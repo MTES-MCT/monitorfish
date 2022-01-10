@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { DndContext, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import styled from 'styled-components'
 
@@ -7,36 +7,42 @@ import { beaconStatusesStages } from './beaconStatuses'
 import StageColumn from './StageColumn'
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers'
 import { useDispatch, useSelector } from 'react-redux'
+import { createSelector } from '@reduxjs/toolkit'
 import updateBeaconStatus from '../../../domain/use_cases/updateBeaconStatus'
 import getAllBeaconStatuses from '../../../domain/use_cases/getAllBeaconStatuses'
+import { COLORS } from '../../../constants/constants'
+import SearchIconSVG from '../../icons/Loupe_dark.svg'
+import { getTextForSearch } from '../../../utils'
+import { updateLocalBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
 
-const getByStage = (stage, items) =>
-  items
+const getByStage = (stage, beaconStatuses) =>
+  beaconStatuses
     .filter((item) => item.stage === stage)
-    .sort((a, b) => a.vesselStatusLastModificationDateTime?.localeCompare(b.vesselStatusLastModificationDateTime))
+    .sort((a, b) => b.vesselStatusLastModificationDateTime?.localeCompare(a.vesselStatusLastModificationDateTime))
 
 const getBeaconStatusesByStage = beaconsStatuses => Object.keys(beaconStatusesStages).reduce(
   (previous, stage) => ({
     ...previous,
     [stage]: getByStage(stage, beaconsStatuses)
-  }),
-  {}
-)
+  }), {})
+
+const getMemoizedBeaconStatusesByStage = createSelector(
+  state => state.beaconStatus.beaconStatuses,
+  beaconStatuses => getBeaconStatusesByStage(beaconStatuses))
 
 const BeaconStatusesBoard = () => {
   const dispatch = useDispatch()
-  const { beaconStatuses } = useSelector(state => state.beaconStatus)
-  const [items, setItems] = useState(getBeaconStatusesByStage(beaconStatuses))
+  const beaconStatuses = useSelector(state => getMemoizedBeaconStatusesByStage(state))
+  const [filteredItems, setFilteredItems] = useState({})
   const [isDroppedId, setIsDroppedId] = useState(undefined)
-  const [doNotUpdateBoard, setDoNotUpdateBoard] = useState(undefined)
+  const [searchedVessel, setSearchedVessel] = useState(undefined)
+  const doNotUpdateBoard = useRef(false)
   const baseUrl = window.location.origin
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
     }
   })
-  console.log(doNotUpdateBoard)
-  console.log(beaconStatuses, items, 'items')
 
   const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: {
@@ -57,10 +63,40 @@ const BeaconStatusesBoard = () => {
   }, [])
 
   useEffect(() => {
-    if (beaconStatuses) {
-      setItems(getBeaconStatusesByStage(beaconStatuses))
+    const timeoutHandle = setTimeout(() => {
+      setIsDroppedId(undefined)
+    }, 1000)
+
+    return () => {
+      clearTimeout(timeoutHandle)
     }
-  }, [beaconStatuses])
+  }, [isDroppedId])
+
+  useEffect(() => {
+    if (!beaconStatuses) {
+      return
+    }
+
+    if (!searchedVessel?.length || searchedVessel?.length <= 1) {
+      setFilteredItems(beaconStatuses)
+      return
+    }
+
+    if (searchedVessel?.length > 1) {
+      const nextFilteredItems = Object.keys(beaconStatuses).reduce(
+        (previous, stage) => ({
+          ...previous,
+          [stage]: beaconStatuses[stage].filter(beaconStatus =>
+            getTextForSearch(beaconStatus.vesselName).includes(getTextForSearch(searchedVessel)) ||
+            getTextForSearch(beaconStatus.internalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
+            getTextForSearch(beaconStatus.externalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
+            getTextForSearch(beaconStatus.ircs).includes(getTextForSearch(searchedVessel)))
+        }),
+        {}
+      )
+      setFilteredItems(nextFilteredItems)
+    }
+  }, [beaconStatuses, searchedVessel])
 
   const findStage = stageName => {
     if (stageName in beaconStatusesStages) {
@@ -71,23 +107,19 @@ const BeaconStatusesBoard = () => {
       .find((key) => beaconStatusesStages[key]?.code?.includes(stageName))
   }
 
-  const updateVesselStatus = (stage, beaconStatus, status) => {
+  const updateVesselStatus = useCallback((stage, beaconStatus, status) => {
     const nextBeaconStatus = { ...beaconStatus, vesselStatus: status }
 
-    setItems(items => ({
-      ...items,
-      [stage]: [
-        nextBeaconStatus,
-        ...items[stage].filter(stageBeaconStatus => stageBeaconStatus.id !== beaconStatus.id)
-      ]
-    }))
-
     setIsDroppedId(beaconStatus.id)
-    dispatch(updateBeaconStatus(beaconStatus.id, { vesselStatus: nextBeaconStatus.vesselStatus }))
-  }
+    dispatch(updateLocalBeaconStatus(nextBeaconStatus))
+    dispatch(updateBeaconStatus(beaconStatus.id, {
+      vesselStatus: nextBeaconStatus.vesselStatus,
+      vesselStatusLastModificationDateTime: new Date().toISOString()
+    }))
+  }, [beaconStatuses])
 
-  const onDragEnd = event => {
-    setDoNotUpdateBoard(false)
+  const onDragEnd = useCallback((event) => {
+    doNotUpdateBoard.current = false
     const { active, over } = event
 
     const previousStage = findStage(active.data.current.stageId)
@@ -99,32 +131,34 @@ const BeaconStatusesBoard = () => {
     }
 
     if (nextStage) {
-      const activeIndex = items[previousStage].map(beaconStatus => beaconStatus.id).indexOf(beaconId)
+      const activeIndex = beaconStatuses[previousStage].map(beaconStatus => beaconStatus.id).indexOf(beaconId)
 
       if (activeIndex !== -1) {
-        const nextBeaconStatus = { ...items[previousStage].find(beaconStatus => beaconStatus.id === beaconId) }
+        const nextBeaconStatus = { ...beaconStatuses[previousStage].find(beaconStatus => beaconStatus.id === beaconId) }
         nextBeaconStatus.stage = nextStage
+        nextBeaconStatus.vesselStatusLastModificationDateTime = new Date().toISOString()
 
-        setItems(items => ({
-          ...items,
-          [previousStage]: items[previousStage].filter(beaconStatus => beaconStatus.id !== beaconId),
-          [nextStage]: [
-            nextBeaconStatus,
-            ...items[nextStage]
-          ]
-        }))
-
+        dispatch(updateLocalBeaconStatus(nextBeaconStatus))
         dispatch(updateBeaconStatus(beaconId, { stage: nextBeaconStatus.stage }))
       }
     }
     setIsDroppedId(beaconId)
-  }
+  }, [beaconStatuses])
 
   return (
     <Wrapper innerWidth={window.innerWidth}>
+      <SearchVesselInput
+        baseUrl={baseUrl}
+        data-cy={'search-vessel-in-beacon-statuses'}
+        placeholder={'Rechercher un navire en avarie'}
+        type="text"
+        value={searchedVessel}
+        onChange={e => setSearchedVessel(e.target.value)}/>
       <DndContext
         onDragEnd={onDragEnd}
-        onDragStart={() => setDoNotUpdateBoard(true)}
+        onDragStart={() => {
+          doNotUpdateBoard.current = true
+        }}
         sensors={sensors}
         modifiers={[restrictToFirstScrollableAncestor]}
       >
@@ -134,7 +168,7 @@ const BeaconStatusesBoard = () => {
               <StageColumn
                 baseUrl={baseUrl}
                 stage={beaconStatusesStages[stageId]}
-                beaconStatuses={items[stageId]}
+                beaconStatuses={filteredItems[stageId] || []}
                 updateVesselStatus={updateVesselStatus}
                 isDroppedId={isDroppedId}
               />
@@ -145,6 +179,28 @@ const BeaconStatusesBoard = () => {
     </Wrapper>
   )
 }
+
+const SearchVesselInput = styled.input`
+  margin: 20px 0 5px 5px;
+  background-color: white;
+  border: none;
+  border-bottom: 1px ${COLORS.lightGray} solid;
+  border-radius: 0;
+  color: ${COLORS.gunMetal};
+  font-size: 13px;
+  height: 40px;
+  width: 310px;
+  padding: 0 5px 0 10px;
+  flex: 3;
+  background-image: url(${props => props.baseUrl}/${SearchIconSVG});
+  background-size: 30px;
+  background-position: bottom 3px right 5px;
+  background-repeat: no-repeat;
+  
+  :hover, :focus {
+    border-bottom: 1px ${COLORS.lightGray} solid;
+  }
+`
 
 const Wrapper = styled.div`
   overflow-x: scroll;

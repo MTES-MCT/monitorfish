@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import showAllVessels from '../domain/use_cases/showVesselsLastPosition'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import getAllGearCodes from '../domain/use_cases/getAllGearCodes'
@@ -28,9 +28,13 @@ const APIWorker = () => {
     selectedVesselIdentity
   } = useSelector(state => state.vessel)
   const {
+    sideWindowIsOpen
+  } = useSelector(state => state.global)
+  const {
     layersTopicsByRegTerritory
   } = useSelector(state => state.regulatory)
 
+  const beaconStatusesInterval = useRef(null)
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
   useEffect(() => {
@@ -57,15 +61,26 @@ const APIWorker = () => {
       setUpdateVesselSidebarTab(true)
     }, TEN_MINUTES)
 
-    const beaconStatusesInterval = setInterval(() => {
-      dispatch(getAllBeaconStatuses())
-    }, THIRTY_SECONDS)
-
     return () => {
       clearInterval(interval)
-      clearInterval(beaconStatusesInterval)
     }
   }, [])
+
+  useEffect(() => {
+    if (sideWindowIsOpen) {
+      if (beaconStatusesInterval?.current) {
+        clearInterval(beaconStatusesInterval.current)
+      }
+
+      beaconStatusesInterval.current = setInterval(() => {
+        dispatch(getAllBeaconStatuses())
+      }, THIRTY_SECONDS)
+    }
+
+    return () => {
+      clearInterval(beaconStatusesInterval?.current)
+    }
+  }, [sideWindowIsOpen])
 
   useEffect(() => {
     if (layersTopicsByRegTerritory) {

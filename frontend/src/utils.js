@@ -169,6 +169,10 @@ export const removeAccents = text => Object.keys(accentsMap)
   .reduce((acc, cur) => acc.toString().replace(new RegExp(accentsMap[cur], 'g'), cur), text)
 
 export function getTextForSearch (text) {
+  if (!text) {
+    return ''
+  }
+
   return removeAccents(text)
     .toLowerCase()
     .replace(/[ ]/g, '')

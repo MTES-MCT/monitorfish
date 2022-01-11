@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { ContentLine, InfoText } from '../../../commonStyles/Backoffice.style'
+import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
 import { SquareButton } from '../../../commonStyles/Buttons.style'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
@@ -88,10 +88,10 @@ const RegulationTopicLine = props => {
         isFormOpened={isAddTopicClicked}
         pointer
       >
-        <InfoText bold>{INFO_TEXT.layerNamePart1}</InfoText>
-        <InfoText >
-          {INFO_TEXT.layerNamePart2}
-        </InfoText>
+        <InfoTextWrapper>
+          <InfoText bold>{INFO_TEXT.LAYER_NAME}</InfoText>
+          <InfoText >{INFO_TEXT.LAYER_NAME_NEXT}</InfoText>
+        </InfoTextWrapper>
       </CustomInfoBox>}
     </ContentLine>
 }

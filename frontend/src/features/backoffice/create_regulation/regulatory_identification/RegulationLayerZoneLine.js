@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ContentLine, InfoText } from '../../../commonStyles/Backoffice.style'
+import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Backoffice.style'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
@@ -11,7 +11,6 @@ const RegulationLayerZoneLine = props => {
     nameZoneIsMissing
   } = props
 
-  const [isInfoTextShown, setIsInfoTextShown] = useState(false)
   const [isInputFilled, setIsInputFilled] = useState(false)
 
   useEffect(() => {
@@ -30,15 +29,8 @@ const RegulationLayerZoneLine = props => {
       $isGray={isInputFilled}
       $isRed={nameZoneIsMissing}
     />
-    <InfoBox
-      isInfoTextShown={isInfoTextShown}
-      setIsInfoTextShown={setIsInfoTextShown}
-      isFormOpened={false}
-      pointer
-    >
-      <InfoText>
-        {INFO_TEXT.zoneName}
-      </InfoText>
+    <InfoBox pointer>
+      <InfoTextWrapper><InfoText>{INFO_TEXT.ZONE_NAME}</InfoText></InfoTextWrapper>
     </InfoBox>
   </ContentLine>
 }

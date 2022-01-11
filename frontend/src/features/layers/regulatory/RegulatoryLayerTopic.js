@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, batch } from 'react-redux'
 import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryLayerZone'
 import { getHash } from '../../../utils'
@@ -12,7 +12,7 @@ import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
 import LayerNameInput from '../../backoffice/LayerNameInput'
-import { addRegulatoryTopicOpened, removeRegulatoryTopicOpened } from '../../../domain/shared_slices/Regulatory'
+import { addRegulatoryTopicOpened, removeRegulatoryTopicOpened, closeRegulatoryZoneMetadataPanel } from '../../../domain/shared_slices/Regulatory'
 
 const RegulatoryLayerTopic = props => {
   const {
@@ -134,7 +134,10 @@ const RegulatoryLayerTopic = props => {
   }
   const onRegulatoryTopicClick = useCallback(() => {
     if (isOpen) {
-      dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
+      batch(() => {
+        dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
+        dispatch(closeRegulatoryZoneMetadataPanel())
+      })
     } else {
       dispatch(addRegulatoryTopicOpened(regulatoryTopic))
     }

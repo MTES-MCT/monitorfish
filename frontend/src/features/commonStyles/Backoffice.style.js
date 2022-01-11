@@ -54,11 +54,17 @@ export const Link = styled.a`
   cursor: pointer;
   ${props => !props.tagUrl ? 'font-weight: 500;' : ''}
 `
+export const InfoTextWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 11px;
+  width: 500px;
+`
 
 export const InfoText = styled.span`
   ${props => props.bold ? 'font-weight: bold;' : ''}
-  align-self: center;
-  display: 'flex';
+  text-align: left;
+  display: inline-block;
   font-size: 13px;
   color: ${props => props.red ? COLORS.red : COLORS.gunMetal};
   padding-left: 8px;

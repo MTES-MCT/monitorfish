@@ -12,6 +12,8 @@ import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { COLORS } from '../../constants/constants'
 import { renderRowExpanded } from './alerts/tableCells'
 import { usePrevious } from '../../hooks/usePrevious'
+import BeaconStatusDetails from './beacon_statuses/BeaconStatusDetails'
+import { beaconStatusStub } from '../../stubs/beaconStatusStub'
 
 const SideWindow = ({ menu }) => {
   const [isPreloading, setIsPreloading] = useState(true)
@@ -20,6 +22,7 @@ const SideWindow = ({ menu }) => {
   const [selectedSubMenu, setSelectedSubMenu] = useState(selectedMenu === sideWindowMenu.ALERTS
     ? AlertsSubMenu.MEMN
     : BeaconStatusesSubMenu.MALFUNCTIONING)
+  const [isOverlayed, setIsOverlayed] = useState(false)
 
   /**
    * /!\
@@ -76,6 +79,8 @@ const SideWindow = ({ menu }) => {
         selectedSubMenu={AlertsSubMenu.NAMOSA}
         setSelectedSubMenu={setSelectedSubMenu}
       />
+      <BeaconStatusDetails beaconStatus={beaconStatusStub}/>
+      <BeaconStatusesBoardGrayOverlay isOverlayed={true}/>
     </NotVisible>
   }
 
@@ -94,6 +99,10 @@ const SideWindow = ({ menu }) => {
         ? getComponentsForPreloading()
         : null
     }
+    <BeaconStatusesBoardGrayOverlay
+      isOverlayed={isOverlayed}
+      onClick={() => setIsOverlayed(false)}
+    />
     {
       isPreloading
         ? <Loading>
@@ -113,12 +122,24 @@ const SideWindow = ({ menu }) => {
           }
           {
             selectedMenu === sideWindowMenu.BEACON_STATUSES &&
-            <BeaconStatusesBoard/>
+            <BeaconStatusesBoard
+              setIsOverlayed={setIsOverlayed}
+              isOverlayed={isOverlayed}
+            />
           }
         </>
     }
   </Wrapper>
 }
+
+export const BeaconStatusesBoardGrayOverlay = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: ${props => props.isOverlayed ? 0.5 : 0};
+  background: ${COLORS.charcoal};
+  z-index: ${props => props.isOverlayed ? 11 : -9999};
+`
 
 const Loading = styled.div`
   margin-top: 350px;

@@ -8,33 +8,69 @@ const BeaconStatusReducer = null
 const beaconStatusSlice = createSlice({
   name: 'beaconStatus',
   initialState: {
-    beaconStatuses: []
+    beaconStatuses: [],
+    openedBeaconStatus: null
   },
   reducers: {
     setBeaconStatuses (state, action) {
       state.beaconStatuses = action.payload
+
+      if (state.openedBeaconStatus) {
+        const nextOpenedBeaconStatus = state.beaconStatuses
+          .find(beaconStatus => beaconStatus.id === state.openedBeaconStatus?.id)
+
+        if (nextOpenedBeaconStatus) {
+          state.openedBeaconStatus = nextOpenedBeaconStatus
+        }
+      }
     },
     /**
-     * update a single beacon status
+     * Update a single beacon status
      * @function updateLocalBeaconStatus
      * @memberOf BeaconStatusReducer
      * @param {Object=} state
      * @param {{payload: BeaconStatus}} action - the beacon status to update
      */
     updateLocalBeaconStatus (state, action) {
-      const nextBeaconStatuses = state.beaconStatuses.filter(beaconStatus => beaconStatus.id !== action.payload.id)
+      const id = action.payload?.id
+      const nextBeaconStatuses = state.beaconStatuses.filter(beaconStatus => beaconStatus.id !== id)
 
       state.beaconStatuses = [
         action.payload,
         ...nextBeaconStatuses
       ]
+
+      if (state.openedBeaconStatus?.id === id) {
+        state.openedBeaconStatus = action.payload
+      }
+    },
+    /**
+     * Open a single beacon status
+     * @function openBeaconStatus
+     * @memberOf BeaconStatusReducer
+     * @param {Object=} state
+     * @param {{payload: BeaconStatus}} action - the beacon status to open
+     */
+    openBeaconStatus (state, action) {
+      state.openedBeaconStatus = action.payload
+    },
+    /**
+     * Close a single beacon status
+     * @function closeBeaconStatus
+     * @memberOf BeaconStatusReducer
+     * @param {Object=} state
+     */
+    closeBeaconStatus (state) {
+      state.openedBeaconStatus = null
     }
   }
 })
 
 export const {
   setBeaconStatuses,
-  updateLocalBeaconStatus
+  updateLocalBeaconStatus,
+  openBeaconStatus,
+  closeBeaconStatus
 } = beaconStatusSlice.actions
 
 export default beaconStatusSlice.reducer

@@ -11,6 +11,7 @@ import { timeagoFrenchLocale } from '../../../utils'
 import showVessel from '../../../domain/use_cases/showVessel'
 import { useDispatch } from 'react-redux'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
+import { openBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
 
 timeago.register('fr', timeagoFrenchLocale)
 
@@ -23,7 +24,9 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
     <Header>
       <Row isFirstRow>
         <Flag rel='preload' src={`${baseUrl}/flags/fr.svg`}/>
-        <VesselName>
+        <VesselName
+          onClick={() => dispatch(openBeaconStatus(beaconStatus))}
+        >
           {beaconStatus.vesselName || 'Aucun nom'}
         </VesselName>
         <ShowIcon
@@ -32,7 +35,7 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
             dispatch(showVessel(vesselIdentity, false, false, null))
             dispatch(getVesselVoyage(vesselIdentity, null, false))
           }}
-          src={`${window.location.origin}/oeil_affiche.png`}
+          src={`${baseUrl}/oeil_affiche.png`}
         />
       </Row>
       <Row>
@@ -155,7 +158,7 @@ const VesselName = styled.div`
   cursor: pointer;
 `
 
-const Priority = styled.div`
+export const Priority = styled.div`
   height: 19px;
   font-size: 14px;
   font-weight: 500;

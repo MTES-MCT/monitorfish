@@ -19,3 +19,17 @@
  * @property {string | null} [vesselStatus]
  * @property {string | null} [stage]
  */
+
+/**
+ * @typedef BeaconStatusComment
+ * @property {number} id
+ * @property {string} comment
+ * @property {string} userType
+ * @property {string} dateTime
+ */
+
+/**
+ * @typedef BeaconStatusWithDetails
+ * @property {BeaconStatus} beaconStatus
+ * @property {BeaconStatusComment[]} comments
+ */

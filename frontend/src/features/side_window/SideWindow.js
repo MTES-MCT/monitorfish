@@ -13,7 +13,7 @@ import { COLORS } from '../../constants/constants'
 import { renderRowExpanded } from './alerts/tableCells'
 import { usePrevious } from '../../hooks/usePrevious'
 import BeaconStatusDetails from './beacon_statuses/BeaconStatusDetails'
-import { beaconStatusStub } from '../../stubs/beaconStatusStub'
+import { beaconStatusesStub } from '../../stubs/beaconStatusStub'
 
 const SideWindow = ({ menu }) => {
   const [isPreloading, setIsPreloading] = useState(true)
@@ -79,7 +79,13 @@ const SideWindow = ({ menu }) => {
         selectedSubMenu={AlertsSubMenu.NAMOSA}
         setSelectedSubMenu={setSelectedSubMenu}
       />
-      <BeaconStatusDetails beaconStatus={beaconStatusStub}/>
+      {
+        beaconStatusesStub.map(beaconStatusStub =>
+          <BeaconStatusDetails
+            key={beaconStatusStub.id}
+            beaconStatus={beaconStatusStub}
+          />)
+      }
       <BeaconStatusesBoardGrayOverlay isOverlayed={true}/>
     </NotVisible>
   }

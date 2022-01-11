@@ -16,6 +16,7 @@ import { unByKey } from 'ol/Observable'
 import { getRegulatoryLayersWithoutTerritory } from '../domain/entities/regulatory'
 import getOperationalAlerts from '../domain/use_cases/getOperationalAlerts'
 import getAllBeaconStatuses from '../domain/use_cases/getAllBeaconStatuses'
+import openBeaconStatus from '../domain/use_cases/openBeaconStatus'
 
 export const TEN_MINUTES = 600000
 export const THIRTY_SECONDS = 30000
@@ -31,10 +32,14 @@ const APIWorker = () => {
     sideWindowIsOpen
   } = useSelector(state => state.global)
   const {
+    openedBeaconStatus
+  } = useSelector(state => state.beaconStatus)
+  const {
     layersTopicsByRegTerritory
   } = useSelector(state => state.regulatory)
 
   const beaconStatusesInterval = useRef(null)
+  const beaconStatusInterval = useRef(null)
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
   useEffect(() => {
@@ -81,6 +86,22 @@ const APIWorker = () => {
       clearInterval(beaconStatusesInterval?.current)
     }
   }, [sideWindowIsOpen])
+
+  useEffect(() => {
+    if (sideWindowIsOpen && openedBeaconStatus) {
+      if (beaconStatusInterval?.current) {
+        clearInterval(beaconStatusInterval.current)
+      }
+
+      beaconStatusInterval.current = setInterval(() => {
+        dispatch(openBeaconStatus(openedBeaconStatus))
+      }, THIRTY_SECONDS)
+    }
+
+    return () => {
+      clearInterval(beaconStatusInterval?.current)
+    }
+  }, [sideWindowIsOpen, openedBeaconStatus])
 
   useEffect(() => {
     if (layersTopicsByRegTerritory) {

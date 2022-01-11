@@ -40,7 +40,7 @@ def parse_dep(dep):
         species_onboard = [parse_spe(spe) for spe in children["SPE"]]
         value["speciesOnboard"] = species_onboard
 
-    data = {"log_type": "DEP", "value": value}
+    data = {"log_type": "DEP", "value": [value]}
 
     return data
 
@@ -71,7 +71,7 @@ def parse_far(far):
         value["latitude"] = try_float(lat)
         value["longitude"] = try_float(lon)
 
-    data = {"log_type": "FAR", "value": value}
+    data = {"log_type": "FAR", "value": [value]}
 
     return data
 
@@ -89,7 +89,7 @@ def parse_dis(dis):
         catches = [parse_spe(spe) for spe in children["SPE"]]
         value["catches"] = catches
 
-    data = {"log_type": "DIS", "value": value}
+    data = {"log_type": "DIS", "value": [value]}
 
     return data
 
@@ -122,7 +122,7 @@ def parse_coe(coe):
         value["latitudeEntered"] = try_float(lat)
         value["longitudeEntered"] = try_float(lon)
 
-    data = {"log_type": "COE", "value": value}
+    data = {"log_type": "COE", "value": [value]}
 
     return data
 
@@ -155,7 +155,7 @@ def parse_cox(cox):
         value["latitudeExited"] = try_float(lat)
         value["longitudeExited"] = try_float(lon)
 
-    data = {"log_type": "COX", "value": value}
+    data = {"log_type": "COX", "value": [value]}
 
     return data
 
@@ -169,16 +169,16 @@ def parse_cro(cro):
         assert len(children["COE"]) == 1
         coe = children["COE"][0]
         coe_data = parse_coe(coe)
-        value = coe_data["value"]
+        value = coe_data["value"][0]
 
     if "COX" in children:
         assert len(children["COX"]) == 1
         cox = children["COX"][0]
         cox_data = parse_cox(cox)
-        cox_value = cox_data["value"]
+        cox_value = cox_data["value"][0]
         value = {**value, **cox_value}
 
-    data = {"log_type": "CRO", "value": value}
+    data = {"log_type": "CRO", "value": [value]}
     return data
 
 
@@ -216,7 +216,7 @@ def parse_pno(pno):
         value["latitude"] = try_float(lat)
         value["longitude"] = try_float(lon)
 
-    data = {"log_type": "PNO", "value": value}
+    data = {"log_type": "PNO", "value": [value]}
 
     return data
 
@@ -238,7 +238,7 @@ def parse_lan(lan):
         catches = [parse_spe(spe) for spe in children["SPE"]]
         value["catchLanded"] = catches
 
-    data = {"log_type": "LAN", "value": value}
+    data = {"log_type": "LAN", "value": [value]}
 
     return data
 
@@ -248,7 +248,7 @@ def parse_eof(eof):
     time = eof.get("TI")
     end_of_fishing_datetime_utc = make_datetime_json_serializable(date, time)
     value = {"endOfFishingDatetimeUtc": end_of_fishing_datetime_utc}
-    data = {"log_type": "EOF", "value": value}
+    data = {"log_type": "EOF", "value": [value]}
     return data
 
 
@@ -269,6 +269,6 @@ def parse_rtp(rtp):
         gear = [parse_gea(gea) for gea in children["GEA"]]
         value["gearOnboard"] = gear
 
-    data = {"log_type": "RTP", "value": value}
+    data = {"log_type": "RTP", "value": [value]}
 
     return data

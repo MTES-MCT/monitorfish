@@ -4,6 +4,7 @@ from src.pipeline.parsers.flux.childless_parsers import (
     parse_gea,
     parse_ras,
     parse_spe,
+    complete_ras
 )
 from src.utils.flux import (
     get_msg_type,
@@ -26,16 +27,32 @@ def parse_dep(dep):
     }
 
     children = tagged_children(dep)
-
+    
+    hasSpecifiedFishingGear=False
     if "SpecifiedFishingGear" in children:
         gear = [parse_gea(gea) for gea in children["SpecifiedFishingGear"]]
         value["gearOnboard"] = gear
+        hasSpecifiedFishingGear = True
+    if not hasSpecifiedFishingGear:
+        usedGear = get_element(dep, './/ram:SpecifiedFACatch/ram:UsedFishingGear')
+        if usedGear != None :
+            value["gearOnboard"] = parse_gea(usedGear)
+
+    zone_data ={}
+    if "RelatedFLUXLocation" in children:
+        for ras in children["RelatedFLUXLocation"]:
+            data = parse_ras(ras)
+            zone_data = {**zone_data,**data }
+        hasRelatedFLUXLocation = bool(zone_data)
+        zone_data = complete_ras(zone_data)
 
     if "SpecifiedFACatch" in children:
-        species_onboard = [parse_spe(spe) for spe in children["SpecifiedFACatch"]]
-        value["speciesOnboard"] = species_onboard
+        catches = [parse_spe(spe) for spe in children["SpecifiedFACatch"]]
+        if hasRelatedFLUXLocation:
+            catches = [dict(item, **zone_data) for item in catches]
+        value["speciesOnboard"] = catches
 
-    data = {"log_type": "DEP", "value": value}
+    data = {"log_type": "DEP", "value": [value]}
     return data
 
 
@@ -45,21 +62,39 @@ def parse_far(far):
 
     children = tagged_children(far)
 
+    hasSpecifiedFishingGear=False
     if "SpecifiedFishingGear" in children:
         gea = get_element(far,'.//ram:SpecifiedFishingGear')
         gear = parse_gea(gea)
         value = {**value, **gear}
+        hasSpecifiedFishingGear = True
+    if not hasSpecifiedFishingGear:
+        usedGear = get_element(far, './/ram:SpecifiedFACatch/ram:UsedFishingGear')
+        if usedGear != None :
+            value = {**value, **parse_gea(usedGear)}
+
+    zone_data ={}
+    hasRelatedFLUXLocation=False
+
+    if "RelatedFLUXLocation" in children:
+        for ras in children["RelatedFLUXLocation"]:
+            data = parse_ras(ras)
+            zone_data = {**zone_data,**data }
+        hasRelatedFLUXLocation=bool(zone_data)
+        zone_data = complete_ras(zone_data)
 
     if "SpecifiedFACatch" in children:
         catches = [parse_spe(spe) for spe in children["SpecifiedFACatch"]]
+        if hasRelatedFLUXLocation:
+            catches = [dict(item, **zone_data) for item in catches]
         value["catches"] = catches
 
-    pos=get_element(far,'.//ram:SpecifiedPhysicalFLUXGeographicalCoordinate')
+    pos=get_element(far,'./ram:RelatedFLUXLocation/ram:SpecifiedPhysicalFLUXGeographicalCoordinate')
     if  pos != None:
         value["latitude"] = try_float(get_text(pos,'.//ram:LatitudeMeasure'))
         value["longitude"] = try_float(get_text(pos,'.//ram:LongitudeMeasure'))
 
-    data = {"log_type": "FAR", "value": value}
+    data = {"log_type": "FAR", "value": [value]}
 
     return data
 
@@ -70,11 +105,23 @@ def parse_dis(dis):
 
     children = tagged_children(dis)
 
+    zone_data ={}
+    hasRelatedFLUXLocation=False
+
+    if "RelatedFLUXLocation" in children:
+        for ras in children["RelatedFLUXLocation"]:
+            data = parse_ras(ras)
+            zone_data = {**zone_data,**data }
+        hasRelatedFLUXLocation=bool(zone_data)
+        zone_data = complete_ras(zone_data)
+
     if "SpecifiedFACatch" in children:
         catches = [parse_spe(spe) for spe in children["SpecifiedFACatch"]]
+        if hasRelatedFLUXLocation:
+            catches = [dict(item, **zone_data) for item in catches]
         value["catches"] = catches
 
-    data = {"log_type": "DIS", "value": value}
+    data = {"log_type": "DIS", "value": [value]}
 
     return data
 
@@ -100,7 +147,7 @@ def parse_coe(coe):
         value["longitude"] = try_float(get_text(pos,'.//ram:LongitudeMeasure'))
 
 
-    data = {"log_type": "COE", "value": value}
+    data = {"log_type": "COE", "value": [value]}
 
     return data
 
@@ -124,7 +171,7 @@ def parse_cox(cox):
         value["latitudeExited"] = try_float(get_text(pos,'.//ram:LatitudeMeasure'))
         value["longitudeExited"] = try_float(get_text(pos,'.//ram:LongitudeMeasure'))
 
-    data = {"log_type": "COX", "value": value}
+    data = {"log_type": "COX", "value": [value]}
 
     return data
 
@@ -139,15 +186,22 @@ def parse_pno(pno):
         "purpose": get_text(pno,'.//ram:ReasonCode'),
         "tripStartDate": get_text(pno,'.//ram:StartDateTime/udt:DateTime'),
     }
-    
+
+    zone_data ={}
+    hasRelatedFLUXLocation=False
+
     if "RelatedFLUXLocation" in children:
         for ras in children["RelatedFLUXLocation"]:
-            ras_data = parse_ras(ras)
-            value = {**value, **ras_data}
+            data = parse_ras(ras)
+            zone_data = {**zone_data,**data }
+        hasRelatedFLUXLocation=bool(zone_data)
+        zone_data = complete_ras(zone_data)
 
     if "SpecifiedFACatch" in children:
         unloaded_catches = pno.findall(".//ram:SpecifiedFACatch[ram:TypeCode='UNLOADED']", NS_FLUX)
         catches = [parse_spe(spe) for spe in unloaded_catches]
+        if hasRelatedFLUXLocation:
+            catches = [dict(item, **zone_data) for item in catches]
         value["catchOnboard"] = catches
 
     pos=get_element(pno,'.//ram:SpecifiedPhysicalFLUXGeographicalCoordinate')
@@ -155,7 +209,7 @@ def parse_pno(pno):
         value["latitude"] = try_float(get_text(pos,'.//ram:LatitudeMeasure'))
         value["longitude"] = try_float(get_text(pos,'.//ram:LongitudeMeasure'))
 
-    data = {"log_type": "PNO", "value": value}
+    data = {"log_type": "PNO", "value": [value]}
 
     return data
 
@@ -169,11 +223,24 @@ def parse_lan(lan):
     }
 
     children = tagged_children(lan)
+
+    zone_data ={}
+    hasRelatedFLUXLocation=False
+
+    if "RelatedFLUXLocation" in children:
+        for ras in children["RelatedFLUXLocation"]:
+            data = parse_ras(ras)
+            zone_data = {**zone_data,**data }
+        hasRelatedFLUXLocation=bool(zone_data)
+        zone_data = complete_ras(zone_data)
+
     if "SpecifiedFACatch" in children:
         catches = [parse_spe(spe) for spe in children["SpecifiedFACatch"]]
+        if hasRelatedFLUXLocation:
+            catches = [dict(item, **zone_data) for item in catches]
         value["catchLanded"] = catches
 
-    data = {"log_type": "LAN", "value": value}
+    data = {"log_type": "LAN", "value": [value]}
 
     return data
 
@@ -187,10 +254,16 @@ def parse_rtp(rtp):
 
     children = tagged_children(rtp)
 
+    hasSpecifiedFishingGear=False
     if "SpecifiedFishingGear" in children:
         gear = [parse_gea(gea) for gea in children["SpecifiedFishingGear"]]
         value["gearOnboard"] = gear
+        hasSpecifiedFishingGear = True
+    if not hasSpecifiedFishingGear:
+        usedGear = get_element(rtp, './/ram:SpecifiedFACatch/ram:UsedFishingGear')
+        if usedGear != None :
+            value["gearOnboard"] = parse_gea(usedGear)
 
-    data = {"log_type": "RTP", "value": value}
+    data = {"log_type": "RTP", "value": [value]}
 
     return data

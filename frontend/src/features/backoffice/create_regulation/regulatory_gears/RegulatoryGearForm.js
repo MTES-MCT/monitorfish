@@ -316,21 +316,24 @@ const RegulatoryGearForm = (props) => {
         </GearList>
         : null
       }
-      {!authorized && <DerogationRadio
-        inline
-        onChange={value => set(REGULATORY_GEAR_KEYS.DEROGATION, value)}
-        value={derogation}
-      >
-        <Text>{'Mesures dérogatoires'}</Text>
-        <CustomRadio checked={authorized} value={true} >
-          oui
-          <GreenCircle />
-        </CustomRadio>
-        <CustomRadio checked={authorized === false} value={false} >
-          non
-          <RedCircle />
-        </CustomRadio>
-      </DerogationRadio>}
+      {!authorized && <DerogationRadioWrapper>
+        <DerogationRadio
+          inline
+          onChange={value => set(REGULATORY_GEAR_KEYS.DEROGATION, value)}
+          value={derogation}
+          $isYellow={derogation}
+        >
+          <Text>{'Mesures dérogatoires'}</Text>
+          <CustomRadio value={true} >
+            oui
+            <GreenCircle />
+          </CustomRadio>
+          <CustomRadio value={false} >
+            non
+            <RedCircle />
+          </CustomRadio>
+        </DerogationRadio>
+      </DerogationRadioWrapper>}
     </FormContent>
   </FormSection>
 }
@@ -384,9 +387,16 @@ const RedCircle = styled.span`
   background-color: ${COLORS.red};
 `
 
+const DerogationRadioWrapper = styled.div`
+  padding-top: 15px;
+`
 const DerogationRadio = styled(RadioGroup)` 
   ${customRadioGroup}
-  padding-top: 15px!important;
+  padding-right: 10px!important;
+  ${props => props.$isYellow ? `border: 1.5px solid ${COLORS.yellow}!important;` : ''}
+  :focus {
+    ${props => props.$isYellow ? `border: 1.5px solid ${COLORS.yellow}!important;` : ''}
+  }
 `
 
 const Text = styled.p`

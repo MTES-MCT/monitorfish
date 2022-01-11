@@ -105,7 +105,7 @@ const YellowRectangle = styled.div`
 `
 
 const UpcomingRegulation = styled.div`
-  padding: 10px 15px;
+  padding: 10px 5px 10px 15px;
 `
 
 export default UpcomingRegulationSection

@@ -17,6 +17,10 @@ class JpaBeaconStatusesRepository(private val dbBeaconStatusesRepository: DBBeac
         return dbBeaconStatusesRepository.findAll().map { it.toBeaconStatus() }
     }
 
+    override fun find(beaconStatusId: Int): BeaconStatus {
+        return dbBeaconStatusesRepository.findById(beaconStatusId).get().toBeaconStatus()
+    }
+
     @Transactional
     override fun update(id: Int, vesselStatus: VesselStatus?, stage: Stage?, updateDateTime: ZonedDateTime) {
         try {

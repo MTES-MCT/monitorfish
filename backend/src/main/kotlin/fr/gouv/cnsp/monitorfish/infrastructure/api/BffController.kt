@@ -3,8 +3,10 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusCommentUserType
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconStatusCommentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconStatusDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
@@ -41,6 +43,8 @@ class BffController(
         private val getOperationalAlerts: GetOperationalAlerts,
         private val getAllBeaconStatuses: GetAllBeaconStatuses,
         private val updateBeaconStatus: UpdateBeaconStatus,
+        private val getBeaconStatus: GetBeaconStatus,
+        private val saveBeaconStatusComment: SaveBeaconStatusComment,
         meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -267,7 +271,7 @@ class BffController(
 
     @PutMapping(value = ["/v1/beacon_statuses/{beaconStatusId}"], consumes = ["application/json"])
     @ApiOperation("Update a beacon status")
-    fun updateBeaconStatus(@PathParam("Control objective id")
+    fun updateBeaconStatus(@PathParam("Beacon status id")
                                @PathVariable(name = "beaconStatusId")
                                beaconStatusId: Int,
                                @RequestBody
@@ -276,5 +280,27 @@ class BffController(
                 id = beaconStatusId,
                 vesselStatus = updateBeaconStatusData.vesselStatus,
                 stage = updateBeaconStatusData.stage)
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(value = ["/v1/beacon_statuses/{beaconStatusId}/comments"], consumes = ["application/json"])
+    @ApiOperation("Save a beacon status comment")
+    fun saveBeaconStatusComment(@PathParam("Beacon status id")
+                                @PathVariable(name = "beaconStatusId")
+                                beaconStatusId: Int,
+                                @RequestBody
+                                saveBeaconStatusCommentDataInput: SaveBeaconStatusCommentDataInput) {
+        saveBeaconStatusComment.execute(
+                beaconStatusId = beaconStatusId,
+                comment = saveBeaconStatusCommentDataInput.comment,
+                userType = saveBeaconStatusCommentDataInput.userType)
+    }
+
+    @GetMapping(value = ["/v1/beacon_statuses/{beaconStatusId}"])
+    @ApiOperation("Get a beacon status with the comments and history")
+    fun getAllBeaconStatuses(@PathParam("Beacon status id")
+                             @PathVariable(name = "beaconStatusId")
+                             beaconStatusId: Int): BeaconStatusWithDetailsDataOutput {
+        return BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(getBeaconStatus.execute(beaconStatusId))
     }
 }

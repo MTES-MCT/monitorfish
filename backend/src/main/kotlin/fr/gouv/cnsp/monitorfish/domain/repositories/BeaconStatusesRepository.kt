@@ -7,6 +7,7 @@ import java.time.ZonedDateTime
 
 interface BeaconStatusesRepository {
     fun findAll(): List<BeaconStatus>
+    fun find(beaconStatusId: Int): BeaconStatus
     fun update(id: Int,
                vesselStatus: VesselStatus?,
                stage: Stage?,

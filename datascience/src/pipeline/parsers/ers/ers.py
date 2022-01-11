@@ -83,7 +83,7 @@ def parse_ret(ret):
     if rejection_cause:
         data["rejectionCause"] = rejection_cause
 
-    return metadata, None, None, {"value": data}
+    return metadata, None, None, {"value": [data]}
 
 
 def parse_ers(ers):

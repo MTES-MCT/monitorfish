@@ -41,7 +41,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data["log_type"], "LAN")
-        value = data["value"]
+        value = data["value"][0]
         self.assertEqual(
             set(value), {"landingDatetimeUtc", "port", "sender", "catchLanded"}
         )
@@ -75,7 +75,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data["log_type"], "COX")
-        value = data["value"]
+        value = data["value"][0]
         expected_value = {
             "effortZoneExitDatetimeUtc": "2020-03-23T06:08:00Z",
             "targetSpeciesOnExit": None,
@@ -94,7 +94,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data["log_type"], "CRO")
-        value = data["value"]
+        value = data["value"][0]
         expected_value = {
             "effortZoneEntryDatetimeUtc": "2020-03-23T22:10:00Z",
             "targetSpeciesOnEntry": None,
@@ -121,7 +121,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data["log_type"], "DEP")
-        value = data["value"]
+        value = data["value"][0]
         expected_value = {
             "departureDatetimeUtc": "2020-03-24T10:50:00Z",
             "departurePort": "GBPHD",
@@ -139,7 +139,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data["log_type"], "DIS")
-        value = data["value"]
+        value = data["value"][0]
         expected_value = {
             "discardDatetimeUtc": "2020-03-21T22:07:00Z",
             "catches": [
@@ -181,7 +181,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data["log_type"], "EOF")
-        value = data["value"]
+        value = data["value"][0]
         expected_value = {"endOfFishingDatetimeUtc": "2020-03-24T17:15:00Z"}
         self.assertEqual(value, expected_value)
 
@@ -191,7 +191,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data["log_type"], "FAR")
-        value = data["value"]
+        value = data["value"][0]
         self.assertEqual(
             set(value), {"dimensions", "farDatetimeUtc", "gear", "mesh", "catches"}
         )
@@ -235,7 +235,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data["log_type"], "PNO")
-        value = data["value"]
+        value = data["value"][0]
         self.assertEqual(
             set(value),
             {
@@ -257,7 +257,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data["log_type"], "RTP")
-        value = data["value"]
+        value = data["value"][0]
         expected_value = {
             "returnDatetimeUtc": "2020-03-25T07:30:00Z",
             "port": "SCPOV",

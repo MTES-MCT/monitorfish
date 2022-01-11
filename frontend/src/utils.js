@@ -37,27 +37,34 @@ export const getDate = dateString => {
   }
 }
 
+export const getTime = (dateString, withoutSeconds) => {
+  const date = new Date(dateString)
+  const timeOptions = withoutSeconds
+    ? {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'UTC',
+        hourCycle: 'h24'
+      }
+    : {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'UTC',
+        hourCycle: 'h24'
+      }
+
+  let time = date.toLocaleTimeString([], timeOptions)
+  time = time.replace(':', 'h')
+  time = time.replace('24', '00')
+
+  return time
+}
+
 export const getDateTime = (dateString, withoutSeconds) => {
   if (dateString) {
     const date = new Date(dateString)
-    const timeOptions = withoutSeconds
-      ? {
-          hour: '2-digit',
-          minute: '2-digit',
-          timeZone: 'UTC',
-          hourCycle: 'h24'
-        }
-      : {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          timeZone: 'UTC',
-          hourCycle: 'h24'
-        }
-
-    let time = date.toLocaleTimeString([], timeOptions)
-    time = time.replace(':', 'h')
-    time = time.replace('24', '00')
+    const time = getTime(dateString, withoutSeconds)
 
     return `${getDay(date)}/${getMonth(date)}/${date.getUTCFullYear()} à ${time}`
   }

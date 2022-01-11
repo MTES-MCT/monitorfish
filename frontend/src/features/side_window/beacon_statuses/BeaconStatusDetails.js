@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as TimeAgoSVG } from '../../icons/Label_horaire_VMS.svg'
+import { ReactComponent as CommentsSVG } from '../../icons/Commentaires.svg'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/styles/RiskFactorBox.style'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { Priority } from './BeaconStatusCard'
@@ -16,12 +17,26 @@ import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import * as timeago from 'timeago.js'
 import { closeBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
+import { getDate, getTime } from '../../../utils'
 
-const BeaconStatusDetails = ({ beaconStatus, updateStageVesselStatus }) => {
+const BeaconStatusDetails = ({ beaconStatus, comments, updateStageVesselStatus }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconStatus?.vesselStatus)
   const baseUrl = window.location.origin
   const ref = useRef()
+  const commentsByDate = comments.reduce((commentsByDayAccumulated, comment) => {
+    const dateWithoutTime = comment.dateTime.split('T')[0]
+
+    if (commentsByDayAccumulated[dateWithoutTime]) {
+      commentsByDayAccumulated[dateWithoutTime].push(comment)
+    } else {
+      commentsByDayAccumulated[dateWithoutTime] = [comment]
+    }
+
+    return commentsByDayAccumulated
+  }, {})
+
+  console.log(commentsByDate)
 
   return (
     <BeaconStatusDetailsWrapper isOpen={beaconStatus}>
@@ -96,9 +111,102 @@ const BeaconStatusDetails = ({ beaconStatus, updateStageVesselStatus }) => {
         </LastPosition>
       </Header>
       <Line/>
+      <Body>
+        <NumberComments>
+          <CommentsIcon/>
+          <NumberCommentsText>
+            {comments?.length} commentaires
+          </NumberCommentsText>
+        </NumberComments>
+        <Comments>
+          {
+            Object.keys(commentsByDate)
+              .sort((a, b) => new Date(b.controlDatetimeUtc) - new Date(a.controlDatetimeUtc))
+              .map(date => {
+                return <>
+                  <DateSeparator>
+                    <Line/>
+                    <CommentDate>{ getDate(date) }</CommentDate>
+                  </DateSeparator>
+                  {
+                    commentsByDate[date].map(comment => {
+                      return <>
+                        <CommentRow key={comment.id}>
+                          <CommentText>{comment.comment}</CommentText>
+                        </CommentRow>
+                        <CommentRow key={comment.id}>
+                          <CommentUserType>{comment.userType} - {getTime(comment.dateTime, true)}</CommentUserType>
+                        </CommentRow>
+                      </>
+                    })
+                  }
+                </>
+              })
+          }
+        </Comments>
+      </Body>
     </BeaconStatusDetailsWrapper>
   )
 }
+
+const CommentRow = styled.div`
+  width: 100%;
+  display: flex;
+`
+
+const CommentText = styled.div`
+  background: #CCCFD6 0% 0% no-repeat padding-box;
+  border: 1px solid #CCCFD6;
+  max-width: 480px;
+  padding: 10px 15px;
+  margin-left: auto;
+`
+
+const CommentUserType = styled.div`
+  margin-left: auto;
+  font: normal normal normal 11px/15px Marianne;
+  color: ${COLORS.slateGray};
+  margin-top: 2px;
+`
+
+const DateSeparator = styled.div`
+  height: 30px;
+  width: 100%;
+  margin-top: 30px;
+`
+
+const CommentDate = styled.div`
+  margin-top: -23px;
+  width: fit-content;
+  background: white;
+  padding: 10px;
+  left: calc(50% - 40px);
+  position: absolute;
+  color: ${COLORS.slateGray};
+`
+
+const Comments = styled.div``
+
+const NumberComments = styled.span`
+  font: normal normal normal 11px/15px Marianne;
+  letter-spacing: 0px;
+  color: ${COLORS.slateGray};
+  display: inline-block;
+  width: 100%;
+`
+
+const NumberCommentsText = styled.span`
+  position: relative;
+  width: fit-content;
+  float: right;
+  margin-right: 5px;
+`
+
+const Body = styled.div`
+  margin-top: 20px;
+  padding-right: 40px;
+  padding-left: 40px;
+`
 
 const LastPosition = styled.div`
   background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
@@ -228,6 +336,14 @@ const AlertsIcon = styled(AlertsSVG)`
   width: 19px;
 `
 
+const CommentsIcon = styled(CommentsSVG)`
+  width: 20px;
+  position: relative;
+  width: fit-content;
+  float: right;
+  margin-top: 2px;
+`
+
 const TimeAgo = styled(TimeAgoSVG)`
   vertical-align: sub;
   margin-right: 5px;
@@ -239,7 +355,7 @@ const BeaconStatusDetailsWrapper = styled.div`
   top: 0;
   height: 100vh;
   background: ${COLORS.white};
-  width: 590px;
+  width: 650px;
   right: 0;
   z-index: 999;
   margin-right: ${props => props.isOpen ? 0 : -650}px;

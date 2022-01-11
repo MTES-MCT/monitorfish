@@ -11,7 +11,7 @@ import { timeagoFrenchLocale } from '../../../utils'
 import showVessel from '../../../domain/use_cases/showVessel'
 import { useDispatch } from 'react-redux'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
-import { openBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
+import openBeaconStatus from '../../../domain/use_cases/openBeaconStatus'
 
 timeago.register('fr', timeagoFrenchLocale)
 

@@ -31,6 +31,7 @@ const CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les o
 const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour l\'objectifs de contrôle'
 const ALERTS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les alertes opérationelles'
 const BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les avaries VMS'
+const BEACON_STATUS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer l\'avarie VMS'
 const UPDATE_BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour le statut de l\'avarie VMS'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
@@ -758,6 +759,29 @@ function updateBeaconStatusFromAPI (id, updatedFields) {
   })
 }
 
+/**
+ * Get a beacon status
+ * @memberOf API
+ * @returns {Promise<BeaconStatusWithDetails>} The beacon status with details
+ * @throws {Error}
+ */
+function getBeaconStatusFromAPI (beaconStatusId) {
+  return fetch(`/bff/v1/beacon_statuses/${beaconStatusId}`)
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(BEACON_STATUS_ERROR_MESSAGE)
+      }
+    }).catch(error => {
+      console.error(error)
+      throw Error(BEACON_STATUS_ERROR_MESSAGE)
+    })
+}
+
 export {
   getVesselsLastPositionsFromAPI,
   getVesselFromAPI,
@@ -782,5 +806,6 @@ export {
   getAllSpeciesFromAPI,
   getOperationalAlertsFromAPI,
   getAllBeaconStatusesFromAPI,
-  updateBeaconStatusFromAPI
+  updateBeaconStatusFromAPI,
+  getBeaconStatusFromAPI
 }

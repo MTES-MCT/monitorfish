@@ -176,6 +176,8 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
     setAllDroppableDisabled(previousStage === beaconStatusesStages.RESUMED_TRANSMISSION.code)
   }, [])
 
+  console.log(openedBeaconStatus)
+
   return (
     <Wrapper innerWidth={window.innerWidth}>
       <SearchVesselInput
@@ -207,7 +209,8 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
       </DndContext>
       <BeaconStatusDetails
         updateStageVesselStatus={updateVesselStatus}
-        beaconStatus={openedBeaconStatus}
+        beaconStatus={openedBeaconStatus?.beaconStatus}
+        comments={openedBeaconStatus?.comments || []}
       />
     </Wrapper>
   )

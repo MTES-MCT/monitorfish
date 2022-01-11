@@ -1,14 +1,72 @@
-export const beaconStatusStub = {
-  id: 3,
-  internalReferenceNumber: 'U_W0NTFINDME',
-  externalReferenceNumber: 'TALK2ME',
-  ircs: 'QGDF',
-  vesselIdentifier: 'IRCS',
-  vesselName: 'MALOTRU',
-  vesselStatus: 'NO_NEWS',
-  stage: 'RESUMED_TRANSMISSION',
-  priority: true,
-  malfunctionStartDateTime: '2021-12-27T09:26:09.364422Z',
-  malfunctionEndDateTime: null,
-  vesselStatusLastModificationDateTime: '2022-01-10T14:10:12.351164'
-}
+export const beaconStatusesStub = [
+  {
+    id: 3,
+    internalReferenceNumber: 'U_W0NTFINDME',
+    externalReferenceNumber: 'TALK2ME',
+    ircs: 'QGDF',
+    vesselIdentifier: 'IRCS',
+    vesselName: 'MALOTRU',
+    vesselStatus: 'NO_NEWS',
+    stage: 'RESUMED_TRANSMISSION',
+    priority: true,
+    malfunctionStartDateTime: '2021-12-27T09:26:09.364422Z',
+    malfunctionEndDateTime: null,
+    vesselStatusLastModificationDateTime: '2022-01-10T14:10:12.351164'
+  },
+  {
+    id: 4,
+    internalReferenceNumber: 'U_W0NTFINDME',
+    externalReferenceNumber: 'TALK2ME',
+    ircs: 'QGDF',
+    vesselIdentifier: 'IRCS',
+    vesselName: 'MALOTRU',
+    vesselStatus: 'AT_SEA',
+    stage: 'RESUMED_TRANSMISSION',
+    priority: true,
+    malfunctionStartDateTime: '2021-12-27T09:26:09.364422Z',
+    malfunctionEndDateTime: null,
+    vesselStatusLastModificationDateTime: '2022-01-10T14:10:12.351164'
+  },
+  {
+    id: 5,
+    internalReferenceNumber: 'U_W0NTFINDME',
+    externalReferenceNumber: 'TALK2ME',
+    ircs: 'QGDF',
+    vesselIdentifier: 'IRCS',
+    vesselName: 'MALOTRU',
+    vesselStatus: 'AT_PORT',
+    stage: 'RESUMED_TRANSMISSION',
+    priority: true,
+    malfunctionStartDateTime: '2021-12-27T09:26:09.364422Z',
+    malfunctionEndDateTime: null,
+    vesselStatusLastModificationDateTime: '2022-01-10T14:10:12.351164'
+  },
+  {
+    id: 6,
+    internalReferenceNumber: 'U_W0NTFINDME',
+    externalReferenceNumber: 'TALK2ME',
+    ircs: 'QGDF',
+    vesselIdentifier: 'IRCS',
+    vesselName: 'MALOTRU',
+    vesselStatus: 'TECHNICAL_STOP',
+    stage: 'RESUMED_TRANSMISSION',
+    priority: true,
+    malfunctionStartDateTime: '2021-12-27T09:26:09.364422Z',
+    malfunctionEndDateTime: null,
+    vesselStatusLastModificationDateTime: '2022-01-10T14:10:12.351164'
+  },
+  {
+    id: 7,
+    internalReferenceNumber: 'U_W0NTFINDME',
+    externalReferenceNumber: 'TALK2ME',
+    ircs: 'QGDF',
+    vesselIdentifier: 'IRCS',
+    vesselName: 'MALOTRU',
+    vesselStatus: 'ACTIVITY_DETECTED',
+    stage: 'RESUMED_TRANSMISSION',
+    priority: true,
+    malfunctionStartDateTime: '2021-12-27T09:26:09.364422Z',
+    malfunctionEndDateTime: null,
+    vesselStatusLastModificationDateTime: '2022-01-10T14:10:12.351164'
+  }
+]

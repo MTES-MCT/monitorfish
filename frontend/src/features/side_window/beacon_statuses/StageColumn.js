@@ -6,7 +6,7 @@ import StageColumnHeader from './StageColumnHeader'
 import BeaconStatusCard from './BeaconStatusCard'
 import { SortableContext } from '@dnd-kit/sortable'
 
-const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, baseUrl }) => {
+const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, setBeaconStatusOpened, isDroppedId, baseUrl }) => {
   const updateStageVesselStatus = (beaconStatus, status) => updateVesselStatus(stage?.code, beaconStatus, status)
 
   return <Wrapper>

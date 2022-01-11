@@ -91,9 +91,7 @@ const VesselSidebar = () => {
         firstUpdate={firstUpdate.current}
         rightMenuIsOpen={rightMenuIsOpen}
       >
-        {
-          <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
-        }
+        <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
         <div>
           <TabList>
             <Tab

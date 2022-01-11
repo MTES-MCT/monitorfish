@@ -13,8 +13,9 @@ import getAllBeaconStatuses from '../../../domain/use_cases/getAllBeaconStatuses
 import { COLORS } from '../../../constants/constants'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
-import { updateLocalBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
+import { closeBeaconStatus, updateLocalBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
 import { setError } from '../../../domain/shared_slices/Global'
+import BeaconStatusDetails from './BeaconStatusDetails'
 
 const getByStage = (stage, beaconStatuses) =>
   beaconStatuses
@@ -31,8 +32,11 @@ const getMemoizedBeaconStatusesByStage = createSelector(
   state => state.beaconStatus.beaconStatuses,
   beaconStatuses => getBeaconStatusesByStage(beaconStatuses))
 
-const BeaconStatusesBoard = () => {
+const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
   const dispatch = useDispatch()
+  const {
+    openedBeaconStatus
+  } = useSelector(state => state.beaconStatus)
   const beaconStatuses = useSelector(state => getMemoizedBeaconStatusesByStage(state))
   const [allDroppableDisabled, setAllDroppableDisabled] = useState(false)
   const [filteredBeaconStatuses, setFilteredBeaconStatuses] = useState({})
@@ -62,6 +66,18 @@ const BeaconStatusesBoard = () => {
   useEffect(() => {
     dispatch(getAllBeaconStatuses())
   }, [])
+
+  useEffect(() => {
+    if (setIsOverlayed) {
+      setIsOverlayed(!!openedBeaconStatus)
+    }
+  }, [openedBeaconStatus])
+
+  useEffect(() => {
+    if (!isOverlayed && openedBeaconStatus) {
+      dispatch(closeBeaconStatus())
+    }
+  }, [isOverlayed])
 
   useEffect(() => {
     const timeoutHandle = setTimeout(() => {
@@ -109,13 +125,16 @@ const BeaconStatusesBoard = () => {
   }
 
   const updateVesselStatus = useCallback((stage, beaconStatus, status) => {
-    const nextBeaconStatus = { ...beaconStatus, vesselStatus: status }
+    const nextBeaconStatus = {
+      ...beaconStatus,
+      vesselStatus: status,
+      vesselStatusLastModificationDateTime: new Date().toISOString()
+    }
 
     setIsDroppedId(beaconStatus.id)
     dispatch(updateLocalBeaconStatus(nextBeaconStatus))
     dispatch(updateBeaconStatus(beaconStatus.id, {
-      vesselStatus: nextBeaconStatus.vesselStatus,
-      vesselStatusLastModificationDateTime: new Date().toISOString()
+      vesselStatus: nextBeaconStatus.vesselStatus
     }))
   }, [beaconStatuses])
 
@@ -186,6 +205,10 @@ const BeaconStatusesBoard = () => {
           ))}
         </Columns>
       </DndContext>
+      <BeaconStatusDetails
+        updateStageVesselStatus={updateVesselStatus}
+        beaconStatus={openedBeaconStatus}
+      />
     </Wrapper>
   )
 }

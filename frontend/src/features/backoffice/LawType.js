@@ -5,7 +5,7 @@ import { EmptyResult } from '../commonStyles/Text.style'
 import RegulatoryLayerTopic from '../layers/regulatory/RegulatoryLayerTopic'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
-import { setLawTypeOpened, setRegulatoryTopicsOpened } from '../../domain/shared_slices/Regulatory'
+import { setLawTypeOpened, setRegulatoryTopicsOpened, closeRegulatoryZoneMetadataPanel } from '../../domain/shared_slices/Regulatory'
 import updateLayerNameForAllLayerZones from '../../domain/use_cases/updateLayerNameForAllLayerZones'
 
 const LawType = props => {
@@ -72,6 +72,7 @@ const LawType = props => {
     } else {
       dispatch(setLawTypeOpened(lawType))
     }
+    dispatch(closeRegulatoryZoneMetadataPanel())
     setIsOpen(!isOpen)
   }
 

@@ -315,6 +315,10 @@ export function searchByLawType (lawTypes, properties, searchText, gears) {
   return searchResultByLawType
 }
 
+export function topicListIncludeZone (topicList, zoneName) {
+  return topicList.filter(zone => zone.zone === zoneName).length > 0
+}
+
 export function findIfStringIsIncludedInZoneGears (zone, searchText, uniqueGearCodes) {
   const gears = zone.gears
   if (gears) {

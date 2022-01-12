@@ -18,13 +18,13 @@ class JpaControlRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findVesselControlsAfterDateTime Should return all vessel's controls after a date time`() {
         // Given
-        val dateTime = ZonedDateTime.now().minusMonths(12)
+        val dateTime = ZonedDateTime.now().minusMonths(1)
 
         // When
         val controls = jpaControlRepository.findVesselControlsAfterDateTime(1, dateTime)
 
         // Then
-        assertThat(controls).hasSize(3)
+        assertThat(controls).hasSize(1)
         assertThat(controls.first().control.cnspCalledUnit).isEqualTo(false)
         assertThat(controls.first().control.controller.administration).isEqualTo("Affaires Maritimes")
         assertThat(controls.first().control.controller.controller).isEqualTo("ULAM 56")

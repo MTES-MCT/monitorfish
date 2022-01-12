@@ -275,11 +275,13 @@ class BffController(
                                @PathVariable(name = "beaconStatusId")
                                beaconStatusId: Int,
                                @RequestBody
-                               updateBeaconStatusData: UpdateBeaconStatusDataInput) {
-        updateBeaconStatus.execute(
+                               updateBeaconStatusData: UpdateBeaconStatusDataInput): BeaconStatusWithDetailsDataOutput {
+        return updateBeaconStatus.execute(
                 id = beaconStatusId,
                 vesselStatus = updateBeaconStatusData.vesselStatus,
-                stage = updateBeaconStatusData.stage)
+                stage = updateBeaconStatusData.stage).let {
+            BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(it)
+        }
     }
 
     @ResponseStatus(HttpStatus.CREATED)

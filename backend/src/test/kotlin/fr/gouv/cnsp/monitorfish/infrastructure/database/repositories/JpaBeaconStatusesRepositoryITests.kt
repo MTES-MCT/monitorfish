@@ -25,7 +25,7 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
         assertThat(gears).hasSize(4)
         assertThat(gears.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(gears.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
-        assertThat(gears.first().vesselStatus).isEqualTo(VesselStatus.AT_SEA)
+        assertThat(gears.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
     }
 
     @Test
@@ -36,7 +36,7 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
         val updateDateTime = ZonedDateTime.now()
 
         // When
-        assertThat(controlObjectives.find { it.id == 1 }?.vesselStatus).isEqualTo(VesselStatus.AT_SEA)
+        assertThat(controlObjectives.find { it.id == 1 }?.vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
         jpaBeaconStatusesRepository.update(
                 id = 1,
                 vesselStatus = VesselStatus.ACTIVITY_DETECTED,

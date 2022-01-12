@@ -94,7 +94,6 @@ const APIWorker = () => {
       }
 
       beaconStatusInterval.current = setInterval(() => {
-        console.log(openedBeaconStatus)
         dispatch(openBeaconStatus(openedBeaconStatus))
       }, THIRTY_SECONDS)
     }

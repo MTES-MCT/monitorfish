@@ -69,7 +69,6 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
 
   useEffect(() => {
     if (setIsOverlayed) {
-      console.log('is', !!openedBeaconStatus)
       setIsOverlayed(!!openedBeaconStatus)
     }
   }, [openedBeaconStatus])

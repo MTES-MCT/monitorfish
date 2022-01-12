@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import { COLORS } from '../../constants/constants'
 import { AddRegulationButton } from '../commonStyles/Buttons.style'
-import { searchByLawType, LAWTYPES_TO_TERRITORY, topicListIncludeZone } from '../../domain/entities/regulatory'
+import { searchByLawType, searchResultIncludeZone } from '../../domain/entities/regulatory'
 import { closeRegulatoryZoneMetadataPanel } from '../../domain/shared_slices/Regulatory'
 import { BACKOFFICE_SEARCH_PROPERTIES } from '../../domain/entities/backoffice'
 
@@ -42,16 +42,13 @@ const SearchRegulations = props => {
         const searchResultByLawType = searchByLawType(regulatoryZoneListByRegTerritory[territory], BACKOFFICE_SEARCH_PROPERTIES, searchText)
         if (searchResultByLawType && Object.keys(searchResultByLawType).length !== 0) {
           searchResult[territory] = searchResultByLawType
-          if (regulatoryZoneMetadata !== null) {
-            if (LAWTYPES_TO_TERRITORY[regulatoryZoneMetadata.lawType] === territory &&
-              (!Object.keys(searchResultByLawType).includes(regulatoryZoneMetadata.lawType) ||
-              !Object.keys(searchResultByLawType[regulatoryZoneMetadata.lawType]).includes(regulatoryZoneMetadata.topic) ||
-              !topicListIncludeZone(searchResultByLawType[regulatoryZoneMetadata.lawType][regulatoryZoneMetadata.topic], regulatoryZoneMetadata.zone))) {
-              dispatch(closeRegulatoryZoneMetadataPanel())
-            }
-          }
         }
       })
+      if (regulatoryZoneMetadata !== null) {
+        if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata)) {
+          dispatch(closeRegulatoryZoneMetadataPanel())
+        }
+      }
       setFoundRegulatoryZonesByRegTerritory(searchResult)
     }
   }

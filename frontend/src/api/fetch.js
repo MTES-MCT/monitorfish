@@ -736,7 +736,7 @@ function getAllBeaconStatusesFromAPI () {
 /**
  * Update a beacon status
  * @memberOf API
- * @param {string} id - The id of the beacon status
+ * @param {number} id - The id of the beacon status
  * @param {UpdateBeaconStatus} updatedFields - The fields to update
  * @throws {Error}
  */
@@ -749,7 +749,9 @@ function updateBeaconStatusFromAPI (id, updatedFields) {
     },
     body: JSON.stringify(updatedFields)
   }).then(response => {
-    if (response.status !== OK) {
+    if (response.status === OK) {
+      return response.json()
+    } else {
       response.text().then(text => {
         console.error(text)
       })

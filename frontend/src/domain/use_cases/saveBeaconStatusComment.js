@@ -16,7 +16,6 @@ const saveBeaconStatusComment = (beaconStatusId, comment) => (dispatch, getState
   }
 
   return saveBeaconStatusCommentFromAPI(beaconStatusId, newCommentInput).then(beaconStatusWithDetails => {
-    console.log(beaconStatusWithDetails)
     return dispatch(selectBeaconStatus(beaconStatusWithDetails))
   }).catch(error => {
     console.error(error)

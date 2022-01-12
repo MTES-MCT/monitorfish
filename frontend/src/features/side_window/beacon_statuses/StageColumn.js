@@ -4,7 +4,6 @@ import { COLORS } from '../../../constants/constants'
 import Draggable from './Draggable'
 import StageColumnHeader from './StageColumnHeader'
 import BeaconStatusCard from './BeaconStatusCard'
-import { SortableContext } from '@dnd-kit/sortable'
 
 const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, setBeaconStatusOpened, isDroppedId, baseUrl }) => {
   const updateStageVesselStatus = (beaconStatus, status) => updateVesselStatus(stage?.code, beaconStatus, status)
@@ -15,25 +14,23 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, setBeaconStatu
       description={stage?.description}
       numberOfItems={beaconStatuses?.length}
     />
-    <SortableContext items={beaconStatuses}>
-      {
-        beaconStatuses
-          .map(beaconStatus => {
-            return <Draggable
-              key={beaconStatus.id}
-              id={beaconStatus.id}
-              stageId={stage.code}
-              isDroppedId={isDroppedId}
-            >
-              <BeaconStatusCard
-                baseUrl={baseUrl}
-                beaconStatus={beaconStatus}
-                updateStageVesselStatus={updateStageVesselStatus}
-              />
-            </Draggable>
-          })
-      }
-    </SortableContext>
+    {
+      beaconStatuses
+        .map(beaconStatus => {
+          return <Draggable
+            key={beaconStatus.id}
+            id={beaconStatus.id}
+            stageId={stage.code}
+            isDroppedId={isDroppedId}
+          >
+            <BeaconStatusCard
+              baseUrl={baseUrl}
+              beaconStatus={beaconStatus}
+              updateStageVesselStatus={updateStageVesselStatus}
+            />
+          </Draggable>
+        })
+    }
   </Wrapper>
 }
 

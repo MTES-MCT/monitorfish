@@ -4,14 +4,13 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.*
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconStatusException
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusActionsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusCommentsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusesRepository
 import java.time.ZonedDateTime
 
 @UseCase
 class UpdateBeaconStatus(private val beaconStatusesRepository: BeaconStatusesRepository,
-                         private val beaconStatusCommentsRepository: BeaconStatusCommentsRepository,
-                         private val beaconStatusActionsRepository: BeaconStatusActionsRepository) {
+                         private val beaconStatusActionsRepository: BeaconStatusActionsRepository,
+                         private val getBeaconStatus: GetBeaconStatus) {
     @Throws(CouldNotUpdateBeaconStatusException::class, IllegalArgumentException::class)
     fun execute(id: Int, vesselStatus: VesselStatus?, stage: Stage?): BeaconStatusWithDetails {
         require(vesselStatus != null || stage != null) {
@@ -48,7 +47,6 @@ class UpdateBeaconStatus(private val beaconStatusesRepository: BeaconStatusesRep
 
         beaconStatusActionsRepository.save(beaconStatusAction)
 
-        return GetBeaconStatus(beaconStatusesRepository, beaconStatusCommentsRepository, beaconStatusActionsRepository)
-                .execute(id)
+        return getBeaconStatus.execute(id)
     }
 }

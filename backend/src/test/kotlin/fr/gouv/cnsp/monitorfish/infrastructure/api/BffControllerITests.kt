@@ -489,12 +489,25 @@ class BffControllerITests {
 
     @Test
     fun `Should return Created When an update of a beacon status is done`() {
+        given(this.updateBeaconStatus.execute(123, VesselStatus.AT_SEA, null))
+                .willReturn(BeaconStatusWithDetails(
+                        beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                        comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
+                        actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
+
         // When
         mockMvc.perform(put("/bff/v1/beacon_statuses/123")
                 .content(objectMapper.writeValueAsString(UpdateBeaconStatusDataInput(vesselStatus = VesselStatus.AT_SEA)))
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isOk)
+                .andExpect(jsonPath("$.comments.length()", equalTo(1)))
+                .andExpect(jsonPath("$.actions.length()", equalTo(1)))
+                .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
+                .andExpect(jsonPath("$.actions[0].propertyName", equalTo("VESSEL_STATUS")))
+                .andExpect(jsonPath("$.beaconStatus.internalReferenceNumber", equalTo("CFR")))
     }
 
     @Test

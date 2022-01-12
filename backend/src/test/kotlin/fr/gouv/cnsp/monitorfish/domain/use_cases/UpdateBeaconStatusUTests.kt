@@ -10,6 +10,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.BDDMockito
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
@@ -26,11 +27,14 @@ class UpdateBeaconStatusUTests {
     @MockBean
     private lateinit var beaconStatusesActionRepository: BeaconStatusActionsRepository
 
+    @MockBean
+    private lateinit var getBeaconStatus: GetBeaconStatus
+
     @Test
     fun `execute Should throw an exception When no field to update is given`() {
         // When
         val throwable = catchThrowable {
-            UpdateBeaconStatus(beaconStatusesRepository, beaconStatusesCommentsRepository, beaconStatusesActionRepository)
+            UpdateBeaconStatus(beaconStatusesRepository, beaconStatusesActionRepository, getBeaconStatus)
                     .execute(1, null, null)
         }
 
@@ -47,9 +51,16 @@ class UpdateBeaconStatusUTests {
                 true, ZonedDateTime.now(), null, ZonedDateTime.now()))
         given(beaconStatusesActionRepository.findAllByBeaconStatusId(any())).willReturn(listOf(BeaconStatusAction(1, 1,
                 BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now())))
+        given(getBeaconStatus.execute(1))
+                .willReturn(BeaconStatusWithDetails(
+                        beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                        comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
+                        actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
 
         // When
-        val updatedBeaconStatus = UpdateBeaconStatus(beaconStatusesRepository, beaconStatusesCommentsRepository, beaconStatusesActionRepository)
+        val updatedBeaconStatus = UpdateBeaconStatus(beaconStatusesRepository, beaconStatusesActionRepository, getBeaconStatus)
                 .execute(1, VesselStatus.AT_SEA, null)
 
         // Then

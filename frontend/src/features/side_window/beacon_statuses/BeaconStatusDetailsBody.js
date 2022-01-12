@@ -213,7 +213,7 @@ const CommentDate = styled.div`
 `
 
 const Comments = styled.div`
-  max-height: 480px;
+  max-height: 530px;
   overflow-y: auto;
 `
 

@@ -800,7 +800,9 @@ function saveBeaconStatusCommentFromAPI (id, comment) {
     },
     body: JSON.stringify(comment)
   }).then(response => {
-    if (response.status !== CREATED) {
+    if (response.status === CREATED) {
+      return response.json()
+    } else {
       response.text().then(text => {
         console.error(text)
       })

@@ -82,8 +82,9 @@ const SideWindow = ({ menu }) => {
       {
         beaconStatusesStub.map(beaconStatusStub =>
           <BeaconStatusDetails
-            key={beaconStatusStub.id}
-            beaconStatus={beaconStatusStub}
+            key={beaconStatusStub.beaconStatus.id}
+            beaconStatus={beaconStatusStub.beaconStatus}
+            comments={beaconStatusStub.comments}
           />)
       }
       <BeaconStatusesBoardGrayOverlay isOverlayed={true}/>

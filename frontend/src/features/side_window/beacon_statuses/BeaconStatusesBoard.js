@@ -69,6 +69,7 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
 
   useEffect(() => {
     if (setIsOverlayed) {
+      console.log('is', !!openedBeaconStatus)
       setIsOverlayed(!!openedBeaconStatus)
     }
   }, [openedBeaconStatus])
@@ -175,8 +176,6 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
     const previousStage = findStage(active.data.current.stageId)
     setAllDroppableDisabled(previousStage === beaconStatusesStages.RESUMED_TRANSMISSION.code)
   }, [])
-
-  console.log(openedBeaconStatus)
 
   return (
     <Wrapper innerWidth={window.innerWidth}>

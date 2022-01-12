@@ -7,10 +7,10 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusesRepository
 
 @UseCase
 class GetBeaconStatus(private val beaconStatusesRepository: BeaconStatusesRepository,
-                      private val beaconStatusesCommentRepository: BeaconStatusCommentsRepository) {
+                      private val beaconStatusCommentsRepository: BeaconStatusCommentsRepository) {
     fun execute(beaconStatusId: Int): BeaconStatusWithDetails {
         val beaconStatus = beaconStatusesRepository.find(beaconStatusId)
-        val comments = beaconStatusesCommentRepository.findAllByBeaconStatusId(beaconStatusId)
+        val comments = beaconStatusCommentsRepository.findAllByBeaconStatusId(beaconStatusId)
 
         return BeaconStatusWithDetails(
                 beaconStatus = beaconStatus,

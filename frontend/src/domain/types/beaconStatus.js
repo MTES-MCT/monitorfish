@@ -29,6 +29,12 @@
  */
 
 /**
+ * @typedef BeaconStatusCommentInput
+ * @property {string} comment
+ * @property {string} userType
+ */
+
+/**
  * @typedef BeaconStatusWithDetails
  * @property {BeaconStatus} beaconStatus
  * @property {BeaconStatusComment[]} comments

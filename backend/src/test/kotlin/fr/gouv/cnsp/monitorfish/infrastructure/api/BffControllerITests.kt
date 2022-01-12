@@ -516,7 +516,7 @@ class BffControllerITests {
                         beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                                 "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
-                        comments = listOf(BeaconStatusComment(1, 1, "HAHAHA", BeaconStatusCommentUserType.SIP, ZonedDateTime.now()))
+                        comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now()))
                 ))
 
         // When
@@ -524,17 +524,26 @@ class BffControllerITests {
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.comments.length()", equalTo(1)))
-                .andExpect(jsonPath("$.comments[0].comment", equalTo("HAHAHA")))
+                .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
                 .andExpect(jsonPath("$.beaconStatus.internalReferenceNumber", equalTo("CFR")))
     }
 
     @Test
     fun `Should save a beacon status comment`() {
+        given(this.saveBeaconStatusComment.execute(any(), any(), any())).willReturn(BeaconStatusWithDetails(
+                beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                        "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                        true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now()))))
+
         // When
         mockMvc.perform(post("/bff/v1/beacon_statuses/123/comments")
                 .content(objectMapper.writeValueAsString(SaveBeaconStatusCommentDataInput("A comment", BeaconStatusCommentUserType.SIP)))
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isCreated)
+                .andExpect(jsonPath("$.comments.length()", equalTo(1)))
+                .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
+                .andExpect(jsonPath("$.beaconStatus.internalReferenceNumber", equalTo("CFR")))
     }
 }

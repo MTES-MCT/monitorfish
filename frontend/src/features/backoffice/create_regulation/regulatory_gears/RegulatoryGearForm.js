@@ -10,6 +10,8 @@ import { Radio, RadioGroup, MultiCascader } from 'rsuite'
 import GearLine from './GearLine'
 import getAllGearCodes from '../../../../domain/use_cases/getAllGearCodes'
 import { GEARS_CATEGORES_WITH_MESH } from '../../../../domain/entities/regulatory'
+import InfoBox from '../InfoBox'
+import { INFO_TEXT } from '../../constants'
 
 const REGULATORY_GEAR_KEYS = {
   AUTHORIZED: 'authorized',
@@ -245,22 +247,28 @@ const RegulatoryGearForm = (props) => {
       >
         Tous les engins
       </GearCheckBox>}
-      <GearCheckBox
-        data-cy={'all-towed-gears-option'}
-        value={REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS}
-        onChange={onCheckboxChange}
-        checked={allTowedGears}
-      >
-        Engins trainants
-      </GearCheckBox>
-      <GearCheckBox
-        data-cy={'all-passive-gears-option'}
-        value={REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS}
-        onChange={onCheckboxChange}
-        checked={allPassiveGears}
-      >
-        Engins dormants
-      </GearCheckBox>
+      <CheckboxWrapper>
+        <GearCheckBox
+          data-cy={'all-towed-gears-option'}
+          value={REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS}
+          onChange={onCheckboxChange}
+          checked={allTowedGears}
+        >
+          Engins trainants
+        </GearCheckBox>
+        <InfoBox><InfoText>{INFO_TEXT.TOWED_GEAR}</InfoText></InfoBox>
+      </CheckboxWrapper>
+      <CheckboxWrapper>
+        <GearCheckBox
+          data-cy={'all-passive-gears-option'}
+          value={REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS}
+          onChange={onCheckboxChange}
+          checked={allPassiveGears}
+        >
+          Engins dormants
+        </GearCheckBox>
+        <InfoBox><InfoText>{INFO_TEXT.PASSIVE_GEAR}</InfoText></InfoBox>
+      </CheckboxWrapper>
       <CustomMultiCascader
         data-cy='gears-selector'
         data={allCategoriesAndGears}
@@ -308,24 +316,37 @@ const RegulatoryGearForm = (props) => {
         </GearList>
         : null
       }
-      {!authorized && <DerogationRadio
-        inline
-        onChange={value => set(REGULATORY_GEAR_KEYS.DEROGATION, value)}
-        value={derogation}
-      >
-        <Text>{'Mesures dérogatoires'}</Text>
-        <CustomRadio checked={authorized} value={true} >
-          oui
-          <GreenCircle />
-        </CustomRadio>
-        <CustomRadio checked={authorized === false} value={false} >
-          non
-          <RedCircle />
-        </CustomRadio>
-      </DerogationRadio>}
+      {!authorized && <DerogationRadioWrapper>
+        <DerogationRadio
+          inline
+          onChange={value => set(REGULATORY_GEAR_KEYS.DEROGATION, value)}
+          value={derogation}
+          $isYellow={derogation}
+        >
+          <Text>{'Mesures dérogatoires'}</Text>
+          <CustomRadio value={true} >
+            oui
+            <GreenCircle />
+          </CustomRadio>
+          <CustomRadio value={false} >
+            non
+            <RedCircle />
+          </CustomRadio>
+        </DerogationRadio>
+      </DerogationRadioWrapper>}
     </FormContent>
   </FormSection>
 }
+
+const CheckboxWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+const InfoText = styled.span`
+  padding-left: 6px;
+  white-space: nowrap;
+`
 
 const GearList = styled.div`
   padding-top: 20px;
@@ -343,7 +364,8 @@ const CustomMultiCascader = styled(MultiCascader)`
   }
 `
 
-const GearCheckBox = styled(CustomCheckbox)` 
+const GearCheckBox = styled(CustomCheckbox)`
+  padding-right: 11px;
   margin-bottom: 15px;
 `
 
@@ -365,9 +387,16 @@ const RedCircle = styled.span`
   background-color: ${COLORS.red};
 `
 
+const DerogationRadioWrapper = styled.div`
+  padding-top: 15px;
+`
 const DerogationRadio = styled(RadioGroup)` 
   ${customRadioGroup}
-  padding-top: 15px!important;
+  padding-right: 10px!important;
+  ${props => props.$isYellow ? `border: 1.5px solid ${COLORS.yellow}!important;` : ''}
+  :focus {
+    ${props => props.$isYellow ? `border: 1.5px solid ${COLORS.yellow}!important;` : ''}
+  }
 `
 
 const Text = styled.p`

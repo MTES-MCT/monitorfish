@@ -10,6 +10,7 @@ import WFS from 'ol/format/WFS'
 import GML from 'ol/format/GML'
 
 const OK = 200
+const CREATED = 201
 const NOT_FOUND = 404
 const ACCEPTED = 202
 
@@ -33,6 +34,7 @@ const ALERTS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les alertes opér
 const BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les avaries VMS'
 const BEACON_STATUS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer l\'avarie VMS'
 const UPDATE_BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour le statut de l\'avarie VMS'
+const SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter le commentaire sur l\'avarie VMS'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -782,6 +784,34 @@ function getBeaconStatusFromAPI (beaconStatusId) {
     })
 }
 
+/**
+ * Save a new comment attached to a beacon status
+ * @memberOf API
+ * @param {string} id - The id of the beacon status
+ * @param {BeaconStatusCommentInput} comment - The fields to update
+ * @throws {Error}
+ */
+function saveBeaconStatusCommentFromAPI (id, comment) {
+  return fetch(`/bff/v1/beacon_statuses/${id}/comments`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json, text/plain',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    body: JSON.stringify(comment)
+  }).then(response => {
+    if (response.status !== CREATED) {
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE)
+    }
+  }).catch(error => {
+    console.error(error)
+    throw Error(SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE)
+  })
+}
+
 export {
   getVesselsLastPositionsFromAPI,
   getVesselFromAPI,
@@ -807,5 +837,6 @@ export {
   getOperationalAlertsFromAPI,
   getAllBeaconStatusesFromAPI,
   updateBeaconStatusFromAPI,
-  getBeaconStatusFromAPI
+  getBeaconStatusFromAPI,
+  saveBeaconStatusCommentFromAPI
 }

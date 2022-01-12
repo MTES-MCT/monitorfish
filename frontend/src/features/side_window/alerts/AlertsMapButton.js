@@ -38,7 +38,7 @@ const AlertsMapButton = () => {
           copyStyles
           name={'MonitorFish'}
           title={'MonitorFish'}
-          features={{ scrollbars: true, width: '1500px', height: '900px' }}
+          features={{ scrollbars: true, width: '1500px', height: '1200px' }}
           onUnload={() => {
             batch(() => {
               dispatch(closeSideWindow())

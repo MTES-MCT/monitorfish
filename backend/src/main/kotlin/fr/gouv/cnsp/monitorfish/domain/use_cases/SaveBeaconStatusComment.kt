@@ -3,13 +3,16 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusComment
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusCommentUserType
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusWithDetails
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusCommentsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusesRepository
 import java.time.ZonedDateTime
 
 @UseCase
-class SaveBeaconStatusComment(private val beaconStatusCommentsRepository: BeaconStatusCommentsRepository) {
+class SaveBeaconStatusComment(private val beaconStatusesRepository: BeaconStatusesRepository,
+                              private val beaconStatusCommentsRepository: BeaconStatusCommentsRepository) {
     @Throws(IllegalArgumentException::class)
-    fun execute(beaconStatusId: Int, comment: String, userType: BeaconStatusCommentUserType) {
+    fun execute(beaconStatusId: Int, comment: String, userType: BeaconStatusCommentUserType): BeaconStatusWithDetails {
         val beaconStatusComment = BeaconStatusComment(
                 beaconStatusId = beaconStatusId,
                 comment = comment,
@@ -17,5 +20,12 @@ class SaveBeaconStatusComment(private val beaconStatusCommentsRepository: Beacon
                 dateTime = ZonedDateTime.now())
 
         beaconStatusCommentsRepository.save(beaconStatusComment)
+
+        val beaconStatus = beaconStatusesRepository.find(beaconStatusId)
+        val comments = beaconStatusCommentsRepository.findAllByBeaconStatusId(beaconStatusId)
+
+        return BeaconStatusWithDetails(
+                beaconStatus = beaconStatus,
+                comments = comments)
     }
 }

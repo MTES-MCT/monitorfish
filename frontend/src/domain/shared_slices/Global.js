@@ -1,9 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { UserType } from '../entities/beaconStatus'
+import { getLocalStorageState } from '../../utils'
 
 /* eslint-disable */
 /** @namespace GlobalReducer */
 const GlobalReducer = null
 /* eslint-enable */
+
+const userTypeLocalStorageKey = 'userType'
 
 const globalSlice = createSlice({
   name: 'global',
@@ -17,7 +21,8 @@ const globalSlice = createSlice({
     healthcheckTextWarning: null,
     previewFilteredVesselsMode: undefined,
     inBackofficeMode: false,
-    sideWindowIsOpen: false
+    sideWindowIsOpen: false,
+    userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey)
   },
   reducers: {
     expandRightMenu (state) {
@@ -95,6 +100,17 @@ const globalSlice = createSlice({
      */
     closeSideWindow (state) {
       state.sideWindowIsOpen = false
+    },
+    /**
+     * Set the user type as OPS or SIP
+     * @function setUserType
+     * @memberOf GlobalReducer
+     * @param {Object=} state
+     * @param {{payload: string}} action - The user type
+     */
+    setUserType (state, action) {
+      state.userType = action.payload
+      window.localStorage.setItem(userTypeLocalStorageKey, JSON.stringify(state.userType))
     }
   }
 })
@@ -113,7 +129,8 @@ export const {
   setBlockVesselsUpdate,
   setInBackofficeMode,
   openSideWindow,
-  closeSideWindow
+  closeSideWindow,
+  setUserType
 } = globalSlice.actions
 
 export default globalSlice.reducer

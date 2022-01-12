@@ -284,21 +284,23 @@ class BffController(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = ["/v1/beacon_statuses/{beaconStatusId}/comments"], consumes = ["application/json"])
-    @ApiOperation("Save a beacon status comment")
+    @ApiOperation("Save a beacon status comment and return the updated beacon status")
     fun saveBeaconStatusComment(@PathParam("Beacon status id")
                                 @PathVariable(name = "beaconStatusId")
                                 beaconStatusId: Int,
                                 @RequestBody
-                                saveBeaconStatusCommentDataInput: SaveBeaconStatusCommentDataInput) {
-        saveBeaconStatusComment.execute(
+                                saveBeaconStatusCommentDataInput: SaveBeaconStatusCommentDataInput): BeaconStatusWithDetailsDataOutput {
+        return saveBeaconStatusComment.execute(
                 beaconStatusId = beaconStatusId,
                 comment = saveBeaconStatusCommentDataInput.comment,
-                userType = saveBeaconStatusCommentDataInput.userType)
+                userType = saveBeaconStatusCommentDataInput.userType).let {
+            BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(it)
+        }
     }
 
     @GetMapping(value = ["/v1/beacon_statuses/{beaconStatusId}"])
     @ApiOperation("Get a beacon status with the comments and history")
-    fun getAllBeaconStatuses(@PathParam("Beacon status id")
+    fun getBeaconStatus(@PathParam("Beacon status id")
                              @PathVariable(name = "beaconStatusId")
                              beaconStatusId: Int): BeaconStatusWithDetailsDataOutput {
         return BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(getBeaconStatus.execute(beaconStatusId))

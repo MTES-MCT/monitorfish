@@ -25,7 +25,7 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
       <Row isFirstRow>
         <Flag rel='preload' src={`${baseUrl}/flags/fr.svg`}/>
         <VesselName
-          onClick={() => dispatch(openBeaconStatus(beaconStatus))}
+          onClick={() => dispatch(openBeaconStatus({ beaconStatus }))}
         >
           {beaconStatus.vesselName || 'Aucun nom'}
         </VesselName>

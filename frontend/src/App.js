@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Redirect, Route, Switch, useRouteMatch } from 
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
 import { browserName, browserVersion } from 'react-device-detect'
+import { PersistGate } from 'redux-persist/integration/react'
 
 import Map from './features/map/Map'
 import Backoffice from './features/backoffice/Backoffice'
@@ -19,7 +20,7 @@ import VesselFilters from './features/vessel_filters/VesselFilters'
 import NewRegulation from './features/backoffice/create_regulation/NewRegulation'
 import { ReactComponent as AlertSVG } from './features/icons/Picto_alerte.svg'
 import { Provider } from 'react-redux'
-import { backofficeStore, homeStore } from './Store'
+import { backofficeStore, homeStore, homePersistor, backofficePersistor } from './Store'
 import NamespaceContext from './domain/context/NamespaceContext'
 import Healthcheck from './features/healthcheck/Healthcheck'
 import InterestPoint from './features/interest_points/InterestPoint'
@@ -76,40 +77,42 @@ function App () {
 
 function HomePage () {
   return <Provider store={homeStore}>
-    <NamespaceContext.Provider value={'homepage'}>
-      <BackofficeMode inBackofficeMode={false}/>
-      <Switch>
-        <Route exact path="/side_window">
-          <SideWindow
-            openedSideWindowTab={sideWindowMenu.ALERTS.code}
-            fromTab
-          />
-        </Route>
-        <Route exact path="/">
-          <Healthcheck/>
-          <PreviewFilteredVessels/>
-          <Wrapper>
-            <Map/>
-            <LayersSidebar/>
-            <AlertsMapButton/>
-            <BeaconStatusesMapButton/>
-            <VesselsSearch/>
-            <RightMenuOnHoverArea/>
-            <VesselList namespace={'homepage'}/>
-            <VesselFilters/>
-            <VesselVisibility/>
-            <VesselSidebar/>
-            <UpdatingVesselLoader/>
-            <Measurement/>
-            <InterestPoint/>
-            <VesselLabels/>
-            <APIWorker/>
-            <ErrorToastNotification/>
-            <SideWindowLauncher/>
-          </Wrapper>
-        </Route>
-      </Switch>
-    </NamespaceContext.Provider>
+    <PersistGate loading={null} persistor={homePersistor}>
+      <NamespaceContext.Provider value={'homepage'}>
+        <BackofficeMode inBackofficeMode={false}/>
+        <Switch>
+          <Route exact path="/side_window">
+            <SideWindow
+              openedSideWindowTab={sideWindowMenu.ALERTS.code}
+              fromTab
+            />
+          </Route>
+          <Route exact path="/">
+            <Healthcheck/>
+            <PreviewFilteredVessels/>
+            <Wrapper>
+              <Map/>
+              <LayersSidebar/>
+              <VesselsSearch/>
+              <AlertsMapButton/>
+              <BeaconStatusesMapButton/>
+              <RightMenuOnHoverArea/>
+              <VesselList namespace={'homepage'}/>
+              <VesselFilters/>
+              <VesselVisibility/>
+              <VesselSidebar/>
+              <UpdatingVesselLoader/>
+              <Measurement/>
+              <InterestPoint/>
+              <VesselLabels/>
+              <APIWorker/>
+              <ErrorToastNotification/>
+              <SideWindowLauncher/>
+            </Wrapper>
+          </Route>
+        </Switch>
+      </NamespaceContext.Provider>
+    </PersistGate>
   </Provider>
 }
 
@@ -117,32 +120,34 @@ function BackofficePage () {
   const match = useRouteMatch()
 
   return <Provider store={backofficeStore}>
-    <NamespaceContext.Provider value={'backoffice'}>
-      <BackofficeMode inBackofficeMode={true}/>
-      <BackofficeWrapper>
-        <Menu/>
-        <Switch>
-          <Route
-            exact
-            path="/backoffice"
-            render={() => <Redirect to="/backoffice/regulation"/>}
-          />
-          <Route exact path={`${match.path}/regulation`}>
-            <Backoffice/>
-          </Route>
-          <Route exact path={`${match.path}/regulation/new`}>
-            <NewRegulation title='Saisir une nouvelle réglementation' />
-          </Route>
-          <Route exact path={`${match.path}/regulation/edit`}>
-            <NewRegulation title='Modifier la réglementation de la zone' isEdition={true}/>
-          </Route>
-          <Route exact path={`${match.path}/control_objectives`}>
-            <ControlObjectives/>
-          </Route>
-        </Switch>
-      </BackofficeWrapper>
-      <ErrorToastNotification/>
-    </NamespaceContext.Provider>
+    <PersistGate loading={null} persistor={backofficePersistor}>
+      <NamespaceContext.Provider value={'backoffice'}>
+        <BackofficeMode inBackofficeMode={true}/>
+        <BackofficeWrapper>
+          <Menu/>
+          <Switch>
+            <Route
+              exact
+              path="/backoffice"
+              render={() => <Redirect to="/backoffice/regulation"/>}
+            />
+            <Route exact path={`${match.path}/regulation`}>
+              <Backoffice/>
+            </Route>
+            <Route exact path={`${match.path}/regulation/new`}>
+              <NewRegulation title='Saisir une nouvelle réglementation' />
+            </Route>
+            <Route exact path={`${match.path}/regulation/edit`}>
+              <NewRegulation title='Modifier la réglementation de la zone' isEdition={true}/>
+            </Route>
+            <Route exact path={`${match.path}/control_objectives`}>
+              <ControlObjectives/>
+            </Route>
+          </Switch>
+        </BackofficeWrapper>
+        <ErrorToastNotification/>
+      </NamespaceContext.Provider>
+    </PersistGate>
   </Provider>
 }
 

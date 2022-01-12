@@ -4,5 +4,5 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusActi
 
 interface BeaconStatusActionsRepository {
     fun findAllByBeaconStatusId(beaconStatusId: Int): List<BeaconStatusAction>
-    fun BeaconStatusAction.save()
+    fun save(beaconStatusAction: BeaconStatusAction)
 }

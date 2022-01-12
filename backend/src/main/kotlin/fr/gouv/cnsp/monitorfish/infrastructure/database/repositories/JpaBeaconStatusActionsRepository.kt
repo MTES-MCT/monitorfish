@@ -17,7 +17,7 @@ class JpaBeaconStatusActionsRepository(private val dbBeaconStatusActionsReposito
     }
 
     @Transactional
-    override fun BeaconStatusAction.save() {
-        dbBeaconStatusActionsRepository.save(BeaconStatusActionEntity.fromBeaconStatusAction(this))
+    override fun save(beaconStatusAction: BeaconStatusAction) {
+        dbBeaconStatusActionsRepository.save(BeaconStatusActionEntity.fromBeaconStatusAction(beaconStatusAction))
     }
 }

@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import { COLORS } from '../../constants/constants'
 import { AddRegulationButton } from '../commonStyles/Buttons.style'
-import { searchByLawType } from '../../domain/entities/regulatory'
+import { searchByLawType, searchResultIncludeZone } from '../../domain/entities/regulatory'
+import { closeRegulatoryZoneMetadataPanel } from '../../domain/shared_slices/Regulatory'
 import { BACKOFFICE_SEARCH_PROPERTIES } from '../../domain/entities/backoffice'
 
 const SearchRegulations = props => {
+  const dispatch = useDispatch()
   const {
     setFoundRegulatoryZonesByRegTerritory,
     regulatoryZoneListByRegTerritory
@@ -15,6 +18,10 @@ const SearchRegulations = props => {
 
   const searchInput = useRef(null)
   const [searchText, setSearchText] = useState('')
+
+  const {
+    regulatoryZoneMetadata
+  } = useSelector(state => state.regulatory)
 
   useEffect(() => {
     searchRegulatoryZone()
@@ -37,6 +44,11 @@ const SearchRegulations = props => {
           searchResult[territory] = searchResultByLawType
         }
       })
+      if (regulatoryZoneMetadata !== null) {
+        if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata)) {
+          dispatch(closeRegulatoryZoneMetadataPanel())
+        }
+      }
       setFoundRegulatoryZonesByRegTerritory(searchResult)
     }
   }

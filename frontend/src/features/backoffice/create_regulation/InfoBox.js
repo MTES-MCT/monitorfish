@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 
@@ -7,34 +7,47 @@ const InfoBox = props => {
     isInfoTextShown,
     setIsInfoTextShown,
     isFormOpened,
-    message,
+    pointer,
     className,
     children
   } = props
+
+  const [isShown, setIsShown] = useState(isInfoTextShown !== undefined ? isInfoTextShown : false)
+
+  const onMouseLeave = () => {
+    if (!isFormOpened) {
+      changeDisplayStatus(false)
+    }
+  }
+
+  const changeDisplayStatus = (status) => {
+    if (setIsInfoTextShown) {
+      setIsInfoTextShown(status)
+    }
+    setIsShown(status)
+  }
   return (
     <InfoTextParent
-      isInfoTextShown={isInfoTextShown}
+      isInfoTextShown={isShown}
       isFormOpened={isFormOpened}
-      onMouseLeave={() => setIsInfoTextShown && !isFormOpened && setIsInfoTextShown(false)}
-      pointer={message}
+      onMouseLeave={onMouseLeave}
+      pointer={pointer}
       className={className}
     >
-      {isInfoTextShown
+      {isShown || isFormOpened
         ? <InfoTextWrapper
-          isInfoTextShown={isInfoTextShown}
+          isInfoTextShown={isShown}
           isFormOpened={isFormOpened}
-          onMouseLeave={() => setIsInfoTextShown && !isFormOpened && setIsInfoTextShown(false)}
+          onMouseLeave={onMouseLeave}
           >
           <InfoPoint
-            isInfoTextShown={isInfoTextShown}
+            isInfoTextShown={isShown || isFormOpened}
           >!</InfoPoint>
-          <ChildrenWrapper>
-            {children}
-          </ChildrenWrapper>
+          {children}
         </InfoTextWrapper>
         : <InfoPoint
-          onMouseEnter={() => setIsInfoTextShown && setIsInfoTextShown(true)}
-          onMouseOut={() => setIsInfoTextShown && setIsInfoTextShown(false)}
+          onMouseEnter={() => changeDisplayStatus(true)}
+          onMouseOut={() => changeDisplayStatus(true)}
         >!</InfoPoint>}
     </InfoTextParent>)
 }
@@ -45,14 +58,8 @@ const InfoTextParent = styled.div`
   min-width: 14px;
   position: relative;
   cursor: ${props => props.pointer ? 'pointer' : 'default'};
-  ${props => props.isFormOpened && props.isInfoTextShown ? 'left: 384px' : ''};
-  ${props => props.isFormOpened && props.isInfoTextShown ? 'margin-top: 8px' : ''};
-`
-
-const ChildrenWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: left;
+  ${props => props.isFormOpened ? 'left: 384px' : ''};
+  ${props => props.isFormOpened ? 'margin-top: 8px' : ''};
 `
 
 const InfoTextWrapper = styled.div`
@@ -61,9 +68,7 @@ const InfoTextWrapper = styled.div`
   border: 1px solid ${COLORS.lightGray};
   background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
   border-radius: 2px;
-  min-width: 460px;
-  max-width: 500px;
-  padding: 8px 20px 20px 8px;
+  padding: 8px 20px 9px 8px;
   ${props => props.isInfoTextShown && !props.isFormOpened ? 'margin-top: -10px;' : ''}
   box-sizing: border-box;
   z-index: 30;
@@ -77,6 +82,7 @@ const InfoPoint = styled.a`
   height: 14px;
   width: 14px;
   border-radius: 50%;
+  ${props => props.isInfoTextShown ? 'margin-top: 3px;' : ''}
   background: ${props => props.isInfoTextShown ? COLORS.charcoal : COLORS.slateGray} 0% 0% no-repeat padding-box;
   color: ${COLORS.white};
   text-align: center;

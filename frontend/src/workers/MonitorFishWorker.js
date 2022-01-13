@@ -34,7 +34,7 @@ class MonitorFishWorker {
   }
 
   #getGeometryIdFromFeatureId = feature => {
-    return feature.properties.id || feature.id.split('.')[1]
+    return feature.vesselProperties?.id || feature.id.split('.')[1]
   }
 
   getGeometryWithoutRegulationRef (features) {
@@ -196,7 +196,7 @@ class MonitorFishWorker {
     } = filters
 
     if (countriesFiltered?.length) {
-      vessels = vessels.filter(vessel => countriesFiltered.some(country => vessel.flagState === country))
+      vessels = vessels.filter(vessel => countriesFiltered.some(country => vessel.vesselProperties?.flagState === country))
     }
 
     if (lastPositionTimeAgoFilter) {
@@ -214,7 +214,7 @@ class MonitorFishWorker {
       const controlBefore = getDateMonthsBefore(new Date(), lastControlMonthsAgo)
 
       vessels = vessels.filter(vessel => {
-        const vesselDate = new Date(vessel.lastControlDateTimeTimestamp)
+        const vesselDate = new Date(vessel.vesselProperties?.lastControlDateTimeTimestamp)
 
         return vesselDate < controlBefore
       })
@@ -223,34 +223,34 @@ class MonitorFishWorker {
     if (fleetSegmentsFiltered?.length) {
       vessels = vessels.filter(vessel =>
         fleetSegmentsFiltered.some(fleetSegment => {
-          return vessel.fleetSegmentsArray.includes(fleetSegment)
+          return vessel.vesselProperties?.fleetSegmentsArray.includes(fleetSegment)
         }))
     }
 
     if (gearsFiltered?.length) {
       vessels = vessels.filter(vessel =>
         gearsFiltered.some(gear => {
-          return vessel.gearsArray.includes(gear)
+          return vessel.vesselProperties?.gearsArray.includes(gear)
         }))
     }
 
     if (speciesFiltered?.length) {
       vessels = vessels.filter(vessel =>
         speciesFiltered.some(species => {
-          return vessel.speciesArray.includes(species)
+          return vessel.vesselProperties?.speciesArray.includes(species)
         }))
     }
 
     if (districtsFiltered?.length) {
       vessels = vessels.filter(vessel =>
         districtsFiltered.some(district => {
-          return vessel.district === district
+          return vessel.vesselProperties?.district === district
         }))
     }
 
     if (vesselsSizeValuesChecked?.length) {
       vessels = vessels.filter(vessel => {
-        return this.evaluateVesselsSize(vesselsSizeValuesChecked, vessel)
+        return this.evaluateVesselsSize(vesselsSizeValuesChecked, vessel.vesselProperties?.length)
       })
     }
 
@@ -267,19 +267,19 @@ class MonitorFishWorker {
     return vessels
   }
 
-  evaluateVesselsSize (vesselsSizeValuesChecked, vessel) {
+  evaluateVesselsSize (vesselsSizeValuesChecked, length) {
     if (vesselsSizeValuesChecked.length === 3) {
       return true
     }
 
     if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TEN_METERS.code) &&
       vesselsSizeValuesChecked.includes(vesselSize.ABOVE_TWELVE_METERS.code)) {
-      return vesselSize.BELOW_TEN_METERS.evaluate(vessel.length) || vesselSize.ABOVE_TWELVE_METERS.evaluate(vessel.length)
+      return vesselSize.BELOW_TEN_METERS.evaluate(length) || vesselSize.ABOVE_TWELVE_METERS.evaluate(length)
     }
 
     if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TEN_METERS.code) &&
       vesselsSizeValuesChecked.includes(vesselSize.BELOW_TWELVE_METERS.code)) {
-      return vesselSize.BELOW_TWELVE_METERS.evaluate(vessel.length)
+      return vesselSize.BELOW_TWELVE_METERS.evaluate(length)
     }
 
     if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TWELVE_METERS.code) &&
@@ -288,15 +288,15 @@ class MonitorFishWorker {
     }
 
     if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TEN_METERS.code)) {
-      return vesselSize.BELOW_TEN_METERS.evaluate(vessel.length)
+      return vesselSize.BELOW_TEN_METERS.evaluate(length)
     }
 
     if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TWELVE_METERS.code)) {
-      return vesselSize.BELOW_TWELVE_METERS.evaluate(vessel.length)
+      return vesselSize.BELOW_TWELVE_METERS.evaluate(length)
     }
 
     if (vesselsSizeValuesChecked.includes(vesselSize.ABOVE_TWELVE_METERS.code)) {
-      return vesselSize.ABOVE_TWELVE_METERS.evaluate(vessel.length)
+      return vesselSize.ABOVE_TWELVE_METERS.evaluate(length)
     }
   }
 

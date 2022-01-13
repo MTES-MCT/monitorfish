@@ -28,10 +28,46 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   } = useSelector(state => state.global)
 
   useEffect(() => {
+    function createAnimateObject (resolution, duration, zoom) {
+      return {
+        center: [
+          animateToCoordinates[0] + resolution,
+          animateToCoordinates[1]
+        ],
+        duration,
+        zoom
+      }
+    }
+    function animateViewToCoordinates () {
+      if (map && animateToCoordinates && vesselSidebarIsOpen) {
+        if (map.getView().getZoom() >= 8) {
+          const resolution = map.getView().getResolution()
+          map.getView().animate(createAnimateObject(resolution * 200, 1000, undefined))
+        } else {
+          map.getView().animate(createAnimateObject(0, 800, 8), () => {
+            const resolution = map.getView().getResolution()
+            map.getView().animate(createAnimateObject(resolution * 200, 500, undefined))
+          })
+        }
+        dispatch(resetAnimateToCoordinates())
+      }
+    }
     animateViewToCoordinates()
   }, [animateToCoordinates, map, vesselSidebarIsOpen])
 
   useEffect(() => {
+    function animateViewToExtent () {
+      if (map && vesselSidebarIsOpen && animateToExtent && vesselTrackExtent?.length) {
+        map.getView().fit(vesselTrackExtent, {
+          duration: 500,
+          padding: [100, 550, 100, 50],
+          maxZoom: 10,
+          callback: () => {
+            dispatch(resetAnimateToExtent())
+          }
+        })
+      }
+    }
     animateViewToExtent()
   }, [animateToExtent, vesselTrackExtent, map, vesselSidebarIsOpen])
 
@@ -46,53 +82,13 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
           dispatch(showVesselTrack(feature, false))
         } else {
           batch(() => {
-            dispatch(showVessel(feature, false, false))
-            dispatch(getVesselVoyage(feature, null, false))
+            dispatch(showVessel(feature.vesselProperties, false, false))
+            dispatch(getVesselVoyage(feature.vesselProperties, null, false))
           })
         }
       }
     }
   }, [mapClickEvent])
-
-  function animateViewToExtent () {
-    if (map && vesselSidebarIsOpen && animateToExtent && vesselTrackExtent?.length) {
-      map.getView().fit(vesselTrackExtent, {
-        duration: 500,
-        padding: [100, 550, 100, 50],
-        maxZoom: 10,
-        callback: () => {
-          dispatch(resetAnimateToExtent())
-        }
-      })
-    }
-  }
-
-  function animateViewToCoordinates () {
-    if (map && animateToCoordinates && vesselSidebarIsOpen) {
-      if (map.getView().getZoom() >= 8) {
-        const resolution = map.getView().getResolution()
-        map.getView().animate(createAnimateObject(resolution * 200, 1000, undefined))
-      } else {
-        map.getView().animate(createAnimateObject(0, 800, 8), () => {
-          const resolution = map.getView().getResolution()
-          map.getView().animate(createAnimateObject(resolution * 200, 500, undefined))
-        })
-      }
-
-      dispatch(resetAnimateToCoordinates())
-    }
-  }
-
-  function createAnimateObject (resolution, duration, zoom) {
-    return {
-      center: [
-        animateToCoordinates[0] + resolution,
-        animateToCoordinates[1]
-      ],
-      duration,
-      zoom
-    }
-  }
 
   return null
 }

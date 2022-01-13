@@ -99,23 +99,24 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
         }
       })
 
-      function moveVesselLabelLine (featureId, coordinates, nextCoordinates, offset) {
+      function moveVesselLabelLine (featureId, fromCoordinates, toCoordinates, offset, opacity) {
         if (vesselToCoordinates.has(featureId)) {
           const existingLabelLineFeature = vectorSourceRef.current.getFeatureById(featureId)
           if (existingLabelLineFeature) {
-            existingLabelLineFeature.setGeometry(new LineString([coordinates, nextCoordinates]))
+            existingLabelLineFeature.setGeometry(new LineString([fromCoordinates, toCoordinates]))
           }
         } else {
           const labelLineFeature = VesselLabelLine.getFeature(
-            coordinates,
-            nextCoordinates,
-            featureId)
+            fromCoordinates,
+            toCoordinates,
+            featureId,
+            opacity)
 
           vectorSourceRef.current.addFeature(labelLineFeature)
         }
 
         const nextVesselToCoordinates = vesselToCoordinates
-        nextVesselToCoordinates.set(featureId, { coordinates: nextCoordinates, offset })
+        nextVesselToCoordinates.set(featureId, { coordinates: toCoordinates, offset })
         setVesselToCoordinates(nextVesselToCoordinates)
       }
       function triggerShowRiskDetails (featureId) {
@@ -166,10 +167,9 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
       vesselsLayerSourceRef?.current?.forEachFeatureInExtent(map.getView().calculateExtent(), vesselFeature => {
-        const vessel = vesselFeature.getProperties()
-        const opacity = Vessel.getVesselOpacity(vessel.dateTime, vesselIsHidden, vesselIsOpacityReduced)
-        const labelLineFeatureId = VesselLabelLine.getFeatureId(vessel)
-
+        const { vesselProperties } = vesselFeature
+        const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)
+        const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
         const feature = vectorSourceRef?.current?.getFeatureById(labelLineFeatureId)
         if (feature) {
           feature.set(VesselLabelLine.opacityProperty, opacity)
@@ -183,7 +183,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       return
     }
     // functions definition
-    function drawMovedLabelIfFoundAndReturnOffset (labelLineFeatureId, feature) {
+    function drawMovedLabelIfFoundAndReturnOffset (labelLineFeatureId, feature, opacity) {
       let offset = null
 
       if (vesselToCoordinates.has(labelLineFeatureId)) {
@@ -197,7 +197,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           const labelLineFeature = VesselLabelLine.getFeature(
             feature.getGeometry().getCoordinates(),
             coordinatesAndOffset.coordinates,
-            labelLineFeatureId)
+            labelLineFeatureId,
+            opacity)
           labelLineFeature.setId(labelLineFeatureId)
           vectorSourceRef.current.addFeature(labelLineFeature)
         }
@@ -211,29 +212,30 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
       const nextFeaturesAndLabels = features
         .map(feature => {
-          const featureProperties = feature.getProperties()
-          const label = Vessel.getVesselFeatureLabel(featureProperties, {
+          const { vesselProperties } = feature
+          const label = Vessel.getVesselFeatureLabel(vesselProperties, {
             vesselLabel,
             vesselsLastPositionVisibility,
             riskFactorShowedOnMap,
             vesselLabelsShowedOnMap,
             hideVesselsAtPort
           })
-          const labelLineFeatureId = VesselLabelLine.getFeatureId(featureProperties)
-          const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature)
-          const trackIsShown = showedTracksVesselsIdentities.includes(getVesselFeatureIdFromVessel(featureProperties))
+          const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
+          const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)
+          const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature, opacity)
+          const trackIsShown = showedTracksVesselsIdentities.includes(getVesselFeatureIdFromVessel(vesselProperties))
 
           return {
             identity: {
               key: feature.ol_uid,
-              flagState: featureProperties.flagState,
+              flagState: vesselProperties.flagState,
               coordinates: feature.getGeometry().getCoordinates(),
-              internalReferenceNumber: featureProperties.internalReferenceNumber,
-              ircs: featureProperties.ircs,
-              externalReferenceNumber: featureProperties.externalReferenceNumber
+              internalReferenceNumber: vesselProperties.internalReferenceNumber,
+              ircs: vesselProperties.ircs,
+              externalReferenceNumber: vesselProperties.externalReferenceNumber
             },
             trackIsShown,
-            opacity: Vessel.getVesselOpacity(featureProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced),
+            opacity,
             label,
             offset,
             featureId: labelLineFeatureId

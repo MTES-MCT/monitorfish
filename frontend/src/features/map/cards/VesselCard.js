@@ -15,32 +15,32 @@ timeago.register('fr', timeagoFrenchLocale)
 
 const VesselCard = ({ feature, overlayPosition, hasAlert }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
-  const featureProperties = feature.getProperties()
+  const { vesselProperties } = feature
   const featureCoordinates = feature.getGeometry().getCoordinates()
-
+  console.log(feature)
   return (
     <>
       <VesselCardHeader>
         {
-          featureProperties.flagState
+          vesselProperties.flagState
             ? <>
-              <Flag rel="preload" src={`flags/${featureProperties.flagState.toLowerCase()}.svg`}/>{' '}</>
+              <Flag rel="preload" src={`flags/${vesselProperties.flagState.toLowerCase()}.svg`}/>{' '}</>
             : null
         }
         <VesselCardTitle data-cy={'vessel-card-name'}>
           {
-            featureProperties.vesselName
-              ? featureProperties.vesselName
+            vesselProperties.vesselName
+              ? vesselProperties.vesselName
               : 'NOM INCONNU'
           }{' '}
           {
-            featureProperties.flagState
-              ? <>({featureProperties.flagState})</>
+            vesselProperties.flagState
+              ? <>({vesselProperties.flagState.toUpperCase()})</>
               : ''
           }
         </VesselCardTitle>
         {
-          featureProperties.lastErsDateTime
+          vesselProperties.lastErsDateTime
             ? <ERS>
               <ERSOK/>
               <MessageText>JPE</MessageText>
@@ -72,28 +72,28 @@ const VesselCard = ({ feature, overlayPosition, hasAlert }) => {
         </LatLon>
         <Course>
           <FieldName>Route</FieldName>
-          <FieldValue>{featureProperties.course === 0 || featureProperties.course
-            ? <>{featureProperties.course}°</>
+          <FieldValue>{vesselProperties.course === 0 || vesselProperties.course
+            ? <>{vesselProperties.course}°</>
             : <NoValue>-</NoValue>}</FieldValue>
           <FieldName>Vitesse</FieldName>
-          <FieldValue>{featureProperties.speed === 0 || featureProperties.speed
-            ? <>{featureProperties.speed} Nds</>
+          <FieldValue>{vesselProperties.speed === 0 || vesselProperties.speed
+            ? <>{vesselProperties.speed} Nds</>
             : <NoValue>-</NoValue>}</FieldValue>
         </Course>
         <Position>
           <FieldName>Dernier signal VMS</FieldName>
           <FieldValue>
             {
-              featureProperties.dateTime
-                ? <>{timeago.format(featureProperties.dateTime, 'fr')}</>
+              vesselProperties.dateTime
+                ? <>{timeago.format(vesselProperties.dateTime, 'fr')}</>
                 : <NoValue>-</NoValue>
             }
           </FieldValue>
           <FieldName>Cadencement</FieldName>
           <FieldValue>
             {
-              featureProperties.emissionPeriod
-                ? <>1 signal toutes les {featureProperties.emissionPeriod / 60} min</>
+              vesselProperties.emissionPeriod
+                ? <>1 signal toutes les {vesselProperties.emissionPeriod / 60} min</>
                 : <NoValue>-</NoValue>
             }
           </FieldValue>
@@ -105,14 +105,14 @@ const VesselCard = ({ feature, overlayPosition, hasAlert }) => {
             <Body>
               <Field>
                 <Key>CFR</Key>
-                <Value data-cy={'vessel-card-internal-reference-number'}>{featureProperties.internalReferenceNumber
-                  ? featureProperties.internalReferenceNumber
+                <Value data-cy={'vessel-card-internal-reference-number'}>{vesselProperties.internalReferenceNumber
+                  ? vesselProperties.internalReferenceNumber
                   : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key>MMSI</Key>
-                <Value data-cy={'vessel-card-mmsi'}>{featureProperties.mmsi
-                  ? featureProperties.mmsi
+                <Value data-cy={'vessel-card-mmsi'}>{vesselProperties.mmsi
+                  ? vesselProperties.mmsi
                   : <NoValue>-</NoValue>}</Value>
               </Field>
             </Body>
@@ -123,14 +123,14 @@ const VesselCard = ({ feature, overlayPosition, hasAlert }) => {
             <Body>
               <Field>
                 <Key>Marquage ext.</Key>
-                <Value data-cy={'vessel-card-external-reference-number'}>{featureProperties.externalReferenceNumber
-                  ? featureProperties.externalReferenceNumber
+                <Value data-cy={'vessel-card-external-reference-number'}>{vesselProperties.externalReferenceNumber
+                  ? vesselProperties.externalReferenceNumber
                   : <NoValue>-</NoValue>}</Value>
               </Field>
               <Field>
                 <Key>Call Sign (IRCS)</Key>
-                <Value data-cy={'vessel-card-ircs'}>{featureProperties.ircs
-                  ? featureProperties.ircs
+                <Value data-cy={'vessel-card-ircs'}>{vesselProperties.ircs
+                  ? vesselProperties.ircs
                   : <NoValue>-</NoValue>}</Value>
               </Field>
             </Body>
@@ -145,11 +145,11 @@ const VesselCard = ({ feature, overlayPosition, hasAlert }) => {
                 <Key>Taille du navire</Key>
                 <Value>
                   {
-                    featureProperties.length ? featureProperties.length : <NoValue>-</NoValue>
+                    vesselProperties.length ? vesselProperties.length : <NoValue>-</NoValue>
                   }
                   {' '}x{' '}
                   {
-                    featureProperties.width ? featureProperties.width : <NoValue>-</NoValue>
+                    vesselProperties.width ? vesselProperties.width : <NoValue>-</NoValue>
                   }
                   {' '}m
                 </Value>

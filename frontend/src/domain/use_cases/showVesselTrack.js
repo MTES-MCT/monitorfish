@@ -13,17 +13,24 @@ import { convertToUTCFullDay } from '../../utils'
  * @param {boolean} calledFromCron
  * @param {VesselTrackDepth=} vesselTrackDepth
  */
-const showVesselTrack = (vesselIdentity, calledFromCron, vesselTrackDepth) => (dispatch, getState) => {
+const showVesselTrack = (vesselFeature, calledFromCron, vesselTrackDepth) => (dispatch, getState) => {
   const {
-    vessels
-  } = getState().vessel
-  const nextVesselTrackDepthObject = geNextVesselTrackDepthObject(vesselTrackDepth, getState)
-  const feature = vessels.find((vessel) => { return Vessel.getVesselId(vesselIdentity) === vessel.vesselId })
+    vessel: {
+      vessels
+    }, map: {
+      defaultVesselTrackDepth
+    }
+  } = getState()
+  const nextVesselTrackDepthObject = getNextVesselTrackDepthObject(vesselTrackDepth, defaultVesselTrackDepth)
+  // FIXME: vesselFeature is an olFeature but should have the same props as vessel stored in globalState
+  const feature = vessels.find((vessel) => {
+    return (vesselFeature.vesselId ? (vesselFeature.vesselId === vessel.vesselId) : Vessel.getVesselId(vesselFeature) === vessel.vesselId)
+  })
 
   dispatch(doNotAnimate(calledFromCron))
   dispatch(removeError())
 
-  getVesselPositionsFromAPI(vesselIdentity, nextVesselTrackDepthObject)
+  getVesselPositionsFromAPI(vesselFeature.vesselProperties, nextVesselTrackDepthObject)
     .then(({ positions, trackDepthHasBeenModified }) => {
       const error = getTrackDepthError(
         positions,
@@ -36,15 +43,14 @@ const showVesselTrack = (vesselIdentity, calledFromCron, vesselTrackDepth) => (d
       } else {
         dispatch(removeError())
       }
-
-      const identity = getVesselFeatureIdFromVessel(vesselIdentity)
+      const identity = getVesselFeatureIdFromVessel(vesselFeature.vesselProperties)
       dispatch(addVesselTrackShowed({
         identity: identity,
         showedVesselTrack: {
           identity: identity,
-          vessel: vesselIdentity,
-          // coordinates: feature.getGeometry().getCoordinates(),
+          vessel: vesselFeature.vesselProperties,
           coordinates: feature.coordinates,
+          course: feature.course,
           positions: positions,
           trackDepth: nextVesselTrackDepthObject,
           toShow: true,
@@ -58,9 +64,9 @@ const showVesselTrack = (vesselIdentity, calledFromCron, vesselTrackDepth) => (d
     })
 }
 
-function geNextVesselTrackDepthObject (vesselTrackDepth, getState) {
+function getNextVesselTrackDepthObject (vesselTrackDepth, trackDepth) {
   let nextVesselTrackDepthObject = vesselTrackDepth || {
-    trackDepth: getState().map.defaultVesselTrackDepth,
+    trackDepth,
     beforeDateTime: null,
     afterDateTime: null
   }

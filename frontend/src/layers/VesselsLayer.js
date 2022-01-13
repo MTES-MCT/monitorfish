@@ -120,7 +120,6 @@ const VesselsLayer = ({ map }) => {
       })
       VesselsVectorSource.current?.clear(true)
       VesselsVectorSource.current?.addFeatures(features)
-      console.log('vessels update webgl')
       if (filterColor) {
         const rgb = customHexToRGB(filterColor)
 

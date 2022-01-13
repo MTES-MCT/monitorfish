@@ -6,6 +6,7 @@ on:
     - 'datascience/**'
     - '.github/workflows/*'
     - 'infra/docker/Dockerfile.DataPipeline'
+    - 'Makefile'
   schedule:
     - cron: "38 11 */3 * *"
 

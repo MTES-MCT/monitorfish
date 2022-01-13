@@ -125,7 +125,7 @@ const Info = styled(InfoSVG)`
   width: 14px;
   vertical-align: text-bottom;
   margin-bottom: 2px;
-  margin-left: ${props => props.isInfoSegment ? '5px' : '2px'};
+  margin-left: ${props => props.$isInfoSegment ? '5px' : '2px'};
 `
 
 const SubRiskDetails = styled.div`

@@ -241,7 +241,7 @@ const VesselList = ({ namespace }) => {
   }
 
   const previewFilteredVessels = () => {
-    const vesselsUids = filteredVessels.map(vessel => vessel.uid)
+    const vesselsUids = filteredVessels.map(vessel => vessel.id)
 
     if (vesselsUids?.length) {
       dispatch(setPreviewFilteredVesselsFeatures(vesselsUids))

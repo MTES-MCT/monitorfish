@@ -27,7 +27,7 @@ const VesselSearchList = ({ searchText, foundVesselsOnMap, foundVesselsFromAPI, 
                   key={feature.vesselId}
                   id={feature.vesselId}
                   vessel={feature}
-                  selectVessel={() => selectVessel(feature)}
+                  selectVessel={() => selectVessel(feature.vesselProperties)}
                   searchText={searchText}
                 />
               })

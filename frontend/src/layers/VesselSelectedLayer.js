@@ -4,22 +4,17 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
+import { transform } from 'ol/proj'
 
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import Layers from '../domain/entities/layers'
 import { Vessel } from '../domain/entities/vessel'
 
 import { getSelectedVesselStyle } from './styles/vessel.style'
 
-export const OPACITY = 'opacity'
-
 const VesselSelectedLayer = ({ map }) => {
-  const {
-    selectedVessel
-  } = useSelector(state => state.vessel)
-
-  const {
-    selectedBaseLayer
-  } = useSelector(state => state.map)
+  const { selectedVessel, vesselsTracksShowed } = useSelector(state => state.vessel)
+  const { selectedBaseLayer } = useSelector(state => state.map)
 
   const vectorSourceRef = useRef(new VectorSource({
     features: []
@@ -41,7 +36,7 @@ const VesselSelectedLayer = ({ map }) => {
 
   useEffect(() => {
     if (map) {
-      layerRef.current.name = 'SelectedVessels'
+      layerRef.current.name = Layers.SELECTED_VESSEL.code
       map.getLayers().push(layerRef.current)
     }
 
@@ -53,15 +48,30 @@ const VesselSelectedLayer = ({ map }) => {
   }, [map])
 
   useEffect(() => {
-    if (map && selectedVessel) {
-      const feature = new Feature({
-        ...selectedVessel,
-        geometry: new Point(selectedVessel.coordinates)
-      })
+    if (map) {
       vectorSourceRef.current?.clear(true)
-      vectorSourceRef.current?.addFeature(feature)
+      if (selectedVessel) {
+        const coordinates = transform([selectedVessel.longitude, selectedVessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+        const feature = new Feature({
+          ...selectedVessel,
+          geometry: new Point(coordinates)
+        })
+        vectorSourceRef.current?.addFeature(feature)
+      }
+      if (vesselsTracksShowed) {
+        const vessels = Object.values(vesselsTracksShowed)
+        const features = vessels?.map(vessel => {
+          const f = new Feature({
+            course: vessel.course,
+            geometry: new Point(vessel.coordinates)
+          })
+          f.setId(vessel.vesselId)
+          return f
+        })
+        vectorSourceRef.current?.addFeatures(features)
+      }
     }
-  }, [selectedVessel])
+  }, [map, selectedVessel, vesselsTracksShowed])
 
   return null
 }

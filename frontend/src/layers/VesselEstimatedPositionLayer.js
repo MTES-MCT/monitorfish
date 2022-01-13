@@ -7,8 +7,6 @@ import { getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities
 import { Vector } from 'ol/layer'
 import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style'
 
-export const OPACITY = 'opacity'
-
 const VesselEstimatedPositionLayer = ({ map }) => {
   const {
     vessels,
@@ -59,11 +57,13 @@ const VesselEstimatedPositionLayer = ({ map }) => {
 
       function createEstimatedTrack (vesselFeature) {
         const {
-          estimatedCurrentLatitude,
-          estimatedCurrentLongitude,
-          latitude,
-          longitude,
-          dateTime,
+          vesselProperties: {
+            estimatedCurrentLatitude,
+            estimatedCurrentLongitude,
+            latitude,
+            longitude,
+            dateTime
+          },
           isAtPort,
           isFiltered,
           filterPreview,
@@ -71,15 +71,15 @@ const VesselEstimatedPositionLayer = ({ map }) => {
         } = vesselFeature
 
         if (nonFilteredVesselsAreHidden && !isFiltered) {
-          return
+          return null
         }
 
         if (previewFilteredVesselsMode && !filterPreview) {
-          return
+          return null
         }
 
         if (hideVesselsAtPort && isAtPort) {
-          return
+          return null
         }
 
         if (estimatedCurrentLatitude && estimatedCurrentLongitude && latitude && longitude) {

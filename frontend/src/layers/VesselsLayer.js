@@ -99,13 +99,23 @@ const VesselsLayer = ({ map }) => {
 
   useEffect(() => {
     if (map) {
-      const features = vessels.map(({ coordinates, vesselId, ...properties }) => {
+      const features = vessels.map((vessel) => {
+        const propertiesUsedForStyling = {
+          isAtPort: vessel.isAtPort,
+          course: vessel.course,
+          speed: vessel.speed,
+          lastPositionSentAt: vessel.lastPositionSentAt,
+          coordinates: vessel.coordinates,
+          isFiltered: vessel.isFiltered,
+          filterPreview: vessel.filterPreview
+        }
         const f = new Feature({
-          ...properties,
-          vesselId,
-          geometry: new Point(coordinates)
+          vesselId: vessel.vesselId,
+          ...propertiesUsedForStyling,
+          geometry: new Point(vessel.coordinates)
         })
-        f.setId(vesselId)
+        f.setId(vessel.vesselId)
+        f.vesselProperties = vessel.vesselProperties
         return f
       })
       VesselsVectorSource.current?.clear(true)

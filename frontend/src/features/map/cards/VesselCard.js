@@ -14,7 +14,6 @@ const VesselCard = ({ feature, overlayPosition }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
   const { vesselProperties } = feature
   const featureCoordinates = feature.getGeometry().getCoordinates()
-  console.log(feature)
   return (
     <>
       <VesselCardHeader>

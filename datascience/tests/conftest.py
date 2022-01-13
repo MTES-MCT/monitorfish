@@ -21,6 +21,8 @@ migrations_folders = [
 
 test_data_scripts_folder = TEST_DATA_LOCATION / Path("remote_database")
 
+################################## Handle migrations ##################################
+
 
 @dataclass
 class Migration:
@@ -71,6 +73,7 @@ def get_migrations_in_folders(migrations_folders: List[Path]) -> List[Migration]
     return migrations
 
 
+################################# Start test database #################################
 @pytest.fixture(scope="session")
 def monkeysession(request):
     mpatch = MonkeyPatch()

@@ -9,7 +9,7 @@ import { COLORS } from '../../../../constants/constants'
 import { Radio, RadioGroup, MultiCascader } from 'rsuite'
 import GearLine from './GearLine'
 import getAllGearCodes from '../../../../domain/use_cases/getAllGearCodes'
-import { GEARS_CATEGORES_WITH_MESH } from '../../../../domain/entities/regulatory'
+import { GEARS_CATEGORES_WITH_MESH, prepareCategoriesAndGearsToDisplay } from '../../../../domain/entities/regulatory'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
 
@@ -46,9 +46,12 @@ const RegulatoryGearForm = (props) => {
   } = regulatoryGears
 
   const dispatch = useDispatch()
-
-  /** @type {Object.<string, Gear[]>} */
-  const { categoriesToGears, groupsToCategories, gearsByCode } = useSelector(state => state.gear)
+  const {
+    /** @type {Object.<string, Gear[]>} */
+    categoriesToGears,
+    groupsToCategories,
+    gearsByCode
+  } = useSelector(state => state.gear)
   /** @type {string[]} */
   const [allCategoriesAndGears, setAllCategoriesAndGears] = useState([])
 
@@ -60,20 +63,7 @@ const RegulatoryGearForm = (props) => {
 
   useEffect(() => {
     if (categoriesToGears) {
-      const list = Object.keys(categoriesToGears).map((category) => {
-        const children = categoriesToGears[category].map((gear) => {
-          return {
-            label: gear.name,
-            value: gear.code
-          }
-        })
-        return {
-          label: category,
-          value: category,
-          children
-        }
-      })
-      setAllCategoriesAndGears(list)
+      setAllCategoriesAndGears(prepareCategoriesAndGearsToDisplay(categoriesToGears))
     }
   }, [categoriesToGears])
 
@@ -82,7 +72,7 @@ const RegulatoryGearForm = (props) => {
       const categories = []
       const gears = []
       selectedCategoriesAndGears.forEach(value => {
-        if (isCategory) {
+        if (isCategory(value)) {
           categories.push(value)
         } else {
           gears.push(value)
@@ -221,14 +211,14 @@ const RegulatoryGearForm = (props) => {
           data-cy={'regulation-authorized-gears'}
           checked={authorized}
           value={true} >
-          autorisées
+          autorisés
           <GreenCircle />
         </CustomRadio>
         <CustomRadio
           data-cy={'regulation-forbidden-gears'}
           checked={authorized === false}
           value={false} >
-          interdites
+          interdits
           <RedCircle />
         </CustomRadio>
       </AuthorizedRadio>
@@ -273,8 +263,8 @@ const RegulatoryGearForm = (props) => {
         data-cy='gears-selector'
         data={allCategoriesAndGears}
         style={{ width: 130 }}
-        menuWidth={175}
-        searchable={false}
+        menuWidth={250}
+        searchable={true}
         cleanable={false}
         placeholder='Choisir un ou des engins'
         renderValue={() => <MultiCascaderLabel>Choisir un ou des engins</MultiCascaderLabel>}

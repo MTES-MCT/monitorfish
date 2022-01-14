@@ -36,7 +36,9 @@ const RegulatoryGearSection = (props) => {
       <CustomInput
         width={'730px'}
         value={regulatoryGears?.otherInfo || ''}
-        onChange={setOtherInfo} />
+        onChange={setOtherInfo}
+        $isGray={regulatoryGears?.otherInfo && regulatoryGears?.otherInfo !== ''}
+      />
     </OtherRemark>
   </Section>
 }

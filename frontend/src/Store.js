@@ -4,11 +4,26 @@ import { persistStore, persistReducer } from 'redux-persist'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/lib/storage' // localStorage
 import thunk from 'redux-thunk'
+// import { mapToCurrentRegulation } from './domain/entities/regulatory'
+
+/* const RegulationTransform = createTransform(
+  // transform state being rehydrated
+  (outboundState) => {
+    // convert mySet back to a Set.
+    return {
+      ...outboundState,
+      currentRegulation: mapToCurrentRegulation(outboundState.currentRegulation)
+    }
+  },
+  // define which reducers this transform gets called for.
+  { whitelist: ['regulation'] }
+) */
 
 const persistConfig = {
   key: 'root',
   storage,
   stateReconciler: autoMergeLevel2
+  // transforms: [RegulationTransform]
 }
 
 const homeStore = configureStore({

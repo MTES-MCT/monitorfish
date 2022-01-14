@@ -1,23 +1,31 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import FishingPeriodForm from './FishingPeriodForm'
 import SectionTitle from '../../SectionTitle'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
+import { setRegulationByKey } from '../../Regulation.slice'
 import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
 
-const FishingPeriodSection = (props) => {
-  const {
-    fishingPeriod,
-    setFishingPeriod
-  } = props
+const FishingPeriodSection = () => {
+  const { fishingPeriod } = useSelector(state => state.regulation.currentRegulation)
+
+  const dispatch = useDispatch()
 
   const [show, setShow] = useState(false)
   const [isInputFilled, setIsInputFilled] = useState(false)
 
   const setOtherInfo = value => {
-    setFishingPeriod({
-      ...fishingPeriod,
-      otherInfo: value
-    })
+    dispatch(setRegulationByKey({
+      key: 'fishingPeriod',
+      value: {
+        ...fishingPeriod,
+        otherInfo: value
+      }
+    }))
+  }
+
+  const setFishingPeriod = value => {
+    dispatch(setRegulationByKey({ key: 'fishingPeriod', value }))
   }
 
   return <Section show>

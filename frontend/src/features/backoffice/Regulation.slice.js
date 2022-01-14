@@ -1,11 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { INITIAL_REGULATION } from '../../domain/entities/regulatory'
 
 const INITIAL_STATE = {
   /** @type {RegulatoryText} */
   selectedRegulation: undefined,
   /** @type {UpcomingRegulation} */
   upcomingRegulation: undefined,
-  /** @type {boolean} */
+  /** @type {RegulatoryText} */
+  currentRegulation: INITIAL_REGULATION,
+  /** @type {UpcomingRegulation} upcomingRegulation */
+  // upcomingRegulation: undefined,
+  /** @type {boolean} isModalOpen */
   isModalOpen: false,
   /** @type {Map<number, RegulatoryText | null>} */
   upcomingRegulatoryTextCheckedMap: undefined,
@@ -34,15 +39,21 @@ const regulationSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {
     resetState: () => INITIAL_STATE,
+    setRegulationByKey (state, { payload: { key, value } }) {
+      state.currentRegulation[key] = value
+    },
+    setRegulation (state, { payload }) {
+      state.currentRegulation = payload
+    },
     setSelectedRegulation (state, action) {
       state.selectedRegulation = action.payload
     },
     setIsModalOpen (state, action) {
       state.isModalOpen = action.payload
     },
-    setUpcomingRegulation (state, action) {
+    /* setUpcomingRegulation (state, action) {
       state.upcomingRegulation = action.payload
-    },
+    }, */
     addObjectToRegulatoryTextCheckedMap (state, action) {
       const {
         /** @type {boolean} */
@@ -93,9 +104,6 @@ const regulationSlice = createSlice({
     },
     setIsConfirmModalOpen (state, action) {
       state.isConfirmModalOpen = action.payload
-    },
-    setSelectedGeometryId (state, action) {
-      state.selectedGeometryId = action.payload
     }
   }
 })
@@ -104,7 +112,7 @@ export const {
   resetState,
   setSelectedRegulation,
   setIsModalOpen,
-  setUpcomingRegulation,
+  // setUpcomingRegulation,
   addObjectToUpcomingRegulatoryTextCheckedMap,
   setUpcomingRegulatoryTextListCheckedMap,
   setRegulationSaved,
@@ -116,7 +124,8 @@ export const {
   setRegulationDeleted,
   setIsRemoveModalOpen,
   setIsConfirmModalOpen,
-  setSelectedGeometryId
+  setRegulationByKey,
+  setRegulation
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

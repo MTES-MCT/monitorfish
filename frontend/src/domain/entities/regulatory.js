@@ -41,10 +41,24 @@ function parseRegulatoryGears (gears) {
     : initialRegulatoryGearsValues
 }
 
+export const mapToCurrentRegulation = (reg) => {
+  return {
+    id: reg.id,
+    lawType: reg.lawType,
+    topic: reg.layerName,
+    zone: reg.zone,
+    region: reg.region,
+    regulatorySpecies: parseRegulatorySpecies(reg.regulatorySpecies),
+    regulatoryReferences: parseRegulatoryReferences(reg.regulatoryReferences),
+    upcomingRegulatoryReferences: parseUpcomingRegulatoryReferences(reg.upcomingRegulatoryReferences),
+    fishingPeriod: parseFishingPeriod(reg.fishingPeriod)
+  }
+}
+
 function parseRegulatorySpecies (species) {
   return species
     ? parseJSON(species)
-    : initialRegulatorySpeciesValues
+    : INITIAL_REG_SPECIES_VALUES
 }
 
 const parseUpcomingRegulatoryReferences = upcomingRegulatoryReferences =>
@@ -120,7 +134,7 @@ export const parseFishingPeriod = fishingPeriod => {
     }
   }
 
-  return initialFishingPeriodValues
+  return INITIAL_FISHING_PERIOD_VALUES
 }
 
 export const mapToRegulatoryFeatureObject = properties => {
@@ -151,15 +165,6 @@ export const mapToRegulatoryFeatureObject = properties => {
 
 export const getRegulatoryFeatureId = (id) => {
   return `${Layers.REGULATORY.code}_write.${id}`
-}
-
-export const emptyRegulatoryFeatureObject = {
-  layer_name: null,
-  law_type: null,
-  zones: null,
-  region: null,
-  references_reglementaires: null,
-  references_reglementaires_a_venir: null
 }
 
 export const FRANCE = 'Réglementation France'
@@ -251,7 +256,7 @@ export const DEFAULT_DATE_RANGE = {
 }
 
 /** @type {FishingPeriod} */
-export const initialFishingPeriodValues = {
+const INITIAL_FISHING_PERIOD_VALUES = {
   authorized: undefined,
   annualRecurrence: undefined,
   dateRanges: [],
@@ -263,7 +268,7 @@ export const initialFishingPeriodValues = {
 }
 
 /** @type {RegulatorySpecies} */
-export const initialRegulatorySpeciesValues = {
+const INITIAL_REG_SPECIES_VALUES = {
   authorized: undefined,
   allSpecies: undefined,
   otherInfo: undefined,
@@ -290,6 +295,21 @@ export const GEARS_CATEGORES_WITH_MESH = [
   'Filets soulevés',
   'Filets maillants et filets emmêlants'
 ]
+export const emptyRegulatoryFeatureObject = {
+  layer_name: null,
+  law_type: null,
+  zones: null,
+  region: null,
+  references_reglementaires: null,
+  references_reglementaires_a_venir: null
+}
+
+export const INITIAL_REGULATION = {
+  regulatoryReferences: [DEFAULT_REGULATORY_TEXT],
+  fishingPeriod: INITIAL_FISHING_PERIOD_VALUES,
+  regulatorySpecies: INITIAL_REG_SPECIES_VALUES,
+  upcomingRegulatoryReferences: { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }
+}
 
 export const WEEKDAYS = {
   lundi: 'L',
@@ -529,6 +549,7 @@ export const convertTimeToString = (date) => {
     const hours = date.getHours()
     return `${hours < 10 ? '0' + hours : hours}h${minutes === 0 ? minutes + '0' : minutes}`
   }
+  return null
 }
 
 /**

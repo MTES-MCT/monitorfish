@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { useSelector, useDispatch, batch } from 'react-redux'
 import styled from 'styled-components'
 
@@ -7,7 +7,7 @@ import {
   setIsModalOpen,
   setUpcomingRegulatoryTextListCheckedMap,
   setSaveUpcomingRegulation,
-  setUpcomingRegulation
+  setRegulationByKey
 } from '../../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
@@ -19,28 +19,32 @@ const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
   const {
     isModalOpen,
-    upcomingRegulation = { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] },
     upcomingRegulatoryTextCheckedMap,
-    saveUpcomingRegulation
+    saveUpcomingRegulation,
+    currentRegulation
   } = useSelector(state => state.regulation)
 
-  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList || [DEFAULT_REGULATORY_TEXT])
+  const { upcomingRegulatoryReferences } = currentRegulation
+  const { regulatoryTextList } = upcomingRegulatoryReferences
 
   const onAddUpcomingRegulation = () => {
     dispatch(setSaveUpcomingRegulation(true))
   }
 
+  const setRegulatoryTextList = useCallback((regulatoryTextList) => {
+    setRegulationByKey('upcomingRegulatoryReferences', { regulatoryTextList })
+  }, [setRegulationByKey])
+
   useEffect(() => {
-    if (upcomingRegulatoryTextCheckedMap && saveUpcomingRegulation) {
+    if (upcomingRegulatoryTextCheckedMap) {
       const regulatoryTextCheckList = Object.values(upcomingRegulatoryTextCheckedMap)
       const allTextsHaveBeenChecked = regulatoryTextCheckList.length > 0 && regulatoryTextCheckList.length === regulatoryTextList.length
       if (allTextsHaveBeenChecked) {
         const allTextsHaveBeenFilled = !regulatoryTextCheckList.includes(false)
         if (allTextsHaveBeenFilled) {
-          const newUpcomingRegulation = { ...(upcomingRegulation || { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }) }
+          const newUpcomingRegulation = { ...(upcomingRegulatoryReferences || { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }) }
           newUpcomingRegulation.regulatoryTextList = [...regulatoryTextList]
           batch(() => {
-            dispatch(setUpcomingRegulation(newUpcomingRegulation))
             dispatch(setIsModalOpen(false))
           })
         }
@@ -61,6 +65,7 @@ const UpcomingRegulationModal = () => {
         </ModalTitle>
         <Section>
           <RegulatoryTextSection
+            key={regulatoryTextList}
             regulatoryTextList={regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
             source={REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION}

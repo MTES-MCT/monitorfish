@@ -1,17 +1,27 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import Tag from '../Tag'
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import MenuItem from '../custom_form/MenuItem'
-import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
-const RegulationLawTypeLine = props => {
-  const {
-    setSelectedValue,
-    selectedValue,
-    selectData,
-    lawTypeIsMissing
-  } = props
+import { DEFAULT_MENU_CLASSNAME, LAWTYPES_TO_TERRITORY, UE } from '../../../../domain/entities/regulatory'
+import { setRegulationByKey } from '../../Regulation.slice'
+
+const RegulationLawTypeLine = ({ selectData, lawTypeIsMissing }) => {
+  const dispatch = useDispatch()
+
+  const { lawType } = useSelector(state => state.regulation.currentRegulation)
+
+  const onLawTypeChange = useCallback((value) => {
+    if (LAWTYPES_TO_TERRITORY[value] !== UE) {
+      dispatch(setRegulationByKey({ key: 'region', value: [] }))
+    }
+    batch(() => {
+      dispatch(setRegulationByKey({ key: 'topic', value: undefined }))
+      dispatch(setRegulationByKey({ key: 'lawType', value: value }))
+    })
+  }, [setRegulationByKey])
 
   return (
     <ContentLine>
@@ -21,22 +31,22 @@ const RegulationLawTypeLine = props => {
         menuStyle={{ width: 250, overflowY: 'scroll', textOverflow: 'ellipsis' }}
         placeholder='Choisir un ensemble'
         value={'Choisir un ensemble'}
-        onChange={setSelectedValue}
+        onChange={onLawTypeChange}
         data={selectData}
         data-cy={'regulation-lawtype-select'}
         emptyMessage={'aucun ensemble à afficher'}
         renderMenuItem={(_, item) =>
           <MenuItem
-            checked={item.value === selectedValue}
+            checked={item.value === onLawTypeChange}
             item={item}
             tag={'Radio'} />}
         valueIsMissing={lawTypeIsMissing}
         menuClassName={DEFAULT_MENU_CLASSNAME}
       />
-      {selectedValue &&
+      {lawType &&
         <Tag
-          tagValue={selectedValue}
-          onCloseIconClicked={_ => setSelectedValue()}
+          tagValue={lawType}
+          onCloseIconClicked={_ => onLawTypeChange()}
         />
       }
     </ContentLine>

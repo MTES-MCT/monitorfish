@@ -38,13 +38,13 @@ import { Footer, FooterButton, Title, Section } from '../../commonStyles/Backoff
 import {
   setSelectedRegulation,
   setRegulatoryTextCheckedMap,
-  setUpcomingRegulation,
   setSaveOrUpdateRegulation,
   setAtLeastOneValueIsMissing,
   setIsRemoveModalOpen,
-  setSelectedGeometryId,
   setIsConfirmModalOpen,
-  resetState
+  resetState,
+  setRegulationByKey,
+  setRegulation
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 import {
@@ -56,11 +56,8 @@ import {
   DEFAULT_REGULATORY_TEXT,
   REG_LOCALE,
   LAWTYPES_TO_TERRITORY,
-  UE,
   FRANCE,
-  initialFishingPeriodValues,
-  initialRegulatorySpeciesValues,
-  initialRegulatoryGearsValues
+  INITIAL_REGULATION
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
 import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
@@ -68,32 +65,21 @@ import showRegulationToEdit from '../../../domain/use_cases/showRegulationToEdit
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
+
   const history = useHistory()
+
   const {
     layersTopicsByRegTerritory,
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
-
-  /** @type {string} */
-  const [selectedRegulationLawType, setSelectedRegulationLawType] = useState()
+  /** @type {boolean} */
   const [lawTypeIsMissing, setLawTypeIsMissing] = useState(false)
-  /** @type {string} */
-  const [selectedRegulationTopic, setSelectedRegulationTopic] = useState()
+  /** @type {boolean} */
   const [regulationTopicIsMissing, setRegulationTopicIsMissing] = useState(false)
-  /** @type {string} */
-  const [nameZone, setNameZone] = useState()
+  /** @type {boolean} */
   const [nameZoneIsMissing, setNameZoneIsMissing] = useState()
-  /** @type {String[]} */
-  const [selectedRegionList, setSelectedRegionList] = useState([])
+  /** @type {boolean} */
   const [regionIsMissing, setRegionIsMissing] = useState(false)
-  /** @type {regulatoryText[]} */
-  const [regulatoryTextList, setRegulatoryTextList] = useState([DEFAULT_REGULATORY_TEXT])
-  /** @type {FishingPeriod} */
-  const [fishingPeriod, setFishingPeriod] = useState(initialFishingPeriodValues)
-  /** @type {RegulatorySpecies} */
-  const [regulatorySpecies, setRegulatorySpecies] = useState(initialRegulatorySpeciesValues)
-  /** @type {RegulatoryGears} */
-  const [regulatoryGears, setRegulatoryGears] = useState(initialRegulatoryGearsValues)
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
   /** @type {GeoJSONGeometry} selectedGeometry */
@@ -108,14 +94,26 @@ const CreateRegulation = ({ title, isEdition }) => {
     isModalOpen,
     regulationSaved,
     regulatoryTextCheckedMap,
-    upcomingRegulation,
     saveOrUpdateRegulation,
     atLeastOneValueIsMissing,
-    selectedGeometryId,
     isRemoveModalOpen,
     isConfirmModalOpen,
-    regulationDeleted
+    regulationDeleted,
+    currentRegulation,
+    fishingPeriod,
+    regulatorySpecies
   } = useSelector(state => state.regulation)
+
+  const {
+    lawType: selectedRegulationLawType,
+    topic: selectedRegulationTopic,
+    zone: nameZone,
+    region: selectedRegionList,
+    id: selectedGeometryId,
+    regulatoryReferences: regulatoryTextList,
+    upcomingRegulatoryReferences,
+    regulatoryGears
+  } = currentRegulation
 
   const selectedRegulation = useSelector(state => state.regulation.selectedRegulation)
 
@@ -140,6 +138,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
     return () => {
       dispatch(setSelectedRegulation(undefined))
+      dispatch(setRegulation(INITIAL_REGULATION))
       dispatch(setRegulatoryZoneMetadata(undefined))
     }
   }, [])
@@ -239,7 +238,7 @@ const CreateRegulation = ({ title, isEdition }) => {
             zone: nameZone,
             region: selectedRegionList?.join(', '),
             regulatoryReferences: regulatoryTextList,
-            upcomingRegulatoryReferences: upcomingRegulation,
+            upcomingRegulatoryReferences,
             fishingPeriod,
             regulatorySpecies,
             regulatoryGears
@@ -272,19 +271,22 @@ const CreateRegulation = ({ title, isEdition }) => {
       regulatoryGears
     } = regulatoryZoneMetadata
 
-    setSelectedRegulationLawType(lawType)
-    setSelectedRegulationTopic(topic)
-    setNameZone(zone)
-    setSelectedRegionList(region ? region.split(', ') : [])
-    setRegulatoryTextList(regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT])
+    dispatch(setRegulation({
+      lawType,
+      topic,
+      zone,
+      region: region ? region.split(', ') : [],
+      id,
+      regulatoryReferences: regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT],
+      upcomingRegulatoryReferences: upcomingRegulatoryReferences || { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] },
+      fishingPeriod,
+      regulatorySpecies
+    }))
     setInitialGeometryId(id)
-    setFishingPeriod(fishingPeriod)
-    setRegulatorySpecies(regulatorySpecies)
-    setRegulatoryGears(regulatoryGears)
 
     batch(() => {
-      dispatch(setSelectedGeometryId(id))
-      dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
+      dispatch(setRegulationByKey({ key: 'id', value: id }))
+      // dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
     })
   }
 
@@ -306,13 +308,9 @@ const CreateRegulation = ({ title, isEdition }) => {
       })
   }
 
-  const onLawTypeChange = (value) => {
-    if (LAWTYPES_TO_TERRITORY[value] !== UE) {
-      setSelectedRegionList([])
-    }
-    setSelectedRegulationTopic(undefined)
-    setSelectedRegulationLawType(value)
-  }
+  const setRegulatoryTextList = useCallback((texts) => {
+    dispatch(setRegulationByKey({ key: 'regulatoryReferences', value: texts }))
+  }, [setRegulationByKey])
 
   return (
     <>
@@ -330,31 +328,22 @@ const CreateRegulation = ({ title, isEdition }) => {
             <Span />
           </Header>
           <ContentWrapper>
+            {/** j'ai  supprimé une CONTENT */}
             <Section show>
               <Title>
                 identification de la zone réglementaire
               </Title>
               <RegulationLawTypeLine
-                setSelectedValue={onLawTypeChange}
-                selectedValue={selectedRegulationLawType}
                 selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))}
                 lawTypeIsMissing={lawTypeIsMissing}
               />
               <RegulationTopicLine
                 disabled={!selectedRegulationLawType}
-                selectedRegulationTopic={selectedRegulationTopic}
-                setSelectedRegulationTopic={setSelectedRegulationTopic}
                 regulationTopicIsMissing={regulationTopicIsMissing}
               />
-              <RegulationLayerZoneLine
-                nameZone={nameZone}
-                setNameZone={setNameZone}
-                nameZoneIsMissing={nameZoneIsMissing}
-              />
+              <RegulationLayerZoneLine nameZoneIsMissing={nameZoneIsMissing} />
               <RegulationRegionLine
                 disabled={!selectedRegulationLawType || LAWTYPES_TO_TERRITORY[selectedRegulationLawType] !== FRANCE}
-                setSelectedRegionList={setSelectedRegionList}
-                selectedRegionList={selectedRegionList}
                 regionIsMissing={regionIsMissing}
               />
               <RegulationGeometryLine
@@ -364,24 +353,16 @@ const CreateRegulation = ({ title, isEdition }) => {
                 geometryIsMissing={geometryIsMissing}
               />
             </Section>
+            {/** j'ai supprimé un content */}
             <RegulatoryTextSection
               regulatoryTextList={regulatoryTextList}
               setRegulatoryTextList={setRegulatoryTextList}
               source={REGULATORY_TEXT_SOURCE.REGULATION}
               saveForm={saveOrUpdateRegulation}
             />
-            <FishingPeriodSection
-              fishingPeriod={fishingPeriod}
-              setFishingPeriod={setFishingPeriod}
-            />
-            <RegulatoryGearSection
-              regulatoryGears={regulatoryGears}
-              setRegulatoryGears={setRegulatoryGears}
-            />
-            <RegulatorySpeciesSection
-              regulatorySpecies={regulatorySpecies}
-              setRegulatorySpecies={setRegulatorySpecies}
-            />
+            <FishingPeriodSection />
+            <RegulatorySpeciesSection />
+            <RegulatoryGearSection />
           </ContentWrapper>
         </Body>
         <Footer>

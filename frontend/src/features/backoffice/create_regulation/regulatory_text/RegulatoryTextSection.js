@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../../constants/constants'
@@ -19,17 +19,19 @@ import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../../dom
 const RegulatoryTextSection = props => {
   const {
     regulatoryTextList,
-    source,
     setRegulatoryTextList,
+    source,
     saveForm
   } = props
 
-  const { upcomingRegulation } = useSelector(state => state.regulation)
+  const { currentRegulation } = useSelector(state => state.regulation)
+
+  const { upcomingRegulatoryReferences } = currentRegulation
 
   const dispatch = useDispatch()
 
-  const addOrRemoveRegulatoryTextInList = (id) => {
-    let newRegulatoryTextList = [...regulatoryTextList]
+  const addOrRemoveRegulatoryTextInList = useCallback((id) => {
+    let newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
     if (id === undefined) {
       newRegulatoryTextList.push(DEFAULT_REGULATORY_TEXT)
     } else if (regulatoryTextList.length === 1) {
@@ -38,25 +40,25 @@ const RegulatoryTextSection = props => {
       newRegulatoryTextList.splice(id, 1)
     }
     setRegulatoryTextList(newRegulatoryTextList)
-  }
+  }, [setRegulatoryTextList, regulatoryTextList])
 
-  const addRegRefInEffect = () => {
+  const addRegRefInEffect = useCallback(() => {
     addOrRemoveRegulatoryTextInList()
-  }
+  }, [addOrRemoveRegulatoryTextInList])
 
-  const addUpcomingText = () => {
+  const addUpcomingText = useCallback(() => {
     if (source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION) {
       addOrRemoveRegulatoryTextInList()
     } else {
       dispatch(setIsModalOpen(true))
     }
-  }
+  }, [addOrRemoveRegulatoryTextInList, setIsModalOpen])
 
-  const setRegulatoryText = (id, regulatoryText) => {
-    const newRegulatoryTextList = [...regulatoryTextList]
+  const setRegulatoryText = useCallback((id, regulatoryText) => {
+    const newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
     newRegulatoryTextList[id] = regulatoryText
     setRegulatoryTextList(newRegulatoryTextList)
-  }
+  }, [setRegulatoryTextList, regulatoryTextList])
 
   return <Section show>
     <Title>
@@ -65,8 +67,8 @@ const RegulatoryTextSection = props => {
         : 'références réglementaires en vigueur'}
     </Title>
     {
-      (regulatoryTextList && regulatoryTextList.length > 0) &&
-        regulatoryTextList.map((regulatoryText, id) => {
+      (regulatoryTextList && regulatoryTextList.length > 0)
+        ? regulatoryTextList.map((regulatoryText, id) => {
           return <RegulatoryText
               key={regulatoryText}
               id={id}
@@ -78,6 +80,16 @@ const RegulatoryTextSection = props => {
               setRegulatoryText={setRegulatoryText}
             />
         })
+        : <RegulatoryText
+          regulatoryText={DEFAULT_REGULATORY_TEXT}
+          key={-1}
+          id={0}
+          addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
+          source={source}
+          listLength={0}
+          saveForm={saveForm}
+          setRegulatoryText={setRegulatoryText}
+        />
     }
     <ButtonLine>
     {source === REGULATORY_TEXT_SOURCE.REGULATION
@@ -87,7 +99,7 @@ const RegulatoryTextSection = props => {
         onClick={addRegRefInEffect}>
         Ajouter un autre texte en vigueur
       </ValidateButton>
-      {!upcomingRegulation && <CustomCancelButton
+      {!upcomingRegulatoryReferences && <CustomCancelButton
         disabled={false}
         isLast={false}
         onClick={addUpcomingText}>
@@ -101,8 +113,8 @@ const RegulatoryTextSection = props => {
       </ValidateButton>}
     </ButtonLine>
     {source === REGULATORY_TEXT_SOURCE.REGULATION &&
-      upcomingRegulation && upcomingRegulation !== {} &&
-        <UpcomingRegulationSection upcomingRegulation={upcomingRegulation} />
+      upcomingRegulatoryReferences && upcomingRegulatoryReferences !== {} &&
+        <UpcomingRegulationSection upcomingRegulation={upcomingRegulatoryReferences} />
     }
   </Section>
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
@@ -7,30 +8,33 @@ import { FRENCH_REGION_LIST } from '../../constants'
 import Tag from '../Tag'
 import MenuItem from '../custom_form/MenuItem'
 import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
+import { setRegulationByKey } from '../../Regulation.slice'
 
 const RegulationRegionLine = props => {
   const {
-    selectedRegionList,
-    setSelectedRegionList,
     regionIsMissing,
     disabled
   } = props
 
+  const dispatch = useDispatch()
+
+  const { region: regionList } = useSelector(state => state.regulation.currentRegulation)
+
   const addRegionToSelectedRegionList = (region) => {
-    const newArray = selectedRegionList ? [...selectedRegionList] : []
+    const newArray = regionList ? [...regionList] : []
     newArray.push(region)
-    setSelectedRegionList(newArray)
+    dispatch(setRegulationByKey({ key: 'region', value: newArray }))
   }
 
   const removeRegionToSelectedRegionList = (regionToRemove) => {
-    const regionToRemoveIndex = selectedRegionList.indexOf(regionToRemove)
-    const newArray = [...selectedRegionList]
+    const regionToRemoveIndex = regionList.indexOf(regionToRemove)
+    const newArray = [...regionList]
     newArray.splice(regionToRemoveIndex, 1)
-    setSelectedRegionList(newArray)
+    dispatch(setRegulationByKey({ key: 'region', value: newArray }))
   }
 
   function SelectedRegionList () {
-    return selectedRegionList?.map(selectedRegion => {
+    return regionList?.map(selectedRegion => {
       return <Tag
         key={selectedRegion}
         tagValue={selectedRegion}
@@ -40,7 +44,7 @@ const RegulationRegionLine = props => {
   }
 
   const onChange = (value) => {
-    if (selectedRegionList?.includes(value)) {
+    if (regionList?.includes(value)) {
       removeRegionToSelectedRegionList(value)
     } else {
       addRegionToSelectedRegionList(value)
@@ -58,12 +62,12 @@ const RegulationRegionLine = props => {
       value={'Choisir une région'}
       emptyMessage={'aucune région à afficher'}
       data={formatDataForSelectPicker(FRENCH_REGION_LIST)}
-      renderMenuItem={(_, item) => <MenuItem checked={selectedRegionList?.includes(item.value)} item={item} tag={'Checkbox'} />}
+      renderMenuItem={(_, item) => <MenuItem checked={regionList?.includes(item.value)} item={item} tag={'Checkbox'} />}
       valueIsMissing={regionIsMissing}
       menuClassName={DEFAULT_MENU_CLASSNAME}
     />
     {
-      selectedRegionList?.length > 0 &&
+     regionList?.length > 0 &&
       <SelectedRegionList />
     }
   </ContentLine>)

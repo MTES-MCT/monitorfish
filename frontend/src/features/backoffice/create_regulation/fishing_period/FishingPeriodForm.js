@@ -90,6 +90,9 @@ const FishingPeriodForm = (props) => {
   }, [fishingPeriod, fishingPeriodAsString])
 
   const set = useCallback((key, value) => {
+    console.log('set')
+    console.log(key)
+    console.log(value)
     const obj = {
       ...fishingPeriod,
       [key]: value

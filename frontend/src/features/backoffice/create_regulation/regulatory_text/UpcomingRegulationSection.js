@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { CancelButton } from '../../../commonStyles/Buttons.style'
 import { Link } from '../../../commonStyles/Backoffice.style'
-import { setIsModalOpen, setUpcomingRegulation } from '../../Regulation.slice'
+import { setIsModalOpen, setRegulationByKey } from '../../Regulation.slice'
 import InfoPoint from '../InfoPoint'
 
 const UpcomingRegulationSection = ({ upcomingRegulation }) => {
   const dispatch = useDispatch()
+
+  const onCancelClicked = useCallback(() => {
+    dispatch(setRegulationByKey('upcomingRegulatoryReferences', undefined))
+  }, [setRegulationByKey])
+
   const DATE_STRING_OPTIONS = { year: 'numeric', month: '2-digit', day: '2-digit' }
   return (
       <>
@@ -44,7 +49,7 @@ const UpcomingRegulationSection = ({ upcomingRegulation }) => {
           <CancelButton
             disabled={false}
             isLast={false}
-            onClick={() => dispatch(setUpcomingRegulation(undefined))}
+            onClick={onCancelClicked}
           >
             Supprimer la réglementation
           </CancelButton></Row>

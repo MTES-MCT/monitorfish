@@ -314,14 +314,8 @@ const RegulatoryGearForm = (props) => {
           $isYellow={derogation}
         >
           <Text>{'Mesures dérogatoires'}</Text>
-          <CustomRadio value={true} >
-            oui
-            <GreenCircle />
-          </CustomRadio>
-          <CustomRadio value={false} >
-            non
-            <RedCircle />
-          </CustomRadio>
+          <CustomRadio value={true} >oui</CustomRadio>
+          <CustomRadio value={false} >non</CustomRadio>
         </DerogationRadio>
       </DerogationRadioWrapper>}
     </FormContent>
@@ -383,9 +377,9 @@ const DerogationRadioWrapper = styled.div`
 const DerogationRadio = styled(RadioGroup)` 
   ${customRadioGroup}
   padding-right: 10px!important;
-  ${props => props.$isYellow ? `border: 1.5px solid ${COLORS.yellow}!important;` : ''}
+  border: 1.5px solid ${props => props.$isYellow ? COLORS.yellow : COLORS.lightGray}!important;
   :focus {
-    ${props => props.$isYellow ? `border: 1.5px solid ${COLORS.yellow}!important;` : ''}
+    border: 1.5px solid ${props => props.$isYellow ? COLORS.yellow : COLORS.lightGray}!important;
   }
 `
 

@@ -47,9 +47,11 @@ RUN python3 -m venv $VIRTUAL_ENV && \
 ENV PYTHONPATH=/home/${USER}
 
 # Add source
-COPY datascience/ .
+COPY datascience/ ./datascience
+COPY backend/src/main/resources/db/migration  ./backend/src/main/resources/db/migration
 
 RUN chown -R ${USER} .
 USER ${USER}
+WORKDIR /home/${USER}/datascience
 ENTRYPOINT ["/tini", "--"]
 CMD ["python", "main.py"]

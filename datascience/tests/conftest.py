@@ -1,6 +1,7 @@
 import itertools
 import os
 import re
+import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 from time import sleep
@@ -15,8 +16,10 @@ from config import ROOT_DIRECTORY, TEST_DATA_LOCATION
 from src.db_config import create_engine
 
 migrations_folders = [
-    ROOT_DIRECTORY / Path("../backend/src/main/resources/db/migration/internal"),
-    ROOT_DIRECTORY / Path("../backend/src/main/resources/db/migration/layers"),
+    ROOT_DIRECTORY
+    / Path("../backend/src/main/resources/db/migration/internal").resolve(),
+    ROOT_DIRECTORY
+    / Path("../backend/src/main/resources/db/migration/layers").resolve(),
 ]
 
 test_data_scripts_folder = TEST_DATA_LOCATION / Path("remote_database")

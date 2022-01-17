@@ -23,7 +23,7 @@ const ControlField = ({ field, type, isFirst }) => {
         <StrongText data-cy={'vessel-controls-last-control-date'}>
           {
             control
-              ? <>le {getDate(control.controlDatetimeUtc)}</>
+              ? <>le {getDate(control.dateTime)}</>
               : <>Aucun</>
           }
         </StrongText>

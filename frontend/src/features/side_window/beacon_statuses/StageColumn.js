@@ -5,7 +5,7 @@ import Draggable from './Draggable'
 import StageColumnHeader from './StageColumnHeader'
 import BeaconStatusCard from './BeaconStatusCard'
 
-const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, setBeaconStatusOpened, isDroppedId, baseUrl }) => {
+const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, baseUrl }) => {
   const updateStageVesselStatus = (beaconStatus, status) => updateVesselStatus(stage?.code, beaconStatus, status)
 
   return <Wrapper>

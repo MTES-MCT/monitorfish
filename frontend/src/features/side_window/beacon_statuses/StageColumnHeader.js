@@ -32,6 +32,7 @@ const Row = styled.div`
 
 const Title = styled.div`
   font-weight: 700;
+  text-transform: uppercase;
 `
 
 const Description = styled.div`

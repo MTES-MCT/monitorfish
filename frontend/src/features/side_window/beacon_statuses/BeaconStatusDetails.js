@@ -18,7 +18,7 @@ import * as timeago from 'timeago.js'
 import { closeBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
 import BeaconStatusDetailsBody from './BeaconStatusDetailsBody'
 
-const BeaconStatusDetails = ({ beaconStatus, comments, updateStageVesselStatus }) => {
+const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesselStatus }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconStatus?.vesselStatus)
   const baseUrl = window.location.origin
@@ -99,6 +99,7 @@ const BeaconStatusDetails = ({ beaconStatus, comments, updateStageVesselStatus }
       <Line/>
       <BeaconStatusDetailsBody
         comments={comments}
+        actions={actions}
         beaconStatusId={beaconStatus?.id}
       />
     </BeaconStatusDetailsWrapper>

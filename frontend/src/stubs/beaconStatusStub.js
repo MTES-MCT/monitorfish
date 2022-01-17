@@ -21,6 +21,22 @@ export const beaconStatusesStub = [
         userType: 'OPS',
         dateTime: '2021-12-27T09:26:09.364422Z'
       }
+    ],
+    actions: [
+      {
+        beaconStatusId: 1,
+        propertyName: 'VESSEL_STATUS',
+        previousValue: 'AT_PORT',
+        nextValue: 'TECHNICAL_STOP',
+        dateTime: '2022-01-03T08:49:29.087756Z'
+      },
+      {
+        beaconStatusId: 1,
+        propertyName: 'VESSEL_STATUS',
+        previousValue: 'TECHNICAL_STOP',
+        nextValue: 'ACTIVITY_DETECTED',
+        dateTime: '2022-01-17T09:27:20.544785Z'
+      }
     ]
   },
   {
@@ -92,6 +108,22 @@ export const beaconStatusesStub = [
         comment: 'A comment',
         userType: 'OPS',
         dateTime: '2021-12-27T09:26:09.364422Z'
+      }
+    ],
+    actions: [
+      {
+        beaconStatusId: 1,
+        propertyName: 'VESSEL_STATUS',
+        previousValue: 'AT_PORT',
+        nextValue: 'TECHNICAL_STOP',
+        dateTime: '2022-01-03T08:49:29.087756Z'
+      },
+      {
+        beaconStatusId: 1,
+        propertyName: 'VESSEL_STATUS',
+        previousValue: 'TECHNICAL_STOP',
+        nextValue: 'ACTIVITY_DETECTED',
+        dateTime: '2022-01-17T09:27:20.544785Z'
       }
     ]
   },

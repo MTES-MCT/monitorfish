@@ -8,7 +8,6 @@ export const VesselStatusSelectValue = ({ item }) => {
       {icon}
       <Text>
         {item.label}
-
       </Text>
       </Value>
   )

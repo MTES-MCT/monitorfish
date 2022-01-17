@@ -209,6 +209,7 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
         updateStageVesselStatus={updateVesselStatus}
         beaconStatus={openedBeaconStatus?.beaconStatus}
         comments={openedBeaconStatus?.comments || []}
+        actions={openedBeaconStatus?.actions || []}
       />
     </Wrapper>
   )

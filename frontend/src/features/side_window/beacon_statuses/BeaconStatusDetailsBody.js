@@ -2,15 +2,26 @@ import React, { useEffect, useRef, useState } from 'react'
 import { COLORS } from '../../../constants/constants'
 import styled from 'styled-components'
 import { ReactComponent as CommentsSVG } from '../../icons/Commentaires.svg'
-import { getDate, getTime } from '../../../utils'
+import { getDate, getTime, mergeObjects } from '../../../utils'
 import { Toggle } from 'rsuite'
 import { basePrimaryButton } from '../../commonStyles/Buttons.style'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserType } from '../../../domain/shared_slices/Global'
 import { UserType } from '../../../domain/entities/beaconStatus'
 import saveBeaconStatusComment from '../../../domain/use_cases/saveBeaconStatusComment'
+import { beaconStatusesStages, vesselStatuses } from './beaconStatuses'
 
-const BeaconStatusDetailsBody = ({ comments, beaconStatusId }) => {
+const Type = {
+  ACTION: 'ACTION',
+  COMMENT: 'COMMENT'
+}
+
+const ActionProperty = {
+  VESSEL_STATUS: 'VESSEL_STATUS',
+  STAGE: 'STAGE'
+}
+
+const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
   const dispatch = useDispatch()
   const {
     userType
@@ -39,7 +50,7 @@ const BeaconStatusDetailsBody = ({ comments, beaconStatusId }) => {
     }
   }, [comments])
 
-  const getCommentDate = date => {
+  const getCommentOrActionDate = date => {
     if (date === today.current) {
       return 'Ajourd\'hui'
     }
@@ -53,6 +64,7 @@ const BeaconStatusDetailsBody = ({ comments, beaconStatusId }) => {
 
   const commentsByDate = comments?.reduce((commentsByDayAccumulated, comment) => {
     const dateWithoutTime = comment.dateTime.split('T')[0]
+    comment = { ...comment, type: Type.COMMENT }
 
     if (commentsByDayAccumulated[dateWithoutTime]) {
       commentsByDayAccumulated[dateWithoutTime].push(comment)
@@ -62,6 +74,57 @@ const BeaconStatusDetailsBody = ({ comments, beaconStatusId }) => {
 
     return commentsByDayAccumulated
   }, {}) || {}
+
+  const actionsByDate = actions?.reduce((actionsByDayAccumulated, action) => {
+    const dateWithoutTime = action.dateTime.split('T')[0]
+    action = { ...action, type: Type.ACTION }
+
+    if (actionsByDayAccumulated[dateWithoutTime]) {
+      actionsByDayAccumulated[dateWithoutTime].push(action)
+    } else {
+      actionsByDayAccumulated[dateWithoutTime] = [action]
+    }
+
+    return actionsByDayAccumulated
+  }, {}) || {}
+
+  const actionsAndCommentsByDate = mergeObjects(commentsByDate, actionsByDate)
+
+  const getActionText = action => {
+    if (action.propertyName === ActionProperty.VESSEL_STATUS) {
+      const previousValue = vesselStatuses.find(status => status.value === action.previousValue)?.label
+      const nextValue = vesselStatuses.find(status => status.value === action.nextValue)?.label
+
+      return <>Le statut du ticket a été modifié, de <b>{previousValue}</b> à <b>{nextValue}</b>.</>
+    } else if (action.propertyName === ActionProperty.STAGE) {
+      const previousValue = beaconStatusesStages[action.previousValue].title
+      const nextValue = beaconStatusesStages[action.nextValue].title
+
+      return <>Le ticket a été déplacé de <b>{previousValue}</b> à <b>{nextValue}</b>.</>
+    }
+  }
+
+  const getActionOrCommentRow = (actionOrComment, isLastDate, isLast) => {
+    if (actionOrComment.type === Type.COMMENT) {
+      return <div key={actionOrComment.type + actionOrComment.dateTime}>
+        <ActionOrCommentRow ref={isLastDate && isLast ? scrollToRef : null}>
+          <CommentText>{actionOrComment.comment}</CommentText>
+        </ActionOrCommentRow>
+        <ActionOrCommentRow>
+          <CommentUserType>{actionOrComment.userType} - {getTime(actionOrComment.dateTime, true)} (UTC)</CommentUserType>
+        </ActionOrCommentRow>
+      </div>
+    } else if (actionOrComment.type === Type.ACTION) {
+      return <div key={actionOrComment.type + actionOrComment.dateTime}>
+        <ActionOrCommentRow ref={isLastDate && isLast ? scrollToRef : null}>
+          <ActionText>{getActionText(actionOrComment)}</ActionText>
+        </ActionOrCommentRow>
+        <ActionOrCommentRow>
+          <CommentUserType>{getTime(actionOrComment.dateTime, true)} (UTC)</CommentUserType>
+        </ActionOrCommentRow>
+      </div>
+    }
+  }
 
   const saveComment = () => {
     dispatch(saveBeaconStatusComment(beaconStatusId, comment)).then(() => {
@@ -79,35 +142,30 @@ const BeaconStatusDetailsBody = ({ comments, beaconStatusId }) => {
       </NumberComments>
       <Comments>
         {
-          Object.keys(commentsByDate)
-            .sort((a, b) => new Date(b.controlDatetimeUtc) - new Date(a.controlDatetimeUtc))
+          Object.keys(actionsAndCommentsByDate)
+            .sort((a, b) => new Date(a) - new Date(b))
             .map((date, index) => {
-              const isLastDate = Object.keys(commentsByDate).length === index + 1
-              const dateText = getCommentDate(getDate(date))
+              const isLastDate = Object.keys(actionsAndCommentsByDate).length === index + 1
+              const dateText = getCommentOrActionDate(getDate(date))
 
               return <>
                 <DateSeparator>
                   <Line/>
-                  <CommentDate
+                  <RowDate
                     isToday={dateText === 'Aujourd\'hui'}
                     isYesterday={dateText === 'Hier'}
                   >
                     {dateText}
-                  </CommentDate>
+                  </RowDate>
                 </DateSeparator>
                 {
-                  commentsByDate[date].map((comment, index) => {
-                    const isLastComment = commentsByDate[date].length === index + 1
+                  actionsAndCommentsByDate[date]
+                    .sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime))
+                    .map((actionOrComment, index) => {
+                      const isLast = actionsAndCommentsByDate[date].length === index + 1
 
-                    return <>
-                      <CommentRow key={comment.id} ref={isLastDate && isLastComment ? scrollToRef : null}>
-                        <CommentText>{comment.comment}</CommentText>
-                      </CommentRow>
-                      <CommentRow key={comment.id}>
-                        <CommentUserType>{comment.userType} - {getTime(comment.dateTime, true)} (UTC)</CommentUserType>
-                      </CommentRow>
-                    </>
-                  })
+                      return getActionOrCommentRow(actionOrComment, isLastDate, isLast)
+                    })
                 }
               </>
             })
@@ -171,14 +229,22 @@ const AddComment = styled.textarea`
   height: 50px;
 `
 
-const CommentRow = styled.div`
+const ActionOrCommentRow = styled.div`
   width: 100%;
   display: flex;
 `
 
 const CommentText = styled.div`
-  background: #CCCFD6 0% 0% no-repeat padding-box;
-  border: 1px solid #CCCFD6;
+  background: ${COLORS.lightGray} 0% 0% no-repeat padding-box;
+  border: 1px solid ${COLORS.lightGray};
+  max-width: 480px;
+  padding: 10px 15px;
+  margin-left: auto;
+  margin-top: 10px;
+`
+
+const ActionText = styled.div`
+  border: 2px solid ${COLORS.lightGray};
   max-width: 480px;
   padding: 10px 15px;
   margin-left: auto;
@@ -198,7 +264,7 @@ const DateSeparator = styled.div`
   margin-top: 30px;
 `
 
-const CommentDate = styled.div`
+const RowDate = styled.div`
   margin-top: -23px;
   width: fit-content;
   background: white;

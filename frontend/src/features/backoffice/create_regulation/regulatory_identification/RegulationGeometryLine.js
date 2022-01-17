@@ -10,7 +10,7 @@ import { ReactComponent as ShowIconSVG } from '../../../icons/oeil_affiche.svg'
 import { ReactComponent as HideIconSVG } from '../../../icons/oeil_masque.svg'
 import { COLORS } from '../../../../constants/constants'
 import { setRegulationByKey } from '../../Regulation.slice'
-import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
+import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const RegulationGeometryLine = props => {
   const {
@@ -25,7 +25,7 @@ const RegulationGeometryLine = props => {
   const { id: selectedGeometryId } = useSelector(state => state.regulation.currentRegulation)
 
   const onCloseIconClicked = () => {
-    dispatch(setRegulationByKey({ key: 'id', value: undefined }))
+    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined }))
     setShowRegulatoryPreview(false)
   }
 

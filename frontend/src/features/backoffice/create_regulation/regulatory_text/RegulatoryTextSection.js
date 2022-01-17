@@ -7,7 +7,7 @@ import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.styl
 import RegulatoryText from './RegulatoryText'
 import UpcomingRegulationSection from './UpcomingRegulationSection'
 import { setIsModalOpen, setUpcomingRegulatoryText } from '../../Regulation.slice'
-import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../../domain/entities/regulatory'
+import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT, INITIAL_UPCOMING_REG_REFERENCE } from '../../../../domain/entities/regulatory'
 
 /**
  * @typedef {object} Props
@@ -51,14 +51,11 @@ const RegulatoryTextSection = props => {
       addOrRemoveRegulatoryTextInList()
     } else {
       dispatch(setIsModalOpen(true))
-      dispatch(setUpcomingRegulatoryText(upcomingRegulatoryReferences.regulatoryTextList))
+      dispatch(setUpcomingRegulatoryText(upcomingRegulatoryReferences || INITIAL_UPCOMING_REG_REFERENCE))
     }
   }, [addOrRemoveRegulatoryTextInList, setIsModalOpen])
 
   const setRegulatoryText = useCallback((id, regulatoryText) => {
-    console.log('setRegulatoryText')
-    console.log(regulatoryTextList)
-    console.log(regulatoryText)
     const newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
     newRegulatoryTextList[id] = regulatoryText
     setRegulatoryTextList(newRegulatoryTextList)
@@ -86,7 +83,7 @@ const RegulatoryTextSection = props => {
         })
         : <RegulatoryText
           regulatoryText={DEFAULT_REGULATORY_TEXT}
-          key={-1}
+          key={0}
           id={0}
           addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
           source={source}
@@ -103,7 +100,7 @@ const RegulatoryTextSection = props => {
         onClick={addRegRefInEffect}>
         Ajouter un autre texte en vigueur
       </ValidateButton>
-      {upcomingRegulatoryReferences?.regulatoryTextList?.length === 0 && <CustomCancelButton
+      {!upcomingRegulatoryReferences?.regulatoryTextList?.length > 0 && <CustomCancelButton
         disabled={false}
         isLast={false}
         onClick={addUpcomingText}>

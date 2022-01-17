@@ -44,7 +44,8 @@ import {
   setIsConfirmModalOpen,
   resetState,
   setRegulationByKey,
-  setRegulation
+  setRegulation,
+  setUpcomingRegulatoryText
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
 import {
@@ -57,7 +58,9 @@ import {
   REG_LOCALE,
   LAWTYPES_TO_TERRITORY,
   FRANCE,
-  INITIAL_REGULATION
+  INITIAL_REGULATION,
+  REGULATORY_REFERENCE_KEYS,
+  INITIAL_UPCOMING_REG_REFERENCE
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
 import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
@@ -140,6 +143,7 @@ const CreateRegulation = ({ title, isEdition }) => {
       dispatch(setSelectedRegulation(undefined))
       dispatch(setRegulation(INITIAL_REGULATION))
       dispatch(setRegulatoryZoneMetadata(undefined))
+      dispatch(setUpcomingRegulatoryText(INITIAL_UPCOMING_REG_REFERENCE))
     }
   }, [])
 
@@ -283,11 +287,7 @@ const CreateRegulation = ({ title, isEdition }) => {
       regulatorySpecies
     }))
     setInitialGeometryId(id)
-
-    batch(() => {
-      dispatch(setRegulationByKey({ key: 'id', value: id }))
-      // dispatch(setUpcomingRegulation(upcomingRegulatoryReferences))
-    })
+    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: id }))
   }
 
   useEffect(() => {
@@ -309,7 +309,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   const setRegulatoryTextList = useCallback((texts) => {
-    dispatch(setRegulationByKey({ key: 'regulatoryReferences', value: texts }))
+    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES, value: texts }))
   }, [setRegulationByKey])
 
   return (

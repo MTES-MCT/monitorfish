@@ -5,6 +5,7 @@ import SectionTitle from '../../SectionTitle'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
 import { setRegulationByKey } from '../../Regulation.slice'
 import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
+import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const FishingPeriodSection = () => {
   const { fishingPeriod } = useSelector(state => state.regulation.currentRegulation)
@@ -16,7 +17,7 @@ const FishingPeriodSection = () => {
 
   const setOtherInfo = value => {
     dispatch(setRegulationByKey({
-      key: 'fishingPeriod',
+      key: REGULATORY_REFERENCE_KEYS.FISHING_PERIOD,
       value: {
         ...fishingPeriod,
         otherInfo: value
@@ -25,7 +26,7 @@ const FishingPeriodSection = () => {
   }
 
   const setFishingPeriod = value => {
-    dispatch(setRegulationByKey({ key: 'fishingPeriod', value }))
+    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.FISHING_PERIOD, value }))
   }
 
   return <Section show>

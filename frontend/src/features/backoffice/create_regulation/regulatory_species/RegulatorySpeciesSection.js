@@ -5,6 +5,7 @@ import RegulatorySpeciesForm from './RegulatorySpeciesForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { setRegulationByKey } from '../../Regulation.slice'
 import { FormSection, OtherRemark } from '../../../commonStyles/Backoffice.style'
+import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const RegulatorySpeciesSection = () => {
   const [show, setShow] = useState(false)
@@ -14,7 +15,7 @@ const RegulatorySpeciesSection = () => {
   const { regulatorySpecies } = useSelector(state => state.regulation.currentRegulation)
 
   const setRegulatorySpecies = value => {
-    dispatch(setRegulationByKey({ key: 'regulatorySpecies', value }))
+    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGULATORY_SPECIES, value }))
   }
 
   const setOtherInfo = useCallback(value => {

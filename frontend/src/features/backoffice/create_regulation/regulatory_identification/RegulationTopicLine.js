@@ -11,7 +11,7 @@ import CreateRegulationTopicForm from './CreateRegulationTopicForm'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
 import { formatDataForSelectPicker } from '../../../../utils'
-import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
+import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 import { setRegulationByKey } from '../../Regulation.slice'
 const RegulationTopicLine = props => {
   const {
@@ -38,7 +38,7 @@ const RegulationTopicLine = props => {
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
 
   const updateTopic = (value) => {
-    dispatch(setRegulationByKey({ key: 'topic', value }))
+    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value }))
   }
 
   return <ContentLine

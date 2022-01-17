@@ -304,13 +304,25 @@ export const emptyRegulatoryFeatureObject = {
   references_reglementaires_a_venir: null
 }
 
-export const INITIAL_UPCOMING_REG_REFERENCE = { regulatoryTextList: [] }
+export const INITIAL_UPCOMING_REG_REFERENCE = { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }
+
+export const REGULATORY_REFERENCE_KEYS = {
+  ID: 'id',
+  REGULATORY_REFERENCES: 'regulatoryReferences',
+  FISHING_PERIOD: 'fishingPeriod',
+  REGULAOTRY_SPECIES: 'regulatorySpecies',
+  UPCOMING_REGULATORY_REFERENCES: 'upcomingRegulatoryReferences',
+  REGION: 'region',
+  TOPIC: 'topic',
+  LAW_TYPE: 'lawType',
+  ZONE: 'zone',
+  REGULATORY_SPECIES: 'regulatorySpecies'
+}
 
 export const INITIAL_REGULATION = {
-  regulatoryReferences: [DEFAULT_REGULATORY_TEXT],
-  fishingPeriod: INITIAL_FISHING_PERIOD_VALUES,
-  regulatorySpecies: INITIAL_REG_SPECIES_VALUES,
-  upcomingRegulatoryReferences: INITIAL_UPCOMING_REG_REFERENCE
+  [REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES]: [DEFAULT_REGULATORY_TEXT],
+  [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: INITIAL_FISHING_PERIOD_VALUES,
+  [REGULATORY_REFERENCE_KEYS.REGULAOTRY_SPECIES]: INITIAL_REG_SPECIES_VALUES
 }
 
 export const WEEKDAYS = {

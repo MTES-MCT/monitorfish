@@ -14,7 +14,11 @@ import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import { FooterButton } from '../../../commonStyles/Backoffice.style'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise_clair.svg'
-import { REGULATORY_TEXT_SOURCE, INITIAL_UPCOMING_REG_REFERENCE } from '../../../../domain/entities/regulatory'
+import {
+  REGULATORY_TEXT_SOURCE,
+  INITIAL_UPCOMING_REG_REFERENCE,
+  REGULATORY_REFERENCE_KEYS
+} from '../../../../domain/entities/regulatory'
 
 const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
@@ -44,7 +48,7 @@ const UpcomingRegulationModal = () => {
           const newUpcomingRegulation = { ...(upcomingRegulatoryText || { regulatoryTextList: [] }) }
           newUpcomingRegulation.regulatoryTextList = [...upcomingRegulatoryText.regulatoryTextList]
           batch(() => {
-            dispatch(setRegulationByKey({ key: 'upcomingRegulatoryReferences', value: newUpcomingRegulation }))
+            dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.UPCOMING_REGULATORY_REFERENCES, value: newUpcomingRegulation }))
             dispatch(setIsModalOpen(false))
           })
         }

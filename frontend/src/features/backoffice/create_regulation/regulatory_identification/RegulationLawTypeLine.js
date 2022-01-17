@@ -5,7 +5,12 @@ import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import MenuItem from '../custom_form/MenuItem'
-import { DEFAULT_MENU_CLASSNAME, LAWTYPES_TO_TERRITORY, UE } from '../../../../domain/entities/regulatory'
+import {
+  DEFAULT_MENU_CLASSNAME,
+  LAWTYPES_TO_TERRITORY,
+  UE,
+  REGULATORY_REFERENCE_KEYS
+} from '../../../../domain/entities/regulatory'
 import { setRegulationByKey } from '../../Regulation.slice'
 
 const RegulationLawTypeLine = ({ selectData, lawTypeIsMissing }) => {
@@ -15,11 +20,11 @@ const RegulationLawTypeLine = ({ selectData, lawTypeIsMissing }) => {
 
   const onLawTypeChange = useCallback((value) => {
     if (LAWTYPES_TO_TERRITORY[value] !== UE) {
-      dispatch(setRegulationByKey({ key: 'region', value: [] }))
+      dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: [] }))
     }
     batch(() => {
-      dispatch(setRegulationByKey({ key: 'topic', value: undefined }))
-      dispatch(setRegulationByKey({ key: 'lawType', value: value }))
+      dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value: undefined }))
+      dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.LAW_TYPE, value: value }))
     })
   }, [setRegulationByKey])
 

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { INITIAL_REGULATION, INITIAL_UPCOMING_REG_REFERENCE } from '../../domain/entities/regulatory'
+import { INITIAL_REGULATION } from '../../domain/entities/regulatory'
 
 const INITIAL_STATE = {
   /** @type {RegulatoryText} */
@@ -8,14 +8,12 @@ const INITIAL_STATE = {
   upcomingRegulation: undefined,
   /** @type {RegulatoryText} */
   currentRegulation: INITIAL_REGULATION,
-  /** @type {UpcomingRegulation} upcomingRegulation */
-  // upcomingRegulation: undefined,
   /** @type {boolean} isModalOpen */
   isModalOpen: false,
   /** @type {Map<number, RegulatoryText | null>} */
   upcomingRegulatoryTextCheckedMap: undefined,
-  /** @type {Map<number, RegulatoryText | null>} */
-  upcomingRegulatoryText: INITIAL_UPCOMING_REG_REFERENCE,
+  /** @type {UpcomingRegulation} upcomingRegulatoryText */
+  upcomingRegulatoryText: undefined,
   /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */
   regulatoryTextCheckedMap: undefined,
   /** @type {boolean} */

@@ -6,7 +6,7 @@ import { Title, Section } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcomingRegulationSection from './UpcomingRegulationSection'
-import { setIsModalOpen } from '../../Regulation.slice'
+import { setIsModalOpen, setUpcomingRegulatoryText } from '../../Regulation.slice'
 import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../../domain/entities/regulatory'
 
 /**
@@ -51,10 +51,14 @@ const RegulatoryTextSection = props => {
       addOrRemoveRegulatoryTextInList()
     } else {
       dispatch(setIsModalOpen(true))
+      dispatch(setUpcomingRegulatoryText(upcomingRegulatoryReferences.regulatoryTextList))
     }
   }, [addOrRemoveRegulatoryTextInList, setIsModalOpen])
 
   const setRegulatoryText = useCallback((id, regulatoryText) => {
+    console.log('setRegulatoryText')
+    console.log(regulatoryTextList)
+    console.log(regulatoryText)
     const newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
     newRegulatoryTextList[id] = regulatoryText
     setRegulatoryTextList(newRegulatoryTextList)
@@ -99,7 +103,7 @@ const RegulatoryTextSection = props => {
         onClick={addRegRefInEffect}>
         Ajouter un autre texte en vigueur
       </ValidateButton>
-      {!upcomingRegulatoryReferences && <CustomCancelButton
+      {upcomingRegulatoryReferences?.regulatoryTextList?.length === 0 && <CustomCancelButton
         disabled={false}
         isLast={false}
         onClick={addUpcomingText}>
@@ -113,7 +117,7 @@ const RegulatoryTextSection = props => {
       </ValidateButton>}
     </ButtonLine>
     {source === REGULATORY_TEXT_SOURCE.REGULATION &&
-      upcomingRegulatoryReferences && upcomingRegulatoryReferences !== {} &&
+      upcomingRegulatoryReferences &&
         <UpcomingRegulationSection upcomingRegulation={upcomingRegulatoryReferences} />
     }
   </Section>

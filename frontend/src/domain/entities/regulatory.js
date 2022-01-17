@@ -628,13 +628,13 @@ export const sortLayersTopicsByRegTerritory = (layersTopicsByRegTerritory) => {
  * @returns
  */
 export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
-  const SORTED_CATEGORI_LIST = [
+  const SORTED_CATEGORY_LIST = [
     'Chaluts', 'Sennes traînantes', 'Dragues', 'Sennes tournantes coulissantes',
     'Filets tournants', 'Filets maillants et filets emmêlants', 'Filets soulevés',
     'Lignes et hameçons', 'Pièges', 'Engins de récolte', 'Engins divers'
   ]
 
-  return SORTED_CATEGORI_LIST.map((category) => {
+  return SORTED_CATEGORY_LIST.map((category) => {
     const CATEOGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']
     if (!CATEOGORIES_TO_HIDE.includes(category)) {
       const categoryGearList = [...categoriesToGears[category]]

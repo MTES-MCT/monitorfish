@@ -25,20 +25,19 @@ const FilterLayer = ({ map }) => {
     }),
     features: []
   }))
-  const style = new Style({
-    stroke: new Stroke({
-      color: filterColor,
-      width: 2,
-      lineDash: [4, 8]
-    })
-  })
   const layerRef = useRef(new Vector({
     renderBuffer: 4,
     source: vectorSourceRef.current,
     zIndex: Layers.SELECTED_VESSEL.zIndex,
     updateWhileAnimating: true,
     updateWhileInteracting: true,
-    style
+    style: new Style({
+      stroke: new Stroke({
+        color: filterColor,
+        width: 2,
+        lineDash: [4, 8]
+      })
+    })
   }))
 
   useEffect(() => {
@@ -63,6 +62,16 @@ const FilterLayer = ({ map }) => {
       }
     }
   }, [filterGeoJSON])
+
+  useEffect(() => {
+    layerRef?.current.setStyle(new Style({
+      stroke: new Stroke({
+        color: filterColor,
+        width: 2,
+        lineDash: [4, 8]
+      })
+    }))
+  }, [filterColor])
 
   return null
 }

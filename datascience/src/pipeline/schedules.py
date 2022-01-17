@@ -18,6 +18,7 @@ from src.pipeline.flows import (
     init_species_groups,
     last_positions,
     missing_trip_numbers,
+    new_beacons_statuses,
     ports,
     regulations,
     regulations_checkup,
@@ -59,6 +60,7 @@ last_positions.flow.schedule = Schedule(
     ]
 )
 missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
+new_beacons_statuses.flow.schedule = CronSchedule("5,15,25,35,45,55 * * * *")
 regulations.flow.schedule = CronSchedule("6,16,26,36,46,56 * * * *")
 regulations_checkup.flow.schedule = CronSchedule("58 7 * * 1,2,3,4,5")
 risk_factor.flow.schedule = CronSchedule("3,13,23,33,43,53 * * * *")
@@ -90,6 +92,7 @@ flows_to_register = [
     init_species_groups.flow,
     last_positions.flow,
     missing_trip_numbers.flow,
+    new_beacons_statuses.flow,
     ports.flow,
     regulations.flow,
     regulations_checkup.flow,

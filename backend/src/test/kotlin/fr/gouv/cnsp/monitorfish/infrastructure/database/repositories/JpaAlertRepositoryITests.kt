@@ -3,7 +3,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.PNOAndLANWeightToleranceAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
@@ -75,29 +74,5 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(alerts).hasSize(0)
-    }
-
-    @Test
-    @Transactional
-    fun `findAlertsOfTypes Should return an alert with the type entered`() {
-        // Given
-        val alertOne = Alert(
-                id = UUID.randomUUID(),
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                tripNumber = 123456,
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert(speed = 2.36, numberOfIncursion = 3))
-        jpaAlertRepository.save(alertOne)
-
-        // When
-        val alerts = jpaAlertRepository.findAlertsOfTypes(listOf(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT))
-
-        // Then
-        assertThat(alerts).hasSize(15)
-        assertThat(alerts.first().externalReferenceNumber).isEqualTo("DONTSINK")
-        assertThat(alerts.first().internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(alerts.first().value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
     }
 }

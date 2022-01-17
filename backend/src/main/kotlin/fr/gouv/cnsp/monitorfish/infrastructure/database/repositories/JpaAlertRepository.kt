@@ -22,11 +22,4 @@ class JpaAlertRepository(private val dbAlertRepository: DBAlertRepository,
         return dbAlertRepository.findAlertsOfRules(rulesAsString, internalReferenceNumber, tripNumber)
                 .map { it.toAlert(mapper) }
     }
-
-    override fun findAlertsOfTypes(types: List<AlertTypeMapping>): List<Alert> {
-        val rulesAsString = types.map { it.name }
-
-        return dbAlertRepository.findAlertsOfRules(rulesAsString)
-                .map { it.toAlert(mapper) }
-    }
 }

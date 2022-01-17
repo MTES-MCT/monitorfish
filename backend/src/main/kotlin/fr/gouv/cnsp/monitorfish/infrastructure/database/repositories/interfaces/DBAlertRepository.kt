@@ -10,6 +10,4 @@ interface DBAlertRepository : CrudRepository<AlertEntity, Long> {
     @Query("select * from alerts where internal_reference_number = :internalReferenceNumber " +
             "and trip_number = :tripNumber and value->>'type' in (:types)", nativeQuery = true)
     fun findAlertsOfRules(types: List<String>, internalReferenceNumber: String, tripNumber: Int?): List<AlertEntity>
-    @Query("select * from alerts where value->>'type' in (:types)", nativeQuery = true)
-    fun findAlertsOfRules(types: List<String>): List<AlertEntity>
 }

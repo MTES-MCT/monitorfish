@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import RegulatoryLayerSearchInput from './RegulatoryLayerSearchInput'
-import RegulatoryLayerSearchResultList from './RegulatoryLayerSearchResultList'
 import { resetRegulatoryZonesChecked, setRegulatoryLayersSearchResult } from './RegulatoryLayerSearch.slice'
-import { COLORS } from '../../../../constants/constants'
-import { batch, useDispatch, useSelector } from 'react-redux'
+
 import layer from '../../../../domain/shared_slices/Layer'
+import { addRegulatoryZonesToMyLayers, resetRegulatoryGeometryToPreview } from '../../../../domain/shared_slices/Regulatory'
 import { useEscapeFromKeyboard } from '../../../../hooks/useEscapeFromKeyboard'
-import { addRegulatoryZonesToMyLayers } from '../../../../domain/shared_slices/Regulatory'
+
+import RegulatoryLayerSearchResultList from './RegulatoryLayerSearchResultList'
+import RegulatoryLayerSearchInput from './RegulatoryLayerSearchInput'
+import { COLORS } from '../../../../constants/constants'
 
 const RegulatoryLayerSearch = props => {
   const {
@@ -35,6 +37,7 @@ const RegulatoryLayerSearch = props => {
   useEffect(() => {
     if (layersSidebarOpenedLayer !== '') {
       batch(() => {
+        dispatch(resetRegulatoryGeometryToPreview())
         dispatch(setRegulatoryLayersSearchResult(null))
         dispatch(resetRegulatoryZonesChecked())
       })
@@ -44,6 +47,7 @@ const RegulatoryLayerSearch = props => {
   useEffect(() => {
     if (escape) {
       batch(() => {
+        dispatch(resetRegulatoryGeometryToPreview())
         dispatch(setRegulatoryLayersSearchResult(null))
         dispatch(resetRegulatoryZonesChecked())
       })

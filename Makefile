@@ -76,7 +76,7 @@ install-pipeline:
 run-notebook:
 	cd datascience && poetry run jupyter notebook
 test-pipeline:
-	cd datascience && poetry run coverage run -m pytest tests/ && poetry run coverage report && poetry run coverage html
+	cd datascience && poetry run coverage run -m pytest --pdb tests/ && poetry run coverage report && poetry run coverage html
 update-python-dependencies:
 	cd datascience && poetry export --without-hashes -o requirements.txt && poetry export --without-hashes --dev -o requirements-dev.txt
 

@@ -583,7 +583,7 @@ function getAllFleetSegmentFromAPI () {
  * @throws {Error}
  */
 function getOperationalAlertsFromAPI () {
-  return fetch('/bff/v1/alerts')
+  return fetch('/bff/v1/operational_alerts')
     .then(response => {
       if (response.status === OK) {
         return response.json()

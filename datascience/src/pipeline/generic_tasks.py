@@ -4,16 +4,10 @@ from typing import Union
 
 import geopandas as gpd
 import pandas as pd
-import prefect
-from prefect import task
 
 from src.db_config import create_engine
 from src.pipeline import utils
-from src.pipeline.processing import (
-    df_values_to_psql_arrays,
-    prepare_df_for_loading,
-    to_json,
-)
+from src.pipeline.processing import prepare_df_for_loading
 from src.pipeline.utils import get_table, psql_insert_copy
 from src.read_query import read_saved_query
 
@@ -106,13 +100,34 @@ def load(
         df (Union[pd.DataFrame, gpd.GeoDataFrame]): data to load
         table_name (str): name of the table
         schema (str): database schema of the table
-        db_name (str): name of the database. Currently only 'monitorfish_remote'.
+        db_name (str): 'monitorfish_remote' or 'monitorfish_local'
         logger (logging.Logger): logger instance,
         how (str): one of
           - 'replace' to delete all rows in the table before loading
           - 'append' to append the data to rows already in the table
           - 'upsert' to append the rows to the table, replacing the rows whose id is
             already
+        pg_array_columns (Union[None, list]): columns containing sequences that must be
+          serialized before loading into columns with Postgresql `Array` type
+        handle_array_conversion_errors (bool): whether to handle or raise upon error
+          during the serialization of columns to load into Postgresql `Array` columns
+        value_on_array_conversion_error: if `handle_array_conversion_errors`, the value
+          to use when an error must be handled
+        jsonb_columns (Union[None, list]): columns containing values that must be
+          serialized before loading into columns with Postgresql `JSONB` type
+        table_id_column (Union[None, str]): name of the table column to use an id.
+          Required if `how` is "upsert".
+        df_id_column (Union[None, str]): name of the DataFrame column to use an id.
+          Required if `how` is "upsert".
+        nullable_integer_columns (Union[None, list]): columns containing values
+          that must loaded into columns with Postgresql `Integer` type. If these
+          columns contain `NA` values, pandas will automatically change the dtype to
+          `float` and the loading into Postgreql `Integer` columns will fail, so it is
+          necessary to serialize these values as `Integer`-compatible `str` objects.
+        timedelta_columns (Union[None, list]): columns containing `Timedelta` values to
+          load into Postgresql `Interval` columns. If these columns contain `NaT`
+          values, the loading will fail, so it is necessary to serialize these values
+          as `Interval`-compatible `str` objects.
     """
 
     df_ = prepare_df_for_loading(

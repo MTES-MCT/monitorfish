@@ -3,16 +3,12 @@ import logging
 import os
 import pathlib
 import shutil
+import sys
 from io import StringIO
-from typing import Sequence, Union
+from typing import Sequence
 
-import geopandas as gpd
-import pandas as pd
+import geoalchemy2
 import sqlalchemy
-
-# Adds support for geometries in sqlalchemy table reflection, even though not it is
-# not used below
-from geoalchemy2 import Geometry
 from sqlalchemy import MetaData, Table, func, select
 from sqlalchemy.exc import InvalidRequestError
 
@@ -33,6 +29,15 @@ def get_table(
 
     meta = MetaData(schema=schema)
     meta.bind = engine
+    try:
+        geoalchemy2
+        assert "geoalchemy2" in sys.modules
+    except (AssertionError, NameError):
+        logger.error(
+            "geoalchemy2 must be imported for geometry support in table reflection."
+        )
+        raise
+
     try:
         logger.info(f"Searching for table {schema}.{table_name}...")
         meta.reflect(only=[table_name])

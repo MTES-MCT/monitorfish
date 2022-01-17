@@ -16,7 +16,6 @@ from config import (
     CNSP_FRANCE_EMAIL_ADDRESS,
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
-    LIBRARY_LOCATION,
 )
 from src.pipeline.emails.emails import create_html_email, send_email
 from src.pipeline.generic_tasks import extract

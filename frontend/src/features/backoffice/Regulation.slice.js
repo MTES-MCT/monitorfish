@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { INITIAL_REGULATION } from '../../domain/entities/regulatory'
+import { INITIAL_REGULATION, INITIAL_UPCOMING_REG_REFERENCE } from '../../domain/entities/regulatory'
 
 const INITIAL_STATE = {
   /** @type {RegulatoryText} */
@@ -15,6 +15,8 @@ const INITIAL_STATE = {
   /** @type {Map<number, RegulatoryText | null>} */
   upcomingRegulatoryTextCheckedMap: undefined,
   /** @type {Map<number, RegulatoryText | null>} */
+  upcomingRegulatoryText: INITIAL_UPCOMING_REG_REFERENCE,
+  /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */
   regulatoryTextCheckedMap: undefined,
   /** @type {boolean} */
   saveOrUpdateRegulation: false,
@@ -45,15 +47,15 @@ const regulationSlice = createSlice({
     setRegulation (state, { payload }) {
       state.currentRegulation = payload
     },
+    setUpcomingRegulatoryText (state, action) {
+      state.upcomingRegulatoryText = action.payload
+    },
     setSelectedRegulation (state, action) {
       state.selectedRegulation = action.payload
     },
     setIsModalOpen (state, action) {
       state.isModalOpen = action.payload
     },
-    /* setUpcomingRegulation (state, action) {
-      state.upcomingRegulation = action.payload
-    }, */
     addObjectToRegulatoryTextCheckedMap (state, action) {
       const {
         /** @type {boolean} */
@@ -111,8 +113,8 @@ const regulationSlice = createSlice({
 export const {
   resetState,
   setSelectedRegulation,
+  setUpcomingRegulatoryText,
   setIsModalOpen,
-  // setUpcomingRegulation,
   addObjectToUpcomingRegulatoryTextCheckedMap,
   setUpcomingRegulatoryTextListCheckedMap,
   setRegulationSaved,

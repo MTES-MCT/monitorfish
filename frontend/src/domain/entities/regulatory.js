@@ -304,11 +304,13 @@ export const emptyRegulatoryFeatureObject = {
   references_reglementaires_a_venir: null
 }
 
+export const INITIAL_UPCOMING_REG_REFERENCE = { regulatoryTextList: [] }
+
 export const INITIAL_REGULATION = {
   regulatoryReferences: [DEFAULT_REGULATORY_TEXT],
   fishingPeriod: INITIAL_FISHING_PERIOD_VALUES,
   regulatorySpecies: INITIAL_REG_SPECIES_VALUES,
-  upcomingRegulatoryReferences: { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }
+  upcomingRegulatoryReferences: INITIAL_UPCOMING_REG_REFERENCE
 }
 
 export const WEEKDAYS = {

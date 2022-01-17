@@ -6,16 +6,18 @@ import { CancelButton } from '../../../commonStyles/Buttons.style'
 import { Link } from '../../../commonStyles/Backoffice.style'
 import { setIsModalOpen, setRegulationByKey } from '../../Regulation.slice'
 import InfoPoint from '../InfoPoint'
+import { INITIAL_UPCOMING_REG_REFERENCE } from '../../../../domain/entities/regulatory'
 
 const UpcomingRegulationSection = ({ upcomingRegulation }) => {
   const dispatch = useDispatch()
 
   const onCancelClicked = useCallback(() => {
-    dispatch(setRegulationByKey('upcomingRegulatoryReferences', undefined))
+    dispatch(setRegulationByKey({ key: 'upcomingRegulatoryReferences', value: INITIAL_UPCOMING_REG_REFERENCE }))
   }, [setRegulationByKey])
 
   const DATE_STRING_OPTIONS = { year: 'numeric', month: '2-digit', day: '2-digit' }
   return (
+    upcomingRegulation?.regulatoryTextList?.length > 0 &&
       <>
       <Container>
         <YellowRectangle />

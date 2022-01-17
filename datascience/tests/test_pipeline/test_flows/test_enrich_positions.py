@@ -480,7 +480,7 @@ def test_flow_can_compute_in_chunks(reset_test_data):
             average_speed,
             is_fishing
         FROM positions
-        ORDER BY date_time""",
+        ORDER BY id""",
     )
 
     flow.run(
@@ -503,7 +503,7 @@ def test_flow_can_compute_in_chunks(reset_test_data):
             average_speed,
             is_fishing
         FROM positions
-        ORDER BY date_time""",
+        ORDER BY id""",
     )
 
     flow.run(
@@ -526,7 +526,7 @@ def test_flow_can_compute_in_chunks(reset_test_data):
             average_speed,
             is_fishing
         FROM positions
-        ORDER BY date_time""",
+        ORDER BY id""",
     )
 
     with pytest.raises(AssertionError):

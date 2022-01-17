@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import AlertsTable from './AlertsTable'
+import AlertsList from './AlertsList'
 import { getAlertForTable } from './dataFormatting'
 import { useSelector } from 'react-redux'
-import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu, AlertTypes } from '../../../domain/entities/alerts'
+import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
+import { COLORS } from '../../../constants/constants'
 
 const Alerts = ({ selectedSubMenu, setSelectedSubMenu }) => {
   const {
@@ -27,8 +28,7 @@ const Alerts = ({ selectedSubMenu, setSelectedSubMenu }) => {
   const baseUrl = window.location.origin
 
   return <Content>
-    <AlertsTable
-      alertType={AlertTypes.THREE_MILES_TRAWLING_ALERT.name}
+    <AlertsList
       alerts={alerts
         .map(alert => getAlertForTable(alert))
         .filter(alert =>
@@ -41,6 +41,7 @@ const Alerts = ({ selectedSubMenu, setSelectedSubMenu }) => {
 
 const Content = styled.div`
   margin: 30px;
+  background: ${COLORS.white};
 `
 
 export default Alerts

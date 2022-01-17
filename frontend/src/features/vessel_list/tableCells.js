@@ -68,7 +68,7 @@ export const CellWithTitle = ({ rowData, dataKey, ...props }) => (
   </Cell>
 )
 
-const Flag = styled.img`
+export const Flag = styled.img`
   font-size: 1.5em;
   margin-left: 14px;
   margin-top: 8px;

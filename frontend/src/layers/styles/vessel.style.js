@@ -97,7 +97,7 @@ export const getSelectedVesselStyle = ({ isLight }) => (feature) => {
   const course = feature.get('course')
   const style = new Style({
     image: new Icon({
-      src: 'selecteur_navire_complet.png',
+      src: 'selecteur_navire.png',
       rotation: degreesToRadian(course),
       scale: 0.5,
       color: isLight ? COLORS.vesselLightColor : COLORS.vesselColor,

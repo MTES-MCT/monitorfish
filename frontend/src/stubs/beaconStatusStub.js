@@ -1,3 +1,6 @@
+const yesterdayDate = new Date()
+yesterdayDate.setDate(yesterdayDate.getDate() - 1)
+
 export const beaconStatusesStub = [
   {
     beaconStatus: {
@@ -8,7 +11,7 @@ export const beaconStatusesStub = [
       vesselIdentifier: 'IRCS',
       vesselName: 'MALOTRU',
       vesselStatus: 'NO_NEWS',
-      stage: 'RESUMED_TRANSMISSION',
+      stage: 'INITIAL_ENCOUNTER',
       priority: true,
       malfunctionStartDateTime: '2021-12-27T09:26:09.364422Z',
       malfunctionEndDateTime: null,
@@ -19,7 +22,7 @@ export const beaconStatusesStub = [
         id: 1,
         comment: 'A comment',
         userType: 'OPS',
-        dateTime: '2021-12-27T09:26:09.364422Z'
+        dateTime: yesterdayDate.toISOString()
       }
     ],
     actions: [

@@ -4,21 +4,25 @@ import { COLORS } from '../../constants/constants'
 import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
 import { ReactComponent as BeaconStatusesSVG } from '../icons/Icone_VMS.svg'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
+import { openSideWindowTab } from '../../domain/shared_slices/Global'
+import { useDispatch } from 'react-redux'
 
-const SideWindowMenu = ({ selectedMenu, setSelectedMenu }) => {
+const SideWindowMenu = ({ selectedMenu }) => {
+  const dispatch = useDispatch()
+
   return <Menu>
     <Link/>
     <Link
       title={sideWindowMenu.ALERTS.name}
-      selected={selectedMenu === sideWindowMenu.ALERTS}
-      onClick={() => setSelectedMenu(sideWindowMenu.ALERTS)}
+      selected={selectedMenu === sideWindowMenu.ALERTS.code}
+      onClick={() => dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))}
     >
       <AlertsIcon/>
     </Link>
     <Link
       title={sideWindowMenu.BEACON_STATUSES.name}
-      selected={selectedMenu === sideWindowMenu.BEACON_STATUSES}
-      onClick={() => setSelectedMenu(sideWindowMenu.BEACON_STATUSES)}
+      selected={selectedMenu === sideWindowMenu.BEACON_STATUSES.code}
+      onClick={() => dispatch(openSideWindowTab(sideWindowMenu.BEACON_STATUSES.code))}
     >
       <BeaconStatusesIcon/>
     </Link>

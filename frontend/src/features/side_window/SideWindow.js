@@ -14,12 +14,23 @@ import { renderRowExpanded } from './alerts/tableCells'
 import { usePrevious } from '../../hooks/usePrevious'
 import BeaconStatusDetails from './beacon_statuses/BeaconStatusDetails'
 import { beaconStatusesStub } from '../../stubs/beaconStatusStub'
+import { batch, useDispatch, useSelector } from 'react-redux'
+import { closeSideWindow, setSideWindowAsOpen } from '../../domain/shared_slices/Global'
+import NewWindow from 'react-new-window'
+import { resetFocusOnAlert } from '../../domain/shared_slices/Alert'
+import SideWindowSubMenuLink from './SideWindowSubMenuLink'
 
-const SideWindow = ({ menu }) => {
+const SideWindow = () => {
+  const {
+    openedSideWindowTab
+  } = useSelector(state => state.global)
+  const {
+    beaconStatuses
+  } = useSelector(state => state.beaconStatus)
+  const dispatch = useDispatch()
   const [isPreloading, setIsPreloading] = useState(true)
-  const [selectedMenu, setSelectedMenu] = useState(sideWindowMenu.BEACON_STATUSES)
-  const previousSelectedMenu = usePrevious(selectedMenu)
-  const [selectedSubMenu, setSelectedSubMenu] = useState(selectedMenu === sideWindowMenu.ALERTS
+  const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
+  const [selectedSubMenu, setSelectedSubMenu] = useState(openedSideWindowTab === sideWindowMenu.ALERTS.code
     ? AlertsSubMenu.MEMN
     : BeaconStatusesSubMenu.MALFUNCTIONING)
   const [isOverlayed, setIsOverlayed] = useState(false)
@@ -32,35 +43,33 @@ const SideWindow = ({ menu }) => {
    * can copy the styles using `document.styleSheets` as they are found in the DOM
    **/
   useEffect(() => {
-    setTimeout(() => {
-      setIsPreloading(false)
-    }, 1000)
-  }, [])
+    if (openedSideWindowTab) {
+      dispatch(setSideWindowAsOpen())
+
+      setTimeout(() => {
+        setIsPreloading(false)
+      }, 1000)
+    }
+  }, [openedSideWindowTab])
 
   useEffect(() => {
-    if (selectedMenu === previousSelectedMenu) {
+    if (openedSideWindowTab === previousOpenedSideWindowTab) {
       return
     }
 
     if (selectedSubMenu) {
-      switch (selectedMenu) {
-        case sideWindowMenu.BEACON_STATUSES: {
+      switch (openedSideWindowTab) {
+        case sideWindowMenu.BEACON_STATUSES.code: {
           setSelectedSubMenu(BeaconStatusesSubMenu.MALFUNCTIONING)
           break
         }
-        case sideWindowMenu.ALERTS: {
+        case sideWindowMenu.ALERTS.code: {
           setSelectedSubMenu(AlertsSubMenu.MEMN)
           break
         }
       }
     }
-  }, [selectedMenu, setSelectedSubMenu])
-
-  useEffect(() => {
-    if (menu) {
-      setSelectedMenu(menu)
-    }
-  }, [menu, setSelectedMenu])
+  }, [openedSideWindowTab, setSelectedSubMenu])
 
   /**
    * /!\
@@ -79,6 +88,11 @@ const SideWindow = ({ menu }) => {
         selectedSubMenu={AlertsSubMenu.NAMOSA}
         setSelectedSubMenu={setSelectedSubMenu}
       />
+      <SideWindowSubMenuLink
+        number={4}
+        menu={BeaconStatusesSubMenu.MALFUNCTIONING}
+        isSelected={false}
+      />
       {
         beaconStatusesStub.map(beaconStatusStub =>
           <BeaconStatusDetails
@@ -92,52 +106,69 @@ const SideWindow = ({ menu }) => {
     </NotVisible>
   }
 
-  return <Wrapper>
-    <SideWindowMenu
-      selectedMenu={selectedMenu}
-      setSelectedMenu={setSelectedMenu}
-    />
-    <SideWindowSubMenu
-      selectedMenu={selectedMenu}
-      selectedSubMenu={selectedSubMenu}
-      setSelectedSubMenu={setSelectedSubMenu}
-    />
-    {
-      isPreloading
-        ? getComponentsForPreloading()
-        : null
-    }
-    <BeaconStatusesBoardGrayOverlay
-      isOverlayed={isOverlayed}
-      onClick={() => setIsOverlayed(false)}
-    />
-    {
-      isPreloading
-        ? <Loading>
-          <FulfillingBouncingCircleSpinner
-            color={COLORS.grayShadow}
-            className={'update-vessels'}
-            size={100}/>
-          <Text data-cy={'first-loader'}>Chargement...</Text>
-        </Loading>
-        : <>
-          {
-            selectedMenu === sideWindowMenu.ALERTS &&
-            <Alerts
-              selectedSubMenu={selectedSubMenu}
-              setSelectedSubMenu={setSelectedSubMenu}
-            />
-          }
-          {
-            selectedMenu === sideWindowMenu.BEACON_STATUSES &&
-            <BeaconStatusesBoard
-              setIsOverlayed={setIsOverlayed}
-              isOverlayed={isOverlayed}
-            />
-          }
-        </>
-    }
-  </Wrapper>
+  return <>{openedSideWindowTab
+    ? <NewWindow
+      copyStyles
+      name={'MonitorFish'}
+      title={'MonitorFish'}
+      features={{ scrollbars: true, width: '1500px', height: '1200px' }}
+      onUnload={() => {
+        batch(() => {
+          dispatch(closeSideWindow())
+          dispatch(resetFocusOnAlert())
+        })
+      }}
+    >
+      <Wrapper>
+        <SideWindowMenu
+          selectedMenu={openedSideWindowTab}
+        />
+        <SideWindowSubMenu
+          beaconStatuses={beaconStatuses}
+          selectedMenu={openedSideWindowTab}
+          selectedSubMenu={selectedSubMenu}
+          setSelectedSubMenu={setSelectedSubMenu}
+        />
+        {
+          isPreloading
+            ? getComponentsForPreloading()
+            : null
+        }
+        <BeaconStatusesBoardGrayOverlay
+          isOverlayed={isOverlayed}
+          onClick={() => setIsOverlayed(false)}
+        />
+        {
+          isPreloading
+            ? <Loading>
+              <FulfillingBouncingCircleSpinner
+                color={COLORS.grayShadow}
+                className={'update-vessels'}
+                size={100}/>
+              <Text data-cy={'first-loader'}>Chargement...</Text>
+            </Loading>
+            : <>
+              {
+                openedSideWindowTab === sideWindowMenu.ALERTS.code &&
+                <Alerts
+                  selectedSubMenu={selectedSubMenu}
+                  setSelectedSubMenu={setSelectedSubMenu}
+                />
+              }
+              {
+                openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code &&
+                <BeaconStatusesBoard
+                  setIsOverlayed={setIsOverlayed}
+                  isOverlayed={isOverlayed}
+                />
+              }
+            </>
+        }
+      </Wrapper>
+    </NewWindow>
+    : null
+  }
+  </>
 }
 
 export const BeaconStatusesBoardGrayOverlay = styled.div`

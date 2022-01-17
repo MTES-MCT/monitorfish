@@ -31,6 +31,8 @@ import ControlObjectives from './features/backoffice/control_objectives/ControlO
 import BackofficeMode from './api/BackofficeMode'
 import AlertsMapButton from './features/side_window/alerts/AlertsMapButton'
 import BeaconStatusesBoard from './features/side_window/beacon_statuses/BeaconStatusesBoard'
+import BeaconStatusesMapButton from './features/side_window/beacon_statuses/BeaconStatusesMapButton'
+import SideWindow from './features/side_window/SideWindow'
 
 function App () {
   switch (browserName) {
@@ -86,6 +88,7 @@ function HomePage () {
             <Map/>
             <LayersSidebar/>
             <AlertsMapButton/>
+            <BeaconStatusesMapButton/>
             <VesselsSearch/>
             <RightMenuOnHoverArea/>
             <VesselList namespace={'homepage'}/>
@@ -98,6 +101,7 @@ function HomePage () {
             <VesselLabels/>
             <APIWorker/>
             <ErrorToastNotification/>
+            <SideWindow/>
           </Wrapper>
         </Route>
       </Switch>

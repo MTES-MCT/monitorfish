@@ -94,8 +94,8 @@ def enrich_positions_by_vessel(
     Returns:
         pd.DataFrame: same as input, with the following columns added:
 
-          - 'meters_since_last_positions'
-          - 'time_since_last_positions'
+          - 'meters_from_previous_position'
+          - 'time_since_previous_position'
           - 'average_speed'
           - 'is_fishing'
     """
@@ -123,6 +123,23 @@ def enrich_positions_by_vessel(
 
 
 def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logger):
+    """Updates `positions` table with the contents of the input `DataFrame`.
+    The input `DataFrame` must have columns:
+
+      - id
+      - is_at_port
+      - meters_from_previous_position
+      - time_since_previous_position
+      - average_speed
+      - is_fishing
+
+    Args:
+        positions (pd.DataFrame): Enriched positions data
+        period (Period): the `Period` covered by the input `DataFrame`. This is used
+          to add a `where` clause on the `positions` hypertable limiting the time range
+          queried when looking for `id`s corresponding to the rows to update.
+        logger (Logger): `Logger`
+    """
 
     e = create_engine("monitorfish_remote")
 

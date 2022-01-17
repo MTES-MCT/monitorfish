@@ -1,14 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-
-import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes.svg'
+import { ReactComponent as BeaconStatusesSVG } from '../../icons/Icone_VMS.svg'
 import { COLORS } from '../../../constants/constants'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { closeSideWindow, openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { sideWindowMenu } from '../../../domain/entities/sideWindow'
 
-const AlertsMapButton = () => {
+const BeaconStatusesMapButton = () => {
   const dispatch = useDispatch()
   const {
     regulatoryZoneMetadataPanelIsOpen
@@ -21,36 +20,36 @@ const AlertsMapButton = () => {
   } = useSelector(state => state.global)
 
   return <>
-    <AlertsButton
-      data-cy={'alerts-button'}
-      title={'Alertes'}
-      isVisible={openedSideWindowTab === sideWindowMenu.ALERTS.code}
+    <BeaconStatusesButton
+      data-cy={'beacon-status-button'}
+      title={'Avaries VMS'}
+      isVisible={openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code}
       regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
       healthcheckTextWarning={healthcheckTextWarning}
       isHidden={previewFilteredVesselsMode}
       onClick={() => {
-        if (!sideWindowIsOpen || (sideWindowIsOpen && openedSideWindowTab !== sideWindowMenu.ALERTS.code)) {
-          dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
+        if (!sideWindowIsOpen || (sideWindowIsOpen && openedSideWindowTab !== sideWindowMenu.BEACON_STATUSES.code)) {
+          dispatch(openSideWindowTab(sideWindowMenu.BEACON_STATUSES.code))
           return
         }
 
-        if (sideWindowIsOpen && openedSideWindowTab === sideWindowMenu.ALERTS.code) {
+        if (sideWindowIsOpen && openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code) {
           dispatch(closeSideWindow())
         }
       }}
     >
-      <AlertsIcon/>
-    </AlertsButton>
+      <BeaconStatusesIcon/>
+    </BeaconStatusesButton>
   </>
 }
 
-const AlertsButton = styled(MapButtonStyle)`
+const BeaconStatusesButton = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
   background: ${props => props.isVisible ? COLORS.shadowBlue : COLORS.charcoal};
   padding: 2px 2px 2px 2px;
-  top: 65px;
+  top: 107px;
   left: 12px;
   border-radius: 2px;
   height: 40px;
@@ -61,9 +60,10 @@ const AlertsButton = styled(MapButtonStyle)`
   }
 `
 
-const AlertsIcon = styled(AlertsSVG)`
+const BeaconStatusesIcon = styled(BeaconStatusesSVG)`
   margin-top: 5px;
-  width: 20px;
+  width: 25px;
+  margin-right: 0px;
 `
 
-export default AlertsMapButton
+export default BeaconStatusesMapButton

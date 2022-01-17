@@ -22,8 +22,9 @@ import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
 import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFishingActivitiesOnMap'
 import { getAlertNameFromType } from '../../domain/entities/alerts'
 import { focusOnAlert } from '../../domain/shared_slices/Alert'
-import { openSideWindow } from '../../domain/shared_slices/Global'
+import { openSideWindowTab } from '../../domain/shared_slices/Global'
 import { ReactComponent as AlertSVG } from '../icons/Icone_alertes.svg'
+import { sideWindowMenu } from '../../domain/entities/sideWindow'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -140,7 +141,7 @@ const VesselSidebar = () => {
                 ? <VesselCardAlerts
                   onClick={() => {
                     batch(() => {
-                      dispatch(openSideWindow())
+                      dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
                       dispatch(focusOnAlert({
                         name: selectedVessel?.alerts[0],
                         internalReferenceNumber: selectedVessel.internalReferenceNumber,

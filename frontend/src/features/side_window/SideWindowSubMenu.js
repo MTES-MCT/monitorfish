@@ -5,17 +5,14 @@ import SideWindowSubMenuLink from './SideWindowSubMenuLink'
 import { AlertsSubMenu } from '../../domain/entities/alerts'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
 import { beaconStatusesStages, BeaconStatusesSubMenu } from './beacon_statuses/beaconStatuses'
-import { useSelector } from 'react-redux'
 
-const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }) => {
-  const beaconStatuses = useSelector(state => state.beaconStatus.beaconStatuses)
-
+const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, beaconStatuses }) => {
   return <Menu>
     <Title>
       Vue d&apos;ensemble
     </Title>
     {
-      selectedMenu === sideWindowMenu.ALERTS &&
+      selectedMenu === sideWindowMenu.ALERTS.code &&
         <>
           <SideWindowSubMenuLink
             menu={AlertsSubMenu.MEMN}
@@ -45,7 +42,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu }
         </>
     }
     {
-      selectedMenu === sideWindowMenu.BEACON_STATUSES &&
+      selectedMenu === sideWindowMenu.BEACON_STATUSES.code &&
       <>
         <SideWindowSubMenuLink
           number={beaconStatuses.filter(beaconStatus => beaconStatus.stage !== beaconStatusesStages.RESUMED_TRANSMISSION.code).length}

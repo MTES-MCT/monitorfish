@@ -21,6 +21,7 @@ const globalSlice = createSlice({
     healthcheckTextWarning: null,
     previewFilteredVesselsMode: undefined,
     inBackofficeMode: false,
+    openedSideWindowTab: null,
     sideWindowIsOpen: false,
     userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey)
   },
@@ -84,13 +85,14 @@ const globalSlice = createSlice({
       state.inBackofficeMode = action.payload
     },
     /**
-     * Open side window
-     * @function openSideWindow
+     * Open a side window tab
+     * @function openSideWindowTab
      * @memberOf GlobalReducer
      * @param {Object=} state
+     * @param {{payload: string}} action - The tab to show, see `sideWindowMenu`
      */
-    openSideWindow (state) {
-      state.sideWindowIsOpen = true
+    openSideWindowTab (state, action) {
+      state.openedSideWindowTab = action.payload
     },
     /**
      * Close side window
@@ -99,7 +101,17 @@ const globalSlice = createSlice({
      * @param {Object=} state
      */
     closeSideWindow (state) {
+      state.openedSideWindowTab = null
       state.sideWindowIsOpen = false
+    },
+    /**
+     * Set the side window as open
+     * @function setSideWindowAsOpen
+     * @memberOf GlobalReducer
+     * @param {Object=} state
+     */
+    setSideWindowAsOpen (state) {
+      state.sideWindowIsOpen = true
     },
     /**
      * Set the user type as OPS or SIP
@@ -128,7 +140,8 @@ export const {
   setPreviewFilteredVesselsMode,
   setBlockVesselsUpdate,
   setInBackofficeMode,
-  openSideWindow,
+  openSideWindowTab,
+  setSideWindowAsOpen,
   closeSideWindow,
   setUserType
 } = globalSlice.actions

@@ -199,6 +199,7 @@ const NotVisible = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
+  background: ${COLORS.white};
 `
 
 export default SideWindow

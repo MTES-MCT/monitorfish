@@ -27,8 +27,6 @@ from src.utils.ers import get_first_child, get_root_tag, make_datetime, remove_n
 class ERSParsingError(Exception):
     """Raised when an ERS message cannot be parsed."""
 
-    pass
-
 
 def simple_parser(el: xml.etree.ElementTree.Element, pass_child: bool = False):
     root_tag = get_root_tag(el)

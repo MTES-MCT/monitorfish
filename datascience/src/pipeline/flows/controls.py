@@ -2,9 +2,7 @@ import geopandas as gpd
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, task
-from sqlalchemy.exc import InvalidRequestError
 
-from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
 from src.pipeline.helpers.segments import (
@@ -14,13 +12,10 @@ from src.pipeline.helpers.segments import (
 )
 from src.pipeline.processing import (
     df_to_dict_series,
-    df_values_to_psql_arrays,
-    to_json,
     try_get_factory,
     zeros_ones_to_bools,
 )
 from src.pipeline.shared_tasks.facades import extract_facade_areas
-from src.pipeline.utils import delete, get_table, psql_insert_copy
 
 
 # ********************************** Tasks and flow ***********************************

@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Union
 
 import geopandas as gpd
 import pandas as pd
@@ -15,7 +14,6 @@ from src.pipeline.helpers.segments import (
 )
 from src.pipeline.processing import df_to_dict_series
 from src.pipeline.shared_tasks.facades import extract_facade_areas
-from src.read_query import read_saved_query
 
 
 @task(checkpoint=False)
@@ -66,9 +64,7 @@ def compute_last_positions_facade(
         unassigned_last_positions, facade_areas, how="left"
     )[["cfr", "facade"]]
 
-    last_positions_facade_2 = last_positions_facade_2.drop_duplicates(
-        subset=["cfr", "facade"]
-    )
+    last_positions_facade_2 = last_positions_facade_2.drop_duplicates(subset=["cfr"])
 
     last_positions_facade = pd.concat(
         [last_positions_facade_1, last_positions_facade_2]

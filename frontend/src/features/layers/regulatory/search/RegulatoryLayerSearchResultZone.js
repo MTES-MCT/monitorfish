@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
-import { getHash } from '../../../../utils'
-import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
-import Layers, { getGearCategory } from '../../../../domain/entities/layers'
 import { useDispatch, useSelector } from 'react-redux'
-import Checkbox from 'rsuite/lib/Checkbox'
+import styled, { css } from 'styled-components'
 import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
+import Checkbox from 'rsuite/lib/Checkbox'
+
+import Layers, { getGearCategory } from '../../../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../../../domain/use_cases/showRegulatoryZoneMetadata'
 import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/closeRegulatoryZoneMetadata'
-import { REGPaperDarkIcon, REGPaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
+import { setRegulatoryGeometryToPreview } from '../../../../domain/shared_slices/Regulatory'
+
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 import { showOrHideMetadataIcon } from '../RegulatoryLayerZone'
+
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
+import { REGPaperDarkIcon, REGPaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
+import { COLORS } from '../../../../constants/constants'
+import { getHash } from '../../../../utils'
 
 const RegulatoryLayerSearchResultZone = props => {
   const {
@@ -89,8 +93,14 @@ const RegulatoryLayerSearchResultZone = props => {
     }
   }, [regulatoryZone, isOpen])
 
+  const handleMouseOver = () => {
+    if (regulatoryZone.geometry) {
+      dispatch(setRegulatoryGeometryToPreview(regulatoryZone.geometry))
+    }
+  }
+
   return (
-    <Zone>
+    <Zone onMouseOver={handleMouseOver}>
       <Rectangle vectorLayerStyle={zoneStyle}/>
       <Name onClick={() => zoneSelectionList?.length
         ? setZoneSelectionList([])

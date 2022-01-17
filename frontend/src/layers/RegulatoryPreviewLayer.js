@@ -23,13 +23,16 @@ const RegulatoryPreviewLayer = ({ map }) => {
   }))
 
   useEffect(() => {
-    if (regulatoryGeometryToPreview && map) {
+    if (map) {
       vectorSource.clear()
-      const feature = new GeoJSON({
-        featureProjection: OPENLAYERS_PROJECTION
-      }).readFeature(regulatoryGeometryToPreview)
-      vectorSource.addFeature(feature)
-      dispatch(zoomInLayer({ feature }))
+
+      if (regulatoryGeometryToPreview) {
+        const feature = new GeoJSON({
+          featureProjection: OPENLAYERS_PROJECTION
+        }).readFeature(regulatoryGeometryToPreview)
+        vectorSource.addFeature(feature)
+        dispatch(zoomInLayer({ feature }))
+      }
     }
   }, [map, regulatoryGeometryToPreview])
 

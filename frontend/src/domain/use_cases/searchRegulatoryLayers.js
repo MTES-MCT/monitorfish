@@ -18,12 +18,13 @@ const MonitorFishWorker = Comlink.wrap(worker)
 const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
   return async (dispatch, getState) => {
     const worker = await new MonitorFishWorker()
+    const state = getState()
     const {
       regulatoryLayers
-    } = getState().regulatory
+    } = state.regulatory
     const {
       zoneSelected
-    } = getState().regulatoryLayerSearch
+    } = state.regulatoryLayerSearch
 
     let extent = []
     if (zoneSelected) {
@@ -31,7 +32,7 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
     }
 
     if (extent?.length === 4) {
-      return getRegulatoryZonesInExtentFromAPI(extent, getState().global.inBackofficeMode)
+      return getRegulatoryZonesInExtentFromAPI(extent, state.global.inBackofficeMode)
         .then(features => worker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features))
         .then(regulatoryLayers => getRegulatoryLayersWithoutTerritory(regulatoryLayers))
         .then(filteredRegulatoryLayers => {
@@ -39,11 +40,11 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
             return filteredRegulatoryLayers
           }
 
-          return worker.searchLayers(searchFields, filteredRegulatoryLayers, getState().gear.gears)
+          return worker.searchLayers(searchFields, filteredRegulatoryLayers, state.gear.gears)
         })
     }
 
-    return worker.searchLayers(searchFields, regulatoryLayers, getState().gear.gears)
+    return worker.searchLayers(searchFields, regulatoryLayers, state.gear.gears)
   }
 }
 

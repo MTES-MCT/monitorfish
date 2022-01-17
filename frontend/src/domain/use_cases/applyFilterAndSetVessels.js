@@ -1,5 +1,5 @@
 import { setError } from '../shared_slices/Global'
-import { setVesselsFromAPI, setUnfilteredVessels, setFilteredVesselsFeatures } from '../shared_slices/Vessel'
+import { setVesselsFromAPI, setAllVesselsAsUnfiltered, setFilteredVesselsFeatures } from '../shared_slices/Vessel'
 import getFilteredVessels from './getFilteredVessels'
 import NoVesselsInFilterError from '../../errors/NoVesselsInFilterError'
 
@@ -13,8 +13,7 @@ export const applyFilterToVessels = () => (dispatch, getState) => {
   const _showedFilter = state.filter?.filters?.find(filter => filter.showed)
   const { vessels } = state.vessel
   if (!_showedFilter) {
-    // TODO: just update isFiltered, don't recompute new attributes
-    return dispatch(setUnfilteredVessels(vessels))
+    return dispatch(setAllVesselsAsUnfiltered())
   }
 
   return dispatch(getFilteredVessels(vessels, _showedFilter.filters))

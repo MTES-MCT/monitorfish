@@ -69,25 +69,11 @@ const vesselSlice = createSlice({
         }
       })
     },
-    setUnfilteredVessels (state, action) {
-      state.vessels = action.payload?.map((vessel) => {
+    setAllVesselsAsUnfiltered (state) {
+      state.vessels = state.vessels.map((vessel) => {
         return {
-          vesselProperties: {
-            ...vessel,
-            flagState: vessel.flagState?.toLowerCase(),
-            gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
-            fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
-            speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : [],
-            lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : ''
-          },
-          vesselId: Vessel.getVesselId(vessel),
-          isAtPort: vessel.isAtPort,
-          course: vessel.course,
-          speed: vessel.speed,
-          lastPositionSentAt: new Date(vessel.dateTime).getTime(),
-          coordinates: transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION),
-          isFiltered: 0,
-          filterPreview: 0
+          ...vessel,
+          isFiltered: 0
         }
       })
     },
@@ -329,7 +315,7 @@ const vesselSlice = createSlice({
 
 export const {
   setVesselsFromAPI,
-  setUnfilteredVessels,
+  setAllVesselsAsUnfiltered,
   setFilteredVesselsFeatures,
   setPreviewFilteredVesselsFeatures,
   loadingVessel,

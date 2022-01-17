@@ -256,7 +256,7 @@ class BffController(
                 controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel)
     }
 
-    @GetMapping("/v1/alerts")
+    @GetMapping("/v1/operational_alerts")
     @ApiOperation("Get operational alerts")
     fun getOperationalAlerts(): List<PendingAlert> {
         return getOperationalAlerts.execute()

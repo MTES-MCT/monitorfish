@@ -26,8 +26,8 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
   const {
     userType
   } = useSelector(state => state.global)
-  const today = useRef('')
-  const yesterday = useRef('')
+  const [today, setToday] = useState('')
+  const [yesterday, setYesterday] = useState('')
   const scrollToRef = useRef('')
   const [comment, setComment] = useState('')
 
@@ -37,12 +37,11 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
     }
 
     if (comments?.length) {
-      today.current = getDate(new Date().toISOString())
+      setToday(getDate(new Date().toISOString()))
 
       const yesterdayDate = new Date()
       yesterdayDate.setDate(yesterdayDate.getDate() - 1)
-
-      yesterday.current = getDate(yesterdayDate.toISOString())
+      setYesterday(getDate(yesterdayDate.toISOString()))
 
       setTimeout(() => {
         scrollToRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -51,11 +50,11 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
   }, [comments])
 
   const getCommentOrActionDate = date => {
-    if (date === today.current) {
+    if (date === today) {
       return 'Ajourd\'hui'
     }
 
-    if (date === yesterday.current) {
+    if (date === yesterday) {
       return 'Hier'
     }
 
@@ -239,7 +238,6 @@ const CommentText = styled.div`
   border: 1px solid ${COLORS.lightGray};
   max-width: 480px;
   padding: 10px 15px;
-  margin-left: auto;
   margin-top: 10px;
 `
 
@@ -247,12 +245,10 @@ const ActionText = styled.div`
   border: 2px solid ${COLORS.lightGray};
   max-width: 480px;
   padding: 10px 15px;
-  margin-left: auto;
   margin-top: 10px;
 `
 
 const CommentUserType = styled.div`
-  margin-left: auto;
   font: normal normal normal 11px/15px Marianne;
   color: ${COLORS.slateGray};
   margin-top: 2px;

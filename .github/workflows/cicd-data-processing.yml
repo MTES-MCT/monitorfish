@@ -6,6 +6,7 @@ on:
     - 'datascience/**'
     - '.github/workflows/*'
     - 'infra/docker/Dockerfile.DataPipeline'
+    - 'Makefile'
   schedule:
     - cron: "38 11 */3 * *"
 
@@ -67,6 +68,9 @@ jobs:
       run: |
         rm -rf /tmp/.buildx-cache-pipeline
         mv /tmp/.buildx-cache-pipeline-new /tmp/.buildx-cache-pipeline
+
+    - name: Set DOCKER_GROUP
+      run: echo "DOCKER_GROUP=$(getent group docker | cut --delimiter=":" -f3)" >> $GITHUB_ENV
 
     - name: Test docker image
       run: make docker-test-pipeline

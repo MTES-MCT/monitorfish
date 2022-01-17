@@ -81,6 +81,9 @@ default_risk_factors = {
     ),
 }
 
+# BEACONS MALFUNCTIONS CONFIGURATION
+BEACONS_MALFUNCTION_MINIMUM_DURATION_IN_HOURS = 6
+
 # App URL
 MONITORFISH_URL = "https://monitorfish.din.developpement-durable.gouv.fr/"
 BACKOFFICE_URL = MONITORFISH_URL + "backoffice/"

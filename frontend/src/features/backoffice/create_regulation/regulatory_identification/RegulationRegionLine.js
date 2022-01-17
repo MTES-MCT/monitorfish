@@ -7,7 +7,7 @@ import { formatDataForSelectPicker } from '../../../../utils'
 import { FRENCH_REGION_LIST } from '../../constants'
 import Tag from '../Tag'
 import MenuItem from '../custom_form/MenuItem'
-import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
+import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 import { setRegulationByKey } from '../../Regulation.slice'
 
 const RegulationRegionLine = props => {
@@ -23,14 +23,14 @@ const RegulationRegionLine = props => {
   const addRegionToSelectedRegionList = (region) => {
     const newArray = regionList ? [...regionList] : []
     newArray.push(region)
-    dispatch(setRegulationByKey({ key: 'region', value: newArray }))
+    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: newArray }))
   }
 
   const removeRegionToSelectedRegionList = (regionToRemove) => {
     const regionToRemoveIndex = regionList.indexOf(regionToRemove)
     const newArray = [...regionList]
     newArray.splice(regionToRemoveIndex, 1)
-    dispatch(setRegulationByKey({ key: 'region', value: newArray }))
+    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: newArray }))
   }
 
   function SelectedRegionList () {

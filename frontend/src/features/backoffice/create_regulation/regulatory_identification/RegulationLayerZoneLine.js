@@ -5,6 +5,7 @@ import { Label, CustomInput } from '../../../commonStyles/Input.style'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
 import { setRegulationByKey } from '../../Regulation.slice'
+import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const RegulationLayerZoneLine = props => {
   const dispatch = useDispatch()
@@ -22,7 +23,7 @@ const RegulationLayerZoneLine = props => {
   }, [zone])
 
   const setZoneName = useCallback((value) => {
-    dispatch(setRegulationByKey({ key: 'zone', value }))
+    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ZONE, value }))
   }, [setRegulationByKey, zone])
 
   return <ContentLine>

@@ -146,6 +146,7 @@ def test_load_new_beacons_statuses(reset_test_data):
 def test_new_beacons_statuses_flow_doesnt_insert_already_known_malfunctions(
     reset_test_data,
 ):
+    flow.schedule = None
     flow.run(min_duration=1)
     loaded_beacons_statuses = read_query(
         "monitorfish_remote", "SELECT * FROM beacon_statuses"
@@ -154,6 +155,7 @@ def test_new_beacons_statuses_flow_doesnt_insert_already_known_malfunctions(
 
 
 def test_new_beacons_statuses_flow_inserts_new_malfunctions(reset_test_data):
+    flow.schedule = None
     flow.run(min_duration=6)
     loaded_beacons_statuses = read_query(
         "monitorfish_remote", "SELECT * FROM beacon_statuses"

@@ -633,10 +633,10 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
     'Filets tournants', 'Filets maillants et filets emmêlants', 'Filets soulevés',
     'Lignes et hameçons', 'Pièges', 'Engins de récolte', 'Engins divers'
   ]
-  const CATEOGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']
+  const CATEGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']
 
   return SORTED_CATEGORY_LIST.map((category) => {
-    if (!CATEOGORIES_TO_HIDE.includes(category)) {
+    if (!CATEGORIES_TO_HIDE.includes(category)) {
       const categoryGearList = [...categoriesToGears[category]]
       const gears = categoryGearList
         .sort((gearA, gearB) => {

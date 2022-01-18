@@ -17,7 +17,8 @@ data class BeaconStatusDataOutput(
         val priority: Boolean,
         val malfunctionStartDateTime: ZonedDateTime,
         val malfunctionEndDateTime: ZonedDateTime?,
-        val vesselStatusLastModificationDateTime: ZonedDateTime) {
+        val vesselStatusLastModificationDateTime: ZonedDateTime,
+        var riskFactor: Double?) {
     companion object {
         fun fromBeaconStatus(beaconStatus: BeaconStatus): BeaconStatusDataOutput {
             return BeaconStatusDataOutput(
@@ -32,7 +33,8 @@ data class BeaconStatusDataOutput(
                     priority = beaconStatus.priority,
                     malfunctionStartDateTime = beaconStatus.malfunctionStartDateTime,
                     malfunctionEndDateTime = beaconStatus.malfunctionEndDateTime,
-                    vesselStatusLastModificationDateTime  = beaconStatus.vesselStatusLastModificationDateTime)
+                    vesselStatusLastModificationDateTime  = beaconStatus.vesselStatusLastModificationDateTime,
+                    riskFactor = beaconStatus.riskFactor)
         }
     }
 }

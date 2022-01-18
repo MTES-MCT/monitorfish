@@ -11,4 +11,5 @@ class PendingAlert(val id: Int? = null,
                    val ircs: String? = null,
                    val creationDate: ZonedDateTime,
                    val tripNumber: Int? = null,
-                   val value: AlertType)
+                   val value: AlertType,
+                   var riskFactor: Double? = null)

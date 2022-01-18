@@ -14,4 +14,5 @@ data class BeaconStatus(
         val priority: Boolean,
         val malfunctionStartDateTime: ZonedDateTime,
         val malfunctionEndDateTime: ZonedDateTime?,
-        val vesselStatusLastModificationDateTime: ZonedDateTime)
+        val vesselStatusLastModificationDateTime: ZonedDateTime,
+        var riskFactor: Double? = null)

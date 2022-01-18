@@ -8,7 +8,7 @@ export const AlertTypes = {
   },
   THREE_MILES_TRAWLING_ALERT: {
     code: 'THREE_MILES_TRAWLING_ALERT',
-    name: 'CHALUTAGE DANS LES 3 MILLES'
+    name: '3 milles - Chaluts'
   }
 }
 
@@ -23,9 +23,13 @@ export const AlertsSubMenu = {
     name: 'MEMN',
     code: 'MEMN'
   },
-  NAMOSA: {
-    name: 'NAMO / SA',
-    code: 'NAMOSA'
+  NAMO: {
+    name: 'NAMO',
+    code: 'NAMO'
+  },
+  SA: {
+    name: 'SA',
+    code: 'SA'
   },
   MED: {
     name: 'MED',
@@ -46,9 +50,13 @@ export const AlertsMenuSeaFrontsToSeaFrontList = {
     menuSeaFront: 'MEMN',
     seaFronts: ['MEMN']
   },
-  NAMOSA: {
-    menuSeaFront: 'NAMOSA',
-    seaFronts: ['NAMO', 'SA']
+  SA: {
+    menuSeaFront: 'SA',
+    seaFronts: ['SA']
+  },
+  NAMO: {
+    menuSeaFront: 'NAMO',
+    seaFronts: ['NAMO']
   },
   MED: {
     menuSeaFront: 'MED',

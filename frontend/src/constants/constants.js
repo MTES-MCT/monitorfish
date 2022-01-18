@@ -6,6 +6,7 @@ export const COLORS = {
   lightGray: '#CCCFD6',
   charcoal: '#3B4559',
   slateGray: '#707785',
+  cultured: '#F7F7FA',
   slateGrayLittleOpacity: 'rgba(112, 119, 133, 0.7)',
   mediumSeaGreen: '#29b361',
   gunMetal: '#282F3E',

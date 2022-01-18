@@ -27,7 +27,7 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
                 ircs = "6554fEE",
                 tripNumber = 123456,
                 creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert(speed = 2.36, numberOfIncursion = 3))
+                value = ThreeMilesTrawlingAlert())
         jpaPendingAlertRepository.save(alertOne)
 
         // When

@@ -81,7 +81,7 @@ export const CustomCheckbox = styled(Checkbox)`
   .rs-checkbox-wrapper {
     top: 0px !important;
     left: 0px !important;
-    border: 1px solid ${props => props.$isRequired ? COLORS.red : COLORS.lightGray}
+    border: 1px solid ${props => props.$isRequired ? COLORS.red : COLORS.lightGray};
   }
   .rs-checkbox-wrapper .rs-checkbox-inner {
     &:before {

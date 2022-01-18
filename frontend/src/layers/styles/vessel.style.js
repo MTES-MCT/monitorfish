@@ -95,7 +95,7 @@ export const getWebGLVesselStyle = ({
 
 export const getSelectedVesselStyle = ({ isLight }) => (feature) => {
   const course = feature.get('course')
-  const style = new Style({
+  const styleSelecteur = new Style({
     image: new Icon({
       src: 'selecteur_navire.png',
       rotation: degreesToRadian(course),
@@ -105,7 +105,17 @@ export const getSelectedVesselStyle = ({ isLight }) => (feature) => {
     }),
     zIndex: VESSEL_SELECTOR_STYLE
   })
-  return style
+  const styleNavire = new Style({
+    image: new Icon({
+      src: 'boat.png',
+      rotation: degreesToRadian(course),
+      scale: 0.85,
+      color: isLight ? COLORS.vesselLightColor : COLORS.vesselColor,
+      opacity: 1
+    }),
+    zIndex: VESSEL_SELECTOR_STYLE
+  })
+  return [styleSelecteur, styleNavire]
 }
 // vesselLightColor: cacce0
 // vesselColor: 3B4559

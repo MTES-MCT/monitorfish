@@ -10,7 +10,6 @@ import { BeaconStatusesSubMenu } from './beacon_statuses/beaconStatuses'
 import BeaconStatusesBoard from './beacon_statuses/BeaconStatusesBoard'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { COLORS } from '../../constants/constants'
-import { renderRowExpanded } from './alerts/tableCells'
 import { usePrevious } from '../../hooks/usePrevious'
 import BeaconStatusDetails from './beacon_statuses/BeaconStatusDetails'
 import { beaconStatusesStub } from '../../stubs/beaconStatusStub'
@@ -27,6 +26,9 @@ const SideWindow = () => {
   const {
     beaconStatuses
   } = useSelector(state => state.beaconStatus)
+  const {
+    alerts
+  } = useSelector(state => state.alert)
   const dispatch = useDispatch()
   const [isPreloading, setIsPreloading] = useState(true)
   const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
@@ -48,7 +50,7 @@ const SideWindow = () => {
 
       setTimeout(() => {
         setIsPreloading(false)
-      }, 1000)
+      }, 1500)
     }
   }, [openedSideWindowTab])
 
@@ -73,25 +75,41 @@ const SideWindow = () => {
 
   /**
    * /!\
-   * The components to preload so we got the associated styles
+   * The components to preload so we get the associated styles
    **/
   function getComponentsForPreloading () {
     return <NotVisible hidden={true}>
       <Alerts
-        selectedSubMenu={AlertsSubMenu.NAMOSA}
+        selectedSubMenu={AlertsSubMenu.NAMO}
         setSelectedSubMenu={setSelectedSubMenu}
       />
       <BeaconStatusesBoard/>
-      {renderRowExpanded()}
       <SideWindowSubMenu
         selectedMenu={sideWindowMenu.ALERTS}
-        selectedSubMenu={AlertsSubMenu.NAMOSA}
+        selectedSubMenu={AlertsSubMenu.NAMO}
         setSelectedSubMenu={setSelectedSubMenu}
       />
       <SideWindowSubMenuLink
         number={4}
         menu={BeaconStatusesSubMenu.MALFUNCTIONING}
         isSelected={false}
+      />
+      <SideWindowSubMenuLink
+        number={4}
+        menu={BeaconStatusesSubMenu.MALFUNCTIONING}
+        isSelected
+      />
+      <SideWindowSubMenuLink
+        oneLine
+        number={4}
+        menu={BeaconStatusesSubMenu.MALFUNCTIONING}
+        isSelected={false}
+      />
+      <SideWindowSubMenuLink
+        oneLine
+        number={4}
+        menu={BeaconStatusesSubMenu.MALFUNCTIONING}
+        isSelected
       />
       {
         beaconStatusesStub.map(beaconStatusStub =>
@@ -125,6 +143,7 @@ const SideWindow = () => {
         />
         <SideWindowSubMenu
           beaconStatuses={beaconStatuses}
+          alerts={alerts}
           selectedMenu={openedSideWindowTab}
           selectedSubMenu={selectedSubMenu}
           setSelectedSubMenu={setSelectedSubMenu}

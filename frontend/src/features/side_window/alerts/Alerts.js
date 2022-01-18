@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import AlertsList from './AlertsList'
-import { getAlertForTable } from './dataFormatting'
+import { getAlertForList } from './dataFormatting'
 import { useSelector } from 'react-redux'
 import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
 import { COLORS } from '../../../constants/constants'
@@ -25,16 +25,14 @@ const Alerts = ({ selectedSubMenu, setSelectedSubMenu }) => {
       }
     }
   }, [focusOnAlert])
-  const baseUrl = window.location.origin
 
   return <Content>
     <AlertsList
       alerts={alerts
-        .map(alert => getAlertForTable(alert))
+        .map(alert => getAlertForList(alert))
         .filter(alert =>
           (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert?.seaFront))
       }
-      baseUrl={baseUrl}
     />
   </Content>
 }

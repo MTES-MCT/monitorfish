@@ -2,12 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 
-const SideWindowSubMenuLink = ({ menu, isSelected, setSelected, number }) => {
+const SideWindowSubMenuLink = ({ menu, isSelected, setSelected, number, oneLine }) => {
   return <Link
     selected={isSelected}
     onClick={() => setSelected(menu)}
+    oneLine={oneLine}
   >
-    <Text>{ menu.name }</Text>
+    <Text oneLine={oneLine}>{ menu.name }</Text>
     {
       number
         ? <CircleWithKeyMetric>{number}</CircleWithKeyMetric>
@@ -17,20 +18,21 @@ const SideWindowSubMenuLink = ({ menu, isSelected, setSelected, number }) => {
 }
 
 const Text = styled.div`
-  max-width: 100px;
+  max-width: ${props => props.oneLine ? 170 : 100}px;
   color: ${props => props.selected ? COLORS.gunMetal : COLORS.slateGray};
-  height: 50px;
+  height: ${props => props.oneLine ? 22 : 50}px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
 `
 
 const Link = styled.div`
-  height: 64px;
+  height: ${props => props.oneLine ? 47 : 64}px;
   padding: 0px 20px;
   background: ${props => props.selected ? COLORS.lightGray : 'unset'};
   cursor: pointer;
   display: flex;
   align-items: center;
+  border-bottom: 0.5px solid ${COLORS.lightGray};
 `
 
 const CircleWithKeyMetric = styled.span`

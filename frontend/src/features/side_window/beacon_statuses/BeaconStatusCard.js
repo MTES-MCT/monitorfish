@@ -30,12 +30,13 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
           {beaconStatus.vesselName || 'Aucun nom'}
         </VesselName>
         <ShowIcon
+          alt={'Voir sur la carte'}
           onClick={() => {
-            const vesselIdentity = { ...beaconStatus, flagState: 'FR' }
+            const vesselIdentity = { ...alert, flagState: 'FR' }
             dispatch(showVessel(vesselIdentity, false, false, null))
             dispatch(getVesselVoyage(vesselIdentity, null, false))
           }}
-          src={`${baseUrl}/oeil_affiche.png`}
+          src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
         />
       </Row>
       <Row>
@@ -78,15 +79,14 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const ShowIcon = styled.img`
-  width: 23px;
-  padding-right: 7px;
+  width: 20px;
+  padding-right: 9px;
   float: right;
   flex-shrink: 0;
-  height: 30px;
   cursor: pointer;
   margin-left: auto;
-  height: 18px;
-  cursor: zoom-in;
+  height: 16px;
+  margin-top: 2px;
 `
 
 const Row = styled.div`

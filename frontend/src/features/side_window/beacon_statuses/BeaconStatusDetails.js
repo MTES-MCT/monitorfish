@@ -9,7 +9,6 @@ import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { Priority } from './BeaconStatusCard'
 import showVessel from '../../../domain/use_cases/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
-import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { useDispatch } from 'react-redux'
 import { vesselStatuses } from './beaconStatuses'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
@@ -66,7 +65,8 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
               voir le navire sur la carte
             </ShowVesselText>
             <ShowIcon
-              src={`${baseUrl}/oeil_affiche.png`}
+              alt={'Voir sur la carte'}
+              src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
             />
           </ShowVessel>
         </Row>
@@ -105,6 +105,19 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
     </BeaconStatusDetailsWrapper>
   )
 }
+
+// We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
+// goes back to the main window
+const ShowIcon = styled.img`
+  width: 20px;
+  padding-right: 9px;
+  float: right;
+  flex-shrink: 0;
+  cursor: pointer;
+  margin-left: auto;
+  height: 16px;
+  margin-top: 2px;
+`
 
 const LastPosition = styled.div`
   background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;

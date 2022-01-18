@@ -9,7 +9,7 @@ const ErrorToastNotification = () => {
   const { addToast } = useToasts()
 
   useEffect(() => {
-    if (error) {
+    if (error && error.message) {
       if (error.type && error.type === errorType.INFO_AND_HIDDEN) {
         return
       }

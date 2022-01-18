@@ -5,7 +5,6 @@ import java.time.ZonedDateTime
 import java.util.*
 
 class Alert(val id: UUID,
-            val vesselName: String? = null,
             val internalReferenceNumber: String? = null,
             val externalReferenceNumber: String? = null,
             val ircs: String? = null,

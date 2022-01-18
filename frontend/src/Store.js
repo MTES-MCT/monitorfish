@@ -10,18 +10,13 @@ const commonConfig = {
   stateReconciler: autoMergeLevel2
 }
 
-const homePersistConfig = {
-  key: 'homePersistor',
-  ...commonConfig
-}
-
 const backofficePersistConfig = {
   key: 'backofficePersistor',
   ...commonConfig
 }
 
 const homeStore = configureStore({
-  reducer: persistReducer(homePersistConfig, homeReducers),
+  reducer: homeReducers,
   middleware: [thunk]
 })
 
@@ -30,7 +25,6 @@ const backofficeStore = configureStore({
   middleware: [thunk]
 })
 
-const homePersistor = persistStore(homeStore)
 const backofficePersistor = persistStore(backofficeStore)
 
-export { homeStore, backofficeStore, homePersistor, backofficePersistor }
+export { homeStore, backofficeStore, backofficePersistor }

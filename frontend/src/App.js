@@ -20,7 +20,7 @@ import VesselFilters from './features/vessel_filters/VesselFilters'
 import NewRegulation from './features/backoffice/create_regulation/NewRegulation'
 import { ReactComponent as AlertSVG } from './features/icons/Picto_alerte.svg'
 import { Provider } from 'react-redux'
-import { backofficeStore, homeStore, homePersistor, backofficePersistor } from './Store'
+import { backofficeStore, homeStore, backofficePersistor } from './Store'
 import NamespaceContext from './domain/context/NamespaceContext'
 import Healthcheck from './features/healthcheck/Healthcheck'
 import InterestPoint from './features/interest_points/InterestPoint'
@@ -77,7 +77,7 @@ function App () {
 
 function HomePage () {
   return <Provider store={homeStore}>
-    <PersistGate loading={null} persistor={homePersistor}>
+    <PersistGate loading={null} >
       <NamespaceContext.Provider value={'homepage'}>
         <BackofficeMode inBackofficeMode={false}/>
         <Switch>

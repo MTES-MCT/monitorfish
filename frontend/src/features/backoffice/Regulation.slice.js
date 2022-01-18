@@ -3,10 +3,6 @@ import { INITIAL_REGULATION } from '../../domain/entities/regulatory'
 
 const INITIAL_STATE = {
   /** @type {RegulatoryText} */
-  selectedRegulation: undefined,
-  /** @type {UpcomingRegulation} */
-  upcomingRegulation: undefined,
-  /** @type {RegulatoryText} */
   currentRegulation: INITIAL_REGULATION,
   /** @type {boolean} isModalOpen */
   isModalOpen: false,
@@ -110,7 +106,6 @@ const regulationSlice = createSlice({
 
 export const {
   resetState,
-  setSelectedRegulation,
   setUpcomingRegulatoryText,
   setIsModalOpen,
   addObjectToUpcomingRegulatoryTextCheckedMap,

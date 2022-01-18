@@ -36,7 +36,6 @@ import {
 } from '../../commonStyles/Buttons.style'
 import { Footer, FooterButton, Title, Section } from '../../commonStyles/Backoffice.style'
 import {
-  setSelectedRegulation,
   setRegulatoryTextCheckedMap,
   setSaveOrUpdateRegulation,
   setAtLeastOneValueIsMissing,
@@ -54,7 +53,6 @@ import {
   getRegulatoryFeatureId,
   REGULATION_ACTION_TYPE,
   REGULATORY_TEXT_SOURCE,
-  DEFAULT_REGULATORY_TEXT,
   REG_LOCALE,
   LAWTYPES_TO_TERRITORY,
   FRANCE,
@@ -64,7 +62,6 @@ import {
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
 import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
-import showRegulationToEdit from '../../../domain/use_cases/showRegulationToEdit'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -118,8 +115,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     regulatoryGears
   } = currentRegulation
 
-  const selectedRegulation = useSelector(state => state.regulation.selectedRegulation)
-
   useEffect(() => {
     if (!layersTopicsByRegTerritory || Object.keys(layersTopicsByRegTerritory).length === 0) {
       dispatch(getAllRegulatoryLayersByRegTerritory())
@@ -136,11 +131,7 @@ const CreateRegulation = ({ title, isEdition }) => {
       dispatch(closeRegulatoryZoneMetadataPanel())
     })
 
-    if (isEdition && selectedRegulation) {
-      dispatch(showRegulationToEdit(selectedRegulation))
-    }
     return () => {
-      dispatch(setSelectedRegulation(undefined))
       dispatch(setRegulation(INITIAL_REGULATION))
       dispatch(setRegulatoryZoneMetadata(undefined))
       dispatch(setUpcomingRegulatoryText(INITIAL_UPCOMING_REG_REFERENCE))
@@ -149,7 +140,7 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   useEffect(() => {
     if (isEdition && regulatoryZoneMetadata) {
-      initForm()
+      setInitialGeometryId(regulatoryZoneMetadata.id)
     }
   }, [isEdition, regulatoryZoneMetadata])
 
@@ -165,7 +156,6 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   const goBackofficeHome = useCallback(() => {
     batch(() => {
-      dispatch(setSelectedRegulation(undefined))
       dispatch(resetState())
     })
     history.push('/backoffice/regulation')
@@ -260,35 +250,6 @@ const CreateRegulation = ({ title, isEdition }) => {
       }
     }
   }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap, setSaveIsForbidden, createOrUpdateRegulation])
-
-  const initForm = () => {
-    const {
-      lawType,
-      topic,
-      zone,
-      region,
-      regulatoryReferences,
-      id,
-      upcomingRegulatoryReferences,
-      fishingPeriod,
-      regulatorySpecies,
-      regulatoryGears
-    } = regulatoryZoneMetadata
-
-    dispatch(setRegulation({
-      lawType,
-      topic,
-      zone,
-      region: region ? region.split(', ') : [],
-      id,
-      regulatoryReferences: regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT],
-      upcomingRegulatoryReferences: upcomingRegulatoryReferences || { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] },
-      fishingPeriod,
-      regulatorySpecies
-    }))
-    setInitialGeometryId(id)
-    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: id }))
-  }
 
   useEffect(() => {
     if (showRegulatoryPreview &&

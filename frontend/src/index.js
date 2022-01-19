@@ -13,17 +13,19 @@ import { Integrations } from '@sentry/tracing'
 import App from './App'
 import GlobalFonts from './fonts/fonts'
 
-Sentry.init({
-  dsn: 'https://ab46041e2f104a45b73260f1d19879b0@o557126.ingest.sentry.io/5688987',
-  integrations: [new Integrations.BrowserTracing({
-    tracingOrigins: ['monitorfish-test.csam.e2.rie.gouv.fr', 'monitorfish.din.developpement-durable.gouv.fr']
-  })],
+if (!(process.env.NODE_ENV === 'development')) {
+  Sentry.init({
+    dsn: 'https://ab46041e2f104a45b73260f1d19879b0@o557126.ingest.sentry.io/5688987',
+    integrations: [new Integrations.BrowserTracing({
+      tracingOrigins: ['monitorfish-test.csam.e2.rie.gouv.fr', 'monitorfish.din.developpement-durable.gouv.fr']
+    })],
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0
-})
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0
+  })
+}
 
 ReactDOM.render(
   <React.StrictMode>

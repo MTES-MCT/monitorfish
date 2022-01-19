@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import Modal from 'rsuite/lib/Modal'
 
-import { COLORS } from '../../constants/constants'
 import { layersType } from '../../domain/entities/layers'
+import { InteractionTypes } from '../../domain/entities/map'
+import { VesselLocation } from '../../domain/entities/vessel'
 import {
   animateToExtent,
   setInteraction
@@ -14,10 +15,6 @@ import {
   resetZonesSelected,
   setZonesSelected
 } from './VesselList.slice'
-import { InteractionTypes } from '../../domain/entities/map'
-import VesselListTable from './VesselListTable'
-import DownloadVesselListModal from './DownloadVesselListModal'
-import getAdministrativeZoneGeometry from '../../domain/use_cases/getAdministrativeZoneGeometry'
 import {
   expandRightMenu,
   openVesselListModal,
@@ -25,22 +22,29 @@ import {
   setBlockVesselsUpdate,
   setPreviewFilteredVesselsMode
 } from '../../domain/shared_slices/Global'
+import { addFilter } from '../../domain/shared_slices/Filter'
+import { setPreviewFilteredVesselsFeatures } from '../../domain/shared_slices/Vessel'
+import { setRegulationSearchedZoneExtent } from '../../domain/shared_slices/Regulatory'
+import getAdministrativeZoneGeometry from '../../domain/use_cases/getAdministrativeZoneGeometry'
 import unselectVessel from '../../domain/use_cases/unselectVessel'
 import getFilteredVessels from '../../domain/use_cases/getFilteredVessels'
-import VesselListFilters from './VesselListFilters'
-import { getVesselObjectFromFeature } from './dataFormatting'
+import { getZonesAndSubZonesPromises } from '../../domain/use_cases/getZonesAndSubZonesPromises'
+
 import SaveVesselFiltersModal from '../vessel_filters/SaveVesselFiltersModal'
-import { addFilter } from '../../domain/shared_slices/Filter'
+import VesselListTable from './VesselListTable'
+import DownloadVesselListModal from './DownloadVesselListModal'
+import VesselListFilters from './VesselListFilters'
+
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { VesselListSVG } from '../commonStyles/icons/VesselListSVG'
-import { getZonesAndSubZonesPromises } from '../../domain/use_cases/getZonesAndSubZonesPromises'
-import { setPreviewFilteredVesselsFeatures } from '../../domain/shared_slices/Vessel'
 import { PrimaryButton, SecondaryButton } from '../commonStyles/Buttons.style'
 import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
-import { VesselLocation } from '../../domain/entities/vessel'
-import { setRegulationSearchedZoneExtent } from '../../domain/shared_slices/Regulatory'
+
 import { getExtentFromGeoJSON } from '../../utils'
+import { COLORS } from '../../constants/constants'
+
+const NOT_FOUND = -1
 
 const VesselList = ({ namespace }) => {
   const dispatch = useDispatch()
@@ -56,9 +60,6 @@ const VesselList = ({ namespace }) => {
     uniqueVesselsSpecies: species,
     uniqueVesselsDistricts: districts
   } = useSelector(state => state.vessel)
-  const {
-    coordinatesFormat
-  } = useSelector(state => state.map)
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
   const gears = useSelector(state => state.gear.gears)
 
@@ -126,9 +127,8 @@ const VesselList = ({ namespace }) => {
       firstUpdate.current = false
 
       dispatch(setBlockVesselsUpdate(true))
-      const currentvessels = vessels.map((vessel) => getVesselObjectFromFeature(vessel, coordinatesFormat))
-      setVessels(currentvessels)
-      setVesselsCountTotal(currentvessels?.length ? currentvessels?.length : 0)
+      setVessels(vessels)
+      setVesselsCountTotal(vessels?.length || 0)
     }
   }, [vesselListModalIsOpen])
 
@@ -177,11 +177,14 @@ const VesselList = ({ namespace }) => {
     setVessels(nextVessels)
   }, [allVesselsChecked])
 
-  const handleChangeModifiableKey = (id, key, value) => {
+  const toggleSelectRow = (vesselId, value) => {
     const nextVessels = Object.assign([], _vessels)
 
-    nextVessels.find(item => item.id === id)[key] = value
-    setVessels(nextVessels)
+    const toggledVesselIndex = nextVessels.findIndex(vessel => vessel.vesselId === vesselId)
+    if (!(toggledVesselIndex === NOT_FOUND)) {
+      nextVessels.splice(toggledVesselIndex, 1, { ...nextVessels[toggledVesselIndex], checked: value })
+      setVessels(nextVessels)
+    }
   }
 
   const closeAndResetVesselList = () => {
@@ -416,7 +419,7 @@ const VesselList = ({ namespace }) => {
               vesselsCountShowed={vesselsCountShowed}
               allVesselsChecked={allVesselsChecked}
               setAllVesselsChecked={setAllVesselsChecked}
-              handleChange={handleChangeModifiableKey}
+              toggleSelectRow={toggleSelectRow}
               seeMoreIsOpen={seeMoreIsOpen}
               filters={{
                 districtsFiltered,

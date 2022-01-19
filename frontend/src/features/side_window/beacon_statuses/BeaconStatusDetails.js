@@ -1,12 +1,12 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { COLORS } from '../../../constants/constants'
 import styled from 'styled-components'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as TimeAgoSVG } from '../../icons/Label_horaire_VMS.svg'
-import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/styles/RiskFactorBox.style'
+import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
-import { Priority } from './BeaconStatusCard'
+import { Priority, priorityStyle } from './BeaconStatusCard'
 import showVessel from '../../../domain/use_cases/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 import { useDispatch } from 'react-redux'
@@ -23,64 +23,90 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
   const baseUrl = window.location.origin
   const ref = useRef()
 
+  useEffect(() => {
+    if (vesselStatus?.color && beaconStatus?.id) {
+      // Target the `select-picker` DOM component
+      ref.current.children[1].style.background = vesselStatus.color
+      ref.current.children[1].style.setProperty('margin', '2px 10px 10px 0px', 'important')
+    }
+  }, [vesselStatus, beaconStatus])
+
+  const beaconStatusDetailsWrapperStyle = {
+    position: 'fixed',
+    top: 0,
+    height: '100vh',
+    background: COLORS.white,
+    width: 650,
+    right: 0,
+    zIndex: 999,
+    marginRight: beaconStatus ? 0 : -650,
+    transition: 'margin-right 0.5s'
+  }
+
   return (
-    <BeaconStatusDetailsWrapper isOpen={beaconStatus}>
-      <Header>
-        <Row>
-          <AlertsIcon/>
-          <Title>NON-RÉCEPTION DU VMS</Title>
+    <BeaconStatusDetailsWrapper style={beaconStatusDetailsWrapperStyle}>
+      <Header style={headerStyle}>
+        <Row style={rowStyle()}>
+          <AlertsIcon style={alertsIconStyle}/>
+          <Title style={titleStyle}>NON-RÉCEPTION DU VMS</Title>
           <CloseIcon
+            style={closeIconStyle}
             onClick={() => dispatch(closeBeaconStatus())}
           />
         </Row>
-        <Row topMargin={10}>
-          <Flag rel='preload' src={`${baseUrl}/flags/fr.svg`}/>
-          <VesselName>
+        <Row style={rowStyle(10)}>
+          <Flag
+            style={flagStyle}
+            rel='preload'
+            src={`${baseUrl}/flags/fr.svg`}
+          />
+          <VesselName style={vesselNameStyle}>
             {beaconStatus?.vesselName || 'Aucun nom'}
           </VesselName>
-          <InternalReferenceNumber>
+          <InternalReferenceNumber style={internalReferenceNumberStyle}>
             ({beaconStatus?.internalReferenceNumber || 'Aucun CFR'})
           </InternalReferenceNumber>
         </Row>
-        <Row topMargin={10}>
+        <Row style={rowStyle(10)}>
           <RiskFactorBox
             marginRight={5}
             height={24}
             isBig={true}
-            color={getRiskFactorColor(1.2)}
+            color={getRiskFactorColor(beaconStatus?.riskFactor)}
           >
-            {1.2}
+            {parseFloat(beaconStatus?.riskFactor).toFixed(1)}
           </RiskFactorBox>
-          <Priority priority={beaconStatus?.priority}>
+          <Priority style={priorityStyle(beaconStatus?.priority)}>
             {beaconStatus?.priority ? 'Prioritaire' : 'Non prioritaire'}
           </Priority>
           <ShowVessel
+            style={showVesselStyle}
             onClick={() => {
               const vesselIdentity = { ...beaconStatus, flagState: 'FR' }
               dispatch(showVessel(vesselIdentity, false, false, null))
               dispatch(getVesselVoyage(vesselIdentity, null, false))
             }}
           >
-            <ShowVesselText>
+            <ShowVesselText style={showVesselTextStyle}>
               voir le navire sur la carte
             </ShowVesselText>
             <ShowIcon
+              style={showIconStyle}
               alt={'Voir sur la carte'}
               src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
             />
           </ShowVessel>
         </Row>
       </Header>
-      <Line/>
-      <Header>
-        <Malfunctioning background={vesselStatus?.color} ref={ref}>
-          <MalfunctioningText>
+      <Line style={lineStyle}/>
+      <Header style={headerStyle}>
+        <Malfunctioning style={malfunctioningStyle} ref={ref}>
+          <MalfunctioningText style={malfunctioningTextStyle}>
             AVARIE EN COURS
           </MalfunctioningText>
           <SelectPicker
             container={() => ref.current}
             menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
-            style={{ width: 90, margin: '2px 10px 10px 0' }}
             searchable={false}
             value={vesselStatus?.value}
             onChange={status => updateStageVesselStatus(beaconStatus?.stage, beaconStatus, status)}
@@ -89,14 +115,14 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
             cleanable={false}
           />
         </Malfunctioning>
-        <LastPosition>
-          <TimeAgo/>
+        <LastPosition style={lastPositionStyle}>
+          <TimeAgo style={timeAgoStyle}/>
           Dernière émission {
           timeago.format(beaconStatus?.malfunctionStartDateTime, 'fr')
         }
         </LastPosition>
       </Header>
-      <Line/>
+      <Line style={lineStyle}/>
       <BeaconStatusDetailsBody
         comments={comments}
         actions={actions}
@@ -108,161 +134,132 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
-const ShowIcon = styled.img`
-  width: 20px;
-  padding-right: 9px;
-  float: right;
-  flex-shrink: 0;
-  cursor: pointer;
-  margin-left: auto;
-  height: 16px;
-  margin-top: 2px;
-`
+const ShowIcon = styled.img``
+const showIconStyle = {
+  width: 20,
+  paddingRight: 9,
+  float: 'right',
+  flexShrink: 0,
+  cursor: 'pointer',
+  marginLeft: 'auto',
+  marginTop: 2,
+  height: 16
+}
 
-const LastPosition = styled.div`
-  background: ${COLORS.gainsboro} 0% 0% no-repeat padding-box;
-  border-radius: 1px;
-  width: fit-content;
-  padding: 5px 8px;
-  margin-top: 10px;
-  margin-bottom: 25px;
-  font-weight: 500;
-`
+const LastPosition = styled.div``
+const lastPositionStyle = {
+  background: `${COLORS.gainsboro} 0% 0% no-repeat padding-box`,
+  borderRadius: 1,
+  width: 'fit-content',
+  padding: '5px 8px',
+  marginTop: 10,
+  marginBottom: 25,
+  fontWeight: 500
+}
 
-const Malfunctioning = styled.div`
-  padding-top: 5px;
+const Malfunctioning = styled.div``
+const malfunctioningStyle = {
+  paddingTop: 5
+}
 
-  .rs-btn rs-btn-default rs-picker-toggle {
-    background: #1675e0 !important;
-  }
-  .rs-picker-toggle-wrapper {
-    display: block;
-  }
-  .rs-picker-select-menu-item.rs-picker-select-menu-item-active, .rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover,
-  .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover, .rs-picker-select-menu-item.rs-picker-select-menu-item-focus, .rs-picker-select-menu-item {
-    color: #707785;
-    font-size: 13px;
-    font-weight: normal;
-  }
-  .rs-picker-select-menu-items {
-    overflow-y: unset;
-  }
-  .rs-picker-select {
-    width: 155px !important;
-    margin: 10px 10px 0 0 !important;
-    background: ${props => props.background};
-    height: 30px;
-  }
-  .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn {
-    padding-right: 27px;
-    padding-left: 10px;
-    height: 15px;
-    padding-top: 5px;
-    padding-bottom: 8px;
-  }
-  .rs-picker-toggle.rs-btn {
-    padding-left: 5px !important;
-  }
-  .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-caret, .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-clean {
-    top: 5px;
-  }
-`
+const MalfunctioningText = styled.div``
+const malfunctioningTextStyle = {
+  letterSpacing: 0,
+  color: COLORS.slateGray,
+  textTransform: 'uppercase',
+  marginTop: 5,
+  marginBottom: 10,
+  fontWeight: 500
+}
 
-const MalfunctioningText = styled.div`
-  letter-spacing: 0px;
-  color: ${COLORS.slateGray};
-  text-transform: uppercase;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  font-weight: 500;
-`
+const Line = styled.div``
+const lineStyle = {
+  width: '100%',
+  borderBottom: `1px solid ${COLORS.lightGray}`
+}
 
-const Line = styled.div`
-  width: 100%;
-  border-bottom: 1px solid ${COLORS.lightGray};
-`
+const ShowVesselText = styled.span``
+const showVesselTextStyle = {
+  textDecoration: 'underline',
+  font: 'normal normal normal 13px/18px Marianne',
+  letterSpacing: 0,
+  color: COLORS.slateGray,
+  marginRight: 4,
+  verticalAlign: 'sub'
+}
 
-const ShowVesselText = styled.span`
-  text-decoration: underline;
-  font: normal normal normal 13px/18px Marianne;
-  letter-spacing: 0px;
-  color: ${COLORS.slateGray};
-  margin-right: 4px;
-  vertical-align: sub;
-`
+const ShowVessel = styled.div``
+const showVesselStyle = {
+  marginLeft: 'auto',
+  cursor: 'pointer'
+}
 
-const ShowVessel = styled.div`
-  margin-left: auto;
-  cursor: pointer;
-`
+const Flag = styled.img``
+const flagStyle = {
+  height: 14,
+  display: 'inline-block',
+  verticalAlign: 'middle',
+  marginTop: 5,
+  cursor: 'pointer'
+}
 
-const Flag = styled.img`
-  height: 14px;
-  display: inline-block;
-  vertical-align: middle;
-  margin-top: 5px;
-  cursor: pointer;
-`
+const VesselName = styled.div``
+const vesselNameStyle = {
+  font: 'normal normal bold 16px/22px Marianne',
+  marginLeft: 8,
+  color: COLORS.gunMetal
+}
 
-const VesselName = styled.div`
-  font: normal normal bold 16px/22px Marianne;
-  margin-left: 8px;
-  color: ${COLORS.gunMetal};
-`
+const InternalReferenceNumber = styled.div``
+const internalReferenceNumberStyle = {
+  font: 'normal normal normal 16px/22px Marianne',
+  marginLeft: 5,
+  color: COLORS.gunMetal
+}
 
-const InternalReferenceNumber = styled.div`
-  font: normal normal normal 16px/22px Marianne;
-  margin-left: 5px;
-  color: ${COLORS.gunMetal};
-`
+const CloseIcon = styled(CloseIconSVG)``
+const closeIconStyle = {
+  width: 20,
+  cursor: 'pointer',
+  marginLeft: 'auto',
+  height: 20,
+  marginTop: 6,
+  marginRight: 4
+}
 
-const CloseIcon = styled(CloseIconSVG)`
-  width: 20px;
-  cursor: pointer;
-  margin-left: auto;
-  height: 20px;
-  margin-top: 6px;
-  margin-right: 4px;
-`
+const Row = styled.div``
+const rowStyle = topMargin => ({
+  display: 'flex',
+  marginTop: topMargin || 0
+})
 
-const Row = styled.div`
-  display: flex;
-  margin-top: ${props => props.topMargin ? props.topMargin : 0}px;
-`
+const Header = styled.div``
+const headerStyle = {
+  margin: '15px 20px 15px 40px'
+}
 
-const Header = styled.div`
-  margin: 15px 20px 15px 40px;
-`
+const Title = styled.span``
+const titleStyle = {
+  font: 'normal normal bold 22px/31px Marianne',
+  letterSpacing: 0,
+  color: COLORS.slateGray,
+  marginLeft: 10,
+  verticalAlign: 'super'
+}
 
-const Title = styled.span`
-  font: normal normal bold 22px/31px Marianne;
-  letter-spacing: 0px;
-  color: ${COLORS.slateGray};
-  margin-left: 10px;
-  vertical-align: super;
-`
+const AlertsIcon = styled(AlertsSVG)``
+const alertsIconStyle = {
+  marginTop: 4,
+  width: 19
+}
 
-const AlertsIcon = styled(AlertsSVG)`
-  margin-top: 4px;
-  width: 19px;
-`
+const TimeAgo = styled(TimeAgoSVG)``
+const timeAgoStyle = {
+  verticalAlign: 'sub',
+  marginRight: 5,
+  width: 15
+}
 
-const TimeAgo = styled(TimeAgoSVG)`
-  vertical-align: sub;
-  margin-right: 5px;
-  width: 15px;
-`
-
-const BeaconStatusDetailsWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  height: 100vh;
-  background: ${COLORS.white};
-  width: 650px;
-  right: 0;
-  z-index: 999;
-  margin-right: ${props => props.isOpen ? 0 : -650}px;
-  transition: margin-right 0.5s;
-`
+const BeaconStatusDetailsWrapper = styled.div``
 
 export default BeaconStatusDetails

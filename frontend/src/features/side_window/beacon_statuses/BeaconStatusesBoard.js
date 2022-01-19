@@ -176,9 +176,31 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
     setAllDroppableDisabled(previousStage === beaconStatusesStages.RESUMED_TRANSMISSION.code)
   }, [])
 
+  const searchVesselInputStyle = {
+    margin: '0 0 5px 5px',
+    backgroundColor: 'white',
+    border: 'none',
+    borderBottom: `1px ${COLORS.lightGray} solid`,
+    borderRadius: 0,
+    color: COLORS.gunMetal,
+    fontSize: 13,
+    height: 40,
+    width: 310,
+    padding: '0 5px 0 10px',
+    flex: 3,
+    backgroundImage: `url(${baseUrl}/${SearchIconSVG})`,
+    backgroundSize: 30,
+    backgroundPosition: 'bottom 3px right 5px',
+    backgroundRepeat: 'no-repeat',
+    ':hover, :focus': {
+      borderBottom: `1px ${COLORS.lightGray} solid`
+    }
+  }
+
   return (
-    <Wrapper innerWidth={window.innerWidth}>
+    <Wrapper innerWidth={window.innerWidth} style={wrapperStyle}>
       <SearchVesselInput
+        style={searchVesselInputStyle}
         baseUrl={baseUrl}
         data-cy={'search-vessel-in-beacon-statuses'}
         placeholder={'Rechercher un navire en avarie'}
@@ -191,7 +213,7 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
         sensors={sensors}
         modifiers={[restrictToFirstScrollableAncestor]}
       >
-        <Columns>
+        <Columns style={columnsStyle}>
           {Object.keys(beaconStatusesStages).map((stageId) => (
             <Droppable key={stageId} id={stageId} disabled={allDroppableDisabled}>
               <StageColumn
@@ -215,36 +237,18 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
   )
 }
 
-const SearchVesselInput = styled.input`
-  margin: 0 0 5px 5px;
-  background-color: white;
-  border: none;
-  border-bottom: 1px ${COLORS.lightGray} solid;
-  border-radius: 0;
-  color: ${COLORS.gunMetal};
-  font-size: 13px;
-  height: 40px;
-  width: 310px;
-  padding: 0 5px 0 10px;
-  flex: 3;
-  background-image: url(${props => props.baseUrl}/${SearchIconSVG});
-  background-size: 30px;
-  background-position: bottom 3px right 5px;
-  background-repeat: no-repeat;
-  
-  :hover, :focus {
-    border-bottom: 1px ${COLORS.lightGray} solid;
-  }
-`
+const SearchVesselInput = styled.input``
 
-const Wrapper = styled.div`
-  overflow-x: scroll;
-  height: calc(100vh - 20px);
-  padding: 20px 0 0 10px;
-`
+const Wrapper = styled.div``
+const wrapperStyle = {
+  overflowX: 'scroll',
+  height: 'calc(100vh - 20px)',
+  padding: '20px 0 0 10px'
+}
 
-const Columns = styled.div`
-  display: flex;
-`
+const Columns = styled.div``
+const columnsStyle = {
+  display: 'flex'
+}
 
 export default BeaconStatusesBoard

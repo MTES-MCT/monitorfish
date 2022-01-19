@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { RiskFactorBox } from './styles/RiskFactorBox.style'
+import { RiskFactorBox } from './RiskFactorBox'
 
 const RiskFactorCursor = ({ value, color, progress, isBig, withoutBox, height, underCharter }) => {
   const [progressWithDelay, setProgressWithDelay] = useState(0)

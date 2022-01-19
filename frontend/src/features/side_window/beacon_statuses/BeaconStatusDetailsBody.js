@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { ReactComponent as CommentsSVG } from '../../icons/Commentaires.svg'
 import { getDate, getTime, mergeObjects } from '../../../utils'
 import { Toggle } from 'rsuite'
-import { basePrimaryButton } from '../../commonStyles/Buttons.style'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserType } from '../../../domain/shared_slices/Global'
 import { UserType } from '../../../domain/entities/beaconStatus'
@@ -106,20 +105,20 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
   const getActionOrCommentRow = (actionOrComment, isLastDate, isLast) => {
     if (actionOrComment.type === Type.COMMENT) {
       return <div key={actionOrComment.type + actionOrComment.dateTime}>
-        <ActionOrCommentRow ref={isLastDate && isLast ? scrollToRef : null}>
-          <CommentText>{actionOrComment.comment}</CommentText>
+        <ActionOrCommentRow style={actionOrCommentRow} ref={isLastDate && isLast ? scrollToRef : null}>
+          <CommentText style={commentTextStyle}>{actionOrComment.comment}</CommentText>
         </ActionOrCommentRow>
-        <ActionOrCommentRow>
-          <CommentUserType>{actionOrComment.userType} - {getTime(actionOrComment.dateTime, true)} (UTC)</CommentUserType>
+        <ActionOrCommentRow style={actionOrCommentRow}>
+          <CommentUserType style={commentUserTypeStyle}>{actionOrComment.userType} - {getTime(actionOrComment.dateTime, true)} (UTC)</CommentUserType>
         </ActionOrCommentRow>
       </div>
     } else if (actionOrComment.type === Type.ACTION) {
       return <div key={actionOrComment.type + actionOrComment.dateTime}>
-        <ActionOrCommentRow ref={isLastDate && isLast ? scrollToRef : null}>
-          <ActionText>{getActionText(actionOrComment)}</ActionText>
+        <ActionOrCommentRow style={actionOrCommentRow} ref={isLastDate && isLast ? scrollToRef : null}>
+          <ActionText style={actionTextStyle}>{getActionText(actionOrComment)}</ActionText>
         </ActionOrCommentRow>
-        <ActionOrCommentRow>
-          <CommentUserType>{getTime(actionOrComment.dateTime, true)} (UTC)</CommentUserType>
+        <ActionOrCommentRow style={actionOrCommentRow}>
+          <CommentUserType style={commentUserTypeStyle}>{getTime(actionOrComment.dateTime, true)} (UTC)</CommentUserType>
         </ActionOrCommentRow>
       </div>
     }
@@ -132,14 +131,14 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
   }
 
   return (
-    <Body>
-      <NumberComments>
-        <CommentsIcon/>
-        <NumberCommentsText>
+    <Body style={bodyStyle}>
+      <NumberComments style={numberCommentsStyle}>
+        <CommentsIcon style={commentsIconStyle}/>
+        <NumberCommentsText style={numberCommentsTextStyle}>
           {comments?.length} commentaires
         </NumberCommentsText>
       </NumberComments>
-      <Comments>
+      <Comments style={commentsStyle}>
         {
           Object.keys(actionsAndCommentsByDate)
             .sort((a, b) => new Date(a) - new Date(b))
@@ -148,11 +147,12 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
               const dateText = getCommentOrActionDate(getDate(date))
 
               return <>
-                <DateSeparator>
-                  <Line/>
+                <DateSeparator style={dateSeparatorStyle}>
+                  <Line style={lineStyle}/>
                   <RowDate
-                    isToday={dateText === 'Aujourd\'hui'}
-                    isYesterday={dateText === 'Hier'}
+                    style={rowDateStyle(
+                      dateText === 'Aujourd\'hui',
+                      dateText === 'Hier')}
                   >
                     {dateText}
                   </RowDate>
@@ -171,10 +171,11 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
         }
       </Comments>
       <AddComment
+        style={addCommentStyle}
         value={comment}
         onChange={event => setComment(event.target.value)}
       />
-      <SubmitCommentRow>
+      <SubmitCommentRow style={submitCommentRowStyle}>
         Équipe SIP
         <Toggle
           value={userType === UserType.OPS}
@@ -183,6 +184,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
         />
         Équipe OPS
         <SubmitComment
+          style={submitCommentStyle}
           onClick={saveComment}
         >
           Commenter
@@ -192,125 +194,135 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
   )
 }
 
-const SubmitComment = styled.button`
-  ${basePrimaryButton}
-  margin-left: auto;
-  padding: 6px 12px 6px 12px;
-`
-
-const SubmitCommentRow = styled.div`
-  margin-top: 5px;
-  width: 100%;
-  display: flex;
-  font: normal normal normal 13px/18px Marianne;
-  color: ${COLORS.slateGray};
-  
-  .rs-btn-toggle {
-    background: #C8DCE6 0% 0% no-repeat padding-box;
-    border: 1px solid #707785;
-    border-radius: 7px;
-    margin: 3px 7px 0 7px;
-  }
-  .rs-btn-toggle::after {
-    background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
-    top: 1px;
+const SubmitComment = styled.button``
+const submitCommentStyle = {
+  background: COLORS.charcoal,
+  color: COLORS.gainsboro,
+  marginLeft: 'auto',
+  padding: '6px 12px 6px 12px',
+  ':hover, :focus': {
+    background: COLORS.charcoal
+  },
+  ':disabled': {
+    border: `1px solid ${COLORS.lightGray}`,
+    background: COLORS.lightGray,
+    color: COLORS.white
   }
 }
-`
 
-const AddComment = styled.textarea`
-  width: 100%;
-  background: #C8DCE6 0% 0% no-repeat padding-box;
-  border: 1px solid #9DC0D2;
-  margin-top: 20px;
-  margin-bottom: 5px;
-  padding: 5px;
-  height: 50px;
-`
+const SubmitCommentRow = styled.div``
+const submitCommentRowStyle = {
+  marginTop: 5,
+  width: '100%',
+  display: 'flex',
+  font: 'normal normal normal 13px/18px Marianne',
+  color: COLORS.slateGray
+}
 
-const ActionOrCommentRow = styled.div`
-  width: 100%;
-  display: flex;
-`
+const AddComment = styled.textarea``
+const addCommentStyle = {
+  width: '100%',
+  background: '#C8DCE6 0% 0% no-repeat padding-box',
+  border: '1px solid #9DC0D2',
+  marginTop: 20,
+  marginBottom: 5,
+  padding: 5,
+  height: 50
+}
 
-const CommentText = styled.div`
-  background: ${COLORS.lightGray} 0% 0% no-repeat padding-box;
-  border: 1px solid ${COLORS.lightGray};
-  max-width: 480px;
-  padding: 10px 15px;
-  margin-top: 10px;
-`
+const ActionOrCommentRow = styled.div``
+const actionOrCommentRow = {
+  width: '100%',
+  display: 'flex'
+}
 
-const ActionText = styled.div`
-  border: 2px solid ${COLORS.lightGray};
-  max-width: 480px;
-  padding: 10px 15px;
-  margin-top: 10px;
-`
+const CommentText = styled.div``
+const commentTextStyle = {
+  background: `${COLORS.lightGray} 0% 0% no-repeat padding-box`,
+  border: `1px solid ${COLORS.lightGray}`,
+  maxWidth: 480,
+  padding: '10px 15px',
+  marginTop: 10
+}
 
-const CommentUserType = styled.div`
-  font: normal normal normal 11px/15px Marianne;
-  color: ${COLORS.slateGray};
-  margin-top: 2px;
-`
+const ActionText = styled.div``
+const actionTextStyle = {
+  border: `2px solid ${COLORS.lightGray}`,
+  maxWidth: 480,
+  padding: '10px 15px',
+  marginTop: 10
+}
 
-const DateSeparator = styled.div`
-  height: 20px;
-  width: 100%;
-  margin-top: 30px;
-`
+const CommentUserType = styled.div``
+const commentUserTypeStyle = {
+  font: 'normal normal normal 11px/15px Marianne',
+  color: COLORS.slateGray,
+  marginTop: 2
+}
 
-const RowDate = styled.div`
-  margin-top: -23px;
-  width: fit-content;
-  background: white;
-  padding: 10px;
-  ${props => props.isToday
-    ? 'margin-left: calc(50% - 45px);'
-    : props.isYesterday
-      ? 'margin-left: calc(50% - 23px);'
-      : 'margin-left: calc(50% - 43px);'
-  } 
-  color: ${COLORS.slateGray};
-`
+const DateSeparator = styled.div``
+const dateSeparatorStyle = {
+  height: 20,
+  width: '100%',
+  marginTop: 30
+}
 
-const Comments = styled.div`
-  max-height: 530px;
-  overflow-y: auto;
-`
+const RowDate = styled.div``
+const rowDateStyle = (isToday, isYesterday) => ({
+  marginTop: -23,
+  width: 'fit-content',
+  background: 'white',
+  padding: 10,
+  marginLeft: isToday
+    ? 'calc(50% - 45px)'
+    : isYesterday
+      ? 'calc(50% - 23px)'
+      : 'calc(50% - 43px)',
+  color: COLORS.slateGray
+})
 
-const NumberComments = styled.span`
-  font: normal normal normal 11px/15px Marianne;
-  letter-spacing: 0px;
-  color: ${COLORS.slateGray};
-  display: inline-block;
-  width: 100%;
-`
+const Comments = styled.div``
+const commentsStyle = {
+  maxHeight: 530,
+  overflowY: 'auto'
+}
 
-const NumberCommentsText = styled.span`
-  position: relative;
-  width: fit-content;
-  float: right;
-  margin-right: 5px;
-`
+const NumberComments = styled.span``
+const numberCommentsStyle = {
+  font: 'normal normal normal 11px/15px Marianne',
+  letterSpacing: 0,
+  color: COLORS.slateGray,
+  display: 'inline-block',
+  width: '100%'
+}
 
-const Body = styled.div`
-  margin-top: 20px;
-  padding-right: 40px;
-  padding-left: 40px;
-`
+const NumberCommentsText = styled.span``
+const numberCommentsTextStyle = {
+  position: 'relative',
+  width: 'fit-content',
+  float: 'right',
+  marginRight: 5
+}
 
-const Line = styled.div`
-  width: 100%;
-  border-bottom: 1px solid ${COLORS.lightGray};
-`
+const Body = styled.div``
+const bodyStyle = {
+  marginTop: 20,
+  paddingRight: 40,
+  paddingLeft: 40
+}
 
-const CommentsIcon = styled(CommentsSVG)`
-  width: 20px;
-  position: relative;
-  width: fit-content;
-  float: right;
-  margin-top: 2px;
-`
+const Line = styled.div``
+const lineStyle = {
+  width: '100%',
+  borderBottom: `1px solid ${COLORS.lightGray}`
+}
+
+const CommentsIcon = styled(CommentsSVG)``
+const commentsIconStyle = {
+  position: 'relative',
+  width: 'fit-content',
+  float: 'right',
+  marginTop: 2
+}
 
 export default BeaconStatusDetailsBody

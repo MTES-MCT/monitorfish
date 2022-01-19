@@ -6,9 +6,19 @@ import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../domain/e
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
 import { beaconStatusesStages, BeaconStatusesSubMenu } from './beacon_statuses/beaconStatuses'
 
+/**
+ * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
+ * @param selectedMenu
+ * @param selectedSubMenu
+ * @param setSelectedSubMenu
+ * @param beaconStatuses
+ * @param alerts
+ * @return {JSX.Element}
+ * @constructor
+ */
 const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, beaconStatuses, alerts }) => {
-  return <Menu>
-    <Title>
+  return <Menu style={menuStyle}>
+    <Title style={titleStyle}>
       Vue d&apos;ensemble
     </Title>
     {
@@ -72,23 +82,25 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
   </Menu>
 }
 
-const Menu = styled.div`
-  width: 200px;
-  height: 100vh;
-  background: ${COLORS.gainsboro};
-  flex-shrink: 0;
-  font-size: 16px;
-  font-weight: 500;
-  color: ${COLORS.slateGray};
-  padding: 14px 0;
-`
+const Menu = styled.div``
+const menuStyle = {
+  width: 200,
+  height: '100vh',
+  background: COLORS.gainsboro,
+  flexShrink: 0,
+  fontSize: 16,
+  fontWeight: 500,
+  color: COLORS.slateGray,
+  padding: '14px 0'
+}
 
-const Title = styled.span`
-  width: 180px;
-  display: inline-block;
-  padding-bottom: 11px;
-  padding-left: 20px;
-  border-bottom: 1px solid ${COLORS.lightGray};
-`
+const Title = styled.span``
+const titleStyle = {
+  width: 180,
+  display: 'inline-block',
+  paddingBottom: 11,
+  paddingLeft: 20,
+  borderBottom: `1px solid ${COLORS.lightGray}`
+}
 
 export default SideWindowSubMenu

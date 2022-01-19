@@ -11,13 +11,10 @@ import BeaconStatusesBoard from './beacon_statuses/BeaconStatusesBoard'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { COLORS } from '../../constants/constants'
 import { usePrevious } from '../../hooks/usePrevious'
-import BeaconStatusDetails from './beacon_statuses/BeaconStatusDetails'
-import { beaconStatusesStub } from '../../stubs/beaconStatusStub'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import { closeSideWindow, setSideWindowAsOpen } from '../../domain/shared_slices/Global'
 import NewWindow from 'react-new-window'
 import { resetFocusOnAlert } from '../../domain/shared_slices/Alert'
-import SideWindowSubMenuLink from './SideWindowSubMenuLink'
 
 const SideWindow = () => {
   const {
@@ -73,23 +70,8 @@ const SideWindow = () => {
     }
   }, [openedSideWindowTab, setSelectedSubMenu])
 
-  /**
-   * /!\
-   * The components to preload so we get the associated styles
-   **/
-  function getComponentsForPreloading () {
-    return <NotVisible hidden={true}>
-      <Alerts
-        selectedSubMenu={AlertsSubMenu.NAMO}
-        setSelectedSubMenu={setSelectedSubMenu}
-      />
-      <BeaconStatusesBoard/>
-      <SideWindowSubMenu
-        selectedMenu={sideWindowMenu.ALERTS}
-        selectedSubMenu={AlertsSubMenu.NAMO}
-        setSelectedSubMenu={setSelectedSubMenu}
-      />
-      <SideWindowSubMenuLink
+  /*
+  <SideWindowSubMenuLink
         number={4}
         menu={BeaconStatusesSubMenu.MALFUNCTIONING}
         isSelected={false}
@@ -111,17 +93,15 @@ const SideWindow = () => {
         menu={BeaconStatusesSubMenu.MALFUNCTIONING}
         isSelected
       />
-      {
-        beaconStatusesStub.map(beaconStatusStub =>
-          <BeaconStatusDetails
-            key={beaconStatusStub.beaconStatus.id}
-            beaconStatus={beaconStatusStub.beaconStatus}
-            comments={beaconStatusStub.comments}
-            actions={beaconStatusStub.actions}
-          />)
-      }
-      <BeaconStatusesBoardGrayOverlay isOverlayed={true}/>
-    </NotVisible>
+   */
+
+  const beaconStatusBoardGrayOverlayStyle = {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    opacity: isOverlayed ? 0.5 : 0,
+    background: COLORS.charcoal,
+    zIndex: isOverlayed ? 11 : -9999
   }
 
   return <>{openedSideWindowTab
@@ -148,13 +128,8 @@ const SideWindow = () => {
           selectedSubMenu={selectedSubMenu}
           setSelectedSubMenu={setSelectedSubMenu}
         />
-        {
-          isPreloading
-            ? getComponentsForPreloading()
-            : null
-        }
         <BeaconStatusesBoardGrayOverlay
-          isOverlayed={isOverlayed}
+          style={beaconStatusBoardGrayOverlayStyle}
           onClick={() => setIsOverlayed(false)}
         />
         {
@@ -190,14 +165,7 @@ const SideWindow = () => {
   </>
 }
 
-export const BeaconStatusesBoardGrayOverlay = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  opacity: ${props => props.isOverlayed ? 0.5 : 0};
-  background: ${COLORS.charcoal};
-  z-index: ${props => props.isOverlayed ? 11 : -9999};
-`
+const BeaconStatusesBoardGrayOverlay = styled.div``
 
 const Loading = styled.div`
   margin-top: 350px;
@@ -212,13 +180,70 @@ const Text = styled.span`
   position: relative;
 `
 
-const NotVisible = styled.div`
-  opacity: 0;
-`
-
 const Wrapper = styled.div`
   display: flex;
   background: ${COLORS.white};
+  
+  @keyframes blink {
+    0%   {
+      background: ${COLORS.background};
+      color: ${COLORS.gunMetal};
+    }
+    50% {
+      background: ${COLORS.gunMetal};
+      color: ${COLORS.gainsboro};
+    }
+    0% {
+      background: ${COLORS.background};
+      color: ${COLORS.gunMetal};
+    }
+  }
+  
+  .rs-btn rs-btn-default rs-picker-toggle {
+    background: #1675e0 !important;
+  }
+  .rs-picker-toggle-wrapper {
+    display: block;
+  }
+  .rs-picker-select-menu-item.rs-picker-select-menu-item-active, .rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover,
+  .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover, .rs-picker-select-menu-item.rs-picker-select-menu-item-focus, .rs-picker-select-menu-item {
+    color: #707785;
+    font-size: 13px;
+    font-weight: normal;
+  }
+  .rs-picker-select-menu-items {
+    overflow-y: unset;
+  }
+  .rs-picker-select {
+    width: 155px !important;
+    margin: 8px 10px 0 10px !important;
+    background: ${props => props.background};
+    height: 30px;
+  }
+  .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn {
+    padding-right: 27px;
+    padding-left: 10px;
+    height: 15px;
+    padding-top: 5px;
+    padding-bottom: 8px;
+  }
+  .rs-picker-toggle.rs-btn {
+    padding-left: 5px !important;
+  }
+  .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-caret, .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-clean {
+    top: 5px;
+  }
+  
+  .rs-btn-toggle {
+    background: #C8DCE6 0% 0% no-repeat padding-box;
+    border: 1px solid #707785;
+    border-radius: 7px;
+    margin: 3px 7px 0 7px;
+  }
+  .rs-btn-toggle::after {
+    background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
+    top: 1px;
+  }
 `
 
 export default SideWindow

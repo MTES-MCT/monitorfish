@@ -14,7 +14,9 @@ class GetAllBeaconStatuses(private val beaconStatusesRepository: BeaconStatusesR
         val lastPositions = lastPositionRepository.findAll()
 
         return beaconStatusesRepository.findAll().map { beaconStatus ->
-            val riskFactor = lastPositions.find { it.internalReferenceNumber === beaconStatus.internalReferenceNumber }?.riskFactor
+            val riskFactor = lastPositions.find { lastPosition ->
+                lastPosition.internalReferenceNumber == beaconStatus.internalReferenceNumber
+            }?.riskFactor
             beaconStatus.riskFactor = riskFactor
 
             if (riskFactor == null) {

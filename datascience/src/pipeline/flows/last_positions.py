@@ -1,15 +1,14 @@
 from datetime import datetime
 from typing import Tuple
 
-import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task
+from prefect.tasks.control_flow import merge
 
-from config import ANCHORAGES_H3_CELL_RESOLUTION, CURRENT_POSITION_ESTIMATION_MAX_HOURS
-from src.pipeline.flows.risk_factor import default_risk_factors
+from config import CURRENT_POSITION_ESTIMATION_MAX_HOURS, default_risk_factors
 from src.pipeline.generic_tasks import extract, load
-from src.pipeline.helpers.spatial import estimate_current_position, get_h3_indices
+from src.pipeline.helpers.spatial import estimate_current_position
 from src.pipeline.processing import (
     coalesce,
     drop_duplicates_by_decreasing_priority,
@@ -17,7 +16,8 @@ from src.pipeline.processing import (
     join_on_multiple_keys,
     left_isin_right_by_decreasing_priority,
 )
-from src.pipeline.shared_tasks.control_flow import check_flow_not_running, merge
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
+from src.pipeline.shared_tasks.positions import tag_positions_at_port
 
 
 @task(checkpoint=False)
@@ -66,6 +66,14 @@ def extract_last_positions(minutes: int) -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def extract_pending_alerts() -> pd.DataFrame:
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/pending_alerts.sql",
+    )
+
+
+@task(checkpoint=False)
 def drop_duplicates(positions: pd.DataFrame) -> pd.DataFrame:
     """
     Drop duplicate vessels in a `pandas.DataFrame` of positions.
@@ -102,41 +110,6 @@ def add_vessel_identifier(last_positions: pd.DataFrame) -> pd.DataFrame:
         last_positions[["cfr", "ircs", "external_immatriculation"]],
         vessel_identifier_labels,
     )
-
-    return last_positions
-
-
-@task(checkpoint=False)
-def tag_vessels_at_port(last_positions: pd.DataFrame) -> pd.DataFrame:
-    """
-    Adds an `is_at_port` boolean field to the last_positions DataFrame.
-    """
-
-    last_positions = last_positions.copy(deep=True)
-
-    if len(last_positions) == 0:
-        last_positions["is_at_port"] = False
-
-    else:
-
-        last_positions["h3"] = get_h3_indices(
-            last_positions,
-            lat="latitude",
-            lon="longitude",
-            resolution=ANCHORAGES_H3_CELL_RESOLUTION,
-        )
-
-        h3_indices_at_port = set(
-            extract(
-                db_name="monitorfish_remote",
-                query_filepath="monitorfish/h3_is_anchorage.sql",
-                params={"h3_cells": tuple(last_positions.h3)},
-            )["h3"]
-        )
-
-        last_positions["is_at_port"] = last_positions.h3.isin(h3_indices_at_port)
-
-        last_positions = last_positions.drop(columns=["h3"])
 
     return last_positions
 
@@ -375,10 +348,25 @@ def estimate_current_positions(
 
 
 @task(checkpoint=False)
-def merge_last_positions_risk_factors(last_positions, risk_factors):
+def merge_last_positions_risk_factors_alerts(
+    last_positions: pd.DataFrame,
+    risk_factors: pd.DataFrame,
+    pending_alerts: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Performs a left join on last_positions, risk_factors and pending_alerts using cfr,
+    ircs and external_immatriculation as join keys.
+    """
     last_positions = join_on_multiple_keys(
         last_positions,
         risk_factors,
+        on=["cfr", "ircs", "external_immatriculation"],
+        how="left",
+    )
+
+    last_positions = join_on_multiple_keys(
+        last_positions,
+        pending_alerts,
         on=["cfr", "ircs", "external_immatriculation"],
         how="left",
     )
@@ -399,7 +387,7 @@ def load_last_positions(last_positions):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
-        pg_array_columns=["segments"],
+        pg_array_columns=["segments", "alerts"],
         handle_array_conversion_errors=True,
         value_on_array_conversion_error="{}",
         jsonb_columns=["gear_onboard", "species_onboard"],
@@ -425,11 +413,12 @@ with Flow("Last positions") as flow:
 
         # Extract & Transform
         risk_factors = extract_risk_factors()
+        pending_alerts = extract_pending_alerts()
 
         last_positions = extract_last_positions(minutes=minutes)
         last_positions = drop_duplicates(last_positions)
         last_positions = add_vessel_identifier(last_positions)
-        last_positions = tag_vessels_at_port(last_positions)
+        last_positions = tag_positions_at_port(last_positions)
 
         with case(action, "update"):
             previous_last_positions = extract_previous_last_positions()
@@ -460,7 +449,9 @@ with Flow("Last positions") as flow:
             last_positions=last_positions,
             max_hours_since_last_position=current_position_estimation_max_hours,
         )
-        last_positions = merge_last_positions_risk_factors(last_positions, risk_factors)
+        last_positions = merge_last_positions_risk_factors_alerts(
+            last_positions, risk_factors, pending_alerts
+        )
 
         # Load
         load_last_positions(last_positions)

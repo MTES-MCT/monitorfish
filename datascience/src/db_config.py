@@ -3,7 +3,9 @@ import os
 import sqlalchemy as sa
 from dotenv import load_dotenv
 
-load_dotenv()
+from config import ROOT_DIRECTORY
+
+load_dotenv(ROOT_DIRECTORY / ".env")
 
 db_env = {
     "ocan": {

@@ -1,6 +1,7 @@
 from prefect.executors.dask import LocalDaskExecutor
 from prefect.schedules import CronSchedule, Schedule, clocks
 
+from config import FISHING_SPEED_THRESHOLD, MINIMUM_CONSECUTIVE_POSITIONS
 from src.pipeline.flows import (
     admin_areas,
     anchorages,
@@ -9,6 +10,7 @@ from src.pipeline.flows import (
     controllers,
     controls,
     current_segments,
+    enrich_positions,
     ers,
     facade_areas,
     fao_areas,
@@ -18,7 +20,9 @@ from src.pipeline.flows import (
     init_species_groups,
     last_positions,
     missing_trip_numbers,
+    new_beacons_statuses,
     ports,
+    position_alerts,
     regulations,
     regulations_checkup,
     risk_factor,
@@ -44,6 +48,22 @@ controls.flow.schedule = Schedule(
 )
 current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
 ers.flow.schedule = CronSchedule("* * * * *")
+enrich_positions.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "1 * * * *",
+            parameter_defaults={
+                "start_hours_ago": 7,
+                "end_hours_ago": 0,
+                "minutes_per_chunk": 420,
+                "chunk_overlap_minutes": 0,
+                "minimum_consecutive_positions": MINIMUM_CONSECUTIVE_POSITIONS,
+                "fishing_speed_threshold": FISHING_SPEED_THRESHOLD,
+                "recompute_all": False,
+            },
+        ),
+    ]
+)
 fishing_gear_codes.flow.schedule = CronSchedule("0 8 * * *")
 infractions.flow.schedule = CronSchedule("1 8 * * *")
 last_positions.flow.schedule = Schedule(
@@ -59,6 +79,25 @@ last_positions.flow.schedule = Schedule(
     ]
 )
 missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
+new_beacons_statuses.flow.schedule = CronSchedule("5,15,25,35,45,55 * * * *")
+position_alerts.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "1 * * * *",
+            parameter_defaults={
+                "alert_type": "THREE_MILES_TRAWLING_ALERT",
+                "zones": "0-3",
+                "hours_from_now": 8,
+                "only_fishing_positions": True,
+                "flag_states": None,
+                "fishing_gears": None,
+                "fishing_gear_categories": "Chaluts",
+                "include_vessels_unknown_gear": True,
+            },
+        ),
+    ]
+)
+
 regulations.flow.schedule = CronSchedule("6,16,26,36,46,56 * * * *")
 regulations_checkup.flow.schedule = CronSchedule("58 7 * * 1,2,3,4,5")
 risk_factor.flow.schedule = CronSchedule("3,13,23,33,43,53 * * * *")
@@ -81,6 +120,7 @@ flows_to_register = [
     controllers.flow,
     controls.flow,
     current_segments.flow,
+    enrich_positions.flow,
     ers.flow,
     facade_areas.flow,
     fao_areas.flow,
@@ -90,7 +130,9 @@ flows_to_register = [
     init_species_groups.flow,
     last_positions.flow,
     missing_trip_numbers.flow,
+    new_beacons_statuses.flow,
     ports.flow,
+    position_alerts.flow,
     regulations.flow,
     regulations_checkup.flow,
     risk_factor.flow,

@@ -5,8 +5,13 @@ import { Radio } from 'rsuite'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import MenuItem from '../custom_form/MenuItem'
 import {
-  ContentLine, CustomCheckbox, AuthorizedRadio, Delimiter,
-  RegulatorySectionTitle, FormSection, FormContent
+  AuthorizedRadio,
+  ContentLine,
+  CustomCheckbox,
+  Delimiter,
+  FormContent,
+  FormSection,
+  RegulatorySectionTitle
 } from '../../../commonStyles/Backoffice.style'
 import Tag from '../Tag'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
@@ -51,6 +56,10 @@ const RegulatorySpeciesForm = props => {
 
     if (!authorized && species?.length) {
       initSpeciesQuantityAndMinimumSize()
+    }
+
+    if (allSpecies && authorized) {
+      set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, false)
     }
   }, [authorized])
 
@@ -187,9 +196,8 @@ const RegulatorySpeciesForm = props => {
           <ContentLine>
               <CustomCheckbox
                 inline
-                checked
-                value={REGULATORY_SPECIES_KEYS.ALL_SPECIES}
-                onChange={value => set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, value)}
+                checked={allSpecies}
+                onChange={(_, checked) => set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, checked)}
               >
                 Toutes les espèces
               </CustomCheckbox>

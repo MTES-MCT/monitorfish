@@ -1,15 +1,12 @@
 import io
-import pickle
 from dataclasses import dataclass
-from typing import List, Set, Tuple
+from typing import List, Set
 
 import h3
-import numpy as np
 import pandas as pd
 import prefect
 import requests
 from prefect import Flow, Parameter, task
-from sqlalchemy import text
 from vptree import VPTree
 
 from config import (
@@ -28,7 +25,6 @@ from src.pipeline.helpers.spatial import (
 )
 from src.pipeline.utils import psql_insert_copy
 from src.read_query import read_query
-from src.utils.database import print_schemas_tables
 
 #######################################################################################
 ####################################### HELPERS #######################################

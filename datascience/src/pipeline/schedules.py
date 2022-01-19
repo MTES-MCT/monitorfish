@@ -51,7 +51,7 @@ ers.flow.schedule = CronSchedule("* * * * *")
 enrich_positions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
-            "1 * * * *",
+            "* * * * *",
             parameter_defaults={
                 "start_hours_ago": 7,
                 "end_hours_ago": 0,

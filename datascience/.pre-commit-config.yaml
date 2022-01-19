@@ -1,4 +1,14 @@
 repos:
+  - repo: https://github.com/myint/autoflake
+    rev: v1.4
+    hooks:
+      - id: autoflake
+        name: autoflake
+        entry: autoflake
+        language: python
+        'types': [python]
+        require_serial: true
+        args: ['--in-place', '--remove-all-unused-imports', '--ignore-init-module-imports']
   - repo: https://github.com/pycqa/isort
     rev: 5.6.3
     hooks:
@@ -23,4 +33,3 @@ repos:
           # https://flake8.pycqa.org/en/latest/user/error-codes.html
           - "--ignore=D203,E203,E266,E501,W503,F403,F401,E402,E722"
           - "--exclude=dam-si-jupyter-config.py"
-

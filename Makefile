@@ -35,7 +35,7 @@ docker-compose-up:
 docker-build-pipeline:
 	docker build -f "infra/docker/Dockerfile.DataPipeline" . -t monitorfish-pipeline:$(VERSION)
 docker-test-pipeline:
-	docker run monitorfish-pipeline:$(VERSION) coverage run -m unittest discover
+	docker run --network host -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) monitorfish-pipeline:$(VERSION) coverage run -m pytest --pdb tests
 docker-tag-pipeline:
 	docker tag monitorfish-pipeline:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 docker-push-pipeline:
@@ -76,7 +76,7 @@ install-pipeline:
 run-notebook:
 	cd datascience && poetry run jupyter notebook
 test-pipeline:
-	cd datascience && poetry run coverage run -m unittest discover && poetry run coverage report && poetry run coverage html
+	cd datascience && poetry run coverage run -m pytest --pdb tests/ && poetry run coverage report && poetry run coverage html
 update-python-dependencies:
 	cd datascience && poetry export --without-hashes -o requirements.txt && poetry export --without-hashes --dev -o requirements-dev.txt
 

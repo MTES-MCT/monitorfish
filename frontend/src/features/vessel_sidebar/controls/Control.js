@@ -32,7 +32,7 @@ const Control = props => {
         {
           numberOfInfractions ? <GyroRed/> : <GyroGreen/>
         }
-        CONTRÔLE DU {getDate(control.dateTime)}
+        CONTRÔLE DU {getDate(control.controlDatetimeUtc)}
         {
           control.seizure
             ? <ResumeBox>

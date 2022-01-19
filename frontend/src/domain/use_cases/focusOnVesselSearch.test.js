@@ -14,12 +14,7 @@ describe('focusOnVesselSearch', () => {
     await focusOnVesselSearch()(dispatch, getState)
 
     // Then
-    expect(dispatch).toHaveBeenCalledTimes(1)
-    expect(dispatch).toHaveBeenCalledWith(
-      {
-        type: 'vessel/setFocusOnVesselSearch',
-        payload: false
-      })
+    expect(dispatch).toHaveBeenCalledTimes(0)
   })
 
   it('Should focus When click on the vessel name', async () => {
@@ -56,12 +51,7 @@ describe('focusOnVesselSearch', () => {
     await focusOnVesselSearch(focusState.CLICK_VESSEL_SEARCH_RESULT)(dispatch, getState)
 
     // Then
-    expect(dispatch).toHaveBeenCalledTimes(1)
-    expect(dispatch).toHaveBeenCalledWith(
-      {
-        type: 'vessel/setFocusOnVesselSearch',
-        payload: false
-      })
+    expect(dispatch).toHaveBeenCalledTimes(0)
   })
 
   it('Should return immediately When it is an update', async () => {

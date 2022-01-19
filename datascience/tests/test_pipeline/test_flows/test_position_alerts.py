@@ -10,7 +10,7 @@ from sqlalchemy import BOOLEAN, TIMESTAMP, VARCHAR, Column, Integer, MetaData, T
 from src.pipeline.flows.position_alerts import (
     ZonesTable,
     alert_has_gear_parameters,
-    extract_vessels_current_gears,
+    extract_current_gears,
     filter_on_gears,
     flow,
     get_alert_type_zones_table,
@@ -262,34 +262,34 @@ def test_make_fishing_gears_query():
     assert query == expected_query
 
 
-def test_extract_vessels_current_gear(reset_test_data):
-    vessels_current_gears = extract_vessels_current_gears.run()
+def test_extract_current_gears(reset_test_data):
+    current_gears = extract_current_gears.run()
     nb_last_positions_vessels = read_query(
         "monitorfish_remote", "SELECT COUNT(*) FROM last_positions"
     ).iloc[0, 0]
 
-    # extract_vessels_current_gears should yield gears of all vessels in the
+    # extract_current_gears should yield gears of all vessels in the
     # `last_positions` table
-    assert len(vessels_current_gears) == nb_last_positions_vessels
+    assert len(current_gears) == nb_last_positions_vessels
 
-    # extract_vessels_current_gears should take gears in the `last_positions` table
+    # extract_current_gears should take gears in the `last_positions` table
     # when available
 
-    assert vessels_current_gears.loc[
-        vessels_current_gears.cfr == "ABC000542519", "current_gears"
-    ].iloc[0] == {"OTM"}
+    assert current_gears.loc[current_gears.cfr == "ABC000542519", "current_gears"].iloc[
+        0
+    ] == {"OTM"}
 
-    # extract_vessels_current_gears should take gears in the `vessels` table when not
+    # extract_current_gears should take gears in the `vessels` table when not
     # available in the `last_positions` table
-    assert vessels_current_gears.loc[
-        vessels_current_gears.cfr == "ABC000055481", "current_gears"
-    ].iloc[0] == {"OTT", "OTB", "OTM"}
+    assert current_gears.loc[current_gears.cfr == "ABC000055481", "current_gears"].iloc[
+        0
+    ] == {"OTT", "OTB", "OTM"}
 
-    # extract_vessels_current_gears should return current_gears = `None` for vessels
+    # extract_current_gears should return current_gears = `None` for vessels
     # whose gear is not in `vessels` nor in `last_positions`
     assert (
-        vessels_current_gears.loc[
-            vessels_current_gears.external_immatriculation == "SB125334",
+        current_gears.loc[
+            current_gears.external_immatriculation == "SB125334",
             "current_gears",
         ].iloc[0]
         is None
@@ -305,7 +305,7 @@ def test_filter_on_gears():
             "some_data": [1.23, 5.56, 12.23],
         }
     )
-    vessels_current_gears = pd.DataFrame(
+    current_gears = pd.DataFrame(
         {
             "cfr": ["A", "B", "C"],
             "external_immatriculation": ["AA", "BB", "CC"],
@@ -320,7 +320,7 @@ def test_filter_on_gears():
 
     filtered_positions_in_alert = filter_on_gears.run(
         positions_in_alert,
-        vessels_current_gears,
+        current_gears,
         gear_codes,
         include_vessels_unknown_gear,
     )
@@ -335,7 +335,7 @@ def test_filter_on_gears():
 
     filtered_positions_in_alert = filter_on_gears.run(
         positions_in_alert,
-        vessels_current_gears,
+        current_gears,
         gear_codes,
         include_vessels_unknown_gear,
     )
@@ -360,6 +360,7 @@ def test_make_alerts():
             "vessel_name": ["v_A", "v_A", "v_A", "v_B", "v_A", "v_B", "v_A"],
             "flag_state": ["FR", "FR", "FR", "FR", "FR", "FR", "FR"],
             "facade": ["NAMO", "NAMO", "NAMO", "MEMN", "NAMO", "MEMN", "NAMO"],
+            "risk_factor": [1.23, 1.23, 1.23, None, 1.23, None, 1.23],
             "date_time": [
                 now - 4 * td,
                 now - 3 * td,
@@ -384,8 +385,18 @@ def test_make_alerts():
             "ircs": ["AAA", "BBB"],
             "creation_date": [now, now - 0.5 * td],
             "value": [
-                {"seaFront": "NAMO", "flagState": "FR", "type": alert_type},
-                {"seaFront": "MEMN", "flagState": "FR", "type": alert_type},
+                {
+                    "seaFront": "NAMO",
+                    "flagState": "FR",
+                    "type": alert_type,
+                    "riskFactor": 1.23,
+                },
+                {
+                    "seaFront": "MEMN",
+                    "flagState": "FR",
+                    "type": alert_type,
+                    "riskFactor": None,
+                },
             ],
         }
     )
@@ -487,16 +498,19 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
+                    "riskFactor": None,
                 },
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
+                    "riskFactor": 2.14443662414848,
                 },
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
+                    "riskFactor": 2.09885592141872,
                 },
             ],
         }
@@ -577,11 +591,13 @@ def test_flow_filters_on_gears(reset_test_data):
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
+                    "riskFactor": None,
                 },
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
+                    "riskFactor": 2.09885592141872,
                 },
             ],
         }
@@ -662,11 +678,13 @@ def test_flow_filters_on_time(reset_test_data):
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
+                    "riskFactor": 2.14443662414848,
                 },
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
+                    "riskFactor": 2.09885592141872,
                 },
             ],
         }
@@ -742,6 +760,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
+                    "riskFactor": None,
                 },
             ],
         }

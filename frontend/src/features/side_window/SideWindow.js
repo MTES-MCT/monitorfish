@@ -70,31 +70,6 @@ const SideWindow = () => {
     }
   }, [openedSideWindowTab, setSelectedSubMenu])
 
-  /*
-  <SideWindowSubMenuLink
-        number={4}
-        menu={BeaconStatusesSubMenu.MALFUNCTIONING}
-        isSelected={false}
-      />
-      <SideWindowSubMenuLink
-        number={4}
-        menu={BeaconStatusesSubMenu.MALFUNCTIONING}
-        isSelected
-      />
-      <SideWindowSubMenuLink
-        oneLine
-        number={4}
-        menu={BeaconStatusesSubMenu.MALFUNCTIONING}
-        isSelected={false}
-      />
-      <SideWindowSubMenuLink
-        oneLine
-        number={4}
-        menu={BeaconStatusesSubMenu.MALFUNCTIONING}
-        isSelected
-      />
-   */
-
   const beaconStatusBoardGrayOverlayStyle = {
     position: 'absolute',
     height: '100%',

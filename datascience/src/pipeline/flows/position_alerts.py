@@ -22,6 +22,17 @@ from src.read_query import read_query
 class ZonesTable:
     """
     A class to represent a table of zones which can be filtered on a given field.
+
+        Args:
+            table (Table): A SQLAchemy `Table`
+            geometry_column (str): name of the geometry column
+            filter_column (str): name of the column on which to filter (typically the
+              id or unique name of zones)
+
+        Raises:
+            AssertionError: if `filter_column` is not a column of `table` or
+              `geometry_column` is not a column of `Table` of type
+              `geoalchemy2.Geometry`
     """
 
     def __init__(self, table: Table, geometry_column: str, filter_column: str):
@@ -87,6 +98,10 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
 
     Returns:
         - ZonesTable: table in which to look for the zones for the given alert type.
+
+    Raises:
+        ValueError: if the input `alert_type` does not correspond to one of the
+          expected types of alert.
     """
 
     alert_type_zones_tables = {
@@ -98,7 +113,7 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
     try:
         table_name = alert_type_zones_tables[alert_type]
     except KeyError:
-        logger.error(
+        raise ValueError(
             (
                 f"Unknown alert type '{alert_type}'. "
                 f"Expects one of {alert_type_zones_tables.keys()}."
@@ -178,6 +193,7 @@ def make_positions_in_alert_query(
             ).join(
                 facades_table,
                 ST_Intersects(positions_table.c.geometry, facades_table.c.geometry),
+                isouter=True,
             )
         )
         .where(
@@ -356,6 +372,7 @@ def make_alerts(positions_in_alert: pd.DataFrame, alert_type: str) -> pd.DataFra
                 "facade",
             ],
             as_index=False,
+            dropna=False,
         )
         .agg({"date_time": "max"})
         .rename(

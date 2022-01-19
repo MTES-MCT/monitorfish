@@ -83,7 +83,7 @@ new_beacons_statuses.flow.schedule = CronSchedule("5,15,25,35,45,55 * * * *")
 position_alerts.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
-            "1 * * * *",
+            "*/10 * * * *",
             parameter_defaults={
                 "alert_type": "THREE_MILES_TRAWLING_ALERT",
                 "zones": "0-3",

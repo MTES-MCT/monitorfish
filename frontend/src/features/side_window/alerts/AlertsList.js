@@ -9,13 +9,19 @@ import FlexboxGrid from 'rsuite/lib/FlexboxGrid'
 import countries from 'i18n-iso-countries'
 import * as timeago from 'timeago.js'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
-import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/styles/RiskFactorBox.style'
+import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getAlertNameFromType } from '../../../domain/entities/alerts'
 import showVessel from '../../../domain/use_cases/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
 
+/**
+ * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
+ * @param alerts
+ * @return {JSX.Element}
+ * @constructor
+ */
 const AlertsList = ({ alerts }) => {
   const dispatch = useDispatch()
 
@@ -25,8 +31,6 @@ const AlertsList = ({ alerts }) => {
   const [sortType] = useState(SortType.DESC)
   const [filteredAlerts, setFilteredAlerts] = useState([])
   const [searchedVessel, setSearchedVessel] = useState(undefined)
-
-  console.log(sortedAlerts)
 
   useEffect(() => {
     if (filteredAlerts) {
@@ -58,8 +62,30 @@ const AlertsList = ({ alerts }) => {
     }
   }, [alerts, searchedVessel])
 
-  return <Content>
+  const searchVesselInputStyle = {
+    margin: '0 0 5px 5px',
+    backgroundColor: 'white',
+    border: 'none',
+    borderBottom: `1px ${COLORS.lightGray} solid`,
+    borderRadius: 0,
+    color: COLORS.gunMetal,
+    fontSize: 13,
+    height: 40,
+    width: 310,
+    padding: '0 5px 0 10px',
+    flex: 3,
+    backgroundImage: `url(${baseUrl}/${SearchIconSVG})`,
+    backgroundSize: 30,
+    backgroundPosition: 'bottom 3px right 5px',
+    backgroundRepeat: 'no-repeat',
+    ':hover, :focus': {
+      borderBottom: `1px ${COLORS.lightGray} solid`
+    }
+  }
+
+  return <Content style={contentStyle}>
     <SearchVesselInput
+      style={searchVesselInputStyle}
       baseUrl={baseUrl}
       data-cy={'search-vessel-in-alerts'}
       placeholder={'Rechercher un navire en alerte'}
@@ -102,9 +128,9 @@ const AlertsList = ({ alerts }) => {
                 marginRight={5}
                 height={240}
                 isBig={false}
-                color={getRiskFactorColor(1.2)}
+                color={getRiskFactorColor(alert.riskFactor)}
               >
-                {1.2}
+                {parseFloat(alert?.riskFactor).toFixed(1)}
               </RiskFactorBox>
             </FlexboxGrid.Item>
             <FlexboxGrid.Item style={vesselNameColumnStyle}>
@@ -127,6 +153,7 @@ const AlertsList = ({ alerts }) => {
             </FlexboxGrid.Item>
             <FlexboxGrid.Item colspan={1} style={styleCenter}>
               <ShowIcon
+                style={showIconStyle}
                 alt={'Voir sur la carte'}
                 onClick={() => {
                   const vesselIdentity = { ...alert, flagState: 'FR' }
@@ -142,51 +169,33 @@ const AlertsList = ({ alerts }) => {
     </List>
     {
       !sortedAlerts?.length
-        ? <NoAlerts>Aucune alerte</NoAlerts>
+        ? <NoAlerts style={noAlertsStyle}>Aucune alerte</NoAlerts>
         : null
     }
   </Content>
 }
 
-const NoAlerts = styled.div`
-  text-align: center;
-  color: ${COLORS.slateGray};
-  margin-top: 20px;
-`
+const NoAlerts = styled.div``
+const noAlertsStyle = {
+  textAlign: 'center',
+  color: COLORS.slateGray,
+  marginTop: 20
+}
 
-const SearchVesselInput = styled.input`
-  margin: 0 0 5px 5px;
-  background-color: white;
-  border: none;
-  border-bottom: 1px ${COLORS.lightGray} solid;
-  border-radius: 0;
-  color: ${COLORS.gunMetal};
-  font-size: 13px;
-  height: 40px;
-  width: 310px;
-  padding: 0 5px 0 10px;
-  flex: 3;
-  background-image: url(${props => props.baseUrl}/${SearchIconSVG});
-  background-size: 30px;
-  background-position: bottom 3px right 5px;
-  background-repeat: no-repeat;
-  
-  :hover, :focus {
-    border-bottom: 1px ${COLORS.lightGray} solid;
-  }
-`
+const SearchVesselInput = styled.input``
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
-const ShowIcon = styled.img`
-  width: 20px;
-  padding-right: 7px;
-  float: right;
-  flex-shrink: 0;
-  cursor: pointer;
-  margin-left: auto;
-  height: 16px;
-`
+const ShowIcon = styled.img``
+const showIconStyle = {
+  width: 20,
+  paddingRight: 7,
+  float: 'right',
+  flexShrink: 0,
+  cursor: 'pointer',
+  marginLeft: 'auto',
+  height: 16
+}
 
 const listItemStyle = {
   background: COLORS.cultured,
@@ -231,8 +240,9 @@ const timeAgoColumnStyle = {
   width: 180
 }
 
-const Content = styled.div`
-  margin: 10px;
-`
+const Content = styled.div``
+const contentStyle = {
+  margin: 10
+}
 
 export default AlertsList

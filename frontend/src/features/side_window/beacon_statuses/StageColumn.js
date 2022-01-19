@@ -8,7 +8,7 @@ import BeaconStatusCard from './BeaconStatusCard'
 const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, baseUrl }) => {
   const updateStageVesselStatus = (beaconStatus, status) => updateVesselStatus(stage?.code, beaconStatus, status)
 
-  return <Wrapper>
+  return <Wrapper style={wrapperStyle}>
     <StageColumnHeader
       title={stage?.title}
       description={stage?.description}
@@ -34,25 +34,11 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, b
   </Wrapper>
 }
 
-const Wrapper = styled.div`
-  width: 282px;
-  border: 1px solid ${COLORS.lightGray};
-  height: calc(100vh - 100px);
-  
-  @keyframes blink {
-    0%   {
-      background: ${COLORS.background};
-      color: ${COLORS.gunMetal};
-    }
-    50% {
-      background: ${COLORS.gunMetal};
-      color: ${COLORS.gainsboro};
-    }
-    0% {
-      background: ${COLORS.background};
-      color: ${COLORS.gunMetal};
-    }
-  }
-`
+const Wrapper = styled.div``
+const wrapperStyle = {
+  width: 282,
+  border: `1px solid ${COLORS.lightGray}`,
+  height: 'calc(100vh - 100px)'
+}
 
 export default StageColumn

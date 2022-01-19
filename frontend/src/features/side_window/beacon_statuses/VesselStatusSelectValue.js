@@ -4,19 +4,21 @@ import styled from 'styled-components'
 export const VesselStatusSelectValue = ({ item }) => {
   const { icon } = item
 
-  return (<Value>
+  return (<Value style={valueStyle}>
       {icon}
-      <Text>
+      <Text style={textStyle}>
         {item.label}
       </Text>
       </Value>
   )
 }
 
-const Value = styled.div`
-  color: #282F3E; 
-`
+const Value = styled.div``
+const valueStyle = {
+  color: '#282F3E'
+}
 
-const Text = styled.span`
-  margin-left: 5px;
-`
+const Text = styled.span``
+const textStyle = {
+  marginLeft: 5
+}

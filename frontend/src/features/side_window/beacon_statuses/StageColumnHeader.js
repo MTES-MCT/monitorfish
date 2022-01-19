@@ -3,49 +3,54 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 
 const StageColumnHeader = ({ title, description, numberOfItems }) => {
-  return <Wrapper>
-    <Row>
-      <Title>
+  return <Wrapper style={wrapperStyle}>
+    <Row style={rowStyle}>
+      <Title style={titleStyle}>
         {title}
       </Title>
-      <NumberOfItems>
+      <NumberOfItems style={numberOfItemsStyle}>
         {numberOfItems}
       </NumberOfItems>
     </Row>
-    <Description>
+    <Description style={descriptionStyle}>
       {description}
     </Description>
   </Wrapper>
 }
 
-const Wrapper = styled.div`
-  color: ${COLORS.slateGray};
-  padding: 15px;
-  height: 95px;
-  border-bottom: 1px solid ${COLORS.lightGray};
-  margin-bottom: 3px;
-`
+const Wrapper = styled.div``
+const wrapperStyle = {
+  color: COLORS.slateGray,
+  padding: 15,
+  height: 95,
+  borderBottom: `1px solid ${COLORS.lightGray}`,
+  marginBottom: 3
+}
 
-const Row = styled.div`
-  display: flex;
-`
+const Row = styled.div``
+const rowStyle = {
+  display: 'flex'
+}
 
-const Title = styled.div`
-  font-weight: 700;
-  text-transform: uppercase;
-`
+const Title = styled.div``
+const titleStyle = {
+  fontWeight: 700,
+  textTransform: 'uppercase'
+}
 
-const Description = styled.div`
-  margin-top: 15px;
-`
+const Description = styled.div``
+const descriptionStyle = {
+  marginTop: 15
+}
 
-const NumberOfItems = styled.div`
-  font-weight: 700;
-  background: ${COLORS.lightGray};
-  border-radius: 10px;
-  width: 14px;
-  padding-left: 6px;
-  margin-left: auto;
-`
+const NumberOfItems = styled.div``
+const numberOfItemsStyle = {
+  fontWeight: 700,
+  background: COLORS.lightGray,
+  borderRadius: 10,
+  width: 14,
+  paddingLeft: 6,
+  marginLeft: 'auto'
+}
 
 export default StageColumnHeader

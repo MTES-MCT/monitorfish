@@ -6,6 +6,13 @@ import { useSelector } from 'react-redux'
 import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
 import { COLORS } from '../../../constants/constants'
 
+/**
+ * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
+ * @param selectedSubMenu
+ * @param setSelectedSubMenu
+ * @return {JSX.Element}
+ * @constructor
+ */
 const Alerts = ({ selectedSubMenu, setSelectedSubMenu }) => {
   const {
     alerts,
@@ -26,7 +33,7 @@ const Alerts = ({ selectedSubMenu, setSelectedSubMenu }) => {
     }
   }, [focusOnAlert])
 
-  return <Content>
+  return <Content style={contentStyle}>
     <AlertsList
       alerts={alerts
         .map(alert => getAlertForList(alert))
@@ -37,9 +44,10 @@ const Alerts = ({ selectedSubMenu, setSelectedSubMenu }) => {
   </Content>
 }
 
-const Content = styled.div`
-  margin: 30px;
-  background: ${COLORS.white};
-`
+const Content = styled.div``
+const contentStyle = {
+  margin: 30,
+  background: COLORS.white
+}
 
 export default Alerts

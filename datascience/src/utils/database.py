@@ -78,7 +78,9 @@ def print_schemas_tables(db: str, schemas=None):
                 print(table)
 
 
-def pg_dump_table(db: str, table_name: str, what: Union[None, str] = None) -> str:
+def pg_dump_table(
+    db: str, table_name: str, what: Union[None, str] = None, inserts: bool = False
+) -> str:
     """
     Runs ``pg_dump --schema-only`` on the selected database and returns the output as a
     string. Useful to generate DDL statements of tables and to output test data as sql
@@ -93,7 +95,9 @@ def pg_dump_table(db: str, table_name: str, what: Union[None, str] = None) -> st
         db (str): 'monitorfish_remote' or 'monitorfish_local'
         table_name (str): the name of the table to export.
         what (Union[None, str]): ``'data-only'`` ``'schema-only'`` or ``None``. If
-        ``None``, output both data and schema definition. Defaults to ``None``.
+          ``None``, output both data and schema definition. Defaults to ``None``.
+        inserts (bool): if `True`, dumps data as INSERT statements instead of COPY.
+          Defaults to `False`.
 
     Returns:
         str: output of ``pg_dump`` command
@@ -104,17 +108,24 @@ def pg_dump_table(db: str, table_name: str, what: Union[None, str] = None) -> st
         e = f"'db' must be 'monitorfish_local' or 'monitorfish_remote' , got {db}"
         raise ValueError(e)
 
-    options = {"data-only": "--data-only", "schema-only": "--schema-only", None: ""}
+    what_options = {
+        "data-only": "--data-only",
+        "schema-only": "--schema-only",
+        None: "",
+    }
 
     try:
-        assert what in options
+        assert what in what_options
     except AssertionError:
         e = f"'what' must be 'data-only', 'schema-only' or None, got {what}"
         raise ValueError(e)
 
     connection_string = make_connection_string(db)
 
-    cmd = f"pg_dump --dbname={connection_string} {options[what]} --table {table_name}"
+    cmd = f"pg_dump --dbname={connection_string} {what_options[what]} --table {table_name}"
+
+    if inserts:
+        cmd = cmd + " --column-inserts"
 
     if db == "monitorfish_remote":
         cmd = "docker exec monitorfish_database " + cmd

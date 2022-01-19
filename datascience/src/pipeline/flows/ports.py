@@ -14,7 +14,7 @@ from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
 from src.pipeline.processing import coalesce
-from src.pipeline.utils import delete, get_table, psql_insert_copy
+from src.pipeline.utils import psql_insert_copy
 from src.read_query import read_query, read_table
 from src.utils.geocode import geocode
 

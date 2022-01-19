@@ -41,7 +41,7 @@ const CreateRegulationTopicForm = props => {
         placeholder='Lieu *'
         value={topicPlace}
         onChange={setTopicPlace}
-        isRed={topicPlaceIsRed}
+        $isRed={topicPlaceIsRed}
       />
       <CustomInput
         placeholder='Espèce'

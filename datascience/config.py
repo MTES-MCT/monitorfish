@@ -56,6 +56,10 @@ ANCHORAGES_H3_CELL_RESOLUTION = 9
 # Last_positions configuration
 CURRENT_POSITION_ESTIMATION_MAX_HOURS = 2.0
 
+# Fishing detection configuration
+FISHING_SPEED_THRESHOLD = 4.5
+MINIMUM_CONSECUTIVE_POSITIONS = 3
+
 # Risk factor configuration
 risk_factor_coefficients = {
     "probability": 0.3,
@@ -76,6 +80,9 @@ default_risk_factors = {
         * (2 ** risk_factor_coefficients["detectability"])
     ),
 }
+
+# BEACONS MALFUNCTIONS CONFIGURATION
+BEACONS_MALFUNCTION_MINIMUM_DURATION_IN_HOURS = 6
 
 # App URL
 MONITORFISH_URL = "https://monitorfish.din.developpement-durable.gouv.fr/"

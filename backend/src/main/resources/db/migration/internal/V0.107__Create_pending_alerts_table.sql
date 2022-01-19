@@ -1,5 +1,5 @@
 create table pending_alerts (
-    id serial,
+    id SERIAL PRIMARY KEY,
     vessel_name character varying(100),
     internal_reference_number varchar(255),
     external_reference_number varchar(255),

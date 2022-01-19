@@ -1,16 +1,12 @@
 import unittest
-from datetime import datetime, timedelta
 from unittest.mock import patch
 
 import pandas as pd
-import sqlalchemy
 
-from config import default_risk_factors
 from src.pipeline.shared_tasks.positions import tag_positions_at_port
-from tests.mocks import mock_extract_side_effect
 
 
-class TestLastPositionsFlow(unittest.TestCase):
+class TestSharedTasksPositions(unittest.TestCase):
     @patch("src.pipeline.shared_tasks.positions.extract")
     def test_tag_positions_at_port(self, mock_extract):
 

@@ -10,6 +10,7 @@ export const COLORS = {
   mediumSeaGreen: '#29b361',
   gunMetal: '#282F3E',
   shadowBlue: '#6B839E',
+  shadowBlueLight: '#d6dce3',
   grayShadow: '#969696BF',
   shadowBlueLittleOpacity: 'rgba(107, 131, 158, 0.15)',
   grayLighter: '#F0F0F0',

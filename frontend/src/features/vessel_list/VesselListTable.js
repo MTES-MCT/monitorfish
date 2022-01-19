@@ -1,16 +1,31 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
-
-import { ReactComponent as FlagSVG } from '../icons/flag.svg'
+import { useSelector } from 'react-redux'
 import Table from 'rsuite/lib/Table'
 import Checkbox from 'rsuite/lib/Checkbox'
-import { CellWithTitle, CheckedCell, EllipsisCell, FlagCell, TargetCell, TimeAgoCell } from './tableCells'
-import { sortArrayByColumn } from './tableSort'
+
+import { ReactComponent as FlagSVG } from '../icons/flag.svg'
+import { CellUsingVesselProperty, ContentWithEllipsis, CellWithTitle, CheckedCell, FlagCell, TimeAgoCell } from './tableCells'
+import { sortVesselsByProperty } from './tableSort'
 import { COLORS } from '../../constants/constants'
+
+import { getCoordinates } from '../../coordinates'
+import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 
 const { Column, HeaderCell, Cell } = Table
 
-const VesselListTable = props => {
+const VesselListTable = ({
+  filteredVessels,
+  vessels,
+  allVesselsChecked,
+  setAllVesselsChecked,
+  vesselsCountShowed,
+  vesselsCountTotal,
+  seeMoreIsOpen,
+  toggleSelectRow,
+  filters
+}) => {
+  const { coordinatesFormat } = useSelector(state => state.map)
   const [sortColumn, setSortColumn] = React.useState()
   const [sortType, setSortType] = React.useState()
 
@@ -21,32 +36,32 @@ const VesselListTable = props => {
 
   const getVessels = useCallback(() => {
     if (sortColumn && sortType) {
-      return props.filteredVessels
+      return filteredVessels
         .slice()
-        .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
+        .sort((a, b) => sortVesselsByProperty(a, b, sortColumn, sortType))
     }
 
-    return props.filteredVessels
-  }, [sortColumn, sortType, props.filteredVessels])
+    return filteredVessels
+  }, [sortColumn, sortType, filteredVessels])
 
   const updateAllVesselsChecked = useCallback(() => {
-    const isChecked = props.allVesselsChecked.globalCheckbox &&
-      props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length
+    const isChecked = allVesselsChecked.globalCheckbox &&
+      vessels.filter(vessel => vessel.checked === true).length === vessels.length
     if (isChecked === false) {
-      props.setAllVesselsChecked({ globalCheckbox: true })
+      setAllVesselsChecked({ globalCheckbox: true })
     } else {
-      props.setAllVesselsChecked({ globalCheckbox: !props.allVesselsChecked.globalCheckbox })
+      setAllVesselsChecked({ globalCheckbox: !allVesselsChecked.globalCheckbox })
     }
-  }, [props.allVesselsChecked, props.vessels])
+  }, [allVesselsChecked, vessels])
 
   return (
     <TableContent>
       <VesselsCount data-cy={'vessel-list-table-count'}>
-        {props.vesselsCountShowed} navires sur {props.vesselsCountTotal}
+        {vesselsCountShowed} navires sur {vesselsCountTotal}
       </VesselsCount>
       <Table
         virtualized
-        height={props.seeMoreIsOpen ? 480 : 530}
+        height={seeMoreIsOpen ? 480 : 530}
         rowHeight={36}
         data={getVessels()}
         sortColumn={sortColumn}
@@ -61,98 +76,98 @@ const VesselListTable = props => {
         <Column resizable width={35} fixed>
           <HeaderCell>
             <Checkbox
-              checked={props.allVesselsChecked.globalCheckbox && props.vessels.filter(vessel => vessel.checked === true).length === props.vessels.length}
-              onChange={() => updateAllVesselsChecked()}/>
+              checked={allVesselsChecked.globalCheckbox && vessels.filter(vessel => vessel.checked === true).length === vessels.length}
+              onChange={() => updateAllVesselsChecked()} />
           </HeaderCell>
-          <CheckedCell dataKey="checked" onChange={props.handleChange}/>
+          <CheckedCell dataKey="checked" onChange={toggleSelectRow} />
         </Column>
         <Column resizable sortable width={95} fixed>
           <HeaderCell>N. de risque</HeaderCell>
-          <TargetCell dataKey="riskFactor" onChange={props.handleChange}/>
+          <Cell dataKey="riskFactor">{rowData => parseFloat(rowData?.vesselProperties?.riskFactor).toFixed(1)}</Cell>
         </Column>
         <Column resizable sortable width={170} fixed>
           <HeaderCell>Nom du navire</HeaderCell>
-          <Cell dataKey="vesselName"/>
+          <CellUsingVesselProperty dataKey="vesselName" vesselProperty="vesselName" />
         </Column>
         <Column resizable sortable width={100}>
           <HeaderCell>Marq. Ext.</HeaderCell>
-          <Cell dataKey="externalReferenceNumber"/>
+          <CellUsingVesselProperty dataKey="externalReferenceNumber" vesselProperty="externalReferenceNumber" />
         </Column>
         <Column resizable sortable width={80}>
           <HeaderCell>Call Sign</HeaderCell>
-          <Cell dataKey="ircs"/>
+          <CellUsingVesselProperty dataKey="ircs" vesselProperty="ircs" />
         </Column>
         <Column resizable sortable width={80}>
           <HeaderCell>MMSI</HeaderCell>
-          <Cell dataKey="mmsi"/>
+          <CellUsingVesselProperty dataKey="mmsi" vesselProperty="mmsi" />
         </Column>
         <Column resizable sortable width={120}>
           <HeaderCell>CFR</HeaderCell>
-          <Cell dataKey="internalReferenceNumber"/>
+          <CellUsingVesselProperty dataKey="internalReferenceNumber" vesselProperty="internalReferenceNumber" />
         </Column>
         <Column resizable width={120}>
           <HeaderCell>Seg. flotte</HeaderCell>
-          <EllipsisCell dataKey="fleetSegments"/>
+          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.fleetSegmentsArray?.join(' ,')}</ContentWithEllipsis>}</Cell>
         </Column>
         <Column resizable width={120}>
           <HeaderCell>Engins à bord</HeaderCell>
-          <EllipsisCell dataKey="gears"/>
+          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.gearsArray?.join(' ,')}</ContentWithEllipsis>}</Cell>
         </Column>
         <Column resizable width={115}>
           <HeaderCell>Espèces à bord</HeaderCell>
-          <EllipsisCell dataKey="species"/>
+          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.speciesArray?.join(' ,')}</ContentWithEllipsis>}</Cell>
         </Column>
         <Column resizable sortable width={50}>
           <HeaderCell>
-            <FlagIcon/>
+            <FlagIcon />
           </HeaderCell>
-          <FlagCell dataKey="flagState"/>
+          <FlagCell dataKey="flagState" vesselProperty="flagState" />
         </Column>
         <Column resizable sortable width={130}>
           <HeaderCell>Dernier signal</HeaderCell>
-          <TimeAgoCell dataKey="lastPositionSentAt"/>
+          <TimeAgoCell dataKey="lastPositionSentAt" />
         </Column>
         <Column resizable width={100}>
           <HeaderCell>Latitude</HeaderCell>
-          <Cell dataKey="latitude"/>
+          <Cell>{rowData => getCoordinates(rowData.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</Cell>
         </Column>
         <Column resizable width={110}>
           <HeaderCell>Longitude</HeaderCell>
-          <Cell dataKey="longitude"/>
+          <Cell>{rowData => getCoordinates(rowData.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</Cell>
         </Column>
         <Column resizable sortable width={60}>
           <HeaderCell>Cap</HeaderCell>
-          <Cell dataKey="course"/>
+          <Cell dataKey="course" />
         </Column>
         <Column resizable sortable width={70}>
           <HeaderCell>Vitesse</HeaderCell>
-          <Cell dataKey="speed"/>
+          <Cell dataKey="speed" />
         </Column>
         <Column resizable sortable width={130}>
           <HeaderCell>Dernier contrôle</HeaderCell>
-          <TimeAgoCell dataKey="lastControlDateTimeTimestamp"/>
+          <TimeAgoCell dataKey="lastControlDateTimeTimestamp" vesselProperty="lastControlDateTimeTimestamp" />
         </Column>
         <Column sortable width={50}>
           <HeaderCell>Infr.</HeaderCell>
-          <Cell dataKey="lastControlInfraction"/>
+          <Cell dataKey="lastControlInfraction">{rowData => rowData?.vesselProperties?.lastControlInfraction ? 'Oui' : 'Non'}</Cell>
         </Column>
         <Column resizable sortable width={300}>
           <HeaderCell>Observations</HeaderCell>
-          <CellWithTitle dataKey="postControlComment"/>
+          <CellWithTitle dataKey="postControlComment" />
         </Column>
         {
-          props.filters.districtsFiltered?.length
+          filters.districtsFiltered?.length
             ? <Column resizable sortable width={100}>
               <HeaderCell>Quartier</HeaderCell>
-              <Cell dataKey="district"/>
+              <CellUsingVesselProperty dataKey="district" vesselProperty="district" />
             </Column>
             : null
         }
         {
-          props.filters.vesselsSizeValuesChecked?.length
+          filters.vesselsSizeValuesChecked?.length
             ? <Column resizable sortable width={100}>
               <HeaderCell>Longueur</HeaderCell>
-              <Cell dataKey="length"/>
+              <CellUsingVesselProperty dataKey="length" vesselProperty="length" />
             </Column>
             : null
         }

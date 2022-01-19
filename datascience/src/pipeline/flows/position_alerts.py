@@ -246,7 +246,7 @@ def make_fishing_gears_query(
 
 
 @task(checkpoint=False)
-def extract_vessels_current_gears() -> pd.DataFrame:
+def extract_current_gears() -> pd.DataFrame:
     """
     Extracts of vessels in `last_positions` with their current (known or probable)
     gear(s).
@@ -256,24 +256,35 @@ def extract_vessels_current_gears() -> pd.DataFrame:
       - For other vessels, the `gears_declared` from the `vessels` table are used.
     """
 
-    vessels_current_gears = extract(
+    current_gears = extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/vessels_current_gears.sql",
+        query_filepath="monitorfish/current_gears.sql",
     )
 
-    vessels_current_gears["current_gears"] = coalesce(
-        vessels_current_gears[["gear_onboard", "declared_fishing_gears"]]
+    current_gears["current_gears"] = coalesce(
+        current_gears[["gear_onboard", "declared_fishing_gears"]]
     )
 
-    vessels_current_gears["current_gears"] = vessels_current_gears["current_gears"].map(
+    current_gears["current_gears"] = current_gears["current_gears"].map(
         lambda l: set(l) if l else None
     )
 
-    vessels_current_gears = vessels_current_gears.drop(
+    current_gears = current_gears.drop(
         columns=["gear_onboard", "declared_fishing_gears"]
     )
 
-    return vessels_current_gears
+    return current_gears
+
+
+@task(checkpoint=False)
+def extract_current_risk_factors() -> pd.DataFrame:
+    """
+    Extracts of vessels' current risk factor in `risk_factors` table.
+    """
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/current_risk_factors.sql",
+    )
 
 
 @task(checkpoint=False)
@@ -305,7 +316,7 @@ def extract_positions_in_alert(query: Select) -> pd.DataFrame:
 @task(checkpoint=False)
 def filter_on_gears(
     positions_in_alert: pd.DataFrame,
-    vessels_current_gears: pd.DataFrame,
+    current_gears: pd.DataFrame,
     gear_codes: set,
     include_vessels_unknown_gear: bool,
 ):
@@ -316,19 +327,19 @@ def filter_on_gears(
     Args:
         positions_in_alert (pd.DataFrame): DataFrame of positions. Must have columns
           "cfr", "external_immatriculation", "ircs"
-        vessels_current_gears (pd.DataFrame): DataFrame of vessels. Must have columns
+        current_gears (pd.DataFrame): DataFrame of vessels. Must have columns
           "cfr", "external_immatriculation", "ircs", "current_gears"
         gear_codes (set): set of gear_codes
         include_vessels_unknown_gear (bool): if `True`, `positions_in_alert` for which
           the corresponding vessel does not have any known gears (because the vessel
-          is either absent of the `vessels_current_gears` DataFrame or has `None` in
+          is either absent of the `current_gears` DataFrame or has `None` in
           the `current_gears` field of that DataFrame) are kept. Otherwise, those rows
           are discarded.
     """
 
     positions_in_alert = join_on_multiple_keys(
         positions_in_alert,
-        vessels_current_gears,
+        current_gears,
         how="left",
         on=["cfr", "external_immatriculation", "ircs"],
     )
@@ -356,6 +367,18 @@ def filter_on_gears(
 
 
 @task(checkpoint=False)
+def merge_risk_factor(
+    positions_in_alert: pd.DataFrame, current_risk_factors: pd.DataFrame
+) -> pd.DataFrame:
+    return join_on_multiple_keys(
+        positions_in_alert,
+        current_risk_factors,
+        how="left",
+        on=["cfr", "external_immatriculation", "ircs"],
+    )
+
+
+@task(checkpoint=False)
 def make_alerts(positions_in_alert: pd.DataFrame, alert_type: str) -> pd.DataFrame:
     """
     Generates alerts from the input `positions_in_alert`, essentially by grouping all
@@ -370,6 +393,7 @@ def make_alerts(positions_in_alert: pd.DataFrame, alert_type: str) -> pd.DataFra
                 "vessel_name",
                 "flag_state",
                 "facade",
+                "risk_factor",
             ],
             as_index=False,
             dropna=False,
@@ -386,9 +410,13 @@ def make_alerts(positions_in_alert: pd.DataFrame, alert_type: str) -> pd.DataFra
 
     alerts["type"] = alert_type
     alerts["value"] = df_to_dict_series(
-        alerts.rename(columns={"facade": "seaFront", "flag_state": "flagState"})[
-            ["seaFront", "flagState", "type"]
-        ]
+        alerts.rename(
+            columns={
+                "facade": "seaFront",
+                "flag_state": "flagState",
+                "risk_factor": "riskFactor",
+            }
+        )[["seaFront", "flagState", "type", "riskFactor"]]
     )
 
     return alerts[
@@ -461,11 +489,11 @@ with Flow("Position alert") as flow:
             fishing_gear_categories=fishing_gear_categories,
         )
         gear_codes = extract_gear_codes(fishing_gears_query)
-        vessels_current_gears = extract_vessels_current_gears()
+        current_gears = extract_current_gears()
 
         positions_in_alert_1 = filter_on_gears(
             positions_in_alert=positions_in_alert,
-            vessels_current_gears=vessels_current_gears,
+            current_gears=current_gears,
             gear_codes=gear_codes,
             include_vessels_unknown_gear=include_vessels_unknown_gear,
         )
@@ -476,6 +504,7 @@ with Flow("Position alert") as flow:
     positions_in_alert = merge(
         positions_in_alert_1, positions_in_alert_2, checkpoint=False
     )
-
+    current_risk_factors = extract_current_risk_factors()
+    positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
     alerts = make_alerts(positions_in_alert, alert_type)
     load_alerts(alerts)

@@ -285,6 +285,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // When
+    cy.wait(1000)
     cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 20000 })
 
     // Then, the last position should be positioned in the bottom of the window

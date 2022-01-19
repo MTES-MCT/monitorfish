@@ -19,9 +19,20 @@ parserOptions:
   sourceType: module
 plugins:
   - react
+  - react-hooks
 rules: {
-  "react-hooks/exhaustive-deps": "off",
-  "react/prop-types": "off"
+  "react-hooks/exhaustive-deps": "warn",
+  "react/prop-types": "off",
+  "react-hooks/rules-of-hooks": "error",
+  "no-shadow": ["warn", { "builtinGlobals": false, "hoist": "functions", "allow": ["resolve", "reject", "done"] }],
+  "block-scoped-var": "warn",
+  "consistent-return": "warn",
+  "react/forbid-component-props": "warn",
+  "react/forbid-dom-props": "warn",
+  "react/no-access-state-in-setstate": "warn",
+  "react/no-array-index-key": "warn",
+  "react/jsx-no-bind": "warn"
+
 }
 settings:
   react:

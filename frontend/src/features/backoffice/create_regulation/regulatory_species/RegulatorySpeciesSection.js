@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import SectionTitle from '../../SectionTitle'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import RegulatorySpeciesForm from './RegulatorySpeciesForm'
@@ -18,12 +18,12 @@ const RegulatorySpeciesSection = () => {
     dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGULATORY_SPECIES, value }))
   }
 
-  const setOtherInfo = useCallback(value => {
+  const setOtherInfo = value => {
     setRegulatorySpecies({
       ...regulatorySpecies,
       otherInfo: value
     })
-  }, [regulatorySpecies, setRegulatorySpecies])
+  }
 
   return <FormSection show>
     <SectionTitle

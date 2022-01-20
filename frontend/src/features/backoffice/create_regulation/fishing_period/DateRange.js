@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import CustomDatePicker from '../custom_form/CustomDatePicker'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
@@ -20,16 +20,16 @@ const DateRange = (props) => {
     endDate
   } = dateRange
 
-  const setDateRange = useCallback((key, value) => {
+  const setDateRange = (key, value) => {
     const newDateRange = {
       ...dateRange,
       [key]: value
     }
     updateList(id, newDateRange)
-  })
+  }
 
-  const setEndDate = useCallback(date => setDateRange('endDate', date))
-  const setStartDate = useCallback(date => setDateRange('startDate', date))
+  const setEndDate = date => setDateRange('endDate', date)
+  const setStartDate = date => setDateRange('startDate', date)
 
   return <Wrapper $isLast={isLast} disabled={disabled}>
     <DateRangeRow>

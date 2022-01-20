@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Label } from '../../../commonStyles/Input.style'
 import styled from 'styled-components'
 import { COLORS, SQUARE_BUTTON_TYPE } from '../../../../constants/constants'
@@ -89,33 +89,30 @@ const FishingPeriodForm = (props) => {
     }
   }, [fishingPeriod, fishingPeriodAsString])
 
-  const set = useCallback((key, value) => {
-    console.log('set')
-    console.log(key)
-    console.log(value)
+  const set = (key, value) => {
     const obj = {
       ...fishingPeriod,
       [key]: value
     }
 
     setFishingPeriod(obj)
-  }, [fishingPeriod, setFishingPeriod])
+  }
 
-  const push = useCallback((key, array, defaultValue) => {
+  const push = (key, array, defaultValue) => {
     const newArray = array ? [...array] : []
     newArray.push(defaultValue || undefined)
 
     set(key, newArray)
-  }, [set])
+  }
 
-  const pop = useCallback((key, array) => {
+  const pop = (key, array) => {
     const newArray = [...array]
     newArray.pop()
 
     set(key, newArray)
-  }, [set])
+  }
 
-  const update = useCallback((id, key, array, value) => {
+  const update = (id, key, array, value) => {
     const newArray = array ? [...array] : []
 
     if (id === -1) {
@@ -125,7 +122,7 @@ const FishingPeriodForm = (props) => {
     }
 
     set(key, newArray)
-  }, [set])
+  }
 
   const updateDateRanges = (id, dateRange) => {
     update(id, FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges, dateRange)

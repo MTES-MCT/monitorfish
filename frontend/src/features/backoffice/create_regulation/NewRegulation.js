@@ -144,22 +144,22 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
   }, [isEdition, regulatoryZoneMetadata])
 
-  useEffect(() => {
-    if (regulationSaved || regulationDeleted) {
-      goBackofficeHome()
-    }
-  }, [regulationSaved, regulationDeleted])
-
-  const onGoBack = () => {
-    dispatch(setIsConfirmModalOpen(true))
-  }
-
   const goBackofficeHome = useCallback(() => {
     batch(() => {
       dispatch(resetState())
     })
     history.push('/backoffice/regulation')
   }, [resetState])
+
+  useEffect(() => {
+    if (regulationSaved || regulationDeleted) {
+      goBackofficeHome()
+    }
+  }, [regulationSaved, regulationDeleted, goBackofficeHome])
+
+  const onGoBack = () => {
+    dispatch(setIsConfirmModalOpen(true))
+  }
 
   useEffect(() => {
     if (selectedRegulationLawType) {
@@ -173,7 +173,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
   }, [selectedRegulationLawType, layersTopicsByRegTerritory])
 
-  const createOrUpdateRegulation = (featureObject) => {
+  const createOrUpdateRegulation = useCallback((featureObject) => {
     const feature = new Feature(featureObject)
     feature.setId(getRegulatoryFeatureId(selectedGeometryId))
     dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
@@ -183,7 +183,7 @@ const CreateRegulation = ({ title, isEdition }) => {
       emptyFeature.setId(getRegulatoryFeatureId(initialGeometryId))
       dispatch(updateRegulation(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
     }
-  }
+  }, [selectedGeometryId, initialGeometryId])
 
   const checkRequiredValues = useCallback(() => {
     let atLeastOneValueIsMissing = false
@@ -269,9 +269,9 @@ const CreateRegulation = ({ title, isEdition }) => {
       })
   }
 
-  const setRegulatoryTextList = useCallback((texts) => {
+  const setRegulatoryTextList = (texts) => {
     dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES, value: texts }))
-  }, [setRegulationByKey])
+  }
 
   return (
     <>

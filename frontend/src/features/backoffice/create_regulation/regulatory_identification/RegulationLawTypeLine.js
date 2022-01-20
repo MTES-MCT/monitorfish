@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import Tag from '../Tag'
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
@@ -18,7 +18,7 @@ const RegulationLawTypeLine = ({ selectData, lawTypeIsMissing }) => {
 
   const { lawType } = useSelector(state => state.regulation.currentRegulation)
 
-  const onLawTypeChange = useCallback((value) => {
+  const onLawTypeChange = (value) => {
     if (LAWTYPES_TO_TERRITORY[value] !== UE) {
       dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: [] }))
     }
@@ -26,7 +26,7 @@ const RegulationLawTypeLine = ({ selectData, lawTypeIsMissing }) => {
       dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value: undefined }))
       dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.LAW_TYPE, value: value }))
     })
-  }, [setRegulationByKey])
+  }
 
   return (
     <ContentLine>

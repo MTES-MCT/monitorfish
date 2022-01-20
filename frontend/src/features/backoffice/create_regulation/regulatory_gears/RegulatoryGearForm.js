@@ -262,7 +262,7 @@ const RegulatoryGearForm = (props) => {
       <CustomMultiCascader
         data-cy='gears-selector'
         data={allCategoriesAndGears}
-        style={{ width: 130 }}
+        style={{ width: 200 }}
         menuWidth={250}
         searchable={true}
         cleanable={false}
@@ -342,6 +342,19 @@ const MultiCascaderLabel = styled.span`
 `
 
 const CustomMultiCascader = styled(MultiCascader)`
+  a {
+    box-sizing: border-box;
+    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
+  }
+
+  .rs-btn-default.rs-picker-toggle:hover {
+    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
+  }
+
+  .rs-btn-default.rs-picker-toggle:focus {
+    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
+  }
+
   .rs-checkbox-checker {
     font-size: 11px;
     color: ${COLORS.charcoal};

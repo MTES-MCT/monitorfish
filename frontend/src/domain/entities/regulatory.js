@@ -650,7 +650,7 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
         })
         .map((gear) => {
           return {
-            label: gear.name,
+            label: `${gear.code} - ${gear.name}`,
             value: gear.code
           }
         })

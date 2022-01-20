@@ -22,7 +22,8 @@ const homeStore = configureStore({
 
 const backofficeStore = configureStore({
   reducer: persistReducer(backofficePersistConfig, backofficeReducers),
-  middleware: [thunk]
+  middleware: [thunk],
+  whitelist: ['regulation']
 })
 
 const backofficePersistor = persistStore(backofficeStore)

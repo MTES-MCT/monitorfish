@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch, batch } from 'react-redux'
 import styled from 'styled-components'
 
@@ -33,9 +33,9 @@ const UpcomingRegulationModal = () => {
     dispatch(setSaveUpcomingRegulation(true))
   }
 
-  const setRegulatoryTextList = useCallback((regulatoryTextList) => {
+  const setRegulatoryTextList = (regulatoryTextList) => {
     dispatch(setUpcomingRegulatoryText({ regulatoryTextList }))
-  }, [setRegulationByKey])
+  }
 
   useEffect(() => {
     if (upcomingRegulatoryTextCheckedMap) {
@@ -58,7 +58,7 @@ const UpcomingRegulationModal = () => {
         })
       }
     }
-  }, [saveUpcomingRegulation, upcomingRegulatoryTextCheckedMap])
+  }, [saveUpcomingRegulation, upcomingRegulatoryTextCheckedMap, upcomingRegulatoryText])
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>

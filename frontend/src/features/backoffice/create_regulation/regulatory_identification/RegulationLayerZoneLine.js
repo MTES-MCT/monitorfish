@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Backoffice.style'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
@@ -22,9 +22,9 @@ const RegulationLayerZoneLine = props => {
     setIsInputFilled(zone && zone !== '')
   }, [zone])
 
-  const setZoneName = useCallback((value) => {
+  const setZoneName = (value) => {
     dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ZONE, value }))
-  }, [setRegulationByKey, zone])
+  }
 
   return <ContentLine>
     <Label>Nom de la zone</Label>

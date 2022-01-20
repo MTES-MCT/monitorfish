@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../../constants/constants'
@@ -17,6 +17,7 @@ import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT, INITIAL_UPCOMING_REG_R
  * @prop {Boolean} saveForm
  */
 const RegulatoryTextSection = props => {
+  console.log('RegulatoryTextSection')
   const {
     regulatoryTextList,
     setRegulatoryTextList,
@@ -30,7 +31,7 @@ const RegulatoryTextSection = props => {
 
   const dispatch = useDispatch()
 
-  const addOrRemoveRegulatoryTextInList = useCallback((id) => {
+  const addOrRemoveRegulatoryTextInList = (id) => {
     let newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
     if (id === undefined) {
       newRegulatoryTextList.push(DEFAULT_REGULATORY_TEXT)
@@ -40,26 +41,26 @@ const RegulatoryTextSection = props => {
       newRegulatoryTextList.splice(id, 1)
     }
     setRegulatoryTextList(newRegulatoryTextList)
-  }, [setRegulatoryTextList, regulatoryTextList])
+  }
 
-  const addRegRefInEffect = useCallback(() => {
+  const addRegRefInEffect = () => {
     addOrRemoveRegulatoryTextInList()
-  }, [addOrRemoveRegulatoryTextInList])
+  }
 
-  const addUpcomingText = useCallback(() => {
+  const addUpcomingText = () => {
     if (source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION) {
       addOrRemoveRegulatoryTextInList()
     } else {
       dispatch(setIsModalOpen(true))
       dispatch(setUpcomingRegulatoryText(upcomingRegulatoryReferences || INITIAL_UPCOMING_REG_REFERENCE))
     }
-  }, [addOrRemoveRegulatoryTextInList, setIsModalOpen])
+  }
 
-  const setRegulatoryText = useCallback((id, regulatoryText) => {
+  const setRegulatoryText = (id, regulatoryText) => {
     const newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
     newRegulatoryTextList[id] = regulatoryText
     setRegulatoryTextList(newRegulatoryTextList)
-  }, [setRegulatoryTextList, regulatoryTextList])
+  }
 
   return <Section show>
     <Title>

@@ -76,6 +76,7 @@ const CustomSelectPicker = styled(SelectPicker)`
   .rs-btn-default.rs-picker-toggle:focus {
     border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
   }
+
   .grouped.rs-picker-select-menu-item {
     padding-left: 0px;
   }

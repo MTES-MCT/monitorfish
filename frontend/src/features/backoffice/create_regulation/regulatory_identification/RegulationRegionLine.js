@@ -21,9 +21,9 @@ const RegulationRegionLine = props => {
   const { region: regionList } = useSelector(state => state.regulation.currentRegulation)
 
   const addRegionToSelectedRegionList = (region) => {
-    const newArray = regionList ? [...regionList] : []
-    newArray.push(region)
-    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: newArray }))
+    const newRegionList = regionList ? [...regionList] : []
+    newRegionList.push(region)
+    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: newRegionList?.join(', ') }))
   }
 
   const removeRegionToSelectedRegionList = (regionToRemove) => {

@@ -22,7 +22,7 @@ const RegulationGeometryLine = props => {
 
   const dispatch = useDispatch()
 
-  const { id: selectedGeometryId } = useSelector(state => state.regulation.currentRegulation)
+  const { id } = useSelector(state => state.regulation.currentRegulation)
 
   const onCloseIconClicked = () => {
     dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined }))
@@ -40,13 +40,13 @@ const RegulationGeometryLine = props => {
         valueIsMissing={geometryIsMissing}
         emptyMessage={'aucun tracé à associer'}
         renderMenuItem={(_, item) =>
-          <MenuItem checked={item.value === selectedGeometryId}
+          <MenuItem checked={item.value === id}
             item={item} tag={'Radio'}/>}
         menuClassName={DEFAULT_MENU_CLASSNAME}
       />
-    {selectedGeometryId &&
+    {id &&
       <><Tag
-        tagValue={selectedGeometryId}
+        tagValue={id}
         onCloseIconClicked={onCloseIconClicked}
       />
       <EyeWrapper>

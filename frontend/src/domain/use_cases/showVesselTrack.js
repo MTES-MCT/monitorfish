@@ -22,9 +22,8 @@ const showVesselTrack = (vesselFeature, calledFromCron, vesselTrackDepth) => (di
     }
   } = getState()
   const nextVesselTrackDepthObject = getNextVesselTrackDepthObject(vesselTrackDepth, defaultVesselTrackDepth)
-  // FIXME: vesselFeature is an olFeature but should have the same props as vessel stored in globalState
   const feature = vessels.find((vessel) => {
-    return (vesselFeature.vesselId ? (vesselFeature.vesselId === vessel.vesselId) : Vessel.getVesselId(vesselFeature) === vessel.vesselId)
+    return (vesselFeature.vesselId ? (vesselFeature.vesselId === vessel.vesselId) : Vessel.getVesselId(vesselFeature?.vesselProperties) === vessel.vesselId)
   })
 
   dispatch(doNotAnimate(calledFromCron))

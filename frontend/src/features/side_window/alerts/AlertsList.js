@@ -87,15 +87,18 @@ const AlertsList = ({ alerts }) => {
     <SearchVesselInput
       style={searchVesselInputStyle}
       baseUrl={baseUrl}
-      data-cy={'search-vessel-in-alerts'}
+      data-cy={'side-window-alerts-search-vessel'}
       placeholder={'Rechercher un navire en alerte'}
       type="text"
       value={searchedVessel}
       onChange={e => setSearchedVessel(e.target.value)}/>
-      <List style={{
-        ...rowStyle,
-        marginTop: 10
-      }}>
+      <List
+        data-cy={'side-window-alerts-list'}
+        style={{
+          ...rowStyle,
+          marginTop: 10
+        }}
+      >
         <List.Item key={0} index={0} style={{
           ...listItemStyle,
           border: `1px solid ${COLORS.lightGray}`,
@@ -153,6 +156,7 @@ const AlertsList = ({ alerts }) => {
             </FlexboxGrid.Item>
             <FlexboxGrid.Item colspan={1} style={styleCenter}>
               <ShowIcon
+                data-cy={'side-window-alerts-show-vessel'}
                 style={showIconStyle}
                 alt={'Voir sur la carte'}
                 onClick={() => {

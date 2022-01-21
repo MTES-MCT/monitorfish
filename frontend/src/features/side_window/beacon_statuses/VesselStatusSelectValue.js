@@ -4,7 +4,10 @@ import styled from 'styled-components'
 export const VesselStatusSelectValue = ({ item }) => {
   const { icon } = item
 
-  return (<Value style={valueStyle}>
+  return (<Value
+      data-cy={'side-window-beacon-statuses-vessel-status'}
+      style={valueStyle}
+    >
       {icon}
       <Text style={textStyle}>
         {item.label}

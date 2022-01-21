@@ -44,7 +44,10 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
   }
 
   return (
-    <BeaconStatusDetailsWrapper style={beaconStatusDetailsWrapperStyle}>
+    <BeaconStatusDetailsWrapper
+      data-cy={'side-window-beacon-statuses-detail'}
+      style={beaconStatusDetailsWrapperStyle}
+    >
       <Header style={headerStyle}>
         <Row style={rowStyle()}>
           <AlertsIcon style={alertsIconStyle}/>
@@ -60,10 +63,16 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
             rel='preload'
             src={`${baseUrl}/flags/fr.svg`}
           />
-          <VesselName style={vesselNameStyle}>
+          <VesselName
+            data-cy={'side-window-beacon-statuses-detail-vessel-name'}
+            style={vesselNameStyle}
+          >
             {beaconStatus?.vesselName || 'Aucun nom'}
           </VesselName>
-          <InternalReferenceNumber style={internalReferenceNumberStyle}>
+          <InternalReferenceNumber
+            data-cy={'side-window-beacon-statuses-detail-cfr'}
+            style={internalReferenceNumberStyle}
+          >
             ({beaconStatus?.internalReferenceNumber || 'Aucun CFR'})
           </InternalReferenceNumber>
         </Row>
@@ -76,10 +85,14 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
           >
             {parseFloat(beaconStatus?.riskFactor).toFixed(1)}
           </RiskFactorBox>
-          <Priority style={priorityStyle(beaconStatus?.priority)}>
+          <Priority
+            data-cy={'side-window-beacon-statuses-detail-priority'}
+            style={priorityStyle(beaconStatus?.priority)}
+          >
             {beaconStatus?.priority ? 'Prioritaire' : 'Non prioritaire'}
           </Priority>
           <ShowVessel
+            data-cy={'side-window-beacon-statuses-detail-show-vessel'}
             style={showVesselStyle}
             onClick={() => {
               const vesselIdentity = { ...beaconStatus, flagState: 'FR' }

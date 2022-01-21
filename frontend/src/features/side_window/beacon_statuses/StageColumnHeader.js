@@ -4,7 +4,10 @@ import { COLORS } from '../../../constants/constants'
 
 const StageColumnHeader = ({ title, description, numberOfItems }) => {
   return <Wrapper style={wrapperStyle}>
-    <Row style={rowStyle}>
+    <Row
+      data-cy={'side-window-beacon-statuses-header'}
+      style={rowStyle}
+    >
       <Title style={titleStyle}>
         {title}
       </Title>

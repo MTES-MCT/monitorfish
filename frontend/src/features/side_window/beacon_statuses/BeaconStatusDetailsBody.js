@@ -50,7 +50,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
 
   const getCommentOrActionDate = date => {
     if (date === today) {
-      return 'Ajourd\'hui'
+      return 'Aujourd\'hui'
     }
 
     if (date === yesterday) {
@@ -104,7 +104,10 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
 
   const getActionOrCommentRow = (actionOrComment, isLastDate, isLast) => {
     if (actionOrComment.type === Type.COMMENT) {
-      return <div key={actionOrComment.type + actionOrComment.dateTime}>
+      return <div
+        data-cy={'side-window-beacon-statuses-detail-comment-content'}
+        key={actionOrComment.type + actionOrComment.dateTime}
+      >
         <ActionOrCommentRow style={actionOrCommentRow} ref={isLastDate && isLast ? scrollToRef : null}>
           <CommentText style={commentTextStyle}>{actionOrComment.comment}</CommentText>
         </ActionOrCommentRow>
@@ -113,7 +116,10 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
         </ActionOrCommentRow>
       </div>
     } else if (actionOrComment.type === Type.ACTION) {
-      return <div key={actionOrComment.type + actionOrComment.dateTime}>
+      return <div
+        data-cy={'side-window-beacon-statuses-detail-action-content'}
+        key={actionOrComment.type + actionOrComment.dateTime}
+      >
         <ActionOrCommentRow style={actionOrCommentRow} ref={isLastDate && isLast ? scrollToRef : null}>
           <ActionText style={actionTextStyle}>{getActionText(actionOrComment)}</ActionText>
         </ActionOrCommentRow>
@@ -134,8 +140,11 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
     <Body style={bodyStyle}>
       <NumberComments style={numberCommentsStyle}>
         <CommentsIcon style={commentsIconStyle}/>
-        <NumberCommentsText style={numberCommentsTextStyle}>
-          {comments?.length} commentaires
+        <NumberCommentsText
+          data-cy={'side-window-beacon-statuses-detail-comments-number'}
+          style={numberCommentsTextStyle}
+        >
+          {comments?.length} commentaire{comments?.length > 1 ? 's' : ''}
         </NumberCommentsText>
       </NumberComments>
       <Comments style={commentsStyle}>
@@ -147,7 +156,10 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
               const dateText = getCommentOrActionDate(getDate(date))
 
               return <>
-                <DateSeparator style={dateSeparatorStyle}>
+                <DateSeparator
+                  data-cy={'side-window-beacon-statuses-detail-comment-date'}
+                  style={dateSeparatorStyle}
+                >
                   <Line style={lineStyle}/>
                   <RowDate
                     style={rowDateStyle(
@@ -171,6 +183,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
         }
       </Comments>
       <AddComment
+        data-cy={'side-window-beacon-statuses-detail-comment-textarea'}
         style={addCommentStyle}
         value={comment}
         onChange={event => setComment(event.target.value)}
@@ -184,6 +197,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
         />
         Équipe OPS
         <SubmitComment
+          data-cy={'side-window-beacon-statuses-detail-comment-add'}
           style={submitCommentStyle}
           onClick={saveComment}
         >
@@ -283,7 +297,7 @@ const rowDateStyle = (isToday, isYesterday) => ({
 
 const Comments = styled.div``
 const commentsStyle = {
-  maxHeight: 530,
+  maxHeight: 435,
   overflowY: 'auto'
 }
 

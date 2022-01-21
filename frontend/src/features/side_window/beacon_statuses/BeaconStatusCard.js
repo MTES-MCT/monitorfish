@@ -32,11 +32,15 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
     }
   }, [vesselStatus, beaconStatus])
 
-  return <Wrapper style={wrapperStyle}>
+  return <Wrapper
+    data-cy={'side-window-beacon-statuses-card'}
+    style={wrapperStyle}
+  >
     <Header style={headerStyle}>
       <Row style={rowStyle(true)}>
         <Flag style={flagStyle} rel='preload' src={`${baseUrl}/flags/fr.svg`}/>
         <VesselName
+          data-cy={'side-window-beacon-statuses-card-vessel-name'}
           style={vesselNameStyle}
           onClick={() => dispatch(openBeaconStatus({ beaconStatus }))}
         >

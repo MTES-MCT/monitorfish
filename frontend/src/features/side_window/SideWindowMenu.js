@@ -20,6 +20,7 @@ const SideWindowMenu = ({ selectedMenu }) => {
       <AlertsIcon/>
     </Link>
     <Link
+      data-cy={'side-window-menu-beacon-statuses'}
       title={sideWindowMenu.BEACON_STATUSES.name}
       selected={selectedMenu === sideWindowMenu.BEACON_STATUSES.code}
       onClick={() => dispatch(openSideWindowTab(sideWindowMenu.BEACON_STATUSES.code))}

@@ -8,7 +8,10 @@ import BeaconStatusCard from './BeaconStatusCard'
 const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, baseUrl }) => {
   const updateStageVesselStatus = (beaconStatus, status) => updateVesselStatus(stage?.code, beaconStatus, status)
 
-  return <Wrapper style={wrapperStyle}>
+  return <Wrapper
+    data-cy={`side-window-beacon-statuses-columns-${stage.code}`}
+    style={wrapperStyle}
+  >
     <StageColumnHeader
       title={stage?.title}
       description={stage?.description}

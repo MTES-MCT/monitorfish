@@ -213,7 +213,10 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
         sensors={sensors}
         modifiers={[restrictToFirstScrollableAncestor]}
       >
-        <Columns style={columnsStyle}>
+        <Columns
+          data-cy={'side-window-beacon-statuses-columns'}
+          style={columnsStyle}
+        >
           {Object.keys(beaconStatusesStages).map((stageId) => (
             <Droppable key={stageId} id={stageId} disabled={allDroppableDisabled}>
               <StageColumn

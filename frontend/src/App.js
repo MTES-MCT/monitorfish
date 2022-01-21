@@ -30,9 +30,10 @@ import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import BackofficeMode from './api/BackofficeMode'
 import AlertsMapButton from './features/side_window/alerts/AlertsMapButton'
-import BeaconStatusesBoard from './features/side_window/beacon_statuses/BeaconStatusesBoard'
 import BeaconStatusesMapButton from './features/side_window/beacon_statuses/BeaconStatusesMapButton'
+import SideWindowLauncher from './features/side_window/SideWindowLauncher'
 import SideWindow from './features/side_window/SideWindow'
+import { sideWindowMenu } from './domain/entities/sideWindow'
 
 function App () {
   switch (browserName) {
@@ -78,8 +79,11 @@ function HomePage () {
     <NamespaceContext.Provider value={'homepage'}>
       <BackofficeMode inBackofficeMode={false}/>
       <Switch>
-        <Route exact path="/beacons">
-          <BeaconStatusesBoard/>
+        <Route exact path="/side_window">
+          <SideWindow
+            openedSideWindowTab={sideWindowMenu.ALERTS.code}
+            fromTab
+          />
         </Route>
         <Route exact path="/">
           <Healthcheck/>
@@ -101,7 +105,7 @@ function HomePage () {
             <VesselLabels/>
             <APIWorker/>
             <ErrorToastNotification/>
-            <SideWindow/>
+            <SideWindowLauncher/>
           </Wrapper>
         </Route>
       </Switch>

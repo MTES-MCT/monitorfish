@@ -32,6 +32,7 @@ const SideWindowSubMenuLink = ({ menu, isSelected, setSelected, number, oneLine 
   }
 
   return <Link
+    data-cy={`side-window-sub-menu-${menu.name}`}
     selected={isSelected}
     onClick={() => setSelected(menu)}
     oneLine={oneLine}
@@ -42,7 +43,12 @@ const SideWindowSubMenuLink = ({ menu, isSelected, setSelected, number, oneLine 
     </Text>
     {
       number
-        ? <CircleWithKeyMetric style={circleMetricStyle}>{number}</CircleWithKeyMetric>
+        ? <CircleWithKeyMetric
+          data-cy={`side-window-sub-menu-${menu.name}-number`}
+          style={circleMetricStyle}
+        >
+          {number}
+      </CircleWithKeyMetric>
         : null
     }
   </Link>

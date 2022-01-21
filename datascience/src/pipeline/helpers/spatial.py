@@ -324,13 +324,14 @@ def detect_fishing_activity(
         # The average speed may contain null values, in particular the first position
         # of a series of positions, for which the time and distance from the previous
         # positions is not known. In this case we must test whether the outcome of the
-        # evaluation of whether positions are fishing depending on this unknown speed :
+        # evaluation of whether positions are in fishing activity depend on these
+        # unknown speeds :
         #
         #   - positions that are evaluated as being in fishing activity regardless of
         #     whether the unknown speeds are below or above the fishing speed threshold
         #     can be asserted to be in fishing activity
         #
-        #   - positions that are evaluated as not being in fishing activity regardless
+        #   - positions that are evaluated as NOT being in fishing activity regardless
         #     of whether the unknown speeds are below or above the fishing speed
         #     threshold can be asserted to NOT be in fishing activity
         #

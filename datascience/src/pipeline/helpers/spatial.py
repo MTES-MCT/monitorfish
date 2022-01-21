@@ -320,20 +320,59 @@ def detect_fishing_activity(
     else:
         is_at_port = positions[is_at_port_column].values
         average_speed = positions[average_speed_column].values
-        is_at_fishing_speed = average_speed < fishing_speed_threshold
 
-        arr = np.concatenate(
-            (is_at_port[:, None], is_at_fishing_speed[:, None]), axis=1
+        # The average speed may contain null values, in particular the first position
+        # of a series of positions, for which the time and distance from the previous
+        # positions is not known. In this case we must test whether the outcome of the
+        # evaluation of whether positions are fishing depending on this unknown speed :
+        #
+        #   - positions that are evaluated as being in fishing activity regardless of
+        #     whether the unknown speeds are below or above the fishing speed threshold
+        #     can be asserted to be in fishing activity
+        #
+        #   - positions that are evaluated as not being in fishing activity regardless
+        #     of whether the unknown speeds are below or above the fishing speed
+        #     threshold can be asserted to NOT be in fishing activity
+        #
+        #   - positions for which the evaluation of whether they correspond to a
+        #     fishing activity depends on the unknown speeds cannot be decided and
+        #     should therefore evaluate to `None`.
+
+        is_at_fishing_speed_unknown_is_true = np.where(
+            np.isnan(average_speed), True, average_speed < fishing_speed_threshold
         )
 
-        fishing_activity = rows_belong_to_sequence(
-            arr,
+        is_at_fishing_speed_unknown_is_false = np.where(
+            np.isnan(average_speed), False, average_speed < fishing_speed_threshold
+        )
+
+        arr_unknown_speed_is_fishing_speed = np.concatenate(
+            (is_at_port[:, None], is_at_fishing_speed_unknown_is_true[:, None]), axis=1
+        )
+
+        arr_unknown_speed_is_not_fishing_speed = np.concatenate(
+            (is_at_port[:, None], is_at_fishing_speed_unknown_is_false[:, None]), axis=1
+        )
+
+        fishing_activity_unknown_speed_is_fishing_speed = rows_belong_to_sequence(
+            arr_unknown_speed_is_fishing_speed,
+            np.array([False, True]),
+            window_length=minimum_consecutive_positions,
+        )
+
+        fishing_activity_unknown_speed_is_not_fishing_speed = rows_belong_to_sequence(
+            arr_unknown_speed_is_not_fishing_speed,
             np.array([False, True]),
             window_length=minimum_consecutive_positions,
         )
 
         fishing_activity = np.where(
-            np.isnan(average_speed) & ~is_at_port, np.nan, fishing_activity
+            (
+                fishing_activity_unknown_speed_is_fishing_speed
+                == fishing_activity_unknown_speed_is_not_fishing_speed
+            ),
+            fishing_activity_unknown_speed_is_fishing_speed,
+            np.nan,
         )
 
         positions["is_fishing"] = fishing_activity

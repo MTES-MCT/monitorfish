@@ -19,28 +19,26 @@ const BeaconStatusesMapButton = () => {
     sideWindowIsOpen
   } = useSelector(state => state.global)
 
-  return <>
-    <BeaconStatusesButton
-      data-cy={'beacon-status-button'}
-      title={'Avaries VMS'}
-      isVisible={openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code}
-      regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-      healthcheckTextWarning={healthcheckTextWarning}
-      isHidden={previewFilteredVesselsMode}
-      onClick={() => {
-        if (!sideWindowIsOpen || (sideWindowIsOpen && openedSideWindowTab !== sideWindowMenu.BEACON_STATUSES.code)) {
-          dispatch(openSideWindowTab(sideWindowMenu.BEACON_STATUSES.code))
-          return
-        }
+  return <BeaconStatusesButton
+    data-cy={'beacon-status-button'}
+    title={'Avaries VMS'}
+    isVisible={openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code}
+    regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+    healthcheckTextWarning={healthcheckTextWarning}
+    isHidden={previewFilteredVesselsMode}
+    onClick={() => {
+      if (!sideWindowIsOpen || (sideWindowIsOpen && openedSideWindowTab !== sideWindowMenu.BEACON_STATUSES.code)) {
+        dispatch(openSideWindowTab(sideWindowMenu.BEACON_STATUSES.code))
+        return
+      }
 
-        if (sideWindowIsOpen && openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code) {
-          dispatch(closeSideWindow())
-        }
-      }}
-    >
-      <BeaconStatusesIcon/>
-    </BeaconStatusesButton>
-  </>
+      if (sideWindowIsOpen && openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code) {
+        dispatch(closeSideWindow())
+      }
+    }}
+  >
+    <BeaconStatusesIcon/>
+  </BeaconStatusesButton>
 }
 
 const BeaconStatusesButton = styled(MapButtonStyle)`

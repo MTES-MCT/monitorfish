@@ -17,12 +17,12 @@ const beaconStatusSlice = createSlice({
     },
     /**
      * Update a single beacon status
-     * @function updateLocalBeaconStatus
+     * @function updateLocalBeaconStatuses
      * @memberOf BeaconStatusReducer
      * @param {Object=} state
      * @param {{payload: BeaconStatus}} action - the beacon status to update
      */
-    updateLocalBeaconStatus (state, action) {
+    updateLocalBeaconStatuses (state, action) {
       const id = action.payload?.id
       const nextBeaconStatuses = state.beaconStatuses.filter(beaconStatus => beaconStatus.id !== id)
 
@@ -30,10 +30,6 @@ const beaconStatusSlice = createSlice({
         action.payload,
         ...nextBeaconStatuses
       ]
-
-      if (state.openedBeaconStatus?.id === id) {
-        state.openedBeaconStatus = action.payload
-      }
     },
     /**
      * Open a single beacon status
@@ -59,7 +55,7 @@ const beaconStatusSlice = createSlice({
 
 export const {
   setBeaconStatuses,
-  updateLocalBeaconStatus,
+  updateLocalBeaconStatuses,
   selectBeaconStatus,
   closeBeaconStatus
 } = beaconStatusSlice.actions

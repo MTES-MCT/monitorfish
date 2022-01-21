@@ -13,7 +13,7 @@ import getAllBeaconStatuses from '../../../domain/use_cases/getAllBeaconStatuses
 import { COLORS } from '../../../constants/constants'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
-import { closeBeaconStatus, updateLocalBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
+import { closeBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
 import { setError } from '../../../domain/shared_slices/Global'
 import BeaconStatusDetails from './BeaconStatusDetails'
 
@@ -32,6 +32,8 @@ const getMemoizedBeaconStatusesByStage = createSelector(
   state => state.beaconStatus.beaconStatuses,
   beaconStatuses => getBeaconStatusesByStage(beaconStatuses))
 
+const baseUrl = window.location.origin
+
 const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
   const dispatch = useDispatch()
   const {
@@ -42,7 +44,6 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
   const [filteredBeaconStatuses, setFilteredBeaconStatuses] = useState({})
   const [isDroppedId, setIsDroppedId] = useState(undefined)
   const [searchedVessel, setSearchedVessel] = useState(undefined)
-  const baseUrl = window.location.origin
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -132,8 +133,7 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
     }
 
     setIsDroppedId(beaconStatus.id)
-    dispatch(updateLocalBeaconStatus(nextBeaconStatus))
-    dispatch(updateBeaconStatus(beaconStatus.id, {
+    dispatch(updateBeaconStatus(beaconStatus.id, nextBeaconStatus, {
       vesselStatus: nextBeaconStatus.vesselStatus
     }))
   }, [beaconStatuses])
@@ -162,8 +162,9 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
         nextBeaconStatus.stage = nextStage
         nextBeaconStatus.vesselStatusLastModificationDateTime = new Date().toISOString()
 
-        dispatch(updateLocalBeaconStatus(nextBeaconStatus))
-        dispatch(updateBeaconStatus(beaconId, { stage: nextBeaconStatus.stage }))
+        dispatch(updateBeaconStatus(beaconId, nextBeaconStatus, {
+          stage: nextBeaconStatus.stage
+        }))
       }
     }
     setIsDroppedId(beaconId)
@@ -175,27 +176,6 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
     const previousStage = findStage(active.data.current.stageId)
     setAllDroppableDisabled(previousStage === beaconStatusesStages.RESUMED_TRANSMISSION.code)
   }, [])
-
-  const searchVesselInputStyle = {
-    margin: '0 0 5px 5px',
-    backgroundColor: 'white',
-    border: 'none',
-    borderBottom: `1px ${COLORS.lightGray} solid`,
-    borderRadius: 0,
-    color: COLORS.gunMetal,
-    fontSize: 13,
-    height: 40,
-    width: 310,
-    padding: '0 5px 0 10px',
-    flex: 3,
-    backgroundImage: `url(${baseUrl}/${SearchIconSVG})`,
-    backgroundSize: 30,
-    backgroundPosition: 'bottom 3px right 5px',
-    backgroundRepeat: 'no-repeat',
-    ':hover, :focus': {
-      borderBottom: `1px ${COLORS.lightGray} solid`
-    }
-  }
 
   return (
     <Wrapper innerWidth={window.innerWidth} style={wrapperStyle}>
@@ -252,6 +232,27 @@ const wrapperStyle = {
 const Columns = styled.div``
 const columnsStyle = {
   display: 'flex'
+}
+
+const searchVesselInputStyle = {
+  margin: '0 0 5px 5px',
+  backgroundColor: 'white',
+  border: 'none',
+  borderBottom: `1px ${COLORS.lightGray} solid`,
+  borderRadius: 0,
+  color: COLORS.gunMetal,
+  fontSize: 13,
+  height: 40,
+  width: 310,
+  padding: '0 5px 0 10px',
+  flex: 3,
+  backgroundImage: `url(${baseUrl}/${SearchIconSVG})`,
+  backgroundSize: 30,
+  backgroundPosition: 'bottom 3px right 5px',
+  backgroundRepeat: 'no-repeat',
+  ':hover, :focus': {
+    borderBottom: `1px ${COLORS.lightGray} solid`
+  }
 }
 
 export default BeaconStatusesBoard

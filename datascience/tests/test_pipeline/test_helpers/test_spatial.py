@@ -203,7 +203,7 @@ class TestHelpersSpatial(unittest.TestCase):
             data=[
                 [False, np.nan],
                 [False, 1.3743995599575196],
-                [False, 3.4733394561194406],
+                [False, 5.4733394561194406],
                 [False, 3.6471005850875398],
                 [False, 1.01491998387466],
                 [False, 2.657721803089177],
@@ -241,8 +241,8 @@ class TestHelpersSpatial(unittest.TestCase):
         expected_positions_is_fishing = positions.copy(deep=True)
         expected_positions_is_fishing["is_fishing"] = [
             np.nan,
-            True,
-            True,
+            np.nan,
+            False,
             True,
             True,
             True,

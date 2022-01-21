@@ -85,11 +85,9 @@ position_alerts.flow.schedule = Schedule(
             "*/10 * * * *",
             parameter_defaults={
                 "alert_type": "THREE_MILES_TRAWLING_ALERT",
-                "zones": "0-3",
+                "zones": ["0-3"],
                 "hours_from_now": 8,
                 "only_fishing_positions": True,
-                "flag_states": [],
-                "fishing_gears": [],
                 "fishing_gear_categories": ["Chaluts"],
                 "include_vessels_unknown_gear": True,
             },

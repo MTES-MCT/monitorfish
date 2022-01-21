@@ -386,7 +386,7 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
         ORDER BY date_time""",
     )
 
-    flow.run(
+    state = flow.run(
         start_hours_ago=48,
         end_hours_ago=0,
         minutes_per_chunk=48 * 60,
@@ -395,6 +395,8 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
         fishing_speed_threshold=4.5,
         recompute_all=False,
     )
+
+    assert state.is_successful()
 
     positions_after = read_query(
         "monitorfish_remote",
@@ -431,7 +433,7 @@ def test_flow_does_recomputes_all_when_asked_to(reset_test_data):
         ORDER BY date_time""",
     )
 
-    flow.run(
+    state = flow.run(
         start_hours_ago=48,
         end_hours_ago=0,
         minutes_per_chunk=48 * 60,
@@ -440,6 +442,8 @@ def test_flow_does_recomputes_all_when_asked_to(reset_test_data):
         fishing_speed_threshold=4.5,
         recompute_all=True,
     )
+
+    assert state.is_successful()
 
     positions_after = read_query(
         "monitorfish_remote",
@@ -483,7 +487,7 @@ def test_flow_can_compute_in_chunks(reset_test_data):
         ORDER BY id""",
     )
 
-    flow.run(
+    state = flow.run(
         start_hours_ago=48,
         end_hours_ago=0,
         minutes_per_chunk=30 * 60,
@@ -492,6 +496,8 @@ def test_flow_can_compute_in_chunks(reset_test_data):
         fishing_speed_threshold=4.5,
         recompute_all=True,
     )
+
+    assert state.is_successful()
 
     positions_enriched_in_2_chunks = read_query(
         "monitorfish_remote",
@@ -506,7 +512,7 @@ def test_flow_can_compute_in_chunks(reset_test_data):
         ORDER BY id""",
     )
 
-    flow.run(
+    state = flow.run(
         start_hours_ago=48,
         end_hours_ago=0,
         minutes_per_chunk=48 * 60,
@@ -515,6 +521,8 @@ def test_flow_can_compute_in_chunks(reset_test_data):
         fishing_speed_threshold=4.5,
         recompute_all=True,
     )
+
+    assert state.is_successful()
 
     positions_enriched_in_1_chunk = read_query(
         "monitorfish_remote",

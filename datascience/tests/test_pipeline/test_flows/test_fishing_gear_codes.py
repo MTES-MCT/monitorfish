@@ -7,9 +7,9 @@ from src.read_query import read_query
 
 def test_fishing_gear_codes_flow(reset_test_data):
     flow.schedule = None
-    res = flow.run()
+    state = flow.run()
 
-    assert res.is_successful()
+    assert state.is_successful()
 
     fishing_gear_codes = read_query(
         "monitorfish_remote", "SELECT * FROM fishing_gear_codes"

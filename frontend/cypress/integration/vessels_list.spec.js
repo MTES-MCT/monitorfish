@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /// <reference types="cypress" />
 
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
@@ -20,8 +21,8 @@ context('Vessels list', () => {
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 20000 })
     cy.get('*[class^="rs-picker-tag-wrapper"]').eq(0).type('France{enter}')
     cy.get('*[data-cy^="vessels-list-box-filter"]').click({ timeout: 20000 })
-    cy.get('body').click(30, 200,{ timeout: 20000 })
-    cy.get('body').click(700, 650,{ timeout: 20000 })
+    cy.get('body').click(30, 200, { timeout: 20000 })
+    cy.get('body').click(700, 650, { timeout: 20000 })
     cy.get('*[data-cy^="vessel-list-table-count"]').contains('11 navires')
 
     // When
@@ -31,17 +32,17 @@ context('Vessels list', () => {
     cy.wait(2000)
 
     // Then
-    cy.get('.vessels > canvas').trigger('pointerdown',  { clientX: 411, clientY: 647, pointerId: 1, force: true, pixel: [411, 635] })
+    cy.get('.vessels').trigger('pointerdown', { clientX: 411, clientY: 647, pointerId: 1, force: true, pixel: [411, 635] })
     cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 646, pointerId: 1, force: true, pixel: [411, 635] })
+    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 646, pointerId: 1, force: true, pixel: [411, 635] })
     cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 647, pointerId: 1, force: true, pixel: [411, 635] })
+    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 647, pointerId: 1, force: true, pixel: [411, 635] })
     cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 648, pointerId: 1, force: true, pixel: [411, 635] })
+    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 648, pointerId: 1, force: true, pixel: [411, 635] })
     cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointermove',  { clientX: 411, clientY: 649, pointerId: 1, force: true, pixel: [411, 635] })
+    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 649, pointerId: 1, force: true, pixel: [411, 635] })
     cy.wait(20)
-    cy.get('.vessels > canvas').trigger('pointerup',  { clientX: 411, clientY: 645, pointerId: 1, force: true, pixel: [411, 635] })
+    cy.get('.vessels').trigger('pointerup', { clientX: 411, clientY: 645, pointerId: 1, force: true, pixel: [411, 635] })
     cy.wait(500)
 
     cy.get('*[data-cy^="vessel-label-text"]').should('have.length', 3)

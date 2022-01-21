@@ -99,20 +99,16 @@ const CreateRegulation = ({ title, isEdition }) => {
     isRemoveModalOpen,
     isConfirmModalOpen,
     regulationDeleted,
-    currentRegulation,
-    fishingPeriod,
-    regulatorySpecies
+    currentRegulation
   } = useSelector(state => state.regulation)
 
   const {
-    lawType: selectedRegulationLawType,
-    topic: selectedRegulationTopic,
-    zone: nameZone,
-    region: selectedRegionList,
-    id: selectedGeometryId,
-    regulatoryReferences: regulatoryTextList,
-    upcomingRegulatoryReferences,
-    regulatoryGears
+    lawType,
+    topic,
+    zone,
+    region,
+    id,
+    regulatoryReferences
   } = currentRegulation
 
   useEffect(() => {
@@ -162,54 +158,54 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   useEffect(() => {
-    if (selectedRegulationLawType) {
-      const territory = layersTopicsByRegTerritory[LAWTYPES_TO_TERRITORY[selectedRegulationLawType]]
+    if (lawType) {
+      const territory = layersTopicsByRegTerritory[LAWTYPES_TO_TERRITORY[lawType]]
       let regulatoryTopicList = []
       if (territory) {
-        const lawTypeObject = territory[selectedRegulationLawType]
+        const lawTypeObject = territory[lawType]
         regulatoryTopicList = lawTypeObject ? Object.keys(lawTypeObject) : []
       }
       dispatch(setRegulatoryTopics(regulatoryTopicList))
     }
-  }, [selectedRegulationLawType, layersTopicsByRegTerritory])
+  }, [lawType, layersTopicsByRegTerritory])
 
   const createOrUpdateRegulation = useCallback((featureObject) => {
     const feature = new Feature(featureObject)
-    feature.setId(getRegulatoryFeatureId(selectedGeometryId))
+    feature.setId(getRegulatoryFeatureId(id))
     dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
 
-    if (initialGeometryId && initialGeometryId !== selectedGeometryId) {
+    if (initialGeometryId && initialGeometryId !== id) {
       const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
       emptyFeature.setId(getRegulatoryFeatureId(initialGeometryId))
       dispatch(updateRegulation(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
     }
-  }, [selectedGeometryId, initialGeometryId])
+  }, [id, initialGeometryId])
 
   const checkRequiredValues = useCallback(() => {
     let atLeastOneValueIsMissing = false
-    let valueIsMissing = !(selectedRegulationLawType && selectedRegulationLawType !== '')
+    let valueIsMissing = !(lawType && lawType !== '')
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setLawTypeIsMissing(valueIsMissing)
 
-    valueIsMissing = !(selectedRegulationTopic && selectedRegulationTopic !== '')
+    valueIsMissing = !(topic && topic !== '')
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setRegulationTopicIsMissing(valueIsMissing)
 
-    valueIsMissing = !(nameZone && nameZone !== '')
+    valueIsMissing = !(zone && zone !== '')
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setNameZoneIsMissing(valueIsMissing)
 
-    valueIsMissing = selectedRegulationLawType && selectedRegulationLawType !== '' &&
-      selectedRegulationLawType.includes(REG_LOCALE) &&
-      !(selectedRegionList && selectedRegionList.length !== 0)
+    valueIsMissing = lawType && lawType !== '' &&
+      lawType.includes(REG_LOCALE) &&
+      !(region && region.length !== 0)
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     setRegionIsMissing(valueIsMissing)
 
-    valueIsMissing = !(selectedGeometryId && selectedGeometryId !== '')
+    valueIsMissing = !(id && id !== '')
     setGeometryIsMissing(valueIsMissing)
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
     dispatch(setAtLeastOneValueIsMissing(atLeastOneValueIsMissing))
-  }, [selectedRegulationLawType, nameZone, selectedRegulationTopic, selectedRegionList, selectedGeometryId])
+  }, [lawType, zone, topic, region, id])
 
   useEffect(() => {
     if (saveOrUpdateRegulation && atLeastOneValueIsMissing === undefined) {
@@ -220,23 +216,13 @@ const CreateRegulation = ({ title, isEdition }) => {
   useEffect(() => {
     if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTextCheckList = Object.values(regulatoryTextCheckedMap)
-      const allTextsHaveBeenChecked = regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryTextList.length
+      const allTextsHaveBeenChecked = regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryReferences.length
 
       if (allTextsHaveBeenChecked) {
         const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !atLeastOneValueIsMissing
 
         if (allRequiredValuesHaveBeenFilled) {
-          const featureObject = mapToRegulatoryFeatureObject({
-            layerName: selectedRegulationTopic,
-            lawType: selectedRegulationLawType,
-            zone: nameZone,
-            region: selectedRegionList?.join(', '),
-            regulatoryReferences: regulatoryTextList,
-            upcomingRegulatoryReferences,
-            fishingPeriod,
-            regulatorySpecies,
-            regulatoryGears
-          })
+          const featureObject = mapToRegulatoryFeatureObject(currentRegulation)
           createOrUpdateRegulation(featureObject)
           setSaveIsForbidden(false)
         } else {
@@ -256,9 +242,9 @@ const CreateRegulation = ({ title, isEdition }) => {
       ((isEdition && regulatoryZoneMetadata.geometry) || (geometryObjectList && geometryObjectList[selectedGeometryId]))) {
       dispatch(setRegulatoryGeometriesToPreview(isEdition
         ? [regulatoryZoneMetadata.geometry]
-        : [geometryObjectList[selectedGeometryId]]))
+        : [geometryObjectList[id]]))
     }
-  }, [isEdition, regulatoryZoneMetadata, selectedGeometryId, geometryObjectList, showRegulatoryPreview])
+  }, [isEdition, regulatoryZoneMetadata, id, geometryObjectList, showRegulatoryPreview])
 
   const getGeometryObjectList = () => {
     dispatch(getGeometryWithoutRegulationReference())
@@ -289,22 +275,44 @@ const CreateRegulation = ({ title, isEdition }) => {
             <Span />
           </Header>
           <ContentWrapper>
-            {/** j'ai  supprimé une CONTENT */}
             <Section show>
-              <Title>
-                identification de la zone réglementaire
-              </Title>
-              <RegulationLawTypeLine
-                selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))}
-                lawTypeIsMissing={lawTypeIsMissing}
+                <Title>
+                  identification de la zone réglementaire
+                </Title>
+                <RegulationLawTypeLine
+                  selectData={formatDataForSelectPicker(Object.keys(LAWTYPES_TO_TERRITORY))}
+                  lawTypeIsMissing={lawTypeIsMissing}
+                />
+                <RegulationTopicLine
+                  disabled={!lawType}
+                  regulationTopicIsMissing={regulationTopicIsMissing}
+                />
+                <RegulationLayerZoneLine nameZoneIsMissing={nameZoneIsMissing} />
+                <RegulationRegionLine
+                  disabled={!lawType || LAWTYPES_TO_TERRITORY[lawType] !== FRANCE}
+                  regionIsMissing={regionIsMissing}
+                />
+                <RegulationGeometryLine
+                  geometryIdList={geometryIdList}
+                  setShowRegulatoryPreview={setShowRegulatoryPreview}
+                  showRegulatoryPreview={showRegulatoryPreview}
+                  geometryIsMissing={geometryIsMissing}
+                />
+            </Section>
+            <Section>
+              <RegulatoryTextSection
+                regulatoryTextList={regulatoryReferences}
+                setRegulatoryTextList={setRegulatoryTextList}
+                source={REGULATORY_TEXT_SOURCE.REGULATION}
+                saveForm={saveOrUpdateRegulation}
               />
               <RegulationTopicLine
-                disabled={!selectedRegulationLawType}
+                disabled={!lawType}
                 regulationTopicIsMissing={regulationTopicIsMissing}
               />
               <RegulationLayerZoneLine nameZoneIsMissing={nameZoneIsMissing} />
               <RegulationRegionLine
-                disabled={!selectedRegulationLawType || LAWTYPES_TO_TERRITORY[selectedRegulationLawType] !== FRANCE}
+                disabled={!lawType || LAWTYPES_TO_TERRITORY[lawType] !== FRANCE}
                 regionIsMissing={regionIsMissing}
               />
               <RegulationGeometryLine
@@ -316,7 +324,7 @@ const CreateRegulation = ({ title, isEdition }) => {
             </Section>
             {/** j'ai supprimé un content */}
             <RegulatoryTextSection
-              regulatoryTextList={regulatoryTextList}
+              regulatoryTextList={regulatoryReferences}
               setRegulatoryTextList={setRegulatoryTextList}
               source={REGULATORY_TEXT_SOURCE.REGULATION}
               saveForm={saveOrUpdateRegulation}

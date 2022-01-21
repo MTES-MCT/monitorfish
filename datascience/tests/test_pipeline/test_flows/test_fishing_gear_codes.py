@@ -1,25 +1,31 @@
-import unittest
-from unittest.mock import patch
-
 import pandas as pd
-import sqlalchemy
 
-from src.pipeline.flows.fishing_gear_codes import (
-    extract_fishing_gear_codes,
-    flow,
-    load_fishing_gear_codes,
-)
-from tests.mocks import mock_extract_side_effect
+from config import LIBRARY_LOCATION
+from src.pipeline.flows.fishing_gear_codes import flow
+from src.read_query import read_query
 
 
-class TestFishingGearCodesFlow(unittest.TestCase):
-    @patch("src.pipeline.flows.fishing_gear_codes.extract")
-    def test_extract_fishing_gear_codes(self, mock_extract):
-        mock_extract.side_effect = mock_extract_side_effect
-        query = extract_fishing_gear_codes.run()
-        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
+def test_fishing_gear_codes_flow(reset_test_data):
+    flow.schedule = None
+    res = flow.run()
 
-    @patch("src.pipeline.flows.fishing_gear_codes.load", autospec=True)
-    def test_load_fishing_gear_codes(self, mock_load):
-        dummy_fishing_gear_codes = pd.DataFrame()
-        load_fishing_gear_codes.run(dummy_fishing_gear_codes)
+    assert res.is_successful()
+
+    fishing_gear_codes = read_query(
+        "monitorfish_remote", "SELECT * FROM fishing_gear_codes"
+    )
+    fishing_gear_codes_groups = read_query(
+        "monitorfish_remote", "SELECT * FROM fishing_gear_codes_groups"
+    )
+
+    expected_fishing_gear_codes = pd.read_csv(
+        LIBRARY_LOCATION / "pipeline/data/fishing_gear_codes.csv"
+    )
+    expected_fishing_gear_codes_groups = pd.read_csv(
+        LIBRARY_LOCATION / "pipeline/data/fishing_gear_codes_groups.csv"
+    )
+
+    pd.testing.assert_frame_equal(fishing_gear_codes, expected_fishing_gear_codes)
+    pd.testing.assert_frame_equal(
+        fishing_gear_codes_groups, expected_fishing_gear_codes_groups
+    )

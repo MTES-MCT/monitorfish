@@ -418,7 +418,7 @@ def test_flow_deletes_existing_pending_alerts(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = False
 
-    flow.run(
+    state = flow.run(
         alert_type=alert_type,
         zones=zones,
         hours_from_now=hours_from_now,
@@ -428,6 +428,8 @@ def test_flow_deletes_existing_pending_alerts(reset_test_data):
         fishing_gear_categories=fishing_gear_categories,
         include_vessels_unknown_gear=include_vessels_unknown_gear,
     )
+
+    assert state.is_successful()
 
     pending_alerts = read_query(
         "monitorfish_remote", "SELECT COUNT(*) FROM pending_alerts"
@@ -452,7 +454,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = True
 
-    flow.run(
+    state = flow.run(
         alert_type=alert_type,
         zones=zones,
         hours_from_now=hours_from_now,
@@ -462,6 +464,8 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
         fishing_gear_categories=fishing_gear_categories,
         include_vessels_unknown_gear=include_vessels_unknown_gear,
     )
+
+    assert state.is_successful()
 
     pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
 
@@ -550,7 +554,7 @@ def test_flow_filters_on_gears(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = False
 
-    flow.run(
+    state = flow.run(
         alert_type=alert_type,
         zones=zones,
         hours_from_now=hours_from_now,
@@ -560,6 +564,8 @@ def test_flow_filters_on_gears(reset_test_data):
         fishing_gear_categories=fishing_gear_categories,
         include_vessels_unknown_gear=include_vessels_unknown_gear,
     )
+
+    assert state.is_successful()
 
     pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
 
@@ -637,7 +643,7 @@ def test_flow_filters_on_time(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = True
 
-    flow.run(
+    state = flow.run(
         alert_type=alert_type,
         zones=zones,
         hours_from_now=hours_from_now,
@@ -647,6 +653,8 @@ def test_flow_filters_on_time(reset_test_data):
         fishing_gear_categories=fishing_gear_categories,
         include_vessels_unknown_gear=include_vessels_unknown_gear,
     )
+
+    assert state.is_successful()
 
     pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
 
@@ -724,7 +732,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = True
 
-    flow.run(
+    state = flow.run(
         alert_type=alert_type,
         zones=zones,
         hours_from_now=hours_from_now,
@@ -734,6 +742,8 @@ def test_flow_filters_on_flag_states(reset_test_data):
         fishing_gear_categories=fishing_gear_categories,
         include_vessels_unknown_gear=include_vessels_unknown_gear,
     )
+
+    assert state.is_successful()
 
     pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
 

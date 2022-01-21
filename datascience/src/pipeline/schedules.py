@@ -64,7 +64,6 @@ enrich_positions.flow.schedule = Schedule(
         ),
     ]
 )
-fishing_gear_codes.flow.schedule = CronSchedule("0 8 * * *")
 infractions.flow.schedule = CronSchedule("1 8 * * *")
 last_positions.flow.schedule = Schedule(
     clocks=[

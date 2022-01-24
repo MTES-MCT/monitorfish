@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import SectionTitle from '../../SectionTitle'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import RegulatorySpeciesForm from './RegulatorySpeciesForm'
-import { useDispatch, useSelector } from 'react-redux'
 import { setRegulationByKey } from '../../Regulation.slice'
-import { FormSection, OtherRemark } from '../../../commonStyles/Backoffice.style'
+import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
 import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const RegulatorySpeciesSection = () => {
@@ -25,7 +25,7 @@ const RegulatorySpeciesSection = () => {
     })
   }
 
-  return <FormSection show>
+  return <Section show>
     <SectionTitle
       dataCy={'open-regulated-species'}
       title={'ESPÈCES RÉGLEMENTÉES'}
@@ -45,7 +45,7 @@ const RegulatorySpeciesSection = () => {
         value={regulatorySpecies?.otherInfo || ''}
         onChange={setOtherInfo} />
     </OtherRemark>
-  </FormSection>
+  </Section>
 }
 
 export default RegulatorySpeciesSection

@@ -72,6 +72,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     layersTopicsByRegTerritory,
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
+
   /** @type {boolean} */
   const [lawTypeIsMissing, setLawTypeIsMissing] = useState(false)
   /** @type {boolean} */
@@ -90,6 +91,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
   /** @type {boolean} saveIsForbidden */
   const [saveIsForbidden, setSaveIsForbidden] = useState(false)
+
   const {
     isModalOpen,
     regulationSaved,
@@ -299,30 +301,6 @@ const CreateRegulation = ({ title, isEdition }) => {
                   geometryIsMissing={geometryIsMissing}
                 />
             </Section>
-            <Section>
-              <RegulatoryTextSection
-                regulatoryTextList={regulatoryReferences}
-                setRegulatoryTextList={setRegulatoryTextList}
-                source={REGULATORY_TEXT_SOURCE.REGULATION}
-                saveForm={saveOrUpdateRegulation}
-              />
-              <RegulationTopicLine
-                disabled={!lawType}
-                regulationTopicIsMissing={regulationTopicIsMissing}
-              />
-              <RegulationLayerZoneLine nameZoneIsMissing={nameZoneIsMissing} />
-              <RegulationRegionLine
-                disabled={!lawType || LAWTYPES_TO_TERRITORY[lawType] !== FRANCE}
-                regionIsMissing={regionIsMissing}
-              />
-              <RegulationGeometryLine
-                geometryIdList={geometryIdList}
-                setShowRegulatoryPreview={setShowRegulatoryPreview}
-                showRegulatoryPreview={showRegulatoryPreview}
-                geometryIsMissing={geometryIsMissing}
-              />
-            </Section>
-            {/** j'ai supprimé un content */}
             <RegulatoryTextSection
               regulatoryTextList={regulatoryReferences}
               setRegulatoryTextList={setRegulatoryTextList}

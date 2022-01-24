@@ -38,7 +38,7 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
 function parseRegulatoryGears (gears) {
   return gears
     ? parseJSON(gears)
-    : initialRegulatoryGearsValues
+    : INITIAL_REG_GEARS_VALUES
 }
 
 export const mapToCurrentRegulation = (reg) => {
@@ -154,7 +154,7 @@ export const mapToRegulatoryFeatureObject = properties => {
     layer_name: layerName,
     law_type: lawType,
     zones: zone,
-    region,
+    region: region.join(', '),
     references_reglementaires: JSON.stringify(regulatoryReferences),
     references_reglementaires_a_venir: JSON.stringify(upcomingRegulatoryReferences),
     fishing_period: JSON.stringify(fishingPeriod),
@@ -277,7 +277,7 @@ const INITIAL_REG_SPECIES_VALUES = {
 }
 
 /** @type {RegulatoryGears} */
-export const initialRegulatoryGearsValues = {
+export const INITIAL_REG_GEARS_VALUES = {
   authorized: undefined,
   allGears: undefined,
   allTowedGears: undefined,
@@ -316,13 +316,15 @@ export const REGULATORY_REFERENCE_KEYS = {
   TOPIC: 'topic',
   LAW_TYPE: 'lawType',
   ZONE: 'zone',
-  REGULATORY_SPECIES: 'regulatorySpecies'
+  REGULATORY_SPECIES: 'regulatorySpecies',
+  REGULATORY_GEARS: 'regulatoryGears'
 }
 
 export const INITIAL_REGULATION = {
   [REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES]: [DEFAULT_REGULATORY_TEXT],
   [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: INITIAL_FISHING_PERIOD_VALUES,
-  [REGULATORY_REFERENCE_KEYS.REGULAOTRY_SPECIES]: INITIAL_REG_SPECIES_VALUES
+  [REGULATORY_REFERENCE_KEYS.REGULAOTRY_SPECIES]: INITIAL_REG_SPECIES_VALUES,
+  [REGULATORY_REFERENCE_KEYS.REGULATORY_GEARS]: INITIAL_REG_GEARS_VALUES
 }
 
 export const WEEKDAYS = {

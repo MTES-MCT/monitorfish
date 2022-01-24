@@ -15,18 +15,6 @@
  */
 
 /**
- * @typedef Alert
- * @property {string} creationDate
- * @property {string} externalReferenceNumber
- * @property {string} id
- * @property {string} internalReferenceNumber
- * @property {string} ircs
- * @property {string} name
- * @property {number} tripNumber
- * @property {{name: string}} value
- */
-
-/**
  * @typedef ERSMessage
  * @property {{
         isSuccess: boolean,

@@ -42,9 +42,9 @@ export const CheckedCell = ({ rowData, dataKey, onClick, onChange, ...props }) =
   )
 }
 
-export const FlagCell = ({ rowData, dataKey, ...props }) => (
+export const FlagCell = ({ rowData, dataKey, baseUrl, ...props }) => (
   <Cell {...props} style={{ padding: 0 }}>
-    <Flag title={countries.getName(rowData[dataKey], 'fr')} rel="preload" src={`flags/${rowData[dataKey]}.svg`}/>
+    <Flag title={countries.getName(rowData[dataKey], 'fr')} rel="preload" src={`${baseUrl ? `${baseUrl}/` : ''}flags/${rowData[dataKey]}.svg`}/>
   </Cell>
 )
 
@@ -68,7 +68,7 @@ export const CellWithTitle = ({ rowData, dataKey, ...props }) => (
   </Cell>
 )
 
-const Flag = styled.img`
+export const Flag = styled.img`
   font-size: 1.5em;
   margin-left: 14px;
   margin-top: 8px;

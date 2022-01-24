@@ -1,8 +1,8 @@
-import { Icon, Style } from 'ol/style'
+import { Circle, Icon, Style } from 'ol/style'
 import { asArray } from 'ol/color'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
-import { Vessel, VESSEL_ICON_STYLE, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
+import { Vessel, VESSEL_ALERT_STYLE, VESSEL_ICON_STYLE, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
 
 import { COLORS } from '../../constants/constants'
 
@@ -16,6 +16,26 @@ export const selectedVesselStyle = new Style({
     scale: 0.5
   }),
   zIndex: VESSEL_SELECTOR_STYLE
+})
+
+export const vesselAlertBigCircleStyle = new Style({
+  image: new Circle({
+    fill: new Fill({
+      color: 'rgba(225, 0, 15, 0.3)'
+    }),
+    radius: 23
+  }),
+  zIndex: VESSEL_ALERT_STYLE
+})
+
+export const vesselAlertBigSmallStyle = new Style({
+  image: new Circle({
+    fill: new Fill({
+      color: 'rgba(225, 0, 15, 1)'
+    }),
+    radius: 18
+  }),
+  zIndex: VESSEL_ALERT_STYLE
 })
 
 export const getIconStyle = vesselObject => {
@@ -61,7 +81,7 @@ export const getCircleStyle = vesselObject => {
   return circleStyleCache.get(key)
 }
 
-export const getVesselStyle = feature => {
+export const getVesselStyle = (feature, resolution) => {
   const filterColor = feature.get(Vessel.filterColorProperty)
   const opacity = feature.get(Vessel.opacityProperty)
   const isLight = feature.get(Vessel.isLightProperty)
@@ -76,6 +96,7 @@ export const getVesselStyle = feature => {
   const course = feature.vessel.course
   const speed = feature.vessel.speed
   const isAtPort = feature.vessel.isAtPort
+  const hasAlert = !!feature.vessel.alerts?.length
 
   if (isHidden && !isSelected) {
     return []
@@ -102,6 +123,13 @@ export const getVesselStyle = feature => {
 
   if (isSelected) {
     styles.push(selectedVesselStyle)
+  }
+
+  if (hasAlert) {
+    styles.push(vesselAlertBigCircleStyle, vesselAlertBigSmallStyle)
+    const scale = Math.min(1.5, 0.1 + Math.sqrt(200 / resolution))
+    styles[styles.length - 1].getImage().setScale(scale)
+    styles[styles.length - 2].getImage().setScale(scale)
   }
 
   return styles

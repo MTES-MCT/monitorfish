@@ -37,27 +37,34 @@ export const getDate = dateString => {
   }
 }
 
+export const getTime = (dateString, withoutSeconds) => {
+  const date = new Date(dateString)
+  const timeOptions = withoutSeconds
+    ? {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'UTC',
+        hourCycle: 'h24'
+      }
+    : {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'UTC',
+        hourCycle: 'h24'
+      }
+
+  let time = date.toLocaleTimeString([], timeOptions)
+  time = time.replace(':', 'h')
+  time = time.replace('24', '00')
+
+  return time
+}
+
 export const getDateTime = (dateString, withoutSeconds) => {
   if (dateString) {
     const date = new Date(dateString)
-    const timeOptions = withoutSeconds
-      ? {
-          hour: '2-digit',
-          minute: '2-digit',
-          timeZone: 'UTC',
-          hourCycle: 'h24'
-        }
-      : {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          timeZone: 'UTC',
-          hourCycle: 'h24'
-        }
-
-    let time = date.toLocaleTimeString([], timeOptions)
-    time = time.replace(':', 'h')
-    time = time.replace('24', '00')
+    const time = getTime(dateString, withoutSeconds)
 
     return `${getDay(date)}/${getMonth(date)}/${date.getUTCFullYear()} à ${time}`
   }
@@ -169,6 +176,10 @@ export const removeAccents = text => Object.keys(accentsMap)
   .reduce((acc, cur) => acc.toString().replace(new RegExp(accentsMap[cur], 'g'), cur), text)
 
 export function getTextForSearch (text) {
+  if (!text) {
+    return ''
+  }
+
   return removeAccents(text)
     .toLowerCase()
     .replace(/[ ]/g, '')
@@ -310,4 +321,37 @@ export const getExtentFromGeoJSON = features => {
   const feature = vectorSource.getFormat().readFeatures(features)
 
   return feature[0]?.getGeometry()?.getExtent()
+}
+
+/**
+ * Merge objects with a key to array structure
+ * Example: {
+ *   {
+ *     '2018-05-11': [],
+ *     '2018-05-16': []
+ *   }
+ * @param {Object} objectOne - First object
+ * @param {Object} objectTwo - Second object
+ * @return {Object} The merged object
+ */
+export function mergeObjects (objectOne, objectTwo) {
+  const mergedObject = {}
+
+  for (const key of Object.keys(objectOne)) {
+    if (!mergedObject[key]) mergedObject[key] = []
+
+    for (const innerKey of objectOne[key]) {
+      mergedObject[key].push(innerKey)
+    }
+  }
+
+  for (const key of Object.keys(objectTwo)) {
+    if (!mergedObject[key]) mergedObject[key] = []
+
+    for (const innerKey of objectTwo[key]) {
+      mergedObject[key].push(innerKey)
+    }
+  }
+
+  return mergedObject
 }

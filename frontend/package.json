@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dnd-kit/core": "^4.0.3",
+    "@dnd-kit/modifiers": "^4.0.0",
     "@reduxjs/toolkit": "^1.5.0",
     "@sentry/react": "^6.2.3",
     "@sentry/tracing": "^6.2.3",
@@ -32,6 +34,7 @@
     "react-highlight-words": "^0.16.0",
     "react-imask": "^6.1.0",
     "react-markdown": "^6.0.1",
+    "react-new-window": "^0.2.1",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",

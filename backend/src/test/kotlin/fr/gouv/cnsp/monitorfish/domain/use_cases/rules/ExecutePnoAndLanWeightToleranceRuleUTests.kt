@@ -79,7 +79,7 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
 
             assertThat(allValues).hasSize(2)
 
-            assertThat(allValues.first().value.name).isEqualTo(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT)
+            assertThat(allValues.first().value.type).isEqualTo(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT)
             assertThat((allValues.first().value as PNOAndLANWeightToleranceAlert).lanOperationNumber).isEqualTo("456846844658")
             assertThat((allValues.first().value as PNOAndLANWeightToleranceAlert).pnoOperationNumber).isEqualTo("47177857577")
             assertThat((allValues.first().value as PNOAndLANWeightToleranceAlert).percentOfTolerance).isEqualTo(10.0)
@@ -91,7 +91,7 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
             assertThat(firstCatchAlerts?.last()?.lan?.weight).isEqualTo(69.7)
             assertThat(firstCatchAlerts?.last()?.pno?.weight).isEqualTo(1069.7)
 
-            assertThat(allValues.last().value.name).isEqualTo(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT)
+            assertThat(allValues.last().value.type).isEqualTo(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT)
             assertThat((allValues.last().value as PNOAndLANWeightToleranceAlert).lanOperationNumber).isEqualTo("48545254254")
             assertThat((allValues.last().value as PNOAndLANWeightToleranceAlert).pnoOperationNumber).isEqualTo("004045204504")
             assertThat((allValues.last().value as PNOAndLANWeightToleranceAlert).percentOfTolerance).isEqualTo(10.0)

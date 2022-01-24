@@ -41,6 +41,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="impact-risk-factor"]').contains('2.1', { timeout: 20000 })
     cy.get('*[data-cy^="probability-risk-factor"]').contains('2.0', { timeout: 20000 })
     cy.get('*[data-cy^="detectability-risk-factor"]').contains('3.0', { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-sidebar-alert"]').contains('3 milles - Chaluts', { timeout: 20000 })
 
     cy.get('*[data-cy^="impact-risk-factor"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="probability-risk-factor"]').click({ timeout: 20000, force: true })
@@ -284,6 +285,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // When
+    cy.wait(1000)
     cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 20000 })
 
     // Then, the last position should be positioned in the bottom of the window

@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch, useRouteMatch, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
 import { browserName, browserVersion } from 'react-device-detect'
@@ -29,6 +29,11 @@ import ErrorToastNotification from './features/commonComponents/ErrorToastNotifi
 import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import BackofficeMode from './api/BackofficeMode'
+import AlertsMapButton from './features/side_window/alerts/AlertsMapButton'
+import BeaconStatusesMapButton from './features/side_window/beacon_statuses/BeaconStatusesMapButton'
+import SideWindowLauncher from './features/side_window/SideWindowLauncher'
+import SideWindow from './features/side_window/SideWindow'
+import { sideWindowMenu } from './domain/entities/sideWindow'
 
 function App () {
   switch (browserName) {
@@ -73,24 +78,37 @@ function HomePage () {
   return <Provider store={homeStore}>
     <NamespaceContext.Provider value={'homepage'}>
       <BackofficeMode inBackofficeMode={false}/>
-      <Healthcheck/>
-      <PreviewFilteredVessels/>
-      <Wrapper>
-        <Map/>
-        <LayersSidebar/>
-        <VesselsSearch/>
-        <RightMenuOnHoverArea/>
-        <VesselList namespace={'homepage'}/>
-        <VesselFilters/>
-        <VesselVisibility/>
-        <VesselSidebar/>
-        <UpdatingVesselLoader/>
-        <Measurement/>
-        <InterestPoint/>
-        <VesselLabels/>
-        <APIWorker/>
-        <ErrorToastNotification/>
-      </Wrapper>
+      <Switch>
+        <Route exact path="/side_window">
+          <SideWindow
+            openedSideWindowTab={sideWindowMenu.ALERTS.code}
+            fromTab
+          />
+        </Route>
+        <Route exact path="/">
+          <Healthcheck/>
+          <PreviewFilteredVessels/>
+          <Wrapper>
+            <Map/>
+            <LayersSidebar/>
+            <AlertsMapButton/>
+            <BeaconStatusesMapButton/>
+            <VesselsSearch/>
+            <RightMenuOnHoverArea/>
+            <VesselList namespace={'homepage'}/>
+            <VesselFilters/>
+            <VesselVisibility/>
+            <VesselSidebar/>
+            <UpdatingVesselLoader/>
+            <Measurement/>
+            <InterestPoint/>
+            <VesselLabels/>
+            <APIWorker/>
+            <ErrorToastNotification/>
+            <SideWindowLauncher/>
+          </Wrapper>
+        </Route>
+      </Switch>
     </NamespaceContext.Provider>
   </Provider>
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import showAllVessels from '../domain/use_cases/showVesselsLastPosition'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import getAllGearCodes from '../domain/use_cases/getAllGearCodes'
@@ -14,8 +14,12 @@ import getAllRegulatoryLayersByRegTerritory from '../domain/use_cases/getAllRegu
 import { setRegulatoryLayers } from '../domain/shared_slices/Regulatory'
 import { unByKey } from 'ol/Observable'
 import { getRegulatoryLayersWithoutTerritory } from '../domain/entities/regulatory'
+import getOperationalAlerts from '../domain/use_cases/getOperationalAlerts'
+import getAllBeaconStatuses from '../domain/use_cases/getAllBeaconStatuses'
+import openBeaconStatus from '../domain/use_cases/openBeaconStatus'
 
 export const TEN_MINUTES = 600000
+export const THIRTY_SECONDS = 30000
 
 const APIWorker = () => {
   const dispatch = useDispatch()
@@ -25,9 +29,17 @@ const APIWorker = () => {
     selectedVesselIdentity
   } = useSelector(state => state.vessel)
   const {
+    sideWindowIsOpen
+  } = useSelector(state => state.global)
+  const {
+    openedBeaconStatus
+  } = useSelector(state => state.beaconStatus)
+  const {
     layersTopicsByRegTerritory
   } = useSelector(state => state.regulatory)
 
+  const beaconStatusesInterval = useRef(null)
+  const beaconStatusInterval = useRef(null)
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
   useEffect(() => {
@@ -37,7 +49,9 @@ const APIWorker = () => {
       dispatch(getAllGearCodes())
       dispatch(getAllFleetSegments())
       dispatch(showAllVessels())
+      dispatch(getOperationalAlerts())
       dispatch(getAllRegulatoryLayersByRegTerritory())
+      dispatch(getAllBeaconStatuses())
     })
 
     const interval = setInterval(() => {
@@ -45,6 +59,7 @@ const APIWorker = () => {
         dispatch(setIsUpdatingVessels())
         dispatch(getHealthcheck())
         dispatch(showAllVessels())
+        dispatch(getOperationalAlerts())
         dispatch(updateVesselTracks())
       })
 
@@ -55,6 +70,38 @@ const APIWorker = () => {
       clearInterval(interval)
     }
   }, [])
+
+  useEffect(() => {
+    if (sideWindowIsOpen) {
+      if (beaconStatusesInterval?.current) {
+        clearInterval(beaconStatusesInterval.current)
+      }
+
+      beaconStatusesInterval.current = setInterval(() => {
+        dispatch(getAllBeaconStatuses())
+      }, THIRTY_SECONDS)
+    }
+
+    return () => {
+      clearInterval(beaconStatusesInterval?.current)
+    }
+  }, [sideWindowIsOpen])
+
+  useEffect(() => {
+    if (sideWindowIsOpen && openedBeaconStatus) {
+      if (beaconStatusInterval?.current) {
+        clearInterval(beaconStatusInterval.current)
+      }
+
+      beaconStatusInterval.current = setInterval(() => {
+        dispatch(openBeaconStatus(openedBeaconStatus))
+      }, THIRTY_SECONDS)
+    }
+
+    return () => {
+      clearInterval(beaconStatusInterval?.current)
+    }
+  }, [sideWindowIsOpen, openedBeaconStatus])
 
   useEffect(() => {
     if (layersTopicsByRegTerritory) {

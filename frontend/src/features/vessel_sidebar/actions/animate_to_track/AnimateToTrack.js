@@ -30,17 +30,13 @@ const AnimateToTrackButton = styled(MapButtonStyle)`
   width: 30px;
   background: ${COLORS.charcoal};
   position: absolute;
-  right: 10px;
   margin-right: ${props => props.openBox ? 505 : -45}px;
   opacity: ${props => props.openBox ? 1 : 0};
   ${props => props.isClickable ? 'cursor: pointer;' : null}
   border-radius: 1px;
   z-index: 999;
-  transition: 0.5s all;
-  
-  animation: ${props => props.rightMenuIsOpen && props.openBox
-  ? 'vessel-box-opening-with-right-menu-hover'
-  : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
+  right: ${props => props.rightMenuIsOpen && props.openBox ? 55 : 10}px;
+  transition: all 0.5s, right 0.3s;
 
   :hover, :focus {
       background: ${COLORS.charcoal};

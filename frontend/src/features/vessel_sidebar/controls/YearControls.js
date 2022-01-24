@@ -52,11 +52,11 @@ const YearControls = props => {
       </YearTitle>
       <List
         isOpen={isOpen}
-        name={yearControls.length && yearControls[0] ? yearControls[0].controlDatetimeUtc : props.year}>
+        name={yearControls.length && yearControls[0] ? yearControls[0].dateTime : props.year}>
         {
           yearControls.length
             ? yearControls
-              .sort((a, b) => new Date(b.controlDatetimeUtc) - new Date(a.controlDatetimeUtc))
+              .sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime))
               .map((control, index) => {
                 return <Control
                   key={index}

@@ -10,6 +10,7 @@ import WFS from 'ol/format/WFS'
 import GML from 'ol/format/GML'
 
 const OK = 200
+const CREATED = 201
 const NOT_FOUND = 404
 const ACCEPTED = 202
 
@@ -29,6 +30,11 @@ const GEOMETRY_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la liste des tr
 const UPDATE_REGULATION_MESSAGE = 'Une erreur est survenue lors de la mise à jour de la zone réglementaire dans GeoServer'
 const CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les objectifs de contrôle'
 const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour l\'objectifs de contrôle'
+const ALERTS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les alertes opérationelles'
+const BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les avaries VMS'
+const BEACON_STATUS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer l\'avarie VMS'
+const UPDATE_BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour le statut de l\'avarie VMS'
+const SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter le commentaire sur l\'avarie VMS'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -571,6 +577,29 @@ function getAllFleetSegmentFromAPI () {
 }
 
 /**
+ * Get operational alerts
+ * @memberOf API
+ * @returns {Promise<Alert[]>} The alerts
+ * @throws {Error}
+ */
+function getOperationalAlertsFromAPI () {
+  return fetch('/bff/v1/operational_alerts')
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(ALERTS_ERROR_MESSAGE)
+      }
+    }).catch(error => {
+      console.error(error)
+      throw Error(ALERTS_ERROR_MESSAGE)
+    })
+}
+
+/**
  * Get application healthcheck
  * @memberOf API
  * @returns {Promise<Healthcheck>} The healthcheck dates of positions and ers messages
@@ -681,6 +710,112 @@ function sendRegulationTransaction (feature, actionType) {
   })
 }
 
+/**
+ * Get all beacon statuses
+ * @memberOf API
+ * @returns {Promise<BeaconStatus[]>} The beacon statuses
+ * @throws {Error}
+ */
+function getAllBeaconStatusesFromAPI () {
+  return fetch('/bff/v1/beacon_statuses')
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(BEACON_STATUSES_ERROR_MESSAGE)
+      }
+    }).catch(error => {
+      console.error(error)
+      throw Error(BEACON_STATUSES_ERROR_MESSAGE)
+    })
+}
+
+/**
+ * Update a beacon status
+ * @memberOf API
+ * @param {number} id - The id of the beacon status
+ * @param {UpdateBeaconStatus} updatedFields - The fields to update
+ * @throws {Error}
+ */
+function updateBeaconStatusFromAPI (id, updatedFields) {
+  return fetch(`/bff/v1/beacon_statuses/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json, text/plain',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    body: JSON.stringify(updatedFields)
+  }).then(response => {
+    if (response.status === OK) {
+      return response.json()
+    } else {
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(UPDATE_BEACON_STATUSES_ERROR_MESSAGE)
+    }
+  }).catch(error => {
+    console.error(error)
+    throw Error(UPDATE_BEACON_STATUSES_ERROR_MESSAGE)
+  })
+}
+
+/**
+ * Get a beacon status
+ * @memberOf API
+ * @returns {Promise<BeaconStatusWithDetails>} The beacon status with details
+ * @throws {Error}
+ */
+function getBeaconStatusFromAPI (beaconStatusId) {
+  return fetch(`/bff/v1/beacon_statuses/${beaconStatusId}`)
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(BEACON_STATUS_ERROR_MESSAGE)
+      }
+    }).catch(error => {
+      console.error(error)
+      throw Error(BEACON_STATUS_ERROR_MESSAGE)
+    })
+}
+
+/**
+ * Save a new comment attached to a beacon status
+ * @memberOf API
+ * @param {string} id - The id of the beacon status
+ * @param {BeaconStatusCommentInput} comment - The fields to update
+ * @throws {Error}
+ */
+function saveBeaconStatusCommentFromAPI (id, comment) {
+  return fetch(`/bff/v1/beacon_statuses/${id}/comments`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json, text/plain',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    body: JSON.stringify(comment)
+  }).then(response => {
+    if (response.status === CREATED) {
+      return response.json()
+    } else {
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE)
+    }
+  }).catch(error => {
+    console.error(error)
+    throw Error(SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE)
+  })
+}
+
 export {
   getVesselsLastPositionsFromAPI,
   getVesselFromAPI,
@@ -702,5 +837,10 @@ export {
   sendRegulationTransaction,
   getControlObjectivesFromAPI,
   updateControlObjectiveFromAPI,
-  getAllSpeciesFromAPI
+  getAllSpeciesFromAPI,
+  getOperationalAlertsFromAPI,
+  getAllBeaconStatusesFromAPI,
+  updateBeaconStatusFromAPI,
+  getBeaconStatusFromAPI,
+  saveBeaconStatusCommentFromAPI
 }

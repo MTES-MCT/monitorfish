@@ -7,6 +7,7 @@ import Layers, { baseLayers } from './layers'
 import { vesselLabel as vesselLabelEnum } from './vesselLabelLine'
 import countries from 'i18n-iso-countries'
 
+export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_ICON_STYLE = 10
 export const VESSEL_LABEL_STYLE = 100
 export const VESSEL_SELECTOR_STYLE = 200
@@ -89,7 +90,7 @@ export class Vessel {
 
   /**
    * Remove filter preview property to vessel feature
-   * @param {Object} feature - The OpenLayers feature object
+   * @param {Object} feature - The Openon(VESSELLayers feature object
    */
   static removeFilterPreviewPropertyToVessels (feature) {
     feature.set(Vessel.filterPreviewProperty, false)
@@ -222,7 +223,7 @@ export const getVesselIdentityFromVessel = vessel => {
 }
 
 export const getVesselFeatureIdFromVessel = vessel => {
-  return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.mmsi}/${vessel.ircs}`
+  return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.ircs}`
 }
 
 export const getVesselLastPositionVisibilityDates = vesselsLastPositionVisibility => {

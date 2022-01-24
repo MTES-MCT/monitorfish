@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 /* eslint-disable */
-/** @namespace ControlsReducer */
-const ControlsReducer = null
+/** @namespace ControlReducer */
+const ControlReducer = null
 /* eslint-enable */
 
-const controlsSlice = createSlice({
+const controlSlice = createSlice({
   name: 'controls',
   initialState: {
     controlResumeAndControls: {},
@@ -17,7 +17,7 @@ const controlsSlice = createSlice({
     /**
      * Set selected vessel control resume and control
      * @function setControlResumeAndControls
-     * @memberOf ControlsReducer
+     * @memberOf ControlReducer
      * @param {Object=} state
      * @param {{payload: ControlResume}} action - the control resume
      */
@@ -34,7 +34,7 @@ const controlsSlice = createSlice({
     /**
      * Set the date since controls are fetched
      * @function setControlFromDate
-     * @memberOf ControlsReducer
+     * @memberOf ControlReducer
      * @param {Object=} state
      * @param {{payload: Date}} action - The "from" date
      */
@@ -44,7 +44,7 @@ const controlsSlice = createSlice({
     /**
      * Set the loading of controls to true, and shows a loader in the controls tab
      * @function loadControls
-     * @memberOf ControlsReducer
+     * @memberOf ControlReducer
      * @param {Object=} state
      */
     loadControls (state) {
@@ -59,6 +59,6 @@ export const {
   resetNextControlResumeAndControls,
   loadControls,
   setControlFromDate
-} = controlsSlice.actions
+} = controlSlice.actions
 
-export default controlsSlice.reducer
+export default controlSlice.reducer

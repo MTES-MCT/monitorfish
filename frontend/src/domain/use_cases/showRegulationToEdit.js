@@ -18,7 +18,8 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
         id,
         upcomingRegulatoryReferences,
         fishingPeriod,
-        regulatorySpecies
+        regulatorySpecies,
+        regulatoryGears
       } = regulatoryZoneMetadata
 
       dispatch(setRegulation({
@@ -30,7 +31,8 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
         regulatoryReferences: regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT],
         upcomingRegulatoryReferences: upcomingRegulatoryReferences || { regulatoryTextList: [] },
         fishingPeriod,
-        regulatorySpecies
+        regulatorySpecies,
+        regulatoryGears
       }))
     }).catch(error => {
       console.error(error)

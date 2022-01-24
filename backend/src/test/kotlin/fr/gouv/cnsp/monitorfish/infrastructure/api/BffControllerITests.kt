@@ -29,8 +29,6 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate.EPOCH
@@ -38,7 +36,12 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.*
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconStatusException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconStatusCommentDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconStatusDataInput
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 
 @Import(MeterRegistryConfiguration::class)
 @ExtendWith(SpringExtension::class)
@@ -83,6 +86,21 @@ class BffControllerITests {
 
     @MockBean
     private lateinit var getAllControlObjective: GetAllControlObjectives
+
+    @MockBean
+    private lateinit var getOperationalAlerts: GetOperationalAlerts
+
+    @MockBean
+    private lateinit var getAllBeaconStatuses: GetAllBeaconStatuses
+
+    @MockBean
+    private lateinit var updateBeaconStatus: UpdateBeaconStatus
+
+    @MockBean
+    private lateinit var getBeaconStatus: GetBeaconStatus
+
+    @MockBean
+    private lateinit var saveBeaconStatusComment: SaveBeaconStatusComment
 
     @Autowired
     private lateinit var meterRegistry: MeterRegistry
@@ -450,5 +468,98 @@ class BffControllerITests {
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.species.length()", equalTo(1)))
                 .andExpect(jsonPath("$.groups.length()", equalTo(1)))
+    }
+
+    @Test
+    fun `Should get all beacon statuses`() {
+        // Given
+        given(this.getAllBeaconStatuses.execute()).willReturn(listOf(BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                true, ZonedDateTime.now(), null, ZonedDateTime.now())))
+
+        // When
+        mockMvc.perform(get("/bff/v1/beacon_statuses"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()", equalTo(1)))
+                .andExpect(jsonPath("$[0].internalReferenceNumber", equalTo("CFR")))
+                .andExpect(jsonPath("$[0].vesselStatus", equalTo("AT_SEA")))
+                .andExpect(jsonPath("$[0].stage", equalTo("INITIAL_ENCOUNTER")))
+    }
+
+    @Test
+    fun `Should return Created When an update of a beacon status is done`() {
+        given(this.updateBeaconStatus.execute(123, VesselStatus.AT_SEA, null))
+                .willReturn(BeaconStatusWithDetails(
+                        beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                        comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
+                        actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
+
+        // When
+        mockMvc.perform(put("/bff/v1/beacon_statuses/123")
+                .content(objectMapper.writeValueAsString(UpdateBeaconStatusDataInput(vesselStatus = VesselStatus.AT_SEA)))
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.comments.length()", equalTo(1)))
+                .andExpect(jsonPath("$.actions.length()", equalTo(1)))
+                .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
+                .andExpect(jsonPath("$.actions[0].propertyName", equalTo("VESSEL_STATUS")))
+                .andExpect(jsonPath("$.beaconStatus.internalReferenceNumber", equalTo("CFR")))
+    }
+
+    @Test
+    fun `Should return Bad request When an update of a beacon status is empty`() {
+        given(this.updateBeaconStatus.execute(1, null, null))
+                .willThrow(CouldNotUpdateBeaconStatusException("FAIL"))
+
+        // When
+        mockMvc.perform(put("/bff/v1/beacon_statuses/123", objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()))
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun `Should return a beacon status`() {
+        given(this.getBeaconStatus.execute(123))
+                .willReturn(BeaconStatusWithDetails(
+                        beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                        comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
+                        actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
+
+        // When
+        mockMvc.perform(get("/bff/v1/beacon_statuses/123"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.comments.length()", equalTo(1)))
+                .andExpect(jsonPath("$.actions.length()", equalTo(1)))
+                .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
+                .andExpect(jsonPath("$.actions[0].propertyName", equalTo("VESSEL_STATUS")))
+                .andExpect(jsonPath("$.beaconStatus.internalReferenceNumber", equalTo("CFR")))
+    }
+
+    @Test
+    fun `Should save a beacon status comment`() {
+        given(this.saveBeaconStatusComment.execute(any(), any(), any())).willReturn(BeaconStatusWithDetails(
+                beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                        "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                        true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
+                actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
+
+        // When
+        mockMvc.perform(post("/bff/v1/beacon_statuses/123/comments")
+                .content(objectMapper.writeValueAsString(SaveBeaconStatusCommentDataInput("A comment", BeaconStatusCommentUserType.SIP)))
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isCreated)
+                .andExpect(jsonPath("$.comments.length()", equalTo(1)))
+                .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
+                .andExpect(jsonPath("$.beaconStatus.internalReferenceNumber", equalTo("CFR")))
     }
 }

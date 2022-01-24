@@ -72,7 +72,6 @@ class ExecutePnoAndLanWeightToleranceRule(private val ersRepository: ERSReposito
 
         return Alert(
                 id = UUID.randomUUID(),
-                name = AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name,
                 internalReferenceNumber = lan.internalReferenceNumber,
                 externalReferenceNumber = lan.externalReferenceNumber,
                 ircs = lan.ircs,

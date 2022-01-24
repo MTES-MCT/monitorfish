@@ -23,6 +23,7 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="vessel-card-external-reference-number"]').contains('OZ854230')
     cy.get('*[data-cy^="vessel-card-mmsi"]').contains('048713984')
     cy.get('*[data-cy^="vessel-card-ircs"]').contains('AQIK')
+    cy.get('*[data-cy^="vessel-card-alert"]').contains('3 milles - Chaluts')
   })
 
   it('Position card Should be seen on the map on vessel track pointer move', () => {

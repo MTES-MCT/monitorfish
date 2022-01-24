@@ -133,7 +133,7 @@ const VesselFishingActivities = () => {
 
 const Wrapper = styled.div`
   overflow-x: hidden;
-  max-height: 730px;
+  max-height: 700px;
 `
 
 const UpdateFishingActivities = styled.div`

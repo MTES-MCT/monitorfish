@@ -11,7 +11,7 @@ import {
   resetNextControlResumeAndControls,
   setControlFromDate,
   setControlResumeAndControls
-} from '../../../domain/shared_slices/Controls'
+} from '../../../domain/shared_slices/Control'
 import { useDispatch, useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
 
@@ -169,7 +169,7 @@ const UpdateControlsButton = styled.div`
 const Body = styled.div`
   padding: 0 5px 1px 5px;
   overflow-x: hidden;
-  max-height: 730px;
+  max-height: 700px;
 `
 
 export default VesselControls

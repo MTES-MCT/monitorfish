@@ -2,12 +2,17 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconStatusCommentDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconStatusDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.micrometer.core.instrument.MeterRegistry
-import io.swagger.annotations.*
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
 import kotlinx.coroutines.runBlocking
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -17,7 +22,6 @@ import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import javax.websocket.server.PathParam
-
 
 @RestController
 @RequestMapping("/bff")
@@ -35,6 +39,11 @@ class BffController(
         private val getHealthcheck: GetHealthcheck,
         private val getAllControlObjectives: GetAllControlObjectives,
         private val updateControlObjective: UpdateControlObjective,
+        private val getOperationalAlerts: GetOperationalAlerts,
+        private val getAllBeaconStatuses: GetAllBeaconStatuses,
+        private val updateBeaconStatus: UpdateBeaconStatus,
+        private val getBeaconStatus: GetBeaconStatus,
+        private val saveBeaconStatusComment: SaveBeaconStatusComment,
         meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -242,7 +251,59 @@ class BffController(
                 id = controlObjectiveId,
                 targetNumberOfControlsAtSea = updateControlObjectiveData.targetNumberOfControlsAtSea,
                 targetNumberOfControlsAtPort = updateControlObjectiveData.targetNumberOfControlsAtPort,
-                controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel
-        )
+                controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel)
+    }
+
+    @GetMapping("/v1/operational_alerts")
+    @ApiOperation("Get operational alerts")
+    fun getOperationalAlerts(): List<PendingAlert> {
+        return getOperationalAlerts.execute()
+    }
+
+    @GetMapping(value = ["/v1/beacon_statuses"])
+    @ApiOperation("Get all beacon statuses")
+    fun getAllBeaconStatuses(): List<BeaconStatusDataOutput> {
+        return getAllBeaconStatuses.execute().map {
+            BeaconStatusDataOutput.fromBeaconStatus(it)
+        }
+    }
+
+    @PutMapping(value = ["/v1/beacon_statuses/{beaconStatusId}"], consumes = ["application/json"])
+    @ApiOperation("Update a beacon status")
+    fun updateBeaconStatus(@PathParam("Beacon status id")
+                               @PathVariable(name = "beaconStatusId")
+                               beaconStatusId: Int,
+                               @RequestBody
+                               updateBeaconStatusData: UpdateBeaconStatusDataInput): BeaconStatusWithDetailsDataOutput {
+        return updateBeaconStatus.execute(
+                id = beaconStatusId,
+                vesselStatus = updateBeaconStatusData.vesselStatus,
+                stage = updateBeaconStatusData.stage).let {
+            BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(it)
+        }
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(value = ["/v1/beacon_statuses/{beaconStatusId}/comments"], consumes = ["application/json"])
+    @ApiOperation("Save a beacon status comment and return the updated beacon status")
+    fun saveBeaconStatusComment(@PathParam("Beacon status id")
+                                @PathVariable(name = "beaconStatusId")
+                                beaconStatusId: Int,
+                                @RequestBody
+                                saveBeaconStatusCommentDataInput: SaveBeaconStatusCommentDataInput): BeaconStatusWithDetailsDataOutput {
+        return saveBeaconStatusComment.execute(
+                beaconStatusId = beaconStatusId,
+                comment = saveBeaconStatusCommentDataInput.comment,
+                userType = saveBeaconStatusCommentDataInput.userType).let {
+            BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(it)
+        }
+    }
+
+    @GetMapping(value = ["/v1/beacon_statuses/{beaconStatusId}"])
+    @ApiOperation("Get a beacon status with the comments and history")
+    fun getBeaconStatus(@PathParam("Beacon status id")
+                             @PathVariable(name = "beaconStatusId")
+                             beaconStatusId: Int): BeaconStatusWithDetailsDataOutput {
+        return BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(getBeaconStatus.execute(beaconStatusId))
     }
 }

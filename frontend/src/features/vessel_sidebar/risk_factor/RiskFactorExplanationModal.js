@@ -6,7 +6,7 @@ import { ReactComponent as RiskFactorImpactSVG } from '../../icons/Note_impact_p
 import { ReactComponent as RiskFactorControlSVG } from '../../icons/Note_de_controle_gyrophare.svg'
 import { ReactComponent as RiskFactorInfractionsSVG } from '../../icons/Note_infraction_stop.svg'
 import RiskFactorExplanationSchema from './RiskFactorExplanationSchema'
-import { RiskFactorBox } from './styles/RiskFactorBox.style'
+import { RiskFactorBox } from './RiskFactorBox'
 import {
   getDetectabilityRiskFactorText,
   getImpactRiskFactorText,

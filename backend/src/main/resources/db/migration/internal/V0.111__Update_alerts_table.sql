@@ -1,0 +1,1 @@
+ALTER TABLE public.alerts DROP COLUMN name;

@@ -1,4 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { UserType } from '../entities/beaconStatus'
+import { getLocalStorageState } from '../../utils'
+
+/* eslint-disable */
+/** @namespace GlobalReducer */
+const GlobalReducer = null
+/* eslint-enable */
+
+const userTypeLocalStorageKey = 'userType'
 
 const globalSlice = createSlice({
   name: 'global',
@@ -11,7 +20,10 @@ const globalSlice = createSlice({
     /** @type {string | null} healthcheckTextWarning */
     healthcheckTextWarning: null,
     previewFilteredVesselsMode: undefined,
-    inBackofficeMode: false
+    inBackofficeMode: false,
+    openedSideWindowTab: null,
+    sideWindowIsOpen: false,
+    userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey)
   },
   reducers: {
     expandRightMenu (state) {
@@ -71,6 +83,46 @@ const globalSlice = createSlice({
      */
     setInBackofficeMode (state, action) {
       state.inBackofficeMode = action.payload
+    },
+    /**
+     * Open a side window tab
+     * @function openSideWindowTab
+     * @memberOf GlobalReducer
+     * @param {Object=} state
+     * @param {{payload: string}} action - The tab to show, see `sideWindowMenu`
+     */
+    openSideWindowTab (state, action) {
+      state.openedSideWindowTab = action.payload
+    },
+    /**
+     * Close side window
+     * @function closeSideWindow
+     * @memberOf GlobalReducer
+     * @param {Object=} state
+     */
+    closeSideWindow (state) {
+      state.openedSideWindowTab = null
+      state.sideWindowIsOpen = false
+    },
+    /**
+     * Set the side window as open
+     * @function setSideWindowAsOpen
+     * @memberOf GlobalReducer
+     * @param {Object=} state
+     */
+    setSideWindowAsOpen (state) {
+      state.sideWindowIsOpen = true
+    },
+    /**
+     * Set the user type as OPS or SIP
+     * @function setUserType
+     * @memberOf GlobalReducer
+     * @param {Object=} state
+     * @param {{payload: string}} action - The user type
+     */
+    setUserType (state, action) {
+      state.userType = action.payload
+      window.localStorage.setItem(userTypeLocalStorageKey, JSON.stringify(state.userType))
     }
   }
 })
@@ -87,7 +139,11 @@ export const {
   setHealthcheckTextWarning,
   setPreviewFilteredVesselsMode,
   setBlockVesselsUpdate,
-  setInBackofficeMode
+  setInBackofficeMode,
+  openSideWindowTab,
+  setSideWindowAsOpen,
+  closeSideWindow,
+  setUserType
 } = globalSlice.actions
 
 export default globalSlice.reducer

@@ -30,3 +30,16 @@ COPY public.reglementation_peche (id, law_type,
 ```
 update prod.reglementation_peche set references_reglementaires = null, layer_name = null, zones = null, facade = null, region = null, law_type = null, references_reglementaires_a_venir = null where id = 10014;
 ```
+
+## Create a test regulatory entry
+
+```
+insert into prod.reglementation_peche (law_type, facade, layer_name, zones, region, date_fermeture,date_ouverture, fishing_period, periodes, engins, engins_interdits,mesures_techniques, especes, species, quantites, taille,especes_interdites, autre_reglementation_especes,documents_obligatoires, autre_reglementation, references_reglementaires, row_hash) select law_type,
+                                                           facade, 'Topic de test', 'Zone de test', region, date_fermeture,
+                                                           date_ouverture, fishing_period, periodes, engins, engins_interdits,
+                                                           mesures_techniques, especes, species, quantites, taille,
+                                                           especes_interdites, autre_reglementation_especes,
+                                                           documents_obligatoires, autre_reglementation,
+                                                           references_reglementaires, row_hash from prod.reglementation_peche where id = 10294;
+
+```

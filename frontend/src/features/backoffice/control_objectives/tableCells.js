@@ -1,6 +1,6 @@
 import InputPicker from 'rsuite/lib/InputPicker'
 import { COLORS } from '../../../constants/constants'
-import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/styles/RiskFactorBox.style'
+import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import React from 'react'
 import styled from 'styled-components'

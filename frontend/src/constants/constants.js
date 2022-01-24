@@ -6,6 +6,7 @@ export const COLORS = {
   lightGray: '#CCCFD6',
   charcoal: '#3B4559',
   slateGray: '#707785',
+  cultured: '#F7F7FA',
   slateGrayLittleOpacity: 'rgba(112, 119, 133, 0.7)',
   mediumSeaGreen: '#29b361',
   gunMetal: '#282F3E',
@@ -27,7 +28,8 @@ export const COLORS = {
   trackFishing: '#2A4670',
   trackTransit: '#1C9B7B',
   overlayShadow: '#7077851A',
-  yellow: '#F6D012'
+  yellow: '#F6D012',
+  titleBottomBorder: '#E0E0E0'
 }
 
 export const HIT_PIXEL_TO_TOLERANCE = 3

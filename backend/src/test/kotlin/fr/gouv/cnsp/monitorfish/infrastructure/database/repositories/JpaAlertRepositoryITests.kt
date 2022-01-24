@@ -20,11 +20,10 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAlertsOfRules Should return all alert of a specific rule`() {
+    fun `findAlertsOfTypes Should return all alert of a specific rule`() {
         // Given
         val alertOne = Alert(
                 id = UUID.randomUUID(),
-                name = AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name,
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
@@ -35,7 +34,6 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
 
         val alertTwo = Alert(
                 id = UUID.randomUUID(),
-                name = AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name,
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
@@ -45,22 +43,21 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
         jpaAlertRepository.save(alertTwo)
 
         // When
-        val gears = jpaAlertRepository.findAlertsOfRules(
+        val alerts = jpaAlertRepository.findAlertsOfTypes(
                 listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
         "FRFGRGR",
                 123456)
 
         // Then
-        assertThat(gears).hasSize(2)
+        assertThat(alerts).hasSize(2)
     }
 
     @Test
     @Transactional
-    fun `findAlertsOfRules Should return no alert When the rule is wrong`() {
+    fun `findAlertsOfTypes Should return no alert When the rule name is wrong`() {
         // Given
         val alertOne = Alert(
                 id = UUID.randomUUID(),
-                name = "BAD_RULE",
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
@@ -70,12 +67,12 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
         jpaAlertRepository.save(alertOne)
 
         // When
-        val gears = jpaAlertRepository.findAlertsOfRules(
-                listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
+        val alerts = jpaAlertRepository.findAlertsOfTypes(
+                listOf(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT),
                 "FRFGRGR",
                 123456)
 
         // Then
-        assertThat(gears).hasSize(0)
+        assertThat(alerts).hasSize(0)
     }
 }

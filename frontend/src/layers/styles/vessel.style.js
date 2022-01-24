@@ -1,8 +1,9 @@
-import { Icon, Style } from 'ol/style'
-import { Vessel, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
+import { Icon, Style, Circle } from 'ol/style'
+import { Vessel, VESSEL_ALERT_STYLE, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
 
 import { COLORS } from '../../constants/constants'
 import { booleanToInt } from '../../utils'
+import Fill from 'ol/style/Fill'
 
 const featureHas = (key) => ['==', ['get', key], 1]
 const featureHasNot = (key) => ['==', ['get', key], 0]
@@ -64,7 +65,7 @@ export const getWebGLVesselStyle = ({
     ]
   ]
 
-  const style = {
+  return {
     variables: {
       hideVesselsAtPort: booleanToInt(hideVesselsAtPort),
       hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels),
@@ -90,12 +91,11 @@ export const getWebGLVesselStyle = ({
         1]
     }
   }
-  return style
 }
 
-export const getSelectedVesselStyle = ({ isLight }) => (feature) => {
+export const getSelectedVesselStyle = ({ isLight }) => feature => {
   const course = feature.get('course')
-  const styleSelecteur = new Style({
+  const selectorStyle = new Style({
     image: new Icon({
       src: 'selecteur_navire.png',
       rotation: degreesToRadian(course),
@@ -105,7 +105,7 @@ export const getSelectedVesselStyle = ({ isLight }) => (feature) => {
     }),
     zIndex: VESSEL_SELECTOR_STYLE
   })
-  const styleNavire = new Style({
+  const vesselStyle = new Style({
     image: new Icon({
       src: 'boat.png',
       rotation: degreesToRadian(course),
@@ -115,17 +115,15 @@ export const getSelectedVesselStyle = ({ isLight }) => (feature) => {
     }),
     zIndex: VESSEL_SELECTOR_STYLE
   })
-  return [styleSelecteur, styleNavire]
+
+  return [selectorStyle, vesselStyle]
 }
-// vesselLightColor: cacce0
-// vesselColor: 3B4559
 
 export function degreesToRadian (course) {
   return course * Math.PI / 180
 }
 
-/*
-export const vesselAlertBigCircleStyle = new Style({
+const vesselAlertBigCircleStyle = new Style({
   image: new Circle({
     fill: new Fill({
       color: 'rgba(225, 0, 15, 0.3)'
@@ -135,7 +133,7 @@ export const vesselAlertBigCircleStyle = new Style({
   zIndex: VESSEL_ALERT_STYLE
 })
 
-export const vesselAlertBigSmallStyle = new Style({
+const vesselAlertBigSmallStyle = new Style({
   image: new Circle({
     fill: new Fill({
       color: 'rgba(225, 0, 15, 1)'
@@ -145,12 +143,13 @@ export const vesselAlertBigSmallStyle = new Style({
   zIndex: VESSEL_ALERT_STYLE
 })
 
-const hasAlert = !!feature.vessel.alerts?.length
+export const getVesselAlertStyle = (feature, resolution) => {
+  const styles = []
 
-if (hasAlert) {
-    styles.push(vesselAlertBigCircleStyle, vesselAlertBigSmallStyle)
-    const scale = Math.min(1.5, 0.1 + Math.sqrt(200 / resolution))
-    styles[styles.length - 1].getImage().setScale(scale)
-    styles[styles.length - 2].getImage().setScale(scale)
-  }
- */
+  styles.push(vesselAlertBigCircleStyle, vesselAlertBigSmallStyle)
+  const scale = Math.min(1.5, 0.1 + Math.sqrt(200 / resolution))
+  styles[styles.length - 1].getImage().setScale(scale)
+  styles[styles.length - 2].getImage().setScale(scale)
+
+  return styles
+}

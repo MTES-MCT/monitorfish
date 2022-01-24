@@ -48,7 +48,7 @@ const vesselSlice = createSlice({
     setVesselsFromAPI (state, action) {
       // FIXME : find a way to update state.vessel[vessels] without overriding
       // "private" properties like isFiltered / filterPreview when uploading from api
-      state.vessels = action.payload?.map((vessel) => {
+      state.vessels = action.payload?.map(vessel => {
         return {
           vesselProperties: {
             ...vessel,
@@ -56,7 +56,8 @@ const vesselSlice = createSlice({
             gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
             fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
             speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : [],
-            lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : ''
+            lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : '',
+            hasAlert: !!vessel.alerts?.length
           },
           vesselId: Vessel.getVesselId(vessel),
           isAtPort: vessel.isAtPort,

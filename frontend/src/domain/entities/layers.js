@@ -31,6 +31,7 @@ export const layersGroups = {
 
 export const layersType = {
   VESSEL: 'VESSEL',
+  VESSEL_ALERT: 'VESSEL_ALERT',
   ADMINISTRATIVE: 'ADMINISTRATIVE',
   REGULATORY: 'REGULATORY',
   BASE_LAYER: 'BASE_LAYER',
@@ -70,6 +71,17 @@ const Layers = {
     subZoneFieldKey: null,
     isIntersectable: false,
     zIndex: 995
+  },
+  VESSEL_ALERT: {
+    code: 'vessel_alert',
+    name: '',
+    group: null,
+    type: layersType.VESSEL_ALERT,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false,
+    zIndex: 990
   },
   VESSELS_LABEL: {
     code: 'label',

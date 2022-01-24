@@ -154,7 +154,7 @@ export const mapToRegulatoryFeatureObject = properties => {
     layer_name: layerName,
     law_type: lawType,
     zones: zone,
-    region: region.join(', '),
+    region,
     references_reglementaires: JSON.stringify(regulatoryReferences),
     references_reglementaires_a_venir: JSON.stringify(upcomingRegulatoryReferences),
     fishing_period: JSON.stringify(fishingPeriod),

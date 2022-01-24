@@ -224,7 +224,10 @@ const CreateRegulation = ({ title, isEdition }) => {
         const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !atLeastOneValueIsMissing
 
         if (allRequiredValuesHaveBeenFilled) {
-          const featureObject = mapToRegulatoryFeatureObject(currentRegulation)
+          const featureObject = mapToRegulatoryFeatureObject({
+            ...currentRegulation,
+            region: currentRegulation.region?.join(', ')
+          })
           createOrUpdateRegulation(featureObject)
           setSaveIsForbidden(false)
         } else {

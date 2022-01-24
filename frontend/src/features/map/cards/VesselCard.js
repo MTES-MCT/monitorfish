@@ -51,13 +51,13 @@ const VesselCard = ({ feature, overlayPosition, hasAlert }) => {
         }
       </VesselCardHeader>
       {
-        feature?.vessel?.alerts?.length
+        vesselProperties.alerts?.length
           ? <VesselCardAlerts data-cy={'vessel-card-alert'}>
             <AlertIcon/>
             {
-              feature?.vessel?.alerts?.length === 1
-                ? getAlertNameFromType(feature?.vessel?.alerts[0])
-                : `${feature?.vessel?.alerts?.length} alertes`
+              vesselProperties.alerts?.length === 1
+                ? getAlertNameFromType(vesselProperties.alerts[0])
+                : `${vesselProperties.alerts?.length} alertes`
             }
           </VesselCardAlerts>
           : null

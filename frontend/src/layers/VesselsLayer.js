@@ -51,8 +51,7 @@ const VesselsLayer = ({ map }) => {
     }
   })
 
-  const VesselsVectorSource = useRef(new VectorSource({
-  }))
+  const VesselsVectorSource = useRef(new VectorSource({}))
   const VesselWebGLPointsLayerRef = useRef(null)
 
   const style = useRef(null)
@@ -99,7 +98,7 @@ const VesselsLayer = ({ map }) => {
 
   useEffect(() => {
     if (map) {
-      const features = vessels.map((vessel) => {
+      const features = vessels.map(vessel => {
         const propertiesUsedForStyling = {
           isAtPort: vessel.isAtPort,
           course: vessel.course,
@@ -109,17 +108,21 @@ const VesselsLayer = ({ map }) => {
           isFiltered: vessel.isFiltered,
           filterPreview: vessel.filterPreview
         }
-        const f = new Feature({
+
+        const feature = new Feature({
           vesselId: vessel.vesselId,
           ...propertiesUsedForStyling,
           geometry: new Point(vessel.coordinates)
         })
-        f.setId(vessel.vesselId)
-        f.vesselProperties = vessel.vesselProperties
-        return f
+        feature.setId(vessel.vesselId)
+        feature.vesselProperties = vessel.vesselProperties
+
+        return feature
       })
+
       VesselsVectorSource.current?.clear(true)
       VesselsVectorSource.current?.addFeatures(features)
+
       if (filterColor) {
         const rgb = customHexToRGB(filterColor)
 
@@ -130,7 +133,6 @@ const VesselsLayer = ({ map }) => {
           filterColorBlue: rgb[2]
         }
       }
-      // map.render()
     }
   }, [map, vessels])
 

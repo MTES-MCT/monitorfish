@@ -8,18 +8,18 @@ context('NewRegulation', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/backoffice/regulation`)
+    cy.clearLocalStorage()
 
     // Open a regulation to edit
     cy.get('[data-cy="law-type"]').should('have.length', 3)
     cy.get('[data-cy="law-type"]').eq(1).click()
     cy.get('[data-cy="regulatory-layer-topic-row"]').should('have.length', 1)
-    cy.get('[data-cy="regulatory-layer-topic-row"]').eq(0).click()
+    cy.get('[data-cy="regulatory-layer-topic-row"]').eq(0).click({ force: true })
     cy.get('[data-cy="regulatory-layer-zone"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-layer-zone"]').eq(0).trigger('mouseover', { force: true })
     cy.get('[data-cy="regulatory-layer-zone-edit"]')
       .should('have.length', 1)
       .click({ force: true })
-    // cy.get('[data-cy="regulatory-layer-zone-edit"]')
     cy.url().should('include', '/regulation/edit')
   })
 
@@ -64,7 +64,7 @@ context('NewRegulation', () => {
         expect(request.body).contain('typeName="monitorfish:regulatory_areas_write"')
         expect(request.body).contain('<Value>Reg. MEMN</Value>')
         expect(request.body).contain('<Value>Praires_Ouest_cotentin</Value>')
-        expect(request.body).contain('<Value>Normandie,Bretagne</Value>')
+        expect(request.body).contain('<Value>Normandie, Bretagne</Value>')
         expect(request.body).contain('"reference":"texte de reference"')
         expect(request.body).contain('"url":"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634"')
         expect(request.body).not.equal('"startDate":""')

@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { getDate } from '../../src/utils'
+
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Beacon statuses', () => {
@@ -131,7 +133,7 @@ context('Beacon statuses', () => {
       .contains('Activité détectée')
   })
 
-  it('Beacon status Should be opened', () => {
+  it.only('Beacon status Should be opened', () => {
     // Given
     cy.intercept('GET', 'bff/v1/beacon_statuses/1').as('showBeaconStatus')
 
@@ -156,8 +158,14 @@ context('Beacon statuses', () => {
     // Check the comments order
     cy.get('*[data-cy="side-window-beacon-statuses-detail-comments-number"]').contains('2 commentaires')
     cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-date"]').should('have.length', 4)
-    cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-date"]').eq(0).contains('07/01/2022')
-    cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-date"]').eq(1).contains('14/01/2022')
+    let twoWeeksBefore = new Date()
+    twoWeeksBefore.setDate(twoWeeksBefore.getDate() - 14)
+    twoWeeksBefore = getDate(twoWeeksBefore.toUTCString())
+    cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-date"]').eq(0).contains(twoWeeksBefore)
+    let oneWeeksBefore = new Date()
+    oneWeeksBefore.setDate(oneWeeksBefore.getDate() - 7)
+    oneWeeksBefore = getDate(oneWeeksBefore.toUTCString())
+    cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-date"]').eq(1).contains(oneWeeksBefore)
     cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-date"]').eq(2).contains('Hier')
     cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-date"]').eq(3).contains('Aujourd\'hui')
 

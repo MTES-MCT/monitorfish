@@ -119,13 +119,14 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
         nextVesselToCoordinates.set(featureId, { coordinates: toCoordinates, offset })
         setVesselToCoordinates(nextVesselToCoordinates)
       }
+
       function triggerShowRiskDetails (featureId) {
         const previousValue = vesselToRiskFactorDetailsShowed.get(featureId)
         const nextVesselToRiskFactorDetailsShowed = vesselToRiskFactorDetailsShowed
         nextVesselToRiskFactorDetailsShowed.set(featureId, !previousValue)
         setVesselToRiskFactorDetailsShowed(nextVesselToRiskFactorDetailsShowed)
       }
-      // TODO: use only one useEffect to directly render labels in one .map
+
       const labels = featuresAndLabels.map(({ identity, label, offset, featureId, opacity, trackIsShown }) => {
         return <VesselLabelOverlay
           map={map}
@@ -151,7 +152,6 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   }, [
     map,
     previewFilteredVesselsMode,
-    previousFeaturesAndLabels,
     featuresAndLabels,
     vesselToCoordinates,
     previousMapZoom,

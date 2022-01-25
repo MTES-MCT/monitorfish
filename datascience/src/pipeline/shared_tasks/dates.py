@@ -7,6 +7,18 @@ from src.pipeline.helpers import dates
 
 
 @task(checkpoint=False)
+def get_utcnow():
+    """Task version of `datetime.utcnow`"""
+    return datetime.utcnow()
+
+
+@task(checkpoint=False)
+def make_timedelta(**kwargs) -> timedelta:
+    """Task version of `datetime.timedelta`"""
+    return timedelta(**kwargs)
+
+
+@task(checkpoint=False)
 def make_periods(
     start_hours_ago: int,
     end_hours_ago: int,

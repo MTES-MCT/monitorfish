@@ -52,15 +52,16 @@ const VesselsLayer = ({ map }) => {
   })
 
   const VesselsVectorSource = useRef(new VectorSource({}))
-  const VesselWebGLPointsLayerRef = useRef(null)
+  const vesselWebGLPointsLayerRef = useRef(null)
 
   const style = useRef(null)
 
   useEffect(() => {
     if (map) {
-      if (VesselWebGLPointsLayerRef.current) {
-        map.removeLayer(VesselWebGLPointsLayerRef.current)
+      if (vesselWebGLPointsLayerRef.current) {
+        map.removeLayer(vesselWebGLPointsLayerRef.current)
       }
+
       // styles derived from state
       const isLight = Vessel.iconIsLight(selectedBaseLayer)
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
@@ -78,20 +79,20 @@ const VesselsLayer = ({ map }) => {
         filterColorBlue: filterColorRGBArray[2]
       }
       style.current = getWebGLVesselStyle(initStyles)
-      const VesselsVectorLayer = new WebGLPointsLayer({
+      const vesselsVectorLayer = new WebGLPointsLayer({
         style: style.current,
         className: Layers.VESSELS.code,
         zIndex: Layers.VESSELS.zIndex,
         source: VesselsVectorSource.current
       })
-      VesselsVectorLayer.name = Layers.VESSELS.code
-      map.getLayers().push(VesselsVectorLayer)
-      VesselWebGLPointsLayerRef.current = VesselsVectorLayer
+      vesselsVectorLayer.name = Layers.VESSELS.code
+      map.getLayers().push(vesselsVectorLayer)
+      vesselWebGLPointsLayerRef.current = vesselsVectorLayer
     }
 
     return () => {
-      if (map && VesselWebGLPointsLayerRef.current) {
-        map.removeLayer(VesselWebGLPointsLayerRef.current)
+      if (map && vesselWebGLPointsLayerRef.current) {
+        map.removeLayer(vesselWebGLPointsLayerRef.current)
       }
     }
   }, [map])

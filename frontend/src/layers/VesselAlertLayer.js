@@ -37,7 +37,6 @@ const VesselAlertLayer = ({ map }) => {
     features: []
   }))
   const layerRef = useRef(new Vector({
-    renderBuffer: 4,
     source: vectorSourceRef.current,
     zIndex: Layers.VESSEL_ALERT.zIndex,
     updateWhileAnimating: true,

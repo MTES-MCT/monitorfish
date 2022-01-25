@@ -1,68 +1,139 @@
-import React, { useEffect, useRef, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as REGPaperSVG } from '../../icons/reg_paper_dark.svg'
 import { ReactComponent as AlertSVG } from '../../icons/Picto_alerte.svg'
 import { FingerprintSpinner } from 'react-epic-spinners'
-import { getDateTime } from '../../../utils'
 import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { useDispatch, useSelector } from 'react-redux'
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
+import { fishingPeriodToString, getTitle } from '../../../domain/entities/regulatory'
+import { RedCircle, GreenCircle, BlackCircle } from '../../commonStyles/Circle.style'
 
 const RegulatoryLayerZoneMetadata = () => {
   const dispatch = useDispatch()
-  const gears = useSelector(state => state.gear.gears)
+
   const {
     regulatoryZoneMetadata,
     regulatoryZoneMetadataPanelIsOpen
   } = useSelector(state => state.regulatory)
+
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
-  const [formattedGears, setFormattedGears] = useState([])
-  const [prohibitedGears, setProhibitedGears] = useState([])
-  const firstUpdate = useRef(true)
-  const [regulatoryReferences, setRegulatoryReferences] = useState([])
+  const displayRegulatoryZoneMetadata = useCallback(() => {
+    function onCloseIconClicked () { dispatch(closeRegulatoryZoneMetadata()) }
 
-  useEffect(() => {
-    if (regulatoryZoneMetadata && gears) {
-      firstUpdate.current = false
+    const {
+      lawType,
+      topic,
+      region,
+      fishingPeriod,
+      regulatoryGears,
+      regulatorySpecies
+    } = regulatoryZoneMetadata
 
-      setRegulatoryReferences(regulatoryZoneMetadata.regulatoryReferences)
-
-      if (!regulatoryZoneMetadata.gears) {
-        setFormattedGears(null)
-      } else {
-        const gearCodesArray = regulatoryZoneMetadata.gears.replace(/ /g, '').split(',')
-        const nextGears = gearCodesArray.map(gearCode => {
-          const foundGear = gears.find(gear => gear.code === gearCode)
-          return {
-            name: foundGear ? foundGear.name : null,
-            code: gearCode
+    return (<>
+      <Header>
+        <REGPaperIcon/>
+        <RegulatoryZoneName title={getTitle(regulatoryZoneMetadata)}>
+          {getTitle(regulatoryZoneMetadata)}
+        </RegulatoryZoneName>
+        <CloseIcon
+          data-cy={'regulatory-layers-metadata-close'}
+          onClick={onCloseIconClicked}
+        />
+      </Header>
+      <Warning>
+        <WarningIcon/>
+        Travail en cours, bien vérifier dans Légipêche la validité de la référence et des infos réglementaires
+      </Warning>
+      <Content>
+        <Zone>
+          <Fields>
+            <Body>
+              <Field>
+                <Key>Ensemble reg.</Key>
+                <Value data-cy={'regulatory-layers-metadata-lawtype'}>
+                  {lawType || <NoValue>-</NoValue>}
+                </Value>
+              </Field>
+              <Field>
+                <Key>Thématique</Key>
+                <Value>{topic || <NoValue>-</NoValue>}</Value>
+              </Field>
+              <Field>
+                <Key>Région</Key>
+                <Value>{region || <NoValue>-</NoValue>}</Value>
+              </Field>
+            </Body>
+          </Fields>
+        </Zone>
+        {fishingPeriod && <Section>
+          <SectionTitle>{fishingPeriod.authorized ? <GreenCircle margin={'0 5px 0 0'} /> : <RedCircle margin={'0 5px 0 0'} />}
+          Période de pêche {fishingPeriod.authorized ? 'autorisée' : 'interdites'}</SectionTitle>
+          {fishingPeriodToString(fishingPeriod)}
+        </Section>}
+        {regulatoryGears && <Section>
+          <SectionTitle>{regulatoryGears.authorized ? <GreenCircle margin={'0 5px 0 0'} /> : <RedCircle margin={'0 5px 0 0'} />}
+          Engins {regulatoryGears.authorized ? 'réglementés' : 'interdits'}</SectionTitle>
+          <List>
+          {Object.keys(regulatoryGears.regulatedGears).length > 0
+            ? Object.keys(regulatoryGears.regulatedGears).map(gearLabel => {
+              const { code, name, meshType, mesh } = regulatoryGears.regulatedGears[gearLabel]
+              return (<Elem key={gearLabel}><Label><BlackCircle />{`${code} (${name})`}</Label>
+                {mesh && <Mesh><Key>Maillage</Key>
+                <Value>{meshType === 'between' ? `entre ${mesh[0]} et ${mesh[1]} mm` : `supérieur ou égal à ${mesh[0]} mm`}</Value></Mesh>}
+              </Elem>)
+            })
+            : null
           }
-        })
-        setFormattedGears(nextGears)
-      }
-
-      if (!regulatoryZoneMetadata.prohibitedGears) {
-        setProhibitedGears(null)
-      } else {
-        const prohibitedGearCodesArray = regulatoryZoneMetadata.prohibitedGears.replace(/ /g, '').split(',')
-        const prohibitedGears = prohibitedGearCodesArray.map(gearCode => {
-          const foundGear = gears.find(gear => gear.code === gearCode)
-          return {
-            name: foundGear ? foundGear.name : null,
-            code: gearCode
+          {Object.keys(regulatoryZoneMetadata.regulatoryGears.regulatedGearCategories).length > 0
+            ? Object.keys(regulatoryZoneMetadata.regulatoryGears.regulatedGearCategories).map(gearCategoryLabel => {
+              const { name, meshType, mesh } = regulatoryZoneMetadata.regulatoryGears.regulatedGearCategories[gearCategoryLabel]
+              return (<Elem key={gearCategoryLabel}><Label><BlackCircle />{name}</Label>
+                {mesh && <Mesh><Key>Maillage</Key>
+                <Value>{meshType === 'between' ? `entre ${mesh[0]} et ${mesh[1]} mm` : `supérieur ou égal à ${mesh[0]} mm`}</Value></Mesh>}
+              </Elem>)
+            })
+            : null
           }
-        })
-        setProhibitedGears(prohibitedGears)
-      }
-    }
-  }, [gears, regulatoryZoneMetadata])
-
-  const getTitle = regulatory => regulatory
-    ? `${regulatory.topic.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
-    : ''
+          </List>
+          {regulatoryZoneMetadata.regulatoryGears.otherInfo &&
+            <><SectionTitle>Mesures techniques</SectionTitle>
+              {regulatoryZoneMetadata.regulatoryGears.otherInfo}
+            </>
+          }
+        </Section>}
+        {regulatorySpecies && <Section>
+          <SectionTitle>{regulatorySpecies.authorized ? <GreenCircle margin={'0 5px 0 0'} /> : <RedCircle margin={'0 5px 0 0'} />}
+          Espèces {regulatorySpecies.authorized ? 'réglementées' : 'interdites'}</SectionTitle>
+          <List>
+          {regulatorySpecies.species.length > 0
+            ? regulatorySpecies.species.map((specie) => {
+              const { code, quantity, minimumSize } = specie
+              return (<Elem key={specie}><Label><BlackCircle />{code}</Label>
+                  {quantity && <Mesh><Key>Quantité</Key><Value>{quantity}</Value></Mesh>}
+                  {minimumSize && <Mesh><Key>Taille min.</Key><Value>{minimumSize}</Value></Mesh>}
+                </Elem>)
+            })
+            : null
+          }
+          {Object.keys(regulatorySpecies.speciesGroups).length > 0
+            ? Object.keys(regulatorySpecies.speciesGroups).map(group => {
+              return (<Elem key={group}><Label><BlackCircle />{group}</Label></Elem>)
+            })
+            : null
+          }
+          </List>
+          {regulatorySpecies.otherInfo &&
+            <><SectionTitle>Mesures techniques</SectionTitle>
+              {regulatorySpecies.otherInfo}
+            </>
+          }
+        </Section>}
+      </Content>
+    </>)
+  }, [regulatoryZoneMetadata, dispatch])
 
   return (
     <Wrapper
@@ -70,297 +141,53 @@ const RegulatoryLayerZoneMetadata = () => {
       regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
       {
         regulatoryZoneMetadata
-          ? <>
-            <Header>
-              <REGPaperIcon/>
-              <RegulatoryZoneName title={getTitle(regulatoryZoneMetadata)}>
-                {getTitle(regulatoryZoneMetadata)}
-              </RegulatoryZoneName>
-              <CloseIcon
-                data-cy={'regulatory-layers-metadata-close'}
-                onClick={() => dispatch(closeRegulatoryZoneMetadata())}
-              />
-            </Header>
-            <Warning>
-              <WarningIcon/>
-              Travail en cours, bien vérifier dans Légipêche la validité de la référence et des infos réglementaires
-            </Warning>
-            <Content>
-              {
-                regulatoryZoneMetadata.lawType ||
-                regulatoryZoneMetadata.region ||
-                regulatoryZoneMetadata.zone ||
-                regulatoryZoneMetadata.deposit
-                  ? <Zone>
-                    <Fields>
-                      <Body>
-                        <Field>
-                          <Key>Réglementation</Key>
-                          <Value data-cy={'regulatory-layers-metadata-lawtype'}>{regulatoryZoneMetadata.lawType
-                            ? regulatoryZoneMetadata.lawType
-                            : <NoValue>-</NoValue>}</Value>
-                        </Field>
-                        <Field>
-                          <Key>Région</Key>
-                          <Value>{regulatoryZoneMetadata.region
-                            ? regulatoryZoneMetadata.region
-                            : <NoValue>-</NoValue>}</Value>
-                        </Field>
-                        <Field>
-                          <Key>Zone</Key>
-                          <Value>{regulatoryZoneMetadata.zone
-                            ? regulatoryZoneMetadata.zone.replace(/[_]/g, ' ')
-                            : <NoValue>-</NoValue>}</Value>
-                        </Field>
-                        {
-                          regulatoryZoneMetadata.deposit
-                            ? <Field>
-                              <Key>Gisement</Key>
-                              <Value>{regulatoryZoneMetadata.deposit}</Value>
-                            </Field>
-                            : null
-
-                        }
-                      </Body>
-                    </Fields>
-                  </Zone>
-                  : null
-              }
-              {
-                regulatoryZoneMetadata.period ||
-                regulatoryZoneMetadata.openingDate ||
-                regulatoryZoneMetadata.closingDate ||
-                regulatoryZoneMetadata.state
-                  ? <Zone>
-                    <Fields>
-                      <Body>
-                        {
-                          regulatoryZoneMetadata.period
-                            ? <Field>
-                              <Key>Période(s)</Key>
-                              <Value>{regulatoryZoneMetadata.period}</Value>
-                            </Field>
-                            : null
-                        }
-                        {
-                          regulatoryZoneMetadata.openingDate
-                            ? <Field>
-                              <Key>Dates d&apos;ouvertures</Key>
-                              <Value>
-                                <>
-                                  {getDateTime(regulatoryZoneMetadata.openingDate, true)}{' '}
-                                  <Gray>(UTC)</Gray>
-                                </>
-                              </Value>
-                            </Field>
-                            : null
-                        }
-                        {
-                          regulatoryZoneMetadata.closingDate
-                            ? <Field>
-                              <Key>Dates de fermetures</Key>
-                              <Value>
-                                <>
-                                  {getDateTime(regulatoryZoneMetadata.closingDate, true)}{' '}
-                                  <Gray>(UTC)</Gray>
-                                </>
-                              </Value>
-                            </Field>
-                            : null
-                        }
-                        {/*
-                                                // TODO Re-add the regulatory state when the field is fixed for all data
-                                                {
-                                                    regulatoryZoneMetadata.state ?
-                                                      <Field>
-                                                          <Key>État</Key>
-                                                          <Value>{regulatoryZoneMetadata.state}</Value>
-                                                      </Field> : null
-                                                } */}
-                      </Body>
-                    </Fields>
-                  </Zone>
-                  : null
-              }
-              {
-                (formattedGears?.length) ||
-                (prohibitedGears?.length) ||
-                regulatoryZoneMetadata.technicalMeasurements
-                  ? <ZoneWithLineBreak>
-                    {
-                      formattedGears?.length
-                        ? <>
-                          <KeyWithLineBreak>Engin(s)</KeyWithLineBreak>
-                          {
-                            formattedGears.map(gear => {
-                              return gear.name
-                                ? <ValueWithLineBreak data-cy={'regulatory-layers-metadata-gears'} key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
-                                : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
-                            })
-                          }
-                        </>
-                        : null
-                    }
-                    {
-                      prohibitedGears?.length
-                        ? <>
-                          <KeyWithLineBreak>Engin(s) interdit(s)</KeyWithLineBreak>
-                          {
-                            prohibitedGears.map(gear => {
-                              return gear.name
-                                ? <ValueWithLineBreak key={gear.code}>{gear.name} ({gear.code})</ValueWithLineBreak>
-                                : <ValueWithLineBreak key={gear.code}>{gear.code}</ValueWithLineBreak>
-                            })
-                          }
-                        </>
-                        : null
-                    }
-                    {
-                      regulatoryZoneMetadata.technicalMeasurements
-                        ? <>
-                          <KeyWithLineBreak>Mesures techniques</KeyWithLineBreak>
-                          <MarkdownValue>{regulatoryZoneMetadata.technicalMeasurements}</MarkdownValue>
-                        </>
-                        : null
-                    }
-                  </ZoneWithLineBreak>
-                  : null
-              }
-              {
-                regulatoryZoneMetadata.species ||
-                regulatoryZoneMetadata.prohibitedSpecies ||
-                regulatoryZoneMetadata.size ||
-                regulatoryZoneMetadata.quantity ||
-                regulatoryZoneMetadata.bycatch ||
-                regulatoryZoneMetadata.rejections
-                  ? <ZoneWithLineBreak>
-                    {
-                      regulatoryZoneMetadata.species
-                        ? <>
-                          <KeyWithLineBreak>Espèce(s)</KeyWithLineBreak>
-                          {
-                            regulatoryZoneMetadata.species.replace(/ /g, '').split(',').map(species => {
-                              return <ValueWithLineBreak key={species}>{species}</ValueWithLineBreak>
-                            })
-                          }
-                        </>
-                        : null
-                    }
-                    {
-                      regulatoryZoneMetadata.prohibitedSpecies
-                        ? <>
-                          <KeyWithLineBreak>Espèce(s) interdite(s)</KeyWithLineBreak>
-                          {
-                            regulatoryZoneMetadata.prohibitedSpecies.replace(/ /g, '').split(',').map(species => {
-                              return <ValueWithLineBreak key={species}>{species}</ValueWithLineBreak>
-                            })
-                          }
-                        </>
-                        : null
-                    }
-                    {
-                      regulatoryZoneMetadata.size
-                        ? <>
-                          <KeyWithLineBreak>Tailles</KeyWithLineBreak>
-                          <ValueWithLineBreak>{regulatoryZoneMetadata.size}</ValueWithLineBreak>
-                        </>
-                        : null
-                    }
-                    {
-                      regulatoryZoneMetadata.quantity
-                        ? <>
-                          <KeyWithLineBreak>Quantités</KeyWithLineBreak>
-                          <ValueWithLineBreak>{regulatoryZoneMetadata.quantity}</ValueWithLineBreak>
-                        </>
-                        : null
-                    }
-                    {
-                      regulatoryZoneMetadata.bycatch
-                        ? <>
-                          <KeyWithLineBreak>Captures accessoires</KeyWithLineBreak>
-                          <ValueWithLineBreak>{regulatoryZoneMetadata.bycatch} </ValueWithLineBreak>
-                        </>
-                        : null
-                    }
-                    {
-                      regulatoryZoneMetadata.rejections
-                        ? <>
-                          <KeyWithLineBreak>Rejets</KeyWithLineBreak>
-                          <ValueWithLineBreak>{regulatoryZoneMetadata.rejections} </ValueWithLineBreak>
-                        </>
-                        : null
-                    }
-                  </ZoneWithLineBreak>
-                  : null
-              }
-              {
-                regulatoryZoneMetadata.mandatoryDocuments ||
-                regulatoryZoneMetadata.obligations ||
-                regulatoryZoneMetadata.prohibitions ||
-                regulatoryZoneMetadata.permissions ||
-                (regulatoryReferences?.length)
-                  ? <ZoneWithLineBreak isLast>
-                    {
-                      regulatoryZoneMetadata.mandatoryDocuments
-                        ? <>
-                          <KeyWithLineBreak>Documents obligatoires</KeyWithLineBreak>
-                          <ValueWithLineBreak>{regulatoryZoneMetadata.mandatoryDocuments}</ValueWithLineBreak>
-                        </>
-                        : null
-                    }
-                    {
-                      regulatoryZoneMetadata.obligations
-                        ? <>
-                          <KeyWithLineBreak>Autres obligations</KeyWithLineBreak>
-                          <ValueWithLineBreak>{regulatoryZoneMetadata.obligations}</ValueWithLineBreak>
-                        </>
-                        : null
-                    }
-                    {
-                      regulatoryZoneMetadata.prohibitions
-                        ? <>
-                          <KeyWithLineBreak>Interdictions</KeyWithLineBreak>
-                          <ValueWithLineBreak>{regulatoryZoneMetadata.prohibitions}</ValueWithLineBreak>
-                        </>
-                        : null
-                    }
-                    {
-                      regulatoryZoneMetadata.permissions
-                        ? <>
-                          <KeyWithLineBreak>Autorisations</KeyWithLineBreak>
-                          <ValueWithLineBreak>{regulatoryZoneMetadata.permissions} </ValueWithLineBreak>
-                        </>
-                        : null
-                    }
-                    {
-                      regulatoryReferences?.length
-                        ? <>
-                          <KeyWithLineBreak>Références réglementaires</KeyWithLineBreak>
-                          <ValueWithLineBreak>
-                            <ul>
-                              {
-                                regulatoryReferences.map(regulatoryReference => {
-                                  return <Reference key={regulatoryReference.url}>
-                                    <a target="_blank" href={regulatoryReference.url}
-                                       rel="noreferrer">{regulatoryReference.reference}</a>
-                                  </Reference>
-                                })
-                              }
-                            </ul>
-                          </ValueWithLineBreak>
-                        </>
-                        : null
-                    }
-                  </ZoneWithLineBreak>
-                  : null
-              }
-            </Content>
-          </>
+          ? displayRegulatoryZoneMetadata()
+          // eslint-disable-next-line react/forbid-component-props
           : <FingerprintSpinner color={COLORS.background} className={'radar'} size={100}/>
       }
     </Wrapper>
   )
 }
+
+const Label = styled.span``
+
+const Mesh = styled.span`
+  display: flex;
+  flex-direction: row;
+  margin-left: 10px;
+`
+
+const List = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  color: ${COLORS.gunMetal};
+  padding-bottom: 20px;
+`
+
+const Elem = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  color: ${COLORS.gunMetal};
+  font-size: 13px;
+  font-weight: 500;
+  padding: 15px 20px;
+  text-align: left;
+  border-bottom: 1px solid ${COLORS.lightGray};
+`
+
+const SectionTitle = styled.span`
+  display: flex;
+  flex-direction: row;
+  color: ${COLORS.slateGray};
+  font-size: 13px;
+  align-items: center;
+`
 
 const Wrapper = styled.div`
   border-radius: 2px;
@@ -371,17 +198,6 @@ const Wrapper = styled.div`
   z-index: -1;
   padding: 0;
   transition: all 0.5s;
-`
-
-const Reference = styled.li`
-  list-style-type: "→";
-  padding-left: 10px;
-  font-size: 13px;
-`
-
-const Gray = styled.span`
-  color: ${COLORS.gunMetal};
-  font-weight: 300;
 `
 
 const RegulatoryZoneName = styled.span`
@@ -448,15 +264,6 @@ const Zone = styled.div`
   border-bottom: 1px solid ${COLORS.lightGray};
 `
 
-const ZoneWithLineBreak = styled.div`
-  margin: 0;
-  padding: 10px 5px 9px 16px;
-  text-align: left;
-  display: block;
-  ${props => !props.isLast ? `border-bottom: 1px solid ${COLORS.lightGray};` : null}
-  
-`
-
 const Fields = styled.table`
   width: inherit;
   display: table;
@@ -473,43 +280,8 @@ const Field = styled.tr`
   line-height: 0.5em;
 `
 
-const KeyWithLineBreak = styled.div`
-  color: ${COLORS.grayDarkerTwo};
-  flex: initial;
-  display: inline-block;
-  margin: 0;
-  border: none;
-  padding: 6px 10px 5px 0;
-  background: none;
-  width: max-content;
-  line-height: 0.5em;
-  height: 0.5em;
-  font-size: 13px;
-  font-weight: 400;
-`
-
-const ValueWithLineBreak = styled.div`
-  color: ${COLORS.gunMetal};
-  padding: 2px 5px 5px 0;
-  line-height: normal;
-  font-size: 13px;
-  font-weight: 500;
-`
-
-const MarkdownValue = styled(ReactMarkdown)`
-  color: ${COLORS.gunMetal};
-  padding: 2px 5px 5px 0;
-  line-height: normal;
-  font-size: 13px;
-  font-weight: 500;
-  * {
-    font-size: inherit;
-    margin: 0px;
-  }
-`
-
 const Key = styled.th`
-  color: ${COLORS.grayDarkerTwo};
+  color: ${COLORS.slateGray};
   flex: initial;
   display: inline-block;
   margin: 0;

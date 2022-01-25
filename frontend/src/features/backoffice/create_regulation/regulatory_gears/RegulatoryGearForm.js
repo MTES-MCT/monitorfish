@@ -4,7 +4,7 @@ import {
   CustomCheckbox, customRadioGroup, AuthorizedRadio,
   Delimiter, RegulatorySectionTitle, FormSection, FormContent
 } from '../../../commonStyles/Backoffice.style'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Radio, RadioGroup, MultiCascader } from 'rsuite'
 import GearLine from './GearLine'
@@ -12,6 +12,7 @@ import getAllGearCodes from '../../../../domain/use_cases/getAllGearCodes'
 import { GEARS_CATEGORES_WITH_MESH, prepareCategoriesAndGearsToDisplay } from '../../../../domain/entities/regulatory'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
+import { RedCircle, GreenCircle } from '../../../commonStyles/Circle.style'
 
 const REGULATORY_GEAR_KEYS = {
   AUTHORIZED: 'authorized',
@@ -212,14 +213,14 @@ const RegulatoryGearForm = (props) => {
           checked={authorized}
           value={true} >
           autorisés
-          <GreenCircle />
+          <GreenCircle margin={'0 6px'} />
         </CustomRadio>
         <CustomRadio
           data-cy={'regulation-forbidden-gears'}
           checked={authorized === false}
           value={false} >
           interdits
-          <RedCircle />
+          <RedCircle margin={'0 6px'} />
         </CustomRadio>
       </AuthorizedRadio>
     </RegulatorySectionTitle>
@@ -364,24 +365,6 @@ const CustomMultiCascader = styled(MultiCascader)`
 const GearCheckBox = styled(CustomCheckbox)`
   padding-right: 11px;
   margin-bottom: 15px;
-`
-
-const circle = css`
-  display: inline-block;
-  height: 10px;
-  width: 10px;
-  margin-left: 6px;
-  border-radius: 50%;
-  vertical-align: middle;
-`
-const GreenCircle = styled.span`
-  ${circle}
-  background-color: ${COLORS.mediumSeaGreen};
-`
-
-const RedCircle = styled.span`
-  ${circle}
-  background-color: ${COLORS.red};
 `
 
 const DerogationRadioWrapper = styled.div`

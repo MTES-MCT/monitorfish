@@ -133,7 +133,7 @@ context('Beacon statuses', () => {
       .contains('Activité détectée')
   })
 
-  it.only('Beacon status Should be opened', () => {
+  it('Beacon status Should be opened', () => {
     // Given
     cy.intercept('GET', 'bff/v1/beacon_statuses/1').as('showBeaconStatus')
 

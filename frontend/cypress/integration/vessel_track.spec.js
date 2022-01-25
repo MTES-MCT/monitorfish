@@ -13,7 +13,16 @@ context('Vessels Track', () => {
   it('Last position card Should be seen on the map on pointer move', () => {
     // When we move the pointer cursor (from one point to another to emit an event)
     cy.get('.vessels').trigger('pointermove',  {  clientX: 460, clientY: 480, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 904, clientY: 305, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 905, clientY: 307, pointerId: 1, force: true })
     cy.get('.vessels').trigger('pointermove',  {  clientX: 910, clientY: 300, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 905, clientY: 307, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 904, clientY: 305, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 904, clientY: 305, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 905, clientY: 307, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 910, clientY: 300, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 905, clientY: 307, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 904, clientY: 305, pointerId: 1, force: true })
 
     // Then
     cy.get('*[data-cy^="vessel-card-name"]').contains('EN RÉPÉTER PÈRE')

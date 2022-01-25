@@ -7,10 +7,31 @@ import { Vector } from 'ol/layer'
 import Layers from '../domain/entities/layers'
 
 import { getVesselAlertStyle } from './styles/vessel.style'
-import { getVesselFeatureIdFromVessel } from '../domain/entities/vessel'
-
+import {
+  getVesselFeatureIdFromVessel,
+  getVesselLastPositionVisibilityDates,
+  vesselsAreEquals,
+  Vessel
+} from '../domain/entities/vessel'
 const VesselAlertLayer = ({ map }) => {
-  const { vessels } = useSelector(state => state.vessel)
+  const {
+    vessels,
+    hideNonSelectedVessels,
+    selectedVessel
+  } = useSelector(state => state.vessel)
+
+  const {
+    nonFilteredVesselsAreHidden
+  } = useSelector(state => state.filter)
+
+  const {
+    previewFilteredVesselsMode
+  } = useSelector(state => state.global)
+
+  const {
+    vesselsLastPositionVisibility,
+    hideVesselsAtPort
+  } = useSelector(state => state.map)
 
   const vectorSourceRef = useRef(new VectorSource({
     features: []
@@ -38,22 +59,39 @@ const VesselAlertLayer = ({ map }) => {
   }, [map])
 
   useEffect(() => {
-    if (map) {
-      const features = vessels
-        .filter(vessel => vessel.vesselProperties.hasAlert)
-        .map(vessel => {
-          const feature = new Feature({
-            geometry: new Point(vessel.coordinates)
-          })
-          feature.setId(`${Layers.VESSEL_ALERT.code}:${getVesselFeatureIdFromVessel(vessel.vesselProperties)}`)
+    if (vessels?.length) {
+      const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
-          return feature
+      const features = vessels.reduce((features, vessel) => {
+        if (!vessel.vesselProperties.hasAlert) return features
+        if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return features
+        if (previewFilteredVesselsMode && !vessel.filterPreview) return features
+        if (hideVesselsAtPort && vessel.isAtPort) return features
+        if (hideNonSelectedVessels && !vesselsAreEquals(vessel.vesselProperties, selectedVessel)) return features
+        if (!Vessel.getVesselOpacity(vessel.vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)) return features
+
+        const feature = new Feature({
+          geometry: new Point(vessel.coordinates)
         })
+        feature.setId(`${Layers.VESSEL_ALERT.code}:${getVesselFeatureIdFromVessel(vessel.vesselProperties)}`)
+        features.push(feature)
+
+        return features
+      }, [])
 
       vectorSourceRef.current?.clear(true)
       vectorSourceRef.current?.addFeatures(features)
     }
-  }, [map, vessels])
+  }, [
+    vessels,
+    selectedVessel,
+    previewFilteredVesselsMode,
+    nonFilteredVesselsAreHidden,
+    hideNonSelectedVessels,
+    hideVesselsAtPort,
+    vesselsLastPositionVisibility?.opacityReduced,
+    vesselsLastPositionVisibility?.hidden
+  ])
 
   return null
 }

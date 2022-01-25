@@ -1,7 +1,7 @@
 import { getVesselPositionsFromAPI } from '../../api/fetch'
 import { addVesselTrackShowed, resetLoadingVessel } from '../shared_slices/Vessel'
 import { removeError, setError } from '../shared_slices/Global'
-import { getVesselFeatureIdFromVessel, Vessel } from '../entities/vessel'
+import { getVesselFeatureIdFromVessel } from '../entities/vessel'
 import { doNotAnimate } from '../shared_slices/Map'
 import { getTrackDepthError } from '../entities/vesselTrackDepth'
 import { convertToUTCFullDay } from '../../utils'
@@ -9,31 +9,22 @@ import { convertToUTCFullDay } from '../../utils'
 /**
  * Show a specified vessel track on map
  * @function showVesselTrack
- * @param {Vessel} vesselFeature
+ * @param {Vessel} clickedVessel
  * @param {boolean} calledFromCron
  * @param {VesselTrackDepth=} vesselTrackDepth
  */
-const showVesselTrack = (vesselFeature, calledFromCron, vesselTrackDepth) => (dispatch, getState) => {
+const showVesselTrack = (clickedVessel, calledFromCron, vesselTrackDepth) => (dispatch, getState) => {
   const {
-    vessel: {
-      vessels
-    }, map: {
+    map: {
       defaultVesselTrackDepth
     }
   } = getState()
   const nextVesselTrackDepthObject = getNextVesselTrackDepthObject(vesselTrackDepth, defaultVesselTrackDepth)
-  const feature = vessels.find(vessel => {
-    return (
-      vesselFeature.vesselId
-        ? (vesselFeature.vesselId === vessel.vesselId)
-        : Vessel.getVesselId(vesselFeature) === vessel.vesselId
-    )
-  })
 
   dispatch(doNotAnimate(calledFromCron))
   dispatch(removeError())
 
-  getVesselPositionsFromAPI(feature.vesselProperties, nextVesselTrackDepthObject)
+  getVesselPositionsFromAPI(clickedVessel.vesselProperties, nextVesselTrackDepthObject)
     .then(({ positions, trackDepthHasBeenModified }) => {
       const error = getTrackDepthError(
         positions,
@@ -46,14 +37,14 @@ const showVesselTrack = (vesselFeature, calledFromCron, vesselTrackDepth) => (di
       } else {
         dispatch(removeError())
       }
-      const identity = getVesselFeatureIdFromVessel(feature.vesselProperties)
+      const identity = getVesselFeatureIdFromVessel(clickedVessel.vesselProperties)
       dispatch(addVesselTrackShowed({
         identity: identity,
         showedVesselTrack: {
           identity: identity,
-          vessel: feature.vesselProperties,
-          coordinates: feature.coordinates,
-          course: feature.course,
+          vessel: clickedVessel,
+          coordinates: clickedVessel.coordinates,
+          course: clickedVessel.vesselProperties.course,
           positions: positions,
           trackDepth: nextVesselTrackDepthObject,
           toShow: true,

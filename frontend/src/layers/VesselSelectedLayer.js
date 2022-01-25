@@ -48,30 +48,30 @@ const VesselSelectedLayer = ({ map }) => {
   }, [map])
 
   useEffect(() => {
-    if (map) {
-      vectorSourceRef.current?.clear(true)
-      if (selectedVessel) {
-        const coordinates = transform([selectedVessel.longitude, selectedVessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-        const feature = new Feature({
-          ...selectedVessel,
-          geometry: new Point(coordinates)
-        })
-        vectorSourceRef.current?.addFeature(feature)
-      }
-      if (vesselsTracksShowed) {
-        const vessels = Object.values(vesselsTracksShowed)
-        const features = vessels?.map(vessel => {
-          const f = new Feature({
-            course: vessel.course,
-            geometry: new Point(vessel.coordinates)
-          })
-          f.setId(vessel.vesselId)
-          return f
-        })
-        vectorSourceRef.current?.addFeatures(features)
-      }
+    vectorSourceRef.current?.clear(true)
+
+    if (selectedVessel) {
+      const coordinates = transform([selectedVessel.longitude, selectedVessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+      const feature = new Feature({
+        ...selectedVessel,
+        geometry: new Point(coordinates)
+      })
+      vectorSourceRef.current?.addFeature(feature)
     }
-  }, [map, selectedVessel, vesselsTracksShowed])
+
+    if (vesselsTracksShowed) {
+      const vessels = Object.values(vesselsTracksShowed)
+      const features = vessels?.map(vessel => {
+        const feature = new Feature({
+          course: vessel.course,
+          geometry: new Point(vessel.coordinates)
+        })
+        feature.setId(vessel.vesselId)
+        return feature
+      })
+      vectorSourceRef.current?.addFeatures(features)
+    }
+  }, [selectedVessel, vesselsTracksShowed])
 
   return null
 }

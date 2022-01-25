@@ -74,16 +74,17 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   useEffect(() => {
     const clickedFeatureId = mapClickEvent?.feature?.getId()
     if (!previewFilteredVesselsMode && clickedFeatureId?.toString()?.includes(LayersEnum.VESSELS.code)) {
-      const feature = vessels.find((vessel) => {
+      const clickedVessel = vessels.find(vessel => {
         return clickedFeatureId?.toString()?.includes(vessel.vesselId)
       })
-      if (feature) {
+
+      if (clickedVessel) {
         if (mapClickEvent.ctrlKeyPressed) {
-          dispatch(showVesselTrack(feature, false))
+          dispatch(showVesselTrack(clickedVessel, false))
         } else {
           batch(() => {
-            dispatch(showVessel(feature.vesselProperties, false, false))
-            dispatch(getVesselVoyage(feature.vesselProperties, null, false))
+            dispatch(showVessel(clickedVessel.vesselProperties, false, false))
+            dispatch(getVesselVoyage(clickedVessel.vesselProperties, null, false))
           })
         }
       }

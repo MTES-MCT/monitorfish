@@ -71,6 +71,10 @@ const vesselSlice = createSlice({
       })
     },
     setAllVesselsAsUnfiltered (state) {
+      if (!state.vessels.find(vessel => vessel.isFiltered)) {
+        return
+      }
+
       state.vessels = state.vessels.map((vessel) => {
         return {
           ...vessel,

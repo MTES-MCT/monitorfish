@@ -10,5 +10,5 @@ SELECT
     last_position_datetime_utc AS malfunction_start_date_utc
 FROM last_positions
 WHERE
-    flag_state = 'FR'
+    flag_state IN ('FR', 'PF', 'VE', NULL)
     AND last_position_datetime_utc < CURRENT_TIMESTAMP - make_interval(hours => :hours)

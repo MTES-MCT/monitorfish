@@ -82,11 +82,16 @@ default_risk_factors = {
 }
 
 # BEACONS MALFUNCTIONS CONFIGURATION
-BEACONS_MALFUNCTION_MINIMUM_DURATION_IN_HOURS = 6
+BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA = 6
+BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT = 24
 
 # App URL
 MONITORFISH_URL = "https://monitorfish.din.developpement-durable.gouv.fr/"
 BACKOFFICE_URL = MONITORFISH_URL + "backoffice/"
+
+# Backend endpoints
+BFF_ENDPOINT = MONITORFISH_URL + "bff/v1/"
+BEACON_STATUSES_ENDPOINT = BFF_ENDPOINT + "beacon_statuses/"
 
 # Flows healthcheck URL
 FLOWS_HEALTHCHECK_URL = "http://localhost:8085"

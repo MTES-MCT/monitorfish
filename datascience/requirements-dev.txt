@@ -53,6 +53,7 @@ geoalchemy2==0.9.4
 geopandas==0.9.0; python_version >= "3.6"
 gitdb==4.0.7; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version < "3.10" and python_version >= "3.6"
 gitpython==3.1.20; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version < "3.10" and python_version >= "3.6"
+graphviz==0.19.1; python_version >= "3.6"
 grip==4.5.2
 h2==3.2.0; python_full_version >= "3.6.7" and python_version >= "3.6"
 h3==3.7.3

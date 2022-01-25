@@ -20,7 +20,6 @@ from src.pipeline.flows import (
     init_species_groups,
     last_positions,
     missing_trip_numbers,
-    new_beacons_statuses,
     ports,
     position_alerts,
     regulations,
@@ -28,6 +27,7 @@ from src.pipeline.flows import (
     risk_factor,
     scrape_legipeche,
     species,
+    update_beacons_statuses,
     vessels,
 )
 
@@ -78,7 +78,7 @@ last_positions.flow.schedule = Schedule(
     ]
 )
 missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
-new_beacons_statuses.flow.schedule = CronSchedule("5,15,25,35,45,55 * * * *")
+update_beacons_statuses.flow.schedule = CronSchedule("5,15,25,35,45,55 * * * *")
 position_alerts.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -127,7 +127,7 @@ flows_to_register = [
     init_species_groups.flow,
     last_positions.flow,
     missing_trip_numbers.flow,
-    new_beacons_statuses.flow,
+    update_beacons_statuses.flow,
     ports.flow,
     position_alerts.flow,
     regulations.flow,

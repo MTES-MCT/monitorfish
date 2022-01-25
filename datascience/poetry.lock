@@ -676,6 +676,19 @@ gitdb = ">=4.0.1,<5"
 typing-extensions = {version = ">=3.7.4.3", markers = "python_version < \"3.10\""}
 
 [[package]]
+name = "graphviz"
+version = "0.19.1"
+description = "Simple Python interface for Graphviz"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+dev = ["tox (>=3)", "flake8", "pep8-naming", "wheel", "twine"]
+docs = ["sphinx (>=1.8)", "sphinx-autodoc-typehints", "sphinx-rtd-theme"]
+test = ["pytest (>=6)", "pytest-mock (>=3)", "mock (>=4)", "pytest-cov", "coverage"]
+
+[[package]]
 name = "grip"
 version = "4.5.2"
 description = "Render local readme files before sending off to GitHub."
@@ -1689,6 +1702,7 @@ croniter = ">=0.3.24,<2.0"
 dask = {version = ">=2.17.0", markers = "python_version > \"3.6\""}
 distributed = {version = ">=2.17.0", markers = "python_version > \"3.6\""}
 docker = ">=3.4.1"
+graphviz = {version = ">=0.8.3", optional = true, markers = "extra == \"viz\""}
 marshmallow = ">=3.0.0b19"
 marshmallow-oneofschema = ">=2.0.0b2"
 msgpack = ">=0.6.0"
@@ -2862,7 +2876,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.7"
-content-hash = "ddb706b14396481c43ff5cfddfaeb67b86e69f7f3aa33000db0ec4c2a0b2c9e6"
+content-hash = "bda1eda43fd7fd9dda2539a90ebee8e194ee35e4e1a434c01050a1300833de5f"
 
 [metadata.files]
 alabaster = [
@@ -3208,6 +3222,10 @@ gitdb = [
 gitpython = [
     {file = "GitPython-3.1.20-py3-none-any.whl", hash = "sha256:b1e1c269deab1b08ce65403cf14e10d2ef1f6c89e33ea7c5e5bb0222ea593b8a"},
     {file = "GitPython-3.1.20.tar.gz", hash = "sha256:df0e072a200703a65387b0cfdf0466e3bab729c0458cf6b7349d0e9877636519"},
+]
+graphviz = [
+    {file = "graphviz-0.19.1-py3-none-any.whl", hash = "sha256:f34088c08be2ec16279dfa9c3b4ff3d1453c5c67597a33e2819b000e18d4c546"},
+    {file = "graphviz-0.19.1.zip", hash = "sha256:09ed0cde452d015fe77c4845a210eb642f28d245f5bc250d4b97808cb8f49078"},
 ]
 grip = [
     {file = "grip-4.5.2.tar.gz", hash = "sha256:048b7e5c738ed80bee345bd10840f27eb31687eb67132b40f2473dc1cf67aa0f"},

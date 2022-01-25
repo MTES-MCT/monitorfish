@@ -137,7 +137,7 @@ const Backoffice = () => {
           <RegulatoryPreviewLayer />
         </BaseMap>
       </BackofficeContainer>
-      <MetadataWrapper
+      {regulatoryZoneMetadataPanelIsOpen && <MetadataWrapper
         regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
       >
         <RegulatoryLayerZoneMetadata
@@ -149,7 +149,7 @@ const Backoffice = () => {
           layersSidebarIsOpen={true}
           fromBackoffice={true}
         />
-      </MetadataWrapper>
+      </MetadataWrapper>}
     </>
   )
 }

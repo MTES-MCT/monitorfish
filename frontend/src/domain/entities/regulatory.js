@@ -660,3 +660,7 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
     return null
   })
 }
+
+export const getTitle = regulatory => regulatory
+  ? `${regulatory.topic.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
+  : ''

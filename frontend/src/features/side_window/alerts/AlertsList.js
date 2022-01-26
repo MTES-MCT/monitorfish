@@ -24,7 +24,6 @@ import { getTextForSearch } from '../../../utils'
  */
 const AlertsList = ({ alerts }) => {
   const dispatch = useDispatch()
-
   const baseUrl = window.location.origin
   const [sortedAlerts, setSortedAlerts] = useState([])
   const [sortColumn] = useState('creationDate')
@@ -63,10 +62,9 @@ const AlertsList = ({ alerts }) => {
   }, [alerts, searchedVessel])
 
   const searchVesselInputStyle = {
-    margin: '0 0 5px 5px',
+    marginBottom: 5,
     backgroundColor: 'white',
-    border: 'none',
-    borderBottom: `1px ${COLORS.lightGray} solid`,
+    border: `1px ${COLORS.lightGray} solid`,
     borderRadius: 0,
     color: COLORS.gunMetal,
     fontSize: 13,
@@ -161,7 +159,7 @@ const AlertsList = ({ alerts }) => {
                     style={showIconStyle}
                     alt={'Voir sur la carte'}
                     onClick={() => {
-                      const vesselIdentity = { ...alert, flagState: 'FR' }
+                      const vesselIdentity = { ...alert }
                       dispatch(showVessel(vesselIdentity, false, false, null))
                       dispatch(getVesselVoyage(vesselIdentity, null, false))
                     }}

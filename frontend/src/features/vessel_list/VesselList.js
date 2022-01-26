@@ -76,6 +76,8 @@ const VesselList = ({ namespace }) => {
   const [zoneGroups, setZoneGroups] = useState([])
 
   // Filters
+  const zonesSelected = useSelector(state => state.vesselList.zonesSelected)
+
   const [zonesFilter, setZonesFilter] = useState([])
   const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(3)
   const [lastControlMonthsAgo, setLastControlMonthsAgo] = useState(null)
@@ -86,7 +88,6 @@ const VesselList = ({ namespace }) => {
   const [speciesFiltered, setSpeciesFiltered] = useState([])
   const [districtsFiltered, setDistrictsFiltered] = useState([])
   const [vesselsSizeValuesChecked, setVesselsSizeValuesChecked] = useState([])
-  const zonesSelected = useSelector(state => state.vesselList.zonesSelected)
   const [isFiltering, setIsFiltering] = useState(false)
   const [vesselsLocationFilter, setVesselsLocationFilter] = useState([VesselLocation.SEA, VesselLocation.PORT])
 

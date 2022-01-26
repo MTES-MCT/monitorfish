@@ -13,6 +13,7 @@ context('Beacon statuses', () => {
 
   it('A beacon status card Should be moved in the Board', () => {
     // Given
+    cy.request('PUT', 'bff/v1/beacon_statuses/1', {stage: 'INITIAL_ENCOUNTER'})
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-statuses-card"]')

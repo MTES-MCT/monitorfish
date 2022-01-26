@@ -128,6 +128,7 @@ const vesselSlice = createSlice({
           filterPreview: 0
         }
       })
+      console.log()
     },
     loadingVessel (state, action) {
       state.selectedVesselIdentity = action.payload.vesselIdentity

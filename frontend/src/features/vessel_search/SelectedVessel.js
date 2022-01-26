@@ -20,7 +20,7 @@ const SelectedVessel = ({ selectedVesselIdentity, setSelectedVesselIdentity }) =
       flagState = `${selectedVesselIdentity.flagState}`
     }
 
-    return `${selectedVesselIdentity.vesselName} (${flagState})`
+    return `${selectedVesselIdentity.vesselName} (${flagState.toUpperCase()})`
   }
 
   return (

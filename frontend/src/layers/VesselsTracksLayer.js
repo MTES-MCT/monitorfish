@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { extend } from 'ol/extent'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
+
+import { usePrevious } from '../hooks/usePrevious'
 import Layers from '../domain/entities/layers'
 import { VesselTrack } from '../domain/entities/vesselTrack'
-import { getCircleStyle } from './styles/vesselTrack.style'
 import { animateToCoordinates } from '../domain/shared_slices/Map'
-import { usePrevious } from '../hooks/usePrevious'
 import {
   setVesselTrackExtent,
   updateVesselTrackAsHidden,
@@ -18,9 +18,11 @@ import {
   updateFishingActivitiesOnMapCoordinates
 } from '../domain/shared_slices/FishingActivities'
 import { getVesselFeatureIdFromVessel } from '../domain/entities/vessel'
+import { getFishingActivityFeatureOnTrackLine } from '../domain/entities/fishingActivities'
 import CloseVesselTrackOverlay from '../features/map/overlays/CloseVesselTrackOverlay'
 import FishingActivityOverlay from '../features/map/overlays/FishingActivityOverlay'
-import { getFishingActivityFeatureOnTrackLine } from '../domain/entities/fishingActivities'
+
+import { getCircleStyle } from './styles/vesselTrack.style'
 
 const VesselsTracksLayer = ({ map }) => {
   const {
@@ -45,19 +47,28 @@ const VesselsTracksLayer = ({ map }) => {
 
   const dispatch = useDispatch()
 
-  const [vectorSource] = useState(new VectorSource({
+  const vectorSourceRef = useRef(new VectorSource({
     features: []
   }))
-  const [layer] = useState(new Vector({
+  const layerRef = useRef(new Vector({
     renderBuffer: 4,
-    source: vectorSource,
+    source: vectorSourceRef.current,
     zIndex: Layers.VESSEL_TRACK.zIndex,
     updateWhileAnimating: true,
     updateWhileInteracting: true
   }))
 
   useEffect(() => {
-    addLayerToMap()
+    if (map) {
+      layerRef.current.name = Layers.VESSEL_TRACK.code
+      map.getLayers().push(layerRef.current)
+    }
+
+    return () => {
+      if (map) {
+        map.removeLayer(layerRef.current)
+      }
+    }
   }, [map])
 
   useEffect(() => {
@@ -69,7 +80,7 @@ const VesselsTracksLayer = ({ map }) => {
   }, [previousSelectedVessel, selectedVessel])
 
   useEffect(() => {
-    if (!Object.keys(vesselsTracksShowed)?.length || !vectorSource) {
+    if (!Object.keys(vesselsTracksShowed)?.length || !vectorSourceRef.current) {
       return
     }
 
@@ -78,7 +89,7 @@ const VesselsTracksLayer = ({ map }) => {
 
     showVesselsTracks(vesselTracks)
     hideVesselsTracks(vesselTracks)
-  }, [vesselsTracksShowed, vectorSource])
+  }, [vesselsTracksShowed, vectorSourceRef.current])
 
   useEffect(() => {
     if (highlightedVesselTrackPosition) {
@@ -123,8 +134,8 @@ const VesselsTracksLayer = ({ map }) => {
     }).filter(coordinatesFeaturesAndIds => coordinatesFeaturesAndIds)
 
     removeFishingActivitiesFeatures()
-    vectorSource.addFeatures(coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature))
-    vectorSource.changed()
+    vectorSourceRef.current.addFeatures(coordinatesFeaturesAndIds.map(coordinatesFeatureAndId => coordinatesFeatureAndId.feature))
+    vectorSourceRef.current.changed()
     dispatch(updateFishingActivitiesOnMapCoordinates(coordinatesFeaturesAndIds))
   }
 
@@ -134,25 +145,25 @@ const VesselsTracksLayer = ({ map }) => {
   }
 
   function removeFishingActivitiesFeatures () {
-    vectorSource
+    vectorSourceRef.current
       .getFeatures()
       .filter(feature =>
         feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
         feature?.getId()?.toString()?.includes('ers'))
-      .forEach(feature => vectorSource.removeFeature(feature))
+      .forEach(feature => vectorSourceRef.current.removeFeature(feature))
   }
 
   function getVesselTrackLines () {
-    return vectorSource.getFeatures()
+    return vectorSourceRef.current.getFeatures()
       .filter(feature =>
         feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
         feature?.getId()?.toString()?.includes('line'))
   }
 
   function removeVesselTrackFeatures (identity) {
-    vectorSource.getFeatures()
+    vectorSourceRef.current.getFeatures()
       .filter(feature => feature?.getId()?.toString()?.includes(identity))
-      .map(feature => vectorSource.removeFeature(feature))
+      .map(feature => vectorSourceRef.current.removeFeature(feature))
   }
 
   function hidePreviouslySelectedVessel () {
@@ -171,7 +182,7 @@ const VesselsTracksLayer = ({ map }) => {
         removeVesselTrackFeatures(vesselTrack.identity)
 
         const vesselTrackFeatures = new VesselTrack(vesselTrack.positions, vesselTrack.identity)
-        vectorSource.addFeatures(vesselTrackFeatures.features)
+        vectorSourceRef.current.addFeatures(vesselTrackFeatures.features)
 
         dispatch(updateVesselTrackAsShowed(vesselTrack.identity))
       })
@@ -189,26 +200,13 @@ const VesselsTracksLayer = ({ map }) => {
 
   function updateTrackCircleStyle (vesselTrackCircle, radius) {
     if (vesselTrackCircle) {
-      const feature = vectorSource.getFeatures()
+      const feature = vectorSourceRef.current.getFeatures()
         .find(feature => feature.dateTime === vesselTrackCircle.dateTime)
 
       if (feature) {
         const featureColor = feature?.getStyle()[0].getImage()?.getFill()?.getColor()
 
         feature.setStyle(getCircleStyle(featureColor, radius))
-      }
-    }
-  }
-
-  function addLayerToMap () {
-    if (map) {
-      layer.name = Layers.VESSEL_TRACK.code
-      map.getLayers().push(layer)
-    }
-
-    return () => {
-      if (map) {
-        map.removeLayer(layer)
       }
     }
   }
@@ -221,7 +219,7 @@ const VesselsTracksLayer = ({ map }) => {
       const vesselTrack = new VesselTrack(selectedVesselPositions, identity)
 
       if (vesselTrack.features?.length) {
-        vectorSource.addFeatures(vesselTrack.features)
+        vectorSourceRef.current.addFeatures(vesselTrack.features)
         const vesselTrackExtent = getVesselTrackExtent(vesselTrack, identity)
 
         dispatch(setVesselTrackExtent(vesselTrackExtent))

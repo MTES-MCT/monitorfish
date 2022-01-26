@@ -1,16 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+
 import BaseMap from '../map/BaseMap'
 import LawType from './LawType'
 import SearchRegulations from './SearchRegulations'
 import RegulatoryLayerZoneMetadata from '../layers/regulatory/RegulatoryLayerZoneMetadata'
+import BaseLayer from '../../layers/BaseLayer'
+import RegulatoryLayers from '../../layers/RegulatoryLayers'
+import AdministrativeLayers from '../../layers/AdministrativeLayers'
+import RegulatoryPreviewLayer from '../../layers/RegulatoryPreviewLayer'
+import ShowRegulatoryMetadata from '../map/ShowRegulatoryMetadata'
+
 import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import getAllGearCodes from '../../domain/use_cases/getAllGearCodes'
-import { COLORS } from '../../constants/constants'
-import { EmptyResult } from '../commonStyles/Text.style'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { REGULATORY_TERRITORY } from '../../domain/entities/regulatory'
+import { COLORS } from '../../constants/constants'
+import { EmptyResult } from '../commonStyles/Text.style'
 import { setRegulationSaved } from './Regulation.slice'
 import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
 /* import { SecondaryButton } from '../commonStyles/Buttons.style' */
@@ -122,10 +129,13 @@ const Backoffice = () => {
             ? searchResultList
             : <div>En attente de chargement</div>}
         </RegulatoryZonePanel>
-        <BaseMap
-          handleMovingAndZoom={handleMovingAndZoom}
-          mapMovingAndZoomEvent={mapMovingAndZoomEvent}
-        />
+        <BaseMap handleMovingAndZoom={handleMovingAndZoom} >
+          <BaseLayer/>
+          <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
+          <AdministrativeLayers/>
+          <ShowRegulatoryMetadata/>
+          <RegulatoryPreviewLayer />
+        </BaseMap>
       </BackofficeContainer>
       <MetadataWrapper
         regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}

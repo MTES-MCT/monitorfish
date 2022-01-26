@@ -86,14 +86,6 @@ const mapSlice = createSlice({
       window.localStorage.setItem(riskFactorLocalStorageKey, JSON.stringify(action.payload))
       state.riskFactorShowedOnMap = action.payload
     },
-    setView (state, action) {
-      window.localStorage.setItem(savedMapViewLocalStorageKey, JSON.stringify(action.payload))
-      state.view = action.payload
-    },
-    setExtent (state, action) {
-      window.localStorage.setItem(savedMapExtentLocalStorageKey, JSON.stringify(action.payload))
-      state.extent = action.payload
-    },
     setVesselsLastPositionVisibility (state, action) {
       window.localStorage.setItem(vesselsLastPositionVisibilityLocalStorageKey, JSON.stringify(action.payload))
       state.vesselsLastPositionVisibility = action.payload
@@ -169,8 +161,6 @@ export const {
   animateToRegulatoryLayer,
   resetAnimateToRegulatoryLayer,
   setVesselLabelsShowedOnMap,
-  setView,
-  setExtent,
   setVesselsLastPositionVisibility,
   setVesselTrackDepth,
   setVesselLabel,

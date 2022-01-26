@@ -1,10 +1,32 @@
-import { asArray, asString } from 'ol/color'
 import { createSlice } from '@reduxjs/toolkit'
+import { asArray, asString } from 'ol/color'
 import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map'
 import { all } from 'ol/loadingstrategy'
 
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map'
+/**
+ *
+ * @param {string} hexColor
+ * @param {number[]} defaultColor
+ * @returns
+ */
+export const customHexToRGB = (hexColor, defaultColor) => {
+  if (!hexColor || !(typeof hexColor === 'string')) {
+    return defaultColor || [0, 0, 0]
+  }
+  const aRgbHex = hexColor.substring(1).match(/.{1,2}/g)
+  const aRgb = [
+    parseInt(aRgbHex[0], 16),
+    parseInt(aRgbHex[1], 16),
+    parseInt(aRgbHex[2], 16)
+  ]
+  return aRgb
+}
+
+export const booleanToInt = (boolean) => {
+  return boolean ? 1 : 0
+}
 export const calculatePointsDistance = (coord1, coord2) => {
   const dx = coord1[0] - coord2[0]
   const dy = coord1[1] - coord2[1]
@@ -250,19 +272,18 @@ export const formatDataForSelectPicker = (list, groupName) => {
  * @returns a new array
  */
 export function formatToCSVColumnsForExport (initialObject, csvColumns, filters) {
-  let columnsKeys = Object.keys(csvColumns)
+  let csvColumnsAsArray = Object.entries(csvColumns)
 
   if (filters?.length) {
-    columnsKeys = columnsKeys.filter(value => {
-      return filters.some(filter => value === filter)
+    csvColumnsAsArray = csvColumnsAsArray.filter(([columnKey, column]) => {
+      return filters.some(filter => column.code === filter)
     })
   }
-
-  return columnsKeys
+  return csvColumnsAsArray
     .reduce(
-      (obj, key) => {
-        obj[csvColumns[key].name] = initialObject[csvColumns[key].code]
-        return obj
+      (collector, [columnKey, column]) => {
+        collector[column.name] = initialObject[column.code]
+        return collector
       },
       {}
     )

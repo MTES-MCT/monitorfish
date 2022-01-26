@@ -13,6 +13,7 @@ context('Beacon statuses', () => {
 
   it('A beacon status card Should be moved in the Board', () => {
     // Given
+    cy.request('PUT', 'bff/v1/beacon_statuses/1', {stage: 'INITIAL_ENCOUNTER'})
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-statuses-card"]')
@@ -169,10 +170,10 @@ context('Beacon statuses', () => {
     cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-date"]').eq(2).contains('Hier')
     cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-date"]').eq(3).contains('Aujourd\'hui')
 
-    cy.get('*[data-cy="side-window-beacon-statuses-detail-action-content"]').should('have.length', 2)
+    cy.get('*[data-cy="side-window-beacon-statuses-detail-action-content"]').should('have.length', 3)
     cy.get('*[data-cy="side-window-beacon-statuses-detail-action-content"]').eq(0)
       .contains('Le statut du ticket a été modifié, de Navire à quai à En arrêt technique.')
-    cy.get('*[data-cy="side-window-beacon-statuses-detail-action-content"]').eq(1)
+    cy.get('*[data-cy="side-window-beacon-statuses-detail-action-content"]').eq(2)
       .contains('Le ticket a été déplacé de Premier contact à Relance pour reprise.')
 
     cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-content"]').should('have.length', 2)

@@ -11,11 +11,6 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/m
 import { resetAnimateToRegulatoryLayer } from '../../domain/shared_slices/Map'
 import MapCoordinatesBox from './controls/MapCoordinatesBox'
 import MapAttributionsBox from './controls/MapAttributionsBox'
-import BaseLayer from '../../layers/BaseLayer'
-import RegulatoryLayers from '../../layers/RegulatoryLayers'
-import AdministrativeLayers from '../../layers/AdministrativeLayers'
-import ShowRegulatoryMetadata from './ShowRegulatoryMetadata'
-import RegulatoryPreviewLayer from '../../layers/RegulatoryPreviewLayer'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 import { platformModifierKeyOnly } from 'ol/events/condition'
 
@@ -29,8 +24,7 @@ const BaseMap = props => {
     showCoordinates,
     setCurrentFeature,
     showAttributions,
-    container,
-    mapMovingAndZoomEvent
+    container
   } = props
 
   const {
@@ -83,7 +77,7 @@ const BaseMap = props => {
       const pixel = map.getEventPixel(event.originalEvent)
       const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
 
-      if (feature && feature.getId()) {
+      if (feature?.getId()) {
         if (setCurrentFeature) {
           setCurrentFeature(feature)
         }
@@ -226,16 +220,11 @@ const BaseMap = props => {
         healthcheckTextWarning={healthcheckTextWarning}
         previewFilteredVesselsMode={previewFilteredVesselsMode}
       />
-      <BaseLayer map={map}/>
-      <RegulatoryLayers map={map} mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
-      <AdministrativeLayers map={map}/>
-      <ShowRegulatoryMetadata mapClickEvent={mapClickEvent}/>
       {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates}/>}
       {showAttributions && <MapAttributionsBox/>}
       {map && Children.map(children, (child) => (
         child && cloneElement(child, { map, mapClickEvent })
       ))}
-      <RegulatoryPreviewLayer map={map} />
     </MapWrapper>
   )
 }

@@ -126,6 +126,7 @@ function getVesselFromAPI (identity, vesselTrackDepthObject) {
 /**
  * Get vessel positions
  * @memberOf API
+ * @param {VesselIdentity} identity
  * @returns {Promise<{
  *   positions: VesselPosition[],
  *   trackDepthHasBeenModified: boolean

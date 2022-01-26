@@ -103,7 +103,7 @@ const VesselLabelOverlay = ({
 
       const nextCoordinates = map.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
       currentCoordinates.current = nextCoordinates
-      moveLine(featureId, coordinates, nextCoordinates, offset)
+      moveLine(featureId, coordinates, nextCoordinates, offset, opacity)
 
       isThrottled.current = false
     }, delay)

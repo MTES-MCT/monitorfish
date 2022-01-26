@@ -68,7 +68,7 @@ Façade: ${dirm}`
           ? fleetSegments.map((segment, index) => {
             return <span key={index}>
                   {segment.segment}
-              <Info isInfoSegment={true} title={getSegmentInfo(segment)}/>
+              <Info $isInfoSegment={true} title={getSegmentInfo(segment)}/>
               {fleetSegments.length === index + 1 ? '' : ', '}
                 </span>
           })
@@ -88,7 +88,7 @@ const Info = styled(InfoSVG)`
   width: 14px;
   vertical-align: text-bottom;
   margin-bottom: 2px;
-  margin-left: ${props => props.isInfoSegment ? '5px' : '2px'};
+  margin-left: ${props => props.$isInfoSegment ? '5px' : '2px'};
 `
 
 export default FleetSegments

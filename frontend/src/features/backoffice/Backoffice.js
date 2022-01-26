@@ -18,7 +18,7 @@ import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZ
 import { REGULATORY_TERRITORY } from '../../domain/entities/regulatory'
 import { COLORS } from '../../constants/constants'
 import { EmptyResult } from '../commonStyles/Text.style'
-import { setRegulationSaved } from './Regulation.slice'
+import { setProcessingRegulationSaved } from './Regulation.slice'
 import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
 /* import { SecondaryButton } from '../commonStyles/Buttons.style' */
 
@@ -46,7 +46,7 @@ const Backoffice = () => {
     batch(() => {
       dispatch(getAllRegulatoryLayersByRegTerritory())
       dispatch(getAllGearCodes())
-      dispatch(setRegulationSaved(false))
+      dispatch(setProcessingRegulationSaved(false))
       dispatch(setRegulatoryZoneMetadata(null))
     })
   }

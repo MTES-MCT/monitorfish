@@ -28,8 +28,8 @@ const REGULATORY_SPECIES_KEYS = {
 
 const RegulatorySpeciesForm = props => {
   const {
-    /** @type {Species} speciesCodesState */
-    species: speciesCodesState,
+    /** @type {Map<string, Species>} speciesByCode */
+    speciesByCode,
     /** @type {SpeciesGroup} speciesGroupsState */
     speciesGroups: speciesGroupsState
   } = useSelector(state => state.species)
@@ -50,6 +50,15 @@ const RegulatorySpeciesForm = props => {
 
   const [displayForm, setDisplayForm] = useState(false)
 
+  const set = useCallback((key, value) => {
+    const nextRegulatorySpecies = {
+      ...regulatorySpecies,
+      [key]: value
+    }
+
+    setRegulatorySpecies(nextRegulatorySpecies)
+  }, [setRegulatorySpecies, regulatorySpecies])
+
   useEffect(() => {
     if (!displayForm && authorized !== undefined) {
       setDisplayForm(true)
@@ -62,7 +71,19 @@ const RegulatorySpeciesForm = props => {
     if (allSpecies && authorized) {
       set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, false)
     }
-  }, [authorized])
+
+    function initSpeciesQuantityAndMinimumSize () {
+      const nextSpecies = [...species]
+        .map(_species => {
+          return {
+            ..._species,
+            minimumSize: undefined,
+            quantity: undefined
+          }
+        })
+      set(REGULATORY_SPECIES_KEYS.SPECIES, nextSpecies)
+    }
+  }, [authorized, displayForm, allSpecies, species, setDisplayForm, set])
 
   useEffect(() => {
     if (allSpecies) {
@@ -74,28 +95,7 @@ const RegulatorySpeciesForm = props => {
 
       setRegulatorySpecies(regulatorySpeciesWithoutSpecies)
     }
-  }, [allSpecies])
-
-  function initSpeciesQuantityAndMinimumSize () {
-    const nextSpecies = [...species]
-      .map(species => {
-        return {
-          ...species,
-          minimumSize: undefined,
-          quantity: undefined
-        }
-      })
-    set(REGULATORY_SPECIES_KEYS.SPECIES, nextSpecies)
-  }
-
-  const set = useCallback((key, value) => {
-    const nextRegulatorySpecies = {
-      ...regulatorySpecies,
-      [key]: value
-    }
-
-    setRegulatorySpecies(nextRegulatorySpecies)
-  }, [setRegulatorySpecies, regulatorySpecies])
+  }, [allSpecies, regulatorySpecies, setRegulatorySpecies])
 
   const push = useCallback((key, array, value) => {
     const newArray = array ? [...array] : []
@@ -118,22 +118,23 @@ const RegulatorySpeciesForm = props => {
 
   const removeSpeciesToRegulatorySpeciesList = speciesCodeToRemove => {
     const nextSpecies = [...species]
-      .filter(species => species.code !== speciesCodeToRemove)
+      .filter(_species => _species.code !== speciesCodeToRemove)
     set(REGULATORY_SPECIES_KEYS.SPECIES, nextSpecies)
   }
 
   const removeSpeciesGroupToRegulatorySpeciesList = speciesGroupToRemove => {
     const nextSpeciesGroups = [...speciesGroups]
-      .filter(species => species !== speciesGroupToRemove)
+      .filter(_species => _species !== speciesGroupToRemove)
     set(REGULATORY_SPECIES_KEYS.SPECIES_GROUPS, nextSpeciesGroups)
   }
 
   const onSpeciesChange = value => {
-    if (species?.some(species => species?.code?.includes(value))) {
+    if (species?.some(_species => _species?.code?.includes(value))) {
       removeSpeciesToRegulatorySpeciesList(value)
     } else {
       push(REGULATORY_SPECIES_KEYS.SPECIES, species, {
         code: value,
+        name: speciesByCode[value].name,
         quantity: undefined,
         minimumSize: undefined
       })
@@ -158,11 +159,11 @@ const RegulatorySpeciesForm = props => {
   }
 
   function getFormattedSpecies () {
-    return [...speciesCodesState]
+    return Object.values(speciesByCode)
       ?.sort((speciesA, speciesB) => speciesB.code - speciesA.code)
-      .map(species => ({
-        label: `${species.name} (${species.code})`,
-        value: species.code
+      .map(_species => ({
+        label: `${_species.name} (${_species.code})`,
+        value: _species.code
       }))
   }
 
@@ -231,7 +232,7 @@ const RegulatorySpeciesForm = props => {
             data={getFormattedSpecies()}
             emptyMessage={'Aucune espèce'}
             renderMenuItem={(_, item) =>
-              <MenuItem checked={species?.some(species => species?.code?.includes(item.value))} item={item} tag={'Checkbox'} />}
+              <MenuItem checked={species?.some(_species => _species?.code?.includes(item.value))} item={item} tag={'Checkbox'} />}
             menuClassName={DEFAULT_MENU_CLASSNAME}
           />
         </ContentLine>
@@ -268,7 +269,7 @@ const RegulatorySpeciesForm = props => {
                       value={speciesValue.quantity || ''}
                       onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, quantity: value })}
                       width={'200px'}
-                      $isGray={species.find(species => species.code === speciesValue.code)?.quantity}
+                      $isGray={species.find(_species => _species.code === speciesValue.code)?.quantity}
                     />
                   </SpeciesDetail>
                   <SpeciesDetail>
@@ -279,7 +280,7 @@ const RegulatorySpeciesForm = props => {
                       value={speciesValue.minimumSize || ''}
                       onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, minimumSize: value })}
                       width={'200px'}
-                      $isGray={species.find(species => species.code === speciesValue.code)?.minimumSize}
+                      $isGray={species.find(_species => _species.code === speciesValue.code)?.minimumSize}
                     />
                   </SpeciesDetail>
                 </SpeciesDetails>

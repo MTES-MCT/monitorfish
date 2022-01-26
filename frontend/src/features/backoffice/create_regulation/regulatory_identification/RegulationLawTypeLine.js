@@ -11,20 +11,20 @@ import {
   UE,
   REGULATORY_REFERENCE_KEYS
 } from '../../../../domain/entities/regulatory'
-import { setRegulationByKey } from '../../Regulation.slice'
+import { setProcessingRegulationByKey } from '../../Regulation.slice'
 
 const RegulationLawTypeLine = ({ selectData, lawTypeIsMissing }) => {
   const dispatch = useDispatch()
 
-  const { lawType } = useSelector(state => state.regulation.currentRegulation)
+  const { lawType } = useSelector(state => state.regulation.processingRegulation)
 
   const onLawTypeChange = (value) => {
     if (LAWTYPES_TO_TERRITORY[value] !== UE) {
-      dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: [] }))
+      dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: [] }))
     }
     batch(() => {
-      dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value: undefined }))
-      dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.LAW_TYPE, value: value }))
+      dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value: undefined }))
+      dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.LAW_TYPE, value: value }))
     })
   }
 

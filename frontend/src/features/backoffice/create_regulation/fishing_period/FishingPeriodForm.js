@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Label } from '../../../commonStyles/Input.style'
 import styled from 'styled-components'
 import { COLORS, SQUARE_BUTTON_TYPE } from '../../../../constants/constants'
@@ -51,68 +51,61 @@ const FishingPeriodForm = (props) => {
   const [fishingPeriodAsString, setFishingPeriodAsString] = useState()
   const [timeIsDisabled, setTimeIsDisabled] = useState(true)
 
-  useEffect(() => {
-    const atLeastOneDateElementIsCompleted = dateRanges?.length > 0 || dates?.length > 0 || weekdays?.length > 0 || holidays !== undefined
-    setTimeIsDisabled(!atLeastOneDateElementIsCompleted)
-  }, [fishingPeriod, timeIsDisabled])
-
-  useEffect(() => {
-    if (daytime) {
-      set(FISHING_PERIOD_KEYS.TIME_INTERVALS, [])
-    }
-  }, [daytime])
-
-  useEffect(() => {
-    if (!displayForm && authorized !== undefined) {
-      setDisplayForm(true)
-    }
-  }, [authorized])
-
-  useEffect(() => {
-    if (disabled && annualRecurrence !== undefined) {
-      setDisabled(false)
-    }
-  }, [annualRecurrence])
-
-  useEffect(() => {
-    const {
-      dateRanges,
-      dates,
-      weekdays,
-      timeIntervals,
-      daytime
-    } = fishingPeriod
-    if (dateRanges?.length || dates?.length || weekdays?.length || timeIntervals?.length || daytime) {
-      setFishingPeriodAsString(fishingPeriodToString(fishingPeriod))
-    } else {
-      setFishingPeriodAsString(undefined)
-    }
-  }, [fishingPeriod, fishingPeriodAsString])
-
-  const set = (key, value) => {
+  const set = useCallback((key, value) => {
     const obj = {
       ...fishingPeriod,
       [key]: value
     }
 
     setFishingPeriod(obj)
-  }
+  }, [fishingPeriod, setFishingPeriod])
 
-  const push = (key, array, defaultValue) => {
+  useEffect(() => {
+    const atLeastOneDateElementIsCompleted = dateRanges?.length > 0 || dates?.length > 0 || weekdays?.length > 0 || holidays !== undefined
+    setTimeIsDisabled(!atLeastOneDateElementIsCompleted)
+  }, [fishingPeriod, timeIsDisabled, dateRanges, dates, weekdays, holidays])
+
+  useEffect(() => {
+    if (daytime) {
+      set(FISHING_PERIOD_KEYS.TIME_INTERVALS, [])
+    }
+  }, [set, daytime])
+
+  useEffect(() => {
+    if (!displayForm && authorized !== undefined) {
+      setDisplayForm(true)
+    }
+  }, [displayForm, authorized])
+
+  useEffect(() => {
+    if (disabled && annualRecurrence !== undefined) {
+      setDisabled(false)
+    }
+  }, [disabled, annualRecurrence])
+
+  useEffect(() => {
+    if (dateRanges?.length || dates?.length || weekdays?.length || timeIntervals?.length || daytime) {
+      setFishingPeriodAsString(fishingPeriodToString(fishingPeriod))
+    } else {
+      setFishingPeriodAsString(undefined)
+    }
+  }, [fishingPeriod, dateRanges, dates, weekdays, timeIntervals, daytime, fishingPeriodAsString])
+
+  const push = useCallback((key, array, defaultValue) => {
     const newArray = array ? [...array] : []
     newArray.push(defaultValue || undefined)
 
     set(key, newArray)
-  }
+  }, [set])
 
-  const pop = (key, array) => {
+  const pop = useCallback((key, array) => {
     const newArray = [...array]
     newArray.pop()
 
     set(key, newArray)
-  }
+  }, [set])
 
-  const update = (id, key, array, value) => {
+  const update = useCallback((id, key, array, value) => {
     const newArray = array ? [...array] : []
 
     if (id === -1) {
@@ -122,29 +115,28 @@ const FishingPeriodForm = (props) => {
     }
 
     set(key, newArray)
-  }
+  }, [set])
 
-  const updateDateRanges = (id, dateRange) => {
-    update(id, FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges, dateRange)
-  }
-
-  const onDateChange = (id, date) => {
-    update(id, FISHING_PERIOD_KEYS.DATES, dates, date)
-  }
-
-  const onTimeIntervalChange = (id, timeInterval) => {
-    update(id, FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals, timeInterval)
-  }
-
+  const updateDateRanges = (id, dateRange) => update(id, FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges, dateRange)
+  const onDateChange = (id, date) => update(id, FISHING_PERIOD_KEYS.DATES, dates, date)
+  const onAuthorizedChange = value => set(FISHING_PERIOD_KEYS.AUTHORIZED, value)
+  const onTimeIntervalChange = (id, timeInterval) => update(id, FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals, timeInterval)
   const setWeekdays = value => set(FISHING_PERIOD_KEYS.WEEKDAYS, value)
   const setHolidays = _ => set(FISHING_PERIOD_KEYS.HOLIDAYS, !holidays)
   const setDaytime = _ => set(FISHING_PERIOD_KEYS.DAYTIME, !daytime)
+  const onAnnualReccurenceChange = value => set(FISHING_PERIOD_KEYS.ANNUAL_RECURRENCE, value)
+  const addDateToDateRange = _ => !disabled && push(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges, DEFAULT_DATE_RANGE)
+  const removeDateFromDateRange = _ => !disabled && pop(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges)
+  const addDate = _ => !disabled && pop(FISHING_PERIOD_KEYS.DATES, dates)
+  const removeDate = _ => !disabled && push(FISHING_PERIOD_KEYS.DATES, dates)
+  const addTimeToTimeInterval = _ => !disabled && push(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals, {})
+  const removeTimeFromTimeInterval = _ => !disabled && pop(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals)
 
   return <FormSection show={show}>
     <RegulatorySectionTitle >
       <AuthorizedRadio
         inline
-        onChange={value => set(FISHING_PERIOD_KEYS.AUTHORIZED, value)}
+        onChange={onAuthorizedChange}
         value={authorized}
       >
         Périodes
@@ -164,7 +156,7 @@ const FishingPeriodForm = (props) => {
         <Label>Récurrence annuelle</Label>
         <RadioGroup
           inline
-          onChange={value => set(FISHING_PERIOD_KEYS.ANNUAL_RECURRENCE, value)}
+          onChange={onAnnualReccurenceChange}
           value={annualRecurrence}
         >
           <CustomRadio value={true}>oui</CustomRadio>
@@ -181,7 +173,7 @@ const FishingPeriodForm = (props) => {
               { dateRanges?.length > 0
                 ? dateRanges.map((dateRange, id) => {
                   return <DateRange
-                      key={id}
+                      key={dateRange}
                       id={id}
                       annualRecurrence={annualRecurrence}
                       dateRange={dateRange}
@@ -204,11 +196,11 @@ const FishingPeriodForm = (props) => {
             <ContentWrapper alignItems={'flex-end'}>
               <SquareButton
                 disabled={disabled || dateRanges?.length === 0}
-                onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges, DEFAULT_DATE_RANGE)} />
+                onClick={addDateToDateRange} />
               <SquareButton
                 disabled={disabled || dateRanges?.length === 0}
                 type={SQUARE_BUTTON_TYPE.DELETE}
-                onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges)} />
+                onClick={removeDateFromDateRange} />
             </ContentWrapper>
           </Row>
           <Row>
@@ -218,7 +210,7 @@ const FishingPeriodForm = (props) => {
             <DateList>
               { dates?.length > 0
                 ? dates.map((date, id) => {
-                  return <DateRow key={id} $isLast={id === dates.length - 1}>
+                  return <DateRow key={date} $isLast={id === dates.length - 1}>
                     <CustomDatePicker
                       disabled={disabled}
                       value={date}
@@ -245,10 +237,10 @@ const FishingPeriodForm = (props) => {
               <SquareButton
                 type={SQUARE_BUTTON_TYPE.DELETE}
                 disabled={disabled || !dates?.length > 0}
-                onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.DATES, dates)} />
+                onClick={addDate} />
               <SquareButton
                 disabled={disabled || !dates?.length > 0}
-                onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.DATES, dates)} />
+                onClick={removeDate} />
             </ContentWrapper>
           </Row>
           <Row>
@@ -261,7 +253,11 @@ const FishingPeriodForm = (props) => {
           </Row>
           <Row>
             <Label>Jours fériés</Label>
-            <HolidaysCheckbox disabled={disabled} onChange={setHolidays} checked={holidays}/>
+            <HolidaysCheckbox
+              disabled={disabled}
+              onChange={setHolidays}
+              checked={holidays}
+            />
           </Row>
           <TimeTitle>Horaires {authorized ? 'autorisés' : 'interdits'}</TimeTitle>
           <Delimiter width='500' />
@@ -291,11 +287,11 @@ const FishingPeriodForm = (props) => {
             <ContentWrapper alignItems={'flex-end'}>
               <SquareButton
                 disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
-                onClick={_ => !disabled && push(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals, {})} />
+                onClick={addTimeToTimeInterval} />
               <SquareButton
                 type={SQUARE_BUTTON_TYPE.DELETE}
                 disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
-                onClick={_ => !disabled && pop(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals)} />
+                onClick={removeTimeFromTimeInterval} />
             </ContentWrapper>
           </TimeRow>
           <TimeRow disabled={timeIsDisabled}>

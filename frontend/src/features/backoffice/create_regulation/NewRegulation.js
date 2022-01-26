@@ -42,8 +42,8 @@ import {
   setIsRemoveModalOpen,
   setIsConfirmModalOpen,
   resetState,
-  setRegulationByKey,
-  setRegulation,
+  setProcessingRegulationByKey,
+  setProcessingRegulation,
   setUpcomingRegulatoryText
 } from '../Regulation.slice'
 import Feature from 'ol/Feature'
@@ -76,7 +76,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   /** @type {boolean} */
   const [lawTypeIsMissing, setLawTypeIsMissing] = useState(false)
   /** @type {boolean} */
-  const [regulationTopicIsMissing, setRegulationTopicIsMissing] = useState(false)
+  const [regulationTopicIsMissing, setProcessingRegulationTopicIsMissing] = useState(false)
   /** @type {boolean} */
   const [nameZoneIsMissing, setNameZoneIsMissing] = useState()
   /** @type {boolean} */
@@ -101,7 +101,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     isRemoveModalOpen,
     isConfirmModalOpen,
     regulationDeleted,
-    currentRegulation
+    processingRegulation
   } = useSelector(state => state.regulation)
 
   const {
@@ -111,7 +111,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     region,
     id,
     regulatoryReferences
-  } = currentRegulation
+  } = processingRegulation
 
   useEffect(() => {
     if (!layersTopicsByRegTerritory || Object.keys(layersTopicsByRegTerritory).length === 0) {
@@ -130,7 +130,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     })
 
     return () => {
-      dispatch(setRegulation(INITIAL_REGULATION))
+      dispatch(setProcessingRegulation(INITIAL_REGULATION))
       dispatch(setRegulatoryZoneMetadata(undefined))
       dispatch(setUpcomingRegulatoryText(INITIAL_UPCOMING_REG_REFERENCE))
     }
@@ -191,7 +191,7 @@ const CreateRegulation = ({ title, isEdition }) => {
 
     valueIsMissing = !(topic && topic !== '')
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    setRegulationTopicIsMissing(valueIsMissing)
+    setProcessingRegulationTopicIsMissing(valueIsMissing)
 
     valueIsMissing = !(zone && zone !== '')
     atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
@@ -225,8 +225,8 @@ const CreateRegulation = ({ title, isEdition }) => {
 
         if (allRequiredValuesHaveBeenFilled) {
           const featureObject = mapToRegulatoryFeatureObject({
-            ...currentRegulation,
-            region: currentRegulation.region?.join(', ')
+            ...processingRegulation,
+            region: processingRegulation.region?.join(', ')
           })
           createOrUpdateRegulation(featureObject)
           setSaveIsForbidden(false)
@@ -261,7 +261,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   }
 
   const setRegulatoryTextList = (texts) => {
-    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES, value: texts }))
+    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES, value: texts }))
   }
 
   return (

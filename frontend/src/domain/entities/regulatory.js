@@ -35,24 +35,20 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
   }
 }
 
+export const mapToProcessingRegulation = (persistProcessingRegulation) => {
+  if (persistProcessingRegulation) {
+    return {
+      ...persistProcessingRegulation,
+      fishingPeriod: parseFishingPeriod(persistProcessingRegulation.fishing_period)
+    }
+  }
+  return null
+}
+
 function parseRegulatoryGears (gears) {
   return gears
     ? parseJSON(gears)
     : INITIAL_REG_GEARS_VALUES
-}
-
-export const mapToCurrentRegulation = (reg) => {
-  return {
-    id: reg.id,
-    lawType: reg.lawType,
-    topic: reg.layerName,
-    zone: reg.zone,
-    region: reg.region,
-    regulatorySpecies: parseRegulatorySpecies(reg.regulatorySpecies),
-    regulatoryReferences: parseRegulatoryReferences(reg.regulatoryReferences),
-    upcomingRegulatoryReferences: parseUpcomingRegulatoryReferences(reg.upcomingRegulatoryReferences),
-    fishingPeriod: parseFishingPeriod(reg.fishingPeriod)
-  }
 }
 
 function parseRegulatorySpecies (species) {
@@ -308,14 +304,13 @@ export const INITIAL_UPCOMING_REG_REFERENCE = { regulatoryTextList: [DEFAULT_REG
 
 export const REGULATORY_REFERENCE_KEYS = {
   ID: 'id',
-  REGULATORY_REFERENCES: 'regulatoryReferences',
-  FISHING_PERIOD: 'fishingPeriod',
-  REGULAOTRY_SPECIES: 'regulatorySpecies',
-  UPCOMING_REGULATORY_REFERENCES: 'upcomingRegulatoryReferences',
   REGION: 'region',
   TOPIC: 'topic',
   LAW_TYPE: 'lawType',
   ZONE: 'zone',
+  REGULATORY_REFERENCES: 'regulatoryReferences',
+  UPCOMING_REGULATORY_REFERENCES: 'upcomingRegulatoryReferences',
+  FISHING_PERIOD: 'fishingPeriod',
   REGULATORY_SPECIES: 'regulatorySpecies',
   REGULATORY_GEARS: 'regulatoryGears'
 }
@@ -323,7 +318,7 @@ export const REGULATORY_REFERENCE_KEYS = {
 export const INITIAL_REGULATION = {
   [REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES]: [DEFAULT_REGULATORY_TEXT],
   [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: INITIAL_FISHING_PERIOD_VALUES,
-  [REGULATORY_REFERENCE_KEYS.REGULAOTRY_SPECIES]: INITIAL_REG_SPECIES_VALUES,
+  [REGULATORY_REFERENCE_KEYS.REGULATORY_SPECIES]: INITIAL_REG_SPECIES_VALUES,
   [REGULATORY_REFERENCE_KEYS.REGULATORY_GEARS]: INITIAL_REG_GEARS_VALUES
 }
 

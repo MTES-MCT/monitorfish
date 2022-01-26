@@ -4,15 +4,15 @@ import GearForm from './RegulatoryGearForm'
 import SectionTitle from '../../SectionTitle'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
 import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
-import { setRegulationByKey } from '../../Regulation.slice'
+import { setProcessingRegulationByKey } from '../../Regulation.slice'
 import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const RegulatoryGearSection = () => {
   const dispatch = useDispatch()
-  const { regulatoryGears } = useSelector(state => state.regulation.currentRegulation)
+  const { regulatoryGears } = useSelector(state => state.regulation.processingRegulation)
 
   const setRegulatoryGears = value => {
-    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGULATORY_GEARS, value }))
+    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGULATORY_GEARS, value }))
   }
 
   const [show, setShow] = useState(false)

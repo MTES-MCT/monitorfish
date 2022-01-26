@@ -1,18 +1,27 @@
 import { backofficeReducers, homeReducers } from './domain/shared_slices'
 import { configureStore } from '@reduxjs/toolkit'
-import { persistStore, persistReducer } from 'redux-persist'
+import { persistStore, persistReducer, createTransform } from 'redux-persist'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/lib/storage' // localStorage
 import thunk from 'redux-thunk'
+import { mapToProcessingRegulation } from './domain/entities/regulatory'
 
-const commonConfig = {
-  storage,
-  stateReconciler: autoMergeLevel2
-}
+const SetTransform = createTransform(
+  // transform state on its way to being serialized and persisted.
+  (inboundState) => inboundState,
+  // transform state being rehydrated
+  (outboundState) => {
+    return { ...outboundState, processingRegulation: mapToProcessingRegulation(outboundState.processingRegulation) }
+  },
+  // define which reducers this transform gets called for.
+  { whitelist: ['regulation'] }
+)
 
 const backofficePersistConfig = {
   key: 'backofficePersistor',
-  ...commonConfig
+  storage,
+  stateReconciler: autoMergeLevel2,
+  transforms: [SetTransform]
 }
 
 const homeStore = configureStore({

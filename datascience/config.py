@@ -86,7 +86,7 @@ BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA = 6
 BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT = 24
 
 # App URL
-MONITORFISH_URL = "https://monitorfish.din.developpement-durable.gouv.fr/"
+MONITORFISH_URL = os.getenv("MONITORFISH_URL")
 BACKOFFICE_URL = MONITORFISH_URL + "backoffice/"
 
 # Backend endpoints

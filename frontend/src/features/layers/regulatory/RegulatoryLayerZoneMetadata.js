@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as REGPaperSVG } from '../../icons/reg_paper_dark.svg'
@@ -7,8 +7,9 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { useDispatch, useSelector } from 'react-redux'
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
-import { fishingPeriodToString, getTitle } from '../../../domain/entities/regulatory'
-import { RedCircle, GreenCircle, BlackCircle } from '../../commonStyles/Circle.style'
+import { fishingPeriodToString, getTitle, getRegulatoryZoneTextTypeAsText } from '../../../domain/entities/regulatory'
+import { RedCircle, GreenCircle } from '../../commonStyles/Circle.style'
+import { Link } from '../../commonStyles/Backoffice.style'
 
 const RegulatoryLayerZoneMetadata = () => {
   const dispatch = useDispatch()
@@ -17,6 +18,10 @@ const RegulatoryLayerZoneMetadata = () => {
     regulatoryZoneMetadata,
     regulatoryZoneMetadataPanelIsOpen
   } = useSelector(state => state.regulatory)
+
+  useEffect(() => {
+    console.log(regulatoryZoneMetadata)
+  }, [regulatoryZoneMetadata])
 
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
@@ -29,7 +34,8 @@ const RegulatoryLayerZoneMetadata = () => {
       region,
       fishingPeriod,
       regulatoryGears,
-      regulatorySpecies
+      regulatorySpecies,
+      regulatoryReferences
     } = regulatoryZoneMetadata
 
     return (<>
@@ -68,29 +74,29 @@ const RegulatoryLayerZoneMetadata = () => {
             </Body>
           </Fields>
         </Zone>
-        {fishingPeriod && <Section>
+        {fishingPeriod && fishingPeriod.authorized !== undefined && <Section>
           <SectionTitle>{fishingPeriod.authorized ? <GreenCircle margin={'0 5px 0 0'} /> : <RedCircle margin={'0 5px 0 0'} />}
           Période de pêche {fishingPeriod.authorized ? 'autorisée' : 'interdites'}</SectionTitle>
           {fishingPeriodToString(fishingPeriod)}
         </Section>}
-        {regulatoryGears && <Section>
+        {regulatoryGears && regulatoryGears.authorized !== undefined && <Section>
           <SectionTitle>{regulatoryGears.authorized ? <GreenCircle margin={'0 5px 0 0'} /> : <RedCircle margin={'0 5px 0 0'} />}
           Engins {regulatoryGears.authorized ? 'réglementés' : 'interdits'}</SectionTitle>
           <List>
           {Object.keys(regulatoryGears.regulatedGears).length > 0
             ? Object.keys(regulatoryGears.regulatedGears).map(gearLabel => {
               const { code, name, meshType, mesh } = regulatoryGears.regulatedGears[gearLabel]
-              return (<Elem key={gearLabel}><Label><BlackCircle />{`${code} (${name})`}</Label>
+              return (<Elem key={gearLabel}><Label>{`${code} (${name})`}</Label>
                 {mesh && <Mesh><Key>Maillage</Key>
                 <Value>{meshType === 'between' ? `entre ${mesh[0]} et ${mesh[1]} mm` : `supérieur ou égal à ${mesh[0]} mm`}</Value></Mesh>}
               </Elem>)
             })
             : null
           }
-          {Object.keys(regulatoryZoneMetadata.regulatoryGears.regulatedGearCategories).length > 0
-            ? Object.keys(regulatoryZoneMetadata.regulatoryGears.regulatedGearCategories).map(gearCategoryLabel => {
+          {Object.keys(regulatoryGears.regulatedGearCategories).length > 0
+            ? Object.keys(regulatoryGears.regulatedGearCategories).map(gearCategoryLabel => {
               const { name, meshType, mesh } = regulatoryZoneMetadata.regulatoryGears.regulatedGearCategories[gearCategoryLabel]
-              return (<Elem key={gearCategoryLabel}><Label><BlackCircle />{name}</Label>
+              return (<Elem key={gearCategoryLabel}><Label>{name}</Label>
                 {mesh && <Mesh><Key>Maillage</Key>
                 <Value>{meshType === 'between' ? `entre ${mesh[0]} et ${mesh[1]} mm` : `supérieur ou égal à ${mesh[0]} mm`}</Value></Mesh>}
               </Elem>)
@@ -98,29 +104,28 @@ const RegulatoryLayerZoneMetadata = () => {
             : null
           }
           </List>
-          {regulatoryZoneMetadata.regulatoryGears.otherInfo &&
+          {regulatoryGears.otherInfo &&
             <><SectionTitle>Mesures techniques</SectionTitle>
               {regulatoryZoneMetadata.regulatoryGears.otherInfo}
-            </>
-          }
+            </>}
         </Section>}
-        {regulatorySpecies && <Section>
+        {regulatorySpecies && regulatorySpecies.authorized !== undefined && <Section>
           <SectionTitle>{regulatorySpecies.authorized ? <GreenCircle margin={'0 5px 0 0'} /> : <RedCircle margin={'0 5px 0 0'} />}
           Espèces {regulatorySpecies.authorized ? 'réglementées' : 'interdites'}</SectionTitle>
           <List>
           {regulatorySpecies.species.length > 0
             ? regulatorySpecies.species.map((specie) => {
-              const { code, quantity, minimumSize } = specie
-              return (<Elem key={specie}><Label><BlackCircle />{code}</Label>
+              const { code, name, quantity, minimumSize } = specie
+              return (<Elem key={specie}><Label>{`${code} (${name})`}</Label>
                   {quantity && <Mesh><Key>Quantité</Key><Value>{quantity}</Value></Mesh>}
                   {minimumSize && <Mesh><Key>Taille min.</Key><Value>{minimumSize}</Value></Mesh>}
                 </Elem>)
             })
             : null
           }
-          {Object.keys(regulatorySpecies.speciesGroups).length > 0
-            ? Object.keys(regulatorySpecies.speciesGroups).map(group => {
-              return (<Elem key={group}><Label><BlackCircle />{group}</Label></Elem>)
+          {regulatorySpecies.speciesGroups.length > 0
+            ? regulatorySpecies.speciesGroups.map(group => {
+              return (<Elem key={group}><Label>{group}</Label></Elem>)
             })
             : null
           }
@@ -130,6 +135,18 @@ const RegulatoryLayerZoneMetadata = () => {
               {regulatorySpecies.otherInfo}
             </>
           }
+        </Section>}
+        {regulatoryReferences && <Section>
+          <SectionTitle>Références réglementaires</SectionTitle>
+          <List>
+          {regulatoryReferences.map(regulatoryReference => {
+            return <Reference key={regulatoryReference}>
+              {regulatoryReference.textType &&
+                <Label>{getRegulatoryZoneTextTypeAsText(regulatoryReference.textType)}</Label>}
+              <Link href={regulatoryReference.url}>{regulatoryReference.reference}</Link>
+            </Reference>
+          })}
+          </List>
         </Section>}
       </Content>
     </>)
@@ -149,26 +166,29 @@ const RegulatoryLayerZoneMetadata = () => {
   )
 }
 
+const Reference = styled.li`
+  list-style-type: "→";
+  padding-left: 10px;
+  font-size: 13px;
+`
+
 const Label = styled.span``
 
 const Mesh = styled.span`
   display: flex;
   flex-direction: row;
-  margin-left: 10px;
 `
 
-const List = styled.div`
+const List = styled.ul`
   display: flex;
   flex-direction: column;
   font-size: 13px;
   color: ${COLORS.gunMetal};
   padding-bottom: 20px;
+  margin: 0;
 `
 
-const Elem = styled.div`
-  display: flex;
-  flex-direction: column;
-`
+const Elem = styled.li``
 
 const Section = styled.div`
   display: flex;

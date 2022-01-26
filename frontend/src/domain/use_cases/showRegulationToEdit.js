@@ -1,7 +1,7 @@
 import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../api/fetch'
 import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../entities/regulatory'
 import { setError } from '../shared_slices/Global'
-import { setRegulation } from '../../features/backoffice/Regulation.slice'
+import { setProcessingRegulation } from '../../features/backoffice/Regulation.slice'
 import Layers from '../entities/layers'
 
 const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
@@ -22,7 +22,7 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
         regulatoryGears
       } = regulatoryZoneMetadata
 
-      dispatch(setRegulation({
+      dispatch(setProcessingRegulation({
         lawType,
         topic,
         zone,

@@ -8,7 +8,7 @@ import {
   setUpcomingRegulatoryTextListCheckedMap,
   setSaveUpcomingRegulation,
   setUpcomingRegulatoryText,
-  setRegulationByKey
+  setProcessingRegulationByKey
 } from '../../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
@@ -48,7 +48,7 @@ const UpcomingRegulationModal = () => {
           const newUpcomingRegulation = { ...(upcomingRegulatoryText || { regulatoryTextList: [] }) }
           newUpcomingRegulation.regulatoryTextList = [...upcomingRegulatoryText.regulatoryTextList]
           batch(() => {
-            dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.UPCOMING_REGULATORY_REFERENCES, value: newUpcomingRegulation }))
+            dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.UPCOMING_REGULATORY_REFERENCES, value: newUpcomingRegulation }))
             dispatch(setIsModalOpen(false))
           })
         }

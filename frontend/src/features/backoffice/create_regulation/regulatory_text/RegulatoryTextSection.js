@@ -17,7 +17,6 @@ import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT, INITIAL_UPCOMING_REG_R
  * @prop {Boolean} saveForm
  */
 const RegulatoryTextSection = props => {
-  console.log('RegulatoryTextSection')
   const {
     regulatoryTextList,
     setRegulatoryTextList,
@@ -25,9 +24,9 @@ const RegulatoryTextSection = props => {
     saveForm
   } = props
 
-  const { currentRegulation } = useSelector(state => state.regulation)
+  const { processingRegulation } = useSelector(state => state.regulation)
 
-  const { upcomingRegulatoryReferences } = currentRegulation
+  const { upcomingRegulatoryReferences } = processingRegulation
 
   const dispatch = useDispatch()
 

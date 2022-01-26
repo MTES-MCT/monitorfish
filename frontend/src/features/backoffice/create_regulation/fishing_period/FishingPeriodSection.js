@@ -3,20 +3,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import FishingPeriodForm from './FishingPeriodForm'
 import SectionTitle from '../../SectionTitle'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
-import { setRegulationByKey } from '../../Regulation.slice'
+import { setProcessingRegulationByKey } from '../../Regulation.slice'
 import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
 import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const FishingPeriodSection = () => {
-  const { fishingPeriod } = useSelector(state => state.regulation.currentRegulation)
+  const { fishingPeriod } = useSelector(state => state.regulation.processingRegulation)
 
   const dispatch = useDispatch()
 
   const [show, setShow] = useState(false)
-  const [isInputFilled, setIsInputFilled] = useState(false)
 
   const setOtherInfo = value => {
-    dispatch(setRegulationByKey({
+    dispatch(setProcessingRegulationByKey({
       key: REGULATORY_REFERENCE_KEYS.FISHING_PERIOD,
       value: {
         ...fishingPeriod,
@@ -26,7 +25,7 @@ const FishingPeriodSection = () => {
   }
 
   const setFishingPeriod = value => {
-    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.FISHING_PERIOD, value }))
+    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.FISHING_PERIOD, value }))
   }
 
   return <Section show>
@@ -46,8 +45,7 @@ const FishingPeriodSection = () => {
         width={'730px'}
         value={fishingPeriod?.otherInfo || ''}
         onChange={setOtherInfo}
-        onMouseLeave={() => setIsInputFilled(fishingPeriod.otherInfo && fishingPeriod.otherInfo !== '')}
-        $isGray={isInputFilled} />
+        $isGray={fishingPeriod.otherInfo && fishingPeriod.otherInfo !== ''} />
     </OtherRemark>
   </Section>
 }

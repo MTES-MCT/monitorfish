@@ -3,7 +3,7 @@ import { INITIAL_REGULATION } from '../../domain/entities/regulatory'
 
 const INITIAL_STATE = {
   /** @type {RegulatoryText} */
-  currentRegulation: INITIAL_REGULATION,
+  processingRegulation: INITIAL_REGULATION,
   /** @type {boolean} isModalOpen */
   isModalOpen: false,
   /** @type {Map<number, RegulatoryText | null>} */
@@ -35,11 +35,11 @@ const regulationSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {
     resetState: () => INITIAL_STATE,
-    setRegulationByKey (state, { payload: { key, value } }) {
-      state.currentRegulation[key] = value
+    setProcessingRegulationByKey (state, { payload: { key, value } }) {
+      state.processingRegulation[key] = value
     },
-    setRegulation (state, { payload }) {
-      state.currentRegulation = payload
+    setProcessingRegulation (state, { payload }) {
+      state.processingRegulation = payload
     },
     setUpcomingRegulatoryText (state, action) {
       state.upcomingRegulatoryText = action.payload
@@ -80,7 +80,7 @@ const regulationSlice = createSlice({
     setRegulatoryTextCheckedMap (state, action) {
       state.regulatoryTextCheckedMap = { ...action.payload }
     },
-    setRegulationSaved (state, action) {
+    setProcessingRegulationSaved (state, action) {
       state.regulationSaved = action.payload
     },
     setSaveOrUpdateRegulation (state, action) {
@@ -92,7 +92,7 @@ const regulationSlice = createSlice({
     setSaveUpcomingRegulation (state, action) {
       state.saveUpcomingRegulation = action.payload
     },
-    setRegulationDeleted (state, action) {
+    setProcessingRegulationDeleted (state, action) {
       state.regulationDeleted = action.payload
     },
     setIsRemoveModalOpen (state, action) {
@@ -110,17 +110,17 @@ export const {
   setIsModalOpen,
   addObjectToUpcomingRegulatoryTextCheckedMap,
   setUpcomingRegulatoryTextListCheckedMap,
-  setRegulationSaved,
+  setProcessingRegulationSaved,
   setRegulatoryTextCheckedMap,
   addObjectToRegulatoryTextCheckedMap,
   setSaveOrUpdateRegulation,
   setAtLeastOneValueIsMissing,
   setSaveUpcomingRegulation,
-  setRegulationDeleted,
+  setProcessingRegulationDeleted,
   setIsRemoveModalOpen,
   setIsConfirmModalOpen,
-  setRegulationByKey,
-  setRegulation
+  setProcessingRegulationByKey,
+  setProcessingRegulation
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

@@ -8,7 +8,7 @@ import { FRENCH_REGION_LIST } from '../../constants'
 import Tag from '../Tag'
 import MenuItem from '../custom_form/MenuItem'
 import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
-import { setRegulationByKey } from '../../Regulation.slice'
+import { setProcessingRegulationByKey } from '../../Regulation.slice'
 
 const RegulationRegionLine = props => {
   const {
@@ -18,19 +18,19 @@ const RegulationRegionLine = props => {
 
   const dispatch = useDispatch()
 
-  const { region: regionList } = useSelector(state => state.regulation.currentRegulation)
+  const { region: regionList } = useSelector(state => state.regulation.processingRegulation)
 
   const addRegionToSelectedRegionList = (region) => {
     const newRegionList = regionList ? [...regionList] : []
     newRegionList.push(region)
-    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: newRegionList }))
+    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: newRegionList }))
   }
 
   const removeRegionToSelectedRegionList = (regionToRemove) => {
     const regionToRemoveIndex = regionList.indexOf(regionToRemove)
     const newArray = [...regionList]
     newArray.splice(regionToRemoveIndex, 1)
-    dispatch(setRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: newArray }))
+    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGION, value: newArray }))
   }
 
   function SelectedRegionList () {

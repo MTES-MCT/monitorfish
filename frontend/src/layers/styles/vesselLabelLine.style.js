@@ -7,7 +7,6 @@ const labelLineStyleCache = new Map()
 
 export const getLabelLineStyle = feature => {
   const opacity = feature.get('opacity')
-
   const key = JSON.stringify(opacity)
 
   if (!labelLineStyleCache.has(key)) {

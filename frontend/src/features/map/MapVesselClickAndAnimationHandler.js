@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, batch } from 'react-redux'
 import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../domain/shared_slices/Map'
 import showVessel from '../../domain/use_cases/showVessel'
 import LayersEnum from '../../domain/entities/layers'
@@ -19,6 +19,7 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
     animateToExtent
   } = useSelector(state => state.map)
   const {
+    vessels,
     vesselSidebarIsOpen,
     vesselTrackExtent
   } = useSelector(state => state.vessel)
@@ -27,63 +28,68 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   } = useSelector(state => state.global)
 
   useEffect(() => {
+    function createAnimateObject (resolution, duration, zoom) {
+      return {
+        center: [
+          animateToCoordinates[0] + resolution,
+          animateToCoordinates[1]
+        ],
+        duration,
+        zoom
+      }
+    }
+    function animateViewToCoordinates () {
+      if (map && animateToCoordinates && vesselSidebarIsOpen) {
+        if (map.getView().getZoom() >= 8) {
+          const resolution = map.getView().getResolution()
+          map.getView().animate(createAnimateObject(resolution * 200, 1000, undefined))
+        } else {
+          map.getView().animate(createAnimateObject(0, 800, 8), () => {
+            const resolution = map.getView().getResolution()
+            map.getView().animate(createAnimateObject(resolution * 200, 500, undefined))
+          })
+        }
+        dispatch(resetAnimateToCoordinates())
+      }
+    }
     animateViewToCoordinates()
   }, [animateToCoordinates, map, vesselSidebarIsOpen])
 
   useEffect(() => {
+    function animateViewToExtent () {
+      if (map && vesselSidebarIsOpen && animateToExtent && vesselTrackExtent?.length) {
+        map.getView().fit(vesselTrackExtent, {
+          duration: 500,
+          padding: [100, 550, 100, 50],
+          maxZoom: 10,
+          callback: () => {
+            dispatch(resetAnimateToExtent())
+          }
+        })
+      }
+    }
     animateViewToExtent()
   }, [animateToExtent, vesselTrackExtent, map, vesselSidebarIsOpen])
 
   useEffect(() => {
-    if (!previewFilteredVesselsMode && mapClickEvent?.feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
-      if (mapClickEvent.ctrlKeyPressed) {
-        dispatch(showVesselTrack(mapClickEvent.feature.vessel, false))
-      } else {
-        dispatch(showVessel(mapClickEvent.feature.vessel, false, false))
-        dispatch(getVesselVoyage(mapClickEvent.feature.vessel, null, false))
+    const clickedFeatureId = mapClickEvent?.feature?.getId()
+    if (!previewFilteredVesselsMode && clickedFeatureId?.toString()?.includes(LayersEnum.VESSELS.code)) {
+      const clickedVessel = vessels.find(vessel => {
+        return clickedFeatureId?.toString()?.includes(vessel.vesselId)
+      })
+
+      if (clickedVessel) {
+        if (mapClickEvent.ctrlKeyPressed) {
+          dispatch(showVesselTrack(clickedVessel, false))
+        } else {
+          batch(() => {
+            dispatch(showVessel(clickedVessel.vesselProperties, false, false))
+            dispatch(getVesselVoyage(clickedVessel.vesselProperties, null, false))
+          })
+        }
       }
     }
   }, [mapClickEvent])
-
-  function animateViewToExtent () {
-    if (map && vesselSidebarIsOpen && animateToExtent && vesselTrackExtent?.length) {
-      map.getView().fit(vesselTrackExtent, {
-        duration: 500,
-        padding: [100, 550, 100, 50],
-        maxZoom: 10,
-        callback: () => {
-          dispatch(resetAnimateToExtent())
-        }
-      })
-    }
-  }
-
-  function animateViewToCoordinates () {
-    if (map && animateToCoordinates && vesselSidebarIsOpen) {
-      if (map.getView().getZoom() >= 8) {
-        const resolution = map.getView().getResolution()
-        map.getView().animate(createAnimateObject(resolution * 200, 1000, undefined))
-      } else {
-        map.getView().animate(createAnimateObject(0, 800, 8), () => {
-          const resolution = map.getView().getResolution()
-          map.getView().animate(createAnimateObject(resolution * 200, 500, undefined))
-        })
-      }
-
-      dispatch(resetAnimateToCoordinates())
-    }
-  }
-
-  function createAnimateObject (resolution, duration, zoom) {
-    return {
-      center: [
-        animateToCoordinates[0] + resolution,
-        animateToCoordinates[1]
-      ],
-      duration,
-      zoom
-    }
-  }
 
   return null
 }

@@ -14,7 +14,7 @@ context('Alerts', () => {
     // When
     cy.get('.vessels').dblclick(300, 400, { force: true })
     cy.get('.vessels').dblclick(500, 600, { force: true })
-    cy.get('.vessels > canvas').toMatchImageSnapshot({
+    cy.get('.vessels').toMatchImageSnapshot({
       clip: { x: 300, y: 400, width: 500, height: 500 }
     })
   })

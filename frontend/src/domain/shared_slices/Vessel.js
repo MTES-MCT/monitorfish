@@ -1,29 +1,32 @@
-import { VesselSidebarTab } from '../entities/vessel'
 import { createSlice } from '@reduxjs/toolkit'
+import { transform } from 'ol/proj'
+
+import { VesselSidebarTab, Vessel } from '../entities/vessel'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 
 /* eslint-disable */
 /** @namespace VesselReducer */
 const VesselReducer = null
 /* eslint-enable */
 
+const NOT_FOUND = -1
+
 const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
     vessels: [],
+    vesselsEstimatedPositions: [],
     /** @type {Object.<string, ShowedVesselTrack>} vesselsTracksShowed */
     vesselsTracksShowed: {},
     uniqueVesselsSpecies: [],
     uniqueVesselsDistricts: [],
-    filteredVesselsFeaturesUids: [],
-    previewFilteredVesselsFeaturesUids: [],
-    vesselsLayerSource: null,
     /** @type {VesselIdentity | null} selectedVesselIdentity */
     selectedVesselIdentity: null,
     /** @type {SelectedVessel | null} selectedVessel */
     selectedVessel: null,
     /** @type {VesselPosition[] | null} selectedVesselPositions */
     selectedVesselPositions: null,
-    hideOtherVessels: false,
+    hideNonSelectedVessels: false,
     /** @type {VesselPosition | null} highlightedVesselTrackPosition */
     highlightedVesselTrackPosition: null,
     loadingVessel: null,
@@ -42,34 +45,89 @@ const vesselSlice = createSlice({
     fishingActivitiesShowedOnMap: []
   },
   reducers: {
-    setVessels (state, action) {
-      state.vessels = action.payload
+    setVesselsFromAPI (state, action) {
+      // FIXME : find a way to update state.vessel[vessels] without overriding
+      // "private" properties like isFiltered / filterPreview when uploading from api
+      state.vessels = action.payload?.map(vessel => {
+        return {
+          vesselProperties: {
+            ...vessel,
+            flagState: vessel.flagState?.toLowerCase(),
+            gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
+            fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
+            speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : [],
+            lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : '',
+            hasAlert: !!vessel.alerts?.length
+          },
+          vesselId: Vessel.getVesselId(vessel),
+          isAtPort: vessel.isAtPort,
+          course: vessel.course,
+          speed: vessel.speed,
+          lastPositionSentAt: new Date(vessel.dateTime).getTime(),
+          coordinates: transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION),
+          isFiltered: 0,
+          filterPreview: 0
+        }
+      })
     },
-    resetVessels (state) {
-      state.vessels = []
+    setAllVesselsAsUnfiltered (state) {
+      if (!state.vessels.find(vessel => vessel.isFiltered)) {
+        return
+      }
+
+      state.vessels = state.vessels.map((vessel) => {
+        return {
+          ...vessel,
+          isFiltered: 0
+        }
+      })
+    },
+    setVesselsEstimatedPositions (state, action) {
+      state.vesselsEstimatedPositions = action.payload
     },
     /**
-     * Set the list of vessel features Uids for filtering features (using JS indexOf is good for performance)
-     * @function setFilteredVesselsFeaturesUids
+     * Set filtered features as true
+     * @function setFilteredVesselsFeatures
      * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: string[]}} action - the vessel features uids
      */
-    setFilteredVesselsFeaturesUids (state, action) {
-      state.filteredVesselsFeaturesUids = action.payload
+    setFilteredVesselsFeatures (state, action) {
+      const filteredVesselsFeaturesUids = action.payload
+      state.vessels = state.vessels.map((vessel) => {
+        if (filteredVesselsFeaturesUids.indexOf(vessel.vesselId) !== NOT_FOUND) {
+          return {
+            ...vessel,
+            isFiltered: 1
+          }
+        }
+        return {
+          ...vessel,
+          isFiltered: 0
+        }
+      })
     },
     /**
-     * Set the list of previewed vessel features Uids (using JS indexOf is good for performance)
-     * @function setPreviewFilteredVesselsFeaturesUids
+     * Set  previewed vessel features
+     * @function setPreviewFilteredVesselsFeatures
      * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: string[]}} action - the previewed vessel features uids
      */
-    setPreviewFilteredVesselsFeaturesUids (state, action) {
-      state.previewFilteredVesselsFeaturesUids = action.payload
-    },
-    setVesselsLayerSource (state, action) {
-      state.vesselsLayerSource = action.payload
+    setPreviewFilteredVesselsFeatures (state, action) {
+      const previewFilteredVesselsFeaturesUids = action.payload
+      state.vessels = state.vessels.map((vessel) => {
+        if (previewFilteredVesselsFeaturesUids.indexOf(vessel.vesselId) !== NOT_FOUND) {
+          return {
+            ...vessel,
+            filterPreview: 1
+          }
+        }
+        return {
+          ...vessel,
+          filterPreview: 0
+        }
+      })
     },
     loadingVessel (state, action) {
       state.selectedVesselIdentity = action.payload.vesselIdentity
@@ -184,13 +242,13 @@ const vesselSlice = createSlice({
     },
     /**
      * Show or hide other vessels (than the selected vessel)
-     * @function setHideOtherVessels
+     * @function sethideNonSelectedVessels
      * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: boolean}} action - hide (true) or show (false)
      */
-    setHideOtherVessels (state, action) {
-      state.hideOtherVessels = action.payload
+    sethideNonSelectedVessels (state, action) {
+      state.hideNonSelectedVessels = action.payload
     },
     /**
      * Add a new vessel track to show or remove -
@@ -261,11 +319,10 @@ const vesselSlice = createSlice({
 })
 
 export const {
-  setVessels,
-  resetVessels,
-  setFilteredVesselsFeaturesUids,
-  setPreviewFilteredVesselsFeaturesUids,
-  setVesselsLayerSource,
+  setVesselsFromAPI,
+  setAllVesselsAsUnfiltered,
+  setFilteredVesselsFeatures,
+  setPreviewFilteredVesselsFeatures,
   loadingVessel,
   resetLoadingVessel,
   updatingVesselTrackDepth,
@@ -288,7 +345,7 @@ export const {
   updateVesselTrackAsHidden,
   setVesselTrackExtent,
   resetVesselTrackExtent,
-  setHideOtherVessels
+  sethideNonSelectedVessels
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

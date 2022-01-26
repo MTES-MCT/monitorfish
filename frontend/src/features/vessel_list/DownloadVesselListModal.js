@@ -24,7 +24,7 @@ const optionsCSV = {
 
 const csvExporter = new ExportToCsv(optionsCSV)
 
-const DownloadVesselListModal = props => {
+const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
   const [indeterminate, setIndeterminate] = useState(false)
   const [checkAll, setCheckAll] = useState(true)
   const [valuesChecked, setValuesChecked] = useState([])
@@ -64,18 +64,20 @@ const DownloadVesselListModal = props => {
   }
 
   const download = () => {
-    const objectsToExports = props.filteredVessels
+    const objectsToExports = filteredVessels
       .filter(vessel => vessel.checked)
       .map(vessel => {
         const filteredVesselObject = {}
-
         valuesChecked.forEach(valueChecked => {
           switch (valueChecked) {
             case CSVOptions.flagState.code:
-              filteredVesselObject[CSVOptions[valueChecked].code] = vessel[valueChecked] ? countries.getName(vessel[valueChecked], 'fr') : ''
+              filteredVesselObject[CSVOptions.flagState.code] = vessel?.vesselProperties?.flagState ? countries.getName(vessel?.vesselProperties?.flagState, 'fr') : ''
               break
-            default:
-              filteredVesselObject[CSVOptions[valueChecked].code] = vessel[valueChecked] ? vessel[valueChecked].toString() : ''
+            default: {
+              const value = vessel[valueChecked] || vessel?.vesselProperties[valueChecked] || ''
+              const stringValue = Array.isArray(value) ? value.join(', ') : value.toString()
+              filteredVesselObject[valueChecked] = stringValue
+            }
           }
         })
 
@@ -91,9 +93,9 @@ const DownloadVesselListModal = props => {
     <Modal
       size={'sm'}
       backdrop
-      show={props.isOpen}
+      show={isOpen}
       style={{ marginTop: 100 }}
-      onHide={() => props.setIsOpen(false)}
+      onHide={() => setIsOpen(false)}
     >
       <Modal.Header>
         <Modal.Title>
@@ -152,7 +154,7 @@ const DownloadVesselListModal = props => {
       </Modal.Body>
       <Modal.Footer>
         <DownloadButton
-          onClick={() => download()}>
+          onClick={download}>
           Télécharger le tableau
         </DownloadButton>
       </Modal.Footer>

@@ -17,7 +17,7 @@ import TrackDepthSelection from './actions/track_depth_selection/TrackDepthSelec
 import TrackExport from './actions/track_export/TrackExport'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { VesselSidebarTab } from '../../domain/entities/vessel'
-import HideOtherVessels from './actions/hide_other_vessels/HideOtherVessels'
+import HideNonSelectedVessels from './actions/hide_non_selected_vessels/HideNonSelectedVessels'
 import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
 import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFishingActivitiesOnMap'
 import { getAlertNameFromType } from '../../domain/entities/alerts'
@@ -73,7 +73,7 @@ const VesselSidebar = () => {
         openBox={openSidebar}
         rightMenuIsOpen={rightMenuIsOpen}
       />
-      <HideOtherVessels
+      <HideNonSelectedVessels
         openBox={openSidebar}
         rightMenuIsOpen={rightMenuIsOpen}
       />

@@ -11,7 +11,7 @@ context('VesselSidebar', () => {
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
     cy.get('*[data-cy^="first-loader"]', { timeout: 20000 }).should('not.exist')
     cy.url().should('include', '@-82')
-    cy.wait(400)
+    cy.wait(1000)
   })
 
   it('Vessel Should be searched from the search bar', () => {
@@ -289,9 +289,9 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 20000 })
 
     // Then, the last position should be positioned in the bottom of the window
-    cy.get('.vessels > canvas').trigger('pointermove', { clientX: 910, clientY: 300, pointerId: 1, force: true })
-    cy.get('.vessels > canvas').trigger('pointermove', { clientX: 315, clientY: 835, pointerId: 1, force: true })
-    cy.get('.vessels > canvas').trigger('pointermove', { clientX: 315, clientY: 835, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 910, clientY: 300, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 835, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 835, pointerId: 1, force: true })
     cy.wait(200)
 
     cy.get('*[data-cy^="vessel-track-card-latitude"]', { timeout: 20000 }).contains('47° 20′ 53″ N')

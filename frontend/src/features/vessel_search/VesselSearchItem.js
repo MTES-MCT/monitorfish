@@ -61,22 +61,25 @@ const VesselSearchItem = ({ id, vessel, selectVessel, searchText }) => {
       })
   }
 
+  const flagState = vessel.flagState || vessel.vesselProperties?.flagState
+  const vesselName = vessel.vesselName || vessel.vesselProperties?.vesselName
+
   return <ListItem
     data-cy={'vessel-search-item'}
     onClick={selectVessel}
     key={id}>
     <div>
-      {vessel.flagState
+      {flagState
         ? <Flag rel="preload"
-                title={countries.getName(vessel.flagState, 'fr')}
-                src={`flags/${vessel.flagState.toLowerCase()}.svg`}/>
+                title={countries.getName(flagState, 'fr')}
+                src={`flags/${flagState.toLowerCase()}.svg`}/>
         : null}
       <Name>
         <Highlighter
           highlightClassName="highlight"
           searchWords={[searchText]}
           autoEscape={true}
-          textToHighlight={vessel.vesselName || 'SANS NOM'}
+          textToHighlight={vesselName || 'SANS NOM'}
         />
       </Name>
     </div>

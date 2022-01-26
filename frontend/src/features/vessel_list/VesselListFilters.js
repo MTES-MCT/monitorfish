@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
@@ -15,6 +15,13 @@ import { VesselLocation, vesselSize } from '../../domain/entities/vessel'
 import Tag from 'rsuite/lib/Tag'
 import FilterTag from '../vessel_filters/FilterTag'
 
+const countriesField = Object.keys(Countries.getAlpha2Codes()).map(country => {
+  return {
+    value: country.toLowerCase(),
+    label: Countries.getName(country, 'fr')
+  }
+})
+
 const VesselListFilters = ({
   lastPositionTimeAgo,
   countries,
@@ -29,13 +36,6 @@ const VesselListFilters = ({
   controls,
   location
 }) => {
-  const { current: countriesField } = useRef(Object.keys(Countries.getAlpha2Codes()).map(country => {
-    return {
-      value: country.toLowerCase(),
-      label: Countries.getName(country, 'fr')
-    }
-  }))
-
   const fleetSegmentsField = useMemo(() => {
     if (fleetSegments.fleetSegments && fleetSegments.fleetSegments.length) {
       return fleetSegments.fleetSegments.map(segment => {
@@ -60,10 +60,10 @@ const VesselListFilters = ({
 
   const speciesField = useMemo(() => {
     if (species.species && species.species.length) {
-      return species.species.map(species => {
+      return species.species.map(_species => {
         return {
-          value: species,
-          label: species
+          value: _species,
+          label: _species
         }
       })
     }
@@ -80,20 +80,21 @@ const VesselListFilters = ({
     }
   }, [districts.districts])
 
+  const { zonesSelected, callRemoveZoneSelected } = zones
   const showZonesSelected = useCallback(() => {
-    return zones.zonesSelected?.length && zones.zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
-      ? zones.zonesSelected.filter(zone => zone.code === LayersType.FREE_DRAW).map((zoneSelected, index) => {
-        return <InlineTagWrapper key={zoneSelected.code + index}>
+    return zonesSelected?.length && zonesSelected.find(zone => zone.code === LayersType.FREE_DRAW)
+      ? zonesSelected.filter(zone => zone.code === LayersType.FREE_DRAW).map((zoneSelected, index) => {
+        return <InlineTagWrapper key={zoneSelected.code}>
           <FilterTag
-            key={zoneSelected.code + index}
+            key={zoneSelected.code}
             value={'Effacer la zone définie'}
             text={'Effacer la zone définie'}
-            removeTagFromFilter={() => zones.callRemoveZoneSelected(zoneSelected)}
+            removeTagFromFilter={() => callRemoveZoneSelected(zoneSelected)}
           />
         </InlineTagWrapper>
       })
       : null
-  }, [zones.zonesSelected])
+  }, [zonesSelected, callRemoveZoneSelected])
 
   function renderTagPickerMenuItem (item) {
     return (
@@ -105,7 +106,7 @@ const VesselListFilters = ({
 
   function renderTagPickerValue (items) {
     return items.map((tag, index) => (
-      <Tag key={index}>
+      <Tag key={tag.label}>
         {tag.label}
       </Tag>
     ))

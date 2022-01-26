@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as BackToVesselsListSVG } from '../icons/Fleche_navigation_marees_gainsboro.svg'
-import { setPreviewFilteredVesselsFeaturesUids } from '../../domain/shared_slices/Vessel'
 import { setPreviewFilteredVesselsMode } from '../../domain/shared_slices/Global'
 
 const PreviewFilteredVessels = () => {
@@ -18,7 +17,6 @@ const PreviewFilteredVessels = () => {
       previewFilteredVesselsMode
         ? <Preview
           onClick={() => {
-            dispatch(setPreviewFilteredVesselsFeaturesUids([]))
             dispatch(setPreviewFilteredVesselsMode(false))
           }}
           data-cy={'back-to-vessels-list'}

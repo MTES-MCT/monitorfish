@@ -1,6 +1,4 @@
 // These properties are ordered for the CSV column order
-import { getCoordinates } from '../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 
 export const CSVOptions = {
   riskFactor: {
@@ -36,15 +34,15 @@ export const CSVOptions = {
     name: 'MMSI'
   },
   fleetSegments: {
-    code: 'fleetSegments',
+    code: 'fleetSegmentsArray',
     name: 'Seg. flotte'
   },
   gears: {
-    code: 'gears',
+    code: 'gearsArray',
     name: 'Engins à bord'
   },
   species: {
-    code: 'species',
+    code: 'speciesArray',
     name: 'Espèces à bord'
   },
   length: {
@@ -154,39 +152,3 @@ export const lastControlAfterLabels = [
     value: 24
   }
 ]
-
-export function getVesselObjectFromFeature (feature, coordinates, coordinatesFormat) {
-  return {
-    uid: feature.ol_uid,
-    id: feature.id_,
-    checked: true,
-    vesselName: feature.vessel.vesselName,
-    course: feature.vessel.course,
-    speed: feature.vessel.speed,
-    length: feature.vessel.length,
-    flagState: feature.vessel.flagState?.toLowerCase(),
-    mmsi: feature.vessel.mmsi,
-    internalReferenceNumber: feature.vessel.internalReferenceNumber,
-    externalReferenceNumber: feature.vessel.externalReferenceNumber,
-    ircs: feature.vessel.ircs,
-    dateTimeTimestamp: feature.vessel.dateTime ? new Date(feature.vessel.dateTime).getTime() : '',
-    dateTime: feature.vessel.dateTime,
-    latitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0],
-    longitude: getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1],
-    olCoordinates: coordinates,
-    gears: feature.vessel.gearOnboard ? [...new Set(feature.vessel.gearOnboard.map(gear => gear.gear))].join(', ') : '',
-    gearsArray: feature.vessel.gearOnboard ? [...new Set(feature.vessel.gearOnboard.map(gear => gear.gear))] : [],
-    fleetSegments: feature.vessel.segments ? feature.vessel.segments.join(', ') : '',
-    fleetSegmentsArray: feature.vessel.segments ? feature.vessel.segments.map(segment => segment.replace(' ', '')) : [],
-    species: feature.vessel.speciesOnboard ? [...new Set(feature.vessel.speciesOnboard.map(species => species.species))].join(', ') : '',
-    speciesArray: feature.vessel.speciesOnboard ? [...new Set(feature.vessel.speciesOnboard.map(species => species.species))] : [],
-    district: feature.vessel.district,
-    isAtPort: feature.vessel.isAtPort,
-    districtCode: feature.vessel.districtCode,
-    lastControlDateTimeTimestamp: feature.vessel.lastControlDateTime ? new Date(feature.vessel.lastControlDateTime).getTime() : '',
-    lastControlDateTime: feature.vessel.lastControlDateTime,
-    lastControlInfraction: feature.vessel.lastControlInfraction ? 'Oui' : 'Non',
-    postControlComment: feature.vessel.postControlComment,
-    riskFactor: parseFloat(feature.vessel.riskFactor).toFixed(1)
-  }
-}

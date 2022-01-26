@@ -3,7 +3,6 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from config import BEACON_STATUSES_ENDPOINT
 from src.pipeline.flows.update_beacons_statuses import (
     extract_beacons_last_emission,
     extract_known_malfunctions,
@@ -263,10 +262,16 @@ def test_update_beacons_statuses_flow_moves_beacon_statuses_to_resumed_transmiss
     ).iloc[0, 0]
 
     flow.schedule = None
+    endpoint_mock_url = "http://beacon.statuses.endpoint/"
     with patch("src.pipeline.flows.update_beacons_statuses.requests") as mock_requests:
-        state = flow.run(
-            max_hours_without_emission_at_sea=12, max_hours_without_emission_at_port=24
-        )
+        with patch(
+            "src.pipeline.flows.update_beacons_statuses.BEACON_STATUSES_ENDPOINT",
+            endpoint_mock_url,
+        ):
+            state = flow.run(
+                max_hours_without_emission_at_sea=12,
+                max_hours_without_emission_at_port=24,
+            )
 
     assert state.is_successful()
     assert (
@@ -279,9 +284,12 @@ def test_update_beacons_statuses_flow_moves_beacon_statuses_to_resumed_transmiss
     )
 
     mock_requests.put.assert_called_once_with(
-        url=BEACON_STATUSES_ENDPOINT
-        + f"{beacon_status_id_to_move_to_resumed_transmission}",
-        data={"stage": "RESUMED_TRANSMISSION"},
+        url=endpoint_mock_url + f"{beacon_status_id_to_move_to_resumed_transmission}",
+        json={"stage": "RESUMED_TRANSMISSION"},
+        headers={
+            "Accept": "application/json, text/plain",
+            "Content-Type": "application/json;charset=UTF-8",
+        },
     )
 
 

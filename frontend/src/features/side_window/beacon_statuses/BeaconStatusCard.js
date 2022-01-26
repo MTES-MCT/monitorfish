@@ -50,7 +50,7 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
           style={showIconStyle}
           alt={'Voir sur la carte'}
           onClick={() => {
-            const vesselIdentity = { ...alert, flagState: 'FR' }
+            const vesselIdentity = { ...beaconStatus, flagState: 'FR' }
             dispatch(showVessel(vesselIdentity, false, false, null))
             dispatch(getVesselVoyage(vesselIdentity, null, false))
           }}

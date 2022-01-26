@@ -208,6 +208,10 @@ const Wrapper = styled.div`
     background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
     top: 1px;
   }
+  
+  .rs-list-item {
+    box-shadow: unset;
+  }
 `
 
 export default SideWindow

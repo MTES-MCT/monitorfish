@@ -107,7 +107,7 @@ context('NewRegulation', () => {
         expect(request.body)
           .contain('"authorized":true')
           .contain('"otherInfo":"Mhm pas d\'autre info !"')
-          .contain('"species":[{"code":"HKE","quantity":"Ne pas en prendre beaucoup please","minimumSize":"à peu près 60 cm"}]')
+          .contain('"species":[{"code":"HKE","name":"MERLU D\'EUROPE","quantity":"Ne pas en prendre beaucoup please","minimumSize":"à peu près 60 cm"}]')
           .contain('"speciesGroups":["Espèces eau profonde"]')
 
         expect(response.statusCode).equal(200)

@@ -260,8 +260,13 @@ def change_beacon_status_stage(beacon_status_id: int, new_stage: beaconStatusSta
         new_stage (beaconStatusStage): stage to move the beacon status to
     """
     url = BEACON_STATUSES_ENDPOINT + str(beacon_status_id)
-    data = {"stage": new_stage.value}
-    requests.put(url=url, data=data)
+    json = {"stage": new_stage.value}
+    headers = {
+        "Accept": "application/json, text/plain",
+        "Content-Type": "application/json;charset=UTF-8",
+    }
+    r = requests.put(url=url, json=json, headers=headers)
+    r.raise_for_status()
 
 
 with Flow("Beacons statuses") as flow:

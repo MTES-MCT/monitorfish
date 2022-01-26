@@ -17,24 +17,32 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, b
       description={stage?.description}
       numberOfItems={beaconStatuses?.length}
     />
-    {
-      beaconStatuses
-        .map(beaconStatus => {
-          return <Draggable
-            key={beaconStatus.id}
-            id={beaconStatus.id}
-            stageId={stage.code}
-            isDroppedId={isDroppedId}
-          >
-            <BeaconStatusCard
-              baseUrl={baseUrl}
-              beaconStatus={beaconStatus}
-              updateStageVesselStatus={updateStageVesselStatus}
-            />
-          </Draggable>
-        })
-    }
+    <ScrollableContainer style={ScrollableContainerStyle}>
+      {
+        beaconStatuses
+          .map(beaconStatus => {
+            return <Draggable
+              key={beaconStatus.id}
+              id={beaconStatus.id}
+              stageId={stage.code}
+              isDroppedId={isDroppedId}
+            >
+              <BeaconStatusCard
+                baseUrl={baseUrl}
+                beaconStatus={beaconStatus}
+                updateStageVesselStatus={updateStageVesselStatus}
+              />
+            </Draggable>
+          })
+      }
+    </ScrollableContainer>
   </Wrapper>
+}
+
+const ScrollableContainer = styled.div``
+const ScrollableContainerStyle = {
+  overflowY: 'auto',
+  maxHeight: 'calc(100vh - 232px)'
 }
 
 const Wrapper = styled.div``

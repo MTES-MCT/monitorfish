@@ -123,53 +123,55 @@ const AlertsList = ({ alerts }) => {
             </FlexboxGrid.Item>
           </FlexboxGrid>
         </List.Item>
-      {sortedAlerts.map((alert, index) => (
-        <List.Item key={alert.id} index={index + 1} style={listItemStyle}>
-          <FlexboxGrid>
-            <FlexboxGrid.Item colspan={2} style={riskColumnStyle}>
-              <RiskFactorBox
-                marginRight={5}
-                height={240}
-                isBig={false}
-                color={getRiskFactorColor(alert.riskFactor)}
-              >
-                {parseFloat(alert?.riskFactor).toFixed(1)}
-              </RiskFactorBox>
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={vesselNameColumnStyle}>
-              <Flag
-                title={countries.getName(alert.flagState, 'fr')}
-                rel="preload"
-                src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.flagState}.svg`}
-                style={{ width: 18, marginRight: 5, marginLeft: 0, marginTop: 1 }}
-              />
-              {alert.vesselName}
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={cfrColumnStyle}>
-              {alert.internalReferenceNumber}
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={timeAgoColumnStyle}>
-              {timeago.format(alert.creationDateTimestamp, 'fr')}
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item colspan={7} style={styleCenter}>
-              {getAlertNameFromType(alert.type)}
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item colspan={1} style={styleCenter}>
-              <ShowIcon
-                data-cy={'side-window-alerts-show-vessel'}
-                style={showIconStyle}
-                alt={'Voir sur la carte'}
-                onClick={() => {
-                  const vesselIdentity = { ...alert, flagState: 'FR' }
-                  dispatch(showVessel(vesselIdentity, false, false, null))
-                  dispatch(getVesselVoyage(vesselIdentity, null, false))
-                }}
-                src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
-              />
-            </FlexboxGrid.Item>
-          </FlexboxGrid>
-        </List.Item>
-      ))}
+        <ScrollableContainer style={ScrollableContainerStyle}>
+          {sortedAlerts.map((alert, index) => (
+            <List.Item key={alert.id} index={index + 1} style={listItemStyle}>
+              <FlexboxGrid>
+                <FlexboxGrid.Item colspan={2} style={riskColumnStyle}>
+                  <RiskFactorBox
+                    marginRight={5}
+                    height={240}
+                    isBig={false}
+                    color={getRiskFactorColor(alert.riskFactor)}
+                  >
+                    {parseFloat(alert?.riskFactor).toFixed(1)}
+                  </RiskFactorBox>
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item style={vesselNameColumnStyle}>
+                  <Flag
+                    title={countries.getName(alert.flagState, 'fr')}
+                    rel="preload"
+                    src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.flagState}.svg`}
+                    style={{ width: 18, marginRight: 5, marginLeft: 0, marginTop: 1 }}
+                  />
+                  {alert.vesselName}
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item style={cfrColumnStyle}>
+                  {alert.internalReferenceNumber}
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item style={timeAgoColumnStyle}>
+                  {timeago.format(alert.creationDateTimestamp, 'fr')}
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item colspan={7} style={styleCenter}>
+                  {getAlertNameFromType(alert.type)}
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item colspan={1} style={styleCenter}>
+                  <ShowIcon
+                    data-cy={'side-window-alerts-show-vessel'}
+                    style={showIconStyle}
+                    alt={'Voir sur la carte'}
+                    onClick={() => {
+                      const vesselIdentity = { ...alert, flagState: 'FR' }
+                      dispatch(showVessel(vesselIdentity, false, false, null))
+                      dispatch(getVesselVoyage(vesselIdentity, null, false))
+                    }}
+                    src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
+                  />
+                </FlexboxGrid.Item>
+              </FlexboxGrid>
+            </List.Item>
+          ))}
+        </ScrollableContainer>
     </List>
     {
       !sortedAlerts?.length
@@ -177,6 +179,12 @@ const AlertsList = ({ alerts }) => {
         : null
     }
   </Content>
+}
+
+const ScrollableContainer = styled.div``
+const ScrollableContainerStyle = {
+  overflowY: 'auto',
+  maxHeight: 'calc(100vh - 170px)'
 }
 
 const NoAlerts = styled.div``

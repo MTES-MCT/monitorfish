@@ -7,7 +7,6 @@ import sqlalchemy
 
 from config import default_risk_factors
 from src.pipeline.flows.last_positions import (
-    add_vessel_identifier,
     compute_emission_period,
     concatenate,
     drop_duplicates,
@@ -382,37 +381,3 @@ class TestLastPositionsFlow(unittest.TestCase):
         ).fillna({**default_risk_factors})
 
         pd.testing.assert_frame_equal(expected_res, res)
-
-    def test_add_vessel_identifier(self):
-
-        last_positions = pd.DataFrame(
-            {
-                "cfr": ["A", "B", None, None, None],
-                "ircs": ["aa", "bb", "cc", None, "ee"],
-                "external_immatriculation": ["aaa", None, None, "ddd", "eee"],
-                "some": [1, 2, None, 1, 1],
-                "more": ["a", None, "c", "d", "e"],
-                "data": [None, 2.256, 0.1, 2.36, None],
-            }
-        )
-
-        last_positions_with_vessel_identifier = add_vessel_identifier.run(
-            last_positions
-        )
-
-        expected_last_positions_with_vessel_identifier = last_positions.copy(
-            deep=True
-        ).assign(
-            vessel_identifier=[
-                "INTERNAL_REFERENCE_NUMBER",
-                "INTERNAL_REFERENCE_NUMBER",
-                "IRCS",
-                "EXTERNAL_REFERENCE_NUMBER",
-                "IRCS",
-            ]
-        )
-
-        pd.testing.assert_frame_equal(
-            last_positions_with_vessel_identifier,
-            expected_last_positions_with_vessel_identifier,
-        )

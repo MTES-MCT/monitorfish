@@ -32,3 +32,26 @@ export class VesselLabelLine {
     return `${Layers.VESSELS_LABEL.code}:${identity.internalReferenceNumber}/${identity.ircs}/${identity.externalReferenceNumber}`
   }
 }
+
+export function drawMovedLabelIfFoundAndReturnOffset (vectorSource, vesselToCoordinates, labelLineFeatureId, feature, opacity) {
+  let offset = null
+
+  if (vesselToCoordinates.has(labelLineFeatureId)) {
+    const coordinatesAndOffset = vesselToCoordinates.get(labelLineFeatureId)
+    offset = coordinatesAndOffset.offset
+
+    const existingLabelLineFeature = vectorSource.getFeatureById(labelLineFeatureId)
+    if (existingLabelLineFeature) {
+      existingLabelLineFeature.getGeometry().setCoordinates([feature.getGeometry().getCoordinates(), coordinatesAndOffset.coordinates])
+    } else {
+      const labelLineFeature = VesselLabelLine.getFeature(
+        feature.getGeometry().getCoordinates(),
+        coordinatesAndOffset.coordinates,
+        labelLineFeatureId,
+        opacity)
+      labelLineFeature.setId(labelLineFeatureId)
+      vectorSource.addFeature(labelLineFeature)
+    }
+  }
+  return offset
+}

@@ -42,7 +42,7 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, b
 const ScrollableContainer = styled.div``
 const ScrollableContainerStyle = {
   overflowY: 'auto',
-  maxHeight: 'calc(100vh - 232px)'
+  height: 'calc(100vh - 232px)'
 }
 
 const Wrapper = styled.div``

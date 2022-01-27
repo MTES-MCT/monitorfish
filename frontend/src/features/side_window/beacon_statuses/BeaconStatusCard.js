@@ -59,7 +59,7 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
       </Row>
       <Row style={rowStyle(false)}>
         {
-          beaconStatus.riskFactor
+          beaconStatus?.riskFactor
             ? <RiskFactorBox
               marginRight={5}
               height={24}

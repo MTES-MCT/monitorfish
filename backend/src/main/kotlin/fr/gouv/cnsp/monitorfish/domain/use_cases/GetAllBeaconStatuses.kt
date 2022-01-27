@@ -13,7 +13,10 @@ class GetAllBeaconStatuses(private val beaconStatusesRepository: BeaconStatusesR
     fun execute(): List<BeaconStatus> {
         val lastPositions = lastPositionRepository.findAll()
 
-        return beaconStatusesRepository.findAll().map { beaconStatus ->
+        val beaconStatusesExceptResumedTransmission = beaconStatusesRepository.findAllExceptResumedTransmission()
+        val lastThirtyResumedTransmissions = beaconStatusesRepository.findLastThirtyResumedTransmissions()
+
+        return (beaconStatusesExceptResumedTransmission + lastThirtyResumedTransmissions).map { beaconStatus ->
             val riskFactor = lastPositions.find { lastPosition ->
                 lastPosition.internalReferenceNumber == beaconStatus.internalReferenceNumber
             }?.riskFactor

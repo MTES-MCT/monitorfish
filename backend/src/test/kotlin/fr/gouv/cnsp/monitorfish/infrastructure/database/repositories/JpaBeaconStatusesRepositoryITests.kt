@@ -20,12 +20,36 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAll Should return all beacon statuses`() {
         // When
-        val gears = jpaBeaconStatusesRepository.findAll()
+        val baconStatuses = jpaBeaconStatusesRepository.findAll()
 
-        assertThat(gears).hasSize(4)
-        assertThat(gears.first().internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(gears.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
-        assertThat(gears.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
+        assertThat(baconStatuses).hasSize(5)
+        assertThat(baconStatuses.first().internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(baconStatuses.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
+        assertThat(baconStatuses.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllExceptResumedTransmission Should return all beacon statuses except resumed transmission`() {
+        // When
+        val baconStatuses = jpaBeaconStatusesRepository.findAllExceptResumedTransmission()
+
+        assertThat(baconStatuses).hasSize(4)
+        assertThat(baconStatuses.first().internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(baconStatuses.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
+        assertThat(baconStatuses.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllExceptResumedTransmission Should return last thirty resumed transmission beacon statuses`() {
+        // When
+        val baconStatuses = jpaBeaconStatusesRepository.findLastThirtyResumedTransmissions()
+
+        assertThat(baconStatuses).hasSize(1)
+        assertThat(baconStatuses.first().internalReferenceNumber).isEqualTo("FR263465414")
+        assertThat(baconStatuses.first().stage).isEqualTo(Stage.RESUMED_TRANSMISSION)
+        assertThat(baconStatuses.first().vesselStatus).isEqualTo(VesselStatus.AT_PORT)
     }
 
     @Test

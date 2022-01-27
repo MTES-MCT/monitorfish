@@ -34,21 +34,21 @@ const RegulatoryPreviewLayer = ({ map }) => {
   }, [map, regulatoryGeometryToPreview])
 
   useEffect(() => {
-    addLayerToMap()
-  }, [map])
-
-  function addLayerToMap () {
-    if (map) {
-      layer.name = Layers.REGULATORY_PREVIEW.code
-      map.getLayers().push(layer)
-    }
-
-    return () => {
+    function addLayerToMap () {
       if (map) {
-        map.removeLayer(layer)
+        layer.name = Layers.REGULATORY_PREVIEW.code
+        map.getLayers().push(layer)
+      }
+
+      return () => {
+        if (map) {
+          map.removeLayer(layer)
+        }
       }
     }
-  }
+
+    addLayerToMap()
+  }, [map])
 
   return null
 }

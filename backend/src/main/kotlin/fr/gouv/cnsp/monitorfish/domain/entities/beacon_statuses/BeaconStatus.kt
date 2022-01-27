@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses
 
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import java.time.ZonedDateTime
 
 data class BeaconStatus(
@@ -7,7 +8,7 @@ data class BeaconStatus(
         val internalReferenceNumber: String?,
         val externalReferenceNumber: String?,
         val ircs: String?,
-        val vesselIdentifier: String?,
+        val vesselIdentifier: VesselIdentifier,
         val vesselName: String,
         val vesselStatus: VesselStatus,
         val stage: Stage,

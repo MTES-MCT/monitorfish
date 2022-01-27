@@ -20,12 +20,12 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findAll Should return all beacon statuses`() {
         // When
-        val gears = jpaBeaconStatusesRepository.findAll()
+        val beaconStatuses = jpaBeaconStatusesRepository.findAll()
 
-        assertThat(gears).hasSize(4)
-        assertThat(gears.first().internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(gears.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
-        assertThat(gears.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
+        assertThat(beaconStatuses).hasSize(3)
+        assertThat(beaconStatuses.first().internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(beaconStatuses.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
+        assertThat(beaconStatuses.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
     }
 
     @Test

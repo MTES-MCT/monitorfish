@@ -29,11 +29,14 @@ class GetAllBeaconStatusesUTests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = LastPosition(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.23, dateTime = now.minusHours(4))
-        val secondPosition = LastPosition(null, "FR224226855", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.54, dateTime = now.minusHours(3))
+        val secondPosition = LastPosition(null, "FR123456785", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.54, dateTime = now.minusHours(3))
         val thirdPosition = LastPosition(null, "FR224226856", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.98, dateTime = now.minusHours(2))
         val fourthPosition = LastPosition(null, "FR224226857", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.24, dateTime = now.minusHours(1))
         given(lastPositionRepository.findAll()).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
-        given(beaconStatusesRepository.findAll()).willReturn(listOf(BeaconStatus(1, "FR224226850", "1236514", "IRCS",
+        given(beaconStatusesRepository.findAllExceptResumedTransmission()).willReturn(listOf(BeaconStatus(1, "FR224226850", "1236514", "IRCS",
+                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                true, ZonedDateTime.now(), null, ZonedDateTime.now())))
+        given(beaconStatusesRepository.findLastThirtyResumedTransmissions()).willReturn(listOf(BeaconStatus(2, "FR123456785", "9876543", "IRCS",
                 "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                 true, ZonedDateTime.now(), null, ZonedDateTime.now())))
 
@@ -41,8 +44,11 @@ class GetAllBeaconStatusesUTests {
         val enrichedBeaconStatuses = GetAllBeaconStatuses(beaconStatusesRepository, lastPositionRepository).execute()
 
         // Then
-        assertThat(enrichedBeaconStatuses).hasSize(1)
+        assertThat(enrichedBeaconStatuses).hasSize(2)
         assertThat(enrichedBeaconStatuses.first().riskFactor).isEqualTo(1.23)
         assertThat(enrichedBeaconStatuses.first().internalReferenceNumber).isEqualTo("FR224226850")
+
+        assertThat(enrichedBeaconStatuses.last().riskFactor).isEqualTo(1.54)
+        assertThat(enrichedBeaconStatuses.last().internalReferenceNumber).isEqualTo("FR123456785")
     }
 }

@@ -109,7 +109,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
         key={actionOrComment.type + actionOrComment.dateTime}
       >
         <ActionOrCommentRow style={actionOrCommentRow} ref={isLastDate && isLast ? scrollToRef : null}>
-          <CommentText style={commentTextStyle}>{actionOrComment.comment}</CommentText>
+          <CommentText style={commentTextStyle(actionOrComment.userType)}>{actionOrComment.comment}</CommentText>
         </ActionOrCommentRow>
         <ActionOrCommentRow style={actionOrCommentRow}>
           <CommentUserType style={commentUserTypeStyle}>{actionOrComment.userType} - {getTime(actionOrComment.dateTime, true)} (UTC)</CommentUserType>
@@ -251,13 +251,13 @@ const actionOrCommentRow = {
 }
 
 const CommentText = styled.div``
-const commentTextStyle = {
-  background: `${COLORS.lightGray} 0% 0% no-repeat padding-box`,
+const commentTextStyle = userType => ({
+  background: `${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray} 0% 0% no-repeat padding-box`,
   border: `1px solid ${COLORS.lightGray}`,
   maxWidth: 480,
   padding: '10px 15px',
   marginTop: 10
-}
+})
 
 const ActionText = styled.div``
 const actionTextStyle = {
@@ -320,7 +320,7 @@ const numberCommentsTextStyle = {
 
 const Body = styled.div``
 const bodyStyle = {
-  marginTop: 20,
+  marginTop: 25,
   paddingRight: 40,
   paddingLeft: 40
 }

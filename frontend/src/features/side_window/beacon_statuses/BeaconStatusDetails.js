@@ -78,7 +78,7 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
         </Row>
         <Row style={rowStyle(10)}>
           {
-            beaconStatus.riskFactor
+            beaconStatus?.riskFactor
               ? <RiskFactorBox
                 marginRight={5}
                 height={24}

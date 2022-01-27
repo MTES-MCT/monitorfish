@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.last_position
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import java.time.Duration
 import java.time.ZonedDateTime
 
@@ -48,7 +49,7 @@ data class LastPosition(
         val lastControlDateTime: ZonedDateTime? = null,
         val lastControlInfraction: Boolean? = null,
         val postControlComment: String? = null,
-        val vesselIdentifier: String? = null,
+        val vesselIdentifier: VesselIdentifier,
         val impactRiskFactor: Double? = null,
         val probabilityRiskFactor: Double? = null,
         val detectabilityRiskFactor: Double? = null,

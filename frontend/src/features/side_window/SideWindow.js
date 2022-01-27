@@ -151,15 +151,12 @@ const Wrapper = styled.div`
   @keyframes blink {
     0%   {
       background: ${COLORS.background};
-      color: ${COLORS.gunMetal};
     }
     50% {
-      background: ${COLORS.gunMetal};
-      color: ${COLORS.gainsboro};
+      background: ${COLORS.lightGray};
     }
     0% {
       background: ${COLORS.background};
-      color: ${COLORS.gunMetal};
     }
   }
   

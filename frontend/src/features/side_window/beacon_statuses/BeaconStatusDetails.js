@@ -167,10 +167,9 @@ const LastPosition = styled.div``
 const lastPositionStyle = {
   background: `${COLORS.gainsboro} 0% 0% no-repeat padding-box`,
   borderRadius: 1,
-  width: 'fit-content',
+  display: 'inline-block',
   padding: '5px 8px',
-  marginTop: 10,
-  marginBottom: 25,
+  marginBottom: 10,
   fontWeight: 500
 }
 

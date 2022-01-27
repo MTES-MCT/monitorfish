@@ -22,13 +22,16 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
 
   const rowStyle = isFirstRow => ({
     display: 'flex',
-    margin: `${isFirstRow ? 7 : 5}px 0 0 10px`
+    margin: `${isFirstRow ? 7 : 5}px 0 0 10px`,
+    height: `${isFirstRow ? '21px' : 'unset'}`
   })
 
   useEffect(() => {
     if (vesselStatus.color && beaconStatus?.id) {
-      // Target the `select-picker` DOM component
+      // Target the `rs-select-picker` DOM component
       ref.current.firstChild.style.background = vesselStatus.color
+      // Target the `rs-picker-toggle-value` span DOM component
+      ref.current.firstChild.firstChild.firstChild.firstChild.style.color = vesselStatus.textColor
     }
   }, [vesselStatus, beaconStatus])
 
@@ -40,6 +43,7 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
       <Row style={rowStyle(true)}>
         <Flag style={flagStyle} rel='preload' src={`${baseUrl}/flags/fr.svg`}/>
         <VesselName
+          className={'hover-border'}
           data-cy={'side-window-beacon-statuses-card-vessel-name'}
           style={vesselNameStyle}
           onClick={() => dispatch(openBeaconStatus({ beaconStatus }))}

@@ -58,14 +58,18 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
         />
       </Row>
       <Row style={rowStyle(false)}>
-        <RiskFactorBox
-          marginRight={5}
-          height={24}
-          isBig={true}
-          color={getRiskFactorColor(beaconStatus?.riskFactor)}
-        >
-          {parseFloat(beaconStatus?.riskFactor).toFixed(1)}
-        </RiskFactorBox>
+        {
+          beaconStatus.riskFactor
+            ? <RiskFactorBox
+              marginRight={5}
+              height={24}
+              isBig={true}
+              color={getRiskFactorColor(beaconStatus?.riskFactor)}
+            >
+              {parseFloat(beaconStatus?.riskFactor).toFixed(1)}
+            </RiskFactorBox>
+            : null
+        }
         <Priority style={priorityStyle(beaconStatus?.priority)}>
           {beaconStatus?.priority ? 'Prioritaire' : 'Non prioritaire'}
         </Priority>

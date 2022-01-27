@@ -16,6 +16,8 @@ import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
 
+const baseUrl = window.location.origin
+
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  * @param alerts
@@ -24,7 +26,6 @@ import { getTextForSearch } from '../../../utils'
  */
 const AlertsList = ({ alerts }) => {
   const dispatch = useDispatch()
-  const baseUrl = window.location.origin
   const [sortedAlerts, setSortedAlerts] = useState([])
   const [sortColumn] = useState('creationDate')
   const [sortType] = useState(SortType.DESC)
@@ -60,26 +61,6 @@ const AlertsList = ({ alerts }) => {
       setFilteredAlerts(nextFilteredAlerts)
     }
   }, [alerts, searchedVessel])
-
-  const searchVesselInputStyle = {
-    marginBottom: 5,
-    backgroundColor: 'white',
-    border: `1px ${COLORS.lightGray} solid`,
-    borderRadius: 0,
-    color: COLORS.gunMetal,
-    fontSize: 13,
-    height: 40,
-    width: 310,
-    padding: '0 5px 0 10px',
-    flex: 3,
-    backgroundImage: `url(${baseUrl}/${SearchIconSVG})`,
-    backgroundSize: 30,
-    backgroundPosition: 'bottom 3px right 5px',
-    backgroundRepeat: 'no-repeat',
-    ':hover, :focus': {
-      borderBottom: `1px ${COLORS.lightGray} solid`
-    }
-  }
 
   return <Content style={contentStyle}>
     <SearchVesselInput
@@ -126,14 +107,18 @@ const AlertsList = ({ alerts }) => {
             <List.Item key={alert.id} index={index + 1} style={listItemStyle}>
               <FlexboxGrid>
                 <FlexboxGrid.Item colspan={2} style={riskColumnStyle}>
-                  <RiskFactorBox
-                    marginRight={5}
-                    height={240}
-                    isBig={false}
-                    color={getRiskFactorColor(alert.riskFactor)}
-                  >
-                    {parseFloat(alert?.riskFactor).toFixed(1)}
-                  </RiskFactorBox>
+                  {
+                    alert.riskFactor
+                      ? <RiskFactorBox
+                        marginRight={5}
+                        height={240}
+                        isBig={false}
+                        color={getRiskFactorColor(alert.riskFactor)}
+                      >
+                        {parseFloat(alert.riskFactor).toFixed(1)}
+                      </RiskFactorBox>
+                      : null
+                  }
                 </FlexboxGrid.Item>
                 <FlexboxGrid.Item style={vesselNameColumnStyle}>
                   <Flag
@@ -177,6 +162,26 @@ const AlertsList = ({ alerts }) => {
         : null
     }
   </Content>
+}
+
+const searchVesselInputStyle = {
+  marginBottom: 5,
+  backgroundColor: 'white',
+  border: `1px ${COLORS.lightGray} solid`,
+  borderRadius: 0,
+  color: COLORS.gunMetal,
+  fontSize: 13,
+  height: 40,
+  width: 310,
+  padding: '0 5px 0 10px',
+  flex: 3,
+  backgroundImage: `url(${baseUrl}/${SearchIconSVG})`,
+  backgroundSize: 30,
+  backgroundPosition: 'bottom 3px right 5px',
+  backgroundRepeat: 'no-repeat',
+  ':hover, :focus': {
+    borderBottom: `1px ${COLORS.lightGray} solid`
+  }
 }
 
 const ScrollableContainer = styled.div``

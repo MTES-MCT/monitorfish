@@ -77,14 +77,18 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
           </InternalReferenceNumber>
         </Row>
         <Row style={rowStyle(10)}>
-          <RiskFactorBox
-            marginRight={5}
-            height={24}
-            isBig={true}
-            color={getRiskFactorColor(beaconStatus?.riskFactor)}
-          >
-            {parseFloat(beaconStatus?.riskFactor).toFixed(1)}
-          </RiskFactorBox>
+          {
+            beaconStatus.riskFactor
+              ? <RiskFactorBox
+                marginRight={5}
+                height={24}
+                isBig={true}
+                color={getRiskFactorColor(beaconStatus?.riskFactor)}
+              >
+                {parseFloat(beaconStatus?.riskFactor).toFixed(1)}
+              </RiskFactorBox>
+              : null
+          }
           <Priority
             data-cy={'side-window-beacon-statuses-detail-priority'}
             style={priorityStyle(beaconStatus?.priority)}

@@ -423,6 +423,7 @@ export function search (searchText, propertiesToSearch, regulatoryZones, gears) 
 
     return foundRegulatoryZones
   }
+  return {}
 }
 
 export function getUniqueGearCodesFromSearch (searchText, gears) {
@@ -522,6 +523,7 @@ const toArrayString = (array) => {
       return array.slice(0, -1).join(', ').concat(' et ').concat(array.slice(-1))
     }
   }
+  return null
 }
 
 /**

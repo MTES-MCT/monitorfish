@@ -7,6 +7,7 @@ import com.vladmihalcea.hibernate.type.interval.PostgreSQLIntervalType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
@@ -98,7 +99,8 @@ data class LastPositionEntity(
         @Column(name = "post_control_comments")
         val postControlComment: String? = null,
         @Column(name = "vessel_identifier")
-        val vesselIdentifier: String? = null,
+        @Enumerated(EnumType.STRING)
+        val vesselIdentifier: VesselIdentifier,
         @Column(name = "impact_risk_factor")
         val impactRiskFactor: Double? = null,
         @Column(name = "probability_risk_factor")

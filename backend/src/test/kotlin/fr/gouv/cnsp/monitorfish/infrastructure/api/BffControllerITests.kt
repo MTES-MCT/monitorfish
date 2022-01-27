@@ -112,7 +112,7 @@ class BffControllerITests {
     fun `Should get all vessels last positions`() {
         // Given
         val farPastFixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"));
-        val position = LastPosition(0, "MMSI", null, null, null, null, null, PositionType.AIS, 16.445, 48.2525, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime)
+        val position = LastPosition(0, "MMSI", null, null, null, null, null, PositionType.AIS, 16.445, 48.2525, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime, vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER)
         given(this.getLastPositions.execute()).willReturn(listOf(position))
 
         // When

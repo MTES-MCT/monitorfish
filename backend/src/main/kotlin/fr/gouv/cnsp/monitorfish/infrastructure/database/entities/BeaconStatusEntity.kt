@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselStatus
@@ -22,7 +23,8 @@ data class BeaconStatusEntity(
         @Column(name = "vessel_name")
         val vesselName: String,
         @Column(name = "vessel_identifier")
-        val vesselIdentifier: String,
+        @Enumerated(EnumType.STRING)
+        val vesselIdentifier: VesselIdentifier,
         @Column(name = "vessel_status")
         @Enumerated(EnumType.STRING)
         val vesselStatus: VesselStatus,

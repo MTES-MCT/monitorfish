@@ -474,7 +474,7 @@ class BffControllerITests {
     fun `Should get all beacon statuses`() {
         // Given
         given(this.getAllBeaconStatuses.execute()).willReturn(listOf(BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                 true, ZonedDateTime.now(), null, ZonedDateTime.now())))
 
         // When
@@ -492,7 +492,7 @@ class BffControllerITests {
         given(this.updateBeaconStatus.execute(123, VesselStatus.AT_SEA, null))
                 .willReturn(BeaconStatusWithDetails(
                         beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
                         actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
@@ -527,7 +527,7 @@ class BffControllerITests {
         given(this.getBeaconStatus.execute(123))
                 .willReturn(BeaconStatusWithDetails(
                         beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
                         actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
@@ -547,7 +547,7 @@ class BffControllerITests {
     fun `Should save a beacon status comment`() {
         given(this.saveBeaconStatusComment.execute(any(), any(), any())).willReturn(BeaconStatusWithDetails(
                 beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                        "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                 comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
                 actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))

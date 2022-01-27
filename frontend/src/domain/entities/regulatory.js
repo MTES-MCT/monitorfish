@@ -37,12 +37,13 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
 
 export const mapToProcessingRegulation = (persistProcessingRegulation) => {
   if (persistProcessingRegulation) {
+    const _parsedFishingPeriod = mapToFishingPeriod(persistProcessingRegulation.fishingPeriod)
     return {
       ...persistProcessingRegulation,
-      fishingPeriod: parseFishingPeriod(persistProcessingRegulation.fishing_period)
+      fishingPeriod: _parsedFishingPeriod
     }
   }
-  return null
+  return INITIAL_REGULATION
 }
 
 function parseRegulatoryGears (gears) {
@@ -87,18 +88,18 @@ const parseJSON = text => typeof text === 'string'
 
 export const parseFishingPeriod = fishingPeriod => {
   if (fishingPeriod) {
+    return mapToFishingPeriod(JSON.parse(fishingPeriod))
+  }
+  return INITIAL_FISHING_PERIOD_VALUES
+}
+
+const mapToFishingPeriod = fishingPeriod => {
+  if (fishingPeriod) {
     const {
-      authorized,
-      annualRecurrence,
       dateRanges,
       dates,
-      weekdays,
-      holidays,
-      daytime,
-      timeIntervals,
-      otherInfo
-    } = JSON.parse(fishingPeriod)
-
+      timeIntervals
+    } = fishingPeriod
     const newDateRanges = dateRanges?.map(({ startDate, endDate }) => {
       return {
         startDate: startDate ? new Date(startDate) : undefined,
@@ -118,18 +119,12 @@ export const parseFishingPeriod = fishingPeriod => {
     })
 
     return {
-      authorized,
-      annualRecurrence,
+      ...fishingPeriod,
       dateRanges: newDateRanges,
       dates: newDates,
-      weekdays,
-      holidays,
-      daytime,
-      timeIntervals: newTimeIntervals,
-      otherInfo
+      timeIntervals: newTimeIntervals
     }
   }
-
   return INITIAL_FISHING_PERIOD_VALUES
 }
 
@@ -320,6 +315,17 @@ export const INITIAL_REGULATION = {
   [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: INITIAL_FISHING_PERIOD_VALUES,
   [REGULATORY_REFERENCE_KEYS.REGULATORY_SPECIES]: INITIAL_REG_SPECIES_VALUES,
   [REGULATORY_REFERENCE_KEYS.REGULATORY_GEARS]: INITIAL_REG_GEARS_VALUES
+}
+
+export const FISHING_PERIOD_KEYS = {
+  DATE_RANGES: 'dateRanges',
+  DATES: 'dates',
+  TIME_INTERVALS: 'timeIntervals',
+  AUTHORIZED: 'authorized',
+  ANNUAL_RECURRENCE: 'annualRecurrence',
+  WEEKDAYS: 'weekdays',
+  HOLIDAYS: 'holidays',
+  DAYTIME: 'daytime'
 }
 
 export const WEEKDAYS = {

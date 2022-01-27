@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import FishingPeriodForm from './FishingPeriodForm'
 import SectionTitle from '../../SectionTitle'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
-import { setProcessingRegulationByKey } from '../../Regulation.slice'
+import { setFishingPeriodOtherInfo } from '../../Regulation.slice'
 import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
-import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const FishingPeriodSection = () => {
   const { fishingPeriod } = useSelector(state => state.regulation.processingRegulation)
@@ -14,19 +13,7 @@ const FishingPeriodSection = () => {
 
   const [show, setShow] = useState(false)
 
-  const setOtherInfo = value => {
-    dispatch(setProcessingRegulationByKey({
-      key: REGULATORY_REFERENCE_KEYS.FISHING_PERIOD,
-      value: {
-        ...fishingPeriod,
-        otherInfo: value
-      }
-    }))
-  }
-
-  const setFishingPeriod = value => {
-    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.FISHING_PERIOD, value }))
-  }
+  const onChange = useCallback(value => dispatch(setFishingPeriodOtherInfo(value)), [dispatch])
 
   return <Section show>
     <SectionTitle
@@ -37,14 +24,13 @@ const FishingPeriodSection = () => {
     <FishingPeriodForm
       show={show}
       fishingPeriod={fishingPeriod}
-      setFishingPeriod={setFishingPeriod}
     />
     <OtherRemark show={show}>
       <Label>Autres points sur la période</Label>
       <CustomInput
         width={'730px'}
         value={fishingPeriod?.otherInfo || ''}
-        onChange={setOtherInfo}
+        onChange={onChange}
         $isGray={fishingPeriod.otherInfo && fishingPeriod.otherInfo !== ''} />
     </OtherRemark>
   </Section>

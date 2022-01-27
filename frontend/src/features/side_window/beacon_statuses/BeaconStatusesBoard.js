@@ -188,6 +188,7 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
         value={searchedVessel}
         onChange={e => setSearchedVessel(e.target.value)}/>
       <DndContext
+        autoScroll={true}
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}
         sensors={sensors}

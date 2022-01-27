@@ -161,6 +161,10 @@ def test_make_positions_in_alert_query():
         "ON ST_Intersects(positions.geometry, facades.geometry) "
         "\nWHERE positions.date_time > '2021-01-01 10:10:00' "
         "AND positions.date_time < '2021-01-01 16:10:00' "
+        "AND ("
+        "positions.internal_reference_number IS NOT NULL OR "
+        "positions.external_reference_number IS NOT NULL OR "
+        "positions.ircs IS NOT NULL) "
         "AND positions.is_fishing "
         "AND zones.zone_name IN ('Zone A') "
         "AND positions.flag_state IN ('NL, DE')"
@@ -198,7 +202,11 @@ def test_make_positions_in_alert_query():
         "LEFT OUTER JOIN facades "
         "ON ST_Intersects(positions.geometry, facades.geometry) "
         "\nWHERE positions.date_time > '2021-01-01 10:10:00' "
-        "AND positions.date_time < '2021-01-01 16:10:00'"
+        "AND positions.date_time < '2021-01-01 16:10:00' "
+        "AND ("
+        "positions.internal_reference_number IS NOT NULL OR "
+        "positions.external_reference_number IS NOT NULL OR "
+        "positions.ircs IS NOT NULL)"
     )
 
     assert query == expected_query
@@ -357,6 +365,7 @@ def test_make_alerts():
             "cfr": ["A", "A", "A", "B", "A", "B", "A"],
             "external_immatriculation": ["AA", "AA", "AA", "BB", "AA", "BB", "AA"],
             "ircs": ["AAA", "AAA", "AAA", "BBB", "AAA", "BBB", "AAA"],
+            "vessel_identifier": ["INTERNAL_REFERENCE_NUMBER"] * 7,
             "vessel_name": ["v_A", "v_A", "v_A", "v_B", "v_A", "v_B", "v_A"],
             "flag_state": ["FR", "FR", "FR", "FR", "FR", "FR", "FR"],
             "facade": ["NAMO", "NAMO", "NAMO", "MEMN", "NAMO", "MEMN", "NAMO"],
@@ -383,6 +392,10 @@ def test_make_alerts():
             "internal_reference_number": ["A", "B"],
             "external_reference_number": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+            ],
             "creation_date": [now, now - 0.5 * td],
             "value": [
                 {
@@ -517,6 +530,11 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                     "riskFactor": 2.09885592141872,
                 },
             ],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+            ],
         }
     )
 
@@ -605,6 +623,10 @@ def test_flow_filters_on_gears(reset_test_data):
                     "flagState": "FR",
                     "riskFactor": 2.09885592141872,
                 },
+            ],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
             ],
         }
     )
@@ -695,6 +717,10 @@ def test_flow_filters_on_time(reset_test_data):
                     "riskFactor": 2.09885592141872,
                 },
             ],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+            ],
         }
     )
 
@@ -772,6 +798,9 @@ def test_flow_filters_on_flag_states(reset_test_data):
                     "flagState": "NL",
                     "riskFactor": None,
                 },
+            ],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
             ],
         }
     )

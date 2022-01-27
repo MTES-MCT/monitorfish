@@ -14,7 +14,7 @@ context('Alerts', () => {
 
     // Then
     cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('7')
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().should('have.length', 8)
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 7)
 
     cy.get('*[data-cy^="side-window-alerts-list"]').children().last().contains('ABC000363962')
     cy.get('*[data-cy^="side-window-alerts-list"]').children().last().contains('3 milles - Chaluts')
@@ -34,7 +34,7 @@ context('Alerts', () => {
   it('Alerts Should be filtered based on the search input', () => {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-SA"]').click()
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().should('have.length', 3)
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 2)
 
     // When
     cy.get('*[data-cy^="side-window-alerts-search-vessel"]').type('ABC0003')

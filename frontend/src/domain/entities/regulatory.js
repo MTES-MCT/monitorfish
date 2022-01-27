@@ -1,10 +1,5 @@
-import {
-  getTextForSearch,
-  formatDataForSelectPicker
-} from '../../utils'
-import Layers, { getLayerNameNormalized } from './layers'
-import { getVectorLayer } from '../use_cases/showRegulatoryLayer'
-import { metadataIsShowedPropertyName, SIMPLIFIED_FEATURE_ZOOM_LEVEL } from '../../layers/RegulatoryLayers'
+import { formatDataForSelectPicker, getTextForSearch } from '../../utils'
+import Layers from './layers'
 
 export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
   return {
@@ -663,89 +658,5 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
       }
     }
     return null
-  })
-}
-
-export function sortRegulatoryLayersFromAreas (layersToFeatures, olLayers) {
-  const sortedLayersToArea = [...layersToFeatures].sort((a, b) => a.area - b.area).reverse()
-
-  sortedLayersToArea.forEach((layerAndArea, index) => {
-    index = index + 1
-    const layer = olLayers.find(layer => layer?.name === layerAndArea.name)
-
-    if (layer) {
-      layer.setZIndex(index)
-    }
-  })
-}
-
-export function addRegulatoryLayersToMap (dispatch, getState, olLayers, showedLayers) {
-  if (showedLayers.length) {
-    const layersToInsert = showedLayers
-      .filter(layer => layersNotInCurrentOLMap(olLayers.getArray(), layer))
-      .filter(layer => layersOfTypeRegulatoryLayer(layer))
-
-    layersToInsert.forEach(layerToInsert => {
-      if (!layerToInsert) {
-        return
-      }
-      const getVectorLayerClosure = getVectorLayer(dispatch, getState)
-      const vectorLayer = getVectorLayerClosure(layerToInsert)
-      olLayers.push(vectorLayer)
-    })
-  }
-}
-
-export function layersNotInCurrentOLMap (olLayers, layer) {
-  return !olLayers.some(olLayer => olLayer.name ===
-    getLayerNameNormalized({ type: Layers.REGULATORY.code, ...layer }))
-}
-
-export function layersOfTypeRegulatoryLayer (layer) {
-  return layer.type === Layers.REGULATORY.code
-}
-
-export function getShowSimplifiedFeatures (currentZoom) {
-  return currentZoom < SIMPLIFIED_FEATURE_ZOOM_LEVEL
-}
-
-export function featuresAreAlreadyDrawWithTheSameTolerance (showSimplifiedFeatures, simplifiedGeometries) {
-  return (!showSimplifiedFeatures && !simplifiedGeometries) || (showSimplifiedFeatures && simplifiedGeometries)
-}
-
-export function removeRegulatoryLayersToMap (showedLayers, olLayers) {
-  const _showedLayers = showedLayers.length ? showedLayers : []
-  const layersToRemove = olLayers.getArray()
-    .filter(olLayer => layersOfTypeRegulatoryLayerInCurrentMap(olLayer))
-    .filter(olLayer => layersNotPresentInShowedLayers(_showedLayers, olLayer))
-
-  layersToRemove?.forEach(layerToRemove => {
-    olLayers.remove(layerToRemove)
-  })
-}
-
-export function layersNotPresentInShowedLayers (_showedLayers, olLayer) {
-  return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.name)
-}
-
-export function layersOfTypeRegulatoryLayerInCurrentMap (olLayer) {
-  return olLayer?.name?.includes(Layers.REGULATORY.code)
-}
-
-export function addMetadataIsShowedProperty (lastShowedFeatures, layerToAddProperty) {
-  const features = layerToAddProperty.getSource().getFeatures()
-  if (features?.length) {
-    features.forEach(feature => feature.set(metadataIsShowedPropertyName, true))
-  } else if (lastShowedFeatures?.length) {
-    lastShowedFeatures
-      .forEach(feature => feature.set(metadataIsShowedPropertyName, true))
-  }
-}
-
-export function removeMetadataIsShowedProperty (regulatoryLayers) {
-  regulatoryLayers.forEach(layer => {
-    layer.getSource().getFeatures()
-      .filter(feature => feature.get(metadataIsShowedPropertyName))
-      .forEach(feature => feature.set(metadataIsShowedPropertyName, false))
   })
 }

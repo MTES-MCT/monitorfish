@@ -16,8 +16,6 @@ import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
 
-const baseUrl = window.location.origin
-
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  * @param alerts
@@ -26,6 +24,7 @@ const baseUrl = window.location.origin
  */
 const AlertsList = ({ alerts }) => {
   const dispatch = useDispatch()
+  const baseUrl = window.location.origin
   const [sortedAlerts, setSortedAlerts] = useState([])
   const [sortColumn] = useState('creationDate')
   const [sortType] = useState(SortType.DESC)
@@ -64,7 +63,7 @@ const AlertsList = ({ alerts }) => {
 
   return <Content style={contentStyle}>
     <SearchVesselInput
-      style={searchVesselInputStyle}
+      style={searchVesselInputStyle(baseUrl)}
       baseUrl={baseUrl}
       data-cy={'side-window-alerts-search-vessel'}
       placeholder={'Rechercher un navire en alerte'}
@@ -164,7 +163,7 @@ const AlertsList = ({ alerts }) => {
   </Content>
 }
 
-const searchVesselInputStyle = {
+const searchVesselInputStyle = baseUrl => ({
   marginBottom: 5,
   backgroundColor: 'white',
   border: `1px ${COLORS.lightGray} solid`,
@@ -182,7 +181,7 @@ const searchVesselInputStyle = {
   ':hover, :focus': {
     borderBottom: `1px ${COLORS.lightGray} solid`
   }
-}
+})
 
 const ScrollableContainer = styled.div``
 const ScrollableContainerStyle = {

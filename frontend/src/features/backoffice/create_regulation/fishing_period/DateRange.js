@@ -1,4 +1,5 @@
-import React from 'react'
+/* eslint-disable react/forbid-component-props */
+import React, { useCallback } from 'react'
 import CustomDatePicker from '../custom_form/CustomDatePicker'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
@@ -20,16 +21,16 @@ const DateRange = (props) => {
     endDate
   } = dateRange
 
-  const setDateRange = (key, value) => {
+  const setDateRange = useCallback(key => value => {
     const newDateRange = {
       ...dateRange,
       [key]: value
     }
     updateList(id, newDateRange)
-  }
+  }, [dateRange, id, updateList])
 
-  const setEndDate = date => setDateRange('endDate', date)
-  const setStartDate = date => setDateRange('startDate', date)
+  const setEndDate = setDateRange('endDate')
+  const setStartDate = setDateRange('startDate')
 
   return <Wrapper $isLast={isLast} disabled={disabled}>
     <DateRangeRow>

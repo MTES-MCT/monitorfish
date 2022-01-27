@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { INITIAL_REGULATION } from '../../domain/entities/regulatory'
+import { INITIAL_REGULATION, REGULATORY_REFERENCE_KEYS } from '../../domain/entities/regulatory'
 
 const INITIAL_STATE = {
   /** @type {RegulatoryText} */
@@ -40,6 +40,20 @@ const regulationSlice = createSlice({
     },
     setProcessingRegulation (state, { payload }) {
       state.processingRegulation = payload
+    },
+    setFishingPeriod (state, { payload: { key, value } }) {
+      const nextFishingPeriod = {
+        ...state.processingRegulation.fishingPeriod,
+        [key]: value
+      }
+      const nextProcessingRegulation = {
+        ...state.processingRegulation,
+        [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: nextFishingPeriod
+      }
+      state.processingRegulation = nextProcessingRegulation
+    },
+    setFishingPeriodOtherInfo (state, action) {
+      state.processingRegulation[REGULATORY_REFERENCE_KEYS.FISHING_PERIOD].otherInfo = action.payload
     },
     setUpcomingRegulatoryText (state, action) {
       state.upcomingRegulatoryText = action.payload
@@ -120,7 +134,9 @@ export const {
   setIsRemoveModalOpen,
   setIsConfirmModalOpen,
   setProcessingRegulationByKey,
-  setProcessingRegulation
+  setProcessingRegulation,
+  setFishingPeriod,
+  setFishingPeriodOtherInfo
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

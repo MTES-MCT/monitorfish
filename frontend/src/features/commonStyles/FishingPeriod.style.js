@@ -7,3 +7,23 @@ export const Row = styled.div`
   align-items: center;
   color: ${COLORS.slateGray}
 `
+
+export const TimeRow = styled(Row)`
+  opacity: ${props => props.disabled ? '0.4' : '1'};
+`
+
+export const DateRanges = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 13px;
+  color: ${COLORS.slateGray};
+  margin-right: 10px;
+`
+
+export const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  ${props => props.alignItems ? `align-items: ${props.alignItems}` : ''};
+`

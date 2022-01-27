@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+/* eslint-disable react/forbid-component-props */
+import React, { useState, useCallback } from 'react'
 import { DatePicker } from 'rsuite'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
@@ -25,6 +26,17 @@ const CustomDatePicker = props => {
 
   const [val, setVal] = useState(undefined)
 
+  const onSelect = useCallback(_value => {
+    if (oneTap) {
+      saveValue(_value)
+    } else {
+      setVal(_value)
+    }
+  }, [setVal, saveValue, oneTap])
+
+  const onOk = useCallback(_value => !oneTap && saveValue(_value), [oneTap, saveValue])
+  const onExit = useCallback(_ => val && saveValue(val), [val, saveValue])
+
   return <DatePickerStyled
     key={value}
     data-cy={`custom-date-picker-${value}`}
@@ -33,19 +45,9 @@ const CustomDatePicker = props => {
     oneTap={oneTap}
     ranges={[]}
     value={value}
-    onSelect={value => {
-      if (oneTap) {
-        saveValue(value)
-      } else {
-        setVal(value)
-      }
-    }}
-    onOk={value => {
-      if (!oneTap) {
-        saveValue(value)
-      }
-    }}
-    onExit={_ => val && saveValue(val)}
+    onSelect={onSelect}
+    onOk={onOk}
+    onExit={onExit}
     cleanable={false}
     placement={placement}
     placeholder={type === CUSTOM_DATEPICKER_TYPES.TIME

@@ -26,7 +26,7 @@ context('Beacon statuses', () => {
 
     // When
     cy.get('*[data-cy="side-window-beacon-statuses-columns-INITIAL_ENCOUNTER"]').children()
-      .find('*[data-cy="side-window-beacon-statuses-card-vessel-name"]')
+      .find('*[data-cy="side-window-beacon-statuses-card"]')
       .first()
       .dragTo('*[data-cy="side-window-beacon-statuses-columns-RELAUNCH_REQUEST"]')
 

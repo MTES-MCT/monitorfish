@@ -1,19 +1,11 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector, useStore } from 'react-redux'
-import LayersEnum from '../domain/entities/layers'
+import Layers, { getLayerNameNormalized } from '../domain/entities/layers'
 import { showSimplifiedGeometries, showWholeGeometries } from '../domain/shared_slices/Regulatory'
-import {
-  addMetadataIsShowedProperty,
-  addRegulatoryLayersToMap,
-  featuresAreAlreadyDrawWithTheSameTolerance,
-  getShowSimplifiedFeatures,
-  removeMetadataIsShowedProperty,
-  removeRegulatoryLayersToMap,
-  sortRegulatoryLayersFromAreas
-} from '../domain/entities/regulatory'
+import { getVectorLayer } from '../domain/use_cases/showRegulatoryLayer'
 
 export const metadataIsShowedPropertyName = 'metadataIsShowed'
-export const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5
+const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5
 
 const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   const throttleDuration = 500 // ms
@@ -51,10 +43,10 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   useEffect(() => {
     function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers () {
       if (map) {
-        const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(LayersEnum.REGULATORY.code))
+        const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(Layers.REGULATORY.code))
         if (regulatoryZoneMetadata) {
           const layerToAddProperty = regulatoryLayers.find(layer => {
-            return layer?.name === `${LayersEnum.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
+            return layer?.name === `${Layers.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
           })
 
           if (layerToAddProperty) {
@@ -85,7 +77,7 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
           return
         }
 
-        const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(LayersEnum.REGULATORY.code))
+        const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(Layers.REGULATORY.code))
         regulatoryLayers.forEach(layer => {
           const vectorSource = layer.getSource()
 
@@ -118,6 +110,90 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   }, [map, mapMovingAndZoomEvent, layersToFeatures])
 
   return null
+}
+
+function sortRegulatoryLayersFromAreas (layersToFeatures, olLayers) {
+  const sortedLayersToArea = [...layersToFeatures].sort((a, b) => a.area - b.area).reverse()
+
+  sortedLayersToArea.forEach((layerAndArea, index) => {
+    index = index + 1
+    const layer = olLayers.find(layer => layer?.name === layerAndArea.name)
+
+    if (layer) {
+      layer.setZIndex(index)
+    }
+  })
+}
+
+function layersNotInCurrentOLMap (olLayers, layer) {
+  return !olLayers.some(olLayer => olLayer.name ===
+    getLayerNameNormalized({ type: Layers.REGULATORY.code, ...layer }))
+}
+
+function layersOfTypeRegulatoryLayer (layer) {
+  return layer.type === Layers.REGULATORY.code
+}
+
+function getShowSimplifiedFeatures (currentZoom) {
+  return currentZoom < SIMPLIFIED_FEATURE_ZOOM_LEVEL
+}
+
+function featuresAreAlreadyDrawWithTheSameTolerance (showSimplifiedFeatures, simplifiedGeometries) {
+  return (!showSimplifiedFeatures && !simplifiedGeometries) || (showSimplifiedFeatures && simplifiedGeometries)
+}
+
+function removeRegulatoryLayersToMap (showedLayers, olLayers) {
+  const _showedLayers = showedLayers.length ? showedLayers : []
+  const layersToRemove = olLayers.getArray()
+    .filter(olLayer => layersOfTypeRegulatoryLayerInCurrentMap(olLayer))
+    .filter(olLayer => layersNotPresentInShowedLayers(_showedLayers, olLayer))
+
+  layersToRemove?.forEach(layerToRemove => {
+    olLayers.remove(layerToRemove)
+  })
+}
+
+function layersNotPresentInShowedLayers (_showedLayers, olLayer) {
+  return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.name)
+}
+
+function layersOfTypeRegulatoryLayerInCurrentMap (olLayer) {
+  return olLayer?.name?.includes(Layers.REGULATORY.code)
+}
+
+function addMetadataIsShowedProperty (lastShowedFeatures, layerToAddProperty) {
+  const features = layerToAddProperty.getSource().getFeatures()
+  if (features?.length) {
+    features.forEach(feature => feature.set(metadataIsShowedPropertyName, true))
+  } else if (lastShowedFeatures?.length) {
+    lastShowedFeatures
+      .forEach(feature => feature.set(metadataIsShowedPropertyName, true))
+  }
+}
+
+function removeMetadataIsShowedProperty (regulatoryLayers) {
+  regulatoryLayers.forEach(layer => {
+    layer.getSource().getFeatures()
+      .filter(feature => feature.get(metadataIsShowedPropertyName))
+      .forEach(feature => feature.set(metadataIsShowedPropertyName, false))
+  })
+}
+
+function addRegulatoryLayersToMap (dispatch, getState, olLayers, showedLayers) {
+  if (showedLayers.length) {
+    const layersToInsert = showedLayers
+      .filter(layer => layersNotInCurrentOLMap(olLayers.getArray(), layer))
+      .filter(layer => layersOfTypeRegulatoryLayer(layer))
+
+    layersToInsert.forEach(layerToInsert => {
+      if (!layerToInsert) {
+        return
+      }
+      const getVectorLayerClosure = getVectorLayer(dispatch, getState)
+      const vectorLayer = getVectorLayerClosure(layerToInsert)
+      olLayers.push(vectorLayer)
+    })
+  }
 }
 
 export default RegulatoryLayers

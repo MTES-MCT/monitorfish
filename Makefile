@@ -35,7 +35,7 @@ docker-compose-up:
 docker-build-pipeline:
 	docker build -f "infra/docker/Dockerfile.DataPipeline" . -t monitorfish-pipeline:$(VERSION)
 docker-test-pipeline:
-	docker run --network host -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) monitorfish-pipeline:$(VERSION) coverage run -m pytest --pdb tests
+	docker run --network host -v /var/run/docker.sock:/var/run/docker.sock -u monitorfish-pipeline:$(DOCKER_GROUP) --env-file datascience/.env.test monitorfish-pipeline:$(VERSION) coverage run -m pytest --pdb tests
 docker-tag-pipeline:
 	docker tag monitorfish-pipeline:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(VERSION)
 docker-push-pipeline:

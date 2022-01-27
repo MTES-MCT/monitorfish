@@ -20,12 +20,13 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, b
     <ScrollableContainer style={ScrollableContainerStyle}>
       {
         beaconStatuses
-          .map(beaconStatus => {
+          .map((beaconStatus, index) => {
             return <Draggable
               key={beaconStatus.id}
               id={beaconStatus.id}
               stageId={stage.code}
               isDroppedId={isDroppedId}
+              index={index}
             >
               <BeaconStatusCard
                 baseUrl={baseUrl}

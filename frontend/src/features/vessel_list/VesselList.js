@@ -168,8 +168,10 @@ const VesselList = ({ namespace }) => {
 
   useEffect(() => {
     const nextVessels = _vessels.map(vessel => {
-      vessel.checked = allVesselsChecked.globalCheckbox
-      return vessel
+      return {
+        ...vessel,
+        checked: allVesselsChecked.globalCheckbox
+      }
     })
 
     setVessels(nextVessels)

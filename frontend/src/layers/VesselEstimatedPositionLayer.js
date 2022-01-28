@@ -31,7 +31,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   const vectorSourceRef = useRef(null)
   const layerRef = useRef(null)
 
-  function getVectorSourceRef () {
+  function getVectorSource () {
     if (vectorSourceRef.current === null) {
       vectorSourceRef.current = new VectorSource({
         features: []
@@ -40,11 +40,11 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     return vectorSourceRef.current
   }
 
-  function getLayerRef () {
+  function getLayer () {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
         renderBuffer: 4,
-        source: getVectorSourceRef(),
+        source: getVectorSource(),
         zIndex: Layers.VESSEL_ESTIMATED_POSITION.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
@@ -57,13 +57,13 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   useEffect(() => {
     function addLayerToMap () {
       if (map) {
-        getLayerRef().name = Layers.VESSEL_ESTIMATED_POSITION.code
-        map.getLayers().push(getLayerRef())
+        getLayer().name = Layers.VESSEL_ESTIMATED_POSITION.code
+        map.getLayers().push(getLayer())
       }
 
       return () => {
         if (map) {
-          map.removeLayer(getLayerRef())
+          map.removeLayer(getLayer())
         }
       }
     }
@@ -72,9 +72,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   }, [map])
 
   useEffect(() => {
-    console.log(getVectorSourceRef())
     if (vessels && !showingVesselsEstimatedPositions) {
-      getVectorSourceRef().clear(true)
+      getVectorSource().clear(true)
     }
 
     if (vessels && showingVesselsEstimatedPositions) {
@@ -110,8 +109,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
         return features
       }, [])
 
-      getVectorSourceRef().clear(true)
-      getVectorSourceRef().addFeatures(estimatedCurrentPositionsFeatures.flat())
+      getVectorSource().clear(true)
+      getVectorSource().addFeatures(estimatedCurrentPositionsFeatures.flat())
     }
   }, [
     vessels,

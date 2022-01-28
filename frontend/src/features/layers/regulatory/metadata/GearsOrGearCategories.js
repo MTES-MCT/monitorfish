@@ -6,7 +6,11 @@ const GearsOrGearCategories = ({ list }) => {
   return <>{Object.keys(list).length > 0
     ? Object.keys(list).map(elem => {
       const { code, name, meshType, mesh } = list[elem]
-      return (<Elem key={elem}><Label>{`${code}${name ? ` (${name})` : ''}`}</Label>
+      return (<Elem key={elem}>
+        <Label>{`${code
+          ? `${code} ${name ? `(${name})` : ''}`
+          : `${name ? `${name}` : ''}`
+        }`}</Label>
         {mesh &&
         <Mesh><Key>Maillage</Key>
           <Value>{meshType === 'between'

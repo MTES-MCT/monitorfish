@@ -86,7 +86,7 @@ const RegulatoryLayerZone = props => {
         setShowRegulatoryZone(false)
       }
     }
-  }, [showWholeLayer])
+  }, [showWholeLayer, zoneIsShown])
 
   useEffect(() => {
     if (zoneIsShown) {
@@ -108,7 +108,7 @@ const RegulatoryLayerZone = props => {
         namespace
       }))
     }
-  }, [showRegulatoryZone, isReadyToShowRegulatoryLayers, namespace])
+  }, [showRegulatoryZone, isReadyToShowRegulatoryLayers, namespace, regulatoryZone, dispatch])
 
   const onEditRegulationClick = () => {
     history.push(`${match.path}/edit`)
@@ -116,6 +116,7 @@ const RegulatoryLayerZone = props => {
       dispatch(showRegulationToEdit(regulatoryZone))
       dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
       dispatch(addRegulatoryTopicOpened(regulatoryTopic))
+      dispatch(closeRegulatoryZoneMetadata())
     })
   }
 

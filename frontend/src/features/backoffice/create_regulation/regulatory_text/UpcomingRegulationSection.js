@@ -2,10 +2,10 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import InfoBox from '../InfoBox'
 import { CancelButton } from '../../../commonStyles/Buttons.style'
 import { Link } from '../../../commonStyles/Backoffice.style'
 import { setIsModalOpen, setUpcomingRegulation } from '../../Regulation.slice'
+import InfoPoint from '../InfoPoint'
 
 const UpcomingRegulationSection = ({ upcomingRegulation }) => {
   const dispatch = useDispatch()
@@ -15,7 +15,7 @@ const UpcomingRegulationSection = ({ upcomingRegulation }) => {
       <Container>
         <YellowRectangle />
         <UpcomingRegulation>
-          <Row><InfoBox /> <GrayText >Réglementation à venir</ GrayText></Row>
+          <Row><InfoPoint margin={'3px 0 0 0'} /> <GrayText >Réglementation à venir</ GrayText></Row>
           {upcomingRegulation?.regulatoryTextList?.length > 0 && upcomingRegulation?.regulatoryTextList?.map((upcomingRegulationText, id) => {
             const {
               reference,

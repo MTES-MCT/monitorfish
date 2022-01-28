@@ -54,7 +54,6 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
         globalRiskFactor: vesselIdentity?.riskFactor,
         riskFactor: vesselAndPositions?.vessel?.riskFactor
       }
-      console.log(selectedVessel)
 
       batch(() => {
         if (error) {

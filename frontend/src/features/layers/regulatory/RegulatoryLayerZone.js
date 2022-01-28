@@ -21,7 +21,11 @@ import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
-import { addRegulatoryTopicOpened, removeRegulatoryTopicOpened } from '../../../domain/shared_slices/Regulatory'
+import {
+  addRegulatoryTopicOpened,
+  removeRegulatoryTopicOpened,
+  closeRegulatoryZoneMetadataPanel
+} from '../../../domain/shared_slices/Regulatory'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (regulatoryZoneMetadata && regulatoryZone &&
@@ -116,7 +120,7 @@ const RegulatoryLayerZone = props => {
       dispatch(showRegulationToEdit(regulatoryZone))
       dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
       dispatch(addRegulatoryTopicOpened(regulatoryTopic))
-      dispatch(closeRegulatoryZoneMetadata())
+      dispatch(closeRegulatoryZoneMetadataPanel())
     })
   }
 

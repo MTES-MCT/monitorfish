@@ -14,7 +14,10 @@ from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import coalesce, df_to_dict_series, join_on_multiple_keys
 from src.pipeline.shared_tasks.facades import get_facades_table
-from src.pipeline.shared_tasks.positions import get_positions_table
+from src.pipeline.shared_tasks.positions import (
+    add_vessel_identifier,
+    get_positions_table,
+)
 from src.pipeline.utils import get_table
 from src.read_query import read_query
 
@@ -200,6 +203,11 @@ def make_positions_in_alert_query(
             and_(
                 positions_table.c.date_time > start_date,
                 positions_table.c.date_time < now,
+                or_(
+                    positions_table.c.internal_reference_number.isnot(None),
+                    positions_table.c.external_reference_number.isnot(None),
+                    positions_table.c.ircs.isnot(None),
+                ),
             )
         )
     )
@@ -394,6 +402,7 @@ def make_alerts(positions_in_alert: pd.DataFrame, alert_type: str) -> pd.DataFra
                 "flag_state",
                 "facade",
                 "risk_factor",
+                "vessel_identifier",
             ],
             as_index=False,
             dropna=False,
@@ -425,6 +434,7 @@ def make_alerts(positions_in_alert: pd.DataFrame, alert_type: str) -> pd.DataFra
             "internal_reference_number",
             "external_reference_number",
             "ircs",
+            "vessel_identifier",
             "creation_date",
             "value",
         ]
@@ -504,6 +514,8 @@ with Flow("Position alert") as flow:
     positions_in_alert = merge(
         positions_in_alert_1, positions_in_alert_2, checkpoint=False
     )
+
+    positions_in_alert = add_vessel_identifier(positions_in_alert)
     current_risk_factors = extract_current_risk_factors()
     positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
     alerts = make_alerts(positions_in_alert, alert_type)

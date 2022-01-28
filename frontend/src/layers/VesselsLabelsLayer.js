@@ -8,7 +8,7 @@ import { usePrevious } from '../hooks/usePrevious'
 
 import Layers from '../domain/entities/layers'
 import { getVesselFeatureIdFromVessel, getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
-import { VesselLabelLine } from '../domain/entities/vesselLabelLine'
+import { drawMovedLabelIfFoundAndReturnOffset, VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 
 import VesselLabelOverlay from '../features/map/overlays/VesselLabelOverlay'
@@ -183,29 +183,6 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       return
     }
     // functions definition
-    function drawMovedLabelIfFoundAndReturnOffset (labelLineFeatureId, feature, opacity) {
-      let offset = null
-
-      if (vesselToCoordinates.has(labelLineFeatureId)) {
-        const coordinatesAndOffset = vesselToCoordinates.get(labelLineFeatureId)
-        offset = coordinatesAndOffset.offset
-
-        const existingLabelLineFeature = vectorSourceRef.current.getFeatureById(labelLineFeatureId)
-        if (existingLabelLineFeature) {
-          existingLabelLineFeature.getGeometry().setCoordinates([feature.getGeometry().getCoordinates(), coordinatesAndOffset.coordinates])
-        } else {
-          const labelLineFeature = VesselLabelLine.getFeature(
-            feature.getGeometry().getCoordinates(),
-            coordinatesAndOffset.coordinates,
-            labelLineFeatureId,
-            opacity)
-          labelLineFeature.setId(labelLineFeatureId)
-          vectorSourceRef.current.addFeature(labelLineFeature)
-        }
-      }
-      return offset
-    }
-
     function addLabelToFeatures (features) {
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
       const showedTracksVesselsIdentities = Object.keys(vesselsTracksShowed)
@@ -222,7 +199,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           })
           const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
           const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)
-          const offset = drawMovedLabelIfFoundAndReturnOffset(labelLineFeatureId, feature, opacity)
+          const offset = drawMovedLabelIfFoundAndReturnOffset(vectorSourceRef.current, vesselToCoordinates, labelLineFeatureId, feature, opacity)
           const trackIsShown = showedTracksVesselsIdentities.includes(getVesselFeatureIdFromVessel(vesselProperties))
 
           return {

@@ -1,9 +1,8 @@
-import { Icon, Style, Circle } from 'ol/style'
+import { Icon, Style } from 'ol/style'
 import { Vessel, VESSEL_ALERT_STYLE, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
 
 import { COLORS } from '../../constants/constants'
 import { booleanToInt } from '../../utils'
-import Fill from 'ol/style/Fill'
 
 const featureHas = (key) => ['==', ['get', key], 1]
 const featureHasNot = (key) => ['==', ['get', key], 0]
@@ -124,21 +123,8 @@ export function degreesToRadian (course) {
 }
 
 const vesselAlertBigCircleStyle = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgba(225, 0, 15, 0.3)'
-    }),
-    radius: 23
-  }),
-  zIndex: VESSEL_ALERT_STYLE
-})
-
-const vesselAlertBigSmallStyle = new Style({
-  image: new Circle({
-    fill: new Fill({
-      color: 'rgba(225, 0, 15, 1)'
-    }),
-    radius: 18
+  image: new Icon({
+    src: 'Double-cercle-alertes.png'
   }),
   zIndex: VESSEL_ALERT_STYLE
 })
@@ -146,10 +132,9 @@ const vesselAlertBigSmallStyle = new Style({
 export const getVesselAlertStyle = (feature, resolution) => {
   const styles = []
 
-  styles.push(vesselAlertBigCircleStyle, vesselAlertBigSmallStyle)
-  const scale = Math.min(1.5, 0.1 + Math.sqrt(200 / resolution))
+  styles.push(vesselAlertBigCircleStyle)
+  const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
   styles[styles.length - 1].getImage().setScale(scale)
-  styles[styles.length - 2].getImage().setScale(scale)
 
   return styles
 }

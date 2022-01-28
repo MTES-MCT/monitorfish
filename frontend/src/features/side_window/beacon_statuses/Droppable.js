@@ -11,7 +11,7 @@ const Droppable = ({ id, index, disabled, children }) => {
     disabled: disabled
   })
   const style = {
-    background: isOver ? COLORS.gunMetal : COLORS.gainsboro,
+    background: isOver ? COLORS.lightGray : COLORS.gainsboro,
     margin: '10px 5px',
     height: 'calc(100vh - 100px)',
     transition: '0.5s all'

@@ -2,7 +2,8 @@ import * as Comlink from 'comlink'
 import {
   getMergedRegulatoryLayers,
   LAWTYPES_TO_TERRITORY,
-  mapToRegulatoryZone, orderByAlphabeticalLayer,
+  mapToRegulatoryZone,
+  orderByAlphabeticalLayer,
   searchByLawType,
   FRANCE
 } from '../domain/entities/regulatory'

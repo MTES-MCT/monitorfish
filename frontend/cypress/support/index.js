@@ -34,7 +34,7 @@ const dragTo = (subject, to, opts) => {
     // delay inbetween steps
     delay: 0,
     // interpolation between coords
-    steps: 0,
+    steps: 5,
     // >=10 steps
     smooth: false,
   })
@@ -44,12 +44,10 @@ const dragTo = (subject, to, opts) => {
   }
 
   const win = subject[0].ownerDocument.defaultView
-
   const elFromCoords = (coords) => win.document.elementFromPoint(coords.x, coords.y)
   const winMouseEvent = win.MouseEvent
 
   const send = (type, coords, el) => {
-
     el = el || elFromCoords(coords)
 
     el.dispatchEvent(
@@ -60,7 +58,6 @@ const dragTo = (subject, to, opts) => {
   const toSel = to
 
   function drag (from, to, steps = 1) {
-
     const fromEl = elFromCoords(from)
 
     const _log = Cypress.log({
@@ -70,7 +67,6 @@ const dragTo = (subject, to, opts) => {
     })
 
     _log.snapshot('before', { next: 'after', at: 0 })
-
     _log.set({ coords: to })
 
     send('mouseover', from, fromEl)
@@ -108,9 +104,7 @@ const dragTo = (subject, to, opts) => {
           _log.snapshot('after', { at: 1 }).end()
 
         })
-
     })
-
   }
 
   const $el = subject

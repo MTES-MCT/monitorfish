@@ -54,39 +54,40 @@ const BaseLayer = ({ map }) => {
   })
 
   useEffect(() => {
+    function addLayerToMap () {
+      if (map) {
+        if (!selectedBaseLayer) {
+          selectedBaseLayer = baseLayers.OSM.code
+        }
+        if (baseLayersObjects[selectedBaseLayer]) {
+          map.getLayers().push(baseLayersObjects[selectedBaseLayer]())
+        }
+      }
+    }
+
     addLayerToMap()
   }, [map])
 
   useEffect(() => {
+    function showAnotherBaseLayer () {
+      if (map && selectedBaseLayer && baseLayersObjects[selectedBaseLayer]) {
+        const olLayers = map.getLayers()
+        const layerToRemove = olLayers.getArray()
+          .find(layer => layer.className_ === Layers.BASE_LAYER.code)
+
+        if (!layerToRemove) {
+          return
+        }
+
+        olLayers.insertAt(0, baseLayersObjects[selectedBaseLayer]())
+        setTimeout(() => {
+          olLayers.remove(layerToRemove)
+        }, 300)
+      }
+    }
+
     showAnotherBaseLayer()
   }, [selectedBaseLayer])
-
-  function addLayerToMap () {
-    if (map) {
-      if (!selectedBaseLayer) {
-        selectedBaseLayer = baseLayers.OSM.code
-      }
-      if (baseLayersObjects[selectedBaseLayer]) {
-        map.getLayers().push(baseLayersObjects[selectedBaseLayer]())
-      }
-    }
-  }
-
-  function showAnotherBaseLayer () {
-    if (map && selectedBaseLayer && baseLayersObjects[selectedBaseLayer]) {
-      const layerToRemove = map.getLayers().getArray()
-        .find(layer => layer.className_ === Layers.BASE_LAYER.code)
-
-      if (!layerToRemove) {
-        return
-      }
-
-      map.getLayers().insertAt(0, baseLayersObjects[selectedBaseLayer]())
-      setTimeout(() => {
-        map.getLayers().remove(layerToRemove)
-      }, 300)
-    }
-  }
 
   return null
 }

@@ -1,7 +1,4 @@
-import {
-  getTextForSearch,
-  formatDataForSelectPicker
-} from '../../utils'
+import { formatDataForSelectPicker, getTextForSearch } from '../../utils'
 import Layers from './layers'
 
 export const mapToRegulatoryZone = ({ properties, geometry, id }) => {

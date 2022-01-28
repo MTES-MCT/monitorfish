@@ -24,7 +24,8 @@ const SideWindow = ({ fromTab }) => {
     beaconStatuses
   } = useSelector(state => state.beaconStatus)
   const {
-    alerts
+    alerts,
+    focusOnAlert
   } = useSelector(state => state.alert)
   const dispatch = useDispatch()
   const [isPreloading, setIsPreloading] = useState(true)
@@ -65,12 +66,12 @@ const SideWindow = ({ fromTab }) => {
           break
         }
         case sideWindowMenu.ALERTS.code: {
-          setSelectedSubMenu(AlertsSubMenu.MEMN)
+          setSelectedSubMenu(focusOnAlert?.value?.seaFront || AlertsSubMenu.MEMN)
           break
         }
       }
     }
-  }, [openedSideWindowTab, setSelectedSubMenu])
+  }, [openedSideWindowTab, setSelectedSubMenu, focusOnAlert])
 
   const beaconStatusBoardGrayOverlayStyle = {
     position: 'absolute',
@@ -151,15 +152,12 @@ const Wrapper = styled.div`
   @keyframes blink {
     0%   {
       background: ${COLORS.background};
-      color: ${COLORS.gunMetal};
     }
     50% {
-      background: ${COLORS.gunMetal};
-      color: ${COLORS.gainsboro};
+      background: ${COLORS.lightGray};
     }
     0% {
       background: ${COLORS.background};
-      color: ${COLORS.gunMetal};
     }
   }
   
@@ -207,6 +205,10 @@ const Wrapper = styled.div`
   .rs-btn-toggle::after {
     background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
     top: 1px;
+  }
+  
+  .rs-list-item {
+    box-shadow: unset;
   }
 `
 

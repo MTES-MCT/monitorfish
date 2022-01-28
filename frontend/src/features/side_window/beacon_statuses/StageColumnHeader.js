@@ -27,7 +27,8 @@ const wrapperStyle = {
   padding: 15,
   height: 95,
   borderBottom: `1px solid ${COLORS.lightGray}`,
-  marginBottom: 3
+  marginBottom: 3,
+  background: COLORS.gainsboro
 }
 
 const Row = styled.div``
@@ -50,9 +51,9 @@ const NumberOfItems = styled.div``
 const numberOfItemsStyle = {
   fontWeight: 700,
   background: COLORS.lightGray,
-  borderRadius: 10,
-  width: 14,
-  paddingLeft: 6,
+  borderRadius: 2,
+  padding: '0px 5px',
+  direction: 'rtl',
   marginLeft: 'auto'
 }
 

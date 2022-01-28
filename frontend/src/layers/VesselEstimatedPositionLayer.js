@@ -42,6 +42,19 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   }))
 
   useEffect(() => {
+    function addLayerToMap () {
+      if (map) {
+        layerRef.current.name = Layers.VESSEL_ESTIMATED_POSITION.code
+        map.getLayers().push(layerRef.current)
+      }
+
+      return () => {
+        if (map) {
+          map.removeLayer(layerRef.current)
+        }
+      }
+    }
+
     addLayerToMap()
   }, [map])
 
@@ -96,19 +109,6 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     hideVesselsAtPort,
     vesselsLastPositionVisibility
   ])
-
-  function addLayerToMap () {
-    if (map) {
-      layerRef.current.name = Layers.VESSEL_ESTIMATED_POSITION.code
-      map.getLayers().push(layerRef.current)
-    }
-
-    return () => {
-      if (map) {
-        map.removeLayer(layerRef.current)
-      }
-    }
-  }
 
   return null
 }

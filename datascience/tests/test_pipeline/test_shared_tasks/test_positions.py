@@ -3,7 +3,10 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from src.pipeline.shared_tasks.positions import tag_positions_at_port
+from src.pipeline.shared_tasks.positions import (
+    add_vessel_identifier,
+    tag_positions_at_port,
+)
 
 
 class TestSharedTasksPositions(unittest.TestCase):
@@ -60,4 +63,38 @@ class TestSharedTasksPositions(unittest.TestCase):
             positions_with_is_at_port,
             expected_positions_with_is_at_port,
             check_index_type=False,
+        )
+
+    def test_add_vessel_identifier(self):
+
+        last_positions = pd.DataFrame(
+            {
+                "cfr": ["A", "B", None, None, None],
+                "ircs": ["aa", "bb", "cc", None, "ee"],
+                "external_immatriculation": ["aaa", None, None, "ddd", "eee"],
+                "some": [1, 2, None, 1, 1],
+                "more": ["a", None, "c", "d", "e"],
+                "data": [None, 2.256, 0.1, 2.36, None],
+            }
+        )
+
+        last_positions_with_vessel_identifier = add_vessel_identifier.run(
+            last_positions
+        )
+
+        expected_last_positions_with_vessel_identifier = last_positions.copy(
+            deep=True
+        ).assign(
+            vessel_identifier=[
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+                "IRCS",
+                "EXTERNAL_REFERENCE_NUMBER",
+                "IRCS",
+            ]
+        )
+
+        pd.testing.assert_frame_equal(
+            last_positions_with_vessel_identifier,
+            expected_last_positions_with_vessel_identifier,
         )

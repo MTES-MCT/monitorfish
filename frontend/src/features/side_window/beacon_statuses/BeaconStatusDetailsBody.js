@@ -109,7 +109,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
         key={actionOrComment.type + actionOrComment.dateTime}
       >
         <ActionOrCommentRow style={actionOrCommentRow} ref={isLastDate && isLast ? scrollToRef : null}>
-          <CommentText style={commentTextStyle}>{actionOrComment.comment}</CommentText>
+          <CommentText style={commentTextStyle(actionOrComment.userType)}>{actionOrComment.comment}</CommentText>
         </ActionOrCommentRow>
         <ActionOrCommentRow style={actionOrCommentRow}>
           <CommentUserType style={commentUserTypeStyle}>{actionOrComment.userType} - {getTime(actionOrComment.dateTime, true)} (UTC)</CommentUserType>
@@ -158,7 +158,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
               return <>
                 <DateSeparator
                   data-cy={'side-window-beacon-statuses-detail-comment-date'}
-                  style={dateSeparatorStyle}
+                  style={dateSeparatorStyle(index === 0)}
                 >
                   <Line style={lineStyle}/>
                   <RowDate
@@ -251,13 +251,13 @@ const actionOrCommentRow = {
 }
 
 const CommentText = styled.div``
-const commentTextStyle = {
-  background: `${COLORS.lightGray} 0% 0% no-repeat padding-box`,
+const commentTextStyle = userType => ({
+  background: `${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray} 0% 0% no-repeat padding-box`,
   border: `1px solid ${COLORS.lightGray}`,
   maxWidth: 480,
   padding: '10px 15px',
   marginTop: 10
-}
+})
 
 const ActionText = styled.div``
 const actionTextStyle = {
@@ -275,11 +275,11 @@ const commentUserTypeStyle = {
 }
 
 const DateSeparator = styled.div``
-const dateSeparatorStyle = {
+const dateSeparatorStyle = first => ({
   height: 20,
-  width: '100%',
-  marginTop: 30
-}
+  width: 558,
+  marginTop: first ? 10 : 30
+})
 
 const RowDate = styled.div``
 const rowDateStyle = (isToday, isYesterday) => ({
@@ -320,14 +320,14 @@ const numberCommentsTextStyle = {
 
 const Body = styled.div``
 const bodyStyle = {
-  marginTop: 20,
+  marginTop: 25,
   paddingRight: 40,
   paddingLeft: 40
 }
 
 const Line = styled.div``
 const lineStyle = {
-  width: '100%',
+  width: 558,
   borderBottom: `1px solid ${COLORS.lightGray}`
 }
 

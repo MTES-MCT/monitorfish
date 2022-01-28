@@ -5,6 +5,7 @@ import { ReactComponent as VesselStatusTechnicalStopSVG } from '../../icons/Avar
 import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../icons/Avarie_statut_activite_detectee.svg'
 import React from 'react'
 import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
 
 export const BeaconStatusesSubMenu = {
   PAIRING: {
@@ -54,51 +55,51 @@ export const beaconStatusesStages = {
   }
 }
 
-const VesselStatusAtPort = styled(VesselStatusAtPortSVG)`
-  vertical-align: sub;
-`
-const VesselStatusAtSea = styled(VesselStatusAtSeaSVG)`
-  vertical-align: sub;
-`
-const VesselStatusNoNews = styled(VesselStatusNoNewsSVG)`
-  vertical-align: sub;
-`
-const VesselStatusTechnicalStop = styled(VesselStatusTechnicalStopSVG)`
-  vertical-align: sub;
-`
-const VesselStatusActivityDetected = styled(VesselStatusActivityDetectedSVG)`
-  vertical-align: sub;
-`
+const VesselStatusAtPort = styled(VesselStatusAtPortSVG)``
+const VesselStatusAtSea = styled(VesselStatusAtSeaSVG)``
+const VesselStatusNoNews = styled(VesselStatusNoNewsSVG)``
+const VesselStatusTechnicalStop = styled(VesselStatusTechnicalStopSVG)``
+const VesselStatusActivityDetected = styled(VesselStatusActivityDetectedSVG)``
+
+const iconStyle = {
+  verticalAlign: 'sub',
+  height: 17
+}
 
 export const vesselStatuses = [
   {
     label: 'Navire à quai',
     value: 'AT_PORT',
     color: '#F4DEAF',
-    icon: <VesselStatusAtPort/>
+    textColor: COLORS.charcoal,
+    icon: <VesselStatusAtPort style={iconStyle}/>
   },
   {
     label: 'Navire en mer',
     value: 'AT_SEA',
     color: '#9ED7D9',
-    icon: <VesselStatusAtSea/>
+    textColor: COLORS.charcoal,
+    icon: <VesselStatusAtSea style={iconStyle}/>
   },
   {
     label: 'Sans nouvelles',
     value: 'NO_NEWS',
     color: '#F7BA9E',
-    icon: <VesselStatusNoNews/>
+    textColor: COLORS.charcoal,
+    icon: <VesselStatusNoNews style={iconStyle}/>
   },
   {
     label: 'En arrêt technique',
     value: 'TECHNICAL_STOP',
     color: '#E8CA46',
-    icon: <VesselStatusTechnicalStop/>
+    textColor: COLORS.charcoal,
+    icon: <VesselStatusTechnicalStop style={iconStyle}/>
   },
   {
     label: 'Activité détectée',
     value: 'ACTIVITY_DETECTED',
     color: '#C41812',
-    icon: <VesselStatusActivityDetected/>
+    textColor: COLORS.white,
+    icon: <VesselStatusActivityDetected style={iconStyle}/>
   }
 ]

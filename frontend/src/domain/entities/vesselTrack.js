@@ -7,6 +7,7 @@ import { arraysEqual, calculatePointsDistance, calculateSplitPointCoords } from 
 import { getLineStyle, getArrowStyle, getCircleStyle } from '../../layers/styles/vesselTrack.style'
 import LineString from 'ol/geom/LineString'
 import { COLORS } from '../../constants/constants'
+import { extend } from 'ol/extent'
 
 const NUMBER_HOURS_TIME_ELLIPSIS = 4
 
@@ -192,5 +193,56 @@ export function getTrackTypeFromSpeedAndEllipsis (speed, isTimeEllipsis) {
     return trackTypes.FISHING
   } else {
     return trackTypes.TRANSIT
+  }
+}
+
+export function getVesselTrackLines (features) {
+  return features
+    .filter(feature =>
+      feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
+      feature?.getId()?.toString()?.includes('line'))
+}
+
+export function removeFishingActivitiesFeatures (features, vectorSource) {
+  features
+    .filter(feature =>
+      feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
+      feature?.getId()?.toString()?.includes('ers'))
+    .forEach(feature => vectorSource.removeFeature(feature))
+}
+
+export function removeVesselTrackFeatures (features, vectorSource, identity) {
+  features
+    .filter(feature => feature?.getId()?.toString()?.includes(identity))
+    .map(feature => vectorSource.removeFeature(feature))
+}
+
+export function fishingActivityIsWithinTrackLineDates (fishingActivityDateTimestamp, line) {
+  return fishingActivityDateTimestamp > new Date(line.firstPositionDate).getTime() &&
+    fishingActivityDateTimestamp < new Date(line.secondPositionDate).getTime()
+}
+
+export function getVesselTrackExtent (vesselTrack, identity) {
+  let vesselTrackExtent = vesselTrack.features[0].getGeometry().getExtent().slice(0)
+
+  vesselTrack.features
+    .filter(feature => feature.getId().includes(identity))
+    .forEach(feature => {
+      vesselTrackExtent = extend(vesselTrackExtent, feature.getGeometry().getExtent())
+    })
+
+  return vesselTrackExtent
+}
+
+export function updateTrackCircleStyle (features, vesselTrackCircle, radius) {
+  if (vesselTrackCircle) {
+    const feature = features
+      .find(feature => feature.dateTime === vesselTrackCircle.dateTime)
+
+    if (feature) {
+      const featureColor = feature?.getStyle()[0].getImage()?.getFill()?.getColor()
+
+      feature.setStyle(getCircleStyle(featureColor, radius))
+    }
   }
 }

@@ -26,7 +26,7 @@ context('Beacon statuses', () => {
 
     // When
     cy.get('*[data-cy="side-window-beacon-statuses-columns-INITIAL_ENCOUNTER"]').children()
-      .find('*[data-cy="side-window-beacon-statuses-card-vessel-name"]')
+      .find('*[data-cy="side-window-beacon-statuses-card"]')
       .first()
       .dragTo('*[data-cy="side-window-beacon-statuses-columns-RELAUNCH_REQUEST"]')
 
@@ -149,6 +149,7 @@ context('Beacon statuses', () => {
     cy.wait('@showBeaconStatus')
       .then(({ request, response }) => expect(response.statusCode).equal(200))
     cy.get('*[data-cy="side-window-beacon-statuses-detail"]').should('be.visible')
+    cy.get('*[data-cy="side-window-beacon-statuses-detail"]').find('*[data-cy="risk-factor"]').contains('2.5')
     cy.get('*[data-cy="side-window-beacon-statuses-detail-vessel-name"]').contains('PHENOMENE')
     cy.get('*[data-cy="side-window-beacon-statuses-detail-cfr"]').contains('FAK000999999')
     cy.get('*[data-cy="side-window-beacon-statuses-detail-priority"]').contains('Prioritaire')

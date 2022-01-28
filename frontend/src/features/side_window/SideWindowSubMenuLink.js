@@ -62,7 +62,7 @@ const CircleWithKeyMetric = styled.span``
 const circleMetricStyle = {
   display: 'inline-block',
   height: 9,
-  borderRadius: '30%',
+  borderRadius: 2,
   padding: '0px 6px 12px 5px',
   color: 'white',
   background: COLORS.charcoal,

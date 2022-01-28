@@ -12,12 +12,14 @@ from src.pipeline.helpers.spatial import estimate_current_position
 from src.pipeline.processing import (
     coalesce,
     drop_duplicates_by_decreasing_priority,
-    get_first_non_null_column_name,
     join_on_multiple_keys,
     left_isin_right_by_decreasing_priority,
 )
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
-from src.pipeline.shared_tasks.positions import tag_positions_at_port
+from src.pipeline.shared_tasks.positions import (
+    add_vessel_identifier,
+    tag_positions_at_port,
+)
 
 
 @task(checkpoint=False)
@@ -93,25 +95,6 @@ def drop_duplicates(positions: pd.DataFrame) -> pd.DataFrame:
     return drop_duplicates_by_decreasing_priority(
         positions, subset=["cfr", "external_immatriculation", "ircs"]
     )
-
-
-@task(checkpoint=False)
-def add_vessel_identifier(last_positions: pd.DataFrame) -> pd.DataFrame:
-
-    vessel_identifier_labels = {
-        "cfr": "INTERNAL_REFERENCE_NUMBER",
-        "ircs": "IRCS",
-        "external_immatriculation": "EXTERNAL_REFERENCE_NUMBER",
-    }
-
-    last_positions = last_positions.copy(deep=True)
-
-    last_positions["vessel_identifier"] = get_first_non_null_column_name(
-        last_positions[["cfr", "ircs", "external_immatriculation"]],
-        vessel_identifier_labels,
-    )
-
-    return last_positions
 
 
 @task(checkpoint=False)

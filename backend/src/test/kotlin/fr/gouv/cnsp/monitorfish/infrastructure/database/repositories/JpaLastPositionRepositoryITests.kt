@@ -48,7 +48,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(position?.lastControlDateTime).isNotNull
         assertThat(position?.lastControlInfraction).isTrue
         assertThat(position?.postControlComment).isEqualTo("Tout va bien")
-        assertThat(position?.vesselIdentifier).isEqualTo(VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString())
+        assertThat(position?.vesselIdentifier).isEqualTo(VesselIdentifier.INTERNAL_REFERENCE_NUMBER)
 
         assertThat(position?.impactRiskFactor).isEqualTo(2.1)
         assertThat(position?.probabilityRiskFactor).isEqualTo(2.0)

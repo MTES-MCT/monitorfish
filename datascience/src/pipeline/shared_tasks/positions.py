@@ -7,6 +7,7 @@ from config import ANCHORAGES_H3_CELL_RESOLUTION
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract
 from src.pipeline.helpers.spatial import get_h3_indices
+from src.pipeline.processing import get_first_non_null_column_name
 from src.pipeline.utils import get_table
 
 
@@ -71,3 +72,22 @@ def get_positions_table() -> Table:
     )
 
     return positions_table
+
+
+@task(checkpoint=False)
+def add_vessel_identifier(last_positions: pd.DataFrame) -> pd.DataFrame:
+
+    vessel_identifier_labels = {
+        "cfr": "INTERNAL_REFERENCE_NUMBER",
+        "ircs": "IRCS",
+        "external_immatriculation": "EXTERNAL_REFERENCE_NUMBER",
+    }
+
+    last_positions = last_positions.copy(deep=True)
+
+    last_positions["vessel_identifier"] = get_first_non_null_column_name(
+        last_positions[["cfr", "ircs", "external_immatriculation"]],
+        vessel_identifier_labels,
+    )
+
+    return last_positions

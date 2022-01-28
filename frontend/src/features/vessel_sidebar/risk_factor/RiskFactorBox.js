@@ -20,7 +20,7 @@ export const RiskFactorBox = ({ hide, color, marginRight, isBig, children }) => 
     borderRadius: 1
   }
 
-  return <RiskFactorBoxDOM style={riskFactorBoxStyle}>
+  return <RiskFactorBoxDOM data-cy={'risk-factor'} style={riskFactorBoxStyle}>
     {children}
   </RiskFactorBoxDOM>
 }

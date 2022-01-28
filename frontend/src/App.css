@@ -427,3 +427,7 @@ a:hover, a:focus {
     height: 100px !important;
     background: white !important;
 }
+
+.hover-border:hover {
+    border-bottom: 1px solid rgb(40, 47, 62);
+}

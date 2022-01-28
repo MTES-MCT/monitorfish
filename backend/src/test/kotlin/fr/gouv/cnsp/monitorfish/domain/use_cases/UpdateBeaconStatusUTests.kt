@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusCommentsRepository
@@ -47,14 +48,14 @@ class UpdateBeaconStatusUTests {
     fun `execute Should return the updated beacon status When a field to update is given`() {
         // Given
         given(beaconStatusesRepository.find(any())).willReturn(BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                 true, ZonedDateTime.now(), null, ZonedDateTime.now()))
         given(beaconStatusesActionRepository.findAllByBeaconStatusId(any())).willReturn(listOf(BeaconStatusAction(1, 1,
                 BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now())))
         given(getBeaconStatus.execute(1))
                 .willReturn(BeaconStatusWithDetails(
                         beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                                "INTERNAL_REFERENCE_NUMBER", "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
                         actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))

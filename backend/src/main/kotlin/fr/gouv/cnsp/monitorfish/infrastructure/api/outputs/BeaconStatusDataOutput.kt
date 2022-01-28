@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselStatus
@@ -10,7 +11,7 @@ data class BeaconStatusDataOutput(
         val internalReferenceNumber: String?,
         val externalReferenceNumber: String?,
         val ircs: String?,
-        val vesselIdentifier: String?,
+        val vesselIdentifier: VesselIdentifier,
         val vesselName: String,
         val vesselStatus: VesselStatus,
         val stage: Stage,
@@ -33,7 +34,7 @@ data class BeaconStatusDataOutput(
                     priority = beaconStatus.priority,
                     malfunctionStartDateTime = beaconStatus.malfunctionStartDateTime,
                     malfunctionEndDateTime = beaconStatus.malfunctionEndDateTime,
-                    vesselStatusLastModificationDateTime  = beaconStatus.vesselStatusLastModificationDateTime,
+                    vesselStatusLastModificationDateTime = beaconStatus.vesselStatusLastModificationDateTime,
                     riskFactor = beaconStatus.riskFactor)
         }
     }

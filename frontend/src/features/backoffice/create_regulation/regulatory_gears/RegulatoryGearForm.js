@@ -247,7 +247,7 @@ const RegulatoryGearForm = (props) => {
         >
           Engins trainants
         </GearCheckBox>
-        <InfoBox><InfoText>{INFO_TEXT.TOWED_GEAR}</InfoText></InfoBox>
+        <InfoBox pointer><InfoText>{INFO_TEXT.TOWED_GEAR}</InfoText></InfoBox>
       </CheckboxWrapper>
       <CheckboxWrapper>
         <GearCheckBox
@@ -258,7 +258,7 @@ const RegulatoryGearForm = (props) => {
         >
           Engins dormants
         </GearCheckBox>
-        <InfoBox><InfoText>{INFO_TEXT.PASSIVE_GEAR}</InfoText></InfoBox>
+        <InfoBox pointer><InfoText>{INFO_TEXT.PASSIVE_GEAR}</InfoText></InfoBox>
       </CheckboxWrapper>
       <CustomMultiCascader
         data-cy='gears-selector'

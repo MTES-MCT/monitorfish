@@ -222,24 +222,10 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
 }
 
 const SearchVesselInput = styled.input``
-
-const Wrapper = styled.div``
-const wrapperStyle = {
-  overflowX: 'scroll',
-  height: 'calc(100vh - 20px)',
-  padding: '20px 0 0 10px'
-}
-
-const Columns = styled.div``
-const columnsStyle = {
-  display: 'flex'
-}
-
 const searchVesselInputStyle = {
   margin: '0 0 5px 5px',
   backgroundColor: 'white',
-  border: 'none',
-  borderBottom: `1px ${COLORS.lightGray} solid`,
+  border: `1px ${COLORS.lightGray} solid`,
   borderRadius: 0,
   color: COLORS.gunMetal,
   fontSize: 13,
@@ -254,6 +240,18 @@ const searchVesselInputStyle = {
   ':hover, :focus': {
     borderBottom: `1px ${COLORS.lightGray} solid`
   }
+}
+
+const Wrapper = styled.div``
+const wrapperStyle = {
+  overflowX: 'scroll',
+  height: 'calc(100vh - 20px)',
+  padding: '20px 0 0 10px'
+}
+
+const Columns = styled.div``
+const columnsStyle = {
+  display: 'flex'
 }
 
 export default BeaconStatusesBoard

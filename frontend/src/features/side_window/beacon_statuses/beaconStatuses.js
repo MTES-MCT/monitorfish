@@ -55,26 +55,16 @@ export const beaconStatusesStages = {
   }
 }
 
-const VesselStatusAtPort = styled(VesselStatusAtPortSVG)`
-  vertical-align: sub;
-  height: 16px;
-`
-const VesselStatusAtSea = styled(VesselStatusAtSeaSVG)`
-  vertical-align: sub;
-  height: 16px;
-`
-const VesselStatusNoNews = styled(VesselStatusNoNewsSVG)`
-  vertical-align: sub;
-  height: 16px;
-`
-const VesselStatusTechnicalStop = styled(VesselStatusTechnicalStopSVG)`
-  vertical-align: sub;
-  height: 16px;
-`
-const VesselStatusActivityDetected = styled(VesselStatusActivityDetectedSVG)`
-  vertical-align: sub;
-  height: 16px;
-`
+const VesselStatusAtPort = styled(VesselStatusAtPortSVG)``
+const VesselStatusAtSea = styled(VesselStatusAtSeaSVG)``
+const VesselStatusNoNews = styled(VesselStatusNoNewsSVG)``
+const VesselStatusTechnicalStop = styled(VesselStatusTechnicalStopSVG)``
+const VesselStatusActivityDetected = styled(VesselStatusActivityDetectedSVG)``
+
+const iconStyle = {
+  verticalAlign: 'sub',
+  height: 17
+}
 
 export const vesselStatuses = [
   {
@@ -82,34 +72,34 @@ export const vesselStatuses = [
     value: 'AT_PORT',
     color: '#F4DEAF',
     textColor: COLORS.charcoal,
-    icon: <VesselStatusAtPort/>
+    icon: <VesselStatusAtPort style={iconStyle}/>
   },
   {
     label: 'Navire en mer',
     value: 'AT_SEA',
     color: '#9ED7D9',
     textColor: COLORS.charcoal,
-    icon: <VesselStatusAtSea/>
+    icon: <VesselStatusAtSea style={iconStyle}/>
   },
   {
     label: 'Sans nouvelles',
     value: 'NO_NEWS',
     color: '#F7BA9E',
     textColor: COLORS.charcoal,
-    icon: <VesselStatusNoNews/>
+    icon: <VesselStatusNoNews style={iconStyle}/>
   },
   {
     label: 'En arrêt technique',
     value: 'TECHNICAL_STOP',
     color: '#E8CA46',
     textColor: COLORS.charcoal,
-    icon: <VesselStatusTechnicalStop/>
+    icon: <VesselStatusTechnicalStop style={iconStyle}/>
   },
   {
     label: 'Activité détectée',
     value: 'ACTIVITY_DETECTED',
     color: '#C41812',
     textColor: COLORS.white,
-    icon: <VesselStatusActivityDetected/>
+    icon: <VesselStatusActivityDetected style={iconStyle}/>
   }
 ]

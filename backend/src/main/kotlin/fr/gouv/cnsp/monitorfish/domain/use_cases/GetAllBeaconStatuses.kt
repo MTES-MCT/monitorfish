@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatus
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatus.Companion.getVesselFromBeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusesRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import org.slf4j.LoggerFactory
@@ -17,9 +18,7 @@ class GetAllBeaconStatuses(private val beaconStatusesRepository: BeaconStatusesR
         val lastThirtyResumedTransmissions = beaconStatusesRepository.findLastThirtyResumedTransmissions()
 
         return (beaconStatusesExceptResumedTransmission + lastThirtyResumedTransmissions).map { beaconStatus ->
-            val riskFactor = lastPositions.find { lastPosition ->
-                lastPosition.internalReferenceNumber == beaconStatus.internalReferenceNumber
-            }?.riskFactor
+            val riskFactor = lastPositions.find(getVesselFromBeaconStatus(beaconStatus))?.riskFactor
             beaconStatus.riskFactor = riskFactor
 
             if (riskFactor == null) {

@@ -57,7 +57,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   const vesselsLayerSourceRef = useRef(null)
   const [currentLabels, setCurrentLabels] = useState(null)
 
-  function getVectorSourceRef () {
+  function getVectorSource () {
     if (vectorSourceRef.current === null) {
       vectorSourceRef.current = new VectorSource({
         features: []
@@ -66,11 +66,11 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     return vectorSourceRef.current
   }
 
-  function getLayerRef () {
+  function getLayer () {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
         renderBuffer: 7,
-        source: getVectorSourceRef(),
+        source: getVectorSource(),
         zIndex: Layers.VESSELS_LABEL.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
@@ -82,8 +82,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   useEffect(() => {
     if (map) {
-      getLayerRef().name = Layers.VESSELS_LABEL.code
-      map.getLayers().push(getLayerRef())
+      getLayer().name = Layers.VESSELS_LABEL.code
+      map.getLayers().push(getLayer())
 
       const vesselsLayer = map.getLayers().getArray()?.find((olLayer) => {
         return olLayer.name === Layers.VESSELS.code
@@ -93,10 +93,10 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
     return () => {
       if (map) {
-        map.removeLayer(getLayerRef())
+        map.removeLayer(getLayer())
       }
     }
-  })
+  }, [map])
 
   useEffect(() => {
     if (previousFeaturesAndLabels && featuresAndLabels) {
@@ -105,16 +105,16 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
       previousFeatureIdsList.forEach(id => {
         if (featureIdsList.indexOf(id) === NOT_FOUND) {
-          const feature = getVectorSourceRef().getFeatureById(id)
+          const feature = getVectorSource().getFeatureById(id)
           if (feature) {
-            getVectorSourceRef().removeFeature(feature)
+            getVectorSource().removeFeature(feature)
           }
         }
       })
 
       function moveVesselLabelLine (featureId, fromCoordinates, toCoordinates, offset, opacity) {
         if (vesselToCoordinates.has(featureId)) {
-          const existingLabelLineFeature = getVectorSourceRef().getFeatureById(featureId)
+          const existingLabelLineFeature = getVectorSource().getFeatureById(featureId)
           if (existingLabelLineFeature) {
             existingLabelLineFeature.setGeometry(new LineString([fromCoordinates, toCoordinates]))
           }
@@ -125,7 +125,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
             featureId,
             opacity)
 
-          getVectorSourceRef().addFeature(labelLineFeature)
+          getVectorSource().addFeature(labelLineFeature)
         }
 
         const nextVesselToCoordinates = vesselToCoordinates
@@ -212,7 +212,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           })
           const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
           const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)
-          const offset = drawMovedLabelIfFoundAndReturnOffset(getVectorSourceRef(), vesselToCoordinates, labelLineFeatureId, feature, opacity)
+          const offset = drawMovedLabelIfFoundAndReturnOffset(getVectorSource(), vesselToCoordinates, labelLineFeatureId, feature, opacity)
           const trackIsShown = showedTracksVesselsIdentities.includes(getVesselFeatureIdFromVessel(vesselProperties))
 
           return {
@@ -238,7 +238,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     function addVesselLabelToAllFeaturesInExtent () {
       if (!vesselLabelsShowedOnMap && !riskFactorShowedOnMap) {
         setFeaturesAndLabels([])
-        getVectorSourceRef().clear()
+        getVectorSource().clear()
         return
       }
 
@@ -262,20 +262,16 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
         addLabelToFeatures(featuresRequireringLabel)
       } else {
         setFeaturesAndLabels([])
-        getVectorSourceRef().clear()
+        getVectorSource().clear()
       }
     }
     // End of functions definition
 
     isThrottled.current = true
-    const id = setTimeout(() => {
+    setTimeout(() => {
       addVesselLabelToAllFeaturesInExtent()
       isThrottled.current = false
     }, throttleDuration)
-
-    return () => {
-      clearTimeout(id)
-    }
   }, [
     map,
     vessels,

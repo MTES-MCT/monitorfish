@@ -37,7 +37,7 @@ const VesselAlertLayer = ({ map }) => {
   const vectorSourceRef = useRef(null)
   const layerRef = useRef(null)
 
-  function getVectorSourceRef () {
+  function getVectorSource () {
     if (vectorSourceRef.current === null) {
       vectorSourceRef.current = new VectorSource({
         features: []
@@ -46,10 +46,10 @@ const VesselAlertLayer = ({ map }) => {
     return vectorSourceRef.current
   }
 
-  function getLayerRef () {
+  function getLayer () {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
-        source: getVectorSourceRef(),
+        source: getVectorSource(),
         zIndex: Layers.VESSEL_ALERT.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
@@ -61,13 +61,13 @@ const VesselAlertLayer = ({ map }) => {
 
   useEffect(() => {
     if (map) {
-      getLayerRef().name = Layers.VESSEL_ALERT.code
-      map.getLayers().push(getLayerRef())
+      getLayer().name = Layers.VESSEL_ALERT.code
+      map.getLayers().push(getLayer())
     }
 
     return () => {
       if (map) {
-        map.removeLayer(getLayerRef())
+        map.removeLayer(getLayer())
       }
     }
   }, [map])
@@ -93,8 +93,8 @@ const VesselAlertLayer = ({ map }) => {
         return features
       }, [])
 
-      getVectorSourceRef()?.clear(true)
-      getVectorSourceRef()?.addFeatures(features)
+      getVectorSource()?.clear(true)
+      getVectorSource()?.addFeatures(features)
     }
   }, [
     vessels,

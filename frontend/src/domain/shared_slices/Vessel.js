@@ -11,10 +11,6 @@ const VesselReducer = null
 
 const NOT_FOUND = -1
 
-function onlyUnique (value, index, self) {
-  return self.indexOf(value) === index
-}
-
 const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
@@ -53,23 +49,16 @@ const vesselSlice = createSlice({
       // FIXME : find a way to update state.vessel[vessels] without overriding
       // "private" properties like isFiltered / filterPreview when uploading from api
       state.vessels = action.payload?.map(vessel => {
-        vessel.flagState = vessel.flagState?.toLowerCase()
-        vessel.gearsArray = vessel.gearOnboard
-          ? vessel.gearOnboard
-            .filter((gear, index, self) => onlyUnique(gear.gear, index, self))
-          : []
-        vessel.fleetSegmentsArray = vessel.segments
-          ? vessel.segments.map(segment => segment.replace(' ', ''))
-          : []
-        vessel.speciesArray = vessel.speciesOnboard
-          ? vessel.speciesOnboard
-            .filter((species, index, self) => onlyUnique(species.species, index, self))
-          : []
-        vessel.lastControlDateTimeTimestamp = vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : ''
-        vessel.hasAlert = !!vessel.alerts?.length
-
         return {
-          vesselProperties: vessel,
+          vesselProperties: {
+            ...vessel,
+            flagState: vessel.flagState?.toLowerCase(),
+            gearsArray: vessel.gearOnboard ? [...new Set(vessel.gearOnboard.map(gear => gear.gear))] : [],
+            fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
+            speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : [],
+            lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : '',
+            hasAlert: !!vessel.alerts?.length
+          },
           vesselId: Vessel.getVesselId(vessel),
           isAtPort: vessel.isAtPort,
           course: vessel.course,
@@ -77,8 +66,7 @@ const vesselSlice = createSlice({
           lastPositionSentAt: new Date(vessel.dateTime).getTime(),
           coordinates: transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION),
           isFiltered: 0,
-          filterPreview: 0,
-          hash: vessel.hash
+          filterPreview: 0
         }
       })
     },
@@ -87,9 +75,11 @@ const vesselSlice = createSlice({
         return
       }
 
-      state.vessels = state.vessels.map(vessel => {
-        vessel.isFiltered = 0
-        return vessel
+      state.vessels = state.vessels.map((vessel) => {
+        return {
+          ...vessel,
+          isFiltered: 0
+        }
       })
     },
     setVesselsEstimatedPositions (state, action) {
@@ -106,12 +96,15 @@ const vesselSlice = createSlice({
       const filteredVesselsFeaturesUids = action.payload
       state.vessels = state.vessels.map(vessel => {
         if (filteredVesselsFeaturesUids.indexOf(vessel.vesselId) !== NOT_FOUND) {
-          vessel.isFiltered = 1
-          return vessel
+          return {
+            ...vessel,
+            isFiltered: 1
+          }
         }
-
-        vessel.isFiltered = 0
-        return vessel
+        return {
+          ...vessel,
+          isFiltered: 0
+        }
       })
     },
     /**
@@ -125,12 +118,15 @@ const vesselSlice = createSlice({
       const previewFilteredVesselsFeaturesUids = action.payload
       state.vessels = state.vessels.map(vessel => {
         if (previewFilteredVesselsFeaturesUids.indexOf(vessel.vesselId) !== NOT_FOUND) {
-          vessel.filterPreview = 1
-          return vessel
+          return {
+            ...vessel,
+            filterPreview: 1
+          }
         }
-
-        vessel.filterPreview = 0
-        return vessel
+        return {
+          ...vessel,
+          filterPreview: 0
+        }
       })
     },
     loadingVessel (state, action) {

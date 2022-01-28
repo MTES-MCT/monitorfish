@@ -3,6 +3,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { SectionTitle, Section, List, Elem, Key, Label, Value, Fields, Field } from './RegulatoryMetadata.style'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
+import CodeAndName from './CodeAndName'
 const MetadataSpecies = () => {
   const { regulatorySpecies } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
   return <>{regulatorySpecies && regulatorySpecies.authorized !== undefined &&
@@ -14,9 +15,9 @@ const MetadataSpecies = () => {
       </SectionTitle>
       <List>
         {regulatorySpecies.species.length > 0
-          ? regulatorySpecies.species.map((specie) => {
-            const { code, name, quantity, minimumSize } = specie
-            return (<Elem key={specie}><Label>{`${code} (${name})`}</Label>
+          ? regulatorySpecies.species.map((_species) => {
+            const { code, name, quantity, minimumSize } = _species
+            return (<Elem key={_species}><CodeAndName code={code} name={name} />
                 <Fields>
                   {quantity && <Field><Key>Quantité</Key><Value>{quantity}</Value></Field>}
                   {minimumSize && <Field><Key>Taille min.</Key><Value>{minimumSize}</Value></Field>}

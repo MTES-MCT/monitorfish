@@ -1,8 +1,7 @@
 
 import React from 'react'
-import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-import { SectionTitle, Section, List, Elem, Key, Label, Value } from './RegulatoryMetadata.style'
+import { SectionTitle, Section, List, Elem, Key, Label, Value, Fields, Field } from './RegulatoryMetadata.style'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
 const MetadataSpecies = () => {
   const { regulatorySpecies } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
@@ -18,8 +17,10 @@ const MetadataSpecies = () => {
           ? regulatorySpecies.species.map((specie) => {
             const { code, name, quantity, minimumSize } = specie
             return (<Elem key={specie}><Label>{`${code} (${name})`}</Label>
-                {quantity && <Desc><Key>Quantité</Key><Value>{quantity}</Value></Desc>}
-                {minimumSize && <Desc><Key>Taille min.</Key><Value>{minimumSize}</Value></Desc>}
+                <Fields>
+                  {quantity && <Field><Key>Quantité</Key><Value>{quantity}</Value></Field>}
+                  {minimumSize && <Field><Key>Taille min.</Key><Value>{minimumSize}</Value></Field>}
+                </Fields>
               </Elem>)
           })
           : null
@@ -38,10 +39,5 @@ const MetadataSpecies = () => {
       }
     </Section>}</>
 }
-
-const Desc = styled.span`
-  display: flex;
-  flex-direction: row;
-`
 
 export default MetadataSpecies

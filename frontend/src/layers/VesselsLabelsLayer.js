@@ -268,10 +268,14 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     // End of functions definition
 
     isThrottled.current = true
-    setTimeout(() => {
+    const id = setTimeout(() => {
       addVesselLabelToAllFeaturesInExtent()
       isThrottled.current = false
     }, throttleDuration)
+
+    return () => {
+      clearTimeout(id)
+    }
   }, [
     map,
     vessels,

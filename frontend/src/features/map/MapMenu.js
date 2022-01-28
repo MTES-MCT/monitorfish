@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import MapMenuOverlay from './overlays/MapMenuOverlay'
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 import LayersEnum from '../../domain/entities/layers'
@@ -15,37 +15,37 @@ const MapMenu = ({ map }) => {
   const [coordinates, setCoordinates] = useState([])
   const vessel = useRef(null)
 
-  useEffect(() => {
-    if (map) {
-      const showMenu = event => {
-        event.preventDefault()
+  const showMenu = useCallback(event => {
+    event.preventDefault()
 
-        const pixel = map.getEventPixel(event)
-        const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
-        const clickedFeatureId = feature?.getId()
+    const pixel = map.getEventPixel(event)
+    const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
+    const clickedFeatureId = feature?.getId()
 
-        if (clickedFeatureId?.toString()?.includes(LayersEnum.VESSELS.code)) {
-          const clickedVessel = vessels.find(vessel => {
-            return clickedFeatureId?.toString()?.includes(vessel.vesselId)
-          })
+    if (clickedFeatureId?.toString()?.includes(LayersEnum.VESSELS.code)) {
+      const clickedVessel = vessels.find(vessel => {
+        return clickedFeatureId?.toString()?.includes(vessel.vesselId)
+      })
 
-          if (clickedVessel) {
-            vessel.current = clickedVessel
-            setCoordinates(feature.getGeometry().getCoordinates())
-            return
-          }
-
-          return
-        }
-
-        vessel.current = null
-        setCoordinates([])
+      if (clickedVessel) {
+        vessel.current = clickedVessel
+        setCoordinates(feature.getGeometry().getCoordinates())
+        return
       }
 
-      map.getViewport().addEventListener('contextmenu', event => showMenu(event))
+      return
+    }
+
+    vessel.current = null
+    setCoordinates([])
+  }, [map, vessels, setCoordinates])
+
+  useEffect(() => {
+    if (map) {
+      map.getViewport().addEventListener('contextmenu', showMenu)
 
       return () => {
-        removeEventListener('contextmenu', showMenu)
+        map.getViewport().removeEventListener('contextmenu', showMenu)
       }
     }
   }, [map, vessels])

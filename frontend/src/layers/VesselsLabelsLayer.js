@@ -52,35 +52,48 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   const [vesselToRiskFactorDetailsShowed, setVesselToRiskFactorDetailsShowed] = useState(new Map())
   const isThrottled = useRef(false)
 
-  const vectorSourceRef = useRef(new VectorSource({
-    features: []
-  }))
-  const [layer] = useState(new Vector({
-    renderBuffer: 7,
-    source: vectorSourceRef.current,
-    zIndex: Layers.VESSELS_LABEL.zIndex,
-    updateWhileAnimating: true,
-    updateWhileInteracting: true,
-    style: getLabelLineStyle
-  }))
-
+  const vectorSourceRef = useRef(null)
+  const layerRef = useRef(null)
   const vesselsLayerSourceRef = useRef(null)
   const [currentLabels, setCurrentLabels] = useState(null)
 
+  function getVectorSourceRef () {
+    if (vectorSourceRef.current === null) {
+      vectorSourceRef.current = new VectorSource({
+        features: []
+      })
+    }
+    return vectorSourceRef.current
+  }
+
+  function getLayerRef () {
+    if (layerRef.current === null) {
+      layerRef.current = new Vector({
+        renderBuffer: 7,
+        source: getVectorSourceRef(),
+        zIndex: Layers.VESSELS_LABEL.zIndex,
+        updateWhileAnimating: true,
+        updateWhileInteracting: true,
+        style: getLabelLineStyle
+      })
+    }
+    return layerRef.current
+  }
+
   useEffect(() => {
     if (map) {
-      layer.name = Layers.VESSELS_LABEL.code
-      map.getLayers().push(layer)
+      getLayerRef().name = Layers.VESSELS_LABEL.code
+      map.getLayers().push(getLayerRef())
 
-      const vesselsLayer = map.getLayers().getArray()?.find((ollayer) => {
-        return ollayer.name === Layers.VESSELS.code
+      const vesselsLayer = map.getLayers().getArray()?.find((olLayer) => {
+        return olLayer.name === Layers.VESSELS.code
       })
       vesselsLayerSourceRef.current = vesselsLayer?.getSource()
     }
 
     return () => {
       if (map) {
-        map.removeLayer(layer)
+        map.removeLayer(getLayerRef())
       }
     }
   })
@@ -92,16 +105,16 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
       previousFeatureIdsList.forEach(id => {
         if (featureIdsList.indexOf(id) === NOT_FOUND) {
-          const feature = vectorSourceRef.current.getFeatureById(id)
+          const feature = getVectorSourceRef().getFeatureById(id)
           if (feature) {
-            vectorSourceRef.current.removeFeature(feature)
+            getVectorSourceRef().removeFeature(feature)
           }
         }
       })
 
       function moveVesselLabelLine (featureId, fromCoordinates, toCoordinates, offset, opacity) {
         if (vesselToCoordinates.has(featureId)) {
-          const existingLabelLineFeature = vectorSourceRef.current.getFeatureById(featureId)
+          const existingLabelLineFeature = getVectorSourceRef().getFeatureById(featureId)
           if (existingLabelLineFeature) {
             existingLabelLineFeature.setGeometry(new LineString([fromCoordinates, toCoordinates]))
           }
@@ -112,7 +125,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
             featureId,
             opacity)
 
-          vectorSourceRef.current.addFeature(labelLineFeature)
+          getVectorSourceRef().addFeature(labelLineFeature)
         }
 
         const nextVesselToCoordinates = vesselToCoordinates
@@ -199,7 +212,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           })
           const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
           const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)
-          const offset = drawMovedLabelIfFoundAndReturnOffset(vectorSourceRef.current, vesselToCoordinates, labelLineFeatureId, feature, opacity)
+          const offset = drawMovedLabelIfFoundAndReturnOffset(getVectorSourceRef(), vesselToCoordinates, labelLineFeatureId, feature, opacity)
           const trackIsShown = showedTracksVesselsIdentities.includes(getVesselFeatureIdFromVessel(vesselProperties))
 
           return {
@@ -225,7 +238,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     function addVesselLabelToAllFeaturesInExtent () {
       if (!vesselLabelsShowedOnMap && !riskFactorShowedOnMap) {
         setFeaturesAndLabels([])
-        vectorSourceRef.current.clear()
+        getVectorSourceRef().clear()
         return
       }
 
@@ -249,7 +262,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
         addLabelToFeatures(featuresRequireringLabel)
       } else {
         setFeaturesAndLabels([])
-        vectorSourceRef.current.clear()
+        getVectorSourceRef().clear()
       }
     }
     // End of functions definition

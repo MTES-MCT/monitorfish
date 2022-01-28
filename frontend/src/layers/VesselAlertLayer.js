@@ -10,9 +10,10 @@ import { getVesselAlertStyle } from './styles/vessel.style'
 import {
   getVesselFeatureIdFromVessel,
   getVesselLastPositionVisibilityDates,
-  vesselsAreEquals,
-  Vessel
+  Vessel,
+  vesselsAreEquals
 } from '../domain/entities/vessel'
+
 const VesselAlertLayer = ({ map }) => {
   const {
     vessels,
@@ -33,26 +34,40 @@ const VesselAlertLayer = ({ map }) => {
     hideVesselsAtPort
   } = useSelector(state => state.map)
 
-  const vectorSourceRef = useRef(new VectorSource({
-    features: []
-  }))
-  const layerRef = useRef(new Vector({
-    source: vectorSourceRef.current,
-    zIndex: Layers.VESSEL_ALERT.zIndex,
-    updateWhileAnimating: true,
-    updateWhileInteracting: true,
-    style: (feature, resolution) => getVesselAlertStyle(feature, resolution)
-  }))
+  const vectorSourceRef = useRef(null)
+  const layerRef = useRef(null)
+
+  function getVectorSourceRef () {
+    if (vectorSourceRef.current === null) {
+      vectorSourceRef.current = new VectorSource({
+        features: []
+      })
+    }
+    return vectorSourceRef.current
+  }
+
+  function getLayerRef () {
+    if (layerRef.current === null) {
+      layerRef.current = new Vector({
+        source: getVectorSourceRef(),
+        zIndex: Layers.VESSEL_ALERT.zIndex,
+        updateWhileAnimating: true,
+        updateWhileInteracting: true,
+        style: (feature, resolution) => getVesselAlertStyle(feature, resolution)
+      })
+    }
+    return layerRef.current
+  }
 
   useEffect(() => {
     if (map) {
-      layerRef.current.name = Layers.VESSEL_ALERT.code
-      map.getLayers().push(layerRef.current)
+      getLayerRef().name = Layers.VESSEL_ALERT.code
+      map.getLayers().push(getLayerRef())
     }
 
     return () => {
       if (map) {
-        map.removeLayer(layerRef.current)
+        map.removeLayer(getLayerRef())
       }
     }
   }, [map])
@@ -78,8 +93,8 @@ const VesselAlertLayer = ({ map }) => {
         return features
       }, [])
 
-      vectorSourceRef.current?.clear(true)
-      vectorSourceRef.current?.addFeatures(features)
+      getVectorSourceRef()?.clear(true)
+      getVectorSourceRef()?.addFeatures(features)
     }
   }, [
     vessels,

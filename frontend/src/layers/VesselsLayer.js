@@ -51,10 +51,16 @@ const VesselsLayer = ({ map }) => {
     }
   })
 
-  const VesselsVectorSource = useRef(new VectorSource({}))
+  const vesselsVectorSource = useRef(null)
   const vesselWebGLPointsLayerRef = useRef(null)
-
   const style = useRef(null)
+
+  function getVesselsVectorSource () {
+    if (vesselsVectorSource.current === null) {
+      vesselsVectorSource.current = new VectorSource({})
+    }
+    return vesselsVectorSource.current
+  }
 
   useEffect(() => {
     if (map) {
@@ -83,7 +89,7 @@ const VesselsLayer = ({ map }) => {
         style: style.current,
         className: Layers.VESSELS.code,
         zIndex: Layers.VESSELS.zIndex,
-        source: VesselsVectorSource.current
+        source: getVesselsVectorSource()
       })
       vesselsVectorLayer.name = Layers.VESSELS.code
       map.getLayers().push(vesselsVectorLayer)
@@ -121,8 +127,8 @@ const VesselsLayer = ({ map }) => {
         return feature
       })
 
-      VesselsVectorSource.current?.clear(true)
-      VesselsVectorSource.current?.addFeatures(features)
+      getVesselsVectorSource()?.clear(true)
+      getVesselsVectorSource()?.addFeatures(features)
 
       if (filterColor) {
         const rgb = customHexToRGB(filterColor)

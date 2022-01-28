@@ -5,7 +5,7 @@ import { ReactComponent as HidingOtherTracksSVG } from '../../../icons/Bouton_ma
 import { ReactComponent as ShowingOtherTracksSVG } from '../../../icons/Bouton_masquer_pistes_inactif.svg'
 import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
 import { useDispatch, useSelector } from 'react-redux'
-import { sethideNonSelectedVessels } from '../../../../domain/shared_slices/Vessel'
+import { setHideNonSelectedVessels } from '../../../../domain/shared_slices/Vessel'
 
 const HideNonSelectedVessels = ({ openBox, rightMenuIsOpen }) => {
   const dispatch = useDispatch()
@@ -14,7 +14,7 @@ const HideNonSelectedVessels = ({ openBox, rightMenuIsOpen }) => {
 
   useEffect(() => {
     if (!openBox) {
-      dispatch(sethideNonSelectedVessels(false))
+      dispatch(setHideNonSelectedVessels(false))
     }
   }, [openBox])
 
@@ -25,7 +25,7 @@ const HideNonSelectedVessels = ({ openBox, rightMenuIsOpen }) => {
       hideNonSelectedVessels={hideNonSelectedVessels}
       openBox={openBox}
       rightMenuIsOpen={rightMenuIsOpen}
-      onClick={() => dispatch(sethideNonSelectedVessels(!hideNonSelectedVessels))}
+      onClick={() => dispatch(setHideNonSelectedVessels(!hideNonSelectedVessels))}
       title={`${hideNonSelectedVessels ? 'Afficher' : 'Cacher'} les autres navires`}
     >
       {

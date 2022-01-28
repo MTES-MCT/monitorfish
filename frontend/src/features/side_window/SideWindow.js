@@ -24,7 +24,8 @@ const SideWindow = ({ fromTab }) => {
     beaconStatuses
   } = useSelector(state => state.beaconStatus)
   const {
-    alerts
+    alerts,
+    focusOnAlert
   } = useSelector(state => state.alert)
   const dispatch = useDispatch()
   const [isPreloading, setIsPreloading] = useState(true)
@@ -65,12 +66,12 @@ const SideWindow = ({ fromTab }) => {
           break
         }
         case sideWindowMenu.ALERTS.code: {
-          setSelectedSubMenu(AlertsSubMenu.MEMN)
+          setSelectedSubMenu(focusOnAlert?.value?.seaFront || AlertsSubMenu.MEMN)
           break
         }
       }
     }
-  }, [openedSideWindowTab, setSelectedSubMenu])
+  }, [openedSideWindowTab, setSelectedSubMenu, focusOnAlert])
 
   const beaconStatusBoardGrayOverlayStyle = {
     position: 'absolute',

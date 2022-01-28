@@ -47,7 +47,7 @@ export const Section = styled.div`
   color: ${COLORS.gunMetal};
   font-size: 13px;
   font-weight: 500;
-  padding: 15px 20px;
+  padding: 15px 45px 15px 20px;
   text-align: left;
   border-bottom: 1px solid ${COLORS.lightGray};
 `
@@ -58,4 +58,20 @@ export const SectionTitle = styled.span`
   color: ${COLORS.slateGray};
   font-size: 13px;
   align-items: center;
+`
+
+export const Fields = styled.table`
+  width: inherit;
+  display: table;
+  margin: 0;
+  min-width: 40%;
+  line-height: 0.2em;
+  padding: unset;
+`
+
+export const Field = styled.tr`
+  margin: 5px 5px 5px 0;
+  border: none;
+  background: none;
+  line-height: 0.5em;
 `

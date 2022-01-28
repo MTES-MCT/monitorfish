@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { Key, Value } from './RegulatoryMetadata.style'
+import { Key, Value, Fields, Field } from './RegulatoryMetadata.style'
 import { useSelector } from 'react-redux'
 
 const Identification = () => {
@@ -45,22 +45,6 @@ const Zone = styled.div`
   display: flex;
   flex-wrap: wrap;
   border-bottom: 1px solid ${COLORS.lightGray};
-`
-
-const Fields = styled.table`
-  width: inherit;
-  display: table;
-  margin: 0;
-  min-width: 40%;
-  line-height: 0.2em;
-  padding: unset;
-`
-
-const Field = styled.tr`
-  margin: 5px 5px 5px 0;
-  border: none;
-  background: none;
-  line-height: 0.5em;
 `
 
 export default Identification

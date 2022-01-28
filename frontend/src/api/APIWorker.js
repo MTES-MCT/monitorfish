@@ -16,7 +16,7 @@ import getOperationalAlerts from '../domain/use_cases/getOperationalAlerts'
 import getAllBeaconStatuses from '../domain/use_cases/getAllBeaconStatuses'
 import openBeaconStatus from '../domain/use_cases/openBeaconStatus'
 
-export const TEN_MINUTES = 600000
+export const FIVE_MINUTES = 30000
 export const THIRTY_SECONDS = 30000
 
 const APIWorker = () => {
@@ -61,7 +61,7 @@ const APIWorker = () => {
       })
 
       setUpdateVesselSidebarTab(true)
-    }, TEN_MINUTES)
+    }, FIVE_MINUTES)
 
     return () => {
       clearInterval(interval)

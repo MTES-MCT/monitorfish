@@ -24,7 +24,8 @@ import updateRegulation from '../../../domain/use_cases/updateRegulation'
 import {
   setRegulatoryGeometryToPreview,
   setRegulatoryZoneMetadata,
-  setRegulatoryTopics
+  setRegulatoryTopics,
+  closeRegulatoryZoneMetadataPanel
 } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 
@@ -121,14 +122,16 @@ const CreateRegulation = ({ title, isEdition }) => {
       dispatch(getAllRegulatoryLayersByRegTerritory())
     }
 
-    dispatch(getAllSpecies())
-
     const newRegulation = {
       regulatoryText: [],
       upcomingRegulation: [{}]
     }
     getGeometryObjectList()
-    dispatch(setSelectedRegulation(newRegulation))
+    batch(() => {
+      dispatch(getAllSpecies())
+      dispatch(setSelectedRegulation(newRegulation))
+      dispatch(closeRegulatoryZoneMetadataPanel())
+    })
     return () => {
       dispatch(setRegulatoryZoneMetadata(undefined))
     }
@@ -474,7 +477,8 @@ const BackLink = styled.a`
   align-self: center;
   &:visited {
     color: ${COLORS.slateGray}!important;
-  }
+  }import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
+
 `
 
 const HeaderTitle = styled.span`

@@ -158,7 +158,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
               return <>
                 <DateSeparator
                   data-cy={'side-window-beacon-statuses-detail-comment-date'}
-                  style={dateSeparatorStyle}
+                  style={dateSeparatorStyle(index === 0)}
                 >
                   <Line style={lineStyle}/>
                   <RowDate
@@ -275,11 +275,11 @@ const commentUserTypeStyle = {
 }
 
 const DateSeparator = styled.div``
-const dateSeparatorStyle = {
+const dateSeparatorStyle = first => ({
   height: 20,
-  width: '100%',
-  marginTop: 30
-}
+  width: 558,
+  marginTop: first ? 10 : 30
+})
 
 const RowDate = styled.div``
 const rowDateStyle = (isToday, isYesterday) => ({
@@ -327,7 +327,7 @@ const bodyStyle = {
 
 const Line = styled.div``
 const lineStyle = {
-  width: '100%',
+  width: 558,
   borderBottom: `1px solid ${COLORS.lightGray}`
 }
 

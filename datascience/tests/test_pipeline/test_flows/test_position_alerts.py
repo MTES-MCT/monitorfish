@@ -11,6 +11,7 @@ from src.pipeline.flows.position_alerts import (
     ZonesTable,
     alert_has_gear_parameters,
     extract_current_gears,
+    extract_current_risk_factors,
     filter_on_gears,
     flow,
     get_alert_type_zones_table,
@@ -304,6 +305,19 @@ def test_extract_current_gears(reset_test_data):
     )
 
 
+def test_extract_current_risk_factors(reset_test_data):
+    risk_factors = extract_current_risk_factors.run()
+    expected_risk_factors = pd.DataFrame(
+        columns=pd.Index(["cfr", "ircs", "external_immatriculation", "risk_factor"]),
+        data=[
+            ["ABC000055481", "IL2468", "AS761555", 1.74110112659225],
+            ["ABC000542519", "FQ7058", "RO237719", 1.4142135623731],
+            [None, "OLY7853", "SB125334", 1.74110112659225],
+        ],
+    )
+    pd.testing.assert_frame_equal(risk_factors, expected_risk_factors)
+
+
 def test_filter_on_gears():
     positions_in_alert = pd.DataFrame(
         {
@@ -515,19 +529,19 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
-                    "riskFactor": None,
+                    "riskFactor": 1.74110112659225003,
                 },
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
-                    "riskFactor": 2.14443662414848,
+                    "riskFactor": None,
                 },
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
-                    "riskFactor": 2.09885592141872,
+                    "riskFactor": 1.41421356237310003,
                 },
             ],
             "vessel_identifier": [
@@ -615,13 +629,13 @@ def test_flow_filters_on_gears(reset_test_data):
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
-                    "riskFactor": None,
+                    "riskFactor": 1.74110112659225003,
                 },
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
-                    "riskFactor": 2.09885592141872,
+                    "riskFactor": 1.41421356237310003,
                 },
             ],
             "vessel_identifier": [
@@ -708,13 +722,13 @@ def test_flow_filters_on_time(reset_test_data):
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
-                    "riskFactor": 2.14443662414848,
+                    "riskFactor": None,
                 },
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
-                    "riskFactor": 2.09885592141872,
+                    "riskFactor": 1.41421356237310003,
                 },
             ],
             "vessel_identifier": [
@@ -796,7 +810,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
-                    "riskFactor": None,
+                    "riskFactor": 1.74110112659225003,
                 },
             ],
             "vessel_identifier": [

@@ -287,7 +287,7 @@ def extract_current_gears() -> pd.DataFrame:
 @task(checkpoint=False)
 def extract_current_risk_factors() -> pd.DataFrame:
     """
-    Extracts of vessels' current risk factor in `risk_factors` table.
+    Extracts vessels' current risk factor in `last_positions` table.
     """
     return extract(
         db_name="monitorfish_remote",

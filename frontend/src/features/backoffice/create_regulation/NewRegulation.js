@@ -477,8 +477,7 @@ const BackLink = styled.a`
   align-self: center;
   &:visited {
     color: ${COLORS.slateGray}!important;
-  }import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
-
+  }
 `
 
 const HeaderTitle = styled.span`

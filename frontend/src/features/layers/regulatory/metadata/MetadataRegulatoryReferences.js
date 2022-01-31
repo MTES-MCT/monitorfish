@@ -11,7 +11,10 @@ const MetadataRegulatoryReferences = () => {
     <SectionTitle>Références réglementaires</SectionTitle>
     <List>
     {regulatoryReferences.map(regulatoryReference => {
-      return <Reference key={regulatoryReference}>
+      return <Reference
+          key={regulatoryReference}
+          data-cy="regulatory-layers-metadata-references"
+        >
         {regulatoryReference.textType &&
           <Label>{getRegulatoryZoneTextTypeAsText(regulatoryReference.textType)}</Label>}
         <Link href={regulatoryReference.url}>{regulatoryReference.reference}</Link>

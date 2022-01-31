@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { transform } from 'ol/proj'
 
-import { VesselSidebarTab, Vessel } from '../entities/vessel'
+import { Vessel, VesselSidebarTab } from '../entities/vessel'
+import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 
 /* eslint-disable */
@@ -94,7 +94,7 @@ const vesselSlice = createSlice({
      */
     setFilteredVesselsFeatures (state, action) {
       const filteredVesselsFeaturesUids = action.payload
-      state.vessels = state.vessels.map((vessel) => {
+      state.vessels = state.vessels.map(vessel => {
         if (filteredVesselsFeaturesUids.indexOf(vessel.vesselId) !== NOT_FOUND) {
           return {
             ...vessel,
@@ -116,7 +116,7 @@ const vesselSlice = createSlice({
      */
     setPreviewFilteredVesselsFeatures (state, action) {
       const previewFilteredVesselsFeaturesUids = action.payload
-      state.vessels = state.vessels.map((vessel) => {
+      state.vessels = state.vessels.map(vessel => {
         if (previewFilteredVesselsFeaturesUids.indexOf(vessel.vesselId) !== NOT_FOUND) {
           return {
             ...vessel,
@@ -247,7 +247,7 @@ const vesselSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: boolean}} action - hide (true) or show (false)
      */
-    sethideNonSelectedVessels (state, action) {
+    setHideNonSelectedVessels (state, action) {
       state.hideNonSelectedVessels = action.payload
     },
     /**
@@ -345,7 +345,7 @@ export const {
   updateVesselTrackAsHidden,
   setVesselTrackExtent,
   resetVesselTrackExtent,
-  sethideNonSelectedVessels
+  setHideNonSelectedVessels
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

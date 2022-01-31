@@ -17,7 +17,7 @@ import unselectVessel from '../../domain/use_cases/unselectVessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'
-import { sethideNonSelectedVessels } from '../../domain/shared_slices/Vessel'
+import { setHideNonSelectedVessels } from '../../domain/shared_slices/Vessel'
 import { ReactComponent as HidingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_actif.svg'
 import { ReactComponent as ShowingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_inactif.svg'
 import { ReactComponent as HideVesselsAtPortSVG } from '../icons/Masquer_navires_au_port.svg'
@@ -118,7 +118,7 @@ const VesselVisibility = () => {
         <MapPropertyTrigger
           inverse
           booleanProperty={hideNonSelectedVessels}
-          updateBooleanProperty={isHidden => dispatch(sethideNonSelectedVessels(isHidden))}
+          updateBooleanProperty={isHidden => dispatch(setHideNonSelectedVessels(isHidden))}
           text={'les navires non sélectionnés'}
           Icon={hideNonSelectedVessels ? ShowingOtherTracksSVG : HidingOtherTracksSVG}
         />

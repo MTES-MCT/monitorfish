@@ -178,7 +178,7 @@ const VesselList = ({ namespace }) => {
     setVessels(nextVessels)
   }, [allVesselsChecked])
 
-  const toggleSelectRow = (vesselId, value) => {
+  const toggleSelectRow = useCallback((vesselId, value) => {
     const nextVessels = Object.assign([], _vessels)
 
     const toggledVesselIndex = nextVessels.findIndex(vessel => vessel.vesselId === vesselId)
@@ -186,9 +186,9 @@ const VesselList = ({ namespace }) => {
       nextVessels.splice(toggledVesselIndex, 1, { ...nextVessels[toggledVesselIndex], checked: value })
       setVessels(nextVessels)
     }
-  }
+  }, [_vessels, setVessels])
 
-  const closeAndResetVesselList = () => {
+  const closeAndResetVesselList = useCallback(() => {
     setCountriesFiltered([])
     setAdministrativeZonesFiltered([])
     setLastPositionTimeAgoFilter(3)
@@ -204,13 +204,13 @@ const VesselList = ({ namespace }) => {
       dispatch(setBlockVesselsUpdate(false))
       dispatch(resetZonesSelected())
     })
-  }
+  }, [])
 
   const addFilterCallback = useCallback(filter => {
     dispatch(addFilter(filter))
   }, [])
 
-  const selectBox = () => {
+  const selectBox = useCallback(() => {
     batch(() => {
       dispatch(closeVesselListModal())
       dispatch(setInteraction({
@@ -219,9 +219,9 @@ const VesselList = ({ namespace }) => {
       }))
       dispatch(setBlockVesselsUpdate(true))
     })
-  }
+  }, [])
 
-  const selectPolygon = () => {
+  const selectPolygon = useCallback(() => {
     batch(() => {
       dispatch(closeVesselListModal())
       dispatch(setInteraction({
@@ -230,21 +230,21 @@ const VesselList = ({ namespace }) => {
       }))
       dispatch(setBlockVesselsUpdate(true))
     })
-  }
+  }, [])
 
-  const callRemoveZoneSelected = zoneSelectedToRemove => {
+  const callRemoveZoneSelected = useCallback(zoneSelectedToRemove => {
     dispatch(removeZoneSelected(zoneSelectedToRemove.code))
-  }
+  }, [])
 
-  const download = () => {
+  const download = useCallback(() => {
     setDownloadVesselListModalIsOpen(true)
-  }
+  }, [])
 
-  const saveFilter = () => {
+  const saveFilter = useCallback(() => {
     setSaveVesselFilterModalIsOpen(true)
-  }
+  }, [])
 
-  const previewFilteredVessels = () => {
+  const previewFilteredVessels = useCallback(() => {
     const vesselsUids = filteredVessels.map(vessel => vessel.vesselId)
 
     if (vesselsUids?.length) {
@@ -261,7 +261,7 @@ const VesselList = ({ namespace }) => {
         }
       }
     }
-  }
+  }, [filteredVessels, zonesSelected])
 
   useEffect(() => {
     if (previewFilteredVesselsMode) {
@@ -435,7 +435,7 @@ const VesselList = ({ namespace }) => {
               toLeft
               disabled={!(filteredVessels && filteredVessels.length)}
               isLast={false}
-              onClick={() => previewFilteredVessels()}>
+              onClick={previewFilteredVessels}>
               <Preview/>
               Aperçu sur la carte
             </PreviewButton>

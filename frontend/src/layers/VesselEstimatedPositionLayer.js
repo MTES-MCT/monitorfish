@@ -28,29 +28,42 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     hideVesselsAtPort
   } = useSelector(state => state.map)
 
-  const vectorSourceRef = useRef(new VectorSource({
-    features: []
-  }))
+  const vectorSourceRef = useRef(null)
+  const layerRef = useRef(null)
 
-  const layerRef = useRef(new Vector({
-    renderBuffer: 4,
-    source: vectorSourceRef.current,
-    zIndex: Layers.VESSEL_ESTIMATED_POSITION.zIndex,
-    updateWhileAnimating: true,
-    updateWhileInteracting: true,
-    style: feature => getEstimatedPositionStyle(feature)
-  }))
+  function getVectorSource () {
+    if (vectorSourceRef.current === null) {
+      vectorSourceRef.current = new VectorSource({
+        features: []
+      })
+    }
+    return vectorSourceRef.current
+  }
+
+  function getLayer () {
+    if (layerRef.current === null) {
+      layerRef.current = new Vector({
+        renderBuffer: 4,
+        source: getVectorSource(),
+        zIndex: Layers.VESSEL_ESTIMATED_POSITION.zIndex,
+        updateWhileAnimating: true,
+        updateWhileInteracting: true,
+        style: feature => getEstimatedPositionStyle(feature)
+      })
+    }
+    return layerRef.current
+  }
 
   useEffect(() => {
     function addLayerToMap () {
       if (map) {
-        layerRef.current.name = Layers.VESSEL_ESTIMATED_POSITION.code
-        map.getLayers().push(layerRef.current)
+        getLayer().name = Layers.VESSEL_ESTIMATED_POSITION.code
+        map.getLayers().push(getLayer())
       }
 
       return () => {
         if (map) {
-          map.removeLayer(layerRef.current)
+          map.removeLayer(getLayer())
         }
       }
     }
@@ -60,7 +73,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
 
   useEffect(() => {
     if (vessels && !showingVesselsEstimatedPositions) {
-      vectorSourceRef.current.clear(true)
+      getVectorSource().clear(true)
     }
 
     if (vessels && showingVesselsEstimatedPositions) {
@@ -96,8 +109,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
         return features
       }, [])
 
-      vectorSourceRef.current.clear(true)
-      vectorSourceRef.current.addFeatures(estimatedCurrentPositionsFeatures.flat())
+      getVectorSource().clear(true)
+      getVectorSource().addFeatures(estimatedCurrentPositionsFeatures.flat())
     }
   }, [
     vessels,

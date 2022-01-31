@@ -17,7 +17,7 @@ const MapMenu = ({ map }) => {
 
   useEffect(() => {
     if (map) {
-      const showMenu = event => {
+      function showMenu (event) {
         event.preventDefault()
 
         const pixel = map.getEventPixel(event)
@@ -42,10 +42,10 @@ const MapMenu = ({ map }) => {
         setCoordinates([])
       }
 
-      map.getViewport().addEventListener('contextmenu', event => showMenu(event))
+      map.getViewport().addEventListener('contextmenu', showMenu)
 
       return () => {
-        removeEventListener('contextmenu', showMenu)
+        map.getViewport().removeEventListener('contextmenu', showMenu)
       }
     }
   }, [map, vessels])

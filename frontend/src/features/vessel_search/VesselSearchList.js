@@ -2,12 +2,23 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import focusOnVesselSearch, { focusState } from '../../domain/use_cases/focusOnVesselSearch'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import VesselSearchItem from './VesselSearchItem'
 import { Vessel } from '../../domain/entities/vessel'
 
-const VesselSearchList = ({ searchText, foundVesselsOnMap, foundVesselsFromAPI, setVesselsHasBeenUpdated, setSelectedVesselIdentity, setSearchText }) => {
+const VesselSearchList = ({
+  searchText,
+  foundVesselsOnMap,
+  foundVesselsFromAPI,
+  setVesselsHasBeenUpdated,
+  setSelectedVesselIdentity,
+  setSearchText,
+  showLastSearchedVessels
+}) => {
   const dispatch = useDispatch()
+  const {
+    lastSearchedVessels
+  } = useSelector(state => state.global)
 
   const selectVessel = useCallback(vessel => {
     dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_SEARCH_RESULT))
@@ -18,7 +29,7 @@ const VesselSearchList = ({ searchText, foundVesselsOnMap, foundVesselsFromAPI, 
 
   return <>
     {
-      (foundVesselsOnMap && foundVesselsOnMap.length) || (foundVesselsFromAPI && foundVesselsFromAPI.length)
+      (foundVesselsOnMap?.length) || (foundVesselsFromAPI?.length)
         ? <Results>
           <List>
             {
@@ -32,23 +43,29 @@ const VesselSearchList = ({ searchText, foundVesselsOnMap, foundVesselsFromAPI, 
                 />
               })
             }
-            {
-              foundVesselsFromAPI.map((vessel) => {
-                const vesselId = Vessel.getVesselId(vessel)
-                return <VesselSearchItem
-                  key={vesselId}
-                  id={vesselId}
-                  vessel={vessel}
-                  selectVessel={() => selectVessel(vessel)}
-                  searchText={searchText}
-                />
-              })
-            }
+
           </List>
         </Results>
-        : ''
+        : showLastSearchedVessels
+          ? <Results>
+            <List>
+              {
+                lastSearchedVessels.map(vessel => {
+                  const vesselId = Vessel.getVesselId(vessel)
+                  return <VesselSearchItem
+                    key={vesselId}
+                    id={vesselId}
+                    vessel={vessel}
+                    selectVessel={() => selectVessel(vessel)}
+                    searchText={searchText}
+                  />
+                })
+              }
+            </List>
+          </Results>
+          : ''
     }
-    </>
+  </>
 }
 
 export default VesselSearchList

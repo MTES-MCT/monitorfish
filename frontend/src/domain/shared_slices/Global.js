@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { UserType } from '../entities/beaconStatus'
 import { getLocalStorageState } from '../../utils'
+import { getVesselIdentityFromVessel, vesselsAreEquals } from '../entities/vessel'
 
 /* eslint-disable */
 /** @namespace GlobalReducer */
@@ -8,6 +9,7 @@ const GlobalReducer = null
 /* eslint-enable */
 
 const userTypeLocalStorageKey = 'userType'
+const lastSearchedVesselsLocalStorageKey = 'lastSearchedVessels'
 
 const globalSlice = createSlice({
   name: 'global',
@@ -23,7 +25,8 @@ const globalSlice = createSlice({
     inBackofficeMode: false,
     openedSideWindowTab: null,
     sideWindowIsOpen: false,
-    userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey)
+    userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey),
+    lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey)
   },
   reducers: {
     expandRightMenu (state) {
@@ -123,6 +126,30 @@ const globalSlice = createSlice({
     setUserType (state, action) {
       state.userType = action.payload
       window.localStorage.setItem(userTypeLocalStorageKey, JSON.stringify(state.userType))
+    },
+    /**
+     * Adds a vessel to the last searched vessels list showed below
+     * the vessel search input on click
+     * @function addLastSearchedVessel
+     * @memberOf GlobalReducer
+     * @param {Object=} state
+     * @param {{payload: VesselIdentity}} action - The last searched vessel
+     */
+    addSearchedVessel (state, action) {
+      const vesselIdentityToAdd = getVesselIdentityFromVessel(action.payload)
+
+      // Remove vessel if already in the list
+      state.lastSearchedVessels = state.lastSearchedVessels.filter(searchedVessel => !vesselsAreEquals(searchedVessel, vesselIdentityToAdd))
+
+      // Add vessel in the beginning
+      state.lastSearchedVessels.splice(0, 0, getVesselIdentityFromVessel(action.payload))
+
+      // Truncate list if more than 10 items
+      if (state.lastSearchedVessels.length > 10) {
+        state.lastSearchedVessels.pop()
+      }
+
+      window.localStorage.setItem(lastSearchedVesselsLocalStorageKey, JSON.stringify(state.lastSearchedVessels))
     }
   }
 })
@@ -143,7 +170,8 @@ export const {
   openSideWindowTab,
   setSideWindowAsOpen,
   closeSideWindow,
-  setUserType
+  setUserType,
+  addSearchedVessel
 } = globalSlice.actions
 
 export default globalSlice.reducer

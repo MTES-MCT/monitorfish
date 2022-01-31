@@ -51,8 +51,8 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
 
       const selectedVessel = {
         ...lastPositionVessel?.vesselProperties,
-        ...vesselIdentity,
         ...vesselAndPositions?.vessel,
+        ...vesselIdentity,
         globalRiskFactor: vesselIdentity?.riskFactor,
         riskFactor: vesselAndPositions?.vessel?.riskFactor
       }

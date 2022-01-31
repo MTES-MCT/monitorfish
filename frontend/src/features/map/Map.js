@@ -5,6 +5,7 @@ import BaseMap from './BaseMap'
 import LayerDetailsBox from './controls/LayerDetailsBox'
 import VesselsTracksLayer from '../../layers/VesselsTracksLayer'
 import VesselsLayer from '../../layers/VesselsLayer'
+import FilterLayer from '../../layers/FilterLayer'
 import DrawLayer from '../../layers/DrawLayer'
 import BaseLayer from '../../layers/BaseLayer'
 import RegulatoryLayers from '../../layers/RegulatoryLayers'
@@ -73,6 +74,7 @@ const Map = () => {
       <MapMenu/>
       <MeasurementLayer/>
       <VesselsLayer/>
+      <FilterLayer/>
       <VesselsTracksLayer/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <DrawLayer/>

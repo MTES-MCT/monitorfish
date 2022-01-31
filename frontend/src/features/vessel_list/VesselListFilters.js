@@ -22,6 +22,24 @@ const countriesField = Object.keys(Countries.getAlpha2Codes()).map(country => {
   }
 })
 
+function renderTagPickerMenuItem (item) {
+  return (
+    <Label>
+      {item.label}
+    </Label>
+  )
+}
+
+function renderTagPickerValue (items) {
+  return items.map((tag) => (
+    <Tag key={tag.label}>
+      {tag.label}
+    </Tag>
+  ))
+}
+
+const tagPickerStyle = { width: 160, margin: '2px 10px 10px 0', verticalAlign: 'top' }
+
 const VesselListFilters = ({
   lastPositionTimeAgo,
   countries,
@@ -96,24 +114,6 @@ const VesselListFilters = ({
       : null
   }, [zonesSelected, callRemoveZoneSelected])
 
-  function renderTagPickerMenuItem (item) {
-    return (
-      <Label>
-        {item.label}
-      </Label>
-    )
-  }
-
-  function renderTagPickerValue (items) {
-    return items.map((tag, index) => (
-      <Tag key={tag.label}>
-        {tag.label}
-      </Tag>
-    ))
-  }
-
-  const tagPickerStyle = { width: 160, margin: '2px 10px 10px 0', verticalAlign: 'top' }
-
   return (
     <Filters>
       <FilterDesc>
@@ -135,7 +135,7 @@ const VesselListFilters = ({
         style={tagPickerStyle}
         data={countriesField}
         placeholder="Nationalité"
-        onChange={change => countries.setCountriesFiltered(change)}
+        onChange={countries.setCountriesFiltered}
         renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
         renderValue={(_, items) => renderTagPickerValue(items)}
       />
@@ -144,7 +144,7 @@ const VesselListFilters = ({
         style={tagPickerStyle}
         data={fleetSegmentsField}
         placeholder="Seg. de flotte"
-        onChange={change => fleetSegments.setFleetSegmentsFiltered(change)}
+        onChange={fleetSegments.setFleetSegmentsFiltered}
         renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
         renderValue={(_, items) => renderTagPickerValue(items)}
       />
@@ -153,7 +153,7 @@ const VesselListFilters = ({
         style={tagPickerStyle}
         data={gearsField}
         placeholder="Engins à bord"
-        onChange={change => gears.setGearsFiltered(change)}
+        onChange={gears.setGearsFiltered}
         renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
         renderValue={(_, items) => renderTagPickerValue(items)}
       />
@@ -162,7 +162,7 @@ const VesselListFilters = ({
         style={tagPickerStyle}
         data={speciesField}
         placeholder="Espèces à bord"
-        onChange={change => species.setSpeciesFiltered(change)}
+        onChange={species.setSpeciesFiltered}
         renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
         renderValue={(_, items) => renderTagPickerValue(items)}
       />
@@ -175,13 +175,13 @@ const VesselListFilters = ({
           uncheckableItemValues={zones.zoneGroups}
           value={zones.administrativeZonesFiltered}
           onClean={() => zones.setAdministrativeZonesFiltered([])}
-          onChange={change => zones.setAdministrativeZonesFiltered(change)}
+          onChange={zones.setAdministrativeZonesFiltered}
         />
         <CustomZone>
           ou définir une zone
         </CustomZone>
-        <BoxFilter data-cy={'vessels-list-box-filter'} onClick={() => geometrySelection.selectBox()}/>
-        <PolygonFilter onClick={() => geometrySelection.selectPolygon()}/>
+        <BoxFilter data-cy={'vessels-list-box-filter'} onClick={geometrySelection.selectBox}/>
+        <PolygonFilter onClick={geometrySelection.selectPolygon}/>
         {
           showZonesSelected()
         }
@@ -217,7 +217,7 @@ const VesselListFilters = ({
               style={tagPickerStyle}
               data={districtsField}
               placeholder="Quartiers"
-              onChange={change => districts.setDistrictsFiltered(change)}
+              onChange={districts.setDistrictsFiltered}
               renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
               renderValue={(_, items) => renderTagPickerValue(items)}
             />

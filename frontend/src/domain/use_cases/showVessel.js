@@ -2,7 +2,7 @@ import { batch } from 'react-redux'
 import { getVesselFromAPI } from '../../api/fetch'
 import { Vessel } from '../entities/vessel'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../shared_slices/Vessel'
-import { removeError, setError } from '../shared_slices/Global'
+import { addSearchedVessel, removeError, setError } from '../shared_slices/Global'
 import { doNotAnimate } from '../shared_slices/Map'
 import { getTrackDepthError, getVesselTrackDepth } from '../entities/vesselTrackDepth'
 import { removeFishingActivitiesFromMap } from '../shared_slices/FishingActivities'
@@ -21,7 +21,6 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
     selectedVesselCustomTrackDepth,
     vessels
   } = vessel
-
   const {
     fishingActivitiesAreShowedOnMap
   } = fishingActivities
@@ -37,6 +36,10 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
 
   if (fishingActivitiesAreShowedOnMap && !calledFromCron) {
     dispatch(removeFishingActivitiesFromMap())
+  }
+
+  if (fromSearch) {
+    dispatch(addSearchedVessel(vesselIdentity))
   }
 
   getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)

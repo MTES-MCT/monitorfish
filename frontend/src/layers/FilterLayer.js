@@ -36,7 +36,7 @@ const FilterLayer = ({ map }) => {
     layerRef.current = new Vector({
       renderBuffer: 4,
       source: vectorSourceRef.current,
-      zIndex: Layers.SELECTED_VESSEL.zIndex,
+      zIndex: Layers.FILTERED_VESSELS.zIndex,
       updateWhileAnimating: true,
       updateWhileInteracting: true,
       style: new Style({
@@ -47,11 +47,11 @@ const FilterLayer = ({ map }) => {
         })
       })
     })
+    layerRef.current.name = Layers.FILTERED_VESSELS.code
   }
 
   useEffect(() => {
     if (map) {
-      layerRef.current.name = 'currentFilter'
       map.getLayers().push(layerRef.current)
     }
 

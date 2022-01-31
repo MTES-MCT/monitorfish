@@ -72,6 +72,17 @@ const Layers = {
     isIntersectable: false,
     zIndex: 995
   },
+  FILTERED_VESSELS: {
+    code: 'filtered_vessel',
+    name: '',
+    group: null,
+    type: layersType.VESSEL,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false,
+    zIndex: 1000
+  },
   VESSEL_ALERT: {
     code: 'vessel_alert',
     name: '',

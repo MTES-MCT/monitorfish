@@ -3,4 +3,4 @@ SELECT
     ircs,
     external_immatriculation,
     risk_factor
-FROM risk_factors
+FROM last_positions

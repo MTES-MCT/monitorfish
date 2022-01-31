@@ -122,7 +122,7 @@ export class Vessel {
     selectedBaseLayer === baseLayers.SATELLITE.code
 }
 
-export const getVesselIdentityFromVessel = vessel => {
+export const getOnlyVesselIdentityProperties = vessel => {
   return {
     internalReferenceNumber: vessel.internalReferenceNumber,
     externalReferenceNumber: vessel.externalReferenceNumber,

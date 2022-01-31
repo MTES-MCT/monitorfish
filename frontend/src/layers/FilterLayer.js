@@ -22,52 +22,59 @@ const FilterLayer = ({ map }) => {
   const filterFeature = currentDrawnFilterZone || showedFilter?.filters?.zonesSelected[0]?.feature
 
   const vectorSourceRef = useRef(null)
-  if (!vectorSourceRef.current) {
-    vectorSourceRef.current = new VectorSource({
-      format: new GeoJSON({
-        dataProjection: WSG84_PROJECTION,
-        featureProjection: OPENLAYERS_PROJECTION
-      }),
-      features: []
-    })
+  function getVectorSource () {
+    if (vectorSourceRef.current === null) {
+      vectorSourceRef.current = new VectorSource({
+        format: new GeoJSON({
+          dataProjection: WSG84_PROJECTION,
+          featureProjection: OPENLAYERS_PROJECTION
+        }),
+        features: []
+      })
+    }
+    return vectorSourceRef.current
   }
+
   const layerRef = useRef(null)
-  if (!layerRef.current) {
-    layerRef.current = new Vector({
-      renderBuffer: 4,
-      source: vectorSourceRef.current,
-      zIndex: Layers.FILTERED_VESSELS.zIndex,
-      updateWhileAnimating: true,
-      updateWhileInteracting: true,
-      style: new Style({
-        stroke: new Stroke({
-          color: filterColor,
-          width: 2,
-          lineDash: [4, 8]
+  function getLayer () {
+    if (layerRef.current === null) {
+      layerRef.current = new Vector({
+        renderBuffer: 4,
+        source: getVectorSource(),
+        zIndex: Layers.FILTERED_VESSELS.zIndex,
+        updateWhileAnimating: true,
+        updateWhileInteracting: true,
+        style: new Style({
+          stroke: new Stroke({
+            color: filterColor,
+            width: 2,
+            lineDash: [4, 8]
+          })
         })
       })
-    })
-    layerRef.current.name = Layers.FILTERED_VESSELS.code
+      layerRef.current.name = Layers.FILTERED_VESSELS.code
+    }
+    return layerRef.current
   }
 
   useEffect(() => {
     if (map) {
-      map.getLayers().push(layerRef.current)
+      map.getLayers().push(getLayer())
     }
 
     return () => {
       if (map) {
-        map.removeLayer(layerRef.current)
+        map.removeLayer(getLayer())
       }
     }
   }, [map])
 
   useEffect(() => {
     if (map) {
-      vectorSourceRef.current?.clear(true)
-      const feature = filterFeature && vectorSourceRef.current?.getFormat().readFeatures(filterFeature)
+      getVectorSource()?.clear(true)
+      const feature = filterFeature && getVectorSource()?.getFormat().readFeatures(filterFeature)
       if (feature) {
-        vectorSourceRef.current?.addFeatures(feature)
+        getVectorSource()?.addFeatures(feature)
       }
     }
   }, [map, filterFeature])

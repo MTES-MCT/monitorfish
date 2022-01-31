@@ -186,6 +186,9 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     function addLabelToFeatures (features) {
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
       const showedTracksVesselsIdentities = Object.keys(vesselsTracksShowed)
+      if (selectedVessel) {
+        showedTracksVesselsIdentities.push(getVesselFeatureIdFromVessel(selectedVessel))
+      }
 
       const nextFeaturesAndLabels = features
         .map(feature => {

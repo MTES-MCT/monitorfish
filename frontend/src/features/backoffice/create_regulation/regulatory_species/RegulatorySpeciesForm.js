@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Radio } from 'rsuite'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
@@ -17,6 +17,7 @@ import Tag from '../Tag'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import { useSelector } from 'react-redux'
 import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
+import { RedCircle, GreenCircle } from '../../../commonStyles/Circle.style'
 
 const REGULATORY_SPECIES_KEYS = {
   AUTHORIZED: 'authorized',
@@ -178,14 +179,14 @@ const RegulatorySpeciesForm = props => {
             value={true}
           >
             autorisées
-            <GreenCircle data-cy={'regulation-authorized-species'}/>
+            <GreenCircle data-cy={'regulation-authorized-species'} margin={'0 6px'} />
           </CustomRadio>
           <CustomRadio
             checked={authorized === false}
             value={false}
           >
             interdites
-            <RedCircle />
+            <RedCircle margin={'0 6px'} />
           </CustomRadio>
         </AuthorizedRadio>
       </RegulatorySectionTitle>
@@ -311,24 +312,6 @@ const SpeciesDetail = styled.div`
 const SpeciesGroupDetail = styled.div`
   display: flex;
   margin-top: ${props => props.isFirst ? 20 : 8}px;
-`
-
-const circle = css`
-  display: inline-block;
-  height: 10px;
-  width: 10px;
-  margin-left: 6px;
-  border-radius: 50%;
-  vertical-align: middle;
-`
-const GreenCircle = styled.span`
-  ${circle}
-  background-color: ${COLORS.mediumSeaGreen};
-`
-
-const RedCircle = styled.span`
-  ${circle}
-  background-color: ${COLORS.red};
 `
 
 const CustomRadio = styled(Radio)`

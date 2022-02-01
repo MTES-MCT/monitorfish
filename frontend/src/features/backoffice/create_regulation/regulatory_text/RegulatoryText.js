@@ -13,7 +13,7 @@ import {
   addObjectToRegulatoryTextCheckedMap
 } from '../../Regulation.slice'
 import Tag from '../Tag'
-import { REGULATORY_TEXT_SOURCE } from '../../../../domain/entities/regulatory'
+import { REGULATORY_TEXT_SOURCE, checkURL, REGULATORY_TEXT_TYPE } from '../../../../domain/entities/regulatory'
 
 /**
  * @typedef {object} Props
@@ -42,14 +42,6 @@ const RegulatoryText = props => {
     textType
   } = regulatoryText
 
-  /**
-  * @enum {RegulatoryTextType}
-  */
-  const REGULATORY_TEXT_TYPE = {
-    CREATION: 'creation',
-    REGULATION: 'regulation'
-  }
-
   const dispatch = useDispatch()
 
   /** @type {boolean} isEditing */
@@ -73,7 +65,7 @@ const RegulatoryText = props => {
       [key]: value
     }
     setRegulatoryText(id, obj)
-  })
+  }, [id, regulatoryText, setRegulatoryText])
 
   useEffect(() => {
     if (fromForm) {
@@ -83,41 +75,13 @@ const RegulatoryText = props => {
     } else {
       setIsEditing(reference === undefined || reference === '' || url === undefined || url === '')
     }
-  }, [reference, url, fromForm])
-
-  /**
-   * @function checkUrl
-   * @param {String} url
-   * @returns true if the url parameter is a correct url, else false
-   */
-  const checkURL = (url) => {
-    const regex = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/
-    return regex.test(url)
-  }
-
-  /**
-   * @function checkNameAndUrl
-   * @return true if a value is missing, else false
-   */
-  const checkNameAndUrl = () => {
-    let required = !reference || reference === ''
-    let oneValueIsMissing = required
-    setNameIsRequired(required)
-    required = !url || url === '' || !checkURL(url)
-    oneValueIsMissing = oneValueIsMissing || required
-    setURLIsrequired(required)
-    if (!oneValueIsMissing) {
-      setFromForm(false)
-      return false
-    }
-    return true
-  }
+  }, [reference, url, fromForm, setIsEditing, isEditing])
 
   /**
    * @function checkOtherRequiredValues
    * @returns true if a regulatory text form value is missing or incorrect, else false
    */
-  const checkOtherRequiredValues = () => {
+  const checkOtherRequiredValues = useCallback(() => {
     let oneValueIsMissing = false
     let valueIsMissing = !startDate || startDate === ''
     oneValueIsMissing = oneValueIsMissing || valueIsMissing
@@ -129,7 +93,25 @@ const RegulatoryText = props => {
     oneValueIsMissing = oneValueIsMissing || valueIsMissing
     setTextTypeIsRequired(valueIsMissing)
     return oneValueIsMissing
-  }
+  }, [startDate, endDate, textType])
+
+  /**
+  * @function checkNameAndUrl
+  * @return true if a value is missing, else false
+  */
+  const checkNameAndUrl = useCallback(() => {
+    let required = !reference || reference === ''
+    let oneValueIsMissing = required
+    setNameIsRequired(required)
+    required = !url || url === '' || !checkURL(url)
+    oneValueIsMissing = oneValueIsMissing || required
+    setURLIsrequired(required)
+    if (!oneValueIsMissing) {
+      setFromForm(false)
+      return false
+    }
+    return true
+  }, [reference, url])
 
   useEffect(() => {
     if (saveForm) {
@@ -146,9 +128,9 @@ const RegulatoryText = props => {
         dispatch(addObjectToRegulatoryTextCheckedMap(payload))
       }
     }
-  }, [saveForm, source, id])
+  }, [saveForm, source, id, checkNameAndUrl, checkOtherRequiredValues, dispatch])
 
-  const cancelAddNewRegulatoryText = () => {
+  const cancelAddNewRegulatoryText = useCallback(() => {
     setIsEditing(true)
     const obj = {
       ...regulatoryText,
@@ -156,7 +138,7 @@ const RegulatoryText = props => {
       url: ''
     }
     setRegulatoryText(id, obj)
-  }
+  }, [regulatoryText, id, setRegulatoryText, setIsEditing])
 
   const onCloseIconClicked = () => {
     setFromForm(true)

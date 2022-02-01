@@ -245,6 +245,7 @@ const searchVesselInputStyle = {
 const Wrapper = styled.div``
 const wrapperStyle = {
   overflowX: 'scroll',
+  overflowY: 'hidden',
   height: 'calc(100vh - 20px)',
   padding: '20px 0 0 10px'
 }

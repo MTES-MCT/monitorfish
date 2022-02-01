@@ -21,7 +21,8 @@ const backofficePersistConfig = {
   key: 'backofficePersistor',
   storage,
   stateReconciler: autoMergeLevel2,
-  transforms: [SetTransform]
+  transforms: [SetTransform],
+  whitelist: ['regulation']
 }
 
 const homeStore = configureStore({
@@ -31,8 +32,7 @@ const homeStore = configureStore({
 
 const backofficeStore = configureStore({
   reducer: persistReducer(backofficePersistConfig, backofficeReducers),
-  middleware: [thunk],
-  whitelist: ['regulation']
+  middleware: [thunk]
 })
 
 const backofficePersistor = persistStore(backofficeStore)

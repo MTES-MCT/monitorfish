@@ -45,11 +45,13 @@ const VesselsSearch = () => {
   const wrapperRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
   const escapeFromKeyboard = useEscapeFromKeyboard()
+  const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
 
   useEffect(() => {
     if (clickedOutsideComponent || escapeFromKeyboard) {
       dispatch(focusOnVesselSearch())
       setSearchText('')
+      setShowLastSearchedVessels(false)
     }
   }, [clickedOutsideComponent, escapeFromKeyboard])
 
@@ -83,6 +85,7 @@ const VesselsSearch = () => {
 
   useEffect(() => {
     if (searchText.length > 1) {
+      setShowLastSearchedVessels(false)
       const foundVesselsOnMap = getFoundVesselsOnMap()
       setFoundVesselsOnMap(foundVesselsOnMap)
 
@@ -108,6 +111,7 @@ const VesselsSearch = () => {
         setSearchText('')
         setFoundVesselsFromAPI([])
         setFoundVesselsOnMap([])
+        setShowLastSearchedVessels(false)
       }
     } else {
       dispatch(unselectVessel())
@@ -136,6 +140,7 @@ const VesselsSearch = () => {
                 ref={input => selectedVesselIdentity ? input && input.focus() : null}
                 type="text"
                 firstUpdate={firstUpdate}
+                onClick={() => !searchText?.length && setShowLastSearchedVessels(true)}
                 value={searchText}
                 placeholder={'Rechercher un navire...'}
                 onChange={e => setSearchText(e.target.value)}
@@ -145,6 +150,7 @@ const VesselsSearch = () => {
           }
         </SearchBoxField>
         <VesselSearchList
+          showLastSearchedVessels={showLastSearchedVessels}
           foundVesselsOnMap={foundVesselsOnMap}
           foundVesselsFromAPI={foundVesselsFromAPI}
           setVesselsHasBeenUpdated={setVesselsHasBeenUpdated}

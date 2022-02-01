@@ -83,7 +83,7 @@ const RegulatorySpeciesForm = props => {
         })
       set(REGULATORY_SPECIES_KEYS.SPECIES, nextSpecies)
     }
-  }, [authorized, displayForm, allSpecies, species, setDisplayForm, set])
+  }, [authorized])
 
   useEffect(() => {
     if (allSpecies) {
@@ -95,7 +95,7 @@ const RegulatorySpeciesForm = props => {
 
       setRegulatorySpecies(regulatorySpeciesWithoutSpecies)
     }
-  }, [allSpecies, regulatorySpecies, setRegulatorySpecies])
+  }, [allSpecies])
 
   const push = useCallback((key, array, value) => {
     const newArray = array ? [...array] : []
@@ -199,7 +199,7 @@ const RegulatorySpeciesForm = props => {
               <CustomCheckbox
                 inline
                 checked={allSpecies}
-                onChange={(_, checked) => set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, checked)}
+                onChange={_ => set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, !allSpecies)}
               >
                 Toutes les espèces
               </CustomCheckbox>

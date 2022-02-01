@@ -321,18 +321,18 @@ def test_extract_current_risk_factors(reset_test_data):
 def test_filter_on_gears():
     positions_in_alert = pd.DataFrame(
         {
-            "cfr": ["A", "B", "C"],
-            "external_immatriculation": ["AA", "BB", "CC"],
-            "ircs": ["AAA", "BBB", "CCC"],
-            "some_data": [1.23, 5.56, 12.23],
+            "cfr": ["A", "B", "C", "D"],
+            "external_immatriculation": ["AA", "BB", "CC", "DD"],
+            "ircs": ["AAA", "BBB", "CCC", "DDD"],
+            "some_data": [1.23, 5.56, 12.23, 5.236],
         }
     )
     current_gears = pd.DataFrame(
         {
-            "cfr": ["A", "B", "C"],
-            "external_immatriculation": ["AA", "BB", "CC"],
-            "ircs": ["AAA", "BBB", "CCC"],
-            "current_gears": [None, {"OTB", "OTT"}, {"DRB"}],
+            "cfr": ["A", "B", "C", "D"],
+            "external_immatriculation": ["AA", "BB", "CC", "DD"],
+            "ircs": ["AAA", "BBB", "CCC", "DDD"],
+            "current_gears": [None, {"OTB", "OTT"}, {"DRB"}, {"OTM"}],
         }
     )
     gear_codes = {"OTM", "OTB"}
@@ -349,7 +349,7 @@ def test_filter_on_gears():
 
     pd.testing.assert_frame_equal(
         filtered_positions_in_alert,
-        positions_in_alert.loc[positions_in_alert.cfr == "B"],
+        positions_in_alert.loc[positions_in_alert.cfr == "D"],
     )
 
     # Test including unknown gears
@@ -364,7 +364,7 @@ def test_filter_on_gears():
 
     pd.testing.assert_frame_equal(
         filtered_positions_in_alert,
-        positions_in_alert.loc[positions_in_alert.cfr.isin(["B", "A"])],
+        positions_in_alert.loc[positions_in_alert.cfr.isin(["D", "A"])],
         check_like=True,
     )
 
@@ -582,7 +582,7 @@ def test_flow_filters_on_gears(reset_test_data):
     hours_from_now = 48
     only_fishing_positions = False
     flag_states = None
-    fishing_gears = ["OTM"]
+    fishing_gears = ["OTM", "OTB", "OTT"]
     fishing_gear_categories = None
     include_vessels_unknown_gear = False
 

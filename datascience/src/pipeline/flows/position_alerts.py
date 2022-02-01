@@ -329,8 +329,8 @@ def filter_on_gears(
     include_vessels_unknown_gear: bool,
 ):
     """
-    Filters input `positions_in_alert` to keep only rows for which the vessel has at
-    least on of the gears listed in `gear_codes`.
+    Filters input `positions_in_alert` to keep only rows for which the vessel's
+    current gears are included in `gear_codes`.
 
     Args:
         positions_in_alert (pd.DataFrame): DataFrame of positions. Must have columns
@@ -356,7 +356,7 @@ def filter_on_gears(
 
     positions_in_alert_known_gear = positions_in_alert_known_gear.loc[
         positions_in_alert_known_gear.current_gears.map(
-            lambda s: not gear_codes.isdisjoint(s)
+            lambda s: s.issubset(gear_codes)
         )
     ]
 

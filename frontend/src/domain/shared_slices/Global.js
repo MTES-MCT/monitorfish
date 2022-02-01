@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { UserType } from '../entities/beaconStatus'
 import { getLocalStorageState } from '../../utils'
-import { getVesselIdentityFromVessel, vesselsAreEquals } from '../entities/vessel'
+import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel'
 
 /* eslint-disable */
 /** @namespace GlobalReducer */
@@ -136,13 +136,13 @@ const globalSlice = createSlice({
      * @param {{payload: VesselIdentity}} action - The last searched vessel
      */
     addSearchedVessel (state, action) {
-      const vesselIdentityToAdd = getVesselIdentityFromVessel(action.payload)
+      const vesselIdentityToAdd = getOnlyVesselIdentityProperties(action.payload)
 
       // Remove vessel if already in the list
       state.lastSearchedVessels = state.lastSearchedVessels.filter(searchedVessel => !vesselsAreEquals(searchedVessel, vesselIdentityToAdd))
 
       // Add vessel in the beginning
-      state.lastSearchedVessels.splice(0, 0, getVesselIdentityFromVessel(action.payload))
+      state.lastSearchedVessels.splice(0, 0, vesselIdentityToAdd)
 
       // Truncate list if more than 10 items
       if (state.lastSearchedVessels.length > 10) {

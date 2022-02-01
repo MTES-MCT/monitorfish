@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { Label } from '../../../commonStyles/Input.style'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { COLORS, SQUARE_BUTTON_TYPE } from '../../../../constants/constants'
 import { Radio, RadioGroup } from 'rsuite'
 import { SquareButton } from '../../../commonStyles/Buttons.style'
@@ -14,6 +14,7 @@ import {
 } from '../../../commonStyles/Backoffice.style'
 import { Row } from '../../../commonStyles/FishingPeriod.style'
 import { DEFAULT_DATE_RANGE, fishingPeriodToString } from '../../../../domain/entities/regulatory'
+import { RedCircle, GreenCircle } from '../../../commonStyles/Circle.style'
 
 const FISHING_PERIOD_KEYS = {
   DATE_RANGES: 'dateRanges',
@@ -149,11 +150,11 @@ const FishingPeriodForm = (props) => {
         Périodes
         <CustomRadio checked={authorized} value={true} >
           autorisées
-          <GreenCircle />
+          <GreenCircle margin={'0 6px'} />
         </CustomRadio>
         <CustomRadio checked={authorized === false} value={false} >
           interdites
-          <RedCircle />
+          <RedCircle margin={'0 6px'} />
         </CustomRadio>
       </AuthorizedRadio>
     </RegulatorySectionTitle>
@@ -386,24 +387,6 @@ const DateRanges = styled.div`
   font-size: 13px;
   color: ${COLORS.slateGray};
   margin-right: 10px;
-`
-
-const circle = css`
-  display: inline-block;
-  height: 10px;
-  width: 10px;
-  margin-left: 6px;
-  border-radius: 50%;
-  vertical-align: middle;
-`
-const GreenCircle = styled.span`
-  ${circle}
-  background-color: ${COLORS.mediumSeaGreen};
-`
-
-const RedCircle = styled.span`
-  ${circle}
-  background-color: ${COLORS.red};
 `
 
 const CustomRadio = styled(Radio)`

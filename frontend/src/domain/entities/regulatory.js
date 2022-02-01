@@ -219,6 +219,23 @@ export const REGULATORY_TEXT_SOURCE = {
   REGULATION: 'regulation'
 }
 
+/**
+* @enum {RegulatoryTextType}
+*/
+export const REGULATORY_TEXT_TYPE = {
+  CREATION: 'creation',
+  REGULATION: 'regulation'
+}
+
+const regulatoryZoneTextType = type =>
+  type === REGULATORY_TEXT_TYPE.CREATION ? 'création' : REGULATORY_TEXT_TYPE.REGULATION ? 'réglementation' : undefined
+
+export const getRegulatoryZoneTextTypeAsText = (textTypeList) => {
+  return `${textTypeList.length === 2
+  ? `${regulatoryZoneTextType(textTypeList[0])} et ${regulatoryZoneTextType(textTypeList[1])}`
+  : `${regulatoryZoneTextType(textTypeList[0])}`} de zone`
+}
+
 export const DEFAULT_REGULATORY_TEXT = {
   url: '',
   reference: '',
@@ -659,4 +676,18 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
     }
     return null
   }).filter(gears => gears)
+}
+
+export const getTitle = regulatory => regulatory
+  ? `${regulatory.topic.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
+  : ''
+
+/**
+ * @function checkUrl
+ * @param {String} url
+ * @returns true if the url parameter is a correct url, else false
+ */
+export const checkURL = (_url) => {
+  const regex = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/
+  return regex.test(_url)
 }

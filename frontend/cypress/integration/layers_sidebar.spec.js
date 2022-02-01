@@ -105,7 +105,9 @@ context('LayersSidebar', () => {
     // Then show the metadata
     cy.get('*[data-cy="regulatory-layers-show-metadata"]').click()
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
-    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Dragues remorquées par bateau (DRB)')
+    cy.get('*[data-cy="regulatory-layers-metadata-topic"]').contains('Ouest Cotentin Bivalves')
+    cy.get('*[data-cy="regulatory-layers-metadata-region"]').contains('Normandie, Bretagne')
+    cy.get('*[data-cy="regulatory-layers-metadata-references"]').should('have.length', 1)
   })
 
   it('An advanced search Should filter the search result', () => {

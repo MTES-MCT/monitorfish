@@ -13,8 +13,8 @@ const showRegulatoryZoneMetadata = regulatoryZone => (dispatch, getState) => {
   if (regulatoryZone) {
     dispatch(setLoadingRegulatoryZoneMetadata())
     getRegulatoryFeatureMetadataFromAPI(regulatoryZone, getState().global.inBackofficeMode).then(feature => {
-      const regulatoryZone = mapToRegulatoryZone(feature)
-      dispatch(setRegulatoryZoneMetadata(regulatoryZone))
+      const regulatoryZoneMetadata = mapToRegulatoryZone(feature)
+      dispatch(setRegulatoryZoneMetadata(regulatoryZoneMetadata))
     }).catch(error => {
       console.error(error)
       batch(() => {

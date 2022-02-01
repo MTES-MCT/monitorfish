@@ -25,33 +25,33 @@ const SearchRegulations = props => {
 
   useEffect(() => {
     searchRegulatoryZone()
-  }, [searchText, setFoundRegulatoryZonesByRegTerritory, regulatoryZoneListByRegTerritory])
+
+    function searchRegulatoryZone () {
+      const searchResult = {}
+      if (searchText === '') {
+        setFoundRegulatoryZonesByRegTerritory(regulatoryZoneListByRegTerritory)
+      } else {
+        Object.keys(regulatoryZoneListByRegTerritory).forEach(territory => {
+          const searchResultByLawType = searchByLawType(regulatoryZoneListByRegTerritory[territory], BACKOFFICE_SEARCH_PROPERTIES, searchText)
+          if (searchResultByLawType && Object.keys(searchResultByLawType).length !== 0) {
+            searchResult[territory] = searchResultByLawType
+          }
+        })
+        if (regulatoryZoneMetadata !== null) {
+          if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata)) {
+            dispatch(closeRegulatoryZoneMetadataPanel())
+          }
+        }
+        setFoundRegulatoryZonesByRegTerritory(searchResult)
+      }
+    }
+  }, [searchText, setFoundRegulatoryZonesByRegTerritory, regulatoryZoneListByRegTerritory, regulatoryZoneMetadata, dispatch])
 
   useEffect(() => {
     if (searchInput) {
       searchInput.current.focus()
     }
   }, [])
-
-  const searchRegulatoryZone = () => {
-    const searchResult = {}
-    if (searchText === '') {
-      setFoundRegulatoryZonesByRegTerritory(regulatoryZoneListByRegTerritory)
-    } else {
-      Object.keys(regulatoryZoneListByRegTerritory).forEach(territory => {
-        const searchResultByLawType = searchByLawType(regulatoryZoneListByRegTerritory[territory], BACKOFFICE_SEARCH_PROPERTIES, searchText)
-        if (searchResultByLawType && Object.keys(searchResultByLawType).length !== 0) {
-          searchResult[territory] = searchResultByLawType
-        }
-      })
-      if (regulatoryZoneMetadata !== null) {
-        if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata)) {
-          dispatch(closeRegulatoryZoneMetadataPanel())
-        }
-      }
-      setFoundRegulatoryZonesByRegTerritory(searchResult)
-    }
-  }
 
   const history = useHistory()
 

@@ -8,10 +8,10 @@ from src.pipeline.parsers.ers.childless_parsers import (
 )
 from src.pipeline.parsers.utils import (
     get_root_tag,
+    make_datetime_json_serializable,
     tagged_children,
     try_float,
 )
-from src.utils.ers import make_datetime_json_serializable
 
 
 def default_log_parser(el: xml.etree.ElementTree.Element):

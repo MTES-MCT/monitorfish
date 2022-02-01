@@ -632,8 +632,8 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
   ]
   const CATEGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']
 
-  return SORTED_CATEGORY_LIST.map((category) => {
-    if (!CATEGORIES_TO_HIDE.includes(category)) {
+  return SORTED_CATEGORY_LIST.map(category => {
+    if (!CATEGORIES_TO_HIDE.includes(category) && categoriesToGears[category]) {
       const categoryGearList = [...categoriesToGears[category]]
       const gears = categoryGearList
         .sort((gearA, gearB) => {
@@ -658,5 +658,5 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
       }
     }
     return null
-  })
+  }).filter(gears => gears)
 }

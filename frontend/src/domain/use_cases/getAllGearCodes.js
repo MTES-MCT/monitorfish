@@ -12,6 +12,7 @@ const getAllGearCodes = () => dispatch => {
     const groupToCategories = {}
     /** @type {Map<string, Gear>} */
     const gearsByCode = {}
+
     gears.forEach(gear => {
       const {
         code,
@@ -19,6 +20,7 @@ const getAllGearCodes = () => dispatch => {
         groupId
       } = gear
       gearsByCode[code] = gear
+
       if (!Object.keys(categoriesToGears).includes(category)) {
         categoriesToGears[category] = [gear]
       } else {

@@ -133,4 +133,19 @@ context('NewRegulation', () => {
       })
     cy.url().should('include', '/backoffice')
   })
+
+  it('Form values should be kept when F5 is pressed', () => {
+    // When F5 is pressed
+    cy.reload()
+    // then form values are kept
+    cy.get('[data-cy^="tag"]').should('have.length', 6)
+    cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
+    cy.get('[data-cy="tag-Ouest_Cotentin_Bivalves"]').should('exist')
+    cy.get('[data-cy="tag-Normandie"]').should('exist')
+    cy.get('[data-cy="tag-Bretagne"]').should('exist')
+    cy.get('[data-cy="tag-598"]').should('exist')
+    cy.get('[data-cy="tag-texte de reference"]').should('exist')
+    cy.get('[data-cy="input-Praires_Ouest_cotentin"]').should('exist')
+    cy.get('.rs-picker-toggle-value').eq(0).should('have.text', getDate(new Date().toISOString()))
+  })
 })

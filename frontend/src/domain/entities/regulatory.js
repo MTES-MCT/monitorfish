@@ -130,7 +130,7 @@ const mapToFishingPeriod = fishingPeriod => {
 
 export const mapToRegulatoryFeatureObject = properties => {
   const {
-    layerName,
+    topic,
     lawType,
     zone,
     region,
@@ -142,7 +142,7 @@ export const mapToRegulatoryFeatureObject = properties => {
   } = properties
 
   return {
-    layer_name: layerName,
+    layer_name: topic,
     law_type: lawType,
     zones: zone,
     region,
@@ -300,8 +300,8 @@ export const INITIAL_UPCOMING_REG_REFERENCE = { regulatoryTextList: [DEFAULT_REG
 export const REGULATORY_REFERENCE_KEYS = {
   ID: 'id',
   REGION: 'region',
-  TOPIC: 'topic',
   LAW_TYPE: 'lawType',
+  TOPIC: 'topic',
   ZONE: 'zone',
   REGULATORY_REFERENCES: 'regulatoryReferences',
   UPCOMING_REGULATORY_REFERENCES: 'upcomingRegulatoryReferences',

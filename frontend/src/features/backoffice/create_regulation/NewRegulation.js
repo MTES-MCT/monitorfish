@@ -53,7 +53,6 @@ import {
   getRegulatoryFeatureId,
   REGULATION_ACTION_TYPE,
   REGULATORY_TEXT_SOURCE,
-  REG_LOCALE,
   LAWTYPES_TO_TERRITORY,
   FRANCE,
   INITIAL_REGULATION,
@@ -184,30 +183,30 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [id, initialGeometryId])
 
   const checkRequiredValues = useCallback(() => {
-    let atLeastOneValueIsMissing = false
+    let _atLeastOneValueIsMissing = false
     let valueIsMissing = !(lawType && lawType !== '')
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
     setLawTypeIsMissing(valueIsMissing)
 
     valueIsMissing = !(topic && topic !== '')
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
     setProcessingRegulationTopicIsMissing(valueIsMissing)
 
     valueIsMissing = !(zone && zone !== '')
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
     setNameZoneIsMissing(valueIsMissing)
 
     valueIsMissing = lawType && lawType !== '' &&
-      lawType.includes(REG_LOCALE) &&
+      LAWTYPES_TO_TERRITORY[lawType] === FRANCE &&
       !(region && region.length !== 0)
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
+    _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
     setRegionIsMissing(valueIsMissing)
 
     valueIsMissing = !(id && id !== '')
     setGeometryIsMissing(valueIsMissing)
-    atLeastOneValueIsMissing = atLeastOneValueIsMissing || valueIsMissing
-    dispatch(setAtLeastOneValueIsMissing(atLeastOneValueIsMissing))
-  }, [lawType, zone, topic, region, id])
+    _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
+    dispatch(setAtLeastOneValueIsMissing(_atLeastOneValueIsMissing))
+  }, [lawType, topic, zone, region, id])
 
   useEffect(() => {
     if (saveOrUpdateRegulation && atLeastOneValueIsMissing === undefined) {

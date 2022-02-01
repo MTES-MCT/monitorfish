@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Backoffice.style'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
@@ -15,12 +15,6 @@ const RegulationLayerZoneLine = props => {
 
   const { zone } = useSelector(state => state.regulation.processingRegulation)
 
-  const [isInputFilled, setIsInputFilled] = useState(false)
-
-  useEffect(() => {
-    setIsInputFilled(zone && zone !== '')
-  }, [zone])
-
   const setZoneName = (value) => {
     dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ZONE, value }))
   }
@@ -33,8 +27,7 @@ const RegulationLayerZoneLine = props => {
       value={zone}
       onChange={setZoneName}
       width={'200px'}
-      onMouseLeave={() => setIsInputFilled(zone && zone !== '')}
-      $isGray={isInputFilled}
+      $isGray={zone && zone !== ''}
       $isRed={nameZoneIsMissing}
     />
     <InfoBox pointer>

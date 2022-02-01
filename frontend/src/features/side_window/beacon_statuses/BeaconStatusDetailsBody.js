@@ -29,6 +29,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
   const [yesterday, setYesterday] = useState('')
   const scrollToRef = useRef('')
   const [comment, setComment] = useState('')
+  const textareaRef = useRef(null)
 
   useEffect(() => {
     if (!comments?.length) {
@@ -130,6 +131,15 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
     }
   }
 
+  useEffect(() => {
+    if (comment?.length && textareaRef.current) {
+      const scrollHeight = textareaRef.current.scrollHeight
+      textareaRef.current.style.height = scrollHeight > 50 ? scrollHeight : 50 + 'px'
+    } else if (textareaRef.current) {
+      textareaRef.current.style.height = '50px'
+    }
+  }, [comment])
+
   const saveComment = () => {
     dispatch(saveBeaconStatusComment(beaconStatusId, comment)).then(() => {
       setComment('')
@@ -184,9 +194,10 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
       </Comments>
       <AddComment
         data-cy={'side-window-beacon-statuses-detail-comment-textarea'}
-        style={addCommentStyle}
+        style={addCommentStyle(userType)}
         value={comment}
         onChange={event => setComment(event.target.value)}
+        ref={textareaRef}
       />
       <SubmitCommentRow style={submitCommentRowStyle}>
         Équipe SIP
@@ -198,6 +209,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
         Équipe OPS
         <SubmitComment
           data-cy={'side-window-beacon-statuses-detail-comment-add'}
+          disabled={!comment.replace(/\s/g, '').length}
           style={submitCommentStyle}
           onClick={saveComment}
         >
@@ -234,15 +246,16 @@ const submitCommentRowStyle = {
 }
 
 const AddComment = styled.textarea``
-const addCommentStyle = {
+const addCommentStyle = userType => ({
   width: '100%',
-  background: '#C8DCE6 0% 0% no-repeat padding-box',
+  background: `${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray} 0% 0% no-repeat padding-box`,
   border: '1px solid #9DC0D2',
   marginTop: 20,
   marginBottom: 5,
   padding: 5,
-  height: 50
-}
+  height: 50,
+  maxHeight: 150
+})
 
 const ActionOrCommentRow = styled.div``
 const actionOrCommentRow = {
@@ -298,7 +311,8 @@ const rowDateStyle = (isToday, isYesterday) => ({
 const Comments = styled.div``
 const commentsStyle = {
   maxHeight: 435,
-  overflowY: 'auto'
+  overflowY: 'auto',
+  overflowX: 'hidden'
 }
 
 const NumberComments = styled.span``
@@ -307,7 +321,8 @@ const numberCommentsStyle = {
   letterSpacing: 0,
   color: COLORS.slateGray,
   display: 'inline-block',
-  width: '100%'
+  width: '100%',
+  marginBottom: 5
 }
 
 const NumberCommentsText = styled.span``

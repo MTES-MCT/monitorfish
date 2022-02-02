@@ -6,9 +6,7 @@ import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as TimeAgoSVG } from '../../icons/Label_horaire_VMS.svg'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
-import { Priority, priorityStyle } from './BeaconStatusCard'
-import showVessel from '../../../domain/use_cases/showVessel'
-import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
+import { Priority, priorityStyle, showVesselOnMap } from './BeaconStatusCard'
 import { useDispatch } from 'react-redux'
 import { vesselStatuses } from './beaconStatuses'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
@@ -98,11 +96,7 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
           <ShowVessel
             data-cy={'side-window-beacon-statuses-detail-show-vessel'}
             style={showVesselStyle}
-            onClick={() => {
-              const vesselIdentity = { ...beaconStatus, flagState: 'FR' }
-              dispatch(showVessel(vesselIdentity, false, false, null))
-              dispatch(getVesselVoyage(vesselIdentity, null, false))
-            }}
+            onClick={() => showVesselOnMap(dispatch, beaconStatus)}
           >
             <ShowVesselText style={showVesselTextStyle}>
               voir le navire sur la carte

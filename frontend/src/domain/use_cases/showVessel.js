@@ -4,8 +4,9 @@ import { getOnlyVesselIdentityProperties, Vessel } from '../entities/vessel'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../shared_slices/Vessel'
 import { addSearchedVessel, removeError, setError } from '../shared_slices/Global'
 import { doNotAnimate } from '../shared_slices/Map'
-import { getTrackDepthError, getVesselTrackDepth } from '../entities/vesselTrackDepth'
+import { getTrackDepthError } from '../entities/vesselTrackDepth'
 import { removeFishingActivitiesFromMap } from '../shared_slices/FishingActivities'
+import { getNextVesselTrackDepthObject } from './showVesselTrack'
 
 /**
  * Show a specified vessel track on map and on the vessel right sidebar
@@ -20,9 +21,11 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
 
   const { vessel, fishingActivities, map } = getState()
   const {
-    selectedVesselCustomTrackDepth,
     vessels
   } = vessel
+  const {
+    defaultVesselTrackDepth
+  } = map
   const {
     fishingActivitiesAreShowedOnMap
   } = fishingActivities
@@ -31,11 +34,7 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
 
   dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 
-  const nextVesselTrackDepthObject = getVesselTrackDepth(
-    vesselTrackDepth,
-    selectedVesselCustomTrackDepth,
-    map.defaultVesselTrackDepth)
-
+  const nextVesselTrackDepthObject = getNextVesselTrackDepthObject(vesselTrackDepth, defaultVesselTrackDepth)
   if (fishingActivitiesAreShowedOnMap && !calledFromCron) {
     dispatch(removeFishingActivitiesFromMap())
   }
@@ -53,9 +52,9 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
         vesselTrackDepth)
 
       const selectedVessel = {
+        ...vesselIdentity,
         ...lastPositionVessel?.vesselProperties,
         ...vesselAndPositions?.vessel,
-        ...vesselIdentity,
         globalRiskFactor: vesselIdentity?.riskFactor,
         riskFactor: vesselAndPositions?.vessel?.riskFactor
       }

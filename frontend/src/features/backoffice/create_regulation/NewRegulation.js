@@ -22,7 +22,7 @@ import BaseMap from '../../map/BaseMap'
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
 
 import {
-  setRegulatoryGeometryToPreview,
+  setRegulatoryGeometriesToPreview,
   setRegulatoryZoneMetadata,
   setRegulatoryTopics,
   closeRegulatoryZoneMetadataPanel
@@ -281,9 +281,9 @@ const CreateRegulation = ({ title, isEdition }) => {
   useEffect(() => {
     if (showRegulatoryPreview &&
       ((isEdition && regulatoryZoneMetadata.geometry) || (geometryObjectList && geometryObjectList[selectedGeometryId]))) {
-      dispatch(setRegulatoryGeometryToPreview(isEdition
-        ? regulatoryZoneMetadata.geometry
-        : geometryObjectList[selectedGeometryId]))
+      dispatch(setRegulatoryGeometriesToPreview(isEdition
+        ? [regulatoryZoneMetadata.geometry]
+        : [geometryObjectList[selectedGeometryId]]))
     }
   }, [isEdition, regulatoryZoneMetadata, selectedGeometryId, geometryObjectList, showRegulatoryPreview])
 

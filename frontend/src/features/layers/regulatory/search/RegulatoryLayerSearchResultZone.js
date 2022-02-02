@@ -7,7 +7,7 @@ import Checkbox from 'rsuite/lib/Checkbox'
 import Layers, { getGearCategory } from '../../../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../../../domain/use_cases/showRegulatoryZoneMetadata'
 import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/closeRegulatoryZoneMetadata'
-import { setRegulatoryGeometryToPreview } from '../../../../domain/shared_slices/Regulatory'
+import { setRegulatoryGeometriesToPreview, resetRegulatoryGeometriesToPreview } from '../../../../domain/shared_slices/Regulatory'
 
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 import { showOrHideMetadataIcon } from '../RegulatoryLayerZone'
@@ -95,12 +95,15 @@ const RegulatoryLayerSearchResultZone = props => {
 
   const handleMouseOver = () => {
     if (regulatoryZone.geometry) {
-      dispatch(setRegulatoryGeometryToPreview(regulatoryZone.geometry))
+      dispatch(setRegulatoryGeometriesToPreview([regulatoryZone.geometry]))
     }
+  }
+  const handleMouseOut = () => {
+    dispatch(resetRegulatoryGeometriesToPreview())
   }
 
   return (
-    <Zone onMouseOver={handleMouseOver}>
+    <Zone onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
       <Rectangle vectorLayerStyle={zoneStyle}/>
       <Name onClick={() => zoneSelectionList?.length
         ? setZoneSelectionList([])

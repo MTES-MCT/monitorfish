@@ -58,9 +58,9 @@ const showVesselTrack = (clickedVessel, calledFromCron, vesselTrackDepth) => (di
     })
 }
 
-function getNextVesselTrackDepthObject (vesselTrackDepth, trackDepth) {
+export function getNextVesselTrackDepthObject (vesselTrackDepth, defaultTrackDepth) {
   let nextVesselTrackDepthObject = vesselTrackDepth || {
-    trackDepth,
+    trackDepth: defaultTrackDepth,
     beforeDateTime: null,
     afterDateTime: null
   }

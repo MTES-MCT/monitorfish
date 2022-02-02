@@ -14,11 +14,12 @@ const RegulatoryLayerSearchResultList = () => {
     <List $advancedSearchIsOpen={advancedSearchIsOpen}>
       {
         regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0
-          ? Object.keys(regulatoryLayersSearchResult).map((lawType) => {
+          ? Object.entries(regulatoryLayersSearchResult)?.map(([lawType, topic]) => {
             return (
               <RegulatoryLayerSearchResultLawType
                 key={lawType}
                 regulatoryLayerLawType={lawType}
+                topic={topic}
               />
             )
           })

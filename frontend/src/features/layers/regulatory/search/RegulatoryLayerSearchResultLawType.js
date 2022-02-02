@@ -1,32 +1,23 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 import RegulatoryLayerSearchResultTopic from './RegulatoryLayerSearchResultTopic'
-import { useSelector } from 'react-redux'
 
-const RegulatoryLayerSearchResultLawType = props => {
-  const {
-    regulatoryLayerLawType
-  } = props
-
-  const {
-    regulatoryLayersSearchResult
-  } = useSelector(state => state.regulatoryLayerSearch)
-
+const RegulatoryLayerSearchResultLawType = ({ regulatoryLayerLawType, topic }) => {
   return (
     <Wrapper>
-      <LayerLawType>
+      <LayerLawType >
         {regulatoryLayerLawType}
       </LayerLawType>
-        {
-          Object.keys(regulatoryLayersSearchResult[regulatoryLayerLawType]).map(regulatoryLayerTopic => {
-            return <RegulatoryLayerSearchResultTopic
-              key={regulatoryLayerTopic}
-              regulatoryLayerLawType={regulatoryLayerLawType}
-              regulatoryLayerTopic={regulatoryLayerTopic}
-            />
-          })
-    }
+      {Object.keys(topic).length > 0 && Object.entries(topic).map(([regulatoryLayerTopic, topicDetails]) => {
+        return <RegulatoryLayerSearchResultTopic
+          key={regulatoryLayerTopic}
+          regulatoryLayerLawType={regulatoryLayerLawType}
+          regulatoryLayerTopic={regulatoryLayerTopic}
+          topicDetails={topicDetails}
+        />
+      })}
     </Wrapper>
   )
 }

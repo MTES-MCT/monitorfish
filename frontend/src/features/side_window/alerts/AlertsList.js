@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { Flag } from '../../vessel_list/tableCells'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import List from 'rsuite/lib/List'
 import FlexboxGrid from 'rsuite/lib/FlexboxGrid'
 import countries from 'i18n-iso-countries'
@@ -15,6 +15,7 @@ import showVessel from '../../../domain/use_cases/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
+import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -24,12 +25,27 @@ import { getTextForSearch } from '../../../utils'
  */
 const AlertsList = ({ alerts }) => {
   const dispatch = useDispatch()
+  const {
+    focusOnAlert
+  } = useSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortedAlerts, setSortedAlerts] = useState([])
   const [sortColumn] = useState('creationDate')
   const [sortType] = useState(SortType.DESC)
   const [filteredAlerts, setFilteredAlerts] = useState([])
   const [searchedVessel, setSearchedVessel] = useState(undefined)
+
+  useEffect(() => {
+    if (focusOnAlert) {
+      const timeoutHandler = setTimeout(() => {
+        dispatch(resetFocusOnAlert())
+      }, 2000)
+
+      return () => {
+        clearTimeout(timeoutHandler)
+      }
+    }
+  }, [focusOnAlert])
 
   useEffect(() => {
     if (filteredAlerts) {
@@ -103,7 +119,13 @@ const AlertsList = ({ alerts }) => {
         </List.Item>
         <ScrollableContainer style={ScrollableContainerStyle}>
           {sortedAlerts.map((alert, index) => (
-            <List.Item key={alert.id} index={index + 1} style={listItemStyle}>
+            <List.Item
+              key={alert.id}
+              index={index + 1}
+              style={listItemStyle(focusOnAlert
+                ? alert.id === focusOnAlert?.id
+                : false)}
+            >
               <FlexboxGrid>
                 <FlexboxGrid.Item colspan={2} style={riskColumnStyle}>
                   {
@@ -211,13 +233,14 @@ const showIconStyle = {
   height: 16
 }
 
-const listItemStyle = {
-  background: COLORS.cultured,
+const listItemStyle = isFocused => ({
+  background: isFocused ? COLORS.gainsboro : COLORS.cultured,
   border: `1px solid ${COLORS.lightGray}`,
   borderRadius: 1,
   height: 15,
-  marginTop: 6
-}
+  marginTop: 6,
+  transition: 'background 3s'
+})
 
 const styleCenter = {
   display: 'flex',

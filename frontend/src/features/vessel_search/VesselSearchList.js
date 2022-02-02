@@ -20,6 +20,8 @@ const VesselSearchList = ({
     lastSearchedVessels
   } = useSelector(state => state.global)
 
+  console.log(foundVesselsFromAPI)
+
   const selectVessel = useCallback(vessel => {
     dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_SEARCH_RESULT))
     setVesselsHasBeenUpdated(false)
@@ -33,7 +35,7 @@ const VesselSearchList = ({
         ? <Results>
           <List>
             {
-              foundVesselsOnMap.map(feature => {
+              foundVesselsOnMap?.map(feature => {
                 return <VesselSearchItem
                   key={feature.vesselId}
                   id={feature.vesselId}
@@ -43,7 +45,18 @@ const VesselSearchList = ({
                 />
               })
             }
-
+            {
+              foundVesselsFromAPI?.map((vessel) => {
+                const vesselId = Vessel.getVesselId(vessel)
+                return <VesselSearchItem
+                  key={vesselId}
+                  id={vesselId}
+                  vessel={vessel}
+                  selectVessel={() => selectVessel(vessel)}
+                  searchText={searchText}
+                />
+              })
+            }
           </List>
         </Results>
         : showLastSearchedVessels

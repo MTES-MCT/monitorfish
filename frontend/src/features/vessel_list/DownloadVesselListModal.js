@@ -84,9 +84,11 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
         return formatToCSVColumnsForExport(filteredVesselObject, CSVOptions, valuesChecked)
       })
 
-    const date = new Date()
-    csvExporter.options.filename = `export_vms_${getDate(date.toISOString())}_${Math.floor(Math.random() * 100) + 1}`
-    csvExporter.generateCsv(objectsToExports)
+    if (objectsToExports) {
+      const date = new Date()
+      csvExporter.options.filename = `export_vms_${getDate(date.toISOString())}_${Math.floor(Math.random() * 100) + 1}`
+      csvExporter.generateCsv(objectsToExports)
+    }
   }
 
   return (

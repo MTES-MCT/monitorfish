@@ -187,8 +187,7 @@ context('Beacon statuses', () => {
 
     // Show vessel on map
     cy.intercept('GET', 'bff/v1/vessels/find?internalReferenceNumber=FAK000999999' +
-      '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS' +
-      '&afterDateTime=&beforeDateTime=').as('showVesselPositionsOnMap')
+      '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*').as('showVesselPositionsOnMap')
     cy.intercept('GET', 'bff/v1/ers/find?internalReferenceNumber=FAK000999999' +
       '&externalReferenceNumber=DONTSINK&IRCS=CALLME&voyageRequest=LAST&tripNumber=').as('showVesselVoyageOnMap')
     cy.get('*[data-cy="side-window-beacon-statuses-detail-show-vessel"]').click()

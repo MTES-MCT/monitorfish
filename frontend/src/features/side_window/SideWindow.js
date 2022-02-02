@@ -66,7 +66,7 @@ const SideWindow = ({ fromTab }) => {
           break
         }
         case sideWindowMenu.ALERTS.code: {
-          setSelectedSubMenu(focusOnAlert?.value?.seaFront || AlertsSubMenu.MEMN)
+          setSelectedSubMenu(AlertsSubMenu[focusOnAlert?.value?.seaFront] || AlertsSubMenu.MEMN)
           break
         }
       }

@@ -117,14 +117,9 @@ const CreateRegulation = ({ title, isEdition }) => {
       dispatch(getAllRegulatoryLayersByRegTerritory())
     }
 
-    const newRegulation = {
-      regulatoryText: [],
-      upcomingRegulation: [{}]
-    }
     getGeometryObjectList()
     batch(() => {
       dispatch(getAllSpecies())
-      dispatch(setSelectedRegulation(newRegulation))
       dispatch(closeRegulatoryZoneMetadataPanel())
     })
 

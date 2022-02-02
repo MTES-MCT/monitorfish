@@ -447,6 +447,7 @@ const VesselList = ({ namespace }) => {
               Enregistrer le filtre
             </BlackButton>
             <BlackButton
+              data-cy={'download-vessels-modal'}
               disabled={!filteredVessels?.some(vessel => vessel.checked)}
               isLast={true}
               onClick={() => download()}>

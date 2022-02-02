@@ -447,7 +447,7 @@ const VesselList = ({ namespace }) => {
               Enregistrer le filtre
             </BlackButton>
             <BlackButton
-              disabled={!(filteredVessels && filteredVessels.length)}
+              disabled={!filteredVessels?.some(vessel => vessel.checked)}
               isLast={true}
               onClick={() => download()}>
               Télécharger le tableau

@@ -20,8 +20,6 @@ const VesselSearchList = ({
     lastSearchedVessels
   } = useSelector(state => state.global)
 
-  console.log(foundVesselsFromAPI)
-
   const selectVessel = useCallback(vessel => {
     dispatch(focusOnVesselSearch(focusState.CLICK_VESSEL_SEARCH_RESULT))
     setVesselsHasBeenUpdated(false)

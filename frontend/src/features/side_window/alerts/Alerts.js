@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import AlertsList from './AlertsList'
 import { getAlertForList } from './dataFormatting'
 import { useSelector } from 'react-redux'
-import { AlertsMenuSeaFrontsToSeaFrontList } from '../../../domain/entities/alerts'
+import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
 import { COLORS } from '../../../constants/constants'
 
 /**
@@ -13,10 +13,25 @@ import { COLORS } from '../../../constants/constants'
  * @return {JSX.Element}
  * @constructor
  */
-const Alerts = ({ selectedSubMenu }) => {
+const Alerts = ({ selectedSubMenu, setSelectedSubMenu }) => {
   const {
-    alerts
+    alerts,
+    focusOnAlert
   } = useSelector(state => state.alert)
+
+  useEffect(() => {
+    if (focusOnAlert) {
+      const seaFront = focusOnAlert?.value?.seaFront
+
+      const menuSeaFrontName = Object.keys(AlertsMenuSeaFrontsToSeaFrontList)
+        .map(menuSeaFrontKey => AlertsMenuSeaFrontsToSeaFrontList[menuSeaFrontKey])
+        .find(item => item.seaFronts.includes(seaFront))
+
+      if (menuSeaFrontName) {
+        setSelectedSubMenu(AlertsSubMenu[menuSeaFrontName.menuSeaFront])
+      }
+    }
+  }, [focusOnAlert])
 
   return <Content style={contentStyle}>
     <AlertsList

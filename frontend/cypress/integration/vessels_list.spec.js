@@ -72,4 +72,18 @@ context('Vessels list', () => {
 
     cy.get('*[data-cy^="vessel-list-table-count"]').contains('959 navires')
   })
+
+  it('Vessels Should not be downloadable When no vessels selected', () => {
+    // Given
+    cy.get('*[data-cy^="vessel-list"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="download-vessels-modal"]').should('be.disabled')
+
+    // When
+    cy.get('[aria-rowindex="2"] > .rs-table-cell-group-fixed-left > .table-content-editing ' +
+      '> .rs-table-cell-content > .rs-checkbox > .rs-checkbox-checker').click({ timeout: 20000 })
+
+    // Then
+    cy.get('*[data-cy^="download-vessels-modal"]').should('not.be.disabled')
+    cy.get('*[data-cy^="download-vessels-modal"]').click()
+  })
 })

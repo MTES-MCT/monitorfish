@@ -8,15 +8,15 @@ context('Alerts', () => {
     cy.visit(`http://localhost:${port}/side_window`)
   })
 
-  it('Seven alerts Should be shown When clicking on the NAMO menu', () => {
+  it('Six alerts Should be shown When clicking on the NAMO menu', () => {
     // When
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
 
     // Then
-    cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('7')
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 7)
+    cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('6')
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 6)
 
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().last().contains('ABC000363962')
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().last().contains('LE b@TO')
     cy.get('*[data-cy^="side-window-alerts-list"]').children().last().contains('3 milles - Chaluts')
 
     // Show vessel on map
@@ -34,7 +34,7 @@ context('Alerts', () => {
   it('Alerts Should be filtered based on the search input', () => {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-SA"]').click()
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 2)
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 3)
 
     // When
     cy.get('*[data-cy^="side-window-alerts-search-vessel"]').type('ABC0003')

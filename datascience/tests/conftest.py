@@ -1,7 +1,6 @@
 import itertools
 import os
 import re
-import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 from time import sleep
@@ -107,7 +106,7 @@ def start_remote_database_container(set_environment_variables, create_docker_cli
             "POSTGRES_USER": os.environ["MONITORFISH_REMOTE_DB_USER"],
             "POSTGRES_DB": os.environ["MONITORFISH_REMOTE_DB_NAME"],
         },
-        network_mode="host",
+        ports={"5432/tcp": 5434},
         detach=True,
     )
     sleep(3)

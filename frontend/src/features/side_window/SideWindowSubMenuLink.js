@@ -61,14 +61,16 @@ const Link = styled.div``
 const CircleWithKeyMetric = styled.span``
 const circleMetricStyle = {
   display: 'inline-block',
-  height: 9,
+  height: 7,
   borderRadius: 2,
   padding: '0px 6px 12px 5px',
   color: 'white',
   background: COLORS.charcoal,
   fontSize: 13,
   flexShrink: 0,
-  marginLeft: 'auto'
+  marginLeft: 'auto',
+  minWidth: 7,
+  lineHeight: '16px'
 }
 
 export default SideWindowSubMenuLink

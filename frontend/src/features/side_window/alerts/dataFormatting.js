@@ -7,6 +7,7 @@ export function getAlertForList (alert) {
     ircs: alert.ircs,
     creationDateTimestamp: alert.creationDate ? new Date(alert.creationDate).getTime() : '',
     creationDate: alert.creationDate,
+    vesselIdentifier: alert.vesselIdentifier,
     riskFactor: alert.value.riskFactor,
     flagState: alert.value.flagState?.toLowerCase(),
     seaFront: alert.value.seaFront,

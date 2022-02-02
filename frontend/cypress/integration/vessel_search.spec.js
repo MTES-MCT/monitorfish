@@ -14,8 +14,8 @@ context('VesselSearch', () => {
     cy.wait(1000)
   })
 
-  it('Vessel Should be searched from the search bar', () => {
-    // When
+  it('Vessel from last positions and vessels table Should be searched from the search bar', () => {
+    // When searching a vessel from the last positions table
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 20000 }).type('Pheno')
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 20000 }).eq(0).click()
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
@@ -28,6 +28,10 @@ context('VesselSearch', () => {
     // Close the sidebar
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 20000 }).click()
     cy.get('*[data-cy^="vessel-search-selected-vessel-title"]', { timeout: 20000 }).should('not.exist')
+
+    // Search a vessel in the vessel table
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 20000 }).type('MALOTRU')
+    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 20000 }).eq(0).contains('MALOTRU')
   })
 
   it('Vessel history Should be shown When having previously searched vessels', () => {

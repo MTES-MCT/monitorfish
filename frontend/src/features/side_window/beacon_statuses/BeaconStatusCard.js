@@ -12,6 +12,7 @@ import showVessel from '../../../domain/use_cases/showVessel'
 import { useDispatch } from 'react-redux'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 import openBeaconStatus from '../../../domain/use_cases/openBeaconStatus'
+import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 
 timeago.register('fr', timeagoFrenchLocale)
 
@@ -53,11 +54,7 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
         <ShowIcon
           style={showIconStyle}
           alt={'Voir sur la carte'}
-          onClick={() => {
-            const vesselIdentity = { ...beaconStatus }
-            dispatch(showVessel(vesselIdentity, false, false, null))
-            dispatch(getVesselVoyage(vesselIdentity, null, false))
-          }}
+          onClick={() => showVesselOnMap(dispatch, beaconStatus)}
           src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
         />
       </Row>
@@ -100,6 +97,24 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
       </Row>
     </Body>
   </Wrapper>
+}
+
+export const showVesselOnMap = (dispatch, beaconStatus) => {
+  const afterDateTime = new Date()
+  const twentyFiveHours = 25
+  afterDateTime.setTime(afterDateTime.getTime() - (twentyFiveHours * 60 * 60 * 1000))
+  afterDateTime.setMilliseconds(0)
+  const beforeDateTime = new Date()
+  beforeDateTime.setMilliseconds(0)
+
+  const vesselTrackDepth = {
+    trackDepth: VesselTrackDepth.CUSTOM,
+    afterDateTime: afterDateTime,
+    beforeDateTime: beforeDateTime
+  }
+  const vesselIdentity = { ...beaconStatus, flagState: 'fr' }
+  dispatch(showVessel(vesselIdentity, false, false, vesselTrackDepth))
+  dispatch(getVesselVoyage(vesselIdentity, null, false))
 }
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer

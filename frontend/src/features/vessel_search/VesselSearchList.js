@@ -33,7 +33,7 @@ const VesselSearchList = ({
         ? <Results>
           <List>
             {
-              foundVesselsOnMap.map(feature => {
+              foundVesselsOnMap?.map(feature => {
                 return <VesselSearchItem
                   key={feature.vesselId}
                   id={feature.vesselId}
@@ -43,7 +43,18 @@ const VesselSearchList = ({
                 />
               })
             }
-
+            {
+              foundVesselsFromAPI?.map((vessel) => {
+                const vesselId = Vessel.getVesselId(vessel)
+                return <VesselSearchItem
+                  key={vesselId}
+                  id={vesselId}
+                  vessel={vessel}
+                  selectVessel={() => selectVessel(vessel)}
+                  searchText={searchText}
+                />
+              })
+            }
           </List>
         </Results>
         : showLastSearchedVessels

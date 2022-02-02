@@ -5,19 +5,19 @@ INSERT INTO pending_alerts (vessel_name,internal_reference_number,external_refer
     '"riskFactor": 3.5647,' ||
     '"type": "THREE_MILES_TRAWLING_ALERT"' ||
     '}')::jsonb),
-('PHENOMENE', 'U_W0NTFINDME', 'ABC123456', 'TALK2ME', NOW(), '9463723', 'INTERNAL_REFERENCE_NUMBER', ('{' ||
+('MALOTRU', 'U_W0NTFINDME', 'TALK2ME', 'QGDF', NOW(), '9463723', 'INTERNAL_REFERENCE_NUMBER', ('{' ||
     '"seaFront": "NAMO",' ||
     '"flagState": "FR",' ||
     '"riskFactor": 1.5647,' ||
     '"type": "THREE_MILES_TRAWLING_ALERT"' ||
     '}')::jsonb),
-('PHENOMENE', 'ABC000363962', 'QZ642965', 'SK1266', (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER', ('{' ||
-    '"seaFront": "NAMO",' ||
+('PAYSAGE ROMAN LIER', 'ABC000339263', 'CN775734', 'YHIZ', (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER', ('{' ||
+    '"seaFront": "SA",' ||
     '"flagState": "FR",' ||
     '"riskFactor": 2.5647,' ||
     '"type": "THREE_MILES_TRAWLING_ALERT"' ||
     '}')::jsonb),
-('PHENOMENE', 'ABC000035772', 'ZR522262', 'NC1001', (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '13 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER', ('{' ||
+('LE b@TO', 'FR263418260', '08FR65324', 'IR12A', (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '13 hours 45 minutes', '9463723', 'INTERNAL_REFERENCE_NUMBER', ('{' ||
     '"seaFront": "NAMO",' ||
     '"flagState": "FR",' ||
     '"riskFactor": 2.5647,' ||

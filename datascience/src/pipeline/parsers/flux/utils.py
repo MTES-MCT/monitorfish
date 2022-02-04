@@ -16,22 +16,20 @@ def get_element(xml_element, xml_path):
     return xml_element.find(xml_path, NS_FLUX)
 
 
-msg_types = {
-    "DEPARTURE": "DEP",
-    "FISHING_OPERATION": "FAR",
-    "DISCARD": "DIS",
-    "ARRIVAL": "RTP",
-    "LANDING": "LAN",
-    "RELOCATION": "RLC",
-    "TRANSHIPMENT": "TRA",
-    "AREA_ENTRY": "COE",
-    "AREA_EXIT": "COX",
-    "JOINT_FISHING_OPERATION": "JOINT_FISHING_OPERATION",
-}
-
-
 def get_msg_type(xml_element):
     # Renvoie le type de message(DEP, LAN,...)
+    msg_types = {
+        "DEPARTURE": "DEP",
+        "FISHING_OPERATION": "FAR",
+        "DISCARD": "DIS",
+        "ARRIVAL": "RTP",
+        "LANDING": "LAN",
+        "RELOCATION": "RLC",
+        "TRANSHIPMENT": "TRA",
+        "AREA_ENTRY": "COE",
+        "AREA_EXIT": "COX",
+        "JOINT_FISHING_OPERATION": "JOINT_FISHING_OPERATION",
+    }
     message_type = get_text(xml_element, './/ram:TypeCode[@listID="FLUX_FA_TYPE"]')
     try:
         type = msg_types[message_type]

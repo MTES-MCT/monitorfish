@@ -1,8 +1,8 @@
+import base64
+import gzip
 import logging
 import xml
 import xml.etree.ElementTree as ET
-import gzip
-import base64
 from datetime import datetime
 from functools import partial
 from typing import List
@@ -21,74 +21,98 @@ from src.pipeline.parsers.flux.log_parsers import (
     parse_pno,
     parse_rtp,
 )
-
-from src.utils.flux import NS_FLUX, get_element, get_op_type, get_msg_type, get_purpose, get_text, make_datetime
+from src.pipeline.parsers.flux.utils import (
+    NS_FLUX,
+    get_element,
+    get_msg_type,
+    get_op_type,
+    get_purpose,
+    get_text,
+    make_datetime,
+)
 from src.pipeline.parsers.utils import tagged_children
+
 
 class FLUXParsingError(Exception):
     """Raised when an FLUX message cannot be parsed."""
 
-    pass
 
 def parse_metadata(el: xml.etree.ElementTree.Element, op_type):
-    vessel = get_element(el,'ram:SpecifiedVesselTransportMeans')
+    vessel = get_element(el, "ram:SpecifiedVesselTransportMeans")
 
-    metadata =  {"operation_type": op_type,
-            "report_id": get_text(el,'.//ram:ID[@schemeID="UUID"]'),
-            "report_datetime_utc": make_datetime(get_text(el,'.//ram:CreationDateTime/udt:DateTime')),
-            "cfr": get_text(vessel,'.//*[@schemeID="CFR"]'),
-            "ircs": get_text(vessel,'.//*[@schemeID="IRCS"]'),
-            "external_identification": get_text(vessel,'.//*[@schemeID="EXT_MARK"]'),
-            "vessel_name": get_text(vessel,'ram:Name'),
-            "flag_state": get_text(vessel,'.//ram:ID[@schemeID="TERRITORY"]'),
-            "imo": get_text(vessel,'.//*[@schemeID="UVI"]'),
-            "trip_number": get_text(el,'.//ram:SpecifiedFishingTrip/ram:ID[@schemeID="EU_TRIP_ID"]')
-            }
-    if op_type=='COR':
-        metadata= {**metadata, "referenced_report_id": get_text(el,'.//ram:ReferencedID[@schemeID="UUID"]')}
+    metadata = {
+        "operation_type": op_type,
+        "report_id": get_text(el, './/ram:ID[@schemeID="UUID"]'),
+        "report_datetime_utc": make_datetime(
+            get_text(el, ".//ram:CreationDateTime/udt:DateTime")
+        ),
+        "cfr": get_text(vessel, './/*[@schemeID="CFR"]'),
+        "ircs": get_text(vessel, './/*[@schemeID="IRCS"]'),
+        "external_identification": get_text(vessel, './/*[@schemeID="EXT_MARK"]'),
+        "vessel_name": get_text(vessel, "ram:Name"),
+        "flag_state": get_text(vessel, './/ram:ID[@schemeID="TERRITORY"]'),
+        "imo": get_text(vessel, './/*[@schemeID="UVI"]'),
+        "trip_number": get_text(
+            el, './/ram:SpecifiedFishingTrip/ram:ID[@schemeID="EU_TRIP_ID"]'
+        ),
+    }
+    if op_type == "COR":
+        metadata = {
+            **metadata,
+            "referenced_report_id": get_text(
+                el, './/ram:ReferencedID[@schemeID="UUID"]'
+            ),
+        }
 
     return metadata
 
+
 def simple_parser(el: xml.etree.ElementTree.Element, op_type):
-    metadata =  parse_metadata(el,op_type)
+    metadata = parse_metadata(el, op_type)
 
     children = tagged_children(el)
-    data_iter=[]
+    data_iter = []
     if "SpecifiedFishingActivity" in children:
         nb_FActivity = len(children["SpecifiedFishingActivity"])
-        if nb_FActivity>1 :
-            value = {"log_type": "FAR", "value":[]}
+        if nb_FActivity > 1:
+            value = {"log_type": "FAR", "value": []}
             for child in children["SpecifiedFishingActivity"]:
                 data = parse_message(child)
                 value["value"].append(data.get("value")[0])
             data_iter.append(value)
-        else :
-            data = parse_message(get_element(el,'ram:SpecifiedFishingActivity'))
+        else:
+            data = parse_message(get_element(el, "ram:SpecifiedFishingActivity"))
             data_iter.append(data)
 
     return metadata, data_iter
+
 
 def parse_not(not_):
     op_type = get_purpose(not_)
     metadata = parse_metadata(not_, op_type)
 
     children = tagged_children(not_)
-    data_iter=[]
+    data_iter = []
     if "SpecifiedFishingActivity" in children:
         for child in children["SpecifiedFishingActivity"]:
             msg_type = get_msg_type(child)
-            if msg_type=='RTP' :
+            if msg_type == "RTP":
                 data = parse_pno(child)
                 data_iter.append(data)
-            else :
-                data = {"log_type": "NOT-"+msg_type}
+            else:
+                data = {"log_type": "NOT-" + msg_type}
                 data_iter.append(data)
     return metadata, data_iter
 
+
 def parse_del(del_):
-    metadata = {"operation_type": "DEL", "referenced_flux_id": get_text(del_,'.//ram:ReferencedID[@schemeID="UUID"]')}
+    metadata = {
+        "operation_type": "DEL",
+        "referenced_flux_id": get_text(del_, './/ram:ReferencedID[@schemeID="UUID"]'),
+    }
 
     return metadata, [{"value": None}]
+
 
 parsers = {
     "DAT": partial(simple_parser, op_type="DAT"),
@@ -107,6 +131,7 @@ parsers = {
     "JOINT_FISHING_OPERATION": default_log_parser,
 }
 
+
 def parse(el, tag):
     try:
         parser = parsers[tag]
@@ -119,32 +144,45 @@ def parse(el, tag):
         raise FLUXParsingError
     return res
 
+
 def parse_report(el):
     op_type = get_op_type(el)
-    res = parse(el,op_type)
+    res = parse(el, op_type)
     return res
+
 
 def parse_message(el):
     msg_type = get_msg_type(el)
     res = parse(el, msg_type)
     return res
 
+
 def get_list_flux_message(xml_document):
-    msg_list=xml_document.findall('FAReportDocument',NS_FLUX)
+    msg_list = xml_document.findall("FAReportDocument", NS_FLUX)
     return msg_list
+
 
 def decode_flux(enc_flux):
     root = ET.fromstring(enc_flux).text
     dec_flux = gzip.decompress(base64.b64decode(root)).decode("utf-8")
     return dec_flux
 
-def parse_xml_document(xml_document,decode_base64):
+
+def parse_xml_document(xml_document, decode_base64):
     try:
         if decode_base64:
             xml_document = decode_flux(xml_document)
         el = ET.fromstring(xml_document)
-        op_data = {"operation_number": get_text(el,'.//rsm:FLUXReportDocument/ram:ID[@schemeID="UUID"]'),
-                    "operation_datetime_utc": make_datetime(get_text(el,'.//rsm:FLUXReportDocument/ram:CreationDateTime/udt:DateTime'))}
+        op_data = {
+            "operation_number": get_text(
+                el, './/rsm:FLUXReportDocument/ram:ID[@schemeID="UUID"]'
+            ),
+            "operation_datetime_utc": make_datetime(
+                get_text(
+                    el, ".//rsm:FLUXReportDocument/ram:CreationDateTime/udt:DateTime"
+                )
+            ),
+        }
         msg_list = get_list_flux_message(el)
         res = []
         for msg in msg_list:
@@ -154,6 +192,7 @@ def parse_xml_document(xml_document,decode_base64):
     except ParseError:
         raise FLUXParsingError
     return res
+
 
 def batch_parse(flux_xmls: List[str]):
     """Parses FLUX documents and return 2 tables as DataFrames containing the
@@ -191,18 +230,18 @@ def batch_parse(flux_xmls: List[str]):
     }
 
     for xml_document in flux_xmls:
-        parsed_doc = parse_xml_document(xml_document,decode_base64=True)
-        
+        parsed_doc = parse_xml_document(xml_document, decode_base64=True)
+
         now = datetime.utcnow()
         raw = {
-                    "operation_number":parsed_doc[0][0].get("operation_number"),
-                    "xml_message": decode_flux(xml_document),
+            "operation_number": parsed_doc[0][0].get("operation_number"),
+            "xml_message": decode_flux(xml_document),
         }
         res_xml.append(pd.Series({**raw}))
 
         for res in parsed_doc:
             try:
-                metadata=res[0]
+                metadata = res[0]
                 data = res[1][0]
                 res_json.append(
                     pd.Series(

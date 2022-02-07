@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
 import { useSelector } from 'react-redux'
-import { SectionTitle, Section, List } from './RegulatoryMetadata.style'
+import { SectionTitle, Section, List, Label } from './RegulatoryMetadata.style'
 import GearsOrGearCategories from './GearsOrGearCategories'
 import { COLORS } from '../../../../constants/constants'
 import InfoPoint from '../../../backoffice/create_regulation/InfoPoint'
@@ -14,7 +14,8 @@ const MetadataGears = () => {
     regulatedGears,
     regulatedGearCategories,
     derogation,
-    otherInfo
+    otherInfo,
+    allGears
   } = regulatoryGears
 
   return <>{regulatoryGears && authorized !== undefined &&
@@ -24,10 +25,12 @@ const MetadataGears = () => {
         : <RedCircle margin={'0 5px 0 0'} />}
         Engins {regulatoryGears.authorized ? 'réglementés' : 'interdits'}
       </SectionTitle>
-      <List>
-        <GearsOrGearCategories list={regulatedGears} />
-        <GearsOrGearCategories list={regulatedGearCategories} />
-      </List>
+      {allGears
+        ? <Label>{'Tous les engins'}</Label>
+        : <List>
+          <GearsOrGearCategories list={regulatedGears} />
+          <GearsOrGearCategories list={regulatedGearCategories} />
+        </List>}
       {!authorized && derogation &&
         <Derogation>
           <InfoPoint

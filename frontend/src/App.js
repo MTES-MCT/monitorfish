@@ -77,7 +77,6 @@ function App () {
 
 function HomePage () {
   return <Provider store={homeStore}>
-    <PersistGate loading={null} >
       <NamespaceContext.Provider value={'homepage'}>
         <BackofficeMode inBackofficeMode={false}/>
         <Switch>
@@ -112,7 +111,6 @@ function HomePage () {
           </Route>
         </Switch>
       </NamespaceContext.Provider>
-    </PersistGate>
   </Provider>
 }
 

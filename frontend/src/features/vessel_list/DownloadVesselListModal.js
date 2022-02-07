@@ -8,6 +8,9 @@ import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
 import { formatToCSVColumnsForExport, getDate } from '../../utils'
 import { CSVOptions } from './dataFormatting'
+import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+import { getCoordinates } from '../../coordinates'
+import { useSelector } from 'react-redux'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
@@ -25,9 +28,12 @@ const optionsCSV = {
 const csvExporter = new ExportToCsv(optionsCSV)
 
 const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
-  const [indeterminate, setIndeterminate] = useState(false)
-  const [checkAll, setCheckAll] = useState(true)
-  const [valuesChecked, setValuesChecked] = useState([])
+  const { coordinatesFormat } = useSelector(state => state.map)
+  const [checkboxState, setCheckboxState] = useState({
+    checkAll: true,
+    indeterminate: false,
+    valuesChecked: []
+  })
 
   useEffect(() => {
     const columnsNotCheckedByDefault = [
@@ -47,28 +53,36 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
       .map(value => CSVOptions[value].code)
       .filter(value => !columnsNotCheckedByDefault.includes(value))
 
-    setValuesChecked(values || [])
+    setCheckboxState((checkboxState) => ({ ...checkboxState, valuesChecked: values || [] }))
   }, [])
 
   const handleCheckAll = (value, checked) => {
     const nextValue = checked ? Object.keys(CSVOptions).map(value => CSVOptions[value].code) : []
 
-    setValuesChecked(nextValue)
-    setIndeterminate(false)
-    setCheckAll(checked)
+    setCheckboxState(({
+      checkAll: checked,
+      indeterminate: false,
+      valuesChecked: nextValue
+    }))
   }
+
   const handleChange = value => {
-    setValuesChecked(value)
-    setIndeterminate(value.length > 0 && value.length < Object.keys(CSVOptions).length)
-    setCheckAll(value.length === CSVOptions.length)
+    setCheckboxState(({
+      checkAll: value.length === CSVOptions.length,
+      indeterminate: value.length > 0 && value.length < Object.keys(CSVOptions).length,
+      valuesChecked: value
+    }))
   }
 
   const download = () => {
     const objectsToExports = filteredVessels
       .filter(vessel => vessel.checked)
       .map(vessel => {
+        vessel.vesselProperties.latitude = getCoordinates(vessel.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0]
+        vessel.vesselProperties.longitude = getCoordinates(vessel.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]
+
         const filteredVesselObject = {}
-        valuesChecked.forEach(valueChecked => {
+        checkboxState.valuesChecked.forEach(valueChecked => {
           switch (valueChecked) {
             case CSVOptions.flagState.code:
               filteredVesselObject[CSVOptions.flagState.code] = vessel?.vesselProperties?.flagState ? countries.getName(vessel?.vesselProperties?.flagState, 'fr') : ''
@@ -81,7 +95,7 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
           }
         })
 
-        return formatToCSVColumnsForExport(filteredVesselObject, CSVOptions, valuesChecked)
+        return formatToCSVColumnsForExport(filteredVesselObject, CSVOptions, checkboxState.valuesChecked)
       })
 
     if (objectsToExports) {
@@ -111,7 +125,7 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
         <CheckboxGroup
           inline
           name="checkboxList"
-          value={valuesChecked}
+          value={checkboxState.valuesChecked}
           onChange={handleChange}
         >
           <Columns>
@@ -144,18 +158,19 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
         <SelectAll>
           <Checkbox
             className={'checkbox-hidden'}
-            indeterminate={indeterminate}
-            checked={checkAll}
+            indeterminate={checkboxState.indeterminate}
+            checked={checkboxState.checkAll}
             onChange={handleCheckAll}
           >
             <SelectAllText>
-              Tout {checkAll ? 'dé' : ''}sélectionner
+              Tout {checkboxState.checkAll ? 'dé' : ''}sélectionner
             </SelectAllText>
           </Checkbox>
         </SelectAll>
       </Modal.Body>
       <Modal.Footer>
         <DownloadButton
+          data-cy={'download-vessels'}
           onClick={download}>
           Télécharger le tableau
         </DownloadButton>

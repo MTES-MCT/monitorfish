@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
-
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Vessels list', () => {
@@ -85,5 +84,26 @@ context('Vessels list', () => {
     // Then
     cy.get('*[data-cy^="download-vessels-modal"]').should('not.be.disabled')
     cy.get('*[data-cy^="download-vessels-modal"]').click()
+  })
+
+  it('Vessels Should be downloaded When a vessel is selected', () => {
+    // Given
+    cy.get('*[data-cy^="vessel-list"]').click({ timeout: 20000 })
+    cy.get('[aria-rowindex="2"] > .rs-table-cell-group-fixed-left > .table-content-editing ' +
+      '> .rs-table-cell-content > .rs-checkbox > .rs-checkbox-checker').click({ timeout: 20000 })
+    cy.get('*[data-cy="download-vessels-modal"]').click()
+
+    // When
+    cy.get('*[data-cy="download-vessels"]').click()
+
+    // Then
+    cy.wait(400)
+    cy.exec('cd cypress/downloads && ls').then(result => {
+      const downloadedCSVFilename = result.stdout
+      return cy.readFile(`cypress/downloads/${downloadedCSVFilename}`)
+        .should('contains', 'Quartier,CFR,C/S,Nom,GDH (UTC),MMSI,Latitude,Longitude,Cap,Vitesse') // true
+        .should('contains', '"Begue","ABC000599544","NDLN","HIVER CHEVEU HAÏR"') // true
+        .should('contains', '"037998379","50° 43′ 30″ N","001° 36′ 00″ E"') // true
+    })
   })
 })

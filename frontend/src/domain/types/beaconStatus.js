@@ -29,6 +29,16 @@
  */
 
 /**
+ * @typedef BeaconStatusAction
+ * @property {number} id
+ * @property {int} beaconStatusId
+ * @property {string} propertyName
+ * @property {string} previousValue
+ * @property {string} nextValue
+ * @property {string} dateTime
+ */
+
+/**
  * @typedef BeaconStatusCommentInput
  * @property {string} comment
  * @property {string} userType
@@ -38,4 +48,5 @@
  * @typedef BeaconStatusWithDetails
  * @property {BeaconStatus} beaconStatus
  * @property {BeaconStatusComment[]} comments
+ * @property {BeaconStatusAction[]} actions
  */

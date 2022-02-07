@@ -32,10 +32,6 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
   const textareaRef = useRef(null)
 
   useEffect(() => {
-    if (!comments?.length) {
-      setComment('')
-    }
-
     if (comments?.length) {
       setToday(getDate(new Date().toISOString()))
 

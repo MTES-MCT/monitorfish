@@ -46,7 +46,7 @@ const FishingPeriodTimeSection = ({ timeIsDisabled, disabled }) => {
           />
         }
     </DateRanges>
-    <ContentWrapper alignItems={'flex-end'}>
+    <ContentWrapper alignSelf={'flex-end'}>
       <SquareButton
         disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
         onClick={addTimeToTimeInterval} />

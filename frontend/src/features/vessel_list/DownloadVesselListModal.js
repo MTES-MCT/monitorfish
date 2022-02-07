@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Modal from 'rsuite/lib/Modal'
 import { COLORS } from '../../constants/constants'
@@ -29,9 +29,11 @@ const csvExporter = new ExportToCsv(optionsCSV)
 
 const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
-  const [indeterminate, setIndeterminate] = useState(false)
-  const [checkAll, setCheckAll] = useState(true)
-  const [valuesChecked, setValuesChecked] = useState([])
+  const [checkboxState, setCheckboxState] = useState({
+    checkAll: true,
+    indeterminate: false,
+    valuesChecked: []
+  })
 
   useEffect(() => {
     const columnsNotCheckedByDefault = [
@@ -51,23 +53,28 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
       .map(value => CSVOptions[value].code)
       .filter(value => !columnsNotCheckedByDefault.includes(value))
 
-    setValuesChecked(values || [])
+    setCheckboxState((checkboxState) => ({ ...checkboxState, valuesChecked: values || [] }))
   }, [])
 
   const handleCheckAll = (value, checked) => {
     const nextValue = checked ? Object.keys(CSVOptions).map(value => CSVOptions[value].code) : []
 
-    setValuesChecked(nextValue)
-    setIndeterminate(false)
-    setCheckAll(checked)
-  }
-  const handleChange = value => {
-    setValuesChecked(value)
-    setIndeterminate(value.length > 0 && value.length < Object.keys(CSVOptions).length)
-    setCheckAll(value.length === CSVOptions.length)
+    setCheckboxState(({
+      checkAll: checked,
+      indeterminate: false,
+      valuesChecked: nextValue
+    }))
   }
 
-  const download = useCallback(() => {
+  const handleChange = value => {
+    setCheckboxState(({
+      checkAll: value.length === CSVOptions.length,
+      indeterminate: value.length > 0 && value.length < Object.keys(CSVOptions).length,
+      valuesChecked: value
+    }))
+  }
+
+  const download = () => {
     const objectsToExports = filteredVessels
       .filter(vessel => vessel.checked)
       .map(vessel => {
@@ -75,7 +82,7 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
         vessel.vesselProperties.longitude = getCoordinates(vessel.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]
 
         const filteredVesselObject = {}
-        valuesChecked.forEach(valueChecked => {
+        checkboxState.valuesChecked.forEach(valueChecked => {
           switch (valueChecked) {
             case CSVOptions.flagState.code:
               filteredVesselObject[CSVOptions.flagState.code] = vessel?.vesselProperties?.flagState ? countries.getName(vessel?.vesselProperties?.flagState, 'fr') : ''
@@ -88,7 +95,7 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
           }
         })
 
-        return formatToCSVColumnsForExport(filteredVesselObject, CSVOptions, valuesChecked)
+        return formatToCSVColumnsForExport(filteredVesselObject, CSVOptions, checkboxState.valuesChecked)
       })
 
     if (objectsToExports) {
@@ -96,7 +103,7 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
       csvExporter.options.filename = `export_vms_${getDate(date.toISOString())}_${Math.floor(Math.random() * 100) + 1}`
       csvExporter.generateCsv(objectsToExports)
     }
-  }, [filteredVessels, valuesChecked, coordinatesFormat])
+  }
 
   return (
     <Modal
@@ -118,7 +125,7 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
         <CheckboxGroup
           inline
           name="checkboxList"
-          value={valuesChecked}
+          value={checkboxState.valuesChecked}
           onChange={handleChange}
         >
           <Columns>
@@ -151,12 +158,12 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
         <SelectAll>
           <Checkbox
             className={'checkbox-hidden'}
-            indeterminate={indeterminate}
-            checked={checkAll}
+            indeterminate={checkboxState.indeterminate}
+            checked={checkboxState.checkAll}
             onChange={handleCheckAll}
           >
             <SelectAllText>
-              Tout {checkAll ? 'dé' : ''}sélectionner
+              Tout {checkboxState.checkAll ? 'dé' : ''}sélectionner
             </SelectAllText>
           </Checkbox>
         </SelectAll>

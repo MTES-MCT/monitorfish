@@ -17,7 +17,7 @@ const FishingPeriodDates = ({ disabled }) => {
   const removeDate = usePushArrayInFishingPeriod(FISHING_PERIOD_KEYS.DATES, dates) // j'ai supprimé !disabled &&
 
   return <Row>
-    <ContentWrapper>
+    <ContentWrapper alignSelf={'flex-start'}>
       <Label>Dates précises</Label>
     </ContentWrapper>
     <DateList>
@@ -38,7 +38,7 @@ const FishingPeriodDates = ({ disabled }) => {
           />
       }
     </DateList>
-    <ContentWrapper alignItems={'flex-end'}>
+    <ContentWrapper alignSelf={'flex-end'}>
       <SquareButton
         type={SQUARE_BUTTON_TYPE.DELETE}
         disabled={disabled || !dates?.length > 0}

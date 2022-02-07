@@ -1,11 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import styled from 'styled-components'
 import useUpdateArrayInFishingPeriod from '../../../../hooks/useUpdateArrayInFishingPeriod'
 import usePushArrayInFishingPeriod from '../../../../hooks/usePushArrayInFishingPeriod'
 import usePopArrayInFishingPeriod from '../../../../hooks/usePopArrayInFishingPeriod'
 import { FISHING_PERIOD_KEYS, DEFAULT_DATE_RANGE } from '../../../../domain/entities/regulatory'
-import { Row, DateRanges } from '../../../commonStyles/FishingPeriod.style'
+import { Row, DateRanges, ContentWrapper } from '../../../commonStyles/FishingPeriod.style'
 import { Label } from '../../../commonStyles/Input.style'
 import { SQUARE_BUTTON_TYPE } from '../../../../constants/constants'
 import DateRange from './DateRange'
@@ -18,7 +17,7 @@ const FishingPeriodDateRanges = ({ disabled }) => {
   const removeDateFromDateRange = usePopArrayInFishingPeriod(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges)
 
   return <Row>
-      <ContentWrapper>
+      <ContentWrapper alignSelf={'flex-start'}>
         <Label>Plages de dates</Label>
       </ContentWrapper>
       <DateRanges>
@@ -45,7 +44,7 @@ const FishingPeriodDateRanges = ({ disabled }) => {
           />
         }
       </DateRanges>
-      <ContentWrapper alignItems={'flex-end'}>
+      <ContentWrapper alignSelf={'flex-end'}>
         <SquareButton
           disabled={disabled || dateRanges?.length === 0}
           onClick={addDateToDateRange} />
@@ -56,12 +55,5 @@ const FishingPeriodDateRanges = ({ disabled }) => {
       </ContentWrapper>
     </Row>
 }
-
-const ContentWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  ${props => props.alignItems ? `align-items: ${props.alignItems}` : ''};
-`
 
 export default FishingPeriodDateRanges

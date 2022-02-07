@@ -4,7 +4,6 @@ import { COLORS } from '../../constants/constants'
 export const Row = styled.div`
   display: ${props => props.display === false ? 'none' : 'flex'};
   margin-bottom: 8px;
-  align-items: center;
   color: ${COLORS.slateGray}
 `
 
@@ -25,5 +24,5 @@ export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: row;
   height: 100%;
-  ${props => props.alignItems ? `align-items: ${props.alignItems}` : ''};
+  ${props => props.alignSelf ? `align-self: ${props.alignSelf}` : ''};
 `

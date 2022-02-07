@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-import { SectionTitle, Section, List, Label } from './RegulatoryMetadata.style'
-import { Link } from '../../../commonStyles/Backoffice.style'
+import { SectionTitle, Section, List, Label, Elem } from './RegulatoryMetadata.style'
 import { getRegulatoryZoneTextTypeAsText } from '../../../../domain/entities/regulatory'
+import { COLORS } from '../../../../constants/constants'
 
 const MetadataRegulatoryReferences = () => {
   const { regulatoryReferences } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
@@ -16,8 +16,8 @@ const MetadataRegulatoryReferences = () => {
           data-cy="regulatory-layers-metadata-references"
         >
         {regulatoryReference.textType &&
-          <Label>{getRegulatoryZoneTextTypeAsText(regulatoryReference.textType)}</Label>}
-        <Link href={regulatoryReference.url}>{regulatoryReference.reference}</Link>
+          <Elem><Label>{getRegulatoryZoneTextTypeAsText(regulatoryReference.textType)}</Label></Elem>}
+          <Elem><Link href={regulatoryReference.url}>{regulatoryReference.reference}</Link></Elem>
       </Reference>
     })}
     </List>
@@ -28,6 +28,13 @@ const Reference = styled.li`
   list-style-type: "→";
   padding-left: 10px;
   font-size: 13px;
+`
+
+export const Link = styled.a`
+  color: ${COLORS.blue};
+  font-size: 13px;
+  cursor: pointer;
+  font-weigth: 500;
 `
 
 export default MetadataRegulatoryReferences

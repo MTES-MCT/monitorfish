@@ -3,7 +3,9 @@ import { COLORS } from '../../../../constants/constants'
 
 export const Label = styled.span``
 
-export const Elem = styled.li``
+export const Elem = styled.li`
+  list-style-type: none;
+`
 
 export const List = styled.ul`
   display: flex;

@@ -14,24 +14,29 @@ const regulatoryLayerSearchSlice = createSlice({
     /**
      * Add zones to regulatory zones selection in progress to add to "My Zones"
      * @param {Object=} state
-     * @param {RegulatoryZone[]} action - The regulatory zones
+     * @param {{
+     *   topic: string,
+     *   zone: string,
+     *   id: string
+     * }[]} action - The regulatory zones
      */
     checkRegulatoryZones (state, action) {
       state.regulatoryZonesChecked = state.regulatoryZonesChecked.concat(action.payload)
         // remove duplicates
-        .filter((v, i, a) => a.findIndex(t => (t.zone === v.zone && t.topic === v.topic)) === i)
+        .filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
     },
     /**
      * Remove zones from regulatory zones selection in progress to add to "My Zones"
      * @param {Object=} state
      * @param {{
      *   topic: string,
-     *   zone: string
+     *   zone: string,
+     *   id: string
      * }[]} action - The regulatory zones and topic
      */
     uncheckRegulatoryZones (state, action) {
       state.regulatoryZonesChecked = state.regulatoryZonesChecked
-        .filter(zone => !action.payload.some(layer => layer.zone === zone.zone && layer.topic === zone.topic))
+        .filter(zone => !action.payload.some(zoneIdToRemove => zoneIdToRemove === zone.id))
     },
     /**
      * Reset regulatory zones selection

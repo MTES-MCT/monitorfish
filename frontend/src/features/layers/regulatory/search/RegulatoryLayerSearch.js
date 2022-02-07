@@ -29,9 +29,7 @@ const RegulatoryLayerSearch = props => {
   } = useSelector(state => state.regulatoryLayerSearch)
 
   const [initSearchFields, setInitSearchFields] = useState(false)
-
   const escape = useEscapeFromKeyboard()
-
   const wrapperRef = useRef(null)
 
   useEffect(() => {
@@ -78,7 +76,7 @@ const RegulatoryLayerSearch = props => {
       <AddRegulatoryLayer
         data-cy={'regulatory-search-add-zones-button'}
         onClick={() => saveRegulatoryLayers(regulatoryZonesChecked)}
-        isShown={regulatoryZonesChecked && regulatoryZonesChecked.length}
+        isShown={regulatoryZonesChecked?.length}
       >
         {
           numberOfRegulatoryLayersSaved

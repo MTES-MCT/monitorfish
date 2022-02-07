@@ -149,31 +149,35 @@ const regulatorySlice = createSlice({
      *  "Reg locale / NAMO": {
      *   "Armor_CSJ_Dragues": [
      *     {
-     *       bycatch: undefined,
-     *       closingDate: undefined,
-     *       deposit: undefined,
-     *       gears: "DRB",
-     *       lawType: "Reg locale",
-     *       mandatoryDocuments: undefined,
-     *       obligations: undefined,
-     *       openingDate: undefined,
-     *       period: undefined,
-     *       permissions: undefined,
-     *       prohibitedGears: null,
-     *       prohibitedSpecies: null,
-     *       prohibitions: undefined,
-     *       quantity: undefined,
-     *       region: "Bretagne",
-     *       regulatoryReferences: "[
-     *         {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-r53-2020-04-24-002-delib-2020-a9873.html?id_rub=1637\",
-     *         \"reference\": \"ArrÃªtÃ© PrÃ©fectoral R53-2020-04-24-002 - dÃ©lib 2020-004 / NAMO\"}, {\"url\": \"\", \"reference\": \"126-2020\"}]",
-     *       rejections: undefined,
-     *       size: undefined,
-     *       species: "SCE",
-     *       state: undefined,
-     *       technicalMeasurements: undefined,
-     *       topic: "Armor_CSJ_Dragues",
-     *       zone: "Secteur 3"
+     *      bycatch: undefined,
+     *      closingDate: undefined,
+     *      deposit: undefined,
+     *      fishingPeriod: Object { authorized: undefined, annualRecurrence: undefined, dateRanges: [], … },
+     *      gears: "DHB, DRH, DHS",
+     *      geometry: null,
+     *      id: 3012,
+     *      lawType: "Reg. MED",
+     *      mandatoryDocuments: undefined,
+     *      obligations: undefined,
+     *      openingDate: undefined,
+     *      period: undefined,
+     *      permissions: undefined,
+     *      prohibitedGears: null,
+     *      prohibitedSpecies: null,
+     *      prohibitions: undefined,
+     *      quantity: undefined,
+     *      region: "Occitanie, Languedoc-Roussillon",
+     *      regulatoryGears: Object { authorized: undefined, allGears: undefined, allTowedGears: undefined, … },
+     *      regulatoryReferences: Array [ {…} ],
+     *      regulatorySpecies: Object { authorized: undefined, allSpecies: undefined, otherInfo: undefined, … },
+     *      rejections: undefined,
+     *      size: undefined,
+     *      species: "coquillages et appâts\n",
+     *      state: undefined,
+     *      technicalMeasurements: undefined,
+     *      topic: "Etang de Thau-Ingril Mèze",
+     *      upcomingRegulatoryReferences: undefined,
+     *      zone: "Etang de Thau-Ingrill_Drague-à-main"
      *     }
      *   ]
      *   "GlÃ©nan_CSJ_Dragues": (1) […],
@@ -187,6 +191,7 @@ const regulatorySlice = createSlice({
      * }
      */
     setRegulatoryLayers (state, action) {
+      console.log(action.payload)
       state.regulatoryLayers = action.payload
     },
     setRegulatoryTopics (state, action) {

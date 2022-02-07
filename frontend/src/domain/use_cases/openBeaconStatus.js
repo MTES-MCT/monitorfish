@@ -1,17 +1,23 @@
 import { getBeaconStatusFromAPI } from '../../api/fetch'
 import { setError } from '../shared_slices/Global'
-import { selectBeaconStatus } from '../shared_slices/BeaconStatus'
+import { setOpenedBeaconStatus } from '../shared_slices/BeaconStatus'
 
-const openBeaconStatus = beaconStatus => (dispatch, getState) => {
+/**
+ * Open a single beacon status
+ * @function setOpenedBeaconStatus
+ * @param {BeaconStatusWithDetails} beaconStatus - the beacon status to open
+ * @param {boolean} fromCron - true if called from cron
+ */
+const openBeaconStatus = (beaconStatus, fromCron) => (dispatch, getState) => {
   const previousBeaconStatus = getState().beaconStatus.openedBeaconStatus
-  dispatch(selectBeaconStatus(beaconStatus))
+  dispatch(setOpenedBeaconStatus(beaconStatus))
 
   getBeaconStatusFromAPI(beaconStatus.beaconStatus?.id).then(beaconStatusWithDetails => {
-    dispatch(selectBeaconStatus(beaconStatusWithDetails))
+    dispatch(setOpenedBeaconStatus(beaconStatusWithDetails))
   }).catch(error => {
     console.error(error)
     dispatch(setError(error))
-    dispatch(selectBeaconStatus(previousBeaconStatus))
+    dispatch(setOpenedBeaconStatus(previousBeaconStatus))
   })
 }
 

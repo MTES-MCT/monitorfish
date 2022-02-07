@@ -1,6 +1,6 @@
 import { setError } from '../shared_slices/Global'
 import { updateBeaconStatusFromAPI } from '../../api/fetch'
-import { selectBeaconStatus, setBeaconStatuses, updateLocalBeaconStatuses } from '../shared_slices/BeaconStatus'
+import { setOpenedBeaconStatus, setBeaconStatuses, updateLocalBeaconStatuses } from '../shared_slices/BeaconStatus'
 
 /**
  * Update a beacon status
@@ -15,7 +15,7 @@ const updateBeaconStatus = (id, nextBeaconStatus, updatedFields) => (dispatch, g
 
   return updateBeaconStatusFromAPI(id, updatedFields).then(updatedBeaconStatusWithDetails => {
     if (beaconStatusToUpdateIsOpened) {
-      dispatch(selectBeaconStatus(updatedBeaconStatusWithDetails))
+      dispatch(setOpenedBeaconStatus(updatedBeaconStatusWithDetails))
     }
   }).catch(error => {
     dispatch(setError(error))

@@ -128,7 +128,7 @@ const MapMenuOverlay = props => {
                 isModalOpen={modalIsOpen}
                 setModalIsOpen={setModalIsOpen}
                 datesSelection={datesSelection}
-                setDateSelection={setDateSelection}
+                modifyVesselTrackDepthFromDates={setDateSelection}
               />
             </>
             : null

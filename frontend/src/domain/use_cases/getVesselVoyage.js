@@ -12,7 +12,6 @@ import {
 import NoERSMessagesFoundError from '../../errors/NoERSMessagesFoundError'
 import { vesselsAreEquals } from '../entities/vessel'
 import { batch } from 'react-redux'
-import { setSelectedVesselCustomTrackDepth } from '../shared_slices/Vessel'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 import modifyVesselTrackDepth from './modifyVesselTrackDepth'
 
@@ -102,8 +101,6 @@ function modifyVesselTrackAndVoyage (voyage, dispatch, vesselIdentity, fishingAc
     afterDateTime: afterDateTime,
     beforeDateTime: beforeDateTime
   }
-
-  dispatch(setSelectedVesselCustomTrackDepth(trackDepthObject))
   dispatch(modifyVesselTrackDepth(vesselIdentity, trackDepthObject, true)).then(() => {
     dispatch(setVoyage(voyage))
     if (fishingActivitiesAreShowedOnMap) {

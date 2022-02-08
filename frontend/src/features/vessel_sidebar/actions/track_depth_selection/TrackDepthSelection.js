@@ -8,9 +8,7 @@ import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 import { useDispatch, useSelector } from 'react-redux'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import TrackPositionsTable from './TrackPositionsTable'
-import { setSelectedVesselCustomTrackDepth } from '../../../../domain/shared_slices/Vessel'
 import modifyVesselTrackDepth from '../../../../domain/use_cases/modifyVesselTrackDepth'
-import { usePrevious } from '../../../../hooks/usePrevious'
 
 const TrackDepthSelection = props => {
   const dispatch = useDispatch()
@@ -23,25 +21,7 @@ const TrackDepthSelection = props => {
   const defaultVesselTrackDepth = useSelector(state => state.map.defaultVesselTrackDepth)
 
   const [datesSelection, setDateSelection] = useState([])
-  const [updateTrackDepthFromDates, setUpdateTrackDepthFromDates] = useState(false)
-  const [trackDepthRadioSelection, setTrackDepthRadioSelection] = useState(null)
-  const previousTrackDepthRadioSelection = usePrevious(trackDepthRadioSelection)
-
-  useEffect(() => {
-    setDateSelection([])
-    setTrackDepthRadioSelection(defaultVesselTrackDepth)
-  }, [selectedVesselIdentity])
-
-  useEffect(() => {
-    setDateSelection([])
-    setTrackDepthRadioSelection(defaultVesselTrackDepth)
-  }, [props.init])
-
-  useEffect(() => {
-    if (defaultVesselTrackDepth && !trackDepthRadioSelection) {
-      setTrackDepthRadioSelection(defaultVesselTrackDepth)
-    }
-  }, [defaultVesselTrackDepth])
+  const [trackDepthRadioSelection, setTrackDepthRadioSelection] = useState(defaultVesselTrackDepth)
 
   useEffect(() => {
     const {
@@ -50,55 +30,49 @@ const TrackDepthSelection = props => {
       trackDepth
     } = selectedVesselCustomTrackDepth
 
-    if (afterDateTime && beforeDateTime &&
-      (!datesSelection?.length ||
-        (datesSelection?.length && (datesSelection[0].getTime() !== afterDateTime.getTime() || datesSelection[1].getTime() !== beforeDateTime.getTime())))) {
+    if (afterDateTime && beforeDateTime) {
       setDateSelection([afterDateTime, beforeDateTime])
-      setUpdateTrackDepthFromDates(false)
       setTrackDepthRadioSelection(null)
       return
     }
 
-    if (trackDepth && trackDepth !== trackDepthRadioSelection) {
-      setTrackDepthRadioSelection(trackDepth)
-    }
-  }, [selectedVesselCustomTrackDepth])
-
-  useEffect(() => {
-    if (trackDepthRadioSelection && trackDepthRadioSelection !== previousTrackDepthRadioSelection) {
-      const nextTrackDepth = {
-        trackDepth: trackDepthRadioSelection,
-        beforeDatetime: null,
-        afterDatetime: null
-      }
-      dispatch(setSelectedVesselCustomTrackDepth(nextTrackDepth))
-      dispatch(modifyVesselTrackDepth(selectedVesselIdentity, nextTrackDepth))
+    if (trackDepth) {
       setDateSelection([])
+      setTrackDepthRadioSelection(trackDepth)
+      return
     }
-  }, [trackDepthRadioSelection])
 
-  const setDatesFromDateRangePicker = dates => {
-    setDateSelection(dates)
-    setUpdateTrackDepthFromDates(true)
+    setDateSelection([])
+    setTrackDepthRadioSelection(defaultVesselTrackDepth)
+  }, [selectedVesselCustomTrackDepth, defaultVesselTrackDepth])
+
+  const triggerModifyVesselTrackDepthFromRadio = trackDepthRadioSelection => {
+    const nextTrackDepth = {
+      trackDepth: trackDepthRadioSelection,
+      beforeDatetime: null,
+      afterDatetime: null
+    }
+    dispatch(modifyVesselTrackDepth(selectedVesselIdentity, nextTrackDepth))
+    setDateSelection([])
+    setTrackDepthRadioSelection(trackDepthRadioSelection)
   }
 
-  useEffect(() => {
-    if (datesSelection?.length > 1) {
-      if (updateTrackDepthFromDates) {
-        const vesselTrackDepth = {
-          trackDepth: VesselTrackDepth.CUSTOM,
-          afterDateTime: datesSelection[0],
-          beforeDateTime: datesSelection[1]
-        }
-        dispatch(setSelectedVesselCustomTrackDepth(vesselTrackDepth))
-        dispatch(modifyVesselTrackDepth(selectedVesselIdentity, vesselTrackDepth, false, true))
-        setUpdateTrackDepthFromDates(false)
+  const triggerModifyVesselTrackDepthFromDates = trackDepthDatesSelection => {
+    if (trackDepthDatesSelection?.length > 1) {
+      const nextTrackDepth = {
+        trackDepth: VesselTrackDepth.CUSTOM,
+        afterDateTime: trackDepthDatesSelection[0],
+        beforeDateTime: trackDepthDatesSelection[1]
       }
+      dispatch(modifyVesselTrackDepth(selectedVesselIdentity, nextTrackDepth, false, true))
       setTrackDepthRadioSelection(null)
-    } else if (!trackDepthRadioSelection) {
-      setTrackDepthRadioSelection(defaultVesselTrackDepth)
+      setDateSelection(trackDepthDatesSelection)
+      return
     }
-  }, [datesSelection, updateTrackDepthFromDates])
+
+    setTrackDepthRadioSelection(defaultVesselTrackDepth)
+    setDateSelection([])
+  }
 
   return (
     <>
@@ -123,11 +97,11 @@ const TrackDepthSelection = props => {
         <TrackDepthRadio
           vesselTrackDepth={defaultVesselTrackDepth}
           trackDepthRadioSelection={trackDepthRadioSelection}
-          setTrackDepthRadioSelection={setTrackDepthRadioSelection}
+          modifyVesselTrackDepth={triggerModifyVesselTrackDepthFromRadio}
         />
         <TrackDepthDateRange
           dates={datesSelection}
-          setDate={setDatesFromDateRangePicker}
+          modifyVesselTrackDepthFromDates={triggerModifyVesselTrackDepthFromDates}
         />
         <Header>Liste des positions VMS affichées</Header>
         <TrackPositionsTable />

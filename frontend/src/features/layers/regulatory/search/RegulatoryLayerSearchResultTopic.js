@@ -1,17 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
 import Checkbox from 'rsuite/lib/Checkbox'
 import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
-import RegulatoryLayerSearchResultZones from './RegulatoryLayerSearchResultZones'
-import { useDispatch, useSelector } from 'react-redux'
-import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 
-const RegulatoryLayerSearchResultTopic = props => {
-  const {
-    regulatoryLayerLawType,
-    regulatoryLayerTopic
-  } = props
+import { setRegulatoryGeometriesToPreview, resetRegulatoryGeometriesToPreview } from '../../../../domain/shared_slices/Regulatory'
+import RegulatoryLayerSearchResultZones from './RegulatoryLayerSearchResultZones'
+import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
+import { COLORS } from '../../../../constants/constants'
+
+const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLayerTopic, topicDetails }) => {
   const dispatch = useDispatch()
 
   const {
@@ -22,14 +20,6 @@ const RegulatoryLayerSearchResultTopic = props => {
   const [topicSelection, setTopicSelection] = useState([])
   const [zonesAreOpen, setZonesAreOpen] = useState(false)
 
-  const getRegulatoryZonesLength = useCallback(() => {
-    if (regulatoryLayersSearchResult && regulatoryLayerLawType && regulatoryLayerTopic) {
-      return regulatoryLayersSearchResult[regulatoryLayerLawType][regulatoryLayerTopic].length
-    }
-
-    return 0
-  }, [regulatoryLayersSearchResult, regulatoryLayerLawType, regulatoryLayerTopic])
-
   const allTopicZonesAreChecked = useCallback(() => {
     if (!regulatoryZonesChecked || !regulatoryLayerTopic) {
       return false
@@ -37,7 +27,7 @@ const RegulatoryLayerSearchResultTopic = props => {
 
     const zonesCheckedLength = regulatoryZonesChecked
       .filter(zone => zone.topic === regulatoryLayerTopic).length
-    const allZonesLength = getRegulatoryZonesLength()
+    const allZonesLength = topicDetails.length
     if (!zonesCheckedLength || !allZonesLength) {
       return false
     }
@@ -45,7 +35,7 @@ const RegulatoryLayerSearchResultTopic = props => {
     if (zonesCheckedLength === allZonesLength) {
       return true
     }
-  }, [regulatoryZonesChecked, getRegulatoryZonesLength])
+  }, [regulatoryZonesChecked, topicDetails])
 
   useEffect(() => {
     if (allTopicZonesAreChecked()) {
@@ -60,7 +50,7 @@ const RegulatoryLayerSearchResultTopic = props => {
   }, [regulatoryZonesChecked, regulatoryLayersSearchResult])
 
   const displayNumberOfZones = () => {
-    const zoneNumber = getRegulatoryZonesLength()
+    const zoneNumber = topicDetails.length
     return (
       <ZonesNumber>
         {`${zoneNumber} zone${zoneNumber > 1 ? 's' : ''}`}
@@ -74,17 +64,27 @@ const RegulatoryLayerSearchResultTopic = props => {
     }
 
     if (topicSelection?.length) {
-      dispatch(uncheckRegulatoryZones(regulatoryLayersSearchResult[regulatoryLayerLawType][regulatoryLayerTopic]))
+      dispatch(uncheckRegulatoryZones(topicDetails))
       setTopicSelection([])
     } else {
-      dispatch(checkRegulatoryZones(regulatoryLayersSearchResult[regulatoryLayerLawType][regulatoryLayerTopic]))
+      dispatch(checkRegulatoryZones(topicDetails))
       setTopicSelection([regulatoryLayerTopic])
     }
   }
 
+  const handleMouseOver = () => {
+    if (topicDetails.length > 0) {
+      const features = topicDetails.map(topic => topic.geometry)
+      dispatch(setRegulatoryGeometriesToPreview(features))
+    }
+  }
+  const handleMouseOut = () => {
+    dispatch(resetRegulatoryGeometriesToPreview())
+  }
+
   return (
     <>
-      <LayerTopic onClick={() => setZonesAreOpen(!zonesAreOpen)}>
+      <LayerTopic onClick={() => setZonesAreOpen(!zonesAreOpen)} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
         <TopicName
           data-cy={'regulatory-layer-topic'}
           title={regulatoryLayerTopic.replace(/[_]/g, ' ')}

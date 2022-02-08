@@ -2,15 +2,11 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.times
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.AlertRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
-import kotlinx.coroutines.runBlocking
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -25,31 +21,31 @@ import java.time.ZonedDateTime
 class GetVesselVoyageUTests {
 
     @MockBean
-    private lateinit var ersRepository: ERSRepository
+    private lateinit var logbookReportRepository: LogbookReportRepository
 
     @MockBean
     private lateinit var alertRepository: AlertRepository
 
     @MockBean
-    private lateinit var getERSMessages: GetERSMessages
+    private lateinit var getLogbookMessages: GetLogbookMessages
 
     @Test
     fun `execute Should return a voyage with isFirstVoyage as true When requesting a LAST voyage with current trip number as null`() {
         // Given
         val endDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
         val startDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
-        given(ersRepository.findTripBeforeTripNumber(any(), any())).willThrow(NoLogbookFishingTripFound("Not found"))
-        given(ersRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber(1234, startDate, endDate))
+        given(logbookReportRepository.findTripBeforeTripNumber(any(), any())).willThrow(NoLogbookFishingTripFound("Not found"))
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber(1234, startDate, endDate))
 
         // When
-        val voyage = GetVesselVoyage(ersRepository, alertRepository, getERSMessages)
+        val voyage = GetVesselVoyage(logbookReportRepository, alertRepository, getLogbookMessages)
                 .execute("FR224226850", VoyageRequest.LAST, null)
 
-        val (_, alerts) = voyage.ersMessagesAndAlerts
+        val (_, alerts) = voyage.logbookMessagesAndAlerts
 
         // Then
-        Mockito.verify(ersRepository, times(0)).findTripAfterTripNumber("FR224226850", 1234)
-        Mockito.verify(ersRepository).findTripBeforeTripNumber("FR224226850", 1234)
+        Mockito.verify(logbookReportRepository, times(0)).findTripAfterTripNumber("FR224226850", 1234)
+        Mockito.verify(logbookReportRepository).findTripBeforeTripNumber("FR224226850", 1234)
 
         assertThat(voyage.isFirstVoyage).isTrue
         assertThat(voyage.startDate).isEqualTo(startDate)
@@ -62,7 +58,7 @@ class GetVesselVoyageUTests {
     fun `execute Should throw an Exception When requesting a PREVIOUS voyage with current trip number as null`() {
         // When
         val throwable = catchThrowable {
-            GetVesselVoyage(ersRepository, alertRepository, getERSMessages)
+            GetVesselVoyage(logbookReportRepository, alertRepository, getLogbookMessages)
                     .execute("FR224226850", VoyageRequest.PREVIOUS, null)
         }
 
@@ -77,17 +73,17 @@ class GetVesselVoyageUTests {
         val endDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
         val startDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
         val tripNumber = 123456789
-        given(ersRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber(tripNumber, startDate, endDate))
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber(tripNumber, startDate, endDate))
 
         // When
-        val voyage = GetVesselVoyage(ersRepository, alertRepository, getERSMessages)
+        val voyage = GetVesselVoyage(logbookReportRepository, alertRepository, getLogbookMessages)
                 .execute("FR224226850", VoyageRequest.LAST, 12345)
 
-        val (_, alerts) = voyage.ersMessagesAndAlerts
+        val (_, alerts) = voyage.logbookMessagesAndAlerts
 
         // Then
-        Mockito.verify(ersRepository).findTripAfterTripNumber("FR224226850", 123456789)
-        Mockito.verify(ersRepository).findTripBeforeTripNumber("FR224226850", 123456789)
+        Mockito.verify(logbookReportRepository).findTripAfterTripNumber("FR224226850", 123456789)
+        Mockito.verify(logbookReportRepository).findTripBeforeTripNumber("FR224226850", 123456789)
 
         assertThat(voyage.isLastVoyage).isFalse
         assertThat(voyage.isFirstVoyage).isFalse
@@ -102,14 +98,14 @@ class GetVesselVoyageUTests {
         val expectedEndDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
         val expectedStartDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
         val expectedTripNumber = 123456789
-        given(ersRepository.findTripAfterTripNumber("FR224226850", 123456788)).willReturn(VoyageDatesAndTripNumber(expectedTripNumber, expectedStartDate, expectedEndDate))
-        given(ersRepository.findTripAfterTripNumber("FR224226850", expectedTripNumber)).willThrow(NoLogbookFishingTripFound("Not found"))
+        given(logbookReportRepository.findTripAfterTripNumber("FR224226850", 123456788)).willReturn(VoyageDatesAndTripNumber(expectedTripNumber, expectedStartDate, expectedEndDate))
+        given(logbookReportRepository.findTripAfterTripNumber("FR224226850", expectedTripNumber)).willThrow(NoLogbookFishingTripFound("Not found"))
 
         // When
-        val voyage = GetVesselVoyage(ersRepository, alertRepository, getERSMessages)
+        val voyage = GetVesselVoyage(logbookReportRepository, alertRepository, getLogbookMessages)
                 .execute("FR224226850", VoyageRequest.NEXT, 123456788)
 
-        val (_, alerts) = voyage.ersMessagesAndAlerts
+        val (_, alerts) = voyage.logbookMessagesAndAlerts
 
         // Then
         assertThat(voyage.isLastVoyage).isTrue

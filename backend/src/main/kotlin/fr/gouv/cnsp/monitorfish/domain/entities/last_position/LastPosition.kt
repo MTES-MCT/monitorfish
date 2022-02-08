@@ -35,7 +35,7 @@ data class LastPosition(
         val tripNumber: Int? = null,
 
         val emissionPeriod: Duration? = null,
-        val lastErsDateTime: ZonedDateTime? = null,
+        val lastLogbookMessageDateTime: ZonedDateTime? = null,
         val departureDateTime: ZonedDateTime? = null,
         val width: Double? = null,
         val length: Double? = null,

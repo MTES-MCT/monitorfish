@@ -5,7 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselWithData
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
@@ -18,7 +18,7 @@ import java.time.ZonedDateTime
 @UseCase
 class GetVessel(private val vesselRepository: VesselRepository,
                 private val positionRepository: PositionRepository,
-                private val ersRepository: ERSRepository,
+                private val logbookReportRepository: LogbookReportRepository,
                 private val riskFactorsRepository: RiskFactorsRepository) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
@@ -31,7 +31,7 @@ class GetVessel(private val vesselRepository: VesselRepository,
                         toDateTime: ZonedDateTime? = null): Pair<Boolean, VesselWithData> {
 
         return coroutineScope {
-            val (vesselTrackHasBeenModified, positions) = GetVesselPositions(positionRepository, ersRepository).execute(
+            val (vesselTrackHasBeenModified, positions) = GetVesselPositions(positionRepository, logbookReportRepository).execute(
                     internalReferenceNumber = internalReferenceNumber,
                     externalReferenceNumber = externalReferenceNumber,
                     ircs = ircs,

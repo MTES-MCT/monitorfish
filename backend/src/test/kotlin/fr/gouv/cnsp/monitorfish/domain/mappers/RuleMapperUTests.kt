@@ -33,7 +33,7 @@ class RuleMapperUTests {
 
         assertThat(parsedPNOAndLANWeightTolerance.percentOfTolerance).isEqualTo(10.0)
         assertThat(parsedPNOAndLANWeightTolerance.name).isEqualTo(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE)
-        assertThat(parsedPNOAndLANWeightTolerance.inputSource).isEqualTo(InputSource.ERS)
+        assertThat(parsedPNOAndLANWeightTolerance.inputSource).isEqualTo(InputSource.Logbook)
 
     }
 

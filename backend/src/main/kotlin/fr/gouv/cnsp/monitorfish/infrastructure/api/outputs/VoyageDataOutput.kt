@@ -9,7 +9,7 @@ data class VoyageDataOutput(
         val startDate: ZonedDateTime?,
         val endDate: ZonedDateTime?,
         val tripNumber: Int?,
-        val ersMessagesAndAlerts: ERSMessagesAndAlertsDataOutput) {
+        val logbookMessagesAndAlerts: LogbookMessagesAndAlertsDataOutput) {
     companion object {
         fun fromVoyage(voyage: Voyage): VoyageDataOutput {
             return VoyageDataOutput(
@@ -18,8 +18,8 @@ data class VoyageDataOutput(
                     startDate = voyage.startDate,
                     endDate = voyage.endDate,
                     tripNumber = voyage.tripNumber,
-                    ersMessagesAndAlerts = ERSMessagesAndAlertsDataOutput
-                            .fromERSMessagesAndAlerts(voyage.ersMessagesAndAlerts)
+                    logbookMessagesAndAlerts = LogbookMessagesAndAlertsDataOutput
+                            .fromLogbookMessagesAndAlerts(voyage.logbookMessagesAndAlerts)
             )
         }
     }

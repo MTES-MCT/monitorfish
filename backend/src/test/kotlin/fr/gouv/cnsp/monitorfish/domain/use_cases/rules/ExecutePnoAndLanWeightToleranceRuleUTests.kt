@@ -8,9 +8,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.rules.Rule
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.PNOAndLANWeightTolerance
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.RuleTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.repositories.AlertRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RuleRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyPNOAndLANERSMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyPNOAndLANLogbookMessages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -25,7 +25,7 @@ import java.util.*
 class ExecutePnoAndLanWeightToleranceRuleUTests {
 
     @MockBean
-    private lateinit var ersRepository: ERSRepository
+    private lateinit var logbookReportRepository: LogbookReportRepository
 
     @MockBean
     private lateinit var rulesRepository: RuleRepository
@@ -45,11 +45,11 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
                 null,
                 PNOAndLANWeightTolerance(10.0, 50.0)
         )
-        given(ersRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name))
-                .willReturn(getDummyPNOAndLANERSMessages())
+        given(logbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name))
+                .willReturn(getDummyPNOAndLANLogbookMessages())
 
         // When
-        ExecutePnoAndLanWeightToleranceRule(ersRepository, alertRepository).execute(rule)
+        ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, alertRepository).execute(rule)
 
         // Then
         Mockito.verify(alertRepository, never()).save(any())
@@ -67,11 +67,11 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
                 null,
                 PNOAndLANWeightTolerance(10.0, 50.0)
         )
-        given(ersRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name))
-                .willReturn(getDummyPNOAndLANERSMessages(1000.0, true))
+        given(logbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name))
+                .willReturn(getDummyPNOAndLANLogbookMessages(1000.0, true))
 
         // When
-        ExecutePnoAndLanWeightToleranceRule(ersRepository, alertRepository).execute(rule)
+        ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, alertRepository).execute(rule)
 
         // Then
         argumentCaptor<Alert>().apply {
@@ -115,16 +115,16 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
                 null,
                 PNOAndLANWeightTolerance(10.0, 50.0)
         )
-        given(ersRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name))
-                .willReturn(getDummyPNOAndLANERSMessages(1000.0))
+        given(logbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name))
+                .willReturn(getDummyPNOAndLANLogbookMessages(1000.0))
 
         // When
-        ExecutePnoAndLanWeightToleranceRule(ersRepository, alertRepository).execute(rule)
+        ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, alertRepository).execute(rule)
 
         // Then
         argumentCaptor<Alert>().apply {
-            verify(ersRepository, times(1))
-                    .updateERSMessagesAsProcessedByRule(listOf(1, 2, 3, 4), "PNO_LAN_WEIGHT_TOLERANCE")
+            verify(logbookReportRepository, times(1))
+                    .updateLogbookMessagesAsProcessedByRule(listOf(1, 2, 3, 4), "PNO_LAN_WEIGHT_TOLERANCE")
         }
     }
 }

@@ -2,10 +2,10 @@ package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.Catch
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.Acknowledge
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.FAR
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,7 +22,7 @@ class ERSMapperUTests {
     @Test
     fun `getERSMessageValueFromJSON Should not throw an exception When the message value is null`() {
         // When
-        val parsedFARMessage = ERSMapper.getERSMessageValueFromJSON(mapper, "null", "INS", ERSOperationType.DAT)
+        val parsedFARMessage = ERSMapper.getERSMessageValueFromJSON(mapper, "null", "INS", LogbookOperationType.DAT)
 
         // Then
         assertThat(parsedFARMessage).isNull()
@@ -48,7 +48,7 @@ class ERSMapperUTests {
 
         // When
         val jsonString = mapper.writeValueAsString(farMessage);
-        val parsedFARMessage = ERSMapper.getERSMessageValueFromJSON(mapper, jsonString, "FAR", ERSOperationType.DAT)
+        val parsedFARMessage = ERSMapper.getERSMessageValueFromJSON(mapper, jsonString, "FAR", LogbookOperationType.DAT)
 
         // Then
         assertThat(parsedFARMessage).isInstanceOf(FAR::class.java)
@@ -89,7 +89,7 @@ class ERSMapperUTests {
                 "}"
 
         // When
-        val parsedFARMessage = ERSMapper.getERSMessageValueFromJSON(mapper, farMessage, "FAR", ERSOperationType.DAT)
+        val parsedFARMessage = ERSMapper.getERSMessageValueFromJSON(mapper, farMessage, "FAR", LogbookOperationType.DAT)
 
         // Then
         assertThat(parsedFARMessage).isInstanceOf(FAR::class.java)
@@ -119,7 +119,7 @@ class ERSMapperUTests {
                 "Veuillez vérifier la date/heure de l’événement déclaré et renvoyer votre message.\"}"
 
         // When
-        val parsedRETMessage = ERSMapper.getERSMessageValueFromJSON(mapper, retMessage, "", ERSOperationType.RET)
+        val parsedRETMessage = ERSMapper.getERSMessageValueFromJSON(mapper, retMessage, "", LogbookOperationType.RET)
 
         // Then
         assertThat(parsedRETMessage).isInstanceOf(Acknowledge::class.java)

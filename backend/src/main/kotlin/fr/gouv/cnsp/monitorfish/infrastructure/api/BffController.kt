@@ -49,7 +49,7 @@ class BffController(
 
     // TODO Move this the it's own infrastructure Metric class
     val vesselsTimer = meterRegistry.timer("ws_vessel_requests_latency_seconds_summary");
-    val ersTimer = meterRegistry.timer("ws_ers_requests_latency_seconds_summary");
+    val logbookTimer = meterRegistry.timer("ws_logbook_requests_latency_seconds_summary");
     val vesselsGauge = meterRegistry.gauge("ws_vessels_stored_in_last_positions", AtomicInteger(0))
 
     @GetMapping("/v1/vessels")
@@ -214,22 +214,22 @@ class BffController(
         }
     }
 
-    @GetMapping("/v1/ers/find")
-    @ApiOperation("Get vessel's ERS messages")
-    fun getVesselERSMessages(@ApiParam("Vessel internal reference number (CFR)", required = true)
+    @GetMapping("/v1/logbook/find")
+    @ApiOperation("Get vessel's Logbook messages")
+    fun getVesselLogbookMessages(@ApiParam("Vessel internal reference number (CFR)", required = true)
                              @RequestParam(name = "internalReferenceNumber")
                              internalReferenceNumber: String,
-                             @ApiParam("Voyage request (LAST, PREVIOUS or NEXT) with respect to date", required = true)
+                                 @ApiParam("Voyage request (LAST, PREVIOUS or NEXT) with respect to date", required = true)
                              @RequestParam(name = "voyageRequest")
                              voyageRequest: VoyageRequest,
-                             @ApiParam("Trip number")
+                                 @ApiParam("Trip number")
                              @RequestParam(name = "tripNumber", required = false)
                              tripNumber: Int?): VoyageDataOutput {
         val start = System.currentTimeMillis()
 
         val voyage = getVesselVoyage.execute(internalReferenceNumber, voyageRequest, tripNumber)
 
-        ersTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
+        logbookTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
         return VoyageDataOutput.fromVoyage(voyage)
     }
 
@@ -256,7 +256,7 @@ class BffController(
     }
 
     @GetMapping("/v1/healthcheck")
-    @ApiOperation("Get healtcheck of positions and ers")
+    @ApiOperation("Get healtcheck of positions and logbook")
     fun getHealthcheck(): HealthDataOutput {
         return HealthDataOutput.fromHealth(getHealthcheck.execute())
     }

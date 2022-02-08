@@ -11,14 +11,15 @@ const RegulatoryLayerSearchResultList = () => {
   } = useSelector(state => state.regulatoryLayerSearch)
 
   return (
-    <List advancedSearchIsOpen={advancedSearchIsOpen}>
+    <List $advancedSearchIsOpen={advancedSearchIsOpen}>
       {
         regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0
-          ? Object.keys(regulatoryLayersSearchResult).map((lawType) => {
+          ? Object.entries(regulatoryLayersSearchResult)?.map(([lawType, topic]) => {
             return (
               <RegulatoryLayerSearchResultLawType
                 key={lawType}
                 regulatoryLayerLawType={lawType}
+                topic={topic}
               />
             )
           })
@@ -33,7 +34,7 @@ const List = styled.ul`
   background: ${COLORS.background};
   border-radius: 0;
   padding: 0;
-  max-height: ${props => props.advancedSearchIsOpen ? '55vh' : '74vh'};
+  max-height: ${props => props.$advancedSearchIsOpen ? '55vh' : '74vh'};
   overflow-y: auto;
   overflow-x: hidden;
   color: ${COLORS.slateGray};

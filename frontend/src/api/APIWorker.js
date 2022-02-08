@@ -16,8 +16,8 @@ import getOperationalAlerts from '../domain/use_cases/getOperationalAlerts'
 import getAllBeaconStatuses from '../domain/use_cases/getAllBeaconStatuses'
 import openBeaconStatus from '../domain/use_cases/openBeaconStatus'
 
-export const FIVE_MINUTES = 300000
-export const THIRTY_SECONDS = 30000
+export const FIVE_MINUTES = 5 * 60 * 1000
+export const THIRTY_SECONDS = 30 * 1000
 
 const APIWorker = () => {
   const dispatch = useDispatch()

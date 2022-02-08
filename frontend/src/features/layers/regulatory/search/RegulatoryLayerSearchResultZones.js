@@ -12,7 +12,6 @@ const RegulatoryLayerSearchResultZones = props => {
   } = props
 
   const {
-
     regulatoryLayersSearchResult
   } = useSelector(state => state.regulatoryLayerSearch)
 

@@ -41,13 +41,17 @@ const regulatorySlice = createSlice({
     regulatoryTopicsOpened: [],
     regulatoryTopics: [],
     layersTopicsByRegTerritory: {},
-    regulatoryGeometryToPreview: null,
+    /** @type ol.geom.Geometry[] */
+    regulatoryGeometriesToPreview: null,
     simplifiedGeometries: true,
     regulationSearchedZoneExtent: []
   },
   reducers: {
-    setRegulatoryGeometryToPreview (state, action) {
-      state.regulatoryGeometryToPreview = action.payload
+    setRegulatoryGeometriesToPreview (state, action) {
+      state.regulatoryGeometriesToPreview = action.payload
+    },
+    resetRegulatoryGeometriesToPreview (state) {
+      state.regulatoryGeometriesToPreview = null
     },
     /**
      * Add regulatory zones to "My Zones" regulatory selection
@@ -225,7 +229,8 @@ export const {
   setRegulatoryTopicsOpened,
   setRegulatoryTopics,
   setLayersTopicsByRegTerritory,
-  setRegulatoryGeometryToPreview,
+  setRegulatoryGeometriesToPreview,
+  resetRegulatoryGeometriesToPreview,
   showSimplifiedGeometries,
   showWholeGeometries,
   setRegulationSearchedZoneExtent

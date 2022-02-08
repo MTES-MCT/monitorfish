@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Vector } from 'ol/layer'
@@ -10,44 +10,64 @@ import { regulatoryPreviewStyle } from './styles/regulatoryPreview.style'
 
 const RegulatoryPreviewLayer = ({ map }) => {
   const dispatch = useDispatch()
-  const { regulatoryGeometryToPreview } = useSelector(state => state.regulatory)
-  const [vectorSource] = useState(new VectorSource({
-    features: []
-  }))
-  const [layer] = useState(new Vector({
-    renderBuffer: 4,
-    source: vectorSource,
-    updateWhileAnimating: true,
-    updateWhileInteracting: true,
-    style: regulatoryPreviewStyle
-  }))
-
-  useEffect(() => {
-    if (regulatoryGeometryToPreview && map) {
-      vectorSource.clear()
-      const feature = new GeoJSON({
-        featureProjection: OPENLAYERS_PROJECTION
-      }).readFeature(regulatoryGeometryToPreview)
-      vectorSource.addFeature(feature)
-      dispatch(zoomInLayer({ feature }))
+  const { regulatoryGeometriesToPreview } = useSelector(state => state.regulatory)
+  const vectorSourceRef = useRef(null)
+  function getVectorSource () {
+    if (!vectorSourceRef.current) {
+      vectorSourceRef.current = new VectorSource({
+        features: []
+      })
     }
-  }, [map, regulatoryGeometryToPreview])
+    return vectorSourceRef.current
+  }
+  const layerRef = useRef(null)
+  function getLayer () {
+    if (!layerRef.current) {
+      layerRef.current = new Vector({
+        renderBuffer: 4,
+        source: getVectorSource(),
+        updateWhileAnimating: true,
+        updateWhileInteracting: true,
+        style: regulatoryPreviewStyle
+      })
+    }
+    return layerRef.current
+  }
 
   useEffect(() => {
-    function addLayerToMap () {
-      if (map) {
-        layer.name = Layers.REGULATORY_PREVIEW.code
-        map.getLayers().push(layer)
-      }
+    if (map) {
+      getVectorSource().clear()
 
-      return () => {
-        if (map) {
-          map.removeLayer(layer)
+      if (regulatoryGeometriesToPreview) {
+        const features = regulatoryGeometriesToPreview.map(geometry => {
+          if (geometry) {
+            return new GeoJSON({
+              featureProjection: OPENLAYERS_PROJECTION
+            }).readFeature(geometry)
+          }
+
+          return null
+        }).filter(feature => feature)
+
+        if (features?.length) {
+          getVectorSource().addFeatures(features)
+          dispatch(zoomInLayer({ feature: features[0] }))
         }
       }
     }
+  }, [map, regulatoryGeometriesToPreview])
 
-    addLayerToMap()
+  useEffect(() => {
+    if (map) {
+      getLayer().name = Layers.REGULATORY_PREVIEW.code
+      map.getLayers().push(getLayer())
+    }
+
+    return () => {
+      if (map) {
+        map.removeLayer(getLayer())
+      }
+    }
   }, [map])
 
   return null

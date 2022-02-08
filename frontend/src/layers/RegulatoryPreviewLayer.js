@@ -39,11 +39,20 @@ const RegulatoryPreviewLayer = ({ map }) => {
       getVectorSource().clear()
 
       if (regulatoryGeometriesToPreview) {
-        const features = regulatoryGeometriesToPreview.map(regulatorylayer => new GeoJSON({
-          featureProjection: OPENLAYERS_PROJECTION
-        }).readFeature(regulatorylayer))
-        getVectorSource().addFeatures(features)
-        dispatch(zoomInLayer({ feature: features[0] }))
+        const features = regulatoryGeometriesToPreview.map(geometry => {
+          if (geometry) {
+            return new GeoJSON({
+              featureProjection: OPENLAYERS_PROJECTION
+            }).readFeature(geometry)
+          }
+
+          return null
+        }).filter(feature => feature)
+
+        if (features?.length) {
+          getVectorSource().addFeatures(features)
+          dispatch(zoomInLayer({ feature: features[0] }))
+        }
       }
     }
   }, [map, regulatoryGeometriesToPreview])

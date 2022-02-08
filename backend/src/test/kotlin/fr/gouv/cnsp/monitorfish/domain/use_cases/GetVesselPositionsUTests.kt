@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
-import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -27,7 +27,7 @@ class GetVesselPositionsUTests {
     private lateinit var positionRepository: PositionRepository
 
     @MockBean
-    private lateinit var ersRepository: ERSRepository
+    private lateinit var logbookReportRepository: LogbookReportRepository
 
     @Test
     fun `execute Should return the last 1 day positions When the DEP message is not found`() {
@@ -38,11 +38,11 @@ class GetVesselPositionsUTests {
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
-        given(ersRepository.findLastTripBeforeDateTime(any(), any())).willThrow(NoLogbookFishingTripFound("ERROR"))
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willThrow(NoLogbookFishingTripFound("ERROR"))
 
         // When
         val pair = runBlocking {
-            GetVesselPositions(positionRepository, ersRepository)
+            GetVesselPositions(positionRepository, logbookReportRepository)
                     .execute("FR224226850",
                             "",
                             "",
@@ -68,7 +68,7 @@ class GetVesselPositionsUTests {
         // When
         val throwable = catchThrowable {
             runBlocking {
-                GetVesselPositions(positionRepository, ersRepository)
+                GetVesselPositions(positionRepository, logbookReportRepository)
                         .execute("FR224226850",
                                 "",
                                 "",
@@ -86,12 +86,12 @@ class GetVesselPositionsUTests {
     @Test
     fun `execute Should not throw an exception When a vessel's last DEP is not found`() {
         // Given
-        given(ersRepository.findLastTripBeforeDateTime(any(), any())).willThrow(NoLogbookFishingTripFound("ERROR"))
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willThrow(NoLogbookFishingTripFound("ERROR"))
 
         // When
         val throwable = catchThrowable {
             runBlocking {
-                GetVesselPositions(positionRepository, ersRepository)
+                GetVesselPositions(positionRepository, logbookReportRepository)
                         .execute("FR224226850",
                                 "",
                                 "",
@@ -114,7 +114,7 @@ class GetVesselPositionsUTests {
         // When
         val throwable = catchThrowable {
             runBlocking {
-                GetVesselPositions(positionRepository, ersRepository)
+                GetVesselPositions(positionRepository, logbookReportRepository)
                         .execute("FR224226850",
                                 "",
                                 "",
@@ -139,7 +139,7 @@ class GetVesselPositionsUTests {
         val fromDateTime = ZonedDateTime.now().minusMinutes(15)
         val toDateTime = ZonedDateTime.now()
         runBlocking {
-            GetVesselPositions(positionRepository, ersRepository)
+            GetVesselPositions(positionRepository, logbookReportRepository)
                     .execute(
                             "FR224226850",
                             "",
@@ -166,7 +166,7 @@ class GetVesselPositionsUTests {
 
         // When
         runBlocking {
-            GetVesselPositions(positionRepository, ersRepository)
+            GetVesselPositions(positionRepository, logbookReportRepository)
                     .execute("FR224226850",
                             "",
                             "",

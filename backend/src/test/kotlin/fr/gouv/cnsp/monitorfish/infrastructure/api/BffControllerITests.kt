@@ -305,13 +305,13 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should find the last ERS messages of vessels`() {
+    fun `Should find the last logbook messages of vessels`() {
         // Given
-        val voyage = Voyage(true, false, ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"), null, 1234, ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
+        val voyage = Voyage(true, false, ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"), null, 1234, LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessage(), listOf()))
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
         // When
-        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime="))
+        mockMvc.perform(get("/bff/v1/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime="))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()", equalTo(6)))
@@ -320,22 +320,22 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.isFirstVoyage", equalTo(false)))
                 .andExpect(jsonPath("$.startDate", equalTo("2021-01-21T10:21:26.617301+01:00")))
                 .andExpect(jsonPath("$.endDate", equalTo(null)))
-                .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages.length()", equalTo(3)))
-                .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].messageType", equalTo("DEP")))
-                .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].tripNumber", equalTo(345)))
-                .andExpect(jsonPath("$.ersMessagesAndAlerts.ersMessages[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
+                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages.length()", equalTo(3)))
+                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[0].messageType", equalTo("DEP")))
+                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[0].tripNumber", equalTo(345)))
+                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
 
         Mockito.verify(getVesselVoyage).execute("FR224226850", VoyageRequest.LAST, null)
     }
 
     @Test
-    fun `Should find the ERS messages of vessels before a specified date`() {
+    fun `Should find the logbook messages of vessels before a specified date`() {
         // Given
-        val voyage = Voyage(true, false, ZonedDateTime.now().minusMonths(5), null, 1234, ERSMessagesAndAlerts(TestUtils.getDummyERSMessage(), listOf()))
+        val voyage = Voyage(true, false, ZonedDateTime.now().minusMonths(5), null, 1234, LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessage(), listOf()))
         given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
 
         // When
-        mockMvc.perform(get("/bff/v1/ers/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&tripNumber=12345"))
+        mockMvc.perform(get("/bff/v1/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&tripNumber=12345"))
 
         Mockito.verify(getVesselVoyage).execute(
                 "FR224226850",
@@ -397,7 +397,7 @@ class BffControllerITests {
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.datePositionReceived", equalTo("2020-12-21T15:01:00Z")))
                 .andExpect(jsonPath("$.dateLastPosition", equalTo("2020-12-21T16:01:00Z")))
-                .andExpect(jsonPath("$.dateERSMessageReceived", equalTo("2020-12-21T17:01:00Z")))
+                .andExpect(jsonPath("$.dateLogbookMessageReceived", equalTo("2020-12-21T17:01:00Z")))
     }
 
     @Test

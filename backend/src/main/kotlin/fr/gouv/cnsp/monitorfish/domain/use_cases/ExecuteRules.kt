@@ -25,15 +25,15 @@ class ExecuteRules(private val ruleRepository: RuleRepository,
 
         rules.forEach {
             when (it.value.inputSource) {
-                InputSource.ERS -> {
-                    executeERSRules(it)
+                InputSource.Logbook -> {
+                    executeLogbookRules(it)
                 }
             }
         }
         logger.info("RULES: End of rules executor")
     }
 
-    private fun executeERSRules(rule: Rule) {
+    private fun executeLogbookRules(rule: Rule) {
         when (rule.value.name) {
             RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE -> {
                 logger.info("PNO_LAN_WEIGHT_TOLERANCE: Executing...")

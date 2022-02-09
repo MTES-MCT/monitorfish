@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDate } from '../../../utils'
-import { setSelectedVesselCustomTrackDepth } from '../../../domain/shared_slices/Vessel'
 import modifyVesselTrackDepth from '../../../domain/use_cases/modifyVesselTrackDepth'
 
 const CustomDatesShowedInfo = ({ width }) => {
@@ -20,7 +19,6 @@ const CustomDatesShowedInfo = ({ width }) => {
       beforeDatetime: null,
       afterDatetime: null
     }
-    dispatch(setSelectedVesselCustomTrackDepth(nextTrackDepth))
     dispatch(modifyVesselTrackDepth(selectedVesselIdentity, nextTrackDepth))
   }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import DateRangePicker, { afterToday } from 'rsuite/lib/DateRangePicker'
 import styled from 'styled-components'
 
-const TrackDepthDateRange = ({ dates, setDate, width }) => {
+const TrackDepthDateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackDepthFromDates, width }) => {
   return (
     <Wrapper width={width}>
       <DateRangePicker
@@ -12,8 +12,8 @@ const TrackDepthDateRange = ({ dates, setDate, width }) => {
         size={'sm'}
         disabledDate={afterToday()}
         value={dates}
-        onOk={nextValue => setDate(nextValue)}
-        onClean={() => setDate([])}
+        onOk={modifyVesselTrackDepthFromDates}
+        onClean={resetToDefaultTrackDepth}
         ranges={[]}
         format="DD-MM-YYYY"
         locale={{

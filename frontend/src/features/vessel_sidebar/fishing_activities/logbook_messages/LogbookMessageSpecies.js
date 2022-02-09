@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
-import { ERSSpeciesPresentation, ERSSpeciesPreservationState } from '../../../../domain/entities/ERS'
+import { LogbookSpeciesPresentation, LogbookSpeciesPreservationState } from '../../../../domain/entities/logbook'
 import countries from 'i18n-iso-countries'
 import { ReactComponent as WarningSVG } from '../../../icons/Point_exclamation_info.svg'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
-const ERSMessageSpecies = props => {
+const LogbookMessageSpecies = props => {
   const [isOpen, setIsOpen] = useState(false)
 
   const getSpeciesName = species => {
@@ -65,12 +65,12 @@ const ERSMessageSpecies = props => {
                         <TrimmedValue
                           title={
                             species?.presentation
-                              ? `${ERSSpeciesPresentation[species.presentation]} (${species.presentation})`
+                              ? `${LogbookSpeciesPresentation[species.presentation]} (${species.presentation})`
                               : undefined
                           }>
                           {
-                            species?.presentation && ERSSpeciesPresentation[species.presentation]
-                              ? <>{ERSSpeciesPresentation[species.presentation]} ({species.presentation})</>
+                            species?.presentation && LogbookSpeciesPresentation[species.presentation]
+                              ? <>{LogbookSpeciesPresentation[species.presentation]} ({species.presentation})</>
                               : species.presentation
                                 ? species.presentation
                                 : <NoValue>-</NoValue>
@@ -82,12 +82,12 @@ const ERSMessageSpecies = props => {
                         <TrimmedValue
                           title={
                             species?.preservationState
-                              ? `${ERSSpeciesPreservationState[species.preservationState]} (${species.preservationState})`
+                              ? `${LogbookSpeciesPreservationState[species.preservationState]} (${species.preservationState})`
                               : undefined
                           }>
                           {
-                            species?.preservationState && ERSSpeciesPreservationState[species.preservationState]
-                              ? <>{ERSSpeciesPreservationState[species.preservationState]} ({species.preservationState})</>
+                            species?.preservationState && LogbookSpeciesPreservationState[species.preservationState]
+                              ? <>{LogbookSpeciesPreservationState[species.preservationState]} ({species.preservationState})</>
                               : species.preservationState
                                 ? species.preservationState
                                 : <NoValue>-</NoValue>
@@ -327,4 +327,4 @@ const NoValue = styled.span`
   display: inline-block;
 `
 
-export default ERSMessageSpecies
+export default LogbookMessageSpecies

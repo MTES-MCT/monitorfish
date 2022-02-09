@@ -5,24 +5,24 @@
  * @property {string | null} startDate
  * @property {string | null} endDate
  * @property {int} tripNumber
- * @property {FishingActivities} ersMessagesAndAlerts
+ * @property {FishingActivities} logbookMessagesAndAlerts
  */
 
 /**
  * @typedef FishingActivities
  * @property {Alert[]} alerts
- * @property {ERSMessage[]} ersMessages
+ * @property {LogbookMessage[]} logbookMessages
  */
 
 /**
- * @typedef ERSMessage
+ * @typedef LogbookMessage
  * @property {{
         isSuccess: boolean,
         rejectionCause: string,
         returnStatus: string
       }} acknowledge
  * @property {boolean} deleted
- * @property {string} ersId
+ * @property {string} reportId
  * @property {string} externalReferenceNumber
  * @property {string} flagState
  * @property {string} imo
@@ -35,7 +35,7 @@
  * @property {string} operationNumber
  * @property {string} operationType
  * @property {string} rawMessage
- * @property {string} referencedErsId
+ * @property {string} referencedReportId
  * @property {number} tripNumber
  * @property {string} vesselName
  */

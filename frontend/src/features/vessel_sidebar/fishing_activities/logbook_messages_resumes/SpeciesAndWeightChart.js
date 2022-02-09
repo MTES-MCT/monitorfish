@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { ERSSpeciesPresentation } from '../../../../domain/entities/ERS'
+import { LogbookSpeciesPresentation } from '../../../../domain/entities/logbook'
 import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
 
 function getHeight (weight, percentOfTotalFARWeight) {
@@ -113,7 +113,7 @@ const SpeciesAndWeightChart = ({
                         </PresentationWeight>
                         <Presentation>
                           {speciesAndPresentation.presentation
-                            ? <>{ERSSpeciesPresentation[speciesAndPresentation.presentation]} ({speciesAndPresentation.presentation})</>
+                            ? <>{LogbookSpeciesPresentation[speciesAndPresentation.presentation]} ({speciesAndPresentation.presentation})</>
                             : 'Inconnu'
                           }
                         </Presentation>

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
-import { ERSMessageActivityType } from '../../../../domain/entities/ERS'
+import { LogbookMessageActivityType } from '../../../../domain/entities/logbook'
 
 const DEPMessage = props => {
   const getPortName = message => {
@@ -35,7 +35,7 @@ const DEPMessage = props => {
               <Field>
                 <Key>Activité prévue</Key>
                 <Value>{props.message.anticipatedActivity
-                  ? <>{ERSMessageActivityType[props.message.anticipatedActivity]} ({props.message.anticipatedActivity})</>
+                  ? <>{LogbookMessageActivityType[props.message.anticipatedActivity]} ({props.message.anticipatedActivity})</>
                   : <NoValue>-</NoValue>}</Value>
               </Field>
             </TableBody>

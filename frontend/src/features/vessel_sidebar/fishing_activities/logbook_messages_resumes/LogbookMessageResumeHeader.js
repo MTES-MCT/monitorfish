@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { ERSMessageType as ERSMessageTypeEnum } from '../../../../domain/entities/ERS'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { ReactComponent as NotAcknowledgedSVG } from '../../../icons/Message_non_acquitte.svg'
 
-const ERSMessageResumeHeader = props => {
+const LogbookMessageResumeHeader = props => {
   const firstUpdate = useRef(true)
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const ERSMessageResumeHeader = props => {
   return <>
     {props.messageType
       ? <Wrapper>
-        <ERSMessageTitle
+        <LogbookMessageTitle
           onClick={() => props.setIsOpen(!props.isOpen)}
           hasNoMessage={props.hasNoMessage || props.noContent}
           isLastItem={props.isLastItem}
@@ -27,7 +27,7 @@ const ERSMessageResumeHeader = props => {
           {
             props.hasNoMessage || props.noContent ? null : <ChevronIcon $isOpen={props.isOpen} name={props.messageType}/>
           }
-          <ERSMessageName
+          <LogbookMessageName
             isNotAcknowledged={props.isNotAcknowledged}
             hasNoMessage={props.hasNoMessage || props.noContent}
             title={
@@ -42,17 +42,17 @@ const ERSMessageResumeHeader = props => {
                 ? <NotAcknowledgedOrDeleted/>
                 : null
             }
-            {ERSMessageTypeEnum[props.messageType].name}
-          </ERSMessageName>
-          <ERSMessageResumeText
+            {LogbookMessageTypeEnum[props.messageType].name}
+          </LogbookMessageName>
+          <LogbookMessageResumeText
             data-cy={'vessel-fishing-resume-title'}
             title={props.onHoverText ? props.onHoverText : ''}>
             {props.hasNoMessage ? <Gray>Aucun message</Gray> : <>{props.title}{props.isAlert ? <Red/> : null}</>}
-          </ERSMessageResumeText>
+          </LogbookMessageResumeText>
           {
-            props.hasNoMessage ? null : <ShowThisMessage onClick={() => props.showERSMessages(props.messageType)}/>
+            props.hasNoMessage ? null : <ShowThisMessage onClick={() => props.showLogbookMessages(props.messageType)}/>
           }
-        </ERSMessageTitle>
+        </LogbookMessageTitle>
       </Wrapper>
       : null}
   </>
@@ -86,7 +86,7 @@ const Gray = styled.span`
   font-weight: 300;
 `
 
-const ERSMessageResumeText = styled.span`
+const LogbookMessageResumeText = styled.span`
   color: ${COLORS.gunMetal};
   margin: 5px 5px 5px 5px;
   padding: 2px 4px 2px 0;
@@ -102,7 +102,7 @@ const ERSMessageResumeText = styled.span`
   white-space: nowrap;
 `
 
-const ERSMessageName = styled.span`
+const LogbookMessageName = styled.span`
   color: ${props => props.isNotAcknowledged ? COLORS.maximumRed : COLORS.slateGray};
   font-weight: 500;
   margin: 5px 0 5px ${props => props.hasNoMessage ? '27px' : '0px'};
@@ -123,7 +123,7 @@ const Wrapper = styled.div`
   color: ${COLORS.slateGray};
 `
 
-const ERSMessageTitle = styled.div`
+const LogbookMessageTitle = styled.div`
   height: 35px;
   width: inherit;
   padding: 0 0 0 20px;
@@ -155,4 +155,4 @@ const ChevronIcon = styled(ChevronIconSVG)`
 }
 `
 
-export default ERSMessageResumeHeader
+export default LogbookMessageResumeHeader

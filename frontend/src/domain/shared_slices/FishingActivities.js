@@ -1,6 +1,6 @@
 import { FishingActivitiesTab } from '../entities/vessel'
 import { createSlice } from '@reduxjs/toolkit'
-import { getEffectiveDateTimeFromMessage, getErsMessageType } from '../entities/fishingActivities'
+import { getEffectiveDateTimeFromMessage, getLogbookMessageType } from '../entities/logbook'
 
 /* eslint-disable */
 /** @namespace FishingActivitiesReducer */
@@ -36,13 +36,13 @@ const fishingActivitiesSlice = createSlice({
      */
     setVoyage (state, action) {
       const {
-        ersMessagesAndAlerts,
+        logbookMessagesAndAlerts,
         isLastVoyage,
         isFirstVoyage,
         tripNumber
       } = action.payload
 
-      state.fishingActivities = ersMessagesAndAlerts
+      state.fishingActivities = logbookMessagesAndAlerts
       state.isLastVoyage = isLastVoyage
       state.isFirstVoyage = isFirstVoyage
       state.tripNumber = tripNumber
@@ -57,8 +57,8 @@ const fishingActivitiesSlice = createSlice({
      * @param {{payload: VesselVoyage}} action - the vessel last voyage
      */
     setLastVoyage (state, action) {
-      state.lastFishingActivities = action.payload.ersMessagesAndAlerts
-      state.fishingActivities = action.payload.ersMessagesAndAlerts
+      state.lastFishingActivities = action.payload.logbookMessagesAndAlerts
+      state.fishingActivities = action.payload.logbookMessagesAndAlerts
       state.isLastVoyage = action.payload.isLastVoyage
       state.isFirstVoyage = action.payload.isFirstVoyage
       state.tripNumber = action.payload.tripNumber
@@ -94,13 +94,13 @@ const fishingActivitiesSlice = createSlice({
      * @param {{payload: string}} action - The fishing activity id to show
      */
     showFishingActivityOnMap (state, action) {
-      const fishingActivityToShow = state.fishingActivities.ersMessages
+      const fishingActivityToShow = state.fishingActivities.logbookMessages
         .find(fishingActivity => fishingActivity.operationNumber === action.payload)
 
       state.fishingActivitiesShowedOnMap = state.fishingActivitiesShowedOnMap.concat({
         id: fishingActivityToShow.operationNumber,
         date: getEffectiveDateTimeFromMessage(fishingActivityToShow),
-        name: getErsMessageType(fishingActivityToShow),
+        name: getLogbookMessageType(fishingActivityToShow),
         isDeleted: fishingActivityToShow.deleted,
         isNotAcknowledged: !fishingActivityToShow.acknowledge?.isSuccess
       })
@@ -125,12 +125,12 @@ const fishingActivitiesSlice = createSlice({
      */
     showFishingActivitiesOnMap (state, action) {
       state.fishingActivitiesAreShowedOnMap = true
-      state.fishingActivitiesShowedOnMap = state.fishingActivities.ersMessages
+      state.fishingActivitiesShowedOnMap = state.fishingActivities.logbookMessages
         .filter(fishingActivity => !fishingActivity.isCorrected)
         .map(fishingActivity => ({
           id: fishingActivity.operationNumber,
           date: getEffectiveDateTimeFromMessage(fishingActivity),
-          name: getErsMessageType(fishingActivity),
+          name: getLogbookMessageType(fishingActivity),
           isDeleted: fishingActivity.deleted,
           isNotAcknowledged: !fishingActivity.acknowledge?.isSuccess
         }))

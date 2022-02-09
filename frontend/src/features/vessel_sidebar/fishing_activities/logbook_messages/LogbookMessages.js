@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import ERSMessage from './ERSMessage'
+import LogbookMessage from './LogbookMessage'
 import { ReactComponent as SortSVG } from '../../../icons/ascendant-descendant.svg'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { ReactComponent as ArrowTripSVG } from '../../../icons/Fleche_navigation_marees.svg'
@@ -63,7 +63,7 @@ const downloadMessagesOptions = {
   }
 }
 
-const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigation }) => {
+const LogbookMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigation }) => {
   const {
     isLastVoyage,
     isFirstVoyage,
@@ -71,14 +71,14 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
     fishingActivities
   } = useSelector(state => state.fishingActivities)
 
-  /** @type {ERSMessage[]} ersMessages */
-  const [ersMessages, setERSMessages] = useState([])
+  /** @type {LogbookMessage[]} logbookMessages */
+  const [logbookMessages, setLogbookMessages] = useState([])
   const [ascendingSort, setAscendingSort] = useState(true)
   const [selectedOptions, setSelectedOptions] = useState(null)
 
   useEffect(() => {
     if (fishingActivities?.ersMessages) {
-      setERSMessages(fishingActivities.ersMessages)
+      setLogbookMessages(fishingActivities.logbookMessages)
     }
   }, [fishingActivities])
 
@@ -90,7 +90,7 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
   function inverseSort () {
     const inversedSort = !ascendingSort
 
-    const sortedFishingActivities = [...ersMessages].sort((a, b) => {
+    const sortedFishingActivities = [...logbookMessages].sort((a, b) => {
       if (inversedSort) {
         return new Date(a.operationDateTime) - new Date(b.operationDateTime)
       } else {
@@ -99,12 +99,12 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
     })
 
     setAscendingSort(inversedSort)
-    setERSMessages(sortedFishingActivities)
+    setLogbookMessages(sortedFishingActivities)
   }
 
   function downloadMessages () {
-    const objectsToExports = ersMessages
-      .filter(ersMessages => filterBySelectedType(ersMessages))
+    const objectsToExports = logbookMessages
+      .filter(logbookMessages => filterBySelectedType(logbookMessages))
       .map(position => {
         return formatToCSVColumnsForExport(position, downloadMessagesOptions)
       })
@@ -154,9 +154,9 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
     menuPortal: base => ({ ...base, zIndex: 9999 })
   }
 
-  function filterBySelectedType (ersMessage) {
+  function filterBySelectedType (logbookMessage) {
     if (selectedOptions?.length) {
-      return selectedOptions.some(messageType => ersMessage.messageType === messageType.value)
+      return selectedOptions.some(messageType => logbookMessage.messageType === messageType.value)
     } else {
       return true
     }
@@ -215,12 +215,12 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
     <CustomDatesShowedInfoWithMargin>
       <CustomDatesShowedInfo width={460}/>
     </CustomDatesShowedInfoWithMargin>
-    {ersMessages?.length
-      ? ersMessages
-        .filter(ersMessage => filterBySelectedType(ersMessage))
+    {logbookMessages?.length
+      ? logbookMessages
+        .filter(logbookMessage => filterBySelectedType(logbookMessage))
         .map((message, index) => {
-          return <ERSMessage
-            key={message.ersId}
+          return <LogbookMessage
+            key={message.reportId}
             message={message}
             isFirst={index === 0}
           />
@@ -334,4 +334,4 @@ const Previous = styled.a`
   display: inline-block;
 `
 
-export default ERSMessages
+export default LogbookMessages

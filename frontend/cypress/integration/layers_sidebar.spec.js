@@ -120,6 +120,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy^="regulatory-layers-advanced-search-zone"]').type('MEMN')
     cy.get('*[data-cy^="regulatory-layers-advanced-search-gears"]').type('DRB')
     cy.get('*[data-cy^="regulatory-layers-advanced-search-species"]').type('VEV')
+    cy.get('*[data-cy^="regulatory-layers-advanced-search-reg"]').type('1241')
     cy.get('*[data-cy^="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
   })
 

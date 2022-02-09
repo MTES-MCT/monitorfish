@@ -195,6 +195,7 @@ export const REGULATORY_SEARCH_PROPERTIES = {
   TOPIC: 'topic',
   ZONE: 'zone',
   REGION: 'region',
+  LAW_TYPE: 'law_type',
   GEARS: 'gears',
   SPECIES: 'species',
   REGULATORY_REFERENCES: 'regulatoryReferences'
@@ -310,7 +311,7 @@ export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, 
 
 export function findIfSearchStringIncludedInRegulatoryReferences (zone, searchText) {
   return REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES?.length && searchText
-    ? zone[REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES].find(text => text?.reference.toString().includes(getTextForSearch(searchText)))
+    ? zone[REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES].find(text => text?.reference.toString().includes(searchText))
     : false
 }
 

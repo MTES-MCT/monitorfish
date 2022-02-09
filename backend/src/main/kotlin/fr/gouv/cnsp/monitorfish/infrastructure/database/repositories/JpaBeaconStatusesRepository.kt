@@ -17,12 +17,12 @@ class JpaBeaconStatusesRepository(private val dbBeaconStatusesRepository: DBBeac
         return dbBeaconStatusesRepository.findAll().map { it.toBeaconStatus() }
     }
 
-    override fun findAllExceptResumedTransmission(): List<BeaconStatus> {
-        return dbBeaconStatusesRepository.findAllExceptResumedTransmission().map { it.toBeaconStatus() }
+    override fun findAllExceptEndOfFollowUp(): List<BeaconStatus> {
+        return dbBeaconStatusesRepository.findAllExceptEndOfFollowUp().map { it.toBeaconStatus() }
     }
 
-    override fun findLastThirtyResumedTransmissions(): List<BeaconStatus> {
-        return dbBeaconStatusesRepository.findLastThirtyResumedTransmissions().map { it.toBeaconStatus() }
+    override fun findLastThirtyEndOfFollowUp(): List<BeaconStatus> {
+        return dbBeaconStatusesRepository.findLastThirtyEndOfFollowUp().map { it.toBeaconStatus() }
     }
 
     override fun find(beaconStatusId: Int): BeaconStatus {

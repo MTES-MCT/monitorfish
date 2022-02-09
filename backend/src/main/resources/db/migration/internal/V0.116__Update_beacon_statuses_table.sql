@@ -1,0 +1,1 @@
+UPDATE public.beacon_statuses SET stage = CAST('END_OF_FOLLOW_UP' AS beacon_statuses_stage), vessel_status_last_modification_date_utc = CURRENT_TIMESTAMP WHERE stage = CAST('RESUMED_TRANSMISSION' AS beacon_statuses_stage);

@@ -14,8 +14,8 @@ class GetAllBeaconStatuses(private val beaconStatusesRepository: BeaconStatusesR
     fun execute(): List<BeaconStatus> {
         val lastPositions = lastPositionRepository.findAll()
 
-        val beaconStatusesExceptResumedTransmission = beaconStatusesRepository.findAllExceptResumedTransmission()
-        val lastThirtyResumedTransmissions = beaconStatusesRepository.findLastThirtyResumedTransmissions()
+        val beaconStatusesExceptResumedTransmission = beaconStatusesRepository.findAllExceptEndOfFollowUp()
+        val lastThirtyResumedTransmissions = beaconStatusesRepository.findLastThirtyEndOfFollowUp()
 
         return (beaconStatusesExceptResumedTransmission + lastThirtyResumedTransmissions).map { beaconStatus ->
             val riskFactor = lastPositions.find(getVesselFromBeaconStatus(beaconStatus))?.riskFactor

@@ -40,7 +40,6 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
     openedBeaconStatus
   } = useSelector(state => state.beaconStatus)
   const beaconStatuses = useSelector(state => getMemoizedBeaconStatusesByStage(state))
-  const [allDroppableDisabled, setAllDroppableDisabled] = useState(false)
   const [filteredBeaconStatuses, setFilteredBeaconStatuses] = useState({})
   const [isDroppedId, setIsDroppedId] = useState(undefined)
   const [searchedVessel, setSearchedVessel] = useState(undefined)
@@ -145,7 +144,8 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
     const beaconId = active?.id
     const nextStage = findStage(over?.id)
 
-    if (previousStage === beaconStatusesStages.RESUMED_TRANSMISSION.code) {
+    if (previousStage === beaconStatusesStages.RESUMED_TRANSMISSION.code &&
+      nextStage !== beaconStatusesStages.END_OF_FOLLOW_UP.code) {
       dispatch(setError(new Error('Une avarie en REPRISE DES ÉMISSIONS ne peut revenir en arrière')))
       return
     }
@@ -170,13 +170,6 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
     setIsDroppedId(beaconId)
   }, [beaconStatuses])
 
-  const onDragStart = useCallback(event => {
-    const { active } = event
-
-    const previousStage = findStage(active.data.current.stageId)
-    setAllDroppableDisabled(previousStage === beaconStatusesStages.RESUMED_TRANSMISSION.code)
-  }, [])
-
   return (
     <Wrapper innerWidth={window.innerWidth} style={wrapperStyle}>
       <SearchVesselInput
@@ -190,7 +183,6 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
       <DndContext
         autoScroll={true}
         onDragEnd={onDragEnd}
-        onDragStart={onDragStart}
         sensors={sensors}
         modifiers={[restrictToFirstScrollableAncestor]}
       >
@@ -199,7 +191,11 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
           style={columnsStyle}
         >
           {Object.keys(beaconStatusesStages).map((stageId) => (
-            <Droppable key={stageId} id={stageId} disabled={allDroppableDisabled}>
+            <Droppable
+              key={stageId}
+              id={stageId}
+              disabled={stageId === beaconStatusesStages.RESUMED_TRANSMISSION.code}
+            >
               <StageColumn
                 baseUrl={baseUrl}
                 stage={beaconStatusesStages[stageId]}

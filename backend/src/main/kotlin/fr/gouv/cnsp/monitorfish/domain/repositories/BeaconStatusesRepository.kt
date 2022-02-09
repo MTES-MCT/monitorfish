@@ -7,8 +7,8 @@ import java.time.ZonedDateTime
 
 interface BeaconStatusesRepository {
     fun findAll(): List<BeaconStatus>
-    fun findAllExceptResumedTransmission(): List<BeaconStatus>
-    fun findLastThirtyResumedTransmissions(): List<BeaconStatus>
+    fun findAllExceptEndOfFollowUp(): List<BeaconStatus>
+    fun findLastThirtyEndOfFollowUp(): List<BeaconStatus>
     fun find(beaconStatusId: Int): BeaconStatus
     fun update(id: Int,
                vesselStatus: VesselStatus?,

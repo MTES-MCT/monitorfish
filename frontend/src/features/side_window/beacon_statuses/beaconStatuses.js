@@ -52,6 +52,11 @@ export const beaconStatusesStages = {
     code: 'RESUMED_TRANSMISSION',
     title: 'Reprise des émissions',
     description: 'Envoyer un message de reprise aux unités dont les émissions ont repris.'
+  },
+  END_OF_FOLLOW_UP: {
+    code: 'END_OF_FOLLOW_UP',
+    title: 'Fin de suivi',
+    description: 'Avaries archivées'
   }
 }
 
@@ -103,3 +108,24 @@ export const vesselStatuses = [
     icon: <VesselStatusActivityDetected style={iconStyle}/>
   }
 ]
+
+const BEACON_CREATION_AT_SEA_OFFSET = 6
+const BEACON_CREATION_AT_PORT_OFFSET = 24
+
+export const getBeaconCreationDate = (dateLastEmission, status) => {
+  switch (status) {
+    case 'AT_PORT': {
+      const beaconCreationDate = new Date(dateLastEmission)
+      beaconCreationDate.setHours(beaconCreationDate.getHours() + BEACON_CREATION_AT_PORT_OFFSET)
+
+      return beaconCreationDate
+    }
+    case 'AT_SEA': {
+      const beaconCreationDate = new Date(dateLastEmission)
+      beaconCreationDate.setHours(beaconCreationDate.getHours() + BEACON_CREATION_AT_SEA_OFFSET)
+
+      return beaconCreationDate
+    }
+    default: return dateLastEmission
+  }
+}

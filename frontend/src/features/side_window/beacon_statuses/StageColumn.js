@@ -13,7 +13,7 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, b
     style={wrapperStyle}
   >
     <StageColumnHeader
-      title={stage?.title}
+      stage={stage?.title}
       description={stage?.description}
       numberOfItems={beaconStatuses?.length}
     />

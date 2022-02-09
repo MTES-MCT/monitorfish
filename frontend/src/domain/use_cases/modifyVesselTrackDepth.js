@@ -1,5 +1,10 @@
 import { getVesselPositionsFromAPI } from '../../api/fetch'
-import { resetLoadingVessel, updateSelectedVesselPositions, updatingVesselTrackDepth } from '../shared_slices/Vessel'
+import {
+  resetLoadingVessel,
+  setSelectedVesselCustomTrackDepth,
+  updateSelectedVesselPositions,
+  updatingVesselTrackDepth
+} from '../shared_slices/Vessel'
 import { removeError, setError } from '../shared_slices/Global'
 import { animateToExtent, doNotAnimate } from '../shared_slices/Map'
 import { batch } from 'react-redux'
@@ -46,6 +51,7 @@ const modifyVesselTrackDepth = (vesselIdentity, vesselTrackDepth, doNotRedrawFis
       }
 
       batch(() => {
+        dispatch(setSelectedVesselCustomTrackDepth(vesselTrackDepth))
         dispatch(updateSelectedVesselPositions(positions))
         if (fishingActivitiesAreShowedOnMap && !doNotRedrawFishingMessages) {
           dispatch(showFishingActivitiesOnMap(true))

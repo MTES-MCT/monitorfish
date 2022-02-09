@@ -34,6 +34,9 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
 
   dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 
+  if (trackDepthIsDefined(vessel.selectedVesselCustomTrackDepth)) {
+    vesselTrackDepth = vessel.selectedVesselCustomTrackDepth
+  }
   const nextVesselTrackDepthObject = getNextVesselTrackDepthObject(vesselTrackDepth, defaultVesselTrackDepth)
   if (fishingActivitiesAreShowedOnMap && !calledFromCron) {
     dispatch(removeFishingActivitiesFromMap())
@@ -89,6 +92,18 @@ function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
       calledFromCron
     }))
   })
+}
+
+/** Returns true if the track depth object is defined
+ * @param trackDepth {{
+      trackDepth: null,
+      afterDateTime: null,
+      beforeDateTime: null
+    }}
+  @return boolean|null
+ */
+function trackDepthIsDefined (trackDepth) {
+  return trackDepth?.trackDepth || (trackDepth?.afterDateTime && trackDepth?.beforeDateTime)
 }
 
 export default showVessel

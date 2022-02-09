@@ -1,18 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
+import { beaconStatusesStages } from './beaconStatuses'
 
-const StageColumnHeader = ({ title, description, numberOfItems }) => {
+const MAX_END_OF_FOLLOW_UP_ITEMS = 30
+
+const StageColumnHeader = ({ stage, description, numberOfItems }) => {
   return <Wrapper style={wrapperStyle}>
     <Row
       data-cy={'side-window-beacon-statuses-header'}
       style={rowStyle}
     >
       <Title style={titleStyle}>
-        {title}
+        {stage}
       </Title>
       <NumberOfItems style={numberOfItemsStyle}>
-        {numberOfItems}
+        {
+          stage === beaconStatusesStages.END_OF_FOLLOW_UP.code && numberOfItems === MAX_END_OF_FOLLOW_UP_ITEMS
+            ? `${MAX_END_OF_FOLLOW_UP_ITEMS}+`
+            : numberOfItems
+        }
       </NumberOfItems>
     </Row>
     <Description style={descriptionStyle}>

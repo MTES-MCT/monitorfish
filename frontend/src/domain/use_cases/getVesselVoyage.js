@@ -9,7 +9,7 @@ import {
   setVoyage,
   showFishingActivitiesOnMap
 } from '../shared_slices/FishingActivities'
-import NoERSMessagesFoundError from '../../errors/NoERSMessagesFoundError'
+import NoLogbookMessagesFoundError from '../../errors/NoLogbookMessagesFoundError'
 import { vesselsAreEquals } from '../entities/vessel'
 import { batch } from 'react-redux'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
@@ -56,7 +56,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
         batch(() => {
           dispatch(setVoyage(emptyVoyage))
           dispatch(hideFishingActivitiesOnMap())
-          dispatch(setError(new NoERSMessagesFoundError('Ce navire n\'a pas envoyé de message JPE.')))
+          dispatch(setError(new NoLogbookMessagesFoundError('Ce navire n\'a pas envoyé de message JPE.')))
         })
         return
       }

@@ -37,7 +37,7 @@ const showAdministrativeLayer = layerToShow => dispatch => {
   })
 }
 
-export const getVectorLayer = (type, zone, inBackofficeMode) => {
+export const getVectorOLLayer = (type, zone, inBackofficeMode) => {
   let name
   if (zone) {
     name = `${type}:${zone}`

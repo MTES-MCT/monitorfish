@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import RegulatoryLayerTopic from './RegulatoryLayerTopic'
 import { COLORS } from '../../../constants/constants'
@@ -31,20 +31,21 @@ const RegulatoryLayers = props => {
     setShowRegulatoryLayers(layersSidebarOpenedLayer === layersType.REGULATORY)
   }, [layersSidebarOpenedLayer, setShowRegulatoryLayers])
 
-  function increaseNumberOfZonesOpened (number) {
-    setNumberOfZonesOpened(numberOfZonesOpened + number)
-  }
+  const increaseNumberOfZonesOpened = useCallback(number => {
+    setNumberOfZonesOpened((numberOfZonesOpened) => numberOfZonesOpened + number)
+  }, [])
 
-  function decreaseNumberOfZonesOpened (number) {
-    const value = numberOfZonesOpened - number
-    if (value < 0) {
+  const decreaseNumberOfZonesOpened = useCallback(number => {
+    setNumberOfZonesOpened((numberOfZonesOpened) => numberOfZonesOpened - number)
+  }, [])
+
+  useEffect(() => {
+    if (numberOfZonesOpened < 0) {
       setNumberOfZonesOpened(0)
-    } else {
-      setNumberOfZonesOpened(value)
     }
-  }
+  }, [numberOfZonesOpened])
 
-  const callRemoveRegulatoryLayerFromMySelection = (regulatoryZone, numberOfZones) => {
+  const callRemoveRegulatoryLayerFromMySelection = useCallback((regulatoryZone, numberOfZones, namespace) => {
     decreaseNumberOfZonesOpened(numberOfZones)
     dispatch(hideLayer({
       type: LayersEnum.REGULATORY.code,
@@ -52,7 +53,7 @@ const RegulatoryLayers = props => {
       namespace
     }))
     dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
-  }
+  }, [numberOfZonesOpened])
 
   useEffect(() => {
     if (firstUpdate) {

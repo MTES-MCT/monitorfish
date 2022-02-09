@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
-import ERSMessageResumeHeader from './ERSMessageResumeHeader'
-import { ERSMessageType as ERSMessageTypeEnum } from '../../../../domain/entities/ERS'
+import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 
 const DEPMessageResume = props => {
   const [isOpen, setIsOpen] = useState(false)
@@ -26,27 +26,27 @@ const DEPMessageResume = props => {
 
   return <>
     <Wrapper>
-      <ERSMessageResumeHeader
+      <LogbookMessageResumeHeader
         isNotAcknowledged={props.isNotAcknowledged}
         isDeleted={props.isDeleted}
         rejectionCause={props.rejectionCause}
         onHoverText={props.hasNoMessage ? null : getDEPMessageResumeTitleText()}
         title={props.hasNoMessage ? null : getDEPMessageResumeTitle()}
         hasNoMessage={props.hasNoMessage}
-        showERSMessages={props.showERSMessages}
-        messageType={ERSMessageTypeEnum.DEP.code.toString()}
+        showLogbookMessages={props.showLogbookMessages}
+        messageType={LogbookMessageTypeEnum.DEP.code.toString()}
         setIsOpen={setIsOpen}
         isOpen={isOpen}/>
       {
         props.hasNoMessage
           ? null
-          : <ERSMessageContent
+          : <LogbookMessageContent
             id={props.id}
             speciesOnboard={(props.depMessage.speciesOnboard?.length > 0) ? props.depMessage.speciesOnboard.length : 1}
             gearOnboard={props.depMessage.gearOnboard ? props.depMessage.gearOnboard.length : 1}
             firstUpdate={firstUpdate}
             isOpen={isOpen}
-            name={ERSMessageTypeEnum.DEP.code.toString()}>
+            name={LogbookMessageTypeEnum.DEP.code.toString()}>
             <Zone>
               {props.depMessage.gearOnboard?.length
                 ? props.depMessage.gearOnboard.map((gear, index) => {
@@ -87,7 +87,7 @@ const DEPMessageResume = props => {
                 </TableBody>
               </Fields>
             </Zone>
-          </ERSMessageContent>
+          </LogbookMessageContent>
       }
     </Wrapper>
   </>
@@ -180,7 +180,7 @@ const Wrapper = styled.li`
   color: ${COLORS.slateGray};
 `
 
-const ERSMessageContent = styled.div`
+const LogbookMessageContent = styled.div`
   background: ${COLORS.background};
   width: inherit;
   overflow: hidden;

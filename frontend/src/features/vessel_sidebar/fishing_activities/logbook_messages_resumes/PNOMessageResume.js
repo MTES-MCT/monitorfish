@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import ERSMessageResumeHeader from './ERSMessageResumeHeader'
+import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
 import SpeciesAndWeightChart from './SpeciesAndWeightChart'
 import { getDateTime } from '../../../../utils'
-import { ERSMessagePNOPurposeType, ERSMessageType as ERSMessageTypeEnum } from '../../../../domain/entities/ERS'
+import { LogbookMessagePNOPurposeType, LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 
 const PNOMessageResume = props => {
   const [isOpen, setIsOpen] = useState(false)
@@ -75,27 +75,27 @@ const PNOMessageResume = props => {
   }
 
   return <Wrapper>
-    <ERSMessageResumeHeader
+    <LogbookMessageResumeHeader
       isNotAcknowledged={props.isNotAcknowledged}
       isDeleted={props.isDeleted}
       id={props.id}
       onHoverText={props.hasNoMessage ? null : getPNOMessageResumeTitleText()}
       title={props.hasNoMessage ? null : getPNOMessageResumeTitle()}
       hasNoMessage={props.hasNoMessage}
-      showERSMessages={props.showERSMessages}
-      messageType={ERSMessageTypeEnum.PNO.code.toString()}
+      showLogbookMessages={props.showLogbookMessages}
+      messageType={LogbookMessageTypeEnum.PNO.code.toString()}
       setIsOpen={setIsOpen}
       isOpen={isOpen}/>
     {
       props.hasNoMessage
         ? null
-        : <ERSMessageContent
+        : <LogbookMessageContent
           id={props.id}
           chartHeight={chartHeight + boxHeight}
           speciesNotLandedArray={speciesNotLandedArray}
           firstUpdate={firstUpdate}
           isOpen={isOpen}
-          name={ERSMessageTypeEnum.PNO.code.toString()}>
+          name={LogbookMessageTypeEnum.PNO.code.toString()}>
           <Zone>
             <Fields>
               <TableBody>
@@ -115,7 +115,7 @@ const PNOMessageResume = props => {
                 <Field>
                   <Key>Raison du préavis</Key>
                   <Value>{props.pnoMessage.message.purpose
-                    ? <>{ERSMessagePNOPurposeType[props.pnoMessage.message.purpose]} ({props.pnoMessage.message.purpose})</>
+                    ? <>{LogbookMessagePNOPurposeType[props.pnoMessage.message.purpose]} ({props.pnoMessage.message.purpose})</>
                     : <NoValue>-</NoValue>}</Value>
                 </Field>
                 <Field>
@@ -152,7 +152,7 @@ const PNOMessageResume = props => {
                 : null
             }
           </Zone>
-        </ERSMessageContent>
+        </LogbookMessageContent>
     }
   </Wrapper>
 }
@@ -243,7 +243,7 @@ const Wrapper = styled.li`
   color: ${COLORS.slateGray};
 `
 
-const ERSMessageContent = styled.div`
+const LogbookMessageContent = styled.div`
   background: ${COLORS.background};
   width: inherit;
   overflow: hidden;

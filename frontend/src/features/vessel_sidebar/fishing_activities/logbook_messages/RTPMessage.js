@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
-import { ERSMessagePNOPurposeType } from '../../../../domain/entities/ERS'
+import { LogbookMessagePNOPurposeType } from '../../../../domain/entities/logbook'
 
 const RTPMessage = props => {
   const getPortName = message => {
@@ -35,7 +35,7 @@ const RTPMessage = props => {
               <Field>
                 <Key>Raison du retour</Key>
                 <Value>{props.message.reasonOfReturn
-                  ? <>{ERSMessagePNOPurposeType[props.message.reasonOfReturn]} ({props.message.reasonOfReturn})</>
+                  ? <>{LogbookMessagePNOPurposeType[props.message.reasonOfReturn]} ({props.message.reasonOfReturn})</>
                   : <NoValue>-</NoValue>}</Value>
               </Field>
             </TableBody>

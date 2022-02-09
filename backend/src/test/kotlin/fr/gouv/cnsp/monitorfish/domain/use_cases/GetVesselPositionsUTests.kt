@@ -193,7 +193,7 @@ class GetVesselPositionsUTests {
 
         // When
         val pair = runBlocking {
-            GetVesselPositions(positionRepository, ersRepository)
+            GetVesselPositions(positionRepository, logbookReportRepository)
                     .execute("FR224226850",
                             "",
                             "",

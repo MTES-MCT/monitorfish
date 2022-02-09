@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getDate, getDateTime } from '../../../../utils'
-import ERSMessageSpecies from './ERSMessageSpecies'
-import { buildCatchArray, ERSMessagePNOPurposeType } from '../../../../domain/entities/ERS'
-import { getTotalPNOWeightFromMessage } from '../../../../domain/entities/fishingActivities'
+import LogbookMessageSpecies from './LogbookMessageSpecies'
+import {
+  buildCatchArray,
+  getTotalPNOWeightFromMessage,
+  LogbookMessagePNOPurposeType
+} from '../../../../domain/entities/logbook'
 
 const PNOMessage = props => {
   const [catches, setCatches] = useState([])
@@ -54,7 +57,7 @@ const PNOMessage = props => {
               <Field>
                 <Key>Raison du préavis</Key>
                 <Value>{props.message.purpose
-                  ? <>{ERSMessagePNOPurposeType[props.message.purpose]} ({props.message.purpose})</>
+                  ? <>{LogbookMessagePNOPurposeType[props.message.purpose]} ({props.message.purpose})</>
                   : <NoValue>-</NoValue>}
                 </Value>
               </Field>
@@ -71,7 +74,7 @@ const PNOMessage = props => {
         <SpeciesList>
           {
             catches.map((speciesCatch, index) => {
-              return <ERSMessageSpecies
+              return <LogbookMessageSpecies
                 index={index + 1}
                 isLast={catches.length === index + 1}
                 species={speciesCatch}

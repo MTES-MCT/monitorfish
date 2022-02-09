@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import ERSMessageResumeHeader from './ERSMessageResumeHeader'
+import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
 import { getDateTime } from '../../../../utils'
-import { ERSMessageType as ERSMessageTypeEnum } from '../../../../domain/entities/ERS'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 import { AlertTypes } from '../../../../domain/entities/alerts'
 
 const LANMessageResume = props => {
@@ -59,15 +59,15 @@ const LANMessageResume = props => {
   }
 
   return <Wrapper>
-    <ERSMessageResumeHeader
+    <LogbookMessageResumeHeader
       isNotAcknowledged={props.isNotAcknowledged}
       isDeleted={props.isDeleted}
       isAlert={!!props.catchesOverToleranceAlert}
       title={props.hasNoMessage ? null : props.catchesOverToleranceAlert ? AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name : null}
       onHoverText={getWeightOverToleranceInfo()}
       hasNoMessage={props.hasNoMessage}
-      showERSMessages={props.showERSMessages}
-      messageType={ERSMessageTypeEnum.LAN.code.toString()}
+      showLogbookMessages={props.showLogbookMessages}
+      messageType={LogbookMessageTypeEnum.LAN.code.toString()}
       setIsOpen={setIsOpen}
       isOpen={isOpen}
       isLastItem={true}
@@ -75,12 +75,12 @@ const LANMessageResume = props => {
     {
       props.hasNoMessage
         ? null
-        : <ERSMessageContent
+        : <LogbookMessageContent
           id={props.id}
           chartHeight={chartHeight}
           firstUpdate={firstUpdate}
           isOpen={isOpen}
-          name={ERSMessageTypeEnum.LAN.code.toString()}>
+          name={LogbookMessageTypeEnum.LAN.code.toString()}>
           <Zone>
             <Fields withoutMarginBottom={true}>
               <TableBody>
@@ -179,7 +179,7 @@ const LANMessageResume = props => {
                 })
               : <Gray>Aucune capture à bord</Gray>}
           </Zone>
-        </ERSMessageContent>
+        </LogbookMessageContent>
     }
   </Wrapper>
 }
@@ -315,7 +315,7 @@ const Wrapper = styled.li`
   color: ${COLORS.slateGray};
 `
 
-const ERSMessageContent = styled.div`
+const LogbookMessageContent = styled.div`
   background: ${COLORS.background};
   width: inherit;
   opacity: ${props => props.isOpen ? 1 : 0};

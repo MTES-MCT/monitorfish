@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
-import ERSMessageSpecies from './ERSMessageSpecies'
-import { buildCatchArray, ERSMessageSender } from '../../../../domain/entities/ERS'
+import LogbookMessageSpecies from './LogbookMessageSpecies'
+import { buildCatchArray, LogbookMessageSender } from '../../../../domain/entities/logbook'
 
 const LANMessage = props => {
   const [catches, setCatches] = useState([])
@@ -40,7 +40,7 @@ const LANMessage = props => {
               <Field>
                 <Key>Émetteur du message</Key>
                 <Value>{props.message.sender
-                  ? <>{ERSMessageSender[props.message.sender]} ({props.message.sender})</>
+                  ? <>{LogbookMessageSender[props.message.sender]} ({props.message.sender})</>
                   : <NoValue>-</NoValue>}</Value>
               </Field>
             </TableBody>
@@ -49,7 +49,7 @@ const LANMessage = props => {
         <SpeciesList>
           {
             catches.map((speciesCatch, index) => {
-              return <ERSMessageSpecies
+              return <LogbookMessageSpecies
                 index={index + 1}
                 isLast={catches.length === index + 1}
                 species={speciesCatch}

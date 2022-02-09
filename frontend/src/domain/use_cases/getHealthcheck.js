@@ -6,11 +6,11 @@ const TEN_MINUTES = 10
 const getHealthcheck = () => dispatch => {
   getHealthcheckFromAPI().then(healthCheck => {
     const now = Date.now()
-    const ersMessagesReceivedMinutesAgo = getMinutesAgoFromNow(now, healthCheck.dateERSMessageReceived)
+    const logbookMessagesReceivedMinutesAgo = getMinutesAgoFromNow(now, healthCheck.dateERSMessageReceived)
     const positionsReceivedMinutesAgo = getMinutesAgoFromNow(now, healthCheck.datePositionReceived)
     const lastPositionsMinutesAgo = getMinutesAgoFromNow(now, healthCheck.dateLastPosition)
 
-    const warning = getWarningText(ersMessagesReceivedMinutesAgo, positionsReceivedMinutesAgo, lastPositionsMinutesAgo)
+    const warning = getWarningText(logbookMessagesReceivedMinutesAgo, positionsReceivedMinutesAgo, lastPositionsMinutesAgo)
     dispatch(setHealthcheckTextWarning(warning))
   }).catch(error => {
     console.error(error)
@@ -18,9 +18,9 @@ const getHealthcheck = () => dispatch => {
   })
 }
 
-function getWarningText (ersMessagesReceivedMinutesAgo, positionsReceivedMinutesAgo, lastPositionsMinutesAgo) {
-  if ((lastPositionsMinutesAgo > TEN_MINUTES || positionsReceivedMinutesAgo > TEN_MINUTES) && ersMessagesReceivedMinutesAgo > TEN_MINUTES) {
-    let timeAgo = ersMessagesReceivedMinutesAgo
+function getWarningText (logbookMessagesReceivedMinutesAgo, positionsReceivedMinutesAgo, lastPositionsMinutesAgo) {
+  if ((lastPositionsMinutesAgo > TEN_MINUTES || positionsReceivedMinutesAgo > TEN_MINUTES) && logbookMessagesReceivedMinutesAgo > TEN_MINUTES) {
+    let timeAgo = logbookMessagesReceivedMinutesAgo
     if (lastPositionsMinutesAgo > timeAgo) {
       timeAgo = lastPositionsMinutesAgo
     } else if (positionsReceivedMinutesAgo > timeAgo) {
@@ -28,8 +28,8 @@ function getWarningText (ersMessagesReceivedMinutesAgo, positionsReceivedMinutes
     }
 
     return `Les données VMS et JPE ne sont plus à jour dans MonitorFish depuis ${timeAgo} minutes`
-  } else if (ersMessagesReceivedMinutesAgo > TEN_MINUTES) {
-    return `Nous ne recevons plus aucun message JPE depuis ${ersMessagesReceivedMinutesAgo} minutes.`
+  } else if (logbookMessagesReceivedMinutesAgo > TEN_MINUTES) {
+    return `Nous ne recevons plus aucun message JPE depuis ${logbookMessagesReceivedMinutesAgo} minutes.`
   } else if (positionsReceivedMinutesAgo > TEN_MINUTES) {
     return `Nous ne recevons plus aucune position VMS depuis ${positionsReceivedMinutesAgo} minutes.`
   } else if (lastPositionsMinutesAgo > TEN_MINUTES) {

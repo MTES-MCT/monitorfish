@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import ERSMessageResumeHeader from './ERSMessageResumeHeader'
+import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
 import SpeciesAndWeightChart from './SpeciesAndWeightChart'
-import { ERSMessageType as ERSMessageTypeEnum } from '../../../../domain/entities/ERS'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 
 const FARMessageResume = props => {
   const [isOpen, setIsOpen] = useState(false)
@@ -85,25 +85,25 @@ const FARMessageResume = props => {
   }
 
   return <Wrapper>
-    <ERSMessageResumeHeader
+    <LogbookMessageResumeHeader
       onHoverText={props.hasNoMessage ? null : getFARMessageResumeTitleText()}
       title={props.hasNoMessage ? null : getFARMessageResumeTitle()}
       hasNoMessage={props.hasNoMessage}
       noContent={!props.hasNoMessage && !props.totalFARWeight}
-      showERSMessages={props.showERSMessages}
-      messageType={ERSMessageTypeEnum.FAR.code.toString()}
+      showLogbookMessages={props.showLogbookMessages}
+      messageType={LogbookMessageTypeEnum.FAR.code.toString()}
       setIsOpen={setIsOpen}
       isOpen={isOpen}/>
     {
       props.hasNoMessage
         ? null
-        : <ERSMessageContent
+        : <LogbookMessageContent
           id={props.id}
           chartHeight={chartHeight}
           species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}
           firstUpdate={firstUpdate}
           isOpen={isOpen}
-          name={ERSMessageTypeEnum.FAR.code.toString()}>
+          name={LogbookMessageTypeEnum.FAR.code.toString()}>
           <Zone>
             <SpeciesAndWeightChart
               setChartHeight={setChartHeight}
@@ -115,7 +115,7 @@ const FARMessageResume = props => {
               resetInitialChartHeight={resetInitialChartHeight}
             />
           </Zone>
-        </ERSMessageContent>
+        </LogbookMessageContent>
     }
   </Wrapper>
 }
@@ -135,7 +135,7 @@ const Wrapper = styled.li`
   color: ${COLORS.slateGray};
 `
 
-const ERSMessageContent = styled.div`
+const LogbookMessageContent = styled.div`
   background: ${COLORS.background};
   width: inherit;
   height: ${props => props.isOpen && props.chartHeight ? props.chartHeight + 20 : 0}px;

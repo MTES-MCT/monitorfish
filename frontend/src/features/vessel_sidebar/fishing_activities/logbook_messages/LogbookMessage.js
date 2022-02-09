@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { ERSMessageType as ERSMessageTypeEnum } from '../../../../domain/entities/ERS'
+import {
+  getLogbookMessageType,
+  LogbookMessageType as LogbookMessageTypeEnum
+} from '../../../../domain/entities/logbook'
 import { ReactComponent as XMLSVG } from '../../../icons/Picto_XML.svg'
 import { ReactComponent as AckOkSVG } from '../../../icons/Message_JPE_acquitté.svg'
 import { ReactComponent as AckNOkSVG } from '../../../icons/Message_JPE_non_acquitte.svg'
@@ -10,26 +13,25 @@ import { ReactComponent as HideActivitySVG } from '../../../icons/Position_messa
 import { getDateTime } from '../../../../utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeFishingActivityFromMap, showFishingActivityOnMap } from '../../../../domain/shared_slices/FishingActivities'
-import { getErsMessageType } from '../../../../domain/entities/fishingActivities'
 
-const ERSMessage = ({ message, isFirst }) => {
+const LogbookMessage = ({ message, isFirst }) => {
   const dispatch = useDispatch()
   const {
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
     fishingActivitiesShowedOnMap
   } = useSelector(state => state.fishingActivities)
 
-  const ersMessageHeaderTitle = useMemo(() => {
+  const logbookHeaderTitle = useMemo(() => {
     if (message) {
       switch (message.messageType) {
-        case ERSMessageTypeEnum.DEP.code.toString(): {
+        case LogbookMessageTypeEnum.DEP.code.toString(): {
           return <>
-            <ERSMessageName>{ERSMessageTypeEnum[message.messageType].name}</ERSMessageName>
+            <LogbookMessageName>{LogbookMessageTypeEnum[message.messageType].name}</LogbookMessageName>
             {message.message.departurePortName ? message.message.departurePortName : message.message.departurePort}
             {' '}le {getDateTime(message.message.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
         }
         default: {
-          return ERSMessageTypeEnum[message.messageType].fullName
+          return LogbookMessageTypeEnum[message.messageType].fullName
         }
       }
     }
@@ -42,11 +44,11 @@ const ERSMessage = ({ message, isFirst }) => {
     URL.revokeObjectURL(url)
   }
 
-  const getERSMessage = ersMessage => {
-    const Component = ERSMessageTypeEnum[ersMessage.messageType].component
+  const getLogbookMessage = logbook => {
+    const Component = LogbookMessageTypeEnum[logbook.messageType].component
 
     if (Component) {
-      return <Component message={ersMessage.message}/>
+      return <Component message={logbook.message}/>
     } else {
       return null
     }
@@ -56,14 +58,14 @@ const ERSMessage = ({ message, isFirst }) => {
     {message
       ? <Wrapper isFirst={isFirst} id={message.operationNumber}>
         <Header>
-          <ERSMessageType>{getErsMessageType(message)}</ERSMessageType>
-          <ERSMessageHeaderText
-            isShortcut={message.isCorrected || message.deleted || message.referencedErsId}
-            title={typeof ersMessageHeaderTitle === 'string' ? ersMessageHeaderTitle : ''}
+          <LogbookMessageType>{getLogbookMessageType(message)}</LogbookMessageType>
+          <LogbookMessageHeaderText
+            isShortcut={message.isCorrected || message.deleted || message.referencedReportId}
+            title={typeof logbookHeaderTitle === 'string' ? logbookHeaderTitle : ''}
             data-cy={'vessel-fishing-dep-message'}
           >
-            {ersMessageHeaderTitle}
-          </ERSMessageHeaderText>
+            {logbookHeaderTitle}
+          </LogbookMessageHeaderText>
           {
             message.isCorrected
               ? <CorrectedMessage>
@@ -81,7 +83,7 @@ const ERSMessage = ({ message, isFirst }) => {
               : null
           }
           {
-            message.referencedErsId
+            message.referencedReportId
               ? <CorrectedMessage>
                 <MessageOK/>
                 <OKMessageText>MESSAGE CORRIGÉ</OKMessageText>
@@ -113,7 +115,7 @@ const ERSMessage = ({ message, isFirst }) => {
           }
         </Header>
         <Body>
-          <ERSMessageMetadata>
+          <LogbookMessageMetadata>
             <EmissionDateTime>
               <Key>Date d&apos;émission</Key><br/>
               {getDateTime(message.operationDateTime, true)}
@@ -138,8 +140,8 @@ const ERSMessage = ({ message, isFirst }) => {
                 ? <AckNOk title={message.acknowledge.rejectionCause}/>
                 : null}
             </Acknowledge>
-          </ERSMessageMetadata>
-          {getERSMessage(message)}
+          </LogbookMessageMetadata>
+          {getLogbookMessage(message)}
         </Body>
       </Wrapper>
       : null}
@@ -234,7 +236,7 @@ const EmissionDateTime = styled.div`
   flex-grow: 3;
 `
 
-const ERSMessageMetadata = styled.div`
+const LogbookMessageMetadata = styled.div`
  display: flex;
 `
 
@@ -258,7 +260,7 @@ const Header = styled.div`
   display: flex;
 `
 
-const ERSMessageHeaderText = styled.span`
+const LogbookMessageHeaderText = styled.span`
   color: ${COLORS.background};
   font-weight: 500;
   margin: 5px 5px 5px 5px;
@@ -272,14 +274,14 @@ const ERSMessageHeaderText = styled.span`
   max-width: ${props => props.isShortcut ? '185px' : '330px'};
 `
 
-const ERSMessageName = styled.span`
+const LogbookMessageName = styled.span`
   color: ${COLORS.gainsboro};
   margin: 5px 5px 5px 0;
   padding: 2px 4px 2px 0;
   font-size: 13px;
 `
 
-const ERSMessageType = styled.span`
+const LogbookMessageType = styled.span`
   border: 2px solid ${COLORS.gainsboro};
   color: ${COLORS.gainsboro};
   margin: 5px 5px 5px 0;
@@ -328,4 +330,4 @@ const HideActivity = styled(HideActivitySVG)`
   cursor: pointer;
 `
 
-export default ERSMessage
+export default LogbookMessage

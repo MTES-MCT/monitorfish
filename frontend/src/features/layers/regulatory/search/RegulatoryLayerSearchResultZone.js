@@ -31,9 +31,6 @@ const RegulatoryLayerSearchResultZone = props => {
   const {
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
-  const {
-    regulatoryZonesChecked
-  } = useSelector(state => state.regulatoryLayerSearch)
 
   const [zoneStyle, setZoneStyle] = useState(null)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
@@ -51,8 +48,6 @@ const RegulatoryLayerSearchResultZone = props => {
   useEffect(() => {
     showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown)
   }, [regulatoryZoneMetadata, regulatoryZone])
-
-  console.log(zoneIsChecked, regulatoryZone, regulatoryZonesChecked)
 
   useEffect(() => {
     if (!isOpen) {

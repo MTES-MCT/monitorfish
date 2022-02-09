@@ -70,7 +70,7 @@ const RegulatoryLayerSearchInput = props => {
     },
     placeSearchText: {
       searchText: placeSearchText,
-      properties: [REGULATORY_SEARCH_PROPERTIES.REGION, REGULATORY_SEARCH_PROPERTIES.SEAFRONT]
+      properties: [REGULATORY_SEARCH_PROPERTIES.REGION, REGULATORY_SEARCH_PROPERTIES.LAW_TYPE]
     },
     gearSearchText: {
       searchText: gearSearchText,

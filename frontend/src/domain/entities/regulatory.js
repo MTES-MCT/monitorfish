@@ -195,6 +195,7 @@ export const REGULATORY_SEARCH_PROPERTIES = {
   TOPIC: 'topic',
   ZONE: 'zone',
   REGION: 'region',
+  LAW_TYPE: 'law_type',
   GEARS: 'gears',
   SPECIES: 'species',
   REGULATORY_REFERENCES: 'regulatoryReferences'
@@ -308,9 +309,9 @@ export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, 
     : false
 }
 
-export function findIfSearchStringIncludedInArrayProperty (zone, propertiesToSearch, searchText) {
-  return zone[propertiesToSearch]?.length && searchText
-    ? zone[propertiesToSearch].find(text => getTextForSearch(JSON.stringify(text)).includes(getTextForSearch(searchText)))
+export function findIfSearchStringIncludedInRegulatoryReferences (zone, searchText) {
+  return zone[REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES]?.length && searchText
+    ? zone[REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES].find(text => text?.reference.toString().includes(searchText))
     : false
 }
 
@@ -370,7 +371,7 @@ export function search (searchText, propertiesToSearch, regulatoryZones, gears) 
                 searchStringIncludedInProperty = findIfStringIsIncludedInZoneGears(zone, searchText, uniqueGearCodes)
               } else if (property === REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES) {
                 searchStringIncludedInProperty =
-                  searchStringIncludedInProperty || findIfSearchStringIncludedInArrayProperty(zone, property, searchText)
+                  searchStringIncludedInProperty || findIfSearchStringIncludedInRegulatoryReferences(zone, searchText)
               } else {
                 searchStringIncludedInProperty =
                   searchStringIncludedInProperty || findIfSearchStringIncludedInProperty(zone, property, searchText)

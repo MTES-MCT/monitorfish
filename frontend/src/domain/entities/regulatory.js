@@ -308,9 +308,9 @@ export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, 
     : false
 }
 
-export function findIfSearchStringIncludedInRegulatoryReferences (zone, propertiesToSearch, searchText) {
-  return zone[propertiesToSearch]?.length && searchText
-    ? zone[propertiesToSearch].find(text => text?.reference.toString().includes(getTextForSearch(searchText)))
+export function findIfSearchStringIncludedInRegulatoryReferences (zone, searchText) {
+  return REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES?.length && searchText
+    ? REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES.find(text => text?.reference.toString().includes(getTextForSearch(searchText)))
     : false
 }
 
@@ -370,7 +370,7 @@ export function search (searchText, propertiesToSearch, regulatoryZones, gears) 
                 searchStringIncludedInProperty = findIfStringIsIncludedInZoneGears(zone, searchText, uniqueGearCodes)
               } else if (property === REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES) {
                 searchStringIncludedInProperty =
-                  searchStringIncludedInProperty || findIfSearchStringIncludedInRegulatoryReferences(zone, property, searchText)
+                  searchStringIncludedInProperty || findIfSearchStringIncludedInRegulatoryReferences(zone, searchText)
               } else {
                 searchStringIncludedInProperty =
                   searchStringIncludedInProperty || findIfSearchStringIncludedInProperty(zone, property, searchText)

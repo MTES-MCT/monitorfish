@@ -1,7 +1,7 @@
 import { errorType } from '../domain/entities/errors'
 
-export default class NoERSMessagesFoundError extends Error {
-  name = 'NoERSMessagesFoundError'
+export default class NoLogbookMessagesFoundError extends Error {
+  name = 'NoLogbookMessagesFoundError'
   type = errorType.INFO_AND_HIDDEN
   showEmptyComponentFields = true
 
@@ -9,7 +9,7 @@ export default class NoERSMessagesFoundError extends Error {
     super(message)
 
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, NoERSMessagesFoundError)
+      Error.captureStackTrace(this, NoLogbookMessagesFoundError)
     }
     this.message = message
     this.date = new Date()

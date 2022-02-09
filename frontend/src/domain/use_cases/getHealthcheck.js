@@ -1,12 +1,13 @@
 import { getHealthcheckFromAPI } from '../../api/fetch'
 import { setError, setHealthcheckTextWarning } from '../shared_slices/Global'
+import * as timeago from 'timeago.js'
 
 const TEN_MINUTES = 10
 
 const getHealthcheck = () => dispatch => {
   getHealthcheckFromAPI().then(healthCheck => {
     const now = Date.now()
-    const logbookMessagesReceivedMinutesAgo = getMinutesAgoFromNow(now, healthCheck.dateERSMessageReceived)
+    const logbookMessagesReceivedMinutesAgo = getMinutesAgoFromNow(now, healthCheck.dateLogbookMessageReceived)
     const positionsReceivedMinutesAgo = getMinutesAgoFromNow(now, healthCheck.datePositionReceived)
     const lastPositionsMinutesAgo = getMinutesAgoFromNow(now, healthCheck.dateLastPosition)
 
@@ -18,6 +19,10 @@ const getHealthcheck = () => dispatch => {
   })
 }
 
+function getTimeAgo (timeAgo) {
+  return timeago.format(timeAgo, 'fr').replace('il y a', '')
+}
+
 function getWarningText (logbookMessagesReceivedMinutesAgo, positionsReceivedMinutesAgo, lastPositionsMinutesAgo) {
   if ((lastPositionsMinutesAgo > TEN_MINUTES || positionsReceivedMinutesAgo > TEN_MINUTES) && logbookMessagesReceivedMinutesAgo > TEN_MINUTES) {
     let timeAgo = logbookMessagesReceivedMinutesAgo
@@ -27,13 +32,13 @@ function getWarningText (logbookMessagesReceivedMinutesAgo, positionsReceivedMin
       timeAgo = positionsReceivedMinutesAgo
     }
 
-    return `Les données VMS et JPE ne sont plus à jour dans MonitorFish depuis ${timeAgo} minutes`
+    return `Les données VMS et JPE ne sont plus à jour dans MonitorFish depuis ${(getTimeAgo(timeAgo))}`
   } else if (logbookMessagesReceivedMinutesAgo > TEN_MINUTES) {
-    return `Nous ne recevons plus aucun message JPE depuis ${logbookMessagesReceivedMinutesAgo} minutes.`
+    return `Nous ne recevons plus aucun message JPE depuis ${getTimeAgo(logbookMessagesReceivedMinutesAgo)}.`
   } else if (positionsReceivedMinutesAgo > TEN_MINUTES) {
-    return `Nous ne recevons plus aucune position VMS depuis ${positionsReceivedMinutesAgo} minutes.`
+    return `Nous ne recevons plus aucune position VMS depuis ${getTimeAgo(positionsReceivedMinutesAgo)}.`
   } else if (lastPositionsMinutesAgo > TEN_MINUTES) {
-    return `Les dernières positions des navires ne sont plus actualisées depuis ${lastPositionsMinutesAgo} minutes (ni sur la carte, ni dans la liste des navires).`
+    return `Les dernières positions des navires ne sont plus actualisées depuis ${getTimeAgo(lastPositionsMinutesAgo)} (ni sur la carte, ni dans la liste des navires).`
   }
 
   return null

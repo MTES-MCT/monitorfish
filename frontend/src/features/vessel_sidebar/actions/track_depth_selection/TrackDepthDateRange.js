@@ -12,7 +12,7 @@ const TrackDepthDateRange = ({ dates, modifyVesselTrackDepthFromDates, width }) 
         size={'sm'}
         disabledDate={afterToday()}
         value={dates}
-        onOk={nextValue => modifyVesselTrackDepthFromDates(nextValue)}
+        onOk={modifyVesselTrackDepthFromDates}
         onClean={() => modifyVesselTrackDepthFromDates([])}
         ranges={[]}
         format="DD-MM-YYYY"

@@ -85,29 +85,31 @@ const RegulatoryLayers = props => {
       >
         Mes zones réglementaires <ChevronIcon $isOpen={showRegulatoryLayers}/>
       </RegulatoryLayersTitle>
-      <RegulatoryLayersList
-        topicLength={Object.keys(selectedRegulatoryLayers).length}
-        zoneLength={numberOfZonesOpened}
-        showRegulatoryLayers={showRegulatoryLayers}
-      >
-        {
-          selectedRegulatoryLayers && Object.keys(selectedRegulatoryLayers).length > 0
-            ? Object.keys(selectedRegulatoryLayers).map((regulatoryTopic, index) => {
-              return (<RegulatoryLayerTopic
-                isEditable={false}
-                key={regulatoryTopic}
-                increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
-                decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-                callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryLayerFromMySelection}
-                regulatoryTopic={regulatoryTopic}
-                regulatoryZones={selectedRegulatoryLayers[regulatoryTopic]}
-                isLastItem={Object.keys(selectedRegulatoryLayers).length === index + 1}
-                allowRemoveZone={true}
-              />)
-            })
-            : <NoLayerSelected>Aucune zone sélectionnée</NoLayerSelected>
-        }
-      </RegulatoryLayersList>
+      {selectedRegulatoryLayers
+        ? <RegulatoryLayersList
+          topicLength={Object.keys(selectedRegulatoryLayers).length}
+          zoneLength={numberOfZonesOpened}
+          showRegulatoryLayers={showRegulatoryLayers}
+        >
+          {
+            selectedRegulatoryLayers && Object.keys(selectedRegulatoryLayers).length > 0
+              ? Object.keys(selectedRegulatoryLayers).map((regulatoryTopic, index) => {
+                return (<RegulatoryLayerTopic
+                  isEditable={false}
+                  key={regulatoryTopic}
+                  increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
+                  decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
+                  callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryLayerFromMySelection}
+                  regulatoryTopic={regulatoryTopic}
+                  regulatoryZones={selectedRegulatoryLayers[regulatoryTopic]}
+                  isLastItem={Object.keys(selectedRegulatoryLayers).length === index + 1}
+                  allowRemoveZone={true}
+                />)
+              })
+              : <NoLayerSelected>Aucune zone sélectionnée</NoLayerSelected>
+          }
+        </RegulatoryLayersList>
+        : null}
     </>
   )
 }

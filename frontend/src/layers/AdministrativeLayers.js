@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { getVectorLayer } from '../domain/use_cases/showAdministrativeLayer'
+import { getVectorOLLayer } from '../domain/use_cases/showAdministrativeLayer'
 import Layers, { layersType } from '../domain/entities/layers'
 import {
   layerOfTypeAdministrativeLayer,
@@ -28,7 +28,7 @@ const AdministrativeLayers = ({ map }) => {
           if (!layerToInsert) {
             return
           }
-          const VectorLayer = getVectorLayer(layerToInsert.type, layerToInsert.zone, inBackofficeMode)
+          const VectorLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, inBackofficeMode)
           olLayers.push(VectorLayer)
         })
       }

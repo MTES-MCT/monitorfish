@@ -24,14 +24,18 @@ const hideLayer = layerToHide => (dispatch, getState) => {
     const layerName = getLayerNameNormalized({ type, topic, zone })
 
     const layersToRemove = showedLayers.filter(layer_ => {
-      return getLayerNameNormalized(layer_) === layerName
+      if (zone) {
+        return getLayerNameNormalized(layer_) === layerName
+      } else {
+        return getLayerNameNormalized(layer_).includes(layerName)
+      }
     })
 
     if (layersToRemove) {
       batch(() => {
         dispatch(removeShowedLayer(layerToHide))
         layersToRemove.forEach(layer => {
-          dispatch(removeLayerToFeatures(layer.type))
+          dispatch(removeLayerToFeatures(getLayerNameNormalized(layer)))
         })
       })
     }

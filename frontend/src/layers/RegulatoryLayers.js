@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import Layers, { getLayerNameNormalized } from '../domain/entities/layers'
 import { showSimplifiedGeometries, showWholeGeometries } from '../domain/shared_slices/Regulatory'
-import { getVectorLayer } from '../domain/use_cases/showRegulatoryLayer'
+import { getVectorOLLayer } from '../domain/use_cases/showRegulatoryZone'
 
 export const metadataIsShowedPropertyName = 'metadataIsShowed'
 const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5
@@ -23,6 +23,10 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
     simplifiedGeometries
   } = useSelector(state => state.regulatory)
 
+  const {
+    gears
+  } = useSelector(state => state.gear)
+
   const previousMapZoom = useRef('')
   const isThrottled = useRef(false)
 
@@ -33,12 +37,12 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   }, [map, layersToFeatures])
 
   useEffect(() => {
-    if (map && showedLayers) {
+    if (map && showedLayers && gears?.length) {
       const olLayers = map.getLayers()
       addRegulatoryLayersToMap(dispatch, getState, olLayers, showedLayers)
       removeRegulatoryLayersToMap(showedLayers, olLayers)
     }
-  }, [showedLayers])
+  }, [showedLayers, gears])
 
   useEffect(() => {
     function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers () {
@@ -189,7 +193,7 @@ function addRegulatoryLayersToMap (dispatch, getState, olLayers, showedLayers) {
       if (!layerToInsert) {
         return
       }
-      const getVectorLayerClosure = getVectorLayer(dispatch, getState)
+      const getVectorLayerClosure = getVectorOLLayer(dispatch, getState)
       const vectorLayer = getVectorLayerClosure(layerToInsert)
       olLayers.push(vectorLayer)
     })

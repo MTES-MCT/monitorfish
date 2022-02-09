@@ -26,25 +26,23 @@ const setIrretrievableFeaturesEvent = error => {
 }
 
 /**
- * Show a Regulatory or Administrative layer
- * @param layerToShow {AdministrativeOrRegulatoryLayer} - The layer to show
+ * Show a Regulatory zone
+ * @param zoneToShow {AdministrativeOrRegulatoryLayer} - The zone to show
  */
-const showRegulatoryLayer = layerToShow => dispatch => {
-  currentNamespace = layerToShow.namespace
+const showRegulatoryZone = zoneToShow => dispatch => {
+  currentNamespace = zoneToShow.namespace
   const {
     addShowedLayer
   } = layer[currentNamespace].actions
 
-  if (!layerToShow.zone) {
+  if (!zoneToShow.zone) {
     console.error('No regulatory layer to show.')
     return
   }
-  batch(() => {
-    dispatch(addShowedLayer(layerToShow))
-  })
+  dispatch(addShowedLayer(zoneToShow))
 }
 
-export const getVectorLayer = (dispatch, getState) => (layerToShow) => {
+export const getVectorOLLayer = (dispatch, getState) => layerToShow => {
   const { gears } = getState().gear
   const gearCategory = getGearCategory(layerToShow.gears, gears)
   const hash = getHash(`${layerToShow.topic}:${layerToShow.zone}`)
@@ -127,4 +125,4 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
   return vectorSource
 }
 
-export default showRegulatoryLayer
+export default showRegulatoryZone

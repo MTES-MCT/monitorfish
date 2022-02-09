@@ -310,7 +310,7 @@ export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, 
 
 export function findIfSearchStringIncludedInRegulatoryReferences (zone, searchText) {
   return REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES?.length && searchText
-    ? REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES.find(text => text?.reference.toString().includes(getTextForSearch(searchText)))
+    ? zone[REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES].find(text => text?.reference.toString().includes(getTextForSearch(searchText)))
     : false
 }
 

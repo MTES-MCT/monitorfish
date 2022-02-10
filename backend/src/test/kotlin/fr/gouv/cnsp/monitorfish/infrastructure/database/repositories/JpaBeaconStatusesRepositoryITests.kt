@@ -30,7 +30,7 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllExceptResumedTransmission Should return all beacon statuses except resumed transmission`() {
+    fun `findAllExceptResumedTransmission Should return all beacon statuses except end of follow up`() {
         // When
         val baconStatuses = jpaBeaconStatusesRepository.findAllExceptEndOfFollowUp()
 
@@ -42,13 +42,13 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllExceptResumedTransmission Should return last thirty resumed transmission beacon statuses`() {
+    fun `findAllExceptResumedTransmission Should return last thirty end of follow up beacon statuses`() {
         // When
         val baconStatuses = jpaBeaconStatusesRepository.findLastThirtyEndOfFollowUp()
 
         assertThat(baconStatuses).hasSize(1)
         assertThat(baconStatuses.first().internalReferenceNumber).isEqualTo("FR263465414")
-        assertThat(baconStatuses.first().stage).isEqualTo(Stage.RESUMED_TRANSMISSION)
+        assertThat(baconStatuses.first().stage).isEqualTo(Stage.END_OF_FOLLOW_UP)
         assertThat(baconStatuses.first().vesselStatus).isEqualTo(VesselStatus.AT_PORT)
     }
 

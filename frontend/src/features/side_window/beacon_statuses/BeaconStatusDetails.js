@@ -8,7 +8,7 @@ import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { Priority, priorityStyle, showVesselOnMap } from './BeaconStatusCard'
 import { useDispatch } from 'react-redux'
-import { vesselStatuses } from './beaconStatuses'
+import { getBeaconCreationOrModificationDate, vesselStatuses } from './beaconStatuses'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import * as timeago from 'timeago.js'
@@ -113,7 +113,7 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
       <Header style={headerStyle}>
         <Malfunctioning style={malfunctioningStyle} ref={ref}>
           <MalfunctioningText style={malfunctioningTextStyle}>
-            AVARIE EN COURS
+            AVARIE #{beaconStatus?.id} - {' '}{getBeaconCreationOrModificationDate(beaconStatus)}
           </MalfunctioningText>
           <SelectPicker
             container={() => ref.current}

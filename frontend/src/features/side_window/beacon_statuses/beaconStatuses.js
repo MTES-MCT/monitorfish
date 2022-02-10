@@ -6,6 +6,7 @@ import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../icons/A
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
+import * as timeago from 'timeago.js'
 
 export const BeaconStatusesSubMenu = {
   PAIRING: {
@@ -128,4 +129,18 @@ export const getBeaconCreationDate = (dateLastEmission, status) => {
     }
     default: return dateLastEmission
   }
+}
+
+export function getBeaconCreationOrModificationDate (beaconStatus) {
+  if (beaconStatus?.stage === beaconStatusesStages.INITIAL_ENCOUNTER.code) {
+    return `ouverte ${getReducedTimeAgo(getBeaconCreationDate(beaconStatus?.malfunctionStartDateTime, beaconStatus?.vesselStatus))}`
+  }
+
+  return `modifiée ${getReducedTimeAgo(beaconStatus?.vesselStatusLastModificationDateTime)}`
+}
+
+export function getReducedTimeAgo (dateTime) {
+  return timeago.format(dateTime, 'fr')
+    .replace('semaines', 'sem.')
+    .replace('semaine', 'sem.')
 }

@@ -4,7 +4,7 @@ import { COLORS } from '../../../constants/constants'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import SelectPicker from 'rsuite/lib/SelectPicker'
-import { beaconStatusesStages, getBeaconCreationDate, vesselStatuses } from './beaconStatuses'
+import { getBeaconCreationOrModificationDate, getReducedTimeAgo, vesselStatuses } from './beaconStatuses'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import * as timeago from 'timeago.js'
 import { timeagoFrenchLocale } from '../../../utils'
@@ -37,7 +37,7 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
     <Header style={headerStyle}>
       <Row style={rowStyle(true)}>
         <Id style={idStyle}>
-          #{beaconStatus.id} - {' '}{getHeaderDate(beaconStatus)}
+          #{beaconStatus?.id} - {' '}{getBeaconCreationOrModificationDate(beaconStatus)}
         </Id>
         <ShowIcon
           style={showIconStyle}
@@ -88,24 +88,10 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
         cleanable={false}
       />
       <Row style={rowStyle(false)}>
-        Dernière émission {getTimeAgo(beaconStatus.malfunctionStartDateTime)}
+        Dernière émission {getReducedTimeAgo(beaconStatus.malfunctionStartDateTime)}
       </Row>
     </Body>
   </Wrapper>
-}
-
-function getHeaderDate (beaconStatus) {
-  if (beaconStatus.stage === beaconStatusesStages.INITIAL_ENCOUNTER.code) {
-    return `ouverte ${getTimeAgo(getBeaconCreationDate(beaconStatus.malfunctionStartDateTime, beaconStatus.vesselStatus))}`
-  }
-
-  return `modifiée ${getTimeAgo(beaconStatus.vesselStatusLastModificationDateTime)}`
-}
-
-function getTimeAgo (dateTime) {
-  return timeago.format(dateTime, 'fr')
-    .replace('semaines', 'sem.')
-    .replace('semaine', 'sem.')
 }
 
 export const showVesselOnMap = (dispatch, beaconStatus) => {

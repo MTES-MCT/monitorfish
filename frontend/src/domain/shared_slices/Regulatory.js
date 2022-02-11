@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { SELECTED_REG_ZONES_LOCAL_STORAGE_KEY } from '../entities/layers'
+import { SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY } from '../entities/layers'
+import { getLocalStorageState } from '../../utils'
 
 /* eslint-disable */
 /** @namespace RegulatoryReducer */
@@ -33,9 +34,6 @@ const regulatorySlice = createSlice({
     resetRegulatoryGeometriesToPreview (state) {
       state.regulatoryGeometriesToPreview = null
     },
-    setSelectedRegulatoryZone (state, action) {
-      state.selectedRegulatoryLayers = action.payload
-    },
     /**
      * Add regulatory zones to "My Zones" regulatory selection
      * @memberOf RegulatoryReducer
@@ -44,21 +42,25 @@ const regulatorySlice = createSlice({
      */
     addRegulatoryZonesToMyLayers (state, action) {
       const myRegulatoryLayers = { ...state.selectedRegulatoryLayers }
+      const myRegulatoryLayerIds = []
 
       action.payload.forEach(regulatoryZone => {
         if (!myRegulatoryLayers[regulatoryZone.topic] || !myRegulatoryLayers[regulatoryZone.topic].length) {
           myRegulatoryLayers[regulatoryZone.topic] = [regulatoryZone]
         } else {
-          if (!myRegulatoryLayers[regulatoryZone.topic].some(zone =>
-            zone.topic === regulatoryZone.topic &&
-            zone.zone === regulatoryZone.zone)) {
-            myRegulatoryLayers[regulatoryZone.topic] = myRegulatoryLayers[regulatoryZone.topic].concat(regulatoryZone)
+          if (!myRegulatoryLayers[regulatoryZone.topic].some(zone => zone.id === regulatoryZone.id)) {
+            myRegulatoryLayers[regulatoryZone.topic] = myRegulatoryLayers[regulatoryZone.topic].concat(regulatoryZone.id)
           }
         }
+        myRegulatoryLayerIds.push({
+          id: regulatoryZone.id,
+          lawType: regulatoryZone.lawType,
+          topic: regulatoryZone.topic
+        })
       })
 
       state.selectedRegulatoryLayers = myRegulatoryLayers
-      window.localStorage.setItem(SELECTED_REG_ZONES_LOCAL_STORAGE_KEY, JSON.stringify(state.selectedRegulatoryLayers))
+      window.localStorage.setItem(SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, JSON.stringify(myRegulatoryLayerIds))
     },
     /**
      * Remove regulatory zone(s) from "My Zones" regulatory selection, by providing a topic name to remove multiple zones
@@ -71,21 +73,20 @@ const regulatorySlice = createSlice({
      *          }} action - The regulatory zone(s) to remove
      */
     removeRegulatoryZonesFromMyLayers (state, action) {
-      if (action.payload.zone && action.payload.topic) {
-        state.selectedRegulatoryLayers[action.payload.topic] = state.selectedRegulatoryLayers[action.payload.topic].filter(subZone => {
-          return !(subZone.topic === action.payload.topic && subZone.zone === action.payload.zone)
-        })
-      } else if (action.payload.topic) {
-        state.selectedRegulatoryLayers[action.payload.topic] = state.selectedRegulatoryLayers[action.payload.topic].filter(subZone => {
-          return !(subZone.topic === action.payload.topic)
-        })
+      const { topic, id } = action.payload
+      if (topic) {
+        state.selectedRegulatoryLayers[topic] = state.selectedRegulatoryLayers[topic]
+          .filter(subZone => !subZone.id === id)
       }
 
       if (!state.selectedRegulatoryLayers[action.payload.topic].length) {
         delete state.selectedRegulatoryLayers[action.payload.topic]
       }
 
-      window.localStorage.setItem(SELECTED_REG_ZONES_LOCAL_STORAGE_KEY, JSON.stringify(state.selectedRegulatoryLayers))
+      let nextSelectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
+      nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayerIds
+        .filter(selectedRegulatoryLayerId => !selectedRegulatoryLayerId.id === id)
+      window.localStorage.setItem(SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, JSON.stringify(nextSelectedRegulatoryLayerIds))
     },
     setIsReadyToShowRegulatoryZones (state) {
       state.isReadyToShowRegulatoryLayers = true
@@ -175,6 +176,41 @@ const regulatorySlice = createSlice({
      */
     setRegulatoryLayers (state, action) {
       state.regulatoryLayers = action.payload
+      if (state.regulatoryLayers && Object.keys(state.regulatoryLayers).length) {
+        const selectedRegulatoryLayers = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
+        const nextSelectedRegulatoryLayers = {}
+        selectedRegulatoryLayers
+          .map(selectedRegulatoryZone => {
+            const lawTypeRegulatoryZones = Object.values(state.regulatoryLayers[selectedRegulatoryZone.lawType]).flat()
+            const nextRegulatoryZone = lawTypeRegulatoryZones.find(zone => zone.id === selectedRegulatoryZone.id)
+            // On doit vérifier prévious aussi sinon on perd des infos
+            if (nextRegulatoryZone && nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
+              if (Object.keys(nextSelectedRegulatoryLayers).includes(nextRegulatoryZone.topic)) {
+                const nextRegZoneTopic = nextSelectedRegulatoryLayers[nextRegulatoryZone.topic]
+                nextRegZoneTopic.push(nextRegulatoryZone)
+                nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = nextRegZoneTopic
+              } else {
+                nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = [nextRegulatoryZone]
+              }
+              return null
+            }
+            /* else if (nextRegulatoryZone && nextRegulatoryZone.nextId) {
+              nextRegulatoryZone = regulatoryZones.filter(zone => zone.id === nextRegulatoryZone.nextId)
+              if (nextRegulatoryZone && nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
+                if (Object.keys(nextSelectedRegulatoryLayers).includes(nextRegulatoryZone.topic)) {
+                  const nextRegZoneTopic = nextSelectedRegulatoryLayers[nextRegulatoryZone.topic]
+                  nextRegZoneTopic.push(nextRegulatoryZone)
+                  nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = nextRegZoneTopic
+                } else {
+                  nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = [nextRegulatoryZone]
+                }
+                return null
+              }
+            } */
+            return null
+          })
+        state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
+      }
     },
     setRegulatoryTopics (state, action) {
       state.regulatoryTopics = action.payload

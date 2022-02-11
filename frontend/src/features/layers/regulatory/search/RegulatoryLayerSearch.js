@@ -61,8 +61,10 @@ const RegulatoryLayerSearch = props => {
   function saveRegulatoryLayers (regulatoryZonesChecked) {
     setNumberOfRegulatoryLayersSaved(regulatoryZonesChecked.length)
     setTimeout(() => { setNumberOfRegulatoryLayersSaved(0) }, 2000)
-    dispatch(addRegulatoryZonesToMyLayers(regulatoryZonesChecked))
-    dispatch(resetRegulatoryZonesChecked())
+    batch(() => {
+      dispatch(addRegulatoryZonesToMyLayers(regulatoryZonesChecked))
+      dispatch(resetRegulatoryZonesChecked())
+    })
   }
 
   return (

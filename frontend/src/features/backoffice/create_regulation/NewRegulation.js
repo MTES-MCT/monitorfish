@@ -171,6 +171,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
 
     if (initialGeometryId && initialGeometryId !== id) {
+      emptyRegulatoryFeatureObject.next_id = id
       const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
       emptyFeature.setId(getRegulatoryFeatureId(initialGeometryId))
       dispatch(updateRegulation(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))

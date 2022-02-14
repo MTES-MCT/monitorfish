@@ -4,7 +4,8 @@ import * as Comlink from 'comlink'
 import Worker from 'worker-loader!../../workers/MonitorFishWorker'
 import { setError } from '../shared_slices/Global'
 import {
-  setLayersTopicsByRegTerritory
+  setLayersTopicsByRegTerritory,
+  setRegulatoryLayers
 } from '../shared_slices/Regulatory'
 
 const worker = new Worker()
@@ -17,7 +18,14 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
     .then(features => {
       return worker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features)
     })
-    .then(response => dispatch(setLayersTopicsByRegTerritory(response)))
+    .then(response => {
+      const {
+        layersTopicsByRegulatoryTerritory,
+        layersWithoutGeometry
+      } = response
+      dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
+      dispatch(setRegulatoryLayers(layersWithoutGeometry))
+    })
     .catch(error => {
       console.error(error)
       dispatch(setError(error))

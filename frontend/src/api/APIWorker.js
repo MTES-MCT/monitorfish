@@ -10,7 +10,7 @@ import getVesselVoyage from '../domain/use_cases/getVesselVoyage'
 import getControls from '../domain/use_cases/getControls'
 import { VesselSidebarTab } from '../domain/entities/vessel'
 import getAllRegulatoryLayersByRegTerritory from '../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
-import { setRegulatoryLayers } from '../domain/shared_slices/Regulatory'
+import { setRegulatoryLayerLawTypes } from '../domain/shared_slices/Regulatory'
 import { getRegulatoryLayersWithoutTerritory } from '../domain/entities/regulatory'
 import getOperationalAlerts from '../domain/use_cases/getOperationalAlerts'
 import getAllBeaconStatuses from '../domain/use_cases/getAllBeaconStatuses'
@@ -103,7 +103,7 @@ const APIWorker = () => {
   useEffect(() => {
     if (layersTopicsByRegTerritory) {
       const nextRegulatoryLayersWithoutTerritory = getRegulatoryLayersWithoutTerritory(layersTopicsByRegTerritory)
-      dispatch(setRegulatoryLayers(nextRegulatoryLayersWithoutTerritory))
+      dispatch(setRegulatoryLayerLawTypes(nextRegulatoryLayersWithoutTerritory))
     }
   }, [layersTopicsByRegTerritory, dispatch])
 

@@ -14,7 +14,9 @@ const regulatorySlice = createSlice({
     /** @type {Object.<string, RegulatoryZone[]>} selectedRegulatoryLayers */
     selectedRegulatoryLayers: null,
     regulatoryZoneMetadata: null,
-    /** @type RegulatoryLawTypes regulatoryLayers */
+    /** @type RegulatoryLawTypes regulatoryLayerLawTypes */
+    regulatoryLayerLawTypes: [],
+    /** @type RegulatoryZone[] regulatoryLayers */
     regulatoryLayers: [],
     loadingRegulatoryZoneMetadata: false,
     regulatoryZoneMetadataPanelIsOpen: false,
@@ -34,6 +36,9 @@ const regulatorySlice = createSlice({
     resetRegulatoryGeometriesToPreview (state) {
       state.regulatoryGeometriesToPreview = null
     },
+    setRegulatoryLayers (state, action) {
+      state.regulatoryLayers = action.payload
+    },
     /**
      * Add regulatory zones to "My Zones" regulatory selection
      * @memberOf RegulatoryReducer
@@ -42,21 +47,17 @@ const regulatorySlice = createSlice({
      */
     addRegulatoryZonesToMyLayers (state, action) {
       const myRegulatoryLayers = { ...state.selectedRegulatoryLayers }
-      const myRegulatoryLayerIds = []
+      const myRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
 
       action.payload.forEach(regulatoryZone => {
         if (!myRegulatoryLayers[regulatoryZone.topic] || !myRegulatoryLayers[regulatoryZone.topic].length) {
           myRegulatoryLayers[regulatoryZone.topic] = [regulatoryZone]
         } else {
           if (!myRegulatoryLayers[regulatoryZone.topic].some(zone => zone.id === regulatoryZone.id)) {
-            myRegulatoryLayers[regulatoryZone.topic] = myRegulatoryLayers[regulatoryZone.topic].concat(regulatoryZone.id)
+            myRegulatoryLayers[regulatoryZone.topic] = myRegulatoryLayers[regulatoryZone.topic].concat(regulatoryZone)
           }
         }
-        myRegulatoryLayerIds.push({
-          id: regulatoryZone.id,
-          lawType: regulatoryZone.lawType,
-          topic: regulatoryZone.topic
-        })
+        myRegulatoryLayerIds.push(regulatoryZone.id)
       })
 
       state.selectedRegulatoryLayers = myRegulatoryLayers
@@ -85,7 +86,7 @@ const regulatorySlice = createSlice({
 
       let nextSelectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
       nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayerIds
-        .filter(selectedRegulatoryLayerId => !selectedRegulatoryLayerId.id === id)
+        .filter(selectedRegulatoryLayerId => !selectedRegulatoryLayerId === id)
       window.localStorage.setItem(SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, JSON.stringify(nextSelectedRegulatoryLayerIds))
     },
     setIsReadyToShowRegulatoryZones (state) {
@@ -174,16 +175,15 @@ const regulatorySlice = createSlice({
      *  }
      * }
      */
-    setRegulatoryLayers (state, action) {
-      state.regulatoryLayers = action.payload
-      if (state.regulatoryLayers && Object.keys(state.regulatoryLayers).length) {
+    setRegulatoryLayerLawTypes (state, action) {
+      state.regulatoryLayerLawTypes = action.payload
+      if (state.regulatoryLayers && state.regulatoryLayers.length) {
         const selectedRegulatoryLayers = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
         const nextSelectedRegulatoryLayers = {}
+        const nextSelectedRegulatoryLayerIds = []
         selectedRegulatoryLayers
-          .map(selectedRegulatoryZone => {
-            const lawTypeRegulatoryZones = Object.values(state.regulatoryLayers[selectedRegulatoryZone.lawType]).flat()
-            const nextRegulatoryZone = lawTypeRegulatoryZones.find(zone => zone.id === selectedRegulatoryZone.id)
-            // On doit vérifier prévious aussi sinon on perd des infos
+          .map(selectedRegulatoryZoneId => {
+            let nextRegulatoryZone = state.regulatoryLayers.find(zone => zone.id === selectedRegulatoryZoneId)
             if (nextRegulatoryZone && nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
               if (Object.keys(nextSelectedRegulatoryLayers).includes(nextRegulatoryZone.topic)) {
                 const nextRegZoneTopic = nextSelectedRegulatoryLayers[nextRegulatoryZone.topic]
@@ -192,10 +192,10 @@ const regulatorySlice = createSlice({
               } else {
                 nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = [nextRegulatoryZone]
               }
+              nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
               return null
-            }
-            /* else if (nextRegulatoryZone && nextRegulatoryZone.nextId) {
-              nextRegulatoryZone = regulatoryZones.filter(zone => zone.id === nextRegulatoryZone.nextId)
+            } else if (nextRegulatoryZone && nextRegulatoryZone.nextId) {
+              nextRegulatoryZone = state.regulatoryLayers.find(zone => zone.id === nextRegulatoryZone.nextId)
               if (nextRegulatoryZone && nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
                 if (Object.keys(nextSelectedRegulatoryLayers).includes(nextRegulatoryZone.topic)) {
                   const nextRegZoneTopic = nextSelectedRegulatoryLayers[nextRegulatoryZone.topic]
@@ -204,11 +204,15 @@ const regulatorySlice = createSlice({
                 } else {
                   nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = [nextRegulatoryZone]
                 }
+                nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
                 return null
               }
-            } */
+            }
             return null
           })
+        console.log('nextSelectedRegulatoryLayers')
+        console.log(nextSelectedRegulatoryLayers)
+        window.localStorage.setItem(SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, JSON.stringify(nextSelectedRegulatoryLayerIds))
         state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
       }
     },
@@ -245,7 +249,7 @@ export const {
   resetLoadingRegulatoryZoneMetadata,
   setRegulatoryZoneMetadata,
   closeRegulatoryZoneMetadataPanel,
-  setRegulatoryLayers,
+  setRegulatoryLayerLawTypes,
   setLawTypeOpened,
   addRegulatoryTopicOpened,
   removeRegulatoryTopicOpened,
@@ -257,7 +261,8 @@ export const {
   showSimplifiedGeometries,
   showWholeGeometries,
   setProcessingRegulationSearchedZoneExtent,
-  setSelectedRegulatoryZone
+  setSelectedRegulatoryZone,
+  setRegulatoryLayers
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

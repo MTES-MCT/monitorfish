@@ -1,5 +1,5 @@
 ALTER TABLE public.reglementation_peche
-    ADD COLUMN next_id bigint
+    ADD COLUMN next_id bigint;
 
 DROP VIEW reglementation_peche_view;
 

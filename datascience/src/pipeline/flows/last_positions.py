@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 from typing import Tuple
 
 import pandas as pd
@@ -438,3 +439,5 @@ with Flow("Last positions") as flow:
 
         # Load
         load_last_positions(last_positions)
+
+flow.file_name = Path(__file__).name

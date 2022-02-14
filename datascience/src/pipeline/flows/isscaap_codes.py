@@ -1,4 +1,5 @@
 import io
+from pathlib import Path
 
 import pandas as pd
 import requests
@@ -104,3 +105,5 @@ with Flow("Extract ISSCAAP codes from fao.org to csv file") as flow:
     isscaap_codes = parse_pdf(pdf)
     isscaap_codes = transform_isscaap_codes(isscaap_codes)
     export_isscaap_codes(isscaap_codes, csv_filepath)
+
+flow.file_name = Path(__file__).name

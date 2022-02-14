@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import prefect
 from prefect import Flow, task
 
@@ -31,3 +33,5 @@ with Flow("Infractions") as flow:
     infractions = extract_infractions()
     infractions = clean_infractions(infractions)
     load_infractions(infractions)
+
+flow.file_name = Path(__file__).name

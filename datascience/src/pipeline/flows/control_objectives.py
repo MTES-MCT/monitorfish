@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import prefect
 from prefect import Flow, task
@@ -26,3 +28,5 @@ def load_control_objectives(control_objectives):
 with Flow("Control_objectives") as flow:
     control_objectives = extract_control_objectives()
     load_control_objectives(control_objectives)
+
+flow.file_name = Path(__file__).name

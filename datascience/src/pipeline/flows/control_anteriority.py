@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -519,3 +520,5 @@ with Flow("Control anteriority") as flow:
         control_statistics,
     )
     load_control_anteriority(control_anteriority)
+
+flow.file_name = Path(__file__).name

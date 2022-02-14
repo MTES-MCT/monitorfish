@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import prefect
 from prefect import Flow, task
@@ -45,3 +47,5 @@ with Flow("Fishing gears") as flow:
     fishing_gear_codes_groups = extract_fishing_gear_codes_groups()
     load_fishing_gear_codes_groups(fishing_gear_codes_groups)
     load_fishing_gear_codes(fishing_gear_codes)
+
+flow.file_name = Path(__file__).name

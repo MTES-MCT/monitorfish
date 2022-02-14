@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import List
 
 import pandas as pd
@@ -520,3 +521,5 @@ with Flow("Position alert") as flow:
     positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
     alerts = make_alerts(positions_in_alert, alert_type)
     load_alerts(alerts)
+
+flow.file_name = Path(__file__).name

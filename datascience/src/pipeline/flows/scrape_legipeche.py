@@ -1,5 +1,6 @@
 import datetime
 import os
+from pathlib import Path
 
 import pandas as pd
 import prefect
@@ -109,3 +110,5 @@ with Flow("Scrape legipeche") as flow:
     extraction_datetime_utc = scrape_legipeche_to_csv(upstream_tasks=[deleted_csv])
     legipeche = read_legipeche_csv(extraction_datetime_utc)
     load_legipeche(legipeche)
+
+flow.file_name = Path(__file__).name

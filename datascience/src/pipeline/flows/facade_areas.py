@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import prefect
 from prefect import Flow, task
@@ -35,3 +37,5 @@ def load_facade_areas(facade_areas: pd.DataFrame):
 with Flow("Facade areas") as flow:
     facade_areas = extract_facade_areas()
     load_facade_areas(facade_areas)
+
+flow.file_name = Path(__file__).name

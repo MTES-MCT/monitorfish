@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import prefect
 from prefect import Flow, task
@@ -112,3 +114,5 @@ with Flow("Risk factor") as flow:
     control_anteriority = extract_control_anteriority()
     risk_factors = compute_risk_factors(current_segments, control_anteriority)
     load_risk_factors(risk_factors)
+
+flow.file_name = Path(__file__).name

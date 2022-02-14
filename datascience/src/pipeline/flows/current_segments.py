@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 
 import geopandas as gpd
 import pandas as pd
@@ -243,3 +244,5 @@ with Flow("Current segments") as flow:
 
     # Load
     load_current_segments(current_segments)
+
+flow.file_name = Path(__file__).name

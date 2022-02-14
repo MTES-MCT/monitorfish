@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import geopandas as gpd
 import pandas as pd
 import prefect
@@ -464,3 +466,5 @@ with Flow("Controls") as flow:
 
     # Load
     load_controls(controls, how=loading_mode)
+
+flow.file_name = Path(__file__).name

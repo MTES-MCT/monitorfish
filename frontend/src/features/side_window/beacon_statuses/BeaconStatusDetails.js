@@ -14,6 +14,7 @@ import SelectPicker from 'rsuite/lib/SelectPicker'
 import * as timeago from 'timeago.js'
 import { closeBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
 import BeaconStatusDetailsBody from './BeaconStatusDetailsBody'
+import { getDateTime } from '../../../utils'
 
 const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesselStatus }) => {
   const dispatch = useDispatch()
@@ -126,7 +127,7 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
             cleanable={false}
           />
         </Malfunctioning>
-        <LastPosition style={lastPositionStyle}>
+        <LastPosition style={lastPositionStyle} title={getDateTime(beaconStatus?.malfunctionStartDateTime)}>
           <TimeAgo style={timeAgoStyle}/>
           Dernière émission {
           timeago.format(beaconStatus?.malfunctionStartDateTime, 'fr')

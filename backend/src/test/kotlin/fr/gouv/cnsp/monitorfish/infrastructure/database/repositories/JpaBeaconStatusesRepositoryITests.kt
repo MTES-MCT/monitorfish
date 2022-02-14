@@ -22,7 +22,7 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
         // When
         val baconStatuses = jpaBeaconStatusesRepository.findAll()
 
-        assertThat(baconStatuses).hasSize(5)
+        assertThat(baconStatuses).hasSize(6)
         assertThat(baconStatuses.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(baconStatuses.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
         assertThat(baconStatuses.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
@@ -34,7 +34,7 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
         // When
         val baconStatuses = jpaBeaconStatusesRepository.findAllExceptEndOfFollowUp()
 
-        assertThat(baconStatuses).hasSize(4)
+        assertThat(baconStatuses).hasSize(5)
         assertThat(baconStatuses.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(baconStatuses.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
         assertThat(baconStatuses.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)

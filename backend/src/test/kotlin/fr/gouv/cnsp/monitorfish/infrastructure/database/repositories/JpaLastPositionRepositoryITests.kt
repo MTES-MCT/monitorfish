@@ -22,7 +22,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("vessels_position")?.clear()
+        cacheManager.getCache("vessels_positions")?.clear()
     }
 
     @Test
@@ -54,6 +54,26 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(position?.probabilityRiskFactor).isEqualTo(2.0)
         assertThat(position?.detectabilityRiskFactor).isEqualTo(3.0)
         assertThat(position?.riskFactor).isEqualTo(2.473)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllInLast48Hours Should returns the last positions in the last 48 hours`() {
+        // Then
+        val positions = jpaLastPositionRepository.findAllInLast48Hours()
+
+        assertThat(positions).hasSize(998)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllWithBeaconStatusesBeforeLast48Hours Should returns the last positions with beacon statuses before the last 48 hours`() {
+        // Then
+        val positions = jpaLastPositionRepository.findAllWithBeaconStatusesBeforeLast48Hours()
+
+        assertThat(positions).hasSize(1)
+        assertThat(positions.first().internalReferenceNumber).isEqualTo("ABC000939217")
+        assertThat(positions.first().vesselName).isEqualTo("FRAIS AVIS MODE")
     }
 
     @Test

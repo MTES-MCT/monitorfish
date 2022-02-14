@@ -29,7 +29,9 @@ class CaffeineConfiguration {
     val previousErs = "previous_ers"
     val ersRawMessage = "ers_raw_message"
     val vesselTrack = "vessel_track"
-    val vesselsPosition = "vessels_position"
+    val vesselsPositions = "vessels_positions"
+    val vesselsAllPositions = "vessels_all_position"
+    val vesselsPositionsWithBeaconStatuses = "vessels_positions_with_beacon_statuses"
     val infractions = "infractions"
     val fleetSegments = "fleet_segments"
     val currentSegments = "current_segment"
@@ -66,14 +68,18 @@ class CaffeineConfiguration {
         val infractionsCache = buildCache(infractions, ticker, oneWeek)
 
         val vesselTrackCache = buildCache(vesselTrack, ticker, 1)
-        val vesselsPositionCache = buildCache(vesselsPosition, ticker, 1)
+        val vesselsPositionsCache = buildCache(vesselsPositions, ticker, 1)
+        val vesselsAllPositionsCache = buildCache(vesselsAllPositions, ticker, 1)
+        val vesselsPositionsWithBeaconStatusesCache = buildCache(vesselsPositionsWithBeaconStatuses, ticker, 1)
         val searchVesselsCache = buildCache(searchVessels, ticker, 180)
 
         val manager = SimpleCacheManager()
         manager.setCaches(listOf(
                 vesselCache,
                 vesselTrackCache,
-                vesselsPositionCache,
+                vesselsPositionsCache,
+                vesselsAllPositionsCache,
+                vesselsPositionsWithBeaconStatusesCache,
                 gearCodeGroupsCache,
                 gearCodeGroupCache,
                 gearsCache,

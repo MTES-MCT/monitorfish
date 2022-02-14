@@ -5,6 +5,8 @@ import java.time.ZonedDateTime
 
 interface LastPositionRepository {
     fun findAll(): List<LastPosition>
+    fun findAllInLast48Hours(): List<LastPosition>
+    fun findAllWithBeaconStatusesBeforeLast48Hours(): List<LastPosition>
     fun findLastPositionDate(): ZonedDateTime
     // For test purpose
     fun deleteAll()

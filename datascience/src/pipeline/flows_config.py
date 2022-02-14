@@ -1,7 +1,19 @@
+from docker.types import Mount
+from dotenv import dotenv_values
 from prefect.executors.dask import LocalDaskExecutor
+from prefect.run_configs.docker import DockerRun
 from prefect.schedules import CronSchedule, Schedule, clocks
+from prefect.storage.local import Local
 
-from config import FISHING_SPEED_THRESHOLD, MINIMUM_CONSECUTIVE_POSITIONS
+from config import (
+    DOCKER_IMAGE,
+    FISHING_SPEED_THRESHOLD,
+    FLOWS_LOCATION,
+    LOGBOOK_FILES_GID,
+    MINIMUM_CONSECUTIVE_POSITIONS,
+    MONITORFISH_VERSION,
+    ROOT_DIRECTORY,
+)
 from src.pipeline.flows import (
     admin_areas,
     anchorages,
@@ -102,11 +114,6 @@ scrape_legipeche.flow.schedule = CronSchedule("35 7 * * 1,2,3,4,5")
 species.flow.schedule = CronSchedule("0 8 * * *")
 vessels.flow.schedule = CronSchedule("5 2,5,8,11,14,17,20,23 * * *")
 
-################################ Define flows' executor ###############################
-admin_areas.flow.executor = LocalDaskExecutor()
-controls.flow.executor = LocalDaskExecutor()
-last_positions.flow.executor = LocalDaskExecutor()
-vessels.flow.executor = LocalDaskExecutor()
 
 ###################### List flows to register with prefect server #####################
 flows_to_register = [
@@ -137,3 +144,39 @@ flows_to_register = [
     species.flow,
     vessels.flow,
 ]
+
+################################ Define flows' executor ###############################
+for flow in flows_to_register:
+    flow.executor = LocalDaskExecutor()
+
+################################ Define flows' storage ################################
+# This defines where the executor can find the flow.py file for each flow **inside**
+# the container.
+for flow in flows_to_register:
+    flow.storage = Local(
+        add_default_labels=False,
+        stored_as_script=True,
+        path=(FLOWS_LOCATION / flow.file_name).as_posix(),
+    )
+
+################### Define flows' run config ####################
+for flow in flows_to_register:
+    if flow.name == "ERS":
+        host_config = {
+            "group_add": [LOGBOOK_FILES_GID],
+            "mounts": [
+                Mount(
+                    target="/opt2/monitorfish-data/ers",
+                    source="/opt2/monitorfish-data/ers",
+                    type="bind",
+                )
+            ],
+        }
+    else:
+        host_config = None
+
+    flow.run_config = DockerRun(
+        image=f"{DOCKER_IMAGE}:{MONITORFISH_VERSION}",
+        host_config=host_config,
+        env=dotenv_values(ROOT_DIRECTORY / ".env"),
+    )

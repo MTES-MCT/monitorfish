@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import prefect
 from dotenv import load_dotenv
@@ -48,3 +50,5 @@ with Flow("Species groups") as flow:
     species_groups = extract_species_groups()
     species_codes_groups = extract_species_codes_groups()
     load_species_groups(species_groups, species_codes_groups)
+
+flow.file_name = Path(__file__).name

@@ -2,6 +2,7 @@ import datetime
 import logging
 import os
 from email.message import EmailMessage
+from pathlib import Path
 from typing import List, Tuple
 
 import jinja2
@@ -494,3 +495,5 @@ with Flow("Regulations checkup") as flow:
     recipients = get_recipients()
     msg = create_message(html, recipients)
     send_message(msg)
+
+flow.file_name = Path(__file__).name

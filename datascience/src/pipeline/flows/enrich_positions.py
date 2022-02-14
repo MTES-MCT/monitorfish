@@ -1,4 +1,5 @@
 from logging import Logger
+from pathlib import Path
 
 import pandas as pd
 import prefect
@@ -319,3 +320,5 @@ with Flow("Enrich positions") as flow:
             minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
             fishing_speed_threshold=unmapped(fishing_speed_threshold),
         )
+
+flow.file_name = Path(__file__).name

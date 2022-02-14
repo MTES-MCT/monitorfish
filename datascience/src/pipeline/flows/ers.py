@@ -1,5 +1,5 @@
 import os
-import pathlib
+from pathlib import Path
 from typing import List, Union
 from zipfile import ZipFile
 
@@ -40,10 +40,10 @@ def get_message_type(zipfile_name: str) -> str:
 
 @task(checkpoint=False)
 def extract_zipfiles(
-    input_dir: pathlib.Path,
-    treated_dir: pathlib.Path,
-    non_treated_dir: pathlib.Path,
-    error_dir: pathlib.Path,
+    input_dir: Path,
+    treated_dir: Path,
+    non_treated_dir: Path,
+    error_dir: Path,
 ) -> List[dict]:
     """
     Scans ``input_dir``, in which ers zipfiles are expected to be arranged in a
@@ -328,3 +328,5 @@ with Flow("ERS") as flow:
         zipfiles = parse_xmls.map(zipfiles)
         zipfiles = clean.map(zipfiles)
         load_ers(zipfiles)
+
+flow.file_name = Path(__file__).name

@@ -1,5 +1,6 @@
 from datetime import datetime
 from enum import Enum
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -328,3 +329,5 @@ with Flow("Beacons statuses") as flow:
         new_stage=unmapped(beaconStatusStage.RESUMED_TRANSMISSION),
     )
     load_new_beacons_statuses(new_beacons_statuses)
+
+flow.file_name = Path(__file__).name

@@ -107,15 +107,15 @@ const VesselListTable = ({
         </Column>
         <Column resizable width={120}>
           <HeaderCell>Seg. flotte</HeaderCell>
-          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.fleetSegmentsArray?.join(' ,')}</ContentWithEllipsis>}</Cell>
+          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.fleetSegmentsArray?.join(', ')}</ContentWithEllipsis>}</Cell>
         </Column>
         <Column resizable width={120}>
           <HeaderCell>Engins à bord</HeaderCell>
-          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.gearsArray?.join(' ,')}</ContentWithEllipsis>}</Cell>
+          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.gearsArray?.join(', ')}</ContentWithEllipsis>}</Cell>
         </Column>
         <Column resizable width={115}>
           <HeaderCell>Espèces à bord</HeaderCell>
-          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.speciesArray?.join(' ,')}</ContentWithEllipsis>}</Cell>
+          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.speciesArray?.join(', ')}</ContentWithEllipsis>}</Cell>
         </Column>
         <Column resizable sortable width={50}>
           <HeaderCell>

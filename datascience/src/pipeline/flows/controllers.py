@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import prefect
 from prefect import Flow, task
 
@@ -25,3 +27,5 @@ def load_controllers(controllers):
 with Flow("Controllers") as flow:
     controllers = extract_controllers()
     load_controllers(controllers)
+
+flow.file_name = Path(__file__).name

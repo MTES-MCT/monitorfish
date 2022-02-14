@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import prefect
@@ -364,3 +366,5 @@ with Flow("Vessels") as flow:
 
     # Load
     load_vessels(all_vessels)
+
+flow.file_name = Path(__file__).name

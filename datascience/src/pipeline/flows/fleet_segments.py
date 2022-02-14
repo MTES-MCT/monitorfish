@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import prefect
 from prefect import Flow, task
@@ -34,3 +36,5 @@ def load_segments(segments):
 with Flow("Fleet segments") as flow:
     segments = extract_segments()
     load_segments(segments)
+
+flow.file_name = Path(__file__).name

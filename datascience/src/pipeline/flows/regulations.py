@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import prefect
 from prefect import Flow, case, task
@@ -130,3 +132,5 @@ with Flow("Regulations") as flow:
     with case(cond_update, True):
         new_regulations = extract_new_regulations(ids_to_update)
         load_new_regulations(new_regulations)
+
+flow.file_name = Path(__file__).name

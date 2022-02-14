@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import prefect
 from prefect import Flow, task
@@ -578,3 +580,5 @@ with Flow("Administrative areas") as flow:
 
     situs_areas = extract_situs_areas()
     load_situs_areas(situs_areas)
+
+flow.file_name = Path(__file__).name

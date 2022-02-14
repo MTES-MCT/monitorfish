@@ -1,10 +1,12 @@
 #!/bin/bash
 
-docker run -d -t --network=host --name monitorfish-pipeline-flows \
-        -v prefect_flows:/home/monitorfish-pipeline/.prefect \
-        -u monitorfish-pipeline:"$(getent group di_etlmf | cut -d: -f3)" \
+docker run -d -t --network=host --name monitorfish-pipeline-agent \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        -u monitorfish-pipeline:"$(getent group docker | cut -d: -f3)" \
         -v /opt2/monitorfish-data/ers:/opt2/monitorfish-data/ers \
         --env-file datascience/.env \
+        -e MONITORFISH_VERSION \
+        -e LOGBOOK_FILES_GID="$(getent group di_etlmf | cut -d: -f3)" \
         --health-cmd='wget --no-verbose --tries=1 -O /dev/null http://localhost:8085/api/health || exit 1'\
         --health-interval=10s \
         --health-retries=5 \

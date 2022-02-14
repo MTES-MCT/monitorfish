@@ -1,4 +1,5 @@
 from io import BytesIO
+from pathlib import Path
 
 import geopandas as gpd
 import prefect
@@ -77,3 +78,5 @@ with Flow("FAO areas") as flow:
     fao_areas = extract_fao_areas(url=FAO_AREAS_URL, proxies=PROXIES)
     fao_areas = transform_fao_areas(fao_areas)
     load_fao_areas(fao_areas)
+
+flow.file_name = Path(__file__).name

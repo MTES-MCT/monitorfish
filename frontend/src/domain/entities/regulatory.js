@@ -31,7 +31,8 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
     region: properties.region,
     obligations: properties.obligations,
     rejections: properties.rejets,
-    deposit: properties.gisement
+    deposit: properties.gisement,
+    nextId: properties.next_id
   }
 }
 
@@ -138,7 +139,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     upcomingRegulatoryReferences,
     fishingPeriod,
     regulatorySpecies,
-    regulatoryGears
+    regulatoryGears,
+    nextId
   } = properties
 
   return {
@@ -150,12 +152,23 @@ export const mapToRegulatoryFeatureObject = properties => {
     references_reglementaires_a_venir: JSON.stringify(upcomingRegulatoryReferences),
     fishing_period: JSON.stringify(fishingPeriod),
     species: JSON.stringify(regulatorySpecies),
-    gears: JSON.stringify(regulatoryGears)
+    gears: JSON.stringify(regulatoryGears),
+    next_id: nextId
   }
 }
 
 export const getRegulatoryFeatureId = (id) => {
   return `${Layers.REGULATORY.code}_write.${id}`
+}
+
+export const emptyRegulatoryFeatureObject = {
+  layer_name: null,
+  law_type: null,
+  zones: null,
+  region: null,
+  references_reglementaires: null,
+  references_reglementaires_a_venir: null,
+  next_id: null
 }
 
 export const FRANCE = 'Réglementation France'

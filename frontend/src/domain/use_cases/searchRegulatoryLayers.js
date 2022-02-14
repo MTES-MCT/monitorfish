@@ -20,7 +20,7 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
     const worker = await new MonitorFishWorker()
     const state = getState()
     const {
-      regulatoryLayers
+      regulatoryLayerLawTypes
     } = state.regulatory
     const {
       zoneSelected
@@ -34,7 +34,7 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
     if (extent?.length === 4) {
       return getRegulatoryZonesInExtentFromAPI(extent, state.global.inBackofficeMode)
         .then(features => worker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features))
-        .then(regulatoryLayers => getRegulatoryLayersWithoutTerritory(regulatoryLayers))
+        .then(result => getRegulatoryLayersWithoutTerritory(result.layersTopicsByRegulatoryTerritory))
         .then(filteredRegulatoryLayers => {
           if (inputsAreEmpty) {
             return filteredRegulatoryLayers
@@ -44,7 +44,7 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
         })
     }
 
-    return worker.searchLayers(searchFields, regulatoryLayers, state.gear.gears)
+    return worker.searchLayers(searchFields, regulatoryLayerLawTypes, state.gear.gears)
   }
 }
 

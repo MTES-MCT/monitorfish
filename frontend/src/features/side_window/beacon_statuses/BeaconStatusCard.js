@@ -16,7 +16,7 @@ import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) => {
+const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl, horizontalScrollRef }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconStatus?.vesselStatus)
   const ref = useRef()
@@ -32,7 +32,7 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
 
   return <Wrapper
     data-cy={'side-window-beacon-statuses-card'}
-    style={wrapperStyle}
+    style={wrapperStyle(horizontalScrollRef?.current?. scrollHeight > horizontalScrollRef?.current?.clientHeight)}
   >
     <Header style={headerStyle}>
       <Row style={rowStyle(true)}>
@@ -140,12 +140,12 @@ const rowStyle = isFirstRow => ({
 })
 
 const Wrapper = styled.div``
-const wrapperStyle = {
+const wrapperStyle = hasScroll => ({
   borderRadius: 2,
   border: `1px solid ${COLORS.lightGray}`,
   height: 150,
-  width: 245
-}
+  width: hasScroll ? 230 : 245
+})
 
 const Header = styled.div``
 const headerStyle = {

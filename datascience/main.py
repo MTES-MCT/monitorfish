@@ -1,8 +1,8 @@
 import prefect
-from prefect.agent.local import LocalAgent
+from prefect.agent.docker import DockerAgent
 
 from config import FLOWS_HEALTHCHECK_URL
-from src.pipeline.schedules import flows_to_register
+from src.pipeline.flows_config import flows_to_register
 
 PROJECT_NAME = "Monitorfish"
 
@@ -28,15 +28,6 @@ def create_project_if_not_exists(client: prefect.Client, project_name: str) -> N
         raise ValueError("Several projects with the name 'Monitorfish' were found.")
 
 
-def register_flow(f: prefect.Flow, project_name: str) -> None:
-    """Registers f to "Monitorfich" project.
-
-    Args:
-        f (prefect.Flow): Prefect flow
-    """
-    f.register(project_name)
-
-
 if __name__ == "__main__":
     # Initialize a client, which can interact with the Prefect orchestrator.
     # The communication with the orchestrator is done through the Prefect GraphQL API.
@@ -49,13 +40,15 @@ if __name__ == "__main__":
     create_project_if_not_exists(client, PROJECT_NAME)
 
     # Register all flows
-    print("Register flows")
-    for f in flows_to_register:
-        print(f"Register flow {f.name}")
-        register_flow(f, PROJECT_NAME)
+    print("Registering flows")
+    for flow in flows_to_register:
+        print(f"Registering flow {flow.name}")
+        flow.register(project_name=PROJECT_NAME)
 
-    # Start local "agent" process
+    # Start Docker Agent process
     # This process queries the Prefect GraphQL API every second to ask if any new flows
     # should be run
-    agent = LocalAgent(show_flow_logs=True, agent_address=FLOWS_HEALTHCHECK_URL)
+    agent = DockerAgent(
+        show_flow_logs=True, no_pull=True, agent_address=FLOWS_HEALTHCHECK_URL
+    )
     agent.start()

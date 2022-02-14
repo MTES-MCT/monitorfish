@@ -1,5 +1,6 @@
 import io
 import zipfile
+from pathlib import Path
 
 import pandas as pd
 import requests
@@ -110,3 +111,5 @@ with Flow("Species") as flow:
     isscaap_groups = extract_isscaap_groups(url=ISSCAAP_GROUPS_URL, proxies=PROXIES)
     species = transform_species(species, isscaap_groups)
     export_species(species, csv_filepath=csv_filepath)
+
+flow.file_name = Path(__file__).name

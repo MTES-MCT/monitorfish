@@ -2,6 +2,7 @@ import io
 import os
 from ast import literal_eval
 from datetime import date
+from pathlib import Path
 from time import sleep
 
 import pandas as pd
@@ -630,3 +631,5 @@ def load_ports_to_monitorfish(ports):
 with Flow("Ports") as flow:
     ports = extract_datagouv_ports(ports_url=PORTS_URL, proxies=PROXIES)
     load_ports_to_monitorfish(ports)
+
+flow.file_name = Path(__file__).name

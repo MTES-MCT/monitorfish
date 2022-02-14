@@ -1,5 +1,6 @@
 import io
 from dataclasses import dataclass
+from pathlib import Path
 from typing import List, Set
 
 import h3
@@ -533,3 +534,5 @@ with Flow("Anchorages") as flow:
         anchorages_url=ANCHORAGES_URL, proxies=PROXIES
     )
     load_anchorages_to_monitorfish(anchorages)
+
+flow.file_name = Path(__file__).name

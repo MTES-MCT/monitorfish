@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 from prefect import Flow, task
 
@@ -72,3 +74,5 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
 with Flow("Missing trip number") as flow:
     computed_trip_numbers = extract_computed_trip_numbers()
     load_computed_trip_numbers(computed_trip_numbers)
+
+flow.file_name = Path(__file__).name

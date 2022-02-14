@@ -1,4 +1,5 @@
 import io
+from pathlib import Path
 
 import pandas as pd
 import prefect
@@ -59,3 +60,5 @@ with Flow("Species") as flow:
     species = extract_species(url=DATA_GOUV_SPECIES_URL, proxies=PROXIES)
     species = transform_species(species)
     load_species(species)
+
+flow.file_name = Path(__file__).name

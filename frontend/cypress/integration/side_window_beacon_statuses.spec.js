@@ -48,7 +48,7 @@ context('Beacon statuses', () => {
     // Then
     cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('4')
-    cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children().should('have.length', 6)
+    cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children().should('have.length', 7)
 
     // Count the number of cards in the columns' header
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()

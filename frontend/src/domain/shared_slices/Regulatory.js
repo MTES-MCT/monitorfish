@@ -63,6 +63,9 @@ const regulatorySlice = createSlice({
     resetRegulatoryGeometriesToPreview (state) {
       state.regulatoryGeometriesToPreview = null
     },
+    setRegulatoryLayers (state, action) {
+      state.regulatoryLayers = action.payload
+    },
     /**
      * Add regulatory zones to "My Zones" regulatory selection
      * @memberOf RegulatoryReducer
@@ -288,7 +291,8 @@ export const {
   showSimplifiedGeometries,
   showWholeGeometries,
   setProcessingRegulationSearchedZoneExtent,
-  setSelectedRegulatoryZone
+  setSelectedRegulatoryZone,
+  setRegulatoryLayers
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

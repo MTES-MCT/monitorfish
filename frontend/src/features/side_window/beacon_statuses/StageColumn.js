@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import Draggable from './Draggable'
 import StageColumnHeader from './StageColumnHeader'
 import BeaconStatusCard from './BeaconStatusCard'
 
-const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, baseUrl }) => {
+const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, baseUrl, verticalScrollRef }) => {
   const updateStageVesselStatus = (beaconStatus, status) => updateVesselStatus(stage?.code, beaconStatus, status)
+  const horizontalScrollRef = useRef()
 
   return <Wrapper
     data-cy={`side-window-beacon-statuses-columns-${stage.code}`}
@@ -17,7 +18,10 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, b
       description={stage?.description}
       numberOfItems={beaconStatuses?.length}
     />
-    <ScrollableContainer style={ScrollableContainerStyle}>
+    <ScrollableContainer
+      style={ScrollableContainerStyle}
+      ref={horizontalScrollRef}
+    >
       {
         beaconStatuses
           .map((beaconStatus, index) => {
@@ -27,8 +31,10 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, b
               stageId={stage.code}
               isDroppedId={isDroppedId}
               index={index}
+              verticalScrollRef={verticalScrollRef}
             >
               <BeaconStatusCard
+                horizontalScrollRef={horizontalScrollRef}
                 baseUrl={baseUrl}
                 beaconStatus={beaconStatus}
                 updateStageVesselStatus={updateStageVesselStatus}
@@ -49,7 +55,7 @@ const ScrollableContainerStyle = {
 
 const Wrapper = styled.div``
 const wrapperStyle = {
-  width: 282,
+  width: 267,
   border: `1px solid ${COLORS.lightGray}`,
   height: 'calc(100vh - 100px)'
 }

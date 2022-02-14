@@ -4,6 +4,7 @@ import { COLORS } from '../../constants/constants'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
+ * @param isOpen
  * @param menu
  * @param isSelected
  * @param setSelected
@@ -12,15 +13,15 @@ import { COLORS } from '../../constants/constants'
  * @return {JSX.Element}
  * @constructor
  */
-const SideWindowSubMenuLink = ({ menu, isSelected, setSelected, number, oneLine }) => {
+const SideWindowSubMenuLink = ({ isOpen, menu, isSelected, setSelected, number, oneLine }) => {
   const linkStyle = {
     height: oneLine ? 47 : 64,
     padding: '0px 20px',
-    background: isSelected ? COLORS.lightGray : 'unset',
+    background: isOpen && isSelected ? COLORS.lightGray : 'unset',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
-    borderBottom: `0.5px solid ${COLORS.lightGray}`
+    borderBottom: isOpen ? `0.5px solid ${COLORS.lightGray}` : 'unset'
   }
 
   const textStyle = {
@@ -28,7 +29,8 @@ const SideWindowSubMenuLink = ({ menu, isSelected, setSelected, number, oneLine 
     color: isSelected ? COLORS.gunMetal : COLORS.slateGray,
     height: oneLine ? 22 : 50,
     fontSize: 16,
-    fontWeight: 500
+    fontWeight: 500,
+    visibility: isOpen ? 'visible' : 'hidden'
   }
 
   return <Link
@@ -45,7 +47,7 @@ const SideWindowSubMenuLink = ({ menu, isSelected, setSelected, number, oneLine 
       number
         ? <CircleWithKeyMetric
           data-cy={`side-window-sub-menu-${menu.name}-number`}
-          style={circleMetricStyle}
+          style={circleMetricStyle(isOpen)}
         >
           {number}
       </CircleWithKeyMetric>
@@ -59,7 +61,7 @@ const Text = styled.div``
 const Link = styled.div``
 
 const CircleWithKeyMetric = styled.span``
-const circleMetricStyle = {
+const circleMetricStyle = isOpen => ({
   display: 'inline-block',
   height: 7,
   borderRadius: 2,
@@ -70,7 +72,8 @@ const circleMetricStyle = {
   flexShrink: 0,
   marginLeft: 'auto',
   minWidth: 7,
-  lineHeight: '16px'
-}
+  lineHeight: '16px',
+  visibility: isOpen ? 'visible' : 'hidden'
+})
 
 export default SideWindowSubMenuLink

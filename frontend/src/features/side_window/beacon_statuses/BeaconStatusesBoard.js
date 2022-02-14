@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { DndContext, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import styled from 'styled-components'
 
@@ -40,6 +40,7 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
     openedBeaconStatus
   } = useSelector(state => state.beaconStatus)
   const beaconStatuses = useSelector(state => getMemoizedBeaconStatusesByStage(state))
+  const verticalScrollRef = useRef()
   const [filteredBeaconStatuses, setFilteredBeaconStatuses] = useState({})
   const [isDroppedId, setIsDroppedId] = useState(undefined)
   const [searchedVessel, setSearchedVessel] = useState(undefined)
@@ -171,7 +172,7 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
   }, [beaconStatuses])
 
   return (
-    <Wrapper innerWidth={window.innerWidth} style={wrapperStyle}>
+    <Wrapper innerWidth={window.innerWidth} style={wrapperStyle} ref={verticalScrollRef}>
       <SearchVesselInput
         style={searchVesselInputStyle}
         baseUrl={baseUrl}
@@ -202,6 +203,7 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
                 beaconStatuses={filteredBeaconStatuses[stageId] || []}
                 updateVesselStatus={updateVesselStatus}
                 isDroppedId={isDroppedId}
+                verticalScrollRef={verticalScrollRef}
               />
             </Droppable>
           ))}

@@ -24,6 +24,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
     style={menuStyle(isOpen)}
   >
     <Chevron
+      data-cy={'side-window-sub-menu-trigger'}
       style={chevronStyle(isOpen)}
       onClick={() => setIsOpen(!isOpen)}
     >
@@ -90,7 +91,9 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
       <>
         <SideWindowSubMenuLink
           isOpen={isOpen}
-          number={beaconStatuses.filter(beaconStatus => beaconStatus.stage !== beaconStatusesStages.RESUMED_TRANSMISSION.code).length}
+          number={beaconStatuses.filter(beaconStatus =>
+            beaconStatus.stage !== beaconStatusesStages.RESUMED_TRANSMISSION.code &&
+            beaconStatus.stage !== beaconStatusesStages.END_OF_FOLLOW_UP.code).length}
           menu={BeaconStatusesSubMenu.MALFUNCTIONING}
           isSelected={selectedSubMenu.code === BeaconStatusesSubMenu.MALFUNCTIONING.code}
           setSelected={setSelectedSubMenu}

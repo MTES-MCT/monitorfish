@@ -66,7 +66,8 @@ const vesselSlice = createSlice({
           lastPositionSentAt: new Date(vessel.dateTime).getTime(),
           coordinates: transform([vessel.longitude, vessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION),
           isFiltered: 0,
-          filterPreview: 0
+          filterPreview: 0,
+          hasBeaconStatus: !!vessel.beaconStatusId
         }
       })
     },

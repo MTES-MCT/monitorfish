@@ -6,15 +6,10 @@ import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
 import Layers from '../domain/entities/layers'
 
-import { getVesselAlertStyle } from './styles/vessel.style'
-import {
-  getVesselFeatureIdFromVessel,
-  getVesselLastPositionVisibilityDates,
-  Vessel,
-  vesselsAreEquals
-} from '../domain/entities/vessel'
+import { getVesselAlertAndBeaconStatusStyle } from './styles/vessel.style'
+import { getVesselFeatureIdFromVessel, vesselsAreEquals } from '../domain/entities/vessel'
 
-const VesselAlertLayer = ({ map }) => {
+const VesselAlertAndBeaconStatusLayer = ({ map }) => {
   const {
     vessels,
     hideNonSelectedVessels,
@@ -30,7 +25,6 @@ const VesselAlertLayer = ({ map }) => {
   } = useSelector(state => state.global)
 
   const {
-    vesselsLastPositionVisibility,
     hideVesselsAtPort
   } = useSelector(state => state.map)
 
@@ -50,10 +44,10 @@ const VesselAlertLayer = ({ map }) => {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
         source: getVectorSource(),
-        zIndex: Layers.VESSEL_ALERT.zIndex,
+        zIndex: Layers.VESSEL_BEACON_STATUS.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
-        style: (feature, resolution) => getVesselAlertStyle(feature, resolution)
+        style: (feature, resolution) => getVesselAlertAndBeaconStatusStyle(feature, resolution)
       })
     }
     return layerRef.current
@@ -61,7 +55,7 @@ const VesselAlertLayer = ({ map }) => {
 
   useEffect(() => {
     if (map) {
-      getLayer().name = Layers.VESSEL_ALERT.code
+      getLayer().name = Layers.VESSEL_BEACON_STATUS.code
       map.getLayers().push(getLayer())
     }
 
@@ -74,21 +68,18 @@ const VesselAlertLayer = ({ map }) => {
 
   useEffect(() => {
     if (vessels?.length) {
-      const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-
       const features = vessels.reduce((features, vessel) => {
+        if (!vessel.hasBeaconStatus) return features
         if (!vessel.vesselProperties.hasAlert) return features
-        if (vessel.hasBeaconStatus) return features
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return features
         if (hideVesselsAtPort && vessel.isAtPort) return features
         if (hideNonSelectedVessels && !vesselsAreEquals(vessel.vesselProperties, selectedVessel)) return features
-        if (!Vessel.getVesselOpacity(vessel.vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)) return features
 
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layers.VESSEL_ALERT.code}:${getVesselFeatureIdFromVessel(vessel.vesselProperties)}`)
+        feature.setId(`${Layers.VESSEL_BEACON_STATUS.code}:${getVesselFeatureIdFromVessel(vessel.vesselProperties)}`)
         features.push(feature)
 
         return features
@@ -103,12 +94,10 @@ const VesselAlertLayer = ({ map }) => {
     previewFilteredVesselsMode,
     nonFilteredVesselsAreHidden,
     hideNonSelectedVessels,
-    hideVesselsAtPort,
-    vesselsLastPositionVisibility?.opacityReduced,
-    vesselsLastPositionVisibility?.hidden
+    hideVesselsAtPort
   ])
 
   return null
 }
 
-export default VesselAlertLayer
+export default VesselAlertAndBeaconStatusLayer

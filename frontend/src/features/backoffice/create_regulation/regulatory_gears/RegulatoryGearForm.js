@@ -331,15 +331,15 @@ const MultiCascaderLabel = styled.span`
 const CustomMultiCascader = styled(MultiCascader)`
   a {
     box-sizing: border-box;
-    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
+    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:hover {
-    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
+    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:focus {
-    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
+    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
   }
 
   .rs-checkbox-checker {

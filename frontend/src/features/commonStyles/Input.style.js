@@ -15,7 +15,7 @@ export const CustomInput = styled(Input)`
   height: 35px;
   ${props => props.width ? '' : 'min-width: 100px;'}
   ${props => props.width ? `width: ${props.width};` : ''}
-  border: 1px solid ${props => props.$isRed ? `${COLORS.red}` : `${COLORS.lightGray}`};
+  border: 1px solid ${props => props.$isRed ? `${COLORS.maximumRed}` : `${COLORS.lightGray}`};
   border-radius: 2px;
   color: ${COLORS.gunMetal}!important;
   font-weight: 500;

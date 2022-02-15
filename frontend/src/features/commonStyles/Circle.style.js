@@ -16,7 +16,7 @@ export const GreenCircle = styled.span`
 
 export const RedCircle = styled.span`
   ${circle}
-  background-color: ${COLORS.red};
+  background-color: ${COLORS.maximumRed};
 `
 
 export const BlackCircle = styled.span`

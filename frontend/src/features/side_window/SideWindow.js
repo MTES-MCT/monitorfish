@@ -15,13 +15,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { openSideWindowTab, setSideWindowAsOpen } from '../../domain/shared_slices/Global'
 import getOperationalAlerts from '../../domain/use_cases/getOperationalAlerts'
 import getAllBeaconStatuses from '../../domain/use_cases/getAllBeaconStatuses'
+import { closeBeaconStatus } from '../../domain/shared_slices/BeaconStatus'
 
 const SideWindow = ({ fromTab }) => {
   const {
     openedSideWindowTab
   } = useSelector(state => state.global)
   const {
-    beaconStatuses
+    beaconStatuses,
+    openedBeaconStatus
   } = useSelector(state => state.beaconStatus)
   const {
     alerts,
@@ -44,6 +46,16 @@ const SideWindow = ({ fromTab }) => {
       }, 500)
     }
   }, [openedSideWindowTab])
+
+  useEffect(() => {
+    if (setIsOverlayed) {
+      setIsOverlayed(!!openedBeaconStatus)
+    }
+
+    if (openedSideWindowTab === sideWindowMenu.ALERTS.code) {
+      setIsOverlayed(false)
+    }
+  }, [openedBeaconStatus, openedSideWindowTab])
 
   useEffect(() => {
     if (fromTab) {
@@ -96,7 +108,7 @@ const SideWindow = ({ fromTab }) => {
       />
       <BeaconStatusesBoardGrayOverlay
         style={beaconStatusBoardGrayOverlayStyle}
-        onClick={() => setIsOverlayed(false)}
+        onClick={() => dispatch(closeBeaconStatus())}
       />
       {
         isPreloading
@@ -117,10 +129,7 @@ const SideWindow = ({ fromTab }) => {
             }
             {
               openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code &&
-              <BeaconStatusesBoard
-                setIsOverlayed={setIsOverlayed}
-                isOverlayed={isOverlayed}
-              />
+              <BeaconStatusesBoard/>
             }
           </>
       }

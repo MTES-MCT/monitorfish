@@ -74,6 +74,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(positions).hasSize(1)
         assertThat(positions.first().internalReferenceNumber).isEqualTo("ABC000939217")
         assertThat(positions.first().vesselName).isEqualTo("FRAIS AVIS MODE")
+        assertThat(positions.first().beaconStatusId).isEqualTo(6)
     }
 
     @Test

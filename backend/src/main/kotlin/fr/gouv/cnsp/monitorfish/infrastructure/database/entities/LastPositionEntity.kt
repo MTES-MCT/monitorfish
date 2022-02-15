@@ -157,5 +157,6 @@ data class LastPositionEntity(
             riskFactor = riskFactor,
             underCharter = underCharter,
             isAtPort = isAtPort,
-            alerts = alerts)
+            alerts = alerts,
+            beaconStatusId = beaconStatusId)
 }

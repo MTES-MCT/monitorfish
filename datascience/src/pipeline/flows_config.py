@@ -11,6 +11,8 @@ from config import (
     FLOWS_LOCATION,
     LOGBOOK_FILES_GID,
     MINIMUM_CONSECUTIVE_POSITIONS,
+    MONITORFISH_HOST,
+    MONITORFISH_IP,
     MONITORFISH_VERSION,
     ROOT_DIRECTORY,
 )
@@ -161,8 +163,10 @@ for flow in flows_to_register:
 
 ################### Define flows' run config ####################
 for flow in flows_to_register:
+    host_config = {"extra_hosts": {MONITORFISH_HOST: MONITORFISH_IP}}
     if flow.name == "ERS":
         host_config = {
+            **host_config,
             "group_add": [LOGBOOK_FILES_GID],
             "mounts": [
                 Mount(
@@ -172,8 +176,6 @@ for flow in flows_to_register:
                 )
             ],
         }
-    else:
-        host_config = None
 
     flow.run_config = DockerRun(
         image=f"{DOCKER_IMAGE}:{MONITORFISH_VERSION}",

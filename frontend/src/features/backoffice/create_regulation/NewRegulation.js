@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
+import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayers'
 import {
   RegulationGeometryLine,
   RegulationLawTypeLine,

@@ -6,8 +6,7 @@ import Worker from 'worker-loader!../../workers/MonitorFishWorker'
 import { setError } from '../shared_slices/Global'
 import {
   setLayersTopicsByRegTerritory,
-  setRegulatoryLayerLawTypes,
-  setSelectedRegulatoryZone
+  setRegulatoryLayerLawTypes
 } from '../shared_slices/Regulatory'
 
 const worker = new Worker()
@@ -28,7 +27,6 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
       batch(() => {
         dispatch(setLayersTopicsByRegTerritory(layersWithoutGeometry))
         dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegTerritory))
-        dispatch(setSelectedRegulatoryZone(layersTopicsByRegTerritory))
       })
     })
     .catch(error => {

@@ -9,9 +9,7 @@ import getHealthcheck from '../domain/use_cases/getHealthcheck'
 import getVesselVoyage from '../domain/use_cases/getVesselVoyage'
 import getControls from '../domain/use_cases/getControls'
 import { VesselSidebarTab } from '../domain/entities/vessel'
-import getAllRegulatoryLayersByRegTerritory from '../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
-import { setRegulatoryLayerLawTypes } from '../domain/shared_slices/Regulatory'
-import { getRegulatoryLayersWithoutTerritory } from '../domain/entities/regulatory'
+import getAllRegulatoryLayers from '../domain/use_cases/getAllRegulatoryLayers'
 import getOperationalAlerts from '../domain/use_cases/getOperationalAlerts'
 import getAllBeaconStatuses from '../domain/use_cases/getAllBeaconStatuses'
 import openBeaconStatus from '../domain/use_cases/openBeaconStatus'
@@ -31,9 +29,9 @@ const APIWorker = () => {
   const {
     openedBeaconStatus
   } = useSelector(state => state.beaconStatus)
-  const {
+  /* const {
     layersTopicsByRegTerritory
-  } = useSelector(state => state.regulatory)
+  } = useSelector(state => state.regulatory) */
 
   const beaconStatusesInterval = useRef(null)
   const beaconStatusInterval = useRef(null)
@@ -47,7 +45,7 @@ const APIWorker = () => {
       dispatch(getAllFleetSegments())
       dispatch(showAllVessels())
       dispatch(getOperationalAlerts())
-      dispatch(getAllRegulatoryLayersByRegTerritory())
+      dispatch(getAllRegulatoryLayers())
       dispatch(getAllBeaconStatuses())
     })
 
@@ -100,12 +98,12 @@ const APIWorker = () => {
     }
   }, [sideWindowIsOpen, openedBeaconStatus])
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (layersTopicsByRegTerritory) {
       const nextRegulatoryLayersWithoutTerritory = getRegulatoryLayersWithoutTerritory(layersTopicsByRegTerritory)
       dispatch(setRegulatoryLayerLawTypes(nextRegulatoryLayersWithoutTerritory))
     }
-  }, [layersTopicsByRegTerritory, dispatch])
+  }, [layersTopicsByRegTerritory, dispatch]) */
 
   useEffect(() => {
     if (updateVesselSidebarTab) {

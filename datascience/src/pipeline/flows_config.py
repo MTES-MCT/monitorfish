@@ -163,7 +163,12 @@ for flow in flows_to_register:
 
 ################### Define flows' run config ####################
 for flow in flows_to_register:
-    host_config = {"extra_hosts": {MONITORFISH_HOST: MONITORFISH_IP}}
+    host_config = {
+        "extra_hosts": {
+            "host.docker.internal": "host-gateway",
+            MONITORFISH_HOST: MONITORFISH_IP,
+        }
+    }
     if flow.name == "ERS":
         host_config = {
             **host_config,

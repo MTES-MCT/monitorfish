@@ -49,6 +49,7 @@ ENV PYTHONPATH=/home/${USER}
 # Add source
 COPY datascience/ ./datascience
 COPY backend/src/main/resources/db/migration  ./backend/src/main/resources/db/migration
+RUN mkdir /home/${USER}/.prefect/
 
 RUN chown -R ${USER} .
 USER ${USER}

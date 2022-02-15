@@ -4,6 +4,7 @@ docker run -d -t --network=host --name monitorfish-pipeline-agent \
         -v /var/run/docker.sock:/var/run/docker.sock \
         -u monitorfish-pipeline:"$(getent group docker | cut -d: -f3)" \
         -v /opt2/monitorfish-data/ers:/opt2/monitorfish-data/ers \
+	-v "$(pwd)"/infra/configurations/prefect-agent/backend.toml:/home/monitorfish-pipeline/.prefect/backend.toml \
         --env-file datascience/.env \
         -e MONITORFISH_VERSION \
         -e LOGBOOK_FILES_GID="$(getent group di_etlmf | cut -d: -f3)" \

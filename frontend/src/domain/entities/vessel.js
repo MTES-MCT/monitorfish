@@ -72,7 +72,7 @@ export class Vessel {
       underCharter: feature.underCharter
     }
 
-    if (vesselDate.getTime() < vesselIsHidden.getTime()) {
+    if (vesselDate.getTime() < vesselIsHidden.getTime() && !feature.beaconStatusId) {
       return label
     }
 

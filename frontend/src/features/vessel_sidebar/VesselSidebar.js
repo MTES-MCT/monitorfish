@@ -7,7 +7,7 @@ import { ReactComponent as ControlsSVG } from '../icons/Picto_controles.svg'
 import { ReactComponent as ObservationsSVG } from '../icons/Picto_ciblage.svg'
 import { ReactComponent as VMSSVG } from '../icons/Icone_VMS_fiche_navire.svg'
 import VesselIdentity from './VesselIdentity'
-import { batch, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
 import VesselSummary from './VesselSummary'
 import VesselFishingActivities from './fishing_activities/VesselFishingActivities'
@@ -20,11 +20,8 @@ import { VesselSidebarTab } from '../../domain/entities/vessel'
 import HideNonSelectedVessels from './actions/hide_non_selected_vessels/HideNonSelectedVessels'
 import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
 import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFishingActivitiesOnMap'
-import { getAlertNameFromType } from '../../domain/entities/alerts'
-import { focusOnAlert } from '../../domain/shared_slices/Alert'
-import { openSideWindowTab } from '../../domain/shared_slices/Global'
-import { ReactComponent as AlertSVG } from '../icons/Icone_alertes.svg'
-import { sideWindowMenu } from '../../domain/entities/sideWindow'
+import AlertWarning from './warnings/AlertWarning'
+import BeaconStatusWarning from './warnings/BeaconStatusWarning'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -136,38 +133,8 @@ const VesselSidebar = () => {
             </Tab>
           </TabList>
           <Panel healthcheckTextWarning={healthcheckTextWarning}>
-            {
-              selectedVessel?.alerts?.length
-                ? <VesselCardAlerts
-                  onClick={() => {
-                    batch(() => {
-                      dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
-                      dispatch(focusOnAlert({
-                        name: selectedVessel?.alerts[0],
-                        internalReferenceNumber: selectedVessel.internalReferenceNumber,
-                        externalReferenceNumber: selectedVessel.externalReferenceNumber,
-                        ircs: selectedVessel.ircs
-                      }))
-                    })
-                  }}
-                  data-cy={'vessel-sidebar-alert'}
-                >
-                  <AlertIcon/>
-                  {
-                    selectedVessel?.alerts.length === 1
-                      ? getAlertNameFromType(selectedVessel?.alerts[0])
-                      : `${selectedVessel?.alerts.length} alertes`
-                  }
-                  <SeeAlert>
-                    {
-                      selectedVessel?.alerts.length === 1
-                        ? 'Voir l\'alerte dans la liste'
-                        : 'Voir les alertes dans la liste'
-                    }
-                  </SeeAlert>
-                </VesselCardAlerts>
-                : null
-            }
+            <AlertWarning selectedVessel={selectedVessel}/>
+            <BeaconStatusWarning selectedVessel={selectedVessel}/>
             {
               vesselSidebarTab === VesselSidebarTab.SUMMARY
                 ? <VesselSummary/>
@@ -195,67 +162,6 @@ const VesselSidebar = () => {
   )
 }
 
-const SeeAlert = styled.span`
-  font-size: 11px;
-  float: right;
-  margin-right: 10px;
-  text-decoration: underline;
-  text-transform: lowercase;
-  line-height: 17px;
-`
-
-const AlertIcon = styled(AlertSVG)`
-  width: 18px;
-  height: 18px;
-  margin-bottom: -4px;
-  margin-right: 5px;
-  margin-left: 7px;
-  
-  animation: ring 4s .7s ease-in-out;
-  animation-iteration-count: 1;
-  transform-origin: 50% 4px;
-  
-  @keyframes ring {
-    0% { transform: rotate(0); }
-    1% { transform: rotate(30deg); }
-    3% { transform: rotate(-28deg); }
-    5% { transform: rotate(34deg); }
-    7% { transform: rotate(-32deg); }
-    9% { transform: rotate(30deg); }
-    11% { transform: rotate(-28deg); }
-    13% { transform: rotate(26deg); }
-    15% { transform: rotate(-24deg); }
-    17% { transform: rotate(22deg); }
-    19% { transform: rotate(-20deg); }
-    21% { transform: rotate(18deg); }
-    23% { transform: rotate(-16deg); }
-    25% { transform: rotate(14deg); }
-    27% { transform: rotate(-12deg); }
-    29% { transform: rotate(10deg); }
-    31% { transform: rotate(-8deg); }
-    33% { transform: rotate(6deg); }
-    35% { transform: rotate(-4deg); }
-    37% { transform: rotate(2deg); }
-    39% { transform: rotate(-1deg); }
-    41% { transform: rotate(1deg); }
-    43% { transform: rotate(0); }
-    100% { transform: rotate(0); }
-  }
-`
-
-const VesselCardAlerts = styled.div`
-  cursor: pointer;
-  background: #E1000F;
-  font-weight: 500;
-  font-size: 13px;
-  color: #FFFFFF;
-  text-transform: uppercase;
-  width: 100%;
-  text-align: left;
-  padding: 5px 0;
-  margin-top: 1px;
-`
-
 const GrayOverlay = styled.div`
   position: absolute;
   height: 100%;
@@ -278,7 +184,7 @@ const GrayOverlay = styled.div`
 const Panel = styled.div`
   padding: 0;
   background: ${COLORS.gainsboro};
-  max-height: ${props => props.healthcheckTextWarning ? 77 : 82}vh;
+  max-height: ${props => props.healthcheckTextWarning ? 80 : 82}vh;
 `
 
 const Tab = styled.button`

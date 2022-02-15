@@ -6,9 +6,8 @@ import { setOpenedBeaconStatus } from '../shared_slices/BeaconStatus'
  * Open a single beacon status
  * @function setOpenedBeaconStatus
  * @param {BeaconStatusWithDetails} beaconStatus - the beacon status to open
- * @param {boolean} fromCron - true if called from cron
  */
-const openBeaconStatus = (beaconStatus, fromCron) => (dispatch, getState) => {
+const openBeaconStatus = (beaconStatus) => (dispatch, getState) => {
   const previousBeaconStatus = getState().beaconStatus.openedBeaconStatus
   dispatch(setOpenedBeaconStatus(beaconStatus))
 

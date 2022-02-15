@@ -76,35 +76,35 @@ export const vesselStatuses = [
   {
     label: 'Navire à quai',
     value: 'AT_PORT',
-    color: '#F4DEAF',
+    color: COLORS.wheat,
     textColor: COLORS.charcoal,
     icon: <VesselStatusAtPort style={iconStyle}/>
   },
   {
     label: 'Navire en mer',
     value: 'AT_SEA',
-    color: '#9ED7D9',
+    color: COLORS.powderBlue,
     textColor: COLORS.charcoal,
     icon: <VesselStatusAtSea style={iconStyle}/>
   },
   {
     label: 'Sans nouvelles',
     value: 'NO_NEWS',
-    color: '#F7BA9E',
+    color: COLORS.tumbleweed,
     textColor: COLORS.charcoal,
     icon: <VesselStatusNoNews style={iconStyle}/>
   },
   {
     label: 'En arrêt technique',
     value: 'TECHNICAL_STOP',
-    color: '#E8CA46',
+    color: COLORS.vegasGold,
     textColor: COLORS.charcoal,
     icon: <VesselStatusTechnicalStop style={iconStyle}/>
   },
   {
     label: 'Activité détectée',
     value: 'ACTIVITY_DETECTED',
-    color: '#C41812',
+    color: COLORS.maximumRed,
     textColor: COLORS.white,
     icon: <VesselStatusActivityDetected style={iconStyle}/>
   }

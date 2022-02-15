@@ -57,7 +57,11 @@ transifex-client = "^0.14.3"
 prefect = {version = "^0.15.11", extras = ["viz"]}
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = [
+    "poetry-core>=1.0.0",
+    "setuptools>=42",
+    "wheel"
+]
 build-backend = "poetry.core.masonry.api"
 
 [tool.isort]

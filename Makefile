@@ -68,7 +68,7 @@ run-pipeline-flows-int:
 stop-pipeline-server:
 	infra/remote/data-pipeline/stop-server.sh
 stop-pipeline-flows:
-	docker container stop monitorfish-pipeline-flows; docker container rm monitorfish-pipeline-flows;
+	docker container stop monitorfish-pipeline-agent; docker container rm monitorfish-pipeline-agent;
 
 # DATA commands
 install-pipeline:

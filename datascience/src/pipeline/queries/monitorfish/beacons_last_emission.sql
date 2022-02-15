@@ -11,4 +11,4 @@ SELECT
 FROM last_positions
 WHERE
     -- Flag_states whose emission malfunctions are monitored
-    flag_state IN ('FR', 'PF', 'VE', NULL)
+    flag_state = 'FR'

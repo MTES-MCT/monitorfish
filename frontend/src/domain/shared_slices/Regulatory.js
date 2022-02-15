@@ -7,6 +7,34 @@ import { getLocalStorageState } from '../../utils'
 const RegulatoryReducer = null
 /* eslint-enable */
 
+const pushRegulatoryZoneInTopicList = (selectedRegulatoryLayers, regulatoryZone) => {
+  if (Object.keys(selectedRegulatoryLayers).includes(regulatoryZone.topic)) {
+    const nextRegZoneTopic = selectedRegulatoryLayers[regulatoryZone.topic]
+    nextRegZoneTopic.push(regulatoryZone)
+    selectedRegulatoryLayers[regulatoryZone.topic] = nextRegZoneTopic
+  } else {
+    selectedRegulatoryLayers[regulatoryZone.topic] = [regulatoryZone]
+  }
+}
+
+const updateSelectedRegulatoryLayers = (regulatoryLayers, regulatoryZoneId, selectedRegulatoryLayers, selectedRegulatoryLayerIds) => {
+  const nextSelectedRegulatoryLayers = { ...selectedRegulatoryLayers }
+  const nextSelectedRegulatoryLayerIds = [...selectedRegulatoryLayerIds]
+  const nextRegulatoryZone = regulatoryLayers.find(zone => zone.id === regulatoryZoneId)
+  if (nextRegulatoryZone) {
+    if (nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
+      pushRegulatoryZoneInTopicList(nextSelectedRegulatoryLayers, nextRegulatoryZone)
+      nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
+      return { selectedRegulatoryLayers: nextSelectedRegulatoryLayers, selectedRegulatoryLayerIds: nextSelectedRegulatoryLayerIds }
+    } else if (nextRegulatoryZone.nextId) {
+      return updateSelectedRegulatoryLayers(regulatoryLayers, nextRegulatoryZone.nextId, selectedRegulatoryLayers, selectedRegulatoryLayerIds)
+    }
+    return null
+  } else {
+    return null
+  }
+}
+
 const regulatorySlice = createSlice({
   name: 'regulatory',
   initialState: {
@@ -179,34 +207,14 @@ const regulatorySlice = createSlice({
       state.regulatoryLayerLawTypes = action.payload
       if (state.regulatoryLayers && state.regulatoryLayers.length) {
         const selectedRegulatoryLayers = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
-        const nextSelectedRegulatoryLayers = {}
-        const nextSelectedRegulatoryLayerIds = []
+        let nextSelectedRegulatoryLayers = {}
+        let nextSelectedRegulatoryLayerIds = []
         selectedRegulatoryLayers
           .map(selectedRegulatoryZoneId => {
-            let nextRegulatoryZone = state.regulatoryLayers.find(zone => zone.id === selectedRegulatoryZoneId)
-            if (nextRegulatoryZone && nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
-              if (Object.keys(nextSelectedRegulatoryLayers).includes(nextRegulatoryZone.topic)) {
-                const nextRegZoneTopic = nextSelectedRegulatoryLayers[nextRegulatoryZone.topic]
-                nextRegZoneTopic.push(nextRegulatoryZone)
-                nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = nextRegZoneTopic
-              } else {
-                nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = [nextRegulatoryZone]
-              }
-              nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
-              return null
-            } else if (nextRegulatoryZone && nextRegulatoryZone.nextId) {
-              nextRegulatoryZone = state.regulatoryLayers.find(zone => zone.id === nextRegulatoryZone.nextId)
-              if (nextRegulatoryZone && nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
-                if (Object.keys(nextSelectedRegulatoryLayers).includes(nextRegulatoryZone.topic)) {
-                  const nextRegZoneTopic = nextSelectedRegulatoryLayers[nextRegulatoryZone.topic]
-                  nextRegZoneTopic.push(nextRegulatoryZone)
-                  nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = nextRegZoneTopic
-                } else {
-                  nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = [nextRegulatoryZone]
-                }
-                nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
-                return null
-              }
+            const updatedObjects = updateSelectedRegulatoryLayers(state.regulatoryLayers, selectedRegulatoryZoneId, nextSelectedRegulatoryLayers, nextSelectedRegulatoryLayerIds)
+            if (updatedObjects.selectedRegulatoryLayers && updatedObjects.selectedRegulatoryLayerIds) {
+              nextSelectedRegulatoryLayers = updatedObjects.selectedRegulatoryLayers
+              nextSelectedRegulatoryLayerIds = updatedObjects.selectedRegulatoryLayerIds
             }
             return null
           })

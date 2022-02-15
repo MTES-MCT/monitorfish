@@ -190,7 +190,7 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
 
   return fetch(`${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
     // pendant le rebase j'ai pris les changements de ma branche ce qui supprime la geometry qui était sur master ?
-    `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,region,next_id`)
+    `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,region,geometry,next_id`)
     .then(response => {
       if (response.status === OK) {
         return response.json()

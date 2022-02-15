@@ -279,13 +279,14 @@ export const INITIAL_REG_GEARS_VALUES = {
   derogation: undefined
 }
 
-export const GEARS_CATEGORES_WITH_MESH = [
+export const GEARS_CATEGORIES_WITH_MESH = [
   'Chaluts',
   'Sennes traînantes',
   'Filets tournants',
   'Filets soulevés',
   'Filets maillants et filets emmêlants'
 ]
+
 export const emptyRegulatoryFeatureObject = {
   layer_name: null,
   law_type: null,

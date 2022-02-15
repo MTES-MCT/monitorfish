@@ -9,7 +9,7 @@ import { COLORS } from '../../../../constants/constants'
 import { Radio, RadioGroup, MultiCascader } from 'rsuite'
 import GearLine from './GearLine'
 import getAllGearCodes from '../../../../domain/use_cases/getAllGearCodes'
-import { GEARS_CATEGORES_WITH_MESH, prepareCategoriesAndGearsToDisplay } from '../../../../domain/entities/regulatory'
+import { GEARS_CATEGORIES_WITH_MESH, prepareCategoriesAndGearsToDisplay } from '../../../../domain/entities/regulatory'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
 import { RedCircle, GreenCircle } from '../../../commonStyles/Circle.style'
@@ -68,22 +68,6 @@ const RegulatoryGearForm = (props) => {
     }
   }, [categoriesToGears])
 
-  useEffect(() => {
-    if (selectedCategoriesAndGears?.length > 0) {
-      const categories = []
-      const gears = []
-      selectedCategoriesAndGears.forEach(value => {
-        if (isCategory(value)) {
-          categories.push(value)
-        } else {
-          gears.push(value)
-        }
-      })
-      set(REGULATORY_GEAR_KEYS.REGULATED_GEARS, gears)
-      set(REGULATORY_GEAR_KEYS.REGULATED_GEAR_CATEGORIES, categories)
-    }
-  }, [selectedCategoriesAndGears])
-
   const onCheckboxChange = (option, checked) => {
     let nextSelectedCategoriesAndGears = selectedCategoriesAndGears ? [...selectedCategoriesAndGears] : []
     let listToConcat = []
@@ -112,11 +96,11 @@ const RegulatoryGearForm = (props) => {
   }
 
   const set = useCallback((key, value) => {
-    const obj = {
+    const nextRegulatoryGears = {
       ...regulatoryGears,
       [key]: value
     }
-    setRegulatoryGears(obj)
+    setRegulatoryGears(nextRegulatoryGears)
   }, [regulatoryGears, setRegulatoryGears])
 
   const isCategory = useCallback(value => {
@@ -140,11 +124,13 @@ const RegulatoryGearForm = (props) => {
           } else {
             nextRegulatedGearCategories[value] = { name: value }
           }
+
           if (groupsToCategories[1].includes(value)) {
             towedGearCategories += 1
           } else if (groupsToCategories[2].includes(value)) {
             passiveGearCategories += 1
           }
+
           categories += 1
         } else {
           if (currentRegulatedGears.includes(value)) {
@@ -155,7 +141,7 @@ const RegulatoryGearForm = (props) => {
         }
       })
 
-      const obj = {
+      const nextRegulatedGearsObject = {
         ...regulatoryGears,
         [REGULATORY_GEAR_KEYS.ALL_GEARS]: categories === Object.keys(categoriesToGears).length,
         [REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS]: towedGearCategories === groupsToCategories[1].length,
@@ -164,7 +150,7 @@ const RegulatoryGearForm = (props) => {
         [REGULATORY_GEAR_KEYS.REGULATED_GEAR_CATEGORIES]: nextRegulatedGearCategories
       }
 
-      setRegulatoryGears(obj)
+      setRegulatoryGears(nextRegulatedGearsObject)
     }
   }
 
@@ -278,10 +264,10 @@ const RegulatoryGearForm = (props) => {
         {
           Object.keys(regulatedGears).map((gearCode, index) => {
             return <GearLine
-                key={index}
+                key={gearCode + index}
                 id={index}
                 label={regulatedGears[gearCode].name}
-                allowMesh={GEARS_CATEGORES_WITH_MESH.includes(regulatedGears[gearCode].category)}
+                allowMesh={GEARS_CATEGORIES_WITH_MESH.includes(regulatedGears[gearCode].category)}
                 code={gearCode}
                 onChange={(key, value) => setRegulatedGear(key, value, gearCode)}
                 meshType={regulatedGears[gearCode].meshType}
@@ -293,10 +279,10 @@ const RegulatoryGearForm = (props) => {
         {
           Object.keys(regulatedGearCategories).map((category, index) => {
             return <GearLine
-              key={index}
+              key={category + index}
               id={index}
               label={category}
-              allowMesh={GEARS_CATEGORES_WITH_MESH.includes(category)}
+              allowMesh={GEARS_CATEGORIES_WITH_MESH.includes(category)}
               onChange={(key, value) => setRegulatedGearCategory(key, value, category)}
               meshType={regulatedGearCategories[category].meshType}
               mesh={regulatedGearCategories[category].mesh}

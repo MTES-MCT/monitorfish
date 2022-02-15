@@ -11,8 +11,6 @@ from config import (
     FLOWS_LOCATION,
     LOGBOOK_FILES_GID,
     MINIMUM_CONSECUTIVE_POSITIONS,
-    MONITORFISH_HOST,
-    MONITORFISH_IP,
     MONITORFISH_VERSION,
     ROOT_DIRECTORY,
 )
@@ -163,10 +161,9 @@ for flow in flows_to_register:
 
 ################### Define flows' run config ####################
 for flow in flows_to_register:
-    host_config = {"extra_hosts": {MONITORFISH_HOST: MONITORFISH_IP}}
+    host_config = None
     if flow.name == "ERS":
         host_config = {
-            **host_config,
             "group_add": [LOGBOOK_FILES_GID],
             "mounts": [
                 Mount(

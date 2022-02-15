@@ -17,7 +17,7 @@ context('Beacon statuses', () => {
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-statuses-card"]')
-      .should('have.length', 2)
+      .should('have.length', 3)
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(2)
       .find('*[data-cy="side-window-beacon-statuses-card"]')
@@ -38,7 +38,7 @@ context('Beacon statuses', () => {
       })
     cy.get('*[data-cy="side-window-beacon-statuses-columns-INITIAL_ENCOUNTER"]').children()
       .find('*[data-cy="side-window-beacon-statuses-card"]')
-      .should('have.length', 1)
+      .should('have.length', 2)
     cy.get('*[data-cy="side-window-beacon-statuses-columns-RELAUNCH_REQUEST"]').children()
       .find('*[data-cy="side-window-beacon-statuses-card"]')
       .should('have.length', 2)
@@ -47,14 +47,14 @@ context('Beacon statuses', () => {
   it('Board Should be initialized with the beacon statuses', () => {
     // Then
     cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
-    cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('4')
+    cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('5')
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children().should('have.length', 7)
 
     // Count the number of cards in the columns' header
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-statuses-header"]')
-      .contains('1')
+      .contains('2')
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(1)
       .find('*[data-cy="side-window-beacon-statuses-header"]')
@@ -68,7 +68,7 @@ context('Beacon statuses', () => {
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-statuses-card"]')
-      .should('have.length', 1)
+      .should('have.length', 2)
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(1)
       .find('*[data-cy="side-window-beacon-statuses-card"]')

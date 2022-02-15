@@ -22,7 +22,7 @@ export const COLORS = {
   textWhite: '#EDEDF5',
   squareBorder: '#E0E0E0',
   grayVesselHidden: '#B2B2B2',
-  red: '#E1000F',
+  maximumRed: '#E1000F',
   blue: '#0A18DF',
   vesselLightColor: '#cacce0',
   vesselColor: '#3B4559',
@@ -30,7 +30,11 @@ export const COLORS = {
   trackTransit: '#1C9B7B',
   overlayShadow: '#7077851A',
   yellow: '#F6D012',
-  titleBottomBorder: '#E0E0E0'
+  titleBottomBorder: '#E0E0E0',
+  powderBlue: '#9ED7D9',
+  wheat: '#edd6a4',
+  tumbleweed: '#f7ba9e',
+  vegasGold: '#E8CA46'
 }
 
 export const HIT_PIXEL_TO_TOLERANCE = 3

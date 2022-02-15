@@ -38,7 +38,7 @@ const ResumeBoxText = styled.span`
 `
 
 const ResumeBoxStrongText = styled.span`
-    background: ${props => props.isRed ? COLORS.red : COLORS.charcoal};
+    background: ${props => props.isRed ? COLORS.maximumRed : COLORS.charcoal};
     color: ${COLORS.gainsboro};
     border-radius: 11px;
     height: 16px;

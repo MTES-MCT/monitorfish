@@ -13,7 +13,6 @@ import getAllBeaconStatuses from '../../../domain/use_cases/getAllBeaconStatuses
 import { COLORS } from '../../../constants/constants'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
-import { closeBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
 import { setError } from '../../../domain/shared_slices/Global'
 import BeaconStatusDetails from './BeaconStatusDetails'
 
@@ -34,7 +33,7 @@ const getMemoizedBeaconStatusesByStage = createSelector(
 
 const baseUrl = window.location.origin
 
-const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
+const BeaconStatusesBoard = () => {
   const dispatch = useDispatch()
   const {
     openedBeaconStatus
@@ -67,18 +66,6 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
   useEffect(() => {
     dispatch(getAllBeaconStatuses())
   }, [])
-
-  useEffect(() => {
-    if (setIsOverlayed) {
-      setIsOverlayed(!!openedBeaconStatus)
-    }
-  }, [openedBeaconStatus])
-
-  useEffect(() => {
-    if (!isOverlayed && openedBeaconStatus) {
-      dispatch(closeBeaconStatus())
-    }
-  }, [isOverlayed])
 
   useEffect(() => {
     const timeoutHandle = setTimeout(() => {

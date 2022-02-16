@@ -87,6 +87,12 @@ context('Beacon statuses', () => {
 
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(2)
+      .find('*[data-cy="side-window-vessel-id"]')
+      .first()
+      .contains('#1 - ouverte il y a 6 jours')
+
+    cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
+      .eq(2)
       .find('*[data-cy="side-window-beacon-statuses-card"]')
       .first()
       .contains('Prioritaire')

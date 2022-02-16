@@ -29,9 +29,6 @@ const APIWorker = () => {
   const {
     openedBeaconStatus
   } = useSelector(state => state.beaconStatus)
-  /* const {
-    layersTopicsByRegTerritory
-  } = useSelector(state => state.regulatory) */
 
   const beaconStatusesInterval = useRef(null)
   const beaconStatusInterval = useRef(null)
@@ -97,13 +94,6 @@ const APIWorker = () => {
       clearInterval(beaconStatusInterval?.current)
     }
   }, [sideWindowIsOpen, openedBeaconStatus])
-
-  /* useEffect(() => {
-    if (layersTopicsByRegTerritory) {
-      const nextRegulatoryLayersWithoutTerritory = getRegulatoryLayersWithoutTerritory(layersTopicsByRegTerritory)
-      dispatch(setRegulatoryLayerLawTypes(nextRegulatoryLayersWithoutTerritory))
-    }
-  }, [layersTopicsByRegTerritory, dispatch]) */
 
   useEffect(() => {
     if (updateVesselSidebarTab) {

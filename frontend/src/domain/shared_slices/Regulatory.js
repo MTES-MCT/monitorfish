@@ -175,13 +175,13 @@ const regulatorySlice = createSlice({
       state.regulatoryLayerLawTypes = getRegulatoryLayersWithoutTerritory(action.payload)
     },
     setLayersTopicsByRegTerritory (state, action) {
-      if (action.payload.layersTopicsByRegulatoryTerritory) {
-        state.layersTopicsByRegTerritory = action.payload.layersTopicsByRegulatoryTerritory
+      if (action.payload) {
+        state.layersTopicsByRegTerritory = action.payload
       }
     },
     setSelectedRegulatoryZone (state, action) {
-      if (action.payload.layersWithoutGeometry && action.payload.layersWithoutGeometry.length) {
-        const regulatoryLayers = action.payload.layersWithoutGeometry
+      if (action.payload && action.payload.length) {
+        const regulatoryLayers = action.payload
         const selectedRegulatoryLayers = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
         const nextSelectedRegulatoryLayers = {}
         const nextSelectedRegulatoryLayerIds = []

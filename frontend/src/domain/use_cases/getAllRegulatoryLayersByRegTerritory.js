@@ -23,12 +23,12 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
     .then(response => {
       const {
         layersWithoutGeometry,
-        layersTopicsByRegTerritory
+        layersTopicsByRegulatoryTerritory
       } = response
       batch(() => {
-        dispatch(setLayersTopicsByRegTerritory(layersWithoutGeometry))
-        dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegTerritory))
-        dispatch(setSelectedRegulatoryZone(layersTopicsByRegTerritory))
+        dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
+        dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
+        dispatch(setSelectedRegulatoryZone(layersWithoutGeometry))
       })
     })
     .catch(error => {

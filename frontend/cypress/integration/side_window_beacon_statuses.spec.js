@@ -86,10 +86,16 @@ context('Beacon statuses', () => {
       .contains('PHENOMENE')
 
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
+      .eq(0)
+      .find('*[data-cy="side-window-vessel-id"]')
+      .first()
+      .contains('#3 - ouverte il y a 2 sem.')
+
+    cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(2)
       .find('*[data-cy="side-window-vessel-id"]')
       .first()
-      .contains('#1 - ouverte il y a 6 jours')
+      .contains('#1 - modifiée à l\'instant')
 
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(2)
@@ -194,7 +200,8 @@ context('Beacon statuses', () => {
 
     // Show vessel on map
     cy.intercept('GET', 'bff/v1/vessels/find?internalReferenceNumber=FAK000999999' +
-      '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*').as('showVesselPositionsOnMap')
+      '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER' +
+      '&trackDepth=CUSTOM&afterDateTime=2022-02-08T00:00:00.000Z&beforeDateTime=2022-02-09T23:59:59.000Z').as('showVesselPositionsOnMap')
     cy.intercept('GET', 'bff/v1/ers/find?internalReferenceNumber=FAK000999999' +
       '&externalReferenceNumber=DONTSINK&IRCS=CALLME&voyageRequest=LAST&tripNumber=').as('showVesselVoyageOnMap')
     cy.get('*[data-cy="side-window-beacon-statuses-detail-show-vessel"]').click()

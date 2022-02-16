@@ -36,6 +36,7 @@ const SideWindow = ({ fromTab }) => {
     ? AlertsSubMenu.MEMN
     : BeaconStatusesSubMenu.MALFUNCTIONING)
   const [isOverlayed, setIsOverlayed] = useState(false)
+  const [subMenuIsFixed, setSubMenuIsFixed] = useState(false)
 
   useEffect(() => {
     if (openedSideWindowTab) {
@@ -105,6 +106,8 @@ const SideWindow = ({ fromTab }) => {
         selectedMenu={openedSideWindowTab}
         selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
+        fixed={subMenuIsFixed}
+        setIsFixed={setSubMenuIsFixed}
       />
       <BeaconStatusesBoardGrayOverlay
         style={beaconStatusBoardGrayOverlayStyle}
@@ -119,7 +122,7 @@ const SideWindow = ({ fromTab }) => {
               size={100}/>
             <Text data-cy={'first-loader'}>Chargement...</Text>
           </Loading>
-          : <>
+          : <Content style={contentStyle(subMenuIsFixed)}>
             {
               openedSideWindowTab === sideWindowMenu.ALERTS.code &&
               <Alerts
@@ -131,13 +134,18 @@ const SideWindow = ({ fromTab }) => {
               openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code &&
               <BeaconStatusesBoard/>
             }
-          </>
+          </Content>
       }
     </Wrapper>
     : null
   }
   </>
 }
+
+const Content = styled.div``
+const contentStyle = fixed => ({
+  marginLeft: fixed ? 0 : 30
+})
 
 const BeaconStatusesBoardGrayOverlay = styled.div``
 

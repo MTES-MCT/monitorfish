@@ -62,6 +62,16 @@ describe('coordinates', () => {
     expect(coordinates[1]).toEqual('017° 24′ 52″ W')
   })
 
+  it('getCoordinates Should get DMD with coordinates for a dummy lon/lat with seconds under 100', async () => {
+    // When
+    const coordinates = getCoordinates([48.883917, -5.563333], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_DECIMALS)
+
+    // Then
+    expect(coordinates).not.toBeUndefined()
+    expect(coordinates[0]).toEqual('05° 33.799′ S')
+    expect(coordinates[1]).toEqual('048° 53.035′ E')
+  })
+
   it('getCoordinates Should get DMD with coordinates for another dummy lon/lat', async () => {
     // When
     const coordinates = getCoordinates([-17.4144, -2.986], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_DECIMALS)

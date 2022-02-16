@@ -12,7 +12,7 @@ import {
 const worker = new Worker()
 const MonitorFishWorker = Comlink.wrap(worker)
 
-const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) => {
+const getAllRegulatoryLayers = () => async (dispatch, getState) => {
   const worker = await new MonitorFishWorker()
 
   return getAllRegulatoryLayersFromAPI(getState().global.inBackofficeMode)
@@ -21,12 +21,11 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
     })
     .then(response => {
       const {
-        layersWithoutGeometry,
-        layersTopicsByRegTerritory
+        layersTopicsByRegulatoryTerritory
       } = response
       batch(() => {
-        dispatch(setLayersTopicsByRegTerritory(layersWithoutGeometry))
-        dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegTerritory))
+        dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
+        dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
       })
     })
     .catch(error => {
@@ -35,4 +34,4 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
     })
 }
 
-export default getAllRegulatoryLayersByRegTerritory
+export default getAllRegulatoryLayers

@@ -33,7 +33,6 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="vessel-card-mmsi"]').contains('048713984')
     cy.get('*[data-cy^="vessel-card-ircs"]').contains('AQIK')
     cy.get('*[data-cy^="vessel-card-alert"]').contains('3 milles - Chaluts')
-    cy.get('*[data-cy^="vessel-card-beacon-status"]').contains('NON-ÉMISSION VMS')
   })
 
   it('Last position card with Beacon status Should be seen on the map on pointer move', () => {

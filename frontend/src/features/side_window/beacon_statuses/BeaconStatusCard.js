@@ -36,7 +36,10 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl, hori
   >
     <Header style={headerStyle}>
       <Row style={rowStyle(true)}>
-        <Id style={idStyle}>
+        <Id
+          data-cy={'side-window-vessel-id'}
+          style={idStyle}
+        >
           #{beaconStatus?.id} - {' '}{getBeaconCreationOrModificationDate(beaconStatus)}
         </Id>
         <ShowIcon

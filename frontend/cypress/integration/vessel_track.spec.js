@@ -10,7 +10,7 @@ context('Vessels Track', () => {
     cy.url().should('include', '@-82')
   })
 
-  it('Last position card Should be seen on the map on pointer move', () => {
+  it('Last position card with Alert Should be seen on the map on pointer move', () => {
     // When we move the pointer cursor (from one point to another to emit an event)
     cy.get('.vessels').trigger('pointermove',  {  clientX: 460, clientY: 480, pointerId: 1, force: true })
     cy.get('.vessels').trigger('pointermove',  {  clientX: 904, clientY: 305, pointerId: 1, force: true })
@@ -33,6 +33,25 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="vessel-card-mmsi"]').contains('048713984')
     cy.get('*[data-cy^="vessel-card-ircs"]').contains('AQIK')
     cy.get('*[data-cy^="vessel-card-alert"]').contains('3 milles - Chaluts')
+    cy.get('*[data-cy^="vessel-card-beacon-status"]').contains('NON-ÉMISSION VMS')
+  })
+
+  it('Last position card with Beacon status Should be seen on the map on pointer move', () => {
+    // When we move the pointer cursor (from one point to another to emit an event)
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 460, clientY: 480, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 980, clientY: 785, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 981, clientY: 787, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 910, clientY: 780, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 982, clientY: 787, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 980, clientY: 785, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 979, clientY: 785, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 985, clientY: 787, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 985, clientY: 787, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove',  {  clientX: 984, clientY: 785, pointerId: 1, force: true })
+
+    // Then
+    cy.get('*[data-cy^="vessel-card-name"]').contains('FRAIS AVIS MODE')
+    cy.get('*[data-cy^="vessel-card-beacon-status"]').contains('NON-ÉMISSION VMS')
   })
 
   it('Position card Should be seen on the map on vessel track pointer move', () => {

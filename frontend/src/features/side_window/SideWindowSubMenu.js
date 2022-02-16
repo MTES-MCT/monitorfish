@@ -14,19 +14,23 @@ import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.s
  * @param setSelectedSubMenu
  * @param beaconStatuses
  * @param alerts
+ * @param fixed
+ * @param setIsFixed
  * @return {JSX.Element}
  * @constructor
  */
-const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, beaconStatuses, alerts }) => {
+const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, beaconStatuses, alerts, fixed, setIsFixed }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return <Menu
-    style={menuStyle(isOpen)}
+    style={menuStyle(isOpen, fixed)}
+    onMouseEnter={() => setIsOpen(true)}
+    onMouseLeave={() => !fixed && setIsOpen(false)}
   >
     <Chevron
       data-cy={'side-window-sub-menu-trigger'}
       style={chevronStyle(isOpen)}
-      onClick={() => setIsOpen(!isOpen)}
+      onClick={() => setIsFixed(!fixed)}
     >
       <ChevronIcon style={chevronIconStyle(isOpen)}/>
     </Chevron>
@@ -126,7 +130,7 @@ const chevronIconStyle = isOpen => ({
 })
 
 const Menu = styled.div``
-const menuStyle = (isOpen) => ({
+const menuStyle = (isOpen, fixed) => ({
   width: isOpen ? 200 : 30,
   height: '100vh',
   background: COLORS.gainsboro,
@@ -135,7 +139,10 @@ const menuStyle = (isOpen) => ({
   fontWeight: 500,
   color: COLORS.slateGray,
   padding: '14px 0',
-  transition: 'all 0.5s'
+  transition: 'all 0.5s',
+  position: fixed ? 'unset' : 'absolute',
+  marginLeft: fixed ? 0 : 65,
+  zIndex: 999
 })
 
 const Title = styled.span``
@@ -145,7 +152,8 @@ const titleStyle = isOpen => ({
   paddingBottom: 11,
   paddingLeft: 20,
   borderBottom: `1px solid ${COLORS.lightGray}`,
-  visibility: isOpen ? 'visible' : 'hidden'
+  opacity: isOpen ? 1 : 0,
+  transition: 'opacity 0.5s ease'
 })
 
 export default SideWindowSubMenu

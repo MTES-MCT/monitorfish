@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch, batch } from 'react-redux'
 import styled from 'styled-components'
 
@@ -7,40 +7,48 @@ import {
   setIsModalOpen,
   setUpcomingRegulatoryTextListCheckedMap,
   setSaveUpcomingRegulation,
-  setUpcomingRegulation
+  setUpcomingRegulatoryText,
+  setProcessingRegulationByKey
 } from '../../Regulation.slice'
 import RegulatoryTextSection from './RegulatoryTextSection'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import { FooterButton } from '../../../commonStyles/Backoffice.style'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise_clair.svg'
-import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../../domain/entities/regulatory'
+import {
+  REGULATORY_TEXT_SOURCE,
+  INITIAL_UPCOMING_REG_REFERENCE,
+  REGULATORY_REFERENCE_KEYS
+} from '../../../../domain/entities/regulatory'
 
 const UpcomingRegulationModal = () => {
   const dispatch = useDispatch()
   const {
     isModalOpen,
-    upcomingRegulation = { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] },
     upcomingRegulatoryTextCheckedMap,
-    saveUpcomingRegulation
+    saveUpcomingRegulation,
+    upcomingRegulatoryText
   } = useSelector(state => state.regulation)
-
-  const [regulatoryTextList, setRegulatoryTextList] = useState(upcomingRegulation?.regulatoryTextList || [DEFAULT_REGULATORY_TEXT])
 
   const onAddUpcomingRegulation = () => {
     dispatch(setSaveUpcomingRegulation(true))
   }
 
+  const setRegulatoryTextList = (regulatoryTextList) => {
+    dispatch(setUpcomingRegulatoryText({ regulatoryTextList }))
+  }
+
   useEffect(() => {
-    if (upcomingRegulatoryTextCheckedMap && saveUpcomingRegulation) {
+    if (upcomingRegulatoryTextCheckedMap) {
       const regulatoryTextCheckList = Object.values(upcomingRegulatoryTextCheckedMap)
-      const allTextsHaveBeenChecked = regulatoryTextCheckList.length > 0 && regulatoryTextCheckList.length === regulatoryTextList.length
+      const allTextsHaveBeenChecked = regulatoryTextCheckList.length > 0 &&
+        regulatoryTextCheckList.length === upcomingRegulatoryText.regulatoryTextList.length
       if (allTextsHaveBeenChecked) {
         const allTextsHaveBeenFilled = !regulatoryTextCheckList.includes(false)
         if (allTextsHaveBeenFilled) {
-          const newUpcomingRegulation = { ...(upcomingRegulation || { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }) }
-          newUpcomingRegulation.regulatoryTextList = [...regulatoryTextList]
+          const newUpcomingRegulation = { ...(upcomingRegulatoryText || { regulatoryTextList: [] }) }
+          newUpcomingRegulation.regulatoryTextList = [...upcomingRegulatoryText.regulatoryTextList]
           batch(() => {
-            dispatch(setUpcomingRegulation(newUpcomingRegulation))
+            dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.UPCOMING_REGULATORY_REFERENCES, value: newUpcomingRegulation }))
             dispatch(setIsModalOpen(false))
           })
         }
@@ -50,7 +58,7 @@ const UpcomingRegulationModal = () => {
         })
       }
     }
-  }, [saveUpcomingRegulation, upcomingRegulatoryTextCheckedMap, regulatoryTextList])
+  }, [saveUpcomingRegulation, upcomingRegulatoryTextCheckedMap, upcomingRegulatoryText])
 
   return (<RegulationModal isOpen={isModalOpen}>
     <ModalContent>
@@ -61,7 +69,7 @@ const UpcomingRegulationModal = () => {
         </ModalTitle>
         <Section>
           <RegulatoryTextSection
-            regulatoryTextList={regulatoryTextList}
+            regulatoryTextList={upcomingRegulatoryText.regulatoryTextList}
             setRegulatoryTextList={setRegulatoryTextList}
             source={REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION}
             saveForm={saveUpcomingRegulation}
@@ -80,7 +88,10 @@ const UpcomingRegulationModal = () => {
           <CancelButton
             disabled={false}
             isLast={false}
-            onClick={() => dispatch(setIsModalOpen(false))}
+            onClick={() => {
+              dispatch(setUpcomingRegulatoryText(INITIAL_UPCOMING_REG_REFERENCE))
+              dispatch(setIsModalOpen(false))
+            }}
           >
             Annuler
           </CancelButton>

@@ -4,13 +4,20 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { CancelButton } from '../../../commonStyles/Buttons.style'
 import { Link } from '../../../commonStyles/Backoffice.style'
-import { setIsModalOpen, setUpcomingRegulation } from '../../Regulation.slice'
+import { setIsModalOpen, setProcessingRegulationByKey } from '../../Regulation.slice'
 import InfoPoint from '../InfoPoint'
+import { INITIAL_UPCOMING_REG_REFERENCE, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const UpcomingRegulationSection = ({ upcomingRegulation }) => {
   const dispatch = useDispatch()
+
+  const onCancelClicked = () => {
+    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.UPCOMING_REGULATORY_REFERENCES, value: INITIAL_UPCOMING_REG_REFERENCE }))
+  }
+
   const DATE_STRING_OPTIONS = { year: 'numeric', month: '2-digit', day: '2-digit' }
   return (
+    upcomingRegulation?.regulatoryTextList?.length > 0 &&
       <>
       <Container>
         <YellowRectangle />
@@ -44,7 +51,7 @@ const UpcomingRegulationSection = ({ upcomingRegulation }) => {
           <CancelButton
             disabled={false}
             isLast={false}
-            onClick={() => dispatch(setUpcomingRegulation(undefined))}
+            onClick={onCancelClicked}
           >
             Supprimer la réglementation
           </CancelButton></Row>

@@ -35,7 +35,7 @@ class MonitorFishWorker {
   }
 
   #getGeometryIdFromFeatureId = feature => {
-    return feature.vesselProperties?.id || feature.id.split('.')[1]
+    return feature.properties?.id || feature.id.split('.')[1]
   }
 
   getGeometryWithoutRegulationRef (features) {

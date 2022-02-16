@@ -6,7 +6,7 @@ import { CustomInput } from '../../../commonStyles/Input.style'
 const CreateRegulationTopicForm = props => {
   const {
     onCancelEdit,
-    updateLayerName
+    updateTopic
   } = props
   const [topicPlace, setTopicPlace] = useState('')
   const [topicPlaceIsRed, setTopicPlaceIsRed] = useState(false)
@@ -25,11 +25,11 @@ const CreateRegulationTopicForm = props => {
     if (topicPlace === '') {
       setTopicPlaceIsRed(true)
     } else {
-      const regulationLayerName = `${topicPlace}
+      const regulationTopic = `${topicPlace}
         ${topicSpecies ? ' - ' + topicSpecies : ''}
         ${topicGears ? ' - ' + topicGears : ''}
         ${topicOtherIndications ? ' - ' + topicOtherIndications : ''}`
-      updateLayerName(regulationLayerName)
+      updateTopic(regulationTopic)
       resetThemeForm()
       onCancelEdit()
       setTopicPlaceIsRed(false)

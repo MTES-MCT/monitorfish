@@ -101,7 +101,14 @@
  * @property {boolean} allTowedGears
  * @property {boolean} allPassiveGears
  * @property {Gear[]} regulatedGears
- * @property {GearCategory[]} regulatedGearCategories
+ * @property {Object<string,GearCategory>} regulatedGearCategories
  * @property {string[]} selectedCategoriesAndGears - a list of categories name and gears code
  * @property {boolean} derogation
+*/
+
+/**
+ * @typedef RegulatorySpeciesDetail
+ * @property {string} code - FAO code
+ * @property {string} quantity
+ * @property {string} minimumSize
  */

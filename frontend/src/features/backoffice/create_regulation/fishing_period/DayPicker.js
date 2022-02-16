@@ -1,30 +1,37 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { WEEKDAYS } from '../../../../domain/entities/regulatory'
+import { WEEKDAYS, FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulatory'
+import useSetFishingPeriod from '../../../../hooks/useSetFishingPeriod'
 
-const DayPicker = ({ selectedList, setSelectedList, disabled }) => {
+const DayPicker = ({ disabled }) => {
+  const { weekdays } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
+  const setWeekdays = useSetFishingPeriod(FISHING_PERIOD_KEYS.WEEKDAYS)
+
+  const onClick = useCallback(e => {
+    let newSelectedList
+    const value = e.currentTarget.getAttribute('value')
+    if (weekdays?.includes(value)) {
+      newSelectedList = weekdays.filter(elem => elem !== value)
+    } else {
+      newSelectedList = [
+        ...weekdays,
+        value
+      ]
+    }
+    setWeekdays(newSelectedList)
+  }, [weekdays, setWeekdays])
+
   return <>
     {
-      Object.keys(WEEKDAYS).map((weekday, id) => {
+      Object.keys(WEEKDAYS).map(weekday => {
         return <Circle
-          key={id}
+          key={weekday}
           disabled={disabled}
           value={weekday}
-          $isGray={selectedList?.includes(weekday)}
-          onClick={e => {
-            let newSelectedList
-            const value = e.currentTarget.getAttribute('value')
-            if (selectedList?.includes(value)) {
-              newSelectedList = selectedList.filter(elem => elem !== value)
-            } else {
-              newSelectedList = [
-                ...selectedList,
-                value
-              ]
-            }
-            setSelectedList(newSelectedList)
-          }}>
+          $isGray={weekdays?.includes(weekday)}
+          onClick={onClick}>
             {WEEKDAYS[weekday]}
           </Circle>
       })

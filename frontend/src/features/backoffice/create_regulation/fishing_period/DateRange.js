@@ -1,4 +1,5 @@
-import React from 'react'
+/* eslint-disable react/forbid-component-props */
+import React, { useCallback } from 'react'
 import CustomDatePicker from '../custom_form/CustomDatePicker'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
@@ -20,24 +21,22 @@ const DateRange = (props) => {
     endDate
   } = dateRange
 
-  const setDateRange = (key, value) => {
+  const setDateRange = useCallback(key => value => {
     const newDateRange = {
       ...dateRange,
       [key]: value
     }
     updateList(id, newDateRange)
-  }
+  }, [dateRange, id, updateList])
 
-  const setStartDateFromDateType = value => {
-    setDateRange('startDate', value)
-  }
-  const setEndDateFromDateType = value => setDateRange('endDate', value)
+  const setEndDate = setDateRange('endDate')
+  const setStartDate = setDateRange('startDate')
 
   return <Wrapper $isLast={isLast} disabled={disabled}>
     <DateRangeRow>
         Du <CustomDatePicker
           value={startDate}
-          saveValue={setStartDateFromDateType}
+          saveValue={setStartDate}
           format='DD/MM/YYYY'
           placement={'rightStart'}
           style={{ margin: '0px 5px' }}
@@ -46,7 +45,7 @@ const DateRange = (props) => {
         />
         au <CustomDatePicker
           value={endDate}
-          saveValue={setEndDateFromDateType}
+          saveValue={setEndDate}
           format='DD/MM/YYYY'
           placement={'rightStart'}
           style={{ margin: '0px 0px 0px 5px' }}

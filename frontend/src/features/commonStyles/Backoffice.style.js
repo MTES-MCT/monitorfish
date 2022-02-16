@@ -142,3 +142,8 @@ export const OtherRemark = styled.div`
   align-items: center;
   margin-top: 15px;
 `
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 60px;
+`

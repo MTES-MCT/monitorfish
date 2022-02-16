@@ -162,7 +162,7 @@ const RegulatoryText = props => {
 
   return <>
     <ContentLine>
-      <Label>{`Texte réglementaire ${regulatoryText ? id + 1 : 1}`}</Label>
+      <Label>{`Texte réglementaire ${regulatoryText && id ? id + 1 : 1}`}</Label>
       {isEditing
         ? <>
           <CustomInput

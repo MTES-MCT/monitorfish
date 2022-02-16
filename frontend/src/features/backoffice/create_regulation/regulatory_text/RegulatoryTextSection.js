@@ -6,8 +6,8 @@ import { Title, Section } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
 import UpcomingRegulationSection from './UpcomingRegulationSection'
-import { setIsModalOpen } from '../../Regulation.slice'
-import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../../domain/entities/regulatory'
+import { setIsModalOpen, setUpcomingRegulatoryText } from '../../Regulation.slice'
+import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT, INITIAL_UPCOMING_REG_REFERENCE } from '../../../../domain/entities/regulatory'
 
 /**
  * @typedef {object} Props
@@ -19,17 +19,19 @@ import { REGULATORY_TEXT_SOURCE, DEFAULT_REGULATORY_TEXT } from '../../../../dom
 const RegulatoryTextSection = props => {
   const {
     regulatoryTextList,
-    source,
     setRegulatoryTextList,
+    source,
     saveForm
   } = props
 
-  const { upcomingRegulation } = useSelector(state => state.regulation)
+  const { processingRegulation } = useSelector(state => state.regulation)
+
+  const { upcomingRegulatoryReferences } = processingRegulation
 
   const dispatch = useDispatch()
 
   const addOrRemoveRegulatoryTextInList = (id) => {
-    let newRegulatoryTextList = [...regulatoryTextList]
+    let newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
     if (id === undefined) {
       newRegulatoryTextList.push(DEFAULT_REGULATORY_TEXT)
     } else if (regulatoryTextList.length === 1) {
@@ -49,11 +51,12 @@ const RegulatoryTextSection = props => {
       addOrRemoveRegulatoryTextInList()
     } else {
       dispatch(setIsModalOpen(true))
+      dispatch(setUpcomingRegulatoryText(upcomingRegulatoryReferences || INITIAL_UPCOMING_REG_REFERENCE))
     }
   }
 
   const setRegulatoryText = (id, regulatoryText) => {
-    const newRegulatoryTextList = [...regulatoryTextList]
+    const newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
     newRegulatoryTextList[id] = regulatoryText
     setRegulatoryTextList(newRegulatoryTextList)
   }
@@ -65,8 +68,8 @@ const RegulatoryTextSection = props => {
         : 'références réglementaires en vigueur'}
     </Title>
     {
-      (regulatoryTextList && regulatoryTextList.length > 0) &&
-        regulatoryTextList.map((regulatoryText, id) => {
+      (regulatoryTextList && regulatoryTextList.length > 0)
+        ? regulatoryTextList.map((regulatoryText, id) => {
           return <RegulatoryText
               key={regulatoryText}
               id={id}
@@ -78,6 +81,16 @@ const RegulatoryTextSection = props => {
               setRegulatoryText={setRegulatoryText}
             />
         })
+        : <RegulatoryText
+          regulatoryText={DEFAULT_REGULATORY_TEXT}
+          key={0}
+          id={0}
+          addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
+          source={source}
+          listLength={0}
+          saveForm={saveForm}
+          setRegulatoryText={setRegulatoryText}
+        />
     }
     <ButtonLine>
     {source === REGULATORY_TEXT_SOURCE.REGULATION
@@ -87,7 +100,7 @@ const RegulatoryTextSection = props => {
         onClick={addRegRefInEffect}>
         Ajouter un autre texte en vigueur
       </ValidateButton>
-      {!upcomingRegulation && <CustomCancelButton
+      {!upcomingRegulatoryReferences?.regulatoryTextList?.length > 0 && <CustomCancelButton
         disabled={false}
         isLast={false}
         onClick={addUpcomingText}>
@@ -101,8 +114,8 @@ const RegulatoryTextSection = props => {
       </ValidateButton>}
     </ButtonLine>
     {source === REGULATORY_TEXT_SOURCE.REGULATION &&
-      upcomingRegulation && upcomingRegulation !== {} &&
-        <UpcomingRegulationSection upcomingRegulation={upcomingRegulation} />
+      upcomingRegulatoryReferences &&
+        <UpcomingRegulationSection upcomingRegulation={upcomingRegulatoryReferences} />
     }
   </Section>
 }

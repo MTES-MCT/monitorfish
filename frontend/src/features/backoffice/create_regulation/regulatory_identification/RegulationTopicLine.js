@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
@@ -11,18 +11,21 @@ import CreateRegulationTopicForm from './CreateRegulationTopicForm'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
 import { formatDataForSelectPicker } from '../../../../utils'
-import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
+import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
+import { setProcessingRegulationByKey } from '../../Regulation.slice'
 const RegulationTopicLine = props => {
   const {
     disabled,
-    selectedRegulationTopic,
-    setSelectedRegulationTopic,
     regulationTopicIsMissing
   } = props
+
+  const dispatch = useDispatch()
 
   const {
     regulatoryTopics
   } = useSelector(state => state.regulatory)
+
+  const { topic } = useSelector(state => state.regulation.processingRegulation)
 
   useEffect(() => {
     if (regulatoryTopics) {
@@ -34,8 +37,8 @@ const RegulationTopicLine = props => {
   const [isAddTopicClicked, setIsAddTopicClicked] = useState(false)
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
 
-  const updateLayerName = (newLayerName) => {
-    setSelectedRegulationTopic(newLayerName)
+  const updateTopic = (value) => {
+    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value }))
   }
 
   return <ContentLine
@@ -51,29 +54,29 @@ const RegulationTopicLine = props => {
           menuStyle={{ width: 250, overflowY: 'hidden', textOverflow: 'ellipsis' }}
           placeholder='Choisir une thématique'
           value={'Choisir une thématique'}
-          onChange={setSelectedRegulationTopic}
+          onChange={updateTopic}
           data={layerTypeList}
-          renderMenuItem={(_, item) => <MenuItem checked={item.value === selectedRegulationTopic} item={item} tag={'Radio'} />}
+          renderMenuItem={(_, item) => <MenuItem checked={item.value === topic} item={item} tag={'Radio'} />}
           valueIsMissing={regulationTopicIsMissing}
           emptyMessage={'aucune thématique à afficher'}
           menuClassName={DEFAULT_MENU_CLASSNAME}
         />
-        {selectedRegulationTopic && !isAddTopicClicked &&
+        {topic && !isAddTopicClicked &&
           <Tag
-            data-cy={`${selectedRegulationTopic}`}
-            tagValue={selectedRegulationTopic}
-            onCloseIconClicked={_ => setSelectedRegulationTopic()}
+            data-cy={`${topic}`}
+            tagValue={topic}
+            onCloseIconClicked={_ => updateTopic()}
           />}
         {
         isAddTopicClicked
           ? <CreateRegulationTopicForm
-              updateLayerName={updateLayerName}
+              updateTopic={updateTopic}
               onCancelEdit={_ => {
                 setIsAddTopicClicked(false)
                 setIsInfoTextShown(false)
               }}
             />
-          : !selectedRegulationTopic && !disabled && <><SquareButton
+          : !topic && !disabled && <><SquareButton
               onClick={() => {
                 setIsAddTopicClicked(true)
                 setIsInfoTextShown(true)

@@ -41,6 +41,7 @@
     "react-select": "^4.1.0",
     "react-toast-notifications": "^2.4.0",
     "redux": "^4.0.5",
+    "redux-persist": "^6.0.0",
     "rsuite": "^4.8.9",
     "simplify-geojson": "^1.0.4",
     "styled-components": "^5.2.1",

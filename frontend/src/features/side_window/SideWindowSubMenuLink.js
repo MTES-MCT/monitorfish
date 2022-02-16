@@ -21,7 +21,9 @@ const SideWindowSubMenuLink = ({ isOpen, menu, isSelected, setSelected, number, 
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
-    borderBottom: isOpen ? `0.5px solid ${COLORS.lightGray}` : 'unset'
+    borderBottom: isOpen ? `0.5px solid ${COLORS.lightGray}` : 'unset',
+    opacity: isOpen ? 1 : 0,
+    transition: 'opacity 0.5s ease'
   }
 
   const textStyle = {
@@ -30,7 +32,8 @@ const SideWindowSubMenuLink = ({ isOpen, menu, isSelected, setSelected, number, 
     height: oneLine ? 22 : 50,
     fontSize: 16,
     fontWeight: 500,
-    visibility: isOpen ? 'visible' : 'hidden'
+    opacity: isOpen ? 1 : 0,
+    transition: 'opacity 0.5s ease'
   }
 
   return <Link
@@ -73,7 +76,8 @@ const circleMetricStyle = isOpen => ({
   marginLeft: 'auto',
   minWidth: 7,
   lineHeight: '16px',
-  visibility: isOpen ? 'visible' : 'hidden'
+  opacity: isOpen ? 1 : 0,
+  transition: 'opacity 0.5s ease'
 })
 
 export default SideWindowSubMenuLink

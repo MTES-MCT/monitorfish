@@ -98,11 +98,11 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl, hori
 }
 
 export const showVesselOnMap = (dispatch, beaconStatus) => {
-  const afterDateTime = new Date()
+  const afterDateTime = new Date(beaconStatus.malfunctionStartDateTime)
   const twentyFiveHours = 25
   afterDateTime.setTime(afterDateTime.getTime() - (twentyFiveHours * 60 * 60 * 1000))
   afterDateTime.setMilliseconds(0)
-  const beforeDateTime = new Date()
+  const beforeDateTime = new Date(beaconStatus.malfunctionStartDateTime)
   beforeDateTime.setMilliseconds(0)
 
   const vesselTrackDepth = {

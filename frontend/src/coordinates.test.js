@@ -68,7 +68,7 @@ describe('coordinates', () => {
 
     // Then
     expect(coordinates).not.toBeUndefined()
-    expect(coordinates[0]).toEqual('05° 33.799′ S')
+    expect(coordinates[0]).toEqual('05° 33.800′ S')
     expect(coordinates[1]).toEqual('048° 53.035′ E')
   })
 

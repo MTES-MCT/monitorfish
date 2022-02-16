@@ -92,8 +92,7 @@ function getDMDFromDecimal (dd, latitudeOrLongitude) {
   const minutes = truncate((absDD - degrees) * 60)
   let decimal = (absDD - degrees) * 60
   decimal = decimal - Math.floor(decimal)
-  decimal = decimal.toString().split('.')[1]
-  decimal = decimal.substring(0, 3)
+  decimal = Math.round(decimal * 1000)
 
   const formattedDegrees = getPaddedDegrees(degrees, latitudeOrLongitude)
   const formattedMinutes = minutes.toString().padStart(2, '0')

@@ -91,7 +91,7 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="dmd-coordinates-input"]').eq(1).type('{backspace}{backspace}{backspace}{backspace}{backspace}500W')
 
     // Then
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("47° 48.930′ N 007° 54.500′ W", { timeout: 20000 })
+    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains("47° 48.931′ N 007° 54.500′ W", { timeout: 20000 })
   })
 
   it('An interest Should be edited with East value When DMS coordinates are selected', () => {

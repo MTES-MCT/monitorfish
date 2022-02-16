@@ -1,24 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import FishingPeriodForm from './FishingPeriodForm'
 import SectionTitle from '../../SectionTitle'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
+import { setFishingPeriodOtherInfo } from '../../Regulation.slice'
 import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
 
-const FishingPeriodSection = (props) => {
-  const {
-    fishingPeriod,
-    setFishingPeriod
-  } = props
+const FishingPeriodSection = () => {
+  const { fishingPeriod } = useSelector(state => state.regulation.processingRegulation)
+
+  const dispatch = useDispatch()
 
   const [show, setShow] = useState(false)
-  const [isInputFilled, setIsInputFilled] = useState(false)
 
-  const setOtherInfo = value => {
-    setFishingPeriod({
-      ...fishingPeriod,
-      otherInfo: value
-    })
-  }
+  const onChange = useCallback(value => dispatch(setFishingPeriodOtherInfo(value)), [dispatch])
 
   return <Section show>
     <SectionTitle
@@ -29,16 +24,14 @@ const FishingPeriodSection = (props) => {
     <FishingPeriodForm
       show={show}
       fishingPeriod={fishingPeriod}
-      setFishingPeriod={setFishingPeriod}
     />
     <OtherRemark show={show}>
       <Label>Autres points sur la période</Label>
       <CustomInput
         width={'730px'}
         value={fishingPeriod?.otherInfo || ''}
-        onChange={setOtherInfo}
-        onMouseLeave={() => setIsInputFilled(fishingPeriod.otherInfo && fishingPeriod.otherInfo !== '')}
-        $isGray={isInputFilled} />
+        onChange={onChange}
+        $isGray={fishingPeriod.otherInfo && fishingPeriod.otherInfo !== ''} />
     </OtherRemark>
   </Section>
 }

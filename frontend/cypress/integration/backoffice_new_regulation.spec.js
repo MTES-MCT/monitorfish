@@ -85,6 +85,7 @@ context('NewRegulation', () => {
     // Region select picker should be disabled
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).should('have.attr', 'aria-disabled', 'true')
   })
+
   it('Select "Grand Est" and "Auvergne-Rhône-Alpes" region and remove it', () => {
     // Select a french law type
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
@@ -218,5 +219,53 @@ context('NewRegulation', () => {
     // then
     cy.get('[data-cy="tag-Sennes tournantes coulissantes"]').should('not.exist')
     cy.get('[data-cy="all-passive-gears-option"]').should('not.be.checked')
+  })
+
+  it('Modification of inputs Should be kept in local storage when refreshing the page', () => {
+    // Given
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
+    cy.get('[data-key="Reg. MEMN"]').eq(0).click()
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).click()
+    cy.get('[data-key="Auvergne-Rhône-Alpes"]').click()
+    cy.get('[data-cy="reg-text-name"]').type('zone name')
+    cy.get('[data-cy="reg-text-url"]').type('http://url.com')
+    cy.get('[data-cy="save-reg-text-name"]').click()
+    cy.get('[data-cy="regulatory-gears-section"]').click()
+    cy.get('[data-cy="regulation-forbidden-gears"]').click()
+    cy.get('[data-cy="all-towed-gears-option"]').click()
+    cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
+    cy.get('*[data-cy^="regulation-authorized-species"]').click({ force: true })
+    cy.scrollTo(0, 500)
+    cy.get('.rs-picker-toggle-placeholder')
+      .filter(':contains("catégories d\'espèces")')
+      .click({ timeout: 20000 })
+    cy.get('.rs-picker-search-bar-input').type('Espèce{enter}', { force: true })
+    cy.get('.rs-picker-toggle-placeholder')
+      .filter(':contains("des espèces")')
+      .click({ timeout: 20000 })
+    cy.get('.rs-picker-search-bar-input').type('HKE{enter}', { force: true })
+
+    // Values are found
+    cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')
+    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 3)
+    cy.get('[data-cy="mesh-label"]').should('have.length', 2)
+    cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
+    cy.get('[data-cy="tag-zone name"]').should('exist')
+    cy.get('[data-cy=tag-HKE]').should('exist')
+    cy.get('[data-cy="tag-Espèces eau profonde"]').should('exist')
+
+    // When
+    cy.reload()
+    cy.get('[data-cy="regulatory-gears-section"]').click()
+    cy.get('*[data-cy^="open-regulated-species"]').click()
+
+    // Then
+    cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')
+    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 3)
+    cy.get('[data-cy="mesh-label"]').should('have.length', 2)
+    cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
+    cy.get('[data-cy="tag-zone name"]').should('exist')
+    cy.get('[data-cy=tag-HKE]').should('exist')
+    cy.get('[data-cy="tag-Espèces eau profonde"]').should('exist')
   })
 })

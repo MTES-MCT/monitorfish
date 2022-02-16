@@ -35,16 +35,27 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
   }
 }
 
+export const mapToProcessingRegulation = (persistProcessingRegulation) => {
+  if (persistProcessingRegulation) {
+    const _parsedFishingPeriod = mapToFishingPeriod(persistProcessingRegulation.fishingPeriod)
+    return {
+      ...persistProcessingRegulation,
+      fishingPeriod: _parsedFishingPeriod
+    }
+  }
+  return INITIAL_REGULATION
+}
+
 function parseRegulatoryGears (gears) {
   return gears
     ? parseJSON(gears)
-    : initialRegulatoryGearsValues
+    : INITIAL_REG_GEARS_VALUES
 }
 
 function parseRegulatorySpecies (species) {
   return species
     ? parseJSON(species)
-    : initialRegulatorySpeciesValues
+    : INITIAL_REG_SPECIES_VALUES
 }
 
 const parseUpcomingRegulatoryReferences = upcomingRegulatoryReferences =>
@@ -77,18 +88,18 @@ const parseJSON = text => typeof text === 'string'
 
 export const parseFishingPeriod = fishingPeriod => {
   if (fishingPeriod) {
+    return mapToFishingPeriod(JSON.parse(fishingPeriod))
+  }
+  return INITIAL_FISHING_PERIOD_VALUES
+}
+
+const mapToFishingPeriod = fishingPeriod => {
+  if (fishingPeriod) {
     const {
-      authorized,
-      annualRecurrence,
       dateRanges,
       dates,
-      weekdays,
-      holidays,
-      daytime,
-      timeIntervals,
-      otherInfo
-    } = JSON.parse(fishingPeriod)
-
+      timeIntervals
+    } = fishingPeriod
     const newDateRanges = dateRanges?.map(({ startDate, endDate }) => {
       return {
         startDate: startDate ? new Date(startDate) : undefined,
@@ -108,24 +119,18 @@ export const parseFishingPeriod = fishingPeriod => {
     })
 
     return {
-      authorized,
-      annualRecurrence,
+      ...fishingPeriod,
       dateRanges: newDateRanges,
       dates: newDates,
-      weekdays,
-      holidays,
-      daytime,
-      timeIntervals: newTimeIntervals,
-      otherInfo
+      timeIntervals: newTimeIntervals
     }
   }
-
-  return initialFishingPeriodValues
+  return INITIAL_FISHING_PERIOD_VALUES
 }
 
 export const mapToRegulatoryFeatureObject = properties => {
   const {
-    layerName,
+    topic,
     lawType,
     zone,
     region,
@@ -137,7 +142,7 @@ export const mapToRegulatoryFeatureObject = properties => {
   } = properties
 
   return {
-    layer_name: layerName,
+    layer_name: topic,
     law_type: lawType,
     zones: zone,
     region,
@@ -151,15 +156,6 @@ export const mapToRegulatoryFeatureObject = properties => {
 
 export const getRegulatoryFeatureId = (id) => {
   return `${Layers.REGULATORY.code}_write.${id}`
-}
-
-export const emptyRegulatoryFeatureObject = {
-  layer_name: null,
-  law_type: null,
-  zones: null,
-  region: null,
-  references_reglementaires: null,
-  references_reglementaires_a_venir: null
 }
 
 export const FRANCE = 'Réglementation France'
@@ -251,7 +247,7 @@ export const DEFAULT_DATE_RANGE = {
 }
 
 /** @type {FishingPeriod} */
-export const initialFishingPeriodValues = {
+const INITIAL_FISHING_PERIOD_VALUES = {
   authorized: undefined,
   annualRecurrence: undefined,
   dateRanges: [],
@@ -263,7 +259,7 @@ export const initialFishingPeriodValues = {
 }
 
 /** @type {RegulatorySpecies} */
-export const initialRegulatorySpeciesValues = {
+const INITIAL_REG_SPECIES_VALUES = {
   authorized: undefined,
   allSpecies: undefined,
   otherInfo: undefined,
@@ -272,7 +268,7 @@ export const initialRegulatorySpeciesValues = {
 }
 
 /** @type {RegulatoryGears} */
-export const initialRegulatoryGearsValues = {
+export const INITIAL_REG_GEARS_VALUES = {
   authorized: undefined,
   allGears: undefined,
   allTowedGears: undefined,
@@ -283,13 +279,55 @@ export const initialRegulatoryGearsValues = {
   derogation: undefined
 }
 
-export const GEARS_CATEGORES_WITH_MESH = [
+export const GEARS_CATEGORIES_WITH_MESH = [
   'Chaluts',
   'Sennes traînantes',
   'Filets tournants',
   'Filets soulevés',
   'Filets maillants et filets emmêlants'
 ]
+
+export const emptyRegulatoryFeatureObject = {
+  layer_name: null,
+  law_type: null,
+  zones: null,
+  region: null,
+  references_reglementaires: null,
+  references_reglementaires_a_venir: null
+}
+
+export const INITIAL_UPCOMING_REG_REFERENCE = { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }
+
+export const REGULATORY_REFERENCE_KEYS = {
+  ID: 'id',
+  REGION: 'region',
+  LAW_TYPE: 'lawType',
+  TOPIC: 'topic',
+  ZONE: 'zone',
+  REGULATORY_REFERENCES: 'regulatoryReferences',
+  UPCOMING_REGULATORY_REFERENCES: 'upcomingRegulatoryReferences',
+  FISHING_PERIOD: 'fishingPeriod',
+  REGULATORY_SPECIES: 'regulatorySpecies',
+  REGULATORY_GEARS: 'regulatoryGears'
+}
+
+export const INITIAL_REGULATION = {
+  [REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES]: [DEFAULT_REGULATORY_TEXT],
+  [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: INITIAL_FISHING_PERIOD_VALUES,
+  [REGULATORY_REFERENCE_KEYS.REGULATORY_SPECIES]: INITIAL_REG_SPECIES_VALUES,
+  [REGULATORY_REFERENCE_KEYS.REGULATORY_GEARS]: INITIAL_REG_GEARS_VALUES
+}
+
+export const FISHING_PERIOD_KEYS = {
+  DATE_RANGES: 'dateRanges',
+  DATES: 'dates',
+  TIME_INTERVALS: 'timeIntervals',
+  AUTHORIZED: 'authorized',
+  ANNUAL_RECURRENCE: 'annualRecurrence',
+  WEEKDAYS: 'weekdays',
+  HOLIDAYS: 'holidays',
+  DAYTIME: 'daytime'
+}
 
 export const WEEKDAYS = {
   lundi: 'L',
@@ -386,6 +424,7 @@ export function search (searchText, propertiesToSearch, regulatoryZones, gears) 
 
     return foundRegulatoryZones
   }
+  return {}
 }
 
 export function getUniqueGearCodesFromSearch (searchText, gears) {
@@ -485,6 +524,7 @@ const toArrayString = (array) => {
       return array.slice(0, -1).join(', ').concat(' et ').concat(array.slice(-1))
     }
   }
+  return null
 }
 
 /**
@@ -529,6 +569,7 @@ export const convertTimeToString = (date) => {
     const hours = date.getHours()
     return `${hours < 10 ? '0' + hours : hours}h${minutes === 0 ? minutes + '0' : minutes}`
   }
+  return null
 }
 
 /**

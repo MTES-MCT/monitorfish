@@ -203,12 +203,12 @@ const regulatorySlice = createSlice({
     },
     /**
      * Set the regulation searched zone extent - used to fit the extent into the OpenLayers view
-     * @function setRegulationSearchedZoneExtent
+     * @function setProcessingRegulationSearchedZoneExtent
      * @memberOf RegulatoryReducer
      * @param {Object=} state
      * @param {{payload: number[]}} action - the extent
      */
-    setRegulationSearchedZoneExtent (state, action) {
+    setProcessingRegulationSearchedZoneExtent (state, action) {
       state.regulationSearchedZoneExtent = action.payload
     }
   }
@@ -233,7 +233,7 @@ export const {
   resetRegulatoryGeometriesToPreview,
   showSimplifiedGeometries,
   showWholeGeometries,
-  setRegulationSearchedZoneExtent
+  setProcessingRegulationSearchedZoneExtent
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

@@ -9,8 +9,8 @@ import Tag from '../Tag'
 import { ReactComponent as ShowIconSVG } from '../../../icons/oeil_affiche.svg'
 import { ReactComponent as HideIconSVG } from '../../../icons/oeil_masque.svg'
 import { COLORS } from '../../../../constants/constants'
-import { setSelectedGeometryId } from '../../Regulation.slice'
-import { DEFAULT_MENU_CLASSNAME } from '../../../../domain/entities/regulatory'
+import { setProcessingRegulationByKey } from '../../Regulation.slice'
+import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const RegulationGeometryLine = props => {
   const {
@@ -22,10 +22,10 @@ const RegulationGeometryLine = props => {
 
   const dispatch = useDispatch()
 
-  const { selectedGeometryId } = useSelector(state => state.regulation)
+  const { id } = useSelector(state => state.regulation.processingRegulation)
 
   const onCloseIconClicked = () => {
-    dispatch(setSelectedGeometryId(undefined))
+    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined }))
     setShowRegulatoryPreview(false)
   }
 
@@ -35,18 +35,18 @@ const RegulationGeometryLine = props => {
         searchable={false}
         placeholder='Choisir un tracé'
         value={'Choisir un tracé'}
-        onChange={value => dispatch(setSelectedGeometryId(value))}
+        onChange={value => dispatch(setProcessingRegulationByKey({ key: 'id', value }))}
         data={geometryIdList}
         valueIsMissing={geometryIsMissing}
         emptyMessage={'aucun tracé à associer'}
         renderMenuItem={(_, item) =>
-          <MenuItem checked={item.value === selectedGeometryId}
+          <MenuItem checked={item.value === id}
             item={item} tag={'Radio'}/>}
         menuClassName={DEFAULT_MENU_CLASSNAME}
       />
-    {selectedGeometryId &&
+    {id &&
       <><Tag
-        tagValue={selectedGeometryId}
+        tagValue={id}
         onCloseIconClicked={onCloseIconClicked}
       />
       <EyeWrapper>

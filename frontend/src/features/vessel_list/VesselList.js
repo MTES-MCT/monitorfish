@@ -24,7 +24,6 @@ import {
 } from '../../domain/shared_slices/Global'
 import { addFilter } from '../../domain/shared_slices/Filter'
 import { setPreviewFilteredVesselsFeatures } from '../../domain/shared_slices/Vessel'
-import { setRegulationSearchedZoneExtent } from '../../domain/shared_slices/Regulatory'
 import getAdministrativeZoneGeometry from '../../domain/use_cases/getAdministrativeZoneGeometry'
 import unselectVessel from '../../domain/use_cases/unselectVessel'
 import getFilteredVessels from '../../domain/use_cases/getFilteredVessels'
@@ -40,7 +39,7 @@ import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { VesselListSVG } from '../commonStyles/icons/VesselListSVG'
 import { PrimaryButton, SecondaryButton } from '../commonStyles/Buttons.style'
 import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
-
+import { setProcessingRegulationSearchedZoneExtent } from '../../domain/shared_slices/Regulatory'
 import { getExtentFromGeoJSON } from '../../utils'
 import { COLORS } from '../../constants/constants'
 
@@ -255,7 +254,7 @@ const VesselList = ({ namespace }) => {
         const extent = getExtentFromGeoJSON(zonesSelected[0]?.feature)
         if (extent?.length && !Number.isNaN(extent[0]) && !Number.isNaN(extent[1])) {
           batch(() => {
-            dispatch(setRegulationSearchedZoneExtent(extent))
+            dispatch(setProcessingRegulationSearchedZoneExtent(extent))
             dispatch(animateToExtent())
           })
         }

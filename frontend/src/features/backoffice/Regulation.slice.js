@@ -1,15 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { INITIAL_REGULATION, REGULATORY_REFERENCE_KEYS } from '../../domain/entities/regulatory'
 
 const INITIAL_STATE = {
   /** @type {RegulatoryText} */
-  selectedRegulation: undefined,
-  /** @type {UpcomingRegulation} */
-  upcomingRegulation: undefined,
-  /** @type {boolean} */
+  processingRegulation: INITIAL_REGULATION,
+  /** @type {boolean} isModalOpen */
   isModalOpen: false,
   /** @type {Map<number, RegulatoryText | null>} */
   upcomingRegulatoryTextCheckedMap: undefined,
-  /** @type {Map<number, RegulatoryText | null>} */
+  /** @type {UpcomingRegulation} upcomingRegulatoryText */
+  upcomingRegulatoryText: undefined,
+  /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */
   regulatoryTextCheckedMap: undefined,
   /** @type {boolean} */
   saveOrUpdateRegulation: false,
@@ -34,14 +35,34 @@ const regulationSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {
     resetState: () => INITIAL_STATE,
+    setProcessingRegulationByKey (state, { payload: { key, value } }) {
+      state.processingRegulation[key] = value
+    },
+    setProcessingRegulation (state, { payload }) {
+      state.processingRegulation = payload
+    },
+    setFishingPeriod (state, { payload: { key, value } }) {
+      const nextFishingPeriod = {
+        ...state.processingRegulation.fishingPeriod,
+        [key]: value
+      }
+      const nextProcessingRegulation = {
+        ...state.processingRegulation,
+        [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: nextFishingPeriod
+      }
+      state.processingRegulation = nextProcessingRegulation
+    },
+    setFishingPeriodOtherInfo (state, action) {
+      state.processingRegulation[REGULATORY_REFERENCE_KEYS.FISHING_PERIOD].otherInfo = action.payload
+    },
+    setUpcomingRegulatoryText (state, action) {
+      state.upcomingRegulatoryText = action.payload
+    },
     setSelectedRegulation (state, action) {
       state.selectedRegulation = action.payload
     },
     setIsModalOpen (state, action) {
       state.isModalOpen = action.payload
-    },
-    setUpcomingRegulation (state, action) {
-      state.upcomingRegulation = action.payload
     },
     addObjectToRegulatoryTextCheckedMap (state, action) {
       const {
@@ -73,7 +94,7 @@ const regulationSlice = createSlice({
     setRegulatoryTextCheckedMap (state, action) {
       state.regulatoryTextCheckedMap = { ...action.payload }
     },
-    setRegulationSaved (state, action) {
+    setProcessingRegulationSaved (state, action) {
       state.regulationSaved = action.payload
     },
     setSaveOrUpdateRegulation (state, action) {
@@ -85,7 +106,7 @@ const regulationSlice = createSlice({
     setSaveUpcomingRegulation (state, action) {
       state.saveUpcomingRegulation = action.payload
     },
-    setRegulationDeleted (state, action) {
+    setProcessingRegulationDeleted (state, action) {
       state.regulationDeleted = action.payload
     },
     setIsRemoveModalOpen (state, action) {
@@ -93,30 +114,29 @@ const regulationSlice = createSlice({
     },
     setIsConfirmModalOpen (state, action) {
       state.isConfirmModalOpen = action.payload
-    },
-    setSelectedGeometryId (state, action) {
-      state.selectedGeometryId = action.payload
     }
   }
 })
 
 export const {
   resetState,
-  setSelectedRegulation,
+  setUpcomingRegulatoryText,
   setIsModalOpen,
-  setUpcomingRegulation,
   addObjectToUpcomingRegulatoryTextCheckedMap,
   setUpcomingRegulatoryTextListCheckedMap,
-  setRegulationSaved,
+  setProcessingRegulationSaved,
   setRegulatoryTextCheckedMap,
   addObjectToRegulatoryTextCheckedMap,
   setSaveOrUpdateRegulation,
   setAtLeastOneValueIsMissing,
   setSaveUpcomingRegulation,
-  setRegulationDeleted,
+  setProcessingRegulationDeleted,
   setIsRemoveModalOpen,
   setIsConfirmModalOpen,
-  setSelectedGeometryId
+  setProcessingRegulationByKey,
+  setProcessingRegulation,
+  setFishingPeriod,
+  setFishingPeriodOtherInfo
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

@@ -48,7 +48,7 @@ const updateLayerNameForAllLayerZones = (territory, lawType, oldLayerName, newLa
 function buildZoneFeature (zone, newLayerName) {
   const featureObject = mapToRegulatoryFeatureObject({
     ...zone,
-    layerName: newLayerName
+    topic: newLayerName
   })
   const feature = new Feature(featureObject)
   feature.setId(getRegulatoryFeatureId(zone.id))

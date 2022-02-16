@@ -7,11 +7,11 @@ import { COLORS } from '../../../constants/constants'
 import Layers, { getGearCategory } from '../../../domain/entities/layers'
 
 import showRegulatoryZoneMetadata from '../../../domain/use_cases/showRegulatoryZoneMetadata'
-import showRegulationToEdit from '../../../domain/use_cases/showRegulationToEdit'
 import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
 import zoomInLayer from '../../../domain/use_cases/zoomInLayer'
 import hideLayer from '../../../domain/use_cases/hideLayer'
 import showRegulatoryZone from '../../../domain/use_cases/showRegulatoryZone'
+import showRegulationToEdit from '../../../domain/use_cases/showRegulationToEdit'
 
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'

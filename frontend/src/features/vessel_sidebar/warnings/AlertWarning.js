@@ -14,17 +14,7 @@ const AlertWarning = ({ selectedVessel }) => {
     {
       selectedVessel?.alerts?.length
         ? <Alerts
-          onClick={() => {
-            batch(() => {
-              dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
-              dispatch(focusOnAlert({
-                name: selectedVessel?.alerts[0],
-                internalReferenceNumber: selectedVessel.internalReferenceNumber,
-                externalReferenceNumber: selectedVessel.externalReferenceNumber,
-                ircs: selectedVessel.ircs
-              }))
-            })
-          }}
+          onClick={() => showAlertInSideWindow(selectedVessel)}
           data-cy={'vessel-sidebar-alert'}
         >
           <AlertIcon/>
@@ -44,6 +34,18 @@ const AlertWarning = ({ selectedVessel }) => {
         : null
     }
     </>)
+}
+
+const showAlertInSideWindow = selectedVessel => {
+  batch(() => {
+    dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
+    dispatch(focusOnAlert({
+      name: selectedVessel?.alerts[0],
+      internalReferenceNumber: selectedVessel.internalReferenceNumber,
+      externalReferenceNumber: selectedVessel.externalReferenceNumber,
+      ircs: selectedVessel.ircs
+    }))
+  })
 }
 
 const SeeAlert = styled.span`

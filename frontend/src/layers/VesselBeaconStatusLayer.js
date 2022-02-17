@@ -47,7 +47,7 @@ const VesselBeaconStatusLayer = ({ map }) => {
         zIndex: Layers.VESSEL_BEACON_STATUS.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
-        style: (feature, resolution) => getVesselBeaconStatusStyle(feature, resolution)
+        style: (_, resolution) => getVesselBeaconStatusStyle(resolution)
       })
     }
     return layerRef.current
@@ -64,25 +64,25 @@ const VesselBeaconStatusLayer = ({ map }) => {
         map.removeLayer(getLayer())
       }
     }
-  }, [map])
+  }, [map, getLayer])
 
   useEffect(() => {
     if (vessels?.length) {
-      const features = vessels.reduce((features, vessel) => {
-        if (!vessel.hasBeaconStatus) return features
-        if (vessel.vesselProperties.hasAlert) return features
-        if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return features
-        if (previewFilteredVesselsMode && !vessel.filterPreview) return features
-        if (hideVesselsAtPort && vessel.isAtPort) return features
-        if (hideNonSelectedVessels && !vesselsAreEquals(vessel.vesselProperties, selectedVessel)) return features
+      const features = vessels.reduce((_features, vessel) => {
+        if (!vessel.hasBeaconStatus) return _features
+        if (vessel.vesselProperties.hasAlert) return _features
+        if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return _features
+        if (previewFilteredVesselsMode && !vessel.filterPreview) return _features
+        if (hideVesselsAtPort && vessel.isAtPort) return _features
+        if (hideNonSelectedVessels && !vesselsAreEquals(vessel.vesselProperties, selectedVessel)) return _features
 
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
         feature.setId(`${Layers.VESSEL_BEACON_STATUS.code}:${getVesselFeatureIdFromVessel(vessel.vesselProperties)}`)
-        features.push(feature)
+        _features.push(feature)
 
-        return features
+        return _features
       }, [])
 
       getVectorSource()?.clear(true)

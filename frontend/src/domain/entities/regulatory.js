@@ -300,15 +300,6 @@ export const GEARS_CATEGORIES_WITH_MESH = [
   'Filets maillants et filets emmêlants'
 ]
 
-export const emptyRegulatoryFeatureObject = {
-  layer_name: null,
-  law_type: null,
-  zones: null,
-  region: null,
-  references_reglementaires: null,
-  references_reglementaires_a_venir: null
-}
-
 export const INITIAL_UPCOMING_REG_REFERENCE = { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }
 
 export const REGULATORY_REFERENCE_KEYS = {

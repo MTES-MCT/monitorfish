@@ -1,4 +1,4 @@
-import { batch, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { sideWindowMenu } from '../../../domain/entities/sideWindow'
 import React from 'react'
@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as BeaconStatusSVG } from '../../icons/Icone_VMS_dark.svg'
 import openBeaconStatus from '../../../domain/use_cases/openBeaconStatus'
-import { focusOnAlert } from '../../../domain/shared_slices/Alert'
 
 const BeaconStatusWarning = ({ selectedVessel }) => {
   const dispatch = useDispatch()
@@ -15,7 +14,7 @@ const BeaconStatusWarning = ({ selectedVessel }) => {
     {
       selectedVessel?.beaconStatusId
         ? <BeaconStatus
-          onClick={() => showBeaconStatusInSideWindow(selectedVessel)}
+          onClick={() => showBeaconStatusInSideWindow(dispatch, selectedVessel)}
           data-cy={'vessel-sidebar-beacon-status'}
         >
           <BeaconStatusIcon/>
@@ -29,7 +28,7 @@ const BeaconStatusWarning = ({ selectedVessel }) => {
     </>)
 }
 
-const showBeaconStatusInSideWindow = selectedVessel => {
+const showBeaconStatusInSideWindow = (dispatch, selectedVessel) => {
   dispatch(openSideWindowTab(sideWindowMenu.BEACON_STATUSES.code))
   dispatch(openBeaconStatus({
     beaconStatus: {

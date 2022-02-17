@@ -1,17 +1,23 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.*
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.*
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Control
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconStatusException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconStatusCommentDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconStatusDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.CompletableDeferred
@@ -29,19 +35,13 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate.EPOCH
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.*
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconStatusException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconStatusCommentDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconStatusDataInput
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 
 @Import(MeterRegistryConfiguration::class)
 @ExtendWith(SpringExtension::class)
@@ -101,6 +101,9 @@ class BffControllerITests {
 
     @MockBean
     private lateinit var saveBeaconStatusComment: SaveBeaconStatusComment
+
+    @MockBean
+    private lateinit var getVesselBeaconStatuses: GetVesselBeaconStatuses
 
     @Autowired
     private lateinit var meterRegistry: MeterRegistry
@@ -177,7 +180,7 @@ class BffControllerITests {
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=UNDEFINED"))
+        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.vessel.declaredFishingGears[0]", equalTo("Trémails")))
@@ -191,7 +194,7 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.vessel.underCharter", equalTo(true)))
 
         runBlocking {
-            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.UNDEFINED, null, null)
+            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, null, null)
         }
     }
 
@@ -210,7 +213,7 @@ class BffControllerITests {
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=UNDEFINED"))
+        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
                 // Then
                 .andExpect(status().isAccepted)
                 .andExpect(jsonPath("$.vessel.declaredFishingGears[0]", equalTo("Trémails")))
@@ -221,7 +224,7 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.positions.length()", equalTo(3)))
 
         runBlocking {
-            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.UNDEFINED, null, null)
+            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, null, null)
         }
     }
 
@@ -275,13 +278,13 @@ class BffControllerITests {
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/positions?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=UNDEFINED"))
+        mockMvc.perform(get("/bff/v1/vessels/positions?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()", equalTo(3)))
 
         runBlocking {
-            Mockito.verify(getVesselPositions).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.UNDEFINED, null, null)
+            Mockito.verify(getVesselPositions).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, null, null)
         }
     }
 
@@ -561,5 +564,34 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.comments.length()", equalTo(1)))
                 .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
                 .andExpect(jsonPath("$.beaconStatus.internalReferenceNumber", equalTo("CFR")))
+    }
+
+    @Test
+    fun `Should get vessels's beacon statuses`() {
+        // Given
+        val now = ZonedDateTime.now().minusDays(1)
+        given(this.getVesselBeaconStatuses.execute("FR224226850", "123", "IEF4", VesselIdentifier.INTERNAL_REFERENCE_NUMBER))
+                .willReturn(BeaconStatusResumeAndHistory(listOf(BeaconStatusWithDetails(
+                        beaconStatus = BeaconStatus(1, "FR224226850", "1236514", "IRCS",
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                        comments = listOf(BeaconStatusComment(
+                                beaconStatusId = 1, comment = "A comment", userType = BeaconStatusCommentUserType.SIP, dateTime = now)),
+                        actions = listOf(BeaconStatusAction(
+                                beaconStatusId = 1, propertyName = BeaconStatusActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))
+                )))
+
+        // When
+        mockMvc.perform(get("/bff/v1/vessels/beacon_statuses?internalReferenceNumber=FR224226850" +
+                "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.history[0].beaconStatus.id", equalTo(1)))
+                .andExpect(jsonPath("$.history[0].beaconStatus.internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$.history[0].beaconStatus.externalReferenceNumber", equalTo("1236514")))
+                .andExpect(jsonPath("$.history[0].actions[0].beaconStatusId", equalTo(1)))
+                .andExpect(jsonPath("$.history[0].actions[0].propertyName", equalTo("VESSEL_STATUS")))
+                .andExpect(jsonPath("$.history[0].comments[0].beaconStatusId", equalTo(1)))
+                .andExpect(jsonPath("$.history[0].comments[0].comment", equalTo("A comment")))
     }
 }

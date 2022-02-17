@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselStatus
 import org.assertj.core.api.Assertions.assertThat
@@ -71,5 +72,22 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
         val updatedBeaconStatus = jpaBeaconStatusesRepository.findAll().find { it.id == 1 }
         assertThat(updatedBeaconStatus?.vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
         assertThat(updatedBeaconStatus?.vesselStatusLastModificationDateTime).isEqualTo(updateDateTime)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllByVesselIdentifierEquals Should return all beacon statuses for a given vessel`() {
+        // When
+        val baconStatuses = jpaBeaconStatusesRepository
+                .findAllByVesselIdentifierEquals(VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "FAK000999999")
+
+        assertThat(baconStatuses).hasSize(2)
+        assertThat(baconStatuses.first().internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(baconStatuses.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
+        assertThat(baconStatuses.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
+
+        assertThat(baconStatuses.last().internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(baconStatuses.last().stage).isEqualTo(Stage.RESUMED_TRANSMISSION)
+        assertThat(baconStatuses.last().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
     }
 }

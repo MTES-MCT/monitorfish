@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselStatus
@@ -41,6 +42,13 @@ class JpaBeaconStatusesRepository(private val dbBeaconStatusesRepository: DBBeac
             }
         } catch (e: Throwable) {
             throw CouldNotUpdateBeaconStatusException("Could not update beacon status: ${e.message}")
+        }
+    }
+
+    override fun findAllByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String): List<BeaconStatus> {
+        return dbBeaconStatusesRepository
+                .findAllByVesselIdentifierEquals(vesselIdentifier.toString(), value).map {
+            it.toBeaconStatus()
         }
     }
 }

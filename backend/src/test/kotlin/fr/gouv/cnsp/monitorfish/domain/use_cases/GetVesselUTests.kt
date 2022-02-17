@@ -50,7 +50,7 @@ class GetVesselUTests {
                              "",
                              "",
                              VesselTrackDepth.TWELVE_HOURS,
-                             VesselIdentifier.UNDEFINED,
+                             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                              null,
                              null)
         }

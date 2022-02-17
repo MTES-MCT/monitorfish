@@ -20,4 +20,14 @@ interface DBBeaconStatusesRepository : CrudRepository<BeaconStatusEntity, Int> {
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE beacon_statuses SET stage = CAST(:stage AS beacon_statuses_stage), vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconStatusId", nativeQuery = true)
     fun updateStage(beaconStatusId: Int, stage: String, updateDateTime: ZonedDateTime)
+
+    @Query(value = """
+        SELECT * FROM beacon_statuses where 
+            CASE
+                WHEN :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER' THEN internal_reference_number
+                WHEN :vesselIdentifier = 'IRCS' THEN ircs
+                WHEN :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER' THEN external_reference_number
+            END = :value""", nativeQuery = true)
+    fun findAllByVesselIdentifierEquals(vesselIdentifier: String, value: String): List<BeaconStatusEntity>
 }
+

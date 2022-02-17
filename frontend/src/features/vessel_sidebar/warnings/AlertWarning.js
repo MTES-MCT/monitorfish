@@ -14,7 +14,7 @@ const AlertWarning = ({ selectedVessel }) => {
     {
       selectedVessel?.alerts?.length
         ? <Alerts
-          onClick={() => showAlertInSideWindow(selectedVessel)}
+          onClick={() => showAlertInSideWindow(dispatch, selectedVessel)}
           data-cy={'vessel-sidebar-alert'}
         >
           <AlertIcon/>
@@ -36,7 +36,7 @@ const AlertWarning = ({ selectedVessel }) => {
     </>)
 }
 
-const showAlertInSideWindow = selectedVessel => {
+const showAlertInSideWindow = (dispatch, selectedVessel) => {
   batch(() => {
     dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
     dispatch(focusOnAlert({

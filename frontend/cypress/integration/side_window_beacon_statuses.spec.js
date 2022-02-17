@@ -199,9 +199,18 @@ context('Beacon statuses', () => {
         'grands fonds pour trouver la ressource qui leur faisait défaut.')
 
     // Show vessel on map
+    let oneWeeksBeforeDate = new Date()
+    oneWeeksBeforeDate.setDate(oneWeeksBeforeDate.getDate() - 8)
+    oneWeeksBeforeDate.setUTCHours(0, 0, 0, 0)
+    oneWeeksBeforeDate = oneWeeksBeforeDate.toISOString()
+    let oneWeeksBeforePlusOneDayDate = new Date()
+    oneWeeksBeforePlusOneDayDate.setDate(oneWeeksBeforePlusOneDayDate.getDate() - 7)
+    oneWeeksBeforePlusOneDayDate.setUTCHours(23, 59, 59, 0)
+    oneWeeksBeforePlusOneDayDate = oneWeeksBeforePlusOneDayDate.toISOString()
+    console.log(oneWeeksBeforeDate, oneWeeksBeforePlusOneDayDate)
     cy.intercept('GET', 'bff/v1/vessels/find?internalReferenceNumber=FAK000999999' +
       '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER' +
-      '&trackDepth=CUSTOM&afterDateTime=2022-02-08T00:00:00.000Z&beforeDateTime=2022-02-09T23:59:59.000Z').as('showVesselPositionsOnMap')
+      '&trackDepth=CUSTOM&afterDateTime=' + oneWeeksBeforeDate + '&beforeDateTime=' + oneWeeksBeforePlusOneDayDate).as('showVesselPositionsOnMap')
     cy.intercept('GET', 'bff/v1/ers/find?internalReferenceNumber=FAK000999999' +
       '&externalReferenceNumber=DONTSINK&IRCS=CALLME&voyageRequest=LAST&tripNumber=').as('showVesselVoyageOnMap')
     cy.get('*[data-cy="side-window-beacon-statuses-detail-show-vessel"]').click()

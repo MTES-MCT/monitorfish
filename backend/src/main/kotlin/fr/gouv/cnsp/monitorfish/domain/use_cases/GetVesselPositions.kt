@@ -96,10 +96,6 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
                     .sortedBy { it.dateTime }}
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> async { positionRepository.findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber, from!!, to!!)
                     .sortedBy { it.dateTime }}
-            VesselIdentifier.UNDEFINED -> async {
-                positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(internalReferenceNumber, externalReferenceNumber, ircs, from!!, to!!)
-                        .sortedBy { it.dateTime }
-            }
         }
     }
 }

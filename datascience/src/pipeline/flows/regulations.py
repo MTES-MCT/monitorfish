@@ -109,6 +109,7 @@ def load_new_regulations(new_regulations: pd.DataFrame):
             "references_reglementaires_a_venir",
             "fishing_period",
             "species",
+            "gears",
         ],
         how="upsert",
         table_id_column="id",

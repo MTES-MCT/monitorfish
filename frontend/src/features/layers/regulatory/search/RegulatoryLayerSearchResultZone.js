@@ -21,7 +21,8 @@ const RegulatoryLayerSearchResultZone = props => {
   const {
     regulatoryZone,
     isOpen,
-    zoneIsChecked
+    regulatoryLayerTopic,
+    regulatoryLayerLawType
   } = props
   const dispatch = useDispatch()
 
@@ -31,8 +32,12 @@ const RegulatoryLayerSearchResultZone = props => {
   const {
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
+  const {
+    regulatoryZonesChecked
+  } = useSelector(state => state.regulatoryLayerSearch)
 
   const [zoneStyle, setZoneStyle] = useState(null)
+  const [zoneSelectionList, setZoneSelectionList] = useState([])
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
   const showOrHideRegulatoryZoneMetadata = regulatoryZone => {
@@ -48,6 +53,32 @@ const RegulatoryLayerSearchResultZone = props => {
   useEffect(() => {
     showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown)
   }, [regulatoryZoneMetadata, regulatoryZone])
+
+  useEffect(() => {
+    if (zoneSelectionList?.length) {
+      dispatch(checkRegulatoryZones([regulatoryZone]))
+    } else {
+      dispatch(uncheckRegulatoryZones([regulatoryZone]))
+    }
+  }, [zoneSelectionList])
+
+  useEffect(() => {
+    if (!regulatoryZonesChecked || !regulatoryLayerTopic || !regulatoryLayerLawType) {
+      return
+    }
+
+    if (regulatoryZonesChecked.find(zone => zone.topic === regulatoryZone.topic && zone.zone === regulatoryZone.zone)) {
+      if (zoneSelectionList && !zoneSelectionList.length) {
+        dispatch(checkRegulatoryZones([regulatoryZone]))
+        setZoneSelectionList([regulatoryZone])
+      }
+    } else {
+      if (zoneSelectionList && zoneSelectionList.length) {
+        dispatch(uncheckRegulatoryZones([regulatoryZone]))
+        setZoneSelectionList([])
+      }
+    }
+  }, [regulatoryZonesChecked, regulatoryLayerTopic, regulatoryLayerLawType])
 
   useEffect(() => {
     if (!isOpen) {
@@ -74,10 +105,9 @@ const RegulatoryLayerSearchResultZone = props => {
   return (
     <Zone onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
       <Rectangle vectorLayerStyle={zoneStyle}/>
-      <Name onClick={() => zoneIsChecked
-        ? dispatch(uncheckRegulatoryZones([regulatoryZone]))
-        : dispatch(checkRegulatoryZones([regulatoryZone]))
-      }
+      <Name onClick={() => zoneSelectionList?.length
+        ? setZoneSelectionList([])
+        : setZoneSelectionList([regulatoryZone])}
       >
         {regulatoryZone?.zone ? regulatoryZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
       </Name>
@@ -93,10 +123,10 @@ const RegulatoryLayerSearchResultZone = props => {
           <CheckboxGroup
               inline
               name="checkboxList"
-              value={zoneIsChecked ? [regulatoryZone?.zone] : []}
+              value={zoneSelectionList?.map(zoneSelection => zoneSelection?.zone)}
               onChange={value => value?.length
-                ? dispatch(uncheckRegulatoryZones([regulatoryZone]))
-                : dispatch(checkRegulatoryZones([regulatoryZone]))
+                ? setZoneSelectionList([regulatoryZone])
+                : setZoneSelectionList([])
               }
               style={{ marginLeft: 'auto', height: 20 }}
           >
@@ -174,4 +204,4 @@ const CustomREGPaperDarkIcon = styled(REGPaperDarkIcon)`
   ${CustomPaperStyle}
 `
 
-export default React.memo(RegulatoryLayerSearchResultZone)
+export default RegulatoryLayerSearchResultZone

@@ -10,6 +10,7 @@ SELECT
     periodes,
     fishing_period,
     engins,
+    gears,
     engins_interdits,
     mesures_techniques,
     especes,

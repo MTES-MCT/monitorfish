@@ -47,7 +47,7 @@ class GetVesselPositionsUTests {
                             "",
                             "",
                             VesselTrackDepth.LAST_DEPARTURE,
-                            VesselIdentifier.UNDEFINED,
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                             null,
                             null)
         }
@@ -73,7 +73,7 @@ class GetVesselPositionsUTests {
                                 "",
                                 "",
                                 VesselTrackDepth.TWELVE_HOURS,
-                                VesselIdentifier.UNDEFINED,
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 null,
                                 null)
             }
@@ -96,7 +96,7 @@ class GetVesselPositionsUTests {
                                 "",
                                 "",
                                 VesselTrackDepth.LAST_DEPARTURE,
-                                VesselIdentifier.UNDEFINED,
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 null,
                                 null)
             }
@@ -119,7 +119,7 @@ class GetVesselPositionsUTests {
                                 "",
                                 "",
                                 VesselTrackDepth.CUSTOM,
-                                VesselIdentifier.UNDEFINED,
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 null,
                                 ZonedDateTime.now())
             }
@@ -145,7 +145,7 @@ class GetVesselPositionsUTests {
                             "",
                             "",
                             VesselTrackDepth.CUSTOM,
-                            VesselIdentifier.UNDEFINED,
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                             fromDateTime,
                             toDateTime)
         }

@@ -44,6 +44,7 @@ class BffController(
     private val updateBeaconMalfunction: UpdateBeaconMalfunction,
     private val getBeaconMalfunction: GetBeaconMalfunction,
     private val saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment,
+    private val getVesselBeaconStatuses: GetVesselBeaconStatuses,
     meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -109,31 +110,54 @@ class BffController(
         }
     }
 
+    @GetMapping("/v1/vessels/beacon_statuses")
+    @ApiOperation("Get vessel's beacon status history")
+    fun getVesselBeaconStatuses(@ApiParam("Vessel internal reference number (CFR)")
+                                @RequestParam(name = "internalReferenceNumber")
+                                internalReferenceNumber: String,
+                                @ApiParam("Vessel external reference number")
+                                @RequestParam(name = "externalReferenceNumber")
+                                externalReferenceNumber: String,
+                                @ApiParam("Vessel IRCS")
+                                @RequestParam(name = "IRCS")
+                                IRCS: String,
+                                @ApiParam("Vessel identifier")
+                                @RequestParam(name = "vesselIdentifier")
+                                vesselIdentifier: VesselIdentifier): BeaconStatusResumeAndHistoryDataOutput {
+        val beaconStatusesWithDetails = getVesselBeaconStatuses.execute(
+                internalReferenceNumber,
+                externalReferenceNumber,
+                IRCS,
+                vesselIdentifier)
+
+        return BeaconStatusResumeAndHistoryDataOutput.fromBeaconStatusResumeAndHistory(beaconStatusesWithDetails)
+    }
+
     @GetMapping("/v1/vessels/positions")
     @ApiOperation("Get vessel's positions")
     fun getVesselPositions(@ApiParam("Vessel internal reference number (CFR)")
-                  @RequestParam(name = "internalReferenceNumber")
-                  internalReferenceNumber: String,
-                  @ApiParam("Vessel external reference number")
-                  @RequestParam(name = "externalReferenceNumber")
-                  externalReferenceNumber: String,
-                  @ApiParam("Vessel IRCS")
-                  @RequestParam(name = "IRCS")
-                  IRCS: String,
-                  @ApiParam("Vessel track depth")
-                  @RequestParam(name = "trackDepth")
-                  trackDepth: VesselTrackDepth,
-                  @ApiParam("Vessel positions identifier")
-                  @RequestParam(name = "vesselIdentifier")
-                  vesselIdentifier: VesselIdentifier,
-                  @ApiParam("from date")
-                  @RequestParam(name = "afterDateTime", required = false)
-                  @DateTimeFormat(pattern = zoneDateTimePattern)
-                  afterDateTime: ZonedDateTime?,
-                  @ApiParam("to date")
-                  @RequestParam(name = "beforeDateTime", required = false)
-                  @DateTimeFormat(pattern = zoneDateTimePattern)
-                  beforeDateTime: ZonedDateTime?): ResponseEntity<List<PositionDataOutput>> {
+                           @RequestParam(name = "internalReferenceNumber")
+                           internalReferenceNumber: String,
+                           @ApiParam("Vessel external reference number")
+                           @RequestParam(name = "externalReferenceNumber")
+                           externalReferenceNumber: String,
+                           @ApiParam("Vessel IRCS")
+                           @RequestParam(name = "IRCS")
+                           IRCS: String,
+                           @ApiParam("Vessel track depth")
+                           @RequestParam(name = "trackDepth")
+                           trackDepth: VesselTrackDepth,
+                           @ApiParam("Vessel positions identifier")
+                           @RequestParam(name = "vesselIdentifier")
+                           vesselIdentifier: VesselIdentifier,
+                           @ApiParam("from date")
+                           @RequestParam(name = "afterDateTime", required = false)
+                           @DateTimeFormat(pattern = zoneDateTimePattern)
+                           afterDateTime: ZonedDateTime?,
+                           @ApiParam("to date")
+                           @RequestParam(name = "beforeDateTime", required = false)
+                           @DateTimeFormat(pattern = zoneDateTimePattern)
+                           beforeDateTime: ZonedDateTime?): ResponseEntity<List<PositionDataOutput>> {
         return runBlocking {
             val start = System.currentTimeMillis()
 
@@ -243,10 +267,10 @@ class BffController(
     @PutMapping(value = ["/v1/control_objectives/{controlObjectiveId}"], consumes = ["application/json"])
     @ApiOperation("Update a control objective")
     fun updateControlObjective(@PathParam("Control objective id")
-                    @PathVariable(name = "controlObjectiveId")
-                    controlObjectiveId: Int,
-                    @RequestBody
-                    updateControlObjectiveData: UpdateControlObjectiveDataInput) {
+                               @PathVariable(name = "controlObjectiveId")
+                               controlObjectiveId: Int,
+                               @RequestBody
+                               updateControlObjectiveData: UpdateControlObjectiveDataInput) {
         updateControlObjective.execute(
                 id = controlObjectiveId,
                 targetNumberOfControlsAtSea = updateControlObjectiveData.targetNumberOfControlsAtSea,

@@ -207,7 +207,6 @@ context('Beacon statuses', () => {
     oneWeeksBeforePlusOneDayDate.setDate(oneWeeksBeforePlusOneDayDate.getDate() - 7)
     oneWeeksBeforePlusOneDayDate.setUTCHours(23, 59, 59, 0)
     oneWeeksBeforePlusOneDayDate = oneWeeksBeforePlusOneDayDate.toISOString()
-    console.log(oneWeeksBeforeDate, oneWeeksBeforePlusOneDayDate)
     cy.intercept('GET', 'bff/v1/vessels/find?internalReferenceNumber=FAK000999999' +
       '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER' +
       '&trackDepth=CUSTOM&afterDateTime=' + oneWeeksBeforeDate + '&beforeDateTime=' + oneWeeksBeforePlusOneDayDate).as('showVesselPositionsOnMap')

@@ -157,12 +157,11 @@ const vesselBeaconStatusBigCircleStyle = new Style({
   zIndex: VESSEL_BEACON_STATUS_STYLE
 })
 
-export const getVesselBeaconStatusStyle = (feature, resolution) => {
-  const styles = []
+export const getVesselBeaconStatusStyle = (resolution) => {
+  const styles = [vesselBeaconStatusBigCircleStyle]
 
-  styles.push(vesselBeaconStatusBigCircleStyle)
   const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
-  styles[styles.length - 1].getImage().setScale(scale)
+  styles[0].getImage().setScale(scale)
 
   return styles
 }
@@ -174,12 +173,11 @@ const vesselAlertAndBeaconStatusBigCircleStyle = new Style({
   zIndex: VESSEL_ALERT_AND_BEACON_STATUS
 })
 
-export const getVesselAlertAndBeaconStatusStyle = (feature, resolution) => {
-  const styles = []
+export const getVesselAlertAndBeaconStatusStyle = (resolution) => {
+  const styles = [vesselAlertAndBeaconStatusBigCircleStyle]
 
-  styles.push(vesselAlertAndBeaconStatusBigCircleStyle)
   const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
-  styles[styles.length - 1].getImage().setScale(scale)
+  styles[0].getImage().setScale(scale)
 
   return styles
 }

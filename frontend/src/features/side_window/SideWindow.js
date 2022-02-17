@@ -49,9 +49,7 @@ const SideWindow = ({ fromTab }) => {
   }, [openedSideWindowTab])
 
   useEffect(() => {
-    if (setIsOverlayed) {
-      setIsOverlayed(!!openedBeaconStatus)
-    }
+    setIsOverlayed(!!openedBeaconStatus)
 
     if (openedSideWindowTab === sideWindowMenu.ALERTS.code) {
       setIsOverlayed(false)

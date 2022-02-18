@@ -32,7 +32,6 @@ const FishingPeriodForm = ({ show }) => {
   const [fishingPeriodAsString, setFishingPeriodAsString] = useState()
   const [timeIsDisabled, setTimeIsDisabled] = useState(true)
 
-  // je ne devrai pas mettre ça ailleurs ?
   useEffect(() => {
     const atLeastOneDateElementIsCompleted = dateRanges?.length > 0 || dates?.length > 0 || weekdays?.length > 0 || holidays !== undefined
     setTimeIsDisabled(!atLeastOneDateElementIsCompleted)

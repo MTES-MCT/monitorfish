@@ -8,6 +8,34 @@ import { getRegulatoryLayersWithoutTerritory } from '../entities/regulatory'
 const RegulatoryReducer = null
 /* eslint-enable */
 
+const pushRegulatoryZoneInTopicList = (selectedRegulatoryLayers, regulatoryZone) => {
+  if (Object.keys(selectedRegulatoryLayers).includes(regulatoryZone.topic)) {
+    const nextRegZoneTopic = selectedRegulatoryLayers[regulatoryZone.topic]
+    nextRegZoneTopic.push(regulatoryZone)
+    selectedRegulatoryLayers[regulatoryZone.topic] = nextRegZoneTopic
+  } else {
+    selectedRegulatoryLayers[regulatoryZone.topic] = [regulatoryZone]
+  }
+}
+
+const updateSelectedRegulatoryLayers = (regulatoryLayers, regulatoryZoneId, selectedRegulatoryLayers, selectedRegulatoryLayerIds) => {
+  const nextSelectedRegulatoryLayers = { ...selectedRegulatoryLayers }
+  const nextSelectedRegulatoryLayerIds = [...selectedRegulatoryLayerIds]
+  const nextRegulatoryZone = regulatoryLayers.find(zone => zone.id === regulatoryZoneId)
+  if (nextRegulatoryZone) {
+    if (nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
+      pushRegulatoryZoneInTopicList(nextSelectedRegulatoryLayers, nextRegulatoryZone)
+      nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
+      return { selectedRegulatoryLayers: nextSelectedRegulatoryLayers, selectedRegulatoryLayerIds: nextSelectedRegulatoryLayerIds }
+    } else if (nextRegulatoryZone.nextId) {
+      return updateSelectedRegulatoryLayers(regulatoryLayers, nextRegulatoryZone.nextId, selectedRegulatoryLayers, selectedRegulatoryLayerIds)
+    }
+    return null
+  } else {
+    return null
+  }
+}
+
 const regulatorySlice = createSlice({
   name: 'regulatory',
   initialState: {
@@ -158,7 +186,8 @@ const regulatorySlice = createSlice({
      *      technicalMeasurements: undefined,
      *      topic: "Etang de Thau-Ingril Mèze",
      *      upcomingRegulatoryReferences: undefined,
-     *      zone: "Etang de Thau-Ingrill_Drague-à-main"
+     *      zone: "Etang de Thau-Ingrill_Drague-à-main",
+     *      next_id: undefined
      *     }
      *   ]
      *   "GlÃ©nan_CSJ_Dragues": (1) […],
@@ -182,40 +211,18 @@ const regulatorySlice = createSlice({
     setSelectedRegulatoryZone (state, action) {
       if (action.payload && action.payload.length) {
         const regulatoryLayers = action.payload
-        const selectedRegulatoryLayers = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
-        const nextSelectedRegulatoryLayers = {}
-        const nextSelectedRegulatoryLayerIds = []
-        selectedRegulatoryLayers
+        const selectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
+        let nextSelectedRegulatoryLayers = {}
+        let nextSelectedRegulatoryLayerIds = []
+        selectedRegulatoryLayerIds
           .map(selectedRegulatoryZoneId => {
-            let nextRegulatoryZone = regulatoryLayers.find(zone => zone.id === selectedRegulatoryZoneId)
-            if (nextRegulatoryZone && nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
-              if (Object.keys(nextSelectedRegulatoryLayers).includes(nextRegulatoryZone.topic)) {
-                const nextRegZoneTopic = nextSelectedRegulatoryLayers[nextRegulatoryZone.topic]
-                nextRegZoneTopic.push(nextRegulatoryZone)
-                nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = nextRegZoneTopic
-              } else {
-                nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = [nextRegulatoryZone]
-              }
-              nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
-              return null
-            } else if (nextRegulatoryZone && nextRegulatoryZone.nextId) {
-              nextRegulatoryZone = regulatoryLayers.find(zone => zone.id === nextRegulatoryZone.nextId)
-              if (nextRegulatoryZone && nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
-                if (Object.keys(nextSelectedRegulatoryLayers).includes(nextRegulatoryZone.topic)) {
-                  const nextRegZoneTopic = nextSelectedRegulatoryLayers[nextRegulatoryZone.topic]
-                  nextRegZoneTopic.push(nextRegulatoryZone)
-                  nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = nextRegZoneTopic
-                } else {
-                  nextSelectedRegulatoryLayers[nextRegulatoryZone.topic] = [nextRegulatoryZone]
-                }
-                nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
-                return null
-              }
+            const updatedObjects = updateSelectedRegulatoryLayers(regulatoryLayers, selectedRegulatoryZoneId, nextSelectedRegulatoryLayers, nextSelectedRegulatoryLayerIds)
+            if (updatedObjects.selectedRegulatoryLayers && updatedObjects.selectedRegulatoryLayerIds) {
+              nextSelectedRegulatoryLayers = updatedObjects.selectedRegulatoryLayers
+              nextSelectedRegulatoryLayerIds = updatedObjects.selectedRegulatoryLayerIds
             }
             return null
           })
-        console.log('nextSelectedRegulatoryLayers')
-        console.log(nextSelectedRegulatoryLayers)
         window.localStorage.setItem(SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, JSON.stringify(nextSelectedRegulatoryLayerIds))
         state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
       }

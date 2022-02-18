@@ -578,21 +578,33 @@ class BffControllerITests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         given(this.getVesselBeaconStatuses.execute("FR224226850", "123", "IEF4", VesselIdentifier.INTERNAL_REFERENCE_NUMBER))
-                .willReturn(BeaconStatusResumeAndHistory(listOf(BeaconStatusWithDetails(
-                        beaconStatus = BeaconStatus(1, "FR224226850", "1236514", "IRCS",
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                                true, ZonedDateTime.now(), null, ZonedDateTime.now()),
-                        comments = listOf(BeaconStatusComment(
-                                beaconStatusId = 1, comment = "A comment", userType = BeaconStatusCommentUserType.SIP, dateTime = now)),
-                        actions = listOf(BeaconStatusAction(
-                                beaconStatusId = 1, propertyName = BeaconStatusActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))
-                )))
+                .willReturn(BeaconStatusResumeAndHistory(
+                        history = listOf(BeaconStatusWithDetails(
+                            beaconStatus = BeaconStatus(1, "FR224226850", "1236514", "IRCS",
+                                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.RESUMED_TRANSMISSION,
+                                    true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                            comments = listOf(BeaconStatusComment(
+                                    beaconStatusId = 1, comment = "A comment", userType = BeaconStatusCommentUserType.SIP, dateTime = now)),
+                            actions = listOf(BeaconStatusAction(
+                                    beaconStatusId = 1, propertyName = BeaconStatusActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))),
+                        current = BeaconStatusWithDetails(
+                                beaconStatus = BeaconStatus(2, "FR224226850", "1236514", "IRCS",
+                                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                    true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                                comments = listOf(BeaconStatusComment(
+                                        beaconStatusId = 1, comment = "A comment", userType = BeaconStatusCommentUserType.SIP, dateTime = now)),
+                                actions = listOf(BeaconStatusAction(
+                                    beaconStatusId = 1, propertyName = BeaconStatusActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))
+                ))
 
         // When
         mockMvc.perform(get("/bff/v1/vessels/beacon_statuses?internalReferenceNumber=FR224226850" +
                 "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
                 // Then
                 .andExpect(status().isOk)
+                .andExpect(jsonPath("$.current.beaconStatus.id", equalTo(2)))
+                .andExpect(jsonPath("$.current.beaconStatus.internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$.current.beaconStatus.externalReferenceNumber", equalTo("1236514")))
                 .andExpect(jsonPath("$.history[0].beaconStatus.id", equalTo(1)))
                 .andExpect(jsonPath("$.history[0].beaconStatus.internalReferenceNumber", equalTo("FR224226850")))
                 .andExpect(jsonPath("$.history[0].beaconStatus.externalReferenceNumber", equalTo("1236514")))

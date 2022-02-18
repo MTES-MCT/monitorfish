@@ -1,16 +1,18 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.BeaconStatusResumeAndHistory
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselBeaconStatusResumeAndHistory
 
 data class BeaconStatusResumeAndHistoryDataOutput(
+        val resume: VesselBeaconStatusResumeDataOutput,
         val current: BeaconStatusWithDetailsDataOutput?,
         val history: List<BeaconStatusWithDetailsDataOutput>) {
     companion object {
-        fun fromBeaconStatusResumeAndHistory(beaconStatusResumeAndHistory: BeaconStatusResumeAndHistory) = BeaconStatusResumeAndHistoryDataOutput(
-                current = beaconStatusResumeAndHistory.current?.let {
-                    BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(beaconStatusResumeAndHistory.current)
+        fun fromBeaconStatusResumeAndHistory(vesselBeaconStatusResumeAndHistory: VesselBeaconStatusResumeAndHistory) = BeaconStatusResumeAndHistoryDataOutput(
+                resume = VesselBeaconStatusResumeDataOutput.fromVesselBeaconStatusResume(vesselBeaconStatusResumeAndHistory.resume),
+                current = vesselBeaconStatusResumeAndHistory.current?.let {
+                    BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(vesselBeaconStatusResumeAndHistory.current)
                 },
-                history = beaconStatusResumeAndHistory.history.map { BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(it) }
+                history = vesselBeaconStatusResumeAndHistory.history.map { BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(it) }
         )
     }
 }

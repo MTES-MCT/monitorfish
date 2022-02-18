@@ -40,7 +40,7 @@ class GetVesselBeaconStatusesUTests {
         given(beaconStatusCommentsRepository.findAllByBeaconStatusId(1)).willReturn(listOf(BeaconStatusComment(
                 beaconStatusId = 1, comment = "A comment", userType = BeaconStatusCommentUserType.SIP, dateTime = now)))
         given(beaconStatusActionsRepository.findAllByBeaconStatusId(1)).willReturn(listOf(BeaconStatusAction(
-                beaconStatusId = 1, propertyName = BeaconStatusActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))
+                beaconStatusId = 1, propertyName = BeaconStatusActionPropertyName.VESSEL_STATUS, nextValue = VesselStatus.ACTIVITY_DETECTED.toString(), previousValue = VesselStatus.AT_PORT.toString(), dateTime = now)))
 
         // When
         val enrichedBeaconStatuses = GetVesselBeaconStatuses(beaconStatusesRepository, beaconStatusCommentsRepository, beaconStatusActionsRepository)

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayers'
+import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
 import {
   RegulationGeometryLine,
   RegulationLawTypeLine,
@@ -87,7 +87,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {Number[]} geometryIdList */
-  const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [])
+  const geometryIdList = useMemo(() => geometryObjectList ? formatDataForSelectPicker(Object.keys(geometryObjectList)) : [], [geometryObjectList])
   /** @type {boolean} saveIsForbidden */
   const [saveIsForbidden, setSaveIsForbidden] = useState(false)
 
@@ -137,11 +137,9 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [isEdition, regulatoryZoneMetadata])
 
   const goBackofficeHome = useCallback(() => {
-    batch(() => {
-      dispatch(resetState())
-    })
+    dispatch(resetState())
     history.push('/backoffice/regulation')
-  }, [resetState])
+  }, [dispatch, history])
 
   useEffect(() => {
     if (regulationSaved || regulationDeleted) {

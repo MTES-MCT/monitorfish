@@ -571,7 +571,8 @@ class BffControllerITests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         given(this.getVesselBeaconStatuses.execute("FR224226850", "123", "IEF4", VesselIdentifier.INTERNAL_REFERENCE_NUMBER))
-                .willReturn(BeaconStatusResumeAndHistory(
+                .willReturn(VesselBeaconStatusResumeAndHistory(
+                        resume = VesselBeaconStatusResume(1, 2, null, null),
                         history = listOf(BeaconStatusWithDetails(
                             beaconStatus = BeaconStatus(1, "FR224226850", "1236514", "IRCS",
                                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.RESUMED_TRANSMISSION,
@@ -595,6 +596,8 @@ class BffControllerITests {
                 "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
                 // Then
                 .andExpect(status().isOk)
+                .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))
+                .andExpect(jsonPath("$.resume.numberOfBeaconsAtPort", equalTo(2)))
                 .andExpect(jsonPath("$.current.beaconStatus.id", equalTo(2)))
                 .andExpect(jsonPath("$.current.beaconStatus.internalReferenceNumber", equalTo("FR224226850")))
                 .andExpect(jsonPath("$.current.beaconStatus.externalReferenceNumber", equalTo("1236514")))

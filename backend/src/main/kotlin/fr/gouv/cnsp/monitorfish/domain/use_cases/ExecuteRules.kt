@@ -39,7 +39,6 @@ class ExecuteRules(private val ruleRepository: RuleRepository,
                 logger.info("PNO_LAN_WEIGHT_TOLERANCE: Executing...")
                 executePnoAndLanWeightToleranceRule.execute(rule)
             }
-            else -> logger.warn("Unhandled Rule ${rule.value.name} for rule ${rule.id}: ${rule.title}")
         }
     }
 }

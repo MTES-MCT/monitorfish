@@ -23,7 +23,7 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
         // When
         val baconStatuses = jpaBeaconStatusesRepository.findAll()
 
-        assertThat(baconStatuses).hasSize(5)
+        assertThat(baconStatuses).hasSize(6)
         assertThat(baconStatuses.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(baconStatuses.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
         assertThat(baconStatuses.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
@@ -47,7 +47,7 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
         // When
         val baconStatuses = jpaBeaconStatusesRepository.findLastThirtyResumedTransmissions()
 
-        assertThat(baconStatuses).hasSize(1)
+        assertThat(baconStatuses).hasSize(2)
         assertThat(baconStatuses.first().internalReferenceNumber).isEqualTo("FR263465414")
         assertThat(baconStatuses.first().stage).isEqualTo(Stage.RESUMED_TRANSMISSION)
         assertThat(baconStatuses.first().vesselStatus).isEqualTo(VesselStatus.AT_PORT)

@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.BeaconStatusResumeAndHistory
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusWithDetails
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.Stage
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusCommentsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusesRepository
@@ -24,15 +25,25 @@ class GetVesselBeaconStatuses(private val beaconStatusesRepository: BeaconStatus
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> externalReferenceNumber
         }
 
-        val history = beaconStatusesRepository.findAllByVesselIdentifierEquals(vesselIdentifier, value)
+        val beaconStatuses = beaconStatusesRepository.findAllByVesselIdentifierEquals(vesselIdentifier, value)
 
-        val beaconStatusWithDetails = history.map {
+        val beaconStatusesWithDetails = beaconStatuses.map {
             val comments = beaconStatusCommentsRepository.findAllByBeaconStatusId(it.id)
             val actions = beaconStatusActionsRepository.findAllByBeaconStatusId(it.id)
 
             BeaconStatusWithDetails(it, comments, actions)
         }
 
-        return BeaconStatusResumeAndHistory(beaconStatusWithDetails)
+        val currentBeaconStatus = beaconStatusesWithDetails.find {
+            it.beaconStatus.stage != Stage.RESUMED_TRANSMISSION
+        }
+        val history = beaconStatusesWithDetails.filter {
+            it.beaconStatus.id != currentBeaconStatus?.beaconStatus?.id
+        }
+
+        return BeaconStatusResumeAndHistory(
+                current = currentBeaconStatus,
+                history = history
+        )
     }
 }

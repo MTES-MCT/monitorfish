@@ -1,7 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.BeaconStatusResumeAndHistory
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselBeaconStatusResume
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselBeaconStatusResumeAndHistory
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusWithDetails
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.Stage
@@ -18,7 +19,7 @@ class GetVesselBeaconStatuses(private val beaconStatusesRepository: BeaconStatus
     fun execute(internalReferenceNumber: String,
                 externalReferenceNumber: String,
                 ircs: String,
-                vesselIdentifier: VesselIdentifier): BeaconStatusResumeAndHistory {
+                vesselIdentifier: VesselIdentifier): VesselBeaconStatusResumeAndHistory {
         val value = when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> internalReferenceNumber
             VesselIdentifier.IRCS -> ircs
@@ -34,6 +35,7 @@ class GetVesselBeaconStatuses(private val beaconStatusesRepository: BeaconStatus
             BeaconStatusWithDetails(it, comments, actions)
         }
 
+        val resume = VesselBeaconStatusResume.fromBeaconStatuses(beaconStatusesWithDetails)
         val currentBeaconStatus = beaconStatusesWithDetails.find {
             it.beaconStatus.stage != Stage.RESUMED_TRANSMISSION
         }
@@ -41,7 +43,8 @@ class GetVesselBeaconStatuses(private val beaconStatusesRepository: BeaconStatus
             it.beaconStatus.id != currentBeaconStatus?.beaconStatus?.id
         }
 
-        return BeaconStatusResumeAndHistory(
+        return VesselBeaconStatusResumeAndHistory(
+                resume = resume,
                 current = currentBeaconStatus,
                 history = history
         )

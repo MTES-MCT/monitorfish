@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import javax.transaction.Transactional
 
 @Repository
 class JpaPositionRepository(private val dbPositionRepository: DBPositionRepository) : PositionRepository {
@@ -66,6 +67,7 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
                 .map(PositionEntity::toPosition)
     }
 
+    @Transactional
     override fun save(position: Position) {
         val positionEntity = PositionEntity.fromPosition(position)
         dbPositionRepository.save(positionEntity)

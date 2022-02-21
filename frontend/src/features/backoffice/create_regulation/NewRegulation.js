@@ -5,6 +5,9 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
+import Layers from '../../../domain/entities/layers'
+import showRegulatoryZone from '../../../domain/use_cases/showRegulatoryZone'
+
 import {
   RegulationGeometryLine,
   RegulationLawTypeLine,
@@ -21,6 +24,7 @@ import ConfirmRegulationModal from './ConfirmRegulationModal'
 import BaseMap from '../../map/BaseMap'
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
 import BaseLayer from '../../../layers/BaseLayer'
+
 import RegulatoryPreviewLayer from '../../../layers/RegulatoryPreviewLayer'
 import {
   setRegulatoryGeometriesToPreview,
@@ -129,6 +133,18 @@ const CreateRegulation = ({ title, isEdition }) => {
       dispatch(resetRegulatoryGeometriesToPreview())
     }
   }, [])
+
+  useEffect(() => {
+    return () => {
+      if (isEdition && processingRegulation?.geometry) {
+        dispatch(showRegulatoryZone({
+          type: Layers.REGULATORY.code,
+          ...processingRegulation,
+          namespace: 'backoffice'
+        }))
+      }
+    }
+  }, [isEdition, processingRegulation])
 
   useEffect(() => {
     if (isEdition && processingRegulation) {

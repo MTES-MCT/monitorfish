@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY } from '../entities/layers'
+import { SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, SELECTED_REG_ZONES_LOCAL_STORAGE_KEY } from '../entities/layers'
 import { getLocalStorageState } from '../../utils'
 import { getRegulatoryLayersWithoutTerritory } from '../entities/regulatory'
 
@@ -211,9 +211,22 @@ const regulatorySlice = createSlice({
     setSelectedRegulatoryZone (state, action) {
       if (action.payload && action.payload.length) {
         const regulatoryLayers = action.payload
-        const selectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
         let nextSelectedRegulatoryLayers = {}
         let nextSelectedRegulatoryLayerIds = []
+        let selectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
+        if (!selectedRegulatoryLayerIds.length) {
+          const selectedRegulatoryLayers = getLocalStorageState([], SELECTED_REG_ZONES_LOCAL_STORAGE_KEY)
+          if (Object.keys(selectedRegulatoryLayers).length) {
+            selectedRegulatoryLayerIds = []
+            Object.keys(selectedRegulatoryLayers).map(selectedRegulatoryTopic => {
+              selectedRegulatoryLayers[selectedRegulatoryTopic].forEach(selectedRegulatoryLayerId => {
+                selectedRegulatoryLayerIds.push(selectedRegulatoryLayerId.id)
+              })
+              return null
+            })
+          }
+          // remove SELECTED_REG_ZONES_LOCAL_STORAGE_KEY item in localstorage
+        }
         selectedRegulatoryLayerIds
           .map(selectedRegulatoryZoneId => {
             const updatedObjects = updateSelectedRegulatoryLayers(regulatoryLayers, selectedRegulatoryZoneId, nextSelectedRegulatoryLayers, nextSelectedRegulatoryLayerIds)

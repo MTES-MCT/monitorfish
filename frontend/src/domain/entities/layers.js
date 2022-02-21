@@ -465,6 +465,7 @@ export function getGearCategory (layerGears, gears) {
 }
 
 export const SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY = 'selectedRegulatoryZoneIds'
+export const SELECTED_REG_ZONES_LOCAL_STORAGE_KEY = 'selectedRegulatoryZones'
 
 export const reOrderOldObjectHierarchyIfFound = layers => {
   layers.forEach(layer => {

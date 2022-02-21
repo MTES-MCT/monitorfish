@@ -102,6 +102,10 @@ const reducers = {
     }
     window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
   },
+  resetShowedLayer (state, action) {
+    state.showedLayers = []
+    window.localStorage.setItem(`${action.payload}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
+  },
   /**
    * Store layer to feature and simplified feature - To show simplified features if the zoom is low
    * @param {Object=} state

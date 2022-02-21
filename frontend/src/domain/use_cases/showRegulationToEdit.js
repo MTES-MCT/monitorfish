@@ -19,7 +19,8 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
         upcomingRegulatoryReferences,
         fishingPeriod,
         regulatorySpecies,
-        regulatoryGears
+        regulatoryGears,
+        geometry
       } = regulatoryZoneMetadata
 
       dispatch(setProcessingRegulation({
@@ -32,7 +33,8 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
         upcomingRegulatoryReferences: upcomingRegulatoryReferences || { regulatoryTextList: [] },
         fishingPeriod,
         regulatorySpecies,
-        regulatoryGears
+        regulatoryGears,
+        geometry
       }))
     }).catch(error => {
       console.error(error)

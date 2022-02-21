@@ -20,9 +20,11 @@ import {
 import ConfirmRegulationModal from './ConfirmRegulationModal'
 import BaseMap from '../../map/BaseMap'
 import updateRegulation from '../../../domain/use_cases/updateRegulation'
-
+import BaseLayer from '../../../layers/BaseLayer'
+import RegulatoryPreviewLayer from '../../../layers/RegulatoryPreviewLayer'
 import {
   setRegulatoryGeometriesToPreview,
+  resetRegulatoryGeometriesToPreview,
   setRegulatoryZoneMetadata,
   setRegulatoryTopics,
   closeRegulatoryZoneMetadataPanel
@@ -67,10 +69,7 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   const history = useHistory()
 
-  const {
-    layersTopicsByRegTerritory,
-    regulatoryZoneMetadata
-  } = useSelector(state => state.regulatory)
+  const layersTopicsByRegTerritory = useSelector(state => state.regulatory.layersTopicsByRegTerritory)
 
   /** @type {boolean} */
   const [lawTypeIsMissing, setLawTypeIsMissing] = useState(false)
@@ -127,14 +126,15 @@ const CreateRegulation = ({ title, isEdition }) => {
       dispatch(setProcessingRegulation(INITIAL_REGULATION))
       dispatch(setRegulatoryZoneMetadata(undefined))
       dispatch(setUpcomingRegulatoryText(INITIAL_UPCOMING_REG_REFERENCE))
+      dispatch(resetRegulatoryGeometriesToPreview())
     }
   }, [])
 
   useEffect(() => {
-    if (isEdition && regulatoryZoneMetadata) {
-      setInitialGeometryId(regulatoryZoneMetadata.id)
+    if (isEdition && processingRegulation) {
+      setInitialGeometryId(processingRegulation.id)
     }
-  }, [isEdition, regulatoryZoneMetadata])
+  }, [isEdition, processingRegulation])
 
   const goBackofficeHome = useCallback(() => {
     dispatch(resetState())
@@ -237,12 +237,12 @@ const CreateRegulation = ({ title, isEdition }) => {
 
   useEffect(() => {
     if (showRegulatoryPreview &&
-      ((isEdition && regulatoryZoneMetadata.geometry) || (geometryObjectList && geometryObjectList[id]))) {
+      ((isEdition && processingRegulation?.geometry) || (geometryObjectList && geometryObjectList[id]))) {
       dispatch(setRegulatoryGeometriesToPreview(isEdition
-        ? [regulatoryZoneMetadata.geometry]
+        ? [processingRegulation.geometry]
         : [geometryObjectList[id]]))
     }
-  }, [isEdition, regulatoryZoneMetadata, id, geometryObjectList, showRegulatoryPreview])
+  }, [isEdition, processingRegulation, id, geometryObjectList, showRegulatoryPreview])
 
   const getGeometryObjectList = () => {
     dispatch(getGeometryWithoutRegulationReference())
@@ -347,7 +347,11 @@ const CreateRegulation = ({ title, isEdition }) => {
           </FooterButton>
         </Footer>
       </CreateRegulationWrapper>
-    { showRegulatoryPreview && <BaseMap />}
+      { showRegulatoryPreview &&
+        <BaseMap >
+          <BaseLayer />
+          <RegulatoryPreviewLayer />
+        </BaseMap>}
     </Wrapper>
     {isModalOpen && <UpcomingRegulationModal />}
     {isRemoveModalOpen && <RemoveRegulationModal />}

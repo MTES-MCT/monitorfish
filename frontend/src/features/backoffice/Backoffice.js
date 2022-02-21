@@ -20,6 +20,7 @@ import { COLORS } from '../../constants/constants'
 import { EmptyResult } from '../commonStyles/Text.style'
 import { setProcessingRegulationSaved } from './Regulation.slice'
 import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
+import layer from '../../domain/shared_slices/Layer'
 /* import { SecondaryButton } from '../commonStyles/Buttons.style' */
 
 const Backoffice = () => {
@@ -28,6 +29,9 @@ const Backoffice = () => {
   const gears = useSelector(state => state.gear.gears)
   const dispatch = useDispatch()
   const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState(null)
+  const {
+    resetShowedLayer
+  } = layer.backoffice.actions
 
   const handleMovingAndZoom = () => {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
@@ -56,6 +60,9 @@ const Backoffice = () => {
    */
   useEffect(() => {
     initBackoffice()
+    return () => {
+      dispatch(resetShowedLayer('backoffice'))
+    }
   }, [])
 
   /**

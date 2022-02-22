@@ -298,12 +298,12 @@ class BffController(
                                 @PathVariable(name = "beaconMalfunctionId")
                                 beaconMalfunctionId: Int,
                                 @RequestBody
-                                updateBeaconMalfunctionData: UpdateBeaconMalfunctionDataInput): BeaconMalfunctionWithDetailsDataOutput {
+                                updateBeaconMalfunctionData: UpdateBeaconMalfunctionDataInput): BeaconStatusResumeAndDetailsDataOutput {
         return updateBeaconMalfunction.execute(
                 id = beaconMalfunctionId,
                 vesselStatus = updateBeaconMalfunctionData.vesselStatus,
                 stage = updateBeaconMalfunctionData.stage).let {
-            BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(it)
+            BeaconStatusResumeAndDetailsDataOutput.fromBeaconMalfunctionWithDetails(it)
         }
     }
 
@@ -314,12 +314,12 @@ class BffController(
                                      @PathVariable(name = "beaconMalfunctionId")
                                      beaconMalfunctionId: Int,
                                      @RequestBody
-                                     saveBeaconMalfunctionCommentDataInput: SaveBeaconMalfunctionCommentDataInput): BeaconMalfunctionWithDetailsDataOutput {
+                                     saveBeaconMalfunctionCommentDataInput: SaveBeaconMalfunctionCommentDataInput): BeaconStatusResumeAndDetailsDataOutput {
         return saveBeaconMalfunctionComment.execute(
                 beaconMalfunctionId = beaconMalfunctionId,
                 comment = saveBeaconMalfunctionCommentDataInput.comment,
                 userType = saveBeaconMalfunctionCommentDataInput.userType).let {
-            BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(it)
+            BeaconStatusResumeAndDetailsDataOutput.fromBeaconMalfunctionWithDetails(it)
         }
     }
 
@@ -327,7 +327,7 @@ class BffController(
     @ApiOperation("Get a beacon malfunction with the comments and history")
     fun getBeaconMalfunction(@PathParam("Beacon malfunction id")
                              @PathVariable(name = "beaconMalfunctionId")
-                             beaconMalfunctionId: Int): BeaconMalfunctionWithDetailsDataOutput {
-        return BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(getBeaconMalfunction.execute(beaconMalfunctionId))
+                             beaconMalfunctionId: Int): BeaconStatusResumeAndDetailsDataOutput {
+        return BeaconStatusResumeAndDetailsDataOutput.fromBeaconMalfunctionWithDetails(getBeaconMalfunction.execute(beaconMalfunctionId))
     }
 }

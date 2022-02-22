@@ -59,6 +59,7 @@
  * @property {boolean} holidays
  * @property {boolean} daytime
  * @property {string} otherInfo
+ * @property {boolean} allYear
  */
 
 /**

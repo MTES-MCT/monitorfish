@@ -12,7 +12,7 @@ class UpdateBeaconStatus(private val beaconStatusesRepository: BeaconStatusesRep
                          private val beaconStatusActionsRepository: BeaconStatusActionsRepository,
                          private val getBeaconStatus: GetBeaconStatus) {
     @Throws(CouldNotUpdateBeaconStatusException::class, IllegalArgumentException::class)
-    fun execute(id: Int, vesselStatus: VesselStatus?, stage: Stage?): BeaconStatusWithDetails {
+    fun execute(id: Int, vesselStatus: VesselStatus?, stage: Stage?): BeaconStatusResumeAndDetails {
         require(vesselStatus != null || stage != null) {
             "No value to update"
         }

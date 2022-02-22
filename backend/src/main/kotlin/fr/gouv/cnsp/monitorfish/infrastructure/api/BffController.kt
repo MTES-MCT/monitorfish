@@ -298,12 +298,12 @@ class BffController(
                            @PathVariable(name = "beaconStatusId")
                            beaconStatusId: Int,
                            @RequestBody
-                           updateBeaconStatusData: UpdateBeaconStatusDataInput): BeaconStatusWithDetailsDataOutput {
+                           updateBeaconStatusData: UpdateBeaconStatusDataInput): BeaconStatusResumeAndDetailsDataOutput {
         return updateBeaconStatus.execute(
                 id = beaconStatusId,
                 vesselStatus = updateBeaconStatusData.vesselStatus,
                 stage = updateBeaconStatusData.stage).let {
-            BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(it)
+            BeaconStatusResumeAndDetailsDataOutput.fromBeaconStatusResumeAndDetails(it)
         }
     }
 
@@ -314,12 +314,12 @@ class BffController(
                                 @PathVariable(name = "beaconStatusId")
                                 beaconStatusId: Int,
                                 @RequestBody
-                                saveBeaconStatusCommentDataInput: SaveBeaconStatusCommentDataInput): BeaconStatusWithDetailsDataOutput {
+                                saveBeaconStatusCommentDataInput: SaveBeaconStatusCommentDataInput): BeaconStatusResumeAndDetailsDataOutput {
         return saveBeaconStatusComment.execute(
                 beaconStatusId = beaconStatusId,
                 comment = saveBeaconStatusCommentDataInput.comment,
                 userType = saveBeaconStatusCommentDataInput.userType).let {
-            BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(it)
+            BeaconStatusResumeAndDetailsDataOutput.fromBeaconStatusResumeAndDetails(it)
         }
     }
 
@@ -327,7 +327,7 @@ class BffController(
     @ApiOperation("Get a beacon status with the comments and history")
     fun getBeaconStatus(@PathParam("Beacon status id")
                         @PathVariable(name = "beaconStatusId")
-                        beaconStatusId: Int): BeaconStatusWithDetailsDataOutput {
-        return BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(getBeaconStatus.execute(beaconStatusId))
+                        beaconStatusId: Int): BeaconStatusResumeAndDetailsDataOutput {
+        return BeaconStatusResumeAndDetailsDataOutput.fromBeaconStatusResumeAndDetails(getBeaconStatus.execute(beaconStatusId))
     }
 }

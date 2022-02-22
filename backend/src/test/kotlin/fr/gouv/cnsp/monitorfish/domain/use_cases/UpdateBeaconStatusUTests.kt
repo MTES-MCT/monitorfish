@@ -53,7 +53,7 @@ class UpdateBeaconStatusUTests {
         given(beaconStatusesActionRepository.findAllByBeaconStatusId(any())).willReturn(listOf(BeaconStatusAction(1, 1,
                 BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now())))
         given(getBeaconStatus.execute(1))
-                .willReturn(BeaconStatusWithDetails(
+                .willReturn(BeaconStatusResumeAndDetails(
                         beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                                 VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),

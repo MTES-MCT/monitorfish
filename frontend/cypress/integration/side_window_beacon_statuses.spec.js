@@ -112,7 +112,7 @@ context('Beacon statuses', () => {
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Navire à quai')
-    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/9').as('moveBeaconMalfunctionCardVesselStatus')
+    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/4').as('moveBeaconMalfunctionCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]').children()
@@ -225,7 +225,7 @@ context('Beacon statuses', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Activité détectée')
-    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/9').as('moveBeaconMalfunctionCardVesselStatus')
+    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/4').as('moveBeaconMalfunctionCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
@@ -261,7 +261,7 @@ context('Beacon statuses', () => {
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-textarea"]')
       .type('I just added a new comment')
-    cy.intercept('POST', 'bff/v1/beacon_malfunctions/9/comments').as('addBeaconMalfunctionComment')
+    cy.intercept('POST', 'bff/v1/beacon_malfunctions/4/comments').as('addBeaconMalfunctionComment')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-add"]').click({ force: true })
 
     // Then

@@ -209,7 +209,7 @@ const regulatorySlice = createSlice({
       }
     },
     setSelectedRegulatoryZone (state, action) {
-      if (action.payload && action.payload.length) {
+      if (action.payload?.length) {
         const regulatoryLayers = action.payload
         let nextSelectedRegulatoryLayers = {}
         let nextSelectedRegulatoryLayerIds = []
@@ -218,17 +218,16 @@ const regulatorySlice = createSlice({
           const selectedRegulatoryLayers = getLocalStorageState([], SELECTED_REG_ZONES_LOCAL_STORAGE_KEY)
           if (Object.keys(selectedRegulatoryLayers).length) {
             selectedRegulatoryLayerIds = []
-            Object.keys(selectedRegulatoryLayers).map(selectedRegulatoryTopic => {
+            Object.keys(selectedRegulatoryLayers).forEach(selectedRegulatoryTopic => {
               selectedRegulatoryLayers[selectedRegulatoryTopic].forEach(selectedRegulatoryLayerId => {
                 selectedRegulatoryLayerIds.push(selectedRegulatoryLayerId.id)
               })
-              return null
             })
           }
           // remove SELECTED_REG_ZONES_LOCAL_STORAGE_KEY item in localstorage
         }
         selectedRegulatoryLayerIds
-          .map(selectedRegulatoryZoneId => {
+          .forEach(selectedRegulatoryZoneId => {
             const updatedObjects = updateSelectedRegulatoryLayers(regulatoryLayers, selectedRegulatoryZoneId, nextSelectedRegulatoryLayers, nextSelectedRegulatoryLayerIds)
             if (updatedObjects.selectedRegulatoryLayers && updatedObjects.selectedRegulatoryLayerIds) {
               nextSelectedRegulatoryLayers = updatedObjects.selectedRegulatoryLayers

@@ -22,7 +22,6 @@ import {
 } from './'
 import ConfirmRegulationModal from './ConfirmRegulationModal'
 import BaseMap from '../../map/BaseMap'
-import updateRegulation from '../../../domain/use_cases/updateRegulation'
 import BaseLayer from '../../../layers/BaseLayer'
 
 import RegulatoryPreviewLayer from '../../../layers/RegulatoryPreviewLayer'
@@ -34,6 +33,8 @@ import {
   closeRegulatoryZoneMetadataPanel
 } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
+import createRegulation from '../../../domain/use_cases/createRegulation'
+import resetRegulation from '../../../domain/use_cases/resetRegulation'
 
 import { formatDataForSelectPicker } from '../../../utils'
 import {
@@ -52,12 +53,8 @@ import {
   setProcessingRegulation,
   setUpcomingRegulatoryText
 } from '../Regulation.slice'
-import Feature from 'ol/Feature'
 import {
   mapToRegulatoryFeatureObject,
-  emptyRegulatoryFeatureObject,
-  getRegulatoryFeatureId,
-  REGULATION_ACTION_TYPE,
   REGULATORY_TEXT_SOURCE,
   LAWTYPES_TO_TERRITORY,
   FRANCE,
@@ -85,8 +82,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [regionIsMissing, setRegionIsMissing] = useState(false)
   /** @type {[GeoJSONGeometry]} geometryObjectList */
   const [geometryObjectList, setGeometryObjectList] = useState([])
-  /** @type {GeoJSONGeometry} selectedGeometry */
-  const [initialGeometryId, setInitialGeometryId] = useState()
   const [geometryIsMissing, setGeometryIsMissing] = useState(false)
   const [showRegulatoryPreview, setShowRegulatoryPreview] = useState(false)
   /** @type {Number[]} geometryIdList */
@@ -103,7 +98,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     isRemoveModalOpen,
     isConfirmModalOpen,
     regulationDeleted,
-    processingRegulation
+    processingRegulation,
+    selectedRegulatoryZoneId
   } = useSelector(state => state.regulation)
 
   const {
@@ -144,14 +140,9 @@ const CreateRegulation = ({ title, isEdition }) => {
         }))
       }
     }
-  }, [isEdition, processingRegulation])
+  }, [isEdition, processingRegulation, dispatch])
 
-  useEffect(() => {
-    if (isEdition && processingRegulation) {
-      setInitialGeometryId(processingRegulation.id)
-    }
-  }, [isEdition, processingRegulation])
-
+  // hooks ?
   const goBackofficeHome = useCallback(() => {
     dispatch(resetState())
     history.push('/backoffice/regulation')
@@ -177,20 +168,14 @@ const CreateRegulation = ({ title, isEdition }) => {
       }
       dispatch(setRegulatoryTopics(regulatoryTopicList))
     }
-  }, [lawType, layersTopicsByRegTerritory])
+  }, [lawType, layersTopicsByRegTerritory, dispatch])
 
   const createOrUpdateRegulation = useCallback((featureObject) => {
-    const feature = new Feature(featureObject)
-    feature.setId(getRegulatoryFeatureId(id))
-    dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
-
-    if (initialGeometryId && initialGeometryId !== id) {
-      emptyRegulatoryFeatureObject.next_id = id
-      const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
-      emptyFeature.setId(getRegulatoryFeatureId(initialGeometryId))
-      dispatch(updateRegulation(emptyFeature, REGULATION_ACTION_TYPE.UPDATE))
+    dispatch(createRegulation(featureObject, id))
+    if (selectedRegulatoryZoneId && selectedRegulatoryZoneId !== id) {
+      dispatch(resetRegulation(selectedRegulatoryZoneId, id))
     }
-  }, [id, initialGeometryId])
+  }, [id, selectedRegulatoryZoneId, dispatch])
 
   const checkRequiredValues = useCallback(() => {
     let _atLeastOneValueIsMissing = false
@@ -216,7 +201,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     setGeometryIsMissing(valueIsMissing)
     _atLeastOneValueIsMissing = _atLeastOneValueIsMissing || valueIsMissing
     dispatch(setAtLeastOneValueIsMissing(_atLeastOneValueIsMissing))
-  }, [lawType, topic, zone, region, id])
+  }, [lawType, topic, zone, region, id, dispatch])
 
   useEffect(() => {
     if (saveOrUpdateRegulation && atLeastOneValueIsMissing === undefined) {

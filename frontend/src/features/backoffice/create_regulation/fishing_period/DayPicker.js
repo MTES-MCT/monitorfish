@@ -1,13 +1,19 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { WEEKDAYS, FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulatory'
-import useSetFishingPeriod from '../../../../hooks/useSetFishingPeriod'
+import { FISHING_PERIOD_KEYS, WEEKDAYS } from '../../../../domain/entities/regulatory'
+import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 
 const DayPicker = ({ disabled }) => {
   const { weekdays } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
   const setWeekdays = useSetFishingPeriod(FISHING_PERIOD_KEYS.WEEKDAYS)
+
+  useEffect(() => {
+    if (disabled) {
+      setWeekdays([])
+    }
+  }, [disabled])
 
   const onClick = useCallback(e => {
     let newSelectedList

@@ -1,24 +1,41 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { Radio, RadioGroup } from 'rsuite'
 import { Label } from '../../../commonStyles/Input.style'
 import { COLORS } from '../../../../constants/constants'
-import useSetFishingPeriod from '../../../../hooks/useSetFishingPeriod'
+import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 import { FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulatory'
 
-const FishingPeriodAnnualReccurence = () => {
+const FishingPeriodAnnualRecurrence = ({ disabled }) => {
   const { annualRecurrence } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
-  const onAnnualReccurenceChange = useSetFishingPeriod(FISHING_PERIOD_KEYS.ANNUAL_RECURRENCE)
-  return <AnnualRecurrence >
+  const onAnnualRecurrenceChange = useSetFishingPeriod(FISHING_PERIOD_KEYS.ANNUAL_RECURRENCE)
+
+  useEffect(() => {
+    if (disabled) {
+      onAnnualRecurrenceChange(undefined)
+    }
+  }, [disabled])
+
+  return <AnnualRecurrence disabled={disabled}>
     <Label>Récurrence annuelle</Label>
     <RadioGroup
       inline
-      onChange={onAnnualReccurenceChange}
-      value={annualRecurrence}
+      onChange={value => onAnnualRecurrenceChange(value === 'true')}
+      value={
+        annualRecurrence === undefined
+          ? ''
+          : annualRecurrence === true
+            ? 'true'
+            : 'false'
+      }
     >
-      <CustomRadio value={true}>oui</CustomRadio>
-      <CustomRadio value={false}>non</CustomRadio>
+      <CustomRadio disabled={disabled} value={'true'}>
+        oui
+      </CustomRadio>
+      <CustomRadio disabled={disabled} value={'false'}>
+        non
+      </CustomRadio>
     </RadioGroup>
   </AnnualRecurrence>
 }
@@ -51,6 +68,7 @@ const AnnualRecurrence = styled.div`
   .rs-radio-group {
     margin-left: -10px;
   }
+  opacity: ${props => props.disabled ? '0.4' : '1'};
 `
 
-export default FishingPeriodAnnualReccurence
+export default FishingPeriodAnnualRecurrence

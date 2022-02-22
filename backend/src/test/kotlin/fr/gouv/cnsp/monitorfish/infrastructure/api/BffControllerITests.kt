@@ -5,6 +5,7 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.isNull
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.*
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.*
@@ -500,8 +501,8 @@ class BffControllerITests {
     @Test
     fun `Should return Created When an update of a beacon status is done`() {
         given(this.updateBeaconMalfunction.execute(123, VesselStatus.AT_SEA, null))
-                .willReturn(BeaconMalfunctionWithDetails(
-                        beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                .willReturn(BeaconStatusResumeAndDetails(
+                        beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                                 VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
@@ -535,8 +536,31 @@ class BffControllerITests {
     @Test
     fun `Should return a beacon status`() {
         given(this.getBeaconMalfunction.execute(123))
-                .willReturn(BeaconMalfunctionWithDetails(
-                        beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                .willReturn(BeaconStatusResumeAndDetails(
+                        beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                        resume = VesselBeaconStatusResume(1, 2, null, null),
+                        comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
+                        actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
+
+        // When
+        mockMvc.perform(get("/bff/v1/beacon_malfunctions/123"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))
+                .andExpect(jsonPath("$.comments.length()", equalTo(1)))
+                .andExpect(jsonPath("$.actions.length()", equalTo(1)))
+                .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
+                .andExpect(jsonPath("$.actions[0].propertyName", equalTo("VESSEL_STATUS")))
+                .andExpect(jsonPath("$.beaconStatus.internalReferenceNumber", equalTo("CFR")))
+    }
+
+    @Test
+    fun `Should return a beacon status without a resume`() {
+        given(this.getBeaconStatus.execute(123))
+                .willReturn(BeaconStatusResumeAndDetails(
+                        beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                                 VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
@@ -546,6 +570,7 @@ class BffControllerITests {
         mockMvc.perform(get("/bff/v1/beacon_malfunctions/123"))
                 // Then
                 .andExpect(status().isOk)
+                .andExpect(jsonPath("$.resume", equalTo(null)))
                 .andExpect(jsonPath("$.comments.length()", equalTo(1)))
                 .andExpect(jsonPath("$.actions.length()", equalTo(1)))
                 .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
@@ -555,7 +580,7 @@ class BffControllerITests {
 
     @Test
     fun `Should save a beacon status comment`() {
-        given(this.saveBeaconMalfunctionComment.execute(any(), any(), any())).willReturn(BeaconMalfunctionWithDetails(
+        given(this.saveBeaconMalfunctionComment.execute(any(), any(), any())).willReturn(BeaconStatusResumeAndDetails(
                 beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         true, ZonedDateTime.now(), null, ZonedDateTime.now()),

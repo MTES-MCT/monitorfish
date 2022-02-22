@@ -11,7 +11,7 @@ import java.time.ZonedDateTime
 class VesselBeaconStatusResumeUTests {
 
     @Test
-    fun `fromBeaconStatuses Should create the resume`() {
+    fun `fromBeaconStatuses Should create the resume When there is some actions`() {
         // Given
         val now = ZonedDateTime.now()
         val lastBeaconDateTime = now.minusMinutes(2)
@@ -77,4 +77,36 @@ class VesselBeaconStatusResumeUTests {
         assertThat(resume.lastBeaconStatusVesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
     }
 
+    @Test
+    fun `fromBeaconStatuses Should create the resume When there is no actions`() {
+        // Given
+        val now = ZonedDateTime.now()
+        val lastBeaconDateTime = now.minusMinutes(2)
+        val beaconStatuses = listOf(
+                BeaconStatusWithDetails(
+                        beaconStatus = BeaconStatus(1, "FR224226850", "1236514", "IRCS",
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA,
+                                Stage.RESUMED_TRANSMISSION, true, lastBeaconDateTime, null, lastBeaconDateTime),
+                        comments = listOf(BeaconStatusComment(
+                                beaconStatusId = 1, comment = "A comment", userType = BeaconStatusCommentUserType.SIP,
+                                dateTime = lastBeaconDateTime)),
+                        actions = listOf()),
+                BeaconStatusWithDetails(
+                        beaconStatus = BeaconStatus(2, "FR224226852", "1236514", "IRCS",
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_PORT,
+                                Stage.RESUMED_TRANSMISSION, true, now, null, now),
+                        comments = listOf(BeaconStatusComment(
+                                beaconStatusId = 1, comment = "A comment", userType = BeaconStatusCommentUserType.SIP,
+                                dateTime = now)),
+                        actions = listOf()))
+
+        // When
+        val resume = VesselBeaconStatusResume.fromBeaconStatuses(beaconStatuses)
+
+        // Then
+        assertThat(resume.numberOfBeaconsAtSea).isEqualTo(0)
+        assertThat(resume.numberOfBeaconsAtPort).isEqualTo(1)
+        assertThat(resume.lastBeaconStatusDateTime).isEqualTo(now)
+        assertThat(resume.lastBeaconStatusVesselStatus).isEqualTo(VesselStatus.AT_PORT)
+    }
 }

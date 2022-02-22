@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Radio, RadioGroup } from 'rsuite'
 import styled, { css } from 'styled-components'
-import useSetFishingPeriod from '../../../hooks/useSetFishingPeriod'
+import useSetFishingPeriod from '../../../hooks/fishingPeriod/useSetFishingPeriod'
 import { FISHING_PERIOD_KEYS } from '../../../domain/entities/regulatory'
 import { COLORS } from '../../../constants/constants'
 

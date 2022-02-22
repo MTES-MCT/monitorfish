@@ -25,7 +25,6 @@ data class BeaconStatus(
                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> lastPosition.internalReferenceNumber == beaconStatus.internalReferenceNumber
                     VesselIdentifier.IRCS -> lastPosition.ircs == beaconStatus.ircs
                     VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> lastPosition.externalReferenceNumber == beaconStatus.externalReferenceNumber
-                    else -> false
                 }
             }
         }

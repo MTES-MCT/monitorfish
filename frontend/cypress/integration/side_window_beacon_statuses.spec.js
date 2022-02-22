@@ -105,7 +105,7 @@ context('Beacon statuses', () => {
       .first()
       .find('*[data-cy="side-window-beacon-statuses-vessel-status"]')
       .contains('Navire à quai')
-    cy.intercept('PUT', 'bff/v1/beacon_statuses/3').as('moveBeaconStatusCardVesselStatus')
+    cy.intercept('PUT', 'bff/v1/beacon_statuses/4').as('moveBeaconStatusCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-statuses-columns-INITIAL_ENCOUNTER"]').children()
@@ -209,7 +209,7 @@ context('Beacon statuses', () => {
     cy.get('*[data-cy="side-window-beacon-statuses-detail"]')
       .find('*[data-cy="side-window-beacon-statuses-vessel-status"]')
       .contains('Activité détectée')
-    cy.intercept('PUT', 'bff/v1/beacon_statuses/3').as('moveBeaconStatusCardVesselStatus')
+    cy.intercept('PUT', 'bff/v1/beacon_statuses/4').as('moveBeaconStatusCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-statuses-detail"]')
@@ -245,7 +245,7 @@ context('Beacon statuses', () => {
     // When
     cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-textarea"]')
       .type('I just added a new comment')
-    cy.intercept('POST', 'bff/v1/beacon_statuses/3/comments').as('addBeaconStatusComment')
+    cy.intercept('POST', 'bff/v1/beacon_statuses/4/comments').as('addBeaconStatusComment')
     cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-add"]').click({ force: true })
 
     // Then

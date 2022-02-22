@@ -223,8 +223,8 @@ const regulatorySlice = createSlice({
                 selectedRegulatoryLayerIds.push(selectedRegulatoryLayerId.id)
               })
             })
+            window.localStorage.removeItem(SELECTED_REG_ZONES_LOCAL_STORAGE_KEY)
           }
-          // remove SELECTED_REG_ZONES_LOCAL_STORAGE_KEY item in localstorage
         }
         selectedRegulatoryLayerIds
           .forEach(selectedRegulatoryZoneId => {

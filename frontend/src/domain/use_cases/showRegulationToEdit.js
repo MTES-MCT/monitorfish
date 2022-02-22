@@ -1,7 +1,7 @@
 import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../api/fetch'
 import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../entities/regulatory'
 import { setError } from '../shared_slices/Global'
-import { setProcessingRegulation } from '../../features/backoffice/Regulation.slice'
+import { setProcessingRegulation, setSelectedRegulatoryZoneId } from '../../features/backoffice/Regulation.slice'
 import Layers from '../entities/layers'
 
 const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
@@ -36,6 +36,7 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
         regulatoryGears,
         geometry
       }))
+      dispatch(setSelectedRegulatoryZoneId(id))
     }).catch(error => {
       console.error(error)
       dispatch(setError(new Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)))

@@ -16,7 +16,7 @@ const OutdatedRegulatoryReferences = () => {
 
     state.regulatory.regulatoryZoneMetadata?.regulatoryReferences.forEach(reference => {
       if (reference?.endDate && reference.endDate !== INFINITE) {
-        referenceIsOutdated = new Date(reference?.endDate) < today
+        referenceIsOutdated = new Date(reference?.endDate) < today || referenceIsOutdated
       }
     })
 

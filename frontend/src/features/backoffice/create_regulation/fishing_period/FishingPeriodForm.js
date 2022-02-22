@@ -2,8 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { Delimiter, RegulatorySectionTitle, FormSection, FormContent } from '../../../commonStyles/Backoffice.style'
-import { fishingPeriodToString } from '../../../../domain/entities/regulatory'
+import {
+  Delimiter,
+  RegulatorySectionTitle,
+  FormSection,
+  FormContent,
+  ContentLine, CustomCheckbox
+} from '../../../commonStyles/Backoffice.style'
+import { FISHING_PERIOD_KEYS, fishingPeriodToString } from '../../../../domain/entities/regulatory'
 import AuthorizedRadioButtonGroup from '../AuthorizedRadioButtonGroup'
 import FishingPeriodDateRanges from './FishingPeriodDateRanges'
 import HolidayCheckbox from './HolidayCheckbox'
@@ -11,12 +17,14 @@ import DayTimeCheckbox from './DayTimeCheckbox'
 import FishingPeriodTimeSection from './FishingPeriodTimeSection'
 import WeekDays from './WeekDays'
 import FishingPeriodDates from './FishingPeriodDates'
-import FishingPeriodAnnualReccurence from './FishingPeriodAnnualReccurence'
+import FishingPeriodAnnualRecurrence from './FishingPeriodAnnualRecurrence'
+import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 
 const FishingPeriodForm = ({ show }) => {
   const { fishingPeriod } = useSelector(state => state.regulation.processingRegulation)
 
   const {
+    allYear,
     authorized,
     annualRecurrence,
     dateRanges,
@@ -31,8 +39,8 @@ const FishingPeriodForm = ({ show }) => {
   const [disabled, setDisabled] = useState(true)
   const [fishingPeriodAsString, setFishingPeriodAsString] = useState()
   const [timeIsDisabled, setTimeIsDisabled] = useState(true)
+  const setAllYear = useSetFishingPeriod(FISHING_PERIOD_KEYS.ALL_YEAR)
 
-  // je ne devrai pas mettre ça ailleurs ?
   useEffect(() => {
     const atLeastOneDateElementIsCompleted = dateRanges?.length > 0 || dates?.length > 0 || weekdays?.length > 0 || holidays !== undefined
     setTimeIsDisabled(!atLeastOneDateElementIsCompleted)
@@ -45,18 +53,26 @@ const FishingPeriodForm = ({ show }) => {
   }, [displayForm, authorized])
 
   useEffect(() => {
-    if (disabled && annualRecurrence !== undefined) {
-      setDisabled(false)
+    if (authorized) {
+      setAllYear(undefined)
     }
-  }, [disabled, annualRecurrence])
+  }, [authorized])
 
   useEffect(() => {
-    if (dateRanges?.length || dates?.length || weekdays?.length || timeIntervals?.length || daytime) {
+    if (allYear) {
+      setDisabled(true)
+    } else if (disabled && annualRecurrence !== undefined) {
+      setDisabled(false)
+    }
+  }, [disabled, annualRecurrence, allYear])
+
+  useEffect(() => {
+    if (dateRanges?.length || dates?.length || weekdays?.length || timeIntervals?.length || daytime || allYear !== undefined) {
       setFishingPeriodAsString(fishingPeriodToString(fishingPeriod))
     } else {
       setFishingPeriodAsString(undefined)
     }
-  }, [fishingPeriod, dateRanges, dates, weekdays, timeIntervals, daytime, fishingPeriodAsString])
+  }, [fishingPeriod, dateRanges, dates, weekdays, timeIntervals, daytime, allYear, fishingPeriodAsString])
 
   return <FormSection show={show}>
     <RegulatorySectionTitle >
@@ -64,8 +80,20 @@ const FishingPeriodForm = ({ show }) => {
     </RegulatorySectionTitle>
     <Delimiter width='523' />
     <FormContent display={displayForm} authorized={authorized}>
-      <FishingPeriodAnnualReccurence />
-      <DateTime >
+      {
+        !authorized &&
+        <ContentLine>
+          <CustomCheckbox
+            inline
+            checked={allYear}
+            onChange={_ => setAllYear(!allYear)}
+          >
+            Toute l&apos;année
+          </CustomCheckbox>
+        </ContentLine>
+      }
+      <FishingPeriodAnnualRecurrence disabled={allYear}/>
+      <DateTime>
         <ConditionalLines $display={displayForm} disabled={disabled}>
           <FishingPeriodDateRanges disabled={disabled} />
           <FishingPeriodDates disabled={disabled} />

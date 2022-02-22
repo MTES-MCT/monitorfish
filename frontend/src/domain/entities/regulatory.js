@@ -255,7 +255,8 @@ const INITIAL_FISHING_PERIOD_VALUES = {
   weekdays: [],
   holidays: undefined,
   daytime: undefined,
-  timeIntervals: []
+  timeIntervals: [],
+  allYear: undefined
 }
 
 /** @type {RegulatorySpecies} */
@@ -326,7 +327,8 @@ export const FISHING_PERIOD_KEYS = {
   ANNUAL_RECURRENCE: 'annualRecurrence',
   WEEKDAYS: 'weekdays',
   HOLIDAYS: 'holidays',
-  DAYTIME: 'daytime'
+  DAYTIME: 'daytime',
+  ALL_YEAR: 'allYear'
 }
 
 export const WEEKDAYS = {
@@ -587,10 +589,15 @@ export const fishingPeriodToString = fishingPeriod => {
     holidays,
     timeIntervals,
     daytime,
-    authorized
+    authorized,
+    allYear
   } = fishingPeriod
 
   const textArray = []
+  if (allYear) {
+    textArray.push('toute l\'année')
+  }
+
   if (dateRanges?.length) {
     let array = toArrayString(
       dateRanges.map(({ startDate, endDate }) => {

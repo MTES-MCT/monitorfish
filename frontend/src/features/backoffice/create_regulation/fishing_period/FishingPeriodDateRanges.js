@@ -1,20 +1,28 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import useUpdateArrayInFishingPeriod from '../../../../hooks/useUpdateArrayInFishingPeriod'
-import usePushArrayInFishingPeriod from '../../../../hooks/usePushArrayInFishingPeriod'
-import usePopArrayInFishingPeriod from '../../../../hooks/usePopArrayInFishingPeriod'
-import { FISHING_PERIOD_KEYS, DEFAULT_DATE_RANGE } from '../../../../domain/entities/regulatory'
-import { Row, DateRanges, ContentWrapper } from '../../../commonStyles/FishingPeriod.style'
+import useUpdateArrayInFishingPeriod from '../../../../hooks/fishingPeriod/useUpdateArrayInFishingPeriod'
+import usePushArrayInFishingPeriod from '../../../../hooks/fishingPeriod/usePushArrayInFishingPeriod'
+import usePopArrayInFishingPeriod from '../../../../hooks/fishingPeriod/usePopArrayInFishingPeriod'
+import { DEFAULT_DATE_RANGE, FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulatory'
+import { ContentWrapper, DateRanges, Row } from '../../../commonStyles/FishingPeriod.style'
 import { Label } from '../../../commonStyles/Input.style'
 import { SQUARE_BUTTON_TYPE } from '../../../../constants/constants'
 import DateRange from './DateRange'
 import { SquareButton } from '../../../commonStyles/Buttons.style'
+import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 
 const FishingPeriodDateRanges = ({ disabled }) => {
   const { annualRecurrence, dateRanges } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
   const updateDateRanges = useUpdateArrayInFishingPeriod(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges)
   const addDateToDateRange = usePushArrayInFishingPeriod(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges, DEFAULT_DATE_RANGE)
   const removeDateFromDateRange = usePopArrayInFishingPeriod(FISHING_PERIOD_KEYS.DATE_RANGES, dateRanges)
+  const setDateRange = useSetFishingPeriod(FISHING_PERIOD_KEYS.DATE_RANGES)
+
+  useEffect(() => {
+    if (disabled) {
+      setDateRange([])
+    }
+  }, [disabled])
 
   return <Row>
       <ContentWrapper alignSelf={'flex-start'}>

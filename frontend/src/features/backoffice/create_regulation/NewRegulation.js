@@ -53,6 +53,7 @@ import {
   setProcessingRegulation,
   setUpcomingRegulatoryText
 } from '../Regulation.slice'
+import { setError } from '../../../domain/shared_slices/Global'
 import {
   mapToRegulatoryFeatureObject,
   REGULATORY_TEXT_SOURCE,
@@ -237,13 +238,16 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap, setSaveIsForbidden, createOrUpdateRegulation])
 
   useEffect(() => {
-    if (showRegulatoryPreview &&
-      ((isEdition && processingRegulation?.geometry) || (geometryObjectList && geometryObjectList[id]))) {
-      dispatch(setRegulatoryGeometriesToPreview(isEdition
-        ? [processingRegulation.geometry]
-        : [geometryObjectList[id]]))
+    if (showRegulatoryPreview) {
+      if (geometryObjectList && geometryObjectList[id]) {
+        dispatch(setRegulatoryGeometriesToPreview([geometryObjectList[id]]))
+      } else if (isEdition && processingRegulation?.geometry) {
+        dispatch(setRegulatoryGeometriesToPreview([processingRegulation?.geometry]))
+      } else {
+        dispatch(setError(new Error('Aucune géométrie n\'a été trouvée pour cette identifiant.')))
+      }
     }
-  }, [isEdition, processingRegulation, id, geometryObjectList, showRegulatoryPreview])
+  }, [isEdition, processingRegulation, id, geometryObjectList, showRegulatoryPreview, selectedRegulatoryZoneId, dispatch])
 
   const getGeometryObjectList = () => {
     dispatch(getGeometryWithoutRegulationReference())

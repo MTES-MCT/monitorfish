@@ -38,7 +38,7 @@ const RegulatoryPreviewLayer = ({ map }) => {
     if (map) {
       getVectorSource().clear()
 
-      if (regulatoryGeometriesToPreview) {
+      if (regulatoryGeometriesToPreview && regulatoryGeometriesToPreview.length) {
         const features = regulatoryGeometriesToPreview.map(geometry => {
           if (geometry) {
             return new GeoJSON({

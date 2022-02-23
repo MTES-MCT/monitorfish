@@ -131,13 +131,13 @@ const RegulatoryLayerZone = props => {
       <ZoneText
         data-cy={'regulatory-layers-my-zones-zone'}
         title={regulatoryZone.zone
-          ? regulatoryZone.zone.replace(/[_]/g, ' ')
+          ? regulatoryZone.zone
           : 'AUCUN NOM'}
         onClick={triggerShowRegulatoryZone}
       >
         {
           regulatoryZone.zone
-            ? regulatoryZone.zone.replace(/[_]/g, ' ')
+            ? regulatoryZone.zone
             : 'AUCUN NOM'
         }
       </ZoneText>

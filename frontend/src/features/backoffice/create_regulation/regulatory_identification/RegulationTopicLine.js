@@ -92,8 +92,8 @@ const RegulationTopicLine = props => {
         pointer
       >
         <InfoTextWrapper>
-          <InfoText bold>{INFO_TEXT.LAYER_NAME}</InfoText>
-          <InfoText >{INFO_TEXT.LAYER_NAME_NEXT}</InfoText>
+          <InfoText bold>{INFO_TEXT.TOPIC}</InfoText>
+          <InfoText >{INFO_TEXT.TOPIC_NEXT}</InfoText>
         </InfoTextWrapper>
       </CustomInfoBox>}
     </ContentLine>

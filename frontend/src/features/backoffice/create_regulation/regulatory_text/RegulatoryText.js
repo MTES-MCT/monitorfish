@@ -9,7 +9,6 @@ import CustomDatePicker from '../custom_form/CustomDatePicker'
 import { INFINITE } from '../../constants'
 import { COLORS } from '../../../../constants/constants'
 import {
-  addObjectToUpcomingRegulatoryTextCheckedMap,
   addObjectToRegulatoryTextCheckedMap
 } from '../../Regulation.slice'
 import Tag from '../Tag'
@@ -122,9 +121,8 @@ const RegulatoryText = props => {
         source: source,
         complete: !atLeastOneValueIsMissing
       }
-      if (source === REGULATORY_TEXT_SOURCE.UPCOMING_REGULATION) {
-        dispatch(addObjectToUpcomingRegulatoryTextCheckedMap(payload))
-      } else if (source === REGULATORY_TEXT_SOURCE.REGULATION) {
+
+      if (source === REGULATORY_TEXT_SOURCE.REGULATION) {
         dispatch(addObjectToRegulatoryTextCheckedMap(payload))
       }
     }

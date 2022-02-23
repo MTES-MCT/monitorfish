@@ -5,7 +5,7 @@ import { Radio, Checkbox } from 'rsuite'
 
 const MenuItem = ({ checked, item, tag }) => {
   const { label } = item
-  const labelToDisplay = label.replace(/[_]/g, ' ')
+  const labelToDisplay = label
   return <>{
     tag === 'Radio'
       ? <CustomRadio

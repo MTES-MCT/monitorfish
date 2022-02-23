@@ -26,13 +26,13 @@ const LayerDetailsBox = props => {
   useEffect(() => {
     if (regulatoryFeatureToShowOnCard) {
       const {
-        zones,
-        layer_name,
+        zone,
+        topic,
         engins
       } = regulatoryFeatureToShowOnCard.getProperties()
 
-      if (zones && layer_name && gears) {
-        const hash = getHash(`${layer_name}:${zones}`)
+      if (zone && topic && gears) {
+        const hash = getHash(`${topic}:${zone}`)
         const gearCategory = getGearCategory(engins, gears)
         setVectorLayerStyle(getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
       } else {
@@ -46,10 +46,10 @@ const LayerDetailsBox = props => {
       regulatoryFeatureToShowOnCard && <>
         <Rectangle vectorLayerStyle={vectorLayerStyle}/>
         <Text>
-          {regulatoryFeatureToShowOnCard.getProperties().layer_name.replace(/[_]/g, ' ')}
+          {regulatoryFeatureToShowOnCard.getProperties().topic}
           {
-            regulatoryFeatureToShowOnCard.getProperties().zones
-              ? <ZoneName>{regulatoryFeatureToShowOnCard.getProperties().zones.replace(/[_]/g, ' ')}</ZoneName>
+            regulatoryFeatureToShowOnCard.getProperties().zone
+              ? <ZoneName>{regulatoryFeatureToShowOnCard.getProperties().zone}</ZoneName>
               : null
           }
         </Text>

@@ -131,13 +131,13 @@ const RegulatoryLayerTopic = props => {
           >
             <Name
               data-cy={'regulatory-layers-my-zones-topic'}
-              title={regulatoryTopic.replace(/[_]/g, ' ')}
+              title={regulatoryTopic}
               onClick={onRegulatoryTopicClick}
             >
               {
                 !isLayerNameEditable
                   ? <Text>
-                    {regulatoryTopic.replace(/[_]/g, ' ')}
+                    {regulatoryTopic}
                   </Text>
                   : <LayerNameInput
                     layerName={regulatoryTopic}

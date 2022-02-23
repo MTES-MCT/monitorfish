@@ -6,16 +6,10 @@ const INITIAL_STATE = {
   processingRegulation: INITIAL_REGULATION,
   /** @type {boolean} isModalOpen */
   isModalOpen: false,
-  /** @type {Map<number, RegulatoryText | null>} */
-  upcomingRegulatoryTextCheckedMap: undefined,
-  /** @type {UpcomingRegulation} upcomingRegulatoryText */
-  upcomingRegulatoryText: undefined,
   /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */
   regulatoryTextCheckedMap: undefined,
   /** @type {boolean} */
   saveOrUpdateRegulation: false,
-  /** @type {boolean} */
-  saveUpcomingRegulation: false,
   /** @type {boolean} */
   regulationSaved: false,
   /** @type {boolean} */
@@ -58,9 +52,6 @@ const regulationSlice = createSlice({
     setFishingPeriodOtherInfo (state, action) {
       state.processingRegulation[REGULATORY_REFERENCE_KEYS.FISHING_PERIOD].otherInfo = action.payload
     },
-    setUpcomingRegulatoryText (state, action) {
-      state.upcomingRegulatoryText = action.payload
-    },
     setSelectedRegulation (state, action) {
       state.selectedRegulation = action.payload
     },
@@ -79,21 +70,6 @@ const regulationSlice = createSlice({
         [id]: complete
       }
     },
-    addObjectToUpcomingRegulatoryTextCheckedMap (state, action) {
-      const {
-        /** @type {boolean} */
-        complete,
-        /** @type {number} */
-        id
-      } = action.payload
-      state.upcomingRegulatoryTextCheckedMap = {
-        ...(state.upcomingRegulatoryTextCheckedMap || {}),
-        [id]: complete
-      }
-    },
-    setUpcomingRegulatoryTextListCheckedMap (state, action) {
-      state.upcomingRegulatoryTextCheckedMap = action.payload
-    },
     setRegulatoryTextCheckedMap (state, action) {
       state.regulatoryTextCheckedMap = { ...action.payload }
     },
@@ -105,9 +81,6 @@ const regulationSlice = createSlice({
     },
     setAtLeastOneValueIsMissing (state, action) {
       state.atLeastOneValueIsMissing = action.payload
-    },
-    setSaveUpcomingRegulation (state, action) {
-      state.saveUpcomingRegulation = action.payload
     },
     setProcessingRegulationDeleted (state, action) {
       state.regulationDeleted = action.payload
@@ -123,16 +96,12 @@ const regulationSlice = createSlice({
 
 export const {
   resetState,
-  setUpcomingRegulatoryText,
   setIsModalOpen,
-  addObjectToUpcomingRegulatoryTextCheckedMap,
-  setUpcomingRegulatoryTextListCheckedMap,
   setProcessingRegulationSaved,
   setRegulatoryTextCheckedMap,
   addObjectToRegulatoryTextCheckedMap,
   setSaveOrUpdateRegulation,
   setAtLeastOneValueIsMissing,
-  setSaveUpcomingRegulation,
   setProcessingRegulationDeleted,
   setIsRemoveModalOpen,
   setIsConfirmModalOpen,

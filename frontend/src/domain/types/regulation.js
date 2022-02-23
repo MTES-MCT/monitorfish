@@ -6,7 +6,6 @@
  * @property {RegulatoryGears} regulatoryGears
  * @property {RegulatorySpecies} regulatorySpecies
  * @property {RegulatoryText[]} regulatoryReference
- * @property {RegulatoryText[]} upcomingRegulation
  * @property {GeoJSONGeometry} geometry
  * @property {string} region
  * @property {string} color
@@ -21,10 +20,6 @@
  * @property {startDate} Date
  * @property {endDate | 'infinite'} Date
  * @property {RegulatoryTextType} textType
- */
-
-/**
- * @typedef {RegulatoryText[]} UpcomingRegulation
  */
 
 /**

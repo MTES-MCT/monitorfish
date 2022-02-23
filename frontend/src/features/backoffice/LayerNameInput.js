@@ -13,7 +13,7 @@ const LayerNameInput = props => {
 
   const update = () => {
     if (value && value !== layerName) {
-      updateLayerName(layerName, value.replace(/[ ]/g, '_'))
+      updateLayerName(layerName, value)
     }
     setIsLayerNameEditable(false)
   }
@@ -38,7 +38,7 @@ const LayerNameInput = props => {
   return (<CustomInput
       data-cy="layer-name-input"
       inputRef={ref}
-      value={value && value.replace(/[_]/g, ' ')}
+      value={value}
       onChange={val => setValue(val)}
       onBlur={update}
       onKeyDown={handleKeyDown}

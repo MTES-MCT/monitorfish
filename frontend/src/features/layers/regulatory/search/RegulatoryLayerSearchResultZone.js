@@ -37,9 +37,9 @@ const RegulatoryLayerSearchResultZone = props => {
   const [zoneStyle, setZoneStyle] = useState(null)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
-  const showOrHideRegulatoryZoneMetadata = regulatoryZone => {
+  const showOrHideRegulatoryZoneMetadata = _regulatoryZone => {
     if (!metadataIsShown) {
-      dispatch(showRegulatoryZoneMetadata(regulatoryZone, true))
+      dispatch(showRegulatoryZoneMetadata(_regulatoryZone, true))
       setMetadataIsShown(true)
     } else {
       dispatch(closeRegulatoryZoneMetadata())
@@ -58,11 +58,12 @@ const RegulatoryLayerSearchResultZone = props => {
 
     if (regulatoryZone.zone && regulatoryZone.topic && gears) {
       const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
+      console.log('regulatoryZone ', regulatoryZone)
       const gearCategory = getGearCategory(regulatoryZone.gears, gears)
 
       setZoneStyle(getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
     }
-  }, [regulatoryZone, isOpen])
+  }, [regulatoryZone, isOpen, gears])
 
   return (
     <Zone>

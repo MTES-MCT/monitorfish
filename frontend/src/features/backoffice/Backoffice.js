@@ -25,7 +25,6 @@ import layer from '../../domain/shared_slices/Layer'
 
 const Backoffice = () => {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
-  const showedLayers = useSelector(state => state.layer.showedLayers)
   const gears = useSelector(state => state.gear.gears)
   const dispatch = useDispatch()
   const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState(null)
@@ -87,9 +86,6 @@ const Backoffice = () => {
           key={lawType}
           lawType={lawType}
           regZoneByLawType={regZoneByLawType}
-          showedLayers={showedLayers}
-          gears={gears}
-          callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
           isEditable={true}
           territory={territory}
         />

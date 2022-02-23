@@ -143,7 +143,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
   }, [isEdition, processingRegulation, dispatch])
 
-  // hooks ?
   const goBackofficeHome = useCallback(() => {
     dispatch(resetState())
     history.push('/backoffice/regulation')

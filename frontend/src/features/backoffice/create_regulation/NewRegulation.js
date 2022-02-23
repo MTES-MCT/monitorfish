@@ -43,8 +43,9 @@ import {
   setAtLeastOneValueIsMissing,
   setIsConfirmModalOpen,
   setIsRemoveModalOpen,
-  setProcessingRegulation,
   setProcessingRegulationByKey,
+  setProcessingRegulation,
+  setRegulationModified,
   setRegulatoryTextCheckedMap,
   setSaveOrUpdateRegulation
 } from '../Regulation.slice'
@@ -93,7 +94,8 @@ const CreateRegulation = ({ title, isEdition }) => {
     isConfirmModalOpen,
     regulationDeleted,
     processingRegulation,
-    selectedRegulatoryZoneId
+    selectedRegulatoryZoneId,
+    regulationModified
   } = useSelector(state => state.regulation)
 
   const {
@@ -114,6 +116,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     batch(() => {
       dispatch(getAllSpecies())
       dispatch(closeRegulatoryZoneMetadataPanel())
+      dispatch(setRegulationModified(false))
     })
 
     return () => {
@@ -147,7 +150,11 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [regulationSaved, regulationDeleted, goBackofficeHome])
 
   const onGoBack = () => {
-    dispatch(setIsConfirmModalOpen(true))
+    if (regulationModified) {
+      dispatch(setIsConfirmModalOpen(true))
+    } else {
+      goBackofficeHome()
+    }
   }
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.express as px
-from matplotlib_venn import venn3
+from matplotlib_venn import venn2, venn3
 
 
 def dataframe_inventory(df: pd.DataFrame, title=None, fig_height=None):
@@ -55,20 +55,36 @@ def compare_2_columns_values(df: pd.DataFrame, col_name_1: str, col_name_2: str)
     return fig
 
 
-def compare_2_columns_availability(df: pd.DataFrame, col_name_1: str, col_name_2: str):
+def compare_2_columns_availability(
+    df: pd.DataFrame,
+    col_name_1: str,
+    col_name_2: str,
+    show_all: bool = True,
+    ax=None,
+    title: str = None,
+):
 
-    fig, ax = plt.subplots(figsize=(12, 7))
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(12, 7))
 
-    all_ = set(df.index)
+    if show_all:
+        all_ = set(df.index)
+
     set_1 = set(df[~df[col_name_1].isna()].index)
     set_2 = set(df[~df[col_name_2].isna()].index)
 
-    fig = venn3(
-        [all_, set_1, set_2], set_labels=["Ensemble", col_name_1, col_name_2], ax=ax
-    )
+    if show_all:
+        fig = venn3(
+            [all_, set_1, set_2], set_labels=["Ensemble", col_name_1, col_name_2], ax=ax
+        )
+    else:
+        fig = venn2([set_1, set_2], set_labels=[col_name_1, col_name_2], ax=ax)
+
+    if title is None:
+        title = f"Complétude des données {col_name_1} et {col_name_2}"
 
     ax.set_title(
-        f"Complétude des données {col_name_1} et {col_name_2}",
+        title,
         weight="bold",
         fontsize=16,
     )

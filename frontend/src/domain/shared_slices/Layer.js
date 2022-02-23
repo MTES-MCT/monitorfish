@@ -30,7 +30,7 @@ const homepageInitialState = {
 
 const backofficeInitialState = {
   ...initialState,
-  showedLayers: reOrderOldObjectHierarchyIfFound(getLocalStorageState([], `backoffice${layersShowedOnMapLocalStorageKey}`))
+  showedLayers: []
 }
 
 const reducers = {
@@ -64,7 +64,9 @@ const reducers = {
           namespace,
           gears
         })
-        window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
+        if (namespace !== 'backoffice') {
+          window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
+        }
       }
     }
   },
@@ -100,7 +102,15 @@ const reducers = {
     } else {
       state.showedLayers = state.showedLayers.filter(layer => !(layer.type === type && layer.zone === zone))
     }
-    window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
+    if (namespace !== 'backoffice') {
+      window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
+    }
+  },
+  resetShowedLayer (state, action) {
+    state.showedLayers = []
+    if (action.payload !== 'backoffice') {
+      window.localStorage.setItem(`${action.payload}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
+    }
   },
   /**
    * Store layer to feature and simplified feature - To show simplified features if the zoom is low

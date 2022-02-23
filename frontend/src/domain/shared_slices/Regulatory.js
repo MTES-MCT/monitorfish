@@ -1,29 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, SELECTED_REG_ZONES_LOCAL_STORAGE_KEY } from '../entities/layers'
 import { getLocalStorageState } from '../../utils'
-
-const selectedRegulatoryZonesLocalStorageKey = 'selectedRegulatoryZones'
+import { getRegulatoryLayersWithoutTerritory } from '../entities/regulatory'
 
 /* eslint-disable */
 /** @namespace RegulatoryReducer */
 const RegulatoryReducer = null
 /* eslint-enable */
 
-export const reOrderOldObjectHierarchyIfFound = layers => {
-  Object.keys(layers)
-    .forEach(layer => {
-      layers[layer] = layers[layer].map(zone => {
-        if (zone && zone.layerName) {
-          return {
-            topic: zone.layerName,
-            ...zone
-          }
-        }
+const pushRegulatoryZoneInTopicList = (selectedRegulatoryLayers, regulatoryZone) => {
+  if (Object.keys(selectedRegulatoryLayers).includes(regulatoryZone.topic)) {
+    const nextRegZoneTopic = selectedRegulatoryLayers[regulatoryZone.topic]
+    nextRegZoneTopic.push(regulatoryZone)
+    selectedRegulatoryLayers[regulatoryZone.topic] = nextRegZoneTopic
+  } else {
+    selectedRegulatoryLayers[regulatoryZone.topic] = [regulatoryZone]
+  }
+}
 
-        return zone
-      })
-    })
-
-  return layers
+const updateSelectedRegulatoryLayers = (regulatoryLayers, regulatoryZoneId, selectedRegulatoryLayers, selectedRegulatoryLayerIds) => {
+  const nextSelectedRegulatoryLayers = { ...selectedRegulatoryLayers }
+  const nextSelectedRegulatoryLayerIds = [...selectedRegulatoryLayerIds]
+  const nextRegulatoryZone = regulatoryLayers.find(zone => zone.id === regulatoryZoneId)
+  if (nextRegulatoryZone) {
+    if (nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
+      pushRegulatoryZoneInTopicList(nextSelectedRegulatoryLayers, nextRegulatoryZone)
+      nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
+      return { selectedRegulatoryLayers: nextSelectedRegulatoryLayers, selectedRegulatoryLayerIds: nextSelectedRegulatoryLayerIds }
+    } else if (nextRegulatoryZone.nextId) {
+      return updateSelectedRegulatoryLayers(regulatoryLayers, nextRegulatoryZone.nextId, selectedRegulatoryLayers, selectedRegulatoryLayerIds)
+    }
+    return null
+  } else {
+    return null
+  }
 }
 
 const regulatorySlice = createSlice({
@@ -31,10 +41,10 @@ const regulatorySlice = createSlice({
   initialState: {
     isReadyToShowRegulatoryLayers: false,
     /** @type {Object.<string, RegulatoryZone[]>} selectedRegulatoryLayers */
-    selectedRegulatoryLayers: reOrderOldObjectHierarchyIfFound(getLocalStorageState({}, selectedRegulatoryZonesLocalStorageKey)),
+    selectedRegulatoryLayers: null,
     regulatoryZoneMetadata: null,
-    /** @type RegulatoryLawTypes regulatoryLayers */
-    regulatoryLayers: [],
+    /** @type RegulatoryLawTypes regulatoryLayerLawTypes */
+    regulatoryLayerLawTypes: [],
     loadingRegulatoryZoneMetadata: false,
     regulatoryZoneMetadataPanelIsOpen: false,
     lawTypeOpened: null,
@@ -61,21 +71,21 @@ const regulatorySlice = createSlice({
      */
     addRegulatoryZonesToMyLayers (state, action) {
       const myRegulatoryLayers = { ...state.selectedRegulatoryLayers }
+      const myRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
 
       action.payload.forEach(regulatoryZone => {
         if (!myRegulatoryLayers[regulatoryZone.topic] || !myRegulatoryLayers[regulatoryZone.topic].length) {
           myRegulatoryLayers[regulatoryZone.topic] = [regulatoryZone]
         } else {
-          if (!myRegulatoryLayers[regulatoryZone.topic].some(zone =>
-            zone.topic === regulatoryZone.topic &&
-            zone.zone === regulatoryZone.zone)) {
+          if (!myRegulatoryLayers[regulatoryZone.topic].some(zone => zone.id === regulatoryZone.id)) {
             myRegulatoryLayers[regulatoryZone.topic] = myRegulatoryLayers[regulatoryZone.topic].concat(regulatoryZone)
           }
         }
+        myRegulatoryLayerIds.push(regulatoryZone.id)
       })
 
       state.selectedRegulatoryLayers = myRegulatoryLayers
-      window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryLayers))
+      window.localStorage.setItem(SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, JSON.stringify(myRegulatoryLayerIds))
     },
     /**
      * Remove regulatory zone(s) from "My Zones" regulatory selection, by providing a topic name to remove multiple zones
@@ -88,21 +98,20 @@ const regulatorySlice = createSlice({
      *          }} action - The regulatory zone(s) to remove
      */
     removeRegulatoryZonesFromMyLayers (state, action) {
-      if (action.payload.zone && action.payload.topic) {
-        state.selectedRegulatoryLayers[action.payload.topic] = state.selectedRegulatoryLayers[action.payload.topic].filter(subZone => {
-          return !(subZone.topic === action.payload.topic && subZone.zone === action.payload.zone)
-        })
-      } else if (action.payload.topic) {
-        state.selectedRegulatoryLayers[action.payload.topic] = state.selectedRegulatoryLayers[action.payload.topic].filter(subZone => {
-          return !(subZone.topic === action.payload.topic)
-        })
+      const { topic, id } = action.payload
+      if (topic) {
+        state.selectedRegulatoryLayers[topic] = state.selectedRegulatoryLayers[topic]
+          .filter(subZone => !subZone.id === id)
       }
 
       if (!state.selectedRegulatoryLayers[action.payload.topic].length) {
         delete state.selectedRegulatoryLayers[action.payload.topic]
       }
 
-      window.localStorage.setItem(selectedRegulatoryZonesLocalStorageKey, JSON.stringify(state.selectedRegulatoryLayers))
+      let nextSelectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
+      nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayerIds
+        .filter(selectedRegulatoryLayerId => !selectedRegulatoryLayerId === id)
+      window.localStorage.setItem(SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, JSON.stringify(nextSelectedRegulatoryLayerIds))
     },
     setIsReadyToShowRegulatoryZones (state) {
       state.isReadyToShowRegulatoryLayers = true
@@ -149,31 +158,36 @@ const regulatorySlice = createSlice({
      *  "Reg locale / NAMO": {
      *   "Armor_CSJ_Dragues": [
      *     {
-     *       bycatch: undefined,
-     *       closingDate: undefined,
-     *       deposit: undefined,
-     *       gears: "DRB",
-     *       lawType: "Reg locale",
-     *       mandatoryDocuments: undefined,
-     *       obligations: undefined,
-     *       openingDate: undefined,
-     *       period: undefined,
-     *       permissions: undefined,
-     *       prohibitedGears: null,
-     *       prohibitedSpecies: null,
-     *       prohibitions: undefined,
-     *       quantity: undefined,
-     *       region: "Bretagne",
-     *       regulatoryReferences: "[
-     *         {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-r53-2020-04-24-002-delib-2020-a9873.html?id_rub=1637\",
-     *         \"reference\": \"ArrÃªtÃ© PrÃ©fectoral R53-2020-04-24-002 - dÃ©lib 2020-004 / NAMO\"}, {\"url\": \"\", \"reference\": \"126-2020\"}]",
-     *       rejections: undefined,
-     *       size: undefined,
-     *       species: "SCE",
-     *       state: undefined,
-     *       technicalMeasurements: undefined,
-     *       topic: "Armor_CSJ_Dragues",
-     *       zone: "Secteur 3"
+     *      bycatch: undefined,
+     *      closingDate: undefined,
+     *      deposit: undefined,
+     *      fishingPeriod: Object { authorized: undefined, annualRecurrence: undefined, dateRanges: [], … },
+     *      gears: "DHB, DRH, DHS",
+     *      geometry: null,
+     *      id: 3012,
+     *      lawType: "Reg. MED",
+     *      mandatoryDocuments: undefined,
+     *      obligations: undefined,
+     *      openingDate: undefined,
+     *      period: undefined,
+     *      permissions: undefined,
+     *      prohibitedGears: null,
+     *      prohibitedSpecies: null,
+     *      prohibitions: undefined,
+     *      quantity: undefined,
+     *      region: "Occitanie, Languedoc-Roussillon",
+     *      regulatoryGears: Object { authorized: undefined, allGears: undefined, allTowedGears: undefined, … },
+     *      regulatoryReferences: Array [ {…} ],
+     *      regulatorySpecies: Object { authorized: undefined, allSpecies: undefined, otherInfo: undefined, … },
+     *      rejections: undefined,
+     *      size: undefined,
+     *      species: "coquillages et appâts\n",
+     *      state: undefined,
+     *      technicalMeasurements: undefined,
+     *      topic: "Etang de Thau-Ingril Mèze",
+     *      upcomingRegulatoryReferences: undefined,
+     *      zone: "Etang de Thau-Ingrill_Drague-à-main",
+     *      next_id: undefined
      *     }
      *   ]
      *   "GlÃ©nan_CSJ_Dragues": (1) […],
@@ -186,14 +200,47 @@ const regulatorySlice = createSlice({
      *  }
      * }
      */
-    setRegulatoryLayers (state, action) {
-      state.regulatoryLayers = action.payload
+    setRegulatoryLayerLawTypes (state, action) {
+      state.regulatoryLayerLawTypes = getRegulatoryLayersWithoutTerritory(action.payload)
+    },
+    setLayersTopicsByRegTerritory (state, action) {
+      if (action.payload) {
+        state.layersTopicsByRegTerritory = action.payload
+      }
+    },
+    setSelectedRegulatoryZone (state, action) {
+      if (action.payload?.length) {
+        const regulatoryLayers = action.payload
+        let nextSelectedRegulatoryLayers = {}
+        let nextSelectedRegulatoryLayerIds = []
+        let selectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
+        if (!selectedRegulatoryLayerIds.length) {
+          const selectedRegulatoryLayers = getLocalStorageState([], SELECTED_REG_ZONES_LOCAL_STORAGE_KEY)
+          if (Object.keys(selectedRegulatoryLayers).length) {
+            selectedRegulatoryLayerIds = []
+            Object.keys(selectedRegulatoryLayers).forEach(selectedRegulatoryTopic => {
+              selectedRegulatoryLayers[selectedRegulatoryTopic].forEach(selectedRegulatoryLayerId => {
+                selectedRegulatoryLayerIds.push(selectedRegulatoryLayerId.id)
+              })
+            })
+            window.localStorage.removeItem(SELECTED_REG_ZONES_LOCAL_STORAGE_KEY)
+          }
+        }
+        selectedRegulatoryLayerIds
+          .forEach(selectedRegulatoryZoneId => {
+            const updatedObjects = updateSelectedRegulatoryLayers(regulatoryLayers, selectedRegulatoryZoneId, nextSelectedRegulatoryLayers, nextSelectedRegulatoryLayerIds)
+            if (updatedObjects.selectedRegulatoryLayers && updatedObjects.selectedRegulatoryLayerIds) {
+              nextSelectedRegulatoryLayers = updatedObjects.selectedRegulatoryLayers
+              nextSelectedRegulatoryLayerIds = updatedObjects.selectedRegulatoryLayerIds
+            }
+            return null
+          })
+        window.localStorage.setItem(SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, JSON.stringify(nextSelectedRegulatoryLayerIds))
+        state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
+      }
     },
     setRegulatoryTopics (state, action) {
       state.regulatoryTopics = action.payload
-    },
-    setLayersTopicsByRegTerritory (state, action) {
-      state.layersTopicsByRegTerritory = action.payload
     },
     showSimplifiedGeometries (state) {
       state.simplifiedGeometries = true
@@ -222,7 +269,7 @@ export const {
   resetLoadingRegulatoryZoneMetadata,
   setRegulatoryZoneMetadata,
   closeRegulatoryZoneMetadataPanel,
-  setRegulatoryLayers,
+  setRegulatoryLayerLawTypes,
   setLawTypeOpened,
   addRegulatoryTopicOpened,
   removeRegulatoryTopicOpened,
@@ -233,7 +280,8 @@ export const {
   resetRegulatoryGeometriesToPreview,
   showSimplifiedGeometries,
   showWholeGeometries,
-  setProcessingRegulationSearchedZoneExtent
+  setProcessingRegulationSearchedZoneExtent,
+  setSelectedRegulatoryZone
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

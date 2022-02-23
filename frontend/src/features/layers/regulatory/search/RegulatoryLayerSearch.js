@@ -29,9 +29,7 @@ const RegulatoryLayerSearch = props => {
   } = useSelector(state => state.regulatoryLayerSearch)
 
   const [initSearchFields, setInitSearchFields] = useState(false)
-
   const escape = useEscapeFromKeyboard()
-
   const wrapperRef = useRef(null)
 
   useEffect(() => {
@@ -63,8 +61,10 @@ const RegulatoryLayerSearch = props => {
   function saveRegulatoryLayers (regulatoryZonesChecked) {
     setNumberOfRegulatoryLayersSaved(regulatoryZonesChecked.length)
     setTimeout(() => { setNumberOfRegulatoryLayersSaved(0) }, 2000)
-    dispatch(addRegulatoryZonesToMyLayers(regulatoryZonesChecked))
-    dispatch(resetRegulatoryZonesChecked())
+    batch(() => {
+      dispatch(addRegulatoryZonesToMyLayers(regulatoryZonesChecked))
+      dispatch(resetRegulatoryZonesChecked())
+    })
   }
 
   return (
@@ -78,7 +78,7 @@ const RegulatoryLayerSearch = props => {
       <AddRegulatoryLayer
         data-cy={'regulatory-search-add-zones-button'}
         onClick={() => saveRegulatoryLayers(regulatoryZonesChecked)}
-        isShown={regulatoryZonesChecked && regulatoryZonesChecked.length}
+        isShown={regulatoryZonesChecked?.length}
       >
         {
           numberOfRegulatoryLayersSaved

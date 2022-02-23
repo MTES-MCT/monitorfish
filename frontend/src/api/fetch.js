@@ -189,7 +189,7 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   return fetch(`${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-    `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,region,next_id`)
+    `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,regulatory_references,zones,region,next_id`)
     .then(response => {
       if (response.status === OK) {
         return response.json()
@@ -216,7 +216,7 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
 function getAllGeometryWithoutProperty (fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
-  const filter = 'references_reglementaires IS NULL AND zones IS NULL AND region IS NULL AND law_type IS NULL AND layer_name IS NULL'
+  const filter = 'regulatory_references IS NULL AND zone IS NULL AND region IS NULL AND law_type IS NULL AND topic IS NULL'
   const REQUEST = `${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
   `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
   return fetch(REQUEST)
@@ -331,7 +331,7 @@ function getRegulatoryZoneURL (type, regulatoryZone, geoserverURL) {
     throw new Error('Le nom de la zone n\'est pas renseigné')
   }
 
-  const filter = `layer_name='${encodeURIComponent(regulatoryZone.topic).replace(/'/g, '\'\'')}' AND zones='${encodeURIComponent(regulatoryZone.zone).replace(/'/g, '\'\'')}'`
+  const filter = `topic='${encodeURIComponent(regulatoryZone.topic).replace(/'/g, '\'\'')}' AND zones='${encodeURIComponent(regulatoryZone.zone).replace(/'/g, '\'\'')}'`
   return (
     `${geoserverURL}/geoserver/wfs?service=WFS` +
     `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
@@ -356,7 +356,7 @@ export function getRegulatoryZonesInExtentFromAPI (extent, fromBackoffice) {
       `&version=1.1.0&request=GetFeature&typename=monitorfish:${Layers.REGULATORY.code}` +
       `&outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
       `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}` +
-      `&propertyName=law_type,layer_name,engins,engins_interdits,especes,especes_interdites,references_reglementaires,zones,facade,region`
+      `&propertyName=law_type,topic,gears,regulatory_references,zone,facade,region`
         .replace(/'/g, '%27')
         .replace(/\(/g, '%28')
         .replace(/\)/g, '%29')

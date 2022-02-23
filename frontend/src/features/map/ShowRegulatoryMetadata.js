@@ -15,7 +15,7 @@ const ShowRegulatoryMetadata = ({ mapClickEvent }) => {
   function showRegulatoryZoneMetadataOnClick (feature) {
     if (feature?.getId()?.toString()?.includes(LayersEnum.REGULATORY.code)) {
       const zone = {
-        topic: feature.getProperties().layer_name,
+        topic: feature.getProperties().topic,
         zone: feature.getProperties().zones
       }
       dispatch(showRegulatoryZoneMetadata(zone))

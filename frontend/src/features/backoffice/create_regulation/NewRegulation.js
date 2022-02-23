@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
-import { useDispatch, useSelector, batch } from 'react-redux'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
@@ -9,16 +9,15 @@ import Layers from '../../../domain/entities/layers'
 import showRegulatoryZone from '../../../domain/use_cases/showRegulatoryZone'
 
 import {
+  FishingPeriodSection,
   RegulationGeometryLine,
   RegulationLawTypeLine,
   RegulationLayerZoneLine,
   RegulationRegionLine,
   RegulationTopicLine,
+  RegulatoryGearSection,
   RegulatoryTextSection,
-  UpcomingRegulationModal,
-  RemoveRegulationModal,
-  FishingPeriodSection,
-  RegulatoryGearSection
+  RemoveRegulationModal
 } from './'
 import ConfirmRegulationModal from './ConfirmRegulationModal'
 import BaseMap from '../../map/BaseMap'
@@ -26,32 +25,28 @@ import BaseLayer from '../../../layers/BaseLayer'
 
 import RegulatoryPreviewLayer from '../../../layers/RegulatoryPreviewLayer'
 import {
+  closeRegulatoryZoneMetadataPanel,
   setRegulatoryGeometriesToPreview,
   resetRegulatoryGeometriesToPreview,
   setRegulatoryZoneMetadata,
-  setRegulatoryTopics,
-  closeRegulatoryZoneMetadataPanel
+  setRegulatoryTopics
 } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 import createRegulation from '../../../domain/use_cases/createRegulation'
 import resetRegulation from '../../../domain/use_cases/resetRegulation'
 
 import { formatDataForSelectPicker } from '../../../utils'
+import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
+import { Footer, FooterButton, Section, Title } from '../../commonStyles/Backoffice.style'
 import {
-  CancelButton,
-  ValidateButton
-} from '../../commonStyles/Buttons.style'
-import { Footer, FooterButton, Title, Section } from '../../commonStyles/Backoffice.style'
-import {
-  setRegulatoryTextCheckedMap,
-  setSaveOrUpdateRegulation,
-  setAtLeastOneValueIsMissing,
-  setIsRemoveModalOpen,
-  setIsConfirmModalOpen,
   resetState,
-  setProcessingRegulationByKey,
+  setAtLeastOneValueIsMissing,
+  setIsConfirmModalOpen,
+  setIsRemoveModalOpen,
   setProcessingRegulation,
-  setUpcomingRegulatoryText
+  setProcessingRegulationByKey,
+  setRegulatoryTextCheckedMap,
+  setSaveOrUpdateRegulation
 } from '../Regulation.slice'
 import { setError } from '../../../domain/shared_slices/Global'
 import {
@@ -60,8 +55,7 @@ import {
   LAWTYPES_TO_TERRITORY,
   FRANCE,
   INITIAL_REGULATION,
-  REGULATORY_REFERENCE_KEYS,
-  INITIAL_UPCOMING_REG_REFERENCE
+  REGULATORY_REFERENCE_KEYS
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
 import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
@@ -126,7 +120,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     return () => {
       dispatch(setProcessingRegulation(INITIAL_REGULATION))
       dispatch(setRegulatoryZoneMetadata(undefined))
-      dispatch(setUpcomingRegulatoryText(INITIAL_UPCOMING_REG_REFERENCE))
       dispatch(resetRegulatoryGeometriesToPreview())
     }
   }, [])
@@ -357,7 +350,6 @@ const CreateRegulation = ({ title, isEdition }) => {
           <RegulatoryPreviewLayer />
         </BaseMap>}
     </Wrapper>
-    {isModalOpen && <UpcomingRegulationModal />}
     {isRemoveModalOpen && <RemoveRegulationModal />}
     {isConfirmModalOpen && <ConfirmRegulationModal goBackofficeHome={goBackofficeHome} />}
     </>

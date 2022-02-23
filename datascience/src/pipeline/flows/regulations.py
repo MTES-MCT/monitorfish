@@ -105,8 +105,7 @@ def load_new_regulations(new_regulations: pd.DataFrame):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         jsonb_columns=[
-            "references_reglementaires",
-            "references_reglementaires_a_venir",
+            "regulatory_references",
             "fishing_period",
             "species",
             "gears",

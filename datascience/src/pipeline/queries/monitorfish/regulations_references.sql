@@ -1,6 +1,6 @@
 SELECT 
-    law_type, 
-    layer_name, 
-    zones, 
-    references_reglementaires 
+    law_type,
+    topic,
+    zone,
+    regulatory_references
 FROM reglementation_peche

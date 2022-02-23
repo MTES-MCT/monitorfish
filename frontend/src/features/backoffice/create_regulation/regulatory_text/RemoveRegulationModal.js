@@ -15,12 +15,12 @@ const RemoveRegulationModal = () => {
   const dispatch = useDispatch()
   const {
     isRemoveModalOpen,
-    selectedGeometryId
+    processingRegulation
   } = useSelector(state => state.regulation)
 
   const deleteRegulation = () => {
     const feature = new Feature({})
-    feature.setId(getRegulatoryFeatureId(selectedGeometryId))
+    feature.setId(getRegulatoryFeatureId(processingRegulation.id))
     dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.DELETE))
   }
 

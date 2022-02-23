@@ -5,6 +5,7 @@ import * as Comlink from 'comlink'
 import Worker from 'worker-loader!../../workers/MonitorFishWorker'
 import { setError } from '../shared_slices/Global'
 import {
+  setSelectedRegulatoryZone,
   setLayersTopicsByRegTerritory,
   setRegulatoryLayerLawTypes
 } from '../shared_slices/Regulatory'
@@ -12,7 +13,7 @@ import {
 const worker = new Worker()
 const MonitorFishWorker = Comlink.wrap(worker)
 
-const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) => {
+const getAllRegulatoryLayers = () => async (dispatch, getState) => {
   const worker = await new MonitorFishWorker()
 
   return getAllRegulatoryLayersFromAPI(getState().global.inBackofficeMode)
@@ -21,11 +22,13 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
     })
     .then(response => {
       const {
+        layersWithoutGeometry,
         layersTopicsByRegulatoryTerritory
       } = response
       batch(() => {
         dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
         dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
+        dispatch(setSelectedRegulatoryZone(layersWithoutGeometry))
       })
     })
     .catch(error => {
@@ -34,4 +37,4 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
     })
 }
 
-export default getAllRegulatoryLayersByRegTerritory
+export default getAllRegulatoryLayers

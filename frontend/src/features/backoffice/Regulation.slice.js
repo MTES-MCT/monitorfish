@@ -27,7 +27,7 @@ const INITIAL_STATE = {
   /** @type {boolean} */
   isConfirmModalOpen: false,
   /** @type {boolean} */
-  selectedGeometryId: undefined
+  selectedRegulatoryZoneId: undefined
 }
 
 const regulationSlice = createSlice({
@@ -35,6 +35,9 @@ const regulationSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {
     resetState: () => INITIAL_STATE,
+    setSelectedRegulatoryZoneId (state, action) {
+      state.selectedRegulatoryZoneId = action.payload
+    },
     setProcessingRegulationByKey (state, { payload: { key, value } }) {
       state.processingRegulation[key] = value
     },
@@ -136,7 +139,8 @@ export const {
   setProcessingRegulationByKey,
   setProcessingRegulation,
   setFishingPeriod,
-  setFishingPeriodOtherInfo
+  setFishingPeriodOtherInfo,
+  setSelectedRegulatoryZoneId
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

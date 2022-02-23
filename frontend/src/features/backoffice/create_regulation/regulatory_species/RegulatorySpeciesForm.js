@@ -150,21 +150,27 @@ const RegulatorySpeciesForm = props => {
   }
 
   function getFormattedSpeciesGroups () {
-    return [...speciesGroupsState]
+    if (speciesGroupsState) {
+      return [...speciesGroupsState]
       ?.sort((speciesA, speciesB) => speciesB.group - speciesA.group)
       .map(speciesGroup => ({
         label: speciesGroup.group,
         value: speciesGroup.group
       }))
+    }
+    return []
   }
 
   function getFormattedSpecies () {
-    return Object.values(speciesByCode)
+    if (speciesByCode) {
+      return Object.values(speciesByCode)
       ?.sort((speciesA, speciesB) => speciesB.code - speciesA.code)
       .map(_species => ({
         label: `${_species.name} (${_species.code})`,
         value: _species.code
       }))
+    }
+    return []
   }
 
   return <FormSection show={show}>

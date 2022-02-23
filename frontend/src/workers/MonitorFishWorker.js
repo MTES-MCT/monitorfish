@@ -27,11 +27,16 @@ class MonitorFishWorker {
       }
     }, [])
 
-    return uniqueFeaturesWithoutGeometry
+    const uniqueFeaturesWithoutGeometryByTopics = uniqueFeaturesWithoutGeometry
       .map(layer => layer.topic)
       .map(topic => {
         return uniqueFeaturesWithoutGeometry.filter(layer => layer.topic === topic)
       })
+
+    return {
+      featuresWithoutGeometry,
+      uniqueFeaturesWithoutGeometryByTopics
+    }
   }
 
   #getGeometryIdFromFeatureId = feature => {
@@ -44,16 +49,6 @@ class MonitorFishWorker {
       geometryListAsObject[this.#getGeometryIdFromFeatureId(feature)] = feature.geometry
     })
     return geometryListAsObject
-  }
-
-  convertGeoJSONFeaturesToObject (features) {
-    const layerTopicsArray = this.#getLayerTopicList(features)
-    const layersTopicsToZones = layerTopicsArray.reduce((accumulatedObject, zone) => {
-      accumulatedObject[zone[0].topic] = zone
-      return accumulatedObject
-    }, {})
-
-    return layersTopicsToZones
   }
 
   /**
@@ -110,7 +105,10 @@ class MonitorFishWorker {
    */
   convertGeoJSONFeaturesToStructuredRegulatoryObject (features) {
     const regulatoryTopicList = new Set()
-    const layerTopicArray = this.#getLayerTopicList(features)
+    const {
+      featuresWithoutGeometry,
+      uniqueFeaturesWithoutGeometryByTopics: layerTopicArray
+    } = this.#getLayerTopicList(features)
     const layersTopicsByRegulatoryTerritory = layerTopicArray.reduce((accumulatedObject, zone) => {
       const {
         lawType,
@@ -147,7 +145,10 @@ class MonitorFishWorker {
     })
     layersTopicsByRegulatoryTerritory[FRANCE] = orderedFrenchLayersTopics
 
-    return layersTopicsByRegulatoryTerritory
+    return {
+      layersTopicsByRegulatoryTerritory,
+      layersWithoutGeometry: featuresWithoutGeometry
+    }
   }
 
   getUniqueSpeciesAndDistricts (vessels) {

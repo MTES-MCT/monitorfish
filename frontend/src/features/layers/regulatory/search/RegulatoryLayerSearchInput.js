@@ -63,29 +63,6 @@ const RegulatoryLayerSearchInput = props => {
     }
   }, [advancedSearchIsOpen])
 
-  const searchFields = {
-    nameSearchText: {
-      searchText: nameSearchText,
-      properties: [REGULATORY_SEARCH_PROPERTIES.TOPIC, REGULATORY_SEARCH_PROPERTIES.ZONE]
-    },
-    placeSearchText: {
-      searchText: placeSearchText,
-      properties: [REGULATORY_SEARCH_PROPERTIES.REGION, REGULATORY_SEARCH_PROPERTIES.LAW_TYPE]
-    },
-    gearSearchText: {
-      searchText: gearSearchText,
-      properties: [REGULATORY_SEARCH_PROPERTIES.GEARS]
-    },
-    speciesSearchText: {
-      searchText: speciesSearchText,
-      properties: [REGULATORY_SEARCH_PROPERTIES.SPECIES]
-    },
-    regulatoryReferencesSearchText: {
-      searchText: regulatoryReferencesSearchText,
-      properties: [REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES]
-    }
-  }
-
   useEffect(() => {
     const inputsAreEmpty = nameSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
       placeSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
@@ -99,6 +76,29 @@ const RegulatoryLayerSearchInput = props => {
         dispatch(resetRegulatoryZonesChecked())
       })
       return
+    }
+
+    const searchFields = {
+      nameSearchText: {
+        searchText: nameSearchText,
+        properties: [REGULATORY_SEARCH_PROPERTIES.TOPIC, REGULATORY_SEARCH_PROPERTIES.ZONE]
+      },
+      placeSearchText: {
+        searchText: placeSearchText,
+        properties: [REGULATORY_SEARCH_PROPERTIES.REGION]
+      },
+      gearSearchText: {
+        searchText: gearSearchText,
+        properties: [REGULATORY_SEARCH_PROPERTIES.GEARS]
+      },
+      speciesSearchText: {
+        searchText: speciesSearchText,
+        properties: [REGULATORY_SEARCH_PROPERTIES.SPECIES]
+      },
+      regulatoryReferencesSearchText: {
+        searchText: regulatoryReferencesSearchText,
+        properties: [REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES]
+      }
     }
 
     batch(() => {

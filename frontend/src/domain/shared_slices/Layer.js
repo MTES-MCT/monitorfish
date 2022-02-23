@@ -48,7 +48,7 @@ const reducers = {
       topic,
       zone,
       namespace,
-      gears
+      regulatoryGears
     } = action.payload
 
     if (type !== Layers.VESSELS.code) {
@@ -62,7 +62,7 @@ const reducers = {
           topic,
           zone,
           namespace,
-          gears
+          gears: regulatoryGears
         })
         if (namespace !== 'backoffice') {
           window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
@@ -110,6 +110,8 @@ const reducers = {
     state.showedLayers = []
     if (action.payload !== 'backoffice') {
       window.localStorage.setItem(`${action.payload}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
+    } else {
+      window.localStorage.removeItem(`${action.payload}${layersShowedOnMapLocalStorageKey}`)
     }
   },
   /**

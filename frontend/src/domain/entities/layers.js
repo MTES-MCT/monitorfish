@@ -442,26 +442,29 @@ function removeVariousLonglineGears (layerGearsArray) {
 }
 
 export function getGearCategory (layerGears, gears) {
-  let gear = null
   if (layerGears) {
-    let layerGearsArray = layerGears.replace(/ /g, '').split(',')
-    if (layerGearsArray.length > 1) {
-      layerGearsArray = removeMiscellaneousGears(layerGearsArray)
-    }
-    if (layerGearsArray.length > 1) {
-      layerGearsArray = removeVariousLonglineGears(layerGearsArray)
-    }
+    if (layerGears.regulatedGearCategories && Object.keys(layerGears.regulatedGearCategories).length) {
+      return Object.keys(layerGears.regulatedGearCategories)[0]
+    } else if (layerGears.regulatedGears?.length) {
+      let layerGearsArray = layerGears.regulatedGears.replace(/ /g, '').split(',')
+      if (layerGearsArray.length > 1) {
+        layerGearsArray = removeMiscellaneousGears(layerGearsArray)
+      }
+      if (layerGearsArray.length > 1) {
+        layerGearsArray = removeVariousLonglineGears(layerGearsArray)
+      }
 
-    gear = gears
-      .find(gear => {
-        return layerGearsArray
-          .some(gearCode => {
-            return gearCode === gear.code
-          })
-      })
+      const gear = gears
+        .find(_gear => {
+          return layerGearsArray
+            .some(gearCode => {
+              return gearCode === _gear.code
+            })
+        })
+      return gear ? gear.category : null
+    }
   }
-
-  return gear ? gear.category : null
+  return null
 }
 
 export const SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY = 'selectedRegulatoryZoneIds'

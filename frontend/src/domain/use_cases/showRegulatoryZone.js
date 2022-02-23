@@ -43,26 +43,35 @@ const showRegulatoryZone = zoneToShow => dispatch => {
 }
 
 export const getVectorOLLayer = (dispatch, getState) => layerToShow => {
+  console.log('getVectorOLLayer')
+  console.log(layerToShow)
   const { gears } = getState().gear
-  const gearCategory = getGearCategory(layerToShow.gears, gears)
   const hash = getHash(`${layerToShow.topic}:${layerToShow.zone}`)
   const name = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
 
-  const layer = new VectorImageLayer({
-    source: getRegulatoryVectorSource(dispatch, getState)(layerToShow),
-    className: 'regulatory',
-    style: feature => {
-      return [getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(feature, hash, gearCategory)]
-    }
-  })
-  layer.name = name
+  // Et non ça ne marche pas du tout ça.
+  // Il faut trouver une combine pour mettre à jour les layers affichés
+  const {
+    source,
+    layerToShowGears
+  } = getRegulatoryVectorSourceAndGears(dispatch, getState)(layerToShow)
 
-  return layer
+  const gearCategory = getGearCategory(layerToShowGears, gears)
+
+  const _layer = new VectorImageLayer({
+    source,
+    className: 'regulatory',
+    style: feature => [getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(feature, hash, gearCategory)]
+  })
+  _layer.name = name
+
+  return _layer
 }
 
-const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperties => {
+const getRegulatoryVectorSourceAndGears = (dispatch, getState) => regulatoryZoneProperties => {
   const zoneName = `${Layers.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
 
+  let layerToShowGears = []
   const {
     setLastShowedFeatures,
     pushLayerToFeatures
@@ -74,46 +83,52 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
       featureProjection: OPENLAYERS_PROJECTION
     }),
     loader: extent => {
-      getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZoneProperties, getState().global.inBackofficeMode).then(regulatoryZone => {
-        if (!regulatoryZone.geometry) {
-          vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(new Error('Aucune géometrie dans la zone')))
-          vectorSource.removeLoadedExtent(extent)
-          return
-        }
+      getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZoneProperties, getState().global.inBackofficeMode)
+        .then(regulatoryZone => {
+          if (!regulatoryZone.geometry) {
+            vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(new Error('Aucune géometrie dans la zone')))
+            vectorSource.removeLoadedExtent(extent)
+            return
+          }
 
-        let simplifiedRegulatoryZone = null
-        try {
-          simplifiedRegulatoryZone = simplify(regulatoryZone, 0.01)
-        } catch (e) {
-          console.error(e)
-        }
+          console.log(regulatoryZone)
+          layerToShowGears = JSON.parse(regulatoryZone.properties.gears)
+          console.log('on met à jour les engins ', layerToShowGears)
 
-        const feature = getState().regulatory.simplifiedGeometries ? simplifiedRegulatoryZone || regulatoryZone : regulatoryZone
-        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(feature))
-        const center = getCenter(vectorSource.getExtent())
-        const centerHasValidCoordinates = center?.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])
+          let simplifiedRegulatoryZone = null
+          try {
+            simplifiedRegulatoryZone = simplify(regulatoryZone, 0.01)
+          } catch (e) {
+            console.error(e)
+          }
 
-        batch(() => {
-          dispatch(pushLayerToFeatures({
-            name: zoneName,
-            area: getArea(vectorSource.getExtent()),
-            simplifiedFeatures: simplifiedRegulatoryZone,
-            features: regulatoryZone,
-            center: center
-          }))
-          dispatch(setLastShowedFeatures(vectorSource.getFeatures()))
+          const feature = getState().regulatory.simplifiedGeometries ? simplifiedRegulatoryZone || regulatoryZone : regulatoryZone
+          vectorSource.addFeatures(vectorSource.getFormat().readFeatures(feature))
+          const center = getCenter(vectorSource.getExtent())
+          const centerHasValidCoordinates = center?.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])
 
-          if (centerHasValidCoordinates) {
-            dispatch(animateToRegulatoryLayer({
+          batch(() => {
+            dispatch(pushLayerToFeatures({
               name: zoneName,
+              area: getArea(vectorSource.getExtent()),
+              simplifiedFeatures: simplifiedRegulatoryZone,
+              features: regulatoryZone,
               center: center
             }))
-          }
+            dispatch(setLastShowedFeatures(vectorSource.getFeatures()))
+
+            if (centerHasValidCoordinates) {
+              dispatch(animateToRegulatoryLayer({
+                name: zoneName,
+                center: center
+              }))
+            }
+          })
         })
-      }).catch(e => {
-        vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(e))
-        vectorSource.removeLoadedExtent(extent)
-      })
+        .catch(e => {
+          vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(e))
+          vectorSource.removeLoadedExtent(extent)
+        })
     },
     strategy: all
   })
@@ -122,7 +137,10 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
     console.error(event.error)
   })
 
-  return vectorSource
+  return {
+    source: vectorSource,
+    layerToShowGears
+  }
 }
 
 export default showRegulatoryZone

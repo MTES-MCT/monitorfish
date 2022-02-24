@@ -3,7 +3,7 @@ import { useDraggable } from '@dnd-kit/core'
 import { COLORS } from '../../../constants/constants'
 import { beaconStatusesStages } from './beaconStatuses'
 
-const Draggable = ({ id, stageId, children, isDroppedId, index, verticalScrollRef }) => {
+const Draggable = ({ id, stageId, children, isDroppedId, index, verticalScrollRef, horizontalScrollRef }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: id,
     data: {
@@ -13,7 +13,11 @@ const Draggable = ({ id, stageId, children, isDroppedId, index, verticalScrollRe
   })
 
   const style = {
-    transform: transform ? `translate3d(${transform.x - (index ? 273 : 0) - (verticalScrollRef?.current?.scrollLeft)}px, ${transform.y + (index ? 146 : 0)}px, 0)` : 'unset',
+    transform: transform
+      ? `translate3d(
+        ${transform.x - (index ? 273 : 0) - (horizontalScrollRef?.current?.scrollLeft)}px,
+        ${transform.y + (index ? 146 : 0) - (verticalScrollRef?.current?.scrollTop >= 152 ? verticalScrollRef?.current?.scrollTop : 0)}px, 0)`
+      : 'unset',
     boxShadow: isDragging ? `0px 0px 10px -3px ${COLORS.gunMetal}` : 'unset',
     zIndex: isDragging ? 9999999 : 'unset',
     position: isDragging ? 'fixed' : 'static',

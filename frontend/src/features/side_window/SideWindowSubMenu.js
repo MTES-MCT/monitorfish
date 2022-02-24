@@ -132,7 +132,7 @@ const chevronIconStyle = isOpen => ({
 const Menu = styled.div``
 const menuStyle = (isOpen, fixed) => ({
   width: isOpen ? 200 : 30,
-  height: '100vh',
+  height: 'calc(100vh - 28px)',
   background: COLORS.gainsboro,
   flexShrink: 0,
   fontSize: 16,

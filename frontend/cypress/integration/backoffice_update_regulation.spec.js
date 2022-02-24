@@ -27,12 +27,12 @@ context('NewRegulation', () => {
     // When check expected form values
     cy.get('[data-cy^="tag"]').should('have.length', 6)
     cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
-    cy.get('[data-cy="tag-Ouest_Cotentin_Bivalves"]').should('exist')
+    cy.get('[data-cy="tag-Ouest Cotentin Bivalves"]').should('exist')
     cy.get('[data-cy="tag-Normandie"]').should('exist')
     cy.get('[data-cy="tag-Bretagne"]').should('exist')
     cy.get('[data-cy="tag-598"]').should('exist')
     cy.get('[data-cy="tag-texte de reference"]').should('exist')
-    cy.get('[data-cy="input-Praires_Ouest_cotentin"]').should('exist')
+    cy.get('[data-cy="input-Praires Ouest cotentin"]').should('exist')
     cy.get('.rs-picker-toggle-value').eq(0).should('have.text', getDate(new Date().toISOString()))
 
     // Then try to save
@@ -44,7 +44,7 @@ context('NewRegulation', () => {
   it('Select another law type should reset selected layer name', () => {
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
     cy.get('[data-key="R(CE) 494/2002"]').eq(0).click()
-    cy.get('[data-cy="tag-Ouest_Cotentin_Bivalves"]').should('not.exist')
+    cy.get('[data-cy="tag-Ouest Cotentin Bivalves"]').should('not.exist')
   })
 
   it('Save regulation Should send the update payload to Geoserver and go back to backoffice page', () => {
@@ -63,7 +63,7 @@ context('NewRegulation', () => {
       .then(({ request, response }) => {
         expect(request.body).contain('typeName="monitorfish:regulatory_areas_write"')
         expect(request.body).contain('<Value>Reg. MEMN</Value>')
-        expect(request.body).contain('<Value>Praires_Ouest_cotentin</Value>')
+        expect(request.body).contain('<Value>Praires Ouest cotentin</Value>')
         expect(request.body).contain('<Value>Normandie, Bretagne</Value>')
         expect(request.body).contain('"reference":"texte de reference"')
         expect(request.body).contain('"url":"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634"')
@@ -140,12 +140,12 @@ context('NewRegulation', () => {
     // then form values are kept
     cy.get('[data-cy^="tag"]').should('have.length', 6)
     cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
-    cy.get('[data-cy="tag-Ouest_Cotentin_Bivalves"]').should('exist')
+    cy.get('[data-cy="tag-Ouest Cotentin Bivalves"]').should('exist')
     cy.get('[data-cy="tag-Normandie"]').should('exist')
     cy.get('[data-cy="tag-Bretagne"]').should('exist')
     cy.get('[data-cy="tag-598"]').should('exist')
     cy.get('[data-cy="tag-texte de reference"]').should('exist')
-    cy.get('[data-cy="input-Praires_Ouest_cotentin"]').should('exist')
+    cy.get('[data-cy="input-Praires Ouest cotentin"]').should('exist')
     cy.get('.rs-picker-toggle-value').eq(0).should('have.text', getDate(new Date().toISOString()))
   })
 })

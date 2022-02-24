@@ -24,8 +24,3 @@ ALTER TABLE public.reglementation_peche
 ALTER TABLE public.reglementation_peche
     RENAME COLUMN mesures_techniques to regulatory_details;
 
-UPDATE public.reglementation_peche
-    SET topic = REPLACE(topic, '_', ' ');
-
-UPDATE public.reglementation_peche
-    SET zone = REPLACE(topic, '_', ' ');

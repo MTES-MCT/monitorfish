@@ -51,7 +51,7 @@ context('Backoffice', () => {
     cy.wait('@postRegulation')
       .then(({ request, response }) => {
         expect(request.body).contain('typeName="monitorfish:regulatory_areas_write"')
-        expect(request.body).contain('<Value>Ouest_Cotentin_Bivalves_-_changed</Value>')
+        expect(request.body).contain('<Value>Ouest Cotentin Bivalves - changed</Value>')
         expect(response.statusCode).equal(200)
       })
   })

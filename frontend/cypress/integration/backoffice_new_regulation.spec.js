@@ -39,7 +39,7 @@ context('NewRegulation', () => {
     cy.get('[data-key="Reg. MEMN"]').eq(0).click()
     // Select the first layer name in the dropdown menu
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(1).click()
-    cy.get('[data-key="Ouest_Cotentin_Bivalves"]').should('exist')
+    cy.get('[data-key="Ouest Cotentin Bivalves"]').should('exist')
 
     // Select Reg. NAMO law type in the dropdown menu
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
@@ -47,7 +47,7 @@ context('NewRegulation', () => {
     // Select the first layer name in the dropdown menu
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(1).click()
     // layer name should have changed
-    cy.get('[data-key="Armor_CSJ_Dragues"]').should('exist')
+    cy.get('[data-key="Armor CSJ Dragues"]').should('exist')
   })
 
   it('select UE law_type should display an empty list', () => {

@@ -17,7 +17,7 @@ context('Beacon statuses', () => {
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-statuses-card"]')
-      .should('have.length', 3)
+      .should('have.length', 6)
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(2)
       .find('*[data-cy="side-window-beacon-statuses-card"]')
@@ -38,7 +38,7 @@ context('Beacon statuses', () => {
       })
     cy.get('*[data-cy="side-window-beacon-statuses-columns-INITIAL_ENCOUNTER"]').children()
       .find('*[data-cy="side-window-beacon-statuses-card"]')
-      .should('have.length', 2)
+      .should('have.length', 5)
     cy.get('*[data-cy="side-window-beacon-statuses-columns-RELAUNCH_REQUEST"]').children()
       .find('*[data-cy="side-window-beacon-statuses-card"]')
       .should('have.length', 2)
@@ -47,14 +47,14 @@ context('Beacon statuses', () => {
   it('Board Should be initialized with the beacon statuses', () => {
     // Then
     cy.get('*[data-cy="side-window-sub-menu-trigger"]').click({ force: true })
-    cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('5')
+    cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('8')
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children().should('have.length', 7)
 
     // Count the number of cards in the columns' header
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-statuses-header"]')
-      .contains('2')
+      .contains('5')
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(1)
       .find('*[data-cy="side-window-beacon-statuses-header"]')
@@ -68,7 +68,7 @@ context('Beacon statuses', () => {
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-statuses-card"]')
-      .should('have.length', 2)
+      .should('have.length', 5)
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(1)
       .find('*[data-cy="side-window-beacon-statuses-card"]')
@@ -84,12 +84,6 @@ context('Beacon statuses', () => {
       .find('*[data-cy="side-window-beacon-statuses-card"]')
       .first()
       .contains('PHENOMENE')
-
-    cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
-      .eq(0)
-      .find('*[data-cy="side-window-vessel-id"]')
-      .first()
-      .contains('#3 - ouverte il y a 2 sem.')
 
     cy.get('*[data-cy="side-window-beacon-statuses-columns"]').children()
       .eq(2)
@@ -118,7 +112,7 @@ context('Beacon statuses', () => {
       .first()
       .find('*[data-cy="side-window-beacon-statuses-vessel-status"]')
       .contains('Navire à quai')
-    cy.intercept('PUT', 'bff/v1/beacon_statuses/3').as('moveBeaconStatusCardVesselStatus')
+    cy.intercept('PUT', 'bff/v1/beacon_statuses/9').as('moveBeaconStatusCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-statuses-columns-INITIAL_ENCOUNTER"]').children()
@@ -231,7 +225,7 @@ context('Beacon statuses', () => {
     cy.get('*[data-cy="side-window-beacon-statuses-detail"]')
       .find('*[data-cy="side-window-beacon-statuses-vessel-status"]')
       .contains('Activité détectée')
-    cy.intercept('PUT', 'bff/v1/beacon_statuses/3').as('moveBeaconStatusCardVesselStatus')
+    cy.intercept('PUT', 'bff/v1/beacon_statuses/9').as('moveBeaconStatusCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-statuses-detail"]')
@@ -267,7 +261,7 @@ context('Beacon statuses', () => {
     // When
     cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-textarea"]')
       .type('I just added a new comment')
-    cy.intercept('POST', 'bff/v1/beacon_statuses/3/comments').as('addBeaconStatusComment')
+    cy.intercept('POST', 'bff/v1/beacon_statuses/9/comments').as('addBeaconStatusComment')
     cy.get('*[data-cy="side-window-beacon-statuses-detail-comment-add"]').click({ force: true })
 
     // Then

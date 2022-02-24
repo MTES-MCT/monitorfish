@@ -39,7 +39,7 @@ const BeaconStatusesBoard = () => {
     openedBeaconStatus
   } = useSelector(state => state.beaconStatus)
   const beaconStatuses = useSelector(state => getMemoizedBeaconStatusesByStage(state))
-  const verticalScrollRef = useRef()
+  const horizontalScrollRef = useRef()
   const [filteredBeaconStatuses, setFilteredBeaconStatuses] = useState({})
   const [isDroppedId, setIsDroppedId] = useState(undefined)
   const [searchedVessel, setSearchedVessel] = useState(undefined)
@@ -159,7 +159,7 @@ const BeaconStatusesBoard = () => {
   }, [beaconStatuses])
 
   return (
-    <Wrapper innerWidth={window.innerWidth} style={wrapperStyle} ref={verticalScrollRef}>
+    <Wrapper style={wrapperStyle} ref={horizontalScrollRef}>
       <SearchVesselInput
         style={searchVesselInputStyle}
         baseUrl={baseUrl}
@@ -190,7 +190,7 @@ const BeaconStatusesBoard = () => {
                 beaconStatuses={filteredBeaconStatuses[stageId] || []}
                 updateVesselStatus={updateVesselStatus}
                 isDroppedId={isDroppedId}
-                verticalScrollRef={verticalScrollRef}
+                horizontalScrollRef={horizontalScrollRef}
               />
             </Droppable>
           ))}
@@ -232,7 +232,8 @@ const wrapperStyle = {
   overflowX: 'scroll',
   overflowY: 'hidden',
   height: 'calc(100vh - 20px)',
-  padding: '20px 0 0 10px'
+  padding: '20px 0 0 10px',
+  width: 'calc(100vw - 110px)'
 }
 
 const Columns = styled.div``

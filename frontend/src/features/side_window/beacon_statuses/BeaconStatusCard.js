@@ -16,7 +16,7 @@ import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl, horizontalScrollRef }) => {
+const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl, verticalScrollRef }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconStatus?.vesselStatus)
   const ref = useRef()
@@ -32,7 +32,7 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl, hori
 
   return <Wrapper
     data-cy={'side-window-beacon-statuses-card'}
-    style={wrapperStyle(horizontalScrollRef?.current?. scrollHeight > horizontalScrollRef?.current?.clientHeight)}
+    style={wrapperStyle(verticalScrollRef?.current?.scrollHeight > verticalScrollRef?.current?.clientHeight)}
   >
     <Header style={headerStyle}>
       <Row style={rowStyle(true)}>
@@ -176,7 +176,12 @@ const vesselNameStyle = {
   fontSize: 13,
   fontWeight: 500,
   marginLeft: 8,
-  cursor: 'pointer'
+  cursor: 'pointer',
+  maxWidth: 180,
+  overflow: 'hidden',
+  height: 20.5,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap'
 }
 
 export const Priority = styled.div``

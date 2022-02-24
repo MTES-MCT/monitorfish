@@ -1,10 +1,8 @@
 import datetime
-from unittest.mock import patch
 
 import geopandas as gpd
 import numpy as np
 import pandas as pd
-import sqlalchemy
 from shapely.geometry import Polygon
 
 from src.pipeline.flows.current_segments import (
@@ -14,30 +12,43 @@ from src.pipeline.flows.current_segments import (
     extract_catches,
     extract_control_priorities,
     extract_last_positions,
+    flow,
     join,
 )
-from tests.mocks import mock_extract_side_effect
+from src.read_query import read_query
 
 
-@patch("src.pipeline.flows.current_segments.extract")
-def test_extract_catches(mock_extract):
-    mock_extract.side_effect = mock_extract_side_effect
-    query = extract_catches.run()
-    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
+def test_extract_catches(reset_test_data):
+    catches = extract_catches.run()
+    assert len(catches) == 3
+    assert set(catches.cfr) == {"ABC000542519", "ABC000306959"}
+    assert set(catches.loc[catches.cfr == "ABC000542519", "trip_number"]) == {20210002}
+    assert catches.loc[
+        (catches.cfr == "ABC000542519") & (catches.species == "HKE"), "weight"
+    ].to_list() == [2426.0]
 
 
-@patch("src.pipeline.flows.current_segments.extract")
-def test_extract_control_priorities(mock_extract):
-    mock_extract.side_effect = mock_extract_side_effect
-    query = extract_control_priorities.run()
-    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
+def test_extract_control_priorities(reset_test_data):
+    control_priorities = extract_control_priorities.run()
+    expected_control_priorities = pd.DataFrame(
+        columns=["facade", "segment", "control_priority_level"],
+        data=[["SA", "SWW01/02/03", 1.0], ["SA", "SWW04", 3.0]],
+    )
+    pd.testing.assert_frame_equal(control_priorities, expected_control_priorities)
 
 
-@patch("src.pipeline.flows.current_segments.extract")
-def test_extract_last_positions(mock_extract):
-    mock_extract.side_effect = mock_extract_side_effect
-    query = extract_last_positions.run()
-    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
+def test_extract_last_positions(reset_test_data):
+    last_positions = extract_last_positions.run()
+    assert last_positions.crs.to_string() == "EPSG:4326"
+    last_positions["geometry"] = last_positions["geometry"].map(str)
+    expected_last_positions = pd.DataFrame(
+        columns=["cfr", "latitude", "longitude", "geometry"],
+        data=[
+            ["ABC000055481", 53.435, 5.553, "POINT (5.553 53.435)"],
+            ["ABC000542519", 43.324, 5.359, "POINT (5.359 43.324)"],
+        ],
+    )
+    pd.testing.assert_frame_equal(last_positions, expected_last_positions)
 
 
 def test_compute_last_positions_facade():
@@ -349,3 +360,13 @@ def test_join():
     )
 
     pd.testing.assert_frame_equal(res, expected_res)
+
+
+def test_test_current_segments_flow(reset_test_data):
+    state = flow.run()
+    assert state.is_successful()
+
+    current_segments = read_query(
+        "monitorfish_remote", "SELECT * FROM current_segments"
+    )
+    assert len(current_segments) == 2

@@ -189,7 +189,7 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   return fetch(`${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-    `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,regulatory_references,zones,region,next_id`)
+    `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,regulatory_references,zone,region,next_id`)
     .then(response => {
       if (response.status === OK) {
         return response.json()
@@ -331,7 +331,7 @@ function getRegulatoryZoneURL (type, regulatoryZone, geoserverURL) {
     throw new Error('Le nom de la zone n\'est pas renseigné')
   }
 
-  const filter = `topic='${encodeURIComponent(regulatoryZone.topic).replace(/'/g, '\'\'')}' AND zones='${encodeURIComponent(regulatoryZone.zone).replace(/'/g, '\'\'')}'`
+  const filter = `topic='${encodeURIComponent(regulatoryZone.topic).replace(/'/g, '\'\'')}' AND zone='${encodeURIComponent(regulatoryZone.zone).replace(/'/g, '\'\'')}'`
   return (
     `${geoserverURL}/geoserver/wfs?service=WFS` +
     `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +

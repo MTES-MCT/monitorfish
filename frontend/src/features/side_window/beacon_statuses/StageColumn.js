@@ -5,9 +5,9 @@ import Draggable from './Draggable'
 import StageColumnHeader from './StageColumnHeader'
 import BeaconStatusCard from './BeaconStatusCard'
 
-const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, baseUrl, verticalScrollRef }) => {
+const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, baseUrl, horizontalScrollRef }) => {
   const updateStageVesselStatus = (beaconStatus, status) => updateVesselStatus(stage?.code, beaconStatus, status)
-  const horizontalScrollRef = useRef()
+  const verticalScrollRef = useRef()
 
   return <Wrapper
     data-cy={`side-window-beacon-statuses-columns-${stage.code}`}
@@ -20,7 +20,7 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, b
     />
     <ScrollableContainer
       style={ScrollableContainerStyle}
-      ref={horizontalScrollRef}
+      ref={verticalScrollRef}
     >
       {
         beaconStatuses
@@ -31,10 +31,11 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, b
               stageId={stage.code}
               isDroppedId={isDroppedId}
               index={index}
+              horizontalScrollRef={horizontalScrollRef}
               verticalScrollRef={verticalScrollRef}
             >
               <BeaconStatusCard
-                horizontalScrollRef={horizontalScrollRef}
+                verticalScrollRef={verticalScrollRef}
                 baseUrl={baseUrl}
                 beaconStatus={beaconStatus}
                 updateStageVesselStatus={updateStageVesselStatus}

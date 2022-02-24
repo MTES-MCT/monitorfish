@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulatory_areas&outputFormat=application/json&CQL_FILTER=topic=%27Ouest Cotentin Bivalves%27%20AND%20zone=%27Praires Ouest cotentin%27"
+    "url": "/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulatory_areas&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27"
   },
   "response": {
     "status": 200,

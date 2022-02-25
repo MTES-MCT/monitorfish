@@ -9,7 +9,7 @@ import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
-import LayerNameInput from '../../backoffice/LayerNameInput'
+import RegulatoryTopicInput from '../../backoffice/RegulatoryTopicInput'
 import {
   addRegulatoryTopicOpened,
   closeRegulatoryZoneMetadataPanel,
@@ -139,10 +139,10 @@ const RegulatoryLayerTopic = props => {
                   ? <Text>
                     {regulatoryTopic}
                   </Text>
-                  : <LayerNameInput
-                    layerName={regulatoryTopic}
-                    updateLayerName={updateLayerName}
-                    setIsLayerNameEditable={setIsLayerNameEditable}
+                  : <RegulatoryTopicInput
+                    topic={regulatoryTopic}
+                    updateTopic={updateLayerName}
+                    setIsTopicEditable={setIsLayerNameEditable}
                   />
               }
             </Name>

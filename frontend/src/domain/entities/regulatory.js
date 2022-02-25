@@ -194,14 +194,6 @@ export const REGULATION_ACTION_TYPE = {
 }
 
 /**
-  * @readonly
-  * @enum {RegulatoryTextSource}
-*/
-export const REGULATORY_TEXT_SOURCE = {
-  REGULATION: 'regulation'
-}
-
-/**
 * @enum {RegulatoryTextType}
 */
 export const REGULATORY_TEXT_TYPE = {

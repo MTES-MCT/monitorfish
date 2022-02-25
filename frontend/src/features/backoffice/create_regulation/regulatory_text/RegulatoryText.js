@@ -12,7 +12,7 @@ import {
   addObjectToRegulatoryTextCheckedMap
 } from '../../Regulation.slice'
 import Tag from '../Tag'
-import { REGULATORY_TEXT_SOURCE, checkURL, REGULATORY_TEXT_TYPE } from '../../../../domain/entities/regulatory'
+import { checkURL, REGULATORY_TEXT_TYPE } from '../../../../domain/entities/regulatory'
 
 /**
  * @typedef {object} Props
@@ -20,7 +20,6 @@ import { REGULATORY_TEXT_SOURCE, checkURL, REGULATORY_TEXT_TYPE } from '../../..
  * @prop {RegulatoryText} regulatoryText
  * @prop {Function} addOrRemoveRegulatoryTextInList
  * @prop {Boolean} saveForm
- * @prop {RegulatoryTextSource} source
  */
 const RegulatoryText = props => {
   const {
@@ -29,7 +28,6 @@ const RegulatoryText = props => {
     regulatoryText,
     addOrRemoveRegulatoryTextInList,
     listLength,
-    source,
     saveForm
   } = props
 
@@ -118,15 +116,11 @@ const RegulatoryText = props => {
       const atLeastOneValueIsMissing = checkOtherRequiredValues() || nameOrUrlIsMissing
       const payload = {
         id: id,
-        source: source,
         complete: !atLeastOneValueIsMissing
       }
-
-      if (source === REGULATORY_TEXT_SOURCE.REGULATION) {
-        dispatch(addObjectToRegulatoryTextCheckedMap(payload))
-      }
+      dispatch(addObjectToRegulatoryTextCheckedMap(payload))
     }
-  }, [saveForm, source, id, checkNameAndUrl, checkOtherRequiredValues, dispatch])
+  }, [saveForm, id, checkNameAndUrl, checkOtherRequiredValues, dispatch])
 
   const cancelAddNewRegulatoryText = useCallback(() => {
     setIsEditing(true)

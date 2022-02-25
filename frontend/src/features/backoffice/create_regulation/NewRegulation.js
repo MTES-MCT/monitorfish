@@ -51,7 +51,6 @@ import {
 import { setError } from '../../../domain/shared_slices/Global'
 import {
   mapToRegulatoryFeatureObject,
-  REGULATORY_TEXT_SOURCE,
   LAWTYPES_TO_TERRITORY,
   FRANCE,
   INITIAL_REGULATION,
@@ -297,7 +296,6 @@ const CreateRegulation = ({ title, isEdition }) => {
             <RegulatoryTextSection
               regulatoryTextList={regulatoryReferences}
               setRegulatoryTextList={setRegulatoryTextList}
-              source={REGULATORY_TEXT_SOURCE.REGULATION}
               saveForm={saveOrUpdateRegulation}
             />
             <FishingPeriodSection />

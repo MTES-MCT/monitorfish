@@ -121,8 +121,10 @@ def create_tables(set_environment_variables, start_remote_database_container):
     e = create_engine("monitorfish_remote")
     migrations = get_migrations_in_folders(migrations_folders)
     print("Creating tables")
-    for m in migrations:
-        e.execute(m.script)
+    with e.connect() as connection:
+        for m in migrations:
+            connection.execute("COMMIT")
+            connection.execute(m.script)
 
 
 @pytest.fixture()

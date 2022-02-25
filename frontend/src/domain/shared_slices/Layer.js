@@ -47,6 +47,7 @@ const reducers = {
       type,
       topic,
       zone,
+      id,
       namespace,
       regulatoryGears
     } = action.payload
@@ -61,6 +62,7 @@ const reducers = {
           type,
           topic,
           zone,
+          id,
           namespace,
           gears: regulatoryGears
         })
@@ -113,6 +115,38 @@ const reducers = {
     } else {
       window.localStorage.removeItem(`${action.payload}${layersShowedOnMapLocalStorageKey}`)
     }
+  },
+  setShowedLayers (state, action) {
+    const regulatoryZones = action.payload.regulatoryZones
+    let nextShowedLayers = []
+    if (action.payload.namespace === 'homepage') {
+      const showedLayersInLS = reOrderOldObjectHierarchyIfFound(getLocalStorageState([], `homepage${layersShowedOnMapLocalStorageKey}`))
+      nextShowedLayers = showedLayersInLS.map(showedLayer => {
+        let nextRegulatoryZone = regulatoryZones.find(regulatoryZone => {
+          if (showedLayer.id) {
+            return regulatoryZone.id === showedLayer.id
+          } else {
+            return regulatoryZone.topic === showedLayer.topic && regulatoryZone.zone === showedLayer.zone
+          }
+        })
+        if (nextRegulatoryZone) {
+          if (!(nextRegulatoryZone.topic && nextRegulatoryZone.lawType) && nextRegulatoryZone.nextId) {
+            nextRegulatoryZone = regulatoryZones.find(regulatoryZone => regulatoryZone.id === nextRegulatoryZone.nextId)
+          }
+          return {
+            type: showedLayer.type,
+            namespace: showedLayer.namespace,
+            gears: nextRegulatoryZone.gears,
+            topic: nextRegulatoryZone.topic,
+            id: nextRegulatoryZone.id,
+            zone: nextRegulatoryZone.zone
+          }
+        }
+        return null
+      })
+    }
+    state.showedLayers = nextShowedLayers
+    window.localStorage.setItem(`homepage${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
   },
   /**
    * Store layer to feature and simplified feature - To show simplified features if the zoom is low

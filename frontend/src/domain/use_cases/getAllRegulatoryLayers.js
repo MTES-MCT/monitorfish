@@ -9,12 +9,14 @@ import {
   setLayersTopicsByRegTerritory,
   setRegulatoryLayerLawTypes
 } from '../shared_slices/Regulatory'
+import layer from '../shared_slices/Layer'
 
 const worker = new Worker()
 const MonitorFishWorker = Comlink.wrap(worker)
 
 const getAllRegulatoryLayers = () => async (dispatch, getState) => {
   const worker = await new MonitorFishWorker()
+  const { setShowedLayers } = layer.homepage.actions
 
   return getAllRegulatoryLayersFromAPI(getState().global.inBackofficeMode)
     .then(features => {
@@ -29,6 +31,7 @@ const getAllRegulatoryLayers = () => async (dispatch, getState) => {
         dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
         dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
         dispatch(setSelectedRegulatoryZone(layersWithoutGeometry))
+        dispatch(setShowedLayers({ regulatoryZones: layersWithoutGeometry, namespace: 'homepage' }))
       })
     })
     .catch(error => {

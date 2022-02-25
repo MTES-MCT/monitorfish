@@ -6,6 +6,7 @@ import sqlalchemy
 
 from src.pipeline.flows.vessels import (
     clean_vessels,
+    extract_beacon_numbers,
     extract_cee_vessels,
     extract_control_charters,
     extract_floats,
@@ -56,6 +57,13 @@ def test_extract_non_cee_vessels(mock_extract):
 def test_extract_control_charters(mock_extract):
     mock_extract.side_effect = mock_extract_side_effect
     query = extract_control_charters.run()
+    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
+
+
+@patch("src.pipeline.flows.vessels.extract")
+def test_extract_beacon_numbers(mock_extract):
+    mock_extract.side_effect = mock_extract_side_effect
+    query = extract_beacon_numbers.run()
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
@@ -118,6 +126,7 @@ def test_clean_vessels():
             ],
             "sailing_category": ["2ème", None],
             "beacon_number": [None, "beacbeac"],
+            "beacon_status": [None, "Activée"],
             "under_charter": [True, False],
         }
     )
@@ -154,6 +163,7 @@ def test_clean_vessels():
         "vessel_phones",
         "vessel_emails",
         "beacon_number",
+        "beacon_status",
         "under_charter",
     ]
 
@@ -188,6 +198,7 @@ def test_clean_vessels():
             ["0123456789", "9876543210"],
             [],
             None,
+            None,
             True,
         ],
         [
@@ -220,6 +231,7 @@ def test_clean_vessels():
             [],
             [],
             "beacbeac",
+            "Activée",
             False,
         ],
     ]
@@ -246,8 +258,7 @@ def test_clean_vessels():
     )
 
 
-@patch("src.pipeline.flows.vessels.load", autospec=True)
-def test_load_vessels(mock_load):
+def test_load_vessels(reset_test_data):
     columns = [
         "id",
         "imo",
@@ -278,6 +289,8 @@ def test_load_vessels(mock_load):
         "vessel_phones",
         "vessel_emails",
         "beacon_number",
+        "beacon_status",
+        "under_charter",
     ]
 
     values = [
@@ -311,6 +324,8 @@ def test_load_vessels(mock_load):
             ["0123456789", "9876543210"],
             [],
             None,
+            None,
+            True,
         ],
         [
             2,
@@ -342,6 +357,8 @@ def test_load_vessels(mock_load):
             [],
             [],
             "beacbeac",
+            "Activée",
+            False,
         ],
     ]
 

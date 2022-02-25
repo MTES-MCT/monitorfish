@@ -282,6 +282,7 @@ def clean_vessels(all_vessels):
         "vessel_phones",
         "vessel_emails",
         "beacon_number",
+        "beacon_status",
         "under_charter",
     ]
     res = res[columns]

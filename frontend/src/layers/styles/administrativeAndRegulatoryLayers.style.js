@@ -144,7 +144,10 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
           metadataIsShowed = feature.get(metadataIsShowedPropertyName)
         }
         switch (gearCategory) {
-          case 'Sennes traînants' || 'Sennes traînantes coulissantes': {
+          case 'Sennes traînantes': {
+            return getTrawlStyles(lastNumber, getStyle, metadataIsShowed)
+          }
+          case 'Sennes traînantes coulissantes': {
             return getTrawlStyles(lastNumber, getStyle, metadataIsShowed)
           }
           case 'Chaluts': {

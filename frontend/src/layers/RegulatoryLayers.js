@@ -147,14 +147,15 @@ function featuresAreAlreadyDrawWithTheSameTolerance (showSimplifiedFeatures, sim
 }
 
 function removeRegulatoryLayersToMap (showedLayers, olLayers) {
-  const _showedLayers = showedLayers.length ? showedLayers : []
-  const layersToRemove = olLayers.getArray()
-    .filter(olLayer => layersOfTypeRegulatoryLayerInCurrentMap(olLayer))
-    .filter(olLayer => layersNotPresentInShowedLayers(_showedLayers, olLayer))
+  if (showedLayers.length) {
+    const layersToRemove = olLayers.getArray()
+      .filter(olLayer => layersOfTypeRegulatoryLayerInCurrentMap(olLayer))
+      .filter(olLayer => layersNotPresentInShowedLayers(showedLayers, olLayer))
 
-  layersToRemove?.forEach(layerToRemove => {
-    olLayers.remove(layerToRemove)
-  })
+    layersToRemove?.forEach(layerToRemove => {
+      olLayers.remove(layerToRemove)
+    })
+  }
 }
 
 function layersNotPresentInShowedLayers (_showedLayers, olLayer) {

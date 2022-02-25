@@ -99,18 +99,25 @@ const regulatorySlice = createSlice({
      */
     removeRegulatoryZonesFromMyLayers (state, action) {
       const { topic, id } = action.payload
-      if (topic) {
+      let nextSelectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
+
+      if (topic && !id) {
+        state.selectedRegulatoryLayers[topic].forEach(selectedRegulatoryLayer => {
+          nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayerIds
+            .filter(selectedRegulatoryLayerId => selectedRegulatoryLayerId !== selectedRegulatoryLayer.id)
+        })
+        delete state.selectedRegulatoryLayers[topic]
+      } else if (id) {
         state.selectedRegulatoryLayers[topic] = state.selectedRegulatoryLayers[topic]
           .filter(subZone => !subZone.id === id)
+        nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayerIds
+          .filter(selectedRegulatoryLayerId => !selectedRegulatoryLayerId === id)
       }
 
-      if (!state.selectedRegulatoryLayers[action.payload.topic].length) {
-        delete state.selectedRegulatoryLayers[action.payload.topic]
+      if (!state.selectedRegulatoryLayers[topic]?.length) {
+        delete state.selectedRegulatoryLayers[topic]
       }
 
-      let nextSelectedRegulatoryLayerIds = getLocalStorageState([], SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY)
-      nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayerIds
-        .filter(selectedRegulatoryLayerId => !selectedRegulatoryLayerId === id)
       window.localStorage.setItem(SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, JSON.stringify(nextSelectedRegulatoryLayerIds))
     },
     setIsReadyToShowRegulatoryZones (state) {
@@ -209,6 +216,7 @@ const regulatorySlice = createSlice({
       }
     },
     setSelectedRegulatoryZone (state, action) {
+      console.log('setSelectedRegulatoryZone ', action)
       if (action.payload?.length) {
         const regulatoryLayers = action.payload
         let nextSelectedRegulatoryLayers = {}
@@ -229,7 +237,7 @@ const regulatorySlice = createSlice({
         selectedRegulatoryLayerIds
           .forEach(selectedRegulatoryZoneId => {
             const updatedObjects = updateSelectedRegulatoryLayers(regulatoryLayers, selectedRegulatoryZoneId, nextSelectedRegulatoryLayers, nextSelectedRegulatoryLayerIds)
-            if (updatedObjects.selectedRegulatoryLayers && updatedObjects.selectedRegulatoryLayerIds) {
+            if (updatedObjects?.selectedRegulatoryLayers && updatedObjects?.selectedRegulatoryLayerIds) {
               nextSelectedRegulatoryLayers = updatedObjects.selectedRegulatoryLayers
               nextSelectedRegulatoryLayerIds = updatedObjects.selectedRegulatoryLayerIds
             }

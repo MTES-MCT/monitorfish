@@ -43,8 +43,6 @@ const showRegulatoryZone = zoneToShow => dispatch => {
 }
 
 export const getVectorOLLayer = (dispatch, getState) => layerToShow => {
-  console.log('getVectorOLLayer')
-  console.log(layerToShow)
   const { gears } = getState().gear
   const hash = getHash(`${layerToShow.topic}:${layerToShow.zone}`)
   const name = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
@@ -91,9 +89,7 @@ const getRegulatoryVectorSourceAndGears = (dispatch, getState) => regulatoryZone
             return
           }
 
-          console.log(regulatoryZone)
           layerToShowGears = JSON.parse(regulatoryZone.properties.gears)
-          console.log('on met à jour les engins ', layerToShowGears)
 
           let simplifiedRegulatoryZone = null
           try {

@@ -60,10 +60,8 @@ const RegulatoryLayerZone = props => {
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
   const gears = useSelector(state => state.gear.gears)
-  const zoneIsShown = useSelector(state => state.layer.showedLayers
-    .some(layer =>
-      layer.topic === regulatoryZone?.topic &&
-      layer.zone === regulatoryZone?.zone))
+  const zoneIsShown = useSelector(state =>
+    state.layer.showedLayers.some(layer => layer.id === regulatoryZone?.id))
 
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)

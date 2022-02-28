@@ -216,7 +216,6 @@ const regulatorySlice = createSlice({
       }
     },
     setSelectedRegulatoryZone (state, action) {
-      console.log('setSelectedRegulatoryZone ', action)
       if (action.payload?.length) {
         const regulatoryLayers = action.payload
         let nextSelectedRegulatoryLayers = {}

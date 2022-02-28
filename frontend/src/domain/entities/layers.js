@@ -446,7 +446,7 @@ export function getGearCategory (layerGears, gears) {
     if (layerGears.regulatedGearCategories && Object.keys(layerGears.regulatedGearCategories).length) {
       return Object.keys(layerGears.regulatedGearCategories)[0]
     } else if (layerGears.regulatedGears?.length) {
-      let layerGearsArray = layerGears.regulatedGears.replace(/ /g, '').split(',')
+      let layerGearsArray = layerGears.regulatedGears
       if (layerGearsArray.length > 1) {
         layerGearsArray = removeMiscellaneousGears(layerGearsArray)
       }

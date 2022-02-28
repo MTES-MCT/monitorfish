@@ -116,7 +116,7 @@ const reducers = {
       window.localStorage.removeItem(`${action.payload}${layersShowedOnMapLocalStorageKey}`)
     }
   },
-  setShowedLayers (state, action) {
+  setShowedLayersWithLocalStorageValues (state, action) {
     const regulatoryZones = action.payload.regulatoryZones
     let nextShowedLayers = []
     if (action.payload.namespace === 'homepage') {
@@ -136,7 +136,7 @@ const reducers = {
           return {
             type: showedLayer.type,
             namespace: showedLayer.namespace,
-            gears: nextRegulatoryZone.gears,
+            gears: nextRegulatoryZone.regulatoryGears,
             topic: nextRegulatoryZone.topic,
             id: nextRegulatoryZone.id,
             zone: nextRegulatoryZone.zone

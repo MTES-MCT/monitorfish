@@ -92,7 +92,7 @@ curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces
 {
   "featureType": {
     "name": "regulatory_areas",
-    "nativeName": "reglementation_peche_view",
+    "nativeName": "regulations_view",
     "title": "Regulatory Areas",
     "nativeCRS": "EPSG:4326",
     "srs": "EPSG:4326",
@@ -105,7 +105,7 @@ curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces
 {
   "featureType": {
     "name": "regulatory_areas_write",
-    "nativeName": "reglementation_peche",
+    "nativeName": "regulations",
     "title": "Regulatory Areas for write operation",
     "nativeCRS": "EPSG:4326",
     "srs": "EPSG:4326",

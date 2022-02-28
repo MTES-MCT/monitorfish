@@ -3,4 +3,4 @@ SELECT
     topic,
     zone,
     regulatory_references
-FROM reglementation_peche
+FROM regulations

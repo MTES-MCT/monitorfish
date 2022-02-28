@@ -72,7 +72,7 @@ def delete_required(ids_to_delete: set) -> bool:
 def delete(ids_to_delete: set):
     logger = prefect.context.get("logger")
     delete_rows(
-        table_name="reglementation_peche",
+        table_name="regulations",
         schema="public",
         db_name="monitorfish_remote",
         table_id_column="id",
@@ -92,7 +92,7 @@ def extract_new_regulations(ids_to_update: set) -> pd.DataFrame:
 
 @task(checkpoint=False)
 def load_new_regulations(new_regulations: pd.DataFrame):
-    """Load the output of ``extract_rows_to_update`` task into ``reglementation_peche``
+    """Load the output of ``extract_rows_to_update`` task into ``regulations``
     table.
 
     Args:
@@ -100,7 +100,7 @@ def load_new_regulations(new_regulations: pd.DataFrame):
     """
     load(
         new_regulations,
-        table_name="reglementation_peche",
+        table_name="regulations",
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),

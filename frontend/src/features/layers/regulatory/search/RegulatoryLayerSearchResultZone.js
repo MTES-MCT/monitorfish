@@ -7,7 +7,6 @@ import Checkbox from 'rsuite/lib/Checkbox'
 import Layers, { getGearCategory } from '../../../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../../../domain/use_cases/showRegulatoryZoneMetadata'
 import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/closeRegulatoryZoneMetadata'
-import { setRegulatoryGeometriesToPreview, resetRegulatoryGeometriesToPreview } from '../../../../domain/shared_slices/Regulatory'
 
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 import { showOrHideMetadataIcon } from '../RegulatoryLayerZone'
@@ -42,7 +41,7 @@ const RegulatoryLayerSearchResultZone = props => {
 
   const showOrHideRegulatoryZoneMetadata = regulatoryZone => {
     if (!metadataIsShown) {
-      dispatch(showRegulatoryZoneMetadata(regulatoryZone))
+      dispatch(showRegulatoryZoneMetadata(regulatoryZone, true))
       setMetadataIsShown(true)
     } else {
       dispatch(closeRegulatoryZoneMetadata())
@@ -93,17 +92,8 @@ const RegulatoryLayerSearchResultZone = props => {
     }
   }, [regulatoryZone, isOpen])
 
-  const handleMouseOver = () => {
-    if (regulatoryZone.geometry) {
-      dispatch(setRegulatoryGeometriesToPreview([regulatoryZone.geometry]))
-    }
-  }
-  const handleMouseOut = () => {
-    dispatch(resetRegulatoryGeometriesToPreview())
-  }
-
   return (
-    <Zone onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+    <Zone>
       <Rectangle vectorLayerStyle={zoneStyle}/>
       <Name onClick={() => zoneSelectionList?.length
         ? setZoneSelectionList([])
@@ -117,8 +107,14 @@ const RegulatoryLayerSearchResultZone = props => {
           ? <>
           {
             metadataIsShown
-              ? <CustomREGPaperDarkIcon title="Fermer la réglementation" onClick={() => showOrHideRegulatoryZoneMetadata(regulatoryZone)}/>
-              : <CustomREGPaperIcon title="Afficher la réglementation" onClick={() => showOrHideRegulatoryZoneMetadata(regulatoryZone)}/>
+              ? <CustomREGPaperDarkIcon
+                title="Fermer la réglementation"
+                onClick={() => showOrHideRegulatoryZoneMetadata(regulatoryZone)}
+              />
+              : <CustomREGPaperIcon
+                title="Afficher la réglementation"
+                onClick={() => showOrHideRegulatoryZoneMetadata(regulatoryZone)}
+              />
           }
           <CheckboxGroup
               inline

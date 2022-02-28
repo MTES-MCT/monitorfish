@@ -12,6 +12,7 @@ import layer from '../../../domain/shared_slices/Layer'
 import LayersEnum, { layersType } from '../../../domain/entities/layers'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
 import showAdministrativeLayer from '../../../domain/use_cases/showAdministrativeLayer'
+import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
 
 const AdministrativeLayers = props => {
   const {
@@ -74,6 +75,7 @@ const AdministrativeLayers = props => {
       dispatch(setLayersSideBarOpenedZone(''))
     } else {
       dispatch(setLayersSideBarOpenedZone(layersType.ADMINISTRATIVE))
+      dispatch(closeRegulatoryZoneMetadata())
     }
   }
 

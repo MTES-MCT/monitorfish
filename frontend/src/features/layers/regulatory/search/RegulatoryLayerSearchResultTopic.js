@@ -1,13 +1,12 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import Checkbox from 'rsuite/lib/Checkbox'
 import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
-
-import { setRegulatoryGeometriesToPreview, resetRegulatoryGeometriesToPreview } from '../../../../domain/shared_slices/Regulatory'
 import RegulatoryLayerSearchResultZones from './RegulatoryLayerSearchResultZones'
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 import { COLORS } from '../../../../constants/constants'
+import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/closeRegulatoryZoneMetadata'
 
 const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLayerTopic, topicDetails }) => {
   const dispatch = useDispatch()
@@ -17,7 +16,17 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
     regulatoryZonesChecked
   } = useSelector(state => state.regulatoryLayerSearch)
 
+  const {
+    regulatoryZoneMetadata
+  } = useSelector(state => state.regulatory)
+
   const [zonesAreOpen, setZonesAreOpen] = useState(false)
+
+  useEffect(() => {
+    if (!zonesAreOpen && regulatoryZoneMetadata?.topic === regulatoryLayerTopic) {
+      dispatch(closeRegulatoryZoneMetadata())
+    }
+  }, [zonesAreOpen])
 
   const getRegulatoryZonesLength = useCallback(() => {
     if (regulatoryLayersSearchResult && regulatoryLayerLawType && regulatoryLayerTopic) {
@@ -66,19 +75,11 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
     }
   }
 
-  const handleMouseOver = () => {
-    if (topicDetails.length > 0) {
-      const features = topicDetails.map(topic => topic.geometry)
-      dispatch(setRegulatoryGeometriesToPreview(features))
-    }
-  }
-  const handleMouseOut = () => {
-    dispatch(resetRegulatoryGeometriesToPreview())
-  }
-
   return (
     <>
-      <LayerTopic onClick={() => setZonesAreOpen(!zonesAreOpen)} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+      <LayerTopic
+        onClick={() => setZonesAreOpen(!zonesAreOpen)}
+      >
         <TopicName
           data-cy={'regulatory-layer-topic'}
           title={regulatoryLayerTopic.replace(/[_]/g, ' ')}

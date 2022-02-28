@@ -7,6 +7,7 @@ import { COLORS } from '../../../constants/constants'
 import { baseLayers, layersType } from '../../../domain/entities/layers'
 import layer from '../../../domain/shared_slices/Layer'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
+import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
 
 const BaseLayers = ({ namespace }) => {
   const dispatch = useDispatch()
@@ -29,12 +30,16 @@ const BaseLayers = ({ namespace }) => {
       dispatch(setLayersSideBarOpenedZone(''))
     } else {
       dispatch(setLayersSideBarOpenedZone(layersType.BASE_LAYER))
+      dispatch(closeRegulatoryZoneMetadata())
     }
   }
 
   return (
     <>
-      <SectionTitle onClick={() => onSectionTitleClicked()} showBaseLayers={showBaseLayers}>
+      <SectionTitle
+        onClick={() => onSectionTitleClicked()}
+        showBaseLayers={showBaseLayers}
+      >
         Fonds de carte <ChevronIcon $isOpen={showBaseLayers}/>
       </SectionTitle>
       <BaseLayersList showBaseLayers={showBaseLayers} baseLayersLength={baseLayersKeys.length}>

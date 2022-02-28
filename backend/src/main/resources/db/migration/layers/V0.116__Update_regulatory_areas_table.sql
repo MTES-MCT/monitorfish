@@ -23,4 +23,5 @@ ALTER TABLE public.reglementation_peche
     RENAME COLUMN references_reglementaires to regulatory_references;
 ALTER TABLE public.reglementation_peche
     RENAME COLUMN mesures_techniques to regulatory_details;
-
+ALTER TABLE public.reglementation_peche
+    RENAME TO regulations;

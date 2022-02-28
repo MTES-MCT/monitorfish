@@ -47,14 +47,9 @@ export const getVectorOLLayer = (dispatch, getState) => layerToShow => {
   const hash = getHash(`${layerToShow.topic}:${layerToShow.zone}`)
   const name = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
 
-  // Et non ça ne marche pas du tout ça.
-  // Il faut trouver une combine pour mettre à jour les layers affichés
-  const {
-    source,
-    layerToShowGears
-  } = getRegulatoryVectorSourceAndGears(dispatch, getState)(layerToShow)
+  const source = getRegulatoryVectorSourceAndGears(dispatch, getState)(layerToShow)
 
-  const gearCategory = getGearCategory(layerToShowGears, gears)
+  const gearCategory = getGearCategory(layerToShow.gears, gears)
 
   const _layer = new VectorImageLayer({
     source,
@@ -69,7 +64,6 @@ export const getVectorOLLayer = (dispatch, getState) => layerToShow => {
 const getRegulatoryVectorSourceAndGears = (dispatch, getState) => regulatoryZoneProperties => {
   const zoneName = `${Layers.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
 
-  let layerToShowGears = []
   const {
     setLastShowedFeatures,
     pushLayerToFeatures
@@ -88,8 +82,6 @@ const getRegulatoryVectorSourceAndGears = (dispatch, getState) => regulatoryZone
             vectorSource.removeLoadedExtent(extent)
             return
           }
-
-          layerToShowGears = JSON.parse(regulatoryZone.properties.gears)
 
           let simplifiedRegulatoryZone = null
           try {
@@ -133,10 +125,7 @@ const getRegulatoryVectorSourceAndGears = (dispatch, getState) => regulatoryZone
     console.error(event.error)
   })
 
-  return {
-    source: vectorSource,
-    layerToShowGears
-  }
+  return vectorSource
 }
 
 export default showRegulatoryZone

@@ -58,7 +58,6 @@ const RegulatoryLayerSearchResultZone = props => {
 
     if (regulatoryZone.zone && regulatoryZone.topic && gears) {
       const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
-      console.log('regulatoryZone ', regulatoryZone)
       const gearCategory = getGearCategory(regulatoryZone.gears, gears)
 
       setZoneStyle(getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory))

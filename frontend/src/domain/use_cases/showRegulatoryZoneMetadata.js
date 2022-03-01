@@ -16,7 +16,6 @@ const showRegulatoryZoneMetadata = (regulatoryZone, previewZone) => (dispatch, g
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature)
       dispatch(setRegulatoryZoneMetadata(regulatoryZoneMetadata))
 
-      console.log(feature)
       if (previewZone) {
         dispatch(setRegulatoryGeometriesToPreview([feature.geometry]))
       }

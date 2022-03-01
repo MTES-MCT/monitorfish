@@ -20,6 +20,8 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
     regulatoryZoneMetadata,
     selectedRegulatoryLayers
   } = useSelector(state => state.regulatory)
+  const numberOfTotalZones = useSelector(state => state.regulatory
+    .regulatoryLayerLawTypes[regulatoryLayerLawType][regulatoryLayerTopic]?.length)
 
   const [zonesAreOpen, setZonesAreOpen] = useState(false)
 
@@ -54,15 +56,6 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
     }
   }, [regulatoryZonesChecked, regulatoryLayerTopic, getRegulatoryZonesLength])
 
-  const displayNumberOfZones = () => {
-    const zoneNumber = topicDetails.length
-    return (
-      <ZonesNumber>
-        {`${zoneNumber} zone${zoneNumber > 1 ? 's' : ''}`}
-      </ZonesNumber>
-    )
-  }
-
   const handleCheckAllZones = () => {
     if (!regulatoryLayersSearchResult || !regulatoryLayerLawType || !regulatoryLayerTopic) {
       return
@@ -87,7 +80,9 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
         >
           {regulatoryLayerTopic.replace(/[_]/g, ' ')}
         </TopicName>
-        {displayNumberOfZones()}
+        <ZonesNumber>
+          {`${topicDetails?.length}/${numberOfTotalZones}`}
+        </ZonesNumber>
         <CheckboxGroup
           disabled={selectedRegulatoryLayers[regulatoryLayerTopic]?.length === getRegulatoryZonesLength()}
           onClick={e => e.stopPropagation()}

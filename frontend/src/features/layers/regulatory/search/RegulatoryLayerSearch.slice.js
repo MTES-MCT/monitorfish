@@ -21,7 +21,6 @@ const regulatoryLayerSearchSlice = createSlice({
      * }[]} action - The regulatory zones
      */
     checkRegulatoryZones (state, action) {
-      console.log('add', action.payload)
       state.regulatoryZonesChecked = state.regulatoryZonesChecked.concat(action.payload)
         // remove duplicates
         .filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
@@ -36,7 +35,6 @@ const regulatoryLayerSearchSlice = createSlice({
      * }[]} action - The regulatory zones and topic
      */
     uncheckRegulatoryZones (state, action) {
-      console.log('remove', action.payload)
       state.regulatoryZonesChecked = state.regulatoryZonesChecked
         .filter(zone => !action.payload.some(zoneToRemove => zoneToRemove.id === zone.id))
     },

@@ -67,14 +67,14 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllWithBeaconStatusesBeforeLast48Hours Should returns the last positions with beacon statuses before the last 48 hours`() {
+    fun `findAllWithBeaconMalfunctionBeforeLast48Hours Should returns the last positions with beacon statuses before the last 48 hours`() {
         // Then
-        val positions = jpaLastPositionRepository.findAllWithBeaconStatusesBeforeLast48Hours()
+        val positions = jpaLastPositionRepository.findAllWithBeaconMalfunctionBeforeLast48Hours()
 
         assertThat(positions).hasSize(1)
         assertThat(positions.first().internalReferenceNumber).isEqualTo("ABC000939217")
         assertThat(positions.first().vesselName).isEqualTo("FRAIS AVIS MODE")
-        assertThat(positions.first().beaconStatusId).isEqualTo(6)
+        assertThat(positions.first().beaconMalfunctionId).isEqualTo(6)
     }
 
     @Test

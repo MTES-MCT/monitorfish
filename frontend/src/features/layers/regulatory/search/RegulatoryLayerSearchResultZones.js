@@ -27,7 +27,7 @@ const RegulatoryLayerSearchResultZones = props => {
       {
         getRegulatoryZones().map(regulatoryZone => {
           return <RegulatoryLayerSearchResultZone
-            key={regulatoryZone?.zone}
+            key={regulatoryZone?.id}
             regulatoryZone={regulatoryZone}
             isOpen={zonesAreOpen}
           />

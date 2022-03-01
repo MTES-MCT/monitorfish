@@ -31,6 +31,8 @@ const RegulatoryLayerSearchResultZone = props => {
   } = useSelector(state => state.regulatory)
   const zoneIsChecked = useSelector(state => !!state.regulatoryLayerSearch
     .regulatoryZonesChecked?.find(zone => zone.id === regulatoryZone.id))
+  const zoneIsAlreadySelected = useSelector(state => state.regulatory
+    .selectedRegulatoryLayers[regulatoryZone.topic]?.find(zone => zone.id === regulatoryZone.id))
 
   const [zoneStyle, setZoneStyle] = useState(null)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
@@ -88,13 +90,15 @@ const RegulatoryLayerSearchResultZone = props => {
           <CheckboxGroup
               inline
               name="checkboxList"
-              value={zoneIsChecked ? [regulatoryZone.id] : []}
+              value={zoneIsChecked || zoneIsAlreadySelected ? [regulatoryZone.id] : []}
               onChange={_ => zoneIsChecked
                 ? dispatch(uncheckRegulatoryZones([regulatoryZone]))
                 : dispatch(checkRegulatoryZones([regulatoryZone]))}
               style={{ marginLeft: 'auto', height: 20 }}
           >
             <Checkbox
+              title={zoneIsAlreadySelected ? 'zone déjà ajoutée à mes zones réglementaires' : ''}
+              disabled={zoneIsAlreadySelected}
               data-cy={'regulatory-zone-check'}
               value={regulatoryZone?.id}
             />

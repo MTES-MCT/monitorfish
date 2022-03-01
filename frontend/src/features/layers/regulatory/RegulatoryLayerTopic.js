@@ -255,7 +255,7 @@ const List = styled.div`
   height: inherit;
   overflow: hidden;
   transition: all 0.5s;
-  height: ${props => props.isOpen ? props.zonesLength * 38 : 0}px;
+  height: ${props => props.isOpen ? props.zonesLength * 36 : 0}px;
 `
 
 const Row = styled.li`

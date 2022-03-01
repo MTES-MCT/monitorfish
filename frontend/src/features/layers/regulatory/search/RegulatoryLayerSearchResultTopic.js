@@ -17,7 +17,8 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
   } = useSelector(state => state.regulatoryLayerSearch)
 
   const {
-    regulatoryZoneMetadata
+    regulatoryZoneMetadata,
+    selectedRegulatoryLayers
   } = useSelector(state => state.regulatory)
 
   const [zonesAreOpen, setZonesAreOpen] = useState(false)
@@ -88,6 +89,7 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
         </TopicName>
         {displayNumberOfZones()}
         <CheckboxGroup
+          disabled={selectedRegulatoryLayers[regulatoryLayerTopic]?.length === getRegulatoryZonesLength()}
           onClick={e => e.stopPropagation()}
           inline
           name="checkboxList"

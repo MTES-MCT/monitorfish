@@ -38,6 +38,7 @@ const RegulatoryLayerSearch = props => {
         dispatch(resetRegulatoryGeometriesToPreview())
         dispatch(setRegulatoryLayersSearchResult(null))
         dispatch(resetRegulatoryZonesChecked())
+        setInitSearchFields(true)
       })
     }
   }, [layersSidebarOpenedLayer])

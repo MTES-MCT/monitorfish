@@ -7,13 +7,11 @@ const RegulatoryLayerSearchResultZones = props => {
   const {
     regulatoryLayerLawType,
     regulatoryLayerTopic,
-    toggleSelectRegulatoryLayer,
     zonesAreOpen
   } = props
 
   const {
-    regulatoryLayersSearchResult,
-    regulatoryZonesChecked
+    regulatoryLayersSearchResult
   } = useSelector(state => state.regulatoryLayerSearch)
 
   const getRegulatoryZones = useCallback(() => {
@@ -24,14 +22,6 @@ const RegulatoryLayerSearchResultZones = props => {
     return []
   }, [regulatoryLayersSearchResult, regulatoryLayerLawType, regulatoryLayerTopic])
 
-  const getZoneIsChecked = useCallback(regulatoryZone => {
-    if (!regulatoryZonesChecked) {
-      return false
-    }
-
-    return regulatoryZonesChecked.find(zone => zone.id === regulatoryZone.id)
-  }, [regulatoryZonesChecked])
-
   return (
     <RegulatoryZones length={getRegulatoryZones().length} isOpen={zonesAreOpen}>
       {
@@ -39,9 +29,7 @@ const RegulatoryLayerSearchResultZones = props => {
           return <RegulatoryLayerSearchResultZone
             key={regulatoryZone?.zone}
             regulatoryZone={regulatoryZone}
-            toggleSelectRegulatoryLayer={toggleSelectRegulatoryLayer}
             isOpen={zonesAreOpen}
-            zoneIsChecked={getZoneIsChecked(regulatoryZone)}
           />
         })
       }

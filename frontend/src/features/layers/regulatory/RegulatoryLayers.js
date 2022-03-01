@@ -175,7 +175,7 @@ const RegulatoryLayersList = styled.ul`
   color: ${COLORS.gunMetal};
   height: ${props => props.showRegulatoryLayers
   ? props.topicLength || props.zoneLength
-      ? 36 * props.topicLength + props.zoneLength * 39
+      ? 40 * props.topicLength + props.zoneLength * 36
       : 40
   : 0}px;
   transition: 0.5s all;

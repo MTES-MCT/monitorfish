@@ -1,7 +1,6 @@
 import prefect
 from prefect.agent.docker import DockerAgent
 
-from config import FLOWS_HEALTHCHECK_URL
 from src.pipeline.flows_config import flows_to_register
 
 PROJECT_NAME = "Monitorfish"
@@ -48,7 +47,5 @@ if __name__ == "__main__":
     # Start Docker Agent process
     # This process queries the Prefect GraphQL API every second to ask if any new flows
     # should be run
-    agent = DockerAgent(
-        show_flow_logs=True, no_pull=True, agent_address=FLOWS_HEALTHCHECK_URL
-    )
+    agent = DockerAgent(show_flow_logs=True, no_pull=True)
     agent.start()

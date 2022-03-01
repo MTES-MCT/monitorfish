@@ -8,8 +8,8 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 class GetLastPositions(private val lastPositionRepository: LastPositionRepository) {
     fun execute(): List<LastPosition> {
         val lastRecentPositions = lastPositionRepository.findAllInLast48Hours()
-        val lastPositionsWithOldBeaconStatuses = lastPositionRepository.findAllWithBeaconStatusesBeforeLast48Hours()
+        val lastPositionsWithOldBeaconMalfunctions = lastPositionRepository.findAllWithBeaconMalfunctionBeforeLast48Hours()
 
-        return lastRecentPositions + lastPositionsWithOldBeaconStatuses
+        return lastRecentPositions + lastPositionsWithOldBeaconMalfunctions
     }
 }

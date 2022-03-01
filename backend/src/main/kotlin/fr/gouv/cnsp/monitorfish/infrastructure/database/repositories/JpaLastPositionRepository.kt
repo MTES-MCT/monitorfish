@@ -35,10 +35,10 @@ class JpaLastPositionRepository(private val dbLastPositionRepository: DBLastPosi
                 }
     }
 
-    @Cacheable(value = ["vessels_positions_with_beacon_statuses"])
-    override fun findAllWithBeaconStatusesBeforeLast48Hours(): List<LastPosition> {
+    @Cacheable(value = ["vessels_positions_with_beacon_malfunctions"])
+    override fun findAllWithBeaconMalfunctionBeforeLast48Hours(): List<LastPosition> {
         val nowMinus48Hours = ZonedDateTime.now().minusHours(48)
-        return dbLastPositionRepository.findAllByDateTimeLessThanEqualAndBeaconStatusIdNotNull(nowMinus48Hours)
+        return dbLastPositionRepository.findAllByDateTimeLessThanEqualAndBeaconMalfunctionIdNotNull(nowMinus48Hours)
                 // We NEED this non filterNotNull (even if the IDE say not so, as the SQL request may return null internalReferenceNumber)
                 .filterNotNull()
                 .map {

@@ -5,8 +5,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconStatusCommentDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconStatusDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.micrometer.core.instrument.MeterRegistry
@@ -27,24 +27,24 @@ import javax.websocket.server.PathParam
 @RequestMapping("/bff")
 @Api(description = "API for UI frontend")
 class BffController(
-        private val getLastPositions: GetLastPositions,
-        private val getVessel: GetVessel,
-        private val getVesselPositions: GetVesselPositions,
-        private val getVesselVoyage: GetVesselVoyage,
-        private val getAllGears: GetAllGears,
-        private val getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups,
-        private val searchVessels: SearchVessels,
-        private val getVesselControls: GetVesselControls,
-        private val getAllFleetSegments: GetAllFleetSegments,
-        private val getHealthcheck: GetHealthcheck,
-        private val getAllControlObjectives: GetAllControlObjectives,
-        private val updateControlObjective: UpdateControlObjective,
-        private val getOperationalAlerts: GetOperationalAlerts,
-        private val getAllBeaconStatuses: GetAllBeaconStatuses,
-        private val updateBeaconStatus: UpdateBeaconStatus,
-        private val getBeaconStatus: GetBeaconStatus,
-        private val saveBeaconStatusComment: SaveBeaconStatusComment,
-        meterRegistry: MeterRegistry) {
+    private val getLastPositions: GetLastPositions,
+    private val getVessel: GetVessel,
+    private val getVesselPositions: GetVesselPositions,
+    private val getVesselVoyage: GetVesselVoyage,
+    private val getAllGears: GetAllGears,
+    private val getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups,
+    private val searchVessels: SearchVessels,
+    private val getVesselControls: GetVesselControls,
+    private val getAllFleetSegments: GetAllFleetSegments,
+    private val getHealthcheck: GetHealthcheck,
+    private val getAllControlObjectives: GetAllControlObjectives,
+    private val updateControlObjective: UpdateControlObjective,
+    private val getOperationalAlerts: GetOperationalAlerts,
+    private val getAllBeaconMalfunctions: GetAllBeaconMalfunctions,
+    private val updateBeaconMalfunction: UpdateBeaconMalfunction,
+    private val getBeaconMalfunction: GetBeaconMalfunction,
+    private val saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment,
+    meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
     val vesselsTimer = meterRegistry.timer("ws_vessel_requests_latency_seconds_summary");
@@ -260,50 +260,50 @@ class BffController(
         return getOperationalAlerts.execute()
     }
 
-    @GetMapping(value = ["/v1/beacon_statuses"])
-    @ApiOperation("Get all beacon statuses")
-    fun getAllBeaconStatuses(): List<BeaconStatusDataOutput> {
-        return getAllBeaconStatuses.execute().map {
-            BeaconStatusDataOutput.fromBeaconStatus(it)
+    @GetMapping(value = ["/v1/beacon_malfunctions"])
+    @ApiOperation("Get all beacon malfunctions")
+    fun getAllBeaconMalfunctions(): List<BeaconMalfunctionDataOutput> {
+        return getAllBeaconMalfunctions.execute().map {
+            BeaconMalfunctionDataOutput.fromBeaconMalfunction(it)
         }
     }
 
-    @PutMapping(value = ["/v1/beacon_statuses/{beaconStatusId}"], consumes = ["application/json"])
-    @ApiOperation("Update a beacon status")
-    fun updateBeaconStatus(@PathParam("Beacon status id")
-                               @PathVariable(name = "beaconStatusId")
-                               beaconStatusId: Int,
-                               @RequestBody
-                               updateBeaconStatusData: UpdateBeaconStatusDataInput): BeaconStatusWithDetailsDataOutput {
-        return updateBeaconStatus.execute(
-                id = beaconStatusId,
-                vesselStatus = updateBeaconStatusData.vesselStatus,
-                stage = updateBeaconStatusData.stage).let {
-            BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(it)
+    @PutMapping(value = ["/v1/beacon_malfunctions/{beaconMalfunctionId}"], consumes = ["application/json"])
+    @ApiOperation("Update a beacon malfunction")
+    fun updateBeaconMalfunction(@PathParam("Beacon malfunction id")
+                                @PathVariable(name = "beaconMalfunctionId")
+                                beaconMalfunctionId: Int,
+                                @RequestBody
+                                updateBeaconMalfunctionData: UpdateBeaconMalfunctionDataInput): BeaconMalfunctionWithDetailsDataOutput {
+        return updateBeaconMalfunction.execute(
+                id = beaconMalfunctionId,
+                vesselStatus = updateBeaconMalfunctionData.vesselStatus,
+                stage = updateBeaconMalfunctionData.stage).let {
+            BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(it)
         }
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = ["/v1/beacon_statuses/{beaconStatusId}/comments"], consumes = ["application/json"])
+    @PostMapping(value = ["/v1/beacon_malfunctions/{beaconMalfunctionId}/comments"], consumes = ["application/json"])
     @ApiOperation("Save a beacon status comment and return the updated beacon status")
-    fun saveBeaconStatusComment(@PathParam("Beacon status id")
-                                @PathVariable(name = "beaconStatusId")
-                                beaconStatusId: Int,
-                                @RequestBody
-                                saveBeaconStatusCommentDataInput: SaveBeaconStatusCommentDataInput): BeaconStatusWithDetailsDataOutput {
-        return saveBeaconStatusComment.execute(
-                beaconStatusId = beaconStatusId,
-                comment = saveBeaconStatusCommentDataInput.comment,
-                userType = saveBeaconStatusCommentDataInput.userType).let {
-            BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(it)
+    fun saveBeaconMalfunctionComment(@PathParam("Beacon malfunction id")
+                                     @PathVariable(name = "beaconMalfunctionId")
+                                     beaconMalfunctionId: Int,
+                                     @RequestBody
+                                     saveBeaconMalfunctionCommentDataInput: SaveBeaconMalfunctionCommentDataInput): BeaconMalfunctionWithDetailsDataOutput {
+        return saveBeaconMalfunctionComment.execute(
+                beaconMalfunctionId = beaconMalfunctionId,
+                comment = saveBeaconMalfunctionCommentDataInput.comment,
+                userType = saveBeaconMalfunctionCommentDataInput.userType).let {
+            BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(it)
         }
     }
 
-    @GetMapping(value = ["/v1/beacon_statuses/{beaconStatusId}"])
-    @ApiOperation("Get a beacon status with the comments and history")
-    fun getBeaconStatus(@PathParam("Beacon status id")
-                             @PathVariable(name = "beaconStatusId")
-                             beaconStatusId: Int): BeaconStatusWithDetailsDataOutput {
-        return BeaconStatusWithDetailsDataOutput.fromBeaconStatusWithDetails(getBeaconStatus.execute(beaconStatusId))
+    @GetMapping(value = ["/v1/beacon_malfunctions/{beaconMalfunctionId}"])
+    @ApiOperation("Get a beacon malfunction with the comments and history")
+    fun getBeaconMalfunction(@PathParam("Beacon malfunction id")
+                             @PathVariable(name = "beaconMalfunctionId")
+                             beaconMalfunctionId: Int): BeaconMalfunctionWithDetailsDataOutput {
+        return BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(getBeaconMalfunction.execute(beaconMalfunctionId))
     }
 }

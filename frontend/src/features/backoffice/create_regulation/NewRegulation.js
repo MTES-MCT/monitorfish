@@ -153,7 +153,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     if (regulationModified) {
       dispatch(setIsConfirmModalOpen(true))
     } else {
-      goBackofficeHome()
+      dispatch(setSaveOrUpdateRegulation(true))
     }
   }
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /// <reference types="cypress" />
 
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
@@ -34,7 +35,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').contains('Ouest Cotentin Bivalves')
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-zone"]').contains('Praires Ouest cotentin')
-                                                                                                                        
+
     // Show a zone with the zone button
     cy.log('Show a zone with the zone button')
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 20000 })

@@ -131,6 +131,8 @@ context('NewRegulation', () => {
 
   it('A modal should be open on go back button click', () => {
     // When
+    cy.get('[data-cy="reg-text-name"]').type('zone name')
+    cy.get('[data-cy="reg-text-url"]').type('http://url.com')
     cy.get('[data-cy="go-back-link"]').eq(0).click()
     // then
     cy.get('[data-cy="regulation-modal"]').should('exist')
@@ -139,6 +141,8 @@ context('NewRegulation', () => {
 
   it('Confirm modal is closed on close icon click', () => {
     // Given
+    cy.get('[data-cy="reg-text-name"]').type('zone name')
+    cy.get('[data-cy="reg-text-url"]').type('http://url.com')
     cy.get('[data-cy="go-back-link"]').eq(0).click()
     cy.get('[data-cy="regulation-modal"]').should('exist')
     // When
@@ -149,6 +153,8 @@ context('NewRegulation', () => {
 
   it('Confirm modal is closed on confirm button click and error is displayed', () => {
     // Given
+    cy.get('[data-cy="reg-text-name"]').type('zone name')
+    cy.get('[data-cy="reg-text-url"]').type('http://url.com')
     cy.get('[data-cy="go-back-link"]').eq(0).click()
     cy.get('[data-cy="regulation-modal"]').should('exist')
     // When
@@ -160,6 +166,8 @@ context('NewRegulation', () => {
 
   it('New regulation page is closed and backoffice list is displayed on cancel button click', () => {
     // Given
+    cy.get('[data-cy="reg-text-name"]').type('zone name')
+    cy.get('[data-cy="reg-text-url"]').type('http://url.com')
     cy.get('[data-cy="go-back-link"]').eq(0).click()
     cy.get('[data-cy="regulation-modal"]').should('exist')
     // When

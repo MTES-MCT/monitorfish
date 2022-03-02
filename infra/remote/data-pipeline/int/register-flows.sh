@@ -7,6 +7,5 @@ docker run -t --network=host --name monitorfish-pipeline-agent \
         --env-file datascience/.env \
         -e MONITORFISH_VERSION \
         -e LOGBOOK_FILES_GID="$(getent group di_etlmf | cut -d: -f3)" \
-        --restart always \
         docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$MONITORFISH_VERSION \
         python main.py

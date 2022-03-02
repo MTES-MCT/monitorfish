@@ -1,5 +1,4 @@
 import prefect
-from prefect.agent.docker import DockerAgent
 
 from src.pipeline.flows_config import flows_to_register
 
@@ -43,9 +42,3 @@ if __name__ == "__main__":
     for flow in flows_to_register:
         print(f"Registering flow {flow.name}")
         flow.register(project_name=PROJECT_NAME)
-
-    # Start Docker Agent process
-    # This process queries the Prefect GraphQL API every second to ask if any new flows
-    # should be run
-    agent = DockerAgent(show_flow_logs=True, no_pull=True)
-    agent.start()

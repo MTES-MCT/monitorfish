@@ -1,4 +1,4 @@
-SELECT
+SELECT DISTINCT
     p.locode,
     f.facade
 FROM processed.ports p

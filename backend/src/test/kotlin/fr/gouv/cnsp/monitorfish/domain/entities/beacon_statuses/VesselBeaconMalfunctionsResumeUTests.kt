@@ -8,7 +8,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
-class VesselBeaconStatusResumeUTests {
+class VesselBeaconMalfunctionsResumeUTests {
 
     @Test
     fun `fromBeaconStatuses Should create the resume When there is some actions`() {
@@ -68,7 +68,7 @@ class VesselBeaconStatusResumeUTests {
                         ))
 
         // When
-        val resume = VesselBeaconStatusResume.fromBeaconStatuses(beaconStatuses)
+        val resume = VesselBeaconMalfunctionsResume.fromBeaconStatuses(beaconStatuses)
 
         // Then
         assertThat(resume.numberOfBeaconsAtSea).isEqualTo(2)
@@ -101,7 +101,7 @@ class VesselBeaconStatusResumeUTests {
                         actions = listOf()))
 
         // When
-        val resume = VesselBeaconStatusResume.fromBeaconStatuses(beaconStatuses)
+        val resume = VesselBeaconMalfunctionsResume.fromBeaconStatuses(beaconStatuses)
 
         // Then
         assertThat(resume.numberOfBeaconsAtSea).isEqualTo(0)

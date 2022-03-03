@@ -45,9 +45,9 @@ class JpaBeaconStatusesRepository(private val dbBeaconStatusesRepository: DBBeac
         }
     }
 
-    override fun findAllByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String): List<BeaconStatus> {
+    override fun findAllByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String, afterDateTime: ZonedDateTime): List<BeaconStatus> {
         return dbBeaconStatusesRepository
-                .findAllByVesselIdentifierEquals(vesselIdentifier.toString(), value).map {
+                .findAllByVesselIdentifierEqualsAfterDateTime(vesselIdentifier.toString(), value, afterDateTime.toInstant()).map {
             it.toBeaconStatus()
         }
     }

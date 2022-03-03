@@ -1,6 +1,6 @@
 import { setError } from '../shared_slices/Global'
 import { updateBeaconStatusFromAPI } from '../../api/fetch'
-import { setOpenedBeaconStatus, setBeaconStatuses, updateLocalBeaconStatuses } from '../shared_slices/BeaconStatus'
+import { setOpenedBeaconStatusInKanban, setBeaconStatuses, updateLocalBeaconStatuses } from '../shared_slices/BeaconStatus'
 
 /**
  * Update a beacon status
@@ -11,11 +11,11 @@ import { setOpenedBeaconStatus, setBeaconStatuses, updateLocalBeaconStatuses } f
 const updateBeaconStatus = (id, nextBeaconStatus, updatedFields) => (dispatch, getState) => {
   const previousBeaconStatuses = getState().beaconStatus.beaconStatuses
   dispatch(updateLocalBeaconStatuses(nextBeaconStatus))
-  const beaconStatusToUpdateIsOpened = getState().beaconStatus.openedBeaconStatus?.beaconStatus?.id === id
+  const beaconStatusToUpdateIsOpened = getState().beaconStatus.openedBeaconStatusInKanban?.beaconStatus?.id === id
 
   return updateBeaconStatusFromAPI(id, updatedFields).then(updatedBeaconStatusWithDetails => {
     if (beaconStatusToUpdateIsOpened) {
-      dispatch(setOpenedBeaconStatus(updatedBeaconStatusWithDetails))
+      dispatch(setOpenedBeaconStatusInKanban(updatedBeaconStatusWithDetails))
     }
   }).catch(error => {
     dispatch(setError(error))

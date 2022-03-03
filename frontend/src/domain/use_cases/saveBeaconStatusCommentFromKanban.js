@@ -1,6 +1,6 @@
 import { saveBeaconStatusCommentFromAPI } from '../../api/fetch'
 import { setError } from '../shared_slices/Global'
-import { setOpenedBeaconStatus } from '../shared_slices/BeaconStatus'
+import { setOpenedBeaconStatusInKanban } from '../shared_slices/BeaconStatus'
 
 /**
  * Save a new comment to a beacon status
@@ -16,7 +16,7 @@ const saveBeaconStatusComment = (beaconStatusId, comment) => (dispatch, getState
   }
 
   return saveBeaconStatusCommentFromAPI(beaconStatusId, newCommentInput).then(beaconStatusWithDetails => {
-    return dispatch(setOpenedBeaconStatus(beaconStatusWithDetails))
+    return dispatch(setOpenedBeaconStatusInKanban(beaconStatusWithDetails))
   }).catch(error => {
     console.error(error)
     dispatch(setError(error))

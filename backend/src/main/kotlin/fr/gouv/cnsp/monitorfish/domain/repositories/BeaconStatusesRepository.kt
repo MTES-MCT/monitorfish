@@ -8,7 +8,9 @@ import java.time.ZonedDateTime
 
 interface BeaconStatusesRepository {
     fun findAll(): List<BeaconStatus>
-    fun findAllByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String): List<BeaconStatus>
+    fun findAllByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier,
+                                        value: String,
+                                        afterDateTime: ZonedDateTime): List<BeaconStatus>
     fun findAllExceptResumedTransmission(): List<BeaconStatus>
     fun findLastThirtyResumedTransmissions(): List<BeaconStatus>
     fun find(beaconStatusId: Int): BeaconStatus

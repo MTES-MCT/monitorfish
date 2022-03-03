@@ -38,6 +38,9 @@ const RegulatoryLayerTopic = props => {
     regulatoryZoneMetadata,
     regulatoryTopicsOpened
   } = useSelector(state => state.regulatory)
+  const lawType = regulatoryZones[0]?.lawType
+  const numberOfTotalZones = useSelector(state => state.regulatory
+    .regulatoryLayerLawTypes[lawType][regulatoryTopic]?.length)
 
   const [isOpen, setIsOpen] = useState(false)
   const [atLeastOneLayerIsShowed, setAtLeastOneLayerIsShowed] = useState(false)
@@ -98,20 +101,6 @@ const RegulatoryLayerTopic = props => {
     }
   }, [regulatoryZoneMetadata, regulatoryTopic, regulatoryTopicsOpened, setIsOpen])
 
-  const getRegulatoryLayerName = regulatoryZones => {
-    return {
-      topic: regulatoryZones[0].topic
-    }
-  }
-
-  const displayNumberOfZones = () => {
-    const zoneNumber = regulatoryZones.length
-    return (<ZonesNumber>
-        {`${zoneNumber} zone${zoneNumber > 1 ? 's' : ''}`}
-      </ZonesNumber>
-    )
-  }
-
   const onEditLayerNameClick = () => {
     setIsLayerNameEditable(true)
   }
@@ -157,7 +146,9 @@ const RegulatoryLayerTopic = props => {
                   />
               }
             </Name>
-            {displayNumberOfZones()}
+            <ZonesNumber>
+              {`${regulatoryZones?.length}/${numberOfTotalZones}`}
+            </ZonesNumber>
             {
               isEditable
                 ? <EditIcon
@@ -217,6 +208,12 @@ const RegulatoryLayerTopic = props => {
   )
 }
 
+const getRegulatoryLayerName = regulatoryZones => {
+  return {
+    topic: regulatoryZones[0].topic
+  }
+}
+
 const Text = styled.span`
   margin-left: 5px;
 `
@@ -255,7 +252,7 @@ const List = styled.div`
   height: inherit;
   overflow: hidden;
   transition: all 0.5s;
-  height: ${props => props.isOpen ? props.zonesLength * 38 : 0}px;
+  height: ${props => props.isOpen ? props.zonesLength * 36 : 0}px;
 `
 
 const Row = styled.li`

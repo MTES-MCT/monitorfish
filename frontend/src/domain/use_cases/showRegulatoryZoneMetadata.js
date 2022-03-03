@@ -1,26 +1,31 @@
 import { getRegulatoryFeatureMetadataFromAPI } from '../../api/fetch'
 import {
   closeRegulatoryZoneMetadataPanel,
-  resetLoadingRegulatoryZoneMetadata,
-  setLoadingRegulatoryZoneMetadata,
+  resetLoadingRegulatoryZoneMetadata, resetRegulatoryGeometriesToPreview,
+  setLoadingRegulatoryZoneMetadata, setRegulatoryGeometriesToPreview,
   setRegulatoryZoneMetadata
 } from '../shared_slices/Regulatory'
 import { mapToRegulatoryZone } from '../entities/regulatory'
 import { setError } from '../shared_slices/Global'
 import { batch } from 'react-redux'
 
-const showRegulatoryZoneMetadata = regulatoryZone => (dispatch, getState) => {
+const showRegulatoryZoneMetadata = (regulatoryZone, previewZone) => (dispatch, getState) => {
   if (regulatoryZone) {
     dispatch(setLoadingRegulatoryZoneMetadata())
     getRegulatoryFeatureMetadataFromAPI(regulatoryZone, getState().global.inBackofficeMode).then(feature => {
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature)
       dispatch(setRegulatoryZoneMetadata(regulatoryZoneMetadata))
+
+      if (previewZone) {
+        dispatch(setRegulatoryGeometriesToPreview([feature.geometry]))
+      }
     }).catch(error => {
       console.error(error)
       batch(() => {
         dispatch(closeRegulatoryZoneMetadataPanel())
         dispatch(setError(error))
         dispatch(resetLoadingRegulatoryZoneMetadata())
+        dispatch(resetRegulatoryGeometriesToPreview())
       })
     })
   }

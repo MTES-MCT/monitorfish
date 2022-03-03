@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
@@ -12,6 +12,7 @@ import { drawStyle } from './styles/draw.style'
 import { setZoneSelected } from '../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
 import VectorLayer from 'ol/layer/Vector'
 import { dottedLayerStyle } from './styles/dottedLayer.style'
+import { useEscapeFromKeyboard } from '../hooks/useEscapeFromKeyboard'
 
 const DrawLayer = ({ map }) => {
   const interaction = useSelector(state => state.map.interaction)
@@ -19,6 +20,8 @@ const DrawLayer = ({ map }) => {
     zoneSelected
   } = useSelector(state => state.regulatoryLayerSearch)
   const dispatch = useDispatch()
+  const draw = useRef()
+  const escape = useEscapeFromKeyboard()
 
   const [vectorSource] = useState(new VectorSource({
     format: new GeoJSON({
@@ -35,6 +38,13 @@ const DrawLayer = ({ map }) => {
     zIndex: 999,
     style: dottedLayerStyle
   }))
+
+  useEffect(() => {
+    if (escape) {
+      dispatch(resetInteraction())
+      map.removeInteraction(draw.current)
+    }
+  }, [escape])
 
   useEffect(() => {
     function addLayerToMap () {
@@ -70,15 +80,15 @@ const DrawLayer = ({ map }) => {
             return
         }
 
-        const draw = new Draw({
+        draw.current = new Draw({
           source: source,
           type: type,
           style: drawStyle,
           geometryFunction: interaction.type === InteractionTypes.SQUARE ? createBox() : null
         })
-        map.addInteraction(draw)
+        map.addInteraction(draw.current)
 
-        draw.on('drawend', event => {
+        draw.current.on('drawend', event => {
           const format = new GeoJSON()
           const feature = event.feature
           feature.set('type', interaction.type)
@@ -100,7 +110,7 @@ const DrawLayer = ({ map }) => {
           }
 
           dispatch(resetInteraction())
-          map.removeInteraction(draw)
+          map.removeInteraction(draw.current)
         })
       }
     }

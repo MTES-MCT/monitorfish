@@ -76,10 +76,13 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllByVesselIdentifierEquals Should return all beacon statuses for a given vessel`() {
+    fun `findAllByVesselIdentifierEquals Should return all beacon statuses for a given vessel after the date time`() {
+        // Given
+        val afterDateTime = ZonedDateTime.now().minusWeeks(9)
+
         // When
         val baconStatuses = jpaBeaconStatusesRepository
-                .findAllByVesselIdentifierEquals(VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "FAK000999999")
+                .findAllByVesselIdentifierEquals(VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "FAK000999999", afterDateTime)
 
         assertThat(baconStatuses).hasSize(2)
         assertThat(baconStatuses.first().internalReferenceNumber).isEqualTo("FAK000999999")
@@ -89,5 +92,18 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
         assertThat(baconStatuses.last().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(baconStatuses.last().stage).isEqualTo(Stage.RESUMED_TRANSMISSION)
         assertThat(baconStatuses.last().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllByVesselIdentifierEquals Should return no beacon statuses for a given vessel When it is before the after date time`() {
+        // Given
+        val afterDateTime = ZonedDateTime.now()
+
+        // When
+        val baconStatuses = jpaBeaconStatusesRepository
+                .findAllByVesselIdentifierEquals(VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "FAK000999999", afterDateTime)
+
+        assertThat(baconStatuses).hasSize(0)
     }
 }

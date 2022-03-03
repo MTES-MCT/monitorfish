@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusActionsRepository
@@ -37,7 +38,7 @@ class GetBeaconStatusUTests {
                 .willReturn(BeaconStatus(1, "FR224226850", "1236514", "IRCS",
                         VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.RESUMED_TRANSMISSION,
                         true, ZonedDateTime.now(), null, ZonedDateTime.now()))
-        given(beaconStatusesRepository.findAllByVesselIdentifierEquals(VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "FR224226850"))
+        given(beaconStatusesRepository.findAllByVesselIdentifierEquals(VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "FR224226850", any()))
                 .willReturn(listOf(
                         BeaconStatus(1, "FR224226850", "1236514", "IRCS",
                                 VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.RESUMED_TRANSMISSION,

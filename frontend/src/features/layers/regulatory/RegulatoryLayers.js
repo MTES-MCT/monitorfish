@@ -8,6 +8,7 @@ import hideLayer from '../../../domain/use_cases/hideLayer'
 import { useDispatch, useSelector } from 'react-redux'
 import layer from '../../../domain/shared_slices/Layer'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
+import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
 
 const RegulatoryLayers = props => {
   const dispatch = useDispatch()
@@ -72,6 +73,7 @@ const RegulatoryLayers = props => {
       dispatch(setLayersSideBarOpenedZone(''))
     } else {
       dispatch(setLayersSideBarOpenedZone(layersType.REGULATORY))
+      dispatch(closeRegulatoryZoneMetadata())
     }
   }
 
@@ -173,7 +175,7 @@ const RegulatoryLayersList = styled.ul`
   color: ${COLORS.gunMetal};
   height: ${props => props.showRegulatoryLayers
   ? props.topicLength || props.zoneLength
-      ? 36 * props.topicLength + props.zoneLength * 39
+      ? 40 * props.topicLength + props.zoneLength * 36
       : 40
   : 0}px;
   transition: 0.5s all;

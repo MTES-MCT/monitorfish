@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import SearchIconSVG from '../../../icons/Loupe_dark.svg'
 import { REGULATORY_SEARCH_PROPERTIES } from '../../../../domain/entities/regulatory'
 import searchRegulatoryLayers from '../../../../domain/use_cases/searchRegulatoryLayers'
 import { batch, useDispatch, useSelector } from 'react-redux'
@@ -11,6 +10,8 @@ import {
   setAdvancedSearchIsOpen,
   setRegulatoryLayersSearchResult
 } from './RegulatoryLayerSearch.slice'
+import { ReactComponent as SearchIconSVG } from '../../../icons/Loupe_dark.svg'
+import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
 import { ReactComponent as BoxFilterSVG } from '../../../icons/Filtre_zone_rectangle.svg'
 import { ReactComponent as PolygonFilterSVG } from '../../../icons/Filtre_zone_polygone.svg'
 import { ReactComponent as BoxFilterSelectedSVG } from '../../../icons/Filtre_zone_rectangle_selected.svg'
@@ -42,6 +43,12 @@ const RegulatoryLayerSearchInput = props => {
   const [speciesSearchText, setSpeciesSearchText] = useState('')
   const [regulatoryReferencesSearchText, setRegulatoryReferenceSearchText] = useState('')
 
+  const inputsAreEmpty = nameSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
+    placeSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
+    gearSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
+    regulatoryReferencesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
+    speciesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER
+
   useEffect(() => {
     if (initSearchFields) {
       setNameSearchText('')
@@ -64,12 +71,6 @@ const RegulatoryLayerSearchInput = props => {
   }, [advancedSearchIsOpen])
 
   useEffect(() => {
-    const inputsAreEmpty = nameSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
-      placeSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
-      gearSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
-      regulatoryReferencesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
-      speciesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER
-
     if (inputsAreEmpty && !zoneSelected) {
       batch(() => {
         dispatch(setRegulatoryLayersSearchResult({}))
@@ -107,7 +108,7 @@ const RegulatoryLayerSearchInput = props => {
         dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
       })
     })
-  }, [nameSearchText, placeSearchText, speciesSearchText, gearSearchText, regulatoryReferencesSearchText, zoneSelected])
+  }, [inputsAreEmpty, nameSearchText, placeSearchText, speciesSearchText, gearSearchText, regulatoryReferencesSearchText, zoneSelected])
 
   return (
     <>
@@ -117,7 +118,13 @@ const RegulatoryLayerSearchInput = props => {
           placeholder={'Rechercher une zone reg. par son nom'}
           type="text"
           value={nameSearchText}
-          onChange={e => setNameSearchText(e.target.value)}/>
+          onChange={e => setNameSearchText(e.target.value)}
+        />
+        {
+          inputsAreEmpty
+            ? <SearchIcon/>
+            : <CloseIcon onClick={() => setInitSearchFields(true)}/>
+        }
         <AdvancedSearch
           data-cy={'regulatory-layers-advanced-search'}
           onClick={() => dispatch(setAdvancedSearchIsOpen(!advancedSearchIsOpen))}
@@ -282,22 +289,37 @@ const SearchBoxInput = styled.input`
   margin: 0;
   background-color: white;
   border: none;
-  border-bottom: 1px ${COLORS.lightGray} solid;
   border-radius: 0;
   color: ${COLORS.gunMetal};
   font-size: 13px;
   height: 40px;
-  width: 310px;
+  width: 270px;
   padding: 0 5px 0 10px;
-  flex: 3;
-  background-image: url(${SearchIconSVG});
-  background-size: 30px;
-  background-position: bottom 3px right 5px;
-  background-repeat: no-repeat;
+  border-bottom: 1px ${COLORS.lightGray} solid;
   
   :hover, :focus {
     border-bottom: 1px ${COLORS.lightGray} solid;
   }
+`
+
+const SearchIcon = styled(SearchIconSVG)`
+  width: 30px;
+  padding-left: 10px;
+  height: 29px;
+  padding-top: 10px;
+  background: ${COLORS.background};
+  vertical-align: top;
+  border-bottom: 1px ${COLORS.lightGray} solid;
+`
+
+const CloseIcon = styled(CloseIconSVG)`
+  width: 20px;
+  padding: 13px 11px 9px 9px;
+  height: 17px;
+  background: ${COLORS.background};
+  vertical-align: top;
+  border-bottom: 1px ${COLORS.lightGray} solid;
+  cursor: pointer;
 `
 
 const AdvancedSearchInput = styled.input`

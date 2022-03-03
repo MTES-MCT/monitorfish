@@ -36,7 +36,7 @@ const regulatoryLayerSearchSlice = createSlice({
      */
     uncheckRegulatoryZones (state, action) {
       state.regulatoryZonesChecked = state.regulatoryZonesChecked
-        .filter(zone => !action.payload.some(zoneIdToRemove => zoneIdToRemove === zone.id))
+        .filter(zone => !action.payload.some(zoneToRemove => zoneToRemove.id === zone.id))
     },
     /**
      * Reset regulatory zones selection

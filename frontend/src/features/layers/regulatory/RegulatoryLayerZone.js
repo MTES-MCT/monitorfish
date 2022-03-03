@@ -218,7 +218,7 @@ const Zone = styled.span`
   font-weight: 300;
   ${props => props.isLast
   ? `border-bottom: 1px solid ${COLORS.lightGray}; height: 27px;`
-  : null}
+  : 'height: 28px;'}
 
   :hover {
     background: ${COLORS.shadowBlueLittleOpacity};

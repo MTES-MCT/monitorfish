@@ -104,7 +104,7 @@ class VesselBeaconMalfunctionsResumeUTests {
         val resume = VesselBeaconMalfunctionsResume.fromBeaconStatuses(beaconStatuses)
 
         // Then
-        assertThat(resume.numberOfBeaconsAtSea).isEqualTo(0)
+        assertThat(resume.numberOfBeaconsAtSea).isEqualTo(1)
         assertThat(resume.numberOfBeaconsAtPort).isEqualTo(1)
         assertThat(resume.lastBeaconStatusDateTime).isEqualTo(now)
         assertThat(resume.lastBeaconStatusVesselStatus).isEqualTo(VesselStatus.AT_PORT)

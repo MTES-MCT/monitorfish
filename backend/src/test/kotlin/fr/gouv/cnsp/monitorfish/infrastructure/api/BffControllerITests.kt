@@ -5,7 +5,6 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.isNull
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.*
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.*
@@ -111,7 +110,7 @@ class BffControllerITests {
     private lateinit var saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment
 
     @MockBean
-    private lateinit var getVesselBeaconStatuses: GetVesselBeaconStatuses
+    private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
 
     @Autowired
     private lateinit var meterRegistry: MeterRegistry
@@ -540,7 +539,7 @@ class BffControllerITests {
                         beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                                 VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
-                        resume = VesselBeaconStatusResume(1, 2, null, null),
+                        resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
                         comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
                         actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
 
@@ -602,9 +601,9 @@ class BffControllerITests {
     fun `Should get vessels's beacon statuses`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        given(this.getVesselBeaconStatuses.execute("FR224226850", "123", "IEF4", VesselIdentifier.INTERNAL_REFERENCE_NUMBER))
-                .willReturn(VesselBeaconStatusResumeAndHistory(
-                        resume = VesselBeaconStatusResume(1, 2, null, null),
+        given(this.getVesselBeaconMalfunctions.execute(eq("FR224226850"), eq("123"), eq("IEF4"), eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), any()))
+                .willReturn(VesselBeaconMalfunctionsResumeAndHistory(
+                        resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
                         history = listOf(BeaconStatusWithDetails(
                             beaconStatus = BeaconStatus(1, "FR224226850", "1236514", "IRCS",
                                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.RESUMED_TRANSMISSION,
@@ -624,8 +623,8 @@ class BffControllerITests {
                 ))
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/beacon_statuses?internalReferenceNumber=FR224226850" +
-                "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
+        mockMvc.perform(get("/bff/v1/vessels/beacon_malfunctions?internalReferenceNumber=FR224226850" +
+                "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))

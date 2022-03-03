@@ -14,7 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
-class GetVesselBeaconStatusesUTests {
+class GetVesselBeaconMalfunctionsUTests {
 
     @MockBean
     private lateinit var beaconStatusesRepository: BeaconStatusesRepository
@@ -29,7 +29,7 @@ class GetVesselBeaconStatusesUTests {
     fun `execute Should return the detailed beacon statuses for a given vessel`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        given(beaconStatusesRepository.findAllByVesselIdentifierEquals(VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "FR224226850"))
+        given(beaconStatusesRepository.findAllByVesselIdentifierEquals(VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "FR224226850", now.minusYears(1)))
                 .willReturn(listOf(
                         BeaconStatus(1, "FR224226850", "1236514", "IRCS",
                                 VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.RESUMED_TRANSMISSION,
@@ -43,8 +43,8 @@ class GetVesselBeaconStatusesUTests {
                 beaconStatusId = 1, propertyName = BeaconStatusActionPropertyName.VESSEL_STATUS, nextValue = VesselStatus.ACTIVITY_DETECTED.toString(), previousValue = VesselStatus.AT_PORT.toString(), dateTime = now)))
 
         // When
-        val enrichedBeaconStatuses = GetVesselBeaconStatuses(beaconStatusesRepository, beaconStatusCommentsRepository, beaconStatusActionsRepository)
-                .execute("FR224226850", "", "", VesselIdentifier.INTERNAL_REFERENCE_NUMBER)
+        val enrichedBeaconStatuses = GetVesselBeaconMalfunctions(beaconStatusesRepository, beaconStatusCommentsRepository, beaconStatusActionsRepository)
+                .execute("FR224226850", "", "", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, now.minusYears(1))
 
         // Then
         assertThat(enrichedBeaconStatuses.history).hasSize(1)

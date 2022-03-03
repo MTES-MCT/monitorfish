@@ -5,12 +5,13 @@ import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatus.Companion.getVesselFromBeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusResumeAndDetails
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusWithDetails
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselBeaconStatusResume
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselBeaconMalfunctionsResume
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusCommentsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusesRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import org.slf4j.LoggerFactory
+import java.time.ZonedDateTime
 
 @UseCase
 class GetBeaconStatus(private val beaconStatusesRepository: BeaconStatusesRepository,
@@ -39,7 +40,8 @@ class GetBeaconStatus(private val beaconStatusesRepository: BeaconStatusesReposi
         }
 
         val vesselBeaconStatusesResume = vesselIdentifierValue?.let {
-            val vesselBeaconStatuses = beaconStatusesRepository.findAllByVesselIdentifierEquals(beaconStatus.vesselIdentifier, it)
+            val oneYearBefore = ZonedDateTime.now().minusYears(1)
+            val vesselBeaconStatuses = beaconStatusesRepository.findAllByVesselIdentifierEquals(beaconStatus.vesselIdentifier, it, oneYearBefore)
 
             val beaconStatusesWithDetails = vesselBeaconStatuses.map { beaconStatus ->
                 val comments = beaconStatusCommentsRepository.findAllByBeaconStatusId(beaconStatus.id)
@@ -48,7 +50,7 @@ class GetBeaconStatus(private val beaconStatusesRepository: BeaconStatusesReposi
                 BeaconStatusWithDetails(beaconStatus, comments, actions)
             }
 
-            VesselBeaconStatusResume.fromBeaconStatuses(beaconStatusesWithDetails)
+            VesselBeaconMalfunctionsResume.fromBeaconStatuses(beaconStatusesWithDetails)
         } ?: run {
             logger.warn("The vessel identifier '${beaconStatus.vesselIdentifier}' was not found in the beacon status : " +
                     "the vessel beacon statuses resume could not be extracted")

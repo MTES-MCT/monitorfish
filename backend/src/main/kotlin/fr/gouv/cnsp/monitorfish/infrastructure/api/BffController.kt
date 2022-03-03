@@ -44,7 +44,7 @@ class BffController(
     private val updateBeaconMalfunction: UpdateBeaconMalfunction,
     private val getBeaconMalfunction: GetBeaconMalfunction,
     private val saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment,
-    private val getVesselBeaconStatuses: GetVesselBeaconStatuses,
+    private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
     meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -110,8 +110,8 @@ class BffController(
         }
     }
 
-    @GetMapping("/v1/vessels/beacon_statuses")
-    @ApiOperation("Get vessel's beacon status history")
+    @GetMapping("/v1/vessels/beacon_malfunctions")
+    @ApiOperation("Get vessel's beacon malfunctions history")
     fun getVesselBeaconStatuses(@ApiParam("Vessel internal reference number (CFR)")
                                 @RequestParam(name = "internalReferenceNumber")
                                 internalReferenceNumber: String,
@@ -123,14 +123,19 @@ class BffController(
                                 IRCS: String,
                                 @ApiParam("Vessel identifier")
                                 @RequestParam(name = "vesselIdentifier")
-                                vesselIdentifier: VesselIdentifier): BeaconStatusResumeAndHistoryDataOutput {
-        val beaconStatusesWithDetails = getVesselBeaconStatuses.execute(
+                                vesselIdentifier: VesselIdentifier,
+                                @ApiParam("beacon malfunctions after date time")
+                                @RequestParam(name = "afterDateTime")
+                                @DateTimeFormat(pattern = zoneDateTimePattern)
+                                afterDateTime: ZonedDateTime): BeaconMalfunctionsResumeAndHistoryDataOutput {
+        val beaconMalfunctionsWithDetails = getVesselBeaconMalfunctions.execute(
                 internalReferenceNumber,
                 externalReferenceNumber,
                 IRCS,
-                vesselIdentifier)
+                vesselIdentifier,
+                afterDateTime)
 
-        return BeaconStatusResumeAndHistoryDataOutput.fromBeaconStatusResumeAndHistory(beaconStatusesWithDetails)
+        return BeaconMalfunctionsResumeAndHistoryDataOutput.fromBeaconMalfunctionsResumeAndHistory(beaconMalfunctionsWithDetails)
     }
 
     @GetMapping("/v1/vessels/positions")

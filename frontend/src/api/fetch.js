@@ -35,6 +35,7 @@ const BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les avar
 const BEACON_STATUS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer l\'avarie VMS'
 const UPDATE_BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour le statut de l\'avarie VMS'
 const SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter le commentaire sur l\'avarie VMS'
+const VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les avaries de ce navire'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -817,6 +818,34 @@ function saveBeaconStatusCommentFromAPI (id, comment) {
   })
 }
 
+/**
+ * Get vessel beacon malfunctions
+ * @memberOf API
+ * @returns {Promise<VesselBeaconMalfunctionsResumeAndHistory>} The beacon malfunctions resume and history
+ * @throws {Error}
+ */
+function getVesselBeaconsMalfunctionsFromAPI (vesselIdentity, fromDate) {
+  const internalReferenceNumber = vesselIdentity.internalReferenceNumber || ''
+  const externalReferenceNumber = vesselIdentity.externalReferenceNumber || ''
+  const ircs = vesselIdentity.ircs || ''
+  const vesselIdentifier = vesselIdentity.vesselIdentifier || 'UNDEFINED'
+
+  return fetch(`/bff/v1/vessels/beacon_malfunctions?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&afterDateTime=${fromDate.toISOString()}`)
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE)
+      }
+    }).catch(error => {
+      console.error(error)
+      throw Error(VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE)
+    })
+}
+
 export {
   getVesselsLastPositionsFromAPI,
   getVesselFromAPI,
@@ -843,5 +872,6 @@ export {
   getAllBeaconStatusesFromAPI,
   updateBeaconStatusFromAPI,
   getBeaconStatusFromAPI,
-  saveBeaconStatusCommentFromAPI
+  saveBeaconStatusCommentFromAPI,
+  getVesselBeaconsMalfunctionsFromAPI
 }

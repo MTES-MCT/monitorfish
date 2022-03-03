@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { NoValue } from './Controls.style'
+import { NoValue } from '../common_styles/common.style'
 
 const InfractionsResume = ({ numberOfDiversions, numberOfEscortsToQuay, numberOfSeizures }) => {
   const getText = value => {

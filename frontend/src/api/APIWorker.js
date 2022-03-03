@@ -7,12 +7,13 @@ import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
 import getAllFleetSegments from '../domain/use_cases/getAllFleetSegments'
 import getHealthcheck from '../domain/use_cases/getHealthcheck'
 import getVesselVoyage from '../domain/use_cases/getVesselVoyage'
-import getControls from '../domain/use_cases/getControls'
+import getVesselControls from '../domain/use_cases/getVesselControls'
 import { VesselSidebarTab } from '../domain/entities/vessel'
 import getAllRegulatoryLayers from '../domain/use_cases/getAllRegulatoryLayers'
 import getOperationalAlerts from '../domain/use_cases/getOperationalAlerts'
 import getAllBeaconStatuses from '../domain/use_cases/getAllBeaconStatuses'
-import openBeaconStatus from '../domain/use_cases/openBeaconStatus'
+import openBeaconStatusInKanban from '../domain/use_cases/openBeaconStatusInKanban'
+import getVesselBeaconMalfunctions from '../domain/use_cases/getVesselBeaconMalfunctions'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
 export const THIRTY_SECONDS = 30 * 1000
@@ -27,7 +28,7 @@ const APIWorker = () => {
     sideWindowIsOpen
   } = useSelector(state => state.global)
   const {
-    openedBeaconStatus
+    openedBeaconStatusInKanban
   } = useSelector(state => state.beaconStatus)
 
   const beaconStatusesInterval = useRef(null)
@@ -80,20 +81,20 @@ const APIWorker = () => {
   }, [sideWindowIsOpen])
 
   useEffect(() => {
-    if (sideWindowIsOpen && openedBeaconStatus) {
+    if (sideWindowIsOpen && openedBeaconStatusInKanban) {
       if (beaconStatusInterval?.current) {
         clearInterval(beaconStatusInterval.current)
       }
 
       beaconStatusInterval.current = setInterval(() => {
-        dispatch(openBeaconStatus(openedBeaconStatus))
+        dispatch(openBeaconStatusInKanban(openedBeaconStatusInKanban))
       }, THIRTY_SECONDS)
     }
 
     return () => {
       clearInterval(beaconStatusInterval?.current)
     }
-  }, [sideWindowIsOpen, openedBeaconStatus])
+  }, [sideWindowIsOpen, openedBeaconStatusInKanban])
 
   useEffect(() => {
     if (updateVesselSidebarTab) {
@@ -102,7 +103,9 @@ const APIWorker = () => {
           dispatch(getVesselVoyage(selectedVesselIdentity, null, true))
         }
       } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
-        dispatch(getControls())
+        dispatch(getVesselControls())
+      } else if (vesselSidebarTab === VesselSidebarTab.ERSVMS) {
+        dispatch(getVesselBeaconMalfunctions())
       }
 
       setUpdateVesselSidebarTab(false)

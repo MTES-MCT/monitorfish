@@ -4,15 +4,15 @@ import { COLORS } from '../../../constants/constants'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import SelectPicker from 'rsuite/lib/SelectPicker'
-import { vesselStatuses } from './beaconStatuses'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import * as timeago from 'timeago.js'
 import { timeagoFrenchLocale } from '../../../utils'
 import showVessel from '../../../domain/use_cases/showVessel'
 import { useDispatch } from 'react-redux'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
-import openBeaconStatus from '../../../domain/use_cases/openBeaconStatus'
+import openBeaconStatusInKanban from '../../../domain/use_cases/openBeaconStatusInKanban'
 import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
+import { vesselStatuses } from '../../../domain/entities/beaconStatus'
 
 timeago.register('fr', timeagoFrenchLocale)
 
@@ -47,7 +47,7 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl }) =>
           className={'hover-border'}
           data-cy={'side-window-beacon-statuses-card-vessel-name'}
           style={vesselNameStyle}
-          onClick={() => dispatch(openBeaconStatus({ beaconStatus }))}
+          onClick={() => dispatch(openBeaconStatusInKanban({ beaconStatus }))}
         >
           {beaconStatus.vesselName || 'Aucun nom'}
         </VesselName>

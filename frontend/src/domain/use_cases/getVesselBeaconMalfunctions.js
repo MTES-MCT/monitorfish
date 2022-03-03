@@ -1,61 +1,53 @@
-import { getVesselControlsFromAPI } from '../../api/fetch'
+import { getVesselBeaconsMalfunctionsFromAPI } from '../../api/fetch'
 import { removeError, setError } from '../shared_slices/Global'
-import {
-  loadControls,
-  setControlResumeAndControls,
-  setNextControlResumeAndControls
-} from '../shared_slices/Control'
-import NoControlsFoundError from '../../errors/NoControlsFoundError'
 import { batch } from 'react-redux'
+import {
+  loadVesselBeaconMalfunctions, setOpenedBeaconMalfunction,
+  setVesselBeaconMalfunctionsResumeAndHistory
+} from '../shared_slices/BeaconStatus'
+import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel'
 
-const getBeaconMalfunctions = userRequest => (dispatch, getState) => {
+const getVesselBeaconMalfunctions = () => (dispatch, getState) => {
   const {
     selectedVessel
   } = getState().vessel
+  const vesselIdentity = getOnlyVesselIdentityProperties(selectedVessel)
 
   const {
-    currentControlResumeAndControls,
-    controlsFromDate
-  } = getState().controls
+    vesselBeaconMalfunctionsFromDate,
+    /** @type {VesselBeaconMalfunctionsResumeAndHistory || null} */
+    vesselBeaconMalfunctionsResumeAndHistory,
+    /** @type {BeaconStatusWithDetails || null} */
+    openedBeaconMalfunction
+  } = getState().beaconStatus
 
-  if (selectedVessel?.id) {
-    const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(selectedVessel.id, currentControlResumeAndControls)
+  const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, selectedVessel)
 
-    if (!isSameVesselAsCurrentlyShowed) {
-      dispatch(loadControls())
+  if (!isSameVesselAsCurrentlyShowed || !vesselBeaconMalfunctionsResumeAndHistory) {
+    dispatch(loadVesselBeaconMalfunctions())
+  }
+
+  getVesselBeaconsMalfunctionsFromAPI(vesselIdentity, vesselBeaconMalfunctionsFromDate).then(vesselBeaconsMalfunctions => {
+    dispatch(setVesselBeaconMalfunctionsResumeAndHistory({
+      ...vesselBeaconsMalfunctions,
+      vesselIdentity
+    }))
+
+    if (openedBeaconMalfunction) {
+      const nextOpenedBeaconMalfunction = vesselBeaconsMalfunctions.history
+        .find(beaconMalfunction => beaconMalfunction.beaconStatus.id === openedBeaconMalfunction.beaconStatus.id)
+      if (nextOpenedBeaconMalfunction) {
+        dispatch(setOpenedBeaconMalfunction(nextOpenedBeaconMalfunction))
+      }
     }
 
-    getVesselControlsFromAPI(selectedVessel.id, controlsFromDate).then(controlResumeAndControls => {
-      if (isSameVesselAsCurrentlyShowed && !userRequest) {
-        if (controlResumeAndControls.controls?.length > currentControlResumeAndControls.controls?.length) {
-          dispatch(setNextControlResumeAndControls(controlResumeAndControls))
-        }
-      } else {
-        dispatch(setControlResumeAndControls(controlResumeAndControls))
-      }
-      dispatch(removeError())
-    }).catch(error => {
-      console.error(error)
-      batch(() => {
-        dispatch(setError(error))
-      })
-    })
-  } else {
+    dispatch(removeError())
+  }).catch(error => {
+    console.error(error)
     batch(() => {
-      dispatch(setError(new NoControlsFoundError('Aucun contrôle connu')))
-      dispatch(setControlResumeAndControls({
-        controls: []
-      }))
+      dispatch(setError(error))
     })
-  }
+  })
 }
 
-const getIsSameVesselAsCurrentlyShowed = (vesselId, controlResumeAndControls) => {
-  if (controlResumeAndControls?.vesselId) {
-    return vesselId === controlResumeAndControls.vesselId
-  }
-
-  return false
-}
-
-export default getBeaconMalfunctions
+export default getVesselBeaconMalfunctions

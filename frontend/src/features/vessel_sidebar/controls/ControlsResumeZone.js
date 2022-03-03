@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as GyroSVG } from '../../icons/Gyrophare_controles_gris.svg'
 import { ReactComponent as WarningSVG } from '../../icons/Attention_controles.svg'
-import { NoValue, StrongText, Title, Zone } from './Controls.style'
 import InfractionsResume from './InfractionsResume'
+import { NoValue, StrongText, Title, Zone } from '../common_styles/common.style'
 
 const ControlsResumeZone = props => {
   const {
@@ -38,17 +38,17 @@ const ControlsResumeZone = props => {
         <ResumeText>
           <Gyro/> Nombre de contrôles
         </ResumeText>
-        <ControlResumeStrongTextElement>en
-          mer <StrongText>{getText(numberOfSeaControls)}</StrongText></ControlResumeStrongTextElement>
-        <ControlResumeStrongTextElement>débarque <StrongText>{getText(numberOfLandControls)}</StrongText></ControlResumeStrongTextElement>
-        <ControlResumeStrongTextElement>aérien <StrongText>{getText(numberOfAerialControls)}</StrongText></ControlResumeStrongTextElement>
+        <Strong>en
+          mer <StrongText>{getText(numberOfSeaControls)}</StrongText></Strong>
+        <Strong>débarque <StrongText>{getText(numberOfLandControls)}</StrongText></Strong>
+        <Strong>aérien <StrongText>{getText(numberOfAerialControls)}</StrongText></Strong>
       </ControlResumeLine>
       <ControlResumeLine>
         <ResumeText>
           <Warning/> Nombre d&apos;infractions
         </ResumeText>
-        <ControlResumeStrongTextElement>pêche <StrongText>{getText(numberOfFishingInfractions)}</StrongText></ControlResumeStrongTextElement>
-        <ControlResumeStrongTextElement>sécurité <StrongText>{getText(numberOfSecurityInfractions)}</StrongText></ControlResumeStrongTextElement>
+        <Strong>pêche <StrongText>{getText(numberOfFishingInfractions)}</StrongText></Strong>
+        <Strong>sécurité <StrongText>{getText(numberOfSecurityInfractions)}</StrongText></Strong>
       </ControlResumeLine>
       <InfractionsResume
         numberOfDiversions={numberOfDiversions}
@@ -80,7 +80,7 @@ const ResumeText = styled.span`
     margin: 5px 0 0 0;
 `
 
-const ControlResumeStrongTextElement = styled.span`
+const Strong = styled.span`
     margin: 5px 10px 0 14px;
 `
 

@@ -3,12 +3,12 @@ import { setError } from '../shared_slices/Global'
 import { setOpenedBeaconStatusInKanban } from '../shared_slices/BeaconStatus'
 
 /**
- * Save a new comment to a beacon status
+ * Save a new comment to a beacon status from the side window kanban
  * @function showVesselTrack
  * @param {number} beaconStatusId
  * @param {string} comment
  */
-const saveBeaconStatusComment = (beaconStatusId, comment) => (dispatch, getState) => {
+const saveBeaconStatusCommentFromKanban = (beaconStatusId, comment) => (dispatch, getState) => {
   const userType = getState().global.userType
   const newCommentInput = {
     comment,
@@ -23,4 +23,4 @@ const saveBeaconStatusComment = (beaconStatusId, comment) => (dispatch, getState
   })
 }
 
-export default saveBeaconStatusComment
+export default saveBeaconStatusCommentFromKanban

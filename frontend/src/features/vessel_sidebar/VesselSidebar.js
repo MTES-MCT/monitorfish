@@ -25,6 +25,7 @@ import { focusOnAlert } from '../../domain/shared_slices/Alert'
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
 import { ReactComponent as AlertSVG } from '../icons/Icone_alertes.svg'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
+import VesselBeaconMalfunctions from './beacon_malfunctions/VesselBeaconMalfunctions'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -130,7 +131,9 @@ const VesselSidebar = () => {
             </Tab>
             <Tab
               isLast
-              disabled
+              isActive={vesselSidebarTab === VesselSidebarTab.ERSVMS}
+              onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))}
+              data-cy={'vessel-menu-ers-vms'}
             >
               <VMSIcon/> <br/> VMS/ERS
             </Tab>
@@ -186,6 +189,11 @@ const VesselSidebar = () => {
             {
               vesselSidebarTab === VesselSidebarTab.CONTROLS
                 ? <VesselControls/>
+                : null
+            }
+            {
+              vesselSidebarTab === VesselSidebarTab.ERSVMS
+                ? <VesselBeaconMalfunctions/>
                 : null
             }
           </Panel>

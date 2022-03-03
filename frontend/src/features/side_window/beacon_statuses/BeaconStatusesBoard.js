@@ -8,12 +8,12 @@ import StageColumn from './StageColumn'
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers'
 import { useDispatch, useSelector } from 'react-redux'
 import { createSelector } from '@reduxjs/toolkit'
-import updateBeaconStatus from '../../../domain/use_cases/updateBeaconStatus'
+import updateBeaconStatusFromKanban from '../../../domain/use_cases/updateBeaconStatusFromKanban'
 import getAllBeaconStatuses from '../../../domain/use_cases/getAllBeaconStatuses'
 import { COLORS } from '../../../constants/constants'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
-import { closeBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
+import { closeBeaconStatusInKanban } from '../../../domain/shared_slices/BeaconStatus'
 import { setError } from '../../../domain/shared_slices/Global'
 import BeaconStatusDetails from './BeaconStatusDetails'
 
@@ -37,7 +37,7 @@ const baseUrl = window.location.origin
 const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
   const dispatch = useDispatch()
   const {
-    openedBeaconStatus
+    openedBeaconStatusInKanban
   } = useSelector(state => state.beaconStatus)
   const beaconStatuses = useSelector(state => getMemoizedBeaconStatusesByStage(state))
   const [allDroppableDisabled, setAllDroppableDisabled] = useState(false)
@@ -70,13 +70,13 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
 
   useEffect(() => {
     if (setIsOverlayed) {
-      setIsOverlayed(!!openedBeaconStatus)
+      setIsOverlayed(!!openedBeaconStatusInKanban)
     }
-  }, [openedBeaconStatus])
+  }, [openedBeaconStatusInKanban])
 
   useEffect(() => {
-    if (!isOverlayed && openedBeaconStatus) {
-      dispatch(closeBeaconStatus())
+    if (!isOverlayed && openedBeaconStatusInKanban) {
+      dispatch(closeBeaconStatusInKanban())
     }
   }, [isOverlayed])
 
@@ -133,7 +133,7 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
     }
 
     setIsDroppedId(beaconStatus.id)
-    dispatch(updateBeaconStatus(beaconStatus.id, nextBeaconStatus, {
+    dispatch(updateBeaconStatusFromKanban(beaconStatus.id, nextBeaconStatus, {
       vesselStatus: nextBeaconStatus.vesselStatus
     }))
   }, [beaconStatuses])
@@ -162,7 +162,7 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
         nextBeaconStatus.stage = nextStage
         nextBeaconStatus.vesselStatusLastModificationDateTime = new Date().toISOString()
 
-        dispatch(updateBeaconStatus(beaconId, nextBeaconStatus, {
+        dispatch(updateBeaconStatusFromKanban(beaconId, nextBeaconStatus, {
           stage: nextBeaconStatus.stage
         }))
       }
@@ -213,9 +213,10 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
       </DndContext>
       <BeaconStatusDetails
         updateStageVesselStatus={updateVesselStatus}
-        beaconStatus={openedBeaconStatus?.beaconStatus}
-        comments={openedBeaconStatus?.comments || []}
-        actions={openedBeaconStatus?.actions || []}
+        beaconStatus={openedBeaconStatusInKanban?.beaconStatus}
+        resume={openedBeaconStatusInKanban?.resume}
+        comments={openedBeaconStatusInKanban?.comments || []}
+        actions={openedBeaconStatusInKanban?.actions || []}
       />
     </Wrapper>
   )

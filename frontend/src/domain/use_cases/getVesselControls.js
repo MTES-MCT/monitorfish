@@ -8,7 +8,7 @@ import {
 import NoControlsFoundError from '../../errors/NoControlsFoundError'
 import { batch } from 'react-redux'
 
-const getControls = userRequest => (dispatch, getState) => {
+const getVesselControls = userRequest => (dispatch, getState) => {
   const {
     selectedVessel
   } = getState().vessel
@@ -58,4 +58,4 @@ const getIsSameVesselAsCurrentlyShowed = (vesselId, controlResumeAndControls) =>
   return false
 }
 
-export default getControls
+export default getVesselControls

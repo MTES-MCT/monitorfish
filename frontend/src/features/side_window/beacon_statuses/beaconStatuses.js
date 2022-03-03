@@ -1,12 +1,3 @@
-import { ReactComponent as VesselStatusAtPortSVG } from '../../icons/Avarie_statut_navire_a_quai.svg'
-import { ReactComponent as VesselStatusAtSeaSVG } from '../../icons/Avarie_statut_navire_en_mer.svg'
-import { ReactComponent as VesselStatusNoNewsSVG } from '../../icons/Avarie_statut_sans_nouvelles.svg'
-import { ReactComponent as VesselStatusTechnicalStopSVG } from '../../icons/Avarie_statut_arret_tech.svg'
-import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../icons/Avarie_statut_activite_detectee.svg'
-import React from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-
 export const BeaconStatusesSubMenu = {
   PAIRING: {
     name: 'Apparaige des balises',
@@ -54,52 +45,3 @@ export const beaconStatusesStages = {
     description: 'Envoyer un message de reprise aux unités dont les émissions ont repris.'
   }
 }
-
-const VesselStatusAtPort = styled(VesselStatusAtPortSVG)``
-const VesselStatusAtSea = styled(VesselStatusAtSeaSVG)``
-const VesselStatusNoNews = styled(VesselStatusNoNewsSVG)``
-const VesselStatusTechnicalStop = styled(VesselStatusTechnicalStopSVG)``
-const VesselStatusActivityDetected = styled(VesselStatusActivityDetectedSVG)``
-
-const iconStyle = {
-  verticalAlign: 'sub',
-  height: 17
-}
-
-export const vesselStatuses = [
-  {
-    label: 'Navire à quai',
-    value: 'AT_PORT',
-    color: '#F4DEAF',
-    textColor: COLORS.charcoal,
-    icon: <VesselStatusAtPort style={iconStyle}/>
-  },
-  {
-    label: 'Navire en mer',
-    value: 'AT_SEA',
-    color: '#9ED7D9',
-    textColor: COLORS.charcoal,
-    icon: <VesselStatusAtSea style={iconStyle}/>
-  },
-  {
-    label: 'Sans nouvelles',
-    value: 'NO_NEWS',
-    color: '#F7BA9E',
-    textColor: COLORS.charcoal,
-    icon: <VesselStatusNoNews style={iconStyle}/>
-  },
-  {
-    label: 'En arrêt technique',
-    value: 'TECHNICAL_STOP',
-    color: '#E8CA46',
-    textColor: COLORS.charcoal,
-    icon: <VesselStatusTechnicalStop style={iconStyle}/>
-  },
-  {
-    label: 'Activité détectée',
-    value: 'ACTIVITY_DETECTED',
-    color: '#C41812',
-    textColor: COLORS.white,
-    icon: <VesselStatusActivityDetected style={iconStyle}/>
-  }
-]

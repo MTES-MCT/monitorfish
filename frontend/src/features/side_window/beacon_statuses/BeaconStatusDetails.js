@@ -8,14 +8,16 @@ import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { Priority, priorityStyle, showVesselOnMap } from './BeaconStatusCard'
 import { useDispatch } from 'react-redux'
-import { vesselStatuses } from './beaconStatuses'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import * as timeago from 'timeago.js'
-import { closeBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
-import BeaconStatusDetailsBody from './BeaconStatusDetailsBody'
+import { closeBeaconStatusInKanban } from '../../../domain/shared_slices/BeaconStatus'
+import BeaconStatusDetailsFollowUp from './BeaconStatusDetailsFollowUp'
+import { showVesselSidebarTab } from '../../../domain/shared_slices/Vessel'
+import { VesselSidebarTab } from '../../../domain/entities/vessel'
+import { vesselStatuses } from '../../../domain/entities/beaconStatus'
 
-const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesselStatus }) => {
+const BeaconStatusDetails = ({ beaconStatus, resume, comments, actions, updateStageVesselStatus }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconStatus?.vesselStatus)
   const baseUrl = window.location.origin
@@ -46,13 +48,13 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
       data-cy={'side-window-beacon-statuses-detail'}
       style={beaconStatusDetailsWrapperStyle}
     >
-      <Header style={headerStyle}>
+      <FirstHeader style={firstHeaderStyle}>
         <Row style={rowStyle()}>
           <AlertsIcon style={alertsIconStyle}/>
           <Title style={titleStyle}>NON-RÉCEPTION DU VMS</Title>
           <CloseIcon
             style={closeIconStyle}
-            onClick={() => dispatch(closeBeaconStatus())}
+            onClick={() => dispatch(closeBeaconStatusInKanban())}
           />
         </Row>
         <Row style={rowStyle(10)}>
@@ -108,39 +110,117 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
             />
           </ShowVessel>
         </Row>
-      </Header>
+      </FirstHeader>
       <Line style={lineStyle}/>
-      <Header style={headerStyle}>
-        <Malfunctioning style={malfunctioningStyle} ref={ref}>
-          <MalfunctioningText style={malfunctioningTextStyle}>
-            AVARIE EN COURS
-          </MalfunctioningText>
-          <SelectPicker
-            container={() => ref.current}
-            menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
-            searchable={false}
-            value={vesselStatus?.value}
-            onChange={status => updateStageVesselStatus(beaconStatus?.stage, beaconStatus, status)}
-            data={vesselStatuses}
-            renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
-            cleanable={false}
-          />
-        </Malfunctioning>
-        <LastPosition style={lastPositionStyle}>
-          <TimeAgo style={timeAgoStyle}/>
-          Dernière émission {
-          timeago.format(beaconStatus?.malfunctionStartDateTime, 'fr')
-        }
-        </LastPosition>
-      </Header>
+      <SecondHeader style={secondHeaderStyle}>
+        <FirstColumn style={firstColumnStyle}>
+          <Malfunctioning ref={ref}>
+            <ColumnTitle style={malfunctioningTextStyle}>
+              AVARIE EN COURS
+            </ColumnTitle>
+            <SelectPicker
+              container={() => ref.current}
+              menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
+              searchable={false}
+              value={vesselStatus?.value}
+              onChange={status => updateStageVesselStatus(beaconStatus?.stage, beaconStatus, status)}
+              data={vesselStatuses}
+              renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
+              cleanable={false}
+            />
+          </Malfunctioning>
+          <LastPosition style={lastPositionStyle}>
+            <TimeAgo style={timeAgoStyle}/>
+            Dernière émission {
+            timeago.format(beaconStatus?.malfunctionStartDateTime, 'fr')
+          }
+          </LastPosition>
+        </FirstColumn>
+        <SecondColumn style={secondColumnStyle}>
+          <ColumnTitle style={malfunctioningTextStyle}>
+            AVARIES DE LA DERNIÈRE ANNÉE
+          </ColumnTitle>
+          <ResumeLine style={resumeLineStyle}>
+            <ResumeKey style={resumeKeyStyle}>Nombre d&apos;avaries</ResumeKey>
+            <ResumeSubKey style={resumeSubKeyStyle}>en mer</ResumeSubKey>
+            <ResumeValue style={resumeValueStyle}>{resume?.numberOfBeaconsAtSea}</ResumeValue>
+            <ResumeSubKey style={resumeSubKeyStyle}>à quai</ResumeSubKey>
+            <ResumeValue style={resumeValueStyle}>{resume?.numberOfBeaconsAtPort}</ResumeValue>
+          </ResumeLine>
+          <ResumeLine style={resumeLineStyle}>
+            <ResumeKey style={resumeKeyStyle}>Dernière avarie</ResumeKey>
+            <ResumeValue style={resumeValueStyle}>
+              {timeago.format(resume?.lastBeaconStatusDateTime, 'fr')}{' '}
+              ({vesselStatuses.find(status => status.value === resume?.lastBeaconStatusVesselStatus)?.label})
+            </ResumeValue>
+          </ResumeLine>
+          <ResumeLine>
+            <ShowHistory
+              style={showHistoryStyle}
+              onClick={() => {
+                showVesselOnMap(dispatch, beaconStatus)
+                dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))
+              }}>
+              voir l&apos;historique
+            </ShowHistory>
+          </ResumeLine>
+        </SecondColumn>
+      </SecondHeader>
       <Line style={lineStyle}/>
-      <BeaconStatusDetailsBody
+      <BeaconStatusDetailsFollowUp
         comments={comments}
         actions={actions}
         beaconStatusId={beaconStatus?.id}
       />
     </BeaconStatusDetailsWrapper>
   )
+}
+
+const ShowHistory = styled.span``
+const showHistoryStyle = {
+  color: COLORS.slateGray,
+  textDecoration: 'underline',
+  textDecorationColor: COLORS.slateGray,
+  cursor: 'pointer'
+}
+
+const ResumeValue = styled.span``
+const resumeValueStyle = {
+  color: COLORS.gunMetal,
+  marginRight: 10,
+  fontWeight: 500,
+  maxWidth: 130
+}
+
+const ResumeKey = styled.div``
+const resumeKeyStyle = {
+  color: COLORS.slateGray,
+  fontSize: 13,
+  width: 130
+}
+
+const ResumeSubKey = styled.span``
+const resumeSubKeyStyle = {
+  margin: '0 10px 0 0',
+  color: COLORS.slateGray
+}
+
+const ResumeLine = styled.span``
+const resumeLineStyle = {
+  marginBottom: 5,
+  display: 'inline-flex'
+}
+
+const FirstColumn = styled.div``
+const firstColumnStyle = {
+  width: 295
+}
+
+const SecondColumn = styled.div``
+const secondColumnStyle = {
+  width: 274,
+  borderLeft: `1px solid ${COLORS.lightGray}`,
+  paddingLeft: 20
 }
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
@@ -168,16 +248,12 @@ const lastPositionStyle = {
 }
 
 const Malfunctioning = styled.div``
-const malfunctioningStyle = {
-  paddingTop: 5
-}
 
-const MalfunctioningText = styled.div``
+const ColumnTitle = styled.div``
 const malfunctioningTextStyle = {
   letterSpacing: 0,
   color: COLORS.slateGray,
   textTransform: 'uppercase',
-  marginTop: 5,
   marginBottom: 10,
   fontWeight: 500
 }
@@ -243,9 +319,15 @@ const rowStyle = topMargin => ({
   marginTop: topMargin || 0
 })
 
-const Header = styled.div``
-const headerStyle = {
-  margin: '15px 20px 15px 40px'
+const FirstHeader = styled.div``
+const firstHeaderStyle = {
+  margin: '20px 20px 15px 40px'
+}
+
+const SecondHeader = styled.div``
+const secondHeaderStyle = {
+  margin: '20px 20px 15px 40px',
+  display: 'flex'
 }
 
 const Title = styled.span``

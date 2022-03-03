@@ -6,21 +6,16 @@ import { getDate, getTime, mergeObjects } from '../../../utils'
 import { Toggle } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserType } from '../../../domain/shared_slices/Global'
-import { UserType } from '../../../domain/entities/beaconStatus'
-import saveBeaconStatusComment from '../../../domain/use_cases/saveBeaconStatusComment'
-import { beaconStatusesStages, vesselStatuses } from './beaconStatuses'
+import { BeaconMalfunctionPropertyName, UserType, vesselStatuses } from '../../../domain/entities/beaconStatus'
+import saveBeaconStatusCommentFromKanban from '../../../domain/use_cases/saveBeaconStatusCommentFromKanban'
+import { beaconStatusesStages } from './beaconStatuses'
 
 const Type = {
   ACTION: 'ACTION',
   COMMENT: 'COMMENT'
 }
 
-const ActionProperty = {
-  VESSEL_STATUS: 'VESSEL_STATUS',
-  STAGE: 'STAGE'
-}
-
-const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
+const BeaconStatusDetailsFollowUp = ({ comments, actions, beaconStatusId, smallSize }) => {
   const dispatch = useDispatch()
   const {
     userType
@@ -40,7 +35,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
       setYesterday(getDate(yesterdayDate.toISOString()))
 
       setTimeout(() => {
-        scrollToRef.current?.scrollIntoView({ behavior: 'smooth' })
+        scrollToRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       }, 500)
     }
   }, [comments])
@@ -86,12 +81,12 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
   const actionsAndCommentsByDate = mergeObjects(commentsByDate, actionsByDate)
 
   const getActionText = action => {
-    if (action.propertyName === ActionProperty.VESSEL_STATUS) {
+    if (action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS) {
       const previousValue = vesselStatuses.find(status => status.value === action.previousValue)?.label
       const nextValue = vesselStatuses.find(status => status.value === action.nextValue)?.label
 
       return <>Le statut du ticket a été modifié, de <b>{previousValue}</b> à <b>{nextValue}</b>.</>
-    } else if (action.propertyName === ActionProperty.STAGE) {
+    } else if (action.propertyName === BeaconMalfunctionPropertyName.STAGE) {
       const previousValue = beaconStatusesStages[action.previousValue].title
       const nextValue = beaconStatusesStages[action.nextValue].title
 
@@ -137,13 +132,13 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
   }, [comment])
 
   const saveComment = () => {
-    dispatch(saveBeaconStatusComment(beaconStatusId, comment)).then(() => {
+    dispatch(saveBeaconStatusCommentFromKanban(beaconStatusId, comment)).then(() => {
       setComment('')
     })
   }
 
   return (
-    <Body style={bodyStyle}>
+    <Body style={bodyStyle(smallSize)}>
       <NumberComments style={numberCommentsStyle}>
         <CommentsIcon style={commentsIconStyle}/>
         <NumberCommentsText
@@ -153,7 +148,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
           {comments?.length} commentaire{comments?.length > 1 ? 's' : ''}
         </NumberCommentsText>
       </NumberComments>
-      <Comments style={commentsStyle}>
+      <Comments style={commentsStyle(smallSize)}>
         {
           Object.keys(actionsAndCommentsByDate)
             .sort((a, b) => new Date(a) - new Date(b))
@@ -161,16 +156,14 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
               const isLastDate = Object.keys(actionsAndCommentsByDate).length === index + 1
               const dateText = getCommentOrActionDate(getDate(date))
 
-              return <>
+              return <span key={date}>
                 <DateSeparator
                   data-cy={'side-window-beacon-statuses-detail-comment-date'}
                   style={dateSeparatorStyle(index === 0)}
                 >
                   <Line style={lineStyle}/>
                   <RowDate
-                    style={rowDateStyle(
-                      dateText === 'Aujourd\'hui',
-                      dateText === 'Hier')}
+                    style={rowDateStyle(dateText === 'Aujourd\'hui', dateText === 'Hier', smallSize)}
                   >
                     {dateText}
                   </RowDate>
@@ -184,34 +177,40 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
                       return getActionOrCommentRow(actionOrComment, isLastDate, isLast)
                     })
                 }
-              </>
+              </span>
             })
         }
       </Comments>
-      <AddComment
-        data-cy={'side-window-beacon-statuses-detail-comment-textarea'}
-        style={addCommentStyle(userType)}
-        value={comment}
-        onChange={event => setComment(event.target.value)}
-        ref={textareaRef}
-      />
-      <SubmitCommentRow style={submitCommentRowStyle}>
-        Équipe SIP
-        <Toggle
-          value={userType === UserType.OPS}
-          onChange={checked => dispatch(setUserType(checked ? UserType.OPS : UserType.SIP))}
-          size="sm"
-        />
-        Équipe OPS
-        <SubmitComment
-          data-cy={'side-window-beacon-statuses-detail-comment-add'}
-          disabled={!comment.replace(/\s/g, '').length}
-          style={submitCommentStyle}
-          onClick={saveComment}
-        >
-          Commenter
-        </SubmitComment>
-      </SubmitCommentRow>
+      {
+        !smallSize
+          ? <>
+            <AddComment
+              data-cy={'side-window-beacon-statuses-detail-comment-textarea'}
+              style={addCommentStyle(userType)}
+              value={comment}
+              onChange={event => setComment(event.target.value)}
+              ref={textareaRef}
+            />
+            <SubmitCommentRow style={submitCommentRowStyle}>
+              Équipe SIP
+              <Toggle
+                value={userType === UserType.OPS}
+                onChange={checked => dispatch(setUserType(checked ? UserType.OPS : UserType.SIP))}
+                size="sm"
+              />
+              Équipe OPS
+              <SubmitComment
+                data-cy={'side-window-beacon-statuses-detail-comment-add'}
+                disabled={!comment.replace(/\s/g, '').length}
+                style={submitCommentStyle}
+                onClick={saveComment}
+              >
+                Commenter
+              </SubmitComment>
+            </SubmitCommentRow>
+          </>
+          : null
+      }
     </Body>
   )
 }
@@ -291,25 +290,25 @@ const dateSeparatorStyle = first => ({
 })
 
 const RowDate = styled.div``
-const rowDateStyle = (isToday, isYesterday) => ({
+const rowDateStyle = (isToday, isYesterday, smallSize) => ({
   marginTop: -23,
   width: 'fit-content',
   background: 'white',
   padding: 10,
   marginLeft: isToday
-    ? 'calc(50% - 45px)'
+    ? smallSize ? 'calc(220px - 45px)' : 'calc(50% - 45px)'
     : isYesterday
-      ? 'calc(50% - 23px)'
-      : 'calc(50% - 43px)',
+      ? smallSize ? 'calc(220px - 23px)' : 'calc(50% - 23px)'
+      : smallSize ? 'calc(220px - 43px)' : 'calc(50% - 43px)',
   color: COLORS.slateGray
 })
 
 const Comments = styled.div``
-const commentsStyle = {
-  maxHeight: 435,
+const commentsStyle = smallSize => ({
+  maxHeight: smallSize ? 410 : 435,
   overflowY: 'auto',
   overflowX: 'hidden'
-}
+})
 
 const NumberComments = styled.span``
 const numberCommentsStyle = {
@@ -330,11 +329,12 @@ const numberCommentsTextStyle = {
 }
 
 const Body = styled.div``
-const bodyStyle = {
-  marginTop: 25,
-  paddingRight: 40,
-  paddingLeft: 40
-}
+const bodyStyle = smallSize => ({
+  marginTop: smallSize ? 5 : 25,
+  marginBottom: smallSize ? 5 : 0,
+  paddingRight: smallSize ? 15 : 40,
+  paddingLeft: smallSize ? 20 : 40
+})
 
 const Line = styled.div``
 const lineStyle = {
@@ -350,4 +350,4 @@ const commentsIconStyle = {
   marginTop: 2
 }
 
-export default BeaconStatusDetailsBody
+export default BeaconStatusDetailsFollowUp

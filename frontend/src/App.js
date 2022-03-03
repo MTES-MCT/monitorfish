@@ -189,8 +189,8 @@ const Alert = styled.div`
 const Wrapper = styled.div`
   font-size: 13px;
   text-align: center;
-  height: 100% - 50px;
-  width: 100%;
+  height: calc(100vh - 50px);
+  width: 100vw;
   overflow-y: hidden;
   overflow-x: hidden;
 `

@@ -3,12 +3,12 @@ import { setError } from '../shared_slices/Global'
 import { setOpenedBeaconStatusInKanban } from '../shared_slices/BeaconStatus'
 
 /**
- * Open a single beacon status
+ * Open a single beacon status in the side window kanban
  * @function setOpenedBeaconStatusInKanban
  * @param {BeaconStatusWithDetails} beaconStatus - the beacon status to open
  * @param {boolean} fromCron - true if called from cron
  */
-const openBeaconStatus = (beaconStatus, fromCron) => (dispatch, getState) => {
+const openBeaconStatusInKanban = (beaconStatus, fromCron) => (dispatch, getState) => {
   const previousBeaconStatus = getState().beaconStatus.openedBeaconStatusInKanban
   dispatch(setOpenedBeaconStatusInKanban(beaconStatus))
 
@@ -21,4 +21,4 @@ const openBeaconStatus = (beaconStatus, fromCron) => (dispatch, getState) => {
   })
 }
 
-export default openBeaconStatus
+export default openBeaconStatusInKanban

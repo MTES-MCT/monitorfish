@@ -1,14 +1,4 @@
-import { ReactComponent as VesselStatusAtPortSVG } from '../../icons/Avarie_statut_navire_a_quai.svg'
-import { ReactComponent as VesselStatusAtSeaSVG } from '../../icons/Avarie_statut_navire_en_mer.svg'
-import { ReactComponent as VesselStatusNoNewsSVG } from '../../icons/Avarie_statut_sans_nouvelles.svg'
-import { ReactComponent as VesselStatusTechnicalStopSVG } from '../../icons/Avarie_statut_arret_tech.svg'
-import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../icons/Avarie_statut_activite_detectee.svg'
-import React from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import * as timeago from 'timeago.js'
-
-export const BeaconMalfunctionsSubMenu = {
+export const BeaconStatusesSubMenu = {
   PAIRING: {
     name: 'Apparaige des balises',
     code: 'PAIRING'
@@ -60,55 +50,6 @@ export const beaconMalfunctionsStages = {
     description: 'Avaries archivées'
   }
 }
-
-const VesselStatusAtPort = styled(VesselStatusAtPortSVG)``
-const VesselStatusAtSea = styled(VesselStatusAtSeaSVG)``
-const VesselStatusNoNews = styled(VesselStatusNoNewsSVG)``
-const VesselStatusTechnicalStop = styled(VesselStatusTechnicalStopSVG)``
-const VesselStatusActivityDetected = styled(VesselStatusActivityDetectedSVG)``
-
-const iconStyle = {
-  verticalAlign: 'sub',
-  height: 17
-}
-
-export const vesselStatuses = [
-  {
-    label: 'Navire à quai',
-    value: 'AT_PORT',
-    color: COLORS.wheat,
-    textColor: COLORS.charcoal,
-    icon: <VesselStatusAtPort style={iconStyle}/>
-  },
-  {
-    label: 'Navire en mer',
-    value: 'AT_SEA',
-    color: COLORS.powderBlue,
-    textColor: COLORS.charcoal,
-    icon: <VesselStatusAtSea style={iconStyle}/>
-  },
-  {
-    label: 'Sans nouvelles',
-    value: 'NO_NEWS',
-    color: COLORS.tumbleweed,
-    textColor: COLORS.charcoal,
-    icon: <VesselStatusNoNews style={iconStyle}/>
-  },
-  {
-    label: 'En arrêt technique',
-    value: 'TECHNICAL_STOP',
-    color: COLORS.vegasGold,
-    textColor: COLORS.charcoal,
-    icon: <VesselStatusTechnicalStop style={iconStyle}/>
-  },
-  {
-    label: 'Activité détectée',
-    value: 'ACTIVITY_DETECTED',
-    color: COLORS.maximumRed,
-    textColor: COLORS.white,
-    icon: <VesselStatusActivityDetected style={iconStyle}/>
-  }
-]
 
 const BEACON_CREATION_AT_SEA_OFFSET = 6
 const BEACON_CREATION_AT_PORT_OFFSET = 24

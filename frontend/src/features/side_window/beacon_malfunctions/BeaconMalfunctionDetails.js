@@ -8,15 +8,19 @@ import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { Priority, priorityStyle, showVesselOnMap } from './BeaconMalfunctionCard'
 import { useDispatch } from 'react-redux'
-import { getBeaconCreationOrModificationDate, vesselStatuses } from './beaconMalfunctions'
+import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import * as timeago from 'timeago.js'
 import { closeBeaconMalfunction } from '../../../domain/shared_slices/BeaconMalfunction'
 import BeaconMalfunctionDetailsBody from './BeaconMalfunctionDetailsBody'
 import { getDateTime } from '../../../utils'
+import { closeBeaconStatusInKanban } from '../../../domain/shared_slices/BeaconStatus'
+import BeaconStatusDetailsFollowUp from './BeaconStatusDetailsFollowUp'
+import { showVesselSidebarTab } from '../../../domain/shared_slices/Vessel'
+import { VesselSidebarTab } from '../../../domain/entities/vessel'
 
-const BeaconMalfunctionDetails = ({ beaconMalfunction, comments, actions, updateStageVesselStatus }) => {
+const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions, updateStageVesselStatus }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselMalfunction => vesselMalfunction.value === beaconMalfunction?.vesselStatus)
   const baseUrl = window.location.origin
@@ -47,7 +51,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, comments, actions, update
       data-cy={'side-window-beacon-malfunctions-detail'}
       style={beaconMalfunctionDetailsWrapperStyle}
     >
-      <Header style={headerStyle}>
+      <FirstHeader style={firstHeaderStyle}>
         <Row style={rowStyle()}>
           <AlertsIcon style={alertsIconStyle}/>
           <Title style={titleStyle}>NON-RÉCEPTION DU VMS</Title>
@@ -109,7 +113,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, comments, actions, update
             />
           </ShowVessel>
         </Row>
-      </Header>
+      </FirstHeader>
       <Line style={lineStyle}/>
       <Header style={headerStyle}>
         <Malfunctioning style={malfunctioningStyle} ref={ref}>
@@ -144,6 +148,53 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, comments, actions, update
   )
 }
 
+const ShowHistory = styled.span``
+const showHistoryStyle = {
+  color: COLORS.slateGray,
+  textDecoration: 'underline',
+  textDecorationColor: COLORS.slateGray,
+  cursor: 'pointer'
+}
+
+const ResumeValue = styled.span``
+const resumeValueStyle = {
+  color: COLORS.gunMetal,
+  marginRight: 10,
+  fontWeight: 500,
+  maxWidth: 130
+}
+
+const ResumeKey = styled.div``
+const resumeKeyStyle = {
+  color: COLORS.slateGray,
+  fontSize: 13,
+  width: 130
+}
+
+const ResumeSubKey = styled.span``
+const resumeSubKeyStyle = {
+  margin: '0 10px 0 0',
+  color: COLORS.slateGray
+}
+
+const ResumeLine = styled.span``
+const resumeLineStyle = {
+  marginBottom: 5,
+  display: 'inline-flex'
+}
+
+const FirstColumn = styled.div``
+const firstColumnStyle = {
+  width: 295
+}
+
+const SecondColumn = styled.div``
+const secondColumnStyle = {
+  width: 274,
+  borderLeft: `1px solid ${COLORS.lightGray}`,
+  paddingLeft: 20
+}
+
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const ShowIcon = styled.img``
@@ -169,16 +220,12 @@ const lastPositionStyle = {
 }
 
 const Malfunctioning = styled.div``
-const malfunctioningStyle = {
-  paddingTop: 5
-}
 
-const MalfunctioningText = styled.div``
+const ColumnTitle = styled.div``
 const malfunctioningTextStyle = {
   letterSpacing: 0,
   color: COLORS.slateGray,
   textTransform: 'uppercase',
-  marginTop: 5,
   marginBottom: 10,
   fontWeight: 500
 }
@@ -244,9 +291,15 @@ const rowStyle = topMargin => ({
   marginTop: topMargin || 0
 })
 
-const Header = styled.div``
-const headerStyle = {
-  margin: '15px 20px 15px 40px'
+const FirstHeader = styled.div``
+const firstHeaderStyle = {
+  margin: '20px 20px 15px 40px'
+}
+
+const SecondHeader = styled.div``
+const secondHeaderStyle = {
+  margin: '20px 20px 15px 40px',
+  display: 'flex'
 }
 
 const Title = styled.span``

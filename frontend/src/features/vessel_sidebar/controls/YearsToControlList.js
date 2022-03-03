@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import YearControls from './YearControls'
 import { COLORS } from '../../../constants/constants'
-import { Title, Zone } from './Controls.style'
+import { Title, Zone } from '../common_styles/common.style'
 
 const YearsToControlList = props => {
   const {

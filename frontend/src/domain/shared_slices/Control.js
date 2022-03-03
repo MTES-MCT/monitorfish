@@ -8,8 +8,11 @@ const ControlReducer = null
 const controlSlice = createSlice({
   name: 'controls',
   initialState: {
+    /** @type {ControlResume} */
     controlResumeAndControls: {},
+    /** @type {ControlResume || null} */
     nextControlResumeAndControls: null,
+    /** @type {Date} */
     controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
     loadingControls: false
   },

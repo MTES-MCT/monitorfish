@@ -6,7 +6,7 @@ import LastControlZone from './LastControlZone'
 import ControlsResumeZone from './ControlsResumeZone'
 import YearsToControlList from './YearsToControlList'
 import { getYearsToControl, lastControlByType } from '../../../domain/entities/controls'
-import getControls from '../../../domain/use_cases/getControls'
+import getVesselControls from '../../../domain/use_cases/getVesselControls'
 import {
   resetNextControlResumeAndControls,
   setControlFromDate,
@@ -51,7 +51,7 @@ const VesselControls = () => {
 
   useEffect(() => {
     if (controlsFromDate) {
-      dispatch(getControls(true))
+      dispatch(getVesselControls(true))
     }
   }, [selectedVessel, controlsFromDate])
 

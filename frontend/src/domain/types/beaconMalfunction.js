@@ -50,3 +50,19 @@
  * @property {BeaconMalfunctionComment[]} comments
  * @property {BeaconMalfunctionAction[]} actions
  */
+
+/**
+ * @typedef VesselBeaconMalfunctionsResumeAndHistory
+ * @property {BeaconStatus || null} current
+ * @property {VesselBeaconMalfunctionsResume} resume
+ * @property {BeaconStatusWithDetails[]} history
+ * @property {VesselIdentity} vesselIdentity
+ */
+
+/**
+ * @typedef VesselBeaconMalfunctionsResume
+ * @property {number} numberOfBeaconsAtSea
+ * @property {number} numberOfBeaconsAtPort
+ * @property {string || null} lastBeaconStatusDateTime
+ * @property {string || null} lastBeaconStatusVesselStatus
+ */

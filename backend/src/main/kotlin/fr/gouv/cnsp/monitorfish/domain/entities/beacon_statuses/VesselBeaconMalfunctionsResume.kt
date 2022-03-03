@@ -18,8 +18,8 @@ data class VesselBeaconMalfunctionsResume(
                 it.beaconStatus.malfunctionStartDateTime > oneYearBefore
             }
 
-            val numberOfBeaconsAtSea = getNumberOfBeaconsMalfunctionsAt(VesselStatus.AT_SEA, lastYearBeaconStatusesWithDetails, lastBeaconStatus)
-            val numberOfBeaconsAtPort = getNumberOfBeaconsMalfunctionsAt(VesselStatus.AT_PORT, lastYearBeaconStatusesWithDetails, lastBeaconStatus)
+            val numberOfBeaconsAtSea = getNumberOfBeaconsMalfunctionsAt(VesselStatus.AT_SEA, lastYearBeaconStatusesWithDetails)
+            val numberOfBeaconsAtPort = getNumberOfBeaconsMalfunctionsAt(VesselStatus.AT_PORT, lastYearBeaconStatusesWithDetails)
 
             return VesselBeaconMalfunctionsResume(
                     numberOfBeaconsAtSea = numberOfBeaconsAtSea,
@@ -30,35 +30,33 @@ data class VesselBeaconMalfunctionsResume(
         }
 
         private fun getNumberOfBeaconsMalfunctionsAt(vesselStatus: VesselStatus,
-                                                     lastYearBeaconStatusesWithDetails: List<BeaconStatusWithDetails>,
-                                                     lastBeaconStatus: BeaconStatusWithDetails?): Int {
-            val lastBeaconStatusHasNoVesselStatusAction = lastBeaconStatus?.actions
-                    ?.filter { action -> action.propertyName == BeaconStatusActionPropertyName.VESSEL_STATUS }
-                    ?.size == 0
-
-            var numberOfBeaconsAtSeaOrPort = lastYearBeaconStatusesWithDetails.filter {
-                it.actions
-                        .filter { action -> action.propertyName == BeaconStatusActionPropertyName.VESSEL_STATUS }
-                        .minByOrNull { action -> action.dateTime }?.let { action ->
-                            VesselStatus.valueOf(action.previousValue) == vesselStatus
-                        } ?: false
+                                                     lastYearBeaconStatusesWithDetails: List<BeaconStatusWithDetails>): Int {
+            return lastYearBeaconStatusesWithDetails.filter { beaconStatusWithDetails ->
+                getFirstVesselStatus(beaconStatusWithDetails) == vesselStatus
             }.size
-
-            if (lastBeaconStatusHasNoVesselStatusAction && lastBeaconStatus?.beaconStatus?.vesselStatus == vesselStatus) {
-                numberOfBeaconsAtSeaOrPort += 1
-            }
-
-            return numberOfBeaconsAtSeaOrPort
         }
 
-        private fun getLastVesselStatus(lastBeaconStatus: BeaconStatusWithDetails?): VesselStatus? {
-            val lastVesselStatus = lastBeaconStatus?.actions?.filter { action ->
+        private fun getFirstVesselStatus(beaconStatusWithDetails: BeaconStatusWithDetails): VesselStatus {
+            val beaconStatusVesselStatusActions = beaconStatusWithDetails.actions
+                    .filter { action -> action.propertyName == BeaconStatusActionPropertyName.VESSEL_STATUS }
+
+            return when (beaconStatusVesselStatusActions.isEmpty()) {
+                true -> beaconStatusWithDetails.beaconStatus.vesselStatus
+                false -> beaconStatusVesselStatusActions
+                        .minByOrNull { action -> action.dateTime }?.let { action ->
+                            VesselStatus.valueOf(action.previousValue)
+                        }!!
+            }
+        }
+
+        private fun getLastVesselStatus(beaconStatus: BeaconStatusWithDetails?): VesselStatus? {
+            val lastVesselStatus = beaconStatus?.actions?.filter { action ->
                 action.propertyName == BeaconStatusActionPropertyName.VESSEL_STATUS
             }?.maxByOrNull { action -> action.dateTime }?.nextValue
 
             return lastVesselStatus?.let {
                 VesselStatus.valueOf(lastVesselStatus)
-            } ?: lastBeaconStatus?.beaconStatus?.vesselStatus
+            } ?: beaconStatus?.beaconStatus?.vesselStatus
         }
     }
 }

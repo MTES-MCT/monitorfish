@@ -126,14 +126,14 @@ export class Vessel {
 
 export const getOnlyVesselIdentityProperties = vessel => {
   return {
-    internalReferenceNumber: vessel.internalReferenceNumber,
-    externalReferenceNumber: vessel.externalReferenceNumber,
-    vesselName: vessel.vesselName,
-    flagState: vessel.flagState,
-    mmsi: vessel.mmsi,
-    ircs: vessel.ircs,
-    vesselIdentifier: vessel.vesselIdentifier,
-    beaconNumber: vessel.beaconNumber
+    internalReferenceNumber: vessel?.internalReferenceNumber,
+    externalReferenceNumber: vessel?.externalReferenceNumber,
+    vesselName: vessel?.vesselName,
+    flagState: vessel?.flagState,
+    mmsi: vessel?.mmsi,
+    ircs: vessel?.ircs,
+    vesselIdentifier: vessel?.vesselIdentifier,
+    beaconNumber: vessel?.beaconNumber
   }
 }
 
@@ -163,9 +163,24 @@ export function vesselAndVesselFeatureAreEquals (vessel, feature) {
       : false)
 }
 
+const VesselIdentifier = {
+  INTERNAL_REFERENCE_NUMBER: 'INTERNAL_REFERENCE_NUMBER',
+  EXTERNAL_REFERENCE_NUMBER: 'EXTERNAL_REFERENCE_NUMBER',
+  IRCS: 'IRCS'
+}
+
 export function vesselsAreEquals (firstVessel, secondVessel) {
   if (!firstVessel || !secondVessel) {
     return false
+  }
+
+  switch (firstVessel?.vesselIdentifier) {
+    case VesselIdentifier.INTERNAL_REFERENCE_NUMBER: return firstVessel.internalReferenceNumber &&
+      firstVessel.internalReferenceNumber === secondVessel.internalReferenceNumber
+    case VesselIdentifier.EXTERNAL_REFERENCE_NUMBER: return firstVessel.externalReferenceNumber &&
+      firstVessel.externalReferenceNumber === secondVessel.externalReferenceNumber
+    case VesselIdentifier.IRCS: return firstVessel.ircs &&
+      firstVessel.ircs === secondVessel.ircs
   }
 
   return (firstVessel.internalReferenceNumber
@@ -208,7 +223,8 @@ export const VesselSidebarTab = {
   SUMMARY: 1,
   IDENTITY: 2,
   VOYAGES: 3,
-  CONTROLS: 4
+  CONTROLS: 4,
+  ERSVMS: 5
 }
 
 export const FishingActivitiesTab = {

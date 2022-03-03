@@ -13,6 +13,7 @@ import getAllBeaconMalfunctions from '../../../domain/use_cases/getAllBeaconMalf
 import { COLORS } from '../../../constants/constants'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
+import { closeBeaconStatusInKanban } from '../../../domain/shared_slices/BeaconStatus'
 import { setError } from '../../../domain/shared_slices/Global'
 import BeaconMalfunctionDetails from './BeaconMalfunctionDetails'
 
@@ -36,7 +37,7 @@ const baseUrl = window.location.origin
 const BeaconMalfunctionsBoard = () => {
   const dispatch = useDispatch()
   const {
-    openedBeaconMalfunction
+    openedBeaconMalfunctionInKanban
   } = useSelector(state => state.beaconMalfunction)
   const beaconMalfunctions = useSelector(state => getMemoizedBeaconMalfunctionsByStage(state))
   const horizontalScrollRef = useRef()
@@ -198,9 +199,10 @@ const BeaconMalfunctionsBoard = () => {
       </DndContext>
       <BeaconMalfunctionDetails
         updateStageVesselStatus={updateVesselStatus}
-        beaconMalfunction={openedBeaconMalfunction?.beaconMalfunction}
-        comments={openedBeaconMalfunction?.comments || []}
-        actions={openedBeaconMalfunction?.actions || []}
+        beaconMalfunction={openedBeaconMalfunctionInKanban?.beaconMalfunction}
+        resume={openedBeaconMalfunctionInKanban?.resume}
+        comments={openedBeaconMalfunctionInKanban?.comments || []}
+        actions={openedBeaconMalfunctionInKanban?.actions || []}
       />
     </Wrapper>
   )

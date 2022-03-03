@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 import openBeaconmalfunction from '../../../domain/use_cases/openBeaconMalfunction'
 import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
+import { vesselStatuses } from '../../../domain/entities/beaconStatus'
 
 timeago.register('fr', timeagoFrenchLocale)
 

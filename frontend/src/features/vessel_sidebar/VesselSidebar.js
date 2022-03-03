@@ -22,6 +22,7 @@ import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
 import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFishingActivitiesOnMap'
 import AlertWarning from './warnings/AlertWarning'
 import BeaconMalfunctionWarning from './warnings/BeaconMalfunctionWarning'
+import VesselBeaconMalfunctions from './beacon_malfunctions/VesselBeaconMalfunctions'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -127,7 +128,9 @@ const VesselSidebar = () => {
             </Tab>
             <Tab
               isLast
-              disabled
+              isActive={vesselSidebarTab === VesselSidebarTab.ERSVMS}
+              onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))}
+              data-cy={'vessel-menu-ers-vms'}
             >
               <VMSIcon/> <br/> VMS/ERS
             </Tab>
@@ -153,6 +156,11 @@ const VesselSidebar = () => {
             {
               vesselSidebarTab === VesselSidebarTab.CONTROLS
                 ? <VesselControls/>
+                : null
+            }
+            {
+              vesselSidebarTab === VesselSidebarTab.ERSVMS
+                ? <VesselBeaconMalfunctions/>
                 : null
             }
           </Panel>

@@ -5,8 +5,9 @@ import pandas as pd
 import sqlalchemy
 
 from src.pipeline.flows.vessels import (
+    beaconStatus,
     clean_vessels,
-    extract_beacon_numbers,
+    extract_beacons,
     extract_cee_vessels,
     extract_control_charters,
     extract_floats,
@@ -14,6 +15,7 @@ from src.pipeline.flows.vessels import (
     extract_nav_licences,
     extract_non_cee_vessels,
     load_vessels,
+    transform_beacons,
 )
 from tests.mocks import mock_extract_side_effect
 
@@ -61,10 +63,45 @@ def test_extract_control_charters(mock_extract):
 
 
 @patch("src.pipeline.flows.vessels.extract")
-def test_extract_beacon_numbers(mock_extract):
+def test_extract_beacons(mock_extract):
     mock_extract.side_effect = mock_extract_side_effect
-    query = extract_beacon_numbers.run()
+    query = extract_beacons.run()
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
+
+
+def test_transform_beacons():
+    beacons = pd.DataFrame(
+        {
+            "id_nav_flotteur_bn": [1, 2, 3, 4, 5, 6],
+            "beacon_number": ["A", "B", "C", "D", "E", "F"],
+            "beacon_status": [
+                "Activée",
+                "Désactivée",
+                "En test",
+                "Non agréée",
+                "Non surveillée",
+                None,
+            ],
+        }
+    )
+
+    transformed_beacons = transform_beacons.run(beacons)
+    expected_transformed_beacons = pd.DataFrame(
+        {
+            "id_nav_flotteur_bn": [1, 2, 3, 4, 5, 6],
+            "beacon_number": ["A", "B", "C", "D", "E", "F"],
+            "beacon_status": [
+                "ACTIVATED",
+                "DEACTIVATED",
+                "IN_TEST",
+                "NON_APPROVED",
+                "UNSUPERVISED",
+                None,
+            ],
+        }
+    )
+
+    pd.testing.assert_frame_equal(transformed_beacons, expected_transformed_beacons)
 
 
 def test_clean_vessels():
@@ -126,7 +163,7 @@ def test_clean_vessels():
             ],
             "sailing_category": ["2ème", None],
             "beacon_number": [None, "beacbeac"],
-            "beacon_status": [None, "Activée"],
+            "beacon_status": [None, beaconStatus.ACTIVATED.value],
             "under_charter": [True, False],
         }
     )
@@ -231,7 +268,7 @@ def test_clean_vessels():
             [],
             [],
             "beacbeac",
-            "Activée",
+            beaconStatus.ACTIVATED.value,
             False,
         ],
     ]
@@ -357,7 +394,7 @@ def test_load_vessels(reset_test_data):
             [],
             [],
             "beacbeac",
-            "Activée",
+            beaconStatus.ACTIVATED.value,
             False,
         ],
     ]

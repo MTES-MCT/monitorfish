@@ -1,6 +1,6 @@
-DELETE FROM beacon_statuses;
+DELETE FROM beacon_malfunctions;
 
-INSERT INTO beacon_statuses (
+INSERT INTO beacon_malfunctions (
     internal_reference_number,
     external_reference_number,
     ircs,
@@ -20,7 +20,7 @@ INSERT INTO beacon_statuses (
     'DEVINER FIGURE CONSCIENCE',
     'INTERNAL_REFERENCE_NUMBER',
     'AT_SEA',
-    'RESUMED_TRANSMISSION',
+    'END_OF_MALFUNCTION',
     True,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month 3 days',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month',

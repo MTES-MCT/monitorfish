@@ -142,7 +142,7 @@ const Layers = {
     zIndex: 1020
   },
   REGULATORY: {
-    code: 'regulatory_areas',
+    code: 'regulations',
     name: '',
     group: null,
     type: layersType.REGULATORY,

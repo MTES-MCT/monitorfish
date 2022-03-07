@@ -120,31 +120,42 @@ const reducers = {
     const regulatoryZones = action.payload.regulatoryZones
     let nextShowedLayers = []
     if (action.payload.namespace === 'homepage') {
-      const showedLayersInLS = reOrderOldObjectHierarchyIfFound(getLocalStorageState([], `homepage${layersShowedOnMapLocalStorageKey}`))
-      nextShowedLayers = showedLayersInLS.map(showedLayer => {
-        let nextRegulatoryZone = regulatoryZones.find(regulatoryZone => {
-          if (showedLayer.id) {
-            return regulatoryZone.id === showedLayer.id
-          } else {
-            return regulatoryZone.topic === showedLayer.topic && regulatoryZone.zone === showedLayer.zone
+      const showedLayersInLocalStorage = reOrderOldObjectHierarchyIfFound(getLocalStorageState([], `homepage${layersShowedOnMapLocalStorageKey}`))
+
+      nextShowedLayers = showedLayersInLocalStorage
+        .filter(layer => layer)
+        .map(showedLayer => {
+          if (showedLayer.type === Layers.REGULATORY.code) {
+            let nextRegulatoryZone = regulatoryZones.find(regulatoryZone => {
+              if (showedLayer.id) {
+                return regulatoryZone.id === showedLayer.id
+              } else {
+                return regulatoryZone.topic === showedLayer.topic && regulatoryZone.zone === showedLayer.zone
+              }
+            })
+
+            if (nextRegulatoryZone) {
+              if (!(nextRegulatoryZone.topic && nextRegulatoryZone.lawType) && nextRegulatoryZone.nextId) {
+                nextRegulatoryZone = regulatoryZones.find(regulatoryZone => regulatoryZone.id === nextRegulatoryZone.nextId)
+              }
+
+              return {
+                type: showedLayer.type,
+                namespace: showedLayer.namespace,
+                gears: nextRegulatoryZone.regulatoryGears,
+                topic: nextRegulatoryZone.topic,
+                id: nextRegulatoryZone.id,
+                zone: nextRegulatoryZone.zone
+              }
+            }
+
+            return null
           }
-        })
-        if (nextRegulatoryZone) {
-          if (!(nextRegulatoryZone.topic && nextRegulatoryZone.lawType) && nextRegulatoryZone.nextId) {
-            nextRegulatoryZone = regulatoryZones.find(regulatoryZone => regulatoryZone.id === nextRegulatoryZone.nextId)
-          }
-          return {
-            type: showedLayer.type,
-            namespace: showedLayer.namespace,
-            gears: nextRegulatoryZone.regulatoryGears,
-            topic: nextRegulatoryZone.topic,
-            id: nextRegulatoryZone.id,
-            zone: nextRegulatoryZone.zone
-          }
-        }
-        return null
-      })
+
+          return showedLayer
+        }).filter(layer => layer)
     }
+
     state.showedLayers = nextShowedLayers
     window.localStorage.setItem(`homepage${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
   },

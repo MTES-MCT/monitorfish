@@ -5,18 +5,18 @@ import { Feature } from 'ol'
 
 import { setLayersTopicsByRegTerritory } from '../shared_slices/Regulatory'
 
-const UPDATE_LAYER_NAME_ERROR = 'Une erreur est survenue lors la mise à jour de la thématique'
+const UPDATE_TOPIC_NAME_ERROR = 'Une erreur est survenue lors la mise à jour de la thématique'
 
-const updateLayerNameForAllLayerZones = (territory, lawType, oldLayerName, newLayerName) => (dispatch, getState) => {
+const updateTopicForAllZones = (territory, lawType, oldLayerName, newLayerName) => (dispatch, getState) => {
   const { layersTopicsByRegTerritory } = getState().regulatory
   if (!layersTopicsByRegTerritory || !layersTopicsByRegTerritory[territory] ||
     !layersTopicsByRegTerritory[territory][lawType]) {
-    console.error(`${UPDATE_LAYER_NAME_ERROR}
+    console.error(`${UPDATE_TOPIC_NAME_ERROR}
       One value is undefined: 
       layersTopicsByRegTerritory is ${layersTopicsByRegTerritory}
       territory is ${territory}
       lawType is ${lawType}`)
-    dispatch(setError(new Error(UPDATE_LAYER_NAME_ERROR)))
+    dispatch(setError(new Error(UPDATE_TOPIC_NAME_ERROR)))
 
     return
   }
@@ -35,7 +35,7 @@ const updateLayerNameForAllLayerZones = (territory, lawType, oldLayerName, newLa
 
     return Promise.all(promiseList)
       .then(_ => {
-        const newLayersTopicsByRegTerritory = mutateLayersTopicsWithNewLayerName(layersTopicsByRegTerritory, territory, lawType, newLayerName, oldLayerName)
+        const newLayersTopicsByRegTerritory = mutateLayersTopicsWithNewTopic(layersTopicsByRegTerritory, territory, lawType, newLayerName, oldLayerName)
         dispatch(setLayersTopicsByRegTerritory(newLayersTopicsByRegTerritory))
       })
       .catch(e => {
@@ -55,11 +55,11 @@ function buildZoneFeature (zone, newLayerName) {
   return feature
 }
 
-function mutateLayersTopicsWithNewLayerName (layersTopicsByRegTerritory, territory, lawType, newLayerName, oldLayerName) {
+function mutateLayersTopicsWithNewTopic (layersTopicsByRegTerritory, territory, lawType, newTopic, oldTopic) {
   const newTerritoryObject = { ...layersTopicsByRegTerritory[territory] }
   const newLawTypeObject = { ...newTerritoryObject[lawType] }
-  newLawTypeObject[newLayerName] = [...newLawTypeObject[oldLayerName]]
-  delete newLawTypeObject[oldLayerName]
+  newLawTypeObject[newTopic] = [...newLawTypeObject[oldTopic]]
+  delete newLawTypeObject[oldTopic]
   newTerritoryObject[lawType] = newLawTypeObject
 
   return {
@@ -68,4 +68,4 @@ function mutateLayersTopicsWithNewLayerName (layersTopicsByRegTerritory, territo
   }
 }
 
-export default updateLayerNameForAllLayerZones
+export default updateTopicForAllZones

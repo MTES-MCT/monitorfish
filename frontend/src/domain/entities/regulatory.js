@@ -6,32 +6,13 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
     id: properties.id || id?.split('.')[1],
     geometry: geometry,
     lawType: properties.law_type,
-    topic: properties.layer_name,
-    prohibitedGears: properties.engins_interdits,
-    gears: properties.engins,
-    zone: decodeURI(properties.zones),
-    species: properties.especes,
-    prohibitedSpecies: properties.especes_interdites,
+    topic: properties.topic,
+    zone: decodeURI(properties.zone),
     regulatoryGears: parseRegulatoryGears(properties.gears),
     regulatorySpecies: parseRegulatorySpecies(properties.species),
-    regulatoryReferences: parseRegulatoryReferences(properties.references_reglementaires),
-    upcomingRegulatoryReferences: parseUpcomingRegulatoryReferences(properties.references_reglementaires_a_venir),
+    regulatoryReferences: parseRegulatoryReferences(properties.regulatory_references),
     fishingPeriod: parseFishingPeriod(properties.fishing_period),
-    permissions: properties.autorisations,
-    bycatch: properties.captures_accessoires,
-    openingDate: properties.date_ouverture,
-    closingDate: properties.date_fermeture,
-    mandatoryDocuments: properties.documents_obligatoires,
-    state: properties.etat,
-    prohibitions: properties.interdictions,
-    technicalMeasurements: properties.mesures_techniques,
-    period: properties.periodes,
-    quantity: properties.quantites,
-    size: properties.taille,
     region: properties.region,
-    obligations: properties.obligations,
-    rejections: properties.rejets,
-    deposit: properties.gisement,
     nextId: properties.next_id
   }
 }
@@ -58,11 +39,6 @@ function parseRegulatorySpecies (species) {
     ? parseJSON(species)
     : INITIAL_REG_SPECIES_VALUES
 }
-
-const parseUpcomingRegulatoryReferences = upcomingRegulatoryReferences =>
-  upcomingRegulatoryReferences && upcomingRegulatoryReferences !== {}
-    ? parseJSON(upcomingRegulatoryReferences)
-    : undefined
 
 const parseRegulatoryReferences = regulatoryTextsString => {
   if (!regulatoryTextsString) {
@@ -136,7 +112,6 @@ export const mapToRegulatoryFeatureObject = properties => {
     zone,
     region,
     regulatoryReferences,
-    upcomingRegulatoryReferences,
     fishingPeriod,
     regulatorySpecies,
     regulatoryGears,
@@ -144,12 +119,11 @@ export const mapToRegulatoryFeatureObject = properties => {
   } = properties
 
   return {
-    layer_name: topic,
+    topic: topic,
     law_type: lawType,
-    zones: zone,
-    region,
-    references_reglementaires: JSON.stringify(regulatoryReferences),
-    references_reglementaires_a_venir: JSON.stringify(upcomingRegulatoryReferences),
+    zone: zone,
+    region: region,
+    regulatory_references: JSON.stringify(regulatoryReferences),
     fishing_period: JSON.stringify(fishingPeriod),
     species: JSON.stringify(regulatorySpecies),
     gears: JSON.stringify(regulatoryGears),
@@ -162,12 +136,11 @@ export const getRegulatoryFeatureId = (id) => {
 }
 
 export const emptyRegulatoryFeatureObject = {
-  layer_name: null,
+  topic: null,
   law_type: null,
-  zones: null,
+  zone: null,
   region: null,
-  references_reglementaires: null,
-  references_reglementaires_a_venir: null,
+  regulatory_references: null,
   next_id: null
 }
 
@@ -218,15 +191,6 @@ export const REGULATION_ACTION_TYPE = {
   UPDATE: 'update',
   INSERT: 'insert',
   DELETE: 'delete'
-}
-
-/**
-  * @readonly
-  * @enum {RegulatoryTextSource}
-*/
-export const REGULATORY_TEXT_SOURCE = {
-  UPCOMING_REGULATION: 'upcomingRegulation',
-  REGULATION: 'regulation'
 }
 
 /**
@@ -310,7 +274,6 @@ export const REGULATORY_REFERENCE_KEYS = {
   TOPIC: 'topic',
   ZONE: 'zone',
   REGULATORY_REFERENCES: 'regulatoryReferences',
-  UPCOMING_REGULATORY_REFERENCES: 'upcomingRegulatoryReferences',
   FISHING_PERIOD: 'fishingPeriod',
   REGULATORY_SPECIES: 'regulatorySpecies',
   REGULATORY_GEARS: 'regulatoryGears'
@@ -732,7 +695,7 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
 }
 
 export const getTitle = regulatory => regulatory
-  ? `${regulatory.topic.replace(/[_]/g, ' ')} - ${regulatory.zone.replace(/[_]/g, ' ')}`
+  ? `${regulatory.topic} - ${regulatory.zone}`
   : ''
 
 /**

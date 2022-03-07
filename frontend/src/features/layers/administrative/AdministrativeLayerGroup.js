@@ -16,10 +16,10 @@ const AdministrativeLayerGroup = props => {
         ? <Row>
           <Zone isLastItem={props.isLastItem} isOpen={isOpen}>
             <Text
-              title={props.layers[0].group.name.replace(/[_]/g, ' ')}
+              title={props.layers[0].group.name}
               onClick={() => setIsOpen(!isOpen)}
             >
-              {props.layers[0].group.name.replace(/[_]/g, ' ')}
+              {props.layers[0].group.name}
             </Text>
             <Chevron
               $isOpen={isOpen}

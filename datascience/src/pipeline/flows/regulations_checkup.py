@@ -56,23 +56,21 @@ def extract_monitorfish_regulations():
     )
 
     monitorfish_regulations = monitorfish_regulations.explode(
-        "references_reglementaires", ignore_index=True
+        "regulatory_references", ignore_index=True
     )
 
-    monitorfish_regulations[
-        "url"
-    ] = monitorfish_regulations.references_reglementaires.map(
+    monitorfish_regulations["url"] = monitorfish_regulations.regulatory_references.map(
         try_get_factory("url", error_value=None)
     )
 
     monitorfish_regulations[
         "reference"
-    ] = monitorfish_regulations.references_reglementaires.map(
+    ] = monitorfish_regulations.regulatory_references.map(
         try_get_factory("reference", error_value=None)
     )
 
     monitorfish_regulations = monitorfish_regulations.drop(
-        columns=["references_reglementaires"]
+        columns=["regulatory_references"]
     )
 
     return monitorfish_regulations
@@ -204,8 +202,8 @@ def transform_modified_regulations(
         modified_regulations[
             [
                 "law_type",
-                "layer_name",
-                "zones",
+                "topic",
+                "zone",
                 "Référence réglementaire",
                 "Modification",
                 "Document",
@@ -214,8 +212,8 @@ def transform_modified_regulations(
         .sort_values(
             [
                 "law_type",
-                "layer_name",
-                "zones",
+                "topic",
+                "zone",
                 "Référence réglementaire",
                 "Modification",
                 "Document",
@@ -224,8 +222,8 @@ def transform_modified_regulations(
         .rename(
             columns={
                 "law_type": "Type de réglementation",
-                "layer_name": "Thématique",
-                "zones": "Zone",
+                "topic": "Thématique",
+                "zone": "Zone",
             }
         )
     )
@@ -238,15 +236,15 @@ def get_missing_references(monitorfish_regulations: pd.DataFrame) -> pd.DataFram
     return (
         monitorfish_regulations.loc[
             monitorfish_regulations.reference.isna(),
-            ["law_type", "layer_name", "zones"],
+            ["law_type", "topic", "zone"],
         ]
         .copy(deep=True)
-        .sort_values(["law_type", "layer_name", "zones"])
+        .sort_values(["law_type", "topic", "zone"])
         .rename(
             columns={
                 "law_type": "Type de réglementation",
-                "layer_name": "Thématique",
-                "zones": "Zone",
+                "topic": "Thématique",
+                "zone": "Zone",
             }
         )
     )
@@ -323,8 +321,8 @@ def format_dead_links(dead_links: pd.DataFrame) -> pd.DataFrame:
     dead_links = dead_links.rename(
         columns={
             "law_type": "Type de réglementation",
-            "layer_name": "Thématique",
-            "zones": "Zone",
+            "topic": "Thématique",
+            "zone": "Zone",
         }
     ).copy(deep=True)
 

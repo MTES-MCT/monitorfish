@@ -4,7 +4,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Port
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPortRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository

@@ -77,9 +77,9 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
       >
         <TopicName
           data-cy={'regulatory-layer-topic'}
-          title={regulatoryLayerTopic.replace(/[_]/g, ' ')}
+          title={regulatoryLayerTopic}
         >
-          {regulatoryLayerTopic.replace(/[_]/g, ' ')}
+          {regulatoryLayerTopic}
         </TopicName>
         <ZonesNumber>
           {`${topicDetails?.length}/${numberOfTotalZones}`}

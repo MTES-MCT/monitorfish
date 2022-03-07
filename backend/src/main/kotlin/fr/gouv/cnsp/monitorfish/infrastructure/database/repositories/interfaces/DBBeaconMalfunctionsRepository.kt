@@ -7,11 +7,11 @@ import org.springframework.data.repository.CrudRepository
 import java.time.ZonedDateTime
 
 interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntity, Int> {
-    @Query(value = "SELECT * FROM beacon_malfunctions where stage = 'END_OF_FOLLOW_UP' ORDER BY vessel_status_last_modification_date_utc DESC LIMIT 30", nativeQuery = true)
-    fun findLastThirtyEndOfFollowUp(): List<BeaconMalfunctionEntity>
+    @Query(value = "SELECT * FROM beacon_malfunctions where stage = 'ARCHIVED' ORDER BY vessel_status_last_modification_date_utc DESC LIMIT 30", nativeQuery = true)
+    fun findLastThirtyArchived(): List<BeaconMalfunctionEntity>
 
-    @Query(value = "SELECT * FROM beacon_malfunctions where stage <> 'END_OF_FOLLOW_UP'", nativeQuery = true)
-    fun findAllExceptEndOfFollowUp(): List<BeaconMalfunctionEntity>
+    @Query(value = "SELECT * FROM beacon_malfunctions where stage <> 'ARCHIVED'", nativeQuery = true)
+    fun findAllExceptArchived(): List<BeaconMalfunctionEntity>
 
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE beacon_malfunctions SET vessel_status = CAST(:vesselStatus AS beacon_malfunctions_vessel_status), vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId", nativeQuery = true)

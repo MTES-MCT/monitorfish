@@ -61,7 +61,7 @@ context('NewRegulation', () => {
     // Then
     cy.wait('@postRegulation')
       .then(({ request, response }) => {
-        expect(request.body).contain('typeName="monitorfish:regulatory_areas_write"')
+        expect(request.body).contain('typeName="monitorfish:regulations_write"')
         expect(request.body).contain('<Value>Reg. MEMN</Value>')
         expect(request.body).contain('<Value>Praires Ouest cotentin</Value>')
         expect(request.body).contain('<Value>Normandie, Bretagne</Value>')
@@ -70,7 +70,7 @@ context('NewRegulation', () => {
         expect(request.body).not.equal('"startDate":""')
         expect(request.body).contain('"endDate":"infinite"')
         expect(request.body).contain('"textType":["creation"]')
-        expect(request.body).contain('<FeatureId fid="regulatory_areas_write.598"/>')
+        expect(request.body).contain('<FeatureId fid="regulations_write.598"/>')
         expect(response.statusCode).equal(200)
       })
     cy.url().should('include', '/backoffice')

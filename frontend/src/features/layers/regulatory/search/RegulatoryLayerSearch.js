@@ -5,7 +5,11 @@ import styled from 'styled-components'
 import { resetRegulatoryZonesChecked, setRegulatoryLayersSearchResult } from './RegulatoryLayerSearch.slice'
 
 import layer from '../../../../domain/shared_slices/Layer'
-import { addRegulatoryZonesToMyLayers, resetRegulatoryGeometriesToPreview } from '../../../../domain/shared_slices/Regulatory'
+import {
+  addRegulatoryZonesToMyLayers,
+  closeRegulatoryZoneMetadataPanel,
+  resetRegulatoryGeometriesToPreview
+} from '../../../../domain/shared_slices/Regulatory'
 import { useEscapeFromKeyboard } from '../../../../hooks/useEscapeFromKeyboard'
 
 import RegulatoryLayerSearchResultList from './RegulatoryLayerSearchResultList'
@@ -44,11 +48,18 @@ const RegulatoryLayerSearch = props => {
   }, [layersSidebarOpenedLayer])
 
   useEffect(() => {
+    if (initSearchFields) {
+      dispatch(closeRegulatoryZoneMetadataPanel())
+    }
+  }, [initSearchFields])
+
+  useEffect(() => {
     if (escape) {
       batch(() => {
         dispatch(resetRegulatoryGeometriesToPreview())
         dispatch(setRegulatoryLayersSearchResult(null))
         dispatch(resetRegulatoryZonesChecked())
+        dispatch(closeRegulatoryZoneMetadataPanel())
       })
     }
   }, [escape])

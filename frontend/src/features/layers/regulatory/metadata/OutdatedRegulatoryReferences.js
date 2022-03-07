@@ -14,11 +14,13 @@ const OutdatedRegulatoryReferences = () => {
     const hasOneRegulatoryReference = state.regulatory.regulatoryZoneMetadata?.regulatoryReferences?.length === 1
     let referenceIsOutdated = false
 
-    state.regulatory.regulatoryZoneMetadata?.regulatoryReferences.forEach(reference => {
-      if (reference?.endDate && reference.endDate !== INFINITE) {
-        referenceIsOutdated = new Date(reference?.endDate) < today || referenceIsOutdated
-      }
-    })
+    if (Array.isArray(state.regulatory.regulatoryZoneMetadata?.regulatoryReferences)) {
+      state.regulatory.regulatoryZoneMetadata?.regulatoryReferences.forEach(reference => {
+        if (reference?.endDate && reference.endDate !== INFINITE) {
+          referenceIsOutdated = new Date(reference?.endDate) < today || referenceIsOutdated
+        }
+      })
+    }
 
     return {
       hasOneRegulatoryReference,

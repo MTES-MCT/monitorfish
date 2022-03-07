@@ -1,3 +1,4 @@
 ALTER TABLE public.beacon_status_comments RENAME TO beacon_malfunction_comments;
 
 ALTER TABLE public.beacon_malfunction_comments RENAME COLUMN beacon_status_id TO beacon_malfunction_id;
+ALTER SEQUENCE public.beacon_status_comments_id_seq RENAME TO beacon_malfunction_comments_id_seq;

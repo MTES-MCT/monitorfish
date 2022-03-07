@@ -9,7 +9,7 @@ import requests
 from prefect import Flow, Parameter, task, unmapped
 
 from config import (
-    BEACON_STATUSES_ENDPOINT,
+    BEACON_MALFUNCTIONS_ENDPOINT,
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
 )
@@ -18,13 +18,14 @@ from src.pipeline.processing import left_isin_right_by_decreasing_priority
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 
 
-class beaconStatusStage(Enum):
+class beaconMalfunctionStage(Enum):
     INITIAL_ENCOUNTER = "INITIAL_ENCOUNTER"
     FOUR_HOUR_REPORT = "FOUR_HOUR_REPORT"
     RELAUNCH_REQUEST = "RELAUNCH_REQUEST"
     TARGETING_VESSEL = "TARGETING_VESSEL"
     CROSS_CHECK = "CROSS_CHECK"
-    RESUMED_TRANSMISSION = "RESUMED_TRANSMISSION"
+    END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
+    ARCHIVED = "ARCHIVED"
 
 
 @task(checkpoint=False)
@@ -42,9 +43,9 @@ def extract_beacons_last_emission() -> pd.DataFrame:
 @task(checkpoint=False)
 def extract_known_malfunctions() -> pd.DataFrame:
     """
-    Extract ongoing malfunctions in the `beacon_statuses` table.
+    Extract ongoing malfunctions in the `beacon_malfunctions` table.
     """
-    return extract("monitorfish_remote", "monitorfish/known_beacons_malfunctions.sql")
+    return extract("monitorfish_remote", "monitorfish/known_beacon_malfunctions.sql")
 
 
 @task(checkpoint=False)
@@ -170,7 +171,7 @@ def get_new_malfunctions(
 
 
 @task(checkpoint=False)
-def get_beacons_statuses_with_resumed_transmission(
+def get_beacon_malfunctions_with_resumed_transmission(
     known_malfunctions: pd.DataFrame, vessels_emitting: pd.DataFrame
 ) -> list:
     """Returns the ids of the `known_malfunctions` that correspond to vessels that now
@@ -187,11 +188,11 @@ def get_beacons_statuses_with_resumed_transmission(
         vessels_emitting (pd.DataFrame): `DataFrame` of vessels now emitting.
 
     Returns:
-        list: ids of `beacon_statuses` corresponding to vessels that now emit.
+        list: ids of `beacon_malfunctions` corresponding to vessels that now emit.
     """
     vessel_id_cols = ["cfr", "ircs", "external_immatriculation"]
 
-    beacons_statuses_with_resumed_transmission = list(
+    beacon_malfunctions_with_resumed_transmission = list(
         set(
             known_malfunctions.loc[
                 left_isin_right_by_decreasing_priority(
@@ -203,11 +204,11 @@ def get_beacons_statuses_with_resumed_transmission(
         )
     )
 
-    return beacons_statuses_with_resumed_transmission
+    return beacon_malfunctions_with_resumed_transmission
 
 
 @task(checkpoint=False)
-def prepare_new_beacons_statuses(new_malfunctions: pd.DataFrame) -> pd.DataFrame:
+def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFrame:
     new_malfunctions = new_malfunctions.rename(
         columns={
             "cfr": "internal_reference_number",
@@ -218,7 +219,7 @@ def prepare_new_beacons_statuses(new_malfunctions: pd.DataFrame) -> pd.DataFrame
         new_malfunctions.is_at_port.values, ["AT_SEA", "AT_PORT"]
     )
 
-    new_malfunctions["stage"] = beaconStatusStage.INITIAL_ENCOUNTER.value
+    new_malfunctions["stage"] = beaconMalfunctionStage.INITIAL_ENCOUNTER.value
 
     new_malfunctions["malfunction_end_date_utc"] = pd.NaT
     new_malfunctions["vessel_status_last_modification_date_utc"] = datetime.utcnow()
@@ -240,10 +241,10 @@ def prepare_new_beacons_statuses(new_malfunctions: pd.DataFrame) -> pd.DataFrame
 
 
 @task(checkpoint=False)
-def load_new_beacons_statuses(new_beacons_statuses: pd.DataFrame):
+def load_new_beacons_malfunctions(new_beacons_malfunctions: pd.DataFrame):
     load(
-        new_beacons_statuses,
-        table_name="beacon_statuses",
+        new_beacons_malfunctions,
+        table_name="beacon_malfunctions",
         schema="public",
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
@@ -252,15 +253,19 @@ def load_new_beacons_statuses(new_beacons_statuses: pd.DataFrame):
 
 
 @task(checkpoint=False)
-def change_beacon_status_stage(beacon_status_id: int, new_stage: beaconStatusStage):
+def update_beacon_malfunction(
+    beacon_malfunction_id: int,
+    *,
+    new_stage: beaconMalfunctionStage = None,
+):
     """
-    Change the stage of the `beacon_status`of id `beacon_status_id` to `new_stage`.
+    Change the stage of the `beacon_malfunction`of id `beacon_malfunction_id` to `new_stage`.
 
     Args:
-        beacon_status_id (int): id of the beacon_status to update
-        new_stage (beaconStatusStage): stage to move the beacon status to
+        beacon_malfunction_id (int): id of the beacon_malfunction to update
+        new_stage (beaconMalfunctionStage): stage to move the beacon malfunction to
     """
-    url = BEACON_STATUSES_ENDPOINT + str(beacon_status_id)
+    url = BEACON_MALFUNCTIONS_ENDPOINT + str(beacon_malfunction_id)
     json = {"stage": new_stage.value}
     headers = {
         "Accept": "application/json, text/plain",
@@ -270,7 +275,7 @@ def change_beacon_status_stage(beacon_status_id: int, new_stage: beaconStatusSta
     r.raise_for_status()
 
 
-with Flow("Beacons statuses") as flow:
+with Flow("Beacons malfunctions") as flow:
 
     # Parameters
     max_hours_without_emission_at_sea = Parameter(
@@ -311,8 +316,8 @@ with Flow("Beacons statuses") as flow:
         malfunction_datetime_utc_threshold_at_port,
     )
 
-    beacons_statuses_with_resumed_transmission = (
-        get_beacons_statuses_with_resumed_transmission(
+    beacon_malfunctions_with_resumed_transmission = (
+        get_beacon_malfunctions_with_resumed_transmission(
             known_beacons_malfunctions, vessels_emitting
         )
     )
@@ -321,13 +326,13 @@ with Flow("Beacons statuses") as flow:
         current_malfunctions, known_beacons_malfunctions
     )
 
-    new_beacons_statuses = prepare_new_beacons_statuses(new_malfunctions)
+    new_malfunctions = prepare_new_beacon_malfunctions(new_malfunctions)
 
     # Load
-    change_beacon_status_stage.map(
-        beacons_statuses_with_resumed_transmission,
-        new_stage=unmapped(beaconStatusStage.RESUMED_TRANSMISSION),
+    update_beacon_malfunction.map(
+        beacon_malfunctions_with_resumed_transmission,
+        new_stage=unmapped(beaconMalfunctionStage.END_OF_MALFUNCTION),
     )
-    load_new_beacons_statuses(new_beacons_statuses)
+    load_new_beacons_malfunctions(new_malfunctions)
 
 flow.file_name = Path(__file__).name

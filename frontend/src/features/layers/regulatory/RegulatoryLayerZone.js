@@ -60,10 +60,8 @@ const RegulatoryLayerZone = props => {
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
   const gears = useSelector(state => state.gear.gears)
-  const zoneIsShown = useSelector(state => state.layer.showedLayers
-    .some(layer =>
-      layer.topic === regulatoryZone?.topic &&
-      layer.zone === regulatoryZone?.zone))
+  const zoneIsShown = useSelector(state =>
+    state.layer.showedLayers.some(layer => layer.id === regulatoryZone?.id))
 
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)
@@ -82,7 +80,7 @@ const RegulatoryLayerZone = props => {
   useEffect(() => {
     if (regulatoryZone.zone && regulatoryZone.topic && gears) {
       const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
-      const gearCategory = getGearCategory(regulatoryZone.gears, gears)
+      const gearCategory = getGearCategory(regulatoryZone.regulatoryGears, gears)
       setVectorLayerStyle(getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
     }
   }, [regulatoryZone, gears])

@@ -91,7 +91,7 @@ EOF
 curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
-    "name": "regulatory_areas",
+    "name": "regulations",
     "nativeName": "regulations_view",
     "title": "Regulatory Areas",
     "nativeCRS": "EPSG:4326",
@@ -104,7 +104,7 @@ EOF
 curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
-    "name": "regulatory_areas_write",
+    "name": "regulations_write",
     "nativeName": "regulations",
     "title": "Regulatory Areas for write operation",
     "nativeCRS": "EPSG:4326",

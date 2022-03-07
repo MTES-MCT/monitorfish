@@ -3,16 +3,16 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from src.pipeline.flows.update_beacons_statuses import (
+from src.pipeline.flows.update_beacon_malfunctions import (
     extract_beacons_last_emission,
     extract_known_malfunctions,
     flow,
-    get_beacons_statuses_with_resumed_transmission,
+    get_beacon_malfunctions_with_resumed_transmission,
     get_current_malfunctions,
     get_new_malfunctions,
     get_vessels_emitting,
-    load_new_beacons_statuses,
-    prepare_new_beacons_statuses,
+    load_new_beacons_malfunctions,
+    prepare_new_beacon_malfunctions,
 )
 from src.read_query import read_query
 from tests.mocks import mock_datetime_utcnow
@@ -120,7 +120,7 @@ def test_get_new_malfunctions():
     pd.testing.assert_frame_equal(new_malfunctions, expected_new_malfunctions)
 
 
-def test_get_beacons_statuses_with_resumed_transmission():
+def test_get_beacon_malfunctions_with_resumed_transmission():
     vessels_emitting = pd.DataFrame(
         {
             "cfr": ["A", "B", "C", "D"],
@@ -140,7 +140,7 @@ def test_get_beacons_statuses_with_resumed_transmission():
         }
     )
 
-    emission_restarts = get_beacons_statuses_with_resumed_transmission.run(
+    emission_restarts = get_beacon_malfunctions_with_resumed_transmission.run(
         known_malfunctions=known_malfunctions, vessels_emitting=vessels_emitting
     )
 
@@ -150,10 +150,10 @@ def test_get_beacons_statuses_with_resumed_transmission():
 
 
 @patch(
-    "src.pipeline.flows.update_beacons_statuses.datetime",
+    "src.pipeline.flows.update_beacon_malfunctions.datetime",
     mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
 )
-def test_prepare_new_beacons_statuses():
+def test_prepare_new_beacon_malfunctions():
 
     new_malfunctions = pd.DataFrame(
         {
@@ -171,9 +171,9 @@ def test_prepare_new_beacons_statuses():
         }
     )
 
-    beacons_statuses = prepare_new_beacons_statuses.run(new_malfunctions)
+    beacon_malfunctions = prepare_new_beacon_malfunctions.run(new_malfunctions)
 
-    expected_beacons_statuses = pd.DataFrame(
+    expected_beacon_malfunctions = pd.DataFrame(
         {
             "internal_reference_number": ["B", "D"],
             "external_reference_number": ["BB", "DD"],
@@ -195,11 +195,11 @@ def test_prepare_new_beacons_statuses():
         }
     )
 
-    pd.testing.assert_frame_equal(beacons_statuses, expected_beacons_statuses)
+    pd.testing.assert_frame_equal(beacon_malfunctions, expected_beacon_malfunctions)
 
 
-def test_load_new_beacons_statuses(reset_test_data):
-    beacons_new_statuses = pd.DataFrame(
+def test_load_new_beacon_malfunctions(reset_test_data):
+    new_beacon_malfunctions = pd.DataFrame(
         {
             "internal_reference_number": ["B", "D"],
             "external_reference_number": ["BB", "DD"],
@@ -221,51 +221,54 @@ def test_load_new_beacons_statuses(reset_test_data):
         }
     )
 
-    load_new_beacons_statuses.run(beacons_new_statuses)
+    load_new_beacons_malfunctions.run(new_beacon_malfunctions)
 
-    loaded_beacons_statuses = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_statuses"
+    loaded_beacon_malfunctions = read_query(
+        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
     )
 
-    assert len(loaded_beacons_statuses) == 4
+    assert len(loaded_beacon_malfunctions) == 4
     pd.testing.assert_series_equal(
-        loaded_beacons_statuses.internal_reference_number,
+        loaded_beacon_malfunctions.internal_reference_number,
         pd.Series(["ABC000542519", None, "B", "D"], name="internal_reference_number"),
     )
 
 
-def test_update_beacons_statuses_flow_doesnt_insert_already_known_malfunctions(
+def test_update_beacon_malfunctions_flow_doesnt_insert_already_known_malfunctions(
     reset_test_data,
 ):
-    initial_beacons_statuses = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_statuses"
+    initial_beacons_malfunctions = read_query(
+        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
     )
     flow.schedule = None
     state = flow.run(
         max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=24
     )
-    loaded_beacons_statuses = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_statuses"
+    loaded_beacons_malfunctions = read_query(
+        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
     )
 
     assert state.is_successful()
     assert len(state.result[flow.get_tasks("get_current_malfunctions")[0]].result) == 1
     assert len(state.result[flow.get_tasks("get_new_malfunctions")[0]].result) == 0
-    assert len(loaded_beacons_statuses) == len(initial_beacons_statuses)
+    assert len(loaded_beacons_malfunctions) == len(initial_beacons_malfunctions)
 
 
-def test_update_beacons_statuses_flow_moves_beacon_statuses_to_resumed_transmission(
+def test_update_beacon_malfunctions_flow_moves_beacon_malfunctions_to_end_of_malfunction(
     reset_test_data,
 ):
-    beacon_status_id_to_move_to_resumed_transmission = read_query(
-        "monitorfish_remote", "SELECT id FROM beacon_statuses WHERE ircs = 'OLY7853'"
+    beacon_malfunction_id_to_move_to_end_of_malfunction = read_query(
+        "monitorfish_remote",
+        "SELECT id FROM beacon_malfunctions WHERE ircs = 'OLY7853'",
     ).iloc[0, 0]
 
     flow.schedule = None
-    endpoint_mock_url = "http://beacon.statuses.endpoint/"
-    with patch("src.pipeline.flows.update_beacons_statuses.requests") as mock_requests:
+    endpoint_mock_url = "http://beacon.malfunctions.endpoint/"
+    with patch(
+        "src.pipeline.flows.update_beacon_malfunctions.requests"
+    ) as mock_requests:
         with patch(
-            "src.pipeline.flows.update_beacons_statuses.BEACON_STATUSES_ENDPOINT",
+            "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
             endpoint_mock_url,
         ):
             state = flow.run(
@@ -279,13 +282,12 @@ def test_update_beacons_statuses_flow_moves_beacon_statuses_to_resumed_transmiss
     )
     assert len(state.result[flow.get_tasks("get_current_malfunctions")[0]].result) == 0
     assert len(state.result[flow.get_tasks("get_new_malfunctions")[0]].result) == 0
-    assert (
-        len(state.result[flow.get_tasks("change_beacon_status_stage")[0]].result) == 1
-    )
+    assert len(state.result[flow.get_tasks("update_beacon_malfunction")[0]].result) == 1
 
     mock_requests.put.assert_called_once_with(
-        url=endpoint_mock_url + f"{beacon_status_id_to_move_to_resumed_transmission}",
-        json={"stage": "RESUMED_TRANSMISSION"},
+        url=endpoint_mock_url
+        + f"{beacon_malfunction_id_to_move_to_end_of_malfunction}",
+        json={"stage": "END_OF_MALFUNCTION"},
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
@@ -293,18 +295,18 @@ def test_update_beacons_statuses_flow_moves_beacon_statuses_to_resumed_transmiss
     )
 
 
-def test_update_beacons_statuses_flow_inserts_new_malfunctions(reset_test_data):
+def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_data):
     flow.schedule = None
-    initial_beacons_statuses = read_query(
+    initial_beacon_malfunctions = read_query(
         "monitorfish_remote",
-        "SELECT * FROM beacon_statuses WHERE stage != 'RESUMED_TRANSMISSION'",
+        "SELECT * FROM beacon_malfunctions WHERE stage NOT IN ('END_OF_MALFUNCTION', 'ARCHIVED')",
     )
     state = flow.run(
         max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=1
     )
-    loaded_beacons_statuses = read_query(
+    loaded_beacons_malfunctions = read_query(
         "monitorfish_remote",
-        "SELECT * FROM beacon_statuses WHERE stage != 'RESUMED_TRANSMISSION'",
+        "SELECT * FROM beacon_malfunctions WHERE stage NOT IN ('END_OF_MALFUNCTION', 'ARCHIVED')",
     )
 
     assert state.is_successful()
@@ -313,7 +315,7 @@ def test_update_beacons_statuses_flow_inserts_new_malfunctions(reset_test_data):
     )
     assert len(state.result[flow.get_tasks("get_current_malfunctions")[0]].result) == 2
     assert len(state.result[flow.get_tasks("get_new_malfunctions")[0]].result) == 1
-    assert len(initial_beacons_statuses) == 1
-    assert len(loaded_beacons_statuses) == 2
-    assert "FQ7058" not in initial_beacons_statuses.ircs.values
-    assert "FQ7058" in loaded_beacons_statuses.ircs.values
+    assert len(initial_beacon_malfunctions) == 1
+    assert len(loaded_beacons_malfunctions) == 2
+    assert "FQ7058" not in initial_beacon_malfunctions.ircs.values
+    assert "FQ7058" in loaded_beacons_malfunctions.ircs.values

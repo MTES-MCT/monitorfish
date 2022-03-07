@@ -147,7 +147,8 @@ function featuresAreAlreadyDrawWithTheSameTolerance (showSimplifiedFeatures, sim
 }
 
 function removeRegulatoryLayersToMap (showedLayers, olLayers) {
-  const _showedLayers = showedLayers.length ? showedLayers : []
+  const _showedLayers = showedLayers?.length ? showedLayers : []
+
   const layersToRemove = olLayers.getArray()
     .filter(olLayer => layersOfTypeRegulatoryLayerInCurrentMap(olLayer))
     .filter(olLayer => layersNotPresentInShowedLayers(_showedLayers, olLayer))

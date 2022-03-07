@@ -47,8 +47,9 @@ const reducers = {
       type,
       topic,
       zone,
+      id,
       namespace,
-      gears
+      regulatoryGears
     } = action.payload
 
     if (type !== Layers.VESSELS.code) {
@@ -61,8 +62,9 @@ const reducers = {
           type,
           topic,
           zone,
+          id,
           namespace,
-          gears
+          gears: regulatoryGears
         })
         if (namespace !== 'backoffice') {
           window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
@@ -110,7 +112,52 @@ const reducers = {
     state.showedLayers = []
     if (action.payload !== 'backoffice') {
       window.localStorage.setItem(`${action.payload}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
+    } else {
+      window.localStorage.removeItem(`${action.payload}${layersShowedOnMapLocalStorageKey}`)
     }
+  },
+  setShowedLayersWithLocalStorageValues (state, action) {
+    const regulatoryZones = action.payload.regulatoryZones
+    let nextShowedLayers = []
+    if (action.payload.namespace === 'homepage') {
+      const showedLayersInLocalStorage = reOrderOldObjectHierarchyIfFound(getLocalStorageState([], `homepage${layersShowedOnMapLocalStorageKey}`))
+
+      nextShowedLayers = showedLayersInLocalStorage
+        .filter(layer => layer)
+        .map(showedLayer => {
+          if (showedLayer.type === Layers.REGULATORY.code) {
+            let nextRegulatoryZone = regulatoryZones.find(regulatoryZone => {
+              if (showedLayer.id) {
+                return regulatoryZone.id === showedLayer.id
+              } else {
+                return regulatoryZone.topic === showedLayer.topic && regulatoryZone.zone === showedLayer.zone
+              }
+            })
+
+            if (nextRegulatoryZone) {
+              if (!(nextRegulatoryZone.topic && nextRegulatoryZone.lawType) && nextRegulatoryZone.nextId) {
+                nextRegulatoryZone = regulatoryZones.find(regulatoryZone => regulatoryZone.id === nextRegulatoryZone.nextId)
+              }
+
+              return {
+                type: showedLayer.type,
+                namespace: showedLayer.namespace,
+                gears: nextRegulatoryZone.regulatoryGears,
+                topic: nextRegulatoryZone.topic,
+                id: nextRegulatoryZone.id,
+                zone: nextRegulatoryZone.zone
+              }
+            }
+
+            return null
+          }
+
+          return showedLayer
+        }).filter(layer => layer)
+    }
+
+    state.showedLayers = nextShowedLayers
+    window.localStorage.setItem(`homepage${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
   },
   /**
    * Store layer to feature and simplified feature - To show simplified features if the zoom is low

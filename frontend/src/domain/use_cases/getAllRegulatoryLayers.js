@@ -9,16 +9,18 @@ import {
   setLayersTopicsByRegTerritory,
   setRegulatoryLayerLawTypes
 } from '../shared_slices/Regulatory'
+import layer from '../shared_slices/Layer'
 
 const worker = new Worker()
 const MonitorFishWorker = Comlink.wrap(worker)
 
 const getAllRegulatoryLayers = () => async (dispatch, getState) => {
-  const worker = await new MonitorFishWorker()
+  const monitorFishWorker = await new MonitorFishWorker()
+  const { setShowedLayersWithLocalStorageValues } = layer.homepage.actions
 
   return getAllRegulatoryLayersFromAPI(getState().global.inBackofficeMode)
     .then(features => {
-      return worker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features)
+      return monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features)
     })
     .then(response => {
       const {
@@ -29,6 +31,7 @@ const getAllRegulatoryLayers = () => async (dispatch, getState) => {
         dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
         dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
         dispatch(setSelectedRegulatoryZone(layersWithoutGeometry))
+        dispatch(setShowedLayersWithLocalStorageValues({ regulatoryZones: layersWithoutGeometry, namespace: 'homepage' }))
       })
     })
     .catch(error => {

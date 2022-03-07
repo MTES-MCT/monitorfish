@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /// <reference types="cypress" />
 
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
@@ -8,7 +9,7 @@ context('LayersSidebar', () => {
     cy.visit(`http://localhost:${port}/#@-224002.65,6302673.54,8.70`)
 
     cy.request('GET', 'http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=' +
-      'monitorfish:regulatory_areas&outputFormat=application/json&propertyName=id,law_type,topic,gears,regulatory_references,zone,region,next_id').then(
+      'monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,regulatory_references,zone,region,next_id').then(
       (response) => {
         cy.log(response.body)
       }
@@ -34,7 +35,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').contains('Ouest Cotentin Bivalves')
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-zone"]').contains('Praires Ouest cotentin')
-                                                                                                                        
+
     // Show a zone with the zone button
     cy.log('Show a zone with the zone button')
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 20000 })

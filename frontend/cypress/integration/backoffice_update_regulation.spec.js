@@ -61,7 +61,7 @@ context('NewRegulation', () => {
     // Then
     cy.wait('@postRegulation')
       .then(({ request, response }) => {
-        expect(request.body).contain('typeName="monitorfish:regulatory_areas_write"')
+        expect(request.body).contain('typeName="monitorfish:regulations_write"')
         expect(request.body).contain('<Value>Reg. MEMN</Value>')
         expect(request.body).contain('<Value>Praires Ouest cotentin</Value>')
         expect(request.body).contain('<Value>Normandie, Bretagne</Value>')
@@ -70,7 +70,7 @@ context('NewRegulation', () => {
         expect(request.body).not.equal('"startDate":""')
         expect(request.body).contain('"endDate":"infinite"')
         expect(request.body).contain('"textType":["creation"]')
-        expect(request.body).contain('<FeatureId fid="regulatory_areas_write.598"/>')
+        expect(request.body).contain('<FeatureId fid="regulations_write.598"/>')
         expect(response.statusCode).equal(200)
       })
     cy.url().should('include', '/backoffice')
@@ -118,11 +118,11 @@ context('NewRegulation', () => {
   it('Confirm modal is closed on confirm button click and post request is sent', () => {
     // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
-    cy.get('[data-cy="go-back-link"]').eq(0).click()
-    cy.get('[data-cy="regulation-modal"]').should('exist')
     cy.get('[type="checkbox"]').first().check({ force: true })
     cy.get('[type="checkbox"]').eq(2).check({ force: true })
     // When
+    cy.get('[data-cy="go-back-link"]').eq(0).click()
+    cy.get('[data-cy="regulation-modal"]').should('exist')
     cy.get('[data-cy="confirm-modal-confirm-button"]').click()
     // Then
     cy.get('[data-cy="regulation-modal"]').should('not.exist')
@@ -131,6 +131,22 @@ context('NewRegulation', () => {
       .then(({ request, response }) => {
         expect(response.statusCode).equal(200)
       })
+    cy.url().should('include', '/backoffice')
+  })
+
+  it('If a value is missing, the confirm modal is not openned and a warning message is displayed', () => {
+    // When
+    cy.get('[data-cy="go-back-link"]').eq(0).click()
+    // Then
+    cy.get('[data-cy="regulation-modal"]').should('not.exist')
+    cy.get('[data-cy="save-forbidden-btn"]').should('exist')
+  })
+
+  it('A modal should not be openned on go back button click, if nothing has been modified', () => {
+    // When
+    cy.get('[data-cy="go-back-link"]').eq(0).click()
+    // then
+    cy.get('[data-cy="regulation-modal"]').should('not.exist')
     cy.url().should('include', '/backoffice')
   })
 

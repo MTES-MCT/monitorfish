@@ -679,7 +679,7 @@ function sendRegulationTransaction (feature, actionType) {
   const formatWFS = new WFS()
   const formatGML = new GML({
     featureNS: 'monitorfish',
-    featureType: 'monitorfish:regulatory_areas_write',
+    featureType: 'monitorfish:regulations_write',
     srsName: 'EPSG:4326'
   })
 

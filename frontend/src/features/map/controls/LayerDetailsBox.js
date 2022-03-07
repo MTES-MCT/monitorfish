@@ -28,12 +28,12 @@ const LayerDetailsBox = props => {
       const {
         zone,
         topic,
-        engins
+        gears: layerGears
       } = regulatoryFeatureToShowOnCard.getProperties()
 
       if (zone && topic && gears) {
         const hash = getHash(`${topic}:${zone}`)
-        const gearCategory = getGearCategory(engins, gears)
+        const gearCategory = getGearCategory(layerGears, gears)
         setVectorLayerStyle(getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
       } else {
         setVectorLayerStyle(null)

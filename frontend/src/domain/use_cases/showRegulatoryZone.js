@@ -47,7 +47,7 @@ export const getVectorOLLayer = (dispatch, getState) => layerToShow => {
   const hash = getHash(`${layerToShow.topic}:${layerToShow.zone}`)
   const name = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
 
-  const source = getRegulatoryVectorSourceAndGears(dispatch, getState)(layerToShow)
+  const source = getRegulatoryVectorSource(dispatch, getState)(layerToShow)
 
   const gearCategory = getGearCategory(layerToShow.gears, gears)
 
@@ -61,7 +61,7 @@ export const getVectorOLLayer = (dispatch, getState) => layerToShow => {
   return _layer
 }
 
-const getRegulatoryVectorSourceAndGears = (dispatch, getState) => regulatoryZoneProperties => {
+const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperties => {
   const zoneName = `${Layers.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
 
   const {

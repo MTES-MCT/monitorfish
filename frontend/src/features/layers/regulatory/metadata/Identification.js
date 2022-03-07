@@ -18,7 +18,7 @@ const Identification = () => {
         <Field>
           <Key>Thématique</Key>
           <Value data-cy={'regulatory-layers-metadata-topic'}>
-            {`${topic.replace(/[_]/g, ' ')}` || <NoValue>-</NoValue>}
+            {`${topic}` || <NoValue>-</NoValue>}
           </Value>
         </Field>
         <Field>

@@ -71,7 +71,7 @@ const RegulatoryLayerSearchResultZone = props => {
         ? dispatch(uncheckRegulatoryZones([regulatoryZone]))
         : dispatch(checkRegulatoryZones([regulatoryZone]))}
       >
-        {regulatoryZone?.zone ? regulatoryZone.zone.replace(/[_]/g, ' ') : 'AUCUN NOM'}
+        {regulatoryZone?.zone ? regulatoryZone.zone : 'AUCUN NOM'}
       </Name>
       {
         isOpen

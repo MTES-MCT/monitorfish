@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { CustomInput } from '../commonStyles/Input.style'
 
-const LayerNameInput = props => {
+const RegulatoryTopicInput = props => {
   const {
-    layerName,
-    updateLayerName,
-    setIsLayerNameEditable
+    topic,
+    updateTopic,
+    setIsTopicEditable
   } = props
 
   const [value, setValue] = useState()
   const ref = useRef()
 
   const update = () => {
-    if (value && value !== layerName) {
-      updateLayerName(layerName, value.replace(/[ ]/g, '_'))
+    if (value && value !== topic) {
+      updateTopic(topic, value)
     }
-    setIsLayerNameEditable(false)
+    setIsTopicEditable(false)
   }
 
   const handleKeyDown = (event) => {
@@ -23,7 +23,7 @@ const LayerNameInput = props => {
       update()
     }
     if (event.key === 'Escape') {
-      setValue(layerName)
+      setValue(topic)
     }
   }
 
@@ -32,17 +32,17 @@ const LayerNameInput = props => {
   }, [])
 
   useEffect(() => {
-    setValue(layerName)
-  }, [layerName])
+    setValue(topic)
+  }, [topic])
 
   return (<CustomInput
       data-cy="layer-name-input"
       inputRef={ref}
-      value={value && value.replace(/[_]/g, ' ')}
+      value={value}
       onChange={val => setValue(val)}
       onBlur={update}
       onKeyDown={handleKeyDown}
     />)
 }
 
-export default LayerNameInput
+export default RegulatoryTopicInput

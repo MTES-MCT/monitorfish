@@ -9,7 +9,7 @@ import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
-import LayerNameInput from '../../backoffice/LayerNameInput'
+import RegulatoryTopicInput from '../../backoffice/RegulatoryTopicInput'
 import {
   addRegulatoryTopicOpened,
   closeRegulatoryZoneMetadataPanel,
@@ -131,18 +131,18 @@ const RegulatoryLayerTopic = props => {
           >
             <Name
               data-cy={'regulatory-layers-my-zones-topic'}
-              title={regulatoryTopic.replace(/[_]/g, ' ')}
+              title={regulatoryTopic}
               onClick={onRegulatoryTopicClick}
             >
               {
                 !isLayerNameEditable
                   ? <Text>
-                    {regulatoryTopic.replace(/[_]/g, ' ')}
+                    {regulatoryTopic}
                   </Text>
-                  : <LayerNameInput
-                    layerName={regulatoryTopic}
-                    updateLayerName={updateLayerName}
-                    setIsLayerNameEditable={setIsLayerNameEditable}
+                  : <RegulatoryTopicInput
+                    topic={regulatoryTopic}
+                    updateTopic={updateLayerName}
+                    setIsTopicEditable={setIsLayerNameEditable}
                   />
               }
             </Name>

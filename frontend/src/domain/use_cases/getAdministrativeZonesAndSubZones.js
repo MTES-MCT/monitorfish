@@ -30,7 +30,7 @@ const getAdministrativeZonesAndSubZones = administrativeZones => async (dispatch
             return {
               group: zone.group,
               groupCode: zone.code,
-              name: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey].replace(/[_]/g, ' ') : 'Aucun nom',
+              name: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey] : 'Aucun nom',
               code: subZone.id,
               showMultipleZonesInAdministrativeZones: zone.showMultipleZonesInAdministrativeZones,
               isSubZone: true

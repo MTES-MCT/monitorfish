@@ -20,8 +20,8 @@ export const FRENCH_REGION_LIST = [
 ]
 
 export const INFO_TEXT = {
-  LAYER_NAME: 'Avant de créer une nouvelle thématique, vérifiez bien qu\'il n\'en existe pas déjà une\n qui pourrait correspondre.',
-  LAYER_NAME_NEXT: `Le nom de la thématique doit permettre de connaître en un coup d'œil le lieu
+  TOPIC: 'Avant de créer une nouvelle thématique, vérifiez bien qu\'il n\'en existe pas déjà une\n qui pourrait correspondre.',
+  TOPIC_NEXT: `Le nom de la thématique doit permettre de connaître en un coup d'œil le lieu
   et le sujet de la réglementation. Il peut être intéressant de mentionner une zone
   totalement interdite à la pêche avec le mot "interdiction" (dans le champ "autres indications").\n
   NB : le lieu indiqué peut être une façade maritime (NAMO),

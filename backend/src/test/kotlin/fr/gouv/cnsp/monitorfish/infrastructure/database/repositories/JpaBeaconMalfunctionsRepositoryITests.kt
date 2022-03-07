@@ -18,7 +18,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAll Should return all beacon statuses`() {
+    fun `findAll Should return all beacon malfunctions`() {
         // When
         val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAll()
 
@@ -30,7 +30,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllExceptResumedTransmission Should return all beacon statuses except end of follow up`() {
+    fun `findAllExceptResumedTransmission Should return all beacon malfunctions except end of follow up`() {
         // When
         val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllExceptEndOfFollowUp()
 
@@ -48,7 +48,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
         assertThat(baconMalfunctions).hasSize(1)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")
-        assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.END_OF_FOLLOW_UP)
+        assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.ARCHIVED)
         assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.AT_PORT)
     }
 
@@ -68,8 +68,8 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
                 updateDateTime)
 
         // Then
-        val updatedBeaconStatus = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
-        assertThat(updatedBeaconStatus?.vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
-        assertThat(updatedBeaconStatus?.vesselStatusLastModificationDateTime).isEqualTo(updateDateTime)
+        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
+        assertThat(updatedBeaconMalfunction?.vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
+        assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isEqualTo(updateDateTime)
     }
 }

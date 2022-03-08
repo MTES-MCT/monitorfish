@@ -15,7 +15,7 @@ const YearsToBeaconMalfunctionList = props => {
     <Title>Historique des avaries VMS</Title>
     {
       yearsToBeaconMalfunctions && Object.keys(yearsToBeaconMalfunctions)?.length
-        ? <List>
+        ? <List data-cy={'vessel-beacon-malfunctions-history'}>
           {
             Object.keys(yearsToBeaconMalfunctions)
               .sort((a, b) => b - a)

@@ -34,7 +34,7 @@ const YearBeaconMalfunctions = props => {
             yearBeaconMalfunctions.length ? <ChevronIcon $isOpen={isOpen}/> : null
           }
           <Year>{year}</Year>
-          <YearResume data-cy={'vessel-controls-year'}>
+          <YearResume>
             {
               !yearBeaconMalfunctions.length
                 ? 'Aucune avarie'

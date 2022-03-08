@@ -21,8 +21,12 @@ const BeaconMalfunction = props => {
   const dispatch = useDispatch()
 
   return beaconMalfunctionWithDetails
-    ? <Wrapper key={index} isLastItem={isLastItem}>
-      <Title data-cy={'vessel-malfunction-title'}>
+    ? <Wrapper
+      key={index}
+      isLastItem={isLastItem}
+      data-cy={'vessel-beacon-malfunction-single-history'}
+    >
+      <Title>
         {
           getFirstVesselStatus(beaconMalfunctionWithDetails) === BeaconMalfunctionVesselStatus.AT_PORT
             ? <AtPort/>
@@ -31,7 +35,10 @@ const BeaconMalfunction = props => {
         AVARIE DU {getDateTime(beaconMalfunctionWithDetails.beaconStatus.malfunctionStartDateTime)}
       </Title>
       <BeaconMalfunctionBody beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}/>
-      <SeeMore onClick={() => dispatch(setOpenedBeaconMalfunction(beaconMalfunctionWithDetails))}>
+      <SeeMore
+        data-cy={'vessel-beacon-malfunction-history-see-more'}
+        onClick={() => dispatch(setOpenedBeaconMalfunction(beaconMalfunctionWithDetails))}
+      >
         voir les détails de l&apos;avarie <Arrow/>
       </SeeMore>
     </Wrapper>

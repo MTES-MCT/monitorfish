@@ -13,8 +13,8 @@ import getAllRegulatoryLayersByRegTerritory from '../domain/use_cases/getAllRegu
 import { setRegulatoryLayers } from '../domain/shared_slices/Regulatory'
 import { getRegulatoryLayersWithoutTerritory } from '../domain/entities/regulatory'
 import getOperationalAlerts from '../domain/use_cases/getOperationalAlerts'
-import getAllBeaconStatuses from '../domain/use_cases/getAllBeaconStatuses'
-import openBeaconStatus from '../domain/use_cases/openBeaconStatus'
+import getAllBeaconMalfunctions from '../domain/use_cases/getAllBeaconMalfunctions'
+import openBeaconmalfunction from '../domain/use_cases/openBeaconMalfunction'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
 export const THIRTY_SECONDS = 30 * 1000
@@ -29,14 +29,14 @@ const APIWorker = () => {
     sideWindowIsOpen
   } = useSelector(state => state.global)
   const {
-    openedBeaconStatus
-  } = useSelector(state => state.beaconStatus)
+    openedBeaconMalfunction
+  } = useSelector(state => state.beaconMalfunction)
   const {
     layersTopicsByRegTerritory
   } = useSelector(state => state.regulatory)
 
-  const beaconStatusesInterval = useRef(null)
-  const beaconStatusInterval = useRef(null)
+  const beaconMalfunctionsInterval = useRef(null)
+  const beaconMalfunctionInterval = useRef(null)
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const APIWorker = () => {
       dispatch(showAllVessels())
       dispatch(getOperationalAlerts())
       dispatch(getAllRegulatoryLayersByRegTerritory())
-      dispatch(getAllBeaconStatuses())
+      dispatch(getAllBeaconMalfunctions())
     })
 
     const interval = setInterval(() => {
@@ -70,35 +70,35 @@ const APIWorker = () => {
 
   useEffect(() => {
     if (sideWindowIsOpen) {
-      if (beaconStatusesInterval?.current) {
-        clearInterval(beaconStatusesInterval.current)
+      if (beaconMalfunctionsInterval?.current) {
+        clearInterval(beaconMalfunctionsInterval.current)
       }
 
-      beaconStatusesInterval.current = setInterval(() => {
-        dispatch(getAllBeaconStatuses())
+      beaconMalfunctionsInterval.current = setInterval(() => {
+        dispatch(getAllBeaconMalfunctions())
       }, THIRTY_SECONDS)
     }
 
     return () => {
-      clearInterval(beaconStatusesInterval?.current)
+      clearInterval(beaconMalfunctionsInterval?.current)
     }
   }, [sideWindowIsOpen])
 
   useEffect(() => {
-    if (sideWindowIsOpen && openedBeaconStatus) {
-      if (beaconStatusInterval?.current) {
-        clearInterval(beaconStatusInterval.current)
+    if (sideWindowIsOpen && openedBeaconMalfunction) {
+      if (beaconMalfunctionInterval?.current) {
+        clearInterval(beaconMalfunctionInterval.current)
       }
 
-      beaconStatusInterval.current = setInterval(() => {
-        dispatch(openBeaconStatus(openedBeaconStatus))
+      beaconMalfunctionInterval.current = setInterval(() => {
+        dispatch(openBeaconmalfunction(openedBeaconMalfunction))
       }, THIRTY_SECONDS)
     }
 
     return () => {
-      clearInterval(beaconStatusInterval?.current)
+      clearInterval(beaconMalfunctionInterval?.current)
     }
-  }, [sideWindowIsOpen, openedBeaconStatus])
+  }, [sideWindowIsOpen, openedBeaconMalfunction])
 
   useEffect(() => {
     if (layersTopicsByRegTerritory) {

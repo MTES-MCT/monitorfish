@@ -114,7 +114,7 @@ const VesselsLayer = ({ map }) => {
           coordinates: vessel.coordinates,
           isFiltered: vessel.isFiltered,
           filterPreview: vessel.filterPreview,
-          hasBeaconStatus: vessel.hasBeaconStatus
+          hasBeaconMalfunction: vessel.hasBeaconMalfunction
         }
 
         const feature = new Feature({

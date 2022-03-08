@@ -67,7 +67,7 @@ const VesselCardOverlay = ({ feature, map }) => {
     if (overlayRef.current && overlayObjectRef.current) {
       if (feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
         setVesselFeatureToShowOnCard(feature)
-        numberOfWarnings.current = feature?.vesselProperties?.hasAlert + !!feature?.vesselProperties?.beaconStatusId
+        numberOfWarnings.current = feature?.vesselProperties?.hasAlert + !!feature?.vesselProperties?.beaconMalfunctionId
         overlayRef.current.style.display = 'block'
         overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
 

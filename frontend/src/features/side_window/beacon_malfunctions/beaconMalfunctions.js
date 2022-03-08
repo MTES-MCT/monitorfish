@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import * as timeago from 'timeago.js'
 
-export const BeaconStatusesSubMenu = {
+export const BeaconMalfunctionsSubMenu = {
   PAIRING: {
     name: 'Apparaige des balises',
     code: 'PAIRING'
@@ -23,7 +23,7 @@ export const BeaconStatusesSubMenu = {
   }
 }
 
-export const beaconStatusesStages = {
+export const beaconMalfunctionsStages = {
   INITIAL_ENCOUNTER: {
     code: 'INITIAL_ENCOUNTER',
     title: 'Premier contact',
@@ -49,14 +49,14 @@ export const beaconStatusesStages = {
     title: 'Contrôle croisé',
     description: 'Mobiliser les unités sur les navires dont on n\'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.'
   },
-  RESUMED_TRANSMISSION: {
-    code: 'RESUMED_TRANSMISSION',
-    title: 'Reprise des émissions',
+  END_OF_MALFUNCTION: {
+    code: 'END_OF_MALFUNCTION',
+    title: 'Fin d\'avarie',
     description: 'Envoyer un message de reprise aux unités dont les émissions ont repris.'
   },
-  END_OF_FOLLOW_UP: {
-    code: 'END_OF_FOLLOW_UP',
-    title: 'Fin de suivi',
+  ARCHIVED: {
+    code: 'ARCHIVED',
+    title: 'Archive',
     description: 'Avaries archivées'
   }
 }
@@ -131,12 +131,12 @@ export const getBeaconCreationDate = (dateLastEmission, status) => {
   }
 }
 
-export function getBeaconCreationOrModificationDate (beaconStatus) {
-  if (beaconStatus?.stage === beaconStatusesStages.INITIAL_ENCOUNTER.code) {
-    return `ouverte ${getReducedTimeAgo(getBeaconCreationDate(beaconStatus?.malfunctionStartDateTime, beaconStatus?.vesselStatus))}`
+export function getBeaconCreationOrModificationDate (beaconMalfunction) {
+  if (beaconMalfunction?.stage === beaconMalfunctionsStages.INITIAL_ENCOUNTER.code) {
+    return `ouverte ${getReducedTimeAgo(getBeaconCreationDate(beaconMalfunction?.malfunctionStartDateTime, beaconMalfunction?.vesselStatus))}`
   }
 
-  return `modifiée ${getReducedTimeAgo(beaconStatus?.vesselStatusLastModificationDateTime)}`
+  return `modifiée ${getReducedTimeAgo(beaconMalfunction?.vesselStatusLastModificationDateTime)}`
 }
 
 export function getReducedTimeAgo (dateTime) {

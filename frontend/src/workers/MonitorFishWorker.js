@@ -205,7 +205,7 @@ class MonitorFishWorker {
       vesselIsHidden.setHours(vesselIsHidden.getHours() - lastPositionTimeAgoFilter)
 
       vessels = vessels.filter(vessel => {
-        if (vessel.vesselProperties?.beaconStatusId) {
+        if (vessel.vesselProperties?.beaconMalfunctionId) {
           return true
         }
 

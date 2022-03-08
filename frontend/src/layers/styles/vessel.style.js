@@ -1,8 +1,8 @@
 import { Icon, Style } from 'ol/style'
 import {
-  Vessel, VESSEL_ALERT_AND_BEACON_STATUS,
+  Vessel, VESSEL_ALERT_AND_BEACON_MALFUNCTION,
   VESSEL_ALERT_STYLE,
-  VESSEL_BEACON_STATUS_STYLE,
+  VESSEL_BEACON_MALFUNCTION_STYLE,
   VESSEL_SELECTOR_STYLE
 } from '../../domain/entities/vessel'
 
@@ -31,8 +31,8 @@ const hideNonSelectedVesselsCondition = [
 
 const hideDeprecatedPositionsCondition = [
   'case',
-  // if there is a beacon status, do not hide the vessel
-  featureHas('hasBeaconStatus'), true,
+  // if there is a beacon malfunction, do not hide the vessel
+  featureHas('hasBeaconMalfunction'), true,
   // if lastPosition is older than threshold, hide vessel
   ['<=', ['var', 'vesselIsHiddenTimeThreshold'], ['get', 'lastPositionSentAt']], true,
   false
@@ -96,7 +96,7 @@ export const getWebGLVesselStyle = ({
         featureHas('isFiltered'), filterColor,
         defaultVesselColor],
       opacity: ['case',
-        featureHas('hasBeaconStatus'), 1,
+        featureHas('hasBeaconMalfunction'), 1,
         ['<', ['get', 'lastPositionSentAt'], ['var', 'vesselIsOpacityReducedTimeThreshold']], 0.2,
         1]
     }
@@ -150,15 +150,15 @@ export const getVesselAlertStyle = (feature, resolution) => {
   return styles
 }
 
-const vesselBeaconStatusBigCircleStyle = new Style({
+const vesselBeaconMalfunctionBigCircleStyle = new Style({
   image: new Icon({
     src: 'Double-cercle_avaries.png'
   }),
-  zIndex: VESSEL_BEACON_STATUS_STYLE
+  zIndex: VESSEL_BEACON_MALFUNCTION_STYLE
 })
 
-export const getVesselBeaconStatusStyle = (resolution) => {
-  const styles = [vesselBeaconStatusBigCircleStyle]
+export const getVesselBeaconMalfunctionStyle = (resolution) => {
+  const styles = [vesselBeaconMalfunctionBigCircleStyle]
 
   const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
   styles[0].getImage().setScale(scale)
@@ -166,15 +166,15 @@ export const getVesselBeaconStatusStyle = (resolution) => {
   return styles
 }
 
-const vesselAlertAndBeaconStatusBigCircleStyle = new Style({
+const vesselAlertAndBeaconMalfunctionBigCircleStyle = new Style({
   image: new Icon({
     src: 'Triple-cercle_alerte_et_avarie.png'
   }),
-  zIndex: VESSEL_ALERT_AND_BEACON_STATUS
+  zIndex: VESSEL_ALERT_AND_BEACON_MALFUNCTION
 })
 
-export const getVesselAlertAndBeaconStatusStyle = (resolution) => {
-  const styles = [vesselAlertAndBeaconStatusBigCircleStyle]
+export const getVesselAlertAndBeaconMalfunctionStyle = (resolution) => {
+  const styles = [vesselAlertAndBeaconMalfunctionBigCircleStyle]
 
   const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
   styles[0].getImage().setScale(scale)

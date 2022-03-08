@@ -21,7 +21,7 @@ import HideNonSelectedVessels from './actions/hide_non_selected_vessels/HideNonS
 import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
 import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFishingActivitiesOnMap'
 import AlertWarning from './warnings/AlertWarning'
-import BeaconStatusWarning from './warnings/BeaconStatusWarning'
+import BeaconMalfunctionWarning from './warnings/BeaconMalfunctionWarning'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -134,7 +134,7 @@ const VesselSidebar = () => {
           </TabList>
           <Panel healthcheckTextWarning={healthcheckTextWarning}>
             <AlertWarning selectedVessel={selectedVessel}/>
-            <BeaconStatusWarning selectedVessel={selectedVessel}/>
+            <BeaconMalfunctionWarning selectedVessel={selectedVessel}/>
             {
               vesselSidebarTab === VesselSidebarTab.SUMMARY
                 ? <VesselSummary/>

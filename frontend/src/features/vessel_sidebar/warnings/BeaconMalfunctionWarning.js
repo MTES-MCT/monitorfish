@@ -4,40 +4,40 @@ import { sideWindowMenu } from '../../../domain/entities/sideWindow'
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as BeaconStatusSVG } from '../../icons/Icone_VMS_dark.svg'
-import openBeaconStatus from '../../../domain/use_cases/openBeaconStatus'
+import { ReactComponent as BeaconMalfunctionSVG } from '../../icons/Icone_VMS_dark.svg'
+import openBeaconmalfunction from '../../../domain/use_cases/openBeaconMalfunction'
 
-const BeaconStatusWarning = ({ selectedVessel }) => {
+const BeaconMalfunctionWarning = ({ selectedVessel }) => {
   const dispatch = useDispatch()
 
   return (<>
     {
-      selectedVessel?.beaconStatusId
-        ? <BeaconStatus
-          onClick={() => showBeaconStatusInSideWindow(dispatch, selectedVessel)}
-          data-cy={'vessel-sidebar-beacon-status'}
+      selectedVessel?.beaconMalfunctionId
+        ? <BeaconMalfunction
+          onClick={() => showBeaconMalfunctionInSideWindow(dispatch, selectedVessel)}
+          data-cy={'vessel-sidebar-beacon-malfunction'}
         >
-          <BeaconStatusIcon/>
+          <BeaconMalfunctionIcon/>
           NON-ÉMISSION VMS
-          <SeeBeaconStatus>
+          <SeeBeaconMalfunction>
             Voir l&apos;avarie dans le tableau
-          </SeeBeaconStatus>
-        </BeaconStatus>
+          </SeeBeaconMalfunction>
+        </BeaconMalfunction>
         : null
     }
     </>)
 }
 
-const showBeaconStatusInSideWindow = (dispatch, selectedVessel) => {
-  dispatch(openSideWindowTab(sideWindowMenu.BEACON_STATUSES.code))
-  dispatch(openBeaconStatus({
-    beaconStatus: {
-      id: selectedVessel?.beaconStatusId
+const showBeaconMalfunctionInSideWindow = (dispatch, selectedVessel) => {
+  dispatch(openSideWindowTab(sideWindowMenu.BEACON_MALFUNCTIONS.code))
+  dispatch(openBeaconmalfunction({
+    beaconMalfunction: {
+      id: selectedVessel?.beaconMalfunctionId
     }
   }))
 }
 
-const SeeBeaconStatus = styled.span`
+const SeeBeaconMalfunction = styled.span`
   font-size: 11px;
   float: right;
   margin-right: 10px;
@@ -46,7 +46,7 @@ const SeeBeaconStatus = styled.span`
   line-height: 17px;
 `
 
-const BeaconStatusIcon = styled(BeaconStatusSVG)`
+const BeaconMalfunctionIcon = styled(BeaconMalfunctionSVG)`
   width: 20px;
   height: 18px;
   margin-bottom: -4px;
@@ -66,7 +66,7 @@ const BeaconStatusIcon = styled(BeaconStatusSVG)`
   }
 `
 
-const BeaconStatus = styled.div`
+const BeaconMalfunction = styled.div`
   cursor: pointer;
   background: ${COLORS.yellow};
   color: ${COLORS.gunMetal};
@@ -79,4 +79,4 @@ const BeaconStatus = styled.div`
   margin-top: 1px;
 `
 
-export default BeaconStatusWarning
+export default BeaconMalfunctionWarning

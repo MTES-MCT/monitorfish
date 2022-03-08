@@ -4,7 +4,7 @@ import { COLORS } from '../../constants/constants'
 import SideWindowSubMenuLink from './SideWindowSubMenuLink'
 import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../domain/entities/alerts'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
-import { beaconStatusesStages, BeaconStatusesSubMenu } from './beacon_statuses/beaconStatuses'
+import { beaconMalfunctionsStages, BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 
 /**
@@ -12,14 +12,14 @@ import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.s
  * @param selectedMenu
  * @param selectedSubMenu
  * @param setSelectedSubMenu
- * @param beaconStatuses
+ * @param beaconMalfunctions
  * @param alerts
  * @param fixed
  * @param setIsFixed
  * @return {JSX.Element}
  * @constructor
  */
-const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, beaconStatuses, alerts, fixed, setIsFixed }) => {
+const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, beaconMalfunctions, alerts, fixed, setIsFixed }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return <Menu
@@ -91,15 +91,15 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
         </>
     }
     {
-      selectedMenu === sideWindowMenu.BEACON_STATUSES.code &&
+      selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code &&
       <>
         <SideWindowSubMenuLink
           isOpen={isOpen}
-          number={beaconStatuses.filter(beaconStatus =>
-            beaconStatus.stage !== beaconStatusesStages.RESUMED_TRANSMISSION.code &&
-            beaconStatus.stage !== beaconStatusesStages.END_OF_FOLLOW_UP.code).length}
-          menu={BeaconStatusesSubMenu.MALFUNCTIONING}
-          isSelected={selectedSubMenu.code === BeaconStatusesSubMenu.MALFUNCTIONING.code}
+          number={beaconMalfunctions.filter(beaconMalfunction =>
+            beaconMalfunction.stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
+            beaconMalfunction.stage !== beaconMalfunctionsStages.ARCHIVED.code).length}
+          menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING}
+          isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}
           setSelected={setSelectedSubMenu}
         />
       </>

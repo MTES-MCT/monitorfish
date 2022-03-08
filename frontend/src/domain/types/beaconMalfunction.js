@@ -1,5 +1,5 @@
 /**
- * @typedef BeaconStatus
+ * @typedef BeaconMalfunction
  * @property {number} id
  * @property {string} internalReferenceNumber
  * @property {string} externalReferenceNumber
@@ -15,13 +15,13 @@
  */
 
 /**
- * @typedef UpdateBeaconStatus
+ * @typedef UpdateBeaconMalfunction
  * @property {string | null} [vesselStatus]
  * @property {string | null} [stage]
  */
 
 /**
- * @typedef BeaconStatusComment
+ * @typedef BeaconMalfunctionComment
  * @property {number} id
  * @property {string} comment
  * @property {string} userType
@@ -29,9 +29,9 @@
  */
 
 /**
- * @typedef BeaconStatusAction
+ * @typedef BeaconMalfunctionAction
  * @property {number} id
- * @property {int} beaconStatusId
+ * @property {int} beaconMalfunctionId
  * @property {string} propertyName
  * @property {string} previousValue
  * @property {string} nextValue
@@ -39,14 +39,14 @@
  */
 
 /**
- * @typedef BeaconStatusCommentInput
+ * @typedef BeaconMalfunctionCommentInput
  * @property {string} comment
  * @property {string} userType
  */
 
 /**
- * @typedef BeaconStatusWithDetails
- * @property {BeaconStatus} beaconStatus
- * @property {BeaconStatusComment[]} comments
- * @property {BeaconStatusAction[]} actions
+ * @typedef BeaconMalfunctionWithDetails
+ * @property {BeaconMalfunction} beaconMalfunction
+ * @property {BeaconMalfunctionComment[]} comments
+ * @property {BeaconMalfunctionAction[]} actions
  */

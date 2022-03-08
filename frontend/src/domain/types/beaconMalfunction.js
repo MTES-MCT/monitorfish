@@ -53,7 +53,7 @@
 
 /**
  * @typedef VesselBeaconMalfunctionsResumeAndHistory
- * @property {BeaconStatus || null} current
+ * @property {BeaconStatusWithDetails || null} current
  * @property {VesselBeaconMalfunctionsResume} resume
  * @property {BeaconStatusWithDetails[]} history
  * @property {VesselIdentity} vesselIdentity

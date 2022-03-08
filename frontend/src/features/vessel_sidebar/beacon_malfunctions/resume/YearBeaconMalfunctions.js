@@ -10,7 +10,8 @@ const YearBeaconMalfunctions = props => {
   const {
     /** @type {BeaconStatusWithDetails[]} yearBeaconMalfunctions */
     yearBeaconMalfunctions,
-    year
+    year,
+    setIsCurrentBeaconMalfunctionDetails
   } = props
 
   const [isOpen, setIsOpen] = useState(false)
@@ -68,6 +69,7 @@ const YearBeaconMalfunctions = props => {
                   beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}
                   index={index}
                   isLastItem={yearBeaconMalfunctions.length === index + 1}
+                  setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
                 />
               })
             : null

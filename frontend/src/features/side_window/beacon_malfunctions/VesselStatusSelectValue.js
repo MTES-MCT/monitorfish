@@ -5,7 +5,7 @@ export const VesselStatusSelectValue = ({ item }) => {
   const { icon } = item
 
   return (<Value
-      data-cy={'side-window-beacon-statuses-vessel-status'}
+      data-cy={'side-window-beacon-malfunctions-vessel-status'}
       style={valueStyle}
     >
       {icon}

@@ -6,10 +6,10 @@ import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
 import Layers from '../domain/entities/layers'
 
-import { getVesselBeaconStatusStyle } from './styles/vessel.style'
+import { getVesselBeaconMalfunctionStyle } from './styles/vessel.style'
 import { getVesselFeatureIdFromVessel, vesselsAreEquals } from '../domain/entities/vessel'
 
-const VesselBeaconStatusLayer = ({ map }) => {
+const VesselBeaconMalfunctionLayer = ({ map }) => {
   const {
     vessels,
     hideNonSelectedVessels,
@@ -44,10 +44,10 @@ const VesselBeaconStatusLayer = ({ map }) => {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
         source: getVectorSource(),
-        zIndex: Layers.VESSEL_BEACON_STATUS.zIndex,
+        zIndex: Layers.VESSEL_BEACON_MALFUNCTION.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
-        style: (_, resolution) => getVesselBeaconStatusStyle(resolution)
+        style: (_, resolution) => getVesselBeaconMalfunctionStyle(resolution)
       })
     }
     return layerRef.current
@@ -55,7 +55,7 @@ const VesselBeaconStatusLayer = ({ map }) => {
 
   useEffect(() => {
     if (map) {
-      getLayer().name = Layers.VESSEL_BEACON_STATUS.code
+      getLayer().name = Layers.VESSEL_BEACON_MALFUNCTION.code
       map.getLayers().push(getLayer())
     }
 
@@ -69,7 +69,7 @@ const VesselBeaconStatusLayer = ({ map }) => {
   useEffect(() => {
     if (vessels?.length) {
       const features = vessels.reduce((_features, vessel) => {
-        if (!vessel.hasBeaconStatus) return _features
+        if (!vessel.hasBeaconMalfunction) return _features
         if (vessel.vesselProperties.hasAlert) return _features
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return _features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return _features
@@ -79,7 +79,7 @@ const VesselBeaconStatusLayer = ({ map }) => {
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layers.VESSEL_BEACON_STATUS.code}:${getVesselFeatureIdFromVessel(vessel.vesselProperties)}`)
+        feature.setId(`${Layers.VESSEL_BEACON_MALFUNCTION.code}:${getVesselFeatureIdFromVessel(vessel.vesselProperties)}`)
         _features.push(feature)
 
         return _features
@@ -100,4 +100,4 @@ const VesselBeaconStatusLayer = ({ map }) => {
   return null
 }
 
-export default VesselBeaconStatusLayer
+export default VesselBeaconMalfunctionLayer

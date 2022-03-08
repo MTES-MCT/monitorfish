@@ -50,7 +50,7 @@ context('Vessels Track', () => {
 
     // Then
     cy.get('*[data-cy^="vessel-card-name"]').contains('FRAIS AVIS MODE')
-    cy.get('*[data-cy^="vessel-card-beacon-status"]').contains('NON-ÉMISSION VMS')
+    cy.get('*[data-cy^="vessel-card-beacon-malfunction"]').contains('NON-ÉMISSION VMS')
   })
 
   it('Position card Should be seen on the map on vessel track pointer move', () => {

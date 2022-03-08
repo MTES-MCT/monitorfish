@@ -3,41 +3,41 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import Draggable from './Draggable'
 import StageColumnHeader from './StageColumnHeader'
-import BeaconStatusCard from './BeaconStatusCard'
+import BeaconMalfunctionCard from './BeaconMalfunctionCard'
 
-const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, baseUrl, horizontalScrollRef }) => {
-  const updateStageVesselStatus = (beaconStatus, status) => updateVesselStatus(stage?.code, beaconStatus, status)
+const StageColumn = ({ stage, beaconMalfunctions, updateVesselStatus, isDroppedId, baseUrl, horizontalScrollRef }) => {
+  const updateStageVesselStatus = (beaconMalfunction, status) => updateVesselStatus(stage?.code, beaconMalfunction, status)
   const verticalScrollRef = useRef()
 
   return <Wrapper
-    data-cy={`side-window-beacon-statuses-columns-${stage.code}`}
+    data-cy={`side-window-beacon-malfunctions-columns-${stage.code}`}
     style={wrapperStyle}
   >
     <StageColumnHeader
       stage={stage?.title}
       description={stage?.description}
-      numberOfItems={beaconStatuses?.length}
+      numberOfItems={beaconMalfunctions?.length}
     />
     <ScrollableContainer
       style={ScrollableContainerStyle}
       ref={verticalScrollRef}
     >
       {
-        beaconStatuses
-          .map((beaconStatus, index) => {
+        beaconMalfunctions
+          .map((beaconMalfunction, index) => {
             return <Draggable
-              key={beaconStatus.id}
-              id={beaconStatus.id}
+              key={beaconMalfunction.id}
+              id={beaconMalfunction.id}
               stageId={stage.code}
               isDroppedId={isDroppedId}
               index={index}
               horizontalScrollRef={horizontalScrollRef}
               verticalScrollRef={verticalScrollRef}
             >
-              <BeaconStatusCard
+              <BeaconMalfunctionCard
                 verticalScrollRef={verticalScrollRef}
                 baseUrl={baseUrl}
-                beaconStatus={beaconStatus}
+                beaconMalfunction={beaconMalfunction}
                 updateStageVesselStatus={updateStageVesselStatus}
               />
             </Draggable>

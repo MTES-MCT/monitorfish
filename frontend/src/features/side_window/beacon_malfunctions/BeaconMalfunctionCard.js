@@ -4,34 +4,34 @@ import { COLORS } from '../../../constants/constants'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import SelectPicker from 'rsuite/lib/SelectPicker'
-import { getBeaconCreationOrModificationDate, getReducedTimeAgo, vesselStatuses } from './beaconStatuses'
+import { getBeaconCreationOrModificationDate, getReducedTimeAgo, vesselStatuses } from './beaconMalfunctions'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import * as timeago from 'timeago.js'
 import { timeagoFrenchLocale } from '../../../utils'
 import showVessel from '../../../domain/use_cases/showVessel'
 import { useDispatch } from 'react-redux'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
-import openBeaconStatus from '../../../domain/use_cases/openBeaconStatus'
+import openBeaconmalfunction from '../../../domain/use_cases/openBeaconMalfunction'
 import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl, verticalScrollRef }) => {
+const BeaconMalfunctionCard = ({ beaconMalfunction, updateStageVesselStatus, baseUrl, verticalScrollRef }) => {
   const dispatch = useDispatch()
-  const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconStatus?.vesselStatus)
+  const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconMalfunction?.vesselStatus)
   const ref = useRef()
 
   useEffect(() => {
-    if (vesselStatus.color && beaconStatus?.id) {
+    if (vesselStatus.color && beaconMalfunction?.id) {
       // Target the `rs-select-picker` DOM component
       ref.current.firstChild.style.background = vesselStatus.color
       // Target the `rs-picker-toggle-value` span DOM component
       ref.current.firstChild.firstChild.firstChild.firstChild.style.color = vesselStatus.textColor
     }
-  }, [vesselStatus, beaconStatus])
+  }, [vesselStatus, beaconMalfunction])
 
   return <Wrapper
-    data-cy={'side-window-beacon-statuses-card'}
+    data-cy={'side-window-beacon-malfunctions-card'}
     style={wrapperStyle(verticalScrollRef?.current?.scrollHeight > verticalScrollRef?.current?.clientHeight)}
   >
     <Header style={headerStyle}>
@@ -40,12 +40,12 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl, vert
           data-cy={'side-window-vessel-id'}
           style={idStyle}
         >
-          #{beaconStatus?.id} - {' '}{getBeaconCreationOrModificationDate(beaconStatus)}
+          #{beaconMalfunction?.id} - {' '}{getBeaconCreationOrModificationDate(beaconMalfunction)}
         </Id>
         <ShowIcon
           style={showIconStyle}
           alt={'Voir sur la carte'}
-          onClick={() => showVesselOnMap(dispatch, beaconStatus)}
+          onClick={() => showVesselOnMap(dispatch, beaconMalfunction)}
           src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
         />
       </Row>
@@ -53,28 +53,28 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl, vert
         <Flag style={flagStyle} rel='preload' src={`${baseUrl}/flags/fr.svg`}/>
         <VesselName
           className={'hover-border'}
-          data-cy={'side-window-beacon-statuses-card-vessel-name'}
+          data-cy={'side-window-beacon-malfunctions-card-vessel-name'}
           style={vesselNameStyle}
-          onClick={() => dispatch(openBeaconStatus({ beaconStatus }))}
+          onClick={() => dispatch(openBeaconmalfunction({ beaconMalfunction: beaconMalfunction }))}
         >
-          {beaconStatus.vesselName || 'Aucun nom'}
+          {beaconMalfunction.vesselName || 'Aucun nom'}
         </VesselName>
       </Row>
       <Row style={rowStyle(false)}>
         {
-          beaconStatus?.riskFactor
+          beaconMalfunction?.riskFactor
             ? <RiskFactorBox
               marginRight={5}
               height={24}
               isBig={true}
-              color={getRiskFactorColor(beaconStatus?.riskFactor)}
+              color={getRiskFactorColor(beaconMalfunction?.riskFactor)}
             >
-              {parseFloat(beaconStatus?.riskFactor).toFixed(1)}
+              {parseFloat(beaconMalfunction?.riskFactor).toFixed(1)}
             </RiskFactorBox>
             : null
         }
-        <Priority style={priorityStyle(beaconStatus?.priority)}>
-          {beaconStatus?.priority ? 'Prioritaire' : 'Non prioritaire'}
+        <Priority style={priorityStyle(beaconMalfunction?.priority)}>
+          {beaconMalfunction?.priority ? 'Prioritaire' : 'Non prioritaire'}
         </Priority>
       </Row>
     </Header>
@@ -85,24 +85,24 @@ const BeaconStatusCard = ({ beaconStatus, updateStageVesselStatus, baseUrl, vert
         style={selectPickerStyle}
         searchable={false}
         value={vesselStatus.value}
-        onChange={status => updateStageVesselStatus(beaconStatus, status)}
+        onChange={status => updateStageVesselStatus(beaconMalfunction, status)}
         data={vesselStatuses}
         renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
         cleanable={false}
       />
       <Row style={rowStyle(false)}>
-        Dernière émission {getReducedTimeAgo(beaconStatus.malfunctionStartDateTime)}
+        Dernière émission {getReducedTimeAgo(beaconMalfunction.malfunctionStartDateTime)}
       </Row>
     </Body>
   </Wrapper>
 }
 
-export const showVesselOnMap = (dispatch, beaconStatus) => {
-  const afterDateTime = new Date(beaconStatus.malfunctionStartDateTime)
+export const showVesselOnMap = (dispatch, beaconMalfunction) => {
+  const afterDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
   const twentyFiveHours = 25
   afterDateTime.setTime(afterDateTime.getTime() - (twentyFiveHours * 60 * 60 * 1000))
   afterDateTime.setMilliseconds(0)
-  const beforeDateTime = new Date(beaconStatus.malfunctionStartDateTime)
+  const beforeDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
   beforeDateTime.setMilliseconds(0)
 
   const vesselTrackDepth = {
@@ -110,7 +110,7 @@ export const showVesselOnMap = (dispatch, beaconStatus) => {
     afterDateTime: afterDateTime,
     beforeDateTime: beforeDateTime
   }
-  const vesselIdentity = { ...beaconStatus, flagState: 'fr' }
+  const vesselIdentity = { ...beaconMalfunction, flagState: 'fr' }
   dispatch(showVessel(vesselIdentity, false, false, vesselTrackDepth))
   dispatch(getVesselVoyage(vesselIdentity, null, false))
 }
@@ -199,4 +199,4 @@ export const priorityStyle = priority => ({
   padding: '3px 9px 0px 9px'
 })
 
-export default BeaconStatusCard
+export default BeaconMalfunctionCard

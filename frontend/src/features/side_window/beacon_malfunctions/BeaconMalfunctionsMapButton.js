@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { ReactComponent as BeaconStatusesSVG } from '../../icons/Icone_VMS.svg'
+import { ReactComponent as BeaconMalfunctionsSVG } from '../../icons/Icone_VMS.svg'
 import { COLORS } from '../../../constants/constants'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { closeSideWindow, openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { sideWindowMenu } from '../../../domain/entities/sideWindow'
 
-const BeaconStatusesMapButton = () => {
+const BeaconMalfunctionsMapButton = () => {
   const dispatch = useDispatch()
   const {
     regulatoryZoneMetadataPanelIsOpen
@@ -19,29 +19,29 @@ const BeaconStatusesMapButton = () => {
     sideWindowIsOpen
   } = useSelector(state => state.global)
 
-  return <BeaconStatusesButton
-    data-cy={'beacon-status-button'}
+  return <BeaconMalfunctionsButton
+    data-cy={'beacon-malfunction-button'}
     title={'Avaries VMS'}
-    isVisible={openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code}
+    isVisible={openedSideWindowTab === sideWindowMenu.BEACON_MALFUNCTIONS.code}
     regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
     healthcheckTextWarning={healthcheckTextWarning}
     isHidden={previewFilteredVesselsMode}
     onClick={() => {
-      if (!sideWindowIsOpen || (sideWindowIsOpen && openedSideWindowTab !== sideWindowMenu.BEACON_STATUSES.code)) {
-        dispatch(openSideWindowTab(sideWindowMenu.BEACON_STATUSES.code))
+      if (!sideWindowIsOpen || (sideWindowIsOpen && openedSideWindowTab !== sideWindowMenu.BEACON_MALFUNCTIONS.code)) {
+        dispatch(openSideWindowTab(sideWindowMenu.BEACON_MALFUNCTIONS.code))
         return
       }
 
-      if (sideWindowIsOpen && openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code) {
+      if (sideWindowIsOpen && openedSideWindowTab === sideWindowMenu.BEACON_MALFUNCTIONS.code) {
         dispatch(closeSideWindow())
       }
     }}
   >
-    <BeaconStatusesIcon/>
-  </BeaconStatusesButton>
+    <BeaconMalfunctionsIcon/>
+  </BeaconMalfunctionsButton>
 }
 
-const BeaconStatusesButton = styled(MapButtonStyle)`
+const BeaconMalfunctionsButton = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
@@ -58,10 +58,10 @@ const BeaconStatusesButton = styled(MapButtonStyle)`
   }
 `
 
-const BeaconStatusesIcon = styled(BeaconStatusesSVG)`
+const BeaconMalfunctionsIcon = styled(BeaconMalfunctionsSVG)`
   margin-top: 5px;
   width: 25px;
   margin-right: 0px;
 `
 
-export default BeaconStatusesMapButton
+export default BeaconMalfunctionsMapButton

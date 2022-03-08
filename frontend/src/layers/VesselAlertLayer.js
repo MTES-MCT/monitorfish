@@ -78,7 +78,7 @@ const VesselAlertLayer = ({ map }) => {
 
       const features = vessels.reduce((features, vessel) => {
         if (!vessel.vesselProperties.hasAlert) return features
-        if (vessel.hasBeaconStatus) return features
+        if (vessel.hasBeaconMalfunction) return features
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return features
         if (hideVesselsAtPort && vessel.isAtPort) return features

@@ -6,31 +6,31 @@ import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as TimeAgoSVG } from '../../icons/Label_horaire_VMS.svg'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
-import { Priority, priorityStyle, showVesselOnMap } from './BeaconStatusCard'
+import { Priority, priorityStyle, showVesselOnMap } from './BeaconMalfunctionCard'
 import { useDispatch } from 'react-redux'
-import { getBeaconCreationOrModificationDate, vesselStatuses } from './beaconStatuses'
+import { getBeaconCreationOrModificationDate, vesselStatuses } from './beaconMalfunctions'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import * as timeago from 'timeago.js'
-import { closeBeaconStatus } from '../../../domain/shared_slices/BeaconStatus'
-import BeaconStatusDetailsBody from './BeaconStatusDetailsBody'
+import { closeBeaconMalfunction } from '../../../domain/shared_slices/BeaconMalfunction'
+import BeaconMalfunctionDetailsBody from './BeaconMalfunctionDetailsBody'
 import { getDateTime } from '../../../utils'
 
-const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesselStatus }) => {
+const BeaconMalfunctionDetails = ({ beaconMalfunction, comments, actions, updateStageVesselStatus }) => {
   const dispatch = useDispatch()
-  const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconStatus?.vesselStatus)
+  const vesselStatus = vesselStatuses.find(vesselMalfunction => vesselMalfunction.value === beaconMalfunction?.vesselStatus)
   const baseUrl = window.location.origin
   const ref = useRef()
 
   useEffect(() => {
-    if (vesselStatus?.color && beaconStatus?.id) {
+    if (vesselStatus?.color && beaconMalfunction?.id) {
       // Target the `select-picker` DOM component
       ref.current.children[1].style.background = vesselStatus.color
       ref.current.children[1].style.setProperty('margin', '2px 10px 10px 0px', 'important')
     }
-  }, [vesselStatus, beaconStatus])
+  }, [vesselStatus, beaconMalfunction])
 
-  const beaconStatusDetailsWrapperStyle = {
+  const beaconMalfunctionDetailsWrapperStyle = {
     position: 'fixed',
     top: 0,
     height: '100vh',
@@ -38,14 +38,14 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
     width: 650,
     right: 0,
     zIndex: 999,
-    marginRight: beaconStatus ? 0 : -650,
+    marginRight: beaconMalfunction ? 0 : -650,
     transition: 'margin-right 0.5s'
   }
 
   return (
-    <BeaconStatusDetailsWrapper
-      data-cy={'side-window-beacon-statuses-detail'}
-      style={beaconStatusDetailsWrapperStyle}
+    <BeaconMalfunctionDetailsWrapper
+      data-cy={'side-window-beacon-malfunctions-detail'}
+      style={beaconMalfunctionDetailsWrapperStyle}
     >
       <Header style={headerStyle}>
         <Row style={rowStyle()}>
@@ -53,7 +53,7 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
           <Title style={titleStyle}>NON-RÉCEPTION DU VMS</Title>
           <CloseIcon
             style={closeIconStyle}
-            onClick={() => dispatch(closeBeaconStatus())}
+            onClick={() => dispatch(closeBeaconMalfunction())}
           />
         </Row>
         <Row style={rowStyle(10)}>
@@ -63,41 +63,41 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
             src={`${baseUrl}/flags/fr.svg`}
           />
           <VesselName
-            data-cy={'side-window-beacon-statuses-detail-vessel-name'}
+            data-cy={'side-window-beacon-malfunctions-detail-vessel-name'}
             style={vesselNameStyle}
           >
-            {beaconStatus?.vesselName || 'Aucun nom'}
+            {beaconMalfunction?.vesselName || 'Aucun nom'}
           </VesselName>
           <InternalReferenceNumber
-            data-cy={'side-window-beacon-statuses-detail-cfr'}
+            data-cy={'side-window-beacon-malfunctions-detail-cfr'}
             style={internalReferenceNumberStyle}
           >
-            ({beaconStatus?.internalReferenceNumber || 'Aucun CFR'})
+            ({beaconMalfunction?.internalReferenceNumber || 'Aucun CFR'})
           </InternalReferenceNumber>
         </Row>
         <Row style={rowStyle(10)}>
           {
-            beaconStatus?.riskFactor
+            beaconMalfunction?.riskFactor
               ? <RiskFactorBox
                 marginRight={5}
                 height={24}
                 isBig={true}
-                color={getRiskFactorColor(beaconStatus?.riskFactor)}
+                color={getRiskFactorColor(beaconMalfunction?.riskFactor)}
               >
-                {parseFloat(beaconStatus?.riskFactor).toFixed(1)}
+                {parseFloat(beaconMalfunction?.riskFactor).toFixed(1)}
               </RiskFactorBox>
               : null
           }
           <Priority
-            data-cy={'side-window-beacon-statuses-detail-priority'}
-            style={priorityStyle(beaconStatus?.priority)}
+            data-cy={'side-window-beacon-malfunctions-detail-priority'}
+            style={priorityStyle(beaconMalfunction?.priority)}
           >
-            {beaconStatus?.priority ? 'Prioritaire' : 'Non prioritaire'}
+            {beaconMalfunction?.priority ? 'Prioritaire' : 'Non prioritaire'}
           </Priority>
           <ShowVessel
-            data-cy={'side-window-beacon-statuses-detail-show-vessel'}
+            data-cy={'side-window-beacon-malfunctions-detail-show-vessel'}
             style={showVesselStyle}
-            onClick={() => showVesselOnMap(dispatch, beaconStatus)}
+            onClick={() => showVesselOnMap(dispatch, beaconMalfunction)}
           >
             <ShowVesselText style={showVesselTextStyle}>
               voir le navire sur la carte
@@ -114,33 +114,33 @@ const BeaconStatusDetails = ({ beaconStatus, comments, actions, updateStageVesse
       <Header style={headerStyle}>
         <Malfunctioning style={malfunctioningStyle} ref={ref}>
           <MalfunctioningText style={malfunctioningTextStyle}>
-            AVARIE #{beaconStatus?.id} - {' '}{getBeaconCreationOrModificationDate(beaconStatus)}
+            AVARIE #{beaconMalfunction?.id} - {' '}{getBeaconCreationOrModificationDate(beaconMalfunction)}
           </MalfunctioningText>
           <SelectPicker
             container={() => ref.current}
             menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
             searchable={false}
             value={vesselStatus?.value}
-            onChange={status => updateStageVesselStatus(beaconStatus?.stage, beaconStatus, status)}
+            onChange={status => updateStageVesselStatus(beaconMalfunction?.stage, beaconMalfunction, status)}
             data={vesselStatuses}
             renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
             cleanable={false}
           />
         </Malfunctioning>
-        <LastPosition style={lastPositionStyle} title={getDateTime(beaconStatus?.malfunctionStartDateTime)}>
+        <LastPosition style={lastPositionStyle} title={getDateTime(beaconMalfunction?.malfunctionStartDateTime)}>
           <TimeAgo style={timeAgoStyle}/>
           Dernière émission {
-          timeago.format(beaconStatus?.malfunctionStartDateTime, 'fr')
+          timeago.format(beaconMalfunction?.malfunctionStartDateTime, 'fr')
         }
         </LastPosition>
       </Header>
       <Line style={lineStyle}/>
-      <BeaconStatusDetailsBody
+      <BeaconMalfunctionDetailsBody
         comments={comments}
         actions={actions}
-        beaconStatusId={beaconStatus?.id}
+        beaconMalfunctionId={beaconMalfunction?.id}
       />
-    </BeaconStatusDetailsWrapper>
+    </BeaconMalfunctionDetailsWrapper>
   )
 }
 
@@ -271,6 +271,6 @@ const timeAgoStyle = {
   width: 15
 }
 
-const BeaconStatusDetailsWrapper = styled.div``
+const BeaconMalfunctionDetailsWrapper = styled.div``
 
-export default BeaconStatusDetails
+export default BeaconMalfunctionDetails

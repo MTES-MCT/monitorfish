@@ -42,7 +42,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="probability-risk-factor"]').contains('2.0', { timeout: 20000 })
     cy.get('*[data-cy^="detectability-risk-factor"]').contains('3.0', { timeout: 20000 })
     cy.get('*[data-cy^="vessel-sidebar-alert"]').contains('3 milles - Chaluts', { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-sidebar-beacon-status"]').contains('NON-ÉMISSION VMS', { timeout: 20000 })
+    cy.get('*[data-cy^="vessel-sidebar-beacon-malfunction"]').contains('NON-ÉMISSION VMS', { timeout: 20000 })
 
     cy.get('*[data-cy^="impact-risk-factor"]').click({ timeout: 20000, force: true })
     cy.get('*[data-cy^="probability-risk-factor"]').click({ timeout: 20000, force: true })

@@ -1,9 +1,9 @@
 const yesterdayDate = new Date()
 yesterdayDate.setDate(yesterdayDate.getDate() - 1)
 
-export const beaconStatusesStub = [
+export const beaconMalfunctionsStub = [
   {
-    beaconStatus: {
+    beaconMalfunction: {
       id: 3,
       internalReferenceNumber: 'U_W0NTFINDME',
       externalReferenceNumber: 'TALK2ME',
@@ -27,14 +27,14 @@ export const beaconStatusesStub = [
     ],
     actions: [
       {
-        beaconStatusId: 1,
+        beaconMalfunctionId: 1,
         propertyName: 'VESSEL_STATUS',
         previousValue: 'AT_PORT',
         nextValue: 'TECHNICAL_STOP',
         dateTime: '2022-01-03T08:49:29.087756Z'
       },
       {
-        beaconStatusId: 1,
+        beaconMalfunctionId: 1,
         propertyName: 'VESSEL_STATUS',
         previousValue: 'TECHNICAL_STOP',
         nextValue: 'ACTIVITY_DETECTED',
@@ -43,7 +43,7 @@ export const beaconStatusesStub = [
     ]
   },
   {
-    beaconStatus: {
+    beaconMalfunction: {
       id: 4,
       internalReferenceNumber: 'U_W0NTFINDME',
       externalReferenceNumber: 'TALK2ME',
@@ -67,7 +67,7 @@ export const beaconStatusesStub = [
     ]
   },
   {
-    beaconStatus: {
+    beaconMalfunction: {
       id: 5,
       internalReferenceNumber: 'U_W0NTFINDME',
       externalReferenceNumber: 'TALK2ME',
@@ -91,7 +91,7 @@ export const beaconStatusesStub = [
     ]
   },
   {
-    beaconStatus: {
+    beaconMalfunction: {
       id: 6,
       internalReferenceNumber: 'U_W0NTFINDME',
       externalReferenceNumber: 'TALK2ME',
@@ -115,14 +115,14 @@ export const beaconStatusesStub = [
     ],
     actions: [
       {
-        beaconStatusId: 1,
+        beaconMalfunctionId: 1,
         propertyName: 'VESSEL_STATUS',
         previousValue: 'AT_PORT',
         nextValue: 'TECHNICAL_STOP',
         dateTime: '2022-01-03T08:49:29.087756Z'
       },
       {
-        beaconStatusId: 1,
+        beaconMalfunctionId: 1,
         propertyName: 'VESSEL_STATUS',
         previousValue: 'TECHNICAL_STOP',
         nextValue: 'ACTIVITY_DETECTED',
@@ -131,7 +131,7 @@ export const beaconStatusesStub = [
     ]
   },
   {
-    beaconStatus: {
+    beaconMalfunction: {
       id: 7,
       internalReferenceNumber: 'U_W0NTFINDME',
       externalReferenceNumber: 'TALK2ME',

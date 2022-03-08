@@ -31,7 +31,7 @@ import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import BackofficeMode from './api/BackofficeMode'
 import AlertsMapButton from './features/side_window/alerts/AlertsMapButton'
-import BeaconStatusesMapButton from './features/side_window/beacon_statuses/BeaconStatusesMapButton'
+import BeaconMalfunctionsMapButton from './features/side_window/beacon_malfunctions/BeaconMalfunctionsMapButton'
 import SideWindowLauncher from './features/side_window/SideWindowLauncher'
 import SideWindow from './features/side_window/SideWindow'
 import { sideWindowMenu } from './domain/entities/sideWindow'
@@ -94,7 +94,7 @@ function HomePage () {
               <LayersSidebar/>
               <VesselsSearch/>
               <AlertsMapButton/>
-              <BeaconStatusesMapButton/>
+              <BeaconMalfunctionsMapButton/>
               <RightMenuOnHoverArea/>
               <VesselList namespace={'homepage'}/>
               <VesselFilters/>

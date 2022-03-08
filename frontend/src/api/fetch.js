@@ -31,10 +31,10 @@ const UPDATE_REGULATION_MESSAGE = 'Une erreur est survenue lors de la mise à jo
 const CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les objectifs de contrôle'
 const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour l\'objectifs de contrôle'
 const ALERTS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les alertes opérationelles'
-const BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les avaries VMS'
-const BEACON_STATUS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer l\'avarie VMS'
-const UPDATE_BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour le statut de l\'avarie VMS'
-const SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter le commentaire sur l\'avarie VMS'
+const BEACON_MALFUNCTIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les avaries VMS'
+const BEACON_MALFUNCTION_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer l\'avarie VMS'
+const UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour le statut de l\'avarie VMS'
+const SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter le commentaire sur l\'avarie VMS'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -714,11 +714,11 @@ function sendRegulationTransaction (feature, actionType) {
 /**
  * Get all beacon statuses
  * @memberOf API
- * @returns {Promise<BeaconStatus[]>} The beacon statuses
+ * @returns {Promise<BeaconMalfunction[]>} The beacon statuses
  * @throws {Error}
  */
-function getAllBeaconStatusesFromAPI () {
-  return fetch('/bff/v1/beacon_statuses')
+function getAllBeaconMalfunctionsFromAPI () {
+  return fetch('/bff/v1/beacon_malfunctions')
     .then(response => {
       if (response.status === OK) {
         return response.json()
@@ -726,11 +726,11 @@ function getAllBeaconStatusesFromAPI () {
         response.text().then(text => {
           console.error(text)
         })
-        throw Error(BEACON_STATUSES_ERROR_MESSAGE)
+        throw Error(BEACON_MALFUNCTIONS_ERROR_MESSAGE)
       }
     }).catch(error => {
       console.error(error)
-      throw Error(BEACON_STATUSES_ERROR_MESSAGE)
+      throw Error(BEACON_MALFUNCTIONS_ERROR_MESSAGE)
     })
 }
 
@@ -738,11 +738,11 @@ function getAllBeaconStatusesFromAPI () {
  * Update a beacon status
  * @memberOf API
  * @param {number} id - The id of the beacon status
- * @param {UpdateBeaconStatus} updatedFields - The fields to update
+ * @param {UpdateBeaconMalfunction} updatedFields - The fields to update
  * @throws {Error}
  */
-function updateBeaconStatusFromAPI (id, updatedFields) {
-  return fetch(`/bff/v1/beacon_statuses/${id}`, {
+function updateBeaconMalfunctionFromAPI (id, updatedFields) {
+  return fetch(`/bff/v1/beacon_malfunctions/${id}`, {
     method: 'PUT',
     headers: {
       'Accept': 'application/json, text/plain',
@@ -756,22 +756,22 @@ function updateBeaconStatusFromAPI (id, updatedFields) {
       response.text().then(text => {
         console.error(text)
       })
-      throw Error(UPDATE_BEACON_STATUSES_ERROR_MESSAGE)
+      throw Error(UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE)
     }
   }).catch(error => {
     console.error(error)
-    throw Error(UPDATE_BEACON_STATUSES_ERROR_MESSAGE)
+    throw Error(UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE)
   })
 }
 
 /**
  * Get a beacon status
  * @memberOf API
- * @returns {Promise<BeaconStatusWithDetails>} The beacon status with details
+ * @returns {Promise<BeaconMalfunctionWithDetails>} The beacon status with details
  * @throws {Error}
  */
-function getBeaconStatusFromAPI (beaconStatusId) {
-  return fetch(`/bff/v1/beacon_statuses/${beaconStatusId}`)
+function getBeaconMalfunctionsFromAPI (beaconMalfunctionId) {
+  return fetch(`/bff/v1/beacon_malfunctions/${beaconMalfunctionId}`)
     .then(response => {
       if (response.status === OK) {
         return response.json()
@@ -779,11 +779,11 @@ function getBeaconStatusFromAPI (beaconStatusId) {
         response.text().then(text => {
           console.error(text)
         })
-        throw Error(BEACON_STATUS_ERROR_MESSAGE)
+        throw Error(BEACON_MALFUNCTION_ERROR_MESSAGE)
       }
     }).catch(error => {
       console.error(error)
-      throw Error(BEACON_STATUS_ERROR_MESSAGE)
+      throw Error(BEACON_MALFUNCTION_ERROR_MESSAGE)
     })
 }
 
@@ -791,11 +791,11 @@ function getBeaconStatusFromAPI (beaconStatusId) {
  * Save a new comment attached to a beacon status
  * @memberOf API
  * @param {string} id - The id of the beacon status
- * @param {BeaconStatusCommentInput} comment - The fields to update
+ * @param {BeaconMalfunctionCommentInput} comment - The fields to update
  * @throws {Error}
  */
-function saveBeaconStatusCommentFromAPI (id, comment) {
-  return fetch(`/bff/v1/beacon_statuses/${id}/comments`, {
+function saveBeaconMalfunctionCommentFromAPI (id, comment) {
+  return fetch(`/bff/v1/beacon_malfunctions/${id}/comments`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json, text/plain',
@@ -809,11 +809,11 @@ function saveBeaconStatusCommentFromAPI (id, comment) {
       response.text().then(text => {
         console.error(text)
       })
-      throw Error(SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE)
+      throw Error(SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE)
     }
   }).catch(error => {
     console.error(error)
-    throw Error(SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE)
+    throw Error(SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE)
   })
 }
 
@@ -840,8 +840,8 @@ export {
   updateControlObjectiveFromAPI,
   getAllSpeciesFromAPI,
   getOperationalAlertsFromAPI,
-  getAllBeaconStatusesFromAPI,
-  updateBeaconStatusFromAPI,
-  getBeaconStatusFromAPI,
-  saveBeaconStatusCommentFromAPI
+  getAllBeaconMalfunctionsFromAPI as getAllBeaconMalfunctionsFromAPI,
+  updateBeaconMalfunctionFromAPI as updateMalfunctionStatusFromAPI,
+  getBeaconMalfunctionsFromAPI as getBeaconMalfunctionFromAPI,
+  saveBeaconMalfunctionCommentFromAPI as saveBeaconMalfunctionCommentFromAPI
 }

@@ -8,7 +8,7 @@ import * as timeago from 'timeago.js'
 import { OverlayPosition } from '../overlays/position'
 import { useSelector } from 'react-redux'
 import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
-import { ReactComponent as BeaconStatusSVG } from '../../icons/Icone_VMS_dark.svg'
+import { ReactComponent as BeaconMalfunctionSVG } from '../../icons/Icone_VMS_dark.svg'
 import { getAlertNameFromType } from '../../../domain/entities/alerts'
 import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } from '../overlays/VesselCardOverlay'
 
@@ -65,11 +65,11 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
           : null
       }
       {
-        vesselProperties.beaconStatusId
-          ? <VesselCardBeaconStatus data-cy={'vessel-card-beacon-status'}>
-            <BeaconStatusIcon/>
+        vesselProperties.beaconMalfunctionId
+          ? <VesselCardBeaconMalfunction data-cy={'vessel-card-beacon-malfunction'}>
+            <BeaconMalfunctionIcon/>
             NON-ÉMISSION VMS
-          </VesselCardBeaconStatus>
+          </VesselCardBeaconMalfunction>
           : null
       }
       <VesselCardBody>
@@ -193,7 +193,7 @@ const AlertIcon = styled(AlertSVG)`
   margin-right: 5px;
 `
 
-const BeaconStatusIcon = styled(BeaconStatusSVG)`
+const BeaconMalfunctionIcon = styled(BeaconMalfunctionSVG)`
   width: 18px;
   height: 18px;
   margin-bottom: -4px;
@@ -211,7 +211,7 @@ const VesselCardAlert = styled.div`
   padding: 5px 0;
 `
 
-const VesselCardBeaconStatus = styled.div`
+const VesselCardBeaconMalfunction = styled.div`
   background: ${COLORS.yellow};
   font-weight: 500;
   font-size: 13px;

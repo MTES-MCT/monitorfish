@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { COLORS } from '../../../constants/constants'
-import { beaconStatusesStages } from './beaconStatuses'
+import { beaconMalfunctionsStages } from './beaconMalfunctions'
 
 const Draggable = ({ id, stageId, children, isDroppedId, index, verticalScrollRef, horizontalScrollRef }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
@@ -9,7 +9,7 @@ const Draggable = ({ id, stageId, children, isDroppedId, index, verticalScrollRe
     data: {
       stageId: stageId
     },
-    disabled: stageId === beaconStatusesStages.END_OF_FOLLOW_UP.code
+    disabled: stageId === beaconMalfunctionsStages.ARCHIVED.code
   })
 
   const style = {

@@ -6,8 +6,6 @@ import StageColumnHeader from './StageColumnHeader'
 import BeaconStatusCard from './BeaconStatusCard'
 
 const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, baseUrl }) => {
-  const updateStageVesselStatus = (beaconStatus, status) => updateVesselStatus(stage?.code, beaconStatus, status)
-
   return <Wrapper
     data-cy={`side-window-beacon-statuses-columns-${stage.code}`}
     style={wrapperStyle}
@@ -31,7 +29,7 @@ const StageColumn = ({ stage, beaconStatuses, updateVesselStatus, isDroppedId, b
               <BeaconStatusCard
                 baseUrl={baseUrl}
                 beaconStatus={beaconStatus}
-                updateStageVesselStatus={updateStageVesselStatus}
+                updateVesselStatus={updateVesselStatus}
               />
             </Draggable>
           })

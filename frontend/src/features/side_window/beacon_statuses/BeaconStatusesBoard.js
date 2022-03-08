@@ -125,7 +125,7 @@ const BeaconStatusesBoard = ({ setIsOverlayed, isOverlayed }) => {
       .find((key) => beaconStatusesStages[key]?.code?.includes(stageName))
   }
 
-  const updateVesselStatus = useCallback((stage, beaconStatus, status) => {
+  const updateVesselStatus = useCallback((beaconStatus, status) => {
     const nextBeaconStatus = {
       ...beaconStatus,
       vesselStatus: status,

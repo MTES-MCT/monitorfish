@@ -16,7 +16,8 @@ const BeaconMalfunction = props => {
     /** @type {BeaconStatusWithDetails} */
     beaconMalfunctionWithDetails,
     index,
-    isLastItem
+    isLastItem,
+    setIsCurrentBeaconMalfunctionDetails
   } = props
   const dispatch = useDispatch()
 
@@ -37,7 +38,10 @@ const BeaconMalfunction = props => {
       <BeaconMalfunctionBody beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}/>
       <SeeMore
         data-cy={'vessel-beacon-malfunction-history-see-more'}
-        onClick={() => dispatch(setOpenedBeaconMalfunction(beaconMalfunctionWithDetails))}
+        onClick={() => {
+          setIsCurrentBeaconMalfunctionDetails(false)
+          dispatch(setOpenedBeaconMalfunction(beaconMalfunctionWithDetails))
+        }}
       >
         voir les détails de l&apos;avarie <Arrow/>
       </SeeMore>

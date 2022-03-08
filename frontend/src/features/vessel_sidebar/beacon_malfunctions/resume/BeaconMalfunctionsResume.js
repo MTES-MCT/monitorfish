@@ -21,14 +21,14 @@ const BeaconMalfunctionsResume = props => {
           <TableBody>
             <Field>
               <Key>Nombre d&apos;avaries</Key>
-              <Value>
+              <Value data-cy={'vessel-beacon-malfunctions-resume-number'}>
                 <AtSea>en mer</AtSea> {vesselBeaconMalfunctionsResume?.numberOfBeaconsAtSea}
                 <AtPort>à quai</AtPort> {vesselBeaconMalfunctionsResume?.numberOfBeaconsAtPort}
               </Value>
             </Field>
             <Field>
               <Key>Dernière avarie</Key>
-              <Value>
+              <Value data-cy={'vessel-beacon-malfunctions-resume-last'}>
                 {
                   vesselBeaconMalfunctionsResume?.lastBeaconStatusDateTime
                     ? <>Le {getDateTime(vesselBeaconMalfunctionsResume?.lastBeaconStatusDateTime)}

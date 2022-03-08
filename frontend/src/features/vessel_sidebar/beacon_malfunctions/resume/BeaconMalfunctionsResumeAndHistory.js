@@ -39,7 +39,7 @@ const BeaconMalfunctionsResumeAndHistory = () => {
   return <>
     {
       !loadingVesselBeaconMalfunctions
-        ? <Body data-cy={'vessel-beacon-malfunctions'}>
+        ? <Body data-cy={'vessel-malfunctions-resume'}>
           <BeaconMalfunctionsResume vesselBeaconMalfunctionsResume={vesselBeaconMalfunctionsResumeAndHistory?.resume}/>
           <YearsToBeaconMalfunctionList yearsToBeaconMalfunctions={yearsToBeaconMalfunctions} vesselBeaconMalfunctionsFromDate={vesselBeaconMalfunctionsFromDate}/>
           <SeeMoreBackground>

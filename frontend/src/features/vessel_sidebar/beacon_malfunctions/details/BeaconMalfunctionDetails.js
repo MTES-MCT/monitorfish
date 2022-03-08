@@ -18,18 +18,21 @@ const BeaconMalfunctionDetails = () => {
 
   const navigateToResume = () => dispatch(setBeaconMalfunctionsTab(BeaconMalfunctionsTab.RESUME))
 
-  return <Wrapper>
+  return <Wrapper data-cy={'vessel-malfunctions-details'}>
     <Arrow onClick={navigateToResume}/>
-    <Previous onClick={navigateToResume}>
+    <Previous
+      data-cy={'beacon-malfunction-back-to-resume'}
+      onClick={navigateToResume}
+    >
       Revenir au résumé des avaries
     </Previous>
-    <Zone>
+    <Zone data-cy={'beacon-malfunction-details'}>
       <Title>
         Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunction.beaconStatus.malfunctionStartDateTime)}
       </Title>
       <BeaconMalfunctionDetailBody beaconMalfunctionWithDetails={openedBeaconMalfunction}/>
     </Zone>
-    <Zone>
+    <Zone data-cy={'beacon-malfunction-details-follow-up'}>
       <Title>
         Main courante de l&apos;avarie
       </Title>

@@ -44,7 +44,7 @@ const VesselBeaconMalfunctions = () => {
 }
 
 const Wrapper = styled.div`
-  overflow-x: hidden;
+  overflow: hidden;
   max-height: 700px;
 `
 

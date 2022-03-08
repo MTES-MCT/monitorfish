@@ -8,9 +8,13 @@ import { setVesselBeaconMalfunctionsFromDate } from '../../../../domain/shared_s
 import { getYearsToBeaconMalfunctions } from '../../../../domain/entities/beaconStatus'
 import YearsToBeaconMalfunctionList from './YearsToBeaconMalfunctionList'
 import BeaconMalfunctionsResume from './BeaconMalfunctionsResume'
+import CurrentBeaconMalfunction from './CurrentBeaconMalfunction'
 
-const BeaconMalfunctionsResumeAndHistory = () => {
+const BeaconMalfunctionsResumeAndHistory = props => {
   const dispatch = useDispatch()
+  const {
+    setIsCurrentBeaconMalfunctionDetails
+  } = props
 
   const {
     /** @type {VesselBeaconMalfunctionsResumeAndHistory || null} */
@@ -40,8 +44,16 @@ const BeaconMalfunctionsResumeAndHistory = () => {
     {
       !loadingVesselBeaconMalfunctions
         ? <Body data-cy={'vessel-malfunctions-resume'}>
+          <CurrentBeaconMalfunction
+            currentBeaconMalfunctionWithDetails={vesselBeaconMalfunctionsResumeAndHistory?.current}
+            setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
+          />
           <BeaconMalfunctionsResume vesselBeaconMalfunctionsResume={vesselBeaconMalfunctionsResumeAndHistory?.resume}/>
-          <YearsToBeaconMalfunctionList yearsToBeaconMalfunctions={yearsToBeaconMalfunctions} vesselBeaconMalfunctionsFromDate={vesselBeaconMalfunctionsFromDate}/>
+          <YearsToBeaconMalfunctionList
+            yearsToBeaconMalfunctions={yearsToBeaconMalfunctions}
+            vesselBeaconMalfunctionsFromDate={vesselBeaconMalfunctionsFromDate}
+            setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
+          />
           <SeeMoreBackground>
             <SeeMore onClick={seeMore}>
               Afficher plus d&apos;avaries

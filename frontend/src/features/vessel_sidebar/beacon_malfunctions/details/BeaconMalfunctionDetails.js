@@ -8,8 +8,12 @@ import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-d
 import { setBeaconMalfunctionsTab } from '../../../../domain/shared_slices/BeaconStatus'
 import { BeaconMalfunctionsTab } from '../../../../domain/entities/beaconStatus'
 import BeaconStatusDetailsFollowUp from '../../../side_window/beacon_statuses/BeaconStatusDetailsFollowUp'
+import CurrentBeaconMalfunctionBody from '../resume/CurrentBeaconMalfunctionBody'
 
-const BeaconMalfunctionDetails = () => {
+const BeaconMalfunctionDetails = props => {
+  const {
+    isCurrentBeaconMalfunctionDetails
+  } = props
   const {
     /** @type {BeaconStatusWithDetails || null} */
     openedBeaconMalfunction
@@ -26,12 +30,21 @@ const BeaconMalfunctionDetails = () => {
     >
       Revenir au résumé des avaries
     </Previous>
-    <Zone data-cy={'beacon-malfunction-details'}>
-      <Title>
-        Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunction.beaconStatus.malfunctionStartDateTime)}
-      </Title>
-      <BeaconMalfunctionDetailBody beaconMalfunctionWithDetails={openedBeaconMalfunction}/>
-    </Zone>
+    {
+      isCurrentBeaconMalfunctionDetails
+        ? <Zone data-cy={'beacon-malfunction-current-details'}>
+          <Title>
+            Résumé de l&apos;avarie en cours
+          </Title>
+          <CurrentBeaconMalfunctionBody currentBeaconMalfunctionWithDetails={openedBeaconMalfunction}/>
+      </Zone>
+        : <Zone data-cy={'beacon-malfunction-details'}>
+          <Title>
+            Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunction.beaconStatus.malfunctionStartDateTime)}
+          </Title>
+          <BeaconMalfunctionDetailBody beaconMalfunctionWithDetails={openedBeaconMalfunction}/>
+        </Zone>
+    }
     <Zone data-cy={'beacon-malfunction-details-follow-up'}>
       <Title>
         Main courante de l&apos;avarie

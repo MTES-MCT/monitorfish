@@ -8,7 +8,8 @@ const YearsToBeaconMalfunctionList = props => {
     /** @type {Object.<string, BeaconStatusWithDetails[]>} */
     yearsToBeaconMalfunctions,
     /** @type {Date} */
-    vesselBeaconMalfunctionsFromDate
+    vesselBeaconMalfunctionsFromDate,
+    setIsCurrentBeaconMalfunctionDetails
   } = props
 
   return <Zone>
@@ -25,6 +26,7 @@ const YearsToBeaconMalfunctionList = props => {
                   year={year}
                   yearBeaconMalfunctions={yearsToBeaconMalfunctions[year]}
                   isLastItem={yearsToBeaconMalfunctions[year].length === index + 1}
+                  setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
                 />
               })
           }

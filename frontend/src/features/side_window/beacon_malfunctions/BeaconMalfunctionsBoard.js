@@ -113,7 +113,7 @@ const BeaconMalfunctionsBoard = () => {
       .find((key) => beaconMalfunctionsStages[key]?.code?.includes(stageName))
   }
 
-  const updateVesselStatus = useCallback((stage, beaconMalfunction, status) => {
+  const updateVesselStatus = useCallback((beaconMalfunction, status) => {
     const nextBeaconMalfunction = {
       ...beaconMalfunction,
       vesselStatus: status,

@@ -298,15 +298,15 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-card-latitude"]', { timeout: 20000 }).contains('47° 20′ 53″ N')
   })
 
-  it('ERS/VMS tab Should contain the beacon malfunctions', () => {
+  it('ERS/VMS tab Should contain current and history of beacon malfunctions', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // When
     cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-beacon-malfunctions"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-malfunctions-resume"]', { timeout: 20000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-beacon-malfunctions"]', { timeout: 20000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-malfunctions-resume"]', { timeout: 20000 }).should('be.visible')
 
     // Then
     cy.get('*[data-cy="vessel-beacon-malfunctions-resume-number"]', { timeout: 20000 }).contains('à quai 1')
@@ -318,7 +318,7 @@ context('VesselSidebar', () => {
 
     // See the details of a beacon malfunction
     cy.get('*[data-cy="vessel-beacon-malfunction-history-see-more"]', { timeout: 20000 }).click()
-    cy.get('*[data-cy^="vessel-malfunctions-details"]', { timeout: 20000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-malfunctions-details"]', { timeout: 20000 }).should('be.visible')
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 20000 }).contains('0 commentaire')
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 20000 }).contains('Le ticket a été déplacé de Premier contact à Reprise des émissions.')
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 20000 }).contains('Navire en mer')
@@ -326,7 +326,12 @@ context('VesselSidebar', () => {
 
     // Go back ot resume
     cy.get('*[data-cy="beacon-malfunction-back-to-resume"]', { timeout: 20000 }).click()
-    cy.get('*[data-cy^="vessel-malfunctions-resume"]', { timeout: 20000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-malfunctions-resume"]', { timeout: 20000 }).should('be.visible')
+
+    // See current beacon malfunction
+    cy.get('*[data-cy="beacon-malfunction-current-see-details"]', { timeout: 20000 }).click()
+    cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).should('be.visible')
+    cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).contains('En arrêt technique')
   })
 
 })

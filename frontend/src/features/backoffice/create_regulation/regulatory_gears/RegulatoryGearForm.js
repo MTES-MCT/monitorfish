@@ -81,7 +81,7 @@ const RegulatoryGearForm = (props) => {
         break
       }
       case REGULATORY_GEAR_KEYS.ALL_GEARS: {
-        listToConcat = Object.keys(categoriesToGears)
+        listToConcat = allCategoriesAndGears.map(category => category.value)
         break
       }
     }
@@ -92,6 +92,7 @@ const RegulatoryGearForm = (props) => {
     } else {
       nextSelectedCategoriesAndGears = nextSelectedCategoriesAndGears.filter(value => !listToConcat.includes(value))
     }
+
     set(REGULATORY_GEAR_KEYS.SELECTED_GEARS_AND_CATEGORIES, nextSelectedCategoriesAndGears)
   }
 

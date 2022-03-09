@@ -77,7 +77,9 @@ const ERSMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navigati
   const [selectedOptions, setSelectedOptions] = useState(null)
 
   useEffect(() => {
-    setERSMessages(fishingActivities.ersMessages)
+    if (fishingActivities?.ersMessages) {
+      setERSMessages(fishingActivities.ersMessages)
+    }
   }, [fishingActivities])
 
   useEffect(() => {

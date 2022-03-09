@@ -1,21 +1,18 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselBeaconMalfunctionsResume
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselBeaconMalfunctionsResumeAndHistory
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusWithDetails
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.Stage
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusActionsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusCommentsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusesRepository
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionActionsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionCommentsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVesselBeaconMalfunctions(private val beaconStatusesRepository: BeaconStatusesRepository,
-                                  private val beaconStatusCommentsRepository: BeaconStatusCommentsRepository,
-                                  private val beaconStatusActionsRepository: BeaconStatusActionsRepository) {
+class GetVesselBeaconMalfunctions(private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
+                                  private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
+                                  private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository) {
     private val logger = LoggerFactory.getLogger(GetVesselBeaconMalfunctions::class.java)
     fun execute(internalReferenceNumber: String,
                 externalReferenceNumber: String,
@@ -28,21 +25,21 @@ class GetVesselBeaconMalfunctions(private val beaconStatusesRepository: BeaconSt
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> externalReferenceNumber
         }
 
-        val beaconMalfunctions = beaconStatusesRepository.findAllByVesselIdentifierEquals(vesselIdentifier, value, afterDateTime)
+        val beaconMalfunctions = beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(vesselIdentifier, value, afterDateTime)
 
         val beaconStatusesWithDetails = beaconMalfunctions.map {
-            val comments = beaconStatusCommentsRepository.findAllByBeaconStatusId(it.id)
-            val actions = beaconStatusActionsRepository.findAllByBeaconStatusId(it.id)
+            val comments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(it.id)
+            val actions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(it.id)
 
-            BeaconStatusWithDetails(it, comments, actions)
+            BeaconMalfunctionWithDetails(it, comments, actions)
         }
 
-        val resume = VesselBeaconMalfunctionsResume.fromBeaconStatuses(beaconStatusesWithDetails)
+        val resume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconStatusesWithDetails)
         val currentBeaconStatus = beaconStatusesWithDetails.find {
-            it.beaconStatus.stage != Stage.RESUMED_TRANSMISSION
+            it.beaconMalfunction.stage != Stage.ARCHIVED && it.beaconMalfunction.stage != Stage.END_OF_MALFUNCTION
         }
         val history = beaconStatusesWithDetails.filter {
-            it.beaconStatus.id != currentBeaconStatus?.beaconStatus?.id
+            it.beaconMalfunction.id != currentBeaconStatus?.beaconMalfunction?.id
         }
 
         return VesselBeaconMalfunctionsResumeAndHistory(

@@ -3,9 +3,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionWithDetails
 
 data class BeaconMalfunctionWithDetailsDataOutput(
-    val beaconMalfunction: BeaconMalfunctionDataOutput,
-    val comments: List<BeaconMalfunctionCommentDataOutput>,
-    val actions: List<BeaconMalfunctionActionDataOutput>) {
+        val beaconMalfunction: BeaconMalfunctionDataOutput,
+        val comments: List<BeaconMalfunctionCommentDataOutput>,
+        val actions: List<BeaconMalfunctionActionDataOutput>) {
     companion object {
         fun fromBeaconMalfunctionWithDetails(beaconMalfunctionWithDetails: BeaconMalfunctionWithDetails): BeaconMalfunctionWithDetailsDataOutput {
             return BeaconMalfunctionWithDetailsDataOutput(

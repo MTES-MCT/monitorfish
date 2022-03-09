@@ -12,7 +12,7 @@ class UpdateBeaconMalfunction(private val beaconMalfunctionsRepository: BeaconMa
                               private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
                               private val getBeaconMalfunction: GetBeaconMalfunction) {
     @Throws(CouldNotUpdateBeaconMalfunctionException::class, IllegalArgumentException::class)
-    fun execute(id: Int, vesselStatus: VesselStatus?, stage: Stage?): BeaconMalfunctionWithDetails {
+    fun execute(id: Int, vesselStatus: VesselStatus?, stage: Stage?): BeaconMalfunctionResumeAndDetails {
         require(vesselStatus != null || stage != null) {
             "No value to update"
         }

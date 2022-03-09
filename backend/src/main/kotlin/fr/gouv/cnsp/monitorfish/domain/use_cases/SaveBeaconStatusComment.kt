@@ -1,25 +1,25 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusComment
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusCommentUserType
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.BeaconStatusResumeAndDetails
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconStatusCommentsRepository
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionComment
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionCommentUserType
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionResumeAndDetails
+import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionCommentsRepository
 import java.time.ZonedDateTime
 
 @UseCase
-class SaveBeaconStatusComment(private val beaconStatusCommentsRepository: BeaconStatusCommentsRepository,
-                              private val getBeaconStatus: GetBeaconStatus) {
+class SaveBeaconStatusComment(private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
+                              private val getBeaconMalfunction: GetBeaconMalfunction) {
     @Throws(IllegalArgumentException::class)
-    fun execute(beaconStatusId: Int, comment: String, userType: BeaconStatusCommentUserType): BeaconStatusResumeAndDetails {
-        val beaconStatusComment = BeaconStatusComment(
-                beaconStatusId = beaconStatusId,
+    fun execute(beaconMalfunctionId: Int, comment: String, userType: BeaconMalfunctionCommentUserType): BeaconMalfunctionResumeAndDetails {
+        val beaconStatusComment = BeaconMalfunctionComment(
+                beaconMalfunctionId = beaconMalfunctionId,
                 comment = comment,
                 userType = userType,
                 dateTime = ZonedDateTime.now())
 
-        beaconStatusCommentsRepository.save(beaconStatusComment)
+        beaconMalfunctionCommentsRepository.save(beaconStatusComment)
 
-        return getBeaconStatus.execute(beaconStatusId)
+        return getBeaconMalfunction.execute(beaconMalfunctionId)
     }
 }

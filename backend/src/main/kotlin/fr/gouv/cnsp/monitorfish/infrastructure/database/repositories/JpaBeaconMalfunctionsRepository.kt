@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
@@ -42,5 +43,12 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
         } catch (e: Throwable) {
             throw CouldNotUpdateBeaconMalfunctionException("Could not update beacon status: ${e.message}")
         }
+    }
+
+    override fun findAllByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String, afterDateTime: ZonedDateTime): List<BeaconMalfunction> {
+        return dbBeaconMalfunctionsRepository
+                .findAllByVesselIdentifierEqualsAfterDateTime(vesselIdentifier.toString(), value, afterDateTime.toInstant()).map {
+                    it.toBeaconMalfunction()
+                }
     }
 }

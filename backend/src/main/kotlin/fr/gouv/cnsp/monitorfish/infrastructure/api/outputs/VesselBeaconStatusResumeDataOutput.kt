@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselBeaconMalfunctionsResume
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.VesselStatus
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeaconMalfunctionsResume
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import java.time.ZonedDateTime
 
 data class VesselBeaconStatusResumeDataOutput(

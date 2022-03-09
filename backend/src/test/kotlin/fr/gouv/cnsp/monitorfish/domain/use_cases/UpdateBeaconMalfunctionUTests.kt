@@ -52,7 +52,7 @@ class UpdateBeaconMalfunctionUTests {
         given(beaconMalfunctionActionRepository.findAllByBeaconMalfunctionId(any())).willReturn(listOf(BeaconMalfunctionAction(1, 1,
                 BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now())))
         given(getBeaconMalfunction.execute(1))
-                .willReturn(BeaconMalfunctionWithDetails(
+                .willReturn(BeaconMalfunctionResumeAndDetails(
                         beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                                 VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),

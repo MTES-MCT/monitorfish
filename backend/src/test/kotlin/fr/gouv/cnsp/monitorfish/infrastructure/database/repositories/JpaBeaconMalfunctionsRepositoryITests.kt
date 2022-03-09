@@ -22,7 +22,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // When
         val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAll()
 
-        assertThat(baconMalfunctions).hasSize(9)
+        assertThat(baconMalfunctions).hasSize(10)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
         assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
@@ -34,7 +34,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // When
         val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllExceptEndOfFollowUp()
 
-        assertThat(baconMalfunctions).hasSize(8)
+        assertThat(baconMalfunctions).hasSize(9)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
         assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)

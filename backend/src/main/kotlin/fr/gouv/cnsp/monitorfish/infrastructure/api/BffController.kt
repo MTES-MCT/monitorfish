@@ -303,12 +303,12 @@ class BffController(
                                 @PathVariable(name = "beaconMalfunctionId")
                                 beaconMalfunctionId: Int,
                                 @RequestBody
-                                updateBeaconMalfunctionData: UpdateBeaconMalfunctionDataInput): BeaconStatusResumeAndDetailsDataOutput {
+                                updateBeaconMalfunctionData: UpdateBeaconMalfunctionDataInput): BeaconMalfunctionResumeAndDetailsDataOutput {
         return updateBeaconMalfunction.execute(
                 id = beaconMalfunctionId,
                 vesselStatus = updateBeaconMalfunctionData.vesselStatus,
                 stage = updateBeaconMalfunctionData.stage).let {
-            BeaconStatusResumeAndDetailsDataOutput.fromBeaconMalfunctionWithDetails(it)
+            BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconStatusResumeAndDetails(it)
         }
     }
 
@@ -319,12 +319,12 @@ class BffController(
                                      @PathVariable(name = "beaconMalfunctionId")
                                      beaconMalfunctionId: Int,
                                      @RequestBody
-                                     saveBeaconMalfunctionCommentDataInput: SaveBeaconMalfunctionCommentDataInput): BeaconStatusResumeAndDetailsDataOutput {
+                                     saveBeaconMalfunctionCommentDataInput: SaveBeaconMalfunctionCommentDataInput): BeaconMalfunctionResumeAndDetailsDataOutput {
         return saveBeaconMalfunctionComment.execute(
                 beaconMalfunctionId = beaconMalfunctionId,
                 comment = saveBeaconMalfunctionCommentDataInput.comment,
                 userType = saveBeaconMalfunctionCommentDataInput.userType).let {
-            BeaconStatusResumeAndDetailsDataOutput.fromBeaconMalfunctionWithDetails(it)
+            BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconStatusResumeAndDetails(it)
         }
     }
 
@@ -332,7 +332,7 @@ class BffController(
     @ApiOperation("Get a beacon malfunction with the comments and history")
     fun getBeaconMalfunction(@PathParam("Beacon malfunction id")
                              @PathVariable(name = "beaconMalfunctionId")
-                             beaconMalfunctionId: Int): BeaconStatusResumeAndDetailsDataOutput {
-        return BeaconStatusResumeAndDetailsDataOutput.fromBeaconMalfunctionWithDetails(getBeaconMalfunction.execute(beaconMalfunctionId))
+                             beaconMalfunctionId: Int): BeaconMalfunctionResumeAndDetailsDataOutput {
+        return BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconStatusResumeAndDetails(getBeaconMalfunction.execute(beaconMalfunctionId))
     }
 }

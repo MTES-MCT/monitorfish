@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionComment
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionCommentUserType
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionWithDetails
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionResumeAndDetails
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionCommentsRepository
 import java.time.ZonedDateTime
 
@@ -11,7 +11,7 @@ import java.time.ZonedDateTime
 class SaveBeaconMalfunctionComment(private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
                                    private val getBeaconMalfunction: GetBeaconMalfunction) {
     @Throws(IllegalArgumentException::class)
-    fun execute(beaconMalfunctionId: Int, comment: String, userType: BeaconMalfunctionCommentUserType): BeaconMalfunctionWithDetails {
+    fun execute(beaconMalfunctionId: Int, comment: String, userType: BeaconMalfunctionCommentUserType): BeaconMalfunctionResumeAndDetails {
         val beaconMalfunctionComment = BeaconMalfunctionComment(
                 beaconMalfunctionId = beaconMalfunctionId,
                 comment = comment,

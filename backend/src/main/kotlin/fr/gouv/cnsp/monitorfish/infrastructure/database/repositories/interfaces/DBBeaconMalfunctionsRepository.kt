@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.BeaconMalfuncti
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
+import java.time.Instant
 import java.time.ZonedDateTime
 
 interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntity, Int> {
@@ -20,4 +21,13 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE beacon_malfunctions SET stage = CAST(:stage AS beacon_malfunctions_stage), vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId", nativeQuery = true)
     fun updateStage(beaconMalfunctionId: Int, stage: String, updateDateTime: ZonedDateTime)
+
+    @Query(value = """
+        SELECT * FROM beacon_malfunctions WHERE 
+            CASE
+                WHEN :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER' THEN internal_reference_number
+                WHEN :vesselIdentifier = 'IRCS' THEN ircs
+                WHEN :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER' THEN external_reference_number
+            END = :value AND malfunction_start_date_utc >= :afterDateTime""", nativeQuery = true)
+    fun findAllByVesselIdentifierEqualsAfterDateTime(vesselIdentifier: String, value: String, afterDateTime: Instant): List<BeaconMalfunctionEntity>
 }

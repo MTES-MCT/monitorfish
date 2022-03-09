@@ -26,10 +26,10 @@ import BaseLayer from '../../../layers/BaseLayer'
 import RegulatoryPreviewLayer from '../../../layers/RegulatoryPreviewLayer'
 import {
   closeRegulatoryZoneMetadataPanel,
-  setRegulatoryGeometriesToPreview,
   resetRegulatoryGeometriesToPreview,
-  setRegulatoryZoneMetadata,
-  setRegulatoryTopics
+  setRegulatoryGeometriesToPreview,
+  setRegulatoryTopics,
+  setRegulatoryZoneMetadata
 } from '../../../domain/shared_slices/Regulatory'
 import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
 import createRegulation from '../../../domain/use_cases/createRegulation'
@@ -43,18 +43,18 @@ import {
   setAtLeastOneValueIsMissing,
   setIsConfirmModalOpen,
   setIsRemoveModalOpen,
-  setProcessingRegulationByKey,
   setProcessingRegulation,
+  setProcessingRegulationByKey,
   setRegulationModified,
   setRegulatoryTextCheckedMap,
   setSaveOrUpdateRegulation
 } from '../Regulation.slice'
 import { setError } from '../../../domain/shared_slices/Global'
 import {
-  mapToRegulatoryFeatureObject,
-  LAWTYPES_TO_TERRITORY,
   FRANCE,
   INITIAL_REGULATION,
+  LAWTYPES_TO_TERRITORY,
+  mapToRegulatoryFeatureObject,
   REGULATORY_REFERENCE_KEYS
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
@@ -94,8 +94,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     isConfirmModalOpen,
     regulationDeleted,
     processingRegulation,
-    selectedRegulatoryZoneId,
-    regulationModified
+    selectedRegulatoryZoneId
   } = useSelector(state => state.regulation)
 
   const {
@@ -150,11 +149,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [regulationSaved, regulationDeleted, goBackofficeHome])
 
   const onGoBack = () => {
-    if (regulationModified) {
-      dispatch(setIsConfirmModalOpen(true))
-    } else {
-      dispatch(setSaveOrUpdateRegulation(true))
-    }
+    dispatch(setIsConfirmModalOpen(true))
   }
 
   useEffect(() => {
@@ -270,7 +265,9 @@ const CreateRegulation = ({ title, isEdition }) => {
               <BackLink
                 data-cy='go-back-link'
                 onClick={onGoBack}
-              >Revenir à la liste complète des zones</BackLink>
+              >
+                Revenir à la liste complète des zones
+              </BackLink>
             </LinkSpan>
             <HeaderTitle>{title}</HeaderTitle>
             <Span />

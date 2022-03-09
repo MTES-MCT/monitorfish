@@ -91,7 +91,7 @@ class JpaBeaconStatusesRepositoryITests : AbstractDBTests() {
 
         assertThat(baconStatuses.last().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(baconStatuses.last().stage).isEqualTo(Stage.RESUMED_TRANSMISSION)
-        assertThat(baconStatuses.last().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
+        assertThat(baconStatuses.last().vesselStatus).isEqualTo(VesselStatus.AT_SEA)
     }
 
     @Test

@@ -37,6 +37,7 @@ const RegulatoryLayerSearchInput = props => {
     interaction
   } = useSelector(state => state.map)
 
+  const [clickedOnSearch, setClickedOnSearch] = useState(null)
   const [nameSearchText, setNameSearchText] = useState('')
   const [placeSearchText, setPlaceSearchText] = useState('')
   const [gearSearchText, setGearSearchText] = useState('')
@@ -71,6 +72,7 @@ const RegulatoryLayerSearchInput = props => {
   }, [advancedSearchIsOpen])
 
   useEffect(() => {
+    console.log('clickedOnSearch', clickedOnSearch)
     if (inputsAreEmpty && !zoneSelected) {
       batch(() => {
         dispatch(setRegulatoryLayersSearchResult({}))
@@ -108,7 +110,16 @@ const RegulatoryLayerSearchInput = props => {
         dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
       })
     })
-  }, [inputsAreEmpty, nameSearchText, placeSearchText, speciesSearchText, gearSearchText, regulatoryReferencesSearchText, zoneSelected])
+  }, [
+    inputsAreEmpty,
+    nameSearchText,
+    placeSearchText,
+    speciesSearchText,
+    gearSearchText,
+    regulatoryReferencesSearchText,
+    zoneSelected,
+    clickedOnSearch
+  ])
 
   return (
     <>
@@ -118,6 +129,7 @@ const RegulatoryLayerSearchInput = props => {
           placeholder={'Rechercher une zone reg. par son nom'}
           type="text"
           value={nameSearchText}
+          onClick={() => setClickedOnSearch({})}
           onChange={e => setNameSearchText(e.target.value)}
         />
         {
@@ -298,7 +310,7 @@ const SearchBoxInput = styled.input`
   border-bottom: 1px ${COLORS.lightGray} solid;
   
   :hover, :focus {
-    border-bottom: 1px ${COLORS.lightGray} solid;
+    border-bottom: 1px ${COLORS.slateGray} solid;
   }
 `
 

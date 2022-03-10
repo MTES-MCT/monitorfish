@@ -302,6 +302,7 @@ context('VesselSidebar', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
+    cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselBeaconMalfunctions')
 
     // When
     cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 20000 })
@@ -309,9 +310,10 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy="vessel-malfunctions-resume"]', { timeout: 20000 }).should('be.visible')
 
     // Then
+    cy.wait('@vesselBeaconMalfunctions')
+      .then(({ request, response }) => expect(response.statusCode).equal(200))
     cy.get('*[data-cy="vessel-beacon-malfunctions-resume-number"]', { timeout: 20000 }).contains('à quai 1')
     cy.get('*[data-cy="vessel-beacon-malfunctions-resume-last"]', { timeout: 20000 }).contains('En arrêt technique')
-    cy.wait(100)
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().should('have.length', 4)
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().eq(0).contains('1 avarie en mer')
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().eq(0).contains('0 avarie à quai')

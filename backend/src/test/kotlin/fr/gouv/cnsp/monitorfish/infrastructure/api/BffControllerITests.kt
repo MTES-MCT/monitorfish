@@ -474,7 +474,7 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should get all beacon statuses`() {
+    fun `Should get all beacon malfunctions`() {
         // Given
         given(this.getAllBeaconMalfunctions.execute()).willReturn(listOf(BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                 VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
@@ -491,7 +491,7 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should return Created When an update of a beacon status is done`() {
+    fun `Should return Created When an update of a beacon malfunction is done`() {
         given(this.updateBeaconMalfunction.execute(123, VesselStatus.AT_SEA, null))
                 .willReturn(BeaconMalfunctionResumeAndDetails(
                         beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
@@ -514,7 +514,7 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should return Bad request When an update of a beacon status is empty`() {
+    fun `Should return Bad request When an update of a beacon malfunction is empty`() {
         given(this.updateBeaconMalfunction.execute(1, null, null))
                 .willThrow(CouldNotUpdateBeaconMalfunctionException("FAIL"))
 
@@ -526,7 +526,7 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should return a beacon status`() {
+    fun `Should return a beacon malfunction`() {
         given(this.getBeaconMalfunction.execute(123))
                 .willReturn(BeaconMalfunctionResumeAndDetails(
                         beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
@@ -549,7 +549,7 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should return a beacon status without a resume`() {
+    fun `Should return a beacon malfunction without a resume`() {
         given(this.getBeaconMalfunction.execute(123))
                 .willReturn(BeaconMalfunctionResumeAndDetails(
                         beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
@@ -571,7 +571,7 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should save a beacon status comment`() {
+    fun `Should save a beacon malfunction comment`() {
         given(this.saveBeaconMalfunctionComment.execute(any(), any(), any())).willReturn(BeaconMalfunctionResumeAndDetails(
                 beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,

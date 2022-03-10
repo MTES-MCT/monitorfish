@@ -149,22 +149,22 @@ const getNumberOfSeaAndLandBeaconMalfunctions = beaconMalfunctions => {
  */
 const getNumberOfBeaconMalfunctionsAt = (vesselStatus, beaconMalfunctionsWithDetails) => {
   return beaconMalfunctionsWithDetails
-    .filter(beaconStatusWithDetails => getFirstVesselStatus(beaconStatusWithDetails) === vesselStatus)
+    .filter(beaconMalfunctionWithDetails => getFirstVesselStatus(beaconMalfunctionWithDetails) === vesselStatus)
     .length
 }
 
 /**
  * Get the first vessel status of a beacon malfunction
  * @memberOf BeaconMalfunction
- * @param {BeaconMalfunctionResumeAndDetails} beaconStatusWithDetails
+ * @param {BeaconMalfunctionResumeAndDetails} beaconMalfunctionWithDetails
  * @returns {string<BeaconMalfunctionVesselStatus>} The vessel status
  */
-const getFirstVesselStatus = beaconStatusWithDetails => {
-  const beaconMalfunctionsVesselStatusActions = beaconStatusWithDetails.actions
+const getFirstVesselStatus = beaconMalfunctionWithDetails => {
+  const beaconMalfunctionsVesselStatusActions = beaconMalfunctionWithDetails.actions
     .filter ( action => action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS )
 
   switch (beaconMalfunctionsVesselStatusActions.length === 0) {
-    case true: return beaconStatusWithDetails.beaconMalfunction.vesselStatus
+    case true: return beaconMalfunctionWithDetails.beaconMalfunction.vesselStatus
     case false: _.minBy(beaconMalfunctionsVesselStatusActions, action => action.dateTime)
   }
 }

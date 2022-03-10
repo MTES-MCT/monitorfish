@@ -63,6 +63,6 @@
  * @typedef VesselBeaconMalfunctionsResume
  * @property {number} numberOfBeaconsAtSea
  * @property {number} numberOfBeaconsAtPort
- * @property {string || null} lastBeaconStatusDateTime
- * @property {string || null} lastBeaconStatusVesselStatus
+ * @property {string || null} lastBeaconMalfunctionDateTime
+ * @property {string || null} lastBeaconMalfunctionVesselStatus
  */

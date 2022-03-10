@@ -27,24 +27,24 @@ class GetVesselBeaconMalfunctions(private val beaconMalfunctionsRepository: Beac
 
         val beaconMalfunctions = beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(vesselIdentifier, value, afterDateTime)
 
-        val beaconStatusesWithDetails = beaconMalfunctions.map {
+        val beaconMalfunctionsWithDetails = beaconMalfunctions.map {
             val comments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(it.id)
             val actions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(it.id)
 
             BeaconMalfunctionWithDetails(it, comments, actions)
         }
 
-        val resume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconStatusesWithDetails)
-        val currentBeaconStatus = beaconStatusesWithDetails.find {
+        val resume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconMalfunctionsWithDetails)
+        val currentBeaconMalfunction = beaconMalfunctionsWithDetails.find {
             it.beaconMalfunction.stage != Stage.ARCHIVED && it.beaconMalfunction.stage != Stage.END_OF_MALFUNCTION
         }
-        val history = beaconStatusesWithDetails.filter {
-            it.beaconMalfunction.id != currentBeaconStatus?.beaconMalfunction?.id
+        val history = beaconMalfunctionsWithDetails.filter {
+            it.beaconMalfunction.id != currentBeaconMalfunction?.beaconMalfunction?.id
         }
 
         return VesselBeaconMalfunctionsResumeAndHistory(
                 resume = resume,
-                current = currentBeaconStatus,
+                current = currentBeaconMalfunction,
                 history = history
         )
     }

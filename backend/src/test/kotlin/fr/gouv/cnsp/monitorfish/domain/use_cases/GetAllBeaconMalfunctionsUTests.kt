@@ -26,7 +26,7 @@ class GetAllBeaconMalfunctionsUTests {
     private lateinit var lastPositionRepository: LastPositionRepository
 
     @Test
-    fun `execute Should return the beacon statuses enriched with the risk factor found in the last position table`() {
+    fun `execute Should return the beacon malfunctions enriched with the risk factor found in the last position table`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = LastPosition(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.23, dateTime = now.minusHours(4), vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER)

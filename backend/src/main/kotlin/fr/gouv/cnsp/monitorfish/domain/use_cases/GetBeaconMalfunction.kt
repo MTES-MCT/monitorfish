@@ -20,11 +20,11 @@ class GetBeaconMalfunction(private val beaconMalfunctionsRepository: BeaconMalfu
                       private val lastPositionRepository: LastPositionRepository) {
     private val logger = LoggerFactory.getLogger(GetBeaconMalfunction::class.java)
 
-    fun execute(beaconStatusId: Int): BeaconMalfunctionResumeAndDetails {
+    fun execute(beaconMalfunctionId: Int): BeaconMalfunctionResumeAndDetails {
         val lastPositions = lastPositionRepository.findAll()
-        val beaconMalfunction = beaconMalfunctionsRepository.find(beaconStatusId)
-        val beaconStatusComments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(beaconStatusId)
-        val beaconStatusActions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(beaconStatusId)
+        val beaconMalfunction = beaconMalfunctionsRepository.find(beaconMalfunctionId)
+        val beaconMalfunctionComments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
+        val beaconMalfunctionActions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
 
         val riskFactor = lastPositions.find(BeaconMalfunction.getVesselFromBeaconMalfunction(beaconMalfunction))?.riskFactor
         beaconMalfunction.riskFactor = riskFactor
@@ -39,11 +39,11 @@ class GetBeaconMalfunction(private val beaconMalfunctionsRepository: BeaconMalfu
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> beaconMalfunction.externalReferenceNumber
         }
 
-        val vesselBeaconStatusesResume = vesselIdentifierValue?.let {
+        val vesselBeaconMalfunctionsResume = vesselIdentifierValue?.let {
             val oneYearBefore = ZonedDateTime.now().minusYears(1)
-            val vesselBeaconStatuses = beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(beaconMalfunction.vesselIdentifier, it, oneYearBefore)
+            val vesselBeaconMalfunctions = beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(beaconMalfunction.vesselIdentifier, it, oneYearBefore)
 
-            val beaconMalfunctionsWithDetails = vesselBeaconStatuses.map { beaconMalfunction ->
+            val beaconMalfunctionsWithDetails = vesselBeaconMalfunctions.map { beaconMalfunction ->
                 val comments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(beaconMalfunction.id)
                 val actions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(beaconMalfunction.id)
 
@@ -52,16 +52,16 @@ class GetBeaconMalfunction(private val beaconMalfunctionsRepository: BeaconMalfu
 
             VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconMalfunctionsWithDetails)
         } ?: run {
-            logger.warn("The vessel identifier '${beaconMalfunction.vesselIdentifier}' was not found in the beacon status : " +
-                    "the vessel beacon statuses resume could not be extracted")
+            logger.warn("The vessel identifier '${beaconMalfunction.vesselIdentifier}' was not found in the beacon malfunctions : " +
+                    "the vessel beacon malfunction resume could not be extracted")
 
             null
         }
 
         return BeaconMalfunctionResumeAndDetails(
                 beaconMalfunction = beaconMalfunction,
-                resume = vesselBeaconStatusesResume,
-                comments = beaconStatusComments,
-                actions = beaconStatusActions)
+                resume = vesselBeaconMalfunctionsResume,
+                comments = beaconMalfunctionComments,
+                actions = beaconMalfunctionActions)
     }
 }

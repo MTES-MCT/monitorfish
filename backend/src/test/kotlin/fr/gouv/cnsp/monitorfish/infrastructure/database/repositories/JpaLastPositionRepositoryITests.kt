@@ -67,7 +67,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllWithBeaconMalfunctionBeforeLast48Hours Should returns the last positions with beacon statuses before the last 48 hours`() {
+    fun `findAllWithBeaconMalfunctionBeforeLast48Hours Should returns the last positions with beacon malfunctions before the last 48 hours`() {
         // Then
         val positions = jpaLastPositionRepository.findAllWithBeaconMalfunctionBeforeLast48Hours()
 

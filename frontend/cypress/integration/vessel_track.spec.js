@@ -35,7 +35,7 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="vessel-card-alert"]').contains('3 milles - Chaluts')
   })
 
-  it('Last position card with Beacon status Should be seen on the map on pointer move', () => {
+  it('Last position card with Beacon malfunction Should be seen on the map on pointer move', () => {
     // When we move the pointer cursor (from one point to another to emit an event)
     cy.get('.vessels').trigger('pointermove',  {  clientX: 460, clientY: 480, pointerId: 1, force: true })
     cy.get('.vessels').trigger('pointermove',  {  clientX: 980, clientY: 785, pointerId: 1, force: true })

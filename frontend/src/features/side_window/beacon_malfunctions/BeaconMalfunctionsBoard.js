@@ -197,7 +197,7 @@ const BeaconMalfunctionsBoard = () => {
         </Columns>
       </DndContext>
       <BeaconMalfunctionDetails
-        updateStageVesselStatus={updateVesselStatus}
+        updateVesselStatus={updateVesselStatus}
         beaconMalfunction={openedBeaconMalfunctionInKanban?.beaconMalfunction}
         resume={openedBeaconMalfunctionInKanban?.resume}
         comments={openedBeaconMalfunctionInKanban?.comments || []}

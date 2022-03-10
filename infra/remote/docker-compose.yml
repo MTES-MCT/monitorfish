@@ -3,12 +3,14 @@ services:
   db:
     image: timescale/timescaledb-postgis:1.7.4-pg11
     container_name: monitorfish_database
+    user: ":${MONITORFISH_LOGS_AND_BACKUPS_GID}"
     environment:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - POSTGRES_DB=$POSTGRES_DB
     volumes:
       - db-data:/var/lib/postgresql/data
+      - "${MONITORFISH_BACKUPS_FOLDER}:/opt/monitorfish_backups"
     ports:
       - 5432:5432
     networks:

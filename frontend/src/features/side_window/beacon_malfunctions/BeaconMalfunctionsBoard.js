@@ -8,17 +8,16 @@ import StageColumn from './StageColumn'
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers'
 import { useDispatch, useSelector } from 'react-redux'
 import { createSelector } from '@reduxjs/toolkit'
-import updateBeaconMalfunction from '../../../domain/use_cases/updateBeaconMalfunction'
+import updateBeaconMalfunctionFromKanban from '../../../domain/use_cases/updateBeaconMalfunctionFromKanban'
 import getAllBeaconMalfunctions from '../../../domain/use_cases/getAllBeaconMalfunctions'
 import { COLORS } from '../../../constants/constants'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
-import { closeBeaconStatusInKanban } from '../../../domain/shared_slices/BeaconStatus'
 import { setError } from '../../../domain/shared_slices/Global'
 import BeaconMalfunctionDetails from './BeaconMalfunctionDetails'
 
-const getByStage = (stage, beaconmalfunctions) =>
-  beaconmalfunctions
+const getByStage = (stage, beaconMalfunctions) =>
+  beaconMalfunctions
     .filter((item) => item.stage === stage)
     .sort((a, b) => b.vesselStatusLastModificationDateTime?.localeCompare(a.vesselStatusLastModificationDateTime))
 
@@ -121,7 +120,7 @@ const BeaconMalfunctionsBoard = () => {
     }
 
     setIsDroppedId(beaconMalfunction.id)
-    dispatch(updateBeaconMalfunction(beaconMalfunction.id, nextBeaconMalfunction, {
+    dispatch(updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconMalfunction, {
       vesselStatus: nextBeaconMalfunction.vesselStatus
     }))
   }, [beaconMalfunctions])
@@ -151,7 +150,7 @@ const BeaconMalfunctionsBoard = () => {
         nextBeaconMalfunction.stage = nextStage
         nextBeaconMalfunction.vesselStatusLastModificationDateTime = new Date().toISOString()
 
-        dispatch(updateBeaconMalfunction(beaconId, nextBeaconMalfunction, {
+        dispatch(updateBeaconMalfunctionFromKanban(beaconId, nextBeaconMalfunction, {
           stage: nextBeaconMalfunction.stage
         }))
       }

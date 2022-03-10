@@ -5,9 +5,9 @@ import BeaconMalfunctionDetailBody from '../resume/BeaconMalfunctionBody'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
-import { setBeaconMalfunctionsTab } from '../../../../domain/shared_slices/BeaconStatus'
-import { BeaconMalfunctionsTab } from '../../../../domain/entities/beaconStatus'
-import BeaconStatusDetailsFollowUp from '../../../side_window/beacon_statuses/BeaconStatusDetailsFollowUp'
+import { setBeaconMalfunctionsTab } from '../../../../domain/shared_slices/BeaconMalfunction'
+import { BeaconMalfunctionsTab } from '../../../../domain/entities/beaconMalfunction'
+import BeaconMalfunctionDetailsFollowUp from '../../../side_window/beacon_malfunctions/BeaconMalfunctionDetailsFollowUp'
 import CurrentBeaconMalfunctionBody from '../resume/CurrentBeaconMalfunctionBody'
 
 const BeaconMalfunctionDetails = props => {
@@ -15,9 +15,9 @@ const BeaconMalfunctionDetails = props => {
     isCurrentBeaconMalfunctionDetails
   } = props
   const {
-    /** @type {BeaconStatusWithDetails || null} */
+    /** @type {BeaconMalfunctionResumeAndDetails || null} */
     openedBeaconMalfunction
-  } = useSelector(state => state.beaconStatus)
+  } = useSelector(state => state.beaconMalfunction)
   const dispatch = useDispatch()
 
   const navigateToResume = () => dispatch(setBeaconMalfunctionsTab(BeaconMalfunctionsTab.RESUME))
@@ -40,7 +40,7 @@ const BeaconMalfunctionDetails = props => {
       </Zone>
         : <Zone data-cy={'beacon-malfunction-details'}>
           <Title>
-            Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunction.beaconStatus.malfunctionStartDateTime)}
+            Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunction.beaconMalfunction.malfunctionStartDateTime)}
           </Title>
           <BeaconMalfunctionDetailBody beaconMalfunctionWithDetails={openedBeaconMalfunction}/>
         </Zone>
@@ -49,11 +49,11 @@ const BeaconMalfunctionDetails = props => {
       <Title>
         Main courante de l&apos;avarie
       </Title>
-      <BeaconStatusDetailsFollowUp
+      <BeaconMalfunctionDetailsFollowUp
         smallSize
         comments={openedBeaconMalfunction.comments}
         actions={openedBeaconMalfunction.actions}
-        beaconStatusId={openedBeaconMalfunction?.beaconStatus.id}
+        beaconMalfunctionId={openedBeaconMalfunction?.beaconMalfunction.id}
       />
     </Zone>
   </Wrapper>

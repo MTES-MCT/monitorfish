@@ -713,9 +713,9 @@ function sendRegulationTransaction (feature, actionType) {
 }
 
 /**
- * Get all beacon statuses
+ * Get all beacon malfunctions
  * @memberOf API
- * @returns {Promise<BeaconMalfunction[]>} The beacon statuses
+ * @returns {Promise<BeaconMalfunction[]>} The beacon malfunctions
  * @throws {Error}
  */
 function getAllBeaconMalfunctionsFromAPI () {
@@ -736,9 +736,9 @@ function getAllBeaconMalfunctionsFromAPI () {
 }
 
 /**
- * Update a beacon status
+ * Update a beacon malfunction
  * @memberOf API
- * @param {number} id - The id of the beacon status
+ * @param {number} id - The id of the beacon malfunction
  * @param {UpdateBeaconMalfunction} updatedFields - The fields to update
  * @throws {Error}
  */
@@ -766,12 +766,12 @@ function updateBeaconMalfunctionFromAPI (id, updatedFields) {
 }
 
 /**
- * Get a beacon status
+ * Get a beacon malfunction
  * @memberOf API
- * @returns {Promise<BeaconMalfunctionWithDetails>} The beacon status with details
+ * @returns {Promise<BeaconMalfunctionResumeAndDetails>} The beacon malfunction with details
  * @throws {Error}
  */
-function getBeaconMalfunctionsFromAPI (beaconMalfunctionId) {
+function getBeaconMalfunctionFromAPI (beaconMalfunctionId) {
   return fetch(`/bff/v1/beacon_malfunctions/${beaconMalfunctionId}`)
     .then(response => {
       if (response.status === OK) {
@@ -789,9 +789,9 @@ function getBeaconMalfunctionsFromAPI (beaconMalfunctionId) {
 }
 
 /**
- * Save a new comment attached to a beacon status
+ * Save a new comment attached to a beacon malfunction
  * @memberOf API
- * @param {string} id - The id of the beacon status
+ * @param {string} id - The id of the beacon malfunction
  * @param {BeaconMalfunctionCommentInput} comment - The fields to update
  * @throws {Error}
  */
@@ -828,7 +828,7 @@ function getVesselBeaconsMalfunctionsFromAPI (vesselIdentity, fromDate) {
   const internalReferenceNumber = vesselIdentity.internalReferenceNumber || ''
   const externalReferenceNumber = vesselIdentity.externalReferenceNumber || ''
   const ircs = vesselIdentity.ircs || ''
-  const vesselIdentifier = vesselIdentity.vesselIdentifier || 'UNDEFINED'
+  const vesselIdentifier = vesselIdentity.vesselIdentifier || ''
 
   return fetch(`/bff/v1/vessels/beacon_malfunctions?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&afterDateTime=${fromDate.toISOString()}`)
     .then(response => {
@@ -871,7 +871,7 @@ export {
   getOperationalAlertsFromAPI,
   getAllBeaconMalfunctionsFromAPI,
   updateBeaconMalfunctionFromAPI,
-  getBeaconMalfunctionsFromAPI,
+  getBeaconMalfunctionFromAPI,
   saveBeaconMalfunctionCommentFromAPI,
   getVesselBeaconsMalfunctionsFromAPI
 }

@@ -8,13 +8,13 @@ import {
   BeaconMalfunctionVesselStatus,
   getFirstVesselStatus,
   vesselStatuses
-} from '../../../../domain/entities/beaconStatus'
+} from '../../../../domain/entities/beaconMalfunction'
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24
 
 const BeaconMalfunctionBody = props => {
   const {
-    /** @type {BeaconStatusWithDetails} */
+    /** @type {BeaconMalfunctionResumeAndDetails} */
     beaconMalfunctionWithDetails
   } = props
 
@@ -27,13 +27,13 @@ const BeaconMalfunctionBody = props => {
       <Key width={84}>Durée avarie</Key>
       <SubValue>
         {Math.floor(
-          (new Date(beaconMalfunctionWithDetails.beaconStatus.malfunctionEndDateTime) -
-            new Date(beaconMalfunctionWithDetails.beaconStatus.malfunctionStartDateTime)) / MS_PER_DAY)}
+          (new Date(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime) -
+            new Date(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime)) / MS_PER_DAY)}
         {' '}jours
       </SubValue><br/>
       <Key width={84}>Date reprise</Key>
       <SubValue>
-        {getDateTime(beaconMalfunctionWithDetails.beaconStatus.malfunctionEndDateTime)}
+        {getDateTime(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime)}
       </SubValue><br/>
       {
         beaconMalfunctionWithDetails.actions.find(action =>

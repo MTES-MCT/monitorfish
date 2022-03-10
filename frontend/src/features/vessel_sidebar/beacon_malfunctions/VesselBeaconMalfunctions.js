@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
-import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconStatus'
+import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconMalfunction'
 import { COLORS } from '../../../constants/constants'
 import BeaconMalfunctionsResumeAndHistory from './resume/BeaconMalfunctionsResumeAndHistory'
 import BeaconMalfunctionDetails from './details/BeaconMalfunctionDetails'
@@ -16,7 +16,7 @@ const VesselBeaconMalfunctions = () => {
     beaconMalfunctionsTab,
     loadingVesselBeaconMalfunctions,
     vesselBeaconMalfunctionsFromDate
-  } = useSelector(state => state.beaconStatus)
+  } = useSelector(state => state.beaconMalfunction)
   const [isCurrentBeaconMalfunctionDetails, setIsCurrentBeaconMalfunctionDetails] = useState(null)
 
   useEffect(() => {

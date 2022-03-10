@@ -3,12 +3,12 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
-import { getNumberOfSeaAndLandBeaconMalfunctions } from '../../../../domain/entities/beaconStatus'
+import { getNumberOfSeaAndLandBeaconMalfunctions } from '../../../../domain/entities/beaconMalfunction'
 import BeaconMalfunction from './BeaconMalfunction'
 
 const YearBeaconMalfunctions = props => {
   const {
-    /** @type {BeaconStatusWithDetails[]} yearBeaconMalfunctions */
+    /** @type {BeaconMalfunctionResumeAndDetails[]} yearBeaconMalfunctions */
     yearBeaconMalfunctions,
     year,
     setIsCurrentBeaconMalfunctionDetails
@@ -62,10 +62,10 @@ const YearBeaconMalfunctions = props => {
           yearBeaconMalfunctions.length
             ? yearBeaconMalfunctions
               .sort((a, b) =>
-                new Date(b.beaconStatus.malfunctionStartDateTime) - new Date(a.beaconStatus.malfunctionStartDateTime))
+                new Date(b.beaconMalfunction.malfunctionStartDateTime) - new Date(a.beaconMalfunction.malfunctionStartDateTime))
               .map((beaconMalfunctionWithDetails, index) => {
                 return <BeaconMalfunction
-                  key={beaconMalfunctionWithDetails.beaconStatus.id}
+                  key={beaconMalfunctionWithDetails.beaconMalfunction.id}
                   beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}
                   index={index}
                   isLastItem={yearBeaconMalfunctions.length === index + 1}

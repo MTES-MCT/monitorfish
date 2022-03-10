@@ -89,8 +89,8 @@ const vesselStatuses = [
  * Get beacon malfunctions for each years : Years are keys and beacon malfunctions are values
  * @memberOf BeaconMalfunction
  * @param {Date} beaconMalfunctionsFromDate - The date
- * @param {BeaconStatusWithDetails[]} beaconMalfunctions
- * @returns {Object.<string, BeaconStatusWithDetails[]>} The beacon malfunctions for all years
+ * @param {BeaconMalfunctionResumeAndDetails[]} beaconMalfunctions
+ * @returns {Object.<string, BeaconMalfunctionResumeAndDetails[]>} The beacon malfunctions for all years
  */
 const getYearsToBeaconMalfunctions = (beaconMalfunctionsFromDate, beaconMalfunctions) => {
   const nextYearsToBeaconMalfunctions = {}
@@ -99,8 +99,8 @@ const getYearsToBeaconMalfunctions = (beaconMalfunctionsFromDate, beaconMalfunct
   }
 
   beaconMalfunctions.forEach(beaconMalfunction => {
-    if (beaconMalfunction.beaconStatus?.malfunctionStartDateTime) {
-      const year = new Date(beaconMalfunction.beaconStatus?.malfunctionStartDateTime).getUTCFullYear()
+    if (beaconMalfunction.beaconMalfunction?.malfunctionStartDateTime) {
+      const year = new Date(beaconMalfunction.beaconMalfunction?.malfunctionStartDateTime).getUTCFullYear()
 
       if (nextYearsToBeaconMalfunctions[year]?.length) {
         nextYearsToBeaconMalfunctions[year] = nextYearsToBeaconMalfunctions[year].concat(beaconMalfunction)
@@ -124,7 +124,7 @@ function initYears (beaconMalfunctionsFromDate, nextYearsToBeaconMalfunctions) {
 /**
  * Get the number of sea and port beacon malfunctions for a given list of beacon malfunctions
  * @memberOf BeaconMalfunction
- * @param {BeaconStatusWithDetails[]} beaconMalfunctions
+ * @param {BeaconMalfunctionResumeAndDetails[]} beaconMalfunctions
  * @returns {{
  *  numberOfBeaconMalfunctionsAtSea: number,
  *  numberOfBeaconMalfunctionsAtPort: number
@@ -144,7 +144,7 @@ const getNumberOfSeaAndLandBeaconMalfunctions = beaconMalfunctions => {
  * Get the number of beacon malfunctions at Port or at Sea
  * @memberOf BeaconMalfunction
  * @param {string<BeaconMalfunctionVesselStatus>} vesselStatus - The vessel status : at Sea or at Port
- * @param {BeaconStatusWithDetails[]} beaconMalfunctionsWithDetails
+ * @param {BeaconMalfunctionResumeAndDetails[]} beaconMalfunctionsWithDetails
  * @returns {number} The sum of beacon malfunctions at sea and port
  */
 const getNumberOfBeaconMalfunctionsAt = (vesselStatus, beaconMalfunctionsWithDetails) => {
@@ -156,7 +156,7 @@ const getNumberOfBeaconMalfunctionsAt = (vesselStatus, beaconMalfunctionsWithDet
 /**
  * Get the first vessel status of a beacon malfunction
  * @memberOf BeaconMalfunction
- * @param {BeaconStatusWithDetails} beaconStatusWithDetails
+ * @param {BeaconMalfunctionResumeAndDetails} beaconStatusWithDetails
  * @returns {string<BeaconMalfunctionVesselStatus>} The vessel status
  */
 const getFirstVesselStatus = beaconStatusWithDetails => {
@@ -164,7 +164,7 @@ const getFirstVesselStatus = beaconStatusWithDetails => {
     .filter ( action => action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS )
 
   switch (beaconMalfunctionsVesselStatusActions.length === 0) {
-    case true: return beaconStatusWithDetails.beaconStatus.vesselStatus
+    case true: return beaconStatusWithDetails.beaconMalfunction.vesselStatus
     case false: _.minBy(beaconMalfunctionsVesselStatusActions, action => action.dateTime)
   }
 }

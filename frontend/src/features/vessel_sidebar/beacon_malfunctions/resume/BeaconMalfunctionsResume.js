@@ -3,7 +3,7 @@ import { getDateTime } from '../../../../utils'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { NoValue, Title, Zone } from '../../common_styles/common.style'
-import { vesselStatuses } from '../../../../domain/entities/beaconStatus'
+import { vesselStatuses } from '../../../../domain/entities/beaconMalfunction'
 
 const BeaconMalfunctionsResume = props => {
   const {

@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { openSideWindowTab, setSideWindowAsOpen } from '../../domain/shared_slices/Global'
 import getOperationalAlerts from '../../domain/use_cases/getOperationalAlerts'
 import getAllBeaconMalfunctions from '../../domain/use_cases/getAllBeaconMalfunctions'
-import { closeBeaconMalfunction } from '../../domain/shared_slices/BeaconMalfunction'
+import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 
 const SideWindow = ({ fromTab }) => {
   const {
@@ -23,7 +23,7 @@ const SideWindow = ({ fromTab }) => {
   } = useSelector(state => state.global)
   const {
     beaconMalfunctions,
-    openedBeaconMalfunction
+    openedBeaconMalfunctionInKanban
   } = useSelector(state => state.beaconMalfunction)
   const {
     alerts,
@@ -49,12 +49,12 @@ const SideWindow = ({ fromTab }) => {
   }, [openedSideWindowTab])
 
   useEffect(() => {
-    setIsOverlayed(!!openedBeaconMalfunction)
+    setIsOverlayed(!!openedBeaconMalfunctionInKanban)
 
     if (openedSideWindowTab === sideWindowMenu.ALERTS.code) {
       setIsOverlayed(false)
     }
-  }, [openedBeaconMalfunction, openedSideWindowTab])
+  }, [openedBeaconMalfunctionInKanban, openedSideWindowTab])
 
   useEffect(() => {
     if (fromTab) {
@@ -109,7 +109,7 @@ const SideWindow = ({ fromTab }) => {
       />
       <BeaconMalfunctionsBoardGrayOverlay
         style={beaconMalfunctionBoardGrayOverlayStyle}
-        onClick={() => dispatch(closeBeaconMalfunction())}
+        onClick={() => dispatch(closeBeaconMalfunctionInKanban())}
       />
       {
         isPreloading

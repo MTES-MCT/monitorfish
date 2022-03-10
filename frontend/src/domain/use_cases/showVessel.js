@@ -16,7 +16,7 @@ import { getNextVesselTrackDepthObject } from './showVesselTrack'
  * @param {boolean} fromSearch
  * @param {VesselTrackDepth=} vesselTrackDepth
  */
-const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth) => (dispatch, getState) => {
+const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth) => async (dispatch, getState) => {
   vesselIdentity = getOnlyVesselIdentityProperties(vesselIdentity)
 
   const { vessel, fishingActivities, map } = getState()
@@ -46,7 +46,7 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
     dispatch(addSearchedVessel(vesselIdentity))
   }
 
-  getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)
+  return getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)
     .then(({ vesselAndPositions, trackDepthHasBeenModified }) => {
       const error = getTrackDepthError(
         vesselAndPositions.positions,
@@ -69,7 +69,7 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
           dispatch(removeError())
         }
 
-        dispatch(setSelectedVessel({
+        return dispatch(setSelectedVessel({
           vessel: selectedVessel,
           positions: vesselAndPositions.positions
         }))

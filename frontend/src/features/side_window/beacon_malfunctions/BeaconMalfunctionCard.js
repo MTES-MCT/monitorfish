@@ -4,16 +4,16 @@ import { COLORS } from '../../../constants/constants'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import SelectPicker from 'rsuite/lib/SelectPicker'
-import { getBeaconCreationOrModificationDate, getReducedTimeAgo, vesselStatuses } from './beaconMalfunctions'
+import { getBeaconCreationOrModificationDate, getReducedTimeAgo } from './beaconMalfunctions'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import * as timeago from 'timeago.js'
 import { timeagoFrenchLocale } from '../../../utils'
 import showVessel from '../../../domain/use_cases/showVessel'
 import { useDispatch } from 'react-redux'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
-import openBeaconmalfunction from '../../../domain/use_cases/openBeaconMalfunction'
+import openBeaconMalfunctionInKanban from '../../../domain/use_cases/openBeaconMalfunctionInKanban'
 import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
-import { vesselStatuses } from '../../../domain/entities/beaconStatus'
+import { vesselStatuses } from '../../../domain/entities/beaconMalfunction'
 
 timeago.register('fr', timeagoFrenchLocale)
 
@@ -56,7 +56,7 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateStageVesselStatus, bas
           className={'hover-border'}
           data-cy={'side-window-beacon-malfunctions-card-vessel-name'}
           style={vesselNameStyle}
-          onClick={() => dispatch(openBeaconmalfunction({ beaconMalfunction: beaconMalfunction }))}
+          onClick={() => dispatch(openBeaconMalfunctionInKanban({ beaconMalfunction: beaconMalfunction }))}
         >
           {beaconMalfunction.vesselName || 'Aucun nom'}
         </VesselName>
@@ -98,7 +98,7 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateStageVesselStatus, bas
   </Wrapper>
 }
 
-export const showVesselOnMap = (dispatch, beaconMalfunction) => {
+export const showVesselOnMap = async (dispatch, beaconMalfunction) => {
   const afterDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
   const twentyFiveHours = 25
   afterDateTime.setTime(afterDateTime.getTime() - (twentyFiveHours * 60 * 60 * 1000))
@@ -112,7 +112,7 @@ export const showVesselOnMap = (dispatch, beaconMalfunction) => {
     beforeDateTime: beforeDateTime
   }
   const vesselIdentity = { ...beaconMalfunction, flagState: 'fr' }
-  dispatch(showVessel(vesselIdentity, false, false, vesselTrackDepth))
+  await dispatch(showVessel(vesselIdentity, false, false, vesselTrackDepth))
   dispatch(getVesselVoyage(vesselIdentity, null, false))
 }
 

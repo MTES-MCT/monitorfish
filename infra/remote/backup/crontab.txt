@@ -1,0 +1,1 @@
+13 17 * * * bash -l -c 'source $HOME/.monitorfish; $MONITORFISH_GIT_FOLDER/infra/remote/backup/pg_backup_rotated.sh > $MONITORFISH_BACKUPS_FOLDER/cron.log 2>&1'

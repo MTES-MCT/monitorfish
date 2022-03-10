@@ -41,7 +41,7 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
                 dbBeaconMalfunctionsRepository.updateStage(id, it.toString(), updateDateTime)
             }
         } catch (e: Throwable) {
-            throw CouldNotUpdateBeaconMalfunctionException("Could not update beacon status: ${e.message}")
+            throw CouldNotUpdateBeaconMalfunctionException("Could not update beacon malfunction: ${e.message}")
         }
     }
 

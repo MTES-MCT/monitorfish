@@ -1,6 +1,6 @@
 import { saveBeaconMalfunctionCommentFromAPI } from '../../api/fetch'
 import { setError } from '../shared_slices/Global'
-import { setOpenedBeaconMalfunction } from '../shared_slices/BeaconMalfunction'
+import { setOpenedBeaconMalfunctionsInKanban } from '../shared_slices/BeaconMalfunction'
 
 /**
  * Save a new comment to a beacon malfunction
@@ -16,7 +16,7 @@ const saveBeaconMalfunctionCommentFromKanban = (beaconMalfunctionId, comment) =>
   }
 
   return saveBeaconMalfunctionCommentFromAPI(beaconMalfunctionId, newCommentInput).then(beaconMalfunctionWithDetails => {
-    return dispatch(setOpenedBeaconMalfunction(beaconMalfunctionWithDetails))
+    return dispatch(setOpenedBeaconMalfunctionsInKanban(beaconMalfunctionWithDetails))
   }).catch(error => {
     console.error(error)
     dispatch(setError(error))

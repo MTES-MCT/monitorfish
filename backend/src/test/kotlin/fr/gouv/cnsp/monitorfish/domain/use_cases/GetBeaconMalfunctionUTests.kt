@@ -32,7 +32,7 @@ class GetBeaconMalfunctionUTests {
     private lateinit var lastPositionRepository: LastPositionRepository
 
     @Test
-    fun `execute Should return the detailed beacon status`() {
+    fun `execute Should return the detailed beacon malfunction`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         given(beaconMalfunctionsRepository.find(1))
@@ -59,7 +59,7 @@ class GetBeaconMalfunctionUTests {
         // Then
         assertThat(beaconMalfunctions.resume?.numberOfBeaconsAtSea).isEqualTo(1)
         assertThat(beaconMalfunctions.resume?.numberOfBeaconsAtPort).isEqualTo(1)
-        assertThat(beaconMalfunctions.resume?.lastBeaconStatusVesselStatus).isEqualTo(VesselStatus.AT_SEA)
+        assertThat(beaconMalfunctions.resume?.lastBeaconMalfunctionVesselStatus).isEqualTo(VesselStatus.AT_SEA)
         assertThat(beaconMalfunctions.actions).hasSize(1)
         assertThat(beaconMalfunctions.comments).hasSize(1)
         assertThat(beaconMalfunctions.beaconMalfunction.internalReferenceNumber).isEqualTo("FR224226850")

@@ -17,7 +17,7 @@ import { vesselStatuses } from '../../../domain/entities/beaconMalfunction'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const BeaconMalfunctionCard = ({ beaconMalfunction, updateStageVesselStatus, baseUrl, verticalScrollRef }) => {
+const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl, verticalScrollRef }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconMalfunction?.vesselStatus)
   const ref = useRef()
@@ -86,7 +86,7 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateStageVesselStatus, bas
         style={selectPickerStyle}
         searchable={false}
         value={vesselStatus.value}
-        onChange={status => updateStageVesselStatus(beaconMalfunction, status)}
+        onChange={status => updateVesselStatus(beaconMalfunction, status)}
         data={vesselStatuses}
         renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
         cleanable={false}

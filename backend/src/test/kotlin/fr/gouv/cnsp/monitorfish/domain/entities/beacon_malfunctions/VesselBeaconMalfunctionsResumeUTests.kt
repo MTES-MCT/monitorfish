@@ -11,7 +11,7 @@ import java.time.ZonedDateTime
 class VesselBeaconMalfunctionsResumeUTests {
 
     @Test
-    fun `fromBeaconStatuses Should create the resume When there is some actions`() {
+    fun `fromBeaconMalfunctions Should create the resume When there is some actions`() {
         // Given
         val now = ZonedDateTime.now()
         val lastBeaconDateTime = now.minusMinutes(2)
@@ -73,12 +73,12 @@ class VesselBeaconMalfunctionsResumeUTests {
         // Then
         assertThat(resume.numberOfBeaconsAtSea).isEqualTo(2)
         assertThat(resume.numberOfBeaconsAtPort).isEqualTo(1)
-        assertThat(resume.lastBeaconStatusDateTime).isEqualTo(lastBeaconDateTime)
-        assertThat(resume.lastBeaconStatusVesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
+        assertThat(resume.lastBeaconMalfunctionDateTime).isEqualTo(lastBeaconDateTime)
+        assertThat(resume.lastBeaconMalfunctionVesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
     }
 
     @Test
-    fun `fromBeaconStatuses Should create the resume When there is no actions`() {
+    fun `fromBeaconMalfunctions Should create the resume When there is no actions`() {
         // Given
         val now = ZonedDateTime.now()
         val lastBeaconDateTime = now.minusMinutes(2)
@@ -106,7 +106,7 @@ class VesselBeaconMalfunctionsResumeUTests {
         // Then
         assertThat(resume.numberOfBeaconsAtSea).isEqualTo(1)
         assertThat(resume.numberOfBeaconsAtPort).isEqualTo(1)
-        assertThat(resume.lastBeaconStatusDateTime).isEqualTo(now)
-        assertThat(resume.lastBeaconStatusVesselStatus).isEqualTo(VesselStatus.AT_PORT)
+        assertThat(resume.lastBeaconMalfunctionDateTime).isEqualTo(now)
+        assertThat(resume.lastBeaconMalfunctionVesselStatus).isEqualTo(VesselStatus.AT_PORT)
     }
 }

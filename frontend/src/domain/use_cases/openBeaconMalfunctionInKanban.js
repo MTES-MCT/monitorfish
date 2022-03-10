@@ -5,7 +5,7 @@ import { setOpenedBeaconMalfunctionsInKanban } from '../shared_slices/BeaconMalf
 /**
  * Open a single beacon malfunction
  * @function openBeaconMalfunctionInKanban
- * @param {BeaconMalfunctionResumeAndDetails} beaconMalfunction - the beacon status to open
+ * @param {BeaconMalfunctionResumeAndDetails} beaconMalfunction - the beacon malfunction to open
  */
 const openBeaconMalfunctionInKanban = beaconMalfunction => (dispatch, getState) => {
   const previousBeaconMalfunction = getState().beaconMalfunction.openedBeaconMalfunction

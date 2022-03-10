@@ -24,7 +24,7 @@ class GetVesselBeaconMalfunctionsUTests {
     private lateinit var beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository
 
     @Test
-    fun `execute Should return the detailed beacon statuses for a given vessel`() {
+    fun `execute Should return the detailed beacon malfunctions for a given vessel`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         given(beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "FR224226850", now.minusYears(1)))

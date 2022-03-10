@@ -4,14 +4,14 @@ import { getDate } from '../../src/utils'
 
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
-context('Beacon statuses', () => {
+context('Side window beacon malfunctions', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/side_window`)
     cy.get('*[data-cy="side-window-menu-beacon-malfunctions"]').click()
   })
 
-  it('A beacon status card Should be moved in the Board', () => {
+  it('A beacon malfunction card Should be moved in the Board', () => {
     // Given
     cy.request('PUT', 'bff/v1/beacon_malfunctions/1', {stage: 'INITIAL_ENCOUNTER'})
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children()
@@ -44,7 +44,7 @@ context('Beacon statuses', () => {
       .should('have.length', 2)
   })
 
-  it('Board Should be initialized with the beacon statuses', () => {
+  it('Board Should be initialized with the beacon malfunctions', () => {
     // Then
     cy.get('*[data-cy="side-window-sub-menu-trigger"]').click({ force: true })
     cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('8')
@@ -105,14 +105,14 @@ context('Beacon statuses', () => {
       .contains('En arrêt technique')
   })
 
-  it('A beacon status card vessel status Should be changed in the Board', () => {
+  it('A beacon malfunction card vessel status Should be changed in the Board', () => {
     // Given
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]').children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Navire à quai')
-    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/4').as('moveBeaconMalfunctionCardVesselStatus')
+    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/10').as('moveBeaconMalfunctionCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]').children()
@@ -141,7 +141,7 @@ context('Beacon statuses', () => {
       .contains('Activité détectée')
   })
 
-  it('Beacon status Should be opened', () => {
+  it('Beacon malfunction Should be opened', () => {
     // Given
     cy.intercept('GET', 'bff/v1/beacon_malfunctions/1').as('showBeaconMalfunction')
 
@@ -152,7 +152,7 @@ context('Beacon statuses', () => {
       .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
       .click()
 
-    // Then, check the beacon status data
+    // Then, check the beacon malfunction data
     cy.wait('@showBeaconMalfunction')
       .then(({ request, response }) => expect(response.statusCode).equal(200))
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]').should('be.visible')
@@ -213,7 +213,7 @@ context('Beacon statuses', () => {
       .then(({ request, response }) => expect(response.statusCode).equal(200))
   })
 
-  it('Beacon status Should be opened and vessel status changed', () => {
+  it('Beacon malfunction Should be opened and vessel status changed', () => {
     // Given
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children()
       .eq(0)
@@ -225,7 +225,7 @@ context('Beacon statuses', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Activité détectée')
-    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/4').as('moveBeaconMalfunctionCardVesselStatus')
+    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/10').as('moveBeaconMalfunctionCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
@@ -248,7 +248,7 @@ context('Beacon statuses', () => {
       .contains('En arrêt technique')
   })
 
-  it('Beacon status Should be opened and a comment added', () => {
+  it('Beacon malfunction Should be opened and a comment added', () => {
     // Given
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children()
       .eq(0)
@@ -261,7 +261,7 @@ context('Beacon statuses', () => {
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-textarea"]')
       .type('I just added a new comment')
-    cy.intercept('POST', 'bff/v1/beacon_malfunctions/4/comments').as('addBeaconMalfunctionComment')
+    cy.intercept('POST', 'bff/v1/beacon_malfunctions/10/comments').as('addBeaconMalfunctionComment')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-add"]').click({ force: true })
 
     // Then

@@ -42,7 +42,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllExceptResumedTransmission Should return last thirty end of follow up beacon statuses`() {
+    fun `findAllExceptResumedTransmission Should return last thirty end of follow up beacon malfunctions`() {
         // When
         val baconMalfunctions = jpaBeaconMalfunctionsRepository.findLastThirtyEndOfFollowUp()
 

@@ -19,7 +19,7 @@ import BeaconMalfunctionDetailsFollowUp from './BeaconMalfunctionDetailsFollowUp
 import { showVesselSidebarTab } from '../../../domain/shared_slices/Vessel'
 import { VesselSidebarTab } from '../../../domain/entities/vessel'
 
-const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions, updateStageVesselStatus }) => {
+const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions, updateVesselStatus }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselMalfunction => vesselMalfunction.value === beaconMalfunction?.vesselStatus)
   const baseUrl = window.location.origin
@@ -125,7 +125,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
               menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
               searchable={false}
               value={vesselStatus?.value}
-              onChange={status => updateStageVesselStatus(beaconMalfunction?.stage, beaconMalfunction, status)}
+              onChange={status => updateVesselStatus(beaconMalfunction, status)}
               data={vesselStatuses}
               renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
               cleanable={false}

@@ -29,14 +29,14 @@ const CurrentBeaconMalfunctionBody = props => {
   }, [vesselStatus, currentBeaconMalfunctionWithDetails?.beaconMalfunction])
 
   const updateVesselStatus = (beaconMalfunction, status) => {
-    const nextBeaconStatus = {
+    const nextBeaconMalfunction = {
       ...beaconMalfunction,
       vesselStatus: status,
       vesselStatusLastModificationDateTime: new Date().toISOString()
     }
 
-    dispatch(updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconStatus, {
-      vesselStatus: nextBeaconStatus.vesselStatus
+    dispatch(updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconMalfunction, {
+      vesselStatus: nextBeaconMalfunction.vesselStatus
     }))
   }
 

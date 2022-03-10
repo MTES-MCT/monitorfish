@@ -6,16 +6,16 @@ import { getDate, getTime, mergeObjects } from '../../../utils'
 import { Toggle } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserType } from '../../../domain/shared_slices/Global'
-import { BeaconMalfunctionPropertyName, UserType, vesselStatuses } from '../../../domain/entities/beaconStatus'
-import saveBeaconStatusCommentFromKanban from '../../../domain/use_cases/saveBeaconStatusCommentFromKanban'
-import { beaconStatusesStages } from './beaconStatuses'
+import { BeaconMalfunctionPropertyName, UserType, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
+import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/saveBeaconMalfunctionCommentFromKanban'
+import { beaconMalfunctionsStages } from './beaconMalfunctions'
 
 const Type = {
   ACTION: 'ACTION',
   COMMENT: 'COMMENT'
 }
 
-const BeaconStatusDetailsFollowUp = ({ comments, actions, beaconStatusId, smallSize }) => {
+const BeaconMalfunctionDetailsFollowUp = ({ comments, actions, beaconMalfunctionId, smallSize }) => {
   const dispatch = useDispatch()
   const {
     userType
@@ -87,8 +87,8 @@ const BeaconStatusDetailsFollowUp = ({ comments, actions, beaconStatusId, smallS
 
       return <>Le statut du ticket a été modifié, de <b>{previousValue}</b> à <b>{nextValue}</b>.</>
     } else if (action.propertyName === BeaconMalfunctionPropertyName.STAGE) {
-      const previousValue = beaconStatusesStages[action.previousValue].title
-      const nextValue = beaconStatusesStages[action.nextValue].title
+      const previousValue = beaconMalfunctionsStages[action.previousValue].title
+      const nextValue = beaconMalfunctionsStages[action.nextValue].title
 
       return <>Le ticket a été déplacé de <b>{previousValue}</b> à <b>{nextValue}</b>.</>
     }
@@ -97,7 +97,7 @@ const BeaconStatusDetailsFollowUp = ({ comments, actions, beaconStatusId, smallS
   const getActionOrCommentRow = (actionOrComment, isLastDate, isLast) => {
     if (actionOrComment.type === Type.COMMENT) {
       return <div
-        data-cy={'side-window-beacon-statuses-detail-comment-content'}
+        data-cy={'side-window-beacon-malfunctions-detail-comment-content'}
         key={actionOrComment.type + actionOrComment.dateTime}
       >
         <ActionOrCommentRow style={actionOrCommentRow} ref={isLastDate && isLast ? scrollToRef : null}>
@@ -109,7 +109,7 @@ const BeaconStatusDetailsFollowUp = ({ comments, actions, beaconStatusId, smallS
       </div>
     } else if (actionOrComment.type === Type.ACTION) {
       return <div
-        data-cy={'side-window-beacon-statuses-detail-action-content'}
+        data-cy={'side-window-beacon-malfunctions-detail-action-content'}
         key={actionOrComment.type + actionOrComment.dateTime}
       >
         <ActionOrCommentRow style={actionOrCommentRow} ref={isLastDate && isLast ? scrollToRef : null}>
@@ -132,7 +132,7 @@ const BeaconStatusDetailsFollowUp = ({ comments, actions, beaconStatusId, smallS
   }, [comment])
 
   const saveComment = () => {
-    dispatch(saveBeaconStatusCommentFromKanban(beaconStatusId, comment)).then(() => {
+    dispatch(saveBeaconMalfunctionCommentFromKanban(beaconMalfunctionId, comment)).then(() => {
       setComment('')
     })
   }
@@ -142,7 +142,7 @@ const BeaconStatusDetailsFollowUp = ({ comments, actions, beaconStatusId, smallS
       <NumberComments style={numberCommentsStyle}>
         <CommentsIcon style={commentsIconStyle}/>
         <NumberCommentsText
-          data-cy={'side-window-beacon-statuses-detail-comments-number'}
+          data-cy={'side-window-beacon-malfunctions-detail-comments-number'}
           style={numberCommentsTextStyle}
         >
           {comments?.length} commentaire{comments?.length > 1 ? 's' : ''}
@@ -158,7 +158,7 @@ const BeaconStatusDetailsFollowUp = ({ comments, actions, beaconStatusId, smallS
 
               return <span key={date}>
                 <DateSeparator
-                  data-cy={'side-window-beacon-statuses-detail-comment-date'}
+                  data-cy={'side-window-beacon-malfunctions-detail-comment-date'}
                   style={dateSeparatorStyle(index === 0)}
                 >
                   <Line style={lineStyle}/>
@@ -185,7 +185,7 @@ const BeaconStatusDetailsFollowUp = ({ comments, actions, beaconStatusId, smallS
         !smallSize
           ? <>
             <AddComment
-              data-cy={'side-window-beacon-statuses-detail-comment-textarea'}
+              data-cy={'side-window-beacon-malfunctions-detail-comment-textarea'}
               style={addCommentStyle(userType)}
               value={comment}
               onChange={event => setComment(event.target.value)}
@@ -200,7 +200,7 @@ const BeaconStatusDetailsFollowUp = ({ comments, actions, beaconStatusId, smallS
               />
               Équipe OPS
               <SubmitComment
-                data-cy={'side-window-beacon-statuses-detail-comment-add'}
+                data-cy={'side-window-beacon-malfunctions-detail-comment-add'}
                 disabled={!comment.replace(/\s/g, '').length}
                 style={submitCommentStyle}
                 onClick={saveComment}
@@ -350,4 +350,4 @@ const commentsIconStyle = {
   marginTop: 2
 }
 
-export default BeaconStatusDetailsFollowUp
+export default BeaconMalfunctionDetailsFollowUp

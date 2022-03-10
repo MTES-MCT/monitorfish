@@ -12,11 +12,10 @@ import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import * as timeago from 'timeago.js'
-import { closeBeaconMalfunction } from '../../../domain/shared_slices/BeaconMalfunction'
-import BeaconMalfunctionDetailsBody from './BeaconMalfunctionDetailsBody'
+import { closeBeaconMalfunctionInKanban } from '../../../domain/shared_slices/BeaconMalfunction'
 import { getDateTime } from '../../../utils'
-import { closeBeaconStatusInKanban } from '../../../domain/shared_slices/BeaconStatus'
-import BeaconStatusDetailsFollowUp from './BeaconStatusDetailsFollowUp'
+import { vesselStatuses } from '../../../domain/entities/beaconMalfunction'
+import BeaconMalfunctionDetailsFollowUp from './BeaconMalfunctionDetailsFollowUp'
 import { showVesselSidebarTab } from '../../../domain/shared_slices/Vessel'
 import { VesselSidebarTab } from '../../../domain/entities/vessel'
 
@@ -57,7 +56,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
           <Title style={titleStyle}>NON-RÉCEPTION DU VMS</Title>
           <CloseIcon
             style={closeIconStyle}
-            onClick={() => dispatch(closeBeaconMalfunction())}
+            onClick={() => dispatch(closeBeaconMalfunctionInKanban())}
           />
         </Row>
         <Row style={rowStyle(10)}>
@@ -115,31 +114,62 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
         </Row>
       </FirstHeader>
       <Line style={lineStyle}/>
-      <Header style={headerStyle}>
-        <Malfunctioning style={malfunctioningStyle} ref={ref}>
-          <MalfunctioningText style={malfunctioningTextStyle}>
-            AVARIE #{beaconMalfunction?.id} - {' '}{getBeaconCreationOrModificationDate(beaconMalfunction)}
-          </MalfunctioningText>
-          <SelectPicker
-            container={() => ref.current}
-            menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
-            searchable={false}
-            value={vesselStatus?.value}
-            onChange={status => updateStageVesselStatus(beaconMalfunction?.stage, beaconMalfunction, status)}
-            data={vesselStatuses}
-            renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
-            cleanable={false}
-          />
-        </Malfunctioning>
-        <LastPosition style={lastPositionStyle} title={getDateTime(beaconMalfunction?.malfunctionStartDateTime)}>
-          <TimeAgo style={timeAgoStyle}/>
-          Dernière émission {
-          timeago.format(beaconMalfunction?.malfunctionStartDateTime, 'fr')
-        }
-        </LastPosition>
-      </Header>
+      <SecondHeader style={secondHeaderStyle}>
+        <FirstColumn style={firstColumnStyle}>
+          <Malfunctioning ref={ref}>
+            <ColumnTitle style={malfunctioningTextStyle}>
+              AVARIE #{beaconMalfunction?.id} - {' '}{getBeaconCreationOrModificationDate(beaconMalfunction)}
+            </ColumnTitle>
+            <SelectPicker
+              container={() => ref.current}
+              menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
+              searchable={false}
+              value={vesselStatus?.value}
+              onChange={status => updateStageVesselStatus(beaconMalfunction?.stage, beaconMalfunction, status)}
+              data={vesselStatuses}
+              renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
+              cleanable={false}
+            />
+          </Malfunctioning>
+          <LastPosition style={lastPositionStyle} title={getDateTime(beaconMalfunction?.malfunctionStartDateTime)}>
+            <TimeAgo style={timeAgoStyle}/>
+            Dernière émission {
+            timeago.format(beaconMalfunction?.malfunctionStartDateTime, 'fr')
+          }
+          </LastPosition>
+        </FirstColumn>
+        <SecondColumn style={secondColumnStyle}>
+          <ColumnTitle style={malfunctioningTextStyle}>
+            AVARIES DE LA DERNIÈRE ANNÉE
+          </ColumnTitle>
+          <ResumeLine style={resumeLineStyle}>
+            <ResumeKey style={resumeKeyStyle}>Nombre d&apos;avaries</ResumeKey>
+            <ResumeSubKey style={resumeSubKeyStyle}>en mer</ResumeSubKey>
+            <ResumeValue style={resumeValueStyle}>{resume?.numberOfBeaconsAtSea}</ResumeValue>
+            <ResumeSubKey style={resumeSubKeyStyle}>à quai</ResumeSubKey>
+            <ResumeValue style={resumeValueStyle}>{resume?.numberOfBeaconsAtPort}</ResumeValue>
+          </ResumeLine>
+          <ResumeLine style={resumeLineStyle}>
+            <ResumeKey style={resumeKeyStyle}>Dernière avarie</ResumeKey>
+            <ResumeValue style={resumeValueStyle}>
+              {timeago.format(resume?.lastBeaconMalfunctionDateTime, 'fr')}{' '}
+              ({vesselStatuses.find(status => status.value === resume?.lastBeaconMalfunctionVesselStatus)?.label})
+            </ResumeValue>
+          </ResumeLine>
+          <ResumeLine>
+            <ShowHistory
+              style={showHistoryStyle}
+              onClick={async () => {
+                await showVesselOnMap(dispatch, beaconMalfunction)
+                dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))
+              }}>
+              voir l&apos;historique
+            </ShowHistory>
+          </ResumeLine>
+        </SecondColumn>
+      </SecondHeader>
       <Line style={lineStyle}/>
-      <BeaconMalfunctionDetailsBody
+      <BeaconMalfunctionDetailsFollowUp
         comments={comments}
         actions={actions}
         beaconMalfunctionId={beaconMalfunction?.id}

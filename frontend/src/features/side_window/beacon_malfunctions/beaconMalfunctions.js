@@ -1,4 +1,6 @@
-export const BeaconStatusesSubMenu = {
+import * as timeago from 'timeago.js'
+
+export const BeaconMalfunctionsSubMenu = {
   PAIRING: {
     name: 'Apparaige des balises',
     code: 'PAIRING'

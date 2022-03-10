@@ -3,12 +3,12 @@ import { setError } from '../shared_slices/Global'
 import { setOpenedBeaconMalfunction } from '../shared_slices/BeaconMalfunction'
 
 /**
- * Save a new comment to a beacon status
+ * Save a new comment to a beacon malfunction
  * @function showVesselTrack
  * @param {number} beaconMalfunctionId
  * @param {string} comment
  */
-const saveBeaconMalfunctionComment = (beaconMalfunctionId, comment) => (dispatch, getState) => {
+const saveBeaconMalfunctionCommentFromKanban = (beaconMalfunctionId, comment) => (dispatch, getState) => {
   const userType = getState().global.userType
   const newCommentInput = {
     comment,
@@ -23,4 +23,4 @@ const saveBeaconMalfunctionComment = (beaconMalfunctionId, comment) => (dispatch
   })
 }
 
-export default saveBeaconMalfunctionComment
+export default saveBeaconMalfunctionCommentFromKanban

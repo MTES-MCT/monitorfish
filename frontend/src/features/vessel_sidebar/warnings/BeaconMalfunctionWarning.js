@@ -5,7 +5,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as BeaconMalfunctionSVG } from '../../icons/Icone_VMS_dark.svg'
-import openBeaconmalfunction from '../../../domain/use_cases/openBeaconMalfunction'
+import openBeaconMalfunctionInKanban from '../../../domain/use_cases/openBeaconMalfunctionInKanban'
 
 const BeaconMalfunctionWarning = ({ selectedVessel }) => {
   const dispatch = useDispatch()
@@ -30,7 +30,7 @@ const BeaconMalfunctionWarning = ({ selectedVessel }) => {
 
 const showBeaconMalfunctionInSideWindow = (dispatch, selectedVessel) => {
   dispatch(openSideWindowTab(sideWindowMenu.BEACON_MALFUNCTIONS.code))
-  dispatch(openBeaconmalfunction({
+  dispatch(openBeaconMalfunctionInKanban({
     beaconMalfunction: {
       id: selectedVessel?.beaconMalfunctionId
     }

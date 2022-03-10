@@ -6,14 +6,14 @@ import { ReactComponent as AtSeaSVG } from '../../../icons/Icone_avarie_mer.svg'
 import { ReactComponent as AtPortSVG } from '../../../icons/Icone_avarie_quai.svg'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { getDateTime } from '../../../../utils'
-import { BeaconMalfunctionVesselStatus, getFirstVesselStatus } from '../../../../domain/entities/beaconStatus'
-import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconStatus'
+import { BeaconMalfunctionVesselStatus, getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
+import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconMalfunction'
 import { useDispatch } from 'react-redux'
 import BeaconMalfunctionBody from './BeaconMalfunctionBody'
 
 const BeaconMalfunction = props => {
   const {
-    /** @type {BeaconStatusWithDetails} */
+    /** @type {BeaconMalfunctionResumeAndDetails} */
     beaconMalfunctionWithDetails,
     index,
     isLastItem,
@@ -33,7 +33,7 @@ const BeaconMalfunction = props => {
             ? <AtPort/>
             : <AtSea/>
         }
-        AVARIE DU {getDateTime(beaconMalfunctionWithDetails.beaconStatus.malfunctionStartDateTime)}
+        AVARIE DU {getDateTime(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime)}
       </Title>
       <BeaconMalfunctionBody beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}/>
       <SeeMore

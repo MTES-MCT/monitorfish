@@ -4,7 +4,7 @@ import { batch } from 'react-redux'
 import {
   loadVesselBeaconMalfunctions, setOpenedBeaconMalfunction,
   setVesselBeaconMalfunctionsResumeAndHistory
-} from '../shared_slices/BeaconStatus'
+} from '../shared_slices/BeaconMalfunction'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel'
 
 const getVesselBeaconMalfunctions = () => (dispatch, getState) => {
@@ -17,9 +17,9 @@ const getVesselBeaconMalfunctions = () => (dispatch, getState) => {
     vesselBeaconMalfunctionsFromDate,
     /** @type {VesselBeaconMalfunctionsResumeAndHistory || null} */
     vesselBeaconMalfunctionsResumeAndHistory,
-    /** @type {BeaconStatusWithDetails || null} */
+    /** @type {BeaconMalfunctionResumeAndDetails || null} */
     openedBeaconMalfunction
-  } = getState().beaconStatus
+  } = getState().beaconMalfunction
 
   const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, selectedVessel)
 
@@ -35,7 +35,7 @@ const getVesselBeaconMalfunctions = () => (dispatch, getState) => {
 
     if (openedBeaconMalfunction) {
       const nextOpenedBeaconMalfunction = vesselBeaconsMalfunctions.history
-        .find(beaconMalfunction => beaconMalfunction.beaconStatus.id === openedBeaconMalfunction.beaconStatus.id)
+        .find(beaconMalfunction => beaconMalfunction.beaconMalfunction.id === openedBeaconMalfunction.beaconMalfunction.id)
       if (nextOpenedBeaconMalfunction) {
         dispatch(setOpenedBeaconMalfunction(nextOpenedBeaconMalfunction))
       }

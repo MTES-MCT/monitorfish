@@ -12,9 +12,7 @@ import { VesselSidebarTab } from '../domain/entities/vessel'
 import getAllRegulatoryLayers from '../domain/use_cases/getAllRegulatoryLayers'
 import getOperationalAlerts from '../domain/use_cases/getOperationalAlerts'
 import getAllBeaconMalfunctions from '../domain/use_cases/getAllBeaconMalfunctions'
-import openBeaconmalfunction from '../domain/use_cases/openBeaconMalfunction'
-import getAllBeaconStatuses from '../domain/use_cases/getAllBeaconStatuses'
-import openBeaconStatusInKanban from '../domain/use_cases/openBeaconStatusInKanban'
+import openBeaconMalfunctionInKanban from '../domain/use_cases/openBeaconMalfunctionInKanban'
 import getVesselBeaconMalfunctions from '../domain/use_cases/getVesselBeaconMalfunctions'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
@@ -89,7 +87,7 @@ const APIWorker = () => {
       }
 
       beaconMalfunctionInterval.current = setInterval(() => {
-        dispatch(openBeaconmalfunction(openedBeaconMalfunctionInKanban))
+        dispatch(openBeaconMalfunctionInKanban(openedBeaconMalfunctionInKanban))
       }, THIRTY_SECONDS)
     }
 

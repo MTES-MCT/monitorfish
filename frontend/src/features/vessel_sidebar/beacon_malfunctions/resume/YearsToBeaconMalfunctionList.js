@@ -5,7 +5,7 @@ import { COLORS } from '../../../../constants/constants'
 
 const YearsToBeaconMalfunctionList = props => {
   const {
-    /** @type {Object.<string, BeaconStatusWithDetails[]>} */
+    /** @type {Object.<string, BeaconMalfunctionResumeAndDetails[]>} */
     yearsToBeaconMalfunctions,
     /** @type {Date} */
     vesselBeaconMalfunctionsFromDate,

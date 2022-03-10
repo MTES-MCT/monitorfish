@@ -16,7 +16,7 @@ const BeaconMalfunctionDetails = props => {
   } = props
   const {
     /** @type {BeaconMalfunctionResumeAndDetails || null} */
-    openedBeaconMalfunctionInKanban
+    openedBeaconMalfunction
   } = useSelector(state => state.beaconMalfunction)
   const dispatch = useDispatch()
 
@@ -36,13 +36,13 @@ const BeaconMalfunctionDetails = props => {
           <Title>
             Résumé de l&apos;avarie en cours
           </Title>
-          <CurrentBeaconMalfunctionBody currentBeaconMalfunctionWithDetails={openedBeaconMalfunctionInKanban}/>
+          <CurrentBeaconMalfunctionBody currentBeaconMalfunctionWithDetails={openedBeaconMalfunction}/>
       </Zone>
         : <Zone data-cy={'beacon-malfunction-details'}>
           <Title>
-            Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunctionInKanban.beaconMalfunction.malfunctionStartDateTime)}
+            Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunction.beaconMalfunction.malfunctionStartDateTime)}
           </Title>
-          <BeaconMalfunctionDetailBody beaconMalfunctionWithDetails={openedBeaconMalfunctionInKanban}/>
+          <BeaconMalfunctionDetailBody beaconMalfunctionWithDetails={openedBeaconMalfunction}/>
         </Zone>
     }
     <Zone data-cy={'beacon-malfunction-details-follow-up'}>
@@ -51,9 +51,9 @@ const BeaconMalfunctionDetails = props => {
       </Title>
       <BeaconMalfunctionDetailsFollowUp
         smallSize
-        comments={openedBeaconMalfunctionInKanban.comments}
-        actions={openedBeaconMalfunctionInKanban.actions}
-        beaconMalfunctionId={openedBeaconMalfunctionInKanban?.beaconMalfunction.id}
+        comments={openedBeaconMalfunction.comments}
+        actions={openedBeaconMalfunction.actions}
+        beaconMalfunctionId={openedBeaconMalfunction?.beaconMalfunction.id}
       />
     </Zone>
   </Wrapper>

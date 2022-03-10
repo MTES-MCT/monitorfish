@@ -511,23 +511,4 @@ export const reOrderOldObjectHierarchyIfFound = layers => {
   return layers
 }
 
-export const SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY = 'selectedRegulatoryZoneIds'
-
-export const reOrderOldObjectHierarchyIfFound = layers => {
-  layers.forEach(layer => {
-    layers[layer] = layers[layer].map(zone => {
-      if (zone && zone.layerName) {
-        return {
-          topic: zone.layerName,
-          ...zone
-        }
-      }
-
-      return zone
-    })
-  })
-
-  return layers
-}
-
 export default Layers

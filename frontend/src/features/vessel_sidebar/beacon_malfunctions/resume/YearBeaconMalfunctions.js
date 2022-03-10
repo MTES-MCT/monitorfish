@@ -11,7 +11,8 @@ const YearBeaconMalfunctions = props => {
     /** @type {BeaconMalfunctionResumeAndDetails[]} yearBeaconMalfunctions */
     yearBeaconMalfunctions,
     year,
-    setIsCurrentBeaconMalfunctionDetails
+    setIsCurrentBeaconMalfunctionDetails,
+    isLastItem
   } = props
 
   const [isOpen, setIsOpen] = useState(false)
@@ -29,7 +30,7 @@ const YearBeaconMalfunctions = props => {
 
   return yearBeaconMalfunctions &&
     <Row>
-      <YearTitle isEmpty={yearBeaconMalfunctions.length === 0} isLastItem={props.isLastItem} isOpen={isOpen}>
+      <YearTitle isEmpty={yearBeaconMalfunctions.length === 0} isLastItem={isLastItem} isOpen={isOpen}>
         <Text isEmpty={yearBeaconMalfunctions.length === 0} isOpen={isOpen} title={year} onClick={() => setIsOpen(!isOpen)}>
           {
             yearBeaconMalfunctions.length ? <ChevronIcon $isOpen={isOpen}/> : null

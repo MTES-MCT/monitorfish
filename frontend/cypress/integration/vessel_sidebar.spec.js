@@ -314,6 +314,7 @@ context('VesselSidebar', () => {
       .then(({ request, response }) => expect(response.statusCode).equal(200))
     cy.get('*[data-cy="vessel-beacon-malfunctions-resume-number"]', { timeout: 20000 }).contains('à quai 1')
     cy.get('*[data-cy="vessel-beacon-malfunctions-resume-last"]', { timeout: 20000 }).contains('En arrêt technique')
+    cy.wait(1000)
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().should('have.length', 4)
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().eq(0).contains('1 avarie en mer')
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().eq(0).contains('0 avarie à quai')

@@ -8,6 +8,34 @@ import { getRegulatoryLayersWithoutTerritory } from '../entities/regulatory'
 const RegulatoryReducer = null
 /* eslint-enable */
 
+const pushRegulatoryZoneInTopicList = (selectedRegulatoryLayers, regulatoryZone) => {
+  if (Object.keys(selectedRegulatoryLayers).includes(regulatoryZone.topic)) {
+    const nextRegZoneTopic = selectedRegulatoryLayers[regulatoryZone.topic]
+    nextRegZoneTopic.push(regulatoryZone)
+    selectedRegulatoryLayers[regulatoryZone.topic] = nextRegZoneTopic
+  } else {
+    selectedRegulatoryLayers[regulatoryZone.topic] = [regulatoryZone]
+  }
+}
+
+const updateSelectedRegulatoryLayers = (regulatoryLayers, regulatoryZoneId, selectedRegulatoryLayers, selectedRegulatoryLayerIds) => {
+  const nextSelectedRegulatoryLayers = { ...selectedRegulatoryLayers }
+  const nextSelectedRegulatoryLayerIds = [...selectedRegulatoryLayerIds]
+  const nextRegulatoryZone = regulatoryLayers.find(zone => zone.id === regulatoryZoneId)
+  if (nextRegulatoryZone) {
+    if (nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
+      pushRegulatoryZoneInTopicList(nextSelectedRegulatoryLayers, nextRegulatoryZone)
+      nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
+      return { selectedRegulatoryLayers: nextSelectedRegulatoryLayers, selectedRegulatoryLayerIds: nextSelectedRegulatoryLayerIds }
+    } else if (nextRegulatoryZone.nextId) {
+      return updateSelectedRegulatoryLayers(regulatoryLayers, nextRegulatoryZone.nextId, selectedRegulatoryLayers, selectedRegulatoryLayerIds)
+    }
+    return null
+  } else {
+    return null
+  }
+}
+
 const regulatorySlice = createSlice({
   name: 'regulatory',
   initialState: {
@@ -260,7 +288,8 @@ export const {
   showSimplifiedGeometries,
   showWholeGeometries,
   setRegulationSearchedZoneExtent,
-  setSelectedRegulatoryZone
+  setSelectedRegulatoryZone,
+  setProcessingRegulationSearchedZoneExtent
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

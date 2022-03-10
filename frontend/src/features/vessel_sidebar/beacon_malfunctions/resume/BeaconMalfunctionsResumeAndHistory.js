@@ -32,6 +32,7 @@ const BeaconMalfunctionsResumeAndHistory = props => {
     }
     return nextYearsToBeaconMalfunctions
   }, [vesselBeaconMalfunctionsResumeAndHistory?.history, vesselBeaconMalfunctionsFromDate])
+  console.log(yearsToBeaconMalfunctions)
 
   function seeMore () {
     const nextDate = new Date(vesselBeaconMalfunctionsFromDate.getTime())

@@ -80,6 +80,30 @@ const beaconMalfunctionSlice = createSlice({
       state.loadingVesselBeaconMalfunctions = false
     },
     /**
+     * Reset selected vessel beacon malfunctions resume and history
+     * @function resetVesselBeaconMalfunctionsResumeAndHistory
+     * @memberOf BeaconMalfunctionReducer
+     * @param {Object=} state
+     */
+    resetVesselBeaconMalfunctionsResumeAndHistory (state) {
+      state.vesselBeaconMalfunctionsResumeAndHistory = null
+      state.openedBeaconMalfunction = null
+      state.loadingVesselBeaconMalfunctions = false
+    },
+    /**
+     * Update the selected vessel beacon malfunctions resume and history
+     * @function setVesselBeaconMalfunctionsResumeAndHistory
+     * @memberOf BeaconMalfunctionReducer
+     * @param {Object=} state
+     * @param {{payload: BeaconMalfunctionResumeAndDetails}} action
+     */
+    updateVesselBeaconMalfunctionsResumeAndHistory (state, action) {
+      state.vesselBeaconMalfunctionsResumeAndHistory = {
+        ...state.vesselBeaconMalfunctionsResumeAndHistory,
+        current: action.payload
+      }
+    },
+    /**
      * Set the date since beacon malfunctions are fetched
      * @function setVesselBeaconMalfunctionsFromDate
      * @memberOf BeaconMalfunctionReducer
@@ -121,6 +145,16 @@ const beaconMalfunctionSlice = createSlice({
     setOpenedBeaconMalfunction (state, action) {
       state.openedBeaconMalfunction = action.payload
       state.beaconMalfunctionsTab = BeaconMalfunctionsTab.DETAIL
+    },
+    /**
+     * Reset the open beacon malfunction
+     * @function resetOpenedBeaconMalfunction
+     * @memberOf BeaconMalfunctionReducer
+     * @param {Object=} state
+     */
+    resetOpenedBeaconMalfunction (state) {
+      state.openedBeaconMalfunction = null
+      state.beaconMalfunctionsTab = BeaconMalfunctionsTab.RESUME
     }
   }
 })
@@ -131,10 +165,13 @@ export const {
   setOpenedBeaconMalfunctionsInKanban,
   closeBeaconMalfunctionInKanban,
   setVesselBeaconMalfunctionsResumeAndHistory,
+  resetVesselBeaconMalfunctionsResumeAndHistory,
   setVesselBeaconMalfunctionsFromDate,
   loadVesselBeaconMalfunctions,
   setBeaconMalfunctionsTab,
-  setOpenedBeaconMalfunction
+  setOpenedBeaconMalfunction,
+  updateVesselBeaconMalfunctionsResumeAndHistory,
+  resetOpenedBeaconMalfunction
 } = beaconMalfunctionSlice.actions
 
 export default beaconMalfunctionSlice.reducer

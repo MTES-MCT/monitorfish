@@ -17,13 +17,14 @@ const VesselBeaconMalfunctions = () => {
     loadingVesselBeaconMalfunctions,
     vesselBeaconMalfunctionsFromDate
   } = useSelector(state => state.beaconMalfunction)
+  const {
+    selectedVessel
+  } = useSelector(state => state.vessel)
   const [isCurrentBeaconMalfunctionDetails, setIsCurrentBeaconMalfunctionDetails] = useState(null)
 
   useEffect(() => {
-    if (vesselBeaconMalfunctionsFromDate) {
-      dispatch(getVesselBeaconMalfunctions())
-    }
-  }, [])
+    dispatch(getVesselBeaconMalfunctions())
+  }, [selectedVessel, vesselBeaconMalfunctionsFromDate])
 
   return <>
     { !loadingVesselBeaconMalfunctions && beaconMalfunctionsTab

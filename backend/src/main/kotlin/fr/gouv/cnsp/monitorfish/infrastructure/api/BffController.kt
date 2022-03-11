@@ -81,7 +81,7 @@ class BffController(
                   trackDepth: VesselTrackDepth,
                   @ApiParam("Vessel positions identifier")
                   @RequestParam(name = "vesselIdentifier")
-                  vesselIdentifier: VesselIdentifier,
+                  vesselIdentifier: VesselIdentifier?,
                   @ApiParam("from date")
                   @RequestParam(name = "afterDateTime", required = false)
                   @DateTimeFormat(pattern = zoneDateTimePattern)
@@ -123,7 +123,7 @@ class BffController(
                                     IRCS: String,
                                     @ApiParam("Vessel identifier")
                                     @RequestParam(name = "vesselIdentifier")
-                                    vesselIdentifier: VesselIdentifier,
+                                    vesselIdentifier: VesselIdentifier?,
                                     @ApiParam("beacon malfunctions after date time")
                                     @RequestParam(name = "afterDateTime")
                                     @DateTimeFormat(pattern = zoneDateTimePattern)
@@ -154,7 +154,7 @@ class BffController(
                            trackDepth: VesselTrackDepth,
                            @ApiParam("Vessel positions identifier")
                            @RequestParam(name = "vesselIdentifier")
-                           vesselIdentifier: VesselIdentifier,
+                           vesselIdentifier: VesselIdentifier?,
                            @ApiParam("from date")
                            @RequestParam(name = "afterDateTime", required = false)
                            @DateTimeFormat(pattern = zoneDateTimePattern)

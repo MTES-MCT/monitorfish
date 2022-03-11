@@ -51,9 +51,9 @@ const BeaconMalfunctionDetails = props => {
       </Title>
       <BeaconMalfunctionDetailsFollowUp
         smallSize
-        comments={openedBeaconMalfunction.comments}
-        actions={openedBeaconMalfunction.actions}
-        beaconMalfunctionId={openedBeaconMalfunction?.beaconMalfunction.id}
+        comments={openedBeaconMalfunction?.comments}
+        actions={openedBeaconMalfunction?.actions}
+        beaconMalfunctionId={openedBeaconMalfunction?.beaconMalfunction?.id}
       />
     </Zone>
   </Wrapper>

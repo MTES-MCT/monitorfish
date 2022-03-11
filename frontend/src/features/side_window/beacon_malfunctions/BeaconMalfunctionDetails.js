@@ -28,6 +28,8 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
     if (vesselStatus?.color && beaconMalfunction?.id && getIsMalfunctioning(beaconMalfunction?.stage)) {
       // Target the `select-picker` DOM component
       ref.current.children[1].style.background = vesselStatus.color
+      // Target the `rs-picker-toggle-value` span DOM component
+      ref.current.children[1].firstChild.firstChild.firstChild.style.color = vesselStatus.textColor
       ref.current.children[1].style.setProperty('margin', '2px 10px 10px 0px', 'important')
     }
   }, [vesselStatus, beaconMalfunction, ref])

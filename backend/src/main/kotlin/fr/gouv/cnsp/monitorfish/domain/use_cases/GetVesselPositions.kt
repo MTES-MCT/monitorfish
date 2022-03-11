@@ -24,10 +24,18 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
                         externalReferenceNumber: String,
                         ircs: String,
                         trackDepth: VesselTrackDepth,
-                        vesselIdentifier: VesselIdentifier,
+                        vesselIdentifier: VesselIdentifier?,
                         fromDateTime: ZonedDateTime? = null,
                         toDateTime: ZonedDateTime? = null): Pair<Boolean, Deferred<List<Position>>> {
         var vesselTrackDepthHasBeenModified = false
+
+        if (vesselIdentifier == null) {
+            logger.warn("Vessel identifier must be not null : returning an empty list of positions " +
+                    "(internalReferenceNumber=${internalReferenceNumber}, externalReferenceNumber=${externalReferenceNumber}, ircs=${ircs})")
+            return coroutineScope {
+                Pair(vesselTrackDepthHasBeenModified, async { listOf() })
+            }
+        }
 
         if(trackDepth == VesselTrackDepth.CUSTOM) {
             requireNotNull(fromDateTime) {

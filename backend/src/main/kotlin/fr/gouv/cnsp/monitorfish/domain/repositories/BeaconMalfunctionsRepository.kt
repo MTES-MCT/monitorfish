@@ -18,4 +18,8 @@ interface BeaconMalfunctionsRepository {
                vesselStatus: VesselStatus?,
                stage: Stage?,
                updateDateTime: ZonedDateTime)
+    fun findAllByVesselWithoutVesselIdentifier(internalReferenceNumber: String,
+                                               externalReferenceNumber: String,
+                                               ircs: String,
+                                               afterDateTime: ZonedDateTime): List<BeaconMalfunction>
 }

@@ -3,7 +3,7 @@ import { updateBeaconMalfunctionFromAPI } from '../../api/fetch'
 import {
   setBeaconMalfunctions,
   updateLocalBeaconMalfunctions,
-  setOpenedBeaconMalfunctionsInKanban
+  setOpenedBeaconMalfunctionsInKanban, setOpenedBeaconMalfunction, updateVesselBeaconMalfunctionsResumeAndHistory
 } from '../shared_slices/BeaconMalfunction'
 
 /**
@@ -15,11 +15,22 @@ import {
 const updateBeaconMalfunctionFromKanban = (id, nextBeaconMalfunction, updatedFields) => (dispatch, getState) => {
   const previousBeaconMalfunctions = getState().beaconMalfunction.beaconMalfunctions
   dispatch(updateLocalBeaconMalfunctions(nextBeaconMalfunction))
-  const beaconMalfunctionToUpdateIsOpened = getState().beaconMalfunction.openedBeaconMalfunctionInKanban?.beaconMalfunction?.id === id
+  const beaconMalfunctionToUpdateIsOpenedAsCurrentVesselMalfunction = getState().beaconMalfunction
+    .vesselBeaconMalfunctionsResumeAndHistory?.current?.beaconMalfunction?.id === id
+  const beaconMalfunctionToUpdateIsOpened = getState().beaconMalfunction
+    .openedBeaconMalfunction?.beaconMalfunction?.id === id
+  const beaconMalfunctionToUpdateIsOpenedInKanban = getState().beaconMalfunction
+    .openedBeaconMalfunctionInKanban?.beaconMalfunction?.id === id
 
   return updateBeaconMalfunctionFromAPI(id, updatedFields).then(updatedBeaconMalfunctionWithDetails => {
     if (beaconMalfunctionToUpdateIsOpened) {
+      dispatch(setOpenedBeaconMalfunction(updatedBeaconMalfunctionWithDetails))
+    }
+    if (beaconMalfunctionToUpdateIsOpenedInKanban) {
       dispatch(setOpenedBeaconMalfunctionsInKanban(updatedBeaconMalfunctionWithDetails))
+    }
+    if (beaconMalfunctionToUpdateIsOpenedAsCurrentVesselMalfunction) {
+      dispatch(updateVesselBeaconMalfunctionsResumeAndHistory(updatedBeaconMalfunctionWithDetails))
     }
   }).catch(error => {
     dispatch(setError(error))

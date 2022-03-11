@@ -110,7 +110,7 @@ function perform_backups()
 
 		echo "Custom backup of $DATABASE"
 
-		if ! docker exec monitorfish_database sh -c "pg_dump -v -Fc -T anchorages -h $HOSTNAME -U $USERNAME $DATABASE -f ${FINAL_BACKUP_DIR}${DATABASE}.custom.in_progress"; then
+		if ! docker exec monitorfish_database sh -c "pg_dump -v -Fc -h $HOSTNAME -U $USERNAME $DATABASE -f ${FINAL_BACKUP_DIR}${DATABASE}.custom.in_progress"; then
 			echo "[!!ERROR!!] Failed to produce custom backup database $DATABASE"
 		else
 			mv $FINAL_BACKUP_DIR"$DATABASE".custom.in_progress $FINAL_BACKUP_DIR"$DATABASE".custom

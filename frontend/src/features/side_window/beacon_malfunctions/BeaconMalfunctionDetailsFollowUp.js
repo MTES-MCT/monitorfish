@@ -194,6 +194,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ comments, actions, beaconMalfunction
             <SubmitCommentRow style={submitCommentRowStyle}>
               Équipe SIP
               <Toggle
+                style={{ background: `${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray}` }}
                 value={userType === UserType.OPS}
                 onChange={checked => dispatch(setUserType(checked ? UserType.OPS : UserType.SIP))}
                 size="sm"
@@ -261,7 +262,7 @@ const actionOrCommentRow = {
 const CommentText = styled.div``
 const commentTextStyle = userType => ({
   background: `${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray} 0% 0% no-repeat padding-box`,
-  border: `1px solid ${COLORS.lightGray}`,
+  border: `1px solid ${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray}`,
   maxWidth: 480,
   padding: '10px 15px',
   marginTop: 10

@@ -72,7 +72,6 @@ const RegulatoryLayerSearchInput = props => {
   }, [advancedSearchIsOpen])
 
   useEffect(() => {
-    console.log('clickedOnSearch', clickedOnSearch)
     if (inputsAreEmpty && !zoneSelected) {
       batch(() => {
         dispatch(setRegulatoryLayersSearchResult({}))

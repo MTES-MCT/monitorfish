@@ -87,6 +87,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   const {
     isModalOpen,
     regulationSaved,
+    regulationModified,
     regulatoryTextCheckedMap,
     saveOrUpdateRegulation,
     atLeastOneValueIsMissing,
@@ -149,7 +150,11 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [regulationSaved, regulationDeleted, goBackofficeHome])
 
   const onGoBack = () => {
-    dispatch(setIsConfirmModalOpen(true))
+    if (regulationModified) {
+      dispatch(setIsConfirmModalOpen(true))
+    } else {
+      goBackofficeHome()
+    }
   }
 
   useEffect(() => {

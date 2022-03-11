@@ -9,15 +9,14 @@ import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { Priority, priorityStyle, showVesselOnMap } from './BeaconMalfunctionCard'
 import { useDispatch } from 'react-redux'
 import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
-import { VesselStatusSelectValue } from './VesselStatusSelectValue'
-import SelectPicker from 'rsuite/lib/SelectPicker'
 import * as timeago from 'timeago.js'
 import { closeBeaconMalfunctionInKanban } from '../../../domain/shared_slices/BeaconMalfunction'
 import { getDateTime } from '../../../utils'
-import { vesselStatuses } from '../../../domain/entities/beaconMalfunction'
+import { getIsMalfunctioning, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
 import BeaconMalfunctionDetailsFollowUp from './BeaconMalfunctionDetailsFollowUp'
 import { showVesselSidebarTab } from '../../../domain/shared_slices/Vessel'
 import { VesselSidebarTab } from '../../../domain/entities/vessel'
+import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
 
 const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions, updateVesselStatus }) => {
   const dispatch = useDispatch()
@@ -26,12 +25,12 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
   const ref = useRef()
 
   useEffect(() => {
-    if (vesselStatus?.color && beaconMalfunction?.id) {
+    if (vesselStatus?.color && beaconMalfunction?.id && getIsMalfunctioning(beaconMalfunction?.stage)) {
       // Target the `select-picker` DOM component
       ref.current.children[1].style.background = vesselStatus.color
       ref.current.children[1].style.setProperty('margin', '2px 10px 10px 0px', 'important')
     }
-  }, [vesselStatus, beaconMalfunction])
+  }, [vesselStatus, beaconMalfunction, ref])
 
   const beaconMalfunctionDetailsWrapperStyle = {
     position: 'fixed',
@@ -124,15 +123,12 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
             <ColumnTitle style={malfunctioningTextStyle}>
               AVARIE #{beaconMalfunction?.id} - {' '}{getBeaconCreationOrModificationDate(beaconMalfunction)}
             </ColumnTitle>
-            <SelectPicker
-              container={() => ref.current}
-              menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
-              searchable={false}
-              value={vesselStatus?.value}
-              onChange={status => updateVesselStatus(beaconMalfunction, status)}
-              data={vesselStatuses}
-              renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
-              cleanable={false}
+            <VesselStatusSelectOrEndOfMalfunction
+              domRef={ref}
+              beaconMalfunction={beaconMalfunction}
+              vesselStatus={vesselStatus}
+              updateVesselStatus={updateVesselStatus}
+              isMalfunctioning={getIsMalfunctioning(beaconMalfunction?.stage)}
             />
           </Malfunctioning>
           <LastPosition style={lastPositionStyle} title={getDateTime(beaconMalfunction?.malfunctionStartDateTime)}>

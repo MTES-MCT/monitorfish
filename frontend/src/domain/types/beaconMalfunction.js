@@ -4,6 +4,7 @@
  * @property {string} internalReferenceNumber
  * @property {string} externalReferenceNumber
  * @property {string} ircs
+ * @property {string} flagState
  * @property {string} vesselIdentifier
  * @property {string} vesselName
  * @property {string} vesselStatus
@@ -12,6 +13,7 @@
  * @property {string} malfunctionStartDateTime
  * @property {string | null} malfunctionEndDateTime
  * @property {string} vesselStatusLastModificationDateTime
+ * @property {string} endOfBeaconMalfunctionReason
  */
 
 /**

@@ -276,4 +276,37 @@ context('Side window beacon malfunctions', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-content"]').eq(0)
       .contains('I just added a new comment')
   })
+
+  it('Beacon malfunction end of malfunction reason Should be showed', () => {
+    // In the board
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]').children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .first()
+      .find('*[data-cy="side-window-beacon-malfunctions-end-of-malfunction"]')
+      .contains('Reprise des émissions')
+
+    // In the details
+    // When
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]').children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .first()
+      .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
+      .click()
+
+    // Then
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
+      .find('*[data-cy="side-window-beacon-malfunctions-end-of-malfunction"]')
+      .contains('Reprise des émissions')
+  })
 })
+
+
+/*
+cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]').children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .first()
+      .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
+      .contains('Sans nouvelles')
+ */
+
+// side-window-beacon-malfunctions-end-of-malfunction

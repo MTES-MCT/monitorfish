@@ -134,18 +134,22 @@ context('NewRegulation', () => {
     cy.url().should('include', '/backoffice')
   })
 
-  it('If a value is missing, the confirm modal is not opnned and a warning message is displayed', () => {
+  it('If a value is missing, the confirm modal is opened and a warning message is displayed if saving', () => {
     // When
+    cy.get('[data-cy="close-tag-Ouest Cotentin Bivalves"]').click()
     cy.get('[data-cy="go-back-link"]').eq(0).click()
-    // Then
     cy.get('[data-cy="regulation-modal"]').should('exist')
+    cy.get('[data-cy="confirm-modal-confirm-button"]').click()
+
+    // Then
     cy.get('[data-cy="save-forbidden-btn"]').should('exist')
   })
 
   it('A modal should not be opened on go back button click, if nothing has been modified', () => {
     // When
     cy.get('[data-cy="go-back-link"]').eq(0).click()
-    // then
+
+    // Then
     cy.get('[data-cy="regulation-modal"]').should('not.exist')
     cy.url().should('include', '/backoffice')
   })

@@ -60,11 +60,15 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
           />
         </Row>
         <Row style={rowStyle(10)}>
-          <Flag
-            style={flagStyle}
-            rel='preload'
-            src={`${baseUrl}/flags/fr.svg`}
-          />
+          {
+            beaconMalfunction?.flagState
+              ? <Flag
+                style={flagStyle}
+                rel='preload'
+                src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`}
+              />
+              : null
+          }
           <VesselName
             data-cy={'side-window-beacon-malfunctions-detail-vessel-name'}
             style={vesselNameStyle}

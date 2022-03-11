@@ -51,7 +51,15 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl,
         />
       </Row>
       <Row style={rowStyle(false)}>
-        <Flag style={flagStyle} rel='preload' src={`${baseUrl}/flags/fr.svg`}/>
+        {
+          beaconMalfunction?.flagState
+            ? <Flag
+              style={flagStyle}
+              rel='preload'
+              src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`}
+            />
+            : null
+        }
         <VesselName
           className={'hover-border'}
           data-cy={'side-window-beacon-malfunctions-card-vessel-name'}

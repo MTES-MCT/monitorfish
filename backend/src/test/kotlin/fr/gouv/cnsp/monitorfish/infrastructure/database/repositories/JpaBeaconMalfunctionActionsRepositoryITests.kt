@@ -26,7 +26,7 @@ class JpaBeaconMalfunctionActionsRepositoryITests : AbstractDBTests() {
         assertThat(comments.last().beaconMalfunctionId).isEqualTo(1)
         assertThat(comments.last().propertyName).isEqualTo(BeaconMalfunctionActionPropertyName.VESSEL_STATUS)
         assertThat(comments.last().previousValue).isEqualTo("AT_PORT")
-        assertThat(comments.last().nextValue).isEqualTo("TECHNICAL_STOP")
+        assertThat(comments.last().nextValue).isEqualTo("ACTIVITY_DETECTED")
         assertThat(comments.last().dateTime).isNotNull
     }
 

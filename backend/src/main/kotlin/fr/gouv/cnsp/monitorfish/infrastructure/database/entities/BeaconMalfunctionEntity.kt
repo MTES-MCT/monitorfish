@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import java.time.Instant
@@ -22,6 +23,8 @@ data class BeaconMalfunctionEntity(
         val externalReferenceNumber: String?,
         @Column(name = "vessel_name")
         val vesselName: String,
+        @Column(name = "flag_state")
+        val flagState: String?,
         @Column(name = "vessel_identifier")
         @Enumerated(EnumType.STRING)
         val vesselIdentifier: VesselIdentifier,
@@ -38,7 +41,10 @@ data class BeaconMalfunctionEntity(
         @Column(name = "malfunction_end_date_utc")
         val malfunctionEndDateTime: Instant?,
         @Column(name = "vessel_status_last_modification_date_utc")
-        val vesselStatusLastModificationDateTime: Instant) {
+        val vesselStatusLastModificationDateTime: Instant,
+        @Column(name = "end_of_malfunction_reason")
+        @Enumerated(EnumType.STRING)
+        val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason) {
 
         fun toBeaconMalfunction() = BeaconMalfunction(
                 id = id,
@@ -46,11 +52,13 @@ data class BeaconMalfunctionEntity(
                 ircs = ircs,
                 externalReferenceNumber = externalReferenceNumber,
                 vesselName = vesselName,
+                flagState = flagState,
                 vesselIdentifier = vesselIdentifier,
                 vesselStatus = vesselStatus,
                 stage = stage,
                 priority = priority,
                 malfunctionStartDateTime = malfunctionStartDateTime.atZone(ZoneOffset.UTC),
                 malfunctionEndDateTime = malfunctionEndDateTime?.atZone(ZoneOffset.UTC),
-                vesselStatusLastModificationDateTime = vesselStatusLastModificationDateTime.atZone(ZoneOffset.UTC))
+                vesselStatusLastModificationDateTime = vesselStatusLastModificationDateTime.atZone(ZoneOffset.UTC),
+                endOfBeaconMalfunctionReason = endOfBeaconMalfunctionReason)
 }

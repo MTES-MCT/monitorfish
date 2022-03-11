@@ -47,14 +47,14 @@ class UpdateBeaconMalfunctionUTests {
     fun `execute Should return the updated beacon malfunction When a field to update is given`() {
         // Given
         given(beaconMalfunctionsRepository.find(any())).willReturn(BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                 true, ZonedDateTime.now(), null, ZonedDateTime.now()))
         given(beaconMalfunctionActionRepository.findAllByBeaconMalfunctionId(any())).willReturn(listOf(BeaconMalfunctionAction(1, 1,
                 BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now())))
         given(getBeaconMalfunction.execute(1))
                 .willReturn(BeaconMalfunctionResumeAndDetails(
                         beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
                         actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))

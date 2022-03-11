@@ -477,7 +477,7 @@ class BffControllerITests {
     fun `Should get all beacon malfunctions`() {
         // Given
         given(this.getAllBeaconMalfunctions.execute()).willReturn(listOf(BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                 true, ZonedDateTime.now(), null, ZonedDateTime.now())))
 
         // When
@@ -495,7 +495,7 @@ class BffControllerITests {
         given(this.updateBeaconMalfunction.execute(123, VesselStatus.AT_SEA, null))
                 .willReturn(BeaconMalfunctionResumeAndDetails(
                         beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
                         actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
@@ -530,7 +530,7 @@ class BffControllerITests {
         given(this.getBeaconMalfunction.execute(123))
                 .willReturn(BeaconMalfunctionResumeAndDetails(
                         beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
                         comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
@@ -553,7 +553,7 @@ class BffControllerITests {
         given(this.getBeaconMalfunction.execute(123))
                 .willReturn(BeaconMalfunctionResumeAndDetails(
                         beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
                         actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
@@ -574,7 +574,7 @@ class BffControllerITests {
     fun `Should save a beacon malfunction comment`() {
         given(this.saveBeaconMalfunctionComment.execute(any(), any(), any())).willReturn(BeaconMalfunctionResumeAndDetails(
                 beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                        "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                 comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
                 actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
@@ -599,15 +599,15 @@ class BffControllerITests {
                         resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
                         history = listOf(BeaconMalfunctionWithDetails(
                             beaconMalfunction = BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
-                                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
-                                    true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                                    "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                                    true, ZonedDateTime.now(), null, ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION),
                             comments = listOf(BeaconMalfunctionComment(
                                     beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
                             actions = listOf(BeaconMalfunctionAction(
                                     beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))),
                         current = BeaconMalfunctionWithDetails(
                                 beaconMalfunction = BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
-                                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                    "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                     true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                                 comments = listOf(BeaconMalfunctionComment(
                                         beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
@@ -627,7 +627,9 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.current.beaconMalfunction.externalReferenceNumber", equalTo("1236514")))
                 .andExpect(jsonPath("$.history[0].beaconMalfunction.id", equalTo(1)))
                 .andExpect(jsonPath("$.history[0].beaconMalfunction.internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.flagState", equalTo("fr")))
                 .andExpect(jsonPath("$.history[0].beaconMalfunction.externalReferenceNumber", equalTo("1236514")))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.endOfBeaconMalfunctionReason", equalTo("RESUMED_TRANSMISSION")))
                 .andExpect(jsonPath("$.history[0].actions[0].beaconMalfunctionId", equalTo(1)))
                 .andExpect(jsonPath("$.history[0].actions[0].propertyName", equalTo("VESSEL_STATUS")))
                 .andExpect(jsonPath("$.history[0].comments[0].beaconMalfunctionId", equalTo(1)))

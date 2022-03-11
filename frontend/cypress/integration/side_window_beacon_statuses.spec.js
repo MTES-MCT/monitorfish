@@ -102,7 +102,7 @@ context('Side window beacon malfunctions', () => {
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
-      .contains('En arrêt technique')
+      .contains('Activité détectée')
   })
 
   it('A beacon malfunction card vessel status Should be changed in the Board', () => {
@@ -125,20 +125,20 @@ context('Side window beacon malfunctions', () => {
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
       .find('.rs-picker-select-menu-item')
-      .eq(4)
+      .eq(2)
       .click()
 
     // Then
     cy.wait('@moveBeaconMalfunctionCardVesselStatus')
       .then(({ request, response }) => {
-        expect(request.body.vesselStatus).contains('ACTIVITY_DETECTED')
+        expect(request.body.vesselStatus).contains('NO_NEWS')
         expect(response.statusCode).equal(200)
       })
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]').children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
-      .contains('Activité détectée')
+      .contains('Sans nouvelles')
   })
 
   it('Beacon malfunction Should be opened', () => {
@@ -162,7 +162,7 @@ context('Side window beacon malfunctions', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-priority"]').contains('Prioritaire')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
-      .contains('En arrêt technique')
+      .contains('Activité détectée')
 
     // Check the comments order
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comments-number"]').contains('2 commentaires')
@@ -180,7 +180,7 @@ context('Side window beacon malfunctions', () => {
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-action-content"]').should('have.length', 3)
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-action-content"]').eq(0)
-      .contains('Le statut du ticket a été modifié, de Navire à quai à En arrêt technique.')
+      .contains('Le statut du ticket a été modifié, de Navire à quai à Activité détectée.')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-action-content"]').eq(2)
       .contains('Le ticket a été déplacé de Premier contact à Relance pour reprise.')
 
@@ -224,7 +224,7 @@ context('Side window beacon malfunctions', () => {
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
-      .contains('Activité détectée')
+      .contains('Sans nouvelles')
     cy.intercept('PUT', 'bff/v1/beacon_malfunctions/10').as('moveBeaconMalfunctionCardVesselStatus')
 
     // When
@@ -234,18 +234,18 @@ context('Side window beacon malfunctions', () => {
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
       .find('.rs-picker-select-menu-item')
-      .eq(3)
+      .eq(1)
       .click()
 
     // Then
     cy.wait('@moveBeaconMalfunctionCardVesselStatus')
       .then(({ request, response }) => {
-        expect(request.body.vesselStatus).contains('TECHNICAL_STOP')
+        expect(request.body.vesselStatus).contains('AT_SEA')
         expect(response.statusCode).equal(200)
       })
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
-      .contains('En arrêt technique')
+      .contains('Navire en mer')
   })
 
   it('Beacon malfunction Should be opened and a comment added', () => {

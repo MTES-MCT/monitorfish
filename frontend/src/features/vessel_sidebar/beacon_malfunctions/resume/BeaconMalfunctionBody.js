@@ -41,12 +41,6 @@ const BeaconMalfunctionBody = props => {
           ? <ActivityDetectedLabel>Activité détectée</ActivityDetectedLabel>
           : null
       }
-      {
-        beaconMalfunctionWithDetails.actions.find(action =>
-          action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS && action.nextValue === BeaconMalfunctionVesselStatus.TECHNICAL_STOP)
-          ? <TechnicalStopLabel>En arrêt technique</TechnicalStopLabel>
-          : null
-      }
     </Wrapper>
     : null
 }
@@ -63,17 +57,6 @@ const ActivityDetectedLabel = styled.span`
   background: #E1000F 0% 0% no-repeat padding-box;
   border-radius: 11px;
   color: ${COLORS.white};
-  font-size: 13px;
-  font-weight: 500;
-`
-
-const TechnicalStopLabel = styled.span`
-  display: inline-block;
-  margin-top: 10px;
-  padding: 0 8px 0 8px;
-  background: #D1B85E 0% 0% no-repeat padding-box;
-  border-radius: 11px;
-  color: ${COLORS.gunMetal};
   font-size: 13px;
   font-weight: 500;
 `

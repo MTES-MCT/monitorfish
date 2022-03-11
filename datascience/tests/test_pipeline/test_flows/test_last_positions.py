@@ -1,8 +1,8 @@
-import unittest
 from datetime import datetime, timedelta
 from unittest.mock import patch
 
 import pandas as pd
+import pytest
 import sqlalchemy
 
 from config import default_risk_factors
@@ -23,361 +23,369 @@ from src.pipeline.flows.last_positions import (
 from tests.mocks import mock_extract_side_effect
 
 
-class TestLastPositionsFlow(unittest.TestCase):
-    @patch("src.pipeline.flows.last_positions.extract")
-    def test_extract_risk_factors(self, mock_extract):
-        mock_extract.side_effect = mock_extract_side_effect
-        query = extract_risk_factors.run()
-        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
+@patch("src.pipeline.flows.last_positions.extract")
+def test_extract_risk_factors(mock_extract):
+    mock_extract.side_effect = mock_extract_side_effect
+    query = extract_risk_factors.run()
+    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
-    @patch("src.pipeline.flows.last_positions.extract")
-    def test_extract_previous_last_positions(self, mock_extract):
-        mock_extract.side_effect = mock_extract_side_effect
-        query = extract_previous_last_positions.run()
-        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
 
-    @patch("src.pipeline.flows.last_positions.extract")
-    def test_extract_last_positions(self, mock_extract):
-        mock_extract.side_effect = mock_extract_side_effect
-        query = extract_last_positions.run(minutes=10)
-        self.assertTrue(isinstance(query, sqlalchemy.sql.elements.TextClause))
+@patch("src.pipeline.flows.last_positions.extract")
+def test_extract_previous_last_positions(mock_extract):
+    mock_extract.side_effect = mock_extract_side_effect
+    query = extract_previous_last_positions.run()
+    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
-    @patch("src.pipeline.flows.last_positions.load", autospec=True)
-    def test_load_last_positions(self, mock_load):
-        dummy_last_positions = pd.DataFrame()
-        load_last_positions.run(dummy_last_positions)
 
-    def test_validate_action(self):
-        self.assertEqual(validate_action.run("update"), "update")
-        self.assertEqual(validate_action.run("replace"), "replace")
-        with self.assertRaises(ValueError):
-            validate_action.run("unknown_option")
+@patch("src.pipeline.flows.last_positions.extract")
+def test_extract_last_positions(mock_extract):
+    mock_extract.side_effect = mock_extract_side_effect
+    query = extract_last_positions.run(minutes=10)
+    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
-    def test_drop_duplicates(self):
-        positions = pd.DataFrame(
-            {
-                "cfr": ["A", "A", "B", "C"],
-                "external_immatriculation": ["AA", "A-A", "BB", "CC"],
-                "ircs": ["AAA", "AAA", "BBB", "CCC"],
-                "other_columns": ["some", "some", "more", "data"],
-            }
-        )
 
-        res = drop_duplicates.run(positions)
-        expected_res = positions.iloc[[0, 2, 3]]
-        pd.testing.assert_frame_equal(res, expected_res)
+@patch("src.pipeline.flows.last_positions.load", autospec=True)
+def test_load_last_positions(mock_load):
+    dummy_last_positions = pd.DataFrame()
+    load_last_positions.run(dummy_last_positions)
 
-    def test_drop_unchanched_new_last_positions(self):
-        previous_last_positions = pd.DataFrame(
-            {
-                "id": [1, 2, 3, 4],
-                "vessel_id": ["A", "B", "C", "D"],
-                "some": [1.1, 0.2, -5.65, 1],
-                "more": ["b", "c", "d", "a"],
-                "data": [None, None, None, None],
-            }
-        )
 
-        new_last_positions = pd.DataFrame(
-            {
-                "id": [4, 5, 6],
-                "vessel_id": ["D", "E", "A"],
-                "some": [1.8, 2.2, -1.1],
-                "more": ["a", "d", "f"],
-                "data": [None, 42, ""],
-            }
-        )
+def test_validate_action():
+    assert validate_action.run("update") == "update"
+    assert validate_action.run("replace") == "replace"
+    with pytest.raises(ValueError):
+        validate_action.run("unknown_option")
 
-        expected_res = pd.DataFrame(
-            {
-                "id": [5, 6],
-                "vessel_id": ["E", "A"],
-                "some": [2.2, -1.1],
-                "more": ["d", "f"],
-                "data": [42, ""],
-            }
-        )
 
-        res = drop_unchanched_new_last_positions.run(
-            new_last_positions, previous_last_positions
-        )
+def test_drop_duplicates():
+    positions = pd.DataFrame(
+        {
+            "cfr": ["A", "A", "B", "C"],
+            "external_immatriculation": ["AA", "A-A", "BB", "CC"],
+            "ircs": ["AAA", "AAA", "BBB", "CCC"],
+            "other_columns": ["some", "some", "more", "data"],
+        }
+    )
 
-        self.assertEqual(list(res), list(expected_res))
-        self.assertEqual(res.values.tolist(), expected_res.values.tolist())
+    res = drop_duplicates.run(positions)
+    expected_res = positions.iloc[[0, 2, 3]]
+    pd.testing.assert_frame_equal(res, expected_res)
 
-    def test_split(self):
-        previous_last_positions = pd.DataFrame(
-            {
-                "cfr": ["A", "B", "C", None, None, "G"],
-                "external_immatriculation": ["AA", "BB", None, "DD", None, "GG"],
-                "ircs": ["AAA", None, None, None, "EEE", "GGG"],
-                "last_position_datetime_utc": [
-                    datetime(2021, 10, 1, 20, 52, 10),
-                    datetime(2021, 10, 1, 20, 42, 10),
-                    datetime(2021, 10, 1, 20, 32, 10),
-                    datetime(2021, 10, 1, 19, 52, 10),
-                    datetime(2021, 10, 1, 20, 16, 10),
-                    datetime(2021, 10, 1, 19, 16, 55),
-                ],
-            }
-        )
 
-        new_last_positions = pd.DataFrame(
-            {
-                "cfr": ["A", None, "F", "G"],
-                "external_immatriculation": ["AA", None, "FF", "GG"],
-                "ircs": ["AAA", "EEE", None, None],
-                "last_position_datetime_utc": [
-                    datetime(2021, 10, 1, 21, 52, 10),
-                    datetime(2021, 10, 1, 21, 56, 10),
-                    datetime(2021, 10, 1, 21, 54, 10),
-                    datetime(2021, 10, 1, 20, 17, 25),
-                ],
-                "some": [1, 2, 3, 4],
-                "more": ["a", "b", "c", "g"],
-                "data": [None, 2.256, "Bla", "Picachu"],
-            }
-        )
+def test_drop_unchanched_new_last_positions():
+    previous_last_positions = pd.DataFrame(
+        {
+            "id": [1, 2, 3, 4],
+            "vessel_id": ["A", "B", "C", "D"],
+            "some": [1.1, 0.2, -5.65, 1],
+            "more": ["b", "c", "d", "a"],
+            "data": [None, None, None, None],
+        }
+    )
 
-        (
-            unchanged_previous_last_positions,
-            new_vessels_last_positions,
-            last_positions_to_update,
-        ) = split.run(previous_last_positions, new_last_positions)
+    new_last_positions = pd.DataFrame(
+        {
+            "id": [4, 5, 6],
+            "vessel_id": ["D", "E", "A"],
+            "some": [1.8, 2.2, -1.1],
+            "more": ["a", "d", "f"],
+            "data": [None, 42, ""],
+        }
+    )
 
-        expected_unchanged_previous_last_positions = previous_last_positions.iloc[
-            [1, 2, 3]
-        ]
+    expected_res = pd.DataFrame(
+        {
+            "id": [5, 6],
+            "vessel_id": ["E", "A"],
+            "some": [2.2, -1.1],
+            "more": ["d", "f"],
+            "data": [42, ""],
+        }
+    )
 
-        expected_new_vessels_last_positions = new_last_positions.iloc[[2]]
+    res = drop_unchanched_new_last_positions.run(
+        new_last_positions, previous_last_positions
+    )
 
-        expected_last_positions_to_update = pd.DataFrame(
-            {
-                "cfr": ["A", "G", None],
-                "external_immatriculation": ["AA", "GG", None],
-                "ircs": ["AAA", "GGG", "EEE"],
-                "last_position_datetime_utc_previous": [
-                    datetime(2021, 10, 1, 20, 52, 10),
-                    datetime(2021, 10, 1, 19, 16, 55),
-                    datetime(2021, 10, 1, 20, 16, 10),
-                ],
-                "last_position_datetime_utc_new": [
-                    datetime(2021, 10, 1, 21, 52, 10),
-                    datetime(2021, 10, 1, 20, 17, 25),
-                    datetime(2021, 10, 1, 21, 56, 10),
-                ],
-                "some": [1, 4, 2],
-                "more": ["a", "g", "b"],
-                "data": [None, "Picachu", 2.256],
-            },
-        ).astype({"data": "object"})
+    assert list(res) == list(expected_res)
+    assert res.values.tolist() == expected_res.values.tolist()
 
-        pd.testing.assert_frame_equal(
-            unchanged_previous_last_positions,
-            expected_unchanged_previous_last_positions,
-        )
 
-        pd.testing.assert_frame_equal(
-            new_vessels_last_positions, expected_new_vessels_last_positions
-        )
+def test_split():
+    previous_last_positions = pd.DataFrame(
+        {
+            "cfr": ["A", "B", "C", None, None, "G"],
+            "external_immatriculation": ["AA", "BB", None, "DD", None, "GG"],
+            "ircs": ["AAA", None, None, None, "EEE", "GGG"],
+            "last_position_datetime_utc": [
+                datetime(2021, 10, 1, 20, 52, 10),
+                datetime(2021, 10, 1, 20, 42, 10),
+                datetime(2021, 10, 1, 20, 32, 10),
+                datetime(2021, 10, 1, 19, 52, 10),
+                datetime(2021, 10, 1, 20, 16, 10),
+                datetime(2021, 10, 1, 19, 16, 55),
+            ],
+        }
+    )
 
-        pd.testing.assert_frame_equal(
-            last_positions_to_update, expected_last_positions_to_update
-        )
+    new_last_positions = pd.DataFrame(
+        {
+            "cfr": ["A", None, "F", "G"],
+            "external_immatriculation": ["AA", None, "FF", "GG"],
+            "ircs": ["AAA", "EEE", None, None],
+            "last_position_datetime_utc": [
+                datetime(2021, 10, 1, 21, 52, 10),
+                datetime(2021, 10, 1, 21, 56, 10),
+                datetime(2021, 10, 1, 21, 54, 10),
+                datetime(2021, 10, 1, 20, 17, 25),
+            ],
+            "some": [1, 2, 3, 4],
+            "more": ["a", "b", "c", "g"],
+            "data": [None, 2.256, "Bla", "Picachu"],
+        }
+    )
 
-    def test_compute_emission_period(self):
-        last_positions_to_update = pd.DataFrame(
-            {
-                "cfr": ["A", None],
-                "external_immatriculation": ["AA", None],
-                "ircs": ["AAA", "EEE"],
-                "last_position_datetime_utc_previous": [
-                    datetime(2021, 10, 1, 20, 52, 10),
-                    datetime(2021, 10, 1, 20, 16, 10),
-                ],
-                "last_position_datetime_utc_new": [
-                    datetime(2021, 10, 1, 21, 52, 10),
-                    datetime(2021, 10, 1, 21, 56, 10),
-                ],
-                "emission_period": [timedelta(minutes=10), None],
-                "some": [1, 2],
-                "more": ["a", "b"],
-                "data": [None, 2.256],
-            },
-        )
+    (
+        unchanged_previous_last_positions,
+        new_vessels_last_positions,
+        last_positions_to_update,
+    ) = split.run(previous_last_positions, new_last_positions)
 
-        updated_last_positions = compute_emission_period.run(last_positions_to_update)
+    expected_unchanged_previous_last_positions = previous_last_positions.iloc[[1, 2, 3]]
 
-        expected_updated_last_positions = pd.DataFrame(
-            {
-                "cfr": ["A", None],
-                "external_immatriculation": ["AA", None],
-                "ircs": ["AAA", "EEE"],
-                "last_position_datetime_utc": [
-                    datetime(2021, 10, 1, 21, 52, 10),
-                    datetime(2021, 10, 1, 21, 56, 10),
-                ],
-                "emission_period": [
-                    timedelta(minutes=10),
-                    timedelta(hours=1, minutes=40),
-                ],
-                "some": [1, 2],
-                "more": ["a", "b"],
-                "data": [None, 2.256],
-            },
-        )
+    expected_new_vessels_last_positions = new_last_positions.iloc[[2]]
 
-        self.assertTrue(updated_last_positions.equals(expected_updated_last_positions))
+    expected_last_positions_to_update = pd.DataFrame(
+        {
+            "cfr": ["A", "G", None],
+            "external_immatriculation": ["AA", "GG", None],
+            "ircs": ["AAA", "GGG", "EEE"],
+            "last_position_datetime_utc_previous": [
+                datetime(2021, 10, 1, 20, 52, 10),
+                datetime(2021, 10, 1, 19, 16, 55),
+                datetime(2021, 10, 1, 20, 16, 10),
+            ],
+            "last_position_datetime_utc_new": [
+                datetime(2021, 10, 1, 21, 52, 10),
+                datetime(2021, 10, 1, 20, 17, 25),
+                datetime(2021, 10, 1, 21, 56, 10),
+            ],
+            "some": [1, 4, 2],
+            "more": ["a", "g", "b"],
+            "data": [None, "Picachu", 2.256],
+        },
+    ).astype({"data": "object"})
 
-    def test_concatenate(self):
+    pd.testing.assert_frame_equal(
+        unchanged_previous_last_positions,
+        expected_unchanged_previous_last_positions,
+    )
 
-        unchanged_previous_last_positions = pd.DataFrame(
-            {
-                "vessel_id": ["A", "B", "C"],
-                "some": [1, 2, None],
-                "more": ["a", None, "c"],
-                "data": [None, 2.256, 0.1],
-            }
-        )
+    pd.testing.assert_frame_equal(
+        new_vessels_last_positions, expected_new_vessels_last_positions
+    )
 
-        new_vessels_last_positions = pd.DataFrame(
-            {"vessel_id": ["D"], "some": [1], "more": ["d"], "data": [2.36]}
-        )
+    pd.testing.assert_frame_equal(
+        last_positions_to_update, expected_last_positions_to_update
+    )
 
-        updated_last_positions = pd.DataFrame(
-            {
-                "vessel_id": ["E", "F"],
-                "some": [1, 2],
-                "more": ["e", "f"],
-                "data": [None, 21.256],
-            }
-        )
 
-        expected_last_positions = pd.DataFrame(
-            {
-                "vessel_id": ["A", "B", "C", "D", "E", "F"],
-                "some": [1, 2, None, 1, 1, 2],
-                "more": ["a", None, "c", "d", "e", "f"],
-                "data": [None, 2.256, 0.1, 2.36, None, 21.256],
-            }
-        )
+def test_compute_emission_period():
+    last_positions_to_update = pd.DataFrame(
+        {
+            "cfr": ["A", None],
+            "external_immatriculation": ["AA", None],
+            "ircs": ["AAA", "EEE"],
+            "last_position_datetime_utc_previous": [
+                datetime(2021, 10, 1, 20, 52, 10),
+                datetime(2021, 10, 1, 20, 16, 10),
+            ],
+            "last_position_datetime_utc_new": [
+                datetime(2021, 10, 1, 21, 52, 10),
+                datetime(2021, 10, 1, 21, 56, 10),
+            ],
+            "emission_period": [timedelta(minutes=10), None],
+            "some": [1, 2],
+            "more": ["a", "b"],
+            "data": [None, 2.256],
+        },
+    )
 
-        last_positions = concatenate.run(
-            unchanged_previous_last_positions,
-            new_vessels_last_positions,
-            updated_last_positions,
-        )
+    updated_last_positions = compute_emission_period.run(last_positions_to_update)
 
-        self.assertTrue(last_positions.equals(expected_last_positions))
+    expected_updated_last_positions = pd.DataFrame(
+        {
+            "cfr": ["A", None],
+            "external_immatriculation": ["AA", None],
+            "ircs": ["AAA", "EEE"],
+            "last_position_datetime_utc": [
+                datetime(2021, 10, 1, 21, 52, 10),
+                datetime(2021, 10, 1, 21, 56, 10),
+            ],
+            "emission_period": [
+                timedelta(minutes=10),
+                timedelta(hours=1, minutes=40),
+            ],
+            "some": [1, 2],
+            "more": ["a", "b"],
+            "data": [None, 2.256],
+        },
+    )
 
-    @patch("src.pipeline.flows.last_positions.datetime")
-    def test_estimate_current_positions(self, mock_datetime):
+    assert updated_last_positions.equals(expected_updated_last_positions)
 
-        mock_datetime.utcnow = lambda: datetime(2021, 10, 1, 10, 0, 0)
 
-        last_positions = pd.DataFrame(
-            {
-                "latitude": [45, 45.1, 45.2, 45.3],
-                "longitude": [-5, -5.1, -5.2, -5.3],
-                "course": [0, 45, "invalid", 180],
-                "speed": [0, 5, 10, 10.2],
-                "last_position_datetime_utc": [
-                    datetime(2021, 10, 1, 0, 0, 0),
-                    datetime(2021, 10, 1, 9, 0, 0),
-                    datetime(2021, 10, 1, 9, 30, 0),
-                    datetime(2021, 10, 1, 10, 0, 10),
-                ],
-            }
-        )
+def test_concatenate():
 
-        expected_estimated_current_positions = last_positions.copy(deep=True)
-        expected_estimated_current_positions["estimated_current_latitude"] = [
-            None,
-            45.158888,
-            None,
-            None,
-        ]
-        expected_estimated_current_positions["estimated_current_longitude"] = [
-            None,
-            -5.016725,
-            None,
-            None,
-        ]
+    unchanged_previous_last_positions = pd.DataFrame(
+        {
+            "vessel_id": ["A", "B", "C"],
+            "some": [1, 2, None],
+            "more": ["a", None, "c"],
+            "data": [None, 2.256, 0.1],
+        }
+    )
 
-        estimated_current_positions = estimate_current_positions.run(
-            last_positions=last_positions, max_hours_since_last_position=1.5
-        )
+    new_vessels_last_positions = pd.DataFrame(
+        {"vessel_id": ["D"], "some": [1], "more": ["d"], "data": [2.36]}
+    )
 
-        pd.testing.assert_frame_equal(
-            estimated_current_positions, expected_estimated_current_positions
-        )
+    updated_last_positions = pd.DataFrame(
+        {
+            "vessel_id": ["E", "F"],
+            "some": [1, 2],
+            "more": ["e", "f"],
+            "data": [None, 21.256],
+        }
+    )
 
-    def test_merge_last_positions_risk_factors_alerts(self):
+    expected_last_positions = pd.DataFrame(
+        {
+            "vessel_id": ["A", "B", "C", "D", "E", "F"],
+            "some": [1, 2, None, 1, 1, 2],
+            "more": ["a", None, "c", "d", "e", "f"],
+            "data": [None, 2.256, 0.1, 2.36, None, 21.256],
+        }
+    )
 
-        last_positions = pd.DataFrame(
-            {
-                "cfr": ["A", "B", None, None],
-                "ircs": ["aa", "bb", "cc", None],
-                "external_immatriculation": ["aaa", None, None, "ddd"],
-                "latitude": [45, 45.12, 56.214, 21.325],
-                "longitude": [-5.1236, -12.85, 1.01, -1.236],
-            }
-        )
+    last_positions = concatenate.run(
+        unchanged_previous_last_positions,
+        new_vessels_last_positions,
+        updated_last_positions,
+    )
 
-        risk_factors = pd.DataFrame(
-            {
-                "cfr": ["A", None, None, "E"],
-                "ircs": ["aa", "cc", None, "ee"],
-                "external_immatriculation": ["aaa", None, "ddd", "eee"],
-                "impact_risk_factor": [1.2, 3.8, 1.2, 3.7],
-                "probability_risk_factor": [1.3, 1.5, 2.1, 2.2],
-                "detectability_risk_factor": [2.1, 2.3, 2.3, 1.4],
-                "risk_factor": [1.8, 3.0, 1.9, 3.3],
-                "total_weight_onboard": [121.2, None, None, 4.0],
-            }
-        )
+    assert last_positions.equals(expected_last_positions)
 
-        pending_alerts = pd.DataFrame(
-            {
-                "cfr": ["A", "F"],
-                "ircs": [None, "ff"],
-                "external_immatriculation": ["aaa", None],
-                "alerts": [
-                    ["THREE_MILES_TRAWLING_ALERT", "SOME_OTHER_ALERT"],
-                    ["THREE_MILES_TRAWLING_ALERT"],
-                ],
-            }
-        )
 
-        res = merge_last_positions_risk_factors_alerts.run(
-            last_positions, risk_factors, pending_alerts
-        )
+@patch("src.pipeline.flows.last_positions.datetime")
+def test_estimate_current_positions(mock_datetime):
 
-        res = (
-            res.sort_values(["cfr", "ircs", "external_immatriculation"])
-            .reset_index()
-            .drop(columns=["index"])
-        )
+    mock_datetime.utcnow = lambda: datetime(2021, 10, 1, 10, 0, 0)
 
-        expected_res = pd.DataFrame(
-            {
-                "cfr": ["A", "B", None, None],
-                "ircs": ["aa", "bb", "cc", None],
-                "external_immatriculation": ["aaa", None, None, "ddd"],
-                "latitude": [45, 45.12, 56.214, 21.325],
-                "longitude": [-5.1236, -12.85, 1.01, -1.236],
-                "impact_risk_factor": [1.2, None, 3.8, 1.2],
-                "probability_risk_factor": [1.3, None, 1.5, 2.1],
-                "detectability_risk_factor": [2.1, None, 2.3, 2.3],
-                "risk_factor": [1.8, None, 3.0, 1.9],
-                "total_weight_onboard": [121.2, 0.0, 0.0, 0.0],
-                "alerts": [
-                    ["THREE_MILES_TRAWLING_ALERT", "SOME_OTHER_ALERT"],
-                    None,
-                    None,
-                    None,
-                ],
-            }
-        ).fillna({**default_risk_factors})
+    last_positions = pd.DataFrame(
+        {
+            "latitude": [45, 45.1, 45.2, 45.3],
+            "longitude": [-5, -5.1, -5.2, -5.3],
+            "course": [0, 45, "invalid", 180],
+            "speed": [0, 5, 10, 10.2],
+            "last_position_datetime_utc": [
+                datetime(2021, 10, 1, 0, 0, 0),
+                datetime(2021, 10, 1, 9, 0, 0),
+                datetime(2021, 10, 1, 9, 30, 0),
+                datetime(2021, 10, 1, 10, 0, 10),
+            ],
+        }
+    )
 
-        pd.testing.assert_frame_equal(expected_res, res)
+    expected_estimated_current_positions = last_positions.copy(deep=True)
+    expected_estimated_current_positions["estimated_current_latitude"] = [
+        None,
+        45.158888,
+        None,
+        None,
+    ]
+    expected_estimated_current_positions["estimated_current_longitude"] = [
+        None,
+        -5.016725,
+        None,
+        None,
+    ]
+
+    estimated_current_positions = estimate_current_positions.run(
+        last_positions=last_positions, max_hours_since_last_position=1.5
+    )
+
+    pd.testing.assert_frame_equal(
+        estimated_current_positions, expected_estimated_current_positions
+    )
+
+
+def test_merge_last_positions_risk_factors_alerts():
+
+    last_positions = pd.DataFrame(
+        {
+            "cfr": ["A", "B", None, None],
+            "ircs": ["aa", "bb", "cc", None],
+            "external_immatriculation": ["aaa", None, None, "ddd"],
+            "latitude": [45, 45.12, 56.214, 21.325],
+            "longitude": [-5.1236, -12.85, 1.01, -1.236],
+        }
+    )
+
+    risk_factors = pd.DataFrame(
+        {
+            "cfr": ["A", None, None, "E"],
+            "ircs": ["aa", "cc", None, "ee"],
+            "external_immatriculation": ["aaa", None, "ddd", "eee"],
+            "impact_risk_factor": [1.2, 3.8, 1.2, 3.7],
+            "probability_risk_factor": [1.3, 1.5, 2.1, 2.2],
+            "detectability_risk_factor": [2.1, 2.3, 2.3, 1.4],
+            "risk_factor": [1.8, 3.0, 1.9, 3.3],
+            "total_weight_onboard": [121.2, None, None, 4.0],
+        }
+    )
+
+    pending_alerts = pd.DataFrame(
+        {
+            "cfr": ["A", "F"],
+            "ircs": [None, "ff"],
+            "external_immatriculation": ["aaa", None],
+            "alerts": [
+                ["THREE_MILES_TRAWLING_ALERT", "SOME_OTHER_ALERT"],
+                ["THREE_MILES_TRAWLING_ALERT"],
+            ],
+        }
+    )
+
+    res = merge_last_positions_risk_factors_alerts.run(
+        last_positions, risk_factors, pending_alerts
+    )
+
+    res = (
+        res.sort_values(["cfr", "ircs", "external_immatriculation"])
+        .reset_index()
+        .drop(columns=["index"])
+    )
+
+    expected_res = pd.DataFrame(
+        {
+            "cfr": ["A", "B", None, None],
+            "ircs": ["aa", "bb", "cc", None],
+            "external_immatriculation": ["aaa", None, None, "ddd"],
+            "latitude": [45, 45.12, 56.214, 21.325],
+            "longitude": [-5.1236, -12.85, 1.01, -1.236],
+            "impact_risk_factor": [1.2, None, 3.8, 1.2],
+            "probability_risk_factor": [1.3, None, 1.5, 2.1],
+            "detectability_risk_factor": [2.1, None, 2.3, 2.3],
+            "risk_factor": [1.8, None, 3.0, 1.9],
+            "total_weight_onboard": [121.2, 0.0, 0.0, 0.0],
+            "alerts": [
+                ["THREE_MILES_TRAWLING_ALERT", "SOME_OTHER_ALERT"],
+                None,
+                None,
+                None,
+            ],
+        }
+    ).fillna({**default_risk_factors})
+
+    pd.testing.assert_frame_equal(expected_res, res)

@@ -298,7 +298,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-card-latitude"]', { timeout: 20000 }).contains('47° 20′ 53″ N')
   })
 
-  it.only('ERS/VMS tab Should contain current and history of beacon malfunctions', () => {
+  it('ERS/VMS tab Should contain current and history of beacon malfunctions', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')

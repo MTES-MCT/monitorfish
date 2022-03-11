@@ -335,6 +335,28 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy="beacon-malfunction-current-see-details"]', { timeout: 20000 }).click()
     cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).should('be.visible')
     cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).contains('Activité détectée')
+
+    // Search for another vessel
+    cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselTwoBeaconMalfunctions')
+    cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 20000 }).click()
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 20000 }).click()
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 20000 }).type('U_W0')
+    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 20000 }).eq(1).click()
+
+    // Then
+    cy.wait('@vesselTwoBeaconMalfunctions')
+      .then(({ request, response }) => expect(response.statusCode).equal(200))
+    cy.get('*[data-cy="vessel-malfunctions-resume"]', { timeout: 20000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-beacon-malfunctions"]', { timeout: 20000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-beacon-malfunctions-resume-number"]', { timeout: 20000 }).contains('à quai 0')
+    cy.get('*[data-cy="vessel-beacon-malfunctions-resume-number"]', { timeout: 20000 }).contains('en mer 1')
+    cy.get('*[data-cy="vessel-beacon-malfunctions-resume-last"]', { timeout: 20000 }).contains('Sans nouvelles')
+
+    // See current beacon malfunction of new vessel
+    cy.get('*[data-cy="beacon-malfunction-current-see-details"]', { timeout: 20000 }).click()
+    cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).should('be.visible')
+    cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).contains('Sans nouvelles')
+    cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 20000 }).click()
   })
 
 })

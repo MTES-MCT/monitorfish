@@ -2,7 +2,8 @@ import { getVesselBeaconsMalfunctionsFromAPI } from '../../api/fetch'
 import { removeError, setError } from '../shared_slices/Global'
 import { batch } from 'react-redux'
 import {
-  loadVesselBeaconMalfunctions, setOpenedBeaconMalfunction,
+  loadVesselBeaconMalfunctions,
+  resetOpenedBeaconMalfunction,
   setVesselBeaconMalfunctionsResumeAndHistory
 } from '../shared_slices/BeaconMalfunction'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel'
@@ -11,6 +12,9 @@ const getVesselBeaconMalfunctions = () => (dispatch, getState) => {
   const {
     selectedVessel
   } = getState().vessel
+  if (!selectedVessel) {
+    return
+  }
   const vesselIdentity = getOnlyVesselIdentityProperties(selectedVessel)
 
   const {
@@ -34,11 +38,7 @@ const getVesselBeaconMalfunctions = () => (dispatch, getState) => {
     }))
 
     if (openedBeaconMalfunction) {
-      const nextOpenedBeaconMalfunction = vesselBeaconsMalfunctions.history
-        .find(beaconMalfunction => beaconMalfunction.beaconMalfunction.id === openedBeaconMalfunction.beaconMalfunction.id)
-      if (nextOpenedBeaconMalfunction) {
-        dispatch(setOpenedBeaconMalfunction(nextOpenedBeaconMalfunction))
-      }
+      dispatch(resetOpenedBeaconMalfunction())
     }
 
     dispatch(removeError())

@@ -51,4 +51,32 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
                     it.toBeaconMalfunction()
                 }
     }
+
+    override fun findAllByVesselWithoutVesselIdentifier(internalReferenceNumber: String,
+                                               externalReferenceNumber: String,
+                                               ircs: String,
+                                               afterDateTime: ZonedDateTime): List<BeaconMalfunction> {
+        if(internalReferenceNumber.isNotEmpty()) {
+            return dbBeaconMalfunctionsRepository
+                .findAllByVesselIdentifierEqualsAfterDateTime(VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(), internalReferenceNumber, afterDateTime.toInstant()).map {
+                    it.toBeaconMalfunction()
+                }
+        }
+
+        if(ircs.isNotEmpty()) {
+            return dbBeaconMalfunctionsRepository
+                .findAllByVesselIdentifierEqualsAfterDateTime(VesselIdentifier.IRCS.toString(), ircs, afterDateTime.toInstant()).map {
+                    it.toBeaconMalfunction()
+                }
+        }
+
+        if(externalReferenceNumber.isNotEmpty()) {
+            return dbBeaconMalfunctionsRepository
+                .findAllByVesselIdentifierEqualsAfterDateTime(VesselIdentifier.EXTERNAL_REFERENCE_NUMBER.toString(), externalReferenceNumber, afterDateTime.toInstant()).map {
+                    it.toBeaconMalfunction()
+                }
+        }
+
+        return listOf()
+    }
 }

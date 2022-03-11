@@ -13,6 +13,7 @@ import openBeaconMalfunctionInKanban from '../../../domain/use_cases/openBeaconM
 import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import { getIsMalfunctioning, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
 import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
+import { setSelectedVesselCustomTrackDepth } from '../../../domain/shared_slices/Vessel'
 
 timeago.register('fr', timeagoFrenchLocale)
 
@@ -116,7 +117,8 @@ export const showVesselOnMap = async (dispatch, beaconMalfunction) => {
     beforeDateTime: beforeDateTime
   }
   const vesselIdentity = { ...beaconMalfunction, flagState: 'fr' }
-  await dispatch(showVessel(vesselIdentity, false, false, vesselTrackDepth))
+  await dispatch(setSelectedVesselCustomTrackDepth(vesselTrackDepth))
+  await dispatch(showVessel(vesselIdentity, false, false))
   dispatch(getVesselVoyage(vesselIdentity, null, false))
 }
 

@@ -17,15 +17,21 @@ class GetVesselBeaconMalfunctions(private val beaconMalfunctionsRepository: Beac
     fun execute(internalReferenceNumber: String,
                 externalReferenceNumber: String,
                 ircs: String,
-                vesselIdentifier: VesselIdentifier,
+                vesselIdentifier: VesselIdentifier?,
                 afterDateTime: ZonedDateTime): VesselBeaconMalfunctionsResumeAndHistory {
-        val value = when (vesselIdentifier) {
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> internalReferenceNumber
-            VesselIdentifier.IRCS -> ircs
-            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> externalReferenceNumber
+        val beaconMalfunctions = when (vesselIdentifier) {
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
+                beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(vesselIdentifier, internalReferenceNumber, afterDateTime)
+            VesselIdentifier.IRCS ->
+                beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(vesselIdentifier, ircs, afterDateTime)
+            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
+                beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(vesselIdentifier, externalReferenceNumber, afterDateTime)
+            else -> beaconMalfunctionsRepository.findAllByVesselWithoutVesselIdentifier(
+                    internalReferenceNumber,
+                    externalReferenceNumber,
+                    ircs,
+                    afterDateTime)
         }
-
-        val beaconMalfunctions = beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(vesselIdentifier, value, afterDateTime)
 
         val beaconMalfunctionsWithDetails = beaconMalfunctions.map {
             val comments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(it.id)

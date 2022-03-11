@@ -14,9 +14,8 @@ import { getNextVesselTrackDepthObject } from './showVesselTrack'
  * @param {VesselIdentity} vesselIdentity
  * @param {boolean} calledFromCron
  * @param {boolean} fromSearch
- * @param {VesselTrackDepth=} vesselTrackDepth
  */
-const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth) => async (dispatch, getState) => {
+const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispatch, getState) => {
   vesselIdentity = getOnlyVesselIdentityProperties(vesselIdentity)
 
   const { vessel, fishingActivities, map } = getState()
@@ -34,6 +33,7 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron, vesselTrackDepth
 
   dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 
+  let vesselTrackDepth = null
   if (trackDepthIsDefined(vessel.selectedVesselCustomTrackDepth)) {
     vesselTrackDepth = vessel.selectedVesselCustomTrackDepth
   }

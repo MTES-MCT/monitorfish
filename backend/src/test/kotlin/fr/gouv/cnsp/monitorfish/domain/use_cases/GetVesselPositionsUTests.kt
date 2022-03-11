@@ -179,4 +179,24 @@ class GetVesselPositionsUTests {
         // Then
         Mockito.verify(positionRepository).findVesselLastPositionsByInternalReferenceNumber(eq("FR224226850"), any(), any())
     }
+
+    @Test
+    fun `execute Should return an empty list of positions When the vessel identifier is null`() {
+        // When
+        val pair = runBlocking {
+            GetVesselPositions(positionRepository, ersRepository)
+                    .execute("FR224226850",
+                            "",
+                            "",
+                            VesselTrackDepth.TWELVE_HOURS,
+                            null,
+                            null,
+                            null)
+        }
+
+        // Then
+        runBlocking {
+            assertThat(pair.second.await()).hasSize(0)
+        }
+    }
 }

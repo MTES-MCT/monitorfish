@@ -1,6 +1,7 @@
-# Env variables
+# Env variables & configuration files
 datascience/.env
 github_token.txt
+infra/remote/backup/pg_backup.config
 
 # Notebooks
 /datascience/notebooks

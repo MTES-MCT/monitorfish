@@ -3,7 +3,6 @@ from unittest.mock import patch
 
 import pandas as pd
 import pytest
-import sqlalchemy
 
 from config import default_risk_factors
 from src.pipeline.flows.last_positions import (
@@ -15,39 +14,117 @@ from src.pipeline.flows.last_positions import (
     extract_last_positions,
     extract_previous_last_positions,
     extract_risk_factors,
+    flow,
     load_last_positions,
     merge_last_positions_risk_factors_alerts,
     split,
     validate_action,
 )
-from tests.mocks import mock_extract_side_effect
+from src.read_query import read_query
+from tests.mocks import mock_check_flow_not_running
+
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
-@patch("src.pipeline.flows.last_positions.extract")
-def test_extract_risk_factors(mock_extract):
-    mock_extract.side_effect = mock_extract_side_effect
-    query = extract_risk_factors.run()
-    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
+def test_extract_risk_factors(reset_test_data):
+    risk_factors = extract_risk_factors.run()
+    assert len(risk_factors) == 2
+    assert list(risk_factors) == [
+        "cfr",
+        "ircs",
+        "external_immatriculation",
+        "last_ers_datetime_utc",
+        "departure_datetime_utc",
+        "trip_number",
+        "gear_onboard",
+        "species_onboard",
+        "segments",
+        "total_weight_onboard",
+        "last_control_datetime_utc",
+        "last_control_infraction",
+        "post_control_comments",
+        "impact_risk_factor",
+        "probability_risk_factor",
+        "detectability_risk_factor",
+        "risk_factor",
+    ]
+    assert risk_factors.notnull().all().all()
 
 
-@patch("src.pipeline.flows.last_positions.extract")
-def test_extract_previous_last_positions(mock_extract):
-    mock_extract.side_effect = mock_extract_side_effect
-    query = extract_previous_last_positions.run()
-    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
+def test_extract_previous_last_positions(reset_test_data):
+    previous_last_positions = extract_previous_last_positions.run()
+    assert previous_last_positions.shape == (3, 21)
 
 
-@patch("src.pipeline.flows.last_positions.extract")
-def test_extract_last_positions(mock_extract):
-    mock_extract.side_effect = mock_extract_side_effect
-    query = extract_last_positions.run(minutes=10)
-    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
+def test_extract_last_positions(reset_test_data):
+    last_positions = extract_last_positions.run(minutes=15)
+    assert last_positions.shape == (1, 19)
+
+    last_positions = extract_last_positions.run(minutes=35)
+    assert last_positions.shape == (2, 19)
 
 
-@patch("src.pipeline.flows.last_positions.load", autospec=True)
-def test_load_last_positions(mock_load):
-    dummy_last_positions = pd.DataFrame()
-    load_last_positions.run(dummy_last_positions)
+def test_load_last_positions(reset_test_data):
+    last_positions_to_load = pd.DataFrame(
+        {
+            "id": [13639642, 13640935],
+            "cfr": ["ABC000306959", "ABC000542519"],
+            "external_immatriculation": ["RV348407", "RO237719"],
+            "mmsi": [None, None],
+            "ircs": ["LLUK", "FQ7058"],
+            "vessel_name": ["ÉTABLIR IMPRESSION LORSQUE", "DEVINER FIGURE CONSCIENCE"],
+            "flag_state": ["FR", "FR"],
+            "district_code": ["CC", "CC"],
+            "district": ["Concarneau", "Concarneau"],
+            "registry_port": ["Concarneau", "Concarneau"],
+            "width": [3.23, 3.13],
+            "length": [17.4, 11.4],
+            "under_charter": [False, True],
+            "latitude": [49.61, 43.324],
+            "longitude": [-0.74, 5.359],
+            "speed": [1.0, 0.0],
+            "course": [302.0, 0.0],
+            "last_position_datetime_utc": [
+                datetime(2021, 12, 5, 11, 52, 32),
+                datetime(2018, 12, 5, 11, 52, 32),
+            ],
+            "emission_period": [None, None],
+            "trip_number": [2021001, None],
+            "last_ers_datetime_utc": [datetime(2021, 12, 4, 19, 12, 3), None],
+            "departure_datetime_utc": [datetime(2021, 12, 3, 21, 55, 2), None],
+            "gear_onboard": [[{"gear": "OTB", "mesh": 75.0, "dimensions": 12.0}], None],
+            "segments": [["NWW01/02"], None],
+            "species_onboard": [
+                [
+                    {
+                        "gear": "OTB",
+                        "weight": 30.0,
+                        "faoZone": "27.7.d",
+                        "species": "SQZ",
+                    }
+                ],
+                None,
+            ],
+            "total_weight_onboard": [30.0, None],
+            "last_control_datetime_utc": [datetime(2020, 1, 5, 9, 5, 32), None],
+            "last_control_infraction": [False, None],
+            "post_control_comments": ["RAS", None],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+            ],
+            "estimated_current_latitude": [49.61, 43.324],
+            "estimated_current_longitude": [-0.74, 5.359],
+            "impact_risk_factor": [2.0, 1.8],
+            "probability_risk_factor": [2.1, 2.0],
+            "detectability_risk_factor": [1.3, 1.0],
+            "risk_factor": [2.36, 1.5],
+            "is_at_port": [True, False],
+            "alerts": [["THREE_MILES_TRAWLING_ALERT"], None],
+            "is_manual": [True, False],
+        }
+    )
+    load_last_positions.run(last_positions_to_load)
 
 
 def test_validate_action():
@@ -389,3 +466,73 @@ def test_merge_last_positions_risk_factors_alerts():
     ).fillna({**default_risk_factors})
 
     pd.testing.assert_frame_equal(expected_res, res)
+
+
+def test_last_positions_flow_resets_last_positions_when_action_is_replace(
+    reset_test_data,
+):
+    initial_last_positions = read_query(
+        "monitorfish_remote", "SELECT * FROM last_positions;"
+    )
+
+    state = flow.run(action="replace", minutes=1200)
+    assert state.is_successful()
+
+    final_last_positions = read_query(
+        "monitorfish_remote", "SELECT * FROM last_positions;"
+    )
+
+    assert len(initial_last_positions) == 3
+    assert len(final_last_positions) == 2
+    assert set(initial_last_positions.external_immatriculation) == {
+        "AS761555",
+        "RO237719",
+        "SB125334",
+    }
+    assert set(final_last_positions.external_immatriculation) == {
+        "RV348407",
+        "RO237719",
+    }
+
+
+def test_last_positions_flow_updates_last_positions_when_action_is_update(
+    reset_test_data,
+):
+    initial_last_positions = read_query(
+        "monitorfish_remote", "SELECT * FROM last_positions;"
+    )
+
+    state = flow.run(action="update", minutes=35)
+    assert state.is_successful()
+
+    final_last_positions = read_query(
+        "monitorfish_remote", "SELECT * FROM last_positions;"
+    )
+
+    assert len(initial_last_positions) == 3
+    assert len(final_last_positions) == 4
+    assert set(initial_last_positions.external_immatriculation) == {
+        "AS761555",
+        "RO237719",
+        "SB125334",
+    }
+    assert set(final_last_positions.external_immatriculation) == {
+        "AS761555",
+        "RO237719",
+        "SB125334",
+        "RV348407",
+    }
+
+    assert (
+        initial_last_positions.loc[
+            initial_last_positions.external_immatriculation == "RO237719", "id"
+        ]
+        == 13638407
+    ).all()
+
+    assert (
+        final_last_positions.loc[
+            final_last_positions.external_immatriculation == "RO237719", "id"
+        ]
+        == 13640935
+    ).all()

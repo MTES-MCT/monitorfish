@@ -134,7 +134,7 @@ const BeaconMalfunctionsBoard = () => {
 
     if (previousStage === beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
       nextStage !== beaconMalfunctionsStages.ARCHIVED.code) {
-      dispatch(setError(new Error('Une avarie en REPRISE DES ÉMISSIONS ne peut revenir en arrière')))
+      dispatch(setError(new Error('Une avarie archivée ne peut revenir en arrière')))
       return
     }
 

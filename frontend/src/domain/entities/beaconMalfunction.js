@@ -4,7 +4,6 @@ import { ReactComponent as VesselStatusNoNewsSVG } from '../../features/icons/Av
 import { ReactComponent as VesselStatusAtPortSVG } from '../../features/icons/Avarie_statut_navire_a_quai.svg'
 import { COLORS } from '../../constants/constants'
 import React from 'react'
-import { ReactComponent as VesselStatusTechnicalStopSVG } from '../../features/icons/Avarie_statut_arret_tech.svg'
 import { ReactComponent as VesselStatusAtSeaSVG } from '../../features/icons/Avarie_statut_navire_en_mer.svg'
 import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../features/icons/Avarie_statut_activite_detectee.svg'
 
@@ -32,14 +31,12 @@ const BeaconMalfunctionVesselStatus = {
   AT_PORT: 'AT_PORT',
   AT_SEA: 'AT_SEA',
   NO_NEWS: 'NO_NEWS',
-  TECHNICAL_STOP: 'TECHNICAL_STOP',
   ACTIVITY_DETECTED: 'ACTIVITY_DETECTED'
 }
 
 const VesselStatusAtPort = styled(VesselStatusAtPortSVG)``
 const VesselStatusAtSea = styled(VesselStatusAtSeaSVG)``
 const VesselStatusNoNews = styled(VesselStatusNoNewsSVG)``
-const VesselStatusTechnicalStop = styled(VesselStatusTechnicalStopSVG)``
 const VesselStatusActivityDetected = styled(VesselStatusActivityDetectedSVG)``
 
 const iconStyle = {
@@ -65,16 +62,9 @@ const vesselStatuses = [
   {
     label: 'Sans nouvelles',
     value: 'NO_NEWS',
-    color: '#F7BA9E',
+    color: '#E6BC51',
     textColor: COLORS.charcoal,
     icon: <VesselStatusNoNews style={iconStyle}/>
-  },
-  {
-    label: 'En arrêt technique',
-    value: 'TECHNICAL_STOP',
-    color: '#E8CA46',
-    textColor: COLORS.charcoal,
-    icon: <VesselStatusTechnicalStop style={iconStyle}/>
   },
   {
     label: 'Activité détectée',

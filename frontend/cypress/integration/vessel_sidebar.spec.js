@@ -298,7 +298,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-card-latitude"]', { timeout: 20000 }).contains('47° 20′ 53″ N')
   })
 
-  it('ERS/VMS tab Should contain current and history of beacon malfunctions', () => {
+  it.only('ERS/VMS tab Should contain current and history of beacon malfunctions', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
@@ -313,7 +313,7 @@ context('VesselSidebar', () => {
     cy.wait('@vesselBeaconMalfunctions')
       .then(({ request, response }) => expect(response.statusCode).equal(200))
     cy.get('*[data-cy="vessel-beacon-malfunctions-resume-number"]', { timeout: 20000 }).contains('à quai 1')
-    cy.get('*[data-cy="vessel-beacon-malfunctions-resume-last"]', { timeout: 20000 }).contains('En arrêt technique')
+    cy.get('*[data-cy="vessel-beacon-malfunctions-resume-last"]', { timeout: 20000 }).contains('Activité détectée')
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().eq(0).contains('1 avarie en mer')
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().eq(0).contains('0 avarie à quai')
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().eq(0).click()
@@ -323,7 +323,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy="vessel-beacon-malfunction-history-see-more"]', { timeout: 20000 }).click()
     cy.get('*[data-cy="vessel-malfunctions-details"]', { timeout: 20000 }).should('be.visible')
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 20000 }).contains('0 commentaire')
-    cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 20000 }).contains('Le ticket a été déplacé de Premier contact à Fin d\'avarie.')
+    cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 20000 }).contains('Le ticket a été déplacé de Premier contact à Fin de l\'avarie.')
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 20000 }).contains('Navire en mer')
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 20000 }).contains('14 jours')
 
@@ -334,7 +334,7 @@ context('VesselSidebar', () => {
     // See current beacon malfunction
     cy.get('*[data-cy="beacon-malfunction-current-see-details"]', { timeout: 20000 }).click()
     cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).contains('En arrêt technique')
+    cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).contains('Activité détectée')
   })
 
 })

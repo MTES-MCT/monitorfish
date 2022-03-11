@@ -37,15 +37,15 @@ class GetBeaconMalfunctionUTests {
         val now = ZonedDateTime.now().minusDays(1)
         given(beaconMalfunctionsRepository.find(1))
                 .willReturn(BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                        null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
                         true, ZonedDateTime.now(), null, ZonedDateTime.now()))
         given(beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), eq("FR224226850"), any()))
                 .willReturn(listOf(
                         BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                                null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now())))
         given(beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(1)).willReturn(listOf(BeaconMalfunctionComment(
                 beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)))

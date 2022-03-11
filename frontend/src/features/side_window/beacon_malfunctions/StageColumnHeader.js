@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { beaconMalfunctionsStages } from './beaconMalfunctions'
 
-const MAX_END_OF_FOLLOW_UP_ITEMS = 30
+const MAX_ARCHIVED_ITEMS = 30
 
 const StageColumnHeader = ({ stage, description, numberOfItems }) => {
   return <Wrapper style={wrapperStyle}>
@@ -16,8 +16,8 @@ const StageColumnHeader = ({ stage, description, numberOfItems }) => {
       </Title>
       <NumberOfItems style={numberOfItemsStyle}>
         {
-          stage === beaconMalfunctionsStages.ARCHIVED.code && numberOfItems === MAX_END_OF_FOLLOW_UP_ITEMS
-            ? `${MAX_END_OF_FOLLOW_UP_ITEMS}+`
+          stage === beaconMalfunctionsStages.ARCHIVED.code && numberOfItems === MAX_ARCHIVED_ITEMS
+            ? `${MAX_ARCHIVED_ITEMS}+`
             : numberOfItems
         }
       </NumberOfItems>

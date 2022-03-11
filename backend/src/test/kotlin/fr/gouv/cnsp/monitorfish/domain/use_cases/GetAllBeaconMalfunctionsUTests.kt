@@ -35,10 +35,10 @@ class GetAllBeaconMalfunctionsUTests {
         val fourthPosition = LastPosition(null, "FR224226857", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.24, dateTime = now.minusHours(1), vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER)
         given(lastPositionRepository.findAll()).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
         given(beaconMalfunctionsRepository.findAllExceptEndOfFollowUp()).willReturn(listOf(BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                 true, ZonedDateTime.now(), null, ZonedDateTime.now())))
         given(beaconMalfunctionsRepository.findLastThirtyEndOfFollowUp()).willReturn(listOf(BeaconMalfunction(2, "FR123456785", "9876543", "IRCS",
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                 true, ZonedDateTime.now(), null, ZonedDateTime.now())))
 
         // When

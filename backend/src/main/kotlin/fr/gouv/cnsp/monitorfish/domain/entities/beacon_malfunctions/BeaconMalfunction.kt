@@ -9,6 +9,7 @@ data class BeaconMalfunction(
         val internalReferenceNumber: String?,
         val externalReferenceNumber: String?,
         val ircs: String?,
+        val flagState: String?,
         val vesselIdentifier: VesselIdentifier,
         val vesselName: String,
         val vesselStatus: VesselStatus,

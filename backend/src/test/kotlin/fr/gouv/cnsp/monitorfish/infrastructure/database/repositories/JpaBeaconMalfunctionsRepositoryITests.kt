@@ -25,7 +25,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         assertThat(baconMalfunctions).hasSize(10)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
-        assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
+        assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
     }
 
     @Test
@@ -37,7 +37,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         assertThat(baconMalfunctions).hasSize(9)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.INITIAL_ENCOUNTER)
-        assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
+        assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
     }
 
     @Test
@@ -60,7 +60,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         val updateDateTime = ZonedDateTime.now()
 
         // When
-        assertThat(controlObjectives.find { it.id == 1 }?.vesselStatus).isEqualTo(VesselStatus.TECHNICAL_STOP)
+        assertThat(controlObjectives.find { it.id == 1 }?.vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
         jpaBeaconMalfunctionsRepository.update(
                 id = 1,
                 vesselStatus = VesselStatus.ACTIVITY_DETECTED,

@@ -652,6 +652,8 @@ export const sortLayersTopicsByRegTerritory = (layersTopicsByRegTerritory) => {
   }
 }
 
+const CATEGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']
+
 /**
  *
  * @param {Object.<string, Gear[]>} categoriesToGears
@@ -663,7 +665,6 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
     'Filets tournants', 'Filets maillants et filets emmêlants', 'Filets soulevés',
     'Lignes et hameçons', 'Pièges', 'Engins de récolte', 'Engins divers'
   ]
-  const CATEGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']
 
   return SORTED_CATEGORY_LIST.map(category => {
     if (!CATEGORIES_TO_HIDE.includes(category) && categoriesToGears[category]) {
@@ -703,7 +704,7 @@ export const getTitle = regulatory => regulatory
  * @param {String} url
  * @returns true if the url parameter is a correct url, else false
  */
-export const checkURL = (_url) => {
+export const checkURL = (url) => {
   const regex = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/
-  return regex.test(_url)
+  return regex.test(url)
 }

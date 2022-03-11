@@ -387,6 +387,11 @@ a:hover, a:focus {
     top: 8px !important;
 }
 
+.rs-checkbox-disabled > .rs-checkbox-checker > label > span > span::after {
+    border: solid #c5c6c7 !important;
+    border-width: 0 2px 2px 0 !important;
+}
+
 .rs-table-cell-header .rs-table-cell-content {
     padding: 10px 7px;
 }

@@ -198,6 +198,7 @@ const BeaconStatusDetailsBody = ({ comments, actions, beaconStatusId }) => {
       <SubmitCommentRow style={submitCommentRowStyle}>
         Équipe SIP
         <Toggle
+          style={{ background: `${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray}` }}
           value={userType === UserType.OPS}
           onChange={checked => dispatch(setUserType(checked ? UserType.OPS : UserType.SIP))}
           size="sm"
@@ -245,7 +246,7 @@ const AddComment = styled.textarea``
 const addCommentStyle = userType => ({
   width: '100%',
   background: `${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray} 0% 0% no-repeat padding-box`,
-  border: '1px solid #9DC0D2',
+  border: `1px solid ${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray}`,
   marginTop: 20,
   marginBottom: 5,
   padding: 5,

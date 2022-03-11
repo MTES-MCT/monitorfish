@@ -54,7 +54,7 @@ const RegulatoryGearForm = (props) => {
     gearsByCode
   } = useSelector(state => state.gear)
   /** @type {string[]} */
-  const [allCategoriesAndGears, setAllCategoriesAndGears] = useState([])
+  const [formattedAndFilteredCategoriesToGears, setFormattedAndFilteredCategoriesToGears] = useState([])
 
   useEffect(() => {
     if (!categoriesToGears || !groupsToCategories || gearsByCode) {
@@ -64,7 +64,7 @@ const RegulatoryGearForm = (props) => {
 
   useEffect(() => {
     if (categoriesToGears) {
-      setAllCategoriesAndGears(prepareCategoriesAndGearsToDisplay(categoriesToGears))
+      setFormattedAndFilteredCategoriesToGears(prepareCategoriesAndGearsToDisplay(categoriesToGears))
     }
   }, [categoriesToGears])
 
@@ -81,7 +81,7 @@ const RegulatoryGearForm = (props) => {
         break
       }
       case REGULATORY_GEAR_KEYS.ALL_GEARS: {
-        listToConcat = Object.keys(categoriesToGears)
+        listToConcat = formattedAndFilteredCategoriesToGears.map(category => category.value)
         break
       }
     }
@@ -92,6 +92,7 @@ const RegulatoryGearForm = (props) => {
     } else {
       nextSelectedCategoriesAndGears = nextSelectedCategoriesAndGears.filter(value => !listToConcat.includes(value))
     }
+
     set(REGULATORY_GEAR_KEYS.SELECTED_GEARS_AND_CATEGORIES, nextSelectedCategoriesAndGears)
   }
 
@@ -248,7 +249,7 @@ const RegulatoryGearForm = (props) => {
       </CheckboxWrapper>
       <CustomMultiCascader
         data-cy='gears-selector'
-        data={allCategoriesAndGears}
+        data={formattedAndFilteredCategoriesToGears}
         style={{ width: 200 }}
         menuWidth={250}
         searchable={true}

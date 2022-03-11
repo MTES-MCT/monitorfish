@@ -34,7 +34,8 @@ export const COLORS = {
   powderBlue: '#9ED7D9',
   wheat: '#edd6a4',
   tumbleweed: '#f7ba9e',
-  vegasGold: '#E8CA46'
+  vegasGold: '#E8CA46',
+  opal: '#a5bcc0'
 }
 
 export const HIT_PIXEL_TO_TOLERANCE = 3

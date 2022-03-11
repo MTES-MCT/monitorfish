@@ -11,7 +11,7 @@ CREATE TYPE public.beacon_malfunctions_end_of_malfunction_reason
 AS ENUM (
     'RESUMED_TRANSMISSION',
     'TEMPORARY_INTERRUPTION_OF_SUPERVISION',
-    'END_OF_SUPERVISION'
+    'PERMANENT_INTERRUPTION_OF_SUPERVISION'
 );
 
 ALTER TABLE public.beacon_malfunctions

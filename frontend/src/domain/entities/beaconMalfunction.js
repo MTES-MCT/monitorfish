@@ -6,6 +6,7 @@ import { COLORS } from '../../constants/constants'
 import React from 'react'
 import { ReactComponent as VesselStatusAtSeaSVG } from '../../features/icons/Avarie_statut_navire_en_mer.svg'
 import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../features/icons/Avarie_statut_activite_detectee.svg'
+import { beaconMalfunctionsStages } from '../../features/side_window/beacon_malfunctions/beaconMalfunctions'
 
 /* eslint-disable */
 /** @namespace BeaconMalfunction */
@@ -74,6 +75,27 @@ const vesselStatuses = [
     icon: <VesselStatusActivityDetected style={iconStyle}/>
   }
 ]
+
+const endOfBeaconMalfunctionReasons = {
+  'RESUMED_TRANSMISSION': {
+    label: 'Reprise des émissions',
+    value: 'RESUMED_TRANSMISSION',
+    color: COLORS.mediumSeaGreen,
+    textColor: COLORS.white
+  },
+  'TEMPORARY_INTERRUPTION_OF_SUPERVISION': {
+    label: 'Arrêt temporaire du suivi',
+    value: 'TEMPORARY_INTERRUPTION_OF_SUPERVISION',
+    color: COLORS.opal,
+    textColor: COLORS.gunMetal
+  },
+  'PERMANENT_INTERRUPTION_OF_SUPERVISION': {
+    label: 'Arrêt définitif du suivi',
+    value: 'PERMANENT_INTERRUPTION_OF_SUPERVISION',
+    color: COLORS.opal,
+    textColor: COLORS.gunMetal
+  }
+}
 
 /**
  * Get beacon malfunctions for each years : Years are keys and beacon malfunctions are values
@@ -159,6 +181,9 @@ const getFirstVesselStatus = beaconMalfunctionWithDetails => {
   }
 }
 
+const getIsMalfunctioning = stage => stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
+  stage !== beaconMalfunctionsStages.ARCHIVED.code
+
 export {
   getYearsToBeaconMalfunctions,
   getNumberOfSeaAndLandBeaconMalfunctions,
@@ -167,5 +192,7 @@ export {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionVesselStatus,
   vesselStatuses,
-  BeaconMalfunctionsTab
+  BeaconMalfunctionsTab,
+  endOfBeaconMalfunctionReasons,
+  getIsMalfunctioning
 }

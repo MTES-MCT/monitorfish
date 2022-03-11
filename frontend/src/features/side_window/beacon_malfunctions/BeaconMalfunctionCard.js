@@ -3,9 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
-import SelectPicker from 'rsuite/lib/SelectPicker'
 import { getBeaconCreationOrModificationDate, getReducedTimeAgo } from './beaconMalfunctions'
-import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import * as timeago from 'timeago.js'
 import { timeagoFrenchLocale } from '../../../utils'
 import showVessel from '../../../domain/use_cases/showVessel'
@@ -13,7 +11,8 @@ import { useDispatch } from 'react-redux'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 import openBeaconMalfunctionInKanban from '../../../domain/use_cases/openBeaconMalfunctionInKanban'
 import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
-import { vesselStatuses } from '../../../domain/entities/beaconMalfunction'
+import { getIsMalfunctioning, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
+import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
 
 timeago.register('fr', timeagoFrenchLocale)
 
@@ -23,13 +22,13 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl,
   const ref = useRef()
 
   useEffect(() => {
-    if (vesselStatus.color && beaconMalfunction?.id) {
+    if (vesselStatus.color && beaconMalfunction?.id && getIsMalfunctioning(beaconMalfunction?.stage)) {
       // Target the `rs-select-picker` DOM component
       ref.current.firstChild.style.background = vesselStatus.color
       // Target the `rs-picker-toggle-value` span DOM component
       ref.current.firstChild.firstChild.firstChild.firstChild.style.color = vesselStatus.textColor
     }
-  }, [vesselStatus, beaconMalfunction])
+  }, [vesselStatus, beaconMalfunction, ref])
 
   return <Wrapper
     data-cy={'side-window-beacon-malfunctions-card'}
@@ -88,16 +87,13 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl,
       </Row>
     </Header>
     <Body ref={ref}>
-      <SelectPicker
-        container={() => ref.current}
-        menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
-        style={selectPickerStyle}
-        searchable={false}
-        value={vesselStatus.value}
-        onChange={status => updateVesselStatus(beaconMalfunction, status)}
-        data={vesselStatuses}
-        renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
-        cleanable={false}
+      <VesselStatusSelectOrEndOfMalfunction
+        domRef={ref}
+        beaconMalfunction={beaconMalfunction}
+        vesselStatus={vesselStatus}
+        updateVesselStatus={updateVesselStatus}
+        isMalfunctioning={getIsMalfunctioning(beaconMalfunction?.stage)}
+        showedInCard={true}
       />
       <Row style={rowStyle(false)}>
         Dernière émission {getReducedTimeAgo(beaconMalfunction.malfunctionStartDateTime)}
@@ -166,10 +162,6 @@ const headerStyle = {
 }
 
 const Body = styled.div``
-const selectPickerStyle = {
-  width: 90,
-  margin: '2px 10px 10px 0'
-}
 
 const Flag = styled.img``
 const flagStyle = {

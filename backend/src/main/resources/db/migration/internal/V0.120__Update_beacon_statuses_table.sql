@@ -23,3 +23,7 @@ SET
     stage = CAST('ARCHIVED' AS beacon_malfunctions_stage),
     vessel_status_last_modification_date_utc = CURRENT_TIMESTAMP
 WHERE stage = CAST('END_OF_MALFUNCTION' AS beacon_malfunctions_stage);
+
+ALTER TABLE public.beacon_malfunctions
+ALTER COLUMN vessel_identifier
+DROP NOT NULL;

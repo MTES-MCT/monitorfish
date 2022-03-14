@@ -29,7 +29,8 @@ const FilterLayer = ({ map }) => {
           dataProjection: WSG84_PROJECTION,
           featureProjection: OPENLAYERS_PROJECTION
         }),
-        features: []
+        features: [],
+        wrapX: false
       })
     }
     return vectorSourceRef.current

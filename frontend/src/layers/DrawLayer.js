@@ -28,7 +28,8 @@ const DrawLayer = ({ map }) => {
       dataProjection: WSG84_PROJECTION,
       featureProjection: OPENLAYERS_PROJECTION
     }),
-    projection: OPENLAYERS_PROJECTION
+    projection: OPENLAYERS_PROJECTION,
+    wrapX: false
   }))
   const [vectorLayer] = useState(new VectorLayer({
     source: vectorSource,

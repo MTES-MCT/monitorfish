@@ -51,7 +51,8 @@ const VesselsTracksLayer = ({ map }) => {
   const dispatch = useDispatch()
 
   const vectorSourceRef = useRef(new VectorSource({
-    features: []
+    features: [],
+    wrapX: false
   }))
   const layerRef = useRef(new Vector({
     renderBuffer: 4,

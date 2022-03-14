@@ -116,10 +116,9 @@ export const showVesselOnMap = async (dispatch, beaconMalfunction) => {
     afterDateTime: afterDateTime,
     beforeDateTime: beforeDateTime
   }
-  const vesselIdentity = { ...beaconMalfunction, flagState: 'fr' }
   await dispatch(setSelectedVesselCustomTrackDepth(vesselTrackDepth))
-  await dispatch(showVessel(vesselIdentity, false, false))
-  dispatch(getVesselVoyage(vesselIdentity, null, false))
+  await dispatch(showVessel(beaconMalfunction, false, false))
+  dispatch(getVesselVoyage(beaconMalfunction, null, false))
 }
 
 const Id = styled.div``

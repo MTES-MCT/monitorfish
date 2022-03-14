@@ -9,7 +9,7 @@ const RightMenuOnHoverArea = () => {
   const dispatch = useDispatch()
 
   const wrapperRef = useRef(null)
-  const timeOutRef = useRef()
+  const timeOutRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
 
   useEffect(() => {

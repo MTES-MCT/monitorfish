@@ -5,7 +5,7 @@ import Draggable from './Draggable'
 import StageColumnHeader from './StageColumnHeader'
 import BeaconMalfunctionCard from './BeaconMalfunctionCard'
 
-const StageColumn = ({ stage, beaconMalfunctions, updateVesselStatus, isDroppedId, baseUrl, horizontalScrollRef }) => {
+const StageColumn = ({ stage, beaconMalfunctions, updateVesselStatus, isDroppedId, baseUrl, activeBeaconMalfunction }) => {
   const verticalScrollRef = useRef()
 
   return <Wrapper
@@ -23,21 +23,20 @@ const StageColumn = ({ stage, beaconMalfunctions, updateVesselStatus, isDroppedI
     >
       {
         beaconMalfunctions
-          .map((beaconMalfunction, index) => {
+          .map((beaconMalfunction) => {
             return <Draggable
               key={beaconMalfunction.id}
               id={beaconMalfunction.id}
               stageId={stage.code}
-              isDroppedId={isDroppedId}
-              index={index}
-              horizontalScrollRef={horizontalScrollRef}
-              verticalScrollRef={verticalScrollRef}
             >
               <BeaconMalfunctionCard
                 verticalScrollRef={verticalScrollRef}
                 baseUrl={baseUrl}
                 beaconMalfunction={beaconMalfunction}
                 updateVesselStatus={updateVesselStatus}
+                isDroppedId={isDroppedId}
+                isDragging={false}
+                activeBeaconMalfunctionId={activeBeaconMalfunction?.id}
               />
             </Draggable>
           })

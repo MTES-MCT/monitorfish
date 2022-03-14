@@ -499,8 +499,9 @@ def join_on_multiple_keys(
     the sense that rows of left and right that have been matched on one key are removed
     from ulterior joins perfomed on the next keys.
 
-    During each of the joins on the individual keys, non-joining key pairs from left and
-    right DataFrames are coalesced.
+    During each of the joins on the individual keys, non-joining key pairs and, if any,
+    columns common to both left and right DataFrames, are coalesced (from left to
+    right).
 
     Args:
         left (pd.DataFrame): pandas DataFrame
@@ -513,6 +514,7 @@ def join_on_multiple_keys(
     """
 
     joins = []
+    common_columns = set.intersection(set(left.columns), set(right.columns))
     keys_already_joined = set()
 
     # Attempt to perform the join successively on each key
@@ -529,19 +531,18 @@ def join_on_multiple_keys(
             suffixes=("_left", "_right"),
         )
 
-        non_joining_keys = set(on) - {key}
+        columns_to_merge = common_columns - {key}
 
-        for non_joining_key in non_joining_keys:
+        for column_to_merge in columns_to_merge:
 
-            cols_to_coalesce = [f"{non_joining_key}_left", f"{non_joining_key}_right"]
-            [l, r] = cols_to_coalesce
+            [l, r] = [f"{column_to_merge}_left", f"{column_to_merge}_right"]
 
-            if non_joining_key in keys_already_joined:
+            if column_to_merge in keys_already_joined:
                 join = join[(join[r].isna()) | (join[l].isna())]
 
-            join[non_joining_key] = coalesce(join[cols_to_coalesce])
+            join[column_to_merge] = coalesce(join[[l, r]])
 
-            join = join.drop(columns=cols_to_coalesce)
+            join = join.drop(columns=[l, r])
 
         left = left[~left[key].isin(join[key])]
         right = right[~right[key].isin(join[key])]
@@ -560,7 +561,7 @@ def join_on_multiple_keys(
     res = pd.concat(joins, axis=0)
     res.index = np.arange(0, len(res))
 
-    columns_order = list(left) + [col for col in list(right) if col not in on]
+    columns_order = list(left) + [col for col in right if col not in left]
     res = res[columns_order]
 
     return res

@@ -9,6 +9,7 @@ const RightMenuOnHoverArea = () => {
   const dispatch = useDispatch()
 
   const wrapperRef = useRef(null)
+  const timeOutRef = useRef()
   const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
 
   useEffect(() => {
@@ -20,7 +21,11 @@ const RightMenuOnHoverArea = () => {
   return <>
     {
       selectedVessel
-        ? <Area ref={wrapperRef} onMouseLeave={() => dispatch(contractRightMenu())}/>
+        ? <Area ref={wrapperRef} onMouseLeave={() => {
+          clearTimeout(timeOutRef.current)
+          timeOutRef.current = setTimeout(() => dispatch(contractRightMenu()), 3000)
+        }
+        }/>
         : null
     }
   </>

@@ -16,7 +16,7 @@ SDN,Sennes danoises,Sennes traînantes
 SB,Sennes de plage,Filets tournants
 TMS,Chaluts pélagiques à crevettes,Chaluts
 TM,Chaluts pélagiques (non spécifiés),Chaluts
-TMB,Gangui,Chaluts
+TMB,Gangui,Gangui
 TX,Autres chaluts (non spécifiés),Chaluts
 PT,Chaluts-bœufs (non spécifiés),Chaluts
 OT,Chaluts à panneaux (non spécifiés),Chaluts
@@ -53,15 +53,15 @@ FSN,Filets à l'étalage (diables),Pièges
 FPN,Filets pièges-fixes non couverts,Pièges
 FAR,Pièges aériens,Pièges
 FAG,"Balai, Fagot",Pièges
-LL,Palangres (non spécifiées),Pièges
+LL,Palangres (non spécifiées),Palangres
 FIX,Pièges (non spécifiés),Pièges
 FPO,Nasses (casiers),Pièges
-LVS,Palangre verticale de fond,Lignes et hameçons
-LVD,Palangre verticale dérivante,Lignes et hameçons
+LVS,Palangre verticale de fond,Palangres
+LVD,Palangre verticale dérivante,Palangres
 LX,Hameçons et lignes,Lignes et hameçons
 LTL,Lignes de traîne,Lignes et hameçons
-LLD,Palangres dérivantes,Lignes et hameçons
-LLS,Palangres calées,Lignes et hameçons
+LLD,Palangres dérivantes,Palangres
+LLS,Palangres calées,Palangres
 LHM,Lignes à main et  à cannes (mécanisées),Lignes et hameçons
 LHP,Lignes à main et  à cannes (manœuvrées à la main),Lignes et hameçons
 FG,Autres engins retombants (non spécifiés),Engins divers

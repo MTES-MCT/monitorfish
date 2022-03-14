@@ -9,5 +9,4 @@ WHERE
     beacon_status = 'ACTIVATED' AND
     beacon_number IS NOT NULL AND
     -- Flag_states whose emissions are monitored
-    flag_state = 'FR'
-    
+    flag_state IN ('FR', 'VE')

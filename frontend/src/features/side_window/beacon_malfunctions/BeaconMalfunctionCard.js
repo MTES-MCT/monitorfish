@@ -17,7 +17,7 @@ import { setSelectedVesselCustomTrackDepth } from '../../../domain/shared_slices
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl, verticalScrollRef }) => {
+const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl, verticalScrollRef, isDragging, isDroppedId, activeBeaconId }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconMalfunction?.vesselStatus)
   const ref = useRef()
@@ -33,7 +33,13 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl,
 
   return <Wrapper
     data-cy={'side-window-beacon-malfunctions-card'}
-    style={wrapperStyle(verticalScrollRef?.current?.scrollHeight > verticalScrollRef?.current?.clientHeight)}
+    style={wrapperStyle(
+      verticalScrollRef?.current?.scrollHeight > verticalScrollRef?.current?.clientHeight,
+      isDragging,
+      isDroppedId,
+      beaconMalfunction?.id,
+      activeBeaconId
+    )}
   >
     <Header style={headerStyle}>
       <Row style={rowStyle(true)}>
@@ -149,11 +155,14 @@ const rowStyle = isFirstRow => ({
 })
 
 const Wrapper = styled.div``
-const wrapperStyle = hasScroll => ({
+const wrapperStyle = (hasScroll, isDragging, isDroppedId, id, activeBeaconId) => ({
   borderRadius: 2,
   border: `1px solid ${COLORS.lightGray}`,
   height: 150,
-  width: hasScroll ? 230 : 245
+  width: hasScroll ? 230 : 245,
+  background: activeBeaconId === id ? COLORS.lightGray : COLORS.background,
+  boxShadow: isDragging ? `0px 0px 10px -3px ${COLORS.gunMetal}` : 'unset',
+  animation: isDroppedId === id ? 'blink 1s' : 'unset'
 })
 
 const Header = styled.div``

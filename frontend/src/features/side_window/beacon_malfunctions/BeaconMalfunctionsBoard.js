@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { DndContext, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
+import React, { useCallback, useEffect, useState } from 'react'
+import { DndContext, DragOverlay, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import styled from 'styled-components'
 
 import Droppable from './Droppable'
 import { beaconMalfunctionsStages } from './beaconMalfunctions'
 import StageColumn from './StageColumn'
-import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers'
 import { useDispatch, useSelector } from 'react-redux'
 import { createSelector } from '@reduxjs/toolkit'
 import updateBeaconMalfunctionFromKanban from '../../../domain/use_cases/updateBeaconMalfunctionFromKanban'
@@ -15,6 +14,7 @@ import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
 import { setError } from '../../../domain/shared_slices/Global'
 import BeaconMalfunctionDetails from './BeaconMalfunctionDetails'
+import BeaconMalfunctionCard from './BeaconMalfunctionCard'
 
 const getByStage = (stage, beaconMalfunctions) =>
   beaconMalfunctions
@@ -39,10 +39,10 @@ const BeaconMalfunctionsBoard = () => {
     openedBeaconMalfunctionInKanban
   } = useSelector(state => state.beaconMalfunction)
   const beaconMalfunctions = useSelector(state => getMemoizedBeaconMalfunctionsByStage(state))
-  const horizontalScrollRef = useRef()
   const [filteredBeaconMalfunctions, setFilteredBeaconMalfunctions] = useState({})
   const [isDroppedId, setIsDroppedId] = useState(undefined)
   const [searchedVessel, setSearchedVessel] = useState(undefined)
+  const [activeBeaconMalfunction, setActiveBeaconMalfunction] = useState(null)
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -135,10 +135,12 @@ const BeaconMalfunctionsBoard = () => {
     if (previousStage === beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
       nextStage !== beaconMalfunctionsStages.ARCHIVED.code) {
       dispatch(setError(new Error('Une avarie archivée ne peut revenir en arrière')))
+      setActiveBeaconMalfunction(null)
       return
     }
 
     if (previousStage === nextStage) {
+      setActiveBeaconMalfunction(null)
       return
     }
 
@@ -156,10 +158,19 @@ const BeaconMalfunctionsBoard = () => {
       }
     }
     setIsDroppedId(beaconId)
+    setActiveBeaconMalfunction(null)
   }, [beaconMalfunctions])
 
+  const onDragStart = event => {
+    const { active } = event
+    const beaconId = active?.id
+    const previousStage = findStage(active.data.current.stageId)
+    const beaconMalfunction = { ...beaconMalfunctions[previousStage].find(beaconMalfunction => beaconMalfunction.id === beaconId) }
+    setActiveBeaconMalfunction(beaconMalfunction)
+  }
+
   return (
-    <Wrapper style={wrapperStyle} ref={horizontalScrollRef}>
+    <Wrapper style={wrapperStyle}>
       <SearchVesselInput
         style={searchVesselInputStyle}
         baseUrl={baseUrl}
@@ -171,8 +182,8 @@ const BeaconMalfunctionsBoard = () => {
       <DndContext
         autoScroll={true}
         onDragEnd={onDragEnd}
+        onDragStart={onDragStart}
         sensors={sensors}
-        modifiers={[restrictToFirstScrollableAncestor]}
       >
         <Columns
           data-cy={'side-window-beacon-malfunctions-columns'}
@@ -190,11 +201,23 @@ const BeaconMalfunctionsBoard = () => {
                 beaconMalfunctions={filteredBeaconMalfunctions[stageId] || []}
                 updateVesselStatus={updateVesselStatus}
                 isDroppedId={isDroppedId}
-                horizontalScrollRef={horizontalScrollRef}
+                activeBeaconMalfunction={activeBeaconMalfunction}
               />
             </Droppable>
           ))}
         </Columns>
+        <DragOverlay>
+          {
+            activeBeaconMalfunction
+              ? <BeaconMalfunctionCard
+                baseUrl={baseUrl}
+                beaconMalfunction={activeBeaconMalfunction}
+                updateVesselStatus={updateVesselStatus}
+                isDragging
+              />
+              : null
+          }
+        </DragOverlay>
       </DndContext>
       <BeaconMalfunctionDetails
         updateVesselStatus={updateVesselStatus}

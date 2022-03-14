@@ -14,7 +14,10 @@ from config import (
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
 )
 from src.pipeline.generic_tasks import extract, load
-from src.pipeline.processing import left_isin_right_by_decreasing_priority
+from src.pipeline.processing import (
+    join_on_multiple_keys,
+    left_isin_right_by_decreasing_priority,
+)
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 
 
@@ -26,6 +29,20 @@ class beaconMalfunctionStage(Enum):
     CROSS_CHECK = "CROSS_CHECK"
     END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
     ARCHIVED = "ARCHIVED"
+
+
+class beaconMalfunctionVesselStatus(Enum):
+    AT_SEA = "AT_SEA"
+    AT_PORT = "AT_PORT"
+    NEVER_EMITTED = "NEVER_EMITTED"
+    NO_NEWS = "NO_NEWS"
+    ACTIVITY_DETECTED = "ACTIVITY_DETECTED"
+
+
+class endOfMalfunctionReason(Enum):
+    RESUMED_TRANSMISSION = "RESUMED_TRANSMISSION"
+    TEMPORARY_INTERRUPTION_OF_SUPERVISION = "TEMPORARY_INTERRUPTION_OF_SUPERVISION"
+    PERMANENT_INTERRUPTION_OF_SUPERVISION = "PERMANENT_INTERRUPTION_OF_SUPERVISION"
 
 
 @task(checkpoint=False)
@@ -49,13 +66,24 @@ def extract_known_malfunctions() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def extract_vessels_that_should_emit() -> pd.DataFrame:
+    """
+    Extract vessels should must emit from the `vessels` table, i.e. vessels with an
+    active beacon and with a flag_state that must be monitored.
+    """
+    return extract("monitorfish_remote", "monitorfish/vessels_that_should_emit.sql")
+
+
+@task(checkpoint=False)
 def get_current_malfunctions(
+    vessels_that_should_emit: pd.DataFrame,
     beacons_last_emission: pd.DataFrame,
     malfunction_datetime_utc_threshold_at_sea: datetime,
     malfunction_datetime_utc_threshold_at_port: datetime,
 ) -> pd.DataFrame:
-    """Filters the input `DataFrame` of last emissions and keeps only those for which
-    the `last_position_datetime_utc` is older than
+    """Filters the input `DataFrame` of vessels that should emit and keeps only those
+    which are either absent from `beacons_last_emission` or for which the
+    `last_position_datetime_utc` is older than
     `malfunction_datetime_utc_threshold_at_sea` or
     `malfunction_datetime_utc_threshold_at_port`, depending on whether the last
     emission `is_at_port`.
@@ -72,19 +100,30 @@ def get_current_malfunctions(
     Returns:
         pd.DataFrame: `DataFrame` of malfunctions.
     """
+
+    last_emission_of_vessels_that_should_emit = join_on_multiple_keys(
+        beacons_last_emission,
+        vessels_that_should_emit,
+        on=["cfr", "ircs", "external_immatriculation"],
+        how="right",
+    )
+
     current_malfunctions = (
-        beacons_last_emission.loc[
+        last_emission_of_vessels_that_should_emit.loc[
             (
-                beacons_last_emission.is_at_port
+                last_emission_of_vessels_that_should_emit.last_position_datetime_utc.isna()
+            )
+            | (
+                (last_emission_of_vessels_that_should_emit.is_at_port == True)
                 & (
-                    beacons_last_emission.last_position_datetime_utc
+                    last_emission_of_vessels_that_should_emit.last_position_datetime_utc
                     < malfunction_datetime_utc_threshold_at_port
                 )
             )
             | (
-                (~beacons_last_emission.is_at_port)
+                (last_emission_of_vessels_that_should_emit.is_at_port == False)
                 & (
-                    beacons_last_emission.last_position_datetime_utc
+                    last_emission_of_vessels_that_should_emit.last_position_datetime_utc
                     < malfunction_datetime_utc_threshold_at_sea
                 )
             )
@@ -216,12 +255,24 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         }
     )
     new_malfunctions["vessel_status"] = np.choose(
-        new_malfunctions.is_at_port.values, ["AT_SEA", "AT_PORT"]
+        (
+            new_malfunctions.is_at_port.where(
+                new_malfunctions.is_at_port.notnull(), 2
+            ).astype(int)
+        ),
+        [
+            beaconMalfunctionVesselStatus.AT_SEA.value,
+            beaconMalfunctionVesselStatus.AT_PORT.value,
+            beaconMalfunctionVesselStatus.NEVER_EMITTED.value,
+        ],
     )
 
     new_malfunctions["stage"] = beaconMalfunctionStage.INITIAL_ENCOUNTER.value
 
     new_malfunctions["malfunction_end_date_utc"] = pd.NaT
+    new_malfunctions["malfunction_start_date_utc"] = new_malfunctions[
+        "malfunction_start_date_utc"
+    ].fillna(datetime.utcnow())
     new_malfunctions["vessel_status_last_modification_date_utc"] = datetime.utcnow()
 
     ordered_columns = [
@@ -289,6 +340,7 @@ with Flow("Beacons malfunctions") as flow:
 
     # Extract
     beacons_last_emission = extract_beacons_last_emission()
+    vessels_that_should_emit = extract_vessels_that_should_emit()
     known_beacons_malfunctions = extract_known_malfunctions()
 
     # Transform
@@ -305,6 +357,7 @@ with Flow("Beacons malfunctions") as flow:
     malfunction_datetime_utc_threshold_at_port = now - non_emission_at_port_max_duration
 
     current_malfunctions = get_current_malfunctions(
+        vessels_that_should_emit,
         beacons_last_emission,
         malfunction_datetime_utc_threshold_at_sea,
         malfunction_datetime_utc_threshold_at_port,

@@ -9,6 +9,3 @@ SELECT
     (COALESCE(length, 0) >= 12) AS priority,
     last_position_datetime_utc
 FROM last_positions
-WHERE
-    -- Flag_states whose emission malfunctions are monitored
-    flag_state = 'FR'

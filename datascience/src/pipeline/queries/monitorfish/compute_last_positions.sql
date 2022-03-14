@@ -12,6 +12,7 @@ WITH last_n_minutes_positions AS (
         speed,
         course,
         date_time,
+        is_manual,
         ROW_NUMBER() OVER (
             PARTITION BY internal_reference_number, external_reference_number, ircs
             ORDER BY date_time DESC, id DESC) AS rk
@@ -37,6 +38,7 @@ last_two_positions AS (
         speed,
         course,
         date_time,
+        is_manual,
         rk
     FROM last_n_minutes_positions
     WHERE rk <=2
@@ -83,6 +85,7 @@ SELECT
     pos.speed,
     pos.course,
     pos.date_time AS last_position_datetime_utc,
+    pos.is_manual,
     per.emission_period
 FROM last_positions pos
 LEFT JOIN emission_periods per

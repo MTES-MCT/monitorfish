@@ -58,10 +58,10 @@ def test_extract_previous_last_positions(reset_test_data):
 
 def test_extract_last_positions(reset_test_data):
     last_positions = extract_last_positions.run(minutes=15)
-    assert last_positions.shape == (1, 19)
+    assert last_positions.shape == (1, 20)
 
     last_positions = extract_last_positions.run(minutes=35)
-    assert last_positions.shape == (2, 19)
+    assert last_positions.shape == (2, 20)
 
 
 def test_load_last_positions(reset_test_data):

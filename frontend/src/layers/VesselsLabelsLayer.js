@@ -60,7 +60,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   function getVectorSource () {
     if (vectorSourceRef.current === null) {
       vectorSourceRef.current = new VectorSource({
-        features: []
+        features: [],
+        wrapX: false
       })
     }
     return vectorSourceRef.current

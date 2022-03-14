@@ -65,7 +65,10 @@ const MeasurementLayer = ({ map }) => {
     _setMeasurementInProgress(value)
   }
   const [drawObject, setDrawObject] = useState(null)
-  const [vectorSource] = useState(new VectorSource({ wrapX: false, projection: OPENLAYERS_PROJECTION }))
+  const [vectorSource] = useState(new VectorSource({
+    wrapX: false,
+    projection: OPENLAYERS_PROJECTION
+  }))
   const [vectorLayer] = useState(new VectorLayer({
     source: vectorSource,
     renderBuffer: 7,

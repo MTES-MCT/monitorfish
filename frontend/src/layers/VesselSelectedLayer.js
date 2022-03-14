@@ -17,7 +17,8 @@ const VesselSelectedLayer = ({ map }) => {
   const { selectedBaseLayer } = useSelector(state => state.map)
 
   const vectorSourceRef = useRef(new VectorSource({
-    features: []
+    features: [],
+    wrapX: false
   }))
   const isLight = Vessel.iconIsLight(selectedBaseLayer)
   const style = getSelectedVesselStyle({ isLight })

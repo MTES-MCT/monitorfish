@@ -38,4 +38,17 @@ INSERT INTO beacon_malfunctions (
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '10 hours',
     NULL,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '4 hours'
+),
+(
+    NULL,
+    'ZZTOPACDC',
+    'ZZ000000',
+    'I DO 4H REPORT',
+    'IRCS',
+    'NO_NEWS',
+    'FOUR_HOUR_REPORT',
+    true,
+    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '12 hours 10 minutes',
+    NULL,
+    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '10 hours 10 minutes'
 );

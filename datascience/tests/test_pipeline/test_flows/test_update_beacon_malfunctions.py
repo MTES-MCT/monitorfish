@@ -16,6 +16,7 @@ from src.pipeline.flows.update_beacon_malfunctions import (
     get_vessels_emitting,
     load_new_beacons_malfunctions,
     prepare_new_beacon_malfunctions,
+    update_beacon_malfunction,
 )
 from src.read_query import read_query
 from tests.mocks import mock_datetime_utcnow
@@ -355,6 +356,43 @@ def test_load_new_beacon_malfunctions(reset_test_data):
             name="external_reference_number",
         ),
     )
+
+
+@patch("src.pipeline.flows.update_beacon_malfunctions.requests")
+@patch(
+    "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "dummy/end/point/",
+)
+def test_update_beacon_malfunction_updates_stage_and_status(mock_requests):
+    malfunction_id_to_update = 25
+    update_beacon_malfunction.run(
+        malfunction_id_to_update,
+        new_stage=beaconMalfunctionStage.FOUR_HOUR_REPORT,
+        new_vessel_status=beaconMalfunctionVesselStatus.AT_SEA,
+    )
+    mock_requests.put.assert_called_once_with(
+        url=f"dummy/end/point/{malfunction_id_to_update}",
+        json={"stage": "FOUR_HOUR_REPORT", "vesselStatus": "AT_SEA"},
+        headers={
+            "Accept": "application/json, text/plain",
+            "Content-Type": "application/json;charset=UTF-8",
+        },
+    )
+
+
+@patch("src.pipeline.flows.update_beacon_malfunctions.requests")
+@patch(
+    "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "dummy/end/point/",
+)
+def test_update_beacon_malfunction_does_nothing_when_no_arguments_given(mock_requests):
+    malfunction_id_to_update = 25
+    update_beacon_malfunction.run(
+        malfunction_id_to_update,
+        new_stage=None,
+        new_vessel_status=None,
+    )
+    mock_requests.put.assert_not_called()
 
 
 def test_update_beacon_malfunctions_flow_doesnt_insert_already_known_malfunctions(

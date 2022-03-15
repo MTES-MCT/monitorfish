@@ -313,6 +313,7 @@ def update_beacon_malfunction(
     beacon_malfunction_id: int,
     *,
     new_stage: beaconMalfunctionStage = None,
+    new_vessel_status: beaconMalfunctionVesselStatus = None,
 ):
     """
     Change the stage of the `beacon_malfunction`of id `beacon_malfunction_id` to `new_stage`.
@@ -322,13 +323,20 @@ def update_beacon_malfunction(
         new_stage (beaconMalfunctionStage): stage to move the beacon malfunction to
     """
     url = BEACON_MALFUNCTIONS_ENDPOINT + str(beacon_malfunction_id)
-    json = {"stage": new_stage.value}
-    headers = {
-        "Accept": "application/json, text/plain",
-        "Content-Type": "application/json;charset=UTF-8",
-    }
-    r = requests.put(url=url, json=json, headers=headers)
-    r.raise_for_status()
+
+    json = {}
+    if new_stage:
+        json["stage"] = new_stage.value
+    if new_vessel_status:
+        json["vesselStatus"] = new_vessel_status.value
+
+    if json:
+        headers = {
+            "Accept": "application/json, text/plain",
+            "Content-Type": "application/json;charset=UTF-8",
+        }
+        r = requests.put(url=url, json=json, headers=headers)
+        r.raise_for_status()
 
 
 with Flow("Beacons malfunctions") as flow:

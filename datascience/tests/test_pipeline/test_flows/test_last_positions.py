@@ -53,7 +53,7 @@ def test_extract_risk_factors(reset_test_data):
 
 def test_extract_previous_last_positions(reset_test_data):
     previous_last_positions = extract_previous_last_positions.run()
-    assert previous_last_positions.shape == (3, 21)
+    assert previous_last_positions.shape == (3, 22)
 
 
 def test_extract_last_positions(reset_test_data):

@@ -14,7 +14,7 @@ INSERT INTO last_positions (
     vessel_identifier, 
     estimated_current_latitude, estimated_current_longitude, 
     impact_risk_factor, probability_risk_factor, detectability_risk_factor, risk_factor, 
-    under_charter, is_at_port
+    under_charter, is_at_port, is_manual
 ) VALUES 
 (
     13641745,
@@ -30,7 +30,7 @@ INSERT INTO last_positions (
     'INTERNAL_REFERENCE_NUMBER',
     53.4417501798786034, 5.55220943397118027,
     1, 2, 2, 1.74110112659225003,
-    false, false),
+    false, false, false),
 (
     13638407,
     'ABC000542519', 'RO237719', '291578411', 'FQ7058', 'DEVINER FIGURE CONSCIENCE', 'FR',
@@ -45,7 +45,7 @@ INSERT INTO last_positions (
     'INTERNAL_REFERENCE_NUMBER',
     43.3239999999999981, 5.35899999999999999, 
     1, 1, 2, 1.41421356237310003,
-    false, true),
+    false, true, false),
 (
     123456789,
     NULL, 'SB125334', NULL, 'OLY7853', 'JOUR INTÉRESSER VOILÀ', 'FR',
@@ -60,5 +60,5 @@ INSERT INTO last_positions (
     'IRCS',
     NULL, NULL, 
     1, 2, 2, 1.74110112659225003,
-    NULL, false
+    NULL, false, false
 );

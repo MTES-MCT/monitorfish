@@ -307,7 +307,9 @@ class BffController(
         return updateBeaconMalfunction.execute(
                 id = beaconMalfunctionId,
                 vesselStatus = updateBeaconMalfunctionData.vesselStatus,
-                stage = updateBeaconMalfunctionData.stage).let {
+                stage = updateBeaconMalfunctionData.stage,
+                endOfBeaconMalfunctionReason = updateBeaconMalfunctionData.endOfBeaconMalfunctionReason,
+        ).let {
             BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
         }
     }

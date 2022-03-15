@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
@@ -31,7 +32,13 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
     }
 
     @Transactional
-    override fun update(id: Int, vesselStatus: VesselStatus?, stage: Stage?, updateDateTime: ZonedDateTime) {
+    override fun update(
+        id: Int,
+        vesselStatus: VesselStatus?,
+        stage: Stage?,
+        endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
+        updateDateTime: ZonedDateTime
+    ) {
         try {
             vesselStatus?.let {
                 dbBeaconMalfunctionsRepository.updateVesselStatus(id, it.toString(), updateDateTime)
@@ -40,6 +47,11 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
             stage?.let {
                 dbBeaconMalfunctionsRepository.updateStage(id, it.toString(), updateDateTime)
             }
+
+            endOfBeaconMalfunctionReason?.let {
+                dbBeaconMalfunctionsRepository.updateEndOfMalfunctionReason(id, it.toString(), updateDateTime)
+            }
+
         } catch (e: Throwable) {
             throw CouldNotUpdateBeaconMalfunctionException("Could not update beacon malfunction: ${e.message}")
         }

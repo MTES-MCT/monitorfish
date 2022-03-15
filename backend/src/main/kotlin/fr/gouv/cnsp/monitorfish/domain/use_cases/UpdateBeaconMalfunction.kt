@@ -12,14 +12,20 @@ class UpdateBeaconMalfunction(private val beaconMalfunctionsRepository: BeaconMa
                               private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
                               private val getBeaconMalfunction: GetBeaconMalfunction) {
     @Throws(CouldNotUpdateBeaconMalfunctionException::class, IllegalArgumentException::class)
-    fun execute(id: Int, vesselStatus: VesselStatus?, stage: Stage?): BeaconMalfunctionResumeAndDetails {
+    fun execute(id: Int, vesselStatus: VesselStatus?, stage: Stage?, endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?): BeaconMalfunctionResumeAndDetails {
         require(vesselStatus != null || stage != null) {
             "No value to update"
         }
+        if (stage == Stage.END_OF_MALFUNCTION) {
+            require(endOfBeaconMalfunctionReason != null) {
+                "Cannot end malfunction without giving an endOfBeaconMalfunctionReason"
+            }
+        }
+
         val previousBeaconMalfunction = beaconMalfunctionsRepository.find(id)
         val updateDateTime = ZonedDateTime.now()
 
-        beaconMalfunctionsRepository.update(id, vesselStatus, stage, updateDateTime)
+        beaconMalfunctionsRepository.update(id, vesselStatus, stage, endOfBeaconMalfunctionReason, updateDateTime)
 
         var propertyName: BeaconMalfunctionActionPropertyName? = vesselStatus?.let { BeaconMalfunctionActionPropertyName.VESSEL_STATUS }
         propertyName = stage?.let { BeaconMalfunctionActionPropertyName.STAGE } ?: propertyName

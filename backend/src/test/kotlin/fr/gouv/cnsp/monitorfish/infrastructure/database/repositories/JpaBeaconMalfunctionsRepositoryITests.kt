@@ -65,6 +65,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
                 id = 1,
                 vesselStatus = VesselStatus.ACTIVITY_DETECTED,
                 null,
+                null,
                 updateDateTime)
 
         // Then

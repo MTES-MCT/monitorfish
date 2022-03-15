@@ -471,7 +471,7 @@ class BffControllerITests {
 
     @Test
     fun `Should return Created When an update of a beacon malfunction is done`() {
-        given(this.updateBeaconMalfunction.execute(123, VesselStatus.AT_SEA, null))
+        given(this.updateBeaconMalfunction.execute(123, VesselStatus.AT_SEA, null, null))
                 .willReturn(BeaconMalfunctionResumeAndDetails(
                         beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                                 "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
@@ -494,7 +494,7 @@ class BffControllerITests {
 
     @Test
     fun `Should return Bad request When an update of a beacon malfunction is empty`() {
-        given(this.updateBeaconMalfunction.execute(1, null, null))
+        given(this.updateBeaconMalfunction.execute(1, null, null, null))
                 .willThrow(CouldNotUpdateBeaconMalfunctionException("FAIL"))
 
         // When

@@ -60,5 +60,20 @@ INSERT INTO last_positions (
     'IRCS',
     NULL, NULL, 
     1, 2, 2, 1.74110112659225003,
-    NULL, false, false
+    NULL, false, false),
+(
+    13740935,
+    NULL, 'ZZTOPACDC', NULL, 'ZZ000000', 'I DO 4H REPORT', 'FR',
+    NULL, -53.4249999999999972, -5.54900000000000038, 1.5, 195,
+    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '10 minutes', '0 days 04:00:00',
+    NULL, NULL,
+    NULL, NULL, NULL, NULL, NULL,
+    'null',
+    '{}',
+    'null', 0,
+    NULL, NULL, NULL,
+    'IRCS',
+    NULL, NULL,
+    1, 2, 2, 1.74110112659225003,
+    false, false, true
 );

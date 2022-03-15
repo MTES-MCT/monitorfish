@@ -47,5 +47,13 @@ INSERT INTO public.vessels (
     '{OTT}', NULL,
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur qui se cache', '{2222222222}', '{discrete@cache-cache.fish}',
     'BEACON_NOT_EMITTING', false, 'ACTIVATED'
+),
+(
+    6,
+    NULL, 'ZZTOPACDC', NULL, 'ZZ000000', 'I DO 4H REPORT', 'FR', 4.1, 12.5,
+    'Marseille', 'MA', 2.7, 'Marseille', 250, 'Chalutier', '4ème', 'Grande pêche',
+    '{OTT}', NULL,
+    '{}', '{}', NULL, '{}', '{}', 'Le pêcheur qui se fait ses 4h reports', '{3333333333}', '{reglo@bateau.fr}',
+    'BEA951357', false, 'ACTIVATED'
 )
 ;

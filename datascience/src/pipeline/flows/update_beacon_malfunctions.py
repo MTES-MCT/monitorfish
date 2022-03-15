@@ -110,7 +110,8 @@ def get_current_malfunctions(
 
     current_malfunctions = (
         last_emission_of_vessels_that_should_emit.loc[
-            (
+            (last_emission_of_vessels_that_should_emit.is_manual == True)
+            | (
                 last_emission_of_vessels_that_should_emit.last_position_datetime_utc.isna()
             )
             | (
@@ -132,6 +133,7 @@ def get_current_malfunctions(
         .reset_index(drop=True)
     )
 
+    current_malfunctions = current_malfunctions.drop(columns=["is_manual"])
     return current_malfunctions
 
 
@@ -160,18 +162,21 @@ def get_vessels_emitting(
         pd.DataFrame: `DataFrame` of vessels that emitted after the relevant threshold.
     """
     vessels_emitting = beacons_last_emission.loc[
-        (
-            beacons_last_emission.is_at_port
-            & (
-                beacons_last_emission.last_position_datetime_utc
-                >= malfunction_datetime_utc_threshold_at_port
+        (beacons_last_emission.is_manual == False)
+        & (
+            (
+                beacons_last_emission.is_at_port
+                & (
+                    beacons_last_emission.last_position_datetime_utc
+                    >= malfunction_datetime_utc_threshold_at_port
+                )
             )
-        )
-        | (
-            (~beacons_last_emission.is_at_port)
-            & (
-                beacons_last_emission.last_position_datetime_utc
-                >= malfunction_datetime_utc_threshold_at_sea
+            | (
+                (~beacons_last_emission.is_at_port)
+                & (
+                    beacons_last_emission.last_position_datetime_utc
+                    >= malfunction_datetime_utc_threshold_at_sea
+                )
             )
         )
     ].reset_index(drop=True)[["cfr", "external_immatriculation", "ircs"]]

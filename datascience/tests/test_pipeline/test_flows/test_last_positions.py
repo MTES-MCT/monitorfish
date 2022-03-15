@@ -53,15 +53,15 @@ def test_extract_risk_factors(reset_test_data):
 
 def test_extract_previous_last_positions(reset_test_data):
     previous_last_positions = extract_previous_last_positions.run()
-    assert previous_last_positions.shape == (3, 22)
+    assert previous_last_positions.shape == (4, 22)
 
 
 def test_extract_last_positions(reset_test_data):
     last_positions = extract_last_positions.run(minutes=15)
-    assert last_positions.shape == (1, 20)
+    assert last_positions.shape == (2, 20)
 
     last_positions = extract_last_positions.run(minutes=35)
-    assert last_positions.shape == (2, 20)
+    assert last_positions.shape == (3, 20)
 
 
 def test_load_last_positions(reset_test_data):
@@ -482,16 +482,18 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
         "monitorfish_remote", "SELECT * FROM last_positions;"
     )
 
-    assert len(initial_last_positions) == 3
-    assert len(final_last_positions) == 2
+    assert len(initial_last_positions) == 4
+    assert len(final_last_positions) == 3
     assert set(initial_last_positions.external_immatriculation) == {
         "AS761555",
         "RO237719",
         "SB125334",
+        "ZZTOPACDC",
     }
     assert set(final_last_positions.external_immatriculation) == {
         "RV348407",
         "RO237719",
+        "ZZTOPACDC",
     }
 
 
@@ -509,18 +511,20 @@ def test_last_positions_flow_updates_last_positions_when_action_is_update(
         "monitorfish_remote", "SELECT * FROM last_positions;"
     )
 
-    assert len(initial_last_positions) == 3
-    assert len(final_last_positions) == 4
+    assert len(initial_last_positions) == 4
+    assert len(final_last_positions) == 5
     assert set(initial_last_positions.external_immatriculation) == {
         "AS761555",
         "RO237719",
         "SB125334",
+        "ZZTOPACDC",
     }
     assert set(final_last_positions.external_immatriculation) == {
         "AS761555",
         "RO237719",
         "SB125334",
         "RV348407",
+        "ZZTOPACDC",
     }
 
     assert (

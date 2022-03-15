@@ -314,20 +314,82 @@ def update_beacon_malfunction(
     *,
     new_stage: beaconMalfunctionStage = None,
     new_vessel_status: beaconMalfunctionVesselStatus = None,
+    end_of_malfunction_reason: endOfMalfunctionReason = None,
 ):
-    """
-    Change the stage of the `beacon_malfunction`of id `beacon_malfunction_id` to `new_stage`.
+    """Update a `beacon_malfunction`s stage or vessel status.
+
+    - Exactly one of `new_state` or `new_vessel_status` must be provided
+    - `end_of_malfunction_reason` must be provided if, and only if, `new_stage` is
+      provided and is equal to `END_OF_MALFUNCTION`
 
     Args:
         beacon_malfunction_id (int): id of the beacon_malfunction to update
-        new_stage (beaconMalfunctionStage): stage to move the beacon malfunction to
-    """
-    url = BEACON_MALFUNCTIONS_ENDPOINT + str(beacon_malfunction_id)
+        new_stage (beaconMalfunctionStage, optional): stage to move the beacon
+          malfunction to. Defaults to None.
+        new_vessel_status (beaconMalfunctionVesselStatus, optional): vessel_status to
+          move the beacon malfunction to. Defaults to None.
+        end_of_malfunction_reason (endOfMalfunctionReason, optional): reason that led
+          to the end of the malfunction. Defaults to None.
 
+    Raises:
+        ValueError: in the following cases :
+
+          - `new_stage` is `END_OF_MALFUNCTION` and no `end_of_malfunction_reason` is
+            provided
+          - an `end_of_malfunction_reason` is provided, but `new_stage` is either not
+            provided or is different from `END_OF_MALFUNCTION`
+          - both `new_stage` and `new_vessel_status` are provided
+    """
+
+    try:
+        assert (
+            new_stage is None
+            and isinstance(new_vessel_status, beaconMalfunctionVesselStatus)
+        ) or (
+            new_vessel_status is None and isinstance(new_stage, beaconMalfunctionStage)
+        )
+    except AssertionError:
+        raise ValueError(
+            "Exactly one of new_stage or new_vessel_status must be provided"
+        )
+
+    url = BEACON_MALFUNCTIONS_ENDPOINT + str(beacon_malfunction_id)
     json = {}
+
     if new_stage:
         json["stage"] = new_stage.value
+        if new_stage is beaconMalfunctionStage.END_OF_MALFUNCTION:
+            try:
+                assert isinstance(end_of_malfunction_reason, endOfMalfunctionReason)
+            except AssertionError:
+                raise ValueError(
+                    (
+                        "Cannot end a malfunction without "
+                        "giving an end_of_malfunction_reason"
+                    )
+                )
+            json["endOfBeaconMalfunctionReason"] = end_of_malfunction_reason.value
+        else:
+            try:
+                assert end_of_malfunction_reason is None
+            except AssertionError:
+                raise ValueError(
+                    (
+                        "Cannot provide an end_of_malfunction_reason "
+                        "if new_stage is not END_OF_MALFUNCTION"
+                    )
+                )
+
     if new_vessel_status:
+        try:
+            assert end_of_malfunction_reason is None
+        except AssertionError:
+            raise ValueError(
+                (
+                    "Unexpected argument end_of_malfunction_reason "
+                    "when updating vessel_status"
+                )
+            )
         json["vesselStatus"] = new_vessel_status.value
 
     if json:
@@ -398,6 +460,7 @@ with Flow("Beacons malfunctions") as flow:
     update_beacon_malfunction.map(
         beacon_malfunctions_with_resumed_transmission,
         new_stage=unmapped(beaconMalfunctionStage.END_OF_MALFUNCTION),
+        end_of_malfunction_reason=unmapped(endOfMalfunctionReason.RESUMED_TRANSMISSION),
     )
     load_new_beacons_malfunctions(new_malfunctions)
 

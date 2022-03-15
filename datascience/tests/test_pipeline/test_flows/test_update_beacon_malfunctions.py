@@ -2,10 +2,12 @@ from datetime import datetime, timedelta
 from unittest.mock import patch
 
 import pandas as pd
+import pytest
 
 from src.pipeline.flows.update_beacon_malfunctions import (
     beaconMalfunctionStage,
     beaconMalfunctionVesselStatus,
+    endOfMalfunctionReason,
     extract_beacons_last_emission,
     extract_known_malfunctions,
     extract_vessels_that_should_emit,
@@ -363,16 +365,67 @@ def test_load_new_beacon_malfunctions(reset_test_data):
     "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
 )
-def test_update_beacon_malfunction_updates_stage_and_status(mock_requests):
+def test_update_beacon_malfunction_raises_when_both_stage_and_status_are_supplied(
+    mock_requests,
+):
+    malfunction_id_to_update = 25
+    with pytest.raises(ValueError):
+        update_beacon_malfunction.run(
+            malfunction_id_to_update,
+            new_stage=beaconMalfunctionStage.FOUR_HOUR_REPORT,
+            new_vessel_status=beaconMalfunctionVesselStatus.AT_SEA,
+        )
+
+
+@patch("src.pipeline.flows.update_beacon_malfunctions.requests")
+@patch(
+    "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "dummy/end/point/",
+)
+def test_update_beacon_malfunction_raises_when_reason_is_missing(mock_requests):
+    malfunction_id_to_update = 25
+    with pytest.raises(ValueError):
+        update_beacon_malfunction.run(
+            malfunction_id_to_update,
+            new_stage=beaconMalfunctionStage.END_OF_MALFUNCTION,
+        )
+
+
+@patch("src.pipeline.flows.update_beacon_malfunctions.requests")
+@patch(
+    "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "dummy/end/point/",
+)
+def test_update_beacon_malfunction_raises_when_reason_is_unexpected(mock_requests):
+    malfunction_id_to_update = 25
+    with pytest.raises(ValueError):
+        update_beacon_malfunction.run(
+            malfunction_id_to_update,
+            new_stage=beaconMalfunctionStage.FOUR_HOUR_REPORT,
+            end_of_malfunction_reason=endOfMalfunctionReason.RESUMED_TRANSMISSION,
+        )
+
+    with pytest.raises(ValueError):
+        update_beacon_malfunction.run(
+            malfunction_id_to_update,
+            end_of_malfunction_reason=endOfMalfunctionReason.RESUMED_TRANSMISSION,
+        )
+
+
+@patch("src.pipeline.flows.update_beacon_malfunctions.requests")
+@patch(
+    "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "dummy/end/point/",
+)
+def test_update_beacon_malfunction_updates_status(mock_requests):
     malfunction_id_to_update = 25
     update_beacon_malfunction.run(
         malfunction_id_to_update,
-        new_stage=beaconMalfunctionStage.FOUR_HOUR_REPORT,
         new_vessel_status=beaconMalfunctionVesselStatus.AT_SEA,
     )
     mock_requests.put.assert_called_once_with(
         url=f"dummy/end/point/{malfunction_id_to_update}",
-        json={"stage": "FOUR_HOUR_REPORT", "vesselStatus": "AT_SEA"},
+        json={"vesselStatus": "AT_SEA"},
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",
@@ -385,14 +438,60 @@ def test_update_beacon_malfunction_updates_stage_and_status(mock_requests):
     "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
 )
-def test_update_beacon_malfunction_does_nothing_when_no_arguments_given(mock_requests):
+def test_update_beacon_malfunction_updates_stage(mock_requests):
     malfunction_id_to_update = 25
     update_beacon_malfunction.run(
         malfunction_id_to_update,
-        new_stage=None,
-        new_vessel_status=None,
+        new_stage=beaconMalfunctionStage.FOUR_HOUR_REPORT,
     )
-    mock_requests.put.assert_not_called()
+    mock_requests.put.assert_called_once_with(
+        url=f"dummy/end/point/{malfunction_id_to_update}",
+        json={"stage": "FOUR_HOUR_REPORT"},
+        headers={
+            "Accept": "application/json, text/plain",
+            "Content-Type": "application/json;charset=UTF-8",
+        },
+    )
+
+
+@patch("src.pipeline.flows.update_beacon_malfunctions.requests")
+@patch(
+    "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "dummy/end/point/",
+)
+def test_update_beacon_malfunction_updates_stage_and_reason(mock_requests):
+    malfunction_id_to_update = 25
+    update_beacon_malfunction.run(
+        malfunction_id_to_update,
+        new_stage=beaconMalfunctionStage.END_OF_MALFUNCTION,
+        end_of_malfunction_reason=endOfMalfunctionReason.RESUMED_TRANSMISSION,
+    )
+    mock_requests.put.assert_called_once_with(
+        url=f"dummy/end/point/{malfunction_id_to_update}",
+        json={
+            "stage": "END_OF_MALFUNCTION",
+            "endOfBeaconMalfunctionReason": "RESUMED_TRANSMISSION",
+        },
+        headers={
+            "Accept": "application/json, text/plain",
+            "Content-Type": "application/json;charset=UTF-8",
+        },
+    )
+
+
+@patch("src.pipeline.flows.update_beacon_malfunctions.requests")
+@patch(
+    "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "dummy/end/point/",
+)
+def test_update_beacon_malfunction_raises_if_no_stage_and_no_status(mock_requests):
+    malfunction_id_to_update = 25
+    with pytest.raises(ValueError):
+        update_beacon_malfunction.run(
+            malfunction_id_to_update,
+            new_stage=None,
+            new_vessel_status=None,
+        )
 
 
 def test_update_beacon_malfunctions_flow_doesnt_insert_already_known_malfunctions(
@@ -460,7 +559,10 @@ def test_update_beacon_malfunctions_flow_moves_beacon_malfunctions_to_end_of_mal
     mock_requests.put.assert_called_once_with(
         url=endpoint_mock_url
         + f"{beacon_malfunction_id_to_move_to_end_of_malfunction}",
-        json={"stage": "END_OF_MALFUNCTION"},
+        json={
+            "stage": "END_OF_MALFUNCTION",
+            "endOfBeaconMalfunctionReason": "RESUMED_TRANSMISSION",
+        },
         headers={
             "Accept": "application/json, text/plain",
             "Content-Type": "application/json;charset=UTF-8",

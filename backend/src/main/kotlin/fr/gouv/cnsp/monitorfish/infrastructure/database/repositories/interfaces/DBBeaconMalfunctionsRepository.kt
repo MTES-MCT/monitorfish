@@ -22,6 +22,10 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
     @Query(value = "UPDATE beacon_malfunctions SET stage = CAST(:stage AS beacon_malfunctions_stage), vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId", nativeQuery = true)
     fun updateStage(beaconMalfunctionId: Int, stage: String, updateDateTime: ZonedDateTime)
 
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE beacon_malfunctions SET end_of_malfunction_reason = CAST(:endOfMalfunctionReason AS beacon_malfunctions_end_of_malfunction_reason), vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId", nativeQuery = true)
+    fun updateEndOfMalfunctionReason(beaconMalfunctionId: Int, endOfMalfunctionReason: String, updateDateTime: ZonedDateTime)
+
     @Query(value = """
         SELECT * FROM beacon_malfunctions WHERE 
             CASE

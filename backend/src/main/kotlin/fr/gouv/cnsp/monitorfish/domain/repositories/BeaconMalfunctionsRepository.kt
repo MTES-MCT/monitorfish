@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import java.time.ZonedDateTime
@@ -17,6 +18,7 @@ interface BeaconMalfunctionsRepository {
     fun update(id: Int,
                vesselStatus: VesselStatus?,
                stage: Stage?,
+               endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
                updateDateTime: ZonedDateTime)
     fun findAllByVesselWithoutVesselIdentifier(internalReferenceNumber: String,
                                                externalReferenceNumber: String,

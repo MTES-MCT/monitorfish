@@ -35,7 +35,7 @@ class UpdateBeaconMalfunctionUTests {
         // When
         val throwable = catchThrowable {
             UpdateBeaconMalfunction(beaconMalfunctionsRepository, beaconMalfunctionActionRepository, getBeaconMalfunction)
-                    .execute(1, null, null)
+                    .execute(1, null, null, null)
         }
 
         // Then
@@ -61,7 +61,7 @@ class UpdateBeaconMalfunctionUTests {
 
         // When
         val updatedBeaconMalfunction = UpdateBeaconMalfunction(beaconMalfunctionsRepository, beaconMalfunctionActionRepository, getBeaconMalfunction)
-                .execute(1, VesselStatus.AT_SEA, null)
+                .execute(1, VesselStatus.AT_SEA, null, null)
 
         // Then
         assertThat(updatedBeaconMalfunction.actions).hasSize(1)

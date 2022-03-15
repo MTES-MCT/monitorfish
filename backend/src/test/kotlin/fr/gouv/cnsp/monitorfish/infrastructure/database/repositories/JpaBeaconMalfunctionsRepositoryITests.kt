@@ -56,21 +56,21 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `update Should update vesselStatus When not null`() {
         // Given
-        val controlObjectives = jpaBeaconMalfunctionsRepository.findAll()
+        val beaconMalfunctions = jpaBeaconMalfunctionsRepository.findAll()
         val updateDateTime = ZonedDateTime.now()
 
         // When
-        assertThat(controlObjectives.find { it.id == 1 }?.vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
+        assertThat(beaconMalfunctions.find { it.id == 1 }?.vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
         jpaBeaconMalfunctionsRepository.update(
                 id = 1,
-                vesselStatus = VesselStatus.ACTIVITY_DETECTED,
+                vesselStatus = VesselStatus.AT_SEA,
                 null,
                 null,
                 updateDateTime)
 
         // Then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
-        assertThat(updatedBeaconMalfunction?.vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
+        assertThat(updatedBeaconMalfunction?.vesselStatus).isEqualTo(VesselStatus.AT_SEA)
         assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isEqualTo(updateDateTime)
     }
 

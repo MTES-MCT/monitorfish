@@ -10,4 +10,5 @@ FROM vessels
 WHERE
     beacon_number IS NOT NULL AND
     -- Flag_states whose emissions are monitored
-    flag_state IN ('FR', 'VE')
+    flag_state IN ('FR', 'VE') AND
+    length >= 12

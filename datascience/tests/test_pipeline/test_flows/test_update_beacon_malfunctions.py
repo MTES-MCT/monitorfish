@@ -10,16 +10,19 @@ from src.pipeline.flows.update_beacon_malfunctions import (
     endOfMalfunctionReason,
     extract_beacons_last_emission,
     extract_known_malfunctions,
-    extract_vessels_that_should_emit,
+    extract_vessels_with_beacon,
     flow,
-    get_beacon_malfunctions_with_resumed_transmission,
     get_current_malfunctions,
+    get_ended_beacon_malfunction_ids,
     get_new_malfunctions,
+    get_temporarily_unsupervised_vessels,
     get_vessels_emitting,
+    get_vessels_that_should_emit,
     load_new_beacons_malfunctions,
     prepare_new_beacon_malfunctions,
     update_beacon_malfunction,
 )
+from src.pipeline.shared_tasks.beacons import beaconStatus
 from src.read_query import read_query
 from tests.mocks import mock_datetime_utcnow
 
@@ -39,8 +42,8 @@ def test_extract_known_malfunctions(reset_test_data):
     assert set(malfunctions.ircs) == {"OLY7853", "ZZ000000"}
 
 
-def test_extract_vessels_that_should_emit(reset_test_data):
-    vessels_that_should_emit = extract_vessels_that_should_emit.run()
+def test_extract_vessels_with_beacon(reset_test_data):
+    vessels_that_should_emit = extract_vessels_with_beacon.run()
     assert set(vessels_that_should_emit.ircs) == {
         "FQ7058",
         "OLY7853",
@@ -153,6 +156,69 @@ def test_get_current_malfunctions_filters_on_max_duration_at_sea_and_at_port_and
     )
 
 
+def test_get_ended_beacon_malfunction_ids():
+    known_malfunctions = pd.DataFrame(
+        {
+            "id": [1, 2, 3, 4, 5, 6],
+            "cfr": ["A", "B", "C", "D", "E", "F"],
+            "ircs": ["AA", "BB", "CC", "DD", "EE", "FF"],
+            "external_immatriculation": ["AAA", "BBB", "CCC", "DDD", "EEE", "FFF"],
+        }
+    )
+
+    vessels_emitting = pd.DataFrame(
+        {
+            "cfr": ["C", "D", "E", "G", "H", "I"],
+            "ircs": ["CC", "DD", "EE", "GG", "HH", "II"],
+            "external_immatriculation": ["CCC", "DDD", "EEE", "GGG", "HHH", "III"],
+        }
+    )
+
+    temporarily_unsupervised_vessels = pd.DataFrame(
+        {
+            "cfr": ["E", "F"],
+            "ircs": ["EE", "FF"],
+            "external_immatriculation": ["EEE", "FFF"],
+        }
+    )
+
+    vessels_that_should_emit = pd.DataFrame(
+        {
+            "cfr": ["B", "C", "I", "J"],
+            "ircs": ["BB", "CC", "II", "JJ"],
+            "external_immatriculation": ["BBB", "CCC", "III", "JJJ"],
+        }
+    )
+
+    (
+        beacon_malfunctions_with_resumed_transmission,
+        beacon_malfunctions_temporarily_unsupervised,
+        beacon_malfunctions_permanently_unsupervised,
+    ) = get_ended_beacon_malfunction_ids.run(
+        known_malfunctions,
+        vessels_emitting,
+        temporarily_unsupervised_vessels,
+        vessels_that_should_emit,
+    )
+
+    expected_beacon_malfunctions_with_resumed_transmission = [3]
+    expected_beacon_malfunctions_temporarily_unsupervised = [5, 6]
+    expected_beacon_malfunctions_permanently_unsupervised = [1, 4]
+
+    assert (
+        expected_beacon_malfunctions_with_resumed_transmission
+        == beacon_malfunctions_with_resumed_transmission
+    )
+    assert (
+        expected_beacon_malfunctions_temporarily_unsupervised
+        == beacon_malfunctions_temporarily_unsupervised
+    )
+    assert (
+        expected_beacon_malfunctions_permanently_unsupervised
+        == beacon_malfunctions_permanently_unsupervised
+    )
+
+
 def test_get_vessels_emitting_filters_on_max_duration_at_sea_and_at_port_and_is_manual():
     d = datetime(2021, 10, 8, 2, 56, 0)
     td = timedelta(hours=1)
@@ -186,6 +252,60 @@ def test_get_vessels_emitting_filters_on_max_duration_at_sea_and_at_port_and_is_
     pd.testing.assert_frame_equal(vessels_emitting, expected_vessels_emitting)
 
 
+def test_get_vessels_that_should_emit():
+    vessels_with_beacon = pd.DataFrame(
+        {
+            "vessel_ids": [1, 2, 3, 4, 5, 6],
+            "other_data": ["A", "B", "C", "D", "E", "F"],
+            "beacon_status": [
+                beaconStatus.ACTIVATED.value,
+                beaconStatus.NON_APPROVED.value,
+                beaconStatus.UNSUPERVISED.value,
+                beaconStatus.IN_TEST.value,
+                beaconStatus.DEACTIVATED.value,
+                beaconStatus.ACTIVATED.value,
+            ],
+        }
+    )
+
+    vessels_that_should_emit = get_vessels_that_should_emit.run(vessels_with_beacon)
+    expected_vessels_that_should_emit = vessels_with_beacon.loc[
+        [0, 5], ["vessel_ids", "other_data"]
+    ].reset_index(drop=True)
+
+    pd.testing.assert_frame_equal(
+        vessels_that_should_emit, expected_vessels_that_should_emit
+    )
+
+
+def test_get_temporarily_unsupervised_vessels():
+    vessels_with_beacon = pd.DataFrame(
+        {
+            "vessel_ids": [1, 2, 3, 4, 5, 6],
+            "other_data": ["A", "B", "C", "D", "E", "F"],
+            "beacon_status": [
+                beaconStatus.ACTIVATED.value,
+                beaconStatus.NON_APPROVED.value,
+                beaconStatus.UNSUPERVISED.value,
+                beaconStatus.IN_TEST.value,
+                beaconStatus.DEACTIVATED.value,
+                beaconStatus.ACTIVATED.value,
+            ],
+        }
+    )
+
+    temporarily_unsupervised_vessels = get_temporarily_unsupervised_vessels.run(
+        vessels_with_beacon
+    )
+    expected_temporarily_unsupervised_vessels = vessels_with_beacon.loc[
+        [2], ["vessel_ids", "other_data"]
+    ].reset_index(drop=True)
+
+    pd.testing.assert_frame_equal(
+        temporarily_unsupervised_vessels, expected_temporarily_unsupervised_vessels
+    )
+
+
 def test_get_new_malfunctions():
     current_malfunctions = pd.DataFrame(
         {
@@ -212,35 +332,6 @@ def test_get_new_malfunctions():
     expected_new_malfunctions = current_malfunctions.loc[[1, 3], :]
 
     pd.testing.assert_frame_equal(new_malfunctions, expected_new_malfunctions)
-
-
-def test_get_beacon_malfunctions_with_resumed_transmission():
-    vessels_emitting = pd.DataFrame(
-        {
-            "cfr": ["A", "B", "C", "D"],
-            "ircs": ["AAA", "BBB", "CCC", "DDD"],
-            "external_immatriculation": ["AA", "BB", "CC", "DD"],
-            "some_more_data": [1.0, 2.3, None, 1.23],
-        }
-    )
-
-    known_malfunctions = pd.DataFrame(
-        {
-            "id": [12, 48, 256],
-            "cfr": ["A", None, "E"],
-            "ircs": ["AAA", "CCC", "EEE"],
-            "external_immatriculation": ["AA", "CC_different", "EE"],
-            "some_more_data": [1.0, None, 569.2],
-        }
-    )
-
-    emission_restarts = get_beacon_malfunctions_with_resumed_transmission.run(
-        known_malfunctions=known_malfunctions, vessels_emitting=vessels_emitting
-    )
-
-    expected_emission_restarts = {48, 12}
-
-    assert set(emission_restarts) == expected_emission_restarts
 
 
 @patch(
@@ -550,10 +641,16 @@ def test_update_beacon_malfunctions_flow_moves_beacon_malfunctions_to_end_of_mal
     )
     assert len(state.result[flow.get_tasks("get_current_malfunctions")[0]].result) == 2
     assert len(state.result[flow.get_tasks("get_new_malfunctions")[0]].result) == 1
-    assert beacon_malfunction_id_manual_position not in (
-        state.result[
-            flow.get_tasks("get_beacon_malfunctions_with_resumed_transmission")[0]
-        ].result
+
+    (
+        beacon_malfunctions_with_resumed_transmission,
+        beacon_malfunctions_temporarily_unsupervised,
+        beacon_malfunctions_permanently_unsupervised,
+    ) = state.result[flow.get_tasks("get_ended_beacon_malfunction_ids")[0]].result
+
+    assert (
+        beacon_malfunction_id_manual_position
+        not in beacon_malfunctions_with_resumed_transmission
     )
 
     mock_requests.put.assert_called_once_with(

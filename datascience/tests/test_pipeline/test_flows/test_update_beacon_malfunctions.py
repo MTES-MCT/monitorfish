@@ -18,7 +18,7 @@ from src.pipeline.flows.update_beacon_malfunctions import (
     get_temporarily_unsupervised_vessels,
     get_vessels_emitting,
     get_vessels_that_should_emit,
-    load_new_beacons_malfunctions,
+    load_new_beacon_malfunctions,
     prepare_new_beacon_malfunctions,
     update_beacon_malfunction,
 )
@@ -346,6 +346,7 @@ def test_prepare_new_beacon_malfunctions():
             "external_immatriculation": ["BB", "DD", "EE"],
             "ircs": ["BBB", "DDD", "EEE"],
             "vessel_name": ["BBBB", "DDDD", "EEEE"],
+            "flag_state": ["FR", "VE", "FR"],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "IRCS",
@@ -369,6 +370,7 @@ def test_prepare_new_beacon_malfunctions():
             "external_reference_number": ["BB", "DD", "EE"],
             "ircs": ["BBB", "DDD", "EEE"],
             "vessel_name": ["BBBB", "DDDD", "EEEE"],
+            "flag_state": ["FR", "VE", "FR"],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "IRCS",
@@ -413,6 +415,7 @@ def test_load_new_beacon_malfunctions(reset_test_data):
             "external_reference_number": ["BB", "DD"],
             "ircs": ["BBB", "DDD"],
             "vessel_name": ["BBBB", "DDDD"],
+            "flag_state": ["FR", "VE"],
             "vessel_identifier": ["INTERNAL_REFERENCE_NUMBER", "IRCS"],
             "vessel_status": [
                 beaconMalfunctionVesselStatus.AT_PORT.value,
@@ -435,7 +438,7 @@ def test_load_new_beacon_malfunctions(reset_test_data):
         }
     )
 
-    load_new_beacons_malfunctions.run(new_beacon_malfunctions)
+    load_new_beacon_malfunctions.run(new_beacon_malfunctions)
 
     loaded_beacon_malfunctions = read_query(
         "monitorfish_remote", "SELECT * FROM beacon_malfunctions"

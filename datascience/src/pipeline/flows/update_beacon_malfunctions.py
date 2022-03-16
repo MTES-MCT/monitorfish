@@ -382,6 +382,7 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         "external_reference_number",
         "ircs",
         "vessel_name",
+        "flag_state",
         "vessel_identifier",
         "vessel_status",
         "stage",
@@ -394,9 +395,9 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
 
 
 @task(checkpoint=False)
-def load_new_beacons_malfunctions(new_beacons_malfunctions: pd.DataFrame):
+def load_new_beacon_malfunctions(new_beacon_malfunctions: pd.DataFrame):
     load(
-        new_beacons_malfunctions,
+        new_beacon_malfunctions,
         table_name="beacon_malfunctions",
         schema="public",
         db_name="monitorfish_remote",
@@ -584,6 +585,6 @@ with Flow("Beacons malfunctions") as flow:
         ),
     )
 
-    load_new_beacons_malfunctions(new_malfunctions)
+    load_new_beacon_malfunctions(new_malfunctions)
 
 flow.file_name = Path(__file__).name

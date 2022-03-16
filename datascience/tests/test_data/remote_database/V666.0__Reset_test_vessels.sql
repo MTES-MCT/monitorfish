@@ -18,7 +18,7 @@ INSERT INTO public.vessels (
 ),
 (
     2,
-    'ABC000542519', 'RO237719', NULL, 'FQ7058', 'DEVINER FIGURE CONSCIENCE', 'FR', 3.13, 11.4, 
+    'ABC000542519', 'RO237719', NULL, 'FQ7058', 'DEVINER FIGURE CONSCIENCE', 'FR', 3.13, 13.4,
     'Concarneau', 'CC', 3.7, 'Concarneau', 312, 'Navire polyvalent', '3ème restreinte', 'Petite pêche', 
     '{DRB,PS1}', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP + INTERVAL '3 months',
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur de crevettes', '{9876543210}', '{address@email.bzh}', 

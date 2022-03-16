@@ -1,12 +1,11 @@
 import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { vesselStatuses } from '../../../../domain/entities/beaconMalfunction'
+import { getMalfunctionStartDateText, vesselStatuses } from '../../../../domain/entities/beaconMalfunction'
 import { VesselStatusSelectValue } from '../../../side_window/beacon_malfunctions/VesselStatusSelectValue'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import updateBeaconMalfunctionFromKanban from '../../../../domain/use_cases/updateBeaconMalfunctionFromKanban'
 import { useDispatch } from 'react-redux'
-import * as timeago from 'timeago.js'
 import { ReactComponent as TimeAgoSVG } from '../../../icons/Label_horaire_VMS.svg'
 
 const CurrentBeaconMalfunctionBody = props => {
@@ -55,11 +54,7 @@ const CurrentBeaconMalfunctionBody = props => {
         style={lastPositionStyle}
       >
         <TimeAgo style={timeAgoStyle}/>
-        Dernière émission {
-        timeago.format(currentBeaconMalfunctionWithDetails?.beaconMalfunction?.malfunctionStartDateTime, 'fr')
-          .replace('semaines', 'sem.')
-          .replace('semaine', 'sem.')
-      }
+        {getMalfunctionStartDateText(vesselStatus, currentBeaconMalfunctionWithDetails?.beaconMalfunction)}
       </LastPosition>
     </Body>
     : null

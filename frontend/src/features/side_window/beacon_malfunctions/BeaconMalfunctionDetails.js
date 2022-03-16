@@ -12,7 +12,11 @@ import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import * as timeago from 'timeago.js'
 import { closeBeaconMalfunctionInKanban } from '../../../domain/shared_slices/BeaconMalfunction'
 import { getDateTime } from '../../../utils'
-import { getIsMalfunctioning, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
+import {
+  getIsMalfunctioning,
+  getMalfunctionStartDateText,
+  vesselStatuses
+} from '../../../domain/entities/beaconMalfunction'
 import BeaconMalfunctionDetailsFollowUp from './BeaconMalfunctionDetailsFollowUp'
 import { showVesselSidebarTab } from '../../../domain/shared_slices/Vessel'
 import { VesselSidebarTab } from '../../../domain/entities/vessel'
@@ -135,9 +139,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
           </Malfunctioning>
           <LastPosition style={lastPositionStyle} title={getDateTime(beaconMalfunction?.malfunctionStartDateTime)}>
             <TimeAgo style={timeAgoStyle}/>
-            Dernière émission {
-            timeago.format(beaconMalfunction?.malfunctionStartDateTime, 'fr')
-          }
+            {getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}
           </LastPosition>
         </FirstColumn>
         <SecondColumn style={secondColumnStyle}>

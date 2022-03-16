@@ -298,15 +298,27 @@ context('Side window beacon malfunctions', () => {
       .find('*[data-cy="side-window-beacon-malfunctions-end-of-malfunction"]')
       .contains('Reprise des émissions')
   })
-})
 
-
-/*
-cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]').children()
+  it('Beacon activated should be showed When the vessel status is NEVER_EMITTED', () => {
+    // In the board
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]').children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .first()
-      .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
-      .contains('Sans nouvelles')
- */
+      .eq(2)
+      .contains('N\'a jamais émis')
 
-// side-window-beacon-malfunctions-end-of-malfunction
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]').children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .eq(2)
+      .contains('Balise activée le')
+
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]').children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .eq(2)
+      .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
+      .click()
+
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
+      .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
+      .contains('N\'a jamais émis')
+  })
+})

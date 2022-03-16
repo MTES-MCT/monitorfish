@@ -1,12 +1,17 @@
 import _ from 'lodash'
 import styled from 'styled-components'
 import { ReactComponent as VesselStatusNoNewsSVG } from '../../features/icons/Avarie_statut_sans_nouvelles.svg'
+import { ReactComponent as VesselStatusNeverEmittedSVG } from '../../features/icons/never_emitted.svg'
 import { ReactComponent as VesselStatusAtPortSVG } from '../../features/icons/Avarie_statut_navire_a_quai.svg'
 import { COLORS } from '../../constants/constants'
 import React from 'react'
 import { ReactComponent as VesselStatusAtSeaSVG } from '../../features/icons/Avarie_statut_navire_en_mer.svg'
 import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../features/icons/Avarie_statut_activite_detectee.svg'
-import { beaconMalfunctionsStages } from '../../features/side_window/beacon_malfunctions/beaconMalfunctions'
+import {
+  beaconMalfunctionsStages,
+  getReducedTimeAgo
+} from '../../features/side_window/beacon_malfunctions/beaconMalfunctions'
+import { getDate } from '../../utils'
 
 /* eslint-disable */
 /** @namespace BeaconMalfunction */
@@ -32,12 +37,14 @@ const BeaconMalfunctionVesselStatus = {
   AT_PORT: 'AT_PORT',
   AT_SEA: 'AT_SEA',
   NO_NEWS: 'NO_NEWS',
+  NEVER_EMITTED: 'NEVER_EMITTED',
   ACTIVITY_DETECTED: 'ACTIVITY_DETECTED'
 }
 
 const VesselStatusAtPort = styled(VesselStatusAtPortSVG)``
 const VesselStatusAtSea = styled(VesselStatusAtSeaSVG)``
 const VesselStatusNoNews = styled(VesselStatusNoNewsSVG)``
+const VesselStatusNeverEmitted = styled(VesselStatusNeverEmittedSVG)``
 const VesselStatusActivityDetected = styled(VesselStatusActivityDetectedSVG)``
 
 const iconStyle = {
@@ -66,6 +73,13 @@ const vesselStatuses = [
     color: '#E6BC51',
     textColor: COLORS.charcoal,
     icon: <VesselStatusNoNews style={iconStyle}/>
+  },
+  {
+    label: 'N\'a jamais émis',
+    value: 'NEVER_EMITTED',
+    color: COLORS.charcoal,
+    textColor: COLORS.white,
+    icon: <VesselStatusNeverEmitted style={iconStyle}/>
   },
   {
     label: 'Activité détectée',
@@ -184,6 +198,10 @@ const getFirstVesselStatus = beaconMalfunctionWithDetails => {
 const getIsMalfunctioning = stage => stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
   stage !== beaconMalfunctionsStages.ARCHIVED.code
 
+const getMalfunctionStartDateText = (vesselStatus, beaconMalfunction) => vesselStatus?.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED
+  ? `Balise activée le ${getDate(beaconMalfunction?.malfunctionStartDateTime)}`
+  : `Dernière émission ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+
 export {
   getYearsToBeaconMalfunctions,
   getNumberOfSeaAndLandBeaconMalfunctions,
@@ -194,5 +212,6 @@ export {
   vesselStatuses,
   BeaconMalfunctionsTab,
   endOfBeaconMalfunctionReasons,
-  getIsMalfunctioning
+  getIsMalfunctioning,
+  getMalfunctionStartDateText
 }

@@ -16,6 +16,7 @@ from src.pipeline.flows.last_positions import (
     extract_risk_factors,
     flow,
     load_last_positions,
+    merge_last_positions_beacon_malfunctions,
     merge_last_positions_risk_factors_alerts,
     split,
     validate_action,
@@ -462,6 +463,69 @@ def test_merge_last_positions_risk_factors_alerts():
                 None,
                 None,
             ],
+        }
+    ).fillna({**default_risk_factors})
+
+    pd.testing.assert_frame_equal(expected_res, res)
+
+
+def test_merge_last_positions_beacon_malfunctions():
+
+    last_positions = pd.DataFrame(
+        {
+            "cfr": ["A", "B", None, None],
+            "ircs": ["aa", "bb", "cc", None],
+            "external_immatriculation": ["aaa", None, None, "ddd"],
+            "latitude": [45, 45.12, 56.214, 21.325],
+            "longitude": [-5.1236, -12.85, 1.01, -1.236],
+        }
+    )
+
+    known_malfunctions = pd.DataFrame(
+        {
+            "id": [1, 2, 3],
+            "cfr": ["B", "D", "E"],
+            "external_immatriculation": ["BB", "DD", "EE"],
+            "ircs": ["BBB", "DDD", "EEE"],
+            "vessel_name": ["BBBB", "DDDD", "EEEE"],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+                "IRCS",
+                "EXTERNAL_REFERENCE_NUMBER",
+            ],
+            "is_at_port": [True, False, None],
+            "priority": [False, True, False],
+            "malfunction_start_date_utc": [
+                datetime(2020, 3, 30, 12, 0, 0),
+                datetime(2022, 4, 1, 18, 20, 12),
+                None,
+            ],
+        }
+    )
+
+    res = merge_last_positions_beacon_malfunctions.run(
+        last_positions, known_malfunctions
+    )
+
+    res = (
+        res.sort_values(["cfr", "ircs", "external_immatriculation"])
+        .reset_index()
+        .drop(columns=["index"])
+    )
+
+    expected_res = pd.DataFrame(
+        {
+            "cfr": ["A", "B", None, None],
+            "ircs": ["aa", "bb", "cc", None],
+            "external_immatriculation": ["aaa", None, None, "ddd"],
+            "latitude": [45, 45.12, 56.214, 21.325],
+            "longitude": [-5.1236, -12.85, 1.01, -1.236],
+            "impact_risk_factor": [1.2, None, 3.8, 1.2],
+            "probability_risk_factor": [1.3, None, 1.5, 2.1],
+            "detectability_risk_factor": [2.1, None, 2.3, 2.3],
+            "risk_factor": [1.8, None, 3.0, 1.9],
+            "total_weight_onboard": [121.2, 0.0, 0.0, 0.0],
+            "beacon_malfunction_id": [1, 2, 3],
         }
     ).fillna({**default_risk_factors})
 

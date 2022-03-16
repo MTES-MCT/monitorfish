@@ -497,7 +497,7 @@ def join_on_multiple_keys(
 
     Joins are performed on the keys listed in `on` by "decreasing order or priority" in
     the sense that rows of left and right that have been matched on one key are removed
-    from ulterior joins perfomed on the next keys.
+    from ulterior joins performed on the next keys.
 
     During each of the joins on the individual keys, non-joining key pairs and, if any,
     columns common to both left and right DataFrames, are coalesced (from left to

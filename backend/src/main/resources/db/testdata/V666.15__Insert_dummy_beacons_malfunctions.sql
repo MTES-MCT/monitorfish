@@ -6,6 +6,6 @@ INSERT INTO beacon_malfunctions (internal_reference_number, ircs, external_refer
 ('FR263465414','IR123','08FR65465', 'FR', 'EXTERNAL_REFERENCE_NUMBER','LE b@TO 2', 'NEVER_EMITTED', 'ARCHIVED', true, NOW() - ('3 WEEK')::interval, null, NOW() - ('2 WEEK')::interval, 'TEMPORARY_INTERRUPTION_OF_SUPERVISION'),
 ('FR263454484','FE4864','8FR6541', 'FR', 'EXTERNAL_REFERENCE_NUMBER','NO NAME', 'AT_SEA', 'RELAUNCH_REQUEST', true, NOW() - ('3 WEEK')::interval, null, NOW() - ('2 WEEK')::interval, null),
 ('ABC000939217','SC6082','RU460262', 'FR', 'INTERNAL_REFERENCE_NUMBER','FRAIS AVIS MODE', 'AT_SEA', 'INITIAL_ENCOUNTER', true, NOW() - ('3 WEEK')::interval, null, NOW() - ('2 WEEK')::interval, null),
-('ABC000717263','QP6933','IG860866', 'FR', 'INTERNAL_REFERENCE_NUMBER','ÉCRASER TON IMPOSSIBLE', 'AT_SEA', 'INITIAL_ENCOUNTER', true, NOW() - ('1 WEEK 5 DAYS')::interval, null, NOW() - ('1 WEEK 5 DAYS')::interval, null),
+('ABC000717263','QP6933','IG860866', 'FR', null,'ÉCRASER TON IMPOSSIBLE', 'AT_SEA', 'INITIAL_ENCOUNTER', true, NOW() - ('1 WEEK 5 DAYS')::interval, null, NOW() - ('1 WEEK 5 DAYS')::interval, null),
 ('ABC000480070','TR0588','ZQ658496', 'FR', 'INTERNAL_REFERENCE_NUMBER','DURER REJETER RECONNAÎTRE', 'NEVER_EMITTED', 'INITIAL_ENCOUNTER', true, NOW() - ('1 WEEK 7 DAYS')::interval, null, NOW() - ('1 WEEK 6 DAYS')::interval, null),
 ('ABC000640738','IJU5217','EJ600773', 'FR', 'INTERNAL_REFERENCE_NUMBER','PROFITER ESPRIT DEPUIS', 'AT_PORT', 'INITIAL_ENCOUNTER', true, NOW() - ('1 WEEK 3 DAYS')::interval, null, NOW() - ('1 WEEK 3 DAYS')::interval, null);

@@ -1,6 +1,6 @@
 INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 
-.PHONY: install init-sig run-front run-back docker-build docker-tag docker-push check-clean-archi test restart-app data_science update_data_science_environment
+.PHONY: install init-sig run-front run-back docker-build docker-tag docker-push check-clean-archi test restart-app
 
 # DEV commands
 install:
@@ -71,14 +71,10 @@ run-pipeline-agent-prod:
 	cd datascience && source ~/venv/bin/activate && prefect agent docker start --no-pull &
 stop-pipeline-server:
 	infra/remote/data-pipeline/stop-server.sh
-stop-pipeline-flows:
-	docker container stop monitorfish-pipeline-agent; docker container rm monitorfish-pipeline-agent;
 
 # DATA commands
 install-pipeline:
 	cd datascience && poetry install
-run-notebook:
-	cd datascience && poetry run jupyter notebook
 test-pipeline:
 	cd datascience && poetry run coverage run -m pytest --pdb tests/ && poetry run coverage report && poetry run coverage html
 update-python-dependencies:

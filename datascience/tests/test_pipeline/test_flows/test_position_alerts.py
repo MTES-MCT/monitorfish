@@ -316,7 +316,14 @@ def test_extract_current_risk_factors(reset_test_data):
             [None, "ZZ000000", "ZZTOPACDC", 1.74110112659225],
         ],
     )
-    pd.testing.assert_frame_equal(risk_factors, expected_risk_factors)
+    pd.testing.assert_frame_equal(
+        (risk_factors.sort_values("external_immatriculation").reset_index(drop=True)),
+        (
+            expected_risk_factors.sort_values("external_immatriculation").reset_index(
+                drop=True
+            )
+        ),
+    )
 
 
 def test_filter_on_gears():

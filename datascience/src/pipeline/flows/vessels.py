@@ -1,4 +1,3 @@
-from enum import Enum
 from pathlib import Path
 
 import numpy as np
@@ -8,25 +7,7 @@ from prefect import Flow, task
 
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import coalesce, concatenate_columns
-
-
-class beaconStatus(Enum):
-    ACTIVATED = "ACTIVATED"
-    DEACTIVATED = "DEACTIVATED"
-    IN_TEST = "IN_TEST"
-    NON_APPROVED = "NON_APPROVED"
-    UNSUPERVISED = "UNSUPERVISED"
-
-    @staticmethod
-    def from_poseidon_status(poseidon_status: str):
-        mapping = {
-            "Activée": beaconStatus.ACTIVATED,
-            "Désactivée": beaconStatus.DEACTIVATED,
-            "En test": beaconStatus.IN_TEST,
-            "Non agréée": beaconStatus.NON_APPROVED,
-            "Non surveillée": beaconStatus.UNSUPERVISED,
-        }
-        return mapping[poseidon_status]
+from src.pipeline.shared_tasks.beacons import beaconStatus
 
 
 @task(checkpoint=False)

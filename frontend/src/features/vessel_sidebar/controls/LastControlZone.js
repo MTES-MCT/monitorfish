@@ -1,7 +1,7 @@
 import React from 'react'
-import { NoValue, Title, Zone } from './Controls.style'
 import { controlType } from '../../../domain/entities/controls'
 import ControlField from './ControlField'
+import { NoValue, Title, Zone } from '../common_styles/common.style'
 
 const LastControlZone = props => {
   const {

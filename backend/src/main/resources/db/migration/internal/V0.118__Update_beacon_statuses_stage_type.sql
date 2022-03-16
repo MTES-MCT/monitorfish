@@ -1,0 +1,1 @@
+ALTER TYPE public.beacon_statuses_stage ADD VALUE 'ARCHIVED' AFTER 'RESUMED_TRANSMISSION';

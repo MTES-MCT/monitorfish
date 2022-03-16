@@ -60,7 +60,8 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
   function getVectorSource () {
     if (vectorSourceRef.current === null) {
       vectorSourceRef.current = new VectorSource({
-        features: []
+        features: [],
+        wrapX: false
       })
     }
     return vectorSourceRef.current
@@ -214,7 +215,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
             hideVesselsAtPort
           })
           const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
-          const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)
+          const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced) || vesselProperties?.beaconMalfunctionId ? 1 : 0
           const offset = drawMovedLabelIfFoundAndReturnOffset(getVectorSource(), vesselToCoordinates, labelLineFeatureId, feature, opacity)
           const trackIsShown = showedTracksVesselsIdentities.includes(getVesselFeatureIdFromVessel(vesselProperties))
 

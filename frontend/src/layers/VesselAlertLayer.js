@@ -40,7 +40,8 @@ const VesselAlertLayer = ({ map }) => {
   function getVectorSource () {
     if (vectorSourceRef.current === null) {
       vectorSourceRef.current = new VectorSource({
-        features: []
+        features: [],
+        wrapX: false
       })
     }
     return vectorSourceRef.current
@@ -78,6 +79,7 @@ const VesselAlertLayer = ({ map }) => {
 
       const features = vessels.reduce((features, vessel) => {
         if (!vessel.vesselProperties.hasAlert) return features
+        if (vessel.hasBeaconMalfunction) return features
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return features
         if (hideVesselsAtPort && vessel.isAtPort) return features

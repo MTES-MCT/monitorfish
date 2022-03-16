@@ -8,15 +8,17 @@ import * as timeago from 'timeago.js'
 import { OverlayPosition } from '../overlays/position'
 import { useSelector } from 'react-redux'
 import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
+import { ReactComponent as BeaconMalfunctionSVG } from '../../icons/Icone_VMS_dark.svg'
 import { getAlertNameFromType } from '../../../domain/entities/alerts'
-import { marginsWithAlert, marginsWithoutAlert } from '../overlays/VesselCardOverlay'
+import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } from '../overlays/VesselCardOverlay'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const VesselCard = ({ feature, overlayPosition, hasAlert }) => {
+const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
   const { vesselProperties } = feature
   const featureCoordinates = feature.getGeometry().getCoordinates()
+
   return (
     <>
       <VesselCardHeader>
@@ -52,14 +54,22 @@ const VesselCard = ({ feature, overlayPosition, hasAlert }) => {
       </VesselCardHeader>
       {
         vesselProperties.alerts?.length
-          ? <VesselCardAlerts data-cy={'vessel-card-alert'}>
+          ? <VesselCardAlert data-cy={'vessel-card-alert'}>
             <AlertIcon/>
             {
               vesselProperties.alerts?.length === 1
                 ? getAlertNameFromType(vesselProperties.alerts[0])
                 : `${vesselProperties.alerts?.length} alertes`
             }
-          </VesselCardAlerts>
+          </VesselCardAlert>
+          : null
+      }
+      {
+        vesselProperties.beaconMalfunctionId
+          ? <VesselCardBeaconMalfunction data-cy={'vessel-card-beacon-malfunction'}>
+            <BeaconMalfunctionIcon/>
+            NON-ÉMISSION VMS
+          </VesselCardBeaconMalfunction>
           : null
       }
       <VesselCardBody>
@@ -160,16 +170,16 @@ const VesselCard = ({ feature, overlayPosition, hasAlert }) => {
       </VesselCardBottom>
       <TrianglePointer>
         {
-          overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow hasAlert={hasAlert}/> : null
+          overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow numberOfWarnings={numberOfWarnings}/> : null
         }
         {
-          overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow hasAlert={hasAlert}/> : null
+          overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow numberOfWarnings={numberOfWarnings}/> : null
         }
         {
-          overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow hasAlert={hasAlert}/> : null
+          overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow numberOfWarnings={numberOfWarnings}/> : null
         }
         {
-          overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow hasAlert={hasAlert}/> : null
+          overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow numberOfWarnings={numberOfWarnings}/> : null
         }
       </TrianglePointer>
     </>
@@ -183,11 +193,29 @@ const AlertIcon = styled(AlertSVG)`
   margin-right: 5px;
 `
 
-const VesselCardAlerts = styled.div`
+const BeaconMalfunctionIcon = styled(BeaconMalfunctionSVG)`
+  width: 18px;
+  height: 18px;
+  margin-bottom: -4px;
+  margin-right: 5px;
+`
+
+const VesselCardAlert = styled.div`
   background: #E1000F;
   font-weight: 500;
   font-size: 13px;
-  color: #FFFFFF;
+  color: ${COLORS.background};
+  text-transform: uppercase;
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
+`
+
+const VesselCardBeaconMalfunction = styled.div`
+  background: ${COLORS.yellow};
+  font-weight: 500;
+  font-size: 13px;
+  color: ${COLORS.gunMetal};
   text-transform: uppercase;
   width: 100%;
   text-align: center;
@@ -298,7 +326,12 @@ const BottomTriangleShadow = styled.div`
   border-style: solid;
   border-width: 11px 6px 0 6px;
   border-color: ${COLORS.gainsboro} transparent transparent transparent;
-  margin-left: ${props => -(props.hasAlert ? marginsWithAlert.xMiddle : marginsWithoutAlert.xMiddle) - 6}px;
+  margin-left: ${props => -(
+    props.numberOfWarnings === 1
+      ? marginsWithOneWarning.xMiddle
+      : props.numberOfWarnings === 2
+        ? marginsWithTwoWarning.xMiddle
+        : marginsWithoutAlert.xMiddle) - 6}px;
   margin-top: -1px;
   clear: top;
 `
@@ -311,8 +344,18 @@ const TopTriangleShadow = styled.div`
   border-right : 6px solid transparent;
   border-bottom : 11px solid ${COLORS.gainsboro};
   border-left : 6px solid transparent;
-  margin-left: ${props => -(props.hasAlert ? marginsWithAlert.xMiddle : marginsWithoutAlert.xMiddle) - 6}px;
-  margin-top: ${props => (props.hasAlert ? marginsWithAlert.yBottom : marginsWithoutAlert.yBottom) + 10}px;
+  margin-left: ${props => -(
+    props.numberOfWarnings === 1
+      ? marginsWithOneWarning.xMiddle
+      : props.numberOfWarnings === 2
+        ? marginsWithTwoWarning.xMiddle
+        : marginsWithoutAlert.xMiddle) - 6}px;
+  margin-top: ${props => (
+    props.numberOfWarnings === 1
+      ? marginsWithOneWarning.yBottom
+      : props.numberOfWarnings === 2
+        ? marginsWithTwoWarning.yBottom
+        : marginsWithoutAlert.yBottom) + 10}px;
   clear: top;
 `
 
@@ -324,8 +367,18 @@ const RightTriangleShadow = styled.div`
   border-top : 6px solid transparent;
   border-bottom : 6px solid transparent;
   border-left : 11px solid ${COLORS.gainsboro};
-  margin-left: ${props => -(props.hasAlert ? marginsWithAlert.xRight : marginsWithoutAlert.xRight) - 20}px;
-  margin-top: ${props => (props.hasAlert ? marginsWithAlert.yMiddle : marginsWithoutAlert.yMiddle) - 6}px;
+  margin-left: ${props => -(
+    props.numberOfWarnings === 1
+      ? marginsWithOneWarning.xRight
+      : props.numberOfWarnings === 2
+        ? marginsWithTwoWarning.xRight
+        : marginsWithoutAlert.xRight) - 20}px;
+  margin-top: ${props => (
+    props.numberOfWarnings === 1
+      ? marginsWithOneWarning.yMiddle
+      : props.numberOfWarnings === 2
+        ? marginsWithTwoWarning.yMiddle
+        : marginsWithoutAlert.yMiddle) - 6}px;
   clear: top;
 `
 
@@ -339,7 +392,12 @@ const LeftTriangleShadow = styled.div`
   border-bottom: 6px solid transparent;
   border-left: transparent;
   margin-left: -11px;
-  margin-top: ${props => (props.hasAlert ? marginsWithAlert.yMiddle : marginsWithoutAlert.yMiddle) - 6}px;
+  margin-top: ${props => (
+    props.numberOfWarnings === 1
+      ? marginsWithOneWarning.yMiddle
+      : props.numberOfWarnings === 2
+        ? marginsWithTwoWarning.yMiddle
+        : marginsWithoutAlert.yMiddle) - 6}px;
   clear: top;
 `
 

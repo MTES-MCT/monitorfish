@@ -37,7 +37,7 @@ class GetVesselPositionsUTests {
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
-        given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
         given(ersRepository.findLastTripBeforeDateTime(any(), any())).willThrow(NoLogbookFishingTripFound("ERROR"))
 
         // When
@@ -47,7 +47,7 @@ class GetVesselPositionsUTests {
                             "",
                             "",
                             VesselTrackDepth.LAST_DEPARTURE,
-                            VesselIdentifier.UNDEFINED,
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                             null,
                             null)
         }
@@ -63,7 +63,7 @@ class GetVesselPositionsUTests {
     @Test
     fun `execute Should not throw an exception When a vessel's position is not found`() {
         // Given
-        given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(listOf())
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(listOf())
 
         // When
         val throwable = catchThrowable {
@@ -73,7 +73,7 @@ class GetVesselPositionsUTests {
                                 "",
                                 "",
                                 VesselTrackDepth.TWELVE_HOURS,
-                                VesselIdentifier.UNDEFINED,
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 null,
                                 null)
             }
@@ -96,7 +96,7 @@ class GetVesselPositionsUTests {
                                 "",
                                 "",
                                 VesselTrackDepth.LAST_DEPARTURE,
-                                VesselIdentifier.UNDEFINED,
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 null,
                                 null)
             }
@@ -109,7 +109,7 @@ class GetVesselPositionsUTests {
     @Test
     fun `execute Should throw an exception When vessel from date is not given as a parameter and track depth is CUSTOM`() {
         // Given
-        given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(listOf())
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(listOf())
 
         // When
         val throwable = catchThrowable {
@@ -119,7 +119,7 @@ class GetVesselPositionsUTests {
                                 "",
                                 "",
                                 VesselTrackDepth.CUSTOM,
-                                VesselIdentifier.UNDEFINED,
+                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 null,
                                 ZonedDateTime.now())
             }
@@ -133,7 +133,7 @@ class GetVesselPositionsUTests {
     @Test
     fun `execute Should pass the from and to parameters to the repository When it is a CUSTOM track depth`() {
         // Given
-        given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(listOf())
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(listOf())
 
         // When
         val fromDateTime = ZonedDateTime.now().minusMinutes(15)
@@ -145,13 +145,13 @@ class GetVesselPositionsUTests {
                             "",
                             "",
                             VesselTrackDepth.CUSTOM,
-                            VesselIdentifier.UNDEFINED,
+                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                             fromDateTime,
                             toDateTime)
         }
 
         // Then
-        Mockito.verify(positionRepository).findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), eq(fromDateTime), eq(toDateTime))
+        Mockito.verify(positionRepository).findVesselLastPositionsByInternalReferenceNumber(any(), eq(fromDateTime), eq(toDateTime))
     }
 
     @Test
@@ -162,7 +162,7 @@ class GetVesselPositionsUTests {
         val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
         val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
         val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
-        given(positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(any(), any(), any(), any(), any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
 
         // When
         runBlocking {
@@ -178,5 +178,25 @@ class GetVesselPositionsUTests {
 
         // Then
         Mockito.verify(positionRepository).findVesselLastPositionsByInternalReferenceNumber(eq("FR224226850"), any(), any())
+    }
+
+    @Test
+    fun `execute Should return an empty list of positions When the vessel identifier is null`() {
+        // When
+        val pair = runBlocking {
+            GetVesselPositions(positionRepository, ersRepository)
+                    .execute("FR224226850",
+                            "",
+                            "",
+                            VesselTrackDepth.TWELVE_HOURS,
+                            null,
+                            null,
+                            null)
+        }
+
+        // Then
+        runBlocking {
+            assertThat(pair.second.await()).hasSize(0)
+        }
     }
 }

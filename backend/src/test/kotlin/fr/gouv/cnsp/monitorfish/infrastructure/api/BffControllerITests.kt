@@ -1,17 +1,23 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.*
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Control
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.CompletableDeferred
@@ -29,19 +35,13 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate.EPOCH
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_statuses.*
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconStatusException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconStatusCommentDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconStatusDataInput
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 
 @Import(MeterRegistryConfiguration::class)
 @ExtendWith(SpringExtension::class)
@@ -91,16 +91,19 @@ class BffControllerITests {
     private lateinit var getOperationalAlerts: GetOperationalAlerts
 
     @MockBean
-    private lateinit var getAllBeaconStatuses: GetAllBeaconStatuses
+    private lateinit var getAllBeaconMalfunctions: GetAllBeaconMalfunctions
 
     @MockBean
-    private lateinit var updateBeaconStatus: UpdateBeaconStatus
+    private lateinit var updateBeaconMalfunction: UpdateBeaconMalfunction
 
     @MockBean
-    private lateinit var getBeaconStatus: GetBeaconStatus
+    private lateinit var getBeaconMalfunction: GetBeaconMalfunction
 
     @MockBean
-    private lateinit var saveBeaconStatusComment: SaveBeaconStatusComment
+    private lateinit var saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment
+
+    @MockBean
+    private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
 
     @Autowired
     private lateinit var meterRegistry: MeterRegistry
@@ -142,27 +145,6 @@ class BffControllerITests {
     private infix fun <T> BDDMockito.BDDMyOngoingStubbing<T>.willReturn(block: () -> T) = willReturn(block())
 
     @Test
-    fun `Should throw an exception When vesselIdentifier is not given as parameter`() {
-        // Given
-        val now = ZonedDateTime.now().minusDays(1)
-        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
-        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
-        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
-        givenSuspended { getVessel.execute(any(), any(), any(), any(), any(), eq(null), eq(null)) } willReturn {
-            Pair(false, VesselWithData(
-                    Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
-                    listOf(firstPosition, secondPosition, thirdPosition),
-                    VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
-        }
-
-        // When
-        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS"))
-                // Then
-                .andExpect(status().isBadRequest)
-                .andExpect(jsonPath("$.error", equalTo("Parameter \"vesselIdentifier\" is missing.")))
-    }
-
-    @Test
     fun `Should get vessels with last positions and risk factor`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
@@ -177,7 +159,7 @@ class BffControllerITests {
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=UNDEFINED"))
+        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.vessel.declaredFishingGears[0]", equalTo("Trémails")))
@@ -191,7 +173,7 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.vessel.underCharter", equalTo(true)))
 
         runBlocking {
-            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.UNDEFINED, null, null)
+            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, null, null)
         }
     }
 
@@ -210,7 +192,7 @@ class BffControllerITests {
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=UNDEFINED"))
+        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
                 // Then
                 .andExpect(status().isAccepted)
                 .andExpect(jsonPath("$.vessel.declaredFishingGears[0]", equalTo("Trémails")))
@@ -221,7 +203,7 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.positions.length()", equalTo(3)))
 
         runBlocking {
-            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.UNDEFINED, null, null)
+            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, null, null)
         }
     }
 
@@ -275,13 +257,13 @@ class BffControllerITests {
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/positions?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=UNDEFINED"))
+        mockMvc.perform(get("/bff/v1/vessels/positions?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()", equalTo(3)))
 
         runBlocking {
-            Mockito.verify(getVesselPositions).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.UNDEFINED, null, null)
+            Mockito.verify(getVesselPositions).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, null, null)
         }
     }
 
@@ -471,14 +453,14 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should get all beacon statuses`() {
+    fun `Should get all beacon malfunctions`() {
         // Given
-        given(this.getAllBeaconStatuses.execute()).willReturn(listOf(BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+        given(this.getAllBeaconMalfunctions.execute()).willReturn(listOf(BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                 true, ZonedDateTime.now(), null, ZonedDateTime.now())))
 
         // When
-        mockMvc.perform(get("/bff/v1/beacon_statuses"))
+        mockMvc.perform(get("/bff/v1/beacon_malfunctions"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()", equalTo(1)))
@@ -488,18 +470,18 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should return Created When an update of a beacon status is done`() {
-        given(this.updateBeaconStatus.execute(123, VesselStatus.AT_SEA, null))
-                .willReturn(BeaconStatusWithDetails(
-                        beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+    fun `Should return Created When an update of a beacon malfunction is done`() {
+        given(this.updateBeaconMalfunction.execute(123, VesselStatus.AT_SEA, null, null))
+                .willReturn(BeaconMalfunctionResumeAndDetails(
+                        beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
-                        comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
-                        actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
+                        comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
+                        actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
 
         // When
-        mockMvc.perform(put("/bff/v1/beacon_statuses/123")
-                .content(objectMapper.writeValueAsString(UpdateBeaconStatusDataInput(vesselStatus = VesselStatus.AT_SEA)))
+        mockMvc.perform(put("/bff/v1/beacon_malfunctions/123")
+                .content(objectMapper.writeValueAsString(UpdateBeaconMalfunctionDataInput(vesselStatus = VesselStatus.AT_SEA)))
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isOk)
@@ -507,59 +489,175 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.actions.length()", equalTo(1)))
                 .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
                 .andExpect(jsonPath("$.actions[0].propertyName", equalTo("VESSEL_STATUS")))
-                .andExpect(jsonPath("$.beaconStatus.internalReferenceNumber", equalTo("CFR")))
+                .andExpect(jsonPath("$.beaconMalfunction.internalReferenceNumber", equalTo("CFR")))
     }
 
     @Test
-    fun `Should return Bad request When an update of a beacon status is empty`() {
-        given(this.updateBeaconStatus.execute(1, null, null))
-                .willThrow(CouldNotUpdateBeaconStatusException("FAIL"))
+    fun `Should return Bad request When an update of a beacon malfunction is empty`() {
+        given(this.updateBeaconMalfunction.execute(1, null, null, null))
+                .willThrow(CouldNotUpdateBeaconMalfunctionException("FAIL"))
 
         // When
-        mockMvc.perform(put("/bff/v1/beacon_statuses/123", objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()))
+        mockMvc.perform(put("/bff/v1/beacon_malfunctions/123", objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()))
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isBadRequest)
     }
 
     @Test
-    fun `Should return a beacon status`() {
-        given(this.getBeaconStatus.execute(123))
-                .willReturn(BeaconStatusWithDetails(
-                        beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+    fun `Should return a beacon malfunction`() {
+        given(this.getBeaconMalfunction.execute(123))
+                .willReturn(BeaconMalfunctionResumeAndDetails(
+                        beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
-                        comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
-                        actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
+                        resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
+                        comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
+                        actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
 
         // When
-        mockMvc.perform(get("/bff/v1/beacon_statuses/123"))
+        mockMvc.perform(get("/bff/v1/beacon_malfunctions/123"))
                 // Then
                 .andExpect(status().isOk)
+                .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))
                 .andExpect(jsonPath("$.comments.length()", equalTo(1)))
                 .andExpect(jsonPath("$.actions.length()", equalTo(1)))
                 .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
                 .andExpect(jsonPath("$.actions[0].propertyName", equalTo("VESSEL_STATUS")))
-                .andExpect(jsonPath("$.beaconStatus.internalReferenceNumber", equalTo("CFR")))
+                .andExpect(jsonPath("$.beaconMalfunction.internalReferenceNumber", equalTo("CFR")))
     }
 
     @Test
-    fun `Should save a beacon status comment`() {
-        given(this.saveBeaconStatusComment.execute(any(), any(), any())).willReturn(BeaconStatusWithDetails(
-                beaconStatus = BeaconStatus(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
-                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                        true, ZonedDateTime.now(), null, ZonedDateTime.now()),
-                comments = listOf(BeaconStatusComment(1, 1, "A comment", BeaconStatusCommentUserType.SIP, ZonedDateTime.now())),
-                actions = listOf(BeaconStatusAction(1, 1, BeaconStatusActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
+    fun `Should return a beacon malfunction without a resume`() {
+        given(this.getBeaconMalfunction.execute(123))
+                .willReturn(BeaconMalfunctionResumeAndDetails(
+                        beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                        comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
+                        actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
 
         // When
-        mockMvc.perform(post("/bff/v1/beacon_statuses/123/comments")
-                .content(objectMapper.writeValueAsString(SaveBeaconStatusCommentDataInput("A comment", BeaconStatusCommentUserType.SIP)))
+        mockMvc.perform(get("/bff/v1/beacon_malfunctions/123"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.resume", equalTo(null)))
+                .andExpect(jsonPath("$.comments.length()", equalTo(1)))
+                .andExpect(jsonPath("$.actions.length()", equalTo(1)))
+                .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
+                .andExpect(jsonPath("$.actions[0].propertyName", equalTo("VESSEL_STATUS")))
+                .andExpect(jsonPath("$.beaconMalfunction.internalReferenceNumber", equalTo("CFR")))
+    }
+
+    @Test
+    fun `Should save a beacon malfunction comment`() {
+        given(this.saveBeaconMalfunctionComment.execute(any(), any(), any())).willReturn(BeaconMalfunctionResumeAndDetails(
+                beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
+                        "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                        true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
+                actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
+
+        // When
+        mockMvc.perform(post("/bff/v1/beacon_malfunctions/123/comments")
+                .content(objectMapper.writeValueAsString(SaveBeaconMalfunctionCommentDataInput("A comment", BeaconMalfunctionCommentUserType.SIP)))
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isCreated)
                 .andExpect(jsonPath("$.comments.length()", equalTo(1)))
                 .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
-                .andExpect(jsonPath("$.beaconStatus.internalReferenceNumber", equalTo("CFR")))
+                .andExpect(jsonPath("$.beaconMalfunction.internalReferenceNumber", equalTo("CFR")))
+    }
+
+    @Test
+    fun `Should get vessel's beacon malfunctions`() {
+        // Given
+        val now = ZonedDateTime.now().minusDays(1)
+        given(this.getVesselBeaconMalfunctions.execute(eq("FR224226850"), eq("123"), eq("IEF4"), eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), any()))
+                .willReturn(VesselBeaconMalfunctionsResumeAndHistory(
+                        resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
+                        history = listOf(BeaconMalfunctionWithDetails(
+                            beaconMalfunction = BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
+                                    "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                                    true, ZonedDateTime.now(), null, ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION),
+                            comments = listOf(BeaconMalfunctionComment(
+                                    beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
+                            actions = listOf(BeaconMalfunctionAction(
+                                    beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))),
+                        current = BeaconMalfunctionWithDetails(
+                                beaconMalfunction = BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
+                                    "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                    true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                                comments = listOf(BeaconMalfunctionComment(
+                                        beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
+                                actions = listOf(BeaconMalfunctionAction(
+                                    beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))
+                ))
+
+        // When
+        mockMvc.perform(get("/bff/v1/vessels/beacon_malfunctions?internalReferenceNumber=FR224226850" +
+                "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))
+                .andExpect(jsonPath("$.resume.numberOfBeaconsAtPort", equalTo(2)))
+                .andExpect(jsonPath("$.current.beaconMalfunction.id", equalTo(2)))
+                .andExpect(jsonPath("$.current.beaconMalfunction.internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$.current.beaconMalfunction.externalReferenceNumber", equalTo("1236514")))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.id", equalTo(1)))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.flagState", equalTo("fr")))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.externalReferenceNumber", equalTo("1236514")))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.endOfBeaconMalfunctionReason", equalTo("RESUMED_TRANSMISSION")))
+                .andExpect(jsonPath("$.history[0].actions[0].beaconMalfunctionId", equalTo(1)))
+                .andExpect(jsonPath("$.history[0].actions[0].propertyName", equalTo("VESSEL_STATUS")))
+                .andExpect(jsonPath("$.history[0].comments[0].beaconMalfunctionId", equalTo(1)))
+                .andExpect(jsonPath("$.history[0].comments[0].comment", equalTo("A comment")))
+    }
+
+    @Test
+    fun `Should get vessel's beacon malfunctions When there is no vessel identifier`() {
+        // Given
+        val now = ZonedDateTime.now().minusDays(1)
+        given(this.getVesselBeaconMalfunctions.execute(eq("FR224226850"), eq("123"), eq("IEF4"), eq(null), any()))
+                .willReturn(VesselBeaconMalfunctionsResumeAndHistory(
+                        resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
+                        history = listOf(BeaconMalfunctionWithDetails(
+                                beaconMalfunction = BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
+                                        "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                                        true, ZonedDateTime.now(), null, ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION),
+                                comments = listOf(BeaconMalfunctionComment(
+                                        beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
+                                actions = listOf(BeaconMalfunctionAction(
+                                        beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))),
+                        current = BeaconMalfunctionWithDetails(
+                                beaconMalfunction = BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
+                                        "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                                        true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                                comments = listOf(BeaconMalfunctionComment(
+                                        beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
+                                actions = listOf(BeaconMalfunctionAction(
+                                        beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))
+                ))
+
+        // When
+        mockMvc.perform(get("/bff/v1/vessels/beacon_malfunctions?internalReferenceNumber=FR224226850" +
+                "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=&afterDateTime=2021-03-24T22:07:00.000Z"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))
+                .andExpect(jsonPath("$.resume.numberOfBeaconsAtPort", equalTo(2)))
+                .andExpect(jsonPath("$.current.beaconMalfunction.id", equalTo(2)))
+                .andExpect(jsonPath("$.current.beaconMalfunction.internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$.current.beaconMalfunction.externalReferenceNumber", equalTo("1236514")))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.id", equalTo(1)))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.flagState", equalTo("fr")))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.externalReferenceNumber", equalTo("1236514")))
+                .andExpect(jsonPath("$.history[0].beaconMalfunction.endOfBeaconMalfunctionReason", equalTo("RESUMED_TRANSMISSION")))
+                .andExpect(jsonPath("$.history[0].actions[0].beaconMalfunctionId", equalTo(1)))
+                .andExpect(jsonPath("$.history[0].actions[0].propertyName", equalTo("VESSEL_STATUS")))
+                .andExpect(jsonPath("$.history[0].comments[0].beaconMalfunctionId", equalTo(1)))
+                .andExpect(jsonPath("$.history[0].comments[0].comment", equalTo("A comment")))
     }
 }

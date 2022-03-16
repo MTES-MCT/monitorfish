@@ -3,8 +3,8 @@ export const sideWindowMenu = {
     name: 'Alertes',
     code: 'ALERTS'
   },
-  BEACON_STATUSES: {
+  BEACON_MALFUNCTIONS: {
     name: 'Suivi VMS',
-    code: 'BEACON_STATUSES'
+    code: 'BEACON_MALFUNCTIONS'
   }
 }

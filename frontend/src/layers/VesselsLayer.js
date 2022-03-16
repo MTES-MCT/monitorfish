@@ -113,7 +113,8 @@ const VesselsLayer = ({ map }) => {
           lastPositionSentAt: vessel.lastPositionSentAt,
           coordinates: vessel.coordinates,
           isFiltered: vessel.isFiltered,
-          filterPreview: vessel.filterPreview
+          filterPreview: vessel.filterPreview,
+          hasBeaconMalfunction: vessel.hasBeaconMalfunction
         }
 
         const feature = new Feature({

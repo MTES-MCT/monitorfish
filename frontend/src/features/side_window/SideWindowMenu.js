@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
-import { ReactComponent as BeaconStatusesSVG } from '../icons/Icone_VMS.svg'
+import { ReactComponent as BeaconMalfunctionsSVG } from '../icons/Icone_VMS.svg'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
 import { useDispatch } from 'react-redux'
@@ -20,12 +20,12 @@ const SideWindowMenu = ({ selectedMenu }) => {
       <AlertsIcon/>
     </Link>
     <Link
-      data-cy={'side-window-menu-beacon-statuses'}
-      title={sideWindowMenu.BEACON_STATUSES.name}
-      selected={selectedMenu === sideWindowMenu.BEACON_STATUSES.code}
-      onClick={() => dispatch(openSideWindowTab(sideWindowMenu.BEACON_STATUSES.code))}
+      data-cy={'side-window-menu-beacon-malfunctions'}
+      title={sideWindowMenu.BEACON_MALFUNCTIONS.name}
+      selected={selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code}
+      onClick={() => dispatch(openSideWindowTab(sideWindowMenu.BEACON_MALFUNCTIONS.code))}
     >
-      <BeaconStatusesIcon/>
+      <BeaconMalfunctionsIcon/>
     </Link>
   </Menu>
 }
@@ -53,7 +53,7 @@ const AlertsIcon = styled(AlertsSVG)`
   margin-top: 12px;
 `
 
-const BeaconStatusesIcon = styled(BeaconStatusesSVG)`
+const BeaconMalfunctionsIcon = styled(BeaconMalfunctionsSVG)`
   margin-top: 12px;
 `
 

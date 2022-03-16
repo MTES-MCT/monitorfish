@@ -6,23 +6,25 @@ import { sideWindowMenu } from '../../domain/entities/sideWindow'
 import { AlertsSubMenu } from '../../domain/entities/alerts'
 import SideWindowSubMenu from './SideWindowSubMenu'
 import Alerts from './alerts/Alerts'
-import { BeaconStatusesSubMenu } from './beacon_statuses/beaconStatuses'
-import BeaconStatusesBoard from './beacon_statuses/BeaconStatusesBoard'
+import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
+import BeaconMalfunctionsBoard from './beacon_malfunctions/BeaconMalfunctionsBoard'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { COLORS } from '../../constants/constants'
 import { usePrevious } from '../../hooks/usePrevious'
 import { useDispatch, useSelector } from 'react-redux'
 import { openSideWindowTab, setSideWindowAsOpen } from '../../domain/shared_slices/Global'
 import getOperationalAlerts from '../../domain/use_cases/getOperationalAlerts'
-import getAllBeaconStatuses from '../../domain/use_cases/getAllBeaconStatuses'
+import getAllBeaconMalfunctions from '../../domain/use_cases/getAllBeaconMalfunctions'
+import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 
 const SideWindow = ({ fromTab }) => {
   const {
     openedSideWindowTab
   } = useSelector(state => state.global)
   const {
-    beaconStatuses
-  } = useSelector(state => state.beaconStatus)
+    beaconMalfunctions,
+    openedBeaconMalfunctionInKanban
+  } = useSelector(state => state.beaconMalfunction)
   const {
     alerts,
     focusOnAlert
@@ -32,8 +34,9 @@ const SideWindow = ({ fromTab }) => {
   const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
   const [selectedSubMenu, setSelectedSubMenu] = useState(openedSideWindowTab === sideWindowMenu.ALERTS.code
     ? AlertsSubMenu.MEMN
-    : BeaconStatusesSubMenu.MALFUNCTIONING)
+    : BeaconMalfunctionsSubMenu.MALFUNCTIONING)
   const [isOverlayed, setIsOverlayed] = useState(false)
+  const [subMenuIsFixed, setSubMenuIsFixed] = useState(false)
 
   useEffect(() => {
     if (openedSideWindowTab) {
@@ -46,9 +49,17 @@ const SideWindow = ({ fromTab }) => {
   }, [openedSideWindowTab])
 
   useEffect(() => {
+    setIsOverlayed(!!openedBeaconMalfunctionInKanban)
+
+    if (openedSideWindowTab === sideWindowMenu.ALERTS.code) {
+      setIsOverlayed(false)
+    }
+  }, [openedBeaconMalfunctionInKanban, openedSideWindowTab])
+
+  useEffect(() => {
     if (fromTab) {
       dispatch(getOperationalAlerts())
-      dispatch(getAllBeaconStatuses())
+      dispatch(getAllBeaconMalfunctions())
 
       dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
     }
@@ -61,8 +72,8 @@ const SideWindow = ({ fromTab }) => {
 
     if (selectedSubMenu) {
       switch (openedSideWindowTab) {
-        case sideWindowMenu.BEACON_STATUSES.code: {
-          setSelectedSubMenu(BeaconStatusesSubMenu.MALFUNCTIONING)
+        case sideWindowMenu.BEACON_MALFUNCTIONS.code: {
+          setSelectedSubMenu(BeaconMalfunctionsSubMenu.MALFUNCTIONING)
           break
         }
         case sideWindowMenu.ALERTS.code: {
@@ -73,7 +84,7 @@ const SideWindow = ({ fromTab }) => {
     }
   }, [openedSideWindowTab, setSelectedSubMenu, focusOnAlert])
 
-  const beaconStatusBoardGrayOverlayStyle = {
+  const beaconMalfunctionBoardGrayOverlayStyle = {
     position: 'absolute',
     height: '100%',
     width: '100%',
@@ -88,15 +99,17 @@ const SideWindow = ({ fromTab }) => {
         selectedMenu={openedSideWindowTab}
       />
       <SideWindowSubMenu
-        beaconStatuses={beaconStatuses}
+        beaconMalfunctions={beaconMalfunctions}
         alerts={alerts}
         selectedMenu={openedSideWindowTab}
         selectedSubMenu={selectedSubMenu}
         setSelectedSubMenu={setSelectedSubMenu}
+        fixed={subMenuIsFixed}
+        setIsFixed={setSubMenuIsFixed}
       />
-      <BeaconStatusesBoardGrayOverlay
-        style={beaconStatusBoardGrayOverlayStyle}
-        onClick={() => setIsOverlayed(false)}
+      <BeaconMalfunctionsBoardGrayOverlay
+        style={beaconMalfunctionBoardGrayOverlayStyle}
+        onClick={() => dispatch(closeBeaconMalfunctionInKanban())}
       />
       {
         isPreloading
@@ -107,7 +120,7 @@ const SideWindow = ({ fromTab }) => {
               size={100}/>
             <Text data-cy={'first-loader'}>Chargement...</Text>
           </Loading>
-          : <>
+          : <Content style={contentStyle(subMenuIsFixed)}>
             {
               openedSideWindowTab === sideWindowMenu.ALERTS.code &&
               <Alerts
@@ -116,13 +129,10 @@ const SideWindow = ({ fromTab }) => {
               />
             }
             {
-              openedSideWindowTab === sideWindowMenu.BEACON_STATUSES.code &&
-              <BeaconStatusesBoard
-                setIsOverlayed={setIsOverlayed}
-                isOverlayed={isOverlayed}
-              />
+              openedSideWindowTab === sideWindowMenu.BEACON_MALFUNCTIONS.code &&
+              <BeaconMalfunctionsBoard/>
             }
-          </>
+          </Content>
       }
     </Wrapper>
     : null
@@ -130,7 +140,12 @@ const SideWindow = ({ fromTab }) => {
   </>
 }
 
-const BeaconStatusesBoardGrayOverlay = styled.div``
+const Content = styled.div``
+const contentStyle = fixed => ({
+  marginLeft: fixed ? 0 : 30
+})
+
+const BeaconMalfunctionsBoardGrayOverlay = styled.div``
 
 const Loading = styled.div`
   margin-top: 350px;

@@ -113,7 +113,9 @@ data class LastPositionEntity(
         val isAtPort: Boolean? = null,
         @Type(type = "string-array")
         @Column(name = "alerts", columnDefinition = "varchar(200)[]")
-        val alerts: List<String>? = listOf()) : Serializable {
+        val alerts: List<String>? = listOf(),
+        @Column(name = "beacon_malfunction_id")
+        val beaconMalfunctionId: Int?) : Serializable {
 
     fun toLastPosition(mapper: ObjectMapper) = LastPosition(
             internalReferenceNumber = internalReferenceNumber,
@@ -155,5 +157,6 @@ data class LastPositionEntity(
             riskFactor = riskFactor,
             underCharter = underCharter,
             isAtPort = isAtPort,
-            alerts = alerts)
+            alerts = alerts,
+            beaconMalfunctionId = beaconMalfunctionId)
 }

@@ -31,10 +31,11 @@ const UPDATE_REGULATION_MESSAGE = 'Une erreur est survenue lors de la mise à jo
 const CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les objectifs de contrôle'
 const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour l\'objectifs de contrôle'
 const ALERTS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les alertes opérationelles'
-const BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les avaries VMS'
-const BEACON_STATUS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer l\'avarie VMS'
-const UPDATE_BEACON_STATUSES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour le statut de l\'avarie VMS'
-const SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter le commentaire sur l\'avarie VMS'
+const BEACON_MALFUNCTIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les avaries VMS'
+const BEACON_MALFUNCTION_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer l\'avarie VMS'
+const UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour le statut de l\'avarie VMS'
+const SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter le commentaire sur l\'avarie VMS'
+const VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les avaries de ce navire'
 
 function throwIrretrievableAdministrativeZoneError (e, type) {
   throw Error(`Nous n'avons pas pu récupérer la zone ${type} : ${e}`)
@@ -95,7 +96,7 @@ function getVesselFromAPI (identity, vesselTrackDepthObject) {
   const internalReferenceNumber = identity.internalReferenceNumber || ''
   const externalReferenceNumber = identity.externalReferenceNumber || ''
   const ircs = identity.ircs || ''
-  const vesselIdentifier = identity.vesselIdentifier || 'UNDEFINED'
+  const vesselIdentifier = identity.vesselIdentifier || ''
   const trackDepth = vesselTrackDepthObject.trackDepth || ''
   const afterDateTime = vesselTrackDepthObject.afterDateTime?.toISOString() || ''
   const beforeDateTime = vesselTrackDepthObject.beforeDateTime?.toISOString() || ''
@@ -137,7 +138,7 @@ function getVesselPositionsFromAPI (identity, vesselTrackDepthObject) {
   const internalReferenceNumber = identity.internalReferenceNumber || ''
   const externalReferenceNumber = identity.externalReferenceNumber || ''
   const ircs = identity.ircs || ''
-  const vesselIdentifier = identity.vesselIdentifier || 'UNDEFINED'
+  const vesselIdentifier = identity.vesselIdentifier || ''
   const trackDepth = vesselTrackDepthObject.trackDepth || ''
   const afterDateTime = vesselTrackDepthObject.afterDateTime?.toISOString() || ''
   const beforeDateTime = vesselTrackDepthObject.beforeDateTime?.toISOString() || ''
@@ -712,13 +713,13 @@ function sendRegulationTransaction (feature, actionType) {
 }
 
 /**
- * Get all beacon statuses
+ * Get all beacon malfunctions
  * @memberOf API
- * @returns {Promise<BeaconStatus[]>} The beacon statuses
+ * @returns {Promise<BeaconMalfunction[]>} The beacon malfunctions
  * @throws {Error}
  */
-function getAllBeaconStatusesFromAPI () {
-  return fetch('/bff/v1/beacon_statuses')
+function getAllBeaconMalfunctionsFromAPI () {
+  return fetch('/bff/v1/beacon_malfunctions')
     .then(response => {
       if (response.status === OK) {
         return response.json()
@@ -726,23 +727,23 @@ function getAllBeaconStatusesFromAPI () {
         response.text().then(text => {
           console.error(text)
         })
-        throw Error(BEACON_STATUSES_ERROR_MESSAGE)
+        throw Error(BEACON_MALFUNCTIONS_ERROR_MESSAGE)
       }
     }).catch(error => {
       console.error(error)
-      throw Error(BEACON_STATUSES_ERROR_MESSAGE)
+      throw Error(BEACON_MALFUNCTIONS_ERROR_MESSAGE)
     })
 }
 
 /**
- * Update a beacon status
+ * Update a beacon malfunction
  * @memberOf API
- * @param {number} id - The id of the beacon status
- * @param {UpdateBeaconStatus} updatedFields - The fields to update
+ * @param {number} id - The id of the beacon malfunction
+ * @param {UpdateBeaconMalfunction} updatedFields - The fields to update
  * @throws {Error}
  */
-function updateBeaconStatusFromAPI (id, updatedFields) {
-  return fetch(`/bff/v1/beacon_statuses/${id}`, {
+function updateBeaconMalfunctionFromAPI (id, updatedFields) {
+  return fetch(`/bff/v1/beacon_malfunctions/${id}`, {
     method: 'PUT',
     headers: {
       'Accept': 'application/json, text/plain',
@@ -756,22 +757,22 @@ function updateBeaconStatusFromAPI (id, updatedFields) {
       response.text().then(text => {
         console.error(text)
       })
-      throw Error(UPDATE_BEACON_STATUSES_ERROR_MESSAGE)
+      throw Error(UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE)
     }
   }).catch(error => {
     console.error(error)
-    throw Error(UPDATE_BEACON_STATUSES_ERROR_MESSAGE)
+    throw Error(UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE)
   })
 }
 
 /**
- * Get a beacon status
+ * Get a beacon malfunction
  * @memberOf API
- * @returns {Promise<BeaconStatusWithDetails>} The beacon status with details
+ * @returns {Promise<BeaconMalfunctionResumeAndDetails>} The beacon malfunction with details
  * @throws {Error}
  */
-function getBeaconStatusFromAPI (beaconStatusId) {
-  return fetch(`/bff/v1/beacon_statuses/${beaconStatusId}`)
+function getBeaconMalfunctionFromAPI (beaconMalfunctionId) {
+  return fetch(`/bff/v1/beacon_malfunctions/${beaconMalfunctionId}`)
     .then(response => {
       if (response.status === OK) {
         return response.json()
@@ -779,23 +780,23 @@ function getBeaconStatusFromAPI (beaconStatusId) {
         response.text().then(text => {
           console.error(text)
         })
-        throw Error(BEACON_STATUS_ERROR_MESSAGE)
+        throw Error(BEACON_MALFUNCTION_ERROR_MESSAGE)
       }
     }).catch(error => {
       console.error(error)
-      throw Error(BEACON_STATUS_ERROR_MESSAGE)
+      throw Error(BEACON_MALFUNCTION_ERROR_MESSAGE)
     })
 }
 
 /**
- * Save a new comment attached to a beacon status
+ * Save a new comment attached to a beacon malfunction
  * @memberOf API
- * @param {string} id - The id of the beacon status
- * @param {BeaconStatusCommentInput} comment - The fields to update
+ * @param {string} id - The id of the beacon malfunction
+ * @param {BeaconMalfunctionCommentInput} comment - The fields to update
  * @throws {Error}
  */
-function saveBeaconStatusCommentFromAPI (id, comment) {
-  return fetch(`/bff/v1/beacon_statuses/${id}/comments`, {
+function saveBeaconMalfunctionCommentFromAPI (id, comment) {
+  return fetch(`/bff/v1/beacon_malfunctions/${id}/comments`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json, text/plain',
@@ -809,12 +810,40 @@ function saveBeaconStatusCommentFromAPI (id, comment) {
       response.text().then(text => {
         console.error(text)
       })
-      throw Error(SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE)
+      throw Error(SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE)
     }
   }).catch(error => {
     console.error(error)
-    throw Error(SAVE_BEACON_STATUS_COMMENT_ERROR_MESSAGE)
+    throw Error(SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE)
   })
+}
+
+/**
+ * Get vessel beacon malfunctions
+ * @memberOf API
+ * @returns {Promise<VesselBeaconMalfunctionsResumeAndHistory>} The beacon malfunctions resume and history
+ * @throws {Error}
+ */
+function getVesselBeaconsMalfunctionsFromAPI (vesselIdentity, fromDate) {
+  const internalReferenceNumber = vesselIdentity.internalReferenceNumber || ''
+  const externalReferenceNumber = vesselIdentity.externalReferenceNumber || ''
+  const ircs = vesselIdentity.ircs || ''
+  const vesselIdentifier = vesselIdentity.vesselIdentifier || ''
+
+  return fetch(`/bff/v1/vessels/beacon_malfunctions?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&afterDateTime=${fromDate.toISOString()}`)
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE)
+      }
+    }).catch(error => {
+      console.error(error)
+      throw Error(VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE)
+    })
 }
 
 export {
@@ -840,8 +869,9 @@ export {
   updateControlObjectiveFromAPI,
   getAllSpeciesFromAPI,
   getOperationalAlertsFromAPI,
-  getAllBeaconStatusesFromAPI,
-  updateBeaconStatusFromAPI,
-  getBeaconStatusFromAPI,
-  saveBeaconStatusCommentFromAPI
+  getAllBeaconMalfunctionsFromAPI,
+  updateBeaconMalfunctionFromAPI,
+  getBeaconMalfunctionFromAPI,
+  saveBeaconMalfunctionCommentFromAPI,
+  getVesselBeaconsMalfunctionsFromAPI
 }

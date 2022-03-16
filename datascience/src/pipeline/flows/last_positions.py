@@ -116,7 +116,7 @@ def extract_previous_last_positions() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def drop_unchanched_new_last_positions(
+def drop_unchanged_new_last_positions(
     new_last_positions: pd.DataFrame, previous_last_positions: pd.DataFrame
 ) -> pd.DataFrame:
     """
@@ -287,6 +287,14 @@ def extract_risk_factors():
 
 
 @task(checkpoint=False)
+def extract_beacon_malfunctions():
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/known_beacon_malfunctions.sql",
+    )
+
+
+@task(checkpoint=False)
 def estimate_current_positions(
     last_positions: pd.DataFrame, max_hours_since_last_position: float
 ) -> pd.DataFrame:
@@ -362,6 +370,25 @@ def merge_last_positions_risk_factors_alerts(
 
 
 @task(checkpoint=False)
+def merge_last_positions_beacon_malfunctions(
+    last_positions: pd.DataFrame,
+    beacon_malfunctions: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Performs a left join on last_positions and beacon_malfunctions using cfr,
+    ircs and external_immatriculation as join keys.
+    """
+    last_positions = join_on_multiple_keys(
+        last_positions,
+        beacon_malfunctions.rename(columns={"id": "beacon_malfunction_id"}),
+        on=["cfr", "ircs", "external_immatriculation"],
+        how="left",
+    )
+
+    return last_positions
+
+
+@task(checkpoint=False)
 def load_last_positions(last_positions):
 
     load(
@@ -375,7 +402,7 @@ def load_last_positions(last_positions):
         handle_array_conversion_errors=True,
         value_on_array_conversion_error="{}",
         jsonb_columns=["gear_onboard", "species_onboard"],
-        nullable_integer_columns=["trip_number"],
+        nullable_integer_columns=["trip_number", "beacon_malfunction_id"],
         timedelta_columns=["emission_period"],
     )
 
@@ -398,6 +425,7 @@ with Flow("Last positions") as flow:
         # Extract & Transform
         risk_factors = extract_risk_factors()
         pending_alerts = extract_pending_alerts()
+        beacon_malfunctions = extract_beacon_malfunctions()
 
         last_positions = extract_last_positions(minutes=minutes)
         last_positions = drop_duplicates(last_positions)
@@ -407,7 +435,7 @@ with Flow("Last positions") as flow:
         with case(action, "update"):
             previous_last_positions = extract_previous_last_positions()
             previous_last_positions = drop_duplicates(previous_last_positions)
-            new_last_positions = drop_unchanched_new_last_positions(
+            new_last_positions = drop_unchanged_new_last_positions(
                 last_positions, previous_last_positions
             )
 
@@ -435,6 +463,9 @@ with Flow("Last positions") as flow:
         )
         last_positions = merge_last_positions_risk_factors_alerts(
             last_positions, risk_factors, pending_alerts
+        )
+        last_positions = merge_last_positions_beacon_malfunctions(
+            last_positions, beacon_malfunctions
         )
 
         # Load

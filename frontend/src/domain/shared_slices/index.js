@@ -15,7 +15,7 @@ import interestPoint from './InterestPoint'
 import fishingActivities from './FishingActivities'
 import controls from './Control'
 import alert from './Alert'
-import beaconStatus from './BeaconStatus'
+import beaconMalfunction from './BeaconMalfunction'
 import { combineReducers } from '@reduxjs/toolkit'
 
 const commonReducerList = {
@@ -39,7 +39,7 @@ const homeReducers = combineReducers({
   fishingActivities,
   controls,
   alert,
-  beaconStatus
+  beaconMalfunction
 })
 
 const backofficeReducers = combineReducers({

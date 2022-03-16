@@ -66,7 +66,7 @@ export const InfoText = styled.span`
   text-align: left;
   display: inline-block;
   font-size: 13px;
-  color: ${props => props.red ? COLORS.red : COLORS.gunMetal};
+  color: ${props => props.red ? COLORS.maximumRed : COLORS.gunMetal};
   padding-left: 8px;
   white-space: pre-line;
 `
@@ -81,7 +81,7 @@ export const CustomCheckbox = styled(Checkbox)`
   .rs-checkbox-wrapper {
     top: 0px !important;
     left: 0px !important;
-    border: 1px solid ${props => props.$isRequired ? COLORS.red : COLORS.lightGray};
+    border: 1px solid ${props => props.$isRequired ? COLORS.maximumRed : COLORS.lightGray};
   }
   .rs-checkbox-wrapper .rs-checkbox-inner {
     &:before {
@@ -127,7 +127,7 @@ export const FormContent = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding-left: 15px;
-  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.red};
+  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.maximumRed};
   margin-bottom: 15px;
 `
 

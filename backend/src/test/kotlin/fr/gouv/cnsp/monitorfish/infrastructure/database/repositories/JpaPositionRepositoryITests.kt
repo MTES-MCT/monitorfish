@@ -26,7 +26,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("vessels_position")?.clear()
+        cacheManager.getCache("vessels_positions")?.clear()
     }
 
     @Test

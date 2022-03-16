@@ -1,0 +1,62 @@
+import React, { useRef } from 'react'
+import styled from 'styled-components'
+import { COLORS } from '../../../constants/constants'
+import Draggable from './Draggable'
+import StageColumnHeader from './StageColumnHeader'
+import BeaconMalfunctionCard from './BeaconMalfunctionCard'
+
+const StageColumn = ({ stage, beaconMalfunctions, updateVesselStatus, isDroppedId, baseUrl, activeBeaconMalfunction }) => {
+  const verticalScrollRef = useRef()
+
+  return <Wrapper
+    data-cy={`side-window-beacon-malfunctions-columns-${stage.code}`}
+    style={wrapperStyle}
+  >
+    <StageColumnHeader
+      stage={stage?.title}
+      description={stage?.description}
+      numberOfItems={beaconMalfunctions?.length}
+    />
+    <ScrollableContainer
+      style={ScrollableContainerStyle}
+      ref={verticalScrollRef}
+    >
+      {
+        beaconMalfunctions
+          .map((beaconMalfunction) => {
+            return <Draggable
+              key={beaconMalfunction.id}
+              id={beaconMalfunction.id}
+              stageId={stage.code}
+            >
+              <BeaconMalfunctionCard
+                verticalScrollRef={verticalScrollRef}
+                baseUrl={baseUrl}
+                beaconMalfunction={beaconMalfunction}
+                updateVesselStatus={updateVesselStatus}
+                isDroppedId={isDroppedId}
+                isDragging={false}
+                activeBeaconMalfunctionId={activeBeaconMalfunction?.id}
+              />
+            </Draggable>
+          })
+      }
+    </ScrollableContainer>
+  </Wrapper>
+}
+
+const ScrollableContainer = styled.div``
+const ScrollableContainerStyle = {
+  overflowY: 'auto',
+  overflowX: 'hidden',
+  height: 'calc(100vh - 232px)'
+}
+
+const Wrapper = styled.div``
+const wrapperStyle = {
+  width: 267,
+  border: `1px solid ${COLORS.lightGray}`,
+  height: 'calc(100vh - 100px)'
+}
+
+export default StageColumn

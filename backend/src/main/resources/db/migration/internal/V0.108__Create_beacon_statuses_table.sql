@@ -1,5 +1,5 @@
 
-CREATE TYPE public.beacon_statuses_vessel_status AS ENUM ('AT_SEA', 'AT_PORT', 'NO_NEWS', 'TECHNICAL_STOP', 'ACTIVITY_DETECTED');
+CREATE TYPE public.beacon_statuses_vessel_status AS ENUM ('AT_SEA', 'AT_PORT', 'NO_NEWS', 'ACTIVITY_DETECTED');
 CREATE TYPE public.beacon_statuses_stage AS ENUM ('INITIAL_ENCOUNTER', 'FOUR_HOUR_REPORT', 'RELAUNCH_REQUEST', 'TARGETING_VESSEL', 'CROSS_CHECK', 'RESUMED_TRANSMISSION');
 
 CREATE TABLE public.beacon_statuses (

@@ -40,7 +40,7 @@ const BeaconMalfunctionDetails = props => {
       </Zone>
         : <Zone data-cy={'beacon-malfunction-details'}>
           <Title>
-            Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunction.beaconMalfunction.malfunctionStartDateTime)}
+            Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunction?.beaconMalfunction?.malfunctionStartDateTime)}
           </Title>
           <BeaconMalfunctionDetailBody beaconMalfunctionWithDetails={openedBeaconMalfunction}/>
         </Zone>

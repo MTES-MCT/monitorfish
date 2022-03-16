@@ -298,7 +298,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-track-card-latitude"]', { timeout: 20000 }).contains('47° 20′ 53″ N')
   })
 
-  it('ERS/VMS tab Should contain current and history of beacon malfunctions', () => {
+  it('ERS/VMS tab Should contain history of beacon malfunctions and show a malfunction detail in history', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
@@ -326,8 +326,15 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 20000 }).contains('Le ticket a été déplacé de Premier contact à Fin de l\'avarie.')
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 20000 }).contains('Navire en mer')
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 20000 }).contains('14 jours')
+    cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 20000 }).click()
+  })
 
-    // Go back ot resume
+  it('ERS/VMS tab Should contain current and history of beacon malfunctions', () => {
+    // Go to the detail of a beacon malfunction and go back to resume
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
+    cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().eq(0).click()
+    cy.get('*[data-cy="vessel-beacon-malfunction-history-see-more"]', { timeout: 20000 }).click()
     cy.get('*[data-cy="beacon-malfunction-back-to-resume"]', { timeout: 20000 }).click()
     cy.get('*[data-cy="vessel-malfunctions-resume"]', { timeout: 20000 }).should('be.visible')
 
@@ -358,5 +365,9 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).contains('Sans nouvelles')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 20000 }).click()
   })
+
+  /*
+
+   */
 
 })

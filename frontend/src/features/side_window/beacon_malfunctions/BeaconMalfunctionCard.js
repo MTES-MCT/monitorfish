@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
-import { getBeaconCreationOrModificationDate, getReducedTimeAgo } from './beaconMalfunctions'
+import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import * as timeago from 'timeago.js'
 import { timeagoFrenchLocale } from '../../../utils'
 import showVessel from '../../../domain/use_cases/showVessel'
@@ -11,7 +11,11 @@ import { useDispatch } from 'react-redux'
 import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 import openBeaconMalfunctionInKanban from '../../../domain/use_cases/openBeaconMalfunctionInKanban'
 import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
-import { getIsMalfunctioning, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
+import {
+  getIsMalfunctioning,
+  getMalfunctionStartDateText,
+  vesselStatuses
+} from '../../../domain/entities/beaconMalfunction'
 import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
 import { setSelectedVesselCustomTrackDepth } from '../../../domain/shared_slices/Vessel'
 
@@ -103,7 +107,7 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl,
         showedInCard={true}
       />
       <Row style={rowStyle(false)}>
-        Dernière émission {getReducedTimeAgo(beaconMalfunction.malfunctionStartDateTime)}
+        {getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}
       </Row>
     </Body>
   </Wrapper>

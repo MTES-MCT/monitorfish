@@ -17,7 +17,7 @@ const MetadataRegulatoryReferences = () => {
         >
         {regulatoryReference.textType &&
           <Elem><Label>{getRegulatoryZoneTextTypeAsText(regulatoryReference.textType)}</Label></Elem>}
-          <Elem><Link href={regulatoryReference.url}>{regulatoryReference.reference}</Link></Elem>
+          <Elem><Link href={regulatoryReference.url} target='_blank'>{regulatoryReference.reference}</Link></Elem>
       </Reference>
     })}
     </List>
@@ -34,7 +34,7 @@ export const Link = styled.a`
   color: ${COLORS.blue};
   font-size: 13px;
   cursor: pointer;
-  font-weigth: 500;
+  font-weight: 500;
 `
 
 export default MetadataRegulatoryReferences

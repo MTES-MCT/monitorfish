@@ -26,10 +26,9 @@ class GetVessel(private val vesselRepository: VesselRepository,
                         externalReferenceNumber: String,
                         ircs: String,
                         trackDepth: VesselTrackDepth,
-                        vesselIdentifier: VesselIdentifier,
+                        vesselIdentifier: VesselIdentifier?,
                         fromDateTime: ZonedDateTime? = null,
                         toDateTime: ZonedDateTime? = null): Pair<Boolean, VesselWithData> {
-
 
         return coroutineScope {
             val (vesselTrackHasBeenModified, positions) = GetVesselPositions(positionRepository, ersRepository).execute(

@@ -12,7 +12,7 @@ import AdministrativeLayers from '../../layers/AdministrativeLayers'
 import RegulatoryPreviewLayer from '../../layers/RegulatoryPreviewLayer'
 import ShowRegulatoryMetadata from '../map/ShowRegulatoryMetadata'
 
-import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
+import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/getAllRegulatoryLayers'
 import getAllGearCodes from '../../domain/use_cases/getAllGearCodes'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
 import { REGULATORY_TERRITORY } from '../../domain/entities/regulatory'

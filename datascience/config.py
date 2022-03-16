@@ -99,7 +99,7 @@ BACKOFFICE_URL = MONITORFISH_URL + "backoffice/"
 
 # Backend endpoints
 BFF_ENDPOINT = MONITORFISH_URL + "bff/v1/"
-BEACON_STATUSES_ENDPOINT = BFF_ENDPOINT + "beacon_statuses/"
+BEACON_MALFUNCTIONS_ENDPOINT = BFF_ENDPOINT + "beacon_malfunctions/"
 
 # Flows healthcheck URL
 FLOWS_HEALTHCHECK_URL = "http://localhost:8085"

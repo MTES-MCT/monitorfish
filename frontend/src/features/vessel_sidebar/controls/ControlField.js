@@ -2,8 +2,9 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { getDate } from '../../../utils'
-import { Green, NoValue, Red, StrongText } from './Controls.style'
+import { Green, Red } from './Controls.style'
 import { getNumberOfInfractions } from '../../../domain/entities/controls'
+import { NoValue, StrongText } from '../common_styles/common.style'
 
 const ControlField = ({ field, type, isFirst }) => {
   const {
@@ -43,7 +44,6 @@ const ControlField = ({ field, type, isFirst }) => {
         </ControlResumeLine>
         : null
     }
-
   </Fields>
 }
 

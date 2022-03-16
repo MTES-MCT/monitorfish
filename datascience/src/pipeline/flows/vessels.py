@@ -7,6 +7,7 @@ from prefect import Flow, task
 
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import coalesce, concatenate_columns
+from src.pipeline.shared_tasks.beacons import beaconStatus
 
 
 @task(checkpoint=False)
@@ -98,11 +99,11 @@ def extract_nav_licences():
 
 
 @task(checkpoint=False)
-def extract_beacon_numbers() -> pd.DataFrame:
+def extract_beacons() -> pd.DataFrame:
     """
     Extract beacon numbers of all vessels from Poseidon.
     """
-    return extract("fmc", "fmc/beacon_numbers.sql")
+    return extract("fmc", "fmc/beacons.sql")
 
 
 @task(checkpoint=False)
@@ -114,13 +115,30 @@ def extract_control_charters() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def transform_beacons(beacons: pd.DataFrame) -> pd.DataFrame:
+    """Maps Posedion beacon status to Monitorfish `beaconStatus`.
+
+    Args:
+        beacons (pd.DataFrame): DataFrame of beacons extracted from Poseidon
+
+    Returns:
+        pd.DataFrame: beacons with status mapped to `beaconStatus`
+    """
+    beacons = beacons.copy(deep=True)
+    beacons["beacon_status"] = beacons.beacon_status.map(
+        beaconStatus.from_poseidon_status, na_action="ignore"
+    ).map(lambda beacon_status: beacon_status.value, na_action="ignore")
+    return beacons
+
+
+@task(checkpoint=False)
 def merge_vessels(
     floats,
     fr_vessels,
     cee_vessels,
     non_cee_vessels,
     licences,
-    beacon_numbers,
+    beacons,
     control_charters,
 ):
     res = pd.merge(
@@ -157,7 +175,7 @@ def merge_vessels(
 
     res = pd.merge(
         res,
-        beacon_numbers,
+        beacons,
         how="left",
         left_on="id_nav_flotteur_f",
         right_on="id_nav_flotteur_bn",
@@ -282,6 +300,7 @@ def clean_vessels(all_vessels):
         "vessel_phones",
         "vessel_emails",
         "beacon_number",
+        "beacon_status",
         "under_charter",
     ]
     res = res[columns]
@@ -349,17 +368,18 @@ with Flow("Vessels") as flow:
     non_cee_vessels = extract_non_cee_vessels()
     floats = extract_floats()
     licences = extract_nav_licences()
-    beacon_numbers = extract_beacon_numbers()
+    beacons = extract_beacons()
     control_charters = extract_control_charters()
 
     # Transform
+    beacons = transform_beacons(beacons)
     all_vessels = merge_vessels(
         floats,
         fr_vessels,
         cee_vessels,
         non_cee_vessels,
         licences,
-        beacon_numbers,
+        beacons,
         control_charters,
     )
     all_vessels = clean_vessels(all_vessels)

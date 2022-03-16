@@ -24,11 +24,14 @@ def test_extract_positions(reset_test_data):
     )
     positions = extract_positions(period)
 
-    assert len(positions) == 8
+    assert len(positions) == 12
     assert (
         positions.loc[:, "id"].values
         == [
             13641745,
+            13732807,
+            13735518,
+            13738407,
             13632807,
             13634205,
             13635518,
@@ -36,6 +39,7 @@ def test_extract_positions(reset_test_data):
             13638407,
             13640935,
             13639642,
+            13740935,
         ]
     ).all()
     assert list(positions) == [
@@ -344,7 +348,7 @@ def test_extract_enrich_load(reset_test_data):
     )
 
     # The number of positions in the positions table should not change
-    assert len(positions) == 15
+    assert len(positions) == 19
 
     # Positions outside of the selected Period should not be affected
     assert (

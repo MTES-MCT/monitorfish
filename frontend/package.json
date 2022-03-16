@@ -20,6 +20,7 @@
     "i18n-iso-countries": "^6.4.0",
     "imask": "^6.1.0",
     "immer": "^9.0.6",
+    "lodash": "^4.17.21",
     "mini.css": "^3.0.1",
     "nouislider-react": "^3.4.0",
     "ol": "^6.6.1",

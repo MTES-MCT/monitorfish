@@ -368,7 +368,7 @@ const Validate = styled.div`
 `
 
 const ErrorMessage = styled.div`
-  color: ${COLORS.red};
+  color: ${COLORS.maximumRed};
   width: 250px;
   margin-bottom: 10px;
 `

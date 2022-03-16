@@ -32,6 +32,8 @@ export const layersGroups = {
 export const layersType = {
   VESSEL: 'VESSEL',
   VESSEL_ALERT: 'VESSEL_ALERT',
+  VESSEL_BEACON_MALFUNCTION: 'VESSEL_BEACON_MALFUNCTION',
+  VESSEL_ALERT_AND_BEACON_MALFUNCTION: 'VESSEL_ALERT_AND_BEACON_MALFUNCTION',
   ADMINISTRATIVE: 'ADMINISTRATIVE',
   REGULATORY: 'REGULATORY',
   BASE_LAYER: 'BASE_LAYER',
@@ -88,6 +90,28 @@ const Layers = {
     name: '',
     group: null,
     type: layersType.VESSEL_ALERT,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false,
+    zIndex: 990
+  },
+  VESSEL_BEACON_MALFUNCTION: {
+    code: 'vessel_beacon_malfunction',
+    name: '',
+    group: null,
+    type: layersType.VESSEL_BEACON_MALFUNCTION,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false,
+    zIndex: 990
+  },
+  VESSEL_ALERT_AND_BEACON_MALFUNCTION: {
+    code: 'vessel_alert_and_beacon_malfunction',
+    name: '',
+    group: null,
+    type: layersType.VESSEL_BEACON_MALFUNCTION,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,

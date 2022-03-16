@@ -287,8 +287,9 @@ export const {
   resetRegulatoryGeometriesToPreview,
   showSimplifiedGeometries,
   showWholeGeometries,
-  setProcessingRegulationSearchedZoneExtent,
-  setSelectedRegulatoryZone
+  setRegulationSearchedZoneExtent,
+  setSelectedRegulatoryZone,
+  setProcessingRegulationSearchedZoneExtent
 } = regulatorySlice.actions
 
 export default regulatorySlice.reducer

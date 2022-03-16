@@ -1,5 +1,10 @@
 import { Icon, Style } from 'ol/style'
-import { Vessel, VESSEL_ALERT_STYLE, VESSEL_SELECTOR_STYLE } from '../../domain/entities/vessel'
+import {
+  Vessel, VESSEL_ALERT_AND_BEACON_MALFUNCTION,
+  VESSEL_ALERT_STYLE,
+  VESSEL_BEACON_MALFUNCTION_STYLE,
+  VESSEL_SELECTOR_STYLE
+} from '../../domain/entities/vessel'
 
 import { COLORS } from '../../constants/constants'
 import { booleanToInt } from '../../utils'
@@ -7,7 +12,6 @@ import { booleanToInt } from '../../utils'
 const featureHas = (key) => ['==', ['get', key], 1]
 const featureHasNot = (key) => ['==', ['get', key], 0]
 const stateIs = (key) => ['==', ['var', key], 1]
-// const and = (cond1, cond2) => ['all', cond1, cond2]
 
 const hideVesselsAtPortCondition = [
   'case',
@@ -24,13 +28,16 @@ const hideNonSelectedVesselsCondition = [
   stateIs('hideNonSelectedVessels')
   // selectedVessel is in a dedicated layer
 ]
+
 const hideDeprecatedPositionsCondition = [
   'case',
+  // if there is a beacon malfunction, do not hide the vessel
+  featureHas('hasBeaconMalfunction'), true,
   // if lastPosition is older than threshold, hide vessel
-  ['<=', ['var', 'vesselIsHiddenTimeThreshold'], ['get', 'lastPositionSentAt']],
-  true,
+  ['<=', ['var', 'vesselIsHiddenTimeThreshold'], ['get', 'lastPositionSentAt']], true,
   false
 ]
+
 const showOnlyNonFilteredVessels = [
   'case',
   stateIs('nonFilteredVesselsAreHidden'),
@@ -84,8 +91,12 @@ export const getWebGLVesselStyle = ({
       rotation: ['*', ['get', 'course'], Math.PI / 180],
       textureCoord: ['case', ['>', ['get', 'speed'], Vessel.vesselIsMovingSpeed], [0, 0, 0.5, 0.25], [0.5, 0, 1, 0.25]],
       size: 20,
-      color: ['case', stateIs('previewFilteredVesselsMode'), defaultVesselColor, featureHas('isFiltered'), filterColor, defaultVesselColor],
+      color: ['case',
+        stateIs('previewFilteredVesselsMode'), defaultVesselColor,
+        featureHas('isFiltered'), filterColor,
+        defaultVesselColor],
       opacity: ['case',
+        featureHas('hasBeaconMalfunction'), 1,
         ['<', ['get', 'lastPositionSentAt'], ['var', 'vesselIsOpacityReducedTimeThreshold']], 0.2,
         1]
     }
@@ -135,6 +146,38 @@ export const getVesselAlertStyle = (feature, resolution) => {
   styles.push(vesselAlertBigCircleStyle)
   const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
   styles[styles.length - 1].getImage().setScale(scale)
+
+  return styles
+}
+
+const vesselBeaconMalfunctionBigCircleStyle = new Style({
+  image: new Icon({
+    src: 'Double-cercle_avaries.png'
+  }),
+  zIndex: VESSEL_BEACON_MALFUNCTION_STYLE
+})
+
+export const getVesselBeaconMalfunctionStyle = (resolution) => {
+  const styles = [vesselBeaconMalfunctionBigCircleStyle]
+
+  const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
+  styles[0].getImage().setScale(scale)
+
+  return styles
+}
+
+const vesselAlertAndBeaconMalfunctionBigCircleStyle = new Style({
+  image: new Icon({
+    src: 'Triple-cercle_alerte_et_avarie.png'
+  }),
+  zIndex: VESSEL_ALERT_AND_BEACON_MALFUNCTION
+})
+
+export const getVesselAlertAndBeaconMalfunctionStyle = (resolution) => {
+  const styles = [vesselAlertAndBeaconMalfunctionBigCircleStyle]
+
+  const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
+  styles[0].getImage().setScale(scale)
 
   return styles
 }

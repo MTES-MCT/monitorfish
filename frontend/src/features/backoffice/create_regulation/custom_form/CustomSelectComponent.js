@@ -66,15 +66,15 @@ const SelectWrapper = styled.div`
 const CustomSelectPicker = styled(SelectPicker)`
   a {
     box-sizing: border-box;
-    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
+    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:hover {
-    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
+    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:focus {
-    border-color: ${props => props.$valueIsMissing ? COLORS.red : COLORS.lightGray}!important;
+    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
   }
 
   .grouped.rs-picker-select-menu-item {

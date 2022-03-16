@@ -47,7 +47,8 @@ data class LastPositionDataOutput(
         val riskFactor: Double? = null,
         val underCharter: Boolean? = null,
         val isAtPort: Boolean? = null,
-        val alerts: List<String>? = listOf()) {
+        val alerts: List<String>? = listOf(),
+        val beaconMalfunctionId: Int? = null) {
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
             return LastPositionDataOutput(
@@ -90,7 +91,8 @@ data class LastPositionDataOutput(
                     riskFactor = position.riskFactor,
                     underCharter = position.underCharter,
                     isAtPort = position.isAtPort,
-                    alerts = position.alerts)
+                    alerts = position.alerts,
+                    beaconMalfunctionId = position.beaconMalfunctionId)
         }
     }
 }

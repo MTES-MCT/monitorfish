@@ -3,8 +3,9 @@ from pathlib import Path
 from typing import Union
 from unittest.mock import MagicMock, patch
 
+from prefect import task
+
 from src.pipeline.generic_tasks import extract
-from src.read_query import read_saved_query
 
 
 def mock_extract_side_effect(
@@ -50,3 +51,8 @@ def mock_datetime_utcnow(utcnow: datetime):
     mock_datetime = MagicMock()
     mock_datetime.utcnow = MagicMock(return_value=utcnow)
     return mock_datetime
+
+
+@task(checkpoint=False)
+def mock_check_flow_not_running():
+    return True

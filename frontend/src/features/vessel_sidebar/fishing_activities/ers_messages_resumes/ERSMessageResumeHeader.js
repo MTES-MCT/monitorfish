@@ -103,7 +103,7 @@ const ERSMessageResumeText = styled.span`
 `
 
 const ERSMessageName = styled.span`
-  color: ${props => props.isNotAcknowledged ? COLORS.red : COLORS.slateGray};
+  color: ${props => props.isNotAcknowledged ? COLORS.maximumRed : COLORS.slateGray};
   font-weight: 500;
   margin: 5px 0 5px ${props => props.hasNoMessage ? '27px' : '0px'};
   padding: 2px 4px 2px 4px;

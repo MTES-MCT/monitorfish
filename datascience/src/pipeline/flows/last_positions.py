@@ -116,7 +116,7 @@ def extract_previous_last_positions() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def drop_unchanched_new_last_positions(
+def drop_unchanged_new_last_positions(
     new_last_positions: pd.DataFrame, previous_last_positions: pd.DataFrame
 ) -> pd.DataFrame:
     """
@@ -378,11 +378,9 @@ def merge_last_positions_beacon_malfunctions(
     Performs a left join on last_positions and beacon_malfunctions using cfr,
     ircs and external_immatriculation as join keys.
     """
-    beacon_malfunctions.rename(columns={"id": "beacon_malfunction_id"})
-
     last_positions = join_on_multiple_keys(
         last_positions,
-        beacon_malfunctions,
+        beacon_malfunctions.rename(columns={"id": "beacon_malfunction_id"}),
         on=["cfr", "ircs", "external_immatriculation"],
         how="left",
     )
@@ -404,7 +402,7 @@ def load_last_positions(last_positions):
         handle_array_conversion_errors=True,
         value_on_array_conversion_error="{}",
         jsonb_columns=["gear_onboard", "species_onboard"],
-        nullable_integer_columns=["trip_number"],
+        nullable_integer_columns=["trip_number", "beacon_malfunction_id"],
         timedelta_columns=["emission_period"],
     )
 
@@ -437,7 +435,7 @@ with Flow("Last positions") as flow:
         with case(action, "update"):
             previous_last_positions = extract_previous_last_positions()
             previous_last_positions = drop_duplicates(previous_last_positions)
-            new_last_positions = drop_unchanched_new_last_positions(
+            new_last_positions = drop_unchanged_new_last_positions(
                 last_positions, previous_last_positions
             )
 

@@ -9,7 +9,7 @@ from src.pipeline.flows.last_positions import (
     compute_emission_period,
     concatenate,
     drop_duplicates,
-    drop_unchanched_new_last_positions,
+    drop_unchanged_new_last_positions,
     estimate_current_positions,
     extract_last_positions,
     extract_previous_last_positions,
@@ -123,6 +123,7 @@ def test_load_last_positions(reset_test_data):
             "is_at_port": [True, False],
             "alerts": [["THREE_MILES_TRAWLING_ALERT"], None],
             "is_manual": [True, False],
+            "beacon_malfunction_id": [1, None],
         }
     )
     load_last_positions.run(last_positions_to_load)
@@ -150,7 +151,7 @@ def test_drop_duplicates():
     pd.testing.assert_frame_equal(res, expected_res)
 
 
-def test_drop_unchanched_new_last_positions():
+def test_drop_unchanged_new_last_positions():
     previous_last_positions = pd.DataFrame(
         {
             "id": [1, 2, 3, 4],
@@ -181,7 +182,7 @@ def test_drop_unchanched_new_last_positions():
         }
     )
 
-    res = drop_unchanched_new_last_positions.run(
+    res = drop_unchanged_new_last_positions.run(
         new_last_positions, previous_last_positions
     )
 
@@ -484,22 +485,9 @@ def test_merge_last_positions_beacon_malfunctions():
     known_malfunctions = pd.DataFrame(
         {
             "id": [1, 2, 3],
-            "cfr": ["B", "D", "E"],
-            "external_immatriculation": ["BB", "DD", "EE"],
-            "ircs": ["BBB", "DDD", "EEE"],
-            "vessel_name": ["BBBB", "DDDD", "EEEE"],
-            "vessel_identifier": [
-                "INTERNAL_REFERENCE_NUMBER",
-                "IRCS",
-                "EXTERNAL_REFERENCE_NUMBER",
-            ],
-            "is_at_port": [True, False, None],
-            "priority": [False, True, False],
-            "malfunction_start_date_utc": [
-                datetime(2020, 3, 30, 12, 0, 0),
-                datetime(2022, 4, 1, 18, 20, 12),
-                None,
-            ],
+            "cfr": ["B", "A", "E"],
+            "external_immatriculation": ["BB", "AAA", "EE"],
+            "ircs": ["BBB", "AAA", "EEE"],
         }
     )
 
@@ -517,15 +505,10 @@ def test_merge_last_positions_beacon_malfunctions():
         {
             "cfr": ["A", "B", None, None],
             "ircs": ["aa", "bb", "cc", None],
-            "external_immatriculation": ["aaa", None, None, "ddd"],
+            "external_immatriculation": ["aaa", "BB", None, "ddd"],
             "latitude": [45, 45.12, 56.214, 21.325],
             "longitude": [-5.1236, -12.85, 1.01, -1.236],
-            "impact_risk_factor": [1.2, None, 3.8, 1.2],
-            "probability_risk_factor": [1.3, None, 1.5, 2.1],
-            "detectability_risk_factor": [2.1, None, 2.3, 2.3],
-            "risk_factor": [1.8, None, 3.0, 1.9],
-            "total_weight_onboard": [121.2, 0.0, 0.0, 0.0],
-            "beacon_malfunction_id": [1, 2, 3],
+            "beacon_malfunction_id": [2, 1, None, None],
         }
     ).fillna({**default_risk_factors})
 

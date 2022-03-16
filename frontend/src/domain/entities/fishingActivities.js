@@ -7,10 +7,11 @@ import Layers from './layers'
 export const getDEPMessageFromMessages = ersMessages => ersMessages
   .find(message => message.messageType === ERSMessageTypeEnum.DEP.code)
 
-export const getDISMessagesFromMessages = ersMessages => ersMessages
+export const getDISMessagesFromMessages = ersMessages => [...ersMessages]
   .filter(message => message.messageType === ERSMessageTypeEnum.DIS.code)
 
-export const getPNOMessageFromMessages = ersMessages => ersMessages
+export const getPNOMessageFromMessages = ersMessages => [...ersMessages]
+  .sort(sortByCorrectedMessagesFirst())
   .find(message => message.messageType === ERSMessageTypeEnum.PNO.code)
 
 export const getFARMessagesFromMessages = ersMessages => ersMessages
@@ -18,6 +19,7 @@ export const getFARMessagesFromMessages = ersMessages => ersMessages
 
 export const getLANMessageFromMessages = ersMessages => {
   return ersMessages
+    .sort(sortByCorrectedMessagesFirst())
     .find(message => message.messageType === ERSMessageTypeEnum.LAN.code)
 }
 

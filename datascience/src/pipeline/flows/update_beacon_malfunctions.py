@@ -1,6 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
@@ -18,6 +19,7 @@ from src.pipeline.processing import (
     join_on_multiple_keys,
     left_isin_right_by_decreasing_priority,
 )
+from src.pipeline.shared_tasks.beacons import beaconStatus
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 
 
@@ -66,12 +68,56 @@ def extract_known_malfunctions() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def extract_vessels_that_should_emit() -> pd.DataFrame:
+def extract_vessels_with_beacon() -> pd.DataFrame:
     """
-    Extract vessels should must emit from the `vessels` table, i.e. vessels with an
-    active beacon and with a flag_state that must be monitored.
+    Extract vessels from the `vessels` table that have a beacon assciated to them and
+    with a flag_state that must be monitored.
     """
-    return extract("monitorfish_remote", "monitorfish/vessels_that_should_emit.sql")
+    return extract("monitorfish_remote", "monitorfish/vessels_with_beacon.sql")
+
+
+@task(checkpoint=False)
+def get_vessels_that_should_emit(vessels_with_beacon: pd.DataFrame) -> pd.DataFrame:
+    """Filter the input DataFrame of vessels_with_beacon to keep only those with
+    an `ACTIVATED` beacon.
+
+    Args:
+        vessels_with_beacon (pd.DataFrame): DataFrame of vessels
+
+    Returns:
+        pd.DataFrame: filtered version of input
+    """
+    vessels_that_should_emit = (
+        vessels_with_beacon.loc[
+            vessels_with_beacon.beacon_status == beaconStatus.ACTIVATED.value
+        ]
+        .drop(columns=["beacon_status"])
+        .reset_index(drop=True)
+    )
+    return vessels_that_should_emit
+
+
+@task(checkpoint=False)
+def get_temporarily_unsupervised_vessels(
+    vessels_with_beacon: pd.DataFrame,
+) -> pd.DataFrame:
+    """Filter the input DataFrame of vessels_with_beacon to keep only those with
+    an `UNSUPERVISED` beacon.
+
+    Args:
+        vessels_with_beacon (pd.DataFrame): DataFrame of vessels
+
+    Returns:
+        pd.DataFrame: filtered version of input
+    """
+    temporarily_unsupervised_vessels = (
+        vessels_with_beacon.loc[
+            vessels_with_beacon.beacon_status == beaconStatus.UNSUPERVISED.value
+        ]
+        .drop(columns=["beacon_status"])
+        .reset_index(drop=True)
+    )
+    return temporarily_unsupervised_vessels
 
 
 @task(checkpoint=False)
@@ -215,11 +261,15 @@ def get_new_malfunctions(
 
 
 @task(checkpoint=False)
-def get_beacon_malfunctions_with_resumed_transmission(
-    known_malfunctions: pd.DataFrame, vessels_emitting: pd.DataFrame
-) -> list:
-    """Returns the ids of the `known_malfunctions` that correspond to vessels that now
-    emit (those in `vessels_emitting`). Both input DataFrames must have columns :
+def get_ended_beacon_malfunction_ids(
+    known_malfunctions: pd.DataFrame,
+    vessels_emitting: pd.DataFrame,
+    temporarily_unsupervised_vessels: pd.DataFrame,
+    vessels_that_should_emit: pd.DataFrame,
+) -> Tuple[list, list, list]:
+    """Returns the ids of the `known_malfunctions` that are now ended.
+
+    All 4 input DataFrames must have columns :
 
       - cfr
       - external_immatriculation
@@ -230,25 +280,72 @@ def get_beacon_malfunctions_with_resumed_transmission(
     Args:
         known_malfunctions (pd.DataFrame): `DataFrame` of malfunctions.
         vessels_emitting (pd.DataFrame): `DataFrame` of vessels now emitting.
+        temporarily_unsupervised_vessels (pd.DataFrame): `DataFrame` of vessels with
+          `UNSUPERVISED` beacon
+        vessels_that_should_emit (pd.DataFrame): `DataFrame` of vessels with an
+          `ACTIVATED` beacon
 
     Returns:
-        list: ids of `beacon_malfunctions` corresponding to vessels that now emit.
+        Tuple[list, list, list]: 3-tuple of lists :
+
+          - ids of `beacon_malfunctions` corresponding to vessels that are still
+            required to emit and that restarted emitting. These are the ids of
+            malfunctions that should be ended with reason RESUMED_TRANSMISSION
+          - ids of `beacon_malfunctions` corresponding to vessels that now have an
+            `UNSUPERVISED` beacon, which should be ended with reason
+            TEMPORARY_INTERRUPTION_OF_SUPERVISION
+          - ids of `beacon_malfunctions` corresponding to vessels that no longer have a
+            beacon, or whose beacon is neither `ACTIVATED` nor `UNSUPERVISED`. These
+            malfunctions are to be ended with reason
+            PERMANENT_INTERRUPTION_OF_SUPERVISION
     """
     vessel_id_cols = ["cfr", "ircs", "external_immatriculation"]
 
-    beacon_malfunctions_with_resumed_transmission = list(
-        set(
-            known_malfunctions.loc[
-                left_isin_right_by_decreasing_priority(
-                    known_malfunctions.loc[:, vessel_id_cols],
-                    vessels_emitting.loc[:, vessel_id_cols],
-                ),
-                "id",
-            ]
-        )
+    beacon_malfunctions_with_resumed_transmission = set(
+        known_malfunctions.loc[
+            left_isin_right_by_decreasing_priority(
+                known_malfunctions.loc[:, vessel_id_cols],
+                vessels_emitting.loc[:, vessel_id_cols],
+            ),
+            "id",
+        ]
     )
 
-    return beacon_malfunctions_with_resumed_transmission
+    beacon_malfunctions_no_longer_required_to_emit = set(
+        known_malfunctions.loc[
+            ~left_isin_right_by_decreasing_priority(
+                known_malfunctions.loc[:, vessel_id_cols],
+                vessels_that_should_emit.loc[:, vessel_id_cols],
+            ),
+            "id",
+        ]
+    )
+
+    beacon_malfunctions_temporarily_unsupervised = set(
+        known_malfunctions.loc[
+            left_isin_right_by_decreasing_priority(
+                known_malfunctions.loc[:, vessel_id_cols],
+                temporarily_unsupervised_vessels.loc[:, vessel_id_cols],
+            ),
+            "id",
+        ]
+    )
+
+    beacon_malfunctions_permanently_unsupervised = (
+        beacon_malfunctions_no_longer_required_to_emit
+        - beacon_malfunctions_temporarily_unsupervised
+    )
+
+    beacon_malfunctions_with_resumed_transmission = (
+        beacon_malfunctions_with_resumed_transmission
+        - beacon_malfunctions_no_longer_required_to_emit
+    )
+
+    return (
+        list(beacon_malfunctions_with_resumed_transmission),
+        list(beacon_malfunctions_temporarily_unsupervised),
+        list(beacon_malfunctions_permanently_unsupervised),
+    )
 
 
 @task(checkpoint=False)
@@ -415,8 +512,8 @@ with Flow("Beacons malfunctions") as flow:
 
     # Extract
     beacons_last_emission = extract_beacons_last_emission()
-    vessels_that_should_emit = extract_vessels_that_should_emit()
-    known_beacons_malfunctions = extract_known_malfunctions()
+    vessels_with_beacon = extract_vessels_with_beacon()
+    known_malfunctions = extract_known_malfunctions()
 
     # Transform
     now = get_utcnow()
@@ -431,6 +528,11 @@ with Flow("Beacons malfunctions") as flow:
     malfunction_datetime_utc_threshold_at_sea = now - non_emission_at_sea_max_duration
     malfunction_datetime_utc_threshold_at_port = now - non_emission_at_port_max_duration
 
+    vessels_that_should_emit = get_vessels_that_should_emit(vessels_with_beacon)
+    temporarily_unsupervised_vessels = get_temporarily_unsupervised_vessels(
+        vessels_with_beacon
+    )
+
     current_malfunctions = get_current_malfunctions(
         vessels_that_should_emit,
         beacons_last_emission,
@@ -444,15 +546,18 @@ with Flow("Beacons malfunctions") as flow:
         malfunction_datetime_utc_threshold_at_port,
     )
 
-    beacon_malfunctions_with_resumed_transmission = (
-        get_beacon_malfunctions_with_resumed_transmission(
-            known_beacons_malfunctions, vessels_emitting
-        )
+    (
+        beacon_malfunctions_with_resumed_transmission,
+        beacon_malfunctions_temporarily_unsupervised,
+        beacon_malfunctions_permanently_unsupervised,
+    ) = get_ended_beacon_malfunction_ids(
+        known_malfunctions,
+        vessels_emitting,
+        temporarily_unsupervised_vessels,
+        vessels_that_should_emit,
     )
 
-    new_malfunctions = get_new_malfunctions(
-        current_malfunctions, known_beacons_malfunctions
-    )
+    new_malfunctions = get_new_malfunctions(current_malfunctions, known_malfunctions)
 
     new_malfunctions = prepare_new_beacon_malfunctions(new_malfunctions)
 
@@ -462,6 +567,23 @@ with Flow("Beacons malfunctions") as flow:
         new_stage=unmapped(beaconMalfunctionStage.END_OF_MALFUNCTION),
         end_of_malfunction_reason=unmapped(endOfMalfunctionReason.RESUMED_TRANSMISSION),
     )
+
+    update_beacon_malfunction.map(
+        beacon_malfunctions_temporarily_unsupervised,
+        new_stage=unmapped(beaconMalfunctionStage.END_OF_MALFUNCTION),
+        end_of_malfunction_reason=unmapped(
+            endOfMalfunctionReason.TEMPORARY_INTERRUPTION_OF_SUPERVISION
+        ),
+    )
+
+    update_beacon_malfunction.map(
+        beacon_malfunctions_permanently_unsupervised,
+        new_stage=unmapped(beaconMalfunctionStage.END_OF_MALFUNCTION),
+        end_of_malfunction_reason=unmapped(
+            endOfMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION
+        ),
+    )
+
     load_new_beacons_malfunctions(new_malfunctions)
 
 flow.file_name = Path(__file__).name

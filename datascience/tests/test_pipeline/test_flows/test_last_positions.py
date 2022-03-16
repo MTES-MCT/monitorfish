@@ -11,6 +11,7 @@ from src.pipeline.flows.last_positions import (
     drop_duplicates,
     drop_unchanged_new_last_positions,
     estimate_current_positions,
+    extract_beacon_malfunctions,
     extract_last_positions,
     extract_previous_last_positions,
     extract_risk_factors,
@@ -63,6 +64,11 @@ def test_extract_last_positions(reset_test_data):
 
     last_positions = extract_last_positions.run(minutes=35)
     assert last_positions.shape == (3, 20)
+
+
+def test_extract_beacon_malfunctions(reset_test_data):
+    malfunctions = extract_beacon_malfunctions.run()
+    assert set(malfunctions.ircs) == {"OLY7853", "ZZ000000"}
 
 
 def test_load_last_positions(reset_test_data):
@@ -510,7 +516,7 @@ def test_merge_last_positions_beacon_malfunctions():
             "longitude": [-5.1236, -12.85, 1.01, -1.236],
             "beacon_malfunction_id": [2, 1, None, None],
         }
-    ).fillna({**default_risk_factors})
+    )
 
     pd.testing.assert_frame_equal(expected_res, res)
 

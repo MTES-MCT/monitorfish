@@ -15,6 +15,7 @@ import { getTextForSearch } from '../../../utils'
 import { setError } from '../../../domain/shared_slices/Global'
 import BeaconMalfunctionDetails from './BeaconMalfunctionDetails'
 import BeaconMalfunctionCard from './BeaconMalfunctionCard'
+import { rectIntersection } from './rectIntersection'
 
 const getByStage = (stage, beaconMalfunctions) =>
   beaconMalfunctions
@@ -184,6 +185,7 @@ const BeaconMalfunctionsBoard = () => {
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}
         sensors={sensors}
+        collisionDetection={rectIntersection}
       >
         <Columns
           data-cy={'side-window-beacon-malfunctions-columns'}
@@ -207,16 +209,15 @@ const BeaconMalfunctionsBoard = () => {
           ))}
         </Columns>
         <DragOverlay>
-          {
-            activeBeaconMalfunction
-              ? <BeaconMalfunctionCard
-                baseUrl={baseUrl}
-                beaconMalfunction={activeBeaconMalfunction}
-                updateVesselStatus={updateVesselStatus}
-                isDragging
-              />
-              : null
-          }
+        {
+          activeBeaconMalfunction
+            ? <BeaconMalfunctionCard
+              baseUrl={baseUrl}
+              beaconMalfunction={activeBeaconMalfunction}
+              updateVesselStatus={updateVesselStatus}
+              isDragging/>
+            : null
+        }
         </DragOverlay>
       </DndContext>
       <BeaconMalfunctionDetails

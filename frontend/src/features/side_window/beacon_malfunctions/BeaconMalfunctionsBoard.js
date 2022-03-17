@@ -1,5 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { DndContext, DragOverlay, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
+import {
+  closestCenter,
+  DndContext,
+  DragOverlay,
+  MouseSensor,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors
+} from '@dnd-kit/core'
 import styled from 'styled-components'
 
 import Droppable from './Droppable'
@@ -15,7 +24,6 @@ import { getTextForSearch } from '../../../utils'
 import { setError } from '../../../domain/shared_slices/Global'
 import BeaconMalfunctionDetails from './BeaconMalfunctionDetails'
 import BeaconMalfunctionCard from './BeaconMalfunctionCard'
-import { rectIntersection } from './rectIntersection'
 
 const getByStage = (stage, beaconMalfunctions) =>
   beaconMalfunctions
@@ -185,7 +193,7 @@ const BeaconMalfunctionsBoard = () => {
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}
         sensors={sensors}
-        collisionDetection={rectIntersection}
+        collisionDetection={closestCenter}
       >
         <Columns
           data-cy={'side-window-beacon-malfunctions-columns'}

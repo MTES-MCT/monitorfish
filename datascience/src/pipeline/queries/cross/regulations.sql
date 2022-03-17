@@ -12,5 +12,5 @@ SELECT
     ST_CurveToLine(geometry) AS geometry,
     geometry_simplified,
     row_hash
-FROM prod.reglementation_peche
+FROM prod.regulations
 WHERE id IN :ids

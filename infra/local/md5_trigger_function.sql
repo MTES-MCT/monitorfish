@@ -6,25 +6,27 @@
 
 DROP FUNCTION IF EXISTS prod.compute_reglementation_md5 CASCADE;
 
-CREATE FUNCTION prod.compute_reglementation_md5() RETURNS trigger AS $$
-    BEGIN
-        NEW.row_hash := md5(
-			COALESCE(NEW.law_type::text, '') ||
-			COALESCE(NEW.facade::text, '') ||
-			COALESCE(NEW.topic::text, '') ||
-			COALESCE(NEW.zone::text, '') ||
-			COALESCE(NEW.region::text, '') ||
-			COALESCE(NEW.fishing_period::text, '') ||
-			COALESCE(NEW.species::text, '') ||
-			COALESCE(NEW.gears::text, '') ||
-			COALESCE(NEW.regulatory_references::text, '') ||
-			COALESCE(NEW.geometry::text, '')
-		);
-        RETURN NEW;
-    END;
+CREATE FUNCTION prod.compute_regulations_md5() RETURNS trigger AS $$
+BEGIN
+    NEW.row_hash := md5(
+        COALESCE(NEW.law_type::text, '') ||
+        COALESCE(NEW.facade::text, '') ||
+        COALESCE(NEW.topic::text, '') ||
+        COALESCE(NEW.zone::text, '') ||
+        COALESCE(NEW.region::text, '') ||
+        COALESCE(NEW.fishing_period::text, '') ||
+        COALESCE(NEW.species::text, '') ||
+        COALESCE(NEW.gears::text, '') ||
+        COALESCE(NEW.regulatory_details::text, '') ||
+        COALESCE(NEW.regulatory_references::text, '') ||
+        COALESCE(NEW.geometry::text, '')  ||
+        COALESCE(NEW.next_id::text, '')
+        );
+    RETURN NEW;
+END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER compute_reglementation_md5
-    BEFORE INSERT OR UPDATE ON prod.reglementation_peche
+CREATE TRIGGER compute_regulations_md5
+    BEFORE INSERT OR UPDATE ON prod.regulations
     FOR EACH ROW
-    EXECUTE PROCEDURE prod.compute_reglementation_md5();
+EXECUTE PROCEDURE prod.compute_regulations_md5();

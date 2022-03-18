@@ -189,7 +189,7 @@ const Alert = styled.div`
 const Wrapper = styled.div`
   font-size: 13px;
   text-align: center;
-  height: calc(100vh - 50px);
+  height: calc(100vh);
   width: 100vw;
   overflow-y: hidden;
   overflow-x: hidden;

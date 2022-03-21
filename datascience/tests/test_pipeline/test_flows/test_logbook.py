@@ -1,37 +1,45 @@
 import unittest
-from pathlib import Path
 from unittest.mock import patch
 
 import pandas as pd
 
 from config import TEST_DATA_LOCATION
-from src.pipeline.flows.ers import (
+from src.pipeline.flows.logbook import (
+    LogbookZippedFileType,
     clean,
     extract_xmls_from_zipfile,
     extract_zipfiles,
-    flow,
-    get_message_type,
+    get_logbook_zipfile_type,
     parse_xmls,
 )
 
 ZIPFILES_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "ers/zipfiles/"
 
 
-class TestERSFlow(unittest.TestCase):
-    def test_get_message_type(self):
-        self.assertEqual(get_message_type("UN_JBE202001123614.zip"), "UN")
-        self.assertEqual(get_message_type("ERS3_JBE202102365445.zip"), "ERS3")
-        self.assertEqual(get_message_type("ERS3_ACK_JBE202102365445.zip"), "ERS3_ACK")
-        self.assertEqual(get_message_type("Unexpected_file_name"), "Unexpected_file")
-        self.assertEqual(get_message_type("Unexpectedfilename"), "")
+class TestLogbookFlow(unittest.TestCase):
+    def test_get_logbook_zipfile_type(self):
+        self.assertEqual(
+            get_logbook_zipfile_type("UN_JBE202001123614.zip"), LogbookZippedFileType.UN
+        )
+        self.assertEqual(
+            get_logbook_zipfile_type("ERS3_JBE202102365445.zip"),
+            LogbookZippedFileType.ERS3,
+        )
+        self.assertEqual(
+            get_logbook_zipfile_type("ERS3_ACK_JBE202102365445.zip"),
+            LogbookZippedFileType.ERS3_ACK,
+        )
+        with self.assertRaises(ValueError):
+            get_logbook_zipfile_type("Unexpected_file_name")
+        with self.assertRaises(ValueError):
+            get_logbook_zipfile_type("Unexpectedfilename")
 
-    @patch("src.pipeline.flows.ers.move")
+    @patch("src.pipeline.flows.logbook.move")
     def test_extract_many_zipfiles(self, mock_move):
 
         zipfiles = extract_zipfiles.run(
             input_dir=ZIPFILES_TEST_DATA_LOCATION / "many_zipfiles/received",
             treated_dir=ZIPFILES_TEST_DATA_LOCATION / "many_zipfiles/treated",
-            non_treated_dir=ZIPFILES_TEST_DATA_LOCATION / "many_zipfiles/non_treated",
             error_dir=ZIPFILES_TEST_DATA_LOCATION / "many_zipfiles/error",
         )
 
@@ -39,19 +47,17 @@ class TestERSFlow(unittest.TestCase):
 
         self.assertEqual(
             set(zipfiles[0].keys()),
-            {"error_dir", "treated_dir", "full_name", "non_treated_dir", "input_dir"},
+            {"error_dir", "treated_dir", "full_name", "input_dir"},
         )
 
         mock_move.assert_not_called()
 
-    @patch("src.pipeline.flows.ers.move")
+    @patch("src.pipeline.flows.logbook.move")
     def test_extract_unexpected_files(self, mock_move):
 
         zipfiles = extract_zipfiles.run(
             input_dir=ZIPFILES_TEST_DATA_LOCATION / "unexpected_files/received",
             treated_dir=ZIPFILES_TEST_DATA_LOCATION / "unexpected_files/treated",
-            non_treated_dir=ZIPFILES_TEST_DATA_LOCATION
-            / "unexpected_files/non_treated",
             error_dir=ZIPFILES_TEST_DATA_LOCATION / "unexpected_files/error",
         )
 
@@ -70,14 +76,13 @@ class TestERSFlow(unittest.TestCase):
             {ZIPFILES_TEST_DATA_LOCATION / "unexpected_files/received/2021/1"},
         )
 
-    @patch("src.pipeline.flows.ers.move")
+    @patch("src.pipeline.flows.logbook.move")
     def test_extract_xmls_from_ers3_zipfile(self, mock_move):
 
         dummy_ERS3_zipfile = {
-            "full_name": "ERS3_dummy.zip",
+            "full_name": "ERS3_JBE123456789012.zip",
             "input_dir": ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles",
             "treated_dir": ZIPFILES_TEST_DATA_LOCATION / "treated",
-            "non_treated_dir": ZIPFILES_TEST_DATA_LOCATION / "non_treated",
             "error_dir": ZIPFILES_TEST_DATA_LOCATION / "error",
         }
 
@@ -88,20 +93,18 @@ class TestERSFlow(unittest.TestCase):
                 "full_name",
                 "input_dir",
                 "treated_dir",
-                "non_treated_dir",
                 "error_dir",
                 "xml_messages",
             },
         )
         self.assertEqual(zipfiles["xml_messages"], ["This is an ERS3 message."])
 
-    @patch("src.pipeline.flows.ers.move")
+    @patch("src.pipeline.flows.logbook.move")
     def test_extract_xmls_from_ers3_ack_zipfile(self, mock_move):
         dummy_ERS3_ACK_zipfile = {
-            "full_name": "ERS3_ACK_dummy.zip",
+            "full_name": "ERS3_ACK_JBE123456789012.zip",
             "input_dir": ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles",
             "treated_dir": ZIPFILES_TEST_DATA_LOCATION / "treated",
-            "non_treated_dir": ZIPFILES_TEST_DATA_LOCATION / "non_treated",
             "error_dir": ZIPFILES_TEST_DATA_LOCATION / "error",
         }
 
@@ -112,17 +115,16 @@ class TestERSFlow(unittest.TestCase):
                 "full_name",
                 "input_dir",
                 "treated_dir",
-                "non_treated_dir",
                 "error_dir",
                 "xml_messages",
             },
         )
         self.assertEqual(zipfiles["xml_messages"], ["This is an ERS3_ACK message."])
 
-    @patch("src.pipeline.flows.ers.move")
+    @patch("src.pipeline.flows.logbook.move")
     def test_extract_xmls_from_un_zipfile(self, mock_move):
         dummy_UN_zipfile = {
-            "full_name": "UN_dummy.zip",
+            "full_name": "UN_JBE123456789012.zip",
             "input_dir": ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles",
             "treated_dir": ZIPFILES_TEST_DATA_LOCATION / "treated",
             "non_treated_dir": ZIPFILES_TEST_DATA_LOCATION / "non_treated",
@@ -132,12 +134,12 @@ class TestERSFlow(unittest.TestCase):
         zipfiles = extract_xmls_from_zipfile.run(dummy_UN_zipfile)
         self.assertIsNone(zipfiles)
         mock_move.assert_called_once_with(
-            ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles/UN_dummy.zip",
+            ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles/UN_JBE123456789012.zip",
             ZIPFILES_TEST_DATA_LOCATION / "non_treated",
             if_exists="replace",
         )
 
-    @patch("src.pipeline.flows.ers.move")
+    @patch("src.pipeline.flows.logbook.move")
     def test_extract_xmls_from_unexpected_zipfile(self, mock_move):
         dummy_unexpected_zipfile = {
             "full_name": "unexpected.zip",
@@ -155,7 +157,7 @@ class TestERSFlow(unittest.TestCase):
             if_exists="replace",
         )
 
-    @patch("src.pipeline.flows.ers.batch_parse")
+    @patch("src.pipeline.flows.logbook.batch_parse")
     def test_parse_xmls(self, mock_batch_parse):
         mock_batch_parse.return_value = {
             "parsed": "parsed DataFrame",

@@ -30,7 +30,7 @@ def test_get_logbook_zipfile_type():
     )
 
     with pytest.raises(ValueError):
-        get_logbook_zipfile_type("Unexpected_file_name")
+        get_logbook_zipfile_type("Unexpected_filename_JBE123456789012.zip")
     with pytest.raises(ValueError):
         get_logbook_zipfile_type("Unexpectedfilename")
 

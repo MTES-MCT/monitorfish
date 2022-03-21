@@ -13,7 +13,7 @@ from src.pipeline.flows.logbook import (
     parse_xmls,
 )
 
-ZIPFILES_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "ers/zipfiles/"
+ZIPFILES_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/zipfiles/"
 
 
 def test_get_logbook_zipfile_type():

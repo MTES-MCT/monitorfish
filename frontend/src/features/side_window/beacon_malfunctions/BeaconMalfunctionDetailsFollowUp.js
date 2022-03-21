@@ -9,6 +9,7 @@ import { setUserType } from '../../../domain/shared_slices/Global'
 import {
   BeaconMalfunctionPropertyName,
   beaconMalfunctionsStages,
+  endOfBeaconMalfunctionReasons,
   UserType,
   vesselStatuses
 } from '../../../domain/entities/beaconMalfunction'
@@ -19,7 +20,7 @@ const Type = {
   COMMENT: 'COMMENT'
 }
 
-const BeaconMalfunctionDetailsFollowUp = ({ comments, actions, beaconMalfunctionId, smallSize }) => {
+const BeaconMalfunctionDetailsFollowUp = ({ comments, actions, beaconMalfunctionId, smallSize, endOfBeaconMalfunctionReason }) => {
   const dispatch = useDispatch()
   const {
     userType
@@ -94,7 +95,22 @@ const BeaconMalfunctionDetailsFollowUp = ({ comments, actions, beaconMalfunction
       const previousValue = beaconMalfunctionsStages[action.previousValue].title
       const nextValue = beaconMalfunctionsStages[action.nextValue].title
 
-      return <>Le ticket a été déplacé de <b>{previousValue}</b> à <b>{nextValue}</b>.</>
+      let additionalText = ''
+      if (endOfBeaconMalfunctionReason) {
+        switch (endOfBeaconMalfunctionReason) {
+          case endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value: additionalText = endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.label; break
+          case endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.value: additionalText = endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.label; break
+          case endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value: additionalText = endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.label; break
+        }
+      }
+
+      return <>Le ticket a été déplacé de <b>{previousValue}</b> à <b>{nextValue}</b>.
+        {
+          additionalText
+            ? <>{' '}Il a été clôturé pour cause de <b>{additionalText}</b>.</>
+            : ''
+        }
+      </>
     }
   }
 

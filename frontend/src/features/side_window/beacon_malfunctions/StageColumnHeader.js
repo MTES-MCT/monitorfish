@@ -35,7 +35,8 @@ const wrapperStyle = {
   height: 95,
   borderBottom: `1px solid ${COLORS.lightGray}`,
   marginBottom: 3,
-  background: COLORS.gainsboro
+  background: COLORS.gainsboro,
+  whiteSpace: 'pre-line'
 }
 
 const Row = styled.div``

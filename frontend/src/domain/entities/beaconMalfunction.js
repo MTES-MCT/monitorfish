@@ -221,12 +221,12 @@ export const beaconMalfunctionsStages = {
   END_OF_MALFUNCTION: {
     code: 'END_OF_MALFUNCTION',
     title: 'Fin de l\'avarie',
-    description: 'Envoyer un message de reprise aux unités dont les émissions ont repris et archiver les avaries qu\'on ne suit plus'
+    description: 'Envoyer un message de reprise aux unités dont les émissions ont repris et archiver les avaries qu\'on ne suit plus.'
   },
   ARCHIVED: {
     code: 'ARCHIVED',
     title: 'Archivage',
-    description: 'Avaries clôturées. NB : Seules les 30 dernières avaries restent dans le kanban.'
+    description: 'Avaries clôturées.\n NB : Seules les 30 dernières avaries restent dans le kanban.'
   }
 }
 

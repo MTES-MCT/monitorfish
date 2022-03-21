@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { setBeaconMalfunctionsTab } from '../../../../domain/shared_slices/BeaconMalfunction'
-import { BeaconMalfunctionsTab } from '../../../../domain/entities/beaconMalfunction'
+import { BeaconMalfunctionsTab, getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
 import BeaconMalfunctionDetailsFollowUp from '../../../side_window/beacon_malfunctions/BeaconMalfunctionDetailsFollowUp'
 import CurrentBeaconMalfunctionBody from '../resume/CurrentBeaconMalfunctionBody'
 
@@ -40,7 +40,7 @@ const BeaconMalfunctionDetails = props => {
       </Zone>
         : <Zone data-cy={'beacon-malfunction-details'}>
           <Title>
-            Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunction?.beaconMalfunction?.malfunctionStartDateTime)}
+            Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunction?.beaconMalfunction?.malfunctionStartDateTime, true)}
           </Title>
           <BeaconMalfunctionDetailBody beaconMalfunctionWithDetails={openedBeaconMalfunction}/>
         </Zone>
@@ -51,9 +51,8 @@ const BeaconMalfunctionDetails = props => {
       </Title>
       <BeaconMalfunctionDetailsFollowUp
         smallSize
-        comments={openedBeaconMalfunction?.comments}
-        actions={openedBeaconMalfunction?.actions}
-        beaconMalfunctionId={openedBeaconMalfunction?.beaconMalfunction?.id}
+        beaconMalfunctionWithDetails={openedBeaconMalfunction}
+        firstStatus={getFirstVesselStatus(openedBeaconMalfunction)}
       />
     </Zone>
   </Wrapper>

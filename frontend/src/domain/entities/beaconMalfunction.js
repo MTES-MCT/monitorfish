@@ -179,20 +179,20 @@ const getNumberOfBeaconMalfunctionsAt = (vesselStatus, beaconMalfunctionsWithDet
 /**
  * Get the first vessel status of a beacon malfunction
  * @memberOf BeaconMalfunction
- * @param {BeaconMalfunctionResumeAndDetails} beaconMalfunctionWithDetails
+ * @param {BeaconMalfunctionResumeAndDetails | null} beaconMalfunctionWithDetails
  * @returns {string<BeaconMalfunctionVesselStatus>} The vessel status
  */
 const getFirstVesselStatus = beaconMalfunctionWithDetails => {
-  const beaconMalfunctionsVesselStatusActions = beaconMalfunctionWithDetails.actions
-    .filter ( action => action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS )
+  const beaconMalfunctionsVesselStatusActions = beaconMalfunctionWithDetails?.actions
+    ?.filter ( action => action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS )
 
-  switch (beaconMalfunctionsVesselStatusActions.length === 0) {
-    case true: return beaconMalfunctionWithDetails.beaconMalfunction.vesselStatus
+  switch (beaconMalfunctionsVesselStatusActions?.length === 0) {
+    case true: return beaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus
     case false: _.minBy(beaconMalfunctionsVesselStatusActions, action => action.dateTime)
   }
 }
 
-export const beaconMalfunctionsStages = {
+const beaconMalfunctionsStages = {
   INITIAL_ENCOUNTER: {
     code: 'INITIAL_ENCOUNTER',
     title: 'Premier contact',
@@ -227,7 +227,12 @@ export const beaconMalfunctionsStages = {
     code: 'ARCHIVED',
     title: 'Archivage',
     description: 'Avaries clôturées.\n NB : Seules les 30 dernières avaries restent dans le kanban.'
-  }
+  },
+  /** Old stages - for backward compatibility **/
+  RESUMED_TRANSMISSION: {
+    title: 'Reprise des émissions',
+    code: 'RESUMED_TRANSMISSION'
+  },
 }
 
 const getIsMalfunctioning = stage => stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
@@ -259,5 +264,6 @@ export {
   BeaconMalfunctionsTab,
   endOfBeaconMalfunctionReasons,
   getIsMalfunctioning,
-  getMalfunctionStartDateText
+  getMalfunctionStartDateText,
+  beaconMalfunctionsStages
 }

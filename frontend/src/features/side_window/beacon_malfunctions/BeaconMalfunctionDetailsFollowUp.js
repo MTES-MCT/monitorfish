@@ -6,21 +6,23 @@ import { getDate, getTime, mergeObjects } from '../../../utils'
 import { Toggle } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserType } from '../../../domain/shared_slices/Global'
-import {
-  BeaconMalfunctionPropertyName,
-  beaconMalfunctionsStages,
-  endOfBeaconMalfunctionReasons,
-  UserType,
-  vesselStatuses
-} from '../../../domain/entities/beaconMalfunction'
+import { BeaconMalfunctionVesselStatus, UserType } from '../../../domain/entities/beaconMalfunction'
 import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/saveBeaconMalfunctionCommentFromKanban'
+import BeaconMalfunctionDetailsFollowUpRow from './BeaconMalfunctionDetailsFollowUpRow'
+import BeaconMalfunctionDetailsFollowUpCommentOrAction from './BeaconMalfunctionDetailsFollowUpCommentOrAction'
+import { getActionText } from './beaconMalfunctions'
 
-const Type = {
+export const Type = {
   ACTION: 'ACTION',
   COMMENT: 'COMMENT'
 }
 
-const BeaconMalfunctionDetailsFollowUp = ({ comments, actions, beaconMalfunctionId, smallSize, endOfBeaconMalfunctionReason }) => {
+const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallSize, firstStatus, vesselStatus }) => {
+  const {
+    actions,
+    comments,
+    beaconMalfunction
+  } = beaconMalfunctionWithDetails
   const dispatch = useDispatch()
   const {
     userType
@@ -85,63 +87,6 @@ const BeaconMalfunctionDetailsFollowUp = ({ comments, actions, beaconMalfunction
 
   const actionsAndCommentsByDate = mergeObjects(commentsByDate, actionsByDate)
 
-  const getActionText = action => {
-    if (action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS) {
-      const previousValue = vesselStatuses.find(status => status.value === action.previousValue)?.label
-      const nextValue = vesselStatuses.find(status => status.value === action.nextValue)?.label
-
-      return <>Le statut du ticket a été modifié, de <b>{previousValue}</b> à <b>{nextValue}</b>.</>
-    } else if (action.propertyName === BeaconMalfunctionPropertyName.STAGE) {
-      const previousValue = beaconMalfunctionsStages[action.previousValue].title
-      const nextValue = beaconMalfunctionsStages[action.nextValue].title
-
-      let additionalText = ''
-      if (endOfBeaconMalfunctionReason) {
-        switch (endOfBeaconMalfunctionReason) {
-          case endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value: additionalText = endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.label; break
-          case endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.value: additionalText = endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.label; break
-          case endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value: additionalText = endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.label; break
-        }
-      }
-
-      return <>Le ticket a été déplacé de <b>{previousValue}</b> à <b>{nextValue}</b>.
-        {
-          additionalText
-            ? <>{' '}Il a été clôturé pour cause de <b>{additionalText}</b>.</>
-            : ''
-        }
-      </>
-    }
-  }
-
-  const getActionOrCommentRow = (actionOrComment, isLastDate, isLast) => {
-    if (actionOrComment.type === Type.COMMENT) {
-      return <div
-        data-cy={'side-window-beacon-malfunctions-detail-comment-content'}
-        key={actionOrComment.type + actionOrComment.dateTime}
-      >
-        <ActionOrCommentRow style={actionOrCommentRow} ref={isLastDate && isLast ? scrollToRef : null}>
-          <CommentText style={commentTextStyle(actionOrComment.userType)}>{actionOrComment.comment}</CommentText>
-        </ActionOrCommentRow>
-        <ActionOrCommentRow style={actionOrCommentRow}>
-          <CommentUserType style={commentUserTypeStyle}>{actionOrComment.userType} - {getTime(actionOrComment.dateTime, true)} (UTC)</CommentUserType>
-        </ActionOrCommentRow>
-      </div>
-    } else if (actionOrComment.type === Type.ACTION) {
-      return <div
-        data-cy={'side-window-beacon-malfunctions-detail-action-content'}
-        key={actionOrComment.type + actionOrComment.dateTime}
-      >
-        <ActionOrCommentRow style={actionOrCommentRow} ref={isLastDate && isLast ? scrollToRef : null}>
-          <ActionText style={actionTextStyle}>{getActionText(actionOrComment)}</ActionText>
-        </ActionOrCommentRow>
-        <ActionOrCommentRow style={actionOrCommentRow}>
-          <CommentUserType style={commentUserTypeStyle}>{getTime(actionOrComment.dateTime, true)} (UTC)</CommentUserType>
-        </ActionOrCommentRow>
-      </div>
-    }
-  }
-
   useEffect(() => {
     if (comment?.length && textareaRef.current) {
       const scrollHeight = textareaRef.current.scrollHeight
@@ -152,9 +97,17 @@ const BeaconMalfunctionDetailsFollowUp = ({ comments, actions, beaconMalfunction
   }, [comment])
 
   const saveComment = () => {
-    dispatch(saveBeaconMalfunctionCommentFromKanban(beaconMalfunctionId, comment)).then(() => {
+    dispatch(saveBeaconMalfunctionCommentFromKanban(beaconMalfunction?.id, comment)).then(() => {
       setComment('')
     })
+  }
+
+  const getFirstStatusAction = (vesselStatus, malfunctionStartDateTime) => {
+    if (vesselStatus?.value === BeaconMalfunctionVesselStatus.AT_PORT || vesselStatus?.value === BeaconMalfunctionVesselStatus.AT_SEA) {
+      return `Avarie ${vesselStatus?.label?.replace('Navire ', '')} ouverte dans MonitorFish, dernière émission à ${getTime(malfunctionStartDateTime, true)}`
+    } else if (vesselStatus?.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED) {
+      return 'Avarie ouverte dans MonitorFish, aucune émission du navire à ce jour.'
+    }
   }
 
   return (
@@ -168,7 +121,27 @@ const BeaconMalfunctionDetailsFollowUp = ({ comments, actions, beaconMalfunction
           {comments?.length} commentaire{comments?.length > 1 ? 's' : ''}
         </NumberCommentsText>
       </NumberComments>
-      <Comments style={commentsStyle(smallSize)}>
+      {
+        firstStatus
+          ? <BeaconMalfunctionDetailsFollowUpRow
+            index={0}
+            date={beaconMalfunction?.malfunctionStartDateTime}
+            dateText={getCommentOrActionDate(getDate(beaconMalfunction?.malfunctionStartDateTime))}
+          >
+            <BeaconMalfunctionDetailsFollowUpCommentOrAction
+              actionOrComment={{
+                type: Type.ACTION,
+                dateTime: beaconMalfunction?.malfunctionStartDateTime
+              }}
+              contentText={getFirstStatusAction(vesselStatus, beaconMalfunction?.malfunctionStartDateTime)}
+              scrollToRef={scrollToRef}
+              isLast
+              beaconMalfunction={beaconMalfunction?.endOfBeaconMalfunctionReason}
+            />
+          </BeaconMalfunctionDetailsFollowUpRow>
+          : null
+      }
+      <CommentsAndActions style={commentsAndActionsStyle(smallSize)}>
         {
           Object.keys(actionsAndCommentsByDate)
             .sort((a, b) => new Date(a) - new Date(b))
@@ -176,31 +149,35 @@ const BeaconMalfunctionDetailsFollowUp = ({ comments, actions, beaconMalfunction
               const isLastDate = Object.keys(actionsAndCommentsByDate).length === index + 1
               const dateText = getCommentOrActionDate(getDate(date))
 
-              return <span key={date}>
-                <DateSeparator
-                  data-cy={'side-window-beacon-malfunctions-detail-comment-date'}
-                  style={dateSeparatorStyle(index === 0)}
-                >
-                  <Line style={lineStyle}/>
-                  <RowDate
-                    style={rowDateStyle(dateText === 'Aujourd\'hui', dateText === 'Hier', smallSize)}
-                  >
-                    {dateText}
-                  </RowDate>
-                </DateSeparator>
+              return <BeaconMalfunctionDetailsFollowUpRow
+                key={date}
+                index={index}
+                isLastDate={isLastDate}
+                dateText={dateText}
+              >
                 {
                   actionsAndCommentsByDate[date]
                     .sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime))
                     .map((actionOrComment, index) => {
                       const isLast = actionsAndCommentsByDate[date].length === index + 1
 
-                      return getActionOrCommentRow(actionOrComment, isLastDate, isLast)
+                      return <BeaconMalfunctionDetailsFollowUpCommentOrAction
+                        key={actionOrComment.type + actionOrComment.dateTime}
+                        actionOrComment={actionOrComment}
+                        contentText={actionOrComment?.type === Type.COMMENT
+                          ? actionOrComment.comment
+                          : getActionText(actionOrComment, beaconMalfunction?.endOfBeaconMalfunctionReason)}
+                        scrollToRef={scrollToRef}
+                        isLastDate={isLastDate}
+                        isLast={isLast}
+                        beaconMalfunction={beaconMalfunction?.endOfBeaconMalfunctionReason}
+                      />
                     })
                 }
-              </span>
+              </BeaconMalfunctionDetailsFollowUpRow>
             })
         }
-      </Comments>
+      </CommentsAndActions>
       {
         !smallSize
           ? <>
@@ -273,59 +250,8 @@ const addCommentStyle = userType => ({
   maxHeight: 150
 })
 
-const ActionOrCommentRow = styled.div``
-const actionOrCommentRow = {
-  width: '100%',
-  display: 'flex'
-}
-
-const CommentText = styled.div``
-const commentTextStyle = userType => ({
-  background: `${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray} 0% 0% no-repeat padding-box`,
-  border: `1px solid ${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray}`,
-  maxWidth: 480,
-  padding: '10px 15px',
-  marginTop: 10
-})
-
-const ActionText = styled.div``
-const actionTextStyle = {
-  border: `2px solid ${COLORS.lightGray}`,
-  maxWidth: 480,
-  padding: '10px 15px',
-  marginTop: 10
-}
-
-const CommentUserType = styled.div``
-const commentUserTypeStyle = {
-  font: 'normal normal normal 11px/15px Marianne',
-  color: COLORS.slateGray,
-  marginTop: 2
-}
-
-const DateSeparator = styled.div``
-const dateSeparatorStyle = first => ({
-  height: 20,
-  width: 558,
-  marginTop: first ? 10 : 30
-})
-
-const RowDate = styled.div``
-const rowDateStyle = (isToday, isYesterday, smallSize) => ({
-  marginTop: -23,
-  width: 'fit-content',
-  background: 'white',
-  padding: 10,
-  marginLeft: isToday
-    ? smallSize ? 'calc(220px - 45px)' : 'calc(50% - 45px)'
-    : isYesterday
-      ? smallSize ? 'calc(220px - 23px)' : 'calc(50% - 23px)'
-      : smallSize ? 'calc(220px - 43px)' : 'calc(50% - 43px)',
-  color: COLORS.slateGray
-})
-
-const Comments = styled.div``
-const commentsStyle = smallSize => ({
+const CommentsAndActions = styled.div``
+const commentsAndActionsStyle = smallSize => ({
   maxHeight: smallSize ? 410 : 435,
   overflowY: 'auto',
   overflowX: 'hidden'
@@ -356,12 +282,6 @@ const bodyStyle = smallSize => ({
   paddingRight: smallSize ? 15 : 40,
   paddingLeft: smallSize ? 20 : 40
 })
-
-const Line = styled.div``
-const lineStyle = {
-  width: 558,
-  borderBottom: `1px solid ${COLORS.lightGray}`
-}
 
 const CommentsIcon = styled(CommentsSVG)``
 const commentsIconStyle = {

@@ -4,9 +4,13 @@ import { COLORS } from '../../../constants/constants'
 import Draggable from './Draggable'
 import StageColumnHeader from './StageColumnHeader'
 import BeaconMalfunctionCard from './BeaconMalfunctionCard'
+import { useSelector } from 'react-redux'
 
 const StageColumn = ({ stage, beaconMalfunctions, updateVesselStatus, isDroppedId, baseUrl, activeBeaconMalfunction }) => {
   const verticalScrollRef = useRef()
+  const {
+    openedBeaconMalfunctionInKanban
+  } = useSelector(state => state.beaconMalfunction)
 
   return <Wrapper
     data-cy={`side-window-beacon-malfunctions-columns-${stage.code}`}
@@ -23,13 +27,14 @@ const StageColumn = ({ stage, beaconMalfunctions, updateVesselStatus, isDroppedI
     >
       {
         beaconMalfunctions
-          .map((beaconMalfunction) => {
+          .map(beaconMalfunction => {
             return <Draggable
               key={beaconMalfunction.id}
               id={beaconMalfunction.id}
               stageId={stage.code}
             >
               <BeaconMalfunctionCard
+                showed={openedBeaconMalfunctionInKanban?.beaconMalfunction?.id === beaconMalfunction.id}
                 verticalScrollRef={verticalScrollRef}
                 baseUrl={baseUrl}
                 beaconMalfunction={beaconMalfunction}

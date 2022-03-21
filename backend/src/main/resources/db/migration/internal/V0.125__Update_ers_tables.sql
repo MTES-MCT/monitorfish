@@ -41,3 +41,15 @@ ALTER INDEX ers_ret_referenced_ers_id_idx RENAME TO logbook_report_ret_reference
 ALTER INDEX ers_messages_pkey RENAME TO logbook_raw_messages_pkey;
 DROP INDEX ers_messages_operation_number_idx;
 
+-- Add transmission_format column
+CREATE TYPE public.logbook_message_transmission_format AS ENUM ('ERS3', 'FLUX');
+
+ALTER TABLE logbook_reports
+    ADD COLUMN transmission_format logbook_message_transmission_format;
+
+UPDATE logbook_reports
+SET transmission_format = 'ERS3';
+
+ALTER TABLE logbook_reports
+ALTER COLUMN transmission_format
+SET NOT NULL;

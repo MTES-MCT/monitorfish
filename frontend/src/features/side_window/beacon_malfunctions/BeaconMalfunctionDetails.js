@@ -177,6 +177,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
         comments={comments}
         actions={actions}
         beaconMalfunctionId={beaconMalfunction?.id}
+        endOfBeaconMalfunctionReason={beaconMalfunction?.endOfBeaconMalfunctionReason}
       />
     </BeaconMalfunctionDetailsWrapper>
   )

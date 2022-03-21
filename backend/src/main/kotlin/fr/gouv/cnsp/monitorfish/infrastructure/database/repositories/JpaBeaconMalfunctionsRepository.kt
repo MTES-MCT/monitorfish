@@ -32,13 +32,11 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
     }
 
     @Transactional
-    override fun update(
-        id: Int,
-        vesselStatus: VesselStatus?,
-        stage: Stage?,
-        endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
-        updateDateTime: ZonedDateTime
-    ) {
+    override fun update(id: Int,
+                        vesselStatus: VesselStatus?,
+                        stage: Stage?,
+                        endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
+                        updateDateTime: ZonedDateTime) {
         try {
             vesselStatus?.let {
                 dbBeaconMalfunctionsRepository.updateVesselStatus(id, it.toString(), updateDateTime)

@@ -12,7 +12,6 @@ import {
 import styled from 'styled-components'
 
 import Droppable from './Droppable'
-import { beaconMalfunctionsStages } from './beaconMalfunctions'
 import StageColumn from './StageColumn'
 import { useDispatch, useSelector } from 'react-redux'
 import { createSelector } from '@reduxjs/toolkit'
@@ -24,6 +23,7 @@ import { getTextForSearch } from '../../../utils'
 import { setError } from '../../../domain/shared_slices/Global'
 import BeaconMalfunctionDetails from './BeaconMalfunctionDetails'
 import BeaconMalfunctionCard from './BeaconMalfunctionCard'
+import { beaconMalfunctionsStages } from '../../../domain/entities/beaconMalfunction'
 
 const getByStage = (stage, beaconMalfunctions) =>
   beaconMalfunctions

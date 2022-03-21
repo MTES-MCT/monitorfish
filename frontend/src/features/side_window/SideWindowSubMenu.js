@@ -4,8 +4,9 @@ import { COLORS } from '../../constants/constants'
 import SideWindowSubMenuLink from './SideWindowSubMenuLink'
 import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../domain/entities/alerts'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
-import { beaconMalfunctionsStages, BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
+import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
+import { beaconMalfunctionsStages } from '../../domain/entities/beaconMalfunction'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way

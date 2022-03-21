@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { beaconMalfunctionsStages } from './beaconMalfunctions'
+import { beaconMalfunctionsStages } from '../../../domain/entities/beaconMalfunction'
 
 const MAX_ARCHIVED_ITEMS = 30
 

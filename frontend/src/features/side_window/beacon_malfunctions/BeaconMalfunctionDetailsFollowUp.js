@@ -6,9 +6,13 @@ import { getDate, getTime, mergeObjects } from '../../../utils'
 import { Toggle } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserType } from '../../../domain/shared_slices/Global'
-import { BeaconMalfunctionPropertyName, UserType, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
+import {
+  BeaconMalfunctionPropertyName,
+  beaconMalfunctionsStages,
+  UserType,
+  vesselStatuses
+} from '../../../domain/entities/beaconMalfunction'
 import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/saveBeaconMalfunctionCommentFromKanban'
-import { beaconMalfunctionsStages } from './beaconMalfunctions'
 
 const Type = {
   ACTION: 'ACTION',

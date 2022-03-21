@@ -4,20 +4,20 @@ import Point from 'ol/geom/Point'
 import { getFishingActivityCircleStyle } from '../../layers/styles/vesselTrack.style'
 import Layers from './layers'
 
-export const getDEPMessageFromMessages = ersMessages => ersMessages
+export const getDEPMessageFromMessages = logbookMessages => logbookMessages
   .find(message => message.messageType === ERSMessageTypeEnum.DEP.code)
 
-export const getDISMessagesFromMessages = ersMessages => ersMessages
+export const getDISMessagesFromMessages = logbookMessages => logbookMessages
   .filter(message => message.messageType === ERSMessageTypeEnum.DIS.code)
 
-export const getPNOMessageFromMessages = ersMessages => [...ersMessages]
+export const getPNOMessageFromMessages = logbookMessages => [...logbookMessages]
   .sort(sortByCorrectedMessagesFirst())
   .find(message => message.messageType === ERSMessageTypeEnum.PNO.code)
 
-export const getFARMessagesFromMessages = ersMessages => ersMessages
+export const getFARMessagesFromMessages = logbookMessages => logbookMessages
   .filter(message => message.messageType === ERSMessageTypeEnum.FAR.code)
 
-export const getLANMessageFromMessages = ersMessages => [...ersMessages]
+export const getLANMessageFromMessages = logbookMessages => [...logbookMessages]
   .sort(sortByCorrectedMessagesFirst())
   .find(message => message.messageType === ERSMessageTypeEnum.LAN.code)
 
@@ -35,17 +35,17 @@ function sortByCorrectedMessagesFirst () {
   }
 }
 
-export const getTotalFAROrDISWeightFromMessages = ersMessages => {
+export const getTotalFAROrDISWeightFromMessages = logbookMessages => {
   let correctedMessagesReferencedIds = []
 
-  return parseFloat(ersMessages
+  return parseFloat(logbookMessages
     .sort(sortByCorrectedMessagesFirst())
     .reduce((accumulator, ersMessage) => {
       if (ersMessage.operationType === ERSOperationType.COR) {
         correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(ersMessage.referencedErsId)
       }
 
-      const sumOfCatches = !correctedMessagesReferencedIds.includes(ersMessage.ersId) && ersMessage.acknowledge && ersMessage.acknowledge.isSuccess
+      const sumOfCatches = !correctedMessagesReferencedIds.includes(ersMessage.reportId) && ersMessage.acknowledge && ersMessage.acknowledge.isSuccess
         ? ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
           return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
         }, 0)
@@ -127,7 +127,7 @@ export const getFAROrDISSpeciesToWeightObject = (messages, totalWeight) => {
         correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedErsId)
       }
 
-      if (!correctedMessagesReferencedIds.includes(message.ersId) && message.acknowledge && message.acknowledge.isSuccess) {
+      if (!correctedMessagesReferencedIds.includes(message.reportId) && message.acknowledge && message.acknowledge.isSuccess) {
         message.message.catches.forEach(speciesCatch => {
           setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight)
         })
@@ -148,7 +148,7 @@ export const getSpeciesAndPresentationToWeightFARObject = farMessages => {
         correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedErsId)
       }
 
-      if (!correctedMessagesReferencedIds.includes(message.ersId) && message.acknowledge && message.acknowledge.isSuccess) {
+      if (!correctedMessagesReferencedIds.includes(message.reportId) && message.acknowledge && message.acknowledge.isSuccess) {
         message.message.catches.forEach(speciesCatch => {
           getSpeciesAndPresentationToWeightObject(speciesAndPresentationToWeightFARObject, speciesCatch)
         })

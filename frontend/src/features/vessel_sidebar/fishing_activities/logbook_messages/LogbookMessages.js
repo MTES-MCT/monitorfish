@@ -77,7 +77,7 @@ const LogbookMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navi
   const [selectedOptions, setSelectedOptions] = useState(null)
 
   useEffect(() => {
-    if (fishingActivities?.ersMessages) {
+    if (fishingActivities?.logbookMessages) {
       setLogbookMessages(fishingActivities.logbookMessages)
     }
   }, [fishingActivities])

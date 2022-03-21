@@ -251,7 +251,7 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
               ? <LogbookMessages>
                 {depMessage
                   ? <DEPMessageResume
-                    id={depMessage.ersId}
+                    id={depMessage.reportId}
                     showLogbookMessages={showLogbookMessages}
                     depMessage={depMessage.message}
                     isNotAcknowledged={depMessage.acknowledge && depMessage.acknowledge.isSuccess === false}
@@ -262,7 +262,7 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
 
                 {farMessages?.length && farMessages[0]
                   ? <FARMessageResume
-                    id={farMessages[0].ersId}
+                    id={farMessages[0].reportId}
                     showLogbookMessages={showLogbookMessages}
                     totalFARWeight={totalFARWeight}
                     numberOfMessages={farMessages ? farMessages.filter(message => message.operationType === LogbookOperationType.DAT).length : 0}
@@ -273,7 +273,7 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
 
                 {disMessages?.length && disMessages[0]
                   ? <DISMessageResume
-                    id={disMessages[0].ersId}
+                    id={disMessages[0].reportId}
                     totalDISWeight={totalDISWeight}
                     numberOfMessages={disMessages ? disMessages.filter(message => message.operationType === LogbookOperationType.DAT).length : 0}
                     speciesToWeightOfDIS={speciesToWeightOfDIS}
@@ -283,7 +283,7 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
 
                 {pnoMessage
                   ? <PNOMessageResume
-                    id={pnoMessage.ersId}
+                    id={pnoMessage.reportId}
                     totalPNOWeight={totalPNOWeight}
                     totalFARAndDEPWeight={totalFARAndDEPWeight}
                     speciesToWeightOfPNO={speciesToWeightOfPNO}
@@ -297,7 +297,7 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
 
                 {lanMessage
                   ? <LANMessageResume
-                    id={lanMessage.ersId}
+                    id={lanMessage.reportId}
                     catchesOverToleranceAlert={getCatchesOverToleranceAlert()}
                     totalLANWeight={totalLANWeight}
                     totalPNOWeight={totalPNOWeight}

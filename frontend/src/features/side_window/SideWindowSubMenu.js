@@ -143,18 +143,22 @@ const menuStyle = (isOpen, fixed) => ({
   transition: 'all 0.5s',
   position: fixed ? 'unset' : 'absolute',
   marginLeft: fixed ? 0 : 65,
+  boxShadow: isOpen && !fixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset',
   zIndex: 999
 })
 
 const Title = styled.span``
 const titleStyle = isOpen => ({
-  width: 180,
   display: 'inline-block',
   paddingBottom: 11,
   paddingLeft: 20,
   borderBottom: `1px solid ${COLORS.lightGray}`,
   opacity: isOpen ? 1 : 0,
-  transition: 'opacity 0.5s ease'
+  width: isOpen ? 180 : 0,
+  transition: 'width 0.8s ease',
+  overflow: 'hidden',
+  textOverflow: 'clip',
+  whiteSpace: 'nowrap'
 })
 
 export default SideWindowSubMenu

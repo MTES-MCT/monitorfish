@@ -1,6 +1,6 @@
 WITH deleted_messages AS (
-    SELECT referenced_ers_id
-    FROM public.ers
+    SELECT referenced_report_id
+    FROM public.logbook_reports
     WHERE operation_type = 'DEL'
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
 ),
@@ -12,11 +12,11 @@ ordered_deps AS (
         value->'gearOnboard' AS gear_onboard,
         (value->>'departureDatetimeUtc')::timestamptz AS departure_datetime_utc,
         ROW_NUMBER() OVER(PARTITION BY cfr ORDER BY operation_datetime_utc DESC) as rk
-    FROM public.ers
+    FROM public.logbook_reports
     WHERE log_type = 'DEP'
     AND operation_type IN ('DAT', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
-    AND ers_id NOT IN (SELECT referenced_ers_id FROM deleted_messages)
+    AND report_id NOT IN (SELECT referenced_report_id FROM deleted_messages)
 ),
 
 last_deps AS (
@@ -34,7 +34,7 @@ ordered_ers AS (
         cfr,
         operation_datetime_utc,
         ROW_NUMBER() OVER(PARTITION BY cfr ORDER BY operation_datetime_utc DESC) as rk
-    FROM public.ers
+    FROM public.logbook_reports
     WHERE operation_type IN ('DAT', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
 ),
@@ -50,34 +50,34 @@ last_ers AS (
 
 catches AS (
     SELECT
-        ers.cfr,
-        ers.ers_id,
-        ers.referenced_ers_id,
-        ers.operation_type,
-        (ers.value)->>'gear' as gear,
-        jsonb_array_elements((ers.value)->'catches')->>'species' as species,
-        (jsonb_array_elements((ers.value)->'catches')->>'weight')::DOUBLE PRECISION as weight,
-        jsonb_array_elements((ers.value)->'catches')->>'faoZone' as fao_area
-    FROM public.ers
-    JOIN last_deps
-    ON ers.cfr = last_deps.cfr
-    AND ers.operation_datetime_utc > last_deps.departure_datetime_utc
+        r.cfr,
+        r.report_id,
+        r.referenced_report_id,
+        r.operation_type,
+        (r.value)->>'gear' as gear,
+        jsonb_array_elements((r.value)->'catches')->>'species' as species,
+        (jsonb_array_elements((r.value)->'catches')->>'weight')::DOUBLE PRECISION as weight,
+        jsonb_array_elements((r.value)->'catches')->>'faoZone' as fao_area
+    FROM public.logbook_reports r
+    JOIN last_deps d
+    ON r.cfr = d.cfr
+    AND r.operation_datetime_utc > d.departure_datetime_utc
     WHERE log_type = 'FAR'
     AND operation_type IN ('DAT', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
-    AND operation_number NOT IN (SELECT referenced_ers_id FROM deleted_messages)
+    AND operation_number NOT IN (SELECT referenced_report_id FROM deleted_messages)
 ),
 
 corrected_catches AS (
     SELECT 
         cfr,
-        ers_id,
+        report_id,
         species,
         weight,
         gear,
         fao_area
     FROM catches
-    WHERE ers_id NOT IN (SELECT referenced_ers_id FROM catches WHERE operation_type = 'COR')
+    WHERE report_id NOT IN (SELECT referenced_report_id FROM catches WHERE operation_type = 'COR')
 ),
 
 
@@ -95,7 +95,7 @@ summed_catches AS (
 
 SELECT
     COALESCE(last_ers.cfr, last_deps.cfr) AS cfr,
-    last_ers.operation_datetime_utc AS last_ers_datetime_utc,
+    last_ers.operation_datetime_utc AS last_logbook_message_datetime_utc,
     departure_datetime_utc,
     trip_number,
     gear_onboard,

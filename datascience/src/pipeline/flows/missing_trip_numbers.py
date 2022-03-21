@@ -30,7 +30,7 @@ def extract_computed_trip_numbers() -> pd.DataFrame:
 @task(checkpoint=False)
 def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
     """
-    Updates the `ers` table. Computed trip numbers are added to the trip_number
+    Updates the `logbook_reports` table. Computed trip numbers are added to the trip_number
     column of the table.
 
     Args:
@@ -61,7 +61,7 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
 
         connection.execute(
             """
-            UPDATE public.ers e
+            UPDATE public.logbook_reports e
             SET
                 trip_number = t.trip_number,
                 trip_number_was_computed = true

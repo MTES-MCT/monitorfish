@@ -1,4 +1,6 @@
 import os
+import re
+from enum import Enum
 from pathlib import Path
 from typing import List, Union
 from zipfile import ZipFile
@@ -16,23 +18,50 @@ from src.pipeline.utils import get_table, move, psql_insert_copy
 
 RECEIVED_DIRECTORY = ERS_FILES_LOCATION / "received"
 TREATED_DIRECTORY = ERS_FILES_LOCATION / "treated"
-NON_TREATED_DIRECTORY = ERS_FILES_LOCATION / "non_treated"
 ERROR_DIRECTORY = ERS_FILES_LOCATION / "error"
+
+
+class LogbookZippedFileType(Enum):
+    ERS3 = "ERS3"
+    ERS3_ACK = "ERS3_ACK"
+    UN = "UN"
 
 
 ####################################### HELPERS #######################################
 
 
-def get_message_type(zipfile_name: str) -> str:
-    """For a zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip,
-    extract the message type, which may be one of :
+def get_logbook_zipfile_type(zipfile_name: str) -> LogbookZippedFileType:
+    """Takes a zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip
+    and returns the coresponding `LogbookZippedFileType`, based on pattern matching.
 
-    - ERS3 (a set of messages in ERS3 format)
-    - ERS3_ACK (a set of acknowledgement statuses from BIA for ERS3 messages)
-    - UN (a set of FLUX messages)"""
-    name_parts = zipfile_name.split("_")
-    message_type = "_".join(name_parts[:-1])
-    return message_type
+    Args:
+        zipfile_name (str): name of a zipfile containing logbook data.
+
+    Returns:
+        LogbookZippedFileType: the type of data corresponding to the name of the
+          zipfile
+
+    Raises:
+        ValueError: if the name does not match the expected pattern or the matched
+          string does not correspond to a known `LogbookZippedFileType`.
+
+    """
+    zipfile_name_pattern = r"^(?P<logbook_type>.*)_JBE\d{12}.zip"
+    match = re.match(zipfile_name_pattern, zipfile_name)
+
+    try:
+        assert match
+        return LogbookZippedFileType[match["logbook_type"]]
+    except (AssertionError, KeyError):
+        raise ValueError(
+            (
+                "Unexpected file name. Files containing logbook data are expected to "
+                f"have a name matching the pattern {zipfile_name_pattern}, with "
+                "`logbook_type` equal to one of "
+                f"{list(map(lambda s: s.name, LogbookZippedFileType))} .Got "
+                f"{zipfile_name} which does not match."
+            )
+        )
 
 
 ######################################## TASKS ########################################
@@ -42,19 +71,16 @@ def get_message_type(zipfile_name: str) -> str:
 def extract_zipfiles(
     input_dir: Path,
     treated_dir: Path,
-    non_treated_dir: Path,
     error_dir: Path,
 ) -> List[dict]:
     """
-    Scans ``input_dir``, in which ers zipfiles are expected to be arranged in a
+    Scans ``input_dir``, in which logbook zipfiles are expected to be arranged in a
     hierarchy folders like : year / month / zipfiles. Yields found zipfiles
     along with the corresponding paths of :
 
     - ``input_directory`` where the zipfile is located
     - ``treated_directory`` where the zipfile will be transfered after integration into
       the monitorfish database
-    - ``non_treated_directory`` where the zipfile will be transfered if it is a FLUX type
-      of message (currently not handled)
     - ``error_directory`` if an error occurs during the treatment of messages.
     """
 
@@ -96,7 +122,7 @@ def extract_zipfiles(
             logger.warning(f"Unexpected year {year}. Skipping directory.")
             continue
 
-        logger.info(f"Starting extraction of ERS messages for year {year}.")
+        logger.info(f"Starting extraction of logbook messages for year {year}.")
         months = os.listdir(input_dir / year)
 
         for month in months:
@@ -104,11 +130,10 @@ def extract_zipfiles(
                 logger.warning(f"Unexpected month {month}. Skipping directory.")
                 continue
 
-            logger.info(f"Starting extraction of ERS messages for {year}/{month}.")
+            logger.info(f"Starting extraction of logbook messages for {year}/{month}.")
 
             zipfile_input_dir = input_dir / year / month
             zipfile_treated_dir = treated_dir / year / month
-            zipfile_non_treated_dir = non_treated_dir / year / month
             zipfile_error_dir = error_dir / year / month
 
             files = os.listdir(zipfile_input_dir)
@@ -134,7 +159,6 @@ def extract_zipfiles(
                         "full_name": zipfile,
                         "input_dir": zipfile_input_dir,
                         "treated_dir": zipfile_treated_dir,
-                        "non_treated_dir": zipfile_non_treated_dir,
                         "error_dir": zipfile_error_dir,
                     }
                 )
@@ -152,10 +176,19 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
         logger = prefect.context.get("logger")
 
         logger.info(f"Extracting zipfile {zipfile['full_name']}.")
-        message_type = get_message_type(zipfile["full_name"])
+        try:
+            message_type = get_logbook_zipfile_type(zipfile["full_name"])
+        except ValueError as e:
+            logger.error(e)
+            move(
+                zipfile["input_dir"] / zipfile["full_name"],
+                zipfile["error_dir"],
+                if_exists="replace",
+            )
+            return None
 
         # Handle ERS3 messages and acknoledgement statuses
-        if message_type in ["ERS3", "ERS3_ACK"]:
+        if message_type in [LogbookZippedFileType.ERS3, LogbookZippedFileType.ERS3_ACK]:
             with ZipFile(zipfile["input_dir"] / zipfile["full_name"]) as zipobj:
                 xml_filenames = zipobj.namelist()
                 xml_messages = []
@@ -167,7 +200,7 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
 
         # Handle FLUX messages (move them to non_treated_directory
         # as there is currently no parser available)
-        elif message_type in ["UN"]:
+        elif message_type == LogbookZippedFileType.UN:
             logger.info(
                 f"Skipping zipfile {zipfile['full_name']} of type {message_type} "
                 + "which is currently not handled. "
@@ -179,17 +212,9 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
                 if_exists="replace",
             )
 
-        # Move unexpected file types to error directory
+        # Should happen !
         else:
-            logger.error(
-                f"Unexpected message type '{message_type}' ({zipfile}). "
-                + f"Moving {zipfile} to error directory."
-            )
-            move(
-                zipfile["input_dir"] / zipfile["full_name"],
-                zipfile["error_dir"],
-                if_exists="replace",
-            )
+            raise ValueError("This proves that God exists")
 
 
 @task(checkpoint=False)
@@ -225,21 +250,23 @@ def clean(zipfile: Union[None, dict]) -> Union[None, dict]:
 
 
 @task(checkpoint=False)
-def load_ers(cleaned_data: List[dict]):
-    """Loads ERS data into public.ers and public.ers_messages tables.
+def load_logbook_data(cleaned_data: List[dict]):
+    """Loads logbook data into public.logbook_reports and public.logbook_raw_messages tables.
 
     Args:
         cleaned_data (list) : list of dictionaries (output of `clean` task)
     """
     schema = "public"
-    ers_table_name = "ers"
-    ers_messages_table_name = "ers_messages"
+    logbook_reports_table_name = "logbook_reports"
+    logbook_raw_messages_table_name = "logbook_raw_messages"
     engine = create_engine("monitorfish_remote")
     logger = prefect.context.get("logger")
 
     # Check that ers tables exist
-    get_table(ers_table_name, schema, engine, logger)
-    ers_messages_table = get_table(ers_messages_table_name, schema, engine, logger)
+    get_table(logbook_reports_table_name, schema, engine, logger)
+    logbook_raw_messages = get_table(
+        logbook_raw_messages_table_name, schema, engine, logger
+    )
 
     cleaned_data = list(filter(lambda x: True if x else False, cleaned_data))
 
@@ -250,12 +277,12 @@ def load_ers(cleaned_data: List[dict]):
             parsed_with_xml = ers["parsed_with_xml"]
 
             # Drop rows for which the operation number already exists in the
-            # ers_messages database
+            # logbook_raw_messages database
 
             parsed_with_xml = drop_rows_already_in_table(
                 df=parsed_with_xml,
                 df_column_name="operation_number",
-                table=ers_messages_table,
+                table=logbook_raw_messages,
                 table_column_name="operation_number",
                 connection=connection,
                 logger=logger,
@@ -267,10 +294,12 @@ def load_ers(cleaned_data: List[dict]):
 
             if len(parsed_with_xml) > 0:
                 n_lines = len(parsed_with_xml)
-                logger.info(f"Inserting {n_lines} messages in ers_messages table.")
+                logger.info(
+                    f"Inserting {n_lines} messages in logbook_raw_messages table."
+                )
 
                 parsed_with_xml.to_sql(
-                    name=ers_messages_table_name,
+                    name=logbook_raw_messages_table_name,
                     con=connection,
                     schema=schema,
                     index=False,
@@ -286,7 +315,7 @@ def load_ers(cleaned_data: List[dict]):
                 parsed["value"] = parsed.value.map(to_json)
 
                 parsed.to_sql(
-                    name=ers_table_name,
+                    name=logbook_reports_table_name,
                     con=connection,
                     schema=schema,
                     index=False,
@@ -312,7 +341,7 @@ def load_ers(cleaned_data: List[dict]):
                 )
 
 
-with Flow("ERS") as flow:
+with Flow("Logbook") as flow:
 
     # Only run if the previous run has finished running
     flow_not_running = check_flow_not_running()
@@ -321,12 +350,11 @@ with Flow("ERS") as flow:
         zipfiles = extract_zipfiles(
             RECEIVED_DIRECTORY,
             TREATED_DIRECTORY,
-            NON_TREATED_DIRECTORY,
             ERROR_DIRECTORY,
         )
         zipfiles = extract_xmls_from_zipfile.map(zipfiles)
         zipfiles = parse_xmls.map(zipfiles)
         zipfiles = clean.map(zipfiles)
-        load_ers(zipfiles)
+        load_logbook_data(zipfiles)
 
 flow.file_name = Path(__file__).name

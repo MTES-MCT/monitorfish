@@ -5,7 +5,7 @@ INSERT INTO last_positions (
     cfr, external_immatriculation, mmsi, ircs, vessel_name, flag_state, 
     trip_number, latitude, longitude, speed, course, 
     last_position_datetime_utc, emission_period, 
-    last_ers_datetime_utc, departure_datetime_utc, 
+    last_logbook_message_datetime_utc, departure_datetime_utc, 
     width, length, registry_port, district, district_code, 
     gear_onboard, 
     segments, 

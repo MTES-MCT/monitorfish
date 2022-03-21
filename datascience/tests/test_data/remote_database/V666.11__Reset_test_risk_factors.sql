@@ -3,7 +3,7 @@ DELETE FROM risk_factors;
 INSERT INTO risk_factors
 (
     cfr, external_immatriculation, ircs, 
-    last_ers_datetime_utc, departure_datetime_utc,
+    last_logbook_message_datetime_utc, departure_datetime_utc,
     trip_number, gear_onboard, species_onboard, segments, total_weight_onboard,
     last_control_datetime_utc, last_control_infraction, post_control_comments,
     impact_risk_factor, probability_risk_factor, detectability_risk_factor, risk_factor, 

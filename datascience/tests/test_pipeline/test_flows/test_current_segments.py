@@ -242,7 +242,7 @@ def test_join():
         columns=pd.Index(
             [
                 "cfr",
-                "last_ers_datetime_utc",
+                "last_logbook_message_datetime_utc",
                 "departure_datetime_utc",
                 "trip_number",
                 "gear_onboard",
@@ -321,7 +321,7 @@ def test_join():
     expected_res = pd.DataFrame(
         {
             "cfr": ["Vessel_A", "Vessel_B"],
-            "last_ers_datetime_utc": [
+            "last_logbook_message_datetime_utc": [
                 datetime.datetime(2021, 2, 3, 13, 58, 21),
                 datetime.datetime(2020, 12, 3, 15, 58, 21),
             ],

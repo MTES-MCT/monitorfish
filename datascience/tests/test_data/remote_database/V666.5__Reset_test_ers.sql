@@ -1,7 +1,7 @@
-DELETE FROM ers;
-DELETE FROM ers_messages;
+DELETE FROM logbook_reports;
+DELETE FROM logbook_raw_messages;
 
-INSERT INTO ers_messages (operation_number) VALUES 
+INSERT INTO logbook_raw_messages (operation_number) VALUES 
 ('1'),
 ('2'),
 ('3'),
@@ -10,9 +10,9 @@ INSERT INTO ers_messages (operation_number) VALUES
 ('6'),
 ('7');
 
-INSERT INTO ers (
+INSERT INTO logbook_reports (
     operation_number, operation_country, operation_datetime_utc, operation_type,
-    ers_id, referenced_ers_id, ers_datetime_utc, 
+    report_id, referenced_report_id, report_datetime_utc, 
     cfr, ircs, external_identification, vessel_name, flag_state, imo, log_type, 
     value, 
     integration_datetime_utc, trip_number)
@@ -67,7 +67,7 @@ VALUES
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 3 days 23 hours 48 minutes')::TIMESTAMP, 20210002
 );
 
-UPDATE ers
+UPDATE logbook_reports
 SET value = jsonb_set(
     value, 
     '{departureDatetimeUtc}',
@@ -75,7 +75,7 @@ SET value = jsonb_set(
 )
 WHERE operation_number = '3';
 
-UPDATE ers
+UPDATE logbook_reports
 SET value = jsonb_set(
     value, 
     '{departureDatetimeUtc}',

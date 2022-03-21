@@ -228,13 +228,14 @@ const BeaconMalfunctionsBoard = () => {
         }
         </DragOverlay>
       </DndContext>
-      <BeaconMalfunctionDetails
-        updateVesselStatus={updateVesselStatus}
-        beaconMalfunction={openedBeaconMalfunctionInKanban?.beaconMalfunction}
-        resume={openedBeaconMalfunctionInKanban?.resume}
-        comments={openedBeaconMalfunctionInKanban?.comments || []}
-        actions={openedBeaconMalfunctionInKanban?.actions || []}
-      />
+      {
+        openedBeaconMalfunctionInKanban
+          ? <BeaconMalfunctionDetails
+            updateVesselStatus={updateVesselStatus}
+            beaconMalfunctionWithDetails={openedBeaconMalfunctionInKanban}
+          />
+          : null
+      }
     </Wrapper>
   )
 }

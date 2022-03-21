@@ -13,6 +13,7 @@ import * as timeago from 'timeago.js'
 import { closeBeaconMalfunctionInKanban } from '../../../domain/shared_slices/BeaconMalfunction'
 import { getDateTime } from '../../../utils'
 import {
+  getFirstVesselStatus,
   getIsMalfunctioning,
   getMalfunctionStartDateText,
   vesselStatuses
@@ -22,7 +23,12 @@ import { showVesselSidebarTab } from '../../../domain/shared_slices/Vessel'
 import { VesselSidebarTab } from '../../../domain/entities/vessel'
 import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
 
-const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions, updateVesselStatus }) => {
+const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselStatus }) => {
+  const {
+    resume,
+    beaconMalfunction
+  } = beaconMalfunctionWithDetails
+
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselMalfunction => vesselMalfunction.value === beaconMalfunction?.vesselStatus)
   const baseUrl = window.location.origin
@@ -157,7 +163,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
             <ResumeKey style={resumeKeyStyle}>Dernière avarie</ResumeKey>
             <ResumeValue style={resumeValueStyle}>
               {timeago.format(resume?.lastBeaconMalfunctionDateTime, 'fr')}{' '}
-              ({vesselStatuses.find(status => status.value === resume?.lastBeaconMalfunctionVesselStatus)?.label})
+              ({vesselStatus?.label})
             </ResumeValue>
           </ResumeLine>
           <ResumeLine>
@@ -174,10 +180,9 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
       </SecondHeader>
       <Line style={lineStyle}/>
       <BeaconMalfunctionDetailsFollowUp
-        comments={comments}
-        actions={actions}
-        beaconMalfunctionId={beaconMalfunction?.id}
-        endOfBeaconMalfunctionReason={beaconMalfunction?.endOfBeaconMalfunctionReason}
+        beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}
+        vesselStatus={vesselStatus}
+        firstStatus={getFirstVesselStatus(beaconMalfunctionWithDetails)}
       />
     </BeaconMalfunctionDetailsWrapper>
   )

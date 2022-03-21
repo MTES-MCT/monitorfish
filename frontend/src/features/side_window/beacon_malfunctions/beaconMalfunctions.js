@@ -1,5 +1,10 @@
 import * as timeago from 'timeago.js'
-import { beaconMalfunctionsStages } from '../../../domain/entities/beaconMalfunction'
+import {
+  BeaconMalfunctionPropertyName,
+  beaconMalfunctionsStages, endOfBeaconMalfunctionReasons,
+  vesselStatuses
+} from '../../../domain/entities/beaconMalfunction'
+import React from 'react'
 
 export const BeaconMalfunctionsSubMenu = {
   PAIRING: {
@@ -43,6 +48,41 @@ export function getBeaconCreationOrModificationDate (beaconMalfunction) {
   }
 
   return `modifiée ${getReducedTimeAgo(beaconMalfunction?.vesselStatusLastModificationDateTime)}`
+}
+
+export const getActionText = (action, endOfBeaconMalfunctionReason) => {
+  if (action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS) {
+    const previousValue = vesselStatuses.find(status => status.value === action.previousValue)?.label
+    const nextValue = vesselStatuses.find(status => status.value === action.nextValue)?.label
+
+    return <>Le statut du ticket a été modifié, de <b>{previousValue}</b> à <b>{nextValue}</b>.</>
+  } else if (action.propertyName === BeaconMalfunctionPropertyName.STAGE) {
+    const previousValue = beaconMalfunctionsStages[action.previousValue].title
+    const nextValue = beaconMalfunctionsStages[action.nextValue].title
+
+    let additionalText = ''
+    if (endOfBeaconMalfunctionReason) {
+      switch (endOfBeaconMalfunctionReason) {
+        case endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value:
+          additionalText = endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.label
+          break
+        case endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.value:
+          additionalText = endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.label
+          break
+        case endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value:
+          additionalText = endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.label
+          break
+      }
+    }
+
+    return <>Le ticket a été déplacé de <b>{previousValue}</b> à <b>{nextValue}</b>.
+      {
+        additionalText
+          ? <>{' '}Il a été clôturé pour cause de <b>{additionalText}</b>.</>
+          : ''
+      }
+    </>
+  }
 }
 
 export function getReducedTimeAgo (dateTime) {

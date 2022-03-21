@@ -21,7 +21,7 @@ import { setSelectedVesselCustomTrackDepth } from '../../../domain/shared_slices
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl, verticalScrollRef, isDragging, isDroppedId, activeBeaconId }) => {
+const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl, verticalScrollRef, isDragging, isDroppedId, activeBeaconId, showed }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconMalfunction?.vesselStatus)
   const ref = useRef()
@@ -34,6 +34,12 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl,
       ref.current.firstChild.firstChild.firstChild.firstChild.style.color = vesselStatus.textColor
     }
   }, [vesselStatus, beaconMalfunction, ref])
+
+  useEffect(() => {
+    if (showed && beaconMalfunction) {
+      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }, [showed, beaconMalfunction, ref])
 
   return <Wrapper
     data-cy={'side-window-beacon-malfunctions-card'}

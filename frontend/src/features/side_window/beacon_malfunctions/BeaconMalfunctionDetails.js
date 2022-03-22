@@ -6,7 +6,7 @@ import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as TimeAgoSVG } from '../../icons/Label_horaire_VMS.svg'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
-import { Priority, priorityStyle, showVesselOnMap } from './BeaconMalfunctionCard'
+import { Priority, priorityStyle } from './BeaconMalfunctionCard'
 import { useDispatch } from 'react-redux'
 import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import * as timeago from 'timeago.js'
@@ -19,9 +19,8 @@ import {
   vesselStatuses
 } from '../../../domain/entities/beaconMalfunction'
 import BeaconMalfunctionDetailsFollowUp from './BeaconMalfunctionDetailsFollowUp'
-import { showVesselSidebarTab } from '../../../domain/shared_slices/Vessel'
-import { VesselSidebarTab } from '../../../domain/entities/vessel'
 import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
+import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/showVesselFromBeaconMalfunctionsKanban'
 
 const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselStatus }) => {
   const {
@@ -115,7 +114,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselSt
           <ShowVessel
             data-cy={'side-window-beacon-malfunctions-detail-show-vessel'}
             style={showVesselStyle}
-            onClick={() => showVesselOnMap(dispatch, beaconMalfunction)}
+            onClick={() => dispatch(showVesselFromBeaconMalfunctionsKanban(beaconMalfunction, false))}
           >
             <ShowVesselText style={showVesselTextStyle}>
               voir le navire sur la carte
@@ -169,10 +168,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselSt
           <ResumeLine>
             <ShowHistory
               style={showHistoryStyle}
-              onClick={async () => {
-                await showVesselOnMap(dispatch, beaconMalfunction)
-                dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))
-              }}>
+              onClick={() => dispatch(showVesselFromBeaconMalfunctionsKanban(beaconMalfunction, true))}>
               voir l&apos;historique
             </ShowHistory>
           </ResumeLine>

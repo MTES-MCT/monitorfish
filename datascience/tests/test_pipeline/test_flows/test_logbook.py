@@ -1,3 +1,4 @@
+from copy import deepcopy
 from unittest.mock import patch
 
 import pandas as pd
@@ -5,43 +6,48 @@ import pytest
 
 from config import TEST_DATA_LOCATION
 from src.pipeline.flows.logbook import (
+    LogbookTransmissionFormat,
     LogbookZippedFileType,
     clean,
     extract_xmls_from_zipfile,
     extract_zipfiles,
-    get_logbook_zipfile_type,
+    get_logbook_zipped_file_type,
     parse_xmls,
 )
 
 ZIPFILES_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/zipfiles/"
 
 
-def test_get_logbook_zipfile_type():
+def test_get_logbook_zipped_file_type():
     assert (
-        get_logbook_zipfile_type("UN_JBE202001123614.zip") == LogbookZippedFileType.UN
+        get_logbook_zipped_file_type("UN_JBE202001123614.zip")
+        == LogbookZippedFileType.UN
     )
     assert (
-        get_logbook_zipfile_type("ERS3_JBE202102365445.zip")
+        get_logbook_zipped_file_type("ERS3_JBE202102365445.zip")
         == LogbookZippedFileType.ERS3
     )
     assert (
-        get_logbook_zipfile_type("ERS3_ACK_JBE202102365445.zip")
+        get_logbook_zipped_file_type("ERS3_ACK_JBE202102365445.zip")
         == LogbookZippedFileType.ERS3_ACK
     )
 
     with pytest.raises(ValueError):
-        get_logbook_zipfile_type("Unexpected_filename_JBE123456789012.zip")
+        get_logbook_zipped_file_type("Unexpected_filename_JBE123456789012.zip")
     with pytest.raises(ValueError):
-        get_logbook_zipfile_type("Unexpectedfilename")
+        get_logbook_zipped_file_type("Unexpectedfilename")
 
 
 @patch("src.pipeline.flows.logbook.move")
-def test_extract_many_zipfiles(mock_move):
+def test_extract_zipfiles_does_not_return_more_than_two_hundred_files(mock_move):
 
+    TEST_DIRECTORY = (
+        ZIPFILES_TEST_DATA_LOCATION / "test_extract_zipfiles/many_zipfiles/"
+    )
     zipfiles = extract_zipfiles.run(
-        input_dir=ZIPFILES_TEST_DATA_LOCATION / "many_zipfiles/received",
-        treated_dir=ZIPFILES_TEST_DATA_LOCATION / "many_zipfiles/treated",
-        error_dir=ZIPFILES_TEST_DATA_LOCATION / "many_zipfiles/error",
+        input_dir=TEST_DIRECTORY / "received",
+        treated_dir=TEST_DIRECTORY / "treated",
+        error_dir=TEST_DIRECTORY / "error",
     )
 
     assert len(zipfiles) == 200
@@ -50,112 +56,109 @@ def test_extract_many_zipfiles(mock_move):
         "treated_dir",
         "full_name",
         "input_dir",
+        "transmission_format",
     }
 
     mock_move.assert_not_called()
 
 
 @patch("src.pipeline.flows.logbook.move")
-def test_extract_unexpected_files(mock_move):
+def test_extract_zipfiles_handles_flux_ers3_and_unexpected_files(mock_move):
 
-    zipfiles = extract_zipfiles.run(
-        input_dir=ZIPFILES_TEST_DATA_LOCATION / "unexpected_files/received",
-        treated_dir=ZIPFILES_TEST_DATA_LOCATION / "unexpected_files/treated",
-        error_dir=ZIPFILES_TEST_DATA_LOCATION / "unexpected_files/error",
+    TEST_DIRECTORY = (
+        ZIPFILES_TEST_DATA_LOCATION / "test_extract_zipfiles/sample_zipfiles/"
     )
 
-    mock_move.assert_called_once_with(
-        (
-            ZIPFILES_TEST_DATA_LOCATION
-            / "unexpected_files/received/2021/1/unexpected_non_zipfile.txt"
-        ),
-        ZIPFILES_TEST_DATA_LOCATION / "unexpected_files/error/2021/1",
+    zipfiles = extract_zipfiles.run(
+        input_dir=TEST_DIRECTORY / "received",
+        treated_dir=TEST_DIRECTORY / "treated",
+        error_dir=TEST_DIRECTORY / "error",
+    )
+
+    assert mock_move.call_count == 2
+
+    mock_move.assert_any_call(
+        TEST_DIRECTORY / "received/2021/1/unexpected_non_zipfile.txt",
+        TEST_DIRECTORY / "error/2021/1",
+        if_exists="replace",
+    )
+
+    mock_move.assert_any_call(
+        TEST_DIRECTORY / "received/2021/1/unexpected_zipfile_JBE123456789012.zip",
+        TEST_DIRECTORY / "error/2021/1",
         if_exists="replace",
     )
 
     assert len(zipfiles) == 5
     assert {zipfile["input_dir"] for zipfile in zipfiles} == {
-        ZIPFILES_TEST_DATA_LOCATION / "unexpected_files/received/2021/1"
+        TEST_DIRECTORY / "received/2021/1"
+    }
+    assert {zipfile["treated_dir"] for zipfile in zipfiles} == {
+        TEST_DIRECTORY / "treated/2021/1"
+    }
+    assert {zipfile["error_dir"] for zipfile in zipfiles} == {
+        TEST_DIRECTORY / "error/2021/1"
+    }
+
+    assert {
+        zipfile["full_name"]: zipfile["transmission_format"] for zipfile in zipfiles
+    } == {
+        "UN_JBE202101123004.zip": LogbookTransmissionFormat.FLUX,
+        "ERS3_JBE202101123000.zip": LogbookTransmissionFormat.ERS3,
+        "ERS3_ACK_JBE202101123003.zip": LogbookTransmissionFormat.ERS3,
+        "ERS3_JBE202101123002.zip": LogbookTransmissionFormat.ERS3,
+        "ERS3_JBE202101123001.zip": LogbookTransmissionFormat.ERS3,
     }
 
 
-@patch("src.pipeline.flows.logbook.move")
-def test_extract_xmls_from_ers3_zipfile(mock_move):
-
+def test_extract_xmls_from_ers3_zipfile():
+    TEST_DIRECTORY = ZIPFILES_TEST_DATA_LOCATION / "test_extract_xmls"
     dummy_ERS3_zipfile = {
         "full_name": "ERS3_JBE123456789012.zip",
-        "input_dir": ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles",
-        "treated_dir": ZIPFILES_TEST_DATA_LOCATION / "treated",
-        "error_dir": ZIPFILES_TEST_DATA_LOCATION / "error",
+        "input_dir": TEST_DIRECTORY / "received",
+        "treated_dir": TEST_DIRECTORY / "treated",
+        "error_dir": TEST_DIRECTORY / "error",
+        "transmission_format": LogbookTransmissionFormat.ERS3,
     }
 
-    zipfiles = extract_xmls_from_zipfile.run(dummy_ERS3_zipfile)
-    assert set(zipfiles.keys()) == {
-        "full_name",
-        "input_dir",
-        "treated_dir",
-        "error_dir",
-        "xml_messages",
-    }
-    assert zipfiles["xml_messages"] == ["This is an ERS3 message."]
+    xmls = extract_xmls_from_zipfile.run(dummy_ERS3_zipfile)
+    expected_xmls = deepcopy(dummy_ERS3_zipfile)
+    expected_xmls["xml_messages"] = ["This is an ERS3 message."]
+    assert xmls == expected_xmls
 
 
-@patch("src.pipeline.flows.logbook.move")
-def test_extract_xmls_from_ers3_ack_zipfile(mock_move):
+def test_extract_xmls_from_ers3_ack_zipfile():
+    TEST_DIRECTORY = ZIPFILES_TEST_DATA_LOCATION / "test_extract_xmls"
     dummy_ERS3_ACK_zipfile = {
         "full_name": "ERS3_ACK_JBE123456789012.zip",
-        "input_dir": ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles",
-        "treated_dir": ZIPFILES_TEST_DATA_LOCATION / "treated",
-        "error_dir": ZIPFILES_TEST_DATA_LOCATION / "error",
+        "input_dir": TEST_DIRECTORY / "received",
+        "treated_dir": TEST_DIRECTORY / "treated",
+        "error_dir": TEST_DIRECTORY / "error",
+        "transmission_format": LogbookTransmissionFormat.ERS3,
     }
 
-    zipfiles = extract_xmls_from_zipfile.run(dummy_ERS3_ACK_zipfile)
-    assert set(zipfiles.keys()) == {
-        "full_name",
-        "input_dir",
-        "treated_dir",
-        "error_dir",
-        "xml_messages",
-    }
-    assert zipfiles["xml_messages"] == ["This is an ERS3_ACK message."]
+    xmls = extract_xmls_from_zipfile.run(dummy_ERS3_ACK_zipfile)
+
+    expected_xmls = deepcopy(dummy_ERS3_ACK_zipfile)
+    expected_xmls["xml_messages"] = ["This is an ERS3_ACK message."]
+    assert xmls == expected_xmls
 
 
-@patch("src.pipeline.flows.logbook.move")
-def test_extract_xmls_from_un_zipfile(mock_move):
+def test_extract_xmls_from_un_zipfile():
+    TEST_DIRECTORY = ZIPFILES_TEST_DATA_LOCATION / "test_extract_xmls"
     dummy_UN_zipfile = {
         "full_name": "UN_JBE123456789012.zip",
-        "input_dir": ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles",
-        "treated_dir": ZIPFILES_TEST_DATA_LOCATION / "treated",
-        "non_treated_dir": ZIPFILES_TEST_DATA_LOCATION / "non_treated",
-        "error_dir": ZIPFILES_TEST_DATA_LOCATION / "error",
+        "input_dir": TEST_DIRECTORY / "received",
+        "treated_dir": TEST_DIRECTORY / "treated",
+        "error_dir": TEST_DIRECTORY / "error",
+        "transmission_format": LogbookTransmissionFormat.FLUX,
     }
 
-    zipfiles = extract_xmls_from_zipfile.run(dummy_UN_zipfile)
-    assert zipfiles is None
-    mock_move.assert_called_once_with(
-        ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles/UN_JBE123456789012.zip",
-        ZIPFILES_TEST_DATA_LOCATION / "non_treated",
-        if_exists="replace",
-    )
+    xmls = extract_xmls_from_zipfile.run(dummy_UN_zipfile)
 
-
-@patch("src.pipeline.flows.logbook.move")
-def test_extract_xmls_from_unexpected_zipfile(mock_move):
-    dummy_unexpected_zipfile = {
-        "full_name": "unexpected.zip",
-        "input_dir": ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles",
-        "treated_dir": ZIPFILES_TEST_DATA_LOCATION / "treated",
-        "non_treated_dir": ZIPFILES_TEST_DATA_LOCATION / "non_treated",
-        "error_dir": ZIPFILES_TEST_DATA_LOCATION / "error",
-    }
-
-    zipfiles = extract_xmls_from_zipfile.run(dummy_unexpected_zipfile)
-    assert zipfiles is None
-    mock_move.assert_called_once_with(
-        ZIPFILES_TEST_DATA_LOCATION / "test_zipfiles/unexpected.zip",
-        ZIPFILES_TEST_DATA_LOCATION / "error",
-        if_exists="replace",
-    )
+    expected_xmls = deepcopy(dummy_UN_zipfile)
+    expected_xmls["xml_messages"] = ["This is a UN message."]
+    assert xmls == expected_xmls
 
 
 @patch("src.pipeline.flows.logbook.batch_parse")

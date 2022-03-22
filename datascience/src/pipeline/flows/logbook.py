@@ -27,12 +27,35 @@ class LogbookZippedFileType(Enum):
     UN = "UN"
 
 
+class LogbookTransmissionFormat(Enum):
+    ERS3 = "ERS3"
+    FLUX = "FLUX"
+
+    @staticmethod
+    def from_zipped_file_type(t: LogbookZippedFileType):
+        mapping = {
+            LogbookZippedFileType.ERS3: LogbookTransmissionFormat.ERS3,
+            LogbookZippedFileType.ERS3_ACK: LogbookTransmissionFormat.ERS3,
+            LogbookZippedFileType.UN: LogbookTransmissionFormat.FLUX,
+        }
+        return mapping[t]
+
+
 ####################################### HELPERS #######################################
 
 
-def get_logbook_zipfile_type(zipfile_name: str) -> LogbookZippedFileType:
+def get_logbook_zipped_file_type(zipfile_name: str) -> LogbookZippedFileType:
     """Takes a zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip
     and returns the coresponding `LogbookZippedFileType`, based on pattern matching.
+
+    The expected pattern is of the form
+
+        `<prefix>_JBE<YYYYMMXXXXXX>.zip`
+
+    where :
+
+    * prefix is one of the `LogbookZippedFileType` enum values
+    * Y, M and X are digits
 
     Args:
         zipfile_name (str): name of a zipfile containing logbook data.
@@ -45,6 +68,15 @@ def get_logbook_zipfile_type(zipfile_name: str) -> LogbookZippedFileType:
         ValueError: if the name does not match the expected pattern or the matched
           string does not correspond to a known `LogbookZippedFileType`.
 
+    Examples:
+        >>> get_logbook_zipped_file_type("UN_JBE2020010199999.zip")
+        <LogbookZippedFileType.UN: 'UN'>
+
+        >>> get_logbook_zipped_file_type("UN_JBE20200101999999.zip")
+        ValueError
+
+        >>> get_logbook_zipped_file_type("UN_JBE2020010199999.txt")
+        ValueError
     """
     zipfile_name_pattern = r"^(?P<logbook_type>.*)_JBE\d{12}.zip"
     match = re.match(zipfile_name_pattern, zipfile_name)
@@ -73,15 +105,43 @@ def extract_zipfiles(
     treated_dir: Path,
     error_dir: Path,
 ) -> List[dict]:
-    """
-    Scans ``input_dir``, in which logbook zipfiles are expected to be arranged in a
-    hierarchy folders like : year / month / zipfiles. Yields found zipfiles
-    along with the corresponding paths of :
+    """Scans `input_dir`, in which logbook zipfiles are expected to be arranged in a
+    hierarchy of folders like by year / month / zipfiles, and returns a list of `dict`
+    that describe the zipfiles found.
 
-    - ``input_directory`` where the zipfile is located
-    - ``treated_directory`` where the zipfile will be transfered after integration into
-      the monitorfish database
-    - ``error_directory`` if an error occurs during the treatment of messages.
+    Files whose name does not match the expected pattern (see
+    `get_logbook_zipped_file_type` for details) are moved to `error_dir`.
+
+    Files located in `input_dir` but whose location does not match the expected
+    year / month hierarchy of subfolders are ignored.
+
+    Args:
+        input_dir (Path): location of input zipfiles. Zipfiles are expected to be
+          organized in subfolers inside this directory :
+
+            - by year
+            - by month, inside yearly subfolders
+
+        treated_dir (Path): directory where zipfiles are to be transfered after
+          integration into the monitorfish database
+        error_dir (Path): directory where zipfiles are to be transfered if an error
+          occurs during their treatment
+
+    Returns:
+        List[dict]: list of `dict`, one for each of the found zipfiles. Each `dict` in
+          the list has the following elements :
+
+          - full_name (`str`): name of the zipfile, e.g.g. "UN_JBE_202001999999.zip"
+          - input_dir (`Path`): path of the folder container the zipfile (including
+            year/month)
+          - treated_dir (`Path`): path where the zipfile should be transfered to
+            after integration (year/month subfolder to the supplied `treated_dir`
+            argument)
+          - error_dir (`Path`): path where the zipfile should be transfered to
+            in case of error during its treatment (year/month subfolder to the supplied
+            `error_dir` argument)
+          - transmission_format (`LogbookTransmissionFormat`): transmission format,
+            inferred from the zipfile's name.
     """
 
     logger = prefect.context.get("logger")
@@ -136,30 +196,29 @@ def extract_zipfiles(
             zipfile_treated_dir = treated_dir / year / month
             zipfile_error_dir = error_dir / year / month
 
-            files = os.listdir(zipfile_input_dir)
+            zipfile_names = os.listdir(zipfile_input_dir)
 
-            zipfiles = list(filter(lambda s: s[-4:] == ".zip", files))
-            non_zipfiles = list(filter(lambda s: s[-4:] != ".zip", files))
-
-            if len(non_zipfiles) > 0:
-                logger.warning(
-                    f"Non zip files found in {year} / {month}."
-                    + "Moving files to error_directory."
-                )
-                for non_zipfile in non_zipfiles:
+            for zipfile_name in zipfile_names:
+                try:
+                    zipped_file_type = get_logbook_zipped_file_type(zipfile_name)
+                except ValueError as e:
+                    logger.error(e)
                     move(
-                        zipfile_input_dir / non_zipfile,
+                        zipfile_input_dir / zipfile_name,
                         zipfile_error_dir,
                         if_exists="replace",
                     )
+                    continue
 
-            for zipfile in zipfiles:
                 res.append(
                     {
-                        "full_name": zipfile,
+                        "full_name": zipfile_name,
                         "input_dir": zipfile_input_dir,
                         "treated_dir": zipfile_treated_dir,
                         "error_dir": zipfile_error_dir,
+                        "transmission_format": LogbookTransmissionFormat.from_zipped_file_type(
+                            zipped_file_type
+                        ),
                     }
                 )
                 n += 1
@@ -171,50 +230,38 @@ def extract_zipfiles(
 
 @task(checkpoint=False)
 def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
+    """Takes a `dict` with the following structure :
+
+          - full_name (`str`): name of the zipfile
+          - input_dir (`Path`): path of the folder container the zipfile
+          - treated_dir (`Path`): path where the zipfile is be transfered after
+            integration
+          - error_dir (`Path`): path where the zipfile should be transfered
+            in case of error during its treatment
+          - transmission_format (`LogbookTransmissionFormat`): transmission format
+
+    Opens the corresponding zipfile on the filesystem, reads the xml files it is
+    expected to contain, and adds the content of these xml files as a list of strings
+
+    Args:
+        zipfile (Union[None, dict]):
+
+    Returns:
+        Union[None, dict]: _description_
+    """
 
     if zipfile:
         logger = prefect.context.get("logger")
-
         logger.info(f"Extracting zipfile {zipfile['full_name']}.")
-        try:
-            message_type = get_logbook_zipfile_type(zipfile["full_name"])
-        except ValueError as e:
-            logger.error(e)
-            move(
-                zipfile["input_dir"] / zipfile["full_name"],
-                zipfile["error_dir"],
-                if_exists="replace",
-            )
-            return None
 
-        # Handle ERS3 messages and acknoledgement statuses
-        if message_type in [LogbookZippedFileType.ERS3, LogbookZippedFileType.ERS3_ACK]:
-            with ZipFile(zipfile["input_dir"] / zipfile["full_name"]) as zipobj:
-                xml_filenames = zipobj.namelist()
-                xml_messages = []
-                for xml_filename in xml_filenames:
-                    with zipobj.open(xml_filename, mode="r") as f:
-                        xml_messages.append(f.read().decode("utf-8"))
-                zipfile["xml_messages"] = xml_messages
-                return zipfile
-
-        # Handle FLUX messages (move them to non_treated_directory
-        # as there is currently no parser available)
-        elif message_type == LogbookZippedFileType.UN:
-            logger.info(
-                f"Skipping zipfile {zipfile['full_name']} of type {message_type} "
-                + "which is currently not handled. "
-                + f"Moving {zipfile['full_name']} to non-treated directory."
-            )
-            move(
-                zipfile["input_dir"] / zipfile["full_name"],
-                zipfile["non_treated_dir"],
-                if_exists="replace",
-            )
-
-        # Should happen !
-        else:
-            raise ValueError("This proves that God exists")
+        with ZipFile(zipfile["input_dir"] / zipfile["full_name"]) as zipobj:
+            xml_filenames = zipobj.namelist()
+            xml_messages = []
+            for xml_filename in xml_filenames:
+                with zipobj.open(xml_filename, mode="r") as f:
+                    xml_messages.append(f.read().decode("utf-8"))
+            zipfile["xml_messages"] = xml_messages
+            return zipfile
 
 
 @task(checkpoint=False)
@@ -226,8 +273,6 @@ def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
         zipfile.pop("xml_messages")
         zipfile = {**zipfile, **parsed_batch}
         return zipfile
-    else:
-        pass
 
 
 @task(checkpoint=False)
@@ -245,8 +290,6 @@ def clean(zipfile: Union[None, dict]) -> Union[None, dict]:
             zipfile["parsed_with_xml"].operation_type.isin(["DAT", "DEL", "COR", "RET"])
         ]
         return zipfile
-    else:
-        pass
 
 
 @task(checkpoint=False)

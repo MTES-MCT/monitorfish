@@ -196,42 +196,50 @@ const beaconMalfunctionsStages = {
   INITIAL_ENCOUNTER: {
     code: 'INITIAL_ENCOUNTER',
     title: 'Premier contact',
+    isColumn: true,
     description: 'Obtenir une réponse des navires qui ont cessé d\'émettre.'
   },
   FOUR_HOUR_REPORT: {
     code: 'FOUR_HOUR_REPORT',
     title: '4h report',
+    isColumn: true,
     description: 'Suivre les navires qui font leurs 4h report ou les relancer s\'ils l\'ont cessé.'
   },
   RELAUNCH_REQUEST: {
     code: 'RELAUNCH_REQUEST',
     title: 'Relance pour reprise',
+    isColumn: true,
     description: 'Relancer les navires qui sont à quai (ou supposés à quai) et qui n\'ont pas encore repris leurs émissions.'
   },
   TARGETING_VESSEL: {
     code: 'TARGETING_VESSEL',
     title: 'Ciblage du navire',
+    isColumn: true,
     description: 'Mobiliser les unités sur les navires dont on n\'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.'
   },
   CROSS_CHECK: {
     code: 'CROSS_CHECK',
     title: 'Contrôle croisé',
+    isColumn: true,
     description: 'Mobiliser les unités sur les navires dont on n\'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.'
   },
   END_OF_MALFUNCTION: {
     code: 'END_OF_MALFUNCTION',
     title: 'Fin de l\'avarie',
+    isColumn: true,
     description: 'Envoyer un message de reprise aux unités dont les émissions ont repris et archiver les avaries qu\'on ne suit plus.'
   },
   ARCHIVED: {
     code: 'ARCHIVED',
     title: 'Archivage',
+    isColumn: true,
     description: 'Avaries clôturées.\n NB : Seules les 30 dernières avaries restent dans le kanban.'
   },
   /** Old stages - for backward compatibility **/
   RESUMED_TRANSMISSION: {
     title: 'Reprise des émissions',
-    code: 'RESUMED_TRANSMISSION'
+    code: 'RESUMED_TRANSMISSION',
+    isColumn: false
   },
 }
 

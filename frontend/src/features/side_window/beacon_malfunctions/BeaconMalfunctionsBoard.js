@@ -30,8 +30,9 @@ const getByStage = (stage, beaconMalfunctions) =>
     .filter((item) => item.stage === stage)
     .sort((a, b) => b.vesselStatusLastModificationDateTime?.localeCompare(a.vesselStatusLastModificationDateTime))
 
-const getBeaconMalfunctionsByStage = beaconsMalfunctions => Object.keys(beaconMalfunctionsStages).reduce(
-  (previous, stage) => ({
+const getBeaconMalfunctionsByStage = beaconsMalfunctions => Object.keys(beaconMalfunctionsStages)
+  .filter(stage => beaconMalfunctionsStages[stage].isColumn)
+  .reduce((previous, stage) => ({
     ...previous,
     [stage]: getByStage(stage, beaconsMalfunctions)
   }), {})
@@ -199,33 +200,35 @@ const BeaconMalfunctionsBoard = () => {
           data-cy={'side-window-beacon-malfunctions-columns'}
           style={columnsStyle}
         >
-          {Object.keys(beaconMalfunctionsStages).map((stageId) => (
-            <Droppable
-              key={stageId}
-              id={stageId}
-              disabled={stageId === beaconMalfunctionsStages.END_OF_MALFUNCTION.code}
-            >
-              <StageColumn
-                baseUrl={baseUrl}
-                stage={beaconMalfunctionsStages[stageId]}
-                beaconMalfunctions={filteredBeaconMalfunctions[stageId] || []}
-                updateVesselStatus={updateVesselStatus}
-                isDroppedId={isDroppedId}
-                activeBeaconMalfunction={activeBeaconMalfunction}
-              />
-            </Droppable>
-          ))}
+          {Object.keys(beaconMalfunctionsStages)
+            .filter(stage => beaconMalfunctionsStages[stage].isColumn)
+            .map((stageId) => (
+              <Droppable
+                key={stageId}
+                id={stageId}
+                disabled={stageId === beaconMalfunctionsStages.END_OF_MALFUNCTION.code}
+              >
+                <StageColumn
+                  baseUrl={baseUrl}
+                  stage={beaconMalfunctionsStages[stageId]}
+                  beaconMalfunctions={filteredBeaconMalfunctions[stageId] || []}
+                  updateVesselStatus={updateVesselStatus}
+                  isDroppedId={isDroppedId}
+                  activeBeaconMalfunction={activeBeaconMalfunction}
+                />
+              </Droppable>
+            ))}
         </Columns>
         <DragOverlay>
-        {
-          activeBeaconMalfunction
-            ? <BeaconMalfunctionCard
-              baseUrl={baseUrl}
-              beaconMalfunction={activeBeaconMalfunction}
-              updateVesselStatus={updateVesselStatus}
-              isDragging/>
-            : null
-        }
+          {
+            activeBeaconMalfunction
+              ? <BeaconMalfunctionCard
+                baseUrl={baseUrl}
+                beaconMalfunction={activeBeaconMalfunction}
+                updateVesselStatus={updateVesselStatus}
+                isDragging/>
+              : null
+          }
         </DragOverlay>
       </DndContext>
       {

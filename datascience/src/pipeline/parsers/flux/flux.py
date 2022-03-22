@@ -194,18 +194,20 @@ def parse_xml_document(xml_document, decode_base64):
     return res
 
 
-def batch_parse(flux_xmls: List[str]):
-    """Parses FLUX documents and return 2 tables as DataFrames containing the
-    information extracted from the documents.
+def batch_parse(xml_messages: List[str]) -> dict:
+    """Parses a list of FLUX documents and returns a dictionnary with the information
+    extracted from the messages.
 
     Args:
-        flux_xmls (List[str]): list of flux xml documents
+        xml_messages (List[str]): list of FLUX xml documents
 
     Returns:
-        pd.DataFrame: Dataframe with parsed metadata, including a "value" column
+          - logbook_reports pd.DataFrame: Dataframe with parsed metadata, including a "value" column
             with json data extracted with the xml message
-        pd.DataFrame:  Dataframe with "xml_message" and  "operation_number" (document ID) columns
+          - logbook_raw_messages (pd.DataFrame):  Dataframe with parsed metadata, including a "xml_message" column
             with the original xml message
+          - batch_generated_errors (boolean): `True` if an error occurred during the
+            treatment of one or more of the messages
     """
     res_json = []
     res_xml = []
@@ -229,7 +231,7 @@ def batch_parse(flux_xmls: List[str]):
         "integration_datetime_utc": None,
     }
 
-    for xml_document in flux_xmls:
+    for xml_document in xml_messages:
         parsed_doc = parse_xml_document(xml_document, decode_base64=True)
 
         now = datetime.utcnow()

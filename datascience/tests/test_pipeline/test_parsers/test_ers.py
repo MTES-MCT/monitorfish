@@ -17,7 +17,7 @@ class TestLogParsers(unittest.TestCase):
         return metadata, data_list
 
     def test_cor_parser(self):
-        test_file = "{'OPS'-{'COR'-{'ERS'-{'LOG'-['LAN','ELOG']}}}}.xml"
+        test_file = "OOE20200402018600.xml"
         metadata, data_list = self.parse_file(test_file)
 
         expected_metadata = {
@@ -52,7 +52,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(len(catch_landed), 20)
 
     def test_cox_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['COX','ELOG']}}}}.xml"
+        test_file = "OOE20200323034701.xml"
         metadata, data_list = self.parse_file(test_file)
 
         expected_metadata = {
@@ -89,7 +89,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(value, expected_value)
 
     def test_cro_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['CRO','ELOG']}}}}.xml"
+        test_file = "OOE20200324042000.xml"
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
@@ -116,7 +116,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(value, expected_value)
 
     def test_dep_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['DEP','ELOG']}}}}.xml"
+        test_file = "OOF20200324001900.xml"
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
@@ -134,7 +134,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(value, expected_value)
 
     def test_dis_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['DIS','ELOG']}}}}.xml"
+        test_file = "OOE20200321003301.xml"
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
@@ -176,7 +176,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(value, expected_value)
 
     def test_eof_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['EOF','ELOG']}}}}.xml"
+        test_file = "OOF20200324011801.xml"
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
@@ -186,7 +186,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(value, expected_value)
 
     def test_far_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['FAR','ELOG']}}}}.xml"
+        test_file = "OOF20200324066300.xml"
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
@@ -202,35 +202,35 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(value["dimensions"], None)
 
     def test_ins_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['INS','ELOG']}}}}.xml"
+        test_file = "OOF20200306070900.xml"
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data, {"log_type": "INS"})
 
     def test_pnt_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['PNT','ELOG']}}}}.xml"
+        test_file = "OOY20200408047904.xml"
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data, {"log_type": "PNT"})
 
     def test_rlc_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['RLC','ELOG']}}}}.xml"
+        test_file = "OOF20200331006307.xml"
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data, {"log_type": "RLC"})
 
     def test_tra_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['TRA','ELOG']}}}}.xml"
+        test_file = "OOF20200729010401.xml"
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data, {"log_type": "TRA"})
 
     def test_pno_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['PNO','ELOG']}}}}.xml"
+        test_file = "OOF20200326013602.xml"
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
@@ -252,7 +252,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(value["tripStartDate"], "2020-03-26T00:00:00Z")
 
     def test_rtp_parser(self):
-        test_file = "{'OPS'-{'DAT'-{'ERS'-{'LOG'-['RTP','ELOG']}}}}.xml"
+        test_file = "OOE20200326032800.xml"
         metadata, data_list = self.parse_file(test_file)
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
@@ -271,7 +271,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertRaises(ERSParsingError, self.parse_file, test_file)
 
     def test_del_parser(self):
-        test_file = "{'OPS'-'DEL'}.xml"
+        test_file = "OOF20200321016003.xml"
         metadata, data_list = self.parse_file(test_file)
 
         expected_metadata = {
@@ -286,7 +286,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(data, {"value": None})
 
     def test_ret_parser(self):
-        test_file = "{'OPS'-'RET'}.xml"
+        test_file = "FRA20200321502645.xml"
         metadata, data_list = self.parse_file(test_file)
 
         expected_metadata = {
@@ -301,7 +301,7 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(data, {"value": {"returnStatus": "000"}})
 
     def test_multi_line_message(self):
-        test_file = "multi_line_message.xml"
+        test_file = "FAC20211018001928.xml"
         metadata, data_list = self.parse_file(test_file)
         expected_metadata = {
             "operation_number": "FAC20211018001928",

@@ -201,42 +201,32 @@ def parse_xml_string(xml_string):
     return parse(el)
 
 
-def batch_parse(ers_xmls: List[str]):
-    """Parses a list of ERS messages and return 2 tables as DataFrames containing the
-    information extracted from the messages.
+def batch_parse(xml_messages: List[str]) -> dict:
+    """Parses a list of ERS messages and returns a dictionnary with the information
+    extracted from the messages.
 
     Args:
-        ers_xmls (List[str]): list of ERS xml messages
+        xml_messages (List[str]): list of ERS xml messages
 
     Returns:
-        pd.DataFrame: Dataframe with parsed metadata, including a "value" column
-            with json data extracted with the xml message
-        pd.DataFrame:  Dataframe with parsed metadata, including a "xml_message" column
-            with the original xml message
+        dict : dictionnary with 3 elemements:
+
+          - logbook_reports pd.DataFrame: Dataframe with parsed data
+          - logbook_raw_messages (pd.DataFrame):  Dataframe with the original xml
+            messages
+          - batch_generated_errors (boolean): `True` if an error occurred during the
+            treatment of one or more of the messages
     """
-    res_json = []
-    res_xml = []
+    logbook_reports = []
+    logbook_raw_messages = []
     batch_generated_errors = False
 
-    res_xml_default = {
-        "operation_number": None,
-        "operation_country": None,
-        "operation_datetime_utc": None,
-        "operation_type": None,
-        "report_id": None,
-        "referenced_report_id": None,
-        "report_datetime_utc": None,
-        "cfr": None,
-        "ircs": None,
-        "external_identification": None,
-        "vessel_name": None,
-        "flag_state": None,
-        "imo": None,
-        "xml_message": None,
-        "integration_datetime_utc": None,
-    }
+    raw_messages_columns = [
+        "operation_number",
+        "xml_message",
+    ]
 
-    res_json_default = {
+    reports_defaults = {
         "operation_number": None,
         "operation_country": None,
         "operation_datetime_utc": None,
@@ -255,27 +245,26 @@ def batch_parse(ers_xmls: List[str]):
         "integration_datetime_utc": None,
     }
 
-    for xml_message in ers_xmls:
+    for xml_message in xml_messages:
         try:
             metadata, data_iterator = parse_xml_string(xml_message)
             now = datetime.utcnow()
             raw = {
-                **metadata,
+                "operation_number": metadata.get("operation_number"),
                 "xml_message": xml_message,
-                "integration_datetime_utc": now,
             }
             for data in data_iterator:
-                res_json.append(
+                logbook_reports.append(
                     pd.Series(
                         {
-                            **res_json_default,
+                            **reports_defaults,
                             **metadata,
                             **data,
                             "integration_datetime_utc": now,
                         }
                     )
                 )
-            res_xml.append(pd.Series({**res_xml_default, **raw}))
+            logbook_raw_messages.append(pd.Series(raw))
         except ERSParsingError:
             log_end = "..." if len(xml_message) > 40 else ""
             logging.error(
@@ -288,12 +277,12 @@ def batch_parse(ers_xmls: List[str]):
             logging.error("Unkonwn error with message " + xml_message)
             batch_generated_errors = True
 
-    parsed = pd.DataFrame(columns=pd.Index(res_json_default))
-    parsed_with_xml = pd.DataFrame(columns=pd.Index(res_xml_default))
-    if len(res_json) > 0:
-        parsed = pd.concat(res_json, axis=1).T
-    if len(res_xml) > 0:
-        parsed_with_xml = pd.concat(res_xml, axis=1).T
+    parsed = pd.DataFrame(columns=pd.Index(reports_defaults))
+    parsed_with_xml = pd.DataFrame(columns=pd.Index(raw_messages_columns))
+    if len(logbook_reports) > 0:
+        parsed = pd.concat(logbook_reports, axis=1).T
+    if len(logbook_raw_messages) > 0:
+        parsed_with_xml = pd.concat(logbook_raw_messages, axis=1).T
 
     return {
         "parsed": parsed,

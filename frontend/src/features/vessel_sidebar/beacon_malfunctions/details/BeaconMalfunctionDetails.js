@@ -49,11 +49,15 @@ const BeaconMalfunctionDetails = props => {
       <Title>
         Main courante de l&apos;avarie
       </Title>
-      <BeaconMalfunctionDetailsFollowUp
-        smallSize
-        beaconMalfunctionWithDetails={openedBeaconMalfunction}
-        firstStatus={getFirstVesselStatus(openedBeaconMalfunction)}
-      />
+      {
+        openedBeaconMalfunction
+          ? <BeaconMalfunctionDetailsFollowUp
+            smallSize
+            beaconMalfunctionWithDetails={openedBeaconMalfunction}
+            firstStatus={getFirstVesselStatus(openedBeaconMalfunction)}
+          />
+          : null
+      }
     </Zone>
   </Wrapper>
 }

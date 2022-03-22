@@ -11,8 +11,8 @@ from src.pipeline.parsers.flux.flux import (
     parse_xml_document,
 )
 
-XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/flux/business_BASE64"
-XML_EMPTY_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/flux"
+XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/flux/business_BASE64"
+XML_EMPTY_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/flux"
 
 
 class TestLogParsers(unittest.TestCase):

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import org.assertj.core.api.Assertions.assertThat
@@ -72,6 +73,30 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
         assertThat(updatedBeaconMalfunction?.vesselStatus).isEqualTo(VesselStatus.AT_SEA)
         assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isEqualTo(updateDateTime)
+    }
+
+    @Test
+    @Transactional
+    fun `update Should update end of beacon malfunction reason and end of malfunction date time When not null`() {
+        // Given
+        val beaconMalfunctions = jpaBeaconMalfunctionsRepository.findAll()
+        val updateDateTime = ZonedDateTime.now()
+
+        // When
+        assertThat(beaconMalfunctions.find { it.id == 1 }?.vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
+        jpaBeaconMalfunctionsRepository.update(
+                id = 1,
+                null,
+                Stage.END_OF_MALFUNCTION,
+                EndOfBeaconMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION,
+                updateDateTime)
+
+        // Then
+        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
+        assertThat(updatedBeaconMalfunction?.stage).isEqualTo(Stage.END_OF_MALFUNCTION)
+        assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isEqualTo(updateDateTime)
+        assertThat(updatedBeaconMalfunction?.endOfBeaconMalfunctionReason).isEqualTo(EndOfBeaconMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION)
+        assertThat(updatedBeaconMalfunction?.malfunctionEndDateTime).isEqualTo(updateDateTime)
     }
 
     @Test

@@ -5,7 +5,7 @@ import unittest
 from config import TEST_DATA_LOCATION
 from src.pipeline.parsers.ers.ers import ERSParsingError, parse_xml_string
 
-XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/ers"
+XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/ers"
 
 
 class TestLogParsers(unittest.TestCase):

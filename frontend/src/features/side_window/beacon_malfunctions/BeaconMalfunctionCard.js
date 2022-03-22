@@ -6,18 +6,15 @@ import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import * as timeago from 'timeago.js'
 import { timeagoFrenchLocale } from '../../../utils'
-import showVessel from '../../../domain/use_cases/showVessel'
 import { useDispatch } from 'react-redux'
-import getVesselVoyage from '../../../domain/use_cases/getVesselVoyage'
 import openBeaconMalfunctionInKanban from '../../../domain/use_cases/openBeaconMalfunctionInKanban'
-import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import {
   getIsMalfunctioning,
   getMalfunctionStartDateText,
   vesselStatuses
 } from '../../../domain/entities/beaconMalfunction'
 import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
-import { setSelectedVesselCustomTrackDepth } from '../../../domain/shared_slices/Vessel'
+import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/showVesselFromBeaconMalfunctionsKanban'
 
 timeago.register('fr', timeagoFrenchLocale)
 
@@ -62,7 +59,7 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl,
         <ShowIcon
           style={showIconStyle}
           alt={'Voir sur la carte'}
-          onClick={() => showVesselOnMap(dispatch, beaconMalfunction)}
+          onClick={() => dispatch(showVesselFromBeaconMalfunctionsKanban(beaconMalfunction, false))}
           src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
         />
       </Row>
@@ -117,24 +114,6 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl,
       </Row>
     </Body>
   </Wrapper>
-}
-
-export const showVesselOnMap = async (dispatch, beaconMalfunction) => {
-  const afterDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
-  const twentyFiveHours = 25
-  afterDateTime.setTime(afterDateTime.getTime() - (twentyFiveHours * 60 * 60 * 1000))
-  afterDateTime.setMilliseconds(0)
-  const beforeDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
-  beforeDateTime.setMilliseconds(0)
-
-  const vesselTrackDepth = {
-    trackDepth: VesselTrackDepth.CUSTOM,
-    afterDateTime: afterDateTime,
-    beforeDateTime: beforeDateTime
-  }
-  await dispatch(setSelectedVesselCustomTrackDepth(vesselTrackDepth))
-  await dispatch(showVessel(beaconMalfunction, false, false))
-  dispatch(getVesselVoyage(beaconMalfunction, null, false))
 }
 
 const Id = styled.div``

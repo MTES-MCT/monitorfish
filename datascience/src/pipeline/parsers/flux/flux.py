@@ -233,11 +233,11 @@ def batch_parse(xml_messages: List[str]) -> dict:
           - batch_generated_errors (boolean): `True` if an error occurred during the
             treatment of one or more of the messages
     """
-    res_json = []
-    res_xml = []
+    logbook_reports_list = []
+    logbook_raw_messages_list = []
     batch_generated_errors = False
 
-    res_json_default = {
+    reports_defaults = {
         "operation_number": None,
         "operation_datetime_utc": None,
         "operation_type": None,
@@ -255,24 +255,24 @@ def batch_parse(xml_messages: List[str]) -> dict:
         "integration_datetime_utc": None,
     }
 
-    for xml_document in xml_messages:
-        parsed_doc = parse_xml_document(xml_document)
+    for xml_message in xml_messages:
+        parsed_doc = parse_xml_document(xml_message)
 
         now = datetime.utcnow()
         raw = {
             "operation_number": parsed_doc[0][0].get("operation_number"),
-            "xml_message": decode_flux(xml_document),
+            "xml_message": decode_flux(xml_message),
         }
-        res_xml.append(pd.Series({**raw}))
+        logbook_raw_messages_list.append(pd.Series(raw))
 
         for res in parsed_doc:
             try:
                 metadata = res[0]
                 data = res[1][0]
-                res_json.append(
+                logbook_reports_list.append(
                     pd.Series(
                         {
-                            **res_json_default,
+                            **reports_defaults,
                             **metadata,
                             **data,
                             "integration_datetime_utc": now,
@@ -280,26 +280,28 @@ def batch_parse(xml_messages: List[str]) -> dict:
                     )
                 )
             except FLUXParsingError:
-                log_end = "..." if len(xml_document) > 40 else ""
+                log_end = "..." if len(xml_message) > 40 else ""
                 logging.error(
                     "Parsing error - one FLUX message will be ignored : "
-                    + xml_document[:40]
+                    + xml_message[:40]
                     + log_end
                 )
                 batch_generated_errors = True
             except:
-                logging.error("Unkonwn error with message " + xml_document)
+                logging.error("Unkonwn error with message " + xml_message)
                 batch_generated_errors = True
 
-        parsed = pd.DataFrame(columns=pd.Index(res_json_default))
-        parsed_with_xml = pd.DataFrame(columns=pd.Index(raw))
-        if len(res_json) > 0:
-            parsed = pd.concat(res_json, axis=1).T.drop_duplicates(subset=["report_id"])
-        if len(res_xml) > 0:
-            parsed_with_xml = pd.concat(res_xml, axis=1).T
+        logbook_reports = pd.DataFrame(columns=pd.Index(reports_defaults))
+        logbook_raw_messages = pd.DataFrame(columns=pd.Index(raw))
+        if len(logbook_reports_list) > 0:
+            logbook_reports = pd.concat(logbook_reports_list, axis=1).T.drop_duplicates(
+                subset=["report_id"]
+            )
+        if len(logbook_raw_messages_list) > 0:
+            logbook_raw_messages = pd.concat(logbook_raw_messages_list, axis=1).T
 
     return {
-        "parsed": parsed,
-        "parsed_with_xml": parsed_with_xml,
+        "logbook_reports": logbook_reports,
+        "logbook_raw_messages": logbook_raw_messages,
         "batch_generated_errors": batch_generated_errors,
     }

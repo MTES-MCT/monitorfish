@@ -16,6 +16,7 @@ from src.pipeline.flows.logbook import (
 )
 
 ZIPFILES_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/zipfiles/"
+XML_FILES_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files"
 
 
 def test_get_logbook_zipped_file_type():
@@ -161,36 +162,84 @@ def test_extract_xmls_from_un_zipfile():
     assert xmls == expected_xmls
 
 
-@patch("src.pipeline.flows.logbook.batch_parse")
-def test_parse_xmls(mock_batch_parse):
-    mock_batch_parse.return_value = {
-        "parsed": "parsed DataFrame",
-        "parsed_with_xml": "parsed_with_xml DataFrame",
-        "batch_generated_errors": False,
-    }
+def test_parse_xmls_parses_ers3_files():
+
+    xml_messages = []
+    with open(XML_FILES_TEST_DATA_LOCATION / "ers/OOE20200324042000.xml") as f:
+        xml_messages.append(f.read())
+    with open(XML_FILES_TEST_DATA_LOCATION / "ers/FAC20211018001928.xml") as f:
+        xml_messages.append(f.read())
 
     zipfile = {
-        "full_name": "unexpected.zip",
-        "input_dir": "dummy_input_dir",
-        "treated_dir": "dummy_treated_dir",
-        "non_treated_dir": "dummy_non_treated_dir",
-        "error_dir": "dummy_error_dir",
-        "xml_messages": ["Dummy xml_message"],
-    }
-    zipfile = parse_xmls.run(zipfile)
-
-    assert zipfile == {
-        "full_name": "unexpected.zip",
-        "input_dir": "dummy_input_dir",
-        "treated_dir": "dummy_treated_dir",
-        "non_treated_dir": "dummy_non_treated_dir",
-        "error_dir": "dummy_error_dir",
-        "parsed": "parsed DataFrame",
-        "parsed_with_xml": "parsed_with_xml DataFrame",
-        "batch_generated_errors": False,
+        "full_name": "zipfile_name.zip",
+        "input_dir": "smome/input/dir",
+        "treated_dir": "some/treated/dir",
+        "error_dir": "some/error/dir",
+        "transmission_format": LogbookTransmissionFormat.ERS3,
+        "xml_messages": xml_messages,
     }
 
-    assert parse_xmls.run(None) is None
+    parsed_zipfile = parse_xmls.run(zipfile)
+
+    assert set(parsed_zipfile) == {
+        "full_name",
+        "input_dir",
+        "treated_dir",
+        "error_dir",
+        "transmission_format",
+        "logbook_reports",
+        "logbook_raw_messages",
+        "batch_generated_errors",
+    }
+
+    assert len(parsed_zipfile["logbook_raw_messages"]) == 2
+    assert len(parsed_zipfile["logbook_reports"]) == 5
+    assert not parsed_zipfile["batch_generated_errors"]
+
+
+def test_parse_xmls_parses_flux_files():
+
+    xml_messages = []
+    with open(
+        (
+            XML_FILES_TEST_DATA_LOCATION / "flux/business/FLUX-FA-EU-710511 - "
+            "Haul by haul recording reported daily.xml"
+        )
+    ) as f:
+        xml_messages.append(f.read())
+    with open(
+        (
+            XML_FILES_TEST_DATA_LOCATION / "flux/business_BASE64/FLUX-FA-EU-711101 - "
+            "Arrival declaration.xml"
+        )
+    ) as f:
+        xml_messages.append(f.read())
+
+    zipfile = {
+        "full_name": "zipfile_name.zip",
+        "input_dir": "smome/input/dir",
+        "treated_dir": "some/treated/dir",
+        "error_dir": "some/error/dir",
+        "transmission_format": LogbookTransmissionFormat.FLUX,
+        "xml_messages": xml_messages,
+    }
+
+    parsed_zipfile = parse_xmls.run(zipfile)
+
+    assert set(parsed_zipfile) == {
+        "full_name",
+        "input_dir",
+        "treated_dir",
+        "error_dir",
+        "transmission_format",
+        "logbook_reports",
+        "logbook_raw_messages",
+        "batch_generated_errors",
+    }
+
+    assert len(parsed_zipfile["logbook_raw_messages"]) == 2
+    assert len(parsed_zipfile["logbook_reports"]) == 2
+    assert not parsed_zipfile["batch_generated_errors"]
 
 
 def test_clean():

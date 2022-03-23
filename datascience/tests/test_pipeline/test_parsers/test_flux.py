@@ -53,9 +53,11 @@ def test_parser():
             flux_file_list.append(xml_string)
 
     res = batch_parse(flux_file_list)
-    df = res.get("parsed").drop("integration_datetime_utc", axis=1)
+    logbook_reports = res.get("logbook_reports").drop(
+        "integration_datetime_utc", axis=1
+    )
 
-    expected_res = pd.DataFrame(
+    expected_logbook_reports = pd.DataFrame(
         columns=pd.Index(
             [
                 "operation_number",
@@ -680,7 +682,7 @@ def test_parser():
     )
 
     pd.testing.assert_frame_equal(
-        df.reset_index(drop=True),
-        expected_res.reset_index(drop=True),
+        logbook_reports.reset_index(drop=True),
+        expected_logbook_reports.reset_index(drop=True),
         check_dtype=False,
     )

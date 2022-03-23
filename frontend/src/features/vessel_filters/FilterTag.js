@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 
-const FilterTag = ({ key, text, value, uuid, type, iconElement, removeTagFromFilter }) => {
+const FilterTag = ({ text, value, uuid, type, iconElement, removeTagFromFilter }) => {
   const callRemoveTagFromFilter = () => {
     const removeObject = { value, uuid, type }
 
@@ -11,7 +11,7 @@ const FilterTag = ({ key, text, value, uuid, type, iconElement, removeTagFromFil
   }
 
   return (
-    <TagWrapper key={key}>
+    <TagWrapper>
       {
         iconElement
           ? <TagIcon>{iconElement}</TagIcon>

@@ -162,35 +162,56 @@ def get_list_flux_message(xml_document):
     return msg_list
 
 
-def decode_flux(enc_flux):
-    root = ET.fromstring(enc_flux).text
-    dec_flux = gzip.decompress(base64.b64decode(root)).decode("utf-8")
-    return dec_flux
+def decode_flux(flux_xml_string: str) -> str:
+    """Takes a string that represents the content of an xml message of the FLUX format
+    that may be base64-encoded and wrapped in an outer `BASE64DATA` xml tag (or not),
+    and returns the decoded message. If the input message is not base64-encoded, simply
+    return the unmodified input.
 
+    Args:
+        flux_xml_string (str): FLUX message string, possibly base64-encoded and wrapped
+          in a `BASE64DATA` xml tag.
 
-def parse_xml_document(xml_document, decode_base64):
+    Raises:
+        FLUXParsingError: `FLUXParsingError` if the input string cannot be parsed
+
+    Returns:
+        str: decoded FLUX message, ready for parsing and data extraction
+    """
     try:
-        if decode_base64:
-            xml_document = decode_flux(xml_document)
+        el = ET.fromstring(flux_xml_string)
+    except ParseError:
+        raise FLUXParsingError(
+            "Could not parse FLUX xml document: {flux_xml_string[:40]}[...]"
+        )
+    if el.tag == "BASE64DATA":
+        decoded_flux_xml_string = gzip.decompress(base64.b64decode(el.text)).decode(
+            "utf-8"
+        )
+    return decoded_flux_xml_string
+
+
+def parse_xml_document(xml_document: str):
+    xml_document = decode_flux(xml_document)
+    try:
         el = ET.fromstring(xml_document)
-        op_data = {
-            "operation_number": get_text(
-                el, './/rsm:FLUXReportDocument/ram:ID[@schemeID="UUID"]'
-            ),
-            "operation_datetime_utc": make_datetime(
-                get_text(
-                    el, ".//rsm:FLUXReportDocument/ram:CreationDateTime/udt:DateTime"
-                )
-            ),
-        }
-        msg_list = get_list_flux_message(el)
-        res = []
-        for msg in msg_list:
-            data, data_iter = parse_report(msg)
-            metadata = {**op_data, **data}
-            res.append([metadata, data_iter])
     except ParseError:
         raise FLUXParsingError
+
+    op_data = {
+        "operation_number": get_text(
+            el, './/rsm:FLUXReportDocument/ram:ID[@schemeID="UUID"]'
+        ),
+        "operation_datetime_utc": make_datetime(
+            get_text(el, ".//rsm:FLUXReportDocument/ram:CreationDateTime/udt:DateTime")
+        ),
+    }
+    msg_list = get_list_flux_message(el)
+    res = []
+    for msg in msg_list:
+        data, data_iter = parse_report(msg)
+        metadata = {**op_data, **data}
+        res.append([metadata, data_iter])
     return res
 
 
@@ -202,10 +223,11 @@ def batch_parse(xml_messages: List[str]) -> dict:
         xml_messages (List[str]): list of FLUX xml documents
 
     Returns:
-          - logbook_reports pd.DataFrame: Dataframe with parsed metadata, including a "value" column
-            with json data extracted with the xml message
-          - logbook_raw_messages (pd.DataFrame):  Dataframe with parsed metadata, including a "xml_message" column
-            with the original xml message
+        dict : dictionnary with 3 elemements:
+
+          - logbook_reports pd.DataFrame: Dataframe with parsed data
+          - logbook_raw_messages (pd.DataFrame):  Dataframe with the original xml
+            messages
           - batch_generated_errors (boolean): `True` if an error occurred during the
             treatment of one or more of the messages
     """
@@ -232,7 +254,7 @@ def batch_parse(xml_messages: List[str]) -> dict:
     }
 
     for xml_document in xml_messages:
-        parsed_doc = parse_xml_document(xml_document, decode_base64=True)
+        parsed_doc = parse_xml_document(xml_document)
 
         now = datetime.utcnow()
         raw = {

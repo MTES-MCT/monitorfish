@@ -8,6 +8,7 @@ from config import TEST_DATA_LOCATION
 from src.pipeline.parsers.flux.flux import (
     FLUXParsingError,
     batch_parse,
+    decode_flux,
     parse_xml_document,
 )
 
@@ -17,6 +18,30 @@ XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/flux"
 def test_parse_empty_message_raises_flux_parsing_error():
     with pytest.raises(FLUXParsingError):
         parse_xml_document("")
+
+
+def test_decode_flux_decodes_base64_encoded_flux_document():
+    with open(XML_TEST_DATA_LOCATION / "base64_encoded.xml") as f:
+        s = f.read()
+
+    decoded_xml = decode_flux(s)
+    assert decoded_xml == "This is a base64 encoded message"
+
+
+def test_decode_flux_returns_unchanged_input_string_if_not_base64_encoded():
+    with open(XML_TEST_DATA_LOCATION / "not_base64_encoded.xml") as f:
+        s = f.read()
+
+    decoded_xml = decode_flux(s)
+    assert decoded_xml == s
+
+
+def test_decode_flux_raises_flux_parsing_error():
+    with open(XML_TEST_DATA_LOCATION / "corrupt_message.xml") as f:
+        s = f.read()
+
+    with pytest.raises(FLUXParsingError):
+        decode_flux(s)
 
 
 def test_parser():

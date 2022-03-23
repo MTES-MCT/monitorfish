@@ -188,6 +188,8 @@ def decode_flux(flux_xml_string: str) -> str:
         decoded_flux_xml_string = gzip.decompress(base64.b64decode(el.text)).decode(
             "utf-8"
         )
+    else:
+        decoded_flux_xml_string = flux_xml_string
     return decoded_flux_xml_string
 
 

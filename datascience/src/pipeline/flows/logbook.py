@@ -241,13 +241,17 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
           - transmission_format (`LogbookTransmissionFormat`): transmission format
 
     Opens the corresponding zipfile on the filesystem, reads the xml files it is
-    expected to contain, and adds the content of these xml files as a list of strings
+    expected to contain, puts the content of these xml files in a list of strings,
+    then returns a copy of the input `dict` with an added `xml_messages` item that
+    contains that list of strings.
 
     Args:
         zipfile (Union[None, dict]):
 
     Returns:
-        Union[None, dict]: _description_
+        Union[None, dict]: Copy of the input `dict` with an additionnal `xml_messages`
+          item that contains the list of strings contained inside the zipfile
+          identified by the `input_dir` and `full_name` in the input dictionnary
     """
 
     if zipfile:

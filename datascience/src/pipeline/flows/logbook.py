@@ -11,7 +11,8 @@ from prefect.tasks.control_flow import case
 
 from config import ERS_FILES_LOCATION
 from src.db_config import create_engine
-from src.pipeline.parsers.ers.ers import batch_parse
+from src.pipeline.parsers.ers import ers
+from src.pipeline.parsers.flux import flux
 from src.pipeline.processing import drop_rows_already_in_table, to_json
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.utils import get_table, move, psql_insert_copy
@@ -270,10 +271,17 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
 
 @task(checkpoint=False)
 def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
+    batch_parsers = {
+        LogbookTransmissionFormat.ERS3: ers.batch_parse,
+        LogbookTransmissionFormat.FLUX: flux.batch_parse,
+    }
+
     logger = prefect.context.get("logger")
     if zipfile:
         logger.info(f"Parsing messages of zipfile {zipfile['full_name']}")
-        parsed_batch = batch_parse(zipfile["xml_messages"])
+        transmission_format = zipfile["transmission_format"]
+        batch_parser = batch_parsers[transmission_format]
+        parsed_batch = batch_parser(zipfile["xml_messages"])
         zipfile.pop("xml_messages")
         zipfile = {**zipfile, **parsed_batch}
         return zipfile
@@ -317,17 +325,17 @@ def load_logbook_data(cleaned_data: List[dict]):
 
     cleaned_data = list(filter(lambda x: True if x else False, cleaned_data))
 
-    for ers in cleaned_data:
+    for zipfile in cleaned_data:
 
         with engine.begin() as connection:
-            parsed = ers["parsed"]
-            parsed_with_xml = ers["parsed_with_xml"]
+            logbook_reports = zipfile["logbook_reports"]
+            logbook_raw_messages = zipfile["logbook_raw_messages"]
 
             # Drop rows for which the operation number already exists in the
             # logbook_raw_messages database
 
-            parsed_with_xml = drop_rows_already_in_table(
-                df=parsed_with_xml,
+            logbook_raw_messages = drop_rows_already_in_table(
+                df=logbook_raw_messages,
                 df_column_name="operation_number",
                 table=logbook_raw_messages,
                 table_column_name="operation_number",
@@ -335,17 +343,19 @@ def load_logbook_data(cleaned_data: List[dict]):
                 logger=logger,
             )
 
-            parsed = parsed[
-                parsed.operation_number.isin(parsed_with_xml.operation_number)
+            logbook_reports = logbook_reports[
+                logbook_reports.operation_number.isin(
+                    logbook_raw_messages.operation_number
+                )
             ]
 
-            if len(parsed_with_xml) > 0:
-                n_lines = len(parsed_with_xml)
+            if len(logbook_raw_messages) > 0:
+                n_lines = len(logbook_raw_messages)
                 logger.info(
                     f"Inserting {n_lines} messages in logbook_raw_messages table."
                 )
 
-                parsed_with_xml.to_sql(
+                logbook_raw_messages.to_sql(
                     name=logbook_raw_messages_table_name,
                     con=connection,
                     schema=schema,
@@ -354,14 +364,14 @@ def load_logbook_data(cleaned_data: List[dict]):
                     if_exists="append",
                 )
 
-            if len(parsed) > 0:
-                n_lines = len(parsed)
-                logger.info(f"Inserting {n_lines} messages in ers table.")
+            if len(logbook_reports) > 0:
+                n_lines = len(logbook_reports)
+                logger.info(f"Inserting {n_lines} messages in logbook_reports table.")
 
                 # Serialize dicts to prepare for insertion as json in database
-                parsed["value"] = parsed.value.map(to_json)
+                logbook_reports["value"] = logbook_reports.value.map(to_json)
 
-                parsed.to_sql(
+                logbook_reports.to_sql(
                     name=logbook_reports_table_name,
                     con=connection,
                     schema=schema,
@@ -370,20 +380,20 @@ def load_logbook_data(cleaned_data: List[dict]):
                     if_exists="append",
                 )
 
-            if ers["batch_generated_errors"]:
+            if zipfile["batch_generated_errors"]:
                 logger.error(
                     "Errors occurred during parsing of some of the messages. "
-                    f"Moving {ers['full_name']} to error directory."
+                    f"Moving {zipfile['full_name']} to error directory."
                 )
                 move(
-                    ers["input_dir"] / ers["full_name"],
-                    ers["error_dir"],
+                    zipfile["input_dir"] / zipfile["full_name"],
+                    zipfile["error_dir"],
                     if_exists="replace",
                 )
             else:
                 move(
-                    ers["input_dir"] / ers["full_name"],
-                    ers["treated_dir"],
+                    zipfile["input_dir"] / zipfile["full_name"],
+                    zipfile["treated_dir"],
                     if_exists="replace",
                 )
 

@@ -217,8 +217,8 @@ def batch_parse(xml_messages: List[str]) -> dict:
           - batch_generated_errors (boolean): `True` if an error occurred during the
             treatment of one or more of the messages
     """
-    logbook_reports = []
-    logbook_raw_messages = []
+    logbook_reports_list = []
+    logbook_raw_messages_list = []
     batch_generated_errors = False
 
     raw_messages_columns = [
@@ -254,7 +254,7 @@ def batch_parse(xml_messages: List[str]) -> dict:
                 "xml_message": xml_message,
             }
             for data in data_iterator:
-                logbook_reports.append(
+                logbook_reports_list.append(
                     pd.Series(
                         {
                             **reports_defaults,
@@ -264,7 +264,7 @@ def batch_parse(xml_messages: List[str]) -> dict:
                         }
                     )
                 )
-            logbook_raw_messages.append(pd.Series(raw))
+            logbook_raw_messages_list.append(pd.Series(raw))
         except ERSParsingError:
             log_end = "..." if len(xml_message) > 40 else ""
             logging.error(
@@ -277,15 +277,15 @@ def batch_parse(xml_messages: List[str]) -> dict:
             logging.error("Unkonwn error with message " + xml_message)
             batch_generated_errors = True
 
-    parsed = pd.DataFrame(columns=pd.Index(reports_defaults))
-    parsed_with_xml = pd.DataFrame(columns=pd.Index(raw_messages_columns))
-    if len(logbook_reports) > 0:
-        parsed = pd.concat(logbook_reports, axis=1).T
-    if len(logbook_raw_messages) > 0:
-        parsed_with_xml = pd.concat(logbook_raw_messages, axis=1).T
+    logbook_reports = pd.DataFrame(columns=pd.Index(reports_defaults))
+    logbook_raw_messages = pd.DataFrame(columns=pd.Index(raw_messages_columns))
+    if len(logbook_reports_list) > 0:
+        logbook_reports = pd.concat(logbook_reports_list, axis=1).T
+    if len(logbook_raw_messages_list) > 0:
+        logbook_raw_messages = pd.concat(logbook_raw_messages_list, axis=1).T
 
     return {
-        "parsed": parsed,
-        "parsed_with_xml": parsed_with_xml,
+        "logbook_reports": logbook_reports,
+        "logbook_raw_messages": logbook_raw_messages,
         "batch_generated_errors": batch_generated_errors,
     }

@@ -6,7 +6,7 @@ import { getDate, getTime, mergeObjects } from '../../../utils'
 import { Toggle } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserType } from '../../../domain/shared_slices/Global'
-import { BeaconMalfunctionVesselStatus, UserType } from '../../../domain/entities/beaconMalfunction'
+import { BeaconMalfunctionVesselStatus, UserType, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
 import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/saveBeaconMalfunctionCommentFromKanban'
 import BeaconMalfunctionDetailsFollowUpRow from './BeaconMalfunctionDetailsFollowUpRow'
 import BeaconMalfunctionDetailsFollowUpCommentOrAction from './BeaconMalfunctionDetailsFollowUpCommentOrAction'
@@ -17,7 +17,7 @@ export const Type = {
   COMMENT: 'COMMENT'
 }
 
-const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallSize, firstStatus, vesselStatus }) => {
+const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallSize, firstStatus }) => {
   const {
     actions,
     comments,
@@ -27,6 +27,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
   const {
     userType
   } = useSelector(state => state.global)
+  const vesselStatus = vesselStatuses.find(status => status.value === beaconMalfunction?.vesselStatus)
   const [today, setToday] = useState('')
   const [yesterday, setYesterday] = useState('')
   const scrollToRef = useRef('')
@@ -103,6 +104,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
   }
 
   const getFirstStatusAction = (vesselStatus, malfunctionStartDateTime) => {
+    console.log(vesselStatus, malfunctionStartDateTime)
     if (vesselStatus?.value === BeaconMalfunctionVesselStatus.AT_PORT || vesselStatus?.value === BeaconMalfunctionVesselStatus.AT_SEA) {
       return `Avarie ${vesselStatus?.label?.replace('Navire ', '')} ouverte dans MonitorFish, dernière émission à ${getTime(malfunctionStartDateTime, true)}`
     } else if (vesselStatus?.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED) {
@@ -125,6 +127,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
         firstStatus
           ? <BeaconMalfunctionDetailsFollowUpRow
             index={0}
+            smallSize
             date={beaconMalfunction?.malfunctionStartDateTime}
             dateText={getCommentOrActionDate(getDate(beaconMalfunction?.malfunctionStartDateTime))}
           >
@@ -152,6 +155,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
               return <BeaconMalfunctionDetailsFollowUpRow
                 key={date}
                 index={index}
+                smallSize
                 isLastDate={isLastDate}
                 dateText={dateText}
               >

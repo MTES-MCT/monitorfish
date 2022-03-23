@@ -125,7 +125,7 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
         <CheckboxGroup
           inline
           name="checkboxList"
-          value={checkboxState.valuesChecked}
+          value={checkboxState?.valuesChecked || []}
           onChange={handleChange}
         >
           <Columns>

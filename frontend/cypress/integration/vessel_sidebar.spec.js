@@ -292,8 +292,14 @@ context('VesselSidebar', () => {
     cy.wait(200)
     // Then, the last position should be positioned in the bottom of the window
     cy.get('.vessels').trigger('pointermove', { clientX: 910, clientY: 300, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 871, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 872, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 871, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 872, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 873, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 873, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 873, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 316, clientY: 873, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 316, clientY: 874, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 317, clientY: 874, pointerId: 1, force: true })
     cy.wait(200)
 
     cy.get('*[data-cy^="vessel-track-card-latitude"]', { timeout: 20000 }).contains('47° 20′ 53″ N')
@@ -324,6 +330,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy="vessel-beacon-malfunction-history-see-more"]', { timeout: 20000 }).click()
     cy.get('*[data-cy="vessel-malfunctions-details"]', { timeout: 20000 }).should('be.visible')
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 20000 }).contains('0 commentaire')
+    cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 20000 }).contains('Avarie en mer ouverte dans MonitorFish, dernière émission à')
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 20000 }).contains('Le ticket a été déplacé de Premier contact à Fin de l\'avarie.')
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 20000 }).contains('Navire en mer')
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 20000 }).contains('14 jours')
@@ -366,9 +373,5 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).contains('Sans nouvelles')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 20000 }).click()
   })
-
-  /*
-
-   */
 
 })

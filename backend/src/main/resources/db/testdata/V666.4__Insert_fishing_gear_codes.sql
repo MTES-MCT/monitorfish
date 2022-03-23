@@ -16,7 +16,7 @@ SDN	Sennes danoises	Sennes traînantes
 SB	Sennes de plage	Sennes tournantes coulissantes
 TMS	Chaluts pélagiques à crevettes	Chaluts
 TM	Chaluts pélagiques (non spécifiés)	Chaluts
-TMB	Gangui	Chaluts
+TMB	Gangui	Gangui
 TX	Autres chaluts (non spécifiés)	Chaluts
 PT	Chaluts-bœufs (non spécifiés)	Chaluts
 OT	Chaluts à panneaux (non spécifiés)	Chaluts

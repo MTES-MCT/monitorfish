@@ -137,10 +137,10 @@ class MonitorFishWorker {
 
     const orderedFrenchLayersTopics = {}
     Object.keys(LAWTYPES_TO_TERRITORY).forEach(lawType => {
-      const lawTypeObject = layersTopicsByRegulatoryTerritory[FRANCE][lawType]
-      if (lawTypeObject) {
-        orderedFrenchLayersTopics[lawType] = lawTypeObject
+      if (layersTopicsByRegulatoryTerritory[FRANCE] && layersTopicsByRegulatoryTerritory[FRANCE][lawType]) {
+        orderedFrenchLayersTopics[lawType] = layersTopicsByRegulatoryTerritory[FRANCE][lawType]
       }
+
       return null
     })
     layersTopicsByRegulatoryTerritory[FRANCE] = orderedFrenchLayersTopics

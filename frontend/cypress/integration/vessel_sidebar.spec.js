@@ -292,9 +292,8 @@ context('VesselSidebar', () => {
     cy.wait(200)
     // Then, the last position should be positioned in the bottom of the window
     cy.get('.vessels').trigger('pointermove', { clientX: 910, clientY: 300, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 823, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 824, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 825, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 871, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 872, pointerId: 1, force: true })
     cy.wait(200)
 
     cy.get('*[data-cy^="vessel-track-card-latitude"]', { timeout: 20000 }).contains('47° 20′ 53″ N')

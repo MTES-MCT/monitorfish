@@ -22,16 +22,6 @@ const MapCoordinatesBox = ({ coordinates }) => {
     }
   }, [clickedOutsideComponent])
 
-  const getShowedCoordinates = coordinates => {
-    const transformedCoordinates = getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)
-
-    if (Array.isArray(transformedCoordinates) && transformedCoordinates.length === 2) {
-      return `${transformedCoordinates[0]} ${transformedCoordinates[1]}`
-    }
-
-    return ''
-  }
-
   return (<div ref={wrapperRef}>
     <CoordinatesTypeSelection isOpen={coordinatesSelectionIsOpen}>
       <Header
@@ -72,9 +62,19 @@ const MapCoordinatesBox = ({ coordinates }) => {
       </RadioWrapper>
     </CoordinatesTypeSelection>
     <Coordinates onClick={() => setCoordinatesSelectionIsOpen(!coordinatesSelectionIsOpen)}>
-      {getShowedCoordinates(coordinates)} ({coordinatesFormat})
+      {getShowedCoordinates(coordinates, coordinatesFormat)} ({coordinatesFormat})
     </Coordinates>
     </div>)
+}
+
+const getShowedCoordinates = (coordinates, coordinatesFormat) => {
+  const transformedCoordinates = getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)
+
+  if (Array.isArray(transformedCoordinates) && transformedCoordinates.length === 2) {
+    return `${transformedCoordinates[0]} ${transformedCoordinates[1]}`
+  }
+
+  return ''
 }
 
 const RadioWrapper = styled(RadioGroup)`
@@ -88,14 +88,14 @@ const Header = styled.span`
   width: 100%;
   display: inline-block;
   cursor: pointer;
-    border: none;
+  border: none;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 `
 
 const CoordinatesTypeSelection = styled.span`
   position: absolute;
-  bottom: ${props => props.isOpen ? 40 : -40}px;
+  bottom: 40px;
   left: 40px;
   display: inline-block;
   margin: 1px;
@@ -109,7 +109,10 @@ const CoordinatesTypeSelection = styled.span`
   border-radius: 2px;
   width: 237px;
   opacity: ${props => props.isOpen ? 1 : 0};
+  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
+  height: ${props => props.isOpen ? 69 : 0}px;
   transition: all 0.5s;
+  overflow: hidden;
 `
 
 const Coordinates = styled.span`

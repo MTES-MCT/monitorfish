@@ -173,7 +173,7 @@ def decode_flux(flux_xml_string: str) -> str:
           in a `BASE64DATA` xml tag.
 
     Raises:
-        FLUXParsingError: `FLUXParsingError` if the input string cannot be parsed
+        FLUXParsingError: `FLUXParsingError` if the input string is not valid xml
 
     Returns:
         str: decoded FLUX message, ready for parsing and data extraction

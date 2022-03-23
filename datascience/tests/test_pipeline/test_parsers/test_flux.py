@@ -19,7 +19,7 @@ class TestLogParsers(unittest.TestCase):
     def parse_file(self, test_file: str, has_data: bool = False):
         with open(os.path.join(XML_EMPTY_DATA_LOCATION, test_file), "r") as f:
             xml_string = f.read()
-        res = parse_xml_document(xml_string, False)
+        res = parse_xml_document(xml_string)
         metadata = res[0][0]
         data_iter = res[0][1]
         data_list = list(data_iter)

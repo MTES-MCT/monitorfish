@@ -190,7 +190,7 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   return fetch(`${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-    `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,regulatory_references,zone,region,next_id`)
+    `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`)
     .then(response => {
       if (response.status === OK) {
         return response.json()
@@ -445,7 +445,7 @@ function getAllGearCodesFromAPI () {
 /**
  * Get species
  * @memberOf API
- * @returns {Promise<SpeciesAndSpeciesGroups>}
+ * @returns {Promise<SpeciesAndSpeciesGroupsAPIData>}
  * @throws {Error}
  */
 function getAllSpeciesFromAPI () {

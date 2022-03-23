@@ -12,8 +12,9 @@ import { batch } from 'react-redux'
 const showRegulatoryZoneMetadata = (regulatoryZone, previewZone) => (dispatch, getState) => {
   if (regulatoryZone) {
     dispatch(setLoadingRegulatoryZoneMetadata())
+    const speciesByCode = getState().species.speciesByCode
     getRegulatoryFeatureMetadataFromAPI(regulatoryZone, getState().global.inBackofficeMode).then(feature => {
-      const regulatoryZoneMetadata = mapToRegulatoryZone(feature)
+      const regulatoryZoneMetadata = mapToRegulatoryZone(feature, speciesByCode)
       dispatch(setRegulatoryZoneMetadata(regulatoryZoneMetadata))
 
       if (previewZone) {

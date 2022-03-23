@@ -23,6 +23,7 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
       const {
         layersTopicsByRegulatoryTerritory
       } = response
+
       batch(() => {
         dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
         dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))

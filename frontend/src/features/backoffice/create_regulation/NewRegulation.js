@@ -58,7 +58,6 @@ import {
   REGULATORY_REFERENCE_KEYS
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
-import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -114,7 +113,6 @@ const CreateRegulation = ({ title, isEdition }) => {
 
     getGeometryObjectList()
     batch(() => {
-      dispatch(getAllSpecies())
       dispatch(closeRegulatoryZoneMetadataPanel())
       dispatch(setRegulationModified(false))
     })

@@ -25,6 +25,12 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
     const {
       zoneSelected
     } = state.regulatoryLayerSearch
+    const {
+      gears
+    } = state.gear
+    const {
+      species
+    } = state.species
 
     let extent = []
     if (zoneSelected) {
@@ -40,11 +46,11 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
             return filteredRegulatoryLayers
           }
 
-          return worker.searchLayers(searchFields, filteredRegulatoryLayers, state.gear.gears)
+          return worker.searchLayers(searchFields, filteredRegulatoryLayers, gears, species)
         })
     }
 
-    return worker.searchLayers(searchFields, regulatoryLayerLawTypes, state.gear.gears)
+    return worker.searchLayers(searchFields, regulatoryLayerLawTypes, gears, species)
   }
 }
 

@@ -1,7 +1,7 @@
 import { formatDataForSelectPicker, getTextForSearch } from '../../utils'
 import Layers from './layers'
 
-export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
+export const mapToRegulatoryZone = ({ properties, geometry, id }, speciesByCode) => {
   return {
     id: properties.id || id?.split('.')[1],
     geometry: geometry,
@@ -9,7 +9,7 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
     topic: properties.topic,
     zone: decodeURI(properties.zone),
     regulatoryGears: parseRegulatoryGears(properties.gears),
-    regulatorySpecies: parseRegulatorySpecies(properties.species),
+    regulatorySpecies: parseRegulatorySpecies(properties.species, speciesByCode),
     regulatoryReferences: parseRegulatoryReferences(properties.regulatory_references),
     fishingPeriod: parseFishingPeriod(properties.fishing_period),
     region: properties.region,
@@ -17,7 +17,7 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }) => {
   }
 }
 
-export const mapToProcessingRegulation = (persistProcessingRegulation) => {
+export const mapToProcessingRegulation = persistProcessingRegulation => {
   if (persistProcessingRegulation) {
     const _parsedFishingPeriod = mapToFishingPeriod(persistProcessingRegulation.fishingPeriod)
     return {
@@ -34,10 +34,27 @@ function parseRegulatoryGears (gears) {
     : INITIAL_REG_GEARS_VALUES
 }
 
-function parseRegulatorySpecies (species) {
-  return species
-    ? parseJSON(species)
+/**
+ * Parse the JSON and adds the species name to the list of species
+ * @param regulatorySpecies
+ * @param {Object<string, {name: string, code: string}>} speciesByCode
+ * @return {{otherInfo?: string, species: *, authorized?: boolean, allSpecies?: boolean, speciesGroups?: string[]}}
+ */
+function parseRegulatorySpecies (regulatorySpecies, speciesByCode) {
+  const _regulatorySpecies = regulatorySpecies
+    ? parseJSON(regulatorySpecies)
     : INITIAL_REG_SPECIES_VALUES
+
+  const nextSpecies = _regulatorySpecies?.species?.map(uniqueSpecies => {
+    uniqueSpecies.name = speciesByCode[uniqueSpecies.code]?.name
+
+    return uniqueSpecies
+  })
+
+  return {
+    ..._regulatorySpecies,
+    species: nextSpecies
+  }
 }
 
 const parseRegulatoryReferences = regulatoryTextsString => {
@@ -322,12 +339,12 @@ export function findIfSearchStringIncludedInRegulatoryReferences (zone, searchTe
     : false
 }
 
-export function searchByLawType (lawTypes, properties, searchText, gears) {
+export function searchByLawType (lawTypes, properties, searchText, gears, species) {
   const searchResultByLawType = {}
 
   Object.keys(lawTypes).forEach(lawType => {
     const regulatoryZone = Object.assign({}, lawTypes[lawType])
-    const foundRegulatoryZones = search(searchText, properties, regulatoryZone, gears)
+    const foundRegulatoryZones = search(searchText, properties, regulatoryZone, gears, species)
 
     if (foundRegulatoryZones && Object.keys(foundRegulatoryZones).length !== 0) {
       searchResultByLawType[lawType] = foundRegulatoryZones
@@ -348,24 +365,38 @@ export function searchResultIncludeZone (searchResult, { lawType, topic, zone })
 }
 
 export function findIfStringIsIncludedInZoneGears (zone, searchText, uniqueGearCodes) {
-  const gears = zone.gears
-  if (gears) {
-    const gearsArray = gears.replace(/ /g, '').split(',')
-    const found = gearCodeIsFoundInRegulatoryZone(gearsArray, uniqueGearCodes)
+  const gearCodes = zone.regulatoryGears?.regulatedGears
+    ? Object.keys(zone.regulatoryGears?.regulatedGears)
+    : []
 
-    return found || gears.toLowerCase().includes(searchText.toLowerCase())
+  if (gearCodes?.length) {
+    return gearCodeIsFoundInRegulatoryZone(gearCodes, uniqueGearCodes)
   } else {
     return false
   }
 }
 
-export function search (searchText, propertiesToSearch, regulatoryZones, gears) {
+export function findIfStringIsIncludedInZoneSpecies (zone, searchText, uniqueGearCodes) {
+  const speciesCodes = zone.regulatorySpecies?.species?.map(speciesCodes => speciesCodes.code)
+
+  if (speciesCodes?.length) {
+    return gearCodeIsFoundInRegulatoryZone(speciesCodes, uniqueGearCodes)
+  } else {
+    return false
+  }
+}
+
+export function search (searchText, propertiesToSearch, regulatoryZones, gears, species) {
   if (regulatoryZones) {
     const foundRegulatoryZones = { ...regulatoryZones }
 
     let uniqueGearCodes = null
     if (propertiesToSearch.includes(REGULATORY_SEARCH_PROPERTIES.GEARS)) {
       uniqueGearCodes = getUniqueGearCodesFromSearch(searchText, gears)
+    }
+    let uniqueSpeciesCodes = null
+    if (propertiesToSearch.includes(REGULATORY_SEARCH_PROPERTIES.SPECIES)) {
+      uniqueSpeciesCodes = getUniqueSpeciesCodesFromSearch(searchText, species)
     }
 
     Object.keys(foundRegulatoryZones)
@@ -376,6 +407,8 @@ export function search (searchText, propertiesToSearch, regulatoryZones, gears) 
             propertiesToSearch.forEach(property => {
               if (property === REGULATORY_SEARCH_PROPERTIES.GEARS) {
                 searchStringIncludedInProperty = findIfStringIsIncludedInZoneGears(zone, searchText, uniqueGearCodes)
+              } else if (property === REGULATORY_SEARCH_PROPERTIES.SPECIES) {
+                searchStringIncludedInProperty = findIfStringIsIncludedInZoneSpecies(zone, searchText, uniqueSpeciesCodes)
               } else if (property === REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES) {
                 searchStringIncludedInProperty =
                   searchStringIncludedInProperty || findIfSearchStringIncludedInRegulatoryReferences(zone, searchText)
@@ -393,14 +426,22 @@ export function search (searchText, propertiesToSearch, regulatoryZones, gears) 
 
     return foundRegulatoryZones
   }
+
   return {}
 }
 
 export function getUniqueGearCodesFromSearch (searchText, gears) {
   const foundGearCodes = gears
-    .filter(gear => gear.name.toLowerCase().includes(searchText.toLowerCase()))
+    .filter(gear => gear.name.toLowerCase().includes(searchText.toLowerCase()) || gear.code.toLowerCase().includes(searchText.toLowerCase()))
     .map(gear => gear.code)
   return [...new Set(foundGearCodes)]
+}
+
+export function getUniqueSpeciesCodesFromSearch (searchText, species) {
+  const foundSpeciesCodes = species
+    .filter(species => species.name.toLowerCase().includes(searchText.toLowerCase()) || species.code.toLowerCase().includes(searchText.toLowerCase()))
+    .map(gear => gear.code)
+  return [...new Set(foundSpeciesCodes)]
 }
 
 export function gearCodeIsFoundInRegulatoryZone (gears, uniqueGearCodes) {

@@ -15,6 +15,7 @@ import getAllBeaconMalfunctions from '../domain/use_cases/getAllBeaconMalfunctio
 import openBeaconMalfunctionInKanban from '../domain/use_cases/openBeaconMalfunctionInKanban'
 import getVesselBeaconMalfunctions from '../domain/use_cases/getVesselBeaconMalfunctions'
 import openBeaconMalfunction from '../domain/use_cases/openBeaconMalfunction'
+import getAllSpecies from '../domain/use_cases/getAllSpecies'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
 export const THIRTY_SECONDS = 30 * 1000
@@ -41,9 +42,10 @@ const APIWorker = () => {
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
   useEffect(() => {
-    batch(() => {
+    batch(async () => {
       dispatch(setIsUpdatingVessels())
       dispatch(getHealthcheck())
+      await dispatch(getAllSpecies())
       dispatch(getAllGearCodes())
       dispatch(getAllFleetSegments())
       dispatch(showAllVessels())

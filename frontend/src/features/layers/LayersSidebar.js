@@ -93,9 +93,9 @@ const RegulatoryZoneMetadataShifter = styled.div`
   margin-top: 45px;
   top: 0px;
   opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 1 : 0};
-  background: ${COLORS.gainsboro};
+  background: linear-gradient(${COLORS.gainsboro} 70%, rgb(0,0,0,0));
   z-index: -1;
-  transition: 0.5s all;
+  transition: all 0.5s;
 `
 
 const Sidebar = styled(MapComponentStyle)`

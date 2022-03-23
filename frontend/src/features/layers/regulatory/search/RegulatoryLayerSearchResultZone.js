@@ -98,7 +98,7 @@ const RegulatoryLayerSearchResultZone = props => {
           >
             <Checkbox
               title={zoneIsAlreadySelected ? 'zone déjà ajoutée à mes zones réglementaires' : ''}
-              disabled={zoneIsAlreadySelected}
+              disabled={!!zoneIsAlreadySelected}
               data-cy={'regulatory-zone-check'}
               value={regulatoryZone?.id}
             />

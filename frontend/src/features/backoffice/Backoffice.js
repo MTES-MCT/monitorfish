@@ -21,6 +21,7 @@ import { EmptyResult } from '../commonStyles/Text.style'
 import { setProcessingRegulationSaved } from './Regulation.slice'
 import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
 import layer from '../../domain/shared_slices/Layer'
+import getAllSpecies from '../../domain/use_cases/getAllSpecies'
 /* import { SecondaryButton } from '../commonStyles/Buttons.style' */
 
 const Backoffice = () => {
@@ -46,7 +47,8 @@ const Backoffice = () => {
   const { regulationSaved } = useSelector(state => state.regulation)
 
   const initBackoffice = () => {
-    batch(() => {
+    batch(async () => {
+      await dispatch(getAllSpecies())
       dispatch(getAllRegulatoryLayersByRegTerritory())
       dispatch(getAllGearCodes())
       dispatch(setProcessingRegulationSaved(false))
@@ -234,7 +236,7 @@ const MetadataWrapper = styled.div`
   max-height: 95vh;
   transition: all 0.5s;
   opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0'};
-  background: ${COLORS.gainsboro};
+  background: linear-gradient(${COLORS.gainsboro} 70%, rgb(0,0,0,0));
 `
 
 export default Backoffice

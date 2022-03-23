@@ -663,7 +663,7 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
   const SORTED_CATEGORY_LIST = [
     'Chaluts', 'Sennes traînantes', 'Dragues', 'Sennes tournantes coulissantes',
     'Filets tournants', 'Filets maillants et filets emmêlants', 'Filets soulevés',
-    'Lignes et hameçons', 'Pièges', 'Engins de récolte', 'Engins divers'
+    'Lignes et hameçons', 'Pièges', 'Palangres', 'Gangui', 'Engins de récolte', 'Engins divers'
   ]
 
   return SORTED_CATEGORY_LIST.map(category => {

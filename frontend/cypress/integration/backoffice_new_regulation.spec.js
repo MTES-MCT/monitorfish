@@ -204,7 +204,7 @@ context('NewRegulation', () => {
     // when
     cy.get('[data-cy="all-towed-gears-option"]').click()
     // then
-    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 3)
+    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 4)
     cy.get('[data-cy="mesh-label"]').should('have.length', 2)
     // when
     cy.get('[data-cy="close-tag-Sennes traînantes"]').click()

@@ -293,6 +293,9 @@ context('VesselSidebar', () => {
     // Then, the last position should be positioned in the bottom of the window
     cy.get('.vessels').trigger('pointermove', { clientX: 910, clientY: 300, pointerId: 1, force: true })
     cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 871, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 835, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 835, pointerId: 1, force: true })
+    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 835, pointerId: 1, force: true })
     cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 872, pointerId: 1, force: true })
     cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 873, pointerId: 1, force: true })
     cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 873, pointerId: 1, force: true })

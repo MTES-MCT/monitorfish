@@ -11,30 +11,19 @@ from src.pipeline.parsers.flux.flux import (
     parse_xml_document,
 )
 
-XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/flux/business_BASE64"
-XML_EMPTY_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/flux"
+XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/flux"
 
 
-def parse_file(test_file: str, has_data: bool = False):
-    with open(os.path.join(XML_EMPTY_DATA_LOCATION, test_file), "r") as f:
-        xml_string = f.read()
-    res = parse_xml_document(xml_string)
-    metadata = res[0][0]
-    data_iter = res[0][1]
-    data_list = list(data_iter)
-    return metadata, data_list
-
-
-def test_parse_empty_message():
-    test_file = "empty_message.xml"
+def test_parse_empty_message_raises_flux_parsing_error():
     with pytest.raises(FLUXParsingError):
-        parse_file(test_file)
+        parse_xml_document("")
 
 
 def test_parser():
+    base64_encoded_xml_files_location = XML_TEST_DATA_LOCATION / "business_BASE64"
     flux_file_list = []
-    for filename in sorted(os.listdir(XML_TEST_DATA_LOCATION)):
-        with open(os.path.join(XML_TEST_DATA_LOCATION, filename), "r") as f:
+    for filename in sorted(os.listdir(base64_encoded_xml_files_location)):
+        with open(base64_encoded_xml_files_location / filename, "r") as f:
             xml_string = f.read()
             flux_file_list.append(xml_string)
 

@@ -9,42 +9,53 @@ const MetadataSpecies = () => {
   const {
     allSpecies
   } = regulatorySpecies
-  return <>{regulatorySpecies && regulatorySpecies.authorized !== undefined &&
-    <Section>
-      <SectionTitle>{regulatorySpecies.authorized
-        ? <GreenCircle margin={'0 5px 0 0'} />
-        : <RedCircle margin={'0 5px 0 0'} />}
+
+  return <>{regulatorySpecies?.authorized !== undefined &&
+    <Section data-cy={'regulatory-layers-metadata-species'}>
+      <SectionTitle>
+        {
+          regulatorySpecies.authorized
+            ? <GreenCircle margin={'0 5px 0 0'} />
+            : <RedCircle margin={'0 5px 0 0'} />
+        }
         Espèces {regulatorySpecies.authorized ? 'réglementées' : 'interdites'}
       </SectionTitle>
       {allSpecies
         ? <Label>{'Toutes les espèces'}</Label>
-        : <List>
-          {regulatorySpecies.species.length > 0
-            ? regulatorySpecies.species.map((_species) => {
-              const { code, name, quantity, minimumSize } = _species
-              return (<Elem key={_species}><CodeAndName code={code} name={name} />
-                  <Fields>
-                    {quantity && <Field><Key>Quantité</Key><Value>{quantity}</Value></Field>}
-                    {minimumSize && <Field><Key>Taille min.</Key><Value>{minimumSize}</Value></Field>}
-                  </Fields>
-                </Elem>)
-            })
-            : null
+        : <List isLast={!regulatorySpecies.otherInfo}>
+          {
+            regulatorySpecies.species.length > 0
+              ? regulatorySpecies.species.map(_species => {
+                const { code, name, quantity, minimumSize } = _species
+                return (
+                  <Elem key={code}>
+                    <CodeAndName code={code} name={name} />
+                    <Fields>
+                      {quantity && <Field><Key>Quantité</Key><Value>{quantity}</Value></Field>}
+                      {minimumSize && <Field><Key>Taille min.</Key><Value>{minimumSize}</Value></Field>}
+                    </Fields>
+                  </Elem>
+                )
+              })
+              : null
           }
-          {regulatorySpecies.speciesGroups.length > 0
-            ? regulatorySpecies.speciesGroups.map(group => {
-              return (<Elem key={group}><Label>{group}</Label></Elem>)
-            })
-            : null
+          {
+            regulatorySpecies.speciesGroups.length > 0
+              ? regulatorySpecies.speciesGroups.map(group => {
+                return (<Elem key={group}><Label>{group}</Label></Elem>)
+              })
+              : null
           }
           </List>
       }
-      {regulatorySpecies.otherInfo &&
+      {
+        regulatorySpecies.otherInfo &&
         <><SectionTitle>Mesures techniques</SectionTitle>
           {regulatorySpecies.otherInfo}
         </>
       }
-    </Section>}</>
+    </Section>
+  }</>
 }
 
 export default MetadataSpecies

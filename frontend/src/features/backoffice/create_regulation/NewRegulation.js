@@ -108,13 +108,12 @@ const CreateRegulation = ({ title, isEdition }) => {
   } = processingRegulation
 
   useEffect(() => {
-    if (!layersTopicsByRegTerritory || Object.keys(layersTopicsByRegTerritory).length === 0) {
-      dispatch(getAllRegulatoryLayersByRegTerritory())
-    }
-
     getGeometryObjectList()
-    batch(() => {
-      dispatch(getAllSpecies())
+    batch(async () => {
+      await dispatch(getAllSpecies())
+      if (!layersTopicsByRegTerritory || Object.keys(layersTopicsByRegTerritory).length === 0) {
+        dispatch(getAllRegulatoryLayersByRegTerritory())
+      }
       dispatch(closeRegulatoryZoneMetadataPanel())
       dispatch(setRegulationModified(false))
     })

@@ -5,9 +5,11 @@ import { setProcessingRegulation, setSelectedRegulatoryZoneId } from '../../feat
 import Layers from '../entities/layers'
 
 const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
+  const { speciesByCode } = getState().species
+
   return getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZone, getState().global.inBackofficeMode)
     .then(feature => {
-      const regulatoryZoneMetadata = mapToRegulatoryZone(feature)
+      const regulatoryZoneMetadata = mapToRegulatoryZone(feature, speciesByCode)
 
       const {
         lawType,

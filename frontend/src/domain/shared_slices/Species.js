@@ -10,6 +10,8 @@ const speciesSlice = createSlice({
   initialState: {
     /** @type {Map<string, Species} */
     speciesByCode: {},
+    /** @type {Species[]} */
+    species: [],
     speciesGroups: []
   },
   reducers: {
@@ -21,6 +23,7 @@ const speciesSlice = createSlice({
      * @param {{payload: SpeciesAndSpeciesGroups}} action - the species
      */
     setSpeciesAndSpeciesGroups (state, action) {
+      state.species = action.payload.species
       state.speciesByCode = action.payload.speciesByCode
       state.speciesGroups = action.payload.groups
     }

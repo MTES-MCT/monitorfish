@@ -12,7 +12,7 @@ export const List = styled.ul`
   flex-direction: column;
   font-size: 13px;
   color: ${COLORS.gunMetal};
-  padding-bottom: 20px;
+  padding-bottom: ${props => props.isLast ? 0 : 20}px;
   margin: 0;
 `
 

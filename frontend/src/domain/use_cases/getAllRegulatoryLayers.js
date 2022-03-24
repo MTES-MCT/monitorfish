@@ -17,10 +17,11 @@ const MonitorFishWorker = Comlink.wrap(worker)
 const getAllRegulatoryLayers = () => async (dispatch, getState) => {
   const monitorFishWorker = await new MonitorFishWorker()
   const { setShowedLayersWithLocalStorageValues } = layer.homepage.actions
+  const { speciesByCode } = getState().species
 
   return getAllRegulatoryLayersFromAPI(getState().global.inBackofficeMode)
     .then(features => {
-      return monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features)
+      return monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode)
     })
     .then(response => {
       const {

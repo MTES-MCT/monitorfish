@@ -7,12 +7,13 @@ import { COLORS } from '../../../../constants/constants'
 
 const MetadataRegulatoryReferences = () => {
   const { regulatoryReferences } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
+
   return <>{regulatoryReferences && <Section>
     <SectionTitle>Références réglementaires</SectionTitle>
     <List>
     {regulatoryReferences.map(regulatoryReference => {
       return <Reference
-          key={regulatoryReference}
+          key={regulatoryReference?.url + regulatoryReference?.reference}
           data-cy="regulatory-layers-metadata-references"
         >
         {regulatoryReference.textType &&

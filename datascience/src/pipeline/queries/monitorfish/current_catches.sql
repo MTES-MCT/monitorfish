@@ -54,10 +54,10 @@ catches AS (
         r.report_id,
         r.referenced_report_id,
         r.operation_type,
-        (jsonb_array_elements(r.value))->>'gear' as gear,
-        jsonb_array_elements((jsonb_array_elements(r.value))->'catches')->>'species' as species,
-        (jsonb_array_elements((jsonb_array_elements(r.value))->'catches')->>'weight')::DOUBLE PRECISION as weight,
-        jsonb_array_elements((jsonb_array_elements(r.value))->'catches')->>'faoZone' as fao_area
+        (jsonb_array_elements(r.value -> 'hauls'))->>'gear' as gear,
+        jsonb_array_elements((jsonb_array_elements(r.value -> 'hauls'))->'catches')->>'species' as species,
+        (jsonb_array_elements((jsonb_array_elements(r.value -> 'hauls'))->'catches')->>'weight')::DOUBLE PRECISION as weight,
+        jsonb_array_elements((jsonb_array_elements(r.value -> 'hauls'))->'catches')->>'faoZone' as fao_area
     FROM public.logbook_reports r
     JOIN last_deps d
     ON r.cfr = d.cfr

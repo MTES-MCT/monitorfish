@@ -1,4 +1,10 @@
 import * as timeago from 'timeago.js'
+import {
+  BeaconMalfunctionPropertyName,
+  beaconMalfunctionsStages, endOfBeaconMalfunctionReasons,
+  vesselStatuses
+} from '../../../domain/entities/beaconMalfunction'
+import React from 'react'
 
 export const BeaconMalfunctionsSubMenu = {
   PAIRING: {
@@ -12,44 +18,6 @@ export const BeaconMalfunctionsSubMenu = {
   HISTORIC: {
     name: 'Historique des avaries',
     code: 'MED'
-  }
-}
-
-export const beaconMalfunctionsStages = {
-  INITIAL_ENCOUNTER: {
-    code: 'INITIAL_ENCOUNTER',
-    title: 'Premier contact',
-    description: 'Obtenir une réponse des navires qui ont cessé d\'émettre.'
-  },
-  FOUR_HOUR_REPORT: {
-    code: 'FOUR_HOUR_REPORT',
-    title: '4h report',
-    description: 'Suivre les navires qui font leurs 4h report ou les relancer s\'ils l\'ont cessé.'
-  },
-  RELAUNCH_REQUEST: {
-    code: 'RELAUNCH_REQUEST',
-    title: 'Relance pour reprise',
-    description: 'Relancer les navires qui sont à quai (ou supposés à quai) et qui n\'ont pas encore repris leurs émissions.'
-  },
-  TARGETING_VESSEL: {
-    code: 'TARGETING_VESSEL',
-    title: 'Ciblage du navire',
-    description: 'Mobiliser les unités sur les navires dont on n\'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.'
-  },
-  CROSS_CHECK: {
-    code: 'CROSS_CHECK',
-    title: 'Contrôle croisé',
-    description: 'Mobiliser les unités sur les navires dont on n\'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.'
-  },
-  END_OF_MALFUNCTION: {
-    code: 'END_OF_MALFUNCTION',
-    title: 'Fin de l\'avarie',
-    description: 'Envoyer un message de reprise aux unités dont les émissions ont repris et archiver les avaries qu\'on ne suit plus'
-  },
-  ARCHIVED: {
-    code: 'ARCHIVED',
-    title: 'Archivage',
-    description: 'Avaries clôturées. NB : Seules les 30 dernières avaries restent dans le kanban.'
   }
 }
 
@@ -80,6 +48,41 @@ export function getBeaconCreationOrModificationDate (beaconMalfunction) {
   }
 
   return `modifiée ${getReducedTimeAgo(beaconMalfunction?.vesselStatusLastModificationDateTime)}`
+}
+
+export const getActionText = (action, endOfBeaconMalfunctionReason) => {
+  if (action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS) {
+    const previousValue = vesselStatuses.find(status => status.value === action.previousValue)?.label
+    const nextValue = vesselStatuses.find(status => status.value === action.nextValue)?.label
+
+    return <>Le statut du ticket a été modifié, de <b>{previousValue}</b> à <b>{nextValue}</b>.</>
+  } else if (action.propertyName === BeaconMalfunctionPropertyName.STAGE) {
+    const previousValue = beaconMalfunctionsStages[action.previousValue].title
+    const nextValue = beaconMalfunctionsStages[action.nextValue].title
+
+    let additionalText = ''
+    if (endOfBeaconMalfunctionReason) {
+      switch (endOfBeaconMalfunctionReason) {
+        case endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value:
+          additionalText = endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.label
+          break
+        case endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.value:
+          additionalText = endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.label
+          break
+        case endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value:
+          additionalText = endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.label
+          break
+      }
+    }
+
+    return <>Le ticket a été déplacé de <b>{previousValue}</b> à <b>{nextValue}</b>.
+      {
+        additionalText
+          ? <>{' '}Il a été clôturé pour cause de <b>{additionalText}</b>.</>
+          : ''
+      }
+    </>
+  }
 }
 
 export function getReducedTimeAgo (dateTime) {

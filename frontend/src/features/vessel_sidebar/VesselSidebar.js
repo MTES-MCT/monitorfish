@@ -229,9 +229,10 @@ const Wrapper = styled(MapComponentStyle)`
   padding: 0;
   background: ${COLORS.gainsboro};
   overflow: hidden;
+  opacity: ${props => props.openBox ? 1 : 0};
   margin-right: ${props => props.openBox ? 0 : -510}px;
   right: ${props => props.rightMenuIsOpen && props.openBox ? 55 : 10}px;
-  transition: all 0.5s, right 0.3s;
+  transition: all 0.5s, right 0.3s, opacity 0.5s;
 `
 
 const VesselIDIcon = styled(VesselIDSVG)`

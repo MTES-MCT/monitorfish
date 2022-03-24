@@ -10,18 +10,8 @@ const SelectedVessel = ({ selectedVesselIdentity, setSelectedVesselIdentity }) =
   const dispatch = useDispatch()
 
   const {
-    vesselSidebarIsOpen,
-    isFocusedOnVesselSearch
+    vesselSidebarIsOpen
   } = useSelector(state => state.vessel)
-
-  function getVesselName () {
-    let flagState = 'INCONNU'
-    if (selectedVesselIdentity.flagState !== 'UNDEFINED') {
-      flagState = `${selectedVesselIdentity.flagState}`
-    }
-
-    return `${selectedVesselIdentity.vesselName} (${flagState.toUpperCase()})`
-  }
 
   return (
     <Wrapper
@@ -32,8 +22,6 @@ const SelectedVessel = ({ selectedVesselIdentity, setSelectedVesselIdentity }) =
         }
       }}
       vesselSidebarIsOpen={vesselSidebarIsOpen}
-      vesselName={selectedVesselIdentity.vesselName}
-      isFocusedOnVesselSearch={isFocusedOnVesselSearch}
     >
       {selectedVesselIdentity.flagState
         ? <Flag
@@ -41,7 +29,7 @@ const SelectedVessel = ({ selectedVesselIdentity, setSelectedVesselIdentity }) =
           src={`flags/${selectedVesselIdentity.flagState.toLowerCase()}.svg`}/>
         : null}
       <VesselName>
-        {getVesselName()}
+        {getVesselName(selectedVesselIdentity)}
       </VesselName>
       <CloseIcon
         data-cy={'vessel-search-selected-vessel-close-title'}
@@ -49,6 +37,15 @@ const SelectedVessel = ({ selectedVesselIdentity, setSelectedVesselIdentity }) =
       />
     </Wrapper>
   )
+}
+
+function getVesselName (selectedVesselIdentity) {
+  let flagState = 'INCONNU'
+  if (selectedVesselIdentity?.flagState !== 'UNDEFINED') {
+    flagState = `${selectedVesselIdentity?.flagState}`
+  }
+
+  return `${selectedVesselIdentity?.vesselName} (${flagState?.toUpperCase()})`
 }
 
 const Wrapper = styled.div`
@@ -61,21 +58,12 @@ const Wrapper = styled.div`
   border-top-right-radius: 2px;
   color: ${COLORS.gainsboro};
   height: 40px;
-  width: 490px;
+  width: ${props => props.vesselSidebarIsOpen ? '490px' : '320px'};
   padding: 0 0 0 10px;
   flex: 3;
   text-align: left;
   cursor: text;
-  animation: ${props => props.firstUpdate && !props.vesselSidebarIsOpen
-  ? ''
-  : props.vesselSidebarIsOpen && !props.isFocusedOnVesselSearch
-    ? 'vessel-search-opening'
-    : ''} 0.7s ease forwards;
-
-  @keyframes vessel-search-opening {
-    0%   { width: ${props => props.vesselName ? '490px' : '320px'};   }
-    100% { width: 490px; }
-  }
+  transition: width 0.7s ease forwards;
 
   :hover, :focus {
     border-bottom: 1px ${COLORS.gray} solid;

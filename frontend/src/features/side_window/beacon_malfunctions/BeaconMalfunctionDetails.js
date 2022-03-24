@@ -6,23 +6,28 @@ import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as TimeAgoSVG } from '../../icons/Label_horaire_VMS.svg'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
-import { Priority, priorityStyle, showVesselOnMap } from './BeaconMalfunctionCard'
+import { Priority, priorityStyle } from './BeaconMalfunctionCard'
 import { useDispatch } from 'react-redux'
 import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import * as timeago from 'timeago.js'
 import { closeBeaconMalfunctionInKanban } from '../../../domain/shared_slices/BeaconMalfunction'
 import { getDateTime } from '../../../utils'
 import {
+  getFirstVesselStatus,
   getIsMalfunctioning,
   getMalfunctionStartDateText,
   vesselStatuses
 } from '../../../domain/entities/beaconMalfunction'
 import BeaconMalfunctionDetailsFollowUp from './BeaconMalfunctionDetailsFollowUp'
-import { showVesselSidebarTab } from '../../../domain/shared_slices/Vessel'
-import { VesselSidebarTab } from '../../../domain/entities/vessel'
 import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
+import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/showVesselFromBeaconMalfunctionsKanban'
 
-const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions, updateVesselStatus }) => {
+const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselStatus }) => {
+  const {
+    resume,
+    beaconMalfunction
+  } = beaconMalfunctionWithDetails
+
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselMalfunction => vesselMalfunction.value === beaconMalfunction?.vesselStatus)
   const baseUrl = window.location.origin
@@ -109,7 +114,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
           <ShowVessel
             data-cy={'side-window-beacon-malfunctions-detail-show-vessel'}
             style={showVesselStyle}
-            onClick={() => showVesselOnMap(dispatch, beaconMalfunction)}
+            onClick={() => dispatch(showVesselFromBeaconMalfunctionsKanban(beaconMalfunction, false))}
           >
             <ShowVesselText style={showVesselTextStyle}>
               voir le navire sur la carte
@@ -157,16 +162,13 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
             <ResumeKey style={resumeKeyStyle}>Dernière avarie</ResumeKey>
             <ResumeValue style={resumeValueStyle}>
               {timeago.format(resume?.lastBeaconMalfunctionDateTime, 'fr')}{' '}
-              ({vesselStatuses.find(status => status.value === resume?.lastBeaconMalfunctionVesselStatus)?.label})
+              ({vesselStatus?.label})
             </ResumeValue>
           </ResumeLine>
           <ResumeLine>
             <ShowHistory
               style={showHistoryStyle}
-              onClick={async () => {
-                await showVesselOnMap(dispatch, beaconMalfunction)
-                dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))
-              }}>
+              onClick={() => dispatch(showVesselFromBeaconMalfunctionsKanban(beaconMalfunction, true))}>
               voir l&apos;historique
             </ShowHistory>
           </ResumeLine>
@@ -174,9 +176,9 @@ const BeaconMalfunctionDetails = ({ beaconMalfunction, resume, comments, actions
       </SecondHeader>
       <Line style={lineStyle}/>
       <BeaconMalfunctionDetailsFollowUp
-        comments={comments}
-        actions={actions}
-        beaconMalfunctionId={beaconMalfunction?.id}
+        beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}
+        vesselStatus={vesselStatus}
+        firstStatus={getFirstVesselStatus(beaconMalfunctionWithDetails)}
       />
     </BeaconMalfunctionDetailsWrapper>
   )

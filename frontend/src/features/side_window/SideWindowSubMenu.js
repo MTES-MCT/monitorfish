@@ -4,8 +4,9 @@ import { COLORS } from '../../constants/constants'
 import SideWindowSubMenuLink from './SideWindowSubMenuLink'
 import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../domain/entities/alerts'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
-import { beaconMalfunctionsStages, BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
+import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
+import { beaconMalfunctionsStages } from '../../domain/entities/beaconMalfunction'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -139,21 +140,25 @@ const menuStyle = (isOpen, fixed) => ({
   fontWeight: 500,
   color: COLORS.slateGray,
   padding: '14px 0',
-  transition: 'all 0.5s',
+  transition: 'width 0.5s',
   position: fixed ? 'unset' : 'absolute',
   marginLeft: fixed ? 0 : 65,
+  boxShadow: isOpen && !fixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset',
   zIndex: 999
 })
 
 const Title = styled.span``
 const titleStyle = isOpen => ({
-  width: 180,
   display: 'inline-block',
   paddingBottom: 11,
   paddingLeft: 20,
   borderBottom: `1px solid ${COLORS.lightGray}`,
   opacity: isOpen ? 1 : 0,
-  transition: 'opacity 0.5s ease'
+  width: isOpen ? 180 : 0,
+  transition: 'width 0.8s ease',
+  overflow: 'hidden',
+  textOverflow: 'clip',
+  whiteSpace: 'nowrap'
 })
 
 export default SideWindowSubMenu

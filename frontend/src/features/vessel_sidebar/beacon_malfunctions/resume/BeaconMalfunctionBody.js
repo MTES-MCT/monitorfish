@@ -26,10 +26,14 @@ const BeaconMalfunctionBody = props => {
       </SubValue><br/>
       <Key width={120}>Durée avarie</Key>
       <SubValue>
-        {Math.floor(
-          (new Date(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime) -
-            new Date(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime)) / MS_PER_DAY)}
-        {' '}jours
+        {
+          beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime &&
+          beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime
+            ? <>{Math.floor(
+              (new Date(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime) -
+              new Date(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime)) / MS_PER_DAY)}{' '}jours</>
+            : null
+        }
       </SubValue><br/>
       <Key width={120}>Date reprise</Key>
       <SubValue>

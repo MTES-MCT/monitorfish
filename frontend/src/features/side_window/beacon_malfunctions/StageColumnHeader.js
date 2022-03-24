@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { beaconMalfunctionsStages } from './beaconMalfunctions'
+import { beaconMalfunctionsStages } from '../../../domain/entities/beaconMalfunction'
 
 const MAX_ARCHIVED_ITEMS = 30
 
@@ -35,7 +35,8 @@ const wrapperStyle = {
   height: 95,
   borderBottom: `1px solid ${COLORS.lightGray}`,
   marginBottom: 3,
-  background: COLORS.gainsboro
+  background: COLORS.gainsboro,
+  whiteSpace: 'pre-line'
 }
 
 const Row = styled.div``

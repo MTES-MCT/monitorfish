@@ -71,7 +71,7 @@ def parse_far(far):
         value["latitude"] = try_float(lat)
         value["longitude"] = try_float(lon)
 
-    data = {"log_type": "FAR", "value": [value]}
+    data = {"log_type": "FAR", "value": {"hauls": [value]}}
 
     return data
 

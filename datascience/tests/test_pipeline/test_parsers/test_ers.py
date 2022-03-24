@@ -191,15 +191,19 @@ class TestLogParsers(unittest.TestCase):
         self.assertEqual(len(data_list), 1)
         data = data_list[0]
         self.assertEqual(data["log_type"], "FAR")
-        value = data["value"][0]
+        value = data["value"]
+        self.assertEqual(set(value), {"hauls"})
+        hauls = value["hauls"]
+        self.assertEqual(len(hauls), 1)
+        haul_data = hauls[0]
         self.assertEqual(
-            set(value), {"dimensions", "farDatetimeUtc", "gear", "mesh", "catches"}
+            set(haul_data), {"dimensions", "farDatetimeUtc", "gear", "mesh", "catches"}
         )
-        self.assertIs(value["dimensions"], None)
-        self.assertEqual(value["farDatetimeUtc"], "2020-03-24T20:46:00Z")
-        self.assertEqual(value["gear"], "OTT")
-        self.assertEqual(value["mesh"], 80.0)
-        self.assertEqual(value["dimensions"], None)
+        self.assertIs(haul_data["dimensions"], None)
+        self.assertEqual(haul_data["farDatetimeUtc"], "2020-03-24T20:46:00Z")
+        self.assertEqual(haul_data["gear"], "OTT")
+        self.assertEqual(haul_data["mesh"], 80.0)
+        self.assertEqual(haul_data["dimensions"], None)
 
     def test_ins_parser(self):
         test_file = "OOF20200306070900.xml"
@@ -331,60 +335,62 @@ class TestLogParsers(unittest.TestCase):
             },
             {
                 "log_type": "FAR",
-                "value": [
-                    {
-                        "farDatetimeUtc": "2021-09-19T00:00:00Z",
-                        "gear": "OTB",
-                        "mesh": 75.0,
-                        "dimensions": 12.0,
-                        "catches": [
-                            {
-                                "species": "SQZ",
-                                "weight": 30.0,
-                                "nbFish": None,
-                                "faoZone": "27.7.d",
-                                "economicZone": None,
-                                "statisticalRectangle": "27E9",
-                                "effortZone": None,
-                                "presentation": "WHL",
-                                "packaging": None,
-                                "freshness": None,
-                                "preservationState": None,
-                                "conversionFactor": None,
-                            },
-                            {
-                                "species": "PLE",
-                                "weight": 30.0,
-                                "nbFish": None,
-                                "faoZone": "27.7.d",
-                                "economicZone": None,
-                                "statisticalRectangle": "27E9",
-                                "effortZone": None,
-                                "presentation": "WHL",
-                                "packaging": None,
-                                "freshness": None,
-                                "preservationState": None,
-                                "conversionFactor": None,
-                            },
-                            {
-                                "species": "RJC",
-                                "weight": 20.0,
-                                "nbFish": None,
-                                "faoZone": "27.7.d",
-                                "economicZone": None,
-                                "statisticalRectangle": "27E9",
-                                "effortZone": None,
-                                "presentation": "WHL",
-                                "packaging": None,
-                                "freshness": None,
-                                "preservationState": None,
-                                "conversionFactor": None,
-                            },
-                        ],
-                        "latitude": 0.0,
-                        "longitude": 0.0,
-                    }
-                ],
+                "value": {
+                    "hauls": [
+                        {
+                            "farDatetimeUtc": "2021-09-19T00:00:00Z",
+                            "gear": "OTB",
+                            "mesh": 75.0,
+                            "dimensions": 12.0,
+                            "catches": [
+                                {
+                                    "species": "SQZ",
+                                    "weight": 30.0,
+                                    "nbFish": None,
+                                    "faoZone": "27.7.d",
+                                    "economicZone": None,
+                                    "statisticalRectangle": "27E9",
+                                    "effortZone": None,
+                                    "presentation": "WHL",
+                                    "packaging": None,
+                                    "freshness": None,
+                                    "preservationState": None,
+                                    "conversionFactor": None,
+                                },
+                                {
+                                    "species": "PLE",
+                                    "weight": 30.0,
+                                    "nbFish": None,
+                                    "faoZone": "27.7.d",
+                                    "economicZone": None,
+                                    "statisticalRectangle": "27E9",
+                                    "effortZone": None,
+                                    "presentation": "WHL",
+                                    "packaging": None,
+                                    "freshness": None,
+                                    "preservationState": None,
+                                    "conversionFactor": None,
+                                },
+                                {
+                                    "species": "RJC",
+                                    "weight": 20.0,
+                                    "nbFish": None,
+                                    "faoZone": "27.7.d",
+                                    "economicZone": None,
+                                    "statisticalRectangle": "27E9",
+                                    "effortZone": None,
+                                    "presentation": "WHL",
+                                    "packaging": None,
+                                    "freshness": None,
+                                    "preservationState": None,
+                                    "conversionFactor": None,
+                                },
+                            ],
+                            "latitude": 0.0,
+                            "longitude": 0.0,
+                        }
+                    ]
+                },
             },
             {
                 "log_type": "RTP",

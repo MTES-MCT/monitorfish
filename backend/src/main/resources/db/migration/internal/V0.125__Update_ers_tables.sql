@@ -53,3 +53,8 @@ SET transmission_format = 'ERS3';
 ALTER TABLE logbook_reports
 ALTER COLUMN transmission_format
 SET NOT NULL;
+
+-- Wrap the value field of FAR reports in an array, as a single FLUX report can hold declarations for multiples fishing operations (hauls)
+UPDATE logbook_reports
+SET value = jsonb_build_array(value)
+WHERE log_type = 'FAR';

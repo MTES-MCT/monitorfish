@@ -81,7 +81,9 @@ def simple_parser(el: xml.etree.ElementTree.Element, op_type):
             values.append(fishing_activity_data.get("value"))
         assert len(log_types) == 1
         data = {"log_type": log_types.pop(), "value": values}
-        if data["log_type"] != "FAR":
+        if data["log_type"] == "FAR":
+            data["value"] = {"hauls": data["value"]}
+        else:
             data["value"] = data["value"][0]
 
     return metadata, data

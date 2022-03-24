@@ -188,7 +188,6 @@ def decode_flux(flux_xml_string: str) -> str:
 
 
 def parse_xml_document(xml_document: str):
-    xml_document = decode_flux(xml_document)
     try:
         el = ET.fromstring(xml_document)
     except ParseError:
@@ -250,12 +249,13 @@ def batch_parse(xml_messages: List[str]) -> dict:
     }
 
     for xml_message in xml_messages:
+        xml_message = decode_flux(xml_message)
         parsed_doc = parse_xml_document(xml_message)
 
         now = datetime.utcnow()
         raw = {
             "operation_number": parsed_doc[0][0].get("operation_number"),
-            "xml_message": decode_flux(xml_message),
+            "xml_message": xml_message,
         }
         logbook_raw_messages_list.append(pd.Series(raw))
 

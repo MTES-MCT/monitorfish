@@ -18,8 +18,6 @@ check-clean-archi:
 test: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
 	cd frontend && CI=true npm test
-test-front:
-	cd frontend && npm test
 
 # CI commands - app
 docker-build:

@@ -104,7 +104,6 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
   }
 
   const getFirstStatusAction = (vesselStatus, malfunctionStartDateTime) => {
-    console.log(vesselStatus, malfunctionStartDateTime)
     if (vesselStatus?.value === BeaconMalfunctionVesselStatus.AT_PORT || vesselStatus?.value === BeaconMalfunctionVesselStatus.AT_SEA) {
       return `Avarie ${vesselStatus?.label?.replace('Navire ', '')} ouverte dans MonitorFish, dernière émission à ${getTime(malfunctionStartDateTime, true)}`
     } else if (vesselStatus?.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED) {

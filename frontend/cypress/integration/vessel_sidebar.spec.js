@@ -280,7 +280,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
 
-  it.only('Vessel track Should fit the view box When I click on animate to track', () => {
+  it('Vessel track Should fit the view box When I click on animate to track', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')

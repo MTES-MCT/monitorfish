@@ -280,7 +280,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
 
-  it('Vessel track Should fit the view box When I click on animate to track', () => {
+  it.only('Vessel track Should fit the view box When I click on animate to track', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
@@ -288,29 +288,14 @@ context('VesselSidebar', () => {
     // When
     cy.wait(1000)
     cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 20000 })
-
     cy.wait(200)
+
     // Then, the last position should be positioned in the bottom of the window
-    cy.get('.vessels').trigger('pointermove', { clientX: 910, clientY: 300, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 871, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 835, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 835, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 835, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 825, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 824, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 835, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 872, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 873, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 873, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 872, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 871, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 314, clientY: 871, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 315, clientY: 871, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 316, clientY: 874, pointerId: 1, force: true })
-    cy.get('.vessels').trigger('pointermove', { clientX: 317, clientY: 874, pointerId: 1, force: true })
-    cy.wait(200)
-
-    cy.get('*[data-cy^="vessel-track-card-latitude"]', { timeout: 20000 }).contains('47° 20′ 53″ N')
+    cy.get('.vessels').eq(0).toMatchImageSnapshot({
+      screenshotConfig: {
+        clip: { x: 210, y: 0, width: 500, height: 840 }
+      }
+    })
   })
 
   it('ERS/VMS tab Should contain history of beacon malfunctions and show a malfunction detail in history', () => {

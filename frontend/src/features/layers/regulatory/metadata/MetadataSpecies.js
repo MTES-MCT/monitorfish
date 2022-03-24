@@ -11,7 +11,7 @@ const MetadataSpecies = () => {
   } = regulatorySpecies
 
   return <>{regulatorySpecies?.authorized !== undefined &&
-    <Section>
+    <Section data-cy={'regulatory-layers-metadata-species'}>
       <SectionTitle>
         {
           regulatorySpecies.authorized

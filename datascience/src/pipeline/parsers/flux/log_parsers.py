@@ -52,7 +52,7 @@ def parse_dep(dep):
             catches = [dict(item, **zone_data) for item in catches]
         value["speciesOnboard"] = catches
 
-    data = {"log_type": "DEP", "value": [value]}
+    data = {"log_type": "DEP", "value": value}
     return data
 
 
@@ -96,7 +96,7 @@ def parse_far(far):
         value["latitude"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
         value["longitude"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
 
-    data = {"log_type": "FAR", "value": [value]}
+    data = {"log_type": "FAR", "value": value}
 
     return data
 
@@ -125,7 +125,7 @@ def parse_dis(dis):
             catches = [dict(item, **zone_data) for item in catches]
         value["catches"] = catches
 
-    data = {"log_type": "DIS", "value": [value]}
+    data = {"log_type": "DIS", "value": value}
 
     return data
 
@@ -156,7 +156,7 @@ def parse_coe(coe):
         value["latitude"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
         value["longitude"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
 
-    data = {"log_type": "COE", "value": [value]}
+    data = {"log_type": "COE", "value": value}
 
     return data
 
@@ -186,7 +186,7 @@ def parse_cox(cox):
         value["latitudeExited"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
         value["longitudeExited"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
 
-    data = {"log_type": "COX", "value": [value]}
+    data = {"log_type": "COX", "value": value}
 
     return data
 
@@ -230,7 +230,7 @@ def parse_pno(pno):
         value["latitude"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
         value["longitude"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
 
-    data = {"log_type": "PNO", "value": [value]}
+    data = {"log_type": "PNO", "value": value}
 
     return data
 
@@ -266,7 +266,7 @@ def parse_lan(lan):
             catches = [dict(item, **zone_data) for item in catches]
         value["catchLanded"] = catches
 
-    data = {"log_type": "LAN", "value": [value]}
+    data = {"log_type": "LAN", "value": value}
 
     return data
 
@@ -294,6 +294,6 @@ def parse_rtp(rtp):
         if usedGear is not None:
             value["gearOnboard"] = parse_gea(usedGear)
 
-    data = {"log_type": "RTP", "value": [value]}
+    data = {"log_type": "RTP", "value": value}
 
     return data

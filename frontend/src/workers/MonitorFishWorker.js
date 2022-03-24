@@ -11,9 +11,9 @@ import { getDateMonthsBefore } from '../utils'
 import { VesselLocation, vesselSize } from '../domain/entities/vessel'
 
 class MonitorFishWorker {
-  #getLayerTopicList = features => {
+  #getLayerTopicList = (features, speciesByCode) => {
     const featuresWithoutGeometry = features.features.map(feature => {
-      return mapToRegulatoryZone(feature)
+      return mapToRegulatoryZone(feature, speciesByCode)
     })
 
     const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
@@ -60,6 +60,7 @@ class MonitorFishWorker {
    * }
    * (see example)
    * @param {GeoJSON} features
+   * @param {Object<string, Object>} speciesByCode
    * @returns {Object} The structured regulatory data
    * @example
    * "France": {
@@ -103,12 +104,12 @@ class MonitorFishWorker {
    *     }
    * }
    */
-  convertGeoJSONFeaturesToStructuredRegulatoryObject (features) {
+  convertGeoJSONFeaturesToStructuredRegulatoryObject (features, speciesByCode) {
     const regulatoryTopicList = new Set()
     const {
       featuresWithoutGeometry,
       uniqueFeaturesWithoutGeometryByTopics: layerTopicArray
-    } = this.#getLayerTopicList(features)
+    } = this.#getLayerTopicList(features, speciesByCode)
     const layersTopicsByRegulatoryTerritory = layerTopicArray.reduce((accumulatedObject, zone) => {
       const {
         lawType,
@@ -306,7 +307,7 @@ class MonitorFishWorker {
     }
   }
 
-  searchLayers (searchFields, regulatoryLayers, gears) {
+  searchLayers (searchFields, regulatoryLayers, gears, species) {
     let foundRegulatoryLayers = {}
 
     Object.keys(searchFields).forEach(searchProperty => {
@@ -315,7 +316,8 @@ class MonitorFishWorker {
           regulatoryLayers,
           searchFields[searchProperty].properties,
           searchFields[searchProperty].searchText,
-          gears)
+          gears,
+          species)
 
         if (foundRegulatoryLayers && Object.keys(foundRegulatoryLayers).length === 0) {
           foundRegulatoryLayers = searchResultByLawType

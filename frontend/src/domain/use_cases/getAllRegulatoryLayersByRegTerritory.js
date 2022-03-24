@@ -14,15 +14,17 @@ const MonitorFishWorker = Comlink.wrap(worker)
 
 const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) => {
   const worker = await new MonitorFishWorker()
+  const { speciesByCode } = getState().species
 
   return getAllRegulatoryLayersFromAPI(getState().global.inBackofficeMode)
     .then(features => {
-      return worker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features)
+      return worker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode)
     })
     .then(response => {
       const {
         layersTopicsByRegulatoryTerritory
       } = response
+
       batch(() => {
         dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
         dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))

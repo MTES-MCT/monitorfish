@@ -9,7 +9,7 @@ context('LayersSidebar', () => {
     cy.visit(`http://localhost:${port}/#@-224002.65,6302673.54,8.70`)
 
     cy.request('GET', 'http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=' +
-      'monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,regulatory_references,zone,region,next_id').then(
+      'monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id').then(
       (response) => {
         cy.log(response.body)
       }
@@ -107,6 +107,12 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
     cy.get('*[data-cy="regulatory-layers-metadata-topic"]').contains('Ouest Cotentin Bivalves')
     cy.get('*[data-cy="regulatory-layers-metadata-region"]').contains('Normandie, Bretagne')
+    cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Pêche interdite les vendredi, samedi et dimanche, les jours fériés')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Dragues')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Drague sans dent et de largeur maximale 1,30 mètre')
+    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('URC (OURSINS NCA)')
+    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('URX (OURSINS,ETC. NCA)')
+    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('500 kg')
     cy.get('*[data-cy="regulatory-layers-metadata-references"]').should('have.length', 1)
   })
 

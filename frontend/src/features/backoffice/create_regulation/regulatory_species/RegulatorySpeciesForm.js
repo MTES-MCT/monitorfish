@@ -213,7 +213,6 @@ const RegulatorySpeciesForm = props => {
         }
         <ContentLine>
           <CustomSelectComponent
-            placement={'topStart'}
             disabled={allSpecies}
             menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
             searchable={true}
@@ -228,7 +227,6 @@ const RegulatorySpeciesForm = props => {
         </ContentLine>
         <ContentLine>
           <CustomSelectComponent
-            placement={'topStart'}
             disabled={allSpecies}
             menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
             searchable={true}

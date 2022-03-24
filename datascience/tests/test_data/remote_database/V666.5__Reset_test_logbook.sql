@@ -28,7 +28,7 @@ VALUES
     '2', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 day 6 hours')::TIMESTAMP, 'DAT', 
     '2', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 day 6 hours')::TIMESTAMP,
     'ABC000306959', 'LLUK', 'RV348407', 'ÉTABLIR IMPRESSION LORSQUE', 'FRA', null, 'FAR',
-    '{"gear": "OTM", "mesh": 80.0, "catches": [{"nbFish": null, "weight": 713.0, "faoZone": "27.8.a", "species": "HKE", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "FRA", "presentation": "GUT", "conversionFactor": 1.11, "preservationState": "FRE", "statisticalRectangle": "23E6"}], "latitude": 47.084, "longitude": -3.872, "dimensions": null, "farDatetimeUtc": "2018-07-21T17:45:00Z"}',
+    '[{"gear": "OTM", "mesh": 80.0, "catches": [{"nbFish": null, "weight": 713.0, "faoZone": "27.8.a", "species": "HKE", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "FRA", "presentation": "GUT", "conversionFactor": 1.11, "preservationState": "FRE", "statisticalRectangle": "23E6"}], "latitude": 47.084, "longitude": -3.872, "dimensions": null, "farDatetimeUtc": "2018-07-21T17:45:00Z"}]',
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 day 23 hours 48 minutes')::TIMESTAMP, 20210001, 'ERS3'
 ),
 (
@@ -42,7 +42,7 @@ VALUES
     '4', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 4 days')::TIMESTAMP, 'DAT',
     '4', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 4 days')::TIMESTAMP,
     'ABC000542519', 'FQ7058', 'RO237719', 'DEVINER FIGURE CONSCIENCE', 'FRA', null, 'FAR',
-    '{"gear": "OTB", "mesh": 80.0, "catches": [{"nbFish": null, "weight": 713.0, "faoZone": "27.8.c", "species": "HKE", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "FRA", "presentation": "GUT", "conversionFactor": 1.11, "preservationState": "FRE", "statisticalRectangle": "16E4"}], "latitude": 47.084, "longitude": -3.872, "dimensions": null, "farDatetimeUtc": "2018-07-21T17:45:00Z"}',
+    '[{"gear": "OTB", "mesh": 80.0, "catches": [{"nbFish": null, "weight": 713.0, "faoZone": "27.8.c", "species": "HKE", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "FRA", "presentation": "GUT", "conversionFactor": 1.11, "preservationState": "FRE", "statisticalRectangle": "16E4"}], "latitude": 47.084, "longitude": -3.872, "dimensions": null, "farDatetimeUtc": "2018-07-21T17:45:00Z"}]',
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 3 days 23 hours 48 minutes')::TIMESTAMP, 20210001, 'ERS3'
 ),
 (
@@ -56,14 +56,14 @@ VALUES
     '6', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 4 days')::TIMESTAMP, 'DAT',
     '6', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 4 days')::TIMESTAMP,
     'ABC000542519', 'FQ7058', 'RO237719', 'DEVINER FIGURE CONSCIENCE', 'FRA', null, 'FAR',
-    '{"gear": "OTB", "mesh": 80.0, "catches": [{"nbFish": null, "weight": 713.0, "faoZone": "27.8.c", "species": "HKE", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "FRA", "presentation": "GUT", "conversionFactor": 1.11, "preservationState": "FRE", "statisticalRectangle": "16E4"}], "latitude": 47.084, "longitude": -3.872, "dimensions": null, "farDatetimeUtc": "2018-07-21T17:45:00Z"}',
+    '[{"gear": "OTB", "mesh": 80.0, "catches": [{"nbFish": null, "weight": 713.0, "faoZone": "27.8.c", "species": "HKE", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "FRA", "presentation": "GUT", "conversionFactor": 1.11, "preservationState": "FRE", "statisticalRectangle": "16E4"}], "latitude": 47.084, "longitude": -3.872, "dimensions": null, "farDatetimeUtc": "2018-07-21T17:45:00Z"}]',
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 3 days 23 hours 48 minutes')::TIMESTAMP, 20210002, 'ERS3'
 ),
 (
     '7', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 3 days')::TIMESTAMP, 'DAT',
     '7', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 3 days')::TIMESTAMP,
     'ABC000542519', 'FQ7058', 'RO237719', 'DEVINER FIGURE CONSCIENCE', 'FRA', null, 'FAR',
-    '{"gear": "OTB", "mesh": 80.0, "catches": [{"nbFish": null, "weight": 1713.0, "faoZone": "27.8.c", "species": "HKE", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "FRA", "presentation": "GUT", "conversionFactor": 1.11, "preservationState": "FRE", "statisticalRectangle": "16E4"}, {"nbFish": null, "weight": 157.0, "faoZone": "27.8.c", "species": "SOL", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "FRA", "presentation": "GUT", "conversionFactor": 1.11, "preservationState": "FRE", "statisticalRectangle": "16E4"}], "latitude": 47.084, "longitude": -3.872, "dimensions": null, "farDatetimeUtc": "2018-07-22T17:45:00Z"}',
+    '[{"gear": "OTB", "mesh": 80.0, "catches": [{"nbFish": null, "weight": 1713.0, "faoZone": "27.8.c", "species": "HKE", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "FRA", "presentation": "GUT", "conversionFactor": 1.11, "preservationState": "FRE", "statisticalRectangle": "16E4"}, {"nbFish": null, "weight": 157.0, "faoZone": "27.8.c", "species": "SOL", "freshness": null, "packaging": "BOX", "effortZone": null, "economicZone": "FRA", "presentation": "GUT", "conversionFactor": 1.11, "preservationState": "FRE", "statisticalRectangle": "16E4"}], "latitude": 47.084, "longitude": -3.872, "dimensions": null, "farDatetimeUtc": "2018-07-22T17:45:00Z"}]',
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 3 days 23 hours 48 minutes')::TIMESTAMP, 20210002, 'ERS3'
 );
 

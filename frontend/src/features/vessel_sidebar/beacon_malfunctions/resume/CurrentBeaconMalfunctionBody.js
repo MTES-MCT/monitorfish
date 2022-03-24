@@ -61,7 +61,7 @@ const CurrentBeaconMalfunctionBody = props => {
 }
 
 const Body = styled.div`
-  margin: 15px 20px;
+  margin: 15px 10px 15px 20px;
   text-align: left;
   display: flex;
   flex-wrap: wrap;

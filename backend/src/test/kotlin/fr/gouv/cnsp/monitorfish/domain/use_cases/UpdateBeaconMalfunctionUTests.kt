@@ -44,6 +44,19 @@ class UpdateBeaconMalfunctionUTests {
     }
 
     @Test
+    fun `execute Should throw an exception When the Stage is END_OF_MALFUNCTION but there si no endOfBeaconMalfunctionReason`() {
+        // When
+        val throwable = catchThrowable {
+            UpdateBeaconMalfunction(beaconMalfunctionsRepository, beaconMalfunctionActionRepository, getBeaconMalfunction)
+                    .execute(1, null, Stage.END_OF_MALFUNCTION, null)
+        }
+
+        // Then
+        assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
+        assertThat(throwable.message).contains("Cannot end malfunction without giving an endOfBeaconMalfunctionReason")
+    }
+
+    @Test
     fun `execute Should return the updated beacon malfunction When a field to update is given`() {
         // Given
         given(beaconMalfunctionsRepository.find(any())).willReturn(BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",

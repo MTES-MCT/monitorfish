@@ -31,7 +31,7 @@ const BeaconMalfunctionsResume = props => {
               <Value data-cy={'vessel-beacon-malfunctions-resume-last'}>
                 {
                   vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime
-                    ? <>Le {getDateTime(vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime)}
+                    ? <>Le {getDateTime(vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime, true)}
                       {' '}
                     ({vesselStatuses.find(status => status.value === vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionVesselStatus)?.label})</>
                     : <NoValue>-</NoValue>

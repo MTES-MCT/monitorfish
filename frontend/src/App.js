@@ -189,10 +189,8 @@ const Alert = styled.div`
 const Wrapper = styled.div`
   font-size: 13px;
   text-align: center;
-  height: calc(100vh - 50px);
   width: 100vw;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  overflow: hidden;
 `
 
 const BackofficeWrapper = styled.div`
@@ -200,8 +198,7 @@ const BackofficeWrapper = styled.div`
   text-align: center;
   height: 100%;
   width: 100%;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  overflow: hidden;
   display: flex;
 `
 

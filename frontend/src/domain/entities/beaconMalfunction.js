@@ -7,10 +7,7 @@ import { COLORS } from '../../constants/constants'
 import React from 'react'
 import { ReactComponent as VesselStatusAtSeaSVG } from '../../features/icons/Avarie_statut_navire_en_mer.svg'
 import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../features/icons/Avarie_statut_activite_detectee.svg'
-import {
-  beaconMalfunctionsStages,
-  getReducedTimeAgo
-} from '../../features/side_window/beacon_malfunctions/beaconMalfunctions'
+import { getReducedTimeAgo } from '../../features/side_window/beacon_malfunctions/beaconMalfunctions'
 import { getDate } from '../../utils'
 
 /* eslint-disable */
@@ -182,25 +179,87 @@ const getNumberOfBeaconMalfunctionsAt = (vesselStatus, beaconMalfunctionsWithDet
 /**
  * Get the first vessel status of a beacon malfunction
  * @memberOf BeaconMalfunction
- * @param {BeaconMalfunctionResumeAndDetails} beaconMalfunctionWithDetails
+ * @param {BeaconMalfunctionResumeAndDetails | null} beaconMalfunctionWithDetails
  * @returns {string<BeaconMalfunctionVesselStatus>} The vessel status
  */
 const getFirstVesselStatus = beaconMalfunctionWithDetails => {
-  const beaconMalfunctionsVesselStatusActions = beaconMalfunctionWithDetails.actions
-    .filter ( action => action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS )
+  const beaconMalfunctionsVesselStatusActions = beaconMalfunctionWithDetails?.actions
+    ?.filter ( action => action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS )
 
-  switch (beaconMalfunctionsVesselStatusActions.length === 0) {
-    case true: return beaconMalfunctionWithDetails.beaconMalfunction.vesselStatus
+  switch (beaconMalfunctionsVesselStatusActions?.length === 0) {
+    case true: return beaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus
     case false: _.minBy(beaconMalfunctionsVesselStatusActions, action => action.dateTime)
   }
+}
+
+const beaconMalfunctionsStages = {
+  INITIAL_ENCOUNTER: {
+    code: 'INITIAL_ENCOUNTER',
+    title: 'Premier contact',
+    isColumn: true,
+    description: 'Obtenir une réponse des navires qui ont cessé d\'émettre.'
+  },
+  FOUR_HOUR_REPORT: {
+    code: 'FOUR_HOUR_REPORT',
+    title: '4h report',
+    isColumn: true,
+    description: 'Suivre les navires qui font leurs 4h report ou les relancer s\'ils l\'ont cessé.'
+  },
+  RELAUNCH_REQUEST: {
+    code: 'RELAUNCH_REQUEST',
+    title: 'Relance pour reprise',
+    isColumn: true,
+    description: 'Relancer les navires qui sont à quai (ou supposés à quai) et qui n\'ont pas encore repris leurs émissions.'
+  },
+  TARGETING_VESSEL: {
+    code: 'TARGETING_VESSEL',
+    title: 'Ciblage du navire',
+    isColumn: true,
+    description: 'Mobiliser les unités sur les navires dont on n\'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.'
+  },
+  CROSS_CHECK: {
+    code: 'CROSS_CHECK',
+    title: 'Contrôle croisé',
+    isColumn: true,
+    description: 'Mobiliser les unités sur les navires dont on n\'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.'
+  },
+  END_OF_MALFUNCTION: {
+    code: 'END_OF_MALFUNCTION',
+    title: 'Fin de l\'avarie',
+    isColumn: true,
+    description: 'Envoyer un message de reprise aux unités dont les émissions ont repris et archiver les avaries qu\'on ne suit plus.'
+  },
+  ARCHIVED: {
+    code: 'ARCHIVED',
+    title: 'Archivage',
+    isColumn: true,
+    description: 'Avaries clôturées.\n NB : Seules les 30 dernières avaries restent dans le kanban.'
+  },
+  /** Old stages - for backward compatibility **/
+  RESUMED_TRANSMISSION: {
+    title: 'Reprise des émissions',
+    code: 'RESUMED_TRANSMISSION',
+    isColumn: false
+  },
 }
 
 const getIsMalfunctioning = stage => stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
   stage !== beaconMalfunctionsStages.ARCHIVED.code
 
-const getMalfunctionStartDateText = (vesselStatus, beaconMalfunction) => vesselStatus?.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED
-  ? `Balise activée le ${getDate(beaconMalfunction?.malfunctionStartDateTime)}`
-  : `Dernière émission ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+const getMalfunctionStartDateText = (vesselStatus, beaconMalfunction) => {
+  if (beaconMalfunction?.stage === beaconMalfunctionsStages.END_OF_MALFUNCTION.code ||
+    beaconMalfunction?.stage === beaconMalfunctionsStages.ARCHIVED.code) {
+    switch (beaconMalfunction?.endOfBeaconMalfunctionReason) {
+      case endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value: return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+      case endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.value: return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+      case endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value: return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+    }
+  }
+
+  return vesselStatus?.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED
+    ? `Balise activée le ${getDate(beaconMalfunction?.malfunctionStartDateTime)}`
+    : `Dernière émission ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+}
 
 export {
   getYearsToBeaconMalfunctions,
@@ -213,5 +272,6 @@ export {
   BeaconMalfunctionsTab,
   endOfBeaconMalfunctionReasons,
   getIsMalfunctioning,
-  getMalfunctionStartDateText
+  getMalfunctionStartDateText,
+  beaconMalfunctionsStages
 }

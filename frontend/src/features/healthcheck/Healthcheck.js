@@ -14,7 +14,7 @@ const Healthcheck = () => {
       healthcheckTextWarning && !previewFilteredVesselsMode
         ? <HealthcheckWarnings>
           <Warning>
-            <WarningIcon />
+            <WarningIcon/>
             {healthcheckTextWarning}
           </Warning>
         </HealthcheckWarnings>
@@ -36,7 +36,7 @@ const Warning = styled.div`
 
 const HealthcheckWarnings = styled.div`
   background: #F6D012 0% 0% no-repeat padding-box;
-  width 100%;
+  width: calc(100vw - 26px);
   height: 22px;
   text-align: center;
   padding: 13px;

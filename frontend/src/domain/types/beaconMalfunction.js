@@ -51,6 +51,7 @@
  * @property {BeaconMalfunction} beaconMalfunction
  * @property {BeaconMalfunctionComment[]} comments
  * @property {BeaconMalfunctionAction[]} actions
+ * @property {BeaconMalfunctionAction[]} resume
  */
 
 /**

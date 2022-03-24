@@ -92,18 +92,16 @@ def test_parser():
                 "BEL",
                 None,
                 "COE",
-                [
-                    {
-                        "effortZoneEntryDatetimeUtc": "2021-01-22T09:00:00Z",
-                        "targetSpeciesOnEntry": "DEMERSAL",
-                        "faoZoneEntered": "27.4.c",
-                        "economicZoneEntered": "BEL",
-                        "statisticalRectangleEntered": "31F3",
-                        "effortZoneEntered": None,
-                        "latitude": 51.333333,
-                        "longitude": 3.2,
-                    }
-                ],
+                {
+                    "effortZoneEntryDatetimeUtc": "2021-01-22T09:00:00Z",
+                    "targetSpeciesOnEntry": "DEMERSAL",
+                    "faoZoneEntered": "27.4.c",
+                    "economicZoneEntered": "BEL",
+                    "statisticalRectangleEntered": "31F3",
+                    "effortZoneEntered": None,
+                    "latitude": 51.333333,
+                    "longitude": 3.2,
+                },
                 "BEL-TRP-Z510-2021012200107",
             ],
             [
@@ -120,32 +118,28 @@ def test_parser():
                 "CYP",
                 "1234567",
                 "DEP",
-                [
-                    {
-                        "departureDatetimeUtc": "2020-05-06T11:39:33.176Z",
-                        "departurePort": "ESCAR",
-                        "anticipatedActivity": "FIS",
-                        "gearOnboard": [
-                            {"gear": "PS", "mesh": 140.0, "dimensions": 14.0}
-                        ],
-                        "speciesOnboard": [
-                            {
-                                "species": "COD",
-                                "weight": 50.0,
-                                "nbFish": None,
-                                "economicZone": "ESP",
-                                "faoZone": "27.9.b.2",
-                                "statisticalRectangle": None,
-                                "effortZone": None,
-                                "presentation": "GUT",
-                                "packaging": "BOX",
-                                "preservationState": "FRO",
-                                "conversionFactor": 1.1,
-                                "freshness": None,
-                            }
-                        ],
-                    }
-                ],
+                {
+                    "departureDatetimeUtc": "2020-05-06T11:39:33.176Z",
+                    "departurePort": "ESCAR",
+                    "anticipatedActivity": "FIS",
+                    "gearOnboard": [{"gear": "PS", "mesh": 140.0, "dimensions": 14.0}],
+                    "speciesOnboard": [
+                        {
+                            "species": "COD",
+                            "weight": 50.0,
+                            "nbFish": None,
+                            "economicZone": "ESP",
+                            "faoZone": "27.9.b.2",
+                            "statisticalRectangle": None,
+                            "effortZone": None,
+                            "presentation": "GUT",
+                            "packaging": "BOX",
+                            "preservationState": "FRO",
+                            "conversionFactor": 1.1,
+                            "freshness": None,
+                        }
+                    ],
+                },
                 "SRC-TRP-TTT20200506193933176",
             ],
             [
@@ -162,16 +156,12 @@ def test_parser():
                 "CYP",
                 "1234567",
                 "DEP",
-                [
-                    {
-                        "departureDatetimeUtc": "2020-05-06T11:39:40.722Z",
-                        "departurePort": "ESCAR",
-                        "anticipatedActivity": "FIS",
-                        "gearOnboard": [
-                            {"gear": "PS", "mesh": 140.0, "dimensions": 14.0}
-                        ],
-                    }
-                ],
+                {
+                    "departureDatetimeUtc": "2020-05-06T11:39:40.722Z",
+                    "departurePort": "ESCAR",
+                    "anticipatedActivity": "FIS",
+                    "gearOnboard": [{"gear": "PS", "mesh": 140.0, "dimensions": 14.0}],
+                },
                 "SRC-TRP-TTT20200506193940722",
             ],
             [
@@ -382,14 +372,10 @@ def test_parser():
                 "CYP",
                 None,
                 "DIS",
-                [
-                    {
-                        "discardDatetimeUtc": "2020-05-06T11:40:34.449Z",
-                        "catches": [
-                            {"species": "COD", "weight": 100.0, "nbFish": None}
-                        ],
-                    }
-                ],
+                {
+                    "discardDatetimeUtc": "2020-05-06T11:40:34.449Z",
+                    "catches": [{"species": "COD", "weight": 100.0, "nbFish": None}],
+                },
                 "SRC-TRP-TTT20200506194034449",
             ],
             [
@@ -457,18 +443,16 @@ def test_parser():
                 "CYP",
                 None,
                 "COX",
-                [
-                    {
-                        "effortZoneExitDatetimeUtc": "2020-05-06T11:40:57.580Z",
-                        "targetSpeciesOnExit": None,
-                        "faoZoneExited": None,
-                        "economicZoneExited": None,
-                        "statisticalRectangleExited": None,
-                        "effortZoneExited": "A",
-                        "latitudeExited": 46.678,
-                        "longitudeExited": -14.616,
-                    }
-                ],
+                {
+                    "effortZoneExitDatetimeUtc": "2020-05-06T11:40:57.580Z",
+                    "targetSpeciesOnExit": None,
+                    "faoZoneExited": None,
+                    "economicZoneExited": None,
+                    "statisticalRectangleExited": None,
+                    "effortZoneExited": "A",
+                    "latitudeExited": 46.678,
+                    "longitudeExited": -14.616,
+                },
                 "SRC-TRP-TTT20200506194057580",
             ],
             [
@@ -485,17 +469,15 @@ def test_parser():
                 "CYP",
                 None,
                 "PNO",
-                [
-                    {
-                        "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z",
-                        "port": "GBPHD",
-                        "purpose": "LAN",
-                        "tripStartDate": "2020-05-04T19:41:03.340Z",
-                        "catchOnboard": [
-                            {"species": "GHL", "weight": 1500.0, "nbFish": None}
-                        ],
-                    }
-                ],
+                {
+                    "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z",
+                    "port": "GBPHD",
+                    "purpose": "LAN",
+                    "tripStartDate": "2020-05-04T19:41:03.340Z",
+                    "catchOnboard": [
+                        {"species": "GHL", "weight": 1500.0, "nbFish": None}
+                    ],
+                },
                 "SRC-TRP-TTT20200506194103340",
             ],
             [
@@ -512,14 +494,12 @@ def test_parser():
                 "CYP",
                 None,
                 "PNO",
-                [
-                    {
-                        "predictedArrivalDatetimeUtc": "2020-05-06T11:41:09.200Z",
-                        "port": "GBPHD",
-                        "purpose": "SHE",
-                        "tripStartDate": "2020-05-04T19:41:09.200Z",
-                    }
-                ],
+                {
+                    "predictedArrivalDatetimeUtc": "2020-05-06T11:41:09.200Z",
+                    "port": "GBPHD",
+                    "purpose": "SHE",
+                    "tripStartDate": "2020-05-04T19:41:09.200Z",
+                },
                 "SRC-TRP-TTT20200506194109200",
             ],
             [
@@ -536,13 +516,11 @@ def test_parser():
                 "CYP",
                 None,
                 "RTP",
-                [
-                    {
-                        "returnDatetimeUtc": "2020-05-06T11:41:15.013Z",
-                        "port": "ESCAR",
-                        "reasonOfReturn": "REF",
-                    }
-                ],
+                {
+                    "returnDatetimeUtc": "2020-05-06T11:41:15.013Z",
+                    "port": "ESCAR",
+                    "reasonOfReturn": "REF",
+                },
                 "SRC-TRP-TTT20200506194115013",
             ],
             [
@@ -559,16 +537,14 @@ def test_parser():
                 "CYP",
                 None,
                 "RTP",
-                [
-                    {
-                        "returnDatetimeUtc": "2020-05-06T11:41:20.712Z",
-                        "port": "ESCAR",
-                        "reasonOfReturn": "LAN",
-                        "gearOnboard": [
-                            {"gear": "GN", "mesh": 140.0, "dimensions": 1000.0}
-                        ],
-                    }
-                ],
+                {
+                    "returnDatetimeUtc": "2020-05-06T11:41:20.712Z",
+                    "port": "ESCAR",
+                    "reasonOfReturn": "LAN",
+                    "gearOnboard": [
+                        {"gear": "GN", "mesh": 140.0, "dimensions": 1000.0}
+                    ],
+                },
                 "SRC-TRP-TTT20200506194120712",
             ],
             [
@@ -585,29 +561,27 @@ def test_parser():
                 "CYP",
                 None,
                 "LAN",
-                [
-                    {
-                        "landingDatetimeUtc": "2020-05-05T19:41:26.516Z",
-                        "port": "ESCAR",
-                        "sender": None,
-                        "catchLanded": [
-                            {
-                                "species": "HAD",
-                                "weight": 100.0,
-                                "nbFish": None,
-                                "economicZone": "ESP",
-                                "faoZone": "27.9.b.2",
-                                "statisticalRectangle": None,
-                                "effortZone": None,
-                                "presentation": "GUT",
-                                "packaging": "BOX",
-                                "preservationState": "FRO",
-                                "conversionFactor": 1.2,
-                                "freshness": None,
-                            }
-                        ],
-                    }
-                ],
+                {
+                    "landingDatetimeUtc": "2020-05-05T19:41:26.516Z",
+                    "port": "ESCAR",
+                    "sender": None,
+                    "catchLanded": [
+                        {
+                            "species": "HAD",
+                            "weight": 100.0,
+                            "nbFish": None,
+                            "economicZone": "ESP",
+                            "faoZone": "27.9.b.2",
+                            "statisticalRectangle": None,
+                            "effortZone": None,
+                            "presentation": "GUT",
+                            "packaging": "BOX",
+                            "preservationState": "FRO",
+                            "conversionFactor": 1.2,
+                            "freshness": None,
+                        }
+                    ],
+                },
                 "SRC-TRP-TTT20200506194126516",
             ],
             [

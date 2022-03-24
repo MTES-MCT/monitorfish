@@ -71,20 +71,20 @@ def simple_parser(el: xml.etree.ElementTree.Element, op_type):
     metadata = parse_metadata(el, op_type)
 
     children = tagged_children(el)
-    data_iter = []
+    data = None
     if "SpecifiedFishingActivity" in children:
-        nb_FActivity = len(children["SpecifiedFishingActivity"])
-        if nb_FActivity > 1:
-            value = {"log_type": "FAR", "value": []}
-            for child in children["SpecifiedFishingActivity"]:
-                data = parse_message(child)
-                value["value"].append(data.get("value")[0])
-            data_iter.append(value)
-        else:
-            data = parse_message(get_element(el, "ram:SpecifiedFishingActivity"))
-            data_iter.append(data)
+        log_types = set()
+        values = []
+        for child in children["SpecifiedFishingActivity"]:
+            fishing_activity_data = parse_message(child)
+            log_types.add(fishing_activity_data["log_type"])
+            values.append(fishing_activity_data.get("value"))
+        assert len(log_types) == 1
+        data = {"log_type": log_types.pop(), "value": values}
+        if data["log_type"] != "FAR":
+            data["value"] = data["value"][0]
 
-    return metadata, data_iter
+    return metadata, data
 
 
 def parse_not(not_):
@@ -92,17 +92,14 @@ def parse_not(not_):
     metadata = parse_metadata(not_, op_type)
 
     children = tagged_children(not_)
-    data_iter = []
     if "SpecifiedFishingActivity" in children:
         for child in children["SpecifiedFishingActivity"]:
             msg_type = get_msg_type(child)
             if msg_type == "RTP":
                 data = parse_pno(child)
-                data_iter.append(data)
             else:
                 data = {"log_type": "NOT-" + msg_type}
-                data_iter.append(data)
-    return metadata, data_iter
+    return metadata, data
 
 
 def parse_del(del_):
@@ -111,7 +108,7 @@ def parse_del(del_):
         "referenced_flux_id": get_text(del_, './/ram:ReferencedID[@schemeID="UUID"]'),
     }
 
-    return metadata, [{"value": None}]
+    return metadata, {"value": None}
 
 
 parsers = {
@@ -138,10 +135,7 @@ def parse(el, tag):
     except KeyError:
         logging.warning(f"Parser not implemented for xml tag: {tag}")
         raise FLUXParsingError
-    try:
-        res = parser(el)
-    except:
-        raise FLUXParsingError
+    res = parser(el)
     return res
 
 
@@ -268,7 +262,7 @@ def batch_parse(xml_messages: List[str]) -> dict:
         for res in parsed_doc:
             try:
                 metadata = res[0]
-                data = res[1][0]
+                data = res[1]
                 logbook_reports_list.append(
                     pd.Series(
                         {

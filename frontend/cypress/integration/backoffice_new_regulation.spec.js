@@ -255,7 +255,7 @@ context('NewRegulation', () => {
 
     // Values are found
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')
-    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 3)
+    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 4)
     cy.get('[data-cy="mesh-label"]').should('have.length', 2)
     cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
     cy.get('[data-cy="tag-zone name"]').should('exist')
@@ -269,7 +269,7 @@ context('NewRegulation', () => {
 
     // Then
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')
-    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 3)
+    cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 4)
     cy.get('[data-cy="mesh-label"]').should('have.length', 2)
     cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
     cy.get('[data-cy="tag-zone name"]').should('exist')

@@ -1,9 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
@@ -28,9 +25,11 @@ object TestUtils {
         dep.departurePort = "AEFAT"
 
         val far = FAR()
-        far.gear = "OTB"
-        far.catches = listOf(catchTwo, catchThree)
-        far.mesh = 120.0
+        val haul = Haul()
+        haul.gear = "OTB"
+        haul.catches = listOf(catchTwo, catchThree)
+        haul.mesh = 120.0
+        far.hauls = listOf(haul)
 
         val pno = PNO()
         pno.catchOnboard = listOf(catchOne, catchTwo, catchThree)
@@ -54,20 +53,24 @@ object TestUtils {
         catchThree.species = "PNB"
 
         val far = FAR()
-        far.gear = "OTB"
-        far.catches = listOf(catchOne, catchTwo)
-        far.mesh = 120.0
+        val haul = Haul()
+        haul.gear = "OTB"
+        haul.catches = listOf(catchOne, catchTwo)
+        haul.mesh = 120.0
+        far.hauls = listOf(haul)
 
-        val farToCorrect = FAR()
-        farToCorrect.gear = "OTB"
-        farToCorrect.catches = listOf(catchOne, catchTwo, catchThree)
-        farToCorrect.mesh = 120.0
+        val correctedFar = FAR()
+        val correctedHaul = Haul()
+        correctedHaul.gear = "OTB"
+        correctedHaul.catches = listOf(catchOne, catchTwo, catchThree)
+        correctedHaul.mesh = 120.0
+        correctedFar.hauls = listOf(correctedHaul)
 
         return listOf(
                 LogbookMessage(id = 1, analyzedByRules = listOf(), operationNumber = "9065646811", tripNumber = 345, reportId = "9065646811", operationType = LogbookOperationType.DAT, messageType = "FAR",
                         message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
                 LogbookMessage(id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, reportId = "", referencedReportId = "9065646811", operationType = LogbookOperationType.COR, messageType = "FAR",
-                        message = farToCorrect, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12))
+                        message = correctedFar, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12))
                 )
     }
 
@@ -80,14 +83,18 @@ object TestUtils {
         catchThree.species = "PNB"
 
         val far = FAR()
-        far.gear = "OTB"
-        far.catches = listOf(catchOne, catchTwo)
-        far.mesh = 120.0
+        val haul = Haul()
+        haul.gear = "OTB"
+        haul.catches = listOf(catchOne, catchTwo)
+        haul.mesh = 120.0
+        far.hauls = listOf(haul)
 
         val farTwo = FAR()
-        farTwo.gear = "OTB"
-        farTwo.catches = listOf(catchOne, catchTwo, catchThree)
-        farTwo.mesh = 120.0
+        val haulTwo = Haul()
+        haulTwo.gear = "OTB"
+        haulTwo.catches = listOf(catchOne, catchTwo, catchThree)
+        haulTwo.mesh = 120.0
+        farTwo.hauls = listOf(haulTwo)
 
         val farAck = Acknowledge()
         farAck.returnStatus = "000"

@@ -19,7 +19,7 @@ const MetadataGears = () => {
   } = regulatoryGears
 
   return <>{regulatoryGears && authorized !== undefined &&
-    <Section>
+    <Section data-cy={'regulatory-layers-metadata-gears'}>
       <SectionTitle>{regulatoryGears.authorized
         ? <GreenCircle margin={'0 5px 0 0'} />
         : <RedCircle margin={'0 5px 0 0'} />}

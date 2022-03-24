@@ -8,7 +8,7 @@ const MetadataFishingPeriod = () => {
   const { fishingPeriod } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
 
   return <>{fishingPeriod && fishingPeriod.authorized !== undefined &&
-    <Section>
+    <Section data-cy={'regulatory-layers-metadata-fishing-period'}>
       <SectionTitle>{fishingPeriod.authorized
         ? <GreenCircle margin={'0 5px 0 0'} />
         : <RedCircle margin={'0 5px 0 0'} />}

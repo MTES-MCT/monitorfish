@@ -58,6 +58,7 @@ import {
   REGULATORY_REFERENCE_KEYS
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
+import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -107,12 +108,12 @@ const CreateRegulation = ({ title, isEdition }) => {
   } = processingRegulation
 
   useEffect(() => {
-    if (!layersTopicsByRegTerritory || Object.keys(layersTopicsByRegTerritory).length === 0) {
-      dispatch(getAllRegulatoryLayersByRegTerritory())
-    }
-
     getGeometryObjectList()
-    batch(() => {
+    batch(async () => {
+      await dispatch(getAllSpecies())
+      if (!layersTopicsByRegTerritory || Object.keys(layersTopicsByRegTerritory).length === 0) {
+        dispatch(getAllRegulatoryLayersByRegTerritory())
+      }
       dispatch(closeRegulatoryZoneMetadataPanel())
       dispatch(setRegulationModified(false))
     })

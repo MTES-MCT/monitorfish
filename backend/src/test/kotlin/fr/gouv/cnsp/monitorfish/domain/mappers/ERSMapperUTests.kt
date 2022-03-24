@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.mappers
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Haul
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR
@@ -39,12 +40,14 @@ class ERSMapperUTests {
         catch.species = "SCR"
         catch.weight = 125.0
 
+        val haul = Haul()
+        haul.gear = "OTB"
+        haul.catches = listOf(catch)
+        haul.mesh = 80.0
+        haul.latitude = 45.389
+        haul.longitude = -1.303
         val farMessage = FAR()
-        farMessage.gear = "OTB"
-        farMessage.catches = listOf(catch)
-        farMessage.mesh = 80.0
-        farMessage.latitude = 45.389
-        farMessage.longitude = -1.303
+        farMessage.hauls = listOf(haul)
 
         // When
         val jsonString = mapper.writeValueAsString(farMessage);
@@ -54,12 +57,17 @@ class ERSMapperUTests {
         assertThat(parsedFARMessage).isInstanceOf(FAR::class.java)
         parsedFARMessage as FAR
 
-        assertThat(parsedFARMessage.gear).isEqualTo("OTB")
-        assertThat(parsedFARMessage.mesh).isEqualTo(80.0)
-        assertThat(parsedFARMessage.latitude).isEqualTo(45.389)
-        assertThat(parsedFARMessage.longitude).isEqualTo(-1.303)
+        val parsedHauls = parsedFARMessage.hauls
+        assertThat(parsedHauls.size).isEqualTo(1)
 
-        val receivedCatch = parsedFARMessage.catches.first()
+        val parsedhaul = parsedHauls.first()
+
+        assertThat(parsedhaul.gear).isEqualTo("OTB")
+        assertThat(parsedhaul.mesh).isEqualTo(80.0)
+        assertThat(parsedhaul.latitude).isEqualTo(45.389)
+        assertThat(parsedhaul.longitude).isEqualTo(-1.303)
+
+        val receivedCatch = parsedhaul.catches.first()
         assertThat(receivedCatch).isNotNull
         assertThat(receivedCatch.statisticalRectangle).isEqualTo("23E6")
         assertThat(receivedCatch.economicZone).isEqualTo("FRA")
@@ -71,7 +79,7 @@ class ERSMapperUTests {
     @Test
     fun `getERSMessageValueFromJSON Should deserialize an example FAR message`() {
         // Given
-        val farMessage = "{\"gear\": \"GTN\", \"mesh\": 100.0, \"catches\": [" +
+        val farMessage = "{\"hauls\":[{\"gear\": \"GTN\", \"mesh\": 100.0, \"catches\": [" +
                 "{\"weight\": 2.0, \"conversionFactor\": 1.0, \"nbFish\": null, \"species\": \"SCL\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
                 "{\"weight\": 10.0, \"conversionFactor\": 1.0, \"nbFish\": null, \"species\": \"BRB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
                 "{\"weight\": 1.5, \"nbFish\": null, \"species\": \"LBE\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
@@ -86,7 +94,7 @@ class ERSMapperUTests {
                 "{\"weight\": 40.0, \"nbFish\": null, \"species\": \"USB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
                 "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"RJH\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
                 "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"WHG\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}], \"farDatetimeUtc\": \"2019-12-05T11:55Z\"" +
-                "}"
+                "}]}"
 
         // When
         val parsedFARMessage = ERSMapper.getERSMessageValueFromJSON(mapper, farMessage, "FAR", LogbookOperationType.DAT)
@@ -95,12 +103,17 @@ class ERSMapperUTests {
         assertThat(parsedFARMessage).isInstanceOf(FAR::class.java)
         parsedFARMessage as FAR
 
-        assertThat(parsedFARMessage.gear).isEqualTo("GTN")
-        assertThat(parsedFARMessage.mesh).isEqualTo(100.0)
-        assertThat(parsedFARMessage.catchDateTime.toString()).isEqualTo("2019-12-05T11:55Z[UTC]")
-        assertThat(parsedFARMessage.catches).hasSize(14)
+        val parsedHauls = parsedFARMessage.hauls
+        assertThat(parsedHauls.size).isEqualTo(1)
 
-        val receivedCatch = parsedFARMessage.catches.first()
+        val parsedHaul = parsedHauls.first()
+
+        assertThat(parsedHaul.gear).isEqualTo("GTN")
+        assertThat(parsedHaul.mesh).isEqualTo(100.0)
+        assertThat(parsedHaul.catchDateTime.toString()).isEqualTo("2019-12-05T11:55Z[UTC]")
+        assertThat(parsedHaul.catches).hasSize(14)
+
+        val receivedCatch = parsedHaul.catches.first()
         assertThat(receivedCatch).isNotNull
         assertThat(receivedCatch.statisticalRectangle).isEqualTo("23E6")
         assertThat(receivedCatch.conversionFactor).isEqualTo(1.0)

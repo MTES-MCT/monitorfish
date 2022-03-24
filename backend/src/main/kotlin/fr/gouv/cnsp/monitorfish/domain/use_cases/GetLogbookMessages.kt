@@ -148,17 +148,19 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
     }
 
     private fun setNamesFromCodes(message: FAR) {
-        message.gear?.let { gear ->
-            try {
-                message.gearName = gearRepository.find(gear).name
-            } catch (e: CodeNotFoundException) {
-                logger.warn(e.message)
+        message.hauls.forEach { haul ->
+            haul.gear?.let { gear ->
+                try {
+                    haul.gearName = gearRepository.find(gear).name
+                } catch (e: CodeNotFoundException) {
+                    logger.warn(e.message)
+                }
             }
-        }
 
-        message.catches.forEach { catch ->
-            catch.species?.let { species ->
-                addSpeciesName(catch, species)
+            haul.catches.forEach { catch ->
+                catch.species?.let { species ->
+                    addSpeciesName(catch, species)
+                }
             }
         }
     }

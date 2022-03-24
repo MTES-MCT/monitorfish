@@ -77,11 +77,12 @@ class GetVesselLogbookMessagesUTests {
         assertThat(ersMessages[1].message).isInstanceOf(FAR::class.java)
         assertThat(ersMessages[1].rawMessage).isEqualTo("<xml>DUMMY XML MESSAGE</xml>")
         val far = ersMessages[1].message as FAR
-        assertThat(far.catches.first().species).isEqualTo("SMV")
-        assertThat(far.catches.first().speciesName).isEqualTo("STOMIAS BREVIBARBATUS")
-        assertThat(far.catches.last().species).isEqualTo("PNB")
-        assertThat(far.catches.last().speciesName).isEqualTo("CREVETTE ROYALE ROSE")
-        assertThat(far.gearName).isEqualTo("Chaluts de fond à panneaux")
+        assertThat(far.hauls.size).isEqualTo(1)
+        assertThat(far.hauls.first().catches.first().species).isEqualTo("SMV")
+        assertThat(far.hauls.first().catches.first().speciesName).isEqualTo("STOMIAS BREVIBARBATUS")
+        assertThat(far.hauls.first().catches.last().species).isEqualTo("PNB")
+        assertThat(far.hauls.first().catches.last().speciesName).isEqualTo("CREVETTE ROYALE ROSE")
+        assertThat(far.hauls.first().gearName).isEqualTo("Chaluts de fond à panneaux")
 
         assertThat(ersMessages[2].message).isInstanceOf(PNO::class.java)
         assertThat(ersMessages[2].rawMessage).isEqualTo("<xml>DUMMY XML MESSAGE</xml>")
@@ -121,13 +122,15 @@ class GetVesselLogbookMessagesUTests {
         assertThat(ersMessages[0].operationType).isEqualTo(LogbookOperationType.DAT)
         assertThat(ersMessages[0].isCorrected).isEqualTo(true)
         val correctedFar = ersMessages[0].message as FAR
-        assertThat(correctedFar.catches).hasSize(2)
+        assertThat(correctedFar.hauls.size).isEqualTo(1)
+        assertThat(correctedFar.hauls.first().catches).hasSize(2)
 
         assertThat(ersMessages[1].message).isInstanceOf(FAR::class.java)
         assertThat(ersMessages[1].operationType).isEqualTo(LogbookOperationType.COR)
         assertThat(ersMessages[1].isCorrected).isEqualTo(false)
         val far = ersMessages[1].message as FAR
-        assertThat(far.catches).hasSize(3)
+        assertThat(far.hauls.size).isEqualTo(1)
+        assertThat(far.hauls.first().catches).hasSize(3)
     }
 
     @Test
@@ -160,7 +163,8 @@ class GetVesselLogbookMessagesUTests {
         assertThat(ack.returnStatus).isEqualTo("002")
         assertThat(ack.isSuccess).isFalse
         val correctedFar = ersMessages[0].message as FAR
-        assertThat(correctedFar.catches).hasSize(2)
+        assertThat(correctedFar.hauls.size).isEqualTo(1)
+        assertThat(correctedFar.hauls.first().catches).hasSize(2)
 
         assertThat(ersMessages[1].message).isInstanceOf(FAR::class.java)
         assertThat(ersMessages[1].operationType).isEqualTo(LogbookOperationType.DAT)
@@ -170,7 +174,8 @@ class GetVesselLogbookMessagesUTests {
         assertThat(ackTwo.returnStatus).isEqualTo("000")
         assertThat(ackTwo.isSuccess).isTrue
         val far = ersMessages[1].message as FAR
-        assertThat(far.catches).hasSize(3)
+        assertThat(far.hauls.size).isEqualTo(1)
+        assertThat(far.hauls.first().catches).hasSize(3)
     }
 
     @Test

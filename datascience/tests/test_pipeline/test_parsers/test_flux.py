@@ -195,25 +195,27 @@ def test_parser():
                 "CYP",
                 None,
                 "FAR",
-                [
-                    {
-                        "farDatetimeUtc": "2020-05-06T11:39:59.462Z",
-                        "gear": "TBB",
-                        "mesh": 140.0,
-                        "dimensions": 250.0,
-                        "catches": [
-                            {
-                                "species": "COD",
-                                "weight": 1000.0,
-                                "nbFish": None,
-                                "faoZone": "27.8.e.1",
-                                "statisticalRectangle": "21D5",
-                                "economicZone": None,
-                                "effortZone": None,
-                            }
-                        ],
-                    }
-                ],
+                {
+                    "hauls": [
+                        {
+                            "farDatetimeUtc": "2020-05-06T11:39:59.462Z",
+                            "gear": "TBB",
+                            "mesh": 140.0,
+                            "dimensions": 250.0,
+                            "catches": [
+                                {
+                                    "species": "COD",
+                                    "weight": 1000.0,
+                                    "nbFish": None,
+                                    "faoZone": "27.8.e.1",
+                                    "statisticalRectangle": "21D5",
+                                    "economicZone": None,
+                                    "effortZone": None,
+                                }
+                            ],
+                        }
+                    ]
+                },
                 "SRC-TRP-TTT20200506193959462",
             ],
             [
@@ -230,42 +232,44 @@ def test_parser():
                 "CYP",
                 "1234567",
                 "FAR",
-                [
-                    {
-                        "farDatetimeUtc": "2020-05-04T19:40:05.354Z",
-                        "gear": "TBB",
-                        "mesh": 140.0,
-                        "dimensions": 250.0,
-                        "catches": [
-                            {
-                                "species": "COD",
-                                "weight": 1000.0,
-                                "nbFish": None,
-                                "faoZone": "27.8.e.1",
-                                "statisticalRectangle": "21D5",
-                                "economicZone": None,
-                                "effortZone": None,
-                            }
-                        ],
-                    },
-                    {
-                        "farDatetimeUtc": "2020-05-04T19:40:05.354Z",
-                        "gear": "TBB",
-                        "mesh": 140.0,
-                        "dimensions": 250.0,
-                        "catches": [
-                            {
-                                "species": "COD",
-                                "weight": 600.0,
-                                "nbFish": None,
-                                "faoZone": "27.8.e.1",
-                                "statisticalRectangle": "21D6",
-                                "economicZone": None,
-                                "effortZone": None,
-                            }
-                        ],
-                    },
-                ],
+                {
+                    "hauls": [
+                        {
+                            "farDatetimeUtc": "2020-05-04T19:40:05.354Z",
+                            "gear": "TBB",
+                            "mesh": 140.0,
+                            "dimensions": 250.0,
+                            "catches": [
+                                {
+                                    "species": "COD",
+                                    "weight": 1000.0,
+                                    "nbFish": None,
+                                    "faoZone": "27.8.e.1",
+                                    "statisticalRectangle": "21D5",
+                                    "economicZone": None,
+                                    "effortZone": None,
+                                }
+                            ],
+                        },
+                        {
+                            "farDatetimeUtc": "2020-05-04T19:40:05.354Z",
+                            "gear": "TBB",
+                            "mesh": 140.0,
+                            "dimensions": 250.0,
+                            "catches": [
+                                {
+                                    "species": "COD",
+                                    "weight": 600.0,
+                                    "nbFish": None,
+                                    "faoZone": "27.8.e.1",
+                                    "statisticalRectangle": "21D6",
+                                    "economicZone": None,
+                                    "effortZone": None,
+                                }
+                            ],
+                        },
+                    ]
+                },
                 "SRC-TRP-TTT20200506194005354",
             ],
             [
@@ -282,7 +286,7 @@ def test_parser():
                 "CYP",
                 None,
                 "FAR",
-                [{"farDatetimeUtc": "2020-05-06T11:40:11.291Z"}],
+                {"hauls": [{"farDatetimeUtc": "2020-05-06T11:40:11.291Z"}]},
                 "SRC-TRP-TTT20200506194011291",
             ],
             [
@@ -299,14 +303,18 @@ def test_parser():
                 "SVN",
                 None,
                 "FAR",
-                [
-                    {
-                        "farDatetimeUtc": "2020-04-29T12:00:00.000Z",
-                        "catches": [{"species": "BFT", "weight": 0.0, "nbFish": None}],
-                        "latitude": 39.65,
-                        "longitude": 6.83,
-                    }
-                ],
+                {
+                    "hauls": [
+                        {
+                            "farDatetimeUtc": "2020-04-29T12:00:00.000Z",
+                            "catches": [
+                                {"species": "BFT", "weight": 0.0, "nbFish": None}
+                            ],
+                            "latitude": 39.65,
+                            "longitude": 6.83,
+                        }
+                    ]
+                },
                 "SRC-TRP-TTT20200506194017100",
             ],
             [
@@ -323,22 +331,24 @@ def test_parser():
                 "CYP",
                 "1234567",
                 "FAR",
-                [
-                    {
-                        "farDatetimeUtc": "2020-05-06T11:40:22.885Z",
-                        "catches": [
-                            {
-                                "species": "MZZ",
-                                "weight": 0.0,
-                                "nbFish": None,
-                                "faoZone": "27.8.e.1",
-                                "economicZone": None,
-                                "statisticalRectangle": None,
-                                "effortZone": None,
-                            }
-                        ],
-                    }
-                ],
+                {
+                    "hauls": [
+                        {
+                            "farDatetimeUtc": "2020-05-06T11:40:22.885Z",
+                            "catches": [
+                                {
+                                    "species": "MZZ",
+                                    "weight": 0.0,
+                                    "nbFish": None,
+                                    "faoZone": "27.8.e.1",
+                                    "economicZone": None,
+                                    "statisticalRectangle": None,
+                                    "effortZone": None,
+                                }
+                            ],
+                        }
+                    ]
+                },
                 "SRC-TRP-TTT20200506194022885",
             ],
             [

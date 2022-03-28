@@ -7,9 +7,9 @@ import pytest
 from config import TEST_DATA_LOCATION
 from src.pipeline.parsers.flux.flux import (
     FLUXParsingError,
+    base64_decode,
     batch_parse,
-    decode_flux,
-    parse_xml_document,
+    parse_fa_report_message_string,
 )
 
 XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/flux"
@@ -17,14 +17,14 @@ XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/flux"
 
 def test_parse_empty_message_raises_flux_parsing_error():
     with pytest.raises(FLUXParsingError):
-        parse_xml_document("")
+        parse_fa_report_message_string("")
 
 
 def test_decode_flux_decodes_base64_encoded_flux_document():
     with open(XML_TEST_DATA_LOCATION / "base64_encoded.xml") as f:
         s = f.read()
 
-    decoded_xml = decode_flux(s)
+    decoded_xml = base64_decode(s)
     assert decoded_xml == "This is a base64 encoded message"
 
 
@@ -32,7 +32,7 @@ def test_decode_flux_returns_unchanged_input_string_if_not_base64_encoded():
     with open(XML_TEST_DATA_LOCATION / "not_base64_encoded.xml") as f:
         s = f.read()
 
-    decoded_xml = decode_flux(s)
+    decoded_xml = base64_decode(s)
     assert decoded_xml == s
 
 
@@ -41,10 +41,10 @@ def test_decode_flux_raises_flux_parsing_error():
         s = f.read()
 
     with pytest.raises(FLUXParsingError):
-        decode_flux(s)
+        base64_decode(s)
 
 
-def test_parser():
+def test_batch_parse():
     base64_encoded_xml_files_location = XML_TEST_DATA_LOCATION / "business_BASE64"
     flux_file_list = []
     for filename in sorted(os.listdir(base64_encoded_xml_files_location)):
@@ -178,7 +178,16 @@ def test_parser():
                 "CYP",
                 "1234567",
                 "NOT-COE",
-                None,
+                {
+                    "effortZoneEntryDatetimeUtc": "2020-05-06T11:39:46.583Z",
+                    "targetSpeciesOnEntry": None,
+                    "faoZoneEntered": None,
+                    "economicZoneEntered": None,
+                    "statisticalRectangleEntered": None,
+                    "effortZoneEntered": None,
+                    "latitude": 42.794,
+                    "longitude": -13.809,
+                },
                 "SRC-TRP-TTT20200506193946583",
             ],
             [
@@ -364,7 +373,7 @@ def test_parser():
                 "GOLF",
                 "CYP",
                 "1234567",
-                "JOINT_FISHING_OPERATION",
+                "JFO",
                 None,
                 "SRC-TRP-TTT20200506194028615",
             ],
@@ -436,7 +445,16 @@ def test_parser():
                 "CYP",
                 "1234567",
                 "NOT-COX",
-                None,
+                {
+                    "effortZoneExitDatetimeUtc": "2020-05-06T11:40:51.795Z",
+                    "targetSpeciesOnExit": None,
+                    "faoZoneExited": None,
+                    "economicZoneExited": None,
+                    "statisticalRectangleExited": None,
+                    "effortZoneExited": None,
+                    "latitudeExited": 57.7258,
+                    "longitudeExited": 0.5983,
+                },
                 "SRC-TRP-TTT20200506194051795",
             ],
             [

@@ -1,4 +1,5 @@
 import logging
+import xml.etree.ElementTree as ET
 from datetime import datetime
 
 NS_FLUX = {
@@ -12,52 +13,17 @@ NS_FLUX = {
 }
 
 
-def get_element(xml_element, xml_path):
+def get_element(xml_element: ET.Element, xml_path: str) -> ET.Element:
+    """Returns the first element of `xml_element` that matches the provided `xml_path`.
+
+    Args:
+        xml_element (ET.Element): xml element in which to search
+        xml_path (str): path describing the searched element
+
+    Returns:
+        ET.Element: first element of the input `xml_element` that matches `xml_path`
+    """
     return xml_element.find(xml_path, NS_FLUX)
-
-
-def get_msg_type(xml_element):
-    # Renvoie le type de message(DEP, LAN,...)
-    msg_types = {
-        "DEPARTURE": "DEP",
-        "FISHING_OPERATION": "FAR",
-        "DISCARD": "DIS",
-        "ARRIVAL": "RTP",
-        "LANDING": "LAN",
-        "RELOCATION": "RLC",
-        "TRANSHIPMENT": "TRA",
-        "AREA_ENTRY": "COE",
-        "AREA_EXIT": "COX",
-        "JOINT_FISHING_OPERATION": "JOINT_FISHING_OPERATION",
-    }
-    message_type = get_text(xml_element, './/ram:TypeCode[@listID="FLUX_FA_TYPE"]')
-    try:
-        type = msg_types[message_type]
-    except:
-        type = message_type
-    return type
-
-
-def get_op_type(xml_element):
-    # Renvoie le type d'operation (DAT, COR, DEL ou NOTIFICATION)
-    report_type = get_text(
-        xml_element, './/ram:TypeCode[@listID="FLUX_FA_REPORT_TYPE"]'
-    )
-    if report_type == "NOTIFICATION":
-        return "NOT"
-    else:
-        return get_purpose(xml_element)
-
-
-def get_purpose(xml_element):
-    purpose = get_text(xml_element, './/*[@listID="FLUX_GP_PURPOSE"]')
-    purpose_list = {"9": "DAT", "1": "DEL", "3": "DEL", "5": "COR"}
-    try:
-        op_type = purpose_list[purpose]
-    except KeyError:
-        logging.warning("Parser not implemented for purpose code: " + purpose)
-        raise Exception
-    return op_type
 
 
 def get_text(xml_element, xml_path):

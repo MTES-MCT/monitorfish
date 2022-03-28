@@ -79,6 +79,23 @@ def test_batch_parse():
         ),
         data=[
             [
+                "ab1058c7-b7cf-4345-a0b3-a9f472cc6ef1",
+                datetime.datetime(2020, 5, 6, 18, 41, 49),
+                "DEL",
+                "e43c3bf0-163c-4fb0-a1de-1a61beb87981",
+                "e43c3bf0-163c-4fb0-a1de-1a61beb87988",
+                datetime.datetime(2020, 5, 6, 15, 41, 49),
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            ],
+            [
                 "9376ccbd-be2f-4d3d-b4ac-3c559ac9586a",
                 datetime.datetime(2021, 1, 31, 12, 29, 2),
                 "DAT",

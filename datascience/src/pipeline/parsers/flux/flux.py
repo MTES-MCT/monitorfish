@@ -149,7 +149,6 @@ def get_operation_type(xml_element):
 
 
 def parse_metadata(fa_report_document: xml.etree.ElementTree.Element):
-    vessel = get_element(fa_report_document, "ram:SpecifiedVesselTransportMeans")
 
     metadata = {
         "operation_type": get_operation_type(fa_report_document),
@@ -157,12 +156,6 @@ def parse_metadata(fa_report_document: xml.etree.ElementTree.Element):
         "report_datetime_utc": make_datetime(
             get_text(fa_report_document, ".//ram:CreationDateTime/udt:DateTime")
         ),
-        "cfr": get_text(vessel, './/*[@schemeID="CFR"]'),
-        "ircs": get_text(vessel, './/*[@schemeID="IRCS"]'),
-        "external_identification": get_text(vessel, './/*[@schemeID="EXT_MARK"]'),
-        "vessel_name": get_text(vessel, "ram:Name"),
-        "flag_state": get_text(vessel, './/ram:ID[@schemeID="TERRITORY"]'),
-        "imo": get_text(vessel, './/*[@schemeID="UVI"]'),
         "trip_number": get_text(
             fa_report_document,
             './/ram:SpecifiedFishingTrip/ram:ID[@schemeID="EU_TRIP_ID"]',
@@ -171,6 +164,19 @@ def parse_metadata(fa_report_document: xml.etree.ElementTree.Element):
             fa_report_document, './/ram:ReferencedID[@schemeID="UUID"]'
         ),
     }
+
+    vessel = get_element(fa_report_document, "ram:SpecifiedVesselTransportMeans")
+
+    if vessel is not None:
+        vessel_data = {
+            "cfr": get_text(vessel, './/*[@schemeID="CFR"]'),
+            "ircs": get_text(vessel, './/*[@schemeID="IRCS"]'),
+            "external_identification": get_text(vessel, './/*[@schemeID="EXT_MARK"]'),
+            "vessel_name": get_text(vessel, "ram:Name"),
+            "flag_state": get_text(vessel, './/ram:ID[@schemeID="TERRITORY"]'),
+            "imo": get_text(vessel, './/*[@schemeID="UVI"]'),
+        }
+        metadata = {**metadata, **vessel_data}
 
     return metadata
 
@@ -181,8 +187,6 @@ def parse_fa_report_document(fa_report_document: ET.Element):
     report_type = get_fa_report_type(fa_report_document)
 
     children = tagged_children(fa_report_document)
-
-    data = None
 
     if "SpecifiedFishingActivity" in children:
         log_types = set()
@@ -208,6 +212,8 @@ def parse_fa_report_document(fa_report_document: ET.Element):
         else:
             assert len(children["SpecifiedFishingActivity"]) == 1
             data["value"] = data["value"][0]
+    else:
+        data = dict()
 
     fa_report_document_data = {**metadata, **data}
 

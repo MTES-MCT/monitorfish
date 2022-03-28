@@ -509,6 +509,31 @@ def test_batch_parse():
                 "SRC-TRP-TTT20200506194103340",
             ],
             [
+                "d5c3b039-aaee-4cca-bcae-637fa8effe14",
+                datetime.datetime(2020, 5, 6, 18, 41, 3),
+                "COR",
+                "7ee30c6c-adf9-4f60-a4f1-f7f15ab92804",
+                "7ee30c6c-adf9-4f60-a4f1-f7f15ab92803",
+                datetime.datetime(2020, 5, 6, 15, 41, 3),
+                "CYP123456789",
+                None,
+                None,
+                None,
+                "CYP",
+                None,
+                "PNO",
+                {
+                    "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z",
+                    "port": "GBPHD",
+                    "purpose": "LAN",
+                    "tripStartDate": "2020-05-04T19:41:03.340Z",
+                    "catchOnboard": [
+                        {"species": "GHL", "weight": 1500.0, "nbFish": None}
+                    ],
+                },
+                "SRC-TRP-TTT20200506194103340",
+            ],
+            [
                 "7cfcdde3-286c-4713-8460-2ed82a59be34",
                 datetime.datetime(2020, 5, 6, 18, 41, 9),
                 "DAT",

@@ -6,12 +6,12 @@ from src.pipeline.parsers.flux.childless_parsers import (
     parse_ras,
     parse_spe,
 )
-from src.pipeline.parsers.flux.utils import NS_FLUX, get_element, get_msg_type, get_text
+from src.pipeline.parsers.flux.utils import NS_FLUX, get_element, get_text
 from src.pipeline.parsers.utils import tagged_children, try_float
 
 
 def default_log_parser(el: xml.etree.ElementTree.Element):
-    return {"log_type": get_msg_type(el)}
+    return None
 
 
 def parse_dep(dep):
@@ -52,8 +52,7 @@ def parse_dep(dep):
             catches = [dict(item, **zone_data) for item in catches]
         value["speciesOnboard"] = catches
 
-    data = {"log_type": "DEP", "value": value}
-    return data
+    return value
 
 
 def parse_far(far):
@@ -96,9 +95,7 @@ def parse_far(far):
         value["latitude"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
         value["longitude"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
 
-    data = {"log_type": "FAR", "value": value}
-
-    return data
+    return value
 
 
 def parse_dis(dis):
@@ -125,9 +122,7 @@ def parse_dis(dis):
             catches = [dict(item, **zone_data) for item in catches]
         value["catches"] = catches
 
-    data = {"log_type": "DIS", "value": value}
-
-    return data
+    return value
 
 
 def parse_coe(coe):
@@ -156,9 +151,7 @@ def parse_coe(coe):
         value["latitude"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
         value["longitude"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
 
-    data = {"log_type": "COE", "value": value}
-
-    return data
+    return value
 
 
 def parse_cox(cox):
@@ -186,9 +179,7 @@ def parse_cox(cox):
         value["latitudeExited"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
         value["longitudeExited"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
 
-    data = {"log_type": "COX", "value": value}
-
-    return data
+    return value
 
 
 def parse_pno(pno):
@@ -230,9 +221,7 @@ def parse_pno(pno):
         value["latitude"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
         value["longitude"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
 
-    data = {"log_type": "PNO", "value": value}
-
-    return data
+    return value
 
 
 def parse_lan(lan):
@@ -266,9 +255,7 @@ def parse_lan(lan):
             catches = [dict(item, **zone_data) for item in catches]
         value["catchLanded"] = catches
 
-    data = {"log_type": "LAN", "value": value}
-
-    return data
+    return value
 
 
 def parse_rtp(rtp):
@@ -294,6 +281,4 @@ def parse_rtp(rtp):
         if usedGear is not None:
             value["gearOnboard"] = parse_gea(usedGear)
 
-    data = {"log_type": "RTP", "value": value}
-
-    return data
+    return value

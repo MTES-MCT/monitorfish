@@ -4,8 +4,8 @@ import logging
 import xml
 import xml.etree.ElementTree as ET
 from datetime import datetime
-from functools import partial
-from typing import List
+from enum import Enum
+from typing import List, Tuple
 from xml.etree.ElementTree import ParseError
 
 import pandas as pd
@@ -24,27 +24,138 @@ from src.pipeline.parsers.flux.log_parsers import (
 from src.pipeline.parsers.flux.utils import (
     NS_FLUX,
     get_element,
-    get_msg_type,
-    get_op_type,
-    get_purpose,
     get_text,
     make_datetime,
 )
-from src.pipeline.parsers.utils import tagged_children
+from src.pipeline.parsers.utils import get_root_tag, tagged_children
 
 
 class FLUXParsingError(Exception):
     """Raised when an FLUX message cannot be parsed."""
 
 
-def parse_metadata(el: xml.etree.ElementTree.Element, op_type):
-    vessel = get_element(el, "ram:SpecifiedVesselTransportMeans")
+class FluxFAReportDocumentType(Enum):
+    DECLARATION = "DECLARATION"
+    NOTIFICATION = "NOTIFICATION"
+
+
+class FluxFishingActivityType(Enum):
+    DEPARTURE = "DEPARTURE"
+    FISHING_OPERATION = "FISHING_OPERATION"
+    DISCARD = "DISCARD"
+    ARRIVAL = "ARRIVAL"
+    LANDING = "LANDING"
+    RELOCATION = "RELOCATION"
+    TRANSHIPMENT = "TRANSHIPMENT"
+    AREA_ENTRY = "AREA_ENTRY"
+    AREA_EXIT = "AREA_EXIT"
+    JOINT_FISHING_OPERATION = "JOINT_FISHING_OPERATION"
+
+
+def get_fishing_activity_type(fishing_activity: ET.Element) -> FluxFishingActivityType:
+    fishing_activity_type = get_text(
+        fishing_activity, './/ram:TypeCode[@listID="FLUX_FA_TYPE"]'
+    )
+    try:
+        res = FluxFishingActivityType[fishing_activity_type]
+    except KeyError as e:
+        raise FLUXParsingError("Unknown fishing activity type: ", e)
+    return res
+
+
+def get_fa_report_type(fa_report_document: ET.Element) -> FluxFAReportDocumentType:
+
+    report_type = get_text(
+        fa_report_document, './/ram:TypeCode[@listID="FLUX_FA_REPORT_TYPE"]'
+    )
+    try:
+        res = FluxFAReportDocumentType[report_type]
+    except KeyError as e:
+        raise FLUXParsingError("Unknown report type: ", e)
+    return res
+
+
+def get_log_type(
+    fishing_activity: ET.Element, report_type: FluxFAReportDocumentType
+) -> str:
+    mapping = {
+        (
+            FluxFAReportDocumentType.DECLARATION,
+            FluxFishingActivityType.DEPARTURE,
+        ): "DEP",
+        (
+            FluxFAReportDocumentType.DECLARATION,
+            FluxFishingActivityType.FISHING_OPERATION,
+        ): "FAR",
+        (FluxFAReportDocumentType.DECLARATION, FluxFishingActivityType.DISCARD): "DIS",
+        (FluxFAReportDocumentType.DECLARATION, FluxFishingActivityType.ARRIVAL): "RTP",
+        (FluxFAReportDocumentType.NOTIFICATION, FluxFishingActivityType.ARRIVAL): "PNO",
+        (FluxFAReportDocumentType.DECLARATION, FluxFishingActivityType.LANDING): "LAN",
+        (
+            FluxFAReportDocumentType.DECLARATION,
+            FluxFishingActivityType.RELOCATION,
+        ): "RLC",
+        (
+            FluxFAReportDocumentType.DECLARATION,
+            FluxFishingActivityType.TRANSHIPMENT,
+        ): "TRA",
+        (
+            FluxFAReportDocumentType.NOTIFICATION,
+            FluxFishingActivityType.TRANSHIPMENT,
+        ): "NOT-TRA",
+        (
+            FluxFAReportDocumentType.DECLARATION,
+            FluxFishingActivityType.AREA_ENTRY,
+        ): "COE",
+        (
+            FluxFAReportDocumentType.NOTIFICATION,
+            FluxFishingActivityType.AREA_ENTRY,
+        ): "NOT-COE",
+        (
+            FluxFAReportDocumentType.DECLARATION,
+            FluxFishingActivityType.AREA_EXIT,
+        ): "COX",
+        (
+            FluxFAReportDocumentType.NOTIFICATION,
+            FluxFishingActivityType.AREA_EXIT,
+        ): "NOT-COX",
+        (
+            FluxFAReportDocumentType.DECLARATION,
+            FluxFishingActivityType.JOINT_FISHING_OPERATION,
+        ): "JFO",
+    }
+    fishing_activity_type = get_fishing_activity_type(fishing_activity)
+    try:
+        log_type = mapping[(report_type, fishing_activity_type)]
+    except KeyError as e:
+        raise FLUXParsingError(
+            (
+                f"Could not attribute log type to report_type '{report_type}' and "
+                f"fishing_activity_type '{fishing_activity_type}'. "
+            ),
+            e,
+        )
+    return log_type
+
+
+def get_operation_type(xml_element):
+    purpose = get_text(xml_element, './/*[@listID="FLUX_GP_PURPOSE"]')
+    purpose_operation_type_mapping = {"9": "DAT", "1": "DEL", "3": "DEL", "5": "COR"}
+    try:
+        op_type = purpose_operation_type_mapping[purpose]
+    except KeyError as e:
+        raise FLUXParsingError(f"Error finding operation type for code {purpose}: ", e)
+    return op_type
+
+
+def parse_metadata(fa_report_document: xml.etree.ElementTree.Element):
+    vessel = get_element(fa_report_document, "ram:SpecifiedVesselTransportMeans")
 
     metadata = {
-        "operation_type": op_type,
-        "report_id": get_text(el, './/ram:ID[@schemeID="UUID"]'),
+        "operation_type": get_operation_type(fa_report_document),
+        "report_id": get_text(fa_report_document, './/ram:ID[@schemeID="UUID"]'),
         "report_datetime_utc": make_datetime(
-            get_text(el, ".//ram:CreationDateTime/udt:DateTime")
+            get_text(fa_report_document, ".//ram:CreationDateTime/udt:DateTime")
         ),
         "cfr": get_text(vessel, './/*[@schemeID="CFR"]'),
         "ircs": get_text(vessel, './/*[@schemeID="IRCS"]'),
@@ -53,171 +164,172 @@ def parse_metadata(el: xml.etree.ElementTree.Element, op_type):
         "flag_state": get_text(vessel, './/ram:ID[@schemeID="TERRITORY"]'),
         "imo": get_text(vessel, './/*[@schemeID="UVI"]'),
         "trip_number": get_text(
-            el, './/ram:SpecifiedFishingTrip/ram:ID[@schemeID="EU_TRIP_ID"]'
+            fa_report_document,
+            './/ram:SpecifiedFishingTrip/ram:ID[@schemeID="EU_TRIP_ID"]',
+        ),
+        "referenced_report_id": get_text(
+            fa_report_document, './/ram:ReferencedID[@schemeID="UUID"]'
         ),
     }
-    if op_type == "COR":
-        metadata = {
-            **metadata,
-            "referenced_report_id": get_text(
-                el, './/ram:ReferencedID[@schemeID="UUID"]'
-            ),
-        }
 
     return metadata
 
 
-def simple_parser(el: xml.etree.ElementTree.Element, op_type):
-    metadata = parse_metadata(el, op_type)
+def parse_fa_report_document(fa_report_document: ET.Element):
+    metadata = parse_metadata(fa_report_document)
 
-    children = tagged_children(el)
+    report_type = get_fa_report_type(fa_report_document)
+
+    children = tagged_children(fa_report_document)
+
     data = None
+
     if "SpecifiedFishingActivity" in children:
         log_types = set()
         values = []
-        for child in children["SpecifiedFishingActivity"]:
-            fishing_activity_data = parse_message(child)
-            log_types.add(fishing_activity_data["log_type"])
-            values.append(fishing_activity_data.get("value"))
-        assert len(log_types) == 1
+        for specified_fishing_activity in children["SpecifiedFishingActivity"]:
+            log_type, value = parse_specified_fishing_activity(
+                specified_fishing_activity, report_type
+            )
+            log_types.add(log_type)
+            values.append(value)
+        try:
+            assert len(log_types) == 1
+        except AssertionError:
+            raise FLUXParsingError(
+                (
+                    "A FluxFAReportDocument cannot hold SpecifiedFishingActivity "
+                    "elements of different types"
+                )
+            )
         data = {"log_type": log_types.pop(), "value": values}
         if data["log_type"] == "FAR":
             data["value"] = {"hauls": data["value"]}
         else:
+            assert len(children["SpecifiedFishingActivity"]) == 1
             data["value"] = data["value"][0]
 
-    return metadata, data
+    fa_report_document_data = {**metadata, **data}
+
+    return fa_report_document_data
 
 
-def parse_not(not_):
-    op_type = get_purpose(not_)
-    metadata = parse_metadata(not_, op_type)
-
-    children = tagged_children(not_)
-    if "SpecifiedFishingActivity" in children:
-        for child in children["SpecifiedFishingActivity"]:
-            msg_type = get_msg_type(child)
-            if msg_type == "RTP":
-                data = parse_pno(child)
-            else:
-                data = {"log_type": "NOT-" + msg_type}
-    return metadata, data
-
-
-def parse_del(del_):
-    metadata = {
-        "operation_type": "DEL",
-        "referenced_flux_id": get_text(del_, './/ram:ReferencedID[@schemeID="UUID"]'),
-    }
-
-    return metadata, {"value": None}
-
-
-parsers = {
-    "DAT": partial(simple_parser, op_type="DAT"),
-    "COR": partial(simple_parser, op_type="COR"),
-    "DEL": parse_del,
+specified_fishing_activity_parsers = {
     "DEP": parse_dep,
     "FAR": parse_far,
     "DIS": parse_dis,
-    "NOT": parse_not,
     "RTP": parse_rtp,
     "LAN": parse_lan,
     "RLC": default_log_parser,
     "TRA": default_log_parser,
     "COE": parse_coe,
     "COX": parse_cox,
-    "JOINT_FISHING_OPERATION": default_log_parser,
+    "PNO": parse_pno,
+    "NOT-TRA": default_log_parser,
+    "NOT-COE": parse_coe,
+    "NOT-COX": parse_cox,
+    "JFO": default_log_parser,
 }
 
 
-def parse(el, tag):
+def parse_specified_fishing_activity(
+    fishing_activity: ET.Element, report_type: FluxFAReportDocumentType
+):
+    log_type = get_log_type(fishing_activity, report_type)
     try:
-        parser = parsers[tag]
-    except KeyError:
-        logging.warning(f"Parser not implemented for xml tag: {tag}")
-        raise FLUXParsingError
-    res = parser(el)
-    return res
+        parser = specified_fishing_activity_parsers[log_type]
+    except KeyError as e:
+        logging.warning(f"Parser not implemented for xml tag: {log_type}")
+        raise FLUXParsingError(
+            f"Could not find appropriate parser for log type {log_type}: ", e
+        )
+    value = parser(fishing_activity)
+    return log_type, value
 
 
-def parse_report(el):
-    op_type = get_op_type(el)
-    res = parse(el, op_type)
-    return res
+def get_list_fa_report_documents(fa_report_message: ET.Element) -> List[ET.Element]:
+    fa_report_documents = fa_report_message.findall("FAReportDocument", NS_FLUX)
+    return fa_report_documents
 
 
-def parse_message(el):
-    msg_type = get_msg_type(el)
-    res = parse(el, msg_type)
-    return res
-
-
-def get_list_flux_message(xml_document):
-    msg_list = xml_document.findall("FAReportDocument", NS_FLUX)
-    return msg_list
-
-
-def decode_flux(flux_xml_string: str) -> str:
+def base64_decode(fa_report_message_string: str) -> str:
     """Takes a string that represents the content of an xml message of the FLUX format
     that may be base64-encoded and wrapped in an outer `BASE64DATA` xml tag (or not),
     and returns the decoded message. If the input message is not base64-encoded, simply
     return the unmodified input.
 
     Args:
-        flux_xml_string (str): FLUX message string, possibly base64-encoded and wrapped
-          in a `BASE64DATA` xml tag.
+        fa_report_message_string (str): FLUX message string, possibly base64-encoded
+          and wrapped in a `BASE64DATA` xml tag.
 
     Raises:
-        FLUXParsingError: `FLUXParsingError` if the input string is not valid xml
+        FLUXParsingError: `FLUXParsingError` if the input string is not valid xml or
+          its root tag is unexpected.
 
     Returns:
         str: decoded FLUX message, ready for parsing and data extraction
     """
     try:
-        el = ET.fromstring(flux_xml_string)
+        fa_report_message = ET.fromstring(fa_report_message_string)
     except ParseError:
         raise FLUXParsingError(
-            "Could not parse FLUX xml document: {flux_xml_string[:40]}[...]"
+            f"Could not parse FLUX xml document: {fa_report_message_string[:40]}[...]"
         )
-    if el.tag == "BASE64DATA":
-        decoded_flux_xml_string = gzip.decompress(base64.b64decode(el.text)).decode(
-            "utf-8"
-        )
+
+    fa_report_message_tag = get_root_tag(fa_report_message)
+    if fa_report_message_tag == "BASE64DATA":
+        decoded_flux_xml_string = gzip.decompress(
+            base64.b64decode(fa_report_message.text)
+        ).decode("utf-8")
+    elif fa_report_message_tag == "FLUXFAReportMessage":
+        decoded_flux_xml_string = fa_report_message_string
     else:
-        decoded_flux_xml_string = flux_xml_string
+        raise FLUXParsingError(
+            f"fa_report_message element has an unexpected root tag {fa_report_message_tag}"
+        )
     return decoded_flux_xml_string
 
 
-def parse_xml_document(xml_document: str):
+def parse_fa_report_message_string(
+    fa_report_message_string: str,
+) -> Tuple[str, List[dict]]:
     try:
-        el = ET.fromstring(xml_document)
-    except ParseError:
-        raise FLUXParsingError
+        fa_report_message = ET.fromstring(fa_report_message_string)
+    except ParseError as e:
+        raise FLUXParsingError("Could not parse xml string: ", e)
 
-    op_data = {
-        "operation_number": get_text(
-            el, './/rsm:FLUXReportDocument/ram:ID[@schemeID="UUID"]'
-        ),
+    operation_number = get_text(
+        fa_report_message, './/rsm:FLUXReportDocument/ram:ID[@schemeID="UUID"]'
+    )
+
+    operation_data = {
+        "operation_number": operation_number,
         "operation_datetime_utc": make_datetime(
-            get_text(el, ".//rsm:FLUXReportDocument/ram:CreationDateTime/udt:DateTime")
+            get_text(
+                fa_report_message,
+                ".//rsm:FLUXReportDocument/ram:CreationDateTime/udt:DateTime",
+            )
         ),
     }
-    msg_list = get_list_flux_message(el)
-    res = []
-    for msg in msg_list:
-        data, data_iter = parse_report(msg)
-        metadata = {**op_data, **data}
-        res.append([metadata, data_iter])
-    return res
+    fa_report_documents = get_list_fa_report_documents(fa_report_message)
+    fa_report_message_data = []
+    for fa_report_document in fa_report_documents:
+        try:
+            fa_report_document_data = parse_fa_report_document(fa_report_document)
+        except FLUXParsingError:
+            logging.error("Could not parse one report. This report will be skipped.")
+            continue
+        fa_report_message_data.append({**operation_data, **fa_report_document_data})
+    return operation_number, fa_report_message_data
 
 
-def batch_parse(xml_messages: List[str]) -> dict:
-    """Parses a list of FLUX documents and returns a dictionnary with the information
+def batch_parse(fa_report_message_strings: List[str]) -> dict:
+    """Parses a list of FLUX messages and returns a dictionnary with the information
     extracted from the messages.
 
     Args:
-        xml_messages (List[str]): list of FLUX xml documents
+        flux_fa_report_message_strings (List[str]): list of FLUX xml documents, some of
+          which may be BASE64 encoded
 
     Returns:
         dict : dictionnary with 3 elemements:
@@ -250,42 +362,50 @@ def batch_parse(xml_messages: List[str]) -> dict:
         "integration_datetime_utc": None,
     }
 
-    for xml_message in xml_messages:
-        xml_message = decode_flux(xml_message)
-        parsed_doc = parse_xml_document(xml_message)
+    for fa_report_message_string in fa_report_message_strings:
+        try:
+            fa_report_message_string = base64_decode(fa_report_message_string)
+        except FLUXParsingError:
+            log_end = "..." if len(fa_report_message_string) > 40 else ""
+            logging.error(
+                f"Could not BASE64 decode message {fa_report_message_string[:40]}{log_end}"
+            )
+            batch_generated_errors = True
+            continue
+
+        try:
+            operation_number, fa_report_message_data = parse_fa_report_message_string(
+                fa_report_message_string
+            )
+        except FLUXParsingError:
+            log_end = "..." if len(fa_report_message_string) > 40 else ""
+            logging.error(
+                (
+                    "Could not parse report message "
+                    f"{fa_report_message_string[:40]}{log_end}. "
+                    "This message will be skipped."
+                )
+            )
+            batch_generated_errors = True
+            continue
 
         now = datetime.utcnow()
         raw = {
-            "operation_number": parsed_doc[0][0].get("operation_number"),
-            "xml_message": xml_message,
+            "operation_number": operation_number,
+            "xml_message": fa_report_message_string,
         }
         logbook_raw_messages_list.append(pd.Series(raw))
 
-        for res in parsed_doc:
-            try:
-                metadata = res[0]
-                data = res[1]
-                logbook_reports_list.append(
-                    pd.Series(
-                        {
-                            **reports_defaults,
-                            **metadata,
-                            **data,
-                            "integration_datetime_utc": now,
-                        }
-                    )
+        for fa_report_document_data in fa_report_message_data:
+            logbook_reports_list.append(
+                pd.Series(
+                    {
+                        **reports_defaults,
+                        **fa_report_document_data,
+                        "integration_datetime_utc": now,
+                    }
                 )
-            except FLUXParsingError:
-                log_end = "..." if len(xml_message) > 40 else ""
-                logging.error(
-                    "Parsing error - one FLUX message will be ignored : "
-                    + xml_message[:40]
-                    + log_end
-                )
-                batch_generated_errors = True
-            except:
-                logging.error("Unkonwn error with message " + xml_message)
-                batch_generated_errors = True
+            )
 
         logbook_reports = pd.DataFrame(columns=pd.Index(reports_defaults))
         logbook_raw_messages = pd.DataFrame(columns=pd.Index(raw))

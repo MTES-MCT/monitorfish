@@ -282,6 +282,7 @@ def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
         transmission_format = zipfile["transmission_format"]
         batch_parser = batch_parsers[transmission_format]
         parsed_batch = batch_parser(zipfile["xml_messages"])
+        parsed_batch["logbook_reports"]["transmission_format"] = transmission_format
         zipfile.pop("xml_messages")
         zipfile = {**zipfile, **parsed_batch}
         return zipfile

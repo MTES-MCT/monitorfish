@@ -194,6 +194,10 @@ def test_parse_xmls_parses_ers3_files():
 
     assert len(parsed_zipfile["logbook_raw_messages"]) == 2
     assert len(parsed_zipfile["logbook_reports"]) == 5
+    assert (
+        parsed_zipfile["logbook_reports"]["transmission_format"]
+        == LogbookTransmissionFormat.ERS3
+    ).all()
     assert not parsed_zipfile["batch_generated_errors"]
 
 
@@ -239,6 +243,10 @@ def test_parse_xmls_parses_flux_files():
 
     assert len(parsed_zipfile["logbook_raw_messages"]) == 2
     assert len(parsed_zipfile["logbook_reports"]) == 2
+    assert (
+        parsed_zipfile["logbook_reports"]["transmission_format"]
+        == LogbookTransmissionFormat.FLUX
+    ).all()
     assert not parsed_zipfile["batch_generated_errors"]
 
 

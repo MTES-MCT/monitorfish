@@ -11,7 +11,7 @@ from xml.etree.ElementTree import ParseError
 import pandas as pd
 
 from src.pipeline.parsers.flux.log_parsers import (
-    default_log_parser,
+    null_parser,
     parse_coe,
     parse_cox,
     parse_dep,
@@ -50,6 +50,10 @@ class FluxFishingActivityType(Enum):
     AREA_ENTRY = "AREA_ENTRY"
     AREA_EXIT = "AREA_EXIT"
     JOINT_FISHING_OPERATION = "JOINT_FISHING_OPERATION"
+    GEAR_SHOT = "GEAR_SHOT"
+    GEAR_RETRIEVAL = "GEAR_RETRIEVAL"
+    START_ACTIVITY = "START_ACTIVITY"
+    START_FISHING = "START_FISHING"
 
 
 def get_fishing_activity_type(fishing_activity: ET.Element) -> FluxFishingActivityType:
@@ -123,6 +127,22 @@ def get_log_type(
             FluxFAReportDocumentType.DECLARATION,
             FluxFishingActivityType.JOINT_FISHING_OPERATION,
         ): "JFO",
+        (
+            FluxFAReportDocumentType.DECLARATION,
+            FluxFishingActivityType.GEAR_SHOT,
+        ): "GEAR_SHOT",
+        (
+            FluxFAReportDocumentType.DECLARATION,
+            FluxFishingActivityType.GEAR_RETRIEVAL,
+        ): "GEAR_RETRIEVAL",
+        (
+            FluxFAReportDocumentType.DECLARATION,
+            FluxFishingActivityType.START_ACTIVITY,
+        ): "START_ACTIVITY",
+        (
+            FluxFAReportDocumentType.DECLARATION,
+            FluxFishingActivityType.START_FISHING,
+        ): "START_FISHING",
     }
     fishing_activity_type = get_fishing_activity_type(fishing_activity)
     try:
@@ -226,15 +246,19 @@ specified_fishing_activity_parsers = {
     "DIS": parse_dis,
     "RTP": parse_rtp,
     "LAN": parse_lan,
-    "RLC": default_log_parser,
-    "TRA": default_log_parser,
+    "RLC": null_parser,
+    "TRA": null_parser,
     "COE": parse_coe,
     "COX": parse_cox,
     "PNO": parse_pno,
-    "NOT-TRA": default_log_parser,
+    "NOT-TRA": null_parser,
     "NOT-COE": parse_coe,
     "NOT-COX": parse_cox,
-    "JFO": default_log_parser,
+    "JFO": null_parser,
+    "GEAR_SHOT": null_parser,
+    "GEAR_RETRIEVAL": null_parser,
+    "START_ACTIVITY": null_parser,
+    "START_FISHING": null_parser,
 }
 
 

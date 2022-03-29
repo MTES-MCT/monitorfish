@@ -292,16 +292,21 @@ def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
 def clean(zipfile: Union[None, dict]) -> Union[None, dict]:
     logger = prefect.context.get("logger")
     if zipfile:
-        logger.info(
-            "Removing QUE and RSP messages from messages of "
-            + f"zipfile {zipfile['full_name']}."
-        )
-        zipfile["parsed"] = zipfile["parsed"][
-            zipfile["parsed"].operation_type.isin(["DAT", "DEL", "COR", "RET"])
-        ]
-        zipfile["parsed_with_xml"] = zipfile["parsed_with_xml"][
-            zipfile["parsed_with_xml"].operation_type.isin(["DAT", "DEL", "COR", "RET"])
-        ]
+        if zipfile["transmission_format"] is LogbookTransmissionFormat.ERS3:
+            logger.info(
+                "Removing QUE and RSP messages from messages of "
+                + f"zipfile {zipfile['full_name']}."
+            )
+            zipfile["logbook_reports"] = zipfile["logbook_reports"][
+                zipfile["logbook_reports"].operation_type.isin(
+                    ["DAT", "DEL", "COR", "RET"]
+                )
+            ]
+            zipfile["logbook_raw_messages"] = zipfile["logbook_raw_messages"][
+                zipfile["logbook_raw_messages"].operation_number.isin(
+                    zipfile["logbook_reports"]["operation_number"]
+                )
+            ]
         return zipfile
 
 

@@ -37,7 +37,7 @@ const BeaconMalfunctionBody = props => {
       </SubValue><br/>
       <Key width={120}>Date reprise</Key>
       <SubValue>
-        {getDateTime(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime)}
+        {getDateTime(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime, true)}
       </SubValue><br/>
       {
         beaconMalfunctionWithDetails.beaconMalfunction?.endOfBeaconMalfunctionReason

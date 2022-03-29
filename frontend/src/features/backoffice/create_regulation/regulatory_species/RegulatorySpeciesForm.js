@@ -261,7 +261,7 @@ const RegulatorySpeciesForm = props => {
                     <Label>Espèce {index + 1}</Label>
                     <Tag
                       key={speciesValue.code}
-                      tagValue={speciesValue.code}
+                      tagValue={`${speciesByCode[speciesValue.code]?.name} (${speciesValue.code})`}
                       onCloseIconClicked={removeSpeciesToRegulatorySpeciesList}
                     />
                   </SpeciesDetail>

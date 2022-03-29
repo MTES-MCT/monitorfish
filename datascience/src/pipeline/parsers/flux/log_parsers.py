@@ -10,7 +10,7 @@ from src.pipeline.parsers.flux.utils import NS_FLUX, get_element, get_text
 from src.pipeline.parsers.utils import tagged_children, try_float
 
 
-def default_log_parser(el: xml.etree.ElementTree.Element):
+def null_parser(el: xml.etree.ElementTree.Element):
     return None
 
 

@@ -18,46 +18,46 @@ export default createGlobalStyle`
     
      @font-face {
       font-family: Marianne;
-      src: local('Marianne'), local('Marianne-Thin'), url(${MarianneLight}) format('woff2');
+      src: local('Marianne-Thin'), url(${MarianneLight}) format('woff2');
       font-weight: 300;
     }
     
     @font-face {
       font-family: Marianne;
-      src: local('Marianne'), local('Marianne-Medium'), url(${MarianneMedium}) format('woff2');
+      src:local('Marianne-Medium'), url(${MarianneMedium}) format('woff2');
       font-weight: 500;  
     }
     
     @font-face {
       font-family: Marianne;
-      src:  local('Marianne'), local('Marianne-Medium_Italic'), url(${MarianneMediumItalic}) format('woff2');
+      src: local('Marianne-Medium_Italic'), url(${MarianneMediumItalic}) format('woff2');
       font-weight: 500;  
       font-style: italic;
     }
     
     @font-face {
       font-family: Marianne;
-      src: local('Marianne'), local('Marianne-Thin_Italic'), url(${MarianneLightItalic}) format('woff2');
+      src: local('Marianne-Thin_Italic'), url(${MarianneLightItalic}) format('woff2');
       font-weight: lighter;
       font-style: italic;
     }
     
     @font-face {
       font-family: Marianne;
-      src: local('Marianne'), local('Marianne-Regular_Italic'), url(${MarianneItalic}) format('woff2');
+      src:local('Marianne-Regular_Italic'), url(${MarianneItalic}) format('woff2');
       font-weight: normal;  
       font-style: italic;
     }
      
      @font-face {
       font-family: Marianne;
-      src: local('Marianne'), local('Marianne-Bold'), url(${MarianneBold}) format('woff2');
+      src: local('Marianne-Bold'), url(${MarianneBold}) format('woff2');
       font-weight: 700;  
     }
      
      @font-face {
       font-family: Marianne;
-      src: local('Marianne'), local('Marianne-Bold_Italic'), url(${MarianneBoldItalic}) format('woff2');
+      src: local('Marianne-Bold_Italic'), url(${MarianneBoldItalic}) format('woff2');
       font-style: italic;
       font-weight: 700;
     }

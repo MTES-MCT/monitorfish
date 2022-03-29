@@ -253,31 +253,31 @@ def test_parse_xmls_parses_flux_files():
 def test_clean():
     assert clean.run(None) is None
 
-    parsed = pd.DataFrame(
+    logbook_reports = pd.DataFrame(
         {
             "operation_number": [1, 1, 2, 3, 4, 5, 6],
             "operation_type": ["DAT", "DAT", "DEL", "COR", "RET", "RSP", "QUE"],
         }
     )
 
-    expected_cleaned_parsed = pd.DataFrame(
+    expected_cleaned_logbook_reports = pd.DataFrame(
         {
             "operation_number": [1, 1, 2, 3, 4],
             "operation_type": ["DAT", "DAT", "DEL", "COR", "RET"],
         }
     )
 
-    parsed_with_xml = pd.DataFrame(
+    logbook_raw_messages = pd.DataFrame(
         {
             "operation_number": [1, 2, 3, 4, 5, 6],
-            "operation_type": ["DAT", "DEL", "COR", "RET", "RSP", "QUE"],
+            "xml_message": ["AAA", "BBB", "CCC", "DDD", "EEE", "FFF"],
         }
     )
 
-    expected_cleaned_parsed_with_xml = pd.DataFrame(
+    expected_cleaned_logbook_raw_messages = pd.DataFrame(
         {
             "operation_number": [1, 2, 3, 4],
-            "operation_type": ["DAT", "DEL", "COR", "RET"],
+            "xml_message": ["AAA", "BBB", "CCC", "DDD"],
         }
     )
 
@@ -285,21 +285,32 @@ def test_clean():
         "full_name": "dummy.zip",
         "input_dir": "dummy_input_dir",
         "treated_dir": "dummy_treated_dir",
-        "non_treated_dir": "dummy_non_treated_dir",
         "error_dir": "dummy_error_dir",
-        "parsed": parsed,
-        "parsed_with_xml": parsed_with_xml,
+        "transmission_format": LogbookTransmissionFormat.ERS3,
+        "logbook_reports": logbook_reports,
+        "logbook_raw_messages": logbook_raw_messages,
+        "batch_generated_errors": False,
+    }
+
+    expected_cleaned_zipfile = {
+        "full_name": "dummy.zip",
+        "input_dir": "dummy_input_dir",
+        "treated_dir": "dummy_treated_dir",
+        "error_dir": "dummy_error_dir",
+        "transmission_format": LogbookTransmissionFormat.ERS3,
+        "logbook_reports": expected_cleaned_logbook_reports,
+        "logbook_raw_messages": expected_cleaned_logbook_raw_messages,
         "batch_generated_errors": False,
     }
 
     cleaned_zipfile = clean.run(zipfile)
 
-    assert (
-        cleaned_zipfile["parsed"].values.tolist()
-        == expected_cleaned_parsed.values.tolist()
-    )
+    logbook_reports = cleaned_zipfile.pop("logbook_reports")
+    expected_logbook_reports = expected_cleaned_zipfile.pop("logbook_reports")
+    pd.testing.assert_frame_equal(logbook_reports, expected_logbook_reports)
 
-    assert (
-        cleaned_zipfile["parsed_with_xml"].values.tolist()
-        == expected_cleaned_parsed_with_xml.values.tolist()
-    )
+    logbook_raw_messages = cleaned_zipfile.pop("logbook_raw_messages")
+    expected_logbook_raw_messages = expected_cleaned_zipfile.pop("logbook_raw_messages")
+    pd.testing.assert_frame_equal(logbook_raw_messages, expected_logbook_raw_messages)
+
+    assert cleaned_zipfile == expected_cleaned_zipfile

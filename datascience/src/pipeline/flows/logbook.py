@@ -6,7 +6,7 @@ from typing import List, Union
 from zipfile import ZipFile
 
 import prefect
-from prefect import Flow, task
+from prefect import Flow, Parameter, task
 from prefect.tasks.control_flow import case
 
 from config import ERS_FILES_LOCATION
@@ -410,10 +410,13 @@ with Flow("Logbook") as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
 
+        received_directory = Parameter("received_directory", default=RECEIVED_DIRECTORY)
+        treated_directory = Parameter("treated_directory", default=TREATED_DIRECTORY)
+        error_directory = Parameter("error_directory", default=ERROR_DIRECTORY)
         zipfiles = extract_zipfiles(
-            RECEIVED_DIRECTORY,
-            TREATED_DIRECTORY,
-            ERROR_DIRECTORY,
+            received_directory,
+            treated_directory,
+            error_directory,
         )
         zipfiles = extract_xmls_from_zipfile.map(zipfiles)
         zipfiles = parse_xmls.map(zipfiles)

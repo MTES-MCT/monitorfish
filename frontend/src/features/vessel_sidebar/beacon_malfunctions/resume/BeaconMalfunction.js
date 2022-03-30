@@ -33,7 +33,7 @@ const BeaconMalfunction = props => {
             ? <AtPort/>
             : <AtSea/>
         }
-        AVARIE DU {getDateTime(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime)}
+        AVARIE DU {getDateTime(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime, true)}
       </Title>
       <BeaconMalfunctionBody beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}/>
       <SeeMore

@@ -126,7 +126,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
         firstStatus
           ? <BeaconMalfunctionDetailsFollowUpRow
             index={0}
-            smallSize
+            smallSize={smallSize}
             date={beaconMalfunction?.malfunctionStartDateTime}
             dateText={getCommentOrActionDate(getDate(beaconMalfunction?.malfunctionStartDateTime))}
           >
@@ -154,7 +154,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
               return <BeaconMalfunctionDetailsFollowUpRow
                 key={date}
                 index={index}
-                smallSize
+                smallSize={smallSize}
                 isLastDate={isLastDate}
                 dateText={dateText}
               >

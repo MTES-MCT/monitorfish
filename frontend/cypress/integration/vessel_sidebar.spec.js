@@ -206,7 +206,7 @@ context('VesselSidebar', () => {
     // Then
     cy.wait(200)
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 3)
-    cy.get('*[data-cy^="fishing-activity-name"]').eq(2).click({ timeout: 20000 })
+    cy.get('*[data-cy^="fishing-activity-name"]').eq(2).scrollIntoView().click({ timeout: 20000 })
     cy.get('#OOF20191030059909').should('be.visible')
     cy.get('#OOF20190627059908').should('not.be.visible')
 
@@ -270,7 +270,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 20000 })
     cy.scrollTo(0, 380)
-    cy.get('*[data-cy^="show-fishing-activity"]').eq(6).click({ timeout: 20000 })
+    cy.get('*[data-cy^="show-fishing-activity"]').eq(6).scrollIntoView().click({ timeout: 20000 })
 
     // Then
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 1)

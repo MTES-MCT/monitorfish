@@ -1,6 +1,7 @@
 {
   "viewportWidth": 1280,
   "viewportHeight": 1024,
+  "scrollBehavior": false,
   "projectId": "9b7q8z",
   "ignoreTestFiles": [
     "**/__snapshots__/*",

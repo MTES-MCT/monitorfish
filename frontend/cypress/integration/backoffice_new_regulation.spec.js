@@ -53,9 +53,9 @@ context('NewRegulation', () => {
   it('select UE law_type should display an empty list', () => {
     // Select R(CE) 494/2002 in the dropdown menu
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="R(CE) 494/2002"]').eq(0).click()
+    cy.get('[data-key="R(CE) 494/2002"]').eq(0).scrollIntoView().click()
 
-    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(1).click()
+    cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(1).click({ force: true })
     cy.get('.rs-picker-none').contains('aucune thématique à afficher')
   })
 
@@ -81,7 +81,7 @@ context('NewRegulation', () => {
   it('If a EU law type has been selected, region list should be disabled', () => {
     // Select a EU law type
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="R(UE) 2019/1241"]').eq(0).click()
+    cy.get('[data-key="R(UE) 2019/1241"]').eq(0).scrollIntoView().click()
     // Region select picker should be disabled
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(2).should('have.attr', 'aria-disabled', 'true')
   })
@@ -179,7 +179,7 @@ context('NewRegulation', () => {
 
   it('Check authorized yes option in gears section display 2 checkbox and a list', () => {
     // when
-    cy.get('[data-cy="regulatory-gears-section"]').click()
+    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
     cy.get('[data-cy="regulation-authorized-gears"]').click()
     // then
     cy.get('[data-cy="gears-section-content"]').should('have.css', 'border-left-color', 'rgb(41, 179, 97)')
@@ -189,7 +189,7 @@ context('NewRegulation', () => {
 
   it('Check authorized no option in gears section display 3 checkbox and a list', () => {
     // when
-    cy.get('[data-cy="regulatory-gears-section"]').click()
+    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
     cy.get('[data-cy="regulation-forbidden-gears"]').click()
     // then
     cy.get('[data-cy="gears-section-content"]').should('have.css', 'border-left-color', 'rgb(225, 0, 15)')
@@ -197,9 +197,26 @@ context('NewRegulation', () => {
     cy.get('[data-cy="gears-selector"]').should('exist')
   })
 
+  it('Check and uncheck of all gears Should add or remove all gears', () => {
+    // when
+    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
+    cy.get('[data-cy="regulation-forbidden-gears"]').click()
+    cy.get('[data-cy="all-gears-option"]').click()
+
+    // then
+    cy.get('[data-cy="all-towed-gears-option"]').should('have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy="all-passive-gears-option"]').should('have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy^="tag-"]').should('have.length', 12)
+    cy.get('[data-cy="all-gears-option"]').click()
+
+    cy.get('[data-cy="all-towed-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy="all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy^="tag-"]').should('have.length', 0)
+  })
+
   it('Check options displays a list of towed gear categories', () => {
     // Given
-    cy.get('[data-cy="regulatory-gears-section"]').click()
+    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
     cy.get('[data-cy="regulation-forbidden-gears"]').click()
     // when
     cy.get('[data-cy="all-towed-gears-option"]').click()
@@ -207,7 +224,7 @@ context('NewRegulation', () => {
     cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 4)
     cy.get('[data-cy="mesh-label"]').should('have.length', 2)
     // when
-    cy.get('[data-cy="close-tag-Sennes traînantes"]').click()
+    cy.get('[data-cy="close-tag-Sennes traînantes"]').scrollIntoView().click()
     // then
     cy.get('[data-cy="tag-Sennes traînantes"]').should('not.exist')
     cy.get('[data-cy="all-towed-gears-option"]').should('not.be.checked')
@@ -215,18 +232,18 @@ context('NewRegulation', () => {
 
   it('Check all passive gears, display a list of passive gear categories', () => {
     // Given
-    cy.get('[data-cy="regulatory-gears-section"]').click()
+    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
     cy.get('[data-cy="regulation-forbidden-gears"]').click()
     // when
-    cy.get('[data-cy="all-passive-gears-option"]').click()
+    cy.get('[data-cy="all-passive-gears-option"]').scrollIntoView().click()
     // then
     cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 6)
     cy.get('[data-cy="mesh-label"]').should('have.length', 3)
     // when
-    cy.get('[data-cy="close-tag-Sennes tournantes coulissantes"]').click()
+    cy.get('[data-cy="close-tag-Sennes tournantes coulissantes"]').scrollIntoView().click()
     // then
     cy.get('[data-cy="tag-Sennes tournantes coulissantes"]').should('not.exist')
-    cy.get('[data-cy="all-passive-gears-option"]').should('not.be.checked')
+    cy.get('[data-cy="all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
   })
 
   it('Modification of inputs Should be kept in local storage when refreshing the page', () => {
@@ -238,10 +255,10 @@ context('NewRegulation', () => {
     cy.get('[data-cy="reg-text-name"]').type('zone name')
     cy.get('[data-cy="reg-text-url"]').type('http://url.com')
     cy.get('[data-cy="save-reg-text-name"]').click()
-    cy.get('[data-cy="regulatory-gears-section"]').click()
+    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
     cy.get('[data-cy="regulation-forbidden-gears"]').click()
     cy.get('[data-cy="all-towed-gears-option"]').click()
-    cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
+    cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click({ force: true })
     cy.get('*[data-cy^="regulation-authorized-species"]').click({ force: true })
     cy.scrollTo(0, 500)
     cy.get('.rs-picker-toggle-placeholder')
@@ -259,13 +276,13 @@ context('NewRegulation', () => {
     cy.get('[data-cy="mesh-label"]').should('have.length', 2)
     cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
     cy.get('[data-cy="tag-zone name"]').should('exist')
-    cy.get('[data-cy=tag-HKE]').should('exist')
+    cy.get('[data-cy="tag-MERLU D\'EUROPE (HKE)"]').should('exist')
     cy.get('[data-cy="tag-Espèces eau profonde"]').should('exist')
 
     // When
     cy.reload()
-    cy.get('[data-cy="regulatory-gears-section"]').click()
-    cy.get('*[data-cy^="open-regulated-species"]').click()
+    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
+    cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click()
 
     // Then
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')
@@ -273,7 +290,7 @@ context('NewRegulation', () => {
     cy.get('[data-cy="mesh-label"]').should('have.length', 2)
     cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
     cy.get('[data-cy="tag-zone name"]').should('exist')
-    cy.get('[data-cy=tag-HKE]').should('exist')
+    cy.get('[data-cy="tag-MERLU D\'EUROPE (HKE)"]').should('exist')
     cy.get('[data-cy="tag-Espèces eau profonde"]').should('exist')
   })
 })

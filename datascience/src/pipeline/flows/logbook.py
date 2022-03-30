@@ -323,9 +323,10 @@ def load_logbook_data(cleaned_data: List[dict]):
     engine = create_engine("monitorfish_remote")
     logger = prefect.context.get("logger")
 
-    # Check that ers tables exist
-    get_table(logbook_reports_table_name, schema, engine, logger)
-    logbook_raw_messages = get_table(
+    logbook_reports_table = get_table(
+        logbook_reports_table_name, schema, engine, logger
+    )
+    logbook_raw_messages_table = get_table(
         logbook_raw_messages_table_name, schema, engine, logger
     )
 
@@ -336,6 +337,25 @@ def load_logbook_data(cleaned_data: List[dict]):
         with engine.begin() as connection:
             logbook_reports = zipfile["logbook_reports"]
             logbook_raw_messages = zipfile["logbook_raw_messages"]
+            transmission_format = zipfile["transmission_format"]
+            try:
+                assert transmission_format in (
+                    LogbookTransmissionFormat.FLUX,
+                    LogbookTransmissionFormat.ERS3,
+                )
+            except AssertionError:
+                logger.error(
+                    (
+                        f"Unexpected transmission_format {transmission_format}. "
+                        f"Moving {zipfile['full_name']} to error_dir"
+                    )
+                )
+                move(
+                    zipfile["input_dir"] / zipfile["full_name"],
+                    zipfile["error_dir"],
+                    if_exists="replace",
+                )
+                continue
 
             # Drop rows for which the operation number already exists in the
             # logbook_raw_messages database
@@ -343,17 +363,36 @@ def load_logbook_data(cleaned_data: List[dict]):
             logbook_raw_messages = drop_rows_already_in_table(
                 df=logbook_raw_messages,
                 df_column_name="operation_number",
-                table=logbook_raw_messages,
+                table=logbook_raw_messages_table,
                 table_column_name="operation_number",
                 connection=connection,
                 logger=logger,
             )
 
-            logbook_reports = logbook_reports[
-                logbook_reports.operation_number.isin(
-                    logbook_raw_messages.operation_number
+            if zipfile["transmission_format"] is LogbookTransmissionFormat.FLUX:
+                logbook_reports = drop_rows_already_in_table(
+                    df=logbook_reports,
+                    df_column_name="report_id",
+                    table=logbook_reports_table,
+                    table_column_name="report_id",
+                    connection=connection,
+                    logger=logger,
                 )
-            ]
+
+            else:
+                # With ERS3 data, we cannot rely on having unique report_ids like we do
+                # in FLUX data for two reasons :
+                # - DEL messages have a NULL report_id
+                # - Visiocapture data holds multiple reports in a single ERS element,
+                #   and therefore several logbook_reports with the same report_id
+                #
+                # What we do instead is ensure we only insert logbook_reports for which
+                # the corresponding logbook_raw_message is not yet in the database.
+                logbook_reports = logbook_reports[
+                    logbook_reports.operation_number.isin(
+                        logbook_raw_messages.operation_number
+                    )
+                ]
 
             if len(logbook_raw_messages) > 0:
                 n_lines = len(logbook_raw_messages)

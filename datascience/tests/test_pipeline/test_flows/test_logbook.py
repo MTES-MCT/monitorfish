@@ -11,12 +11,16 @@ from src.pipeline.flows.logbook import (
     clean,
     extract_xmls_from_zipfile,
     extract_zipfiles,
+    flow,
     get_logbook_zipped_file_type,
     parse_xmls,
 )
+from tests.mocks import mock_check_flow_not_running
 
 ZIPFILES_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/zipfiles/"
 XML_FILES_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files"
+
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
 def test_get_logbook_zipped_file_type():
@@ -314,3 +318,16 @@ def test_clean():
     pd.testing.assert_frame_equal(logbook_raw_messages, expected_logbook_raw_messages)
 
     assert cleaned_zipfile == expected_cleaned_zipfile
+
+
+@patch("src.pipeline.flows.logbook.move")
+def test_flow(mock_move, reset_test_data):
+    received_directory = ZIPFILES_TEST_DATA_LOCATION / "test_flow/received"
+    treated_directory = ZIPFILES_TEST_DATA_LOCATION / "test_flow/treated"
+    error_directory = ZIPFILES_TEST_DATA_LOCATION / "test_flow/error"
+    state = flow.run(
+        received_directory=received_directory,
+        treated_directory=treated_directory,
+        error_directory=error_directory,
+    )
+    assert state.is_successful()

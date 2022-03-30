@@ -197,6 +197,23 @@ context('NewRegulation', () => {
     cy.get('[data-cy="gears-selector"]').should('exist')
   })
 
+  it('Check and uncheck of all gears Should add or remove all gears', () => {
+    // when
+    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
+    cy.get('[data-cy="regulation-forbidden-gears"]').click()
+    cy.get('[data-cy="all-gears-option"]').click()
+
+    // then
+    cy.get('[data-cy="all-towed-gears-option"]').should('have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy="all-passive-gears-option"]').should('have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy^="tag-"]').should('have.length', 12)
+    cy.get('[data-cy="all-gears-option"]').click()
+
+    cy.get('[data-cy="all-towed-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy="all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy^="tag-"]').should('have.length', 0)
+  })
+
   it('Check options displays a list of towed gear categories', () => {
     // Given
     cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
@@ -226,7 +243,7 @@ context('NewRegulation', () => {
     cy.get('[data-cy="close-tag-Sennes tournantes coulissantes"]').scrollIntoView().click()
     // then
     cy.get('[data-cy="tag-Sennes tournantes coulissantes"]').should('not.exist')
-    cy.get('[data-cy="all-passive-gears-option"]').should('not.be.checked')
+    cy.get('[data-cy="all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
   })
 
   it('Modification of inputs Should be kept in local storage when refreshing the page', () => {

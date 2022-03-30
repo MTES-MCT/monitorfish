@@ -291,6 +291,7 @@ context('Side window beacon malfunctions', () => {
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
+      .scrollIntoView()
       .click()
 
     // Then

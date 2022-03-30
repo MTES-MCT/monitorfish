@@ -32,8 +32,8 @@ context('Update Regulation', () => {
     cy.get('[data-cy="tag-Bretagne"]').should('exist')
     cy.get('[data-cy="tag-598"]').should('exist')
     cy.get('[data-cy="tag-texte de reference"]').should('exist')
-    cy.get('[data-cy="tag-URC"]').should('exist')
-    cy.get('[data-cy="tag-URX"]').should('exist')
+    cy.get('[data-cy="tag-OURSINS NCA (URC)"]').should('exist')
+    cy.get('[data-cy="tag-OURSINS,ETC. NCA (URX)"]').should('exist')
     cy.get('[data-cy="tag-Dragues"]').should('exist')
     cy.get('[data-cy="input-Praires Ouest cotentin"]').should('exist')
     cy.get('.rs-picker-toggle-value').eq(0).should('have.text', getDate(new Date().toISOString()))
@@ -46,7 +46,7 @@ context('Update Regulation', () => {
 
   it('Select another law type should reset selected layer name', () => {
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
-    cy.get('[data-key="R(CE) 494/2002"]').eq(0).click()
+    cy.get('[data-key="R(CE) 494/2002"]').eq(0).scrollIntoView().click()
     cy.get('[data-cy="tag-Ouest Cotentin Bivalves"]').should('not.exist')
   })
 
@@ -90,6 +90,7 @@ context('Update Regulation', () => {
     cy.scrollTo(0, 500)
     cy.get('.rs-picker-toggle-placeholder')
       .filter(':contains("catégories d\'espèces")')
+      .scrollIntoView()
       .click({ timeout: 20000 })
     cy.get('.rs-picker-search-bar-input').type('Espèce{enter}')
     cy.get('.rs-picker-toggle-placeholder')

@@ -36,9 +36,10 @@ const SideWindowSubMenuLink = ({ isOpen, menu, isSelected, setSelected, number, 
     opacity: isOpen ? 1 : 0,
     width: isOpen ? 160 : 0,
     transition: 'max-width 0.5s ease, opacity 0.5s ease',
-    overflow: 'hidden',
-    textOverflow: 'clip',
-    whiteSpace: 'nowrap'
+    overflowY: 'hidden',
+    overflowX: !oneLine ? 'unset' : 'hidden',
+    textOverflow: !oneLine ? 'unset' : 'clip',
+    whiteSpace: !oneLine ? 'unset' : 'nowrap'
   }
 
   return <Link
@@ -82,8 +83,7 @@ const circleMetricStyle = isOpen => ({
   minWidth: 7,
   lineHeight: '16px',
   opacity: isOpen ? 1 : 0,
-  transition: 'opacity 0.5s ease',
-  width: 5
+  transition: 'opacity 0.5s ease'
 })
 
 export default SideWindowSubMenuLink

@@ -142,7 +142,7 @@ const menuStyle = (isOpen, fixed) => ({
   padding: '14px 0',
   transition: 'width 0.5s',
   position: fixed ? 'unset' : 'absolute',
-  marginLeft: fixed ? 0 : 65,
+  marginLeft: fixed ? 0 : 66,
   boxShadow: isOpen && !fixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset',
   zIndex: 999
 })

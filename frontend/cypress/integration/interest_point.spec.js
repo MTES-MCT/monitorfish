@@ -111,7 +111,8 @@ context('InterestPoint', () => {
     cy.get('#root').click(536, 600, { timeout: 20000 })
     cy.get('*[data-cy="save-interest-point"]').should('not.be.visible')
 
-    cy.get('*[data-cy="interest-point-edit"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="interest-point-edit"]').should('not.be.visible')
+    cy.get('*[data-cy="interest-point-edit"]').click({ force: true })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 20000 }).eq(1).should('have.value', '47° 48′ 56″ N 007° 54′ 51″ E')
     cy.get('*[data-cy="interest-point-type-radio-input"]').should('have.class','rs-radio-checked')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 20000 })

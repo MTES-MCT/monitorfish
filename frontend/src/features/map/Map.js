@@ -30,6 +30,7 @@ import VesselAlertAndBeaconMalfunctionLayer from '../../layers/VesselAlertAndBea
 
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)
+  const adminRole = useSelector(state => state.global.adminRole)
 
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
@@ -82,9 +83,9 @@ const Map = () => {
       <DrawLayer/>
       <VesselEstimatedPositionLayer/>
       <VesselSelectedLayer/>
-      <VesselAlertLayer/>
-      <VesselBeaconMalfunctionLayer/>
-      <VesselAlertAndBeaconMalfunctionLayer/>
+      <VesselAlertLayer adminRole={adminRole}/>
+      <VesselBeaconMalfunctionLayer adminRole={adminRole}/>
+      <VesselAlertAndBeaconMalfunctionLayer adminRole={adminRole}/>
       <VesselCardOverlay feature={currentFeature}/>
       <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
       <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>

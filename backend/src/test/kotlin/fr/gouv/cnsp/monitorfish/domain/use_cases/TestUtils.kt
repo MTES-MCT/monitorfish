@@ -36,11 +36,14 @@ object TestUtils {
         pno.port = "AEJAZ"
 
         return listOf(
-                LogbookMessage(id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, reportId = "", operationType = LogbookOperationType.DAT, messageType = "DEP",
+                LogbookMessage(
+                    id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "DEP",
                         message = dep, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(24)),
-                LogbookMessage(id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, reportId = "", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                LogbookMessage(
+                    id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "FAR",
                         message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                LogbookMessage(id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, reportId = "", operationType = LogbookOperationType.DAT, messageType = "PNO",
+                LogbookMessage(
+                    id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "PNO",
                         message = pno, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0)))
     }
 
@@ -67,9 +70,11 @@ object TestUtils {
         correctedFar.hauls = listOf(correctedHaul)
 
         return listOf(
-                LogbookMessage(id = 1, analyzedByRules = listOf(), operationNumber = "9065646811", tripNumber = 345, reportId = "9065646811", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                LogbookMessage(
+                    id = 1, analyzedByRules = listOf(), operationNumber = "9065646811", tripNumber = "345", reportId = "9065646811", operationType = LogbookOperationType.DAT, messageType = "FAR",
                         message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                LogbookMessage(id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, reportId = "", referencedReportId = "9065646811", operationType = LogbookOperationType.COR, messageType = "FAR",
+                LogbookMessage(
+                    id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", referencedReportId = "9065646811", operationType = LogbookOperationType.COR, messageType = "FAR",
                         message = correctedFar, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12))
                 )
     }
@@ -104,15 +109,20 @@ object TestUtils {
         farBadAck.rejectionCause = "Oops"
 
         return listOf(
-                LogbookMessage(id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, reportId = "9065646811", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                LogbookMessage(
+                    id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "9065646811", operationType = LogbookOperationType.DAT, messageType = "FAR",
                         message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                LogbookMessage(id = 2, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646816", referencedReportId = "9065646811", operationType = LogbookOperationType.RET, messageType = "",
+                LogbookMessage(
+                    id = 2, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646816", referencedReportId = "9065646811", operationType = LogbookOperationType.RET, messageType = "",
                         message = farBadAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                LogbookMessage(id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, reportId = "9065646813", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                LogbookMessage(
+                    id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "9065646813", operationType = LogbookOperationType.DAT, messageType = "FAR",
                         message = farTwo, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                LogbookMessage(id = 4, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646818", referencedReportId = "9065646813", operationType = LogbookOperationType.RET, messageType = "",
+                LogbookMessage(
+                    id = 4, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646818", referencedReportId = "9065646813", operationType = LogbookOperationType.RET, messageType = "",
                         message = farAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                LogbookMessage(id = 4, analyzedByRules = listOf(), operationNumber = "", referencedReportId = "9065646813", operationType = LogbookOperationType.DEL, messageType = "",
+                LogbookMessage(
+                    id = 4, analyzedByRules = listOf(), operationNumber = "", referencedReportId = "9065646813", operationType = LogbookOperationType.DEL, messageType = "",
                         message = farAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12))
         )
     }
@@ -172,13 +182,17 @@ object TestUtils {
         secondPno.catchOnboard = listOf(catchFive, catchSix, catchSeven, catchEight)
 
         return listOf(
-                Pair(LogbookMessage(id = 1, analyzedByRules = listOf(), operationNumber = "456846844658", tripNumber = 125345, reportId = "456846844658",
+                Pair(LogbookMessage(
+                    id = 1, analyzedByRules = listOf(), operationNumber = "456846844658", tripNumber = "125345", reportId = "456846844658",
                         operationType = LogbookOperationType.DAT, messageType = "LAN", message = firstLan),
-                        LogbookMessage(id = 2, analyzedByRules = listOf(), operationNumber = "47177857577", tripNumber = 125345, reportId = "47177857577",
+                        LogbookMessage(
+                            id = 2, analyzedByRules = listOf(), operationNumber = "47177857577", tripNumber = "125345", reportId = "47177857577",
                                 operationType = LogbookOperationType.DAT, messageType = "PNO", message = firstPno)),
-                Pair(LogbookMessage(id = 3, analyzedByRules = listOf(), operationNumber = "48545254254", tripNumber = 125345, reportId = "48545254254",
+                Pair(LogbookMessage(
+                    id = 3, analyzedByRules = listOf(), operationNumber = "48545254254", tripNumber = "125345", reportId = "48545254254",
                         operationType = LogbookOperationType.DAT, messageType = "LAN", message = secondLan),
-                        LogbookMessage(id = 4, analyzedByRules = listOf(), operationNumber = "004045204504", tripNumber = 125345, reportId = "004045204504",
+                        LogbookMessage(
+                            id = 4, analyzedByRules = listOf(), operationNumber = "004045204504", tripNumber = "125345", reportId = "004045204504",
                                 operationType = LogbookOperationType.DAT, messageType = "PNO", message = secondPno)),
         )
     }

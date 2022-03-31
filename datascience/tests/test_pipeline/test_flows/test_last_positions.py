@@ -96,7 +96,7 @@ def test_load_last_positions(reset_test_data):
                 datetime(2018, 12, 5, 11, 52, 32),
             ],
             "emission_period": [None, None],
-            "trip_number": [2021001, None],
+            "trip_number": ["2021001", None],
             "last_logbook_message_datetime_utc": [
                 datetime(2021, 12, 4, 19, 12, 3),
                 None,

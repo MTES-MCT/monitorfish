@@ -29,7 +29,7 @@ data class AlertEntity(
         @Column(name = "creation_date", nullable = false)
         val creationDate: ZonedDateTime,
         @Column(name = "trip_number")
-        val tripNumber: Int? = null,
+        val tripNumber: String? = null,
         @Type(type = "jsonb")
         @Column(name = "value", nullable = false, columnDefinition = "jsonb")
         val value: String) {

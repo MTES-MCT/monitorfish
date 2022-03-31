@@ -45,7 +45,7 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
             """
             CREATE TEMP TABLE tmp_computed_trip_numbers(
                 id INTEGER PRIMARY KEY,
-                trip_number INTEGER
+                trip_number VARCHAR
             )
             ON COMMIT DROP;
             """

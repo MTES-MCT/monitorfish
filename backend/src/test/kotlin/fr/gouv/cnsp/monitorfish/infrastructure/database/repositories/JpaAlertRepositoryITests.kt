@@ -27,7 +27,7 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
-                tripNumber = 123456,
+                tripNumber = "123456",
                 creationDate = ZonedDateTime.now(),
                 value = PNOAndLANWeightToleranceAlert())
         jpaAlertRepository.save(alertOne)
@@ -37,7 +37,7 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
-                tripNumber = 123456,
+                tripNumber = "123456",
                 creationDate = ZonedDateTime.now(),
                 value = PNOAndLANWeightToleranceAlert())
         jpaAlertRepository.save(alertTwo)
@@ -46,7 +46,7 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
         val alerts = jpaAlertRepository.findAlertsOfTypes(
                 listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
         "FRFGRGR",
-                123456)
+                "123456")
 
         // Then
         assertThat(alerts).hasSize(2)
@@ -61,7 +61,7 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
-                tripNumber = 123456,
+                tripNumber = "123456",
                 creationDate = ZonedDateTime.now(),
                 value = PNOAndLANWeightToleranceAlert())
         jpaAlertRepository.save(alertOne)
@@ -70,7 +70,7 @@ class JpaAlertRepositoryITests : AbstractDBTests() {
         val alerts = jpaAlertRepository.findAlertsOfTypes(
                 listOf(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT),
                 "FRFGRGR",
-                123456)
+                "123456")
 
         // Then
         assertThat(alerts).hasSize(0)

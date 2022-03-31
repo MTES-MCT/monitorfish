@@ -19,7 +19,7 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
             "AND e.operationDateTime < (SELECT MIN(er.operationDateTime) FROM LogbookReportEntity er WHERE er.internalReferenceNumber = ?1 AND er.tripNumber = ?2) " +
             "GROUP BY e.tripNumber " +
             "ORDER BY 2 DESC")
-    fun findPreviousTripNumber(internalReferenceNumber: String, tripNumber: Int, pageable: Pageable): List<VoyageTripNumberAndDate>
+    fun findPreviousTripNumber(internalReferenceNumber: String, tripNumber: String, pageable: Pageable): List<VoyageTripNumberAndDate>
 
     @Query( "SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDate(e.tripNumber, MAX(e.operationDateTime)) " +
             "FROM LogbookReportEntity e " +
@@ -29,11 +29,11 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
             "AND e.operationDateTime > (SELECT MAX(er.operationDateTime) FROM LogbookReportEntity er WHERE er.internalReferenceNumber = ?1 AND er.tripNumber = ?2) " +
             "GROUP BY e.tripNumber " +
             "ORDER BY 2 ASC")
-    fun findNextTripNumber(internalReferenceNumber: String, tripNumber: Int, pageable: Pageable): List<VoyageTripNumberAndDate>
+    fun findNextTripNumber(internalReferenceNumber: String, tripNumber: String, pageable: Pageable): List<VoyageTripNumberAndDate>
 
     @Query("SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(MIN(e.operationDateTime), MAX(e.operationDateTime)) " +
             "FROM LogbookReportEntity e WHERE e.internalReferenceNumber = ?1 AND e.tripNumber = ?2")
-    fun findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber: String, tripNumber: Int) : VoyageDates
+    fun findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber: String, tripNumber: String) : VoyageDates
 
     @Query( "SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(e.tripNumber, MIN(e.operationDateTime), MAX(e.operationDateTime)) " +
             "FROM LogbookReportEntity e " +
@@ -80,7 +80,7 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
             "FROM dat_cor " +
             "UNION ALL SELECT * from ret " +
             "UNION ALL SELECT * from del", nativeQuery = true)
-    fun findAllMessagesByTripNumberBetweenDates(internalReferenceNumber: String, afterDateTime: Instant, beforeDateTime: Instant, tripNumber: Int): List<LogbookReportEntity>
+    fun findAllMessagesByTripNumberBetweenDates(internalReferenceNumber: String, afterDateTime: Instant, beforeDateTime: Instant, tripNumber: String): List<LogbookReportEntity>
 
     @Query("select operation_datetime_utc from logbook_reports where operation_datetime_utc < now() order by operation_datetime_utc desc limit 1", nativeQuery = true)
     fun findLastOperationDateTime(): Instant

@@ -27,7 +27,7 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = 123456,
+                tripNumber = "123456",
                 creationDate = ZonedDateTime.now(),
                 value = ThreeMilesTrawlingAlert())
         jpaPendingAlertRepository.save(alertOne)

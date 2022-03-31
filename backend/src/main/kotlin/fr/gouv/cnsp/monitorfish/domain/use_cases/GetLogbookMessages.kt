@@ -17,7 +17,7 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
                          private val logbookRawMessageRepository: LogbookRawMessageRepository) {
     private val logger = LoggerFactory.getLogger(GetLogbookMessages::class.java)
 
-    fun execute(internalReferenceNumber: String, afterDepartureDate: ZonedDateTime, beforeDepartureDate: ZonedDateTime, tripNumber: Int): List<LogbookMessage> {
+    fun execute(internalReferenceNumber: String, afterDepartureDate: ZonedDateTime, beforeDepartureDate: ZonedDateTime, tripNumber: String): List<LogbookMessage> {
         val messages = logbookReportRepository
                 .findAllMessagesByTripNumberBetweenDates(internalReferenceNumber, afterDepartureDate, beforeDepartureDate, tripNumber)
                 .sortedBy { it.operationDateTime }

@@ -36,7 +36,7 @@ data class PositionEntity(
         @Enumerated(EnumType.STRING)
         val destination: CountryCode? = null,
         @Column(name = "trip_number")
-        val tripNumber: Int? = null,
+        val tripNumber: String? = null,
         @Column(name = "is_manual")
         val isManual: Boolean? = false,
 

@@ -16,7 +16,7 @@ class GetVesselVoyage(private val logbookReportRepository: LogbookReportReposito
                       private val getLogbookMessages: GetLogbookMessages) {
     private val logger = LoggerFactory.getLogger(GetVesselVoyage::class.java)
 
-    fun execute(internalReferenceNumber: String, voyageRequest: VoyageRequest, currentTripNumber: Int?): Voyage {
+    fun execute(internalReferenceNumber: String, voyageRequest: VoyageRequest, currentTripNumber: String?): Voyage {
         val trip = try {
             when (voyageRequest) {
                 VoyageRequest.LAST -> logbookReportRepository.findLastTripBeforeDateTime(internalReferenceNumber, ZonedDateTime.now())
@@ -65,10 +65,10 @@ class GetVesselVoyage(private val logbookReportRepository: LogbookReportReposito
         )
     }
 
-    private fun getIsLastVoyage(currentTripNumber: Int?,
+    private fun getIsLastVoyage(currentTripNumber: String?,
                                 voyageRequest: VoyageRequest,
                                 internalReferenceNumber: String,
-                                tripNumber: Int): Boolean {
+                                tripNumber: String): Boolean {
         if (currentTripNumber == null) {
             return true
         }
@@ -87,7 +87,7 @@ class GetVesselVoyage(private val logbookReportRepository: LogbookReportReposito
     }
 
     private fun getIsFirstVoyage(internalReferenceNumber: String,
-                                 tripNumber: Int): Boolean {
+                                 tripNumber: String): Boolean {
         return try {
             logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)
 

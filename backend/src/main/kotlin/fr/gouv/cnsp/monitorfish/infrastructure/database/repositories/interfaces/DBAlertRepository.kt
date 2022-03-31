@@ -9,5 +9,5 @@ import org.springframework.data.repository.CrudRepository
 interface DBAlertRepository : CrudRepository<AlertEntity, Long> {
     @Query("select * from alerts where internal_reference_number = :internalReferenceNumber " +
             "and trip_number = :tripNumber and value->>'type' in (:types)", nativeQuery = true)
-    fun findAlertsOfRules(types: List<String>, internalReferenceNumber: String, tripNumber: Int?): List<AlertEntity>
+    fun findAlertsOfRules(types: List<String>, internalReferenceNumber: String, tripNumber: String?): List<AlertEntity>
 }

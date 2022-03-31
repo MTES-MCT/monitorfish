@@ -23,7 +23,7 @@ data class LastPositionDataOutput(
         val dateTime: ZonedDateTime,
         val from: CountryCode? = null,
         val destination: CountryCode? = null,
-        val tripNumber: Int? = null,
+        val tripNumber: String? = null,
         val positionType: PositionType,
         val emissionPeriod: Duration? = null,
         val lastLogbookMessageDateTime: ZonedDateTime? = null,

@@ -31,7 +31,7 @@ data class LogbookReportEntity(
         @Column(name = "operation_number")
         val operationNumber: String,
         @Column(name = "trip_number")
-        val tripNumber: Int? = null,
+        val tripNumber: String? = null,
         @Column(name = "operation_country")
         val operationCountry: String? = null,
         @Column(name = "operation_datetime_utc")

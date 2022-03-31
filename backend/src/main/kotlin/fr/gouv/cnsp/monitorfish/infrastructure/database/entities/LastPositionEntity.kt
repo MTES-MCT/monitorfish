@@ -46,7 +46,7 @@ data class LastPositionEntity(
         @Enumerated(EnumType.STRING)
         val flagState: CountryCode? = null,
         @Column(name = "trip_number")
-        val tripNumber: Int? = null,
+        val tripNumber: String? = null,
 
         @Column(name = "latitude")
         val latitude: Double? = null,

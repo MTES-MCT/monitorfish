@@ -69,7 +69,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(lastTrip.startDate.toString()).isEqualTo("2019-10-11T02:06Z")
-        assertThat(lastTrip.tripNumber).isEqualTo(9463715)
+        assertThat(lastTrip.tripNumber).isEqualTo("9463715")
     }
 
     @Test
@@ -100,10 +100,10 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookLineRepository.findTripBeforeTripNumber(
                 "FAK000999999",
-                9463714)
+                "9463714")
 
         // Then
-        assertThat(secondTrip.tripNumber).isEqualTo(9463713)
+        assertThat(secondTrip.tripNumber).isEqualTo("9463713")
         assertThat(secondTrip.startDate.toString()).isEqualTo("2019-01-18T11:45Z")
         assertThat(secondTrip.endDate.toString()).isEqualTo("2019-02-23T13:08Z")
     }
@@ -115,7 +115,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
         val throwable = catchThrowable {
             jpaLogbookLineRepository.findTripBeforeTripNumber(
                     "FAK000999999",
-                    9463712)
+                    "9463712")
         }
 
         // Then
@@ -129,10 +129,10 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookLineRepository.findTripBeforeTripNumber(
                 "FAK000999999",
-                9463715)
+                "9463715")
 
         // Then
-        assertThat(secondTrip.tripNumber).isEqualTo(9463714)
+        assertThat(secondTrip.tripNumber).isEqualTo("9463714")
         assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-17T01:05Z")
         assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-15T12:01Z")
     }
@@ -143,10 +143,10 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookLineRepository.findTripAfterTripNumber(
                 "FAK000999999",
-                9463713)
+                "9463713")
 
         // Then
-        assertThat(secondTrip.tripNumber).isEqualTo(9463714)
+        assertThat(secondTrip.tripNumber).isEqualTo("9463714")
         assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-17T01:05Z")
         assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-15T12:01Z")
     }
@@ -157,10 +157,10 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookLineRepository.findTripAfterTripNumber(
                 "FAK000999999",
-                9463714)
+                "9463714")
 
         // Then
-        assertThat(secondTrip.tripNumber).isEqualTo(9463715)
+        assertThat(secondTrip.tripNumber).isEqualTo("9463715")
         assertThat(secondTrip.startDate.toString()).isEqualTo("2019-10-11T02:06Z")
         assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
     }
@@ -172,7 +172,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
         val throwable = catchThrowable {
             jpaLogbookLineRepository.findTripAfterTripNumber(
                     "FAK000999999",
-                    9463715)
+                    "9463715")
         }
 
         // Then
@@ -189,7 +189,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
 
         // When
         val messages = jpaLogbookLineRepository
-                .findAllMessagesByTripNumberBetweenDates("FAK000999999", lastDepartureDate, now, 9463715)
+                .findAllMessagesByTripNumberBetweenDates("FAK000999999", lastDepartureDate, now, "9463715")
 
         // Then
         assertThat(messages).hasSize(19)
@@ -380,8 +380,8 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
         // Then, for the first pair of result
         assertThat(messages.first().first.internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(messages.first().second?.internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(messages.first().first.tripNumber).isEqualTo(9463714)
-        assertThat(messages.first().second?.tripNumber).isEqualTo(9463714)
+        assertThat(messages.first().first.tripNumber).isEqualTo("9463714")
+        assertThat(messages.first().second?.tripNumber).isEqualTo("9463714")
         assertThat(messages.first().first.messageType).isEqualTo(LogbookMessageTypeMapping.LAN.name)
         assertThat(messages.first().second?.messageType).isEqualTo(LogbookMessageTypeMapping.PNO.name)
     }

@@ -31,7 +31,7 @@ class NAFMessageMapper(private val naf: String) {
     private var longitude by Delegates.notNull<Double>()
     private var course: Double? = null
     private var speed: Double? = null
-    private var tripNumber: Int? = null
+    private var tripNumber: String? = null
     private var isManual: Boolean = false
 
     private val noCountry = "X"
@@ -66,7 +66,7 @@ class NAFMessageMapper(private val naf: String) {
                             NAFCode.FLAG -> this.flagState = getCountryOrThrowIfCountryNotFound(value)
                             NAFCode.FROM -> this.from = getCountryOrThrowIfCountryNotFound(value)
                             NAFCode.TO -> this.destination = getCountryOrThrowIfCountryNotFound(value)
-                            NAFCode.TRIP_NUMBER -> this.tripNumber = value.toInt()
+                            NAFCode.TRIP_NUMBER -> this.tripNumber = value
                             NAFCode.TIME -> this.time = value
                             NAFCode.DATE -> this.date = value
                             // Latitude

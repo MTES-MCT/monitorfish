@@ -13,7 +13,7 @@ VALUES
 (
     'ABC000306959', 'RV348407', 'LLUK', 
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '3 days', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '4 days',
-    20210001, '[{"gear": "OTM", "mesh": 80.0}]', '[{"gear": "OTB", "weight": 30.0, "faoZone": "27.7.d", "species": "SQZ"}, {"gear": "OTB", "weight": 30.0, "faoZone": "27.7.d", "species": "PLE"}, {"gear": "OTB", "weight": 20.0, "faoZone": "27.7.d", "species": "RJC"}]', '{"NWW01/02"}', 80.0,
+    '20210001', '[{"gear": "OTM", "mesh": 80.0}]', '[{"gear": "OTB", "weight": 30.0, "faoZone": "27.7.d", "species": "SQZ"}, {"gear": "OTB", "weight": 30.0, "faoZone": "27.7.d", "species": "PLE"}, {"gear": "OTB", "weight": 20.0, "faoZone": "27.7.d", "species": "RJC"}]', '{"NWW01/02"}', 80.0,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '6 months 6 days 6 hours', false, 'RAS',
     2.0, 3.0, 1.80277563773199, 2.14443662414848, 
     1.0, 3.25, 3.0, 17.0, 
@@ -22,7 +22,7 @@ VALUES
 (
     'ABC000542519', 'RO237719', 'FQ7058', 
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 week 3 days', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 week 5 days',
-    20210002, '[{"gear": "OTB", "mesh": 80.0}]', '[{"gear": "OTB", "weight": 1930.0, "faoZone": "27.8.c", "species": "HKE"}]', '{}', 1930.0,
+    '20210002', '[{"gear": "OTB", "mesh": 80.0}]', '[{"gear": "OTB", "weight": 1930.0, "faoZone": "27.8.c", "species": "HKE"}]', '{}', 1930.0,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 year months 2 days', true, 'Pêche en zone interdite',
     3.3, 2.0, 1.80277563773199,  2.09885592141872,  
     1.0, 3.25, 2.0, 3.3,

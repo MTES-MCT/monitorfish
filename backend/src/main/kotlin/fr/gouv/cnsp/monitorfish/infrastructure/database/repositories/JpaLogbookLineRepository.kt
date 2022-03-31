@@ -43,7 +43,7 @@ class JpaLogbookLineRepository(private val dbERSRepository: DBLogbookReportRepos
     }
 
     @Cacheable(value = ["previous_logbook"])
-    override fun findTripBeforeTripNumber(internalReferenceNumber: String, tripNumber: Int): VoyageDatesAndTripNumber {
+    override fun findTripBeforeTripNumber(internalReferenceNumber: String, tripNumber: String): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 val previousTripNumber = dbERSRepository.findPreviousTripNumber(
@@ -67,7 +67,7 @@ class JpaLogbookLineRepository(private val dbERSRepository: DBLogbookReportRepos
     }
 
     @Cacheable(value = ["next_logbook"])
-    override fun findTripAfterTripNumber(internalReferenceNumber: String, tripNumber: Int): VoyageDatesAndTripNumber {
+    override fun findTripAfterTripNumber(internalReferenceNumber: String, tripNumber: String): VoyageDatesAndTripNumber {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 val nextTripNumber = dbERSRepository.findNextTripNumber(
@@ -98,7 +98,7 @@ class JpaLogbookLineRepository(private val dbERSRepository: DBLogbookReportRepos
         internalReferenceNumber: String,
         afterDate: ZonedDateTime,
         beforeDate: ZonedDateTime,
-        tripNumber: Int): List<LogbookMessage> {
+        tripNumber: String): List<LogbookMessage> {
         try {
             if(internalReferenceNumber.isNotEmpty()) {
                 return dbERSRepository.findAllMessagesByTripNumberBetweenDates(

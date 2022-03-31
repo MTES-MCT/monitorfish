@@ -224,7 +224,7 @@ class BffController(
                              voyageRequest: VoyageRequest,
                                  @ApiParam("Trip number")
                              @RequestParam(name = "tripNumber", required = false)
-                             tripNumber: Int?): VoyageDataOutput {
+                             tripNumber: String?): VoyageDataOutput {
         val start = System.currentTimeMillis()
 
         val voyage = getVesselVoyage.execute(internalReferenceNumber, voyageRequest, tripNumber)

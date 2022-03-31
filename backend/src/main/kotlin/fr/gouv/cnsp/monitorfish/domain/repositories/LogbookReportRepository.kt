@@ -12,13 +12,13 @@ interface LogbookReportRepository {
                                    beforeDateTime: ZonedDateTime): VoyageDatesAndTripNumber
     @Throws(NoLogbookFishingTripFound::class)
     fun findTripBeforeTripNumber(internalReferenceNumber: String,
-                                 tripNumber: Int): VoyageDatesAndTripNumber
+                                 tripNumber: String): VoyageDatesAndTripNumber
     @Throws(NoLogbookFishingTripFound::class)
-    fun findTripAfterTripNumber(internalReferenceNumber: String, tripNumber: Int): VoyageDatesAndTripNumber
+    fun findTripAfterTripNumber(internalReferenceNumber: String, tripNumber: String): VoyageDatesAndTripNumber
     fun findAllMessagesByTripNumberBetweenDates(internalReferenceNumber: String,
                                                 afterDate: ZonedDateTime,
                                                 beforeDate: ZonedDateTime,
-                                                tripNumber: Int): List<LogbookMessage>
+                                                tripNumber: String): List<LogbookMessage>
     fun findLANAndPNOMessagesNotAnalyzedBy(ruleType: String): List<Pair<LogbookMessage, LogbookMessage?>>
     fun updateLogbookMessagesAsProcessedByRule(ids: List<Long>, ruleType: String)
     fun findById(id: Long): LogbookMessage

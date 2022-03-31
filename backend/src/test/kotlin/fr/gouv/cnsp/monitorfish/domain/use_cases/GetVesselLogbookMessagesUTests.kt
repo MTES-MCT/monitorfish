@@ -44,7 +44,7 @@ class GetVesselLogbookMessagesUTests {
     @Test
     fun `execute Should return an ordered list of last ERS messages with the codes' names`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber(123, ZonedDateTime.now(), ZonedDateTime.now()))
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyLogbookMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -57,7 +57,7 @@ class GetVesselLogbookMessagesUTests {
 
         // When
         val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), 345)
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -100,7 +100,7 @@ class GetVesselLogbookMessagesUTests {
     @Test
     fun `execute Should flag a corrected message as true`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber(123, ZonedDateTime.now(), ZonedDateTime.now()))
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyCorrectedLogbookMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -113,7 +113,7 @@ class GetVesselLogbookMessagesUTests {
 
         // When
         val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), 345)
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(2)
@@ -136,7 +136,7 @@ class GetVesselLogbookMessagesUTests {
     @Test
     fun `execute Should filter to return only DAT and COR messages and add the acknowledge property`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber(123, ZonedDateTime.now(), ZonedDateTime.now()))
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyRETLogbookMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -149,7 +149,7 @@ class GetVesselLogbookMessagesUTests {
 
         // When
         val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), 345)
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(2)
@@ -181,7 +181,7 @@ class GetVesselLogbookMessagesUTests {
     @Test
     fun `execute Should add the deleted property`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber(123, ZonedDateTime.now(), ZonedDateTime.now()))
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyRETLogbookMessage())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
@@ -194,7 +194,7 @@ class GetVesselLogbookMessagesUTests {
 
         // When
         val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), 345)
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(2)

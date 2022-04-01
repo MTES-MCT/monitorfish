@@ -27,7 +27,8 @@ const APIWorker = () => {
     selectedVesselIdentity
   } = useSelector(state => state.vessel)
   const {
-    sideWindowIsOpen
+    sideWindowIsOpen,
+    adminRole
   } = useSelector(state => state.global)
   const {
     openedBeaconMalfunctionInKanban,
@@ -47,10 +48,12 @@ const APIWorker = () => {
       dispatch(getHealthcheck())
       await dispatch(getAllSpecies())
       dispatch(getAllGearCodes())
-      dispatch(getAllFleetSegments())
+      if (adminRole) {
+        dispatch(getAllFleetSegments())
+        dispatch(getOperationalAlerts())
+        dispatch(getAllBeaconMalfunctions())
+      }
       dispatch(showAllVessels())
-      dispatch(getOperationalAlerts())
-      dispatch(getAllBeaconMalfunctions())
       dispatch(getAllRegulatoryLayers())
     })
 
@@ -59,7 +62,9 @@ const APIWorker = () => {
         dispatch(setIsUpdatingVessels())
         dispatch(getHealthcheck())
         dispatch(showAllVessels())
-        dispatch(getOperationalAlerts())
+        if (adminRole) {
+          dispatch(getOperationalAlerts())
+        }
         dispatch(updateVesselTracks())
       })
 
@@ -69,10 +74,10 @@ const APIWorker = () => {
     return () => {
       clearInterval(interval)
     }
-  }, [])
+  }, [adminRole])
 
   useEffect(() => {
-    if (sideWindowIsOpen) {
+    if (adminRole && sideWindowIsOpen) {
       if (beaconMalfunctionsInterval?.current) {
         clearInterval(beaconMalfunctionsInterval.current)
       }
@@ -85,10 +90,10 @@ const APIWorker = () => {
     return () => {
       clearInterval(beaconMalfunctionsInterval?.current)
     }
-  }, [sideWindowIsOpen])
+  }, [adminRole, sideWindowIsOpen])
 
   useEffect(() => {
-    if (sideWindowIsOpen && openedBeaconMalfunctionInKanban) {
+    if (adminRole && sideWindowIsOpen && openedBeaconMalfunctionInKanban) {
       if (beaconMalfunctionInKanbanInterval?.current) {
         clearInterval(beaconMalfunctionInKanbanInterval.current)
       }
@@ -101,10 +106,10 @@ const APIWorker = () => {
     return () => {
       clearInterval(beaconMalfunctionInKanbanInterval?.current)
     }
-  }, [sideWindowIsOpen, openedBeaconMalfunctionInKanban])
+  }, [adminRole, sideWindowIsOpen, openedBeaconMalfunctionInKanban])
 
   useEffect(() => {
-    if (openedBeaconMalfunction) {
+    if (adminRole && openedBeaconMalfunction) {
       if (beaconMalfunctionInterval?.current) {
         clearInterval(beaconMalfunctionInterval.current)
       }
@@ -117,10 +122,10 @@ const APIWorker = () => {
     return () => {
       clearInterval(beaconMalfunctionInterval?.current)
     }
-  }, [openedBeaconMalfunction])
+  }, [adminRole, openedBeaconMalfunction])
 
   useEffect(() => {
-    if (vesselBeaconMalfunctionsResumeAndHistory) {
+    if (adminRole && vesselBeaconMalfunctionsResumeAndHistory) {
       if (vesselBeaconMalfunctionInterval?.current) {
         clearInterval(vesselBeaconMalfunctionInterval.current)
       }
@@ -133,7 +138,7 @@ const APIWorker = () => {
     return () => {
       clearInterval(vesselBeaconMalfunctionInterval?.current)
     }
-  }, [vesselBeaconMalfunctionsResumeAndHistory])
+  }, [adminRole, vesselBeaconMalfunctionsResumeAndHistory])
 
   useEffect(() => {
     if (updateVesselSidebarTab) {
@@ -143,13 +148,13 @@ const APIWorker = () => {
         }
       } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
         dispatch(getVesselControls())
-      } else if (vesselSidebarTab === VesselSidebarTab.ERSVMS) {
+      } else if (adminRole && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
         dispatch(getVesselBeaconMalfunctions())
       }
 
       setUpdateVesselSidebarTab(false)
     }
-  }, [selectedVesselIdentity, updateVesselSidebarTab, vesselSidebarTab])
+  }, [adminRole, selectedVesselIdentity, updateVesselSidebarTab, vesselSidebarTab])
 
   return null
 }

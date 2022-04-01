@@ -26,7 +26,8 @@ const VesselAlertLayer = ({ map }) => {
   } = useSelector(state => state.filter)
 
   const {
-    previewFilteredVesselsMode
+    previewFilteredVesselsMode,
+    adminRole
   } = useSelector(state => state.global)
 
   const {
@@ -61,7 +62,7 @@ const VesselAlertLayer = ({ map }) => {
   }
 
   useEffect(() => {
-    if (map) {
+    if (adminRole && map) {
       getLayer().name = Layers.VESSEL_ALERT.code
       map.getLayers().push(getLayer())
     }
@@ -71,10 +72,10 @@ const VesselAlertLayer = ({ map }) => {
         map.removeLayer(getLayer())
       }
     }
-  }, [map])
+  }, [adminRole, map])
 
   useEffect(() => {
-    if (vessels?.length) {
+    if (adminRole && vessels?.length) {
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
       const features = vessels.reduce((features, vessel) => {
@@ -99,6 +100,7 @@ const VesselAlertLayer = ({ map }) => {
       getVectorSource()?.addFeatures(features)
     }
   }, [
+    adminRole,
     vessels,
     selectedVessel,
     previewFilteredVesselsMode,

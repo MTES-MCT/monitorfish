@@ -29,14 +29,6 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
                         toDateTime: ZonedDateTime? = null): Pair<Boolean, Deferred<List<Position>>> {
         var vesselTrackDepthHasBeenModified = false
 
-        if (vesselIdentifier == null) {
-            logger.warn("Vessel identifier must be not null : returning an empty list of positions " +
-                    "(internalReferenceNumber=${internalReferenceNumber}, externalReferenceNumber=${externalReferenceNumber}, ircs=${ircs})")
-            return coroutineScope {
-                Pair(vesselTrackDepthHasBeenModified, async { listOf() })
-            }
-        }
-
         if(trackDepth == VesselTrackDepth.CUSTOM) {
             requireNotNull(fromDateTime) {
                 "begin date must be not null when requesting custom track depth"
@@ -91,7 +83,7 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
         }
     }
 
-    private fun CoroutineScope.findPositionsAsync(vesselIdentifier: VesselIdentifier,
+    private fun CoroutineScope.findPositionsAsync(vesselIdentifier: VesselIdentifier?,
                                                   internalReferenceNumber: String,
                                                   from: ZonedDateTime?,
                                                   to: ZonedDateTime?,
@@ -104,6 +96,14 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
                     .sortedBy { it.dateTime }}
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> async { positionRepository.findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber, from!!, to!!)
                     .sortedBy { it.dateTime }}
+            else -> async {
+                positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(
+                        internalReferenceNumber = internalReferenceNumber,
+                        externalReferenceNumber = externalReferenceNumber,
+                        ircs = ircs,
+                        from = from!!,
+                        to = to!!).sortedBy { it.dateTime }
+            }
         }
     }
 }

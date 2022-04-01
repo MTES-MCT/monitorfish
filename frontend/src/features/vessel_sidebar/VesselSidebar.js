@@ -4,7 +4,6 @@ import { ReactComponent as SummarySVG } from '../icons/Picto_resume.svg'
 import { ReactComponent as VesselIDSVG } from '../icons/Picto_identite.svg'
 import { ReactComponent as FisheriesSVG } from '../icons/Picto_peche.svg'
 import { ReactComponent as ControlsSVG } from '../icons/Picto_controles.svg'
-import { ReactComponent as ObservationsSVG } from '../icons/Picto_ciblage.svg'
 import { ReactComponent as VMSSVG } from '../icons/Icone_VMS_fiche_navire.svg'
 import VesselIdentity from './VesselIdentity'
 import { useDispatch, useSelector } from 'react-redux'
@@ -36,6 +35,7 @@ const VesselSidebar = () => {
     vesselSidebarIsOpen
   } = useSelector(state => state.vessel)
   const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
+  const adminRole = useSelector(state => state.global.adminRole)
 
   const [openSidebar, setOpenSidebar] = useState(false)
   const firstUpdate = useRef(true)
@@ -57,6 +57,12 @@ const VesselSidebar = () => {
       setOpenSidebar(false)
     }
   }, [vesselSidebarIsOpen, vesselSidebarTab])
+
+  useEffect(() => {
+    if (!adminRole && vesselSidebarTab) {
+      dispatch(showVesselSidebarTab(vesselSidebarTab))
+    }
+  }, [adminRole, vesselSidebarTab])
 
   return (
     <>
@@ -93,13 +99,17 @@ const VesselSidebar = () => {
         <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
         <div>
           <TabList>
-            <Tab
-              isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
-              onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.SUMMARY))}
-              data-cy={'vessel-menu-resume'}
-            >
-              <SummaryIcon/> <br/> Résumé
-            </Tab>
+            {
+              adminRole
+                ? <Tab
+                  isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
+                  onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.SUMMARY))}
+                  data-cy={'vessel-menu-resume'}
+                >
+                  <SummaryIcon/> <br/> Résumé
+                </Tab>
+                : null
+            }
             <Tab
               isActive={vesselSidebarTab === VesselSidebarTab.IDENTITY}
               onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))}
@@ -121,23 +131,30 @@ const VesselSidebar = () => {
             >
               <ControlsIcon/> <br/> Contrôles
             </Tab>
-            <Tab
-              disabled
-            >
-              <ObservationsIcon/> <br/> Ciblage
-            </Tab>
-            <Tab
-              isLast
-              isActive={vesselSidebarTab === VesselSidebarTab.ERSVMS}
-              onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))}
-              data-cy={'vessel-menu-ers-vms'}
-            >
-              <VMSIcon/> <br/> VMS/ERS
-            </Tab>
+            {
+              adminRole
+                ? <Tab
+                  isLast
+                  isActive={vesselSidebarTab === VesselSidebarTab.ERSVMS}
+                  onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))}
+                  data-cy={'vessel-menu-ers-vms'}
+                >
+                  <VMSIcon/> <br/> VMS/ERS
+                </Tab>
+                : null
+            }
           </TabList>
           <Panel healthcheckTextWarning={healthcheckTextWarning}>
-            <AlertWarning selectedVessel={selectedVessel}/>
-            <BeaconMalfunctionWarning selectedVessel={selectedVessel}/>
+            {
+              adminRole
+                ? <AlertWarning selectedVessel={selectedVessel}/>
+                : null
+            }
+            {
+              adminRole
+                ? <BeaconMalfunctionWarning selectedVessel={selectedVessel}/>
+                : null
+            }
             {
               vesselSidebarTab === VesselSidebarTab.SUMMARY
                 ? <VesselSummary/>
@@ -198,7 +215,7 @@ const Panel = styled.div`
 const Tab = styled.button`
   padding-top: 5px;
   display: inline-block;
-  width: 100px;
+  width: 170px;
   margin: 0;
   border: none;
   border-radius: 0;
@@ -241,11 +258,6 @@ const VesselIDIcon = styled(VesselIDSVG)`
 
 const ControlsIcon = styled(ControlsSVG)`
   width: 30px;
-`
-
-const ObservationsIcon = styled(ObservationsSVG)`
-  width: 30px;
-  margin: 0 5px 0 5px;
 `
 
 const VMSIcon = styled(VMSSVG)`

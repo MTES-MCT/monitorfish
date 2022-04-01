@@ -5,6 +5,7 @@ import VesselCard from '../cards/VesselCard'
 import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from './position'
+import { useSelector } from 'react-redux'
 
 const overlayHeight = 260
 export const marginsWithoutAlert = {
@@ -35,6 +36,7 @@ export const marginsWithTwoWarning = {
 }
 
 const VesselCardOverlay = ({ feature, map }) => {
+  const { adminRole } = useSelector(state => state.global)
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
@@ -67,7 +69,9 @@ const VesselCardOverlay = ({ feature, map }) => {
     if (overlayRef.current && overlayObjectRef.current) {
       if (feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
         setVesselFeatureToShowOnCard(feature)
-        numberOfWarnings.current = feature?.vesselProperties?.hasAlert + !!feature?.vesselProperties?.beaconMalfunctionId
+        numberOfWarnings.current = adminRole
+          ? feature?.vesselProperties?.hasAlert + !!feature?.vesselProperties?.beaconMalfunctionId
+          : false
         overlayRef.current.style.display = 'block'
         overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
 
@@ -87,7 +91,7 @@ const VesselCardOverlay = ({ feature, map }) => {
         setVesselFeatureToShowOnCard(null)
       }
     }
-  }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef])
+  }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef, adminRole])
 
   function getNextOverlayPosition (numberOfWarnings) {
     const [x, y] = feature.getGeometry().getCoordinates()

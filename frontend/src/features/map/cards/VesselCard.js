@@ -16,6 +16,7 @@ timeago.register('fr', timeagoFrenchLocale)
 
 const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
+  const { adminRole } = useSelector(state => state.global)
   const { vesselProperties } = feature
   const featureCoordinates = feature.getGeometry().getCoordinates()
 
@@ -53,7 +54,7 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
         }
       </VesselCardHeader>
       {
-        vesselProperties.alerts?.length
+        adminRole && vesselProperties.alerts?.length
           ? <VesselCardAlert data-cy={'vessel-card-alert'}>
             <AlertIcon/>
             {
@@ -65,7 +66,7 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
           : null
       }
       {
-        vesselProperties.beaconMalfunctionId
+        adminRole && vesselProperties.beaconMalfunctionId
           ? <VesselCardBeaconMalfunction data-cy={'vessel-card-beacon-malfunction'}>
             <BeaconMalfunctionIcon/>
             NON-ÉMISSION VMS

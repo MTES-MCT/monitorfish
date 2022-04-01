@@ -14,6 +14,7 @@ const lastSearchedVesselsLocalStorageKey = 'lastSearchedVessels'
 const globalSlice = createSlice({
   name: 'global',
   initialState: {
+    adminRole: false,
     error: null,
     isUpdatingVessels: false,
     blockVesselsUpdate: false,
@@ -46,6 +47,14 @@ const globalSlice = createSlice({
     },
     resetIsUpdatingVessels (state) {
       state.isUpdatingVessels = false
+    },
+    /**
+     * Set the user role as admin or normal user
+     * @param {Object=} state
+     * @param {{payload: boolean}} action - true if in admin role
+     */
+    setAdminRole (state, action) {
+      state.adminRole = action.payload
     },
     setError (state, action) {
       state.error = action.payload
@@ -171,7 +180,8 @@ export const {
   setSideWindowAsOpen,
   closeSideWindow,
   setUserType,
-  addSearchedVessel
+  addSearchedVessel,
+  setAdminRole
 } = globalSlice.actions
 
 export default globalSlice.reducer

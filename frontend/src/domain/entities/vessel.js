@@ -55,6 +55,7 @@ export class Vessel {
    */
   static getVesselFeatureLabel (feature, options) {
     const {
+      adminRole,
       vesselLabel,
       vesselsLastPositionVisibility,
       riskFactorShowedOnMap,
@@ -102,7 +103,7 @@ export class Vessel {
       }
     }
 
-    if (riskFactorShowedOnMap) {
+    if (adminRole && riskFactorShowedOnMap) {
       label.riskFactor = {
         globalRisk: feature.riskFactor,
         impactRiskFactor: feature.impactRiskFactor,

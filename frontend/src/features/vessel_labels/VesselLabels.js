@@ -19,7 +19,6 @@ const VesselLabels = () => {
   const {
     selectedVessel
   } = useSelector(state => state.vessel)
-  const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
   const vesselLabel = useSelector(state => state.map.vesselLabel)
   const {
     vesselLabelsShowedOnMap,
@@ -27,7 +26,9 @@ const VesselLabels = () => {
   } = useSelector(state => state.map)
   const {
     healthcheckTextWarning,
-    previewFilteredVesselsMode
+    previewFilteredVesselsMode,
+    rightMenuIsOpen,
+    adminRole
   } = useSelector(state => state.global)
 
   const [vesselVisibilityBoxIsOpen, setVesselLabelsBoxIsOpen] = useState(false)
@@ -66,7 +67,7 @@ const VesselLabels = () => {
         healthcheckTextWarning={healthcheckTextWarning}
         vesselVisibilityBoxIsOpen={vesselVisibilityBoxIsOpen}>
         <Header isFirst={false}>
-          Affichage des étiquettes et notes des navires
+          Affichage des étiquettes { adminRole ? 'et notes des navires' : ''}
         </Header>
         <VesselLabel>
           Choisir le libellé des étiquettes des navires
@@ -74,6 +75,7 @@ const VesselLabels = () => {
         <VesselLabelSelection
           updateVesselLabel={label => dispatch(setVesselLabel(label))}
           vesselLabel={vesselLabel}
+          adminRole={adminRole}
         />
         <MapPropertyTrigger
           booleanProperty={vesselLabelsShowedOnMap}
@@ -81,12 +83,17 @@ const VesselLabels = () => {
           text={'les étiquettes des navires'}
           Icon={LabelSVG}
         />
-        <MapPropertyTrigger
-          booleanProperty={riskFactorShowedOnMap}
-          updateBooleanProperty={isShowed => dispatch(setRiskFactorShowedOnMap(isShowed))}
-          text={'la note de risque des navires'}
-          Icon={RiskFactorSVG}
-        />
+        {
+          adminRole
+            ? <MapPropertyTrigger
+              booleanProperty={riskFactorShowedOnMap}
+              updateBooleanProperty={isShowed => dispatch(setRiskFactorShowedOnMap(isShowed))}
+              text={'la note de risque des navires'}
+              Icon={RiskFactorSVG}
+            />
+            : null
+        }
+
       </VesselLabelsBox>
     </Wrapper>
   )

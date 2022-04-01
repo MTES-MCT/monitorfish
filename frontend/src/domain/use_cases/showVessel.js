@@ -1,7 +1,7 @@
 import { batch } from 'react-redux'
 import { getVesselFromAPI } from '../../api/fetch'
-import { getOnlyVesselIdentityProperties, Vessel } from '../entities/vessel'
-import { loadingVessel, resetLoadingVessel, setSelectedVessel } from '../shared_slices/Vessel'
+import { getOnlyVesselIdentityProperties, Vessel, VesselSidebarTab } from '../entities/vessel'
+import { loadingVessel, resetLoadingVessel, setSelectedVessel, showVesselSidebarTab } from '../shared_slices/Vessel'
 import { addSearchedVessel, removeError, setError } from '../shared_slices/Global'
 import { doNotAnimate } from '../shared_slices/Map'
 import { getTrackDepthError } from '../entities/vesselTrackDepth'
@@ -18,7 +18,7 @@ import { getNextVesselTrackDepthObject } from './showVesselTrack'
 const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispatch, getState) => {
   vesselIdentity = getOnlyVesselIdentityProperties(vesselIdentity)
 
-  const { vessel, fishingActivities, map } = getState()
+  const { vessel, fishingActivities, map, global } = getState()
   const {
     vessels
   } = vessel
@@ -28,6 +28,9 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
   const {
     fishingActivitiesAreShowedOnMap
   } = fishingActivities
+  const {
+    adminRole
+  } = global
 
   const lastPositionVessel = vessels.find(vessel => vessel.vesselId === Vessel.getVesselId(vesselIdentity))
 
@@ -44,6 +47,10 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
 
   if (fromSearch) {
     dispatch(addSearchedVessel(vesselIdentity))
+  }
+
+  if (!adminRole) {
+    dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))
   }
 
   return getVesselFromAPI(vesselIdentity, nextVesselTrackDepthObject)

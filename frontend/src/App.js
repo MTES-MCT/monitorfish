@@ -29,7 +29,7 @@ import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewF
 import ErrorToastNotification from './features/commonComponents/ErrorToastNotification'
 import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
-import BackofficeMode from './api/BackofficeMode'
+import StateManager from './api/BackofficeMode'
 import AlertsMapButton from './features/side_window/alerts/AlertsMapButton'
 import BeaconMalfunctionsMapButton from './features/side_window/beacon_malfunctions/BeaconMalfunctionsMapButton'
 import SideWindowLauncher from './features/side_window/SideWindowLauncher'
@@ -65,6 +65,9 @@ function App () {
             <Route path="/backoffice">
               <BackofficePage/>
             </Route>
+            <Route exact path="/ext">
+              <TritonFish/>
+            </Route>
             <Route path="/">
               <HomePage/>
             </Route>
@@ -78,7 +81,10 @@ function App () {
 function HomePage () {
   return <Provider store={homeStore}>
       <NamespaceContext.Provider value={'homepage'}>
-        <BackofficeMode inBackofficeMode={false}/>
+        <StateManager
+          inBackofficeMode={false}
+          adminRole={true}
+        />
         <Switch>
           <Route exact path="/side_window">
             <SideWindow
@@ -114,13 +120,40 @@ function HomePage () {
   </Provider>
 }
 
+function TritonFish () {
+  return <Provider store={homeStore}>
+    <NamespaceContext.Provider value={'homepage'}>
+      <StateManager
+        inBackofficeMode={false}
+        adminRole={false}
+      />
+      <Healthcheck/>
+      <PreviewFilteredVessels/>
+      <Wrapper>
+        <Map/>
+        <LayersSidebar/>
+        <VesselsSearch/>
+        <RightMenuOnHoverArea/>
+        <VesselVisibility/>
+        <VesselSidebar/>
+        <UpdatingVesselLoader/>
+        <Measurement/>
+        <InterestPoint/>
+        <VesselLabels/>
+        <APIWorker/>
+        <ErrorToastNotification/>
+      </Wrapper>
+    </NamespaceContext.Provider>
+  </Provider>
+}
+
 function BackofficePage () {
   const match = useRouteMatch()
 
   return <Provider store={backofficeStore}>
     <PersistGate loading={null} persistor={backofficePersistor}>
       <NamespaceContext.Provider value={'backoffice'}>
-        <BackofficeMode inBackofficeMode={true}/>
+        <StateManager inBackofficeMode={true}/>
         <BackofficeWrapper>
           <Menu/>
           <Switch>

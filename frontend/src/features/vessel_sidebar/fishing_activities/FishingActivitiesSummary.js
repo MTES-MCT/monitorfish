@@ -16,12 +16,13 @@ import {
   getDEPMessageFromMessages,
   getDISMessagesFromMessages,
   getFAOZonesFromFARMessages, getFARMessagesFromMessages,
-  getFAROrDISSpeciesToWeightObject, getLANMessageFromMessages, getPNOMessageFromMessages,
+  getDISSpeciesToWeightObject, getFARSpeciesToWeightObject, getLANMessageFromMessages, getPNOMessageFromMessages,
   getSpeciesAndPresentationToWeightFARObject,
   getSpeciesToWeightLANObject,
   getSpeciesToWeightPNOObject,
   getTotalDEPWeightFromMessage,
-  getTotalFAROrDISWeightFromMessages,
+  getTotalDISWeightFromMessages,
+  getTotalFARWeightFromMessages,
   getTotalLANWeightFromMessage,
   getTotalPNOWeightFromMessage,
   LogbookOperationType
@@ -83,11 +84,11 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
 
       let totalFARAndDEPWeight = 0
       if (farMessages?.length) {
-        const totalFARWeight = getTotalFAROrDISWeightFromMessages(farMessages)
+        const totalFARWeight = getTotalFARWeightFromMessages(farMessages)
         setTotalFARWeight(totalFARWeight)
         totalFARAndDEPWeight = totalFARWeight
 
-        const speciesToWeightFARObject = getFAROrDISSpeciesToWeightObject(farMessages, totalFARWeight)
+        const speciesToWeightFARObject = getFARSpeciesToWeightObject(farMessages, totalFARWeight)
         const speciesAndPresentationToWeightFARObject = getSpeciesAndPresentationToWeightFARObject(farMessages)
         setSpeciesToWeightOfFAR(speciesToWeightFARObject)
         setSpeciesAndPresentationToWeightOfFAR(speciesAndPresentationToWeightFARObject)
@@ -99,10 +100,10 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
       }
 
       if (disMessages?.length) {
-        const totalDISWeight = getTotalFAROrDISWeightFromMessages(disMessages)
+        const totalDISWeight = getTotalDISWeightFromMessages(disMessages)
         setTotalDISWeight(totalDISWeight)
 
-        const speciesToWeightDISObject = getFAROrDISSpeciesToWeightObject(disMessages, totalDISWeight)
+        const speciesToWeightDISObject = getDISSpeciesToWeightObject(disMessages, totalDISWeight)
         setSpeciesToWeightOfDIS(speciesToWeightDISObject)
       }
 

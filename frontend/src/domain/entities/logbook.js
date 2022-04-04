@@ -232,7 +232,24 @@ function sortByCorrectedMessagesFirst () {
   }
 }
 
-export const getTotalFAROrDISWeightFromMessages = logbookMessages => {
+export const getTotalDISWeightFromMessages = logbookMessages => {
+  let correctedMessagesReferencedIds = []
+  return parseFloat(logbookMessages
+    .sort(sortByCorrectedMessagesFirst())
+    .reduce((accumulator, ersMessage) => {
+      if (ersMessage.operationType === LogbookOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(ersMessage.referencedReportId)
+      }
+      const sumOfCatches = !correctedMessagesReferencedIds.includes(ersMessage.reportId) && ersMessage.acknowledge && ersMessage.acknowledge.isSuccess
+        ? ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
+          return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
+        }, 0)
+        : 0
+      return accumulator + sumOfCatches
+    }, 0).toFixed(1))
+}
+
+export const getTotalFARWeightFromMessages = logbookMessages => {
   let correctedMessagesReferencedIds = []
 
   return parseFloat(logbookMessages
@@ -243,8 +260,10 @@ export const getTotalFAROrDISWeightFromMessages = logbookMessages => {
       }
 
       const sumOfCatches = !correctedMessagesReferencedIds.includes(ersMessage.reportId) && ersMessage.acknowledge && ersMessage.acknowledge.isSuccess
-        ? ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
-          return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
+        ? ersMessage.message.hauls.reduce((subAccumulator, haul) => {
+          return subAccumulator + (haul.catches.reduce((haulAccumulator, speciesCatch) => {
+            return haulAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
+          }, 0))
         }, 0)
         : 0
       return accumulator + sumOfCatches
@@ -310,7 +329,28 @@ function getSpeciesAndPresentationToWeightObject (speciesToWeightObject, species
   }
 }
 
-export const getFAROrDISSpeciesToWeightObject = (messages, totalWeight) => {
+export const getFARSpeciesToWeightObject = (messages, totalWeight) => {
+  const speciesToWeightObject = {}
+  let correctedMessagesReferencedIds = []
+
+  messages
+    .sort(sortByCorrectedMessagesFirst())
+    .forEach(message => {
+      if (message.operationType === LogbookOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedReportId)
+      }
+
+      if (!correctedMessagesReferencedIds.includes(message.reportId) && message.acknowledge && message.acknowledge.isSuccess) {
+        message.message.hauls.forEach(haul => {
+          haul.catches.forEach(speciesCatch => setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight))
+        })
+      }
+    })
+
+  return speciesToWeightObject
+}
+
+export const getDISSpeciesToWeightObject = (messages, totalWeight) => {
   const speciesToWeightObject = {}
   let correctedMessagesReferencedIds = []
 
@@ -343,8 +383,10 @@ export const getSpeciesAndPresentationToWeightFARObject = farMessages => {
       }
 
       if (!correctedMessagesReferencedIds.includes(message.reportId) && message.acknowledge && message.acknowledge.isSuccess) {
-        message.message.catches.forEach(speciesCatch => {
-          getSpeciesAndPresentationToWeightObject(speciesAndPresentationToWeightFARObject, speciesCatch)
+        message.message.hauls.forEach(haul => {
+          haul.catches.forEach(speciesCatch => {
+            getSpeciesAndPresentationToWeightObject(speciesAndPresentationToWeightFARObject, speciesCatch)
+          })
         })
       }
     })
@@ -376,7 +418,7 @@ export const getSpeciesToWeightPNOObject = (pnoMessage, totalFARAndDEPWeight) =>
 export const getFAOZonesFromFARMessages = farMessages => {
   return farMessages
     .map(farMessage => {
-      return farMessage.message.catches.map(speciesCatch => speciesCatch.faoZone)
+      return farMessage.message.hauls.map(haul => haul.catches.map(speciesCatch => speciesCatch.faoZone)).flat()
     })
     .flat()
     .reduce((acc, faoZone) => {

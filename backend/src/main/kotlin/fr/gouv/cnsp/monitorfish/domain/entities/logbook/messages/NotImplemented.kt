@@ -1,4 +1,4 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages
 
-class EMPTY() : LogbookMessageValue {
+class NotImplemented() : LogbookMessageValue {
 }

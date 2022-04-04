@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.EMPTY as EMPTYMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.NotImplemented as NotImplementedMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP as DEPMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DIS as DISMessage
@@ -26,13 +26,13 @@ enum class LogbookMessageTypeMapping(private val clazz: Class<out LogbookMessage
     LAN(LANMessage::class.java),
     PNO(PNOMessage::class.java),
     RTP(RTPMessage::class.java),
-    RLC(EMPTYMessage::class.java),
-    TRA(EMPTYMessage::class.java),
-    NOT_TRA(EMPTYMessage::class.java),
-    GEAR_SHOT(EMPTYMessage::class.java),
-    GEAR_RETRIEVAL(EMPTYMessage::class.java),
-    START_ACTIVITY(EMPTYMessage::class.java),
-    START_FISHING(EMPTYMessage::class.java);
+    RLC(NotImplementedMessage::class.java),
+    TRA(NotImplementedMessage::class.java),
+    NOT_TRA(NotImplementedMessage::class.java),
+    GEAR_SHOT(NotImplementedMessage::class.java),
+    GEAR_RETRIEVAL(NotImplementedMessage::class.java),
+    START_ACTIVITY(NotImplementedMessage::class.java),
+    START_FISHING(NotImplementedMessage::class.java);
 
     override fun getImplementation(): Class<out LogbookMessageValue> {
         return clazz

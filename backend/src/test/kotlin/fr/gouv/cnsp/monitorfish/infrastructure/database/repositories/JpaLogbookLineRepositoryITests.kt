@@ -409,6 +409,6 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
         val dateTime = jpaLogbookLineRepository.findLastMessageDate()
 
         // Then
-        assertThat(dateTime).isEqualTo(ZonedDateTime.parse("2021-01-18T07:19:29.384921Z"))
+        assertThat(dateTime).isEqualTo(ZonedDateTime.parse("2021-01-31T12:29:02Z"))
     }
 }

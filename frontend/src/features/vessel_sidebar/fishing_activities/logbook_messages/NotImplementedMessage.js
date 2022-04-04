@@ -7,7 +7,9 @@ countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 const NotImplementedMessage = props => {
   return <>
-    <Zone>L affichage de ce type de message n est pas pris en compte.</Zone>
+    <Zone>
+        <Message>L&apos;affichage de ce type de message n&apos;est pas encore supporté.</Message>
+    </Zone>
   </>
 }
 
@@ -18,5 +20,16 @@ const Zone = styled.div`
   display: flex;
   flex-wrap: wrap;
   background: ${COLORS.background};
+`
+const Message = styled.div`
+  padding: 5px;
+  width: inherit;
+  display: table;
+  margin: 0;
+  min-width: 40%;
+  line-height: 0.2em;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: ${COLORS.slateGray} ;
 `
 export default NotImplementedMessage

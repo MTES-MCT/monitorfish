@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.EMPTY as EMPTYMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP as DEPMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DIS as DISMessage
@@ -17,12 +18,21 @@ enum class LogbookMessageTypeMapping(private val clazz: Class<out LogbookMessage
     DEP(DEPMessage::class.java),
     DIS(DISMessage::class.java),
     COX(COXMessage::class.java),
+    NOT_COX(COXMessage::class.java),
     COE(COEMessage::class.java),
+    NOT_COE(COEMessage::class.java),
     CRO(CROMessage::class.java),
     EOF(EOFMessage::class.java),
     LAN(LANMessage::class.java),
     PNO(PNOMessage::class.java),
-    RTP(RTPMessage::class.java);
+    RTP(RTPMessage::class.java),
+    RLC(EMPTYMessage::class.java),
+    TRA(EMPTYMessage::class.java),
+    NOT_TRA(EMPTYMessage::class.java),
+    GEAR_SHOT(EMPTYMessage::class.java),
+    GEAR_RETRIEVAL(EMPTYMessage::class.java),
+    START_ACTIVITY(EMPTYMessage::class.java),
+    START_FISHING(EMPTYMessage::class.java);
 
     override fun getImplementation(): Class<out LogbookMessageValue> {
         return clazz

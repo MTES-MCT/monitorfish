@@ -8,7 +8,8 @@ import {
   FARMessage,
   LANMessage,
   PNOMessage,
-  RTPMessage
+  RTPMessage,
+  NotImplementedMessage
 } from '../../features/vessel_sidebar/fishing_activities/logbook_messages/index.js'
 import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
@@ -18,89 +19,163 @@ import Layers from './layers'
 export const LogbookMessageType = {
   DEP: {
     code: 'DEP',
+    displayCode: 'DEP',
     name: 'Départ',
     component: DEPMessage
   },
   FAR: {
     code: 'FAR',
+    displayCode: 'FAR',
     name: 'Captures',
     fullName: 'Déclaration de capture',
     component: FARMessage
   },
   PNO: {
     code: 'PNO',
+    displayCode: 'PNO',
     name: 'Préavis',
     fullName: 'Préavis (notification de retour au port)',
     component: PNOMessage
   },
   LAN: {
     code: 'LAN',
+    displayCode: 'LAN',
     name: 'Débarquement',
     fullName: 'Débarquement',
     component: LANMessage
   },
   RTP: {
     code: 'RTP',
+    displayCode: 'RTP',
     name: 'Retour au port',
     fullName: 'Retour au port',
     component: RTPMessage
   },
   EOF: {
     code: 'EOF',
+    displayCode: 'EOF',
     name: 'Fin de la marée',
     fullName: 'Fin de pêche',
     component: EOFMessage
   },
   COE: {
     code: 'COE',
+    displayCode: 'COE',
     fullName: 'Entrée dans une zone d\'effort',
     name: 'Entrée dans une zone d\'effort',
     component: COEMessage
   },
+  NOT_COE: {
+    code: 'NOT_COE',
+    displayCode: 'COE',
+    fullName: 'Notification d\'entrée dans une zone d\'effort',
+    name: 'Notification d\'entrée dans une zone d\'effort',
+    component: COEMessage
+  },
   COX: {
     code: 'COX',
+    displayCode: 'COX',
     name: 'Sortie d\'une zone d\'effort',
     fullName: 'Sortie d\'une zone d\'effort',
     component: COXMessage
   },
+  NOT_COX: {
+    code: 'NOT_COX',
+    displayCode: 'COX',
+    fullName: 'Notification de sortie d\'une zone d\'effort',
+    name: 'Notification de sortie d\'une zone d\'effort',
+    component: COXMessage
+  },
+  JFO: {
+    code: 'JFO',
+    displayCode: 'JFO',
+    fullName: 'Opération de pêche conjointe',
+    name: 'Opération de pêche conjointe',
+    component: NotImplementedMessage
+  },
   CRO: {
     code: 'CRO',
+    displayCode: 'CRO',
     name: 'Traversée d\'une zone d\'effort',
     fullName: 'Traversée d\'une zone d\'effort',
     component: CROMessage
   },
   DIS: {
     code: 'DIS',
+    displayCode: 'DIS',
     name: 'Rejets',
     fullName: 'Déclaration de rejets',
     component: DISMessage
   },
   DIM: {
     code: 'DIM',
+    displayCode: 'DIM',
     name: 'Rejets minimis'
   },
   RLC: {
     code: 'RLC',
+    displayCode: 'RLC',
     fullName: 'Déclaration de transfert',
-    name: 'Transfert'
+    name: 'Transfert',
+    component: NotImplementedMessage
   },
   TRA: {
     code: 'TRA',
+    displayCode: 'TRA',
     fullName: 'Déclaration de transbordement',
-    name: 'Transbordement'
+    name: 'Transbordement',
+    component: NotImplementedMessage
+  },
+  NOT_TRA: {
+    code: 'NOT_TRA',
+    displayCode: 'TRA',
+    fullName: 'Notification de transbordement',
+    name: 'Notification de transbordement',
+    component: NotImplementedMessage
+  },
+  GEAR_SHOT: {
+    code: 'GEAR_SHOT',
+    displayCode: 'SHT',
+    fullName: 'Mise à l\'eau d\'engin',
+    name: 'Mise à l\'eau d\'engin',
+    component: NotImplementedMessage
+  },
+  GEAR_RETRIEVAL: {
+    code: 'GEAR_RETRIEVAL',
+    displayCode: 'RTV',
+    fullName: 'Sortie de l\'eau d`engin',
+    name: 'Sortie de l\'eau d`engin',
+    component: NotImplementedMessage
+  },
+  START_ACTIVITY: {
+    code: 'START_ACTIVITY',
+    displayCode: 'STA',
+    fullName: 'Début d\'activité de pêche',
+    name: 'Début d\'activité de pêche',
+    component: NotImplementedMessage
+  },
+  START_FISHING: {
+    code: 'START_FISHING',
+    displayCode: 'STF',
+    fullName: 'Début de pêche',
+    name: 'Début de pêche',
+    component: NotImplementedMessage
   },
   TRZ: {
     code: 'TRZ',
+    displayCode: 'TRZ',
     fullName: 'Pêche trans-zone',
     name: 'Pêche trans-zone'
   },
   INS: {
     code: 'INS',
+    displayCode: 'INS',
     fullName: 'Déclaration d\'inspection',
     name: 'Inspection'
   },
   PNT: {
     code: 'PNT',
+    displayCode: 'PNT',
     fullName: 'Pré-notification de transfert',
     name: 'Pré-notification de transfert'
   }
@@ -492,5 +567,5 @@ export const getLogbookMessageType = message => {
     message.message.catches.some(aCatch => aCatch.presentation === LogbookMessageType.DIM.code)) {
     return LogbookMessageType.DIM.code
   }
-  return message.messageType
+  return LogbookMessageType[message.messageType].displayCode
 }

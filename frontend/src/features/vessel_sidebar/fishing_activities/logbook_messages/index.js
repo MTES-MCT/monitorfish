@@ -8,6 +8,7 @@ import COEMessage from './COEMessage'
 import COXMessage from './COXMessage'
 import CROMessage from './CROMessage'
 import DISMessage from './DISMessage'
+import NotImplementedMessage from './NotImplementedMessage'
 
 export {
   DEPMessage,
@@ -19,5 +20,6 @@ export {
   COEMessage,
   COXMessage,
   CROMessage,
-  DISMessage
+  DISMessage,
+  NotImplementedMessage
 }

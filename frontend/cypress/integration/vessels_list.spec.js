@@ -25,7 +25,7 @@ context('Vessels list', () => {
     cy.wait(200)
     cy.get('body').click(700, 650, { timeout: 20000 })
     cy.wait(200)
-    cy.get('*[data-cy^="vessel-list-table-count"]').contains('11 navires')
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('12 navires')
 
     // When
     cy.get('*[data-cy^="preview-filtered-vessels"]').click({ timeout: 20000 })
@@ -36,26 +36,26 @@ context('Vessels list', () => {
 
     // Back to vessels list
     cy.get('*[data-cy^="back-to-vessels-list"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-list-table-count"]').contains('11 navires')
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('12 navires')
   })
 
   it('Vessels Should be filtered based on their location at port', () => {
     // Given
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-list-table-count"]').contains('959 navires')
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('960 navires')
 
     // When
     cy.get('*[data-cy^="filter-vessel-at-port"]').click()
     cy.wait(1000)
 
     // Then
-    cy.get('*[data-cy^="vessel-list-table-count"]').contains('802 navires')
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('803 navires')
 
     // Then re-show the vessels at port
     cy.get('*[data-cy^="filter-vessel-at-port"]').click()
     cy.wait(1000)
 
-    cy.get('*[data-cy^="vessel-list-table-count"]').contains('959 navires')
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('960 navires')
   })
 
   it('Vessels Should not be downloadable When no vessels selected', () => {

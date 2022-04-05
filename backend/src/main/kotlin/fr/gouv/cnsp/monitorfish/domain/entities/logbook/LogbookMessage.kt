@@ -25,4 +25,5 @@ class LogbookMessage(
     var deleted: Boolean? = false,
     val message: LogbookMessageValue? = null,
     val analyzedByRules: List<String>,
-    var rawMessage: String? = null)
+    var rawMessage: String? = null,
+    val transmissionFormat: LogbookTransmissionFormat)

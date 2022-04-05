@@ -5,6 +5,7 @@ import com.vladmihalcea.hibernate.type.array.ListArrayType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
@@ -66,7 +67,10 @@ data class LogbookReportEntity(
         @Column(name = "value", nullable = true, columnDefinition = "jsonb")
         val message: String? = null,
         @Column(name = "integration_datetime_utc")
-        val integrationDateTime: Instant? = null) {
+        val integrationDateTime: Instant? = null,
+        @Column(name = "transmission_format")
+        @Enumerated(EnumType.STRING)
+        val transmissionFormat: LogbookTransmissionFormat) {
 
         fun toLogbookMessage(mapper: ObjectMapper) = LogbookMessage(
                 id = id,
@@ -84,5 +88,7 @@ data class LogbookReportEntity(
                 imo = imo,
                 messageType = messageType,
                 analyzedByRules = analyzedByRules ?: listOf(),
-                message = getERSMessageValueFromJSON(mapper, message, messageType, operationType))
+                message = getERSMessageValueFromJSON(mapper, message, messageType, operationType),
+                transmissionFormat = transmissionFormat
+        )
 }

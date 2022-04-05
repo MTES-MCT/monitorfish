@@ -29,14 +29,14 @@ class LogbookZippedFileType(Enum):
 
 
 class LogbookTransmissionFormat(Enum):
-    ERS3 = "ERS3"
+    ERS = "ERS"
     FLUX = "FLUX"
 
     @staticmethod
     def from_zipped_file_type(t: LogbookZippedFileType):
         mapping = {
-            LogbookZippedFileType.ERS3: LogbookTransmissionFormat.ERS3,
-            LogbookZippedFileType.ERS3_ACK: LogbookTransmissionFormat.ERS3,
+            LogbookZippedFileType.ERS3: LogbookTransmissionFormat.ERS,
+            LogbookZippedFileType.ERS3_ACK: LogbookTransmissionFormat.ERS,
             LogbookZippedFileType.UN: LogbookTransmissionFormat.FLUX,
         }
         return mapping[t]
@@ -272,7 +272,7 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
 @task(checkpoint=False)
 def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
     batch_parsers = {
-        LogbookTransmissionFormat.ERS3: ers.batch_parse,
+        LogbookTransmissionFormat.ERS: ers.batch_parse,
         LogbookTransmissionFormat.FLUX: flux.batch_parse,
     }
 
@@ -294,7 +294,7 @@ def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
 def clean(zipfile: Union[None, dict]) -> Union[None, dict]:
     logger = prefect.context.get("logger")
     if zipfile:
-        if zipfile["transmission_format"] is LogbookTransmissionFormat.ERS3:
+        if zipfile["transmission_format"] is LogbookTransmissionFormat.ERS:
             logger.info(
                 "Removing QUE and RSP messages from messages of "
                 + f"zipfile {zipfile['full_name']}."
@@ -343,7 +343,7 @@ def load_logbook_data(cleaned_data: List[dict]):
             try:
                 assert transmission_format in (
                     LogbookTransmissionFormat.FLUX,
-                    LogbookTransmissionFormat.ERS3,
+                    LogbookTransmissionFormat.ERS,
                 )
             except AssertionError:
                 logger.error(
@@ -382,7 +382,7 @@ def load_logbook_data(cleaned_data: List[dict]):
                 )
 
             else:
-                # With ERS3 data, we cannot rely on having unique report_ids like we do
+                # With ERS data, we cannot rely on having unique report_ids like we do
                 # in FLUX data for two reasons :
                 # - DEL messages have a NULL report_id
                 # - Visiocapture data holds multiple reports in a single ERS element,

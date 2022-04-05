@@ -47,13 +47,13 @@ ALTER INDEX ers_messages_pkey RENAME TO logbook_raw_messages_pkey;
 DROP INDEX ers_messages_operation_number_idx; -- An index is already created with the primary key, so this one can be dropped
 
 -- Add transmission_format column
-CREATE TYPE public.logbook_message_transmission_format AS ENUM ('ERS3', 'FLUX');
+CREATE TYPE public.logbook_message_transmission_format AS ENUM ('ERS', 'FLUX');
 
 ALTER TABLE logbook_reports
     ADD COLUMN transmission_format logbook_message_transmission_format;
 
 UPDATE logbook_reports
-SET transmission_format = 'ERS3';
+SET transmission_format = 'ERS';
 
 ALTER TABLE logbook_reports
 ALTER COLUMN transmission_format
@@ -64,7 +64,7 @@ UPDATE logbook_reports
 SET value = jsonb_build_object('hauls', jsonb_build_array(value))
 WHERE log_type = 'FAR';
 
--- Adjust operation_number and report_id data type to accomodate for FLUX's longer report_ids and operation_numbers compared to ERS3.
+-- Adjust operation_number and report_id data type to accomodate for FLUX's longer report_ids and operation_numbers compared to ERS.
 ALTER TABLE logbook_reports ALTER COLUMN operation_number TYPE VARCHAR(100);
 ALTER TABLE logbook_reports ALTER COLUMN report_id TYPE VARCHAR(100);
 ALTER TABLE logbook_reports ALTER COLUMN referenced_report_id TYPE VARCHAR(100);

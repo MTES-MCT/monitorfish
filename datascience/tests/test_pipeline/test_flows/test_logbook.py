@@ -109,10 +109,10 @@ def test_extract_zipfiles_handles_flux_ers3_and_unexpected_files(mock_move):
         zipfile["full_name"]: zipfile["transmission_format"] for zipfile in zipfiles
     } == {
         "UN_JBE202101123004.zip": LogbookTransmissionFormat.FLUX,
-        "ERS3_JBE202101123000.zip": LogbookTransmissionFormat.ERS3,
-        "ERS3_ACK_JBE202101123003.zip": LogbookTransmissionFormat.ERS3,
-        "ERS3_JBE202101123002.zip": LogbookTransmissionFormat.ERS3,
-        "ERS3_JBE202101123001.zip": LogbookTransmissionFormat.ERS3,
+        "ERS3_JBE202101123000.zip": LogbookTransmissionFormat.ERS,
+        "ERS3_ACK_JBE202101123003.zip": LogbookTransmissionFormat.ERS,
+        "ERS3_JBE202101123002.zip": LogbookTransmissionFormat.ERS,
+        "ERS3_JBE202101123001.zip": LogbookTransmissionFormat.ERS,
     }
 
 
@@ -123,7 +123,7 @@ def test_extract_xmls_from_ers3_zipfile():
         "input_dir": TEST_DIRECTORY / "received",
         "treated_dir": TEST_DIRECTORY / "treated",
         "error_dir": TEST_DIRECTORY / "error",
-        "transmission_format": LogbookTransmissionFormat.ERS3,
+        "transmission_format": LogbookTransmissionFormat.ERS,
     }
 
     xmls = extract_xmls_from_zipfile.run(dummy_ERS3_zipfile)
@@ -139,7 +139,7 @@ def test_extract_xmls_from_ers3_ack_zipfile():
         "input_dir": TEST_DIRECTORY / "received",
         "treated_dir": TEST_DIRECTORY / "treated",
         "error_dir": TEST_DIRECTORY / "error",
-        "transmission_format": LogbookTransmissionFormat.ERS3,
+        "transmission_format": LogbookTransmissionFormat.ERS,
     }
 
     xmls = extract_xmls_from_zipfile.run(dummy_ERS3_ACK_zipfile)
@@ -179,7 +179,7 @@ def test_parse_xmls_parses_ers3_files():
         "input_dir": "smome/input/dir",
         "treated_dir": "some/treated/dir",
         "error_dir": "some/error/dir",
-        "transmission_format": LogbookTransmissionFormat.ERS3,
+        "transmission_format": LogbookTransmissionFormat.ERS,
         "xml_messages": xml_messages,
     }
 
@@ -200,7 +200,7 @@ def test_parse_xmls_parses_ers3_files():
     assert len(parsed_zipfile["logbook_reports"]) == 5
     assert (
         parsed_zipfile["logbook_reports"]["transmission_format"]
-        == LogbookTransmissionFormat.ERS3.value
+        == LogbookTransmissionFormat.ERS.value
     ).all()
     assert not parsed_zipfile["batch_generated_errors"]
 
@@ -290,7 +290,7 @@ def test_clean():
         "input_dir": "dummy_input_dir",
         "treated_dir": "dummy_treated_dir",
         "error_dir": "dummy_error_dir",
-        "transmission_format": LogbookTransmissionFormat.ERS3,
+        "transmission_format": LogbookTransmissionFormat.ERS,
         "logbook_reports": logbook_reports,
         "logbook_raw_messages": logbook_raw_messages,
         "batch_generated_errors": False,
@@ -301,7 +301,7 @@ def test_clean():
         "input_dir": "dummy_input_dir",
         "treated_dir": "dummy_treated_dir",
         "error_dir": "dummy_error_dir",
-        "transmission_format": LogbookTransmissionFormat.ERS3,
+        "transmission_format": LogbookTransmissionFormat.ERS,
         "logbook_reports": expected_cleaned_logbook_reports,
         "logbook_raw_messages": expected_cleaned_logbook_raw_messages,
         "batch_generated_errors": False,

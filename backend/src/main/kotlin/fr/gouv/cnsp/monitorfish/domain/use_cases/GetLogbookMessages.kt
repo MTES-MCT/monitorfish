@@ -73,13 +73,18 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
     }
 
     private fun flagCorrectedAcknowledgedAndDeletedMessages(messages: List<LogbookMessage>) {
-        messages.forEach { ersMessage ->
-            if (ersMessage.operationType == LogbookOperationType.COR && !ersMessage.referencedReportId.isNullOrEmpty()) {
-                flagMessageAsCorrected(messages, ersMessage)
-            } else if (ersMessage.operationType == LogbookOperationType.RET && !ersMessage.referencedReportId.isNullOrEmpty()) {
-                flagMessageAsAcknowledged(messages, ersMessage)
-            } else if (ersMessage.operationType == LogbookOperationType.DEL && !ersMessage.referencedReportId.isNullOrEmpty()) {
-                flagMessageAsDeleted(messages, ersMessage)
+        messages.forEach { logbookMessage ->
+            if (logbookMessage.operationType == LogbookOperationType.COR && !logbookMessage.referencedReportId.isNullOrEmpty()) {
+                flagMessageAsCorrected(messages, logbookMessage)
+            } else if (logbookMessage.operationType == LogbookOperationType.RET && !logbookMessage.referencedReportId.isNullOrEmpty()) {
+                flagMessageAsAcknowledged(messages, logbookMessage)
+            } else if (logbookMessage.transmissionFormat == LogbookTransmissionFormat.FLUX) {
+                logbookMessage.acknowledge = Acknowledge()
+                logbookMessage.acknowledge?.let{
+                    it.isSuccess = true
+                }
+            } else if (logbookMessage.operationType == LogbookOperationType.DEL && !logbookMessage.referencedReportId.isNullOrEmpty()) {
+                flagMessageAsDeleted(messages, logbookMessage)
             }
         }
     }

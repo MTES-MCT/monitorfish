@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR
@@ -152,7 +153,7 @@ class GetVesselLogbookMessagesUTests {
                 .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
-        assertThat(ersMessages).hasSize(2)
+        assertThat(ersMessages).hasSize(3)
 
         assertThat(ersMessages[0].message).isInstanceOf(FAR::class.java)
         assertThat(ersMessages[0].acknowledge).isInstanceOf(Acknowledge::class.java)
@@ -176,6 +177,16 @@ class GetVesselLogbookMessagesUTests {
         val far = ersMessages[1].message as FAR
         assertThat(far.hauls.size).isEqualTo(1)
         assertThat(far.hauls.first().catches).hasSize(3)
+
+        assertThat(ersMessages[2].operationNumber).isEqualTo("5h499-erh5u7-pm3ae8c5trj78j67dfh")
+        assertThat(ersMessages[2].transmissionFormat).isEqualTo(LogbookTransmissionFormat.FLUX)
+        val ackThree = ersMessages[2].acknowledge as Acknowledge
+        assertThat(ackThree.isSuccess).isTrue
+        assertThat(ackThree.rejectionCause).isNull()
+        assertThat(ackThree.returnStatus).isNull()
+
+
+
     }
 
     @Test
@@ -197,7 +208,7 @@ class GetVesselLogbookMessagesUTests {
                 .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
-        assertThat(ersMessages).hasSize(2)
+        assertThat(ersMessages).hasSize(3)
 
         assertThat(ersMessages[1].deleted).isTrue
     }

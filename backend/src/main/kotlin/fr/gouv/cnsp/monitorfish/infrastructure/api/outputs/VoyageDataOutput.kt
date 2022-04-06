@@ -4,12 +4,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Voyage
 import java.time.ZonedDateTime
 
 data class VoyageDataOutput(
-        val isLastVoyage: Boolean,
-        val isFirstVoyage: Boolean,
-        val startDate: ZonedDateTime?,
-        val endDate: ZonedDateTime?,
-        val tripNumber: Int?,
-        val ersMessagesAndAlerts: ERSMessagesAndAlertsDataOutput) {
+    val isLastVoyage: Boolean,
+    val isFirstVoyage: Boolean,
+    val startDate: ZonedDateTime?,
+    val endDate: ZonedDateTime?,
+    val tripNumber: String,
+    val logbookMessagesAndAlerts: LogbookMessagesAndAlertsDataOutput) {
     companion object {
         fun fromVoyage(voyage: Voyage): VoyageDataOutput {
             return VoyageDataOutput(
@@ -18,8 +18,8 @@ data class VoyageDataOutput(
                     startDate = voyage.startDate,
                     endDate = voyage.endDate,
                     tripNumber = voyage.tripNumber,
-                    ersMessagesAndAlerts = ERSMessagesAndAlertsDataOutput
-                            .fromERSMessagesAndAlerts(voyage.ersMessagesAndAlerts)
+                    logbookMessagesAndAlerts = LogbookMessagesAndAlertsDataOutput
+                            .fromLogbookMessagesAndAlerts(voyage.logbookMessagesAndAlerts)
             )
         }
     }

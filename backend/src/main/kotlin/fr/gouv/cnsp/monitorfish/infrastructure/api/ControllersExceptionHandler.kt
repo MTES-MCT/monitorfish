@@ -30,7 +30,7 @@ class ControllersExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoLogbookFishingTripFound::class)
-    fun handleNoERSLastDepartureDateFound(e: Exception): ApiError {
+    fun handleNoLogbookLastDepartureDateFound(e: Exception): ApiError {
         logger.error(e.message, e.cause)
         return ApiError(e)
     }

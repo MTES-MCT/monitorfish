@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.domain.entities.*
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
@@ -26,7 +26,7 @@ class GetVesselUTests {
     private lateinit var vesselRepository: VesselRepository
 
     @MockBean
-    private lateinit var ersRepository: ERSRepository
+    private lateinit var logbookReportRepository: LogbookReportRepository
 
     @MockBean
     private lateinit var riskFactorsRepository: RiskFactorsRepository
@@ -45,7 +45,7 @@ class GetVesselUTests {
 
         // When
         val pair = runBlocking {
-             GetVessel(vesselRepository, positionRepository, ersRepository, riskFactorsRepository)
+             GetVessel(vesselRepository, positionRepository, logbookReportRepository, riskFactorsRepository)
                      .execute("FR224226850",
                              "",
                              "",

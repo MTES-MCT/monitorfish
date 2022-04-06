@@ -1,0 +1,118 @@
+<rsm:FLUXFAReportMessage xsi:schemaLocation="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3 xsd/FLUXFAReportMessage_3p1/FLUXFAReportMessage_3p1.xsd" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xmlns:rsm="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         <rsm:FLUXReportDocument>
+            <ram:ID schemeID="UUID">8f06061e-e723-4b89-8577-3801a61582a2</ram:ID>
+            <ram:CreationDateTime>
+               <udt:DateTime>2020-05-06T18:41:20.712Z</udt:DateTime>
+            </ram:CreationDateTime>
+            <ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+            <ram:Purpose>FLUX-FA-EU-711102 </ram:Purpose>
+            <ram:OwnerFLUXParty>
+               <ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+            </ram:OwnerFLUXParty>
+         </rsm:FLUXReportDocument>
+	<rsm:FAReportDocument>
+		<ram:TypeCode listID="FLUX_FA_REPORT_TYPE">DECLARATION</ram:TypeCode>
+		<ram:AcceptanceDateTime>
+			<udt:DateTime>2020-05-06T13:41:20.712Z</udt:DateTime>
+		</ram:AcceptanceDateTime>
+		<ram:RelatedFLUXReportDocument>
+			<ram:ID schemeID="UUID">dde5df56-24c2-4a2e-8afb-561f32113256</ram:ID>
+			<ram:CreationDateTime>
+				<udt:DateTime>2020-05-06T15:41:20.712Z</udt:DateTime>
+			</ram:CreationDateTime>
+			<ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+			<ram:OwnerFLUXParty>
+				<ram:ID schemeID="FLUX_GP_PARTY">SRC</ram:ID>
+			</ram:OwnerFLUXParty>
+		</ram:RelatedFLUXReportDocument>
+		<ram:SpecifiedFishingActivity>
+			<ram:TypeCode listID="FLUX_FA_TYPE">ARRIVAL</ram:TypeCode>
+
+			<!--Exact time of arrival to port-->
+			<ram:OccurrenceDateTime>
+				<udt:DateTime>2020-05-06T11:41:20.712Z</udt:DateTime>
+			</ram:OccurrenceDateTime>
+			
+			<!--Reason for port call: Landing-->
+      		<ram:ReasonCode listID="FA_REASON_ARRIVAL">LAN</ram:ReasonCode>
+      		
+			<!--Port-->
+			<ram:RelatedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">LOCATION</ram:TypeCode>
+			     <ram:CountryID schemeID="TERRITORY">ESP</ram:CountryID>
+				<ram:ID schemeID="LOCATION">ESCAR</ram:ID>
+			</ram:RelatedFLUXLocation>
+			
+			<!--Estimated start date/time of landing-->
+			<ram:SpecifiedFLUXCharacteristic>
+                  <ram:TypeCode listID="FA_CHARACTERISTIC">START_DATETIME_LANDING</ram:TypeCode>
+                  <ram:ValueDateTime>
+                     <udt:DateTime>2020-05-05T19:41:20.712Z</udt:DateTime>
+                  </ram:ValueDateTime>
+               </ram:SpecifiedFLUXCharacteristic>
+
+			<!--Gear on board at arrival to port-->
+	      	<ram:SpecifiedFishingGear>
+		          <ram:TypeCode listID="GEAR_TYPE">GN</ram:TypeCode>
+		          <ram:RoleCode listID="FA_GEAR_ROLE">ONBOARD</ram:RoleCode>
+		          <ram:ApplicableGearCharacteristic>
+		              <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">ME</ram:TypeCode>
+		              <ram:ValueMeasure unitCode="MMT">140</ram:ValueMeasure>
+		          </ram:ApplicableGearCharacteristic>
+		          <ram:ApplicableGearCharacteristic>
+		              <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">GM</ram:TypeCode>
+		              <ram:ValueMeasure unitCode="MTR">1000</ram:ValueMeasure>
+		           </ram:ApplicableGearCharacteristic>
+		           <ram:ApplicableGearCharacteristic>
+		              <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">HE</ram:TypeCode>
+		              <ram:ValueMeasure unitCode="MTR">25</ram:ValueMeasure>
+	           	</ram:ApplicableGearCharacteristic>
+	           	<ram:ApplicableGearCharacteristic>
+		              <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">NL</ram:TypeCode>
+		              <ram:ValueMeasure unitCode="MTR">100</ram:ValueMeasure>
+	           	</ram:ApplicableGearCharacteristic>
+	           	<ram:ApplicableGearCharacteristic>
+		              <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">NN</ram:TypeCode>
+		              <ram:ValueQuantity>10</ram:ValueQuantity>
+		           </ram:ApplicableGearCharacteristic>
+		              <ram:ApplicableGearCharacteristic>
+		              <ram:TypeCode listID="FA_GEAR_CHARACTERISTIC">QG</ram:TypeCode>
+		              <ram:ValueQuantity>1</ram:ValueQuantity>
+	           	</ram:ApplicableGearCharacteristic>
+	     	 </ram:SpecifiedFishingGear>
+
+	     	<!--Trip information-->
+			<ram:SpecifiedFishingTrip>
+				<ram:ID schemeID="EU_TRIP_ID">SRC-TRP-TTT20200506194120712</ram:ID>
+			</ram:SpecifiedFishingTrip>
+		</ram:SpecifiedFishingActivity>
+		
+		<!--reporting vessel-->
+            <ram:SpecifiedVesselTransportMeans>
+               <ram:ID schemeID="CFR">CYP123456789</ram:ID>
+               <ram:ID schemeID="IRCS">IRCS6</ram:ID>
+               <ram:ID schemeID="EXT_MARK">XR006</ram:ID>
+               <ram:RegistrationVesselCountry>
+                  <ram:ID schemeID="TERRITORY">CYP</ram:ID>
+               </ram:RegistrationVesselCountry>
+               
+               <!--master name and address-->
+               <ram:SpecifiedContactParty>
+                  <ram:RoleCode listID="FLUX_CONTACT_ROLE">MASTER</ram:RoleCode>
+                  <ram:SpecifiedStructuredAddress>
+                     <ram:StreetName>ABC</ram:StreetName>
+                     <ram:CityName>CABOURG</ram:CityName>
+                     <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                     <ram:PlotIdentification>17</ram:PlotIdentification>
+                     <ram:PostalArea> 14390</ram:PostalArea>
+                  </ram:SpecifiedStructuredAddress>
+                  <ram:SpecifiedContactPerson>
+                     <ram:GivenName>John</ram:GivenName>
+                     <ram:FamilyName>Doe</ram:FamilyName>
+                     <ram:Alias>Captain Jack</ram:Alias>
+                  </ram:SpecifiedContactPerson>
+               </ram:SpecifiedContactParty>
+            </ram:SpecifiedVesselTransportMeans>
+            
+         </rsm:FAReportDocument>
+      </rsm:FLUXFAReportMessage>

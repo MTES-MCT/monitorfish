@@ -7,7 +7,7 @@ import kotlin.math.absoluteValue
 class PNOAndLANWeightTolerance (
         var percentOfTolerance: Double? = null,
         var minimumWeightThreshold: Double? = null,
-): RuleType(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE, InputSource.ERS) {
+): RuleType(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE, InputSource.Logbook) {
     override fun evaluate(parameterToAssert: Double): Boolean {
         val percentOfTolerance = percentOfTolerance
                 ?: throw IllegalArgumentException("Percent of tolerance is not given, rule could not be evaluated.")

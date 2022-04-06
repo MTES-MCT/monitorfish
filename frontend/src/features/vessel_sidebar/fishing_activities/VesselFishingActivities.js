@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import FishingActivitiesSummary from './FishingActivitiesSummary'
-import ERSMessages from './ers_messages/ERSMessages'
+import LogbookMessages from './logbook_messages/LogbookMessages'
 import { COLORS } from '../../../constants/constants'
 import {
   resetNextFishingActivities,
@@ -102,7 +102,7 @@ const VesselFishingActivities = () => {
         {
           fishingActivitiesTab === FishingActivitiesTab.SUMMARY
             ? <FishingActivitiesSummary
-              showERSMessages={showMessages}
+              showLogbookMessages={showMessages}
               navigation={{
                 goToPreviousTrip,
                 goToNextTrip,
@@ -114,7 +114,7 @@ const VesselFishingActivities = () => {
         }
         {
           fishingActivitiesTab === FishingActivitiesTab.MESSAGES
-            ? <ERSMessages
+            ? <LogbookMessages
               showFishingActivitiesSummary={showSummary}
               messageTypeFilter={messageTypeFilter}
               navigation={{

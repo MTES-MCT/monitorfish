@@ -152,7 +152,7 @@ with Flow("Test data") as flow:
         last_positions, "last_position_datetime_utc", td
     )
     last_positions = shift_last_positions_datetimes(
-        last_positions, "last_ers_datetime_utc", td
+        last_positions, "last_logbook_message_datetime_utc", td
     )
     last_positions = shift_last_positions_datetimes(
         last_positions, "departure_datetime_utc", td

@@ -5,11 +5,11 @@ import java.time.ZonedDateTime
 
 data class HealthDataOutput(val datePositionReceived: ZonedDateTime,
                             val dateLastPosition: ZonedDateTime,
-                            val dateERSMessageReceived: ZonedDateTime) {
+                            val dateLogbookMessageReceived: ZonedDateTime) {
    companion object {
        fun fromHealth(health: Health) = HealthDataOutput(
                    health.datePositionReceived,
                    health.dateLastPosition,
-                   health.dateERSMessageReceived)
+                   health.dateLogbookMessageReceived)
    }
 }

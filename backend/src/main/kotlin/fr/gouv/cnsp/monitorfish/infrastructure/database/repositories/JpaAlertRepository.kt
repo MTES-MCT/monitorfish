@@ -16,7 +16,7 @@ class JpaAlertRepository(private val dbAlertRepository: DBAlertRepository,
         dbAlertRepository.save(AlertEntity.fromAlert(alert, mapper))
     }
 
-    override fun findAlertsOfTypes(types: List<AlertTypeMapping>, internalReferenceNumber: String, tripNumber: Int): List<Alert> {
+    override fun findAlertsOfTypes(types: List<AlertTypeMapping>, internalReferenceNumber: String, tripNumber: String): List<Alert> {
         val rulesAsString = types.map { it.name }
 
         return dbAlertRepository.findAlertsOfRules(rulesAsString, internalReferenceNumber, tripNumber)

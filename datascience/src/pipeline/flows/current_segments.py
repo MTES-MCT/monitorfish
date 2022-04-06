@@ -182,15 +182,15 @@ def join(
     species_onboard = species_onboard.groupby("cfr")["species_onboard"].apply(list)
 
     # Keep one line by vessel for data related to the last ers messages of each vessel
-    last_ers_columns = [
+    last_logbook_columns = [
         "cfr",
-        "last_ers_datetime_utc",
+        "last_logbook_message_datetime_utc",
         "departure_datetime_utc",
         "trip_number",
         "gear_onboard",
     ]
 
-    last_ers = catches[last_ers_columns].groupby("cfr").head(1)
+    last_ers = catches[last_logbook_columns].groupby("cfr").head(1)
     last_ers = last_ers.set_index("cfr")
 
     # Join departure, catches and segments information into a single table with 1 line

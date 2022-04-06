@@ -402,7 +402,7 @@ def load_last_positions(last_positions):
         handle_array_conversion_errors=True,
         value_on_array_conversion_error="{}",
         jsonb_columns=["gear_onboard", "species_onboard"],
-        nullable_integer_columns=["trip_number", "beacon_malfunction_id"],
+        nullable_integer_columns=["beacon_malfunction_id"],
         timedelta_columns=["emission_period"],
     )
 

@@ -46,7 +46,7 @@ data class LastPositionEntity(
         @Enumerated(EnumType.STRING)
         val flagState: CountryCode? = null,
         @Column(name = "trip_number")
-        val tripNumber: Int? = null,
+        val tripNumber: String? = null,
 
         @Column(name = "latitude")
         val latitude: Double? = null,
@@ -65,8 +65,8 @@ data class LastPositionEntity(
 
         @Column(name = "emission_period")
         val emissionPeriod: Duration? = null,
-        @Column(name = "last_ers_datetime_utc")
-        val lastErsDateTime: ZonedDateTime? = null,
+        @Column(name = "last_logbook_message_datetime_utc")
+        val lastLogbookMessageDateTime: ZonedDateTime? = null,
         @Column(name = "departure_datetime_utc")
         val departureDateTime: ZonedDateTime? = null,
         @Column(name = "width")
@@ -134,7 +134,7 @@ data class LastPositionEntity(
             tripNumber = tripNumber,
             positionType = PositionType.VMS,
             emissionPeriod = emissionPeriod,
-            lastErsDateTime = lastErsDateTime,
+            lastLogbookMessageDateTime = lastLogbookMessageDateTime,
             departureDateTime = departureDateTime,
             width = width,
             length = length,

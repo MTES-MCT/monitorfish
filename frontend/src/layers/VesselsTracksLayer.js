@@ -23,9 +23,9 @@ import {
   updateFishingActivitiesOnMapCoordinates
 } from '../domain/shared_slices/FishingActivities'
 import { getVesselFeatureIdFromVessel } from '../domain/entities/vessel'
-import { getFishingActivityFeatureOnTrackLine } from '../domain/entities/fishingActivities'
 import CloseVesselTrackOverlay from '../features/map/overlays/CloseVesselTrackOverlay'
 import FishingActivityOverlay from '../features/map/overlays/FishingActivityOverlay'
+import { getFishingActivityFeatureOnTrackLine } from '../domain/entities/logbook'
 
 const VesselsTracksLayer = ({ map }) => {
   const {

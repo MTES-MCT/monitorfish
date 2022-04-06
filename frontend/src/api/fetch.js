@@ -16,7 +16,7 @@ const ACCEPTED = 202
 
 const LAST_POSITIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les dernières positions'
 const VESSEL_POSITIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les informations du navire'
-const ERS_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les messages JPE de ce navire'
+const LOGBOOK_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les messages JPE de ce navire'
 const CONTROLS_ERROR_MESSAGE = 'Nous n\'avons pas pu récuperer les contrôles pour ce navire'
 const VESSEL_SEARCH_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les navires dans notre base'
 const REGULATORY_ZONES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les zones réglementaires'
@@ -478,7 +478,7 @@ function getVesselVoyageFromAPI (vesselIdentity, voyageRequest, tripNumber) {
   tripNumber = tripNumber || ''
   voyageRequest = voyageRequest || ''
 
-  return fetch(`/bff/v1/ers/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&voyageRequest=${voyageRequest}&tripNumber=${tripNumber}`)
+  return fetch(`/bff/v1/logbook/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&voyageRequest=${voyageRequest}&tripNumber=${tripNumber}`)
     .then(response => {
       if (response.status === OK) {
         return response.json()
@@ -491,14 +491,14 @@ function getVesselVoyageFromAPI (vesselIdentity, voyageRequest, tripNumber) {
         response.text().then(text => {
           console.error(text)
         })
-        throw Error(ERS_ERROR_MESSAGE)
+        throw Error(LOGBOOK_ERROR_MESSAGE)
       }
     })
     .catch(error => {
       console.error(error)
-      throw Error(ERS_ERROR_MESSAGE)
+      throw Error(LOGBOOK_ERROR_MESSAGE)
     })
-    .then(ers => ers)
+    .then(logbook => logbook)
 }
 
 /**
@@ -604,7 +604,7 @@ function getOperationalAlertsFromAPI () {
 /**
  * Get application healthcheck
  * @memberOf API
- * @returns {Promise<Healthcheck>} The healthcheck dates of positions and ers messages
+ * @returns {Promise<Healthcheck>} The healthcheck dates of positions and logbook messages
  * @throws {Error}
  */
 function getHealthcheckFromAPI () {

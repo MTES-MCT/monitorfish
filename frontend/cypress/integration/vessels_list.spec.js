@@ -25,37 +25,37 @@ context('Vessels list', () => {
     cy.wait(200)
     cy.get('body').click(700, 650, { timeout: 20000 })
     cy.wait(200)
-    cy.get('*[data-cy^="vessel-list-table-count"]').contains('11 navires')
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('12 navires')
 
     // When
     cy.get('*[data-cy^="preview-filtered-vessels"]').click({ timeout: 20000 })
     cy.wait(500)
-    cy.get('*[data-cy^="vessel-label-text"]').should('have.length', 11)
+    cy.get('*[data-cy^="vessel-label-text"]').should('have.length', 12)
     cy.get('.vessels').click(63, 456, { force: true })
     cy.get('*[data-cy^="vessel-summary-latitude"]', { timeout: 20000 }).contains('-')
 
     // Back to vessels list
     cy.get('*[data-cy^="back-to-vessels-list"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-list-table-count"]').contains('11 navires')
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('12 navires')
   })
 
   it('Vessels Should be filtered based on their location at port', () => {
     // Given
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-list-table-count"]').contains('959 navires')
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('960 navires')
 
     // When
     cy.get('*[data-cy^="filter-vessel-at-port"]').click()
     cy.wait(1000)
 
     // Then
-    cy.get('*[data-cy^="vessel-list-table-count"]').contains('802 navires')
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('803 navires')
 
     // Then re-show the vessels at port
     cy.get('*[data-cy^="filter-vessel-at-port"]').click()
     cy.wait(1000)
 
-    cy.get('*[data-cy^="vessel-list-table-count"]').contains('959 navires')
+    cy.get('*[data-cy^="vessel-list-table-count"]').contains('960 navires')
   })
 
   it('Vessels Should not be downloadable When no vessels selected', () => {
@@ -87,9 +87,9 @@ context('Vessels list', () => {
     cy.exec('cd cypress/downloads && ls').then(result => {
       const downloadedCSVFilename = result.stdout
       return cy.readFile(`cypress/downloads/${downloadedCSVFilename}`)
-        .should('contains', 'Quartier,CFR,C/S,Nom,GDH (UTC),MMSI,Latitude,Longitude,Cap,Vitesse') // true
-        .should('contains', '"Begue","ABC000599544","NDLN","HIVER CHEVEU HAÏR"') // true
-        .should('contains', '"037998379","50° 43′ 30″ N","001° 36′ 00″ E"') // true
+        .should('contains', 'Quartier,CFR,C/S,Nom,GDH (UTC),MMSI,Latitude,Longitude,Cap,Vitesse')
+        .should('contains', '"Duboisdan","ABC000342127","KJ8767","PITIÉ LUI RÊVE"')
+        .should('contains', '"210825304","49° 21′ 50″ N","000° 04′ 48″ E"')
     })
   })
 })

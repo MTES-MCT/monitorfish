@@ -1,15 +1,12 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.Catch
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSOperationType
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.Gear
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 object TestUtils {
-    fun getDummyERSMessage(): List<ERSMessage> {
+    fun getDummyLogbookMessage(): List<LogbookMessage> {
         val gearOne = Gear()
         gearOne.gear = "OTB"
         val gearTwo = Gear()
@@ -28,24 +25,29 @@ object TestUtils {
         dep.departurePort = "AEFAT"
 
         val far = FAR()
-        far.gear = "OTB"
-        far.catches = listOf(catchTwo, catchThree)
-        far.mesh = 120.0
+        val haul = Haul()
+        haul.gear = "OTB"
+        haul.catches = listOf(catchTwo, catchThree)
+        haul.mesh = 120.0
+        far.hauls = listOf(haul)
 
         val pno = PNO()
         pno.catchOnboard = listOf(catchOne, catchTwo, catchThree)
         pno.port = "AEJAZ"
 
         return listOf(
-                ERSMessage(id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "", operationType = ERSOperationType.DAT, messageType = "DEP",
-                        message = dep, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(24)),
-                ERSMessage(id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "", operationType = ERSOperationType.DAT, messageType = "FAR",
-                        message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                ERSMessage(id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "", operationType = ERSOperationType.DAT, messageType = "PNO",
-                        message = pno, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0)))
+                LogbookMessage(
+                    id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "DEP",
+                        message = dep, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(24), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                    id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                        message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                    id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "PNO",
+                        message = pno, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0), transmissionFormat = LogbookTransmissionFormat.ERS))
     }
 
-    fun getCorrectedDummyERSMessage(): List<ERSMessage> {
+    fun getDummyCorrectedLogbookMessage(): List<LogbookMessage> {
         val catchOne = Catch()
         catchOne.species = "TTV"
         val catchTwo = Catch()
@@ -54,24 +56,30 @@ object TestUtils {
         catchThree.species = "PNB"
 
         val far = FAR()
-        far.gear = "OTB"
-        far.catches = listOf(catchOne, catchTwo)
-        far.mesh = 120.0
+        val haul = Haul()
+        haul.gear = "OTB"
+        haul.catches = listOf(catchOne, catchTwo)
+        haul.mesh = 120.0
+        far.hauls = listOf(haul)
 
-        val farToCorrect = FAR()
-        farToCorrect.gear = "OTB"
-        farToCorrect.catches = listOf(catchOne, catchTwo, catchThree)
-        farToCorrect.mesh = 120.0
+        val correctedFar = FAR()
+        val correctedHaul = Haul()
+        correctedHaul.gear = "OTB"
+        correctedHaul.catches = listOf(catchOne, catchTwo, catchThree)
+        correctedHaul.mesh = 120.0
+        correctedFar.hauls = listOf(correctedHaul)
 
         return listOf(
-                ERSMessage(id = 1, analyzedByRules = listOf(), operationNumber = "9065646811", tripNumber = 345, ersId = "9065646811", operationType = ERSOperationType.DAT, messageType = "FAR",
-                        message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                ERSMessage(id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "", referencedErsId = "9065646811", operationType = ERSOperationType.COR, messageType = "FAR",
-                        message = farToCorrect, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12))
+                LogbookMessage(
+                    id = 1, analyzedByRules = listOf(), operationNumber = "9065646811", tripNumber = "345", reportId = "9065646811", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                        message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                    id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", referencedReportId = "9065646811", operationType = LogbookOperationType.COR, messageType = "FAR",
+                        message = correctedFar, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS)
                 )
     }
 
-    fun getRETDummyERSMessage(): List<ERSMessage> {
+    fun getDummyRETLogbookMessage(): List<LogbookMessage> {
         val catchOne = Catch()
         catchOne.species = "TTV"
         val catchTwo = Catch()
@@ -80,14 +88,18 @@ object TestUtils {
         catchThree.species = "PNB"
 
         val far = FAR()
-        far.gear = "OTB"
-        far.catches = listOf(catchOne, catchTwo)
-        far.mesh = 120.0
+        val haul = Haul()
+        haul.gear = "OTB"
+        haul.catches = listOf(catchOne, catchTwo)
+        haul.mesh = 120.0
+        far.hauls = listOf(haul)
 
         val farTwo = FAR()
-        farTwo.gear = "OTB"
-        farTwo.catches = listOf(catchOne, catchTwo, catchThree)
-        farTwo.mesh = 120.0
+        val haulTwo = Haul()
+        haulTwo.gear = "OTB"
+        haulTwo.catches = listOf(catchOne, catchTwo, catchThree)
+        haulTwo.mesh = 120.0
+        farTwo.hauls = listOf(haulTwo)
 
         val farAck = Acknowledge()
         farAck.returnStatus = "000"
@@ -97,20 +109,28 @@ object TestUtils {
         farBadAck.rejectionCause = "Oops"
 
         return listOf(
-                ERSMessage(id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "9065646811", operationType = ERSOperationType.DAT, messageType = "FAR",
-                        message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                ERSMessage(id = 2, analyzedByRules = listOf(), operationNumber = "", ersId = "9065646816", referencedErsId = "9065646811", operationType = ERSOperationType.RET, messageType = "",
-                        message = farBadAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                ERSMessage(id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = 345, ersId = "9065646813", operationType = ERSOperationType.DAT, messageType = "FAR",
-                        message = farTwo, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                ERSMessage(id = 4, analyzedByRules = listOf(), operationNumber = "", ersId = "9065646818", referencedErsId = "9065646813", operationType = ERSOperationType.RET, messageType = "",
-                        message = farAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12)),
-                ERSMessage(id = 4, analyzedByRules = listOf(), operationNumber = "", referencedErsId = "9065646813", operationType = ERSOperationType.DEL, messageType = "",
-                        message = farAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12))
+                LogbookMessage(
+                    id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "9065646811", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                        message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                    id = 2, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646816", referencedReportId = "9065646811", operationType = LogbookOperationType.RET, messageType = "",
+                        message = farBadAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                    id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "9065646813", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                        message = farTwo, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                    id = 4, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646818", referencedReportId = "9065646813", operationType = LogbookOperationType.RET, messageType = "",
+                        message = farAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                    id = 5, analyzedByRules = listOf(), operationNumber = "", referencedReportId = "9065646813", operationType = LogbookOperationType.DEL, messageType = "",
+                        message = farAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                    id = 6, analyzedByRules = listOf(), operationNumber = "5h499-erh5u7-pm3ae8c5trj78j67dfh", tripNumber = "SCR-TTT20200505030505", reportId = "zegj15-zeg56-errg569iezz3659g", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                    message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 9, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.FLUX)
         )
     }
 
-    fun getDummyPNOAndLANERSMessages(weightToAdd: Double = 0.0, addSpeciesToLAN: Boolean = false): List<Pair<ERSMessage, ERSMessage>> {
+    fun getDummyPNOAndLANLogbookMessages(weightToAdd: Double = 0.0, addSpeciesToLAN: Boolean = false): List<Pair<LogbookMessage, LogbookMessage>> {
         val catchOne = Catch()
         catchOne.species = "TTV"
         catchOne.weight = 123.0
@@ -165,14 +185,18 @@ object TestUtils {
         secondPno.catchOnboard = listOf(catchFive, catchSix, catchSeven, catchEight)
 
         return listOf(
-                Pair(ERSMessage(id = 1, analyzedByRules = listOf(), operationNumber = "456846844658", tripNumber = 125345, ersId = "456846844658",
-                        operationType = ERSOperationType.DAT, messageType = "LAN", message = firstLan),
-                        ERSMessage(id = 2, analyzedByRules = listOf(), operationNumber = "47177857577", tripNumber = 125345, ersId = "47177857577",
-                                operationType = ERSOperationType.DAT, messageType = "PNO", message = firstPno)),
-                Pair(ERSMessage(id = 3, analyzedByRules = listOf(), operationNumber = "48545254254", tripNumber = 125345, ersId = "48545254254",
-                        operationType = ERSOperationType.DAT, messageType = "LAN", message = secondLan),
-                        ERSMessage(id = 4, analyzedByRules = listOf(), operationNumber = "004045204504", tripNumber = 125345, ersId = "004045204504",
-                                operationType = ERSOperationType.DAT, messageType = "PNO", message = secondPno)),
+                Pair(LogbookMessage(
+                    id = 1, analyzedByRules = listOf(), operationNumber = "456846844658", tripNumber = "125345", reportId = "456846844658",
+                        operationType = LogbookOperationType.DAT, messageType = "LAN", message = firstLan, transmissionFormat = LogbookTransmissionFormat.ERS),
+                        LogbookMessage(
+                            id = 2, analyzedByRules = listOf(), operationNumber = "47177857577", tripNumber = "125345", reportId = "47177857577",
+                                operationType = LogbookOperationType.DAT, messageType = "PNO", message = firstPno, transmissionFormat = LogbookTransmissionFormat.ERS)),
+                Pair(LogbookMessage(
+                    id = 3, analyzedByRules = listOf(), operationNumber = "48545254254", tripNumber = "125345", reportId = "48545254254",
+                        operationType = LogbookOperationType.DAT, messageType = "LAN", message = secondLan, transmissionFormat = LogbookTransmissionFormat.ERS),
+                        LogbookMessage(
+                            id = 4, analyzedByRules = listOf(), operationNumber = "004045204504", tripNumber = "125345", reportId = "004045204504",
+                                operationType = LogbookOperationType.DAT, messageType = "PNO", message = secondPno, transmissionFormat = LogbookTransmissionFormat.ERS)),
         )
     }
 }

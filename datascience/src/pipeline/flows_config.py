@@ -25,7 +25,6 @@ from src.pipeline.flows import (
     controls,
     current_segments,
     enrich_positions,
-    ers,
     facade_areas,
     fao_areas,
     fishing_gear_codes,
@@ -33,6 +32,7 @@ from src.pipeline.flows import (
     infractions,
     init_species_groups,
     last_positions,
+    logbook,
     missing_trip_numbers,
     ports,
     position_alerts,
@@ -61,7 +61,7 @@ controls.flow.schedule = Schedule(
     ]
 )
 current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
-ers.flow.schedule = CronSchedule("* * * * *")
+logbook.flow.schedule = CronSchedule("* * * * *")
 enrich_positions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
@@ -127,7 +127,7 @@ flows_to_register = [
     controls.flow,
     current_segments.flow,
     enrich_positions.flow,
-    ers.flow,
+    logbook.flow,
     facade_areas.flow,
     fao_areas.flow,
     fishing_gear_codes.flow,

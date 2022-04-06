@@ -9,7 +9,7 @@ import {
   setVoyage,
   showFishingActivitiesOnMap
 } from '../shared_slices/FishingActivities'
-import NoERSMessagesFoundError from '../../errors/NoERSMessagesFoundError'
+import NoLogbookMessagesFoundError from '../../errors/NoLogbookMessagesFoundError'
 import { vesselsAreEquals } from '../entities/vessel'
 import { batch } from 'react-redux'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
@@ -56,14 +56,14 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
         batch(() => {
           dispatch(setVoyage(emptyVoyage))
           dispatch(hideFishingActivitiesOnMap())
-          dispatch(setError(new NoERSMessagesFoundError('Ce navire n\'a pas envoyé de message JPE.')))
+          dispatch(setError(new NoLogbookMessagesFoundError('Ce navire n\'a pas envoyé de message JPE.')))
         })
         return
       }
 
       if (isSameVesselAsCurrentlyShowed && fromCron) {
         if (gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage)) {
-          dispatch(setNextFishingActivities(voyage.ersMessagesAndAlerts))
+          dispatch(setNextFishingActivities(voyage.logbookMessagesAndAlerts))
           dispatch(removeError())
         }
         return
@@ -136,16 +136,16 @@ function getDateRangeMinusFourHoursPlusOneHour (afterDateTime, beforeDateTime) {
 }
 
 function gotNewFishingActivitiesWithMoreMessagesOrAlerts (lastFishingActivities, voyage) {
-  return (lastFishingActivities.ersMessages && !lastFishingActivities.ersMessages.length) ||
-    (lastFishingActivities.alerts && voyage.ersMessagesAndAlerts.alerts &&
-      voyage.ersMessagesAndAlerts.alerts.length > lastFishingActivities.alerts.length) ||
-    (lastFishingActivities.ersMessages && voyage.ersMessagesAndAlerts.ersMessages &&
-      voyage.ersMessagesAndAlerts.ersMessages.length > lastFishingActivities.ersMessages.length)
+  return (lastFishingActivities.logbookMessages && !lastFishingActivities.logbookMessages.length) ||
+    (lastFishingActivities.alerts && voyage.logbookMessagesAndAlerts.alerts &&
+      voyage.logbookMessagesAndAlerts.alerts.length > lastFishingActivities.alerts.length) ||
+    (lastFishingActivities.logbookMessages && voyage.logbookMessagesAndAlerts.logbookMessages &&
+      voyage.logbookMessagesAndAlerts.logbookMessages.length > lastFishingActivities.logbookMessages.length)
 }
 
 const emptyVoyage = {
-  ersMessagesAndAlerts: {
-    ersMessages: [],
+  logbookMessagesAndAlerts: {
+    logbookMessages: [],
     alerts: []
   }
 }

@@ -22,7 +22,9 @@ def test_extract_catches(reset_test_data):
     catches = extract_catches.run()
     assert len(catches) == 3
     assert set(catches.cfr) == {"ABC000542519", "ABC000306959"}
-    assert set(catches.loc[catches.cfr == "ABC000542519", "trip_number"]) == {20210002}
+    assert set(catches.loc[catches.cfr == "ABC000542519", "trip_number"]) == {
+        "20210002"
+    }
     assert catches.loc[
         (catches.cfr == "ABC000542519") & (catches.species == "HKE"), "weight"
     ].to_list() == [2426.0]
@@ -242,7 +244,7 @@ def test_join():
         columns=pd.Index(
             [
                 "cfr",
-                "last_ers_datetime_utc",
+                "last_logbook_message_datetime_utc",
                 "departure_datetime_utc",
                 "trip_number",
                 "gear_onboard",
@@ -321,7 +323,7 @@ def test_join():
     expected_res = pd.DataFrame(
         {
             "cfr": ["Vessel_A", "Vessel_B"],
-            "last_ers_datetime_utc": [
+            "last_logbook_message_datetime_utc": [
                 datetime.datetime(2021, 2, 3, 13, 58, 21),
                 datetime.datetime(2020, 12, 3, 15, 58, 21),
             ],

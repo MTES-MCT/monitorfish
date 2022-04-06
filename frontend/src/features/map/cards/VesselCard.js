@@ -42,15 +42,15 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
           }
         </VesselCardTitle>
         {
-          vesselProperties.lastErsDateTime
-            ? <ERS>
-              <ERSOK/>
+          vesselProperties.lastLogbookMessageDateTime
+            ? <Logbook>
+              <LogbookOK/>
               <MessageText>JPE</MessageText>
-            </ERS>
-            : <ERS>
-              <NoERS/>
+            </Logbook>
+            : <Logbook>
+              <NoLogbook/>
               <MessageText>JPE</MessageText>
-            </ERS>
+            </Logbook>
         }
       </VesselCardHeader>
       {
@@ -229,7 +229,7 @@ const MessageText = styled.span`
   margin: 0 3px 0 3px;
 `
 
-const NoERS = styled.span`
+const NoLogbook = styled.span`
   height: 14px;
   margin-left: 3px;
   width: 14px;
@@ -238,7 +238,7 @@ const NoERS = styled.span`
   display: inline-block;
 `
 
-const ERSOK = styled.span`
+const LogbookOK = styled.span`
   height: 14px;
   margin-left: 3px;
   width: 14px;
@@ -247,7 +247,7 @@ const ERSOK = styled.span`
   display: inline-block;
 `
 
-const ERS = styled.span`
+const Logbook = styled.span`
   border-radius: 11px;
   background: ${COLORS.gainsboro};
   font-size: 11px;

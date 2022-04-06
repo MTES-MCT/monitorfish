@@ -7,7 +7,7 @@ import { Vector } from 'ol/layer'
 import Layers from '../domain/entities/layers'
 
 import { getVesselBeaconMalfunctionStyle } from './styles/vessel.style'
-import { getVesselFeatureIdFromVessel, vesselsAreEquals } from '../domain/entities/vessel'
+import { getVesselId, vesselsAreEquals } from '../domain/entities/vessel'
 
 const VesselBeaconMalfunctionLayer = ({ map }) => {
   const {
@@ -30,8 +30,6 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
   } = useSelector(state => state.map)
 
   const vectorSourceRef = useRef(null)
-  const layerRef = useRef(null)
-
   function getVectorSource () {
     if (vectorSourceRef.current === null) {
       vectorSourceRef.current = new VectorSource({
@@ -42,6 +40,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
     return vectorSourceRef.current
   }
 
+  const layerRef = useRef(null)
   function getLayer () {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
@@ -81,7 +80,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layers.VESSEL_BEACON_MALFUNCTION.code}:${getVesselFeatureIdFromVessel(vessel.vesselProperties)}`)
+        feature.setId(`${Layers.VESSEL_BEACON_MALFUNCTION.code}:${getVesselId(vessel.vesselProperties)}`)
         _features.push(feature)
 
         return _features

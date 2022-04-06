@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import SeaFrontControlObjectives from './SeaFrontControlObjectives'
 import { useDispatch } from 'react-redux'
-import getAllControlObjectives from '../../../domain/use_cases/getAllControlObjectives'
-import getAllFleetSegments from '../../../domain/use_cases/getAllFleetSegments'
+import getAllControlObjectives from '../../../domain/use_cases/controlObjective/getAllControlObjectives'
+import getAllFleetSegments from '../../../domain/use_cases/fleetSegment/getAllFleetSegments'
 
 const ControlObjectives = () => {
   const dispatch = useDispatch()

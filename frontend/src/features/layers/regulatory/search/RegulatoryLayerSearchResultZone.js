@@ -5,8 +5,8 @@ import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
 import Checkbox from 'rsuite/lib/Checkbox'
 
 import Layers, { getGearCategory } from '../../../../domain/entities/layers'
-import showRegulatoryZoneMetadata from '../../../../domain/use_cases/showRegulatoryZoneMetadata'
-import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/closeRegulatoryZoneMetadata'
+import showRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
+import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 import { showOrHideMetadataIcon } from '../RegulatoryLayerZone'

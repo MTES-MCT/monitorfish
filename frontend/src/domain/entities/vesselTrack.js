@@ -15,10 +15,10 @@ export class VesselTrack {
   /**
    * Vessel track object for building OpenLayers vessel track features
    * @param {VesselPosition[]} positions
-   * @param {string} identity
+   * @param {string} vesselId
    */
-  constructor (positions, identity) {
-    let vesselTrackLineFeatures = this.buildVesselTrackLineFeatures(positions, identity)
+  constructor (positions, vesselId) {
+    let vesselTrackLineFeatures = this.buildVesselTrackLineFeatures(positions, vesselId)
 
     const hasMoreThanOnePoint = vesselTrackLineFeatures?.length
     const hasOnlyOnePoint = positions?.length
@@ -29,12 +29,12 @@ export class VesselTrack {
         vesselTrackLineFeatures = vesselTrackLineFeatures.concat(lastTrackLineFeature)
       }
 
-      const circlePointFeatures = this.buildCirclePointFeatures(vesselTrackLineFeatures, positions, identity)
+      const circlePointFeatures = this.buildCirclePointFeatures(vesselTrackLineFeatures, positions, vesselId)
       circlePointFeatures.forEach(circlePoint => {
         vesselTrackLineFeatures.push(circlePoint)
       })
 
-      const arrowPointFeatures = this.buildArrowPointFeatures(vesselTrackLineFeatures, identity)
+      const arrowPointFeatures = this.buildArrowPointFeatures(vesselTrackLineFeatures, vesselId)
       arrowPointFeatures.forEach(arrowPoint => {
         vesselTrackLineFeatures.push(arrowPoint)
       })
@@ -125,7 +125,7 @@ export class VesselTrack {
     }).filter(arrowPoint => arrowPoint)
   }
 
-  buildVesselTrackLineFeatures (positions, identity) {
+  buildVesselTrackLineFeatures (positions, vesselId) {
     return positions
       .filter(position => position)
       .map((position, index) => {
@@ -157,7 +157,7 @@ export class VesselTrack {
         feature.course = -rotation
         feature.speed = position.speed
 
-        feature.setId(`${Layers.VESSEL_TRACK.code}:${identity}:line:${index}`)
+        feature.setId(`${Layers.VESSEL_TRACK.code}:${vesselId}:line:${index}`)
         feature.setStyle(getLineStyle(feature.isTimeEllipsis, feature.trackType))
 
         return feature
@@ -211,9 +211,9 @@ export function removeFishingActivitiesFeatures (features, vectorSource) {
     .forEach(feature => vectorSource.removeFeature(feature))
 }
 
-export function removeVesselTrackFeatures (features, vectorSource, identity) {
+export function removeVesselTrackFeatures (features, vectorSource, vesselId) {
   features
-    .filter(feature => feature?.getId()?.toString()?.includes(identity))
+    .filter(feature => feature?.getId()?.toString()?.includes(vesselId))
     .map(feature => vectorSource.removeFeature(feature))
 }
 
@@ -222,11 +222,11 @@ export function fishingActivityIsWithinTrackLineDates (fishingActivityDateTimest
     fishingActivityDateTimestamp < new Date(line.secondPositionDate).getTime()
 }
 
-export function getVesselTrackExtent (vesselTrack, identity) {
-  let vesselTrackExtent = vesselTrack.features[0].getGeometry().getExtent().slice(0)
+export function getVesselTrackExtent (vesselTrackFeatures, vesselId) {
+  let vesselTrackExtent = vesselTrackFeatures[0].getGeometry().getExtent().slice(0)
 
-  vesselTrack.features
-    .filter(feature => feature.getId().includes(identity))
+  vesselTrackFeatures
+    .filter(feature => feature.getId().includes(vesselId))
     .forEach(feature => {
       vesselTrackExtent = extend(vesselTrackExtent, feature.getGeometry().getExtent())
     })

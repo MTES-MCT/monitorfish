@@ -7,14 +7,14 @@ import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import * as timeago from 'timeago.js'
 import { timeagoFrenchLocale } from '../../../utils'
 import { useDispatch } from 'react-redux'
-import openBeaconMalfunctionInKanban from '../../../domain/use_cases/openBeaconMalfunctionInKanban'
+import openBeaconMalfunctionInKanban from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import {
   getIsMalfunctioning,
   getMalfunctionStartDateText,
   vesselStatuses
 } from '../../../domain/entities/beaconMalfunction'
 import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
-import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/showVesselFromBeaconMalfunctionsKanban'
+import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
 
 timeago.register('fr', timeagoFrenchLocale)
 

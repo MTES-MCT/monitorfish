@@ -4,7 +4,7 @@ import { COLORS } from '../../../../constants/constants'
 import { getMalfunctionStartDateText, vesselStatuses } from '../../../../domain/entities/beaconMalfunction'
 import { VesselStatusSelectValue } from '../../../side_window/beacon_malfunctions/VesselStatusSelectValue'
 import SelectPicker from 'rsuite/lib/SelectPicker'
-import updateBeaconMalfunctionFromKanban from '../../../../domain/use_cases/updateBeaconMalfunctionFromKanban'
+import updateBeaconMalfunctionFromKanban from '../../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useDispatch } from 'react-redux'
 import { ReactComponent as TimeAgoSVG } from '../../../icons/Label_horaire_VMS.svg'
 

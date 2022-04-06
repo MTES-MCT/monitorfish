@@ -59,7 +59,7 @@ const vesselSlice = createSlice({
             lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : '',
             hasAlert: !!vessel.alerts?.length
           },
-          vesselId: Vessel.getVesselId(vessel),
+          vesselId: Vessel.getVesselFeatureId(vessel),
           isAtPort: vessel.isAtPort,
           course: vessel.course,
           speed: vessel.speed,
@@ -260,29 +260,47 @@ const vesselSlice = createSlice({
      * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: {
-     *   identity: string,
+     *   vesselId: string,
      *   showedVesselTrack: ShowedVesselTrack
      *  }}} action - the vessel positions to show on map
      */
     addVesselTrackShowed (state, action) {
-      state.vesselsTracksShowed[action.payload.identity] = action.payload.showedVesselTrack
+      state.vesselsTracksShowed[action.payload.vesselId] = action.payload.showedVesselTrack
     },
     /**
      * Update a given vessel track as showed by the layer
      * @function updateVesselTrackAsShowed
      * @memberOf VesselReducer
      * @param {Object=} state
-     * @param {{payload: string}} action - the vessel identity
+     * @param {{payload: {
+     *   vesselId: string,
+     *   extent: number[]
+     * }}} action - the vessel id and extent
      */
-    updateVesselTrackAsShowed (state, action) {
-      state.vesselsTracksShowed[action.payload].toShow = false
+    updateVesselTrackAsShowedWithExtend (state, action) {
+      const {
+        vesselId,
+        extent
+      } = action.payload
+      state.vesselsTracksShowed[vesselId].toShow = false
+      state.vesselsTracksShowed[vesselId].extent = extent
+    },
+    /**
+     * Update a given vessel track as zoome
+     * @function updateVesselTrackAsZoomed
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: string}} action - the vessel id
+     */
+    updateVesselTrackAsZoomed (state, action) {
+      state.vesselsTracksShowed[action.payload].toZoom = false
     },
     /**
      * Update a given vessel track as to be hidden by the layer
      * @function updateVesselTrackAsShowed
      * @memberOf VesselReducer
      * @param {Object=} state
-     * @param {{payload: string}} action - the vessel identity
+     * @param {{payload: string}} action - the vessel id
      */
     updateVesselTrackAsToHide (state, action) {
       state.vesselsTracksShowed[action.payload].toHide = true
@@ -292,7 +310,7 @@ const vesselSlice = createSlice({
      * @function updateVesselTrackAsHidden
      * @memberOf VesselReducer
      * @param {Object=} state
-     * @param {{payload: string}} action - the vessel identity
+     * @param {{payload: string}} action - the vessel id
      */
     updateVesselTrackAsHidden (state, action) {
       delete state.vesselsTracksShowed[action.payload]
@@ -341,9 +359,10 @@ export const {
   showVesselSidebarTab,
   setVesselsSpeciesAndDistricts,
   addVesselTrackShowed,
-  updateVesselTrackAsShowed,
+  updateVesselTrackAsShowedWithExtend,
   updateVesselTrackAsToHide,
   updateVesselTrackAsHidden,
+  updateVesselTrackAsZoomed,
   setVesselTrackExtent,
   resetVesselTrackExtent,
   setHideNonSelectedVessels

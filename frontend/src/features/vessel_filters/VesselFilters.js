@@ -15,7 +15,7 @@ import {
 } from '../../domain/shared_slices/Filter'
 import FilterParameters from './FilterParameters'
 import { usePrevious } from '../../hooks/usePrevious'
-import unselectVessel from '../../domain/use_cases/unselectVessel'
+import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'

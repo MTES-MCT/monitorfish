@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { REGULATORY_SEARCH_PROPERTIES } from '../../../../domain/entities/regulatory'
-import searchRegulatoryLayers from '../../../../domain/use_cases/searchRegulatoryLayers'
+import searchRegulatoryLayers from '../../../../domain/use_cases/layer/regulation/searchRegulatoryLayers'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import {
   resetRegulatoryZonesChecked,

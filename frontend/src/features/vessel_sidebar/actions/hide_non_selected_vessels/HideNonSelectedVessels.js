@@ -38,7 +38,7 @@ const HideNonSelectedVessels = ({ openBox, rightMenuIsOpen }) => {
 }
 
 const HideNonSelectedVesselsButton = styled(MapButtonStyle)`
-  top: 188px;
+  top: 223px;
   height: 30px;
   width: 30px;
   background: ${props => props.hideNonSelectedVessels ? COLORS.shadowBlue : COLORS.charcoal};

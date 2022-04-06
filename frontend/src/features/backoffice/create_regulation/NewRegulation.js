@@ -4,9 +4,9 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/getAllRegulatoryLayersByRegTerritory'
+import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/layer/regulation/getAllRegulatoryLayersByRegTerritory'
 import Layers from '../../../domain/entities/layers'
-import showRegulatoryZone from '../../../domain/use_cases/showRegulatoryZone'
+import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'
 
 import {
   FishingPeriodSection,
@@ -31,9 +31,9 @@ import {
   setRegulatoryTopics,
   setRegulatoryZoneMetadata
 } from '../../../domain/shared_slices/Regulatory'
-import getGeometryWithoutRegulationReference from '../../../domain/use_cases/getGeometryWithoutRegulationReference'
-import createRegulation from '../../../domain/use_cases/createRegulation'
-import resetRegulation from '../../../domain/use_cases/resetRegulation'
+import getGeometryWithoutRegulationReference from '../../../domain/use_cases/layer/regulation/getGeometryWithoutRegulationReference'
+import createRegulation from '../../../domain/use_cases/layer/regulation/createRegulation'
+import resetRegulation from '../../../domain/use_cases/layer/regulation/resetRegulation'
 
 import { formatDataForSelectPicker } from '../../../utils'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
@@ -58,7 +58,7 @@ import {
   REGULATORY_REFERENCE_KEYS
 } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
-import getAllSpecies from '../../../domain/use_cases/getAllSpecies'
+import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 
 const CreateRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()

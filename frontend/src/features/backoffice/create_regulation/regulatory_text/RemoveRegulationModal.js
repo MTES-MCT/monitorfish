@@ -7,7 +7,7 @@ import { setIsRemoveModalOpen } from '../../Regulation.slice'
 import { ValidateButton, CancelButton } from '../../../commonStyles/Buttons.style'
 import { FooterButton } from '../../../commonStyles/Backoffice.style'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise_clair.svg'
-import updateRegulation from '../../../../domain/use_cases/updateRegulation'
+import updateRegulation from '../../../../domain/use_cases/layer/regulation/updateRegulation'
 import Feature from 'ol/Feature'
 import { REGULATION_ACTION_TYPE, getRegulatoryFeatureId } from '../../../../domain/entities/regulatory'
 

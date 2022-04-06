@@ -5,7 +5,7 @@ import Table from 'rsuite/lib/Table'
 import { useDispatch, useSelector } from 'react-redux'
 import { ControlPriorityCell, ExpandCell, ImpactRiskFactorCell, ModifiableCell, renderRowExpanded } from './tableCells'
 import { CellWithTitle } from '../../vessel_list/tableCells'
-import updateControlObjective from '../../../domain/use_cases/updateControlObjective'
+import updateControlObjective from '../../../domain/use_cases/controlObjective/updateControlObjective'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 
 const { Column, HeaderCell } = Table

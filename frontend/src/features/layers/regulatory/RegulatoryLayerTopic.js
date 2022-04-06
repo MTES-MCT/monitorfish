@@ -15,8 +15,8 @@ import {
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened
 } from '../../../domain/shared_slices/Regulatory'
-import showRegulatoryTopic from '../../../domain/use_cases/showRegulatoryTopic'
-import hideLayer from '../../../domain/use_cases/hideLayer'
+import showRegulatoryTopic from '../../../domain/use_cases/layer/regulation/showRegulatoryTopic'
+import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 
 const RegulatoryLayerTopic = props => {
   const {

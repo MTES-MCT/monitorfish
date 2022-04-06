@@ -12,16 +12,16 @@ import AdministrativeLayers from '../../layers/AdministrativeLayers'
 import RegulatoryPreviewLayer from '../../layers/RegulatoryPreviewLayer'
 import ShowRegulatoryMetadata from '../map/ShowRegulatoryMetadata'
 
-import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/getAllRegulatoryLayers'
-import getAllGearCodes from '../../domain/use_cases/getAllGearCodes'
-import closeRegulatoryZoneMetadata from '../../domain/use_cases/closeRegulatoryZoneMetadata'
+import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
+import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
+import closeRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import { REGULATORY_TERRITORY } from '../../domain/entities/regulatory'
 import { COLORS } from '../../constants/constants'
 import { EmptyResult } from '../commonStyles/Text.style'
 import { setProcessingRegulationSaved } from './Regulation.slice'
 import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
 import layer from '../../domain/shared_slices/Layer'
-import getAllSpecies from '../../domain/use_cases/getAllSpecies'
+import getAllSpecies from '../../domain/use_cases/species/getAllSpecies'
 /* import { SecondaryButton } from '../commonStyles/Buttons.style' */
 
 const Backoffice = () => {

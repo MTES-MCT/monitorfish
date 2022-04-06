@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import LayersEnum from '../../domain/entities/layers'
-import showRegulatoryZoneMetadata from '../../domain/use_cases/showRegulatoryZoneMetadata'
+import showRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 
 const ShowRegulatoryMetadata = ({ mapClickEvent }) => {
   const dispatch = useDispatch()

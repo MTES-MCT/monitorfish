@@ -8,7 +8,7 @@ import Layers from '../domain/entities/layers'
 
 import { getVesselAlertStyle } from './styles/vessel.style'
 import {
-  getVesselFeatureIdFromVessel,
+  getVesselId,
   getVesselLastPositionVisibilityDates,
   Vessel,
   vesselsAreEquals
@@ -90,7 +90,7 @@ const VesselAlertLayer = ({ map }) => {
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layers.VESSEL_ALERT.code}:${getVesselFeatureIdFromVessel(vessel.vesselProperties)}`)
+        feature.setId(`${Layers.VESSEL_ALERT.code}:${getVesselId(vessel.vesselProperties)}`)
         features.push(feature)
 
         return features

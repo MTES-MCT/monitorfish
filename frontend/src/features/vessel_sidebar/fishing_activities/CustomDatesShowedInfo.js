@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDate } from '../../../utils'
-import modifyVesselTrackDepth from '../../../domain/use_cases/modifyVesselTrackDepth'
+import modifyVesselTrackDepth from '../../../domain/use_cases/vessel/modifyVesselTrackDepth'
 
 const CustomDatesShowedInfo = ({ width }) => {
   const dispatch = useDispatch()

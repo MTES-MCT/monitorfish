@@ -7,7 +7,7 @@ import { COLORS } from '../../../constants/constants'
 import { baseLayers, layersType } from '../../../domain/entities/layers'
 import layer from '../../../domain/shared_slices/Layer'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
-import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
+import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 const BaseLayers = ({ namespace }) => {
   const dispatch = useDispatch()

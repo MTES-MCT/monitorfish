@@ -61,13 +61,13 @@ const VesselSelectedLayer = ({ map }) => {
     }
 
     if (vesselsTracksShowed) {
-      const vessels = Object.values(vesselsTracksShowed)
-      const features = vessels?.map(vessel => {
+      const vesselsTracks = Object.values(vesselsTracksShowed)
+      const features = vesselsTracks?.map(vesselTrack => {
         const feature = new Feature({
-          course: vessel.course,
-          geometry: new Point(vessel.coordinates)
+          course: vesselTrack.course,
+          geometry: new Point(vesselTrack.coordinates)
         })
-        feature.setId(vessel.vesselId)
+        feature.setId(vesselTrack.vesselId)
         return feature
       })
       vectorSourceRef.current?.addFeatures(features)

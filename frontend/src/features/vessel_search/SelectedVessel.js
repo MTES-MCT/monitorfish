@@ -1,4 +1,4 @@
-import focusOnVesselSearch, { focusState } from '../../domain/use_cases/focusOnVesselSearch'
+import focusOnVesselSearch, { focusState } from '../../domain/use_cases/vessel/focusOnVesselSearch'
 import countries from 'i18n-iso-countries'
 import React from 'react'
 import styled from 'styled-components'

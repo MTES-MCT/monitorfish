@@ -9,7 +9,7 @@ import { setRiskFactorShowedOnMap, setVesselLabel, setVesselLabelsShowedOnMap } 
 import VesselLabelSelection from './VesselLabelSelection'
 import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
 import { expandRightMenu } from '../../domain/shared_slices/Global'
-import unselectVessel from '../../domain/use_cases/unselectVessel'
+import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'

@@ -5,7 +5,7 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
-import zoomInLayer from '../domain/use_cases/zoomInLayer'
+import zoomInLayer from '../domain/use_cases/layer/zoomInLayer'
 import { regulatoryPreviewStyle } from './styles/regulatoryPreview.style'
 
 const RegulatoryPreviewLayer = ({ map }) => {

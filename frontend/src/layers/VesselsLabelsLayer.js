@@ -7,7 +7,7 @@ import LineString from 'ol/geom/LineString'
 import { usePrevious } from '../hooks/usePrevious'
 
 import Layers from '../domain/entities/layers'
-import { getVesselFeatureIdFromVessel, getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
+import { getVesselId, getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
 import { drawMovedLabelIfFoundAndReturnOffset, VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 
@@ -202,7 +202,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
       const showedTracksVesselsIdentities = Object.keys(vesselsTracksShowed)
       if (selectedVessel) {
-        showedTracksVesselsIdentities.push(getVesselFeatureIdFromVessel(selectedVessel))
+        showedTracksVesselsIdentities.push(getVesselId(selectedVessel))
       }
 
       const nextFeaturesAndLabels = features
@@ -219,7 +219,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
           const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced) || vesselProperties?.beaconMalfunctionId ? 1 : 0
           const offset = drawMovedLabelIfFoundAndReturnOffset(getVectorSource(), vesselToCoordinates, labelLineFeatureId, feature, opacity)
-          const trackIsShown = showedTracksVesselsIdentities.includes(getVesselFeatureIdFromVessel(vesselProperties))
+          const trackIsShown = showedTracksVesselsIdentities.includes(getVesselId(vesselProperties))
 
           return {
             identity: {
@@ -253,7 +253,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       const isFiltered = filterShowed && nonFilteredVesselsAreHidden // && filteredVesselsFeaturesUids?.length FIXME: if filterShowed, is it really necessary to check filteredVesselsFeaturesUids ?
       let featuresRequireringLabel
       if (hideNonSelectedVessels) {
-        const selectedVesselId = selectedVessel && Vessel.getVesselId(selectedVessel)
+        const selectedVesselId = selectedVessel && Vessel.getVesselFeatureId(selectedVessel)
         const showedFeaturesIdentities = Object.keys(vesselsTracksShowed)
         featuresRequireringLabel = featuresInExtent.filter(feature => (selectedVessel && feature.getId() === selectedVesselId) || showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity)))
       } else if (previewFilteredVesselsMode) {

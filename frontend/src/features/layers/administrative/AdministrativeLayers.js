@@ -5,14 +5,14 @@ import styled from 'styled-components'
 import AdministrativeLayer from './AdministrativeLayer'
 import { COLORS } from '../../../constants/constants'
 import AdministrativeLayerGroup from './AdministrativeLayerGroup'
-import getAdministrativeZonesAndSubZones from '../../../domain/use_cases/getAdministrativeZonesAndSubZones'
-import hideLayer from '../../../domain/use_cases/hideLayer'
+import getAdministrativeZonesAndSubZones from '../../../domain/use_cases/layer/administrative/getAdministrativeZonesAndSubZones'
+import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
 import layer from '../../../domain/shared_slices/Layer'
 import LayersEnum, { layersType } from '../../../domain/entities/layers'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
-import showAdministrativeLayer from '../../../domain/use_cases/showAdministrativeLayer'
-import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
+import showAdministrativeLayer from '../../../domain/use_cases/layer/administrative/showAdministrativeLayer'
+import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 const AdministrativeLayers = props => {
   const {

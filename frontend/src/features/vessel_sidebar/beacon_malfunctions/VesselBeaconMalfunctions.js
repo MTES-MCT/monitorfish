@@ -7,7 +7,7 @@ import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconMalfunctio
 import { COLORS } from '../../../constants/constants'
 import BeaconMalfunctionsResumeAndHistory from './resume/BeaconMalfunctionsResumeAndHistory'
 import BeaconMalfunctionDetails from './details/BeaconMalfunctionDetails'
-import getVesselBeaconMalfunctions from '../../../domain/use_cases/getVesselBeaconMalfunctions'
+import getVesselBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 
 const VesselBeaconMalfunctions = () => {
   const dispatch = useDispatch()

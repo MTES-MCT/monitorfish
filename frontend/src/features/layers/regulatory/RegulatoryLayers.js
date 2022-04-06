@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import RegulatoryLayerTopic from './RegulatoryLayerTopic'
 import { COLORS } from '../../../constants/constants'
-import removeRegulatoryZoneFromMySelection from '../../../domain/use_cases/removeRegulatoryZoneFromMySelection'
+import removeRegulatoryZoneFromMySelection from '../../../domain/use_cases/layer/regulation/removeRegulatoryZoneFromMySelection'
 import LayersEnum, { layersType } from '../../../domain/entities/layers'
-import hideLayer from '../../../domain/use_cases/hideLayer'
+import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 import { useDispatch, useSelector } from 'react-redux'
 import layer from '../../../domain/shared_slices/Layer'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
-import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
+import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 const RegulatoryLayers = props => {
   const dispatch = useDispatch()

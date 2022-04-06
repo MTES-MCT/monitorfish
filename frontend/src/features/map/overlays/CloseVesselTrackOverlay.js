@@ -3,13 +3,13 @@ import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import { ReactComponent as CloseVesselTrackSVG } from '../../icons/Croix_piste_VMS.svg'
-import hideVesselTrack from '../../../domain/use_cases/hideVesselTrack'
+import hideVesselTrack from '../../../domain/use_cases/vessel/hideVesselTrack'
 
 const CloseVesselTrackOverlay = props => {
   const {
     map,
     coordinates,
-    identity
+    vesselId
   } = props
 
   const dispatch = useDispatch()
@@ -27,7 +27,7 @@ const CloseVesselTrackOverlay = props => {
   useEffect(() => {
     if (close) {
       map.removeOverlay(overlay)
-      dispatch(hideVesselTrack(identity))
+      dispatch(hideVesselTrack(vesselId))
     }
   }, [close])
 

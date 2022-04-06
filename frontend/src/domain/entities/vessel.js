@@ -12,12 +12,8 @@ export const VESSEL_SELECTOR_STYLE = 200
 export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
-  static getVesselId (vessel) {
-    return `${Layers.VESSELS.code}:${getVesselFeatureIdFromVessel(vessel)}`
-  }
-
-  static getVesselIdFromIdentity (identity) {
-    return `${Layers.VESSELS.code}:${identity}`
+  static getVesselFeatureId (vessel) {
+    return `${Layers.VESSELS.code}:${getVesselId(vessel)}`
   }
 
   static getVesselOpacity (dateTime, vesselIsHidden, vesselIsOpacityReduced) {
@@ -138,7 +134,7 @@ export const getOnlyVesselIdentityProperties = vessel => {
   }
 }
 
-export const getVesselFeatureIdFromVessel = vessel => {
+export const getVesselId = vessel => {
   return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.ircs}`
 }
 

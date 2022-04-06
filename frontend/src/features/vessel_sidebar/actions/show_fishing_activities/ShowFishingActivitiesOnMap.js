@@ -40,7 +40,7 @@ const ShowFishingActivitiesOnMap = ({ openBox, rightMenuIsOpen }) => {
 }
 
 const ShowFishingActivitiesOnMapButton = styled(MapButtonStyle)`
-  top: 223px;
+  top: 258px;
   height: 30px;
   width: 30px;
   background: ${props => props.fishingActivitiesShowedOnMap ? COLORS.shadowBlue : COLORS.charcoal};

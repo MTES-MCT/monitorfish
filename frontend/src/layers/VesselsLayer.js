@@ -11,7 +11,7 @@ import {
 } from '../domain/entities/vessel'
 import Layers from '../domain/entities/layers'
 
-import { applyFilterToVessels } from '../domain/use_cases/applyFilterAndSetVessels'
+import { applyFilterToVessels } from '../domain/use_cases/vessel/applyFilterAndSetVessels'
 import { COLORS } from '../constants/constants'
 import { booleanToInt, customHexToRGB } from '../utils'
 

@@ -62,7 +62,7 @@ const LogbookMessage = ({ message, isFirst }) => {
           <LogbookMessageHeaderText
             isShortcut={message.isCorrected || message.deleted || message.referencedReportId}
             title={typeof logbookHeaderTitle === 'string' ? logbookHeaderTitle : ''}
-            data-cy={'vessel-fishing-dep-message'}
+            data-cy={'vessel-fishing-message'}
           >
             {logbookHeaderTitle}
           </LogbookMessageHeaderText>

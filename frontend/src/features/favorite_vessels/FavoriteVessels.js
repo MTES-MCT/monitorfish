@@ -19,7 +19,8 @@ const FavoriteVessels = () => {
     selectedVesselIdentity
   } = useSelector(state => state.vessel)
   const {
-    healthcheckTextWarning
+    healthcheckTextWarning,
+    previewFilteredVesselsMode
   } = useSelector(state => state.global)
 
   const [isOpen, setIsOpen] = useState(false)
@@ -29,20 +30,26 @@ const FavoriteVessels = () => {
   return (
     <>
       <Wrapper ref={wrapperRef}>
-        <FavoriteVesselsNumber isOpen={isOpen}>
+        <FavoriteVesselsNumber
+          isHidden={previewFilteredVesselsMode}
+          isOpen={isOpen}
+        >
           {favorites?.length || 0}
         </FavoriteVesselsNumber>
         <FavoriteVesselsIcon
           data-cy={'vessel-favorites'}
           healthcheckTextWarning={healthcheckTextWarning}
           isOpen={isOpen}
+          isHidden={previewFilteredVesselsMode}
           title={'Mes navires suivis'}
           onClick={() => setIsOpen(!isOpen)}>
           <FavoritesIcon/>
         </FavoriteVesselsIcon>
         <FavoriteVesselsBox
           healthcheckTextWarning={healthcheckTextWarning}
-          isOpen={isOpen}>
+          isOpen={isOpen}
+          isHidden={previewFilteredVesselsMode}
+        >
           <Header isFirst={true}>
             Mes navires suivis
           </Header>
@@ -77,7 +84,7 @@ const FavoriteVessels = () => {
   )
 }
 
-const FavoriteVesselsNumber = styled.div`
+const FavoriteVesselsNumber = styled(MapComponentStyle)`
   display: inline-block;
   position: absolute;
   width: 14px;

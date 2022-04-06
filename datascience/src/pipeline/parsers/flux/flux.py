@@ -437,14 +437,18 @@ def batch_parse(fa_report_message_strings: List[str]) -> dict:
                 )
             )
 
-        logbook_reports = pd.DataFrame(columns=pd.Index(reports_defaults))
-        logbook_raw_messages = pd.DataFrame(columns=pd.Index(raw))
-        if len(logbook_reports_list) > 0:
-            logbook_reports = pd.concat(logbook_reports_list, axis=1).T.drop_duplicates(
-                subset=["report_id"]
-            )
-        if len(logbook_raw_messages_list) > 0:
-            logbook_raw_messages = pd.concat(logbook_raw_messages_list, axis=1).T
+    logbook_reports = pd.DataFrame(columns=pd.Index(reports_defaults))
+    logbook_raw_messages = pd.DataFrame(columns=pd.Index(raw))
+    if len(logbook_reports_list) > 0:
+        logbook_reports = (
+            pd.concat(logbook_reports_list, axis=1)
+            .T.sort_values("operation_datetime_utc")
+            .drop_duplicates(subset=["report_id"])
+        )
+    if len(logbook_raw_messages_list) > 0:
+        logbook_raw_messages = pd.concat(
+            logbook_raw_messages_list, axis=1
+        ).T.drop_duplicates(subset=["operation_number"])
 
     return {
         "logbook_reports": logbook_reports,

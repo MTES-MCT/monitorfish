@@ -87,9 +87,9 @@ context('Vessels list', () => {
     cy.exec('cd cypress/downloads && ls').then(result => {
       const downloadedCSVFilename = result.stdout
       return cy.readFile(`cypress/downloads/${downloadedCSVFilename}`)
-        .should('contains', 'Quartier,CFR,C/S,Nom,GDH (UTC),MMSI,Latitude,Longitude,Cap,Vitesse') // true
-        .should('contains', '"Begue","ABC000599544","NDLN","HIVER CHEVEU HAÏR"') // true
-        .should('contains', '"037998379","50° 43′ 30″ N","001° 36′ 00″ E"') // true
+        .should('contains', 'Quartier,CFR,C/S,Nom,GDH (UTC),MMSI,Latitude,Longitude,Cap,Vitesse')
+        .should('contains', '"Duboisdan","ABC000342127","KJ8767","PITIÉ LUI RÊVE"')
+        .should('contains', '"210825304","49° 21′ 50″ N","000° 04′ 48″ E"')
     })
   })
 })

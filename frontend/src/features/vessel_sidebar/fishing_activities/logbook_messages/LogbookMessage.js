@@ -124,7 +124,7 @@ const LogbookMessage = ({ message, isFirst }) => {
               <Key>Date de réception</Key><br/>
               {getDateTime(message.operationDateTime, true)}
             </ReceptionDateTime>
-            <VoyageNumber>
+            <VoyageNumber title={message.tripNumber}>
               <Key>N° de marée</Key><br/>
               {message.tripNumber ? message.tripNumber : <Gray>-</Gray>}
             </VoyageNumber>
@@ -215,6 +215,10 @@ const VoyageNumber = styled.div`
   font-size: 13px;
   color: ${COLORS.gunMetal};
   flex-grow: 3;
+  max-width: 80px;
+  overflow: clip;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `
 
 const ReceptionDateTime = styled.div`

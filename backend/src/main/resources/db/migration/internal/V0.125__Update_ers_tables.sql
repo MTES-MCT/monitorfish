@@ -46,11 +46,12 @@ ALTER INDEX ers_ret_referenced_ers_id_idx RENAME TO logbook_report_ret_reference
 ALTER INDEX ers_messages_pkey RENAME TO logbook_raw_messages_pkey;
 DROP INDEX ers_messages_operation_number_idx; -- An index is already created with the primary key, so this one can be dropped
 
--- Add transmission_format column
+-- Add transmission_format and software columns
 CREATE TYPE public.logbook_message_transmission_format AS ENUM ('ERS', 'FLUX');
 
 ALTER TABLE logbook_reports
-    ADD COLUMN transmission_format logbook_message_transmission_format;
+    ADD COLUMN transmission_format logbook_message_transmission_format,
+    ADD COLUMN software VARCHAR(100);
 
 UPDATE logbook_reports
 SET transmission_format = 'ERS';

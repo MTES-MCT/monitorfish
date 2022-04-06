@@ -21,6 +21,7 @@ class TestLogParsers(unittest.TestCase):
         metadata, data_list = self.parse_file(test_file)
 
         expected_metadata = {
+            "software": "TurboCatch (3.5-5)",
             "operation_number": "OOE20200402018600",
             "operation_country": "OOE",
             "operation_datetime_utc": datetime.datetime(2020, 4, 2, 8, 57),
@@ -56,6 +57,7 @@ class TestLogParsers(unittest.TestCase):
         metadata, data_list = self.parse_file(test_file)
 
         expected_metadata = {
+            "software": "TurboCatch (3.5-5)",
             "operation_number": "OOE20200323034701",
             "operation_country": "OOE",
             "operation_datetime_utc": datetime.datetime(2020, 3, 23, 6, 8),
@@ -279,6 +281,7 @@ class TestLogParsers(unittest.TestCase):
         metadata, data_list = self.parse_file(test_file)
 
         expected_metadata = {
+            "software": "IKTUS 4.5.8",
             "operation_number": "OOF20200321016003",
             "operation_country": "OOF",
             "operation_datetime_utc": datetime.datetime(2020, 3, 21, 13, 39),
@@ -299,6 +302,7 @@ class TestLogParsers(unittest.TestCase):
             "operation_datetime_utc": datetime.datetime(2020, 3, 21, 22, 14),
             "operation_type": "RET",
             "referenced_report_id": "OOE20200321041702",
+            "software": None,
         }
         self.assertEqual(metadata, expected_metadata)
         data = data_list[0]
@@ -321,6 +325,7 @@ class TestLogParsers(unittest.TestCase):
             "flag_state": "XXX",
             "imo": None,
             "trip_number": "21091911",
+            "software": "JP/VISIOCaptures V1.0.11",
         }
 
         expected_data_list = [

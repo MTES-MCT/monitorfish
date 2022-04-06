@@ -195,6 +195,7 @@ export const LogbookMessageSender = {
 }
 
 export const LogbookMessagePNOPurposeType = {
+  SHE: 'Mise à l\'abri',
   LAN: 'Débarquement'
 }
 

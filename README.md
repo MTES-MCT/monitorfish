@@ -16,7 +16,7 @@
 
 ## Main features
 * Visualization of fishing vessels' real time **positions** (VMS)
-* Visualization of fishing vessels' declarative **fishing activity** data (ERS)
+* Visualization of fishing vessels' declarative **fishing activity** data (ERS and FLUX)
 * Visualization of fishing vessels' historical **controls** and **violations**
 * Visualization of french and european **regulated fishing areas**
 * Computation of fishing vessels' real time **belonging to fleet segments** as defined by the [European Fishing Control Agency (EFCA)](https://www.efca.europa.eu/en) in its [risk assessment methodology](https://www.efca.europa.eu/sites/default/files/Risk%20Assessment%20Methodology.pdf)

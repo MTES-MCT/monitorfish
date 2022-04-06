@@ -11,7 +11,7 @@ context('VesselSearch', () => {
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
     cy.get('*[data-cy^="first-loader"]', { timeout: 20000 }).should('not.exist')
     cy.url().should('include', '@-82')
-    cy.wait(1000)
+    cy.wait(200)
   })
 
   it('Vessel from last positions and vessels table Should be searched from the search bar', () => {
@@ -61,5 +61,16 @@ context('VesselSearch', () => {
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 20000 }).should('have.length', 2)
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 20000 }).eq(0).contains('DÉTACHER ROULER ÉCHAPPER')
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 20000 }).eq(1).contains('PHENOMENE')
+  })
+
+  it('Vessel Should be searched from the search bar with few positions When a beacon number is entered', () => {
+    // When
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 20000 }).type('BEACON')
+    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 20000 }).eq(0).click()
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
+
+    // Then
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains('14 nds', { timeout: 20000 })
   })
 })

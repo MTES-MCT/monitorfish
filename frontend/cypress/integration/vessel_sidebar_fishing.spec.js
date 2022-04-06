@@ -9,7 +9,7 @@ context('Vessel sidebar fishing tab', () => {
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
     cy.get('*[data-cy^="first-loader"]', { timeout: 20000 }).should('not.exist')
     cy.url().should('include', '@-82')
-    cy.wait(1000)
+    cy.wait(200)
   })
 
   it('Fishing Should contain the vessel fishing resume', () => {
@@ -107,5 +107,70 @@ context('Vessel sidebar fishing tab', () => {
 
     cy.get('*[data-cy^="vessel-fishing-message"]').eq(4).contains('Déclaration de capture')
     cy.get('*[data-cy^="logbook-haul-number"]').should('have.length', 2)
+  })
+
+  it('Fishing activities Should be changed according to the actual trip When walking in fishing trips', () => {
+    // Given
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
+    cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
+    cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
+
+    // When
+    cy.wait(200)
+    cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 3)
+    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
+    cy.intercept('GET', '/bff/v1/vessels/positions*').as('previousTripPositions')
+    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })
+
+    // Then
+    cy.wait('@previousTripPositions').its('response.url')
+      .should('eq', 'http://localhost:8880/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
+        '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
+        '&afterDateTime=2019-02-16T21:05:00.000Z&beforeDateTime=2019-10-15T13:01:00.000Z')
+
+    cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
+    cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 16/02/19 au 15/10/19')
+
+    // Hide fishing activities
+    cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 20000 })
+    cy.intercept('GET', '/bff/v1/vessels/positions*').as('previousTripPositions')
+    cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 20000 })
+    cy.wait('@previousTripPositions').its('response.url')
+      .should('eq', 'http://localhost:8880/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
+        '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
+        '&afterDateTime=2019-10-10T22:06:00.000Z&beforeDateTime=2019-10-22T12:06:00.000Z')
+    cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
+    cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 10/10/19 au 22/10/19')
+
+    // Go back to the default track depth
+    cy.get('*[data-cy="custom-dates-show-last-positions"]').click()
+    cy.get('*[data-cy="custom-dates-showed-text"]').should('not.exist')
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
+    cy.get('*[data-cy^="vessel-track-depth-twelve-hours"]').should('have.class', 'rs-radio-checked')
+  })
+
+  it('Single fishing activity Should be seen on map When clicking on the position icon', () => {
+    // Given
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
+    cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000, force: true })
+
+    // When
+    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 20000 })
+    cy.scrollTo(0, 380)
+    cy.get('*[data-cy^="show-fishing-activity"]').eq(6).scrollIntoView().click({ timeout: 20000 })
+
+    // Then
+    cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 1)
+
+    // Then hide the fishing activity
+    cy.get('*[data-cy^="hide-fishing-activity"]').eq(0).click({ timeout: 20000 })
+    cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
 })

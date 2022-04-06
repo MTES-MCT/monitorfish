@@ -8,7 +8,7 @@ const FARMessage = ({ message }) => {
     {
         hauls.map((haul, index) =>
         <Haul
-            key={uuidv4()}
+            key={index}
             haulNumber={index + 1}
             hasManyHauls={hauls?.length > 1}
             haul={haul}

@@ -3,7 +3,7 @@
 
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
-context('VesselSidebar', () => {
+context('Vessel sidebar fishing tab', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
@@ -90,7 +90,7 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-fishing-message"]').eq(11).siblings().eq(1).contains('MESSAGE SUPPRIMÉ')
   })
 
-  it.only('Fishing Should contain the vessel FLUX logbook messages', () => {
+  it('Fishing Should contain the vessel FLUX logbook messages', () => {
     // Given
     cy.get('.vessels').click(460, 40, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')

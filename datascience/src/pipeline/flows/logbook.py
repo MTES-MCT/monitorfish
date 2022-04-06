@@ -451,9 +451,15 @@ with Flow("Logbook") as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
 
-        received_directory = Parameter("received_directory", default=RECEIVED_DIRECTORY)
-        treated_directory = Parameter("treated_directory", default=TREATED_DIRECTORY)
-        error_directory = Parameter("error_directory", default=ERROR_DIRECTORY)
+        received_directory = Parameter(
+            "received_directory", default=RECEIVED_DIRECTORY.as_posix()
+        )
+        treated_directory = Parameter(
+            "treated_directory", default=TREATED_DIRECTORY.as_posix()
+        )
+        error_directory = Parameter(
+            "error_directory", default=ERROR_DIRECTORY.as_posix()
+        )
         zipfiles = extract_zipfiles(
             received_directory,
             treated_directory,

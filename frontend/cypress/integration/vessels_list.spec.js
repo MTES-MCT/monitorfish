@@ -46,14 +46,14 @@ context('Vessels list', () => {
 
     // When
     cy.get('*[data-cy^="filter-vessel-at-port"]').click()
-    cy.wait(1000)
+    cy.wait(500)
 
     // Then
     cy.get('*[data-cy^="vessel-list-table-count"]').contains('803 navires')
 
     // Then re-show the vessels at port
     cy.get('*[data-cy^="filter-vessel-at-port"]').click()
-    cy.wait(1000)
+    cy.wait(500)
 
     cy.get('*[data-cy^="vessel-list-table-count"]').contains('960 navires')
   })

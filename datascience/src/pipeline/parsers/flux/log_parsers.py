@@ -148,8 +148,8 @@ def parse_coe(coe):
 
     pos = get_element(coe, ".//ram:SpecifiedPhysicalFLUXGeographicalCoordinate")
     if pos is not None:
-        value["latitude"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
-        value["longitude"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
+        value["latitudeEntered"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
+        value["longitudeEntered"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
 
     return value
 

@@ -30,7 +30,7 @@ context('Vessels list', () => {
     // When
     cy.get('*[data-cy^="preview-filtered-vessels"]').click({ timeout: 20000 })
     cy.wait(500)
-    cy.get('*[data-cy^="vessel-label-text"]').should('have.length', 11)
+    cy.get('*[data-cy^="vessel-label-text"]').should('have.length', 12)
     cy.get('.vessels').click(63, 456, { force: true })
     cy.get('*[data-cy^="vessel-summary-latitude"]', { timeout: 20000 }).contains('-')
 

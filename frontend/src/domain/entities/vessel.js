@@ -134,6 +134,11 @@ export const getOnlyVesselIdentityProperties = vessel => {
   }
 }
 
+/**
+ *
+ * @param vessel
+ * @return {VesselId}
+ */
 export const getVesselId = vessel => {
   return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.ircs}`
 }

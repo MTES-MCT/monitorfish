@@ -9,7 +9,7 @@ import { Flag } from '../vessel_list/tableCells'
 import { ShowIcon } from '../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../commonStyles/icons/HideIcon.style'
 import { CloseIcon } from '../commonStyles/icons/CloseIcon.style'
-import { REGPaperDarkIcon, REGPaperIcon } from '../commonStyles/icons/REGPaperIcon.style'
+import { PaperDarkIcon, PaperIcon } from '../commonStyles/icons/REGPaperIcon.style'
 import showVessel from '../../domain/use_cases/vessel/showVessel'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 
@@ -17,32 +17,33 @@ const FavoriteVessel = props => {
   const {
     /** {VesselIdentity} */
     favorite,
-    identity,
+    /** {VesselId} vesselId */
+    vesselId,
     trackIsShowed,
     vesselIsShowed,
     isLastItem
   } = props
   const dispatch = useDispatch()
-  console.log(favorite)
 
   return (
     <Wrapper>
       <Item isLastItem={isLastItem}>
         <Flag rel="preload" src={`flags/${favorite.flagState.toLowerCase()}.svg`}/>
         <Text
-          data-cy={'vessel-filter'}
+          data-cy={'favorite-vessel-name'}
           title={favorite.vesselName}>
           {favorite.vesselName}
         </Text>
         {
           vesselIsShowed
-            ? <REGPaperDarkIcon
-              title="Fermer la réglementation"
-              onClick={() => dispatch(unselectVessel())}
+            ? <PaperDarkIcon
+              data-cy={'favorite-vessel-close-vessel-sidebar'}
+              title="Fermer la fiche navire"
+              onClick={() => dispatch(unselectVessel(true))}
             />
-            : <REGPaperIcon
-              data-cy={'regulatory-layers-show-metadata'}
-              title="Afficher la réglementation"
+            : <PaperIcon
+              data-cy={'favorite-vessel-show-vessel-sidebar'}
+              title="Afficher la fiche navire"
               onClick={() => dispatch(showVessel(favorite))}
             />
         }
@@ -51,7 +52,7 @@ const FavoriteVessel = props => {
             ? <ShowIcon
               style={buttonStyle}
               title="Cacher la piste"
-              onClick={() => dispatch(hideVesselTrack(identity))}
+              onClick={() => dispatch(hideVesselTrack(vesselId))}
             />
             : <HideIcon
               style={buttonStyle}
@@ -62,7 +63,7 @@ const FavoriteVessel = props => {
         <CloseIcon
           style={{ marginTop: 4 }}
           title="Supprimer le navire de mes navires suivis"
-          onClick={() => dispatch(removeVesselFromFavorites(identity))}
+          onClick={() => dispatch(removeVesselFromFavorites(vesselId))}
         />
       </Item>
     </Wrapper>

@@ -65,16 +65,16 @@ const FavoriteVessels = () => {
                 {
                   favorites
                     .map((favoriteVessel, index) => {
-                      const id = getVesselId(favoriteVessel)
+                      const vesselId = getVesselId(favoriteVessel)
 
                       return <FavoriteVessel
-                        key={id}
-                        identity={id}
-                        vesselIsShowed={selectedVesselIdentity
-                          ? id === getVesselId(selectedVesselIdentity)
-                          : false}
-                        trackIsShowed={Object.values(vesselsTracksShowed)?.find(vessel => vessel.vesselId === id)}
+                        key={vesselId}
                         favorite={favoriteVessel}
+                        vesselId={vesselId}
+                        vesselIsShowed={selectedVesselIdentity
+                          ? vesselId === getVesselId(selectedVesselIdentity)
+                          : false}
+                        trackIsShowed={Object.values(vesselsTracksShowed)?.find(vessel => vessel.vesselId === vesselId)}
                         isLastItem={favorites.length === index + 1}
                       />
                     })

@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.ERSMessagesAndAlerts
+import fr.gouv.cnsp.monitorfish.domain.entities.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.Voyage
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
@@ -11,28 +11,28 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVesselVoyage(private val ersRepository: ERSRepository,
+class GetVesselVoyage(private val logbookReportRepository: LogbookReportRepository,
                       private val alertRepository: AlertRepository,
-                      private val getERSMessages: GetERSMessages) {
+                      private val getLogbookMessages: GetLogbookMessages) {
     private val logger = LoggerFactory.getLogger(GetVesselVoyage::class.java)
 
-    fun execute(internalReferenceNumber: String, voyageRequest: VoyageRequest, currentTripNumber: Int?): Voyage {
+    fun execute(internalReferenceNumber: String, voyageRequest: VoyageRequest, currentTripNumber: String?): Voyage {
         val trip = try {
             when (voyageRequest) {
-                VoyageRequest.LAST -> ersRepository.findLastTripBeforeDateTime(internalReferenceNumber, ZonedDateTime.now())
+                VoyageRequest.LAST -> logbookReportRepository.findLastTripBeforeDateTime(internalReferenceNumber, ZonedDateTime.now())
                 VoyageRequest.PREVIOUS -> {
                     require(currentTripNumber != null) {
                         "Current trip number parameter must be not null"
                     }
 
-                    ersRepository.findTripBeforeTripNumber(internalReferenceNumber, currentTripNumber)
+                    logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, currentTripNumber)
                 }
                 VoyageRequest.NEXT -> {
                     require(currentTripNumber != null) {
                         "Current trip number parameter must be not null"
                     }
 
-                    ersRepository.findTripAfterTripNumber(internalReferenceNumber, currentTripNumber)
+                    logbookReportRepository.findTripAfterTripNumber(internalReferenceNumber, currentTripNumber)
                 }
             }
         } catch (e: IllegalArgumentException) {
@@ -48,7 +48,7 @@ class GetVesselVoyage(private val ersRepository: ERSRepository,
             trip.tripNumber
         )
 
-        val ersMessages = getERSMessages.execute(
+        val logbookMessages = getLogbookMessages.execute(
             internalReferenceNumber,
             trip.startDate,
             trip.endDate,
@@ -61,14 +61,14 @@ class GetVesselVoyage(private val ersRepository: ERSRepository,
                 trip.startDate,
                 trip.endDate,
                 trip.tripNumber,
-                ERSMessagesAndAlerts(ersMessages, alerts)
+                LogbookMessagesAndAlerts(logbookMessages, alerts)
         )
     }
 
-    private fun getIsLastVoyage(currentTripNumber: Int?,
+    private fun getIsLastVoyage(currentTripNumber: String?,
                                 voyageRequest: VoyageRequest,
                                 internalReferenceNumber: String,
-                                tripNumber: Int): Boolean {
+                                tripNumber: String): Boolean {
         if (currentTripNumber == null) {
             return true
         }
@@ -78,7 +78,7 @@ class GetVesselVoyage(private val ersRepository: ERSRepository,
         }
 
         return try {
-            ersRepository.findTripAfterTripNumber(internalReferenceNumber, tripNumber)
+            logbookReportRepository.findTripAfterTripNumber(internalReferenceNumber, tripNumber)
 
             false
         } catch (e: NoLogbookFishingTripFound) {
@@ -87,9 +87,9 @@ class GetVesselVoyage(private val ersRepository: ERSRepository,
     }
 
     private fun getIsFirstVoyage(internalReferenceNumber: String,
-                                 tripNumber: Int): Boolean {
+                                 tripNumber: String): Boolean {
         return try {
-            ersRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)
+            logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)
 
             false
         } catch (e: NoLogbookFishingTripFound) {

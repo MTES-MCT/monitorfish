@@ -3,17 +3,16 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.rules
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PNOAndLANCatches
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.PNOAndLANWeightToleranceAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.Catch
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.ERSMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.LAN
-import fr.gouv.cnsp.monitorfish.domain.entities.ers.messages.PNO
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LAN
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.Rule
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.PNOAndLANWeightTolerance
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.RuleTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.repositories.AlertRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -21,14 +20,14 @@ import java.util.*
 import javax.transaction.Transactional
 
 @UseCase
-class ExecutePnoAndLanWeightToleranceRule(private val ersRepository: ERSRepository,
+class ExecutePnoAndLanWeightToleranceRule(private val logbookReportRepository: LogbookReportRepository,
                                           private val alertRepository: AlertRepository) {
     private val logger: Logger = LoggerFactory.getLogger(ExecutePnoAndLanWeightToleranceRule::class.java)
 
     @Transactional
     fun execute(rule: Rule) {
         rule.value as PNOAndLANWeightTolerance
-        val lanAndPnos = ersRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name)
+        val lanAndPnos = logbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name)
         logger.info("PNO_LAN_WEIGHT_TOLERANCE: Found ${lanAndPnos.size} LAN and PNOs to analyze")
 
         lanAndPnos.forEach { pairOfLanAndPno ->
@@ -57,12 +56,12 @@ class ExecutePnoAndLanWeightToleranceRule(private val ersRepository: ERSReposito
         val listOfLanAndPnoIds = lanAndPnos.map { listOf(it.first, it.second) }.flatten()
                 .mapNotNull { it?.id }
         if(listOfLanAndPnoIds.isNotEmpty()) {
-            ersRepository.updateERSMessagesAsProcessedByRule(listOfLanAndPnoIds, RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name)
-            logger.info("PNO_LAN_WEIGHT_TOLERANCE: ${listOfLanAndPnoIds.size} ERS messages marked as processed")
+            logbookReportRepository.updateLogbookMessagesAsProcessedByRule(listOfLanAndPnoIds, RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name)
+            logger.info("PNO_LAN_WEIGHT_TOLERANCE: ${listOfLanAndPnoIds.size} Logbook messages marked as processed")
         }
     }
 
-    private fun buildAlert(lan: ERSMessage, pno: ERSMessage, value: PNOAndLANWeightTolerance, catchesOverTolerance: List<PNOAndLANCatches>) : Alert {
+    private fun buildAlert(lan: LogbookMessage, pno: LogbookMessage, value: PNOAndLANWeightTolerance, catchesOverTolerance: List<PNOAndLANCatches>) : Alert {
         val toleranceAlert = PNOAndLANWeightToleranceAlert(
                 lan.operationNumber,
                 pno.operationNumber,

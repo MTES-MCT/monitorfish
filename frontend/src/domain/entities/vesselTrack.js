@@ -207,7 +207,7 @@ export function removeFishingActivitiesFeatures (features, vectorSource) {
   features
     .filter(feature =>
       feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
-      feature?.getId()?.toString()?.includes('ers'))
+      feature?.getId()?.toString()?.includes('logbook'))
     .forEach(feature => vectorSource.removeFeature(feature))
 }
 

@@ -152,7 +152,7 @@ def get_first_non_null_column_name(
 
     res_values = np.choose(first_non_null_values_idx, list(df))
 
-    res = pd.Series(index=df.index, data=[None] * len(df))
+    res = pd.Series(index=df.index, data=[None] * len(df), dtype=float)
     res[non_null_rows.index] = res_values
 
     if result_labels is not None:

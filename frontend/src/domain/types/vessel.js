@@ -39,7 +39,7 @@
  * @property {Gear[]} gearOnboard
  * @property {string} internalReferenceNumber
  * @property {string} ircs
- * @property {string} lastErsDateTime
+ * @property {string} lastLogbookMessageDateTime
  * @property {number} latitude
  * @property {number} length
  * @property {number} longitude
@@ -158,7 +158,7 @@
  * @property {number | null} emissionPeriod
  * @property {string | null} from
  * @property {Gear[] | null} gearOnboard
- * @property {string | null} lastErsDateTime
+ * @property {string | null} lastLogbookMessageDateTime
  * @property {number | null} latitude
  * @property {number | null} longitude
  * @property {string | null} positionType
@@ -195,7 +195,7 @@
 
 /**
  * @typedef FishingActivityShowedOnMap
- * @property {string} id - The operation number for ERS
+ * @property {string} id - The operation number for logbook
  * @property {Date} date - The effective date of message
  * @property {string} name - The message name
  * @property {string[] | null} coordinates - The coordinates of the fishing activity

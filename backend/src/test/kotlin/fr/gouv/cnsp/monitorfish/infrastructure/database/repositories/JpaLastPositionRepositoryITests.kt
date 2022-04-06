@@ -62,7 +62,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         // Then
         val positions = jpaLastPositionRepository.findAllInLast48Hours()
 
-        assertThat(positions).hasSize(998)
+        assertThat(positions).hasSize(999)
     }
 
     @Test

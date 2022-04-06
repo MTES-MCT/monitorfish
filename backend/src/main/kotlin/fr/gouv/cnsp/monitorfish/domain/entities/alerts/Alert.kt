@@ -9,5 +9,5 @@ class Alert(val id: UUID,
             val externalReferenceNumber: String? = null,
             val ircs: String? = null,
             val creationDate: ZonedDateTime,
-            val tripNumber: Int? = null,
+            val tripNumber: String? = null,
             val value: AlertType)

@@ -24,10 +24,10 @@ class CaffeineConfiguration {
     val allSpecies = "all_species"
     val allSpeciesGroups = "all_species_groups"
     val species = "species"
-    val ers = "ers_messages"
-    val nextErs = "next_ers"
-    val previousErs = "previous_ers"
-    val ersRawMessage = "ers_raw_message"
+    val logbook = "logbook_messages"
+    val nextLogbook = "next_logbook"
+    val previousLogbook = "previous_logbook"
+    val logbookRawMessage = "logbook_raw_message"
     val vesselTrack = "vessel_track"
     val vesselsPositions = "vessels_positions"
     val vesselsAllPositions = "vessels_all_position"
@@ -42,10 +42,10 @@ class CaffeineConfiguration {
     fun cacheManager(ticker: Ticker): CacheManager? {
         val oneWeek = 10080
 
-        val ersCache = buildCache(ers, ticker, 10)
-        val nextErsCache = buildCache(nextErs, ticker, 10)
-        val previousErsCache = buildCache(previousErs, ticker, 10)
-        val ersRawMessageCache = buildCache(ersRawMessage, ticker, oneWeek)
+        val logbookCache = buildCache(logbook, ticker, 10)
+        val nextLogbookCache = buildCache(nextLogbook, ticker, 10)
+        val previousLogbookCache = buildCache(previousLogbook, ticker, 10)
+        val logbookRawMessageCache = buildCache(logbookRawMessage, ticker, oneWeek)
         val vesselCache = buildCache(vessels, ticker, 180)
 
         val gearCodeGroupsCache =  buildCache(gearCodeGroups, ticker, oneWeek)
@@ -89,10 +89,10 @@ class CaffeineConfiguration {
                 allSpeciesCache,
                 speciesCache,
                 searchVesselsCache,
-                ersCache,
-                nextErsCache,
-                previousErsCache,
-                ersRawMessageCache,
+                logbookCache,
+                nextLogbookCache,
+                previousLogbookCache,
+                logbookRawMessageCache,
                 infractionsCache,
                 fleetSegmentsCache,
                 currentSegmentsCache,

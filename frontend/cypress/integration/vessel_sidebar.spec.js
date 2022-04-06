@@ -77,57 +77,6 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy^="vessel-identity-gears"]').contains('Sennes danoises (SDN)', { timeout: 20000 })
   })
 
-  it('Fishing Should contain the vessel fishing resume', () => {
-    // Given
-    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
-
-    // When
-    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-menu-fishing"]', { timeout: 20000 }).should('be.visible')
-
-    // Then
-    cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-fishing-gears"]').contains('Trémails et filets maillants combinés (GTN)', { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message - 2256 kg pêchés au total', { timeout: 20000 })
-  })
-
-  it('Fishing trips Should be walkable', () => {
-    // Given
-    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
-
-    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing"]', { timeout: 20000 }).should('be.visible')
-
-    // Then
-    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463715', { timeout: 20000 })
-
-    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463714', { timeout: 20000 })
-
-    cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message - aucune capture', { timeout: 20000 })
-
-    cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463715', { timeout: 20000 })
-  })
-
-  it('Fishing Should contain the vessel DEP message', () => {
-    // Given
-    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
-
-    // When
-    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing"]', { timeout: 20000 }).should('be.visible')
-    cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 20000 })
-
-    // Then
-    cy.get('*[data-cy^="vessel-fishing-dep-message"]').contains('Départ', { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-dep-message"]').contains('Al Jazeera Port le 11/10/2019 à 01h40 (UTC)', { timeout: 20000 })
-  })
-
   it('Controls Should contain the controls resume', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
@@ -377,5 +326,4 @@ context('VesselSidebar', () => {
     cy.get('*[data-cy="beacon-malfunction-current-details"]', { timeout: 20000 }).contains('Sans nouvelles')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 20000 }).click()
   })
-
 })

@@ -5,7 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
-import fr.gouv.cnsp.monitorfish.domain.repositories.ERSRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -17,7 +17,7 @@ import java.time.ZonedDateTime
 
 @UseCase
 class GetVesselPositions(private val positionRepository: PositionRepository,
-                         private val ersRepository: ERSRepository) {
+                         private val logbookReportRepository: LogbookReportRepository) {
     private val logger: Logger = LoggerFactory.getLogger(GetVesselPositions::class.java)
 
     suspend fun execute(internalReferenceNumber: String,
@@ -44,7 +44,7 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
                 try {
                     // We substract 4h to this date to ensure the track starts at the port
                     // (the departure message may be sent after the departure)
-                    ersRepository.findLastTripBeforeDateTime(internalReferenceNumber, ZonedDateTime.now())
+                    logbookReportRepository.findLastTripBeforeDateTime(internalReferenceNumber, ZonedDateTime.now())
                             .startDate.minusHours(4)
                 } catch (e: NoLogbookFishingTripFound) {
                     logger.warn(e.message)

@@ -4,34 +4,32 @@ import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ArrowSVG } from '../../icons/Picto_fleche-pleine-droite.svg'
 import { ReactComponent as ArrowTripSVG } from '../../icons/Fleche_navigation_marees.svg'
 import { ReactComponent as ArrowLastTripSVG } from '../../icons/Double_fleche_navigation_marees.svg'
-import DEPMessageResume from './ers_messages_resumes/DEPMessageResume'
-import DISMessageResume from './ers_messages_resumes/DISMessageResume'
-import FARMessageResume from './ers_messages_resumes/FARMessageResume'
-import PNOMessageResume from './ers_messages_resumes/PNOMessageResume'
-import LANMessageResume from './ers_messages_resumes/LANMessageResume'
+import DEPMessageResume from './logbook_messages_resumes/DEPMessageResume'
+import DISMessageResume from './logbook_messages_resumes/DISMessageResume'
+import FARMessageResume from './logbook_messages_resumes/FARMessageResume'
+import PNOMessageResume from './logbook_messages_resumes/PNOMessageResume'
+import LANMessageResume from './logbook_messages_resumes/LANMessageResume'
 import { AlertTypes } from '../../../domain/entities/alerts'
 import FleetSegments from '../../fleet_segments/FleetSegments'
 import { useSelector } from 'react-redux'
 import {
   getDEPMessageFromMessages,
   getDISMessagesFromMessages,
-  getFAOZonesFromFARMessages,
-  getFARMessagesFromMessages,
-  getLANMessageFromMessages,
-  getPNOMessageFromMessages,
+  getFAOZonesFromFARMessages, getFARMessagesFromMessages,
+  getDISSpeciesToWeightObject, getFARSpeciesToWeightObject, getLANMessageFromMessages, getPNOMessageFromMessages,
   getSpeciesAndPresentationToWeightFARObject,
-  getFAROrDISSpeciesToWeightObject,
   getSpeciesToWeightLANObject,
   getSpeciesToWeightPNOObject,
   getTotalDEPWeightFromMessage,
-  getTotalFAROrDISWeightFromMessages,
+  getTotalDISWeightFromMessages,
+  getTotalFARWeightFromMessages,
   getTotalLANWeightFromMessage,
-  getTotalPNOWeightFromMessage
-} from '../../../domain/entities/fishingActivities'
-import { ERSOperationType } from '../../../domain/entities/ERS'
+  getTotalPNOWeightFromMessage,
+  LogbookOperationType
+} from '../../../domain/entities/logbook'
 import CustomDatesShowedInfo from './CustomDatesShowedInfo'
 
-const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMessagesResume }) => {
+const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessingMessagesResume }) => {
   const {
     selectedVessel
   } = useSelector(state => state.vessel)
@@ -66,31 +64,31 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMe
   const [faoZones, setFAOZones] = useState([])
 
   useEffect(() => {
-    if (fishingActivities?.ersMessages?.length) {
+    if (fishingActivities?.logbookMessages?.length) {
       setProcessingMessagesResume(true)
-      const ersMessages = fishingActivities.ersMessages
-      const depMessage = getDEPMessageFromMessages(ersMessages)
+      const logbookMessages = fishingActivities.logbookMessages
+      const depMessage = getDEPMessageFromMessages(logbookMessages)
       setDEPMessage(depMessage)
 
-      const lanMessage = getLANMessageFromMessages(ersMessages)
+      const lanMessage = getLANMessageFromMessages(logbookMessages)
       setLANMessage(lanMessage)
 
-      const disMessages = getDISMessagesFromMessages(ersMessages)
+      const disMessages = getDISMessagesFromMessages(logbookMessages)
       setDISMessages(disMessages)
 
-      const pnoMessage = getPNOMessageFromMessages(ersMessages)
+      const pnoMessage = getPNOMessageFromMessages(logbookMessages)
       setPNOMessage(pnoMessage)
 
-      const farMessages = getFARMessagesFromMessages(ersMessages)
+      const farMessages = getFARMessagesFromMessages(logbookMessages)
       setFARMessages(farMessages)
 
       let totalFARAndDEPWeight = 0
       if (farMessages?.length) {
-        const totalFARWeight = getTotalFAROrDISWeightFromMessages(farMessages)
+        const totalFARWeight = getTotalFARWeightFromMessages(farMessages)
         setTotalFARWeight(totalFARWeight)
         totalFARAndDEPWeight = totalFARWeight
 
-        const speciesToWeightFARObject = getFAROrDISSpeciesToWeightObject(farMessages, totalFARWeight)
+        const speciesToWeightFARObject = getFARSpeciesToWeightObject(farMessages, totalFARWeight)
         const speciesAndPresentationToWeightFARObject = getSpeciesAndPresentationToWeightFARObject(farMessages)
         setSpeciesToWeightOfFAR(speciesToWeightFARObject)
         setSpeciesAndPresentationToWeightOfFAR(speciesAndPresentationToWeightFARObject)
@@ -102,10 +100,10 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMe
       }
 
       if (disMessages?.length) {
-        const totalDISWeight = getTotalFAROrDISWeightFromMessages(disMessages)
+        const totalDISWeight = getTotalDISWeightFromMessages(disMessages)
         setTotalDISWeight(totalDISWeight)
 
-        const speciesToWeightDISObject = getFAROrDISSpeciesToWeightObject(disMessages, totalDISWeight)
+        const speciesToWeightDISObject = getDISSpeciesToWeightObject(disMessages, totalDISWeight)
         setSpeciesToWeightOfDIS(speciesToWeightDISObject)
       }
 
@@ -245,17 +243,17 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMe
                 data-cy={'vessel-fishing-next-trip'}
               />
             </TextValue>
-            <SeeAll onClick={() => showERSMessages()} data-cy={'vessel-fishing-see-all'}>Voir tous les messages</SeeAll>
-            <Arrow onClick={() => showERSMessages()}/>
+            <SeeAll onClick={() => showLogbookMessages()} data-cy={'vessel-fishing-see-all'}>Voir tous les messages</SeeAll>
+            <Arrow onClick={() => showLogbookMessages()}/>
           </Title>
           <CustomDatesShowedInfo/>
           {
-            fishingActivities?.ersMessages?.length
-              ? <ERSMessages>
+            fishingActivities?.logbookMessages?.length
+              ? <LogbookMessages>
                 {depMessage
                   ? <DEPMessageResume
-                    id={depMessage.ersId}
-                    showERSMessages={showERSMessages}
+                    id={depMessage.reportId}
+                    showLogbookMessages={showLogbookMessages}
                     depMessage={depMessage.message}
                     isNotAcknowledged={depMessage.acknowledge && depMessage.acknowledge.isSuccess === false}
                     isDeleted={depMessage.deleted}
@@ -265,10 +263,10 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMe
 
                 {farMessages?.length && farMessages[0]
                   ? <FARMessageResume
-                    id={farMessages[0].ersId}
-                    showERSMessages={showERSMessages}
+                    id={farMessages[0].reportId}
+                    showLogbookMessages={showLogbookMessages}
                     totalFARWeight={totalFARWeight}
-                    numberOfMessages={farMessages ? farMessages.filter(message => message.operationType === ERSOperationType.DAT).length : 0}
+                    numberOfMessages={farMessages ? farMessages.filter(message => message.operationType === LogbookOperationType.DAT).length : 0}
                     speciesToWeightOfFAR={speciesToWeightOfFAR}
                     speciesAndPresentationToWeightOfFAR={speciesAndPresentationToWeightOfFAR}/>
                   : <FARMessageResume hasNoMessage={true}/>
@@ -276,22 +274,22 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMe
 
                 {disMessages?.length && disMessages[0]
                   ? <DISMessageResume
-                    id={disMessages[0].ersId}
+                    id={disMessages[0].reportId}
                     totalDISWeight={totalDISWeight}
-                    numberOfMessages={disMessages ? disMessages.filter(message => message.operationType === ERSOperationType.DAT).length : 0}
+                    numberOfMessages={disMessages ? disMessages.filter(message => message.operationType === LogbookOperationType.DAT).length : 0}
                     speciesToWeightOfDIS={speciesToWeightOfDIS}
-                    showERSMessages={showERSMessages}/>
+                    showLogbookMessages={showLogbookMessages}/>
                   : <DISMessageResume hasNoMessage={true}/>
                 }
 
                 {pnoMessage
                   ? <PNOMessageResume
-                    id={pnoMessage.ersId}
+                    id={pnoMessage.reportId}
                     totalPNOWeight={totalPNOWeight}
                     totalFARAndDEPWeight={totalFARAndDEPWeight}
                     speciesToWeightOfPNO={speciesToWeightOfPNO}
                     speciesToWeightOfFAR={speciesToWeightOfFAR}
-                    showERSMessages={showERSMessages}
+                    showLogbookMessages={showLogbookMessages}
                     isNotAcknowledged={pnoMessage.acknowledge && pnoMessage.acknowledge.isSuccess === false}
                     isDeleted={pnoMessage.deleted}
                     pnoMessage={pnoMessage}/>
@@ -300,20 +298,20 @@ const FishingActivitiesSummary = ({ showERSMessages, navigation, setProcessingMe
 
                 {lanMessage
                   ? <LANMessageResume
-                    id={lanMessage.ersId}
+                    id={lanMessage.reportId}
                     catchesOverToleranceAlert={getCatchesOverToleranceAlert()}
                     totalLANWeight={totalLANWeight}
                     totalPNOWeight={totalPNOWeight}
                     speciesToWeightOfFAR={speciesToWeightOfFAR}
                     speciesToWeightOfPNO={speciesToWeightOfPNO}
                     speciesToWeightOfLAN={speciesToWeightOfLAN}
-                    showERSMessages={showERSMessages}
+                    showLogbookMessages={showLogbookMessages}
                     isNotAcknowledged={lanMessage.acknowledge && lanMessage.acknowledge.isSuccess === false}
                     isDeleted={lanMessage.deleted}
                     lanMessage={lanMessage.message}/>
                   : <LANMessageResume hasNoMessage={true}/>
                 }
-              </ERSMessages>
+              </LogbookMessages>
               : <NoMessage>Aucun message reçu</NoMessage>
           }
         </Zone>
@@ -372,7 +370,7 @@ const SeeAll = styled.a`
   width: 70px;
 `
 
-const ERSMessages = styled.ul`
+const LogbookMessages = styled.ul`
   margin: 0 0 0 0;
   padding: 0;
   width: -moz-available;

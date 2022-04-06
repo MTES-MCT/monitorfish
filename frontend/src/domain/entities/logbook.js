@@ -312,12 +312,12 @@ export const getTotalDISWeightFromMessages = logbookMessages => {
   let correctedMessagesReferencedIds = []
   return parseFloat(logbookMessages
     .sort(sortByCorrectedMessagesFirst())
-    .reduce((accumulator, ersMessage) => {
-      if (ersMessage.operationType === LogbookOperationType.COR) {
-        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(ersMessage.referencedReportId)
+    .reduce((accumulator, logbookMessage) => {
+      if (logbookMessage.operationType === LogbookOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(logbookMessage.referencedReportId)
       }
-      const sumOfCatches = !correctedMessagesReferencedIds.includes(ersMessage.reportId) && ersMessage.acknowledge && ersMessage.acknowledge.isSuccess
-        ? ersMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
+      const sumOfCatches = !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledge && logbookMessage.acknowledge.isSuccess
+        ? logbookMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
           return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
         }, 0)
         : 0
@@ -330,13 +330,13 @@ export const getTotalFARWeightFromMessages = logbookMessages => {
 
   return parseFloat(logbookMessages
     .sort(sortByCorrectedMessagesFirst())
-    .reduce((accumulator, ersMessage) => {
-      if (ersMessage.operationType === LogbookOperationType.COR) {
-        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(ersMessage.referencedReportId)
+    .reduce((accumulator, logbookMessage) => {
+      if (logbookMessage.operationType === LogbookOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(logbookMessage.referencedReportId)
       }
 
-      const sumOfCatches = !correctedMessagesReferencedIds.includes(ersMessage.reportId) && ersMessage.acknowledge && ersMessage.acknowledge.isSuccess
-        ? ersMessage.message.hauls.reduce((subAccumulator, haul) => {
+      const sumOfCatches = !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledge && logbookMessage.acknowledge.isSuccess
+        ? logbookMessage.message.hauls.reduce((subAccumulator, haul) => {
           return subAccumulator + (haul.catches.reduce((haulAccumulator, speciesCatch) => {
             return haulAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
           }, 0))
@@ -345,18 +345,18 @@ export const getTotalFARWeightFromMessages = logbookMessages => {
       return accumulator + sumOfCatches
     }, 0).toFixed(1))
 }
-export const getTotalDEPWeightFromMessage = ersMessage => {
-  return parseFloat(ersMessage.message.speciesOnboard.reduce((subAccumulator, speciesCatch) => {
+export const getTotalDEPWeightFromMessage = logbookMessage => {
+  return parseFloat(logbookMessage.message.speciesOnboard.reduce((subAccumulator, speciesCatch) => {
     return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
   }, 0).toFixed(1))
 }
-export const getTotalLANWeightFromMessage = ersMessage => {
-  return parseFloat(ersMessage.message.catchLanded.reduce((subAccumulator, speciesCatch) => {
+export const getTotalLANWeightFromMessage = logbookMessage => {
+  return parseFloat(logbookMessage.message.catchLanded.reduce((subAccumulator, speciesCatch) => {
     return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
   }, 0).toFixed(1))
 }
-export const getTotalPNOWeightFromMessage = ersMessage => {
-  return parseFloat(ersMessage.message.catchOnboard.reduce((subAccumulator, speciesCatch) => {
+export const getTotalPNOWeightFromMessage = logbookMessage => {
+  return parseFloat(logbookMessage.message.catchOnboard.reduce((subAccumulator, speciesCatch) => {
     return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
   }, 0).toFixed(1))
 }

@@ -14,7 +14,7 @@ from src.db_config import create_engine
 from src.pipeline.parsers.ers import ers
 from src.pipeline.parsers.flux import flux
 from src.pipeline.processing import drop_rows_already_in_table, to_json
-from src.pipeline.shared_tasks.control_flow import check_flow_not_running
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running, str_to_path
 from src.pipeline.utils import get_table, move, psql_insert_copy
 
 RECEIVED_DIRECTORY = ERS_FILES_LOCATION / "received"
@@ -460,6 +460,11 @@ with Flow("Logbook") as flow:
         error_directory = Parameter(
             "error_directory", default=ERROR_DIRECTORY.as_posix()
         )
+
+        received_directory = str_to_path(received_directory)
+        treated_directory = str_to_path(treated_directory)
+        error_directory = str_to_path(error_directory)
+
         zipfiles = extract_zipfiles(
             received_directory,
             treated_directory,

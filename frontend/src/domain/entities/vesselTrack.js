@@ -15,7 +15,7 @@ export class VesselTrack {
   /**
    * Vessel track object for building OpenLayers vessel track features
    * @param {VesselPosition[]} positions
-   * @param {string} vesselId
+   * @param {VesselId} vesselId
    */
   constructor (positions, vesselId) {
     let vesselTrackLineFeatures = this.buildVesselTrackLineFeatures(positions, vesselId)

@@ -16,7 +16,7 @@ import showRegulationToEdit from '../../../domain/use_cases/layer/regulation/sho
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
-import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
+import { PaperDarkIcon, PaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
 import {
   addRegulatoryTopicOpened,
@@ -150,11 +150,11 @@ const RegulatoryLayerZone = props => {
         }
         {
           metadataIsShown
-            ? <REGPaperDarkIcon
+            ? <PaperDarkIcon
               title="Fermer la réglementation"
               onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
             />
-            : <REGPaperIcon
+            : <PaperIcon
               data-cy={'regulatory-layers-show-metadata'}
               title="Afficher la réglementation"
               onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}

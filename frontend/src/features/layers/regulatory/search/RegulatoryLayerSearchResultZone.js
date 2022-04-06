@@ -12,7 +12,7 @@ import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerS
 import { showOrHideMetadataIcon } from '../RegulatoryLayerZone'
 
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
-import { REGPaperDarkIcon, REGPaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
+import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
 import { COLORS } from '../../../../constants/constants'
 import { getHash } from '../../../../utils'
 
@@ -165,10 +165,10 @@ const CustomPaperStyle = css`
   height: 23px
 `
 
-const CustomREGPaperIcon = styled(REGPaperIcon)`
+const CustomREGPaperIcon = styled(PaperIcon)`
   ${CustomPaperStyle}
 `
-const CustomREGPaperDarkIcon = styled(REGPaperDarkIcon)`
+const CustomREGPaperDarkIcon = styled(PaperDarkIcon)`
   ${CustomPaperStyle}
 `
 

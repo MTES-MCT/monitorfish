@@ -14,6 +14,13 @@
  */
 
 /**
+ * The vessel id : `internalReferenceNumber/externalReferenceNumber/ircs`
+ *
+ * i.e: "FAK000999999/DONTSINK/CALLME"
+ * @typedef {string} VesselId
+ */
+
+/**
  * @typedef VesselIdentity
  * @property {string} internalReferenceNumber
  * @property {string} externalReferenceNumber

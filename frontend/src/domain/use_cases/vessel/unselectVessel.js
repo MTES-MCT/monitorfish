@@ -3,7 +3,7 @@ import { resetSelectedVessel, closeVesselSidebar } from '../../shared_slices/Ves
 import { hideFishingActivitiesOnMap } from '../../shared_slices/FishingActivities'
 import { resetVesselBeaconMalfunctionsResumeAndHistory } from '../../shared_slices/BeaconMalfunction'
 
-const unselectVessel = () => dispatch => {
+const unselectVessel = fromFavorite => dispatch => {
   batch(() => {
     dispatch(resetSelectedVessel())
     dispatch(hideFishingActivitiesOnMap())

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { ReactComponent as FavoriteSVG } from '../../../icons/favorite.svg'
 import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
 import { useDispatch, useSelector } from 'react-redux'
-import { addVesselToFavorites } from '../../../../domain/shared_slices/FavoriteVessel'
+import { addVesselToFavorites, removeVesselFromFavorites } from '../../../../domain/shared_slices/FavoriteVessel'
 import { getVesselId } from '../../../../domain/entities/vessel'
 
 const AddToFavorites = ({ openBox, rightMenuIsOpen }) => {
@@ -32,7 +32,10 @@ const AddToFavorites = ({ openBox, rightMenuIsOpen }) => {
       openBox={openBox}
       rightMenuIsOpen={rightMenuIsOpen}
       isFavorite={isFavorite}
-      onClick={() => dispatch(addVesselToFavorites(selectedVesselIdentity))}
+      onClick={() => isFavorite
+        ? dispatch(removeVesselFromFavorites(getVesselId(selectedVesselIdentity)))
+        : dispatch(addVesselToFavorites(selectedVesselIdentity))
+      }
     >
       <FavoriteIcon/>
     </AddToFavoritesButton>

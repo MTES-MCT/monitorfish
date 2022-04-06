@@ -169,7 +169,7 @@ for flow in flows_to_register:
             MONITORFISH_HOST: MONITORFISH_IP,
         }
     }
-    if flow.name == "ERS":
+    if flow.name == "Logbook":
         host_config = {
             **host_config,
             "group_add": [LOGBOOK_FILES_GID],

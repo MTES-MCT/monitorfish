@@ -28,7 +28,7 @@ const SelectedVessel = ({ selectedVesselIdentity, setSelectedVesselIdentity }) =
           title={countries.getName(selectedVesselIdentity.flagState, 'fr')}
           src={`flags/${selectedVesselIdentity.flagState.toLowerCase()}.svg`}/>
         : null}
-      <VesselName>
+      <VesselName title={selectedVesselIdentity?.vesselName}>
         {getVesselName(selectedVesselIdentity)}
       </VesselName>
       <CloseIcon
@@ -86,6 +86,10 @@ const VesselName = styled.span`
   font-weight: 500;
   vertical-align: middle;
   font-size: 22px;
+  max-width: 405px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const CloseIcon = styled(CloseIconSVG)`

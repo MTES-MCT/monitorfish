@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { ReactComponent as FavoriteSVG } from '../icons/favorite.svg'
 import { COLORS } from '../../constants/constants'
@@ -8,15 +8,21 @@ import FavoriteVessel from './FavoriteVessel'
 import { getVesselId } from '../../domain/entities/vessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
+import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
+import { setHideNonSelectedVessels } from '../../domain/shared_slices/Vessel'
+import { ReactComponent as ShowingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_inactif.svg'
+import { ReactComponent as HidingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_actif.svg'
 
 const FavoriteVessels = () => {
+  const dispatch = useDispatch()
   const {
     favorites
   } = useSelector(state => state.favoriteVessel)
   const {
     /** @type {Object.<string, ShowedVesselTrack>} */
     vesselsTracksShowed,
-    selectedVesselIdentity
+    selectedVesselIdentity,
+    hideNonSelectedVessels
   } = useSelector(state => state.vessel)
   const {
     healthcheckTextWarning,
@@ -78,6 +84,13 @@ const FavoriteVessels = () => {
                 Aucun navire suivi
               </NoVesselInFavorites>
           }
+          <MapPropertyTrigger
+            inverse
+            booleanProperty={hideNonSelectedVessels}
+            updateBooleanProperty={isHidden => dispatch(setHideNonSelectedVessels(isHidden))}
+            text={'les navires non sélectionnés'}
+            Icon={hideNonSelectedVessels ? ShowingOtherTracksSVG : HidingOtherTracksSVG}
+          />
         </FavoriteVesselsBox>
       </Wrapper>
     </>

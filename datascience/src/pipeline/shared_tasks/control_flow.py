@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import prefect
 from prefect import task
 from prefect.utilities.graphql import with_args
@@ -41,3 +43,16 @@ def check_flow_not_running() -> bool:
         logger.info("This flow already has runs in a 'Running' state.")
 
     return flow_is_not_running
+
+
+@task(checkpoint=False)
+def str_to_path(path: str) -> Path:
+    """Returns `Path` object corresponding to input `str`
+
+    Args:
+        path (str): 'stairway/to/heaven'
+
+    Returns:
+        Path: Path('stairway/to/heaven')
+    """
+    return Path(path)

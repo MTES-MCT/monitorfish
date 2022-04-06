@@ -57,6 +57,7 @@ def parse_ops(ops):
         "operation_number": ops.get("ON"),
         "operation_country": ops.get("FR"),
         "operation_datetime_utc": ops_datetime,
+        "software": ops.get("EVL"),
     }
 
     child = get_first_child(list(ops), assert_child_single=True)

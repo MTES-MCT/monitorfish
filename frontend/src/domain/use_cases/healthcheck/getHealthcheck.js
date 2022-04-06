@@ -1,4 +1,4 @@
-import { setError, setHealthcheckTextWarning } from '../shared_slices/Global'
+import { setError, setHealthcheckTextWarning } from '../../shared_slices/Global'
 import * as timeago from 'timeago.js'
 import { getHealthcheckFromAPI } from '../../../api/healthcheck'
 

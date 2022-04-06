@@ -124,6 +124,7 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="open-vessels-visibility"]').click()
     cy.get('*[data-cy^="map-property-trigger"]')
       .filter(':contains("les navires non sélectionnés")')
+      .eq(1)
       .click({ timeout: 20000, force: true })
     cy.wait(500)
     cy.get('.vessels').dblclick(750, 86, { timeout: 20000, force: true })

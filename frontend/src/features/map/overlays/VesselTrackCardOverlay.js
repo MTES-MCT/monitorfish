@@ -23,21 +23,18 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
   const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState([margins.yBottom, margins.xMiddle])
   const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
 
-  const overlayCallback = useCallback(
-    (ref) => {
-      overlayRef.current = ref
-      if (ref) {
-        overlayObjectRef.current = new Overlay({
-          element: ref,
-          autoPan: false,
-          className: 'ol-overlay-container ol-selectable vessel-card'
-        })
-      } else {
-        overlayObjectRef.current = null
-      }
-    },
-    [overlayRef, overlayObjectRef]
-  )
+  const overlayCallback = useCallback(ref => {
+    overlayRef.current = ref
+    if (ref) {
+      overlayObjectRef.current = new Overlay({
+        element: ref,
+        autoPan: false,
+        className: 'ol-overlay-container ol-selectable vessel-card'
+      })
+    } else {
+      overlayObjectRef.current = null
+    }
+  }, [overlayRef, overlayObjectRef])
 
   useEffect(() => {
     if (map) {

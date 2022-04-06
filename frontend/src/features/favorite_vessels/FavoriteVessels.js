@@ -31,7 +31,6 @@ const FavoriteVessels = () => {
 
   const [isOpen, setIsOpen] = useState(false)
   const wrapperRef = useRef(null)
-  console.log(Object.values(vesselsTracksShowed))
 
   return (
     <>

@@ -121,7 +121,6 @@ const VesselsTracksLayer = ({ map }) => {
       return
     }
 
-    console.log(vesselsTracksShowed)
     const features = vectorSourceRef.current.getFeatures()
     function showVesselsTracks (features, vesselTracks) {
       vesselTracks
@@ -130,7 +129,6 @@ const VesselsTracksLayer = ({ map }) => {
           removeVesselTrackFeatures(features, vectorSourceRef.current, vesselTrack.vesselId)
 
           const vesselTrackFeatures = new VesselTrack(vesselTrack.positions, vesselTrack.vesselId)
-          console.log(vesselTrack, vesselTrackFeatures)
           vectorSourceRef.current.addFeatures(vesselTrackFeatures.features)
           const vesselTrackExtent = getVesselTrackExtent(vesselTrackFeatures.features, vesselTrack.vesselId)
 

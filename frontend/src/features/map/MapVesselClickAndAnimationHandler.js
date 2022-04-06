@@ -82,7 +82,6 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
     Object.keys(vesselsTracksShowed)
       .filter(vesselId => {
         const track = vesselsTracksShowed[vesselId]
-        console.log(track)
 
         return track.toZoom && track.extent && !track.toShow
       }).forEach(vesselIdentity => {

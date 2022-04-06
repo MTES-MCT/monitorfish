@@ -16,7 +16,6 @@ const MapMenuOverlay = props => {
     coordinates,
     vessel
   } = props
-  console.log(vessel)
 
   const dispatch = useDispatch()
 

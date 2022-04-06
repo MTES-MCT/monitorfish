@@ -26,7 +26,7 @@ const Haul = ({ haul, haulNumber, hasManyHauls }) => {
       ? <>
             {
                 hasManyHauls
-                  ? <HaulNumber>Trait de pêche {haulNumber }</HaulNumber>
+                  ? <HaulNumber data-cy='logbook-haul-number'>Trait de pêche {haulNumber }</HaulNumber>
                   : null
             }
         <Zone>

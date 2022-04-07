@@ -26,13 +26,40 @@ const REGULATORY_SPECIES_KEYS = {
   SPECIES_GROUPS: 'speciesGroups'
 }
 
+export const DEFAULT_SPECIES_CATEGORY_VALUE = 'Choisir une ou des catégories d\'espèces'
+export const DEFAULT_SPECIES_VALUE = 'Choisir une ou des espèces'
+
 const RegulatorySpeciesForm = props => {
   const {
     /** @type {Map<string, Species>} speciesByCode */
     speciesByCode,
-    /** @type {SpeciesGroup} speciesGroupsState */
-    speciesGroups: speciesGroupsState
-  } = useSelector(state => state.species)
+    formattedSpeciesGroups,
+    formattedSpecies
+  } = useSelector(state => {
+    const formattedSpeciesGroups = [...state.species.speciesGroups]
+      ?.sort((speciesA, speciesB) => speciesB.group - speciesA.group)
+      .map(speciesGroup => ({
+        label: speciesGroup.group,
+        value: speciesGroup.group
+      }))
+
+    const formattedSpecies = state.species.speciesByCode
+      ? Object.values(state.species.speciesByCode)
+        .sort((speciesA, speciesB) => speciesB.code - speciesA.code)
+        .map(_species => ({
+          label: `${_species.name} (${_species.code})`,
+          value: _species.code
+        }))
+      : []
+
+    return ({
+      speciesByCode: state.species.speciesByCode,
+      formattedSpeciesGroups,
+      formattedSpecies
+    })
+  })
+
+  console.log(formattedSpeciesGroups, formattedSpecies)
 
   const {
     /** @type {RegulatorySpecies} regulatorySpecies */
@@ -129,12 +156,16 @@ const RegulatorySpeciesForm = props => {
   }
 
   const onSpeciesChange = value => {
+    if (value === DEFAULT_SPECIES_VALUE) {
+      return
+    }
+
     if (species?.some(_species => _species?.code?.includes(value))) {
       removeSpeciesToRegulatorySpeciesList(value)
     } else {
       push(REGULATORY_SPECIES_KEYS.SPECIES, species, {
         code: value,
-        name: speciesByCode[value].name,
+        name: speciesByCode[value]?.name,
         quantity: undefined,
         minimumSize: undefined
       })
@@ -142,35 +173,15 @@ const RegulatorySpeciesForm = props => {
   }
 
   const onSpeciesGroupChange = value => {
+    if (value === DEFAULT_SPECIES_CATEGORY_VALUE) {
+      return
+    }
+
     if (speciesGroups?.includes(value)) {
       removeSpeciesGroupToRegulatorySpeciesList(value)
     } else {
       push(REGULATORY_SPECIES_KEYS.SPECIES_GROUPS, speciesGroups, value)
     }
-  }
-
-  function getFormattedSpeciesGroups () {
-    if (speciesGroupsState) {
-      return [...speciesGroupsState]
-      ?.sort((speciesA, speciesB) => speciesB.group - speciesA.group)
-      .map(speciesGroup => ({
-        label: speciesGroup.group,
-        value: speciesGroup.group
-      }))
-    }
-    return []
-  }
-
-  function getFormattedSpecies () {
-    if (speciesByCode) {
-      return Object.values(speciesByCode)
-      ?.sort((speciesA, speciesB) => speciesB.code - speciesA.code)
-      .map(_species => ({
-        label: `${_species.name} (${_species.code})`,
-        value: _species.code
-      }))
-    }
-    return []
   }
 
   return <FormSection show={show}>
@@ -216,29 +227,38 @@ const RegulatorySpeciesForm = props => {
             disabled={allSpecies}
             menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
             searchable={true}
-            placeholder={'Choisir une ou des catégories d\'espèces'}
+            placeholder={DEFAULT_SPECIES_CATEGORY_VALUE}
             onChange={onSpeciesGroupChange}
-            value={'Choisir une ou des catégories d\'espèces'}
-            data={getFormattedSpeciesGroups()}
+            value={DEFAULT_SPECIES_CATEGORY_VALUE}
+            data={formattedSpeciesGroups}
             emptyMessage={'Aucune catégorie'}
             renderMenuItem={(_, item) => <MenuItem checked={speciesGroups?.includes(item.value)} item={item} tag={'Checkbox'} />}
             menuClassName={DEFAULT_MENU_CLASSNAME}
           />
         </ContentLine>
         <ContentLine>
-          <CustomSelectComponent
-            disabled={allSpecies}
-            menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
-            searchable={true}
-            placeholder={'Choisir une ou des espèces'}
-            onChange={onSpeciesChange}
-            value={'Choisir une ou des espèces'}
-            data={getFormattedSpecies()}
-            emptyMessage={'Aucune espèce'}
-            renderMenuItem={(_, item) =>
-              <MenuItem checked={species?.some(_species => _species?.code?.includes(item.value))} item={item} tag={'Checkbox'} />}
-            menuClassName={DEFAULT_MENU_CLASSNAME}
-          />
+          {
+            formattedSpecies?.length
+              ? <CustomSelectComponent
+                disabled={allSpecies}
+                menuStyle={{ overflowY: 'hidden', textOverflow: 'ellipsis' }}
+                searchable={true}
+                placeholder={DEFAULT_SPECIES_VALUE}
+                onChange={onSpeciesChange}
+                value={DEFAULT_SPECIES_VALUE}
+                data={formattedSpecies}
+                emptyMessage={'Aucune espèce'}
+                renderMenuItem={(_, item) =>
+                  <MenuItem
+                    checked={species?.some(_species => _species?.code?.includes(item.value))}
+                    item={item}
+                    tag={'Checkbox'}
+                  />
+                }
+                menuClassName={DEFAULT_MENU_CLASSNAME}
+              />
+              : null
+          }
         </ContentLine>
         {
           speciesGroups?.map((speciesGroup, index) => (

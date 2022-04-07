@@ -10,5 +10,13 @@
   "retries": {
     "runMode": 5,
     "openMode": 0
+  },
+  "env": {
+    "cypress-plugin-snapshots": {
+      "imageConfig": {
+        "threshold": 0.5,
+        "thresholdType": "pixel"
+      }
+    }
   }
 }

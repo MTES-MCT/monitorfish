@@ -5,7 +5,7 @@ import { getDate } from '../../src/utils'
 
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
-context('Vessel sidebar controls', () => {
+context('Vessel sidebar controls buttons', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
@@ -82,9 +82,8 @@ context('Vessel sidebar controls', () => {
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // When
-    cy.wait(500)
     cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 20000 })
-    cy.wait(200)
+    cy.wait(500)
 
     // Then, the last position should be positioned in the bottom of the window
     cy.get('.vessels').eq(0).toMatchImageSnapshot({

@@ -36,13 +36,14 @@ const FavoriteVessels = () => {
     <>
       <Wrapper ref={wrapperRef}>
         <FavoriteVesselsNumber
+          data-cy={'favorite-vessels-number'}
           isHidden={previewFilteredVesselsMode}
           isOpen={isOpen}
         >
           {favorites?.length || 0}
         </FavoriteVesselsNumber>
         <FavoriteVesselsIcon
-          data-cy={'vessel-favorites'}
+          data-cy={'favorite-vessels'}
           healthcheckTextWarning={healthcheckTextWarning}
           isOpen={isOpen}
           isHidden={previewFilteredVesselsMode}

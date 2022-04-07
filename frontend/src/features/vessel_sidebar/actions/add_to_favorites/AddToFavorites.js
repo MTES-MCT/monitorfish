@@ -26,7 +26,7 @@ const AddToFavorites = ({ openBox, rightMenuIsOpen }) => {
 
   return (
     <AddToFavoritesButton
-      data-cy={'add-to-favorites'}
+      data-cy={'sidebar-add-vessel-to-favorites'}
       title={'Ajouter le navire aux navires suivis'}
       healthcheckTextWarning={healthcheckTextWarning}
       openBox={openBox}

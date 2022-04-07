@@ -50,17 +50,20 @@ const FavoriteVessel = props => {
         {
           trackIsShowed || vesselIsShowed
             ? <ShowIcon
+              data-cy={'favorite-vessel-hide-vessel-track'}
               style={buttonStyle}
               title="Cacher la piste"
               onClick={() => dispatch(hideVesselTrack(vesselId))}
             />
             : <HideIcon
+              data-cy={'favorite-vessel-show-vessel-track'}
               style={buttonStyle}
               title="Afficher la piste"
               onClick={() => dispatch(showVesselTrack(favorite, false, null, true))}
             />
         }
         <CloseIcon
+          data-cy={'favorite-vessel-delete-vessel'}
           style={{ marginTop: 4 }}
           title="Supprimer le navire de mes navires suivis"
           onClick={() => dispatch(removeVesselFromFavorites(vesselId))}

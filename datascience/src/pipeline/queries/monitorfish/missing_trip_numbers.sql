@@ -16,18 +16,22 @@ WITH t1 AS (
                 operation_datetime_utc, 
                 (value->>'predictedArrivalDatetimeUtc')::timestamptz
             )
-            ELSE (CASE
-                WHEN log_type = 'DEP' THEN value->>'departureDatetimeUtc'
-                WHEN log_type = 'FAR' THEN value->>'farDatetimeUtc'
-                WHEN log_type = 'DIS' THEN value->>'discardDatetimeUtc'
-                WHEN log_type = 'COE' THEN value->>'effortZoneEntryDatetimeUtc'
-                WHEN log_type = 'COX' THEN value->>'effortZoneExitDatetimeUtc'
-                WHEN log_type = 'LAN' THEN value->>'landingDatetimeUtc'
-                WHEN log_type = 'EOF' THEN value->>'endOfFishingDatetimeUtc'
-                WHEN log_type = 'RTP' THEN value->>'returnDatetimeUtc'
-            END)::timestamptz
+            ELSE COALESCE(
+                (CASE
+                    WHEN log_type = 'DEP' THEN value->>'departureDatetimeUtc'
+                    WHEN log_type = 'FAR' THEN value->>'farDatetimeUtc'
+                    WHEN log_type = 'DIS' THEN value->>'discardDatetimeUtc'
+                    WHEN log_type = 'COE' THEN value->>'effortZoneEntryDatetimeUtc'
+                    WHEN log_type = 'COX' THEN value->>'effortZoneExitDatetimeUtc'
+                    WHEN log_type = 'LAN' THEN value->>'landingDatetimeUtc'
+                    WHEN log_type = 'EOF' THEN value->>'endOfFishingDatetimeUtc'
+                    WHEN log_type = 'RTP' THEN value->>'returnDatetimeUtc'
+                END)::timestamptz,
+                report_datetime_utc,
+                operation_datetime_utc
+            )
         END AS order_datetime_utc
-    FROM ers 
+    FROM logbook_reports
     WHERE operation_datetime_utc < CURRENT_TIMESTAMP
     AND operation_type IN ('DAT', 'COR')
     AND trip_number IS NULL

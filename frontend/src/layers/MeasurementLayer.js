@@ -307,4 +307,4 @@ const MeasurementLayer = ({ map }) => {
   )
 }
 
-export default MeasurementLayer
+export default React.memo(MeasurementLayer)

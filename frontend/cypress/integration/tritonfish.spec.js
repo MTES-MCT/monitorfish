@@ -42,12 +42,12 @@ context('TritonFish', () => {
       .filter(':contains("étiquettes des navires")')
       .click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-labels"]').click({ timeout: 20000 })
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-label-text"]').should('have.length.to.be.greaterThan', 5)
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('not.exist')
 
     // No beacon malfunctions
     cy.get('*[data-cy="beacon-malfunction-button"]').should('not.exist')
-    cy.wait(100)
     cy.get('.vessels').eq(0).toMatchImageSnapshot({
       clip: { x: 510, y: 0, width: 200, height: 200 }
     })

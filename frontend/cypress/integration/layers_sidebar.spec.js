@@ -39,7 +39,7 @@ context('LayersSidebar', () => {
     // Show a zone with the zone button
     cy.log('Show a zone with the zone button')
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 20000 })
-    cy.wait(500)
+    cy.wait(200)
 
     cy.get('canvas', { timeout: 20000 }).eq(0).click(490, 580, { timeout: 20000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
@@ -73,7 +73,7 @@ context('LayersSidebar', () => {
     // Show a zone with the topic button
     cy.log('Show a zone with the topic button')
     cy.get('*[data-cy="regulatory-layers-my-zones-topic-show"]').eq(0).click({ timeout: 20000 })
-    cy.wait(500)
+    cy.wait(200)
 
     cy.get('canvas').eq(0).click(490, 580, { timeout: 20000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')

@@ -47,6 +47,7 @@ context('TritonFish', () => {
 
     // No beacon malfunctions
     cy.get('*[data-cy="beacon-malfunction-button"]').should('not.exist')
+    cy.wait(100)
     cy.get('.vessels').eq(0).toMatchImageSnapshot({
       clip: { x: 510, y: 0, width: 200, height: 200 }
     })

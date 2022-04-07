@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
@@ -127,4 +127,4 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   return null
 }
 
-export default VesselEstimatedPositionLayer
+export default React.memo(VesselEstimatedPositionLayer)

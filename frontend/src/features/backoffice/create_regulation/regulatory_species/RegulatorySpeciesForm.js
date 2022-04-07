@@ -59,8 +59,6 @@ const RegulatorySpeciesForm = props => {
     })
   })
 
-  console.log(formattedSpeciesGroups, formattedSpecies)
-
   const {
     /** @type {RegulatorySpecies} regulatorySpecies */
     regulatorySpecies,

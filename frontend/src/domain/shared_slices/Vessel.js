@@ -286,7 +286,7 @@ const vesselSlice = createSlice({
       state.vesselsTracksShowed[vesselId].extent = extent
     },
     /**
-     * Update a given vessel track as zoome
+     * Update a given vessel track as zoomed
      * @function updateVesselTrackAsZoomed
      * @memberOf VesselReducer
      * @param {Object=} state

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Vector } from 'ol/layer'
@@ -73,4 +73,4 @@ const RegulatoryPreviewLayer = ({ map }) => {
   return null
 }
 
-export default RegulatoryPreviewLayer
+export default React.memo(RegulatoryPreviewLayer)

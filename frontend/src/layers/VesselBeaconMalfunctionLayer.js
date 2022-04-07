@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
@@ -102,4 +102,4 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
   return null
 }
 
-export default VesselBeaconMalfunctionLayer
+export default React.memo(VesselBeaconMalfunctionLayer)

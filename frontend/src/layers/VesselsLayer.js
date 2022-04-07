@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import WebGLPointsLayer from 'ol/layer/WebGLPoints'
@@ -186,4 +186,4 @@ const VesselsLayer = ({ map }) => {
   return null
 }
 
-export default VesselsLayer
+export default React.memo(VesselsLayer)

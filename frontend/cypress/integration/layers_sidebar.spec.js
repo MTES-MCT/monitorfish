@@ -187,10 +187,11 @@ context('LayersSidebar', () => {
     cy.wait(500)
 
     // Then
-    cy.get('.administrative').eq(0).toMatchImageSnapshot({
-      clip: { x: 510, y: 0, width: 200, height: 200 }
+    cy.get('.administrative').toMatchImageSnapshot({
+      screenshotConfig: {
+        clip: { x: 410, y: 0, width: 250, height: 500 }
+      }
     })
 
-    cy.get('*[data-cy^="administrative-layer-toggle"]').eq(0).click({ timeout: 20000 })
   })
 })

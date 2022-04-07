@@ -10,12 +10,19 @@ context('Alerts', () => {
     cy.url().should('include', '@-82')
   })
 
-  it('Should be showed on map When vessels have alerts', () => {
+  it('Should be showed on map When vessels have alerts', { retries: { runMode: 0, openMode: 0 }}, () => {
+    // Given
+    cy.get('*[data-cy^="vessel-labels"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="map-property-trigger"]', { timeout: 20000 })
+      .filter(':contains("de risque des navires")')
+      .click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('not.exist')
+
     // When
-    cy.get('.vessels').dblclick(300, 400, { force: true })
-    cy.get('.vessels').dblclick(500, 600, { force: true })
     cy.get('.vessels').toMatchImageSnapshot({
-      clip: { x: 300, y: 400, width: 500, height: 500 }
+      screenshotConfig: {
+        clip: { x: 400, y: 400, width: 200, height: 200 }
+      }
     })
   })
 })

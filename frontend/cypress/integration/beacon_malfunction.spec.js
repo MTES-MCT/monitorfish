@@ -10,10 +10,19 @@ context('Beacon malfunction', () => {
     cy.url().should('include', '@-68')
   })
 
-  it('Vessels with beacon malfunction Should be showed on map with a yellow circle', () => {
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 2)
+  it('Vessels with beacon malfunction Should be showed on map with a yellow circle', { retries: { runMode: 0, openMode: 0 }}, () => {
+    // Given
+    cy.get('*[data-cy^="vessel-labels"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="map-property-trigger"]', { timeout: 20000 })
+      .filter(':contains("de risque des navires")')
+      .click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('not.exist')
+
+    // When
     cy.get('.vessels').eq(0).toMatchImageSnapshot({
-      clip: { x: 510, y: 0, width: 200, height: 200 }
+      screenshotConfig: {
+        clip: { x: 475, y: 570, width: 200, height: 200 }
+      }
     })
   })
 })

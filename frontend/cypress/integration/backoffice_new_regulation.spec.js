@@ -7,7 +7,7 @@ context('NewRegulation', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/backoffice/regulation/new`)
-    cy.wait(400)
+    cy.wait(100)
   })
 
   it('Law type list contains 8 elements', () => {

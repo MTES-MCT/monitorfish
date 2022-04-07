@@ -83,7 +83,7 @@ context('Vessel sidebar controls buttons', () => {
 
     // When
     cy.get('*[data-cy^="animate-to-track"]').click({ timeout: 20000 })
-    cy.wait(500)
+    cy.wait(1500)
 
     // Then, the last position should be positioned in the bottom of the window
     cy.get('.vessels').eq(0).toMatchImageSnapshot({

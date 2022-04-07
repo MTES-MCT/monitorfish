@@ -63,12 +63,12 @@ context('Favorite Vessel', () => {
 
     // When
     cy.get('*[data-cy="favorite-vessel-show-vessel-track"]').click()
-    cy.wait(500)
+    cy.wait(1500)
 
     // Then
-    cy.get('.vessels').eq(0).toMatchImageSnapshot({
+    cy.get('.vessels').toMatchImageSnapshot({
       screenshotConfig: {
-        clip: { x: 300, y: 200, width: 400, height: 500 }
+        clip: { x: 300, y: 100, width: 400, height: 500 }
       }
     })
     cy.get('*[data-cy^="close-vessel-track"]').click()

@@ -242,6 +242,13 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     }
 
     function addVesselLabelToAllFeaturesInExtent () {
+      const doNotShowLabels = (adminRole && !vesselLabelsShowedOnMap && !riskFactorShowedOnMap) || (!adminRole && !vesselLabelsShowedOnMap)
+      if (doNotShowLabels) {
+        setFeaturesAndLabels([])
+        getVectorSource().clear()
+        return
+      }
+
       if (!vesselLabelsShowedOnMap && !riskFactorShowedOnMap) {
         setFeaturesAndLabels([])
         getVectorSource().clear()
@@ -251,21 +258,21 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       const featuresInExtent = vesselsLayerSourceRef?.current?.getFeaturesInExtent(map.getView().calculateExtent()) || []
       const filterShowed = filters.find(filter => filter.showed)
       const isFiltered = filterShowed && nonFilteredVesselsAreHidden // && filteredVesselsFeaturesUids?.length FIXME: if filterShowed, is it really necessary to check filteredVesselsFeaturesUids ?
-      let featuresRequireringLabel
+      let featuresRequiringLabel
       if (hideNonSelectedVessels) {
         const selectedVesselId = selectedVessel && Vessel.getVesselFeatureId(selectedVessel)
         const showedFeaturesIdentities = Object.keys(vesselsTracksShowed)
-        featuresRequireringLabel = featuresInExtent.filter(feature => (selectedVessel && feature.getId() === selectedVesselId) || showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity)))
+        featuresRequiringLabel = featuresInExtent.filter(feature => (selectedVessel && feature.getId() === selectedVesselId) || showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity)))
       } else if (previewFilteredVesselsMode) {
-        featuresRequireringLabel = featuresInExtent.filter(feature => feature.get('filterPreview'))
+        featuresRequiringLabel = featuresInExtent.filter(feature => feature.get('filterPreview'))
       } else if (isFiltered) {
-        featuresRequireringLabel = featuresInExtent.filter(feature => feature.get('isFiltered'))
+        featuresRequiringLabel = featuresInExtent.filter(feature => feature.get('isFiltered'))
       } else {
-        featuresRequireringLabel = featuresInExtent
+        featuresRequiringLabel = featuresInExtent
       }
       const maxLabelsDisplayed = previewFilteredVesselsMode ? MAX_LABELS_DISPLAYED_IN_PREVIEW : MAX_LABELS_DISPLAYED
-      if (featuresRequireringLabel.length < maxLabelsDisplayed) {
-        addLabelToFeatures(featuresRequireringLabel)
+      if (featuresRequiringLabel.length < maxLabelsDisplayed) {
+        addLabelToFeatures(featuresRequiringLabel)
       } else {
         setFeaturesAndLabels([])
         getVectorSource().clear()

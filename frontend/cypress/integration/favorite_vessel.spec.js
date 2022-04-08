@@ -55,10 +55,35 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessels"]').click()
   })
 
-  it('A favorite vessel track Should be seen on the map',() => {
-    cy.cleanScreenshots()
+  it('A favorite vessel track Should be shown and then the vessel sidebar opened', () => {
+    // Given
+    cy.get('*[data-cy="favorite-vessels"]').click()
+    cy.get('.vessels').rightclick(460, 480, { timeout: 20000, force: true })
+    cy.get('*[data-cy="add-vessel-to-favorites"]').click()
+    cy.get('*[data-cy="favorite-vessel-show-vessel-track"]').click()
+    cy.get('*[data-cy="close-vessel-track"]').should('have.length', 1)
+
+    // When
+    cy.get('*[data-cy="favorite-vessel-show-vessel-sidebar"]').click()
+
+    // Then
+    cy.get('*[data-cy="close-vessel-track"]').should('have.length', 0)
+    cy.get('*[data-cy="vessel-search-selected-vessel-close-title"]').click()
+
+    // Delete the vessel
+    cy.get('*[data-cy="favorite-vessel-delete-vessel"]').click()
+    cy.get('*[data-cy="favorite-vessels-number"]').contains(0)
+    cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
+    cy.get('*[data-cy="favorite-vessels"]').click()
+  })
+
+  it('A favorite vessel track Should be seen on the map and the global track depth Should update the track',() => {
+    cy.cleanScreenshots(2)
 
     // Given
+    cy.get('*[data-cy="open-vessels-visibility"]').click()
+    cy.get('*[data-cy="global-vessel-track-depth-twelve-hours"]').click()
+    cy.get('*[data-cy="open-vessels-visibility"]').click()
     cy.get('.vessels').rightclick(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
     cy.get('*[data-cy="favorite-vessels"]').click()
@@ -70,12 +95,23 @@ context('Favorite Vessel', () => {
     // Then
     cy.get('.vessels').toMatchImageSnapshot({
       screenshotConfig: {
-        clip: { x: 300, y: 100, width: 400, height: 500 }
+        clip: { x: 300, y: 50, width: 400, height: 900 }
       }
     })
+
+    cy.get('*[data-cy="open-vessels-visibility"]').click()
+    cy.get('*[data-cy="global-vessel-track-depth-one-week"]').click()
+    cy.wait(1500)
+
+    cy.get('.vessels').toMatchImageSnapshot({
+      screenshotConfig: {
+        clip: { x: 300, y: 50, width: 400, height: 900 }
+      }
+    })
+
     cy.get('*[data-cy^="close-vessel-track"]').click()
     cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')
 
-    cy.cleanScreenshots()
+    cy.cleanScreenshots(2)
   })
 })

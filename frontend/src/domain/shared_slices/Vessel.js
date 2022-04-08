@@ -286,8 +286,10 @@ const vesselSlice = createSlice({
         vesselId,
         extent
       } = action.payload
-      state.vesselsTracksShowed[vesselId].toShow = false
-      state.vesselsTracksShowed[vesselId].extent = extent
+      if (state.vesselsTracksShowed[vesselId]) {
+        state.vesselsTracksShowed[vesselId].toShow = false
+        state.vesselsTracksShowed[vesselId].extent = extent
+      }
     },
     /**
      * Update a given vessel track as zoomed
@@ -297,7 +299,9 @@ const vesselSlice = createSlice({
      * @param {{payload: string}} action - the vessel id
      */
     updateVesselTrackAsZoomed (state, action) {
-      state.vesselsTracksShowed[action.payload].toZoom = false
+      if (state.vesselsTracksShowed[action.payload]) {
+        state.vesselsTracksShowed[action.payload].toZoom = false
+      }
     },
     /**
      * Update a given vessel track as to be hidden by the layer
@@ -307,7 +311,9 @@ const vesselSlice = createSlice({
      * @param {{payload: string}} action - the vessel id
      */
     updateVesselTrackAsToHide (state, action) {
-      state.vesselsTracksShowed[action.payload].toHide = true
+      if (state.vesselsTracksShowed[action.payload]) {
+        state.vesselsTracksShowed[action.payload].toHide = true
+      }
     },
     /**
      * Remove the vessel track to the list

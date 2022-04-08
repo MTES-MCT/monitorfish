@@ -124,7 +124,7 @@ context('Vessels Track', () => {
       .eq(1)
       .click({ timeout: 20000, force: true })
     cy.wait(200)
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 1)
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 2)
 
     cy.log('Close the last track')
     cy.get('*[data-cy^="close-vessel-track"]').eq(0).click({ force: true })

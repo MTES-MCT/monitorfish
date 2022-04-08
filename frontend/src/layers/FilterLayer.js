@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -93,4 +93,4 @@ const FilterLayer = ({ map }) => {
   return null
 }
 
-export default FilterLayer
+export default React.memo(FilterLayer)

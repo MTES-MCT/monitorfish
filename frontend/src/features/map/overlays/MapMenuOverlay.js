@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react'
+import React, { createRef, useEffect, useRef, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
@@ -7,7 +7,8 @@ import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gri
 import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import CustomTrackDepthModal from './map_menu/CustomTrackDepthModal'
 import { useDispatch } from 'react-redux'
-import showVesselTrack from '../../../domain/use_cases/showVesselTrack'
+import showVesselTrack from '../../../domain/use_cases/vessel/showVesselTrack'
+import { addVesselToFavorites } from '../../../domain/shared_slices/FavoriteVessel'
 
 const MapMenuOverlay = props => {
   const {
@@ -19,24 +20,31 @@ const MapMenuOverlay = props => {
   const dispatch = useDispatch()
 
   const ref = createRef()
-  const [overlay] = useState(new Overlay({
-    element: ref.current,
-    position: coordinates,
-    autoPan: false,
-    positioning: 'left-center',
-    className: 'ol-overlay-container ol-selectable menu-overlay'
-  }))
   const clickedOutsideComponent = useClickOutsideComponent(ref)
   const [showTrackMenu, setShowTrackMenu] = useState(false)
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [iShowed, setIsShowed] = useState(false)
-
   const [showTrackOf, setShowTrackOf] = useState(undefined)
   const [datesSelection, setDateSelection] = useState([])
 
+  const overlayRef = useRef(null)
+  function getOverlay () {
+    if (overlayRef.current === null) {
+      overlayRef.current = new Overlay({
+        element: ref.current,
+        position: coordinates,
+        autoPan: false,
+        positioning: 'left-center',
+        className: 'ol-overlay-container ol-selectable menu-overlay'
+      })
+    }
+
+    return overlayRef.current
+  }
+
   useEffect(() => {
     if (clickedOutsideComponent && !modalIsOpen) {
-      map.removeOverlay(overlay)
+      map.removeOverlay(getOverlay())
     }
   }, [clickedOutsideComponent, modalIsOpen])
 
@@ -47,9 +55,9 @@ const MapMenuOverlay = props => {
         afterDateTime: datesSelection[0],
         beforeDateTime: datesSelection[1]
       }
-      dispatch(showVesselTrack(vessel, false, vesselTrackDepth))
+      dispatch(showVesselTrack(vessel.vesselProperties, false, vesselTrackDepth))
 
-      map.removeOverlay(overlay)
+      map.removeOverlay(getOverlay())
       setIsShowed(false)
       setShowTrackOf(undefined)
       setDateSelection([])
@@ -58,22 +66,22 @@ const MapMenuOverlay = props => {
 
   useEffect(() => {
     if (map && coordinates?.length) {
-      overlay.setPosition(coordinates)
-      overlay.setElement(ref.current)
+      getOverlay().setPosition(coordinates)
+      getOverlay().setElement(ref.current)
       setShowTrackMenu(false)
       ref.current.parentNode.className = 'ol-overlay-container ol-selectable menu-overlay'
 
       setIsShowed(true)
-      map.addOverlay(overlay)
+      map.addOverlay(getOverlay())
 
       return () => {
-        map.removeOverlay(overlay)
+        map.removeOverlay(getOverlay())
         setIsShowed(false)
         setShowTrackOf(undefined)
         setDateSelection([])
       }
     }
-  }, [overlay, coordinates, map])
+  }, [coordinates, map])
 
   return (
     <WrapperToBeKeptForDOMManagement ref={ref}>
@@ -82,19 +90,38 @@ const MapMenuOverlay = props => {
           iShowed
             ? <>
               <Wrapper>
-                <FirstMenu>
-                  {
-                    vessel
-                      ? <Menu
-                        data-cy={'show-vessel-tracks-menu-options'}
-                        onMouseEnter={() => setShowTrackMenu(true)}
-                      >
-                        Afficher la piste VMS depuis…
-                        <ChevronIcon/>
-                      </Menu>
-                      : null
-                  }
-                </FirstMenu>
+                <div>
+                  <FirstMenu>
+                    {
+                      vessel
+                        ? <>
+                          <Menu
+                            data-cy={'show-vessel-tracks-menu-options'}
+                            onMouseEnter={() => setShowTrackMenu(true)}
+                          >
+                            Afficher la piste VMS depuis…
+                            <ChevronIcon/>
+                          </Menu>
+                        </>
+                        : null
+                    }
+                  </FirstMenu>
+                  <FirstMenu>
+                    {
+                      vessel
+                        ? <>
+                          <Menu
+                            data-cy={'add-vessel-to-favorites'}
+                            onMouseEnter={() => setShowTrackMenu(false)}
+                            onClick={() => dispatch(addVesselToFavorites(vessel.vesselProperties))}
+                          >
+                            Ajouter le navire aux navires suivis
+                          </Menu>
+                        </>
+                        : null
+                    }
+                  </FirstMenu>
+                </div>
                 {
                   showTrackMenu
                     ? <SecondMenu>
@@ -157,7 +184,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
 
 const FirstMenu = styled.div`
   display: flex;
-  width: 240px;
+  width: 250px;
   box-shadow: 0px 2px 5px ${COLORS.overlayShadow};
   height: min-content;
   cursor: pointer;

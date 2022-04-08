@@ -1,0 +1,39 @@
+import { setSelectedVesselCustomTrackDepth, showVesselSidebarTab } from '../../shared_slices/Vessel'
+import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
+import showVessel from './showVessel'
+import getVesselVoyage from './getVesselVoyage'
+import { VesselSidebarTab } from '../../entities/vessel'
+import { endOfBeaconMalfunctionReasons } from '../../entities/beaconMalfunction'
+
+/**
+ * Show the selected vessel on map.
+ * If the vessel has resumed positions transmission, the default track depth will be showed so the
+ * last positions of the vessel are shown on map.
+ * Else, date times around the malfunctionStartDateTime will be created.
+ * @param {BeaconMalfunction} beaconMalfunction
+ * @param {boolean} openVMRERSTab
+ */
+export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVMRERSTab) => async dispatch => {
+  if (beaconMalfunction?.endOfBeaconMalfunctionReason !== endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value) {
+    const afterDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
+    const twentyFiveHours = 25
+    afterDateTime.setTime(afterDateTime.getTime() - (twentyFiveHours * 60 * 60 * 1000))
+    afterDateTime.setMilliseconds(0)
+    const beforeDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
+    beforeDateTime.setMilliseconds(0)
+
+    const vesselTrackDepth = {
+      trackDepth: VesselTrackDepth.CUSTOM,
+      afterDateTime: afterDateTime,
+      beforeDateTime: beforeDateTime
+    }
+    await dispatch(setSelectedVesselCustomTrackDepth(vesselTrackDepth))
+  }
+
+  await dispatch(showVessel(beaconMalfunction, false, false))
+  dispatch(getVesselVoyage(beaconMalfunction, null, false))
+
+  if (openVMRERSTab) {
+    dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))
+  }
+}

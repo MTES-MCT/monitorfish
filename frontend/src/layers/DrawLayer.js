@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
@@ -137,4 +137,4 @@ const DrawLayer = ({ map }) => {
   return null
 }
 
-export default DrawLayer
+export default React.memo(DrawLayer)

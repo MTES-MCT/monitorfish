@@ -8,7 +8,7 @@ import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 import { useDispatch, useSelector } from 'react-redux'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import TrackPositionsTable from './TrackPositionsTable'
-import modifyVesselTrackDepth from '../../../../domain/use_cases/modifyVesselTrackDepth'
+import modifyVesselTrackDepth from '../../../../domain/use_cases/vessel/modifyVesselTrackDepth'
 
 const TrackDepthSelection = props => {
   const dispatch = useDispatch()
@@ -99,7 +99,7 @@ const Header = styled.div`
 `
 
 const TrackDepthSelectionButton = styled(MapComponentStyle)`
-  top: 118px;
+  top: 153px;
   height: 30px;
   width: 30px;
   background: ${props => props.trackDepthSelectionIsOpen ? COLORS.shadowBlue : COLORS.charcoal};

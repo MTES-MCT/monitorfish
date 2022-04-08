@@ -1,16 +1,18 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { EstimatedPosition } from '../domain/entities/estimatedPosition'
-import { getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
+import { getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel'
 import { Vector } from 'ol/layer'
 import { getEstimatedPositionStyle } from './styles/vesselEstimatedPosition.style'
 
 const VesselEstimatedPositionLayer = ({ map }) => {
   const {
     vessels,
-    hideNonSelectedVessels
+    hideNonSelectedVessels,
+    vesselsTracksShowed,
+    selectedVesselIdentity
   } = useSelector(state => state.vessel)
 
   const {
@@ -78,7 +80,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
     }
 
     if (vessels && showingVesselsEstimatedPositions) {
-      function createEstimatedTrackFeatures (vessel) {
+      function createEstimatedTrackFeatures (vessel, options) {
         const {
           isAtPort,
           isFiltered,
@@ -89,6 +91,7 @@ const VesselEstimatedPositionLayer = ({ map }) => {
         if (previewFilteredVesselsMode && !filterPreview) return null
         if (hideVesselsAtPort && isAtPort) return null
 
+        options.hideNonSelectedVessels = hideNonSelectedVessels && !vesselIsShowed(vessel.vesselProperties, vesselsTracksShowed, selectedVesselIdentity)
         return EstimatedPosition.getFeatures(vessel, options)
       }
 
@@ -97,12 +100,11 @@ const VesselEstimatedPositionLayer = ({ map }) => {
       const options = {
         isLight,
         vesselIsHidden,
-        vesselIsOpacityReduced,
-        hideNonSelectedVessels
+        vesselIsOpacityReduced
       }
 
       const estimatedCurrentPositionsFeatures = vessels.reduce((features, vessel) => {
-        const estimatedTrackFeatureToAdd = createEstimatedTrackFeatures(vessel)
+        const estimatedTrackFeatureToAdd = createEstimatedTrackFeatures(vessel, options)
         if (estimatedTrackFeatureToAdd) {
           features.push(estimatedTrackFeatureToAdd)
         }
@@ -116,6 +118,8 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   }, [
     vessels,
     selectedBaseLayer,
+    vesselsTracksShowed,
+    selectedVesselIdentity,
     showingVesselsEstimatedPositions,
     previewFilteredVesselsMode,
     nonFilteredVesselsAreHidden,
@@ -127,4 +131,4 @@ const VesselEstimatedPositionLayer = ({ map }) => {
   return null
 }
 
-export default VesselEstimatedPositionLayer
+export default React.memo(VesselEstimatedPositionLayer)

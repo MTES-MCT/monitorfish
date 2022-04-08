@@ -44,21 +44,19 @@ const VesselCardOverlay = ({ feature, map }) => {
   const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
   const numberOfWarnings = useRef(0)
 
-  const overlayCallback = useCallback(
-    (ref) => {
-      overlayRef.current = ref
-      if (ref) {
-        overlayObjectRef.current = new Overlay({
-          element: ref,
-          autoPan: false,
-          className: 'ol-overlay-container ol-selectable vessel-card'
-        })
-      } else {
-        overlayObjectRef.current = null
-      }
-    },
-    [overlayRef, overlayObjectRef]
-  )
+  const overlayCallback = useCallback(ref => {
+    overlayRef.current = ref
+    if (ref) {
+      overlayObjectRef.current = new Overlay({
+        element: ref,
+        autoPan: false,
+        className: 'ol-overlay-container ol-selectable vessel-card'
+      })
+    } else {
+      overlayObjectRef.current = null
+    }
+  }, [overlayRef, overlayObjectRef])
+
   useEffect(() => {
     if (map) {
       map.addOverlay(overlayObjectRef.current)

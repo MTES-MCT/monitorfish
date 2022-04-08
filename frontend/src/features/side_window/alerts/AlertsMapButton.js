@@ -50,7 +50,7 @@ const AlertsButton = styled(MapButtonStyle)`
   color: ${COLORS.blue};
   background: ${props => props.isVisible ? COLORS.shadowBlue : COLORS.charcoal};
   padding: 2px 2px 2px 2px;
-  top: 65px;
+  top: 120px;
   left: 12px;
   border-radius: 2px;
   height: 40px;

@@ -13,8 +13,8 @@ import { COLORS } from '../../constants/constants'
 import { usePrevious } from '../../hooks/usePrevious'
 import { useDispatch, useSelector } from 'react-redux'
 import { openSideWindowTab, setSideWindowAsOpen } from '../../domain/shared_slices/Global'
-import getOperationalAlerts from '../../domain/use_cases/getOperationalAlerts'
-import getAllBeaconMalfunctions from '../../domain/use_cases/getAllBeaconMalfunctions'
+import getOperationalAlerts from '../../domain/use_cases/alert/getOperationalAlerts'
+import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 
 const SideWindow = ({ fromTab }) => {

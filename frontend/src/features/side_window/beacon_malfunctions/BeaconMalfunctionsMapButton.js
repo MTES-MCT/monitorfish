@@ -47,7 +47,7 @@ const BeaconMalfunctionsButton = styled(MapButtonStyle)`
   color: ${COLORS.blue};
   background: ${props => props.isVisible ? COLORS.shadowBlue : COLORS.charcoal};
   padding: 2px 2px 2px 2px;
-  top: 107px;
+  top: 162px;
   left: 12px;
   border-radius: 2px;
   height: 40px;

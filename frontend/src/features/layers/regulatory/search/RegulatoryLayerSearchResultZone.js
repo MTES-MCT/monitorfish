@@ -5,14 +5,14 @@ import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
 import Checkbox from 'rsuite/lib/Checkbox'
 
 import Layers, { getGearCategory } from '../../../../domain/entities/layers'
-import showRegulatoryZoneMetadata from '../../../../domain/use_cases/showRegulatoryZoneMetadata'
-import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/closeRegulatoryZoneMetadata'
+import showRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
+import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 import { showOrHideMetadataIcon } from '../RegulatoryLayerZone'
 
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
-import { REGPaperDarkIcon, REGPaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
+import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
 import { COLORS } from '../../../../constants/constants'
 import { getHash } from '../../../../utils'
 
@@ -165,10 +165,10 @@ const CustomPaperStyle = css`
   height: 23px
 `
 
-const CustomREGPaperIcon = styled(REGPaperIcon)`
+const CustomREGPaperIcon = styled(PaperIcon)`
   ${CustomPaperStyle}
 `
-const CustomREGPaperDarkIcon = styled(REGPaperDarkIcon)`
+const CustomREGPaperDarkIcon = styled(PaperDarkIcon)`
   ${CustomPaperStyle}
 `
 

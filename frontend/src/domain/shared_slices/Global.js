@@ -19,6 +19,7 @@ const globalSlice = createSlice({
     isUpdatingVessels: false,
     blockVesselsUpdate: false,
     rightMenuIsOpen: false,
+    leftBoxOpened: null,
     vesselListModalIsOpen: false,
     /** @type {string | null} healthcheckTextWarning */
     healthcheckTextWarning: null,
@@ -159,6 +160,16 @@ const globalSlice = createSlice({
       }
 
       window.localStorage.setItem(lastSearchedVesselsLocalStorageKey, JSON.stringify(state.lastSearchedVessels))
+    },
+    /**
+     * Set the left box opened as LeftBoxOpened, so the other boxes can close
+     * @function setLeftBoxOpened
+     * @memberOf GlobalReducer
+     * @param {Object=} state
+     * @param {{payload: string<LeftBoxOpened>}} action - the oepend box
+     */
+    setLeftBoxOpened (state, action) {
+      state.leftBoxOpened = action.payload
     }
   }
 })
@@ -181,7 +192,8 @@ export const {
   closeSideWindow,
   setUserType,
   addSearchedVessel,
-  setAdminRole
+  setAdminRole,
+  setLeftBoxOpened
 } = globalSlice.actions
 
 export default globalSlice.reducer

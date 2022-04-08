@@ -93,11 +93,8 @@ context('Vessels Track', () => {
 
   it('A track Should be showed When clicking on a vessel with CTRL key pressed', () => {
     // When
-    cy.wait(500)
     cy.get('.vessels').click(460, 480, { timeout: 20000, ctrlKey: true, force: true })
-    cy.wait(500)
     cy.get('.vessels').click(504, 289, { timeout: 20000, ctrlKey: true, force: true })
-    cy.wait(500)
     cy.get('.vessels').click(297, 298, { timeout: 20000, force: true })
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 2)
     cy.wait(200)
@@ -107,36 +104,36 @@ context('Vessels Track', () => {
     cy.wait(200)
     cy.get('.vessels').dblclick(486, 688, { timeout: 20000, force: true })
 
-    cy.wait(500)
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 3)
-    cy.wait(500)
+    cy.wait(1000) // Because of the throttle
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 2)
+    cy.wait(200)
 
     cy.log('Close the sidebar')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 20000 }).click()
     cy.get('*[data-cy^="vessel-search-selected-vessel-title"]', { timeout: 20000 }).should('not.exist')
 
     cy.log('Close one track')
-    cy.get('*[data-cy^="close-vessel-track"]').eq(1).click()
-    cy.wait(200)
+    cy.get('*[data-cy^="close-vessel-track"]').eq(1).click({ force: true })
+    cy.wait(1000) // Because of the throttle
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
 
     cy.log('Hide other vessels')
     cy.get('*[data-cy^="open-vessels-visibility"]').click()
     cy.get('*[data-cy^="map-property-trigger"]')
       .filter(':contains("les navires non sélectionnés")')
+      .eq(1)
       .click({ timeout: 20000, force: true })
-    cy.wait(500)
-    cy.get('.vessels').dblclick(750, 86, { timeout: 20000, force: true })
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 1)
+    cy.wait(200)
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 2)
 
     cy.log('Close the last track')
-    cy.get('*[data-cy^="close-vessel-track"]').eq(0).click()
+    cy.get('*[data-cy^="close-vessel-track"]').eq(0).click({ force: true })
     cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')
   })
 
   it('A track Should be showed When clicking on a vessel with the custom map menu', () => {
     cy.log('Show a first vessel with a three day track depth')
-    cy.wait(500)
+    cy.wait(200)
     cy.get('.vessels').rightclick(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="show-vessel-tracks-menu-options"]').click({ force: true })
     cy.get('*[data-cy^="show-vessel-tracks-three-days"]').click({ force: true })

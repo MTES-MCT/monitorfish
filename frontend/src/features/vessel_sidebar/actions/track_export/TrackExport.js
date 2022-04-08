@@ -130,7 +130,7 @@ const TrackExport = ({ openBox, rightMenuIsOpen }) => {
 }
 
 const TrackExportButton = styled(MapButtonStyle)`
-  top: 258px;
+  top: 293px;
   height: 30px;
   width: 30px;
   background: ${COLORS.charcoal};

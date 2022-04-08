@@ -20,7 +20,7 @@ import {
 } from '../../../domain/entities/beaconMalfunction'
 import BeaconMalfunctionDetailsFollowUp from './BeaconMalfunctionDetailsFollowUp'
 import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
-import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/showVesselFromBeaconMalfunctionsKanban'
+import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
 
 const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselStatus }) => {
   const {

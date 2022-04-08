@@ -22,6 +22,7 @@ import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFi
 import AlertWarning from './warnings/AlertWarning'
 import BeaconMalfunctionWarning from './warnings/BeaconMalfunctionWarning'
 import VesselBeaconMalfunctions from './beacon_malfunctions/VesselBeaconMalfunctions'
+import AddToFavorites from './actions/add_to_favorites/AddToFavorites'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -66,6 +67,10 @@ const VesselSidebar = () => {
 
   return (
     <>
+      <AddToFavorites
+        openBox={openSidebar}
+        rightMenuIsOpen={rightMenuIsOpen}
+      />
       <TrackDepthSelection
         openBox={openSidebar}
         init={!vesselSidebarIsOpen ? {} : null}

@@ -55,7 +55,9 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessels"]').click()
   })
 
-  it('A favorite vessel track Should be seen on the map', { retries: { runMode: 0, openMode: 0 }},() => {
+  it('A favorite vessel track Should be seen on the map',() => {
+    cy.cleanScreenshots()
+
     // Given
     cy.get('.vessels').rightclick(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
@@ -73,5 +75,7 @@ context('Favorite Vessel', () => {
     })
     cy.get('*[data-cy^="close-vessel-track"]').click()
     cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')
+
+    cy.cleanScreenshots()
   })
 })

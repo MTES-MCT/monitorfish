@@ -76,7 +76,9 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
   })
 
-  it('Vessel track Should fit the view box When I click on animate to track', { retries: { runMode: 0, openMode: 0 }}, () => {
+  it('Vessel track Should fit the view box When I click on animate to track', () => {
+    cy.cleanScreenshots()
+
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
@@ -91,5 +93,7 @@ context('Vessel sidebar controls buttons', () => {
         clip: { x: 210, y: 0, width: 500, height: 840 }
       }
     })
+
+    cy.cleanScreenshots()
   })
 })

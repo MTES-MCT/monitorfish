@@ -10,7 +10,9 @@ context('Alerts', () => {
     cy.url().should('include', '@-82')
   })
 
-  it('Should be showed on map When vessels have alerts', { retries: { runMode: 0, openMode: 0 }}, () => {
+  it('Should be showed on map When vessels have alerts', () => {
+    cy.cleanScreenshots()
+
     // Given
     cy.get('*[data-cy^="vessel-labels"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="map-property-trigger"]', { timeout: 20000 })
@@ -24,5 +26,7 @@ context('Alerts', () => {
         clip: { x: 400, y: 400, width: 200, height: 200 }
       }
     })
+
+    cy.cleanScreenshots()
   })
 })

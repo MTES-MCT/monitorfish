@@ -1,6 +1,6 @@
 SELECT
     cfr,
-    last_ers_datetime_utc,
+    last_logbook_message_datetime_utc,
     departure_datetime_utc,
     trip_number,
     gear_onboard,

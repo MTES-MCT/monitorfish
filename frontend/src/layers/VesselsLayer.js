@@ -5,10 +5,7 @@ import WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 
-import {
-  getVesselLastPositionVisibilityDates,
-  Vessel
-} from '../domain/entities/vessel'
+import { getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
 import Layers from '../domain/entities/layers'
 
 import { applyFilterToVessels } from '../domain/use_cases/vessel/applyFilterAndSetVessels'
@@ -41,7 +38,7 @@ const VesselsLayer = ({ map }) => {
     showedFilter,
     filterColor,
     nonFilteredVesselsAreHidden
-  } = useSelector((state) => {
+  } = useSelector(state => {
     const _showedFilter = state.filter?.filters?.find(filter => filter.showed)
     return {
       filters: state.filter?.filters,

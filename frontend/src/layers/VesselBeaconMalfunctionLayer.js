@@ -7,13 +7,14 @@ import { Vector } from 'ol/layer'
 import Layers from '../domain/entities/layers'
 
 import { getVesselBeaconMalfunctionStyle } from './styles/vessel.style'
-import { getVesselId, vesselsAreEquals } from '../domain/entities/vessel'
+import { getVesselId, vesselIsShowed } from '../domain/entities/vessel'
 
 const VesselBeaconMalfunctionLayer = ({ map }) => {
   const {
     vessels,
     hideNonSelectedVessels,
-    selectedVessel
+    vesselsTracksShowed,
+    selectedVesselIdentity
   } = useSelector(state => state.vessel)
 
   const {
@@ -75,7 +76,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return _features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return _features
         if (hideVesselsAtPort && vessel.isAtPort) return _features
-        if (hideNonSelectedVessels && !vesselsAreEquals(vessel.vesselProperties, selectedVessel)) return _features
+        if (hideNonSelectedVessels && !vesselIsShowed(vessel.vesselProperties, vesselsTracksShowed, selectedVesselIdentity)) return _features
 
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
@@ -92,7 +93,8 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
   }, [
     adminRole,
     vessels,
-    selectedVessel,
+    selectedVesselIdentity,
+    vesselsTracksShowed,
     previewFilteredVesselsMode,
     nonFilteredVesselsAreHidden,
     hideNonSelectedVessels,

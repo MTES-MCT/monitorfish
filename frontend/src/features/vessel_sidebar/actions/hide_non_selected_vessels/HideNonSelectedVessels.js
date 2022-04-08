@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { COLORS } from '../../../../constants/constants'
 import styled from 'styled-components'
 import { ReactComponent as HidingOtherTracksSVG } from '../../../icons/Bouton_masquer_pistes_actif.svg'
@@ -11,12 +11,6 @@ const HideNonSelectedVessels = ({ openBox, rightMenuIsOpen }) => {
   const dispatch = useDispatch()
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const { hideNonSelectedVessels } = useSelector(state => state.vessel)
-
-  useEffect(() => {
-    if (!openBox) {
-      dispatch(setHideNonSelectedVessels(false))
-    }
-  }, [openBox])
 
   return (
     <HideNonSelectedVesselsButton

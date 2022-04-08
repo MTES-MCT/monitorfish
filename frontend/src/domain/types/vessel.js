@@ -191,15 +191,17 @@
 
 /**
  * @typedef ShowedVesselTrack
- * @property {string} identity
- * @property {VesselIdentity} vessel
+ * @property {string} vesselId
+ * @property {VesselIdentity} vesselIdentity
  * @property {string[]} coordinates
+ * @property {number} course
  * @property {VesselPosition[]} positions
  * @property {boolean} isDefaultTrackDepth
  * @property {VesselTrackDepthRequest} trackDepth
  * @property {number[]} extent
  * @property {boolean} toShow
  * @property {boolean} toHide
+ * @property {boolean} toZoom
  */
 
 /**

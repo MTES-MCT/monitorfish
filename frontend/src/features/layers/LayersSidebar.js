@@ -13,6 +13,8 @@ import BaseLayers from './base/BaseLayers'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import NamespaceContext from '../../domain/context/NamespaceContext'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
+import { setLeftBoxOpened } from '../../domain/shared_slices/Global'
+import { LeftBoxOpened } from '../../domain/entities/global'
 
 const LayersSidebar = () => {
   const dispatch = useDispatch()
@@ -21,18 +23,18 @@ const LayersSidebar = () => {
   } = useSelector(state => state.regulatory)
   const {
     healthcheckTextWarning,
-    previewFilteredVesselsMode
+    previewFilteredVesselsMode,
+    leftBoxOpened
   } = useSelector(state => state.global)
 
-  const [layersSidebarIsOpen, setLayersSidebarIsOpen] = useState(false)
   const [numberOfRegulatoryLayersSaved, setNumberOfRegulatoryLayersSaved] = useState(0)
   const [hideLayersListWhenSearching, setHideLayersListWhenSearching] = useState(false)
 
   useEffect(() => {
-    if (!layersSidebarIsOpen) {
+    if (leftBoxOpened !== LeftBoxOpened.REGULATIONS) {
       dispatch(closeRegulatoryZoneMetadata())
     }
-  }, [layersSidebarIsOpen])
+  }, [leftBoxOpened])
 
   return (
     <NamespaceContext.Consumer>
@@ -42,22 +44,24 @@ const LayersSidebar = () => {
             <SidebarLayersIcon
               data-cy={'layers-sidebar'}
               title={'Couches réglementaires'}
-              isVisible={layersSidebarIsOpen || regulatoryZoneMetadataPanelIsOpen}
+              isVisible={leftBoxOpened === LeftBoxOpened.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
               regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
               healthcheckTextWarning={healthcheckTextWarning}
               isHidden={previewFilteredVesselsMode}
-              onClick={() => setLayersSidebarIsOpen(!layersSidebarIsOpen)}>
+              onClick={() => dispatch(setLeftBoxOpened(leftBoxOpened === LeftBoxOpened.REGULATIONS ? null : LeftBoxOpened.REGULATIONS))}
+            >
               <LayersIcon/>
             </SidebarLayersIcon>
             <Sidebar
+              data-cy={'layers-sidebar-box'}
               healthcheckTextWarning={healthcheckTextWarning}
-              layersSidebarIsOpen={layersSidebarIsOpen}
-              isVisible={layersSidebarIsOpen || regulatoryZoneMetadataPanelIsOpen}
+              layersSidebarIsOpen={leftBoxOpened === LeftBoxOpened.REGULATIONS}
+              isVisible={leftBoxOpened === LeftBoxOpened.REGULATIONS || regulatoryZoneMetadataPanelIsOpen}
             >
               <RegulatoryLayerSearch
                 numberOfRegulatoryLayersSaved={numberOfRegulatoryLayersSaved}
                 setNumberOfRegulatoryLayersSaved={setNumberOfRegulatoryLayersSaved}
-                layersSidebarIsOpen={layersSidebarIsOpen}
+                layersSidebarIsOpen={leftBoxOpened === LeftBoxOpened.REGULATIONS}
                 setHideLayersListWhenSearching={setHideLayersListWhenSearching}
                 namespace={namespace}
               />

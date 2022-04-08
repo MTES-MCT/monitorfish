@@ -11,6 +11,19 @@ context('Favorite Vessel', () => {
     cy.wait(100)
   })
 
+  it('Opening the box Should close other boxes', () => {
+    cy.get('*[data-cy="favorite-vessels"]').click()
+    cy.get('*[data-cy="layers-sidebar-box"]').should('be.not.visible')
+
+    // Open the layers box
+    cy.get('*[data-cy="layers-sidebar"]').click()
+    cy.get('*[data-cy="favorite-vessels-box"]').should('be.not.visible')
+
+    // Re-open the favorite vessels box
+    cy.get('*[data-cy="favorite-vessels"]').click()
+    cy.get('*[data-cy="layers-sidebar-box"]').should('be.not.visible')
+  })
+
   it('A favorite vessel Should be added to the list from the map', () => {
     // Given
     cy.get('*[data-cy="favorite-vessels"]').click()

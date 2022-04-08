@@ -18,7 +18,7 @@ const MAX_LABELS_DISPLAYED_IN_PREVIEW = 400
 const NOT_FOUND = -1
 
 const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
-  const throttleDuration = 500 // ms
+  const throttleDuration = 250 // ms
 
   const {
     vessels,

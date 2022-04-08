@@ -6,17 +6,17 @@ import { batch, useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../constants/constants'
 import Layers, { getGearCategory } from '../../../domain/entities/layers'
 
-import showRegulatoryZoneMetadata from '../../../domain/use_cases/showRegulatoryZoneMetadata'
-import closeRegulatoryZoneMetadata from '../../../domain/use_cases/closeRegulatoryZoneMetadata'
-import zoomInLayer from '../../../domain/use_cases/zoomInLayer'
-import hideLayer from '../../../domain/use_cases/hideLayer'
-import showRegulatoryZone from '../../../domain/use_cases/showRegulatoryZone'
-import showRegulationToEdit from '../../../domain/use_cases/showRegulationToEdit'
+import showRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
+import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import zoomInLayer from '../../../domain/use_cases/layer/zoomInLayer'
+import hideLayer from '../../../domain/use_cases/layer/hideLayer'
+import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'
+import showRegulationToEdit from '../../../domain/use_cases/layer/regulation/showRegulationToEdit'
 
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
-import { REGPaperDarkIcon, REGPaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
+import { PaperDarkIcon, PaperIcon } from '../../commonStyles/icons/REGPaperIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
 import {
   addRegulatoryTopicOpened,
@@ -150,11 +150,11 @@ const RegulatoryLayerZone = props => {
         }
         {
           metadataIsShown
-            ? <REGPaperDarkIcon
+            ? <PaperDarkIcon
               title="Fermer la réglementation"
               onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}
             />
-            : <REGPaperIcon
+            : <PaperIcon
               data-cy={'regulatory-layers-show-metadata'}
               title="Afficher la réglementation"
               onClick={() => callShowRegulatoryZoneMetadata(regulatoryZone)}

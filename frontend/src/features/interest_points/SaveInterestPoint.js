@@ -17,7 +17,7 @@ import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../domai
 import { coordinatesAreDistinct, getCoordinates } from '../../coordinates'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
 import { transform } from 'ol/proj'
-import saveInterestPointFeature from '../../domain/use_cases/saveInterestPointFeature'
+import saveInterestPointFeature from '../../domain/use_cases/interestPoint/saveInterestPointFeature'
 
 const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
   const dispatch = useDispatch()

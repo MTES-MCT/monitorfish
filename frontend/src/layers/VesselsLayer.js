@@ -1,17 +1,14 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 
-import {
-  getVesselLastPositionVisibilityDates,
-  Vessel
-} from '../domain/entities/vessel'
+import { getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
 import Layers from '../domain/entities/layers'
 
-import { applyFilterToVessels } from '../domain/use_cases/applyFilterAndSetVessels'
+import { applyFilterToVessels } from '../domain/use_cases/vessel/applyFilterAndSetVessels'
 import { COLORS } from '../constants/constants'
 import { booleanToInt, customHexToRGB } from '../utils'
 
@@ -41,7 +38,7 @@ const VesselsLayer = ({ map }) => {
     showedFilter,
     filterColor,
     nonFilteredVesselsAreHidden
-  } = useSelector((state) => {
+  } = useSelector(state => {
     const _showedFilter = state.filter?.filters?.find(filter => filter.showed)
     return {
       filters: state.filter?.filters,
@@ -186,4 +183,4 @@ const VesselsLayer = ({ map }) => {
   return null
 }
 
-export default VesselsLayer
+export default React.memo(VesselsLayer)

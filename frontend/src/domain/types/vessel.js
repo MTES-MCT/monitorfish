@@ -14,6 +14,13 @@
  */
 
 /**
+ * The vessel id : `internalReferenceNumber/externalReferenceNumber/ircs`
+ *
+ * i.e: "FAK000999999/DONTSINK/CALLME"
+ * @typedef {string} VesselId
+ */
+
+/**
  * @typedef VesselIdentity
  * @property {string} internalReferenceNumber
  * @property {string} externalReferenceNumber
@@ -176,7 +183,7 @@
  */
 
 /**
- * @typedef VesselTrackDepth
+ * @typedef VesselTrackDepthRequest
  * @property {string | null} trackDepth
  * @property {Date | null} afterDateTime
  * @property {Date | null} beforeDateTime
@@ -184,13 +191,17 @@
 
 /**
  * @typedef ShowedVesselTrack
- * @property {string} identity
- * @property {VesselIdentity} vessel
+ * @property {string} vesselId
+ * @property {VesselIdentity} vesselIdentity
  * @property {string[]} coordinates
+ * @property {number} course
  * @property {VesselPosition[]} positions
- * @property {VesselTrackDepth} trackDepth
+ * @property {boolean} isDefaultTrackDepth
+ * @property {VesselTrackDepthRequest} trackDepth
+ * @property {number[]} extent
  * @property {boolean} toShow
  * @property {boolean} toHide
+ * @property {boolean} toZoom
  */
 
 /**

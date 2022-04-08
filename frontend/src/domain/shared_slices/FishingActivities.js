@@ -12,9 +12,15 @@ const fishingActivitiesSlice = createSlice({
   initialState: {
     fishingActivitiesTab: FishingActivitiesTab.SUMMARY,
     /** @type {FishingActivities} fishingActivities */
-    fishingActivities: {},
+    fishingActivities: {
+      alerts: [],
+      logbookMessages: []
+    },
     /** @type {FishingActivities} lastFishingActivities */
-    lastFishingActivities: {},
+    lastFishingActivities: {
+      alerts: [],
+      logbookMessages: []
+    },
     isLastVoyage: null,
     isFirstVoyage: null,
     tripNumber: null,

@@ -6,7 +6,7 @@ import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
 import RegulatoryLayerSearchResultZones from './RegulatoryLayerSearchResultZones'
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 import { COLORS } from '../../../../constants/constants'
-import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/closeRegulatoryZoneMetadata'
+import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLayerTopic, topicDetails }) => {
   const dispatch = useDispatch()

@@ -4,7 +4,7 @@ import { COLORS } from '../../constants/constants'
 import countries from 'i18n-iso-countries'
 import Highlighter from 'react-highlight-words'
 
-const VesselSearchItem = ({ id, vessel, selectVessel, searchText }) => {
+const VesselSearchItem = ({ vessel, selectVessel, searchText }) => {
   const showVesselIdentityData = () => {
     const arrayOfInformation = [
       {
@@ -66,8 +66,7 @@ const VesselSearchItem = ({ id, vessel, selectVessel, searchText }) => {
 
   return <ListItem
     data-cy={'vessel-search-item'}
-    onClick={selectVessel}
-    key={id}>
+    onClick={selectVessel}>
     <div>
       {flagState
         ? <Flag rel="preload"

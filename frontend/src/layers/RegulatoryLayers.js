@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import Layers, { getLayerNameNormalized } from '../domain/entities/layers'
 import { showSimplifiedGeometries, showWholeGeometries } from '../domain/shared_slices/Regulatory'
-import { getVectorOLLayer } from '../domain/use_cases/showRegulatoryZone'
+import { getVectorOLLayer } from '../domain/use_cases/layer/regulation/showRegulatoryZone'
 
 export const metadataIsShowedPropertyName = 'metadataIsShowed'
 const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5

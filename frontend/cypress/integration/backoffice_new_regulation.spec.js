@@ -7,7 +7,7 @@ context('NewRegulation', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/backoffice/regulation/new`)
-    cy.wait(400)
+    cy.wait(100)
   })
 
   it('Law type list contains 8 elements', () => {
@@ -268,6 +268,7 @@ context('NewRegulation', () => {
     cy.get('.rs-picker-toggle-placeholder')
       .filter(':contains("des espèces")')
       .click({ timeout: 20000 })
+    cy.get('.rs-picker-select-menu-item').filter(':contains("HKE")').should('have.length', 1)
     cy.get('.rs-picker-search-bar-input').type('HKE{enter}', { force: true })
 
     // Values are found

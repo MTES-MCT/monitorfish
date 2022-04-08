@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
@@ -7,13 +7,14 @@ import { Vector } from 'ol/layer'
 import Layers from '../domain/entities/layers'
 
 import { getVesselAlertAndBeaconMalfunctionStyle } from './styles/vessel.style'
-import { getVesselFeatureIdFromVessel, vesselsAreEquals } from '../domain/entities/vessel'
+import { getVesselId, vesselIsShowed } from '../domain/entities/vessel'
 
 const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
   const {
     vessels,
     hideNonSelectedVessels,
-    selectedVessel
+    selectedVesselIdentity,
+    vesselsTracksShowed
   } = useSelector(state => state.vessel)
 
   const {
@@ -30,8 +31,6 @@ const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
   } = useSelector(state => state.map)
 
   const vectorSourceRef = useRef(null)
-  const layerRef = useRef(null)
-
   function getVectorSource () {
     if (vectorSourceRef.current === null) {
       vectorSourceRef.current = new VectorSource({
@@ -42,6 +41,7 @@ const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
     return vectorSourceRef.current
   }
 
+  const layerRef = useRef(null)
   function getLayer () {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
@@ -76,12 +76,12 @@ const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return _features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return _features
         if (hideVesselsAtPort && vessel.isAtPort) return _features
-        if (hideNonSelectedVessels && !vesselsAreEquals(vessel.vesselProperties, selectedVessel)) return _features
+        if (hideNonSelectedVessels && !vesselIsShowed(vessel.vesselProperties, vesselsTracksShowed, selectedVesselIdentity)) return _features
 
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layers.VESSEL_BEACON_MALFUNCTION.code}:${getVesselFeatureIdFromVessel(vessel.vesselProperties)}`)
+        feature.setId(`${Layers.VESSEL_BEACON_MALFUNCTION.code}:${getVesselId(vessel.vesselProperties)}`)
         _features.push(feature)
 
         return _features
@@ -93,7 +93,8 @@ const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
   }, [
     adminRole,
     vessels,
-    selectedVessel,
+    selectedVesselIdentity,
+    vesselsTracksShowed,
     previewFilteredVesselsMode,
     nonFilteredVesselsAreHidden,
     hideNonSelectedVessels,
@@ -103,4 +104,4 @@ const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
   return null
 }
 
-export default VesselAlertAndBeaconMalfunctionLayer
+export default React.memo(VesselAlertAndBeaconMalfunctionLayer)

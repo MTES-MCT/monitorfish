@@ -14,24 +14,21 @@ const VesselEstimatedPositionCardOverlay = ({ map, pointerMoveEventPixel, featur
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
 
-  const overlayCallback = useCallback(
-    (ref) => {
-      overlayRef.current = ref
-      if (ref) {
-        overlayObjectRef.current = new Overlay({
-          element: ref,
-          autoPan: true,
-          autoPanAnimation: {
-            duration: 400
-          },
-          className: 'ol-overlay-container ol-selectable'
-        })
-      } else {
-        overlayObjectRef.current = null
-      }
-    },
-    [overlayRef, overlayObjectRef]
-  )
+  const overlayCallback = useCallback(ref => {
+    overlayRef.current = ref
+    if (ref) {
+      overlayObjectRef.current = new Overlay({
+        element: ref,
+        autoPan: true,
+        autoPanAnimation: {
+          duration: 400
+        },
+        className: 'ol-overlay-container ol-selectable'
+      })
+    } else {
+      overlayObjectRef.current = null
+    }
+  }, [overlayRef, overlayObjectRef])
 
   useEffect(() => {
     if (map) {

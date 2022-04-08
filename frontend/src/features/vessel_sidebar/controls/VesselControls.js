@@ -6,7 +6,7 @@ import LastControlZone from './LastControlZone'
 import ControlsResumeZone from './ControlsResumeZone'
 import YearsToControlList from './YearsToControlList'
 import { getYearsToControl, lastControlByType } from '../../../domain/entities/controls'
-import getVesselControls from '../../../domain/use_cases/getVesselControls'
+import getVesselControls from '../../../domain/use_cases/vessel/getVesselControls'
 import {
   resetNextControlResumeAndControls,
   setControlFromDate,

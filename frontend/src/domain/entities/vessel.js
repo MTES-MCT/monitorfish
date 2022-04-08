@@ -12,12 +12,8 @@ export const VESSEL_SELECTOR_STYLE = 200
 export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
-  static getVesselId (vessel) {
-    return `${Layers.VESSELS.code}:${getVesselFeatureIdFromVessel(vessel)}`
-  }
-
-  static getVesselIdFromIdentity (identity) {
-    return `${Layers.VESSELS.code}:${identity}`
+  static getVesselFeatureId (vessel) {
+    return `${Layers.VESSELS.code}:${getVesselId(vessel)}`
   }
 
   static getVesselOpacity (dateTime, vesselIsHidden, vesselIsOpacityReduced) {
@@ -138,8 +134,36 @@ export const getOnlyVesselIdentityProperties = vessel => {
   }
 }
 
-export const getVesselFeatureIdFromVessel = vessel => {
+/**
+ *
+ * @param vessel
+ * @return {VesselId}
+ */
+export const getVesselId = vessel => {
   return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.ircs}`
+}
+
+/**
+ * Returns true if there is at least one vessel track or vessel selected
+ * @param {Object.<string, ShowedVesselTrack>} vesselsTracksShowed
+ * @param {VesselIdentity} selectedVesselIdentity
+ * @return {boolean}
+ */
+export const atLeastOneVesselSelected = (vesselsTracksShowed, selectedVesselIdentity) =>
+  !!(Object.values(vesselsTracksShowed)?.length || selectedVesselIdentity)
+
+/**
+ * Returns true if the vessel is showed:
+ *  - The track is displayed (`vesselsTracksShowed` param)
+ *  - The vessel is selected (`selectedVesselIdentity` param)
+ * @param {VesselIdentity} vessel
+ * @param {Object.<string, ShowedVesselTrack>} vesselsTracksShowed
+ * @param {VesselIdentity} selectedVesselIdentity
+ * @return {boolean}
+ */
+export const vesselIsShowed = (vessel, vesselsTracksShowed, selectedVesselIdentity) => {
+  return vesselsAreEquals(vessel, selectedVesselIdentity) ||
+    Object.values(vesselsTracksShowed)?.find(vesselTrackShowed => vesselsAreEquals(vessel, vesselTrackShowed.vesselIdentity))
 }
 
 export const getVesselLastPositionVisibilityDates = vesselsLastPositionVisibility => {

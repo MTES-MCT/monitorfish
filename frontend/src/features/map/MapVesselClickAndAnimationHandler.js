@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector, batch } from 'react-redux'
 import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../domain/shared_slices/Map'
-import showVessel from '../../domain/use_cases/showVessel'
+import showVessel from '../../domain/use_cases/vessel/showVessel'
 import LayersEnum from '../../domain/entities/layers'
-import showVesselTrack from '../../domain/use_cases/showVesselTrack'
-import getVesselVoyage from '../../domain/use_cases/getVesselVoyage'
+import showVesselTrack from '../../domain/use_cases/vessel/showVesselTrack'
+import getVesselVoyage from '../../domain/use_cases/vessel/getVesselVoyage'
+import { updateVesselTrackAsZoomed } from '../../domain/shared_slices/Vessel'
 
 /**
  * Handle map animations - Note that the map  and mapClickEvent parameters are given from
@@ -21,7 +22,8 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   const {
     vessels,
     vesselSidebarIsOpen,
-    vesselTrackExtent
+    vesselTrackExtent,
+    vesselsTracksShowed
   } = useSelector(state => state.vessel)
   const {
     previewFilteredVesselsMode
@@ -68,8 +70,33 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
         })
       }
     }
+
     animateViewToExtent()
   }, [animateToExtent, vesselTrackExtent, map, vesselSidebarIsOpen])
+
+  useEffect(() => {
+    if (!map) {
+      return
+    }
+
+    Object.keys(vesselsTracksShowed)
+      .filter(vesselId => {
+        const track = vesselsTracksShowed[vesselId]
+
+        return track.toZoom && track.extent && !track.toShow
+      }).forEach(vesselIdentity => {
+        const extent = vesselsTracksShowed[vesselIdentity].extent
+
+        map.getView().fit(extent, {
+          duration: 500,
+          padding: [100, 550, 100, 50],
+          maxZoom: 10,
+          callback: () => {
+            dispatch(updateVesselTrackAsZoomed(vesselIdentity))
+          }
+        })
+      })
+  }, [map, vesselsTracksShowed])
 
   useEffect(() => {
     const clickedFeatureId = mapClickEvent?.feature?.getId()
@@ -80,7 +107,7 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
 
       if (clickedVessel) {
         if (mapClickEvent.ctrlKeyPressed) {
-          dispatch(showVesselTrack(clickedVessel, false))
+          dispatch(showVesselTrack(clickedVessel.vesselProperties, false))
         } else {
           batch(() => {
             dispatch(showVessel(clickedVessel.vesselProperties, false, false))

@@ -21,7 +21,7 @@ context('Vessels list', () => {
     cy.get('*[class^="rs-picker-tag-wrapper"]').eq(0).type('France{enter}')
     cy.get('*[data-cy^="vessels-list-box-filter"]').click({ timeout: 20000 })
     cy.wait(200)
-    cy.get('body').click(30, 230, { timeout: 20000 })
+    cy.get('body').click(60, 230, { timeout: 20000 })
     cy.wait(200)
     cy.get('body').click(700, 650, { timeout: 20000 })
     cy.wait(200)
@@ -46,14 +46,14 @@ context('Vessels list', () => {
 
     // When
     cy.get('*[data-cy^="filter-vessel-at-port"]').click()
-    cy.wait(1000)
+    cy.wait(500)
 
     // Then
     cy.get('*[data-cy^="vessel-list-table-count"]').contains('803 navires')
 
     // Then re-show the vessels at port
     cy.get('*[data-cy^="filter-vessel-at-port"]').click()
-    cy.wait(1000)
+    cy.wait(500)
 
     cy.get('*[data-cy^="vessel-list-table-count"]').contains('960 navires')
   })

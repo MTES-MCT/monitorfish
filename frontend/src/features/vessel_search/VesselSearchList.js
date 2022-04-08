@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
-import focusOnVesselSearch, { focusState } from '../../domain/use_cases/focusOnVesselSearch'
+import focusOnVesselSearch, { focusState } from '../../domain/use_cases/vessel/focusOnVesselSearch'
 import { useDispatch, useSelector } from 'react-redux'
 import VesselSearchItem from './VesselSearchItem'
-import { Vessel } from '../../domain/entities/vessel'
+import { getVesselId } from '../../domain/entities/vessel'
 
 const VesselSearchList = ({
   searchText,
@@ -36,7 +36,6 @@ const VesselSearchList = ({
               foundVesselsOnMap?.map(feature => {
                 return <VesselSearchItem
                   key={feature.vesselId}
-                  id={feature.vesselId}
                   vessel={feature.vesselProperties}
                   selectVessel={() => selectVessel(feature.vesselProperties)}
                   searchText={searchText}
@@ -45,10 +44,9 @@ const VesselSearchList = ({
             }
             {
               foundVesselsFromAPI?.map((vessel) => {
-                const vesselId = Vessel.getVesselId(vessel)
+                const vesselId = getVesselId(vessel)
                 return <VesselSearchItem
                   key={vesselId}
-                  id={vesselId}
                   vessel={vessel}
                   selectVessel={() => selectVessel(vessel)}
                   searchText={searchText}
@@ -62,7 +60,7 @@ const VesselSearchList = ({
             <List>
               {
                 lastSearchedVessels.map(vessel => {
-                  const vesselId = Vessel.getVesselId(vessel)
+                  const vesselId = getVesselId(vessel)
                   return <VesselSearchItem
                     key={vesselId}
                     id={vesselId}

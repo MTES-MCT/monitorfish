@@ -8,12 +8,11 @@ import LastPositionsSlider from './LastPositionsSlider'
 import {
   setHideVesselsAtPort,
   setVesselsLastPositionVisibility,
-  setVesselTrackDepth,
   showVesselsEstimatedPositions
 } from '../../domain/shared_slices/Map'
-import TrackDepthRadio from '../vessel_labels/TrackDepthRadio'
+import TrackDepthRadio from './TrackDepthRadio'
 import { expandRightMenu } from '../../domain/shared_slices/Global'
-import unselectVessel from '../../domain/use_cases/unselectVessel'
+import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useClickOutsideComponent } from '../../hooks/useClickOutside'
@@ -37,7 +36,6 @@ const VesselVisibility = () => {
   } = useSelector(state => state.global)
   const vesselsLastPositionVisibility = useSelector(state => state.map.vesselsLastPositionVisibility)
   const {
-    defaultVesselTrackDepth,
     showingVesselsEstimatedPositions,
     hideVesselsAtPort
   } = useSelector(state => state.map)
@@ -63,10 +61,6 @@ const VesselVisibility = () => {
       opacityReduced: opacityReduced,
       hidden: hidden
     }))
-  }
-
-  const updateVesselTrackDepth = depth => {
-    dispatch(setVesselTrackDepth(depth))
   }
 
   return (
@@ -105,10 +99,7 @@ const VesselVisibility = () => {
         <Header isFirst={false}>
           Paramétrer la longueur par défaut des pistes
         </Header>
-        <TrackDepthRadio
-          updateVesselTrackDepth={updateVesselTrackDepth}
-          vesselTrackDepth={defaultVesselTrackDepth}
-        />
+        <TrackDepthRadio/>
         <MapPropertyTrigger
           booleanProperty={showingVesselsEstimatedPositions}
           updateBooleanProperty={isShowed => dispatch(showVesselsEstimatedPositions(isShowed))}

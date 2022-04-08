@@ -35,6 +35,7 @@ import BeaconMalfunctionsMapButton from './features/side_window/beacon_malfuncti
 import SideWindowLauncher from './features/side_window/SideWindowLauncher'
 import SideWindow from './features/side_window/SideWindow'
 import { sideWindowMenu } from './domain/entities/sideWindow'
+import FavoriteVessels from './features/favorite_vessels/FavoriteVessels'
 
 function App () {
   switch (browserName) {
@@ -105,6 +106,7 @@ function HomePage () {
               <VesselList namespace={'homepage'}/>
               <VesselFilters/>
               <VesselVisibility/>
+              <FavoriteVessels/>
               <VesselSidebar/>
               <UpdatingVesselLoader/>
               <Measurement/>
@@ -135,6 +137,7 @@ function TritonFish () {
         <VesselsSearch/>
         <RightMenuOnHoverArea/>
         <VesselVisibility/>
+        <FavoriteVessels/>
         <VesselSidebar/>
         <UpdatingVesselLoader/>
         <Measurement/>

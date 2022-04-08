@@ -108,13 +108,13 @@ export const getSelectedVesselStyle = ({ isLight }) => feature => {
   const selectorStyle = new Style({
     image: new Icon({
       src: 'selecteur_navire.png',
-      rotation: degreesToRadian(course),
       scale: 0.5,
       color: isLight ? COLORS.vesselLightColor : COLORS.vesselColor,
       opacity: 1
     }),
     zIndex: VESSEL_SELECTOR_STYLE
   })
+
   const vesselStyle = new Style({
     image: new Icon({
       src: 'boat.png',

@@ -14,7 +14,13 @@ export const VesselTrackDepth = {
   CUSTOM: 'CUSTOM'
 }
 
-export function getVesselTrackDepth (newWantedTrackDepth, vesselCustomTrackDepth, defaultVesselTrackDepth) {
+export const getVesselTrackDepthRequestFromDefaultTrackDepth = trackDepth => ({
+  trackDepth: trackDepth,
+  afterDateTime: null,
+  beforeDateTime: null
+})
+
+export function getVesselTrackDepthRequest (newWantedTrackDepth, vesselCustomTrackDepth, defaultVesselTrackDepth) {
   const {
     trackDepth,
     afterDateTime,

@@ -17,6 +17,7 @@ export class VesselLabelLine {
    * @param {string[]} fromCoordinates - The [longitude, latitude] of the start of the line (the vessel position)
    * @param {string[]} toCoordinates - The [longitude, latitude] of the label position
    * @param {string} featureId - The feature identifier
+   * @param {number} opacity - The opacity
    */
   static getFeature (fromCoordinates, toCoordinates, featureId, opacity) {
     const labelLineFeature = new Feature({

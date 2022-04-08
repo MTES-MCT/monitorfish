@@ -6,7 +6,7 @@ import RegulatoryLayerTopic from '../layers/regulatory/RegulatoryLayerTopic'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { setLawTypeOpened, setRegulatoryTopicsOpened, closeRegulatoryZoneMetadataPanel } from '../../domain/shared_slices/Regulatory'
-import updateTopicForAllZones from '../../domain/use_cases/updateTopicForAllZones'
+import updateTopicForAllZones from '../../domain/use_cases/layer/regulation/updateTopicForAllZones'
 
 const LawType = props => {
   const dispatch = useDispatch()

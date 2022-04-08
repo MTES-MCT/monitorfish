@@ -25,7 +25,7 @@ const AnimateToTrack = ({ openBox, rightMenuIsOpen }) => {
 }
 
 const AnimateToTrackButton = styled(MapButtonStyle)`
-  top: 153px;
+  top: 188px;
   height: 30px;
   width: 30px;
   background: ${COLORS.charcoal};

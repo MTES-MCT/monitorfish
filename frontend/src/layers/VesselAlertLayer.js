@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
@@ -7,18 +7,14 @@ import { Vector } from 'ol/layer'
 import Layers from '../domain/entities/layers'
 
 import { getVesselAlertStyle } from './styles/vessel.style'
-import {
-  getVesselFeatureIdFromVessel,
-  getVesselLastPositionVisibilityDates,
-  Vessel,
-  vesselsAreEquals
-} from '../domain/entities/vessel'
+import { getVesselId, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel'
 
 const VesselAlertLayer = ({ map }) => {
   const {
     vessels,
     hideNonSelectedVessels,
-    selectedVessel
+    selectedVesselIdentity,
+    vesselsTracksShowed
   } = useSelector(state => state.vessel)
 
   const {
@@ -84,13 +80,13 @@ const VesselAlertLayer = ({ map }) => {
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return features
         if (hideVesselsAtPort && vessel.isAtPort) return features
-        if (hideNonSelectedVessels && !vesselsAreEquals(vessel.vesselProperties, selectedVessel)) return features
+        if (hideNonSelectedVessels && !vesselIsShowed(vessel.vesselProperties, vesselsTracksShowed, selectedVesselIdentity)) return features
         if (!Vessel.getVesselOpacity(vessel.vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)) return features
 
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layers.VESSEL_ALERT.code}:${getVesselFeatureIdFromVessel(vessel.vesselProperties)}`)
+        feature.setId(`${Layers.VESSEL_ALERT.code}:${getVesselId(vessel.vesselProperties)}`)
         features.push(feature)
 
         return features
@@ -102,7 +98,8 @@ const VesselAlertLayer = ({ map }) => {
   }, [
     adminRole,
     vessels,
-    selectedVessel,
+    selectedVesselIdentity,
+    vesselsTracksShowed,
     previewFilteredVesselsMode,
     nonFilteredVesselsAreHidden,
     hideNonSelectedVessels,
@@ -114,4 +111,4 @@ const VesselAlertLayer = ({ map }) => {
   return null
 }
 
-export default VesselAlertLayer
+export default React.memo(VesselAlertLayer)

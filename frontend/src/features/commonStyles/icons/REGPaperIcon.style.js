@@ -9,10 +9,10 @@ const baseREGPaperIcon = css`
   align-self: center;
   margin-right: 7px;
 `
-export const REGPaperIcon = styled(REGPaperSVG)`
+export const PaperIcon = styled(REGPaperSVG)`
   ${baseREGPaperIcon}
 `
 
-export const REGPaperDarkIcon = styled(REGPaperDarkSVG)`
+export const PaperDarkIcon = styled(REGPaperDarkSVG)`
   ${baseREGPaperIcon}
 `

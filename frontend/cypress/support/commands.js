@@ -31,6 +31,11 @@ function unquote (str) {
   return str.replace(/(^")|("$)/g, '')
 }
 
+Cypress.Commands.add('cleanScreenshots', fromNumber => {
+  cy.exec(`cd cypress/integration/__image_snapshots__/ && find . | grep -P "[${fromNumber}-7]\.png" | xargs -i rm {}\n`)
+})
+
+
 Cypress.Commands.add(
   'before',
   {
@@ -42,3 +47,5 @@ Cypress.Commands.add(
     return unquote(before.getPropertyValue(property))
   }
 )
+
+

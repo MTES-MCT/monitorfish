@@ -90,7 +90,7 @@ const mapSlice = createSlice({
       window.localStorage.setItem(vesselsLastPositionVisibilityLocalStorageKey, JSON.stringify(action.payload))
       state.vesselsLastPositionVisibility = action.payload
     },
-    setVesselTrackDepth (state, action) {
+    setDefaultVesselTrackDepth (state, action) {
       window.localStorage.setItem(vesselTrackDepthLocalStorageKey, JSON.stringify(action.payload))
       state.defaultVesselTrackDepth = action.payload
     },
@@ -162,7 +162,7 @@ export const {
   resetAnimateToRegulatoryLayer,
   setVesselLabelsShowedOnMap,
   setVesselsLastPositionVisibility,
-  setVesselTrackDepth,
+  setDefaultVesselTrackDepth,
   setVesselLabel,
   selectBaseLayer,
   setInteraction,

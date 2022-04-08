@@ -1,0 +1,16 @@
+import { setError } from '../../../shared_slices/Global'
+import { getAllGeometryWithoutProperty } from '../../../../api/geoserver'
+import { MonitorFishWorker } from '../../../../workers/MonitorFishWorker'
+
+const getGeometryWithoutRegulationReference = () => async (dispatch, getState) => {
+  const monitorFishWorker = await new MonitorFishWorker()
+
+  return getAllGeometryWithoutProperty(getState().global.inBackofficeMode)
+    .then(features => {
+      return monitorFishWorker.getGeometryWithoutRegulationRef(features)
+    }).catch(error => {
+      dispatch(setError(error))
+    })
+}
+
+export default getGeometryWithoutRegulationReference

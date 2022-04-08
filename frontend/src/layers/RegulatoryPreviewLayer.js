@@ -1,11 +1,11 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 import Layers from '../domain/entities/layers'
 import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
-import zoomInLayer from '../domain/use_cases/zoomInLayer'
+import zoomInLayer from '../domain/use_cases/layer/zoomInLayer'
 import { regulatoryPreviewStyle } from './styles/regulatoryPreview.style'
 
 const RegulatoryPreviewLayer = ({ map }) => {
@@ -73,4 +73,4 @@ const RegulatoryPreviewLayer = ({ map }) => {
   return null
 }
 
-export default RegulatoryPreviewLayer
+export default React.memo(RegulatoryPreviewLayer)

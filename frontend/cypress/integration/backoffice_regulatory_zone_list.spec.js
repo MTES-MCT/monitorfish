@@ -7,7 +7,7 @@ context('Backoffice', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/backoffice/regulation`)
-    cy.wait(3000)
+    cy.wait(200)
   })
 
   it('regulatory zones are displayed by layer name and law types', () => {

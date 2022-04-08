@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
@@ -61,13 +61,13 @@ const VesselSelectedLayer = ({ map }) => {
     }
 
     if (vesselsTracksShowed) {
-      const vessels = Object.values(vesselsTracksShowed)
-      const features = vessels?.map(vessel => {
+      const vesselsTracks = Object.values(vesselsTracksShowed)
+      const features = vesselsTracks?.map(vesselTrack => {
         const feature = new Feature({
-          course: vessel.course,
-          geometry: new Point(vessel.coordinates)
+          course: vesselTrack.course,
+          geometry: new Point(vesselTrack.coordinates)
         })
-        feature.setId(vessel.vesselId)
+        feature.setId(vesselTrack.vesselId)
         return feature
       })
       vectorSourceRef.current?.addFeatures(features)
@@ -77,4 +77,4 @@ const VesselSelectedLayer = ({ map }) => {
   return null
 }
 
-export default VesselSelectedLayer
+export default React.memo(VesselSelectedLayer)

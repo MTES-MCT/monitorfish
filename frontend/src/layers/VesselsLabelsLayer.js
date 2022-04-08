@@ -7,7 +7,7 @@ import LineString from 'ol/geom/LineString'
 import { usePrevious } from '../hooks/usePrevious'
 
 import Layers from '../domain/entities/layers'
-import { getVesselFeatureIdFromVessel, getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
+import { getVesselId, getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
 import { drawMovedLabelIfFoundAndReturnOffset, VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 
@@ -18,7 +18,7 @@ const MAX_LABELS_DISPLAYED_IN_PREVIEW = 400
 const NOT_FOUND = -1
 
 const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
-  const throttleDuration = 500 // ms
+  const throttleDuration = 250 // ms
 
   const {
     vessels,
@@ -202,7 +202,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
       const showedTracksVesselsIdentities = Object.keys(vesselsTracksShowed)
       if (selectedVessel) {
-        showedTracksVesselsIdentities.push(getVesselFeatureIdFromVessel(selectedVessel))
+        showedTracksVesselsIdentities.push(getVesselId(selectedVessel))
       }
 
       const nextFeaturesAndLabels = features
@@ -219,7 +219,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
           const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced) || vesselProperties?.beaconMalfunctionId ? 1 : 0
           const offset = drawMovedLabelIfFoundAndReturnOffset(getVectorSource(), vesselToCoordinates, labelLineFeatureId, feature, opacity)
-          const trackIsShown = showedTracksVesselsIdentities.includes(getVesselFeatureIdFromVessel(vesselProperties))
+          const trackIsShown = showedTracksVesselsIdentities.includes(getVesselId(vesselProperties))
 
           return {
             identity: {
@@ -242,6 +242,13 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     }
 
     function addVesselLabelToAllFeaturesInExtent () {
+      const doNotShowLabels = (adminRole && !vesselLabelsShowedOnMap && !riskFactorShowedOnMap) || (!adminRole && !vesselLabelsShowedOnMap)
+      if (doNotShowLabels) {
+        setFeaturesAndLabels([])
+        getVectorSource().clear()
+        return
+      }
+
       if (!vesselLabelsShowedOnMap && !riskFactorShowedOnMap) {
         setFeaturesAndLabels([])
         getVectorSource().clear()
@@ -251,21 +258,21 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       const featuresInExtent = vesselsLayerSourceRef?.current?.getFeaturesInExtent(map.getView().calculateExtent()) || []
       const filterShowed = filters.find(filter => filter.showed)
       const isFiltered = filterShowed && nonFilteredVesselsAreHidden // && filteredVesselsFeaturesUids?.length FIXME: if filterShowed, is it really necessary to check filteredVesselsFeaturesUids ?
-      let featuresRequireringLabel
+      let featuresRequiringLabel
       if (hideNonSelectedVessels) {
-        const selectedVesselId = selectedVessel && Vessel.getVesselId(selectedVessel)
+        const selectedVesselId = selectedVessel && Vessel.getVesselFeatureId(selectedVessel)
         const showedFeaturesIdentities = Object.keys(vesselsTracksShowed)
-        featuresRequireringLabel = featuresInExtent.filter(feature => (selectedVessel && feature.getId() === selectedVesselId) || showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity)))
+        featuresRequiringLabel = featuresInExtent.filter(feature => (selectedVessel && feature.getId() === selectedVesselId) || showedFeaturesIdentities.find(identity => feature?.getId()?.toString()?.includes(identity)))
       } else if (previewFilteredVesselsMode) {
-        featuresRequireringLabel = featuresInExtent.filter(feature => feature.get('filterPreview'))
+        featuresRequiringLabel = featuresInExtent.filter(feature => feature.get('filterPreview'))
       } else if (isFiltered) {
-        featuresRequireringLabel = featuresInExtent.filter(feature => feature.get('isFiltered'))
+        featuresRequiringLabel = featuresInExtent.filter(feature => feature.get('isFiltered'))
       } else {
-        featuresRequireringLabel = featuresInExtent
+        featuresRequiringLabel = featuresInExtent
       }
       const maxLabelsDisplayed = previewFilteredVesselsMode ? MAX_LABELS_DISPLAYED_IN_PREVIEW : MAX_LABELS_DISPLAYED
-      if (featuresRequireringLabel.length < maxLabelsDisplayed) {
-        addLabelToFeatures(featuresRequireringLabel)
+      if (featuresRequiringLabel.length < maxLabelsDisplayed) {
+        addLabelToFeatures(featuresRequiringLabel)
       } else {
         setFeaturesAndLabels([])
         getVectorSource().clear()

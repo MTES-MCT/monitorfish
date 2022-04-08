@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -12,6 +12,8 @@ import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
 import { setHideNonSelectedVessels } from '../../domain/shared_slices/Vessel'
 import { ReactComponent as ShowingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_inactif.svg'
 import { ReactComponent as HidingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_actif.svg'
+import { LeftBoxOpened } from '../../domain/entities/global'
+import { setLeftBoxOpened } from '../../domain/shared_slices/Global'
 
 const FavoriteVessels = () => {
   const dispatch = useDispatch()
@@ -26,10 +28,10 @@ const FavoriteVessels = () => {
   } = useSelector(state => state.vessel)
   const {
     healthcheckTextWarning,
-    previewFilteredVesselsMode
+    previewFilteredVesselsMode,
+    leftBoxOpened
   } = useSelector(state => state.global)
 
-  const [isOpen, setIsOpen] = useState(false)
   const wrapperRef = useRef(null)
 
   return (
@@ -38,22 +40,24 @@ const FavoriteVessels = () => {
         <FavoriteVesselsNumber
           data-cy={'favorite-vessels-number'}
           isHidden={previewFilteredVesselsMode}
-          isOpen={isOpen}
+          isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
         >
           {favorites?.length || 0}
         </FavoriteVesselsNumber>
         <FavoriteVesselsIcon
           data-cy={'favorite-vessels'}
           healthcheckTextWarning={healthcheckTextWarning}
-          isOpen={isOpen}
+          isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
           isHidden={previewFilteredVesselsMode}
           title={'Mes navires suivis'}
-          onClick={() => setIsOpen(!isOpen)}>
+          onClick={() => dispatch(setLeftBoxOpened(leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS ? null : LeftBoxOpened.FAVORITE_VESSELS))}
+        >
           <FavoritesIcon/>
         </FavoriteVesselsIcon>
         <FavoriteVesselsBox
+          data-cy={'favorite-vessels-box'}
           healthcheckTextWarning={healthcheckTextWarning}
-          isOpen={isOpen}
+          isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
           isHidden={previewFilteredVesselsMode}
         >
           <Header isFirst={true}>

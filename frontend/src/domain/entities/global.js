@@ -1,0 +1,4 @@
+export const LeftBoxOpened = {
+  REGULATIONS: 'REGULATIONS',
+  FAVORITE_VESSELS: 'FAVORITE_VESSELS'
+}

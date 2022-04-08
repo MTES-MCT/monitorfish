@@ -1492,7 +1492,7 @@ python-versions = "*"
 
 [[package]]
 name = "notebook"
-version = "6.4.4"
+version = "6.4.10"
 description = "A web-based notebook environment for interactive computing"
 category = "dev"
 optional = false
@@ -1505,11 +1505,12 @@ ipython-genutils = "*"
 jinja2 = "*"
 jupyter-client = ">=5.3.4"
 jupyter-core = ">=4.6.1"
-nbconvert = "*"
+nbconvert = ">=5"
 nbformat = "*"
+nest-asyncio = ">=1.5"
 prometheus-client = "*"
 pyzmq = ">=17"
-Send2Trash = ">=1.5.0"
+Send2Trash = ">=1.8.0"
 terminado = ">=0.8.3"
 tornado = ">=6.1"
 traitlets = ">=4.2.1"
@@ -2297,11 +2298,16 @@ scipy = ">=1.0"
 
 [[package]]
 name = "send2trash"
-version = "1.5.0"
+version = "1.8.0"
 description = "Send file to trash natively under Mac OS X, Windows and Linux."
 category = "dev"
 optional = false
 python-versions = "*"
+
+[package.extras]
+nativelib = ["pyobjc-framework-cocoa", "pywin32"]
+objc = ["pyobjc-framework-cocoa"]
+win32 = ["pywin32"]
 
 [[package]]
 name = "service-identity"
@@ -3777,8 +3783,8 @@ nodeenv = [
     {file = "nodeenv-1.5.0.tar.gz", hash = "sha256:ab45090ae383b716c4ef89e690c41ff8c2b257b85b309f01f3654df3d084bd7c"},
 ]
 notebook = [
-    {file = "notebook-6.4.4-py3-none-any.whl", hash = "sha256:33488bdcc5cbef23c3cfa12cd51b0b5459a211945b5053d17405980611818149"},
-    {file = "notebook-6.4.4.tar.gz", hash = "sha256:26b0095c568e307a310fd78818ad8ebade4f00462dada4c0e34cbad632b9085d"},
+    {file = "notebook-6.4.10-py3-none-any.whl", hash = "sha256:49cead814bff0945fcb2ee07579259418672ac175d3dc3d8102a4b0a656ed4df"},
+    {file = "notebook-6.4.10.tar.gz", hash = "sha256:2408a76bc6289283a8eecfca67e298ec83c67db51a4c2e1b713dd180bb39e90e"},
 ]
 numpy = [
     {file = "numpy-1.22.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3d62d6b0870b53799204515145935608cdeb4cebb95a26800b6750e48884cc5b"},
@@ -4375,8 +4381,8 @@ seaborn = [
     {file = "seaborn-0.11.1.tar.gz", hash = "sha256:44e78eaed937c5a87fc7a892c329a7cc091060b67ebd1d0d306b446a74ba01ad"},
 ]
 send2trash = [
-    {file = "Send2Trash-1.5.0-py3-none-any.whl", hash = "sha256:f1691922577b6fa12821234aeb57599d887c4900b9ca537948d2dac34aea888b"},
-    {file = "Send2Trash-1.5.0.tar.gz", hash = "sha256:60001cc07d707fe247c94f74ca6ac0d3255aabcb930529690897ca2a39db28b2"},
+    {file = "Send2Trash-1.8.0-py3-none-any.whl", hash = "sha256:f20eaadfdb517eaca5ce077640cb261c7d2698385a6a0f072a4a5447fd49fa08"},
+    {file = "Send2Trash-1.8.0.tar.gz", hash = "sha256:d2c24762fd3759860a0aff155e45871447ea58d2be6bdd39b5c8f966a0c99c2d"},
 ]
 service-identity = [
     {file = "service_identity-18.1.0-py2.py3-none-any.whl", hash = "sha256:001c0707759cb3de7e49c078a7c0c9cd12594161d3bf06b9c254fdcb1a60dc36"},

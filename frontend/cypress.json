@@ -11,12 +11,14 @@
     "runMode": 5,
     "openMode": 0
   },
+  "updateSnapshots": false,
   "env": {
     "cypress-plugin-snapshots": {
       "imageConfig": {
-        "threshold": 0.5,
+        "threshold": 20,
         "thresholdType": "pixel"
-      }
+      },
+      "updateSnapshots": false
     }
   }
 }

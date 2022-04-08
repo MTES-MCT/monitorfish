@@ -7,18 +7,14 @@ import { Vector } from 'ol/layer'
 import Layers from '../domain/entities/layers'
 
 import { getVesselAlertStyle } from './styles/vessel.style'
-import {
-  getVesselId,
-  getVesselLastPositionVisibilityDates,
-  Vessel,
-  vesselsAreEquals
-} from '../domain/entities/vessel'
+import { getVesselId, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel'
 
 const VesselAlertLayer = ({ map }) => {
   const {
     vessels,
     hideNonSelectedVessels,
-    selectedVessel
+    selectedVesselIdentity,
+    vesselsTracksShowed
   } = useSelector(state => state.vessel)
 
   const {
@@ -84,7 +80,7 @@ const VesselAlertLayer = ({ map }) => {
         if (nonFilteredVesselsAreHidden && !vessel.isFiltered) return features
         if (previewFilteredVesselsMode && !vessel.filterPreview) return features
         if (hideVesselsAtPort && vessel.isAtPort) return features
-        if (hideNonSelectedVessels && !vesselsAreEquals(vessel.vesselProperties, selectedVessel)) return features
+        if (hideNonSelectedVessels && !vesselIsShowed(vessel.vesselProperties, vesselsTracksShowed, selectedVesselIdentity)) return features
         if (!Vessel.getVesselOpacity(vessel.vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced)) return features
 
         const feature = new Feature({
@@ -102,7 +98,8 @@ const VesselAlertLayer = ({ map }) => {
   }, [
     adminRole,
     vessels,
-    selectedVessel,
+    selectedVesselIdentity,
+    vesselsTracksShowed,
     previewFilteredVesselsMode,
     nonFilteredVesselsAreHidden,
     hideNonSelectedVessels,

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { Vessel, VesselSidebarTab } from '../entities/vessel'
+import { atLeastOneVesselSelected, Vessel, VesselSidebarTab } from '../entities/vessel'
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 
@@ -183,6 +183,10 @@ const vesselSlice = createSlice({
         beforeDateTime: null
       }
       state.tripMessagesLastToFormerDEPDateTimes = []
+
+      if (!atLeastOneVesselSelected(state.vesselsTracksShowed, state.selectedVesselIdentity)) {
+        state.hideNonSelectedVessels = false
+      }
     },
     setFocusOnVesselSearch (state, action) {
       state.isFocusedOnVesselSearch = action.payload
@@ -243,7 +247,7 @@ const vesselSlice = createSlice({
     },
     /**
      * Show or hide other vessels (than the selected vessel)
-     * @function sethideNonSelectedVessels
+     * @function setHideNonSelectedVessels
      * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: boolean}} action - hide (true) or show (false)
@@ -314,6 +318,10 @@ const vesselSlice = createSlice({
      */
     updateVesselTrackAsHidden (state, action) {
       delete state.vesselsTracksShowed[action.payload]
+
+      if (!atLeastOneVesselSelected(state.vesselsTracksShowed, state.selectedVesselIdentity)) {
+        state.hideNonSelectedVessels = false
+      }
     },
     /**
      * Set the vessel track features extent - used to fit the extent into the OpenLayers view

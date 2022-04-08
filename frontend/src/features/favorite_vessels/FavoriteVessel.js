@@ -44,7 +44,12 @@ const FavoriteVessel = props => {
             : <PaperIcon
               data-cy={'favorite-vessel-show-vessel-sidebar'}
               title="Afficher la fiche navire"
-              onClick={() => dispatch(showVessel(favorite))}
+              onClick={() => {
+                if (trackIsShowed) {
+                  dispatch(hideVesselTrack(vesselId))
+                }
+                dispatch(showVessel(favorite))
+              }}
             />
         }
         {
@@ -53,7 +58,13 @@ const FavoriteVessel = props => {
               data-cy={'favorite-vessel-hide-vessel-track'}
               style={buttonStyle}
               title="Cacher la piste"
-              onClick={() => dispatch(hideVesselTrack(vesselId))}
+              onClick={() => {
+                if (trackIsShowed) {
+                  dispatch(hideVesselTrack(vesselId))
+                } else if (vesselIsShowed) {
+                  dispatch(unselectVessel())
+                }
+              }}
             />
             : <HideIcon
               data-cy={'favorite-vessel-show-vessel-track'}

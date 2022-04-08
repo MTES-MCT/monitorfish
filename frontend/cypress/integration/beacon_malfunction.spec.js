@@ -11,7 +11,7 @@ context('Beacon malfunction', () => {
   })
 
   it('Vessels with beacon malfunction Should be showed on map with a yellow circle', () => {
-    cy.cleanScreenshots()
+    cy.cleanScreenshots(1)
 
     // Given
     cy.get('*[data-cy^="vessel-labels"]').click({ timeout: 20000 })
@@ -27,6 +27,6 @@ context('Beacon malfunction', () => {
       }
     })
 
-    cy.cleanScreenshots()
+    cy.cleanScreenshots(1)
   })
 })

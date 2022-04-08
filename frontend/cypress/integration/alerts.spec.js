@@ -11,7 +11,7 @@ context('Alerts', () => {
   })
 
   it('Should be showed on map When vessels have alerts', () => {
-    cy.cleanScreenshots()
+    cy.cleanScreenshots(1)
 
     // Given
     cy.get('*[data-cy^="vessel-labels"]').click({ timeout: 20000 })
@@ -27,6 +27,6 @@ context('Alerts', () => {
       }
     })
 
-    cy.cleanScreenshots()
+    cy.cleanScreenshots(1)
   })
 })

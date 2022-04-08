@@ -180,7 +180,7 @@ context('LayersSidebar', () => {
   })
 
   it('An administrative zone Should be showed and hidden', () => {
-    cy.cleanScreenshots()
+    cy.cleanScreenshots(1)
 
     // When
     cy.get('*[data-cy^="layers-sidebar"]').click({ timeout: 20000 })
@@ -195,6 +195,6 @@ context('LayersSidebar', () => {
       }
     })
 
-    cy.cleanScreenshots()
+    cy.cleanScreenshots(1)
   })
 })

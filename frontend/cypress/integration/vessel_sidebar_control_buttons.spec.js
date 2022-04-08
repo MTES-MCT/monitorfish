@@ -77,7 +77,7 @@ context('Vessel sidebar controls buttons', () => {
   })
 
   it('Vessel track Should fit the view box When I click on animate to track', () => {
-    cy.cleanScreenshots()
+    cy.cleanScreenshots(1)
 
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
@@ -94,6 +94,6 @@ context('Vessel sidebar controls buttons', () => {
       }
     })
 
-    cy.cleanScreenshots()
+    cy.cleanScreenshots(1)
   })
 })

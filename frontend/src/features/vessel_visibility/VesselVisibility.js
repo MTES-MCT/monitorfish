@@ -15,13 +15,13 @@ import { expandRightMenu } from '../../domain/shared_slices/Global'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
-import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 import { setHideNonSelectedVessels } from '../../domain/shared_slices/Vessel'
 import { ReactComponent as HidingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_actif.svg'
 import { ReactComponent as ShowingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_inactif.svg'
 import { ReactComponent as HideVesselsAtPortSVG } from '../icons/Masquer_navires_au_port.svg'
 import { ReactComponent as EstimatedPositionSVG } from '../icons/Positions_estimees.svg'
 import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
+import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
 
 const VesselVisibility = () => {
   const dispatch = useDispatch()
@@ -42,7 +42,7 @@ const VesselVisibility = () => {
 
   const [vesselVisibilityBoxIsOpen, setVesselVisibilityBoxIsOpen] = useState(false)
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, vesselVisibilityBoxIsOpen)
 
   useEffect(() => {
     if (clickedOutsideComponent) {

@@ -2,13 +2,13 @@ import React, { createRef, useEffect, useRef, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import { useClickOutsideComponent } from '../../../hooks/useClickOutside'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 import CustomTrackDepthModal from './map_menu/CustomTrackDepthModal'
 import { useDispatch } from 'react-redux'
 import showVesselTrack from '../../../domain/use_cases/vessel/showVesselTrack'
 import { addVesselToFavorites } from '../../../domain/shared_slices/FavoriteVessel'
+import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
 
 const MapMenuOverlay = props => {
   const {
@@ -20,9 +20,9 @@ const MapMenuOverlay = props => {
   const dispatch = useDispatch()
 
   const ref = createRef()
-  const clickedOutsideComponent = useClickOutsideComponent(ref)
-  const [showTrackMenu, setShowTrackMenu] = useState(false)
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(ref, modalIsOpen)
+  const [showTrackMenu, setShowTrackMenu] = useState(false)
   const [iShowed, setIsShowed] = useState(false)
   const [showTrackOf, setShowTrackOf] = useState(undefined)
   const [datesSelection, setDateSelection] = useState([])
@@ -43,10 +43,10 @@ const MapMenuOverlay = props => {
   }
 
   useEffect(() => {
-    if (clickedOutsideComponent && !modalIsOpen) {
+    if (clickedOutsideComponent) {
       map.removeOverlay(getOverlay())
     }
-  }, [clickedOutsideComponent, modalIsOpen])
+  }, [clickedOutsideComponent])
 
   useEffect(() => {
     if (showTrackOf || datesSelection?.length) {

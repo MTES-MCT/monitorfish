@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import TrackDepthRadio from './TrackDepthRadio'
 import TrackDepthDateRange from './TrackDepthDateRange'
 import { COLORS } from '../../../../constants/constants'
@@ -10,27 +10,35 @@ import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import TrackPositionsTable from './TrackPositionsTable'
 import modifyVesselTrackDepth from '../../../../domain/use_cases/vessel/modifyVesselTrackDepth'
 
-const TrackDepthSelection = props => {
+const TrackDepthSelection = ({ openBox, rightMenuIsOpen, trackDepthSelectionIsOpen, setTrackDepthSelectionIsOpen }) => {
   const dispatch = useDispatch()
 
   const { healthcheckTextWarning } = useSelector(state => state.global)
+  const { defaultVesselTrackDepth } = useSelector(state => state.map)
+  const [selectedTrackDepthRadio, setSelectedTrackDepthRadio] = useState(null)
+  const [selectedTrackDepthDates, setSelectedTrackDepthDates] = useState([])
   const {
-    selectedVesselIdentity
+    selectedVesselIdentity,
+    selectedVesselCustomTrackDepth
   } = useSelector(state => state.vessel)
 
-  const {
-    selectedTrackDepthRadio,
-    selectedTrackDepthDates,
-    defaultVesselTrackDepth
-  } = useSelector(state => {
-    const { afterDateTime, beforeDateTime, trackDepth } = state.vessel.selectedVesselCustomTrackDepth
-    const defaultVesselTrackDepth = state.map.defaultVesselTrackDepth
-    return {
-      selectedTrackDepthRadio: afterDateTime && beforeDateTime ? null : trackDepth || defaultVesselTrackDepth,
-      selectedTrackDepthDates: afterDateTime && beforeDateTime ? [afterDateTime, beforeDateTime] : [],
-      defaultVesselTrackDepth
+  useEffect(() => {
+    const { afterDateTime, beforeDateTime, trackDepth } = selectedVesselCustomTrackDepth
+    if (afterDateTime && beforeDateTime) {
+      setSelectedTrackDepthRadio(null)
+    } else {
+      setSelectedTrackDepthRadio(trackDepth || defaultVesselTrackDepth)
     }
-  })
+  }, [selectedVesselCustomTrackDepth])
+
+  useEffect(() => {
+    const { afterDateTime, beforeDateTime } = selectedVesselCustomTrackDepth
+    if (afterDateTime && beforeDateTime) {
+      setSelectedTrackDepthDates([afterDateTime, beforeDateTime])
+    } else {
+      setSelectedTrackDepthDates([])
+    }
+  }, [selectedVesselCustomTrackDepth])
 
   const triggerModifyVesselTrackDepthFromRadio = trackDepthRadioSelection => {
     const nextTrackDepth = {
@@ -56,36 +64,44 @@ const TrackDepthSelection = props => {
 
   return (
     <>
-      <TrackDepthSelectionButton
-        healthcheckTextWarning={healthcheckTextWarning}
-        openBox={props.openBox}
-        rightMenuIsOpen={props.rightMenuIsOpen}
-        trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
-        onClick={() => props.setTrackDepthSelectionIsOpen(!props.trackDepthSelectionIsOpen)}
-        data-cy={'vessel-track-depth-selection'}
-        title={'Paramétrer l\'affichage de la piste VMS'}
-      >
-        <VesselIcon/>
-      </TrackDepthSelectionButton>
-      <TrackDepthSelectionContent
-        healthcheckTextWarning={healthcheckTextWarning}
-        openBox={props.openBox}
-        rightMenuIsOpen={props.rightMenuIsOpen}
-        trackDepthSelectionIsOpen={props.trackDepthSelectionIsOpen}
-      >
-        <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
-        <TrackDepthRadio
-          trackDepthRadioSelection={selectedTrackDepthRadio}
-          modifyVesselTrackDepth={triggerModifyVesselTrackDepthFromRadio}
-        />
-        <TrackDepthDateRange
-          dates={selectedTrackDepthDates}
-          resetToDefaultTrackDepth={resetToDefaultTrackDepth}
-          modifyVesselTrackDepthFromDates={triggerModifyVesselTrackDepthFromDates}
-        />
-        <Header>Liste des positions VMS affichées</Header>
-        <TrackPositionsTable />
-      </TrackDepthSelectionContent>
+      {
+        openBox
+          ? <>
+            <TrackDepthSelectionButton
+              healthcheckTextWarning={healthcheckTextWarning}
+              openBox={openBox}
+              rightMenuIsOpen={rightMenuIsOpen}
+              trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
+              onClick={() => setTrackDepthSelectionIsOpen(!trackDepthSelectionIsOpen)}
+              data-cy={'vessel-track-depth-selection'}
+              title={'Paramétrer l\'affichage de la piste VMS'}
+            >
+              <VesselIcon/>
+            </TrackDepthSelectionButton>
+            <TrackDepthSelectionContent
+              healthcheckTextWarning={healthcheckTextWarning}
+              openBox={openBox}
+              rightMenuIsOpen={rightMenuIsOpen}
+              trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
+            >
+              <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
+              <TrackDepthRadio
+                trackDepthRadioSelection={selectedTrackDepthRadio}
+                modifyVesselTrackDepth={triggerModifyVesselTrackDepthFromRadio}
+              />
+              <TrackDepthDateRange
+                dates={selectedTrackDepthDates}
+                resetToDefaultTrackDepth={resetToDefaultTrackDepth}
+                modifyVesselTrackDepthFromDates={triggerModifyVesselTrackDepthFromDates}
+              />
+              <Header>Liste des positions VMS affichées</Header>
+              <TrackPositionsTable
+                openBox={openBox}
+              />
+            </TrackDepthSelectionContent>
+          </>
+          : null
+      }
     </>
   )
 }

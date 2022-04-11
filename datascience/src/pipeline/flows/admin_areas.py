@@ -490,6 +490,40 @@ def load_situs_areas(situs_areas: pd.DataFrame):
     )
 
 
+@task(checkpoint=False)
+def extract_effort_zones_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/effort_zones_areas.sql")
+
+
+@task(checkpoint=False)
+def load_effort_zones_areas(effort_zones_areas: pd.DataFrame):
+    load(
+        effort_zones_areas,
+        table_name="effort_zones_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
+def extract_neafc_regulatory_area() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/neafc_regulatory_area.sql")
+
+
+@task(checkpoint=False)
+def load_neafc_regulatory_area(neafc_regulatory_area: pd.DataFrame):
+    load(
+        neafc_regulatory_area,
+        table_name="neafc_regulatory_area",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
 with Flow("Administrative areas") as flow:
 
     cgpm_areas = extract_cgpm_areas()
@@ -580,5 +614,11 @@ with Flow("Administrative areas") as flow:
 
     situs_areas = extract_situs_areas()
     load_situs_areas(situs_areas)
+
+    effort_zones_areas = extract_effort_zones_areas()
+    load_effort_zones_areas(effort_zones_areas)
+
+    neafc_regulatory_area = extract_neafc_regulatory_area()
+    load_neafc_regulatory_area(neafc_regulatory_area)
 
 flow.file_name = Path(__file__).name

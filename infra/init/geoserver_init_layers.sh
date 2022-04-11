@@ -347,3 +347,29 @@ curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces
   }
 }
 EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "neafc_regulatory_area",
+    "nativeName": "neafc_regulatory_area",
+    "title": "neafc_regulatory_area",
+    "nativeCRS": "EPSG:4326",
+    "srs": "EPSG:4326",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "effort_zones_areas",
+    "nativeName": "effort_zones_areas",
+    "title": "effort_zones_areas",
+    "nativeCRS": "EPSG:4326",
+    "srs": "EPSG:4326",
+    "enabled": true,
+  }
+}
+EOF

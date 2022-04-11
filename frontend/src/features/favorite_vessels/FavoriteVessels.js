@@ -108,7 +108,7 @@ const FavoriteVesselsNumber = styled(MapComponentStyle)`
   width: 14px;
   height: 18px;
   border-radius: 10px;
-  top: 55px;
+  top: 56px;
   line-height: 15px;
   left: 40px;
   background-color: ${props => props.isOpen ? COLORS.charcoal : COLORS.shadowBlueLight};

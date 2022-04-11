@@ -37,14 +37,17 @@ def extract_positions(period: Period) -> pd.DataFrame:
             "start": period.start,
             "end": period.end,
         },
-        dtypes={"datetime_utc": "datetime64[ns]"},
+        dtypes={
+            "datetime_utc": "datetime64[ns]",
+            "time_emitting_at_sea": "timedelta64[ns]",
+        },
     )
 
 
 def filter_already_enriched_vessels(positions: pd.DataFrame) -> pd.DataFrame:
     """
-    Filters the input positions `DateFrame ` by removing positions of vessels that have
-    all there positions already enriched (which is detected by checking whether the
+    Filters the input positions `DateFrame` by removing positions of vessels that have
+    all their positions already enriched (which is detected by checking whether the
     `is_at_port` column contains any null values).
 
     Args:
@@ -91,6 +94,7 @@ def enrich_positions_by_vessel(
           - 'longitude'
           - 'datetime_utc'
           - 'is_at_port'
+          - 'time_emitting_at_sea'
 
     Returns:
         pd.DataFrame: same as input, with the following columns added:
@@ -99,6 +103,8 @@ def enrich_positions_by_vessel(
           - 'time_since_previous_position'
           - 'average_speed'
           - 'is_fishing'
+
+          and with the `time_emitting_at_sea` values recomputed / updated.
     """
     if len(positions) == 0:
         # With an empty DataFrame, the `groupby` has nothing to group on and therefore
@@ -133,6 +139,7 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logge
       - time_since_previous_position
       - average_speed
       - is_fishing
+      - time_emitting_at_sea
 
     Args:
         positions (pd.DataFrame): Enriched positions data
@@ -155,14 +162,17 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logge
                 "    meters_from_previous_position REAL,"
                 "    time_since_previous_position INTERVAL,"
                 "    average_speed REAL,"
-                "    is_fishing BOOLEAN"
+                "    is_fishing BOOLEAN,"
+                "    time_emitting_at_sea INTERVAL"
                 ")"
                 "ON COMMIT DROP;"
             )
         )
 
         positions = prepare_df_for_loading(
-            positions, logger, timedelta_columns=["time_since_previous_position"]
+            positions,
+            logger,
+            timedelta_columns=["time_since_previous_position", "time_emitting_at_sea"],
         )
 
         columns_to_load = [
@@ -172,6 +182,7 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logge
             "time_since_previous_position",
             "average_speed",
             "is_fishing",
+            "time_emitting_at_sea",
         ]
 
         logger.info("Loading to temporary table")
@@ -206,6 +217,10 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logge
                 "    is_fishing = COALESCE( "
                 "        ep.is_fishing, "
                 "        p.is_fishing "
+                "    ),"
+                "    time_emitting_at_sea = COALESCE( "
+                "        ep.time_emitting_at_sea, "
+                "        p.time_emitting_at_sea "
                 "    )"
                 "FROM tmp_enriched_positions ep "
                 "WHERE p.id = ep.id "
@@ -236,7 +251,8 @@ def reset_positions(period: Period):
             "    meters_from_previous_position = NULL, "
             "    time_since_previous_position = NULL, "
             "    average_speed = NULL, "
-            "    is_fishing = NULL "
+            "    is_fishing = NULL, "
+            "    time_emitting_at_sea = NULL "
             "WHERE p.date_time >= :start "
             "AND p.date_time <= :end;"
         ),

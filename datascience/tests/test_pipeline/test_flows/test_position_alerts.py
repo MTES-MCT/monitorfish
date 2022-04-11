@@ -479,7 +479,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
 
     flow.schedule = None
 
-    # With these parameters, all 3 vessels should be in alert.
+    # With these parameters, all 4 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
     zones = ["0-3", "3-6"]
     hours_from_now = 48
@@ -510,28 +510,33 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                 "PLACE SPECTACLE SUBIR",
                 "ÉTABLIR IMPRESSION LORSQUE",
                 "DEVINER FIGURE CONSCIENCE",
+                "I DO 4H REPORT",
             ],
             "internal_reference_number": [
                 "ABC000055481",
                 "ABC000306959",
                 "ABC000542519",
+                None,
             ],
             "external_reference_number": [
                 "AS761555",
                 "RV348407",
                 "RO237719",
+                "ZZTOPACDC",
             ],
             "ircs": [
                 "IL2468",
                 "LLUK",
                 "FQ7058",
+                "ZZ000000",
             ],
             "creation_date": [
                 now - timedelta(days=1),
                 now - timedelta(minutes=10),
                 now - timedelta(minutes=25),
+                now - timedelta(minutes=10),
             ],
-            "trip_number": [None, None, None],
+            "trip_number": [None, None, None, None],
             "value": [
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
@@ -551,11 +556,18 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                     "flagState": "FR",
                     "riskFactor": 1.41421356237310003,
                 },
+                {
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": "Facade A",
+                    "flagState": "FR",
+                    "riskFactor": 1.7411011266,
+                },
             ],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
+                "IRCS",
             ],
         }
     )
@@ -707,24 +719,29 @@ def test_flow_filters_on_time(reset_test_data):
             "vessel_name": [
                 "ÉTABLIR IMPRESSION LORSQUE",
                 "DEVINER FIGURE CONSCIENCE",
+                "I DO 4H REPORT",
             ],
             "internal_reference_number": [
                 "ABC000306959",
                 "ABC000542519",
+                None,
             ],
             "external_reference_number": [
                 "RV348407",
                 "RO237719",
+                "ZZTOPACDC",
             ],
             "ircs": [
                 "LLUK",
                 "FQ7058",
+                "ZZ000000",
             ],
             "creation_date": [
                 now - timedelta(minutes=10),
                 now - timedelta(minutes=25),
+                now - timedelta(minutes=10),
             ],
-            "trip_number": [None, None],
+            "trip_number": [None, None, None],
             "value": [
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
@@ -738,10 +755,17 @@ def test_flow_filters_on_time(reset_test_data):
                     "flagState": "FR",
                     "riskFactor": 1.41421356237310003,
                 },
+                {
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": "Facade A",
+                    "flagState": "FR",
+                    "riskFactor": 1.7411011266,
+                },
             ],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
+                "IRCS",
             ],
         }
     )

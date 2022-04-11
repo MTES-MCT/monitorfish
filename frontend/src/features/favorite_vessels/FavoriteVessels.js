@@ -39,6 +39,7 @@ const FavoriteVessels = () => {
       <Wrapper ref={wrapperRef}>
         <FavoriteVesselsNumber
           data-cy={'favorite-vessels-number'}
+          healthcheckTextWarning={healthcheckTextWarning}
           isHidden={previewFilteredVesselsMode}
           isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
         >
@@ -107,7 +108,7 @@ const FavoriteVesselsNumber = styled(MapComponentStyle)`
   width: 14px;
   height: 18px;
   border-radius: 10px;
-  top: 108px;
+  top: 55px;
   line-height: 15px;
   left: 40px;
   background-color: ${props => props.isOpen ? COLORS.charcoal : COLORS.shadowBlueLight};

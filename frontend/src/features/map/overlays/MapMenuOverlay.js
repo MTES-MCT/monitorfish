@@ -113,7 +113,7 @@ const MapMenuOverlay = props => {
                           <Menu
                             data-cy={'add-vessel-to-favorites'}
                             onMouseEnter={() => setShowTrackMenu(false)}
-                            onClick={() => dispatch(addVesselToFavorites(vessel.vesselProperties))}
+                            onClick={() => dispatch(addVesselToFavorites(vessel.vesselProperties)) && setIsShowed(false)}
                           >
                             Ajouter le navire aux navires suivis
                           </Menu>

@@ -398,6 +398,26 @@ const Layers = {
     subZoneFieldKey: 'SMU_CODE',
     isIntersectable: true
   },
+  effort_zones_areas: {
+    code: 'effort_zones_areas',
+    name: 'Zones d\'effort',
+    group: null,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: true,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: 'zone',
+    isIntersectable: true
+  },
+  neafc_regulatory_area: {
+    code: 'neafc_regulatory_area',
+    name: 'Zone réglementaire NEAFC',
+    group: null,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: true
+  },
   situations: {
     code: 'situs_areas',
     name: 'Zones pour situation VMS',

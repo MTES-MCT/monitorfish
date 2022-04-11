@@ -51,6 +51,7 @@ def test_extract_positions(reset_test_data):
         "latitude",
         "longitude",
         "is_at_port",
+        "time_emitting_at_sea",
     ]
 
 
@@ -61,6 +62,7 @@ def test_filter_already_enriched_vessels():
             "external_immatriculation": ["AA", "BB", None, "CC", "CC", "BBB"],
             "ircs": ["AAA", "BBB", "AAA", "CCC", "CCC", "BBB"],
             "is_at_port": [None, False, False, True, None, False],
+            "time_emitting_at_sea": [pd.NaT, pd.NaT, pd.NaT, pd.NaT, pd.NaT, pd.NaT],
         }
     )
 
@@ -73,7 +75,15 @@ def test_filter_already_enriched_vessels():
 
 def test_filter_already_enriched_vessels_empty_input():
     positions = pd.DataFrame(
-        columns=pd.Index(["cfr", "external_immatriculation", "ircs", "is_at_port"])
+        columns=pd.Index(
+            [
+                "cfr",
+                "external_immatriculation",
+                "ircs",
+                "is_at_port",
+                "time_emitting_at_sea",
+            ]
+        )
     )
 
     filtered_positions = filter_already_enriched_vessels(positions)
@@ -151,6 +161,18 @@ def test_enrich_positions_by_vessel():
                 False,
                 False,
             ],
+            "time_emitting_at_sea": [
+                pd.NaT,
+                pd.NaT,
+                13 * td,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+                pd.NaT,
+            ],
         }
     )
 
@@ -210,6 +232,19 @@ def test_enrich_positions_by_vessel():
         False,
     ]
 
+    expected_enriched_positions["time_emitting_at_sea"] = [
+        0 * td,
+        0 * td,
+        0 * td,
+        1 * td,
+        2 * td,
+        13 * td,
+        14 * td,
+        15 * td,
+        16 * td,
+        17 * td,
+    ]
+
     pd.testing.assert_frame_equal(enriched_positions, expected_enriched_positions)
 
 
@@ -225,6 +260,7 @@ def test_enrich_positions_by_vessel_handles_empty_input():
             "longitude",
             "datetime_utc",
             "is_at_port",
+            "time_emitting_at_sea",
         ]
     )
 
@@ -255,6 +291,7 @@ def test_load_then_reset_fishing_activity(reset_test_data):
             "time_since_previous_position": [timedelta(hours=1)],
             "average_speed": [2.3],
             "is_fishing": [True],
+            "time_emitting_at_sea": [None],
         }
     )
     positions_2 = pd.DataFrame(
@@ -270,6 +307,12 @@ def test_load_then_reset_fishing_activity(reset_test_data):
             ],
             "average_speed": [None, 0.0, 0.678, 3.04],
             "is_fishing": [None, False, False, False],
+            "time_emitting_at_sea": [
+                None,
+                timedelta(hours=1),
+                timedelta(hours=1),
+                timedelta(minutes=45),
+            ],
         }
     )
 
@@ -287,14 +330,24 @@ def test_load_then_reset_fishing_activity(reset_test_data):
             meters_from_previous_position,
             time_since_previous_position,
             average_speed,
-            is_fishing
+            is_fishing,
+            time_emitting_at_sea
         FROM positions
         WHERE id IN (13632807, 13635518, 13638407, 13640935)
         ORDER BY id""",
     )
 
+    expected_loaded_positions = pd.concat([positions_1, positions_2]).drop_duplicates(
+        subset=["id"]
+    )
+    expected_loaded_positions.loc[
+        expected_loaded_positions.id == 13632807, "time_emitting_at_sea"
+    ] = timedelta(
+        hours=10
+    )  # From DB test data
+
     pd.testing.assert_frame_equal(
-        pd.concat([positions_1, positions_2]).drop_duplicates(subset=["id"]),
+        expected_loaded_positions,
         loaded_positions,
         check_dtype=False,
     )
@@ -307,7 +360,7 @@ def test_load_then_reset_fishing_activity(reset_test_data):
         "SELECT id FROM positions WHERE is_at_port IS NULL ORDER BY id",
     )["id"].tolist()
 
-    assert not_enriched_ids == [13632807, 13634205, 13635518, 13639642]
+    assert not_enriched_ids == [13632807, 13634205, 13635518, 13639642, 13740935]
 
     positions_reset = read_query(
         "monitorfish_remote",
@@ -316,10 +369,10 @@ def test_load_then_reset_fishing_activity(reset_test_data):
             meters_from_previous_position,
             time_since_previous_position,
             average_speed,
-            is_fishing
+            is_fishing,
+            time_emitting_at_sea
         FROM positions
-        WHERE id IN (13632807, 13635518)
-        ORDER BY id""",
+        WHERE id IN (13632807, 13634205, 13635518, 13639642)""",
     )
 
     assert positions_reset.isna().all().all()
@@ -342,7 +395,8 @@ def test_extract_enrich_load(reset_test_data):
             meters_from_previous_position,
             time_since_previous_position,
             average_speed,
-            is_fishing
+            is_fishing,
+            time_emitting_at_sea
         FROM positions
         ORDER BY internal_reference_number, date_time""",
     )
@@ -370,6 +424,31 @@ def test_extract_enrich_load(reset_test_data):
         == 657.987
     ).all()
     assert positions.loc[positions.id == "13637054", "is_fishing"].all()
+
+    assert (
+        positions["time_emitting_at_sea"]
+        == [
+            timedelta(days=1),
+            timedelta(days=1, minutes=30),
+            timedelta(days=1, hours=1),
+            timedelta(days=1, hours=1, minutes=30),
+            timedelta(days=1, hours=2),
+            timedelta(days=1, hours=2, minutes=30),
+            timedelta(days=1, hours=3),
+            timedelta(days=1, hours=3, minutes=30),
+            timedelta(),
+            timedelta(hours=1),
+            timedelta(hours=2),
+            timedelta(),
+            timedelta(),
+            timedelta(),
+            timedelta(),
+            timedelta(days=3),
+            timedelta(days=3, hours=4),
+            timedelta(days=3, hours=8),
+            timedelta(),
+        ]
+    ).all()
 
 
 def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
@@ -419,7 +498,7 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
     pd.testing.assert_frame_equal(positions_before, positions_after)
 
 
-def test_flow_does_recomputes_all_when_asked_to(reset_test_data):
+def test_flow_recomputes_all_when_asked_to(reset_test_data):
     flow.schedule = None
 
     # Vessel 'ABC000055481' has all its positions already enriched in the test_date
@@ -431,7 +510,8 @@ def test_flow_does_recomputes_all_when_asked_to(reset_test_data):
             meters_from_previous_position,
             time_since_previous_position,
             average_speed,
-            is_fishing
+            is_fishing,
+            time_emitting_at_sea
         FROM positions
         WHERE internal_reference_number = 'ABC000055481'
         ORDER BY date_time""",
@@ -457,7 +537,8 @@ def test_flow_does_recomputes_all_when_asked_to(reset_test_data):
             meters_from_previous_position,
             time_since_previous_position,
             average_speed,
-            is_fishing
+            is_fishing,
+            time_emitting_at_sea
         FROM positions
         WHERE internal_reference_number = 'ABC000055481'
         ORDER BY date_time""",

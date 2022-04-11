@@ -61,26 +61,35 @@ def test_get_step_distances():
     np.testing.assert_almost_equal(distances_4, expected_distances_4)
 
 
-def test_compute_movement_metrics_1():
+def test_compute_movement_metrics_on_port_exits_with_no_time_emitting_at_sea_data():
     positions = pd.DataFrame(
         data=[
-            [45.2, -4.56, datetime(2021, 10, 2, 10, 23, 0)],
-            [45.2, -4.56, datetime(2021, 10, 2, 11, 23, 0)],
-            [45.2, -4.56, datetime(2021, 10, 2, 12, 23, 0)],
-            [45.25, -4.36, datetime(2021, 10, 2, 13, 23, 0)],
-            [45.32, -4.16, datetime(2021, 10, 2, 14, 23, 0)],
-            [45.41, -4.07, datetime(2021, 10, 2, 15, 23, 0)],
+            [45.2, -4.56, datetime(2021, 10, 2, 10, 23, 0), True, pd.NaT],
+            [45.2, -4.56, datetime(2021, 10, 2, 11, 23, 0), True, pd.NaT],
+            [45.2, -4.56, datetime(2021, 10, 2, 12, 23, 0), False, pd.NaT],
+            [45.25, -4.36, datetime(2021, 10, 2, 13, 23, 0), False, pd.NaT],
+            [45.32, -4.16, datetime(2021, 10, 2, 14, 23, 0), False, pd.NaT],
+            [45.41, -4.07, datetime(2021, 10, 2, 15, 23, 0), False, pd.NaT],
         ],
         columns=pd.Index(
             [
                 "latitude",
                 "longitude",
                 "datetime_utc",
+                "is_at_port",
+                "time_emitting_at_sea",
             ]
         ),
     )
 
-    res = compute_movement_metrics(positions)
+    res = compute_movement_metrics(
+        positions,
+        lat="latitude",
+        lon="longitude",
+        datetime_column="datetime_utc",
+        is_at_port_column="is_at_port",
+        time_emitting_at_sea_column="time_emitting_at_sea",
+    )
 
     expected_res = positions.copy(deep=True)
     expected_res["meters_from_previous_position"] = [
@@ -108,15 +117,222 @@ def test_compute_movement_metrics_1():
         6.6040202304433,
     ]
 
+    expected_res["time_emitting_at_sea"] = [
+        timedelta(hours=0),
+        timedelta(hours=0),
+        timedelta(hours=0),
+        timedelta(hours=1),
+        timedelta(hours=2),
+        timedelta(hours=3),
+    ]
+
     pd.testing.assert_frame_equal(res, expected_res)
 
 
-def test_compute_movement_metrics_2():
+def test_compute_movement_metrics_at_sea_with_time_emitting_at_sea_data():
+    positions = pd.DataFrame(
+        data=[
+            [
+                45.2,
+                -4.56,
+                datetime(2021, 10, 2, 10, 23, 0),
+                False,
+                timedelta(days=1, hours=2),
+            ],
+            [
+                45.2,
+                -4.56,
+                datetime(2021, 10, 2, 11, 23, 0),
+                False,
+                timedelta(days=1, hours=3),
+            ],
+            [45.2, -4.56, datetime(2021, 10, 2, 12, 23, 0), False, pd.NaT],
+            [45.25, -4.36, datetime(2021, 10, 2, 13, 23, 0), False, pd.NaT],
+            [45.32, -4.16, datetime(2021, 10, 2, 14, 23, 0), False, pd.NaT],
+            [45.41, -4.07, datetime(2021, 10, 2, 15, 23, 0), False, pd.NaT],
+        ],
+        columns=pd.Index(
+            [
+                "latitude",
+                "longitude",
+                "datetime_utc",
+                "is_at_port",
+                "time_emitting_at_sea",
+            ]
+        ),
+    )
 
-    input_columns = ["latitude", "longitude", "datetime_utc"]
+    res = compute_movement_metrics(
+        positions,
+        lat="latitude",
+        lon="longitude",
+        datetime_column="datetime_utc",
+        is_at_port_column="is_at_port",
+        time_emitting_at_sea_column="time_emitting_at_sea",
+    )
+
+    expected_res = positions.copy(deep=True)
+    expected_res["meters_from_previous_position"] = [
+        np.nan,
+        0.0,
+        0.0,
+        16620.929159452244,
+        17476.033442064247,
+        12230.645466780992,
+    ]
+    expected_res["time_since_previous_position"] = [
+        None,
+        timedelta(hours=1),
+        timedelta(hours=1),
+        timedelta(hours=1),
+        timedelta(hours=1),
+        timedelta(hours=1),
+    ]
+    expected_res["average_speed"] = [
+        np.nan,
+        0.0,
+        0.0,
+        8.97458377940186,
+        9.436303154462337,
+        6.6040202304433,
+    ]
+
+    expected_res["time_emitting_at_sea"] = [
+        timedelta(days=1, hours=2),
+        timedelta(days=1, hours=3),
+        timedelta(days=1, hours=4),
+        timedelta(days=1, hours=5),
+        timedelta(days=1, hours=6),
+        timedelta(days=1, hours=7),
+    ]
+
+    pd.testing.assert_frame_equal(res, expected_res)
+
+
+def test_compute_movement_metrics_on_port_entry_with_time_emitting_at_sea_data():
+    positions = pd.DataFrame(
+        data=[
+            [
+                45.2,
+                -4.56,
+                datetime(2021, 10, 2, 10, 23, 0),
+                False,
+                timedelta(days=1, hours=2),
+            ],
+            [
+                45.2,
+                -4.56,
+                datetime(2021, 10, 2, 11, 23, 0),
+                False,
+                timedelta(days=1, hours=3),
+            ],
+            [45.2, -4.56, datetime(2021, 10, 2, 12, 23, 0), False, pd.NaT],
+            [45.25, -4.36, datetime(2021, 10, 2, 13, 23, 0), False, pd.NaT],
+            [45.32, -4.16, datetime(2021, 10, 2, 14, 23, 0), True, pd.NaT],
+            [45.41, -4.07, datetime(2021, 10, 2, 15, 23, 0), True, pd.NaT],
+            [45.51, -4.17, datetime(2021, 10, 2, 16, 23, 0), False, pd.NaT],
+            [45.53, -4.07, datetime(2021, 10, 2, 17, 23, 0), False, pd.NaT],
+            [45.56, -4.02, datetime(2021, 10, 2, 18, 23, 0), False, pd.NaT],
+            [45.82, -3.99, datetime(2021, 10, 2, 19, 23, 0), False, pd.NaT],
+            [45.91, -3.85, datetime(2021, 10, 2, 20, 23, 0), False, pd.NaT],
+        ],
+        columns=pd.Index(
+            [
+                "latitude",
+                "longitude",
+                "datetime_utc",
+                "is_at_port",
+                "time_emitting_at_sea",
+            ]
+        ),
+    )
+
+    res = compute_movement_metrics(
+        positions,
+        lat="latitude",
+        lon="longitude",
+        datetime_column="datetime_utc",
+        is_at_port_column="is_at_port",
+        time_emitting_at_sea_column="time_emitting_at_sea",
+    )
+
+    expected_res = positions.copy(deep=True)
+    expected_res["meters_from_previous_position"] = [
+        np.nan,
+        0.0,
+        0.0,
+        16620.929159452244,
+        17476.033442064247,
+        12230.645466780992,
+        13582.06142259,
+        8102.18076376,
+        5127.31124037,
+        29004.46986396,
+        14753.42185709,
+    ]
+    expected_res["time_since_previous_position"] = [
+        None,
+        timedelta(hours=1),
+        timedelta(hours=1),
+        timedelta(hours=1),
+        timedelta(hours=1),
+        timedelta(hours=1),
+        timedelta(hours=1),
+        timedelta(hours=1),
+        timedelta(hours=1),
+        timedelta(hours=1),
+        timedelta(hours=1),
+    ]
+    expected_res["average_speed"] = [
+        np.nan,
+        0.0,
+        0.0,
+        8.97458377940186,
+        9.436303154462337,
+        6.6040202304433,
+        7.33372647,
+        4.37482763,
+        2.76852659,
+        15.66116083,
+        7.96621051,
+    ]
+
+    expected_res["time_emitting_at_sea"] = [
+        timedelta(days=1, hours=2),
+        timedelta(days=1, hours=3),
+        timedelta(days=1, hours=4),
+        timedelta(days=1, hours=5),
+        timedelta(0),
+        timedelta(0),
+        timedelta(0),
+        timedelta(hours=1),
+        timedelta(hours=2),
+        timedelta(hours=3),
+        timedelta(hours=4),
+    ]
+
+    pd.testing.assert_frame_equal(res, expected_res)
+
+
+def test_compute_movement_metrics_adds_new_columns_on_empty_input():
+
+    input_columns = [
+        "latitude",
+        "longitude",
+        "datetime_utc",
+        "is_at_port",
+        "time_emitting_at_sea",
+    ]
     positions = pd.DataFrame(columns=pd.Index(input_columns))
 
-    res = compute_movement_metrics(positions)
+    res = compute_movement_metrics(
+        positions,
+        lat="latitude",
+        lon="longitude",
+        datetime_column="datetime_utc",
+        is_at_port_column="is_at_port",
+        time_emitting_at_sea_column="time_emitting_at_sea_col",
+    )
 
     added_columns = [
         "meters_from_previous_position",
@@ -417,12 +633,12 @@ def test_detect_fishing_activity_6():
 def test_enrich_positions():
     positions = pd.DataFrame(
         data=[
-            [45.2, -4.56, datetime(2021, 10, 2, 10, 23, 0), True],
-            [45.2, -4.56, datetime(2021, 10, 2, 11, 23, 0), True],
-            [45.2, -4.56, datetime(2021, 10, 2, 12, 23, 0), True],
-            [45.25, -4.36, datetime(2021, 10, 2, 13, 23, 0), False],
-            [45.32, -4.16, datetime(2021, 10, 2, 15, 23, 0), False],
-            [45.41, -4.07, datetime(2021, 10, 2, 16, 23, 0), False],
+            [45.2, -4.56, datetime(2021, 10, 2, 10, 23, 0), True, pd.NaT],
+            [45.2, -4.56, datetime(2021, 10, 2, 11, 23, 0), True, pd.NaT],
+            [45.2, -4.56, datetime(2021, 10, 2, 12, 23, 0), True, pd.NaT],
+            [45.25, -4.36, datetime(2021, 10, 2, 13, 23, 0), False, pd.NaT],
+            [45.32, -4.16, datetime(2021, 10, 2, 15, 23, 0), False, pd.NaT],
+            [45.41, -4.07, datetime(2021, 10, 2, 16, 23, 0), False, pd.NaT],
         ],
         columns=pd.Index(
             [
@@ -430,6 +646,7 @@ def test_enrich_positions():
                 "longitude",
                 "datetime_utc",
                 "is_at_port",
+                "time_emitting_at_sea",
             ]
         ),
     )
@@ -446,6 +663,7 @@ def test_enrich_positions():
         17476.033442064247,
         12230.645466780992,
     ]
+
     expected_res["time_since_previous_position"] = [
         None,
         timedelta(hours=1),
@@ -454,6 +672,7 @@ def test_enrich_positions():
         timedelta(hours=2),
         timedelta(hours=1),
     ]
+
     expected_res["average_speed"] = [
         np.nan,
         0.0,
@@ -464,6 +683,15 @@ def test_enrich_positions():
     ]
 
     expected_res["is_fishing"] = [False, False, False, False, False, False]
+
+    expected_res["time_emitting_at_sea"] = [
+        timedelta(hours=0),
+        timedelta(hours=0),
+        timedelta(hours=0),
+        timedelta(hours=0),
+        timedelta(hours=2),
+        timedelta(hours=3),
+    ]
 
     pd.testing.assert_frame_equal(res, expected_res, check_dtype=False)
 
@@ -495,6 +723,7 @@ def test_enrich_positions_empty_input():
                 "longitude",
                 "datetime_utc",
                 "is_at_port",
+                "time_emitting_at_sea",
             ]
         ),
     )
@@ -509,6 +738,7 @@ def test_enrich_positions_empty_input():
                 "longitude",
                 "datetime_utc",
                 "is_at_port",
+                "time_emitting_at_sea",
                 "meters_from_previous_position",
                 "time_since_previous_position",
                 "average_speed",

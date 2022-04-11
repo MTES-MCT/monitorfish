@@ -49,6 +49,19 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
       })
+    case Layers.effort_zones_areas.code:
+      return feature => new Style({
+        stroke: new Stroke({
+          color: '#767AB2',
+          width: 1
+        }),
+        text: new Text({
+          font: '12px Marianne',
+          text: `${feature.get(Layers.effort_zones_areas.subZoneFieldKey) ? feature.get(Layers.effort_zones_areas.subZoneFieldKey) : ''}`,
+          fill: new Fill({ color: COLORS.gunMetal }),
+          stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
+        })
+      })
     case Layers.cormoran.code:
       return feature => new Style({
         stroke: new Stroke({

@@ -81,7 +81,7 @@ const circleMetricStyle = isOpen => ({
   flexShrink: 0,
   marginLeft: 'auto',
   minWidth: 7,
-  lineHeight: '16px',
+  lineHeight: '17px',
   opacity: isOpen ? 1 : 0,
   transition: 'opacity 0.5s ease'
 })

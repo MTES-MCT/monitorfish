@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { ReactComponent as SummarySVG } from '../icons/Picto_resume.svg'
 import { ReactComponent as VesselIDSVG } from '../icons/Picto_identite.svg'
@@ -42,6 +42,10 @@ const VesselSidebar = () => {
   const firstUpdate = useRef(true)
   const [trackDepthSelectionIsOpen, setTrackDepthSelectionIsOpen] = useState(false)
 
+  const setTrackDepthSelectionIsOpenCallback = useCallback(isOpen => {
+    setTrackDepthSelectionIsOpen(isOpen)
+  }, [])
+
   useEffect(() => {
     if (openSidebar === true) {
       firstUpdate.current = false
@@ -73,10 +77,9 @@ const VesselSidebar = () => {
       />
       <TrackDepthSelection
         openBox={openSidebar}
-        init={!vesselSidebarIsOpen ? {} : null}
         rightMenuIsOpen={rightMenuIsOpen}
         trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
-        setTrackDepthSelectionIsOpen={setTrackDepthSelectionIsOpen}
+        setTrackDepthSelectionIsOpen={setTrackDepthSelectionIsOpenCallback}
       />
       <AnimateToTrack
         openBox={openSidebar}

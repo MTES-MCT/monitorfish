@@ -12,7 +12,7 @@ import { expandRightMenu } from '../../domain/shared_slices/Global'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
-import { useClickOutsideComponent } from '../../hooks/useClickOutside'
+import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
 
 const VesselLabels = () => {
   const dispatch = useDispatch()
@@ -33,7 +33,7 @@ const VesselLabels = () => {
 
   const [vesselVisibilityBoxIsOpen, setVesselLabelsBoxIsOpen] = useState(false)
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, vesselVisibilityBoxIsOpen)
 
   useEffect(() => {
     if (clickedOutsideComponent) {

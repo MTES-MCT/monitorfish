@@ -172,6 +172,7 @@ const vesselSlice = createSlice({
     resetSelectedVessel (state) {
       state.selectedVessel = null
       state.selectedVesselIdentity = null
+      state.selectedVesselPositions = null
     },
     closeVesselSidebar (state) {
       state.vesselSidebarIsOpen = false

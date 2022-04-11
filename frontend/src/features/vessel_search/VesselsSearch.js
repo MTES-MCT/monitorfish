@@ -14,7 +14,7 @@ import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import VesselSearchList from './VesselSearchList'
 import SelectedVessel from './SelectedVessel'
-import { useClickOutsideComponent } from '../../hooks/useClickOutside'
+import { useClickOutside } from '../../hooks/useClickOutside'
 import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
 import { findMatchingFeature, removeDuplicatedFoundVessels } from './vesselsSearchUtils'
 import getVesselVoyage from '../../domain/use_cases/vessel/getVesselVoyage'
@@ -43,7 +43,7 @@ const VesselsSearch = () => {
   const [selectedVesselIdentity, setSelectedVesselIdentity] = useState(null)
   const firstUpdate = useRef(true)
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
+  const clickedOutsideComponent = useClickOutside(wrapperRef)
   const escapeFromKeyboard = useEscapeFromKeyboard()
   const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
 

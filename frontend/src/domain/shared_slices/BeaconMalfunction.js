@@ -145,16 +145,6 @@ const beaconMalfunctionSlice = createSlice({
     setOpenedBeaconMalfunction (state, action) {
       state.openedBeaconMalfunction = action.payload
       state.beaconMalfunctionsTab = BeaconMalfunctionsTab.DETAIL
-    },
-    /**
-     * Reset the open beacon malfunction
-     * @function resetOpenedBeaconMalfunction
-     * @memberOf BeaconMalfunctionReducer
-     * @param {Object=} state
-     */
-    resetOpenedBeaconMalfunction (state) {
-      state.openedBeaconMalfunction = null
-      state.beaconMalfunctionsTab = BeaconMalfunctionsTab.RESUME
     }
   }
 })
@@ -170,8 +160,7 @@ export const {
   loadVesselBeaconMalfunctions,
   setBeaconMalfunctionsTab,
   setOpenedBeaconMalfunction,
-  updateVesselBeaconMalfunctionsResumeAndHistory,
-  resetOpenedBeaconMalfunction
+  updateVesselBeaconMalfunctionsResumeAndHistory
 } = beaconMalfunctionSlice.actions
 
 export default beaconMalfunctionSlice.reducer

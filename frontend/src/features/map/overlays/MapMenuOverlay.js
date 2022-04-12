@@ -3,7 +3,11 @@ import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import { VesselTrackDepth } from '../../../domain/entities/vesselTrackDepth'
+import {
+  getTrackRequestFromDates,
+  getTrackRequestFromTrackDepth,
+  VesselTrackDepth
+} from '../../../domain/entities/vesselTrackDepth'
 import CustomTrackDepthModal from './map_menu/CustomTrackDepthModal'
 import { useDispatch } from 'react-redux'
 import showVesselTrack from '../../../domain/use_cases/vessel/showVesselTrack'
@@ -50,12 +54,10 @@ const MapMenuOverlay = props => {
 
   useEffect(() => {
     if (showTrackOf || datesSelection?.length) {
-      const vesselTrackDepth = {
-        trackDepth: showTrackOf || VesselTrackDepth.CUSTOM,
-        afterDateTime: datesSelection[0],
-        beforeDateTime: datesSelection[1]
-      }
-      dispatch(showVesselTrack(vessel.vesselProperties, false, vesselTrackDepth))
+      const trackRequest = showTrackOf
+        ? getTrackRequestFromTrackDepth(showTrackOf)
+        : getTrackRequestFromDates(datesSelection[0], datesSelection[1])
+      dispatch(showVesselTrack(vessel.vesselProperties, false, trackRequest))
 
       map.removeOverlay(getOverlay())
       setIsShowed(false)

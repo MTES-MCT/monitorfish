@@ -15,6 +15,29 @@ export const VesselTrackDepth = {
 }
 
 /**
+ * Get the custom track request if defined or build a track request from the default track depth
+
+ * @param {TrackRequest|null} customTrackRequest - The custom track request
+ * @param {VesselTrackDepth} defaultTrackDepth - The default vessel track depth
+ * @returns {TrackRequest} vessel track request
+ */
+export const getCustomOrDefaultTrackRequest = (customTrackRequest, defaultTrackDepth) => {
+  if (customTrackRequest && trackRequestIsDefined(customTrackRequest)) {
+    return getUTCFullDayTrackRequest({ ...customTrackRequest })
+  }
+
+  return getTrackRequestFromTrackDepth(defaultTrackDepth)
+}
+
+/** Returns true if the track request object is defined
+ * @param {TrackRequest|null} trackRequest
+ * @return boolean
+ */
+export function trackRequestIsDefined (trackRequest) {
+  return !!trackRequest?.trackDepth || (trackRequest?.afterDateTime && trackRequest?.beforeDateTime)
+}
+
+/**
  * Get the `TrackRequest` object from the track depth
  * @returns {TrackRequest} vessel track request
  */
@@ -104,12 +127,4 @@ function noPositionsFoundForEnteredDateTime (positions, trackRequest) {
 
 function trackDepthHasBeenModifiedFromAPI (positions, trackDepthHasBeenModified, updateShowedVessel) {
   return positions?.length && trackDepthHasBeenModified && !updateShowedVessel
-}
-
-/** Returns true if the track request object is defined
- * @param {TrackRequest} trackRequest
- * @return boolean|null
- */
-export function trackRequestIsDefined (trackRequest) {
-  return !!trackRequest?.trackDepth || (trackRequest?.afterDateTime && trackRequest?.beforeDateTime)
 }

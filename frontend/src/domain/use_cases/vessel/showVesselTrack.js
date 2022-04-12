@@ -3,6 +3,7 @@ import { removeError, setError } from '../../shared_slices/Global'
 import { getVesselId } from '../../entities/vessel'
 import { doNotAnimate } from '../../shared_slices/Map'
 import {
+  getCustomOrDefaultTrackRequest,
   getTrackRequestFromTrackDepth,
   getTrackResponseError,
   getUTCFullDayTrackRequest
@@ -23,12 +24,12 @@ const showVesselTrack = (vesselIdentity, calledFromCron, trackRequest, zoom) => 
   const {
     defaultVesselTrackDepth
   } = getState().map
-  const nextTrackRequest = getNextOrDefaultTrackRequest(trackRequest, defaultVesselTrackDepth)
+  const nextTrackRequest = getCustomOrDefaultTrackRequest(trackRequest, defaultVesselTrackDepth)
 
   dispatch(doNotAnimate(calledFromCron))
   dispatch(removeError())
 
-  getVesselPositionsFromAPI(vesselIdentity, getUTCFullDayTrackRequest(nextTrackRequest))
+  getVesselPositionsFromAPI(vesselIdentity, nextTrackRequest)
     .then(({ positions, trackDepthHasBeenModified }) => {
       const error = getTrackResponseError(
         positions,
@@ -69,10 +70,6 @@ const showVesselTrack = (vesselIdentity, calledFromCron, trackRequest, zoom) => 
       dispatch(setError(error))
       dispatch(resetLoadingVessel())
     })
-}
-
-function getNextOrDefaultTrackRequest (trackRequest, defaultTrackDepth) {
-  return trackRequest || getTrackRequestFromTrackDepth(defaultTrackDepth)
 }
 
 export default showVesselTrack

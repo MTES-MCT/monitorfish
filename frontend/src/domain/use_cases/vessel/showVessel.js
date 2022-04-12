@@ -6,7 +6,7 @@ import { doNotAnimate } from '../../shared_slices/Map'
 import {
   getTrackResponseError,
   getUTCFullDayTrackRequest, getTrackRequestFromTrackDepth,
-  trackRequestIsDefined
+  trackRequestIsDefined, getCustomOrDefaultTrackRequest
 } from '../../entities/vesselTrackDepth'
 import { removeFishingActivitiesFromMap } from '../../shared_slices/FishingActivities'
 import { getVesselFromAPI } from '../../../api/vessel'
@@ -23,7 +23,8 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
 
   const { vessel, fishingActivities, map, global } = getState()
   const {
-    vessels
+    vessels,
+    selectedVesselCustomTrackRequest
   } = vessel
   const {
     defaultVesselTrackDepth
@@ -39,7 +40,7 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
 
   dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 
-  const nextTrackRequest = getTrackRequest(vessel, defaultVesselTrackDepth)
+  const nextTrackRequest = getCustomOrDefaultTrackRequest(selectedVesselCustomTrackRequest, defaultVesselTrackDepth)
   console.log('next', nextTrackRequest)
   if (fishingActivitiesAreShowedOnMap && !calledFromCron) {
     dispatch(removeFishingActivitiesFromMap())
@@ -99,14 +100,6 @@ function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
       calledFromCron
     }))
   })
-}
-
-function getTrackRequest (vessel, defaultVesselTrackDepth) {
-  if (trackRequestIsDefined(vessel.selectedVesselCustomTrackRequest)) {
-    return getUTCFullDayTrackRequest({ ...vessel.selectedVesselCustomTrackRequest })
-  }
-
-  return getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
 }
 
 export default showVessel

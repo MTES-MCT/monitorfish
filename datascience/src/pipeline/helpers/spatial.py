@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+from datetime import timedelta
 from typing import Iterable, Set, Tuple, Union
 
 import h3
@@ -221,22 +222,36 @@ def compute_movement_metrics(
     positions: pd.DataFrame,
     lat: str = "latitude",
     lon: str = "longitude",
-    datetime_col: str = "datetime_utc",
+    datetime_column: str = "datetime_utc",
+    is_at_port_column: str = "is_at_port",
+    time_emitting_at_sea_column: str = "time_emitting_at_sea",
 ) -> pd.DataFrame:
     """Takes a pandas DataFrame with
-        - latitude, longitude columns (float dtypes)
-        - a datetime column
+        - latitude and longitude columns (float dtypes)
+        - a column indicating the date and time of the position (datetime dtype)
+        - a column indicating whether the vessel is at port (boolean dtype)
+        - a column indicating how long the vessel has been continuously
+          emitting at sea (timedelta dtype)
     whose rows represent successive positions of a vessel, assumed to be sorted
     chronologically by ascending order.
 
-    Returns pandas DataFrame with the same index and columns, plus addtionnal computed
-    features in new columns : speed, distance and time between successive positions.
+    Returns pandas DataFrame with the same index and columns, with :
+
+      - speed, distance and time between successive positions as additionnal computed
+        features in new columns
+      - values for `time_emitting_at_sea_column` computed and updated - so if the input
+        contained any NULL values, they will be computed and filled in.
 
     Args:
         positions (pd.DataFrame): DataFrame representing a vessel route
-        lat (str) : column name of latitude values
-        lon (str) : column name of longitude values
-        datetime_col (str): column name of datetime values
+        lat (str) : column name of latitude values. May not contain null values.
+        lon (str) : column name of longitude values. May not contain null values.
+        datetime_column (str) : column name of datetime values. May not contain null
+          values.
+        is_at_port_column (str) : column indicating whether the vessel is at port. May
+          not contain null values.
+        time_emitting_at_sea_column (timedelta) : column indicating how long the vessel
+          has been continuously emitting at sea. May contain null values.
 
     Returns:
         pd.DataFrame: the same DataFrame, plus added columns with the computed features
@@ -247,18 +262,21 @@ def compute_movement_metrics(
 
     positions = positions.copy(deep=True)
 
+    # Compute meters_from_previous_position
     meters_from_previous_position = get_step_distances(
         positions, lat=lat, lon=lon, how="backward", unit="m"
     )
 
     positions["meters_from_previous_position"] = meters_from_previous_position
 
+    # Compute time_since_previous_position
     time_since_previous_position = get_datetime_intervals(
-        positions[datetime_col], how="backward"
+        positions[datetime_column], how="backward"
     )
 
     positions["time_since_previous_position"] = time_since_previous_position
 
+    # Compute average speed
     seconds_since_previous_position = (
         time_since_previous_position.map(lambda dt: dt.total_seconds())
     ).values
@@ -269,13 +287,61 @@ def compute_movement_metrics(
 
     positions["average_speed"] = average_speed
 
+    # Compute time_emitting_at_sea
+    if len(time_since_previous_position) > 0:
+
+        #      time|
+        # intervals|                                   _____ : cumsum of all time
+        #   between|                vessel at sea     |        intervals between
+        # positions|                <----------->     |        sucessive positions
+        #          |                             _____|
+        #          |                            |
+        #          |                        ____|
+        #          |                 ______|    .
+        #          |                |           .
+        #          |             ___|           .
+        #          |         ___|   .       ____._________ : A: cumsum of time
+        #          |        |       .______|    |            intervals at sea only
+        #          |   _____|       |           |
+        #          |__|_____________|           |_________ : res = A - A*is_port_entry
+        #          -----------------*-----------*------------------------------------->
+        #          pos1    pos2     port        port                         successive
+        #                           exit        entry                        positions
+        #
+        # To compute the cumulative time of uninterrupted emission at sea, we compute
+        # the cumulative sum of time intervals between successive positions at sea (A)
+        # and then subtract A * is_port_entry to bring the number back to zero at each
+        # port entry.
+
+        is_at_port = positions[is_at_port_column].values
+        was_previously_at_port = np.insert(is_at_port[:-1], 0, False)
+        is_at_port_or_just_left_port = is_at_port | was_previously_at_port
+
+        t0 = positions[time_emitting_at_sea_column].values[0]
+        t0 = timedelta(minutes=0) if np.isnat(t0) else t0
+
+        time_emitting_at_sea_intervals = time_since_previous_position.values
+        np.put(time_emitting_at_sea_intervals, 0, t0)
+        time_emitting_at_sea_intervals = time_emitting_at_sea_intervals * (
+            ~is_at_port_or_just_left_port
+        )
+        time_emitting_at_sea = np.cumsum(time_emitting_at_sea_intervals)
+
+        is_port_entry = is_at_port & (~was_previously_at_port)
+        time_emitting_at_sea = time_emitting_at_sea - np.cumsum(
+            time_emitting_at_sea * is_port_entry
+        )
+        positions[time_emitting_at_sea_column] = time_emitting_at_sea
+
     return positions
 
 
 def detect_fishing_activity(
     positions: pd.DataFrame,
+    minimum_time_of_emission_at_sea: np.timedelta64,
     is_at_port_column: str = "is_at_port",
     average_speed_column: str = "average_speed",
+    time_emitting_at_sea_column: str = "time_emitting_at_sea",
     minimum_consecutive_positions: int = 3,
     fishing_speed_threshold: float = 4.5,
     return_floats: bool = False,
@@ -297,11 +363,16 @@ def detect_fishing_activity(
     Args:
         positions (pd.DataFrame) : DataFrame representing successive positions of a
           vessel, assumed to be sorted by ascending datetime
+        minimum_time_of_emission_at_sea (np.timedelta64): the minimum time a vessel is
+          required to emit continuously at sea in order to be considred as in fishing
+          activity. This avoids detecting fishing activity when vessels leave ports.
         is_at_port_column (str) : name of the column containing boolean values for
           whether a position is in at port or not
         average_speed_column (str) : name of the column containing average speed values
           (distance from previous position divided by time since the last position), in
           knots
+        time_emitting_at_sea_column (str): name of the column containing the duration
+          for which the vessel has been continuously emitting at sea (outside ports)
         minimum_consecutive_positions (int): minimum number of consecutive positions
           below fishing speed threshold to consider that a vessel is fishing
         fishing_speed_threshold (float): speed below which a vessel is considered to be
@@ -325,6 +396,7 @@ def detect_fishing_activity(
     else:
         is_at_port = positions[is_at_port_column].values
         average_speed = positions[average_speed_column].values
+        time_emitting_at_sea = positions[time_emitting_at_sea_column].values
 
         # The average speed may contain null values, in particular the first position
         # of a series of positions, for which the time and distance from the previous
@@ -381,6 +453,12 @@ def detect_fishing_activity(
             np.nan,
         )
 
+        fishing_activity = np.where(
+            time_emitting_at_sea > minimum_time_of_emission_at_sea,
+            fishing_activity,
+            False,
+        )
+
         positions["is_fishing"] = fishing_activity
 
         if not return_floats:
@@ -391,10 +469,12 @@ def detect_fishing_activity(
 
 def enrich_positions(
     positions: pd.DataFrame,
+    minimum_time_of_emission_at_sea: np.timedelta64,
     lat: str = "latitude",
     lon: str = "longitude",
-    datetime_col: str = "datetime_utc",
+    datetime_column: str = "datetime_utc",
     is_at_port_column: str = "is_at_port",
+    time_emitting_at_sea_column: str = "time_emitting_at_sea",
     minimum_consecutive_positions: int = 3,
     fishing_speed_threshold: float = 4.5,
     return_floats: bool = False,
@@ -409,13 +489,17 @@ def enrich_positions(
         positions,
         lat=lat,
         lon=lon,
-        datetime_col=datetime_col,
+        datetime_column=datetime_column,
+        is_at_port_column=is_at_port_column,
+        time_emitting_at_sea_column=time_emitting_at_sea_column,
     )
 
     positions = detect_fishing_activity(
         positions,
+        minimum_time_of_emission_at_sea=minimum_time_of_emission_at_sea,
         is_at_port_column=is_at_port_column,
         average_speed_column="average_speed",
+        time_emitting_at_sea_column=time_emitting_at_sea_column,
         minimum_consecutive_positions=minimum_consecutive_positions,
         fishing_speed_threshold=fishing_speed_threshold,
         return_floats=return_floats,

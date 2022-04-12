@@ -3,11 +3,7 @@ import { getOnlyVesselIdentityProperties, Vessel, VesselSidebarTab } from '../..
 import { loadingVessel, resetLoadingVessel, setSelectedVessel, showVesselSidebarTab } from '../../shared_slices/Vessel'
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
-import {
-  getTrackResponseError,
-  getUTCFullDayTrackRequest, getTrackRequestFromTrackDepth,
-  trackRequestIsDefined, getCustomOrDefaultTrackRequest
-} from '../../entities/vesselTrackDepth'
+import { getCustomOrDefaultTrackRequest, getTrackResponseError } from '../../entities/vesselTrackDepth'
 import { removeFishingActivitiesFromMap } from '../../shared_slices/FishingActivities'
 import { getVesselFromAPI } from '../../../api/vessel'
 

@@ -2,12 +2,7 @@ import { addVesselTrackShowed, resetLoadingVessel } from '../../shared_slices/Ve
 import { removeError, setError } from '../../shared_slices/Global'
 import { getVesselId } from '../../entities/vessel'
 import { doNotAnimate } from '../../shared_slices/Map'
-import {
-  getCustomOrDefaultTrackRequest,
-  getTrackRequestFromTrackDepth,
-  getTrackResponseError,
-  getUTCFullDayTrackRequest
-} from '../../entities/vesselTrackDepth'
+import { getCustomOrDefaultTrackRequest, getTrackResponseError } from '../../entities/vesselTrackDepth'
 import { getVesselPositionsFromAPI } from '../../../api/vessel'
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map'

@@ -19,7 +19,7 @@ const showVesselTrack = (vesselIdentity, calledFromCron, trackRequest, zoom) => 
   const {
     defaultVesselTrackDepth
   } = getState().map
-  const nextTrackRequest = getCustomOrDefaultTrackRequest(trackRequest, defaultVesselTrackDepth)
+  const nextTrackRequest = getCustomOrDefaultTrackRequest(trackRequest, defaultVesselTrackDepth, true)
 
   dispatch(doNotAnimate(calledFromCron))
   dispatch(removeError())

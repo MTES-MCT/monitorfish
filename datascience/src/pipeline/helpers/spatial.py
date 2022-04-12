@@ -290,23 +290,23 @@ def compute_movement_metrics(
     # Compute time_emitting_at_sea
     if len(time_since_previous_position) > 0:
 
-        #       |
-        #       |                                      _____ : cumsum of all time
-        #       |                   vessel at sea     |        intervals between
-        #       |                   <----------->     |        sucessive positions
-        #       |                                _____|
-        #       |                               |
-        #       |                             __|
-        #       |                    ________|  .
-        #       |                   |           .
-        #       |                ___|           .
-        #       |         ______|   .         __._________ : A: cumsum of time
-        #       |        |          .________|  |            intervals at sea only
-        #       |      __|          |           |
-        #       |_____|_____________|           |_________ : res = A - A*is_port_entry
-        #       --------------------*-----------*------------------------------------->
-        #                           port        port                               time
-        #                           exit        entry
+        #      time|
+        # intervals|                                   _____ : cumsum of all time
+        #   between|                vessel at sea     |        intervals between
+        # positions|                <----------->     |        sucessive positions
+        #          |                             _____|
+        #          |                            |
+        #          |                        ____|
+        #          |                 ______|    .
+        #          |                |           .
+        #          |             ___|           .
+        #          |         ___|   .       ____._________ : A: cumsum of time
+        #          |        |       .______|    |            intervals at sea only
+        #          |   _____|       |           |
+        #          |__|_____________|           |_________ : res = A - A*is_port_entry
+        #          -----------------*-----------*------------------------------------->
+        #          pos1    pos2     port        port                         successive
+        #                           exit        entry                        positions
         #
         # To compute the cumulative time of uninterrupted emission at sea, we compute
         # the cumulative sum of time intervals between successive positions at sea (A)

@@ -65,6 +65,7 @@ CURRENT_POSITION_ESTIMATION_MAX_HOURS = 2.0
 # Fishing detection configuration
 FISHING_SPEED_THRESHOLD = 4.5
 MINIMUM_CONSECUTIVE_POSITIONS = 3
+MINIMUM_MINUTES_OF_EMISSION_AT_SEA = 60
 
 # Risk factor configuration
 risk_factor_coefficients = {

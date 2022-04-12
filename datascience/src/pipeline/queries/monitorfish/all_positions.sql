@@ -6,7 +6,8 @@ SELECT
     date_time AS datetime_utc, 
     latitude, 
     longitude, 
-    is_at_port
+    is_at_port,
+    time_emitting_at_sea
 FROM positions 
 WHERE date_time > :start 
 AND date_time < :end 

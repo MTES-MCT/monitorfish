@@ -338,8 +338,10 @@ def compute_movement_metrics(
 
 def detect_fishing_activity(
     positions: pd.DataFrame,
+    minimum_time_of_emission_at_sea: np.timedelta64,
     is_at_port_column: str = "is_at_port",
     average_speed_column: str = "average_speed",
+    time_emitting_at_sea_column: str = "time_emitting_at_sea",
     minimum_consecutive_positions: int = 3,
     fishing_speed_threshold: float = 4.5,
     return_floats: bool = False,
@@ -361,11 +363,16 @@ def detect_fishing_activity(
     Args:
         positions (pd.DataFrame) : DataFrame representing successive positions of a
           vessel, assumed to be sorted by ascending datetime
+        minimum_time_of_emission_at_sea (np.timedelta64): the minimum time a vessel is
+          required to emit continuously at sea in order to be considred as in fishing
+          activity. This avoids detecting fishing activity when vessels leave ports.
         is_at_port_column (str) : name of the column containing boolean values for
           whether a position is in at port or not
         average_speed_column (str) : name of the column containing average speed values
           (distance from previous position divided by time since the last position), in
           knots
+        time_emitting_at_sea_column (str): name of the column containing the duration
+          for which the vessel has been continuously emitting at sea (outside ports)
         minimum_consecutive_positions (int): minimum number of consecutive positions
           below fishing speed threshold to consider that a vessel is fishing
         fishing_speed_threshold (float): speed below which a vessel is considered to be
@@ -389,6 +396,7 @@ def detect_fishing_activity(
     else:
         is_at_port = positions[is_at_port_column].values
         average_speed = positions[average_speed_column].values
+        time_emitting_at_sea = positions[time_emitting_at_sea_column].values
 
         # The average speed may contain null values, in particular the first position
         # of a series of positions, for which the time and distance from the previous
@@ -445,6 +453,12 @@ def detect_fishing_activity(
             np.nan,
         )
 
+        fishing_activity = np.where(
+            time_emitting_at_sea > minimum_time_of_emission_at_sea,
+            fishing_activity,
+            False,
+        )
+
         positions["is_fishing"] = fishing_activity
 
         if not return_floats:
@@ -455,6 +469,7 @@ def detect_fishing_activity(
 
 def enrich_positions(
     positions: pd.DataFrame,
+    minimum_time_of_emission_at_sea: np.timedelta64,
     lat: str = "latitude",
     lon: str = "longitude",
     datetime_column: str = "datetime_utc",
@@ -481,8 +496,10 @@ def enrich_positions(
 
     positions = detect_fishing_activity(
         positions,
+        minimum_time_of_emission_at_sea=minimum_time_of_emission_at_sea,
         is_at_port_column=is_at_port_column,
         average_speed_column="average_speed",
+        time_emitting_at_sea_column=time_emitting_at_sea_column,
         minimum_consecutive_positions=minimum_consecutive_positions,
         fishing_speed_threshold=fishing_speed_threshold,
         return_floats=return_floats,

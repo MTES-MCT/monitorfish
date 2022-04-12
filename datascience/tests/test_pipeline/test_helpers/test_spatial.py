@@ -350,39 +350,36 @@ def test_detect_fishing_activity_1():
 
     positions = pd.DataFrame(
         data=[
-            [True, np.nan],
-            [False, 1.3743995599575196],
-            [False, 3.4733394561194406],
-            [False, 3.6471005850875398],
-            [False, 1.01491998387466],
-            [False, 2.657721803089177],
-            [False, 1.0745565643325738],
-            [False, 3.5526462712359184],
-            [False, 0.47918612345236017],
-            [False, 1.2016245937954306],
-            [False, 0.46534727085138294],
-            [False, 1.764707518758544],
-            [False, 0.1768675527415563],
-            [False, 3.185626122736285],
-            [True, 0.03020495215890416],
-            [False, 3.32201017795906745],
-            [False, 7.9238776369607742],
-            [False, 1.2368204841346149],
-            [False, 3.238948073103732],
-            [False, 0.32462967457964775],
+            [True, np.nan, timedelta()],
+            [False, 1.3743995599575196, np.timedelta64()],
+            [False, 3.4733394561194406, np.timedelta64(1, "h")],
+            [False, 3.6471005850875398, np.timedelta64(2, "h")],
+            [False, 1.01491998387466, np.timedelta64(3, "h")],
+            [False, 2.657721803089177, np.timedelta64(4, "h")],
+            [False, 1.0745565643325738, np.timedelta64(5, "h")],
+            [False, 3.5526462712359184, np.timedelta64(6, "h")],
+            [False, 0.47918612345236017, np.timedelta64(7, "h")],
+            [False, 1.2016245937954306, np.timedelta64(8, "h")],
+            [False, 0.46534727085138294, np.timedelta64(9, "h")],
+            [False, 1.764707518758544, np.timedelta64(10, "h")],
+            [False, 0.1768675527415563, np.timedelta64(11, "h")],
+            [False, 3.185626122736285, np.timedelta64(12, "h")],
+            [True, 0.03020495215890416, np.timedelta64()],
+            [False, 3.32201017795906745, np.timedelta64()],
+            [False, 7.9238776369607742, np.timedelta64(30, "m")],
+            [False, 1.2368204841346149, np.timedelta64(90, "m")],
+            [False, 3.238948073103732, np.timedelta64(150, "m")],
+            [False, 0.32462967457964775, np.timedelta64(10, "m")],
         ],
-        columns=pd.Index(
-            [
-                "is_at_port",
-                "average_speed",
-            ]
-        ),
+        columns=pd.Index(["is_at_port", "average_speed", "time_emitting_at_sea"]),
     )
 
     positions_is_fishing = detect_fishing_activity(
         positions,
+        minimum_time_of_emission_at_sea=np.timedelta64(60, "m"),
         is_at_port_column="is_at_port",
         average_speed_column="average_speed",
+        time_emitting_at_sea_column="time_emitting_at_sea",
         minimum_consecutive_positions=3,
         fishing_speed_threshold=4.5,
     )
@@ -390,8 +387,8 @@ def test_detect_fishing_activity_1():
     expected_positions_is_fishing = positions.copy(deep=True)
     expected_positions_is_fishing["is_fishing"] = [
         False,
-        True,
-        True,
+        False,
+        False,
         True,
         True,
         True,
@@ -408,7 +405,7 @@ def test_detect_fishing_activity_1():
         False,
         True,
         True,
-        True,
+        False,
     ]
 
     pd.testing.assert_frame_equal(positions_is_fishing, expected_positions_is_fishing)
@@ -418,37 +415,33 @@ def test_detect_fishing_activity_2():
 
     positions = pd.DataFrame(
         data=[
-            [False, np.nan],
-            [False, 1.3743995599575196],
-            [False, 5.4733394561194406],
-            [False, 3.6471005850875398],
-            [False, 1.01491998387466],
-            [False, 2.657721803089177],
-            [False, 1.0745565643325738],
-            [False, 3.5526462712359184],
-            [False, 0.47918612345236017],
-            [False, 1.2016245937954306],
-            [False, 0.46534727085138294],
-            [False, 1.764707518758544],
-            [False, 0.1768675527415563],
-            [False, 3.185626122736285],
-            [True, 0.03020495215890416],
-            [False, 3.32201017795906745],
-            [False, 7.9238776369607742],
-            [False, 1.2368204841346149],
-            [False, 5.238948073103732],
-            [False, 0.32462967457964775],
+            [False, np.nan, np.timedelta64(30, "m")],
+            [False, 1.3743995599575196, np.timedelta64(60, "m")],
+            [False, 5.4733394561194406, np.timedelta64(60, "m")],
+            [False, 3.6471005850875398, np.timedelta64(60, "m")],
+            [False, 1.01491998387466, np.timedelta64(60, "m")],
+            [False, 2.657721803089177, np.timedelta64(60, "m")],
+            [False, 1.0745565643325738, np.timedelta64(60, "m")],
+            [False, 3.5526462712359184, np.timedelta64(60, "m")],
+            [False, 0.47918612345236017, np.timedelta64(60, "m")],
+            [False, 1.2016245937954306, np.timedelta64(60, "m")],
+            [False, 0.46534727085138294, np.timedelta64(60, "m")],
+            [False, 1.764707518758544, np.timedelta64(60, "m")],
+            [False, 0.1768675527415563, np.timedelta64(60, "m")],
+            [False, 3.185626122736285, np.timedelta64(60, "m")],
+            [True, 0.03020495215890416, np.timedelta64(60, "m")],
+            [False, 3.32201017795906745, np.timedelta64(60, "m")],
+            [False, 7.9238776369607742, np.timedelta64(60, "m")],
+            [False, 1.2368204841346149, np.timedelta64(60, "m")],
+            [False, 5.238948073103732, np.timedelta64(60, "m")],
+            [False, 0.32462967457964775, np.timedelta64(60, "m")],
         ],
-        columns=pd.Index(
-            [
-                "is_at_port",
-                "average_speed",
-            ]
-        ),
+        columns=pd.Index(["is_at_port", "average_speed", "time_emitting_at_sea"]),
     )
 
     positions_is_fishing = detect_fishing_activity(
         positions,
+        minimum_time_of_emission_at_sea=np.timedelta64(40, "m"),
         is_at_port_column="is_at_port",
         average_speed_column="average_speed",
         minimum_consecutive_positions=3,
@@ -457,7 +450,7 @@ def test_detect_fishing_activity_2():
 
     expected_positions_is_fishing = positions.copy(deep=True)
     expected_positions_is_fishing["is_fishing"] = [
-        np.nan,
+        False,
         np.nan,
         False,
         True,
@@ -490,20 +483,16 @@ def test_detect_fishing_activity_3():
     """
     positions = pd.DataFrame(
         data=[
-            [False, np.nan],
-            [False, 1.3743995599575196],
-            [False, 3.4733394561194406],
+            [False, np.nan, np.timedelta64(90, "m")],
+            [False, 1.3743995599575196, np.timedelta64(50, "m")],
+            [False, 3.4733394561194406, np.timedelta64(90, "m")],
         ],
-        columns=pd.Index(
-            [
-                "is_at_port",
-                "average_speed",
-            ]
-        ),
+        columns=pd.Index(["is_at_port", "average_speed", "time_emitting_at_sea"]),
     )
 
     positions_is_fishing = detect_fishing_activity(
         positions,
+        minimum_time_of_emission_at_sea=np.timedelta64(40, "m"),
         is_at_port_column="is_at_port",
         average_speed_column="average_speed",
         minimum_consecutive_positions=3,
@@ -520,11 +509,14 @@ def test_detect_fishing_activity_3():
     pd.testing.assert_frame_equal(positions_is_fishing, expected_positions_is_fishing)
 
 
-def test_detect_fishing_activity_4():
-    positions = pd.DataFrame({"is_at_port": [], "average_speed": []})
+def test_detect_fishing_activity_on_empty_input():
+    positions = pd.DataFrame(
+        {"is_at_port": [], "average_speed": [], "time_emitting_at_sea": []}
+    )
 
     positions_is_fishing = detect_fishing_activity(
         positions,
+        minimum_time_of_emission_at_sea=np.timedelta64(40, "m"),
         is_at_port_column="is_at_port",
         average_speed_column="average_speed",
         minimum_consecutive_positions=3,
@@ -532,7 +524,41 @@ def test_detect_fishing_activity_4():
     )
 
     expected_positions_is_fishing = pd.DataFrame(
-        {"is_at_port": [], "average_speed": [], "is_fishing": []}
+        {
+            "is_at_port": [],
+            "average_speed": [],
+            "time_emitting_at_sea": [],
+            "is_fishing": [],
+        }
+    )
+
+    pd.testing.assert_frame_equal(
+        positions_is_fishing, expected_positions_is_fishing, check_dtype=False
+    )
+
+
+def test_detect_fishing_activity_on_empty_input_and_return_floats():
+    positions = pd.DataFrame(
+        {"is_at_port": [], "average_speed": [], "time_emitting_at_sea": []}
+    )
+
+    positions_is_fishing = detect_fishing_activity(
+        positions,
+        minimum_time_of_emission_at_sea=np.timedelta64(50, "m"),
+        is_at_port_column="is_at_port",
+        average_speed_column="average_speed",
+        minimum_consecutive_positions=3,
+        fishing_speed_threshold=4.5,
+        return_floats=True,
+    )
+
+    expected_positions_is_fishing = pd.DataFrame(
+        {
+            "is_at_port": [],
+            "average_speed": [],
+            "time_emitting_at_sea": [],
+            "is_fishing": [],
+        }
     )
 
     pd.testing.assert_frame_equal(
@@ -544,37 +570,39 @@ def test_detect_fishing_activity_5():
 
     positions = pd.DataFrame(
         data=[
-            [False, np.nan],
-            [False, 1.3743995599575196],
-            [False, 3.4733394561194406],
-            [False, 3.6471005850875398],
-            [False, 1.01491998387466],
-            [False, 2.657721803089177],
-            [False, 1.0745565643325738],
-            [False, 3.5526462712359184],
-            [False, 0.47918612345236017],
-            [False, 1.2016245937954306],
-            [False, 0.46534727085138294],
-            [False, 1.764707518758544],
-            [False, 0.1768675527415563],
-            [False, 3.185626122736285],
-            [True, 0.03020495215890416],
-            [False, 3.32201017795906745],
-            [False, 7.9238776369607742],
-            [False, 1.2368204841346149],
-            [False, 5.238948073103732],
-            [False, 0.32462967457964775],
+            [False, np.nan, np.timedelta64(60, "m")],
+            [False, 1.3743995599575196, np.timedelta64(60, "m")],
+            [False, 3.4733394561194406, np.timedelta64(60, "m")],
+            [False, 3.6471005850875398, np.timedelta64(40, "m")],
+            [False, 1.01491998387466, np.timedelta64(60, "m")],
+            [False, 2.657721803089177, np.timedelta64(40, "m")],
+            [False, 1.0745565643325738, np.timedelta64(60, "m")],
+            [False, 3.5526462712359184, np.timedelta64(60, "m")],
+            [False, 0.47918612345236017, np.timedelta64(60, "m")],
+            [False, 1.2016245937954306, np.timedelta64(60, "m")],
+            [False, 0.46534727085138294, np.timedelta64(60, "m")],
+            [False, 1.764707518758544, np.timedelta64(60, "m")],
+            [False, 0.1768675527415563, np.timedelta64(60, "m")],
+            [False, 3.185626122736285, np.timedelta64(60, "m")],
+            [True, 0.03020495215890416, np.timedelta64(60, "m")],
+            [False, 3.32201017795906745, np.timedelta64(60, "m")],
+            [False, 7.9238776369607742, np.timedelta64(60, "m")],
+            [False, 1.2368204841346149, np.timedelta64(60, "m")],
+            [False, 5.238948073103732, np.timedelta64(60, "m")],
+            [False, 0.32462967457964775, np.timedelta64(60, "m")],
         ],
         columns=pd.Index(
             [
                 "is_at_port",
                 "average_speed",
+                "time_emitting_at_sea",
             ]
         ),
     )
 
     positions_is_fishing = detect_fishing_activity(
         positions,
+        minimum_time_of_emission_at_sea=np.timedelta64(50, "m"),
         is_at_port_column="is_at_port",
         average_speed_column="average_speed",
         minimum_consecutive_positions=3,
@@ -587,9 +615,9 @@ def test_detect_fishing_activity_5():
         np.nan,
         1.0,
         1.0,
+        0.0,
         1.0,
-        1.0,
-        1.0,
+        0.0,
         1.0,
         1.0,
         1.0,
@@ -607,27 +635,6 @@ def test_detect_fishing_activity_5():
     ]
 
     pd.testing.assert_frame_equal(positions_is_fishing, expected_positions_is_fishing)
-
-
-def test_detect_fishing_activity_6():
-    positions = pd.DataFrame({"is_at_port": [], "average_speed": []})
-
-    positions_is_fishing = detect_fishing_activity(
-        positions,
-        is_at_port_column="is_at_port",
-        average_speed_column="average_speed",
-        minimum_consecutive_positions=3,
-        fishing_speed_threshold=4.5,
-        return_floats=True,
-    )
-
-    expected_positions_is_fishing = pd.DataFrame(
-        {"is_at_port": [], "average_speed": [], "is_fishing": []}
-    )
-
-    pd.testing.assert_frame_equal(
-        positions_is_fishing, expected_positions_is_fishing, check_dtype=False
-    )
 
 
 def test_enrich_positions():
@@ -651,7 +658,9 @@ def test_enrich_positions():
         ),
     )
 
-    res = enrich_positions(positions)
+    res = enrich_positions(
+        positions, minimum_time_of_emission_at_sea=np.timedelta64(60, "m")
+    )
 
     expected_res = positions.copy(deep=True)
 
@@ -698,7 +707,10 @@ def test_enrich_positions():
     # Test non default arguments
 
     res = enrich_positions(
-        positions, minimum_consecutive_positions=2, fishing_speed_threshold=7.1
+        positions,
+        minimum_time_of_emission_at_sea=np.timedelta64(60, "m"),
+        minimum_consecutive_positions=2,
+        fishing_speed_threshold=7.1,
     )
 
     expected_res.loc[4, "is_fishing"] = True
@@ -706,7 +718,20 @@ def test_enrich_positions():
     pd.testing.assert_frame_equal(res, expected_res, check_dtype=False)
 
     res = enrich_positions(
-        positions, minimum_consecutive_positions=4, fishing_speed_threshold=7.1
+        positions,
+        minimum_time_of_emission_at_sea=np.timedelta64(150, "m"),
+        minimum_consecutive_positions=2,
+        fishing_speed_threshold=7.1,
+    )
+
+    expected_res.loc[4, "is_fishing"] = False
+    pd.testing.assert_frame_equal(res, expected_res, check_dtype=False)
+
+    res = enrich_positions(
+        positions,
+        minimum_time_of_emission_at_sea=np.timedelta64(60, "m"),
+        minimum_consecutive_positions=4,
+        fishing_speed_threshold=7.1,
     )
 
     expected_res["is_fishing"] = [False, False, False, False, np.nan, np.nan]
@@ -728,7 +753,7 @@ def test_enrich_positions_empty_input():
         ),
     )
 
-    res = enrich_positions(positions)
+    res = enrich_positions(positions, minimum_time_of_emission_at_sea=np.timedelta64)
 
     expected_res = pd.DataFrame(
         data=[],

@@ -141,13 +141,15 @@ const VesselsTracksLayer = ({ map }) => {
           removeVesselTrackFeatures(features, getVectorSource(), vesselTrack.vesselId)
 
           const vesselTrackFeatures = new VesselTrack(vesselTrack.positions, vesselTrack.vesselId)
-          getVectorSource().addFeatures(vesselTrackFeatures.features)
-          const vesselTrackExtent = getVesselTrackExtent(vesselTrackFeatures.features, vesselTrack.vesselId)
+          if (vesselTrackFeatures.features?.length) {
+            getVectorSource().addFeatures(vesselTrackFeatures.features)
+            const vesselTrackExtent = getVesselTrackExtent(vesselTrackFeatures.features, vesselTrack.vesselId)
 
-          dispatch(updateVesselTrackAsShowedWithExtend({
-            vesselId: vesselTrack.vesselId,
-            extent: vesselTrackExtent
-          }))
+            dispatch(updateVesselTrackAsShowedWithExtend({
+              vesselId: vesselTrack.vesselId,
+              extent: vesselTrackExtent
+            }))
+          }
         })
     }
 

@@ -42,27 +42,29 @@ const showVesselTrack = (vesselIdentity, calledFromCron, vesselTrackDepthRequest
         dispatch(removeError())
       }
 
-      const vesselId = getVesselId(vesselIdentity)
-      const firstPosition = positions[positions.length - 1]
-      const coordinates = transform([firstPosition.longitude, firstPosition.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-      const course = firstPosition.course
+      if (positions?.length) {
+        const vesselId = getVesselId(vesselIdentity)
+        const firstPosition = positions[positions.length - 1]
+        const coordinates = transform([firstPosition.longitude, firstPosition.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+        const course = firstPosition.course
 
-      dispatch(addVesselTrackShowed({
-        vesselId: vesselId,
-        showedVesselTrack: {
+        dispatch(addVesselTrackShowed({
           vesselId: vesselId,
-          vesselIdentity: vesselIdentity,
-          positions: positions,
-          coordinates: coordinates,
-          course: course,
-          trackDepth: nextVesselTrackDepthRequest,
-          isDefaultTrackDepth: isDefaultTrackDepth,
-          extent: null,
-          toZoom: zoom,
-          toShow: true,
-          toHide: false
-        }
-      }))
+          showedVesselTrack: {
+            vesselId: vesselId,
+            vesselIdentity: vesselIdentity,
+            positions: positions,
+            coordinates: coordinates,
+            course: course,
+            trackDepth: nextVesselTrackDepthRequest,
+            isDefaultTrackDepth: isDefaultTrackDepth,
+            extent: null,
+            toZoom: zoom,
+            toShow: true,
+            toHide: false
+          }
+        }))
+      }
     }).catch(error => {
       console.error(error)
       dispatch(setError(error))

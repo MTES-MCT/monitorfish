@@ -14,42 +14,80 @@ export const VesselTrackDepth = {
   CUSTOM: 'CUSTOM'
 }
 
-export const getVesselTrackDepthRequestFromDefaultTrackDepth = trackDepth => ({
+/**
+ * Get the `TrackRequest` object from the track depth
+ * @returns {TrackRequest} vessel track request
+ */
+export const getTrackRequestFromTrackDepth = trackDepth => ({
   trackDepth: trackDepth,
   afterDateTime: null,
   beforeDateTime: null
 })
 
-export function getVesselTrackDepthRequest (newWantedTrackDepth, vesselCustomTrackDepth, defaultVesselTrackDepth) {
-  const {
-    trackDepth,
-    afterDateTime,
-    beforeDateTime
-  } = { ...vesselCustomTrackDepth }
-  const {
-    wantedTrackDepth,
-    wantedAfterDateTime,
-    wantedBeforeDateTime
-  } = { ...newWantedTrackDepth }
+/**
+ * Get the `TrackRequest` object from the custom track depth with dates range
+ * @returns {TrackRequest} vessel track request
+ */
+export const getTrackRequestFromDates = (afterDateTime, beforeDateTime) => ({
+  trackDepth: VesselTrackDepth.CUSTOM,
+  afterDateTime: afterDateTime,
+  beforeDateTime: beforeDateTime
+})
 
-  if (wantedTrackDepth || (wantedAfterDateTime && wantedBeforeDateTime)) {
-    return newWantedTrackDepth
+/**
+ * Get full days in date range (to avoid missing hours in the selected date range)
+ *
+ * It returns the afterDateTime day at 00:00:00Z and the beforeDateTime day at 23:59:59Z.
+ *
+ * @param {TrackRequest} trackRequest - The vessel track depth request
+ * @returns {TrackRequest} vessel track request
+ */
+export const getUTCFullDayTrackRequest = trackRequest => {
+  if (!trackRequest?.afterDateTime && !trackRequest?.beforeDateTime) {
+    return getTrackRequestFromTrackDepth(trackRequest?.trackDepth)
   }
 
-  return {
-    trackDepth: trackDepth || defaultVesselTrackDepth,
-    afterDateTime: afterDateTime,
-    beforeDateTime: beforeDateTime
-  }
+  trackRequest.afterDateTime = getStartOfDayDateTime(trackRequest?.afterDateTime)
+  trackRequest.beforeDateTime = getEndOfDayDateTime(trackRequest.beforeDateTime)
+
+  return getTrackRequestFromDates(trackRequest?.afterDateTime, trackRequest?.beforeDateTime)
 }
 
-export function getTrackDepthError (positions, trackDepthHasBeenModified, calledFromCron, vesselTrackDepthObject) {
+export const getStartOfDayDateTime = date => {
+  const nextDate = new Date(date instanceof Date
+    ? date.toISOString()
+    : date)
+
+  // Start of day
+  nextDate.setHours(0, 0, 0)
+
+  // Offset se we are in UTC (event if the TimezoneOffset would say the contrary)
+  nextDate.setMinutes(nextDate.getMinutes() - nextDate.getTimezoneOffset())
+
+  return nextDate
+}
+
+export const getEndOfDayDateTime = date => {
+  const nextDate = new Date(date instanceof Date
+    ? date.toISOString()
+    : date)
+
+  // Enf of day
+  nextDate.setHours(23, 59, 59)
+
+  // Offset se we are in UTC (event if the TimezoneOffset would say the contrary)
+  nextDate.setMinutes(nextDate.getMinutes() - nextDate.getTimezoneOffset())
+
+  return nextDate
+}
+
+export function getTrackResponseError (positions, trackDepthHasBeenModified, calledFromCron, nextTrackRequest) {
   if (trackDepthHasBeenModifiedFromAPI(positions, trackDepthHasBeenModified, calledFromCron)) {
     return new NoDEPFoundError('Nous n\'avons pas trouvé de dernier DEP pour ce navire, nous affichons ' +
       'les positions des dernières 24 heures.')
   } else if (noPositionsFoundForVessel(positions, calledFromCron)) {
     return new NoPositionsFoundError('Nous n\'avons trouvé aucune position.')
-  } else if (noPositionsFoundForEnteredDateTime(positions, vesselTrackDepthObject)) {
+  } else if (noPositionsFoundForEnteredDateTime(positions, nextTrackRequest)) {
     return new NoPositionsFoundError('Nous n\'avons trouvé aucune position pour ces dates.')
   }
 
@@ -60,10 +98,18 @@ function noPositionsFoundForVessel (positions, updateShowedVessel) {
   return !positions?.length && !updateShowedVessel
 }
 
-function noPositionsFoundForEnteredDateTime (positions, vesselTrackDepthObject) {
-  return !positions?.length && vesselTrackDepthObject
+function noPositionsFoundForEnteredDateTime (positions, trackRequest) {
+  return !positions?.length && trackRequest
 }
 
 function trackDepthHasBeenModifiedFromAPI (positions, trackDepthHasBeenModified, updateShowedVessel) {
   return positions?.length && trackDepthHasBeenModified && !updateShowedVessel
+}
+
+/** Returns true if the track request object is defined
+ * @param {TrackRequest} trackRequest
+ * @return boolean|null
+ */
+export function trackRequestIsDefined (trackRequest) {
+  return !!trackRequest?.trackDepth || (trackRequest?.afterDateTime && trackRequest?.beforeDateTime)
 }

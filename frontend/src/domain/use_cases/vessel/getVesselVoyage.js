@@ -11,7 +11,7 @@ import {
 import NoLogbookMessagesFoundError from '../../../errors/NoLogbookMessagesFoundError'
 import { vesselsAreEquals } from '../../entities/vessel'
 import { batch } from 'react-redux'
-import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
+import { getTrackRequestFromDates } from '../../entities/vesselTrackDepth'
 import modifyVesselTrackDepth from './modifyVesselTrackDepth'
 import { getVesselVoyageFromAPI } from '../../../api/vessel'
 
@@ -96,12 +96,8 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
 function modifyVesselTrackAndVoyage (voyage, dispatch, vesselIdentity, fishingActivitiesAreShowedOnMap) {
   const { afterDateTime, beforeDateTime } = getDateRangeMinusFourHoursPlusOneHour(voyage.startDate, voyage.endDate)
 
-  const trackDepthObject = {
-    trackDepth: VesselTrackDepth.CUSTOM,
-    afterDateTime: afterDateTime,
-    beforeDateTime: beforeDateTime
-  }
-  dispatch(modifyVesselTrackDepth(vesselIdentity, trackDepthObject, true)).then(() => {
+  const trackRequest = getTrackRequestFromDates(afterDateTime, beforeDateTime)
+  dispatch(modifyVesselTrackDepth(vesselIdentity, trackRequest, true, false)).then(() => {
     dispatch(setVoyage(voyage))
     if (fishingActivitiesAreShowedOnMap) {
       batch(() => {

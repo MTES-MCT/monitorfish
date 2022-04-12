@@ -1,5 +1,5 @@
-import { setSelectedVesselCustomTrackDepth, showVesselSidebarTab } from '../../shared_slices/Vessel'
-import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
+import { setSelectedVesselCustomTrackRequest, showVesselSidebarTab } from '../../shared_slices/Vessel'
+import { getTrackRequestFromDates } from '../../entities/vesselTrackDepth'
 import showVessel from './showVessel'
 import getVesselVoyage from './getVesselVoyage'
 import { VesselSidebarTab } from '../../entities/vessel'
@@ -22,12 +22,8 @@ export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVM
     const beforeDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
     beforeDateTime.setMilliseconds(0)
 
-    const vesselTrackDepth = {
-      trackDepth: VesselTrackDepth.CUSTOM,
-      afterDateTime: afterDateTime,
-      beforeDateTime: beforeDateTime
-    }
-    await dispatch(setSelectedVesselCustomTrackDepth(vesselTrackDepth))
+    const trackRequest = getTrackRequestFromDates(afterDateTime, beforeDateTime)
+    await dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
   }
 
   await dispatch(showVessel(beaconMalfunction, false, false))

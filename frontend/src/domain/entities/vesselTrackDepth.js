@@ -19,11 +19,16 @@ export const VesselTrackDepth = {
 
  * @param {TrackRequest|null} customTrackRequest - The custom track request
  * @param {VesselTrackDepth} defaultTrackDepth - The default vessel track depth
+ * @param {boolean} fullDays - If full days are shown
  * @returns {TrackRequest} vessel track request
  */
-export const getCustomOrDefaultTrackRequest = (customTrackRequest, defaultTrackDepth) => {
+export const getCustomOrDefaultTrackRequest = (customTrackRequest, defaultTrackDepth, fullDays) => {
   if (customTrackRequest && trackRequestIsDefined(customTrackRequest)) {
-    return getUTCFullDayTrackRequest({ ...customTrackRequest })
+    if (fullDays) {
+      return getUTCFullDayTrackRequest({ ...customTrackRequest })
+    } else {
+      return customTrackRequest
+    }
   }
 
   return getTrackRequestFromTrackDepth(defaultTrackDepth)

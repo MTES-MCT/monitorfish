@@ -11,7 +11,12 @@ const TrackDepthDateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrac
         cleanable
         size={'sm'}
         disabledDate={afterToday()}
-        value={dates}
+        value={dates.map(date => {
+          const nextDate = new Date(date.toISOString())
+          nextDate.setMinutes(nextDate.getMinutes() + nextDate.getTimezoneOffset())
+
+          return nextDate
+        })}
         onOk={modifyVesselTrackDepthFromDates}
         onClean={resetToDefaultTrackDepth}
         ranges={[]}

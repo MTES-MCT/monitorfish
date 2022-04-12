@@ -1,8 +1,6 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-import { getDate } from '../../src/utils'
-
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Vessel sidebar controls buttons', () => {
@@ -53,6 +51,56 @@ context('Vessel sidebar controls buttons', () => {
     // Then, back to another trip depth of three days
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 20000 })
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
+  })
+
+  it('Vessel track dates Should be changed from the agenda', () => {
+    // Given
+    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
+
+    // When
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
+    cy.get('.rs-picker-daterange').click({ timeout: 20000 })
+    cy.get('.rs-calendar-table-cell')
+      .filter('.rs-calendar-table-cell-un-same-month')
+      .eq(0)
+      .click({ timeout: 20000 })
+    cy.get('.rs-calendar-table-cell')
+      .filter('.rs-calendar-table-cell-un-same-month')
+      .eq(2)
+      .click({ timeout: 20000 })
+
+    cy.get('.rs-picker-daterange-header').first().then(header => {
+      const dates = header.text()
+      const datesArray = dates.split(' ~ ')
+      const dayPart = datesArray.map(date => date.split('-')[0])
+      cy.log(dates.toString())
+
+      cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')
+      cy.get('.rs-picker-daterange-panel').within(() => {
+        cy.get('button').click({ timeout: 20000 })
+      })
+
+      // Then
+      cy.wait('@getPositions')
+        .then(({ request, response }) => {
+          expect(request.url).contains(`${dayPart[0]}T00:00:00.000Z`)
+          expect(request.url).contains(`${dayPart[1]}T23:59:59.000Z`)
+        })
+      cy.get('*[data-cy^="vessel-track-depth-three-days"]').should('not.have.class', 'rs-radio-checked')
+      cy.get('.rs-picker-daterange').within(() => {
+        cy.get('.rs-picker-toggle-value').contains(dates)
+      })
+      cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
+      const formattedDatesArray = datesArray.map(date => {
+        date = date.replace(/-/g, '/')
+        date = date.replace('20', '')
+
+        return date
+      })
+      cy.get('*[data-cy^="custom-dates-showed-text"]').contains(formattedDatesArray[0])
+      cy.get('*[data-cy^="custom-dates-showed-text"]').contains(formattedDatesArray[1])
+    })
   })
 
   it('Fishing activities Should be seen on the vessel track and showed from the map', () => {

@@ -31,11 +31,11 @@ const modifyVesselTrackDepth = (
 
   dispatchUpdatingVessel(dispatch, true)
 
-  const apiTrackRequest = useFullDays
+  trackRequest = useFullDays
     ? getUTCFullDayTrackRequest({ ...trackRequest })
     : trackRequest
 
-  return getVesselPositionsFromAPI(vesselIdentity, apiTrackRequest)
+  return getVesselPositionsFromAPI(vesselIdentity, trackRequest)
     .then(({ positions, trackDepthHasBeenModified }) => {
       const error = getTrackResponseError(
         positions,
@@ -50,7 +50,6 @@ const modifyVesselTrackDepth = (
 
       batch(() => {
         console.log('saved', trackRequest)
-        console.log('apiTrackRequest', apiTrackRequest)
         dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
         dispatch(updateSelectedVesselPositions(positions))
         if (fishingActivitiesAreShowedOnMap && !doNotRedrawFishingMessages) {

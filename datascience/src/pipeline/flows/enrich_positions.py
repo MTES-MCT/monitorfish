@@ -1,6 +1,7 @@
 from logging import Logger
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task, unmapped
@@ -80,6 +81,7 @@ def enrich_positions_by_vessel(
     positions: pd.DataFrame,
     minimum_consecutive_positions: int,
     fishing_speed_threshold: float,
+    minimum_minutes_of_emission_at_sea: int,
 ) -> pd.DataFrame:
     """
     Applies `enrich_positions` to each vessel's positions.
@@ -106,18 +108,26 @@ def enrich_positions_by_vessel(
 
           and with the `time_emitting_at_sea` values recomputed / updated.
     """
+    minimum_time_of_emission_at_sea = np.timedelta64(
+        minimum_minutes_of_emission_at_sea, "m"
+    )
+
     if len(positions) == 0:
         # With an empty DataFrame, the `groupby` has nothing to group on and therefore
         # `enrich_positions` does not get applied at all, which causes the result to
         # be equal to the input and therefore some columns are missing.
         # In this case, applying `enrich_positions` without any groupby just adds the
         # desired columns and solves the problem.
-        res = enrich_positions(positions)
+        res = enrich_positions(
+            positions, minimum_time_of_emission_at_sea=minimum_time_of_emission_at_sea
+        )
     else:
+
         res = positions.groupby(
             ["cfr", "ircs", "external_immatriculation"], dropna=False, group_keys=False
         ).apply(
             enrich_positions,
+            minimum_time_of_emission_at_sea=minimum_time_of_emission_at_sea,
             minimum_consecutive_positions=minimum_consecutive_positions,
             fishing_speed_threshold=fishing_speed_threshold,
             return_floats=True,
@@ -263,7 +273,10 @@ def reset_positions(period: Period):
 
 @task(checkpoint=False)
 def extract_enrich_load(
-    period: Period, minimum_consecutive_positions: int, fishing_speed_threshold: float
+    period: Period,
+    minimum_consecutive_positions: int,
+    fishing_speed_threshold: float,
+    minimum_minutes_of_emission_at_sea: int,
 ):
     """Extract positions for the given `Period`, enrich and update the `positions`
     table.
@@ -298,6 +311,7 @@ def extract_enrich_load(
         positions,
         minimum_consecutive_positions=minimum_consecutive_positions,
         fishing_speed_threshold=fishing_speed_threshold,
+        minimum_minutes_of_emission_at_sea=minimum_minutes_of_emission_at_sea,
     )
 
     logger.info("Loading")
@@ -311,6 +325,7 @@ with Flow("Enrich positions") as flow:
     minutes_per_chunk = Parameter("minutes_per_chunk")
     chunk_overlap_minutes = Parameter("chunk_overlap_minutes")
     minimum_consecutive_positions = Parameter("minimum_consecutive_positions")
+    minimum_minutes_of_emission_at_sea = Parameter("minimum_minutes_of_emission_at_sea")
     fishing_speed_threshold = Parameter("fishing_speed_threshold")
     recompute_all = Parameter("recompute_all")
 
@@ -327,6 +342,9 @@ with Flow("Enrich positions") as flow:
             periods,
             minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
             fishing_speed_threshold=unmapped(fishing_speed_threshold),
+            minimum_minutes_of_emission_at_sea=unmapped(
+                minimum_minutes_of_emission_at_sea
+            ),
             upstream_tasks=[reset],
         )
 
@@ -335,6 +353,9 @@ with Flow("Enrich positions") as flow:
             periods,
             minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
             fishing_speed_threshold=unmapped(fishing_speed_threshold),
+            minimum_minutes_of_emission_at_sea=unmapped(
+                minimum_minutes_of_emission_at_sea
+            ),
         )
 
 flow.file_name = Path(__file__).name

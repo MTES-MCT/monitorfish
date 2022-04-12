@@ -177,7 +177,10 @@ def test_enrich_positions_by_vessel():
     )
 
     enriched_positions = enrich_positions_by_vessel(
-        positions, minimum_consecutive_positions=3, fishing_speed_threshold=4.5
+        positions,
+        minimum_consecutive_positions=3,
+        fishing_speed_threshold=4.5,
+        minimum_minutes_of_emission_at_sea=-1,
     )
 
     expected_enriched_positions = positions.loc[[0, 1, 5, 6, 9, 2, 3, 4, 7, 8], :].copy(
@@ -247,6 +250,29 @@ def test_enrich_positions_by_vessel():
 
     pd.testing.assert_frame_equal(enriched_positions, expected_enriched_positions)
 
+    # Test with increased minimum_minutes_of_emission_at_sea
+    enriched_positions = enrich_positions_by_vessel(
+        positions,
+        minimum_consecutive_positions=3,
+        fishing_speed_threshold=4.5,
+        minimum_minutes_of_emission_at_sea=int((1.5 * td).total_seconds() / 90),
+    )
+
+    expected_enriched_positions["is_fishing"] = [
+        False,
+        False,
+        False,
+        False,
+        True,
+        None,
+        False,
+        False,
+        False,
+        False,
+    ]
+
+    pd.testing.assert_frame_equal(enriched_positions, expected_enriched_positions)
+
 
 def test_enrich_positions_by_vessel_handles_empty_input():
 
@@ -265,7 +291,10 @@ def test_enrich_positions_by_vessel_handles_empty_input():
     )
 
     enriched_positions = enrich_positions_by_vessel(
-        positions, minimum_consecutive_positions=3, fishing_speed_threshold=4.5
+        positions,
+        minimum_minutes_of_emission_at_sea=60,
+        minimum_consecutive_positions=3,
+        fishing_speed_threshold=4.5,
     )
 
     expected_new_columns = [
@@ -380,16 +409,34 @@ def test_load_then_reset_fishing_activity(reset_test_data):
 
 def test_extract_enrich_load(reset_test_data):
 
-    now = datetime.utcnow()
-    period = Period(start=now - timedelta(hours=4), end=now)
-    extract_enrich_load.run(
-        period, minimum_consecutive_positions=2, fishing_speed_threshold=4.5
-    )
-
-    positions = read_query(
+    positions_before = read_query(
         "monitorfish_remote",
         """SELECT
-            internal_reference_number,
+            external_reference_number,
+            id,
+            is_at_port,
+            meters_from_previous_position,
+            time_since_previous_position,
+            average_speed,
+            is_fishing,
+            time_emitting_at_sea
+        FROM positions
+        ORDER BY internal_reference_number, date_time""",
+    )
+
+    now = datetime.utcnow()
+    period = Period(start=now - timedelta(hours=4, minutes=30), end=now)
+    extract_enrich_load.run(
+        period,
+        minimum_consecutive_positions=2,
+        fishing_speed_threshold=4.5,
+        minimum_minutes_of_emission_at_sea=60,
+    )
+
+    positions_after = read_query(
+        "monitorfish_remote",
+        """SELECT
+            external_reference_number,
             id,
             is_at_port,
             meters_from_previous_position,
@@ -402,59 +449,107 @@ def test_extract_enrich_load(reset_test_data):
     )
 
     # The number of positions in the positions table should not change
-    assert len(positions) == 19
+    assert len(positions_after) == len(positions_before)
+    assert len(positions_after) == 19
 
     # Positions outside of the selected Period should not be affected
     assert (
-        positions.loc[positions.id == "13641745", "meters_from_previous_position"]
-        == 2500
+        positions_after.loc[positions_after.id == "13735518", "average_speed"] == 0.4
+    ).all()
+
+    # Positions inside of the selected Period should be updated
+    assert (
+        positions_after.loc[positions_after.id == "13740935", "average_speed"]
+        == 1459.06
     ).all()
 
     # Positions for which the flow run yields null values should default to the value
     # previously in the table
     assert (
-        positions.loc[positions.id == "13634205", "meters_from_previous_position"]
+        positions_after.loc[
+            positions_after.id == "13634205", "meters_from_previous_position"
+        ]
         == 2050
     ).all()
 
     # Positions for which the flow run yields non null values should replace the value
     # previously in the table
     assert (
-        positions.loc[positions.id == "13637054", "meters_from_previous_position"]
+        positions_before.loc[
+            positions_after.id == "13637054", "meters_from_previous_position"
+        ]
+        == 2050
+    ).all()
+    assert (
+        positions_after.loc[
+            positions_after.id == "13637054", "meters_from_previous_position"
+        ]
         == 657.987
     ).all()
-    assert positions.loc[positions.id == "13637054", "is_fishing"].all()
 
-    assert (
-        positions["time_emitting_at_sea"]
-        == [
-            timedelta(days=1),
-            timedelta(days=1, minutes=30),
-            timedelta(days=1, hours=1),
-            timedelta(days=1, hours=1, minutes=30),
-            timedelta(days=1, hours=2),
-            timedelta(days=1, hours=2, minutes=30),
-            timedelta(days=1, hours=3),
-            timedelta(days=1, hours=3, minutes=30),
-            timedelta(),
-            timedelta(hours=1),
-            timedelta(hours=2),
-            timedelta(),
-            timedelta(),
-            timedelta(),
-            timedelta(),
-            timedelta(days=3),
-            timedelta(days=3, hours=4),
-            timedelta(days=3, hours=8),
-            timedelta(),
-        ]
-    ).all()
+    # Check all meaningful columns values for fishing detection
+    columns_to_check = [
+        "id",
+        "external_reference_number",
+        "average_speed",
+        "is_at_port",
+        "time_emitting_at_sea",
+        "is_fishing",
+    ]
+
+    expected_res = pd.DataFrame(
+        columns=columns_to_check,
+        data=[
+            [13632385, "AS761555", 2.69, False, timedelta(days=1), True],
+            [13633654, "AS761555", 2.69, False, timedelta(days=1, minutes=30), True],
+            [13635013, "AS761555", 2.69, False, timedelta(days=1, hours=1), True],
+            [
+                13636534,
+                "AS761555",
+                2.69,
+                False,
+                timedelta(days=1, hours=1, minutes=30),
+                True,
+            ],
+            [13637980, "AS761555", 2.69, False, timedelta(days=1, hours=2), True],
+            [
+                13639240,
+                "AS761555",
+                2.69,
+                False,
+                timedelta(days=1, hours=2, minutes=30),
+                True,
+            ],
+            [13640592, "AS761555", 2.69, False, timedelta(days=1, hours=3), True],
+            [
+                13641745,
+                "AS761555",
+                2.69,
+                False,
+                timedelta(days=1, hours=3, minutes=30),
+                None,
+            ],
+            [13634205, "RV348407", 1.107, False, timedelta(), False],
+            [13637054, "RV348407", 0.355284, False, timedelta(hours=1), False],
+            [13639642, "RV348407", 0.286178, False, timedelta(hours=2), True],
+            [13632807, "RO237719", 0.0, True, timedelta(), False],
+            [13635518, "RO237719", 0.0, True, timedelta(), False],
+            [13638407, "RO237719", 0.0, True, timedelta(), False],
+            [13640935, "RO237719", 0.0, True, timedelta(), False],
+            [13732807, "ZZTOPACDC", 0.4, True, timedelta(days=3), False],
+            [13735518, "ZZTOPACDC", 0.4, False, timedelta(days=3, hours=4), False],
+            [13738407, "ZZTOPACDC", 0.4, False, timedelta(days=3, hours=8), False],
+            [13740935, "ZZTOPACDC", 1459.06, True, timedelta(), False],
+        ],
+    )
+
+    pd.testing.assert_frame_equal(expected_res, positions_after[columns_to_check])
 
 
 def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
     flow.schedule = None
 
-    # Vessel 'ABC000055481' has all its positions already enriched in the test_date
+    # Vessel 'ABC000055481' has all its positions already enriched in the test_data
     positions_before = read_query(
         "monitorfish_remote",
         """SELECT
@@ -475,6 +570,7 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
         minutes_per_chunk=48 * 60,
         chunk_overlap_minutes=180,
         minimum_consecutive_positions=2,
+        minimum_minutes_of_emission_at_sea=60,
         fishing_speed_threshold=4.5,
         recompute_all=False,
     )
@@ -501,7 +597,7 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
 def test_flow_recomputes_all_when_asked_to(reset_test_data):
     flow.schedule = None
 
-    # Vessel 'ABC000055481' has all its positions already enriched in the test_date
+    # Vessel 'ABC000055481' has all its positions already enriched in the test_data
     positions_before = read_query(
         "monitorfish_remote",
         """SELECT
@@ -523,6 +619,7 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
         minutes_per_chunk=48 * 60,
         chunk_overlap_minutes=180,
         minimum_consecutive_positions=2,
+        minimum_minutes_of_emission_at_sea=60,
         fishing_speed_threshold=4.5,
         recompute_all=True,
     )
@@ -547,30 +644,46 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
     with pytest.raises(AssertionError):
         pd.testing.assert_frame_equal(positions_before, positions_after)
 
-    assert (
-        positions_after.loc[positions_after.id == 13632385, "is_fishing"].isna().all()
+    columns_to_check = [
+        "id",
+        "is_at_port",
+        "average_speed",
+        "time_emitting_at_sea",
+        "is_fishing",
+    ]
+    expected_res = pd.DataFrame(
+        columns=columns_to_check,
+        data=[
+            [13632385, False, None, timedelta(), False],
+            [13633654, False, 0.747199, timedelta(minutes=30), False],
+            [13635013, False, 0.560395, timedelta(hours=1), False],
+            [13636534, False, 0.559126, timedelta(hours=1, minutes=30), True],
+            [13637980, False, 1.002370, timedelta(hours=2), True],
+            [13639240, False, 0.600405, timedelta(hours=2, minutes=30), True],
+            [13640592, False, 0.559129, timedelta(hours=3), True],
+            [13641745, False, 1.351540, timedelta(hours=3, minutes=30), True],
+        ],
     )
-    assert positions_after.loc[positions_after.id != 13632385, "is_fishing"].all()
-    assert (
-        positions_after.loc[positions_after.id == 13637980, "average_speed"] == 1.002370
-    ).all()
+    pd.testing.assert_frame_equal(expected_res, positions_after[columns_to_check])
 
 
 def test_flow_can_compute_in_chunks(reset_test_data):
     flow.schedule = None
 
-    positions_before = read_query(
-        "monitorfish_remote",
-        """SELECT
+    query = """
+        SELECT
             id,
             is_at_port,
             meters_from_previous_position,
             time_since_previous_position,
             average_speed,
+            time_emitting_at_sea,
             is_fishing
         FROM positions
-        ORDER BY id""",
-    )
+        ORDER BY id
+    """
+
+    positions_before = read_query("monitorfish_remote", query)
 
     state = flow.run(
         start_hours_ago=48,
@@ -578,24 +691,14 @@ def test_flow_can_compute_in_chunks(reset_test_data):
         minutes_per_chunk=30 * 60,
         chunk_overlap_minutes=6 * 60,
         minimum_consecutive_positions=2,
+        minimum_minutes_of_emission_at_sea=60,
         fishing_speed_threshold=4.5,
         recompute_all=True,
     )
 
     assert state.is_successful()
 
-    positions_enriched_in_2_chunks = read_query(
-        "monitorfish_remote",
-        """SELECT
-            id,
-            is_at_port,
-            meters_from_previous_position,
-            time_since_previous_position,
-            average_speed,
-            is_fishing
-        FROM positions
-        ORDER BY id""",
-    )
+    positions_enriched_in_2_chunks = read_query("monitorfish_remote", query)
 
     state = flow.run(
         start_hours_ago=48,
@@ -603,24 +706,14 @@ def test_flow_can_compute_in_chunks(reset_test_data):
         minutes_per_chunk=48 * 60,
         chunk_overlap_minutes=6 * 60,
         minimum_consecutive_positions=2,
+        minimum_minutes_of_emission_at_sea=60,
         fishing_speed_threshold=4.5,
         recompute_all=True,
     )
 
     assert state.is_successful()
 
-    positions_enriched_in_1_chunk = read_query(
-        "monitorfish_remote",
-        """SELECT
-            id,
-            is_at_port,
-            meters_from_previous_position,
-            time_since_previous_position,
-            average_speed,
-            is_fishing
-        FROM positions
-        ORDER BY id""",
-    )
+    positions_enriched_in_1_chunk = read_query("monitorfish_remote", query)
 
     with pytest.raises(AssertionError):
         pd.testing.assert_frame_equal(positions_before, positions_enriched_in_2_chunks)

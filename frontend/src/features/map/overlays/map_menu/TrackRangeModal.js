@@ -4,7 +4,7 @@ import { COLORS } from '../../../../constants/constants'
 import Modal from 'rsuite/lib/Modal'
 import DateRange from '../../../vessel_sidebar/actions/track_request/DateRange'
 
-const CustomTrackDepthModal = ({ isModalOpen, setModalIsOpen, datesSelection, resetToDefaultTrackDepth, modifyVesselTrackDepthFromDates }) => {
+const TrackRangeModal = ({ isModalOpen, setModalIsOpen, selectedDates, resetToDefaultTrackDepth, setSelectedDates }) => {
   return (
     <ModalWithCustomHeight
       size={'xs'}
@@ -22,9 +22,9 @@ const CustomTrackDepthModal = ({ isModalOpen, setModalIsOpen, datesSelection, re
       </Modal.Header>
       <Body>
         <DateRange
-          dates={datesSelection}
+          dates={selectedDates}
           resetToDefaultTrackDepth={resetToDefaultTrackDepth}
-          modifyVesselTrackDepthFromDates={modifyVesselTrackDepthFromDates}
+          modifyVesselTrackFromDates={setSelectedDates}
           width={265}
         />
       </Body>
@@ -49,4 +49,4 @@ const ModalWithCustomHeight = styled(Modal)`
   }
 `
 
-export default CustomTrackDepthModal
+export default TrackRangeModal

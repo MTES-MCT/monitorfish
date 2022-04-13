@@ -16,9 +16,9 @@ import { MeasurementTypes } from '../../domain/entities/map'
 import CustomCircleRange from './CustomCircleRange'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
-import { useClickOutsideComponent } from '../../hooks/useClickOutside'
 import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
+import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
 
 const Measurement = () => {
   const dispatch = useDispatch()
@@ -36,7 +36,7 @@ const Measurement = () => {
   const [circleCoordinatesToAdd, setCircleCoordinatesToAdd] = useState([])
   const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, measurementIsOpen)
   const escapeFromKeyboard = useEscapeFromKeyboard()
 
   useEffect(() => {

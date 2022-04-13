@@ -126,6 +126,9 @@ const PNOMessageResume = props => {
                 </Field>
               </TableBody>
             </Fields>
+            <WeightInfo>
+              Tous les poids sont vifs.
+            </WeightInfo>
             <SpeciesAndWeightChart
               setChartHeight={setChartHeight}
               compareWithTotalWeight={true}
@@ -156,6 +159,10 @@ const PNOMessageResume = props => {
     }
   </Wrapper>
 }
+
+const WeightInfo = styled.span`
+  margin: 0 0 10px 5px;
+`
 
 const IndividualSpeciesNotLanded = styled.div`
   font-size: 13px;
@@ -251,7 +258,7 @@ const LogbookMessageContent = styled.div`
   border-bottom: 1px solid ${COLORS.gray};  
   opacity: ${props => props.isOpen ? 1 : 0};
   height: ${props => props.isOpen
-    ? props.chartHeight + 130 + (props.speciesNotLandedArray?.length ? 55 : 0)
+    ? props.chartHeight + 130 + (props.speciesNotLandedArray?.length ? 80 : 0)
     : 0
   }px;
   transition: 0.2s all;

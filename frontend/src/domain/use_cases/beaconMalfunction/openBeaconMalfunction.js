@@ -4,10 +4,10 @@ import { getBeaconMalfunctionFromAPI } from '../../../api/beaconMalfunction'
 
 /**
  * Open a single beacon malfunction
- * @function openBeaconMalfunctionInKanban
+ * @function openBeaconMalfunction
  * @param {BeaconMalfunctionResumeAndDetails} beaconMalfunction - the beacon malfunction to open
  */
-const openBeaconMalfunctionInKanban = beaconMalfunction => (dispatch, getState) => {
+const openBeaconMalfunction = beaconMalfunction => (dispatch, getState) => {
   const previousBeaconMalfunction = getState().beaconMalfunction.openedBeaconMalfunction
   dispatch(setOpenedBeaconMalfunction(beaconMalfunction))
 
@@ -20,4 +20,4 @@ const openBeaconMalfunctionInKanban = beaconMalfunction => (dispatch, getState) 
   })
 }
 
-export default openBeaconMalfunctionInKanban
+export default openBeaconMalfunction

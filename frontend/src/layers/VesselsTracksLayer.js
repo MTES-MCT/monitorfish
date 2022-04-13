@@ -136,7 +136,7 @@ const VesselsTracksLayer = ({ map }) => {
     const features = getVectorSource().getFeatures()
     function showVesselsTracks (features, vesselTracks) {
       vesselTracks
-        .filter(positionsAndTrackDepth => positionsAndTrackDepth.toShow)
+        .filter(vesselTrack => vesselTrack.toShow)
         .forEach(vesselTrack => {
           removeVesselTrackFeatures(features, getVectorSource(), vesselTrack.vesselId)
 
@@ -155,7 +155,7 @@ const VesselsTracksLayer = ({ map }) => {
 
     function hideVesselsTracks (features, vesselTracks) {
       vesselTracks
-        .filter(positionsAndTrackDepth => positionsAndTrackDepth.toHide)
+        .filter(vesselTrack => vesselTrack.toHide)
         .forEach(vesselTrack => {
           removeVesselTrackFeatures(features, getVectorSource(), vesselTrack.vesselId)
 

@@ -143,7 +143,7 @@ context('Vessels Track', () => {
     cy.get('.vessels').rightclick(504, 289, { timeout: 20000, force: true })
     cy.get('*[data-cy^="show-vessel-tracks-menu-options"]').click({ force: true })
     cy.get('*[data-cy^="show-vessel-tracks-custom-period"]').click({ force: true })
-    cy.get('.rs-picker-daterange > .rs-btn').eq(1).click(460, 480, { timeout: 20000, force: true })
+    cy.get('.rs-picker-daterange > .rs-btn').eq(0).click(460, 480, { timeout: 20000, force: true })
 
     cy.get('.rs-calendar-table-cell-is-today').click({ timeout: 20000, force: true })
     cy.get('.rs-calendar-table-cell-is-today').prev().click({ timeout: 20000, force: true })

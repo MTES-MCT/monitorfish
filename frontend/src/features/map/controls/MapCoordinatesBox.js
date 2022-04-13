@@ -6,15 +6,15 @@ import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../../domain/entiti
 import { useDispatch, useSelector } from 'react-redux'
 import { setCoordinatesFormat } from '../../../domain/shared_slices/Map'
 import { getCoordinates } from '../../../coordinates'
-import { useClickOutsideComponent } from '../../../hooks/useClickOutside'
+import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
 
 const MapCoordinatesBox = ({ coordinates }) => {
   const wrapperRef = useRef(null)
 
   const dispatch = useDispatch()
   const { coordinatesFormat } = useSelector(state => state.map)
-  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
   const [coordinatesSelectionIsOpen, setCoordinatesSelectionIsOpen] = useState(false)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, coordinatesSelectionIsOpen)
 
   useEffect(() => {
     if (clickedOutsideComponent) {

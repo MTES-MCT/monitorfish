@@ -5,6 +5,7 @@ import GeoJSON from 'ol/format/GeoJSON'
 import { all } from 'ol/loadingstrategy'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map'
+
 /**
  *
  * @param {string} hexColor
@@ -287,42 +288,6 @@ export function formatToCSVColumnsForExport (initialObject, csvColumns, filters)
       },
       {}
     )
-}
-
-/**
- * Get full days in date range (to avoid missing hours in the selected date range)
- * @param {string | Date} afterDateTime After date
- * @param {string | Date} beforeDateTime Before date
- * @returns {{
-      afterDateTime: Date,
-      beforeDateTime: Date
-    }} date range
- */
-export const convertToUTCFullDay = (afterDateTime, beforeDateTime) => {
-  if (!afterDateTime && !beforeDateTime) {
-    return {
-      afterDateTime: null,
-      beforeDateTime: null
-    }
-  }
-
-  afterDateTime = new Date(afterDateTime instanceof Date
-    ? afterDateTime.getTime()
-    : afterDateTime)
-  beforeDateTime = new Date(beforeDateTime instanceof Date
-    ? beforeDateTime.getTime()
-    : beforeDateTime)
-
-  afterDateTime.setHours(0, 0, 0)
-  beforeDateTime.setHours(23, 59, 59)
-
-  afterDateTime.setMinutes(afterDateTime.getMinutes() - afterDateTime.getTimezoneOffset())
-  beforeDateTime.setMinutes(beforeDateTime.getMinutes() - beforeDateTime.getTimezoneOffset())
-
-  return {
-    afterDateTime,
-    beforeDateTime
-  }
 }
 
 /**

@@ -2,11 +2,11 @@ import { removeError, setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
 import {
   loadVesselBeaconMalfunctions,
-  resetOpenedBeaconMalfunction,
   setVesselBeaconMalfunctionsResumeAndHistory
 } from '../../shared_slices/BeaconMalfunction'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../../entities/vessel'
 import { getVesselBeaconsMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
+import openBeaconMalfunction from './openBeaconMalfunction'
 
 const getVesselBeaconMalfunctions = () => (dispatch, getState) => {
   const {
@@ -38,7 +38,7 @@ const getVesselBeaconMalfunctions = () => (dispatch, getState) => {
     }))
 
     if (openedBeaconMalfunction) {
-      dispatch(resetOpenedBeaconMalfunction())
+      dispatch(openBeaconMalfunction(openedBeaconMalfunction))
     }
 
     dispatch(removeError())

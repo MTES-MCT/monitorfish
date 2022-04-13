@@ -49,14 +49,14 @@ function getVesselsLastPositionsFromAPI () {
  * }>} The vessel
  * @throws {Error}
  */
-function getVesselFromAPI (identity, vesselTrackDepthObject) {
+function getVesselFromAPI (identity, trackRequest) {
   const internalReferenceNumber = identity.internalReferenceNumber || ''
   const externalReferenceNumber = identity.externalReferenceNumber || ''
   const ircs = identity.ircs || ''
   const vesselIdentifier = identity.vesselIdentifier || ''
-  const trackDepth = vesselTrackDepthObject.trackDepth || ''
-  const afterDateTime = vesselTrackDepthObject.afterDateTime?.toISOString() || ''
-  const beforeDateTime = vesselTrackDepthObject.beforeDateTime?.toISOString() || ''
+  const trackDepth = trackRequest.trackDepth || ''
+  const afterDateTime = trackRequest.afterDateTime?.toISOString() || ''
+  const beforeDateTime = trackRequest.beforeDateTime?.toISOString() || ''
 
   return fetch(`/bff/v1/vessels/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`)
     .then(response => {
@@ -85,21 +85,21 @@ function getVesselFromAPI (identity, vesselTrackDepthObject) {
  * Get vessel positions
  * @memberOf API
  * @param {VesselIdentity} identity
- * @param {VesselTrackDepthRequest} vesselTrackDepthRequest
+ * @param {TrackRequest} trackRequest
  * @returns {Promise<{
  *   positions: VesselPosition[],
  *   trackDepthHasBeenModified: boolean
  * }>} The positions
  * @throws {Error}
  */
-function getVesselPositionsFromAPI (identity, vesselTrackDepthRequest) {
+function getVesselPositionsFromAPI (identity, trackRequest) {
   const internalReferenceNumber = identity.internalReferenceNumber || ''
   const externalReferenceNumber = identity.externalReferenceNumber || ''
   const ircs = identity.ircs || ''
   const vesselIdentifier = identity.vesselIdentifier || ''
-  const trackDepth = vesselTrackDepthRequest.trackDepth || ''
-  const afterDateTime = vesselTrackDepthRequest.afterDateTime?.toISOString() || ''
-  const beforeDateTime = vesselTrackDepthRequest.beforeDateTime?.toISOString() || ''
+  const trackDepth = trackRequest.trackDepth || ''
+  const afterDateTime = trackRequest.afterDateTime?.toISOString() || ''
+  const beforeDateTime = trackRequest.beforeDateTime?.toISOString() || ''
 
   return fetch(`/bff/v1/vessels/positions?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`)
     .then(response => {

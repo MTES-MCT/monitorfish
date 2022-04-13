@@ -4,31 +4,28 @@ import { COLORS } from '../../../constants/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDate } from '../../../utils'
 import modifyVesselTrackDepth from '../../../domain/use_cases/vessel/modifyVesselTrackDepth'
+import { getTrackRequestFromTrackDepth } from '../../../domain/entities/vesselTrackDepth'
 
 const CustomDatesShowedInfo = ({ width }) => {
   const dispatch = useDispatch()
   const {
-    selectedVesselCustomTrackDepth,
+    selectedVesselCustomTrackRequest,
     selectedVesselIdentity
   } = useSelector(state => state.vessel)
   const defaultVesselTrackDepth = useSelector(state => state.map.defaultVesselTrackDepth)
 
   const setToDefaultTrackDepth = () => {
-    const nextTrackDepth = {
-      trackDepth: defaultVesselTrackDepth,
-      beforeDatetime: null,
-      afterDatetime: null
-    }
-    dispatch(modifyVesselTrackDepth(selectedVesselIdentity, nextTrackDepth))
+    const trackRequest = getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
+    dispatch(modifyVesselTrackDepth(selectedVesselIdentity, trackRequest, false, false))
   }
 
   return <>
     {
-      selectedVesselCustomTrackDepth?.afterDateTime && selectedVesselCustomTrackDepth?.beforeDateTime
+      selectedVesselCustomTrackRequest?.afterDateTime && selectedVesselCustomTrackRequest?.beforeDateTime
         ? <Wrapper width={width}>
           <TrackDepthInfo data-cy={'custom-dates-showed-text'}>
-            Piste affichée du {getDate(selectedVesselCustomTrackDepth?.afterDateTime.toString()).replace('/20', '/')}{' '}
-            au {getDate(selectedVesselCustomTrackDepth?.beforeDateTime.toString()).replace('/20', '/')}
+            Piste affichée du {getDate(selectedVesselCustomTrackRequest?.afterDateTime.toString()).replace('/20', '/')}{' '}
+            au {getDate(selectedVesselCustomTrackRequest?.beforeDateTime.toString()).replace('/20', '/')}
           </TrackDepthInfo>
           <ShowLastPositions data-cy={'custom-dates-show-last-positions'} onClick={setToDefaultTrackDepth}>
             Afficher les dernières positions

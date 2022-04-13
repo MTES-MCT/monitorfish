@@ -3,13 +3,13 @@ import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 
-const TrackDepthRadio = ({ trackDepthRadioSelection, modifyVesselTrackDepth }) => {
+const TrackDepth = ({ selectedTrackDepth, modifyVesselTrackDepth }) => {
   return (
     <RadioWrapper>
       <RadioGroup
         inline
         name="trackDepthRadio"
-        value={trackDepthRadioSelection}
+        value={selectedTrackDepth}
         onChange={modifyVesselTrackDepth}
       >
         <Columns>
@@ -47,4 +47,4 @@ const RadioWrapper = styled.div`
   margin-top: 10px;
 `
 
-export default TrackDepthRadio
+export default TrackDepth

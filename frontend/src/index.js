@@ -15,7 +15,7 @@ import GlobalFonts from './fonts/fonts'
 
 if (!(process.env.NODE_ENV === 'development')) {
   Sentry.init({
-    dsn: 'https://ab46041e2f104a45b73260f1d19879b0@o557126.ingest.sentry.io/5688987',
+    dsn: 'https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8',
     integrations: [new Integrations.BrowserTracing({
       tracingOrigins: ['monitorfish-test.csam.e2.rie.gouv.fr', 'monitorfish.din.developpement-durable.gouv.fr']
     })],

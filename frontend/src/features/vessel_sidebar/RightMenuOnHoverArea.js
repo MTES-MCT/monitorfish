@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { contractRightMenu } from '../../domain/shared_slices/Global'
-import { useClickOutsideComponent } from '../../hooks/useClickOutside'
+import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
 
 const RightMenuOnHoverArea = () => {
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
@@ -10,7 +10,7 @@ const RightMenuOnHoverArea = () => {
 
   const wrapperRef = useRef(null)
   const timeOutRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, selectedVessel)
 
   useEffect(() => {
     if (clickedOutsideComponent) {

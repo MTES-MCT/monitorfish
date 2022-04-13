@@ -18,7 +18,7 @@ import { usePrevious } from '../../hooks/usePrevious'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
-import { useClickOutsideComponent } from '../../hooks/useClickOutside'
+import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
 
 const VesselFilters = () => {
   const dispatch = useDispatch()
@@ -33,7 +33,7 @@ const VesselFilters = () => {
 
   const [vesselFilterBoxIsOpen, setVesselFilterBoxIsOpen] = useState(false)
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, vesselFilterBoxIsOpen)
 
   useEffect(() => {
     if (clickedOutsideComponent) {

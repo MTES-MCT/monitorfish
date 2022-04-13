@@ -183,7 +183,7 @@
  */
 
 /**
- * @typedef VesselTrackDepthRequest
+ * @typedef TrackRequest
  * @property {string | null} trackDepth
  * @property {Date | null} afterDateTime
  * @property {Date | null} beforeDateTime
@@ -197,7 +197,6 @@
  * @property {number} course
  * @property {VesselPosition[]} positions
  * @property {boolean} isDefaultTrackDepth
- * @property {VesselTrackDepthRequest} trackDepth
  * @property {number[]} extent
  * @property {boolean} toShow
  * @property {boolean} toHide

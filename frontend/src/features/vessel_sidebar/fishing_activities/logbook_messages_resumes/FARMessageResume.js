@@ -105,6 +105,9 @@ const FARMessageResume = props => {
           isOpen={isOpen}
           name={LogbookMessageTypeEnum.FAR.code.toString()}>
           <Zone>
+            <WeightInfo>
+              Tous les poids sont vifs.
+            </WeightInfo>
             <SpeciesAndWeightChart
               setChartHeight={setChartHeight}
               resetChartHeight={resetChartHeight}
@@ -119,6 +122,10 @@ const FARMessageResume = props => {
     }
   </Wrapper>
 }
+
+const WeightInfo = styled.span`
+  margin: 0 0 10px 5px;
+`
 
 const Zone = styled.div`
   margin: 10px;
@@ -138,7 +145,7 @@ const Wrapper = styled.li`
 const LogbookMessageContent = styled.div`
   background: ${COLORS.background};
   width: inherit;
-  height: ${props => props.isOpen && props.chartHeight ? props.chartHeight + 20 : 0}px;
+  height: ${props => props.isOpen && props.chartHeight ? props.chartHeight + 50 : 0}px;
   opacity: ${props => props.isOpen ? 1 : 0};
   overflow: hidden;
   padding-left: 20px;

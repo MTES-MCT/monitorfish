@@ -50,6 +50,22 @@ context('Update Regulation', () => {
     cy.get('[data-cy="tag-Ouest Cotentin Bivalves"]').should('not.exist')
   })
 
+  it('A species Should be removed', () => {
+    // Given
+    cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
+    cy.get('*[data-cy^="regulation-authorized-species"]').click({ force: true })
+    cy.get('.rs-picker-toggle-placeholder')
+      .filter(':contains("des espèces")')
+      .scrollIntoView()
+      .click({ timeout: 20000 })
+
+    // When
+    cy.get('[data-cy="close-tag-OURSINS NCA (URC)"]').click()
+
+    // Then
+    cy.get('[data-cy="tag-OURSINS NCA (URC)"]').should('not.exist')
+  })
+
   it('Save regulation Should send the update payload to Geoserver and go back to backoffice page', () => {
     // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')

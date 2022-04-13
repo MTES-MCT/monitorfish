@@ -179,6 +179,7 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
       ENV_PROFILE:  ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
+    steps:
     - name: Push docker image to registry
       if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
       run: |

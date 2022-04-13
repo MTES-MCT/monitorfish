@@ -73,7 +73,7 @@ const options = {
   }
 }
 
-const TrackExport = ({ openBox, rightMenuIsOpen }) => {
+const TrackExport = ({ sidebarIsOpen, rightMenuIsOpen }) => {
   const { coordinatesFormat } = useSelector(state => state.map)
   const [positions, setPositions] = useState([])
   const { healthcheckTextWarning } = useSelector(state => state.global)
@@ -120,7 +120,7 @@ const TrackExport = ({ openBox, rightMenuIsOpen }) => {
       title={'Exporter la piste'}
       healthcheckTextWarning={healthcheckTextWarning}
       isClickable={selectedVesselPositions?.length}
-      openBox={openBox}
+      sidebarIsOpen={sidebarIsOpen}
       rightMenuIsOpen={rightMenuIsOpen}
       onClick={() => selectedVesselPositions?.length ? download() : undefined}
     >
@@ -135,12 +135,12 @@ const TrackExportButton = styled(MapButtonStyle)`
   width: 30px;
   background: ${COLORS.charcoal};
   position: absolute;
-  margin-right: ${props => props.openBox ? 505 : -45}px;
-  opacity: ${props => props.openBox ? 1 : 0};
+  margin-right: ${props => props.sidebarIsOpen ? 505 : -45}px;
+  opacity: ${props => props.sidebarIsOpen ? 1 : 0};
   ${props => props.isClickable ? 'cursor: pointer;' : null}
   border-radius: 1px;
   z-index: 999;
-  right: ${props => props.rightMenuIsOpen && props.openBox ? 55 : 10}px;
+  right: ${props => props.rightMenuIsOpen && props.sidebarIsOpen ? 55 : 10}px;
   transition: all 0.5s, right 0.3s;
 
   :hover, :focus {

@@ -14,7 +14,7 @@ import { useClickOutsideWhenOpened } from '../../../../hooks/useClickOutsideWhen
 
 const { Column, HeaderCell, Cell } = Table
 
-const TrackPositionsTable = ({ openBox }) => {
+const PositionsTable = ({ openBox }) => {
   const dispatch = useDispatch()
   const { coordinatesFormat } = useSelector(state => state.map)
   const {
@@ -145,4 +145,4 @@ const ManualPosition = styled(ManualPositionSVG)`
   margin-left: 3px;
 `
 
-export default TrackPositionsTable
+export default PositionsTable

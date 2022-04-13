@@ -1,7 +1,7 @@
-WITH deleted_messages AS (
+WITH deleted_or_corrected_messages AS (
     SELECT referenced_report_id
     FROM public.logbook_reports
-    WHERE operation_type = 'DEL'
+    WHERE operation_type IN ('DEL', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
 ),
 
@@ -11,12 +11,11 @@ ordered_deps AS (
         trip_number,
         value->'gearOnboard' AS gear_onboard,
         (value->>'departureDatetimeUtc')::timestamptz AS departure_datetime_utc,
-        ROW_NUMBER() OVER(PARTITION BY cfr ORDER BY operation_datetime_utc DESC) as rk
+        ROW_NUMBER() OVER(PARTITION BY cfr ORDER BY (value->>'departureDatetimeUtc')::timestamptz DESC) as rk
     FROM public.logbook_reports
     WHERE log_type = 'DEP'
-    AND operation_type IN ('DAT', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
-    AND report_id NOT IN (SELECT referenced_report_id FROM deleted_messages)
+    AND report_id NOT IN (SELECT referenced_report_id FROM deleted_or_corrected_messages)
 ),
 
 last_deps AS (
@@ -29,31 +28,20 @@ last_deps AS (
     WHERE rk=1
 ),
 
-ordered_ers AS (
+last_logbook_reports AS (
     SELECT
         cfr,
-        operation_datetime_utc,
-        ROW_NUMBER() OVER(PARTITION BY cfr ORDER BY operation_datetime_utc DESC) as rk
+        MAX(report_datetime_utc) AS last_logbook_message_datetime_utc
     FROM public.logbook_reports
     WHERE operation_type IN ('DAT', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
+    GROUP BY cfr
 ),
-
-last_ers AS (
-    SELECT 
-        cfr,
-        operation_datetime_utc
-    FROM ordered_ers
-    WHERE rk=1
-),
-
 
 catches AS (
     SELECT
         r.cfr,
         r.report_id,
-        r.referenced_report_id,
-        r.operation_type,
         (jsonb_array_elements(r.value -> 'hauls'))->>'gear' as gear,
         jsonb_array_elements((jsonb_array_elements(r.value -> 'hauls'))->'catches')->>'species' as species,
         (jsonb_array_elements((jsonb_array_elements(r.value -> 'hauls'))->'catches')->>'weight')::DOUBLE PRECISION as weight,
@@ -61,25 +49,12 @@ catches AS (
     FROM public.logbook_reports r
     JOIN last_deps d
     ON r.cfr = d.cfr
-    AND r.operation_datetime_utc > d.departure_datetime_utc
+    AND r.trip_number = d.trip_number
     WHERE log_type = 'FAR'
     AND operation_type IN ('DAT', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
-    AND operation_number NOT IN (SELECT referenced_report_id FROM deleted_messages)
+    AND operation_number NOT IN (SELECT referenced_report_id FROM deleted_or_corrected_messages)
 ),
-
-corrected_catches AS (
-    SELECT 
-        cfr,
-        report_id,
-        species,
-        weight,
-        gear,
-        fao_area
-    FROM catches
-    WHERE report_id NOT IN (SELECT referenced_report_id FROM catches WHERE operation_type = 'COR')
-),
-
 
 summed_catches AS (
     SELECT
@@ -88,14 +63,13 @@ summed_catches AS (
         gear,
         fao_area,
         SUM(weight) as weight
-    FROM corrected_catches
+    FROM catches
     GROUP BY cfr, species, gear, fao_area
 )
 
-
 SELECT
-    COALESCE(last_ers.cfr, last_deps.cfr) AS cfr,
-    last_ers.operation_datetime_utc AS last_logbook_message_datetime_utc,
+    COALESCE(last_logbook_reports.cfr, last_deps.cfr) AS cfr,
+    last_logbook_reports.last_logbook_message_datetime_utc,
     departure_datetime_utc,
     trip_number,
     gear_onboard,
@@ -103,8 +77,8 @@ SELECT
     gear,
     fao_area,
     weight
-FROM last_ers
+FROM last_logbook_reports
 FULL OUTER JOIN last_deps
-ON last_ers.cfr = last_deps.cfr
+ON last_logbook_reports.cfr = last_deps.cfr
 LEFT JOIN summed_catches
-ON last_ers.cfr = summed_catches.cfr
+ON last_logbook_reports.cfr = summed_catches.cfr

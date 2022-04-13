@@ -37,7 +37,6 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
   dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 
   const nextTrackRequest = getCustomOrDefaultTrackRequest(selectedVesselCustomTrackRequest, defaultVesselTrackDepth, false)
-  console.log('next', nextTrackRequest)
   if (fishingActivitiesAreShowedOnMap && !calledFromCron) {
     dispatch(removeFishingActivitiesFromMap())
   }

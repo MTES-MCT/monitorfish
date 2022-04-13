@@ -1,5 +1,5 @@
 import { setSelectedVesselCustomTrackRequest, showVesselSidebarTab } from '../../shared_slices/Vessel'
-import { getTrackRequestFromDates } from '../../entities/vesselTrackDepth'
+import { getUTCFullDayTrackRequest } from '../../entities/vesselTrackDepth'
 import showVessel from './showVessel'
 import getVesselVoyage from './getVesselVoyage'
 import { VesselSidebarTab } from '../../entities/vessel'
@@ -15,14 +15,9 @@ import { endOfBeaconMalfunctionReasons } from '../../entities/beaconMalfunction'
  */
 export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVMRERSTab) => async dispatch => {
   if (beaconMalfunction?.endOfBeaconMalfunctionReason !== endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value) {
-    const afterDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
-    const twentyFiveHours = 25
-    afterDateTime.setTime(afterDateTime.getTime() - (twentyFiveHours * 60 * 60 * 1000))
-    afterDateTime.setMilliseconds(0)
-    const beforeDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
-    beforeDateTime.setMilliseconds(0)
+    const { afterDateTime, beforeDateTime } = getDatesAroundMalfunctionDateTime(beaconMalfunction)
 
-    const trackRequest = getTrackRequestFromDates(afterDateTime, beforeDateTime)
+    const trackRequest = getUTCFullDayTrackRequest({ afterDateTime, beforeDateTime })
     await dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
   }
 
@@ -32,4 +27,16 @@ export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVM
   if (openVMRERSTab) {
     dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))
   }
+}
+
+function getDatesAroundMalfunctionDateTime (beaconMalfunction) {
+  const afterDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
+  const twentyFiveHours = 25
+  afterDateTime.setTime(afterDateTime.getTime() - (twentyFiveHours * 60 * 60 * 1000))
+  afterDateTime.setMilliseconds(0)
+
+  const beforeDateTime = new Date(beaconMalfunction.malfunctionStartDateTime)
+  beforeDateTime.setMilliseconds(0)
+
+  return { afterDateTime, beforeDateTime }
 }

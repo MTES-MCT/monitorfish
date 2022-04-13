@@ -49,7 +49,6 @@ const modifyVesselTrackDepth = (
       }
 
       batch(() => {
-        console.log('saved', trackRequest)
         dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
         dispatch(updateSelectedVesselPositions(positions))
         if (fishingActivitiesAreShowedOnMap && !doNotRedrawFishingMessages) {

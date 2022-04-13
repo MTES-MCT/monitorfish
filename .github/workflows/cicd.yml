@@ -48,8 +48,6 @@ jobs:
     - id: version
       name: Set VERSION env
       run: |
-        echo ${{ env.ENV_PROFILE }}
-        echo "${ENV_PROFILE}""
         if [ "${ENV_PROFILE}" != "prod" ]; then\
             export VERSION=${{ steps.lastrelease.outputs.release }}_snapshot
         else\

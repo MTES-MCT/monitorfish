@@ -28,7 +28,7 @@ const LogbookMessageSpecies = props => {
           <TitleText title={getSpeciesName(props.species)}>
             {getSpeciesName(props.species)}
           </TitleText>
-          <Weight title={`${props.species.weight} kg`}>
+          <Weight title={`${props.species.weight} kg (vif)`}>
             <InlineKey>Poids total (estimé) </InlineKey>
             <Kg>{props.species.weight ? props.species.weight : <NoValue>-</NoValue>} kg</Kg>
           </Weight>
@@ -52,7 +52,7 @@ const LogbookMessageSpecies = props => {
                       <Field>
                         <Key>Poids</Key>
                         <TrimmedValue
-                          title={`${species?.weight} kg`}>
+                          title={`${species?.weight} kg (vif)`}>
                           {
                             species?.weight
                               ? `${species.weight} kg`

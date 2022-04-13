@@ -48,12 +48,14 @@ jobs:
     - id: version
       name: Set VERSION env
       run: |
+        echo ${{ env.ENV_PROFILE }}
+        echo "${ENV_PROFILE}""
         if [ "${ENV_PROFILE}" != "prod" ]; then\
-            echo "VERSION=${{ steps.lastrelease.outputs.release }}_snapshot" >> $GITHUB_ENV
+            export VERSION=${{ steps.lastrelease.outputs.release }}_snapshot
         else\
-            echo "VERSION=${{ steps.lastrelease.outputs.release }}" >> $GITHUB_ENV
+            export VERSION=${{ steps.lastrelease.outputs.release }}
         fi
-        VERSION=${{ env.VERSION }} && echo "::set-output name=VERSION::$VERSION"
+        echo "::set-output name=VERSION::$VERSION"
 
   build:
     name: Run unit tests, build and package

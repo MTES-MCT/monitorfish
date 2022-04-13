@@ -9,21 +9,23 @@ import { highlightVesselTrackPosition } from '../../../../domain/shared_slices/V
 import { CSVOptions } from '../../../vessel_list/dataFormatting'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../domain/entities/map'
 import { animateToCoordinates } from '../../../../domain/shared_slices/Map'
-import { useClickOutsideComponent } from '../../../../hooks/useClickOutside'
 import { ReactComponent as ManualPositionSVG } from '../../../icons/Pastille_position_manuelle.svg'
+import { useClickOutsideWhenOpened } from '../../../../hooks/useClickOutsideWhenOpened'
 
 const { Column, HeaderCell, Cell } = Table
 
-const TrackPositionsTable = () => {
+const PositionsTable = ({ openBox }) => {
   const dispatch = useDispatch()
   const { coordinatesFormat } = useSelector(state => state.map)
-  const { selectedVesselPositions, highlightedVesselTrackPosition } = useSelector(state => state.vessel)
+  const {
+    selectedVesselPositions,
+    highlightedVesselTrackPosition
+  } = useSelector(state => state.vessel)
 
   const [sortColumn, setSortColumn] = useState(CSVOptions.dateTime.code)
   const [sortType, setSortType] = useState(SortType.DESC)
-  const [positions, setPositions] = useState()
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideComponent(wrapperRef)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, openBox)
 
   useEffect(() => {
     if (clickedOutsideComponent) {
@@ -31,28 +33,20 @@ const TrackPositionsTable = () => {
     }
   }, [clickedOutsideComponent])
 
-  useEffect(() => {
-    if (selectedVesselPositions?.length) {
-      setPositions(selectedVesselPositions)
-    } else {
-      setPositions([])
-    }
-  }, [selectedVesselPositions])
-
   const handleSortColumn = (sortColumn, sortType) => {
     setSortColumn(sortColumn)
     setSortType(sortType)
   }
 
   const getPositions = useCallback(() => {
-    if (sortColumn && sortType && Array.isArray(positions)) {
-      return positions
+    if (sortColumn && sortType && Array.isArray(selectedVesselPositions)) {
+      return selectedVesselPositions
         .slice()
         .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
     }
 
-    return positions
-  }, [sortColumn, sortType, positions])
+    return []
+  }, [sortColumn, sortType, selectedVesselPositions])
 
   return (
     <div ref={wrapperRef}>
@@ -151,4 +145,4 @@ const ManualPosition = styled(ManualPositionSVG)`
   margin-left: 3px;
 `
 
-export default TrackPositionsTable
+export default PositionsTable

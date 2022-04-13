@@ -30,12 +30,14 @@ context('Control objectives', () => {
     cy.wait('@updateObjective')
 
     // Then
+    cy.wait(50)
     cy.get('.rs-table-cell-content').eq(10).children().should('have.value', '23')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
     cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
     cy.wait('@controlObjectives')
+    cy.wait(50)
     cy.get('.rs-table-cell-content').eq(10).children().should('have.value', '23')
   })
 
@@ -47,12 +49,14 @@ context('Control objectives', () => {
     cy.wait('@updateObjective')
 
     // Then
+    cy.wait(50)
     cy.get('.rs-table-cell-content').eq(11).children().should('have.value', '23')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
     cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
     cy.wait('@controlObjectives')
+    cy.wait(50)
     cy.get('.rs-table-cell-content').eq(11).children().should('have.value', '23')
   })
 
@@ -64,12 +68,14 @@ context('Control objectives', () => {
     cy.wait('@updateObjective')
 
     // Then
+    cy.wait(50)
     cy.get('.rs-table-cell-content').eq(13).children().children().children().contains('3')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
     cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
     cy.wait('@controlObjectives')
+    cy.wait(50)
     cy.get('.rs-table-cell-content').eq(13).children().children().children().contains('3')
   })
 })

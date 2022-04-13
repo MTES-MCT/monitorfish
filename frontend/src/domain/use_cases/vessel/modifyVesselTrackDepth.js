@@ -1,49 +1,47 @@
 import {
   resetLoadingVessel,
-  setSelectedVesselCustomTrackDepth,
+  setSelectedVesselCustomTrackRequest,
   updateSelectedVesselPositions,
   updatingVesselTrackDepth
 } from '../../shared_slices/Vessel'
 import { removeError, setError } from '../../shared_slices/Global'
 import { animateToExtent, doNotAnimate } from '../../shared_slices/Map'
 import { batch } from 'react-redux'
-import { getTrackDepthError } from '../../entities/vesselTrackDepth'
+import { getTrackResponseError, getUTCFullDayTrackRequest } from '../../entities/vesselTrackDepth'
 import { showFishingActivitiesOnMap } from '../../shared_slices/FishingActivities'
-import { convertToUTCFullDay } from '../../../utils'
 import { getVesselPositionsFromAPI } from '../../../api/vessel'
 
 /**
  * Modify the vessel track depth on map
  * @function modifyVesselTrackDepth
  * @param {VesselIdentity} vesselIdentity
- * @param {VesselTrackDepth=} vesselTrackDepth
+ * @param {TrackRequest} trackRequest
  * @param {boolean=} doNotRedrawFishingMessages
  * @param {boolean=} useFullDays
  */
-const modifyVesselTrackDepth = (vesselIdentity, vesselTrackDepth, doNotRedrawFishingMessages = false, useFullDays = false) => (dispatch, getState) => {
+const modifyVesselTrackDepth = (
+  vesselIdentity,
+  trackRequest,
+  doNotRedrawFishingMessages = false,
+  useFullDays = false) => (dispatch, getState) => {
   const fishingActivitiesAreShowedOnMap = getState().fishingActivities.fishingActivitiesAreShowedOnMap
-  if (!vesselIdentity || !vesselTrackDepth) {
+  if (!vesselIdentity || !trackRequest) {
     return
   }
 
   dispatchUpdatingVessel(dispatch, true)
 
-  if (useFullDays) {
-    const { afterDateTime, beforeDateTime } = convertToUTCFullDay(vesselTrackDepth.afterDateTime, vesselTrackDepth.beforeDateTime)
-    vesselTrackDepth = {
-      trackDepth: vesselTrackDepth.trackDepth,
-      afterDateTime,
-      beforeDateTime
-    }
-  }
+  trackRequest = useFullDays
+    ? getUTCFullDayTrackRequest({ ...trackRequest })
+    : trackRequest
 
-  return getVesselPositionsFromAPI(vesselIdentity, vesselTrackDepth)
+  return getVesselPositionsFromAPI(vesselIdentity, trackRequest)
     .then(({ positions, trackDepthHasBeenModified }) => {
-      const error = getTrackDepthError(
+      const error = getTrackResponseError(
         positions,
         trackDepthHasBeenModified,
         false,
-        vesselTrackDepth)
+        trackRequest)
       if (error) {
         dispatch(setError(error))
       } else {
@@ -51,7 +49,7 @@ const modifyVesselTrackDepth = (vesselIdentity, vesselTrackDepth, doNotRedrawFis
       }
 
       batch(() => {
-        dispatch(setSelectedVesselCustomTrackDepth(vesselTrackDepth))
+        dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
         dispatch(updateSelectedVesselPositions(positions))
         if (fishingActivitiesAreShowedOnMap && !doNotRedrawFishingMessages) {
           dispatch(showFishingActivitiesOnMap(true))

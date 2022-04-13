@@ -143,7 +143,7 @@ const RegulatorySpeciesForm = props => {
 
   const removeSpeciesToRegulatorySpeciesList = speciesCodeToRemove => {
     const nextSpecies = [...species]
-      .filter(_species => _species.code !== speciesCodeToRemove)
+      .filter(_species => !speciesCodeToRemove.includes(_species.code))
     set(REGULATORY_SPECIES_KEYS.SPECIES, nextSpecies)
   }
 

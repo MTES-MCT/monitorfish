@@ -34,8 +34,8 @@ const vesselSlice = createSlice({
     vesselSidebarIsOpen: false,
     vesselSidebarTab: VesselSidebarTab.SUMMARY,
     isFocusedOnVesselSearch: false,
-    /** @type {VesselTrackDepth} selectedVesselCustomTrackDepth */
-    selectedVesselCustomTrackDepth: {
+    /** @type {TrackRequest} selectedVesselCustomTrackRequest */
+    selectedVesselCustomTrackRequest: {
       trackDepth: null,
       afterDateTime: null,
       beforeDateTime: null
@@ -172,12 +172,13 @@ const vesselSlice = createSlice({
     resetSelectedVessel (state) {
       state.selectedVessel = null
       state.selectedVesselIdentity = null
+      state.selectedVesselPositions = null
     },
     closeVesselSidebar (state) {
       state.vesselSidebarIsOpen = false
       state.selectedVessel = null
       state.selectedVesselIdentity = null
-      state.selectedVesselCustomTrackDepth = {
+      state.selectedVesselCustomTrackRequest = {
         trackDepth: null,
         afterDateTime: null,
         beforeDateTime: null
@@ -196,17 +197,23 @@ const vesselSlice = createSlice({
       state.loadingPositions = false
     },
     /**
-     * Set a custom track depth of the selected vessel
-     * @function setSelectedVesselCustomTrackDepth
+     * Set the custom track request of the selected vessel
+     * The `afterDateTime` and `beforeDateTime` Dates objects are kept in the local timezone format.
+     * Only the date part is used, as the time will be set as :
+     *  afterDateTime: 00h00
+     *  beforeDateTime: 23h59
+     * When fetching the track from the API
+     *
+     * @function setSelectedVesselCustomTrackRequest
      * @memberOf VesselReducer
      * @param {Object=} state
-     * @param {{payload: VesselTrackDepth | null}} action - The track depth
+     * @param {{payload: TrackRequest | null}} action - The track request
      */
-    setSelectedVesselCustomTrackDepth (state, action) {
-      state.selectedVesselCustomTrackDepth = action.payload
+    setSelectedVesselCustomTrackRequest (state, action) {
+      state.selectedVesselCustomTrackRequest = action.payload
     },
-    resetSelectedVesselCustomTrackDepth (state) {
-      state.selectedVesselCustomTrackDepth = {
+    resetSelectedVesselCustomTrackRequest (state) {
+      state.selectedVesselCustomTrackRequest = {
         trackDepth: null,
         afterDateTime: null,
         beforeDateTime: null
@@ -366,8 +373,8 @@ export const {
   setFocusOnVesselSearch,
   setTemporaryVesselsToHighLightOnMap,
   resetTemporaryVesselsToHighLightOnMap,
-  setSelectedVesselCustomTrackDepth,
-  resetSelectedVesselCustomTrackDepth,
+  setSelectedVesselCustomTrackRequest,
+  resetSelectedVesselCustomTrackRequest,
   highlightVesselTrackPosition,
   resetHighlightedVesselTrackPosition,
   showVesselSidebarTab,

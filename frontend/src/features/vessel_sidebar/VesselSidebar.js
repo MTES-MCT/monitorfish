@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { ReactComponent as SummarySVG } from '../icons/Picto_resume.svg'
 import { ReactComponent as VesselIDSVG } from '../icons/Picto_identite.svg'
@@ -12,7 +12,7 @@ import VesselSummary from './VesselSummary'
 import VesselFishingActivities from './fishing_activities/VesselFishingActivities'
 import { showVesselSidebarTab } from '../../domain/shared_slices/Vessel'
 import VesselControls from './controls/VesselControls'
-import TrackDepthSelection from './actions/track_depth_selection/TrackDepthSelection'
+import TrackRequest from './actions/track_request/TrackRequest'
 import TrackExport from './actions/track_export/TrackExport'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { VesselSidebarTab } from '../../domain/entities/vessel'
@@ -38,24 +38,28 @@ const VesselSidebar = () => {
   const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
   const adminRole = useSelector(state => state.global.adminRole)
 
-  const [openSidebar, setOpenSidebar] = useState(false)
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false)
   const firstUpdate = useRef(true)
-  const [trackDepthSelectionIsOpen, setTrackDepthSelectionIsOpen] = useState(false)
+  const [trackRequestIsOpen, setTrackRequestIsOpen] = useState(false)
+
+  const setTrackRequestIsOpenCallback = useCallback(isOpen => {
+    setTrackRequestIsOpen(isOpen)
+  }, [])
 
   useEffect(() => {
-    if (openSidebar === true) {
+    if (sidebarIsOpen === true) {
       firstUpdate.current = false
     } else {
-      setTrackDepthSelectionIsOpen(false)
+      setTrackRequestIsOpen(false)
     }
-  }, [openSidebar])
+  }, [sidebarIsOpen])
 
   useEffect(() => {
     if (vesselSidebarIsOpen) {
-      setOpenSidebar(true)
+      setSidebarIsOpen(true)
       dispatch(showVesselSidebarTab(vesselSidebarTab))
     } else {
-      setOpenSidebar(false)
+      setSidebarIsOpen(false)
     }
   }, [vesselSidebarIsOpen, vesselSidebarTab])
 
@@ -68,36 +72,35 @@ const VesselSidebar = () => {
   return (
     <>
       <AddToFavorites
-        openBox={openSidebar}
+        sidebarIsOpen={sidebarIsOpen}
         rightMenuIsOpen={rightMenuIsOpen}
       />
-      <TrackDepthSelection
-        openBox={openSidebar}
-        init={!vesselSidebarIsOpen ? {} : null}
+      <TrackRequest
+        sidebarIsOpen={sidebarIsOpen}
         rightMenuIsOpen={rightMenuIsOpen}
-        trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
-        setTrackDepthSelectionIsOpen={setTrackDepthSelectionIsOpen}
+        trackRequestIsOpen={trackRequestIsOpen}
+        setTrackRequestIsOpen={setTrackRequestIsOpenCallback}
       />
       <AnimateToTrack
-        openBox={openSidebar}
+        sidebarIsOpen={sidebarIsOpen}
         rightMenuIsOpen={rightMenuIsOpen}
       />
       <HideNonSelectedVessels
-        openBox={openSidebar}
+        sidebarIsOpen={sidebarIsOpen}
         rightMenuIsOpen={rightMenuIsOpen}
       />
       <ShowFishingActivitiesOnMap
-        openBox={openSidebar}
+        sidebarIsOpen={sidebarIsOpen}
         rightMenuIsOpen={rightMenuIsOpen}
       />
       <TrackExport
-        openBox={openSidebar}
+        sidebarIsOpen={sidebarIsOpen}
         rightMenuIsOpen={rightMenuIsOpen}
       />
       <Wrapper
         data-cy={'vessel-sidebar'}
         healthcheckTextWarning={healthcheckTextWarning}
-        openBox={openSidebar}
+        sidebarIsOpen={sidebarIsOpen}
         firstUpdate={firstUpdate.current}
         rightMenuIsOpen={rightMenuIsOpen}
       >
@@ -251,9 +254,9 @@ const Wrapper = styled(MapComponentStyle)`
   padding: 0;
   background: ${COLORS.gainsboro};
   overflow: hidden;
-  opacity: ${props => props.openBox ? 1 : 0};
-  margin-right: ${props => props.openBox ? 0 : -510}px;
-  right: ${props => props.rightMenuIsOpen && props.openBox ? 55 : 10}px;
+  opacity: ${props => props.sidebarIsOpen ? 1 : 0};
+  margin-right: ${props => props.sidebarIsOpen ? 0 : -510}px;
+  right: ${props => props.rightMenuIsOpen && props.sidebarIsOpen ? 55 : 10}px;
   transition: all 0.5s, right 0.3s, opacity 0.5s;
 `
 

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addVesselToFavorites, removeVesselFromFavorites } from '../../../../domain/shared_slices/FavoriteVessel'
 import { getVesselId } from '../../../../domain/entities/vessel'
 
-const AddToFavorites = ({ openBox, rightMenuIsOpen }) => {
+const AddToFavorites = ({ sidebarIsOpen, rightMenuIsOpen }) => {
   const dispatch = useDispatch()
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const {
@@ -29,7 +29,7 @@ const AddToFavorites = ({ openBox, rightMenuIsOpen }) => {
       data-cy={'sidebar-add-vessel-to-favorites'}
       title={'Ajouter le navire aux navires suivis'}
       healthcheckTextWarning={healthcheckTextWarning}
-      openBox={openBox}
+      sidebarIsOpen={sidebarIsOpen}
       rightMenuIsOpen={rightMenuIsOpen}
       isFavorite={isFavorite}
       onClick={() => isFavorite
@@ -48,12 +48,12 @@ const AddToFavoritesButton = styled(MapButtonStyle)`
   width: 30px;
   background: ${props => props.isFavorite ? COLORS.shadowBlue : COLORS.charcoal};
   position: absolute;
-  margin-right: ${props => props.openBox ? 505 : -45}px;
-  opacity: ${props => props.openBox ? 1 : 0};
+  margin-right: ${props => props.sidebarIsOpen ? 505 : -45}px;
+  opacity: ${props => props.sidebarIsOpen ? 1 : 0};
   ${props => props.isClickable ? 'cursor: pointer;' : null}
   border-radius: 1px;
   z-index: 999;
-  right: ${props => props.rightMenuIsOpen && props.openBox ? 55 : 10}px;
+  right: ${props => props.rightMenuIsOpen && props.sidebarIsOpen ? 55 : 10}px;
   transition: all 0.5s, right 0.3s;
 
   :hover, :focus {

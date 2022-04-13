@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import TrackDepthRadio from './TrackDepthRadio'
-import TrackDepthDateRange from './TrackDepthDateRange'
+import TrackDepth from './TrackDepth'
+import DateRange from './DateRange'
 import { COLORS } from '../../../../constants/constants'
 import styled from 'styled-components'
 import { ReactComponent as VesselSVG } from '../../../icons/Icone_navire.svg'
@@ -10,16 +10,16 @@ import {
 } from '../../../../domain/entities/vesselTrackDepth'
 import { useDispatch, useSelector } from 'react-redux'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
-import TrackPositionsTable from './TrackPositionsTable'
+import PositionsTable from './PositionsTable'
 import modifyVesselTrackDepth from '../../../../domain/use_cases/vessel/modifyVesselTrackDepth'
 
-const TrackDepthSelection = ({ openBox, rightMenuIsOpen, trackDepthSelectionIsOpen, setTrackDepthSelectionIsOpen }) => {
+const TrackRequest = ({ sidebarIsOpen, rightMenuIsOpen, trackRequestIsOpen, setTrackRequestIsOpen }) => {
   const dispatch = useDispatch()
 
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const { defaultVesselTrackDepth } = useSelector(state => state.map)
-  const [selectedTrackDepthRadio, setSelectedTrackDepthRadio] = useState(null)
-  const [selectedTrackDepthDates, setSelectedTrackDepthDates] = useState([])
+  const [selectedTrackDepth, setSelectedTrackDepth] = useState(null)
+  const [selectedDates, setSelectedDates] = useState([])
   const {
     selectedVesselIdentity,
     selectedVesselCustomTrackRequest
@@ -28,72 +28,72 @@ const TrackDepthSelection = ({ openBox, rightMenuIsOpen, trackDepthSelectionIsOp
   useEffect(() => {
     const { afterDateTime, beforeDateTime, trackDepth } = selectedVesselCustomTrackRequest
     if (afterDateTime && beforeDateTime) {
-      setSelectedTrackDepthRadio(null)
+      setSelectedTrackDepth(null)
     } else {
-      setSelectedTrackDepthRadio(trackDepth || defaultVesselTrackDepth)
+      setSelectedTrackDepth(trackDepth || defaultVesselTrackDepth)
     }
   }, [selectedVesselCustomTrackRequest])
 
   useEffect(() => {
     const { afterDateTime, beforeDateTime } = selectedVesselCustomTrackRequest
     if (afterDateTime && beforeDateTime) {
-      setSelectedTrackDepthDates([afterDateTime, beforeDateTime])
+      setSelectedDates([afterDateTime, beforeDateTime])
     } else {
-      setSelectedTrackDepthDates([])
+      setSelectedDates([])
     }
   }, [selectedVesselCustomTrackRequest])
 
-  const triggerModifyVesselTrackDepthFromRadio = trackDepthRadioSelection => {
+  const triggerModifyVesselTrackFromTrackDepthRadio = trackDepthRadioSelection => {
     const trackRequest = getTrackRequestFromTrackDepth(trackDepthRadioSelection)
     dispatch(modifyVesselTrackDepth(selectedVesselIdentity, trackRequest, false, false))
   }
 
-  const triggerModifyVesselTrackDepthFromDates = trackDepthDatesSelection => {
+  const triggerModifyVesselTrackFromDates = trackDepthDatesSelection => {
     if (trackDepthDatesSelection?.length > 1) {
       const trackRequest = getTrackRequestFromDates(trackDepthDatesSelection[0], trackDepthDatesSelection[1])
       dispatch(modifyVesselTrackDepth(selectedVesselIdentity, trackRequest, false, true))
     }
   }
 
-  const resetToDefaultTrackDepth = () => triggerModifyVesselTrackDepthFromRadio(defaultVesselTrackDepth)
+  const resetToDefaultTrackDepth = () => triggerModifyVesselTrackFromTrackDepthRadio(defaultVesselTrackDepth)
 
   return (
     <>
       {
-        openBox
+        sidebarIsOpen
           ? <>
-            <TrackDepthSelectionButton
+            <TrackRequestButton
               healthcheckTextWarning={healthcheckTextWarning}
-              openBox={openBox}
+              sidebarIsOpen={sidebarIsOpen}
               rightMenuIsOpen={rightMenuIsOpen}
-              trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
-              onClick={() => setTrackDepthSelectionIsOpen(!trackDepthSelectionIsOpen)}
+              trackRequestIsOpen={trackRequestIsOpen}
+              onClick={() => setTrackRequestIsOpen(!trackRequestIsOpen)}
               data-cy={'vessel-track-depth-selection'}
               title={'Paramétrer l\'affichage de la piste VMS'}
             >
               <VesselIcon/>
-            </TrackDepthSelectionButton>
-            <TrackDepthSelectionContent
+            </TrackRequestButton>
+            <TrackRequestBody
               healthcheckTextWarning={healthcheckTextWarning}
-              openBox={openBox}
+              sidebarIsOpen={sidebarIsOpen}
               rightMenuIsOpen={rightMenuIsOpen}
-              trackDepthSelectionIsOpen={trackDepthSelectionIsOpen}
+              trackRequestIsOpen={trackRequestIsOpen}
             >
               <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
-              <TrackDepthRadio
-                trackDepthRadioSelection={selectedTrackDepthRadio}
-                modifyVesselTrackDepth={triggerModifyVesselTrackDepthFromRadio}
+              <TrackDepth
+                selectedTrackDepth={selectedTrackDepth}
+                modifyVesselTrackDepth={triggerModifyVesselTrackFromTrackDepthRadio}
               />
-              <TrackDepthDateRange
-                dates={selectedTrackDepthDates}
+              <DateRange
+                dates={selectedDates}
                 resetToDefaultTrackDepth={resetToDefaultTrackDepth}
-                modifyVesselTrackDepthFromDates={triggerModifyVesselTrackDepthFromDates}
+                modifyVesselTrackFromDates={triggerModifyVesselTrackFromDates}
               />
               <Header>Liste des positions VMS affichées</Header>
-              <TrackPositionsTable
-                openBox={openBox}
+              <PositionsTable
+                sidebarIsOpen={sidebarIsOpen}
               />
-            </TrackDepthSelectionContent>
+            </TrackRequestBody>
           </>
           : null
       }
@@ -109,37 +109,37 @@ const Header = styled.div`
   text-align: left;
 `
 
-const TrackDepthSelectionButton = styled(MapComponentStyle)`
+const TrackRequestButton = styled(MapComponentStyle)`
   top: 153px;
   height: 30px;
   width: 30px;
-  background: ${props => props.trackDepthSelectionIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${props => props.trackRequestIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
   position: absolute;
   right: 10px;
-  margin-right: ${props => props.openBox ? 505 : -45}px;
-  opacity: ${props => props.openBox ? 1 : 0};
+  margin-right: ${props => props.sidebarIsOpen ? 505 : -45}px;
+  opacity: ${props => props.sidebarIsOpen ? 1 : 0};
   cursor: pointer;
   border-radius: 1px;
   z-index: 999;
-  right: ${props => props.rightMenuIsOpen && props.openBox ? 55 : 10}px;
+  right: ${props => props.rightMenuIsOpen && props.sidebarIsOpen ? 55 : 10}px;
   transition: all 0.5s, right 0.3s;
 `
 
-const TrackDepthSelectionContent = styled(MapComponentStyle)`
+const TrackRequestBody = styled(MapComponentStyle)`
   top: 118px;
   width: 306px;
   background: ${COLORS.background};
   position: absolute;
   right: 10px;
-  margin-right: ${props => props.openBox && props.trackDepthSelectionIsOpen ? '540px' : '217px'};
-  opacity: ${props => props.openBox && props.trackDepthSelectionIsOpen ? '1' : '0'};
-  visibility: ${props => props.openBox && props.trackDepthSelectionIsOpen ? 'visible' : 'hidden'};
+  margin-right: ${props => props.sidebarIsOpen && props.trackRequestIsOpen ? '540px' : '217px'};
+  opacity: ${props => props.sidebarIsOpen && props.trackRequestIsOpen ? '1' : '0'};
+  visibility: ${props => props.sidebarIsOpen && props.trackRequestIsOpen ? 'visible' : 'hidden'};
   border-radius: 2px;
   font-size: 13px;
   color: ${COLORS.slateGray};
   transition: all 0.3s;
 
-  animation: ${props => props.rightMenuIsOpen && props.openBox && props.trackDepthSelectionIsOpen
+  animation: ${props => props.rightMenuIsOpen && props.sidebarIsOpen && props.trackRequestIsOpen
   ? 'vessel-box-opening-with-right-menu-hover'
   : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
 `
@@ -151,4 +151,4 @@ const VesselIcon = styled(VesselSVG)`
   margin-left: 2px;
 `
 
-export default TrackDepthSelection
+export default TrackRequest

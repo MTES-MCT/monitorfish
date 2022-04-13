@@ -43,7 +43,7 @@ jobs:
 
     - id: env_profile
       name: Set ENV profile output
-      run: echo "::set-output name=ENV_PROFILE::${{ env.ENV_PROFILE }}"
+      run: ENV_PROFILE=${{ env.ENV_PROFILE }} && echo "::set-output name=ENV_PROFILE::$ENV_PROFILE"
 
     - id: version
       name: Set VERSION env
@@ -53,7 +53,7 @@ jobs:
         else\
             echo "VERSION=${{ steps.lastrelease.outputs.release }}" >> $GITHUB_ENV
         fi
-        echo "::set-output name=VERSION::${{ env.VERSION }}"
+        VERSION=${{ env.VERSION }} && echo "::set-output name=VERSION::$VERSION"
 
   build:
     name: Run unit tests, build and package
@@ -64,6 +64,9 @@ jobs:
       VERSION: ${{needs.version.outputs.VERSION}}
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
     steps:
+    - name: Show version
+      run: echo "VERSION:${{ env.VERSION }} ENV_PROFILE:${{ env.ENV_PROFILE }}"
+
     - name: Setup Java JDK
       uses: actions/setup-java@v1.4.2
       with:

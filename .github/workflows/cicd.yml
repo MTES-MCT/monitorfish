@@ -150,6 +150,8 @@ jobs:
       ENV_PROFILE:  ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
     steps:
+    - uses: actions/checkout@v2
+
     - name: Download image
       uses: ishworkh/docker-image-artifact-download@v1
       with:

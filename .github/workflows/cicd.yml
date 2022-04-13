@@ -171,7 +171,7 @@ jobs:
         env: PORT=8880
         browser: firefox
 
-  push:
+  push_to_registry:
     name: Push to registry
     needs: [version, e2e_test]
     runs-on: ubuntu-18.04

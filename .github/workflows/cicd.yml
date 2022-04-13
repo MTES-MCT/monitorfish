@@ -20,37 +20,50 @@ on:
     - cron: "38 11 */3 * *"
 
 jobs:
-  build:
-    name: Test, build and Package
+  version:
+    name: Set application version and env profile
     runs-on: ubuntu-18.04
-    env:
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
-      REACT_APP_CYPRESS_PORT: 8880
-      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-      CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+    outputs:
+      ENV_PROFILE: ${{ steps.env_profile.outputs.ENV_PROFILE }}
+      VERSION: ${{ steps.version.outputs.VERSION }}
     steps:
-
     - name: Get last release version
       id: lastrelease
       uses: pozetroninc/github-action-get-latest-release@master
       with:
         repository: mtes-mct/monitorfish
 
-    - name: Set ENV profile as dev by default
+    - id: step1
+      name: Set ENV profile as dev by default
       run: echo "ENV_PROFILE=dev" >> $GITHUB_ENV
 
     - name: Set ENV profile as PROD when it is a release
       if: startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
       run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
 
-    - name: Set VERSION env
+    - id: env_profile
+      name: Set ENV profile output
+      run: echo "::set-output name=ENV_PROFILE::${{ env.ENV_PROFILE }}"
+
+    - id: version
+      name: Set VERSION env
       run: |
         if [ "${ENV_PROFILE}" != "prod" ]; then\
             echo "VERSION=${{ steps.lastrelease.outputs.release }}_snapshot" >> $GITHUB_ENV
         else\
             echo "VERSION=${{ steps.lastrelease.outputs.release }}" >> $GITHUB_ENV
         fi
-    
+        echo "::set-output name=VERSION::${{ env.VERSION }}"
+
+  build:
+    name: Run unit tests, build and package
+    needs: version
+    runs-on: ubuntu-18.04
+    env:
+      ENV_PROFILE:  ${{needs.version.outputs.ENV_PROFILE}}
+      VERSION: ${{needs.version.outputs.VERSION}}
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
+    steps:
     - name: Setup Java JDK
       uses: actions/setup-java@v1.4.2
       with:
@@ -107,6 +120,38 @@ jobs:
         rm -rf /tmp/.buildx-cache-app
         mv /tmp/.buildx-cache-app-new /tmp/.buildx-cache-app
 
+    - name: Upload image to artifacts
+      uses: ishworkh/docker-image-artifact-upload@v1
+      with:
+        image: monitorfish-app:${{ env.VERSION }}
+
+  e2e_test:
+    name: Run E2E tests and push to registry
+    needs: [version, build]
+    runs-on: ubuntu-18.04
+    strategy:
+      # when one test fails, DO NOT cancel the other
+      # containers, because this will kill Cypress processes
+      # leaving the Dashboard hanging ...
+      # https://github.com/cypress-io/github-action/issues/48
+      fail-fast: false
+      matrix:
+        # run 3 copies of the current job in parallel
+        containers: [1, 2, 3]
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
+      REACT_APP_CYPRESS_PORT: 8880
+      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ENV_PROFILE:  ${{needs.version.outputs.ENV_PROFILE}}
+      VERSION: ${{needs.version.outputs.VERSION}}
+    steps:
+    - name: Download image
+      uses: ishworkh/docker-image-artifact-download@v1
+      with:
+        image: "test_image:latest"
+
     - name: Run docker images
       run: make docker-compose-up
 
@@ -126,6 +171,14 @@ jobs:
         env: PORT=8880
         browser: firefox
 
+  push:
+    name: Push to registry
+    needs: [version, e2e_test]
+    runs-on: ubuntu-18.04
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
+      ENV_PROFILE:  ${{needs.version.outputs.ENV_PROFILE}}
+      VERSION: ${{needs.version.outputs.VERSION}}
     - name: Push docker image to registry
       if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
       run: |

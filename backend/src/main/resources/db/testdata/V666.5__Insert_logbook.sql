@@ -500,3 +500,8 @@ SET
  report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '15 hours 45 minutes'
 WHERE operation_number = 'OOF20191030059909';
 
+UPDATE logbook_reports
+SET
+    value = jsonb_set("value", array['hauls', '0', 'farDatetimeUtc'], concat('"', to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '11 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'), '"')::jsonb),
+    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '11 hours 45 minutes'
+WHERE operation_number = 'OOF20191030059903';

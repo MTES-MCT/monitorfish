@@ -250,7 +250,6 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
         val farMessageOneCorrectedHaul = farMessageOneCorrected.hauls.first()
         assertThat(farMessageOneCorrectedHaul.gear).isEqualTo("GTN")
         assertThat(farMessageOneCorrectedHaul.mesh).isEqualTo(150.0)
-        assertThat(farMessageOneCorrectedHaul.catchDateTime.toString()).isEqualTo("2019-10-17T11:32Z[UTC]")
         assertThat(farMessageOneCorrectedHaul.catches).hasSize(20)
         assertThat(farMessageOneCorrectedHaul.catches.first().weight).isEqualTo(1500.0)
         assertThat(farMessageOneCorrectedHaul.catches.first().numberFish).isEqualTo(null)

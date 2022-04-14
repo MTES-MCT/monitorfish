@@ -185,6 +185,8 @@ jobs:
       ENV_PROFILE:  ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
     steps:
+    - uses: actions/checkout@v2
+
     - name: Push docker image to registry
       if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
       run: |

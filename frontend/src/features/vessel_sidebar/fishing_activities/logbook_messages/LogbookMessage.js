@@ -114,7 +114,7 @@ const LogbookMessage = ({ message, isFirst }) => {
               : null
           }
         </Header>
-        <Body>
+        <Body data-cy={'vessel-fishing-message-body'}>
           {
             message.isSentByFailoverSoftware
               ? <SoftwareFailover>

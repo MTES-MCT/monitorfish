@@ -6,7 +6,7 @@ import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 object TestUtils {
-    fun getDummyLogbookMessage(): List<LogbookMessage> {
+    fun getDummyLogbookMessages(): List<LogbookMessage> {
         val gearOne = Gear()
         gearOne.gear = "OTB"
         val gearTwo = Gear()
@@ -37,17 +37,58 @@ object TestUtils {
 
         return listOf(
                 LogbookMessage(
-                    id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "DEP",
+                    id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "DEP", software = "e-Sacapt Secours ERSV3 V 1.0.10",
                         message = dep, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(24), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
-                    id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "FAR",
+                    id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "FAR", software = "TurboCatch (3.7-1)",
                         message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
-                    id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "PNO",
+                    id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "PNO", software = "e-Sacapt Secours ERSV3 V 1.0.7",
                         message = pno, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0), transmissionFormat = LogbookTransmissionFormat.ERS))
     }
 
-    fun getDummyCorrectedLogbookMessage(): List<LogbookMessage> {
+    fun getDummyFluxAndVisioCaptureLogbookMessages(): List<LogbookMessage> {
+        val gearOne = Gear()
+        gearOne.gear = "OTB"
+        val gearTwo = Gear()
+        gearTwo.gear = "DRB"
+
+        val catchOne = Catch()
+        catchOne.species = "TTV"
+        val catchTwo = Catch()
+        catchTwo.species = "SMV"
+        val catchThree = Catch()
+        catchThree.species = "PNB"
+
+        val dep = DEP()
+        dep.gearOnboard = listOf(gearOne, gearTwo)
+        dep.speciesOnboard = listOf(catchOne)
+        dep.departurePort = "AEFAT"
+
+        val far = FAR()
+        val haul = Haul()
+        haul.gear = "OTB"
+        haul.catches = listOf(catchTwo, catchThree)
+        haul.mesh = 120.0
+        far.hauls = listOf(haul)
+
+        val pno = PNO()
+        pno.catchOnboard = listOf(catchOne, catchTwo, catchThree)
+        pno.port = "AEJAZ"
+
+        return listOf(
+                LogbookMessage(
+                        id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "DEP", software = "FT/VISIOCaptures V1.4.7",
+                        message = dep, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(24), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                        id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "FAR", software = "FP/VISIOCaptures V1.4.7",
+                        message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                        id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "PNO", software = "TurboCatch (3.6-1)",
+                        message = pno, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0), transmissionFormat = LogbookTransmissionFormat.FLUX))
+    }
+
+    fun getDummyCorrectedLogbookMessages(): List<LogbookMessage> {
         val catchOne = Catch()
         catchOne.species = "TTV"
         val catchTwo = Catch()
@@ -79,7 +120,7 @@ object TestUtils {
                 )
     }
 
-    fun getDummyRETLogbookMessage(): List<LogbookMessage> {
+    fun getDummyRETLogbookMessages(): List<LogbookMessage> {
         val catchOne = Catch()
         catchOne.species = "TTV"
         val catchTwo = Catch()

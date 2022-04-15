@@ -70,7 +70,9 @@ data class LogbookReportEntity(
         val integrationDateTime: Instant? = null,
         @Column(name = "transmission_format")
         @Enumerated(EnumType.STRING)
-        val transmissionFormat: LogbookTransmissionFormat) {
+        val transmissionFormat: LogbookTransmissionFormat,
+        @Column(name = "software")
+        val software: String? = null) {
 
         fun toLogbookMessage(mapper: ObjectMapper) = LogbookMessage(
                 id = id,
@@ -79,6 +81,8 @@ data class LogbookReportEntity(
                 externalReferenceNumber = externalReferenceNumber,
                 ircs = ircs,
                 operationDateTime = operationDateTime.atZone(UTC),
+                reportDateTime = reportDateTime?.atZone(UTC),
+                integrationDateTime = integrationDateTime?.atZone(UTC),
                 vesselName = vesselName,
                 operationType = operationType,
                 reportId = reportId,
@@ -89,6 +93,7 @@ data class LogbookReportEntity(
                 messageType = messageType,
                 analyzedByRules = analyzedByRules ?: listOf(),
                 message = getERSMessageValueFromJSON(mapper, message, messageType, operationType),
+                software = software,
                 transmissionFormat = transmissionFormat
         )
 }

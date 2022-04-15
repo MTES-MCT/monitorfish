@@ -59,35 +59,36 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 20000 })
 
     // Then
-    cy.get('*[data-cy^="vessel-fishing-message"]').should('have.length', 12)
-    cy.get('*[data-cy^="vessel-fishing-message"]').first().contains('Départ', { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-message"]').first().contains('Al Jazeera Port le 11/10/2019 à 01h40 (UTC)', { timeout: 20000 })
+    cy.get('*[data-cy="vessel-fishing-message"]').should('have.length', 12)
+    cy.get('*[data-cy="vessel-fishing-message"]').first().contains('Départ', { timeout: 20000 })
+    cy.get('*[data-cy="vessel-fishing-message"]').first().contains('Al Jazeera Port le 11/10/2019 à 01h40 (UTC)', { timeout: 20000 })
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(1).contains('Sortie d\'une zone d\'effort')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(1).contains('Sortie d\'une zone d\'effort')
+    cy.get('*[data-cy="vessel-fishing-message-body"]').eq(1).contains('Message envoyé via e-sacapt')
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(2).contains('Traversée d\'une zone d\'effort')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(2).contains('Traversée d\'une zone d\'effort')
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(3).contains('Entrée dans une zone d\'effort')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(3).contains('Entrée dans une zone d\'effort')
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(4).contains('Déclaration de capture')
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(4).siblings().eq(1).contains('ANCIEN MESSAGE')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(4).contains('Déclaration de capture')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(4).siblings().eq(1).contains('ANCIEN MESSAGE')
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(5).contains('Déclaration de capture')
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(5).siblings().eq(1).contains('MESSAGE CORRIGÉ')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(5).contains('Déclaration de capture')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(5).siblings().eq(1).contains('MESSAGE CORRIGÉ')
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(6).contains('Déclaration d\'inspection')
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(6).siblings().eq(1).contains('MESSAGE CORRIGÉ')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(6).contains('Déclaration d\'inspection')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(6).siblings().eq(1).contains('MESSAGE CORRIGÉ')
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(7).contains('Déclaration de rejets')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(7).contains('Déclaration de rejets')
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(8).contains('Fin de pêche')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(8).contains('Fin de pêche')
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(9).contains('Préavis (notification de retour au port)')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(9).contains('Préavis (notification de retour au port)')
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(10).contains('Retour au port')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(10).contains('Retour au port')
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(11).contains('Débarquement')
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(11).siblings().eq(1).contains('MESSAGE SUPPRIMÉ')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(11).contains('Débarquement')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(11).siblings().eq(1).contains('MESSAGE SUPPRIMÉ')
   })
 
   it('Fishing Should contain the vessel FLUX logbook messages', () => {
@@ -101,11 +102,11 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 20000 })
 
     // Then
-    cy.get('*[data-cy^="vessel-fishing-message"]').should('have.length', 24)
-    cy.get('*[data-cy^="vessel-fishing-message"]').first().contains('Départ', { timeout: 20000 })
-    cy.get('*[data-cy^="vessel-fishing-message"]').first().contains('ESCAR le 06/05/2020 à 11h39 (UTC)', { timeout: 20000 })
+    cy.get('*[data-cy="vessel-fishing-message"]').should('have.length', 24)
+    cy.get('*[data-cy="vessel-fishing-message"]').first().contains('Départ', { timeout: 20000 })
+    cy.get('*[data-cy="vessel-fishing-message"]').first().contains('ESCAR le 06/05/2020 à 11h39 (UTC)', { timeout: 20000 })
 
-    cy.get('*[data-cy^="vessel-fishing-message"]').eq(4).contains('Déclaration de capture')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(4).contains('Déclaration de capture')
     cy.get('*[data-cy^="logbook-haul-number"]').should('have.length', 2)
   })
 
@@ -120,7 +121,7 @@ context('Vessel sidebar fishing tab', () => {
 
     // When
     cy.wait(200)
-    cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 3)
+    cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('previousTripPositions')
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })

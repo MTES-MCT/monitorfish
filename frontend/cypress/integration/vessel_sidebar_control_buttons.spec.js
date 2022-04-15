@@ -114,8 +114,8 @@ context('Vessel sidebar controls buttons', () => {
 
     // Then
     cy.wait(200)
-    cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 3)
-    cy.get('*[data-cy^="fishing-activity-name"]').eq(2).scrollIntoView().click({ timeout: 20000 })
+    cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
+    cy.get('*[data-cy^="fishing-activity-name"]').eq(2).scrollIntoView().click({ force: true, timeout: 20000 })
     cy.get('#OOF20191030059909').should('be.visible')
     cy.get('#OOF20190627059908').should('not.be.visible')
 

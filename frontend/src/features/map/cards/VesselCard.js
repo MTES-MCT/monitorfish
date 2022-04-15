@@ -213,7 +213,7 @@ const VesselCardAlert = styled.div`
 `
 
 const VesselCardBeaconMalfunction = styled.div`
-  background: ${COLORS.yellow};
+  background: ${COLORS.yellowMunsell};
   font-weight: 500;
   font-size: 13px;
   color: ${COLORS.gunMetal};

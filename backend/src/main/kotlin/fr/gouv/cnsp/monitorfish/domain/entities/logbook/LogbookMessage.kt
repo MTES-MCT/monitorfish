@@ -20,10 +20,13 @@ class LogbookMessage(
     val flagState: String? = null,
     val imo: String? = null,
     val messageType: String? = null,
-    val parsedIntegrationDateTime: ZonedDateTime? = null,
+    val reportDateTime: ZonedDateTime? = null,
+    val integrationDateTime: ZonedDateTime? = null,
     var acknowledge: Acknowledge? = null,
     var deleted: Boolean? = false,
     val message: LogbookMessageValue? = null,
     val analyzedByRules: List<String>,
     var rawMessage: String? = null,
-    val transmissionFormat: LogbookTransmissionFormat)
+    val transmissionFormat: LogbookTransmissionFormat,
+    val software: String? = null,
+    var isSentByFailoverSoftware: Boolean = false)

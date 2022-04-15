@@ -3,19 +3,20 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.Gear
-import fr.gouv.cnsp.monitorfish.domain.entities.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.Species
+import fr.gouv.cnsp.monitorfish.domain.entities.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyCorrectedLogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessage
-import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyRETLogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyCorrectedLogbookMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyFluxAndVisioCaptureLogbookMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyRETLogbookMessages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -25,7 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
-class GetVesselLogbookMessagesUTests {
+class GetLogbookMessagesUTests {
 
     @MockBean
     private lateinit var logbookReportRepository: LogbookReportRepository
@@ -46,7 +47,7 @@ class GetVesselLogbookMessagesUTests {
     fun `execute Should return an ordered list of last ERS messages with the codes' names`() {
         // Given
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyLogbookMessage())
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyLogbookMessages())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -102,7 +103,7 @@ class GetVesselLogbookMessagesUTests {
     fun `execute Should flag a corrected message as true`() {
         // Given
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyCorrectedLogbookMessage())
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyCorrectedLogbookMessages())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -138,7 +139,7 @@ class GetVesselLogbookMessagesUTests {
     fun `execute Should filter to return only DAT and COR messages and add the acknowledge property`() {
         // Given
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyRETLogbookMessage())
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyRETLogbookMessages())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -184,16 +185,13 @@ class GetVesselLogbookMessagesUTests {
         assertThat(ackThree.isSuccess).isTrue
         assertThat(ackThree.rejectionCause).isNull()
         assertThat(ackThree.returnStatus).isNull()
-
-
-
     }
 
     @Test
     fun `execute Should add the deleted property`() {
         // Given
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyRETLogbookMessage())
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyRETLogbookMessages())
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -211,5 +209,57 @@ class GetVesselLogbookMessagesUTests {
         assertThat(ersMessages).hasSize(3)
 
         assertThat(ersMessages[1].deleted).isTrue
+    }
+
+    @Test
+    fun `execute Should acknowledge FLUX and VISIOCAPTURE messages`() {
+        // Given
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyFluxAndVisioCaptureLogbookMessages())
+        given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
+        given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
+        given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
+        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
+        given(gearRepository.find(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
+        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.find(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
+        given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+
+        // When
+        val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+
+        // Then
+        assertThat(ersMessages).hasSize(3)
+
+        assertThat(ersMessages[0].acknowledge?.isSuccess).isTrue
+        assertThat(ersMessages[1].acknowledge?.isSuccess).isTrue
+        assertThat(ersMessages[2].acknowledge?.isSuccess).isTrue
+    }
+
+    @Test
+    fun `execute Should flag messages sent by the failover software e-Sacapt`() {
+        // Given
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyLogbookMessages())
+        given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
+        given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
+        given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
+        given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chaluts de fond à panneaux"))
+        given(gearRepository.find(eq("DRB"))).willReturn(Gear("DRB", "Dragues remorquées par bateau"))
+        given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
+        given(portRepository.find(eq("AEJAZ"))).willReturn(Port("AEJAZ", "Arzanah Island"))
+        given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+
+        // When
+        val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
+                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+
+        // Then
+        assertThat(ersMessages).hasSize(3)
+
+        assertThat(ersMessages[0].isSentByFailoverSoftware).isTrue
+        assertThat(ersMessages[1].isSentByFailoverSoftware).isFalse
+        assertThat(ersMessages[2].isSentByFailoverSoftware).isTrue
     }
 }

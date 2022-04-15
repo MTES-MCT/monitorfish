@@ -512,11 +512,14 @@ export const getFAOZonesFromFARMessages = farMessages => {
  * @return {string} date - Message effective date
  */
 export const getEffectiveDateTimeFromMessage = message => {
+  // All FAR catches have at least one haul, so we take the first one to show the catch on track
+  const FIRST_HAUL = 0
+
   switch (message.messageType) {
     case 'DEP':
       return message.message.departureDatetimeUtc
     case 'FAR':
-      return message.message.farDatetimeUtc
+      return message.message.hauls[FIRST_HAUL].farDatetimeUtc
     case 'DIS':
       return message.message.discardDatetimeUtc
     case 'COE':
@@ -530,11 +533,11 @@ export const getEffectiveDateTimeFromMessage = message => {
     case 'RTP':
       return message.message.returnDatetimeUtc
     case 'PNO':
-      return message.operationDateTime < message.message.predictedArrivalDatetimeUtc
-        ? message.operationDateTime
+      return message.reportDateTime < message.message.predictedArrivalDatetimeUtc
+        ? message.reportDateTime
         : message.message.predictedArrivalDatetimeUtc
     default:
-      return message.operationDateTime
+      return message.reportDateTime
   }
 }
 

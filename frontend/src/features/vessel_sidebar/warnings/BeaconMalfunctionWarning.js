@@ -68,7 +68,7 @@ const BeaconMalfunctionIcon = styled(BeaconMalfunctionSVG)`
 
 const BeaconMalfunction = styled.div`
   cursor: pointer;
-  background: ${COLORS.yellow};
+  background: ${COLORS.yellowMunsell};
   color: ${COLORS.gunMetal};
   font-weight: 500;
   font-size: 13px;

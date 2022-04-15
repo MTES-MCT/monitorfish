@@ -27,7 +27,8 @@ data class LogbookMessageDataOutput(
         var acknowledge: Acknowledge? = null,
         var deleted: Boolean? = false,
         val message: LogbookMessageValue? = null,
-        var rawMessage: String? = null) {
+        var rawMessage: String? = null,
+        val isSentByFailoverSoftware: Boolean) {
     companion object {
         fun fromLogbookMessage(logbookMessage: LogbookMessage) = LogbookMessageDataOutput(
                 internalReferenceNumber = logbookMessage.internalReferenceNumber,
@@ -49,7 +50,8 @@ data class LogbookMessageDataOutput(
                 imo = logbookMessage.imo,
                 messageType = logbookMessage.messageType,
                 message = logbookMessage.message,
-                rawMessage = logbookMessage.rawMessage
+                rawMessage = logbookMessage.rawMessage,
+                isSentByFailoverSoftware = logbookMessage.isSentByFailoverSoftware
         )
     }
 }

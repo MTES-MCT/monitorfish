@@ -40,4 +40,5 @@
  * @property {string} referencedReportId
  * @property {number} tripNumber
  * @property {string} vesselName
+ * @property {boolean} isSentByFailoverSoftware
  */

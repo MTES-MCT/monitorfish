@@ -115,6 +115,14 @@ const LogbookMessage = ({ message, isFirst }) => {
           }
         </Header>
         <Body>
+          {
+            message.isSentByFailoverSoftware
+              ? <SoftwareFailover>
+              <MessageSentByFailoverSoftwareIcon/>
+                Message envoyé via e-sacapt
+              </SoftwareFailover>
+              : null
+          }
           <LogbookMessageMetadata>
             <EmissionDateTime>
               <Key>Date de saisie</Key><br/>
@@ -147,6 +155,24 @@ const LogbookMessage = ({ message, isFirst }) => {
       : null}
   </>
 }
+
+const SoftwareFailover = styled.div`
+  padding: 9px 10px 9px 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: ${COLORS.white};
+  font-size: 13px;
+  background: ${COLORS.slateGray};
+`
+
+const MessageSentByFailoverSoftwareIcon = styled.span`
+  height: 10px;
+  margin-right: 6px;
+  width: 10px;
+  background-color: ${COLORS.yellowMunsell};
+  border-radius: 50%;
+  display: inline-block;
+`
 
 const OKMessageText = styled.span`
   vertical-align: text-top;

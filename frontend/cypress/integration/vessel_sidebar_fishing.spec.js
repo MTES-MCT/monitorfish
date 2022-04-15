@@ -120,7 +120,7 @@ context('Vessel sidebar fishing tab', () => {
 
     // When
     cy.wait(200)
-    cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 3)
+    cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('previousTripPositions')
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 20000 })

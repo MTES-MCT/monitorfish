@@ -32,6 +32,8 @@
  * @property {Object} message
  * @property {string} messageType
  * @property {string} operationDateTime
+ * @property {string} reportDateTime
+ * @property {string} integrationDateTime
  * @property {string} operationNumber
  * @property {string} operationType
  * @property {string} rawMessage

@@ -117,12 +117,12 @@ const LogbookMessage = ({ message, isFirst }) => {
         <Body>
           <LogbookMessageMetadata>
             <EmissionDateTime>
-              <Key>Date d&apos;émission</Key><br/>
-              {getDateTime(message.operationDateTime, true)}
+              <Key>Date de saisie</Key><br/>
+              {getDateTime(message.reportDateTime, true)}
             </EmissionDateTime>
             <ReceptionDateTime>
               <Key>Date de réception</Key><br/>
-              {getDateTime(message.operationDateTime, true)}
+              {getDateTime(message.integrationDateTime, true)}
             </ReceptionDateTime>
             <VoyageNumber title={message.tripNumber}>
               <Key>N° de marée</Key><br/>

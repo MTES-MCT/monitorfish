@@ -92,9 +92,9 @@ const LogbookMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navi
 
     const sortedFishingActivities = [...logbookMessages].sort((a, b) => {
       if (inversedSort) {
-        return new Date(a.operationDateTime) - new Date(b.operationDateTime)
+        return new Date(a.reportDateTime) - new Date(b.reportDateTime)
       } else {
-        return new Date(b.operationDateTime) - new Date(a.operationDateTime)
+        return new Date(b.reportDateTime) - new Date(a.reportDateTime)
       }
     })
 
@@ -207,7 +207,7 @@ const LogbookMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navi
         onClick={downloadMessages}
       />
       <InverseDate
-        title={'Trier par date'}
+        title={'Trier par date de saisie'}
         ascendingSort={ascendingSort}
         onClick={inverseSort}
       />

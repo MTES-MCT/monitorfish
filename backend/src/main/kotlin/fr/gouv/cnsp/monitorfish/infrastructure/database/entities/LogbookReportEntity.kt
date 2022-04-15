@@ -79,6 +79,8 @@ data class LogbookReportEntity(
                 externalReferenceNumber = externalReferenceNumber,
                 ircs = ircs,
                 operationDateTime = operationDateTime.atZone(UTC),
+                reportDateTime = reportDateTime?.atZone(UTC),
+                integrationDateTime = integrationDateTime?.atZone(UTC),
                 vesselName = vesselName,
                 operationType = operationType,
                 reportId = reportId,

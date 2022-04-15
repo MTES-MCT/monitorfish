@@ -533,11 +533,11 @@ export const getEffectiveDateTimeFromMessage = message => {
     case 'RTP':
       return message.message.returnDatetimeUtc
     case 'PNO':
-      return message.operationDateTime < message.message.predictedArrivalDatetimeUtc
-        ? message.operationDateTime
+      return message.reportDateTime < message.message.predictedArrivalDatetimeUtc
+        ? message.reportDateTime
         : message.message.predictedArrivalDatetimeUtc
     default:
-      return message.operationDateTime
+      return message.reportDateTime
   }
 }
 

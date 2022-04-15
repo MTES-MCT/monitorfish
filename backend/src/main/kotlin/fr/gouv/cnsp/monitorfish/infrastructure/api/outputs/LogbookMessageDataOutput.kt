@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledge
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 data class LogbookMessageDataOutput(
@@ -14,6 +15,8 @@ data class LogbookMessageDataOutput(
         var isCorrected: Boolean? = false,
         val operationType: LogbookOperationType,
         val operationDateTime: ZonedDateTime? = null,
+        val reportDateTime: ZonedDateTime? = null,
+        val integrationDateTime: ZonedDateTime? = null,
         val internalReferenceNumber: String? = null,
         val externalReferenceNumber: String? = null,
         val ircs: String? = null,
@@ -35,6 +38,8 @@ data class LogbookMessageDataOutput(
                 acknowledge = logbookMessage.acknowledge,
                 deleted = logbookMessage.deleted,
                 operationDateTime = logbookMessage.operationDateTime,
+                reportDateTime = logbookMessage.reportDateTime,
+                integrationDateTime = logbookMessage.integrationDateTime,
                 vesselName = logbookMessage.vesselName,
                 operationType = logbookMessage.operationType,
                 reportId = logbookMessage.reportId,

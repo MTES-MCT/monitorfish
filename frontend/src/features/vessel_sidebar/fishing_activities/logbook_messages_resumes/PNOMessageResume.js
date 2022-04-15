@@ -100,9 +100,9 @@ const PNOMessageResume = props => {
             <Fields>
               <TableBody>
                 <Field>
-                  <Key>Date d&apos;envoi</Key>
-                  <Value>{props.pnoMessage.operationDateTime
-                    ? <>Le {getDateTime(props.pnoMessage.operationDateTime, true)}{' '}
+                  <Key>Date de saisie</Key>
+                  <Value>{props.pnoMessage.reportDateTime
+                    ? <>Le {getDateTime(props.pnoMessage.reportDateTime, true)}{' '}
                       <Gray>(UTC)</Gray></>
                     : <NoValue>-</NoValue>}</Value>
                 </Field>

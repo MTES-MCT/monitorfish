@@ -35,7 +35,7 @@ const MetadataGears = () => {
         <Derogation>
           <InfoPoint
             margin={'3px 0 0 0'}
-            backgroundColor={COLORS.yellow}
+            backgroundColor={COLORS.yellowMunsell}
             color={COLORS.charcoal}
           />
           <DerogationMessage>
@@ -53,7 +53,7 @@ const MetadataGears = () => {
 
 const Derogation = styled.span`
   display: flex;
-  border: 1px solid ${COLORS.yellow};
+  border: 1px solid ${COLORS.yellowMunsell};
   padding: 4px 15px 6px 8px;
 `
 

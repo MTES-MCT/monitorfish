@@ -30,35 +30,7 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
                     }
 
                     if(it.operationType == LogbookOperationType.DAT || it.operationType == LogbookOperationType.COR) {
-                        when (it.messageType) {
-                            LogbookMessageTypeMapping.FAR.name -> {
-                                setNamesFromCodes(it.message as FAR)
-                            }
-                            LogbookMessageTypeMapping.DEP.name -> {
-                                setNamesFromCodes(it.message as DEP)
-                            }
-                            LogbookMessageTypeMapping.DIS.name -> {
-                                setNamesFromCodes(it.message as DIS)
-                            }
-                            LogbookMessageTypeMapping.COE.name -> {
-                                setNamesFromCodes(it.message as COE)
-                            }
-                            LogbookMessageTypeMapping.COX.name -> {
-                                setNamesFromCodes(it.message as COX)
-                            }
-                            LogbookMessageTypeMapping.CRO.name -> {
-                                setNamesFromCodes(it.message as CRO)
-                            }
-                            LogbookMessageTypeMapping.LAN.name -> {
-                                setNamesFromCodes(it.message as LAN)
-                            }
-                            LogbookMessageTypeMapping.PNO.name -> {
-                                setNamesFromCodes(it.message as PNO)
-                            }
-                            LogbookMessageTypeMapping.RTP.name -> {
-                                setNamesFromCodes(it.message as RTP)
-                            }
-                        }
+                        setGearPortAndSpeciesNames(it)
                     }
 
                     it
@@ -72,6 +44,38 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
         }
     }
 
+    private fun setGearPortAndSpeciesNames(it: LogbookMessage) {
+        when (it.messageType) {
+            LogbookMessageTypeMapping.FAR.name -> {
+                setNamesFromCodes(it.message as FAR)
+            }
+            LogbookMessageTypeMapping.DEP.name -> {
+                setNamesFromCodes(it.message as DEP)
+            }
+            LogbookMessageTypeMapping.DIS.name -> {
+                setNamesFromCodes(it.message as DIS)
+            }
+            LogbookMessageTypeMapping.COE.name -> {
+                setNamesFromCodes(it.message as COE)
+            }
+            LogbookMessageTypeMapping.COX.name -> {
+                setNamesFromCodes(it.message as COX)
+            }
+            LogbookMessageTypeMapping.CRO.name -> {
+                setNamesFromCodes(it.message as CRO)
+            }
+            LogbookMessageTypeMapping.LAN.name -> {
+                setNamesFromCodes(it.message as LAN)
+            }
+            LogbookMessageTypeMapping.PNO.name -> {
+                setNamesFromCodes(it.message as PNO)
+            }
+            LogbookMessageTypeMapping.RTP.name -> {
+                setNamesFromCodes(it.message as RTP)
+            }
+        }
+    }
+
     private fun flagCorrectedAcknowledgedAndDeletedMessages(messages: List<LogbookMessage>) {
         messages.forEach { logbookMessage ->
             if (logbookMessage.operationType == LogbookOperationType.COR && !logbookMessage.referencedReportId.isNullOrEmpty()) {
@@ -79,13 +83,23 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
             } else if (logbookMessage.operationType == LogbookOperationType.RET && !logbookMessage.referencedReportId.isNullOrEmpty()) {
                 flagMessageAsAcknowledged(messages, logbookMessage)
             } else if (logbookMessage.transmissionFormat == LogbookTransmissionFormat.FLUX) {
-                logbookMessage.acknowledge = Acknowledge()
-                logbookMessage.acknowledge?.let{
-                    it.isSuccess = true
-                }
+                flagMessageAsSuccess(logbookMessage)
+            } else if (logbookMessage.software !== null && logbookMessage.software.contains(LogbookSoftware.VISIOCAPTURE.software)) {
+                flagMessageAsSuccess(logbookMessage)
             } else if (logbookMessage.operationType == LogbookOperationType.DEL && !logbookMessage.referencedReportId.isNullOrEmpty()) {
                 flagMessageAsDeleted(messages, logbookMessage)
             }
+
+            if (logbookMessage.software !== null  && logbookMessage.software.contains(LogbookSoftware.E_SACAPT.software)) {
+                logbookMessage.isSentByFailoverSoftware = true
+            }
+        }
+    }
+
+    private fun flagMessageAsSuccess(logbookMessage: LogbookMessage) {
+        logbookMessage.acknowledge = Acknowledge()
+        logbookMessage.acknowledge?.let {
+            it.isSuccess = true
         }
     }
 

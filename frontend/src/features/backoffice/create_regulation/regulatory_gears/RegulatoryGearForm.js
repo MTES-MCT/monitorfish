@@ -360,9 +360,9 @@ const DerogationRadioWrapper = styled.div`
 const DerogationRadio = styled(RadioGroup)` 
   ${customRadioGroup}
   padding-right: 10px!important;
-  border: 1.5px solid ${props => props.$isYellow ? COLORS.yellow : COLORS.lightGray}!important;
+  border: 1.5px solid ${props => props.$isYellow ? COLORS.yellowMunsell : COLORS.lightGray}!important;
   :focus {
-    border: 1.5px solid ${props => props.$isYellow ? COLORS.yellow : COLORS.lightGray}!important;
+    border: 1.5px solid ${props => props.$isYellow ? COLORS.yellowMunsell : COLORS.lightGray}!important;
   }
 `
 

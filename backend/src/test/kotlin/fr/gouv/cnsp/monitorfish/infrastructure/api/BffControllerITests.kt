@@ -307,7 +307,7 @@ class BffControllerITests {
     @Test
     fun `Should find the last logbook messages of vessels`() {
         // Given
-        val voyage = Voyage(true, false, ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"), null, "1234", LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessage(), listOf()))
+        val voyage = Voyage(true, false, ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"), null, "1234", LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()))
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
         // When
@@ -331,7 +331,7 @@ class BffControllerITests {
     @Test
     fun `Should find the logbook messages of vessels before a specified date`() {
         // Given
-        val voyage = Voyage(true, false, ZonedDateTime.now().minusMonths(5), null, "1234", LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessage(), listOf()))
+        val voyage = Voyage(true, false, ZonedDateTime.now().minusMonths(5), null, "1234", LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()))
         given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
 
         // When

@@ -125,11 +125,6 @@ const Backoffice = () => {
             setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
             regulatoryZoneListByRegTerritory={layersTopicsByRegTerritory}
           />
-          {/* <ButtonList>
-            <SecondaryButton>Brouillon (X)</SecondaryButton>
-            <SecondaryButton>Tracé en attente (X)</SecondaryButton>
-            <SecondaryButton disabled>Dernière publications (X)</SecondaryButton>
-          </ButtonList> */}
           {layersTopicsByRegTerritory && layersTopicsByRegTerritory !== {}
             ? searchResultList
             : <div>En attente de chargement</div>}

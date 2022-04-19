@@ -36,6 +36,7 @@ context('Backoffice', () => {
   })
 
   it('on mouse over layer name edit button appears', () => {
+    // Given
     // listen Post request to /geoserver/wfs
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
 
@@ -45,6 +46,8 @@ context('Backoffice', () => {
     cy.get('[data-cy="regulatory-layername-edit"]').eq(0).click()
     cy.get('[data-cy="layer-name-input"]').should('have.length', 1)
     cy.get('[data-cy="layer-name-input"]').eq(0).type(' - changed')
+
+    // When
     cy.get('[data-cy="layer-name-input"]').eq(0).type('{enter}')
     cy.get('[data-cy="layer-name-input"]').should('not.exist')
 
@@ -54,5 +57,12 @@ context('Backoffice', () => {
         expect(request.body).contain('<Value>Ouest Cotentin Bivalves - changed</Value>')
         expect(response.statusCode).equal(200)
       })
+
+    // Then
+    cy.get('[data-cy="regulatory-layers-my-zones-topic"]').then(elements => {
+      console.log(elements)
+      expect(elements.eq(0)).contain("Ouest Cotentin Bivalves - changed")
+      expect(elements.eq(0).parent()).contain("1/1")
+    })
   })
 })

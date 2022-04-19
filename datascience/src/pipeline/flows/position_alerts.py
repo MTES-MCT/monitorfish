@@ -109,13 +109,22 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
     """
 
     alert_type_zones_tables = {
-        "THREE_MILES_TRAWLING_ALERT": "n_miles_to_shore_areas_subdivided",
+        "THREE_MILES_TRAWLING_ALERT": {
+            "table": "n_miles_to_shore_areas_subdivided",
+            "filter_column": "miles_to_shore",
+            "geometry_column": "geometry",
+        },
+        "FRENCH_EEZ_FISHING_ALERT": {
+            "table": "eez_areas",
+            "filter_column": "iso_sov1",
+            "geometry_column": "wkb_geometry",
+        },
     }
 
     logger = prefect.context.get("logger")
 
     try:
-        table_name = alert_type_zones_tables[alert_type]
+        table_info = alert_type_zones_tables[alert_type]
     except KeyError:
         raise ValueError(
             (
@@ -125,14 +134,16 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
         )
 
     zones_table = get_table(
-        table_name,
+        table_info["table"],
         schema="public",
         engine=create_engine("monitorfish_remote"),
         logger=logger,
     )
 
     zones_table = ZonesTable(
-        table=zones_table, filter_column="miles_to_shore", geometry_column="geometry"
+        table=zones_table,
+        filter_column=table_info["filter_column"],
+        geometry_column=table_info["geometry_column"],
     )
 
     return zones_table

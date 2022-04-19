@@ -870,3 +870,78 @@ def test_flow_filters_on_flag_states(reset_test_data):
         )
         < 10
     ).all()
+
+
+def test_flow_french_eez_fishing_alert(reset_test_data):
+
+    flow.schedule = None
+
+    # With these parameters, 2 french vessels should be in alert.
+    alert_type = "FRENCH_EEZ_FISHING_ALERT"
+    zones = ["FRA"]
+    hours_from_now = 8
+    only_fishing_positions = False
+    fishing_gears = None
+    fishing_gear_categories = None
+    include_vessels_unknown_gear = True
+    except_flag_states = ["NL"]
+
+    state = flow.run(
+        alert_type=alert_type,
+        zones=zones,
+        hours_from_now=hours_from_now,
+        fishing_gears=fishing_gears,
+        fishing_gear_categories=fishing_gear_categories,
+        include_vessels_unknown_gear=include_vessels_unknown_gear,
+        only_fishing_positions=only_fishing_positions,
+        except_flag_states=except_flag_states,
+    )
+
+    assert state.is_successful()
+
+    pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+
+    expected_pending_alerts = pd.DataFrame(
+        {
+            "vessel_name": [
+                "DEVINER FIGURE CONSCIENCE",
+                "I DO 4H REPORT",
+            ],
+            "internal_reference_number": [
+                "ABC000542519",
+                None,
+            ],
+            "external_reference_number": [
+                "RO237719",
+                "ZZTOPACDC",
+            ],
+            "ircs": [
+                "FQ7058",
+                "ZZ000000",
+            ],
+            "trip_number": [None, None],
+            "value": [
+                {
+                    "type": "FRENCH_EEZ_FISHING_ALERT",
+                    "seaFront": "Facade A",
+                    "flagState": "FR",
+                    "riskFactor": 1.4142135624,
+                },
+                {
+                    "type": "FRENCH_EEZ_FISHING_ALERT",
+                    "seaFront": "Facade A",
+                    "flagState": "FR",
+                    "riskFactor": 1.7411011266,
+                },
+            ],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+                "IRCS",
+            ],
+        }
+    )
+
+    pd.testing.assert_frame_equal(
+        pending_alerts.drop(columns=["creation_date", "id"]),
+        expected_pending_alerts,
+    )

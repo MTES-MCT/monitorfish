@@ -132,15 +132,17 @@ def test_make_positions_in_alert_query():
     zones = ["Zone A"]
     hours_from_now = 6
     flag_states = ["NL, DE"]
+    except_flag_states = ["VE"]
 
     select_statement = make_positions_in_alert_query.run(
-        positions_table,
-        facades_table,
-        zones_table,
-        only_fishing_positions,
-        zones,
-        hours_from_now,
-        flag_states,
+        positions_table=positions_table,
+        facades_table=facades_table,
+        zones_table=zones_table,
+        only_fishing_positions=only_fishing_positions,
+        zones=zones,
+        hours_from_now=hours_from_now,
+        flag_states=flag_states,
+        except_flag_states=except_flag_states,
     )
 
     query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
@@ -168,7 +170,8 @@ def test_make_positions_in_alert_query():
         "positions.ircs IS NOT NULL) "
         "AND positions.is_fishing "
         "AND zones.zone_name IN ('Zone A') "
-        "AND positions.flag_state IN ('NL, DE')"
+        "AND positions.flag_state IN ('NL, DE') "
+        "AND positions.flag_state NOT IN ('VE')"
     )
 
     assert query == expected_query

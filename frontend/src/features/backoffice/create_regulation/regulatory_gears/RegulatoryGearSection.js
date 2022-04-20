@@ -34,7 +34,7 @@ const RegulatoryGearSection = () => {
       setRegulatoryGears={setRegulatoryGears}
     />
     <OtherRemark show={show}>
-      <Label>Mesures Techniques</Label>
+      <Label>Remarques générales</Label>
       <CustomInput
         width={'730px'}
         value={regulatoryGears?.otherInfo || ''}

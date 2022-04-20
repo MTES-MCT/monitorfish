@@ -25,7 +25,7 @@ context('Update Regulation', () => {
 
   it('A layer zone Should be edited', () => {
     // When check expected form values
-    cy.get('[data-cy^="tag"]').should('have.length', 9)
+    cy.get('[data-cy^="tag"]').should('have.length', 10)
     cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
     cy.get('[data-cy="tag-Ouest Cotentin Bivalves"]').should('exist')
     cy.get('[data-cy="tag-Normandie"]').should('exist')
@@ -196,7 +196,7 @@ context('Update Regulation', () => {
     // When F5 is pressed
     cy.reload()
     // then form values are kept
-    cy.get('[data-cy^="tag"]').should('have.length', 9)
+    cy.get('[data-cy^="tag"]').should('have.length', 10)
     cy.get('[data-cy="tag-Reg. MEMN"]').should('exist')
     cy.get('[data-cy="tag-Ouest Cotentin Bivalves"]').should('exist')
     cy.get('[data-cy="tag-Normandie"]').should('exist')

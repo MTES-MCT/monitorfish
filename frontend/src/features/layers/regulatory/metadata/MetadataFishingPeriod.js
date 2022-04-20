@@ -14,10 +14,12 @@ const MetadataFishingPeriod = () => {
         : <RedCircle margin={'0 5px 0 0'} />}
       Période de pêche {fishingPeriod.authorized ? 'autorisée' : 'interdites'}</SectionTitle>
       {fishingPeriodToString(fishingPeriod)}
-      {fishingPeriod?.otherInfo &&
-      <div>
-        {fishingPeriod?.otherInfo}
-      </div>}
+      {
+        fishingPeriod.otherInfo &&
+        <div>
+          {fishingPeriod.otherInfo}
+        </div>
+      }
     </Section>}</>
 }
 

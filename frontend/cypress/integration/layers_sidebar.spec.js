@@ -91,7 +91,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="layers-sidebar"]', { timeout: 20000 }).click({ timeout: 20000 })
   })
 
-  it('A regulation metadata Should be opened', () => {
+  it('The Cotentin regulation metadata Should be opened', () => {
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
 
@@ -122,6 +122,24 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('500 kg')
 
     cy.get('*[data-cy="regulatory-layers-metadata-references"]').should('have.length', 1)
+  })
+
+  it('The Armor regulation metadata Should be opened', () => {
+    // When
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
+
+    cy.get('*[data-cy="regulatory-search-input"]').type('Armor')
+    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()
+    cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
+
+    // Then show the metadata
+    cy.get('*[data-cy="regulatory-layers-show-metadata"]').click()
+    cy.get('*[data-cy="regulatory-layers-metadata-region"]').should('exist')
+    cy.log('Fishing period should not be seen if it has an empty message')
+    cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').should('not.exist')
   })
 
   it('An advanced search Should filter the search result', () => {

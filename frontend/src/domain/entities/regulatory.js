@@ -589,6 +589,10 @@ export const convertTimeToString = (date) => {
  * @returns {string} - fishing period convert to string
  */
 export const fishingPeriodToString = fishingPeriod => {
+  if (!fishingPeriod) {
+    return ''
+  }
+
   const {
     dateRanges,
     annualRecurrence,

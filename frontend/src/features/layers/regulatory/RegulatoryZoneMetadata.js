@@ -14,7 +14,7 @@ import MetadataSpecies from './metadata/MetadataSpecies'
 import MetadataRegulatoryReferences from './metadata/MetadataRegulatoryReferences'
 import OutdatedRegulatoryReferences from './metadata/OutdatedRegulatoryReferences'
 
-const RegulatoryLayerZoneMetadata = () => {
+const RegulatoryZoneMetadata = () => {
   const dispatch = useDispatch()
 
   const {
@@ -108,4 +108,4 @@ const REGPaperIcon = styled(REGPaperSVG)`
   width: 25px;
 `
 
-export default RegulatoryLayerZoneMetadata
+export default RegulatoryZoneMetadata

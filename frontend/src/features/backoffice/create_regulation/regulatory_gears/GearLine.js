@@ -5,6 +5,7 @@ import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import Tag from '../Tag'
 import MenuItem from '../custom_form/MenuItem'
+import { GEAR_MESH_SIZE } from '../../../../domain/entities/backoffice'
 
 const GearLine = (props) => {
   const {
@@ -28,15 +29,34 @@ const GearLine = (props) => {
       {allowMesh && <ContentLine>
         <Label data-cy='mesh-label' >Maillage</Label>
         <CustomSelectComponent
-          value={meshType || 'greaterThan'}
+          value={meshType || GEAR_MESH_SIZE.greaterThan}
           onChange={value => onChange('meshType', value)}
-          data={[{
-            value: 'greaterThan',
-            label: 'supérieur ou égal à'
-          }, {
-            value: 'between',
-            label: 'entre'
-          }]}
+          data={[
+            {
+              value: GEAR_MESH_SIZE.greaterThan,
+              label: 'supérieur à'
+            },
+            {
+              value: GEAR_MESH_SIZE.greaterThanOrEqualTo,
+              label: 'supérieur ou égal à'
+            },
+            {
+              value: GEAR_MESH_SIZE.lowerThan,
+              label: 'inférieur à'
+            },
+            {
+              value: GEAR_MESH_SIZE.lowerThanOrEqualTo,
+              label: 'inférieur ou égal à'
+            },
+            {
+              value: GEAR_MESH_SIZE.equal,
+              label: 'égal à'
+            },
+            {
+              value: GEAR_MESH_SIZE.between,
+              label: 'entre'
+            }
+          ]}
           renderMenuItem={(_, item) =>
             <MenuItem item={item} />}
           valueIsMissing={false}

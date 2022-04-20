@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import BaseMap from '../map/BaseMap'
 import LawType from './LawType'
 import SearchRegulations from './SearchRegulations'
-import RegulatoryLayerZoneMetadata from '../layers/regulatory/RegulatoryLayerZoneMetadata'
+import RegulatoryZoneMetadata from '../layers/regulatory/RegulatoryZoneMetadata'
 import BaseLayer from '../../layers/BaseLayer'
 import RegulatoryLayers from '../../layers/RegulatoryLayers'
 import AdministrativeLayers from '../../layers/AdministrativeLayers'
@@ -140,7 +140,7 @@ const Backoffice = () => {
       {regulatoryZoneMetadataPanelIsOpen && <MetadataWrapper
         regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
       >
-        <RegulatoryLayerZoneMetadata
+        <RegulatoryZoneMetadata
           loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
           regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
           regulatoryZoneMetadata={regulatoryZoneMetadata}

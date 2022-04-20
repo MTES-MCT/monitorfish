@@ -79,7 +79,7 @@
  * @property {string} name
  * @property {string} groupId
  * @property {string} category
- * @property {string} meshType - (between or greaterThan)
+ * @property {string} meshType - (One of greaterThan, greaterThanOrEqualTo, lowerThan, lowerThanOrEqualTo, equal, between)
  * @property {string[]} mesh
  */
 

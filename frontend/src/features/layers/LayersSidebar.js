@@ -8,7 +8,7 @@ import AdministrativeLayers from './administrative/AdministrativeLayers'
 import RegulatoryLayers from './regulatory/RegulatoryLayers'
 import { COLORS } from '../../constants/constants'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
-import RegulatoryLayerZoneMetadata from './regulatory/RegulatoryLayerZoneMetadata'
+import RegulatoryZoneMetadata from './regulatory/RegulatoryZoneMetadata'
 import BaseLayers from './base/BaseLayers'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import NamespaceContext from '../../domain/context/NamespaceContext'
@@ -82,7 +82,7 @@ const LayersSidebar = () => {
               <RegulatoryZoneMetadataShifter
                 regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
               >
-                <RegulatoryLayerZoneMetadata/>
+                <RegulatoryZoneMetadata/>
               </RegulatoryZoneMetadataShifter>
             </Sidebar>
           </>

@@ -95,7 +95,7 @@ context('Update Regulation', () => {
     cy.url().should('include', '/backoffice')
   })
 
-  it('Save regulation Should send the regulated species update object to Geoserver', () => {
+  it('Save regulation Should send the regulated species and gears updates object to Geoserver', () => {
     // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     // complete missing values in form
@@ -104,6 +104,7 @@ context('Update Regulation', () => {
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
     cy.get('*[data-cy^="regulation-authorized-species"]').click({ force: true })
     cy.scrollTo(0, 500)
+
     cy.get('.rs-picker-toggle-placeholder')
       .filter(':contains("catégories d\'espèces")')
       .scrollIntoView()
@@ -117,6 +118,17 @@ context('Update Regulation', () => {
     cy.get('*[data-cy^="regulatory-species-minimum-size"]').eq(0).type('à peu près 60 cm')
     cy.get('*[data-cy^="regulatory-species-other-info"]').type('Mhm pas d\'autre info !')
 
+    cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
+    cy.get('*[data-cy^="regulatory-gears-section"]').click({ force: true })
+    cy.get('*[data-cy="gears-selector"]')
+      .scrollIntoView()
+    cy.get('.rs-picker-select')
+      .filter(':contains("inférieur à")')
+      .click({ timeout: 20000 })
+    cy.get('.rs-picker-select-menu-item')
+      .eq(3)
+      .click({ timeout: 20000 })
+
     // When
     cy.get('[data-cy="validate-button"]').click()
     cy.wait(200)
@@ -127,8 +139,13 @@ context('Update Regulation', () => {
         expect(request.body)
           .contain('"authorized":true')
           .contain('"otherInfo":"Mhm pas d\'autre info !"')
-          .contain('{"species":[{"code":"URC","quantity":"500 kgNe pas en prendre beaucoup please","name":"OURSINS NCA","minimumSize":"à peu près 60 cm"},{"code":"URX","quantity":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],"authorized":true,"speciesGroups":["Espèces eau profonde"]')
-          .contain('{"allGears":false,"otherInfo":"Drague sans dent et de largeur maximale 1,30 mètre","authorized":true,"allTowedGears":false,"regulatedGears":{},"allPassiveGears":false,"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues"]}')
+          .contain('{"species":[{"code":"URC","quantity":"500 kgNe pas en prendre beaucoup please","name":"OURSINS NCA",' +
+            '"minimumSize":"à peu près 60 cm"},{"code":"URX","quantity":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],' +
+            '"authorized":true,"speciesGroups":["Espèces eau profonde"]')
+          .contain('{"allGears":false,"otherInfo":"Drague sans dent et de largeur maximale 1,30 mètre","authorized":true,' +
+            '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines","category":"Chaluts",' +
+            '"groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"]}},"allPassiveGears":false,' +
+            '"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}')
 
         expect(response.statusCode).equal(200)
       })
@@ -140,13 +157,14 @@ context('Update Regulation', () => {
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     cy.get('[type="checkbox"]').first().check({ force: true })
     cy.get('[type="checkbox"]').eq(2).check({ force: true })
+
     // When
     cy.get('[data-cy="go-back-link"]').eq(0).click()
     cy.get('[data-cy="regulation-modal"]').should('exist')
     cy.get('[data-cy="confirm-modal-confirm-button"]').click()
+
     // Then
     cy.get('[data-cy="regulation-modal"]').should('not.exist')
-    // Then
     cy.wait('@postRegulation')
       .then(({ request, response }) => {
         expect(response.statusCode).equal(200)

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import RegulatoryLayerZone from './RegulatoryLayerZone'
+import RegulatoryLayerZone from './RegulatoryZone'
 import Layers from '../../../domain/entities/layers'
 import { COLORS } from '../../../constants/constants'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
@@ -18,7 +18,7 @@ import {
 import showRegulatoryTopic from '../../../domain/use_cases/layer/regulation/showRegulatoryTopic'
 import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 
-const RegulatoryLayerTopic = props => {
+const RegulatoryTopic = props => {
   const {
     callRemoveRegulatoryZoneFromMySelection,
     regulatoryTopic,
@@ -272,4 +272,4 @@ const Row = styled.li`
   display: block;
 `
 
-export default React.memo(RegulatoryLayerTopic)
+export default React.memo(RegulatoryTopic)

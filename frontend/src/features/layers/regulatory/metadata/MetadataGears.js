@@ -43,10 +43,12 @@ const MetadataGears = () => {
           </DerogationMessage>
         </Derogation>
       }
-      {otherInfo &&
-      <><SectionTitle>Mesures techniques</SectionTitle>
-        {otherInfo}
-      </>}
+      {
+        otherInfo &&
+        <div>
+          {otherInfo}
+        </div>
+      }
     </Section>}
   </>
 }

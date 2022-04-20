@@ -38,7 +38,7 @@ const RegulatorySpeciesSection = () => {
       show={show}
     />
     <OtherRemark show={show}>
-      <Label>Autres points sur les espèces</Label>
+      <Label>Remarques générales</Label>
       <CustomInput
         data-cy={'regulatory-species-other-info'}
         width={'730px'}

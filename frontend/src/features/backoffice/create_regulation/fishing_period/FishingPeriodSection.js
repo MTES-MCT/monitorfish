@@ -26,7 +26,7 @@ const FishingPeriodSection = () => {
       fishingPeriod={fishingPeriod}
     />
     <OtherRemark show={show}>
-      <Label>Autres points sur la période</Label>
+      <Label>Remarques générales</Label>
       <CustomInput
         width={'730px'}
         value={fishingPeriod?.otherInfo || ''}

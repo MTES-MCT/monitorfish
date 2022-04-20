@@ -50,9 +50,9 @@ const MetadataSpecies = () => {
       }
       {
         regulatorySpecies.otherInfo &&
-        <><SectionTitle>Mesures techniques</SectionTitle>
+        <div>
           {regulatorySpecies.otherInfo}
-        </>
+        </div>
       }
     </Section>
   }</>

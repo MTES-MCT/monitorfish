@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { SectionTitle, Section, List, Elem, Key, Label, Value, Fields, Field } from './RegulatoryMetadata.style'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
 import CodeAndName from './CodeAndName'
+import ReactMarkdown from 'react-markdown'
 const MetadataSpecies = () => {
   const { regulatorySpecies } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
   const {
@@ -50,9 +51,9 @@ const MetadataSpecies = () => {
       }
       {
         regulatorySpecies.otherInfo &&
-        <div>
+        <ReactMarkdown>
           {regulatorySpecies.otherInfo}
-        </div>
+        </ReactMarkdown>
       }
     </Section>
   }</>

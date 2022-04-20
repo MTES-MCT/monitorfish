@@ -37,7 +37,7 @@ const RegulatorySpeciesForm = props => {
     formattedSpecies
   } = useSelector(state => {
     const formattedSpeciesGroups = [...state.species.speciesGroups]
-      ?.sort((speciesA, speciesB) => speciesB.group - speciesA.group)
+      ?.sort((speciesA, speciesB) => speciesA.group?.localeCompare(speciesB.group))
       .map(speciesGroup => ({
         label: speciesGroup.group,
         value: speciesGroup.group
@@ -45,7 +45,7 @@ const RegulatorySpeciesForm = props => {
 
     const formattedSpecies = state.species.speciesByCode
       ? Object.values(state.species.speciesByCode)
-        .sort((speciesA, speciesB) => speciesB.code - speciesA.code)
+        .sort((speciesA, speciesB) => speciesA.name?.localeCompare(speciesB.name))
         .map(_species => ({
           label: `${_species.name} (${_species.code})`,
           value: _species.code

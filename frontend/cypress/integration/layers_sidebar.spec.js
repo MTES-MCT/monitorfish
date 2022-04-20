@@ -106,6 +106,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-show-metadata"]').click()
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
     cy.get('*[data-cy="regulatory-layers-metadata-topic"]').contains('Ouest Cotentin Bivalves')
+    cy.get('*[data-cy="regulatory-layers-metadata-zone"]').contains('Praires Ouest cotentin')
     cy.get('*[data-cy="regulatory-layers-metadata-region"]').contains('Normandie, Bretagne')
 
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Pêche interdite les vendredi, samedi et dimanche, les jours fériés')

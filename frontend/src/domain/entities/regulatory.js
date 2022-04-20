@@ -741,7 +741,7 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
 }
 
 export const getTitle = regulatory => regulatory
-  ? `${regulatory.topic} - ${regulatory.zone}`
+  ? regulatory.zone
   : ''
 
 /**

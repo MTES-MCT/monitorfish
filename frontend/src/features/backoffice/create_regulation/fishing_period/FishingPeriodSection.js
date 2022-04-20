@@ -28,10 +28,14 @@ const FishingPeriodSection = () => {
     <OtherRemark show={show}>
       <Label>Remarques générales</Label>
       <CustomInput
-        width={'730px'}
+        as="textarea"
+        rows={2}
+        placeholder=''
         value={fishingPeriod?.otherInfo || ''}
-        onChange={onChange}
-        $isGray={fishingPeriod.otherInfo && fishingPeriod.otherInfo !== ''} />
+        onChange={event => onChange(event.target.value)}
+        width={'500px'}
+        $isGray={fishingPeriod?.otherInfo && fishingPeriod?.otherInfo !== ''}
+      />
     </OtherRemark>
   </Section>
 }

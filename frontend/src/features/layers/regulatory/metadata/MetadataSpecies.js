@@ -27,13 +27,20 @@ const MetadataSpecies = () => {
           {
             regulatorySpecies.species.length > 0
               ? regulatorySpecies.species.map(_species => {
-                const { code, name, quantity, minimumSize } = _species
+                const { code, name, remarks } = _species
                 return (
                   <Elem key={code}>
                     <CodeAndName code={code} name={name} />
                     <Fields>
-                      {quantity && <Field><Key>Quantité</Key><Value>{quantity}</Value></Field>}
-                      {minimumSize && <Field><Key>Taille min.</Key><Value>{minimumSize}</Value></Field>}
+                      {remarks &&
+                      <Field>
+                        <Key>Remarques</Key>
+                        <Value>
+                          <ReactMarkdown>
+                            {remarks}
+                          </ReactMarkdown>
+                        </Value>
+                      </Field>}
                     </Fields>
                   </Elem>
                 )

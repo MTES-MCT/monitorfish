@@ -35,12 +35,19 @@ export const Value = styled.td`
   color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
-  padding: 1px 5px 5px 5px;
+  padding: 1px 5px ${props => props.isNotLastItem ? 0 : 5}px 5px;
   background: none;
   border: none;
   line-height: normal;
   font-size: 13px;
   font-weight: 500;
+  
+  p {
+    margin: 0;
+  }
+  ul {
+    margin: 0;
+  }
 `
 
 export const Section = styled.div`

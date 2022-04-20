@@ -16,7 +16,8 @@ const GearLine = (props) => {
     onChange,
     onCloseIconClicked,
     meshType,
-    mesh
+    mesh,
+    remarks
   } = props
   return (<>
       <ContentLine data-cy='regulatory-gear-line'>
@@ -85,6 +86,19 @@ const GearLine = (props) => {
         }
         {'mm'}
       </ContentLine>}
+      <ContentLine>
+        <Label>Remarques</Label>
+        <CustomInput
+          data-cy={'regulatory-gears-remarks'}
+          as="textarea"
+          rows={2}
+          placeholder=''
+          value={remarks || ''}
+          onChange={event => onChange('remarks', event.target.value)}
+          width={'300px'}
+          $isGray={remarks}
+        />
+      </ContentLine>
     </>
   )
 }

@@ -90,20 +90,19 @@ const RegulatorySpeciesForm = props => {
     }
 
     if (!authorized && species?.length) {
-      initSpeciesQuantityAndMinimumSize()
+      initSpeciesWithRemarks()
     }
 
     if (allSpecies && authorized) {
       set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, false)
     }
 
-    function initSpeciesQuantityAndMinimumSize () {
+    function initSpeciesWithRemarks () {
       const nextSpecies = [...species]
         .map(_species => {
           return {
             ..._species,
-            minimumSize: undefined,
-            quantity: undefined
+            remarks: undefined
           }
         })
       set(REGULATORY_SPECIES_KEYS.SPECIES, nextSpecies)
@@ -164,8 +163,7 @@ const RegulatorySpeciesForm = props => {
       push(REGULATORY_SPECIES_KEYS.SPECIES, species, {
         code: value,
         name: speciesByCode[value]?.name,
-        quantity: undefined,
-        minimumSize: undefined
+        remarks: undefined
       })
     }
   }
@@ -284,25 +282,20 @@ const RegulatorySpeciesForm = props => {
                     />
                   </SpeciesDetail>
                   <SpeciesDetail>
-                    <Label>Quantités</Label>
+                    <Label>Remarques</Label>
                     <CustomInput
-                      data-cy={'regulatory-species-quantity'}
+                      data-cy={'regulatory-species-remarks'}
+                      as="textarea"
+                      rows={2}
                       placeholder=''
-                      value={speciesValue.quantity || ''}
-                      onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, quantity: value })}
-                      width={'200px'}
-                      $isGray={species.find(_species => _species.code === speciesValue.code)?.quantity}
-                    />
-                  </SpeciesDetail>
-                  <SpeciesDetail>
-                    <Label>Taille minimale</Label>
-                    <CustomInput
-                      data-cy={'regulatory-species-minimum-size'}
-                      placeholder=''
-                      value={speciesValue.minimumSize || ''}
-                      onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, minimumSize: value })}
-                      width={'200px'}
-                      $isGray={species.find(_species => _species.code === speciesValue.code)?.minimumSize}
+                      value={speciesValue.remarks || ''}
+                      onChange={event =>
+                        update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, {
+                          ...speciesValue,
+                          remarks: event.target.value
+                        })}
+                      width={'300px'}
+                      $isGray={species.find(_species => _species.code === speciesValue.code)?.remarks}
                     />
                   </SpeciesDetail>
                 </SpeciesDetails>

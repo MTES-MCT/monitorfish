@@ -107,12 +107,19 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
     cy.get('*[data-cy="regulatory-layers-metadata-topic"]').contains('Ouest Cotentin Bivalves')
     cy.get('*[data-cy="regulatory-layers-metadata-region"]').contains('Normandie, Bretagne')
+
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Pêche interdite les vendredi, samedi et dimanche, les jours fériés')
+    cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Bien vérifier Légipêche!')
+
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('TBN (Chaluts à langoustines)')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('inférieur à 123 mm')
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Dragues')
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Drague sans dent et de largeur maximale 1,30 mètre')
+
     cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('URC (OURSINS NCA)')
     cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('URX (OURSINS,ETC. NCA)')
     cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('500 kg')
+
     cy.get('*[data-cy="regulatory-layers-metadata-references"]').should('have.length', 1)
   })
 

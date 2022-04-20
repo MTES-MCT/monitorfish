@@ -60,7 +60,6 @@ context('Backoffice', () => {
 
     // Then
     cy.get('[data-cy="regulatory-layers-my-zones-topic"]').then(elements => {
-      console.log(elements)
       expect(elements.eq(0)).contain("Ouest Cotentin Bivalves - changed")
       expect(elements.eq(0).parent()).contain("1/1")
     })

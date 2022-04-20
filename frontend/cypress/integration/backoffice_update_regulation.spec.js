@@ -142,7 +142,7 @@ context('Update Regulation', () => {
           .contain('{"species":[{"code":"URC","quantity":"500 kgNe pas en prendre beaucoup please","name":"OURSINS NCA",' +
             '"minimumSize":"à peu près 60 cm"},{"code":"URX","quantity":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],' +
             '"authorized":true,"speciesGroups":["Espèces eau profonde"]')
-          .contain('{"allGears":false,"otherInfo":"Drague sans dent et de largeur maximale 1,30 mètre","authorized":true,' +
+          .contain('{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\\\n - Dragues avec dents !","authorized":true,' +
             '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines","category":"Chaluts",' +
             '"groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"]}},"allPassiveGears":false,' +
             '"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}')

@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
 import { useSelector } from 'react-redux'
@@ -45,9 +46,9 @@ const MetadataGears = () => {
       }
       {
         otherInfo &&
-        <div>
+        <ReactMarkdown>
           {otherInfo}
-        </div>
+        </ReactMarkdown>
       }
     </Section>}
   </>

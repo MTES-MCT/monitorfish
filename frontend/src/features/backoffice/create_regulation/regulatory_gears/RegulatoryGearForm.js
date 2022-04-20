@@ -259,6 +259,19 @@ const RegulatoryGearForm = (props) => {
         onChange={values => set(REGULATORY_GEAR_KEYS.SELECTED_GEARS_AND_CATEGORIES, values)}
         value={selectedCategoriesAndGears || []}
         placement='autoVerticalStart'
+        onSelect={(item, activePaths) => {
+          if (activePaths.length !== 2) {
+            return
+          }
+
+          if (!selectedCategoriesAndGears?.find(value => value === item.value)) {
+            set(REGULATORY_GEAR_KEYS.SELECTED_GEARS_AND_CATEGORIES, selectedCategoriesAndGears.concat(item.value))
+          }
+
+          if (selectedCategoriesAndGears?.find(value => value === item.value)) {
+            set(REGULATORY_GEAR_KEYS.SELECTED_GEARS_AND_CATEGORIES, selectedCategoriesAndGears.filter(tag => tag !== item.value))
+          }
+        }}
       />
       {(Object.keys(regulatedGears)?.length > 0 || Object.keys(regulatedGearCategories)?.length > 0)
         ? <GearList>

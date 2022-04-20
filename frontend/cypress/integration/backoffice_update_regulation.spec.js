@@ -122,6 +122,33 @@ context('Update Regulation', () => {
     cy.get('*[data-cy^="regulatory-gears-section"]').click({ force: true })
     cy.get('*[data-cy="gears-selector"]')
       .scrollIntoView()
+
+    cy.log('Select TX - Autres chaluts')
+    cy.get('.rs-picker-cascader')
+      .filter(':contains("des engins")')
+      .click({ timeout: 20000 })
+    cy.get('.rs-checkbox-checker')
+      .filter(':contains("Chaluts")')
+      .click({ timeout: 20000 })
+    cy.get('.rs-checkbox-checker')
+      .filter(':contains("TX - Autres chaluts")')
+      .click({ timeout: 20000 })
+    cy.get('.rs-picker-cascader')
+      .filter(':contains("des engins")')
+      .type('{esc}')
+
+    cy.log('Unselect TX - Autres chaluts')
+    cy.get('.rs-picker-cascader')
+      .filter(':contains("des engins")')
+      .click({ timeout: 20000 })
+    cy.get('.rs-checkbox-checker')
+      .filter(':contains("Chaluts")')
+      .eq(0)
+      .click({ timeout: 20000 })
+    cy.get('.rs-checkbox-checker')
+      .filter(':contains("TX - Autres chaluts")')
+      .click({ timeout: 20000 })
+
     cy.get('.rs-picker-select')
       .filter(':contains("inférieur à")')
       .click({ timeout: 20000 })
@@ -142,7 +169,7 @@ context('Update Regulation', () => {
           .contain('{"species":[{"code":"URC","quantity":"500 kgNe pas en prendre beaucoup please","name":"OURSINS NCA",' +
             '"minimumSize":"à peu près 60 cm"},{"code":"URX","quantity":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],' +
             '"authorized":true,"speciesGroups":["Espèces eau profonde"]')
-          .contain('{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\\\n - Dragues avec dents !","authorized":true,' +
+          .contain('{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !","authorized":true,' +
             '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines","category":"Chaluts",' +
             '"groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"]}},"allPassiveGears":false,' +
             '"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}')

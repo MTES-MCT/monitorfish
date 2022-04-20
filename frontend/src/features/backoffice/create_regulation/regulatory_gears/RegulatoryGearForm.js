@@ -173,6 +173,7 @@ const RegulatoryGearForm = (props) => {
         [key]: value
       }
     }
+    console.log(nextRegulatedGears)
     set(REGULATORY_GEAR_KEYS.REGULATED_GEARS, nextRegulatedGears)
   }
 
@@ -286,6 +287,7 @@ const RegulatoryGearForm = (props) => {
                 onChange={(key, value) => setRegulatedGear(key, value, gearCode)}
                 meshType={regulatedGears[gearCode].meshType}
                 mesh={regulatedGears[gearCode].mesh}
+                remarks={regulatedGears[gearCode].remarks}
                 onCloseIconClicked={_ => removeGearOrCategory(gearCode)}
               />
           })

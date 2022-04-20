@@ -264,12 +264,13 @@ context('NewRegulation', () => {
     cy.get('.rs-picker-toggle-placeholder')
       .filter(':contains("catégories d\'espèces")')
       .click({ timeout: 20000 })
-    cy.get('.rs-picker-search-bar-input').type('Espèce{enter}', { force: true })
+    cy.get('.rs-picker-search-bar-input')
+      .type('Espèce{enter}', { force: true })
     cy.get('.rs-picker-toggle-placeholder')
       .filter(':contains("des espèces")')
       .click({ timeout: 20000 })
-    cy.get('.rs-picker-select-menu-item').filter(':contains("HKE")').should('have.length', 1)
-    cy.get('.rs-picker-search-bar-input').type('HKE{enter}', { force: true })
+    cy.get('.rs-picker-search-bar-input')
+      .type('HKE{enter}', { force: true })
 
     // Values are found
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')

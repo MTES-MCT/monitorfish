@@ -60,8 +60,7 @@
 /**
  * @typedef RegulatorySpeciesDetail
  * @property {string} code - FAO code
- * @property {string} quantity
- * @property {string} minimumSize
+ * @property {string} remarks
  */
 
 /**
@@ -106,6 +105,5 @@
 /**
  * @typedef RegulatorySpeciesDetail
  * @property {string} code - FAO code
- * @property {string} quantity
- * @property {string} minimumSize
+ * @property {string} remarks
  */

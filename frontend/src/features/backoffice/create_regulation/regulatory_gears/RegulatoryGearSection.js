@@ -36,9 +36,12 @@ const RegulatoryGearSection = () => {
     <OtherRemark show={show}>
       <Label>Remarques générales</Label>
       <CustomInput
-        width={'730px'}
+        as="textarea"
+        rows={2}
+        placeholder=''
         value={regulatoryGears?.otherInfo || ''}
-        onChange={setOtherInfo}
+        onChange={event => setOtherInfo(event.target.value)}
+        width={'500px'}
         $isGray={regulatoryGears?.otherInfo && regulatoryGears?.otherInfo !== ''}
       />
     </OtherRemark>

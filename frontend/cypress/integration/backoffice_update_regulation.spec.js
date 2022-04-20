@@ -114,8 +114,7 @@ context('Update Regulation', () => {
       .filter(':contains("des espèces")')
       .click({ timeout: 20000 })
     cy.get('.rs-picker-search-bar-input').type('HKE{enter}')
-    cy.get('*[data-cy^="regulatory-species-quantity"]').eq(0).type('Ne pas en prendre beaucoup please')
-    cy.get('*[data-cy^="regulatory-species-minimum-size"]').eq(0).type('à peu près 60 cm')
+    cy.get('*[data-cy^="regulatory-species-remarks"]').eq(0).type('Ne pas en prendre beaucoup please')
     cy.get('*[data-cy^="regulatory-species-other-info"]').type('Mhm pas d\'autre info !')
 
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
@@ -166,8 +165,7 @@ context('Update Regulation', () => {
         expect(request.body)
           .contain('"authorized":true')
           .contain('"otherInfo":"Mhm pas d\'autre info !"')
-          .contain('{"species":[{"code":"URC","quantity":"500 kgNe pas en prendre beaucoup please","name":"OURSINS NCA",' +
-            '"minimumSize":"à peu près 60 cm"},{"code":"URX","quantity":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],' +
+          .contain('{"species":[{"code":"URC","remarks":"500 kg. Ne pas en prendre beaucoup please","name":"OURSINS NCA"},{"code":"URX","remarks":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],' +
             '"authorized":true,"speciesGroups":["Espèces eau profonde"]')
           .contain('{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !","authorized":true,' +
             '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines","category":"Chaluts",' +

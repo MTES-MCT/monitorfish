@@ -114,13 +114,15 @@ context('LayersSidebar', () => {
 
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('TBN (Chaluts à langoustines)')
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('inférieur à 123 mm')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Attention à cette espèce!')
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Dragues')
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('li', 'Drague sans dent et de largeur maximale 1,30 mètre')
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('li', 'Dragues avec dents !')
 
     cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('URC (OURSINS NCA)')
+    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('li', 'Pas plus de 500kg')
+    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('li', 'Autre remarque')
     cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('URX (OURSINS,ETC. NCA)')
-    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('500 kg')
 
     cy.get('*[data-cy="regulatory-layers-metadata-references"]').should('have.length', 1)
   })

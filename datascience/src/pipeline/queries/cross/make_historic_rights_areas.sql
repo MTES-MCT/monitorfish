@@ -7,7 +7,7 @@ It computes 3 areas on which to raise fishing alerts, depending on the flag
 state of the vessel:
 - one area for german vessels
 - one for belgian and dutch vessels
-- one for spanishg vessels
+- one for spanish vessels
 
 The computed areas are inserted into to the n_miles_to_shore_areas table.
 */

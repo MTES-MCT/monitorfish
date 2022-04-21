@@ -13,6 +13,10 @@ export const AlertTypes = {
   FRENCH_EEZ_FISHING_ALERT: {
     code: 'FRENCH_EEZ_FISHING_ALERT',
     name: 'Pêche en ZEE française par un navire tiers'
+  },
+  TWELVE_MILES_FISHING_ALERT: {
+    code: 'TWELVE_MILES_FISHING_ALERT',
+    name: '12 milles - Pêche sans droits historiques'
   }
 }
 

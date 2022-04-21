@@ -8,13 +8,13 @@ context('Alerts', () => {
     cy.visit(`http://localhost:${port}/side_window`)
   })
 
-  it('Six alerts Should be shown When clicking on the NAMO menu', () => {
+  it('Eight alerts Should be shown When clicking on the NAMO menu', () => {
     // When
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
 
     // Then
-    cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('7')
-    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 7)
+    cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('8')
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 8)
 
     cy.get('*[data-cy^="side-window-alerts-list"]').children().last().contains('LE b@TO')
     cy.get('*[data-cy^="side-window-alerts-list"]').children().last().contains('3 milles - Chaluts')

@@ -122,7 +122,7 @@ const RegulatoryGearForm = props => {
         } else {
           if (currentRegulatedGears.includes(value)) {
             nextRegulatedGears[value] = { ...regulatedGears[value] }
-          } else {
+          } else if (gearsByCode[value]) {
             nextRegulatedGears[value] = gearsByCode[value]
           }
         }

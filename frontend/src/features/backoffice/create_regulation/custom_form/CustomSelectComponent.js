@@ -51,7 +51,7 @@ const CustomSelectComponent = props => {
         }}
         groupBy={groupBy}
         disabled={disabled}
-        placement={placement || 'bottomStart'}
+        placement={placement || 'auto'}
       />
     </SelectWrapper>
   )

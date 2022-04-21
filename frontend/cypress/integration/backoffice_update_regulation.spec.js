@@ -166,8 +166,9 @@ context('Update Regulation', () => {
         expect(request.body)
           .contain('"authorized":true')
           .contain('"otherInfo":"Mhm pas d\'autre info !"')
-          .contain('{"species":[{"code":"URC","remarks":"500 kg. Ne pas en prendre beaucoup please","name":"OURSINS NCA"},{"code":"URX","remarks":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],' +
-            '"authorized":true,"speciesGroups":["Espèces eau profonde"]')
+          .contain('{"species":[{"code":"URC","remarks":"- Pas plus de 500kg\\n - Autre remarqueNe pas en prendre beaucoup please","name":"OURSINS NCA"},' +
+            '{"code":"URX","remarks":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],"authorized":true,' +
+            '"speciesGroups":["Espèces eau profonde"],"otherInfo":"Mhm pas d\'autre info !"}')
           .contain('{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !","authorized":true,' +
             '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines","category":"Chaluts",' +
             '"groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"]}},"allPassiveGears":false,' +

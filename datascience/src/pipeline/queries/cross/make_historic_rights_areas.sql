@@ -3,13 +3,13 @@ This query was used on the CROSS database to create the areas that are needed to
 raise fishing alerts in the french 12 mile coastal area by non-french vessels. It
 is not meant to be used by the data pipeline - only the resulting areas are needed.
 
-It creates 4 different areas on which to raise fishing alerts, depending on the flag
+It computes 3 areas on which to raise fishing alerts, depending on the flag
 state of the vessel:
 - one area for german vessels
 - one for belgian and dutch vessels
 - one for spanishg vessels
-- one for all other states
 
+The computed areas are inserted into to the n_miles_to_shore_areas table.
 */
 
 -- The coast line is unnecessarily heavy in details so we aggressively simplify it

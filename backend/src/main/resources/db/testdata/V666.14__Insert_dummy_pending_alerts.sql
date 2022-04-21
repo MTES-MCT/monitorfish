@@ -82,4 +82,11 @@ INSERT INTO pending_alerts (vessel_name,internal_reference_number,external_refer
     '"flagState": "FR",' ||
     '"riskFactor": 2.5647,' ||
     '"type": "THREE_MILES_TRAWLING_ALERT"' ||
-    '}')::jsonb);
+    '}')::jsonb),
+('TEMPÊTE COULEUR PUIS', 'ABC000118343', 'TO598604', 'MRCP', (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '1 hours 7 minutes', '2020005', 'INTERNAL_REFERENCE_NUMBER', ('{' ||
+        '"seaFront": "NAMO",' ||
+        '"flagState": "FR",' ||
+        '"riskFactor": 2.5,' ||
+        '"type": "FRENCH_EEZ_FISHING_ALERT"' ||
+        '}')::jsonb)
+;

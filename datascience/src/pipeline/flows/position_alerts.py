@@ -109,13 +109,22 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
     """
 
     alert_type_zones_tables = {
-        "THREE_MILES_TRAWLING_ALERT": "n_miles_to_shore_areas_subdivided",
+        "THREE_MILES_TRAWLING_ALERT": {
+            "table": "n_miles_to_shore_areas_subdivided",
+            "filter_column": "miles_to_shore",
+            "geometry_column": "geometry",
+        },
+        "FRENCH_EEZ_FISHING_ALERT": {
+            "table": "eez_areas",
+            "filter_column": "iso_sov1",
+            "geometry_column": "wkb_geometry",
+        },
     }
 
     logger = prefect.context.get("logger")
 
     try:
-        table_name = alert_type_zones_tables[alert_type]
+        table_info = alert_type_zones_tables[alert_type]
     except KeyError:
         raise ValueError(
             (
@@ -125,14 +134,16 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
         )
 
     zones_table = get_table(
-        table_name,
+        table_info["table"],
         schema="public",
         engine=create_engine("monitorfish_remote"),
         logger=logger,
     )
 
     zones_table = ZonesTable(
-        table=zones_table, filter_column="miles_to_shore", geometry_column="geometry"
+        table=zones_table,
+        filter_column=table_info["filter_column"],
+        geometry_column=table_info["geometry_column"],
     )
 
     return zones_table
@@ -164,9 +175,28 @@ def make_positions_in_alert_query(
     zones: List = None,
     hours_from_now: int = 8,
     flag_states: List = None,
+    except_flag_states: List = None,
 ) -> Select:
     """
     Creates select statement for the query to execute to compute positions in alert.
+
+    Args:
+        positions_table (Table): `SQLAlchemy.Table` of positions.
+        facades_table (Table): `SQLAlchemy.Table` of façades.
+        zones_table (ZonesTable): `ZonesTable` of zones.
+        only_fishing_positions (bool): If `True`, filters positions to keep only
+          positions tagged as `is_fishing`.
+        zones (List, optional): If provided, adds a
+          'WHERE zones.filter_column IN zones' clause to the query. Defaults to None.
+        hours_from_now (int, optional): Determines how many hours back in the past the
+          `positions` table will be scanned. Defaults to 8.
+        flag_states (List, optional): If given, filters positions to keep only those of
+          vessels that belong to these flag_states. Defaults to None.
+        except_flag_states (List, optional): If given, filters positions to keep only those of
+          vessels that do NOT belong to these flag_states. Defaults to None.
+
+    Returns:
+        Select: `SQLAlchemy.Select` statement corresponding to the given parameters.
     """
 
     now = datetime.utcnow()
@@ -221,6 +251,9 @@ def make_positions_in_alert_query(
 
     if flag_states:
         q = q.where(positions_table.c.flag_state.in_(flag_states))
+
+    if except_flag_states:
+        q = q.where(positions_table.c.flag_state.notin_(except_flag_states))
 
     return q
 
@@ -466,6 +499,7 @@ with Flow("Position alert") as flow:
     hours_from_now = Parameter("hours_from_now", default=8)
     only_fishing_positions = Parameter("only_fishing_positions", default=True)
     flag_states = Parameter("flag_states", default=None)
+    except_flag_states = Parameter("except_flag_states", default=None)
     fishing_gears = Parameter("fishing_gears", default=None)
     fishing_gear_categories = Parameter("fishing_gear_categories", default=None)
     include_vessels_unknown_gear = Parameter(
@@ -488,6 +522,7 @@ with Flow("Position alert") as flow:
         zones=zones,
         hours_from_now=hours_from_now,
         flag_states=flag_states,
+        except_flag_states=except_flag_states,
     )
 
     positions_in_alert = extract_positions_in_alert(positions_query)

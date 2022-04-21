@@ -45,6 +45,10 @@ from src.pipeline.flows import (
     update_beacon_malfunctions,
     vessels,
 )
+from src.pipeline.helpers.country_codes import (
+    european_union_country_codes_iso_2,
+    french_vessels_country_codes_iso_2,
+)
 
 ################################ Define flow schedules ################################
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")
@@ -106,6 +110,22 @@ position_alerts.flow.schedule = Schedule(
                 "only_fishing_positions": True,
                 "fishing_gear_categories": ["Chaluts"],
                 "include_vessels_unknown_gear": True,
+            },
+        ),
+        clocks.CronClock(
+            "*/10 * * * *",
+            parameter_defaults={
+                "alert_type": "FRENCH_EEZ_FISHING_ALERT",
+                "zones": ["FRA"],
+                "hours_from_now": 8,
+                "only_fishing_positions": True,
+                "except_flag_state": list(
+                    set(
+                        european_union_country_codes_iso_2
+                        + french_vessels_country_codes_iso_2
+                        + ["VE"]
+                    )
+                ),
             },
         ),
     ]

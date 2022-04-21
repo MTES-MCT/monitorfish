@@ -173,7 +173,6 @@ const RegulatoryGearForm = (props) => {
         [key]: value
       }
     }
-    console.log(nextRegulatedGears)
     set(REGULATORY_GEAR_KEYS.REGULATED_GEARS, nextRegulatedGears)
   }
 

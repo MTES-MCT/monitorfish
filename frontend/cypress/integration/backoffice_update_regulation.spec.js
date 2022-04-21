@@ -147,6 +147,7 @@ context('Update Regulation', () => {
     cy.get('.rs-checkbox-checker')
       .filter(':contains("TX - Autres chaluts")')
       .click({ timeout: 20000 })
+      .type('{esc}')
 
     cy.get('.rs-picker-select')
       .filter(':contains("inférieur à")')

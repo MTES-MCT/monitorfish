@@ -119,7 +119,7 @@ position_alerts.flow.schedule = Schedule(
                 "zones": ["FRA"],
                 "hours_from_now": 8,
                 "only_fishing_positions": True,
-                "except_flag_state": list(
+                "except_flag_states": list(
                     set(
                         european_union_country_codes_iso_2
                         + french_vessels_country_codes_iso_2

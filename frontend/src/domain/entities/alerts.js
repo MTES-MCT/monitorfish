@@ -9,6 +9,10 @@ export const AlertTypes = {
   THREE_MILES_TRAWLING_ALERT: {
     code: 'THREE_MILES_TRAWLING_ALERT',
     name: '3 milles - Chaluts'
+  },
+  FRENCH_EEZ_FISHING_ALERT: {
+    code: 'FRENCH_EEZ_FISHING_ALERT',
+    name: 'Pêche en ZEE française par un navire tiers'
   }
 }
 

@@ -697,49 +697,6 @@ export const sortLayersTopicsByRegTerritory = (layersTopicsByRegTerritory) => {
   }
 }
 
-const CATEGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']
-
-/**
- *
- * @param {Object.<string, Gear[]>} categoriesToGears
- * @returns
- */
-export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
-  const SORTED_CATEGORY_LIST = [
-    'Chaluts', 'Sennes traînantes', 'Dragues', 'Sennes tournantes coulissantes',
-    'Filets tournants', 'Filets maillants et filets emmêlants', 'Filets soulevés',
-    'Lignes et hameçons', 'Pièges', 'Palangres', 'Gangui', 'Engins de récolte', 'Engins divers'
-  ]
-
-  return SORTED_CATEGORY_LIST.map(category => {
-    if (!CATEGORIES_TO_HIDE.includes(category) && categoriesToGears[category]) {
-      const categoryGearList = [...categoriesToGears[category]]
-      const gears = categoryGearList
-        .sort((gearA, gearB) => {
-          if (gearA.name < gearB.name) {
-            return -1
-          }
-          if (gearA.name > gearB.name) {
-            return 1
-          }
-          return 0
-        })
-        .map((gear) => {
-          return {
-            label: `${gear.code} - ${gear.name}`,
-            value: gear.code
-          }
-        })
-      return {
-        label: category,
-        value: category,
-        children: gears
-      }
-    }
-    return null
-  }).filter(gears => gears)
-}
-
 export const getTitle = regulatory => regulatory
   ? regulatory.zone
   : ''

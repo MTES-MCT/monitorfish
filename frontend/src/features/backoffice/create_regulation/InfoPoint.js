@@ -2,8 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 
-const InfoPoint = ({ margin, color, backgroundColor, onMouseEnter, onMouseOut }) => {
+const InfoPoint = ({ title, dataCy, margin, color, backgroundColor, onMouseEnter, onMouseOut }) => {
   return <Wrapper
+    data-cy={dataCy}
+    title={title}
     margin={margin}
     color={color}
     backgroundColor={backgroundColor}

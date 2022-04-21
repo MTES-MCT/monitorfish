@@ -4,7 +4,7 @@ import CodeAndName from './CodeAndName'
 import { GEAR_MESH_SIZE } from '../../../../domain/entities/backoffice'
 import ReactMarkdown from 'react-markdown'
 
-const GearsOrGearCategories = ({ list }) => {
+const GearsOrGearCategories = ({ list, isCategory, categoriesToGears }) => {
   return <>{Object.keys(list).length > 0
     ? Object.keys(list).map(elem => {
       const {
@@ -16,7 +16,12 @@ const GearsOrGearCategories = ({ list }) => {
       } = list[elem]
 
       return (<Elem key={elem}>
-        <CodeAndName code={code} name={name} />
+        <CodeAndName
+          code={code}
+          name={name}
+          isCategory={isCategory}
+          categoriesToGears={categoriesToGears}
+        />
         <Fields>
           {mesh &&
           <Field>

@@ -118,6 +118,13 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Dragues')
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('li', 'Drague sans dent et de largeur maximale 1,30 mètre')
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('li', 'Dragues avec dents !')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears-category-with-infobox"]')
+      .should('have.attr', 'title', 'DHS - Drague à main manœuvrée à partir du rivage \n' +
+        'DHB - Drague à main manœuvrée à partir du bateau \n' +
+        'HMD - Dragues mécanisées incluant les dragues suceuses \n' +
+        'DRH - Dragues à main utilisées à bord d\'un bateau \n' +
+        'DRB - Dragues remorquées par bateau \n' +
+        'DRM - Dragues mécanisées \n')
 
     cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('URC (OURSINS NCA)')
     cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('li', 'Pas plus de 500kg')
@@ -143,6 +150,10 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-region"]').should('exist')
     cy.log('Fishing period should not be seen if it has an empty message')
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').should('not.exist')
+
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Tous les engins trainants')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears-towed-gears"]').children()
+      .should('have.attr', 'title', 'Chaluts, dragues et sennes traînantes')
   })
 
   it('An advanced search Should filter the search result', () => {

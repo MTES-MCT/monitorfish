@@ -4,7 +4,6 @@ export const BACKOFFICE_SEARCH_PROPERTIES = [
   REGULATORY_SEARCH_PROPERTIES.TOPIC,
   REGULATORY_SEARCH_PROPERTIES.ZONE,
   REGULATORY_SEARCH_PROPERTIES.REGION,
-  REGULATORY_SEARCH_PROPERTIES.SEAFRONT,
   REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES
 ]
 
@@ -15,4 +14,72 @@ export const GEAR_MESH_SIZE = {
   lowerThanOrEqualTo: 'lowerThanOrEqualTo',
   equal: 'equal',
   between: 'between'
+}
+
+export const REGULATORY_GEAR_KEYS = {
+  AUTHORIZED: 'authorized',
+  ALL_GEARS: 'allGears',
+  ALL_TOWED_GEARS: 'allTowedGears',
+  ALL_PASSIVE_GEARS: 'allPassiveGears',
+  REGULATED_GEARS: 'regulatedGears',
+  REGULATED_GEAR_CATEGORIES: 'regulatedGearCategories',
+  SELECTED_GEARS_AND_CATEGORIES: 'selectedCategoriesAndGears',
+  DEROGATION: 'derogation'
+}
+
+export const SORTED_CATEGORY_LIST = [
+  'Chaluts', 'Sennes traînantes', 'Dragues', 'Sennes tournantes coulissantes',
+  'Filets tournants', 'Filets maillants et filets emmêlants', 'Filets soulevés',
+  'Lignes et hameçons', 'Pièges', 'Palangres', 'Gangui', 'Engins de récolte', 'Engins divers'
+]
+
+const CATEGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']
+
+/**
+ *
+ * @param {Object.<string, Gear[]>} categoriesToGears
+ * @returns
+ */
+export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
+  return SORTED_CATEGORY_LIST.map(category => {
+    if (!CATEGORIES_TO_HIDE.includes(category) && categoriesToGears[category]) {
+      const categoryGearList = [...categoriesToGears[category]]
+      const gears = categoryGearList
+        .sort((gearA, gearB) => {
+          if (gearA.name < gearB.name) {
+            return -1
+          }
+          if (gearA.name > gearB.name) {
+            return 1
+          }
+          return 0
+        })
+        .map((gear) => {
+          return {
+            label: `${gear.code} - ${gear.name}`,
+            value: gear.code
+          }
+        })
+      return {
+        label: category,
+        value: category,
+        children: gears
+      }
+    }
+    return null
+  }).filter(gears => gears)
+}
+
+export const getGroupCategories = (option, groupsToCategories) => {
+  switch (option) {
+    case REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS: {
+      return groupsToCategories[REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS]
+    }
+    case REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS: {
+      return groupsToCategories[REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS]
+    }
+    case REGULATORY_GEAR_KEYS.ALL_GEARS: {
+      return SORTED_CATEGORY_LIST
+    }
+  }
 }

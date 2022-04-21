@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 
-export const Label = styled.span``
+export const Label = styled.div`
+  display: flex;
+`
 
 export const Elem = styled.li`
   list-style-type: none;

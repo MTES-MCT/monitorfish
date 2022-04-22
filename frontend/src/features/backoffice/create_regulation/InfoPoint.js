@@ -38,6 +38,7 @@ const Wrapper = styled.a`
     text-decoration: none;
     background-color: ${props => props.backgroundColor ? props.backgroundColor : COLORS.charcoal};
   }
+  cursor: help;
 `
 
 export default InfoPoint

@@ -22,7 +22,6 @@ import { setProcessingRegulationSaved } from './Regulation.slice'
 import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
 import layer from '../../domain/shared_slices/Layer'
 import getAllSpecies from '../../domain/use_cases/species/getAllSpecies'
-/* import { SecondaryButton } from '../commonStyles/Buttons.style' */
 
 const Backoffice = () => {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})

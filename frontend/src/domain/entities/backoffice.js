@@ -30,7 +30,7 @@ export const REGULATORY_GEAR_KEYS = {
 export const SORTED_CATEGORY_LIST = [
   'Chaluts', 'Sennes traînantes', 'Dragues', 'Sennes tournantes coulissantes',
   'Filets tournants', 'Filets maillants et filets emmêlants', 'Filets soulevés',
-  'Lignes et hameçons', 'Pièges', 'Palangres', 'Gangui', 'Engins de récolte', 'Engins divers'
+  'Lignes et hameçons', 'Pièges et casiers', 'Palangres', 'Gangui', 'Engins de récolte', 'Engins divers'
 ]
 
 const CATEGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']

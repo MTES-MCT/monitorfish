@@ -118,7 +118,8 @@ const gearsIsNotEmpty = regulatoryGears => regulatoryGears?.allGears ||
   regulatoryGears?.otherInfo ||
   Object.keys(regulatoryGears?.regulatedGears || {})?.length ||
   Object.keys(regulatoryGears?.regulatedGearCategories || {})?.length ||
-  regulatoryGears?.selectedCategoriesAndGears?.length
+  regulatoryGears?.selectedCategoriesAndGears?.length ||
+  regulatoryGears?.derogation
 
 const Derogation = styled.span`
   display: flex;

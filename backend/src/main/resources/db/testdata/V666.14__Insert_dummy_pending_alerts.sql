@@ -88,5 +88,11 @@ INSERT INTO pending_alerts (vessel_name,internal_reference_number,external_refer
         '"flagState": "FR",' ||
         '"riskFactor": 2.5,' ||
         '"type": "FRENCH_EEZ_FISHING_ALERT"' ||
+        '}')::jsonb),
+('ASSURER TON COMME', 'ABC000207106', 'DC896841', 'MNMN', (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '2 hours 7 minutes', '2020009', 'INTERNAL_REFERENCE_NUMBER', ('{' ||
+        '"seaFront": "NAMO",' ||
+        '"flagState": "FR",' ||
+        '"riskFactor": 2.2,' ||
+        '"type": "TWELVE_MILES_FISHING_ALERT"' ||
         '}')::jsonb)
 ;

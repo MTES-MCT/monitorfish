@@ -1,16 +1,17 @@
-
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { SectionTitle, Section, List, Elem, Key, Label, Value, Fields, Field } from './RegulatoryMetadata.style'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
 import CodeAndName from './CodeAndName'
+import ReactMarkdown from 'react-markdown'
+
 const MetadataSpecies = () => {
   const { regulatorySpecies } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
   const {
     allSpecies
   } = regulatorySpecies
 
-  return <>{regulatorySpecies?.authorized !== undefined &&
+  return <>{regulatorySpecies?.authorized !== undefined && speciesIsNotEmpty(regulatorySpecies) &&
     <Section data-cy={'regulatory-layers-metadata-species'}>
       <SectionTitle>
         {
@@ -26,13 +27,20 @@ const MetadataSpecies = () => {
           {
             regulatorySpecies.species.length > 0
               ? regulatorySpecies.species.map(_species => {
-                const { code, name, quantity, minimumSize } = _species
+                const { code, name, remarks } = _species
                 return (
                   <Elem key={code}>
                     <CodeAndName code={code} name={name} />
                     <Fields>
-                      {quantity && <Field><Key>Quantité</Key><Value>{quantity}</Value></Field>}
-                      {minimumSize && <Field><Key>Taille min.</Key><Value>{minimumSize}</Value></Field>}
+                      {remarks &&
+                      <Field>
+                        <Key>Remarques</Key>
+                        <Value>
+                          <ReactMarkdown>
+                            {remarks}
+                          </ReactMarkdown>
+                        </Value>
+                      </Field>}
                     </Fields>
                   </Elem>
                 )
@@ -50,12 +58,16 @@ const MetadataSpecies = () => {
       }
       {
         regulatorySpecies.otherInfo &&
-        <><SectionTitle>Mesures techniques</SectionTitle>
+        <ReactMarkdown>
           {regulatorySpecies.otherInfo}
-        </>
+        </ReactMarkdown>
       }
     </Section>
   }</>
 }
+
+const speciesIsNotEmpty = regulatorySpecies => regulatorySpecies.otherInfo ||
+  regulatorySpecies.speciesGroups.length > 0 ||
+  regulatorySpecies.species.length > 0
 
 export default MetadataSpecies

@@ -38,13 +38,17 @@ const RegulatorySpeciesSection = () => {
       show={show}
     />
     <OtherRemark show={show}>
-      <Label>Autres points sur les espèces</Label>
+      <Label>Remarques générales</Label>
       <CustomInput
         data-cy={'regulatory-species-other-info'}
-        width={'730px'}
+        as="textarea"
+        rows={2}
+        placeholder=''
         value={regulatorySpecies?.otherInfo || ''}
-        onChange={setOtherInfo}
-        $isGray={regulatorySpecies.otherInfo && regulatorySpecies.otherInfo !== ''} />
+        onChange={event => setOtherInfo(event.target.value)}
+        width={'500px'}
+        $isGray={regulatorySpecies?.otherInfo && regulatorySpecies?.otherInfo !== ''}
+      />
     </OtherRemark>
   </Section>
 }

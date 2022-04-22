@@ -2,7 +2,7 @@ import { setError } from '../../../shared_slices/Global'
 import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, REGULATION_ACTION_TYPE } from '../../../entities/regulatory'
 import { Feature } from 'ol'
 
-import { setLayersTopicsByRegTerritory } from '../../../shared_slices/Regulatory'
+import { setLayersTopicsByRegTerritory, setRegulatoryLayerLawTypes } from '../../../shared_slices/Regulatory'
 import { sendRegulationTransaction } from '../../../../api/geoserver'
 
 const UPDATE_TOPIC_NAME_ERROR = 'Une erreur est survenue lors la mise à jour de la thématique'
@@ -37,6 +37,7 @@ const updateTopicForAllZones = (territory, lawType, oldLayerName, newLayerName) 
       .then(_ => {
         const newLayersTopicsByRegTerritory = mutateLayersTopicsWithNewTopic(layersTopicsByRegTerritory, territory, lawType, newLayerName, oldLayerName)
         dispatch(setLayersTopicsByRegTerritory(newLayersTopicsByRegTerritory))
+        dispatch(setRegulatoryLayerLawTypes(newLayersTopicsByRegTerritory))
       })
       .catch(e => {
         console.error(e)

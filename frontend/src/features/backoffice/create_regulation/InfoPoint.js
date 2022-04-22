@@ -2,8 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 
-const InfoPoint = ({ margin, color, backgroundColor, onMouseEnter, onMouseOut }) => {
+const InfoPoint = ({ title, dataCy, margin, color, backgroundColor, onMouseEnter, onMouseOut }) => {
   return <Wrapper
+    data-cy={dataCy}
+    title={title}
     margin={margin}
     color={color}
     backgroundColor={backgroundColor}
@@ -36,6 +38,7 @@ const Wrapper = styled.a`
     text-decoration: none;
     background-color: ${props => props.backgroundColor ? props.backgroundColor : COLORS.charcoal};
   }
+  cursor: help;
 `
 
 export default InfoPoint

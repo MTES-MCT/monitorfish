@@ -9,7 +9,7 @@ import showRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regul
 import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
-import { showOrHideMetadataIcon } from '../RegulatoryLayerZone'
+import { showOrHideMetadataIcon } from '../RegulatoryZone'
 
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'

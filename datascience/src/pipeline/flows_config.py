@@ -119,13 +119,53 @@ position_alerts.flow.schedule = Schedule(
                 "zones": ["FRA"],
                 "hours_from_now": 8,
                 "only_fishing_positions": True,
-                "except_flag_state": list(
+                "except_flag_states": list(
                     set(
                         european_union_country_codes_iso_2
                         + french_vessels_country_codes_iso_2
                         + ["VE"]
                     )
                 ),
+            },
+        ),
+        clocks.CronClock(
+            "*/10 * * * *",
+            parameter_defaults={
+                "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                "zones": ["0-12_MINUS_BE_AND_NL_FISHING_AREAS"],
+                "hours_from_now": 8,
+                "only_fishing_positions": True,
+                "flag_states": ["BE", "NL"],
+            },
+        ),
+        clocks.CronClock(
+            "*/10 * * * *",
+            parameter_defaults={
+                "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                "zones": ["0-12_MINUS_ES_FISHING_AREAS"],
+                "hours_from_now": 8,
+                "only_fishing_positions": True,
+                "flag_states": ["ES"],
+            },
+        ),
+        clocks.CronClock(
+            "*/10 * * * *",
+            parameter_defaults={
+                "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                "zones": ["0-12_MINUS_DE_FISHING_AREAS"],
+                "hours_from_now": 8,
+                "only_fishing_positions": True,
+                "flag_states": ["DE"],
+            },
+        ),
+        clocks.CronClock(
+            "*/10 * * * *",
+            parameter_defaults={
+                "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                "zones": ["0-3", "3-6", "6-12", "0-12"],
+                "hours_from_now": 8,
+                "only_fishing_positions": True,
+                "except_flag_states": ["FR", "PF", "VE", "BE", "NL", "DE", "ES"],
             },
         ),
     ]

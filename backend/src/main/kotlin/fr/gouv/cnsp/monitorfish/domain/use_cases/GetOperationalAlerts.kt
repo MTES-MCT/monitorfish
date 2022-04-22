@@ -11,6 +11,10 @@ class GetOperationalAlerts(private val pendingAlertRepository: PendingAlertRepos
     private val logger = LoggerFactory.getLogger(GetOperationalAlerts::class.java)
 
     fun execute(): List<PendingAlert> {
-        return pendingAlertRepository.findAlertsOfTypes(listOf(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT, AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT))
+        return pendingAlertRepository.findAlertsOfTypes(listOf(
+            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+            AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
+            AlertTypeMapping.TWELVE_MILES_FISHING_ALERT
+        ))
     }
 }

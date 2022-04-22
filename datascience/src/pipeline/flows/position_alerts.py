@@ -114,6 +114,11 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
             "filter_column": "miles_to_shore",
             "geometry_column": "geometry",
         },
+        "TWELVE_MILES_FISHING_ALERT": {
+            "table": "n_miles_to_shore_areas_subdivided",
+            "filter_column": "miles_to_shore",
+            "geometry_column": "geometry",
+        },
         "FRENCH_EEZ_FISHING_ALERT": {
             "table": "eez_areas",
             "filter_column": "iso_sov1",

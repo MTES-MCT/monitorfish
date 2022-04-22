@@ -35,7 +35,7 @@ export const INFO_TEXT = {
   - ou numérique ("Zone 1"),
   - ou spécifiant une autre caractéristique ("Zone pour navire > 10m").`,
   TOWED_GEAR: 'Chaluts, dragues et sennes traînantes',
-  PASSIVE_GEAR: 'Filets maillants et emmêlants, filets soulevés, pièges, lignes et hameçons'
+  PASSIVE_GEAR: 'Filets maillants et emmêlants, filets soulevés, pièges et casiers, lignes et hameçons'
 }
 
 export const INFINITE = 'infinite'

@@ -13,7 +13,6 @@ export const Label = styled.span`
 
 export const CustomInput = styled(Input)`
   font-size: 13px;
-  height: 35px;
   ${props => props.width ? '' : 'min-width: 100px;'}
   ${props => props.width ? `width: ${props.width};` : ''}
   border: 1px solid ${props => props.$isRed ? `${COLORS.maximumRed}` : `${COLORS.lightGray}`};

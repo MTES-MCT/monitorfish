@@ -37,7 +37,7 @@ const RegulatorySpeciesForm = props => {
     formattedSpecies
   } = useSelector(state => {
     const formattedSpeciesGroups = [...state.species.speciesGroups]
-      ?.sort((speciesA, speciesB) => speciesB.group - speciesA.group)
+      ?.sort((speciesA, speciesB) => speciesA.group?.localeCompare(speciesB.group))
       .map(speciesGroup => ({
         label: speciesGroup.group,
         value: speciesGroup.group
@@ -45,7 +45,7 @@ const RegulatorySpeciesForm = props => {
 
     const formattedSpecies = state.species.speciesByCode
       ? Object.values(state.species.speciesByCode)
-        .sort((speciesA, speciesB) => speciesB.code - speciesA.code)
+        .sort((speciesA, speciesB) => speciesA.name?.localeCompare(speciesB.name))
         .map(_species => ({
           label: `${_species.name} (${_species.code})`,
           value: _species.code
@@ -90,20 +90,19 @@ const RegulatorySpeciesForm = props => {
     }
 
     if (!authorized && species?.length) {
-      initSpeciesQuantityAndMinimumSize()
+      initSpeciesWithRemarks()
     }
 
     if (allSpecies && authorized) {
       set(REGULATORY_SPECIES_KEYS.ALL_SPECIES, false)
     }
 
-    function initSpeciesQuantityAndMinimumSize () {
+    function initSpeciesWithRemarks () {
       const nextSpecies = [...species]
         .map(_species => {
           return {
             ..._species,
-            minimumSize: undefined,
-            quantity: undefined
+            remarks: undefined
           }
         })
       set(REGULATORY_SPECIES_KEYS.SPECIES, nextSpecies)
@@ -164,8 +163,7 @@ const RegulatorySpeciesForm = props => {
       push(REGULATORY_SPECIES_KEYS.SPECIES, species, {
         code: value,
         name: speciesByCode[value]?.name,
-        quantity: undefined,
-        minimumSize: undefined
+        remarks: undefined
       })
     }
   }
@@ -284,25 +282,20 @@ const RegulatorySpeciesForm = props => {
                     />
                   </SpeciesDetail>
                   <SpeciesDetail>
-                    <Label>Quantités</Label>
+                    <Label>Remarques</Label>
                     <CustomInput
-                      data-cy={'regulatory-species-quantity'}
+                      data-cy={'regulatory-species-remarks'}
+                      as="textarea"
+                      rows={2}
                       placeholder=''
-                      value={speciesValue.quantity || ''}
-                      onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, quantity: value })}
-                      width={'200px'}
-                      $isGray={species.find(_species => _species.code === speciesValue.code)?.quantity}
-                    />
-                  </SpeciesDetail>
-                  <SpeciesDetail>
-                    <Label>Taille minimale</Label>
-                    <CustomInput
-                      data-cy={'regulatory-species-minimum-size'}
-                      placeholder=''
-                      value={speciesValue.minimumSize || ''}
-                      onChange={value => update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, { ...speciesValue, minimumSize: value })}
-                      width={'200px'}
-                      $isGray={species.find(_species => _species.code === speciesValue.code)?.minimumSize}
+                      value={speciesValue.remarks || ''}
+                      onChange={event =>
+                        update(index, REGULATORY_SPECIES_KEYS.SPECIES, species, {
+                          ...speciesValue,
+                          remarks: event.target.value
+                        })}
+                      width={'300px'}
+                      $isGray={species.find(_species => _species.code === speciesValue.code)?.remarks}
                     />
                   </SpeciesDetail>
                 </SpeciesDetails>

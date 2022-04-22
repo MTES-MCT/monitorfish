@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import RegulatoryLayerTopic from './RegulatoryLayerTopic'
+import RegulatoryLayerTopic from './RegulatoryTopic'
 import { COLORS } from '../../../constants/constants'
 import removeRegulatoryZoneFromMySelection from '../../../domain/use_cases/layer/regulation/removeRegulatoryZoneFromMySelection'
 import LayersEnum, { layersType } from '../../../domain/entities/layers'

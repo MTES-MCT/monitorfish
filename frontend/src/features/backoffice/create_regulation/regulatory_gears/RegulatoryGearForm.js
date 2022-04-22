@@ -1,31 +1,30 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
-  CustomCheckbox, customRadioGroup, AuthorizedRadio,
-  Delimiter, RegulatorySectionTitle, FormSection, FormContent
+  AuthorizedRadio,
+  CustomCheckbox,
+  customRadioGroup,
+  Delimiter,
+  FormContent,
+  FormSection,
+  RegulatorySectionTitle
 } from '../../../commonStyles/Backoffice.style'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { Radio, RadioGroup, MultiCascader } from 'rsuite'
+import { MultiCascader, Radio, RadioGroup } from 'rsuite'
 import GearLine from './GearLine'
 import getAllGearCodes from '../../../../domain/use_cases/gearCode/getAllGearCodes'
-import { GEARS_CATEGORIES_WITH_MESH, prepareCategoriesAndGearsToDisplay } from '../../../../domain/entities/regulatory'
+import { GEARS_CATEGORIES_WITH_MESH } from '../../../../domain/entities/regulatory'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
-import { RedCircle, GreenCircle } from '../../../commonStyles/Circle.style'
+import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
+import {
+  getGroupCategories,
+  prepareCategoriesAndGearsToDisplay,
+  REGULATORY_GEAR_KEYS
+} from '../../../../domain/entities/backoffice'
 
-const REGULATORY_GEAR_KEYS = {
-  AUTHORIZED: 'authorized',
-  ALL_GEARS: 'allGears',
-  ALL_TOWED_GEARS: 'allTowedGears',
-  ALL_PASSIVE_GEARS: 'allPassiveGears',
-  REGULATED_GEARS: 'regulatedGears',
-  REGULATED_GEAR_CATEGORIES: 'regulatedGearCategories',
-  SELECTED_GEARS_AND_CATEGORIES: 'selectedCategoriesAndGears',
-  DEROGATION: 'derogation'
-}
-
-const RegulatoryGearForm = (props) => {
+const RegulatoryGearForm = props => {
   const {
     regulatoryGears,
     setRegulatoryGears,
@@ -53,6 +52,7 @@ const RegulatoryGearForm = (props) => {
     groupsToCategories,
     gearsByCode
   } = useSelector(state => state.gear)
+
   /** @type {string[]} */
   const [formattedAndFilteredCategoriesToGears, setFormattedAndFilteredCategoriesToGears] = useState([])
 
@@ -68,29 +68,15 @@ const RegulatoryGearForm = (props) => {
     }
   }, [categoriesToGears])
 
-  const onCheckboxChange = (option, checked) => {
+  const onCheckboxChange = (groupName, checked) => {
     let nextSelectedCategoriesAndGears = selectedCategoriesAndGears ? [...selectedCategoriesAndGears] : []
-    let listToConcat = []
-    switch (option) {
-      case REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS: {
-        listToConcat = groupsToCategories[1]
-        break
-      }
-      case REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS: {
-        listToConcat = groupsToCategories[2]
-        break
-      }
-      case REGULATORY_GEAR_KEYS.ALL_GEARS: {
-        listToConcat = formattedAndFilteredCategoriesToGears.map(category => category.value)
-        break
-      }
-    }
+    const gearsListToConcatOrFilter = getGroupCategories(groupName, groupsToCategories)
 
     if (checked) {
-      const set = new Set(nextSelectedCategoriesAndGears.concat(listToConcat))
+      const set = new Set(nextSelectedCategoriesAndGears.concat(gearsListToConcatOrFilter))
       nextSelectedCategoriesAndGears = Array.from(set.values())
     } else {
-      nextSelectedCategoriesAndGears = nextSelectedCategoriesAndGears.filter(value => !listToConcat.includes(value))
+      nextSelectedCategoriesAndGears = nextSelectedCategoriesAndGears.filter(value => !gearsListToConcatOrFilter.includes(value))
     }
 
     set(REGULATORY_GEAR_KEYS.SELECTED_GEARS_AND_CATEGORIES, nextSelectedCategoriesAndGears)
@@ -126,9 +112,9 @@ const RegulatoryGearForm = (props) => {
             nextRegulatedGearCategories[value] = { name: value }
           }
 
-          if (groupsToCategories[1].includes(value)) {
+          if (groupsToCategories[REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS].includes(value)) {
             towedGearCategories += 1
-          } else if (groupsToCategories[2].includes(value)) {
+          } else if (groupsToCategories[REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS].includes(value)) {
             passiveGearCategories += 1
           }
 
@@ -136,7 +122,7 @@ const RegulatoryGearForm = (props) => {
         } else {
           if (currentRegulatedGears.includes(value)) {
             nextRegulatedGears[value] = { ...regulatedGears[value] }
-          } else {
+          } else if (gearsByCode[value]) {
             nextRegulatedGears[value] = gearsByCode[value]
           }
         }
@@ -145,8 +131,8 @@ const RegulatoryGearForm = (props) => {
       const nextRegulatedGearsObject = {
         ...regulatoryGears,
         [REGULATORY_GEAR_KEYS.ALL_GEARS]: categories === formattedAndFilteredCategoriesToGears.length,
-        [REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS]: towedGearCategories === groupsToCategories[1].length,
-        [REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS]: passiveGearCategories === groupsToCategories[2].length,
+        [REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS]: towedGearCategories === groupsToCategories[REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS].length,
+        [REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS]: passiveGearCategories === groupsToCategories[REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS].length,
         [REGULATORY_GEAR_KEYS.REGULATED_GEARS]: nextRegulatedGears,
         [REGULATORY_GEAR_KEYS.REGULATED_GEAR_CATEGORIES]: nextRegulatedGearCategories
       }
@@ -259,6 +245,19 @@ const RegulatoryGearForm = (props) => {
         onChange={values => set(REGULATORY_GEAR_KEYS.SELECTED_GEARS_AND_CATEGORIES, values)}
         value={selectedCategoriesAndGears || []}
         placement='autoVerticalStart'
+        onSelect={(item, activePaths) => {
+          if (activePaths.length !== 2) {
+            return
+          }
+
+          if (!selectedCategoriesAndGears?.find(value => value === item.value)) {
+            set(REGULATORY_GEAR_KEYS.SELECTED_GEARS_AND_CATEGORIES, selectedCategoriesAndGears.concat(item.value))
+          }
+
+          if (selectedCategoriesAndGears?.find(value => value === item.value)) {
+            set(REGULATORY_GEAR_KEYS.SELECTED_GEARS_AND_CATEGORIES, selectedCategoriesAndGears.filter(tag => tag !== item.value))
+          }
+        }}
       />
       {(Object.keys(regulatedGears)?.length > 0 || Object.keys(regulatedGearCategories)?.length > 0)
         ? <GearList>
@@ -273,6 +272,7 @@ const RegulatoryGearForm = (props) => {
                 onChange={(key, value) => setRegulatedGear(key, value, gearCode)}
                 meshType={regulatedGears[gearCode].meshType}
                 mesh={regulatedGears[gearCode].mesh}
+                remarks={regulatedGears[gearCode].remarks}
                 onCloseIconClicked={_ => removeGearOrCategory(gearCode)}
               />
           })

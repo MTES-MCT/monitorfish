@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 
-export const Label = styled.span``
+export const Label = styled.div`
+  display: flex;
+`
 
 export const Elem = styled.li`
   list-style-type: none;
@@ -35,12 +37,19 @@ export const Value = styled.td`
   color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
-  padding: 1px 5px 5px 5px;
+  padding: 1px 5px ${props => props.isNotLastItem ? 0 : 5}px 5px;
   background: none;
   border: none;
   line-height: normal;
   font-size: 13px;
   font-weight: 500;
+  
+  p {
+    margin: 0;
+  }
+  ul {
+    margin: 0;
+  }
 `
 
 export const Section = styled.div`
@@ -52,6 +61,13 @@ export const Section = styled.div`
   padding: 15px 45px 15px 20px;
   text-align: left;
   border-bottom: 1px solid ${COLORS.lightGray};
+  
+  p {
+    margin: 0;
+  }
+  ul {
+    margin: 0;
+  }
 `
 
 export const SectionTitle = styled.span`

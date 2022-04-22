@@ -5,7 +5,12 @@ import { Key, Value, Fields, Field } from './RegulatoryMetadata.style'
 import { useSelector } from 'react-redux'
 
 const Identification = () => {
-  const { lawType, topic, region } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
+  const {
+    lawType,
+    topic,
+    zone,
+    region
+  } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
   return <Zone>
     <Fields>
       <Body>
@@ -19,6 +24,12 @@ const Identification = () => {
           <Key>Thématique</Key>
           <Value data-cy={'regulatory-layers-metadata-topic'}>
             {`${topic}` || <NoValue>-</NoValue>}
+          </Value>
+        </Field>
+        <Field>
+          <Key>Zone</Key>
+          <Value data-cy={'regulatory-layers-metadata-zone'}>
+            {`${zone}` || <NoValue>-</NoValue>}
           </Value>
         </Field>
         <Field>

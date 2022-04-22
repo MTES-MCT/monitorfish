@@ -165,6 +165,7 @@ export const FRANCE = 'Réglementation France'
 export const UE = 'Réglementation UE'
 export const REG_LOCALE = 'Reg locale'
 
+const REG_RTC = 'Reg. RTC'
 const REG_MED = 'Reg. MED'
 const REG_SA = 'Reg. SA'
 const REG_NAMO = 'Reg. NAMO'
@@ -182,7 +183,8 @@ export const LAWTYPES_TO_TERRITORY = {
   [REG_OUTRE_MER]: FRANCE,
   [RUE_2019]: UE,
   [RUE_1380]: UE,
-  [RUE_494]: UE
+  [RUE_494]: UE,
+  [REG_RTC]: UE
 }
 
 export const REGULATORY_TERRITORY = {
@@ -589,6 +591,10 @@ export const convertTimeToString = (date) => {
  * @returns {string} - fishing period convert to string
  */
 export const fishingPeriodToString = fishingPeriod => {
+  if (!fishingPeriod) {
+    return ''
+  }
+
   const {
     dateRanges,
     annualRecurrence,
@@ -693,51 +699,8 @@ export const sortLayersTopicsByRegTerritory = (layersTopicsByRegTerritory) => {
   }
 }
 
-const CATEGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']
-
-/**
- *
- * @param {Object.<string, Gear[]>} categoriesToGears
- * @returns
- */
-export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
-  const SORTED_CATEGORY_LIST = [
-    'Chaluts', 'Sennes traînantes', 'Dragues', 'Sennes tournantes coulissantes',
-    'Filets tournants', 'Filets maillants et filets emmêlants', 'Filets soulevés',
-    'Lignes et hameçons', 'Pièges', 'Palangres', 'Gangui', 'Engins de récolte', 'Engins divers'
-  ]
-
-  return SORTED_CATEGORY_LIST.map(category => {
-    if (!CATEGORIES_TO_HIDE.includes(category) && categoriesToGears[category]) {
-      const categoryGearList = [...categoriesToGears[category]]
-      const gears = categoryGearList
-        .sort((gearA, gearB) => {
-          if (gearA.name < gearB.name) {
-            return -1
-          }
-          if (gearA.name > gearB.name) {
-            return 1
-          }
-          return 0
-        })
-        .map((gear) => {
-          return {
-            label: `${gear.code} - ${gear.name}`,
-            value: gear.code
-          }
-        })
-      return {
-        label: category,
-        value: category,
-        children: gears
-      }
-    }
-    return null
-  }).filter(gears => gears)
-}
-
 export const getTitle = regulatory => regulatory
-  ? `${regulatory.topic} - ${regulatory.zone}`
+  ? regulatory.zone
   : ''
 
 /**

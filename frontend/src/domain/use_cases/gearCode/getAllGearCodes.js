@@ -3,6 +3,31 @@ import { setIsReadyToShowRegulatoryZones } from '../../shared_slices/Regulatory'
 import { setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
 import { getAllGearCodesFromAPI } from '../../../api/gearCode'
+import { REGULATORY_GEAR_KEYS } from '../../entities/backoffice'
+
+/*
+INSERT INTO public.fishing_gear_groups VALUES
+    (1, 'Engins traînants'),
+    (2, 'Engins dormants');
+ */
+
+/***
+ * Get gear group name, see SQL init of table fishing_gear_groups:
+ *
+ * INSERT INTO public.fishing_gear_groups VALUES
+ * (1, 'Engins traînants'),
+ * (2, 'Engins dormants');
+ *
+ * @param groupId
+ * @return {string|null}
+ */
+const getGroupName = groupId => {
+  switch (groupId) {
+    case 1: return REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS
+    case 2: return REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS
+    default: return null
+  }
+}
 
 const getAllGearCodes = () => dispatch => {
   getAllGearCodesFromAPI().then(gears => {
@@ -26,11 +51,13 @@ const getAllGearCodes = () => dispatch => {
       } else {
         categoriesToGears[category].push(gear)
       }
-      if (!Object.keys(groupToCategories).includes(`${groupId}`)) {
-        groupToCategories[groupId] = [category]
+
+      const groupName = getGroupName(groupId)
+      if (!Object.keys(groupToCategories).includes(groupName)) {
+        groupToCategories[groupName] = [category]
       } else {
-        if (!groupToCategories[groupId].includes(category)) {
-          groupToCategories[groupId].push(category)
+        if (!groupToCategories[groupName].includes(category)) {
+          groupToCategories[groupName].push(category)
         }
       }
     })

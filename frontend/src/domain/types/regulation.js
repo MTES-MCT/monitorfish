@@ -60,8 +60,7 @@
 /**
  * @typedef RegulatorySpeciesDetail
  * @property {string} code - FAO code
- * @property {string} quantity
- * @property {string} minimumSize
+ * @property {string} remarks
  */
 
 /**
@@ -79,7 +78,7 @@
  * @property {string} name
  * @property {string} groupId
  * @property {string} category
- * @property {string} meshType - (between or greaterThan)
+ * @property {string} meshType - (One of greaterThan, greaterThanOrEqualTo, lowerThan, lowerThanOrEqualTo, equal, between)
  * @property {string[]} mesh
  */
 
@@ -106,6 +105,5 @@
 /**
  * @typedef RegulatorySpeciesDetail
  * @property {string} code - FAO code
- * @property {string} quantity
- * @property {string} minimumSize
+ * @property {string} remarks
  */

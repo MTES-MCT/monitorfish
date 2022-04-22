@@ -51,11 +51,10 @@ const regulationSlice = createSlice({
         ...state.processingRegulation.fishingPeriod,
         [key]: value
       }
-      const nextProcessingRegulation = {
+      state.processingRegulation = {
         ...state.processingRegulation,
         [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: nextFishingPeriod
       }
-      state.processingRegulation = nextProcessingRegulation
     },
     setFishingPeriodOtherInfo (state, action) {
       state.processingRegulation[REGULATORY_REFERENCE_KEYS.FISHING_PERIOD].otherInfo = action.payload

@@ -91,7 +91,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="layers-sidebar"]', { timeout: 20000 }).click({ timeout: 20000 })
   })
 
-  it('A regulation metadata Should be opened', () => {
+  it('The Cotentin regulation metadata Should be opened', () => {
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
 
@@ -106,14 +106,56 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-show-metadata"]').click()
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
     cy.get('*[data-cy="regulatory-layers-metadata-topic"]').contains('Ouest Cotentin Bivalves')
+    cy.get('*[data-cy="regulatory-layers-metadata-zone"]').contains('Praires Ouest cotentin')
     cy.get('*[data-cy="regulatory-layers-metadata-region"]').contains('Normandie, Bretagne')
+
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Pêche interdite les vendredi, samedi et dimanche, les jours fériés')
+    cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Bien vérifier Légipêche!')
+
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('TBN (Chaluts à langoustines)')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('inférieur à 123 mm')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Attention à cette espèce!')
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Dragues')
-    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Drague sans dent et de largeur maximale 1,30 mètre')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('li', 'Drague sans dent et de largeur maximale 1,30 mètre')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('li', 'Dragues avec dents !')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears-category-with-infobox"]')
+      .should('have.attr', 'title', 'DHS - Drague à main manœuvrée à partir du rivage \n' +
+        'DHB - Drague à main manœuvrée à partir du bateau \n' +
+        'HMD - Dragues mécanisées incluant les dragues suceuses \n' +
+        'DRH - Dragues à main utilisées à bord d\'un bateau \n' +
+        'DRB - Dragues remorquées par bateau \n' +
+        'DRM - Dragues mécanisées \n')
+
     cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('URC (OURSINS NCA)')
+    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('li', 'Pas plus de 500kg')
+    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('li', 'Autre remarque')
     cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('URX (OURSINS,ETC. NCA)')
-    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('500 kg')
+
     cy.get('*[data-cy="regulatory-layers-metadata-references"]').should('have.length', 1)
+  })
+
+  it('The Armor regulation metadata Should be opened', () => {
+    // When
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
+
+    cy.get('*[data-cy="regulatory-search-input"]').type('Armor')
+    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()
+    cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
+
+    // Then show the metadata
+    cy.get('*[data-cy="regulatory-layers-show-metadata"]').click()
+    cy.get('*[data-cy="regulatory-layers-metadata-region"]').should('exist')
+    cy.log('Fishing period should not be seen if it has an empty message')
+    cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').should('not.exist')
+
+    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Tous les engins trainants')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears-towed-gears"]').children()
+      .should('have.attr', 'title', 'Chaluts, dragues et sennes traînantes')
+
+    cy.get('*[data-cy="regulatory-layers-metadata-species"]').should('not.exist')
   })
 
   it('An advanced search Should filter the search result', () => {

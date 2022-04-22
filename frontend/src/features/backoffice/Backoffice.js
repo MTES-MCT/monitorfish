@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import BaseMap from '../map/BaseMap'
 import LawType from './LawType'
 import SearchRegulations from './SearchRegulations'
-import RegulatoryLayerZoneMetadata from '../layers/regulatory/RegulatoryLayerZoneMetadata'
+import RegulatoryZoneMetadata from '../layers/regulatory/RegulatoryZoneMetadata'
 import BaseLayer from '../../layers/BaseLayer'
 import RegulatoryLayers from '../../layers/RegulatoryLayers'
 import AdministrativeLayers from '../../layers/AdministrativeLayers'
@@ -22,7 +22,6 @@ import { setProcessingRegulationSaved } from './Regulation.slice'
 import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
 import layer from '../../domain/shared_slices/Layer'
 import getAllSpecies from '../../domain/use_cases/species/getAllSpecies'
-/* import { SecondaryButton } from '../commonStyles/Buttons.style' */
 
 const Backoffice = () => {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
@@ -125,11 +124,6 @@ const Backoffice = () => {
             setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
             regulatoryZoneListByRegTerritory={layersTopicsByRegTerritory}
           />
-          {/* <ButtonList>
-            <SecondaryButton>Brouillon (X)</SecondaryButton>
-            <SecondaryButton>Tracé en attente (X)</SecondaryButton>
-            <SecondaryButton disabled>Dernière publications (X)</SecondaryButton>
-          </ButtonList> */}
           {layersTopicsByRegTerritory && layersTopicsByRegTerritory !== {}
             ? searchResultList
             : <div>En attente de chargement</div>}
@@ -145,7 +139,7 @@ const Backoffice = () => {
       {regulatoryZoneMetadataPanelIsOpen && <MetadataWrapper
         regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
       >
-        <RegulatoryLayerZoneMetadata
+        <RegulatoryZoneMetadata
           loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
           regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
           regulatoryZoneMetadata={regulatoryZoneMetadata}

@@ -47,15 +47,15 @@ GTR	Trémails	Filets maillants et filets emmêlants
 GNC	Filets maillants encerclants	Filets maillants et filets emmêlants
 GND	Filets maillants dérivants (filets dérivants)	Filets maillants et filets emmêlants
 GNS	Filets maillants calés (ancrés)	Filets maillants et filets emmêlants
-FYK	Verveux	Pièges
-FWR	"Barrages, parcs, bordigues, etc."	Pièges
-FSN	Filets à l'étalage (diables)	Pièges
-FPN	Filets pièges-fixes non couverts	Pièges
-FAR	Pièges aériens	Pièges
-FAG	"Balai, Fagot"	Pièges
-LL	Palangres (non spécifiées)	Pièges
-FIX	Pièges (non spécifiés)	Pièges
-FPO	Nasses (casiers)	Pièges
+FYK	Verveux	Pièges et casiers
+FWR	"Barrages, parcs, bordigues, etc."	Pièges et casiers
+FSN	Filets à l'étalage (diables)	Pièges et casiers
+FPN	Filets pièges-fixes non couverts	Pièges et casiers
+FAR	Pièges aériens	Pièges et casiers
+FAG	"Balai, Fagot"	Pièges et casiers
+LL	Palangres (non spécifiées)	Pièges et casiers
+FIX	Pièges (non spécifiés)	Pièges et casiers
+FPO	Casiers (nasses)	Pièges et casiers
 LVS	Palangre verticale de fond	Lignes et hameçons
 LVD	Palangre verticale dérivante	Lignes et hameçons
 LX	Hameçons et lignes	Lignes et hameçons

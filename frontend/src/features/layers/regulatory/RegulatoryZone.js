@@ -40,7 +40,7 @@ export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, 
   }
 }
 
-const RegulatoryLayerZone = props => {
+const RegulatoryZone = props => {
   const dispatch = useDispatch()
   const match = useRouteMatch()
   const history = useHistory()
@@ -234,4 +234,4 @@ const ZoneText = styled.span`
   margin-top: 5px;
 `
 
-export default React.memo(RegulatoryLayerZone)
+export default React.memo(RegulatoryZone)

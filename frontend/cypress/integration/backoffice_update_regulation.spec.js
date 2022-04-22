@@ -58,6 +58,7 @@ context('Update Regulation', () => {
       .filter(':contains("des espèces")')
       .scrollIntoView()
       .click({ timeout: 20000 })
+      .type('{esc}')
 
     // When
     cy.get('[data-cy="close-tag-OURSINS NCA (URC)"]').click()
@@ -147,6 +148,8 @@ context('Update Regulation', () => {
     cy.get('.rs-checkbox-checker')
       .filter(':contains("TX - Autres chaluts")')
       .click({ timeout: 20000 })
+    cy.get('.rs-picker-cascader')
+      .filter(':contains("des engins")')
       .type('{esc}')
 
     cy.get('.rs-picker-select')
@@ -171,7 +174,7 @@ context('Update Regulation', () => {
             '"speciesGroups":["Espèces eau profonde"],"otherInfo":"Mhm pas d\'autre info !"}')
           .contain('{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !","authorized":true,' +
             '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines","category":"Chaluts",' +
-            '"groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"]}},"allPassiveGears":false,' +
+            '"groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"],"remarks":"Attention à cette espèce!"}},"allPassiveGears":false,' +
             '"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}')
 
         expect(response.statusCode).equal(200)

@@ -225,7 +225,7 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
             }
             break
           }
-          case 'Pièges': {
+          case 'Pièges et casiers': {
             switch (lastNumber) {
               case '0':
                 return getStyle(getColorWithAlpha('#EAD0B2', 0.60), metadataIsShowed)
@@ -251,7 +251,7 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
             break
           }
           default: {
-            // Pièges
+            // Pièges et casiers
             return getStyle(getColorWithAlpha('#7B9FCC', 0.60), metadataIsShowed)
           }
         }

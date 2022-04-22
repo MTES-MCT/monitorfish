@@ -165,6 +165,7 @@ export const FRANCE = 'Réglementation France'
 export const UE = 'Réglementation UE'
 export const REG_LOCALE = 'Reg locale'
 
+const REG_RTC = 'Reg. RTC'
 const REG_MED = 'Reg. MED'
 const REG_SA = 'Reg. SA'
 const REG_NAMO = 'Reg. NAMO'
@@ -182,7 +183,8 @@ export const LAWTYPES_TO_TERRITORY = {
   [REG_OUTRE_MER]: FRANCE,
   [RUE_2019]: UE,
   [RUE_1380]: UE,
-  [RUE_494]: UE
+  [RUE_494]: UE,
+  [REG_RTC]: UE
 }
 
 export const REGULATORY_TERRITORY = {

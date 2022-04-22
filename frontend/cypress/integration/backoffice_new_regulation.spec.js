@@ -10,11 +10,11 @@ context('NewRegulation', () => {
     cy.wait(100)
   })
 
-  it('Law type list contains 8 elements', () => {
+  it('Law type list contains 9 elements', () => {
     cy.get('.rs-picker-toggle-placeholder').eq(0).should('have.text', 'Choisir un ensemble')
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
     cy.get('*[class="rs-picker-select-menu-items"]').should('exist').should('have.length', 1)
-    cy.get('*[class="rs-picker-select-menu-item"]').should('exist').should('have.length', 8)
+    cy.get('*[class="rs-picker-select-menu-item"]').should('exist').should('have.length', 9)
   })
 
   it('Select, change and remove law type Reg. MEMN', () => {

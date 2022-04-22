@@ -154,6 +154,8 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Tous les engins trainants')
     cy.get('*[data-cy="regulatory-layers-metadata-gears-towed-gears"]').children()
       .should('have.attr', 'title', 'Chaluts, dragues et sennes traînantes')
+
+    cy.get('*[data-cy="regulatory-layers-metadata-species"]').should('not.exist')
   })
 
   it('An advanced search Should filter the search result', () => {

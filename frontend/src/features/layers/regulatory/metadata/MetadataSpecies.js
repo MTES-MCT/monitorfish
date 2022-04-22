@@ -1,17 +1,17 @@
-
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { SectionTitle, Section, List, Elem, Key, Label, Value, Fields, Field } from './RegulatoryMetadata.style'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
 import CodeAndName from './CodeAndName'
 import ReactMarkdown from 'react-markdown'
+
 const MetadataSpecies = () => {
   const { regulatorySpecies } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
   const {
     allSpecies
   } = regulatorySpecies
 
-  return <>{regulatorySpecies?.authorized !== undefined &&
+  return <>{regulatorySpecies?.authorized !== undefined && speciesIsNotEmpty(regulatorySpecies) &&
     <Section data-cy={'regulatory-layers-metadata-species'}>
       <SectionTitle>
         {
@@ -65,5 +65,9 @@ const MetadataSpecies = () => {
     </Section>
   }</>
 }
+
+const speciesIsNotEmpty = regulatorySpecies => regulatorySpecies.otherInfo ||
+  regulatorySpecies.speciesGroups.length > 0 ||
+  regulatorySpecies.species.length > 0
 
 export default MetadataSpecies

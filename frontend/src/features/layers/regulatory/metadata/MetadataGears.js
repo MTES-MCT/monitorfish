@@ -48,7 +48,7 @@ const MetadataGears = () => {
     setFilteredRegulatedGearCategories(nextFilteredRegulatedGearCategories)
   }, [groupsToCategories, allTowedGears, allPassiveGears, regulatedGearCategories])
 
-  return <>{regulatoryGears && authorized !== undefined &&
+  return <>{regulatoryGears && authorized !== undefined && gearsIsNotEmpty(regulatoryGears) &&
     <Section data-cy={'regulatory-layers-metadata-gears'}>
       <SectionTitle>{regulatoryGears.authorized
         ? <GreenCircle margin={'0 5px 0 0'} />
@@ -111,6 +111,14 @@ const MetadataGears = () => {
     </Section>}
   </>
 }
+
+const gearsIsNotEmpty = regulatoryGears => regulatoryGears?.allGears ||
+  regulatoryGears?.allTowedGears ||
+  regulatoryGears?.allPassiveGears ||
+  regulatoryGears?.otherInfo ||
+  Object.keys(regulatoryGears?.regulatedGears || {})?.length ||
+  Object.keys(regulatoryGears?.regulatedGearCategories || {})?.length ||
+  regulatoryGears?.selectedCategoriesAndGears?.length
 
 const Derogation = styled.span`
   display: flex;

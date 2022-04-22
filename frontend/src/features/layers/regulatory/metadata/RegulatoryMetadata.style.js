@@ -61,6 +61,13 @@ export const Section = styled.div`
   padding: 15px 45px 15px 20px;
   text-align: left;
   border-bottom: 1px solid ${COLORS.lightGray};
+  
+  p {
+    margin: 0;
+  }
+  ul {
+    margin: 0;
+  }
 `
 
 export const SectionTitle = styled.span`

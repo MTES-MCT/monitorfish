@@ -265,7 +265,7 @@ const Row = styled.li`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  cursor: pointer;import LayerNameInput from '../../backoffice/LayerNameInput'
+  cursor: pointer;
 
   margin: 0;
   line-height: 1.9em;

@@ -287,6 +287,7 @@ const RegulatoryGearForm = props => {
               onChange={(key, value) => setRegulatedGearCategory(key, value, category)}
               meshType={regulatedGearCategories[category].meshType}
               mesh={regulatedGearCategories[category].mesh}
+              remarks={regulatedGearCategories[category].remarks}
               onCloseIconClicked={_ => removeGearOrCategory(category)}
             />
           })

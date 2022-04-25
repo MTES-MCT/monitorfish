@@ -183,7 +183,7 @@ const regulatorySlice = createSlice({
      *      prohibitions: undefined,
      *      quantity: undefined,
      *      region: "Occitanie, Languedoc-Roussillon",
-     *      regulatoryGears: Object { authorized: undefined, allGears: undefined, allTowedGears: undefined, … },
+     *      gearRegulation: Object { authorized: undefined, allGears: undefined, allTowedGears: undefined, … },
      *      regulatoryReferences: Array [ {…} ],
      *      regulatorySpecies: Object { authorized: undefined, allSpecies: undefined, otherInfo: undefined, … },
      *      rejections: undefined,

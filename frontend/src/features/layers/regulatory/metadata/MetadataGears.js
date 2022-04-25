@@ -7,11 +7,11 @@ import { Label, List, Section, SectionTitle } from './RegulatoryMetadata.style'
 import GearsOrGearCategories from './GearsOrGearCategories'
 import { COLORS } from '../../../../constants/constants'
 import InfoPoint from '../../../backoffice/create_regulation/InfoPoint'
-import { getGroupCategories, REGULATORY_GEAR_KEYS } from '../../../../domain/entities/backoffice'
+import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../domain/entities/backoffice'
 import { INFO_TEXT } from '../../../backoffice/constants'
 
 const MetadataGears = () => {
-  const { regulatoryGears } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
+  const { gearRegulation } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
   const {
     groupsToCategories,
     categoriesToGears
@@ -25,11 +25,11 @@ const MetadataGears = () => {
     allGears,
     allTowedGears,
     allPassiveGears
-  } = regulatoryGears
+  } = gearRegulation
 
   const [filteredRegulatedGearCategories, setFilteredRegulatedGearCategories] = useState(regulatedGearCategories)
-  const towedGearsCategories = getGroupCategories(REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS, groupsToCategories)
-  const passiveGearsCategories = getGroupCategories(REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS, groupsToCategories)
+  const towedGearsCategories = getGroupCategories(REGULATED_GEARS_KEYS.ALL_TOWED_GEARS, groupsToCategories)
+  const passiveGearsCategories = getGroupCategories(REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS, groupsToCategories)
 
   useEffect(() => {
     const nextFilteredRegulatedGearCategories = { ...regulatedGearCategories }
@@ -48,12 +48,12 @@ const MetadataGears = () => {
     setFilteredRegulatedGearCategories(nextFilteredRegulatedGearCategories)
   }, [groupsToCategories, allTowedGears, allPassiveGears, regulatedGearCategories])
 
-  return <>{regulatoryGears && authorized !== undefined && gearsIsNotEmpty(regulatoryGears) &&
+  return <>{gearRegulation && authorized !== undefined && gearsIsNotEmpty(gearRegulation) &&
     <Section data-cy={'regulatory-layers-metadata-gears'}>
-      <SectionTitle>{regulatoryGears.authorized
+      <SectionTitle>{gearRegulation.authorized
         ? <GreenCircle margin={'0 5px 0 0'} />
         : <RedCircle margin={'0 5px 0 0'} />}
-        Engins {regulatoryGears.authorized ? 'réglementés' : 'interdits'}
+        Engins {gearRegulation.authorized ? 'réglementés' : 'interdits'}
       </SectionTitle>
       {allGears
         ? <Label>{'Tous les engins'}</Label>
@@ -112,14 +112,14 @@ const MetadataGears = () => {
   </>
 }
 
-const gearsIsNotEmpty = regulatoryGears => regulatoryGears?.allGears ||
-  regulatoryGears?.allTowedGears ||
-  regulatoryGears?.allPassiveGears ||
-  regulatoryGears?.otherInfo ||
-  Object.keys(regulatoryGears?.regulatedGears || {})?.length ||
-  Object.keys(regulatoryGears?.regulatedGearCategories || {})?.length ||
-  regulatoryGears?.selectedCategoriesAndGears?.length ||
-  regulatoryGears?.derogation
+const gearsIsNotEmpty = gearRegulation => gearRegulation?.allGears ||
+  gearRegulation?.allTowedGears ||
+  gearRegulation?.allPassiveGears ||
+  gearRegulation?.otherInfo ||
+  Object.keys(gearRegulation?.gearRegulation || {})?.length ||
+  Object.keys(gearRegulation?.regulatedGearCategories || {})?.length ||
+  gearRegulation?.selectedCategoriesAndGears?.length ||
+  gearRegulation?.derogation
 
 const Derogation = styled.span`
   display: flex;

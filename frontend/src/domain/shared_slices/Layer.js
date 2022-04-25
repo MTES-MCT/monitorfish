@@ -49,7 +49,7 @@ const reducers = {
       zone,
       id,
       namespace,
-      regulatoryGears
+      gearRegulation
     } = action.payload
 
     if (type !== Layers.VESSELS.code) {
@@ -64,7 +64,7 @@ const reducers = {
           zone,
           id,
           namespace,
-          gears: regulatoryGears
+          gears: gearRegulation
         })
         if (namespace !== 'backoffice') {
           window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
@@ -142,7 +142,7 @@ const reducers = {
               return {
                 type: showedLayer.type,
                 namespace: showedLayer.namespace,
-                gears: nextRegulatoryZone.regulatoryGears,
+                gears: nextRegulatoryZone.gearRegulation,
                 topic: nextRegulatoryZone.topic,
                 id: nextRegulatoryZone.id,
                 zone: nextRegulatoryZone.zone

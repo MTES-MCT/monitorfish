@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { INITIAL_REGULATION, REGULATORY_REFERENCE_KEYS } from '../../domain/entities/regulatory'
+import { DEFAULT_REGULATION, REGULATORY_REFERENCE_KEYS } from '../../domain/entities/regulatory'
 
 const INITIAL_STATE = {
-  /** @type {RegulatoryText} */
-  processingRegulation: INITIAL_REGULATION,
+  /** @type {Object} */
+  processingRegulation: DEFAULT_REGULATION,
   /** @type {boolean} isModalOpen */
   isModalOpen: false,
   /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */

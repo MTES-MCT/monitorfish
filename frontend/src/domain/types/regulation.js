@@ -3,7 +3,7 @@
  * @property {string} lawType
  * @property {string} topic
  * @property {string} zone
- * @property {RegulatoryGears} regulatoryGears
+ * @property {GearRegulation} gearRegulation
  * @property {RegulatorySpecies} regulatorySpecies
  * @property {RegulatoryText[]} regulatoryReference
  * @property {GeoJSONGeometry} geometry
@@ -90,7 +90,14 @@
  */
 
 /**
- * @typedef RegulatoryGears
+ * @typedef GearRegulation
+ * @property {RegulatedGears} authorized
+ * @property {RegulatedGears} unauthorized
+ * @property {string} otherInfo
+ */
+
+/**
+ * @typedef RegulatedGears
  * @property {boolean} authorized
  * @property {boolean} allGears
  * @property {boolean} allTowedGears

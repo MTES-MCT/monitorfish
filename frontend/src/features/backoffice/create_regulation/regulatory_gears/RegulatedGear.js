@@ -7,7 +7,7 @@ import Tag from '../Tag'
 import MenuItem from '../custom_form/MenuItem'
 import { GEAR_MESH_SIZE } from '../../../../domain/entities/backoffice'
 
-const GearLine = (props) => {
+const RegulatedGear = props => {
   const {
     id,
     label,
@@ -19,6 +19,7 @@ const GearLine = (props) => {
     mesh,
     remarks
   } = props
+
   return (<>
       <ContentLine data-cy='regulatory-gear-line'>
         <Label>{code ? `Engin ${id + 1}` : `Catégorie ${id + 1}`}</Label>
@@ -105,4 +106,4 @@ const GearLine = (props) => {
 const SecondCustomInput = styled(CustomInput)` 
   margin-left: 10px;
 `
-export default GearLine
+export default RegulatedGear

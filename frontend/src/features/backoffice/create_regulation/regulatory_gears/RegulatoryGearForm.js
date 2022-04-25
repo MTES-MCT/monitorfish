@@ -130,7 +130,7 @@ const RegulatoryGearForm = props => {
 
       const nextRegulatedGearsObject = {
         ...regulatoryGears,
-        [REGULATORY_GEAR_KEYS.ALL_GEARS]: categories === formattedAndFilteredCategoriesToGears.length,
+        [REGULATORY_GEAR_KEYS.ALL_GEARS]: formattedAndFilteredCategoriesToGears.length > 0 && categories === formattedAndFilteredCategoriesToGears.length,
         [REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS]: towedGearCategories === groupsToCategories[REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS].length,
         [REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS]: passiveGearCategories === groupsToCategories[REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS].length,
         [REGULATORY_GEAR_KEYS.REGULATED_GEARS]: nextRegulatedGears,

@@ -28,6 +28,10 @@ const GearsOrGearCategories = ({ list, isCategory, categoriesToGears }) => {
             <Key>Maillage</Key>
             <Value isNotLastItem>
               {
+                meshType === undefined &&
+                `supérieur à ${mesh[0]} mm`
+              }
+              {
                 meshType === GEAR_MESH_SIZE.greaterThan &&
                 `supérieur à ${mesh[0]} mm`
               }

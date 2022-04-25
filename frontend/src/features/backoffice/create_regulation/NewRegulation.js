@@ -15,7 +15,7 @@ import {
   RegulationLayerZoneLine,
   RegulationRegionLine,
   RegulationTopicLine,
-  RegulatoryGearSection,
+  GearRegulation,
   RegulatoryTextSection,
   RemoveRegulationModal
 } from './'
@@ -52,7 +52,7 @@ import {
 import { setError } from '../../../domain/shared_slices/Global'
 import {
   FRANCE,
-  INITIAL_REGULATION,
+  DEFAULT_REGULATION,
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryFeatureObject,
   REGULATORY_REFERENCE_KEYS
@@ -119,7 +119,7 @@ const CreateRegulation = ({ title, isEdition }) => {
     })
 
     return () => {
-      dispatch(setProcessingRegulation(INITIAL_REGULATION))
+      dispatch(setProcessingRegulation(DEFAULT_REGULATION))
       dispatch(setRegulatoryZoneMetadata(undefined))
       dispatch(resetRegulatoryGeometriesToPreview())
     }
@@ -308,7 +308,7 @@ const CreateRegulation = ({ title, isEdition }) => {
             />
             <FishingPeriodSection />
             <RegulatorySpeciesSection />
-            <RegulatoryGearSection />
+            <GearRegulation />
           </ContentWrapper>
         </Body>
         <Footer>

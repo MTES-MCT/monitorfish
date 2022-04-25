@@ -16,7 +16,7 @@ export const GEAR_MESH_SIZE = {
   between: 'between'
 }
 
-export const REGULATORY_GEAR_KEYS = {
+export const REGULATED_GEARS_KEYS = {
   AUTHORIZED: 'authorized',
   ALL_GEARS: 'allGears',
   ALL_TOWED_GEARS: 'allTowedGears',
@@ -25,6 +25,12 @@ export const REGULATORY_GEAR_KEYS = {
   REGULATED_GEAR_CATEGORIES: 'regulatedGearCategories',
   SELECTED_GEARS_AND_CATEGORIES: 'selectedCategoriesAndGears',
   DEROGATION: 'derogation'
+}
+
+export const GEAR_REGULATION_KEYS = {
+  AUTHORIZED: 'authorized',
+  UNAUTHORIZED: 'unauthorized',
+  OTHER_INFO: 'otherInfo'
 }
 
 export const SORTED_CATEGORY_LIST = [
@@ -72,13 +78,13 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
 
 export const getGroupCategories = (option, groupsToCategories) => {
   switch (option) {
-    case REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS: {
-      return groupsToCategories[REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS]
+    case REGULATED_GEARS_KEYS.ALL_TOWED_GEARS: {
+      return groupsToCategories[REGULATED_GEARS_KEYS.ALL_TOWED_GEARS]
     }
-    case REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS: {
-      return groupsToCategories[REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS]
+    case REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS: {
+      return groupsToCategories[REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS]
     }
-    case REGULATORY_GEAR_KEYS.ALL_GEARS: {
+    case REGULATED_GEARS_KEYS.ALL_GEARS: {
       return SORTED_CATEGORY_LIST
     }
   }

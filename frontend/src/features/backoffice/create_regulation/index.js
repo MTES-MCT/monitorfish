@@ -7,7 +7,7 @@ import RegulatoryText from './regulatory_text/RegulatoryText'
 import RegulatoryTextSection from './regulatory_text/RegulatoryTextSection'
 import RemoveRegulationModal from './regulatory_text/RemoveRegulationModal'
 import FishingPeriodSection from './fishing_period/FishingPeriodSection'
-import RegulatoryGearSection from './regulatory_gears/RegulatoryGearSection'
+import GearRegulation from './regulatory_gears/GearRegulation'
 
 export {
   RegulationLawTypeLine,
@@ -19,5 +19,5 @@ export {
   RegulatoryTextSection,
   RemoveRegulationModal,
   FishingPeriodSection,
-  RegulatoryGearSection
+  GearRegulation
 }

@@ -21,7 +21,8 @@ const CustomSelectComponent = props => {
     style,
     menuClassName,
     padding,
-    width
+    width,
+    dataCy
   } = props
 
   const DEFAULT_SELECT_PICKER_STYLE = {
@@ -52,6 +53,7 @@ const CustomSelectComponent = props => {
         groupBy={groupBy}
         disabled={disabled}
         placement={placement || 'auto'}
+        data-cy={dataCy}
       />
     </SelectWrapper>
   )

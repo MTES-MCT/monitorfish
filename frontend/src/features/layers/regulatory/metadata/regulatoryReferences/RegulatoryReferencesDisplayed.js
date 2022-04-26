@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-import { SectionTitle, Section, List, Label, Elem } from './RegulatoryMetadata.style'
-import { getRegulatoryZoneTextTypeAsText } from '../../../../domain/entities/regulatory'
-import { COLORS } from '../../../../constants/constants'
+import { SectionTitle, Section, List, Label, Elem } from '../RegulatoryMetadata.style'
+import { getRegulatoryZoneTextTypeAsText } from '../../../../../domain/entities/regulatory'
+import { COLORS } from '../../../../../constants/constants'
 
-const MetadataRegulatoryReferences = () => {
+const RegulatoryReferencesDisplayed = () => {
   const { regulatoryReferences } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
 
   return <>{regulatoryReferences && <Section>
@@ -38,4 +38,4 @@ export const Link = styled.a`
   font-weight: 500;
 `
 
-export default MetadataRegulatoryReferences
+export default RegulatoryReferencesDisplayed

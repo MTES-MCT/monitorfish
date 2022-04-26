@@ -1,7 +1,7 @@
 import React from 'react'
-import { Elem, Field, Fields, Key, Value } from './RegulatoryMetadata.style'
-import CodeAndName from './CodeAndName'
-import { GEAR_MESH_SIZE } from '../../../../domain/entities/backoffice'
+import { Elem, Field, Fields, Key, Value } from '../RegulatoryMetadata.style'
+import CodeAndName from '../CodeAndName'
+import { GEAR_MESH_SIZE } from '../../../../../domain/entities/backoffice'
 import ReactMarkdown from 'react-markdown'
 
 const GearsOrGearCategories = ({ list, isCategory, categoriesToGears }) => {

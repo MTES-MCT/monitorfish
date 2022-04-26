@@ -62,7 +62,6 @@ const GearRegulation = () => {
   const setOtherInfo = value => {
     setGearRegulation(GEAR_REGULATION_KEYS.OTHER_INFO, value)
   }
-  console.log(gearRegulation)
 
   return <Section show>
     <SectionTitle

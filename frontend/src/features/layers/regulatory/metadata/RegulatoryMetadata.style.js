@@ -76,6 +76,7 @@ export const SectionTitle = styled.span`
   color: ${COLORS.slateGray};
   font-size: 13px;
   align-items: center;
+  margin-top: ${props => props.hasPreviousRegulatedGearsBloc ? 20 : 0}px;
 `
 
 export const Fields = styled.table`

@@ -103,24 +103,36 @@ context('Update Regulation', () => {
     cy.get('[type="checkbox"]').first().check({ force: true })
     cy.get('[type="checkbox"]').eq(2).check({ force: true })
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
-    cy.get('*[data-cy^="regulation-authorized-species"]').click({ force: true })
     cy.scrollTo(0, 500)
 
+    cy.log('Select authorized species and groups')
     cy.get('.rs-picker-toggle-placeholder')
       .filter(':contains("catégories d\'espèces")')
+      .eq(0)
       .scrollIntoView()
       .click({ timeout: 20000 })
     cy.get('.rs-picker-search-bar-input').type('Espèce{enter}')
-    cy.get('.rs-picker-toggle-placeholder')
+    cy.get('[data-cy="authorized-species-selector"]')
       .filter(':contains("des espèces")')
       .click({ timeout: 20000 })
     cy.get('.rs-picker-search-bar-input').type('HKE{enter}')
-    cy.get('*[data-cy^="regulatory-species-remarks"]').eq(0).type('Ne pas en prendre beaucoup please')
+    cy.get('*[data-cy^="authorized-regulatory-species-remarks"]').eq(0).type('Ne pas en prendre beaucoup please')
+
+    cy.log('Select unauthorized species and groups')
+    cy.get('.rs-picker-toggle-placeholder')
+      .filter(':contains("catégories d\'espèces")')
+      .eq(1)
+      .scrollIntoView()
+      .click({ timeout: 20000 })
+    cy.get('.rs-picker-search-bar-input').type('Bival{enter}')
+    cy.get('[data-cy="unauthorized-species-selector"]')
+      .filter(':contains("des espèces")')
+      .click({ timeout: 20000 })
+    cy.get('.rs-picker-search-bar-input').type('MGE{enter}')
+
     cy.get('*[data-cy^="regulatory-species-other-info"]').type('Mhm pas d\'autre info !')
 
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
-    cy.get('*[data-cy="authorized-gears-selector"]')
-      .scrollIntoView()
 
     // When
     cy.get('[data-cy="validate-button"]').click()
@@ -130,16 +142,21 @@ context('Update Regulation', () => {
     cy.wait('@postRegulation')
       .then(({ request, response }) => {
         expect(request.body)
-          .contain('{"species":[{"code":"URC","remarks":"- Pas plus de 500kg\\n - Autre remarqueNe pas en prendre beaucoup please","name":"OURSINS NCA"},' +
-            '{"code":"URX","remarks":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],"authorized":true,' +
-            '"speciesGroups":["Espèces eau profonde"],"otherInfo":"Mhm pas d\'autre info !"}')
+          // Unauthorized
+          .contain('{"unauthorized":{"species":[{"code":"MGE","name":"MICROGLANIS ATER"}],"speciesGroups":["Bivalves"]},' +
+            // Authorized
+            '"authorized":{"species":[{"code":"URC","remarks":"- Pas plus de 500kg\\n - ' +
+            'Autre remarqueNe pas en prendre beaucoup please","name":"OURSINS NCA"},' +
+            '{"code":"URX","remarks":"500 kg","name":"OURSINS,ETC. NCA"},' +
+            '{"code":"HKE","name":"MERLU D\'EUROPE"}],"speciesGroups":["Espèces eau profonde"]},' +
+            '"otherInfo":"Mhm pas d\'autre info !"}')
 
         expect(response.statusCode).equal(200)
       })
     cy.url().should('include', '/backoffice')
   })
 
-  it.only('Save regulation Should send the gears regulation updates object to Geoserver', () => {
+  it('Save regulation Should send the gears regulation updates object to Geoserver', () => {
     // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     // complete missing values in form

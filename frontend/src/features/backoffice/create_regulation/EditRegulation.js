@@ -51,7 +51,7 @@ import {
 } from '../Regulation.slice'
 import { setError } from '../../../domain/shared_slices/Global'
 import { DEFAULT_REGULATION, FRANCE, LAWTYPES_TO_TERRITORY } from '../../../domain/entities/regulatory'
-import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
+import SpeciesRegulation from './regulatory_species/SpeciesRegulation'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 
 const EditRegulation = ({ title, isEdition }) => {
@@ -284,7 +284,7 @@ const EditRegulation = ({ title, isEdition }) => {
               saveForm={saveOrUpdateRegulation}
             />
             <FishingPeriodSection />
-            <RegulatorySpeciesSection />
+            <SpeciesRegulation />
             <GearRegulation />
           </ContentWrapper>
         </Body>

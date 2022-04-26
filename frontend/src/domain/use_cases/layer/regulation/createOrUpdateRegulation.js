@@ -7,7 +7,6 @@ import updateRegulation from './updateRegulation'
 import resetPreviousRegulation from './resetRegulation'
 
 const createOrUpdateRegulation = (processingRegulation, id, previousId) => dispatch => {
-  console.log(processingRegulation, id, previousId)
   const featureObject = mapToRegulatoryFeatureObject({
     ...processingRegulation,
     region: processingRegulation.region?.join(', ')
@@ -15,7 +14,6 @@ const createOrUpdateRegulation = (processingRegulation, id, previousId) => dispa
 
   const feature = new Feature(featureObject)
   feature.setId(getRegulatoryFeatureId(id))
-  console.log(feature)
   dispatch(updateRegulation(feature, REGULATION_ACTION_TYPE.UPDATE))
 
   if (geometryHasChanged(previousId, id)) {

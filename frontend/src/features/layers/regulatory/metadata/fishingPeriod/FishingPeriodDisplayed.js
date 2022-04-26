@@ -1,11 +1,11 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Section, SectionTitle } from './RegulatoryMetadata.style'
-import { RedCircle, GreenCircle } from '../../../commonStyles/Circle.style'
-import { fishingPeriodToString } from '../../../../domain/entities/regulatory'
+import { Section, SectionTitle } from '../RegulatoryMetadata.style'
+import { RedCircle, GreenCircle } from '../../../../commonStyles/Circle.style'
+import { fishingPeriodToString } from '../../../../../domain/entities/regulatory'
 import ReactMarkdown from 'react-markdown'
 
-const MetadataFishingPeriod = () => {
+const FishingPeriodDisplayed = () => {
   const {
     fishingPeriod,
     fishingPeriodText
@@ -40,4 +40,4 @@ const MetadataFishingPeriod = () => {
   </>
 }
 
-export default MetadataFishingPeriod
+export default FishingPeriodDisplayed

@@ -4,7 +4,7 @@
  * @property {string} topic
  * @property {string} zone
  * @property {GearRegulation} gearRegulation
- * @property {RegulatorySpecies} regulatorySpecies
+ * @property {SpeciesRegulation} speciesRegulation
  * @property {RegulatoryText[]} regulatoryReference
  * @property {GeoJSONGeometry} geometry
  * @property {string} region
@@ -64,12 +64,19 @@
  */
 
 /**
- * @typedef RegulatorySpecies
+ * @typedef RegulatedSpecies
  * @property {boolean} authorized
  * @property {boolean} allSpecies
  * @property {string} otherInfo
- * @property {RegulatorySpeciesDetail[]} species
+ * @property {RegulatedSpeciesDetail[]} species
  * @property {string[]} speciesGroups - group name
+ */
+
+/**
+ * @typedef SpeciesRegulation
+ * @property {RegulatedSpecies} authorized
+ * @property {RegulatedSpecies} unauthorized
+ * @property {string} otherInfo
  */
 
 /**
@@ -110,7 +117,7 @@
 */
 
 /**
- * @typedef RegulatorySpeciesDetail
+ * @typedef RegulatedSpeciesDetail
  * @property {string} code - FAO code
  * @property {string} remarks
  */

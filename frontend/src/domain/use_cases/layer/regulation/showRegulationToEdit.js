@@ -19,11 +19,10 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
         regulatoryReferences,
         id,
         fishingPeriod,
-        regulatorySpecies,
+        speciesRegulation,
         gearRegulation,
         geometry
       } = regulatoryZoneMetadata
-      console.log(regulatoryZoneMetadata)
 
       dispatch(setProcessingRegulation({
         lawType,
@@ -33,7 +32,7 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
         id,
         regulatoryReferences: regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT],
         fishingPeriod,
-        regulatorySpecies,
+        speciesRegulation,
         gearRegulation,
         geometry
       }))

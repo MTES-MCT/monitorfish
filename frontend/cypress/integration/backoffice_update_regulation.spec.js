@@ -53,8 +53,7 @@ context('Update Regulation', () => {
   it('A species Should be removed', () => {
     // Given
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
-    cy.get('*[data-cy^="regulation-authorized-species"]').click({ force: true })
-    cy.get('.rs-picker-toggle-placeholder')
+    cy.get('[data-cy="authorized-species-selector"]')
       .filter(':contains("des espèces")')
       .scrollIntoView()
       .click({ timeout: 20000 })
@@ -163,7 +162,6 @@ context('Update Regulation', () => {
     cy.get('[type="checkbox"]').first().check({ force: true })
     cy.get('[type="checkbox"]').eq(2).check({ force: true })
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
-    cy.get('*[data-cy^="regulation-authorized-species"]').click({ force: true })
     cy.scrollTo(0, 500)
     cy.get('*[data-cy^="regulatory-gears-section"]').click({ force: true })
     cy.get('*[data-cy="authorized-gears-selector"]')
@@ -233,7 +231,7 @@ context('Update Regulation', () => {
             '"regulatedGearCategories":{},"regulatedGears":{"TX":{"code":"TX","name":"Autres chaluts (non spécifiés)",' +
             '"category":"Chaluts","groupId":1}},"selectedCategoriesAndGears":["TX"]},' +
             // Authorized
-            '"authorized":{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\n - Dragues avec dents !",' +
+            '"authorized":{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !",' +
             '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines",' +
             '"category":"Chaluts","groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"],"remarks":"Attention à cette espèce!"}},' +
             '"allPassiveGears":false,"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}}')

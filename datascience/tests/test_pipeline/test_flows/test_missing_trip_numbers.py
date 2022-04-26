@@ -116,6 +116,17 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
     AND report_id != '1e1bff95-dfff-4cc3-82d3-d72b46fda745';"""
     )
 
+    # Since only DAT messages trigger the increment of trip_numbers, we must ensure
+    # that COR reports before the very first DAT report do not receive a NULL
+    # trip_number.
+    # By default the value '0' should be assigned to such reports.
+    e.execute(
+        """
+    UPDATE logbook_reports
+    SET operation_type = 'COR'
+    WHERE report_id = '83952732-ef89-4168-b2a1-df49d0aa1aff';"""
+    )
+
     initial_missing_trip_numbers = read_query(
         "monitorfish_remote",
         """
@@ -178,13 +189,15 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
     assert len(final_missing_trip_numbers) == 0
     assert len(final_vessel_trip_numbers) == 24
 
+    # Default value '0' must be assigned to COR reports before the very first DAT
+    # report
     assert (
         final_vessel_trip_numbers.loc[
             final_vessel_trip_numbers.report_id
             == "83952732-ef89-4168-b2a1-df49d0aa1aff",
             "trip_number",
         ].values[0]
-        == "20200001"
+        == "0"
     )
 
     # This trip number should not be updated : it is a real trip_number taken from the
@@ -208,5 +221,5 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
             ),
             "trip_number",
         ]
-        == "20200003"
+        == "20200002"
     ).all()

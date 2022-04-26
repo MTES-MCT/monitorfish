@@ -78,12 +78,14 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
 
         connection.execute(
             """
-            UPDATE public.logbook_reports e
+            UPDATE public.logbook_reports r
             SET
                 trip_number = t.trip_number,
                 trip_number_was_computed = true
             FROM tmp_computed_trip_numbers t
-            WHERE e.id = t.id;
+            WHERE r.id = t.id
+            AND (r.trip_number_was_computed OR r.trip_number IS NULL)
+            ;
         """
         )
 

@@ -1,4 +1,10 @@
+-- For each vessel and for each year, messages are sorted according to the time and 
+-- date of the activity recorded, and not to the time and date of sending the message,
+-- because they can be sent in advance or a posteriori - except for PNOs, for which we
+-- use the time and date at which the message is sent.
 
+-- After sorting the messages in this way, we consider that a new trip number starts 
+-- at each DEP or just after each LAN message.
 WITH vessels_with_missing_trip_numbers AS (
     SELECT DISTINCT cfr
     FROM logbook_reports

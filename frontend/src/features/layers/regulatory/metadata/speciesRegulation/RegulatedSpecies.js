@@ -10,7 +10,6 @@ const RegulatedSpecies = ({ authorized, regulatedSpecies, hasPreviousRegulatedSp
     species,
     speciesGroups
   } = regulatedSpecies
-  console.log(regulatedSpecies)
 
   const dataCyTarget = authorized ? 'authorized' : 'unauthorized'
 

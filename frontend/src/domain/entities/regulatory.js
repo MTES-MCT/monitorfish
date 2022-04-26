@@ -9,7 +9,7 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }, speciesByCode)
     topic: properties.topic,
     zone: decodeURI(properties.zone),
     gearRegulation: parseGearRegulation(properties.gears),
-    regulatorySpecies: parseRegulatorySpecies(properties.species, speciesByCode),
+    speciesRegulation: parseSpeciesRegulation(properties.species, speciesByCode),
     regulatoryReferences: parseRegulatoryReferences(properties.regulatory_references),
     fishingPeriod: parseFishingPeriod(properties.fishing_period),
     region: properties.region,
@@ -36,25 +36,34 @@ function parseGearRegulation (gears) {
 
 /**
  * Parse the JSON and adds the species name to the list of species
- * @param regulatorySpecies
+ * @param speciesRegulation
  * @param {Object<string, {name: string, code: string}>} speciesByCode
- * @return {{otherInfo?: string, species: *, authorized?: boolean, allSpecies?: boolean, speciesGroups?: string[]}}
+ * @return {{otherInfo?: string, species: *, allSpecies?: boolean, speciesGroups?: string[]}}
  */
-function parseRegulatorySpecies (regulatorySpecies, speciesByCode) {
-  const _regulatorySpecies = regulatorySpecies
-    ? parseJSON(regulatorySpecies)
-    : DEFAULT_REG_SPECIES_VALUES
+function parseSpeciesRegulation (speciesRegulation, speciesByCode) {
+  const nextSpeciesRegulation = speciesRegulation
+    ? parseJSON(speciesRegulation)
+    : DEFAULT_SPECIES_REGULATION
 
-  const nextSpecies = _regulatorySpecies?.species?.map(uniqueSpecies => {
-    uniqueSpecies.name = speciesByCode[uniqueSpecies.code]?.name
+  if (nextSpeciesRegulation?.authorized?.species?.length) {
+    nextSpeciesRegulation.authorized.species = addMissingSpeciesName(nextSpeciesRegulation?.authorized?.species, speciesByCode)
+  }
+
+  if (nextSpeciesRegulation?.unauthorized?.species?.length) {
+    nextSpeciesRegulation.unauthorized.species = addMissingSpeciesName(nextSpeciesRegulation?.unauthorized?.species, speciesByCode)
+  }
+
+  return nextSpeciesRegulation
+}
+
+function addMissingSpeciesName (species, speciesByCode) {
+  return species.map(uniqueSpecies => {
+    if (!uniqueSpecies?.name) {
+      uniqueSpecies.name = speciesByCode[uniqueSpecies.code]?.name
+    }
 
     return uniqueSpecies
   })
-
-  return {
-    ..._regulatorySpecies,
-    species: nextSpecies
-  }
 }
 
 const parseRegulatoryReferences = regulatoryTextsString => {
@@ -130,11 +139,10 @@ export const mapToRegulatoryFeatureObject = properties => {
     region,
     regulatoryReferences,
     fishingPeriod,
-    regulatorySpecies,
+    speciesRegulation,
     gearRegulation,
     nextId
   } = properties
-  console.log(properties)
 
   return {
     topic: topic,
@@ -143,7 +151,7 @@ export const mapToRegulatoryFeatureObject = properties => {
     region: region,
     regulatory_references: JSON.stringify(regulatoryReferences),
     fishing_period: JSON.stringify(fishingPeriod),
-    species: JSON.stringify(regulatorySpecies),
+    species: JSON.stringify(speciesRegulation),
     gears: JSON.stringify(gearRegulation),
     next_id: nextId
   }
@@ -256,13 +264,26 @@ const DEFAULT_FISHING_PERIOD_VALUES = {
   always: undefined
 }
 
-/** @type {RegulatorySpecies} */
-const DEFAULT_REG_SPECIES_VALUES = {
-  authorized: undefined,
+/** @type {RegulatedSpecies} */
+export const DEFAULT_AUTHORIZED_REGULATED_SPECIES = {
+  otherInfo: undefined,
+  species: [],
+  speciesGroups: []
+}
+
+/** @type {RegulatedSpecies} */
+export const DEFAULT_UNAUTHORIZED_REGULATED_SPECIES = {
   allSpecies: undefined,
   otherInfo: undefined,
   species: [],
   speciesGroups: []
+}
+
+/** @type {SpeciesRegulation} */
+export const DEFAULT_SPECIES_REGULATION = {
+  authorized: DEFAULT_AUTHORIZED_REGULATED_SPECIES,
+  unauthorized: DEFAULT_UNAUTHORIZED_REGULATED_SPECIES,
+  otherInfo: undefined
 }
 
 /** @type {RegulatedGears} */
@@ -293,6 +314,25 @@ export const DEFAULT_GEAR_REGULATION = {
   otherInfo: undefined
 }
 
+export const REGULATORY_REFERENCE_KEYS = {
+  ID: 'id',
+  REGION: 'region',
+  LAW_TYPE: 'lawType',
+  TOPIC: 'topic',
+  ZONE: 'zone',
+  REGULATORY_REFERENCES: 'regulatoryReferences',
+  FISHING_PERIOD: 'fishingPeriod',
+  SPECIES_REGULATION: 'speciesRegulation',
+  GEAR_REGULATION: 'gearRegulation'
+}
+
+export const DEFAULT_REGULATION = {
+  [REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES]: [DEFAULT_REGULATORY_TEXT],
+  [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: DEFAULT_FISHING_PERIOD_VALUES,
+  [REGULATORY_REFERENCE_KEYS.SPECIES_REGULATION]: DEFAULT_SPECIES_REGULATION,
+  [REGULATORY_REFERENCE_KEYS.GEAR_REGULATION]: DEFAULT_GEAR_REGULATION
+}
+
 export const GEARS_CATEGORIES_WITH_MESH = [
   'Chaluts',
   'Sennes traînantes',
@@ -302,25 +342,6 @@ export const GEARS_CATEGORIES_WITH_MESH = [
 ]
 
 export const INITIAL_UPCOMING_REG_REFERENCE = { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }
-
-export const REGULATORY_REFERENCE_KEYS = {
-  ID: 'id',
-  REGION: 'region',
-  LAW_TYPE: 'lawType',
-  TOPIC: 'topic',
-  ZONE: 'zone',
-  REGULATORY_REFERENCES: 'regulatoryReferences',
-  FISHING_PERIOD: 'fishingPeriod',
-  REGULATORY_SPECIES: 'regulatorySpecies',
-  GEAR_REGULATION: 'gearRegulation'
-}
-
-export const DEFAULT_REGULATION = {
-  [REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES]: [DEFAULT_REGULATORY_TEXT],
-  [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: DEFAULT_FISHING_PERIOD_VALUES,
-  [REGULATORY_REFERENCE_KEYS.REGULATORY_SPECIES]: DEFAULT_REG_SPECIES_VALUES,
-  [REGULATORY_REFERENCE_KEYS.GEAR_REGULATION]: DEFAULT_GEAR_REGULATION
-}
 
 export const FISHING_PERIOD_KEYS = {
   DATE_RANGES: 'dateRanges',
@@ -396,7 +417,7 @@ export function findIfStringIsIncludedInZoneGears (zone, searchText, uniqueGearC
 }
 
 export function findIfStringIsIncludedInZoneSpecies (zone, searchText, uniqueGearCodes) {
-  const speciesCodes = zone.regulatorySpecies?.species?.map(speciesCodes => speciesCodes.code)
+  const speciesCodes = zone.speciesRegulation?.authorized?.species?.map(speciesCodes => speciesCodes.code)
 
   if (speciesCodes?.length) {
     return gearCodeIsFoundInRegulatoryZone(speciesCodes, uniqueGearCodes)

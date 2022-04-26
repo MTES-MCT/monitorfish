@@ -486,11 +486,11 @@ function removeVariousLonglineGears (layerGearsArray) {
 }
 
 export function getGearCategory (layerGears, gears) {
-  if (layerGears) {
-    if (layerGears.regulatedGearCategories && Object.keys(layerGears.regulatedGearCategories).length) {
-      return Object.keys(layerGears.regulatedGearCategories)[0]
-    } else if (layerGears.regulatedGears?.length) {
-      let layerGearsArray = layerGears.regulatedGears
+  if (layerGears?.authorized) {
+    if (layerGears?.authorized.regulatedGearCategories && Object.keys(layerGears?.authorized.regulatedGearCategories).length) {
+      return Object.keys(layerGears?.authorized.regulatedGearCategories)[0]
+    } else if (layerGears?.authorized.regulatedGears?.length) {
+      let layerGearsArray = layerGears?.authorized.regulatedGears
       if (layerGearsArray.length > 1) {
         layerGearsArray = removeMiscellaneousGears(layerGearsArray)
       }

@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
-import { Key, Value, Fields, Field } from './RegulatoryMetadata.style'
+import { COLORS } from '../../../../../constants/constants'
+import { Key, Value, Fields, Field } from '../RegulatoryMetadata.style'
 import { useSelector } from 'react-redux'
 
-const Identification = () => {
+const IdentificationDisplayed = () => {
   const {
     lawType,
     topic,
@@ -62,4 +62,4 @@ const Zone = styled.div`
   border-bottom: 1px solid ${COLORS.lightGray};
 `
 
-export default Identification
+export default IdentificationDisplayed

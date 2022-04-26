@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
-import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
+import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { useSelector } from 'react-redux'
-import { Label, List, Section, SectionTitle } from './RegulatoryMetadata.style'
+import { Label, List, SectionTitle } from '../RegulatoryMetadata.style'
 import GearsOrGearCategories from './GearsOrGearCategories'
-import { COLORS } from '../../../../constants/constants'
-import InfoPoint from '../../../backoffice/create_regulation/InfoPoint'
-import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../domain/entities/backoffice'
-import { INFO_TEXT } from '../../../backoffice/constants'
+import { COLORS } from '../../../../../constants/constants'
+import InfoPoint from '../../../../backoffice/create_regulation/InfoPoint'
+import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../../domain/entities/backoffice'
+import { INFO_TEXT } from '../../../../backoffice/constants'
 
-const MetadataGears = () => {
-  const { gearRegulation } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
+const RegulatedGears = ({ authorized, regulatedGearsObject, hasPreviousRegulatedGearsBloc }) => {
   const {
     groupsToCategories,
     categoriesToGears
   } = useSelector(state => state.gear)
+
   const {
-    authorized,
     regulatedGears,
     regulatedGearCategories,
     derogation,
@@ -25,7 +24,7 @@ const MetadataGears = () => {
     allGears,
     allTowedGears,
     allPassiveGears
-  } = gearRegulation
+  } = regulatedGearsObject
 
   const [filteredRegulatedGearCategories, setFilteredRegulatedGearCategories] = useState(regulatedGearCategories)
   const towedGearsCategories = getGroupCategories(REGULATED_GEARS_KEYS.ALL_TOWED_GEARS, groupsToCategories)
@@ -48,12 +47,18 @@ const MetadataGears = () => {
     setFilteredRegulatedGearCategories(nextFilteredRegulatedGearCategories)
   }, [groupsToCategories, allTowedGears, allPassiveGears, regulatedGearCategories])
 
-  return <>{gearRegulation && authorized !== undefined && gearsIsNotEmpty(gearRegulation) &&
-    <Section data-cy={'regulatory-layers-metadata-gears'}>
-      <SectionTitle>{gearRegulation.authorized
-        ? <GreenCircle margin={'0 5px 0 0'} />
-        : <RedCircle margin={'0 5px 0 0'} />}
-        Engins {gearRegulation.authorized ? 'réglementés' : 'interdits'}
+  const dataCyTarget = authorized ? 'authorized' : 'unauthorized'
+
+  return <div data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears`}>
+      <SectionTitle
+        hasPreviousRegulatedGearsBloc={hasPreviousRegulatedGearsBloc}
+      >
+        {
+          authorized
+            ? <GreenCircle margin={'0 5px 0 0'} />
+            : <RedCircle margin={'0 5px 0 0'} />
+        }
+        Engins {authorized ? 'réglementés' : 'interdits'}
       </SectionTitle>
       {allGears
         ? <Label>{'Tous les engins'}</Label>
@@ -61,7 +66,7 @@ const MetadataGears = () => {
           {
             allTowedGears && <Label
               title={INFO_TEXT.TOWED_GEAR}
-              data-cy={'regulatory-layers-metadata-gears-towed-gears'}
+              data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears-towed-gears`}
             >
               Tous les engins trainants
               <InfoPoint
@@ -73,6 +78,7 @@ const MetadataGears = () => {
           {
             allPassiveGears && <Label
               title={INFO_TEXT.PASSIVE_GEAR}
+              data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears-passive-gears`}
             >
               Tous les engins dormants
               <InfoPoint
@@ -108,18 +114,8 @@ const MetadataGears = () => {
           {otherInfo}
         </ReactMarkdown>
       }
-    </Section>}
-  </>
+  </div>
 }
-
-const gearsIsNotEmpty = gearRegulation => gearRegulation?.allGears ||
-  gearRegulation?.allTowedGears ||
-  gearRegulation?.allPassiveGears ||
-  gearRegulation?.otherInfo ||
-  Object.keys(gearRegulation?.gearRegulation || {})?.length ||
-  Object.keys(gearRegulation?.regulatedGearCategories || {})?.length ||
-  gearRegulation?.selectedCategoriesAndGears?.length ||
-  gearRegulation?.derogation
 
 const Derogation = styled.span`
   display: flex;
@@ -132,4 +128,4 @@ const DerogationMessage = styled.span`
   margin-left: 4px;
 `
 
-export default MetadataGears
+export default RegulatedGears

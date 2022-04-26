@@ -33,6 +33,12 @@ export const GEAR_REGULATION_KEYS = {
   OTHER_INFO: 'otherInfo'
 }
 
+export const SPECIES_REGULATION_KEYS = {
+  AUTHORIZED: 'authorized',
+  UNAUTHORIZED: 'unauthorized',
+  OTHER_INFO: 'otherInfo'
+}
+
 export const SORTED_CATEGORY_LIST = [
   'Chaluts', 'Sennes traînantes', 'Dragues', 'Sennes tournantes coulissantes',
   'Filets tournants', 'Filets maillants et filets emmêlants', 'Filets soulevés',

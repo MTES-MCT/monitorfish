@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch, batch } from 'react-redux'
 import styled from 'styled-components'
-import { EmptyResult } from '../commonStyles/Text.style'
-import RegulatoryLayerTopic from '../layers/regulatory/RegulatoryTopic'
-import { COLORS } from '../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
-import { setLawTypeOpened, setRegulatoryTopicsOpened, closeRegulatoryZoneMetadataPanel } from '../../domain/shared_slices/Regulatory'
-import updateTopicForAllZones from '../../domain/use_cases/layer/regulation/updateTopicForAllZones'
+import { EmptyResult } from '../../commonStyles/Text.style'
+import RegulatoryLayerTopic from '../../layers/regulatory/RegulatoryTopic'
+import { COLORS } from '../../../constants/constants'
+import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
+import { setLawTypeOpened, setRegulatoryTopicsOpened, closeRegulatoryZoneMetadataPanel } from '../../../domain/shared_slices/Regulatory'
+import updateTopicForAllZones from '../../../domain/use_cases/layer/regulation/updateTopicForAllZones'
 
 const LawType = props => {
   const dispatch = useDispatch()

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { Label, List, SectionTitle } from '../RegulatoryMetadata.style'
 import GearsOrGearCategories from './GearsOrGearCategories'
 import { COLORS } from '../../../../../constants/constants'
-import InfoPoint from '../../../../backoffice/create_regulation/InfoPoint'
+import InfoPoint from '../../../../backoffice/edit_regulation/InfoPoint'
 import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../../domain/entities/backoffice'
 import { INFO_TEXT } from '../../../../backoffice/constants'
 

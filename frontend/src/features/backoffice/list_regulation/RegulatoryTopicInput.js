@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { CustomInput } from '../commonStyles/Input.style'
+import { CustomInput } from '../../commonStyles/Input.style'
 
 const RegulatoryTopicInput = props => {
   const {

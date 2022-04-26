@@ -12,7 +12,7 @@ import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
 import { formatDataForSelectPicker } from '../../../../utils'
 import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
-import { setProcessingRegulationByKey } from '../../Regulation.slice'
+import { updateProcessingRegulationByKey } from '../../Regulation.slice'
 const RegulationTopicLine = props => {
   const {
     disabled,
@@ -38,7 +38,7 @@ const RegulationTopicLine = props => {
   const [isInfoTextShown, setIsInfoTextShown] = useState(false)
 
   const updateTopic = (value) => {
-    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value }))
+    dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.TOPIC, value }))
   }
 
   return <ContentLine

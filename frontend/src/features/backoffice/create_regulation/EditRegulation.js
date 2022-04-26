@@ -4,18 +4,19 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
-import getAllRegulatoryLayersByRegTerritory from '../../../domain/use_cases/layer/regulation/getAllRegulatoryLayersByRegTerritory'
+import getAllRegulatoryLayersByRegTerritory
+  from '../../../domain/use_cases/layer/regulation/getAllRegulatoryLayersByRegTerritory'
 import Layers from '../../../domain/entities/layers'
 import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'
 
 import {
   FishingPeriodSection,
+  GearRegulation,
   RegulationGeometryLine,
   RegulationLawTypeLine,
   RegulationLayerZoneLine,
   RegulationRegionLine,
   RegulationTopicLine,
-  GearRegulation,
   RegulatoryTextSection,
   RemoveRegulationModal
 } from './'
@@ -31,9 +32,9 @@ import {
   setRegulatoryTopics,
   setRegulatoryZoneMetadata
 } from '../../../domain/shared_slices/Regulatory'
-import getGeometryWithoutRegulationReference from '../../../domain/use_cases/layer/regulation/getGeometryWithoutRegulationReference'
-import createRegulation from '../../../domain/use_cases/layer/regulation/createRegulation'
-import resetRegulation from '../../../domain/use_cases/layer/regulation/resetRegulation'
+import getGeometryWithoutRegulationReference
+  from '../../../domain/use_cases/layer/regulation/getGeometryWithoutRegulationReference'
+import createOrUpdateRegulation from '../../../domain/use_cases/layer/regulation/createOrUpdateRegulation'
 
 import { formatDataForSelectPicker } from '../../../utils'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
@@ -44,23 +45,16 @@ import {
   setIsConfirmModalOpen,
   setIsRemoveModalOpen,
   setProcessingRegulation,
-  setProcessingRegulationByKey,
   setRegulationModified,
   setRegulatoryTextCheckedMap,
   setSaveOrUpdateRegulation
 } from '../Regulation.slice'
 import { setError } from '../../../domain/shared_slices/Global'
-import {
-  FRANCE,
-  DEFAULT_REGULATION,
-  LAWTYPES_TO_TERRITORY,
-  mapToRegulatoryFeatureObject,
-  REGULATORY_REFERENCE_KEYS
-} from '../../../domain/entities/regulatory'
+import { DEFAULT_REGULATION, FRANCE, LAWTYPES_TO_TERRITORY } from '../../../domain/entities/regulatory'
 import RegulatorySpeciesSection from './regulatory_species/RegulatorySpeciesSection'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 
-const CreateRegulation = ({ title, isEdition }) => {
+const EditRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
 
   const history = useHistory()
@@ -85,7 +79,6 @@ const CreateRegulation = ({ title, isEdition }) => {
   const [saveIsForbidden, setSaveIsForbidden] = useState(false)
 
   const {
-    isModalOpen,
     regulationSaved,
     regulationModified,
     regulatoryTextCheckedMap,
@@ -168,13 +161,6 @@ const CreateRegulation = ({ title, isEdition }) => {
     }
   }, [lawType, layersTopicsByRegTerritory, dispatch])
 
-  const createOrUpdateRegulation = useCallback((featureObject) => {
-    dispatch(createRegulation(featureObject, id))
-    if (selectedRegulatoryZoneId && selectedRegulatoryZoneId !== id) {
-      dispatch(resetRegulation(selectedRegulatoryZoneId, id))
-    }
-  }, [id, selectedRegulatoryZoneId, dispatch])
-
   const checkRequiredValues = useCallback(() => {
     let _atLeastOneValueIsMissing = false
     let valueIsMissing = !(lawType && lawType !== '')
@@ -208,7 +194,7 @@ const CreateRegulation = ({ title, isEdition }) => {
   }, [saveOrUpdateRegulation, atLeastOneValueIsMissing, checkRequiredValues])
 
   useEffect(() => {
-    if (!isModalOpen && regulatoryTextCheckedMap && saveOrUpdateRegulation) {
+    if (regulatoryTextCheckedMap && saveOrUpdateRegulation) {
       const regulatoryTextCheckList = Object.values(regulatoryTextCheckedMap)
       const allTextsHaveBeenChecked = regulatoryTextCheckList?.length > 0 && regulatoryTextCheckList.length === regulatoryReferences.length
 
@@ -216,11 +202,7 @@ const CreateRegulation = ({ title, isEdition }) => {
         const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !atLeastOneValueIsMissing
 
         if (allRequiredValuesHaveBeenFilled) {
-          const featureObject = mapToRegulatoryFeatureObject({
-            ...processingRegulation,
-            region: processingRegulation.region?.join(', ')
-          })
-          createOrUpdateRegulation(featureObject)
+          dispatch(createOrUpdateRegulation(processingRegulation, id, selectedRegulatoryZoneId))
           setSaveIsForbidden(false)
         } else {
           batch(() => {
@@ -232,7 +214,7 @@ const CreateRegulation = ({ title, isEdition }) => {
         }
       }
     }
-  }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap, setSaveIsForbidden, createOrUpdateRegulation])
+  }, [atLeastOneValueIsMissing, saveOrUpdateRegulation, regulatoryTextCheckedMap, setSaveIsForbidden, id, selectedRegulatoryZoneId])
 
   useEffect(() => {
     if (showRegulatoryPreview) {
@@ -253,10 +235,6 @@ const CreateRegulation = ({ title, isEdition }) => {
           setGeometryObjectList(geometryListAsObject)
         }
       })
-  }
-
-  const setRegulatoryTextList = (texts) => {
-    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES, value: texts }))
   }
 
   return (
@@ -303,7 +281,6 @@ const CreateRegulation = ({ title, isEdition }) => {
             </Section>
             <RegulatoryTextSection
               regulatoryTextList={regulatoryReferences}
-              setRegulatoryTextList={setRegulatoryTextList}
               saveForm={saveOrUpdateRegulation}
             />
             <FishingPeriodSection />
@@ -332,13 +309,6 @@ const CreateRegulation = ({ title, isEdition }) => {
               }
               </ValidateButton>
             </Validate>
-            {/* <CancelButton
-              disabled={false}
-              isLast={false}
-              onClick={saveAsDraft}
-            >
-              Enregistrer un brouillon
-            </CancelButton> */}
             {isEdition &&
               <CancelButton
                 disabled={false}
@@ -439,4 +409,4 @@ const ContentWrapper = styled.div`
   padding: 40px;
 `
 
-export default CreateRegulation
+export default EditRegulation

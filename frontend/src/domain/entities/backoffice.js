@@ -66,6 +66,7 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
             value: gear.code
           }
         })
+
       return {
         label: category,
         value: category,

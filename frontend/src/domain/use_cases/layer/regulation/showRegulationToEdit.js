@@ -23,6 +23,7 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
         gearRegulation,
         geometry
       } = regulatoryZoneMetadata
+      console.log(regulatoryZoneMetadata)
 
       dispatch(setProcessingRegulation({
         lawType,

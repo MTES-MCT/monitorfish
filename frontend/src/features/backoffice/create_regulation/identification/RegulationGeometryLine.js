@@ -9,7 +9,7 @@ import Tag from '../Tag'
 import { ReactComponent as ShowIconSVG } from '../../../icons/oeil_affiche.svg'
 import { ReactComponent as HideIconSVG } from '../../../icons/oeil_masque.svg'
 import { COLORS } from '../../../../constants/constants'
-import { setProcessingRegulationByKey } from '../../Regulation.slice'
+import { updateProcessingRegulationByKey } from '../../Regulation.slice'
 import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const RegulationGeometryLine = props => {
@@ -25,7 +25,7 @@ const RegulationGeometryLine = props => {
   const { id } = useSelector(state => state.regulation.processingRegulation)
 
   const onCloseIconClicked = () => {
-    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined }))
+    dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined }))
     setShowRegulatoryPreview(false)
   }
 
@@ -35,7 +35,7 @@ const RegulationGeometryLine = props => {
         searchable={false}
         placeholder='Choisir un tracé'
         value={'Choisir un tracé'}
-        onChange={value => dispatch(setProcessingRegulationByKey({ key: 'id', value }))}
+        onChange={value => dispatch(updateProcessingRegulationByKey({ key: 'id', value }))}
         data={geometryIdList}
         valueIsMissing={geometryIsMissing}
         emptyMessage={'aucun tracé à associer'}

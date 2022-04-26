@@ -47,8 +47,8 @@ const RegulatoryText = props => {
   const [fromForm, setFromForm] = useState(false)
   /** @type {boolean} nameIsRequired */
   const [nameIsRequired, setNameIsRequired] = useState(false)
-  /** @type {boolean} URLIsrequired */
-  const [URLIsrequired, setURLIsrequired] = useState(false)
+  /** @type {boolean} URLIsRequired */
+  const [URLIsRequired, setURLIsRequired] = useState(false)
   /** @type {boolean} startDateIsRequired */
   const [startDateIsRequired, setStartDateIsRequired] = useState(false)
   /** @type {boolean} endDateIsRequired */
@@ -102,7 +102,7 @@ const RegulatoryText = props => {
     setNameIsRequired(required)
     required = !url || url === '' || !checkURL(url)
     oneValueIsMissing = oneValueIsMissing || required
-    setURLIsrequired(required)
+    setURLIsRequired(required)
     if (!oneValueIsMissing) {
       setFromForm(false)
       return false
@@ -167,7 +167,7 @@ const RegulatoryText = props => {
           />
           <CustomInput
             placeholder={'URL'}
-            $isRed={URLIsrequired}
+            $isRed={URLIsRequired}
             width={'250px'}
             value={url || ''}
             onChange={value => onInputValueChange('url', value)}

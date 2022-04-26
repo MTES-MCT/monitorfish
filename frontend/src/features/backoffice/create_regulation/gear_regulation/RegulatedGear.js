@@ -29,7 +29,7 @@ const RegulatedGear = props => {
         />
       </ContentLine>
       {allowMesh && <ContentLine>
-        <Label data-cy='mesh-label' >Maillage</Label>
+        <Label data-cy='mesh-label'>Maillage</Label>
         <CustomSelectComponent
           value={meshType || GEAR_MESH_SIZE.greaterThan}
           onChange={value => onChange('meshType', value)}
@@ -59,8 +59,7 @@ const RegulatedGear = props => {
               label: 'entre'
             }
           ]}
-          renderMenuItem={(_, item) =>
-            <MenuItem item={item} />}
+          renderMenuItem={(_, item) => <MenuItem item={item} />}
           valueIsMissing={false}
           cleanable={false}
           searchable={false}

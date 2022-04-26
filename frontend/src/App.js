@@ -17,7 +17,7 @@ import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader
 import RightMenuOnHoverArea from './features/vessel_sidebar/RightMenuOnHoverArea'
 import Measurement from './features/measurements/Measurement'
 import VesselFilters from './features/vessel_filters/VesselFilters'
-import NewRegulation from './features/backoffice/create_regulation/EditRegulation'
+import EditRegulation from './features/backoffice/create_regulation/EditRegulation'
 import { ReactComponent as AlertSVG } from './features/icons/Picto_alerte.svg'
 import { Provider } from 'react-redux'
 import { backofficeStore, homeStore, backofficePersistor } from './Store'
@@ -169,10 +169,10 @@ function BackofficePage () {
               <Backoffice/>
             </Route>
             <Route exact path={`${match.path}/regulation/new`}>
-              <NewRegulation title='Saisir une nouvelle réglementation' />
+              <EditRegulation title='Saisir une nouvelle réglementation' />
             </Route>
             <Route exact path={`${match.path}/regulation/edit`}>
-              <NewRegulation title='Modifier la réglementation de la zone' isEdition={true}/>
+              <EditRegulation title='Modifier la réglementation de la zone' isEdition={true}/>
             </Route>
             <Route exact path={`${match.path}/control_objectives`}>
               <ControlObjectives/>

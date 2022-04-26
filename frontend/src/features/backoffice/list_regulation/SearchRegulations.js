@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
-import { COLORS } from '../../constants/constants'
-import { AddRegulationButton } from '../commonStyles/Buttons.style'
-import { searchByLawType, searchResultIncludeZone } from '../../domain/entities/regulatory'
-import { closeRegulatoryZoneMetadataPanel } from '../../domain/shared_slices/Regulatory'
-import { BACKOFFICE_SEARCH_PROPERTIES } from '../../domain/entities/backoffice'
+import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
+import { COLORS } from '../../../constants/constants'
+import { AddRegulationButton } from '../../commonStyles/Buttons.style'
+import { searchByLawType, searchResultIncludeZone } from '../../../domain/entities/regulatory'
+import { closeRegulatoryZoneMetadataPanel } from '../../../domain/shared_slices/Regulatory'
+import { BACKOFFICE_SEARCH_PROPERTIES } from '../../../domain/entities/backoffice'
 
 const SearchRegulations = props => {
   const dispatch = useDispatch()

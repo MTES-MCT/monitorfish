@@ -75,7 +75,10 @@ trip_starts AS (
 
 SELECT
     t1.id,
-    MAX(trip_starts.trip_number) OVER (PARTITION BY cfr ORDER BY order_datetime_utc) AS trip_number
+    COALESCE(
+        MAX(trip_starts.trip_number) OVER (PARTITION BY cfr ORDER BY order_datetime_utc),
+        0
+     ) AS trip_number
 FROM t1
 LEFT JOIN trip_starts
 ON t1.id = trip_starts.id

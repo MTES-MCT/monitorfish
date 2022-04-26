@@ -96,7 +96,7 @@ context('Update Regulation', () => {
     cy.url().should('include', '/backoffice')
   })
 
-  it('Save regulation Should send the regulated species and gears updates object to Geoserver', () => {
+  it.only('Save regulation Should send the regulated species and gears updates object to Geoserver', () => {
     // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     // complete missing values in form
@@ -120,12 +120,11 @@ context('Update Regulation', () => {
 
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
     cy.get('*[data-cy^="regulatory-gears-section"]').click({ force: true })
-    cy.get('*[data-cy="gears-selector"]')
+    cy.get('*[data-cy="authorized-gears-selector"]')
       .scrollIntoView()
 
     cy.log('Select TX - Autres chaluts')
-    cy.get('.rs-picker-cascader')
-      .filter(':contains("des engins")')
+    cy.get('[data-cy="authorized-gears-selector"]')
       .click({ timeout: 20000 })
     cy.get('.rs-checkbox-checker')
       .filter(':contains("Chaluts")')
@@ -133,12 +132,12 @@ context('Update Regulation', () => {
     cy.get('.rs-checkbox-checker')
       .filter(':contains("TX - Autres chaluts")')
       .click({ timeout: 20000 })
-    cy.get('.rs-picker-cascader')
+    cy.get('[data-cy="authorized-gears-selector"]')
       .filter(':contains("des engins")')
       .type('{esc}')
 
     cy.log('Unselect TX - Autres chaluts')
-    cy.get('.rs-picker-cascader')
+    cy.get('[data-cy="authorized-gears-selector"]')
       .filter(':contains("des engins")')
       .click({ timeout: 20000 })
     cy.get('.rs-checkbox-checker')
@@ -148,7 +147,7 @@ context('Update Regulation', () => {
     cy.get('.rs-checkbox-checker')
       .filter(':contains("TX - Autres chaluts")')
       .click({ timeout: 20000 })
-    cy.get('.rs-picker-cascader')
+    cy.get('[data-cy="authorized-gears-selector"]')
       .filter(':contains("des engins")')
       .type('{esc}')
 
@@ -172,10 +171,10 @@ context('Update Regulation', () => {
           .contain('{"species":[{"code":"URC","remarks":"- Pas plus de 500kg\\n - Autre remarqueNe pas en prendre beaucoup please","name":"OURSINS NCA"},' +
             '{"code":"URX","remarks":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],"authorized":true,' +
             '"speciesGroups":["Espèces eau profonde"],"otherInfo":"Mhm pas d\'autre info !"}')
-          .contain('{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !","authorized":true,' +
-            '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines","category":"Chaluts",' +
-            '"groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"],"remarks":"Attention à cette espèce!"}},"allPassiveGears":false,' +
-            '"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}')
+          .contain('{"unauthorized":null,"authorized":{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - ' +
+            'Dragues avec dents !","allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines",' +
+            '"category":"Chaluts","groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"],"remarks":"Attention à cette espèce!"}},' +
+            '"allPassiveGears":false,"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}}')
 
         expect(response.statusCode).equal(200)
       })

@@ -4,7 +4,7 @@ import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Ba
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
-import { setProcessingRegulationByKey } from '../../Regulation.slice'
+import { updateProcessingRegulationByKey } from '../../Regulation.slice'
 import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
 const RegulationLayerZoneLine = props => {
@@ -16,7 +16,7 @@ const RegulationLayerZoneLine = props => {
   const { zone } = useSelector(state => state.regulation.processingRegulation)
 
   const setZoneName = (value) => {
-    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ZONE, value }))
+    dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ZONE, value }))
   }
 
   return <ContentLine>

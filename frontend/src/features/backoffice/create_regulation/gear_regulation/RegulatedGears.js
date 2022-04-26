@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useCallback, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import {
   CustomCheckbox,
   customRadioGroup,
@@ -12,23 +12,19 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { MultiCascader, Radio, RadioGroup } from 'rsuite'
 import RegulatedGear from './RegulatedGear'
-import getAllGearCodes from '../../../../domain/use_cases/gearCode/getAllGearCodes'
 import { GEARS_CATEGORIES_WITH_MESH } from '../../../../domain/entities/regulatory'
 import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
-import {
-  getGroupCategories,
-  prepareCategoriesAndGearsToDisplay,
-  REGULATED_GEARS_KEYS
-} from '../../../../domain/entities/backoffice'
+import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../domain/entities/backoffice'
 
 const RegulatedGears = props => {
   const {
     regulatedGearsObject,
     setRegulatedGearsObject,
     show,
-    authorized
+    authorized,
+    formattedAndFilteredCategoriesToGears
   } = props
 
   const {
@@ -44,30 +40,11 @@ const RegulatedGears = props => {
     derogation
   } = regulatedGearsObject
 
-  console.log(regulatedGearsObject)
-
-  const dispatch = useDispatch()
   const {
-    /** @type {Object.<string, Gear[]>} */
     categoriesToGears,
     groupsToCategories,
     gearsByCode
   } = useSelector(state => state.gear)
-
-  /** @type {string[]} */
-  const [formattedAndFilteredCategoriesToGears, setFormattedAndFilteredCategoriesToGears] = useState([])
-
-  useEffect(() => {
-    if (!categoriesToGears || !groupsToCategories || gearsByCode) {
-      dispatch(getAllGearCodes())
-    }
-  }, [])
-
-  useEffect(() => {
-    if (categoriesToGears) {
-      setFormattedAndFilteredCategoriesToGears(prepareCategoriesAndGearsToDisplay(categoriesToGears))
-    }
-  }, [categoriesToGears])
 
   const onCheckboxChange = (groupName, checked) => {
     let nextSelectedCategoriesAndGears = selectedCategoriesAndGears ? [...selectedCategoriesAndGears] : []
@@ -84,10 +61,6 @@ const RegulatedGears = props => {
   }
 
   const set = useCallback((key, value) => {
-    console.log({
-      ...regulatedGearsObject,
-      [key]: value
-    })
     setRegulatedGearsObject(authorized, {
       ...regulatedGearsObject,
       [key]: value
@@ -132,14 +105,6 @@ const RegulatedGears = props => {
         }
       })
 
-      console.log({
-        ...regulatedGearsObject,
-        [REGULATED_GEARS_KEYS.ALL_GEARS]: categories === formattedAndFilteredCategoriesToGears.length,
-        [REGULATED_GEARS_KEYS.ALL_TOWED_GEARS]: towedGearCategories === groupsToCategories[REGULATED_GEARS_KEYS.ALL_TOWED_GEARS].length,
-        [REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS]: passiveGearCategories === groupsToCategories[REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS].length,
-        [REGULATED_GEARS_KEYS.REGULATED_GEARS]: nextRegulatedGears,
-        [REGULATED_GEARS_KEYS.REGULATED_GEAR_CATEGORIES]: nextRegulatedGearCategories
-      })
       setRegulatedGearsObject(authorized, {
         ...regulatedGearsObject,
         [REGULATED_GEARS_KEYS.ALL_GEARS]: categories === formattedAndFilteredCategoriesToGears.length,
@@ -162,7 +127,6 @@ const RegulatedGears = props => {
   }
 
   const setRegulatedGears = (key, value, gearCode) => {
-    console.log(regulatedGears, key, value, gearCode)
     const nextRegulatedGears = {
       ...regulatedGears,
       [gearCode]: {
@@ -186,6 +150,8 @@ const RegulatedGears = props => {
     set(REGULATED_GEARS_KEYS.REGULATED_GEAR_CATEGORIES, nextRegulatedGearCategories)
   }
 
+  const dataCyTarget = authorized ? 'authorized' : 'unauthorized'
+
   return <FormSection show={show}>
     <RegulatorySectionTitle>
       {
@@ -199,10 +165,10 @@ const RegulatedGears = props => {
     <FormContent
       authorized={authorized}
       display={authorized !== undefined}
-      data-cy={'gears-section-content'}
+      data-cy={`${dataCyTarget}-gears-section-content`}
     >
       {!authorized && <GearCheckBox
-        data-cy={'all-gears-option'}
+        data-cy={`${dataCyTarget}-all-gears-option`}
         value={REGULATED_GEARS_KEYS.ALL_GEARS}
         onChange={onCheckboxChange}
         checked={allGears}
@@ -211,7 +177,7 @@ const RegulatedGears = props => {
       </GearCheckBox>}
       <CheckboxWrapper>
         <GearCheckBox
-          data-cy={'all-towed-gears-option'}
+          data-cy={`${dataCyTarget}-all-towed-gears-option`}
           value={REGULATED_GEARS_KEYS.ALL_TOWED_GEARS}
           onChange={onCheckboxChange}
           checked={allTowedGears}
@@ -222,7 +188,7 @@ const RegulatedGears = props => {
       </CheckboxWrapper>
       <CheckboxWrapper>
         <GearCheckBox
-          data-cy={'all-passive-gears-option'}
+          data-cy={`${dataCyTarget}-all-passive-gears-option`}
           value={REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS}
           onChange={onCheckboxChange}
           checked={allPassiveGears}
@@ -232,7 +198,7 @@ const RegulatedGears = props => {
         <InfoBox pointer><InfoText>{INFO_TEXT.PASSIVE_GEAR}</InfoText></InfoBox>
       </CheckboxWrapper>
       <CustomMultiCascader
-        data-cy='gears-selector'
+        data-cy={`${dataCyTarget}-gears-selector`}
         data={formattedAndFilteredCategoriesToGears}
         style={{ width: 200 }}
         menuWidth={250}

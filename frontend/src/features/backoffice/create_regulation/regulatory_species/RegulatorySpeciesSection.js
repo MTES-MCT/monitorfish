@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import SectionTitle from '../../SectionTitle'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
 import RegulatorySpeciesForm from './RegulatorySpeciesForm'
-import { setProcessingRegulationByKey } from '../../Regulation.slice'
+import { updateProcessingRegulationByKey } from '../../Regulation.slice'
 import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
 import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
@@ -15,7 +15,7 @@ const RegulatorySpeciesSection = () => {
   const { regulatorySpecies } = useSelector(state => state.regulation.processingRegulation)
 
   const setRegulatorySpecies = value => {
-    dispatch(setProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGULATORY_SPECIES, value }))
+    dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.REGULATORY_SPECIES, value }))
   }
 
   const setOtherInfo = value => {

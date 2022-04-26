@@ -131,9 +131,10 @@ export const mapToRegulatoryFeatureObject = properties => {
     regulatoryReferences,
     fishingPeriod,
     regulatorySpecies,
-    regulatedGears,
+    gearRegulation,
     nextId
   } = properties
+  console.log(properties)
 
   return {
     topic: topic,
@@ -143,7 +144,7 @@ export const mapToRegulatoryFeatureObject = properties => {
     regulatory_references: JSON.stringify(regulatoryReferences),
     fishing_period: JSON.stringify(fishingPeriod),
     species: JSON.stringify(regulatorySpecies),
-    gears: JSON.stringify(regulatedGears),
+    gears: JSON.stringify(gearRegulation),
     next_id: nextId
   }
 }
@@ -264,25 +265,31 @@ const DEFAULT_REG_SPECIES_VALUES = {
   speciesGroups: []
 }
 
+/** @type {RegulatedGears} */
+export const DEFAULT_AUTHORIZED_REGULATED_GEARS = {
+  allTowedGears: undefined,
+  allPassiveGears: undefined,
+  regulatedGearCategories: {},
+  regulatedGears: {},
+  selectedCategoriesAndGears: [],
+  derogation: undefined
+}
+
+/** @type {RegulatedGears} */
+export const DEFAULT_UNAUTHORIZED_REGULATED_GEARS = {
+  allGears: undefined,
+  allTowedGears: undefined,
+  allPassiveGears: undefined,
+  regulatedGearCategories: {},
+  regulatedGears: {},
+  selectedCategoriesAndGears: [],
+  derogation: undefined
+}
+
 /** @type {GearRegulation} */
 export const DEFAULT_GEAR_REGULATION = {
-  authorized: {
-    allTowedGears: undefined,
-    allPassiveGears: undefined,
-    regulatedGearCategories: {},
-    regulatedGears: {},
-    selectedCategoriesAndGears: [],
-    derogation: undefined
-  },
-  unauthorized: {
-    allGears: undefined,
-    allTowedGears: undefined,
-    allPassiveGears: undefined,
-    regulatedGearCategories: {},
-    regulatedGears: {},
-    selectedCategoriesAndGears: [],
-    derogation: undefined
-  },
+  authorized: DEFAULT_AUTHORIZED_REGULATED_GEARS,
+  unauthorized: DEFAULT_UNAUTHORIZED_REGULATED_GEARS,
   otherInfo: undefined
 }
 

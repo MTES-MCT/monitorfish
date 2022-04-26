@@ -4,8 +4,6 @@ import { DEFAULT_REGULATION, REGULATORY_REFERENCE_KEYS } from '../../domain/enti
 const INITIAL_STATE = {
   /** @type {Object} */
   processingRegulation: DEFAULT_REGULATION,
-  /** @type {boolean} isModalOpen */
-  isModalOpen: false,
   /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */
   regulatoryTextCheckedMap: undefined,
   /** @type {boolean} */
@@ -37,8 +35,14 @@ const regulationSlice = createSlice({
     setRegulationModified (state, action) {
       state.regulationModified = action.payload
     },
-    setProcessingRegulationByKey (state, { payload: { key, value } }) {
+    updateProcessingRegulationByKey (state, { payload: { key, value } }) {
       state.processingRegulation[key] = value
+      if (!state.regulationModified) {
+        state.regulationModified = true
+      }
+    },
+    updateProcessingRegulationByKeyAndSubKey (state, { payload: { key, subKey, value } }) {
+      state.processingRegulation[key][subKey] = value
       if (!state.regulationModified) {
         state.regulationModified = true
       }
@@ -61,9 +65,6 @@ const regulationSlice = createSlice({
     },
     setSelectedRegulation (state, action) {
       state.selectedRegulation = action.payload
-    },
-    setIsModalOpen (state, action) {
-      state.isModalOpen = action.payload
     },
     addObjectToRegulatoryTextCheckedMap (state, action) {
       const {
@@ -103,7 +104,6 @@ const regulationSlice = createSlice({
 
 export const {
   resetState,
-  setIsModalOpen,
   setProcessingRegulationSaved,
   setRegulatoryTextCheckedMap,
   addObjectToRegulatoryTextCheckedMap,
@@ -112,7 +112,8 @@ export const {
   setProcessingRegulationDeleted,
   setIsRemoveModalOpen,
   setIsConfirmModalOpen,
-  setProcessingRegulationByKey,
+  updateProcessingRegulationByKey,
+  updateProcessingRegulationByKeyAndSubKey,
   setProcessingRegulation,
   setFishingPeriod,
   setFishingPeriodOtherInfo,

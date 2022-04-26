@@ -1,13 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import RegulatedGears from './RegulatedGears'
 import SectionTitle from '../../SectionTitle'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
 import { Section, OtherRemark, VerticalLine } from '../../../commonStyles/Backoffice.style'
-import { setProcessingRegulationByKey } from '../../Regulation.slice'
-import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
-import { GEAR_REGULATION_KEYS } from '../../../../domain/entities/backoffice'
+import { updateProcessingRegulationByKeyAndSubKey } from '../../Regulation.slice'
+import {
+  DEFAULT_AUTHORIZED_REGULATED_GEARS,
+  DEFAULT_UNAUTHORIZED_REGULATED_GEARS,
+  REGULATORY_REFERENCE_KEYS
+} from '../../../../domain/entities/regulatory'
+import { GEAR_REGULATION_KEYS, prepareCategoriesAndGearsToDisplay } from '../../../../domain/entities/backoffice'
+import getAllGearCodes from '../../../../domain/use_cases/gearCode/getAllGearCodes'
 
 const GearRegulation = () => {
   const dispatch = useDispatch()
@@ -15,33 +20,49 @@ const GearRegulation = () => {
     gearRegulation
   } = useSelector(state => state.regulation.processingRegulation)
 
-  const [show, setShow] = useState(false)
+  const {
+    /** @type {Object.<string, Gear[]>} */
+    categoriesToGears,
+    groupsToCategories,
+    gearsByCode
+  } = useSelector(state => state.gear)
 
-  const setGearRegulation = value => {
-    console.log(value)
-    dispatch(setProcessingRegulationByKey({
+  const [show, setShow] = useState(false)
+  /** @type {string[]} */
+  const [formattedAndFilteredCategoriesToGears, setFormattedAndFilteredCategoriesToGears] = useState([])
+
+  useEffect(() => {
+    if (!categoriesToGears || !groupsToCategories || gearsByCode) {
+      dispatch(getAllGearCodes())
+    }
+  }, [])
+
+  useEffect(() => {
+    if (categoriesToGears) {
+      setFormattedAndFilteredCategoriesToGears(prepareCategoriesAndGearsToDisplay(categoriesToGears))
+    }
+  }, [categoriesToGears])
+
+  const setGearRegulation = (property, value) => {
+    dispatch(updateProcessingRegulationByKeyAndSubKey({
       key: REGULATORY_REFERENCE_KEYS.GEAR_REGULATION,
+      subKey: property,
       value
     }))
   }
 
   const setRegulatedGears = (isAuthorized, regulatedGears) => {
-    const authorizedKey = isAuthorized
+    const property = isAuthorized
       ? GEAR_REGULATION_KEYS.AUTHORIZED
       : GEAR_REGULATION_KEYS.UNAUTHORIZED
 
-    setGearRegulation({
-      ...gearRegulation,
-      [authorizedKey]: regulatedGears
-    })
+    setGearRegulation(property, regulatedGears)
   }
 
   const setOtherInfo = value => {
-    setGearRegulation({
-      ...gearRegulation,
-      [GEAR_REGULATION_KEYS.OTHER_INFO]: value
-    })
+    setGearRegulation(GEAR_REGULATION_KEYS.OTHER_INFO, value)
   }
+  console.log(gearRegulation)
 
   return <Section show>
     <SectionTitle
@@ -54,15 +75,17 @@ const GearRegulation = () => {
       <RegulatedGears
         show={show}
         authorized={true}
-        regulatedGearsObject={gearRegulation[GEAR_REGULATION_KEYS.AUTHORIZED] || {}}
+        regulatedGearsObject={gearRegulation[GEAR_REGULATION_KEYS.AUTHORIZED] || DEFAULT_AUTHORIZED_REGULATED_GEARS}
         setRegulatedGearsObject={setRegulatedGears}
+        formattedAndFilteredCategoriesToGears={formattedAndFilteredCategoriesToGears}
       />
       <VerticalLine/>
       <RegulatedGears
         show={show}
         authorized={false}
-        regulatedGearsObject={gearRegulation[GEAR_REGULATION_KEYS.UNAUTHORIZED] || {}}
+        regulatedGearsObject={gearRegulation[GEAR_REGULATION_KEYS.UNAUTHORIZED] || DEFAULT_UNAUTHORIZED_REGULATED_GEARS}
         setRegulatedGearsObject={setRegulatedGears}
+        formattedAndFilteredCategoriesToGears={formattedAndFilteredCategoriesToGears}
       />
     </RegulatedGearsForms>
     <OtherRemark show={show}>

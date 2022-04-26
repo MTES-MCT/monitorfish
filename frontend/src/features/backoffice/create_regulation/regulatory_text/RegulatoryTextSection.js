@@ -4,7 +4,9 @@ import { COLORS } from '../../../../constants/constants'
 import { Section, Title } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton } from '../../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
-import { DEFAULT_REGULATORY_TEXT } from '../../../../domain/entities/regulatory'
+import { DEFAULT_REGULATORY_TEXT, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
+import { updateProcessingRegulationByKey } from '../../Regulation.slice'
+import { useDispatch } from 'react-redux'
 
 /**
  * @typedef {object} Props
@@ -16,13 +18,19 @@ import { DEFAULT_REGULATORY_TEXT } from '../../../../domain/entities/regulatory'
 const RegulatoryTextSection = props => {
   const {
     regulatoryTextList,
-    setRegulatoryTextList,
     source,
     saveForm
   } = props
+  const dispatch = useDispatch()
 
-  const addOrRemoveRegulatoryTextInList = (id) => {
+  const setRegulatoryTextList = texts => dispatch(updateProcessingRegulationByKey({
+    key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES,
+    value: texts
+  }))
+
+  const addOrRemoveRegulatoryTextInList = id => {
     let newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
+
     if (id === undefined) {
       newRegulatoryTextList.push(DEFAULT_REGULATORY_TEXT)
     } else if (regulatoryTextList.length === 1) {
@@ -30,6 +38,7 @@ const RegulatoryTextSection = props => {
     } else {
       newRegulatoryTextList.splice(id, 1)
     }
+
     setRegulatoryTextList(newRegulatoryTextList)
   }
 

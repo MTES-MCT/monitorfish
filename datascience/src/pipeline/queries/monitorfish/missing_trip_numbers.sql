@@ -5,6 +5,13 @@
 
 -- After sorting the messages in this way, we consider that a new trip number starts 
 -- at each DEP or just after each LAN message.
+
+-- Trip numbers are re-computed for all reports of each vessel that has at least one
+-- report without a trip number. This may seem suboptimal, but special cases (LANs sent
+-- several days after landing and after some messages of the next trip, CORs updating
+-- reports with trip numbers already previously attributed, ...) make it difficult to
+-- to better.
+
 WITH vessels_with_missing_trip_numbers AS (
     SELECT DISTINCT cfr
     FROM logbook_reports

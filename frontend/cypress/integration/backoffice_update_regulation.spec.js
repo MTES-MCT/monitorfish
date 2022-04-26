@@ -96,7 +96,7 @@ context('Update Regulation', () => {
     cy.url().should('include', '/backoffice')
   })
 
-  it.only('Save regulation Should send the regulated species and gears updates object to Geoserver', () => {
+  it('Save regulation Should send the species regulation updates object to Geoserver', () => {
     // Given
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
     // complete missing values in form
@@ -119,6 +119,35 @@ context('Update Regulation', () => {
     cy.get('*[data-cy^="regulatory-species-other-info"]').type('Mhm pas d\'autre info !')
 
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
+    cy.get('*[data-cy="authorized-gears-selector"]')
+      .scrollIntoView()
+
+    // When
+    cy.get('[data-cy="validate-button"]').click()
+    cy.wait(200)
+
+    // Then
+    cy.wait('@postRegulation')
+      .then(({ request, response }) => {
+        expect(request.body)
+          .contain('{"species":[{"code":"URC","remarks":"- Pas plus de 500kg\\n - Autre remarqueNe pas en prendre beaucoup please","name":"OURSINS NCA"},' +
+            '{"code":"URX","remarks":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],"authorized":true,' +
+            '"speciesGroups":["Espèces eau profonde"],"otherInfo":"Mhm pas d\'autre info !"}')
+
+        expect(response.statusCode).equal(200)
+      })
+    cy.url().should('include', '/backoffice')
+  })
+
+  it.only('Save regulation Should send the gears regulation updates object to Geoserver', () => {
+    // Given
+    cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
+    // complete missing values in form
+    cy.get('[type="checkbox"]').first().check({ force: true })
+    cy.get('[type="checkbox"]').eq(2).check({ force: true })
+    cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
+    cy.get('*[data-cy^="regulation-authorized-species"]').click({ force: true })
+    cy.scrollTo(0, 500)
     cy.get('*[data-cy^="regulatory-gears-section"]').click({ force: true })
     cy.get('*[data-cy="authorized-gears-selector"]')
       .scrollIntoView()
@@ -151,12 +180,28 @@ context('Update Regulation', () => {
       .filter(':contains("des engins")')
       .type('{esc}')
 
+    cy.log('Modify to lowerThanOrEqualTo')
     cy.get('.rs-picker-select')
       .filter(':contains("inférieur à")')
       .click({ timeout: 20000 })
     cy.get('.rs-picker-select-menu-item')
       .eq(3)
       .click({ timeout: 20000 })
+
+    cy.log('Add unauthorized gear')
+    cy.get('[data-cy="unauthorized-gears-selector"]')
+      .filter(':contains("des engins")')
+      .click({ timeout: 20000 })
+    cy.get('.rs-checkbox-checker')
+      .filter(':contains("Chaluts")')
+      .eq(0)
+      .click({ timeout: 20000 })
+    cy.get('.rs-checkbox-checker')
+      .filter(':contains("TX - Autres chaluts")')
+      .click({ timeout: 20000 })
+    cy.get('[data-cy="unauthorized-gears-selector"]')
+      .filter(':contains("des engins")')
+      .type('{esc}')
 
     // When
     cy.get('[data-cy="validate-button"]').click()
@@ -166,13 +211,13 @@ context('Update Regulation', () => {
     cy.wait('@postRegulation')
       .then(({ request, response }) => {
         expect(request.body)
-          .contain('"authorized":true')
-          .contain('"otherInfo":"Mhm pas d\'autre info !"')
-          .contain('{"species":[{"code":"URC","remarks":"- Pas plus de 500kg\\n - Autre remarqueNe pas en prendre beaucoup please","name":"OURSINS NCA"},' +
-            '{"code":"URX","remarks":"500 kg","name":"OURSINS,ETC. NCA"},{"code":"HKE","name":"MERLU D\'EUROPE"}],"authorized":true,' +
-            '"speciesGroups":["Espèces eau profonde"],"otherInfo":"Mhm pas d\'autre info !"}')
-          .contain('{"unauthorized":null,"authorized":{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - ' +
-            'Dragues avec dents !","allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines",' +
+            // Unauthorized
+          .contain('{"unauthorized":{"allGears":false,"allTowedGears":false,"allPassiveGears":false,' +
+            '"regulatedGearCategories":{},"regulatedGears":{"TX":{"code":"TX","name":"Autres chaluts (non spécifiés)",' +
+            '"category":"Chaluts","groupId":1}},"selectedCategoriesAndGears":["TX"]},' +
+            // Authorized
+            '"authorized":{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\n - Dragues avec dents !",' +
+            '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines",' +
             '"category":"Chaluts","groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"],"remarks":"Attention à cette espèce!"}},' +
             '"allPassiveGears":false,"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}}')
 

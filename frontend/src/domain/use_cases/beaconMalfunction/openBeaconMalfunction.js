@@ -6,17 +6,27 @@ import { getBeaconMalfunctionFromAPI } from '../../../api/beaconMalfunction'
  * Open a single beacon malfunction
  * @function openBeaconMalfunction
  * @param {BeaconMalfunctionResumeAndDetails} beaconMalfunction - the beacon malfunction to open
+ * @param {boolean} fromCron - if the use case is called from the API Worker
  */
-const openBeaconMalfunction = beaconMalfunction => (dispatch, getState) => {
+const openBeaconMalfunction = (beaconMalfunction, fromCron) => (dispatch, getState) => {
   const previousBeaconMalfunction = getState().beaconMalfunction.openedBeaconMalfunction
-  dispatch(setOpenedBeaconMalfunction(beaconMalfunction))
+  dispatch(setOpenedBeaconMalfunction({
+    beaconMalfunction: beaconMalfunction,
+    showTab: !fromCron
+  }))
 
   getBeaconMalfunctionFromAPI(beaconMalfunction.beaconMalfunction?.id).then(beaconMalfunctionWithDetails => {
-    dispatch(setOpenedBeaconMalfunction(beaconMalfunctionWithDetails))
+    dispatch(setOpenedBeaconMalfunction({
+      beaconMalfunction: beaconMalfunctionWithDetails,
+      showTab: !fromCron
+    }))
   }).catch(error => {
     console.error(error)
     dispatch(setError(error))
-    dispatch(setOpenedBeaconMalfunction(previousBeaconMalfunction))
+    dispatch(setOpenedBeaconMalfunction({
+      beaconMalfunction: previousBeaconMalfunction,
+      showTab: !fromCron
+    }))
   })
 }
 

@@ -27,7 +27,10 @@ const saveBeaconMalfunctionCommentFromKanban = (beaconMalfunctionId, comment) =>
 
   return saveBeaconMalfunctionCommentFromAPI(beaconMalfunctionId, newCommentInput).then(beaconMalfunctionWithDetails => {
     if (beaconMalfunctionToUpdateIsOpened) {
-      dispatch(setOpenedBeaconMalfunction(beaconMalfunctionWithDetails))
+      dispatch(setOpenedBeaconMalfunction({
+        beaconMalfunction: beaconMalfunctionWithDetails,
+        showTab: false
+      }))
     }
     if (beaconMalfunctionToUpdateIsOpenedInKanban) {
       dispatch(setOpenedBeaconMalfunctionsInKanban(beaconMalfunctionWithDetails))

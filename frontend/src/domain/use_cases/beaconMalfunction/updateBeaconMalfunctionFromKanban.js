@@ -24,7 +24,10 @@ const updateBeaconMalfunctionFromKanban = (id, nextBeaconMalfunction, updatedFie
 
   return updateBeaconMalfunctionFromAPI(id, updatedFields).then(updatedBeaconMalfunctionWithDetails => {
     if (beaconMalfunctionToUpdateIsOpened) {
-      dispatch(setOpenedBeaconMalfunction(updatedBeaconMalfunctionWithDetails))
+      dispatch(setOpenedBeaconMalfunction({
+        beaconMalfunction: updatedBeaconMalfunctionWithDetails,
+        showTab: false
+      }))
     }
     if (beaconMalfunctionToUpdateIsOpenedInKanban) {
       dispatch(setOpenedBeaconMalfunctionsInKanban(updatedBeaconMalfunctionWithDetails))

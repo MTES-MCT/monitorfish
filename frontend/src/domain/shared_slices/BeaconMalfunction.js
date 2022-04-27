@@ -140,11 +140,17 @@ const beaconMalfunctionSlice = createSlice({
      * @function setOpenedBeaconMalfunction
      * @memberOf BeaconMalfunctionReducer
      * @param {Object=} state
-     * @param {{payload: BeaconMalfunctionResumeAndDetails}} action - the beacon malfunction to open
+     * @param {{payload: {
+     *   beaconMalfunction: BeaconMalfunctionResumeAndDetails,
+     *   showTab: boolean
+     * }}} action - the beacon malfunction to open
      */
     setOpenedBeaconMalfunction (state, action) {
-      state.openedBeaconMalfunction = action.payload
-      state.beaconMalfunctionsTab = BeaconMalfunctionsTab.DETAIL
+      state.openedBeaconMalfunction = action.payload.beaconMalfunction
+
+      if (action.payload.showTab) {
+        state.beaconMalfunctionsTab = BeaconMalfunctionsTab.DETAIL
+      }
     }
   }
 })

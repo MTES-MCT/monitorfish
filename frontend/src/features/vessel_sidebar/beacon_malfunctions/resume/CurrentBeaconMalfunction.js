@@ -23,7 +23,10 @@ const CurrentBeaconMalfunction = props => {
           data-cy={'beacon-malfunction-current-see-details'}
           onClick={() => {
             setIsCurrentBeaconMalfunctionDetails(true)
-            dispatch(setOpenedBeaconMalfunction(currentBeaconMalfunctionWithDetails))
+            dispatch(setOpenedBeaconMalfunction({
+              beaconMalfunction: currentBeaconMalfunctionWithDetails,
+              showTab: true
+            }))
           }}
         >
           voir les détails de l&apos;avarie

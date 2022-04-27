@@ -3,7 +3,7 @@ import { setIsReadyToShowRegulatoryZones } from '../../shared_slices/Regulatory'
 import { setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
 import { getAllGearCodesFromAPI } from '../../../api/gearCode'
-import { REGULATORY_GEAR_KEYS } from '../../entities/backoffice'
+import { REGULATED_GEARS_KEYS } from '../../entities/backoffice'
 
 /*
 INSERT INTO public.fishing_gear_groups VALUES
@@ -23,8 +23,8 @@ INSERT INTO public.fishing_gear_groups VALUES
  */
 const getGroupName = groupId => {
   switch (groupId) {
-    case 1: return REGULATORY_GEAR_KEYS.ALL_TOWED_GEARS
-    case 2: return REGULATORY_GEAR_KEYS.ALL_PASSIVE_GEARS
+    case 1: return REGULATED_GEARS_KEYS.ALL_TOWED_GEARS
+    case 2: return REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS
     default: return null
   }
 }

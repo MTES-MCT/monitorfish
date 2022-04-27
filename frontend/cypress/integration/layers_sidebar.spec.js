@@ -112,12 +112,12 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Pêche interdite les vendredi, samedi et dimanche, les jours fériés')
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Bien vérifier Légipêche!')
 
-    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('TBN (Chaluts à langoustines)')
-    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('inférieur à 123 mm')
-    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Attention à cette espèce!')
-    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Dragues')
-    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('li', 'Drague sans dent et de largeur maximale 1,30 mètre')
-    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('li', 'Dragues avec dents !')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('TBN (Chaluts à langoustines)')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('inférieur à 123 mm')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('Attention à cette espèce!')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('Dragues')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('li', 'Drague sans dent et de largeur maximale 1,30 mètre')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('li', 'Dragues avec dents !')
     cy.get('*[data-cy="regulatory-layers-metadata-gears-category-with-infobox"]')
       .should('have.attr', 'title', 'DHS - Drague à main manœuvrée à partir du rivage \n' +
         'DHB - Drague à main manœuvrée à partir du bateau \n' +
@@ -126,10 +126,10 @@ context('LayersSidebar', () => {
         'DRB - Dragues remorquées par bateau \n' +
         'DRM - Dragues mécanisées \n')
 
-    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('URC (OURSINS NCA)')
-    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('li', 'Pas plus de 500kg')
-    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('li', 'Autre remarque')
-    cy.get('*[data-cy="regulatory-layers-metadata-species"]').contains('URX (OURSINS,ETC. NCA)')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('URC (OURSINS NCA)')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('li', 'Pas plus de 500kg')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('li', 'Autre remarque')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('URX (OURSINS,ETC. NCA)')
 
     cy.get('*[data-cy="regulatory-layers-metadata-references"]').should('have.length', 1)
   })
@@ -151,11 +151,23 @@ context('LayersSidebar', () => {
     cy.log('Fishing period should not be seen if it has an empty message')
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').should('not.exist')
 
-    cy.get('*[data-cy="regulatory-layers-metadata-gears"]').contains('Tous les engins trainants')
-    cy.get('*[data-cy="regulatory-layers-metadata-gears-towed-gears"]').children()
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('Tous les engins trainants')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears-towed-gears"]').children()
       .should('have.attr', 'title', 'Chaluts, dragues et sennes traînantes')
 
-    cy.get('*[data-cy="regulatory-layers-metadata-species"]').should('not.exist')
+    cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Tous les engins dormants')
+    cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears-passive-gears"]').children()
+      .should('have.attr', 'title', 'Filets maillants et emmêlants, filets soulevés, pièges et casiers, lignes et hameçons')
+    cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Chaluts')
+    cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Dragues')
+    cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Engins non autorisés')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears-other-info"]').contains('Encore une dernière information sur les engins !')
+
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('HKE (MERLU D\'EUROPE)')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('li', 'Pas plus que ça')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('li', 'OK')
+
+    cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-species"]').contains('Toutes les espèces')
   })
 
   it('An advanced search Should filter the search result', () => {

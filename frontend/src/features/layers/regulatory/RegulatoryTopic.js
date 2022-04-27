@@ -9,7 +9,7 @@ import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
-import RegulatoryTopicInput from '../../backoffice/RegulatoryTopicInput'
+import RegulatoryTopicInput from '../../backoffice/list_regulation/RegulatoryTopicInput'
 import {
   addRegulatoryTopicOpened,
   closeRegulatoryZoneMetadataPanel,

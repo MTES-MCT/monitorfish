@@ -3,7 +3,7 @@
 
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
-context('NewRegulation', () => {
+context('Edit Regulation', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/backoffice/regulation/new`)
@@ -177,49 +177,35 @@ context('NewRegulation', () => {
     cy.url().should('include', '/backoffice')
   })
 
-  it('Check authorized yes option in gears section display 2 checkbox and a list', () => {
-    // when
-    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
-    cy.get('[data-cy="regulation-authorized-gears"]').click()
-    // then
-    cy.get('[data-cy="gears-section-content"]').should('have.css', 'border-left-color', 'rgb(41, 179, 97)')
-    cy.get('[data-cy$="-gears-option"]').should('have.length', 2)
-    cy.get('[data-cy="gears-selector"]').should('exist')
-  })
-
-  it('Check authorized no option in gears section display 3 checkbox and a list', () => {
-    // when
-    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
-    cy.get('[data-cy="regulation-forbidden-gears"]').click()
-    // then
-    cy.get('[data-cy="gears-section-content"]').should('have.css', 'border-left-color', 'rgb(225, 0, 15)')
-    cy.get('[data-cy$="-gears-option"]').should('have.length', 3)
-    cy.get('[data-cy="gears-selector"]').should('exist')
-  })
-
   it('Check and uncheck of all gears Should add or remove all gears', () => {
+    // Given
+    cy.get('[data-cy="authorized-all-towed-gears-option"]').should('exist')
+    cy.get('[data-cy="authorized-all-passive-gears-option"]').should('exist')
+    cy.get('[data-cy="unauthorized-all-towed-gears-option"]').should('exist')
+    cy.get('[data-cy="unauthorized-all-passive-gears-option"]').should('exist')
+    cy.get('[data-cy="authorized-gears-selector"]').should('exist')
+    cy.get('[data-cy="unauthorized-gears-selector"]').should('exist')
+
     // when
     cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
-    cy.get('[data-cy="regulation-forbidden-gears"]').click()
-    cy.get('[data-cy="all-gears-option"]').click()
+    cy.get('[data-cy="unauthorized-all-gears-option"]').click()
 
     // then
-    cy.get('[data-cy="all-towed-gears-option"]').should('have.class', 'rs-checkbox-checked')
-    cy.get('[data-cy="all-passive-gears-option"]').should('have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy="unauthorized-all-towed-gears-option"]').should('have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy="unauthorized-all-passive-gears-option"]').should('have.class', 'rs-checkbox-checked')
     cy.get('[data-cy^="tag-"]').should('have.length', 12)
-    cy.get('[data-cy="all-gears-option"]').click()
+    cy.get('[data-cy="unauthorized-all-gears-option"]').click()
 
-    cy.get('[data-cy="all-towed-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
-    cy.get('[data-cy="all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy="unauthorized-all-towed-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy="unauthorized-all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
     cy.get('[data-cy^="tag-"]').should('have.length', 0)
   })
 
-  it('Check options displays a list of towed gear categories', () => {
+  it('Check all towed gear displays a list of towed gear categories', () => {
     // Given
     cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
-    cy.get('[data-cy="regulation-forbidden-gears"]').click()
     // when
-    cy.get('[data-cy="all-towed-gears-option"]').click()
+    cy.get('[data-cy="authorized-all-towed-gears-option"]').click()
     // then
     cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 4)
     cy.get('[data-cy="mesh-label"]').should('have.length', 2)
@@ -227,15 +213,14 @@ context('NewRegulation', () => {
     cy.get('[data-cy="close-tag-Sennes traînantes"]').scrollIntoView().click()
     // then
     cy.get('[data-cy="tag-Sennes traînantes"]').should('not.exist')
-    cy.get('[data-cy="all-towed-gears-option"]').should('not.be.checked')
+    cy.get('[data-cy="authorized-all-towed-gears-option"]').should('not.be.checked')
   })
 
-  it('Check all passive gears, display a list of passive gear categories', () => {
+  it('Check all passive gears display a list of passive gear categories', () => {
     // Given
     cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
-    cy.get('[data-cy="regulation-forbidden-gears"]').click()
     // when
-    cy.get('[data-cy="all-passive-gears-option"]').scrollIntoView().click()
+    cy.get('[data-cy="authorized-all-passive-gears-option"]').scrollIntoView().click()
     // then
     cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 6)
     cy.get('[data-cy="mesh-label"]').should('have.length', 3)
@@ -243,7 +228,7 @@ context('NewRegulation', () => {
     cy.get('[data-cy="close-tag-Sennes tournantes coulissantes"]').scrollIntoView().click()
     // then
     cy.get('[data-cy="tag-Sennes tournantes coulissantes"]').should('not.exist')
-    cy.get('[data-cy="all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
+    cy.get('[data-cy="authorized-all-passive-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
   })
 
   it('Modification of inputs Should be kept in local storage when refreshing the page', () => {
@@ -256,18 +241,18 @@ context('NewRegulation', () => {
     cy.get('[data-cy="reg-text-url"]').type('http://url.com')
     cy.get('[data-cy="save-reg-text-name"]').click()
     cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
-    cy.get('[data-cy="regulation-forbidden-gears"]').click()
-    cy.get('[data-cy="all-towed-gears-option"]').click()
+    cy.get('[data-cy="authorized-all-towed-gears-option"]').click()
     cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click({ force: true })
-    cy.get('*[data-cy^="regulation-authorized-species"]').click({ force: true })
     cy.scrollTo(0, 500)
     cy.get('.rs-picker-toggle-placeholder')
       .filter(':contains("catégories d\'espèces")')
+      .eq(0)
       .click({ timeout: 20000 })
     cy.get('.rs-picker-search-bar-input')
       .type('Espèce{enter}', { force: true })
     cy.get('.rs-picker-toggle-placeholder')
       .filter(':contains("des espèces")')
+      .eq(0)
       .click({ timeout: 20000 })
     cy.get('.rs-picker-search-bar-input')
       .type('HKE{enter}', { force: true })

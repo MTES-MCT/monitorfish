@@ -120,14 +120,13 @@ export const RegulatorySectionTitle = styled.div`
 export const FormSection = styled.div`
   display: ${props => props.show ? 'flex' : 'none'};
   ${props => props.show ? 'flex-direction: column;' : ''};
+  margin-right: 40px;
 `
 
 export const FormContent = styled.div`
   display: ${props => !props.display ? 'none' : 'flex'};
   flex-direction: column;
   align-items: flex-start;
-  padding-left: 15px;
-  border-left: 8px solid ${props => props.authorized ? COLORS.mediumSeaGreen : COLORS.maximumRed};
   margin-bottom: 15px;
 `
 
@@ -146,4 +145,10 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   padding-bottom: 60px;
+`
+
+export const VerticalLine = styled.div`
+  width: 1px;
+  background: ${COLORS.lightGray};
+  margin-right: 40px;
 `

@@ -3,8 +3,8 @@
  * @property {string} lawType
  * @property {string} topic
  * @property {string} zone
- * @property {RegulatoryGears} regulatoryGears
- * @property {RegulatorySpecies} regulatorySpecies
+ * @property {GearRegulation} gearRegulation
+ * @property {SpeciesRegulation} speciesRegulation
  * @property {RegulatoryText[]} regulatoryReference
  * @property {GeoJSONGeometry} geometry
  * @property {string} region
@@ -64,12 +64,19 @@
  */
 
 /**
- * @typedef RegulatorySpecies
+ * @typedef RegulatedSpecies
  * @property {boolean} authorized
  * @property {boolean} allSpecies
  * @property {string} otherInfo
- * @property {RegulatorySpeciesDetail[]} species
+ * @property {RegulatedSpeciesDetail[]} species
  * @property {string[]} speciesGroups - group name
+ */
+
+/**
+ * @typedef SpeciesRegulation
+ * @property {RegulatedSpecies} authorized
+ * @property {RegulatedSpecies} unauthorized
+ * @property {string} otherInfo
  */
 
 /**
@@ -90,7 +97,14 @@
  */
 
 /**
- * @typedef RegulatoryGears
+ * @typedef GearRegulation
+ * @property {RegulatedGears} authorized
+ * @property {RegulatedGears} unauthorized
+ * @property {string} otherInfo
+ */
+
+/**
+ * @typedef RegulatedGears
  * @property {boolean} authorized
  * @property {boolean} allGears
  * @property {boolean} allTowedGears
@@ -103,7 +117,7 @@
 */
 
 /**
- * @typedef RegulatorySpeciesDetail
+ * @typedef RegulatedSpeciesDetail
  * @property {string} code - FAO code
  * @property {string} remarks
  */

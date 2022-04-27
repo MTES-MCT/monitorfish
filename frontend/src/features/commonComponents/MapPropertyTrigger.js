@@ -2,20 +2,25 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 
-const MapPropertyTrigger = ({ booleanProperty, updateBooleanProperty, text, Icon, inverse }) => {
+const MapPropertyTrigger = ({ booleanProperty, updateBooleanProperty, text, Icon, inverse, disabled }) => {
   function update () {
-    updateBooleanProperty(!booleanProperty)
+    if (!disabled) {
+      updateBooleanProperty(!booleanProperty)
+    }
   }
 
   return (
-    <Wrapper onClick={update}>
+    <Wrapper
+      onClick={update}
+      disabled={disabled}
+    >
       <Icon
         style={{
           width: 36,
           height: 36,
           background: booleanProperty ? COLORS.shadowBlue : COLORS.charcoal,
           transition: 'all 0.2s',
-          cursor: 'pointer'
+          cursor: disabled ? 'not-allowed' : 'pointer'
         }}
       />
       <ShowLabelText
@@ -39,7 +44,7 @@ const Wrapper = styled.div`
   border-top: 1px solid ${COLORS.lightGray};
   text-align: left;
   height: 36px;
-  cursor: pointer;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 `
 
 const ShowLabelText = styled.span`

@@ -5,7 +5,7 @@ import { Checkbox, RadioGroup } from 'rsuite'
 export const ContentLine = styled.div`
   display: flex;
   flex-direction : ${props => props.isFormOpened && props.isInfoTextShown ? 'column' : 'row'};
-  align-items: ${props => props.isFormOpened && props.isInfoTextShown ? 'flex-start' : 'center'};
+  align-items: ${props => (props.isFormOpened && props.isInfoTextShown) || props.alignedToTop ? 'flex-start' : 'center'};
   margin-bottom: 8px;
 `
 
@@ -138,7 +138,6 @@ export const Section = styled(FormSection)`
 
 export const OtherRemark = styled.div`
   display: ${props => props.show ? 'flex' : 'none'};
-  align-items: center;
   margin-top: 15px;
 `
 export const Content = styled.div`

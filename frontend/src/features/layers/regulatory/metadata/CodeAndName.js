@@ -1,7 +1,7 @@
 import React from 'react'
 import { Label } from './RegulatoryMetadata.style'
 import { COLORS } from '../../../../constants/constants'
-import InfoPoint from '../../../backoffice/create_regulation/InfoPoint'
+import InfoPoint from '../../../backoffice/edit_regulation/InfoPoint'
 
 const CodeAndName = ({ code, name, isCategory, categoriesToGears }) => {
   return <Label>

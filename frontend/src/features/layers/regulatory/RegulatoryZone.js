@@ -80,7 +80,7 @@ const RegulatoryZone = props => {
   useEffect(() => {
     if (regulatoryZone.zone && regulatoryZone.topic && gears) {
       const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
-      const gearCategory = getGearCategory(regulatoryZone.regulatoryGears, gears)
+      const gearCategory = getGearCategory(regulatoryZone.gearsRegulation, gears)
       setVectorLayerStyle(getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
     }
   }, [regulatoryZone, gears])

@@ -8,8 +8,8 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }, speciesByCode)
     lawType: properties.law_type,
     topic: properties.topic,
     zone: decodeURI(properties.zone),
-    regulatoryGears: parseRegulatoryGears(properties.gears),
-    regulatorySpecies: parseRegulatorySpecies(properties.species, speciesByCode),
+    gearRegulation: parseGearRegulation(properties.gears),
+    speciesRegulation: parseSpeciesRegulation(properties.species, speciesByCode),
     regulatoryReferences: parseRegulatoryReferences(properties.regulatory_references),
     fishingPeriod: parseFishingPeriod(properties.fishing_period),
     region: properties.region,
@@ -25,36 +25,45 @@ export const mapToProcessingRegulation = persistProcessingRegulation => {
       fishingPeriod: _parsedFishingPeriod
     }
   }
-  return INITIAL_REGULATION
+  return DEFAULT_REGULATION
 }
 
-function parseRegulatoryGears (gears) {
+function parseGearRegulation (gears) {
   return gears
     ? parseJSON(gears)
-    : INITIAL_REG_GEARS_VALUES
+    : DEFAULT_GEAR_REGULATION
 }
 
 /**
  * Parse the JSON and adds the species name to the list of species
- * @param regulatorySpecies
+ * @param speciesRegulation
  * @param {Object<string, {name: string, code: string}>} speciesByCode
- * @return {{otherInfo?: string, species: *, authorized?: boolean, allSpecies?: boolean, speciesGroups?: string[]}}
+ * @return {{otherInfo?: string, species: *, allSpecies?: boolean, speciesGroups?: string[]}}
  */
-function parseRegulatorySpecies (regulatorySpecies, speciesByCode) {
-  const _regulatorySpecies = regulatorySpecies
-    ? parseJSON(regulatorySpecies)
-    : INITIAL_REG_SPECIES_VALUES
+function parseSpeciesRegulation (speciesRegulation, speciesByCode) {
+  const nextSpeciesRegulation = speciesRegulation
+    ? parseJSON(speciesRegulation)
+    : DEFAULT_SPECIES_REGULATION
 
-  const nextSpecies = _regulatorySpecies?.species?.map(uniqueSpecies => {
-    uniqueSpecies.name = speciesByCode[uniqueSpecies.code]?.name
+  if (nextSpeciesRegulation?.authorized?.species?.length) {
+    nextSpeciesRegulation.authorized.species = addMissingSpeciesName(nextSpeciesRegulation?.authorized?.species, speciesByCode)
+  }
+
+  if (nextSpeciesRegulation?.unauthorized?.species?.length) {
+    nextSpeciesRegulation.unauthorized.species = addMissingSpeciesName(nextSpeciesRegulation?.unauthorized?.species, speciesByCode)
+  }
+
+  return nextSpeciesRegulation
+}
+
+function addMissingSpeciesName (species, speciesByCode) {
+  return species.map(uniqueSpecies => {
+    if (!uniqueSpecies?.name) {
+      uniqueSpecies.name = speciesByCode[uniqueSpecies.code]?.name
+    }
 
     return uniqueSpecies
   })
-
-  return {
-    ..._regulatorySpecies,
-    species: nextSpecies
-  }
 }
 
 const parseRegulatoryReferences = regulatoryTextsString => {
@@ -84,7 +93,7 @@ export const parseFishingPeriod = fishingPeriod => {
   if (fishingPeriod) {
     return mapToFishingPeriod(JSON.parse(fishingPeriod))
   }
-  return INITIAL_FISHING_PERIOD_VALUES
+  return DEFAULT_FISHING_PERIOD_VALUES
 }
 
 const mapToFishingPeriod = fishingPeriod => {
@@ -119,7 +128,7 @@ const mapToFishingPeriod = fishingPeriod => {
       timeIntervals: newTimeIntervals
     }
   }
-  return INITIAL_FISHING_PERIOD_VALUES
+  return DEFAULT_FISHING_PERIOD_VALUES
 }
 
 export const mapToRegulatoryFeatureObject = properties => {
@@ -130,8 +139,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     region,
     regulatoryReferences,
     fishingPeriod,
-    regulatorySpecies,
-    regulatoryGears,
+    speciesRegulation,
+    gearRegulation,
     nextId
   } = properties
 
@@ -142,8 +151,8 @@ export const mapToRegulatoryFeatureObject = properties => {
     region: region,
     regulatory_references: JSON.stringify(regulatoryReferences),
     fishing_period: JSON.stringify(fishingPeriod),
-    species: JSON.stringify(regulatorySpecies),
-    gears: JSON.stringify(regulatoryGears),
+    species: JSON.stringify(speciesRegulation),
+    gears: JSON.stringify(gearRegulation),
     next_id: nextId
   }
 }
@@ -243,7 +252,7 @@ export const DEFAULT_DATE_RANGE = {
 }
 
 /** @type {FishingPeriod} */
-const INITIAL_FISHING_PERIOD_VALUES = {
+const DEFAULT_FISHING_PERIOD_VALUES = {
   authorized: undefined,
   annualRecurrence: undefined,
   dateRanges: [],
@@ -255,18 +264,40 @@ const INITIAL_FISHING_PERIOD_VALUES = {
   always: undefined
 }
 
-/** @type {RegulatorySpecies} */
-const INITIAL_REG_SPECIES_VALUES = {
-  authorized: undefined,
+/** @type {RegulatedSpecies} */
+export const DEFAULT_AUTHORIZED_REGULATED_SPECIES = {
+  otherInfo: undefined,
+  species: [],
+  speciesGroups: []
+}
+
+/** @type {RegulatedSpecies} */
+export const DEFAULT_UNAUTHORIZED_REGULATED_SPECIES = {
   allSpecies: undefined,
   otherInfo: undefined,
   species: [],
   speciesGroups: []
 }
 
-/** @type {RegulatoryGears} */
-export const INITIAL_REG_GEARS_VALUES = {
-  authorized: undefined,
+/** @type {SpeciesRegulation} */
+export const DEFAULT_SPECIES_REGULATION = {
+  authorized: DEFAULT_AUTHORIZED_REGULATED_SPECIES,
+  unauthorized: DEFAULT_UNAUTHORIZED_REGULATED_SPECIES,
+  otherInfo: undefined
+}
+
+/** @type {RegulatedGears} */
+export const DEFAULT_AUTHORIZED_REGULATED_GEARS = {
+  allTowedGears: undefined,
+  allPassiveGears: undefined,
+  regulatedGearCategories: {},
+  regulatedGears: {},
+  selectedCategoriesAndGears: [],
+  derogation: undefined
+}
+
+/** @type {RegulatedGears} */
+export const DEFAULT_UNAUTHORIZED_REGULATED_GEARS = {
   allGears: undefined,
   allTowedGears: undefined,
   allPassiveGears: undefined,
@@ -274,6 +305,32 @@ export const INITIAL_REG_GEARS_VALUES = {
   regulatedGears: {},
   selectedCategoriesAndGears: [],
   derogation: undefined
+}
+
+/** @type {GearRegulation} */
+export const DEFAULT_GEAR_REGULATION = {
+  authorized: DEFAULT_AUTHORIZED_REGULATED_GEARS,
+  unauthorized: DEFAULT_UNAUTHORIZED_REGULATED_GEARS,
+  otherInfo: undefined
+}
+
+export const REGULATORY_REFERENCE_KEYS = {
+  ID: 'id',
+  REGION: 'region',
+  LAW_TYPE: 'lawType',
+  TOPIC: 'topic',
+  ZONE: 'zone',
+  REGULATORY_REFERENCES: 'regulatoryReferences',
+  FISHING_PERIOD: 'fishingPeriod',
+  SPECIES_REGULATION: 'speciesRegulation',
+  GEAR_REGULATION: 'gearRegulation'
+}
+
+export const DEFAULT_REGULATION = {
+  [REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES]: [DEFAULT_REGULATORY_TEXT],
+  [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: DEFAULT_FISHING_PERIOD_VALUES,
+  [REGULATORY_REFERENCE_KEYS.SPECIES_REGULATION]: DEFAULT_SPECIES_REGULATION,
+  [REGULATORY_REFERENCE_KEYS.GEAR_REGULATION]: DEFAULT_GEAR_REGULATION
 }
 
 export const GEARS_CATEGORIES_WITH_MESH = [
@@ -285,25 +342,6 @@ export const GEARS_CATEGORIES_WITH_MESH = [
 ]
 
 export const INITIAL_UPCOMING_REG_REFERENCE = { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }
-
-export const REGULATORY_REFERENCE_KEYS = {
-  ID: 'id',
-  REGION: 'region',
-  LAW_TYPE: 'lawType',
-  TOPIC: 'topic',
-  ZONE: 'zone',
-  REGULATORY_REFERENCES: 'regulatoryReferences',
-  FISHING_PERIOD: 'fishingPeriod',
-  REGULATORY_SPECIES: 'regulatorySpecies',
-  REGULATORY_GEARS: 'regulatoryGears'
-}
-
-export const INITIAL_REGULATION = {
-  [REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES]: [DEFAULT_REGULATORY_TEXT],
-  [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: INITIAL_FISHING_PERIOD_VALUES,
-  [REGULATORY_REFERENCE_KEYS.REGULATORY_SPECIES]: INITIAL_REG_SPECIES_VALUES,
-  [REGULATORY_REFERENCE_KEYS.REGULATORY_GEARS]: INITIAL_REG_GEARS_VALUES
-}
 
 export const FISHING_PERIOD_KEYS = {
   DATE_RANGES: 'dateRanges',
@@ -367,8 +405,8 @@ export function searchResultIncludeZone (searchResult, { lawType, topic, zone })
 }
 
 export function findIfStringIsIncludedInZoneGears (zone, searchText, uniqueGearCodes) {
-  const gearCodes = zone.regulatoryGears?.regulatedGears
-    ? Object.keys(zone.regulatoryGears?.regulatedGears)
+  const gearCodes = zone.regulatedGears?.regulatedGears
+    ? Object.keys(zone.regulatedGears?.regulatedGears)
     : []
 
   if (gearCodes?.length) {
@@ -379,7 +417,7 @@ export function findIfStringIsIncludedInZoneGears (zone, searchText, uniqueGearC
 }
 
 export function findIfStringIsIncludedInZoneSpecies (zone, searchText, uniqueGearCodes) {
-  const speciesCodes = zone.regulatorySpecies?.species?.map(speciesCodes => speciesCodes.code)
+  const speciesCodes = zone.speciesRegulation?.authorized?.species?.map(speciesCodes => speciesCodes.code)
 
   if (speciesCodes?.length) {
     return gearCodeIsFoundInRegulatoryZone(speciesCodes, uniqueGearCodes)

@@ -7,12 +7,12 @@ import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulat
 import { useDispatch, useSelector } from 'react-redux'
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
 import { getTitle } from '../../../domain/entities/regulatory'
-import Identification from './metadata/Identification'
-import MetadataFishingPeriod from './metadata/MetadataFishingPeriod'
-import MetadataGears from './metadata/MetadataGears'
-import MetadataSpecies from './metadata/MetadataSpecies'
-import MetadataRegulatoryReferences from './metadata/MetadataRegulatoryReferences'
+import IdentificationDisplayed from './metadata/identification/IdentificationDisplayed'
+import FishingPeriodDisplayed from './metadata/fishingPeriod/FishingPeriodDisplayed'
+import GearRegulationDisplayed from './metadata/gearRegulation/GearRegulationDisplayed'
+import RegulatoryReferencesDisplayed from './metadata/regulatoryReferences/RegulatoryReferencesDisplayed'
 import OutdatedRegulatoryReferences from './metadata/OutdatedRegulatoryReferences'
+import SpeciesRegulationDisplayed from './metadata/speciesRegulation/SpeciesRegulationDisplayed'
 
 const RegulatoryZoneMetadata = () => {
   const dispatch = useDispatch()
@@ -47,11 +47,11 @@ const RegulatoryZoneMetadata = () => {
             </Header>
             <OutdatedRegulatoryReferences/>
             <Content>
-              <Identification/>
-              <MetadataFishingPeriod/>
-              <MetadataGears/>
-              <MetadataSpecies/>
-              <MetadataRegulatoryReferences/>
+              <IdentificationDisplayed/>
+              <FishingPeriodDisplayed/>
+              <GearRegulationDisplayed/>
+              <SpeciesRegulationDisplayed/>
+              <RegulatoryReferencesDisplayed/>
             </Content>
           </>
           // eslint-disable-next-line react/forbid-component-props

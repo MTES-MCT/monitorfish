@@ -90,6 +90,7 @@ const FavoriteVessels = () => {
               </NoVesselInFavorites>
           }
           <MapPropertyTrigger
+            disabled={!favorites?.length}
             inverse
             booleanProperty={hideNonSelectedVessels}
             updateBooleanProperty={isHidden => dispatch(setHideNonSelectedVessels(isHidden))}

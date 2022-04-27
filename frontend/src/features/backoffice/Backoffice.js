@@ -193,14 +193,6 @@ const RegulatoryZoneListByLawTypeList = styled.div`
   margin: 10px 0;
 `
 
-/* const ButtonList = styled.div`
-  display: flex;
-  flex-direction:row;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0 40px 0 30px;
-` */
-
 const BackofficeContainer = styled.div`
   display: flex;
   position: relative;

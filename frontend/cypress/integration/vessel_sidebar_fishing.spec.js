@@ -12,6 +12,27 @@ context('Vessel sidebar fishing tab', () => {
     cy.wait(200)
   })
 
+  it('FAR and DIS messages resume Should notify that all messages are not acknowledged', () => {
+    // Given
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 20000 }).click()
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 20000 }).type('U_W0')
+    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 20000 }).eq(1).click()
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
+
+    // When
+    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
+    cy.get('*[data-cy^="vessel-menu-fishing"]', { timeout: 20000 }).should('be.visible')
+
+    // Then
+    cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 20000 }).should('be.visible')
+    // FAR messages are not acknowledged
+    cy.get('*[data-cy="vessel-fishing-resume-title"]').eq(1).contains('aucune capture acquittée', { timeout: 20000 })
+    // DIS messages are not acknowledged
+    cy.get('*[data-cy="vessel-fishing-resume-title"]').eq(2).contains('aucun rejet acquitté', { timeout: 20000 })
+
+    cy.get('*[data-cy="fishing-resume-not-acknowledged-icon"]').should('have.length', 2)
+  })
+
   it('Fishing Should contain the vessel fishing resume', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })

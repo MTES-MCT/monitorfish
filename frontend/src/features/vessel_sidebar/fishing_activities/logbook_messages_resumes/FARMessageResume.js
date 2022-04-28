@@ -53,18 +53,12 @@ const FARMessageResume = props => {
       firstUpdate.current = false
     }
   }, [isOpen])
+  console.log(props.allFARMessagesAreNotAcknowledged)
 
   const getFARMessageResumeTitleText = () =>
     props.totalFARWeight > 0
       ? `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalFARWeight} kg pêchés au total`
-      : `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - aucune capture`
-
-  const getFARMessageResumeTitle = () => {
-    return props.totalFARWeight > 0
-      ? <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalFARWeight} kg pêchés au
-        total</>
-      : <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - aucune capture</>
-  }
+      : `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - aucune capture ${props.allFARMessagesAreNotAcknowledged ? 'acquittée' : ''}`
 
   useEffect(() => {
     if (chartHeight !== 0 && initialChartHeight === 0) {
@@ -86,8 +80,9 @@ const FARMessageResume = props => {
 
   return <Wrapper>
     <LogbookMessageResumeHeader
+      isNotAcknowledged={props.allFARMessagesAreNotAcknowledged}
       onHoverText={props.hasNoMessage ? null : getFARMessageResumeTitleText()}
-      title={props.hasNoMessage ? null : getFARMessageResumeTitle()}
+      title={props.hasNoMessage ? null : <>{getFARMessageResumeTitleText()}</>}
       hasNoMessage={props.hasNoMessage}
       noContent={!props.hasNoMessage && !props.totalFARWeight}
       showLogbookMessages={props.showLogbookMessages}

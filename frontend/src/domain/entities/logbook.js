@@ -325,6 +325,9 @@ export const getTotalDISWeightFromMessages = logbookMessages => {
     }, 0).toFixed(1))
 }
 
+export const getAllFAROrDISMessagesAreNotAcknowledged = logbookMessages =>
+  logbookMessages.length === logbookMessages.filter(logbookMessage => !logbookMessage?.acknowledge?.isSuccess).length
+
 export const getTotalFARWeightFromMessages = logbookMessages => {
   let correctedMessagesReferencedIds = []
 

@@ -51,7 +51,7 @@ import {
 } from '../Regulation.slice'
 import { setError } from '../../../domain/shared_slices/Global'
 import { DEFAULT_REGULATION, FRANCE, LAWTYPES_TO_TERRITORY } from '../../../domain/entities/regulatory'
-import SpeciesRegulation from './regulatory_species/SpeciesRegulation'
+import SpeciesRegulation from './species_regulation/SpeciesRegulation'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 
 const EditRegulation = ({ title, isEdition }) => {

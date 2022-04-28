@@ -125,7 +125,7 @@ function getVesselPositionsFromAPI (identity, trackRequest) {
 }
 
 function searchVesselsFromAPI (searched) {
-  searched = searched || ''
+  searched = encodeURI(searched) || ''
 
   return fetch(`/bff/v1/vessels/search?searched=${searched}`)
     .then(response => {

@@ -53,7 +53,6 @@ const FARMessageResume = props => {
       firstUpdate.current = false
     }
   }, [isOpen])
-  console.log(props.allFARMessagesAreNotAcknowledged)
 
   const getFARMessageResumeTitleText = () =>
     props.totalFARWeight > 0

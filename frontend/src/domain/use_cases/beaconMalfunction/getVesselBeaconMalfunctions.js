@@ -8,7 +8,7 @@ import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../../entitie
 import { getVesselBeaconsMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
 import openBeaconMalfunction from './openBeaconMalfunction'
 
-const getVesselBeaconMalfunctions = () => (dispatch, getState) => {
+const getVesselBeaconMalfunctions = fromCron => (dispatch, getState) => {
   const {
     selectedVessel
   } = getState().vessel
@@ -38,7 +38,7 @@ const getVesselBeaconMalfunctions = () => (dispatch, getState) => {
     }))
 
     if (openedBeaconMalfunction) {
-      dispatch(openBeaconMalfunction(openedBeaconMalfunction))
+      dispatch(openBeaconMalfunction(openedBeaconMalfunction, fromCron))
     }
 
     dispatch(removeError())

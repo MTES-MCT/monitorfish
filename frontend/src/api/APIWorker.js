@@ -14,7 +14,6 @@ import getOperationalAlerts from '../domain/use_cases/alert/getOperationalAlerts
 import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import openBeaconMalfunctionInKanban from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import getVesselBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
-import openBeaconMalfunction from '../domain/use_cases/beaconMalfunction/openBeaconMalfunction'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
@@ -32,13 +31,11 @@ const APIWorker = () => {
   } = useSelector(state => state.global)
   const {
     openedBeaconMalfunctionInKanban,
-    openedBeaconMalfunction,
     vesselBeaconMalfunctionsResumeAndHistory
   } = useSelector(state => state.beaconMalfunction)
 
   const beaconMalfunctionsInterval = useRef(null)
   const beaconMalfunctionInKanbanInterval = useRef(null)
-  const beaconMalfunctionInterval = useRef(null)
   const vesselBeaconMalfunctionInterval = useRef(null)
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
@@ -109,29 +106,13 @@ const APIWorker = () => {
   }, [adminRole, sideWindowIsOpen, openedBeaconMalfunctionInKanban])
 
   useEffect(() => {
-    if (adminRole && openedBeaconMalfunction) {
-      if (beaconMalfunctionInterval?.current) {
-        clearInterval(beaconMalfunctionInterval.current)
-      }
-
-      beaconMalfunctionInterval.current = setInterval(() => {
-        dispatch(openBeaconMalfunction(openedBeaconMalfunction))
-      }, THIRTY_SECONDS)
-    }
-
-    return () => {
-      clearInterval(beaconMalfunctionInterval?.current)
-    }
-  }, [adminRole, openedBeaconMalfunction])
-
-  useEffect(() => {
     if (adminRole && vesselBeaconMalfunctionsResumeAndHistory) {
       if (vesselBeaconMalfunctionInterval?.current) {
         clearInterval(vesselBeaconMalfunctionInterval.current)
       }
 
       vesselBeaconMalfunctionInterval.current = setInterval(() => {
-        dispatch(getVesselBeaconMalfunctions())
+        dispatch(getVesselBeaconMalfunctions(true))
       }, THIRTY_SECONDS)
     }
 

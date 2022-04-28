@@ -40,7 +40,10 @@ const BeaconMalfunction = props => {
         data-cy={'vessel-beacon-malfunction-history-see-more'}
         onClick={() => {
           setIsCurrentBeaconMalfunctionDetails(false)
-          dispatch(setOpenedBeaconMalfunction(beaconMalfunctionWithDetails))
+          dispatch(setOpenedBeaconMalfunction({
+            beaconMalfunction: beaconMalfunctionWithDetails,
+            showTab: true
+          }))
         }}
       >
         voir les détails de l&apos;avarie <Arrow/>

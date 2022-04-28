@@ -5,7 +5,7 @@ import { Input } from 'rsuite'
 export const Label = styled.span`
   text-align: left;
   color: ${COLORS.slateGray};
-  min-width: 154px;
+  min-width: 74px;
   display: inline-block;
   font-size: 13px;
   ${props => props.isLast ? '' : 'margin-right: 20px'};

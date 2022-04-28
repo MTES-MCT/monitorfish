@@ -25,7 +25,7 @@ import {
   getTotalFARWeightFromMessages,
   getTotalLANWeightFromMessage,
   getTotalPNOWeightFromMessage,
-  LogbookOperationType
+  LogbookOperationType, getAllFAROrDISMessagesAreNotAcknowledged
 } from '../../../domain/entities/logbook'
 import CustomDatesShowedInfo from './CustomDatesShowedInfo'
 
@@ -61,6 +61,9 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
   const [speciesToWeightOfDIS, setSpeciesToWeightOfDIS] = useState({})
   const [speciesToWeightOfLAN, setSpeciesToWeightOfLAN] = useState({})
 
+  const [allFARMessagesAreNotAcknowledged, setAllFARMessagesAreNotAcknowledged] = useState(false)
+  const [allDISMessagesAreNotAcknowledged, setAllDISMessagesAreNotAcknowledged] = useState(false)
+
   const [faoZones, setFAOZones] = useState([])
 
   useEffect(() => {
@@ -88,6 +91,7 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
         setTotalFARWeight(totalFARWeight)
         totalFARAndDEPWeight = totalFARWeight
 
+        setAllFARMessagesAreNotAcknowledged(getAllFAROrDISMessagesAreNotAcknowledged(farMessages))
         const speciesToWeightFARObject = getFARSpeciesToWeightObject(farMessages, totalFARWeight)
         const speciesAndPresentationToWeightFARObject = getSpeciesAndPresentationToWeightFARObject(farMessages)
         setSpeciesToWeightOfFAR(speciesToWeightFARObject)
@@ -103,6 +107,7 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
         const totalDISWeight = getTotalDISWeightFromMessages(disMessages)
         setTotalDISWeight(totalDISWeight)
 
+        setAllDISMessagesAreNotAcknowledged(getAllFAROrDISMessagesAreNotAcknowledged(disMessages))
         const speciesToWeightDISObject = getDISSpeciesToWeightObject(disMessages, totalDISWeight)
         setSpeciesToWeightOfDIS(speciesToWeightDISObject)
       }
@@ -268,7 +273,8 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
                     totalFARWeight={totalFARWeight}
                     numberOfMessages={farMessages ? farMessages.filter(message => message.operationType === LogbookOperationType.DAT).length : 0}
                     speciesToWeightOfFAR={speciesToWeightOfFAR}
-                    speciesAndPresentationToWeightOfFAR={speciesAndPresentationToWeightOfFAR}/>
+                    speciesAndPresentationToWeightOfFAR={speciesAndPresentationToWeightOfFAR}
+                    allFARMessagesAreNotAcknowledged={allFARMessagesAreNotAcknowledged}/>
                   : <FARMessageResume hasNoMessage={true}/>
                 }
 
@@ -278,7 +284,8 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
                     totalDISWeight={totalDISWeight}
                     numberOfMessages={disMessages ? disMessages.filter(message => message.operationType === LogbookOperationType.DAT).length : 0}
                     speciesToWeightOfDIS={speciesToWeightOfDIS}
-                    showLogbookMessages={showLogbookMessages}/>
+                    showLogbookMessages={showLogbookMessages}
+                    allDISMessagesAreNotAcknowledged={allDISMessagesAreNotAcknowledged}/>
                   : <DISMessageResume hasNoMessage={true}/>
                 }
 

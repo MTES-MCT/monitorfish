@@ -86,7 +86,7 @@ const RegulatedGear = props => {
         }
         {'mm'}
       </ContentLine>}
-      <ContentLine>
+      <ContentLine alignedToTop>
         <Label>Remarques</Label>
         <CustomInput
           data-cy={'regulatory-gears-remarks'}

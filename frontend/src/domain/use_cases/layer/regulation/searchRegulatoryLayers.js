@@ -25,7 +25,8 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
       gears
     } = state.gear
     const {
-      species
+      species,
+      speciesByCode
     } = state.species
 
     let extent = []
@@ -35,7 +36,7 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
 
     if (extent?.length === 4) {
       return getRegulatoryZonesInExtentFromAPI(extent, state.global.inBackofficeMode)
-        .then(features => monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features))
+        .then(features => monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode))
         .then(result => getRegulatoryLayersWithoutTerritory(result.layersTopicsByRegulatoryTerritory))
         .then(filteredRegulatoryLayers => {
           if (inputsAreEmpty) {
@@ -43,7 +44,7 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
           }
 
           return monitorFishWorker.searchLayers(searchFields, filteredRegulatoryLayers, gears, species)
-        })
+        }).catch(e => console.error(e))
     }
 
     return monitorFishWorker.searchLayers(searchFields, regulatoryLayerLawTypes, gears, species)

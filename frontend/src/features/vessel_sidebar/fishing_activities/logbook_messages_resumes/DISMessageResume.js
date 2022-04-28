@@ -32,19 +32,15 @@ const DISMessageResume = props => {
     }
   }, [isOpen])
 
-  const getDISMessageResumeTitleText = () => {
-    return `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalDISWeight} kg rejetés au total`
-  }
-
-  const getDISMessageResumeTitle = () => {
-    return <>{props.numberOfMessages} message{props.numberOfMessages > 1 ? 's' : ''} - {props.totalDISWeight} kg rejetés
-      au total</>
-  }
+  const getDISMessageResumeTitleText = () => props.totalDISWeight > 0
+    ? `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalDISWeight} kg rejetés au total`
+    : `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - aucun rejet ${props.allDISMessagesAreNotAcknowledged ? 'acquitté' : ''}`
 
   return <Wrapper>
     <LogbookMessageResumeHeader
+      isNotAcknowledged={props.allDISMessagesAreNotAcknowledged}
       onHoverText={props.hasNoMessage ? null : getDISMessageResumeTitleText()}
-      title={props.hasNoMessage ? null : getDISMessageResumeTitle()}
+      title={props.hasNoMessage ? null : <>{getDISMessageResumeTitleText()}</>}
       hasNoMessage={props.hasNoMessage}
       noContent={!props.hasNoMessage && !props.totalDISWeight}
       showLogbookMessages={props.showLogbookMessages}
@@ -103,7 +99,7 @@ const LogbookMessageContent = styled.div`
   padding-left: 20px;
   border-bottom: 1px solid ${COLORS.gray};
   opacity: ${props => props.isOpen ? 1 : 0};
-  height: ${props => props.isOpen
+  height: ${props => props.isOpen && props.chartHeight
     ? props.chartHeight + 50
     : 0
   }px;

@@ -84,7 +84,7 @@ const Previous = styled.a`
 `
 
 const Zone = styled.div`
-  margin: 10px 5px 0 5px;
+  margin: 10px 5px 5px 5px;
   padding-bottom: 5px;
   text-align: left;
   background: ${COLORS.background};

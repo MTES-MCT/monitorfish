@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import SectionTitle from '../../SectionTitle'
 import { CustomInput, Label } from '../../../commonStyles/Input.style'
@@ -16,21 +16,26 @@ import styled from 'styled-components'
 const SpeciesRegulation = () => {
   const dispatch = useDispatch()
 
-  const {
-    /** @type {Map<string, Species>} speciesByCode */
-    speciesByCode,
-    formattedSpeciesGroups,
-    formattedSpecies
-  } = useSelector(state => {
-    const formattedSpeciesGroups = [...state.species.speciesGroups]
+  /** @type {Map<string, Species>} speciesByCode */
+  const speciesByCode = useSelector(state => state.species.speciesByCode)
+  const speciesGroups = useSelector(state => state.species.speciesGroups)
+  const [formattedSpecies, setFormattedSpecies] = useState([])
+  const [formattedSpeciesGroups, setFormattedSpeciesGroups] = useState([])
+
+  useEffect(() => {
+    const formattedSpeciesGroups = [...speciesGroups]
       ?.sort((speciesA, speciesB) => speciesA.group?.localeCompare(speciesB.group))
       .map(speciesGroup => ({
         label: speciesGroup.group,
         value: speciesGroup.group
       }))
 
-    const formattedSpecies = state.species.speciesByCode
-      ? Object.values(state.species.speciesByCode)
+    setFormattedSpeciesGroups(formattedSpeciesGroups)
+  }, [speciesGroups])
+
+  useEffect(() => {
+    const formattedSpecies = speciesByCode
+      ? Object.values(speciesByCode)
         .sort((speciesA, speciesB) => speciesA.name?.localeCompare(speciesB.name))
         .map(_species => ({
           label: `${_species.name} (${_species.code})`,
@@ -38,12 +43,8 @@ const SpeciesRegulation = () => {
         }))
       : []
 
-    return ({
-      speciesByCode: state.species.speciesByCode,
-      formattedSpeciesGroups,
-      formattedSpecies
-    })
-  })
+    setFormattedSpecies(formattedSpecies)
+  }, [speciesByCode])
 
   const { speciesRegulation } = useSelector(state => state.regulation.processingRegulation)
   const [show, setShow] = useState(false)

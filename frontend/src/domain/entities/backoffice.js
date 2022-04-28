@@ -58,10 +58,10 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
       const categoryGearList = [...categoriesToGears[category]]
       const gears = categoryGearList
         .sort((gearA, gearB) => {
-          if (gearA.name < gearB.name) {
+          if (gearA.code < gearB.code) {
             return -1
           }
-          if (gearA.name > gearB.name) {
+          if (gearA.code > gearB.code) {
             return 1
           }
           return 0

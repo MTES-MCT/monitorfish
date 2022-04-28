@@ -167,20 +167,20 @@ context('Update Regulation', () => {
     cy.get('*[data-cy="authorized-gears-selector"]')
       .scrollIntoView()
 
-    cy.log('Select TX - Autres chaluts')
+    cy.log('Select OT - Chaluts à panneaux')
     cy.get('[data-cy="authorized-gears-selector"]')
       .click({ timeout: 20000 })
     cy.get('.rs-checkbox-checker')
       .filter(':contains("Chaluts")')
       .click({ timeout: 20000 })
     cy.get('.rs-checkbox-checker')
-      .filter(':contains("TX - Autres chaluts")')
+      .filter(':contains("OT - Chaluts à panneaux")')
       .click({ timeout: 20000 })
     cy.get('[data-cy="authorized-gears-selector"]')
       .filter(':contains("des engins")')
       .type('{esc}')
 
-    cy.log('Unselect TX - Autres chaluts')
+    cy.log('Unselect OT - Chaluts à panneaux')
     cy.get('[data-cy="authorized-gears-selector"]')
       .filter(':contains("des engins")')
       .click({ timeout: 20000 })
@@ -189,7 +189,7 @@ context('Update Regulation', () => {
       .eq(0)
       .click({ timeout: 20000 })
     cy.get('.rs-checkbox-checker')
-      .filter(':contains("TX - Autres chaluts")')
+      .filter(':contains("OT - Chaluts à panneaux")')
       .click({ timeout: 20000 })
     cy.get('[data-cy="authorized-gears-selector"]')
       .filter(':contains("des engins")')
@@ -212,7 +212,7 @@ context('Update Regulation', () => {
       .eq(0)
       .click({ timeout: 20000 })
     cy.get('.rs-checkbox-checker')
-      .filter(':contains("TX - Autres chaluts")')
+      .filter(':contains("OT - Chaluts à panneaux")')
       .click({ timeout: 20000 })
     cy.get('[data-cy="unauthorized-gears-selector"]')
       .filter(':contains("des engins")')
@@ -228,8 +228,8 @@ context('Update Regulation', () => {
         expect(request.body)
             // Unauthorized
           .contain('{"unauthorized":{"allGears":false,"allTowedGears":false,"allPassiveGears":false,' +
-            '"regulatedGearCategories":{},"regulatedGears":{"TX":{"code":"TX","name":"Autres chaluts (non spécifiés)",' +
-            '"category":"Chaluts","groupId":1}},"selectedCategoriesAndGears":["TX"]},' +
+            '"regulatedGearCategories":{},"regulatedGears":{"OT":{"code":"OT","name":"Chaluts à panneaux (non spécifiés)",' +
+            '"category":"Chaluts","groupId":1}},"selectedCategoriesAndGears":["OT"]},' +
             // Authorized
             '"authorized":{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !",' +
             '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines",' +

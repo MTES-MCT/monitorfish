@@ -43,6 +43,10 @@ const RegulatoryLayerSearchInput = props => {
   const [gearSearchText, setGearSearchText] = useState('')
   const [speciesSearchText, setSpeciesSearchText] = useState('')
   const [regulatoryReferencesSearchText, setRegulatoryReferenceSearchText] = useState('')
+  const selectedOrSelectingZoneIsSquare = JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.SQUARE ||
+    interaction?.type === InteractionTypes.SQUARE
+  const selectedOrSelectingZoneIsPolygon = JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.POLYGON ||
+    interaction?.type === InteractionTypes.POLYGON
 
   const inputsAreEmpty = nameSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
     placeSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
@@ -120,6 +124,24 @@ const RegulatoryLayerSearchInput = props => {
     clickedOnSearch
   ])
 
+  const drawSquare = () => {
+    if (!selectedOrSelectingZoneIsPolygon) {
+      dispatch(setInteraction({
+        type: InteractionTypes.SQUARE,
+        listener: layersType.REGULATORY
+      }))
+    }
+  }
+
+  const drawPolygon = () => {
+    if (!selectedOrSelectingZoneIsSquare) {
+      dispatch(setInteraction({
+        type: InteractionTypes.POLYGON,
+        listener: layersType.REGULATORY
+      }))
+    }
+  }
+
   return (
     <>
       <PrincipalSearchInput>
@@ -160,39 +182,25 @@ const RegulatoryLayerSearchInput = props => {
         <SearchByGeometry>
           ou définir une zone sur la carte <br/>
           {
-            (JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.SQUARE ||
-              interaction?.type === InteractionTypes.SQUARE)
+            selectedOrSelectingZoneIsSquare
               ? <BoxFilterSelected
                 data-cy={'regulation-search-box-filter-selected'}
-                onClick={() => dispatch(setInteraction({
-                  type: InteractionTypes.SQUARE,
-                  listener: layersType.REGULATORY
-                }))}
+                onClick={drawSquare}
               />
               : <BoxFilter
                 data-cy={'regulation-search-box-filter'}
-                onClick={() => dispatch(setInteraction({
-                  type: InteractionTypes.SQUARE,
-                  listener: layersType.REGULATORY
-                }))}
+                onClick={drawSquare}
               />
           }
           {
-            JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.POLYGON ||
-            interaction?.type === InteractionTypes.POLYGON
+            selectedOrSelectingZoneIsPolygon
               ? <PolygonFilterSelected
                 data-cy={'regulation-search-polygon-filter-selected'}
-                onClick={() => dispatch(setInteraction({
-                  type: InteractionTypes.POLYGON,
-                  listener: layersType.REGULATORY
-                }))}
+                onClick={drawPolygon}
               />
               : <PolygonFilter
                 data-cy={'regulation-search-polygon-filter'}
-                onClick={() => dispatch(setInteraction({
-                  type: InteractionTypes.POLYGON,
-                  listener: layersType.REGULATORY
-                }))}
+                onClick={drawPolygon}
               />
           }
           {

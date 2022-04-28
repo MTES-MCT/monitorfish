@@ -9,7 +9,7 @@ const BeaconMalfunctionDetailsFollowUpRow = ({ dateText, children, smallSize, in
         data-cy={'side-window-beacon-malfunctions-detail-comment-date'}
         style={dateSeparatorStyle(index === 0)}
       >
-        <Line style={lineStyle}/>
+        <Line style={lineStyle(smallSize)}/>
         <RowDate
           style={rowDateStyle(dateText === 'Aujourd\'hui', dateText === 'Hier', smallSize)}
         >
@@ -43,9 +43,9 @@ const rowDateStyle = (isToday, isYesterday, smallSize) => ({
 })
 
 const Line = styled.div``
-const lineStyle = {
-  width: 558,
+const lineStyle = smallSize => ({
+  width: smallSize ? 445 : 558,
   borderBottom: `1px solid ${COLORS.lightGray}`
-}
+})
 
 export default BeaconMalfunctionDetailsFollowUpRow

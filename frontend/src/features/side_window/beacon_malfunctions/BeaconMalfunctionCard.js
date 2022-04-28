@@ -34,7 +34,7 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl,
 
   useEffect(() => {
     if (showed && beaconMalfunction) {
-      ref.current?.scrollIntoView({ behavior: 'smooth' })
+      ref.current?.scrollIntoView({ block: 'start', behavior: 'smooth' })
     }
   }, [showed, beaconMalfunction, ref])
 

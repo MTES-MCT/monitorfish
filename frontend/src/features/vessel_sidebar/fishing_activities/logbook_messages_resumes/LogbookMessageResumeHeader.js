@@ -39,7 +39,7 @@ const LogbookMessageResumeHeader = props => {
             }>
             {
               props.isNotAcknowledged || props.isDeleted
-                ? <NotAcknowledgedOrDeleted/>
+                ? <NotAcknowledgedOrDeleted data-cy={'fishing-resume-not-acknowledged-icon'}/>
                 : null
             }
             {LogbookMessageTypeEnum[props.messageType].name}

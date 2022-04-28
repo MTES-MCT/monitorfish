@@ -44,7 +44,7 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
           }
 
           return monitorFishWorker.searchLayers(searchFields, filteredRegulatoryLayers, gears, species)
-        })
+        }).catch(e => console.error(e))
     }
 
     return monitorFishWorker.searchLayers(searchFields, regulatoryLayerLawTypes, gears, species)

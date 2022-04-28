@@ -125,6 +125,7 @@ const FARMessageResume = props => {
 
 const WeightInfo = styled.span`
   margin: 0 0 10px 5px;
+  width: 100%;
 `
 
 const Zone = styled.div`

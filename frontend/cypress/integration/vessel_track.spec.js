@@ -102,10 +102,9 @@ context('Vessels Track', () => {
     cy.log('Show only the selected vessels')
     cy.get('*[data-cy^="trigger-hide-other-vessels-from-sidebar"]').click({ timeout: 20000, force: true })
     cy.wait(200)
-    cy.get('.vessels').dblclick(486, 688, { timeout: 20000, force: true })
 
     cy.wait(1000) // Because of the throttle
-    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 2)
+    cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 3)
     cy.wait(200)
 
     cy.log('Close the sidebar')

@@ -524,6 +524,74 @@ def load_neafc_regulatory_area(neafc_regulatory_area: pd.DataFrame):
     )
 
 
+@task(checkpoint=False)
+def extract_navigation_category_two_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/navigation_category_two_areas.sql")
+
+
+@task(checkpoint=False)
+def load_navigation_category_two_areas(navigation_category_two_areas: pd.DataFrame):
+    load(
+        navigation_category_two_areas,
+        table_name="navigation_category_two_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
+def extract_navigation_category_three_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/navigation_category_three_areas.sql")
+
+
+@task(checkpoint=False)
+def load_navigation_category_three_areas(navigation_category_three_areas: pd.DataFrame):
+    load(
+        navigation_category_three_areas,
+        table_name="navigation_category_three_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
+def extract_navigation_category_four_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/navigation_category_four_areas.sql")
+
+
+@task(checkpoint=False)
+def load_navigation_category_four_areas(navigation_category_four_areas: pd.DataFrame):
+    load(
+        navigation_category_four_areas,
+        table_name="navigation_category_four_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
+def extract_navigation_category_five_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/navigation_category_five_areas.sql")
+
+
+@task(checkpoint=False)
+def load_navigation_category_five_areas(navigation_category_five_areas: pd.DataFrame):
+    load(
+        navigation_category_five_areas,
+        table_name="navigation_category_five_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
 with Flow("Administrative areas") as flow:
 
     cgpm_areas = extract_cgpm_areas()
@@ -620,5 +688,17 @@ with Flow("Administrative areas") as flow:
 
     neafc_regulatory_area = extract_neafc_regulatory_area()
     load_neafc_regulatory_area(neafc_regulatory_area)
+
+    navigation_category_two_areas = extract_navigation_category_two_areas()
+    load_navigation_category_two_areas(navigation_category_two_areas)
+
+    navigation_category_three_areas = extract_navigation_category_three_areas()
+    load_navigation_category_three_areas(navigation_category_three_areas)
+
+    navigation_category_four_areas = extract_navigation_category_four_areas()
+    load_navigation_category_four_areas(navigation_category_four_areas)
+
+    navigation_category_five_areas = extract_navigation_category_five_areas()
+    load_navigation_category_five_areas(navigation_category_five_areas)
 
 flow.file_name = Path(__file__).name

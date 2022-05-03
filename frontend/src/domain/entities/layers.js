@@ -15,6 +15,10 @@ export const layersGroups = {
     code: 'twelve_forty_one',
     name: 'Zones du 1241'
   },
+  NAVIGATION_CATEGORY: {
+    code: 'navigation_category',
+    name: 'Catégories de navigation'
+  },
   VMS_SITUATION: {
     code: 'vms_situation',
     name: 'Zones pour situation VMS'
@@ -443,6 +447,46 @@ const Layers = {
     name: '',
     group: null,
     type: null,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false
+  },
+  navigation_category_two: {
+    code: 'navigation_category_two_areas',
+    name: '2ème',
+    group: layersGroups.NAVIGATION_CATEGORY,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false
+  },
+  navigation_category_three: {
+    code: 'navigation_category_three_areas',
+    name: '3ème',
+    group: layersGroups.NAVIGATION_CATEGORY,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false
+  },
+  navigation_category_four: {
+    code: 'navigation_category_four_areas',
+    name: '4ème',
+    group: layersGroups.NAVIGATION_CATEGORY,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false
+  },
+  navigation_category_five: {
+    code: 'navigation_category_five_areas',
+    name: '5ème',
+    group: layersGroups.NAVIGATION_CATEGORY,
+    type: layersType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,

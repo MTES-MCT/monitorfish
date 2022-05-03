@@ -132,8 +132,8 @@ const Backoffice = () => {
           <BaseLayer/>
           <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
           <AdministrativeLayers/>
-          <ShowRegulatoryMetadata/>
-          <RegulatoryPreviewLayer />
+          <ShowRegulatoryMetadata hasClickEvent/>
+          <RegulatoryPreviewLayer/>
         </BaseMap>
       </BackofficeContainer>
       {regulatoryZoneMetadataPanelIsOpen && <MetadataWrapper

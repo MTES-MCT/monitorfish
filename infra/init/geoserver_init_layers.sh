@@ -373,3 +373,55 @@ curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces
   }
 }
 EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "navigation_category_two_areas",
+    "nativeName": "navigation_category_two_areas",
+    "title": "navigation_category_two_areas",
+    "nativeCRS": "EPSG:3857",
+    "srs": "EPSG:3857",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "navigation_category_three_areas",
+    "nativeName": "navigation_category_three_areas",
+    "title": "navigation_category_three_areas",
+    "nativeCRS": "EPSG:3857",
+    "srs": "EPSG:3857",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "navigation_category_four_areas",
+    "nativeName": "navigation_category_four_areas",
+    "title": "navigation_category_four_areas",
+    "nativeCRS": "EPSG:3857",
+    "srs": "EPSG:3857",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "navigation_category_five_areas",
+    "nativeName": "navigation_category_five_areas",
+    "title": "navigation_category_five_areas",
+    "nativeCRS": "EPSG:3857",
+    "srs": "EPSG:3857",
+    "enabled": true,
+  }
+}
+EOF

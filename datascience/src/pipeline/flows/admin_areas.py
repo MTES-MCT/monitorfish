@@ -27,6 +27,25 @@ def load_cgpm_areas(
 
 
 @task(checkpoint=False)
+def extract_cgpm_statistical_rectangles_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/cgpm_statistical_rectangles_areas.sql")
+
+
+@task(checkpoint=False)
+def load_cgpm_statistical_rectangles_areas(
+    cgpm_statistical_rectangles_areas: pd.DataFrame,
+):
+    load(
+        cgpm_statistical_rectangles_areas,
+        table_name="cgpm_statistical_rectangles_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
 def extract_n_miles_to_shore_areas() -> pd.DataFrame:
     return extract("monitorfish_local", "cross/n_miles_to_shore_areas.sql")
 
@@ -596,6 +615,9 @@ with Flow("Administrative areas") as flow:
 
     cgpm_areas = extract_cgpm_areas()
     load_cgpm_areas(cgpm_areas)
+
+    cgpm_statistical_rectangles_areas = extract_cgpm_statistical_rectangles_areas()
+    load_cgpm_statistical_rectangles_areas(cgpm_statistical_rectangles_areas)
 
     n_miles_to_shore_areas = extract_n_miles_to_shore_areas()
     load_n_miles_to_shore_areas(n_miles_to_shore_areas)

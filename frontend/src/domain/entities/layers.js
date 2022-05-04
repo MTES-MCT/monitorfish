@@ -404,12 +404,22 @@ const Layers = {
   },
   cgpm_areas: {
     code: 'cgpm_areas',
-    name: 'Zones CGPM',
+    name: 'CGPM',
     group: layersGroups.ORGP,
     type: layersType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'SMU_CODE',
+    isIntersectable: true
+  },
+  cgpm_statistical_rectangles_areas: {
+    code: 'cgpm_statistical_rectangles_areas',
+    name: 'CGPM (Rectangles statistiques)',
+    group: layersGroups.ORGP,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: true,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: 'sect_cod',
     isIntersectable: true
   },
   effort_zones_areas: {

@@ -18,7 +18,7 @@ from sqlalchemy.exc import InvalidRequestError
 def get_table(
     table_name: str,
     schema: str,
-    engine: sqlalchemy.engine.base.Engine,
+    conn: sqlalchemy.engine.Connectable,
     logger: logging.Logger,
 ) -> sqlalchemy.Table:
     """Performs reflection to get a sqlalchemy Table object with metadata reflecting
@@ -28,7 +28,7 @@ def get_table(
     """
 
     meta = MetaData(schema=schema)
-    meta.bind = engine
+    meta.bind = conn
     try:
         geoalchemy2
         assert "geoalchemy2" in sys.modules

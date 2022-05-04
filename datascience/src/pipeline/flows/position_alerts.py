@@ -141,7 +141,7 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
     zones_table = get_table(
         table_info["table"],
         schema="public",
-        engine=create_engine("monitorfish_remote"),
+        conn=create_engine("monitorfish_remote"),
         logger=logger,
     )
 
@@ -166,7 +166,7 @@ def get_fishing_gears_table() -> Table:
     return get_table(
         table_name="fishing_gear_codes",
         schema="public",
-        engine=create_engine("monitorfish_remote"),
+        conn=create_engine("monitorfish_remote"),
         logger=prefect.context.get("logger"),
     )
 

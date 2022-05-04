@@ -105,6 +105,7 @@ position_alerts.flow.schedule = Schedule(
             "*/10 * * * *",
             parameter_defaults={
                 "alert_type": "THREE_MILES_TRAWLING_ALERT",
+                "alert_config_name": "THREE_MILES_TRAWLING_ALERT",
                 "zones": ["0-3"],
                 "hours_from_now": 8,
                 "only_fishing_positions": True,
@@ -116,6 +117,7 @@ position_alerts.flow.schedule = Schedule(
             "*/10 * * * *",
             parameter_defaults={
                 "alert_type": "FRENCH_EEZ_FISHING_ALERT",
+                "alert_config_name": "FRENCH_EEZ_FISHING_ALERT",
                 "zones": ["FRA"],
                 "hours_from_now": 8,
                 "only_fishing_positions": True,
@@ -132,6 +134,7 @@ position_alerts.flow.schedule = Schedule(
             "*/10 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                "alert_config_name": "TWELVE_MILES_FISHING_ALERT_BE_NL",
                 "zones": ["0-12_MINUS_BE_AND_NL_FISHING_AREAS"],
                 "hours_from_now": 8,
                 "only_fishing_positions": True,
@@ -142,6 +145,7 @@ position_alerts.flow.schedule = Schedule(
             "*/10 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                "alert_config_name": "TWELVE_MILES_FISHING_ALERT_ES",
                 "zones": ["0-12_MINUS_ES_FISHING_AREAS"],
                 "hours_from_now": 8,
                 "only_fishing_positions": True,
@@ -152,6 +156,7 @@ position_alerts.flow.schedule = Schedule(
             "*/10 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                "alert_config_name": "TWELVE_MILES_FISHING_ALERT_DE",
                 "zones": ["0-12_MINUS_DE_FISHING_AREAS"],
                 "hours_from_now": 8,
                 "only_fishing_positions": True,
@@ -162,6 +167,7 @@ position_alerts.flow.schedule = Schedule(
             "*/10 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
+                "alert_config_name": "TWELVE_MILES_FISHING_ALERT_OTHERS",
                 "zones": ["0-3", "3-6", "6-12", "0-12"],
                 "hours_from_now": 8,
                 "only_fishing_positions": True,

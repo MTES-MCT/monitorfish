@@ -40,7 +40,7 @@ def get_facades_table() -> Table:
     facades_table = get_table(
         "facade_areas_subdivided",
         schema="public",
-        engine=create_engine("monitorfish_remote"),
+        conn=create_engine("monitorfish_remote"),
         logger=logger,
     )
 

@@ -355,23 +355,6 @@ def load_fao_iotc_areas(fao_iotc_areas: pd.DataFrame):
 
 
 @task(checkpoint=False)
-def extract_fao_neafc_areas() -> pd.DataFrame:
-    return extract("monitorfish_local", "cross/fao_neafc_areas.sql")
-
-
-@task(checkpoint=False)
-def load_fao_neafc_areas(fao_neafc_areas: pd.DataFrame):
-    load(
-        fao_neafc_areas,
-        table_name="fao_neafc_areas",
-        schema="public",
-        db_name="monitorfish_remote",
-        logger=prefect.context.get("logger"),
-        how="replace",
-    )
-
-
-@task(checkpoint=False)
 def extract_fao_siofa_areas() -> pd.DataFrame:
     return extract("monitorfish_local", "cross/fao_siofa_areas.sql")
 
@@ -525,6 +508,23 @@ def load_neafc_regulatory_area(neafc_regulatory_area: pd.DataFrame):
 
 
 @task(checkpoint=False)
+def extract_nafo_regulatory_area() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/nafo_regulatory_area.sql")
+
+
+@task(checkpoint=False)
+def load_nafo_regulatory_area(nafo_regulatory_area: pd.DataFrame):
+    load(
+        nafo_regulatory_area,
+        table_name="nafo_regulatory_area",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
 def extract_navigation_category_two_areas() -> pd.DataFrame:
     return extract("monitorfish_local", "cross/navigation_category_two_areas.sql")
 
@@ -659,9 +659,6 @@ with Flow("Administrative areas") as flow:
     fao_iotc_areas = extract_fao_iotc_areas()
     load_fao_iotc_areas(fao_iotc_areas)
 
-    fao_neafc_areas = extract_fao_neafc_areas()
-    load_fao_neafc_areas(fao_neafc_areas)
-
     fao_siofa_areas = extract_fao_siofa_areas()
     load_fao_siofa_areas(fao_siofa_areas)
 
@@ -688,6 +685,9 @@ with Flow("Administrative areas") as flow:
 
     neafc_regulatory_area = extract_neafc_regulatory_area()
     load_neafc_regulatory_area(neafc_regulatory_area)
+
+    nafo_regulatory_area = extract_nafo_regulatory_area()
+    load_nafo_regulatory_area(nafo_regulatory_area)
 
     navigation_category_two_areas = extract_navigation_category_two_areas()
     load_navigation_category_two_areas(navigation_category_two_areas)

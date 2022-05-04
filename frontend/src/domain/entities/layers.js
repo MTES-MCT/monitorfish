@@ -363,8 +363,18 @@ const Layers = {
     isIntersectable: true
   },
   NEAFC: {
-    code: 'fao_neafc_areas',
+    code: 'neafc_regulatory_area',
     name: 'NEAFC',
+    group: layersGroups.ORGP,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: true
+  },
+  NAFO: {
+    code: 'nafo_regulatory_area',
+    name: 'NAFO',
     group: layersGroups.ORGP,
     type: layersType.ADMINISTRATIVE,
     containsMultipleZones: false,
@@ -410,16 +420,6 @@ const Layers = {
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'zone',
-    isIntersectable: true
-  },
-  neafc_regulatory_area: {
-    code: 'neafc_regulatory_area',
-    name: 'Zone réglementaire NEAFC',
-    group: null,
-    type: layersType.ADMINISTRATIVE,
-    containsMultipleZones: false,
-    showMultipleZonesInAdministrativeZones: false,
-    subZoneFieldKey: null,
     isIntersectable: true
   },
   situations: {

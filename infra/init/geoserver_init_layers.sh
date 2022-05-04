@@ -260,19 +260,6 @@ EOF
 curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
-    "name": "fao_neafc_areas",
-    "nativeName": "fao_neafc_areas",
-    "title": "fao NEAFC areas",
-    "nativeCRS": "EPSG:4326",
-    "srs": "EPSG:4326",
-    "enabled": true,
-  }
-}
-EOF
-
-curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
-{
-  "featureType": {
     "name": "fao_siofa_areas",
     "nativeName": "fao_siofa_areas",
     "title": "fao SIOFA areas",
@@ -421,6 +408,19 @@ curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces
     "title": "navigation_category_five_areas",
     "nativeCRS": "EPSG:3857",
     "srs": "EPSG:3857",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "nafo_regulatory_area",
+    "nativeName": "nafo_regulatory_area",
+    "title": "nafo_regulatory_area",
+    "nativeCRS": "EPSG:4326",
+    "srs": "EPSG:4326",
     "enabled": true,
   }
 }

@@ -1,0 +1,27 @@
+SELECT
+    id_0,
+    geom,
+    id,
+    "F_CODE",
+    "F_LEVEL",
+    "F_STATUS",
+    "OCEAN",
+    "SUBOCEAN",
+    "F_AREA",
+    "F_SUBAREA",
+    "F_DIVISION",
+    "F_SUBDIVIS",
+    "F_SUBUNIT",
+    "ID",
+    "NAME_EN",
+    "NAME_FR",
+    "NAME_ES",
+    fid,
+    gid,
+    name,
+    mrgid,
+    source,
+    area_km2
+    ogc_fid,
+    wkb_geometry
+FROM prod.nafo_regulatory_area

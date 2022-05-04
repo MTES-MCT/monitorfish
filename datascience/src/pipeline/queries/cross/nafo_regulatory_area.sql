@@ -22,6 +22,4 @@ SELECT
     mrgid,
     source,
     area_km2
-    ogc_fid,
-    wkb_geometry
 FROM prod.nafo_regulatory_area

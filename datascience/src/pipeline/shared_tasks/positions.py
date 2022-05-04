@@ -67,7 +67,7 @@ def get_positions_table() -> Table:
     positions_table = get_table(
         "positions",
         schema="public",
-        engine=create_engine("monitorfish_remote"),
+        conn=create_engine("monitorfish_remote"),
         logger=logger,
     )
 

@@ -4,6 +4,7 @@ from typing import Union
 
 import geopandas as gpd
 import pandas as pd
+from sqlalchemy.engine import Connection
 
 from src.db_config import create_engine
 from src.pipeline import utils
@@ -81,17 +82,18 @@ def load(
     *,
     table_name: str,
     schema: str,
-    db_name: str,
     logger: logging.Logger,
     how: str = "replace",
-    pg_array_columns: Union[None, list] = None,
+    db_name: str = None,
+    pg_array_columns: list = None,
     handle_array_conversion_errors: bool = True,
-    value_on_array_conversion_error="{}",
-    jsonb_columns: Union[None, list] = None,
-    table_id_column: Union[None, str] = None,
-    df_id_column: Union[None, str] = None,
-    nullable_integer_columns: Union[None, list] = None,
-    timedelta_columns: Union[None, list] = None,
+    value_on_array_conversion_error: str = "{}",
+    jsonb_columns: list = None,
+    table_id_column: str = None,
+    df_id_column: str = None,
+    nullable_integer_columns: list = None,
+    timedelta_columns: list = None,
+    connection: Connection = None,
 ):
     """
     Load a DataFrame or GeoDataFrame to a database table using sqlalchemy. The table
@@ -101,37 +103,44 @@ def load(
         df (Union[pd.DataFrame, gpd.GeoDataFrame]): data to load
         table_name (str): name of the table
         schema (str): database schema of the table
-        db_name (str): 'monitorfish_remote' or 'monitorfish_local'
-        logger (logging.Logger): logger instance,
+        logger (logging.Logger): logger instance
         how (str): one of
           - 'replace' to delete all rows in the table before loading
           - 'append' to append the data to rows already in the table
           - 'upsert' to append the rows to the table, replacing the rows whose id is
             already
-        pg_array_columns (Union[None, list]): columns containing sequences that must be
+        db_name (str, optional): Required if a `connection` is not provided.
+          'monitorfish_remote' or 'monitorfish_local'. Defaults to None.
+        pg_array_columns (list, optional): columns containing sequences that must be
           serialized before loading into columns with Postgresql `Array` type
         handle_array_conversion_errors (bool): whether to handle or raise upon error
-          during the serialization of columns to load into Postgresql `Array` columns
-        value_on_array_conversion_error: if `handle_array_conversion_errors`, the value
-          to use when an error must be handled
-        jsonb_columns (Union[None, list]): columns containing values that must be
+          during the serialization of columns to load into Postgresql `Array` columns.
+          Defaults to True.
+        value_on_array_conversion_error (str, optional): if
+          `handle_array_conversion_errors`, the value to use when an error must be
+          handled. Defaults to '{}'.
+        jsonb_columns (list, optional): columns containing values that must be
           serialized before loading into columns with Postgresql `JSONB` type
-        table_id_column (Union[None, str]): name of the table column to use an id.
+        table_id_column (str, optional): name of the table column to use an id.
           Required if `how` is "upsert".
-        df_id_column (Union[None, str]): name of the DataFrame column to use an id.
+        df_id_column (str, optional): name of the DataFrame column to use an id.
           Required if `how` is "upsert".
-        nullable_integer_columns (Union[None, list]): columns containing values
+        nullable_integer_columns (list, optional): columns containing values
           that must loaded into columns with Postgresql `Integer` type. If these
           columns contain `NA` values, pandas will automatically change the dtype to
           `float` and the loading into Postgreql `Integer` columns will fail, so it is
           necessary to serialize these values as `Integer`-compatible `str` objects.
-        timedelta_columns (Union[None, list]): columns containing `Timedelta` values to
+        timedelta_columns (list, optional): columns containing `Timedelta` values to
           load into Postgresql `Interval` columns. If these columns contain `NaT`
           values, the loading will fail, so it is necessary to serialize these values
           as `Interval`-compatible `str` objects.
+        connection (Connection, optional): Databse connection to use for the insert
+          operation. If not provided, `db_name` must be given and a connection to the
+          designated database will be created for the insert operation.
+          Defaults to None.
     """
 
-    df_ = prepare_df_for_loading(
+    df = prepare_df_for_loading(
         df,
         logger,
         pg_array_columns=pg_array_columns,
@@ -142,69 +151,102 @@ def load(
         timedelta_columns=timedelta_columns,
     )
 
-    e = create_engine(db_name)
-    table = get_table(table_name, schema, e, logger)
-
-    with e.begin() as connection:
-
-        if how == "replace":
-            # Delete all rows from table
-            utils.delete(table, connection, logger)
-
-        elif how == "upsert":
-            # Delete rows that are in the DataFrame from the table
-
-            try:
-                assert df_id_column is not None
-            except AssertionError:
-                raise ValueError("df_id_column cannot be null if how='upsert'")
-            try:
-                assert table_id_column is not None
-            except AssertionError:
-                raise ValueError("table_id_column cannot be null if how='upsert'")
-
-            ids_to_delete = set(df[df_id_column].unique())
-
-            utils.delete_rows(
-                table=table,
-                id_column=table_id_column,
-                ids_to_delete=ids_to_delete,
+    if connection is None:
+        e = create_engine(db_name)
+        with e.begin() as connection:
+            load_with_connection(
+                df=df,
                 connection=connection,
+                table_name=table_name,
+                schema=schema,
                 logger=logger,
+                how=how,
+                table_id_column=table_id_column,
+                df_id_column=df_id_column,
             )
+    else:
+        load_with_connection(
+            df=df,
+            connection=connection,
+            table_name=table_name,
+            schema=schema,
+            logger=logger,
+            how=how,
+            table_id_column=table_id_column,
+            df_id_column=df_id_column,
+        )
 
-        elif how == "append":
-            # Nothing to do
-            pass
 
-        else:
-            raise ValueError(f"how must be 'replace', 'upsert' or 'append', got {how}")
+def load_with_connection(
+    df: Union[pd.DataFrame, gpd.GeoDataFrame],
+    *,
+    connection: Connection,
+    table_name: str,
+    schema: str,
+    logger: logging.Logger,
+    how: str = "replace",
+    table_id_column: Union[None, str] = None,
+    df_id_column: Union[None, str] = None,
+):
+    table = get_table(table_name, schema, connection, logger)
+    if how == "replace":
+        # Delete all rows from table
+        utils.delete(table, connection, logger)
 
-        # Insert data into table
-        logger.info(f"Loading into {schema}.{table_name}")
+    elif how == "upsert":
+        # Delete rows that are in the DataFrame from the table
 
-        if isinstance(df_, gpd.GeoDataFrame):
-            logger.info("GeodateFrame detected, using to_postgis")
-            df_.to_postgis(
-                name=table_name,
-                con=connection,
-                schema=schema,
-                index=False,
-                if_exists="append",
-            )
+        try:
+            assert df_id_column is not None
+        except AssertionError:
+            raise ValueError("df_id_column cannot be null if how='upsert'")
+        try:
+            assert table_id_column is not None
+        except AssertionError:
+            raise ValueError("table_id_column cannot be null if how='upsert'")
 
-        elif isinstance(df_, pd.DataFrame):
-            df_.to_sql(
-                name=table_name,
-                con=connection,
-                schema=schema,
-                index=False,
-                method=psql_insert_copy,
-                if_exists="append",
-            )
+        ids_to_delete = set(df[df_id_column].unique())
 
-        else:
-            raise ValueError("df must be DataFrame or GeoDataFrame.")
+        utils.delete_rows(
+            table=table,
+            id_column=table_id_column,
+            ids_to_delete=ids_to_delete,
+            connection=connection,
+            logger=logger,
+        )
+
+    elif how == "append":
+        # Nothing to do
+        pass
+
+    else:
+        raise ValueError(f"how must be 'replace', 'upsert' or 'append', got {how}")
+
+    # Insert data into table
+    logger.info(f"Loading into {schema}.{table_name}")
+
+    if isinstance(df, gpd.GeoDataFrame):
+        logger.info("GeodateFrame detected, using to_postgis")
+        df.to_postgis(
+            name=table_name,
+            con=connection,
+            schema=schema,
+            index=False,
+            if_exists="append",
+        )
+
+    elif isinstance(df, pd.DataFrame):
+        df.to_sql(
+            name=table_name,
+            con=connection,
+            schema=schema,
+            index=False,
+            method=psql_insert_copy,
+            if_exists="append",
+        )
+
+    else:
+        raise ValueError("df must be DataFrame or GeoDataFrame.")
 
 
 def delete_rows(

@@ -260,19 +260,6 @@ EOF
 curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
 {
   "featureType": {
-    "name": "fao_neafc_areas",
-    "nativeName": "fao_neafc_areas",
-    "title": "fao NEAFC areas",
-    "nativeCRS": "EPSG:4326",
-    "srs": "EPSG:4326",
-    "enabled": true,
-  }
-}
-EOF
-
-curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
-{
-  "featureType": {
     "name": "fao_siofa_areas",
     "nativeName": "fao_siofa_areas",
     "title": "fao SIOFA areas",
@@ -367,6 +354,84 @@ curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces
     "name": "effort_zones_areas",
     "nativeName": "effort_zones_areas",
     "title": "effort_zones_areas",
+    "nativeCRS": "EPSG:4326",
+    "srs": "EPSG:4326",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "navigation_category_two_areas",
+    "nativeName": "navigation_category_two_areas",
+    "title": "navigation_category_two_areas",
+    "nativeCRS": "EPSG:3857",
+    "srs": "EPSG:3857",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "navigation_category_three_areas",
+    "nativeName": "navigation_category_three_areas",
+    "title": "navigation_category_three_areas",
+    "nativeCRS": "EPSG:3857",
+    "srs": "EPSG:3857",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "navigation_category_four_areas",
+    "nativeName": "navigation_category_four_areas",
+    "title": "navigation_category_four_areas",
+    "nativeCRS": "EPSG:3857",
+    "srs": "EPSG:3857",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "navigation_category_five_areas",
+    "nativeName": "navigation_category_five_areas",
+    "title": "navigation_category_five_areas",
+    "nativeCRS": "EPSG:3857",
+    "srs": "EPSG:3857",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "nafo_regulatory_area",
+    "nativeName": "nafo_regulatory_area",
+    "title": "nafo_regulatory_area",
+    "nativeCRS": "EPSG:4326",
+    "srs": "EPSG:4326",
+    "enabled": true,
+  }
+}
+EOF
+
+curl -v -u admin:geoserver -X POST http://0.0.0.0:8001/geoserver/rest/workspaces/monitorfish/datastores/monitorfish_postgis/featuretypes -H  "accept: text/html" -H  "content-type: application/json" -d @- << EOF
+{
+  "featureType": {
+    "name": "cgpm_statistical_rectangles_areas",
+    "nativeName": "cgpm_statistical_rectangles_areas",
+    "title": "cgpm_statistical_rectangles_areas",
     "nativeCRS": "EPSG:4326",
     "srs": "EPSG:4326",
     "enabled": true,

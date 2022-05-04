@@ -15,6 +15,10 @@ export const layersGroups = {
     code: 'twelve_forty_one',
     name: 'Zones du 1241'
   },
+  NAVIGATION_CATEGORY: {
+    code: 'navigation_category',
+    name: 'Catégories de navigation'
+  },
   VMS_SITUATION: {
     code: 'vms_situation',
     name: 'Zones pour situation VMS'
@@ -359,8 +363,18 @@ const Layers = {
     isIntersectable: true
   },
   NEAFC: {
-    code: 'fao_neafc_areas',
+    code: 'neafc_regulatory_area',
     name: 'NEAFC',
+    group: layersGroups.ORGP,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: true
+  },
+  NAFO: {
+    code: 'nafo_regulatory_area',
+    name: 'NAFO',
     group: layersGroups.ORGP,
     type: layersType.ADMINISTRATIVE,
     containsMultipleZones: false,
@@ -390,12 +404,22 @@ const Layers = {
   },
   cgpm_areas: {
     code: 'cgpm_areas',
-    name: 'Zones CGPM',
+    name: 'CGPM',
     group: layersGroups.ORGP,
     type: layersType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'SMU_CODE',
+    isIntersectable: true
+  },
+  cgpm_statistical_rectangles_areas: {
+    code: 'cgpm_statistical_rectangles_areas',
+    name: 'CGPM (Rectangles statistiques)',
+    group: layersGroups.ORGP,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: true,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: 'sect_cod',
     isIntersectable: true
   },
   effort_zones_areas: {
@@ -406,16 +430,6 @@ const Layers = {
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'zone',
-    isIntersectable: true
-  },
-  neafc_regulatory_area: {
-    code: 'neafc_regulatory_area',
-    name: 'Zone réglementaire NEAFC',
-    group: null,
-    type: layersType.ADMINISTRATIVE,
-    containsMultipleZones: false,
-    showMultipleZonesInAdministrativeZones: false,
-    subZoneFieldKey: null,
     isIntersectable: true
   },
   situations: {
@@ -443,6 +457,46 @@ const Layers = {
     name: '',
     group: null,
     type: null,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false
+  },
+  navigation_category_two: {
+    code: 'navigation_category_two_areas',
+    name: '2ème',
+    group: layersGroups.NAVIGATION_CATEGORY,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false
+  },
+  navigation_category_three: {
+    code: 'navigation_category_three_areas',
+    name: '3ème',
+    group: layersGroups.NAVIGATION_CATEGORY,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false
+  },
+  navigation_category_four: {
+    code: 'navigation_category_four_areas',
+    name: '4ème',
+    group: layersGroups.NAVIGATION_CATEGORY,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false
+  },
+  navigation_category_five: {
+    code: 'navigation_category_five_areas',
+    name: '5ème',
+    group: layersGroups.NAVIGATION_CATEGORY,
+    type: layersType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,

@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS "public"."fao_neafc_areas" CASCADE;

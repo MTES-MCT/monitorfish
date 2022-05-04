@@ -17,7 +17,7 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
         }),
         text: new Text({
           font: '12px Marianne',
-          text: `${feature.get(Layers.EEZ.subZoneFieldKey) ? feature.get(Layers.EEZ.subZoneFieldKey) : ''}`,
+          text: `${feature.get(Layers.EEZ.subZoneFieldKey) || ''}`,
           fill: new Fill({ color: COLORS.gunMetal }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.9)', width: 2 })
         })
@@ -44,7 +44,7 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
         }),
         text: new Text({
           font: '12px Marianne',
-          text: `${feature.get(Layers.AEM.subZoneFieldKey) ? feature.get(Layers.AEM.subZoneFieldKey) : ''}`,
+          text: `${feature.get(Layers.AEM.subZoneFieldKey) || ''}`,
           fill: new Fill({ color: COLORS.gunMetal }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
@@ -57,7 +57,7 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
         }),
         text: new Text({
           font: '12px Marianne',
-          text: `${feature.get(Layers.effort_zones_areas.subZoneFieldKey) ? feature.get(Layers.effort_zones_areas.subZoneFieldKey) : ''}`,
+          text: `${feature.get(Layers.effort_zones_areas.subZoneFieldKey) || ''}`,
           fill: new Fill({ color: COLORS.gunMetal }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
@@ -70,7 +70,7 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
         }),
         text: new Text({
           font: '12px Marianne',
-          text: `${feature.get(Layers.cormoran.subZoneFieldKey) ? feature.get(Layers.cormoran.subZoneFieldKey) : ''}`,
+          text: `${feature.get(Layers.cormoran.subZoneFieldKey) || ''}`,
           fill: new Fill({ color: COLORS.gunMetal }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
@@ -83,7 +83,7 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
         }),
         text: new Text({
           font: '12px Marianne',
-          text: `${feature.get(Layers.situations.subZoneFieldKey) ? feature.get(Layers.situations.subZoneFieldKey) : ''}`,
+          text: `${feature.get(Layers.situations.subZoneFieldKey) || ''}`,
           fill: new Fill({ color: COLORS.gunMetal }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
@@ -96,7 +96,7 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
         }),
         text: new Text({
           font: '12px Marianne',
-          text: `${feature.get(Layers.brexit.subZoneFieldKey) ? feature.get(Layers.brexit.subZoneFieldKey) : ''}`,
+          text: `${feature.get(Layers.brexit.subZoneFieldKey) || ''}`,
           fill: new Fill({ color: COLORS.gunMetal }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
@@ -109,7 +109,7 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
         }),
         text: new Text({
           font: '12px Marianne',
-          text: `${feature.get(Layers.rectangles_stat.subZoneFieldKey) ? feature.get(Layers.rectangles_stat.subZoneFieldKey) : ''}`,
+          text: `${feature.get(Layers.rectangles_stat.subZoneFieldKey) || ''}`,
           fill: new Fill({ color: COLORS.gunMetal }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })
@@ -143,7 +143,20 @@ export const getAdministrativeAndRegulatoryLayersStyle = type => {
         }),
         text: new Text({
           font: '12px Marianne',
-          text: `${feature.get(Layers.cgpm_areas.subZoneFieldKey) ? feature.get(Layers.cgpm_areas.subZoneFieldKey) : ''}`,
+          text: `${feature.get(Layers.cgpm_areas.subZoneFieldKey) || ''}`,
+          fill: new Fill({ color: COLORS.gunMetal }),
+          stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
+        })
+      })
+    case Layers.cgpm_statistical_rectangles_areas.code:
+      return feature => new Style({
+        stroke: new Stroke({
+          color: '#767AB2',
+          width: 1
+        }),
+        text: new Text({
+          font: '12px Marianne',
+          text: `${feature.get(Layers.cgpm_statistical_rectangles_areas.subZoneFieldKey) || ''}`,
           fill: new Fill({ color: COLORS.gunMetal }),
           stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 })
         })

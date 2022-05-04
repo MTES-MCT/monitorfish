@@ -55,8 +55,12 @@ def test_control_anteriority_flow(reset_test_data):
     )
 
     pd.testing.assert_frame_equal(
-        loaded_control_anteriority.drop(columns=["last_control_datetime_utc"]),
-        expected_control_anteriority.drop(columns=["last_control_datetime_utc"]),
+        loaded_control_anteriority.drop(
+            columns=["last_control_datetime_utc", "number_recent_controls"]
+        ),
+        expected_control_anteriority.drop(
+            columns=["last_control_datetime_utc", "number_recent_controls"]
+        ),
     )
 
     # The date of the last control is computed from CURRENT_TIMESTAMP by the database
@@ -77,3 +81,15 @@ def test_control_anteriority_flow(reset_test_data):
     )
 
     assert (seconds_of_difference < max_seconds_of_difference_allowed).all()
+
+    # The value of number_recent_controls may change slightly depending the date, due
+    # to the changing duration of years (regular vs leap years), so we need to make an
+    # approximate check for this value as well.
+
+    assert (
+        (
+            loaded_control_anteriority.number_recent_controls
+            - expected_control_anteriority.number_recent_controls
+        )
+        < 0.1
+    ).all()

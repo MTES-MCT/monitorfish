@@ -31,7 +31,6 @@ PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/aem_areas.sql
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/fao_CCAMLR_areas.sql
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/fao_ICCAT_areas.sql
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/fao_IOTC_areas.sql
-PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/fao_NEAFC_areas.sql
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/fao_SIOFA_areas.sql
 
 PGCLIENTENCODING=UTF-8 psql -d cnsp -U adl -f sig/layersdata/rectangles_stat_areas.sql

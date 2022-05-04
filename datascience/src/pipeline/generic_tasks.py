@@ -78,6 +78,7 @@ def extract(
 
 def load(
     df: Union[pd.DataFrame, gpd.GeoDataFrame],
+    *,
     table_name: str,
     schema: str,
     db_name: str,

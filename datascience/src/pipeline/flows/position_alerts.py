@@ -505,8 +505,7 @@ def load_alerts(alerts: pd.DataFrame, alert_config_name: str):
         assert alert_config_name and isinstance(alert_config_name, str)
     except AssertionError:
         raise (
-            ValueError,
-            (
+            ValueError(
                 "alert_config_name must be a non null `str`, "
                 f"got {alert_config_name} instead."
             ),

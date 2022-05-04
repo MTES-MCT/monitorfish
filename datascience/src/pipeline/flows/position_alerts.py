@@ -19,7 +19,7 @@ from src.pipeline.shared_tasks.positions import (
     add_vessel_identifier,
     get_positions_table,
 )
-from src.pipeline.utils import get_table
+from src.pipeline.utils import delete_rows, get_table
 from src.read_query import read_query
 
 
@@ -426,7 +426,11 @@ def merge_risk_factor(
 
 
 @task(checkpoint=False)
-def make_alerts(positions_in_alert: pd.DataFrame, alert_type: str) -> pd.DataFrame:
+def make_alerts(
+    positions_in_alert: pd.DataFrame,
+    alert_type: str,
+    alert_config_name: str,
+) -> pd.DataFrame:
     """
     Generates alerts from the input `positions_in_alert`, essentially by grouping all
     positions of the same vessel as one alert.
@@ -467,6 +471,8 @@ def make_alerts(positions_in_alert: pd.DataFrame, alert_type: str) -> pd.DataFra
         )[["seaFront", "flagState", "type", "riskFactor"]]
     )
 
+    alerts["alert_config_name"] = alert_config_name
+
     return alerts[
         [
             "vessel_name",
@@ -476,30 +482,76 @@ def make_alerts(positions_in_alert: pd.DataFrame, alert_type: str) -> pd.DataFra
             "vessel_identifier",
             "creation_date",
             "value",
+            "alert_config_name",
         ]
     ]
 
 
 @task(checkpoint=False)
-def load_alerts(alerts: pd.DataFrame):
+def load_alerts(alerts: pd.DataFrame, alert_config_name: str):
     """
-    Loads input alerts in `pending_alerts` table.
+    Updates the `pending_alerts` that have the specified `alert_config_name` by:
+
+    - deleting alerts in the `pending_alerts`table of the specified `alert_config_name`
+    - inserting alerts of the `alerts` dataframe into the `pending_alerts` table
+
+    Args:
+        alerts (pd.DataFrame): Alerts to load into the `pending_alerts` table
+        alert_config_name (str): Name that uniquely identifies the set of parameters
+          used for the flow run
     """
 
-    load(
-        alerts,
-        table_name="pending_alerts",
-        schema="public",
-        db_name="monitorfish_remote",
-        logger=prefect.context.get("logger"),
-        how="replace",
-        jsonb_columns=["value"],
-    )
+    try:
+        assert alert_config_name and isinstance(alert_config_name, str)
+    except AssertionError:
+        raise (
+            ValueError,
+            (
+                "alert_config_name must be a non null `str`, "
+                f"got {alert_config_name} instead."
+            ),
+        )
+
+    schema = "public"
+    table_name = "pending_alerts"
+    logger = prefect.context.get("logger")
+
+    e = create_engine("monitorfish_remote")
+
+    with e.begin() as connection:
+
+        table = get_table(
+            table_name=table_name, schema=schema, conn=connection, logger=logger
+        )
+
+        # This cannot be done by using the `upsert` mode of the `load` fonction because
+        # when the input DataFrame is empty, rows in the `pending_alerts` table that
+        # correspond to the designated `alert_config_name` must be deleted, which does
+        # not happen if there is not at least one row in the DataFrame that contains
+        # the information of which `alert_config_name` needs to be deleted.
+        delete_rows(
+            table=table,
+            id_column="alert_config_name",
+            ids_to_delete=[alert_config_name],
+            connection=connection,
+            logger=logger,
+        )
+
+        load(
+            alerts,
+            table_name="pending_alerts",
+            schema="public",
+            logger=logger,
+            how="append",
+            jsonb_columns=["value"],
+            connection=connection,
+        )
 
 
 with Flow("Position alert") as flow:
 
     alert_type = Parameter("alert_type")
+    alert_config_name = Parameter("alert_config_name")
     zones = Parameter("zones")
     hours_from_now = Parameter("hours_from_now", default=8)
     only_fishing_positions = Parameter("only_fishing_positions", default=True)
@@ -559,7 +611,7 @@ with Flow("Position alert") as flow:
     positions_in_alert = add_vessel_identifier(positions_in_alert)
     current_risk_factors = extract_current_risk_factors()
     positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
-    alerts = make_alerts(positions_in_alert, alert_type)
-    load_alerts(alerts)
+    alerts = make_alerts(positions_in_alert, alert_type, alert_config_name)
+    load_alerts(alerts, alert_config_name)
 
 flow.file_name = Path(__file__).name

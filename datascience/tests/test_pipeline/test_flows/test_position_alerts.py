@@ -408,8 +408,11 @@ def test_make_alerts():
     )
 
     alert_type = "USER_DEFINED_ALERT_TYPE"
+    alert_config_name = "ALERTE_CHALUTAGE_CONFIG_1"
 
-    alerts = make_alerts.run(positions_in_alert, alert_type=alert_type)
+    alerts = make_alerts.run(
+        positions_in_alert, alert_type=alert_type, alert_config_name=alert_config_name
+    )
 
     expected_alerts = pd.DataFrame(
         {
@@ -436,18 +439,21 @@ def test_make_alerts():
                     "riskFactor": None,
                 },
             ],
+            "alert_config_name": [alert_config_name, alert_config_name],
         }
     )
 
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
 
-def test_flow_deletes_existing_pending_alerts(reset_test_data):
+def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test_data):
 
     flow.schedule = None
 
     # With these parameters, no alert should be raised.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
+    alert_config_name_in_table = "ALERTE_1"
+    alert_config_name_not_in_table = "ALERTE_2"
     zones = "0-3"
     hours_from_now = 8
     only_fishing_positions = True
@@ -459,6 +465,7 @@ def test_flow_deletes_existing_pending_alerts(reset_test_data):
     state = flow.run(
         alert_type=alert_type,
         zones=zones,
+        alert_config_name=alert_config_name_not_in_table,
         hours_from_now=hours_from_now,
         only_fishing_positions=only_fishing_positions,
         flag_states=flag_states,
@@ -473,6 +480,28 @@ def test_flow_deletes_existing_pending_alerts(reset_test_data):
         "monitorfish_remote", "SELECT COUNT(*) FROM pending_alerts"
     )
 
+    # The alert in the table should still be there
+    assert pending_alerts.iloc[0, 0] == 1
+
+    state = flow.run(
+        alert_type=alert_type,
+        zones=zones,
+        alert_config_name=alert_config_name_in_table,
+        hours_from_now=hours_from_now,
+        only_fishing_positions=only_fishing_positions,
+        flag_states=flag_states,
+        fishing_gears=fishing_gears,
+        fishing_gear_categories=fishing_gear_categories,
+        include_vessels_unknown_gear=include_vessels_unknown_gear,
+    )
+
+    assert state.is_successful()
+
+    pending_alerts = read_query(
+        "monitorfish_remote", "SELECT COUNT(*) FROM pending_alerts"
+    )
+
+    # The alert in the table should be removed
     assert pending_alerts.iloc[0, 0] == 0
 
 
@@ -484,6 +513,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
 
     # With these parameters, all 4 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
+    alert_config_name = "ALERTE_1"
     zones = ["0-3", "3-6"]
     hours_from_now = 48
     only_fishing_positions = False
@@ -494,6 +524,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
 
     state = flow.run(
         alert_type=alert_type,
+        alert_config_name=alert_config_name,
         zones=zones,
         hours_from_now=hours_from_now,
         only_fishing_positions=only_fishing_positions,
@@ -572,6 +603,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                 "INTERNAL_REFERENCE_NUMBER",
                 "IRCS",
             ],
+            "alert_config_name": [alert_config_name] * 4,
         }
     )
 
@@ -601,6 +633,7 @@ def test_flow_filters_on_gears(reset_test_data):
 
     # With these parameters, all 3 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
+    alert_config_name = "ALERTE_1"
     zones = ["0-3", "3-6"]
     hours_from_now = 48
     only_fishing_positions = False
@@ -611,6 +644,7 @@ def test_flow_filters_on_gears(reset_test_data):
 
     state = flow.run(
         alert_type=alert_type,
+        alert_config_name=alert_config_name,
         zones=zones,
         hours_from_now=hours_from_now,
         only_fishing_positions=only_fishing_positions,
@@ -665,6 +699,7 @@ def test_flow_filters_on_gears(reset_test_data):
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
             ],
+            "alert_config_name": [alert_config_name] * 2,
         }
     )
 
@@ -694,6 +729,7 @@ def test_flow_filters_on_time(reset_test_data):
 
     # With these parameters, all 3 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
+    alert_config_name = "ALERTE_1"
     zones = ["0-3", "3-6"]
     hours_from_now = 8
     only_fishing_positions = False
@@ -704,6 +740,7 @@ def test_flow_filters_on_time(reset_test_data):
 
     state = flow.run(
         alert_type=alert_type,
+        alert_config_name=alert_config_name,
         zones=zones,
         hours_from_now=hours_from_now,
         only_fishing_positions=only_fishing_positions,
@@ -770,6 +807,7 @@ def test_flow_filters_on_time(reset_test_data):
                 "INTERNAL_REFERENCE_NUMBER",
                 "IRCS",
             ],
+            "alert_config_name": [alert_config_name] * 3,
         }
     )
 
@@ -799,6 +837,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
 
     # With these parameters, all 3 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
+    alert_config_name = "ALERTE_1"
     zones = ["0-3", "3-6"]
     hours_from_now = 48
     only_fishing_positions = False
@@ -809,6 +848,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
 
     state = flow.run(
         alert_type=alert_type,
+        alert_config_name=alert_config_name,
         zones=zones,
         hours_from_now=hours_from_now,
         only_fishing_positions=only_fishing_positions,
@@ -851,6 +891,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
             ],
+            "alert_config_name": [alert_config_name],
         }
     )
 
@@ -878,6 +919,8 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
 
     # With these parameters, 2 french vessels should be in alert.
     alert_type = "FRENCH_EEZ_FISHING_ALERT"
+    alert_config_name = "ALERTE_1"
+    alert_config_name = "ALERTE_1"
     zones = ["FRA"]
     hours_from_now = 8
     only_fishing_positions = False
@@ -888,6 +931,7 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
 
     state = flow.run(
         alert_type=alert_type,
+        alert_config_name=alert_config_name,
         zones=zones,
         hours_from_now=hours_from_now,
         fishing_gears=fishing_gears,
@@ -938,6 +982,7 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
                 "INTERNAL_REFERENCE_NUMBER",
                 "IRCS",
             ],
+            "alert_config_name": [alert_config_name] * 2,
         }
     )
 

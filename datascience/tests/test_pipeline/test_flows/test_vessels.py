@@ -57,14 +57,14 @@ def test_extract_non_cee_vessels(mock_extract):
 
 def test_extract_control_charters(reset_test_data):
     vessels_under_charter = extract_control_charters.run()
-    expceted_vessels_under_charter = pd.DataFrame(
+    expected_vessels_under_charter = pd.DataFrame(
         {
-            "id": [1, 2, 3],
+            "id": [1, 2, 4],
             "under_charter": [False, False, True],
         }
     )
 
-    pd.testing.assert_frame_equal(vessels_under_charter, expceted_vessels_under_charter)
+    pd.testing.assert_frame_equal(vessels_under_charter, expected_vessels_under_charter)
 
 
 @patch("src.pipeline.flows.vessels.extract")

@@ -6,12 +6,13 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 context('Control objectives', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
-    cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
+    const currentYear = new Date().getFullYear()
+    cy.intercept('GET', `/bff/v1/control_objectives/${currentYear}`).as('controlObjectives')
     cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
     cy.wait('@controlObjectives')
   })
 
-  it('Should render the objectives', () => {
+  it('Should render the objectives and navigate between years', () => {
     // Then
     cy.get('.rs-table-row').should('have.length', 57)
     cy.get('.rs-table-cell-content').eq(8).contains('ATL01')
@@ -20,6 +21,23 @@ context('Control objectives', () => {
     cy.get('.rs-table-cell-content').eq(11).children().should('have.value', '20')
     cy.get('.rs-table-cell-content').eq(12).children().contains('1.7')
     cy.get('.rs-table-cell-content').eq(13).children().children().children().contains('1')
+
+    const currentYear = new Date().getFullYear()
+    cy.get('*[data-cy^="control-objectives-year"]').contains(currentYear)
+
+    cy.log('Check the FR_SCE control objectives of MEMN')
+    cy.get(':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+      '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input').should('have.value', '247')
+    cy.get(':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+      '> .rs-table-cell-group > [aria-colindex="5"] > .rs-table-cell-content > .rs-input').should('have.value', '242')
+
+    cy.log('Navigate to previous year')
+    cy.get('*[data-cy^="control-objectives-year"]').click()
+    cy.get(`[data-key="${currentYear - 1}"] > .rs-picker-select-menu-item`).click()
+    cy.get(':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+      '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input').should('have.value', '147')
+    cy.get(':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+      '> .rs-table-cell-group > [aria-colindex="5"] > .rs-table-cell-content > .rs-input').should('have.value', '141')
   })
 
   it('Should update the targetNumberOfControlsAtPort field on an objective', () => {

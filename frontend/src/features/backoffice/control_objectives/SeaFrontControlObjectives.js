@@ -80,7 +80,7 @@ const SeaFrontControlObjectives = ({ title, data }) => {
       <Title>{title}</Title><br/>
       <Table
         height={(dataWithSegmentDetails?.length || 0) * 36 + expandedRowKeys.length * 95 + 65}
-        width={765}
+        width={725}
         data={dataWithSegmentDetails}
         rowKey={rowKey}
         expandedRowKeys={expandedRowKeys}
@@ -106,21 +106,21 @@ const SeaFrontControlObjectives = ({ title, data }) => {
           <CellWithTitle dataKey="segment"/>
         </Column>
 
-        <Column sortable width={160}>
+        <Column sortable width={150}>
           <HeaderCell>Nom du segment</HeaderCell>
           <CellWithTitle dataKey="segmentName"/>
         </Column>
 
-        <Column sortable width={160}>
-          <HeaderCell>Obj. contrôles au Port</HeaderCell>
+        <Column sortable width={150}>
+          <HeaderCell>Obj. contrôles Port</HeaderCell>
           <ModifiableCell
             dataKey={'targetNumberOfControlsAtPort'}
             onChange={(id, key, value) => handleChangeModifiableKey(id, key, value, sortColumn, sortType)}
           />
         </Column>
 
-        <Column sortable width={160}>
-          <HeaderCell>Obj. contrôles en Mer</HeaderCell>
+        <Column sortable width={140}>
+          <HeaderCell>Obj. contrôles Mer</HeaderCell>
           <ModifiableCell
             dataKey={'targetNumberOfControlsAtSea'}
             onChange={(id, key, value) => handleChangeModifiableKey(id, key, value, sortColumn, sortType)}
@@ -175,7 +175,7 @@ const Wrapper = styled.div`
 const Title = styled.h2`
   font-size: 16px;
   color: #282F3E;
-  border-bottom: 2px solid #E0E0E0;
+  border-bottom: 2px solid ${COLORS.squareBorder};
   font-weight: 700;
   text-align: left;
   text-transform: uppercase;

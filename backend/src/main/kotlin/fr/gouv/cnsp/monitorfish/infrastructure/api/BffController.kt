@@ -37,7 +37,8 @@ class BffController(
         private val getVesselControls: GetVesselControls,
         private val getAllFleetSegments: GetAllFleetSegments,
         private val getHealthcheck: GetHealthcheck,
-        private val getAllControlObjectives: GetAllControlObjectives,
+        private val getControlObjectivesOfYear: GetControlObjectivesOfYear,
+        private val getControlObjectiveYearEntries: GetControlObjectiveYearEntries,
         private val updateControlObjective: UpdateControlObjective,
         private val getOperationalAlerts: GetOperationalAlerts,
         private val getAllBeaconMalfunctions: GetAllBeaconMalfunctions,
@@ -261,12 +262,20 @@ class BffController(
         return HealthDataOutput.fromHealth(getHealthcheck.execute())
     }
 
-    @GetMapping("/v1/control_objectives")
-    @ApiOperation("Get control objectives")
-    fun getControlObjectives(): List<ControlObjectiveDataOutput> {
-        return getAllControlObjectives.execute().map { controlObjective ->
+    @GetMapping("/v1/control_objectives/{year}")
+    @ApiOperation("Get control objectives of a given year")
+    fun getControlObjectivesOfYear(@PathParam("Year")
+                             @PathVariable(name = "year")
+                             year: Int): List<ControlObjectiveDataOutput> {
+        return getControlObjectivesOfYear.execute(year).map { controlObjective ->
             ControlObjectiveDataOutput.fromControlObjective(controlObjective)
         }
+    }
+
+    @GetMapping("/v1/control_objectives/years")
+    @ApiOperation("Get control objective year entries")
+    fun getControlObjectiveYearEntries(): List<Int> {
+        return getControlObjectiveYearEntries.execute()
     }
 
     @PutMapping(value = ["/v1/control_objectives/{controlObjectiveId}"], consumes = ["application/json"])

@@ -55,11 +55,16 @@ def test_extract_non_cee_vessels(mock_extract):
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
-@patch("src.pipeline.flows.vessels.extract")
-def test_extract_control_charters(mock_extract):
-    mock_extract.side_effect = mock_extract_side_effect
-    query = extract_control_charters.run()
-    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
+def test_extract_control_charters(reset_test_data):
+    vessels_under_charter = extract_control_charters.run()
+    expceted_vessels_under_charter = pd.DataFrame(
+        {
+            "id": [1, 2, 3],
+            "under_charter": [False, False, True],
+        }
+    )
+
+    pd.testing.assert_frame_equal(vessels_under_charter, expceted_vessels_under_charter)
 
 
 @patch("src.pipeline.flows.vessels.extract")

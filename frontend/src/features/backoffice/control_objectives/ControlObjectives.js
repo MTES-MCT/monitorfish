@@ -20,6 +20,7 @@ const ControlObjectives = () => {
       if (years?.length) {
         const yearsWithLabel = years.map(year => ({ label: `Année ${year}`, value: year }))
         setYearEntries(yearsWithLabel)
+        setYear(yearsWithLabel[0]?.value)
       }
     })
   }, [])
@@ -32,7 +33,7 @@ const ControlObjectives = () => {
 
   return (
     <Wrapper>
-      <Year>
+      <Year data-cy={'control-objectives-year'}>
         <InputPicker
           value={year}
           onChange={_year => setYear(_year)}

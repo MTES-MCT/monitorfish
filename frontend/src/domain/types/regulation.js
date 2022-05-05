@@ -65,7 +65,6 @@
 
 /**
  * @typedef RegulatedSpecies
- * @property {boolean} authorized
  * @property {boolean} allSpecies
  * @property {string} otherInfo
  * @property {RegulatedSpeciesDetail[]} species
@@ -105,7 +104,6 @@
 
 /**
  * @typedef RegulatedGears
- * @property {boolean} authorized
  * @property {boolean} allGears
  * @property {boolean} allTowedGears
  * @property {boolean} allPassiveGears
@@ -113,7 +111,6 @@
  * @property {Object<string,GearCategory>} regulatedGearCategories
  * @property {string[]} selectedCategoriesAndGears - a list of categories name and gears code
  * @property {boolean} derogation
- * @property {string} otherInfo
 */
 
 /**

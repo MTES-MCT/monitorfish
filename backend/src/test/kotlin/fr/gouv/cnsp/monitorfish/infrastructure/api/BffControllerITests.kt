@@ -13,7 +13,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
@@ -85,7 +84,10 @@ class BffControllerITests {
     private lateinit var updateControlObjective: UpdateControlObjective
 
     @MockBean
-    private lateinit var getAllControlObjective: GetAllControlObjectives
+    private lateinit var getControlObjectiveOfYear: GetControlObjectivesOfYear
+
+    @MockBean
+    private lateinit var getControlObjectiveYearEntries: GetControlObjectiveYearEntries
 
     @MockBean
     private lateinit var getOperationalAlerts: GetOperationalAlerts
@@ -411,30 +413,31 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should return Bad request When an update of a control objective is empty`() {
-        given(this.updateControlObjective.execute(1, null, null, null))
-                .willThrow(CouldNotUpdateControlObjectiveException("FAIL"))
-
-        // When
-        mockMvc.perform(put("/bff/v1/control_objectives/123", objectMapper.writeValueAsString(UpdateControlObjectiveDataInput()))
-                .contentType(MediaType.APPLICATION_JSON))
-                // Then
-                .andExpect(status().isBadRequest)
-    }
-
-    @Test
-    fun `Should get all control objective`() {
+    fun `Should get all control objective for a given year`() {
         // Given
-        given(this.getAllControlObjective.execute()).willReturn(listOf(
+        given(this.getControlObjectiveOfYear.execute(2021)).willReturn(listOf(
                 ControlObjective(1, facade = "NAME", segment = "SWW01", targetNumberOfControlsAtSea = 23, targetNumberOfControlsAtPort = 102, controlPriorityLevel = 1.0, year = 2021),
                 ControlObjective(1, facade = "NAME", segment = "SWW01", targetNumberOfControlsAtSea = 23, targetNumberOfControlsAtPort = 102, controlPriorityLevel = 1.0, year = 2021),
                 ControlObjective(1, facade = "NAME", segment = "SWW01", targetNumberOfControlsAtSea = 23, targetNumberOfControlsAtPort = 102, controlPriorityLevel = 1.0, year = 2021)))
 
         // When
-        mockMvc.perform(get("/bff/v1/control_objectives"))
+        mockMvc.perform(get("/bff/v1/control_objectives/2021"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()", equalTo(3)))
+    }
+
+    @Test
+    fun `Should get all control objective year entries`() {
+        // Given
+        given(this.getControlObjectiveYearEntries.execute()).willReturn(listOf(2021, 2022))
+
+        // When
+        mockMvc.perform(get("/bff/v1/control_objectives/years"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()", equalTo(2)))
+                .andExpect(jsonPath("$[0]", equalTo(2021)))
     }
 
     @Test

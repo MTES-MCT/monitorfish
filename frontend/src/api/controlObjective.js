@@ -1,16 +1,18 @@
 import { OK } from './api'
 
 export const CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les objectifs de contrôle'
+export const CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les années des objectifs de contrôle'
 export const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour l\'objectifs de contrôle'
 
 /**
  * Get control Objectives
  * @memberOf API
+ * @param {string} year - The year of the control objectives to fetch
  * @returns {Promise<ControlObjective[]>} The control objectives
  * @throws {Error}
  */
-function getControlObjectivesFromAPI () {
-  return fetch('/bff/v1/control_objectives')
+function getControlObjectivesFromAPI (year) {
+  return fetch(`/bff/v1/control_objectives/${year}`)
     .then(response => {
       if (response.status === OK) {
         return response.json()
@@ -23,6 +25,29 @@ function getControlObjectivesFromAPI () {
     }).catch(error => {
       console.error(error)
       throw Error(CONTROL_OBJECTIVES_ERROR_MESSAGE)
+    })
+}
+
+/**
+ * Get control Objective year entries
+ * @memberOf API
+ * @returns {Promise<ControlObjective[]>} The years
+ * @throws {Error}
+ */
+function getControlObjectiveYearEntriesFromAPI () {
+  return fetch('/bff/v1/control_objectives/years')
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE)
+      }
+    }).catch(error => {
+      console.error(error)
+      throw Error(CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE)
     })
 }
 
@@ -57,5 +82,6 @@ function updateControlObjectiveFromAPI (id, updatedFields) {
 
 export {
   updateControlObjectiveFromAPI,
-  getControlObjectivesFromAPI
+  getControlObjectivesFromAPI,
+  getControlObjectiveYearEntriesFromAPI
 }

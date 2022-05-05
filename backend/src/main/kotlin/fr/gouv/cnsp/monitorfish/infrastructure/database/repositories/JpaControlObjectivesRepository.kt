@@ -10,10 +10,14 @@ import org.springframework.transaction.annotation.Transactional
 @Repository
 class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: DBControlObjectivesRepository) : ControlObjectivesRepository {
 
-    override fun findAll(): List<ControlObjective> {
-        return dbControlObjectivesRepository.findAll().map {
+    override fun findAllByYear(year: Int): List<ControlObjective> {
+        return dbControlObjectivesRepository.findAllByYearEquals(year).map {
             it.toControlObjective()
         }
+    }
+
+    override fun findYearEntries(): List<Int> {
+        return dbControlObjectivesRepository.findDistinctYears()
     }
 
     @Transactional

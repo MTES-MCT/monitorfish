@@ -5,8 +5,12 @@ WITH ranked_controls AS (
         infraction_ids,
         control_datetime_utc,
         ROW_NUMBER() OVER (PARTITION BY vessel_id ORDER BY control_datetime_utc DESC) AS rk
-    FROM controls
-    WHERE control_datetime_utc IS NOT NULL
+    FROM controls c
+    JOIN vessels v
+    ON c.vessel_id = v.id
+    WHERE
+        control_datetime_utc IS NOT NULL and
+        v.flag_state = 'FR'
 )
 
 SELECT 

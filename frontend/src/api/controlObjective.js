@@ -3,6 +3,7 @@ import { OK } from './api'
 export const CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les objectifs de contrôle'
 export const CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les années des objectifs de contrôle'
 export const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour l\'objectifs de contrôle'
+export const DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu supprimer l\'objectifs de contrôle'
 
 /**
  * Get control Objectives
@@ -80,8 +81,30 @@ function updateControlObjectiveFromAPI (id, updatedFields) {
   })
 }
 
+/**
+ * Delete a control Objective
+ * @memberOf API
+ * @param {string} id - The id of the control objective
+ * @returns {Promise} The control objectives
+ * @throws {Error}
+ */
+function deleteControlObjectiveFromAPI (id) {
+  console.log('delete')
+  return fetch(`/bff/v1/control_objectives/${id}`, {
+    method: 'DELETE'
+  }).then(response => {
+    if (response.status !== OK) {
+      throw Error(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE)
+    }
+  }).catch(error => {
+    console.error(error)
+    throw Error(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE)
+  })
+}
+
 export {
   updateControlObjectiveFromAPI,
   getControlObjectivesFromAPI,
-  getControlObjectiveYearEntriesFromAPI
+  getControlObjectiveYearEntriesFromAPI,
+  deleteControlObjectiveFromAPI
 }

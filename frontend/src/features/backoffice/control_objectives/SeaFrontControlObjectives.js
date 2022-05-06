@@ -3,10 +3,18 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import Table from 'rsuite/lib/Table'
 import { useDispatch, useSelector } from 'react-redux'
-import { ControlPriorityCell, ExpandCell, ImpactRiskFactorCell, ModifiableCell, renderRowExpanded } from './tableCells'
+import {
+  ControlPriorityCell,
+  DeleteCell,
+  ExpandCell,
+  ImpactRiskFactorCell,
+  ModifiableCell,
+  renderRowExpanded
+} from './tableCells'
 import { CellWithTitle } from '../../vessel_list/tableCells'
 import updateControlObjective from '../../../domain/use_cases/controlObjective/updateControlObjective'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
+import deleteControlObjective from '../../../domain/use_cases/controlObjective/deleteControlObjective'
 
 const { Column, HeaderCell } = Table
 const rowKey = 'id'
@@ -75,6 +83,17 @@ const SeaFrontControlObjectives = ({ title, data }) => {
     })
   }
 
+  const deleteControlObjectiveRow = (id, key, sortColumn, sortType) => {
+    let nextDataWithSegmentDetails = Object.assign([], dataWithSegmentDetails)
+
+    dispatch(deleteControlObjective(id)).then(() => {
+      nextDataWithSegmentDetails = nextDataWithSegmentDetails.filter(item => item.id !== id)
+      nextDataWithSegmentDetails
+        .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
+      setDataWithSegmentDetails(nextDataWithSegmentDetails)
+    })
+  }
+
   return (
     <Wrapper>
       <Title>{title}</Title><br/>
@@ -106,12 +125,12 @@ const SeaFrontControlObjectives = ({ title, data }) => {
           <CellWithTitle dataKey="segment"/>
         </Column>
 
-        <Column sortable width={150}>
+        <Column sortable width={130}>
           <HeaderCell>Nom du segment</HeaderCell>
           <CellWithTitle dataKey="segmentName"/>
         </Column>
 
-        <Column sortable width={150}>
+        <Column sortable width={140}>
           <HeaderCell>Obj. contrôles Port</HeaderCell>
           <ModifiableCell
             dataKey={'targetNumberOfControlsAtPort'}
@@ -132,11 +151,19 @@ const SeaFrontControlObjectives = ({ title, data }) => {
           <ImpactRiskFactorCell/>
         </Column>
 
-        <Column width={60}>
+        <Column width={55}>
           <HeaderCell>Priorité</HeaderCell>
           <ControlPriorityCell
             dataKey={'controlPriorityLevel'}
             onChange={(id, key, value) => handleChangeModifiableKey(id, key, value, sortColumn, sortType)}
+          />
+        </Column>
+
+        <Column width={40}>
+          <HeaderCell/>
+          <DeleteCell
+            dataKey="id"
+            onClick={(id, key) => deleteControlObjectiveRow(id, key, sortColumn, sortType)}
           />
         </Column>
       </Table>

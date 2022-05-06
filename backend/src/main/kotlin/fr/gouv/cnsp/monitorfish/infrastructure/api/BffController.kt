@@ -40,6 +40,7 @@ class BffController(
         private val getControlObjectivesOfYear: GetControlObjectivesOfYear,
         private val getControlObjectiveYearEntries: GetControlObjectiveYearEntries,
         private val updateControlObjective: UpdateControlObjective,
+        private val deleteControlObjective: DeleteControlObjective,
         private val getOperationalAlerts: GetOperationalAlerts,
         private val getAllBeaconMalfunctions: GetAllBeaconMalfunctions,
         private val updateBeaconMalfunction: UpdateBeaconMalfunction,
@@ -290,6 +291,14 @@ class BffController(
                 targetNumberOfControlsAtSea = updateControlObjectiveData.targetNumberOfControlsAtSea,
                 targetNumberOfControlsAtPort = updateControlObjectiveData.targetNumberOfControlsAtPort,
                 controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel)
+    }
+
+    @DeleteMapping(value = ["/v1/control_objectives/{controlObjectiveId}"])
+    @ApiOperation("Delete a control objective")
+    fun deleteControlObjective(@PathParam("Control objective id")
+                               @PathVariable(name = "controlObjectiveId")
+                               controlObjectiveId: Int) {
+        deleteControlObjective.execute(controlObjectiveId)
     }
 
     @GetMapping("/v1/operational_alerts")

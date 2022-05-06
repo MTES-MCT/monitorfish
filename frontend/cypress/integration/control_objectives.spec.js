@@ -96,4 +96,27 @@ context('Control objectives', () => {
     cy.wait(50)
     cy.get('.rs-table-cell-content').eq(13).children().children().children().contains('3')
   })
+
+  it('Should delete an objective', () => {
+    // Given
+    cy.get('.rs-table-row').should('have.length', 57)
+    cy.intercept('DELETE', '/bff/v1/control_objectives/78').as('deleteObjective')
+
+    // When
+    cy.get('*[data-cy="delete-control-objective-78"]')
+      .click()
+    cy.wait('@deleteObjective')
+
+    // Then
+    cy.wait(50)
+    cy.get('.rs-table-row').should('have.length', 56)
+
+    // The value is saved in database when I refresh the page
+    cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
+    cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
+    cy.wait('@controlObjectives')
+    cy.wait(50)
+    cy.get('.rs-table-row').should('have.length', 56)
+    cy.get('*[data-cy="delete-control-objective-78"]').should('not.exist')
+  })
 })

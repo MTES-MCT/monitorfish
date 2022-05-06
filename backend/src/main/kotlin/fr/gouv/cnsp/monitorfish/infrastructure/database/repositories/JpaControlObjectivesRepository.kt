@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.ControlObjective
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotDeleteControlObjectiveException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBControlObjectivesRepository
@@ -36,6 +37,14 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
             }
         } catch (e: Throwable) {
             throw CouldNotUpdateControlObjectiveException("Could not update control objective: ${e.message}")
+        }
+    }
+
+    override fun delete(id: Int) {
+        try {
+            dbControlObjectivesRepository.deleteById(id)
+        } catch (e: Throwable) {
+            throw CouldNotDeleteControlObjectiveException("Could not delete control objective: ${e.message}")
         }
     }
 }

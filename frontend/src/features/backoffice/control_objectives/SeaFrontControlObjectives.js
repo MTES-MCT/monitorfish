@@ -213,7 +213,7 @@ const SeaFrontControlObjectives = ({ title, facade, year, data }) => {
           onChange={segment => setSegmentToAddToFacade(segment)}
           data={fleetSegments
             ?.map(segment => ({ label: segment.segment, value: segment.segment }))
-            .filter(segment => !data.find(facadeSegment => facadeSegment.segment === segment.value))
+            .filter(segment => !dataWithSegmentDetails.find(facadeSegment => facadeSegment.segment === segment.value))
             .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))
           }
         />
@@ -225,6 +225,7 @@ const SeaFrontControlObjectives = ({ title, facade, year, data }) => {
 const AddSegment = styled.div`
   text-align: left;
   margin-left: 5px;
+  margin-top: -10px;
   line-height: 10px;
   width: fit-content;
   color: ${COLORS.gunMetal};

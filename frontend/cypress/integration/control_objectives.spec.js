@@ -42,7 +42,7 @@ context('Control objectives', () => {
 
   it('Should update the targetNumberOfControlsAtPort field on an objective', () => {
     // When
-    cy.intercept('PUT', '/bff/v1/control_objectives/25').as('updateObjective')
+    cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.get('.rs-table-cell-content').eq(10).children().type('{backspace}{backspace}{backspace}{backspace}{backspace}')
     cy.get('.rs-table-cell-content').eq(10).children().type('23')
     cy.wait('@updateObjective')
@@ -61,7 +61,7 @@ context('Control objectives', () => {
 
   it('Should update the targetNumberOfControlsAtSea field on an objective', () => {
     // When
-    cy.intercept('PUT', '/bff/v1/control_objectives/25').as('updateObjective')
+    cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.get('.rs-table-cell-content').eq(11).children().type('{backspace}{backspace}{backspace}{backspace}{backspace}')
     cy.get('.rs-table-cell-content').eq(11).children().type('23')
     cy.wait('@updateObjective')
@@ -80,7 +80,7 @@ context('Control objectives', () => {
 
   it('Should update the controlPriorityLevel field on an objective', () => {
     // When
-    cy.intercept('PUT', '/bff/v1/control_objectives/25').as('updateObjective')
+    cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.get('.rs-table-cell-content').eq(13).click()
     cy.get('.rs-picker-select-menu-item').eq(2).click()
     cy.wait('@updateObjective')

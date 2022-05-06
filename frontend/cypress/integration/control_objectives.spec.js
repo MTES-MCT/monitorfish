@@ -15,12 +15,12 @@ context('Control objectives', () => {
   it('Should render the objectives and navigate between years', () => {
     // Then
     cy.get('.rs-table-row').should('have.length', 57)
-    cy.get('.rs-table-cell-content').eq(8).contains('ATL01')
-    cy.get('.rs-table-cell-content').eq(9).contains('All Trawls 3')
-    cy.get('.rs-table-cell-content').eq(10).children().should('have.value', '0')
-    cy.get('.rs-table-cell-content').eq(11).children().should('have.value', '20')
-    cy.get('.rs-table-cell-content').eq(12).children().contains('1.7')
-    cy.get('.rs-table-cell-content').eq(13).children().children().children().contains('1')
+    cy.get('.rs-table-cell-content').eq(9).contains('ATL01')
+    cy.get('.rs-table-cell-content').eq(10).contains('All Trawls 3')
+    cy.get('.rs-table-cell-content').eq(11).children().should('have.value', '0')
+    cy.get('.rs-table-cell-content').eq(12).children().should('have.value', '20')
+    cy.get('.rs-table-cell-content').eq(13).children().contains('1.7')
+    cy.get('.rs-table-cell-content').eq(14).children().children().children().contains('1')
 
     const currentYear = new Date().getFullYear()
     cy.get('*[data-cy^="control-objectives-year"]').contains(currentYear)
@@ -43,25 +43,6 @@ context('Control objectives', () => {
   it('Should update the targetNumberOfControlsAtPort field on an objective', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
-    cy.get('.rs-table-cell-content').eq(10).children().type('{backspace}{backspace}{backspace}{backspace}{backspace}')
-    cy.get('.rs-table-cell-content').eq(10).children().type('23')
-    cy.wait('@updateObjective')
-
-    // Then
-    cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(10).children().should('have.value', '23')
-
-    // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
-    cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
-    cy.wait('@controlObjectives')
-    cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(10).children().should('have.value', '23')
-  })
-
-  it('Should update the targetNumberOfControlsAtSea field on an objective', () => {
-    // When
-    cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.get('.rs-table-cell-content').eq(11).children().type('{backspace}{backspace}{backspace}{backspace}{backspace}')
     cy.get('.rs-table-cell-content').eq(11).children().type('23')
     cy.wait('@updateObjective')
@@ -78,23 +59,42 @@ context('Control objectives', () => {
     cy.get('.rs-table-cell-content').eq(11).children().should('have.value', '23')
   })
 
-  it('Should update the controlPriorityLevel field on an objective', () => {
+  it('Should update the targetNumberOfControlsAtSea field on an objective', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
-    cy.get('.rs-table-cell-content').eq(13).click()
-    cy.get('.rs-picker-select-menu-item').eq(2).click()
+    cy.get('.rs-table-cell-content').eq(12).children().type('{backspace}{backspace}{backspace}{backspace}{backspace}')
+    cy.get('.rs-table-cell-content').eq(12).children().type('23')
     cy.wait('@updateObjective')
 
     // Then
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(13).children().children().children().contains('3')
+    cy.get('.rs-table-cell-content').eq(12).children().should('have.value', '23')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
     cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
     cy.wait('@controlObjectives')
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(13).children().children().children().contains('3')
+    cy.get('.rs-table-cell-content').eq(12).children().should('have.value', '23')
+  })
+
+  it('Should update the controlPriorityLevel field on an objective', () => {
+    // When
+    cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
+    cy.get('.rs-table-cell-content').eq(14).click()
+    cy.get('.rs-picker-select-menu-item').eq(2).click()
+    cy.wait('@updateObjective')
+
+    // Then
+    cy.wait(50)
+    cy.get('.rs-table-cell-content').eq(14).children().children().children().contains('3')
+
+    // The value is saved in database when I refresh the page
+    cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
+    cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
+    cy.wait('@controlObjectives')
+    cy.wait(50)
+    cy.get('.rs-table-cell-content').eq(14).children().children().children().contains('3')
   })
 
   it('Should delete an objective', () => {
@@ -118,5 +118,43 @@ context('Control objectives', () => {
     cy.wait(50)
     cy.get('.rs-table-row').should('have.length', 56)
     cy.get('*[data-cy="delete-control-objective-78"]').should('not.exist')
+  })
+
+  it('Should add an objective', () => {
+    // Given
+    cy.get('.rs-table-row').should('have.length', 56)
+    cy.intercept('POST', '/bff/v1/control_objectives').as('addObjective')
+
+    // When
+    cy.get('*[data-cy="add-control-objective"]')
+      .eq(0)
+      .click()
+    cy.get('[data-key="ATL01"] > .rs-picker-select-menu-item')
+      .click()
+    cy.wait('@addObjective')
+
+    // Then
+    cy.wait(50)
+    cy.get('.rs-table-row').should('have.length', 57)
+
+    // Update the row when the value is updated in local memory
+    cy.intercept('PUT', '/bff/v1/control_objectives/107').as('updateObjective')
+    cy.get(':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+      '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input')
+      .type('{backspace}{backspace}{backspace}{backspace}{backspace}')
+    cy.get(':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+      '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input')
+      .type('26')
+    cy.wait('@updateObjective')
+    cy.wait(50)
+    cy.get(':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+      '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input').should('have.value', '26')
+
+    // The value is saved in database when I refresh the page
+    cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
+    cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
+    cy.wait('@controlObjectives')
+    cy.wait(50)
+    cy.get('.rs-table-row').should('have.length', 57)
   })
 })

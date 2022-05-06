@@ -48,18 +48,26 @@ const ControlObjectives = () => {
       <ControlObjectivesContainer>
         <SeaFrontControlObjectives
           title={'NORD ATLANTIQUE - MANCHE OUEST (NAMO)'}
+          facade={'NAMO'}
+          year={year}
           data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'NAMO')}
         />
         <SeaFrontControlObjectives
           title={'MANCHE EST – MER DU NORD (MEMN)'}
+          facade={'MEMN'}
+          year={year}
           data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'MEMN')}
         />
         <SeaFrontControlObjectives
           title={'SUD-ATLANTIQUE (SA)'}
+          facade={'SA'}
+          year={year}
           data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'SA')}
         />
         <SeaFrontControlObjectives
           title={'Méditerranée (MED)'}
+          facade={'MED'}
+          year={year}
           data={controlObjectives?.filter(controlObjective => controlObjective.facade === 'MED')}
         />
       </ControlObjectivesContainer>

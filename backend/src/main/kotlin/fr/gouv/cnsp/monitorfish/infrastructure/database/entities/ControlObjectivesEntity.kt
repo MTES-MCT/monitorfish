@@ -1,17 +1,16 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.ControlObjective
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "control_objectives")
 data class ControlObjectivesEntity(
         @Id
-        @Column(name = "id")
-        val id: Int,
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Basic(optional = false)
+        @Column(name = "id", unique = true, nullable = false)
+        val id: Int? = null,
         @Column(name = "facade")
         val facade: String? = null,
         @Column(name = "segment")
@@ -34,4 +33,17 @@ data class ControlObjectivesEntity(
                 targetNumberOfControlsAtPort = targetNumberOfControlsAtPort,
                 controlPriorityLevel = controlPriorityLevel
         )
+
+        companion object {
+                fun fromControlObjective(controlObjective: ControlObjective): ControlObjectivesEntity {
+                        return ControlObjectivesEntity(
+                                facade = controlObjective.facade,
+                                segment = controlObjective.segment,
+                                year = controlObjective.year,
+                                targetNumberOfControlsAtSea = controlObjective.targetNumberOfControlsAtSea,
+                                targetNumberOfControlsAtPort = controlObjective.targetNumberOfControlsAtPort,
+                                controlPriorityLevel = controlObjective.controlPriorityLevel
+                        )
+                }
+        }
 }

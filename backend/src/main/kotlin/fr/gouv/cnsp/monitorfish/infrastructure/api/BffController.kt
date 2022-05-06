@@ -22,6 +22,7 @@ import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import javax.websocket.server.PathParam
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveDataInput as AddControlObjectiveDataInput1
 
 @RestController
 @RequestMapping("/bff")
@@ -41,6 +42,7 @@ class BffController(
         private val getControlObjectiveYearEntries: GetControlObjectiveYearEntries,
         private val updateControlObjective: UpdateControlObjective,
         private val deleteControlObjective: DeleteControlObjective,
+        private val addControlObjective: AddControlObjective,
         private val getOperationalAlerts: GetOperationalAlerts,
         private val getAllBeaconMalfunctions: GetAllBeaconMalfunctions,
         private val updateBeaconMalfunction: UpdateBeaconMalfunction,
@@ -299,6 +301,17 @@ class BffController(
                                @PathVariable(name = "controlObjectiveId")
                                controlObjectiveId: Int) {
         deleteControlObjective.execute(controlObjectiveId)
+    }
+
+    @PostMapping(value = ["/v1/control_objectives"], consumes = ["application/json"])
+    @ApiOperation("Add a control objective")
+    fun addControlObjective(@RequestBody
+                            addControlObjectiveData: AddControlObjectiveDataInput1): Int {
+        return addControlObjective.execute(
+                segment = addControlObjectiveData.segment,
+                facade = addControlObjectiveData.facade,
+                year = addControlObjectiveData.year
+        )
     }
 
     @GetMapping("/v1/operational_alerts")

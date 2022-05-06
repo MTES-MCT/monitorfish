@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities
 
 data class ControlObjective(
-        val id: Int,
+        val id: Int? = null,
         val facade: String?,
         val segment: String?,
         val year: Int?,

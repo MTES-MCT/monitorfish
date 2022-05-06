@@ -5,12 +5,6 @@ import { batch } from 'react-redux'
 import { getAllGearCodesFromAPI } from '../../../api/gearCode'
 import { REGULATED_GEARS_KEYS } from '../../entities/backoffice'
 
-/*
-INSERT INTO public.fishing_gear_groups VALUES
-    (1, 'Engins traînants'),
-    (2, 'Engins dormants');
- */
-
 /***
  * Get gear group name, see SQL init of table fishing_gear_groups:
  *

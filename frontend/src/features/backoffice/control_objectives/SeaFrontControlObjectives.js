@@ -9,17 +9,19 @@ import {
   ExpandCell,
   ImpactRiskFactorCell,
   ModifiableCell,
-  renderRowExpanded
+  renderRowExpanded,
+  SegmentCellWithTitle
 } from './tableCells'
-import { CellWithTitle } from '../../vessel_list/tableCells'
 import updateControlObjective from '../../../domain/use_cases/controlObjective/updateControlObjective'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import deleteControlObjective from '../../../domain/use_cases/controlObjective/deleteControlObjective'
+import SelectPicker from 'rsuite/lib/SelectPicker'
+import addControlObjective from '../../../domain/use_cases/controlObjective/addControlObjective'
 
 const { Column, HeaderCell } = Table
 const rowKey = 'id'
 
-const SeaFrontControlObjectives = ({ title, data }) => {
+const SeaFrontControlObjectives = ({ title, facade, year, data }) => {
   const dispatch = useDispatch()
   const { fleetSegments } = useSelector(state => state.fleetSegment)
 
@@ -27,6 +29,7 @@ const SeaFrontControlObjectives = ({ title, data }) => {
   const [dataWithSegmentDetails, setDataWithSegmentDetails] = useState([])
   const [sortColumn, setSortColumn] = useState('segment')
   const [sortType, setSortType] = useState(SortType.ASC)
+  const [segmentToAddToFacade, setSegmentToAddToFacade] = useState(null)
 
   const handleSortColumn = (sortColumn, sortType) => {
     setSortColumn(sortColumn)
@@ -45,6 +48,37 @@ const SeaFrontControlObjectives = ({ title, data }) => {
       setDataWithSegmentDetails(dataWithSegmentDetails)
     }
   }, [data, sortColumn, sortType, fleetSegments])
+
+  useEffect(() => {
+    if (segmentToAddToFacade) {
+      function addSegmentToFacade () {
+        let nextDataWithSegmentDetails = Object.assign([], dataWithSegmentDetails)
+
+        dispatch(addControlObjective(segmentToAddToFacade, facade, year)).then(id => {
+          const segment = fleetSegments?.find(segment => segment.segment === segmentToAddToFacade)
+          nextDataWithSegmentDetails = nextDataWithSegmentDetails.concat({
+            id,
+            segment: segmentToAddToFacade,
+            facade,
+            year,
+            controlPriorityLevel: 1,
+            targetNumberOfControlsAtSea: 0,
+            targetNumberOfControlsAtPort: 0,
+            target: 1,
+            ...segment
+          })
+
+          nextDataWithSegmentDetails
+            .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
+          setDataWithSegmentDetails(nextDataWithSegmentDetails)
+        })
+
+        setSegmentToAddToFacade(null)
+      }
+
+      addSegmentToFacade()
+    }
+  }, [segmentToAddToFacade, facade, facade])
 
   const handleExpanded = (rowData, dataKey) => {
     let open = false
@@ -98,7 +132,7 @@ const SeaFrontControlObjectives = ({ title, data }) => {
     <Wrapper>
       <Title>{title}</Title><br/>
       <Table
-        height={(dataWithSegmentDetails?.length || 0) * 36 + expandedRowKeys.length * 95 + 65}
+        height={(dataWithSegmentDetails?.length || 0) * 36 + expandedRowKeys.length * 125 + 60}
         width={725}
         data={dataWithSegmentDetails}
         rowKey={rowKey}
@@ -122,12 +156,12 @@ const SeaFrontControlObjectives = ({ title, data }) => {
 
         <Column sortable width={100}>
           <HeaderCell>Segment</HeaderCell>
-          <CellWithTitle dataKey="segment"/>
+          <SegmentCellWithTitle dataKey="segment"/>
         </Column>
 
         <Column sortable width={130}>
           <HeaderCell>Nom du segment</HeaderCell>
-          <CellWithTitle dataKey="segmentName"/>
+          <SegmentCellWithTitle dataKey="segmentName"/>
         </Column>
 
         <Column sortable width={140}>
@@ -167,9 +201,34 @@ const SeaFrontControlObjectives = ({ title, data }) => {
           />
         </Column>
       </Table>
+      <AddSegment>
+        Ajouter
+        <SelectPicker
+          data-cy={'add-control-objective'}
+          style={{ width: 70, margin: '0px 10px 10px 10px' }}
+          searchable={true}
+          placement={'auto'}
+          placeholder="segment"
+          value={segmentToAddToFacade}
+          onChange={segment => setSegmentToAddToFacade(segment)}
+          data={fleetSegments
+            ?.map(segment => ({ label: segment.segment, value: segment.segment }))
+            .filter(segment => !data.find(facadeSegment => facadeSegment.segment === segment.value))
+            .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))
+          }
+        />
+      </AddSegment>
     </Wrapper>
   )
 }
+
+const AddSegment = styled.div`
+  text-align: left;
+  margin-left: 5px;
+  line-height: 10px;
+  width: fit-content;
+  color: ${COLORS.gunMetal};
+`
 
 const Wrapper = styled.div`
   margin-left: 40px;

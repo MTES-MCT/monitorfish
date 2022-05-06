@@ -46,6 +46,16 @@ export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) =>
   )
 }
 
+export const SegmentCellWithTitle = ({ rowData, dataKey, ...props }) => (
+  <Cell
+    title={`Segment ${rowData[dataKey] || ''} inconnu`}
+    style={{ background: rowData.segmentName ? 'unset' : COLORS.tumbleweed }}
+    {...props}
+  >
+    {rowData[dataKey]}
+  </Cell>
+)
+
 export const ExpandCell = ({ rowData, dataKey, expandedRowKeys, onChange, ...props }) => (
   <Cell
     {...props}

@@ -2,8 +2,9 @@ import { OK } from './api'
 
 export const CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les objectifs de contrôle'
 export const CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les années des objectifs de contrôle'
-export const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour l\'objectifs de contrôle'
-export const DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu supprimer l\'objectifs de contrôle'
+export const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour l\'objectif de contrôle'
+export const DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu supprimer l\'objectif de contrôle'
+export const ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter l\'objectif de contrôle'
 
 /**
  * Get control Objectives
@@ -89,7 +90,6 @@ function updateControlObjectiveFromAPI (id, updatedFields) {
  * @throws {Error}
  */
 function deleteControlObjectiveFromAPI (id) {
-  console.log('delete')
   return fetch(`/bff/v1/control_objectives/${id}`, {
     method: 'DELETE'
   }).then(response => {
@@ -102,9 +102,48 @@ function deleteControlObjectiveFromAPI (id) {
   })
 }
 
+/**
+ * Add a control Objective
+ * @memberOf API
+ * @param {string} segment - The segment of the control objective
+ * @param {string} facade - The facade of the control objective
+ * @param {int} year - The year of the control objective
+ * @returns {Promise} The control objectives
+ * @throws {Error}
+ */
+function addControlObjectiveFromAPI (segment, facade, year) {
+  const createFields = {
+    segment,
+    facade,
+    year
+  }
+
+  return fetch('/bff/v1/control_objectives', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    body: JSON.stringify(createFields)
+  }).then(response => {
+    if (response.status === OK) {
+      return response.json()
+    } else {
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE)
+    }
+  }).catch(error => {
+    console.error(error)
+    throw Error(ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE)
+  })
+}
+
 export {
   updateControlObjectiveFromAPI,
   getControlObjectivesFromAPI,
   getControlObjectiveYearEntriesFromAPI,
-  deleteControlObjectiveFromAPI
+  deleteControlObjectiveFromAPI,
+  addControlObjectiveFromAPI
 }

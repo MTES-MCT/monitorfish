@@ -15,6 +15,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
@@ -91,6 +92,9 @@ class BffControllerITests {
 
     @MockBean
     private lateinit var deleteControlObjective: DeleteControlObjective
+
+    @MockBean
+    private lateinit var addControlObjective: AddControlObjective
 
     @MockBean
     private lateinit var getOperationalAlerts: GetOperationalAlerts
@@ -419,6 +423,16 @@ class BffControllerITests {
     fun `Should return Ok When a delete of a control objective is done`() {
         // When
         mockMvc.perform(delete("/bff/v1/control_objectives/123"))
+                // Then
+                .andExpect(status().isOk)
+    }
+
+    @Test
+    fun `Should return the id When a adding a control objective`() {
+        // When
+        mockMvc.perform(post("/bff/v1/control_objectives")
+                .content(objectMapper.writeValueAsString(AddControlObjectiveDataInput(segment = "SEGMENT", facade = "FACADE", year = 2021)))
+                .contentType(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isOk)
     }

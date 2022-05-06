@@ -10,4 +10,5 @@ interface ControlObjectivesRepository {
                targetNumberOfControlsAtPort: Int?,
                controlPriorityLevel: Double?)
     fun delete(id: Int)
+    fun add(controlObjective: ControlObjective): Int
 }

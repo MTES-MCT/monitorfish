@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.ControlObjective
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotDeleteControlObjectiveException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ControlObjectivesEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBControlObjectivesRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -46,5 +47,9 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
         } catch (e: Throwable) {
             throw CouldNotDeleteControlObjectiveException("Could not delete control objective: ${e.message}")
         }
+    }
+
+    override fun add(controlObjective: ControlObjective): Int {
+        return dbControlObjectivesRepository.save(ControlObjectivesEntity.fromControlObjective(controlObjective)).id!!
     }
 }

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.ControlObjective
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
@@ -100,5 +101,28 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         // Then
         val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(2021).find { it.id == 9 }
         assertThat(updatedControlObjective?.controlPriorityLevel).isEqualTo(2.0)
+    }
+
+    @Test
+    @Transactional
+    fun `add Should add a new control objective to a facade`() {
+        // Given
+        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(2021)
+        assertThat(controlObjectives).hasSize(53)
+
+        // When
+        jpaControlObjectivesRepository.add(ControlObjective(
+                segment = "SEGMENT",
+                facade = "FACADE",
+                year = 2021,
+                targetNumberOfControlsAtSea = 25,
+                targetNumberOfControlsAtPort = 64,
+                controlPriorityLevel = 2.0
+        ))
+
+        // Then
+        val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(2021)
+        assertThat(updatedControlObjectives).hasSize(54)
+        assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.targetNumberOfControlsAtSea).isEqualTo(25)
     }
 }

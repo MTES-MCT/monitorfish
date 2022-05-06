@@ -12,10 +12,10 @@ import javax.persistence.*
 @Table(name = "beacon_malfunction_actions")
 data class BeaconMalfunctionActionEntity(
     @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Basic(optional = false)
-        @Column(name = "id",unique = true, nullable = false)
-        val id: Int?,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id", unique = true, nullable = false)
+    val id: Int?,
     @Column(name = "beacon_malfunction_id")
         val beaconMalfunctionId: Int,
     @Column(name = "property_name")

@@ -90,6 +90,9 @@ class BffControllerITests {
     private lateinit var getControlObjectiveYearEntries: GetControlObjectiveYearEntries
 
     @MockBean
+    private lateinit var deleteControlObjective: DeleteControlObjective
+
+    @MockBean
     private lateinit var getOperationalAlerts: GetOperationalAlerts
 
     @MockBean
@@ -408,6 +411,14 @@ class BffControllerITests {
         mockMvc.perform(put("/bff/v1/control_objectives/123")
                 .content(objectMapper.writeValueAsString(UpdateControlObjectiveDataInput(targetNumberOfControlsAtSea = 123)))
                 .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isOk)
+    }
+
+    @Test
+    fun `Should return Ok When a delete of a control objective is done`() {
+        // When
+        mockMvc.perform(delete("/bff/v1/control_objectives/123"))
                 // Then
                 .andExpect(status().isOk)
     }

@@ -110,6 +110,19 @@ export const renderRowExpanded = rowData => {
   )
 }
 
+export const DeleteCell = ({ rowData, dataKey, onClick, ...props }) => {
+  return (
+    <Cell key={rowData.id} {...props}>
+      <Delete
+        data-cy={`delete-control-objective-${rowData.id}`}
+        onClick={() => onClick && onClick(rowData.id, dataKey)}
+      >
+        Sup.
+      </Delete>
+    </Cell>
+  )
+}
+
 const TableBody = styled.tbody``
 
 const Fields = styled.table`
@@ -160,4 +173,8 @@ const NoValue = styled.span`
   color: ${COLORS.slateGray};
   font-weight: 300;
   line-height: normal;
+`
+
+const Delete = styled.div`
+  cursor: pointer;
 `

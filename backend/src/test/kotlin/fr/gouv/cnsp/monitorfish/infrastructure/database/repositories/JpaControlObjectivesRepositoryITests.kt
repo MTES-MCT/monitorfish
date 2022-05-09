@@ -141,11 +141,6 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(2023)
         assertThat(updatedControlObjectives).hasSize(53)
         assertThat(updatedControlObjectives.first().id).isEqualTo(107)
-        assertThat(updatedControlObjectives.first().facade).isEqualTo("MEMN")
-        assertThat(updatedControlObjectives.first().segment).isEqualTo("NWW01/02")
         assertThat(updatedControlObjectives.first().year).isEqualTo(2023)
-        assertThat(updatedControlObjectives.first().targetNumberOfControlsAtSea).isEqualTo(78)
-        assertThat(updatedControlObjectives.first().targetNumberOfControlsAtPort).isEqualTo(82)
-        assertThat(updatedControlObjectives.first().controlPriorityLevel).isEqualTo(3.0)
     }
 }

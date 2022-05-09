@@ -133,7 +133,7 @@ const SeaFrontControlObjectives = ({ title, facade, year, data }) => {
       <Title>{title}</Title><br/>
       <Table
         height={(dataWithSegmentDetails?.length || 0) * 36 + expandedRowKeys.length * 125 + 60}
-        width={725}
+        width={720}
         data={dataWithSegmentDetails}
         rowKey={rowKey}
         expandedRowKeys={expandedRowKeys}
@@ -193,7 +193,7 @@ const SeaFrontControlObjectives = ({ title, facade, year, data }) => {
           />
         </Column>
 
-        <Column width={40}>
+        <Column width={30}>
           <HeaderCell/>
           <DeleteCell
             dataKey="id"

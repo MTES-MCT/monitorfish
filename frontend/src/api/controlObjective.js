@@ -1,10 +1,11 @@
-import { OK } from './api'
+import { CREATED, OK } from './api'
 
 export const CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les objectifs de contrôle'
 export const CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les années des objectifs de contrôle'
 export const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour l\'objectif de contrôle'
 export const DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu supprimer l\'objectif de contrôle'
 export const ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter l\'objectif de contrôle'
+export const ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter une nouvelle année'
 
 /**
  * Get control Objectives
@@ -58,7 +59,6 @@ function getControlObjectiveYearEntriesFromAPI () {
  * @memberOf API
  * @param {string} id - The id of the control objective
  * @param {UpdateControlObjective} updatedFields - The fields to update
- * @returns {Promise} The control objectives
  * @throws {Error}
  */
 function updateControlObjectiveFromAPI (id, updatedFields) {
@@ -86,7 +86,6 @@ function updateControlObjectiveFromAPI (id, updatedFields) {
  * Delete a control Objective
  * @memberOf API
  * @param {string} id - The id of the control objective
- * @returns {Promise} The control objectives
  * @throws {Error}
  */
 function deleteControlObjectiveFromAPI (id) {
@@ -140,10 +139,29 @@ function addControlObjectiveFromAPI (segment, facade, year) {
   })
 }
 
+/**
+ * Add a new control Objective year
+ * @memberOf API
+ * @throws {Error}
+ */
+function addControlObjectiveYearFromAPI () {
+  return fetch('/bff/v1/control_objectives/years', {
+    method: 'POST'
+  }).then(response => {
+    if (response.status !== CREATED) {
+      throw Error(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE)
+    }
+  }).catch(error => {
+    console.error(error)
+    throw Error(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE)
+  })
+}
+
 export {
   updateControlObjectiveFromAPI,
   getControlObjectivesFromAPI,
   getControlObjectiveYearEntriesFromAPI,
   deleteControlObjectiveFromAPI,
-  addControlObjectiveFromAPI
+  addControlObjectiveFromAPI,
+  addControlObjectiveYearFromAPI
 }

@@ -40,6 +40,7 @@ class BffController(
         private val getHealthcheck: GetHealthcheck,
         private val getControlObjectivesOfYear: GetControlObjectivesOfYear,
         private val getControlObjectiveYearEntries: GetControlObjectiveYearEntries,
+        private val addControlObjectiveYear: AddControlObjectiveYear,
         private val updateControlObjective: UpdateControlObjective,
         private val deleteControlObjective: DeleteControlObjective,
         private val addControlObjective: AddControlObjective,
@@ -279,6 +280,13 @@ class BffController(
     @ApiOperation("Get control objective year entries")
     fun getControlObjectiveYearEntries(): List<Int> {
         return getControlObjectiveYearEntries.execute()
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/v1/control_objectives/years")
+    @ApiOperation("Add a control objective year")
+    fun addControlObjectiveYear() {
+        return addControlObjectiveYear.execute()
     }
 
     @PutMapping(value = ["/v1/control_objectives/{controlObjectiveId}"], consumes = ["application/json"])

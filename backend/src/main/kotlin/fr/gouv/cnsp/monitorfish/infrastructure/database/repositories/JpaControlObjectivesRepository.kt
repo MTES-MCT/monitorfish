@@ -52,4 +52,9 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
     override fun add(controlObjective: ControlObjective): Int {
         return dbControlObjectivesRepository.save(ControlObjectivesEntity.fromControlObjective(controlObjective)).id!!
     }
+
+    @Transactional
+    override fun addYear(currentYear: Int, nextYear: Int) {
+        dbControlObjectivesRepository.insertNextYearFromCurrentYear(currentYear, nextYear)
+    }
 }

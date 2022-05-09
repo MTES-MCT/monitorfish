@@ -7,44 +7,68 @@ import getAllControlObjectives from '../../../domain/use_cases/controlObjective/
 import getAllFleetSegments from '../../../domain/use_cases/fleetSegment/getAllFleetSegments'
 import InputPicker from 'rsuite/lib/InputPicker'
 import getControlObjectivesYearEntries from '../../../domain/use_cases/controlObjective/getControlObjectivesYearEntries'
+import addControlObjectiveYear from '../../../domain/use_cases/controlObjective/addControlObjectiveYear'
+
+const currentYear = new Date().getFullYear()
+const nextYear = currentYear + 1
+const lastYear = currentYear - 1
+const LAST_ITEM = -1
 
 const ControlObjectives = () => {
   const dispatch = useDispatch()
   const [controlObjectives, setControlObjectives] = useState([])
-  const [year, setYear] = useState(new Date().getFullYear())
-  const [yearEntries, setYearEntries] = useState([{ label: `Année ${new Date().getFullYear()}`, value: new Date().getFullYear() }])
+  const [year, setYear] = useState(currentYear)
+  const [yearEntries, setYearEntries] = useState([{ label: `Année ${currentYear}`, value: currentYear }])
+  const nextYearToAddFromEntries = yearEntries?.map(year => year.value).sort().at(LAST_ITEM) + 1
+  const lastYearFoundInYearEntries = yearEntries?.map(year => year.value).sort().at(LAST_ITEM) === lastYear
 
   useEffect(() => {
     dispatch(getAllFleetSegments())
-    dispatch(getControlObjectivesYearEntries()).then(years => {
-      if (years?.length) {
-        const yearsWithLabel = years.map(year => ({ label: `Année ${year}`, value: year }))
-        setYearEntries(yearsWithLabel)
-        setYear(yearsWithLabel[0]?.value)
-      }
-    })
   }, [])
 
   useEffect(() => {
-    dispatch(getAllControlObjectives(year)).then(controlObjectives => {
-      setControlObjectives(controlObjectives)
+    if (!yearEntries?.map(_year => year.value).includes(year)) {
+      setYearEntries(yearEntries.concat([{ label: `Année ${year}`, value: year }]))
+    }
+    dispatch(getControlObjectivesYearEntries()).then(years => {
+      if (years?.length) {
+        if (!years.includes(currentYear)) {
+          setYear(years.at(LAST_ITEM))
+          return
+        }
+        const yearsWithLabel = years.map(year => ({ label: `Année ${year}`, value: year }))
+        setYearEntries(yearsWithLabel)
+
+        dispatch(getAllControlObjectives(year)).then(controlObjectives => {
+          setControlObjectives(controlObjectives)
+        })
+      }
     })
   }, [year])
 
   return (
     <Wrapper>
-      <Year data-cy={'control-objectives-year'}>
-        <InputPicker
-          value={year}
-          onChange={_year => setYear(_year)}
-          data={yearEntries}
-          style={{ width: 0 }}
-          menuStyle={{ top: 46 }}
-          creatable={false}
-          cleanable={false}
-          size={'xs'}
-        />
-      </Year>
+      <Header>
+        <Year data-cy={'control-objectives-year'}>
+          <InputPicker
+            value={year}
+            onChange={_year => setYear(_year)}
+            data={yearEntries}
+            style={{ width: 0 }}
+            menuStyle={{ top: 46 }}
+            creatable={false}
+            cleanable={false}
+            size={'xs'}
+          />
+        </Year>
+        <AddYear
+          data-cy={'control-objectives-add-year'}
+          isVisible={lastYearFoundInYearEntries || nextYearToAddFromEntries === nextYear}
+          onClick={() => dispatch(addControlObjectiveYear()).then(() => setYear(nextYearToAddFromEntries))}
+        >
+          Ajouter l&apos;année {nextYearToAddFromEntries}
+        </AddYear>
+      </Header>
       <ControlObjectivesContainer>
         <SeaFrontControlObjectives
           title={'NORD ATLANTIQUE - MANCHE OUEST (NAMO)'}
@@ -75,6 +99,10 @@ const ControlObjectives = () => {
   )
 }
 
+const Header = styled.div`
+  display: flex;
+`
+
 const ControlObjectivesContainer = styled.div`
   width: 100%;
   height: calc(100vh - 90px);
@@ -82,6 +110,18 @@ const ControlObjectivesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   overflow: auto;
+`
+
+const AddYear = styled.a`
+  visibility: ${props => props.isVisible ? 'visible' : 'hidden'};
+  height: fit-content;
+  width: fit-content;
+  margin-top: 23px;
+  margin-right: 20px;
+  margin-left: auto;
+  text-decoration: underline;
+  color: ${COLORS.gunMetal};
+  cursor: pointer;
 `
 
 const Year = styled.div`

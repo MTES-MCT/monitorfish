@@ -125,4 +125,27 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         assertThat(updatedControlObjectives).hasSize(54)
         assertThat(updatedControlObjectives.find { it.segment == "SEGMENT" }?.targetNumberOfControlsAtSea).isEqualTo(25)
     }
+
+    @Test
+    @Transactional
+    fun `addYear Should add a new year copied from the specified year`() {
+        // Given
+        assertThat(jpaControlObjectivesRepository.findAllByYear(2021)).hasSize(53)
+        assertThat(jpaControlObjectivesRepository.findAllByYear(2023)).hasSize(0)
+
+        // When
+        jpaControlObjectivesRepository.addYear(2021, 2023)
+
+        // Then
+        assertThat(jpaControlObjectivesRepository.findAllByYear(2021)).hasSize(53)
+        val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(2023)
+        assertThat(updatedControlObjectives).hasSize(53)
+        assertThat(updatedControlObjectives.first().id).isEqualTo(107)
+        assertThat(updatedControlObjectives.first().facade).isEqualTo("MEMN")
+        assertThat(updatedControlObjectives.first().segment).isEqualTo("NWW01/02")
+        assertThat(updatedControlObjectives.first().year).isEqualTo(2023)
+        assertThat(updatedControlObjectives.first().targetNumberOfControlsAtSea).isEqualTo(78)
+        assertThat(updatedControlObjectives.first().targetNumberOfControlsAtPort).isEqualTo(82)
+        assertThat(updatedControlObjectives.first().controlPriorityLevel).isEqualTo(3.0)
+    }
 }

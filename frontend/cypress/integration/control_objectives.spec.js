@@ -157,4 +157,41 @@ context('Control objectives', () => {
     cy.wait(50)
     cy.get('.rs-table-row').should('have.length', 57)
   })
+
+  it('Should permit to add a control objective year When the current year is not yet added', () => {
+    // Given
+    const now = new Date(2023, 3, 14).getTime()
+    cy.clock(now)
+    cy.get('.rs-table-row').should('have.length', 57)
+    cy.get('*[data-cy^="control-objectives-year"]').contains('2022')
+    cy.get('*[data-cy^="control-objectives-year"]').click()
+    cy.get('.rs-picker-select-menu-item').should('have.length', 2)
+
+    // Then
+    cy.get('*[data-cy="control-objectives-add-year"]')
+      .contains('2023')
+  })
+
+  it('Should add the next control objective year', () => {
+    // Given
+    cy.get('.rs-table-row').should('have.length', 57)
+    cy.get('*[data-cy^="control-objectives-year"]').click()
+    cy.get('.rs-picker-select-menu-item').should('have.length', 2)
+    cy.intercept('POST', '/bff/v1/control_objectives/years').as('addObjectiveYear')
+
+    // When
+    cy.get('*[data-cy="control-objectives-add-year"]')
+      .click()
+    cy.wait('@addObjectiveYear')
+
+    // Then
+    cy.wait(50)
+    const nextYear = new Date().getFullYear() + 1
+    cy.get('*[data-cy^="control-objectives-year"]').contains(nextYear)
+    cy.get('*[data-cy^="control-objectives-year"]').click()
+    cy.get('.rs-picker-select-menu-item').should('have.length', 3)
+    cy.get('.rs-table-row').should('have.length', 57)
+    cy.get('*[data-cy="control-objectives-add-year"]')
+      .should('be.not.visible')
+  })
 })

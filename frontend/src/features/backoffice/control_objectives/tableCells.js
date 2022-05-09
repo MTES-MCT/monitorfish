@@ -2,6 +2,7 @@ import InputPicker from 'rsuite/lib/InputPicker'
 import { COLORS } from '../../../constants/constants'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
+import { ReactComponent as DeleteIconSVG } from '../../icons/Icone_suppression.svg'
 import React from 'react'
 import styled from 'styled-components'
 import Table from 'rsuite/lib/Table'
@@ -124,14 +125,20 @@ export const DeleteCell = ({ rowData, dataKey, onClick, ...props }) => {
   return (
     <Cell key={rowData.id} {...props}>
       <Delete
+        title={'Supprimer la ligne'}
         data-cy={`delete-control-objective-${rowData.id}`}
         onClick={() => onClick && onClick(rowData.id, dataKey)}
       >
-        Sup.
+        <DeleteIcon/>
       </Delete>
     </Cell>
   )
 }
+
+const DeleteIcon = styled(DeleteIconSVG)`
+  margin-left: 1px;
+  margin-top: 2px;
+`
 
 const TableBody = styled.tbody``
 

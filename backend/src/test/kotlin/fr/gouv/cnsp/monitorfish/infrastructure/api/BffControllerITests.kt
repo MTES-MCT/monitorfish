@@ -97,6 +97,9 @@ class BffControllerITests {
     private lateinit var addControlObjective: AddControlObjective
 
     @MockBean
+    private lateinit var addControlObjectiveYear: AddControlObjectiveYear
+
+    @MockBean
     private lateinit var getOperationalAlerts: GetOperationalAlerts
 
     @MockBean
@@ -463,6 +466,14 @@ class BffControllerITests {
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()", equalTo(2)))
                 .andExpect(jsonPath("$[0]", equalTo(2021)))
+    }
+
+    @Test
+    fun `Should add a new control objective year`() {
+        // When
+        mockMvc.perform(post("/bff/v1/control_objectives/years"))
+                // Then
+                .andExpect(status().isCreated)
     }
 
     @Test

@@ -11,7 +11,6 @@ from src.pipeline.flows.position_alerts import (
     ZonesTable,
     alert_has_gear_parameters,
     extract_current_gears,
-    extract_current_risk_factors,
     filter_on_gears,
     flow,
     get_alert_type_zones_table,
@@ -305,27 +304,6 @@ def test_extract_current_gears(reset_test_data):
             "current_gears",
         ].iloc[0]
         is None
-    )
-
-
-def test_extract_current_risk_factors(reset_test_data):
-    risk_factors = extract_current_risk_factors.run()
-    expected_risk_factors = pd.DataFrame(
-        columns=pd.Index(["cfr", "ircs", "external_immatriculation", "risk_factor"]),
-        data=[
-            ["ABC000055481", "IL2468", "AS761555", 1.74110112659225],
-            ["ABC000542519", "FQ7058", "RO237719", 1.4142135623731],
-            [None, "OLY7853", "SB125334", 1.74110112659225],
-            [None, "ZZ000000", "ZZTOPACDC", 1.74110112659225],
-        ],
-    )
-    pd.testing.assert_frame_equal(
-        (risk_factors.sort_values("external_immatriculation").reset_index(drop=True)),
-        (
-            expected_risk_factors.sort_values("external_immatriculation").reset_index(
-                drop=True
-            )
-        ),
     )
 
 

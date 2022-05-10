@@ -20,6 +20,7 @@ from src.pipeline.shared_tasks.positions import (
     add_vessel_identifier,
     get_positions_table,
 )
+from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
 from src.pipeline.utils import get_table
 from src.read_query import read_query
 
@@ -322,17 +323,6 @@ def extract_current_gears() -> pd.DataFrame:
     )
 
     return current_gears
-
-
-@task(checkpoint=False)
-def extract_current_risk_factors() -> pd.DataFrame:
-    """
-    Extracts vessels' current risk factor in `last_positions` table.
-    """
-    return extract(
-        db_name="monitorfish_remote",
-        query_filepath="monitorfish/current_risk_factors.sql",
-    )
 
 
 @task(checkpoint=False)

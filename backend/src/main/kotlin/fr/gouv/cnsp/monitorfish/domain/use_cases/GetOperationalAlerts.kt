@@ -14,7 +14,8 @@ class GetOperationalAlerts(private val pendingAlertRepository: PendingAlertRepos
         return pendingAlertRepository.findAlertsOfTypes(listOf(
             AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
             AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
-            AlertTypeMapping.TWELVE_MILES_FISHING_ALERT
+            AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+            AlertTypeMapping.MISSING_FAR_ALERT
         ))
     }
 }

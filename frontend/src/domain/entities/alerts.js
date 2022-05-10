@@ -17,6 +17,10 @@ export const AlertTypes = {
   TWELVE_MILES_FISHING_ALERT: {
     code: 'TWELVE_MILES_FISHING_ALERT',
     name: '12 milles - Pêche sans droits historiques'
+  },
+  MISSING_FAR_ALERT: {
+    code: 'MISSING_FAR_ALERT',
+    name: 'Non-emission de message "FAR"'
   }
 }
 

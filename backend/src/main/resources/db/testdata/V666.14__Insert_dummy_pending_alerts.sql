@@ -94,5 +94,11 @@ INSERT INTO pending_alerts (vessel_name,internal_reference_number,external_refer
         '"flagState": "FR",' ||
         '"riskFactor": 2.2,' ||
         '"type": "TWELVE_MILES_FISHING_ALERT"' ||
+        '}')::jsonb),
+('MARQUER NOTE MANIER', 'ABC000498845', 'YH219470', 'EXG7039', (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '4 hours 7 minutes', null, 'INTERNAL_REFERENCE_NUMBER', ('{' ||
+        '"seaFront": "NAMO",' ||
+        '"flagState": "FR",' ||
+        '"riskFactor": 3.4,' ||
+        '"type": "MISSING_FAR_ALERT"' ||
         '}')::jsonb)
 ;

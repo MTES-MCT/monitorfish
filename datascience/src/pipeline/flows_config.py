@@ -34,6 +34,7 @@ from src.pipeline.flows import (
     init_species_groups,
     last_positions,
     logbook,
+    missing_far_alerts,
     missing_trip_numbers,
     ports,
     position_alerts,
@@ -94,6 +95,20 @@ last_positions.flow.schedule = Schedule(
         clocks.CronClock(
             "1-59 * * * *",
             parameter_defaults={"minutes": 30, "action": "update"},
+        ),
+    ]
+)
+missing_far_alerts.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "45 6 * * *",
+            parameter_defaults={
+                "alert_type": "MISSING_FAR_ALERT",
+                "alert_config_name": "MISSING_FAR_ALERT",
+                "states_iso2_to_monitor_everywhere": ["FR"],
+                "states_iso2_to_monitor_in_french_eez": ["BE"],
+                "minimum_length": 12.0,
+            },
         ),
     ]
 )
@@ -203,6 +218,7 @@ flows_to_register = [
     infractions.flow,
     init_species_groups.flow,
     last_positions.flow,
+    missing_far_alerts.flow,
     missing_trip_numbers.flow,
     update_beacon_malfunctions.flow,
     ports.flow,

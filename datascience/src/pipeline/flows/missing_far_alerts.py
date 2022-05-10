@@ -19,6 +19,16 @@ from src.read_query import read_query
 
 @task(checkpoint=False)
 def get_dates() -> Tuple[datetime, datetime, datetime]:
+    """
+    Returns the dates used in the flow as a 3-tuple :
+
+      - Yesterday at 00:00 (beginning of the day) in UTC
+      - Today at 00:00 (beginning of the day) in UTC
+      - Current datetime in UTC
+
+    Returns:
+        Tuple[datetime, datetime, datetime]
+    """
     utcnow = datetime.utcnow()
     today_at_zero_hours = utcnow.replace(hour=0, minute=0, second=0, microsecond=0)
     yesterday_at_zero_hours = today_at_zero_hours - timedelta(days=1)
@@ -38,6 +48,36 @@ def make_vessels_at_sea_query(
     eez_areas_table: Table = None,
     eez_to_monitor_iso3: list = None,
 ) -> Select:
+    """
+    Generates the `sqlalchemy.Select` statement to run in order to get the list of
+    vessels that were at sea (i.e. those that emitted at least one VMS position outside
+    of a port) between the designated dates and matching the designated flag states.
+
+    Args:
+        positions_table (Table): `sqlalchemy.Table` representing `positions`
+        facade_areas_table (Table): `sqlalchemy.Table` representing `facade_areas`
+        from_date (datetime): Start of the time interval to query, in UTC
+        to_date (datetime): End of the time interval to query, in UTC
+        states_to_monitor_iso2 (list, optional): If provided, only vessels of the given
+          flag_states will be queried. Defaults to None.
+        vessels_table (Table, optional): `sqlalchemy.Table` representing `vessels`. Must
+          be provided if `minimum_length` is not `None`. Defaults to None.
+        minimum_length (float, optional): If provided, only vessels longer than the
+          given value will be queried. Defaults to None.
+        eez_areas_table (Table, optional): `sqlalchemy.Table` representing `eez_areas`.
+          Must be provided if `eez_to_monitor_iso3` is not `None`. Defaults to None.
+        eez_to_monitor_iso3 (list, optional): If provided, only VMS emission in the
+          designated EEZ areas will be considered. Defaults to None.
+
+    Raises:
+        ValueError: If `minimum_length` is not `None` and the `vessels_table` is not
+          provided.
+        ValueError: If `eez_to_monitor_iso3` is not `None` and the `eez_areas_table`
+          is not provided.
+
+    Returns:
+        Select: `Select` statement representing a SQL query
+    """
 
     from_table = positions_table.join(
         facade_areas_table,
@@ -113,6 +153,16 @@ def make_vessels_at_sea_query(
 
 @task(checkpoint=False)
 def extract_vessels_at_sea(query: Select) -> pd.DataFrame:
+    """
+    Runs the input `Select` statement on the `monitorfish_remote` database and returns
+    the results as a `pandas.DataFrame`.
+
+    Args:
+        query (Select): `Select` statement to execute.
+
+    Returns:
+        pd.DataFrame: Result of the execution of the input `Select` statement.
+    """
 
     return read_query(
         "monitorfish_remote",
@@ -127,6 +177,32 @@ def extract_vessels_that_emitted_fars(
     fishing_operation_min_datetime_utc: datetime,
     fishing_operation_max_datetime_utc: datetime,
 ) -> set:
+    """
+    Extracts the vessels that emitted at least one `FAR` logbook report between the
+    designated dates and returns the result as a `set` of their CFR numbers.
+
+    Date conditions on dates must be made on 3 dates :
+    - `operation_datetime_utc`: for performance reasons (the table is chunked on this
+      column)
+    - `report_datetime_utc`: to get only reports that were filled between the given
+      dates
+    - `farDatetimeUtc` : in certain cases (in particular VisioCapture), reports can be
+      filled weeks or months after the actual fishing operation. In the context of this
+      flow, we are not interested in these reports and want to keep only reports that
+      were filled directly on the boat, in 'live'.
+
+    Args:
+        declaration_min_datetime_utc (datetime): Minimum `operation_datetime_utc` and
+          `report_datetime_utc`
+        declaration_max_datetime_utc (datetime): Maximum `operation_datetime_utc` and
+          `report_datetime_utc`
+        fishing_operation_min_datetime_utc (datetime): Minimum `farDatetimeUtc`
+        fishing_operation_max_datetime_utc (datetime): Maximum `farDatetimeUtc`
+
+    Returns:
+        set: Set of `cfr` number of the vessels that emitted at least one `FAR` report
+          between the given dates.
+    """
 
     vessels_that_emitted_fars = extract(
         "monitorfish_remote",
@@ -147,6 +223,16 @@ def concat(
     vessels_at_sea_yesterday_everywhere: pd.DataFrame,
     vessels_at_sea_yesterday_in_french_eez: pd.DataFrame,
 ) -> pd.DataFrame:
+    """
+    Concatenates the two input `DataFrame`.
+
+    Args:
+        vessels_at_sea_yesterday_everywhere (pd.DataFrame)
+        vessels_at_sea_yesterday_in_french_eez (pd.DataFrame)
+
+    Returns:
+        pd.DataFrame
+    """
     return pd.concat(
         [
             vessels_at_sea_yesterday_everywhere,
@@ -160,6 +246,19 @@ def concat(
 def get_vessels_with_missing_fars(
     vessels_at_sea: pd.DataFrame, vessels_that_emitted_fars: pd.DataFrame
 ) -> pd.DataFrame:
+    """
+    Filters `vessels_at_sea` to keep only rows whose `cfr` is NOT in
+    `vessels_that_emitted_fars`.
+
+    Args:
+        vessels_at_sea (pd.DataFrame): `DataFrame` of vessels at sea
+        vessels_that_emitted_fars (pd.DataFrame): `DataFrame` of vessels that emitted
+          `FAR` reports
+
+    Returns:
+        pd.DataFrame: Filtered version of `vessels_at_sea` with only those that are
+          not in `vessels_that_emitted_fars`
+    """
     return vessels_at_sea.loc[
         ~vessels_at_sea.cfr.isin(vessels_that_emitted_fars)
     ].reset_index(drop=True)
@@ -169,6 +268,16 @@ def get_vessels_with_missing_fars(
 def merge_risk_factor(
     vessels_with_missing_fars: pd.DataFrame, current_risk_factors: pd.DataFrame
 ) -> pd.DataFrame:
+    """
+    Merges on the input DataFrame on ["cfr", "external_immatriculation", "ircs"].
+
+    Args:
+        vessels_with_missing_fars (pd.DataFrame)
+        current_risk_factors (pd.DataFrame)
+
+    Returns:
+        pd.DataFrame
+    """
     return join_on_multiple_keys(
         vessels_with_missing_fars,
         current_risk_factors,
@@ -184,6 +293,19 @@ def make_alerts(
     alert_config_name: str,
     creation_date: datetime,
 ) -> pd.DataFrame:
+    """
+    Generates alerts from the input `vessels_with_missing_fars`.
+
+    Args:
+        vessels_with_missing_fars (pd.DataFrame): `DateFrame` of vessels for which to
+          create an alert.
+        alert_type (str): `type` to specify in the built alerts.
+        alert_config_name (str): `alert_config_name` to specify in the built alerts.
+        creation_date (datetime): `creation_date` to specify in the built alerts.
+
+    Returns:
+        pd.DataFrame: `DataFrame` of alerts.
+    """
     alerts = vessels_with_missing_fars.copy(deep=True)
     alerts = alerts.rename(
         columns={

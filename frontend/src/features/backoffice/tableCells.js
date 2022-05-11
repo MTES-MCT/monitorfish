@@ -1,20 +1,22 @@
 import InputPicker from 'rsuite/lib/InputPicker'
-import { COLORS } from '../../../constants/constants'
-import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
-import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
-import { ReactComponent as DeleteIconSVG } from '../../icons/Icone_suppression.svg'
+import { COLORS } from '../../constants/constants'
+import { RiskFactorBox } from '../vessel_sidebar/risk_factor/RiskFactorBox'
+import { getRiskFactorColor } from '../../domain/entities/riskFactor'
+import { ReactComponent as DeleteIconSVG } from '../icons/Icone_suppression.svg'
 import React from 'react'
 import styled from 'styled-components'
 import Table from 'rsuite/lib/Table'
+import TagPicker from 'rsuite/lib/TagPicker'
+import Tag from 'rsuite/lib/Tag'
 
 const { Cell } = Table
 const rowKey = 'id'
 
 export const ModifiableCell = ({ rowData, dataKey, onChange, ...props }) => {
   return (
-    <Cell key={rowData.id} {...props} className={'table-content-editing'}>
+    <Cell title={rowData[dataKey]} key={rowData.id} {...props} className={'table-content-editing'}>
       <input
-        style={{ fontSize: 13, marginLeft: -5, marginTop: -8, fontWeight: 500 }}
+        style={{ fontSize: 13, marginLeft: -7, marginRight: 0, paddingLeft: 5, paddingRight: 10, marginTop: -8, fontWeight: 500 }}
         type="text"
         maxLength={3}
         className="rs-input"
@@ -49,7 +51,7 @@ export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) =>
 
 export const SegmentCellWithTitle = ({ rowData, dataKey, ...props }) => (
   <Cell
-    title={`Segment ${rowData[dataKey] || ''} inconnu`}
+    title={`Segment ${rowData[dataKey] || 'inconnu'}`}
     style={{ background: rowData.segmentName ? 'unset' : COLORS.tumbleweed }}
     {...props}
   >
@@ -87,6 +89,53 @@ export const ImpactRiskFactorCell = ({ rowData, expandedRowKeys, onChange, ...pr
       {rowData.impactRiskFactor}
     </RiskFactorBox>
   </Cell>
+
+export const TagPickerCell = ({ rowData, dataKey, data, onChange, ...props }) =>
+  <Cell
+    {...props}
+    style={{
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden'
+    }}
+    title={rowData[dataKey]?.join(', ')}
+  >
+    <TagPicker
+      searchable={true}
+      value={rowData[dataKey]}
+      style={tagPickerStyle}
+      data={data}
+      placeholder={''}
+      placement={'auto'}
+      onChange={onChange}
+      renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
+      renderValue={(_, items) => renderTagPickerValue(items)}
+    />
+  </Cell>
+
+function renderTagPickerMenuItem (item) {
+  return (
+    <Label>
+      {item.label}
+    </Label>
+  )
+}
+
+function renderTagPickerValue (items) {
+  return items
+    .filter(tag => tag)
+    .map(tag => (
+      <Tag key={tag?.label}>
+        {tag?.label}
+      </Tag>
+    ))
+}
+
+const Label = styled.span`
+  font-size: 13px;
+`
+
+const tagPickerStyle = { width: 250, margin: '2px 10px 10px 0', verticalAlign: 'top' }
 
 export const renderRowExpanded = rowData => {
   return (

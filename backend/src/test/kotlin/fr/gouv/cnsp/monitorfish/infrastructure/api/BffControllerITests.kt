@@ -14,11 +14,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.UpdateFleetSegmentFields
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.*
 import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
@@ -79,6 +77,9 @@ class BffControllerITests {
     private lateinit var getAllFleetSegments: GetAllFleetSegments
 
     @MockBean
+    private lateinit var updateFleetSegment: UpdateFleetSegment
+
+    @MockBean
     private lateinit var getHealthcheck: GetHealthcheck
 
     @MockBean
@@ -116,6 +117,9 @@ class BffControllerITests {
 
     @MockBean
     private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
+
+    @MockBean
+    private lateinit var getFAOAreas: GetFAOAreas
 
     @Autowired
     private lateinit var meterRegistry: MeterRegistry
@@ -393,6 +397,24 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.length()", equalTo(1)))
                 .andExpect(jsonPath("$[0].segment", equalTo("SW1")))
                 .andExpect(jsonPath("$[0].dirm[0]", equalTo("NAMO")))
+    }
+
+    @Test
+    fun `Should update a fleet segments`() {
+        // Given
+        given(this.updateFleetSegment.execute(any(), any()))
+                .willReturn(FleetSegment("A_SEGMENT/WITH/SLASH", "", listOf("NAMO", "SA"), listOf("OTB", "OTC"), listOf(), listOf(), listOf(), 1.2))
+
+        // When
+        mockMvc.perform(put("/bff/v1/fleet_segments/A_SEGMENT/WITH/SLASH")
+                .content(objectMapper.writeValueAsString(UpdateFleetSegmentDataInput(gears = listOf("OTB", "OTC"))))
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.segment", equalTo("A_SEGMENT/WITH/SLASH")))
+                .andExpect(jsonPath("$.gears[0]", equalTo("OTB")))
+
+        Mockito.verify(updateFleetSegment).execute("A_SEGMENT/WITH/SLASH", UpdateFleetSegmentFields(gears = listOf("OTB", "OTC")))
     }
 
     @Test
@@ -699,4 +721,17 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.history[0].comments[0].beaconMalfunctionId", equalTo(1)))
                 .andExpect(jsonPath("$.history[0].comments[0].comment", equalTo("A comment")))
     }
+
+    @Test
+    fun `Should get FAO areas`() {
+        // Given
+        given(this.getFAOAreas.execute()).willReturn(listOf("27.1", "27.1.0", "28.1", "28.1.0", "28.1.1"))
+
+        // When
+        mockMvc.perform(get("/bff/v1/fao_areas"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()", equalTo(5)))
+    }
+
 }

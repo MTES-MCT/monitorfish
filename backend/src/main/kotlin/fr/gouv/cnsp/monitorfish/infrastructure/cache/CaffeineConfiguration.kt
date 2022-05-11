@@ -37,6 +37,7 @@ class CaffeineConfiguration {
     val currentSegments = "current_segment"
     val controlAnteriority = "control_anteriority"
     val riskFactors = "risk_factors"
+    val faoAreas = "fao_areas"
 
     @Bean
     fun cacheManager(ticker: Ticker): CacheManager? {
@@ -64,6 +65,8 @@ class CaffeineConfiguration {
         val currentSegmentsCache = buildCache(currentSegments, ticker, 1)
         val controlAnteriorityCache = buildCache(controlAnteriority, ticker, 1)
         val riskFactorsCache = buildCache(riskFactors, ticker, 1)
+
+        val faoAreasCache = buildCache(faoAreas, ticker, oneWeek)
 
         val infractionsCache = buildCache(infractions, ticker, oneWeek)
 
@@ -98,7 +101,8 @@ class CaffeineConfiguration {
                 currentSegmentsCache,
                 controlAnteriorityCache,
                 riskFactorsCache,
-                allSpeciesGroupsCache))
+                allSpeciesGroupsCache,
+                faoAreasCache))
 
         return manager
     }

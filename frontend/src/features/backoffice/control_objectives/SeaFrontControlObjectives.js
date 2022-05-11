@@ -11,7 +11,7 @@ import {
   ModifiableCell,
   renderRowExpanded,
   SegmentCellWithTitle
-} from './tableCells'
+} from '../tableCells'
 import updateControlObjective from '../../../domain/use_cases/controlObjective/updateControlObjective'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import deleteControlObjective from '../../../domain/use_cases/controlObjective/deleteControlObjective'

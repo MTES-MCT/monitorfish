@@ -56,7 +56,13 @@ const getAllGearCodes = () => dispatch => {
       }
     })
     batch(() => {
-      dispatch(setGears(gears))
+      dispatch(setGears(gears.sort((a, b) => {
+        if (a.code && b.code) {
+          return a.code.localeCompare(b.code)
+        }
+
+        return null
+      })))
       dispatch(setIsReadyToShowRegulatoryZones())
       dispatch(setCategoriesToGears(categoriesToGears))
       dispatch(setGroupsToCategories(groupToCategories))

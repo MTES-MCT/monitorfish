@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import Table from 'rsuite/lib/Table'
 import { useDispatch, useSelector } from 'react-redux'
-import { DeleteCell, ModifiableCell, TagPickerCell } from '../tableCells'
+import { DeleteCell, INPUT_TYPE, ModifiableCell, TagPickerCell } from '../tableCells'
 import getAllFleetSegments from '../../../domain/use_cases/fleetSegment/getAllFleetSegments'
 import getAllGearCodes from '../../../domain/use_cases/gearCode/getAllGearCodes'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 import getFAOAreas from '../../../domain/use_cases/faoAreas/getFAOAreas'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
+import updateFleetSegment from '../../../domain/use_cases/fleetSegment/updateFleetSegment'
 
 const { Column, HeaderCell } = Table
 
 const FleetSegments = () => {
   const dispatch = useDispatch()
-  const { fleetSegments } = useSelector(state => state.fleetSegment)
-  const { gears } = useSelector(state => state.gear)
-  const { species } = useSelector(state => state.species)
+  const doNotUpdateScrollRef = useRef(false)
+  const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
+  const gears = useSelector(state => state.gear.gears)
+  const species = useSelector(state => state.species.species)
   const [faoAreas, setFAOAreas] = useState([])
 
   useEffect(() => {
@@ -41,6 +43,25 @@ const FleetSegments = () => {
     }
   }, [species])
 
+  const handleChangeModifiableKey = (segment, key, value) => {
+    if (!segment || !key) {
+      return
+    }
+
+    const updateJSON = {
+      segment: null,
+      segmentName: null,
+      impactRiskFactor: null,
+      gears: null,
+      faoAreas: null,
+      targetSpecies: null,
+      bycatchSpecies: null
+    }
+    updateJSON[key] = value
+
+    dispatch(updateFleetSegment(segment, updateJSON))
+  }
+
   return (
     <Wrapper>
       <Title>Segments de flotte</Title><br/>
@@ -53,6 +74,9 @@ const FleetSegments = () => {
             rowHeight={36}
             rowKey={'segment'}
             affixHorizontalScrollbar
+            onDataUpdated={() => { doNotUpdateScrollRef.current = true }}
+            shouldUpdateScroll={!doNotUpdateScrollRef.current}
+            scrollTop={50}
             locale={{
               emptyMessage: 'Aucun résultat',
               loading: 'Chargement...'
@@ -62,7 +86,10 @@ const FleetSegments = () => {
               <HeaderCell>N. impact</HeaderCell>
               <ModifiableCell
                 dataKey={'impactRiskFactor'}
-                onChange={(id, key, value) => console.log('cell')}
+                id={'segment'}
+                maxLength={3}
+                inputType={INPUT_TYPE.DOUBLE}
+                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
               />
             </Column>
 
@@ -70,7 +97,10 @@ const FleetSegments = () => {
               <HeaderCell>Segment</HeaderCell>
               <ModifiableCell
                 dataKey={'segment'}
-                onChange={(id, key, value) => console.log('cell')}
+                id={'segment'}
+                maxLength={null}
+                inputType={INPUT_TYPE.STRING}
+                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
               />
             </Column>
 
@@ -78,7 +108,10 @@ const FleetSegments = () => {
               <HeaderCell>Nom du segment</HeaderCell>
               <ModifiableCell
                 dataKey={'segmentName'}
-                onChange={(id, key, value) => console.log('cell')}
+                id={'segment'}
+                maxLength={null}
+                inputType={INPUT_TYPE.STRING}
+                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
               />
             </Column>
 
@@ -86,7 +119,8 @@ const FleetSegments = () => {
               <HeaderCell>Engins</HeaderCell>
               <TagPickerCell
                 dataKey={'gears'}
-                onChange={(id, key, value) => { console.log(id) }}
+                id={'segment'}
+                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
                 data={gears.map(gear => ({ label: gear.code, value: gear.code }))}
               />
             </Column>
@@ -95,7 +129,8 @@ const FleetSegments = () => {
               <HeaderCell>Espèces ciblées</HeaderCell>
               <TagPickerCell
                 dataKey={'targetSpecies'}
-                onChange={(id, key, value) => { console.log(id) }}
+                id={'segment'}
+                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
                 data={species.map(gear => ({ label: gear.code, value: gear.code }))}
               />
             </Column>
@@ -104,7 +139,8 @@ const FleetSegments = () => {
               <HeaderCell>Prises accessoires</HeaderCell>
               <TagPickerCell
                 dataKey={'bycatchSpecies'}
-                onChange={(id, key, value) => { console.log(id) }}
+                id={'segment'}
+                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
                 data={species.map(species => ({ label: species.code, value: species.code }))}
               />
             </Column>
@@ -113,7 +149,8 @@ const FleetSegments = () => {
               <HeaderCell>FAO</HeaderCell>
               <TagPickerCell
                 dataKey={'faoAreas'}
-                onChange={(id, key, value) => { console.log(id) }}
+                id={'segment'}
+                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
                 data={faoAreas.map(faoArea => ({ label: faoArea, value: faoArea }))}
               />
             </Column>

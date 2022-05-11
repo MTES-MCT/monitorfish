@@ -7,7 +7,7 @@ import {
   ControlPriorityCell,
   DeleteCell,
   ExpandCell,
-  ImpactRiskFactorCell,
+  ImpactRiskFactorCell, INPUT_TYPE,
   ModifiableCell,
   renderRowExpanded,
   SegmentCellWithTitle
@@ -107,7 +107,7 @@ const SeaFrontControlObjectives = ({ title, facade, year, data }) => {
       targetNumberOfControlsAtPort: null,
       controlPriorityLevel: null
     }
-    updateJSON[key] = value || 0
+    updateJSON[key] = value
 
     dispatch(updateControlObjective(id, updateJSON)).then(() => {
       nextDataWithSegmentDetails.find(item => item.id === id)[key] = value
@@ -168,6 +168,9 @@ const SeaFrontControlObjectives = ({ title, facade, year, data }) => {
           <HeaderCell>Obj. contrôles Port</HeaderCell>
           <ModifiableCell
             dataKey={'targetNumberOfControlsAtPort'}
+            id={'id'}
+            maxLength={3}
+            inputType={INPUT_TYPE.INT}
             onChange={(id, key, value) => handleChangeModifiableKey(id, key, value, sortColumn, sortType)}
           />
         </Column>
@@ -176,6 +179,9 @@ const SeaFrontControlObjectives = ({ title, facade, year, data }) => {
           <HeaderCell>Obj. contrôles Mer</HeaderCell>
           <ModifiableCell
             dataKey={'targetNumberOfControlsAtSea'}
+            id={'id'}
+            maxLength={3}
+            inputType={INPUT_TYPE.INT}
             onChange={(id, key, value) => handleChangeModifiableKey(id, key, value, sortColumn, sortType)}
           />
         </Column>

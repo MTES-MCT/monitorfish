@@ -4,10 +4,12 @@ import { COLORS } from '../../../constants/constants'
 import { Link, useRouteMatch } from 'react-router-dom'
 import { ReactComponent as LayersSVG } from '../../icons/Couches.svg'
 import { ReactComponent as FleetSVG } from '../../icons/Label_segment_de_flotte_white.svg'
+import { ReactComponent as ControlObjectivesSVG } from '../../icons/objectifs_controle.svg'
 
 const Menu = () => {
   const onRegulationPage = useRouteMatch('/backoffice/regulation')
   const onControlObjectivePage = useRouteMatch('/backoffice/control_objectives')
+  const onFleetSegmentsPage = useRouteMatch('/backoffice/fleet_segments')
 
   return (
     <Wrapper>
@@ -33,9 +35,21 @@ const Menu = () => {
         to={'/backoffice/control_objectives'}
         title={'Objectifs de contrôle'}
       >
-        <Fleet/>
+        <ControlObjectives/>
         <LinkText>
           Objectifs <br/>de contrôle
+        </LinkText>
+      </MenuLink>
+      <MenuLink
+        style={{
+          background: onFleetSegmentsPage ? COLORS.shadowBlue : 'none'
+        }}
+        to={'/backoffice/fleet_segments'}
+        title={'Segments de flotte'}
+      >
+        <Fleet/>
+        <LinkText>
+          Segments <br/>de flotte
         </LinkText>
       </MenuLink>
   </Wrapper>
@@ -91,6 +105,12 @@ const Fleet = styled(FleetSVG)`
   width: 35px;
   height: 26px;
   padding-top: 9px;
+`
+
+const ControlObjectives = styled(ControlObjectivesSVG)`
+  width: 35px;
+  height: 23px;
+  padding-top: 10px;
 `
 
 export default Menu

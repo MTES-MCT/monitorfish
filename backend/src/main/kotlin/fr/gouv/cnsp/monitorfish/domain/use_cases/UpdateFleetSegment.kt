@@ -1,0 +1,23 @@
+package fr.gouv.cnsp.monitorfish.domain.use_cases
+
+import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.FleetSegment
+import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.UpdateFleetSegmentFields
+
+@UseCase
+class UpdateFleetSegment(private val fleetSegmentRepository: FleetSegmentRepository) {
+    fun execute(segment: String, fields: UpdateFleetSegmentFields): FleetSegment {
+        require(fields.segment != null ||
+                fields.bycatchSpecies != null ||
+                fields.segmentName != null ||
+                fields.faoAreas != null ||
+                fields.gears != null ||
+                fields.impactRiskFactor != null ||
+                fields.targetSpecies != null) {
+            "No value to update"
+        }
+
+        return fleetSegmentRepository.update(segment, fields)
+    }
+}

@@ -1,13 +1,16 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
+import fr.gouv.cnsp.monitorfish.domain.entities.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.UpdateFleetSegmentFields
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateFleetSegmentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.swagger.annotations.Api
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.*
 import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import javax.servlet.http.HttpServletRequest
 import javax.websocket.server.PathParam
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveDataInput as AddControlObjectiveDataInput1
 
@@ -37,6 +41,7 @@ class BffController(
         private val searchVessels: SearchVessels,
         private val getVesselControls: GetVesselControls,
         private val getAllFleetSegments: GetAllFleetSegments,
+        private val updateFleetSegment: UpdateFleetSegment,
         private val getHealthcheck: GetHealthcheck,
         private val getControlObjectivesOfYear: GetControlObjectivesOfYear,
         private val getControlObjectiveYearEntries: GetControlObjectiveYearEntries,
@@ -50,6 +55,7 @@ class BffController(
         private val getBeaconMalfunction: GetBeaconMalfunction,
         private val saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment,
         private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
+        private val getFAOAreas: GetFAOAreas,
         meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -260,6 +266,19 @@ class BffController(
         }
     }
 
+    @PutMapping(value = ["/v1/fleet_segments/**"], consumes = ["application/json"])
+    @ApiOperation("Update a fleet segment")
+    fun updateFleetSegment(request: HttpServletRequest,
+                           @RequestBody
+                           updateFleetSegmentData: UpdateFleetSegmentDataInput): FleetSegment {
+        val segmentPartOfURL = 1
+        val segment = request.requestURI.split(request.contextPath + "/fleet_segments/")[segmentPartOfURL]
+
+        return updateFleetSegment.execute(
+                segment = segment,
+                fields = UpdateFleetSegmentFields.fromUpdateFleetSegmentDataInput(updateFleetSegmentData))
+    }
+
     @GetMapping("/v1/healthcheck")
     @ApiOperation("Get healtcheck of positions and logbook")
     fun getHealthcheck(): HealthDataOutput {
@@ -375,5 +394,11 @@ class BffController(
                              @PathVariable(name = "beaconMalfunctionId")
                              beaconMalfunctionId: Int): BeaconMalfunctionResumeAndDetailsDataOutput {
         return BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(getBeaconMalfunction.execute(beaconMalfunctionId))
+    }
+
+    @GetMapping("/v1/fao_areas")
+    @ApiOperation("Get FAO areas")
+    fun getFAOAreas(): List<String> {
+        return getFAOAreas.execute()
     }
 }

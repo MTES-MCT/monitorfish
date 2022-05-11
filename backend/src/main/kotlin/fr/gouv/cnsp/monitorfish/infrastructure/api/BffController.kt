@@ -276,7 +276,7 @@ class BffController(
 
         return updateFleetSegment.execute(
                 segment = segment,
-                fields = UpdateFleetSegmentFields.fromUpdateFleetSegmentDataInput(updateFleetSegmentData))
+                fields = updateFleetSegmentData.toUpdateFleetSegmentFields())
     }
 
     @GetMapping("/v1/healthcheck")

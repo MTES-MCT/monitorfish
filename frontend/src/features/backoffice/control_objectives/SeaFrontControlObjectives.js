@@ -203,6 +203,7 @@ const SeaFrontControlObjectives = ({ title, facade, year, data }) => {
           <HeaderCell/>
           <DeleteCell
             dataKey="id"
+            id="id"
             onClick={(id, key) => deleteControlObjectiveRow(id, key, sortColumn, sortType)}
           />
         </Column>

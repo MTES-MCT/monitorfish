@@ -36,4 +36,8 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
 
     @Query
     fun findBySegmentEquals(segment: String): FleetSegmentEntity
+
+    @Modifying(clearAutomatically = true)
+    @Query
+    fun deleteBySegment(segment: String)
 }

@@ -112,27 +112,27 @@ context('Fleet segments', () => {
     cy.get('.rs-table-cell-content').eq(11).contains('NO')
   })
 
-  it.skip('Should delete an objective', () => {
+  it('Should delete a fleet segment', () => {
     // Given
-    cy.get('.rs-table-row').should('have.length', 57)
-    cy.intercept('DELETE', '/bff/v1/control_objectives/78').as('deleteObjective')
+    cy.get('.rs-table-row').should('have.length', 44)
+    cy.intercept('DELETE', '/bff/v1/fleet_segments/ATL01').as('deleteFleetSegment')
 
     // When
-    cy.get('*[data-cy="delete-control-objective-78"]')
-      .click()
-    cy.wait('@deleteObjective')
+    cy.get('*[data-cy="delete-row-ATL01"]')
+      .click({ force: true })
+    cy.wait('@deleteFleetSegment')
 
     // Then
     cy.wait(50)
-    cy.get('.rs-table-row').should('have.length', 56)
+    cy.get('.rs-table-row').should('have.length', 43)
 
     // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
-    cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
-    cy.wait('@controlObjectives')
+    cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
+    cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)
+    cy.wait('@fleetSegments')
     cy.wait(50)
-    cy.get('.rs-table-row').should('have.length', 56)
-    cy.get('*[data-cy="delete-control-objective-78"]').should('not.exist')
+    cy.get('.rs-table-row').should('have.length', 43)
+    cy.get('*[data-cy="delete-row-ATL01"]').should('not.exist')
   })
 
 })

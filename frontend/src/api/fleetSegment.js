@@ -2,6 +2,7 @@ import { OK } from './api'
 
 export const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
 export const UPDATE_FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu modifier le segment de flotte'
+export const DELETE_FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu supprimer le segment de flotte'
 
 /**
  * Get Fleet segments
@@ -57,7 +58,27 @@ function updateFleetSegmentFromAPI (segment, updatedFields) {
   })
 }
 
+/**
+ * Delete a fleet segment
+ * @memberOf API
+ * @param {string} segment - The segment
+ * @throws {Error}
+ */
+function deleteFleetSegmentFromAPI (segment) {
+  return fetch(`/bff/v1/fleet_segments/${segment}`, {
+    method: 'DELETE'
+  }).then(response => {
+    if (response.status !== OK) {
+      throw Error(DELETE_FLEET_SEGMENT_ERROR_MESSAGE)
+    }
+  }).catch(error => {
+    console.error(error)
+    throw Error(DELETE_FLEET_SEGMENT_ERROR_MESSAGE)
+  })
+}
+
 export {
   getAllFleetSegmentFromAPI,
-  updateFleetSegmentFromAPI
+  updateFleetSegmentFromAPI,
+  deleteFleetSegmentFromAPI
 }

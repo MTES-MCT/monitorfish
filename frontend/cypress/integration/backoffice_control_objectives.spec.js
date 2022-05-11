@@ -103,7 +103,7 @@ context('Control objectives', () => {
     cy.intercept('DELETE', '/bff/v1/control_objectives/78').as('deleteObjective')
 
     // When
-    cy.get('*[data-cy="delete-control-objective-78"]')
+    cy.get('*[data-cy="delete-row-78"]')
       .click()
     cy.wait('@deleteObjective')
 
@@ -117,7 +117,7 @@ context('Control objectives', () => {
     cy.wait('@controlObjectives')
     cy.wait(50)
     cy.get('.rs-table-row').should('have.length', 56)
-    cy.get('*[data-cy="delete-control-objective-78"]').should('not.exist')
+    cy.get('*[data-cy="delete-row-78"]').should('not.exist')
   })
 
   it('Should add an objective', () => {

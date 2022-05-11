@@ -10,6 +10,7 @@ import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 import getFAOAreas from '../../../domain/use_cases/faoAreas/getFAOAreas'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import updateFleetSegment from '../../../domain/use_cases/fleetSegment/updateFleetSegment'
+import deleteFleetSegment from '../../../domain/use_cases/fleetSegment/deleteFleetSegment'
 
 const { Column, HeaderCell } = Table
 
@@ -158,8 +159,12 @@ const FleetSegments = () => {
             <Column width={30}>
               <HeaderCell/>
               <DeleteCell
-                dataKey="id"
-                onClick={(id, key) => {}}
+                dataKey="segment"
+                id="segment"
+                onClick={(id, _) => {
+                  doNotUpdateScrollRef.current = true
+                  dispatch(deleteFleetSegment(id))
+                }}
               />
             </Column>
           </Table>

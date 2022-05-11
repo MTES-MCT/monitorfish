@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.FleetSegment
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotDeleteException
 import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.UpdateFleetSegmentFields
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBFleetSegmentRepository
@@ -50,6 +51,15 @@ class JpaFleetSegmentRepository(private val dbFleetSegmentRepository: DBFleetSeg
             dbFleetSegmentRepository.findBySegmentEquals(it).toFleetSegment()
         } ?: run {
             dbFleetSegmentRepository.findBySegmentEquals(segment).toFleetSegment()
+        }
+    }
+
+    @Transactional
+    override fun delete(segment: String) {
+        try {
+            dbFleetSegmentRepository.deleteBySegment(segment)
+        } catch (e: Throwable) {
+            throw CouldNotDeleteException("Could not delete fleet segment: ${e.message}")
         }
     }
 

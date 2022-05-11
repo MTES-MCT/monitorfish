@@ -41,6 +41,7 @@ class BffController(
         private val getVesselControls: GetVesselControls,
         private val getAllFleetSegments: GetAllFleetSegments,
         private val updateFleetSegment: UpdateFleetSegment,
+        private val deleteFleetSegment: DeleteFleetSegment,
         private val getHealthcheck: GetHealthcheck,
         private val getControlObjectivesOfYear: GetControlObjectivesOfYear,
         private val getControlObjectiveYearEntries: GetControlObjectiveYearEntries,
@@ -276,6 +277,15 @@ class BffController(
         return updateFleetSegment.execute(
                 segment = segment,
                 fields = updateFleetSegmentData.toUpdateFleetSegmentFields())
+    }
+
+    @DeleteMapping(value = ["/v1/fleet_segments/**"])
+    @ApiOperation("Delete a fleet segment")
+    fun deleteFleetSegment(request: HttpServletRequest) {
+        val segmentPartOfURL = 1
+        val segment = request.requestURI.split(request.contextPath + "/fleet_segments/")[segmentPartOfURL]
+
+        deleteFleetSegment.execute(segment)
     }
 
     @GetMapping("/v1/healthcheck")

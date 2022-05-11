@@ -238,13 +238,13 @@ export const renderRowExpanded = rowData => {
   )
 }
 
-export const DeleteCell = ({ rowData, dataKey, onClick, ...props }) => {
+export const DeleteCell = ({ rowData, dataKey, id, onClick, ...props }) => {
   return (
-    <Cell key={rowData.id} {...props}>
+    <Cell key={rowData[id]} {...props}>
       <Delete
         title={'Supprimer la ligne'}
-        data-cy={`delete-control-objective-${rowData.id}`}
-        onClick={() => onClick && onClick(rowData.id, dataKey)}
+        data-cy={`delete-row-${rowData[id]}`}
+        onClick={() => onClick && onClick(rowData[id], dataKey)}
       >
         <DeleteIcon/>
       </Delete>

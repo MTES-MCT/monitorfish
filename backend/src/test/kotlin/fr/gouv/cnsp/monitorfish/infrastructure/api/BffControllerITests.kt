@@ -80,6 +80,9 @@ class BffControllerITests {
     private lateinit var updateFleetSegment: UpdateFleetSegment
 
     @MockBean
+    private lateinit var deleteFleetSegment: DeleteFleetSegment
+
+    @MockBean
     private lateinit var getHealthcheck: GetHealthcheck
 
     @MockBean
@@ -415,6 +418,14 @@ class BffControllerITests {
                 .andExpect(jsonPath("$.gears[0]", equalTo("OTB")))
 
         Mockito.verify(updateFleetSegment).execute("A_SEGMENT/WITH/SLASH", UpdateFleetSegmentFields(gears = listOf("OTB", "OTC")))
+    }
+
+    @Test
+    fun `Should return Ok When a delete of a fleet segment is done`() {
+        // When
+        mockMvc.perform(delete("/bff/v1/fleet_segments/ATL01"))
+                // Then
+                .andExpect(status().isOk)
     }
 
     @Test

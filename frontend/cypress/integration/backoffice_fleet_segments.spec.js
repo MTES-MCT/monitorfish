@@ -67,7 +67,7 @@ context('Fleet segments', () => {
 
   it('Should update the segment name field', () => {
     // When
-    cy.intercept('PUT', '/bff/v1/fleet_segments/ATL01').as('updateFleetSegment')
+    cy.intercept('PUT', '/bff/v1/fleet_segments/ATL036').as('updateFleetSegment')
     cy.get('.rs-table-cell-content').eq(10).children().type('{backspace}')
     cy.get('.rs-table-cell-content').eq(10).children().type('45')
     cy.wait('@updateFleetSegment')
@@ -86,7 +86,7 @@ context('Fleet segments', () => {
 
   it('Should update the gears field', () => {
     // When
-    cy.intercept('PUT', '/bff/v1/fleet_segments/ATL01').as('updateFleetSegment')
+    cy.intercept('PUT', '/bff/v1/fleet_segments/ATL036').as('updateFleetSegment')
     cy.get('.rs-table-cell-content').eq(11).click()
     cy.get('[data-key="MSP"]').click()
     cy.get('[data-key="NO"]').click()
@@ -115,10 +115,10 @@ context('Fleet segments', () => {
   it('Should delete a fleet segment', () => {
     // Given
     cy.get('.rs-table-row').should('have.length', 44)
-    cy.intercept('DELETE', '/bff/v1/fleet_segments/ATL01').as('deleteFleetSegment')
+    cy.intercept('DELETE', '/bff/v1/fleet_segments/ATL036').as('deleteFleetSegment')
 
     // When
-    cy.get('*[data-cy="delete-row-ATL01"]')
+    cy.get('*[data-cy="delete-row-ATL036"]')
       .click({ force: true })
     cy.wait('@deleteFleetSegment')
 
@@ -132,7 +132,7 @@ context('Fleet segments', () => {
     cy.wait('@fleetSegments')
     cy.wait(50)
     cy.get('.rs-table-row').should('have.length', 43)
-    cy.get('*[data-cy="delete-row-ATL01"]').should('not.exist')
+    cy.get('*[data-cy="delete-row-ATL036"]').should('not.exist')
   })
 
 })

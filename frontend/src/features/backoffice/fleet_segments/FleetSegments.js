@@ -69,7 +69,7 @@ const FleetSegments = () => {
         fleetSegments?.length && gears?.length && species?.length && faoAreas?.length
           ? <Table
             height={830}
-            width={1600}
+            width={document.body.clientWidth < 1800 ? document.body.clientWidth - 200 : 1600}
             data={fleetSegments}
             rowHeight={36}
             rowKey={'segment'}

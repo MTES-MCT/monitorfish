@@ -54,6 +54,22 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `update Should update a fleet segment name`() {
+        // Given
+        val fleetSegments = jpaFleetSegmentRepository.findAll()
+
+        assertThat(fleetSegments).hasSize(43)
+        assertThat(fleetSegments.first().segmentName).isEqualTo("Bottom trawls")
+
+        // When
+        val updatedFleetSegment = jpaFleetSegmentRepository.update("SWW01/02/03", UpdateFleetSegmentFields(segmentName = "Bottom trawls 666"))
+
+        // Then
+        assertThat(updatedFleetSegment.segmentName).isEqualTo("Bottom trawls 666")
+    }
+
+    @Test
+    @Transactional
     fun `update Should update fleet segment gears`() {
         // Given
         val fleetSegments = jpaFleetSegmentRepository.findAll()

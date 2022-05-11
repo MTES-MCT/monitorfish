@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.UpdateFleetSegmentFields
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBFleetSegmentRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
+import javax.transaction.Transactional
 
 @Repository
 class JpaFleetSegmentRepository(private val dbFleetSegmentRepository: DBFleetSegmentRepository) : FleetSegmentRepository {
@@ -17,6 +18,7 @@ class JpaFleetSegmentRepository(private val dbFleetSegmentRepository: DBFleetSeg
         }
     }
 
+    @Transactional
     override fun update(segment: String, fields: UpdateFleetSegmentFields): FleetSegment {
         fields.segment?.let {
             dbFleetSegmentRepository.updateSegment(segment, it)

@@ -3,27 +3,55 @@ import { COLORS } from '../../constants/constants'
 import { RiskFactorBox } from '../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../domain/entities/riskFactor'
 import { ReactComponent as DeleteIconSVG } from '../icons/Icone_suppression.svg'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Table from 'rsuite/lib/Table'
 import TagPicker from 'rsuite/lib/TagPicker'
 import Tag from 'rsuite/lib/Tag'
+import { useClickOutsideWhenOpenedAndNotInSelector } from '../../hooks/useClickOutsideWhenOpenedAndNotInSelector'
 
 const { Cell } = Table
 const rowKey = 'id'
+export const INPUT_TYPE = {
+  STRING: 'STRING',
+  INT: 'INT',
+  DOUBLE: 'DOUBLE'
+}
 
-export const ModifiableCell = ({ rowData, dataKey, onChange, ...props }) => {
+export const ModifiableCell = ({ rowData, dataKey, id, inputType, maxLength, onChange, ...props }) => {
   return (
-    <Cell title={rowData[dataKey]} key={rowData.id} {...props} className={'table-content-editing'}>
+    <Cell title={rowData[dataKey]} key={rowData[id]} {...props} className={'table-content-editing'}>
       <input
-        style={{ fontSize: 13, marginLeft: -7, marginRight: 0, paddingLeft: 5, paddingRight: 10, marginTop: -8, fontWeight: 500 }}
+        style={{
+          fontSize: 13,
+          marginTop: -8,
+          marginLeft: -7,
+          marginRight: 0,
+          paddingLeft: 5,
+          paddingRight: 10,
+          fontWeight: 500
+        }}
         type="text"
-        maxLength={3}
+        maxLength={maxLength}
         className="rs-input"
         value={rowData[dataKey]}
         onChange={event => {
-          const value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : ''
-          onChange && onChange(rowData.id, dataKey, value)
+          let value = null
+          switch (inputType) {
+            case INPUT_TYPE.INT: {
+              value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : 0
+              break
+            }
+            case INPUT_TYPE.DOUBLE: {
+              value = event.target.value ? event.target.value : 0.0
+              break
+            }
+            case INPUT_TYPE.STRING: {
+              value = event.target.value
+              break
+            }
+          }
+          onChange && onChange(rowData[id], dataKey, value)
         }}
       />
     </Cell>
@@ -90,32 +118,67 @@ export const ImpactRiskFactorCell = ({ rowData, expandedRowKeys, onChange, ...pr
     </RiskFactorBox>
   </Cell>
 
-export const TagPickerCell = ({ rowData, dataKey, data, onChange, ...props }) =>
-  <Cell
-    {...props}
-    style={{
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      overflow: 'hidden'
-    }}
-    title={rowData[dataKey]?.join(', ')}
-  >
-    <TagPicker
-      searchable={true}
-      value={rowData[dataKey]}
-      style={tagPickerStyle}
-      data={data}
-      placeholder={''}
-      placement={'auto'}
-      onChange={onChange}
-      renderMenuItem={(_, item) => renderTagPickerMenuItem(item)}
-      renderValue={(_, items) => renderTagPickerValue(items)}
-    />
-  </Cell>
+/**
+ * This component show a list of tag by default and only open the tagPicker if the user click, for performance reason
+ * @param rowData
+ * @param dataKey
+ * @param data
+ * @param hasClicked
+ * @param onChange
+ * @param props
+ * @return {JSX.Element}
+ * @constructor
+ */
+export const TagPickerCell = ({ rowData, dataKey, data, id, onChange, ...props }) => {
+  const wrapperRef = useRef(null)
+  const [isOpened, setIsOpened] = useState(false)
+  const clickedOutsideComponent = useClickOutsideWhenOpenedAndNotInSelector(wrapperRef, isOpened, '.rs-picker-menu')
 
-function renderTagPickerMenuItem (item) {
+  useEffect(() => {
+    setIsOpened(false)
+  }, [clickedOutsideComponent])
+
+  return <div ref={wrapperRef}>
+    <Cell
+      {...props}
+      style={{
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden'
+      }}
+      onClick={() => setIsOpened(true)}
+      title={rowData[dataKey]?.join(', ')}
+    >
+      {
+        isOpened
+          ? <TagPicker
+            searchable
+            value={rowData[dataKey]}
+            style={tagPickerStyle}
+            data={data}
+            placeholder={''}
+            placement={'auto'}
+            open={isOpened}
+            onChange={value => onChange && onChange(rowData[id], dataKey, value)}
+            renderMenuItem={(_, item) => renderTagPickerMenuItem(onChange, item)}
+            renderValue={(_, items) => renderTagPickerValue(items)}
+          />
+          : <TagOnly className="rs-picker-tag-wrapper">
+            {
+              rowData[dataKey]?.map(tag =>
+                <div key={tag} className="rs-tag rs-tag-default">
+                  <span className="rs-tag-text">{tag}</span>
+                </div>)
+            }
+          </TagOnly>
+      }
+    </Cell>
+  </div>
+}
+
+function renderTagPickerMenuItem (onChange, item) {
   return (
-    <Label>
+    <Label onClick={() => onChange(item.label)}>
       {item.label}
     </Label>
   )
@@ -130,6 +193,11 @@ function renderTagPickerValue (items) {
       </Tag>
     ))
 }
+
+const TagOnly = styled.div`
+  margin: -3px 10px 10px 6px !important;
+  vertical-align: top;
+`
 
 const Label = styled.span`
   font-size: 13px;

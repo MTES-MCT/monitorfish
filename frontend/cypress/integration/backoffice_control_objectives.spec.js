@@ -16,10 +16,12 @@ context('Control objectives', () => {
     // Then
     cy.get('.rs-table-row').should('have.length', 57)
     cy.get('.rs-table-cell-content').eq(9).contains('ATL01')
-    cy.get('.rs-table-cell-content').eq(10).contains('All Trawls 3')
+    // We check the next line as the ATL01 segment was deleted from the segment table and has no segment name associated
+    cy.get('.rs-table-cell-content').eq(18).contains('Eel sea fisheries')
     cy.get('.rs-table-cell-content').eq(11).children().should('have.value', '0')
     cy.get('.rs-table-cell-content').eq(12).children().should('have.value', '20')
-    cy.get('.rs-table-cell-content').eq(13).children().contains('1.7')
+    // We check the next line as the ATL01 segment was deleted from the segment table and has no impact risk factor associated
+    cy.get('.rs-table-cell-content').eq(21).children().contains('3.8')
     cy.get('.rs-table-cell-content').eq(14).children().children().children().contains('1')
 
     const currentYear = new Date().getFullYear()
@@ -129,7 +131,7 @@ context('Control objectives', () => {
     cy.get('*[data-cy="add-control-objective"]')
       .eq(0)
       .click()
-    cy.get('[data-key="ATL01"] > .rs-picker-select-menu-item')
+    cy.get('[data-key="FR_DRB"] > .rs-picker-select-menu-item')
       .click()
     cy.wait('@addObjective')
 

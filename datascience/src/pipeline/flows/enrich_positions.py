@@ -80,7 +80,8 @@ def filter_already_enriched_vessels(positions: pd.DataFrame) -> pd.DataFrame:
 def enrich_positions_by_vessel(
     positions: pd.DataFrame,
     minimum_consecutive_positions: int,
-    fishing_speed_threshold: float,
+    min_fishing_speed_threshold: float,
+    max_fishing_speed_threshold: float,
     minimum_minutes_of_emission_at_sea: int,
 ) -> pd.DataFrame:
     """
@@ -129,7 +130,8 @@ def enrich_positions_by_vessel(
             enrich_positions,
             minimum_time_of_emission_at_sea=minimum_time_of_emission_at_sea,
             minimum_consecutive_positions=minimum_consecutive_positions,
-            fishing_speed_threshold=fishing_speed_threshold,
+            min_fishing_speed_threshold=min_fishing_speed_threshold,
+            max_fishing_speed_threshold=max_fishing_speed_threshold,
             return_floats=True,
         )
         # It is much faster to apply zeros_ones_to_bool once after processing all
@@ -275,7 +277,8 @@ def reset_positions(period: Period):
 def extract_enrich_load(
     period: Period,
     minimum_consecutive_positions: int,
-    fishing_speed_threshold: float,
+    min_fishing_speed_threshold: float,
+    max_fishing_speed_threshold: float,
     minimum_minutes_of_emission_at_sea: int,
 ):
     """Extract positions for the given `Period`, enrich and update the `positions`
@@ -310,7 +313,8 @@ def extract_enrich_load(
     positions = enrich_positions_by_vessel(
         positions,
         minimum_consecutive_positions=minimum_consecutive_positions,
-        fishing_speed_threshold=fishing_speed_threshold,
+        min_fishing_speed_threshold=min_fishing_speed_threshold,
+        max_fishing_speed_threshold=max_fishing_speed_threshold,
         minimum_minutes_of_emission_at_sea=minimum_minutes_of_emission_at_sea,
     )
 
@@ -326,7 +330,8 @@ with Flow("Enrich positions") as flow:
     chunk_overlap_minutes = Parameter("chunk_overlap_minutes")
     minimum_consecutive_positions = Parameter("minimum_consecutive_positions")
     minimum_minutes_of_emission_at_sea = Parameter("minimum_minutes_of_emission_at_sea")
-    fishing_speed_threshold = Parameter("fishing_speed_threshold")
+    min_fishing_speed_threshold = Parameter("min_fishing_speed_threshold")
+    max_fishing_speed_threshold = Parameter("max_fishing_speed_threshold")
     recompute_all = Parameter("recompute_all")
 
     periods = make_periods(
@@ -341,7 +346,8 @@ with Flow("Enrich positions") as flow:
         extract_enrich_load.map(
             periods,
             minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
-            fishing_speed_threshold=unmapped(fishing_speed_threshold),
+            min_fishing_speed_threshold=unmapped(min_fishing_speed_threshold),
+            max_fishing_speed_threshold=unmapped(max_fishing_speed_threshold),
             minimum_minutes_of_emission_at_sea=unmapped(
                 minimum_minutes_of_emission_at_sea
             ),
@@ -352,7 +358,8 @@ with Flow("Enrich positions") as flow:
         extract_enrich_load.map(
             periods,
             minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
-            fishing_speed_threshold=unmapped(fishing_speed_threshold),
+            min_fishing_speed_threshold=unmapped(min_fishing_speed_threshold),
+            max_fishing_speed_threshold=unmapped(max_fishing_speed_threshold),
             minimum_minutes_of_emission_at_sea=unmapped(
                 minimum_minutes_of_emission_at_sea
             ),

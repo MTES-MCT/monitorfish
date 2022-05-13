@@ -21,6 +21,10 @@ from src.pipeline.processing import (
 )
 from src.pipeline.shared_tasks.beacons import beaconStatus
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
+from src.pipeline.shared_tasks.healthcheck import (
+    assert_last_positions_health,
+    get_monitorfish_healthcheck,
+)
 
 
 class beaconMalfunctionStage(Enum):
@@ -501,6 +505,13 @@ def update_beacon_malfunction(
 
 with Flow("Beacons malfunctions") as flow:
 
+    # Healthcheck
+    healthcheck = get_monitorfish_healthcheck()
+    now = get_utcnow()
+    last_positions_healthcheck = assert_last_positions_health(
+        healthcheck=healthcheck, utcnow=now
+    )
+
     # Parameters
     max_hours_without_emission_at_sea = Parameter(
         "max_hours_without_emission_at_sea",
@@ -512,13 +523,17 @@ with Flow("Beacons malfunctions") as flow:
     )
 
     # Extract
-    beacons_last_emission = extract_beacons_last_emission()
-    vessels_with_beacon = extract_vessels_with_beacon()
-    known_malfunctions = extract_known_malfunctions()
+    beacons_last_emission = extract_beacons_last_emission(
+        upstream_tasks=[last_positions_healthcheck]
+    )
+    vessels_with_beacon = extract_vessels_with_beacon(
+        upstream_tasks=[last_positions_healthcheck]
+    )
+    known_malfunctions = extract_known_malfunctions(
+        upstream_tasks=[last_positions_healthcheck]
+    )
 
     # Transform
-    now = get_utcnow()
-
     non_emission_at_sea_max_duration = make_timedelta(
         hours=max_hours_without_emission_at_sea
     )

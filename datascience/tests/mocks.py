@@ -1,10 +1,11 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Union
 from unittest.mock import MagicMock, patch
 
 from prefect import task
 
+from src.pipeline.entities.monitorfish_healthcheck import MonitorfishHealthcheck
 from src.pipeline.generic_tasks import extract
 
 
@@ -56,3 +57,23 @@ def mock_datetime_utcnow(utcnow: datetime):
 @task(checkpoint=False)
 def mock_check_flow_not_running():
     return True
+
+
+def get_monitorfish_healthcheck_mock_factory(
+    *,
+    position_received_minutes_ago: int = 0,
+    last_position_minutes_ago: int = 0,
+    logbook_message_received_minutes_ago: int = 0,
+):
+    @task(checkpoint=False)
+    def get_monitorfish_healthcheck() -> MonitorfishHealthcheck:
+        utcnow = datetime.utcnow()
+        return MonitorfishHealthcheck(
+            date_position_received=utcnow
+            - timedelta(minutes=position_received_minutes_ago),
+            date_last_position=utcnow - timedelta(minutes=last_position_minutes_ago),
+            date_logbook_message_received=utcnow
+            - timedelta(minutes=logbook_message_received_minutes_ago),
+        )
+
+    return get_monitorfish_healthcheck

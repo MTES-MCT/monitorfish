@@ -5,8 +5,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.ControlObjective
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
 
 @UseCase
-class GetAllControlObjectives(private val controlObjectivesRepository: ControlObjectivesRepository) {
-    fun execute(): List<ControlObjective> {
-        return controlObjectivesRepository.findAll()
+class GetControlObjectivesOfYear(private val controlObjectivesRepository: ControlObjectivesRepository) {
+    fun execute(year: Int): List<ControlObjective> {
+        return controlObjectivesRepository.findAllByYear(year)
     }
 }

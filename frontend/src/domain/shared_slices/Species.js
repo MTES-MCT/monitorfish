@@ -8,7 +8,7 @@ const SpeciesReducer = null
 const speciesSlice = createSlice({
   name: 'species',
   initialState: {
-    /** @type {Map<string, Species} */
+    /** @type {Map<string, Species>} */
     speciesByCode: {},
     /** @type {Species[]} */
     species: [],

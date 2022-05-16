@@ -36,6 +36,7 @@ import SideWindowLauncher from './features/side_window/SideWindowLauncher'
 import SideWindow from './features/side_window/SideWindow'
 import { sideWindowMenu } from './domain/entities/sideWindow'
 import FavoriteVessels from './features/favorite_vessels/FavoriteVessels'
+import FleetSegments from './features/backoffice/fleet_segments/FleetSegments'
 
 function App () {
   switch (browserName) {
@@ -176,6 +177,9 @@ function BackofficePage () {
             </Route>
             <Route exact path={`${match.path}/control_objectives`}>
               <ControlObjectives/>
+            </Route>
+            <Route exact path={`${match.path}/fleet_segments`}>
+              <FleetSegments/>
             </Route>
           </Switch>
         </BackofficeWrapper>

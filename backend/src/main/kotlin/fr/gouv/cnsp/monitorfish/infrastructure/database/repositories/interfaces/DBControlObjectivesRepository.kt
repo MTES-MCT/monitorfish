@@ -18,4 +18,19 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE control_objectives SET control_priority_level = :controlPriorityLevel WHERE id = :controlObjectiveId", nativeQuery = true)
     fun updateControlPriorityLevel(controlObjectiveId: Int, controlPriorityLevel: Double)
+
+    @Query
+    fun findAllByYearEquals(year: Int): List<ControlObjectivesEntity>
+
+    @Query(value = "SELECT DISTINCT year FROM control_objectives ORDER BY year DESC", nativeQuery = true)
+    fun findDistinctYears(): List<Int>
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = """
+    INSERT INTO control_objectives (facade, segment, year, target_number_of_controls_at_sea, target_number_of_controls_at_port, control_priority_level)
+        SELECT facade, segment, :nextYear, target_number_of_controls_at_sea, target_number_of_controls_at_port, control_priority_level
+        FROM control_objectives AS old
+        WHERE old.year = :currentYear
+    """, nativeQuery = true)
+    fun insertNextYearFromCurrentYear(currentYear: Int, nextYear: Int)
 }

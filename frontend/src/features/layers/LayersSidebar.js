@@ -80,6 +80,7 @@ const LayersSidebar = () => {
                 <BaseLayers namespace={namespace}/>
               </Layers>
               <RegulatoryZoneMetadataShifter
+                leftBoxOpened={leftBoxOpened}
                 regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
               >
                 <RegulatoryZoneMetadata/>
@@ -93,7 +94,7 @@ const LayersSidebar = () => {
 
 const RegulatoryZoneMetadataShifter = styled.div`
   position: absolute;
-  margin-left: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 355 : -455}px;
+  margin-left: ${props => props.regulatoryZoneMetadataPanelIsOpen ? props.leftBoxOpened ? 355 : 373 : -455}px;
   margin-top: 45px;
   top: 0px;
   opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 1 : 0};

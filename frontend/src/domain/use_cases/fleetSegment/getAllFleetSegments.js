@@ -4,7 +4,8 @@ import { getAllFleetSegmentFromAPI } from '../../../api/fleetSegment'
 
 const getAllFleetSegments = () => dispatch => {
   getAllFleetSegmentFromAPI().then(fleetSegments => {
-    dispatch(setFleetSegments(fleetSegments))
+    dispatch(setFleetSegments(fleetSegments
+      .sort((a, b) => a.segment.localeCompare(b.segment))))
   }).catch(error => {
     dispatch(setError(error))
   })

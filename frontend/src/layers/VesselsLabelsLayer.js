@@ -146,6 +146,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
         return <VesselLabelOverlay
           map={map}
           key={identity.key}
+          identity={identity}
           featureId={featureId}
           triggerShowRiskDetails={triggerShowRiskDetails}
           moveLine={moveVesselLabelLine}
@@ -225,8 +226,10 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
             identity: {
               key: feature.ol_uid,
               flagState: vesselProperties.flagState,
+              vesselName: vesselProperties.vesselName,
               coordinates: feature.getGeometry().getCoordinates(),
               internalReferenceNumber: vesselProperties.internalReferenceNumber,
+              vesselIdentifier: vesselProperties.vesselIdentifier,
               ircs: vesselProperties.ircs,
               externalReferenceNumber: vesselProperties.externalReferenceNumber
             },

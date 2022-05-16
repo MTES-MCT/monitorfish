@@ -89,7 +89,7 @@ context('Vessels list', () => {
       return cy.readFile(`cypress/downloads/${downloadedCSVFilename}`)
         .should('contains', 'Quartier,CFR,C/S,Nom,GDH (UTC),MMSI,Latitude,Longitude,Cap,Vitesse')
         .should('contains', '"Duboisdan","ABC000342127","KJ8767","PITIÉ LUI RÊVE"')
-        .should('contains', '"210825304","49° 21′ 50″ N","000° 04′ 48″ E"')
+        .should('contains', '"210825304","49°21′50″N","000°04′48″E"')
     })
   })
 })

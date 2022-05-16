@@ -12,6 +12,10 @@ data class ControlObjectiveDataOutput(
         val controlPriorityLevel: Double) {
     companion object {
         fun fromControlObjective(controlObjective: ControlObjective): ControlObjectiveDataOutput {
+            requireNotNull(controlObjective.id) {
+                "The control objective must have an id"
+            }
+
             return ControlObjectiveDataOutput(
                     id = controlObjective.id,
                     facade = controlObjective.facade,

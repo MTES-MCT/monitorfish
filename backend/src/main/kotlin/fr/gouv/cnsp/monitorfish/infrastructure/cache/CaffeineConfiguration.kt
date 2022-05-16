@@ -33,10 +33,10 @@ class CaffeineConfiguration {
     val vesselsAllPositions = "vessels_all_position"
     val vesselsPositionsWithBeaconMalfunctions = "vessels_positions_with_beacon_malfunctions"
     val infractions = "infractions"
-    val fleetSegments = "fleet_segments"
     val currentSegments = "current_segment"
     val controlAnteriority = "control_anteriority"
     val riskFactors = "risk_factors"
+    val faoAreas = "fao_areas"
 
     @Bean
     fun cacheManager(ticker: Ticker): CacheManager? {
@@ -60,10 +60,11 @@ class CaffeineConfiguration {
 
         val portsCache = buildCache(ports, ticker, oneWeek)
         val portCache = buildCache(port, ticker, oneWeek)
-        val fleetSegmentsCache = buildCache(fleetSegments, ticker, oneWeek)
         val currentSegmentsCache = buildCache(currentSegments, ticker, 1)
         val controlAnteriorityCache = buildCache(controlAnteriority, ticker, 1)
         val riskFactorsCache = buildCache(riskFactors, ticker, 1)
+
+        val faoAreasCache = buildCache(faoAreas, ticker, oneWeek)
 
         val infractionsCache = buildCache(infractions, ticker, oneWeek)
 
@@ -94,11 +95,11 @@ class CaffeineConfiguration {
                 previousLogbookCache,
                 logbookRawMessageCache,
                 infractionsCache,
-                fleetSegmentsCache,
                 currentSegmentsCache,
                 controlAnteriorityCache,
                 riskFactorsCache,
-                allSpeciesGroupsCache))
+                allSpeciesGroupsCache,
+                faoAreasCache))
 
         return manager
     }

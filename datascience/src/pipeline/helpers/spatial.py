@@ -343,7 +343,8 @@ def detect_fishing_activity(
     average_speed_column: str = "average_speed",
     time_emitting_at_sea_column: str = "time_emitting_at_sea",
     minimum_consecutive_positions: int = 3,
-    fishing_speed_threshold: float = 4.5,
+    min_fishing_speed_threshold: float = 0.1,
+    max_fishing_speed_threshold: float = 4.5,
     return_floats: bool = False,
 ) -> pd.DataFrame:
     """
@@ -356,9 +357,11 @@ def detect_fishing_activity(
         1) whether the position is at port
         2) the average speed between each position and the previous one, in knots
 
-    A vessel will be considered to be fishing if its speed remains below the
-    `fishing_speed_threshold` for a minimum of `minimum_consecutive_positions`
-    positions.
+    A vessel will be considered to be fishing if its average speed remains above the
+    `min_fishing_speed_threshold` and below the `max_fishing_speed_threshold` for a
+    minimum of `minimum_consecutive_positions` positions outside a port and after at
+    least `minimum_time_of_emission_at_sea` time of uninterrupted VMS emission outside
+    of a port.
 
     Args:
         positions (pd.DataFrame) : DataFrame representing successive positions of a
@@ -375,8 +378,10 @@ def detect_fishing_activity(
           for which the vessel has been continuously emitting at sea (outside ports)
         minimum_consecutive_positions (int): minimum number of consecutive positions
           below fishing speed threshold to consider that a vessel is fishing
-        fishing_speed_threshold (float): speed below which a vessel is considered to be
-          fishing
+        min_fishing_speed_threshold (float): speed below which a vessel is considered
+          to be stopped
+        max_fishing_speed_threshold (float): speed above which a vessel is considered
+          to be in transit
         return_floats (bool): if `True`, return `float` dtypes with 1.0 representing
           `True`, 0.0 representing `False` and `np.nan` for null values. If `False`
           (the default), the return dtype is `object` and values are `True`, `False`
@@ -416,12 +421,16 @@ def detect_fishing_activity(
         #     fishing activity depends on the unknown speeds cannot be decided and
         #     should therefore evaluate to `None`.
 
+        is_at_fishing_speed = (average_speed >= min_fishing_speed_threshold) * (
+            average_speed <= max_fishing_speed_threshold
+        )
+
         is_at_fishing_speed_unknown_is_true = np.where(
-            np.isnan(average_speed), True, average_speed < fishing_speed_threshold
+            np.isnan(average_speed), True, is_at_fishing_speed
         )
 
         is_at_fishing_speed_unknown_is_false = np.where(
-            np.isnan(average_speed), False, average_speed < fishing_speed_threshold
+            np.isnan(average_speed), False, is_at_fishing_speed
         )
 
         arr_unknown_speed_is_fishing_speed = np.concatenate(
@@ -476,7 +485,8 @@ def enrich_positions(
     is_at_port_column: str = "is_at_port",
     time_emitting_at_sea_column: str = "time_emitting_at_sea",
     minimum_consecutive_positions: int = 3,
-    fishing_speed_threshold: float = 4.5,
+    min_fishing_speed_threshold: float = 0.1,
+    max_fishing_speed_threshold: float = 4.5,
     return_floats: bool = False,
 ) -> pd.DataFrame:
     """
@@ -501,7 +511,8 @@ def enrich_positions(
         average_speed_column="average_speed",
         time_emitting_at_sea_column=time_emitting_at_sea_column,
         minimum_consecutive_positions=minimum_consecutive_positions,
-        fishing_speed_threshold=fishing_speed_threshold,
+        min_fishing_speed_threshold=min_fishing_speed_threshold,
+        max_fishing_speed_threshold=max_fishing_speed_threshold,
         return_floats=return_floats,
     )
 

@@ -179,7 +179,8 @@ def test_enrich_positions_by_vessel():
     enriched_positions = enrich_positions_by_vessel(
         positions,
         minimum_consecutive_positions=3,
-        fishing_speed_threshold=4.5,
+        min_fishing_speed_threshold=0.1,
+        max_fishing_speed_threshold=4.5,
         minimum_minutes_of_emission_at_sea=-1,
     )
 
@@ -254,7 +255,8 @@ def test_enrich_positions_by_vessel():
     enriched_positions = enrich_positions_by_vessel(
         positions,
         minimum_consecutive_positions=3,
-        fishing_speed_threshold=4.5,
+        min_fishing_speed_threshold=0.1,
+        max_fishing_speed_threshold=4.5,
         minimum_minutes_of_emission_at_sea=int((1.5 * td).total_seconds() / 90),
     )
 
@@ -294,7 +296,8 @@ def test_enrich_positions_by_vessel_handles_empty_input():
         positions,
         minimum_minutes_of_emission_at_sea=60,
         minimum_consecutive_positions=3,
-        fishing_speed_threshold=4.5,
+        min_fishing_speed_threshold=0.1,
+        max_fishing_speed_threshold=4.5,
     )
 
     expected_new_columns = [
@@ -429,7 +432,8 @@ def test_extract_enrich_load(reset_test_data):
     extract_enrich_load.run(
         period,
         minimum_consecutive_positions=2,
-        fishing_speed_threshold=4.5,
+        min_fishing_speed_threshold=0.1,
+        max_fishing_speed_threshold=4.5,
         minimum_minutes_of_emission_at_sea=60,
     )
 
@@ -571,7 +575,8 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
         chunk_overlap_minutes=180,
         minimum_consecutive_positions=2,
         minimum_minutes_of_emission_at_sea=60,
-        fishing_speed_threshold=4.5,
+        min_fishing_speed_threshold=0.1,
+        max_fishing_speed_threshold=4.5,
         recompute_all=False,
     )
 
@@ -620,7 +625,8 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
         chunk_overlap_minutes=180,
         minimum_consecutive_positions=2,
         minimum_minutes_of_emission_at_sea=60,
-        fishing_speed_threshold=4.5,
+        min_fishing_speed_threshold=0.57,
+        max_fishing_speed_threshold=4.5,
         recompute_all=True,
     )
 
@@ -657,11 +663,11 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
             [13632385, False, None, timedelta(), False],
             [13633654, False, 0.747199, timedelta(minutes=30), False],
             [13635013, False, 0.560395, timedelta(hours=1), False],
-            [13636534, False, 0.559126, timedelta(hours=1, minutes=30), True],
+            [13636534, False, 0.559126, timedelta(hours=1, minutes=30), False],
             [13637980, False, 1.002370, timedelta(hours=2), True],
             [13639240, False, 0.600405, timedelta(hours=2, minutes=30), True],
-            [13640592, False, 0.559129, timedelta(hours=3), True],
-            [13641745, False, 1.351540, timedelta(hours=3, minutes=30), True],
+            [13640592, False, 0.559129, timedelta(hours=3), False],
+            [13641745, False, 1.351540, timedelta(hours=3, minutes=30), None],
         ],
     )
     pd.testing.assert_frame_equal(expected_res, positions_after[columns_to_check])
@@ -692,7 +698,8 @@ def test_flow_can_compute_in_chunks(reset_test_data):
         chunk_overlap_minutes=6 * 60,
         minimum_consecutive_positions=2,
         minimum_minutes_of_emission_at_sea=60,
-        fishing_speed_threshold=4.5,
+        min_fishing_speed_threshold=0.1,
+        max_fishing_speed_threshold=4.5,
         recompute_all=True,
     )
 
@@ -707,7 +714,8 @@ def test_flow_can_compute_in_chunks(reset_test_data):
         chunk_overlap_minutes=6 * 60,
         minimum_consecutive_positions=2,
         minimum_minutes_of_emission_at_sea=60,
-        fishing_speed_threshold=4.5,
+        min_fishing_speed_threshold=0.1,
+        max_fishing_speed_threshold=4.5,
         recompute_all=True,
     )
 

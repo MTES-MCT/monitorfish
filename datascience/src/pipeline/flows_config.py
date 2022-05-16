@@ -7,9 +7,10 @@ from prefect.storage.local import Local
 
 from config import (
     DOCKER_IMAGE,
-    FISHING_SPEED_THRESHOLD,
     FLOWS_LOCATION,
     LOGBOOK_FILES_GID,
+    MAX_FISHING_SPEED_THRESHOLD,
+    MIN_FISHING_SPEED_THRESHOLD,
     MINIMUM_CONSECUTIVE_POSITIONS,
     MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
     MONITORFISH_HOST,
@@ -79,7 +80,8 @@ enrich_positions.flow.schedule = Schedule(
                 "chunk_overlap_minutes": 0,
                 "minimum_consecutive_positions": MINIMUM_CONSECUTIVE_POSITIONS,
                 "minimum_minutes_of_emission_at_sea": MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
-                "fishing_speed_threshold": FISHING_SPEED_THRESHOLD,
+                "min_fishing_speed_threshold": MIN_FISHING_SPEED_THRESHOLD,
+                "max_fishing_speed_threshold": MAX_FISHING_SPEED_THRESHOLD,
                 "recompute_all": False,
             },
         ),

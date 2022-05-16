@@ -79,7 +79,9 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
       .filter(vessel => vessel.checked)
       .map(vessel => {
         vessel.vesselProperties.latitude = getCoordinates(vessel.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0]
+          .replace(/[ ]/g, '')
         vessel.vesselProperties.longitude = getCoordinates(vessel.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]
+          .replace(/[ ]/g, '')
 
         const filteredVesselObject = {}
         checkboxState.valuesChecked.forEach(valueChecked => {

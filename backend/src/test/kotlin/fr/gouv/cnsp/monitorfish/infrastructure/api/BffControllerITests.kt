@@ -14,7 +14,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.UpdateFleetSegmentFields
+import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.*
 import io.micrometer.core.instrument.MeterRegistry
@@ -81,6 +81,9 @@ class BffControllerITests {
 
     @MockBean
     private lateinit var deleteFleetSegment: DeleteFleetSegment
+
+    @MockBean
+    private lateinit var createFleetSegment: CreateFleetSegment
 
     @MockBean
     private lateinit var getHealthcheck: GetHealthcheck
@@ -403,21 +406,21 @@ class BffControllerITests {
     }
 
     @Test
-    fun `Should update a fleet segments`() {
+    fun `Should update a fleet segment`() {
         // Given
         given(this.updateFleetSegment.execute(any(), any()))
                 .willReturn(FleetSegment("A_SEGMENT/WITH/SLASH", "", listOf("NAMO", "SA"), listOf("OTB", "OTC"), listOf(), listOf(), listOf(), 1.2))
 
         // When
         mockMvc.perform(put("/bff/v1/fleet_segments/A_SEGMENT/WITH/SLASH")
-                .content(objectMapper.writeValueAsString(UpdateFleetSegmentDataInput(gears = listOf("OTB", "OTC"))))
+                .content(objectMapper.writeValueAsString(CreateOrUpdateFleetSegmentDataInput(gears = listOf("OTB", "OTC"))))
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.segment", equalTo("A_SEGMENT/WITH/SLASH")))
                 .andExpect(jsonPath("$.gears[0]", equalTo("OTB")))
 
-        Mockito.verify(updateFleetSegment).execute("A_SEGMENT/WITH/SLASH", UpdateFleetSegmentFields(gears = listOf("OTB", "OTC")))
+        Mockito.verify(updateFleetSegment).execute("A_SEGMENT/WITH/SLASH", CreateOrUpdateFleetSegmentFields(gears = listOf("OTB", "OTC")))
     }
 
     @Test
@@ -426,6 +429,18 @@ class BffControllerITests {
         mockMvc.perform(delete("/bff/v1/fleet_segments/ATL01"))
                 // Then
                 .andExpect(status().isOk)
+    }
+
+    @Test
+    fun `Should create a fleet segment`() {
+        // When
+        mockMvc.perform(post("/bff/v1/fleet_segments")
+                .content(objectMapper.writeValueAsString(CreateOrUpdateFleetSegmentDataInput(segment = "SEGMENT", gears = listOf("OTB", "OTC"))))
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isCreated)
+
+        Mockito.verify(createFleetSegment).execute(CreateOrUpdateFleetSegmentFields(segment = "SEGMENT", gears = listOf("OTB", "OTC")))
     }
 
     @Test

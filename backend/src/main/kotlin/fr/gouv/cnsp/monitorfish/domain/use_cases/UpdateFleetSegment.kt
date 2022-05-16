@@ -2,12 +2,14 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.FleetSegment
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateFleetSegmentException
 import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.UpdateFleetSegmentFields
+import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 
 @UseCase
 class UpdateFleetSegment(private val fleetSegmentRepository: FleetSegmentRepository) {
-    fun execute(segment: String, fields: UpdateFleetSegmentFields): FleetSegment {
+    @Throws(CouldNotUpdateFleetSegmentException::class, IllegalArgumentException::class)
+    fun execute(segment: String, fields: CreateOrUpdateFleetSegmentFields): FleetSegment {
         require(fields.segment != null ||
                 fields.bycatchSpecies != null ||
                 fields.segmentName != null ||

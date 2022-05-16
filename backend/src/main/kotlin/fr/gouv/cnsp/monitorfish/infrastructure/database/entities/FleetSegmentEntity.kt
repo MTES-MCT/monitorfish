@@ -42,6 +42,17 @@ data class FleetSegmentEntity(
                 faoAreas = this.faoAreas,
                 targetSpecies = this.targetSpecies,
                 bycatchSpecies = this.bycatchSpecies,
-                impactRiskFactor = this.impactRiskFactor
-    )
+                impactRiskFactor = this.impactRiskFactor)
+
+        companion object {
+                fun fromFleetSegment(fleetSegment: FleetSegment) = FleetSegmentEntity(
+                        segment = fleetSegment.segment,
+                        segmentName = fleetSegment.segmentName,
+                        dirm = fleetSegment.dirm,
+                        gears = fleetSegment.gears,
+                        faoAreas = fleetSegment.faoAreas,
+                        targetSpecies = fleetSegment.targetSpecies,
+                        bycatchSpecies = fleetSegment.bycatchSpecies,
+                        impactRiskFactor = fleetSegment.impactRiskFactor)
+        }
 }

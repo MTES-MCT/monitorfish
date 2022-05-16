@@ -172,7 +172,6 @@ context('Fleet segments', () => {
     cy.get('*[data-cy="delete-row-SEGMENT007"]').should('exist')
     cy.get('[title="Malotru\'s segment"] > .rs-table-cell-content > .rs-input').should('exist')
 
-    cy.get('.rs-table-cell-content').eq(14).contains('NOPE')
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
     cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)

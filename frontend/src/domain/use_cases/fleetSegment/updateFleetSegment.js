@@ -14,7 +14,7 @@ const updateFleetSegment = (segment, updatedFields) => (dispatch, getState) => {
     dispatch(setError(new Error('Erreur lors de la modification du segment de flotte')))
     return
   }
-  const previousFleetSegments = getState().fleetSegment.fleetSegments
+  const previousFleetSegments = Object.assign([], getState().fleetSegment.fleetSegments)
   const nextFleetSegments = updateFleetSegments(previousFleetSegments, segment, updatedFields)
   dispatch(setFleetSegments(nextFleetSegments
     .sort((a, b) => a.segment.localeCompare(b.segment))))

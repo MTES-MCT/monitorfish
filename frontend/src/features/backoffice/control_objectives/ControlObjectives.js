@@ -117,7 +117,7 @@ const AddYear = styled.a`
   height: fit-content;
   width: fit-content;
   margin-top: 23px;
-  margin-right: 20px;
+  margin-right: 30px;
   margin-left: auto;
   text-decoration: underline;
   color: ${COLORS.gunMetal};

@@ -135,4 +135,53 @@ context('Fleet segments', () => {
     cy.get('*[data-cy="delete-row-ATL036"]').should('not.exist')
   })
 
+  it('Should create a fleet segment', () => {
+    // Given
+    cy.get('.rs-table-row').should('have.length', 43)
+    cy.intercept('POST', '/bff/v1/fleet_segments').as('createFleetSegment')
+
+    // When
+    cy.get('*[data-cy="open-create-fleet-segment-modal"]').click()
+    cy.get('*[data-cy="create-fleet-segment-segment"]').type('SEGMENT007')
+    cy.get('*[data-cy="create-fleet-segment-impact-risk-factor"]').type('2.7')
+    cy.get('*[data-cy="create-fleet-segment-description"]').type('Malotru\'s segment')
+
+    cy.get('*[data-cy="create-fleet-segment-gears"]').click({ force: true })
+    cy.get('[data-key="DHS"]').click()
+    cy.get('[data-key="FCN"]').click()
+
+    cy.get('*[data-cy="create-fleet-segment-target-species"]').click({ force: true })
+    cy.get('[data-key="COD"]').click()
+    cy.get('[data-key="SOL"]').click()
+
+    cy.get(':nth-child(9) > .rs-picker-tag-wrapper > .rs-picker-search > .rs-picker-search-input > input')
+      .type('BF', { force: true })
+    cy.get('[data-key="BFT"]').click()
+
+    cy.get('*[data-cy="create-fleet-segment-fao-zones"]').click({ force: true })
+    cy.get('[data-key="21.1.A"]').click()
+    cy.get('[data-key="21.1.B"]').click()
+
+    cy.get('*[data-cy="create-fleet-segment"]').click()
+    cy.wait('@createFleetSegment')
+
+    // Then
+    cy.wait(50)
+    cy.get('.rs-table-row').should('have.length', 44)
+    cy.get('[title="SEGMENT007"] > .rs-table-cell-content > .rs-input').should('exist')
+    cy.get('*[data-cy="delete-row-SEGMENT007"]').should('exist')
+    cy.get('[title="Malotru\'s segment"] > .rs-table-cell-content > .rs-input').should('exist')
+
+    cy.get('.rs-table-cell-content').eq(14).contains('NOPE')
+    // The value is saved in database when I refresh the page
+    cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
+    cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)
+    cy.wait('@fleetSegments')
+    cy.wait(50)
+    cy.get('.rs-table-row').should('have.length', 44)
+    cy.get('[title="SEGMENT007"] > .rs-table-cell-content > .rs-input').should('exist')
+    cy.get('[title="Malotru\'s segment"] > .rs-table-cell-content > .rs-input').should('exist')
+    cy.get('*[data-cy="delete-row-SEGMENT007"]').should('exist')
+  })
+
 })

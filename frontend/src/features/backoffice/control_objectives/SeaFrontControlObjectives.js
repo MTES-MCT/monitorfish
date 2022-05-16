@@ -101,6 +101,7 @@ const SeaFrontControlObjectives = ({ title, facade, year, data }) => {
 
   const handleChangeModifiableKey = (id, key, value, sortColumn, sortType) => {
     const nextDataWithSegmentDetails = Object.assign([], dataWithSegmentDetails)
+    const previousDataWithSegmentDetails = dataWithSegmentDetails
 
     const updateJSON = {
       targetNumberOfControlsAtSea: null,
@@ -109,11 +110,12 @@ const SeaFrontControlObjectives = ({ title, facade, year, data }) => {
     }
     updateJSON[key] = value
 
-    dispatch(updateControlObjective(id, updateJSON)).then(() => {
-      nextDataWithSegmentDetails.find(item => item.id === id)[key] = value
-      nextDataWithSegmentDetails
-        .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
-      setDataWithSegmentDetails(nextDataWithSegmentDetails)
+    nextDataWithSegmentDetails.find(item => item.id === id)[key] = value
+    nextDataWithSegmentDetails
+      .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
+    setDataWithSegmentDetails(nextDataWithSegmentDetails)
+    dispatch(updateControlObjective(id, updateJSON)).catch(() => {
+      setDataWithSegmentDetails(previousDataWithSegmentDetails)
     })
   }
 
@@ -240,7 +242,8 @@ const AddSegment = styled.div`
 
 const Wrapper = styled.div`
   margin-left: 40px;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   
   .rs-picker-input {
     border: none;

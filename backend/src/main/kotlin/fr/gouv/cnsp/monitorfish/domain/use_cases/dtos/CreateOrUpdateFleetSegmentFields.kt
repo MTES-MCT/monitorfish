@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.dtos
 
-data class UpdateFleetSegmentFields(
+data class CreateOrUpdateFleetSegmentFields(
         var segment: String? = null,
         var segmentName: String? = null,
         var gears: List<String>? = null,

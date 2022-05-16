@@ -11,6 +11,7 @@ import getFAOAreas from '../../../domain/use_cases/faoAreas/getFAOAreas'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import updateFleetSegment from '../../../domain/use_cases/fleetSegment/updateFleetSegment'
 import deleteFleetSegment from '../../../domain/use_cases/fleetSegment/deleteFleetSegment'
+import AddFleetSegmentModal from './AddFleetSegmentModal'
 
 const { Column, HeaderCell } = Table
 
@@ -21,6 +22,7 @@ const FleetSegments = () => {
   const gears = useSelector(state => state.gear.gears)
   const species = useSelector(state => state.species.species)
   const [faoAreas, setFAOAreas] = useState([])
+  const [isModalOpen, setModalIsOpen] = useState(false)
 
   useEffect(() => {
     dispatch(getFAOAreas()).then(_faoAreas => setFAOAreas(_faoAreas))
@@ -65,11 +67,19 @@ const FleetSegments = () => {
 
   return (
     <Wrapper>
-      <Title>Segments de flotte</Title><br/>
+      <Header>
+        <Title>Segments de flotte</Title><br/>
+        <AddSegment
+          data-cy={'open-create-fleet-segment-modal'}
+          onClick={() => setModalIsOpen(true)}
+        >
+          Ajouter un segment
+        </AddSegment>
+      </Header>
       {
         fleetSegments?.length && gears?.length && species?.length && faoAreas?.length
           ? <Table
-            height={830}
+            height={document.body.clientHeight < 900 ? document.body.clientHeight - 100 : 830}
             width={document.body.clientWidth < 1800 ? document.body.clientWidth - 200 : 1600}
             data={fleetSegments}
             rowHeight={36}
@@ -101,7 +111,7 @@ const FleetSegments = () => {
                 id={'segment'}
                 maxLength={null}
                 inputType={INPUT_TYPE.STRING}
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
+                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value?.replace(/[ ]/g, ''))}
               />
             </Column>
 
@@ -173,30 +183,43 @@ const FleetSegments = () => {
               color={COLORS.grayShadow}
               className={'update-vessels'}
               size={100}/>
-            <Text data-cy={'first-loader'}>Chargement...</Text>
           </Loading>
       }
+      <AddFleetSegmentModal
+        isModalOpen={isModalOpen}
+        setModalIsOpen={setModalIsOpen}
+        faoAreasList={faoAreas}
+      />
     </Wrapper>
   )
 }
+
+const Header = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+`
+
+const AddSegment = styled.a`
+  height: fit-content;
+  width: fit-content;
+  margin-top: 10px;
+  margin-right: 20px;
+  margin-left: auto;
+  text-decoration: underline;
+  color: ${COLORS.gunMetal};
+  cursor: pointer;
+`
 
 const Loading = styled.div`
   margin-top: 200px;
   margin-left: calc(50vw - 200px);
 `
 
-const Text = styled.span`
-  margin-top: 10px;
-  font-size: 13px;
-  color: ${COLORS.grayShadow};
-  bottom: -17px;
-  position: relative;
-`
-
 const Wrapper = styled.div`
   margin-left: 40px;
   margin-top: 20px;
   height: calc(100vh - 50px);
+  width: calc(100vw - 200px);
   
   .rs-picker-input {
     border: none;

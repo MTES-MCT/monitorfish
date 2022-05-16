@@ -21,42 +21,54 @@ export const INPUT_TYPE = {
 export const ModifiableCell = ({ rowData, dataKey, id, inputType, maxLength, onChange, ...props }) => {
   return (
     <Cell title={rowData[dataKey]} key={rowData[id]} {...props} className={'table-content-editing'}>
-      <input
-        style={{
-          fontSize: 13,
-          marginTop: -8,
-          marginLeft: -7,
-          marginRight: 0,
-          paddingLeft: 5,
-          paddingRight: 10,
-          fontWeight: 500
-        }}
-        type="text"
+      <FleetSegmentInput
+        withinCell
         maxLength={maxLength}
-        className="rs-input"
         value={rowData[dataKey]}
-        onChange={event => {
-          let value = null
-          switch (inputType) {
-            case INPUT_TYPE.INT: {
-              value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : 0
-              break
-            }
-            case INPUT_TYPE.DOUBLE: {
-              value = event.target.value ? event.target.value : 0.0
-              break
-            }
-            case INPUT_TYPE.STRING: {
-              value = event.target.value
-              break
-            }
-          }
-          onChange && onChange(rowData[id], dataKey, value)
-        }}
+        inputType={inputType}
+        id={rowData[id]}
+        dataKey={dataKey}
+        onChange={onChange}
       />
     </Cell>
   )
 }
+
+export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, withinCell, onChange, dataCy }) => <input
+  data-cy={dataCy}
+  style={{
+    fontSize: 13,
+    marginTop: withinCell ? -8 : 5,
+    marginBottom: withinCell ? 0 : 15,
+    marginLeft: withinCell ? -7 : 0,
+    marginRight: 0,
+    paddingLeft: 5,
+    paddingRight: 10,
+    fontWeight: 500
+  }}
+  type="text"
+  maxLength={maxLength}
+  className="rs-input"
+  value={value}
+  onChange={event => {
+    let value = null
+    switch (inputType) {
+      case INPUT_TYPE.INT: {
+        value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : 0
+        break
+      }
+      case INPUT_TYPE.DOUBLE: {
+        value = event.target.value ? event.target.value : 0.0
+        break
+      }
+      case INPUT_TYPE.STRING: {
+        value = event.target.value
+        break
+      }
+    }
+    onChange && onChange(id, dataKey, value)
+  }}
+/>
 
 export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) => {
   return (
@@ -176,7 +188,7 @@ export const TagPickerCell = ({ rowData, dataKey, data, id, onChange, ...props }
   </div>
 }
 
-function renderTagPickerMenuItem (onChange, item) {
+export function renderTagPickerMenuItem (onChange, item) {
   return (
     <Label onClick={() => onChange(item.label)}>
       {item.label}
@@ -184,7 +196,7 @@ function renderTagPickerMenuItem (onChange, item) {
   )
 }
 
-function renderTagPickerValue (items) {
+export function renderTagPickerValue (items) {
   return items
     .filter(tag => tag)
     .map(tag => (

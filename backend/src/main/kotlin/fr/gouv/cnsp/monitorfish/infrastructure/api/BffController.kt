@@ -6,10 +6,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateOrUpdateFleetSegmentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateFleetSegmentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.swagger.annotations.Api
@@ -42,6 +42,7 @@ class BffController(
         private val getAllFleetSegments: GetAllFleetSegments,
         private val updateFleetSegment: UpdateFleetSegment,
         private val deleteFleetSegment: DeleteFleetSegment,
+        private val createFleetSegment: CreateFleetSegment,
         private val getHealthcheck: GetHealthcheck,
         private val getControlObjectivesOfYear: GetControlObjectivesOfYear,
         private val getControlObjectiveYearEntries: GetControlObjectiveYearEntries,
@@ -228,14 +229,14 @@ class BffController(
     @GetMapping("/v1/logbook/find")
     @ApiOperation("Get vessel's Logbook messages")
     fun getVesselLogbookMessages(@ApiParam("Vessel internal reference number (CFR)", required = true)
-                             @RequestParam(name = "internalReferenceNumber")
-                             internalReferenceNumber: String,
+                                 @RequestParam(name = "internalReferenceNumber")
+                                 internalReferenceNumber: String,
                                  @ApiParam("Voyage request (LAST, PREVIOUS or NEXT) with respect to date", required = true)
-                             @RequestParam(name = "voyageRequest")
-                             voyageRequest: VoyageRequest,
+                                 @RequestParam(name = "voyageRequest")
+                                 voyageRequest: VoyageRequest,
                                  @ApiParam("Trip number")
-                             @RequestParam(name = "tripNumber", required = false)
-                             tripNumber: String?): VoyageDataOutput {
+                                 @RequestParam(name = "tripNumber", required = false)
+                                 tripNumber: String?): VoyageDataOutput {
         val start = System.currentTimeMillis()
 
         val voyage = getVesselVoyage.execute(internalReferenceNumber, voyageRequest, tripNumber)
@@ -270,13 +271,13 @@ class BffController(
     @ApiOperation("Update a fleet segment")
     fun updateFleetSegment(request: HttpServletRequest,
                            @RequestBody
-                           updateFleetSegmentData: UpdateFleetSegmentDataInput): FleetSegment {
+                           createOrUpdateFleetSegmentData: CreateOrUpdateFleetSegmentDataInput): FleetSegment {
         val segmentPartOfURL = 1
         val segment = request.requestURI.split(request.contextPath + "/fleet_segments/")[segmentPartOfURL]
 
         return updateFleetSegment.execute(
                 segment = segment,
-                fields = updateFleetSegmentData.toUpdateFleetSegmentFields())
+                fields = createOrUpdateFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
     }
 
     @DeleteMapping(value = ["/v1/fleet_segments/**"])
@@ -288,6 +289,15 @@ class BffController(
         deleteFleetSegment.execute(segment)
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(value = ["/v1/fleet_segments"])
+    @ApiOperation("Create a fleet segment")
+    fun createFleetSegment(@RequestBody
+                           newFleetSegmentData: CreateOrUpdateFleetSegmentDataInput) {
+
+        createFleetSegment.execute(newFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
+    }
+
     @GetMapping("/v1/healthcheck")
     @ApiOperation("Get healtcheck of positions and logbook")
     fun getHealthcheck(): HealthDataOutput {
@@ -297,8 +307,8 @@ class BffController(
     @GetMapping("/v1/control_objectives/{year}")
     @ApiOperation("Get control objectives of a given year")
     fun getControlObjectivesOfYear(@PathParam("Year")
-                             @PathVariable(name = "year")
-                             year: Int): List<ControlObjectiveDataOutput> {
+                                   @PathVariable(name = "year")
+                                   year: Int): List<ControlObjectiveDataOutput> {
         return getControlObjectivesOfYear.execute(year).map { controlObjective ->
             ControlObjectiveDataOutput.fromControlObjective(controlObjective)
         }

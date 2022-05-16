@@ -5,7 +5,7 @@ import { unByKey } from 'ol/Observable'
 const X = 0
 const Y = 1
 
-export const useMoveOverlayWhenDragging = (overlay, map, currentOffset, moveLineWithThrottle, showed) => {
+export const useMoveOverlayWhenDragging = (overlay, map, currentOffset, moveLineWithThrottle, showed, setIsPanning) => {
   useEffect(() => {
     let eventKey
 
@@ -27,6 +27,7 @@ export const useMoveOverlayWhenDragging = (overlay, map, currentOffset, moveLine
     if (showed && overlay && overlay.getElement()) {
       hammer = new Hammer(overlay.getElement())
       hammer.on('pan', ({ deltaX, deltaY }) => {
+        setIsPanning(true)
         overlay.setOffset([currentOffset.current[X] + deltaX, currentOffset.current[Y] + deltaY])
       })
 

@@ -39,7 +39,7 @@ export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, wi
   style={{
     fontSize: 13,
     marginTop: withinCell ? -8 : 5,
-    marginBottom: withinCell ? 0 : 15,
+    marginBottom: withinCell ? 0 : 20,
     marginLeft: withinCell ? -7 : 0,
     marginRight: 0,
     paddingLeft: 5,

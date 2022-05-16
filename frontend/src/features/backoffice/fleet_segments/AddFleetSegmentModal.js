@@ -16,7 +16,7 @@ const AddFleetSegmentModal = ({ isModalOpen, setModalIsOpen, faoAreasList }) => 
 
   const [segment, setSegment] = useState('')
   const [segmentName, setSegmentName] = useState('')
-  const [impactRiskFactor, setImpactRiskFactor] = useState(0.0)
+  const [impactRiskFactor, setImpactRiskFactor] = useState('')
   const [gears, setGears] = useState([])
   const [faoAreas, setFaoAreas] = useState([])
   const [targetSpecies, setTargetSpecies] = useState([])
@@ -153,7 +153,7 @@ const ValidateButton = styled(PrimaryButton)`
   margin: 10px 10px 15px 25px;
 `
 
-const tagPickerStyle = { width: 350, margin: '5px 10px 15px 0', verticalAlign: 'top' }
+const tagPickerStyle = { width: 350, margin: '5px 10px 20px 0', verticalAlign: 'top' }
 
 const Label = styled.span`
   display: inline-block;

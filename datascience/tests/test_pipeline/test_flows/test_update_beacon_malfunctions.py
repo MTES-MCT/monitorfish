@@ -3,7 +3,9 @@ from unittest.mock import patch
 
 import pandas as pd
 import pytest
+from prefect.engine.signals import TRIGGERFAIL
 
+from src.pipeline.exceptions import MonitorfishHealthError
 from src.pipeline.flows.update_beacon_malfunctions import (
     beaconMalfunctionStage,
     beaconMalfunctionVesselStatus,
@@ -24,7 +26,12 @@ from src.pipeline.flows.update_beacon_malfunctions import (
 )
 from src.pipeline.shared_tasks.beacons import beaconStatus
 from src.read_query import read_query
-from tests.mocks import mock_datetime_utcnow
+from tests.mocks import get_monitorfish_healthcheck_mock_factory, mock_datetime_utcnow
+
+flow.replace(
+    flow.get_tasks("get_monitorfish_healthcheck")[0],
+    get_monitorfish_healthcheck_mock_factory(),
+)
 
 
 def test_extract_beacons_last_emission_selects_all_vessels(reset_test_data):
@@ -696,3 +703,23 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
     assert "FQ7058" in loaded_beacon_malfunctions.ircs.values
     assert "AB654321" not in initial_beacon_malfunctions.ircs.values
     assert "AB654321" in loaded_beacon_malfunctions.ircs.values
+
+
+def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):
+
+    flow.replace(
+        flow.get_tasks("get_monitorfish_healthcheck")[0],
+        get_monitorfish_healthcheck_mock_factory(last_position_minutes_ago=15),
+    )
+
+    state = flow.run()
+
+    assert not state.is_successful()
+    assert isinstance(
+        state.result[flow.get_tasks("assert_last_positions_health")[0]].result,
+        MonitorfishHealthError,
+    )
+    assert isinstance(
+        state.result[flow.get_tasks("load_new_beacon_malfunctions")[0]].result,
+        TRIGGERFAIL,
+    )

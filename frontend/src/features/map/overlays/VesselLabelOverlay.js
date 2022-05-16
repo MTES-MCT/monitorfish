@@ -10,6 +10,9 @@ import {
   getProbabilityRiskFactorText,
   getRiskFactorColor
 } from '../../../domain/entities/riskFactor'
+import { batch, useDispatch } from 'react-redux'
+import showVessel from '../../../domain/use_cases/vessel/showVessel'
+import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 
 const X = 0
 const Y = 1
@@ -19,6 +22,7 @@ const INITIAL_OFFSET_VALUE_WHEN_SHOWN_TRACK = [33, -25]
 const VesselLabelOverlay = ({
   map,
   coordinates,
+  identity,
   offset,
   flagState,
   text,
@@ -33,10 +37,12 @@ const VesselLabelOverlay = ({
   previewFilteredVesselsMode,
   underCharter
 }) => {
+  const dispatch = useDispatch()
   const ref = createRef()
 
   const currentOffset = useRef(trackIsShown ? INITIAL_OFFSET_VALUE_WHEN_SHOWN_TRACK : INITIAL_OFFSET_VALUE)
   const currentCoordinates = useRef([])
+  const overlayIsPanning = useRef(false)
   const isThrottled = useRef(false)
   const [showed, setShowed] = useState(false)
   const [showRiskFactorDetails, setShowRiskFactorDetails] = useState(riskFactorDetailsShowed)
@@ -48,7 +54,8 @@ const VesselLabelOverlay = ({
     positioning: 'left-center'
   }))
 
-  useMoveOverlayWhenDragging(overlay, map, currentOffset, moveVesselLabelWithThrottle, showed)
+  useMoveOverlayWhenDragging(overlay, map, currentOffset, moveVesselLabelWithThrottle, showed,
+    isPanning => { overlayIsPanning.current = isPanning })
   useMoveOverlayWhenZooming(overlay, INITIAL_OFFSET_VALUE, zoomHasChanged, currentOffset, moveVesselLabelWithThrottle)
 
   useEffect(() => {
@@ -111,7 +118,15 @@ const VesselLabelOverlay = ({
 
   return (
     <WrapperToBeKeptForDOMManagement>
-      <Wrapper ref={ref} data-cy={'vessel-label-draggable'}>
+      <Wrapper
+        ref={ref}
+        data-cy={'vessel-label-draggable'}
+        onClick={() => {
+          if (overlayIsPanning.current) {
+            overlayIsPanning.current = false
+          }
+        }}
+      >
         {
           showed && (text || riskFactor) && opacity
             ? previewFilteredVesselsMode
@@ -140,7 +155,17 @@ const VesselLabelOverlay = ({
                               ? <Flag rel="preload" src={`flags/${flagState.toLowerCase()}.svg`}/>
                               : null
                           }
-                          <ZoneText data-cy={'vessel-label-text'}>
+                          <ZoneText
+                            data-cy={'vessel-label-text'}
+                            onClick={() => {
+                              if (!overlayIsPanning.current) {
+                                batch(() => {
+                                  dispatch(showVessel(identity, false, false))
+                                  dispatch(getVesselVoyage(identity, null, false))
+                                })
+                              }
+                            }}
+                          >
                             {text}
                           </ZoneText>
                         </>
@@ -152,8 +177,10 @@ const VesselLabelOverlay = ({
                       ? <RiskFactor
                         withText={text}
                         onClick={() => {
-                          setShowRiskFactorDetails(!showRiskFactorDetails)
-                          triggerShowRiskDetails(featureId)
+                          if (!overlayIsPanning.current) {
+                            setShowRiskFactorDetails(!showRiskFactorDetails)
+                            triggerShowRiskDetails(featureId)
+                          }
                         }}
                         data-cy={'vessel-label-risk-factor'}
                         color={getRiskFactorColor(riskFactor?.globalRisk)}
@@ -165,7 +192,10 @@ const VesselLabelOverlay = ({
                 </VesselLabelOverlayElement>
                 {
                   riskFactor && showRiskFactorDetails
-                    ? <RiskFactorDetails underCharter={underCharter}>
+                    ? <RiskFactorDetails
+                      data-cy={'vessel-label-risk-factor-details'}
+                      underCharter={underCharter}
+                    >
                       {
                         underCharter
                           ? <UnderCharterInfo>

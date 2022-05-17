@@ -144,7 +144,9 @@ const menuStyle = (isOpen, fixed) => ({
   position: fixed ? 'unset' : 'absolute',
   marginLeft: fixed ? 0 : 66,
   boxShadow: isOpen && !fixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset',
-  zIndex: 999
+  zIndex: 999,
+  borderRight: `1px solid ${COLORS.lightGray}`
+
 })
 
 const Title = styled.span``

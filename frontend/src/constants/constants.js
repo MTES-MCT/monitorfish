@@ -29,6 +29,7 @@ export const COLORS = {
   trackFishing: '#2A4670',
   trackTransit: '#1C9B7B',
   overlayShadow: '#7077851A',
+  overlayShadowDarker: '#7077859A',
   yellowMunsell: '#F6D012',
   titleBottomBorder: '#E0E0E0',
   powderBlue: '#9ED7D9',

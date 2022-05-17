@@ -1,0 +1,19 @@
+<svg id="Bouton_archiver" data-name="Bouton archiver" xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 16 15">
+  <g id="Rectangle_3218" data-name="Rectangle 3218" transform="translate(1.5 3)" fill="none" stroke="#707785" stroke-width="1.5">
+    <rect width="13" height="12" stroke="none"/>
+    <rect x="0.75" y="0.75" width="11.5" height="10.5" fill="none"/>
+  </g>
+  <g id="Rectangle_3219" data-name="Rectangle 3219" transform="translate(0.5)" fill="#707785" stroke="#707785" stroke-width="1">
+    <rect width="15" height="1.5" stroke="none"/>
+    <rect x="0.5" y="0.5" width="14" height="0.5" fill="none"/>
+  </g>
+  <line id="Ligne_2064" data-name="Ligne 2064" x2="4" transform="translate(6 7.5)" fill="none" stroke="#707785" stroke-width="2"/>
+  <g id="Rectangle_3223" data-name="Rectangle 3223" fill="#707785" stroke="#707785" stroke-width="1">
+    <rect width="1.5" height="6" stroke="none"/>
+    <rect x="0.5" y="0.5" width="0.5" height="5" fill="none"/>
+  </g>
+  <g id="Rectangle_3224" data-name="Rectangle 3224" transform="translate(14.5)" fill="#707785" stroke="#707785" stroke-width="1">
+    <rect width="1.5" height="6" stroke="none"/>
+    <rect x="0.5" y="0.5" width="0.5" height="5" fill="none"/>
+  </g>
+</svg>

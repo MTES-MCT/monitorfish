@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import SideWindowMenu from './SideWindowMenu'
@@ -30,6 +30,7 @@ const SideWindow = ({ fromTab }) => {
     focusOnAlert
   } = useSelector(state => state.alert)
   const dispatch = useDispatch()
+  const baseRef = useRef()
   const [isPreloading, setIsPreloading] = useState(true)
   const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
   const [selectedSubMenu, setSelectedSubMenu] = useState(openedSideWindowTab === sideWindowMenu.ALERTS.code
@@ -94,7 +95,7 @@ const SideWindow = ({ fromTab }) => {
   }
 
   return <>{openedSideWindowTab
-    ? <Wrapper>
+    ? <Wrapper ref={baseRef}>
       <SideWindowMenu
         selectedMenu={openedSideWindowTab}
       />
@@ -126,6 +127,7 @@ const SideWindow = ({ fromTab }) => {
               <Alerts
                 selectedSubMenu={selectedSubMenu}
                 setSelectedSubMenu={setSelectedSubMenu}
+                baseRef={baseRef}
               />
             }
             {
@@ -142,7 +144,8 @@ const SideWindow = ({ fromTab }) => {
 
 const Content = styled.div``
 const contentStyle = fixed => ({
-  marginLeft: fixed ? 0 : 30
+  marginLeft: fixed ? 0 : 30,
+  width: '100%'
 })
 
 const BeaconMalfunctionsBoardGrayOverlay = styled.div``
@@ -176,6 +179,21 @@ const Wrapper = styled.div`
     }
   }
   
+  @keyframes close-alert-transition-item {
+    60% {
+      height: 15px;
+      margin: 6px 0px 6px 0px;
+      padding: 13px 0px 13px 0px;
+      border-width: 1px;
+    }
+    100% {
+      height: 0px;
+      margin: 0px 0px 0px 0px;
+      padding: 0px 0px 0px 0px;
+      border-width: 0px;
+    }
+  }
+
   .rs-btn rs-btn-default rs-picker-toggle {
     background: #1675e0 !important;
   }

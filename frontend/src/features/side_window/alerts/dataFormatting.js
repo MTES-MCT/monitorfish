@@ -9,6 +9,8 @@ export function getAlertForList (alert) {
     creationDate: alert.creationDate,
     vesselIdentifier: alert.vesselIdentifier,
     riskFactor: alert.value.riskFactor,
+    ignoredPeriod: alert.ignoredPeriod,
+    isValidated: alert.isValidated,
     flagState: alert.value.flagState?.toLowerCase(),
     seaFront: alert.value.seaFront,
     type: alert.value.type

@@ -1,0 +1,49 @@
+import { setError } from '../../shared_slices/Global'
+import { setAlerts } from '../../shared_slices/Alert'
+import { validateAlertFromAPI } from '../../../api/alert'
+
+const validateAlert = id => (dispatch, getState) => {
+  const previousAlerts = getState().alert.alerts
+  const previousAlertsWithValidatedFlag = setAlertAsValidated(previousAlerts, id)
+  dispatch(setAlerts(previousAlertsWithValidatedFlag))
+
+  const timeout = setTimeout(() => {
+    const previousAlertsWithoutValidated = removeAlert(previousAlerts, id)
+    dispatch(setAlerts(previousAlertsWithoutValidated))
+  }, 1500)
+
+  validateAlertFromAPI(id).catch(error => {
+    clearTimeout(timeout)
+    dispatch(setAlerts(previousAlerts))
+    console.error(error)
+    dispatch(setError(error))
+  })
+}
+
+function setAlertAsValidated (previousAlerts, id) {
+  return previousAlerts.reduce((acc, alert) => {
+    if (alert.id === id) {
+      const ignoredAlert = Object.assign({}, alert)
+      ignoredAlert.isValidated = true
+
+      acc.push(ignoredAlert)
+      return acc
+    }
+
+    acc.push(alert)
+    return acc
+  }, [])
+}
+
+export function removeAlert (previousAlerts, id) {
+  return previousAlerts.reduce((acc, alert) => {
+    if (alert.id === id) {
+      return acc
+    }
+
+    acc.push(alert)
+    return acc
+  }, [])
+}
+
+export default validateAlert

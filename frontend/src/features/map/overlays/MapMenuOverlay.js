@@ -96,7 +96,7 @@ const MapMenuOverlay = props => {
                   {
                     vessel
                       ? <>
-                        <FirstColumMenu>
+                        <FirstColumnMenu>
                           <Menu
                             data-cy={'show-vessel-tracks-menu-options'}
                             onMouseEnter={() => setShowTrackDepthSubMenu(true)}
@@ -104,8 +104,8 @@ const MapMenuOverlay = props => {
                             Afficher la piste VMS depuis…
                             <ChevronIcon/>
                           </Menu>
-                        </FirstColumMenu>
-                        <FirstColumMenu>
+                        </FirstColumnMenu>
+                        <FirstColumnMenu>
                           <Menu
                             data-cy={'add-vessel-to-favorites'}
                             onMouseEnter={() => setShowTrackDepthSubMenu(false)}
@@ -113,7 +113,7 @@ const MapMenuOverlay = props => {
                           >
                             Ajouter le navire aux navires suivis
                           </Menu>
-                        </FirstColumMenu>
+                        </FirstColumnMenu>
                       </>
                       : null
                   }
@@ -178,7 +178,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-left: auto;
 `
 
-const FirstColumMenu = styled.div`
+const FirstColumnMenu = styled.div`
   display: flex;
   width: 250px;
   box-shadow: 0px 2px 5px ${COLORS.overlayShadow};

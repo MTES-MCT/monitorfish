@@ -16,7 +16,7 @@ const SideWindowLauncher = () => {
       copyStyles
       name={'MonitorFish'}
       title={'MonitorFish'}
-      features={{ scrollbars: true, width: '1500px', height: '1200px' }}
+      features={{ scrollbars: true, width: window.innerWidth, height: '1200px' }}
       onUnload={() => {
         batch(() => {
           dispatch(closeSideWindow())

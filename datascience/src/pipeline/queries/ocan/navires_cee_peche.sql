@@ -20,3 +20,4 @@ LEFT JOIN  COMMUN.C_PCH_CODE_ENGIN_CE eng3
 ON ncp.idc_pch_engin_auxiliaire1 = eng3.idc_pch_engin_ce
 LEFT JOIN COMMUN.C_PCH_CODE_TYPE_NAVIRE tn
 ON ncp.idc_pch_type_navire = tn.idc_pch_type_navire
+WHERE ncp.est_actif = 1

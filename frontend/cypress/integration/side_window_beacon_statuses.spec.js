@@ -206,7 +206,7 @@ context('Side window beacon malfunctions', () => {
     cy.intercept('GET', 'bff/v1/vessels/find?internalReferenceNumber=FAK000999999' +
       '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER' +
       '&trackDepth=CUSTOM&afterDateTime=' + oneWeeksBeforeDate + '&beforeDateTime=' + oneWeeksBeforePlusOneDayDate).as('showVesselPositionsOnMap')
-    cy.intercept('GET', 'bff/v1/logbook/find?internalReferenceNumber=FAK000999999' +
+    cy.intercept('GET', 'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999' +
       '&externalReferenceNumber=DONTSINK&IRCS=CALLME&voyageRequest=LAST&tripNumber=').as('showVesselVoyageOnMap')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-show-vessel"]').click()
     cy.wait('@showVesselPositionsOnMap')

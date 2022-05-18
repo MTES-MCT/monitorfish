@@ -30,10 +30,11 @@ function getOperationalAlertsFromAPI () {
 /**
  * Validate an alert
  * @memberOf API
+ * @param {int} id
  * @throws {Error}
  */
-function validateAlertFromAPI (uuid) {
-  return fetch(`/bff/v1/operational_alerts/${uuid}/validate`, {
+function validateAlertFromAPI (id) {
+  return fetch(`/bff/v1/operational_alerts/${id}/validate`, {
     method: 'PUT'
   }).then(response => {
     if (response.status !== CREATED) {

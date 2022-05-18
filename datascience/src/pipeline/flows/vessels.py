@@ -51,6 +51,31 @@ def extract_fr_vessels():
 
 
 @task(checkpoint=False)
+def extract_foreign_vessels():
+
+    dtypes = {
+        "operator_email_1_ne": "category",
+        "operator_email_2_ne": "category",
+        "operator_fax_ne": "category",
+        "operator_mobile_phone_ne": "category",
+        "operator_name_ne": "category",
+        "operator_phone_1_ne": "category",
+        "operator_phone_2_ne": "category",
+        "proprietor_name_ne": "category",
+        "vessel_email_1_ne": "category",
+        "vessel_email_2_ne": "category",
+        "vessel_fax_ne": "category",
+        "vessel_mobile_phone_ne": "category",
+        "vessel_phone_1_ne": "category",
+        "vessel_phone_2_ne": "category",
+        "vessel_phone_3_ne": "category",
+        "vessel_telex_ne": "category",
+    }
+
+    return extract("ocan", "ocan/navires_etrangers.sql", dtypes=dtypes)
+
+
+@task(checkpoint=False)
 def extract_cee_vessels():
 
     dtypes = {
@@ -154,6 +179,7 @@ def transform_beacons(beacons: pd.DataFrame) -> pd.DataFrame:
 def merge_vessels(
     floats,
     fr_vessels,
+    foreign_vessels,
     cee_vessels,
     non_cee_vessels,
     licences,
@@ -168,6 +194,14 @@ def merge_vessels(
         left_on="id_nav_flotteur_f",
         right_on="id_nav_flotteur_nf",
     ).drop(columns=["id_nav_flotteur_nf"])
+
+    res = pd.merge(
+        res,
+        foreign_vessels,
+        how="left",
+        left_on="id_nav_flotteur_f",
+        right_on="id_nav_flotteur_ne",
+    ).drop(columns=["id_nav_flotteur_ne"])
 
     res = pd.merge(
         res,
@@ -231,6 +265,11 @@ def clean_vessels(all_vessels):
         "proprietor_phones": ["proprietor_phone_nf", "proprietor_mobile_phone_nf"],
         "proprietor_emails": ["proprietor_email_nf", "proprietor_email_ncp"],
         "operator_phones_nf": ["operator_phone_nf", "operator_mobile_phone_nf"],
+        "operator_phones_ne": [
+            "operator_phone_1_ne",
+            "operator_phone_2_ne",
+            "operator_mobile_phone_ne",
+        ],
         "operator_phones_pos": [
             "operator_phone_1_pos",
             "operator_phone_2_pos",
@@ -242,8 +281,17 @@ def clean_vessels(all_vessels):
             "vessel_phone_2_nf",
             "vessel_phone_3_nf",
             "vessel_mobile_phone_nf",
+            "vessel_phone_1_ne",
+            "vessel_phone_2_ne",
+            "vessel_phone_3_ne",
+            "vessel_mobile_phone_ne",
         ],
-        "vessel_emails": ["vessel_email_1_nf", "vessel_email_2_nf"],
+        "vessel_emails": [
+            "vessel_email_1_nf",
+            "vessel_email_2_nf",
+            "vessel_email_1_ne",
+            "vessel_email_2_ne",
+        ],
         "declared_fishing_gears": [
             "fishing_gear_main_ncp",
             "fishing_gear_main_nep",
@@ -267,6 +315,9 @@ def clean_vessels(all_vessels):
     res.operator_phones_nf = res.operator_phones_nf.where(
         res.operator_phones_nf.map(lambda x: x != []), None
     )
+    res.operator_phones_ne = res.operator_phones_ne.where(
+        res.operator_phones_ne.map(lambda x: x != []), None
+    )
 
     logger.info("Columns combined into lists.")
 
@@ -274,22 +325,38 @@ def clean_vessels(all_vessels):
     logger.info("Combining columns into single values: names, characteristics...")
     combine_cols = {
         "gauge": ["gauge_nf", "gauge_ncp"],
-        "operator_name": ["operator_name_pos", "operator_name_nf", "operator_name_ncp"],
+        "operator_name": [
+            "operator_name_pos",
+            "operator_name_nf",
+            "operator_name_ne",
+            "operator_name_ncp",
+        ],
         "operator_email": [
             "operator_email_pos",
             "operator_email_nf",
             "operator_email_ncp",
+            "operator_email_1_ne",
+            "operator_email_2_ne",
         ],
-        "operator_phones": ["operator_phones_pos", "operator_phones_nf"],
-        "operator_fax": ["operator_fax_pos", "operator_fax_nf"],
+        "operator_phones": [
+            "operator_phones_pos",
+            "operator_phones_nf",
+            "operator_phones_ne",
+        ],
+        "operator_fax": ["operator_fax_pos", "operator_fax_nf", "operator_fax_ne"],
         "operator_mobile_phone": [
             "operator_mobile_phone_pos",
             "operator_mobile_phone_nf",
+            "operator_mobile_phone_ne",
         ],
-        "length": ["length_nf", "length_ncp"],
+        "proprietor_name": ["proprietor_name_nf", "proprietor_name_ne"],
+        "length": ["length_nf", "length_ne", "length_ncp"],
         "power": ["power_nf", "power_ncp"],
         "district": ["district_f", "district_ncp"],
         "vessel_type": ["vessel_type_ncp", "vessel_type_nf"],
+        "vessel_mobile_phone": ["vessel_mobile_phone_nf", "vessel_mobile_phone_ne"],
+        "vessel_fax": ["vessel_fax_nf", "vessel_fax_ne"],
+        "vessel_telex": ["vessel_telex_nf", "vessel_telex_ne"],
     }
 
     for col_name, cols_list in combine_cols.items():
@@ -311,10 +378,6 @@ def clean_vessels(all_vessels):
         "registry_port_nf": "registry_port",
         "sailing_types_nf": "sailing_type",
         "width_nf": "width",
-        "proprietor_name_nf": "proprietor_name",
-        "vessel_mobile_phone_nf": "vessel_mobile_phone",
-        "vessel_fax_nf": "vessel_fax",
-        "vessel_telex_nf": "vessel_telex",
     }
 
     res = res.rename(columns=renamed_columns)
@@ -427,6 +490,7 @@ def load_vessels(all_vessels):
 with Flow("Vessels") as flow:
     # Extract
     fr_vessels = extract_fr_vessels()
+    foreign_vessels = extract_foreign_vessels()
     cee_vessels = extract_cee_vessels()
     non_cee_vessels = extract_non_cee_vessels()
     floats = extract_floats()
@@ -440,6 +504,7 @@ with Flow("Vessels") as flow:
     all_vessels = merge_vessels(
         floats,
         fr_vessels,
+        foreign_vessels,
         cee_vessels,
         non_cee_vessels,
         licences,

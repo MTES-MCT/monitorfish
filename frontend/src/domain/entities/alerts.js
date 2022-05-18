@@ -1,3 +1,5 @@
+import { getDate } from '../../utils'
+
 export const AlertTypes = {
   PNO_LAN_WEIGHT_TOLERANCE_ALERT: {
     code: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT',
@@ -81,5 +83,53 @@ export const AlertsMenuSeaFrontsToSeaFrontList = {
   OUTREMEROI: {
     menuSeaFront: 'OUTREMEROI',
     seaFronts: ['Sud Océan Indien']
+  }
+}
+
+export const IgnoreAlertPeriod = {
+  THIS_OCCURRENCE: 'THIS_OCCURRENCE',
+  ONE_HOUR: 'ONE_HOUR',
+  TWO_HOURS: 'TWO_HOURS',
+  SIX_HOURS: 'SIX_HOURS',
+  TWELVE_HOURS: 'TWELVE_HOURS',
+  ONE_DAY: 'ONE_DAY',
+  ONE_WEEK: 'ONE_WEEK',
+  ONE_MONTH: 'ONE_MONTH',
+  ONE_YEAR: 'ONE_YEAR',
+  CUSTOM: 'CUSTOM'
+}
+
+export const getIgnoreAlertPeriodText = ignoreAlertPeriodRequest => {
+  switch (ignoreAlertPeriodRequest?.ignoreAlertPeriod) {
+    case IgnoreAlertPeriod.THIS_OCCURRENCE: {
+      return 'pour cette occurence'
+    }
+    case IgnoreAlertPeriod.ONE_HOUR: {
+      return 'pendant 1 heure'
+    }
+    case IgnoreAlertPeriod.TWO_HOURS: {
+      return 'pendant 2 heures'
+    }
+    case IgnoreAlertPeriod.SIX_HOURS: {
+      return 'pendant 6 heures'
+    }
+    case IgnoreAlertPeriod.TWELVE_HOURS: {
+      return 'pendant 12 heures'
+    }
+    case IgnoreAlertPeriod.ONE_DAY: {
+      return 'pendant 24 heures'
+    }
+    case IgnoreAlertPeriod.ONE_WEEK: {
+      return 'pendant 1 semaine'
+    }
+    case IgnoreAlertPeriod.ONE_MONTH: {
+      return 'pendant 1 mois'
+    }
+    case IgnoreAlertPeriod.ONE_YEAR: {
+      return 'pendant 1 année'
+    }
+    case IgnoreAlertPeriod.CUSTOM: {
+      return `du ${getDate(ignoreAlertPeriodRequest.afterDateTime)} au ${getDate(ignoreAlertPeriodRequest.beforeDateTime)}`
+    }
   }
 }

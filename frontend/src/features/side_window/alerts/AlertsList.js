@@ -10,13 +10,13 @@ import countries from 'i18n-iso-countries'
 import * as timeago from 'timeago.js'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
-import { getAlertNameFromType } from '../../../domain/entities/alerts'
+import { getAlertNameFromType, getIgnoreAlertPeriodText } from '../../../domain/entities/alerts'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
 import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
-import IgnoreMenu from './IgnoreMenu'
+import IgnoreAlertMenu from './IgnoreAlertMenu'
 import ignoreAlert from '../../../domain/use_cases/alert/ignoreAlert'
 import validateAlert from '../../../domain/use_cases/alert/validateAlert'
 
@@ -84,10 +84,10 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
     }
   }, [alerts, searchedVessel])
 
-  const ignoreAlertCallback = useCallback((period, id) => {
+  const ignoreAlertCallback = useCallback((ignoreAlertPeriod, id) => {
     setShowIgnoreAlertForIndex(null)
     setIgnoredAlertId(null)
-    dispatch(ignoreAlert(null, id))
+    dispatch(ignoreAlert(ignoreAlertPeriod, id))
   }, [dispatch])
 
   const validateAlertCallback = useCallback(id => {
@@ -162,7 +162,7 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
               {
                 alert.ignoredPeriod
                   ? <AlertTransition style={alertIgnoredTransition}>
-                    L&apos;alerte sera ignorée pendant {alert.ignoredPeriod}
+                    L&apos;alerte sera ignorée {getIgnoreAlertPeriodText(alert.ignoredPeriod)}
                 </AlertTransition>
                   : null
               }
@@ -239,7 +239,9 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
                             setIgnoredAlertId(alert.id)
                           })
                         }}
-                        src={showIgnoreAlertForIndex === index + 1 ? `${baseUrl}/Icone_ignorer_alerte_pleine.png` : `${baseUrl}/Icone_ignorer_alerte.png`}
+                        src={showIgnoreAlertForIndex === index + 1
+                          ? `${baseUrl}/Icone_ignorer_alerte_pleine.png`
+                          : `${baseUrl}/Icone_ignorer_alerte.png`}
                         onMouseOver={e => (e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte_pleine.png`)}
                         onMouseOut={e => {
                           if (showIgnoreAlertForIndex !== index + 1) {
@@ -256,7 +258,7 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
         </ScrollableContainer>
         {
           showIgnoreAlertForIndex
-            ? <IgnoreMenu
+            ? <IgnoreAlertMenu
               id={ignoredAlertId}
               showIgnoreAlertForIndex={showIgnoreAlertForIndex}
               setShowIgnoreAlertForIndex={setShowIgnoreAlertForIndex}
@@ -380,7 +382,7 @@ const listItemStyle = (isFocused, toClose) => ({
   height: 15,
   marginTop: 6,
   transition: 'background 3s',
-  animation: toClose ? 'close-alert-transition-item 1s ease forwards' : 'unset',
+  animation: toClose ? 'close-alert-transition-item 2s ease forwards' : 'unset',
   overflow: 'hidden'
 })
 

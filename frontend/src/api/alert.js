@@ -51,13 +51,28 @@ function validateAlertFromAPI (uuid) {
 /**
  * Ignore an alert
  * @memberOf API
+ * @param {int} id
+ * @param {IgnoreAlertPeriodRequest} ignoreAlertPeriodRequest
  * @throws {Error}
  */
-function ignoreAlertFromAPI (uuid) {
-  return fetch(`/bff/v1/operational_alerts/${uuid}/ignore`, {
-    method: 'PUT'
+function ignoreAlertFromAPI (id, ignoreAlertPeriodRequest) {
+  const ignoreAlertPeriod = ignoreAlertPeriodRequest.ignoreAlertPeriod || ''
+  const afterDateTime = ignoreAlertPeriodRequest.afterDateTime?.toISOString() || ''
+  const beforeDateTime = ignoreAlertPeriodRequest.beforeDateTime?.toISOString() || ''
+
+  return fetch(`/bff/v1/operational_alerts/${id}/ignore`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json, text/plain',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    body: JSON.stringify({
+      ignoreAlertPeriod: ignoreAlertPeriod,
+      afterDateTime: afterDateTime,
+      beforeDateTime: beforeDateTime
+    })
   }).then(response => {
-    if (response.status !== CREATED) {
+    if (response.status !== OK) {
       response.text().then(text => {
         console.error(text)
       })

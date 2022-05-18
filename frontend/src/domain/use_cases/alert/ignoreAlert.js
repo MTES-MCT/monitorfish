@@ -3,9 +3,15 @@ import { setAlerts } from '../../shared_slices/Alert'
 import { ignoreAlertFromAPI } from '../../../api/alert'
 import { removeAlert } from './validateAlert'
 
-const ignoreAlert = (forPeriod, id) => (dispatch, getState) => {
+/**
+ * Ignore an alert
+ * @param ignoreAlertPeriodRequest {IgnoreAlertPeriodRequest}
+ * @param id
+ * @return {function(*, *): void}
+ */
+const ignoreAlert = (ignoreAlertPeriodRequest, id) => (dispatch, getState) => {
   const previousAlerts = getState().alert.alerts
-  const previousAlertsWithIgnoredFlag = setIgnoredAlertAs(previousAlerts, id, 'ONE_WEEK')
+  const previousAlertsWithIgnoredFlag = setIgnoredAlertAs(previousAlerts, id, ignoreAlertPeriodRequest)
   dispatch(setAlerts(previousAlertsWithIgnoredFlag))
 
   const timeout = setTimeout(() => {
@@ -13,7 +19,7 @@ const ignoreAlert = (forPeriod, id) => (dispatch, getState) => {
     dispatch(setAlerts(previousAlertsWithoutIgnored))
   }, 1500)
 
-  ignoreAlertFromAPI(id).catch(error => {
+  ignoreAlertFromAPI(id, ignoreAlertPeriodRequest).catch(error => {
     clearTimeout(timeout)
     dispatch(setAlerts(previousAlerts))
     console.error(error)

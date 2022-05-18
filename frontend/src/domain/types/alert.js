@@ -36,3 +36,10 @@
  * @property {Object} pno
  * @property {Object} lan
  */
+
+/**
+ * @typedef IgnoreAlertPeriodRequest
+ * @property {string | null} ignoreAlertPeriod
+ * @property {Date | null} afterDateTime
+ * @property {Date | null} beforeDateTime
+ */

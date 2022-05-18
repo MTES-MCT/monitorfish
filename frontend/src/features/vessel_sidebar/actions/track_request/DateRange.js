@@ -1,5 +1,5 @@
 import React from 'react'
-import DateRangePicker, { afterToday } from 'rsuite/lib/DateRangePicker'
+import DateRangePicker, { beforeToday } from 'rsuite/lib/DateRangePicker'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 
@@ -16,18 +16,19 @@ function convertToLocalDates (date) {
   return nextDate
 }
 
-const DateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackFromDates, width }) => {
+const DateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackFromDates, width, placeholder, containerRef }) => {
   return (
     <Wrapper
-      width={width}
+      style={wrapperStyle(width)}
       hasDates={dates?.length}
     >
       <DateRangePicker
+        container={containerRef || null}
         showOneCalendar
-        placeholder="Choisir une période précise"
+        placeholder={placeholder}
         cleanable
         size={'sm'}
-        disabledDate={afterToday()}
+        disabledDate={beforeToday()}
         value={dates.map(date => convertToLocalDates(date))}
         onOk={modifyVesselTrackFromDates}
         onClean={resetToDefaultTrackDepth}
@@ -52,12 +53,14 @@ const DateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackFromDates
 }
 
 const Wrapper = styled.div`
-  margin: 12px 0 20px 20px;
-  width: ${props => props.width ? props.width : 197}px;
-  
   .rs-picker-daterange {
     ${props => props.hasDates ? `background: ${COLORS.gainsboro}` : null}
   } 
 `
+
+const wrapperStyle = width => ({
+  margin: '12px 0 20px 20px',
+  width: width || 197
+})
 
 export default DateRange

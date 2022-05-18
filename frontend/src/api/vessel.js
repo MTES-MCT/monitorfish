@@ -157,7 +157,7 @@ function getVesselVoyageFromAPI (vesselIdentity, voyageRequest, tripNumber) {
   tripNumber = tripNumber || ''
   voyageRequest = voyageRequest || ''
 
-  return fetch(`/bff/v1/logbook/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&voyageRequest=${voyageRequest}&tripNumber=${tripNumber}`)
+  return fetch(`/bff/v1/vessels/logbook/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&voyageRequest=${voyageRequest}&tripNumber=${tripNumber}`)
     .then(response => {
       if (response.status === OK) {
         return response.json()

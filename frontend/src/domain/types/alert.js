@@ -38,8 +38,8 @@
  */
 
 /**
- * @typedef IgnoreAlertPeriodRequest
- * @property {string | null} ignoreAlertPeriod
+ * @typedef SilencedAlertPeriodRequest
+ * @property {string | null} silencedAlertPeriod
  * @property {Date | null} afterDateTime
  * @property {Date | null} beforeDateTime
  */

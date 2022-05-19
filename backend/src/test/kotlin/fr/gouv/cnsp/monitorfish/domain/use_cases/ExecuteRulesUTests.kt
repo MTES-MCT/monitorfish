@@ -4,7 +4,8 @@ import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.Rule
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.PNOAndLANWeightTolerance
 import fr.gouv.cnsp.monitorfish.domain.repositories.RuleRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.rules.ExecutePnoAndLanWeightToleranceRule
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ExecuteRules
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.rules.ExecutePnoAndLanWeightToleranceRule
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given

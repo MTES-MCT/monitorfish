@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
 import fr.gouv.cnsp.monitorfish.domain.repositories.FAOAreasRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFAOAreas
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

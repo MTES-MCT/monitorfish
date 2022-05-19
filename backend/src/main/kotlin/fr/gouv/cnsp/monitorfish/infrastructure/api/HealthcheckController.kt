@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetHealthcheck
+import fr.gouv.cnsp.monitorfish.domain.use_cases.healthcheck.GetHealthcheck
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.HealthDataOutput
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation

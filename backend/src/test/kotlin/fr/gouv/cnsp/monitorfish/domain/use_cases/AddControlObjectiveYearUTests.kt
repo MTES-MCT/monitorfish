@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.AddControlObjectiveYear
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test

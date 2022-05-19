@@ -1,9 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllBeaconMalfunctions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetBeaconMalfunction
-import fr.gouv.cnsp.monitorfish.domain.use_cases.SaveBeaconMalfunctionComment
-import fr.gouv.cnsp.monitorfish.domain.use_cases.UpdateBeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetAllBeaconMalfunctions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetBeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.SaveBeaconMalfunctionComment
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunction
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionDataOutput

@@ -17,6 +17,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyCorrectedLogb
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyFluxAndVisioCaptureLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyRETLogbookMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLogbookMessages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

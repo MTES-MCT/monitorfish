@@ -86,7 +86,7 @@ export const AlertsMenuSeaFrontsToSeaFrontList = {
   }
 }
 
-export const IgnoreAlertPeriod = {
+export const SilencedAlertPeriod = {
   THIS_OCCURRENCE: 'THIS_OCCURRENCE',
   ONE_HOUR: 'ONE_HOUR',
   TWO_HOURS: 'TWO_HOURS',
@@ -99,37 +99,37 @@ export const IgnoreAlertPeriod = {
   CUSTOM: 'CUSTOM'
 }
 
-export const getIgnoreAlertPeriodText = ignoreAlertPeriodRequest => {
-  switch (ignoreAlertPeriodRequest?.ignoreAlertPeriod) {
-    case IgnoreAlertPeriod.THIS_OCCURRENCE: {
+export const getSilencedAlertPeriodText = silencedAlertPeriodRequest => {
+  switch (silencedAlertPeriodRequest?.silencedAlertPeriod) {
+    case SilencedAlertPeriod.THIS_OCCURRENCE: {
       return 'pour cette occurence'
     }
-    case IgnoreAlertPeriod.ONE_HOUR: {
+    case SilencedAlertPeriod.ONE_HOUR: {
       return 'pendant 1 heure'
     }
-    case IgnoreAlertPeriod.TWO_HOURS: {
+    case SilencedAlertPeriod.TWO_HOURS: {
       return 'pendant 2 heures'
     }
-    case IgnoreAlertPeriod.SIX_HOURS: {
+    case SilencedAlertPeriod.SIX_HOURS: {
       return 'pendant 6 heures'
     }
-    case IgnoreAlertPeriod.TWELVE_HOURS: {
+    case SilencedAlertPeriod.TWELVE_HOURS: {
       return 'pendant 12 heures'
     }
-    case IgnoreAlertPeriod.ONE_DAY: {
+    case SilencedAlertPeriod.ONE_DAY: {
       return 'pendant 24 heures'
     }
-    case IgnoreAlertPeriod.ONE_WEEK: {
+    case SilencedAlertPeriod.ONE_WEEK: {
       return 'pendant 1 semaine'
     }
-    case IgnoreAlertPeriod.ONE_MONTH: {
+    case SilencedAlertPeriod.ONE_MONTH: {
       return 'pendant 1 mois'
     }
-    case IgnoreAlertPeriod.ONE_YEAR: {
+    case SilencedAlertPeriod.ONE_YEAR: {
       return 'pendant 1 année'
     }
-    case IgnoreAlertPeriod.CUSTOM: {
-      return `du ${getDate(ignoreAlertPeriodRequest.afterDateTime)} au ${getDate(ignoreAlertPeriodRequest.beforeDateTime)}`
+    case SilencedAlertPeriod.CUSTOM: {
+      return `du ${getDate(silencedAlertPeriodRequest.afterDateTime)} au ${getDate(silencedAlertPeriodRequest.beforeDateTime)}`
     }
   }
 }

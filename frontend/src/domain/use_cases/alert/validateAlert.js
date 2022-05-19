@@ -23,10 +23,10 @@ const validateAlert = id => (dispatch, getState) => {
 function setAlertAsValidated (previousAlerts, id) {
   return previousAlerts.reduce((acc, alert) => {
     if (alert.id === id) {
-      const ignoredAlert = Object.assign({}, alert)
-      ignoredAlert.isValidated = true
+      const validatedAlert = Object.assign({}, alert)
+      validatedAlert.isValidated = true
 
-      acc.push(ignoredAlert)
+      acc.push(validatedAlert)
       return acc
     }
 

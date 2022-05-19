@@ -10,14 +10,14 @@ import countries from 'i18n-iso-countries'
 import * as timeago from 'timeago.js'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
-import { getAlertNameFromType, getIgnoreAlertPeriodText } from '../../../domain/entities/alerts'
+import { getAlertNameFromType, getSilencedAlertPeriodText } from '../../../domain/entities/alerts'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
 import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
-import IgnoreAlertMenu from './IgnoreAlertMenu'
-import ignoreAlert from '../../../domain/use_cases/alert/ignoreAlert'
+import SilenceAlertMenu from './SilenceAlertMenu'
+import silenceAlert from '../../../domain/use_cases/alert/silenceAlert'
 import validateAlert from '../../../domain/use_cases/alert/validateAlert'
 
 /**
@@ -39,8 +39,8 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
   const [sortType] = useState(SortType.DESC)
   const [filteredAlerts, setFilteredAlerts] = useState([])
   const [searchedVessel, setSearchedVessel] = useState(undefined)
-  const [showIgnoreAlertForIndex, setShowIgnoreAlertForIndex] = useState(null)
-  const [ignoredAlertId, setIgnoredAlertId] = useState(null)
+  const [showSilencedAlertForIndex, setShowSilencedAlertForIndex] = useState(null)
+  const [silencedAlertId, setSilencedAlertId] = useState(null)
 
   useEffect(() => {
     if (focusOnAlert) {
@@ -84,10 +84,10 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
     }
   }, [alerts, searchedVessel])
 
-  const ignoreAlertCallback = useCallback((ignoreAlertPeriod, id) => {
-    setShowIgnoreAlertForIndex(null)
-    setIgnoredAlertId(null)
-    dispatch(ignoreAlert(ignoreAlertPeriod, id))
+  const silenceAlertCallback = useCallback((silencedAlertPeriod, id) => {
+    setShowSilencedAlertForIndex(null)
+    setSilencedAlertId(null)
+    dispatch(silenceAlert(silencedAlertPeriod, id))
   }, [dispatch])
 
   const validateAlertCallback = useCallback(id => {
@@ -150,7 +150,7 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
               style={listItemStyle(focusOnAlert
                 ? alert.id === focusOnAlert?.id
                 : false,
-              alert.ignoredPeriod || alert.isValidated)}
+              alert.silencedPeriod || alert.isValidated)}
             >
               {
                 alert.isValidated
@@ -163,14 +163,14 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
                   : null
               }
               {
-                alert.ignoredPeriod
-                  ? <AlertTransition style={alertIgnoredTransition}>
-                    L&apos;alerte sera ignorée {getIgnoreAlertPeriodText(alert.ignoredPeriod)}
+                alert.silencedPeriod
+                  ? <AlertTransition style={alertSilencedTransition}>
+                    L&apos;alerte sera ignorée {getSilencedAlertPeriodText(alert.silencedPeriod)}
                 </AlertTransition>
                   : null
               }
               {
-                !alert.isValidated && !alert.ignoredPeriod
+                !alert.isValidated && !alert.silencedPeriod
                   ? <FlexboxGrid>
                     <FlexboxGrid.Item style={alertTypeStyle}>
                       {getAlertNameFromType(alert.type)}
@@ -232,22 +232,22 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={iconStyle}>
                       <Icon
-                        data-cy={'side-window-alerts-ignore-alert'}
-                        style={ignoreAlertStyle}
+                        data-cy={'side-window-alerts-silence-alert'}
+                        style={silenceAlertStyle}
                         alt={'Ignorer l\'alerte'}
                         title={'Ignorer l\'alerte'}
                         onClick={() => {
                           batch(() => {
-                            setShowIgnoreAlertForIndex(index + 1)
-                            setIgnoredAlertId(alert.id)
+                            setShowSilencedAlertForIndex(index + 1)
+                            setSilencedAlertId(alert.id)
                           })
                         }}
-                        src={showIgnoreAlertForIndex === index + 1
+                        src={showSilencedAlertForIndex === index + 1
                           ? `${baseUrl}/Icone_ignorer_alerte_pleine.png`
                           : `${baseUrl}/Icone_ignorer_alerte.png`}
                         onMouseOver={e => (e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte_pleine.png`)}
                         onMouseOut={e => {
-                          if (showIgnoreAlertForIndex !== index + 1) {
+                          if (showSilencedAlertForIndex !== index + 1) {
                             e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte.png`
                           }
                         }}
@@ -260,12 +260,12 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
           ))}
         </ScrollableContainer>
         {
-          showIgnoreAlertForIndex
-            ? <IgnoreAlertMenu
-              id={ignoredAlertId}
-              showIgnoreAlertForIndex={showIgnoreAlertForIndex}
-              setShowIgnoreAlertForIndex={setShowIgnoreAlertForIndex}
-              ignoreAlert={ignoreAlertCallback}
+          showSilencedAlertForIndex
+            ? <SilenceAlertMenu
+              id={silencedAlertId}
+              showSilencedAlertForIndex={showSilencedAlertForIndex}
+              setShowSilencedAlertForIndex={setShowSilencedAlertForIndex}
+              silenceAlert={silenceAlertCallback}
               baseRef={baseRef}
             />
             : null
@@ -280,7 +280,7 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
 }
 
 const AlertTransition = styled.div``
-const alertIgnoredTransition = {
+const alertSilencedTransition = {
   background: '#E1000F33 0% 0% no-repeat padding-box',
   color: COLORS.maximumRed,
   fontWeight: 500,
@@ -369,7 +369,7 @@ const validateAlertIconStyle = {
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
-const ignoreAlertStyle = {
+const silenceAlertStyle = {
   paddingRight: 7,
   float: 'right',
   flexShrink: 0,

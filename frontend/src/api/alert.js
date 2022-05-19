@@ -2,7 +2,7 @@ import { OK } from './api'
 
 export const ALERTS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les alertes opérationelles'
 export const VALIDATE_ALERT_ERROR_MESSAGE = 'Nous n\'avons pas pu valider l\'alerte opérationelle'
-export const IGNORE_ALERT_ERROR_MESSAGE = 'Nous n\'avons pas pu ignorer l\'alerte opérationelle'
+export const SILENCE_ALERT_ERROR_MESSAGE = 'Nous n\'avons pas pu ignorer l\'alerte opérationelle'
 
 /**
  * Get operational alerts
@@ -50,25 +50,25 @@ function validateAlertFromAPI (id) {
 }
 
 /**
- * Ignore an alert
+ * Silence an alert
  * @memberOf API
  * @param {int} id
- * @param {IgnoreAlertPeriodRequest} ignoreAlertPeriodRequest
+ * @param {SilencedAlertPeriodRequest} silencedAlertPeriodRequest
  * @throws {Error}
  */
-function ignoreAlertFromAPI (id, ignoreAlertPeriodRequest) {
-  const ignoreAlertPeriod = ignoreAlertPeriodRequest.ignoreAlertPeriod || ''
-  const afterDateTime = ignoreAlertPeriodRequest.afterDateTime?.toISOString() || ''
-  const beforeDateTime = ignoreAlertPeriodRequest.beforeDateTime?.toISOString() || ''
+function silenceAlertFromAPI (id, silencedAlertPeriodRequest) {
+  const silencedAlertPeriod = silencedAlertPeriodRequest.silencedAlertPeriod || ''
+  const afterDateTime = silencedAlertPeriodRequest.afterDateTime?.toISOString() || ''
+  const beforeDateTime = silencedAlertPeriodRequest.beforeDateTime?.toISOString() || ''
 
-  return fetch(`/bff/v1/operational_alerts/${id}/ignore`, {
+  return fetch(`/bff/v1/operational_alerts/${id}/silence`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json, text/plain',
       'Content-Type': 'application/json;charset=UTF-8'
     },
     body: JSON.stringify({
-      ignoreAlertPeriod: ignoreAlertPeriod,
+      silencedAlertPeriod: silencedAlertPeriod,
       afterDateTime: afterDateTime,
       beforeDateTime: beforeDateTime
     })
@@ -77,16 +77,16 @@ function ignoreAlertFromAPI (id, ignoreAlertPeriodRequest) {
       response.text().then(text => {
         console.error(text)
       })
-      throw Error(IGNORE_ALERT_ERROR_MESSAGE)
+      throw Error(SILENCE_ALERT_ERROR_MESSAGE)
     }
   }).catch(error => {
     console.error(error)
-    throw Error(IGNORE_ALERT_ERROR_MESSAGE)
+    throw Error(SILENCE_ALERT_ERROR_MESSAGE)
   })
 }
 
 export {
   getOperationalAlertsFromAPI,
   validateAlertFromAPI,
-  ignoreAlertFromAPI
+  silenceAlertFromAPI
 }

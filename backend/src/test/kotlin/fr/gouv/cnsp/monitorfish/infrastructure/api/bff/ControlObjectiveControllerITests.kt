@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjective
-import fr.gouv.cnsp.monitorfish.domain.use_cases.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import org.hamcrest.Matchers.equalTo

@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetOperationalAlerts
-import fr.gouv.cnsp.monitorfish.domain.use_cases.ValidateOperationalAlert
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetOperationalAlerts
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ValidateOperationalAlert
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.web.bind.annotation.*

@@ -1,10 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
-import fr.gouv.cnsp.monitorfish.domain.use_cases.CreateFleetSegment
-import fr.gouv.cnsp.monitorfish.domain.use_cases.DeleteFleetSegment
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllFleetSegments
-import fr.gouv.cnsp.monitorfish.domain.use_cases.UpdateFleetSegment
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.CreateFleetSegment
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.DeleteFleetSegment
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.GetAllFleetSegments
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.UpdateFleetSegment
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateOrUpdateFleetSegmentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FleetSegmentDataOutput
 import io.swagger.annotations.Api

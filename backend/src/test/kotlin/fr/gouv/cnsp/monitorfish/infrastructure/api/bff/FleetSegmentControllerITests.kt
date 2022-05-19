@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
-import fr.gouv.cnsp.monitorfish.domain.use_cases.CreateFleetSegment
-import fr.gouv.cnsp.monitorfish.domain.use_cases.DeleteFleetSegment
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllFleetSegments
-import fr.gouv.cnsp.monitorfish.domain.use_cases.UpdateFleetSegment
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.CreateFleetSegment
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.DeleteFleetSegment
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.GetAllFleetSegments
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.UpdateFleetSegment
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateOrUpdateFleetSegmentDataInput
 import org.hamcrest.Matchers.equalTo

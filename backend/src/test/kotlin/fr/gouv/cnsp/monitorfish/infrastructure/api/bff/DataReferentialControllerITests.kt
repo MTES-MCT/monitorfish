@@ -6,9 +6,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesAndSpeciesGroups
 import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesGroup
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllGears
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllSpeciesAndSpeciesGroups
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetFAOAreas
+import fr.gouv.cnsp.monitorfish.domain.use_cases.gear.GetAllGears
+import fr.gouv.cnsp.monitorfish.domain.use_cases.species.GetAllSpeciesAndSpeciesGroups
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFAOAreas
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

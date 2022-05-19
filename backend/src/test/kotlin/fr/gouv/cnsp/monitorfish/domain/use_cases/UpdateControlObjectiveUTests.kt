@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.UpdateControlObjective
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test

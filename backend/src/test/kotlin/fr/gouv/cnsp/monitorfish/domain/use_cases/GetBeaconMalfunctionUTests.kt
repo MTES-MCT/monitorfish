@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionActionsRepo
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionCommentsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetBeaconMalfunction
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

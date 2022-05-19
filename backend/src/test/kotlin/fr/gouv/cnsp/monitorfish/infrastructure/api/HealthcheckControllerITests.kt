@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.health.Health
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetHealthcheck
+import fr.gouv.cnsp.monitorfish.domain.use_cases.healthcheck.GetHealthcheck
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

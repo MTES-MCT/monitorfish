@@ -9,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessel
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

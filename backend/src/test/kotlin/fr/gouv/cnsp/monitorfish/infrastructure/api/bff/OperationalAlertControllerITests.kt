@@ -5,8 +5,8 @@ import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
-import fr.gouv.cnsp.monitorfish.domain.use_cases.GetOperationalAlerts
-import fr.gouv.cnsp.monitorfish.domain.use_cases.ValidateOperationalAlert
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetOperationalAlerts
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ValidateOperationalAlert
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

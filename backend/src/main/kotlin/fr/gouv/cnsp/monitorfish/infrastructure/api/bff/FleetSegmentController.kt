@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.entities.FleetSegment
+import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.use_cases.CreateFleetSegment
 import fr.gouv.cnsp.monitorfish.domain.use_cases.DeleteFleetSegment
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllFleetSegments

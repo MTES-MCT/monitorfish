@@ -10,4 +10,10 @@ enum class AlertTypeMapping(private val clazz: Class<out AlertType>) : IHasImple
     override fun getImplementation(): Class<out AlertType> {
         return clazz
     }
+
+    companion object {
+        fun getClassFromName(alertType: String): Class<out AlertType> {
+            return values().first{ it.name == alertType }.getImplementation()
+        }
+    }
 }

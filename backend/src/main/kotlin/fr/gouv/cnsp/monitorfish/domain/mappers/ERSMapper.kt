@@ -14,7 +14,7 @@ object ERSMapper {
 
     fun getERSMessageValueFromJSON(mapper: ObjectMapper, message: String?, messageType: String?, operationType: LogbookOperationType): LogbookMessageValue? {
         return try {
-            if(operationType == LogbookOperationType.RET && !message.isNullOrEmpty() && message != jsonbNullString) {
+            if (operationType == LogbookOperationType.RET && !message.isNullOrEmpty() && message != jsonbNullString) {
                 val classType = LogbookOperationTypeMapping.getClassFromName(operationType.name)
 
                 mapper.readValue(message, classType)

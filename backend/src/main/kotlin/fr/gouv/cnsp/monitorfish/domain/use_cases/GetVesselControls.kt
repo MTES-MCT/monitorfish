@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.ControlResumeAndControls
+import fr.gouv.cnsp.monitorfish.domain.entities.controls.ControlResumeAndControls
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.ControlType
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException

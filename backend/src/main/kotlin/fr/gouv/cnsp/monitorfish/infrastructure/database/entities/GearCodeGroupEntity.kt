@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.GearCodeGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.gear.GearCodeGroup
 import javax.persistence.*
 
 @Entity

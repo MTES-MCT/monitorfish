@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import org.hibernate.annotations.Type
@@ -15,10 +15,8 @@ import javax.persistence.*
 @Entity
 @TypeDefs(
         TypeDef(name = "jsonb", typeClass = JsonBinaryType::class),
-        TypeDef(
-                name = "pgsql_enum",
-                typeClass = PostgreSQLEnumType::class
-        )
+        TypeDef(name = "pgsql_enum",
+                typeClass = PostgreSQLEnumType::class)
 )
 @Table(name = "pending_alerts")
 data class PendingAlertEntity(

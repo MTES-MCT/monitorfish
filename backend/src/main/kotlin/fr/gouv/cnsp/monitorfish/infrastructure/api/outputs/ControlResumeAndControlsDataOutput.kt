@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.ControlResumeAndControls
+import fr.gouv.cnsp.monitorfish.domain.entities.controls.ControlResumeAndControls
 
 data class ControlResumeAndControlsDataOutput(
         val vesselId: Int,

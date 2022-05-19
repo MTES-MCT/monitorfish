@@ -1,4 +1,4 @@
-import { CREATED, OK } from './api'
+import { OK } from './api'
 
 export const ALERTS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les alertes opérationelles'
 export const VALIDATE_ALERT_ERROR_MESSAGE = 'Nous n\'avons pas pu valider l\'alerte opérationelle'
@@ -37,7 +37,7 @@ function validateAlertFromAPI (id) {
   return fetch(`/bff/v1/operational_alerts/${id}/validate`, {
     method: 'PUT'
   }).then(response => {
-    if (response.status !== CREATED) {
+    if (response.status !== OK) {
       response.text().then(text => {
         console.error(text)
       })

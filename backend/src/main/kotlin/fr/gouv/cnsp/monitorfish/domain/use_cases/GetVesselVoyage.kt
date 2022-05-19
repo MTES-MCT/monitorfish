@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.LogbookMessagesAndAlerts
-import fr.gouv.cnsp.monitorfish.domain.entities.Voyage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
@@ -12,7 +12,7 @@ import java.time.ZonedDateTime
 
 @UseCase
 class GetVesselVoyage(private val logbookReportRepository: LogbookReportRepository,
-                      private val alertRepository: AlertRepository,
+                      private val PNOAndLANAlertRepository: PNOAndLANAlertRepository,
                       private val getLogbookMessages: GetLogbookMessages) {
     private val logger = LoggerFactory.getLogger(GetVesselVoyage::class.java)
 
@@ -42,7 +42,7 @@ class GetVesselVoyage(private val logbookReportRepository: LogbookReportReposito
         val isLastVoyage = getIsLastVoyage(currentTripNumber, voyageRequest, internalReferenceNumber, trip.tripNumber)
         val isFirstVoyage = getIsFirstVoyage(internalReferenceNumber, trip.tripNumber)
 
-        val alerts = alertRepository.findAlertsOfTypes(
+        val alerts = PNOAndLANAlertRepository.findAlertsOfTypes(
             listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
             internalReferenceNumber,
             trip.tripNumber

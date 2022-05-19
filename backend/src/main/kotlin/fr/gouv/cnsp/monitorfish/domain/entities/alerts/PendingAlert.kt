@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.alerts
 
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import java.time.ZonedDateTime
 

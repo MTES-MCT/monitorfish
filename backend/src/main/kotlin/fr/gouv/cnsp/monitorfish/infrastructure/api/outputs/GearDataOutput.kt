@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 
 data class GearDataOutput(
         val code: String,

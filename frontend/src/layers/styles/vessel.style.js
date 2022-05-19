@@ -1,13 +1,17 @@
 import { Icon, Style } from 'ol/style'
 import {
-  Vessel, VESSEL_ALERT_AND_BEACON_MALFUNCTION,
+  Vessel,
+  VESSEL_ALERT_AND_BEACON_MALFUNCTION,
   VESSEL_ALERT_STYLE,
   VESSEL_BEACON_MALFUNCTION_STYLE,
+  VESSEL_INFRACTION_SUSPICION_STYLE,
   VESSEL_SELECTOR_STYLE
 } from '../../domain/entities/vessel'
 
 import { COLORS } from '../../constants/constants'
 import { booleanToInt } from '../../utils'
+import Circle from 'ol/style/Circle'
+import Stroke from 'ol/style/Stroke'
 
 const featureHas = (key) => ['==', ['get', key], 1]
 const featureHasNot = (key) => ['==', ['get', key], 0]
@@ -178,6 +182,28 @@ export const getVesselAlertAndBeaconMalfunctionStyle = (resolution) => {
 
   const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
   styles[0].getImage().setScale(scale)
+
+  return styles
+}
+
+const vesselInfractionSuspicionCircleStyle = new Style({
+  image: new Circle({
+    radius: 19,
+    fill: null,
+    stroke: new Stroke({
+      color: COLORS.maximumRed,
+      width: 2
+    })
+  }),
+  zIndex: VESSEL_INFRACTION_SUSPICION_STYLE
+})
+
+export const getVesselInfractionSuspicionStyle = (feature, resolution) => {
+  const styles = []
+
+  styles.push(vesselInfractionSuspicionCircleStyle)
+  const scale = Math.min(1, 0.3 + Math.sqrt(200 / resolution))
+  styles[styles.length - 1].getImage().setScale(scale)
 
   return styles
 }

@@ -3,7 +3,7 @@ import { setVesselsFromAPI, setAllVesselsAsUnfiltered, setFilteredVesselsFeature
 import getFilteredVessels from './getFilteredVessels'
 import NoVesselsInFilterError from '../../../errors/NoVesselsInFilterError'
 
-export const loadVesselsFromAPIAndApplyFilter = (vessels) => (dispatch, getState) => {
+export const loadVesselsFromAPIAndApplyFilter = vessels => (dispatch, getState) => {
   dispatch(setVesselsFromAPI(vessels))
   dispatch(applyFilterToVessels())
 }

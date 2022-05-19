@@ -1,4 +1,6 @@
 ALTER TABLE alerts RENAME TO pno_lan_alerts;
+ALTER TABLE public.last_positions
+    ADD COLUMN reporting VARCHAR(200)[];
 
 CREATE TYPE public.reporting_type AS ENUM ('ALERT', 'OBSERVATION', 'INFRACTION_SUSPICION');
 

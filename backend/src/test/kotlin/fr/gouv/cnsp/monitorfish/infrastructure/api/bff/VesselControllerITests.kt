@@ -104,6 +104,8 @@ class VesselControllerITests {
                 .andExpect(jsonPath("$[0].destination", equalTo(position.destination)))
                 .andExpect(jsonPath("$[0].positionType", equalTo(PositionType.AIS.toString())))
                 .andExpect(jsonPath("$[0].dateTime", equalTo(position.dateTime.toOffsetDateTime().toString())))
+                .andExpect(jsonPath("$[0].reporting.length()", equalTo(0)))
+                .andExpect(jsonPath("$[0].alerts.length()", equalTo(0)))
     }
 
     private fun <T> givenSuspended(block: suspend () -> T) = given(runBlocking { block() })!!

@@ -154,7 +154,10 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
             >
               {
                 alert.isValidated
-                  ? <AlertTransition style={alertValidatedTransition}>
+                  ? <AlertTransition
+                    data-cy={'side-window-alerts-is-validated-transition'}
+                    style={alertValidatedTransition}
+                  >
                     Alerte ajoutée à la fiche du navire
                   </AlertTransition>
                   : null

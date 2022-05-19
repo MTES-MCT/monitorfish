@@ -145,7 +145,8 @@ const SideWindow = ({ fromTab }) => {
 const Content = styled.div``
 const contentStyle = fixed => ({
   marginLeft: fixed ? 0 : 30,
-  width: '100%'
+  width: '100%',
+  overflow: 'auto'
 })
 
 const BeaconMalfunctionsBoardGrayOverlay = styled.div``

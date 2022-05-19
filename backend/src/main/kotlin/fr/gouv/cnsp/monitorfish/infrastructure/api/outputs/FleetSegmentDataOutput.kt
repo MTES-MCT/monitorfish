@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.FleetSegment
+import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 
 data class FleetSegmentDataOutput(
         val segment: String,

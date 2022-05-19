@@ -15,7 +15,7 @@ class OperationalAlertController(
         private val getOperationalAlerts: GetOperationalAlerts,
         private val validateOperationalAlert: ValidateOperationalAlert) {
 
-    @GetMapping("/")
+    @GetMapping("")
     @ApiOperation("Get operational alerts")
     fun getOperationalAlerts(): List<PendingAlert> {
         return getOperationalAlerts.execute()

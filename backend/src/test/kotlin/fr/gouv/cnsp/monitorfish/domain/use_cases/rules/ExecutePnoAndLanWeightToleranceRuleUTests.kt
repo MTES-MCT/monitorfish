@@ -1,13 +1,13 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.rules
 
 import com.nhaarman.mockitokotlin2.*
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PNOAndLANAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.PNOAndLANWeightToleranceAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.Rule
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.PNOAndLANWeightTolerance
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.RuleTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.repositories.AlertRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RuleRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyPNOAndLANLogbookMessages
@@ -31,7 +31,7 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
     private lateinit var rulesRepository: RuleRepository
 
     @MockBean
-    private lateinit var alertRepository: AlertRepository
+    private lateinit var PNOAndLANAlertRepository: PNOAndLANAlertRepository
 
     @Test
     fun `execute Should not save any alert When LAN and PNO weights are below the tolerance threshold or the minimum weight threshold`() {
@@ -49,10 +49,10 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
                 .willReturn(getDummyPNOAndLANLogbookMessages())
 
         // When
-        ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, alertRepository).execute(rule)
+        ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, PNOAndLANAlertRepository).execute(rule)
 
         // Then
-        Mockito.verify(alertRepository, never()).save(any())
+        Mockito.verify(PNOAndLANAlertRepository, never()).save(any())
     }
 
     @Test
@@ -71,11 +71,11 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
                 .willReturn(getDummyPNOAndLANLogbookMessages(1000.0, true))
 
         // When
-        ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, alertRepository).execute(rule)
+        ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, PNOAndLANAlertRepository).execute(rule)
 
         // Then
-        argumentCaptor<Alert>().apply {
-            verify(alertRepository, times(2)).save(capture())
+        argumentCaptor<PNOAndLANAlert>().apply {
+            verify(PNOAndLANAlertRepository, times(2)).save(capture())
 
             assertThat(allValues).hasSize(2)
 
@@ -119,10 +119,10 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
                 .willReturn(getDummyPNOAndLANLogbookMessages(1000.0))
 
         // When
-        ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, alertRepository).execute(rule)
+        ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, PNOAndLANAlertRepository).execute(rule)
 
         // Then
-        argumentCaptor<Alert>().apply {
+        argumentCaptor<PNOAndLANAlert>().apply {
             verify(logbookReportRepository, times(1))
                     .updateLogbookMessagesAsProcessedByRule(listOf(1, 2, 3, 4), "PNO_LAN_WEIGHT_TOLERANCE")
         }

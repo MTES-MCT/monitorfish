@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.Position
+import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import java.time.ZonedDateTime
 
 interface PositionRepository {

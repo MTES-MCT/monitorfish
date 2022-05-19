@@ -2,9 +2,9 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.times
-import fr.gouv.cnsp.monitorfish.domain.entities.VoyageDatesAndTripNumber
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
-import fr.gouv.cnsp.monitorfish.domain.repositories.AlertRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import org.assertj.core.api.Assertions.assertThat
@@ -24,7 +24,7 @@ class GetVesselVoyageUTests {
     private lateinit var logbookReportRepository: LogbookReportRepository
 
     @MockBean
-    private lateinit var alertRepository: AlertRepository
+    private lateinit var PNOAndLANAlertRepository: PNOAndLANAlertRepository
 
     @MockBean
     private lateinit var getLogbookMessages: GetLogbookMessages
@@ -38,7 +38,7 @@ class GetVesselVoyageUTests {
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("1234", startDate, endDate))
 
         // When
-        val voyage = GetVesselVoyage(logbookReportRepository, alertRepository, getLogbookMessages)
+        val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
                 .execute("FR224226850", VoyageRequest.LAST, null)
 
         val (_, alerts) = voyage.logbookMessagesAndAlerts
@@ -58,7 +58,7 @@ class GetVesselVoyageUTests {
     fun `execute Should throw an Exception When requesting a PREVIOUS voyage with current trip number as null`() {
         // When
         val throwable = catchThrowable {
-            GetVesselVoyage(logbookReportRepository, alertRepository, getLogbookMessages)
+            GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
                     .execute("FR224226850", VoyageRequest.PREVIOUS, null)
         }
 
@@ -76,7 +76,7 @@ class GetVesselVoyageUTests {
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber(tripNumber, startDate, endDate))
 
         // When
-        val voyage = GetVesselVoyage(logbookReportRepository, alertRepository, getLogbookMessages)
+        val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
                 .execute("FR224226850", VoyageRequest.LAST, "12345")
 
         val (_, alerts) = voyage.logbookMessagesAndAlerts
@@ -102,7 +102,7 @@ class GetVesselVoyageUTests {
         given(logbookReportRepository.findTripAfterTripNumber("FR224226850", expectedTripNumber)).willThrow(NoLogbookFishingTripFound("Not found"))
 
         // When
-        val voyage = GetVesselVoyage(logbookReportRepository, alertRepository, getLogbookMessages)
+        val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
                 .execute("FR224226850", VoyageRequest.NEXT, "123456788")
 
         val (_, alerts) = voyage.logbookMessagesAndAlerts

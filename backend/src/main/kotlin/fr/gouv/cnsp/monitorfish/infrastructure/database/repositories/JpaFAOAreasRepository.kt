@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.FAOArea
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
 import fr.gouv.cnsp.monitorfish.domain.repositories.FAOAreasRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBFAOAreasRepository
 import org.springframework.cache.annotation.Cacheable

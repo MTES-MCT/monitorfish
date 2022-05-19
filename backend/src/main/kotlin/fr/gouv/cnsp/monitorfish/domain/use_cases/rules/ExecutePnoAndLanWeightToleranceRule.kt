@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.rules
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PNOAndLANAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PNOAndLANCatches
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.PNOAndLANWeightToleranceAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
@@ -11,7 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.Rule
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.PNOAndLANWeightTolerance
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.RuleTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.repositories.AlertRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,7 +21,7 @@ import javax.transaction.Transactional
 
 @UseCase
 class ExecutePnoAndLanWeightToleranceRule(private val logbookReportRepository: LogbookReportRepository,
-                                          private val alertRepository: AlertRepository) {
+                                          private val PNOAndLANAlertRepository: PNOAndLANAlertRepository) {
     private val logger: Logger = LoggerFactory.getLogger(ExecutePnoAndLanWeightToleranceRule::class.java)
 
     @Transactional
@@ -47,7 +47,7 @@ class ExecutePnoAndLanWeightToleranceRule(private val logbookReportRepository: L
                             "for LAN ${lan.operationNumber} and PNO ${pno.operationNumber}")
                     val alert = buildAlert(lan, pno, rule.value, catchesOverTolerance)
 
-                    alertRepository.save(alert)
+                    PNOAndLANAlertRepository.save(alert)
                     logger.info("PNO_LAN_WEIGHT_TOLERANCE: Alert saved")
                 }
             }
@@ -61,7 +61,7 @@ class ExecutePnoAndLanWeightToleranceRule(private val logbookReportRepository: L
         }
     }
 
-    private fun buildAlert(lan: LogbookMessage, pno: LogbookMessage, value: PNOAndLANWeightTolerance, catchesOverTolerance: List<PNOAndLANCatches>) : Alert {
+    private fun buildAlert(lan: LogbookMessage, pno: LogbookMessage, value: PNOAndLANWeightTolerance, catchesOverTolerance: List<PNOAndLANCatches>) : PNOAndLANAlert {
         val toleranceAlert = PNOAndLANWeightToleranceAlert(
                 lan.operationNumber,
                 pno.operationNumber,
@@ -69,7 +69,7 @@ class ExecutePnoAndLanWeightToleranceRule(private val logbookReportRepository: L
                 value.minimumWeightThreshold,
                 catchesOverTolerance)
 
-        return Alert(
+        return PNOAndLANAlert(
                 id = UUID.randomUUID(),
                 internalReferenceNumber = lan.internalReferenceNumber,
                 externalReferenceNumber = lan.externalReferenceNumber,

@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
-import fr.gouv.cnsp.monitorfish.domain.entities.Gear
-import fr.gouv.cnsp.monitorfish.domain.entities.Port
+import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository

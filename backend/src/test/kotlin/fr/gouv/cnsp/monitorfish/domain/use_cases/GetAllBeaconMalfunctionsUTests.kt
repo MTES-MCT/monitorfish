@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
-import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus

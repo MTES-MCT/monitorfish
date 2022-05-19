@@ -5,8 +5,8 @@ import com.neovisionaries.i18n.CountryCode
 import com.vladmihalcea.hibernate.type.array.ListArrayType
 import com.vladmihalcea.hibernate.type.interval.PostgreSQLIntervalType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
-import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species

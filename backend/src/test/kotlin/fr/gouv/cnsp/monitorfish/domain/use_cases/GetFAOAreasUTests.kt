@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.domain.entities.FAOArea
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
 import fr.gouv.cnsp.monitorfish.domain.repositories.FAOAreasRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

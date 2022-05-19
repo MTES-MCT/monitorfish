@@ -10,17 +10,14 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Import
-import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 @Import(MapperConfiguration::class)
-@RunWith(SpringRunner::class)
 class JpaLogbookLineRepositoryITests : AbstractDBTests() {
 
     @Autowired

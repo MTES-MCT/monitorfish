@@ -2,10 +2,10 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.Gear
-import fr.gouv.cnsp.monitorfish.domain.entities.Species
-import fr.gouv.cnsp.monitorfish.domain.entities.SpeciesAndSpeciesGroups
-import fr.gouv.cnsp.monitorfish.domain.entities.SpeciesGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
+import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesAndSpeciesGroups
+import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesGroup
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllGears
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetAllSpeciesAndSpeciesGroups
 import fr.gouv.cnsp.monitorfish.domain.use_cases.GetFAOAreas

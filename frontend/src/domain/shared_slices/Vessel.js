@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { atLeastOneVesselSelected, Vessel, VesselSidebarTab } from '../entities/vessel'
+import { infractionSuspicionReportingTypes } from '../entities/reporting'
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 
@@ -57,7 +58,8 @@ const vesselSlice = createSlice({
             fleetSegmentsArray: vessel.segments ? vessel.segments.map(segment => segment.replace(' ', '')) : [],
             speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : [],
             lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : '',
-            hasAlert: !!vessel.alerts?.length
+            hasAlert: !!vessel.alerts?.length,
+            hasInfractionSuspicion: vessel.reporting.some(reportingType => infractionSuspicionReportingTypes.indexOf(reportingType) >= 0)
           },
           vesselId: Vessel.getVesselFeatureId(vessel),
           isAtPort: vessel.isAtPort,

@@ -27,6 +27,7 @@ import MapMenu from './MapMenu'
 import VesselAlertLayer from '../../layers/VesselAlertLayer'
 import VesselBeaconMalfunctionLayer from '../../layers/VesselBeaconMalfunctionLayer'
 import VesselAlertAndBeaconMalfunctionLayer from '../../layers/VesselAlertAndBeaconMalfunctionLayer'
+import VesselInfractionSuspicionLayer from '../../layers/VesselInfractionSuspicionLayer'
 
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)
@@ -84,6 +85,7 @@ const Map = () => {
       <VesselAlertLayer adminRole={adminRole}/>
       <VesselBeaconMalfunctionLayer adminRole={adminRole}/>
       <VesselAlertAndBeaconMalfunctionLayer adminRole={adminRole}/>
+      <VesselInfractionSuspicionLayer adminRole={adminRole}/>
       <VesselCardOverlay feature={currentFeature}/>
       <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
       <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>

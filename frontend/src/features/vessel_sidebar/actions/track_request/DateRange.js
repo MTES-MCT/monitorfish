@@ -1,5 +1,5 @@
 import React from 'react'
-import DateRangePicker, { beforeToday } from 'rsuite/lib/DateRangePicker'
+import DateRangePicker, { beforeToday, afterToday } from 'rsuite/lib/DateRangePicker'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 
@@ -16,7 +16,7 @@ function convertToLocalDates (date) {
   return nextDate
 }
 
-const DateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackFromDates, width, placeholder, containerRef }) => {
+const DateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackFromDates, width, placeholder, containerRef, disableAfterToday }) => {
   return (
     <Wrapper
       style={wrapperStyle(width)}
@@ -28,7 +28,7 @@ const DateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackFromDates
         placeholder={placeholder}
         cleanable
         size={'sm'}
-        disabledDate={beforeToday()}
+        disabledDate={disableAfterToday ? afterToday() : beforeToday()}
         value={dates.map(date => convertToLocalDates(date))}
         onOk={modifyVesselTrackFromDates}
         onClean={resetToDefaultTrackDepth}

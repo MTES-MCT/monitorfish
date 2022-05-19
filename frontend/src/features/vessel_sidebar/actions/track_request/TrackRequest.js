@@ -85,6 +85,7 @@ const TrackRequest = ({ sidebarIsOpen, rightMenuIsOpen, trackRequestIsOpen, setT
                 modifyVesselTrackDepth={triggerModifyVesselTrackFromTrackDepthRadio}
               />
               <DateRange
+                disableAfterToday
                 placeholder={'Choisir une période précise'}
                 dates={selectedDates}
                 resetToDefaultTrackDepth={resetToDefaultTrackDepth}

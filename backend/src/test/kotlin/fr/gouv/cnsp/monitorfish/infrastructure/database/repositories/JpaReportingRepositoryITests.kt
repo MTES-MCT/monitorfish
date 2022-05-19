@@ -34,12 +34,12 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reporting).hasSize(1)
-        assertThat(reporting.first().internalReferenceNumber).isEqualTo("FRFGRGR")
-        assertThat(reporting.first().externalReferenceNumber).isEqualTo("RGD")
-        val alert = reporting.first().value as ThreeMilesTrawlingAlert
+        assertThat(reporting).hasSize(4)
+        assertThat(reporting.last().internalReferenceNumber).isEqualTo("FRFGRGR")
+        assertThat(reporting.last().externalReferenceNumber).isEqualTo("RGD")
+        val alert = reporting.last().value as ThreeMilesTrawlingAlert
         assertThat(alert.seaFront).isEqualTo("NAMO")
-        assertThat(reporting.first().creationDate).isEqualTo(creationDate)
-        assertThat(reporting.first().validationDate).isEqualTo(now)
+        assertThat(reporting.last().creationDate).isEqualTo(creationDate)
+        assertThat(reporting.last().validationDate).isEqualTo(now)
     }
 }

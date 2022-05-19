@@ -334,9 +334,9 @@ def clean_vessels(all_vessels):
         "operator_email": [
             "operator_email_pos",
             "operator_email_nf",
-            "operator_email_ncp",
             "operator_email_1_ne",
             "operator_email_2_ne",
+            "operator_email_ncp",
         ],
         "operator_phones": [
             "operator_phones_pos",
@@ -353,7 +353,7 @@ def clean_vessels(all_vessels):
         "length": ["length_nf", "length_ne", "length_ncp"],
         "power": ["power_nf", "power_ncp"],
         "district": ["district_f", "district_ncp"],
-        "vessel_type": ["vessel_type_ncp", "vessel_type_nf"],
+        "vessel_type": ["vessel_type_nf", "vessel_type_ncp"],
         "vessel_mobile_phone": ["vessel_mobile_phone_nf", "vessel_mobile_phone_ne"],
         "vessel_fax": ["vessel_fax_nf", "vessel_fax_ne"],
         "vessel_telex": ["vessel_telex_nf", "vessel_telex_ne"],

@@ -19,6 +19,48 @@ from src.pipeline.flows.vessels import (
 )
 from tests.mocks import mock_extract_side_effect
 
+cleaned_vessels_data = {
+    "id": [1, 2],
+    "imo": ["123", None],
+    "cfr": ["FRA000123456", None],
+    "external_immatriculation": [None, "EXT12345"],
+    "mmsi": [None, "MMSI_id"],
+    "ircs": ["FAKE", "DUMMY"],
+    "vessel_name": ["Le bateau", "Le navire"],
+    "flag_state": ["FRA", None],
+    "width": [5.23, None],
+    "length": [12.56, 23.6],
+    "district": ["Le Guilvinec", None],
+    "district_code": ["GV", None],
+    "gauge": [125.2, None],
+    "registry_port": ["Guilvinec", None],
+    "power": [56.36, None],
+    "vessel_type": ["Chalutier", "Dragueur"],
+    "sailing_category": ["2ème", None],
+    "sailing_type": ["Pêche au large, Pêche côtière", None],
+    "declared_fishing_gears": [["OTM", "OTB", "DRB"], ["OTM", "PTB", "OTB", "DRB"]],
+    "nav_licence_expiration_date": [datetime.datetime(2021, 6, 12, 0, 0, 0), None],
+    "proprietor_name": ["Le propriétaire", "Rackham le Rouge"],
+    "proprietor_phones": [["12345678910"], []],
+    "proprietor_emails": [["proprio@peche.fish"], ["proprio@fish.net"]],
+    "operator_name": ["name_pos_123", "The Fishing Co."],
+    "operator_phones": [
+        ["phone_pos_123", "phone_pos_456", "mobile_phone_pos_789"],
+        ["06789_nf"],
+    ],
+    "operator_mobile_phone": ["mobile_phone_pos_789", "06789_nf"],
+    "operator_email": ["email_pos_123", "email@operator.ne"],
+    "operator_fax": ["fax-123456", "fax_pos_123"],
+    "vessel_phones": [["0123456789", "9876543210"], ["321654987", "0123456"]],
+    "vessel_mobile_phone": [None, "0123456"],
+    "vessel_emails": [[], ["vessel@email.me", "vessel_bis@email.me"]],
+    "vessel_fax": ["+123456789", "faxne_999"],
+    "vessel_telex": ["4-000-000", "444444444"],
+    "beacon_number": [None, "beacbeac"],
+    "beacon_status": [None, "ACTIVATED"],
+    "under_charter": [True, False],
+}
+
 
 @patch("src.pipeline.flows.vessels.extract")
 def test_extract_cee_vessels(mock_extract):
@@ -198,55 +240,7 @@ def test_clean_vessels():
 
     cleaned_vessels = clean_vessels.run(all_vessels)
 
-    expected_cleaned_vessels = pd.DataFrame(
-        {
-            "id": [1, 2],
-            "imo": ["123", None],
-            "cfr": ["FRA000123456", None],
-            "external_immatriculation": [None, "EXT12345"],
-            "mmsi": [None, "MMSI_id"],
-            "ircs": ["FAKE", "DUMMY"],
-            "vessel_name": ["Le bateau", "Le navire"],
-            "flag_state": ["FRA", None],
-            "width": [5.23, None],
-            "length": [12.56, 23.6],
-            "district": ["Le Guilvinec", None],
-            "district_code": ["GV", None],
-            "gauge": [125.2, None],
-            "registry_port": ["Guilvinec", None],
-            "power": [56.36, None],
-            "vessel_type": ["Chalutier", "Dragueur"],
-            "sailing_category": ["2ème", None],
-            "sailing_type": ["Pêche au large, Pêche côtière", None],
-            "declared_fishing_gears": [
-                ["OTM", "OTB", "DRB"],
-                ["OTM", "PTB", "OTB", "DRB"],
-            ],
-            "nav_licence_expiration_date": [
-                datetime.datetime(2021, 6, 12, 0, 0, 0),
-                None,
-            ],
-            "proprietor_name": ["Le propriétaire", "Rackham le Rouge"],
-            "proprietor_phones": [["12345678910"], []],
-            "proprietor_emails": [["proprio@peche.fish"], ["proprio@fish.net"]],
-            "operator_name": ["name_pos_123", "The Fishing Co."],
-            "operator_phones": [
-                ["phone_pos_123", "phone_pos_456", "mobile_phone_pos_789"],
-                ["06789_nf"],
-            ],
-            "operator_mobile_phone": ["mobile_phone_pos_789", "06789_nf"],
-            "operator_email": ["email_pos_123", "email@operator.ne"],
-            "operator_fax": ["fax-123456", "fax_pos_123"],
-            "vessel_phones": [["0123456789", "9876543210"], ["321654987", "0123456"]],
-            "vessel_mobile_phone": [None, "0123456"],
-            "vessel_emails": [[], ["vessel@email.me", "vessel_bis@email.me"]],
-            "vessel_fax": ["+123456789", "faxne_999"],
-            "vessel_telex": ["4-000-000", "444444444"],
-            "beacon_number": [None, "beacbeac"],
-            "beacon_status": [None, "ACTIVATED"],
-            "under_charter": [True, False],
-        }
-    )
+    expected_cleaned_vessels = pd.DataFrame(cleaned_vessels_data)
 
     pd.testing.assert_frame_equal(
         cleaned_vessels, expected_cleaned_vessels, check_dtype=False
@@ -254,48 +248,6 @@ def test_clean_vessels():
 
 
 def test_load_vessels(reset_test_data):
-
-    data = {
-        "id": [1, 2],
-        "imo": ["123", None],
-        "cfr": ["FRA000123456", None],
-        "external_immatriculation": [None, "EXT12345"],
-        "mmsi": [None, "MMSI_id"],
-        "ircs": ["FAKE", "DUMMY"],
-        "vessel_name": ["Le bateau", "Le navire"],
-        "flag_state": ["FRA", None],
-        "width": [5.23, None],
-        "length": [12.56, 23.6],
-        "district": ["Le Guilvinec", None],
-        "district_code": ["GV", None],
-        "gauge": [125.2, None],
-        "registry_port": ["Guilvinec", None],
-        "power": [56.36, None],
-        "vessel_type": ["Chalutier", "Dragueur"],
-        "sailing_category": ["2ème", None],
-        "sailing_type": ["Pêche au large, Pêche côtière", None],
-        "declared_fishing_gears": [["OTM", "OTB", "DRB"], ["OTM", "PTB", "OTB", "DRB"]],
-        "nav_licence_expiration_date": [datetime.datetime(2021, 6, 12, 0, 0, 0), None],
-        "proprietor_name": ["Le propriétaire", "Rackham le Rouge"],
-        "proprietor_phones": [["12345678910"], []],
-        "proprietor_emails": [["proprio@peche.fish"], ["proprio@fish.net"]],
-        "operator_name": ["name_pos_123", "The Fishing Co."],
-        "operator_phones": [
-            ["phone_pos_123", "phone_pos_456", "mobile_phone_pos_789"],
-            ["06789_nf"],
-        ],
-        "operator_mobile_phone": ["mobile_phone_pos_789", "06789_nf"],
-        "operator_email": ["email_pos_123", "email@operator.ne"],
-        "operator_fax": ["fax-123456", "fax_pos_123"],
-        "vessel_phones": [["0123456789", "9876543210"], ["321654987", "0123456"]],
-        "vessel_mobile_phone": [None, "0123456"],
-        "vessel_emails": [[], ["vessel@email.me", "vessel_bis@email.me"]],
-        "vessel_fax": ["+123456789", "faxne_999"],
-        "vessel_telex": ["4-000-000", "444444444"],
-        "beacon_number": [None, "beacbeac"],
-        "beacon_status": [None, "ACTIVATED"],
-        "under_charter": [True, False],
-    }
 
     dtypes = {
         "id": "int64",
@@ -336,6 +288,6 @@ def test_load_vessels(reset_test_data):
         "under_charter": bool,
     }
 
-    dummy_vessels = pd.DataFrame(data)
+    dummy_vessels = pd.DataFrame(cleaned_vessels_data)
     dummy_vessels = dummy_vessels.astype(dtypes)
     load_vessels.run(dummy_vessels)

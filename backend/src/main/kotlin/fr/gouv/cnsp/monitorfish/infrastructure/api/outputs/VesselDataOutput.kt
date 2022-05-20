@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.Vessel
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselWithData
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import java.util.*
 
@@ -30,7 +29,7 @@ data class VesselDataOutput(
         val navigationLicenceExpirationDate: Date? = null,
         val operatorName: String? = null,
         val operatorPhones: List<String>? = null,
-        val operatorEmails: List<String>? = null,
+        val operatorEmail: String? = null,
         val proprietorName: String? = null,
         val proprietorPhones: List<String>? = null,
         val proprietorEmails: List<String>? = null,
@@ -65,7 +64,7 @@ data class VesselDataOutput(
                     navigationLicenceExpirationDate = vessel.navigationLicenceExpirationDate,
                     operatorName = vessel.operatorName,
                     operatorPhones = vessel.operatorPhones,
-                    operatorEmails = vessel.operatorEmails,
+                    operatorEmail = vessel.operatorEmail,
                     proprietorName = vessel.proprietorName,
                     proprietorPhones = vessel.proprietorPhones,
                     proprietorEmails = vessel.proprietorEmails,

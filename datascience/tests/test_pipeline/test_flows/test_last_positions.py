@@ -131,6 +131,7 @@ def test_load_last_positions(reset_test_data):
             "risk_factor": [2.36, 1.5],
             "is_at_port": [True, False],
             "alerts": [["THREE_MILES_TRAWLING_ALERT"], None],
+            "reporting": [["ALERT"], None],
             "is_manual": [True, False],
             "beacon_malfunction_id": [1, None],
         }
@@ -450,7 +451,7 @@ def test_merge_last_positions_risk_factors_alerts_reporting():
             "cfr": ["A", "F"],
             "ircs": [None, "ff"],
             "external_immatriculation": ["aaa", None],
-            "alerts": [
+            "reporting": [
                 ["OBSERVATION", "ALERT"],
                 ["INFRACTION_SUSPICION"],
             ],

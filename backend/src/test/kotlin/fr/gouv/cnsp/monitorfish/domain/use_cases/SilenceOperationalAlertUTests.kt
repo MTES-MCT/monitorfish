@@ -82,9 +82,9 @@ class SilenceOperationalAlertUTests {
             verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), capture())
 
             assertThat(allValues.first().toString().split("T")[0])
-                    .isEqualTo(ZonedDateTime.now().plusDays(2).toString().split("T")[0])
-            assertThat(allValues.last().toString().split("T")[0])
                     .isEqualTo(ZonedDateTime.now().plusDays(26).toString().split("T")[0])
+            assertThat(allValues.last().toString().split("T")[0])
+                    .isEqualTo(ZonedDateTime.now().plusDays(2).toString().split("T")[0])
         }
     }
 

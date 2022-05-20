@@ -164,7 +164,10 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
               }
               {
                 alert.silencedPeriod
-                  ? <AlertTransition style={alertSilencedTransition}>
+                  ? <AlertTransition
+                    data-cy={'side-window-alerts-is-silenced-transition'}
+                    style={alertSilencedTransition}
+                  >
                     L&apos;alerte sera ignorée {getSilencedAlertPeriodText(alert.silencedPeriod)}
                 </AlertTransition>
                   : null

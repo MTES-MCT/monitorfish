@@ -14,13 +14,13 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
 
     fun execute(alertId: Int,
                 silenceAlertPeriod: SilenceAlertPeriod,
-                fromDateTime: ZonedDateTime? = null,
-                toDateTime: ZonedDateTime? = null) {
+                afterDateTime: ZonedDateTime? = null,
+                beforeDateTime: ZonedDateTime? = null) {
         if(silenceAlertPeriod == SilenceAlertPeriod.CUSTOM) {
-            requireNotNull(fromDateTime) {
+            requireNotNull(afterDateTime) {
                 "begin date must be not null when ignoring an operational alert with a custom period"
             }
-            requireNotNull(toDateTime) {
+            requireNotNull(beforeDateTime) {
                 "end date must be not null when ignoring an operational alert with a custom period"
             }
         }
@@ -35,11 +35,11 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
             SilenceAlertPeriod.ONE_WEEK -> ZonedDateTime.now().plusWeeks(1)
             SilenceAlertPeriod.ONE_MONTH -> ZonedDateTime.now().plusMonths(1)
             SilenceAlertPeriod.ONE_YEAR ->  ZonedDateTime.now().plusYears(1)
-            SilenceAlertPeriod.CUSTOM -> fromDateTime!!
+            SilenceAlertPeriod.CUSTOM -> beforeDateTime!!
         }
 
-        val to = when (silenceAlertPeriod) {
-            SilenceAlertPeriod.CUSTOM -> toDateTime
+        val after = when (silenceAlertPeriod) {
+            SilenceAlertPeriod.CUSTOM -> afterDateTime
             else -> null
         }
 
@@ -47,7 +47,7 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
 
         silencedAlertRepository.save(
                 alert = silencedAlert,
-                silencedAfterDate = to,
+                silencedAfterDate = after,
                 silencedBeforeDate = before)
 
         pendingAlertRepository.delete(alertId)

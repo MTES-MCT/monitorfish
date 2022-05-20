@@ -1,24 +1,38 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PNOAndLANAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilenceAlertPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetOperationalAlerts
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.SilenceOperationalAlert
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ValidateOperationalAlert
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateOrUpdateFleetSegmentDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SilenceOperationalAlertDataInput
+import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito
+import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
+import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 @Import(MeterRegistryConfiguration::class)
@@ -34,6 +48,9 @@ class OperationalAlertControllerITests {
 
     @MockBean
     private lateinit var validateOperationalAlert: ValidateOperationalAlert
+
+    @MockBean
+    private lateinit var silenceOperationalAlert: SilenceOperationalAlert
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -65,6 +82,31 @@ class OperationalAlertControllerITests {
         mockMvc.perform(MockMvcRequestBuilders.put("/bff/v1/operational_alerts/666/validate"))
                 // Then
                 .andExpect(MockMvcResultMatchers.status().isOk)
+    }
+
+    @Test
+    fun `Should silence an operational alert`() {
+        // Given
+        val before = ZonedDateTime.now()
+        val after = ZonedDateTime.now().minusMinutes(56)
+
+        // When
+        mockMvc.perform(MockMvcRequestBuilders.put("/bff/v1/operational_alerts/666/silence")
+                .content(objectMapper.writeValueAsString(SilenceOperationalAlertDataInput(
+                        silencedAlertPeriod = SilenceAlertPeriod.CUSTOM,
+                        beforeDateTime = before,
+                        afterDateTime = after)))
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(MockMvcResultMatchers.status().isOk)
+
+        argumentCaptor<ZonedDateTime>().apply {
+            verify(silenceOperationalAlert).execute(eq(666), eq(SilenceAlertPeriod.CUSTOM), capture(), capture())
+
+            assertThat(allValues).hasSize(2)
+            assertThat(allValues.first().withZoneSameInstant(UTC).toString()).isEqualTo(after.withZoneSameInstant(UTC).toString())
+            assertThat(allValues.last().withZoneSameInstant(UTC).toString()).isEqualTo(before.withZoneSameInstant(UTC).toString())
+        }
     }
 
 }

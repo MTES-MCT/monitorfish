@@ -66,6 +66,14 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
           : null
       }
       {
+        adminRole && vesselProperties.hasInfractionSuspicion
+          ? <VesselCardAlert>
+            <AlertIcon/>
+            Suspicion d&apos;infraction
+          </VesselCardAlert>
+          : null
+      }
+      {
         adminRole && vesselProperties.beaconMalfunctionId
           ? <VesselCardBeaconMalfunction data-cy={'vessel-card-beacon-malfunction'}>
             <BeaconMalfunctionIcon/>

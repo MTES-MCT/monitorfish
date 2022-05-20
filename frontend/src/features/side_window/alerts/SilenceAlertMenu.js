@@ -60,6 +60,7 @@ const SilenceAlertMenu = ({ showSilencedAlertForIndex, setShowSilencedAlertForIn
             Ignorer l&apos;alerte pour...
           </MenuLink>
           <MenuLink
+            data-cy={'side-window-silence-alert-this-occurrence'}
             onMouseOver={e => setBackgroundAsHovered(e)}
             onMouseOut={e => setBackgroundAsNotHovered(e)}
             style={menuLinkStyle(false, true)}

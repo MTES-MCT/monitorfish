@@ -61,4 +61,22 @@ context('Alerts', () => {
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 8)
   })
+
+  it('An alert Should be silenced', () => {
+    // Given
+    cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
+
+    // When
+    cy.intercept('PUT', '/bff/v1/operational_alerts/2/silence').as('silenceAlert')
+    cy.get('*[data-cy="side-window-alerts-silence-alert"]').first().click({ force: true })
+    cy.get('*[data-cy="side-window-silence-alert-this-occurrence"]').first().click({ force: true })
+    cy.get('*[data-cy="side-window-alerts-is-silenced-transition"]').should('be.visible')
+    cy.wait('@silenceAlert')
+      .then(({ request, response }) => expect(response.statusCode).equal(200))
+
+    // The value is saved in database when I refresh the page
+    cy.visit(`http://localhost:${port}/side_window`)
+    cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
+    cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 7)
+  })
 })

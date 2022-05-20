@@ -414,7 +414,7 @@ def load_last_positions(last_positions):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
-        pg_array_columns=["segments", "alerts"],
+        pg_array_columns=["segments", "alerts", "reporting"],
         handle_array_conversion_errors=True,
         value_on_array_conversion_error="{}",
         jsonb_columns=["gear_onboard", "species_onboard"],

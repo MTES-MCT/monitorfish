@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities
 
 import com.neovisionaries.i18n.CountryCode
-import java.time.ZonedDateTime
 import java.util.*
 
 data class Vessel(
@@ -28,7 +27,7 @@ data class Vessel(
         val navigationLicenceExpirationDate: Date? = null,
         val operatorName: String? = null,
         val operatorPhones: List<String>? = null,
-        val operatorEmails: List<String>? = null,
+        val operatorEmail: String? = null,
         val proprietorName: String? = null,
         val proprietorPhones: List<String>? = null,
         val proprietorEmails: List<String>? = null,

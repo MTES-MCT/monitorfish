@@ -241,7 +241,7 @@ const VesselIdentity = () => {
                       ? <>
                         {vessel?.operatorName}
                         <span>{vessel?.operatorPhones ? <><br/>{vessel?.operatorPhones.join(', ')}</> : ''}</span>
-                        {vessel?.operatorEmails ? <><br/>{vessel?.operatorEmails.join(', ')}</> : ''}
+                        {vessel?.operatorEmail ? <><br/>{vessel?.operatorEmail}</> : ''}
                       </>
                       : <NoPersonalData>-</NoPersonalData>
                     }

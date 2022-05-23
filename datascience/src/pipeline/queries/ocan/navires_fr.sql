@@ -33,7 +33,8 @@ e AS (
         raison_sociale AS name,
         email,
         telephone AS phone,
-        tel_mobile AS mobile_phone
+        tel_mobile AS mobile_phone,
+        fax
     FROM ADM.ADM_ENTREPRISE
 ), 
 
@@ -43,7 +44,8 @@ a AS (
         nom || DECODE(prenom, NULL, '', ' ') || prenom as name,
         email, 
         telephone AS phone, 
-        tel_mobile AS mobile_phone
+        tel_mobile AS mobile_phone,
+        fax
     FROM ADM.ADM_ADMINISTRE
 ),
 
@@ -56,7 +58,6 @@ adm AS (
 nfp AS (
     SELECT
         nfp.id_nav_navire_francais AS id_nav_navire_francais,
-        nfp.numero_cfr AS cfr_nfp,
         eng_1.code AS fishing_gear_main,
         eng_2.code AS fishing_gear_secondary,
         eng_3.code AS fishing_gear_third
@@ -70,7 +71,7 @@ nfp AS (
 ),
 
 nf AS (
-    SELECT 
+    SELECT
         id_nav_navire_francais,
         id_nav_flotteur,
         longueur_hors_tout,
@@ -83,6 +84,8 @@ nf AS (
         tel_fixe_2_contact_navire,
         tel_fixe_3_contact_navire,
         tel_mobile_contact_navire,
+        fax,
+        telex,
         idc_quartier,
         idc_type_navire,
         idc_port_exploitation,
@@ -93,6 +96,7 @@ nf AS (
     WHERE est_dernier = 1
 )
 
+
 SELECT
 	nf.id_nav_flotteur AS id_nav_flotteur_nf,
 	nf.longueur_hors_tout AS length_nf,
@@ -102,7 +106,9 @@ SELECT
 	nf.num_telephone AS vessel_phone_1_nf,
 	nf.tel_fixe_2_contact_navire AS vessel_phone_2_nf,
 	nf.tel_fixe_3_contact_navire AS vessel_phone_3_nf,
-	nf.tel_mobile_contact_navire AS vessel_phone_4_nf,
+	nf.tel_mobile_contact_navire AS vessel_mobile_phone_nf,
+    nf.fax AS vessel_fax_nf,
+    nf.telex AS vessel_telex_nf,
 	LOWER(nf.email1) AS vessel_email_1_nf,
 	LOWER(nf.email2) AS vessel_email_2_nf,
 	ctn.libelle_minus AS vessel_type_nf,
@@ -110,12 +116,13 @@ SELECT
 	pa.sailing_types as sailing_types_nf,
     INITCAP(adm_operator.name) AS operator_name_nf,
     LOWER(adm_operator.email) AS operator_email_nf,
-    adm_operator.phone AS operator_phone_1_nf,
-    adm_operator.mobile_phone AS operator_phone_2_nf,
+    adm_operator.phone AS operator_phone_nf,
+    adm_operator.mobile_phone AS operator_mobile_phone_nf,
+    adm_operator.fax AS operator_fax_nf,
     INITCAP(adm_proprietor.name) AS proprietor_name_nf,
     LOWER(adm_proprietor.email) AS proprietor_email_nf,
-    adm_proprietor.phone AS proprietor_phone_1_nf,
-    adm_proprietor.mobile_phone AS proprietor_phone_2_nf,
+    adm_proprietor.phone AS proprietor_phone_nf,
+    adm_proprietor.mobile_phone AS proprietor_mobile_phone_nf,
     nfp.fishing_gear_main AS fishing_gear_main_nfp,
     nfp.fishing_gear_secondary AS fishing_gear_secondary_nfp,
     nfp.fishing_gear_third AS fishing_gear_third_nfp

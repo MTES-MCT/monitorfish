@@ -68,9 +68,8 @@ data class VesselEntity(
         @Column(name = "operator_phones", columnDefinition = "varchar(100)[]")
         @Type(type = "list-array")
         val operatorPhones: List<String>? = null,
-        @Column(name = "operator_emails", columnDefinition = "varchar(100)[]")
-        @Type(type = "list-array")
-        val operatorEmails: List<String>? = null,
+        @Column(name = "operator_email")
+        val operatorEmail: String? = null,
         @Column(name = "proprietor_name")
         val proprietorName: String? = null,
         @Column(name = "proprietor_phones", columnDefinition = "varchar(100)[]")
@@ -119,7 +118,7 @@ data class VesselEntity(
             navigationLicenceExpirationDate = navigationLicenceExpirationDate,
             operatorName = operatorName,
             operatorPhones = operatorPhones,
-            operatorEmails = operatorEmails,
+            operatorEmail = operatorEmail,
             proprietorName = proprietorName,
             proprietorPhones = proprietorPhones,
             proprietorEmails = proprietorEmails,
@@ -154,7 +153,7 @@ data class VesselEntity(
                     navigationLicenceExpirationDate = vessel.navigationLicenceExpirationDate,
                     operatorName = vessel.operatorName,
                     operatorPhones = vessel.operatorPhones,
-                    operatorEmails = vessel.operatorEmails,
+                    operatorEmail = vessel.operatorEmail,
                     proprietorName = vessel.proprietorName,
                     proprietorPhones = vessel.proprietorPhones,
                     proprietorEmails = vessel.proprietorEmails,

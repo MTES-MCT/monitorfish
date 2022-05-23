@@ -436,36 +436,6 @@ def clean_vessels(all_vessels):
 
 @task(checkpoint=False)
 def load_vessels(all_vessels):
-    all_vessels = all_vessels.astype(
-        {
-            "imo": str,
-            "cfr": str,
-            "external_immatriculation": str,
-            "mmsi": str,
-            "ircs": str,
-            "vessel_name": str,
-            "flag_state": str,
-            "width": float,
-            "length": float,
-            "district": str,
-            "district_code": str,
-            "gauge": float,
-            "registry_port": str,
-            "power": float,
-            "vessel_type": str,
-            "sailing_category": str,
-            "sailing_type": str,
-            "nav_licence_expiration_date": "datetime64[ns]",
-            "proprietor_name": str,
-            "operator_name": str,
-            "operator_email": str,
-            "operator_fax": str,
-            "operator_mobile_phone": str,
-            "vessel_mobile_phone": str,
-            "vessel_fax": str,
-            "vessel_telex": str,
-        }
-    )
 
     all_vessels["width"] = np.asarray(all_vessels["width"])
 

@@ -79,7 +79,6 @@ export const getTime = (dateString, withoutSeconds) => {
 
   let time = date.toLocaleTimeString([], timeOptions)
   time = time.replace(':', 'h')
-  time = time.replace('24', '00')
 
   return time
 }

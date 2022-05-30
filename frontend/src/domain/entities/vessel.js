@@ -249,8 +249,9 @@ export const VesselSidebarTab = {
   SUMMARY: 1,
   IDENTITY: 2,
   VOYAGES: 3,
-  CONTROLS: 4,
-  ERSVMS: 5
+  REPORTING: 4,
+  CONTROLS: 5,
+  ERSVMS: 6
 }
 
 export const FishingActivitiesTab = {

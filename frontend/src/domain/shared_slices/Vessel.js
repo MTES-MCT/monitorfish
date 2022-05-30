@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { atLeastOneVesselSelected, Vessel, VesselSidebarTab } from '../entities/vessel'
-import { infractionSuspicionReportingTypes } from '../entities/reporting'
+import { reportingIsAnInfractionSuspicion, reportingType } from '../entities/reporting'
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 
@@ -59,7 +59,7 @@ const vesselSlice = createSlice({
             speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : [],
             lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : '',
             hasAlert: !!vessel.alerts?.length,
-            hasInfractionSuspicion: vessel.reporting.some(reportingType => infractionSuspicionReportingTypes.indexOf(reportingType) >= 0)
+            hasInfractionSuspicion: vessel.reporting.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
           },
           vesselId: Vessel.getVesselFeatureId(vessel),
           isAtPort: vessel.isAtPort,
@@ -78,12 +78,63 @@ const vesselSlice = createSlice({
         return
       }
 
-      state.vessels = state.vessels.map((vessel) => {
+      state.vessels = state.vessels.map(vessel => {
         return {
           ...vessel,
           isFiltered: 0
         }
       })
+    },
+    /**
+     * Update the vessel alert and reporting in the vessels array
+     * before the /vessels API is fetched from the cron
+     * @function updateVesselsAlertsAndReporting
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: {
+     *   vesselId: string,
+     *   alertType: string,
+     *   isValidated: boolean
+     * }}} action - the vessel alert to validate or silence
+     */
+    updateVesselsAlertsAndReporting (state, action) {
+      state.vessels = state.vessels.map(vessel => {
+        if (vessel.vesselId !== action.payload.vesselId) {
+          return vessel
+        }
+        const filteredAlerts = vessel.vesselProperties.alerts?.filter(alert => alert !== action.payload.alertType)
+
+        if (action.payload.isValidated) {
+          const addedReporting = vessel.vesselProperties.reporting?.concat(reportingType.ALERT.code)
+
+          return {
+            ...vessel,
+            vesselProperties: {
+              ...vessel.vesselProperties,
+              alerts: filteredAlerts,
+              hasAlert: !!filteredAlerts.length,
+              reporting: addedReporting,
+              hasInfractionSuspicion: addedReporting.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+            }
+          }
+        }
+
+        return {
+          ...vessel,
+          vesselProperties: {
+            ...vessel.vesselProperties,
+            alerts: filteredAlerts,
+            hasAlert: !!filteredAlerts.length
+          }
+        }
+      })
+
+      const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType)
+      state.selectedVessel = {
+        ...state.selectedVessel,
+        alerts: filteredAlerts,
+        hasAlert: !!filteredAlerts.length
+      }
     },
     setVesselsEstimatedPositions (state, action) {
       state.vesselsEstimatedPositions = action.payload
@@ -388,7 +439,8 @@ export const {
   updateVesselTrackAsZoomed,
   setVesselTrackExtent,
   resetVesselTrackExtent,
-  setHideNonSelectedVessels
+  setHideNonSelectedVessels,
+  updateVesselsAlertsAndReporting
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

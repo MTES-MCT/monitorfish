@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector, batch } from 'react-redux'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../domain/shared_slices/Map'
 import showVessel from '../../domain/use_cases/vessel/showVessel'
 import LayersEnum from '../../domain/entities/layers'

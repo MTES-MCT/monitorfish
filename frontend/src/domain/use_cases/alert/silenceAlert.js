@@ -2,6 +2,8 @@ import { setError } from '../../shared_slices/Global'
 import { setAlerts } from '../../shared_slices/Alert'
 import { silenceAlertFromAPI } from '../../../api/alert'
 import { removeAlert } from './validateAlert'
+import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
+import { Vessel } from '../../entities/vessel'
 
 /**
  * Silence an alert
@@ -19,7 +21,14 @@ const silenceAlert = (silencedAlertPeriodRequest, id) => (dispatch, getState) =>
     dispatch(setAlerts(previousAlertsWithoutSilenced))
   }, 1500)
 
-  silenceAlertFromAPI(id, silencedAlertPeriodRequest).catch(error => {
+  silenceAlertFromAPI(id, silencedAlertPeriodRequest).then(() => {
+    const silencedAlert = previousAlertsWithSilencedFlag?.find(alert => alert.id === id)
+    dispatch(removeVesselAlertAndUpdateReporting({
+      vesselId: Vessel.getVesselFeatureId(silencedAlert),
+      alertType: silencedAlert.value?.type,
+      isValidated: false
+    }))
+  }).catch(error => {
     clearTimeout(timeout)
     dispatch(setAlerts(previousAlerts))
     console.error(error)

@@ -12,6 +12,7 @@ import { CloseIcon } from '../commonStyles/icons/CloseIcon.style'
 import { PaperDarkIcon, PaperIcon } from '../commonStyles/icons/REGPaperIcon.style'
 import showVessel from '../../domain/use_cases/vessel/showVessel'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
+import getVesselVoyage from '../../domain/use_cases/vessel/getVesselVoyage'
 
 const FavoriteVessel = props => {
   const {
@@ -49,6 +50,7 @@ const FavoriteVessel = props => {
                   dispatch(hideVesselTrack(vesselId))
                 }
                 dispatch(showVessel(favorite))
+                dispatch(getVesselVoyage(favorite, null, false))
               }}
             />
         }

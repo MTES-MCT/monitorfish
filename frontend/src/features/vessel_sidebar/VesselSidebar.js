@@ -140,6 +140,14 @@ const VesselSidebar = () => {
               data-cy={'vessel-menu-reporting'}
             >
               <ReportingIcon/> <br/> Signalements
+              {
+                selectedVessel?.reporting?.length
+                  ? <ReportingNumber hasInfractionSuspicion={selectedVessel?.hasInfractionSuspicion}>
+                      {selectedVessel?.reporting?.length}
+                  </ReportingNumber>
+                  : null
+              }
+
             </Tab>
             <Tab
               isActive={vesselSidebarTab === VesselSidebarTab.CONTROLS}
@@ -226,6 +234,19 @@ const GrayOverlay = styled.div`
     0%   { opacity: 0.5; }
     100% { opacity: 0; z-index: -99999; }
   }
+`
+
+const ReportingNumber = styled.span`
+  background: ${props => props.hasInfractionSuspicion ? COLORS.maximumRed : COLORS.gunMetal};
+  border-radius: 10px;
+  color: ${COLORS.background};
+  position: absolute;
+  top: 6px;
+  right: 189px;
+  width: 14px;
+  height: 14px;
+  line-height: 10px;
+  font-weight: 700;
 `
 
 const Panel = styled.div`

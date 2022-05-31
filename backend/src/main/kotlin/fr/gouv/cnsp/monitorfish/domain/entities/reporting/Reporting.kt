@@ -13,4 +13,6 @@ class Reporting(
         val vesselIdentifier: VesselIdentifier,
         val creationDate: ZonedDateTime,
         val validationDate: ZonedDateTime? = null,
-        val value: ReportingValue)
+        val value: ReportingValue,
+        val isArchived: Boolean,
+        val isDeleted: Boolean)

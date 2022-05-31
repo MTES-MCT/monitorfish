@@ -1,34 +1,43 @@
 import { getDate } from '../../utils'
 
-export const AlertTypes = {
+export const AlertType = {
   PNO_LAN_WEIGHT_TOLERANCE_ALERT: {
     code: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT',
     name: 'Tolérance 10% non respectée',
+    isOperationalAlert: false,
     nameWithAlertDetails: (percentOfTolerance, minimumWeightThreshold) => {
       return `Tolérance de ${percentOfTolerance}% non respectée, appliquée pour un poids minimum de ${minimumWeightThreshold}kg.`
     }
   },
   THREE_MILES_TRAWLING_ALERT: {
     code: 'THREE_MILES_TRAWLING_ALERT',
-    name: '3 milles - Chaluts'
+    name: '3 milles - Chaluts',
+    isOperationalAlert: true
   },
   FRENCH_EEZ_FISHING_ALERT: {
     code: 'FRENCH_EEZ_FISHING_ALERT',
-    name: 'Pêche en ZEE française par un navire tiers'
+    name: 'Pêche en ZEE française par un navire tiers',
+    isOperationalAlert: true
   },
   TWELVE_MILES_FISHING_ALERT: {
     code: 'TWELVE_MILES_FISHING_ALERT',
-    name: '12 milles - Pêche sans droits historiques'
+    name: '12 milles - Pêche sans droits historiques',
+    isOperationalAlert: true
   },
   MISSING_FAR_ALERT: {
     code: 'MISSING_FAR_ALERT',
-    name: 'Non-emission de message "FAR"'
+    name: 'Non-emission de message "FAR"',
+    isOperationalAlert: true
   }
 }
 
+export const operationalAlertTypes = Object.keys(AlertType)
+  .map(alertTypeName => AlertType[alertTypeName])
+  .filter(alertType => alertType.isOperationalAlert)
+
 export const getAlertNameFromType = type => {
-  return AlertTypes[type]
-    ? AlertTypes[type].name
+  return AlertType[type]
+    ? AlertType[type].name
     : 'Alerte inconnue'
 }
 

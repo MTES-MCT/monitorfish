@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import ReportingHistory from './ReportingHistory'
 import CurrentReporting from './CurrentReporting'
+import getVesselReporting from '../../../domain/use_cases/vessel/getVesselReporting'
 
 const ReportingTab = {
   CURRENT_REPORTING: 'CURRENT_REPORTING',
@@ -13,13 +14,25 @@ const ReportingTab = {
 }
 
 const VesselReporting = () => {
+  const dispatch = useDispatch()
+  const {
+    selectedVesselIdentity
+  } = useSelector(state => state.vessel)
+
   const {
     /** @type {Reporting} */
     currentAndArchivedReporting,
+    archivedReportingFromDate,
     loadingReporting
   } = useSelector(state => state.reporting)
 
   const [reportingTab, setReportingTab] = useState(ReportingTab.CURRENT_REPORTING)
+
+  useEffect(() => {
+    if (archivedReportingFromDate) {
+      dispatch(getVesselReporting(true))
+    }
+  }, [selectedVesselIdentity, archivedReportingFromDate])
 
   return <>
     {

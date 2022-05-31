@@ -31,6 +31,7 @@ class VesselController(
         private val searchVessels: SearchVessels,
         private val getVesselControls: GetVesselControls,
         private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
+        private val getVesselReporting: GetVesselReporting,
         meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -188,6 +189,34 @@ class VesselController(
         val controlResumeAndControls = getVesselControls.execute(vesselId.toInt(), afterDateTime)
 
         return ControlResumeAndControlsDataOutput.fromControlResumeAndControls(controlResumeAndControls)
+    }
+
+    @GetMapping("/reporting")
+    @ApiOperation("Get vessel's reporting")
+    fun getVesselReporting(@ApiParam("Vessel internal reference number (CFR)")
+                           @RequestParam(name = "internalReferenceNumber")
+                           internalReferenceNumber: String,
+                           @ApiParam("Vessel external reference number")
+                           @RequestParam(name = "externalReferenceNumber")
+                           externalReferenceNumber: String,
+                           @ApiParam("Vessel IRCS")
+                           @RequestParam(name = "IRCS")
+                           IRCS: String,
+                           @ApiParam("Vessel positions identifier")
+                           @RequestParam(name = "vesselIdentifier")
+                           vesselIdentifier: VesselIdentifier?,
+                           @ApiParam("Reporting from date time")
+                           @RequestParam(name = "fromDate")
+                           @DateTimeFormat(pattern = zoneDateTimePattern)
+                           fromDate: ZonedDateTime): CurrentAndArchivedReportingDataOutput {
+        val currentAndArchivedReporting = getVesselReporting.execute(
+                internalReferenceNumber,
+                externalReferenceNumber,
+                IRCS,
+                vesselIdentifier,
+                fromDate)
+
+        return CurrentAndArchivedReportingDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReporting)
     }
 
     @GetMapping("/search")

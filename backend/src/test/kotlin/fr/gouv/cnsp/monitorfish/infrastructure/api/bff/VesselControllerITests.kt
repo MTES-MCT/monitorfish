@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Control
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.ControlResumeAndControls
@@ -15,6 +16,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.*
@@ -69,6 +74,9 @@ class VesselControllerITests {
 
     @MockBean
     private lateinit var getVesselControls: GetVesselControls
+
+    @MockBean
+    private lateinit var getVesselReporting: GetVesselReporting
 
     @MockBean
     private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
@@ -416,4 +424,72 @@ class VesselControllerITests {
                 .andExpect(jsonPath("$.history[0].comments[0].comment", equalTo("A comment")))
     }
 
+    @Test
+    fun `Should get vessel's reporting`() {
+        // Given
+        val now = ZonedDateTime.now().minusDays(1)
+        given(this.getVesselReporting.execute(eq("FR224226850"), eq("123"), eq("IEF4"), eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), any()))
+                .willReturn(CurrentAndArchivedReporting(
+                        current = listOf(
+                                Reporting(
+                                        id = 1,
+                                        type = ReportingType.ALERT,
+                                        vesselName = "BIDUBULE",
+                                        internalReferenceNumber = "FR224226850",
+                                        externalReferenceNumber = "1236514",
+                                        ircs = "IRCS",
+                                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                        creationDate = ZonedDateTime.now(),
+                                        validationDate = ZonedDateTime.now(),
+                                        value = ThreeMilesTrawlingAlert() as ReportingValue,
+                                        isArchived = false,
+                                        isDeleted = false),
+                                Reporting(
+                                        id = 1,
+                                        type = ReportingType.ALERT,
+                                        vesselName = "BIDUBULE",
+                                        internalReferenceNumber = "FR224226850",
+                                        externalReferenceNumber = "1236514",
+                                        ircs = "IRCS",
+                                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                        creationDate = ZonedDateTime.now(),
+                                        validationDate = ZonedDateTime.now(),
+                                        value = ThreeMilesTrawlingAlert() as ReportingValue,
+                                        isArchived = false,
+                                        isDeleted = false)),
+                archived = listOf(
+                        Reporting(
+                                id = 666,
+                                type = ReportingType.ALERT,
+                                vesselName = "BIDUBULE",
+                                internalReferenceNumber = "FR224226850",
+                                externalReferenceNumber = "1236514",
+                                ircs = "IRCS",
+                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                creationDate = ZonedDateTime.now().minusYears(1),
+                                validationDate = ZonedDateTime.now().minusYears(1),
+                                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                                isArchived = true,
+                                isDeleted = false)))
+                )
+
+        // When
+        mockMvc.perform(get("/bff/v1/vessels/reporting?internalReferenceNumber=FR224226850" +
+                "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z"))
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.current.length()", equalTo(2)))
+                .andExpect(jsonPath("$.current[0].id", equalTo(1)))
+                .andExpect(jsonPath("$.current[0].internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$.current[0].externalReferenceNumber", equalTo("1236514")))
+                .andExpect(jsonPath("$.current[0].type", equalTo("ALERT")))
+                .andExpect(jsonPath("$.current[0].isArchived", equalTo(false)))
+                .andExpect(jsonPath("$.current[0].isDeleted", equalTo(false)))
+                .andExpect(jsonPath("$.archived[0].id", equalTo(666)))
+                .andExpect(jsonPath("$.archived[0].internalReferenceNumber", equalTo("FR224226850")))
+                .andExpect(jsonPath("$.archived[0].externalReferenceNumber", equalTo("1236514")))
+                .andExpect(jsonPath("$.archived[0].type", equalTo("ALERT")))
+                .andExpect(jsonPath("$.current[0].isArchived", equalTo(false)))
+                .andExpect(jsonPath("$.current[0].isDeleted", equalTo(false)))
+    }
 }

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { atLeastOneVesselSelected, Vessel, VesselSidebarTab } from '../entities/vessel'
-import { reportingIsAnInfractionSuspicion, reportingType } from '../entities/reporting'
+import { reportingIsAnInfractionSuspicion, ReportingType } from '../entities/reporting'
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 
@@ -105,7 +105,7 @@ const vesselSlice = createSlice({
         const filteredAlerts = vessel.vesselProperties.alerts?.filter(alert => alert !== action.payload.alertType)
 
         if (action.payload.isValidated) {
-          const addedReporting = vessel.vesselProperties.reporting?.concat(reportingType.ALERT.code)
+          const addedReporting = vessel.vesselProperties.reporting?.concat(ReportingType.ALERT.code)
 
           return {
             ...vessel,

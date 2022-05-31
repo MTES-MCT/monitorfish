@@ -1,4 +1,4 @@
-export const reportingType = {
+export const ReportingType = {
   ALERT: {
     code: 'ALERT',
     name: 'ALERTE',
@@ -16,7 +16,7 @@ export const reportingType = {
   }
 }
 
-export const infractionSuspicionReportingTypes = Object.values(reportingType)
+export const infractionSuspicionReportingTypes = Object.values(ReportingType)
   .filter(type => type.isInfractionSuspicion === true)
   .map(type => type.code)
 

@@ -42,10 +42,10 @@ const reportingSlice = createSlice({
       ],
       archived: []
     },
-    /** @type {Reporting || null} */
+    /** @type {CurrentAndArchivedReporting || null} */
     nextCurrentAndArchivedReporting: null,
     /** @type {Date} */
-    reportingArchivedFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
+    archivedReportingFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
     loadingReporting: false
   },
   reducers: {
@@ -54,11 +54,14 @@ const reportingSlice = createSlice({
      * @function setCurrentAndArchivedReporting
      * @memberOf ReportingReducer
      * @param {Object=} state
-     * @param {{payload: Reporting}} action - the reporting
+     * @param {{payload: CurrentAndArchivedReporting}} action - the reporting
      */
     setCurrentAndArchivedReporting (state, action) {
       state.currentAndArchivedReporting = action.payload
       state.loadingReporting = false
+    },
+    resetCurrentAndArchivedReporting (state) {
+      state.currentAndArchivedReporting = null
     },
     setNextCurrentAndArchivedReporting (state, action) {
       state.nextCurrentAndArchivedReporting = action.payload
@@ -67,14 +70,14 @@ const reportingSlice = createSlice({
       state.nextCurrentAndArchivedReporting = null
     },
     /**
-     * Set the date since reporting archive is fetched
-     * @function setReportingFromDate
+     * Set the date since archived reporting are fetched
+     * @function setArchivedReportingFromDate
      * @memberOf ReportingReducer
      * @param {Object=} state
      * @param {{payload: Date}} action - The "from" date
      */
-    setReportingFromDate (state, action) {
-      state.reportingArchivedFromDate = action.payload
+    setArchivedReportingFromDate (state, action) {
+      state.archivedReportingFromDate = action.payload
     },
     /**
      * Set the loading of reporting to true, and shows a loader in the reporting tab
@@ -90,9 +93,10 @@ const reportingSlice = createSlice({
 
 export const {
   setCurrentAndArchivedReporting,
+  resetCurrentAndArchivedReporting,
   setNextCurrentAndArchivedReporting,
   resetNextCurrentAndArchivedReporting,
-  setReportingFromDate,
+  setArchivedReportingFromDate,
   loadReporting
 } = reportingSlice.actions
 

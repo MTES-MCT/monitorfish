@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import Reporting from './Reporting'
 import { COLORS } from '../../../constants/constants'
 import { PrimaryButton } from '../../commonStyles/Buttons.style'
+import { operationalAlertTypes } from '../../../domain/entities/alerts'
+import { ReportingType } from '../../../domain/entities/reporting'
 
 const CurrentReporting = () => {
   const {
@@ -19,14 +21,42 @@ const CurrentReporting = () => {
   return <Wrapper>
     <OpenReporting>Ouvrir un signalement</OpenReporting>
     {
-      currentAndArchivedReporting?.current?.map(reporting => {
-        return <Reporting
-          key={reporting.id}
-          reporting={reporting}
-        />
-      })
+      operationalAlertTypes
+        .map(alertType => {
+          const alertReporting = currentAndArchivedReporting?.current
+            ?.filter(reporting => reporting.type === ReportingType.ALERT.code && reporting.value.type === alertType.code)
+            ?.sort((a, b) => sortByValidationDate(a, b))
+
+          if (alertReporting?.length) {
+            return <Reporting
+              key={alertReporting[alertReporting?.length - 1].id}
+              reporting={alertReporting[alertReporting?.length - 1]}
+              numberOfAlerts={alertReporting?.length}
+            />
+          }
+
+          return null
+        })
+    }
+    {
+      currentAndArchivedReporting?.current
+        ?.filter(reporting => reporting.type !== ReportingType.ALERT.code)
+        .map(reporting => {
+          return <Reporting
+            key={reporting.id}
+            reporting={reporting}
+          />
+        })
     }
   </Wrapper>
+}
+
+function sortByValidationDate (a, b) {
+  if (a.validationDate && b.validationDate) {
+    return a.validationDate.localeCompare(b.validationDate)
+  }
+
+  return null
 }
 
 const Wrapper = styled.div`

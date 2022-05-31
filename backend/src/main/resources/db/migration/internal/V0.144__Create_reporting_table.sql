@@ -14,5 +14,7 @@ create table reporting (
     vessel_identifier vessel_identifier not null,
     creation_date timestamp with time zone not null,
     validation_date timestamp with time zone,
-    value jsonb not null
+    value jsonb not null,
+    archived boolean not null,
+    deleted boolean not null
 );

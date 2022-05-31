@@ -48,7 +48,11 @@ data class ReportingEntity(
         val validationDate: ZonedDateTime? = null,
         @Type(type = "jsonb")
         @Column(name = "value", nullable = false, columnDefinition = "jsonb")
-        val value: String) {
+        val value: String,
+        @Column(name = "archived", nullable = false)
+        val isArchived: Boolean,
+        @Column(name = "deleted", nullable = false)
+        val isDeleted: Boolean) {
 
         fun toReporting(mapper: ObjectMapper) : Reporting {
             return Reporting(
@@ -61,8 +65,9 @@ data class ReportingEntity(
                     vesselIdentifier = vesselIdentifier,
                     creationDate = creationDate,
                     validationDate = validationDate,
-                    value = ReportingMapper.getReportingValueFromJSON(mapper, value, type)
-            )
+                    value = ReportingMapper.getReportingValueFromJSON(mapper, value, type),
+                    isArchived = isArchived,
+                    isDeleted = isDeleted)
         }
 
         companion object {
@@ -75,6 +80,8 @@ data class ReportingEntity(
                         vesselIdentifier = alert.vesselIdentifier,
                         creationDate = alert.creationDate,
                         validationDate = validationDate,
-                        value = mapper.writeValueAsString(alert.value))
+                        value = mapper.writeValueAsString(alert.value),
+                        isArchived = false,
+                        isDeleted = false)
         }
 }

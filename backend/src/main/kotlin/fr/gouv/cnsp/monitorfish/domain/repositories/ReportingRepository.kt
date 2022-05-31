@@ -15,4 +15,6 @@ interface ReportingRepository {
                                                externalReferenceNumber: String,
                                                ircs: String,
                                                fromDate: ZonedDateTime): List<Reporting>
+    fun archive(id: Int)
+    fun delete(id: Int)
 }

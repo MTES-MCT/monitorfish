@@ -475,7 +475,7 @@ class VesselControllerITests {
 
         // When
         mockMvc.perform(get("/bff/v1/vessels/reporting?internalReferenceNumber=FR224226850" +
-                "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z"))
+                "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z"))
                 // Then
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.current.length()", equalTo(2)))

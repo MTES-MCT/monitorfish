@@ -11,6 +11,12 @@ INSERT INTO reporting (type, vessel_name, internal_reference_number, external_re
     '"riskFactor": 3.3647,' ||
     '"type": "THREE_MILES_TRAWLING_ALERT"' ||
     '}')::jsonb),
+('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'INTERNAL_REFERENCE_NUMBER', NOW() - ('120 DAY')::interval, NOW() - ('29 DAY')::interval, true, true, ('{' ||
+     '"seaFront": "NAMO",' ||
+     '"flagState": "FR",' ||
+     '"riskFactor": 3.6947,' ||
+     '"type": "MISSING_FAR_ALERT"' ||
+     '}')::jsonb),
 ('ALERT', 'PROMETTRE INTÉRIEUR SAINT', 'ABC000232227', 'ZJ472279', 'TMG5756', 'INTERNAL_REFERENCE_NUMBER', NOW() - ('1 DAY')::interval, NOW(), false, false, ('{' ||
    '"seaFront": "SA",' ||
    '"flagState": "FR",' ||

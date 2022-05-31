@@ -34,7 +34,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reporting).hasSize(5)
+        assertThat(reporting).hasSize(6)
         assertThat(reporting.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reporting.last().externalReferenceNumber).isEqualTo("RGD")
         val alert = reporting.last().value as ThreeMilesTrawlingAlert
@@ -79,5 +79,39 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reporting.first().isDeleted).isEqualTo(false)
         val alertTwo = reporting.first().value as ThreeMilesTrawlingAlert
         assertThat(alertTwo.seaFront).isEqualTo("NAMO")
+    }
+
+    @Test
+    @Transactional
+    fun `archive Should set the archived flag as true`() {
+        // Given
+        val reportingToArchive = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "ABC000180832", ZonedDateTime.now().minusYears(1)).first()
+        assertThat(reportingToArchive.isArchived).isEqualTo(false)
+
+        // When
+        jpaReportingRepository.archive(reportingToArchive.id!!)
+
+        // Then
+        val archivedReporting = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "ABC000180832", ZonedDateTime.now().minusYears(1)).first()
+        assertThat(archivedReporting.isArchived).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `delete Should set the deleted flag as true`() {
+        // Given
+        val reportingList = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "ABC000180832", ZonedDateTime.now().minusYears(1))
+        assertThat(reportingList).hasSize(2)
+
+        // When
+        jpaReportingRepository.delete(reportingList.first().id!!)
+
+        // Then
+        val nextReportingList = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "ABC000180832", ZonedDateTime.now().minusYears(1))
+        assertThat(nextReportingList).hasSize(1)
     }
 }

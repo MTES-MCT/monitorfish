@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import org.hibernate.annotations.DynamicUpdate
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.time.Instant
@@ -23,4 +24,20 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
                     deleted IS FALSE))
         """, nativeQuery = true)
     fun findCurrentAndArchivedByVesselIdentifier(vesselIdentifier: String, value: String, fromDate: Instant): List<ReportingEntity>
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = """
+        UPDATE reporting
+        SET archived = TRUE
+        WHERE id = :id
+    """, nativeQuery = true)
+    fun archiveReporting(id: Int)
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = """
+        UPDATE reporting
+        SET deleted = TRUE
+        WHERE id = :id
+    """, nativeQuery = true)
+    fun deleteReporting(id: Int)
 }

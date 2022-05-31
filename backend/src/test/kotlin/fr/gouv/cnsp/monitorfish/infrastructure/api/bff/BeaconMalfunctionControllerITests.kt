@@ -2,11 +2,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
-import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
-import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetAllBeaconMalfunctions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetBeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.SaveBeaconMalfunctionComment
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselBeaconMalfunctions
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
@@ -18,7 +20,6 @@ import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
@@ -27,7 +28,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
-@Import(MeterRegistryConfiguration::class)
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(value = [(BeaconMalfunctionController::class)])
 class BeaconMalfunctionControllerITests {

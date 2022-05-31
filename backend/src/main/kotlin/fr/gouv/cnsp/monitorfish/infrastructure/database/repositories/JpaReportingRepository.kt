@@ -9,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
 import org.springframework.stereotype.Repository
 import java.time.ZonedDateTime
+import javax.transaction.Transactional
 
 @Repository
 class JpaReportingRepository(private val dbReportingRepository: DBReportingRepository,
@@ -52,5 +53,15 @@ class JpaReportingRepository(private val dbReportingRepository: DBReportingRepos
         }
 
         return listOf()
+    }
+
+    @Transactional
+    override fun archive(id: Int) {
+        dbReportingRepository.archiveReporting(id)
+    }
+
+    @Transactional
+    override fun delete(id: Int) {
+        dbReportingRepository.deleteReporting(id)
     }
 }

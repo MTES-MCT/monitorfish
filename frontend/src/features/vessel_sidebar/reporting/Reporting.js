@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { reportingIsAnInfractionSuspicion, reportingType } from '../../../domain/entities/reporting'
+import { reportingIsAnInfractionSuspicion, ReportingType } from '../../../domain/entities/reporting'
 import { COLORS } from '../../../constants/constants'
 import { getDateTime } from '../../../utils'
 
@@ -14,10 +14,11 @@ import { getAlertNameFromType } from '../../../domain/entities/alerts'
 const Reporting = props => {
   const {
     /** @type Reporting */
-    reporting
+    reporting,
+    numberOfAlerts
   } = props
   const isAnInfractionSuspicion = reportingIsAnInfractionSuspicion(reporting.type)
-  const reportingName = Object.values(reportingType)
+  const reportingName = Object.values(ReportingType)
     .find(reportingType => reportingType.code === reporting?.type)?.name
 
   console.log(reporting)
@@ -34,24 +35,34 @@ const Reporting = props => {
         {reportingName}
         {' '}/{' '}
         {
-          reporting?.type === reportingType.ALERT.code
+          reporting?.type === ReportingType.ALERT.code
             ? getAlertNameFromType(reporting?.value?.type)
             : null
         }
       </Title>
       <Date>
-        Le {getDateTime(reporting?.validationDate, true)}
+        {
+          numberOfAlerts
+            ? 'Dernière alerte le'
+            : 'Le'
+        } {getDateTime(reporting?.validationDate, true)}
       </Date>
     </Body>
-    <Actions isInfractionSuspicion={isAnInfractionSuspicion}>
+    <Actions isAlert={!!numberOfAlerts} isInfractionSuspicion={isAnInfractionSuspicion}>
       {
-        reporting?.type === reportingType.OBSERVATION.code
+        numberOfAlerts
+          ? <NumberOfAlerts>{numberOfAlerts}</NumberOfAlerts>
+          : null
+      }
+      {
+        reporting?.type === ReportingType.OBSERVATION.code
           ? <EditButton
             title={'Editer'}
           />
           : null
       }
       <ArchiveButton
+        isAlert={!!numberOfAlerts}
         title={'Archiver'}
       />
       <DeleteButton
@@ -80,10 +91,21 @@ const Body = styled.div`
 `
 
 const Actions = styled.div`
-  padding-top: 3px;
+  padding-top: ${props => props.isAlert ? 8 : 3}px;
   width: 30px;
   text-align: center;
   border-left: 1px solid ${props => props.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray};
+`
+
+const NumberOfAlerts = styled.span`
+  padding: 0px 5.5px;
+  background: ${COLORS.maximumRed} 0% 0% no-repeat padding-box;
+  border-radius: 2px;
+  color: ${COLORS.white};
+  font-weight: 500;
+  height: 17px;
+  display: inline-block;
+  line-height: 14px;
 `
 
 const Title = styled.div`
@@ -108,7 +130,7 @@ const InfractionSuspicionIcon = styled(InfractionSuspicionIconSVG)`
 
 const ArchiveButton = styled(ArchiveIconSVG)`
   cursor: pointer;
-  margin-top: 7px;
+  margin-top: ${props => props.isAlert ? 11 : 7}px;
 `
 
 const EditButton = styled(EditIconSVG)`
@@ -120,6 +142,8 @@ const DeleteButton = styled(DeleteIconSVG)`
   cursor: pointer;
   margin-top: 7px;
   margin-bottom: 10px;
+  width: 15px;
+  height: 15px;
 `
 
 export default Reporting

@@ -8,7 +8,8 @@ const LAST_POSITIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les derni
 const VESSEL_POSITIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les informations du navire'
 const VESSEL_SEARCH_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les navires dans notre base'
 const LOGBOOK_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les messages JPE de ce navire'
-const CONTROLS_ERROR_MESSAGE = 'Nous n\'avons pas pu récuperer les contrôles pour ce navire'
+const CONTROLS_ERROR_MESSAGE = 'Nous n\'avons pas pu récuperer les contrôles de ce navire'
+const REPORTING_ERROR_MESSAGE = 'Nous n\'avons pas pu récuperer les signalements de ce navire'
 
 /**
  * Get all vessels last positions
@@ -205,11 +206,42 @@ function getVesselControlsFromAPI (vesselId, fromDate) {
     .then(controls => controls)
 }
 
+/**
+ * Get vessel reporting
+ * @memberOf API
+ * @returns {Promise<CurrentAndArchivedReporting>} The reporting
+ * @throws {Error}
+ */
+function getVesselReportingFromAPI (identity, fromDate) {
+  const internalReferenceNumber = identity.internalReferenceNumber || ''
+  const externalReferenceNumber = identity.externalReferenceNumber || ''
+  const ircs = identity.ircs || ''
+  const vesselIdentifier = identity.vesselIdentifier || ''
+
+  return fetch(`/bff/v1/vessels/reporting?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&fromDate=${fromDate.toISOString()}`)
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      } else {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(REPORTING_ERROR_MESSAGE)
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      throw Error(REPORTING_ERROR_MESSAGE)
+    })
+    .then(reporting => reporting)
+}
+
 export {
   searchVesselsFromAPI,
   getVesselPositionsFromAPI,
   getVesselFromAPI,
   getVesselsLastPositionsFromAPI,
   getVesselControlsFromAPI,
-  getVesselVoyageFromAPI
+  getVesselVoyageFromAPI,
+  getVesselReportingFromAPI
 }

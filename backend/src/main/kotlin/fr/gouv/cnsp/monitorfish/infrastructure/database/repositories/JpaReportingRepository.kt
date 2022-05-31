@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
@@ -19,5 +20,37 @@ class JpaReportingRepository(private val dbReportingRepository: DBReportingRepos
 
     override fun findAll(): List<Reporting> {
         return dbReportingRepository.findAll().map { it.toReporting(mapper) }
+    }
+
+    override fun findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String, fromDate: ZonedDateTime): List<Reporting> {
+        return dbReportingRepository
+                .findCurrentAndArchivedByVesselIdentifier(vesselIdentifier.toString(), value, fromDate.toInstant()).map {
+                    it.toReporting(mapper)
+                }
+    }
+
+    override fun findCurrentAndArchivedWithoutVesselIdentifier(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String, fromDate: ZonedDateTime): List<Reporting> {
+        if(internalReferenceNumber.isNotEmpty()) {
+            return dbReportingRepository
+                    .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(), internalReferenceNumber, fromDate.toInstant()).map {
+                        it.toReporting(mapper)
+                    }
+        }
+
+        if(ircs.isNotEmpty()) {
+            return dbReportingRepository
+                    .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.IRCS.toString(), ircs, fromDate.toInstant()).map {
+                        it.toReporting(mapper)
+                    }
+        }
+
+        if(externalReferenceNumber.isNotEmpty()) {
+            return dbReportingRepository
+                    .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.EXTERNAL_REFERENCE_NUMBER.toString(), externalReferenceNumber, fromDate.toInstant()).map {
+                        it.toReporting(mapper)
+                    }
+        }
+
+        return listOf()
     }
 }

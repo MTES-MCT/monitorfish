@@ -1,0 +1,37 @@
+package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
+
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import java.time.ZonedDateTime
+
+class ReportingDataOutput(
+        val id: Int? = null,
+        val type: ReportingType,
+        val vesselName: String? = null,
+        val internalReferenceNumber: String? = null,
+        val externalReferenceNumber: String? = null,
+        val ircs: String? = null,
+        val vesselIdentifier: VesselIdentifier,
+        val creationDate: ZonedDateTime,
+        val validationDate: ZonedDateTime? = null,
+        val value: ReportingValue,
+        val isArchived: Boolean,
+        val isDeleted: Boolean) {
+    companion object {
+        fun fromReporting(reporting: Reporting) = ReportingDataOutput(
+                id = reporting.id,
+                type = reporting.type,
+                vesselName = reporting.vesselName,
+                internalReferenceNumber = reporting.internalReferenceNumber,
+                externalReferenceNumber = reporting.externalReferenceNumber,
+                ircs = reporting.ircs,
+                vesselIdentifier = reporting.vesselIdentifier,
+                creationDate = reporting.creationDate,
+                validationDate = reporting.validationDate,
+                value = reporting.value,
+                isArchived = reporting.isArchived,
+                isDeleted = reporting.isDeleted)
+    }
+}

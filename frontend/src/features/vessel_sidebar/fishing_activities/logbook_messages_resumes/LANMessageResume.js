@@ -4,7 +4,7 @@ import { COLORS } from '../../../../constants/constants'
 import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
 import { getDateTime } from '../../../../utils'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
-import { AlertTypes } from '../../../../domain/entities/alerts'
+import { AlertType } from '../../../../domain/entities/alerts'
 
 const LANMessageResume = props => {
   const [isOpen, setIsOpen] = useState(false)
@@ -39,7 +39,7 @@ const LANMessageResume = props => {
 
   const getWeightOverToleranceInfo = () => {
     if (props.catchesOverToleranceAlert) {
-      return AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.nameWithAlertDetails(
+      return AlertType.PNO_LAN_WEIGHT_TOLERANCE_ALERT.nameWithAlertDetails(
         props.catchesOverToleranceAlert.percentOfTolerance,
         props.catchesOverToleranceAlert.minimumWeightThreshold)
     }
@@ -63,7 +63,7 @@ const LANMessageResume = props => {
       isNotAcknowledged={props.isNotAcknowledged}
       isDeleted={props.isDeleted}
       isAlert={!!props.catchesOverToleranceAlert}
-      title={props.hasNoMessage ? null : props.catchesOverToleranceAlert ? AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name : null}
+      title={props.hasNoMessage ? null : props.catchesOverToleranceAlert ? AlertType.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name : null}
       onHoverText={getWeightOverToleranceInfo()}
       hasNoMessage={props.hasNoMessage}
       showLogbookMessages={props.showLogbookMessages}

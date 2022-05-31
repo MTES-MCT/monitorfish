@@ -46,7 +46,8 @@ const reportingSlice = createSlice({
     nextCurrentAndArchivedReporting: null,
     /** @type {Date} */
     archivedReportingFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
-    loadingReporting: false
+    loadingReporting: false,
+    vesselIdentity: null
   },
   reducers: {
     /**
@@ -54,14 +55,19 @@ const reportingSlice = createSlice({
      * @function setCurrentAndArchivedReporting
      * @memberOf ReportingReducer
      * @param {Object=} state
-     * @param {{payload: CurrentAndArchivedReporting}} action - the reporting
+     * @param {{payload: {
+     *   currentAndArchivedReporting: CurrentAndArchivedReporting,
+     *   vesselIdentity: VesselIdentity
+     * }}} action - the reporting
      */
     setCurrentAndArchivedReporting (state, action) {
-      state.currentAndArchivedReporting = action.payload
+      state.currentAndArchivedReporting = action.payload.currentAndArchivedReporting
+      state.vesselIdentity = action.payload.vesselIdentity
       state.loadingReporting = false
     },
     resetCurrentAndArchivedReporting (state) {
       state.currentAndArchivedReporting = null
+      state.vesselIdentity = null
     },
     setNextCurrentAndArchivedReporting (state, action) {
       state.nextCurrentAndArchivedReporting = action.payload

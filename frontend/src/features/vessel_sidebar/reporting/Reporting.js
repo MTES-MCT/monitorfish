@@ -10,8 +10,12 @@ import { ReactComponent as ArchiveIconSVG } from '../../icons/Bouton_archiver.sv
 import { ReactComponent as EditIconSVG } from '../../icons/Bouton_editer.svg'
 import { ReactComponent as DeleteIconSVG } from '../../icons/Bouton_supprimer.svg'
 import { getAlertNameFromType } from '../../../domain/entities/alerts'
+import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
+import { useDispatch } from 'react-redux'
+import deleteReporting from '../../../domain/use_cases/reporting/deleteReporting'
 
 const Reporting = props => {
+  const dispatch = useDispatch()
   const {
     /** @type Reporting */
     reporting,
@@ -21,7 +25,6 @@ const Reporting = props => {
   const reportingName = Object.values(ReportingType)
     .find(reportingType => reportingType.code === reporting?.type)?.name
 
-  console.log(reporting)
   return <Wrapper isInfractionSuspicion={isAnInfractionSuspicion}>
     <Icon>
       {
@@ -62,11 +65,13 @@ const Reporting = props => {
           : null
       }
       <ArchiveButton
-        isAlert={!!numberOfAlerts}
         title={'Archiver'}
+        isAlert={!!numberOfAlerts}
+        onClick={() => dispatch(archiveReporting(reporting.id))}
       />
       <DeleteButton
         title={'Supprimer'}
+        onClick={() => dispatch(deleteReporting(reporting.id))}
       />
     </Actions>
   </Wrapper>

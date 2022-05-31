@@ -1,7 +1,7 @@
 import { setError } from '../../shared_slices/Global'
 import { setAlerts } from '../../shared_slices/Alert'
 import { validateAlertFromAPI } from '../../../api/alert'
-import { updateVesselsAlertsAndReporting } from '../../shared_slices/Vessel'
+import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
 import { Vessel } from '../../entities/vessel'
 
 const validateAlert = id => (dispatch, getState) => {
@@ -16,7 +16,7 @@ const validateAlert = id => (dispatch, getState) => {
 
   validateAlertFromAPI(id).then(() => {
     const validatedAlert = previousAlertsWithValidatedFlag?.find(alert => alert.id === id)
-    dispatch(updateVesselsAlertsAndReporting({
+    dispatch(removeVesselAlertAndUpdateReporting({
       vesselId: Vessel.getVesselFeatureId(validatedAlert),
       alertType: validatedAlert.value?.type,
       isValidated: true

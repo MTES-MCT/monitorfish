@@ -12,6 +12,20 @@ const VesselReducer = null
 
 const NOT_FOUND = -1
 
+function filterFirstFoundReportingType (action) {
+  let reportingTypeHasBeenRemoved = false
+
+  return (acc, reportingType) => {
+    if (reportingType === action.payload.reportingType && !reportingTypeHasBeenRemoved) {
+      reportingTypeHasBeenRemoved = true
+      return acc
+    }
+
+    acc.push(reportingType)
+    return acc
+  }
+}
+
 const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
@@ -86,9 +100,9 @@ const vesselSlice = createSlice({
       })
     },
     /**
-     * Update the vessel alert and reporting in the vessels array
+     * Remove the vessel alert and update the reporting in the vessels array and selected vessel object
      * before the /vessels API is fetched from the cron
-     * @function updateVesselsAlertsAndReporting
+     * @function removeVesselAlertAndUpdateReporting
      * @memberOf VesselReducer
      * @param {Object=} state
      * @param {{payload: {
@@ -97,7 +111,7 @@ const vesselSlice = createSlice({
      *   isValidated: boolean
      * }}} action - the vessel alert to validate or silence
      */
-    updateVesselsAlertsAndReporting (state, action) {
+    removeVesselAlertAndUpdateReporting (state, action) {
       state.vessels = state.vessels.map(vessel => {
         if (vessel.vesselId !== action.payload.vesselId) {
           return vessel
@@ -134,6 +148,45 @@ const vesselSlice = createSlice({
         ...state.selectedVessel,
         alerts: filteredAlerts,
         hasAlert: !!filteredAlerts.length
+      }
+    },
+    /**
+     * Remove the reporting from vessels array
+     * before the /vessels API is fetched from the cron
+     * @function removeVesselReporting
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: {
+     *   vesselId: string,
+     *   reportingType: string<ReportingType>
+     * }}} action - the vessel alert to validate or silence
+     */
+    removeVesselReporting (state, action) {
+      state.vessels = state.vessels.map(vessel => {
+        if (vessel.vesselId !== action.payload.vesselId) {
+          return vessel
+        }
+
+        const vesselReportingWithoutFirstFoundReportingType = vessel.vesselProperties.reporting
+          ?.reduce(filterFirstFoundReportingType(action), [])
+
+        return {
+          ...vessel,
+          vesselProperties: {
+            ...vessel.vesselProperties,
+            reporting: vesselReportingWithoutFirstFoundReportingType,
+            hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingType.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+          }
+        }
+      })
+
+      const vesselReportingWithoutFirstFoundReportingType = state.selectedVessel.reporting
+        ?.reduce(filterFirstFoundReportingType(action), [])
+
+      state.selectedVessel = {
+        ...state.selectedVessel,
+        reporting: vesselReportingWithoutFirstFoundReportingType,
+        hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingType.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
       }
     },
     setVesselsEstimatedPositions (state, action) {
@@ -440,7 +493,8 @@ export const {
   setVesselTrackExtent,
   resetVesselTrackExtent,
   setHideNonSelectedVessels,
-  updateVesselsAlertsAndReporting
+  removeVesselAlertAndUpdateReporting,
+  removeVesselReporting
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

@@ -48,6 +48,11 @@ const CurrentReporting = () => {
           />
         })
     }
+    {
+      !currentAndArchivedReporting?.current?.length
+        ? <NoReporting>Aucun signalement</NoReporting>
+        : null
+    }
   </Wrapper>
 }
 
@@ -64,10 +69,16 @@ const Wrapper = styled.div`
   margin-top: 10px;
   padding: 10px 20px;
   text-align: left;
+  color: ${COLORS.slateGray};
 `
 
 const OpenReporting = styled(PrimaryButton)`
   margin: 0px 0px 10px 0px;
+`
+
+const NoReporting = styled.div`
+  margin: 10px;
+  text-align: center;
 `
 
 export default CurrentReporting

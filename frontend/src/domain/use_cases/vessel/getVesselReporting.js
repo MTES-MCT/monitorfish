@@ -1,20 +1,26 @@
 import { removeError, setError } from '../../shared_slices/Global'
-import { batch } from 'react-redux'
 import { getVesselReportingFromAPI } from '../../../api/vessel'
 import {
   loadReporting,
+  resetCurrentAndArchivedReporting,
   setCurrentAndArchivedReporting,
   setNextCurrentAndArchivedReporting
 } from '../../shared_slices/Reporting'
+import { vesselsAreEquals } from '../../entities/vessel'
 
 const getVesselReporting = () => (dispatch, getState) => {
   const {
     selectedVesselIdentity
   } = getState().vessel
 
+  if (!selectedVesselIdentity) {
+    return
+  }
+
   const {
     currentAndArchivedReporting,
-    archivedReportingFromDate
+    archivedReportingFromDate,
+    vesselIdentity
   } = getState().reporting
 
   if (!currentAndArchivedReporting) {
@@ -22,20 +28,24 @@ const getVesselReporting = () => (dispatch, getState) => {
   }
 
   getVesselReportingFromAPI(selectedVesselIdentity, archivedReportingFromDate).then(nextCurrentAndArchivedReporting => {
-    const isShowedAndContainsMoreCurrentReporting = currentAndArchivedReporting &&
+    const isShowedAndContainsMoreCurrentReporting = vesselsAreEquals(selectedVesselIdentity, vesselIdentity) &&
       nextCurrentAndArchivedReporting.current?.length > currentAndArchivedReporting.current?.length
 
     if (isShowedAndContainsMoreCurrentReporting) {
       dispatch(setNextCurrentAndArchivedReporting(nextCurrentAndArchivedReporting))
     } else {
-      dispatch(setCurrentAndArchivedReporting(nextCurrentAndArchivedReporting))
+      dispatch(setCurrentAndArchivedReporting({
+        currentAndArchivedReporting: nextCurrentAndArchivedReporting,
+        vesselIdentity: selectedVesselIdentity
+      }))
     }
     dispatch(removeError())
   }).catch(error => {
+    if (!vesselsAreEquals(selectedVesselIdentity, vesselIdentity)) {
+      dispatch(resetCurrentAndArchivedReporting())
+    }
     console.error(error)
-    batch(() => {
-      dispatch(setError(error))
-    })
+    dispatch(setError(error))
   })
 }
 

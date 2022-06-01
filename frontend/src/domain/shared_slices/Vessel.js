@@ -143,11 +143,13 @@ const vesselSlice = createSlice({
         }
       })
 
-      const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType)
-      state.selectedVessel = {
-        ...state.selectedVessel,
-        alerts: filteredAlerts,
-        hasAlert: !!filteredAlerts.length
+      if (state.selectedVessel) {
+        const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType)
+        state.selectedVessel = {
+          ...state.selectedVessel,
+          alerts: filteredAlerts,
+          hasAlert: !!filteredAlerts.length
+        }
       }
     },
     /**

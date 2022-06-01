@@ -1,5 +1,5 @@
 import React from 'react'
-import DateRangePicker, { beforeToday, afterToday } from 'rsuite/lib/DateRangePicker'
+import DateRangePicker, { afterToday, beforeToday } from 'rsuite/lib/DateRangePicker'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 
@@ -16,10 +16,10 @@ function convertToLocalDates (date) {
   return nextDate
 }
 
-const DateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackFromDates, width, placeholder, containerRef, disableAfterToday }) => {
+const DateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackFromDates, width, noMargin, placeholder, containerRef, disableAfterToday }) => {
   return (
     <Wrapper
-      style={wrapperStyle(width)}
+      style={wrapperStyle(width, noMargin)}
       hasDates={dates?.length}
     >
       <DateRangePicker
@@ -34,6 +34,7 @@ const DateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackFromDates
         onClean={resetToDefaultTrackDepth}
         ranges={[]}
         format="DD-MM-YYYY"
+        placement={'leftEnd'}
         locale={{
           sunday: 'Di',
           monday: 'Lu',
@@ -58,8 +59,8 @@ const Wrapper = styled.div`
   } 
 `
 
-const wrapperStyle = width => ({
-  margin: '12px 0 20px 20px',
+const wrapperStyle = (width, noMargin) => ({
+  margin: noMargin ? 0 : '12px 0 20px 20px',
   width: width || 197
 })
 

@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
-import ReportingHistory from './ReportingHistory'
-import CurrentReporting from './CurrentReporting'
+import ArchivedReporting from './archived/ArchivedReporting'
+import CurrentReporting from './current/CurrentReporting'
 import getVesselReporting from '../../../domain/use_cases/vessel/getVesselReporting'
 
 const ReportingTab = {
@@ -46,6 +46,7 @@ const VesselReporting = () => {
               Signalements en cours ({currentAndArchivedReporting?.current?.length})
             </CurrentOrHistoryReportingButton>
             <CurrentOrHistoryReportingButton
+              data-cy={'vessel-sidebar-reporting-tab-history-button'}
               isActive={reportingTab === ReportingTab.REPORTING_HISTORY}
               onClick={() => setReportingTab(ReportingTab.REPORTING_HISTORY)}
             >
@@ -59,7 +60,7 @@ const VesselReporting = () => {
           }
           {
             reportingTab === ReportingTab.REPORTING_HISTORY
-              ? <ReportingHistory/>
+              ? <ArchivedReporting/>
               : null
           }
         </Body>
@@ -77,13 +78,14 @@ const CurrentOrHistoryReportingButton = styled.div`
 `
 
 const Menu = styled.div`
+  margin: 5px;
   border: 1px solid ${COLORS.charcoal};
   display: flex;
   width: 480px;
 `
 
 const Body = styled.div`
-  padding: 10px;
+  padding: 5px;
   overflow-x: hidden;
   max-height: 700px;
 `

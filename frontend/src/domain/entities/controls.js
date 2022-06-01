@@ -74,7 +74,8 @@ const getYearsToControl = (controlsFromDate, controls) => {
   const nextYearsToControls = {}
   if (controlsFromDate) {
     let fromYear = controlsFromDate.getUTCFullYear() + 1
-    while (fromYear < new Date().getUTCFullYear()) {
+    const toYear = new Date().getUTCFullYear()
+    while (fromYear <= toYear) {
       nextYearsToControls[fromYear] = []
       fromYear += 1
     }

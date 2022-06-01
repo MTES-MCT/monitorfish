@@ -19,13 +19,17 @@ const Reporting = props => {
   const {
     /** @type Reporting */
     reporting,
-    numberOfAlerts
+    numberOfAlerts,
+    isArchive
   } = props
   const isAnInfractionSuspicion = reportingIsAnInfractionSuspicion(reporting.type)
   const reportingName = Object.values(ReportingType)
     .find(reportingType => reportingType.code === reporting?.type)?.name
 
-  return <Wrapper isInfractionSuspicion={isAnInfractionSuspicion}>
+  return <Wrapper
+    data-cy={'reporting-card'}
+    isInfractionSuspicion={isAnInfractionSuspicion}
+  >
     <Icon>
       {
         isAnInfractionSuspicion
@@ -51,29 +55,35 @@ const Reporting = props => {
         } {getDateTime(reporting?.validationDate, true)}
       </Date>
     </Body>
-    <Actions isAlert={!!numberOfAlerts} isInfractionSuspicion={isAnInfractionSuspicion}>
-      {
-        numberOfAlerts
-          ? <NumberOfAlerts>{numberOfAlerts}</NumberOfAlerts>
-          : null
-      }
-      {
-        reporting?.type === ReportingType.OBSERVATION.code
-          ? <EditButton
-            title={'Editer'}
+    {
+      !isArchive
+        ? <Actions isAlert={!!numberOfAlerts} isInfractionSuspicion={isAnInfractionSuspicion}>
+          {
+            numberOfAlerts
+              ? <NumberOfAlerts>{numberOfAlerts}</NumberOfAlerts>
+              : null
+          }
+          {
+            reporting?.type === ReportingType.OBSERVATION.code
+              ? <EditButton
+                title={'Editer'}
+              />
+              : null
+          }
+          <ArchiveButton
+            data-cy={'archive-reporting-card'}
+            title={'Archiver'}
+            isAlert={!!numberOfAlerts}
+            onClick={() => dispatch(archiveReporting(reporting.id))}
           />
-          : null
-      }
-      <ArchiveButton
-        title={'Archiver'}
-        isAlert={!!numberOfAlerts}
-        onClick={() => dispatch(archiveReporting(reporting.id))}
-      />
-      <DeleteButton
-        title={'Supprimer'}
-        onClick={() => dispatch(deleteReporting(reporting.id))}
-      />
-    </Actions>
+          <DeleteButton
+            data-cy={'delete-reporting-card'}
+            title={'Supprimer'}
+            onClick={() => dispatch(deleteReporting(reporting.id))}
+          />
+        </Actions>
+        : null
+    }
   </Wrapper>
 }
 

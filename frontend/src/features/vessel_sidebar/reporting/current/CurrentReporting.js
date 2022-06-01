@@ -2,11 +2,10 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import Reporting from './Reporting'
-import { COLORS } from '../../../constants/constants'
-import { PrimaryButton } from '../../commonStyles/Buttons.style'
-import { operationalAlertTypes } from '../../../domain/entities/alerts'
-import { ReportingType } from '../../../domain/entities/reporting'
+import Reporting from '../Reporting'
+import { COLORS } from '../../../../constants/constants'
+import { operationalAlertTypes } from '../../../../domain/entities/alerts'
+import { ReportingType } from '../../../../domain/entities/reporting'
 
 const CurrentReporting = () => {
   const {
@@ -19,7 +18,6 @@ const CurrentReporting = () => {
   console.log(currentAndArchivedReporting, nextCurrentAndHistoryReporting)
 
   return <Wrapper>
-    <OpenReporting>Ouvrir un signalement</OpenReporting>
     {
       operationalAlertTypes
         .map(alertType => {
@@ -66,14 +64,10 @@ function sortByValidationDate (a, b) {
 
 const Wrapper = styled.div`
   background: ${COLORS.white};
-  margin-top: 10px;
+  margin: 10px 5px 5px 5px;
   padding: 10px 20px;
   text-align: left;
   color: ${COLORS.slateGray};
-`
-
-const OpenReporting = styled(PrimaryButton)`
-  margin: 0px 0px 10px 0px;
 `
 
 const NoReporting = styled.div`

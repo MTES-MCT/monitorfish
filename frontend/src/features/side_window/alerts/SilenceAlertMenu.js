@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 import { SilencedAlertPeriod } from '../../../domain/entities/alerts'
-import SilenceAlertCustomPeriodModal from './SilenceAlertCustomPeriodModal'
+import DateRange from '../../vessel_sidebar/actions/track_request/DateRange'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -16,26 +16,24 @@ import SilenceAlertCustomPeriodModal from './SilenceAlertCustomPeriodModal'
  * @constructor
  */
 const SilenceAlertMenu = ({ showSilencedAlertForIndex, setShowSilencedAlertForIndex, silenceAlert, baseRef, id }) => {
-  const silencedAlertRef = useRef()
+  const [silencedAlertRef, setSilencedAlertRef] = useState(null)
+  const silencedAlertRefCallback = useCallback(node => {
+    if (node !== null) {
+      setSilencedAlertRef({ current: node })
+    }
+  }, [])
   const clickedOutside = useClickOutsideWhenOpenedWithinRef(silencedAlertRef, showSilencedAlertForIndex, baseRef)
-  const [customDatesModalIsOpen, setCustomDatesModalIsOpen] = useState(false)
   const [selectedDates, setSelectedDates] = useState([])
 
   useEffect(() => {
     if (clickedOutside) {
+      console.log('clicked outside')
       setShowSilencedAlertForIndex(null)
     }
   }, [clickedOutside])
 
   useEffect(() => {
-    if (!customDatesModalIsOpen) {
-      setSelectedDates([])
-    }
-  }, [customDatesModalIsOpen])
-
-  useEffect(() => {
     if (selectedDates?.length) {
-      setCustomDatesModalIsOpen(false)
       setShowSilencedAlertForIndex(null)
 
       const silenceAlertPeriodRequest = {
@@ -46,109 +44,110 @@ const SilenceAlertMenu = ({ showSilencedAlertForIndex, setShowSilencedAlertForIn
       silenceAlert(silenceAlertPeriodRequest, id)
     }
   }, [selectedDates])
+  console.log(silencedAlertRef)
 
   return <Wrapper
-    ref={silencedAlertRef}
+    ref={silencedAlertRefCallback}
     index={showSilencedAlertForIndex}
     style={silenceMenuStyle(showSilencedAlertForIndex)}
   >
-    {
-      !customDatesModalIsOpen
-        ? <>
-          <MenuLink
-            style={menuLinkStyle(true, false)}>
-            Ignorer l&apos;alerte pour...
-          </MenuLink>
-          <MenuLink
-            data-cy={'side-window-silence-alert-this-occurrence'}
-            onMouseOver={e => setBackgroundAsHovered(e)}
-            onMouseOut={e => setBackgroundAsNotHovered(e)}
-            style={menuLinkStyle(false, true)}
-            onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.THIS_OCCURRENCE), id)}
-          >
-            Cette occurence
-          </MenuLink>
-          <MenuLink
-            onMouseOver={e => setBackgroundAsHovered(e)}
-            onMouseOut={e => setBackgroundAsNotHovered(e)}
-            style={menuLinkStyle(false, true)}
-            onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_HOUR), id)}
-          >
-            1 heure
-          </MenuLink>
-          <MenuLink
-            onMouseOver={e => setBackgroundAsHovered(e)}
-            onMouseOut={e => setBackgroundAsNotHovered(e)}
-            style={menuLinkStyle(false, true)}
-            onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.TWO_HOURS), id)}
-          >
-            2 heures
-          </MenuLink>
-          <MenuLink
-            onMouseOver={e => setBackgroundAsHovered(e)}
-            onMouseOut={e => setBackgroundAsNotHovered(e)}
-            style={menuLinkStyle(false, true)}
-            onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.SIX_HOURS), id)}
-          >
-            6 heures
-          </MenuLink>
-          <MenuLink
-            onMouseOver={e => setBackgroundAsHovered(e)}
-            onMouseOut={e => setBackgroundAsNotHovered(e)}
-            style={menuLinkStyle(false, true)}
-            onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.TWELVE_HOURS), id)}
-          >
-            12 heures
-          </MenuLink>
-          <MenuLink
-            onMouseOver={e => setBackgroundAsHovered(e)}
-            onMouseOut={e => setBackgroundAsNotHovered(e)}
-            style={menuLinkStyle(false, true)}
-            onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_DAY), id)}
-          >
-            24 heures
-          </MenuLink>
-          <MenuLink
-            onMouseOver={e => setBackgroundAsHovered(e)}
-            onMouseOut={e => setBackgroundAsNotHovered(e)}
-            style={menuLinkStyle(false, true)}
-            onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_WEEK), id)}
-          >
-            1 semaine
-          </MenuLink>
-          <MenuLink
-            onMouseOver={e => setBackgroundAsHovered(e)}
-            onMouseOut={e => setBackgroundAsNotHovered(e)}
-            style={menuLinkStyle(false, true)}
-            onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_MONTH), id)}
-          >
-            1 mois
-          </MenuLink>
-          <MenuLink
-            onMouseOver={e => setBackgroundAsHovered(e)}
-            onMouseOut={e => setBackgroundAsNotHovered(e)}
-            style={menuLinkStyle(false, true)}
-            onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_YEAR), id)}
-          >
-            1 année
-          </MenuLink>
-          <MenuLink
-            onMouseOver={e => setBackgroundAsHovered(e)}
-            onMouseOut={e => setBackgroundAsNotHovered(e)}
-            style={menuLinkStyle(false, true)}
-            onClick={() => setCustomDatesModalIsOpen(true)}
-          >
-            Choisir une période précise
-          </MenuLink>
-        </>
-        : <SilenceAlertCustomPeriodModal
-          containerRef={silencedAlertRef}
-          isModalOpen={customDatesModalIsOpen}
-          setModalIsOpen={setCustomDatesModalIsOpen}
-          selectedDates={selectedDates}
-          setSelectedDates={setSelectedDates}
-        />
-    }
+    <>
+      <MenuLink
+        style={menuLinkStyle(true, false)}>
+        Ignorer l&apos;alerte pour...
+      </MenuLink>
+      <MenuLink
+        data-cy={'side-window-silence-alert-this-occurrence'}
+        onMouseOver={e => setBackgroundAsHovered(e)}
+        onMouseOut={e => setBackgroundAsNotHovered(e)}
+        style={menuLinkStyle(false, true)}
+        onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.THIS_OCCURRENCE), id)}
+      >
+        Cette occurence
+      </MenuLink>
+      <MenuLink
+        onMouseOver={e => setBackgroundAsHovered(e)}
+        onMouseOut={e => setBackgroundAsNotHovered(e)}
+        style={menuLinkStyle(false, true)}
+        onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_HOUR), id)}
+      >
+        1 heure
+      </MenuLink>
+      <MenuLink
+        onMouseOver={e => setBackgroundAsHovered(e)}
+        onMouseOut={e => setBackgroundAsNotHovered(e)}
+        style={menuLinkStyle(false, true)}
+        onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.TWO_HOURS), id)}
+      >
+        2 heures
+      </MenuLink>
+      <MenuLink
+        onMouseOver={e => setBackgroundAsHovered(e)}
+        onMouseOut={e => setBackgroundAsNotHovered(e)}
+        style={menuLinkStyle(false, true)}
+        onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.SIX_HOURS), id)}
+      >
+        6 heures
+      </MenuLink>
+      <MenuLink
+        onMouseOver={e => setBackgroundAsHovered(e)}
+        onMouseOut={e => setBackgroundAsNotHovered(e)}
+        style={menuLinkStyle(false, true)}
+        onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.TWELVE_HOURS), id)}
+      >
+        12 heures
+      </MenuLink>
+      <MenuLink
+        onMouseOver={e => setBackgroundAsHovered(e)}
+        onMouseOut={e => setBackgroundAsNotHovered(e)}
+        style={menuLinkStyle(false, true)}
+        onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_DAY), id)}
+      >
+        24 heures
+      </MenuLink>
+      <MenuLink
+        onMouseOver={e => setBackgroundAsHovered(e)}
+        onMouseOut={e => setBackgroundAsNotHovered(e)}
+        style={menuLinkStyle(false, true)}
+        onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_WEEK), id)}
+      >
+        1 semaine
+      </MenuLink>
+      <MenuLink
+        onMouseOver={e => setBackgroundAsHovered(e)}
+        onMouseOut={e => setBackgroundAsNotHovered(e)}
+        style={menuLinkStyle(false, true)}
+        onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_MONTH), id)}
+      >
+        1 mois
+      </MenuLink>
+      <MenuLink
+        onMouseOver={e => setBackgroundAsHovered(e)}
+        onMouseOut={e => setBackgroundAsNotHovered(e)}
+        style={menuLinkStyle(false, true)}
+        onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.ONE_YEAR), id)}
+      >
+        1 année
+      </MenuLink>
+      <MenuLink
+        onMouseOver={e => setBackgroundAsHovered(e)}
+        onMouseOut={e => setBackgroundAsNotHovered(e)}
+        style={menuLinkStyle(false, true, true)}
+      >
+        {
+          silencedAlertRef?.current
+            ? <DateRange
+                containerRef={silencedAlertRef?.current}
+                placeholder={'Période précise'}
+                dates={selectedDates}
+                modifyVesselTrackFromDates={setSelectedDates}
+                width={145}
+                noMargin
+              />
+            : null
+        }
+      </MenuLink>
+    </>
   </Wrapper>
 }
 
@@ -171,15 +170,15 @@ const silenceMenuStyle = index => ({
   top: 0,
   position: 'absolute',
   marginTop: 35 + index * 49,
-  marginLeft: 1055,
+  marginLeft: 800,
   width: 220,
   boxShadow: `1px 2px 5px ${COLORS.overlayShadowDarker}`
 })
 
 const MenuLink = styled.span``
-const menuLinkStyle = (withBottomLine, hasLink) => ({
+const menuLinkStyle = (withBottomLine, hasLink, isCalendar) => ({
   background: COLORS.background,
-  padding: '5px 15px 0px 15px',
+  padding: isCalendar ? '3px 15px 8px' : '5px 15px 0px 15px',
   height: 25,
   display: 'flex',
   borderBottom: `${withBottomLine ? 1 : 0}px solid ${COLORS.lightGray}`,

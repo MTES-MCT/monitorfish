@@ -8,8 +8,6 @@ import List from 'rsuite/lib/List'
 import FlexboxGrid from 'rsuite/lib/FlexboxGrid'
 import countries from 'i18n-iso-countries'
 import * as timeago from 'timeago.js'
-import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
-import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getAlertNameFromType, getSilencedAlertPeriodText } from '../../../domain/entities/alerts'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
@@ -28,7 +26,7 @@ import validateAlert from '../../../domain/use_cases/alert/validateAlert'
  * @return {JSX.Element}
  * @constructor
  */
-const AlertsList = ({ alerts, seaFront, baseRef }) => {
+const PendingAlertsList = ({ alerts, baseRef }) => {
   const dispatch = useDispatch()
   const {
     focusOnAlert
@@ -38,7 +36,7 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
   const [sortColumn] = useState('creationDate')
   const [sortType] = useState(SortType.DESC)
   const [filteredAlerts, setFilteredAlerts] = useState([])
-  const [searchedVessel, setSearchedVessel] = useState(undefined)
+  const [searched, setSearched] = useState(undefined)
   const [showSilencedAlertForIndex, setShowSilencedAlertForIndex] = useState(null)
   const [silencedAlertId, setSilencedAlertId] = useState(null)
 
@@ -69,20 +67,21 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
       return
     }
 
-    if (!searchedVessel?.length || searchedVessel?.length <= 1) {
+    if (!searched?.length || searched?.length <= 1) {
       setFilteredAlerts(alerts)
       return
     }
 
-    if (searchedVessel?.length > 1) {
+    if (searched?.length > 1) {
       const nextFilteredAlerts = alerts.filter(alert =>
-        getTextForSearch(alert.vesselName).includes(getTextForSearch(searchedVessel)) ||
-        getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
-        getTextForSearch(alert.externalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
-        getTextForSearch(alert.ircs).includes(getTextForSearch(searchedVessel)))
+        getTextForSearch(getAlertNameFromType(alert.type)).includes(getTextForSearch(searched)) ||
+        getTextForSearch(alert.vesselName).includes(getTextForSearch(searched)) ||
+        getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searched)) ||
+        getTextForSearch(alert.externalReferenceNumber).includes(getTextForSearch(searched)) ||
+        getTextForSearch(alert.ircs).includes(getTextForSearch(searched)))
       setFilteredAlerts(nextFilteredAlerts)
     }
-  }, [alerts, searchedVessel])
+  }, [alerts, searched])
 
   const silenceAlertCallback = useCallback((silencedAlertPeriod, id) => {
     setShowSilencedAlertForIndex(null)
@@ -96,16 +95,16 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
 
   return <Content style={contentStyle}>
     <Title style={titleStyle}>
-      ALERTES AUTOMATIQUES À VÉRIFIER EN {seaFront}
+      ALERTES AUTOMATIQUES À VÉRIFIER
     </Title>
     <SearchVesselInput
       style={searchVesselInputStyle(baseUrl)}
       baseUrl={baseUrl}
       data-cy={'side-window-alerts-search-vessel'}
-      placeholder={'Rechercher un navire en alerte'}
+      placeholder={'Rechercher un navire ou une alerte'}
       type="text"
-      value={searchedVessel}
-      onChange={e => setSearchedVessel(e.target.value)}/>
+      value={searched}
+      onChange={e => setSearched(e.target.value)}/>
       <List
         data-cy={'side-window-alerts-list'}
         style={{
@@ -125,20 +124,14 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
           }}
         >
           <FlexboxGrid>
-            <FlexboxGrid.Item colspan={7} style={alertTypeStyle}>
-              Thématique
-            </FlexboxGrid.Item>
             <FlexboxGrid.Item style={timeAgoColumnStyle}>
-              Alerte il y a...
+              Ouverte il y a...
+            </FlexboxGrid.Item>
+            <FlexboxGrid.Item colspan={7} style={alertTypeStyle}>
+              Titre
             </FlexboxGrid.Item>
             <FlexboxGrid.Item style={vesselNameColumnStyle}>
-              Nom du navire
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={cfrColumnStyle}>
-              CFR du navire
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item colspan={2} style={riskColumnStyle}>
-              Note
+              Navire
             </FlexboxGrid.Item>
           </FlexboxGrid>
         </List.Item>
@@ -175,11 +168,11 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
               {
                 !alert.isValidated && !alert.silencedPeriod
                   ? <FlexboxGrid>
-                    <FlexboxGrid.Item style={alertTypeStyle}>
-                      {getAlertNameFromType(alert.type)}
-                    </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={timeAgoColumnStyle} title={new Date(alert.creationDateTimestamp)}>
                       {timeago.format(alert.creationDateTimestamp, 'fr')}
+                    </FlexboxGrid.Item>
+                    <FlexboxGrid.Item style={alertTypeStyle}>
+                      {getAlertNameFromType(alert.type)}
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={vesselNameColumnStyle}>
                       <Flag
@@ -190,23 +183,7 @@ const AlertsList = ({ alerts, seaFront, baseRef }) => {
                       />
                       {alert.vesselName}
                     </FlexboxGrid.Item>
-                    <FlexboxGrid.Item style={cfrColumnStyle}>
-                      {alert.internalReferenceNumber}
-                    </FlexboxGrid.Item>
-                    <FlexboxGrid.Item colspan={2} style={riskColumnStyle}>
-                      {
-                        alert.riskFactor
-                          ? <RiskFactorBox
-                            marginRight={5}
-                            height={240}
-                            isBig={false}
-                            color={getRiskFactorColor(alert.riskFactor)}
-                          >
-                            {parseFloat(alert.riskFactor).toFixed(1)}
-                          </RiskFactorBox>
-                          : null
-                      }
-                    </FlexboxGrid.Item>
+                    <FlexboxGrid.Item style={rowBorderStyle}/>
                     <FlexboxGrid.Item style={iconStyle}>
                       <Icon
                         data-cy={'side-window-alerts-show-vessel'}
@@ -305,9 +282,9 @@ const alertValidatedTransition = {
 
 const Title = styled.div``
 const titleStyle = {
-  fontWeight: 500,
+  fontWeight: 700,
   fontSize: 16,
-  color: COLORS.slateGray,
+  color: COLORS.gunMetal,
   marginBottom: 20
 }
 
@@ -399,16 +376,10 @@ const styleCenter = {
 }
 
 const rowStyle = {
-  width: 1300,
+  width: 1045,
   fontWeight: 500,
   color: COLORS.gunMetal,
   boxShadow: 'unset'
-}
-
-const riskColumnStyle = {
-  ...styleCenter,
-  marginLeft: 10,
-  width: 70
 }
 
 const vesselNameColumnStyle = {
@@ -417,19 +388,14 @@ const vesselNameColumnStyle = {
   width: 280
 }
 
-const cfrColumnStyle = {
-  ...styleCenter,
-  width: 180
-}
-
 const timeAgoColumnStyle = {
   ...styleCenter,
+  marginLeft: 20,
   width: 190
 }
 
 const alertTypeStyle = {
   ...styleCenter,
-  marginLeft: 20,
   width: 410
 }
 
@@ -439,10 +405,22 @@ const iconStyle = {
   width: 30
 }
 
+const rowBorderStyle = {
+  ...styleCenter,
+  height: 43,
+  width: 2,
+  borderLeft: `1px solid ${COLORS.lightGray}`,
+  marginTop: -14,
+  marginRight: 5
+}
+
 const Content = styled.div``
 const contentStyle = {
-  padding: 40,
+  width: 'fit-content',
+  padding: '30px 40px 40px 40px',
+  marginLeft: 40,
+  marginTop: 20,
   background: COLORS.gainsboro
 }
 
-export default AlertsList
+export default PendingAlertsList

@@ -65,6 +65,7 @@ paramiko==2.10.3; python_version >= "3.6" and python_full_version < "3.0.0" or p
 parsel==1.6.0; python_version >= "3.6"
 partd==1.2.0; python_version >= "3.8"
 pathspec==0.8.1; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
+pdfkit==1.0.0
 pendulum==2.1.2; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
 pluggy==1.0.0; python_version >= "3.6"
 pre-commit==2.10.1; python_full_version >= "3.6.1"

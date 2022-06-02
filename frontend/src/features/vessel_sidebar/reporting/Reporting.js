@@ -54,6 +54,13 @@ const Reporting = props => {
             : 'Le'
         } {getDateTime(reporting?.validationDate, true)}
       </Date>
+      {
+        reporting?.value?.natinfCode
+          ? <Natinf title={reporting?.infraction ? `${reporting?.infraction?.natinfCode || ''}: ${reporting?.infraction?.infraction || ''} (réglementation "${reporting?.infraction?.regulation || ''}")` : ''}>
+            NATINF {reporting?.value?.natinfCode}
+          </Natinf>
+          : null
+      }
     </Body>
     {
       !isArchive
@@ -129,6 +136,15 @@ const Title = styled.div`
 
 const Date = styled.span`
   font: normal normal normal 11px/15px Marianne;
+`
+
+const Natinf = styled.div`
+  padding: 2px 8px 2px 8px;
+  background: ${COLORS.white};
+  font: normal normal medium 13px/18px Marianne;
+  width: fit-content;
+  margin-top: 10px;
+  color: ${COLORS.gunMetal};
 `
 
 const ObservationIcon = styled(ObservationIconSVG)`

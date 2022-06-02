@@ -7,7 +7,10 @@ INSERT INTO infractions (id, natinf_code, regulation, infraction_category, infra
 VALUES
 (5, '23581', 'Arreté du 12/01/3021', 'Pêche', 'Taille de maille non réglementaire'),
 (22, '23588', 'Arreté du 15/01/3021', 'Pêche', 'Chalutage dans la zone des 3 milles'),
-(13, '23584', 'Arreté du 18/01/3021', 'Sécurité / Rôle', 'Défaut AIS');
+(13, '23584', 'Arreté du 18/01/3021', 'Sécurité / Rôle', 'Défaut AIS'),
+(26, '7059', 'd1852', 'Pêche', 'Peche maritime avec un engin dans une zone ou son emploi est interdit'),
+(27, '27689', 'RT.L.945-2 §I 3°, ART.L.921-9 C.RURAL.	Pêche', 'Pêche', 'Pêche	Non respect des obligations d''enregistrement et de communication des donnees requises dans le cadre du systeme de declaration par voie electronique - peche maritime'),
+(28, '2608', 'd1852', 'Pêche', 'Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l''union europeenne');
 
 INSERT INTO controls (id, vessel_id, controller_id, control_type, control_datetime_utc, input_start_datetime_utc, input_end_datetime_utc, facade, longitude, latitude, port_locode, mission_order, vessel_targeted, cnsp_called_unit, cooperative, pre_control_comments, infraction, infraction_ids, diversion, escort_to_quay, seizure, seizure_comments, post_control_comments, gear_controls)
 VALUES 

@@ -66,6 +66,7 @@ class OperationalAlertControllerITests {
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.equalTo(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].value.natinfCode", Matchers.equalTo("7059")))
     }
 
     @Test

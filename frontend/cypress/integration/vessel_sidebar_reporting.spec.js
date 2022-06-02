@@ -23,6 +23,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy^="vessel-reporting"]', { timeout: 20000 }).should('be.visible')
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(2)
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('ALERTE / 3 milles - Chaluts')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 7059')
     cy.get('*[data-cy="archive-reporting-card"]').eq(0).click()
 
     // Then
@@ -54,6 +55,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy^="vessel-reporting"]', { timeout: 20000 }).should('be.visible')
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(2)
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('ALERTE / 12 milles - Pêche sans droits historiques')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2610')
     cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
 
     // Then

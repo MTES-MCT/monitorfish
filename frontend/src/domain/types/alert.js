@@ -16,6 +16,7 @@
  * @typedef PendingAlert
  * @property {number} speed
  * @property {string} type
+ * @property {string | null} natinfCode
  * @property {string} seaFront
  * @property {string} flagState
  */

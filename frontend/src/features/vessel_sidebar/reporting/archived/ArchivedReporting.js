@@ -20,7 +20,7 @@ const ArchivedReporting = () => {
   /** @type {Object.<string, Reporting[]>} yearsToReporting */
   const yearsToReporting = useMemo(() => {
     let nextYearsToControls
-    if (currentAndArchivedReporting.archived) {
+    if (currentAndArchivedReporting?.archived) {
       nextYearsToControls = getYearsToReportingList(archivedReportingFromDate, currentAndArchivedReporting.archived)
     }
     return nextYearsToControls

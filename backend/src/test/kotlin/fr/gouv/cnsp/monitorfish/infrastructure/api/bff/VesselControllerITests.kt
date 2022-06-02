@@ -8,9 +8,7 @@ import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.Control
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.ControlResumeAndControls
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.Controller
+import fr.gouv.cnsp.monitorfish.domain.entities.controls.*
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
@@ -443,7 +441,8 @@ class VesselControllerITests {
                                         validationDate = ZonedDateTime.now(),
                                         value = ThreeMilesTrawlingAlert() as ReportingValue,
                                         isArchived = false,
-                                        isDeleted = false),
+                                        isDeleted = false,
+                                        infraction = Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value)),
                                 Reporting(
                                         id = 1,
                                         type = ReportingType.ALERT,
@@ -485,11 +484,12 @@ class VesselControllerITests {
                 .andExpect(jsonPath("$.current[0].type", equalTo("ALERT")))
                 .andExpect(jsonPath("$.current[0].isArchived", equalTo(false)))
                 .andExpect(jsonPath("$.current[0].isDeleted", equalTo(false)))
+                .andExpect(jsonPath("$.current[0].infraction.natinfCode", equalTo("7059")))
                 .andExpect(jsonPath("$.archived[0].id", equalTo(666)))
                 .andExpect(jsonPath("$.archived[0].internalReferenceNumber", equalTo("FR224226850")))
                 .andExpect(jsonPath("$.archived[0].externalReferenceNumber", equalTo("1236514")))
                 .andExpect(jsonPath("$.archived[0].type", equalTo("ALERT")))
-                .andExpect(jsonPath("$.current[0].isArchived", equalTo(false)))
-                .andExpect(jsonPath("$.current[0].isDeleted", equalTo(false)))
+                .andExpect(jsonPath("$.archived[0].isArchived", equalTo(true)))
+                .andExpect(jsonPath("$.archived[0].isDeleted", equalTo(false)))
     }
 }

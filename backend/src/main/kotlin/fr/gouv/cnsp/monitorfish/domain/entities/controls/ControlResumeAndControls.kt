@@ -1,7 +1,5 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.controls
 
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.Control
-
 data class ControlResumeAndControls(
         val vesselId: Int,
         val numberOfSeaControls: Int,

@@ -1,11 +1,15 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.controls.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.controls.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselReporting
 import org.assertj.core.api.Assertions.assertThat
@@ -22,9 +26,13 @@ class GetVesselReportingUTests {
     @MockBean
     private lateinit var reportingRepository: ReportingRepository
 
+    @MockBean
+    private lateinit var infractionRepository: InfractionRepository
+
     @Test
     fun `execute Should return the reporting of a specified vessel`() {
         // Given
+        given(infractionRepository.findInfractionByNatinfCode(eq("7059"))).willReturn(Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value))
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
                 listOf(
                         Reporting(
@@ -68,7 +76,7 @@ class GetVesselReportingUTests {
                                 isDeleted = false)))
 
         // When
-        val currentAndArchivedReporting = GetVesselReporting(reportingRepository).execute(
+        val currentAndArchivedReporting = GetVesselReporting(reportingRepository, infractionRepository).execute(
                 "FR224226850",
                 "1236514",
                 "IRCS",
@@ -78,6 +86,7 @@ class GetVesselReportingUTests {
         // Then
         assertThat(currentAndArchivedReporting.current).hasSize(2)
         assertThat(currentAndArchivedReporting.current.first().isArchived).isFalse
+        assertThat(currentAndArchivedReporting.current.first().infraction?.natinfCode).isEqualTo("7059")
         assertThat(currentAndArchivedReporting.archived).hasSize(1)
         assertThat(currentAndArchivedReporting.archived.first().isArchived).isTrue
     }

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.reporting
 
+import fr.gouv.cnsp.monitorfish.domain.entities.controls.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
@@ -15,4 +16,5 @@ class Reporting(
         val validationDate: ZonedDateTime? = null,
         val value: ReportingValue,
         val isArchived: Boolean,
-        val isDeleted: Boolean)
+        val isDeleted: Boolean,
+        var infraction: Infraction? = null)

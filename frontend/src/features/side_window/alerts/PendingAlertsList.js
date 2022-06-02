@@ -130,6 +130,9 @@ const PendingAlertsList = ({ alerts, baseRef }) => {
             <FlexboxGrid.Item colspan={7} style={alertTypeStyle}>
               Titre
             </FlexboxGrid.Item>
+            <FlexboxGrid.Item style={alertNatinfStyle}>
+              NATINF
+            </FlexboxGrid.Item>
             <FlexboxGrid.Item style={vesselNameColumnStyle}>
               Navire
             </FlexboxGrid.Item>
@@ -173,6 +176,9 @@ const PendingAlertsList = ({ alerts, baseRef }) => {
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={alertTypeStyle}>
                       {getAlertNameFromType(alert.type)}
+                    </FlexboxGrid.Item>
+                    <FlexboxGrid.Item style={alertNatinfStyle}>
+                      {alert.natinfCode}
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={vesselNameColumnStyle}>
                       <Flag
@@ -376,7 +382,7 @@ const styleCenter = {
 }
 
 const rowStyle = {
-  width: 1045,
+  width: 1145,
   fontWeight: 500,
   color: COLORS.gunMetal,
   boxShadow: 'unset'
@@ -397,6 +403,11 @@ const timeAgoColumnStyle = {
 const alertTypeStyle = {
   ...styleCenter,
   width: 410
+}
+
+const alertNatinfStyle = {
+  ...styleCenter,
+  width: 100
 }
 
 const iconStyle = {

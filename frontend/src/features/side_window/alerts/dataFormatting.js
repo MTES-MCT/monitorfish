@@ -13,6 +13,7 @@ export function getAlertForList (alert) {
     isValidated: alert.isValidated,
     flagState: alert.value.flagState?.toLowerCase(),
     seaFront: alert.value.seaFront,
-    type: alert.value.type
+    type: alert.value.type,
+    natinfCode: alert.value.natinfCode
   }
 }

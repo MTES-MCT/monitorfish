@@ -34,7 +34,7 @@ const DateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackFromDates
         onClean={resetToDefaultTrackDepth}
         ranges={[]}
         format="DD-MM-YYYY"
-        placement={'leftEnd'}
+        placement={'auto'}
         locale={{
           sunday: 'Di',
           monday: 'Lu',

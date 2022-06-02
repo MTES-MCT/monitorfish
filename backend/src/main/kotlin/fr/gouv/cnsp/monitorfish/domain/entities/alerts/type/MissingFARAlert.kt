@@ -4,4 +4,4 @@ class MissingFARAlert (
         var seaFront: String? = null,
         var flagState: String? = null,
         var riskFactor: Double? = null
-): AlertType(AlertTypeMapping.MISSING_FAR_ALERT)
+): AlertType(AlertTypeMapping.MISSING_FAR_ALERT, "27689")

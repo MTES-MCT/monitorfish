@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
@@ -32,6 +33,31 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(infractions).hasSize(0)
+    }
+
+    @Test
+    @Transactional
+    fun `findInfractionByNatinfCode Should return the infraction`() {
+        // When
+        val infraction = jpaInfractionRepository.findInfractionByNatinfCode("23581")
+
+        // Then
+        assertThat(infraction.infraction).isEqualTo("Taille de maille non réglementaire")
+        assertThat(infraction.infractionCategory).isEqualTo("Pêche")
+        assertThat(infraction.natinfCode).isEqualTo("23581")
+        assertThat(infraction.regulation).isEqualTo("Arreté du 12/01/3021")
+    }
+
+    @Test
+    @Transactional
+    fun `findInfractionByNatinfCode Should throw an exception When the natinf code is not found`() {
+        // When
+        val throwable = catchThrowable {
+            jpaInfractionRepository.findInfractionByNatinfCode("666")
+        }
+
+        // Then
+        assertThat(throwable.message).contains("NATINF code 666 not found")
     }
 
 }

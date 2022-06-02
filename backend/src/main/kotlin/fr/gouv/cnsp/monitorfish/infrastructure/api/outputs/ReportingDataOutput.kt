@@ -18,7 +18,8 @@ class ReportingDataOutput(
         val validationDate: ZonedDateTime? = null,
         val value: ReportingValue,
         val isArchived: Boolean,
-        val isDeleted: Boolean) {
+        val isDeleted: Boolean,
+        val infraction: InfractionDataOutput? = null) {
     companion object {
         fun fromReporting(reporting: Reporting) = ReportingDataOutput(
                 id = reporting.id,
@@ -32,6 +33,7 @@ class ReportingDataOutput(
                 validationDate = reporting.validationDate,
                 value = reporting.value,
                 isArchived = reporting.isArchived,
-                isDeleted = reporting.isDeleted)
+                isDeleted = reporting.isDeleted,
+                infraction = reporting.infraction?.let { InfractionDataOutput.fromInfraction(it) })
     }
 }

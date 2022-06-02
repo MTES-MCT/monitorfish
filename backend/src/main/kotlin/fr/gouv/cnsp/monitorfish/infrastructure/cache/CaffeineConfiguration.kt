@@ -33,6 +33,7 @@ class CaffeineConfiguration {
     val vesselsAllPositions = "vessels_all_position"
     val vesselsPositionsWithBeaconMalfunctions = "vessels_positions_with_beacon_malfunctions"
     val infractions = "infractions"
+    val infraction = "infraction"
     val currentSegments = "current_segment"
     val controlAnteriority = "control_anteriority"
     val riskFactors = "risk_factors"
@@ -67,6 +68,7 @@ class CaffeineConfiguration {
         val faoAreasCache = buildCache(faoAreas, ticker, oneWeek)
 
         val infractionsCache = buildCache(infractions, ticker, oneWeek)
+        val infractionCache = buildCache(infraction, ticker, oneWeek)
 
         val vesselTrackCache = buildCache(vesselTrack, ticker, 1)
         val vesselsPositionsCache = buildCache(vesselsPositions, ticker, 1)
@@ -95,6 +97,7 @@ class CaffeineConfiguration {
                 previousLogbookCache,
                 logbookRawMessageCache,
                 infractionsCache,
+                infractionCache,
                 currentSegmentsCache,
                 controlAnteriorityCache,
                 riskFactorsCache,

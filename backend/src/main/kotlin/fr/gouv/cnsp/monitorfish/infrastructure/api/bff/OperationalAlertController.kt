@@ -1,10 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetOperationalAlerts
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.SilenceOperationalAlert
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ValidateOperationalAlert
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SilenceOperationalAlertDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PendingAlertDataOutput
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.web.bind.annotation.*
@@ -20,15 +20,17 @@ class OperationalAlertController(
 
     @GetMapping("")
     @ApiOperation("Get operational alerts")
-    fun getOperationalAlerts(): List<PendingAlert> {
-        return getOperationalAlerts.execute()
+    fun getOperationalAlerts(): List<PendingAlertDataOutput> {
+        return getOperationalAlerts.execute().map {
+            PendingAlertDataOutput.fromPendingAlert(it)
+        }
     }
 
     @PutMapping(value = ["/{id}/validate"])
     @ApiOperation("Validate an operational alert")
     fun validateAlert(@PathParam("Alert id")
-                             @PathVariable(name = "id")
-                             id: Int) {
+                      @PathVariable(name = "id")
+                      id: Int) {
         return validateOperationalAlert.execute(id)
     }
 

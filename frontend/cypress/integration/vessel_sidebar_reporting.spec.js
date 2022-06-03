@@ -60,6 +60,7 @@ context('Vessel sidebar reporting tab', () => {
 
     // Then
     cy.wait(500)
+    cy.wait(500)
     cy.get('.vessels').eq(0).toMatchImageSnapshot({
       screenshotConfig: {
         clip: { x: 400, y: 480, width: 80, height: 80 }

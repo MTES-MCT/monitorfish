@@ -12,8 +12,6 @@ const ArchivedReporting = () => {
   const {
     /** @type {Reporting} */
     currentAndArchivedReporting,
-    /** @type {Reporting || null} */
-    nextCurrentAndHistoryReporting,
     archivedReportingFromDate
   } = useSelector(state => state.reporting)
 
@@ -32,8 +30,6 @@ const ArchivedReporting = () => {
 
     dispatch(setArchivedReportingFromDate(nextDate))
   }
-
-  console.log(currentAndArchivedReporting, nextCurrentAndHistoryReporting)
 
   return <Zone data-cy={'vessel-sidebar-reporting-tab-history'}>
     <Title>Historique des signalements</Title>

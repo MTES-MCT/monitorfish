@@ -10,12 +10,8 @@ import { ReportingType } from '../../../../domain/entities/reporting'
 const CurrentReporting = () => {
   const {
     /** @type {Reporting} */
-    currentAndArchivedReporting,
-    /** @type {Reporting || null} */
-    nextCurrentAndHistoryReporting
+    currentAndArchivedReporting
   } = useSelector(state => state.reporting)
-
-  console.log(currentAndArchivedReporting, nextCurrentAndHistoryReporting)
 
   return <Wrapper>
     {

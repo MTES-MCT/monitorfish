@@ -3,8 +3,7 @@ import { getVesselReportingFromAPI } from '../../../api/vessel'
 import {
   loadReporting,
   resetCurrentAndArchivedReporting,
-  setCurrentAndArchivedReporting,
-  setNextCurrentAndArchivedReporting
+  setCurrentAndArchivedReporting
 } from '../../shared_slices/Reporting'
 import { vesselsAreEquals } from '../../entities/vessel'
 
@@ -28,17 +27,10 @@ const getVesselReporting = () => (dispatch, getState) => {
   }
 
   getVesselReportingFromAPI(selectedVesselIdentity, archivedReportingFromDate).then(nextCurrentAndArchivedReporting => {
-    const isShowedAndContainsMoreCurrentReporting = vesselsAreEquals(selectedVesselIdentity, vesselIdentity) &&
-      nextCurrentAndArchivedReporting.current?.length > currentAndArchivedReporting.current?.length
-
-    if (isShowedAndContainsMoreCurrentReporting) {
-      dispatch(setNextCurrentAndArchivedReporting(nextCurrentAndArchivedReporting))
-    } else {
-      dispatch(setCurrentAndArchivedReporting({
-        currentAndArchivedReporting: nextCurrentAndArchivedReporting,
-        vesselIdentity: selectedVesselIdentity
-      }))
-    }
+    dispatch(setCurrentAndArchivedReporting({
+      currentAndArchivedReporting: nextCurrentAndArchivedReporting,
+      vesselIdentity: selectedVesselIdentity
+    }))
     dispatch(removeError())
   }).catch(error => {
     if (!vesselsAreEquals(selectedVesselIdentity, vesselIdentity)) {

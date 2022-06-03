@@ -42,8 +42,6 @@ const reportingSlice = createSlice({
       ],
       archived: []
     },
-    /** @type {CurrentAndArchivedReporting || null} */
-    nextCurrentAndArchivedReporting: null,
     /** @type {Date} */
     archivedReportingFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
     loadingReporting: false,
@@ -68,12 +66,6 @@ const reportingSlice = createSlice({
     resetCurrentAndArchivedReporting (state) {
       state.currentAndArchivedReporting = null
       state.vesselIdentity = null
-    },
-    setNextCurrentAndArchivedReporting (state, action) {
-      state.nextCurrentAndArchivedReporting = action.payload
-    },
-    resetNextCurrentAndArchivedReporting (state) {
-      state.nextCurrentAndArchivedReporting = null
     },
     /**
      * Set the date since archived reporting are fetched
@@ -100,8 +92,6 @@ const reportingSlice = createSlice({
 export const {
   setCurrentAndArchivedReporting,
   resetCurrentAndArchivedReporting,
-  setNextCurrentAndArchivedReporting,
-  resetNextCurrentAndArchivedReporting,
   setArchivedReportingFromDate,
   loadReporting
 } = reportingSlice.actions

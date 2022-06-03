@@ -13,6 +13,7 @@ context('Side window beacon malfunctions', () => {
 
   it('A beacon malfunction card Should be moved in the Board', () => {
     // Given
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.request('PUT', 'bff/v1/beacon_malfunctions/1', {stage: 'INITIAL_ENCOUNTER'})
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children()
       .eq(0)
@@ -107,6 +108,7 @@ context('Side window beacon malfunctions', () => {
 
   it('A beacon malfunction card vessel status Should be changed in the Board', () => {
     // Given
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]').children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
@@ -143,6 +145,7 @@ context('Side window beacon malfunctions', () => {
 
   it('Beacon malfunction Should be opened', () => {
     // Given
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.intercept('GET', 'bff/v1/beacon_malfunctions/1').as('showBeaconMalfunction')
 
     // When
@@ -217,6 +220,7 @@ context('Side window beacon malfunctions', () => {
 
   it('Beacon malfunction Should be opened and vessel status changed', () => {
     // Given
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -252,6 +256,7 @@ context('Side window beacon malfunctions', () => {
 
   it('Beacon malfunction Should be opened and a comment added', () => {
     // Given
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -281,6 +286,7 @@ context('Side window beacon malfunctions', () => {
 
   it('Beacon malfunction end of malfunction reason Should be showed', () => {
     // In the board
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]').children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
@@ -304,6 +310,7 @@ context('Side window beacon malfunctions', () => {
 
   it('Beacon activated should be showed When the vessel status is NEVER_EMITTED', () => {
     // In the board
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]').children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .eq(2)

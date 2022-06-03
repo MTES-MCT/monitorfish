@@ -7,6 +7,7 @@ import java.time.ZonedDateTime
 interface SilencedAlertRepository {
     fun save(alert: PendingAlert,
              silencedBeforeDate: ZonedDateTime,
-             silencedAfterDate: ZonedDateTime?)
-    fun findAll(): List<SilencedAlert>
+             silencedAfterDate: ZonedDateTime?): SilencedAlert
+    fun findAllCurrentSilencedAlerts(): List<SilencedAlert>
+    fun delete(id: Int)
 }

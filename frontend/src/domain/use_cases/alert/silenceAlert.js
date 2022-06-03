@@ -1,5 +1,5 @@
 import { setError } from '../../shared_slices/Global'
-import { setAlerts } from '../../shared_slices/Alert'
+import { setAlerts, setSilencedAlerts } from '../../shared_slices/Alert'
 import { silenceAlertFromAPI } from '../../../api/alert'
 import { removeAlert } from './validateAlert'
 import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
@@ -13,6 +13,7 @@ import { Vessel } from '../../entities/vessel'
  */
 const silenceAlert = (silencedAlertPeriodRequest, id) => (dispatch, getState) => {
   const previousAlerts = getState().alert.alerts
+  const previousSilencedAlerts = getState().alert.silencedAlerts
   const previousAlertsWithSilencedFlag = setSilencedAlertAs(previousAlerts, id, silencedAlertPeriodRequest)
   dispatch(setAlerts(previousAlertsWithSilencedFlag))
 
@@ -21,16 +22,18 @@ const silenceAlert = (silencedAlertPeriodRequest, id) => (dispatch, getState) =>
     dispatch(setAlerts(previousAlertsWithoutSilenced))
   }, 1500)
 
-  silenceAlertFromAPI(id, silencedAlertPeriodRequest).then(() => {
-    const silencedAlert = previousAlertsWithSilencedFlag?.find(alert => alert.id === id)
+  silenceAlertFromAPI(id, silencedAlertPeriodRequest).then(silencedAlert => {
     dispatch(removeVesselAlertAndUpdateReporting({
       vesselId: Vessel.getVesselFeatureId(silencedAlert),
       alertType: silencedAlert.value?.type,
       isValidated: false
     }))
+    const previousSilencedAlertsWithNewSilencedAlert = [silencedAlert].concat(previousSilencedAlerts)
+    dispatch(setSilencedAlerts(previousSilencedAlertsWithNewSilencedAlert))
   }).catch(error => {
     clearTimeout(timeout)
     dispatch(setAlerts(previousAlerts))
+    dispatch(setSilencedAlerts(previousSilencedAlerts))
     console.error(error)
     dispatch(setError(error))
   })

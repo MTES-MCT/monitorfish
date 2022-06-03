@@ -16,6 +16,7 @@ import { openSideWindowTab, setSideWindowAsOpen } from '../../domain/shared_slic
 import getOperationalAlerts from '../../domain/use_cases/alert/getOperationalAlerts'
 import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
+import getSilencedAlerts from '../../domain/use_cases/alert/getSilencedAlerts'
 
 const SideWindow = ({ fromTab }) => {
   const {
@@ -61,6 +62,7 @@ const SideWindow = ({ fromTab }) => {
     if (fromTab) {
       dispatch(getOperationalAlerts())
       dispatch(getAllBeaconMalfunctions())
+      dispatch(getSilencedAlerts())
 
       dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
     }
@@ -146,6 +148,7 @@ const Content = styled.div``
 const contentStyle = fixed => ({
   marginLeft: fixed ? 0 : 30,
   width: '100%',
+  height: self.innerHeight,
   overflow: 'auto'
 })
 

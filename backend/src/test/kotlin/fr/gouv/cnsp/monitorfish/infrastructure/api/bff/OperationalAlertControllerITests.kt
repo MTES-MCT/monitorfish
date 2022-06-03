@@ -1,16 +1,13 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilenceAlertPeriod
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.GetOperationalAlerts
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.SilenceOperationalAlert
-import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.ValidateOperationalAlert
+import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SilenceOperationalAlertDataInput
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers
@@ -43,6 +40,12 @@ class OperationalAlertControllerITests {
 
     @MockBean
     private lateinit var silenceOperationalAlert: SilenceOperationalAlert
+
+    @MockBean
+    private lateinit var getSilencedAlerts: GetSilencedAlerts
+
+    @MockBean
+    private lateinit var deleteSilencedOperationalAlert: DeleteSilencedOperationalAlert
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -80,6 +83,16 @@ class OperationalAlertControllerITests {
     @Test
     fun `Should silence an operational alert`() {
         // Given
+        given(this.silenceOperationalAlert.execute(any(), any(), any(), any())).willReturn(
+                SilencedAlert(
+                        id = 666,
+                        internalReferenceNumber = "FRFGRGR",
+                        externalReferenceNumber = "RGD",
+                        ircs = "6554fEE",
+                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        silencedBeforeDate = ZonedDateTime.now(),
+                        silencedAfterDate = ZonedDateTime.now().plusDays(2),
+                        value = ThreeMilesTrawlingAlert()))
         val before = ZonedDateTime.now()
         val after = ZonedDateTime.now().minusMinutes(56)
 
@@ -92,6 +105,9 @@ class OperationalAlertControllerITests {
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(666)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT")))
 
         argumentCaptor<ZonedDateTime>().apply {
             verify(silenceOperationalAlert).execute(eq(666), eq(SilenceAlertPeriod.CUSTOM), capture(), capture())
@@ -102,4 +118,34 @@ class OperationalAlertControllerITests {
         }
     }
 
+    @Test
+    fun `Should get all silenced alerts`() {
+        // Given
+        BDDMockito.given(this.getSilencedAlerts.execute()).willReturn(
+                listOf(SilencedAlert(
+                        internalReferenceNumber = "FRFGRGR",
+                        externalReferenceNumber = "RGD",
+                        ircs = "6554fEE",
+                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        silencedBeforeDate = ZonedDateTime.now(),
+                        silencedAfterDate = ZonedDateTime.now().plusDays(2),
+                        value = ThreeMilesTrawlingAlert())))
+
+        // When
+        mockMvc.perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts/silenced"))
+                // Then
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].value.natinfCode", Matchers.equalTo("7059")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT")))
+    }
+
+    @Test
+    fun `Should delete a silenced alert`() {
+        // When
+        mockMvc.perform(MockMvcRequestBuilders.delete("/bff/v1/operational_alerts/silenced/666"))
+                // Then
+                .andExpect(MockMvcResultMatchers.status().isOk)
+    }
 }

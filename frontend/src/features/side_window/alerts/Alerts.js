@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import PendingAlertsList from './PendingAlertsList'
-import { getAlertForList } from './dataFormatting'
+import { getAlertForList, getSilencedAlertForList } from './dataFormatting'
 import { useSelector } from 'react-redux'
 import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
+import SilencedAlertsList from './SilencedAlertsList'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -17,8 +18,12 @@ import { COLORS } from '../../../constants/constants'
 const Alerts = ({ selectedSubMenu, setSelectedSubMenu, baseRef }) => {
   const {
     alerts,
+    silencedAlerts,
     focusOnAlert
   } = useSelector(state => state.alert)
+  const silencedAlertsOfSeaFront = silencedAlerts
+    .map(alert => getSilencedAlertForList(alert))
+    .filter(alert => (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert?.seaFront))
 
   useEffect(() => {
     if (focusOnAlert) {
@@ -42,7 +47,12 @@ const Alerts = ({ selectedSubMenu, setSelectedSubMenu, baseRef }) => {
         .filter(alert =>
           (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert?.seaFront))
       }
+      seaFront={selectedSubMenu?.name}
+      numberOfSilencedAlerts={silencedAlertsOfSeaFront.length}
       baseRef={baseRef}
+    />
+    <SilencedAlertsList
+      silencedAlerts={silencedAlertsOfSeaFront}
     />
   </>
 }

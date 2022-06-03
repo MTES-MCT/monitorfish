@@ -14,12 +14,12 @@ context('Alerts', () => {
 
     // Then
     cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('9')
+    cy.get('*[data-cy^="side-window-alerts-number-silenced-vessels"]').contains('Suspension d\'alertes sur 2 navire en NAMO')
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 9)
 
     cy.get(':nth-child(9)').contains('3 milles - Chaluts')
     cy.get(':nth-child(9)').contains('LE b@TO')
-    cy.get(':nth-child(9)').contains('FR263418260')
-    cy.get(':nth-child(9)').contains(2.6)
+    cy.get(':nth-child(9)').contains('7059')
 
     // Show vessel on map
     cy.intercept('GET', 'bff/v1/vessels/find?internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
@@ -65,18 +65,21 @@ context('Alerts', () => {
   it('An alert Should be silenced', () => {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 2)
 
     // When
     cy.intercept('PUT', '/bff/v1/operational_alerts/2/silence').as('silenceAlert')
     cy.get('*[data-cy="side-window-alerts-silence-alert"]').first().click({ force: true })
-    cy.get('*[data-cy="side-window-silence-alert-this-occurrence"]').first().click({ force: true })
+    cy.get('*[data-cy="side-window-silence-alert-one-hour"]').first().click({ force: true })
     cy.get('*[data-cy="side-window-alerts-is-silenced-transition"]').should('be.visible')
     cy.wait('@silenceAlert')
       .then(({ request, response }) => expect(response.statusCode).equal(200))
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 3)
 
     // The value is saved in database when I refresh the page
     cy.visit(`http://localhost:${port}/side_window`)
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 7)
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 3)
   })
 })

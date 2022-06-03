@@ -7,5 +7,5 @@ create table silenced_alerts (
     vessel_identifier vessel_identifier not null,
     silenced_before_date timestamp with time zone not null,
     silenced_after_date timestamp with time zone,
-    alert varchar(255)
+    value jsonb not null
 );

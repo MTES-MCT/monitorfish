@@ -27,7 +27,6 @@ const SilenceAlertMenu = ({ showSilencedAlertForIndex, setShowSilencedAlertForIn
 
   useEffect(() => {
     if (clickedOutside) {
-      console.log('clicked outside')
       setShowSilencedAlertForIndex(null)
     }
   }, [clickedOutside])
@@ -44,7 +43,6 @@ const SilenceAlertMenu = ({ showSilencedAlertForIndex, setShowSilencedAlertForIn
       silenceAlert(silenceAlertPeriodRequest, id)
     }
   }, [selectedDates])
-  console.log(silencedAlertRef)
 
   return <Wrapper
     ref={silencedAlertRefCallback}
@@ -57,7 +55,6 @@ const SilenceAlertMenu = ({ showSilencedAlertForIndex, setShowSilencedAlertForIn
         Ignorer l&apos;alerte pour...
       </MenuLink>
       <MenuLink
-        data-cy={'side-window-silence-alert-this-occurrence'}
         onMouseOver={e => setBackgroundAsHovered(e)}
         onMouseOut={e => setBackgroundAsNotHovered(e)}
         style={menuLinkStyle(false, true)}
@@ -66,6 +63,7 @@ const SilenceAlertMenu = ({ showSilencedAlertForIndex, setShowSilencedAlertForIn
         Cette occurence
       </MenuLink>
       <MenuLink
+        data-cy={'side-window-silence-alert-one-hour'}
         onMouseOver={e => setBackgroundAsHovered(e)}
         onMouseOut={e => setBackgroundAsNotHovered(e)}
         style={menuLinkStyle(false, true)}
@@ -170,9 +168,10 @@ const silenceMenuStyle = index => ({
   top: 0,
   position: 'absolute',
   marginTop: 35 + index * 49,
-  marginLeft: 800,
+  marginLeft: 955,
   width: 220,
-  boxShadow: `1px 2px 5px ${COLORS.overlayShadowDarker}`
+  boxShadow: `1px 2px 5px ${COLORS.overlayShadowDarker}`,
+  zIndex: 999
 })
 
 const MenuLink = styled.span``

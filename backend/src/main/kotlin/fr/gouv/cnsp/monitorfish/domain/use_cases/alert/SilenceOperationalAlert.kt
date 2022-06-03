@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.alert
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilenceAlertPeriod
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SilencedAlertRepository
 import org.slf4j.LoggerFactory
@@ -15,7 +16,7 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
     fun execute(alertId: Int,
                 silenceAlertPeriod: SilenceAlertPeriod,
                 afterDateTime: ZonedDateTime? = null,
-                beforeDateTime: ZonedDateTime? = null) {
+                beforeDateTime: ZonedDateTime? = null): SilencedAlert {
         if(silenceAlertPeriod == SilenceAlertPeriod.CUSTOM) {
             requireNotNull(afterDateTime) {
                 "begin date must be not null when ignoring an operational alert with a custom period"
@@ -45,12 +46,14 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
 
         val silencedAlert = pendingAlertRepository.find(alertId)
 
-        silencedAlertRepository.save(
+        val savedSilencedAlert = silencedAlertRepository.save(
                 alert = silencedAlert,
                 silencedAfterDate = after,
                 silencedBeforeDate = before)
 
         pendingAlertRepository.delete(alertId)
         logger.info("Alert $alertId has been silenced.")
+
+        return savedSilencedAlert
     }
 }

@@ -10,6 +10,8 @@ const alertSlice = createSlice({
   initialState: {
     /** @type {Alert[]} alerts */
     alerts: [],
+    /** @type {SilencedAlert[]} silencedAlerts */
+    silencedAlerts: [],
     /** @type {Alert | null} focusOnAlert */
     focusOnAlert: null
   },
@@ -58,6 +60,16 @@ const alertSlice = createSlice({
      */
     resetFocusOnAlert (state) {
       state.focusOnAlert = null
+    },
+    /**
+     * Set silenced alerts
+     * @function setSilencedAlerts
+     * @memberOf AlertReducer
+     * @param {Object=} state
+     * @param {{payload: SilencedAlert[]}} action - The silenced alerts
+     */
+    setSilencedAlerts (state, action) {
+      state.silencedAlerts = action.payload
     }
   }
 })
@@ -65,7 +77,8 @@ const alertSlice = createSlice({
 export const {
   setAlerts,
   focusOnAlert,
-  resetFocusOnAlert
+  resetFocusOnAlert,
+  setSilencedAlerts
 } = alertSlice.actions
 
 export default alertSlice.reducer

@@ -16,6 +16,7 @@ import openBeaconMalfunctionInKanban from '../domain/use_cases/beaconMalfunction
 import getVesselBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import getVesselReporting from '../domain/use_cases/vessel/getVesselReporting'
+import getSilencedAlerts from '../domain/use_cases/alert/getSilencedAlerts'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
 export const THIRTY_SECONDS = 30 * 1000
@@ -49,6 +50,7 @@ const APIWorker = () => {
       if (adminRole) {
         dispatch(getAllFleetSegments())
         dispatch(getOperationalAlerts())
+        dispatch(getSilencedAlerts())
         dispatch(getAllBeaconMalfunctions())
       }
       dispatch(showAllVessels())
@@ -62,6 +64,7 @@ const APIWorker = () => {
         dispatch(showAllVessels())
         if (adminRole) {
           dispatch(getOperationalAlerts())
+          dispatch(getSilencedAlerts())
         }
         dispatch(updateVesselTracks())
       })
@@ -124,10 +127,8 @@ const APIWorker = () => {
 
   useEffect(() => {
     if (updateVesselSidebarTab) {
-      if (vesselSidebarTab === VesselSidebarTab.VOYAGES) {
-        if (selectedVesselIdentity) {
-          dispatch(getVesselVoyage(selectedVesselIdentity, null, true))
-        }
+      if (vesselSidebarTab === VesselSidebarTab.VOYAGES && selectedVesselIdentity) {
+        dispatch(getVesselVoyage(selectedVesselIdentity, null, true))
       } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
         dispatch(getVesselControls())
       } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {

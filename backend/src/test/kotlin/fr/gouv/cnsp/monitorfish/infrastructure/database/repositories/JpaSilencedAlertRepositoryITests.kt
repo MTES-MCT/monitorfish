@@ -30,15 +30,39 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
                 value = ThreeMilesTrawlingAlert())
 
         // When
-        jpaSilencedAlertRepository.save(alertOne, now, null)
+        val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null)
 
         // Then
-        val alerts = jpaSilencedAlertRepository.findAll()
-        assertThat(alerts).hasSize(1)
-        assertThat(alerts.first().internalReferenceNumber).isEqualTo("FRFGRGR")
-        assertThat(alerts.first().externalReferenceNumber).isEqualTo("RGD")
-        assertThat(alerts.first().alert).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
-        assertThat(alerts.first().silencedAfterDate).isNull()
-        assertThat(alerts.first().silencedBeforeDate).isEqualTo(now)
+        assertThat(silencedAlert.internalReferenceNumber).isEqualTo("FRFGRGR")
+        assertThat(silencedAlert.externalReferenceNumber).isEqualTo("RGD")
+        assertThat(silencedAlert.value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+        assertThat(silencedAlert.silencedAfterDate).isNull()
+        assertThat(silencedAlert.silencedBeforeDate).isEqualTo(now.plusHours(1))
+
+        val alerts = jpaSilencedAlertRepository.findAllCurrentSilencedAlerts()
+        assertThat(alerts).hasSize(5)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllCurrentSilencedAlerts Should not return silenced alerts silenced before now`() {
+        // Given
+        assertThat(jpaSilencedAlertRepository.findAllCurrentSilencedAlerts()).hasSize(4)
+        val now = ZonedDateTime.now()
+        val alertOne = PendingAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                tripNumber = "123456",
+                creationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert())
+        jpaSilencedAlertRepository.save(alertOne, now, null)
+
+        // When
+        val alerts = jpaSilencedAlertRepository.findAllCurrentSilencedAlerts()
+
+        // Then, the last inserted alert is not fetched
+        assertThat(alerts).hasSize(4)
     }
 }

@@ -1,8 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.hibernate.annotations.Type
@@ -38,12 +40,11 @@ data class SilencedAlertEntity(
         val silencedBeforeDate: ZonedDateTime,
         @Column(name = "silenced_after_date")
         val silencedAfterDate: ZonedDateTime? = null,
-        @Column(name = "alert", nullable = false)
-        @Enumerated(EnumType.STRING)
-        @Type(type = "pgsql_enum")
-        val alert: AlertTypeMapping) {
+        @Type(type = "jsonb")
+        @Column(name = "value", nullable = false, columnDefinition = "jsonb")
+        val value: String) {
 
-        fun toSilencedAlert() : SilencedAlert {
+        fun toSilencedAlert(mapper: ObjectMapper) : SilencedAlert {
                 return SilencedAlert(
                         id = id,
                         vesselName = vesselName,
@@ -53,12 +54,13 @@ data class SilencedAlertEntity(
                         vesselIdentifier = vesselIdentifier,
                         silencedBeforeDate = silencedBeforeDate,
                         silencedAfterDate = silencedAfterDate,
-                        alert = alert
+                        value = mapper.readValue(value, AlertType::class.java)
                 )
         }
 
         companion object {
-                fun fromPendingAlert(alert: PendingAlert,
+                fun fromPendingAlert(mapper: ObjectMapper,
+                                     alert: PendingAlert,
                                      silencedBeforeDate: ZonedDateTime,
                                      silencedAfterDate: ZonedDateTime?) = SilencedAlertEntity(
                         vesselName = alert.vesselName,
@@ -68,6 +70,6 @@ data class SilencedAlertEntity(
                         vesselIdentifier = alert.vesselIdentifier,
                         silencedBeforeDate = silencedBeforeDate,
                         silencedAfterDate = silencedAfterDate,
-                        alert = alert.value.type)
+                        value = mapper.writeValueAsString(alert.value))
         }
 }

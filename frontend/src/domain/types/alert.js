@@ -22,6 +22,20 @@
  */
 
 /**
+ * @typedef SilencedAlert
+ * @property {string} id
+ * @property {string} vesselName
+ * @property {string} internalReferenceNumber
+ * @property {string} externalReferenceNumber
+ * @property {string} ircs
+ * @property {string} vesselIdentifier
+ * @property {Date} silencedBeforeDate
+ * @property {Date} silencedAfterDate
+ * @property {PendingAlert | PNOAndLANWeightToleranceAlert} value
+ * @property {boolean | null} isReactivated
+ */
+
+/**
  * @typedef PNOAndLANWeightToleranceAlert
  * @property {string} lanOperationNumber
  * @property {string} pnoOperationNumber

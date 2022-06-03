@@ -3,55 +3,36 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { Flag } from '../../vessel_list/tableCells'
-import { batch, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import List from 'rsuite/lib/List'
 import FlexboxGrid from 'rsuite/lib/FlexboxGrid'
 import countries from 'i18n-iso-countries'
-import * as timeago from 'timeago.js'
-import { getAlertNameFromType, getSilencedAlertPeriodText } from '../../../domain/entities/alerts'
+import { getAlertNameFromType } from '../../../domain/entities/alerts'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
-import { getTextForSearch } from '../../../utils'
-import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
-import SilenceAlertMenu from './SilenceAlertMenu'
-import silenceAlert from '../../../domain/use_cases/alert/silenceAlert'
-import validateAlert from '../../../domain/use_cases/alert/validateAlert'
+import { getDateDiffInDays, getDateTime, getTextForSearch } from '../../../utils'
+import * as timeago from 'timeago.js'
+import reactivateSilencedAlert from '../../../domain/use_cases/alert/reactivateSilencedAlert'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
- * @param alerts
- * @param numberOfSilencedAlerts
- * @param seaFront
+ * @param silencedAlerts
  * @param baseRef
  * @return {JSX.Element}
  * @constructor
  */
-const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }) => {
+const SilencedAlertsList = ({ silencedAlerts }) => {
   const dispatch = useDispatch()
   const {
     focusOnAlert
   } = useSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortedAlerts, setSortedAlerts] = useState([])
-  const [sortColumn] = useState('creationDate')
-  const [sortType] = useState(SortType.DESC)
+  const [sortColumn] = useState('silencedBeforeDate')
+  const [sortType] = useState(SortType.ASC)
   const [filteredAlerts, setFilteredAlerts] = useState([])
   const [searched, setSearched] = useState(undefined)
-  const [showSilencedAlertForIndex, setShowSilencedAlertForIndex] = useState(null)
-  const [silencedAlertId, setSilencedAlertId] = useState(null)
-
-  useEffect(() => {
-    if (focusOnAlert) {
-      const timeoutHandler = setTimeout(() => {
-        dispatch(resetFocusOnAlert())
-      }, 2000)
-
-      return () => {
-        clearTimeout(timeoutHandler)
-      }
-    }
-  }, [focusOnAlert])
 
   useEffect(() => {
     if (filteredAlerts) {
@@ -64,17 +45,17 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
   }, [filteredAlerts, sortColumn, sortType])
 
   useEffect(() => {
-    if (!alerts) {
+    if (!silencedAlerts) {
       return
     }
 
     if (!searched?.length || searched?.length <= 1) {
-      setFilteredAlerts(alerts)
+      setFilteredAlerts(silencedAlerts)
       return
     }
 
     if (searched?.length > 1) {
-      const nextFilteredAlerts = alerts.filter(alert =>
+      const nextFilteredAlerts = silencedAlerts.filter(alert =>
         getTextForSearch(getAlertNameFromType(alert.type)).includes(getTextForSearch(searched)) ||
         getTextForSearch(alert.vesselName).includes(getTextForSearch(searched)) ||
         getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searched)) ||
@@ -82,43 +63,26 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
         getTextForSearch(alert.ircs).includes(getTextForSearch(searched)))
       setFilteredAlerts(nextFilteredAlerts)
     }
-  }, [alerts, searched])
+  }, [silencedAlerts, searched])
 
-  const silenceAlertCallback = useCallback((silencedAlertPeriod, id) => {
-    setShowSilencedAlertForIndex(null)
-    setSilencedAlertId(null)
-    dispatch(silenceAlert(silencedAlertPeriod, id))
-  }, [dispatch])
-
-  const validateAlertCallback = useCallback(id => {
-    dispatch(validateAlert(id))
+  const reactivateSilencedAlertCallback = useCallback(id => {
+    dispatch(reactivateSilencedAlert(id))
   }, [dispatch])
 
   return <Content style={contentStyle}>
     <Title style={titleStyle}>
-      ALERTES AUTOMATIQUES À VÉRIFIER
+      SUSPENSION D&apos;ALERTES
     </Title>
-    {
-      numberOfSilencedAlerts
-        ? <NumberOfSilencedAlerts
-          style={numberOfSilencedAlertsStyle}
-          data-cy={'side-window-alerts-number-silenced-vessels'}
-        >
-          <Warning style={warningStyle}>!</Warning>
-          Suspension d&apos;alertes sur {numberOfSilencedAlerts} navire{numberOfSilencedAlerts?.length > 1 ? 's' : ''} en {seaFront}
-        </NumberOfSilencedAlerts>
-        : null
-    }
     <SearchVesselInput
       style={searchVesselInputStyle(baseUrl)}
       baseUrl={baseUrl}
-      data-cy={'side-window-alerts-search-vessel'}
+      data-cy={'side-window-silenced-alerts-search-vessel'}
       placeholder={'Rechercher un navire ou une alerte'}
       type="text"
       value={searched}
       onChange={e => setSearched(e.target.value)}/>
       <List
-        data-cy={'side-window-alerts-list'}
+        data-cy={'side-window-silenced-alerts-list'}
         style={{
           ...rowStyle,
           marginTop: 10,
@@ -136,8 +100,8 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
           }}
         >
           <FlexboxGrid>
-            <FlexboxGrid.Item style={timeAgoColumnStyle}>
-              Ouverte il y a...
+            <FlexboxGrid.Item style={vesselNameColumnStyle}>
+              Navire
             </FlexboxGrid.Item>
             <FlexboxGrid.Item colspan={7} style={alertTypeStyle}>
               Titre
@@ -145,8 +109,11 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
             <FlexboxGrid.Item style={alertNatinfStyle}>
               NATINF
             </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={vesselNameColumnStyle}>
-              Navire
+            <FlexboxGrid.Item style={ignoredForStyle}>
+              Ignorée pour...
+            </FlexboxGrid.Item>
+            <FlexboxGrid.Item style={ignoredForStyle}>
+              Reprise le...
             </FlexboxGrid.Item>
           </FlexboxGrid>
         </List.Item>
@@ -158,40 +125,18 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
               style={listItemStyle(focusOnAlert
                 ? alert.id === focusOnAlert?.id
                 : false,
-              alert.silencedPeriod || alert.isValidated)}
+              alert.isReactivated)}
             >
               {
-                alert.isValidated
-                  ? <AlertTransition
-                    data-cy={'side-window-alerts-is-validated-transition'}
-                    style={alertValidatedTransition}
-                  >
-                    Alerte ajoutée à la fiche du navire
+                alert.isReactivated
+                  ? <AlertTransition style={alertValidatedTransition}>
+                    L&apos;alerte est réactivée
                   </AlertTransition>
                   : null
               }
               {
-                alert.silencedPeriod
-                  ? <AlertTransition
-                    data-cy={'side-window-alerts-is-silenced-transition'}
-                    style={alertSilencedTransition}
-                  >
-                    L&apos;alerte sera ignorée {getSilencedAlertPeriodText(alert.silencedPeriod)}
-                </AlertTransition>
-                  : null
-              }
-              {
-                !alert.isValidated && !alert.silencedPeriod
+                !alert.isReactivated
                   ? <FlexboxGrid>
-                    <FlexboxGrid.Item style={timeAgoColumnStyle} title={new Date(alert.creationDateTimestamp)}>
-                      {timeago.format(alert.creationDateTimestamp, 'fr')}
-                    </FlexboxGrid.Item>
-                    <FlexboxGrid.Item style={alertTypeStyle}>
-                      {getAlertNameFromType(alert.type)}
-                    </FlexboxGrid.Item>
-                    <FlexboxGrid.Item style={alertNatinfStyle}>
-                      {alert.natinfCode}
-                    </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={vesselNameColumnStyle}>
                       <Flag
                         title={countries.getName(alert.flagState, 'fr')}
@@ -201,10 +146,28 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
                       />
                       {alert.vesselName}
                     </FlexboxGrid.Item>
+                    <FlexboxGrid.Item style={alertTypeStyle}>
+                      {getAlertNameFromType(alert.type)}
+                    </FlexboxGrid.Item>
+                    <FlexboxGrid.Item style={alertNatinfStyle}>
+                      {alert.natinfCode}
+                    </FlexboxGrid.Item>
+                    <FlexboxGrid.Item style={ignoredForStyle}>
+                      {
+                        alert.silencedAfterDate
+                          ? new Date(alert.silencedAfterDate) > new Date()
+                            ? `${getDateDiffInDays(new Date(alert.silencedAfterDate), new Date(alert.silencedBeforeDate))} jours`
+                            : timeago.format(alert.silencedBeforeDate, 'fr')
+                          : timeago.format(alert.silencedBeforeDate, 'fr')
+                      }
+                    </FlexboxGrid.Item>
+                    <FlexboxGrid.Item style={ignoredForStyle}>
+                      {getDateTime(alert.silencedBeforeDate, true)}
+                    </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={rowBorderStyle}/>
                     <FlexboxGrid.Item style={iconStyle}>
                       <Icon
-                        data-cy={'side-window-alerts-show-vessel'}
+                        data-cy={'side-window-silenced-alerts-show-vessel'}
                         style={showIconStyle}
                         alt={'Voir sur la carte'}
                         title={'Voir sur la carte'}
@@ -218,37 +181,12 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={iconStyle}>
                       <Icon
-                        data-cy={'side-window-alerts-validate-alert'}
-                        style={validateAlertIconStyle}
-                        alt={'Valider l\'alerte'}
-                        title={'Valider l\'alerte'}
-                        onClick={() => validateAlertCallback(alert.id)}
-                        src={`${baseUrl}/Icone_valider_alerte.png`}
-                        onMouseOver={e => (e.currentTarget.src = `${baseUrl}/Icone_valider_alerte_pleine.png`)}
-                        onMouseOut={e => (e.currentTarget.src = `${baseUrl}/Icone_valider_alerte.png`)}
-                      />
-                    </FlexboxGrid.Item>
-                    <FlexboxGrid.Item style={iconStyle}>
-                      <Icon
-                        data-cy={'side-window-alerts-silence-alert'}
-                        style={silenceAlertStyle}
-                        alt={'Ignorer l\'alerte'}
-                        title={'Ignorer l\'alerte'}
-                        onClick={() => {
-                          batch(() => {
-                            setShowSilencedAlertForIndex(index + 1)
-                            setSilencedAlertId(alert.id)
-                          })
-                        }}
-                        src={showSilencedAlertForIndex === index + 1
-                          ? `${baseUrl}/Icone_ignorer_alerte_pleine.png`
-                          : `${baseUrl}/Icone_ignorer_alerte.png`}
-                        onMouseOver={e => (e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte_pleine.png`)}
-                        onMouseOut={e => {
-                          if (showSilencedAlertForIndex !== index + 1) {
-                            e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte.png`
-                          }
-                        }}
+                        data-cy={'side-window-silenced-alerts-delete-silenced-alert'}
+                        style={deleteSilencedAlertIconStyle}
+                        alt={'Réactiver l\'alerte'}
+                        title={'Réactiver l\'alerte'}
+                        onClick={() => reactivateSilencedAlertCallback(alert.id)}
+                        src={`${baseUrl}/Icone_alertes_gris.png`}
                       />
                     </FlexboxGrid.Item>
                   </FlexboxGrid>
@@ -258,56 +196,15 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
           ))}
         </ScrollableContainer>
         {
-          showSilencedAlertForIndex
-            ? <SilenceAlertMenu
-              id={silencedAlertId}
-              showSilencedAlertForIndex={showSilencedAlertForIndex}
-              setShowSilencedAlertForIndex={setShowSilencedAlertForIndex}
-              silenceAlert={silenceAlertCallback}
-              baseRef={baseRef}
-            />
-            : null
-        }
-        {
           !sortedAlerts?.length
-            ? <NoAlerts style={noAlertsStyle}>Aucune alerte à vérifier</NoAlerts>
+            ? <NoAlerts style={noAlertsStyle}>Aucune alerte suspendue</NoAlerts>
             : null
         }
     </List>
   </Content>
 }
 
-const Warning = styled.span``
-const warningStyle = {
-  font: 'normal normal bold 10px/11px Arial',
-  color: COLORS.charcoal,
-  background: COLORS.yellowMunsell,
-  borderRadius: 15,
-  height: 5,
-  width: 5,
-  padding: '5px 4px 5px 6px',
-  lineHeight: '7px',
-  display: 'inline-block',
-  marginRight: 5
-}
-
-const NumberOfSilencedAlerts = styled.div``
-const numberOfSilencedAlertsStyle = {
-  color: COLORS.slateGray,
-  textDecoration: 'underline',
-  marginBottom: 15
-}
-
 const AlertTransition = styled.div``
-const alertSilencedTransition = {
-  background: '#E1000F33 0% 0% no-repeat padding-box',
-  color: COLORS.maximumRed,
-  fontWeight: 500,
-  height: 41,
-  marginTop: -13,
-  textAlign: 'center',
-  lineHeight: '41px'
-}
 
 const alertValidatedTransition = {
   background: '#29B36133 0% 0% no-repeat padding-box',
@@ -377,24 +274,13 @@ const showIconStyle = {
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const Icon = styled.img``
-const validateAlertIconStyle = {
-  paddingRight: 7,
+const deleteSilencedAlertIconStyle = {
+  paddingRight: 10,
   float: 'right',
   flexShrink: 0,
   cursor: 'pointer',
   marginLeft: 'auto',
-  height: 16
-}
-
-// We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
-// goes back to the main window
-const silenceAlertStyle = {
-  paddingRight: 7,
-  float: 'right',
-  flexShrink: 0,
-  cursor: 'pointer',
-  marginLeft: 'auto',
-  height: 16
+  height: 18
 }
 
 const listItemStyle = (isFocused, toClose) => ({
@@ -415,7 +301,7 @@ const styleCenter = {
 }
 
 const rowStyle = {
-  width: 1195,
+  width: 1260,
   fontWeight: 500,
   color: COLORS.gunMetal,
   boxShadow: 'unset'
@@ -424,13 +310,8 @@ const rowStyle = {
 const vesselNameColumnStyle = {
   ...styleCenter,
   display: 'flex',
-  width: 280
-}
-
-const timeAgoColumnStyle = {
-  ...styleCenter,
   marginLeft: 20,
-  width: 190
+  width: 280
 }
 
 const alertTypeStyle = {
@@ -439,6 +320,11 @@ const alertTypeStyle = {
 }
 
 const alertNatinfStyle = {
+  ...styleCenter,
+  width: 150
+}
+
+const ignoredForStyle = {
   ...styleCenter,
   width: 150
 }
@@ -462,9 +348,8 @@ const Content = styled.div``
 const contentStyle = {
   width: 'fit-content',
   padding: '30px 40px 40px 40px',
-  marginLeft: 40,
   marginTop: 20,
-  background: COLORS.gainsboro
+  marginBottom: 20
 }
 
-export default PendingAlertsList
+export default SilencedAlertsList

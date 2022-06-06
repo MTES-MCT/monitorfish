@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
+import fr.gouv.cnsp.monitorfish.domain.entities.CommunicationMeans
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
@@ -114,7 +115,15 @@ class BeaconMalfunctionControllerITests {
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
                         comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
-                        actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now()))))
+                        actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now())),
+                        notifications = listOf(
+                            BeaconMalfunctionNotification(
+                                id = 1, beaconMalfunctionId = 1, dateTime = ZonedDateTime.now(),
+                                notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
+                                communicationMeans = CommunicationMeans.SMS,
+                                recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                                recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000")
+                        )))
 
         // When
         mockMvc.perform(get("/bff/v1/beacon_malfunctions/123"))
@@ -126,6 +135,7 @@ class BeaconMalfunctionControllerITests {
                 .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
                 .andExpect(jsonPath("$.actions[0].propertyName", equalTo("VESSEL_STATUS")))
                 .andExpect(jsonPath("$.beaconMalfunction.internalReferenceNumber", equalTo("CFR")))
+                .andExpect(jsonPath("$.notifications[0].recipientName", equalTo("Jack Sparrow")))
     }
 
     @Test

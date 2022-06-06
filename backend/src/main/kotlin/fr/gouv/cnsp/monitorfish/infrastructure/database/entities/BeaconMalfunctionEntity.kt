@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
@@ -44,7 +45,13 @@ data class BeaconMalfunctionEntity(
         val vesselStatusLastModificationDateTime: Instant,
         @Column(name = "end_of_malfunction_reason")
         @Enumerated(EnumType.STRING)
-        val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason) {
+        val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason,
+        @Column(name = "vessel_id")
+        val vesselId: Int?,
+        @Column(name = "notification_requested")
+        @Enumerated(EnumType.STRING)
+        val notificationRequested: BeaconMalfunctionNotificationType?)
+{
 
         fun toBeaconMalfunction() = BeaconMalfunction(
                 id = id,
@@ -60,5 +67,8 @@ data class BeaconMalfunctionEntity(
                 malfunctionStartDateTime = malfunctionStartDateTime.atZone(ZoneOffset.UTC),
                 malfunctionEndDateTime = malfunctionEndDateTime?.atZone(ZoneOffset.UTC),
                 vesselStatusLastModificationDateTime = vesselStatusLastModificationDateTime.atZone(ZoneOffset.UTC),
-                endOfBeaconMalfunctionReason = endOfBeaconMalfunctionReason)
+                endOfBeaconMalfunctionReason = endOfBeaconMalfunctionReason,
+                vesselId = vesselId,
+                notificationRequested = notificationRequested
+        )
 }

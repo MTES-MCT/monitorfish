@@ -1,0 +1,13 @@
+INSERT INTO beacon_malfunction_notifications (
+    id, beacon_malfunction_id,                                         date_time_utc,                         notification_type, communication_means,   recipient_function, recipient_name, recipient_address_or_number
+) VALUES
+    (1,                     2, NOW() - INTERVAL                   '7 weeks 18 hours', 'MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION',             'FAX',   'SATELLITE_OPERATOR',          'SAT',                '0123456789'),
+    (2,                     2, NOW() - INTERVAL                   '7 weeks 18 hours', 'MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION',             'EMAIL',    'VESSEL_OPERATOR',  'LE PELETIER',      'lepeletier@gmail.com'),
+    (3,                     2, NOW() - INTERVAL                   '7 weeks 18 hours', 'MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION',             'SMS',       'VESSEL_CAPTAIN',           NULL,                '0600000000'),
+    (4,                     2, NOW() - INTERVAL                   '7 weeks 14 hours',             'MALFUNCTION_AT_SEA_REMINDER',             'FAX',   'SATELLITE_OPERATOR',          'SAT',                '0123456789'),
+    (5,                     2, NOW() - INTERVAL                   '7 weeks 14 hours',             'MALFUNCTION_AT_SEA_REMINDER',             'EMAIL',    'VESSEL_OPERATOR',  'LE PELETIER',      'lepeletier@gmail.com'),
+    (6,                     2, NOW() - INTERVAL                   '7 weeks 14 hours',             'MALFUNCTION_AT_SEA_REMINDER',             'SMS',       'VESSEL_CAPTAIN',           NULL,                '0600000000'),
+    (7,                     2, NOW() - INTERVAL '5 weeks 6 days 23 hours 55 minutes',                      'END_OF_MALFUNCTION',             'FAX',   'SATELLITE_OPERATOR',          'SAT',                '0123456789'),
+    (8,                     2, NOW() - INTERVAL '5 weeks 6 days 23 hours 55 minutes',                      'END_OF_MALFUNCTION',             'EMAIL',    'VESSEL_OPERATOR',  'LE PELETIER',      'lepeletier@gmail.com'),
+    (9,                     2, NOW() - INTERVAL '5 weeks 6 days 23 hours 55 minutes',                      'END_OF_MALFUNCTION',             'SMS',       'VESSEL_CAPTAIN',           NULL,                '0600000000');
+

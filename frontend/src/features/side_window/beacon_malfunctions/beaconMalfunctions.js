@@ -2,6 +2,9 @@ import * as timeago from 'timeago.js'
 import {
   BeaconMalfunctionPropertyName,
   beaconMalfunctionsStages, endOfBeaconMalfunctionReasons,
+  beaconMalfunctionNotificationRecipientFunction,
+  beaconMalfunctionNotificationType,
+  communicationMeans,
   vesselStatuses
 } from '../../../domain/entities/beaconMalfunction'
 import React from 'react'
@@ -83,6 +86,15 @@ export const getActionText = (action, endOfBeaconMalfunctionReason) => {
       }
     </>
   }
+}
+
+export const getNotificationText = (notification) => {
+  const followUpMessage = beaconMalfunctionNotificationType[notification.notificationType].followUpMessage
+  const addressee = beaconMalfunctionNotificationRecipientFunction[notification.recipientFunction].addressee
+  const means = communicationMeans[notification.communicationMeans].denomination
+  const recipientName = notification.recipientName ? `(${notification.recipientName})` : ''
+  const addresseePreposition = communicationMeans[notification.communicationMeans].addresseePreposition
+  return <>{ followUpMessage } { addressee } {recipientName} par { means } { addresseePreposition } { notification.recipientAddressOrNumber }.</>
 }
 
 export function getReducedTimeAgo (dateTime) {

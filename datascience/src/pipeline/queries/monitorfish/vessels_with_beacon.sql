@@ -1,4 +1,5 @@
 SELECT
+    id AS vessel_id,
     cfr,
     external_immatriculation,
     ircs,

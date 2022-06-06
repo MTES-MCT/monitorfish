@@ -5,6 +5,7 @@ import pandas as pd
 import pytest
 from prefect.engine.signals import TRIGGERFAIL
 
+from src.pipeline.entities.beacon_malfunctions import beaconMalfunctionNotificationType
 from src.pipeline.exceptions import MonitorfishHealthError
 from src.pipeline.flows.update_beacon_malfunctions import (
     beaconMalfunctionStage,
@@ -65,6 +66,7 @@ def test_get_current_malfunctions_filters_on_max_duration_at_sea_and_at_port_and
     td = timedelta(hours=1)
     vessels_that_should_emit = pd.DataFrame(
         {
+            "vessel_id": [1, 2, 3, 4, 5, 6, 7, 8, 9],
             "cfr": ["A", "B", "C", None, None, None, "J", None, None],
             "ircs": ["AA", "BB", "CC", "DD", "EE", "FF", "JJ", "KK", None],
             "external_immatriculation": [
@@ -349,6 +351,7 @@ def test_prepare_new_beacon_malfunctions():
 
     new_malfunctions = pd.DataFrame(
         {
+            "vessel_id": [2, 4, 5],
             "cfr": ["B", "D", "E"],
             "external_immatriculation": ["BB", "DD", "EE"],
             "ircs": ["BBB", "DDD", "EEE"],
@@ -366,6 +369,8 @@ def test_prepare_new_beacon_malfunctions():
                 datetime(2022, 4, 1, 18, 20, 12),
                 None,
             ],
+            "latitude": [45.23, -12.256, None],
+            "longitude": [12.8, -2.961, None],
         }
     )
 
@@ -405,6 +410,14 @@ def test_prepare_new_beacon_malfunctions():
                 datetime(2021, 1, 1, 1, 1, 1),
                 datetime(2021, 1, 1, 1, 1, 1),
             ],
+            "vessel_id": [2, 4, 5],
+            "notification_requested": [
+                beaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+                beaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value,
+                beaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+            ],
+            "latitude": [45.23, -12.256, None],
+            "longitude": [12.8, -2.961, None],
         }
     )
 
@@ -442,6 +455,13 @@ def test_load_new_beacon_malfunctions(reset_test_data):
                 datetime(2021, 1, 1, 1, 1, 1),
                 datetime(2021, 1, 1, 1, 1, 1),
             ],
+            "vessel_id": [2, 4],
+            "notification_requested": [
+                beaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+                beaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value,
+            ],
+            "latitude": [45.23, -12.256],
+            "longitude": [12.8, -2.961],
         }
     )
 
@@ -703,6 +723,10 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
     assert "FQ7058" in loaded_beacon_malfunctions.ircs.values
     assert "AB654321" not in initial_beacon_malfunctions.ircs.values
     assert "AB654321" in loaded_beacon_malfunctions.ircs.values
+    assert (
+        "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"
+        in loaded_beacon_malfunctions.notification_requested.values
+    )
 
 
 def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):

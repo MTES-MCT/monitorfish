@@ -6,18 +6,17 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionResumeAndDetails
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionWithDetails
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeaconMalfunctionsResume
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionActionsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionCommentsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetBeaconMalfunction(private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
-                      private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
-                      private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
-                      private val lastPositionRepository: LastPositionRepository) {
+class GetBeaconMalfunction(
+    private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
+    private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
+    private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
+    private val lastPositionRepository: LastPositionRepository,
+    private val beaconMalfunctionNotificationsRepository: BeaconMalfunctionNotificationsRepository) {
     private val logger = LoggerFactory.getLogger(GetBeaconMalfunction::class.java)
 
     fun execute(beaconMalfunctionId: Int): BeaconMalfunctionResumeAndDetails {
@@ -25,6 +24,7 @@ class GetBeaconMalfunction(private val beaconMalfunctionsRepository: BeaconMalfu
         val beaconMalfunction = beaconMalfunctionsRepository.find(beaconMalfunctionId)
         val beaconMalfunctionComments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
         val beaconMalfunctionActions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
+        val beaconMalfunctionNotifications = beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
 
         val riskFactor = lastPositions.find(BeaconMalfunction.getVesselFromBeaconMalfunction(beaconMalfunction))?.riskFactor
         beaconMalfunction.riskFactor = riskFactor
@@ -70,9 +70,11 @@ class GetBeaconMalfunction(private val beaconMalfunctionsRepository: BeaconMalfu
         val vesselBeaconMalfunctionsResume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconMalfunctionsWithDetails)
 
         return BeaconMalfunctionResumeAndDetails(
-                beaconMalfunction = beaconMalfunction,
-                resume = vesselBeaconMalfunctionsResume,
-                comments = beaconMalfunctionComments,
-                actions = beaconMalfunctionActions)
+            beaconMalfunction = beaconMalfunction,
+            resume = vesselBeaconMalfunctionsResume,
+            comments = beaconMalfunctionComments,
+            actions = beaconMalfunctionActions,
+            notifications = beaconMalfunctionNotifications
+        )
     }
 }

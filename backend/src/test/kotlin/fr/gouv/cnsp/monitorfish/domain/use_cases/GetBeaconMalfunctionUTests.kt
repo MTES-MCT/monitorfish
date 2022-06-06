@@ -2,12 +2,10 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
+import fr.gouv.cnsp.monitorfish.domain.entities.CommunicationMeans
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionActionsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionCommentsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetBeaconMalfunction
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -28,6 +26,9 @@ class GetBeaconMalfunctionUTests {
 
     @MockBean
     private lateinit var beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository
+
+    @MockBean
+    private lateinit var beaconMalfunctionNotificationsRepository: BeaconMalfunctionNotificationsRepository
 
     @MockBean
     private lateinit var lastPositionRepository: LastPositionRepository
@@ -52,9 +53,18 @@ class GetBeaconMalfunctionUTests {
                 beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)))
         given(beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).willReturn(listOf(BeaconMalfunctionAction(
                 beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = VesselStatus.ACTIVITY_DETECTED.toString(), previousValue = VesselStatus.AT_PORT.toString(), dateTime = now)))
+        given(beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
+            listOf(BeaconMalfunctionNotification(
+                id = 1, beaconMalfunctionId = 1, dateTime = now,
+                notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
+                communicationMeans = CommunicationMeans.SMS,
+                recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000")
+            )
+        )
 
         // When
-        val beaconMalfunctions = GetBeaconMalfunction(beaconMalfunctionsRepository, beaconMalfunctionCommentsRepository, beaconMalfunctionActionsRepository, lastPositionRepository)
+        val beaconMalfunctions = GetBeaconMalfunction(beaconMalfunctionsRepository, beaconMalfunctionCommentsRepository, beaconMalfunctionActionsRepository, lastPositionRepository, beaconMalfunctionNotificationsRepository)
                 .execute(1)
 
         // Then
@@ -63,6 +73,8 @@ class GetBeaconMalfunctionUTests {
         assertThat(beaconMalfunctions.resume?.lastBeaconMalfunctionVesselStatus).isEqualTo(VesselStatus.AT_SEA)
         assertThat(beaconMalfunctions.actions).hasSize(1)
         assertThat(beaconMalfunctions.comments).hasSize(1)
+        assertThat(beaconMalfunctions.notifications).hasSize(1)
+        assertThat(beaconMalfunctions.notifications[0].recipientName).isEqualTo("Jack Sparrow")
         assertThat(beaconMalfunctions.beaconMalfunction.internalReferenceNumber).isEqualTo("FR224226850")
     }
 }

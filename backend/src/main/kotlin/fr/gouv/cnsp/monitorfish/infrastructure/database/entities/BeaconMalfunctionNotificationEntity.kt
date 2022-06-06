@@ -1,0 +1,44 @@
+package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
+
+import fr.gouv.cnsp.monitorfish.domain.entities.CommunicationMeans
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
+import java.time.Instant
+import java.time.ZoneOffset
+import javax.persistence.*
+
+@Entity
+@Table(name = "beacon_malfunction_notifications")
+data class BeaconMalfunctionNotificationEntity(
+    @Id
+    @Column(name = "id", unique = true, nullable = false)
+    val id: Int,
+    @Column(name = "beacon_malfunction_id")
+    val beaconMalfunctionId: Int,
+    @Column(name = "date_time_utc")
+    val dateTime: Instant,
+    @Column(name = "notification_type")
+    @Enumerated(EnumType.STRING)
+    val notificationType: BeaconMalfunctionNotificationType,
+    @Column(name = "communication_means")
+    @Enumerated(EnumType.STRING)
+    val communicationMeans: CommunicationMeans,
+    @Column(name = "recipient_function")
+    @Enumerated(EnumType.STRING)
+    val recipientFunction: BeaconMalfunctionNotificationRecipientFunction,
+    @Column(name = "recipient_name")
+    val recipientName: String? = null,
+    @Column(name = "recipient_address_or_number")
+    val recipientAddressOrNumber: String) {
+
+    fun toBeaconMalfunctionNotification() = BeaconMalfunctionNotification(
+        id = id,
+        beaconMalfunctionId = beaconMalfunctionId,
+        dateTime  = dateTime.atZone(ZoneOffset.UTC),
+        notificationType = notificationType,
+        communicationMeans = communicationMeans,
+        recipientFunction = recipientFunction,
+        recipientName = recipientName,
+        recipientAddressOrNumber = recipientAddressOrNumber
+    )
+
+}

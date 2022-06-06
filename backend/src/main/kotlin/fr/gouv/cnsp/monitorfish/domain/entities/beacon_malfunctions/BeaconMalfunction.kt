@@ -19,7 +19,10 @@ data class BeaconMalfunction(
         val malfunctionEndDateTime: ZonedDateTime?,
         val vesselStatusLastModificationDateTime: ZonedDateTime,
         var riskFactor: Double? = null,
-        val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason? = null) {
+        val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason? = null,
+        val vesselId: Int? = null,
+        val notificationRequested: BeaconMalfunctionNotificationType? = null
+) {
     companion object {
         fun getVesselFromBeaconMalfunction(beaconMalfunction: BeaconMalfunction): (LastPosition) -> Boolean {
             return { lastPosition ->

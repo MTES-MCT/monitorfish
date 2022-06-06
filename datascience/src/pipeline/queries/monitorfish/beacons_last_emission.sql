@@ -8,5 +8,7 @@ SELECT
     -- Vessels are not a priority if their length is < 12 or unknown
     (COALESCE(length, 0) >= 12) AS priority,
     last_position_datetime_utc,
-    is_manual
+    is_manual,
+    latitude,
+    longitude
 FROM last_positions

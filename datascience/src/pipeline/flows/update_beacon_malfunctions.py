@@ -1,5 +1,4 @@
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
 from typing import Tuple
 
@@ -14,6 +13,12 @@ from config import (
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
 )
+from src.pipeline.entities.beacon_malfunctions import (
+    beaconMalfunctionNotificationType,
+    beaconMalfunctionStage,
+    beaconMalfunctionVesselStatus,
+    endOfMalfunctionReason,
+)
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
     join_on_multiple_keys,
@@ -25,30 +30,6 @@ from src.pipeline.shared_tasks.healthcheck import (
     assert_last_positions_health,
     get_monitorfish_healthcheck,
 )
-
-
-class beaconMalfunctionStage(Enum):
-    INITIAL_ENCOUNTER = "INITIAL_ENCOUNTER"
-    FOUR_HOUR_REPORT = "FOUR_HOUR_REPORT"
-    RELAUNCH_REQUEST = "RELAUNCH_REQUEST"
-    TARGETING_VESSEL = "TARGETING_VESSEL"
-    CROSS_CHECK = "CROSS_CHECK"
-    END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
-    ARCHIVED = "ARCHIVED"
-
-
-class beaconMalfunctionVesselStatus(Enum):
-    AT_SEA = "AT_SEA"
-    AT_PORT = "AT_PORT"
-    NEVER_EMITTED = "NEVER_EMITTED"
-    NO_NEWS = "NO_NEWS"
-    ACTIVITY_DETECTED = "ACTIVITY_DETECTED"
-
-
-class endOfMalfunctionReason(Enum):
-    RESUMED_TRANSMISSION = "RESUMED_TRANSMISSION"
-    TEMPORARY_INTERRUPTION_OF_SUPERVISION = "TEMPORARY_INTERRUPTION_OF_SUPERVISION"
-    PERMANENT_INTERRUPTION_OF_SUPERVISION = "PERMANENT_INTERRUPTION_OF_SUPERVISION"
 
 
 @task(checkpoint=False)
@@ -381,6 +362,16 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
     ].fillna(datetime.utcnow())
     new_malfunctions["vessel_status_last_modification_date_utc"] = datetime.utcnow()
 
+    notification_to_send = {
+        beaconMalfunctionVesselStatus.AT_SEA.value: beaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value,
+        beaconMalfunctionVesselStatus.AT_PORT.value: beaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+        beaconMalfunctionVesselStatus.NEVER_EMITTED.value: beaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+    }
+
+    new_malfunctions["notification_requested"] = new_malfunctions.vessel_status.map(
+        lambda x: notification_to_send[x]
+    )
+
     ordered_columns = [
         "internal_reference_number",
         "external_reference_number",
@@ -394,6 +385,10 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         "malfunction_start_date_utc",
         "malfunction_end_date_utc",
         "vessel_status_last_modification_date_utc",
+        "vessel_id",
+        "notification_requested",
+        "latitude",
+        "longitude",
     ]
     return new_malfunctions.loc[:, ordered_columns]
 

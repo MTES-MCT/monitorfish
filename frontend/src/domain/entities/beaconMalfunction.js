@@ -268,6 +268,57 @@ const getFirstStatusActionDate = (vesselStatus, malfunctionStartDateTime) => {
   }
 }
 
+const beaconMalfunctionNotificationType = {
+    MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION : {
+        followUpMessage: "Une notification initiale d'avarie en mer a été envoyée"
+    },
+    MALFUNCTION_AT_SEA_REMINDER : {
+        followUpMessage: "Un rappel d'avarie en mer a été envoyé"
+    },
+    MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION : {
+        followUpMessage: "Une notification initiale d'avarie à quai a été envoyée"
+    },
+    MALFUNCTION_AT_PORT_REMINDER : {
+        followUpMessage: "Un rappel d'avarie à quai a été envoyé"
+    },
+    END_OF_MALFUNCTION : {
+        followUpMessage: "Une notification de fin d'avarie a été envoyée"
+    }
+}
+
+const communicationMeans = {
+    EMAIL: {
+        value: "EMAIL",
+        denomination: "email",
+        addresseePreposition: "à"
+    },
+    SMS: {
+        value: "SMS",
+        denomination: "SMS",
+        addresseePreposition: "au"
+    },
+    FAX: {
+        value: "FAX",
+        denomination: "fax",
+        addresseePreposition: "au"
+    }
+}
+
+const beaconMalfunctionNotificationRecipientFunction = {
+    VESSEL_CAPTAIN: {
+        value: "VESSEL_CAPTAIN",
+        addressee: "au capitaine du navire"
+    },
+    VESSEL_OPERATOR: {
+        value: "VESSEL_OPERATOR",
+        addressee: "à l'armateur du navire"
+    },
+    SATELLITE_OPERATOR: {
+        value: "SATELLITE_OPERATOR",
+        addressee: "à l'opérateur satellite"
+    }
+}
+
 export {
   getYearsToBeaconMalfunctions,
   getNumberOfSeaAndLandBeaconMalfunctions,
@@ -280,5 +331,9 @@ export {
   endOfBeaconMalfunctionReasons,
   getIsMalfunctioning,
   getMalfunctionStartDateText,
-  beaconMalfunctionsStages
+  beaconMalfunctionsStages,
+  beaconMalfunctionNotificationType,
+  communicationMeans,
+  beaconMalfunctionNotificationRecipientFunction,
+  getFirstStatusActionDate
 }

@@ -41,6 +41,18 @@
  */
 
 /**
+ * @typedef BeaconMalfunctionNotification
+ * @property {number} id
+ * @property {int} beaconMalfunctionId
+ * @property {string} notificationType
+ * @property {string} communicationMeans
+ * @property {string} recipientFunction
+ * @property {string} recipientName
+ * @property {string} recipientAddressOrNumber
+ * @property {string} dateTime
+ */
+
+/**
  * @typedef BeaconMalfunctionCommentInput
  * @property {string} comment
  * @property {string} userType
@@ -51,7 +63,8 @@
  * @property {BeaconMalfunction} beaconMalfunction
  * @property {BeaconMalfunctionComment[]} comments
  * @property {BeaconMalfunctionAction[]} actions
- * @property {BeaconMalfunctionAction[]} resume
+ * @property {VesselBeaconMalfunctionsResume} resume
+ * @property {BeaconMalfunctionNotification[]} notifications
  */
 
 /**

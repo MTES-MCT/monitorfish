@@ -11,6 +11,7 @@ LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
 QUERIES_LOCATION = LIBRARY_LOCATION / Path("pipeline/queries")
 TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
 EMAIL_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/templates")
+EMAIL_IMAGES_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/images")
 EMAIL_STYLESHEETS_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/stylesheets")
 
 # Flow execution configuration

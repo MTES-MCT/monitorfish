@@ -18,8 +18,8 @@ from config import (
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
 )
-from src.pipeline.emails.emails import create_html_email, send_email
 from src.pipeline.generic_tasks import extract
+from src.pipeline.helpers.emails import create_html_email, send_email
 from src.pipeline.processing import try_get_factory
 
 ####################################### Helpers #######################################

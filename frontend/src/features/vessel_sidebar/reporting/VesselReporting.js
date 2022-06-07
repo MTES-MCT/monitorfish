@@ -7,6 +7,8 @@ import { FingerprintSpinner } from 'react-epic-spinners'
 import ArchivedReporting from './archived/ArchivedReporting'
 import CurrentReporting from './current/CurrentReporting'
 import getVesselReporting from '../../../domain/use_cases/vessel/getVesselReporting'
+import { usePrevious } from '../../../hooks/usePrevious'
+import { vesselsAreEquals } from '../../../domain/entities/vessel'
 
 const ReportingTab = {
   CURRENT_REPORTING: 'CURRENT_REPORTING',
@@ -27,10 +29,14 @@ const VesselReporting = () => {
   } = useSelector(state => state.reporting)
 
   const [reportingTab, setReportingTab] = useState(ReportingTab.CURRENT_REPORTING)
+  const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
 
   useEffect(() => {
     if (archivedReportingFromDate) {
       dispatch(getVesselReporting(true))
+      if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
+        setReportingTab(ReportingTab.CURRENT_REPORTING)
+      }
     }
   }, [selectedVesselIdentity, archivedReportingFromDate])
 

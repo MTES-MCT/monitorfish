@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class beaconMalfunctionStage(Enum):
+class BeaconMalfunctionStage(Enum):
     INITIAL_ENCOUNTER = "INITIAL_ENCOUNTER"
     FOUR_HOUR_REPORT = "FOUR_HOUR_REPORT"
     RELAUNCH_REQUEST = "RELAUNCH_REQUEST"
@@ -11,7 +11,7 @@ class beaconMalfunctionStage(Enum):
     ARCHIVED = "ARCHIVED"
 
 
-class beaconMalfunctionVesselStatus(Enum):
+class BeaconMalfunctionVesselStatus(Enum):
     AT_SEA = "AT_SEA"
     AT_PORT = "AT_PORT"
     NEVER_EMITTED = "NEVER_EMITTED"
@@ -19,13 +19,13 @@ class beaconMalfunctionVesselStatus(Enum):
     ACTIVITY_DETECTED = "ACTIVITY_DETECTED"
 
 
-class endOfMalfunctionReason(Enum):
+class EndOfMalfunctionReason(Enum):
     RESUMED_TRANSMISSION = "RESUMED_TRANSMISSION"
     TEMPORARY_INTERRUPTION_OF_SUPERVISION = "TEMPORARY_INTERRUPTION_OF_SUPERVISION"
     PERMANENT_INTERRUPTION_OF_SUPERVISION = "PERMANENT_INTERRUPTION_OF_SUPERVISION"
 
 
-class beaconMalfunctionNotificationType(Enum):
+class BeaconMalfunctionNotificationType(Enum):
     MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION = "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION"
     MALFUNCTION_AT_SEA_REMINDER = "MALFUNCTION_AT_SEA_REMINDER"
     MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION = (

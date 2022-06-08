@@ -1,6 +1,6 @@
 SELECT
-    internal_reference_number AS cfr,
-    external_reference_number AS external_immatriculation,
+    internal_reference_number,
+    external_reference_number,
     ircs,
     value->>'seaFront' as silenced_sea_front,
     value->>'type' as silenced_type

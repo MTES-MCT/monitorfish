@@ -555,7 +555,7 @@ def test_extract_enrich_load(reset_test_data):
             [13740935, "ZZTOPACDC", 1459.06, True, timedelta(), False],
         ],
     )
-    breakpoint()
+
     pd.testing.assert_frame_equal(expected_res, positions_after[columns_to_check])
 
 

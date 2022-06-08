@@ -159,6 +159,20 @@ def extract_poseidon_vessels():
 
 
 @task(checkpoint=False)
+def extract_satellite_operators():
+    return extract("fmc", "fmc/satellite_operators.sql")
+
+
+@task(checkpoint=False)
+def transform_satellite_operators(satellite_operators: pd.DataFrame) -> pd.DataFrame:
+    satellite_operators = satellite_operators.copy(deep=True)
+    satellite_operators["emails"] = satellite_operators.emails.map(
+        lambda s: s.split(", "), na_action="ignore"
+    )
+    return satellite_operators
+
+
+@task(checkpoint=False)
 def transform_beacons(beacons: pd.DataFrame) -> pd.DataFrame:
     """Maps Posedion beacon status to Monitorfish `beaconStatus`.
 
@@ -423,6 +437,7 @@ def clean_vessels(all_vessels):
         "beacon_number",
         "beacon_status",
         "under_charter",
+        "satellite_operator_id",
     ]
     res = res[columns]
     logger.info("Columns sorted.")
@@ -446,6 +461,7 @@ def load_vessels(all_vessels):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
+        nullable_integer_columns=["satellite_operator_id"],
         pg_array_columns=[
             "declared_fishing_gears",
             "operator_phones",
@@ -454,6 +470,19 @@ def load_vessels(all_vessels):
             "vessel_phones",
             "vessel_emails",
         ],
+    )
+
+
+@task(checkpoint=False)
+def load_satellite_operators(satellite_operators):
+    load(
+        satellite_operators,
+        table_name="satellite_operators",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+        pg_array_columns=["emails"],
     )
 
 
@@ -468,9 +497,11 @@ with Flow("Vessels") as flow:
     licences = extract_nav_licences()
     beacons = extract_beacons()
     control_charters = extract_control_charters()
+    satellite_operators = extract_satellite_operators()
 
     # Transform
     beacons = transform_beacons(beacons)
+    transform_satellite_operators(satellite_operators)
     all_vessels = merge_vessels(
         floats,
         fr_vessels,
@@ -485,6 +516,7 @@ with Flow("Vessels") as flow:
     all_vessels = clean_vessels(all_vessels)
 
     # Load
+    load_satellite_operators(satellite_operators)
     load_vessels(all_vessels)
 
 flow.file_name = Path(__file__).name

@@ -89,11 +89,11 @@ export const getActionText = (action, endOfBeaconMalfunctionReason) => {
 }
 
 export const getNotificationText = (notification) => {
-  const followUpMessage = beaconMalfunctionNotificationType[notification.notificationType].followUpMessage
-  const addressee = beaconMalfunctionNotificationRecipientFunction[notification.recipientFunction].addressee
-  const means = communicationMeans[notification.communicationMeans].denomination
+  const followUpMessage = beaconMalfunctionNotificationType[notification.notificationType]?.followUpMessage || 'Un message a été envoyé'
+  const addressee = beaconMalfunctionNotificationRecipientFunction[notification.recipientFunction]?.addressee || ''
+  const means = communicationMeans[notification.communicationMeans]?.denomination || ''
   const recipientName = notification.recipientName ? `(${notification.recipientName})` : ''
-  const addresseePreposition = communicationMeans[notification.communicationMeans].addresseePreposition
+  const addresseePreposition = communicationMeans[notification.communicationMeans]?.addresseePreposition || ''
   return <>{ followUpMessage } { addressee } {recipientName} par { means } { addresseePreposition } { notification.recipientAddressOrNumber }.</>
 }
 

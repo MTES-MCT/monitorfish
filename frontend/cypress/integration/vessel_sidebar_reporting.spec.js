@@ -60,13 +60,6 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2610')
     cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
 
-    cy.wait(500)
-    cy.get('.vessels').eq(0).toMatchImageSnapshot({
-      screenshotConfig: {
-        clip: { x: 400, y: 480, width: 80, height: 80 }
-      }
-    })
-
     // Then
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(1)
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()

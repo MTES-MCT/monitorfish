@@ -558,7 +558,7 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
     )
 
     assert len(initial_last_positions) == 4
-    assert len(final_last_positions) == 3
+    assert len(final_last_positions) == 4
     assert set(initial_last_positions.external_immatriculation) == {
         "AS761555",
         "RO237719",
@@ -568,6 +568,7 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
     assert set(final_last_positions.external_immatriculation) == {
         "RV348407",
         "RO237719",
+        "OHMYGOSH",
         "ZZTOPACDC",
     }
 

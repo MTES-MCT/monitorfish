@@ -12,7 +12,7 @@ INSERT INTO beacon_malfunctions (
     priority,
     malfunction_start_date_utc,
     malfunction_end_date_utc,
-    vessel_status_last_modification_date_utc
+    vessel_status_last_modification_date_utc,
     flag_state,
     end_of_malfunction_reason,
     vessel_id,
@@ -76,7 +76,9 @@ INSERT INTO beacon_malfunctions (
     'FR',
     NULL,
     6,
-    NULL,
+    'MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION',
     -8.569,
     -23.1569
 );
+
+ALTER SEQUENCE beacon_malfunctions_id_seq RESTART WITH 4;

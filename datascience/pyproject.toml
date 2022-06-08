@@ -29,7 +29,8 @@ h3 = "^3.7.3"
 vptree = "^1.2"
 pytest = "^6.2.5"
 geopandas = "^0.10.2"
-pdfkit = "^1.0.0"
+PyPDF2 = "^2.1.0"
+weasyprint = "^55.0"
 
 [tool.poetry.dev-dependencies]
 plotly = "^4.14.3"

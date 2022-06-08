@@ -4,6 +4,8 @@ SELECT
     ircs,
     ARRAY_AGG(type) AS reporting
 FROM reporting
+WHERE archived = false AND
+      deleted = false
 GROUP BY
     internal_reference_number,
     external_reference_number,

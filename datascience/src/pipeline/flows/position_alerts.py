@@ -206,15 +206,12 @@ def filter_silenced_alerts(
     vessel_id_cols = ["internal_reference_number", "external_reference_number", "ircs"]
 
     alerts = join_on_multiple_keys(
-        alerts, silenced_alerts, on=vessel_id_cols, how="outer"
+        alerts, silenced_alerts, on=vessel_id_cols, how="left"
     )
 
     return alerts.loc[
-        (
-            (alerts.facade != alerts.silenced_sea_front)
-            | (alerts.type != alerts.silenced_type)
-        )
-        & (alerts.alert_config_name.notnull()),
+        (alerts.facade != alerts.silenced_sea_front)
+        | (alerts.type != alerts.silenced_type),
         [
             "vessel_name",
             "internal_reference_number",

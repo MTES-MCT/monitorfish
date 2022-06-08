@@ -46,14 +46,14 @@ context('Vessel sidebar reporting tab', () => {
       .click({ timeout: 20000 })
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('not.exist')
     cy.get('*[data-cy="vessel-search-input"]', { timeout: 20000 }).type('PROMETTRE')
+    cy.intercept('GET', '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000232227&externalReferenceNumber=ZJ472279&IRCS=TMG5756&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*').as('reportingTwo')
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 20000 }).eq(0).click()
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
 
     // When
-    cy.intercept('GET', '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000232227&externalReferenceNumber=ZJ472279&IRCS=TMG5756&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*').as('reportingTwo')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 20000 })
-    cy.wait('@reportingTwo')
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 20000 }).should('be.visible')
+    cy.wait('@reportingTwo')
     cy.wait(100)
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(2)
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('ALERTE / 12 milles - Pêche sans droits historiques')

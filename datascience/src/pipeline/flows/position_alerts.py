@@ -636,6 +636,6 @@ with Flow("Position alert") as flow:
     alerts = make_alerts(positions_in_alert, alert_type, alert_config_name)
     silenced_alerts = extract_silenced_alerts()
     alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
-    load_alerts(alerts, alert_config_name)
+    load_alerts(alert_without_silenced, alert_config_name)
 
 flow.file_name = Path(__file__).name

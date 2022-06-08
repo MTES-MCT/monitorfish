@@ -31,9 +31,9 @@ https://download.oracle.com/otn_software/linux/instantclient/\
 && rm oracle-instantclient19.8-basic-19.8.0.0.0-1.x86_64.rpm \
 && rm oracle-instantclient19.8-basic_19.8.0.0.0-2_amd64.deb
 
-# Install wkhtmltopdf
+# Install pango
 RUN apt-get update && apt-get install -y \
-    wkhtmltopdf \
+    pango1.0-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # Create and "activate" venv by prepending it to PATH then install python dependencies

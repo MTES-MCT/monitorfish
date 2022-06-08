@@ -15,7 +15,7 @@ import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getA
 import openBeaconMalfunctionInKanban from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import getVesselBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
-import getVesselReporting from '../domain/use_cases/vessel/getVesselReporting'
+import getVesselReportings from '../domain/use_cases/vessel/getVesselReportings'
 import getSilencedAlerts from '../domain/use_cases/alert/getSilencedAlerts'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
@@ -132,7 +132,7 @@ const APIWorker = () => {
       } else if (vesselSidebarTab === VesselSidebarTab.CONTROLS) {
         dispatch(getVesselControls())
       } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {
-        dispatch(getVesselReporting())
+        dispatch(getVesselReportings())
       } else if (adminRole && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
         dispatch(getVesselBeaconMalfunctions())
       }

@@ -73,7 +73,7 @@ const vesselSlice = createSlice({
             speciesArray: vessel.speciesOnboard ? [...new Set(vessel.speciesOnboard.map(species => species.species))] : [],
             lastControlDateTimeTimestamp: vessel.lastControlDateTime ? new Date(vessel.lastControlDateTime).getTime() : '',
             hasAlert: !!vessel.alerts?.length,
-            hasInfractionSuspicion: vessel.reporting.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+            hasInfractionSuspicion: vessel.reportings.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
           },
           vesselId: Vessel.getVesselFeatureId(vessel),
           isAtPort: vessel.isAtPort,
@@ -119,7 +119,7 @@ const vesselSlice = createSlice({
         const filteredAlerts = vessel.vesselProperties.alerts?.filter(alert => alert !== action.payload.alertType)
 
         if (action.payload.isValidated) {
-          const addedReporting = vessel.vesselProperties.reporting?.concat(ReportingType.ALERT.code)
+          const addedReportings = vessel.vesselProperties.reportings?.concat(ReportingType.ALERT.code)
 
           return {
             ...vessel,
@@ -127,8 +127,8 @@ const vesselSlice = createSlice({
               ...vessel.vesselProperties,
               alerts: filteredAlerts,
               hasAlert: !!filteredAlerts.length,
-              reporting: addedReporting,
-              hasInfractionSuspicion: addedReporting.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+              reportings: addedReportings,
+              hasInfractionSuspicion: addedReportings.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
             }
           }
         }
@@ -176,18 +176,18 @@ const vesselSlice = createSlice({
           ...vessel,
           vesselProperties: {
             ...vessel.vesselProperties,
-            reporting: vesselReportingWithoutFirstFoundReportingType,
+            reportings: vesselReportingWithoutFirstFoundReportingType,
             hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingType.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
           }
         }
       })
 
-      const vesselReportingWithoutFirstFoundReportingType = state.selectedVessel.reporting
+      const vesselReportingWithoutFirstFoundReportingType = state.selectedVessel.reportings
         ?.reduce(filterFirstFoundReportingType(action), [])
 
       state.selectedVessel = {
         ...state.selectedVessel,
-        reporting: vesselReportingWithoutFirstFoundReportingType,
+        reportings: vesselReportingWithoutFirstFoundReportingType,
         hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingType.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
       }
     },

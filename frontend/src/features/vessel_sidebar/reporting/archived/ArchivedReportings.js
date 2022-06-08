@@ -5,52 +5,52 @@ import { Title, Zone } from '../../common_styles/common.style'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import YearReporting from './YearReporting'
-import { setArchivedReportingFromDate } from '../../../../domain/shared_slices/Reporting'
+import { setArchivedReportingsFromDate } from '../../../../domain/shared_slices/Reporting'
 
-const ArchivedReporting = () => {
+const ArchivedReportings = () => {
   const dispatch = useDispatch()
   const {
-    /** @type {Reporting} */
-    currentAndArchivedReporting,
-    archivedReportingFromDate
+    /** @type {CurrentAndArchivedReportings} */
+    currentAndArchivedReportings,
+    archivedReportingsFromDate
   } = useSelector(state => state.reporting)
 
-  /** @type {Object.<string, Reporting[]>} yearsToReporting */
-  const yearsToReporting = useMemo(() => {
+  /** @type {Object.<string, Reporting[]>} yearsToReportings */
+  const yearsToReportings = useMemo(() => {
     let nextYearsToControls
-    if (currentAndArchivedReporting?.archived) {
-      nextYearsToControls = getYearsToReportingList(archivedReportingFromDate, currentAndArchivedReporting.archived)
+    if (currentAndArchivedReportings?.archived) {
+      nextYearsToControls = getYearsToReportingList(archivedReportingsFromDate, currentAndArchivedReportings.archived)
     }
     return nextYearsToControls
-  }, [currentAndArchivedReporting, archivedReportingFromDate])
+  }, [currentAndArchivedReportings, archivedReportingsFromDate])
 
   function seeMore () {
-    const nextDate = new Date(archivedReportingFromDate.getTime())
+    const nextDate = new Date(archivedReportingsFromDate.getTime())
     nextDate.setMonth(nextDate.getMonth() - 12)
 
-    dispatch(setArchivedReportingFromDate(nextDate))
+    dispatch(setArchivedReportingsFromDate(nextDate))
   }
 
   return <Zone data-cy={'vessel-sidebar-reporting-tab-history'}>
     <Title>Historique des signalements</Title>
     {
-      yearsToReporting && Object.keys(yearsToReporting)?.length
+      yearsToReportings && Object.keys(yearsToReportings)?.length
         ? <List>
           {
-            Object.keys(yearsToReporting)
+            Object.keys(yearsToReportings)
               .sort((a, b) => b - a)
               .map((year, index) => {
                 return <YearReporting
                   key={year + index}
                   year={year}
-                  yearReporting={yearsToReporting[year]}
-                  isLastItem={yearsToReporting[year].length === index + 1}
+                  yearReportings={yearsToReportings[year]}
+                  isLastItem={yearsToReportings[year].length === index + 1}
                 />
               })
           }
         </List>
         : <NoReporting>
-          Aucun signalement {archivedReportingFromDate && `depuis ${archivedReportingFromDate.getUTCFullYear() + 1}`}
+          Aucun signalement {archivedReportingsFromDate && `depuis ${archivedReportingsFromDate.getUTCFullYear() + 1}`}
         </NoReporting>
     }
     <SeeMoreBackground>
@@ -96,4 +96,4 @@ const SeeMore = styled.div`
   background: ${COLORS.background};
 `
 
-export default ArchivedReporting
+export default ArchivedReportings

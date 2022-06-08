@@ -209,10 +209,10 @@ function getVesselControlsFromAPI (vesselId, fromDate) {
 /**
  * Get vessel reporting
  * @memberOf API
- * @returns {Promise<CurrentAndArchivedReporting>} The reporting
+ * @returns {Promise<CurrentAndArchivedReportings>} The reportings
  * @throws {Error}
  */
-function getVesselReportingFromAPI (identity, fromDate) {
+function getVesselReportingsFromAPI (identity, fromDate) {
   const internalReferenceNumber = identity.internalReferenceNumber || ''
   const externalReferenceNumber = identity.externalReferenceNumber || ''
   const ircs = identity.ircs || ''
@@ -243,5 +243,5 @@ export {
   getVesselsLastPositionsFromAPI,
   getVesselControlsFromAPI,
   getVesselVoyageFromAPI,
-  getVesselReportingFromAPI
+  getVesselReportingsFromAPI
 }

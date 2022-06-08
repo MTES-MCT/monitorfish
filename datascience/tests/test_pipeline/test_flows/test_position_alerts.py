@@ -465,31 +465,11 @@ def test_filter_silenced_alerts():
 
     silenced_alerts = pd.DataFrame(
         {
-            "vessel_name": ["v_A", "v_B_OTHER_VESSEL"],
             "internal_reference_number": ["A", "B_ANOTHER_VESSEL"],
             "external_reference_number": ["AA", "BB_ANOTHER_VESSEL"],
             "ircs": ["AAA", "BBB"],
-            "vessel_identifier": [
-                "INTERNAL_REFERENCE_NUMBER",
-                "INTERNAL_REFERENCE_NUMBER",
-            ],
-            "creation_date": [now, now - 0.5 * td],
             "silenced_type": ["USER_DEFINED_ALERT_TYPE", "USER_DEFINED_ALERT_TYPE"],
             "silenced_sea_front": ["NAMO", "MEMN"],
-            "value": [
-                {
-                    "seaFront": "NAMO",
-                    "flagState": "FR",
-                    "type": alert_type,
-                    "riskFactor": 1.23,
-                },
-                {
-                    "seaFront": "MEMN",
-                    "flagState": "FR",
-                    "type": alert_type,
-                    "riskFactor": None,
-                },
-            ],
         }
     )
 

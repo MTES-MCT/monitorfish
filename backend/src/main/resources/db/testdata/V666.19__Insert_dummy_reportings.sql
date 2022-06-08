@@ -1,4 +1,4 @@
-INSERT INTO reporting (type, vessel_name, internal_reference_number, external_reference_number, ircs, vessel_identifier, creation_date, validation_date, archived, deleted, value) VALUES
+INSERT INTO reportings (type, vessel_name, internal_reference_number, external_reference_number, ircs, vessel_identifier, creation_date, validation_date, archived, deleted, value) VALUES
 ('ALERT', 'MARIAGE ÎLE HASARD', 'ABC000180832', 'VP374069', 'CG1312', 'INTERNAL_REFERENCE_NUMBER', NOW() - ('1 DAY')::interval, NOW(), false, false, ('{' ||
     '"seaFront": "NAMO",' ||
     '"flagState": "FR",' ||

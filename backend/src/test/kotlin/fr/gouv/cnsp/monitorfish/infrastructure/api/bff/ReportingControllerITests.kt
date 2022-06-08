@@ -29,7 +29,7 @@ class ReportingControllerITests {
     @Test
     fun `Should archive a reporting`() {
         // When
-        mockMvc.perform(put("/bff/v1/reporting/123/archive"))
+        mockMvc.perform(put("/bff/v1/reportings/123/archive"))
                 // Then
                 .andExpect(status().isOk)
 
@@ -39,7 +39,7 @@ class ReportingControllerITests {
     @Test
     fun `Should delete a reporting`() {
         // When
-        mockMvc.perform(put("/bff/v1/reporting/123/delete"))
+        mockMvc.perform(put("/bff/v1/reportings/123/delete"))
                 // Then
                 .andExpect(status().isOk)
 

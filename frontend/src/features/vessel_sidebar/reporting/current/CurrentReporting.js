@@ -9,23 +9,23 @@ import { ReportingType } from '../../../../domain/entities/reporting'
 
 const CurrentReporting = () => {
   const {
-    /** @type {Reporting} */
-    currentAndArchivedReporting
+    /** @type {CurrentAndArchivedReportings} */
+    currentAndArchivedReportings
   } = useSelector(state => state.reporting)
 
   return <Wrapper>
     {
       operationalAlertTypes
         .map(alertType => {
-          const alertReporting = currentAndArchivedReporting?.current
+          const alertReportings = currentAndArchivedReportings?.current
             ?.filter(reporting => reporting.type === ReportingType.ALERT.code && reporting.value.type === alertType.code)
             ?.sort((a, b) => sortByValidationDate(a, b))
 
-          if (alertReporting?.length) {
+          if (alertReportings?.length) {
             return <Reporting
-              key={alertReporting[alertReporting?.length - 1].id}
-              reporting={alertReporting[alertReporting?.length - 1]}
-              numberOfAlerts={alertReporting?.length}
+              key={alertReportings[alertReportings?.length - 1].id}
+              reporting={alertReportings[alertReportings?.length - 1]}
+              numberOfAlerts={alertReportings?.length}
             />
           }
 
@@ -33,7 +33,7 @@ const CurrentReporting = () => {
         })
     }
     {
-      currentAndArchivedReporting?.current
+      currentAndArchivedReportings?.current
         ?.filter(reporting => reporting.type !== ReportingType.ALERT.code)
         .map(reporting => {
           return <Reporting
@@ -43,7 +43,7 @@ const CurrentReporting = () => {
         })
     }
     {
-      !currentAndArchivedReporting?.current?.length
+      !currentAndArchivedReportings?.current?.length
         ? <NoReporting>Aucun signalement</NoReporting>
         : null
     }

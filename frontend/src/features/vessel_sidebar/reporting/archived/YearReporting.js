@@ -8,19 +8,19 @@ import Reporting from '../Reporting'
 
 const YearReporting = props => {
   const {
-    /** @type {Reporting[]} yearReporting */
-    yearReporting,
+    /** @type {Reporting[]} yearReportings */
+    yearReportings,
     year,
     isLastItem
   } = props
 
   const [isOpen, setIsOpen] = useState(false)
   const [numberOfInfractionsSuspicion, setNumberOfInfractionsSuspicion] = useState(0)
-  const numberOfObservations = yearReporting?.length - numberOfInfractionsSuspicion
+  const numberOfObservations = yearReportings?.length - numberOfInfractionsSuspicion
 
   useEffect(() => {
-    if (yearReporting?.length) {
-      const nextNumberOfInfractionsSuspicion = parseFloat(yearReporting
+    if (yearReportings?.length) {
+      const nextNumberOfInfractionsSuspicion = parseFloat(yearReportings
         .reduce((accumulator, reporting) => {
           return accumulator + reportingIsAnInfractionSuspicion(reporting.type)
         }, 0).toFixed(1))
@@ -29,24 +29,24 @@ const YearReporting = props => {
     } else {
       setNumberOfInfractionsSuspicion(0)
     }
-  }, [yearReporting])
+  }, [yearReportings])
 
-  return yearReporting &&
+  return yearReportings &&
     <Row>
       <YearTitle
         data-cy={'vessel-sidebar-reporting-tab-archive-year'}
-        isEmpty={yearReporting.length === 0}
+        isEmpty={yearReportings.length === 0}
         isLastItem={isLastItem}
         isOpen={isOpen}
       >
-        <Text isEmpty={yearReporting.length === 0} isOpen={isOpen} title={year} onClick={() => yearReporting.length && setIsOpen(!isOpen)}>
+        <Text isEmpty={yearReportings.length === 0} isOpen={isOpen} title={year} onClick={() => yearReportings.length && setIsOpen(!isOpen)}>
           {
-            yearReporting.length ? <ChevronIcon $isOpen={isOpen}/> : null
+            yearReportings.length ? <ChevronIcon $isOpen={isOpen}/> : null
           }
           <Year>{year}</Year>
           <YearResume data-cy={'vessel-reporting-year'}>
             {
-              !yearReporting.length
+              !yearReportings.length
                 ? 'Pas de signalement'
                 : null
             }
@@ -67,8 +67,8 @@ const YearReporting = props => {
         isOpen={isOpen}
         name={year}>
         {
-          yearReporting.length
-            ? yearReporting
+          yearReportings.length
+            ? yearReportings
               .sort((a, b) => new Date(b.validationDate) - new Date(a.validationDate))
               .map(reporting => {
                 return <Reporting

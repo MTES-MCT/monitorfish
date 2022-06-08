@@ -13,7 +13,7 @@
  */
 
 /**
- * @typedef CurrentAndArchivedReporting
+ * @typedef CurrentAndArchivedReportings
  * @property {Reporting[]} current
  * @property {Reporting[]} archived
  */

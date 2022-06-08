@@ -31,7 +31,7 @@ class VesselController(
         private val searchVessels: SearchVessels,
         private val getVesselControls: GetVesselControls,
         private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
-        private val getVesselReporting: GetVesselReporting,
+        private val getVesselReportings: GetVesselReportings,
         meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
@@ -209,14 +209,14 @@ class VesselController(
                            @RequestParam(name = "fromDate")
                            @DateTimeFormat(pattern = zoneDateTimePattern)
                            fromDate: ZonedDateTime): CurrentAndArchivedReportingDataOutput {
-        val currentAndArchivedReporting = getVesselReporting.execute(
+        val currentAndArchivedReportings = getVesselReportings.execute(
                 internalReferenceNumber,
                 externalReferenceNumber,
                 IRCS,
                 vesselIdentifier,
                 fromDate)
 
-        return CurrentAndArchivedReportingDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReporting)
+        return CurrentAndArchivedReportingDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
     }
 
     @GetMapping("/search")

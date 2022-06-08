@@ -11,7 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselReporting
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselReportings
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
-class GetVesselReportingUTests {
+class GetVesselReportingsUTests {
 
     @MockBean
     private lateinit var reportingRepository: ReportingRepository
@@ -76,7 +76,7 @@ class GetVesselReportingUTests {
                                 isDeleted = false)))
 
         // When
-        val currentAndArchivedReporting = GetVesselReporting(reportingRepository, infractionRepository).execute(
+        val currentAndArchivedReportings = GetVesselReportings(reportingRepository, infractionRepository).execute(
                 "FR224226850",
                 "1236514",
                 "IRCS",
@@ -84,10 +84,10 @@ class GetVesselReportingUTests {
                 ZonedDateTime.now().minusYears(1))
 
         // Then
-        assertThat(currentAndArchivedReporting.current).hasSize(2)
-        assertThat(currentAndArchivedReporting.current.first().isArchived).isFalse
-        assertThat(currentAndArchivedReporting.current.first().infraction?.natinfCode).isEqualTo("7059")
-        assertThat(currentAndArchivedReporting.archived).hasSize(1)
-        assertThat(currentAndArchivedReporting.archived.first().isArchived).isTrue
+        assertThat(currentAndArchivedReportings.current).hasSize(2)
+        assertThat(currentAndArchivedReportings.current.first().isArchived).isFalse
+        assertThat(currentAndArchivedReportings.current.first().infraction?.natinfCode).isEqualTo("7059")
+        assertThat(currentAndArchivedReportings.archived).hasSize(1)
+        assertThat(currentAndArchivedReportings.archived.first().isArchived).isTrue
     }
 }

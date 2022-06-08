@@ -10,7 +10,7 @@ import java.time.Instant
 @DynamicUpdate
 interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     @Query(value = """
-        SELECT * FROM reporting WHERE 
+        SELECT * FROM reportings WHERE 
             CASE
                 WHEN :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER' THEN internal_reference_number
                 WHEN :vesselIdentifier = 'IRCS' THEN ircs
@@ -27,7 +27,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
 
     @Modifying(clearAutomatically = true)
     @Query(value = """
-        UPDATE reporting
+        UPDATE reportings
         SET archived = TRUE
         WHERE id = :id
     """, nativeQuery = true)
@@ -35,7 +35,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
 
     @Modifying(clearAutomatically = true)
     @Query(value = """
-        UPDATE reporting
+        UPDATE reportings
         SET deleted = TRUE
         WHERE id = :id
     """, nativeQuery = true)

@@ -18,7 +18,7 @@ from src.pipeline.flows.last_positions import (
     flow,
     load_last_positions,
     merge_last_positions_beacon_malfunctions,
-    merge_last_positions_risk_factors_alerts_reporting,
+    merge_last_positions_risk_factors_alerts_reportings,
     split,
     validate_action,
 )
@@ -131,7 +131,7 @@ def test_load_last_positions(reset_test_data):
             "risk_factor": [2.36, 1.5],
             "is_at_port": [True, False],
             "alerts": [["THREE_MILES_TRAWLING_ALERT"], None],
-            "reporting": [["ALERT"], None],
+            "reportings": [["ALERT"], None],
             "is_manual": [True, False],
             "beacon_malfunction_id": [1, None],
         }
@@ -409,7 +409,7 @@ def test_estimate_current_positions(mock_datetime):
     )
 
 
-def test_merge_last_positions_risk_factors_alerts_reporting():
+def test_merge_last_positions_risk_factors_alerts_reportings():
 
     last_positions = pd.DataFrame(
         {
@@ -446,20 +446,20 @@ def test_merge_last_positions_risk_factors_alerts_reporting():
         }
     )
 
-    reporting = pd.DataFrame(
+    reportings = pd.DataFrame(
         {
             "cfr": ["A", "F"],
             "ircs": [None, "ff"],
             "external_immatriculation": ["aaa", None],
-            "reporting": [
+            "reportings": [
                 ["OBSERVATION", "ALERT"],
                 ["INFRACTION_SUSPICION"],
             ],
         }
     )
 
-    res = merge_last_positions_risk_factors_alerts_reporting.run(
-        last_positions, risk_factors, pending_alerts, reporting
+    res = merge_last_positions_risk_factors_alerts_reportings.run(
+        last_positions, risk_factors, pending_alerts, reportings
     )
 
     res = (
@@ -486,7 +486,7 @@ def test_merge_last_positions_risk_factors_alerts_reporting():
                 None,
                 None,
             ],
-            "reporting": [
+            "reportings": [
                 ["OBSERVATION", "ALERT"],
                 None,
                 None,

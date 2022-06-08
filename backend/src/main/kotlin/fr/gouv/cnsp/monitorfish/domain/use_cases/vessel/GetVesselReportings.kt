@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReportings
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
@@ -10,16 +10,16 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVesselReporting(private val reportingRepository: ReportingRepository,
-                         private val infractionRepository: InfractionRepository) {
-    private val logger = LoggerFactory.getLogger(GetVesselReporting::class.java)
+class GetVesselReportings(private val reportingRepository: ReportingRepository,
+                          private val infractionRepository: InfractionRepository) {
+    private val logger = LoggerFactory.getLogger(GetVesselReportings::class.java)
 
     fun execute(internalReferenceNumber: String,
                 externalReferenceNumber: String,
                 ircs: String,
                 vesselIdentifier: VesselIdentifier?,
-                fromDate: ZonedDateTime): CurrentAndArchivedReporting {
-        val reporting = when (vesselIdentifier) {
+                fromDate: ZonedDateTime): CurrentAndArchivedReportings {
+        val reportings = when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
                 reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, internalReferenceNumber, fromDate)
             VesselIdentifier.IRCS ->
@@ -33,7 +33,7 @@ class GetVesselReporting(private val reportingRepository: ReportingRepository,
                     fromDate)
         }
 
-        val current = reporting
+        val current = reportings
                 .filter { !it.isArchived }
                 .map { report ->
                     report.value.natinfCode?.let {
@@ -47,7 +47,7 @@ class GetVesselReporting(private val reportingRepository: ReportingRepository,
                     report
                 }
 
-        val archived = reporting
+        val archived = reportings
                 .filter { it.isArchived }
                 .map { report ->
                     report.value.natinfCode?.let {
@@ -61,6 +61,6 @@ class GetVesselReporting(private val reportingRepository: ReportingRepository,
                     report
                 }
 
-        return CurrentAndArchivedReporting(current, archived)
+        return CurrentAndArchivedReportings(current, archived)
     }
 }

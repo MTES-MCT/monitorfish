@@ -19,7 +19,7 @@ import javax.persistence.*
         TypeDef(name = "jsonb", typeClass = JsonBinaryType::class),
         TypeDef(name = "pgsql_enum",
                 typeClass = PostgreSQLEnumType::class))
-@Table(name = "reporting")
+@Table(name = "reportings")
 data class ReportingEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

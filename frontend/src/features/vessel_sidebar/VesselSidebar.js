@@ -24,7 +24,7 @@ import AlertWarning from './warnings/AlertWarning'
 import BeaconMalfunctionWarning from './warnings/BeaconMalfunctionWarning'
 import VesselBeaconMalfunctions from './beacon_malfunctions/VesselBeaconMalfunctions'
 import AddToFavorites from './actions/add_to_favorites/AddToFavorites'
-import VesselReporting from './reporting/VesselReporting'
+import VesselReportings from './reporting/VesselReportings'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -202,7 +202,7 @@ const VesselSidebar = () => {
             }
             {
               vesselSidebarTab === VesselSidebarTab.REPORTING
-                ? <VesselReporting/>
+                ? <VesselReportings/>
                 : null
             }
             {

@@ -2,8 +2,8 @@ SELECT
     internal_reference_number AS cfr,
     external_reference_number AS external_immatriculation,
     ircs,
-    ARRAY_AGG(type) AS reporting
-FROM reporting
+    ARRAY_AGG(type) AS reportings
+FROM reportings
 WHERE archived = false AND
       deleted = false
 GROUP BY

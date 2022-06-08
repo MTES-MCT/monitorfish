@@ -10,7 +10,7 @@ export const DELETE_REPORTING_ERROR_MESSAGE = 'Nous n\'avons pas pu supprimer le
  * @throws {Error}
  */
 function archiveReportingFromAPI (id) {
-  return fetch(`/bff/v1/reporting/${id}/archive`, {
+  return fetch(`/bff/v1/reportings/${id}/archive`, {
     method: 'PUT'
   }).then(response => {
     if (response.status !== OK) {
@@ -32,7 +32,7 @@ function archiveReportingFromAPI (id) {
  * @throws {Error}
  */
 function deleteReportingFromAPI (id) {
-  return fetch(`/bff/v1/reporting/${id}/delete`, {
+  return fetch(`/bff/v1/reportings/${id}/delete`, {
     method: 'PUT'
   }).then(response => {
     if (response.status !== OK) {

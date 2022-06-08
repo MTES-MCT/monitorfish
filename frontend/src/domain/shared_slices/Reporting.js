@@ -8,8 +8,8 @@ const ReportingReducer = null
 const reportingSlice = createSlice({
   name: 'reporting',
   initialState: {
-    /** @type {CurrentAndArchivedReporting} */
-    currentAndArchivedReporting: {
+    /** @type {CurrentAndArchivedReportings} */
+    currentAndArchivedReportings: {
       current: [
         {
           id: '1',
@@ -43,39 +43,39 @@ const reportingSlice = createSlice({
       archived: []
     },
     /** @type {Date} */
-    archivedReportingFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
+    archivedReportingsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
     loadingReporting: false,
     vesselIdentity: null
   },
   reducers: {
     /**
      * Set current and archived reporting
-     * @function setCurrentAndArchivedReporting
+     * @function setCurrentAndArchivedReportings
      * @memberOf ReportingReducer
      * @param {Object=} state
      * @param {{payload: {
-     *   currentAndArchivedReporting: CurrentAndArchivedReporting,
+     *   currentAndArchivedReportings: CurrentAndArchivedReportings,
      *   vesselIdentity: VesselIdentity
      * }}} action - the reporting
      */
-    setCurrentAndArchivedReporting (state, action) {
-      state.currentAndArchivedReporting = action.payload.currentAndArchivedReporting
+    setCurrentAndArchivedReportings (state, action) {
+      state.currentAndArchivedReportings = action.payload.currentAndArchivedReportings
       state.vesselIdentity = action.payload.vesselIdentity
       state.loadingReporting = false
     },
-    resetCurrentAndArchivedReporting (state) {
-      state.currentAndArchivedReporting = null
+    resetCurrentAndArchivedReportings (state) {
+      state.currentAndArchivedReportings = null
       state.vesselIdentity = null
     },
     /**
      * Set the date since archived reporting are fetched
-     * @function setArchivedReportingFromDate
+     * @function setArchivedReportingsFromDate
      * @memberOf ReportingReducer
      * @param {Object=} state
      * @param {{payload: Date}} action - The "from" date
      */
-    setArchivedReportingFromDate (state, action) {
-      state.archivedReportingFromDate = action.payload
+    setArchivedReportingsFromDate (state, action) {
+      state.archivedReportingsFromDate = action.payload
     },
     /**
      * Set the loading of reporting to true, and shows a loader in the reporting tab
@@ -90,9 +90,9 @@ const reportingSlice = createSlice({
 })
 
 export const {
-  setCurrentAndArchivedReporting,
-  resetCurrentAndArchivedReporting,
-  setArchivedReportingFromDate,
+  setCurrentAndArchivedReportings,
+  resetCurrentAndArchivedReportings,
+  setArchivedReportingsFromDate,
   loadReporting
 } = reportingSlice.actions
 

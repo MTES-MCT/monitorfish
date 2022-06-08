@@ -14,7 +14,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReportings
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
@@ -74,7 +74,7 @@ class VesselControllerITests {
     private lateinit var getVesselControls: GetVesselControls
 
     @MockBean
-    private lateinit var getVesselReporting: GetVesselReporting
+    private lateinit var getVesselReportings: GetVesselReportings
 
     @MockBean
     private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
@@ -112,7 +112,7 @@ class VesselControllerITests {
                 .andExpect(jsonPath("$[0].destination", equalTo(position.destination)))
                 .andExpect(jsonPath("$[0].positionType", equalTo(PositionType.AIS.toString())))
                 .andExpect(jsonPath("$[0].dateTime", equalTo(position.dateTime.toOffsetDateTime().toString())))
-                .andExpect(jsonPath("$[0].reporting.length()", equalTo(0)))
+                .andExpect(jsonPath("$[0].reportings.length()", equalTo(0)))
                 .andExpect(jsonPath("$[0].alerts.length()", equalTo(0)))
     }
 
@@ -426,8 +426,8 @@ class VesselControllerITests {
     fun `Should get vessel's reporting`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        given(this.getVesselReporting.execute(eq("FR224226850"), eq("123"), eq("IEF4"), eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), any()))
-                .willReturn(CurrentAndArchivedReporting(
+        given(this.getVesselReportings.execute(eq("FR224226850"), eq("123"), eq("IEF4"), eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), any()))
+                .willReturn(CurrentAndArchivedReportings(
                         current = listOf(
                                 Reporting(
                                         id = 1,

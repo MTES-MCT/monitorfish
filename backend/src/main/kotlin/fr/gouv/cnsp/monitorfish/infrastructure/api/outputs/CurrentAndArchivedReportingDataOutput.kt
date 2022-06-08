@@ -1,15 +1,15 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentAndArchivedReportings
 
 class CurrentAndArchivedReportingDataOutput(val current: List<ReportingDataOutput>,
                                             val archived: List<ReportingDataOutput>) {
     companion object {
-        fun fromCurrentAndArchivedReporting(currentAndArchivedReporting: CurrentAndArchivedReporting) = CurrentAndArchivedReportingDataOutput(
-                currentAndArchivedReporting.current.map {
+        fun fromCurrentAndArchivedReporting(currentAndArchivedReportings: CurrentAndArchivedReportings) = CurrentAndArchivedReportingDataOutput(
+                currentAndArchivedReportings.current.map {
                     ReportingDataOutput.fromReporting(it)
                 },
-                currentAndArchivedReporting.archived.map {
+                currentAndArchivedReportings.archived.map {
                     ReportingDataOutput.fromReporting(it)
                 })
     }

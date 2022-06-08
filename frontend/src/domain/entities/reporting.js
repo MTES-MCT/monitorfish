@@ -26,14 +26,14 @@ export const reportingIsAnInfractionSuspicion = reportingType =>
 /**
  * Get reporting for each years : Years are keys and reporting are values
  * @memberOf Reporting
- * @param {Date} archivedReportingFromDate - The date
+ * @param {Date} archivedReportingsFromDate - The date
  * @param {Reporting[]} reportingList
  * @returns {Object.<string, Reporting[]>} The reporting for all years
  */
-export const getYearsToReportingList = (archivedReportingFromDate, reportingList) => {
+export const getYearsToReportingList = (archivedReportingsFromDate, reportingList) => {
   const nextYearsToReporting = {}
-  if (archivedReportingFromDate) {
-    let fromYear = archivedReportingFromDate.getUTCFullYear() + 1
+  if (archivedReportingsFromDate) {
+    let fromYear = archivedReportingsFromDate.getUTCFullYear() + 1
     const toYear = new Date().getUTCFullYear()
     while (fromYear <= toYear) {
       nextYearsToReporting[fromYear] = []

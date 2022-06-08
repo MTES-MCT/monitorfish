@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 import javax.websocket.server.PathParam
 
 @RestController
-@RequestMapping("/bff/v1/reporting")
+@RequestMapping("/bff/v1/reportings")
 @Api(description = "APIs for reporting")
 class ReportingController(
         private val archiveReporting: ArchiveReporting,

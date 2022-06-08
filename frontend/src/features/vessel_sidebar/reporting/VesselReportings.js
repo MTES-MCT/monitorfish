@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
-import ArchivedReporting from './archived/ArchivedReporting'
+import ArchivedReportings from './archived/ArchivedReportings'
 import CurrentReporting from './current/CurrentReporting'
-import getVesselReporting from '../../../domain/use_cases/vessel/getVesselReporting'
+import getVesselReportings from '../../../domain/use_cases/vessel/getVesselReportings'
 import { usePrevious } from '../../../hooks/usePrevious'
 import { vesselsAreEquals } from '../../../domain/entities/vessel'
 
@@ -15,16 +15,16 @@ const ReportingTab = {
   REPORTING_HISTORY: 'REPORTING_HISTORY'
 }
 
-const VesselReporting = () => {
+const VesselReportings = () => {
   const dispatch = useDispatch()
   const {
     selectedVesselIdentity
   } = useSelector(state => state.vessel)
 
   const {
-    /** @type {Reporting} */
-    currentAndArchivedReporting,
-    archivedReportingFromDate,
+    /** @type {CurrentAndArchivedReportings} */
+    currentAndArchivedReportings,
+    archivedReportingsFromDate,
     loadingReporting
   } = useSelector(state => state.reporting)
 
@@ -32,13 +32,13 @@ const VesselReporting = () => {
   const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
 
   useEffect(() => {
-    if (archivedReportingFromDate) {
-      dispatch(getVesselReporting(true))
+    if (archivedReportingsFromDate) {
+      dispatch(getVesselReportings(true))
       if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
         setReportingTab(ReportingTab.CURRENT_REPORTING)
       }
     }
-  }, [selectedVesselIdentity, archivedReportingFromDate])
+  }, [selectedVesselIdentity, archivedReportingsFromDate])
 
   return <>
     {
@@ -49,7 +49,7 @@ const VesselReporting = () => {
               isActive={reportingTab === ReportingTab.CURRENT_REPORTING}
               onClick={() => setReportingTab(ReportingTab.CURRENT_REPORTING)}
             >
-              Signalements en cours ({currentAndArchivedReporting?.current?.length})
+              Signalements en cours ({currentAndArchivedReportings?.current?.length})
             </CurrentOrHistoryReportingButton>
             <CurrentOrHistoryReportingButton
               data-cy={'vessel-sidebar-reporting-tab-history-button'}
@@ -66,7 +66,7 @@ const VesselReporting = () => {
           }
           {
             reportingTab === ReportingTab.REPORTING_HISTORY
-              ? <ArchivedReporting/>
+              ? <ArchivedReportings/>
               : null
           }
         </Body>
@@ -96,4 +96,4 @@ const Body = styled.div`
   max-height: 700px;
 `
 
-export default VesselReporting
+export default VesselReportings

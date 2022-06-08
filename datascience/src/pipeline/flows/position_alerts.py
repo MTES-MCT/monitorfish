@@ -13,12 +13,7 @@ from sqlalchemy.sql import Select
 
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract
-from src.pipeline.processing import (
-    coalesce,
-    df_to_dict_series,
-    join_on_multiple_keys,
-    left_isin_right_by_decreasing_priority,
-)
+from src.pipeline.processing import coalesce, df_to_dict_series, join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import load_alerts
 from src.pipeline.shared_tasks.facades import get_facades_table
 from src.pipeline.shared_tasks.positions import (
@@ -188,36 +183,6 @@ def extract_silenced_alerts() -> pd.DataFrame:
         db_name="monitorfish_remote",
         query_filepath="monitorfish/silenced_alerts.sql",
     )
-
-
-@task(checkpoint=False)
-def get_new_malfunctions(
-    current_malfunctions: pd.DataFrame, known_malfunctions: pd.DataFrame
-) -> pd.DataFrame:
-    """Filters `current_malfunctions` to keep only malfunctions that are not in
-    `known_malfunctions`. Both input DataFrames must have columns :
-
-      - cfr
-      - external_immatriculation
-      - ircs
-
-    Args:
-        current_malfunctions (pd.DataFrame): `DataFrame` of current
-          malfunctions.
-        known_malfunctions (pd.DataFrame): `DataFrame` of already known
-          malfunctions.
-
-    Returns:
-        pd.DataFrame: filtered version of `current_malfunctions`
-    """
-    vessel_id_cols = ["cfr", "ircs", "external_immatriculation"]
-
-    return current_malfunctions.loc[
-        ~left_isin_right_by_decreasing_priority(
-            current_malfunctions.loc[:, vessel_id_cols],
-            known_malfunctions.loc[:, vessel_id_cols],
-        )
-    ]
 
 
 @task(checkpoint=False)

@@ -13,7 +13,12 @@ from sqlalchemy.sql import Select
 
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract
-from src.pipeline.processing import coalesce, df_to_dict_series, join_on_multiple_keys
+from src.pipeline.processing import (
+    coalesce,
+    df_to_dict_series,
+    join_on_multiple_keys,
+    left_isin_right_by_decreasing_priority,
+)
 from src.pipeline.shared_tasks.alerts import load_alerts
 from src.pipeline.shared_tasks.facades import get_facades_table
 from src.pipeline.shared_tasks.positions import (
@@ -171,6 +176,91 @@ def get_fishing_gears_table() -> Table:
         conn=create_engine("monitorfish_remote"),
         logger=prefect.context.get("logger"),
     )
+
+
+@task(checkpoint=False)
+def extract_silenced_alerts() -> pd.DataFrame:
+    """
+    Return active silenced alerts: the FLow is computed before silenced_before_date
+    and after silenced_after_date if not null
+    """
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/silenced_alerts.sql",
+    )
+
+
+@task(checkpoint=False)
+def get_new_malfunctions(
+    current_malfunctions: pd.DataFrame, known_malfunctions: pd.DataFrame
+) -> pd.DataFrame:
+    """Filters `current_malfunctions` to keep only malfunctions that are not in
+    `known_malfunctions`. Both input DataFrames must have columns :
+
+      - cfr
+      - external_immatriculation
+      - ircs
+
+    Args:
+        current_malfunctions (pd.DataFrame): `DataFrame` of current
+          malfunctions.
+        known_malfunctions (pd.DataFrame): `DataFrame` of already known
+          malfunctions.
+
+    Returns:
+        pd.DataFrame: filtered version of `current_malfunctions`
+    """
+    vessel_id_cols = ["cfr", "ircs", "external_immatriculation"]
+
+    return current_malfunctions.loc[
+        ~left_isin_right_by_decreasing_priority(
+            current_malfunctions.loc[:, vessel_id_cols],
+            known_malfunctions.loc[:, vessel_id_cols],
+        )
+    ]
+
+
+@task(checkpoint=False)
+def filter_silenced_alerts(
+    alerts: pd.DataFrame, silenced_alerts: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Filters `alerts` to keep only alerts that are not in `silenced_alerts`. Both input DataFrames must have columns :
+
+      - internal_reference_number
+      - external_reference_number
+      - ircs
+
+    Args:
+        alerts (pd.DataFrame): positions alerts.
+        silenced_alerts (pd.DataFrame): silenced positions alerts.
+
+    Returns:
+        pd.DataFrame: same as input with some rows removed.
+    """
+    vessel_id_cols = ["internal_reference_number", "external_reference_number", "ircs"]
+
+    alerts = join_on_multiple_keys(
+        alerts, silenced_alerts, on=vessel_id_cols, how="outer"
+    )
+
+    return alerts.loc[
+        (
+            (alerts.facade != alerts.silenced_sea_front)
+            | (alerts.type != alerts.silenced_type)
+        )
+        & (alerts.alert_config_name.notnull()),
+        [
+            "vessel_name",
+            "internal_reference_number",
+            "external_reference_number",
+            "ircs",
+            "vessel_identifier",
+            "creation_date",
+            "value",
+            "alert_config_name",
+        ],
+    ]
 
 
 @task(checkpoint=False)
@@ -472,6 +562,8 @@ def make_alerts(
             "ircs",
             "vessel_identifier",
             "creation_date",
+            "type",
+            "facade",
             "value",
             "alert_config_name",
         ]
@@ -542,6 +634,8 @@ with Flow("Position alert") as flow:
     current_risk_factors = extract_current_risk_factors()
     positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
     alerts = make_alerts(positions_in_alert, alert_type, alert_config_name)
+    silenced_alerts = extract_silenced_alerts()
+    alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
     load_alerts(alerts, alert_config_name)
 
 flow.file_name = Path(__file__).name

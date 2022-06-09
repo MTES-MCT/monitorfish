@@ -169,7 +169,7 @@ const vesselSlice = createSlice({
           return vessel
         }
 
-        const vesselReportingWithoutFirstFoundReportingType = vessel.vesselProperties.reporting
+        const vesselReportingWithoutFirstFoundReportingType = vessel.vesselProperties.reportings
           ?.reduce(filterFirstFoundReportingType(action), [])
 
         return {

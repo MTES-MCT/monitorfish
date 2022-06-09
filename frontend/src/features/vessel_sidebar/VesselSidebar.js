@@ -141,9 +141,9 @@ const VesselSidebar = () => {
             >
               <ReportingIcon/> <br/> Signalements
               {
-                selectedVessel?.reporting?.length
+                selectedVessel?.reportings?.length
                   ? <ReportingNumber hasInfractionSuspicion={selectedVessel?.hasInfractionSuspicion}>
-                      {selectedVessel?.reporting?.length}
+                      {selectedVessel?.reportings?.length}
                   </ReportingNumber>
                   : null
               }

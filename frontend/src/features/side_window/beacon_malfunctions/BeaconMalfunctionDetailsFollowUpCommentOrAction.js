@@ -11,7 +11,18 @@ const BeaconMalfunctionDetailsFollowUpCommentOrAction = ({ actionOrComment, cont
       actionOrComment.type === Type.COMMENT
         ? <div data-cy={'side-window-beacon-malfunctions-detail-comment-content'}>
           <ActionOrCommentRow style={actionOrCommentRow} ref={isLastDate && isLast ? scrollToRef : null}>
-            <CommentText style={commentTextStyle(actionOrComment.userType)}>{contentText}</CommentText>
+            <CommentText style={commentTextStyle(actionOrComment.userType)}>
+              {
+                contentText.split('\n').map((item, idx) => {
+                  return (
+                    <span key={idx}>
+                      {item}
+                      <br/>
+                    </span>
+                  )
+                })
+              }
+            </CommentText>
           </ActionOrCommentRow>
           <ActionOrCommentRow style={actionOrCommentRow}>
             <CommentUserType

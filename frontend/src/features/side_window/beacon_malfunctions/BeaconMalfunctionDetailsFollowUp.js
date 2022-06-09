@@ -33,6 +33,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
   const scrollToRef = useRef('')
   const [comment, setComment] = useState('')
   const textareaRef = useRef(null)
+  const [textareaHeight, setTextareaHeight] = useState(50)
 
   useEffect(() => {
     if (comments?.length) {
@@ -95,6 +96,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
     } else if (textareaRef.current) {
       textareaRef.current.style.height = '50px'
     }
+    setTextareaHeight(textareaRef.current?.style?.height.replace('px', ''))
   }, [comment])
 
   const saveComment = () => {
@@ -122,28 +124,28 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
           {comments?.length} commentaire{comments?.length > 1 ? 's' : ''}
         </NumberCommentsText>
       </NumberComments>
-      {
-        firstStatus
-          ? <BeaconMalfunctionDetailsFollowUpRow
-            index={0}
-            smallSize={smallSize}
-            date={beaconMalfunction?.malfunctionStartDateTime}
-            dateText={getCommentOrActionDate(getDate(beaconMalfunction?.malfunctionStartDateTime))}
-          >
-            <BeaconMalfunctionDetailsFollowUpCommentOrAction
-              actionOrComment={{
-                type: Type.ACTION,
-                dateTime: beaconMalfunction?.malfunctionStartDateTime
-              }}
-              contentText={getFirstStatusAction(vesselStatus, beaconMalfunction?.malfunctionStartDateTime)}
-              scrollToRef={scrollToRef}
-              isLast
-              beaconMalfunction={beaconMalfunction?.endOfBeaconMalfunctionReason}
-            />
-          </BeaconMalfunctionDetailsFollowUpRow>
-          : null
-      }
-      <CommentsAndActions style={commentsAndActionsStyle(smallSize)}>
+      <CommentsAndActions style={commentsAndActionsStyle(smallSize, textareaHeight || 0)}>
+        {
+          firstStatus
+            ? <BeaconMalfunctionDetailsFollowUpRow
+              index={0}
+              smallSize={smallSize}
+              date={beaconMalfunction?.malfunctionStartDateTime}
+              dateText={getCommentOrActionDate(getDate(beaconMalfunction?.malfunctionStartDateTime))}
+            >
+              <BeaconMalfunctionDetailsFollowUpCommentOrAction
+                actionOrComment={{
+                  type: Type.ACTION,
+                  dateTime: beaconMalfunction?.malfunctionStartDateTime
+                }}
+                contentText={getFirstStatusAction(vesselStatus, beaconMalfunction?.malfunctionStartDateTime)}
+                scrollToRef={scrollToRef}
+                isLast
+                beaconMalfunction={beaconMalfunction?.endOfBeaconMalfunctionReason}
+              />
+            </BeaconMalfunctionDetailsFollowUpRow>
+            : null
+        }
         {
           Object.keys(actionsAndCommentsByDate)
             .sort((a, b) => new Date(a) - new Date(b))
@@ -183,7 +185,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
       </CommentsAndActions>
       {
         !smallSize
-          ? <>
+          ? <AddCommentRow style={addCommentRow}>
             <AddComment
               data-cy={'side-window-beacon-malfunctions-detail-comment-textarea'}
               style={addCommentStyle(userType)}
@@ -209,11 +211,18 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
                 Commenter
               </SubmitComment>
             </SubmitCommentRow>
-          </>
+          </AddCommentRow>
           : null
       }
     </Body>
   )
+}
+
+const AddCommentRow = styled.div``
+const addCommentRow = {
+  bottom: 20,
+  position: 'absolute',
+  width: 570
 }
 
 const SubmitComment = styled.button``
@@ -254,8 +263,8 @@ const addCommentStyle = userType => ({
 })
 
 const CommentsAndActions = styled.div``
-const commentsAndActionsStyle = smallSize => ({
-  maxHeight: smallSize ? 410 : 435,
+const commentsAndActionsStyle = (smallSize, textAreaHeight) => ({
+  maxHeight: smallSize ? 410 : (600 - textAreaHeight),
   overflowY: 'auto',
   overflowX: 'hidden'
 })

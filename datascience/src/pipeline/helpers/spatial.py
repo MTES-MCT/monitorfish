@@ -23,6 +23,109 @@ class Position:
     longitude: float
 
 
+@dataclass
+class PositionRepresentation:
+    """
+    Representation of a position with latitude and longitude in human readable format.
+    """
+
+    latitude: str
+    longitude: str
+
+
+def coordinate_to_dms(coord: float) -> Tuple[int, float, int, int]:
+    """
+    Takes a coordinate and return the corresponding degrees, minutes_decimal, minutes
+    and seconds. The sign is not taken into account - only returns positive values.
+
+    Args:
+        coord (float): latitude or longitude coordinate value
+
+    Returns:
+        Tuple[int, float, int, int]: degrees, minutes_decimal, minutes, seconds
+
+    Examples:
+        >>> coordinate_to_dms(45.123)
+        (45, 7.379999999999853, 7, 23)
+
+        >>> coordinate_to_dms(-45.123)
+        (45, 7.379999999999853, 7, 23)
+    """
+    abs_coord = abs(coord)
+
+    degrees = int(abs_coord)
+
+    decimal_part = abs_coord - degrees
+    minutes_decimal = decimal_part * 60
+    minutes = int(minutes_decimal)
+
+    seconds = round((minutes_decimal - minutes) * 60)
+    return degrees, minutes_decimal, minutes, seconds
+
+
+def position_to_position_representation(
+    p: Position, representation_type: str = "DMS"
+) -> PositionRepresentation:
+    """
+    Converts a `Position` to a `PositionRepresentation` in the designated
+    `representation_type`.
+
+    Args:
+        p (Position): input `Position`
+        representation_type (str): "DMS" or "DMD". Defaults to "DMS".
+
+    Returns:
+        PositionRepresentation
+
+    Raises:
+        ValueError : if :
+
+          - `lat` is greater than 90.0 and less than -90.0
+          - `lon` is greater than 180.0 and less than -180.0
+          - `representation_type` is not 'DMD' or 'DMS'.
+    """
+    lat = p.latitude
+    lon = p.longitude
+
+    try:
+        assert -90 <= lat <= 90
+    except AssertionError:
+        raise ValueError("Latitude must be between -90.0 and +90.0")
+
+    try:
+        assert -180 <= lon <= 180
+    except AssertionError:
+        raise ValueError("Longitude must be between -180.0 and +180.0")
+
+    north_south = "N" if lat >= 0 else "S"
+    east_west = "E" if lon >= 0 else "W"
+
+    lat_d, lat_md, lat_m, lat_s = coordinate_to_dms(lat)
+    lon_d, lon_md, lon_m, lon_s = coordinate_to_dms(lon)
+
+    if representation_type == "DMS":
+        p = PositionRepresentation(
+            latitude=f"{lat_d:02}° {lat_m:02}' {lat_s:02}'' {north_south}",
+            longitude=f"{lon_d:03}° {lon_m:02}' {lon_s:02}'' {east_west}",
+        )
+
+    elif representation_type == "DMD":
+        p = PositionRepresentation(
+            latitude=f"{lat_d:02}° {lat_md:06.3f}' {north_south}",
+            longitude=f"{lon_d:03}° {lon_md:06.3f}' {east_west}",
+        )
+
+    else:
+        raise ValueError(
+            (
+                "Unexpected `representation_type`. "
+                f"Expected 'DMS' or 'DMD', got {representation_type} instead."
+            )
+        )
+
+    return p
+
+
 def to_multipolygon(p: Union[Polygon, MultiPolygon]) -> MultiPolygon:
     """
     Returns a MultiPolygon of the input Polygon or MultiPolygon geometry.

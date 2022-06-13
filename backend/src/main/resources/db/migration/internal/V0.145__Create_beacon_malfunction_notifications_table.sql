@@ -29,4 +29,5 @@ create table public.beacon_malfunction_notifications (
     recipient_address_or_number VARCHAR NOT NULL
 );
 
-CREATE INDEX beacon_malfunction_notifications_beacon_malfunction_id_idx ON public.beacon_malfunction_notifications (beacon_malfunction_id);
+CREATE INDEX beacon_malfunction_notifications_beacon_malfunction_id_idx
+ON public.beacon_malfunction_notifications (beacon_malfunction_id);

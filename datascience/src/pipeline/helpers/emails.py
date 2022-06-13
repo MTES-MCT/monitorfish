@@ -1,9 +1,12 @@
+import io
 import smtplib
 from email.message import EmailMessage
 from email.mime.image import MIMEImage
 from mimetypes import guess_type
 from pathlib import Path
 from typing import List, Union
+
+import PyPDF2
 
 from config import (
     MONITORFISH_EMAIL_ADDRESS,
@@ -82,3 +85,29 @@ def send_email(msg: EmailMessage):
         host=MONITORFISH_EMAIL_SERVER_URL, port=MONITORFISH_EMAIL_SERVER_PORT
     ) as s:
         s.send_message(msg)
+
+
+def resize_pdf_to_A4(pdf: bytes) -> bytes:
+
+    DPI = 72
+    INCHES_IN_CM = 2.54
+    A4_WIDTH_CM = 21
+    A4_HEIGHT_CM = 29.7
+    A4 = {
+        "width": DPI * A4_WIDTH_CM / INCHES_IN_CM,
+        "height": DPI * A4_HEIGHT_CM / INCHES_IN_CM,
+    }
+
+    pdf = PyPDF2.PdfReader(io.BytesIO(pdf))
+
+    writer = PyPDF2.PdfWriter()
+
+    for page in pdf.pages:
+        page.scale_to(width=A4["width"], height=A4["height"])
+        page.compress_content_streams()
+        writer.add_page(page)
+
+    buf = io.BytesIO()
+    writer.write(buf)
+    buf.seek(0)
+    return buf.read()

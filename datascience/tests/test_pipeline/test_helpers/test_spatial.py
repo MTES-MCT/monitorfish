@@ -2,13 +2,18 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
+import pytest
 
 from src.pipeline.helpers.spatial import (
+    Position,
+    PositionRepresentation,
     compute_movement_metrics,
+    coordinate_to_dms,
     detect_fishing_activity,
     enrich_positions,
     get_h3_indices,
     get_step_distances,
+    position_to_position_representation,
 )
 
 
@@ -796,3 +801,43 @@ def test_enrich_positions_empty_input():
     )
 
     pd.testing.assert_frame_equal(res, expected_res, check_dtype=False)
+
+
+def test_coordinate_to_dms():
+    assert coordinate_to_dms(45.123) == (45, 7.379999999999853, 7, 23)
+    assert coordinate_to_dms(-45.123) == (45, 7.379999999999853, 7, 23)
+
+
+def test_position_to_position_representation():
+    p = Position(latitude=45.123, longitude=-45.123)
+    dms = position_to_position_representation(p, representation_type="DMS")
+    dmd = position_to_position_representation(p, representation_type="DMD")
+
+    assert dms == PositionRepresentation(
+        latitude="45° 07' 23'' N", longitude="045° 07' 23'' W"
+    )
+    assert dmd == PositionRepresentation(
+        latitude="45° 07.380' N", longitude="045° 07.380' W"
+    )
+
+    p = Position(latitude=-5.523, longitude=165.89634)
+    dms = position_to_position_representation(p, representation_type="DMS")
+    dmd = position_to_position_representation(p, representation_type="DMD")
+
+    assert dms == PositionRepresentation(
+        latitude="05° 31' 23'' S", longitude="165° 53' 47'' E"
+    )
+    assert dmd == PositionRepresentation(
+        latitude="05° 31.380' S", longitude="165° 53.780' E"
+    )
+
+    with pytest.raises(ValueError):
+        position_to_position_representation(p, representation_type="unknown")
+
+    with pytest.raises(ValueError):
+        p = Position(latitude=92.236, longitude=-45.123)
+        position_to_position_representation(p, representation_type="DMD")
+
+    with pytest.raises(ValueError):
+        p = Position(latitude=2.123, longitude=-186.589)
+        position_to_position_representation(p, representation_type="DMD")

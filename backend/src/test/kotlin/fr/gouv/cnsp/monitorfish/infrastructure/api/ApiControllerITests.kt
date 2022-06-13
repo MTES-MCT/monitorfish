@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 
 import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
-import fr.gouv.cnsp.monitorfish.domain.use_cases.ParseAndSavePosition
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.ParseAndSavePosition
 import io.micrometer.core.instrument.MeterRegistry
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

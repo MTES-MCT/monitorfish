@@ -3,21 +3,36 @@
  * @property {string} id
  * @property {string} type
  * @property {string} vesselName
- * @property {string} flagState
  * @property {string} internalReferenceNumber
+ * @property {string} externalReferenceNumber
+ * @property {string} ircs
+ * @property {string} vesselIdentifier
  * @property {string} creationDate
  * @property {number} tripNumber
- * @property {ThreeMilesTrawlingAlert | PNOAndLANWeightToleranceAlert} value
+ * @property {PendingAlert | PNOAndLANWeightToleranceAlert} value
  */
 
 /**
- * @typedef ThreeMilesTrawlingAlert
- * @property {number} numberOfIncursion
+ * @typedef PendingAlert
  * @property {number} speed
  * @property {string} type
- * @property {string} name
+ * @property {string | null} natinfCode
  * @property {string} seaFront
  * @property {string} flagState
+ */
+
+/**
+ * @typedef SilencedAlert
+ * @property {string} id
+ * @property {string} vesselName
+ * @property {string} internalReferenceNumber
+ * @property {string} externalReferenceNumber
+ * @property {string} ircs
+ * @property {string} vesselIdentifier
+ * @property {Date} silencedBeforeDate
+ * @property {Date} silencedAfterDate
+ * @property {PendingAlert | PNOAndLANWeightToleranceAlert} value
+ * @property {boolean | null} isReactivated
  */
 
 /**
@@ -35,4 +50,11 @@
  * @typedef PNOAndLANCatches
  * @property {Object} pno
  * @property {Object} lan
+ */
+
+/**
+ * @typedef SilencedAlertPeriodRequest
+ * @property {string | null} silencedAlertPeriod
+ * @property {Date | null} afterDateTime
+ * @property {Date | null} beforeDateTime
  */

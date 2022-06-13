@@ -9,7 +9,7 @@ import DISMessageResume from './logbook_messages_resumes/DISMessageResume'
 import FARMessageResume from './logbook_messages_resumes/FARMessageResume'
 import PNOMessageResume from './logbook_messages_resumes/PNOMessageResume'
 import LANMessageResume from './logbook_messages_resumes/LANMessageResume'
-import { AlertTypes } from '../../../domain/entities/alerts'
+import { AlertType } from '../../../domain/entities/alerts'
 import FleetSegments from '../../fleet_segments/FleetSegments'
 import { useSelector } from 'react-redux'
 import {
@@ -157,7 +157,7 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
 
   const getCatchesOverToleranceAlert = () => {
     if (fishingActivities?.alerts?.length) {
-      return fishingActivities.alerts.find(alert => alert?.value?.type === AlertTypes.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code).value
+      return fishingActivities.alerts.find(alert => alert?.value?.type === AlertType.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code).value
     }
 
     return null

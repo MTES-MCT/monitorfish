@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.ControlObjective
+import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjective
 
 interface ControlObjectivesRepository {
     fun findAllByYear(year: Int) : List<ControlObjective>

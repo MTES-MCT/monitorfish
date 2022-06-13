@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselWithData
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselWithData
 
 data class VesselAndPositionsDataOutput(
         val positions: List<PositionDataOutput>,

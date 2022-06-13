@@ -5,8 +5,8 @@ import com.neovisionaries.i18n.CountryCode
 import com.vladmihalcea.hibernate.type.array.ListArrayType
 import com.vladmihalcea.hibernate.type.interval.PostgreSQLIntervalType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
-import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
@@ -115,7 +115,10 @@ data class LastPositionEntity(
         @Column(name = "alerts", columnDefinition = "varchar(200)[]")
         val alerts: List<String>? = listOf(),
         @Column(name = "beacon_malfunction_id")
-        val beaconMalfunctionId: Int?) : Serializable {
+        val beaconMalfunctionId: Int?,
+        @Type(type = "string-array")
+        @Column(name = "reportings", columnDefinition = "varchar(200)[]")
+        val reportings: List<String>? = listOf()) : Serializable {
 
     fun toLastPosition(mapper: ObjectMapper) = LastPosition(
             internalReferenceNumber = internalReferenceNumber,
@@ -158,5 +161,6 @@ data class LastPositionEntity(
             underCharter = underCharter,
             isAtPort = isAtPort,
             alerts = alerts,
-            beaconMalfunctionId = beaconMalfunctionId)
+            beaconMalfunctionId = beaconMalfunctionId,
+            reportings = reportings ?: listOf())
 }

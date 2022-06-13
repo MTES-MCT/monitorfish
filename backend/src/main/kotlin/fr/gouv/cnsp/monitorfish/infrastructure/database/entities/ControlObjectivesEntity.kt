@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.ControlObjective
+import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjective
 import javax.persistence.*
 
 @Entity

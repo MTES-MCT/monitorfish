@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions
 
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import java.time.ZonedDateTime
 

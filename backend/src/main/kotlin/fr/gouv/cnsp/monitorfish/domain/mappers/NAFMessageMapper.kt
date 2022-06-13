@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.Position
-import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
+import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.helpers.degreeMinuteToDecimal
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
 import org.slf4j.Logger

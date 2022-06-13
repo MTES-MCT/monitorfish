@@ -1,0 +1,12 @@
+<svg id="Bouton_afficher_fil_d_activité" data-name="Bouton_afficher fil d&apos;activité" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <rect id="Rectangle_3252" data-name="Rectangle 3252" width="30" height="30" fill="#3b4559"/>
+  <g id="Groupe_1235" data-name="Groupe 1235" transform="translate(-1339 -395.5)">
+    <circle id="Ellipse_218" data-name="Ellipse 218" cx="2.5" cy="2.5" r="2.5" transform="translate(1344 401)" fill="#e5e5eb"/>
+    <circle id="Ellipse_219" data-name="Ellipse 219" cx="2.5" cy="2.5" r="2.5" transform="translate(1344 408)" fill="#e5e5eb"/>
+    <circle id="Ellipse_220" data-name="Ellipse 220" cx="2.5" cy="2.5" r="2.5" transform="translate(1344 415)" fill="#e5e5eb"/>
+    <path id="Ligne_2131" data-name="Ligne 2131" d="M.75,13H-.75V0H.75Z" transform="translate(1346.5 403.5)" fill="#e5e5eb"/>
+    <rect id="Rectangle_3249" data-name="Rectangle 3249" width="14" height="3" transform="translate(1350 402)" fill="#e5e5eb"/>
+    <rect id="Rectangle_3250" data-name="Rectangle 3250" width="11" height="3" transform="translate(1350 409)" fill="#e5e5eb"/>
+    <rect id="Rectangle_3251" data-name="Rectangle 3251" width="13" height="3" transform="translate(1350 416)" fill="#e5e5eb"/>
+  </g>
+</svg>

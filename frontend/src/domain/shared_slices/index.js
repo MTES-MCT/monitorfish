@@ -17,6 +17,7 @@ import controls from './Control'
 import alert from './Alert'
 import beaconMalfunction from './BeaconMalfunction'
 import favoriteVessel from './FavoriteVessel'
+import reporting from './Reporting'
 import { combineReducers } from '@reduxjs/toolkit'
 
 const commonReducerList = {
@@ -41,7 +42,8 @@ const homeReducers = combineReducers({
   controls,
   alert,
   beaconMalfunction,
-  favoriteVessel
+  favoriteVessel,
+  reporting
 })
 
 const backofficeReducers = combineReducers({

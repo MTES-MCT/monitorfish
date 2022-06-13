@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType
-import fr.gouv.cnsp.monitorfish.domain.entities.FleetSegment
+import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
 import org.hibernate.annotations.TypeDefs

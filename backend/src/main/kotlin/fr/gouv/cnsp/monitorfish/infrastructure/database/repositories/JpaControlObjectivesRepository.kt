@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.ControlObjective
+import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjective
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotDeleteException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository

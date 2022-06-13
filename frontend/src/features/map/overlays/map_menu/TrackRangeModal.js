@@ -22,6 +22,8 @@ const TrackRangeModal = ({ isModalOpen, setModalIsOpen, selectedDates, resetToDe
       </Modal.Header>
       <Body>
         <DateRange
+          disableAfterToday
+          placeholder={'Choisir une période précise'}
           dates={selectedDates}
           resetToDefaultTrackDepth={resetToDefaultTrackDepth}
           modifyVesselTrackFromDates={setSelectedDates}

@@ -1,32 +1,43 @@
-export const AlertTypes = {
+import { getDate } from '../../utils'
+
+export const AlertType = {
   PNO_LAN_WEIGHT_TOLERANCE_ALERT: {
     code: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT',
     name: 'Tolérance 10% non respectée',
+    isOperationalAlert: false,
     nameWithAlertDetails: (percentOfTolerance, minimumWeightThreshold) => {
       return `Tolérance de ${percentOfTolerance}% non respectée, appliquée pour un poids minimum de ${minimumWeightThreshold}kg.`
     }
   },
   THREE_MILES_TRAWLING_ALERT: {
     code: 'THREE_MILES_TRAWLING_ALERT',
-    name: '3 milles - Chaluts'
+    name: '3 milles - Chaluts',
+    isOperationalAlert: true
   },
   FRENCH_EEZ_FISHING_ALERT: {
     code: 'FRENCH_EEZ_FISHING_ALERT',
-    name: 'Pêche en ZEE française par un navire tiers'
+    name: 'Pêche en ZEE française par un navire tiers',
+    isOperationalAlert: true
   },
   TWELVE_MILES_FISHING_ALERT: {
     code: 'TWELVE_MILES_FISHING_ALERT',
-    name: '12 milles - Pêche sans droits historiques'
+    name: '12 milles - Pêche sans droits historiques',
+    isOperationalAlert: true
   },
   MISSING_FAR_ALERT: {
     code: 'MISSING_FAR_ALERT',
-    name: 'Non-emission de message "FAR"'
+    name: 'Non-emission de message "FAR"',
+    isOperationalAlert: true
   }
 }
 
+export const operationalAlertTypes = Object.keys(AlertType)
+  .map(alertTypeName => AlertType[alertTypeName])
+  .filter(alertType => alertType.isOperationalAlert)
+
 export const getAlertNameFromType = type => {
-  return AlertTypes[type]
-    ? AlertTypes[type].name
+  return AlertType[type]
+    ? AlertType[type].name
     : 'Alerte inconnue'
 }
 
@@ -81,5 +92,53 @@ export const AlertsMenuSeaFrontsToSeaFrontList = {
   OUTREMEROI: {
     menuSeaFront: 'OUTREMEROI',
     seaFronts: ['Sud Océan Indien']
+  }
+}
+
+export const SilencedAlertPeriod = {
+  THIS_OCCURRENCE: 'THIS_OCCURRENCE',
+  ONE_HOUR: 'ONE_HOUR',
+  TWO_HOURS: 'TWO_HOURS',
+  SIX_HOURS: 'SIX_HOURS',
+  TWELVE_HOURS: 'TWELVE_HOURS',
+  ONE_DAY: 'ONE_DAY',
+  ONE_WEEK: 'ONE_WEEK',
+  ONE_MONTH: 'ONE_MONTH',
+  ONE_YEAR: 'ONE_YEAR',
+  CUSTOM: 'CUSTOM'
+}
+
+export const getSilencedAlertPeriodText = silencedAlertPeriodRequest => {
+  switch (silencedAlertPeriodRequest?.silencedAlertPeriod) {
+    case SilencedAlertPeriod.THIS_OCCURRENCE: {
+      return 'pour cette occurence'
+    }
+    case SilencedAlertPeriod.ONE_HOUR: {
+      return 'pendant 1 heure'
+    }
+    case SilencedAlertPeriod.TWO_HOURS: {
+      return 'pendant 2 heures'
+    }
+    case SilencedAlertPeriod.SIX_HOURS: {
+      return 'pendant 6 heures'
+    }
+    case SilencedAlertPeriod.TWELVE_HOURS: {
+      return 'pendant 12 heures'
+    }
+    case SilencedAlertPeriod.ONE_DAY: {
+      return 'pendant 24 heures'
+    }
+    case SilencedAlertPeriod.ONE_WEEK: {
+      return 'pendant 1 semaine'
+    }
+    case SilencedAlertPeriod.ONE_MONTH: {
+      return 'pendant 1 mois'
+    }
+    case SilencedAlertPeriod.ONE_YEAR: {
+      return 'pendant 1 année'
+    }
+    case SilencedAlertPeriod.CUSTOM: {
+      return `du ${getDate(silencedAlertPeriodRequest.afterDateTime)} au ${getDate(silencedAlertPeriodRequest.beforeDateTime)}`
+    }
   }
 }

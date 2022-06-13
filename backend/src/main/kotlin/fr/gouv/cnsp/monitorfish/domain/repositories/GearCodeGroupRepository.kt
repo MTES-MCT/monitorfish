@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.GearCodeGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.gear.GearCodeGroup
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import kotlin.jvm.Throws
 

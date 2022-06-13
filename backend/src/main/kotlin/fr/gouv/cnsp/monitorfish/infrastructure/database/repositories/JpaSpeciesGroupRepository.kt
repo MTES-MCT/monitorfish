@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.SpeciesGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesGroup
 import fr.gouv.cnsp.monitorfish.domain.repositories.SpeciesGroupRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBSpeciesGroupRepository
 import org.springframework.cache.annotation.Cacheable

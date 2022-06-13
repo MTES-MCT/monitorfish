@@ -24,12 +24,13 @@ def test_extract_positions(reset_test_data):
     )
     positions = extract_positions(period)
 
-    assert len(positions) == 12
+    assert len(positions) == 13
     assert (
         positions.loc[:, "id"].values
         == [
             13641745,
             13732807,
+            13786523,
             13735518,
             13738407,
             13632807,
@@ -392,7 +393,14 @@ def test_load_then_reset_fishing_activity(reset_test_data):
         "SELECT id FROM positions WHERE is_at_port IS NULL ORDER BY id",
     )["id"].tolist()
 
-    assert not_enriched_ids == [13632807, 13634205, 13635518, 13639642, 13740935]
+    assert not_enriched_ids == [
+        13632807,
+        13634205,
+        13635518,
+        13639642,
+        13740935,
+        13786523,
+    ]
 
     positions_reset = read_query(
         "monitorfish_remote",
@@ -454,7 +462,7 @@ def test_extract_enrich_load(reset_test_data):
 
     # The number of positions in the positions table should not change
     assert len(positions_after) == len(positions_before)
-    assert len(positions_after) == 19
+    assert len(positions_after) == 20
 
     # Positions outside of the selected Period should not be affected
     assert (
@@ -540,6 +548,7 @@ def test_extract_enrich_load(reset_test_data):
             [13635518, "RO237719", 0.0, True, timedelta(), False],
             [13638407, "RO237719", 0.0, True, timedelta(), False],
             [13640935, "RO237719", 0.0, True, timedelta(), False],
+            [13786523, "OHMYGOSH", 0.7, None, timedelta(days=3, hours=12), True],
             [13732807, "ZZTOPACDC", 0.4, True, timedelta(days=3), False],
             [13735518, "ZZTOPACDC", 0.4, False, timedelta(days=3, hours=4), False],
             [13738407, "ZZTOPACDC", 0.4, False, timedelta(days=3, hours=8), False],

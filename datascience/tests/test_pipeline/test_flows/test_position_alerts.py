@@ -7,11 +7,13 @@ import pytz
 from geoalchemy2 import Geometry
 from sqlalchemy import BOOLEAN, TIMESTAMP, VARCHAR, Column, Integer, MetaData, Table
 
+from src.db_config import create_engine
 from src.pipeline.flows.position_alerts import (
     ZonesTable,
     alert_has_gear_parameters,
     extract_current_gears,
     filter_on_gears,
+    filter_silenced_alerts,
     flow,
     get_alert_type_zones_table,
     get_fishing_gears_table,
@@ -403,6 +405,47 @@ def test_make_alerts():
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "creation_date": [now, now - 0.5 * td],
+            "type": [alert_type, alert_type],
+            "facade": ["NAMO", "MEMN"],
+            "value": [
+                {
+                    "seaFront": "NAMO",
+                    "flagState": "FR",
+                    "type": alert_type,
+                    "riskFactor": 1.23,
+                },
+                {
+                    "seaFront": "MEMN",
+                    "flagState": "FR",
+                    "type": alert_type,
+                    "riskFactor": None,
+                },
+            ],
+            "alert_config_name": [alert_config_name, alert_config_name],
+        }
+    )
+    pd.testing.assert_frame_equal(alerts, expected_alerts)
+
+
+def test_filter_silenced_alerts():
+    now = datetime(2020, 1, 1, 0, 0, 0)
+    td = timedelta(hours=1)
+    alert_type = "USER_DEFINED_ALERT_TYPE"
+    alert_config_name = "ALERTE_CHALUTAGE_CONFIG_1"
+
+    alerts = pd.DataFrame(
+        {
+            "vessel_name": ["v_A", "v_B"],
+            "internal_reference_number": ["A", "B"],
+            "external_reference_number": ["AA", "BB"],
+            "ircs": ["AAA", "BBB"],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+            ],
+            "creation_date": [now, now - 0.5 * td],
+            "type": ["USER_DEFINED_ALERT_TYPE", "USER_DEFINED_ALERT_TYPE"],
+            "facade": ["NAMO", "MEMN"],
             "value": [
                 {
                     "seaFront": "NAMO",
@@ -421,7 +464,43 @@ def test_make_alerts():
         }
     )
 
-    pd.testing.assert_frame_equal(alerts, expected_alerts)
+    silenced_alerts = pd.DataFrame(
+        {
+            "internal_reference_number": ["A", "B_ANOTHER_VESSEL"],
+            "external_reference_number": ["AA", "BB_ANOTHER_VESSEL"],
+            "ircs": ["AAA", "BBB"],
+            "silenced_type": ["USER_DEFINED_ALERT_TYPE", "USER_DEFINED_ALERT_TYPE"],
+            "silenced_sea_front": ["NAMO", "MEMN"],
+        }
+    )
+
+    active_alerts = filter_silenced_alerts.run(alerts, silenced_alerts)
+
+    expected_active_alerts = pd.DataFrame(
+        {
+            "vessel_name": ["v_B"],
+            "internal_reference_number": ["B"],
+            "external_reference_number": ["BB"],
+            "ircs": ["BBB"],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+            ],
+            "creation_date": [now - 0.5 * td],
+            "value": [
+                {
+                    "seaFront": "MEMN",
+                    "flagState": "FR",
+                    "type": alert_type,
+                    "riskFactor": None,
+                },
+            ],
+            "alert_config_name": [alert_config_name],
+        }
+    ).reset_index(drop=True)
+
+    pd.testing.assert_frame_equal(
+        active_alerts.reset_index(drop=True), expected_active_alerts
+    )
 
 
 def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test_data):
@@ -484,7 +563,141 @@ def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test
 
 
 def test_flow_inserts_new_pending_alerts(reset_test_data):
+    # We delete the silenced alerts first
+    e = create_engine("monitorfish_remote")
+    e.execute("DELETE FROM silenced_alerts;")
 
+    now = pytz.utc.localize(datetime.utcnow())
+
+    flow.schedule = None
+
+    # With these parameters, all 4 vessels should be in alert.
+    alert_type = "THREE_MILES_TRAWLING_ALERT"
+    alert_config_name = "ALERTE_1"
+    zones = ["0-3", "3-6"]
+    hours_from_now = 48
+    only_fishing_positions = False
+    flag_states = None
+    fishing_gears = None
+    fishing_gear_categories = None
+    include_vessels_unknown_gear = True
+
+    state = flow.run(
+        alert_type=alert_type,
+        alert_config_name=alert_config_name,
+        zones=zones,
+        hours_from_now=hours_from_now,
+        only_fishing_positions=only_fishing_positions,
+        flag_states=flag_states,
+        fishing_gears=fishing_gears,
+        fishing_gear_categories=fishing_gear_categories,
+        include_vessels_unknown_gear=include_vessels_unknown_gear,
+    )
+
+    assert state.is_successful()
+
+    pending_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+
+    expected_pending_alerts = pd.DataFrame(
+        {
+            "vessel_name": [
+                "PLACE SPECTACLE SUBIR",
+                "ÉTABLIR IMPRESSION LORSQUE",
+                "DEVINER FIGURE CONSCIENCE",
+                "MYNAMEIS",
+                "I DO 4H REPORT",
+            ],
+            "internal_reference_number": [
+                "ABC000055481",
+                "ABC000306959",
+                "ABC000542519",
+                "ABC000658985",
+                None,
+            ],
+            "external_reference_number": [
+                "AS761555",
+                "RV348407",
+                "RO237719",
+                "OHMYGOSH",
+                "ZZTOPACDC",
+            ],
+            "ircs": [
+                "IL2468",
+                "LLUK",
+                "FQ7058",
+                "OGMJ",
+                "ZZ000000",
+            ],
+            "creation_date": [
+                now - timedelta(days=1),
+                now - timedelta(minutes=10),
+                now - timedelta(minutes=25),
+                now - timedelta(minutes=15),
+                now - timedelta(minutes=10),
+            ],
+            "trip_number": [None, None, None, None, None],
+            "value": [
+                {
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": None,
+                    "flagState": "NL",
+                    "riskFactor": 1.74110112659225003,
+                },
+                {
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": "Facade B",
+                    "flagState": "FR",
+                    "riskFactor": None,
+                },
+                {
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": "Facade A",
+                    "flagState": "FR",
+                    "riskFactor": 1.41421356237310003,
+                },
+                {
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": "Facade B",
+                    "flagState": "FR",
+                    "riskFactor": None,
+                },
+                {
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": "Facade A",
+                    "flagState": "FR",
+                    "riskFactor": 1.7411011266,
+                },
+            ],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+                "INTERNAL_REFERENCE_NUMBER",
+                "IRCS",
+            ],
+            "alert_config_name": [alert_config_name] * 5,
+        }
+    )
+
+    pd.testing.assert_frame_equal(
+        pending_alerts.drop(columns=["creation_date", "id"]),
+        expected_pending_alerts.drop(columns=["creation_date"]),
+    )
+
+    # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
+    # and are not exactly equal to `datetime.utcnow()` above, so we need to make an
+    # 'almost equal' check.
+    assert (
+        (
+            (pending_alerts.creation_date - expected_pending_alerts.creation_date).map(
+                lambda td: td.total_seconds()
+            )
+        )
+        < 10
+    ).all()
+
+
+def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data):
     now = pytz.utc.localize(datetime.utcnow())
 
     flow.schedule = None

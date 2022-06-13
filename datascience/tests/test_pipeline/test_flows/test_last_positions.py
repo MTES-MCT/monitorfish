@@ -14,6 +14,7 @@ from src.pipeline.flows.last_positions import (
     extract_beacon_malfunctions,
     extract_last_positions,
     extract_previous_last_positions,
+    extract_reportings,
     extract_risk_factors,
     flow,
     load_last_positions,
@@ -69,6 +70,19 @@ def test_extract_last_positions(reset_test_data):
 def test_extract_beacon_malfunctions(reset_test_data):
     malfunctions = extract_beacon_malfunctions.run()
     assert set(malfunctions.ircs) == {"OLY7853", "ZZ000000"}
+
+
+def test_extract_reportings(reset_test_data):
+    reportings = extract_reportings.run()
+    expected_reportings = pd.DataFrame(
+        {
+            "cfr": ["ABC000180832"],
+            "external_immatriculation": ["VP374069"],
+            "ircs": ["CG1312"],
+            "reportings": [["ALERT"]],
+        }
+    )
+    pd.testing.assert_frame_equal(reportings, expected_reportings)
 
 
 def test_load_last_positions(reset_test_data):

@@ -21,7 +21,7 @@ CREATE TYPE public.recipient_function AS ENUM (
 create table public.beacon_malfunction_notifications (
     id serial PRIMARY KEY,
     beacon_malfunction_id INTEGER NOT NULL,
-    date_time_utc TIMESTAMP WITH TIME ZONE NOT NULL,
+    date_time_utc TIMESTAMP NOT NULL,
     notification_type beacon_malfunction_notification_type NOT NULL,
     communication_means communication_means NOT NULL,
     recipient_function recipient_function NOT NULL,

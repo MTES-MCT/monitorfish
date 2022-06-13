@@ -168,7 +168,7 @@ const silenceMenuStyle = index => ({
   top: 0,
   position: 'absolute',
   marginTop: 35 + index * 49,
-  marginLeft: 955,
+  marginLeft: 940,
   width: 220,
   boxShadow: `1px 2px 5px ${COLORS.overlayShadowDarker}`,
   zIndex: 999

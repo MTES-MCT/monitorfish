@@ -290,7 +290,7 @@ const listItemStyle = (isFocused, toClose) => ({
   height: 15,
   marginTop: 6,
   transition: 'background 3s',
-  animation: toClose ? 'close-alert-transition-item 1.5s ease forwards' : 'unset',
+  animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
   overflow: 'hidden'
 })
 

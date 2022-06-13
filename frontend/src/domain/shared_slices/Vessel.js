@@ -145,10 +145,13 @@ const vesselSlice = createSlice({
 
       if (state.selectedVessel) {
         const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType)
+        const addedReportings = state.selectedVessel.reportings?.concat(ReportingType.ALERT.code)
         state.selectedVessel = {
           ...state.selectedVessel,
           alerts: filteredAlerts,
-          hasAlert: !!filteredAlerts.length
+          hasAlert: !!filteredAlerts.length,
+          reportings: addedReportings,
+          hasInfractionSuspicion: addedReportings.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
         }
       }
     },

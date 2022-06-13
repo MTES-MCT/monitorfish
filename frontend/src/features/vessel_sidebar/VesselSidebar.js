@@ -245,7 +245,7 @@ const ReportingNumber = styled.span`
   right: 189px;
   width: 14px;
   height: 14px;
-  line-height: 10px;
+  line-height: 13px;
   font-weight: 700;
 `
 

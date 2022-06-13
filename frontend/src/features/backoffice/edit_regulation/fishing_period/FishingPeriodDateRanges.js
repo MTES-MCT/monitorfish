@@ -42,6 +42,7 @@ const FishingPeriodDateRanges = ({ disabled }) => {
               />
           })
           : <DateRange
+
             key={-1}
             id={-1}
             isLast

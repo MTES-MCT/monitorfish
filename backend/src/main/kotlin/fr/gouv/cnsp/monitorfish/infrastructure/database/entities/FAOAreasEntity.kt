@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.FAOArea
+import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FAOArea
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id

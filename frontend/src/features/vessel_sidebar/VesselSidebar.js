@@ -4,6 +4,7 @@ import { ReactComponent as SummarySVG } from '../icons/Picto_resume.svg'
 import { ReactComponent as VesselIDSVG } from '../icons/Picto_identite.svg'
 import { ReactComponent as FisheriesSVG } from '../icons/Picto_peche.svg'
 import { ReactComponent as ControlsSVG } from '../icons/Picto_controles.svg'
+import { ReactComponent as ReportingSVG } from '../icons/Icone_onglet_signalement.svg'
 import { ReactComponent as VMSSVG } from '../icons/Icone_VMS_fiche_navire.svg'
 import VesselIdentity from './VesselIdentity'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,6 +24,7 @@ import AlertWarning from './warnings/AlertWarning'
 import BeaconMalfunctionWarning from './warnings/BeaconMalfunctionWarning'
 import VesselBeaconMalfunctions from './beacon_malfunctions/VesselBeaconMalfunctions'
 import AddToFavorites from './actions/add_to_favorites/AddToFavorites'
+import VesselReportings from './reporting/VesselReportings'
 
 const VesselSidebar = () => {
   const dispatch = useDispatch()
@@ -133,6 +135,21 @@ const VesselSidebar = () => {
               <FisheriesIcon/> <br/> Pêche
             </Tab>
             <Tab
+              isActive={vesselSidebarTab === VesselSidebarTab.REPORTING}
+              onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.REPORTING))}
+              data-cy={'vessel-menu-reporting'}
+            >
+              <ReportingIcon/> <br/> Signalements
+              {
+                selectedVessel?.reportings?.length
+                  ? <ReportingNumber hasInfractionSuspicion={selectedVessel?.hasInfractionSuspicion}>
+                      {selectedVessel?.reportings?.length}
+                  </ReportingNumber>
+                  : null
+              }
+
+            </Tab>
+            <Tab
               isActive={vesselSidebarTab === VesselSidebarTab.CONTROLS}
               onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.CONTROLS))}
               data-cy={'vessel-menu-controls'}
@@ -184,6 +201,11 @@ const VesselSidebar = () => {
                 : null
             }
             {
+              vesselSidebarTab === VesselSidebarTab.REPORTING
+                ? <VesselReportings/>
+                : null
+            }
+            {
               vesselSidebarTab === VesselSidebarTab.ERSVMS
                 ? <VesselBeaconMalfunctions/>
                 : null
@@ -214,6 +236,19 @@ const GrayOverlay = styled.div`
   }
 `
 
+const ReportingNumber = styled.span`
+  background: ${props => props.hasInfractionSuspicion ? COLORS.maximumRed : COLORS.gunMetal};
+  border-radius: 10px;
+  color: ${COLORS.background};
+  position: absolute;
+  top: 6px;
+  right: 189px;
+  width: 14px;
+  height: 14px;
+  line-height: 10px;
+  font-weight: 700;
+`
+
 const Panel = styled.div`
   padding: 0;
   background: ${COLORS.gainsboro};
@@ -228,10 +263,10 @@ const Tab = styled.button`
   border: none;
   border-radius: 0;
   height: 65px;
-  font-size: 12px;
-  color: ${COLORS.lightGray};
+  font: normal normal 300 10px/14px Marianne;
   ${props => !props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}
   background: ${props => props.isActive ? COLORS.shadowBlue : COLORS.charcoal};
+  color: ${props => props.isActive ? COLORS.background : COLORS.lightGray};
   
   :hover, :focus, :active {
     background: ${COLORS.shadowBlue};
@@ -273,6 +308,10 @@ const VMSIcon = styled(VMSSVG)`
 `
 
 const FisheriesIcon = styled(FisheriesSVG)`
+  width: 30px;
+`
+
+const ReportingIcon = styled(ReportingSVG)`
   width: 30px;
 `
 

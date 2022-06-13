@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.SpeciesGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesGroup
 
 data class SpeciesGroupDataOutput(
         val group: String,

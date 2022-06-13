@@ -18,7 +18,7 @@ from src.pipeline.flows.last_positions import (
     flow,
     load_last_positions,
     merge_last_positions_beacon_malfunctions,
-    merge_last_positions_risk_factors_alerts,
+    merge_last_positions_risk_factors_alerts_reportings,
     split,
     validate_action,
 )
@@ -131,6 +131,7 @@ def test_load_last_positions(reset_test_data):
             "risk_factor": [2.36, 1.5],
             "is_at_port": [True, False],
             "alerts": [["THREE_MILES_TRAWLING_ALERT"], None],
+            "reportings": [["ALERT"], None],
             "is_manual": [True, False],
             "beacon_malfunction_id": [1, None],
         }
@@ -408,7 +409,7 @@ def test_estimate_current_positions(mock_datetime):
     )
 
 
-def test_merge_last_positions_risk_factors_alerts():
+def test_merge_last_positions_risk_factors_alerts_reportings():
 
     last_positions = pd.DataFrame(
         {
@@ -445,8 +446,20 @@ def test_merge_last_positions_risk_factors_alerts():
         }
     )
 
-    res = merge_last_positions_risk_factors_alerts.run(
-        last_positions, risk_factors, pending_alerts
+    reportings = pd.DataFrame(
+        {
+            "cfr": ["A", "F"],
+            "ircs": [None, "ff"],
+            "external_immatriculation": ["aaa", None],
+            "reportings": [
+                ["OBSERVATION", "ALERT"],
+                ["INFRACTION_SUSPICION"],
+            ],
+        }
+    )
+
+    res = merge_last_positions_risk_factors_alerts_reportings.run(
+        last_positions, risk_factors, pending_alerts, reportings
     )
 
     res = (
@@ -469,6 +482,12 @@ def test_merge_last_positions_risk_factors_alerts():
             "total_weight_onboard": [121.2, 0.0, 0.0, 0.0],
             "alerts": [
                 ["THREE_MILES_TRAWLING_ALERT", "SOME_OTHER_ALERT"],
+                None,
+                None,
+                None,
+            ],
+            "reportings": [
+                ["OBSERVATION", "ALERT"],
                 None,
                 None,
                 None,
@@ -539,7 +558,7 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
     )
 
     assert len(initial_last_positions) == 4
-    assert len(final_last_positions) == 3
+    assert len(final_last_positions) == 4
     assert set(initial_last_positions.external_immatriculation) == {
         "AS761555",
         "RO237719",
@@ -549,6 +568,7 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
     assert set(final_last_positions.external_immatriculation) == {
         "RV348407",
         "RO237719",
+        "OHMYGOSH",
         "ZZTOPACDC",
     }
 

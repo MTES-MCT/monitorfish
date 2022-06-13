@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import SideWindowSubMenuLink from './SideWindowSubMenuLink'
@@ -22,6 +22,15 @@ import { beaconMalfunctionsStages } from '../../domain/entities/beaconMalfunctio
  */
 const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, beaconMalfunctions, alerts, fixed, setIsFixed }) => {
   const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    if (selectedMenu === sideWindowMenu.ALERTS.code) {
+      setIsFixed(true)
+      setIsOpen(true)
+    } else if (selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code) {
+      setIsFixed(false)
+    }
+  }, [selectedMenu])
 
   return <Menu
     style={menuStyle(isOpen, fixed)}
@@ -144,7 +153,9 @@ const menuStyle = (isOpen, fixed) => ({
   position: fixed ? 'unset' : 'absolute',
   marginLeft: fixed ? 0 : 66,
   boxShadow: isOpen && !fixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset',
-  zIndex: 999
+  zIndex: 999,
+  borderRight: `1px solid ${COLORS.lightGray}`
+
 })
 
 const Title = styled.span``

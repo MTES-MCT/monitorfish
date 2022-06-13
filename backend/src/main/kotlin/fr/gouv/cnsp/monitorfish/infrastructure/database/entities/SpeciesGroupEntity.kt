@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import fr.gouv.cnsp.monitorfish.domain.entities.SpeciesGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesGroup
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id

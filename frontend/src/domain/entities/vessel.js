@@ -3,6 +3,7 @@ import { vesselLabel as vesselLabelEnum } from './vesselLabelLine'
 import countries from 'i18n-iso-countries'
 
 export const VESSEL_ALERT_STYLE = 1
+export const VESSEL_INFRACTION_SUSPICION_STYLE = 1
 export const VESSEL_BEACON_MALFUNCTION_STYLE = 1
 export const VESSEL_ALERT_AND_BEACON_MALFUNCTION = 1
 export const VESSEL_ICON_STYLE = 10
@@ -248,8 +249,9 @@ export const VesselSidebarTab = {
   SUMMARY: 1,
   IDENTITY: 2,
   VOYAGES: 3,
-  CONTROLS: 4,
-  ERSVMS: 5
+  REPORTING: 4,
+  CONTROLS: 5,
+  ERSVMS: 6
 }
 
 export const FishingActivitiesTab = {

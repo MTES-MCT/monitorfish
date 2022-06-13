@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PNOAndLANAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
@@ -15,7 +15,7 @@ import javax.persistence.Table
 
 @Entity
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType::class)
-@Table(name = "alerts")
+@Table(name = "pno_lan_alerts")
 data class AlertEntity(
         @Id
         @Column(name = "alert_id")
@@ -34,8 +34,8 @@ data class AlertEntity(
         @Column(name = "value", nullable = false, columnDefinition = "jsonb")
         val value: String) {
 
-        fun toAlert(mapper: ObjectMapper) : Alert {
-            return Alert(
+        fun toAlert(mapper: ObjectMapper) : PNOAndLANAlert {
+            return PNOAndLANAlert(
                     id = id,
                     internalReferenceNumber = internalReferenceNumber,
                     externalReferenceNumber = externalReferenceNumber,
@@ -47,7 +47,7 @@ data class AlertEntity(
         }
 
         companion object {
-                fun fromAlert(alert: Alert, mapper: ObjectMapper) = AlertEntity(
+                fun fromAlert(alert: PNOAndLANAlert, mapper: ObjectMapper) = AlertEntity(
                         id = alert.id,
                         internalReferenceNumber = alert.internalReferenceNumber,
                         externalReferenceNumber = alert.externalReferenceNumber,

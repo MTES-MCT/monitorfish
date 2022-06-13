@@ -298,3 +298,29 @@ label {
 .rs-modal-body {
     padding: 20px 25px 0 25px !important;
 }
+
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-box-shadow: 0 0 0 0 rgba(81,81,81, 0.4);
+    }
+    70% {
+        -webkit-box-shadow: 0 0 0 10px rgba(81,81,81, 0);
+    }
+    100% {
+        -webkit-box-shadow: 0 0 0 0 rgba(81,81,81, 0);
+    }
+}
+@keyframes pulse {
+    0% {
+        -moz-box-shadow: 0 0 0 0 rgba(81,81,81, 0.4);
+        box-shadow: 0 0 0 0 rgba(81,81,81, 0.4);
+    }
+    70% {
+        -moz-box-shadow: 0 0 0 10px rgba(81,81,81, 0);
+        box-shadow: 0 0 0 10px rgba(81,81,81, 0);
+    }
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(81,81,81, 0);
+        box-shadow: 0 0 0 0 rgba(81,81,81, 0);
+    }
+}

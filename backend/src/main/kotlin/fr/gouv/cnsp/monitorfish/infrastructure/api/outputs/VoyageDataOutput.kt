@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.Voyage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import java.time.ZonedDateTime
 
 data class VoyageDataOutput(

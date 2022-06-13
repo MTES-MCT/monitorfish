@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.ControlObjective
+import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjective
 
 data class ControlObjectiveDataOutput(
         val id: Int,

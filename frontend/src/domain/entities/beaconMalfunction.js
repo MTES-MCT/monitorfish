@@ -261,6 +261,13 @@ const getMalfunctionStartDateText = (vesselStatus, beaconMalfunction) => {
     : `Dernière émission ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
 }
 
+const getFirstStatusActionDate = (vesselStatus, malfunctionStartDateTime) => {
+  if (vesselStatus?.value === BeaconMalfunctionVesselStatus.AT_PORT) {
+    const dt = new Date();
+    dt.setHours( dt.getHours() + 2 );
+  }
+}
+
 export {
   getYearsToBeaconMalfunctions,
   getNumberOfSeaAndLandBeaconMalfunctions,

@@ -100,5 +100,4 @@ INSERT INTO pending_alerts (vessel_name,internal_reference_number,external_refer
         '"flagState": "FR",' ||
         '"riskFactor": 3.4,' ||
         '"type": "MISSING_FAR_ALERT"' ||
-        '}')::jsonb)
-;
+        '}')::jsonb);

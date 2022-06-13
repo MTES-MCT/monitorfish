@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
-import fr.gouv.cnsp.monitorfish.domain.entities.PositionType
-import fr.gouv.cnsp.monitorfish.domain.entities.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.Duration
 import java.time.ZonedDateTime
 
@@ -48,7 +48,8 @@ data class LastPositionDataOutput(
         val underCharter: Boolean? = null,
         val isAtPort: Boolean? = null,
         val alerts: List<String>? = listOf(),
-        val beaconMalfunctionId: Int? = null) {
+        val beaconMalfunctionId: Int? = null,
+        val reportings: List<String> = listOf()) {
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
             return LastPositionDataOutput(
@@ -92,7 +93,8 @@ data class LastPositionDataOutput(
                     underCharter = position.underCharter,
                     isAtPort = position.isAtPort,
                     alerts = position.alerts,
-                    beaconMalfunctionId = position.beaconMalfunctionId)
+                    beaconMalfunctionId = position.beaconMalfunctionId,
+                    reportings = position.reportings)
         }
     }
 }

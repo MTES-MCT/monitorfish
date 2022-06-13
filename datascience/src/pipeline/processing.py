@@ -637,8 +637,8 @@ def drop_duplicates_by_decreasing_priority(
 
     Rows having all `NA` values in all columns of `subset` are dropped.
 
-    What is meant by "by decreasing proirity" is that keys in `subset` are considered
-    to be sorted by decresing level of priority (for instance `A` and `B`, with `A`
+    What is meant by "by decreasing priority" is that keys in `subset` are considered
+    to be sorted by decreasing level of priority (for instance `A` and `B`, with `A`
     having the highest level of priority), and rows with distinct values on `B` but
     identical values on `A` will be considered duplicated, whereas rows with distinct
     values on `A` and identical values on `B` will not be considered duplicates. Hence,

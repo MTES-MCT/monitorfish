@@ -36,6 +36,7 @@ export const layersGroups = {
 export const layersType = {
   VESSEL: 'VESSEL',
   VESSEL_ALERT: 'VESSEL_ALERT',
+  INFRACTION_SUSPICION: 'INFRACTION_SUSPICION',
   VESSEL_BEACON_MALFUNCTION: 'VESSEL_BEACON_MALFUNCTION',
   VESSEL_ALERT_AND_BEACON_MALFUNCTION: 'VESSEL_ALERT_AND_BEACON_MALFUNCTION',
   ADMINISTRATIVE: 'ADMINISTRATIVE',
@@ -99,6 +100,17 @@ const Layers = {
     subZoneFieldKey: null,
     isIntersectable: false,
     zIndex: 990
+  },
+  VESSEL_INFRACTION_SUSPICION: {
+    code: 'vessel_infraction_suspicion',
+    name: '',
+    group: null,
+    type: layersType.VESSEL_ALERT,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false,
+    zIndex: 989
   },
   VESSEL_BEACON_MALFUNCTION: {
     code: 'vessel_beacon_malfunction',

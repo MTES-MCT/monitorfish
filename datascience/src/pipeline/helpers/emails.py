@@ -1,6 +1,8 @@
 import io
 import smtplib
+from email import encoders
 from email.message import EmailMessage
+from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from mimetypes import guess_type
 from pathlib import Path
@@ -20,20 +22,28 @@ def create_html_email(
     subject: str,
     html: str,
     from_: str = MONITORFISH_EMAIL_ADDRESS,
+    cc: List[str] = None,
+    bcc: List[str] = None,
     images: List[Path] = None,
-    attachments: List = None,
+    attachments: dict = None,
 ) -> EmailMessage:
-    """Creates a `email.EmailMessage` ready to be sent with the defined parameters.
+    """
+    Creates a `email.EmailMessage` with the defined parameters.
 
     Args:
         to (Union[str, List[str]]): email address or list of email addresses of
           recipient(s)
         subject (str): Subject of the email.
         html (str): html representation of the email's content.
-        from_ (str, optional): From field. Defaults to `MONITORFISH_EMAIL_ADDRESS`.
+        cc (List[str], optional): `Cc` field with optional list of email addresses of
+          copied recipients. Defaults to None.
+        bcc (List[str], optional): `Bcc` field with optional list of email addresses of
+          hidden copied recipients. Defaults to None.
+        from_ (str, optional): `From` field. Defaults to MONITORFISH_EMAIL_ADDRESS env
+          var.
         images (List[Path], optional): List of `Path` to images on the server's file
           system to attach to the email. These images can be displayed in the html body
-          of the email by referencing them in the `src` attribute of `<img>` tag as
+          of the email by referencing them in the `src` attribute of an `<img>` tag as
           `cid:<image_name>`, where `<image_name>` is the image file's name.
 
           For example: `/a/b/c/my_image_123.png` can be included in the html message
@@ -42,7 +52,9 @@ def create_html_email(
             `<img src="cid:my_image_123.png">` in the html message.
 
           Defaults to None.
-        attachements (List): List of attachments to add to the email.
+        attachments (dict, optional): `dict of attachments to add to the email.
+          Consists of {filename : bytes} value pairs. Defaults
+          to None.
 
     Returns:
         EmailMessage
@@ -56,7 +68,13 @@ def create_html_email(
     msg["From"] = from_
     msg["To"] = to
 
-    msg.add_related(html, subtype="html")
+    if cc:
+        msg["Cc"] = cc
+
+    if bcc:
+        msg["Bcc"] = bcc
+
+    msg.set_content(html, subtype="html")
 
     if images:
         for image in images:
@@ -70,8 +88,16 @@ def create_html_email(
             msg.add_related(img)
 
     if attachments:
-        for attachment in attachments:
-            msg.add_attachment(attachment)
+        for filename, filebytes in attachments.items():
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(filebytes)
+            encoders.encode_base64(part)
+            part.add_header(
+                "Content-Disposition",
+                f"attachment; filename= {filename}",
+            )
+
+            msg.add_attachment(part)
 
     return msg
 

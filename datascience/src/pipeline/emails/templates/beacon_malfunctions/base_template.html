@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>{{ object }}</title>
+        <meta charset="UTF-8">
+        <style>
+            {% include "malfunctions_notifications.css" %}
+        </style>
+    </head>
+    <body>
+        <header>
+            <img id="logo", src="{{ logo_src }}" alt="Logo CNSP">
+            <h1>
+                <p class="no-vertical-margin">CENTRE NATIONAL</p>
+                <p class="no-vertical-margin">DE SURVEILLANCE DES PÊCHES</p>
+            </h1>
+        </header>
+        <main>
+            <section class="no-vertical-margin">
+                <h3>Expéditeur</h3>
+                <p>CNSP / Service Système d’information Pêche (SIP)
+                <p>40, avenue Louis Bougo BP 48, 56410 Étel</p>
+                <p>cnsp-vms-ers@developpement-durable.gouv.fr</p>
+                <p>Tél : +33 2 97 29 34 27 / Fax : +33 2 97 55 23 75</p>
+            </section>
+            <section class="no-vertical-margin right-align">
+                <h3>Destinataires</h3>
+                <p>Capitaine et armateur du navire</p>
+                <p>{{ vessel_name }}</p>
+                <p>{{ cfr }}</p>
+                <p>Balise n°{{ beacon_number }}</p>
+                <p>Copies à l’opérateur satellitaire {{ beacon_operator }}</p>
+                <p>et au service SIP du CNSP.</p>
+            </section>
+            <section class="no-vertical-margin">
+                <h3>Objet</h3>
+                <p>{{ object }}</p>
+            </section>
+            <section id="date" class="right-align">
+                <p>Étel, le {{ notification_date }}</p>
+            </section>
+            <section id="message">
+                <p>Bonjour,</p>
+                {% block message %}{% endblock %}
+                <p>Salutations,</p>
+                <p class="right-align">Le service SIP du CNSP (FMC français)</p>
+            </section>
+        </main>
+        {% block footer %}
+        <footer class="no-vertical-margin">
+            <hr/>
+            <p>* R(CE) 404/2011 - du 8 avril 2011 - Chapitre IV -Articles 25 & 26</p>
+            <p>** Livre IX du code rural - Chapitre V - section 1 - article L 945 - 4 - § 13</p>
+        </footer>
+        {% endblock %}
+    </body>
+</html>

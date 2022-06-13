@@ -1,0 +1,26 @@
+{% extends "base_template.html" %}
+{% block message %}
+{% block beginning %}
+<p>Nous vous informons que <strong>le CNSP ne reçoit plus les positions de votre navire par le
+système de surveillance satellitaire des navires (VMS).</strong> La dernière position reçue date
+du {{ last_position_datetime_utc }}, latitude {{ last_position_latitude }}, longitude {{ last_position_longitude }}.</p>
+
+<p>À réception de ce message, <strong>vous êtes tenu de transmettre la position de votre navire
+toutes les 4 heures par message écrit</strong>, en précisant la date et l’heure :
+{% endblock %}
+<ul>
+    <li>au CNSP où que vous soyez,</li>
+    <li>au centre de surveillance des pêches étranger (FMC) dont vous fréquentez la zone
+        économique exclusive (ZEE) si vous êtes hors ZEE française,
+        et ce tant que le dysfonctionnement persiste*.</li>
+</ul>
+</p> 
+
+<p>Merci de préciser « V.M.S. 4 HOURS REPORT » dans votre message.</p>
+<p>Le CNSP vous informera de la reprise de réception des positions de votre navire.</p>
+
+<p>Pour rappel, au terme de votre marée, <strong>votre navire ne sera pas autorisé à reprendre la
+    mer tant que votre installation VMS ne sera pas en état de fonctionnement*.</strong></p>
+<p>Le non-respect de ces obligations peut être sanctionné par une amende de 22 500€**.</p>
+
+{% endblock %}

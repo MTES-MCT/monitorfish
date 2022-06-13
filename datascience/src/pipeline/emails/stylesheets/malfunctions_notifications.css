@@ -1,0 +1,78 @@
+{% if fonts_directory %}
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Regular.woff2) format('woff2');
+font-weight: normal;  
+}
+
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Bold.woff2) format('woff2');
+font-weight: 700;
+}
+
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Light.woff2) format('woff2');
+font-weight: lighter;
+}
+
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Medium.woff2) format('woff2');
+font-weight: 500;
+}
+{% endif %}
+
+@page {
+    margin: 0;
+    size: 26.25cm 37.125cm;
+}
+
+html {
+    margin: 80px 100px 36px 100px;
+    font: 15px Marianne, sans-serif;
+    line-height: 1.4;
+    color: #222;
+}
+
+header {
+    margin-bottom: 40px;
+}
+
+footer {
+    position: absolute;
+    top: 1350px;
+    color: #666
+}
+
+h1 {
+    display: inline-block;
+    padding-top: 10px;
+    padding-left: 15px;
+    vertical-align: top;
+    font-weight: 500;
+    font-size: 1.7rem;
+    width: 500px;
+}
+
+#logo {
+    width: 120px;
+}
+
+#date {
+    margin-top: 70px;
+}
+
+#date, #message {
+    font-size: 1.2rem;
+}
+
+.no-vertical-margin, .no-vertical-margin * {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.right-align, .right-align * {
+    text-align: right;
+}

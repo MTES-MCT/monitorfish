@@ -2160,6 +2160,18 @@ toml = "*"
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xmlschema"]
 
 [[package]]
+name = "pytest-dotenv"
+version = "0.5.2"
+description = "A py.test plugin that parses environment files before running tests"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pytest = ">=5.0.0"
+python-dotenv = ">=0.9.1"
+
+[[package]]
 name = "python-box"
 version = "5.3.0"
 description = "Advanced Python dictionaries with dot notation access"
@@ -3136,7 +3148,7 @@ test = ["pytest"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.7"
-content-hash = "7b28e9fff265988b6c800e2a995f7beaa6e2fa99476805ba42557f133b10fee7"
+content-hash = "319f57e1f45654d2e4cffaa5d7b3de96dff13f616de9ddc17471b00d8a7b739f"
 
 [metadata.files]
 alabaster = [
@@ -4402,6 +4414,10 @@ pyrsistent = [
 pytest = [
     {file = "pytest-6.2.5-py3-none-any.whl", hash = "sha256:7310f8d27bc79ced999e760ca304d69f6ba6c6649c0b60fb0e04a4a77cacc134"},
     {file = "pytest-6.2.5.tar.gz", hash = "sha256:131b36680866a76e6781d13f101efb86cf674ebb9762eb70d3082b6f29889e89"},
+]
+pytest-dotenv = [
+    {file = "pytest-dotenv-0.5.2.tar.gz", hash = "sha256:2dc6c3ac6d8764c71c6d2804e902d0ff810fa19692e95fe138aefc9b1aa73732"},
+    {file = "pytest_dotenv-0.5.2-py3-none-any.whl", hash = "sha256:40a2cece120a213898afaa5407673f6bd924b1fa7eafce6bda0e8abffe2f710f"},
 ]
 python-box = [
     {file = "python-box-5.3.0.tar.gz", hash = "sha256:4ed4ef5d34de505a65c01e3f1911de8cdb29484fcae0c035141dce535c6c194a"},

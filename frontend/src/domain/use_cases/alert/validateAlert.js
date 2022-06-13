@@ -12,7 +12,7 @@ const validateAlert = id => (dispatch, getState) => {
   const timeout = setTimeout(() => {
     const previousAlertsWithoutValidated = removeAlert(previousAlerts, id)
     dispatch(setAlerts(previousAlertsWithoutValidated))
-  }, 1500)
+  }, 3200)
 
   validateAlertFromAPI(id).then(() => {
     const validatedAlert = previousAlertsWithValidatedFlag?.find(alert => alert.id === id)

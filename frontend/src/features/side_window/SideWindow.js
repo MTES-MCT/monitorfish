@@ -148,7 +148,8 @@ const Content = styled.div``
 const contentStyle = fixed => ({
   marginLeft: fixed ? 0 : 30,
   width: '100%',
-  height: self.innerHeight,
+  height: self.innerHeight + 50,
+  minHeight: 1000,
   overflow: 'auto'
 })
 

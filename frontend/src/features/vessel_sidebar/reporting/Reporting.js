@@ -127,7 +127,7 @@ const NumberOfAlerts = styled.span`
   font-weight: 500;
   height: 17px;
   display: inline-block;
-  line-height: 14px;
+  line-height: 16px;
 `
 
 const Title = styled.div`

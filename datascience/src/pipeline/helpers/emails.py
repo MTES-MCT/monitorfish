@@ -1,9 +1,6 @@
 import io
 import smtplib
-from email import encoders
 from email.message import EmailMessage
-from email.mime.base import MIMEBase
-from email.mime.image import MIMEImage
 from mimetypes import guess_type
 from pathlib import Path
 from typing import List, Union
@@ -80,24 +77,26 @@ def create_html_email(
         for image in images:
 
             (mimetype, _) = guess_type(image)
-            (_, subtype) = mimetype.split("/")
+            (maintype, subtype) = mimetype.split("/")
 
-            with open(image, "rb") as fp:
-                img = MIMEImage(fp.read(), _subtype=subtype)
-            img.add_header("Content-ID", f"<{image.name}>")
-            msg.add_related(img)
+            with open(image, "rb") as f:
+                img_data = f.read()
+            msg.add_related(
+                img_data,
+                maintype=maintype,
+                subtype=subtype,
+                filename=image.name,
+                cid=f"<{image.name}>",
+            )
 
     if attachments:
         for filename, filebytes in attachments.items():
-            part = MIMEBase("application", "octet-stream")
-            part.set_payload(filebytes)
-            encoders.encode_base64(part)
-            part.add_header(
-                "Content-Disposition",
-                f"attachment; filename= {filename}",
+            msg.add_attachment(
+                filebytes,
+                maintype="application",
+                subtype="octet-stream",
+                filename=filename,
             )
-
-            msg.add_attachment(part)
 
     return msg
 
@@ -109,8 +108,8 @@ def send_email(msg: EmailMessage):
 
     with smtplib.SMTP(
         host=MONITORFISH_EMAIL_SERVER_URL, port=MONITORFISH_EMAIL_SERVER_PORT
-    ) as s:
-        s.send_message(msg)
+    ) as server:
+        return server.send_message(msg)
 
 
 def resize_pdf_to_A4(pdf: bytes) -> bytes:

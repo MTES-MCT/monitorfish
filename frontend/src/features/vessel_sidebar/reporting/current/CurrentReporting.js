@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
@@ -6,12 +6,14 @@ import Reporting from '../Reporting'
 import { COLORS } from '../../../../constants/constants'
 import { operationalAlertTypes } from '../../../../domain/entities/alerts'
 import { ReportingType } from '../../../../domain/entities/reporting'
+import ConfirmDeletionModal from './ConfirmDeletionModal'
 
 const CurrentReporting = () => {
   const {
     /** @type {CurrentAndArchivedReportings} */
     currentAndArchivedReportings
   } = useSelector(state => state.reporting)
+  const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState(undefined)
 
   return <Wrapper>
     {
@@ -26,6 +28,7 @@ const CurrentReporting = () => {
               key={alertReportings[alertReportings?.length - 1].id}
               reporting={alertReportings[alertReportings?.length - 1]}
               numberOfAlerts={alertReportings?.length}
+              openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
             />
           }
 
@@ -39,6 +42,7 @@ const CurrentReporting = () => {
           return <Reporting
             key={reporting.id}
             reporting={reporting}
+            openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
           />
         })
     }
@@ -47,6 +51,10 @@ const CurrentReporting = () => {
         ? <NoReporting>Aucun signalement</NoReporting>
         : null
     }
+    <ConfirmDeletionModal
+      closeModal={() => setDeletionModalIsOpenForId(null)}
+      modalIsOpenForId={deletionModalIsOpenForId}
+    />
   </Wrapper>
 }
 

@@ -12,7 +12,6 @@ import { ReactComponent as DeleteIconSVG } from '../../icons/Bouton_supprimer.sv
 import { getAlertNameFromType } from '../../../domain/entities/alerts'
 import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
 import { useDispatch } from 'react-redux'
-import deleteReporting from '../../../domain/use_cases/reporting/deleteReporting'
 
 const Reporting = props => {
   const dispatch = useDispatch()
@@ -20,7 +19,8 @@ const Reporting = props => {
     /** @type Reporting */
     reporting,
     numberOfAlerts,
-    isArchive
+    isArchive,
+    openConfirmDeletionModalForId
   } = props
   const isAnInfractionSuspicion = reportingIsAnInfractionSuspicion(reporting.type)
   const reportingName = Object.values(ReportingType)
@@ -86,7 +86,7 @@ const Reporting = props => {
           <DeleteButton
             data-cy={'delete-reporting-card'}
             title={'Supprimer'}
-            onClick={() => dispatch(deleteReporting(reporting.id))}
+            onClick={() => openConfirmDeletionModalForId(reporting.id)}
           />
         </Actions>
         : null

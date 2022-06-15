@@ -5,7 +5,7 @@ from typing import List, Union
 import pandas as pd
 import weasyprint
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from prefect import Flow, task, unmapped
+from prefect import Flow, Parameter, task, unmapped
 
 from config import (
     CNSP_SIP_DEPARTMENT_ADDRESS,
@@ -145,7 +145,9 @@ def render(
 
 
 @task(checkpoint=False)
-def create_email(html: str, pdf: bytes, m: BeaconMalfunctionToNotify) -> EmailMessage:
+def create_email(
+    html: str, pdf: bytes, m: BeaconMalfunctionToNotify, test_mode: bool
+) -> EmailMessage:
 
     if m.vessel_emails:
         vessel_emails = m.vessel_emails
@@ -164,10 +166,12 @@ def create_email(html: str, pdf: bytes, m: BeaconMalfunctionToNotify) -> EmailMe
 
     recipients = vessel_emails + operator_emails + satellite_operator_emails
 
+    to = recipients if not test_mode else CNSP_SIP_DEPARTMENT_ADDRESS
+    cc = CNSP_SIP_DEPARTMENT_ADDRESS if not test_mode else None
+
     msg = create_html_email(
-        to=recipients,
-        cc=CNSP_SIP_DEPARTMENT_ADDRESS,
-        from_=CNSP_SIP_DEPARTMENT_ADDRESS,
+        to=to,
+        cc=cc,
         subject=m.notification_type.to_message_object(),
         html=html,
         images=[cnsp_logo_path],
@@ -183,6 +187,8 @@ def send_message(msg: str):
 
 
 with Flow("Notify malfunctions") as flow:
+
+    test_mode = Parameter("test_mode")
     malfunctions_to_notify = extract_malfunctions_to_notify()
     malfunctions_to_notify = to_malfunctions_to_notify_list(malfunctions_to_notify)
     templates = get_templates()
@@ -199,4 +205,6 @@ with Flow("Notify malfunctions") as flow:
         output_format=unmapped("pdf"),
     )
 
-    email = create_email.map(html=html, pdf=pdf, m=malfunctions_to_notify)
+    email = create_email.map(
+        html=html, pdf=pdf, m=malfunctions_to_notify, test_mode=unmapped(test_mode)
+    )

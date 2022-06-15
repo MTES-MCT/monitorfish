@@ -59,6 +59,11 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('ALERTE / 12 milles - Pêche sans droits historiques')
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2610')
     cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
+    // First, we do not confirm the reporting deletion
+    cy.get('*[data-cy="close-reporting-deletion-modal"]').click()
+    cy.get('*[data-cy="delete-reporting-card"]').eq(0).click()
+    // Then, we confirm the reporting deletion
+    cy.get('*[data-cy="confirm-reporting-deletion-button"]').click()
 
     // Then
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(1)

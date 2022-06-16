@@ -1,6 +1,6 @@
 from datetime import datetime
 from email.message import EmailMessage
-from typing import List, Union
+from typing import List, Tuple, Union
 
 import pandas as pd
 import weasyprint
@@ -147,30 +147,15 @@ def render(
 @task(checkpoint=False)
 def create_email(
     html: str, pdf: bytes, m: BeaconMalfunctionToNotify, test_mode: bool
-) -> EmailMessage:
+) -> Tuple[EmailMessage, list]:
 
-    if m.vessel_emails:
-        vessel_emails = m.vessel_emails
-    else:
-        vessel_emails = []
+    email_addressees = m.get_email_addressees()
 
-    if m.satellite_operator_emails:
-        satellite_operator_emails = m.satellite_operator_emails
-    else:
-        satellite_operator_emails = []
-
-    if m.operator_email:
-        operator_emails = [m.operator_email]
-    else:
-        operator_emails = []
-
-    recipients = vessel_emails + operator_emails + satellite_operator_emails
-
-    to = recipients if not test_mode else CNSP_SIP_DEPARTMENT_ADDRESS
+    send_to = email_addressees if not test_mode else CNSP_SIP_DEPARTMENT_ADDRESS
     cc = CNSP_SIP_DEPARTMENT_ADDRESS if not test_mode else None
 
     msg = create_html_email(
-        to=to,
+        to=send_to,
         cc=cc,
         subject=m.notification_type.to_message_subject(),
         html=html,
@@ -178,7 +163,7 @@ def create_email(
         attachments={"Notification.pdf": pdf},
     )
 
-    return msg
+    return msg, send_to
 
 
 @task(checkpoint=False)
@@ -210,6 +195,6 @@ with Flow("Notify malfunctions") as flow:
         output_format=unmapped("pdf"),
     )
 
-    email = create_email.map(
+    email, send_to = create_email.map(
         html=html, pdf=pdf, m=malfunctions_to_notify, test_mode=unmapped(test_mode)
     )

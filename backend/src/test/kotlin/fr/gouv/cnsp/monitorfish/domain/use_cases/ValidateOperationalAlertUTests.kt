@@ -5,8 +5,10 @@ import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SilencedAlertRepository
@@ -30,6 +32,9 @@ class ValidateOperationalAlertUTests {
     @MockBean
     private lateinit var silencedAlertRepository: SilencedAlertRepository
 
+    @MockBean
+    private lateinit var lastPositionRepository: LastPositionRepository
+
     @Test
     fun `execute Should validate a pending alert`() {
         // Given
@@ -47,12 +52,18 @@ class ValidateOperationalAlertUTests {
         ValidateOperationalAlert(
                 pendingAlertRepository,
                 reportingRepository,
-                silencedAlertRepository).execute(666)
+                silencedAlertRepository,
+                lastPositionRepository).execute(666)
 
         // Then
         Mockito.verify(silencedAlertRepository).save(eq(pendingAlert), any(), anyOrNull())
         Mockito.verify(pendingAlertRepository).delete(eq(666))
         Mockito.verify(reportingRepository).save(eq(pendingAlert), any())
+        Mockito.verify(lastPositionRepository).removeAlertToLastPositionByVesselIdentifierEquals(
+                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                "FRFGRGR",
+                true)
     }
 
 }

@@ -63,9 +63,9 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
     }
 
     override fun findAllByVesselWithoutVesselIdentifier(internalReferenceNumber: String,
-                                               externalReferenceNumber: String,
-                                               ircs: String,
-                                               afterDateTime: ZonedDateTime): List<BeaconMalfunction> {
+                                                        externalReferenceNumber: String,
+                                                        ircs: String,
+                                                        afterDateTime: ZonedDateTime): List<BeaconMalfunction> {
         if(internalReferenceNumber.isNotEmpty()) {
             return dbBeaconMalfunctionsRepository
                 .findAllByVesselIdentifierEqualsAfterDateTime(VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(), internalReferenceNumber, afterDateTime.toInstant()).map {

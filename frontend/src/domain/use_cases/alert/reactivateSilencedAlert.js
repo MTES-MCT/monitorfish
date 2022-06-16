@@ -10,7 +10,7 @@ const reactivateSilencedAlert = id => (dispatch, getState) => {
   const timeout = setTimeout(() => {
     const previousSilencedAlertsWithoutReactivatedFlag = removeAlert(previousSilencedAlerts, id)
     dispatch(setSilencedAlerts(previousSilencedAlertsWithoutReactivatedFlag))
-  }, 1500)
+  }, 3200)
 
   deleteSilencedAlertFromAPI(id).catch(error => {
     clearTimeout(timeout)

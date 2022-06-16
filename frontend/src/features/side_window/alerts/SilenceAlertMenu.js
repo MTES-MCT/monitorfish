@@ -168,7 +168,7 @@ const silenceMenuStyle = index => ({
   top: 0,
   position: 'absolute',
   marginTop: 35 + index * 49,
-  marginLeft: 955,
+  marginLeft: 940,
   width: 220,
   boxShadow: `1px 2px 5px ${COLORS.overlayShadowDarker}`,
   zIndex: 999
@@ -177,7 +177,7 @@ const silenceMenuStyle = index => ({
 const MenuLink = styled.span``
 const menuLinkStyle = (withBottomLine, hasLink, isCalendar) => ({
   background: COLORS.background,
-  padding: isCalendar ? '3px 15px 8px' : '5px 15px 0px 15px',
+  padding: isCalendar ? '3px 15px 15px' : '5px 15px 0px 15px',
   height: 25,
   display: 'flex',
   borderBottom: `${withBottomLine ? 1 : 0}px solid ${COLORS.lightGray}`,

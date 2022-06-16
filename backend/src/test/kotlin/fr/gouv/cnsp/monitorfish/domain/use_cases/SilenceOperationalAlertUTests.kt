@@ -3,8 +3,10 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.*
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilenceAlertPeriod
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SilencedAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.alert.SilenceOperationalAlert
@@ -26,6 +28,9 @@ class SilenceOperationalAlertUTests {
     @MockBean
     private lateinit var silencedAlertRepository: SilencedAlertRepository
 
+    @MockBean
+    private lateinit var lastPositionRepository: LastPositionRepository
+
     @Test
     fun `execute Should silence a pending alert for one day`() {
         // Given
@@ -42,10 +47,16 @@ class SilenceOperationalAlertUTests {
         // When
         SilenceOperationalAlert(
                 pendingAlertRepository,
-                silencedAlertRepository).execute(666, SilenceAlertPeriod.ONE_DAY)
+                silencedAlertRepository,
+                lastPositionRepository).execute(666, SilenceAlertPeriod.ONE_DAY)
 
         // Then
         Mockito.verify(pendingAlertRepository).delete(eq(666))
+        Mockito.verify(lastPositionRepository).removeAlertToLastPositionByVesselIdentifierEquals(
+                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                "FRFGRGR",
+                false)
         argumentCaptor<ZonedDateTime>().apply {
             verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), anyOrNull())
 
@@ -70,7 +81,8 @@ class SilenceOperationalAlertUTests {
         // When
         SilenceOperationalAlert(
                 pendingAlertRepository,
-                silencedAlertRepository).execute(
+                silencedAlertRepository,
+                lastPositionRepository).execute(
                 666,
                 SilenceAlertPeriod.CUSTOM,
                 ZonedDateTime.now().plusDays(2),
@@ -105,7 +117,8 @@ class SilenceOperationalAlertUTests {
         val throwable = catchThrowable {
             SilenceOperationalAlert(
                     pendingAlertRepository,
-                    silencedAlertRepository).execute(
+                    silencedAlertRepository,
+                    lastPositionRepository).execute(
                     666,
                     SilenceAlertPeriod.CUSTOM,
                     ZonedDateTime.now().plusDays(2),

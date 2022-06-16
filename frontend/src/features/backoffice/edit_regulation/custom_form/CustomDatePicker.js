@@ -105,6 +105,9 @@ const DatePickerStyled = styled(DatePicker)`
     border: 1px solid ${props => props.$isrequired ? COLORS.maximumRed : COLORS.lightGray}  !important;
     border-color: ${props => props.$isrequired ? COLORS.maximumRed : COLORS.lightGray} !important;
   }
+  .rs-calendar-month-dropdown-row {
+    width: unset !important;
+  }
 `
 
 export default CustomDatePicker

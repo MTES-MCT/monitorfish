@@ -14,7 +14,7 @@ export const FRENCH_REGION_LIST = [
   'Provence-Alpes-Côte d’Azur',
   'Guadeloupe',
   'Martinique',
-  'Guyanne',
+  'Guyane',
   'La Réunion',
   'Mayotte'
 ]

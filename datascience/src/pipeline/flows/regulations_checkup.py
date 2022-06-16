@@ -283,8 +283,7 @@ def get_dead_links(
     logger = prefect.context.get("logger")
 
     for proxy_env in ["http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY"]:
-        if proxy_env in os.environ:
-            os.environ.pop(proxy_env)
+        os.environ.pop(proxy_env, None)
 
     logger.info(
         (

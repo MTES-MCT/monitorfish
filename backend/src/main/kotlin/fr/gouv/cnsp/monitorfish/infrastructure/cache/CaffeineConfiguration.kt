@@ -43,38 +43,38 @@ class CaffeineConfiguration {
     fun cacheManager(ticker: Ticker): CacheManager? {
         val oneWeek = 10080
 
-        val logbookCache = buildCache(logbook, ticker, 10)
-        val nextLogbookCache = buildCache(nextLogbook, ticker, 10)
-        val previousLogbookCache = buildCache(previousLogbook, ticker, 10)
-        val logbookRawMessageCache = buildCache(logbookRawMessage, ticker, oneWeek)
-        val vesselCache = buildCache(vessels, ticker, 180)
+        val logbookCache = buildMinutesCache(logbook, ticker, 10)
+        val nextLogbookCache = buildMinutesCache(nextLogbook, ticker, 10)
+        val previousLogbookCache = buildMinutesCache(previousLogbook, ticker, 10)
+        val logbookRawMessageCache = buildMinutesCache(logbookRawMessage, ticker, oneWeek)
+        val vesselCache = buildMinutesCache(vessels, ticker, 180)
 
-        val gearCodeGroupsCache =  buildCache(gearCodeGroups, ticker, oneWeek)
-        val gearCodeGroupCache =  buildCache(gearCodeGroup, ticker, oneWeek)
+        val gearCodeGroupsCache =  buildMinutesCache(gearCodeGroups, ticker, oneWeek)
+        val gearCodeGroupCache =  buildMinutesCache(gearCodeGroup, ticker, oneWeek)
 
-        val gearsCache = buildCache(gears, ticker, oneWeek)
-        val gearCache = buildCache(gear, ticker, oneWeek)
+        val gearsCache = buildMinutesCache(gears, ticker, oneWeek)
+        val gearCache = buildMinutesCache(gear, ticker, oneWeek)
 
-        val allSpeciesCache = buildCache(allSpecies, ticker, oneWeek)
-        val speciesCache = buildCache(species, ticker, oneWeek)
-        val allSpeciesGroupsCache = buildCache(allSpeciesGroups, ticker, oneWeek)
+        val allSpeciesCache = buildMinutesCache(allSpecies, ticker, oneWeek)
+        val speciesCache = buildMinutesCache(species, ticker, oneWeek)
+        val allSpeciesGroupsCache = buildMinutesCache(allSpeciesGroups, ticker, oneWeek)
 
-        val portsCache = buildCache(ports, ticker, oneWeek)
-        val portCache = buildCache(port, ticker, oneWeek)
-        val currentSegmentsCache = buildCache(currentSegments, ticker, 1)
-        val controlAnteriorityCache = buildCache(controlAnteriority, ticker, 1)
-        val riskFactorsCache = buildCache(riskFactors, ticker, 1)
+        val portsCache = buildMinutesCache(ports, ticker, oneWeek)
+        val portCache = buildMinutesCache(port, ticker, oneWeek)
+        val currentSegmentsCache = buildMinutesCache(currentSegments, ticker, 1)
+        val controlAnteriorityCache = buildMinutesCache(controlAnteriority, ticker, 1)
+        val riskFactorsCache = buildMinutesCache(riskFactors, ticker, 1)
 
-        val faoAreasCache = buildCache(faoAreas, ticker, oneWeek)
+        val faoAreasCache = buildMinutesCache(faoAreas, ticker, oneWeek)
 
-        val infractionsCache = buildCache(infractions, ticker, oneWeek)
-        val infractionCache = buildCache(infraction, ticker, oneWeek)
+        val infractionsCache = buildMinutesCache(infractions, ticker, oneWeek)
+        val infractionCache = buildMinutesCache(infraction, ticker, oneWeek)
 
-        val vesselTrackCache = buildCache(vesselTrack, ticker, 1)
-        val vesselsPositionsCache = buildCache(vesselsPositions, ticker, 1)
-        val vesselsAllPositionsCache = buildCache(vesselsAllPositions, ticker, 1)
-        val vesselsPositionsWithBeaconMalfunctionsCache = buildCache(vesselsPositionsWithBeaconMalfunctions, ticker, 1)
-        val searchVesselsCache = buildCache(searchVessels, ticker, 180)
+        val vesselTrackCache = buildMinutesCache(vesselTrack, ticker, 1)
+        val vesselsPositionsCache = buildSecondsCache(vesselsPositions, ticker, 30)
+        val vesselsAllPositionsCache = buildSecondsCache(vesselsAllPositions, ticker, 30)
+        val vesselsPositionsWithBeaconMalfunctionsCache = buildMinutesCache(vesselsPositionsWithBeaconMalfunctions, ticker, 1)
+        val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 180)
 
         val manager = SimpleCacheManager()
         manager.setCaches(listOf(
@@ -107,9 +107,17 @@ class CaffeineConfiguration {
         return manager
     }
 
-    private fun buildCache(name: String, ticker: Ticker, minutesToExpire: Int): CaffeineCache {
+    private fun buildMinutesCache(name: String, ticker: Ticker, minutesToExpire: Int): CaffeineCache {
         return CaffeineCache(name, Caffeine.newBuilder()
                 .expireAfterWrite(minutesToExpire.toLong(), TimeUnit.MINUTES)
+                .recordStats()
+                .ticker(ticker)
+                .build())
+    }
+
+    private fun buildSecondsCache(name: String, ticker: Ticker, secondsToExpire: Int): CaffeineCache {
+        return CaffeineCache(name, Caffeine.newBuilder()
+                .expireAfterWrite(secondsToExpire.toLong(), TimeUnit.SECONDS)
                 .recordStats()
                 .ticker(ticker)
                 .build())

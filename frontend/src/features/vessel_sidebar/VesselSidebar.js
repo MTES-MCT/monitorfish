@@ -134,21 +134,24 @@ const VesselSidebar = () => {
             >
               <FisheriesIcon/> <br/> Pêche
             </Tab>
-            <Tab
-              isActive={vesselSidebarTab === VesselSidebarTab.REPORTING}
-              onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.REPORTING))}
-              data-cy={'vessel-menu-reporting'}
-            >
-              <ReportingIcon/> <br/> Signalements
-              {
-                selectedVessel?.reportings?.length
-                  ? <ReportingNumber hasInfractionSuspicion={selectedVessel?.hasInfractionSuspicion}>
-                      {selectedVessel?.reportings?.length}
-                  </ReportingNumber>
-                  : null
-              }
-
-            </Tab>
+            {
+              adminRole
+                ? <Tab
+                  isActive={vesselSidebarTab === VesselSidebarTab.REPORTING}
+                  onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.REPORTING))}
+                  data-cy={'vessel-menu-reporting'}
+                >
+                  <ReportingIcon/> <br/> Signalements
+                  {
+                    selectedVessel?.reportings?.length
+                      ? <ReportingNumber hasInfractionSuspicion={selectedVessel?.hasInfractionSuspicion}>
+                        {selectedVessel?.reportings?.length}
+                      </ReportingNumber>
+                      : null
+                  }
+                </Tab>
+                : null
+            }
             <Tab
               isActive={vesselSidebarTab === VesselSidebarTab.CONTROLS}
               onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.CONTROLS))}
@@ -245,7 +248,7 @@ const ReportingNumber = styled.span`
   right: 189px;
   width: 14px;
   height: 14px;
-  line-height: 10px;
+  line-height: 13px;
   font-weight: 700;
 `
 

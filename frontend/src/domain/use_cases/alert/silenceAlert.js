@@ -20,7 +20,7 @@ const silenceAlert = (silencedAlertPeriodRequest, id) => (dispatch, getState) =>
   const timeout = setTimeout(() => {
     const previousAlertsWithoutSilenced = removeAlert(previousAlerts, id)
     dispatch(setAlerts(previousAlertsWithoutSilenced))
-  }, 1500)
+  }, 3200)
 
   silenceAlertFromAPI(id, silencedAlertPeriodRequest).then(silencedAlert => {
     dispatch(removeVesselAlertAndUpdateReporting({

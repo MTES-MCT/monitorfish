@@ -14,7 +14,7 @@ context('Alerts', () => {
 
     // Then
     cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('9')
-    cy.get('*[data-cy^="side-window-alerts-number-silenced-vessels"]').contains('Suspension d\'alertes sur 2 navire en NAMO')
+    cy.get('*[data-cy^="side-window-alerts-number-silenced-vessels"]').contains('Suspension d\'alerte sur 2 navire en NAMO')
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 9)
 
     cy.get(':nth-child(9)').contains('3 milles - Chaluts')
@@ -48,6 +48,7 @@ context('Alerts', () => {
   it('An alert Should be validated', () => {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 2)
 
     // When
     cy.intercept('PUT', '/bff/v1/operational_alerts/1/validate').as('validateAlert')
@@ -60,12 +61,14 @@ context('Alerts', () => {
     cy.visit(`http://localhost:${port}/side_window`)
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 8)
+    // As the alert is validated, it will be silenced for 4 hours
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 3)
   })
 
   it('An alert Should be silenced', () => {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
-    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 2)
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 3)
 
     // When
     cy.intercept('PUT', '/bff/v1/operational_alerts/2/silence').as('silenceAlert')
@@ -74,12 +77,13 @@ context('Alerts', () => {
     cy.get('*[data-cy="side-window-alerts-is-silenced-transition"]').should('be.visible')
     cy.wait('@silenceAlert')
       .then(({ request, response }) => expect(response.statusCode).equal(200))
-    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 3)
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 4)
 
     // The value is saved in database when I refresh the page
     cy.visit(`http://localhost:${port}/side_window`)
+    cy.wait(200)
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 7)
-    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 3)
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 4)
   })
 })

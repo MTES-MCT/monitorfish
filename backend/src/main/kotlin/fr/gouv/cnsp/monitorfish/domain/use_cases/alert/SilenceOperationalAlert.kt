@@ -1,8 +1,11 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.alert
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilenceAlertPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilencedAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SilencedAlertRepository
 import org.slf4j.LoggerFactory
@@ -10,7 +13,8 @@ import java.time.ZonedDateTime
 
 @UseCase
 class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRepository,
-                              private val silencedAlertRepository: SilencedAlertRepository) {
+                              private val silencedAlertRepository: SilencedAlertRepository,
+                              private val lastPositionRepository: LastPositionRepository) {
     private val logger = LoggerFactory.getLogger(SilenceOperationalAlert::class.java)
 
     fun execute(alertId: Int,
@@ -52,8 +56,44 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
                 silencedBeforeDate = before)
 
         pendingAlertRepository.delete(alertId)
+        updateLastPositionBeforePipelineUpdate(silencedAlert)
         logger.info("Alert $alertId has been silenced.")
 
         return savedSilencedAlert
+    }
+
+    private fun updateLastPositionBeforePipelineUpdate(silencedAlert: PendingAlert) {
+        when (silencedAlert.vesselIdentifier) {
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> {
+                require(silencedAlert.internalReferenceNumber != null) {
+                    "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
+                }
+                lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
+                        silencedAlert.value.type,
+                        silencedAlert.vesselIdentifier,
+                        silencedAlert.internalReferenceNumber,
+                        isValidated = false)
+            }
+            VesselIdentifier.IRCS -> {
+                require(silencedAlert.ircs != null) {
+                    "The fields 'ircs' must be not null when the vessel identifier is IRCS."
+                }
+                lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
+                        silencedAlert.value.type,
+                        silencedAlert.vesselIdentifier,
+                        silencedAlert.ircs,
+                        isValidated = false)
+            }
+            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
+                require(silencedAlert.externalReferenceNumber != null) {
+                    "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
+                }
+                lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
+                        silencedAlert.value.type,
+                        silencedAlert.vesselIdentifier,
+                        silencedAlert.externalReferenceNumber,
+                        isValidated = false)
+            }
+        }
     }
 }

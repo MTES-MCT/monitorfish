@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLastPositionRepository
 import org.springframework.cache.annotation.Cacheable
@@ -9,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
+import javax.transaction.Transactional
 
 @Repository
 class JpaLastPositionRepository(private val dbLastPositionRepository: DBLastPositionRepository,
@@ -53,6 +56,14 @@ class JpaLastPositionRepository(private val dbLastPositionRepository: DBLastPosi
             // Date of birth of the CNSP
             ZonedDateTime.of(2012, 4, 17, 0, 0, 0, 1, UTC)
         }
+    }
+
+    @Transactional
+    override fun removeAlertToLastPositionByVesselIdentifierEquals(alertType: AlertTypeMapping,
+                                                                   vesselIdentifier: VesselIdentifier,
+                                                                   value: String,
+                                                                   isValidated: Boolean) {
+        dbLastPositionRepository.removeAlertByVesselIdentifierEquals(vesselIdentifier.name, value, alertType.name, isValidated)
     }
 
     override fun deleteAll() {

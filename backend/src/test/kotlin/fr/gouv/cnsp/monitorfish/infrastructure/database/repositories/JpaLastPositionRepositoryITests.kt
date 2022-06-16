@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -96,4 +97,82 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(dateTime).isEqualTo(ZonedDateTime.parse("2012-04-17T00:00:00.000000001Z"))
     }
+
+    @Test
+    @Transactional
+    fun `removeAlertToLastPositionByVesselIdentifierEquals Should update a last position row with a validated alert`() {
+        // Given
+        val previousLastPositions = jpaLastPositionRepository.findAll()
+        val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000926735" }!!
+        assertThat(previousLastPosition.alerts).hasSize(1)
+        assertThat(previousLastPosition.alerts).contains("THREE_MILES_TRAWLING_ALERT")
+        assertThat(previousLastPosition.reportings).hasSize(0)
+        cacheManager.getCache("vessels_all_position")?.clear()
+
+        // When
+        jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
+                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                "ABC000926735",
+                isValidated = true)
+
+        // Then
+        val lastPositions = jpaLastPositionRepository.findAll()
+        val lastPosition = lastPositions.find { it.internalReferenceNumber == "ABC000926735" }!!
+        assertThat(lastPosition.alerts).hasSize(0)
+        assertThat(lastPosition.reportings).hasSize(1)
+        assertThat(lastPosition.reportings).contains("ALERT")
+    }
+
+    @Test
+    @Transactional
+    fun `removeAlertToLastPositionByVesselIdentifierEquals Should update a last position row with a silenced alert`() {
+        // Given
+        val previousLastPositions = jpaLastPositionRepository.findAll()
+        val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000339263" }!!
+        assertThat(previousLastPosition.alerts).hasSize(1)
+        assertThat(previousLastPosition.alerts).contains("THREE_MILES_TRAWLING_ALERT")
+        assertThat(previousLastPosition.reportings).hasSize(0)
+        cacheManager.getCache("vessels_all_position")?.clear()
+
+        // When
+        jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
+                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                "ABC000339263",
+                isValidated = false)
+
+        // Then
+        val lastPositions = jpaLastPositionRepository.findAll()
+        val lastPosition = lastPositions.find { it.internalReferenceNumber == "ABC000339263" }!!
+        assertThat(lastPosition.alerts).hasSize(0)
+        assertThat(lastPosition.reportings).hasSize(0)
+    }
+
+    @Test
+    @Transactional
+    fun `removeAlertToLastPositionByVesselIdentifierEquals Should update a last position row and only remove the first occurence of an alert`() {
+        // Given
+        val previousLastPositions = jpaLastPositionRepository.findAll()
+        val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000498845" }!!
+        assertThat(previousLastPosition.alerts).hasSize(2)
+        assertThat(previousLastPosition.alerts).contains("MISSING_FAR_ALERT")
+        assertThat(previousLastPosition.reportings).hasSize(0)
+        cacheManager.getCache("vessels_all_position")?.clear()
+
+        // When
+        jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
+                AlertTypeMapping.MISSING_FAR_ALERT,
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                "ABC000498845",
+                isValidated = false)
+
+        // Then
+        val lastPositions = jpaLastPositionRepository.findAll()
+        val lastPosition = lastPositions.find { it.internalReferenceNumber == "ABC000498845" }!!
+        assertThat(lastPosition.alerts).hasSize(1)
+        assertThat(previousLastPosition.alerts).contains("MISSING_FAR_ALERT")
+        assertThat(lastPosition.reportings).hasSize(0)
+    }
+
 }

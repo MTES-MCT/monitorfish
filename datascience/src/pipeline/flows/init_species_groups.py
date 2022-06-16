@@ -2,13 +2,10 @@ from pathlib import Path
 
 import pandas as pd
 import prefect
-from dotenv import load_dotenv
 from prefect import Flow, task
 
 from config import LIBRARY_LOCATION
 from src.pipeline.generic_tasks import load
-
-load_dotenv()
 
 
 @task(checkpoint=False)

@@ -8,7 +8,6 @@ from typing import List
 
 import docker
 import pytest
-from dotenv import dotenv_values
 from pytest import MonkeyPatch
 
 from config import ROOT_DIRECTORY, TEST_DATA_LOCATION
@@ -81,12 +80,6 @@ def monkeysession(request):
     mpatch = MonkeyPatch()
     yield mpatch
     mpatch.undo()
-
-
-@pytest.fixture(scope="session", autouse=True)
-def set_environment_variables(monkeysession):
-    for k, v in dotenv_values(ROOT_DIRECTORY / ".env.test").items():
-        monkeysession.setenv(k, v)
 
 
 @pytest.fixture(scope="session")

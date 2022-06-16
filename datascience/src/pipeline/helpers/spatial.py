@@ -1,4 +1,3 @@
-import os
 from dataclasses import dataclass
 from datetime import timedelta
 from typing import Iterable, Set, Tuple, Union
@@ -7,14 +6,12 @@ import h3
 import numpy as np
 import pandas as pd
 import requests
-from dotenv import load_dotenv
 from pyproj import Geod
 from shapely.geometry import MultiPolygon, Polygon
 
+from config import LOCATIONIQ_TOKEN
 from src.pipeline.helpers.dates import get_datetime_intervals
 from src.pipeline.processing import rows_belong_to_sequence, zeros_ones_to_bools
-
-load_dotenv()
 
 
 @dataclass
@@ -632,8 +629,9 @@ def geocode(query_string=None, country_code_iso2=None, **kwargs):
         country
         postalcode
     """
+    assert LOCATIONIQ_TOKEN
     base_url = "https://eu1.locationiq.com/v1/search.php"
-    params = {"key": os.environ["LOCATIONIQ_TOKEN"], "format": "json"}
+    params = {"key": LOCATIONIQ_TOKEN, "format": "json"}
 
     if query_string is not None and not pd.isna(query_string):
         if kwargs:

@@ -37,7 +37,7 @@ class BeaconMalfunctionNotificationType(Enum):
     MALFUNCTION_AT_PORT_REMINDER = "MALFUNCTION_AT_PORT_REMINDER"
     END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
 
-    def to_message_object(self):
+    def to_message_subject(self):
         type_object_mapping = {
             "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION": "Interruption en mer des émissions VMS de votre navire",
             "MALFUNCTION_AT_SEA_REMINDER": "RAPPEL : Interruption en mer des émissions VMS de votre navire",

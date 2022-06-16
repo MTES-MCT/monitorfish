@@ -18,7 +18,7 @@ const silenceAlert = (silencedAlertPeriodRequest, id) => (dispatch, getState) =>
   dispatch(setAlerts(previousAlertsWithSilencedFlag))
 
   const timeout = setTimeout(() => {
-    const previousAlertsWithoutSilenced = removeAlert(previousAlerts, id)
+    const previousAlertsWithoutSilenced = removeAlert(getState().alert.alerts, id)
     dispatch(setAlerts(previousAlertsWithoutSilenced))
   }, 3200)
 

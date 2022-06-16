@@ -10,7 +10,7 @@ const validateAlert = id => (dispatch, getState) => {
   dispatch(setAlerts(previousAlertsWithValidatedFlag))
 
   const timeout = setTimeout(() => {
-    const previousAlertsWithoutValidated = removeAlert(previousAlerts, id)
+    const previousAlertsWithoutValidated = removeAlert(getState().alert.alerts, id)
     dispatch(setAlerts(previousAlertsWithoutValidated))
   }, 3200)
 

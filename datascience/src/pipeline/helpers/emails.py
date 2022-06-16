@@ -105,7 +105,35 @@ def create_html_email(
     return msg
 
 
-def send_email(msg: EmailMessage):
+def send_email(msg: EmailMessage) -> dict:
+    """
+    Sends input email using the contents of `From` header as sender and `To`, `Cc`
+    and `Bcc` headers as recipients.
+
+    This method will return normally if the mail is accepted for at least
+    one recipient.  It returns a dictionary, with one entry for each
+    recipient that was refused.  Each entry contains a tuple of the SMTP
+    error code and the accompanying error message sent by the server, like :
+
+      { "three@three.org" : ( 550 ,"User unknown" ) }
+
+    Args:
+        msg (EmailMessage): `email.message.EmailMessage` to send.
+
+    Returns:
+        dict: {email_address : (error_code, error_message)} for all recipients that
+          were refused.
+
+    Raises:
+        SMTPHeloError: The server didn't reply properly to the helo greeting.
+        SMTPRecipientsRefused: The server rejected ALL recipients no mail was sent).
+        SMTPSenderRefused: The server didn't accept the from_addr.
+        SMTPDataError: The server replied with an unexpected error code (other than a
+          refusal of a recipient).
+        SMTPNotSupportedError: The mail_options parameter includes 'SMTPUTF8' but the
+          SMTPUTF8 extension is not supported by the server.
+
+    """
 
     assert MONITORFISH_EMAIL_SERVER_URL is not None
     assert MONITORFISH_EMAIL_SERVER_PORT is not None
@@ -113,7 +141,8 @@ def send_email(msg: EmailMessage):
     with smtplib.SMTP(
         host=MONITORFISH_EMAIL_SERVER_URL, port=MONITORFISH_EMAIL_SERVER_PORT
     ) as server:
-        return server.send_message(msg)
+        send_errors = server.send_message(msg)
+    return send_errors
 
 
 def resize_pdf_to_A4(pdf: bytes) -> bytes:

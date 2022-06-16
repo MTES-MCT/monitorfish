@@ -182,8 +182,13 @@ def create_email(
 
 
 @task(checkpoint=False)
-def send_message(msg: str):
-    send_email(msg)
+def send_message(msg: str, m: BeaconMalfunctionToNotify) -> dict:
+    """
+    Sends input email message. See `src.pipeline.helpers.emails.send_email` for more
+    information.
+    """
+    send_errors = send_email(msg)
+    return send_errors
 
 
 with Flow("Notify malfunctions") as flow:

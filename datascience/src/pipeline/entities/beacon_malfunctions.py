@@ -73,3 +73,12 @@ class BeaconMalfunctionToNotify:
         self.notification_type = BeaconMalfunctionNotificationType(
             self.notification_type
         )
+
+    def get_email_addressees(self):
+        vessel_emails = self.vessel_emails if self.vessel_emails else []
+        satellite_operator_emails = (
+            self.satellite_operator_emails if self.satellite_operator_emails else []
+        )
+        operator_emails = [self.operator_email] if self.operator_email else []
+        addressees = vessel_emails + operator_emails + satellite_operator_emails
+        return addressees

@@ -123,7 +123,7 @@ def render(
         logo_src=logo_src,
         notification_date=datetime.utcnow().strftime("%d/%m/%Y"),
         previous_notification_datetime_utc=previous_notification_datetime_utc,
-        object=m.notification_type.to_message_object(),
+        object=m.notification_type.to_message_subject(),
         vessel_name=m.vessel_name,
         cfr=m.vessel_cfr_or_immat_or_ircs,
         beacon_number=m.beacon_number,
@@ -172,7 +172,7 @@ def create_email(
     msg = create_html_email(
         to=to,
         cc=cc,
-        subject=m.notification_type.to_message_object(),
+        subject=m.notification_type.to_message_subject(),
         html=html,
         images=[cnsp_logo_path],
         attachments={"Notification.pdf": pdf},

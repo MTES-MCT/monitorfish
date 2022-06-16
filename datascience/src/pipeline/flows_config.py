@@ -119,7 +119,7 @@ update_beacon_malfunctions.flow.schedule = CronSchedule("5,15,25,35,45,55 * * * 
 position_alerts.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
-            "*/10 * * * *",
+            "1,11,21,31,41,51 * * * *",
             parameter_defaults={
                 "alert_type": "THREE_MILES_TRAWLING_ALERT",
                 "alert_config_name": "THREE_MILES_TRAWLING_ALERT",
@@ -131,7 +131,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "*/10 * * * *",
+            "2,12,22,32,42,52 * * * *",
             parameter_defaults={
                 "alert_type": "FRENCH_EEZ_FISHING_ALERT",
                 "alert_config_name": "FRENCH_EEZ_FISHING_ALERT",
@@ -148,7 +148,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "*/10 * * * *",
+            "3,13,23,33,43,53 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
                 "alert_config_name": "TWELVE_MILES_FISHING_ALERT_BE_NL",
@@ -159,7 +159,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "*/10 * * * *",
+            "4,14,24,34,44,54 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
                 "alert_config_name": "TWELVE_MILES_FISHING_ALERT_ES",
@@ -170,7 +170,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "*/10 * * * *",
+            "5,15,25,35,45,55 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
                 "alert_config_name": "TWELVE_MILES_FISHING_ALERT_DE",
@@ -181,7 +181,7 @@ position_alerts.flow.schedule = Schedule(
             },
         ),
         clocks.CronClock(
-            "*/10 * * * *",
+            "6,16,26,36,46,56 * * * *",
             parameter_defaults={
                 "alert_type": "TWELVE_MILES_FISHING_ALERT",
                 "alert_config_name": "TWELVE_MILES_FISHING_ALERT_OTHERS",

@@ -19,8 +19,8 @@ def create_html_email(
     subject: str,
     html: str,
     from_: str = MONITORFISH_EMAIL_ADDRESS,
-    cc: List[str] = None,
-    bcc: List[str] = None,
+    cc: Union[str, List[str]] = None,
+    bcc: Union[str, List[str]] = None,
     images: List[Path] = None,
     attachments: dict = None,
 ) -> EmailMessage:
@@ -32,10 +32,10 @@ def create_html_email(
           recipient(s)
         subject (str): Subject of the email.
         html (str): html representation of the email's content.
-        cc (List[str], optional): `Cc` field with optional list of email addresses of
-          copied recipients. Defaults to None.
-        bcc (List[str], optional): `Bcc` field with optional list of email addresses of
-          hidden copied recipients. Defaults to None.
+        cc (Union[str, List[str]], optional): `Cc` field with optional email address
+        (or list of email addresses) of copied recipient(s). Defaults to None.
+        bcc (Union[str, List[str]], optional): `Bcc` field with optional email address
+        (or list of email addresses) of hidden copied recipient(s). Defaults to None.
         from_ (str, optional): `From` field. Defaults to MONITORFISH_EMAIL_ADDRESS env
           var.
         images (List[Path], optional): List of `Path` to images on the server's file
@@ -66,9 +66,13 @@ def create_html_email(
     msg["To"] = to
 
     if cc:
+        if isinstance(cc, list):
+            cc = ", ".join(cc)
         msg["Cc"] = cc
 
     if bcc:
+        if isinstance(bcc, list):
+            bcc = ", ".join(bcc)
         msg["Bcc"] = bcc
 
     msg.set_content(html, subtype="html")

@@ -122,7 +122,8 @@ class BeaconMalfunctionControllerITests {
                                 notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
                                 communicationMeans = CommunicationMeans.SMS,
                                 recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                                recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000")
+                                recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
+                                success = false, errorMessage = "This message could not be delivered")
                         )))
 
         // When
@@ -136,6 +137,8 @@ class BeaconMalfunctionControllerITests {
                 .andExpect(jsonPath("$.actions[0].propertyName", equalTo("VESSEL_STATUS")))
                 .andExpect(jsonPath("$.beaconMalfunction.internalReferenceNumber", equalTo("CFR")))
                 .andExpect(jsonPath("$.notifications[0].recipientName", equalTo("Jack Sparrow")))
+                .andExpect(jsonPath("$.notifications[0].success", equalTo(false)))
+                .andExpect(jsonPath("$.notifications[0].errorMessage", equalTo("This message could not be delivered")))
     }
 
     @Test

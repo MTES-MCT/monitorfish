@@ -31,5 +31,7 @@ class JpaBeaconMalfunctionNotificationsRepositoryITests : AbstractDBTests() {
         assertThat(notifications.last().notificationType).isEqualTo(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION)
         assertThat(notifications.last().recipientName).isNull()
         assertThat(notifications.last().recipientAddressOrNumber).isEqualTo("0600000000")
+        assertThat(notifications[7].success).isFalse
+        assertThat(notifications[7].errorMessage).isEqualTo("The server didn't reply properly to the helo greeting.")
     }
 }

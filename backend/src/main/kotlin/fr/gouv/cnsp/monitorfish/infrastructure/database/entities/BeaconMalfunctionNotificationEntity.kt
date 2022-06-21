@@ -28,7 +28,11 @@ data class BeaconMalfunctionNotificationEntity(
     @Column(name = "recipient_name")
     val recipientName: String? = null,
     @Column(name = "recipient_address_or_number")
-    val recipientAddressOrNumber: String) {
+    val recipientAddressOrNumber: String,
+    @Column(name = "success")
+    val success: Boolean? = null,
+    @Column(name = "error_message")
+    val errorMessage: String? = null) {
 
     fun toBeaconMalfunctionNotification() = BeaconMalfunctionNotification(
         id = id,
@@ -38,7 +42,9 @@ data class BeaconMalfunctionNotificationEntity(
         communicationMeans = communicationMeans,
         recipientFunction = recipientFunction,
         recipientName = recipientName,
-        recipientAddressOrNumber = recipientAddressOrNumber
+        recipientAddressOrNumber = recipientAddressOrNumber,
+        success = success,
+        errorMessage = errorMessage
     )
 
 }

@@ -50,6 +50,8 @@
  * @property {string} recipientName
  * @property {string} recipientAddressOrNumber
  * @property {string} dateTime
+ * @property {boolean || null} success
+ * @property {string || null} errorMessage
  */
 
 /**

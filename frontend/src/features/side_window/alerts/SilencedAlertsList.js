@@ -84,7 +84,7 @@ const SilencedAlertsList = ({ silencedAlerts }) => {
       <List
         data-cy={'side-window-silenced-alerts-list'}
         style={{
-          ...rowStyle,
+          ...rowStyle(sortedAlerts?.length),
           marginTop: 10,
           overflow: 'visible'
         }}
@@ -300,12 +300,14 @@ const styleCenter = {
   height: 15
 }
 
-const rowStyle = {
-  width: 1260,
+// The width of the scrolling bar is 16 px. When we have more than
+// 9 items, the scrolling bar is showed
+const rowStyle = numberOfAlerts => ({
+  width: numberOfAlerts > 9 ? 1260 + 16 : 1260,
   fontWeight: 500,
   color: COLORS.gunMetal,
   boxShadow: 'unset'
-}
+})
 
 const vesselNameColumnStyle = {
   ...styleCenter,

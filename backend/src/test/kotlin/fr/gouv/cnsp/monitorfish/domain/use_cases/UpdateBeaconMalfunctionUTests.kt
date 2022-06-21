@@ -80,7 +80,9 @@ class UpdateBeaconMalfunctionUTests {
                                 notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
                                 communicationMeans = CommunicationMeans.SMS,
                                 recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                                recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000")
+                                recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
+                                success = true
+                            )
                         )
                 ))
 

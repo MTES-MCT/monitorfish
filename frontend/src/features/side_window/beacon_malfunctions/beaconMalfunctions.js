@@ -94,7 +94,15 @@ export const getNotificationText = (notification) => {
   const means = communicationMeans[notification.communicationMeans]?.denomination || ''
   const recipientName = notification.recipientName ? `(${notification.recipientName})` : ''
   const addresseePreposition = communicationMeans[notification.communicationMeans]?.addresseePreposition || ''
-  return <>{ followUpMessage } { addressee } {recipientName} par { means } { addresseePreposition } { notification.recipientAddressOrNumber }.</>
+  let received
+  if (notification.success === true) {
+    received = <> (✅ reçu)</>
+  } else if (notification.success === false) {
+    received = <> (❌ <strong>non reçu</strong>: {notification.errorMessage ? notification.errorMessage : 'Erreur inconnue'})</>
+  } else {
+    received = <></>
+  }
+  return <>{ followUpMessage } { addressee } {recipientName} par { means } { addresseePreposition } { notification.recipientAddressOrNumber }{received}.</>
 }
 
 export function getReducedTimeAgo (dateTime) {

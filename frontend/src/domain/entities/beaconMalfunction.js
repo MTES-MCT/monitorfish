@@ -316,6 +316,10 @@ const beaconMalfunctionNotificationRecipientFunction = {
     SATELLITE_OPERATOR: {
         value: "SATELLITE_OPERATOR",
         addressee: "à l'opérateur satellite"
+    },
+    FMC: {
+        value: "FMC",
+        addressee: "au CNSP"
     }
 }
 

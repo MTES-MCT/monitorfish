@@ -13,7 +13,9 @@ data class BeaconMalfunctionNotificationDataOutput(
     val communicationMeans: CommunicationMeans,
     val recipientFunction: BeaconMalfunctionNotificationRecipientFunction,
     val recipientName:  String?,
-    val recipientAddressOrNumber:  String) {
+    val recipientAddressOrNumber:  String,
+    val success: Boolean?,
+    val errorMessage: String?) {
 
     companion object {
         fun fromBeaconMalfunctionNotification(beaconMalfunctionNotification: BeaconMalfunctionNotification): BeaconMalfunctionNotificationDataOutput {
@@ -24,7 +26,10 @@ data class BeaconMalfunctionNotificationDataOutput(
                 communicationMeans = beaconMalfunctionNotification.communicationMeans,
                 recipientFunction = beaconMalfunctionNotification.recipientFunction,
                 recipientName = beaconMalfunctionNotification.recipientName,
-                recipientAddressOrNumber = beaconMalfunctionNotification.recipientAddressOrNumber)
+                recipientAddressOrNumber = beaconMalfunctionNotification.recipientAddressOrNumber,
+                success = beaconMalfunctionNotification.success,
+                errorMessage = beaconMalfunctionNotification.errorMessage
+            )
         }
     }
 }

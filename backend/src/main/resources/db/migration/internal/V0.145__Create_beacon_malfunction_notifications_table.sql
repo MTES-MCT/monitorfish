@@ -15,7 +15,8 @@ CREATE TYPE public.communication_means AS ENUM (
 CREATE TYPE public.recipient_function AS ENUM (
     'VESSEL_CAPTAIN',
     'VESSEL_OPERATOR',
-    'SATELLITE_OPERATOR'
+    'SATELLITE_OPERATOR',
+    'FMC'
 );
 
 create table public.beacon_malfunction_notifications (
@@ -26,7 +27,9 @@ create table public.beacon_malfunction_notifications (
     communication_means communication_means NOT NULL,
     recipient_function recipient_function NOT NULL,
     recipient_name VARCHAR,
-    recipient_address_or_number VARCHAR NOT NULL
+    recipient_address_or_number VARCHAR NOT NULL,
+    success BOOLEAN,
+    error_message VARCHAR
 );
 
 CREATE INDEX beacon_malfunction_notifications_beacon_malfunction_id_idx

@@ -55,7 +55,7 @@ class GetBeaconMalfunctionUTests {
                 beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = VesselStatus.ACTIVITY_DETECTED.toString(), previousValue = VesselStatus.AT_PORT.toString(), dateTime = now)))
         given(beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
             listOf(BeaconMalfunctionNotification(
-                id = 1, beaconMalfunctionId = 1, dateTime = now,
+                id = 1, beaconMalfunctionId = 1, dateTimeUtc = now,
                 notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
                 communicationMeans = CommunicationMeans.SMS,
                 recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,

@@ -126,13 +126,13 @@ def send_email(msg: EmailMessage) -> dict:
 
     Raises:
         SMTPHeloError: The server didn't reply properly to the helo greeting.
-        SMTPRecipientsRefused: The server rejected ALL recipients no mail was sent).
+        SMTPRecipientsRefused: The server rejected ALL recipients (no mail was sent).
         SMTPSenderRefused: The server didn't accept the from_addr.
         SMTPDataError: The server replied with an unexpected error code (other than a
           refusal of a recipient).
         SMTPNotSupportedError: The mail_options parameter includes 'SMTPUTF8' but the
           SMTPUTF8 extension is not supported by the server.
-
+        ValueError: if there is more than one set of 'Resent-' headers
     """
 
     assert MONITORFISH_EMAIL_SERVER_URL is not None

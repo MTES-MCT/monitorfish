@@ -6,3 +6,5 @@ INSERT INTO beacon_malfunction_notifications (
 VALUES
 (    1,                     1, (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month 2 days 17 hours 57 minutes', 'MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION',               'FAX',   'VESSEL_CAPTAIN', 'Captain Cook',                '0100000000'),
 (    2,                     2,                 (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '3 hours 57 minutes', 'MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION',               'SMS',   'VESSEL_CAPTAIN',           null,                '0111111111');
+
+ALTER SEQUENCE beacon_malfunction_notifications_id_seq RESTART WITH 3;

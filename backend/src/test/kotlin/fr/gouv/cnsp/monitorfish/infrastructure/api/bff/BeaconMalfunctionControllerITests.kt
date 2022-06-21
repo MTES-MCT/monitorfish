@@ -118,7 +118,7 @@ class BeaconMalfunctionControllerITests {
                         actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now())),
                         notifications = listOf(
                             BeaconMalfunctionNotification(
-                                id = 1, beaconMalfunctionId = 1, dateTime = ZonedDateTime.now(),
+                                id = 1, beaconMalfunctionId = 1, dateTimeUtc = ZonedDateTime.now(),
                                 notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
                                 communicationMeans = CommunicationMeans.SMS,
                                 recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,

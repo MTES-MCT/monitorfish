@@ -15,7 +15,7 @@ data class BeaconMalfunctionNotificationEntity(
     @Column(name = "beacon_malfunction_id")
     val beaconMalfunctionId: Int,
     @Column(name = "date_time_utc")
-    val dateTime: Instant,
+    val dateTimeUtc: Instant,
     @Column(name = "notification_type")
     @Enumerated(EnumType.STRING)
     val notificationType: BeaconMalfunctionNotificationType,
@@ -37,7 +37,7 @@ data class BeaconMalfunctionNotificationEntity(
     fun toBeaconMalfunctionNotification() = BeaconMalfunctionNotification(
         id = id,
         beaconMalfunctionId = beaconMalfunctionId,
-        dateTime  = dateTime.atZone(ZoneOffset.UTC),
+        dateTimeUtc  = dateTimeUtc.atZone(ZoneOffset.UTC),
         notificationType = notificationType,
         communicationMeans = communicationMeans,
         recipientFunction = recipientFunction,

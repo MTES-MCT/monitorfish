@@ -8,7 +8,6 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
-import java.time.ZonedDateTime
 
 @RunWith(SpringRunner::class)
 class JpaBeaconMalfunctionNotificationsRepositoryITests : AbstractDBTests() {
@@ -25,7 +24,7 @@ class JpaBeaconMalfunctionNotificationsRepositoryITests : AbstractDBTests() {
         assertThat(notifications).hasSize(9)
         assertThat(notifications.last().id).isEqualTo(9)
         assertThat(notifications.last().beaconMalfunctionId).isEqualTo(2)
-        assertThat(notifications.last().dateTime).isNotNull
+        assertThat(notifications.last().dateTimeUtc).isNotNull
         assertThat(notifications.last().recipientFunction).isEqualTo(BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN)
         assertThat(notifications.last().communicationMeans).isEqualTo(CommunicationMeans.SMS)
         assertThat(notifications.last().notificationType).isEqualTo(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION)

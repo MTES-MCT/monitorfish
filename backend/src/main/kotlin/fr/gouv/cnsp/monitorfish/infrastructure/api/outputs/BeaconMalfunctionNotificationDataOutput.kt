@@ -21,7 +21,7 @@ data class BeaconMalfunctionNotificationDataOutput(
         fun fromBeaconMalfunctionNotification(beaconMalfunctionNotification: BeaconMalfunctionNotification): BeaconMalfunctionNotificationDataOutput {
             return BeaconMalfunctionNotificationDataOutput(
                 beaconMalfunctionId = beaconMalfunctionNotification.beaconMalfunctionId,
-                dateTime = beaconMalfunctionNotification.dateTime,
+                dateTime = beaconMalfunctionNotification.dateTimeUtc,
                 notificationType = beaconMalfunctionNotification.notificationType,
                 communicationMeans = beaconMalfunctionNotification.communicationMeans,
                 recipientFunction = beaconMalfunctionNotification.recipientFunction,

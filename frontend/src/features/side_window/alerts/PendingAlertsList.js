@@ -256,9 +256,9 @@ const styleCenter = {
 }
 
 // The width of the scrolling bar is 16 px. When we have more than
-// 16 items, the scrolling bar is showed
+// 9 items, the scrolling bar is showed
 const rowStyle = numberOfAlerts => ({
-  width: numberOfAlerts > 16 ? 1180 + 16 : 1180,
+  width: numberOfAlerts > 9 ? 1180 + 16 : 1180,
   fontWeight: 500,
   color: COLORS.gunMetal,
   boxShadow: 'unset'

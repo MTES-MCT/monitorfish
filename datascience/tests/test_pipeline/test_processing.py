@@ -1,6 +1,7 @@
 import datetime
 import logging
 import unittest
+from enum import Enum
 from unittest.mock import Mock, patch
 
 import numpy as np
@@ -406,6 +407,10 @@ class TestProcessingMethods(unittest.TestCase):
         self.assertEqual(res.values.tolist(), expected_values)
 
     def test_prepare_df_for_loading(self):
+        class MyEnum(Enum):
+            A = "AAA"
+            B = "BBB"
+
         df = pd.DataFrame(
             columns=pd.Index(
                 [
@@ -418,6 +423,7 @@ class TestProcessingMethods(unittest.TestCase):
                     "int",
                     "timedelta",
                     "timedelta_only_nulls",
+                    "enum_col",
                 ]
             ),
             data=[
@@ -431,6 +437,7 @@ class TestProcessingMethods(unittest.TestCase):
                     2.0,
                     datetime.timedelta(days=1, seconds=21),
                     None,
+                    MyEnum.A,
                 ],
                 [
                     2,
@@ -440,6 +447,7 @@ class TestProcessingMethods(unittest.TestCase):
                     {"a": 1, "b": None, "c": np.nan},
                     {"a": 1, "b": [datetime.datetime(2021, 1, 23, 12, 56, 7), np.nan]},
                     np.nan,
+                    None,
                     None,
                     None,
                 ],
@@ -457,6 +465,7 @@ class TestProcessingMethods(unittest.TestCase):
             jsonb_columns=["json_1", "json_2"],
             nullable_integer_columns=["int"],
             timedelta_columns=["timedelta", "timedelta_only_nulls"],
+            enum_columns=["enum_col"],
         )
 
         expected_res = pd.DataFrame(
@@ -471,6 +480,7 @@ class TestProcessingMethods(unittest.TestCase):
                     "int",
                     "timedelta",
                     "timedelta_only_nulls",
+                    "enum_col",
                 ]
             ),
             data=[
@@ -484,6 +494,7 @@ class TestProcessingMethods(unittest.TestCase):
                     "2",
                     "1 days 00:00:21",
                     None,
+                    "AAA",
                 ],
                 [
                     2,
@@ -492,6 +503,7 @@ class TestProcessingMethods(unittest.TestCase):
                     "{1,5,7}",
                     '{"a": 1, "b": null, "c": null}',
                     '{"a": 1, "b": ["2021-01-23T12:56:07Z", null]}',
+                    None,
                     None,
                     None,
                     None,

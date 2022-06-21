@@ -6,7 +6,7 @@ import java.time.ZonedDateTime
 data class BeaconMalfunctionNotification(
         val id: Int,
         val beaconMalfunctionId: Int,
-        val dateTime: ZonedDateTime,
+        val dateTimeUtc: ZonedDateTime,
         val notificationType:  BeaconMalfunctionNotificationType,
         val communicationMeans: CommunicationMeans,
         val recipientFunction:  BeaconMalfunctionNotificationRecipientFunction,

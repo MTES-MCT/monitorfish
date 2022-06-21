@@ -3,6 +3,8 @@ from datetime import datetime
 from enum import Enum
 from typing import List
 
+from config import CNSP_SIP_DEPARTMENT_ADDRESS
+
 
 class BeaconMalfunctionStage(Enum):
     INITIAL_ENCOUNTER = "INITIAL_ENCOUNTER"
@@ -48,6 +50,26 @@ class BeaconMalfunctionNotificationType(Enum):
         return type_object_mapping[self.name]
 
 
+class BeaconMalfunctionNotificationRecipientFunction(Enum):
+    VESSEL_CAPTAIN = "VESSEL_CAPTAIN"
+    VESSEL_OPERATOR = "VESSEL_OPERATOR"
+    SATELLITE_OPERATOR = "SATELLITE_OPERATOR"
+    FMC = "FMC"
+
+
+class CommunicationMeans(Enum):
+    EMAIL = "EMAIL"
+    SMS = "SMS"
+    FAX = "FAX"
+
+
+@dataclass
+class BeaconMalfunctionNotificationAddressee:
+    function: BeaconMalfunctionNotificationRecipientFunction
+    name: str
+    address_or_number: str
+
+
 @dataclass
 class BeaconMalfunctionToNotify:
     beacon_malfunction_id: int
@@ -68,17 +90,73 @@ class BeaconMalfunctionToNotify:
     satellite_operator: str
     satellite_operator_emails: List[str]
     previous_notification_datetime_utc: datetime
+    test_mode: bool
 
     def __post_init__(self):
         self.notification_type = BeaconMalfunctionNotificationType(
             self.notification_type
         )
 
-    def get_email_addressees(self):
-        vessel_emails = self.vessel_emails if self.vessel_emails else []
-        satellite_operator_emails = (
-            self.satellite_operator_emails if self.satellite_operator_emails else []
-        )
-        operator_emails = [self.operator_email] if self.operator_email else []
-        addressees = vessel_emails + operator_emails + satellite_operator_emails
+    def get_email_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
+
+        if not self.test_mode:
+
+            vessel_emails = self.vessel_emails if self.vessel_emails else []
+            satellite_operator_emails = (
+                self.satellite_operator_emails if self.satellite_operator_emails else []
+            )
+            operator_emails = [self.operator_email] if self.operator_email else []
+
+            vessel_addressees = [
+                BeaconMalfunctionNotificationAddressee(
+                    function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                    name=None,
+                    address_or_number=vessel_email,
+                )
+                for vessel_email in vessel_emails
+            ]
+
+            satellite_operator_addressees = [
+                BeaconMalfunctionNotificationAddressee(
+                    function=BeaconMalfunctionNotificationRecipientFunction.SATELLITE_OPERATOR,
+                    name=self.satellite_operator,
+                    address_or_number=satellite_operator_email,
+                )
+                for satellite_operator_email in satellite_operator_emails
+            ]
+
+            operator_addressees = [
+                BeaconMalfunctionNotificationAddressee(
+                    function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
+                    name=self.operator_name,
+                    address_or_number=operator_email,
+                )
+                for operator_email in operator_emails
+            ]
+
+            addressees = (
+                vessel_addressees + operator_addressees + satellite_operator_addressees
+            )
+
+        else:
+            addressees = [
+                BeaconMalfunctionNotificationAddressee(
+                    function=BeaconMalfunctionNotificationRecipientFunction.FMC,
+                    name="CNSP",
+                    address_or_number=CNSP_SIP_DEPARTMENT_ADDRESS,
+                )
+            ]
         return addressees
+
+
+@dataclass
+class BeaconMalfunctionNotification:
+    beacon_malfunction_id: int
+    date_time_utc: datetime
+    notification_type: BeaconMalfunctionNotificationType
+    communication_means: CommunicationMeans
+    recipient_function: BeaconMalfunctionNotificationRecipientFunction
+    recipient_name: str
+    recipient_address_or_number: str
+    success: bool
+    error_message: str

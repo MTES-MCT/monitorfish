@@ -22,9 +22,15 @@ from tests.mocks import mock_datetime_utcnow
     "src.pipeline.flows.missing_far_alerts.datetime",
     mock_datetime_utcnow(datetime(2021, 1, 1, 16, 10, 0)),
 )
-def tast_get_dates():
-    yesterday_at_zero_hours, today_at_zero_hours, utcnow = get_dates.run()
+def test_get_dates():
+    (
+        yesterday_at_zero_hours,
+        yesterday_at_eight_hours,
+        today_at_zero_hours,
+        utcnow,
+    ) = get_dates.run()
     assert yesterday_at_zero_hours == datetime(2020, 12, 31, 0, 0, 0)
+    assert yesterday_at_eight_hours == datetime(2020, 12, 31, 20, 0, 0)
     assert today_at_zero_hours == datetime(2021, 1, 1, 0, 0, 0)
     assert utcnow == datetime(2021, 1, 1, 16, 10, 0)
 

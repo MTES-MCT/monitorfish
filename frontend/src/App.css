@@ -322,6 +322,7 @@ a:hover, a:focus {
     color: #707785;
     font-size: 13px;
     font-weight: normal;
+    max-width: 600px;
 }
 
 .rs-picker-select-menu-items {

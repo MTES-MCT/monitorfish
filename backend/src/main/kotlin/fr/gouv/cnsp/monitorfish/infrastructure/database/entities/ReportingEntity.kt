@@ -32,11 +32,11 @@ data class ReportingEntity(
         val type: ReportingType,
         @Column(name = "vessel_name")
         val vesselName: String? = null,
-        @Column(name = "internal_reference_number", nullable = false)
+        @Column(name = "internal_reference_number")
         val internalReferenceNumber: String? = null,
-        @Column(name = "external_reference_number", nullable = false)
+        @Column(name = "external_reference_number")
         val externalReferenceNumber: String? = null,
-        @Column(name = "ircs", nullable = false)
+        @Column(name = "ircs")
         val ircs: String? = null,
         @Column(name = "vessel_identifier")
         @Enumerated(EnumType.STRING)
@@ -44,7 +44,7 @@ data class ReportingEntity(
         val vesselIdentifier: VesselIdentifier,
         @Column(name = "creation_date", nullable = false)
         val creationDate: ZonedDateTime,
-        @Column(name = "validation_date", nullable = false)
+        @Column(name = "validation_date", nullable = true)
         val validationDate: ZonedDateTime? = null,
         @Type(type = "jsonb")
         @Column(name = "value", nullable = false, columnDefinition = "jsonb")
@@ -81,6 +81,19 @@ data class ReportingEntity(
                         creationDate = alert.creationDate,
                         validationDate = validationDate,
                         value = mapper.writeValueAsString(alert.value),
+                        isArchived = false,
+                        isDeleted = false)
+
+                fun fromReporting(reporting: Reporting, mapper: ObjectMapper) = ReportingEntity(
+                        vesselName = reporting.vesselName,
+                        type = reporting.type,
+                        internalReferenceNumber = reporting.internalReferenceNumber,
+                        externalReferenceNumber = reporting.externalReferenceNumber,
+                        ircs = reporting.ircs,
+                        vesselIdentifier = reporting.vesselIdentifier,
+                        creationDate = reporting.creationDate,
+                        validationDate = reporting.validationDate,
+                        value = mapper.writeValueAsString(reporting.value),
                         isArchived = false,
                         isDeleted = false)
         }

@@ -1,7 +1,8 @@
-import { OK } from './api'
+import { CREATED, OK } from './api'
 
 export const ARCHIVE_REPORTING_ERROR_MESSAGE = 'Nous n\'avons pas pu archiver le signalement'
 export const DELETE_REPORTING_ERROR_MESSAGE = 'Nous n\'avons pas pu supprimer le signalement'
+export const ADD_REPORTING_ERROR_MESSAGE = 'Nous n\'avons pas pu créer le signalement'
 
 /**
  * Archive a reporting
@@ -47,7 +48,39 @@ function deleteReportingFromAPI (id) {
   })
 }
 
+/**
+ * Add a reporting
+ * @memberOf API
+ * @param {number} newReporting - The reporting to add
+ * @return {Reporting} reporting - The added reporting
+
+ * @throws {Error}
+ */
+function addReportingFromAPI (newReporting) {
+  return fetch('/bff/v1/reportings', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    body: JSON.stringify(newReporting)
+  }).then(response => {
+    if (response.status === CREATED) {
+      return response.json()
+    } else {
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(ADD_REPORTING_ERROR_MESSAGE)
+    }
+  }).catch(error => {
+    console.error(error)
+    throw Error(ADD_REPORTING_ERROR_MESSAGE)
+  })
+}
+
 export {
   archiveReportingFromAPI,
-  deleteReportingFromAPI
+  deleteReportingFromAPI,
+  addReportingFromAPI
 }

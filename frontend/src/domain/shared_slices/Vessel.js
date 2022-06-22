@@ -185,13 +185,54 @@ const vesselSlice = createSlice({
         }
       })
 
-      const vesselReportingWithoutFirstFoundReportingType = state.selectedVessel.reportings
-        ?.reduce(filterFirstFoundReportingType(action), [])
+      if (Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselId) {
+        const vesselReportingWithoutFirstFoundReportingType = state.selectedVessel.reportings
+          ?.reduce(filterFirstFoundReportingType(action), [])
 
-      state.selectedVessel = {
-        ...state.selectedVessel,
-        reportings: vesselReportingWithoutFirstFoundReportingType,
-        hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingType.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+        state.selectedVessel = {
+          ...state.selectedVessel,
+          reportings: vesselReportingWithoutFirstFoundReportingType,
+          hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingType.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+        }
+      }
+    },
+    /**
+     * Add a reporting to the vessels array
+     * before the /vessels API is fetched from the cron
+     * @function addVesselReporting
+     * @memberOf VesselReducer
+     * @param {Object=} state
+     * @param {{payload: {
+     *   vesselId: string,
+     *   reportingType: string<ReportingType>
+     * }}} action - the vessel alert to validate or silence
+     */
+    addVesselReporting (state, action) {
+      state.vessels = state.vessels.map(vessel => {
+        if (vessel.vesselId !== action.payload.vesselId) {
+          return vessel
+        }
+
+        const nextVesselReportings = vessel.vesselProperties.reportings?.concat(action.payload.reportingType)
+
+        return {
+          ...vessel,
+          vesselProperties: {
+            ...vessel.vesselProperties,
+            reportings: nextVesselReportings,
+            hasInfractionSuspicion: nextVesselReportings.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+          }
+        }
+      })
+
+      if (Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselId) {
+        const nextVesselReportings = state.selectedVessel.reportings?.concat(action.payload.reportingType)
+
+        state.selectedVessel = {
+          ...state.selectedVessel,
+          reportings: nextVesselReportings,
+          hasInfractionSuspicion: nextVesselReportings.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+        }
       }
     },
     setVesselsEstimatedPositions (state, action) {
@@ -499,7 +540,8 @@ export const {
   resetVesselTrackExtent,
   setHideNonSelectedVessels,
   removeVesselAlertAndUpdateReporting,
-  removeVesselReporting
+  removeVesselReporting,
+  addVesselReporting
 } = vesselSlice.actions
 
 export default vesselSlice.reducer

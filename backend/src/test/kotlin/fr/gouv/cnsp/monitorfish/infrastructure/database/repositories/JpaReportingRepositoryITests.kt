@@ -2,6 +2,10 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -41,6 +45,39 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(alert.seaFront).isEqualTo("NAMO")
         assertThat(reporting.last().creationDate).isEqualTo(creationDate)
         assertThat(reporting.last().validationDate).isEqualTo(now)
+    }
+
+    @Test
+    @Transactional
+    fun `save Should save a reporting`() {
+        // Given
+        val creationDate = ZonedDateTime.now()
+        val reporting = Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = creationDate,
+                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false)
+
+        // When
+        jpaReportingRepository.save(reporting)
+        val reportings = jpaReportingRepository.findAll()
+
+        // Then
+        assertThat(reportings).hasSize(6)
+        assertThat(reportings.last().internalReferenceNumber).isEqualTo("FRFGRGR")
+        assertThat(reportings.last().externalReferenceNumber).isEqualTo("RGD")
+        assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
+        val infraction = reportings.last().value as InfractionSuspicion
+        assertThat(infraction.reportingActor).isEqualTo(ReportingActor.OPS)
+        assertThat(infraction.natinfCode).isEqualTo("123456")
+        assertThat(infraction.title).isEqualTo("A title")
+        assertThat(reportings.last().creationDate).isEqualTo(creationDate)
+        assertThat(reportings.last().validationDate).isNull()
     }
 
     @Test

@@ -63,9 +63,10 @@ class ReportingMapperUTests {
     }
 
     @Test
-    fun `getReportingValueFromJSON Should deserialize an OBSERVATION json`() {
+    fun `readValue Should deserialize an OBSERVATION json`() {
         // Given
         val observation = "{" +
+                "\"type\": \"OBSERVATION\"," +
                 "\"reportingActor\": \"OPS\"," +
                 "\"unit\": null, " +
                 "\"authorTrigram\": \"LTH\"," +
@@ -74,7 +75,7 @@ class ReportingMapperUTests {
                 "\"description\": \"A description !\"" +
                 "}"
 
-        val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, observation, ReportingType.OBSERVATION)
+        val parsedReporting = mapper.readValue(observation, InfractionSuspicionOrObservationType::class.java)
 
         // Then
         assertThat(parsedReporting).isInstanceOf(Observation::class.java)
@@ -88,9 +89,10 @@ class ReportingMapperUTests {
     }
 
     @Test
-    fun `getReportingValueFromJSON Should deserialize an INFRACTION_SUSPICION json`() {
+    fun `getReportingValueFromJSON Should deserialize an INFRACTION_SUSPICION`() {
         // Given
         val infraction = "{" +
+                "\"type\": \"INFRACTION_SUSPICION\"," +
                 "\"reportingActor\": \"OPS\"," +
                 "\"unit\": null, " +
                 "\"authorTrigram\": \"LTH\"," +
@@ -117,7 +119,7 @@ class ReportingMapperUTests {
     }
 
     @Test
-    fun `getReportingValueFromJSON Should deserialize an INFRACTION_SUSPICION When the json is from a data input`() {
+    fun `readValue Should deserialize an INFRACTION_SUSPICION`() {
         // Given
         val infraction = "{" +
                 "\"type\": \"INFRACTION_SUSPICION\"," +

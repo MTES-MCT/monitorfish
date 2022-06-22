@@ -18,11 +18,12 @@ from src.read_query import read_query
 
 
 @task(checkpoint=False)
-def get_dates() -> Tuple[datetime, datetime, datetime]:
+def get_dates() -> Tuple[datetime, datetime, datetime, datetime]:
     """
-    Returns the dates used in the flow as a 3-tuple :
+    Returns the dates used in the flow as a 4-tuple :
 
       - Yesterday at 00:00 (beginning of the day) in UTC
+      - Yesterday at 8pm in UTC
       - Today at 00:00 (beginning of the day) in UTC
       - Current datetime in UTC
 
@@ -32,8 +33,9 @@ def get_dates() -> Tuple[datetime, datetime, datetime]:
     utcnow = datetime.utcnow()
     today_at_zero_hours = utcnow.replace(hour=0, minute=0, second=0, microsecond=0)
     yesterday_at_zero_hours = today_at_zero_hours - timedelta(days=1)
+    yesterday_at_eight_pm = yesterday_at_zero_hours + timedelta(hours=20)
 
-    return yesterday_at_zero_hours, today_at_zero_hours, utcnow
+    return yesterday_at_zero_hours, yesterday_at_eight_pm, today_at_zero_hours, utcnow
 
 
 @task(checkpoint=False)
@@ -361,13 +363,18 @@ with Flow("Missing FAR alerts") as flow:
     vessels_table = get_table("vessels")
 
     # Extract
-    yesterday_at_zero_hours, today_at_zero_hours, utcnow = get_dates()
+    (
+        yesterday_at_zero_hours,
+        yesterday_at_eight_pm,
+        today_at_zero_hours,
+        utcnow,
+    ) = get_dates()
 
     vessels_at_sea_yesterday_everywhere_query = make_vessels_at_sea_query(
         positions_table=positions_table,
         facade_areas_table=facade_areas_table,
         from_date=yesterday_at_zero_hours,
-        to_date=today_at_zero_hours,
+        to_date=yesterday_at_eight_pm,
         states_to_monitor_iso2=states_iso2_to_monitor_everywhere,
         vessels_table=vessels_table,
         minimum_length=minimum_length,
@@ -377,7 +384,7 @@ with Flow("Missing FAR alerts") as flow:
         positions_table=positions_table,
         facade_areas_table=facade_areas_table,
         from_date=yesterday_at_zero_hours,
-        to_date=today_at_zero_hours,
+        to_date=yesterday_at_eight_pm,
         states_to_monitor_iso2=states_iso2_to_monitor_in_french_eez,
         vessels_table=vessels_table,
         minimum_length=minimum_length,

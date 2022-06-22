@@ -7,6 +7,7 @@ import java.time.ZonedDateTime
 
 interface ReportingRepository {
     fun save(alert: PendingAlert, validationDate: ZonedDateTime?)
+    fun save(reporting: Reporting): Reporting
     fun findAll(): List<Reporting>
     fun findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier,
                                         value: String,

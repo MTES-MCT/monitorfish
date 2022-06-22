@@ -45,6 +45,34 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `save Should save a silenced alert When the ircs is null`() {
+        // Given
+        val now = ZonedDateTime.now()
+        val alertOne = PendingAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = null,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                tripNumber = "123456",
+                creationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert())
+
+        // When
+        val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null)
+
+        // Then
+        assertThat(silencedAlert.internalReferenceNumber).isEqualTo("FRFGRGR")
+        assertThat(silencedAlert.externalReferenceNumber).isEqualTo("RGD")
+        assertThat(silencedAlert.value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+        assertThat(silencedAlert.silencedAfterDate).isNull()
+        assertThat(silencedAlert.silencedBeforeDate).isEqualTo(now.plusHours(1))
+
+        val alerts = jpaSilencedAlertRepository.findAllCurrentSilencedAlerts()
+        assertThat(alerts).hasSize(5)
+    }
+
+    @Test
+    @Transactional
     fun `findAllCurrentSilencedAlerts Should not return silenced alerts silenced before now`() {
         // Given
         assertThat(jpaSilencedAlertRepository.findAllCurrentSilencedAlerts()).hasSize(4)

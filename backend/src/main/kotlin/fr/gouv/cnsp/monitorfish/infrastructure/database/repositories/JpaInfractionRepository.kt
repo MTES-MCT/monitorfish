@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.controls.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBInfractionRepository
@@ -13,6 +14,11 @@ class JpaInfractionRepository(private val dbInfractionRepository: DBInfractionRe
     @Cacheable(value = ["infractions"])
     override fun findInfractions(ids: List<Int>): List<Infraction> {
         return dbInfractionRepository.findAllByIdIn(ids).map { it.toInfraction() }
+    }
+
+    @Cacheable(value = ["fishing_infractions"])
+    override fun findFishingInfractions(): List<Infraction> {
+        return dbInfractionRepository.findAllByInfractionCategoryEquals(InfractionCategory.FISHING.value).map { it.toInfraction() }
     }
 
     @Cacheable(value = ["infraction"])

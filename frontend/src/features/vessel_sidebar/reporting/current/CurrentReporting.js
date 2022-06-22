@@ -7,6 +7,7 @@ import { COLORS } from '../../../../constants/constants'
 import { operationalAlertTypes } from '../../../../domain/entities/alerts'
 import { ReportingType } from '../../../../domain/entities/reporting'
 import ConfirmDeletionModal from './ConfirmDeletionModal'
+import NewReporting from './NewReporting'
 
 const CurrentReporting = () => {
   const {
@@ -16,6 +17,7 @@ const CurrentReporting = () => {
   const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState(undefined)
 
   return <Wrapper>
+    <NewReporting/>
     {
       operationalAlertTypes
         .map(alertType => {
@@ -69,7 +71,7 @@ function sortByValidationDate (a, b) {
 const Wrapper = styled.div`
   background: ${COLORS.white};
   margin: 10px 5px 5px 5px;
-  padding: 20px 20px 10px 20px;
+  padding: 15px 20px 10px 20px;
   text-align: left;
   color: ${COLORS.slateGray};
 `

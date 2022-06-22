@@ -17,6 +17,8 @@ import getVesselBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/g
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import getVesselReportings from '../domain/use_cases/vessel/getVesselReportings'
 import getSilencedAlerts from '../domain/use_cases/alert/getSilencedAlerts'
+import getFishingInfractions from '../domain/use_cases/infraction/getFishingInfractions'
+import getAllControllers from '../domain/use_cases/controller/getAllControllers'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
 export const THIRTY_SECONDS = 30 * 1000
@@ -52,9 +54,11 @@ const APIWorker = () => {
         dispatch(getOperationalAlerts())
         dispatch(getSilencedAlerts())
         dispatch(getAllBeaconMalfunctions())
+        dispatch(getAllControllers())
       }
       dispatch(showAllVessels())
       dispatch(getAllRegulatoryLayers())
+      dispatch(getFishingInfractions())
     })
 
     const interval = setInterval(() => {

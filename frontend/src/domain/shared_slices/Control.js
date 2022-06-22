@@ -14,7 +14,8 @@ const controlSlice = createSlice({
     nextControlResumeAndControls: null,
     /** @type {Date} */
     controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
-    loadingControls: false
+    loadingControls: false,
+    controllers: []
   },
   reducers: {
     /**
@@ -52,6 +53,16 @@ const controlSlice = createSlice({
      */
     loadControls (state) {
       state.loadingControls = true
+    },
+    /**
+     * Set controllers
+     * @function setControllers
+     * @memberOf ControlReducer
+     * @param {Object=} state
+     * @param {{payload: Controller[]}} action - the controllers
+     */
+    setControllers (state, action) {
+      state.controllers = action.payload
     }
   }
 })
@@ -61,7 +72,8 @@ export const {
   setNextControlResumeAndControls,
   resetNextControlResumeAndControls,
   loadControls,
-  setControlFromDate
+  setControlFromDate,
+  setControllers
 } = controlSlice.actions
 
 export default controlSlice.reducer

@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.mappers
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -60,6 +60,90 @@ class ReportingMapperUTests {
         assertThat(parsedReporting.seaFront).isEqualTo("MEMN")
         assertThat(parsedReporting.flagState).isEqualTo("FR")
         assertThat(parsedReporting.riskFactor).isEqualTo(1.2311444133)
+    }
+
+    @Test
+    fun `getReportingValueFromJSON Should deserialize an OBSERVATION json`() {
+        // Given
+        val observation = "{" +
+                "\"reportingActor\": \"OPS\"," +
+                "\"unit\": null, " +
+                "\"authorTrigram\": \"LTH\"," +
+                "\"authorContact\": null," +
+                "\"title\": \"A title !\"," +
+                "\"description\": \"A description !\"" +
+                "}"
+
+        val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, observation, ReportingType.OBSERVATION)
+
+        // Then
+        assertThat(parsedReporting).isInstanceOf(Observation::class.java)
+        parsedReporting as Observation
+        assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
+        assertThat(parsedReporting.unit).isNull()
+        assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
+        assertThat(parsedReporting.authorContact).isNull()
+        assertThat(parsedReporting.title).isEqualTo("A title !")
+        assertThat(parsedReporting.description).isEqualTo("A description !")
+    }
+
+    @Test
+    fun `getReportingValueFromJSON Should deserialize an INFRACTION_SUSPICION json`() {
+        // Given
+        val infraction = "{" +
+                "\"reportingActor\": \"OPS\"," +
+                "\"unit\": null, " +
+                "\"authorTrigram\": \"LTH\"," +
+                "\"authorContact\": null," +
+                "\"title\": \"A title !\"," +
+                "\"description\": \"A description !\"," +
+                "\"natinfCode\": \"1234\"," +
+                "\"dml\": \"DML 56\"" +
+                "}"
+
+        val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, infraction, ReportingType.INFRACTION_SUSPICION)
+
+        // Then
+        assertThat(parsedReporting).isInstanceOf(InfractionSuspicion::class.java)
+        parsedReporting as InfractionSuspicion
+        assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
+        assertThat(parsedReporting.unit).isNull()
+        assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
+        assertThat(parsedReporting.authorContact).isNull()
+        assertThat(parsedReporting.title).isEqualTo("A title !")
+        assertThat(parsedReporting.description).isEqualTo("A description !")
+        assertThat(parsedReporting.natinfCode).isEqualTo("1234")
+        assertThat(parsedReporting.dml).isEqualTo("DML 56")
+    }
+
+    @Test
+    fun `getReportingValueFromJSON Should deserialize an INFRACTION_SUSPICION When the json is from a data input`() {
+        // Given
+        val infraction = "{" +
+                "\"type\": \"INFRACTION_SUSPICION\"," +
+                "\"reportingActor\": \"OPS\"," +
+                "\"unit\": null, " +
+                "\"authorTrigram\": \"LTH\"," +
+                "\"authorContact\": null," +
+                "\"title\": \"A title !\"," +
+                "\"description\": \"A description !\"," +
+                "\"natinfCode\": \"1234\"," +
+                "\"dml\": \"DML 56\"" +
+                "}"
+
+        val parsedReporting = mapper.readValue(infraction, InfractionSuspicionOrObservationType::class.java)
+
+        // Then
+        assertThat(parsedReporting).isInstanceOf(InfractionSuspicion::class.java)
+        parsedReporting as InfractionSuspicion
+        assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
+        assertThat(parsedReporting.unit).isNull()
+        assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
+        assertThat(parsedReporting.authorContact).isNull()
+        assertThat(parsedReporting.title).isEqualTo("A title !")
+        assertThat(parsedReporting.description).isEqualTo("A description !")
+        assertThat(parsedReporting.natinfCode).isEqualTo("1234")
+        assertThat(parsedReporting.dml).isEqualTo("DML 56")
     }
 
 }

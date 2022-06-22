@@ -1,18 +1,39 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.jsontype.NamedType
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionCommentUserType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReporting
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
+import org.hamcrest.Matchers
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
+import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.testcontainers.shaded.com.github.dockerjava.core.dockerfile.DockerfileStatement
+import java.time.ZonedDateTime
 
+@Import(MapperConfiguration::class)
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(value = [(ReportingController::class)])
 class ReportingControllerITests {
@@ -25,6 +46,12 @@ class ReportingControllerITests {
 
     @MockBean
     private lateinit var deleteReporting: DeleteReporting
+
+    @MockBean
+    private lateinit var addReporting: AddReporting
+
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
 
     @Test
     fun `Should archive a reporting`() {
@@ -44,6 +71,40 @@ class ReportingControllerITests {
                 .andExpect(status().isOk)
 
         Mockito.verify(deleteReporting).execute(123)
+    }
+
+    @Test
+    fun `Should create a reporting`() {
+        // Given
+        given(addReporting.execute(any())).willReturn(Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false))
+
+        // When
+        mockMvc.perform(post("/bff/v1/reportings")
+                .content(objectMapper.writeValueAsString(CreateReportingDataInput(
+                        internalReferenceNumber = "FRFGRGR",
+                        externalReferenceNumber = "RGD",
+                        ircs = "6554fEE",
+                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        creationDate = ZonedDateTime.now(),
+                        value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                        type = ReportingType.INFRACTION_SUSPICION
+                )))
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isCreated)
+                .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("OPS")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
 
 }

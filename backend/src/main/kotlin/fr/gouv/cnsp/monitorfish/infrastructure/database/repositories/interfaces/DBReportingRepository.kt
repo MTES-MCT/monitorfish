@@ -16,7 +16,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
                 WHEN :vesselIdentifier = 'IRCS' THEN ircs
                 WHEN :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER' THEN external_reference_number
             END = :value AND (
-                (validation_date >= :fromDate AND
+                (creation_date >= :fromDate AND
                     archived IS TRUE AND
                     deleted IS FALSE)
                 OR

@@ -57,7 +57,7 @@ const YearReporting = props => {
             }
             {
               numberOfObservations
-                ? <> {numberOfObservations} observation{numberOfObservations > 1 ? 's' : ''} <Opal/></>
+                ? <>{numberOfObservations} observation{numberOfObservations > 1 ? 's' : ''} <Opal/></>
                 : null
             }
           </YearResume>
@@ -87,6 +87,7 @@ const Red = styled.span`
   height: 8px;
   width: 8px;
   margin-left: 5px;
+  margin-right: 10px;
   background-color: #E1000F;
   border-radius: 50%;
   display: inline-block;

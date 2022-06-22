@@ -5,7 +5,7 @@ description = ""
 authors = ["Vincent <vincent.chery@m4x.org>"]
 
 [tool.poetry.dependencies]
-python = "3.8.7"
+python = "3.8.13"
 pandas = "1.2"
 black = "^20.8b1"
 isort = "^5.7.0"

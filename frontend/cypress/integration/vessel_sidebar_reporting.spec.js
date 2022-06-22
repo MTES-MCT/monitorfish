@@ -71,4 +71,39 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').eq(0).contains('Pas de signalement')
     cy.get('*[data-cy="reporting-card"]').should('not.exist')
   })
+
+  it('An infraction suspicion reporting Should be added from the reporting form', () => {
+    // Given
+    cy.get('*[data-cy="vessel-search-input"]', { timeout: 20000 }).type('MARIAGE île')
+    cy.get('*[data-cy="vessel-search-item"]', { timeout: 20000 }).eq(0).click()
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
+
+    // When
+    cy.intercept('GET', `/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*`).as('reporting')
+    cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="vessel-reporting"]', { timeout: 20000 }).should('be.visible')
+    cy.wait('@reporting')
+    cy.get('*[data-cy="vessel-menu-reporting"]').contains(2)
+    cy.wait(100)
+
+    cy.get('*[data-cy="vessel-sidebar-open-reporting"]').click()
+    cy.get('*[data-cy="new-reporting-reporting-actor-UNIT"]').click()
+    cy.get('*[data-cy="new-reporting-select-unit"]').click()
+    cy.get('[data-key="ULAM 56"] > .rs-picker-select-menu-item').click()
+    cy.get('*[data-cy="new-reporting-author-contact"]').type('Jean Bon (0612365896)')
+    cy.get('*[data-cy="new-reporting-title"]').type('Sortie non autorisée')
+    cy.get('*[data-cy="new-reporting-description"]').type('Ce navire ne devrait pas être en mer, il n\'a plus de points sur son permis')
+    cy.get('*[data-cy="new-reporting-select-natinf"]').click()
+    cy.get('[data-key="2608"] > .rs-picker-select-menu-item').click()
+    cy.get('*[data-cy="new-reporting-select-dml"]').click()
+    cy.get('[data-key="DML 22"] > .rs-picker-select-menu-item').click()
+    cy.get('*[data-cy="new-reporting-create-button"]').scrollIntoView().click()
+
+    // Then
+    cy.get('*[data-cy="vessel-menu-reporting"]').contains(3)
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('ULAM 56 / Sortie non autorisée')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('Ce navire ne devrait pas être en mer, il n\'a plus de points sur son permis')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('Émetteur: Jean Bon (0612365896)')
+    cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
+  })
 })

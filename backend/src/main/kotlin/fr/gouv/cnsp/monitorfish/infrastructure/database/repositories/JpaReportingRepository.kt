@@ -19,6 +19,10 @@ class JpaReportingRepository(private val dbReportingRepository: DBReportingRepos
         dbReportingRepository.save(ReportingEntity.fromPendingAlert(alert, validationDate, mapper))
     }
 
+    override fun save(reporting: Reporting): Reporting {
+        return dbReportingRepository.save(ReportingEntity.fromReporting(reporting, mapper)).toReporting(mapper)
+    }
+
     override fun findAll(): List<Reporting> {
         return dbReportingRepository.findAll().map { it.toReporting(mapper) }
     }

@@ -1,13 +1,15 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReporting
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ReportingDataOutput
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
 import javax.websocket.server.PathParam
 
 @RestController
@@ -15,7 +17,16 @@ import javax.websocket.server.PathParam
 @Api(description = "APIs for reporting")
 class ReportingController(
         private val archiveReporting: ArchiveReporting,
-        private val deleteReporting: DeleteReporting) {
+        private val deleteReporting: DeleteReporting,
+        private val addReporting: AddReporting) {
+
+    @PostMapping(value = [""], consumes = ["application/json"])
+    @ApiOperation("Create a reporting")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createReporting(@RequestBody
+                        reportingInput: CreateReportingDataInput): ReportingDataOutput {
+        return ReportingDataOutput.fromReporting(addReporting.execute(reportingInput.toReporting()))
+    }
 
     @PutMapping(value = ["/{reportingId}/archive"])
     @ApiOperation("Archive a reporting")

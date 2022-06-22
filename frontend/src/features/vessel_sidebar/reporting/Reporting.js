@@ -1,6 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { reportingIsAnInfractionSuspicion, ReportingType } from '../../../domain/entities/reporting'
+import {
+  reportingIsAnInfractionSuspicion,
+  ReportingOriginActor,
+  ReportingType
+} from '../../../domain/entities/reporting'
 import { COLORS } from '../../../constants/constants'
 import { getDateTime } from '../../../utils'
 
@@ -39,12 +43,16 @@ const Reporting = props => {
     </Icon>
     <Body isInfractionSuspicion={isAnInfractionSuspicion}>
       <Title>
-        {reportingName}
+        {
+          reporting?.type === ReportingType.ALERT.code
+            ? reportingName
+            : getReportingActor(reporting?.value?.reportingActor, reporting?.value?.unit)
+        }
         {' '}/{' '}
         {
           reporting?.type === ReportingType.ALERT.code
             ? getAlertNameFromType(reporting?.value?.type)
-            : null
+            : reporting?.value?.title
         }
       </Title>
       <Date>
@@ -52,8 +60,18 @@ const Reporting = props => {
           numberOfAlerts
             ? 'Dernière alerte le'
             : 'Le'
-        } {getDateTime(reporting?.validationDate, true)}
+        } {getDateTime(reporting?.type === ReportingType.ALERT.code ? reporting?.validationDate : reporting?.creationDate, true)}
       </Date>
+      {
+        reporting?.type !== ReportingType.ALERT.code
+          ? <Description>{reporting?.value?.description}</Description>
+          : null
+      }
+      {
+        reporting?.type !== ReportingType.ALERT.code && reporting?.value?.authorContact
+          ? <Author>Émetteur: {reporting?.value?.authorContact}</Author>
+          : null
+      }
       {
         reporting?.value?.natinfCode
           ? <Natinf title={reporting?.infraction ? `${reporting?.infraction?.natinfCode || ''}: ${reporting?.infraction?.infraction || ''} (réglementation "${reporting?.infraction?.regulation || ''}")` : ''}>
@@ -92,6 +110,13 @@ const Reporting = props => {
         : null
     }
   </Wrapper>
+}
+
+const getReportingActor = (reportingActor, unit) => {
+  switch (reportingActor) {
+    case ReportingOriginActor.UNIT.code: return unit
+    default: return reportingActor
+  }
 }
 
 const Wrapper = styled.div`
@@ -144,6 +169,17 @@ const Natinf = styled.div`
   font: normal normal medium 13px/18px Marianne;
   width: fit-content;
   margin-top: 10px;
+  color: ${COLORS.gunMetal};
+`
+
+const Description = styled.div`
+  margin-top: 10px;
+  font: normal normal bold 13px/18px Marianne;
+  color: ${COLORS.gunMetal};
+`
+
+const Author = styled.div`
+  font: normal normal normal 13px/18px Marianne;
   color: ${COLORS.gunMetal};
 `
 

@@ -27,11 +27,11 @@ data class PendingAlertEntity(
         val id: Int? = null,
         @Column(name = "vessel_name")
         val vesselName: String? = null,
-        @Column(name = "internal_reference_number", nullable = false)
+        @Column(name = "internal_reference_number")
         val internalReferenceNumber: String? = null,
-        @Column(name = "external_reference_number", nullable = false)
+        @Column(name = "external_reference_number")
         val externalReferenceNumber: String? = null,
-        @Column(name = "ircs", nullable = false)
+        @Column(name = "ircs")
         val ircs: String? = null,
         @Column(name = "vessel_identifier")
         @Enumerated(EnumType.STRING)

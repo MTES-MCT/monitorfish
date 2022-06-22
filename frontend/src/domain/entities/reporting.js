@@ -2,17 +2,47 @@ export const ReportingType = {
   ALERT: {
     code: 'ALERT',
     name: 'ALERTE',
+    inputName: null,
     isInfractionSuspicion: true
   },
   OBSERVATION: {
     code: 'OBSERVATION',
     name: 'OBSERVATION',
+    inputName: 'Observation',
     isInfractionSuspicion: false
   },
   INFRACTION_SUSPICION: {
     code: 'INFRACTION_SUSPICION',
     name: 'SUSPICION d\'INFRACTION',
+    inputName: 'Infraction (suspicion)',
     isInfractionSuspicion: true
+  }
+}
+
+export const ReportingOriginActor = {
+  OPS: {
+    code: 'OPS',
+    name: 'OPS'
+  },
+  SIP: {
+    code: 'SIP',
+    name: 'SIP'
+  },
+  UNIT: {
+    code: 'UNIT',
+    name: 'Unité'
+  },
+  DML: {
+    code: 'DML',
+    name: 'DML'
+  },
+  DIRM: {
+    code: 'DIRM',
+    name: 'DIRM'
+  },
+  OTHER: {
+    code: 'OTHER',
+    name: 'Autre'
   }
 }
 
@@ -42,8 +72,8 @@ export const getYearsToReportingList = (archivedReportingsFromDate, reportingLis
   }
 
   reportingList.forEach(reporting => {
-    if (reporting?.validationDate) {
-      const year = new Date(reporting.validationDate).getUTCFullYear()
+    if (reporting?.creationDate) {
+      const year = new Date(reporting.validationDate || reporting.creationDate).getUTCFullYear()
 
       if (nextYearsToReporting[year] && nextYearsToReporting[year].length) {
         nextYearsToReporting[year] = nextYearsToReporting[year].concat(reporting)
@@ -55,3 +85,27 @@ export const getYearsToReportingList = (archivedReportingsFromDate, reportingLis
 
   return nextYearsToReporting
 }
+
+export const FrenchDMLs = [
+  'DML 62/80',
+  'DML 76',
+  'DML 14',
+  'DML 50',
+  'DML 35',
+  'DML 22',
+  'DML 29',
+  'DML 56',
+  'DML 44',
+  'DML 17',
+  'DML 33',
+  'DML 85',
+  'DML 64/40',
+  'DML 66/11',
+  'DML 34/30',
+  'DML 13',
+  'DML 83',
+  'DML 06',
+  'DML 2a',
+  'DML 2b',
+  'DML 76/27'
+]

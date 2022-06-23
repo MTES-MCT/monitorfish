@@ -74,7 +74,10 @@ class GetBeaconMalfunctionUTests {
         assertThat(beaconMalfunctions.actions).hasSize(1)
         assertThat(beaconMalfunctions.comments).hasSize(1)
         assertThat(beaconMalfunctions.notifications).hasSize(1)
-        assertThat(beaconMalfunctions.notifications[0].recipientName).isEqualTo("Jack Sparrow")
+        assertThat(beaconMalfunctions.notifications[0].beaconMalfunctionId).isEqualTo(1)
+        assertThat(beaconMalfunctions.notifications[0].notificationType).isEqualTo(BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION)
+        assertThat(beaconMalfunctions.notifications[0].dateTimeUtc).isEqualTo(now)
+        assertThat(beaconMalfunctions.notifications[0].notifications[0].recipientName).isEqualTo("Jack Sparrow")
         assertThat(beaconMalfunctions.beaconMalfunction.internalReferenceNumber).isEqualTo("FR224226850")
     }
 }

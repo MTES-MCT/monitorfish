@@ -1,11 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionResumeAndDetails
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionWithDetails
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeaconMalfunctionsResume
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -69,12 +66,23 @@ class GetBeaconMalfunction(
 
         val vesselBeaconMalfunctionsResume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconMalfunctionsWithDetails)
 
+        val notifications = beaconMalfunctionNotifications
+                .groupBy { it.toGroupByKeys() }
+                .map {
+                    BeaconMalfunctionNotifications(
+                            dateTimeUtc = it.key.dateTimeUtc,
+                            beaconMalfunctionId = it.key.beaconMalfunctionId,
+                            notificationType = it.key.notificationType,
+                            notifications = it.value
+                    )
+                }
+
         return BeaconMalfunctionResumeAndDetails(
             beaconMalfunction = beaconMalfunction,
             resume = vesselBeaconMalfunctionsResume,
             comments = beaconMalfunctionComments,
             actions = beaconMalfunctionActions,
-            notifications = beaconMalfunctionNotifications
+            notifications = notifications
         )
     }
 }

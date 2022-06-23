@@ -5,5 +5,5 @@ data class BeaconMalfunctionResumeAndDetails(
         val resume: VesselBeaconMalfunctionsResume? = null,
         val comments: List<BeaconMalfunctionComment>,
         val actions: List<BeaconMalfunctionAction>,
-        val notifications: List<BeaconMalfunctionNotification> = listOf()
+        val notifications: List<BeaconMalfunctionNotifications> = listOf()
 )

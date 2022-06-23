@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionResumeAndDetails
 
 data class BeaconMalfunctionResumeAndDetailsDataOutput(
@@ -8,8 +7,7 @@ data class BeaconMalfunctionResumeAndDetailsDataOutput(
         val resume: VesselBeaconMalfunctionResumeDataOutput? = null,
         val comments: List<BeaconMalfunctionCommentDataOutput>,
         val actions: List<BeaconMalfunctionActionDataOutput>,
-        val notifications: List<BeaconMalfunctionNotificationDataOutput>
-) {
+        val notifications: List<BeaconMalfunctionNotificationsDataOutput>) {
     companion object {
         fun fromBeaconMalfunctionResumeAndDetails(beaconMalfunctionResumeAndDetails: BeaconMalfunctionResumeAndDetails): BeaconMalfunctionResumeAndDetailsDataOutput {
             return BeaconMalfunctionResumeAndDetailsDataOutput(
@@ -19,7 +17,7 @@ data class BeaconMalfunctionResumeAndDetailsDataOutput(
                     },
                     comments = beaconMalfunctionResumeAndDetails.comments.map { BeaconMalfunctionCommentDataOutput.fromBeaconMalfunctionComment(it) },
                     actions = beaconMalfunctionResumeAndDetails.actions.map { BeaconMalfunctionActionDataOutput.fromBeaconMalfunctionAction(it) },
-                    notifications = beaconMalfunctionResumeAndDetails.notifications.map { BeaconMalfunctionNotificationDataOutput.fromBeaconMalfunctionNotification(it) }
+                    notifications = beaconMalfunctionResumeAndDetails.notifications.map { BeaconMalfunctionNotificationsDataOutput.fromBeaconMalfunctionNotifications(it) }
             )
         }
     }

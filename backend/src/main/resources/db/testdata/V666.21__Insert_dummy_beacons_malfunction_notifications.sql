@@ -10,4 +10,3 @@ INSERT INTO beacon_malfunction_notifications (
     (7,                     2, NOW() - INTERVAL '5 weeks 6 days 23 hours 55 minutes',                      'END_OF_MALFUNCTION',             'FAX',   'SATELLITE_OPERATOR',          'SAT',                '0123456789',    null,                                                      null),
     (8,                     2, NOW() - INTERVAL '5 weeks 6 days 23 hours 55 minutes',                      'END_OF_MALFUNCTION',             'EMAIL',    'VESSEL_OPERATOR',  'LE PELETIER',      'lepeletier@gmail.com',   false, 'The server didn''t reply properly to the helo greeting.'),
     (9,                     2, NOW() - INTERVAL '5 weeks 6 days 23 hours 55 minutes',                      'END_OF_MALFUNCTION',             'SMS',       'VESSEL_CAPTAIN',           NULL,                '0600000000',    null,                                                      null);
-

@@ -108,6 +108,7 @@ class BeaconMalfunctionControllerITests {
 
     @Test
     fun `Should return a beacon malfunction`() {
+        val dateTimeUtc = ZonedDateTime.now()
         given(this.getBeaconMalfunction.execute(123))
                 .willReturn(BeaconMalfunctionResumeAndDetails(
                         beaconMalfunction = BeaconMalfunction(1, "CFR", "EXTERNAL_IMMAT", "IRCS",
@@ -116,15 +117,20 @@ class BeaconMalfunctionControllerITests {
                         resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
                         comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
                         actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now())),
-                        notifications = listOf(
-                            BeaconMalfunctionNotification(
-                                id = 1, beaconMalfunctionId = 1, dateTimeUtc = ZonedDateTime.now(),
+                        notifications = listOf(BeaconMalfunctionNotifications(
+                                beaconMalfunctionId = 1,
+                                dateTimeUtc = dateTimeUtc,
                                 notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
-                                communicationMeans = CommunicationMeans.SMS,
-                                recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                                recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
-                                success = false, errorMessage = "This message could not be delivered")
-                        )))
+                                notifications = listOf(
+                                        BeaconMalfunctionNotification(
+                                                id = 1, beaconMalfunctionId = 1, dateTimeUtc = dateTimeUtc,
+                                                notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
+                                                communicationMeans = CommunicationMeans.SMS,
+                                                recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                                                recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
+                                                success = false, errorMessage = "This message could not be delivered")
+                                )
+                        ))))
 
         // When
         mockMvc.perform(get("/bff/v1/beacon_malfunctions/123"))
@@ -136,9 +142,10 @@ class BeaconMalfunctionControllerITests {
                 .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
                 .andExpect(jsonPath("$.actions[0].propertyName", equalTo("VESSEL_STATUS")))
                 .andExpect(jsonPath("$.beaconMalfunction.internalReferenceNumber", equalTo("CFR")))
-                .andExpect(jsonPath("$.notifications[0].recipientName", equalTo("Jack Sparrow")))
-                .andExpect(jsonPath("$.notifications[0].success", equalTo(false)))
-                .andExpect(jsonPath("$.notifications[0].errorMessage", equalTo("This message could not be delivered")))
+                .andExpect(jsonPath("$.notifications[0].notificationType", equalTo("MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION")))
+                .andExpect(jsonPath("$.notifications[0].notifications[0].recipientName", equalTo("Jack Sparrow")))
+                .andExpect(jsonPath("$.notifications[0].notifications[0].success", equalTo(false)))
+                .andExpect(jsonPath("$.notifications[0].notifications[0].errorMessage", equalTo("This message could not be delivered")))
     }
 
     @Test

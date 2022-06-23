@@ -74,16 +74,20 @@ class UpdateBeaconMalfunctionUTests {
                                 true, ZonedDateTime.now(), null, ZonedDateTime.now()),
                         comments = listOf(BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())),
                         actions = listOf(BeaconMalfunctionAction(1, 1, BeaconMalfunctionActionPropertyName.VESSEL_STATUS, "PREVIOUS", "NEXT", ZonedDateTime.now())),
-                        notifications = listOf(
-                            BeaconMalfunctionNotification(
-                                id = 1, beaconMalfunctionId = 1, dateTimeUtc = ZonedDateTime.now(),
+                        notifications = listOf(BeaconMalfunctionNotifications(
+                                beaconMalfunctionId = 1,
+                                dateTimeUtc = ZonedDateTime.now(),
                                 notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
-                                communicationMeans = CommunicationMeans.SMS,
-                                recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                                recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
-                                success = true
-                            )
-                        )
+                                notifications = listOf(
+                                        BeaconMalfunctionNotification(
+                                                id = 1, beaconMalfunctionId = 1, dateTimeUtc = ZonedDateTime.now(),
+                                                notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
+                                                communicationMeans = CommunicationMeans.SMS,
+                                                recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                                                recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000",
+                                                success = false, errorMessage = "This message could not be delivered")
+                                )
+                        ))
                 ))
 
         // When

@@ -5,6 +5,9 @@ INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 # DEV commands
 install:
 	cd frontend && npm install
+run:
+	docker-compose -f ./docker-compose.yml -f ./infra/dev/docker-compose.dev.yml up -d app
+	make run-front
 run-front:
 	cd frontend && npm start
 run-back:

@@ -1,13 +1,11 @@
+import React from 'react'
 import * as timeago from 'timeago.js'
 import {
   BeaconMalfunctionPropertyName,
-  beaconMalfunctionsStages, endOfBeaconMalfunctionReasons,
-  beaconMalfunctionNotificationRecipientFunction,
-  beaconMalfunctionNotificationType,
-  communicationMeans,
+  beaconMalfunctionsStages,
+  endOfBeaconMalfunctionReasons,
   vesselStatuses
 } from '../../../domain/entities/beaconMalfunction'
-import React from 'react'
 
 export const BeaconMalfunctionsSubMenu = {
   PAIRING: {
@@ -86,23 +84,6 @@ export const getActionText = (action, endOfBeaconMalfunctionReason) => {
       }
     </>
   }
-}
-
-export const getNotificationText = (notification) => {
-  const followUpMessage = beaconMalfunctionNotificationType[notification.notificationType]?.followUpMessage || 'Un message a été envoyé'
-  const addressee = beaconMalfunctionNotificationRecipientFunction[notification.recipientFunction]?.addressee || ''
-  const means = communicationMeans[notification.communicationMeans]?.denomination || ''
-  const recipientName = notification.recipientName ? `(${notification.recipientName})` : ''
-  const addresseePreposition = communicationMeans[notification.communicationMeans]?.addresseePreposition || ''
-  let received
-  if (notification.success === true) {
-    received = <> (✅ reçu)</>
-  } else if (notification.success === false) {
-    received = <> (❌ <strong>non reçu</strong>: {notification.errorMessage ? notification.errorMessage : 'Erreur inconnue'})</>
-  } else {
-    received = <></>
-  }
-  return <>{ followUpMessage } { addressee } {recipientName} par { means } { addresseePreposition } { notification.recipientAddressOrNumber }{received}.</>
 }
 
 export function getReducedTimeAgo (dateTime) {

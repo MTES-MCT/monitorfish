@@ -269,57 +269,62 @@ const getFirstStatusActionDate = (vesselStatus, malfunctionStartDateTime) => {
 }
 
 const beaconMalfunctionNotificationType = {
-    MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION : {
-        followUpMessage: "Une notification initiale d'avarie en mer a été envoyée"
+    MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: {
+        followUpMessage: 'notification initiale d\'avarie en mer',
+        isReminder: false
     },
-    MALFUNCTION_AT_SEA_REMINDER : {
-        followUpMessage: "Un rappel d'avarie en mer a été envoyé"
+    MALFUNCTION_AT_SEA_REMINDER: {
+        followUpMessage: 'rappel d\'avarie en mer',
+        isReminder: true
     },
-    MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION : {
-        followUpMessage: "Une notification initiale d'avarie à quai a été envoyée"
+    MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: {
+        followUpMessage: 'notification initiale d\'avarie à quai',
+        isReminder: false
     },
-    MALFUNCTION_AT_PORT_REMINDER : {
-        followUpMessage: "Un rappel d'avarie à quai a été envoyé"
+    MALFUNCTION_AT_PORT_REMINDER: {
+        followUpMessage: 'rappel d\'avarie à quai',
+        isReminder: true
     },
-    END_OF_MALFUNCTION : {
-        followUpMessage: "Une notification de fin d'avarie a été envoyée"
+    END_OF_MALFUNCTION: {
+        followUpMessage: 'notification de fin d\'avarie',
+        isReminder: true
     }
 }
 
 const communicationMeans = {
     EMAIL: {
-        value: "EMAIL",
-        denomination: "email",
-        addresseePreposition: "à"
+        value: 'EMAIL',
+        denomination: 'email',
+        addresseePreposition: 'à'
     },
     SMS: {
-        value: "SMS",
-        denomination: "SMS",
-        addresseePreposition: "au"
+        value: 'SMS',
+        denomination: 'SMS',
+        addresseePreposition: 'au'
     },
     FAX: {
-        value: "FAX",
-        denomination: "fax",
-        addresseePreposition: "au"
+        value: 'FAX',
+        denomination: 'fax',
+        addresseePreposition: 'au'
     }
 }
 
 const beaconMalfunctionNotificationRecipientFunction = {
     VESSEL_CAPTAIN: {
-        value: "VESSEL_CAPTAIN",
-        addressee: "au capitaine du navire"
+        value: 'VESSEL_CAPTAIN',
+        addressee: 'Capitaine'
     },
     VESSEL_OPERATOR: {
-        value: "VESSEL_OPERATOR",
-        addressee: "à l'armateur du navire"
+        value: 'VESSEL_OPERATOR',
+        addressee: 'Arrmateur'
     },
     SATELLITE_OPERATOR: {
-        value: "SATELLITE_OPERATOR",
-        addressee: "à l'opérateur satellite"
+        value: 'SATELLITE_OPERATOR',
+        addressee: 'Opérateur sat.'
     },
     FMC: {
-        value: "FMC",
-        addressee: "au CNSP"
+        value: 'FMC',
+        addressee: 'CNSP'
     }
 }
 

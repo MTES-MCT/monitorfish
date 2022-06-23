@@ -19,7 +19,6 @@ services:
       options:
         max-size: "1024m"
     depends_on:
-      # - db
       - flyway
       - geoserver
 

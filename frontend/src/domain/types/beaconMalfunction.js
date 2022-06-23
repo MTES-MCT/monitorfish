@@ -55,6 +55,14 @@
  */
 
 /**
+ * @typedef BeaconMalfunctionNotifications
+ * @property {int} beaconMalfunctionId
+ * @property {string} notificationType
+ * @property {string} dateTimeUtc
+ * @property {BeaconMalfunctionNotification[]} notifications
+ */
+
+/**
  * @typedef BeaconMalfunctionCommentInput
  * @property {string} comment
  * @property {string} userType
@@ -66,7 +74,7 @@
  * @property {BeaconMalfunctionComment[]} comments
  * @property {BeaconMalfunctionAction[]} actions
  * @property {VesselBeaconMalfunctionsResume} resume
- * @property {BeaconMalfunctionNotification[]} notifications
+ * @property {BeaconMalfunctionNotifications[]} notifications
  */
 
 /**

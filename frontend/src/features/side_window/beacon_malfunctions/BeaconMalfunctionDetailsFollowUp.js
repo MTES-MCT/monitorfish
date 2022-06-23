@@ -7,10 +7,12 @@ import { Toggle } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserType } from '../../../domain/shared_slices/Global'
 import { BeaconMalfunctionVesselStatus, UserType, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
-import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
+import saveBeaconMalfunctionCommentFromKanban
+  from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
 import BeaconMalfunctionDetailsFollowUpRow from './BeaconMalfunctionDetailsFollowUpRow'
 import BeaconMalfunctionDetailsFollowUpItem from './BeaconMalfunctionDetailsFollowUpItem'
-import { getActionText, getNotificationText } from './beaconMalfunctions'
+import { getActionText } from './beaconMalfunctions'
+import BeaconMalfunctionsDetailsFollowUpNotification from './BeaconMalfunctionsDetailsFollowUpNotification'
 
 export const Type = {
   ACTION: 'ACTION',
@@ -90,6 +92,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
   }, {}) || {}
 
   const notificationsByDate = notifications?.reduce((notificationsByDayAccumulated, notification) => {
+    console.log(notification)
     const dateWithoutTime = notification.dateTime.split('T')[0]
     notification = { ...notification, type: Type.NOTIFICATION }
 
@@ -190,11 +193,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
                       return <BeaconMalfunctionDetailsFollowUpItem
                         key={item.type + item.dateTime}
                         item={item}
-                        contentText={item?.type === Type.COMMENT
-                          ? item.comment
-                          : item?.type === Type.ACTION
-                            ? getActionText(item, beaconMalfunction?.endOfBeaconMalfunctionReason)
-                            : getNotificationText(item)}
+                        contentText={getContent(item, beaconMalfunction)}
                         scrollToRef={scrollToRef}
                         isLastDate={isLastDate}
                         isLast={isLast}
@@ -239,6 +238,14 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
       }
     </Body>
   )
+}
+
+function getContent (item, beaconMalfunction) {
+  switch (item?.type) {
+    case Type.COMMENT: return item.comment
+    case Type.ACTION: return getActionText(item, beaconMalfunction?.endOfBeaconMalfunctionReason)
+    case Type.NOTIFICATION: return <BeaconMalfunctionsDetailsFollowUpNotification notification={item}/>
+  }
 }
 
 const AddCommentRow = styled.div``

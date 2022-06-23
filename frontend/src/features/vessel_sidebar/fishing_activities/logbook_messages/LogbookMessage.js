@@ -7,7 +7,7 @@ import {
 } from '../../../../domain/entities/logbook'
 import { ReactComponent as XMLSVG } from '../../../icons/Picto_XML.svg'
 import { ReactComponent as AckOkSVG } from '../../../icons/Message_JPE_acquitté.svg'
-import { ReactComponent as AckNOkSVG } from '../../../icons/Message_JPE_non_acquitte.svg'
+import { ReactComponent as AckNOkSVG } from '../../../icons/Icon_not_OK.svg'
 import { ReactComponent as ShowActivitySVG } from '../../../icons/Position_message_JPE_Pin_gris_clair.svg'
 import { ReactComponent as HideActivitySVG } from '../../../icons/Position_message_JPE_Pin_masquer.svg'
 import { getDateTime } from '../../../../utils'

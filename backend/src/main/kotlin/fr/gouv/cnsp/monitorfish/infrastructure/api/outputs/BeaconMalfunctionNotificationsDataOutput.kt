@@ -6,14 +6,14 @@ import java.time.ZonedDateTime
 
 data class BeaconMalfunctionNotificationsDataOutput(
         val beaconMalfunctionId: Int,
-        val dateTimeUtc: ZonedDateTime,
+        val dateTime: ZonedDateTime,
         val notificationType: BeaconMalfunctionNotificationType,
         val notifications: List<BeaconMalfunctionNotificationDataOutput>) {
     companion object {
         fun fromBeaconMalfunctionNotifications(beaconMalfunctionNotifications: BeaconMalfunctionNotifications): BeaconMalfunctionNotificationsDataOutput =
                 BeaconMalfunctionNotificationsDataOutput(
                         beaconMalfunctionId = beaconMalfunctionNotifications.beaconMalfunctionId,
-                        dateTimeUtc = beaconMalfunctionNotifications.dateTimeUtc,
+                        dateTime = beaconMalfunctionNotifications.dateTimeUtc,
                         notificationType = beaconMalfunctionNotifications.notificationType,
                         notifications = beaconMalfunctionNotifications.notifications
                                 .map { BeaconMalfunctionNotificationDataOutput.fromBeaconMalfunctionNotification(it) }

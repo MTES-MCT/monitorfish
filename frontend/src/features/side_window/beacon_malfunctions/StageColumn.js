@@ -6,7 +6,7 @@ import StageColumnHeader from './StageColumnHeader'
 import BeaconMalfunctionCard from './BeaconMalfunctionCard'
 import { useSelector } from 'react-redux'
 
-const StageColumn = ({ stage, beaconMalfunctions, updateVesselStatus, isDroppedId, baseUrl, activeBeaconMalfunction }) => {
+const StageColumn = ({ stage, beaconMalfunctions, updateVesselStatus, isDroppedId, baseUrl, activeBeaconMalfunction, baseRef }) => {
   const verticalScrollRef = useRef()
   const {
     openedBeaconMalfunctionInKanban
@@ -42,6 +42,7 @@ const StageColumn = ({ stage, beaconMalfunctions, updateVesselStatus, isDroppedI
                 isDroppedId={isDroppedId}
                 isDragging={false}
                 activeBeaconMalfunctionId={activeBeaconMalfunction?.id}
+                baseRef={baseRef}
               />
             </Draggable>
           })

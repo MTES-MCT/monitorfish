@@ -12,7 +12,6 @@ import { COLORS } from '../../../constants/constants'
 const BeaconMalfunctionsDetailsFollowUpNotification = ({ notification }) => {
   const [showDetails, setShowDetails] = useState(false)
   const followUpMessage = beaconMalfunctionNotificationType[notification.notificationType]?.followUpMessage || 'Un message a été envoyé'
-  const isReminder = beaconMalfunctionNotificationType[notification.notificationType]?.isReminder
 
   const notReceivedMeans = notification.notifications
     .filter(notificationMeans => notificationMeans.success === false)
@@ -38,7 +37,7 @@ const BeaconMalfunctionsDetailsFollowUpNotification = ({ notification }) => {
   }, {})
 
   return <>
-    Un{ isReminder || 'e' } <strong>{followUpMessage}</strong> a été envoyé{ isReminder || 'e' }<br/>
+    Une <FollowUpMessage style={followUpMessageStyle}>{followUpMessage}</FollowUpMessage> a été envoyée<br/>
     {
       showDetails
         ? <Fields style={fieldsStyle}>
@@ -98,6 +97,12 @@ function getMeansResponseIcon (notification) {
   }
 
   return meansResponse
+}
+
+const FollowUpMessage = styled.span``
+const followUpMessageStyle = {
+  fontWeight: 700,
+  textTransform: 'lowercase'
 }
 
 const ShowDetails = styled.div``

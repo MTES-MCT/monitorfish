@@ -21,8 +21,9 @@ import {
 import BeaconMalfunctionDetailsFollowUp from './BeaconMalfunctionDetailsFollowUp'
 import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
+import SendNotification from './SendNotification'
 
-const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselStatus }) => {
+const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselStatus, baseRef }) => {
   const {
     resume,
     beaconMalfunction
@@ -31,17 +32,17 @@ const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselSt
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselMalfunction => vesselMalfunction.value === beaconMalfunction?.vesselStatus)
   const baseUrl = window.location.origin
-  const ref = useRef()
+  const vesselStatusRef = useRef()
 
   useEffect(() => {
     if (vesselStatus?.color && beaconMalfunction?.id && getIsMalfunctioning(beaconMalfunction?.stage)) {
       // Target the `select-picker` DOM component
-      ref.current.children[1].style.background = vesselStatus.color
+      vesselStatusRef.current.children[1].style.background = vesselStatus.color
       // Target the `rs-picker-toggle-value` span DOM component
-      ref.current.children[1].firstChild.firstChild.firstChild.style.color = vesselStatus.textColor
-      ref.current.children[1].style.setProperty('margin', '2px 10px 10px 0px', 'important')
+      vesselStatusRef.current.children[1].firstChild.firstChild.firstChild.style.color = vesselStatus.textColor
+      vesselStatusRef.current.children[1].style.setProperty('margin', '2px 10px 10px 0px', 'important')
     }
-  }, [vesselStatus, beaconMalfunction, ref])
+  }, [vesselStatus, beaconMalfunction, vesselStatusRef])
 
   const beaconMalfunctionDetailsWrapperStyle = {
     position: 'fixed',
@@ -130,22 +131,31 @@ const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselSt
       <Line style={lineStyle}/>
       <SecondHeader style={secondHeaderStyle}>
         <FirstColumn style={firstColumnStyle}>
-          <Malfunctioning ref={ref}>
+          <Malfunctioning ref={vesselStatusRef}>
             <ColumnTitle style={malfunctioningTextStyle}>
               AVARIE #{beaconMalfunction?.id} - {' '}{getBeaconCreationOrModificationDate(beaconMalfunction)}
             </ColumnTitle>
             <VesselStatusSelectOrEndOfMalfunction
-              domRef={ref}
+              isAbsolute={true}
+              domRef={vesselStatusRef}
               beaconMalfunction={beaconMalfunction}
               vesselStatus={vesselStatus}
               updateVesselStatus={updateVesselStatus}
               isMalfunctioning={getIsMalfunctioning(beaconMalfunction?.stage)}
+              baseRef={baseRef}
             />
           </Malfunctioning>
-          <LastPosition style={lastPositionStyle} title={getDateTime(beaconMalfunction?.malfunctionStartDateTime)}>
+          <LastPosition
+            style={lastPositionStyle}
+            title={getDateTime(beaconMalfunction?.malfunctionStartDateTime)}
+          >
             <TimeAgo style={timeAgoStyle}/>
             {getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}
           </LastPosition>
+          <SendNotification
+            beaconMalfunction={beaconMalfunction}
+            baseRef={baseRef}
+          />
         </FirstColumn>
         <SecondColumn style={secondColumnStyle}>
           <ColumnTitle style={malfunctioningTextStyle}>

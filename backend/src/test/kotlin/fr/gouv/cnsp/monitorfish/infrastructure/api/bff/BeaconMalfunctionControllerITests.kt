@@ -2,14 +2,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.domain.entities.CommunicationMeans
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
-import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetAllBeaconMalfunctions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetBeaconMalfunction
-import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.SaveBeaconMalfunctionComment
-import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselBeaconMalfunctions
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
@@ -50,6 +49,9 @@ class BeaconMalfunctionControllerITests {
 
     @MockBean
     private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
+
+    @MockBean
+    private lateinit var requestNotification: RequestNotification
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -188,6 +190,16 @@ class BeaconMalfunctionControllerITests {
                 .andExpect(jsonPath("$.comments.length()", equalTo(1)))
                 .andExpect(jsonPath("$.comments[0].comment", equalTo("A comment")))
                 .andExpect(jsonPath("$.beaconMalfunction.internalReferenceNumber", equalTo("CFR")))
+    }
+
+    @Test
+    fun `Should request a notification`() {
+        // When
+        mockMvc.perform(put("/bff/v1/beacon_malfunctions/123/MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"))
+                // Then
+                .andExpect(status().isOk)
+
+        verify(requestNotification).execute(eq(123), eq(BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION))
     }
 
 }

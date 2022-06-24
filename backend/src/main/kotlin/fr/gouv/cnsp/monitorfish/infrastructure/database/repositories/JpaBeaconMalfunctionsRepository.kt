@@ -1,10 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBBeaconMalfunctionsRepository
@@ -88,5 +85,10 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
         }
 
         return listOf()
+    }
+
+    @Transactional
+    override fun requestNotification(id: Int, notificationType: BeaconMalfunctionNotificationType) {
+        dbBeaconMalfunctionsRepository.updateRequestNotification(id, notificationType.toString())
     }
 }

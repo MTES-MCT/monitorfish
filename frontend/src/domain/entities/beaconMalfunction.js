@@ -184,11 +184,13 @@ const getNumberOfBeaconMalfunctionsAt = (vesselStatus, beaconMalfunctionsWithDet
  */
 const getFirstVesselStatus = beaconMalfunctionWithDetails => {
   const beaconMalfunctionsVesselStatusActions = beaconMalfunctionWithDetails?.actions
-    ?.filter ( action => action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS )
+    ?.filter(action => action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS)
 
   switch (beaconMalfunctionsVesselStatusActions?.length === 0) {
-    case true: return beaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus
-    case false: _.minBy(beaconMalfunctionsVesselStatusActions, action => action.dateTime)
+    case true:
+      return beaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus
+    case false:
+      _.minBy(beaconMalfunctionsVesselStatusActions, action => action.dateTime)
   }
 }
 
@@ -250,9 +252,12 @@ const getMalfunctionStartDateText = (vesselStatus, beaconMalfunction) => {
   if (beaconMalfunction?.stage === beaconMalfunctionsStages.END_OF_MALFUNCTION.code ||
     beaconMalfunction?.stage === beaconMalfunctionsStages.ARCHIVED.code) {
     switch (beaconMalfunction?.endOfBeaconMalfunctionReason) {
-      case endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value: return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
-      case endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.value: return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
-      case endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value: return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+      case endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value:
+        return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+      case endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.value:
+        return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+      case endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value:
+        return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
     }
   }
 
@@ -263,69 +268,69 @@ const getMalfunctionStartDateText = (vesselStatus, beaconMalfunction) => {
 
 const getFirstStatusActionDate = (vesselStatus, malfunctionStartDateTime) => {
   if (vesselStatus?.value === BeaconMalfunctionVesselStatus.AT_PORT) {
-    const dt = new Date();
-    dt.setHours( dt.getHours() + 2 );
+    const dt = new Date()
+    dt.setHours(dt.getHours() + 2)
   }
 }
 
 const beaconMalfunctionNotificationType = {
-    MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: {
-        followUpMessage: 'notification initiale d\'avarie en mer',
-        isReminder: false
-    },
-    MALFUNCTION_AT_SEA_REMINDER: {
-        followUpMessage: 'rappel d\'avarie en mer',
-        isReminder: true
-    },
-    MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: {
-        followUpMessage: 'notification initiale d\'avarie à quai',
-        isReminder: false
-    },
-    MALFUNCTION_AT_PORT_REMINDER: {
-        followUpMessage: 'rappel d\'avarie à quai',
-        isReminder: true
-    },
-    END_OF_MALFUNCTION: {
-        followUpMessage: 'notification de fin d\'avarie',
-        isReminder: true
-    }
+  MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: {
+    followUpMessage: 'Notification initiale d\'avarie en mer',
+    preposition: 'de la'
+  },
+  MALFUNCTION_AT_SEA_REMINDER: {
+    followUpMessage: 'Relance pour avarie en mer',
+    preposition: 'd\'une'
+  },
+  MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: {
+    followUpMessage: 'Notification initiale d\'avarie à quai',
+    preposition: 'de la'
+  },
+  MALFUNCTION_AT_PORT_REMINDER: {
+    followUpMessage: 'Relance pour avarie à quai',
+    preposition: 'd\'une'
+  },
+  END_OF_MALFUNCTION: {
+    followUpMessage: 'Notification de fin d\'avarie',
+    preposition: 'de la'
+  }
 }
 
 const communicationMeans = {
-    EMAIL: {
-        value: 'EMAIL',
-        denomination: 'email',
-        addresseePreposition: 'à'
-    },
-    SMS: {
-        value: 'SMS',
-        denomination: 'SMS',
-        addresseePreposition: 'au'
-    },
-    FAX: {
-        value: 'FAX',
-        denomination: 'fax',
-        addresseePreposition: 'au'
-    }
+  EMAIL: {
+    value: 'EMAIL',
+    denomination: 'email',
+    addresseePreposition: 'à'
+  },
+  SMS: {
+    value: 'SMS',
+    denomination: 'SMS',
+    addresseePreposition: 'au'
+  },
+  FAX: {
+    value: 'FAX',
+    denomination: 'fax',
+    addresseePreposition: 'au'
+  }
 }
 
 const beaconMalfunctionNotificationRecipientFunction = {
-    VESSEL_CAPTAIN: {
-        value: 'VESSEL_CAPTAIN',
-        addressee: 'Capitaine'
-    },
-    VESSEL_OPERATOR: {
-        value: 'VESSEL_OPERATOR',
-        addressee: 'Arrmateur'
-    },
-    SATELLITE_OPERATOR: {
-        value: 'SATELLITE_OPERATOR',
-        addressee: 'Opérateur sat.'
-    },
-    FMC: {
-        value: 'FMC',
-        addressee: 'CNSP'
-    }
+  VESSEL_CAPTAIN: {
+    value: 'VESSEL_CAPTAIN',
+    addressee: 'Capitaine'
+  },
+  VESSEL_OPERATOR: {
+    value: 'VESSEL_OPERATOR',
+    addressee: 'Arrmateur'
+  },
+  SATELLITE_OPERATOR: {
+    value: 'SATELLITE_OPERATOR',
+    addressee: 'Opérateur sat.'
+  },
+  FMC: {
+    value: 'FMC',
+    addressee: 'CNSP'
+  }
 }
 
 export {

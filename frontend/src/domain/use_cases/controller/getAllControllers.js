@@ -4,7 +4,7 @@ import { setControllers } from '../../shared_slices/Control'
 
 const getAllControllers = () => dispatch => {
   return getControllersFromAPI().then(controllers => {
-    dispatch(setControllers(controllers))
+    dispatch(setControllers([...new Set(controllers)]))
   }).catch(error => {
     dispatch(setError(error))
   })

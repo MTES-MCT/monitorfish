@@ -137,6 +137,8 @@ function TritonFish () {
         <LayersSidebar/>
         <VesselsSearch/>
         <RightMenuOnHoverArea/>
+        <VesselList namespace={'homepage'}/>
+        <VesselFilters/>
         <VesselVisibility/>
         <FavoriteVessels/>
         <VesselSidebar/>

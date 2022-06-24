@@ -1,7 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType
-import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.RequestNotification
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.BeaconMalfunctionEntity
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query

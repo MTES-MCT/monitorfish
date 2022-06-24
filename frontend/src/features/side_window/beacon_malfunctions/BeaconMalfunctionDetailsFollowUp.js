@@ -92,7 +92,6 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
   }, {}) || {}
 
   const notificationsByDate = notifications?.reduce((notificationsByDayAccumulated, notification) => {
-    console.log(notification)
     const dateWithoutTime = notification.dateTime.split('T')[0]
     notification = { ...notification, type: Type.NOTIFICATION }
 

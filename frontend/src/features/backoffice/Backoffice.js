@@ -15,7 +15,7 @@ import ShowRegulatoryMetadata from '../map/ShowRegulatoryMetadata'
 import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
 import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
-import { REGULATORY_TERRITORY } from '../../domain/entities/regulatory'
+import { FRANCE, UE, UK } from '../../domain/entities/regulatory'
 import { COLORS } from '../../constants/constants'
 import { EmptyResult } from '../commonStyles/Text.style'
 import { setProcessingRegulationSaved } from './Regulation.slice'
@@ -102,15 +102,22 @@ const Backoffice = () => {
   }, [foundRegulatoryZonesByRegTerritory])
 
   const searchResultList = useMemo(() => {
-    const territoryList = Object.keys(REGULATORY_TERRITORY)
     return (
       <SearchResultList>
-        {territoryList.map((territory, id) => {
-          return <Territory key={territory} isLast={territoryList.length - 1 === id }>
-              <TerritoryName>{territory}</TerritoryName>
-              {displayRegulatoryZoneByRegTerritory(territory)}
-            </Territory>
-        })}
+        <Columns>
+          <Territory key={FRANCE}>
+            <TerritoryName>{FRANCE}</TerritoryName>
+            {displayRegulatoryZoneByRegTerritory(FRANCE)}
+          </Territory>
+          <Territory key={UE}>
+            <TerritoryName>{UE}</TerritoryName>
+            {displayRegulatoryZoneByRegTerritory(UE)}
+          </Territory>
+        </Columns>
+        <Territory key={UK} isLast>
+          <TerritoryName>{UK}</TerritoryName>
+          {displayRegulatoryZoneByRegTerritory(UK)}
+        </Territory>
       </SearchResultList>)
   }, [foundRegulatoryZonesByRegTerritory])
 
@@ -153,11 +160,15 @@ const Backoffice = () => {
   )
 }
 
-const SearchResultList = styled.div`
+const Columns = styled.div`
   display: flex;
   flex-direction: row;
   align-items: stretch;
   flex: 1;
+  max-height: calc(100vh - 138.5px - 25px - 100px);
+`
+
+const SearchResultList = styled.div`
   margin-top: 5px;
   color: ${COLORS.textWhite};
   text-decoration: none;
@@ -174,6 +185,7 @@ const Territory = styled.div`
   padding: 5px;
   box-sizing: border-box;
   max-width: 50%;
+  min-width: 250px;
   margin-right: ${props => props.isLast ? '0px' : '20px'}
 `
 

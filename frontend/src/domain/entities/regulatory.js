@@ -172,9 +172,11 @@ export const emptyRegulatoryFeatureObject = {
 
 export const FRANCE = 'Réglementation France'
 export const UE = 'Réglementation UE'
+export const UK = 'Réglementation UK'
 export const REG_LOCALE = 'Reg locale'
 
 const REG_RTC = 'Reg. RTC'
+const REG_UK = 'Reg. UK'
 const REG_MED = 'Reg. MED'
 const REG_SA = 'Reg. SA'
 const REG_NAMO = 'Reg. NAMO'
@@ -183,6 +185,7 @@ const REG_OUTRE_MER = 'Reg. Outre-mer'
 const RUE_2019 = 'R(UE) 2019/1241'
 const RUE_1380 = 'R(UE) 1380/2013'
 const RUE_494 = 'R(CE) 494/2002'
+const RUE_2017 = 'R(CE) 2017/118'
 
 export const LAWTYPES_TO_TERRITORY = {
   [REG_MED]: FRANCE,
@@ -193,12 +196,15 @@ export const LAWTYPES_TO_TERRITORY = {
   [RUE_2019]: UE,
   [RUE_1380]: UE,
   [RUE_494]: UE,
-  [REG_RTC]: UE
+  [RUE_2017]: UE,
+  [REG_RTC]: UE,
+  [REG_UK]: UK
 }
 
 export const REGULATORY_TERRITORY = {
   [FRANCE]: 'Réglementation France',
-  [UE]: 'Réglementation UE'
+  [UE]: 'Réglementation UE',
+  [UK]: 'Réglementation UK'
 }
 
 export const REGULATORY_SEARCH_PROPERTIES = {

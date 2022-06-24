@@ -1,10 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import java.time.ZonedDateTime
 
 data class BeaconMalfunctionDataOutput(
@@ -22,7 +19,8 @@ data class BeaconMalfunctionDataOutput(
         val malfunctionEndDateTime: ZonedDateTime?,
         val vesselStatusLastModificationDateTime: ZonedDateTime,
         val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason? = null,
-        var riskFactor: Double?) {
+        var riskFactor: Double?,
+        val notificationRequested: BeaconMalfunctionNotificationType? = null) {
     companion object {
         fun fromBeaconMalfunction(beaconMalfunction: BeaconMalfunction): BeaconMalfunctionDataOutput {
             return BeaconMalfunctionDataOutput(
@@ -40,7 +38,8 @@ data class BeaconMalfunctionDataOutput(
                     malfunctionEndDateTime = beaconMalfunction.malfunctionEndDateTime,
                     vesselStatusLastModificationDateTime = beaconMalfunction.vesselStatusLastModificationDateTime,
                     endOfBeaconMalfunctionReason = beaconMalfunction.endOfBeaconMalfunctionReason,
-                    riskFactor = beaconMalfunction.riskFactor)
+                    riskFactor = beaconMalfunction.riskFactor,
+                    notificationRequested = beaconMalfunction.notificationRequested)
         }
     }
 }

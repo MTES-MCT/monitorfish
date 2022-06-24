@@ -14,6 +14,7 @@
  * @property {string | null} malfunctionEndDateTime
  * @property {string} vesselStatusLastModificationDateTime
  * @property {string} endOfBeaconMalfunctionReason
+ * @property {string} notificationRequested
  */
 
 /**

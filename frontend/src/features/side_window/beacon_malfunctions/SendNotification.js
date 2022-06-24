@@ -21,7 +21,7 @@ const SendNotification = ({ beaconMalfunction, baseRef }) => {
   }, [clickedOutsideSendNotificationMenu])
 
   useEffect(() => {
-    setIsSendingNotification('')
+    setIsSendingNotification(beaconMalfunction?.notificationRequested)
   }, [beaconMalfunction])
 
   useEffect(() => {

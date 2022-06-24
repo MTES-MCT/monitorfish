@@ -71,6 +71,7 @@ const BeaconMalfunctionsDetailsFollowUpNotification = ({ notification }) => {
         : notReceivedMeans.map(notReceived => notReceived)
     }
     <ShowDetails
+      data-cy={'side-window-beacon-malfunctions-notification-show-details'}
       style={showDetailsStyle}
       onClick={() => setShowDetails(!showDetails)}
     >

@@ -53,7 +53,10 @@ const SendNotification = ({ beaconMalfunction, baseRef }) => {
     <div ref={selectMenuRef} />
     {
       isSendingNotification
-        ? <SendingNotification style={sendingNotificationStyle}>
+        ? <SendingNotification
+          data-cy={'side-window-beacon-malfunctions-sending-notification'}
+          style={sendingNotificationStyle}
+        >
           <span className={'loader'}/>
           Envoi en cours  {beaconMalfunctionNotificationType[isSendingNotification].preposition}{' '}
           {beaconMalfunctionNotificationType[isSendingNotification].followUpMessage}

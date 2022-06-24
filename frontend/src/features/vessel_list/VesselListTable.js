@@ -25,6 +25,7 @@ const VesselListTable = ({
   toggleSelectRow,
   filters
 }) => {
+  const adminRole = useSelector(state => state.global.adminRole)
   const { coordinatesFormat } = useSelector(state => state.map)
   const [sortColumn, setSortColumn] = React.useState()
   const [sortType, setSortType] = React.useState()
@@ -81,10 +82,14 @@ const VesselListTable = ({
           </HeaderCell>
           <CheckedCell dataKey="checked" onChange={toggleSelectRow} />
         </Column>
-        <Column resizable sortable width={95} fixed>
-          <HeaderCell>N. de risque</HeaderCell>
-          <Cell dataKey="riskFactor">{rowData => parseFloat(rowData?.vesselProperties?.riskFactor).toFixed(1)}</Cell>
-        </Column>
+        {
+          adminRole
+            ? <Column resizable sortable width={95} fixed>
+              <HeaderCell>N. de risque</HeaderCell>
+              <Cell dataKey="riskFactor">{rowData => parseFloat(rowData?.vesselProperties?.riskFactor).toFixed(1)}</Cell>
+            </Column>
+            : null
+        }
         <Column resizable sortable width={170} fixed>
           <HeaderCell>Nom du navire</HeaderCell>
           <CellUsingVesselProperty dataKey="vesselName" vesselProperty="vesselName" />

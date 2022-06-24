@@ -116,9 +116,8 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
           <Label>Nom de l&apos;unité</Label>
           <SelectPicker
             data-cy={'new-reporting-select-unit'}
-            style={{ width: 70, margin: '0px 10px 10px 10px' }}
+            style={{ width: unit ? 250 : 80, margin: '0px 10px 10px 10px' }}
             searchable={true}
-            placement={'auto'}
             placeholder="Choisir l'unité"
             value={unit}
             onChange={_unit => setUnit(_unit)}
@@ -134,7 +133,7 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
       reportingActor === ReportingOriginActor.OPS.code || reportingActor === ReportingOriginActor.SIP.code
         ? <>
           <Label>Identité de l&apos;émetteur (trigramme)</Label>
-          <SearchBoxInput
+          <Input
             data-cy={''}
             width={100}
             placeholder={'LTH'}
@@ -157,10 +156,10 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
       reportingActor === ReportingOriginActor.OTHER.code
         ? <>
           <Label>Nom et contact (numéro, mail…) de l&apos;émetteur</Label>
-          <SearchBoxInput
+          <Input
             data-cy={'new-reporting-author-contact'}
             width={230}
-            placeholder={'Yannick Attal (06 24 25 01 91)'}
+            placeholder={'Ex: Yannick Attal (06 24 25 01 91)'}
             type="text"
             value={authorContact}
             onChange={e => setAuthorContact(e.target.value)}
@@ -192,10 +191,13 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
       </Radio>
     </RadioGroup>
     <Label>Titre</Label>
-    <SearchBoxInput
+    <Input
       data-cy={'new-reporting-title'}
-      placeholder={'DÉROGATION TEMPORAIRE LICENCE'}
-      width={405}
+      placeholder={reportingType === ReportingType.OBSERVATION.code
+        ? 'Ex: Dérogation temporaire licence'
+        : 'Ex: Infraction maille cul de chalut'
+      }
+      width={385}
       type="text"
       value={title}
       onChange={e => setTitle(e.target.value)}
@@ -203,7 +205,10 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
     <Label>Description</Label>
     <DescriptionTextarea
       data-cy={'new-reporting-description'}
-      placeholder={'Licence en cours de renouvellement, dérogation accordée par la DML jusqu\'au 01/08/2022.'}
+      placeholder={reportingType === ReportingType.OBSERVATION.code
+        ? 'Ex: Licence en cours de renouvellement, dérogation accordée par la DML jusqu\'au 01/08/2022.'
+        : 'Ex: Infraction constatée sur la taille de la maille en cul de chalut'
+      }
       value={description}
       onChange={e => setDescription(e.target.value)}
     />
@@ -212,8 +217,9 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
         ? <>
         <Label>NATINF</Label>
         <SelectPicker
+          title={infractions?.find(infraction => infraction.natinfCode === natinfCode)?.infraction}
           data-cy={'new-reporting-select-natinf'}
-          style={{ width: 70, margin: '0px 10px 10px 10px' }}
+          style={{ width: natinfCode ? 350 : 70, margin: '0px 10px 10px 10px' }}
           searchable={true}
           placement={'auto'}
           placeholder="Natinf"
@@ -229,7 +235,7 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
           data-cy={'new-reporting-select-dml'}
           style={{ width: 70, margin: '0px 10px 10px 10px' }}
           searchable={true}
-          placement={'auto'}
+          placement={'topLeft'}
           placeholder="DML"
           value={dml}
           onChange={_dml => setDml(_dml)}
@@ -244,34 +250,36 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
     <ValidateButton
       data-cy={'new-reporting-create-button'}
       onClick={() => {
-        const newReporting = {
-          vesselName: selectedVesselIdentity?.vesselName,
-          internalReferenceNumber: selectedVesselIdentity?.internalReferenceNumber,
-          externalReferenceNumber: selectedVesselIdentity?.externalReferenceNumber,
-          ircs: selectedVesselIdentity?.ircs,
-          vesselIdentifier: selectedVesselIdentity?.vesselIdentifier,
-          type: reportingType,
-          creationDate: new Date().toISOString(),
-          validationDate: null,
-          value: {
+        if (title) {
+          const newReporting = {
+            vesselName: selectedVesselIdentity?.vesselName,
+            internalReferenceNumber: selectedVesselIdentity?.internalReferenceNumber,
+            externalReferenceNumber: selectedVesselIdentity?.externalReferenceNumber,
+            ircs: selectedVesselIdentity?.ircs,
+            vesselIdentifier: selectedVesselIdentity?.vesselIdentifier,
             type: reportingType,
-            unit: unit,
-            authorTrigram: authorTrigram,
-            authorContact: authorContact,
-            reportingActor: reportingActor,
-            title: title,
-            natinfCode: natinfCode,
-            dml: dml,
-            description: description
+            creationDate: new Date().toISOString(),
+            validationDate: null,
+            value: {
+              type: reportingType,
+              unit: unit,
+              authorTrigram: authorTrigram,
+              authorContact: authorContact,
+              reportingActor: reportingActor,
+              title: title,
+              natinfCode: natinfCode,
+              dml: dml,
+              description: description
+            }
           }
-        }
 
-        dispatch(addReporting(newReporting))
-          .then(() => {
-            closeForm()
-            deleteLocalStorageReportingEntry()
-          })
-          .catch(error => console.log(error))
+          dispatch(addReporting(newReporting))
+            .then(() => {
+              closeForm()
+              deleteLocalStorageReportingEntry()
+            })
+            .catch(error => console.log(error))
+        }
       }}
     >
       Valider
@@ -304,6 +312,10 @@ const DescriptionTextarea = styled.textarea`
   :hover, :focus {
     border: 1px solid ${COLORS.slateGray} !important;
   }
+  ::placeholder {
+    font-style: italic;
+    color: ${COLORS.slateGrayLittleOpacity};
+  }
 `
 
 const ValidateButton = styled(PrimaryButton)`
@@ -319,7 +331,7 @@ const Label = styled.div`
   margin-top: 5px;
 `
 
-const SearchBoxInput = styled.input`
+const Input = styled.input`
   margin-top: 5px;
   margin-bottom: 10px;
   background-color: white;
@@ -336,11 +348,19 @@ const SearchBoxInput = styled.input`
   :hover, :focus {
     border: 1px solid ${COLORS.slateGray} !important;
   }
+  ::placeholder {
+    font-style: italic;
+    color: ${COLORS.slateGrayLittleOpacity};
+  }
 `
 
 const Form = styled.div`
   margin: 15px;
   flex-direction: column;
+  
+  .rs-picker-toggle-value {
+    color: ${COLORS.gunMetal} !important;
+  }
   
   .rs-radio-group {
     border: 1px solid ${COLORS.lightGray};
@@ -366,6 +386,7 @@ const Form = styled.div`
   }
   .rs-radio-group-picker .rs-radio-checked .rs-radio-checker > label {
     color: ${COLORS.gunMetal};
+    font-weight: 500;
   }
   
   .rs-picker-select {
@@ -380,7 +401,7 @@ const Form = styled.div`
 `
 
 const radioStyle = {
-  background: COLORS.grayLighter,
+  background: COLORS.background,
   fontSize: 11
 }
 

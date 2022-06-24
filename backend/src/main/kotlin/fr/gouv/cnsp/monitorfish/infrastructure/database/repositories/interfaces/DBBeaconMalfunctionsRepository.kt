@@ -1,5 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.RequestNotification
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.BeaconMalfunctionEntity
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -41,4 +43,8 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
             END = :value AND malfunction_start_date_utc >= :afterDateTime
         """, nativeQuery = true)
     fun findAllByVesselIdentifierEqualsAfterDateTime(vesselIdentifier: String, value: String, afterDateTime: Instant): List<BeaconMalfunctionEntity>
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE beacon_malfunctions SET notification_requested = CAST(:notificationType AS beacon_malfunction_notification_type) WHERE id = :beaconMalfunctionId", nativeQuery = true)
+    fun updateRequestNotification(beaconMalfunctionId: Int, notificationType: String)
 }

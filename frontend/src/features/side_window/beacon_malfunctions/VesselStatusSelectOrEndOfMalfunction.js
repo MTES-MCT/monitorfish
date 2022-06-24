@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { endOfBeaconMalfunctionReasons, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
 import SelectPicker from 'rsuite/lib/SelectPicker'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
+import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 
 const VesselStatusSelectOrEndOfMalfunction = props => {
   const {
@@ -12,22 +13,40 @@ const VesselStatusSelectOrEndOfMalfunction = props => {
     beaconMalfunction,
     updateVesselStatus,
     isMalfunctioning,
-    showedInCard
+    showedInCard,
+    isAbsolute,
+    baseRef
   } = props
   const endOfBeaconMalfunctionReason = endOfBeaconMalfunctionReasons[beaconMalfunction?.endOfBeaconMalfunctionReason]
+  const selectMenuRef = useRef()
+  const [vesselStatusSelectIsOpened, setVesselStatusSelectIsOpened] = useState(false)
+  const clickedOutsideVesselStatusMenu = useClickOutsideWhenOpenedWithinRef(selectMenuRef, vesselStatusSelectIsOpened, baseRef)
+
+  useEffect(() => {
+    if (clickedOutsideVesselStatusMenu) {
+      setVesselStatusSelectIsOpened(false)
+    }
+  }, [clickedOutsideVesselStatusMenu])
 
   return vesselStatus && isMalfunctioning
-    ? <SelectPicker
-      container={() => domRef.current}
-      menuStyle={{ position: 'relative', marginLeft: -10, marginTop: -48 }}
-      style={selectPickerStyle}
-      searchable={false}
-      value={vesselStatus.value}
-      onChange={status => updateVesselStatus(beaconMalfunction, status)}
-      data={vesselStatuses}
-      renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
-      cleanable={false}
-    />
+    ? <>
+      <SelectPicker
+        container={() => domRef.current}
+        menuStyle={isAbsolute
+          ? { position: 'absolute', marginLeft: 40, marginTop: 160 }
+          : { position: 'relative', marginLeft: -10, marginTop: -48 }}
+        style={selectPickerStyle}
+        searchable={false}
+        open={vesselStatusSelectIsOpened}
+        onClick={() => setVesselStatusSelectIsOpened(true)}
+        value={vesselStatus.value}
+        onChange={status => updateVesselStatus(beaconMalfunction, status)}
+        data={vesselStatuses}
+        renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
+        cleanable={false}
+      />
+      <span ref={selectMenuRef}/>
+      </>
     : <EndOfMalfunction
       data-cy={'side-window-beacon-malfunctions-end-of-malfunction'}
       style={endOfMalfunctionStyle(endOfBeaconMalfunctionReason, showedInCard)}

@@ -294,7 +294,7 @@ const addCommentStyle = userType => ({
 
 const CommentsAndActions = styled.div``
 const commentsAndActionsStyle = (smallSize, textAreaHeight) => ({
-  maxHeight: smallSize ? 410 : (600 - textAreaHeight),
+  maxHeight: smallSize ? 410 : (560 - textAreaHeight),
   overflowY: 'auto',
   overflowX: 'hidden'
 })

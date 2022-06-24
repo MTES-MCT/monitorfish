@@ -43,7 +43,7 @@ const getMemoizedBeaconMalfunctionsByStage = createSelector(
 
 const baseUrl = window.location.origin
 
-const BeaconMalfunctionsBoard = () => {
+const BeaconMalfunctionsBoard = ({ baseRef }) => {
   const dispatch = useDispatch()
   const {
     openedBeaconMalfunctionInKanban
@@ -209,6 +209,7 @@ const BeaconMalfunctionsBoard = () => {
                 disabled={stageId === beaconMalfunctionsStages.END_OF_MALFUNCTION.code}
               >
                 <StageColumn
+                  baseRef={baseRef}
                   baseUrl={baseUrl}
                   stage={beaconMalfunctionsStages[stageId]}
                   beaconMalfunctions={filteredBeaconMalfunctions[stageId] || []}
@@ -226,7 +227,9 @@ const BeaconMalfunctionsBoard = () => {
                 baseUrl={baseUrl}
                 beaconMalfunction={activeBeaconMalfunction}
                 updateVesselStatus={updateVesselStatus}
-                isDragging/>
+                baseRef={baseRef}
+                isDragging
+              />
               : null
           }
         </DragOverlay>
@@ -236,6 +239,7 @@ const BeaconMalfunctionsBoard = () => {
           ? <BeaconMalfunctionDetails
             updateVesselStatus={updateVesselStatus}
             beaconMalfunctionWithDetails={openedBeaconMalfunctionInKanban}
+            baseRef={baseRef}
           />
           : null
       }

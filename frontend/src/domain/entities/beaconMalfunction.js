@@ -321,7 +321,7 @@ const beaconMalfunctionNotificationRecipientFunction = {
   },
   VESSEL_OPERATOR: {
     value: 'VESSEL_OPERATOR',
-    addressee: 'Arrmateur'
+    addressee: 'Armateur'
   },
   SATELLITE_OPERATOR: {
     value: 'SATELLITE_OPERATOR',

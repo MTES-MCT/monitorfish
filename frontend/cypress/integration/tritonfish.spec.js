@@ -28,11 +28,11 @@ context('TritonFish', () => {
     cy.get('*[data-cy="vessel-menu-reporting"]').should('not.exist')
     cy.get('*[data-cy="vessel-menu-ers-vms"]').should('not.exist')
 
-    // No Vessel list
-    cy.get('*[data-cy="vessel-list"]').should('not.exist')
+    // Vessel list
+    cy.get('*[data-cy="vessel-list"]').should('exist')
 
-    // No filters
-    cy.get('*[data-cy="vessel-filters"]').should('not.exist')
+    // filters
+    cy.get('*[data-cy="vessel-filters"]').should('exist')
 
     // No alerts
     cy.get('*[data-cy="alerts-button"]').should('not.exist')

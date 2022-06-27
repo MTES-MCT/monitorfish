@@ -1,13 +1,10 @@
-import InputPicker from 'rsuite/lib/InputPicker'
 import { COLORS } from '../../constants/constants'
 import { RiskFactorBox } from '../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../domain/entities/riskFactor'
 import { ReactComponent as DeleteIconSVG } from '../icons/Icone_suppression.svg'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import Table from 'rsuite/lib/Table'
-import TagPicker from 'rsuite/lib/TagPicker'
-import Tag from 'rsuite/lib/Tag'
+import { InputPicker, Table, Tag, TagPicker } from 'rsuite'
 import { useClickOutsideWhenOpenedAndNotInSelector } from '../../hooks/useClickOutsideWhenOpenedAndNotInSelector'
 
 const { Cell } = Table

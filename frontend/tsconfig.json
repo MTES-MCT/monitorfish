@@ -1,0 +1,28 @@
+{
+  "extends": "@tsconfig/create-react-app/tsconfig.json",
+  "compilerOptions": {
+    "allowUnreachableCode": true,
+    "allowUnusedLabels": true,
+    "alwaysStrict": true,
+    "checkJs": true,
+    "exactOptionalPropertyTypes": false,
+    "incremental": true,
+    "isolatedModules": true,
+    "noFallthroughCasesInSwitch": false,
+    "noImplicitAny": false,
+    "noImplicitOverride": false,
+    "noImplicitReturns": false,
+    "noImplicitThis": false,
+    "noUncheckedIndexedAccess": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "strict": false,
+    "strictBindCallApply": false,
+    "strictFunctionTypes": false,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": false
+  },
+  "include": ["**/*.js","**/*.jsx", "**/*.ts", "**/*.tsx"],
+  "exclude": ["cypress/*", "node_modules/*"]
+}

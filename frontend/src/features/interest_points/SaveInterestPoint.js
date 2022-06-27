@@ -3,8 +3,7 @@ import styled, { css } from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
-import RadioGroup from 'rsuite/lib/RadioGroup'
-import Radio from 'rsuite/lib/Radio'
+import { Radio, RadioGroup } from 'rsuite'
 import { interestPointType } from '../../domain/entities/interestPoints'
 
 import { ReactComponent as GearSVG } from '../icons/Label_engin_de_peche.svg'

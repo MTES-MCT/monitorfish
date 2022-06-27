@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import Modal from 'rsuite/lib/Modal'
+import { Modal } from 'rsuite'
 import DateRange from '../../../vessel_sidebar/actions/track_request/DateRange'
 
 const TrackRangeModal = ({ isModalOpen, setModalIsOpen, selectedDates, resetToDefaultTrackDepth, setSelectedDates }) => {

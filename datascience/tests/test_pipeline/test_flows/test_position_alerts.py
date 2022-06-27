@@ -13,7 +13,6 @@ from src.pipeline.flows.position_alerts import (
     alert_has_gear_parameters,
     extract_current_gears,
     filter_on_gears,
-    filter_silenced_alerts,
     flow,
     get_alert_type_zones_table,
     get_fishing_gears_table,
@@ -427,82 +426,6 @@ def test_make_alerts():
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
 
-def test_filter_silenced_alerts():
-    now = datetime(2020, 1, 1, 0, 0, 0)
-    td = timedelta(hours=1)
-    alert_type = "USER_DEFINED_ALERT_TYPE"
-    alert_config_name = "ALERTE_CHALUTAGE_CONFIG_1"
-
-    alerts = pd.DataFrame(
-        {
-            "vessel_name": ["v_A", "v_B"],
-            "internal_reference_number": ["A", "B"],
-            "external_reference_number": ["AA", "BB"],
-            "ircs": ["AAA", "BBB"],
-            "vessel_identifier": [
-                "INTERNAL_REFERENCE_NUMBER",
-                "INTERNAL_REFERENCE_NUMBER",
-            ],
-            "creation_date": [now, now - 0.5 * td],
-            "type": ["USER_DEFINED_ALERT_TYPE", "USER_DEFINED_ALERT_TYPE"],
-            "facade": ["NAMO", "MEMN"],
-            "value": [
-                {
-                    "seaFront": "NAMO",
-                    "flagState": "FR",
-                    "type": alert_type,
-                    "riskFactor": 1.23,
-                },
-                {
-                    "seaFront": "MEMN",
-                    "flagState": "FR",
-                    "type": alert_type,
-                    "riskFactor": None,
-                },
-            ],
-            "alert_config_name": [alert_config_name, alert_config_name],
-        }
-    )
-
-    silenced_alerts = pd.DataFrame(
-        {
-            "internal_reference_number": ["A", "B_ANOTHER_VESSEL"],
-            "external_reference_number": ["AA", "BB_ANOTHER_VESSEL"],
-            "ircs": ["AAA", "BBB"],
-            "silenced_type": ["USER_DEFINED_ALERT_TYPE", "USER_DEFINED_ALERT_TYPE"],
-            "silenced_sea_front": ["NAMO", "MEMN"],
-        }
-    )
-
-    active_alerts = filter_silenced_alerts.run(alerts, silenced_alerts)
-
-    expected_active_alerts = pd.DataFrame(
-        {
-            "vessel_name": ["v_B"],
-            "internal_reference_number": ["B"],
-            "external_reference_number": ["BB"],
-            "ircs": ["BBB"],
-            "vessel_identifier": [
-                "INTERNAL_REFERENCE_NUMBER",
-            ],
-            "creation_date": [now - 0.5 * td],
-            "value": [
-                {
-                    "seaFront": "MEMN",
-                    "flagState": "FR",
-                    "type": alert_type,
-                    "riskFactor": None,
-                },
-            ],
-            "alert_config_name": [alert_config_name],
-        }
-    ).reset_index(drop=True)
-
-    pd.testing.assert_frame_equal(
-        active_alerts.reset_index(drop=True), expected_active_alerts
-    )
-
-
 def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test_data):
 
     flow.schedule = None
@@ -732,37 +655,43 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
     expected_pending_alerts = pd.DataFrame(
         {
             "vessel_name": [
+                "DEVINER FIGURE CONSCIENCE",
                 "PLACE SPECTACLE SUBIR",
                 "ÉTABLIR IMPRESSION LORSQUE",
-                "DEVINER FIGURE CONSCIENCE",
                 "I DO 4H REPORT",
             ],
             "internal_reference_number": [
+                "ABC000542519",
                 "ABC000055481",
                 "ABC000306959",
-                "ABC000542519",
                 None,
             ],
             "external_reference_number": [
+                "RO237719",
                 "AS761555",
                 "RV348407",
-                "RO237719",
                 "ZZTOPACDC",
             ],
             "ircs": [
+                "FQ7058",
                 "IL2468",
                 "LLUK",
-                "FQ7058",
                 "ZZ000000",
             ],
             "creation_date": [
+                now - timedelta(minutes=25),
                 now - timedelta(days=1),
                 now - timedelta(minutes=10),
-                now - timedelta(minutes=25),
                 now - timedelta(minutes=10),
             ],
             "trip_number": [None, None, None, None],
             "value": [
+                {
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": "Facade A",
+                    "flagState": "FR",
+                    "riskFactor": 1.41421356237310003,
+                },
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
@@ -774,12 +703,6 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
                     "seaFront": "Facade B",
                     "flagState": "FR",
                     "riskFactor": None,
-                },
-                {
-                    "type": "THREE_MILES_TRAWLING_ALERT",
-                    "seaFront": "Facade A",
-                    "flagState": "FR",
-                    "riskFactor": 1.41421356237310003,
                 },
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
@@ -852,38 +775,38 @@ def test_flow_filters_on_gears(reset_test_data):
     expected_pending_alerts = pd.DataFrame(
         {
             "vessel_name": [
-                "PLACE SPECTACLE SUBIR",
                 "DEVINER FIGURE CONSCIENCE",
+                "PLACE SPECTACLE SUBIR",
             ],
             "internal_reference_number": [
-                "ABC000055481",
                 "ABC000542519",
+                "ABC000055481",
             ],
             "external_reference_number": [
-                "AS761555",
                 "RO237719",
+                "AS761555",
             ],
             "ircs": [
-                "IL2468",
                 "FQ7058",
+                "IL2468",
             ],
             "creation_date": [
-                now - timedelta(days=1),
                 now - timedelta(minutes=25),
+                now - timedelta(days=1),
             ],
             "trip_number": [None, None],
             "value": [
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
-                    "seaFront": None,
-                    "flagState": "NL",
-                    "riskFactor": 1.74110112659225003,
-                },
-                {
-                    "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
                     "riskFactor": 1.41421356237310003,
+                },
+                {
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": None,
+                    "flagState": "NL",
+                    "riskFactor": 1.74110112659225003,
                 },
             ],
             "vessel_identifier": [
@@ -948,43 +871,43 @@ def test_flow_filters_on_time(reset_test_data):
     expected_pending_alerts = pd.DataFrame(
         {
             "vessel_name": [
-                "ÉTABLIR IMPRESSION LORSQUE",
                 "DEVINER FIGURE CONSCIENCE",
+                "ÉTABLIR IMPRESSION LORSQUE",
                 "I DO 4H REPORT",
             ],
             "internal_reference_number": [
-                "ABC000306959",
                 "ABC000542519",
+                "ABC000306959",
                 None,
             ],
             "external_reference_number": [
-                "RV348407",
                 "RO237719",
+                "RV348407",
                 "ZZTOPACDC",
             ],
             "ircs": [
-                "LLUK",
                 "FQ7058",
+                "LLUK",
                 "ZZ000000",
             ],
             "creation_date": [
-                now - timedelta(minutes=10),
                 now - timedelta(minutes=25),
+                now - timedelta(minutes=10),
                 now - timedelta(minutes=10),
             ],
             "trip_number": [None, None, None],
             "value": [
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",
-                    "seaFront": "Facade B",
-                    "flagState": "FR",
-                    "riskFactor": None,
-                },
-                {
-                    "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
                     "riskFactor": 1.41421356237310003,
+                },
+                {
+                    "type": "THREE_MILES_TRAWLING_ALERT",
+                    "seaFront": "Facade B",
+                    "flagState": "FR",
+                    "riskFactor": None,
                 },
                 {
                     "type": "THREE_MILES_TRAWLING_ALERT",

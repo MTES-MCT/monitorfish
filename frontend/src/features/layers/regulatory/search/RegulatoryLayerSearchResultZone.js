@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
-import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
-import Checkbox from 'rsuite/lib/Checkbox'
+import { Checkbox, CheckboxGroup } from 'rsuite'
 
 import Layers, { getGearCategory } from '../../../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'

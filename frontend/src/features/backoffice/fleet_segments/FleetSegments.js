@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import Table from 'rsuite/lib/Table'
+import { Table } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
 import { DeleteCell, INPUT_TYPE, ModifiableCell, TagPickerCell } from '../tableCells'
 import getAllFleetSegments from '../../../domain/use_cases/fleetSegment/getAllFleetSegments'

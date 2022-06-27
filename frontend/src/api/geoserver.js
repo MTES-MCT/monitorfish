@@ -173,12 +173,10 @@ function getRegulatoryZoneURL (type, regulatoryZone, geoserverURL) {
   }
 
   const filter = `topic='${encodeURIComponent(regulatoryZone.topic).replace(/'/g, '\'\'')}' AND zone='${encodeURIComponent(regulatoryZone.zone).replace(/'/g, '\'\'')}'`
-  return (
-    `${geoserverURL}/geoserver/wfs?service=WFS` +
-    `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
-    '&outputFormat=application/json&CQL_FILTER=' +
-    filter.replace(/'/g, '%27').replace(/ /g, '%20')
-  )
+  return `${geoserverURL}/geoserver/wfs?service=WFS` +
+  `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
+  '&outputFormat=application/json&CQL_FILTER=' +
+  filter.replace(/'/g, '%27').replace(/ /g, '%20')
 }
 
 /**

@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-import Table from 'rsuite/lib/Table'
-import Checkbox from 'rsuite/lib/Checkbox'
+import { Checkbox, Table } from 'rsuite'
 
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 import { CellUsingVesselProperty, ContentWithEllipsis, CellWithTitle, CheckedCell, FlagCell, TimeAgoCell } from './tableCells'

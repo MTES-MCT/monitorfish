@@ -109,9 +109,9 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
     <Modal
       size={'sm'}
       backdrop
-      show={isOpen}
+      onPointerEnter={}={isOpen}
       style={{ marginTop: 100 }}
-      onHide={() => setIsOpen(false)}
+      onClose={() => setIsOpen(false)}
     >
       <Modal.Header>
         <Modal.Title>

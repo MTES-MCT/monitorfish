@@ -9,9 +9,9 @@ const TrackRangeModal = ({ isModalOpen, setModalIsOpen, selectedDates, resetToDe
     <ModalWithCustomHeight
       size={'xs'}
       backdrop
-      show={isModalOpen}
+      open={isModalOpen}
       style={{ marginTop: 100 }}
-      onHide={() => setModalIsOpen(false)}
+      onClose={() => setModalIsOpen(false)}
     >
       <Modal.Header>
         <Modal.Title>

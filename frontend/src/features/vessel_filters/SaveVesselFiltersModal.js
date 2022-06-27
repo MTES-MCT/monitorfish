@@ -43,9 +43,9 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter, closeAn
     <Modal
       size={'sm'}
       backdrop
-      show={isOpen}
+      open={isOpen}
       style={{ marginTop: 100 }}
-      onHide={cancel}
+      onClose={cancel}
     >
       <Modal.Header>
         <Modal.Title>

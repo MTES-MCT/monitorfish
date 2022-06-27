@@ -116,7 +116,16 @@ missing_far_alerts.flow.schedule = Schedule(
     ]
 )
 missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
-notify_beacon_malfunctions.flow.schedule = CronSchedule("0 * * * *")
+notify_beacon_malfunctions.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "0 * * * *",
+            parameter_defaults={
+                "test_mode": True,
+            },
+        ),
+    ]
+)
 update_beacon_malfunctions.flow.schedule = CronSchedule("5,15,25,35,45,55 * * * *")
 position_alerts.flow.schedule = Schedule(
     clocks=[

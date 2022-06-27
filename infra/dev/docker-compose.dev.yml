@@ -21,11 +21,27 @@ services:
     depends_on:
       - flyway
       - geoserver
+    networks:
+      - monitorfish_backend
+ 
+  db:
+    networks:
+      - monitorfish_backend
 
   flyway:
     image: flyway/flyway
-    command: -url=jdbc:postgresql://db:5432/monitorfishdb?user=postgres&password=postgres -schemas=public -user=postgres -password=postgres -connectRetries=60 migrate
+    command: -url=jdbc:postgresql://db:5432/monitorfishdb -schemas=public -user=postgres -password=postgres -connectRetries=60 migrate
     volumes:
       - ./backend/src/main/resources/db/:/flyway/sql
     depends_on:
       - db
+    networks:
+      - monitorfish_backend
+
+  geoserver:
+    networks:
+      - monitorfish_backend
+
+networks:
+  monitorfish_backend:
+    external: true

@@ -34,8 +34,7 @@ def scrape_legipeche_to_csv():
     """Scrapes all links to regulations in legipeche, stores the results to csv."""
 
     for proxy_env in ["http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY"]:
-        if proxy_env in os.environ:
-            os.environ.pop(proxy_env)
+        os.environ.pop(proxy_env, None)
 
     extraction_datetime_utc = datetime.datetime.utcnow()
 

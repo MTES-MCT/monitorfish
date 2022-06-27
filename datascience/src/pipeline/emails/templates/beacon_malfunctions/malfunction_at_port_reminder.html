@@ -1,0 +1,7 @@
+{% extends "malfunction_at_port_initial_notification.html" %}
+{% block beginning %}
+<p>Aucune amélioration n’a été apportée depuis notre dernier message
+{% if previous_notification_datetime_utc %} datant du {{ previous_notification_datetime_utc }}{% endif %}. 
+<strong>Le CNSP ne reçoit toujours pas les positions de votre navire par le
+système de surveillance satellitaire des navires (VMS).</strong></p>
+{% endblock %}

@@ -331,4 +331,60 @@ context('Side window beacon malfunctions', () => {
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('N\'a jamais émis')
   })
+
+  it('Notification messages feedback should be showed in beacon follow up', () => {
+    // In the board
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]').children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .eq(0)
+      .scrollIntoView()
+      .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
+      .click()
+
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-notification-content"]')
+      .eq(0)
+      .contains('Une Notification initiale d\'avarie en mer a été envoyée')
+
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-notification-content"]')
+      .eq(1)
+      .contains('Une Relance pour avarie en mer a été envoyée')
+      .contains('email non reçu à lepeletier@gmail.com')
+
+    cy.get('*[data-cy="side-window-beacon-malfunctions-notification-show-details"]')
+      .eq(1)
+      .click()
+
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-notification-content"]')
+      .eq(1)
+      .and('contain', '0600000000 (SMS)')
+      .and('contain', 'lepeletier@gmail.com')
+      .and('contain', '0123456789 (fax)')
+
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-notification-content"]')
+      .eq(2)
+      .scrollIntoView()
+      .contains('Une Notification de fin d\'avarie a été envoyée')
+      .contains('email non reçu à lepeletier@gmail.com')
+  })
+
+  it('Temporary sent message Should be seen When clicking on sent notification select menu', () => {
+    // In the board
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]').children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .eq(0)
+      .scrollIntoView()
+      .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
+      .click()
+    // Click on send notification select menu
+    cy.get('.rs-picker-toggle-placeholder').click()
+
+    // When
+    cy.get('[data-key="MALFUNCTION_AT_SEA_REMINDER"] > .rs-picker-select-menu-item').click()
+
+    // Then
+    cy.get('*[data-cy="side-window-beacon-malfunctions-sending-notification"]')
+      .contains('Envoi en cours d\'une Relance pour avarie en mer')
+  })
 })

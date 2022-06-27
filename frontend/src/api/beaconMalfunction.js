@@ -5,6 +5,7 @@ export const BEACON_MALFUNCTION_ERROR_MESSAGE = 'Nous n\'avons pas pu récupére
 export const UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour le statut de l\'avarie VMS'
 export const SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter le commentaire sur l\'avarie VMS'
 export const VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE = 'Nous n\'avons pas pu chercher les avaries de ce navire'
+export const SEND_NOTIFICATION_ERROR_MESSAGE = 'Nous n\'avons pas pu envoyer la notification'
 
 /**
  * Get all beacon malfunctions
@@ -140,10 +141,34 @@ function getVesselBeaconsMalfunctionsFromAPI (vesselIdentity, fromDate) {
     })
 }
 
+/**
+ * Send a notification - Update the request notification column to asynchronously send the message
+ * @memberOf API
+ * @param {number} id - The id of the beacon malfunction
+ * @param {string} notificationType
+ * @throws {Error}
+ */
+function sendNotificationFromAPI (id, notificationType) {
+  return fetch(`/bff/v1/beacon_malfunctions/${id}/${notificationType}`, {
+    method: 'PUT'
+  }).then(response => {
+    if (response.status !== OK) {
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(SEND_NOTIFICATION_ERROR_MESSAGE)
+    }
+  }).catch(error => {
+    console.error(error)
+    throw Error(SEND_NOTIFICATION_ERROR_MESSAGE)
+  })
+}
+
 export {
   getVesselBeaconsMalfunctionsFromAPI,
   saveBeaconMalfunctionCommentFromAPI,
   getBeaconMalfunctionFromAPI,
   updateBeaconMalfunctionFromAPI,
-  getAllBeaconMalfunctionsFromAPI
+  getAllBeaconMalfunctionsFromAPI,
+  sendNotificationFromAPI
 }

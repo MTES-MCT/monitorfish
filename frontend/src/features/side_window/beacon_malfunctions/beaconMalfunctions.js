@@ -1,10 +1,11 @@
+import React from 'react'
 import * as timeago from 'timeago.js'
 import {
   BeaconMalfunctionPropertyName,
-  beaconMalfunctionsStages, endOfBeaconMalfunctionReasons,
+  beaconMalfunctionsStages,
+  endOfBeaconMalfunctionReasons,
   vesselStatuses
 } from '../../../domain/entities/beaconMalfunction'
-import React from 'react'
 
 export const BeaconMalfunctionsSubMenu = {
   PAIRING: {

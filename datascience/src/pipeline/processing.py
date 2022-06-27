@@ -446,12 +446,13 @@ def drop_rows_already_in_table(
 def prepare_df_for_loading(
     df: pd.DataFrame,
     logger: logging.Logger,
-    pg_array_columns: Union[None, list] = None,
+    pg_array_columns: list = None,
     handle_array_conversion_errors: bool = True,
     value_on_array_conversion_error="{}",
-    jsonb_columns: Union[None, list] = None,
-    nullable_integer_columns: Union[None, list] = None,
-    timedelta_columns: Union[None, list] = None,
+    jsonb_columns: list = None,
+    nullable_integer_columns: list = None,
+    timedelta_columns: list = None,
+    enum_columns: list = None,
 ):
 
     df_ = df.copy(deep=True)
@@ -480,6 +481,11 @@ def prepare_df_for_loading(
     if timedelta_columns:
         logger.info("Serializing timedelta columns")
         df_[timedelta_columns] = serialize_timedelta_df(df_[timedelta_columns])
+
+    if enum_columns:
+        logger.info("Serializing enum columns")
+        for enum_column in enum_columns:
+            df_[enum_column] = df_[enum_column].map(lambda x: x.value if x else None)
 
     return df_
 

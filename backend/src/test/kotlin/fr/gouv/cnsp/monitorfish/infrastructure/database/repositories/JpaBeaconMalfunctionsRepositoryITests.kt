@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
@@ -110,5 +111,21 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")
         assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.ARCHIVED)
         assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.NEVER_EMITTED)
+    }
+
+    @Test
+    @Transactional
+    fun `requestNotification Should update the requestNotification field`() {
+        // Given
+        val initialBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
+        assertThat(initialBeaconMalfunction?.notificationRequested).isNull()
+
+        // When
+        jpaBeaconMalfunctionsRepository
+                .requestNotification(2, BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION)
+
+        // then
+        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
+        assertThat(updatedBeaconMalfunction?.notificationRequested).isEqualTo(BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION)
     }
 }

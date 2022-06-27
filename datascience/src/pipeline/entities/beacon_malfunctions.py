@@ -1,0 +1,162 @@
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import List
+
+from config import CNSP_SIP_DEPARTMENT_ADDRESS
+
+
+class BeaconMalfunctionStage(Enum):
+    INITIAL_ENCOUNTER = "INITIAL_ENCOUNTER"
+    FOUR_HOUR_REPORT = "FOUR_HOUR_REPORT"
+    RELAUNCH_REQUEST = "RELAUNCH_REQUEST"
+    TARGETING_VESSEL = "TARGETING_VESSEL"
+    CROSS_CHECK = "CROSS_CHECK"
+    END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
+    ARCHIVED = "ARCHIVED"
+
+
+class BeaconMalfunctionVesselStatus(Enum):
+    AT_SEA = "AT_SEA"
+    AT_PORT = "AT_PORT"
+    NEVER_EMITTED = "NEVER_EMITTED"
+    NO_NEWS = "NO_NEWS"
+    ACTIVITY_DETECTED = "ACTIVITY_DETECTED"
+
+
+class EndOfMalfunctionReason(Enum):
+    RESUMED_TRANSMISSION = "RESUMED_TRANSMISSION"
+    TEMPORARY_INTERRUPTION_OF_SUPERVISION = "TEMPORARY_INTERRUPTION_OF_SUPERVISION"
+    PERMANENT_INTERRUPTION_OF_SUPERVISION = "PERMANENT_INTERRUPTION_OF_SUPERVISION"
+
+
+class BeaconMalfunctionNotificationType(Enum):
+    MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION = "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION"
+    MALFUNCTION_AT_SEA_REMINDER = "MALFUNCTION_AT_SEA_REMINDER"
+    MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION = (
+        "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"
+    )
+    MALFUNCTION_AT_PORT_REMINDER = "MALFUNCTION_AT_PORT_REMINDER"
+    END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
+
+    def to_message_subject(self):
+        type_object_mapping = {
+            "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION": "Interruption en mer des émissions VMS de votre navire",
+            "MALFUNCTION_AT_SEA_REMINDER": "RAPPEL : Interruption en mer des émissions VMS de votre navire",
+            "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION": "Interruption à quai des émissions VMS de votre navire",
+            "MALFUNCTION_AT_PORT_REMINDER": "RAPPEL : Interruption à quai des émissions VMS de votre navire",
+            "END_OF_MALFUNCTION": "Reprise des émissions VMS de votre navire",
+        }
+        return type_object_mapping[self.name]
+
+
+class BeaconMalfunctionNotificationRecipientFunction(Enum):
+    VESSEL_CAPTAIN = "VESSEL_CAPTAIN"
+    VESSEL_OPERATOR = "VESSEL_OPERATOR"
+    SATELLITE_OPERATOR = "SATELLITE_OPERATOR"
+    FMC = "FMC"
+
+
+class CommunicationMeans(Enum):
+    EMAIL = "EMAIL"
+    SMS = "SMS"
+    FAX = "FAX"
+
+
+@dataclass
+class BeaconMalfunctionNotificationAddressee:
+    function: BeaconMalfunctionNotificationRecipientFunction
+    name: str
+    address_or_number: str
+
+
+@dataclass
+class BeaconMalfunctionToNotify:
+    beacon_malfunction_id: int
+    vessel_cfr_or_immat_or_ircs: str
+    beacon_number: str
+    vessel_name: str
+    malfunction_start_date_utc: datetime
+    last_position_latitude: float
+    last_position_longitude: float
+    notification_type: BeaconMalfunctionNotificationType
+    vessel_emails: List[str]
+    vessel_mobile_phone: str
+    vessel_fax: str
+    operator_name: str
+    operator_email: str
+    operator_mobile_phone: str
+    operator_fax: str
+    satellite_operator: str
+    satellite_operator_emails: List[str]
+    previous_notification_datetime_utc: datetime
+    test_mode: bool
+
+    def __post_init__(self):
+        self.notification_type = BeaconMalfunctionNotificationType(
+            self.notification_type
+        )
+
+    def get_email_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
+
+        if not self.test_mode:
+
+            vessel_emails = self.vessel_emails if self.vessel_emails else []
+            satellite_operator_emails = (
+                self.satellite_operator_emails if self.satellite_operator_emails else []
+            )
+            operator_emails = [self.operator_email] if self.operator_email else []
+
+            vessel_addressees = [
+                BeaconMalfunctionNotificationAddressee(
+                    function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                    name=None,
+                    address_or_number=vessel_email,
+                )
+                for vessel_email in vessel_emails
+            ]
+
+            satellite_operator_addressees = [
+                BeaconMalfunctionNotificationAddressee(
+                    function=BeaconMalfunctionNotificationRecipientFunction.SATELLITE_OPERATOR,
+                    name=self.satellite_operator,
+                    address_or_number=satellite_operator_email,
+                )
+                for satellite_operator_email in satellite_operator_emails
+            ]
+
+            operator_addressees = [
+                BeaconMalfunctionNotificationAddressee(
+                    function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
+                    name=self.operator_name,
+                    address_or_number=operator_email,
+                )
+                for operator_email in operator_emails
+            ]
+
+            addressees = (
+                vessel_addressees + operator_addressees + satellite_operator_addressees
+            )
+
+        else:
+            addressees = [
+                BeaconMalfunctionNotificationAddressee(
+                    function=BeaconMalfunctionNotificationRecipientFunction.FMC,
+                    name="CNSP",
+                    address_or_number=CNSP_SIP_DEPARTMENT_ADDRESS,
+                )
+            ]
+        return addressees
+
+
+@dataclass
+class BeaconMalfunctionNotification:
+    beacon_malfunction_id: int
+    date_time_utc: datetime
+    notification_type: BeaconMalfunctionNotificationType
+    communication_means: CommunicationMeans
+    recipient_function: BeaconMalfunctionNotificationRecipientFunction
+    recipient_name: str
+    recipient_address_or_number: str
+    success: bool
+    error_message: str

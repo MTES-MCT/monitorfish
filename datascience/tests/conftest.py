@@ -8,7 +8,6 @@ from typing import List
 
 import docker
 import pytest
-from dotenv import dotenv_values
 from pytest import MonkeyPatch
 
 from config import ROOT_DIRECTORY, TEST_DATA_LOCATION
@@ -83,20 +82,14 @@ def monkeysession(request):
     mpatch.undo()
 
 
-@pytest.fixture(scope="session", autouse=True)
-def set_environment_variables(monkeysession):
-    for k, v in dotenv_values(ROOT_DIRECTORY / ".env.test").items():
-        monkeysession.setenv(k, v)
-
-
 @pytest.fixture(scope="session")
-def create_docker_client(set_environment_variables):
+def create_docker_client():
     client = docker.from_env()
     yield client
 
 
 @pytest.fixture(scope="session")
-def start_remote_database_container(set_environment_variables, create_docker_client):
+def start_remote_database_container(create_docker_client):
     client = create_docker_client
     print("Starting database container")
     remote_database_container = client.containers.run(
@@ -117,7 +110,7 @@ def start_remote_database_container(set_environment_variables, create_docker_cli
 
 
 @pytest.fixture(scope="session")
-def create_tables(set_environment_variables, start_remote_database_container):
+def create_tables(start_remote_database_container):
     e = create_engine("monitorfish_remote")
     migrations = get_migrations_in_folders(migrations_folders)
     print("Creating tables")

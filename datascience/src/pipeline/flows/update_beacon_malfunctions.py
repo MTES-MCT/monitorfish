@@ -1,5 +1,4 @@
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
 from typing import Tuple
 
@@ -14,6 +13,12 @@ from config import (
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
 )
+from src.pipeline.entities.beacon_malfunctions import (
+    BeaconMalfunctionNotificationType,
+    BeaconMalfunctionStage,
+    BeaconMalfunctionVesselStatus,
+    EndOfMalfunctionReason,
+)
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
     join_on_multiple_keys,
@@ -25,30 +30,6 @@ from src.pipeline.shared_tasks.healthcheck import (
     assert_last_positions_health,
     get_monitorfish_healthcheck,
 )
-
-
-class beaconMalfunctionStage(Enum):
-    INITIAL_ENCOUNTER = "INITIAL_ENCOUNTER"
-    FOUR_HOUR_REPORT = "FOUR_HOUR_REPORT"
-    RELAUNCH_REQUEST = "RELAUNCH_REQUEST"
-    TARGETING_VESSEL = "TARGETING_VESSEL"
-    CROSS_CHECK = "CROSS_CHECK"
-    END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
-    ARCHIVED = "ARCHIVED"
-
-
-class beaconMalfunctionVesselStatus(Enum):
-    AT_SEA = "AT_SEA"
-    AT_PORT = "AT_PORT"
-    NEVER_EMITTED = "NEVER_EMITTED"
-    NO_NEWS = "NO_NEWS"
-    ACTIVITY_DETECTED = "ACTIVITY_DETECTED"
-
-
-class endOfMalfunctionReason(Enum):
-    RESUMED_TRANSMISSION = "RESUMED_TRANSMISSION"
-    TEMPORARY_INTERRUPTION_OF_SUPERVISION = "TEMPORARY_INTERRUPTION_OF_SUPERVISION"
-    PERMANENT_INTERRUPTION_OF_SUPERVISION = "PERMANENT_INTERRUPTION_OF_SUPERVISION"
 
 
 @task(checkpoint=False)
@@ -367,19 +348,29 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
             ).astype(int)
         ),
         [
-            beaconMalfunctionVesselStatus.AT_SEA.value,
-            beaconMalfunctionVesselStatus.AT_PORT.value,
-            beaconMalfunctionVesselStatus.NEVER_EMITTED.value,
+            BeaconMalfunctionVesselStatus.AT_SEA.value,
+            BeaconMalfunctionVesselStatus.AT_PORT.value,
+            BeaconMalfunctionVesselStatus.NEVER_EMITTED.value,
         ],
     )
 
-    new_malfunctions["stage"] = beaconMalfunctionStage.INITIAL_ENCOUNTER.value
+    new_malfunctions["stage"] = BeaconMalfunctionStage.INITIAL_ENCOUNTER.value
 
     new_malfunctions["malfunction_end_date_utc"] = pd.NaT
     new_malfunctions["malfunction_start_date_utc"] = new_malfunctions[
         "malfunction_start_date_utc"
     ].fillna(datetime.utcnow())
     new_malfunctions["vessel_status_last_modification_date_utc"] = datetime.utcnow()
+
+    notification_to_send = {
+        BeaconMalfunctionVesselStatus.AT_SEA.value: BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value,
+        BeaconMalfunctionVesselStatus.AT_PORT.value: BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+        BeaconMalfunctionVesselStatus.NEVER_EMITTED.value: BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+    }
+
+    new_malfunctions["notification_requested"] = new_malfunctions.vessel_status.map(
+        lambda x: notification_to_send[x]
+    )
 
     ordered_columns = [
         "internal_reference_number",
@@ -394,6 +385,10 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         "malfunction_start_date_utc",
         "malfunction_end_date_utc",
         "vessel_status_last_modification_date_utc",
+        "vessel_id",
+        "notification_requested",
+        "latitude",
+        "longitude",
     ]
     return new_malfunctions.loc[:, ordered_columns]
 
@@ -414,9 +409,9 @@ def load_new_beacon_malfunctions(new_beacon_malfunctions: pd.DataFrame):
 def update_beacon_malfunction(
     beacon_malfunction_id: int,
     *,
-    new_stage: beaconMalfunctionStage = None,
-    new_vessel_status: beaconMalfunctionVesselStatus = None,
-    end_of_malfunction_reason: endOfMalfunctionReason = None,
+    new_stage: BeaconMalfunctionStage = None,
+    new_vessel_status: BeaconMalfunctionVesselStatus = None,
+    end_of_malfunction_reason: EndOfMalfunctionReason = None,
 ):
     """Update a `beacon_malfunction`s stage or vessel status.
 
@@ -446,9 +441,9 @@ def update_beacon_malfunction(
     try:
         assert (
             new_stage is None
-            and isinstance(new_vessel_status, beaconMalfunctionVesselStatus)
+            and isinstance(new_vessel_status, BeaconMalfunctionVesselStatus)
         ) or (
-            new_vessel_status is None and isinstance(new_stage, beaconMalfunctionStage)
+            new_vessel_status is None and isinstance(new_stage, BeaconMalfunctionStage)
         )
     except AssertionError:
         raise ValueError(
@@ -460,9 +455,9 @@ def update_beacon_malfunction(
 
     if new_stage:
         json["stage"] = new_stage.value
-        if new_stage is beaconMalfunctionStage.END_OF_MALFUNCTION:
+        if new_stage is BeaconMalfunctionStage.END_OF_MALFUNCTION:
             try:
-                assert isinstance(end_of_malfunction_reason, endOfMalfunctionReason)
+                assert isinstance(end_of_malfunction_reason, EndOfMalfunctionReason)
             except AssertionError:
                 raise ValueError(
                     (
@@ -580,23 +575,23 @@ with Flow("Beacons malfunctions") as flow:
     # Load
     update_beacon_malfunction.map(
         beacon_malfunctions_with_resumed_transmission,
-        new_stage=unmapped(beaconMalfunctionStage.END_OF_MALFUNCTION),
-        end_of_malfunction_reason=unmapped(endOfMalfunctionReason.RESUMED_TRANSMISSION),
+        new_stage=unmapped(BeaconMalfunctionStage.END_OF_MALFUNCTION),
+        end_of_malfunction_reason=unmapped(EndOfMalfunctionReason.RESUMED_TRANSMISSION),
     )
 
     update_beacon_malfunction.map(
         beacon_malfunctions_temporarily_unsupervised,
-        new_stage=unmapped(beaconMalfunctionStage.END_OF_MALFUNCTION),
+        new_stage=unmapped(BeaconMalfunctionStage.END_OF_MALFUNCTION),
         end_of_malfunction_reason=unmapped(
-            endOfMalfunctionReason.TEMPORARY_INTERRUPTION_OF_SUPERVISION
+            EndOfMalfunctionReason.TEMPORARY_INTERRUPTION_OF_SUPERVISION
         ),
     )
 
     update_beacon_malfunction.map(
         beacon_malfunctions_permanently_unsupervised,
-        new_stage=unmapped(beaconMalfunctionStage.END_OF_MALFUNCTION),
+        new_stage=unmapped(BeaconMalfunctionStage.END_OF_MALFUNCTION),
         end_of_malfunction_reason=unmapped(
-            endOfMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION
+            EndOfMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION
         ),
     )
 

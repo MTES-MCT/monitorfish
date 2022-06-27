@@ -14,8 +14,11 @@ from src.pipeline.flows.vessels import (
     extract_fr_vessels,
     extract_nav_licences,
     extract_non_cee_vessels,
+    extract_satellite_operators,
+    load_satellite_operators,
     load_vessels,
     transform_beacons,
+    transform_satellite_operators,
 )
 from tests.mocks import mock_extract_side_effect
 
@@ -59,6 +62,7 @@ cleaned_vessels_data = {
     "beacon_number": [None, "beacbeac"],
     "beacon_status": [None, "ACTIVATED"],
     "under_charter": [True, False],
+    "satellite_operator_id": [1, None],
 }
 
 
@@ -116,6 +120,13 @@ def test_extract_beacons(mock_extract):
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
+@patch("src.pipeline.flows.vessels.extract")
+def test_extract_satellite_operators(mock_extract):
+    mock_extract.side_effect = mock_extract_side_effect
+    query = extract_satellite_operators.run()
+    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
+
+
 def test_transform_beacons():
     beacons = pd.DataFrame(
         {
@@ -129,6 +140,7 @@ def test_transform_beacons():
                 "Non surveillée",
                 None,
             ],
+            "satellite_operator_id": [1, 1, 2, 2, 3, None],
         }
     )
 
@@ -145,10 +157,36 @@ def test_transform_beacons():
                 "UNSUPERVISED",
                 None,
             ],
+            "satellite_operator_id": [1, 1, 2, 2, 3, None],
         }
     )
 
     pd.testing.assert_frame_equal(transformed_beacons, expected_transformed_beacons)
+
+
+def test_transform_satellite_operators():
+
+    satellite_operators = pd.DataFrame(
+        {
+            "id": [1, 2, 3],
+            "name": ["SAT", "SAT2", "SAT3"],
+            "emails": ["simple@email.com", "contact1@sat2.com, conact2@sat2.com", None],
+        }
+    )
+
+    res = transform_satellite_operators.run(satellite_operators)
+    expected_res = pd.DataFrame(
+        {
+            "id": [1, 2, 3],
+            "name": ["SAT", "SAT2", "SAT3"],
+            "emails": [
+                ["simple@email.com"],
+                ["contact1@sat2.com", "conact2@sat2.com"],
+                None,
+            ],
+        }
+    )
+    pd.testing.assert_frame_equal(res, expected_res)
 
 
 def test_clean_vessels():
@@ -227,6 +265,7 @@ def test_clean_vessels():
             "sailing_category": ["2ème", None],
             "beacon_number": [None, "beacbeac"],
             "beacon_status": [None, beaconStatus.ACTIVATED.value],
+            "satellite_operator_id": [1, None],
             "under_charter": [True, False],
             "operator_name_pos": ["name_pos_123", None],
             "operator_email_pos": ["email_pos_123", None],
@@ -245,6 +284,23 @@ def test_clean_vessels():
     pd.testing.assert_frame_equal(
         cleaned_vessels, expected_cleaned_vessels, check_dtype=False
     )
+
+
+def test_load_satellite_operators(reset_test_data):
+
+    satellite_operators = pd.DataFrame(
+        {
+            "id": [1, 2, 3],
+            "name": ["SAT", "SAT2", "SAT3"],
+            "emails": [
+                ["simple@email.com"],
+                ["contact1@sat2.com", "conact2@sat2.com"],
+                None,
+            ],
+        }
+    )
+
+    load_satellite_operators.run(satellite_operators)
 
 
 def test_load_vessels(reset_test_data):

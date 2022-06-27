@@ -1,7 +1,8 @@
 SELECT
     n.id_nav_flotteur as id_nav_flotteur_bn,
     b.numero as beacon_number,
-    cst.libelle AS beacon_status
+    cst.libelle AS beacon_status,
+    b.id_fmc_operateur_satellite AS satellite_operator_id
 FROM FMC2.FMC_BALISE b
 LEFT JOIN FMC2.FMC_BALISE_NAVIRE bn
 ON b.id_fmc_balise = bn.id_fmc_balise

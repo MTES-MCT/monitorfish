@@ -1,11 +1,6 @@
 import os
 
 import sqlalchemy as sa
-from dotenv import load_dotenv
-
-from config import ROOT_DIRECTORY
-
-load_dotenv(ROOT_DIRECTORY / ".env")
 
 db_env = {
     "ocan": {
@@ -65,6 +60,8 @@ def make_connection_string(db: str) -> str:
         ValueError: with credentials for the selected database are not found in
         environment variables.
     """
+
+    import config  # To load env vars in "local test" and "local run" configurations
 
     try:
         CLIENT = os.environ[db_env[db]["client"]]

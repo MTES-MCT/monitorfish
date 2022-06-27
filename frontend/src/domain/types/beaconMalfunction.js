@@ -14,6 +14,7 @@
  * @property {string | null} malfunctionEndDateTime
  * @property {string} vesselStatusLastModificationDateTime
  * @property {string} endOfBeaconMalfunctionReason
+ * @property {string} notificationRequested
  */
 
 /**
@@ -41,6 +42,28 @@
  */
 
 /**
+ * @typedef BeaconMalfunctionNotification
+ * @property {number} id
+ * @property {int} beaconMalfunctionId
+ * @property {string} notificationType
+ * @property {string} communicationMeans
+ * @property {string} recipientFunction
+ * @property {string} recipientName
+ * @property {string} recipientAddressOrNumber
+ * @property {string} dateTime
+ * @property {boolean || null} success
+ * @property {string || null} errorMessage
+ */
+
+/**
+ * @typedef BeaconMalfunctionNotifications
+ * @property {int} beaconMalfunctionId
+ * @property {string} notificationType
+ * @property {string} dateTimeUtc
+ * @property {BeaconMalfunctionNotification[]} notifications
+ */
+
+/**
  * @typedef BeaconMalfunctionCommentInput
  * @property {string} comment
  * @property {string} userType
@@ -51,7 +74,8 @@
  * @property {BeaconMalfunction} beaconMalfunction
  * @property {BeaconMalfunctionComment[]} comments
  * @property {BeaconMalfunctionAction[]} actions
- * @property {BeaconMalfunctionAction[]} resume
+ * @property {VesselBeaconMalfunctionsResume} resume
+ * @property {BeaconMalfunctionNotifications[]} notifications
  */
 
 /**

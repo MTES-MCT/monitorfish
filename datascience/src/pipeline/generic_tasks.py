@@ -93,6 +93,7 @@ def load(
     df_id_column: str = None,
     nullable_integer_columns: list = None,
     timedelta_columns: list = None,
+    enum_columns: list = None,
     connection: Connection = None,
 ):
     """
@@ -134,6 +135,9 @@ def load(
           load into Postgresql `Interval` columns. If these columns contain `NaT`
           values, the loading will fail, so it is necessary to serialize these values
           as `Interval`-compatible `str` objects.
+        enum_columns (list, optional): columns containing Enum values to
+          load into Postgresql. Values in these columns will be converted to string
+          using the enum's `.value`. Null values will remain null.
         connection (Connection, optional): Databse connection to use for the insert
           operation. If not provided, `db_name` must be given and a connection to the
           designated database will be created for the insert operation.
@@ -149,6 +153,7 @@ def load(
         jsonb_columns=jsonb_columns,
         nullable_integer_columns=nullable_integer_columns,
         timedelta_columns=timedelta_columns,
+        enum_columns=enum_columns,
     )
 
     if connection is None:

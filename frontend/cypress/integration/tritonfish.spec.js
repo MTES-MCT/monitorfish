@@ -44,6 +44,7 @@ context('TritonFish', () => {
       .click({ timeout: 20000 })
     cy.get('*[data-cy="vessel-labels"]').click({ timeout: 20000 })
     cy.wait(200)
+    cy.wait(200)
     cy.get('*[data-cy="vessel-label-text"]').should('have.length.to.be.greaterThan', 5)
     cy.get('*[data-cy="vessel-label-risk-factor"]').should('not.exist')
 

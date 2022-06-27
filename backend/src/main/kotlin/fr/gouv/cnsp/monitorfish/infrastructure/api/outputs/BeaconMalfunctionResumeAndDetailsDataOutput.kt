@@ -6,7 +6,8 @@ data class BeaconMalfunctionResumeAndDetailsDataOutput(
         val beaconMalfunction: BeaconMalfunctionDataOutput,
         val resume: VesselBeaconMalfunctionResumeDataOutput? = null,
         val comments: List<BeaconMalfunctionCommentDataOutput>,
-        val actions: List<BeaconMalfunctionActionDataOutput>) {
+        val actions: List<BeaconMalfunctionActionDataOutput>,
+        val notifications: List<BeaconMalfunctionNotificationsDataOutput>) {
     companion object {
         fun fromBeaconMalfunctionResumeAndDetails(beaconMalfunctionResumeAndDetails: BeaconMalfunctionResumeAndDetails): BeaconMalfunctionResumeAndDetailsDataOutput {
             return BeaconMalfunctionResumeAndDetailsDataOutput(
@@ -15,7 +16,8 @@ data class BeaconMalfunctionResumeAndDetailsDataOutput(
                         VesselBeaconMalfunctionResumeDataOutput.fromVesselBeaconMalfunctionResume(beaconMalfunctionResumeAndDetails.resume)
                     },
                     comments = beaconMalfunctionResumeAndDetails.comments.map { BeaconMalfunctionCommentDataOutput.fromBeaconMalfunctionComment(it) },
-                    actions = beaconMalfunctionResumeAndDetails.actions.map { BeaconMalfunctionActionDataOutput.fromBeaconMalfunctionAction(it) }
+                    actions = beaconMalfunctionResumeAndDetails.actions.map { BeaconMalfunctionActionDataOutput.fromBeaconMalfunctionAction(it) },
+                    notifications = beaconMalfunctionResumeAndDetails.notifications.map { BeaconMalfunctionNotificationsDataOutput.fromBeaconMalfunctionNotifications(it) }
             )
         }
     }

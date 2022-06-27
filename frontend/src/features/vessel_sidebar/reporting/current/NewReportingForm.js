@@ -36,11 +36,13 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
   useSaveReportingInLocalStorage('dml', dml, true)
   const [description, setDescription] = useState('')
   useSaveReportingInLocalStorage('description', description, true)
+  const [hasError, setHasError] = useState(false)
 
   useEffect(() => {
     const savedReporting = getLocalStorageState(null, newReportingLocalStorageKey)
 
     if (savedReporting) {
+      setHasError(false)
       setReportingType(savedReporting?.type || ReportingType.INFRACTION_SUSPICION.code)
       setUnit(savedReporting?.value?.unit || '')
       setAuthorTrigram(savedReporting?.value?.authorTrigram || '')
@@ -136,7 +138,7 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
           <Input
             data-cy={''}
             width={100}
-            placeholder={'LTH'}
+            placeholder={'Ex: LTH'}
             type="text"
             value={authorTrigram}
             onChange={e => setAuthorTrigram(e.target.value)}
@@ -197,6 +199,7 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
         ? 'Ex: Dérogation temporaire licence'
         : 'Ex: Infraction maille cul de chalut'
       }
+      $hasError={hasError}
       width={385}
       type="text"
       value={title}
@@ -250,36 +253,39 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
     <ValidateButton
       data-cy={'new-reporting-create-button'}
       onClick={() => {
-        if (title) {
-          const newReporting = {
-            vesselName: selectedVesselIdentity?.vesselName,
-            internalReferenceNumber: selectedVesselIdentity?.internalReferenceNumber,
-            externalReferenceNumber: selectedVesselIdentity?.externalReferenceNumber,
-            ircs: selectedVesselIdentity?.ircs,
-            vesselIdentifier: selectedVesselIdentity?.vesselIdentifier,
-            type: reportingType,
-            creationDate: new Date().toISOString(),
-            validationDate: null,
-            value: {
-              type: reportingType,
-              unit: unit,
-              authorTrigram: authorTrigram,
-              authorContact: authorContact,
-              reportingActor: reportingActor,
-              title: title,
-              natinfCode: natinfCode,
-              dml: dml,
-              description: description
-            }
-          }
-
-          dispatch(addReporting(newReporting))
-            .then(() => {
-              closeForm()
-              deleteLocalStorageReportingEntry()
-            })
-            .catch(error => console.log(error))
+        if (!title) {
+          setHasError(true)
+          return
         }
+
+        const newReporting = {
+          vesselName: selectedVesselIdentity?.vesselName,
+          internalReferenceNumber: selectedVesselIdentity?.internalReferenceNumber,
+          externalReferenceNumber: selectedVesselIdentity?.externalReferenceNumber,
+          ircs: selectedVesselIdentity?.ircs,
+          vesselIdentifier: selectedVesselIdentity?.vesselIdentifier,
+          type: reportingType,
+          creationDate: new Date().toISOString(),
+          validationDate: null,
+          value: {
+            type: reportingType,
+            unit: unit,
+            authorTrigram: authorTrigram,
+            authorContact: authorContact,
+            reportingActor: reportingActor,
+            title: title,
+            natinfCode: natinfCode,
+            dml: dml,
+            description: description
+          }
+        }
+
+        dispatch(addReporting(newReporting))
+          .then(() => {
+            closeForm()
+            deleteLocalStorageReportingEntry()
+          })
+          .catch(error => console.log(error))
       }}
     >
       Valider
@@ -292,6 +298,11 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
     >
       Annuler
     </CancelButton>
+    {
+      hasError
+        ? <><br/>Le champ Titre est obligatoire</>
+        : null
+    }
   </Form>
 }
 
@@ -342,11 +353,11 @@ const Input = styled.input`
   height: 25px;
   width: ${props => props.width}px;
   padding: 0 5px 0 5px;
-  border: 1px solid ${COLORS.lightGray};
+  border: 1px solid ${props => props.$hasError ? COLORS.maximumRed : COLORS.lightGray};
   border-radius: 2px;
   
   :hover, :focus {
-    border: 1px solid ${COLORS.slateGray} !important;
+    border: 1px solid ${props => props.$hasError ? COLORS.maximumRed : COLORS.slateGray} !important;
   }
   ::placeholder {
     font-style: italic;

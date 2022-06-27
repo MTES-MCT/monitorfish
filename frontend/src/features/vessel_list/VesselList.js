@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { batch, useDispatch, useSelector } from 'react-redux'
-import Modal from 'rsuite/lib/Modal'
+import { Modal } from 'rsuite'
 
 import { layersType } from '../../domain/entities/layers'
 import { InteractionTypes } from '../../domain/entities/map'

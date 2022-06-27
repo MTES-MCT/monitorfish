@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { endOfBeaconMalfunctionReasons, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
-import SelectPicker from 'rsuite/lib/SelectPicker'
+import { SelectPicker } from 'rsuite'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 

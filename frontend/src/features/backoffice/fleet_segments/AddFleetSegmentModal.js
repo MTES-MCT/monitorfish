@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Modal from 'rsuite/lib/Modal'
+import { Footer, Modal, TagPicker } from 'rsuite'
 import { COLORS } from '../../../constants/constants'
 import { FleetSegmentInput, INPUT_TYPE, renderTagPickerValue } from '../tableCells'
-import TagPicker from 'rsuite/lib/TagPicker'
 import { useDispatch, useSelector } from 'react-redux'
-import { Footer } from 'rsuite'
 import { PrimaryButton } from '../../commonStyles/Buttons.style'
 import createFleetSegment from '../../../domain/use_cases/fleetSegment/createFleetSegment'
 

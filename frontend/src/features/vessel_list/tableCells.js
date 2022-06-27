@@ -1,8 +1,7 @@
-import Checkbox from 'rsuite/lib/Checkbox'
+import { Checkbox, Table } from 'rsuite'
 import countries from 'i18n-iso-countries'
 import * as timeago from 'timeago.js'
 import React from 'react'
-import Table from 'rsuite/lib/Table'
 import styled from 'styled-components'
 
 const { Cell } = Table

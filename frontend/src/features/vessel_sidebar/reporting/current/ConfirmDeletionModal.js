@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
-import Modal from 'rsuite/lib/Modal'
+import { Modal } from 'rsuite'
 import deleteReporting from '../../../../domain/use_cases/reporting/deleteReporting'
 
 const ConfirmDeletionModal = ({ modalIsOpenForId, closeModal }) => {

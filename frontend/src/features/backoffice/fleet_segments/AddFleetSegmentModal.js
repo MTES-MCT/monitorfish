@@ -24,9 +24,9 @@ const AddFleetSegmentModal = ({ isModalOpen, setModalIsOpen, faoAreasList }) => 
     <ModalWithCustomHeight
       size={'xs'}
       backdrop
-      show={isModalOpen}
+      open={isModalOpen}
       style={{ marginTop: 50 }}
-      onHide={() => setModalIsOpen(false)}
+      onClose={() => setModalIsOpen(false)}
     >
       <Modal.Header>
         <Modal.Title>

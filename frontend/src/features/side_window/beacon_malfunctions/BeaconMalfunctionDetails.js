@@ -36,11 +36,9 @@ const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselSt
 
   useEffect(() => {
     if (vesselStatus?.color && beaconMalfunction?.id && getIsMalfunctioning(beaconMalfunction?.stage)) {
-      // Target the `select-picker` DOM component
-      vesselStatusRef.current.children[1].style.background = vesselStatus.color
-      // Target the `rs-picker-toggle-value` span DOM component
-      vesselStatusRef.current.children[1].firstChild.firstChild.firstChild.style.color = vesselStatus.textColor
-      vesselStatusRef.current.children[1].style.setProperty('margin', '2px 10px 10px 0px', 'important')
+      vesselStatusRef.current.querySelector('.rs-picker-select').style.background = vesselStatus.color
+      vesselStatusRef.current.querySelector('[data-cy="side-window-beacon-malfunctions-vessel-status"]').style.color = vesselStatus.textColor
+      vesselStatusRef.current.querySelector('.rs-picker-select').style.setProperty('margin', '2px 10px 10px 0px', 'important')
     }
   }, [vesselStatus, beaconMalfunction, vesselStatusRef])
 

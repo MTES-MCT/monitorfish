@@ -341,8 +341,8 @@ const VesselList = ({ namespace }) => {
         <Modal
           full
           backdrop={'static'}
-          show={vesselListModalIsOpen}
-          onHide={() => closeAndResetVesselList()}
+          open={vesselListModalIsOpen}
+          onClose={() => closeAndResetVesselList()}
         >
           <Modal.Header>
             <Modal.Title>

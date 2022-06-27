@@ -20,9 +20,9 @@ const RiskFactorExplanationModal = ({ isOpen, setIsOpen }) => {
     <Modal
       size={'lg'}
       backdrop
-      show={isOpen}
+      open={isOpen}
       style={{ marginTop: 50 }}
-      onHide={() => setIsOpen(false)}
+      onClose={() => setIsOpen(false)}
     >
       <Modal.Header>
         <Modal.Title>

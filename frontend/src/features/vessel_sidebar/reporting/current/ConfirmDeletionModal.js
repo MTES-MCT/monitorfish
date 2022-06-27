@@ -14,9 +14,9 @@ const ConfirmDeletionModal = ({ modalIsOpenForId, closeModal }) => {
     <ModalWithCustomHeight
       size={'xs'}
       backdrop
-      show={modalIsOpenForId}
+      open={modalIsOpenForId}
       style={{ marginTop: 100 }}
-      onHide={closeModal}
+      onClose={closeModal}
     >
       <Modal.Header>
         <Modal.Title>

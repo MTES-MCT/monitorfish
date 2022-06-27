@@ -1,4 +1,4 @@
-FROM python:3.8.7-slim-buster
+FROM python:3.8.13-slim-bullseye
 
 ENV TINI_VERSION v0.19.0
 ENV USER="monitorfish-pipeline"
@@ -30,6 +30,11 @@ https://download.oracle.com/otn_software/linux/instantclient/\
 && dpkg -i oracle-instantclient19.8-basic_19.8.0.0.0-2_amd64.deb \
 && rm oracle-instantclient19.8-basic-19.8.0.0.0-1.x86_64.rpm \
 && rm oracle-instantclient19.8-basic_19.8.0.0.0-2_amd64.deb
+
+# Install pango
+RUN apt-get update && apt-get install -y \
+    pango1.0-tools \
+    && rm -rf /var/lib/apt/lists/*
 
 # Create and "activate" venv by prepending it to PATH then install python dependencies
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"

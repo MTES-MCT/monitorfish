@@ -1,9 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetAllBeaconMalfunctions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetBeaconMalfunction
-import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.SaveBeaconMalfunctionComment
-import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionDataOutput
@@ -21,7 +19,8 @@ class BeaconMalfunctionController(
         private val getAllBeaconMalfunctions: GetAllBeaconMalfunctions,
         private val updateBeaconMalfunction: UpdateBeaconMalfunction,
         private val getBeaconMalfunction: GetBeaconMalfunction,
-        private val saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment) {
+        private val saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment,
+        private val requestNotification: RequestNotification) {
 
     @GetMapping(value = [""])
     @ApiOperation("Get all beacon malfunctions")
@@ -70,5 +69,18 @@ class BeaconMalfunctionController(
                              @PathVariable(name = "beaconMalfunctionId")
                              beaconMalfunctionId: Int): BeaconMalfunctionResumeAndDetailsDataOutput {
         return BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(getBeaconMalfunction.execute(beaconMalfunctionId))
+    }
+
+    @PutMapping(value = ["/{beaconMalfunctionId}/{notificationRequested}"])
+    @ApiOperation("Request a notification")
+    fun requestNotification(@PathParam("Beacon malfunction id")
+                            @PathVariable(name = "beaconMalfunctionId")
+                            beaconMalfunctionId: Int,
+                            @PathParam("Notification type requested")
+                            @PathVariable(name = "notificationRequested")
+                            notificationRequested: BeaconMalfunctionNotificationType) {
+        return requestNotification.execute(
+                id = beaconMalfunctionId,
+                notificationRequested = notificationRequested)
     }
 }

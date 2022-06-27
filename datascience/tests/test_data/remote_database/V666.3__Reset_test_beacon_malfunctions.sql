@@ -1,6 +1,7 @@
 DELETE FROM beacon_malfunctions;
 
 INSERT INTO beacon_malfunctions (
+    id,
     internal_reference_number,
     external_reference_number,
     ircs,
@@ -11,9 +12,16 @@ INSERT INTO beacon_malfunctions (
     priority,
     malfunction_start_date_utc,
     malfunction_end_date_utc,
-    vessel_status_last_modification_date_utc
+    vessel_status_last_modification_date_utc,
+    flag_state,
+    end_of_malfunction_reason,
+    vessel_id,
+    notification_requested,
+    latitude,
+    longitude
 ) VALUES
 (
+    1,
     'ABC000542519', 
     'RO237719',
     'FQ7058', 
@@ -24,9 +32,16 @@ INSERT INTO beacon_malfunctions (
     True,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month 3 days',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month',
-    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month'
+    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month',
+    'FR',
+    'RESUMED_TRANSMISSION',
+    2,
+    'END_OF_MALFUNCTION',
+    45.236,
+    -3.569
 ),
 (
+    2,
     NULL,
     'SB125334',
     'OLY7853',
@@ -37,9 +52,16 @@ INSERT INTO beacon_malfunctions (
     False,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '10 hours',
     NULL,
-    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '4 hours'
+    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '4 hours',
+    'FR',
+    NULL,
+    4,
+    'MALFUNCTION_AT_SEA_REMINDER',
+    42.843,
+    -8.568
 ),
 (
+    3,
     NULL,
     'ZZTOPACDC',
     'ZZ000000',
@@ -50,5 +72,13 @@ INSERT INTO beacon_malfunctions (
     true,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '12 hours 10 minutes',
     NULL,
-    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '10 hours 10 minutes'
+    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '10 hours 10 minutes',
+    'FR',
+    NULL,
+    6,
+    'MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION',
+    -8.569,
+    -23.1569
 );
+
+ALTER SEQUENCE beacon_malfunctions_id_seq RESTART WITH 4;

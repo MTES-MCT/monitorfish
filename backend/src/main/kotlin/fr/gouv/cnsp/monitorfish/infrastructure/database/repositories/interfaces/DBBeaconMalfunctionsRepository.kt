@@ -41,4 +41,8 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
             END = :value AND malfunction_start_date_utc >= :afterDateTime
         """, nativeQuery = true)
     fun findAllByVesselIdentifierEqualsAfterDateTime(vesselIdentifier: String, value: String, afterDateTime: Instant): List<BeaconMalfunctionEntity>
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE beacon_malfunctions SET notification_requested = CAST(:notificationType AS beacon_malfunction_notification_type) WHERE id = :beaconMalfunctionId", nativeQuery = true)
+    fun updateRequestNotification(beaconMalfunctionId: Int, notificationType: String)
 }

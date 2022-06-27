@@ -3,15 +3,25 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv()
-
 # Package structure
 ROOT_DIRECTORY = Path(__file__).parent
 LIBRARY_LOCATION = ROOT_DIRECTORY / Path("src")
 QUERIES_LOCATION = LIBRARY_LOCATION / Path("pipeline/queries")
 TEST_DATA_LOCATION = ROOT_DIRECTORY / Path("tests/test_data")
 EMAIL_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/templates")
+EMAIL_IMAGES_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/images")
+EMAIL_FONTS_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/fonts")
 EMAIL_STYLESHEETS_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/stylesheets")
+
+# Must be set to true when running tests locally
+TEST_LOCAL = os.getenv("TEST_LOCAL", "False").lower() in ("true", "t", "yes", "y")
+if TEST_LOCAL:
+    load_dotenv(ROOT_DIRECTORY / ".env.test")
+
+# Must be set to true when running flows locally
+RUN_LOCAL = os.getenv("RUN_LOCAL", "False").lower() in ("true", "t", "yes", "y")
+if RUN_LOCAL:
+    load_dotenv(ROOT_DIRECTORY / ".env")
 
 # Flow execution configuration
 DOCKER_IMAGE = "docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline"
@@ -113,4 +123,8 @@ MONITORFISH_EMAIL_SERVER_PORT = os.environ.get("MONITORFISH_EMAIL_SERVER_PORT")
 MONITORFISH_EMAIL_ADDRESS = os.environ.get("MONITORFISH_EMAIL_ADDRESS")
 
 # Recipients
+CNSP_SIP_DEPARTMENT_ADDRESS = os.environ.get("CNSP_SIP_DEPARTMENT_ADDRESS")
 CNSP_FRANCE_EMAIL_ADDRESS = os.environ.get("CNSP_FRANCE_EMAIL_ADDRESS")
+
+# Tokens
+LOCATIONIQ_TOKEN = os.getenv("LOCATIONIQ_TOKEN")

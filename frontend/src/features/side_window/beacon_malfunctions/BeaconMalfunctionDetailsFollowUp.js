@@ -7,20 +7,24 @@ import { Toggle } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserType } from '../../../domain/shared_slices/Global'
 import { BeaconMalfunctionVesselStatus, UserType, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
-import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
+import saveBeaconMalfunctionCommentFromKanban
+  from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
 import BeaconMalfunctionDetailsFollowUpRow from './BeaconMalfunctionDetailsFollowUpRow'
-import BeaconMalfunctionDetailsFollowUpCommentOrAction from './BeaconMalfunctionDetailsFollowUpCommentOrAction'
+import BeaconMalfunctionDetailsFollowUpItem from './BeaconMalfunctionDetailsFollowUpItem'
 import { getActionText } from './beaconMalfunctions'
+import BeaconMalfunctionsDetailsFollowUpNotification from './BeaconMalfunctionsDetailsFollowUpNotification'
 
 export const Type = {
   ACTION: 'ACTION',
-  COMMENT: 'COMMENT'
+  COMMENT: 'COMMENT',
+  NOTIFICATION: 'NOTIFICATION'
 }
 
 const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallSize, firstStatus }) => {
   const {
     actions,
     comments,
+    notifications,
     beaconMalfunction
   } = beaconMalfunctionWithDetails
   const dispatch = useDispatch()
@@ -87,7 +91,26 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
     return actionsByDayAccumulated
   }, {}) || {}
 
-  const actionsAndCommentsByDate = mergeObjects(commentsByDate, actionsByDate)
+  const notificationsByDate = notifications?.reduce((notificationsByDayAccumulated, notification) => {
+    const dateWithoutTime = notification.dateTime.split('T')[0]
+    notification = { ...notification, type: Type.NOTIFICATION }
+
+    if (notificationsByDayAccumulated[dateWithoutTime]) {
+      notificationsByDayAccumulated[dateWithoutTime].push(notification)
+    } else {
+      notificationsByDayAccumulated[dateWithoutTime] = [notification]
+    }
+
+    return notificationsByDayAccumulated
+  }, {}) || {}
+
+  const itemsByDate = mergeObjects(
+    commentsByDate,
+    mergeObjects(
+      actionsByDate,
+      notificationsByDate
+    )
+  )
 
   useEffect(() => {
     if (comment?.length && textareaRef.current) {
@@ -133,8 +156,8 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
               date={beaconMalfunction?.malfunctionStartDateTime}
               dateText={getCommentOrActionDate(getDate(beaconMalfunction?.malfunctionStartDateTime))}
             >
-              <BeaconMalfunctionDetailsFollowUpCommentOrAction
-                actionOrComment={{
+              <BeaconMalfunctionDetailsFollowUpItem
+                item={{
                   type: Type.ACTION,
                   dateTime: beaconMalfunction?.malfunctionStartDateTime
                 }}
@@ -147,10 +170,10 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
             : null
         }
         {
-          Object.keys(actionsAndCommentsByDate)
+          Object.keys(itemsByDate)
             .sort((a, b) => new Date(a) - new Date(b))
             .map((date, index) => {
-              const isLastDate = Object.keys(actionsAndCommentsByDate).length === index + 1
+              const isLastDate = Object.keys(itemsByDate).length === index + 1
               const dateText = getCommentOrActionDate(getDate(date))
 
               return <BeaconMalfunctionDetailsFollowUpRow
@@ -161,17 +184,15 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
                 dateText={dateText}
               >
                 {
-                  actionsAndCommentsByDate[date]
+                  itemsByDate[date]
                     .sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime))
-                    .map((actionOrComment, index) => {
-                      const isLast = actionsAndCommentsByDate[date].length === index + 1
+                    .map((item, index) => {
+                      const isLast = itemsByDate[date].length === index + 1
 
-                      return <BeaconMalfunctionDetailsFollowUpCommentOrAction
-                        key={actionOrComment.type + actionOrComment.dateTime}
-                        actionOrComment={actionOrComment}
-                        contentText={actionOrComment?.type === Type.COMMENT
-                          ? actionOrComment.comment
-                          : getActionText(actionOrComment, beaconMalfunction?.endOfBeaconMalfunctionReason)}
+                      return <BeaconMalfunctionDetailsFollowUpItem
+                        key={item.type + item.dateTime}
+                        item={item}
+                        contentText={getContent(item, beaconMalfunction)}
                         scrollToRef={scrollToRef}
                         isLastDate={isLastDate}
                         isLast={isLast}
@@ -216,6 +237,14 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
       }
     </Body>
   )
+}
+
+function getContent (item, beaconMalfunction) {
+  switch (item?.type) {
+    case Type.COMMENT: return item.comment
+    case Type.ACTION: return getActionText(item, beaconMalfunction?.endOfBeaconMalfunctionReason)
+    case Type.NOTIFICATION: return <BeaconMalfunctionsDetailsFollowUpNotification notification={item}/>
+  }
 }
 
 const AddCommentRow = styled.div``
@@ -264,7 +293,7 @@ const addCommentStyle = userType => ({
 
 const CommentsAndActions = styled.div``
 const commentsAndActionsStyle = (smallSize, textAreaHeight) => ({
-  maxHeight: smallSize ? 410 : (600 - textAreaHeight),
+  maxHeight: smallSize ? 410 : (560 - textAreaHeight),
   overflowY: 'auto',
   overflowX: 'hidden'
 })

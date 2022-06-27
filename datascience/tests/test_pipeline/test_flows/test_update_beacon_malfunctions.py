@@ -5,11 +5,12 @@ import pandas as pd
 import pytest
 from prefect.engine.signals import TRIGGERFAIL
 
+from src.pipeline.entities.beacon_malfunctions import BeaconMalfunctionNotificationType
 from src.pipeline.exceptions import MonitorfishHealthError
 from src.pipeline.flows.update_beacon_malfunctions import (
-    beaconMalfunctionStage,
-    beaconMalfunctionVesselStatus,
-    endOfMalfunctionReason,
+    BeaconMalfunctionStage,
+    BeaconMalfunctionVesselStatus,
+    EndOfMalfunctionReason,
     extract_beacons_last_emission,
     extract_known_malfunctions,
     extract_vessels_with_beacon,
@@ -65,6 +66,7 @@ def test_get_current_malfunctions_filters_on_max_duration_at_sea_and_at_port_and
     td = timedelta(hours=1)
     vessels_that_should_emit = pd.DataFrame(
         {
+            "vessel_id": [1, 2, 3, 4, 5, 6, 7, 8, 9],
             "cfr": ["A", "B", "C", None, None, None, "J", None, None],
             "ircs": ["AA", "BB", "CC", "DD", "EE", "FF", "JJ", "KK", None],
             "external_immatriculation": [
@@ -349,6 +351,7 @@ def test_prepare_new_beacon_malfunctions():
 
     new_malfunctions = pd.DataFrame(
         {
+            "vessel_id": [2, 4, 5],
             "cfr": ["B", "D", "E"],
             "external_immatriculation": ["BB", "DD", "EE"],
             "ircs": ["BBB", "DDD", "EEE"],
@@ -366,6 +369,8 @@ def test_prepare_new_beacon_malfunctions():
                 datetime(2022, 4, 1, 18, 20, 12),
                 None,
             ],
+            "latitude": [45.23, -12.256, None],
+            "longitude": [12.8, -2.961, None],
         }
     )
 
@@ -384,14 +389,14 @@ def test_prepare_new_beacon_malfunctions():
                 "EXTERNAL_REFERENCE_NUMBER",
             ],
             "vessel_status": [
-                beaconMalfunctionVesselStatus.AT_PORT.value,
-                beaconMalfunctionVesselStatus.AT_SEA.value,
-                beaconMalfunctionVesselStatus.NEVER_EMITTED.value,
+                BeaconMalfunctionVesselStatus.AT_PORT.value,
+                BeaconMalfunctionVesselStatus.AT_SEA.value,
+                BeaconMalfunctionVesselStatus.NEVER_EMITTED.value,
             ],
             "stage": [
-                beaconMalfunctionStage.INITIAL_ENCOUNTER.value,
-                beaconMalfunctionStage.INITIAL_ENCOUNTER.value,
-                beaconMalfunctionStage.INITIAL_ENCOUNTER.value,
+                BeaconMalfunctionStage.INITIAL_ENCOUNTER.value,
+                BeaconMalfunctionStage.INITIAL_ENCOUNTER.value,
+                BeaconMalfunctionStage.INITIAL_ENCOUNTER.value,
             ],
             "priority": [False, True, False],
             "malfunction_start_date_utc": [
@@ -405,6 +410,14 @@ def test_prepare_new_beacon_malfunctions():
                 datetime(2021, 1, 1, 1, 1, 1),
                 datetime(2021, 1, 1, 1, 1, 1),
             ],
+            "vessel_id": [2, 4, 5],
+            "notification_requested": [
+                BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+                BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value,
+                BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+            ],
+            "latitude": [45.23, -12.256, None],
+            "longitude": [12.8, -2.961, None],
         }
     )
 
@@ -425,12 +438,12 @@ def test_load_new_beacon_malfunctions(reset_test_data):
             "flag_state": ["FR", "VE"],
             "vessel_identifier": ["INTERNAL_REFERENCE_NUMBER", "IRCS"],
             "vessel_status": [
-                beaconMalfunctionVesselStatus.AT_PORT.value,
-                beaconMalfunctionVesselStatus.AT_SEA.value,
+                BeaconMalfunctionVesselStatus.AT_PORT.value,
+                BeaconMalfunctionVesselStatus.AT_SEA.value,
             ],
             "stage": [
-                beaconMalfunctionStage.INITIAL_ENCOUNTER.value,
-                beaconMalfunctionStage.INITIAL_ENCOUNTER.value,
+                BeaconMalfunctionStage.INITIAL_ENCOUNTER.value,
+                BeaconMalfunctionStage.INITIAL_ENCOUNTER.value,
             ],
             "priority": [False, True],
             "malfunction_start_date_utc": [
@@ -442,6 +455,13 @@ def test_load_new_beacon_malfunctions(reset_test_data):
                 datetime(2021, 1, 1, 1, 1, 1),
                 datetime(2021, 1, 1, 1, 1, 1),
             ],
+            "vessel_id": [2, 4],
+            "notification_requested": [
+                BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+                BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value,
+            ],
+            "latitude": [45.23, -12.256],
+            "longitude": [12.8, -2.961],
         }
     )
 
@@ -473,8 +493,8 @@ def test_update_beacon_malfunction_raises_when_both_stage_and_status_are_supplie
     with pytest.raises(ValueError):
         update_beacon_malfunction.run(
             malfunction_id_to_update,
-            new_stage=beaconMalfunctionStage.FOUR_HOUR_REPORT,
-            new_vessel_status=beaconMalfunctionVesselStatus.AT_SEA,
+            new_stage=BeaconMalfunctionStage.FOUR_HOUR_REPORT,
+            new_vessel_status=BeaconMalfunctionVesselStatus.AT_SEA,
         )
 
 
@@ -488,7 +508,7 @@ def test_update_beacon_malfunction_raises_when_reason_is_missing(mock_requests):
     with pytest.raises(ValueError):
         update_beacon_malfunction.run(
             malfunction_id_to_update,
-            new_stage=beaconMalfunctionStage.END_OF_MALFUNCTION,
+            new_stage=BeaconMalfunctionStage.END_OF_MALFUNCTION,
         )
 
 
@@ -502,14 +522,14 @@ def test_update_beacon_malfunction_raises_when_reason_is_unexpected(mock_request
     with pytest.raises(ValueError):
         update_beacon_malfunction.run(
             malfunction_id_to_update,
-            new_stage=beaconMalfunctionStage.FOUR_HOUR_REPORT,
-            end_of_malfunction_reason=endOfMalfunctionReason.RESUMED_TRANSMISSION,
+            new_stage=BeaconMalfunctionStage.FOUR_HOUR_REPORT,
+            end_of_malfunction_reason=EndOfMalfunctionReason.RESUMED_TRANSMISSION,
         )
 
     with pytest.raises(ValueError):
         update_beacon_malfunction.run(
             malfunction_id_to_update,
-            end_of_malfunction_reason=endOfMalfunctionReason.RESUMED_TRANSMISSION,
+            end_of_malfunction_reason=EndOfMalfunctionReason.RESUMED_TRANSMISSION,
         )
 
 
@@ -522,7 +542,7 @@ def test_update_beacon_malfunction_updates_status(mock_requests):
     malfunction_id_to_update = 25
     update_beacon_malfunction.run(
         malfunction_id_to_update,
-        new_vessel_status=beaconMalfunctionVesselStatus.AT_SEA,
+        new_vessel_status=BeaconMalfunctionVesselStatus.AT_SEA,
     )
     mock_requests.put.assert_called_once_with(
         url=f"dummy/end/point/{malfunction_id_to_update}",
@@ -543,7 +563,7 @@ def test_update_beacon_malfunction_updates_stage(mock_requests):
     malfunction_id_to_update = 25
     update_beacon_malfunction.run(
         malfunction_id_to_update,
-        new_stage=beaconMalfunctionStage.FOUR_HOUR_REPORT,
+        new_stage=BeaconMalfunctionStage.FOUR_HOUR_REPORT,
     )
     mock_requests.put.assert_called_once_with(
         url=f"dummy/end/point/{malfunction_id_to_update}",
@@ -564,8 +584,8 @@ def test_update_beacon_malfunction_updates_stage_and_reason(mock_requests):
     malfunction_id_to_update = 25
     update_beacon_malfunction.run(
         malfunction_id_to_update,
-        new_stage=beaconMalfunctionStage.END_OF_MALFUNCTION,
-        end_of_malfunction_reason=endOfMalfunctionReason.RESUMED_TRANSMISSION,
+        new_stage=BeaconMalfunctionStage.END_OF_MALFUNCTION,
+        end_of_malfunction_reason=EndOfMalfunctionReason.RESUMED_TRANSMISSION,
     )
     mock_requests.put.assert_called_once_with(
         url=f"dummy/end/point/{malfunction_id_to_update}",
@@ -703,6 +723,10 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
     assert "FQ7058" in loaded_beacon_malfunctions.ircs.values
     assert "AB654321" not in initial_beacon_malfunctions.ircs.values
     assert "AB654321" in loaded_beacon_malfunctions.ircs.values
+    assert (
+        "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"
+        in loaded_beacon_malfunctions.notification_requested.values
+    )
 
 
 def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):

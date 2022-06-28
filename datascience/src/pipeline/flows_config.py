@@ -37,6 +37,7 @@ from src.pipeline.flows import (
     logbook,
     missing_far_alerts,
     missing_trip_numbers,
+    notify_beacon_malfunctions,
     ports,
     position_alerts,
     regulations,
@@ -115,6 +116,16 @@ missing_far_alerts.flow.schedule = Schedule(
     ]
 )
 missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
+notify_beacon_malfunctions.flow.schedule = Schedule(
+    clocks=[
+        clocks.CronClock(
+            "0 * * * *",
+            parameter_defaults={
+                "test_mode": True,
+            },
+        ),
+    ]
+)
 update_beacon_malfunctions.flow.schedule = CronSchedule("5,15,25,35,45,55 * * * *")
 position_alerts.flow.schedule = Schedule(
     clocks=[
@@ -222,6 +233,7 @@ flows_to_register = [
     last_positions.flow,
     missing_far_alerts.flow,
     missing_trip_numbers.flow,
+    notify_beacon_malfunctions.flow,
     update_beacon_malfunctions.flow,
     ports.flow,
     position_alerts.flow,

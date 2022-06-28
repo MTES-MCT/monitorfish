@@ -1,5 +1,6 @@
 from datetime import datetime
 from email.message import EmailMessage
+from pathlib import Path
 from smtplib import (
     SMTPDataError,
     SMTPHeloError,

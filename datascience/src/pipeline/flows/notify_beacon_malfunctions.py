@@ -371,3 +371,5 @@ with Flow("Notify malfunctions") as flow:
     )
 
     execute_statement(reset_requested_notifications_statement)
+
+flow.file_name = Path(__file__).name

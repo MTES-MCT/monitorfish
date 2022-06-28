@@ -10,7 +10,11 @@ from sqlalchemy.sql import Select
 
 from src.pipeline.generic_tasks import extract
 from src.pipeline.processing import df_to_dict_series, join_on_multiple_keys
-from src.pipeline.shared_tasks.alerts import load_alerts
+from src.pipeline.shared_tasks.alerts import (
+    extract_silenced_alerts,
+    filter_silenced_alerts,
+    load_alerts,
+)
 from src.pipeline.shared_tasks.infrastructure import get_table
 from src.pipeline.shared_tasks.positions import add_vessel_identifier
 from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
@@ -339,6 +343,8 @@ def make_alerts(
             "ircs",
             "vessel_identifier",
             "creation_date",
+            "type",
+            "facade",
             "value",
             "alert_config_name",
         ]
@@ -429,8 +435,10 @@ with Flow("Missing FAR alerts") as flow:
         alert_config_name=alert_config_name,
         creation_date=utcnow,
     )
+    silenced_alerts = extract_silenced_alerts()
+    alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
 
     # Load
-    load_alerts(alerts, alert_config_name=alert_config_name)
+    load_alerts(alert_without_silenced, alert_config_name=alert_config_name)
 
 flow.file_name = Path(__file__).name

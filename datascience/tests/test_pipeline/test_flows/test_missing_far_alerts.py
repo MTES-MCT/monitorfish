@@ -284,6 +284,8 @@ def test_make_alerts():
                 datetime(2020, 5, 3, 8, 0, 0),
                 datetime(2020, 5, 3, 8, 0, 0),
             ],
+            "type": ["MISSING_FAR_ALERT", "MISSING_FAR_ALERT"],
+            "facade": ["NAMO", "MEMN"],
             "value": [
                 {
                     "seaFront": "NAMO",
@@ -305,7 +307,7 @@ def test_make_alerts():
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
 
-def test_flow(reset_test_data):
+def test_flow_when_an_alert_is_silenced(reset_test_data):
 
     initial_pending_alerts = read_query(
         "monitorfish_remote", "SELECT * FROM pending_alerts"
@@ -326,6 +328,7 @@ def test_flow(reset_test_data):
     )
 
     assert len(initial_pending_alerts) == 1
+    # Only two alerts are kept, as one alert is filtered by the filter_silenced_alerts task
     assert len(final_pending_alerts) == 2
     assert "ABC000055481" in final_pending_alerts.internal_reference_number.values
     assert "MISSING_FAR_ALERT" in final_pending_alerts.alert_config_name.values

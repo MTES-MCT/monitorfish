@@ -14,7 +14,11 @@ from sqlalchemy.sql import Select
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract
 from src.pipeline.processing import coalesce, df_to_dict_series, join_on_multiple_keys
-from src.pipeline.shared_tasks.alerts import load_alerts
+from src.pipeline.shared_tasks.alerts import (
+    extract_silenced_alerts,
+    filter_silenced_alerts,
+    load_alerts,
+)
 from src.pipeline.shared_tasks.facades import get_facades_table
 from src.pipeline.shared_tasks.positions import (
     add_vessel_identifier,
@@ -171,58 +175,6 @@ def get_fishing_gears_table() -> Table:
         conn=create_engine("monitorfish_remote"),
         logger=prefect.context.get("logger"),
     )
-
-
-@task(checkpoint=False)
-def extract_silenced_alerts() -> pd.DataFrame:
-    """
-    Return active silenced alerts: the FLow is computed before silenced_before_date
-    and after silenced_after_date if not null
-    """
-    return extract(
-        db_name="monitorfish_remote",
-        query_filepath="monitorfish/silenced_alerts.sql",
-    )
-
-
-@task(checkpoint=False)
-def filter_silenced_alerts(
-    alerts: pd.DataFrame, silenced_alerts: pd.DataFrame
-) -> pd.DataFrame:
-    """
-    Filters `alerts` to keep only alerts that are not in `silenced_alerts`. Both input DataFrames must have columns :
-
-      - internal_reference_number
-      - external_reference_number
-      - ircs
-
-    Args:
-        alerts (pd.DataFrame): positions alerts.
-        silenced_alerts (pd.DataFrame): silenced positions alerts.
-
-    Returns:
-        pd.DataFrame: same as input with some rows removed.
-    """
-    vessel_id_cols = ["internal_reference_number", "external_reference_number", "ircs"]
-
-    alerts = join_on_multiple_keys(
-        alerts, silenced_alerts, on=vessel_id_cols, how="left"
-    )
-
-    return alerts.loc[
-        (alerts.facade != alerts.silenced_sea_front)
-        | (alerts.type != alerts.silenced_type),
-        [
-            "vessel_name",
-            "internal_reference_number",
-            "external_reference_number",
-            "ircs",
-            "vessel_identifier",
-            "creation_date",
-            "value",
-            "alert_config_name",
-        ],
-    ]
 
 
 @task(checkpoint=False)

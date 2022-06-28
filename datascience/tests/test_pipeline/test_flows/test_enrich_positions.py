@@ -24,15 +24,21 @@ def test_extract_positions(reset_test_data):
     )
     positions = extract_positions(period)
 
-    assert len(positions) == 13
+    assert len(positions) == 19
     assert (
         positions.loc[:, "id"].values
         == [
             13641745,
+            13786527,
+            13786528,
+            13786529,
             13732807,
+            13786530,
             13786523,
             13735518,
+            13786532,
             13738407,
+            13786531,
             13632807,
             13634205,
             13635518,
@@ -462,7 +468,7 @@ def test_extract_enrich_load(reset_test_data):
 
     # The number of positions in the positions table should not change
     assert len(positions_after) == len(positions_before)
-    assert len(positions_after) == 20
+    assert len(positions_after) == 29
 
     # Positions outside of the selected Period should not be affected
     assert (
@@ -544,10 +550,26 @@ def test_extract_enrich_load(reset_test_data):
             [13634205, "RV348407", 1.107, False, timedelta(), False],
             [13637054, "RV348407", 0.355284, False, timedelta(hours=1), False],
             [13639642, "RV348407", 0.286178, False, timedelta(hours=2), True],
-            [13632807, "RO237719", 0.0, True, timedelta(), False],
-            [13635518, "RO237719", 0.0, True, timedelta(), False],
-            [13638407, "RO237719", 0.0, True, timedelta(), False],
-            [13640935, "RO237719", 0.0, True, timedelta(), False],
+            [13786524, "RO237719", 2.690000, False, timedelta(days=1), True],
+            [
+                13786525,
+                "RO237719",
+                2.690000,
+                False,
+                timedelta(days=1, minutes=30),
+                True,
+            ],
+            [13786526, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
+            [13786527, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
+            [13786528, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
+            [13786529, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
+            [13786530, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
+            [13786532, "RO237719", 2.690000, False, timedelta(days=1, hours=1), True],
+            [13786531, "RO237719", 2.690000, True, timedelta(), False],
+            [13632807, "RO237719", 0.000000, True, timedelta(), False],
+            [13635518, "RO237719", 0.000000, True, timedelta(), False],
+            [13638407, "RO237719", 0.000000, True, timedelta(), False],
+            [13640935, "RO237719", 0.000000, True, timedelta(), False],
             [13786523, "OHMYGOSH", 0.7, None, timedelta(days=3, hours=12), True],
             [13732807, "ZZTOPACDC", 0.4, True, timedelta(days=3), False],
             [13735518, "ZZTOPACDC", 0.4, False, timedelta(days=3, hours=4), False],

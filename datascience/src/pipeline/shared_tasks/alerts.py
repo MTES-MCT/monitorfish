@@ -3,7 +3,8 @@ import prefect
 from prefect import task
 
 from src.db_config import create_engine
-from src.pipeline.generic_tasks import load
+from src.pipeline.generic_tasks import extract, load
+from src.pipeline.processing import join_on_multiple_keys
 from src.pipeline.utils import delete_rows, get_table
 
 
@@ -65,3 +66,58 @@ def load_alerts(alerts: pd.DataFrame, alert_config_name: str):
             jsonb_columns=["value"],
             connection=connection,
         )
+
+
+@task(checkpoint=False)
+def extract_silenced_alerts() -> pd.DataFrame:
+    """
+    Return active silenced alerts: the FLow is computed before silenced_before_date
+    and after silenced_after_date if not null
+    """
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/silenced_alerts.sql",
+    )
+
+
+@task(checkpoint=False)
+def filter_silenced_alerts(
+    alerts: pd.DataFrame, silenced_alerts: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Filters `alerts` to keep only alerts that are not in `silenced_alerts`. Both input DataFrames must have columns :
+
+      - internal_reference_number
+      - external_reference_number
+      - ircs
+      - facade
+      - silenced_sea_front
+      - type or silenced_type
+
+    Args:
+        alerts (pd.DataFrame): positions alerts.
+        silenced_alerts (pd.DataFrame): silenced positions alerts.
+
+    Returns:
+        pd.DataFrame: same as input with some rows removed.
+    """
+    vessel_id_cols = ["internal_reference_number", "external_reference_number", "ircs"]
+
+    alerts = join_on_multiple_keys(
+        alerts, silenced_alerts, on=vessel_id_cols, how="left"
+    )
+
+    return alerts.loc[
+        (alerts.facade != alerts.silenced_sea_front)
+        | (alerts.type != alerts.silenced_type),
+        [
+            "vessel_name",
+            "internal_reference_number",
+            "external_reference_number",
+            "ircs",
+            "vessel_identifier",
+            "creation_date",
+            "value",
+            "alert_config_name",
+        ],
+    ]

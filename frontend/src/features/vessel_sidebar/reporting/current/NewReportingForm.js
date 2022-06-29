@@ -200,7 +200,7 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
         : 'Ex: Infraction maille cul de chalut'
       }
       $hasError={hasError}
-      width={385}
+      width={390}
       type="text"
       value={title}
       onChange={e => setTitle(e.target.value)}
@@ -222,9 +222,10 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
         <SelectPicker
           title={infractions?.find(infraction => infraction.natinfCode === natinfCode)?.infraction}
           data-cy={'new-reporting-select-natinf'}
-          style={{ width: natinfCode ? 350 : 70, margin: '0px 10px 10px 10px' }}
+          style={{ width: natinfCode ? 335 : 70, margin: '0px 10px 10px 10px' }}
           searchable={true}
-          placement={'auto'}
+          virtualized={false}
+          placement={'topLeft'}
           placeholder="Natinf"
           value={natinfCode}
           onChange={natinf => setNatinfCode(natinf)}

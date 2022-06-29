@@ -204,7 +204,7 @@ def split(
                 columns={"last_position_datetime_utc": "last_position_datetime_utc_new"}
             )
         ),
-        on=vessel_id_cols,
+        or_join_keys=vessel_id_cols,
         how="inner",
     )
 
@@ -361,21 +361,21 @@ def merge_last_positions_risk_factors_alerts_reportings(
     last_positions = join_on_multiple_keys(
         last_positions,
         risk_factors,
-        on=["cfr", "ircs", "external_immatriculation"],
+        or_join_keys=["cfr", "ircs", "external_immatriculation"],
         how="left",
     )
 
     last_positions = join_on_multiple_keys(
         last_positions,
         pending_alerts,
-        on=["cfr", "ircs", "external_immatriculation"],
+        or_join_keys=["cfr", "ircs", "external_immatriculation"],
         how="left",
     )
 
     last_positions = join_on_multiple_keys(
         last_positions,
         reportings,
-        on=["cfr", "ircs", "external_immatriculation"],
+        or_join_keys=["cfr", "ircs", "external_immatriculation"],
         how="left",
     )
 
@@ -397,7 +397,7 @@ def merge_last_positions_beacon_malfunctions(
     last_positions = join_on_multiple_keys(
         last_positions,
         beacon_malfunctions.rename(columns={"id": "beacon_malfunction_id"}),
-        on=["cfr", "ircs", "external_immatriculation"],
+        or_join_keys=["cfr", "ircs", "external_immatriculation"],
         how="left",
     )
 

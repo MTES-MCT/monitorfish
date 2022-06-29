@@ -288,7 +288,7 @@ def merge_risk_factor(
         vessels_with_missing_fars,
         current_risk_factors,
         how="left",
-        on=["cfr", "external_immatriculation", "ircs"],
+        or_join_keys=["cfr", "external_immatriculation", "ircs"],
     )
 
 

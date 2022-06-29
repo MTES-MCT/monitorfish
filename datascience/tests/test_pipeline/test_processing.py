@@ -535,7 +535,7 @@ class TestProcessingMethods(unittest.TestCase):
 
         # Test inner join
         res_inner = join_on_multiple_keys(
-            left, right, on=["key_1", "key_2", "key_3"], how="inner"
+            left, right, or_join_keys=["key_1", "key_2", "key_3"], how="inner"
         ).fillna("null")
 
         expected_values = [
@@ -550,7 +550,7 @@ class TestProcessingMethods(unittest.TestCase):
 
         # Test left join
         res_left = join_on_multiple_keys(
-            left, right, on=["key_1", "key_2", "key_3"], how="left"
+            left, right, or_join_keys=["key_1", "key_2", "key_3"], how="left"
         ).fillna("null")
 
         expected_values = [
@@ -569,7 +569,7 @@ class TestProcessingMethods(unittest.TestCase):
 
         # Test right join
         res_right = join_on_multiple_keys(
-            left, right, on=["key_1", "key_2", "key_3"], how="right"
+            left, right, or_join_keys=["key_1", "key_2", "key_3"], how="right"
         ).fillna("null")
 
         expected_values = [
@@ -587,7 +587,7 @@ class TestProcessingMethods(unittest.TestCase):
 
         # Test outer join
         res_outer = join_on_multiple_keys(
-            left, right, on=["key_1", "key_2", "key_3"], how="outer"
+            left, right, or_join_keys=["key_1", "key_2", "key_3"], how="outer"
         ).fillna("null")
 
         expected_values = [

@@ -135,7 +135,7 @@ def get_current_malfunctions(
     last_emission_of_vessels_that_should_emit = join_on_multiple_keys(
         beacons_last_emission,
         vessels_that_should_emit,
-        on=["cfr", "ircs", "external_immatriculation"],
+        or_join_keys=["cfr", "ircs", "external_immatriculation"],
         how="right",
     )
 

@@ -90,8 +90,7 @@ def filter_silenced_alerts(
       - internal_reference_number
       - external_reference_number
       - ircs
-      - facade
-      - silenced_sea_front
+      - facade or silenced_sea_front
       - type or silenced_type
 
     Args:

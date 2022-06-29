@@ -497,54 +497,55 @@ def join_on_multiple_keys(
     how: str = "inner",
     and_join_keys: list = None,
 ):
-    """Join two pandas DataFrames, attempting to match rows on several keys by
-        decreasing order of priority.
+    """
+    Join two pandas DataFrames, attempting to match rows on several keys by
+    decreasing order of priority.
 
-    +    Joins are performed successively with each of the keys listed in `or_join_keys`,
-    +    and results are then concatenated to form the final result. This is different from
-    +    joining on a composite key where all keys must match simultaneously : here, rows of
-    +    left and right DataFrames are joined if at least one of the keys match.
+    Joins are performed successively with each of the keys listed in `or_join_keys`,
+    and results are then concatenated to form the final result. This is different from
+    joining on a composite key where all keys must match simultaneously : here, rows of
+    left and right DataFrames are joined if at least one of the keys match.
 
-    +    Joins are performed on the keys listed in `or_join_keys` by "decreasing order of
-    +    priority" in the sense that rows of left and right that have been matched on one
-    +    key are removed from ulterior joins performed on the next keys.
+    Joins are performed on the keys listed in `or_join_keys` by "decreasing order of
+    priority" in the sense that rows of left and right that have been matched on one
+    key are removed from ulterior joins performed on the next keys.
 
-        During each of the joins on the individual keys, non-joining key pairs and, if any,
-        columns common to both left and right DataFrames, are coalesced (from left to
-        right).
+    During each of the joins on the individual keys, non-joining key pairs and, if any,
+    columns common to both left and right DataFrames, are coalesced (from left to
+    right).
 
-        Optionally, the join condition can contain an additional equality clause on keys
-        listed in `and_join_keys`.
+    Optionally, the join condition can contain an additional equality clause on keys
+    listed in `and_join_keys`.
 
-        If `or_join_keys` is `['A', 'B']` and `and_join_keys` is `['C', 'D']`, the SQL
-        equivalent of the join condition is :
+    If `or_join_keys` is `['A', 'B']` and `and_join_keys` is `['C', 'D']`, the SQL
+    equivalent of the join condition is :
 
-            WHERE
+        WHERE
+            (
+                left.A = right.A AND
+                left.C = right.C AND
+                left.D = right.D
+            ) OR
+            (
                 (
-                    left.A = right.A AND
-                    left.C = right.C AND
-                    left.D = right.D
-                ) OR
-                (
-                    (
-                        left.A IS NULL OR
-                        right.A IS NULL
-                    ) AND
-                    left.B = right.B AND
-                    left.C = right.C AND
-                    left.D = right.D
-                )
+                    left.A IS NULL OR
+                    right.A IS NULL
+                ) AND
+                left.B = right.B AND
+                left.C = right.C AND
+                left.D = right.D
+            )
 
-        Args:
-            left (pd.DataFrame): pandas DataFrame
-            right (pd.DataFrame): pandas DataFrame
-            or_join_keys (list): list of column names to use as join keys
-            how (str, optional): 'inner', 'left', 'right' or 'outer'. Defaults to 'inner'.
-            and_join_keys (list, optional): list of column names to use as additional join
-              keys
+    Args:
+        left (pd.DataFrame): pandas DataFrame
+        right (pd.DataFrame): pandas DataFrame
+        or_join_keys (list): list of column names to use as join keys
+        how (str, optional): 'inner', 'left', 'right' or 'outer'. Defaults to 'inner'.
+        and_join_keys (list, optional): list of column names to use as additional join
+            keys
 
-        Returns:
-            pd.DataFrame: result of join operation
+    Returns:
+        pd.DataFrame: result of join operation
     """
 
     joins = []

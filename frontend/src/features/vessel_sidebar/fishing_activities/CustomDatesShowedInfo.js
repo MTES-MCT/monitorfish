@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,10 +14,11 @@ const CustomDatesShowedInfo = ({ width }) => {
   } = useSelector(state => state.vessel)
   const defaultVesselTrackDepth = useSelector(state => state.map.defaultVesselTrackDepth)
 
-  const setToDefaultTrackDepth = () => {
+  const setToDefaultTrackDepth = useCallback(() => {
     const trackRequest = getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
+
     dispatch(modifyVesselTrackDepth(selectedVesselIdentity, trackRequest, false, false))
-  }
+  }, [selectedVesselIdentity])
 
   return <>
     {

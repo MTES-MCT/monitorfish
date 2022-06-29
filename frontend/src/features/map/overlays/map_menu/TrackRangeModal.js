@@ -4,7 +4,7 @@ import { COLORS } from '../../../../constants/constants'
 import { Modal } from 'rsuite'
 import DateRange from '../../../vessel_sidebar/actions/track_request/DateRange'
 
-const TrackRangeModal = ({ isModalOpen, setModalIsOpen, selectedDates, resetToDefaultTrackDepth, setSelectedDates }) => {
+const TrackRangeModal = ({ isModalOpen, setModalIsOpen, selectedDates, setSelectedDates }) => {
   return (
     <ModalWithCustomHeight
       size={'xs'}
@@ -22,11 +22,10 @@ const TrackRangeModal = ({ isModalOpen, setModalIsOpen, selectedDates, resetToDe
       </Modal.Header>
       <Body>
         <DateRange
-          disableAfterToday
+          defaultValue={selectedDates}
+          isDisabledAfterToday
+          onChange={setSelectedDates}
           placeholder={'Choisir une période précise'}
-          dates={selectedDates}
-          resetToDefaultTrackDepth={resetToDefaultTrackDepth}
-          modifyVesselTrackFromDates={setSelectedDates}
           width={265}
         />
       </Body>

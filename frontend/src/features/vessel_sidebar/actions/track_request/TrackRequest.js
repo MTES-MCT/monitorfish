@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import TrackDepth from './TrackDepth'
 import DateRange from './DateRange'
 import { COLORS } from '../../../../constants/constants'
 import styled from 'styled-components'
 import { ReactComponent as VesselSVG } from '../../../icons/Icone_navire.svg'
 import {
-  getTrackRequestFromDates,
-  getTrackRequestFromTrackDepth
+  getTrackRequestFromTrackDepth,
+  VesselTrackDepth
 } from '../../../../domain/entities/vesselTrackDepth'
 import { useDispatch, useSelector } from 'react-redux'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
@@ -18,44 +18,36 @@ const TrackRequest = ({ sidebarIsOpen, rightMenuIsOpen, trackRequestIsOpen, setT
 
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const { defaultVesselTrackDepth } = useSelector(state => state.map)
-  const [selectedTrackDepth, setSelectedTrackDepth] = useState(null)
-  const [selectedDates, setSelectedDates] = useState([])
-  const {
-    selectedVesselIdentity,
-    selectedVesselCustomTrackRequest
-  } = useSelector(state => state.vessel)
+  /** @type {[string, *]} */
+  const [selectedTrackDepth, setSelectedTrackDepth] = useState(defaultVesselTrackDepth)
+  /** @type {[[Date, Date], *]} */
+  const [selectedDates, setSelectedDates] = useState()
+  const { selectedVesselIdentity } = useSelector(state => state.vessel)
 
-  useEffect(() => {
-    const { afterDateTime, beforeDateTime, trackDepth } = selectedVesselCustomTrackRequest
-    if (afterDateTime && beforeDateTime) {
-      setSelectedTrackDepth(null)
-    } else {
-      setSelectedTrackDepth(trackDepth || defaultVesselTrackDepth)
+  /**
+   * @param {[Date, Date]} dateRange
+   */
+  const updateDateRange = useCallback(([startDate, endDate]) => {
+    const trackRequest = {
+      trackDepth: VesselTrackDepth.CUSTOM,
+      afterDateTime: startDate,
+      beforeDateTime: endDate
     }
-  }, [selectedVesselCustomTrackRequest])
 
-  useEffect(() => {
-    const { afterDateTime, beforeDateTime } = selectedVesselCustomTrackRequest
-    if (afterDateTime && beforeDateTime) {
-      setSelectedDates([afterDateTime, beforeDateTime])
-    } else {
-      setSelectedDates([])
-    }
-  }, [selectedVesselCustomTrackRequest])
-
-  const triggerModifyVesselTrackFromTrackDepthRadio = trackDepthRadioSelection => {
-    const trackRequest = getTrackRequestFromTrackDepth(trackDepthRadioSelection)
     dispatch(modifyVesselTrackDepth(selectedVesselIdentity, trackRequest, false, false))
-  }
 
-  const triggerModifyVesselTrackFromDates = trackDepthDatesSelection => {
-    if (trackDepthDatesSelection?.length > 1) {
-      const trackRequest = getTrackRequestFromDates(trackDepthDatesSelection[0], trackDepthDatesSelection[1])
-      dispatch(modifyVesselTrackDepth(selectedVesselIdentity, trackRequest, false, true))
-    }
-  }
+    setSelectedDates([startDate, endDate])
+    setSelectedTrackDepth(undefined)
+  }, [selectedVesselIdentity])
 
-  const resetToDefaultTrackDepth = () => triggerModifyVesselTrackFromTrackDepthRadio(defaultVesselTrackDepth)
+  const updateTrackDepth = useCallback((trackDepthRadioSelection) => {
+    const trackRequest = getTrackRequestFromTrackDepth(trackDepthRadioSelection)
+
+    dispatch(modifyVesselTrackDepth(selectedVesselIdentity, trackRequest, false, false))
+
+    setSelectedDates(undefined)
+    setSelectedTrackDepth(trackRequest.trackDepth)
+  }, [selectedVesselIdentity])
 
   return (
     <>
@@ -82,18 +74,17 @@ const TrackRequest = ({ sidebarIsOpen, rightMenuIsOpen, trackRequestIsOpen, setT
               <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
               <TrackDepth
                 selectedTrackDepth={selectedTrackDepth}
-                modifyVesselTrackDepth={triggerModifyVesselTrackFromTrackDepthRadio}
+                modifyVesselTrackDepth={updateTrackDepth}
               />
               <DateRange
-                disableAfterToday
+                defaultValue={selectedDates}
+                isDisabledAfterToday
+                onChange={updateDateRange}
                 placeholder={'Choisir une période précise'}
-                dates={selectedDates}
-                resetToDefaultTrackDepth={resetToDefaultTrackDepth}
-                modifyVesselTrackFromDates={triggerModifyVesselTrackFromDates}
               />
               <Header>Liste des positions VMS affichées</Header>
               <PositionsTable
-                sidebarIsOpen={sidebarIsOpen}
+                openBox={sidebarIsOpen}
               />
             </TrackRequestBody>
           </>

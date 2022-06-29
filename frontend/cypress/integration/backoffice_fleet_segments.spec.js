@@ -6,7 +6,7 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 context('Fleet segments', () => {
   beforeEach(() => {
     cy.viewport(1280, 1024)
-    cy.intercept('GET', `/bff/v1/fleet_segments`).as('fleetSegments')
+    cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
     cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)
     cy.wait('@fleetSegments')
   })
@@ -88,6 +88,7 @@ context('Fleet segments', () => {
     // When
     cy.intercept('PUT', '/bff/v1/fleet_segments/ATL036').as('updateFleetSegment')
     cy.get('.rs-table-cell-content').eq(11).click()
+    cy.get('[data-key="MSP"]').scrollIntoView()
     cy.get('[data-key="MSP"]').click()
     cy.get('[data-key="NO"]').click()
 
@@ -182,5 +183,4 @@ context('Fleet segments', () => {
     cy.get('[title="Malotru\'s segment"] > .rs-table-cell-content > .rs-input').should('exist')
     cy.get('*[data-cy="delete-row-SEGMENT007"]').should('exist')
   })
-
 })

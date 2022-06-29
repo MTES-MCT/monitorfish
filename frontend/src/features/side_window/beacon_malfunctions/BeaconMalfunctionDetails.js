@@ -36,6 +36,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselSt
 
   useEffect(() => {
     if (vesselStatus?.color && beaconMalfunction?.id && getIsMalfunctioning(beaconMalfunction?.stage)) {
+      // TODO Use styled-component and avoid useEffect to update these elements style.
       vesselStatusRef.current.querySelector('.rs-picker-select').style.background = vesselStatus.color
       vesselStatusRef.current.querySelector('[data-cy="side-window-beacon-malfunctions-vessel-status"]').style.color = vesselStatus.textColor
       vesselStatusRef.current.querySelector('.rs-picker-select').style.setProperty('margin', '2px 10px 10px 0px', 'important')

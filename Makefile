@@ -6,7 +6,7 @@ INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 install:
 	cd frontend && npm install
 run:
-	docker network create monitorfish_backend
+	docker network inspect monitorfish_backend >/dev/null 2>&1 || docker network create monitorfish_backend
 	docker-compose -f ./docker-compose.yml -f ./infra/dev/docker-compose.dev.yml up -d app
 	make run-front
 run-front:

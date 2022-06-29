@@ -19,11 +19,10 @@ const CurrentBeaconMalfunctionBody = props => {
 
   useEffect(() => {
     if (vesselStatus?.color && currentBeaconMalfunctionWithDetails?.beaconMalfunction?.id) {
-      // Target the `select-picker` DOM component
-      vesselStatusRef.current.children[0].style.background = vesselStatus.color
-      vesselStatusRef.current.children[0].style.setProperty('margin', '0 45px 0 0', 'important')
-      // Target the `rs-picker-toggle-value` span DOM component
-      vesselStatusRef.current.children[0].firstChild.firstChild.firstChild.style.color = vesselStatus.textColor
+      // TODO Use styled-component and avoid useEffect to update these elements style.
+      vesselStatusRef.current.querySelector('.rs-picker-select').style.background = vesselStatus.color
+      vesselStatusRef.current.querySelector('.rs-picker-select').style.setProperty('margin', '0 45px 0 0', 'important')
+      vesselStatusRef.current.querySelector('.rs-picker-toggle-value').style.color = vesselStatus.textColor
     }
   }, [vesselStatus, currentBeaconMalfunctionWithDetails?.beaconMalfunction])
 

@@ -4,7 +4,7 @@ from prefect import task
 
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract, load
-from src.pipeline.processing import join_on_multiple_keys
+from src.pipeline.processing import get_unused_col_name, join_on_multiple_keys
 from src.pipeline.utils import delete_rows, get_table
 
 
@@ -90,8 +90,8 @@ def filter_silenced_alerts(
       - internal_reference_number
       - external_reference_number
       - ircs
-      - facade or silenced_sea_front
-      - type or silenced_type
+      - facade
+      - type
 
     Args:
         alerts (pd.DataFrame): positions alerts.
@@ -101,14 +101,24 @@ def filter_silenced_alerts(
         pd.DataFrame: same as input with some rows removed.
     """
     vessel_id_cols = ["internal_reference_number", "external_reference_number", "ircs"]
+    alert_id_cols = ["facade", "type"]
 
-    alerts = join_on_multiple_keys(
-        alerts, silenced_alerts, on=vessel_id_cols, how="left"
+    id_col_name = get_unused_col_name("id", alerts)
+    alerts[id_col_name] = range(len(alerts))
+
+    alerts_to_remove = join_on_multiple_keys(
+        alerts,
+        silenced_alerts,
+        or_join_keys=vessel_id_cols,
+        how="inner",
+        and_join_keys=alert_id_cols,
     )
 
-    return alerts.loc[
-        (alerts.facade != alerts.silenced_sea_front)
-        | (alerts.type != alerts.silenced_type),
+    alert_ids_to_remove = set(alerts_to_remove[id_col_name])
+
+    alerts = alerts.loc[~alerts[id_col_name].isin(alert_ids_to_remove)]
+
+    return alerts[
         [
             "vessel_name",
             "internal_reference_number",
@@ -118,5 +128,5 @@ def filter_silenced_alerts(
             "creation_date",
             "value",
             "alert_config_name",
-        ],
+        ]
     ]

@@ -383,7 +383,7 @@ def filter_on_gears(
         positions_in_alert,
         current_gears,
         how="left",
-        on=["cfr", "external_immatriculation", "ircs"],
+        or_join_keys=["cfr", "external_immatriculation", "ircs"],
     )
 
     positions_in_alert_known_gear = positions_in_alert.dropna(subset=["current_gears"])
@@ -416,7 +416,7 @@ def merge_risk_factor(
         positions_in_alert,
         current_risk_factors,
         how="left",
-        on=["cfr", "external_immatriculation", "ircs"],
+        or_join_keys=["cfr", "external_immatriculation", "ircs"],
     )
 
 

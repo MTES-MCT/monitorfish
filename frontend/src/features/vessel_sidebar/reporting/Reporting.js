@@ -11,7 +11,9 @@ import { getDateTime } from '../../../utils'
 import { ReactComponent as ObservationIconSVG } from '../../icons/Icone_observations.svg'
 import { ReactComponent as InfractionSuspicionIconSVG } from '../../icons/Icone_alerte_signalement_rouge_16.svg'
 import { ReactComponent as ArchiveIconSVG } from '../../icons/Bouton_archiver.svg'
+/*
 import { ReactComponent as EditIconSVG } from '../../icons/Bouton_editer.svg'
+ */
 import { ReactComponent as DeleteIconSVG } from '../../icons/Bouton_supprimer.svg'
 import { getAlertNameFromType } from '../../../domain/entities/alerts'
 import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
@@ -88,13 +90,13 @@ const Reporting = props => {
               ? <NumberOfAlerts>{numberOfAlerts}</NumberOfAlerts>
               : null
           }
-          {
+          {/* {
             reporting?.type === ReportingType.OBSERVATION.code
               ? <EditButton
                 title={'Editer'}
               />
               : null
-          }
+          } */}
           <ArchiveButton
             data-cy={'archive-reporting-card'}
             title={'Archiver'}
@@ -200,10 +202,12 @@ const ArchiveButton = styled(ArchiveIconSVG)`
   margin-top: ${props => props.isAlert ? 11 : 7}px;
 `
 
+/*
 const EditButton = styled(EditIconSVG)`
   cursor: pointer;
   margin-top: 7px;
 `
+ */
 
 const DeleteButton = styled(DeleteIconSVG)`
   cursor: pointer;

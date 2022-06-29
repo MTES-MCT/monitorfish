@@ -19,6 +19,7 @@ context('Vessels list', () => {
 
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 20000 })
     cy.get('*[class^="rs-picker-tag-wrapper"]').eq(0).type('France{enter}')
+    cy.get('body').clickOutside()
     cy.get('*[data-cy^="vessels-list-box-filter"]').click({ timeout: 20000 })
     cy.wait(200)
     cy.get('body').click(60, 230, { timeout: 20000 })
@@ -83,7 +84,7 @@ context('Vessels list', () => {
     cy.get('*[data-cy="download-vessels"]').click()
 
     // Then
-    cy.wait(400)
+    cy.wait(1000)
     cy.exec('cd cypress/downloads && ls').then(result => {
       const downloadedCSVFilename = result.stdout
       return cy.readFile(`cypress/downloads/${downloadedCSVFilename}`)

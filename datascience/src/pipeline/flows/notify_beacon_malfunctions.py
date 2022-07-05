@@ -11,6 +11,7 @@ from smtplib import (
 from time import sleep
 from typing import List, Union
 
+import css_inline
 import pandas as pd
 import prefect
 import sqlalchemy
@@ -160,6 +161,7 @@ def render(
         return pdf
 
     else:
+        html = css_inline.inline(html, remove_style_tags=True)
         return html
 
 

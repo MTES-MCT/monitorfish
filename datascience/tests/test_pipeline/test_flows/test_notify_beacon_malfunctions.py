@@ -256,6 +256,29 @@ def malfunction_to_notify_data() -> dict:
 
 
 @fixture
+def malfunction_to_notify_data_with_nulls() -> dict:
+    return dict(
+        beacon_malfunction_id=1,
+        vessel_cfr_or_immat_or_ircs=None,
+        beacon_number=None,
+        vessel_name=None,
+        malfunction_start_date_utc=datetime(2022, 1, 3, 12, 53, 23),
+        last_position_latitude=float("nan"),
+        last_position_longitude=float("nan"),
+        vessel_emails=[],
+        vessel_mobile_phone=None,
+        vessel_fax=None,
+        operator_name=None,
+        operator_email=None,
+        operator_mobile_phone=None,
+        operator_fax=None,
+        satellite_operator=None,
+        satellite_operator_emails=[],
+        previous_notification_datetime_utc=None,
+    )
+
+
+@fixture
 def email_message() -> EmailMessage:
     msg = EmailMessage()
     msg["Subject"] = "The subject of the email"
@@ -382,6 +405,35 @@ def test_render(
     ######################### Uncomment to replace test files #########################
     # with open(test_filepath, "w" + mode_suffix) as f:
     #     f.write(pdf_or_html)
+    ###################################################################################
+
+
+@patch(
+    "src.pipeline.flows.notify_beacon_malfunctions.datetime",
+    mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
+)
+def test_render_with_null_values(malfunction_to_notify_data_with_nulls, templates):
+
+    test_filepath = (
+        TEST_DATA_LOCATION
+        / "emails/MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_WITH_NULLS.html"
+    )
+
+    with open(test_filepath, "r") as f:
+        expected_res = f.read()
+
+    m = BeaconMalfunctionToNotify(
+        **malfunction_to_notify_data_with_nulls,
+        notification_type="MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION",
+        test_mode=False,
+    )
+    html = render.run(m=m, templates=templates, output_format="html")
+
+    assert html == expected_res
+
+    ######################### Uncomment to replace test file ##########################
+    # with open(test_filepath, "w") as f:
+    #     f.write(html)
     ###################################################################################
 
 

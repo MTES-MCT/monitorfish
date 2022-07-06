@@ -284,7 +284,7 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
             closeForm()
             deleteLocalStorageReportingEntry()
           })
-          .catch(error => console.log(error))
+          .catch(console.error)
       }}
     >
       Valider

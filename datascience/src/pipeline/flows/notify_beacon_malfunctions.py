@@ -37,6 +37,7 @@ from src.pipeline.entities.beacon_malfunctions import (
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.emails import create_html_email, resize_pdf_to_A4, send_email
 from src.pipeline.helpers.spatial import Position, position_to_position_representation
+from src.pipeline.shared_tasks.control_flow import filter_results
 from src.pipeline.shared_tasks.infrastructure import get_table
 
 cnsp_logo_path = EMAIL_IMAGES_LOCATION / "logo_cnsp.jpg"
@@ -362,9 +363,11 @@ with Flow("Notify malfunctions") as flow:
     )
 
     email = create_email.map(html=html, pdf=pdf, m=malfunctions_to_notify)
+    email = filter_results(email)
 
     notifications = send_email_notification.map(email, malfunctions_to_notify)
 
+    notifications = filter_results(notifications)
     load_notifications(flatten(notifications))
 
     reset_requested_notifications_statement = (

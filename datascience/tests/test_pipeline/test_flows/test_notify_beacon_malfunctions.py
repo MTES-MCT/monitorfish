@@ -581,6 +581,14 @@ def test_flow(reset_test_data):
     def mock_send_email_notification(
         mock_send_email, msg: EmailMessage, m: BeaconMalfunctionToNotify
     ):
+        if m.beacon_malfunction_id == 2:
+            raise ValueError(
+                (
+                    "This email could not be sent - the flow should filter it and process "
+                    "the other two malfunctions' notifications"
+                )
+            )
+
         mock_send_email.return_value = {
             "email1@sat.op": (550, "User unknown"),
             "email2@sat.op": (None, None),
@@ -632,15 +640,20 @@ def test_flow(reset_test_data):
         state.result[flow.get_tasks("create_email")[0]].result[0], EmailMessage
     )
 
+    # Check mock_send_email_notification results
     assert (
         len(state.result[flow.get_tasks("mock_send_email_notification")[0]].result) == 3
+    )
+    assert isinstance(
+        state.result[flow.get_tasks("mock_send_email_notification")[0]].result[1],
+        ValueError,
     )
     assert [
         len(notifs)
         for notifs in state.result[
             flow.get_tasks("mock_send_email_notification")[0]
-        ].result
-    ] == [5, 2, 2]
+        ].result[0:3:2]
+    ] == [5, 2]
     assert (
         state.result[flow.get_tasks("mock_send_email_notification")[0]]
         .result[0][0]
@@ -659,8 +672,15 @@ def test_flow(reset_test_data):
         == "User unknown"
     )
 
+    # Check filtered notifications : out of the 3 malfunctions to notify, the one with
+    # beacon_malfunction_id == 2 raised an error during the
+    # mock_send_email_notification task and should be removed by the prefect
+    # filter_results task.
+    assert len(state.result[flow.get_tasks("FilterTask")[1]].result) == 2
+
+    # Check the data loaded into the database
     assert len(initial_notifications) == 2
-    assert len(final_notifications) == 11
+    assert len(final_notifications) == 9
 
     assert len(initial_malfunctions) == 3
     assert initial_malfunctions.notification_requested.notnull().all()

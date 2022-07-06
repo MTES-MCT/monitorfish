@@ -606,6 +606,56 @@ def test_join_on_multiple_keys():
 
     assert res_outer.values.tolist() == expected_values
 
+    # Test join with and_join_keys
+    res_and_join_keys = join_on_multiple_keys(
+        left,
+        right,
+        or_join_keys=["key_1", "key_2"],
+        and_join_keys=["key_3"],
+        how="inner",
+    )
+
+    expected_res_and_join_keys = pd.DataFrame(
+        {
+            "key_1": [1, 2],
+            "key_2": ["a", None],
+            "key_3": ["A", "B"],
+            "value_left_1": [9, 8],
+            "value_left_2": [90, 80],
+            "value_right": ["R1", "R2"],
+        }
+    )
+
+    pd.testing.assert_frame_equal(
+        res_and_join_keys, expected_res_and_join_keys, check_dtype=False
+    )
+
+    # Test join with coalesce_common_columns=False
+    res_no_coalesce_common_columns = join_on_multiple_keys(
+        left,
+        right,
+        or_join_keys=["key_1", "key_2"],
+        coalesce_common_columns=False,
+        how="inner",
+    )
+
+    expected_res_no_coalesce_common_columns = pd.DataFrame(
+        {
+            "key_1": [1, 2, 4, None],
+            "key_2": ["a", None, "d", "c"],
+            "key_3": ["A", "B", "D", None],
+            "value_left_1": [9, 8, 6, 7],
+            "value_left_2": [90, 80, None, 70],
+            "value_right": ["R1", "R2", "R4", "R3"],
+        }
+    )
+
+    pd.testing.assert_frame_equal(
+        res_no_coalesce_common_columns,
+        expected_res_no_coalesce_common_columns,
+        check_dtype=False,
+    )
+
 
 def test_left_isin_right_by_decreasing_priority():
     left = pd.DataFrame(

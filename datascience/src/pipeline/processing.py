@@ -496,6 +496,7 @@ def join_on_multiple_keys(
     or_join_keys: list,
     how: str = "inner",
     and_join_keys: list = None,
+    coalesce_common_columns: bool = True,
 ):
     """
     Join two pandas DataFrames, attempting to match rows on several keys by
@@ -512,7 +513,7 @@ def join_on_multiple_keys(
 
     During each of the joins on the individual keys, non-joining key pairs and, if any,
     columns common to both left and right DataFrames, are coalesced (from left to
-    right).
+    right) if `coalesce_common_columns` is `True` (the default).
 
     Optionally, the join condition can contain an additional equality clause on keys
     listed in `and_join_keys`.
@@ -543,6 +544,8 @@ def join_on_multiple_keys(
         how (str, optional): 'inner', 'left', 'right' or 'outer'. Defaults to 'inner'.
         and_join_keys (list, optional): list of column names to use as additional join
             keys
+        coalesce_common_columns (bool, optional): whether to coalesce values in the
+          columns that are present in both DataFrames. Defaults to `True`.
 
     Returns:
         pd.DataFrame: result of join operation
@@ -578,7 +581,10 @@ def join_on_multiple_keys(
             if column_to_merge in keys_already_joined:
                 join = join[(join[r].isna()) | (join[l].isna())]
 
-            join[column_to_merge] = coalesce(join[[l, r]])
+            if coalesce_common_columns:
+                join[column_to_merge] = coalesce(join[[l, r]])
+            else:
+                join[column_to_merge] = join[l]
 
             join = join.drop(columns=[l, r])
 

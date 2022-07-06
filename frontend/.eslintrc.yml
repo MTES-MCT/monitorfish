@@ -1,9 +1,11 @@
 env:
   browser: true
   es6: true
+
 extends:
-  - 'plugin:react/recommended'
+  - plugin:react/recommended
   - standard
+
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
@@ -11,29 +13,65 @@ globals:
   it: readonly
   expect: readonly
   jest: readonly
-parser: "babel-eslint"
+
+parser: babel-eslint
+
 parserOptions:
   ecmaFeatures:
     jsx: true
   ecmaVersion: 2018
   sourceType: module
+
 plugins:
   - react
   - react-hooks
-rules: {
-  "react-hooks/exhaustive-deps": "warn",
-  "react/prop-types": "off",
-  "react-hooks/rules-of-hooks": "error",
-  "no-shadow": ["warn", { "builtinGlobals": false, "hoist": "functions", "allow": ["resolve", "reject", "done"] }],
-  "block-scoped-var": "warn",
-  "consistent-return": "warn",
-  "react/forbid-component-props": "warn",
-  "react/forbid-dom-props": "warn",
-  "react/no-access-state-in-setstate": "warn",
-  "react/no-array-index-key": "warn",
-  "react/jsx-no-bind": "warn"
 
-}
+rules:
+  no-shadow:
+    - warn
+    - builtinGlobals: false
+      hoist: functions
+      allow:
+        - done
+        - reject
+        - resolve
+  block-scoped-var: warn
+  consistent-return: warn
+  no-use-before-define: off
+  no-console:
+    - warn
+    - allow:
+        - error
+        - warn
+
+  # TODO Re-enable these rules (to error) once refactoring is done
+  no-unused-vars: warn
+
+  react/forbid-dom-props: warn
+  react/no-access-state-in-setstate: warn
+  react/no-array-index-key: warn
+  react/prop-types: off
+  # No need to enforce this rule since React v17
+  react/react-in-jsx-scope:
+    off
+
+    # TODO Re-enable these rules (to error) once refactoring is done
+  react/forbid-component-props: off
+  react/jsx-no-bind: off
+
+  react-hooks/exhaustive-deps: off
+  react-hooks/rules-of-hooks: error
+
 settings:
   react:
     version: 16.13.1
+
+overrides:
+  - files: "**/*.d.ts"
+    parser: "@typescript-eslint/parser"
+    parserOptions:
+      ecmaVersion: 2022,
+      project: ./tsconfig.json
+    rules:
+      no-undef: off
+      no-unused-vars: off

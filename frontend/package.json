@@ -6,7 +6,7 @@
     "@dnd-kit/core": "^4.0.3",
     "@dnd-kit/modifiers": "^4.0.0",
     "@reduxjs/toolkit": "^1.5.0",
-    "@sentry/react": "^6.2.3",
+    "@sentry/react": "^6.19.7",
     "@sentry/tracing": "^6.2.3",
     "@svgr/webpack": "^5.5.0",
     "@testing-library/jest-dom": "^4.2.4",

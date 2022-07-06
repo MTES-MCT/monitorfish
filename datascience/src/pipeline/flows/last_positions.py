@@ -191,6 +191,11 @@ def split(
 
     last_positions_to_update = join_on_multiple_keys(
         (
+            new_last_positions.rename(
+                columns={"last_position_datetime_utc": "last_position_datetime_utc_new"}
+            )
+        ),
+        (
             previous_last_positions[
                 vessel_id_cols + ["last_position_datetime_utc"]
             ].rename(
@@ -199,13 +204,9 @@ def split(
                 }
             )
         ),
-        (
-            new_last_positions.rename(
-                columns={"last_position_datetime_utc": "last_position_datetime_utc_new"}
-            )
-        ),
         or_join_keys=vessel_id_cols,
         how="inner",
+        coalesce_common_columns=False,
     )
 
     return (

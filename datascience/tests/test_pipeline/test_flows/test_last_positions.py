@@ -218,8 +218,15 @@ def test_split():
     previous_last_positions = pd.DataFrame(
         {
             "cfr": ["A", "B", "C", None, None, "G"],
-            "external_immatriculation": ["AA", "BB", None, "DD", None, "GG"],
-            "ircs": ["AAA", None, None, None, "EEE", "GGG"],
+            "external_immatriculation": [
+                "AA",
+                "BB",
+                None,
+                "DD",
+                None,
+                "GG_will_change",
+            ],
+            "ircs": [None, None, None, None, "EEE", "GGG_will_be_removed"],
             "last_position_datetime_utc": [
                 datetime(2021, 10, 1, 20, 52, 10),
                 datetime(2021, 10, 1, 20, 42, 10),
@@ -234,7 +241,7 @@ def test_split():
     new_last_positions = pd.DataFrame(
         {
             "cfr": ["A", None, "F", "G"],
-            "external_immatriculation": ["AA", None, "FF", "GG"],
+            "external_immatriculation": ["AA", None, "FF", "GG_updated"],
             "ircs": ["AAA", "EEE", None, None],
             "last_position_datetime_utc": [
                 datetime(2021, 10, 1, 21, 52, 10),
@@ -261,13 +268,8 @@ def test_split():
     expected_last_positions_to_update = pd.DataFrame(
         {
             "cfr": ["A", "G", None],
-            "external_immatriculation": ["AA", "GG", None],
-            "ircs": ["AAA", "GGG", "EEE"],
-            "last_position_datetime_utc_previous": [
-                datetime(2021, 10, 1, 20, 52, 10),
-                datetime(2021, 10, 1, 19, 16, 55),
-                datetime(2021, 10, 1, 20, 16, 10),
-            ],
+            "external_immatriculation": ["AA", "GG_updated", None],
+            "ircs": ["AAA", None, "EEE"],
             "last_position_datetime_utc_new": [
                 datetime(2021, 10, 1, 21, 52, 10),
                 datetime(2021, 10, 1, 20, 17, 25),
@@ -276,6 +278,11 @@ def test_split():
             "some": [1, 4, 2],
             "more": ["a", "g", "b"],
             "data": [None, "Picachu", 2.256],
+            "last_position_datetime_utc_previous": [
+                datetime(2021, 10, 1, 20, 52, 10),
+                datetime(2021, 10, 1, 19, 16, 55),
+                datetime(2021, 10, 1, 20, 16, 10),
+            ],
         },
     ).astype({"data": "object"})
 

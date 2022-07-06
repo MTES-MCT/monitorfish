@@ -645,7 +645,7 @@ def test_join_on_multiple_keys():
             "key_2": ["a", None, "d", "c"],
             "key_3": ["A", "B", "D", None],
             "value_left_1": [9, 8, 6, 7],
-            "value_left_2": [90, 80, None, 70],
+            "value_left_2": [90, 80, None, "70"],
             "value_right": ["R1", "R2", "R4", "R3"],
         }
     )

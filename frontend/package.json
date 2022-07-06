@@ -5,7 +5,7 @@
   "dependencies": {
     "@dnd-kit/core": "^4.0.3",
     "@dnd-kit/modifiers": "^4.0.0",
-    "@reduxjs/toolkit": "^1.5.0",
+    "@reduxjs/toolkit": "^1.8.2",
     "@sentry/react": "^6.2.3",
     "@sentry/tracing": "^6.2.3",
     "@svgr/webpack": "^5.5.0",

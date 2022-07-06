@@ -11,6 +11,7 @@ from smtplib import (
 from time import sleep
 from typing import List, Union
 
+import css_inline
 import pandas as pd
 import prefect
 import sqlalchemy
@@ -110,7 +111,8 @@ def render(
         else None
     )
 
-    if m.last_position_latitude and m.last_position_longitude:
+    # `nan` evaluates to True so `pd.notnull` is required
+    if pd.notnull(m.last_position_latitude) and pd.notnull(m.last_position_longitude):
         last_position = Position(
             latitude=m.last_position_latitude,
             longitude=m.last_position_longitude,
@@ -159,6 +161,7 @@ def render(
         return pdf
 
     else:
+        html = css_inline.inline(html, remove_style_tags=True)
         return html
 
 

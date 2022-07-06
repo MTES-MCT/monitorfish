@@ -383,6 +383,14 @@ ssh = ["bcrypt (>=3.1.5)"]
 test = ["pytest (>=6.2.0)", "pytest-benchmark", "pytest-cov", "pytest-subtests", "pytest-xdist", "pretend", "iso8601", "pytz", "hypothesis (>=1.11.4,!=3.79.2)"]
 
 [[package]]
+name = "css-inline"
+version = "0.8.2"
+description = "Fast CSS inlining written in Rust"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "cssselect"
 version = "1.1.0"
 description = "cssselect parses CSS3 Selectors and translates them to XPath 1.0"
@@ -3252,7 +3260,7 @@ test = ["pytest"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.13"
-content-hash = "e4c2c6e6ee2d14e1d952a3d592f0adf7c847e8335df9a2b77724c60b84165767"
+content-hash = "d8ee7d9c9305651127f36b7a2c2a0a252c5980c512c20fdeb3d906aec8a96e13"
 
 [metadata.files]
 alabaster = [
@@ -3585,6 +3593,56 @@ cryptography = [
     {file = "cryptography-37.0.3-pp39-pypy39_pp73-manylinux_2_24_x86_64.whl", hash = "sha256:c3c8b1ad2c266fdf7adc041cc4156d6a3d14db93de2f81b26a5af97ef3f209e5"},
     {file = "cryptography-37.0.3-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:2383d6c3088e863304c37c65cd2ea404b7fbb4886823eab1d74137cc27f3d2ee"},
     {file = "cryptography-37.0.3.tar.gz", hash = "sha256:ae430d51c67ac638dfbb42edf56c669ca9c74744f4d225ad11c6f3d355858187"},
+]
+css-inline = [
+    {file = "css_inline-0.8.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:124f0e6c09ad7ecfe7f6b35c0fc1a9ab82d108ffd419acac7c29f1cf795d45b7"},
+    {file = "css_inline-0.8.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:cbba7efdccd89023024637dd967c45172759ca1ca640de22704d0bc6470e3dc4"},
+    {file = "css_inline-0.8.2-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4301c85eeff53408073dae03a57874bac76db0ec7a7cf4ccbac7aafe26912a2a"},
+    {file = "css_inline-0.8.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3bf37f5198acb89f040fcf5c7cb121311f6ec4245ad8f85d95c5adea1751232f"},
+    {file = "css_inline-0.8.2-cp310-cp310-musllinux_1_1_aarch64.whl", hash = "sha256:9ee5a8e0918be802ce7d5127df7768de36eb9d3f29dc4310661be64849c030bb"},
+    {file = "css_inline-0.8.2-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:611787a60be14adbe994e9a872c8c69c77ee4f9ea6444933a3c8a7fa78aeeefc"},
+    {file = "css_inline-0.8.2-cp310-cp310-win32.whl", hash = "sha256:10a5dc1b874bcb218c2a6986bc9fb296171c34a467ab576684d2eee601fc92f5"},
+    {file = "css_inline-0.8.2-cp310-cp310-win_amd64.whl", hash = "sha256:2aad69d49fbeaa44f955c63c143e8d453683b2ded145d75985de55c98578099f"},
+    {file = "css_inline-0.8.2-cp36-abi3-macosx_10_10_universal2.whl", hash = "sha256:a8679f0073a6b66f9c86c2adb2ee4f5728077cddc44e9b1f415e4cdc12c9d31e"},
+    {file = "css_inline-0.8.2-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:a1f263c454af27667b9c3e83cf956577129bf4f7cd0fe2ae08c7ea592d1a95de"},
+    {file = "css_inline-0.8.2-cp36-cp36m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4870f1b534da8cc191780da096aa1a57b51f8671f173836b017d56aa5e1576f9"},
+    {file = "css_inline-0.8.2-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d94e12cfc042cee358990952d0bc4a4eb4eda69dc9f5e661b0d1ad6077fa9c93"},
+    {file = "css_inline-0.8.2-cp36-cp36m-musllinux_1_1_aarch64.whl", hash = "sha256:634d2b7d1ea2849b2806e061b1510964c9b3b7dd78c142b7277d843696344666"},
+    {file = "css_inline-0.8.2-cp36-cp36m-musllinux_1_1_x86_64.whl", hash = "sha256:c0f72a5a78ea97e9efd7e53fab3a77455a5938b421bb817df06f2f9e62eb58a3"},
+    {file = "css_inline-0.8.2-cp36-cp36m-win32.whl", hash = "sha256:51c9bfff3934454deccd42a1298b374d78a45297285126b36fc4847a77461804"},
+    {file = "css_inline-0.8.2-cp36-cp36m-win_amd64.whl", hash = "sha256:ca0faa54c39250e089b69c1decee8822b69c527556853a0f9cdd62ed308b9798"},
+    {file = "css_inline-0.8.2-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:9f902de7ee3bf18d100b99b65f8f4e272c55818e03cb2620ba5a83483911e2ca"},
+    {file = "css_inline-0.8.2-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:fa6665ce6a1770a32f07499ea8f070062ac1df82676f9b2cc553f112c2085130"},
+    {file = "css_inline-0.8.2-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7dbc226cc7eddcb9aa7ac367988679d92ddb3bad4e7e54da6fd9be3ef13a846a"},
+    {file = "css_inline-0.8.2-cp37-cp37m-musllinux_1_1_aarch64.whl", hash = "sha256:e9eeb20020041620d21b019ce4f87f1ba140f12ab600035b1fb23bb52b7f8f93"},
+    {file = "css_inline-0.8.2-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:b7b4cbfbf135ba9c06d56dbbe3bf222d51553b5b308985f5aac5ca26d3c26232"},
+    {file = "css_inline-0.8.2-cp37-cp37m-win32.whl", hash = "sha256:37a95d93ae993d171e1e403a4165edc3e351cb8a35d0cda6f8deaadbdbd13e6d"},
+    {file = "css_inline-0.8.2-cp37-cp37m-win_amd64.whl", hash = "sha256:0d1abfbc318980e7f2f1f504bc0f0423166de028c12fc88b15ea5ec1a7b1d935"},
+    {file = "css_inline-0.8.2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:5edb44a2b15e2d3a49f285fdf659ec762242013f590226886338e38481b717ca"},
+    {file = "css_inline-0.8.2-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:e3eee4b31529b2fd240b37395ef232a70d6c3cf3f2f0f834bff3abd2ebb3b604"},
+    {file = "css_inline-0.8.2-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:7136937e4d81eeb3ed1dfd268f4b13261e20009ab3fd35f109fb718f8b6c1f2a"},
+    {file = "css_inline-0.8.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e8a1784c01a8ee5b3d1394970ab22aab1dd7b5928ccbacfc606bf4425d52d39b"},
+    {file = "css_inline-0.8.2-cp38-cp38-musllinux_1_1_aarch64.whl", hash = "sha256:571faa096c4b307d0e102dd3c3ad5b200681fa2c3e9921a10a90d92e7ee8b57e"},
+    {file = "css_inline-0.8.2-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:7e6999c90c537b1d49deaf384e3afa65358b8defb7eb512285cc5d03c4546a2d"},
+    {file = "css_inline-0.8.2-cp38-cp38-win32.whl", hash = "sha256:d90132ba8f57ec1d63fab7e4a8c36c84317df6a2787a9012fe8cd164b06195ea"},
+    {file = "css_inline-0.8.2-cp38-cp38-win_amd64.whl", hash = "sha256:d997b1a6473b1c210f90c676e242d48fab620053aa77a23d747fabc7f0f99cc3"},
+    {file = "css_inline-0.8.2-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:9a555e88a53f65915b5fa5a61e2df1d0a34ed848b5afa2f0644955aa6212d805"},
+    {file = "css_inline-0.8.2-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:176a633f5e96424c7ed3396cbb2af773999b59c62d438f13961335032e7333c9"},
+    {file = "css_inline-0.8.2-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f6e0bf1c9c8c3238dce3e8f88cd024744967724ea13c7939a0b55f6e5e6ca6a7"},
+    {file = "css_inline-0.8.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9f093fb3196f4dd05af314cfd307a36eb789b67dd589725878fbc967a4458e17"},
+    {file = "css_inline-0.8.2-cp39-cp39-musllinux_1_1_aarch64.whl", hash = "sha256:302e973247c54035b2e1f6380b1dd796f1e4fde5f9bdc74d406ead9388b90c54"},
+    {file = "css_inline-0.8.2-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:475fa91d171082eeab464d29bc0ac97adc3a936c561b8a532ded22fae02ac184"},
+    {file = "css_inline-0.8.2-cp39-cp39-win32.whl", hash = "sha256:099e640e80a7e8f95b8cb115e09c66e18aa52e05e09086f47954a3a9f4d14703"},
+    {file = "css_inline-0.8.2-cp39-cp39-win_amd64.whl", hash = "sha256:4fd4aaa031b7b5be85dff38f857a7fb389ead09c818407312e0a7c4bd2172a7d"},
+    {file = "css_inline-0.8.2-pp37-pypy37_pp73-macosx_10_9_x86_64.whl", hash = "sha256:1a56d258b4ecab29f470198cad51ff7580177eefb19eba498f692c1be144b787"},
+    {file = "css_inline-0.8.2-pp37-pypy37_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:fc1605c2a914e638ae0114ef0c9a50c5d296030fd5504efeb2258c71f9adb3c3"},
+    {file = "css_inline-0.8.2-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:46877d49dad0695662860c978aa25392819caed65bf3cf4abb5e907fb0235fe1"},
+    {file = "css_inline-0.8.2-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:21572009fea0930019d26d8d25920b672dd5b3c79a15d1421b70c0860b1aa09e"},
+    {file = "css_inline-0.8.2-pp38-pypy38_pp73-macosx_10_9_x86_64.whl", hash = "sha256:318d675a68ba3fe02be4b17fa1b0b3a861f6f77d9af8eb9137f68278c98371ae"},
+    {file = "css_inline-0.8.2-pp38-pypy38_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4bdfefb0a17191f46b3caa6afeda692ad2db46925887feeb062a8402155c0b7d"},
+    {file = "css_inline-0.8.2-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d83d1798309930e3e44b9e6346d60f2856bed450a60cd27093e03db93550e3ed"},
+    {file = "css_inline-0.8.2-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:b2e02291d02003bc4c65a35dd6afca57e547052a7534c31a0b044530d88e0564"},
+    {file = "css_inline-0.8.2.tar.gz", hash = "sha256:e915f2066cac0c02aaacf858ff9cd059df8466b165329c581849972c6354cf69"},
 ]
 cssselect = [
     {file = "cssselect-1.1.0-py2.py3-none-any.whl", hash = "sha256:f612ee47b749c877ebae5bb77035d8f4202c6ad0f0fc1271b3c18ad6c4468ecf"},

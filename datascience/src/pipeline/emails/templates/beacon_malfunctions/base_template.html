@@ -26,10 +26,10 @@
             <section class="no-vertical-margin right-align">
                 <h3>Destinataires</h3>
                 <p>Capitaine et armateur du navire</p>
-                <p>{{ vessel_name }}</p>
-                <p>{{ cfr }}</p>
-                <p>Balise n°{{ beacon_number }}</p>
-                <p>Copies à l’opérateur satellitaire {{ beacon_operator }}</p>
+                {% if vessel_name %}<p>{{ vessel_name }}</p>{% endif %}
+                {% if cfr %}<p>{{ cfr }}</p>{% endif %}
+                {% if beacon_number %}<p>Balise n°{{ beacon_number }}</p>{% endif %}
+                <p>Copies à l’opérateur satellitaire {{ beacon_operator if beacon_operator }}</p>
                 <p>et au service SIP du CNSP.</p>
             </section>
             <section class="no-vertical-margin">

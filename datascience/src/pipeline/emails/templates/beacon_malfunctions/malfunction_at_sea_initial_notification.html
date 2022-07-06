@@ -1,9 +1,13 @@
 {% extends "base_template.html" %}
 {% block message %}
 {% block beginning %}
-<p>Nous vous informons que <strong>le CNSP ne reçoit plus les positions de votre navire par le
-système de surveillance satellitaire des navires (VMS).</strong> La dernière position reçue date
-du {{ last_position_datetime_utc }}, latitude {{ last_position_latitude }}, longitude {{ last_position_longitude }}.</p>
+<p>Nous vous informons que <strong>le CNSP ne reçoit pas les positions de votre navire par le
+système de surveillance satellitaire des navires (VMS).</strong>
+{% if last_position_latitude and last_position_longitude and last_position_datetime_utc %}
+ La dernière position reçue date du {{ last_position_datetime_utc }}, 
+latitude {{ last_position_latitude }}, longitude {{ last_position_longitude }}.
+{%endif%}
+</p>
 
 <p>À réception de ce message, <strong>vous êtes tenu de transmettre la position de votre navire
 toutes les 4 heures par message écrit</strong>, en précisant la date et l’heure :

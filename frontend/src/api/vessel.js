@@ -164,7 +164,7 @@ function getVesselVoyageFromAPI (vesselIdentity, voyageRequest, tripNumber) {
         return response.json()
       } else if (response.status === NOT_FOUND) {
         response.text().then(text => {
-          console.info(text)
+          console.error(text)
         })
         return null
       } else {

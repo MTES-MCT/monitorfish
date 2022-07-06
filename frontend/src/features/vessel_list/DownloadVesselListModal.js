@@ -122,39 +122,37 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
       </Modal.Header>
       <Modal.Body>
         <Description>Sélectionnez les colonnes à télécharger</Description>
-        <CheckboxGroup
+        <StyledCheckboxGroup
           inline
           name="checkboxList"
-          value={checkboxState?.valuesChecked || []}
+          value={checkboxState.valuesChecked || []}
           onChange={handleChange}
         >
-          <Columns>
-            <div>
-              <Checkbox value={CSVOptions.riskFactor.code}>Note de risque</Checkbox><br/>
-              <Checkbox value={CSVOptions.vesselName.code}>Nom</Checkbox><br/>
-              <Checkbox value={CSVOptions.externalReferenceNumber.code}>Marquage extérieur</Checkbox><br/>
-              <Checkbox value={CSVOptions.ircs.code}>Call Sign (IRCS)</Checkbox><br/>
-              <Checkbox value={CSVOptions.mmsi.code}>MMSI</Checkbox><br/>
-              <Checkbox value={CSVOptions.internalReferenceNumber.code}>CFR</Checkbox><br/>
-              <Checkbox value={CSVOptions.flagState.code}>Nationalité</Checkbox><br/>
-              <Checkbox value={CSVOptions.district.code}>Quartier</Checkbox><br/>
-              <Checkbox value={CSVOptions.lastControlDateTime.code}>Dernier contrôle</Checkbox><br/>
-              <Checkbox value={CSVOptions.lastControlInfraction.code}>Infraction</Checkbox><br/>
-              <Checkbox value={CSVOptions.postControlComment.code}>Observations</Checkbox><br/>
-            </div>
-            <div>
-              <Checkbox value={CSVOptions.dateTime.code}>Date et heure du dernier signal</Checkbox><br/>
-              <Checkbox value={CSVOptions.latitude.code}>Latitude</Checkbox><br/>
-              <Checkbox value={CSVOptions.longitude.code}>Longitude</Checkbox><br/>
-              <Checkbox value={CSVOptions.course.code}>Cap</Checkbox><br/>
-              <Checkbox value={CSVOptions.speed.code}>Vitesse</Checkbox><br/>
-              <Checkbox value={CSVOptions.fleetSegments.code}>Segments de flotte</Checkbox><br/>
-              <Checkbox value={CSVOptions.gears.code}>Engins à bord</Checkbox><br/>
-              <Checkbox value={CSVOptions.species.code}>Espèces à bord</Checkbox><br/>
-              <Checkbox value={CSVOptions.length.code}>Longueur</Checkbox><br/>
-            </div>
-          </Columns>
-        </CheckboxGroup>
+          <div>
+            <Checkbox value={CSVOptions.riskFactor.code}>Note de risque</Checkbox><br/>
+            <Checkbox value={CSVOptions.vesselName.code}>Nom</Checkbox><br/>
+            <Checkbox value={CSVOptions.externalReferenceNumber.code}>Marquage extérieur</Checkbox><br/>
+            <Checkbox value={CSVOptions.ircs.code}>Call Sign (IRCS)</Checkbox><br/>
+            <Checkbox value={CSVOptions.mmsi.code}>MMSI</Checkbox><br/>
+            <Checkbox value={CSVOptions.internalReferenceNumber.code}>CFR</Checkbox><br/>
+            <Checkbox value={CSVOptions.flagState.code}>Nationalité</Checkbox><br/>
+            <Checkbox value={CSVOptions.district.code}>Quartier</Checkbox><br/>
+            <Checkbox value={CSVOptions.lastControlDateTime.code}>Dernier contrôle</Checkbox><br/>
+            <Checkbox value={CSVOptions.lastControlInfraction.code}>Infraction</Checkbox><br/>
+            <Checkbox value={CSVOptions.postControlComment.code}>Observations</Checkbox><br/>
+          </div>
+          <div>
+            <Checkbox value={CSVOptions.dateTime.code}>Date et heure du dernier signal</Checkbox><br/>
+            <Checkbox value={CSVOptions.latitude.code}>Latitude</Checkbox><br/>
+            <Checkbox value={CSVOptions.longitude.code}>Longitude</Checkbox><br/>
+            <Checkbox value={CSVOptions.course.code}>Cap</Checkbox><br/>
+            <Checkbox value={CSVOptions.speed.code}>Vitesse</Checkbox><br/>
+            <Checkbox value={CSVOptions.fleetSegments.code}>Segments de flotte</Checkbox><br/>
+            <Checkbox value={CSVOptions.gears.code}>Engins à bord</Checkbox><br/>
+            <Checkbox value={CSVOptions.species.code}>Espèces à bord</Checkbox><br/>
+            <Checkbox value={CSVOptions.length.code}>Longueur</Checkbox><br/>
+          </div>
+        </StyledCheckboxGroup>
         <SelectAll>
           <Checkbox
             className={'checkbox-hidden'}
@@ -179,7 +177,7 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
   )
 }
 
-const Columns = styled.div`
+const StyledCheckboxGroup = styled(CheckboxGroup)`
   display: flex;
   flex: 1 1 1;
 `

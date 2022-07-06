@@ -295,19 +295,20 @@ def send_email_notification(
 
 @task(checkpoint=False)
 def load_notifications(notifications: List[BeaconMalfunctionNotification]):
-    load(
-        pd.DataFrame(notifications),
-        table_name="beacon_malfunction_notifications",
-        schema="public",
-        logger=prefect.context.get("logger"),
-        how="append",
-        db_name="monitorfish_remote",
-        enum_columns=[
-            "notification_type",
-            "communication_means",
-            "recipient_function",
-        ],
-    )
+    if notifications:
+        load(
+            pd.DataFrame(notifications),
+            table_name="beacon_malfunction_notifications",
+            schema="public",
+            logger=prefect.context.get("logger"),
+            how="append",
+            db_name="monitorfish_remote",
+            enum_columns=[
+                "notification_type",
+                "communication_means",
+                "recipient_function",
+            ],
+        )
 
 
 @task(checkpoint=False)

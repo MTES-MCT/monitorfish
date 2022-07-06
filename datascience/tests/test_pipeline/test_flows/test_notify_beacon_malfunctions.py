@@ -554,8 +554,21 @@ def test_load_notifications(reset_test_data, expected_notifications):
     }
 
 
+def test_load_notifications_empty_input(reset_test_data):
+
+    initial_notifications = read_query(
+        "monitorfish_remote", "SELECT * FROM beacon_malfunction_notifications"
+    )
+    load_notifications.run([])
+    final_notifications = read_query(
+        "monitorfish_remote", "SELECT * FROM beacon_malfunction_notifications"
+    )
+    pd.testing.assert_frame_equal(initial_notifications, final_notifications)
+
+
 def test_flow(reset_test_data):
 
+    # Setup
     initial_notifications = read_query(
         "monitorfish_remote", "SELECT * FROM beacon_malfunction_notifications"
     )
@@ -579,6 +592,7 @@ def test_flow(reset_test_data):
         flow.get_tasks("send_email_notification")[0], mock_send_email_notification
     )
 
+    # Test flow run
     state = flow.run(test_mode=False)
 
     final_notifications = read_query(
@@ -651,3 +665,12 @@ def test_flow(reset_test_data):
     assert len(initial_malfunctions) == 3
     assert initial_malfunctions.notification_requested.notnull().all()
     assert final_malfunctions.notification_requested.isna().all()
+
+    # Now all notifications have been sent, test flow again to check it runs
+    # successfully when there are no notifications to send
+    state = flow.run(test_mode=False)
+    assert state.is_successful()
+    assert (
+        len(state.result[flow.get_tasks("extract_malfunctions_to_notify")[0]].result)
+        == 0
+    )

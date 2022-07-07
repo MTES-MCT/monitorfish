@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { ReactComponent as SummarySVG } from '../icons/Picto_resume.svg'
 import { ReactComponent as VesselIDSVG } from '../icons/Picto_identite.svg'
@@ -40,36 +40,14 @@ const VesselSidebar = () => {
   const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
   const adminRole = useSelector(state => state.global.adminRole)
 
-  const [sidebarIsOpen, setSidebarIsOpen] = useState(false)
-  const firstUpdate = useRef(true)
-  const [trackRequestIsOpen, setTrackRequestIsOpen] = useState(false)
+  const isFirstLoad = useRef(true)
+  const [isTrackRequestOpen, setIsTrackRequestOpen] = useState(false)
 
-  const setTrackRequestIsOpenCallback = useCallback(isOpen => {
-    setTrackRequestIsOpen(isOpen)
+  const sidebarIsOpen = useMemo(() => vesselSidebarIsOpen, [vesselSidebarIsOpen])
+
+  useEffect(() => {
+    isFirstLoad.current = false
   }, [])
-
-  useEffect(() => {
-    if (sidebarIsOpen === true) {
-      firstUpdate.current = false
-    } else {
-      setTrackRequestIsOpen(false)
-    }
-  }, [sidebarIsOpen])
-
-  useEffect(() => {
-    if (vesselSidebarIsOpen) {
-      setSidebarIsOpen(true)
-      dispatch(showVesselSidebarTab(vesselSidebarTab))
-    } else {
-      setSidebarIsOpen(false)
-    }
-  }, [vesselSidebarIsOpen, vesselSidebarTab])
-
-  useEffect(() => {
-    if (!adminRole && vesselSidebarTab) {
-      dispatch(showVesselSidebarTab(vesselSidebarTab))
-    }
-  }, [adminRole, vesselSidebarTab])
 
   return (
     <>
@@ -77,12 +55,11 @@ const VesselSidebar = () => {
         sidebarIsOpen={sidebarIsOpen}
         rightMenuIsOpen={rightMenuIsOpen}
       />
-      <TrackRequest
-        sidebarIsOpen={sidebarIsOpen}
-        rightMenuIsOpen={rightMenuIsOpen}
-        trackRequestIsOpen={trackRequestIsOpen}
-        setTrackRequestIsOpen={setTrackRequestIsOpenCallback}
-      />
+      {sidebarIsOpen && <TrackRequest
+        isRightMenuOpen={rightMenuIsOpen}
+        isTrackRequestOpen={isTrackRequestOpen}
+        setIsTrackRequestOpen={setIsTrackRequestOpen}
+      />}
       <AnimateToTrack
         sidebarIsOpen={sidebarIsOpen}
         rightMenuIsOpen={rightMenuIsOpen}
@@ -103,10 +80,10 @@ const VesselSidebar = () => {
         data-cy={'vessel-sidebar'}
         healthcheckTextWarning={healthcheckTextWarning}
         sidebarIsOpen={sidebarIsOpen}
-        firstUpdate={firstUpdate.current}
+        firstUpdate={isFirstLoad.current}
         rightMenuIsOpen={rightMenuIsOpen}
       >
-        <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !firstUpdate.current}/>
+        <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !isFirstLoad.current}/>
         <div>
           <TabList>
             {
@@ -221,12 +198,12 @@ const VesselSidebar = () => {
 }
 
 const GrayOverlay = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  opacity: 0;
+  animation: ${p => p.isOverlayed ? 'opacity-up' : 'opacity-down'} 0.5s ease forwards;
   background: ${COLORS.charcoal};
-  animation: ${props => props.isOverlayed ? 'opacity-up' : 'opacity-down'} 0.5s ease forwards;
+  height: 100%;
+  opacity: 0;
+  position: absolute;
+  width: 100%;
   z-index: 11;
 
   @keyframes opacity-up {
@@ -240,7 +217,7 @@ const GrayOverlay = styled.div`
 `
 
 const ReportingNumber = styled.span`
-  background: ${props => props.hasInfractionSuspicion ? COLORS.maximumRed : COLORS.gunMetal};
+  background: ${p => p.hasInfractionSuspicion ? COLORS.maximumRed : COLORS.gunMetal};
   border-radius: 10px;
   color: ${COLORS.background};
   position: absolute;
@@ -255,47 +232,47 @@ const ReportingNumber = styled.span`
 const Panel = styled.div`
   padding: 0;
   background: ${COLORS.gainsboro};
-  max-height: ${props => props.healthcheckTextWarning ? 80 : 82}vh;
+  max-height: ${p => p.healthcheckTextWarning ? 80 : 82}vh;
 `
 
 const Tab = styled.button`
-  padding-top: 5px;
-  display: inline-block;
-  width: 170px;
-  margin: 0;
-  border: none;
+  ${p => !p.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}
+  background: ${p => p.isActive ? COLORS.shadowBlue : COLORS.charcoal};
   border-radius: 0;
-  height: 65px;
+  border: none;
+  color: ${p => p.isActive ? COLORS.background : COLORS.lightGray};
+  display: inline-block;
   font: normal normal 300 10px/14px Marianne;
-  ${props => !props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}
-  background: ${props => props.isActive ? COLORS.shadowBlue : COLORS.charcoal};
-  color: ${props => props.isActive ? COLORS.background : COLORS.lightGray};
-  
+  height: 65px;
+  margin: 0;
+  padding-top: 5px;
+  width: 170px;
+
   :hover, :focus, :active {
     background: ${COLORS.shadowBlue};
-    ${props => !props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}
+    ${p => !p.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}
   }
 `
 
 const TabList = styled.div`
-  display: flex;
   background: ${COLORS.charcoal};
   border-top: 1px solid ${COLORS.lightGray};
+  display: flex;
 `
 
 const Wrapper = styled(MapComponentStyle)`
-  position: absolute;
-  top: 50px;
-  width: 500px;
-  max-height: 93vh;
-  z-index: 999;
-  padding: 0;
   background: ${COLORS.gainsboro};
+  margin-right: ${p => p.sidebarIsOpen ? 0 : -510}px;
+  max-height: 93vh;
+  opacity: ${p => p.sidebarIsOpen ? 1 : 0};
   overflow: hidden;
-  opacity: ${props => props.sidebarIsOpen ? 1 : 0};
-  margin-right: ${props => props.sidebarIsOpen ? 0 : -510}px;
-  right: ${props => props.rightMenuIsOpen && props.sidebarIsOpen ? 55 : 10}px;
+  padding: 0;
+  position: absolute;
+  right: ${p => p.rightMenuIsOpen && p.sidebarIsOpen ? 55 : 10}px;
+  top: 50px;
   transition: all 0.5s, right 0.3s, opacity 0.5s;
+  width: 500px;
+  z-index: 999;
 `
 
 const VesselIDIcon = styled(VesselIDSVG)`

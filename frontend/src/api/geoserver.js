@@ -42,6 +42,12 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
       }
     })
     .catch(error => {
+      if (process.env.NODE_ENV === 'development') {
+        return {
+          features: []
+        }
+      }
+
       console.error(error)
       throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
     })
@@ -294,6 +300,12 @@ function getAdministrativeSubZonesFromAPI (type, fromBackoffice) {
         })
       }
     }).catch(e => {
+      if (process.env.NODE_ENV === 'development') {
+        return {
+          features: []
+        }
+      }
+
       throwIrretrievableAdministrativeZoneError(e, type)
     })
 }

@@ -75,3 +75,9 @@ overrides:
     rules:
       no-undef: off
       no-unused-vars: off
+  - files: "cypress/**/*.js"
+    globals:
+      beforeEach: true
+      context: true
+      cy: true
+      Cypress: true

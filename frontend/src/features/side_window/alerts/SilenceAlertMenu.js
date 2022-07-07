@@ -12,10 +12,18 @@ import DateRange from '../../vessel_sidebar/actions/track_request/DateRange'
  * @param silenceAlert
  * @param baseRef
  * @param id
+ * @param scrollableContainer
  * @return {JSX.Element}
  * @constructor
  */
-const SilenceAlertMenu = ({ showSilencedAlertForIndex, setShowSilencedAlertForIndex, silenceAlert, baseRef, id }) => {
+const SilenceAlertMenu = ({
+  showSilencedAlertForIndex,
+  setShowSilencedAlertForIndex,
+  silenceAlert,
+  baseRef,
+  id,
+  scrollableContainer
+}) => {
   const [silencedAlertRef, setSilencedAlertRef] = useState(null)
   const silencedAlertRefCallback = useCallback(node => {
     if (node !== null) {
@@ -47,7 +55,7 @@ const SilenceAlertMenu = ({ showSilencedAlertForIndex, setShowSilencedAlertForIn
   return <Wrapper
     ref={silencedAlertRefCallback}
     index={showSilencedAlertForIndex}
-    style={silenceMenuStyle(showSilencedAlertForIndex)}
+    style={silenceMenuStyle(showSilencedAlertForIndex, scrollableContainer?.current.scrollTop || 0)}
   >
     <>
       <MenuLink
@@ -164,10 +172,10 @@ function setBackgroundAsNotHovered (e) {
 }
 
 const Wrapper = styled.div``
-const silenceMenuStyle = index => ({
+const silenceMenuStyle = (index, scrollY) => ({
   top: 0,
   position: 'absolute',
-  marginTop: 35 + index * 49,
+  marginTop: 35 + index * 49 - scrollY,
   marginLeft: 940,
   width: 220,
   boxShadow: `1px 2px 5px ${COLORS.overlayShadowDarker}`,

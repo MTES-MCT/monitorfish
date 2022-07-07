@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
@@ -35,6 +35,7 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
   const [searched, setSearched] = useState(undefined)
   const [showSilencedAlertForIndex, setShowSilencedAlertForIndex] = useState(null)
   const [silencedAlertId, setSilencedAlertId] = useState(null)
+  const scrollableContainer = useRef()
 
   useEffect(() => {
     if (focusOnAlert) {
@@ -142,7 +143,10 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
             </FlexboxGrid.Item>
           </FlexboxGrid>
         </List.Item>
-        <ScrollableContainer style={ScrollableContainerStyle}>
+        <ScrollableContainer
+          style={ScrollableContainerStyle}
+          ref={scrollableContainer}
+        >
           {sortedAlerts.map((alert, index) => (
             <PendingAlertRow
               key={alert.id}
@@ -162,6 +166,7 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
               setShowSilencedAlertForIndex={setShowSilencedAlertForIndex}
               silenceAlert={silenceAlertCallback}
               baseRef={baseRef}
+              scrollableContainer={scrollableContainer}
             />
             : null
         }

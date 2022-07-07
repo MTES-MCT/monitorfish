@@ -1,9 +1,6 @@
 import Layers, { baseLayers } from './layers'
 import { vesselLabel as vesselLabelEnum } from './vesselLabelLine'
 import countries from 'i18n-iso-countries'
-// @ts-ignore
-// eslint-disable-next-line no-unused-vars
-import * as VesselType from '../types/vessel'
 
 export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_INFRACTION_SUSPICION_STYLE = 1
@@ -142,9 +139,8 @@ export const getOnlyVesselIdentityProperties = vessel => {
 }
 
 /**
- *
  * @param vessel
- * @return {VesselType.VesselId}
+ * @return {VesselNS.VesselId}
  */
 export const getVesselId = vessel => {
   return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.ircs}`
@@ -152,8 +148,8 @@ export const getVesselId = vessel => {
 
 /**
  * Returns true if there is at least one vessel track or vessel selected
- * @param {Object.<string, VesselType.ShowedVesselTrack>} vesselsTracksShowed
- * @param {VesselType.VesselIdentity | null} selectedVesselIdentity
+ * @param {Object.<string, VesselNS.ShowedVesselTrack>} vesselsTracksShowed
+ * @param {VesselNS.VesselIdentity | null} selectedVesselIdentity
  * @return {boolean}
  */
 export const atLeastOneVesselSelected = (vesselsTracksShowed, selectedVesselIdentity) =>
@@ -163,9 +159,9 @@ export const atLeastOneVesselSelected = (vesselsTracksShowed, selectedVesselIden
  * Returns true if the vessel is showed:
  *  - The track is displayed (`vesselsTracksShowed` param)
  *  - The vessel is selected (`selectedVesselIdentity` param)
- * @param {VesselType.VesselIdentity} vessel
- * @param {Object.<string, VesselType.ShowedVesselTrack>} vesselsTracksShowed
- * @param {VesselType.VesselIdentity} selectedVesselIdentity
+ * @param {VesselNS.VesselIdentity} vessel
+ * @param {Object.<string, VesselNS.ShowedVesselTrack>} vesselsTracksShowed
+ * @param {VesselNS.VesselIdentity} selectedVesselIdentity
  * @return {boolean}
  */
 export const vesselIsShowed = (vessel, vesselsTracksShowed, selectedVesselIdentity) => {

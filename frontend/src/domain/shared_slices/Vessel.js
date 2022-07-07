@@ -5,9 +5,6 @@ import { reportingIsAnInfractionSuspicion, ReportingType } from '../entities/rep
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
-// @ts-ignore
-// eslint-disable-next-line no-unused-vars
-import * as VesselType from '../types/vessel'
 
 const NOT_FOUND = -1
 
@@ -28,27 +25,27 @@ function filterFirstFoundReportingType (action) {
 const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
-    /** @type {VesselType.FishingActivityShowedOnMap[]} */
+    /** @type {VesselNS.FishingActivityShowedOnMap[]} */
     fishingActivitiesShowedOnMap: [],
     hideNonSelectedVessels: false,
-    /** @type {VesselType.VesselPosition | null} */
+    /** @type {VesselNS.VesselPosition | null} */
     highlightedVesselTrackPosition: null,
     isFocusedOnVesselSearch: false,
     /** @type {boolean | null} */
     loadingVessel: null,
     /** @type {boolean | null} */
     loadingPositions: null,
-    /** @type {VesselType.SelectedVessel | null} */
+    /** @type {VesselNS.SelectedVessel | null} */
     selectedVessel: null,
-    /** @type {VesselType.TrackRequest} */
+    /** @type {VesselNS.TrackRequest} */
     selectedVesselCustomTrackRequest: {
       trackDepth: VesselTrackDepth.TWELVE_HOURS,
       afterDateTime: null,
       beforeDateTime: null
     },
-    /** @type {VesselType.VesselIdentity | null} */
+    /** @type {VesselNS.VesselIdentity | null} */
     selectedVesselIdentity: null,
-    /** @type {VesselType.VesselPosition[] | null} */
+    /** @type {VesselNS.VesselPosition[] | null} */
     selectedVesselPositions: null,
     /** @type {any[]} */
     tripMessagesLastToFormerDEPDateTimes: [],
@@ -63,7 +60,7 @@ const vesselSlice = createSlice({
     vesselSidebarIsOpen: false,
     vesselSidebarTab: VesselSidebarTab.SUMMARY,
     vesselTrackExtent: null,
-    /** @type {Object.<string, VesselType.ShowedVesselTrack>} */
+    /** @type {Object.<string, VesselNS.ShowedVesselTrack>} */
     vesselsTracksShowed: {}
   },
   reducers: {
@@ -312,7 +309,7 @@ const vesselSlice = createSlice({
      * @param {Object} state
      * @param {{payload: {
      *   vessel: Vessel,
-     *   positions: VesselType.VesselPosition[]
+     *   positions: VesselNS.VesselPosition[]
      * }}} action - The positions
      */
     setSelectedVessel (state, action) {
@@ -326,7 +323,7 @@ const vesselSlice = createSlice({
      * @function updateSelectedVesselPositions
      * @memberOf VesselReducer
      * @param {Object} state
-     * @param {{payload: VesselType.VesselPosition[]}} action - The positions
+     * @param {{payload: VesselNS.VesselPosition[]}} action - The positions
      */
     updateSelectedVesselPositions (state, action) {
       state.loadingPositions = null
@@ -370,7 +367,7 @@ const vesselSlice = createSlice({
      * @function setSelectedVesselCustomTrackRequest
      * @memberOf VesselReducer
      * @param {Object} state
-     * @param {{payload: VesselType.TrackRequest}} action - The track request
+     * @param {{payload: VesselNS.TrackRequest}} action - The track request
      */
     setSelectedVesselCustomTrackRequest (state, action) {
       state.selectedVesselCustomTrackRequest = action.payload
@@ -380,7 +377,7 @@ const vesselSlice = createSlice({
      * @function highlightVesselTrackPosition
      * @memberOf VesselReducer
      * @param {Object} state
-     * @param {{payload: VesselType.VesselPosition | null}} action - The position
+     * @param {{payload: VesselNS.VesselPosition | null}} action - The position
      */
     highlightVesselTrackPosition (state, action) {
       state.highlightedVesselTrackPosition = action.payload
@@ -428,7 +425,7 @@ const vesselSlice = createSlice({
      * @param {Object} state
      * @param {{payload: {
      *   vesselId: string,
-     *   showedVesselTrack: VesselType.ShowedVesselTrack
+     *   showedVesselTrack: VesselNS.ShowedVesselTrack
      *  }}} action - the vessel positions to show on map
      */
     addVesselTrackShowed (state, action) {

@@ -1,7 +1,7 @@
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
 
-/** @type {Vessel.VesselTrackDepth} */
+/** @type {VesselNS.VesselTrackDepth} */
 export const VesselTrackDepth = {
   LAST_DEPARTURE: 'LAST_DEPARTURE',
   TWELVE_HOURS: 'TWELVE_HOURS',
@@ -18,13 +18,13 @@ export const VesselTrackDepth = {
 /**
  * Get the custom track request if defined or build a track request from the default track depth
 
- * @param {Vessel.TrackRequest | null} customTrackRequest - The custom track request
- * @param {string} defaultTrackDepth - The default vessel track depth
+ * @param {VesselNS.TrackRequest | null} customTrackRequest - The custom track request
+ * @param {VesselNS.TrackRequestPredefined['trackDepth']} defaultTrackDepth - The default vessel track depth
  * @param {boolean} fullDays - If full days are shown
- * @returns {Vessel.TrackRequest} vessel track request
+ * @returns {VesselNS.TrackRequest} vessel track request
  */
 export const getCustomOrDefaultTrackRequest = (customTrackRequest, defaultTrackDepth, fullDays) => {
-  if (customTrackRequest && trackRequestIsDefined(customTrackRequest)) {
+  if (customTrackRequest) {
     if (fullDays) {
       return getUTCFullDayTrackRequest({ ...customTrackRequest })
     } else {
@@ -35,18 +35,10 @@ export const getCustomOrDefaultTrackRequest = (customTrackRequest, defaultTrackD
   return getTrackRequestFromTrackDepth(defaultTrackDepth)
 }
 
-/** Returns true if the track request object is defined
- * @param {Vessel.TrackRequest | null} trackRequest
- * @return boolean
- */
-export function trackRequestIsDefined (trackRequest) {
-  return !!trackRequest?.trackDepth || (trackRequest?.afterDateTime && trackRequest?.beforeDateTime)
-}
-
 /**
  * Get the `TrackRequest` object from the track depth
- * @param {Omit<Vessel.VesselTrackDepthKey, 'CUSTOM'>} trackDepth
- * @returns {Vessel.TrackRequestPredefined} vessel track request
+ * @param {VesselNS.TrackRequestPredefined['trackDepth']} trackDepth
+ * @returns {VesselNS.TrackRequestPredefined} vessel track request
  */
 export const getTrackRequestFromTrackDepth = trackDepth => ({
   trackDepth,
@@ -56,7 +48,7 @@ export const getTrackRequestFromTrackDepth = trackDepth => ({
 
 /**
  * Get the `TrackRequest` object from the custom track depth with dates range
- * @returns {Vessel.TrackRequest} vessel track request
+ * @returns {VesselNS.TrackRequest} vessel track request
  */
 export const getTrackRequestFromDates = (afterDateTime, beforeDateTime) => ({
   trackDepth: VesselTrackDepth.CUSTOM,
@@ -67,8 +59,8 @@ export const getTrackRequestFromDates = (afterDateTime, beforeDateTime) => ({
 /**
  * Return either track depth or track date range depending on each other existence.
  *
- * @param {Vessel.TrackRequest} trackRequest - The vessel track depth request
- * @returns {Vessel.TrackRequest} vessel track request
+ * @param {VesselNS.TrackRequest} trackRequest - The vessel track depth request
+ * @returns {VesselNS.TrackRequest} vessel track request
  *
  * TODO Is it still useful?
  */

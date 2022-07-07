@@ -5,14 +5,14 @@ import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 
 /**
  * @typedef {object} TrackDepthProps
- * @property {Vessel.VesselTrackDepthKey} value
- * @property {(newValue: Omit<Vessel.VesselTrackDepthKey, 'CUSTOM'>) => void} onChange
+ * @property {VesselNS.VesselTrackDepthKey} value
+ * @property {(newValue: Omit<VesselNS.VesselTrackDepthKey, 'CUSTOM'>) => void} onChange
  */
 
 /**
  * @param {TrackDepthProps} props
  */
-const TrackDepth = ({ onChange, value }) => {
+function TrackDepth ({ onChange, value }) {
   const controlledValue = useMemo(() => value !== VesselTrackDepth.CUSTOM ? value : undefined, [value])
 
   return (

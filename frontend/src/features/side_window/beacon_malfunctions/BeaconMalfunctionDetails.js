@@ -135,13 +135,12 @@ const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselSt
               AVARIE #{beaconMalfunction?.id} - {' '}{getBeaconCreationOrModificationDate(beaconMalfunction)}
             </ColumnTitle>
             <VesselStatusSelectOrEndOfMalfunction
-              isAbsolute={true}
-              domRef={vesselStatusRef}
               beaconMalfunction={beaconMalfunction}
-              vesselStatus={vesselStatus}
-              updateVesselStatus={updateVesselStatus}
+              domRef={vesselStatusRef}
+              isAbsolute
               isMalfunctioning={getIsMalfunctioning(beaconMalfunction?.stage)}
-              baseRef={baseRef}
+              updateVesselStatus={updateVesselStatus}
+              vesselStatus={vesselStatus}
             />
           </Malfunctioning>
           <LastPosition

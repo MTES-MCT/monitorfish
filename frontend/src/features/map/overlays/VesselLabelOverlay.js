@@ -353,7 +353,7 @@ const ZoneText = styled.span`
   user-select: none;
   color: ${COLORS.gunMetal};
   line-height: ${props => props.isLittle ? 35 : 17}px;
-  cursor: grabbing;
+  cursor: pointer;
   margin-left: 2px;
   vertical-align: middle;
 `

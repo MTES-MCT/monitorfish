@@ -27,9 +27,9 @@ const TrackRequest = ({ isRightMenuOpen, setIsTrackRequestOpen, isTrackRequestOp
   const dispatch = useDispatch()
   /** @type {{ healthcheckTextWarning: string }} */
   const { healthcheckTextWarning } = useSelector(state => state.global)
-  /** @type {{ selectedVesselCustomTrackRequest: Vessel.TrackRequest }} */
+  /** @type {{ selectedVesselCustomTrackRequest: VesselNS.TrackRequest }} */
   const { selectedVesselCustomTrackRequest } = useSelector(state => state.vessel)
-  /** @type {{ selectedVesselIdentity: Vessel.VesselIdentity }} */
+  /** @type {{ selectedVesselIdentity: VesselNS.VesselIdentity }} */
   const { selectedVesselIdentity } = useSelector(state => state.vessel)
 
   /** @type {[Date, Date] | undefined} */
@@ -51,7 +51,7 @@ const TrackRequest = ({ isRightMenuOpen, setIsTrackRequestOpen, isTrackRequestOp
     }
 
     const [startDate, endDate] = dateRange
-    /** @type {Vessel.TrackRequestCustom} */
+    /** @type {VesselNS.TrackRequestCustom} */
     const trackRequest = {
       trackDepth: VesselTrackDepth.CUSTOM,
       afterDateTime: startDate,
@@ -62,7 +62,7 @@ const TrackRequest = ({ isRightMenuOpen, setIsTrackRequestOpen, isTrackRequestOp
   }, [dispatch, selectedVesselIdentity])
 
   /**
-   * @param {Vessel.VesselTrackDepthKey} newTrackDepth
+   * @param {VesselNS.VesselTrackDepthKey} newTrackDepth
    */
   const updateTrackDepth = useCallback((newTrackDepth) => {
     const trackRequest = getTrackRequestFromTrackDepth(newTrackDepth)

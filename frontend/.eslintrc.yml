@@ -73,6 +73,7 @@ overrides:
       ecmaVersion: 2022,
       project: ./tsconfig.json
     rules:
+      no-shadow: off
       no-undef: off
       no-unused-vars: off
   - files: "cypress/**/*.js"

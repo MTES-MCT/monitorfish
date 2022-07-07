@@ -21,7 +21,7 @@ const MapMenuOverlay = ({
   const dispatch = useDispatch()
 
   const ref = createRef()
-  /** @type {import('react').MutableRefObject<import('ol').Overlay | undefined>} */
+  /** @type {React.MutableRefObject<import('ol').Overlay | undefined>} */
   const overlayRef = useRef()
   const [isTrackRangeModalOpen, setIsTrackRangeModalOpen] = useState(false)
   const clickedOutsideComponent = useClickOutsideWhenOpened(ref, isTrackRangeModalOpen)
@@ -69,30 +69,6 @@ const MapMenuOverlay = ({
     setSelectedDateRange(dateRange)
     setSelectedTrackDepth(undefined)
   }, [])
-
-  /**
-   * @param {[Date, Date]=} dateRange
-   */
-  // const updateTrackDepth = useCallback((dateRange) => {
-  //   if (!dateRange) {
-  //     setSelectedDateRange(undefined)
-
-  //     return
-  //   }
-
-  //   const trackRequest = {
-  //     trackDepth: VesselTrackDepth.CUSTOM,
-  //     afterDateTime: dateRange.startDate,
-  //     beforeDateTime: dateRange.endDate
-  //   }
-
-  //   dispatch(showVesselTrack(vessel.vesselProperties, false, trackRequest))
-
-  //   map.removeOverlay(getOverlay())
-  //   setIsOpen(false)
-  //   setSelectedDateRange(dateRange)
-  //   setSelectedTrackDepth(undefined)
-  // }, [])
 
   useEffect(() => {
     if (clickedOutsideComponent) {

@@ -4,11 +4,10 @@ import { atLeastOneVesselSelected, Vessel, VesselSidebarTab } from '../entities/
 import { reportingIsAnInfractionSuspicion, ReportingType } from '../entities/reporting'
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
-
-/* eslint-disable */
-/** @namespace VesselReducer */
-const VesselReducer = null
-/* eslint-enable */
+import { VesselTrackDepth } from '../entities/vesselTrackDepth'
+// @ts-ignore
+// eslint-disable-next-line no-unused-vars
+import * as VesselType from '../types/vessel'
 
 const NOT_FOUND = -1
 
@@ -29,35 +28,43 @@ function filterFirstFoundReportingType (action) {
 const vesselSlice = createSlice({
   name: 'vessel',
   initialState: {
-    vessels: [],
-    vesselsEstimatedPositions: [],
-    /** @type {Object.<string, ShowedVesselTrack>} vesselsTracksShowed */
-    vesselsTracksShowed: {},
-    uniqueVesselsSpecies: [],
-    uniqueVesselsDistricts: [],
-    /** @type {VesselIdentity | null} selectedVesselIdentity */
-    selectedVesselIdentity: null,
-    /** @type {SelectedVessel | null} selectedVessel */
-    selectedVessel: null,
-    /** @type {VesselPosition[] | null} selectedVesselPositions */
-    selectedVesselPositions: null,
+    /** @type {VesselType.FishingActivityShowedOnMap[]} */
+    fishingActivitiesShowedOnMap: [],
     hideNonSelectedVessels: false,
-    /** @type {VesselPosition | null} highlightedVesselTrackPosition */
+    /** @type {VesselType.VesselPosition | null} */
     highlightedVesselTrackPosition: null,
-    loadingVessel: null,
-    loadingPositions: null,
-    vesselSidebarIsOpen: false,
-    vesselSidebarTab: VesselSidebarTab.SUMMARY,
     isFocusedOnVesselSearch: false,
-    /** @type {TrackRequest} selectedVesselCustomTrackRequest */
+    /** @type {boolean | null} */
+    loadingVessel: null,
+    /** @type {boolean | null} */
+    loadingPositions: null,
+    /** @type {VesselType.SelectedVessel | null} */
+    selectedVessel: null,
+    /** @type {VesselType.TrackRequest} */
     selectedVesselCustomTrackRequest: {
-      trackDepth: null,
+      trackDepth: VesselTrackDepth.TWELVE_HOURS,
       afterDateTime: null,
       beforeDateTime: null
     },
+    /** @type {VesselType.VesselIdentity | null} */
+    selectedVesselIdentity: null,
+    /** @type {VesselType.VesselPosition[] | null} */
+    selectedVesselPositions: null,
+    /** @type {any[]} */
+    tripMessagesLastToFormerDEPDateTimes: [],
+    /** @type {any[]} */
+    uniqueVesselsDistricts: [],
+    /** @type {any[]} */
+    uniqueVesselsSpecies: [],
+    /** @type {any[]} */
+    vessels: [],
+    /** @type {any[]} */
+    vesselsEstimatedPositions: [],
+    vesselSidebarIsOpen: false,
+    vesselSidebarTab: VesselSidebarTab.SUMMARY,
     vesselTrackExtent: null,
-    /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
-    fishingActivitiesShowedOnMap: []
+    /** @type {Object.<string, VesselType.ShowedVesselTrack>} */
+    vesselsTracksShowed: {}
   },
   reducers: {
     setVesselsFromAPI (state, action) {
@@ -104,7 +111,7 @@ const vesselSlice = createSlice({
      * before the /vessels API is fetched from the cron
      * @function removeVesselAlertAndUpdateReporting
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: {
      *   vesselId: string,
      *   alertType: string,
@@ -160,11 +167,13 @@ const vesselSlice = createSlice({
      * before the /vessels API is fetched from the cron
      * @function removeVesselReporting
      * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: {
-     *   vesselId: string,
-     *   reportingType: string<ReportingType>
-     * }}} action - the vessel alert to validate or silence
+     * @param {Object} state
+     * @param {{
+     *   payload: {
+     *     vesselId: string
+     *     reportingType: string
+     *   }
+     * }} action - the vessel alert to validate or silence
      */
     removeVesselReporting (state, action) {
       state.vessels = state.vessels.map(vessel => {
@@ -201,11 +210,13 @@ const vesselSlice = createSlice({
      * before the /vessels API is fetched from the cron
      * @function addVesselReporting
      * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: {
-     *   vesselId: string,
-     *   reportingType: string<ReportingType>
-     * }}} action - the vessel alert to validate or silence
+     * @param {Object} state
+     * @param {{
+     *   payload: {
+     *     vesselId: string,
+     *     reportingType: string
+     *   }
+     * }} action - the vessel alert to validate or silence
      */
     addVesselReporting (state, action) {
       state.vessels = state.vessels.map(vessel => {
@@ -242,7 +253,7 @@ const vesselSlice = createSlice({
      * Set filtered features as true
      * @function setFilteredVesselsFeatures
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: string[]}} action - the vessel features uids
      */
     setFilteredVesselsFeatures (state, action) {
@@ -264,7 +275,7 @@ const vesselSlice = createSlice({
      * Set  previewed vessel features
      * @function setPreviewFilteredVesselsFeatures
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: string[]}} action - the previewed vessel features uids
      */
     setPreviewFilteredVesselsFeatures (state, action) {
@@ -298,10 +309,10 @@ const vesselSlice = createSlice({
      * Set the selected vessel and positions
      * @function setSelectedVessel
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: {
      *   vessel: Vessel,
-     *   positions: VesselPosition[]
+     *   positions: VesselType.VesselPosition[]
      * }}} action - The positions
      */
     setSelectedVessel (state, action) {
@@ -314,8 +325,8 @@ const vesselSlice = createSlice({
      * Update the positions of the vessel
      * @function updateSelectedVesselPositions
      * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: VesselPosition[]}} action - The positions
+     * @param {Object} state
+     * @param {{payload: VesselType.VesselPosition[]}} action - The positions
      */
     updateSelectedVesselPositions (state, action) {
       state.loadingPositions = null
@@ -331,7 +342,7 @@ const vesselSlice = createSlice({
       state.selectedVessel = null
       state.selectedVesselIdentity = null
       state.selectedVesselCustomTrackRequest = {
-        trackDepth: null,
+        trackDepth: VesselTrackDepth.TWELVE_HOURS,
         afterDateTime: null,
         beforeDateTime: null
       }
@@ -358,25 +369,18 @@ const vesselSlice = createSlice({
      *
      * @function setSelectedVesselCustomTrackRequest
      * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: TrackRequest | null}} action - The track request
+     * @param {Object} state
+     * @param {{payload: VesselType.TrackRequest}} action - The track request
      */
     setSelectedVesselCustomTrackRequest (state, action) {
       state.selectedVesselCustomTrackRequest = action.payload
-    },
-    resetSelectedVesselCustomTrackRequest (state) {
-      state.selectedVesselCustomTrackRequest = {
-        trackDepth: null,
-        afterDateTime: null,
-        beforeDateTime: null
-      }
     },
     /**
      * Highlight a vessel position on map from the vessel track positions table
      * @function highlightVesselTrackPosition
      * @memberOf VesselReducer
-     * @param {Object=} state
-     * @param {{payload: VesselPosition | null}} action - The position
+     * @param {Object} state
+     * @param {{payload: VesselType.VesselPosition | null}} action - The position
      */
     highlightVesselTrackPosition (state, action) {
       state.highlightedVesselTrackPosition = action.payload
@@ -385,7 +389,7 @@ const vesselSlice = createSlice({
      * Reset the highlighted vessel position
      * @function resetHighlightedVesselTrackPosition
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      */
     resetHighlightedVesselTrackPosition (state) {
       state.highlightedVesselTrackPosition = null
@@ -394,7 +398,7 @@ const vesselSlice = createSlice({
      * Show the specified vessel tab
      * @function showVesselSidebarTab
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: number}} action - The tab (VesselSidebarTab)
      */
     showVesselSidebarTab (state, action) {
@@ -408,7 +412,7 @@ const vesselSlice = createSlice({
      * Show or hide other vessels (than the selected vessel)
      * @function setHideNonSelectedVessels
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: boolean}} action - hide (true) or show (false)
      */
     setHideNonSelectedVessels (state, action) {
@@ -421,10 +425,10 @@ const vesselSlice = createSlice({
      * - The `toHide` property trigger the layer to hide the track
      * @function addVesselTrackShowed
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: {
      *   vesselId: string,
-     *   showedVesselTrack: ShowedVesselTrack
+     *   showedVesselTrack: VesselType.ShowedVesselTrack
      *  }}} action - the vessel positions to show on map
      */
     addVesselTrackShowed (state, action) {
@@ -434,7 +438,7 @@ const vesselSlice = createSlice({
      * Update a given vessel track as showed by the layer
      * @function updateVesselTrackAsShowed
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: {
      *   vesselId: string,
      *   extent: number[]
@@ -454,7 +458,7 @@ const vesselSlice = createSlice({
      * Update a given vessel track as zoomed
      * @function updateVesselTrackAsZoomed
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: string}} action - the vessel id
      */
     updateVesselTrackAsZoomed (state, action) {
@@ -466,7 +470,7 @@ const vesselSlice = createSlice({
      * Update a given vessel track as to be hidden by the layer
      * @function updateVesselTrackAsShowed
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: string}} action - the vessel id
      */
     updateVesselTrackAsToHide (state, action) {
@@ -478,7 +482,7 @@ const vesselSlice = createSlice({
      * Remove the vessel track to the list
      * @function updateVesselTrackAsHidden
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: string}} action - the vessel id
      */
     updateVesselTrackAsHidden (state, action) {
@@ -492,7 +496,7 @@ const vesselSlice = createSlice({
      * Set the vessel track features extent - used to fit the extent into the OpenLayers view
      * @function setVesselTrackExtent
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{payload: number[]}} action - the extent
      */
     setVesselTrackExtent (state, action) {
@@ -502,7 +506,7 @@ const vesselSlice = createSlice({
      * Reset the vessel track features extent
      * @function setVesselTrackExtent
      * @memberOf VesselReducer
-     * @param {Object=} state
+     * @param {Object} state
      */
     resetVesselTrackExtent (state) {
       state.vesselTrackExtent = null
@@ -523,10 +527,7 @@ export const {
   resetSelectedVessel,
   closeVesselSidebar,
   setFocusOnVesselSearch,
-  setTemporaryVesselsToHighLightOnMap,
-  resetTemporaryVesselsToHighLightOnMap,
   setSelectedVesselCustomTrackRequest,
-  resetSelectedVesselCustomTrackRequest,
   highlightVesselTrackPosition,
   resetHighlightedVesselTrackPosition,
   showVesselSidebarTab,

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { DateRangePicker } from 'rsuite'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
@@ -42,10 +42,10 @@ const DateRange = ({
   placeholder,
   width
 }) => {
-  /** @type {[Date, Date]} */
+  /** @type {[Date, Date] | undefined} */
   const normalizedDefaultValue = useMemo(
     () => defaultValue
-      ? [new CustomDate(defaultValue[0]).fixOffset(), new CustomDate(defaultValue[1]).fixOffset()]
+      ? [CustomDate.fixOffset(defaultValue[0]), CustomDate.fixOffset(defaultValue[1])]
       : undefined,
     [defaultValue]
   )

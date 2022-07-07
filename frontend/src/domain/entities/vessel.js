@@ -1,6 +1,9 @@
 import Layers, { baseLayers } from './layers'
 import { vesselLabel as vesselLabelEnum } from './vesselLabelLine'
 import countries from 'i18n-iso-countries'
+// @ts-ignore
+// eslint-disable-next-line no-unused-vars
+import * as VesselType from '../types/vessel'
 
 export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_INFRACTION_SUSPICION_STYLE = 1
@@ -34,18 +37,19 @@ export class Vessel {
    * Add text label to vessel feature
    * @param {Object} feature - The OpenLayers feature.getProperties() object
    * @param {{
-   *   vesselLabel: string,
-   *   vesselsLastPositionVisibility: Object,
-   *   vesselLabelsShowedOnMap: boolean,
-   *   hideVesselsAtPort: boolean,
+   *   adminRole: any
+   *   vesselLabel: string
+   *   vesselsLastPositionVisibility: Object
+   *   vesselLabelsShowedOnMap: boolean
+   *   hideVesselsAtPort: boolean
    *   riskFactorShowedOnMap: boolean
    * }} options
    * @return {{
-        labelText: string | null,
+        labelText: string | null
         riskFactor: {
-          globalRisk: int,
-          impactRiskFactor: int,
-          probabilityRiskFactor: int,
+          globalRisk: int
+          impactRiskFactor: int
+          probabilityRiskFactor: int
           detectabilityRiskFactor: int
         } | null,
       }} - The label object
@@ -65,7 +69,9 @@ export class Vessel {
     vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
 
     const label = {
+      /** @type {string | null} */
       labelText: null,
+      /** @type {any} */
       riskFactor: null,
       underCharter: feature.underCharter
     }
@@ -138,7 +144,7 @@ export const getOnlyVesselIdentityProperties = vessel => {
 /**
  *
  * @param vessel
- * @return {VesselId}
+ * @return {VesselType.VesselId}
  */
 export const getVesselId = vessel => {
   return `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.ircs}`
@@ -146,8 +152,8 @@ export const getVesselId = vessel => {
 
 /**
  * Returns true if there is at least one vessel track or vessel selected
- * @param {Object.<string, ShowedVesselTrack>} vesselsTracksShowed
- * @param {VesselIdentity} selectedVesselIdentity
+ * @param {Object.<string, VesselType.ShowedVesselTrack>} vesselsTracksShowed
+ * @param {VesselType.VesselIdentity | null} selectedVesselIdentity
  * @return {boolean}
  */
 export const atLeastOneVesselSelected = (vesselsTracksShowed, selectedVesselIdentity) =>
@@ -157,9 +163,9 @@ export const atLeastOneVesselSelected = (vesselsTracksShowed, selectedVesselIden
  * Returns true if the vessel is showed:
  *  - The track is displayed (`vesselsTracksShowed` param)
  *  - The vessel is selected (`selectedVesselIdentity` param)
- * @param {VesselIdentity} vessel
- * @param {Object.<string, ShowedVesselTrack>} vesselsTracksShowed
- * @param {VesselIdentity} selectedVesselIdentity
+ * @param {VesselType.VesselIdentity} vessel
+ * @param {Object.<string, VesselType.ShowedVesselTrack>} vesselsTracksShowed
+ * @param {VesselType.VesselIdentity} selectedVesselIdentity
  * @return {boolean}
  */
 export const vesselIsShowed = (vessel, vesselsTracksShowed, selectedVesselIdentity) => {

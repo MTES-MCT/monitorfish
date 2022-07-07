@@ -7,7 +7,7 @@ import { CoordinatesFormat } from '../entities/map'
 
 const vesselLabelsShowedOnMapLocalStorageKey = 'vesselLabelsShowedOnMap'
 const vesselsLastPositionVisibilityLocalStorageKey = 'vesselsLastPositionVisibility'
-const vesselTrackDepthLocalStorageKey = 'vesselTrackDepth'
+export const vesselTrackDepthLocalStorageKey = 'vesselTrackDepth'
 const vesselLabelLocalStorageKey = 'vesselLabel'
 const savedMapViewLocalStorageKey = 'mapView'
 const savedMapExtentLocalStorageKey = 'mapExtent'
@@ -20,30 +20,30 @@ const hideVesselsAtPortLocalStorageKey = 'hideVesselsAtPort'
 const mapSlice = createSlice({
   name: 'map',
   initialState: {
+    // End of vessels map properties
+    animateToCoordinates: null,
+    animateToExtent: null,
+    animateToRegulatoryLayer: null,
+    coordinatesFormat: getLocalStorageState(CoordinatesFormat.DEGREES_MINUTES_SECONDS, coordinatesFormatLocalStorageKey),
+    defaultVesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
+    doNotAnimate: false,
+    extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
+    hideVesselsAtPort: getLocalStorageState(true, hideVesselsAtPortLocalStorageKey),
+    interaction: null,
+    riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
+    selectedBaseLayer: getLocalStorageState(baseLayers.LIGHT.code, baseLayerLocalStorageKey),
+    showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
+    vesselLabel: getLocalStorageState(vesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
+    vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
     // Vessels map properties
     vesselsLastPositionVisibility: getLocalStorageState({
       opacityReduced: 6,
       hidden: 48
     }, vesselsLastPositionVisibilityLocalStorageKey),
-    hideVesselsAtPort: getLocalStorageState(true, hideVesselsAtPortLocalStorageKey),
-    defaultVesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
-    vesselLabel: getLocalStorageState(vesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
-    vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
-    riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
-    showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
-    // End of vessels map properties
-    animateToCoordinates: null,
-    animateToExtent: null,
-    doNotAnimate: false,
-    animateToRegulatoryLayer: null,
-    interaction: null,
-    selectedBaseLayer: getLocalStorageState(baseLayers.LIGHT.code, baseLayerLocalStorageKey),
     view: getLocalStorageState({
       zoom: null,
       center: null
-    }, savedMapViewLocalStorageKey),
-    extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
-    coordinatesFormat: getLocalStorageState(CoordinatesFormat.DEGREES_MINUTES_SECONDS, coordinatesFormatLocalStorageKey)
+    }, savedMapViewLocalStorageKey)
   },
   reducers: {
     doNotAnimate (state, action) {
@@ -51,9 +51,9 @@ const mapSlice = createSlice({
     },
     /**
      * Animate map to the specified OpenLayers coordinates
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{
-     * payload: String[]
+     *   payload: String[]
      * }} action - The OpenLayers internal [longitude, latitude] coordinates
      */
     animateToCoordinates (state, action) {
@@ -104,11 +104,13 @@ const mapSlice = createSlice({
     },
     /**
      * Start an interaction with the OpenLayers map, hence use the mouse to draw geometries
-     * @param {Object=} state
-     * @param {{payload: {
-     *   type: (InteractionTypes.SQUARE|InteractionTypes.POLYGON),
-     *   listener: (layersType.REGULATORY|layersType.VESSEL)
-     * }}} action - The interaction type (see InteractionTypes enum) and listener (see layersType enum)
+     * @param {Object} state
+     * @param {{
+     *   payload: {
+     *     type: string
+     *     listener: (layersType.REGULATORY|layersType.VESSEL)
+     *   }
+     * }} action - The interaction type (see InteractionTypes enum) and listener (see layersType enum)
      */
     setInteraction (state, action) {
       state.interaction = action.payload
@@ -122,7 +124,7 @@ const mapSlice = createSlice({
     },
     /**
      * Set the coordinate format in the whole application (as DMS, DMD or DD)
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{
      * payload: CoordinatesFormat}} action - The coordinate format
      */
@@ -132,7 +134,7 @@ const mapSlice = createSlice({
     },
     /**
      * Show or hide the vessels current estimated positions
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{
      * payload: boolean}} action
      */
@@ -142,7 +144,7 @@ const mapSlice = createSlice({
     },
     /**
      * Show or hide the vessels located in a port
-     * @param {Object=} state
+     * @param {Object} state
      * @param {{
      * payload: boolean}} action - true if the vessels at port are hidden
      */

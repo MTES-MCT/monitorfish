@@ -1,17 +1,27 @@
-import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Modal } from 'rsuite'
 import DateRange from '../../../vessel_sidebar/actions/track_request/DateRange'
 
-const TrackRangeModal = ({ isModalOpen, setModalIsOpen, selectedDates, setSelectedDates }) => {
+/**
+ * @typedef {object} TrackRangeModalProps
+ * @property {boolean} isOpen
+ * @property {(dateRange?: [Date, Date]) => void} onChange
+ * @property {() => void} onClose
+ * @property {[Date, Date]=} selectedDates
+ */
+
+/**
+ * @param {TrackRangeModalProps} props
+ */
+export const TrackRangeModal = ({ isOpen, onChange, onClose, selectedDates }) => {
   return (
     <ModalWithCustomHeight
-      size={'xs'}
       backdrop
-      open={isModalOpen}
+      onClose={onClose}
+      open={isOpen}
+      size={'xs'}
       style={{ marginTop: 100 }}
-      onClose={() => setModalIsOpen(false)}
     >
       <Modal.Header>
         <Modal.Title>
@@ -24,7 +34,7 @@ const TrackRangeModal = ({ isModalOpen, setModalIsOpen, selectedDates, setSelect
         <DateRange
           defaultValue={selectedDates}
           isDisabledAfterToday
-          onChange={setSelectedDates}
+          onChange={onChange}
           placeholder={'Choisir une période précise'}
           width={265}
         />
@@ -34,9 +44,9 @@ const TrackRangeModal = ({ isModalOpen, setModalIsOpen, selectedDates, setSelect
 }
 
 const Title = styled.div`
+  color: ${COLORS.gainsboro};
   font-size: 16px;
   line-height: 30px;
-  color: ${COLORS.gainsboro};
 `
 
 const Body = styled(Modal.Body)`
@@ -49,5 +59,3 @@ const ModalWithCustomHeight = styled(Modal)`
     height: 150px !important;
   }
 `
-
-export default TrackRangeModal

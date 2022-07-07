@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
+const dayjs = require('dayjs')
+
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Vessel sidebar controls buttons', () => {
@@ -54,6 +56,9 @@ context('Vessel sidebar controls buttons', () => {
   })
 
   it('Vessel track dates Should be changed from the agenda', () => {
+    const startDay = dayjs().subtract(6, 'days').format('DD')
+    const endDay = dayjs().format('DD')
+
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
@@ -62,10 +67,10 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 20000 })
     cy.get('.rs-picker-daterange').click({ timeout: 20000 })
     cy.get('.rs-calendar-table-cell')
-      .contains('14')
+      .contains(new RegExp(`^${Number(startDay)}$`))
       .click({ timeout: 20000 })
     cy.get('.rs-calendar-table-cell')
-      .contains('26')
+      .contains(new RegExp(`^${Number(endDay)}$`))
       .click({ timeout: 20000 })
 
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')
@@ -76,18 +81,22 @@ context('Vessel sidebar controls buttons', () => {
     // Then
     cy.wait('@getPositions')
       .then(({ request, response }) => {
-        expect(request.url).contains('14T00:00:00.000Z')
-        expect(request.url).contains('26T23:59:59.000Z')
+        expect(request.url).contains(`${startDay}T00:00:00.000Z`)
+        expect(request.url).contains(`${endDay}T23:59:59.000Z`)
       })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').should('not.have.class', 'rs-radio-checked')
     cy.get('.rs-picker-daterange').within(() => {
-      cy.get('.rs-picker-toggle-value').contains(/14-\d{2}-\d{4}/)
-      cy.get('.rs-picker-toggle-value').contains(/26-\d{2}-\d{4}/)
-    })
-    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
+      const startDateRegexp = new RegExp(`${startDay}-\\d{2}-\\d{4}`)
+      const endDateRegexp = new RegExp(`${endDay}-\\d{2}-\\d{4}`)
 
-    cy.get('*[data-cy^="custom-dates-showed-text"]').contains(/^14\/\d{2}\/\d{2}/)
-    cy.get('*[data-cy^="custom-dates-showed-text"]').contains(/^26\/\d{2}\/\d{2}/)
+      cy.get('.rs-picker-toggle-value').contains(startDateRegexp, { })
+      cy.get('.rs-picker-toggle-value').contains(endDateRegexp)
+    })
+
+    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 20000 })
+    cy
+      .get('*[data-cy^="custom-dates-showed-text"]')
+      .contains(new RegExp(`Piste affichée du ${startDay}/\\d{2}/\\d{2} au ${endDay}/\\d{2}/\\d{2}`))
   })
 
   it('Fishing activities Should be seen on the vessel track and showed from the map', () => {

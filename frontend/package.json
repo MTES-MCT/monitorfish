@@ -44,7 +44,7 @@
     "react-toast-notifications": "2.5.1",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
-    "rsuite": "5.15.1",
+    "rsuite": "5.15.2",
     "simplify-geojson": "^1.0.4",
     "styled-components": "^5.2.1",
     "timeago.js": "^4.0.2",

@@ -281,10 +281,10 @@ class VesselControllerITests {
                 .andExpect(jsonPath("$.isFirstVoyage", equalTo(false)))
                 .andExpect(jsonPath("$.startDate", equalTo("2021-01-21T10:21:26.617301+01:00")))
                 .andExpect(jsonPath("$.endDate", equalTo(null)))
-                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages.length()", equalTo(3)))
-                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[0].messageType", equalTo("DEP")))
-                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[0].tripNumber", equalTo("345")))
-                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[0].operationDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
+                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages.length()", equalTo(4)))
+                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].messageType", equalTo("DEP")))
+                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].tripNumber", equalTo("345")))
+                .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].reportDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
 
         Mockito.verify(getVesselVoyage).execute("FR224226850", VoyageRequest.LAST, null)
     }

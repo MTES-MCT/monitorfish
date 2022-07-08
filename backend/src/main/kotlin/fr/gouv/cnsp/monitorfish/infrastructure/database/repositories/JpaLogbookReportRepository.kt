@@ -20,8 +20,8 @@ import java.time.ZonedDateTime
 import javax.transaction.Transactional
 
 @Repository
-class JpaLogbookLineRepository(private val dbERSRepository: DBLogbookReportRepository,
-                               private val mapper: ObjectMapper) : LogbookReportRepository {
+class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRepository,
+                                 private val mapper: ObjectMapper) : LogbookReportRepository {
 
     private val postgresChunkSize = 5000
 

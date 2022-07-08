@@ -20,7 +20,7 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
     fun execute(internalReferenceNumber: String, afterDepartureDate: ZonedDateTime, beforeDepartureDate: ZonedDateTime, tripNumber: String): List<LogbookMessage> {
         val messages = logbookReportRepository
                 .findAllMessagesByTripNumberBetweenDates(internalReferenceNumber, afterDepartureDate, beforeDepartureDate, tripNumber)
-                .sortedBy { it.operationDateTime }
+                .sortedBy { it.reportDateTime }
                 .map {
                     try {
                         val rawMessage = logbookRawMessageRepository.findRawMessage(it.operationNumber)

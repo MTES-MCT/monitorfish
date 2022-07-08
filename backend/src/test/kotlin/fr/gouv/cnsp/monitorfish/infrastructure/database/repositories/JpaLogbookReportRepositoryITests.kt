@@ -18,10 +18,10 @@ import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 @Import(MapperConfiguration::class)
-class JpaLogbookLineRepositoryITests : AbstractDBTests() {
+class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Autowired
-    private lateinit var jpaLogbookLineRepository: JpaLogbookLineRepository
+    private lateinit var jpaLogbookReportRepository: JpaLogbookReportRepository
 
     @Autowired
     lateinit var cacheManager: CacheManager
@@ -33,7 +33,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
 
     @AfterEach
     fun after() {
-        jpaLogbookLineRepository.deleteAll()
+        jpaLogbookReportRepository.deleteAll()
     }
 
     /**
@@ -62,7 +62,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastTripBefore Should return the last departure date When the CFR is given`() {
         // When
-        val lastTrip = jpaLogbookLineRepository.findLastTripBeforeDateTime("FAK000999999", ZonedDateTime.now())
+        val lastTrip = jpaLogbookReportRepository.findLastTripBeforeDateTime("FAK000999999", ZonedDateTime.now())
 
         // Then
         assertThat(lastTrip.startDate.toString()).isEqualTo("2019-10-11T02:06Z")
@@ -73,7 +73,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastTripBefore Should throw an exception When no parameter is given`() {
         // When
-        val throwable = catchThrowable { jpaLogbookLineRepository.findLastTripBeforeDateTime("", ZonedDateTime.now()) }
+        val throwable = catchThrowable { jpaLogbookReportRepository.findLastTripBeforeDateTime("", ZonedDateTime.now()) }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
@@ -84,7 +84,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastTripBefore Should throw an exception When the vessel could not be found`() {
         // When
-        val throwable = catchThrowable { jpaLogbookLineRepository.findLastTripBeforeDateTime("ARGH", ZonedDateTime.now()) }
+        val throwable = catchThrowable { jpaLogbookReportRepository.findLastTripBeforeDateTime("ARGH", ZonedDateTime.now()) }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
@@ -95,7 +95,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findTripBeforeTripNumber Should return the previous trip number When there is an overlap between the current and previous trip`() {
         // When
-        val secondTrip = jpaLogbookLineRepository.findTripBeforeTripNumber(
+        val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
                 "FAK000999999",
                 "9463714")
 
@@ -110,7 +110,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     fun `findTripBeforeTripNumber Should return an exception When the current trip number is invalid`() {
         // When
         val throwable = catchThrowable {
-            jpaLogbookLineRepository.findTripBeforeTripNumber(
+            jpaLogbookReportRepository.findTripBeforeTripNumber(
                     "FAK000999999",
                     "9463712")
         }
@@ -124,7 +124,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findTripBeforeTripNumber Should return the previous trip number When there is no overlap between the current and previous trip`() {
         // When
-        val secondTrip = jpaLogbookLineRepository.findTripBeforeTripNumber(
+        val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
                 "FAK000999999",
                 "9463715")
 
@@ -138,7 +138,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findTripAfterTripNumber Should return the next trip number When there is an overlap between the current and previous trip`() {
         // When
-        val secondTrip = jpaLogbookLineRepository.findTripAfterTripNumber(
+        val secondTrip = jpaLogbookReportRepository.findTripAfterTripNumber(
                 "FAK000999999",
                 "9463713")
 
@@ -152,7 +152,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findTripAfterTripNumber Should return the next trip number When there is no overlap between the current and previous trip`() {
         // When
-        val secondTrip = jpaLogbookLineRepository.findTripAfterTripNumber(
+        val secondTrip = jpaLogbookReportRepository.findTripAfterTripNumber(
                 "FAK000999999",
                 "9463714")
 
@@ -167,7 +167,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     fun `findTripAfterTripNumber Should throw an exception When there is no next trip found`() {
         // When
         val throwable = catchThrowable {
-            jpaLogbookLineRepository.findTripAfterTripNumber(
+            jpaLogbookReportRepository.findTripAfterTripNumber(
                     "FAK000999999",
                     "9463715")
         }
@@ -185,7 +185,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
         val now = ZonedDateTime.now()
 
         // When
-        val messages = jpaLogbookLineRepository
+        val messages = jpaLogbookReportRepository
                 .findAllMessagesByTripNumberBetweenDates("FAK000999999", lastDepartureDate, now, "9463715")
 
         // Then
@@ -341,7 +341,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLANAndPNOMessagesNotAnalyzedBy Should not return already analyzed LAN by rule PNO_LAN_WEIGHT_TOLERANCE`() {
         // When
-        val messages = jpaLogbookLineRepository.findLANAndPNOMessagesNotAnalyzedBy("PNO_LAN_WEIGHT_TOLERANCE")
+        val messages = jpaLogbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy("PNO_LAN_WEIGHT_TOLERANCE")
 
         // Then
         assertThat(messages).hasSize(2)
@@ -354,7 +354,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
         val lanMessageBeingCorrected = "OOF20190430059907"
 
         // When
-        val messages = jpaLogbookLineRepository.findLANAndPNOMessagesNotAnalyzedBy("FAKE_RULE_NAME")
+        val messages = jpaLogbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy("FAKE_RULE_NAME")
 
         // Then, the origin LAN message is not present (3 messages in place of 4)
         assertThat(messages).hasSize(3)
@@ -371,7 +371,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLANAndPNOMessagesNotAnalyzedBy Should return the LAN and the associated PNO`() {
         // When
-        val messages = jpaLogbookLineRepository.findLANAndPNOMessagesNotAnalyzedBy("PNO_LAN_WEIGHT_TOLERANCE")
+        val messages = jpaLogbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy("PNO_LAN_WEIGHT_TOLERANCE")
 
         // Then, for the first pair of result
         assertThat(messages.first().first.internalReferenceNumber).isEqualTo("FAK000999999")
@@ -386,14 +386,14 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `updateERSMessagesAsProcessedByRule Should update multiple message processed by a rule`() {
         // When
-        jpaLogbookLineRepository.updateLogbookMessagesAsProcessedByRule(listOf(2, 10), "PNO_LAN_WEIGHT_TOLERANCE")
+        jpaLogbookReportRepository.updateLogbookMessagesAsProcessedByRule(listOf(2, 10), "PNO_LAN_WEIGHT_TOLERANCE")
 
         // Then
-        val firstMessageUpdated = jpaLogbookLineRepository.findById(2)
+        val firstMessageUpdated = jpaLogbookReportRepository.findById(2)
         assertThat(firstMessageUpdated.analyzedByRules).hasSize(1)
         assertThat(firstMessageUpdated.analyzedByRules.first()).isEqualTo("PNO_LAN_WEIGHT_TOLERANCE")
 
-        val secondMessageUpdated = jpaLogbookLineRepository.findById(10)
+        val secondMessageUpdated = jpaLogbookReportRepository.findById(10)
         assertThat(secondMessageUpdated.analyzedByRules).hasSize(1)
         assertThat(secondMessageUpdated.analyzedByRules.first()).isEqualTo("PNO_LAN_WEIGHT_TOLERANCE")
     }
@@ -402,7 +402,7 @@ class JpaLogbookLineRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastMessageDate Should find the last message datetime before now and not a datetime in the future`() {
         // When
-        val dateTime = jpaLogbookLineRepository.findLastMessageDate()
+        val dateTime = jpaLogbookReportRepository.findLastMessageDate()
 
         // Then
         assertThat(dateTime).isEqualTo(ZonedDateTime.parse("2021-01-31T12:29:02Z"))

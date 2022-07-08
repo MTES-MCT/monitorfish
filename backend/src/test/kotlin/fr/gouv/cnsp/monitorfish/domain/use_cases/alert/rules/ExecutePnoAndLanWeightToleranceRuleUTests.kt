@@ -11,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RuleRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyPNOAndLANLogbookMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyPNOAndLANLogbookMessagesWithSpeciesInDouble
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -100,6 +101,44 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
             val secondCatchAlerts = (allValues.last().value as PNOAndLANWeightToleranceAlert).catchesOverTolerance
             assertThat(secondCatchAlerts?.first()?.lan?.weight).isEqualTo(2225.0)
             assertThat(secondCatchAlerts?.first()?.pno?.weight).isNull()
+        }
+    }
+
+    @Test
+    fun `execute Should save an alert When LAN and PNO weights are above the tolerance threshold And species is found in double`() {
+        // Given
+        val rule = Rule(UUID.randomUUID(),
+                "Save an alert when PNO and LAN weights are below tolerance",
+                true,
+                ZonedDateTime.now(),
+                null,
+                null,
+                null,
+                PNOAndLANWeightTolerance(10.0, 50.0)
+        )
+        given(logbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name))
+                .willReturn(getDummyPNOAndLANLogbookMessagesWithSpeciesInDouble(1000.0, true))
+
+        // When
+        ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, PNOAndLANAlertRepository).execute(rule)
+
+        // Then
+        argumentCaptor<PNOAndLANAlert>().apply {
+            verify(PNOAndLANAlertRepository, times(2)).save(capture())
+
+            assertThat(allValues).hasSize(2)
+
+            assertThat(allValues.first().value.type).isEqualTo(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT)
+            val firstCatchAlerts = (allValues.first().value as PNOAndLANWeightToleranceAlert).catchesOverTolerance
+            assertThat(firstCatchAlerts?.first()?.lan?.weight).isEqualTo(123.0)
+            assertThat(firstCatchAlerts?.first()?.pno?.weight).isEqualTo(1123.0)
+
+            // The species SMV is found twice
+            assertThat(firstCatchAlerts?.get(1)?.lan?.weight).isEqualTo(2884.5)
+            assertThat(firstCatchAlerts?.get(1)?.pno?.weight).isEqualTo(1923.5)
+
+            assertThat(firstCatchAlerts?.last()?.lan?.weight).isEqualTo(69.7)
+            assertThat(firstCatchAlerts?.last()?.pno?.weight).isEqualTo(1069.7)
         }
     }
 

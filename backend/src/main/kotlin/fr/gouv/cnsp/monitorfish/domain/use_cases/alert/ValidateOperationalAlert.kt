@@ -24,7 +24,8 @@ class ValidateOperationalAlert(private val pendingAlertRepository: PendingAlertR
         silencedAlertRepository.save(
                 alert = validatedAlert,
                 silencedAfterDate = null,
-                silencedBeforeDate = now.plusHours(4))
+                silencedBeforeDate = now.plusHours(4),
+                isValidated = true)
 
         reportingRepository.save(validatedAlert, now)
 

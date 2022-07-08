@@ -56,7 +56,7 @@ class ValidateOperationalAlertUTests {
                 lastPositionRepository).execute(666)
 
         // Then
-        Mockito.verify(silencedAlertRepository).save(eq(pendingAlert), any(), anyOrNull())
+        Mockito.verify(silencedAlertRepository).save(eq(pendingAlert), any(), anyOrNull(), any())
         Mockito.verify(pendingAlertRepository).delete(eq(666))
         Mockito.verify(reportingRepository).save(eq(pendingAlert), any())
         Mockito.verify(lastPositionRepository).removeAlertToLastPositionByVesselIdentifierEquals(

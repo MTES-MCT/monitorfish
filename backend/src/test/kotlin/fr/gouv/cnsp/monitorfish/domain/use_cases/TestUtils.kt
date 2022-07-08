@@ -246,4 +246,75 @@ object TestUtils {
                                 operationType = LogbookOperationType.DAT, messageType = "PNO", message = secondPno, transmissionFormat = LogbookTransmissionFormat.ERS)),
         )
     }
+
+    fun getDummyPNOAndLANLogbookMessagesWithSpeciesInDouble(weightToAdd: Double = 0.0, addSpeciesToLAN: Boolean = false): List<Pair<LogbookMessage, LogbookMessage>> {
+        val catchOne = Catch()
+        catchOne.species = "TTV"
+        catchOne.weight = 123.0
+        val catchTwo = Catch()
+        catchTwo.species = "SMV"
+        catchTwo.weight = 961.5
+        val catchThree = Catch()
+        catchThree.species = "PNB"
+        catchThree.weight = 69.7
+        val catchFour = Catch()
+        catchFour.species = "CQL"
+        catchFour.weight = 98.2
+
+        val catchFive = Catch()
+        catchFive.species = "FGV"
+        catchFive.weight = 25.5
+        val catchSix = Catch()
+        catchSix.species = "THB"
+        catchSix.weight = 35.0
+        val catchSeven = Catch()
+        catchSeven.species = "VGY"
+        catchSeven.weight = 66666.0
+        val catchEight = Catch()
+        catchEight.species = "MQP"
+        catchEight.weight = 11.1
+
+        val catchNine = Catch()
+        catchNine.species = "FPS"
+        catchNine.weight = 22.0
+
+        val catchTen = Catch()
+        catchTen.species = "DPD"
+        catchTen.weight = 2225.0
+
+        val firstLan = LAN()
+        firstLan.catchLanded = listOf(catchOne, catchTwo, catchTwo, catchTwo, catchThree, catchFour, catchNine)
+
+        val firstPno = PNO()
+        firstPno.catchOnboard = listOf(
+                catchOne.copy(weight = catchOne.weight?.plus(weightToAdd)),
+                catchTwo.copy(weight = catchTwo.weight?.plus(0.5)),
+                catchTwo,
+                catchThree.copy(weight = catchThree.weight?.plus(weightToAdd)),
+                catchFour)
+
+        val secondLan = LAN()
+        if(addSpeciesToLAN) {
+            secondLan.catchLanded = listOf(catchFive, catchSix, catchSeven, catchEight, catchTen)
+        } else {
+            secondLan.catchLanded = listOf(catchFive, catchSix, catchSeven, catchEight)
+        }
+        val secondPno = PNO()
+        secondPno.catchOnboard = listOf(catchFive, catchSix, catchSeven, catchEight)
+
+        return listOf(
+                Pair(LogbookMessage(
+                        id = 1, analyzedByRules = listOf(), operationNumber = "456846844658", tripNumber = "125345", reportId = "456846844658",
+                        operationType = LogbookOperationType.DAT, messageType = "LAN", message = firstLan, transmissionFormat = LogbookTransmissionFormat.ERS),
+                        LogbookMessage(
+                                id = 2, analyzedByRules = listOf(), operationNumber = "47177857577", tripNumber = "125345", reportId = "47177857577",
+                                operationType = LogbookOperationType.DAT, messageType = "PNO", message = firstPno, transmissionFormat = LogbookTransmissionFormat.ERS)),
+                Pair(LogbookMessage(
+                        id = 3, analyzedByRules = listOf(), operationNumber = "48545254254", tripNumber = "125345", reportId = "48545254254",
+                        operationType = LogbookOperationType.DAT, messageType = "LAN", message = secondLan, transmissionFormat = LogbookTransmissionFormat.ERS),
+                        LogbookMessage(
+                                id = 4, analyzedByRules = listOf(), operationNumber = "004045204504", tripNumber = "125345", reportId = "004045204504",
+                                operationType = LogbookOperationType.DAT, messageType = "PNO", message = secondPno, transmissionFormat = LogbookTransmissionFormat.ERS)),
+        )
+    }
 }

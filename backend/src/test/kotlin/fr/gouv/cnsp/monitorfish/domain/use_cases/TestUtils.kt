@@ -31,6 +31,9 @@ object TestUtils {
         haul.mesh = 120.0
         far.hauls = listOf(haul)
 
+        val coe = COE()
+        coe.targetSpeciesOnEntry = "DEM"
+
         val pno = PNO()
         pno.catchOnboard = listOf(catchOne, catchTwo, catchThree)
         pno.port = "AEJAZ"
@@ -44,7 +47,10 @@ object TestUtils {
                         message = dep, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(24), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
                     id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "PNO", software = "e-Sacapt Secours ERSV3 V 1.0.7",
-                        message = pno, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0), transmissionFormat = LogbookTransmissionFormat.ERS))
+                        message = pno, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                        id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "COE", software = "e-Sacapt Secours ERSV3 V 1.0.7",
+                        message = coe, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(3), transmissionFormat = LogbookTransmissionFormat.ERS))
     }
 
     fun getDummyFluxAndVisioCaptureLogbookMessages(): List<LogbookMessage> {

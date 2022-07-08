@@ -37,14 +37,14 @@ object TestUtils {
 
         return listOf(
                 LogbookMessage(
-                    id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "DEP", software = "e-Sacapt Secours ERSV3 V 1.0.10",
-                        message = dep, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(24), transmissionFormat = LogbookTransmissionFormat.ERS),
-                LogbookMessage(
                     id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "FAR", software = "TurboCatch (3.7-1)",
-                        message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                        message = far, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                LogbookMessage(
+                    id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "DEP", software = "e-Sacapt Secours ERSV3 V 1.0.10",
+                        message = dep, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(24), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
                     id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "PNO", software = "e-Sacapt Secours ERSV3 V 1.0.7",
-                        message = pno, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0), transmissionFormat = LogbookTransmissionFormat.ERS))
+                        message = pno, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0), transmissionFormat = LogbookTransmissionFormat.ERS))
     }
 
     fun getDummyFluxAndVisioCaptureLogbookMessages(): List<LogbookMessage> {
@@ -79,13 +79,13 @@ object TestUtils {
         return listOf(
                 LogbookMessage(
                         id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "DEP", software = "FT/VISIOCaptures V1.4.7",
-                        message = dep, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(24), transmissionFormat = LogbookTransmissionFormat.ERS),
+                        message = dep, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(24), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
                         id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "FAR", software = "FP/VISIOCaptures V1.4.7",
-                        message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                        message = far, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
                         id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "PNO", software = "TurboCatch (3.6-1)",
-                        message = pno, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0), transmissionFormat = LogbookTransmissionFormat.FLUX))
+                        message = pno, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0), transmissionFormat = LogbookTransmissionFormat.FLUX))
     }
 
     fun getDummyCorrectedLogbookMessages(): List<LogbookMessage> {
@@ -113,10 +113,10 @@ object TestUtils {
         return listOf(
                 LogbookMessage(
                     id = 1, analyzedByRules = listOf(), operationNumber = "9065646811", tripNumber = "345", reportId = "9065646811", operationType = LogbookOperationType.DAT, messageType = "FAR",
-                        message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                        message = far, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
                     id = 2, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", referencedReportId = "9065646811", operationType = LogbookOperationType.COR, messageType = "FAR",
-                        message = correctedFar, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS)
+                        message = correctedFar, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS)
                 )
     }
 
@@ -152,22 +152,22 @@ object TestUtils {
         return listOf(
                 LogbookMessage(
                     id = 1, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "9065646811", operationType = LogbookOperationType.DAT, messageType = "FAR",
-                        message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                        message = far, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
                     id = 2, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646816", referencedReportId = "9065646811", operationType = LogbookOperationType.RET, messageType = "",
-                        message = farBadAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                        message = farBadAck, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
                     id = 3, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "9065646813", operationType = LogbookOperationType.DAT, messageType = "FAR",
-                        message = farTwo, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                        message = farTwo, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
                     id = 4, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646818", referencedReportId = "9065646813", operationType = LogbookOperationType.RET, messageType = "",
-                        message = farAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                        message = farAck, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
                     id = 5, analyzedByRules = listOf(), operationNumber = "", referencedReportId = "9065646813", operationType = LogbookOperationType.DEL, messageType = "",
-                        message = farAck, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
+                        message = farAck, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS),
                 LogbookMessage(
                     id = 6, analyzedByRules = listOf(), operationNumber = "5h499-erh5u7-pm3ae8c5trj78j67dfh", tripNumber = "SCR-TTT20200505030505", reportId = "zegj15-zeg56-errg569iezz3659g", operationType = LogbookOperationType.DAT, messageType = "FAR",
-                    message = far, operationDateTime = ZonedDateTime.of(2020, 5, 5, 3, 9, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.FLUX)
+                    message = far, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 9, 5, 3, UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.FLUX)
         )
     }
 

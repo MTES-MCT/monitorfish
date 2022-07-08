@@ -101,19 +101,19 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy="vessel-fishing-message"]').eq(4).contains('Déclaration de capture')
     cy.get('*[data-cy="vessel-fishing-message"]').eq(4).siblings().eq(1).contains('ANCIEN MESSAGE')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(5).contains('Déclaration de capture')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(5).contains('Déclaration d\'inspection')
     cy.get('*[data-cy="vessel-fishing-message"]').eq(5).siblings().eq(1).contains('MESSAGE CORRIGÉ')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(6).contains('Déclaration d\'inspection')
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(6).siblings().eq(1).contains('MESSAGE CORRIGÉ')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(6).contains('Fin de pêche')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(7).contains('Déclaration de rejets')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(7).contains('Préavis (notification de retour au port)')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(8).contains('Fin de pêche')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(8).contains('Retour au port')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(9).contains('Préavis (notification de retour au port)')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(9).contains('Déclaration de capture')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(9).siblings().eq(1).contains('MESSAGE CORRIGÉ')
 
-    cy.get('*[data-cy="vessel-fishing-message"]').eq(10).contains('Retour au port')
+    cy.get('*[data-cy="vessel-fishing-message"]').eq(10).contains('Déclaration de rejets')
 
     cy.get('*[data-cy="vessel-fishing-message"]').eq(11).contains('Débarquement')
     cy.get('*[data-cy="vessel-fishing-message"]').eq(11).siblings().eq(1).contains('MESSAGE SUPPRIMÉ')
@@ -196,10 +196,21 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-fishing-see-all"]').click({ timeout: 10000 })
     cy.scrollTo(0, 380)
-    cy.get('*[data-cy^="show-fishing-activity"]').eq(6).scrollIntoView().click({ timeout: 10000 })
+    cy.get('*[data-cy^="show-fishing-activity"]')
+      .eq(7)
+      .parent()
+      .contains('Retour au port')
+    cy.get('*[data-cy^="show-fishing-activity"]')
+      .eq(7)
+      .scrollIntoView()
+      .click({ timeout: 20000 })
 
     // Then
-    cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 1)
+    cy.get('*[data-cy^="fishing-activity-name"]')
+      .should('exist')
+      .should('have.length', 1)
+      .eq(0)
+      .contains('RTP')
 
     // Then hide the fishing activity
     cy.get('*[data-cy^="hide-fishing-activity"]').eq(0).click({ timeout: 10000 })

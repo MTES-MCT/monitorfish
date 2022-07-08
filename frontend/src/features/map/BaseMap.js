@@ -57,21 +57,6 @@ const BaseMap = props => {
     }
   }
 
-  function allowClickOnMapFeaturesOverlayArePositionedOnTop () {
-    for (const s of document.querySelectorAll('.overlay-active')) {
-      s.style.pointerEvents = 'none'
-    }
-  }
-
-  function resetOverlayPointerStyle () {
-    const elements = document.querySelectorAll('.overlay-active')
-    if (elements?.length && elements[0].style.pointerEvents !== 'auto') {
-      for (const s of elements) {
-        s.style.pointerEvents = 'auto'
-      }
-    }
-  }
-
   const handleBasePointerMove = (event, map) => {
     if (event && map) {
       const pixel = map.getEventPixel(event.originalEvent)
@@ -82,13 +67,11 @@ const BaseMap = props => {
           setCurrentFeature(feature)
         }
         map.getTarget().style.cursor = 'pointer'
-        allowClickOnMapFeaturesOverlayArePositionedOnTop()
       } else if (map.getTarget().style) {
         if (setCurrentFeature) {
           setCurrentFeature(null)
         }
         map.getTarget().style.cursor = ''
-        resetOverlayPointerStyle()
       }
 
       if (handlePointerMove) {

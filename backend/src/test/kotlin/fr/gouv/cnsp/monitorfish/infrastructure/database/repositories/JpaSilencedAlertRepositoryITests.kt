@@ -30,7 +30,7 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
                 value = ThreeMilesTrawlingAlert())
 
         // When
-        val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null)
+        val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null, false)
 
         // Then
         assertThat(silencedAlert.internalReferenceNumber).isEqualTo("FRFGRGR")
@@ -38,6 +38,7 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
         assertThat(silencedAlert.value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
         assertThat(silencedAlert.silencedAfterDate).isNull()
         assertThat(silencedAlert.silencedBeforeDate).isEqualTo(now.plusHours(1))
+        assertThat(silencedAlert.wasValidated).isEqualTo(false)
 
         val alerts = jpaSilencedAlertRepository.findAllCurrentSilencedAlerts()
         assertThat(alerts).hasSize(5)
@@ -58,7 +59,7 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
                 value = ThreeMilesTrawlingAlert())
 
         // When
-        val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null)
+        val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null, false)
 
         // Then
         assertThat(silencedAlert.internalReferenceNumber).isEqualTo("FRFGRGR")
@@ -85,7 +86,7 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
                 tripNumber = "123456",
                 creationDate = ZonedDateTime.now(),
                 value = ThreeMilesTrawlingAlert())
-        jpaSilencedAlertRepository.save(alertOne, now, null)
+        jpaSilencedAlertRepository.save(alertOne, now, null, false)
 
         // When
         val alerts = jpaSilencedAlertRepository.findAllCurrentSilencedAlerts()

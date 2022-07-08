@@ -53,7 +53,8 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
         val savedSilencedAlert = silencedAlertRepository.save(
                 alert = silencedAlert,
                 silencedAfterDate = after,
-                silencedBeforeDate = before)
+                silencedBeforeDate = before,
+                isValidated = false)
 
         pendingAlertRepository.delete(alertId)
         updateLastPositionBeforePipelineUpdate(silencedAlert)

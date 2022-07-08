@@ -58,7 +58,7 @@ class SilenceOperationalAlertUTests {
                 "FRFGRGR",
                 false)
         argumentCaptor<ZonedDateTime>().apply {
-            verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), anyOrNull())
+            verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), anyOrNull(), any())
 
             assertThat(allValues.first().toString().split("T")[0])
                     .isEqualTo(ZonedDateTime.now().plusDays(1).toString().split("T")[0])
@@ -91,7 +91,7 @@ class SilenceOperationalAlertUTests {
         // Then
         Mockito.verify(pendingAlertRepository).delete(eq(666))
         argumentCaptor<ZonedDateTime>().apply {
-            verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), capture())
+            verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), capture(), any())
 
             assertThat(allValues.first().toString().split("T")[0])
                     .isEqualTo(ZonedDateTime.now().plusDays(26).toString().split("T")[0])

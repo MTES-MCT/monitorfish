@@ -11,5 +11,8 @@ class GetSilencedAlerts(private val silencedAlertRepository: SilencedAlertReposi
 
     fun execute(): List<SilencedAlert> {
         return silencedAlertRepository.findAllCurrentSilencedAlerts()
+                .filter {
+                    it.wasValidated == null || it.wasValidated.let { wasValidated -> !wasValidated }
+                }
     }
 }

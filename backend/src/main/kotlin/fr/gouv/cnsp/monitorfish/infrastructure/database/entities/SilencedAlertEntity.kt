@@ -42,7 +42,9 @@ data class SilencedAlertEntity(
         val silencedAfterDate: ZonedDateTime? = null,
         @Type(type = "jsonb")
         @Column(name = "value", nullable = false, columnDefinition = "jsonb")
-        val value: String) {
+        val value: String,
+        @Column(name = "was_validated")
+        val wasValidated: Boolean? = null) {
 
         fun toSilencedAlert(mapper: ObjectMapper) : SilencedAlert {
                 return SilencedAlert(
@@ -54,15 +56,16 @@ data class SilencedAlertEntity(
                         vesselIdentifier = vesselIdentifier,
                         silencedBeforeDate = silencedBeforeDate,
                         silencedAfterDate = silencedAfterDate,
-                        value = mapper.readValue(value, AlertType::class.java)
-                )
+                        value = mapper.readValue(value, AlertType::class.java),
+                        wasValidated = wasValidated)
         }
 
         companion object {
                 fun fromPendingAlert(mapper: ObjectMapper,
                                      alert: PendingAlert,
                                      silencedBeforeDate: ZonedDateTime,
-                                     silencedAfterDate: ZonedDateTime?) = SilencedAlertEntity(
+                                     silencedAfterDate: ZonedDateTime?,
+                                     isValidated: Boolean) = SilencedAlertEntity(
                         vesselName = alert.vesselName,
                         internalReferenceNumber = alert.internalReferenceNumber,
                         externalReferenceNumber = alert.externalReferenceNumber,
@@ -70,6 +73,7 @@ data class SilencedAlertEntity(
                         vesselIdentifier = alert.vesselIdentifier,
                         silencedBeforeDate = silencedBeforeDate,
                         silencedAfterDate = silencedAfterDate,
-                        value = mapper.writeValueAsString(alert.value))
+                        value = mapper.writeValueAsString(alert.value),
+                        wasValidated = isValidated)
         }
 }

@@ -12,6 +12,7 @@ from config import (
     BEACON_MALFUNCTIONS_ENDPOINT,
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
+    LIBRARY_LOCATION,
 )
 from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationType,
@@ -62,19 +63,43 @@ def extract_vessels_with_beacon() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def get_vessels_that_should_emit(vessels_with_beacon: pd.DataFrame) -> pd.DataFrame:
-    """Filter the input DataFrame of vessels_with_beacon to keep only those with
-    an `ACTIVATED` beacon.
+def extract_vessels_less_than_twelve_meters_to_monitor() -> set:
+    """
+    Returns the vessels <12m whose emissions must be monitored.
+
+    Returns:
+        set: set of `cfr`s of vessels <12m to monitor
+    """
+    vessels = pd.read_csv(
+        LIBRARY_LOCATION
+        / "pipeline/data/vessels_less_than_twelve_meters_to_monitor.csv"
+    )
+    return set(vessels.cfr)
+
+
+@task(checkpoint=False)
+def get_vessels_that_should_emit(
+    vessels_with_beacon: pd.DataFrame, less_than_twelve_to_monitor: set
+) -> pd.DataFrame:
+    """Filter the input DataFrame of vessels_with_beacon to keep only those that have :
+
+      - an `ACTIVATED` beacon AND
+      - a length >= 12m OR a `cfr` that is in `less_than_twelve_to_monitor`
 
     Args:
         vessels_with_beacon (pd.DataFrame): DataFrame of vessels
+        less_than_twelve_to_monitor (set): set of `cfr`s of vessels <12m to monitor
 
     Returns:
         pd.DataFrame: filtered version of input
     """
     vessels_that_should_emit = (
         vessels_with_beacon.loc[
-            vessels_with_beacon.beacon_status == beaconStatus.ACTIVATED.value
+            (vessels_with_beacon.beacon_status == beaconStatus.ACTIVATED.value)
+            & (
+                (vessels_with_beacon.length >= 12)
+                | (vessels_with_beacon.cfr.isin(less_than_twelve_to_monitor))
+            )
         ]
         .drop(columns=["beacon_status"])
         .reset_index(drop=True)
@@ -527,6 +552,7 @@ with Flow("Beacons malfunctions") as flow:
     known_malfunctions = extract_known_malfunctions(
         upstream_tasks=[last_positions_healthcheck]
     )
+    less_than_twelve_to_monitor = extract_vessels_less_than_twelve_meters_to_monitor()
 
     # Transform
     non_emission_at_sea_max_duration = make_timedelta(
@@ -539,7 +565,9 @@ with Flow("Beacons malfunctions") as flow:
     malfunction_datetime_utc_threshold_at_sea = now - non_emission_at_sea_max_duration
     malfunction_datetime_utc_threshold_at_port = now - non_emission_at_port_max_duration
 
-    vessels_that_should_emit = get_vessels_that_should_emit(vessels_with_beacon)
+    vessels_that_should_emit = get_vessels_that_should_emit(
+        vessels_with_beacon, less_than_twelve_to_monitor
+    )
     temporarily_unsupervised_vessels = get_temporarily_unsupervised_vessels(
         vessels_with_beacon
     )

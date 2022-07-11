@@ -6,10 +6,10 @@ SELECT
     vessel_name,
     flag_state,
     (COALESCE(length, 0) >= 12) AS priority,
-    beacon_status
+    beacon_status,
+    length
 FROM vessels
 WHERE
     beacon_number IS NOT NULL AND
     -- Flag_states whose emissions are monitored
-    flag_state IN ('FR', 'VE') AND
-    length >= 12
+    flag_state IN ('FR', 'VE')

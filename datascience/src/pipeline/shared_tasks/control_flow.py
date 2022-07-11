@@ -2,6 +2,8 @@ from pathlib import Path
 
 import prefect
 from prefect import task
+from prefect.engine.signals import SKIP
+from prefect.tasks.control_flow.filter import FilterTask
 from prefect.utilities.graphql import with_args
 
 
@@ -56,3 +58,8 @@ def str_to_path(path: str) -> Path:
         Path: Path('stairway/to/heaven')
     """
     return Path(path)
+
+
+filter_results = FilterTask(
+    filter_func=lambda x: not isinstance(x, (BaseException, SKIP, type(None)))
+)

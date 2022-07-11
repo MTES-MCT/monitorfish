@@ -11,6 +11,12 @@ from config import (
     MONITORFISH_EMAIL_ADDRESS,
     MONITORFISH_EMAIL_SERVER_PORT,
     MONITORFISH_EMAIL_SERVER_URL,
+    MONITORFISH_FAX_DOMAIN,
+    MONITORFISH_FAX_SERVER_PORT,
+    MONITORFISH_FAX_SERVER_URL,
+    MONITORFISH_SMS_DOMAIN,
+    MONITORFISH_SMS_SERVER_PORT,
+    MONITORFISH_SMS_SERVER_URL,
 )
 
 
@@ -32,6 +38,8 @@ def create_html_email(
           recipient(s)
         subject (str): Subject of the email.
         html (str): html representation of the email's content.
+        from_ (str, optional): `From` field. Defaults to env var
+          `MONITORFISH_EMAIL_ADDRESS`.
         cc (Union[str, List[str]], optional): `Cc` field with optional email address
         (or list of email addresses) of copied recipient(s). Defaults to None.
         bcc (Union[str, List[str]], optional): `Bcc` field with optional email address
@@ -49,7 +57,7 @@ def create_html_email(
             `<img src="cid:my_image_123.png">` in the html message.
 
           Defaults to None.
-        attachments (dict, optional): `dict of attachments to add to the email.
+        attachments (dict, optional): `dict` of attachments to add to the email.
           Consists of {filename : bytes} value pairs. Defaults
           to None.
 
@@ -105,6 +113,87 @@ def create_html_email(
     return msg
 
 
+def create_sms_email(
+    to: Union[str, List[str]],
+    text: str,
+    from_: str = MONITORFISH_EMAIL_ADDRESS,
+) -> EmailMessage:
+    """
+    Creates a `email.EmailMessage` with the defined parameters, configured to be sent
+    as an SMS.
+
+    Args:
+        to (Union[str, List[str]]): phone number or list of phone numbers of
+          recipient(s)
+        text (str): text of the SMS message
+        from_ (str, optional): `From` field. Defaults to MONITORFISH_EMAIL_ADDRESS env
+          var.
+
+    Returns:
+        EmailMessage
+    """
+    assert isinstance(to, (str, list))
+    assert MONITORFISH_SMS_DOMAIN
+
+    if isinstance(to, str):
+        to = f"{to}@{MONITORFISH_SMS_DOMAIN}"
+
+    if isinstance(to, list):
+        to = [f"{phone_number}@{MONITORFISH_SMS_DOMAIN}" for phone_number in to]
+        to = ", ".join(to)
+
+    msg = EmailMessage()
+    msg["From"] = from_
+    msg["To"] = to
+
+    msg.set_content(text)
+
+    return msg
+
+
+def create_fax_email(
+    to: Union[str, List[str]],
+    pdf: bytes,
+    from_: str = MONITORFISH_EMAIL_ADDRESS,
+) -> EmailMessage:
+    """
+    Creates a `email.EmailMessage` with the defined parameters.
+
+    Args:
+        to (Union[str, List[str]]): email address or list of email addresses of
+          recipient(s)
+        pdf (bytes): `bytes` pdf object
+        from_ (str, optional): `From` field. Defaults to MONITORFISH_EMAIL_ADDRESS env
+          var.
+
+    Returns:
+        EmailMessage
+    """
+    assert isinstance(to, (str, list))
+    assert MONITORFISH_FAX_DOMAIN
+
+    if isinstance(to, str):
+        to = f"{to}@{MONITORFISH_FAX_DOMAIN}"
+
+    if isinstance(to, list):
+        to = [f"{phone_number}@{MONITORFISH_FAX_DOMAIN}" for phone_number in to]
+        to = ", ".join(to)
+
+    msg = EmailMessage()
+    msg["Subject"] = "FAX"
+    msg["From"] = from_
+    msg["To"] = to
+
+    msg.add_attachment(
+        pdf,
+        maintype="application",
+        subtype="octet-stream",
+        filename="FAX.pdf",
+    )
+
+    return msg
+
+
 def send_email(msg: EmailMessage) -> dict:
     """
     Sends input email using the contents of `From` header as sender and `To`, `Cc`
@@ -140,6 +229,36 @@ def send_email(msg: EmailMessage) -> dict:
 
     with smtplib.SMTP(
         host=MONITORFISH_EMAIL_SERVER_URL, port=MONITORFISH_EMAIL_SERVER_PORT
+    ) as server:
+        send_errors = server.send_message(msg)
+    return send_errors
+
+
+def send_sms(msg: EmailMessage) -> dict:
+    """
+    Same as `send_email`, using sms server.
+    """
+
+    assert MONITORFISH_SMS_SERVER_URL is not None
+    assert MONITORFISH_SMS_SERVER_PORT is not None
+
+    with smtplib.SMTP(
+        host=MONITORFISH_SMS_SERVER_URL, port=MONITORFISH_SMS_SERVER_PORT
+    ) as server:
+        send_errors = server.send_message(msg)
+    return send_errors
+
+
+def send_fax(msg: EmailMessage) -> dict:
+    """
+    Same as `send_email`, using fax server.
+    """
+
+    assert MONITORFISH_FAX_SERVER_URL is not None
+    assert MONITORFISH_FAX_SERVER_PORT is not None
+
+    with smtplib.SMTP(
+        host=MONITORFISH_FAX_SERVER_URL, port=MONITORFISH_FAX_SERVER_PORT
     ) as server:
         send_errors = server.send_message(msg)
     return send_errors

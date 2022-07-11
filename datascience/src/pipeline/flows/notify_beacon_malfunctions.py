@@ -1,5 +1,4 @@
 from datetime import datetime
-from email.message import EmailMessage
 from pathlib import Path
 from smtplib import (
     SMTPDataError,
@@ -21,22 +20,33 @@ from prefect import Flow, Parameter, flatten, task, unmapped
 from sqlalchemy import Table, update
 
 from config import (
-    CNSP_SIP_DEPARTMENT_ADDRESS,
+    CNSP_SIP_DEPARTMENT_EMAIL,
     EMAIL_FONTS_LOCATION,
     EMAIL_IMAGES_LOCATION,
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
+    SMS_TEMPLATES_LOCATION,
 )
 from src.db_config import create_engine
 from src.pipeline.entities.beacon_malfunctions import (
+    BeaconMalfunctionMessageToSend,
     BeaconMalfunctionNotification,
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionToNotify,
     CommunicationMeans,
 )
 from src.pipeline.generic_tasks import extract, load
-from src.pipeline.helpers.emails import create_html_email, resize_pdf_to_A4, send_email
+from src.pipeline.helpers.emails import (
+    create_fax_email,
+    create_html_email,
+    create_sms_email,
+    resize_pdf_to_A4,
+    send_email,
+    send_fax,
+    send_sms,
+)
 from src.pipeline.helpers.spatial import Position, position_to_position_representation
+from src.pipeline.shared_tasks.control_flow import filter_results
 from src.pipeline.shared_tasks.infrastructure import get_table
 
 cnsp_logo_path = EMAIL_IMAGES_LOCATION / "logo_cnsp.jpg"
@@ -84,6 +94,34 @@ def get_templates() -> dict:
         ),
         BeaconMalfunctionNotificationType.END_OF_MALFUNCTION: env.get_template(
             "end_of_malfunction.html"
+        ),
+    }
+
+    return templates
+
+
+@task(checkpoint=False)
+def get_sms_templates() -> dict:
+
+    env = Environment(
+        loader=FileSystemLoader(SMS_TEMPLATES_LOCATION), autoescape=select_autoescape()
+    )
+
+    templates = {
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: env.get_template(
+            "malfunction_at_sea_initial_notification.txt"
+        ),
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: env.get_template(
+            "malfunction_at_port_initial_notification.txt"
+        ),
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: env.get_template(
+            "malfunction_at_sea_reminder.txt"
+        ),
+        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_REMINDER: env.get_template(
+            "malfunction_at_port_reminder.txt"
+        ),
+        BeaconMalfunctionNotificationType.END_OF_MALFUNCTION: env.get_template(
+            "end_of_malfunction.txt"
         ),
     }
 
@@ -166,30 +204,107 @@ def render(
 
 
 @task(checkpoint=False)
-def create_email(html: str, pdf: bytes, m: BeaconMalfunctionToNotify) -> EmailMessage:
+def render_sms(m: BeaconMalfunctionToNotify, templates: dict) -> str:
+
+    template = templates[m.notification_type]
+
+    # `nan` evaluates to True so `pd.notnull` is required
+    if pd.notnull(m.last_position_latitude) and pd.notnull(m.last_position_longitude):
+        last_position = Position(
+            latitude=m.last_position_latitude,
+            longitude=m.last_position_longitude,
+        )
+
+        last_position_representation = position_to_position_representation(
+            last_position, representation_type="DMS"
+        )
+
+        latitude = last_position_representation.latitude
+        longitude = last_position_representation.longitude
+
+    else:
+        latitude = None
+        longitude = None
+
+    text = template.render(
+        last_position_datetime_utc=m.malfunction_start_date_utc.strftime(
+            "%d/%m/%Y à %Hh%M UTC"
+        ),
+        last_position_latitude=latitude,
+        last_position_longitude=longitude,
+    )
+
+    return text
+
+
+@task(checkpoint=False)
+def create_email(
+    html: str, pdf: bytes, m: BeaconMalfunctionToNotify
+) -> BeaconMalfunctionMessageToSend:
 
     to = [
         email_addressee.address_or_number
         for email_addressee in m.get_email_addressees()
     ]
 
-    cc = CNSP_SIP_DEPARTMENT_ADDRESS if not m.test_mode else None
+    cc = CNSP_SIP_DEPARTMENT_EMAIL if not m.test_mode else None
 
-    msg = create_html_email(
-        to=to,
-        cc=cc,
-        subject=m.notification_type.to_message_subject(),
-        html=html,
-        images=[cnsp_logo_path],
-        attachments={"Notification.pdf": pdf},
-    )
+    if to:
+        message = create_html_email(
+            to=to,
+            cc=cc,
+            subject=m.notification_type.to_message_subject(),
+            html=html,
+            images=[cnsp_logo_path],
+            attachments={"Notification.pdf": pdf},
+        )
 
-    return msg
+        return BeaconMalfunctionMessageToSend(
+            message=message,
+            beacon_malfunction_to_notify=m,
+            communication_means=CommunicationMeans.EMAIL,
+        )
+    else:
+        return None
 
 
 @task(checkpoint=False)
-def send_email_notification(
-    msg: EmailMessage, m: BeaconMalfunctionToNotify
+def create_sms(
+    text: str, m: BeaconMalfunctionToNotify
+) -> BeaconMalfunctionMessageToSend:
+
+    to = [sms_addressee.address_or_number for sms_addressee in m.get_sms_addressees()]
+
+    if to:
+        return BeaconMalfunctionMessageToSend(
+            message=create_sms_email(to=to, text=text),
+            beacon_malfunction_to_notify=m,
+            communication_means=CommunicationMeans.SMS,
+        )
+    else:
+        return None
+
+
+@task(checkpoint=False)
+def create_fax(
+    pdf: bytes, m: BeaconMalfunctionToNotify
+) -> BeaconMalfunctionMessageToSend:
+
+    to = [fax_addressee.address_or_number for fax_addressee in m.get_fax_addressees()]
+
+    if to:
+        return BeaconMalfunctionMessageToSend(
+            message=create_fax_email(to=to, pdf=pdf),
+            beacon_malfunction_to_notify=m,
+            communication_means=CommunicationMeans.FAX,
+        )
+    else:
+        return None
+
+
+@task(checkpoint=False)
+def send_beacon_malfunction_message(
+    msg_to_send: BeaconMalfunctionMessageToSend,
 ) -> List[BeaconMalfunctionNotification]:
     """
     Sends input email using the contents of `From` header as sender and `To`, `Cc`
@@ -205,37 +320,59 @@ def send_email_notification(
           { "three@three.org" : ( 550 ,"User unknown" ) }
     """
 
-    addressees = m.get_email_addressees()
+    addressees = msg_to_send.get_addressees()
+    m = msg_to_send.beacon_malfunction_to_notify
+    msg = msg_to_send.message
+    communication_means = msg_to_send.communication_means
     logger = prefect.context.get("logger")
+
+    send_functions = {
+        CommunicationMeans.EMAIL: send_email,
+        CommunicationMeans.SMS: send_sms,
+        CommunicationMeans.FAX: send_fax,
+    }
+
+    send = send_functions[communication_means]
 
     try:
         try:
-            logger.info(f"Sending {m.notification_type} by email.")
-            send_errors = send_email(msg)
+            logger.info(
+                f"Sending {m.notification_type} by {communication_means.value.lower()}."
+            )
+            send_errors = send(msg)
         except (SMTPHeloError, SMTPDataError):
             # Retry
-            logger.info("Email not sent, retrying...")
+            logger.warning("Message not sent, retrying...")
             sleep(10)
-            send_errors = send_email(msg)
+            send_errors = send(msg)
     except SMTPHeloError:
         send_errors = {
-            addr: (None, "The server didn't reply properly to the helo greeting.")
+            addr.address_or_number: (
+                None,
+                "The server didn't reply properly to the helo greeting.",
+            )
             for addr in addressees
         }
+        logger.error(str(send_errors))
     except SMTPRecipientsRefused:
         # All recipients were refused
         send_errors = {
-            addr: (None, "The server rejected ALL recipients (no mail was sent)")
+            addr.address_or_number: (
+                None,
+                "The server rejected ALL recipients (no mail was sent)",
+            )
             for addr in addressees
         }
+        logger.error(str(send_errors))
     except SMTPSenderRefused:
         send_errors = {
-            addr: (None, "The server didn't accept the from_addr.")
+            addr.address_or_number: (None, "The server didn't accept the from_addr.")
             for addr in addressees
         }
+        logger.error(str(send_errors))
     except SMTPDataError:
         send_errors = {
-            addr: (
+            addr.address_or_number: (
                 None,
                 (
                     "The server replied with an unexpected error code "
@@ -244,9 +381,10 @@ def send_email_notification(
             )
             for addr in addressees
         }
+        logger.error(str(send_errors))
     except SMTPNotSupportedError:
         send_errors = {
-            addr: (
+            addr.address_or_number: (
                 None,
                 (
                     "The mail_options parameter includes 'SMTPUTF8' but the SMTPUTF8 "
@@ -255,13 +393,21 @@ def send_email_notification(
             )
             for addr in addressees
         }
+        logger.error(str(send_errors))
     except ValueError:
         send_errors = {
-            addr: (None, "there is more than one set of 'Resent-' headers.")
+            addr.address_or_number: (
+                None,
+                "there is more than one set of 'Resent-' headers.",
+            )
             for addr in addressees
         }
+        logger.error(str(send_errors))
     except:
-        send_errors = {addr: (None, "Unknown error.") for addr in addressees}
+        send_errors = {
+            addr.address_or_number: (None, "Unknown error.") for addr in addressees
+        }
+        logger.error(str(send_errors))
 
     now = datetime.utcnow()
 
@@ -281,7 +427,7 @@ def send_email_notification(
                 beacon_malfunction_id=m.beacon_malfunction_id,
                 date_time_utc=now,
                 notification_type=m.notification_type,
-                communication_means=CommunicationMeans.EMAIL,
+                communication_means=communication_means,
                 recipient_function=addressee.function,
                 recipient_name=addressee.name,
                 recipient_address_or_number=addressee.address_or_number,
@@ -295,19 +441,20 @@ def send_email_notification(
 
 @task(checkpoint=False)
 def load_notifications(notifications: List[BeaconMalfunctionNotification]):
-    load(
-        pd.DataFrame(notifications),
-        table_name="beacon_malfunction_notifications",
-        schema="public",
-        logger=prefect.context.get("logger"),
-        how="append",
-        db_name="monitorfish_remote",
-        enum_columns=[
-            "notification_type",
-            "communication_means",
-            "recipient_function",
-        ],
-    )
+    if notifications:
+        load(
+            pd.DataFrame(notifications),
+            table_name="beacon_malfunction_notifications",
+            schema="public",
+            logger=prefect.context.get("logger"),
+            how="append",
+            db_name="monitorfish_remote",
+            enum_columns=[
+                "notification_type",
+                "communication_means",
+                "recipient_function",
+            ],
+        )
 
 
 @task(checkpoint=False)
@@ -342,11 +489,14 @@ with Flow("Notify malfunctions") as flow:
 
     beacon_malfunctions_table = get_table(table_name="beacon_malfunctions")
     templates = get_templates()
+    sms_templates = get_sms_templates()
 
     malfunctions_to_notify = extract_malfunctions_to_notify()
     malfunctions_to_notify = to_malfunctions_to_notify_list(
         malfunctions_to_notify, test_mode
     )
+
+    sms_text = render_sms.map(malfunctions_to_notify, templates=unmapped(sms_templates))
 
     html = render.map(
         malfunctions_to_notify,
@@ -361,16 +511,24 @@ with Flow("Notify malfunctions") as flow:
     )
 
     email = create_email.map(html=html, pdf=pdf, m=malfunctions_to_notify)
+    email = filter_results(email)
 
-    notifications = send_email_notification.map(email, malfunctions_to_notify)
+    sms = create_sms.map(text=sms_text, m=malfunctions_to_notify)
+    sms = filter_results(sms)
 
+    fax = create_fax.map(pdf=pdf, m=malfunctions_to_notify)
+    fax = filter_results(fax)
+
+    messages_to_send = flatten([flatten(email), flatten(sms), flatten(fax)])
+
+    notifications = send_beacon_malfunction_message.map(messages_to_send)
+    notifications = filter_results(notifications)
     load_notifications(flatten(notifications))
 
     reset_requested_notifications_statement = (
         make_reset_requested_notifications_statement(
             beacon_malfunctions_table=beacon_malfunctions_table,
             notified_malfunctions=malfunctions_to_notify,
-            upstream_tasks=[notifications],
         )
     )
 

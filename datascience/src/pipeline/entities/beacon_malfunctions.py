@@ -1,9 +1,14 @@
 from dataclasses import dataclass
 from datetime import datetime
+from email.message import EmailMessage
 from enum import Enum
 from typing import List
 
-from config import CNSP_SIP_DEPARTMENT_ADDRESS
+from config import (
+    CNSP_SIP_DEPARTMENT_EMAIL,
+    CNSP_SIP_DEPARTMENT_FAX,
+    CNSP_SIP_DEPARTMENT_MOBILE_PHONE,
+)
 
 
 class BeaconMalfunctionStage(Enum):
@@ -97,6 +102,82 @@ class BeaconMalfunctionToNotify:
             self.notification_type
         )
 
+    def get_sms_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
+
+        if not self.test_mode:
+
+            addressees = []
+
+            if self.vessel_mobile_phone:
+                addressees.append(
+                    BeaconMalfunctionNotificationAddressee(
+                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                        name=None,
+                        address_or_number=self.vessel_mobile_phone,
+                    )
+                )
+
+            if self.operator_mobile_phone:
+                addressees.append(
+                    BeaconMalfunctionNotificationAddressee(
+                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
+                        name=self.operator_name,
+                        address_or_number=self.operator_mobile_phone,
+                    )
+                )
+
+        else:
+            addressees = (
+                [
+                    BeaconMalfunctionNotificationAddressee(
+                        function=BeaconMalfunctionNotificationRecipientFunction.FMC,
+                        name="CNSP",
+                        address_or_number=CNSP_SIP_DEPARTMENT_MOBILE_PHONE,
+                    )
+                ]
+                if CNSP_SIP_DEPARTMENT_MOBILE_PHONE
+                else []
+            )
+        return addressees
+
+    def get_fax_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
+
+        if not self.test_mode:
+
+            addressees = []
+
+            if self.vessel_fax:
+                addressees.append(
+                    BeaconMalfunctionNotificationAddressee(
+                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                        name=None,
+                        address_or_number=self.vessel_fax,
+                    )
+                )
+
+            if self.operator_fax:
+                addressees.append(
+                    BeaconMalfunctionNotificationAddressee(
+                        function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
+                        name=self.operator_name,
+                        address_or_number=self.operator_fax,
+                    )
+                )
+
+        else:
+            addressees = (
+                [
+                    BeaconMalfunctionNotificationAddressee(
+                        function=BeaconMalfunctionNotificationRecipientFunction.FMC,
+                        name="CNSP",
+                        address_or_number=CNSP_SIP_DEPARTMENT_FAX,
+                    )
+                ]
+                if CNSP_SIP_DEPARTMENT_FAX
+                else []
+            )
+        return addressees
+
     def get_email_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
 
         if not self.test_mode:
@@ -139,14 +220,38 @@ class BeaconMalfunctionToNotify:
             )
 
         else:
-            addressees = [
-                BeaconMalfunctionNotificationAddressee(
-                    function=BeaconMalfunctionNotificationRecipientFunction.FMC,
-                    name="CNSP",
-                    address_or_number=CNSP_SIP_DEPARTMENT_ADDRESS,
-                )
-            ]
+            addressees = (
+                [
+                    BeaconMalfunctionNotificationAddressee(
+                        function=BeaconMalfunctionNotificationRecipientFunction.FMC,
+                        name="CNSP",
+                        address_or_number=CNSP_SIP_DEPARTMENT_EMAIL,
+                    )
+                ]
+                if CNSP_SIP_DEPARTMENT_EMAIL
+                else []
+            )
         return addressees
+
+
+@dataclass
+class BeaconMalfunctionMessageToSend:
+    message: EmailMessage
+    beacon_malfunction_to_notify: BeaconMalfunctionToNotify
+    communication_means: CommunicationMeans
+
+    def get_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
+
+        if self.communication_means is CommunicationMeans.EMAIL:
+            return self.beacon_malfunction_to_notify.get_email_addressees()
+        elif self.communication_means is CommunicationMeans.SMS:
+            return self.beacon_malfunction_to_notify.get_sms_addressees()
+        elif self.communication_means is CommunicationMeans.FAX:
+            return self.beacon_malfunction_to_notify.get_fax_addressees()
+        else:
+            raise ValueError(
+                f"Unexpected communication_means {self.communication_means}"
+            )
 
 
 @dataclass

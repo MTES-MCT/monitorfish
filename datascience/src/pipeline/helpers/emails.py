@@ -11,6 +11,9 @@ from config import (
     MONITORFISH_EMAIL_ADDRESS,
     MONITORFISH_EMAIL_SERVER_PORT,
     MONITORFISH_EMAIL_SERVER_URL,
+    MONITORFISH_FAX_DOMAIN,
+    MONITORFISH_FAX_SERVER_PORT,
+    MONITORFISH_FAX_SERVER_URL,
     MONITORFISH_SMS_DOMAIN,
     MONITORFISH_SMS_SERVER_PORT,
     MONITORFISH_SMS_SERVER_URL,
@@ -35,6 +38,8 @@ def create_html_email(
           recipient(s)
         subject (str): Subject of the email.
         html (str): html representation of the email's content.
+        from_ (str, optional): `From` field. Defaults to env var
+          `MONITORFISH_EMAIL_ADDRESS`.
         cc (Union[str, List[str]], optional): `Cc` field with optional email address
         (or list of email addresses) of copied recipient(s). Defaults to None.
         bcc (Union[str, List[str]], optional): `Bcc` field with optional email address
@@ -52,7 +57,7 @@ def create_html_email(
             `<img src="cid:my_image_123.png">` in the html message.
 
           Defaults to None.
-        attachments (dict, optional): `dict of attachments to add to the email.
+        attachments (dict, optional): `dict` of attachments to add to the email.
           Consists of {filename : bytes} value pairs. Defaults
           to None.
 
@@ -122,7 +127,7 @@ def create_sms_email(
           recipient(s)
         text (str): text of the SMS message
         from_ (str, optional): `From` field. Defaults to MONITORFISH_EMAIL_ADDRESS env
-          var
+          var.
 
     Returns:
         EmailMessage
@@ -142,6 +147,49 @@ def create_sms_email(
     msg["To"] = to
 
     msg.set_content(text)
+
+    return msg
+
+
+def create_fax_email(
+    to: Union[str, List[str]],
+    pdf: bytes,
+    from_: str = MONITORFISH_EMAIL_ADDRESS,
+) -> EmailMessage:
+    """
+    Creates a `email.EmailMessage` with the defined parameters.
+
+    Args:
+        to (Union[str, List[str]]): email address or list of email addresses of
+          recipient(s)
+        pdf (bytes): `bytes` pdf object
+        from_ (str, optional): `From` field. Defaults to MONITORFISH_EMAIL_ADDRESS env
+          var.
+
+    Returns:
+        EmailMessage
+    """
+    assert isinstance(to, (str, list))
+    assert MONITORFISH_FAX_DOMAIN
+
+    if isinstance(to, str):
+        to = f"{to}@{MONITORFISH_FAX_DOMAIN}"
+
+    if isinstance(to, list):
+        to = [f"{phone_number}@{MONITORFISH_FAX_DOMAIN}" for phone_number in to]
+        to = ", ".join(to)
+
+    msg = EmailMessage()
+    msg["Subject"] = "FAX"
+    msg["From"] = from_
+    msg["To"] = to
+
+    msg.add_attachment(
+        pdf,
+        maintype="application",
+        subtype="octet-stream",
+        filename="FAX.pdf",
+    )
 
     return msg
 
@@ -188,31 +236,7 @@ def send_email(msg: EmailMessage) -> dict:
 
 def send_sms(msg: EmailMessage) -> dict:
     """
-    Sends input email using the contents of the `To` header as recipients.
-
-    This method will return normally if the mail is accepted for at least
-    one recipient.  It returns a dictionary, with one entry for each
-    recipient that was refused.  Each entry contains a tuple of the SMTP
-    error code and the accompanying error message sent by the server, like :
-
-      { "three@three.org" : ( 550 ,"User unknown" ) }
-
-    Args:
-        msg (EmailMessage): `email.message.EmailMessage` to send.
-
-    Returns:
-        dict: {email_address : (error_code, error_message)} for all recipients that
-          were refused.
-
-    Raises:
-        SMTPHeloError: The server didn't reply properly to the helo greeting.
-        SMTPRecipientsRefused: The server rejected ALL recipients (no mail was sent).
-        SMTPSenderRefused: The server didn't accept the from_addr.
-        SMTPDataError: The server replied with an unexpected error code (other than a
-          refusal of a recipient).
-        SMTPNotSupportedError: The mail_options parameter includes 'SMTPUTF8' but the
-          SMTPUTF8 extension is not supported by the server.
-        ValueError: if there is more than one set of 'Resent-' headers
+    Same as `send_email`, using sms server.
     """
 
     assert MONITORFISH_SMS_SERVER_URL is not None
@@ -220,6 +244,21 @@ def send_sms(msg: EmailMessage) -> dict:
 
     with smtplib.SMTP(
         host=MONITORFISH_SMS_SERVER_URL, port=MONITORFISH_SMS_SERVER_PORT
+    ) as server:
+        send_errors = server.send_message(msg)
+    return send_errors
+
+
+def send_fax(msg: EmailMessage) -> dict:
+    """
+    Same as `send_email`, using fax server.
+    """
+
+    assert MONITORFISH_FAX_SERVER_URL is not None
+    assert MONITORFISH_FAX_SERVER_PORT is not None
+
+    with smtplib.SMTP(
+        host=MONITORFISH_FAX_SERVER_URL, port=MONITORFISH_FAX_SERVER_PORT
     ) as server:
         send_errors = server.send_message(msg)
     return send_errors

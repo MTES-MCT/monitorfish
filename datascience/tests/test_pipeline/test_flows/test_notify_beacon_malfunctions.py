@@ -1,6 +1,7 @@
 import io
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.message import EmailMessage
+from pathlib import Path
 from unittest.mock import patch
 
 import pandas as pd
@@ -13,6 +14,7 @@ from pytest import fixture
 
 from config import EMAIL_IMAGES_LOCATION, TEST_DATA_LOCATION
 from src.pipeline.entities.beacon_malfunctions import (
+    BeaconMalfunctionMessageToSend,
     BeaconMalfunctionNotification,
     BeaconMalfunctionNotificationRecipientFunction,
     BeaconMalfunctionNotificationType,
@@ -21,12 +23,16 @@ from src.pipeline.entities.beacon_malfunctions import (
 )
 from src.pipeline.flows.notify_beacon_malfunctions import (
     create_email,
+    create_fax,
+    create_sms,
     extract_malfunctions_to_notify,
     flow,
+    get_sms_templates,
     get_templates,
     load_notifications,
     render,
-    send_email_notification,
+    render_sms,
+    send_beacon_malfunction_message,
     to_malfunctions_to_notify_list,
 )
 from src.read_query import read_query
@@ -220,9 +226,22 @@ def test_get_templates():
         assert isinstance(templates[notification_type], Template)
 
 
+def test_get_sms_templates():
+    templates = get_sms_templates.run()
+    assert isinstance(templates, dict)
+    for notification_type in BeaconMalfunctionNotificationType:
+        assert notification_type in templates
+        assert isinstance(templates[notification_type], Template)
+
+
 @fixture
 def templates() -> dict:
     return get_templates.run()
+
+
+@fixture
+def sms_templates() -> dict:
+    return get_sms_templates.run()
 
 
 @fixture
@@ -351,6 +370,50 @@ def expected_notifications(request) -> list:
             success=False,
             error_message=None,
         ),
+        BeaconMalfunctionNotification(
+            beacon_malfunction_id=1,
+            date_time_utc=request.param,
+            notification_type=BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER,
+            communication_means=CommunicationMeans.SMS,
+            recipient_function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+            recipient_name=None,
+            recipient_address_or_number="0699999999",
+            success=False,
+            error_message="Unknown error.",
+        ),
+        BeaconMalfunctionNotification(
+            beacon_malfunction_id=1,
+            date_time_utc=request.param,
+            notification_type=BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER,
+            communication_means=CommunicationMeans.SMS,
+            recipient_function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
+            recipient_name="Le pêcheur de crevettes",
+            recipient_address_or_number="0600000000",
+            success=False,
+            error_message="Unknown error.",
+        ),
+        BeaconMalfunctionNotification(
+            beacon_malfunction_id=1,
+            date_time_utc=request.param,
+            notification_type=BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER,
+            communication_means=CommunicationMeans.FAX,
+            recipient_function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+            recipient_name=None,
+            recipient_address_or_number="0100000000",
+            success=False,
+            error_message="Unknown error.",
+        ),
+        BeaconMalfunctionNotification(
+            beacon_malfunction_id=1,
+            date_time_utc=request.param,
+            notification_type=BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER,
+            communication_means=CommunicationMeans.FAX,
+            recipient_function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
+            recipient_name="Le pêcheur de crevettes",
+            recipient_address_or_number="0200000000",
+            success=False,
+            error_message="Unknown error.",
+        ),
     ]
 
 
@@ -408,6 +471,42 @@ def test_render(
     ###################################################################################
 
 
+@pytest.mark.parametrize(
+    "notification_type",
+    [
+        "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION",
+        "MALFUNCTION_AT_SEA_REMINDER",
+        "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION",
+        "MALFUNCTION_AT_PORT_REMINDER",
+        "END_OF_MALFUNCTION",
+    ],
+)
+@patch(
+    "src.pipeline.flows.notify_beacon_malfunctions.datetime",
+    mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
+)
+def test_render_sms(malfunction_to_notify_data, sms_templates, notification_type):
+
+    test_filepath = TEST_DATA_LOCATION / f"sms/{notification_type}.txt"
+
+    with open(test_filepath, "r") as f:
+        expected_res = f.read()
+
+    m = BeaconMalfunctionToNotify(
+        **malfunction_to_notify_data,
+        notification_type=notification_type,
+        test_mode=False,
+    )
+    sms_text = render_sms.run(m=m, templates=sms_templates)
+
+    assert sms_text == expected_res
+
+    ######################### Uncomment to replace test files #########################
+    # with open(test_filepath, "w") as f:
+    #     f.write(sms_text)
+    ###################################################################################
+
+
 @patch(
     "src.pipeline.flows.notify_beacon_malfunctions.datetime",
     mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
@@ -457,7 +556,14 @@ def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
     )
 
     subject = m.notification_type.to_message_subject()
-    email = create_email.run(html=html, pdf=pdf, m=m)
+    email_to_send = create_email.run(html=html, pdf=pdf, m=m)
+
+    malfunction_to_notify = email_to_send.beacon_malfunction_to_notify
+    communication_means = email_to_send.communication_means
+    email = email_to_send.message
+
+    assert communication_means is CommunicationMeans.EMAIL
+    assert malfunction_to_notify is m
 
     assert email["Subject"] == subject
     assert email["From"] == "monitorfish@test.email"
@@ -495,8 +601,93 @@ def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
 
 
 @pytest.mark.parametrize(
-    "expected_notifications",
-    [datetime(2021, 1, 1, 16, 10, 0)],
+    "notification_type",
+    [
+        "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION",
+        "MALFUNCTION_AT_SEA_REMINDER",
+        "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION",
+        "MALFUNCTION_AT_PORT_REMINDER",
+        "END_OF_MALFUNCTION",
+    ],
+)
+def test_create_sms(malfunction_to_notify_data, notification_type):
+    m = BeaconMalfunctionToNotify(
+        **malfunction_to_notify_data,
+        notification_type=notification_type,
+        test_mode=False,
+    )
+    text = "Hi, your vessel does not emit VMS."
+    sms_to_send = create_sms.run(text=text, m=m)
+
+    malfunction_to_notify = sms_to_send.beacon_malfunction_to_notify
+    communication_means = sms_to_send.communication_means
+    sms = sms_to_send.message
+
+    assert communication_means is CommunicationMeans.SMS
+    assert malfunction_to_notify is m
+
+    assert sms["Subject"] is None
+    assert sms["From"] == "monitorfish@test.email"
+    assert sms["To"] == "0699999999@test.sms, 0600000000@test.sms"
+    assert sms["Cc"] is None
+    assert sms.get_content_type() == "text/plain"
+
+    attachments = list(sms.iter_attachments())
+    assert len(attachments) == 0
+
+    assert sms.get_content() == text + "\n"
+
+
+@pytest.mark.parametrize(
+    "notification_type",
+    [
+        "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION",
+        "MALFUNCTION_AT_SEA_REMINDER",
+        "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION",
+        "MALFUNCTION_AT_PORT_REMINDER",
+        "END_OF_MALFUNCTION",
+    ],
+)
+def test_create_fax(malfunction_to_notify_data, cnsp_logo, notification_type):
+    pdf = b"Test pdf bytes"
+    m = BeaconMalfunctionToNotify(
+        **malfunction_to_notify_data,
+        notification_type=notification_type,
+        test_mode=False,
+    )
+
+    fax_to_send = create_fax.run(pdf=pdf, m=m)
+
+    malfunction_to_notify = fax_to_send.beacon_malfunction_to_notify
+    communication_means = fax_to_send.communication_means
+    fax = fax_to_send.message
+
+    assert communication_means is CommunicationMeans.FAX
+    assert malfunction_to_notify is m
+
+    assert fax["Subject"] == "FAX"
+    assert fax["From"] == "monitorfish@test.email"
+    assert fax["To"] == "0100000000@test.fax, 0200000000@test.fax"
+    assert fax["Cc"] is None
+    assert fax.get_content_type() == "multipart/mixed"
+
+    attachments = list(fax.iter_attachments())
+    assert len(attachments) == 1
+
+    attachment = attachments[0]
+    assert attachment.get_content_disposition() == "attachment"
+    assert attachment.get_content_type() == "application/octet-stream"
+    assert attachment.get_filename() == "FAX.pdf"
+    assert attachment.get_content() == pdf
+
+
+@pytest.mark.parametrize(
+    "expected_notifications,communication_means",
+    [
+        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.EMAIL),
+        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.SMS),
+        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.FAX),
+    ],
     indirect=["expected_notifications"],
 )
 @patch(
@@ -504,8 +695,12 @@ def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
     mock_datetime_utcnow(datetime(2021, 1, 1, 16, 10, 0)),
 )
 @patch("src.pipeline.flows.notify_beacon_malfunctions.send_email")
-def test_send_email_notification(
-    mock_send_email, malfunction_to_notify_data, email_message, expected_notifications
+def test_send_beacon_malfunction_message(
+    mock_send_email,
+    malfunction_to_notify_data,
+    email_message,
+    expected_notifications,
+    communication_means,
 ):
 
     m = BeaconMalfunctionToNotify(
@@ -519,9 +714,21 @@ def test_send_email_notification(
         "email2@sat.op": (None, None),
     }
 
-    notifications = send_email_notification.run(msg=msg, m=m)
+    msg_to_send = BeaconMalfunctionMessageToSend(
+        message=msg,
+        beacon_malfunction_to_notify=m,
+        communication_means=communication_means,
+    )
 
-    assert notifications == expected_notifications
+    notifications = send_beacon_malfunction_message.run(msg_to_send)
+    expected_notifications_of_communication_means = list(
+        filter(
+            lambda n: n.communication_means is communication_means,
+            expected_notifications,
+        )
+    )
+
+    assert notifications == expected_notifications_of_communication_means
 
 
 @pytest.mark.parametrize(
@@ -539,7 +746,7 @@ def test_load_notifications(reset_test_data, expected_notifications):
         "monitorfish_remote", "SELECT * FROM beacon_malfunction_notifications"
     )
     assert len(initial_notifications) == 2
-    assert len(final_notifications) == 7
+    assert len(final_notifications) == 11
     assert final_notifications.loc[5].to_dict() == {
         "id": 6,
         "beacon_malfunction_id": 1,
@@ -577,11 +784,16 @@ def test_flow(reset_test_data):
     )
 
     @task(checkpoint=False)
+    @patch("src.pipeline.flows.notify_beacon_malfunctions.send_fax")
+    @patch("src.pipeline.flows.notify_beacon_malfunctions.send_sms")
     @patch("src.pipeline.flows.notify_beacon_malfunctions.send_email")
-    def mock_send_email_notification(
-        mock_send_email, msg: EmailMessage, m: BeaconMalfunctionToNotify
+    def mock_send_beacon_malfunction_message(
+        mock_send_email,
+        mock_send_sms,
+        mock_send_fax,
+        msg_to_send: BeaconMalfunctionMessageToSend,
     ):
-        if m.beacon_malfunction_id == 2:
+        if msg_to_send.beacon_malfunction_to_notify.beacon_malfunction_id == 2:
             raise ValueError(
                 (
                     "This email could not be sent - the flow should filter it and process "
@@ -593,11 +805,14 @@ def test_flow(reset_test_data):
             "email1@sat.op": (550, "User unknown"),
             "email2@sat.op": (None, None),
         }
+        mock_send_sms.return_value = {}
+        mock_send_fax.return_value = {}
 
-        return send_email_notification.run(msg, m)
+        return send_beacon_malfunction_message.run(msg_to_send)
 
     flow.replace(
-        flow.get_tasks("send_email_notification")[0], mock_send_email_notification
+        flow.get_tasks("send_beacon_malfunction_message")[0],
+        mock_send_beacon_malfunction_message,
     )
 
     # Test flow run
@@ -635,53 +850,77 @@ def test_flow(reset_test_data):
     )
 
     # Check create_email results
-    assert len(state.result[flow.get_tasks("create_email")[0]].result) == 3
-    assert isinstance(
-        state.result[flow.get_tasks("create_email")[0]].result[0], EmailMessage
-    )
+    created_emails = state.result[flow.get_tasks("create_email")[0]].result
+    assert len(created_emails) == 3
+    assert isinstance(created_emails[0], BeaconMalfunctionMessageToSend)
+    assert isinstance(created_emails[1], BeaconMalfunctionMessageToSend)
+    assert isinstance(created_emails[2], BeaconMalfunctionMessageToSend)
+    assert created_emails[0].communication_means is CommunicationMeans.EMAIL
 
-    # Check mock_send_email_notification results
+    # Check create_sms results
+    created_smss = state.result[flow.get_tasks("create_sms")[0]].result
+    assert len(created_smss) == 3
+    assert isinstance(created_smss[0], BeaconMalfunctionMessageToSend)
+    assert created_smss[0].communication_means is CommunicationMeans.SMS
+    assert isinstance(created_smss[1], BeaconMalfunctionMessageToSend)
+    assert created_smss[2] is None
+
+    # Check create_fax results
+    created_faxs = state.result[flow.get_tasks("create_fax")[0]].result
+    assert len(created_faxs) == 3
+    assert isinstance(created_faxs[0], BeaconMalfunctionMessageToSend)
+    assert created_faxs[0].communication_means is CommunicationMeans.FAX
+    assert created_faxs[1] is None
+    assert created_faxs[2] is None
+
+    # Check mock_send_beacon_malfunction_message results
     assert (
-        len(state.result[flow.get_tasks("mock_send_email_notification")[0]].result) == 3
+        len(
+            state.result[
+                flow.get_tasks("mock_send_beacon_malfunction_message")[0]
+            ].result
+        )
+        == 6
     )
     assert isinstance(
-        state.result[flow.get_tasks("mock_send_email_notification")[0]].result[1],
+        state.result[flow.get_tasks("mock_send_beacon_malfunction_message")[0]].result[
+            1
+        ],
         ValueError,
-    )
-    assert [
-        len(notifs)
-        for notifs in state.result[
-            flow.get_tasks("mock_send_email_notification")[0]
-        ].result[0:3:2]
-    ] == [5, 2]
-    assert (
-        state.result[flow.get_tasks("mock_send_email_notification")[0]]
-        .result[0][0]
-        .success
-    )
-    assert (
-        state.result[flow.get_tasks("mock_send_email_notification")[0]]
-        .result[0][-1]
-        .success
-        == False
-    )
-    assert (
-        state.result[flow.get_tasks("mock_send_email_notification")[0]]
-        .result[0][-2]
-        .error_message
-        == "User unknown"
     )
 
     # Check filtered notifications : out of the 3 malfunctions to notify, the one with
     # beacon_malfunction_id == 2 raised an error during the
     # mock_send_email_notification task and should be removed by the prefect
     # filter_results task.
-    assert len(state.result[flow.get_tasks("FilterTask")[1]].result) == 2
 
     # Check the data loaded into the database
     assert len(initial_notifications) == 2
-    assert len(final_notifications) == 9
+    assert len(final_notifications) == 12
+    inserted_notifications = final_notifications[
+        ~final_notifications.id.isin(initial_notifications.id)
+    ]
+    expected_inserted_notifications = pd.read_csv(
+        Path(__file__).parent / "test_notify_beacon_malfunctions_expected_data.csv",
+        parse_dates=["date_time_utc"],
+    )
+    expected_inserted_notifications.index = range(2, 12)
+    expected_inserted_notifications["date_time_utc"] = datetime.utcnow()
+    pd.testing.assert_frame_equal(
+        inserted_notifications.drop(columns=["date_time_utc"]),
+        expected_inserted_notifications.drop(columns=["date_time_utc"]),
+        check_dtype=False,
+    )
 
+    assert (
+        (
+            inserted_notifications["date_time_utc"]
+            - expected_inserted_notifications["date_time_utc"]
+        )
+        < timedelta(minutes=5)
+    ).all()
+
+    # Check that malfunctions' `notification_requested` field is reset to nulls.
     assert len(initial_malfunctions) == 3
     assert initial_malfunctions.notification_requested.notnull().all()
     assert final_malfunctions.notification_requested.isna().all()

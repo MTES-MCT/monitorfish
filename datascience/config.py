@@ -12,6 +12,7 @@ EMAIL_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/templates")
 EMAIL_IMAGES_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/images")
 EMAIL_FONTS_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/fonts")
 EMAIL_STYLESHEETS_LOCATION = LIBRARY_LOCATION / Path("pipeline/emails/stylesheets")
+SMS_TEMPLATES_LOCATION = LIBRARY_LOCATION / Path("pipeline/sms")
 
 # Must be set to true when running tests locally
 TEST_LOCAL = os.getenv("TEST_LOCAL", "False").lower() in ("true", "t", "yes", "y")
@@ -133,7 +134,9 @@ MONITORFISH_FAX_SERVER_PORT = os.environ.get("MONITORFISH_FAX_SERVER_PORT")
 MONITORFISH_FAX_DOMAIN = os.environ.get("MONITORFISH_FAX_DOMAIN")
 
 # Recipients
-CNSP_SIP_DEPARTMENT_ADDRESS = os.environ.get("CNSP_SIP_DEPARTMENT_ADDRESS")
+CNSP_SIP_DEPARTMENT_MOBILE_PHONE = os.environ.get("CNSP_SIP_DEPARTMENT_MOBILE_PHONE")
+CNSP_SIP_DEPARTMENT_FAX = os.environ.get("CNSP_SIP_DEPARTMENT_FAX")
+CNSP_SIP_DEPARTMENT_EMAIL = os.environ.get("CNSP_SIP_DEPARTMENT_EMAIL")
 CNSP_FRANCE_EMAIL_ADDRESS = os.environ.get("CNSP_FRANCE_EMAIL_ADDRESS")
 
 # Tokens

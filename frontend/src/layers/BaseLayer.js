@@ -50,6 +50,17 @@ const BaseLayer = ({ map }) => {
       }),
       className: Layers.BASE_LAYER.code,
       zIndex: 0
+    }),
+    SCAN_LITTORAL: () => new TileLayer({
+      source: new TileWMS({
+        url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`,
+        params: { LAYERS: 'FDC_GEBCO_PYR-PNG_3857_WMTS', TILED: true },
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0
+      }),
+      className: Layers.BASE_LAYER.code,
+      zIndex: 0
     })
   })
 

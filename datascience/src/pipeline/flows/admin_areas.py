@@ -611,6 +611,40 @@ def load_navigation_category_five_areas(navigation_category_five_areas: pd.DataF
     )
 
 
+@task(checkpoint=False)
+def extract_saltwater_limit_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/saltwater_limit_areas.sql")
+
+
+@task(checkpoint=False)
+def load_saltwater_limit_areas(saltwater_limit_areas: pd.DataFrame):
+    load(
+        saltwater_limit_areas,
+        table_name="saltwater_limit_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
+@task(checkpoint=False)
+def extract_transversal_sea_limit_areas() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/transversal_sea_limit_areas.sql")
+
+
+@task(checkpoint=False)
+def load_transversal_sea_limit_areas(transversal_sea_limit_areas: pd.DataFrame):
+    load(
+        transversal_sea_limit_areas,
+        table_name="transversal_sea_limit_areas",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=prefect.context.get("logger"),
+        how="replace",
+    )
+
+
 with Flow("Administrative areas") as flow:
 
     cgpm_areas = extract_cgpm_areas()
@@ -722,5 +756,11 @@ with Flow("Administrative areas") as flow:
 
     navigation_category_five_areas = extract_navigation_category_five_areas()
     load_navigation_category_five_areas(navigation_category_five_areas)
+
+    saltwater_limit_areas = extract_saltwater_limit_areas()
+    load_saltwater_limit_areas(saltwater_limit_areas)
+
+    transversal_sea_limit_areas = extract_transversal_sea_limit_areas()
+    load_transversal_sea_limit_areas(transversal_sea_limit_areas)
 
 flow.file_name = Path(__file__).name

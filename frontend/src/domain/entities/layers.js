@@ -513,6 +513,26 @@ const Layers = {
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
     isIntersectable: false
+  },
+  saltwater_limit: {
+    code: 'saltwater_limit_areas',
+    name: 'Limites de salure des eaux',
+    group: null,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: 'objnam',
+    isIntersectable: false
+  },
+  transversal_sea_limit: {
+    code: 'transversal_sea_limit_areas',
+    name: 'Limites transversales de mer',
+    group: null,
+    type: layersType.ADMINISTRATIVE,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: 'objnam',
+    isIntersectable: false
   }
 }
 
@@ -532,6 +552,10 @@ export const baseLayers = {
   SATELLITE: {
     code: 'SATELLITE',
     text: 'Satellite'
+  },
+  SCAN_LITTORAL: {
+    code: 'SCAN_LITTORAL',
+    text: 'Terre/Mer Littoral (IGN/SHOM)'
   },
   DARK: {
     code: 'DARK',

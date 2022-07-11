@@ -1,0 +1,3 @@
+{% extends "base_template.txt" %}
+{% block message %}Le CNSP ne reçoit toujours pas les positions VMS de votre navire. Merci de contacter au plus vite le CNSP.
+{% endblock %}

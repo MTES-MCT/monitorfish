@@ -1,0 +1,7 @@
+{% extends "base_template.txt" %}
+{% block message %}Le CNSP ne reçoit pas les positions VMS de votre navire.
+{% if last_position_latitude and last_position_longitude and last_position_datetime_utc %}
+La dernière position reçue date du {{ last_position_datetime_utc }}, latitude {{ last_position_latitude }}, longitude {{ last_position_longitude }}.
+{%endif%}
+Vous êtes tenu de transmettre la position de votre navire toutes les 4 heures par message écrit au CNSP et, si vous êtes hors ZEE française, au FMC dont vous fréquentez la ZEE.
+{% endblock %}

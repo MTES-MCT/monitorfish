@@ -5,10 +5,6 @@ INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 # DEV commands
 install:
 	cd frontend && npm install
-run:
-	docker network inspect monitorfish_backend >/dev/null 2>&1 || docker network create monitorfish_backend
-	docker-compose -f ./docker-compose.yml -f ./infra/dev/docker-compose.dev.yml up -d app
-	make run-front
 run-front:
 	cd frontend && npm start
 run-back:
@@ -22,6 +18,13 @@ check-clean-archi:
 test: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
 	cd frontend && CI=true npm test
+run-with-back-in-docker:
+	docker network inspect monitorfish_backend >/dev/null 2>&1 || docker network create monitorfish_backend
+	docker-compose -f ./docker-compose.yml -f ./infra/dev/docker-compose.dev.yml up -d app
+	sh -c 'make run-front'
+rerun-with-back-in-docker:
+	docker-compose -f ./docker-compose.yml -f ./infra/dev/docker-compose.dev.yml down --remove-orphans -v
+	make run
 
 # CI commands - app
 docker-build:

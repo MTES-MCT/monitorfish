@@ -16,7 +16,6 @@ import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
 import { findMatchingFeature, removeDuplicatedFoundVessels } from './vesselsSearchUtils'
 import getVesselVoyage from '../../domain/use_cases/vessel/getVesselVoyage'
 import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
-import { usePrevious } from '../../hooks/usePrevious'
 import { setFocusOnVesselSearch } from '../../domain/shared_slices/Vessel'
 
 const VesselsSearch = () => {
@@ -42,21 +41,15 @@ const VesselsSearch = () => {
   const [foundVesselsFromAPI, setFoundVesselsFromAPI] = useState([])
   const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
   const escapeFromKeyboard = useEscapeFromKeyboard()
-  const previousSelectedVesselIdentity = usePrevious(selectedVesselIdentity)
   const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isFocusedOnVesselSearch)
   const inputIsShown = isFocusedOnVesselSearch || !selectedVesselIdentity
+  const rightMenuIsShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
 
   useEffect(() => {
     if (clickedOutsideComponent || escapeFromKeyboard) {
       focusOnVesselSearchInput(false)
     }
   }, [clickedOutsideComponent, escapeFromKeyboard])
-
-  useEffect(() => {
-    if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {
-      focusOnVesselSearchInput(false)
-    }
-  }, [selectedVesselIdentity])
 
   const focusOnVesselSearchInput = useCallback(isFocused => {
     dispatch(setFocusOnVesselSearch(isFocused))
@@ -106,7 +99,7 @@ const VesselsSearch = () => {
         data-cy={'vessel-name'}
         isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
-        rightMenuIsShrinked={vesselSidebarIsOpen && !rightMenuIsOpen}
+        rightMenuIsShrinked={rightMenuIsShrinked}
       >
         <Flex>
           {
@@ -139,12 +132,12 @@ const VesselsSearch = () => {
         healthcheckTextWarning={healthcheckTextWarning}
         title={'Rechercher un navire'}
         onMouseEnter={() => dispatch(expandRightMenu())}
-        onClick={() => dispatch(setFocusOnVesselSearch(true))}
-        isShrinked={vesselSidebarIsOpen && !rightMenuIsOpen}
+        onClick={() => focusOnVesselSearchInput(true)}
+        isShrinked={rightMenuIsShrinked}
         isOpen={selectedVessel}
       >
         <SearchIcon
-          $isShrinked={vesselSidebarIsOpen && !rightMenuIsOpen}
+          $isShrinked={rightMenuIsShrinked}
         />
       </SearchButton>
     </>

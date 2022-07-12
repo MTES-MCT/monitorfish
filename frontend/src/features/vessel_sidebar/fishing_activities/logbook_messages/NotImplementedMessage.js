@@ -1,11 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import countries from 'i18n-iso-countries'
 
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
-
-const NotImplementedMessage = props => {
+const NotImplementedMessage = () => {
   return <Zone>
     <Message>L&apos;affichage de ce type de message n&apos;est pas encore supporté.</Message>
   </Zone>

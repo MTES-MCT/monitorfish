@@ -10,8 +10,6 @@ import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 import { getCoordinates } from '../../coordinates'
 import { useSelector } from 'react-redux'
 
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
-
 const optionsCSV = {
   fieldSeparator: ',',
   quoteStrings: '"',

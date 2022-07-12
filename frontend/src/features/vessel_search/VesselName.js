@@ -28,6 +28,11 @@ function VesselName ({ focusOnVesselSearchInput }) {
     e.stopPropagation()
   }, [selectedVesselIdentity, isFavorite])
 
+  const close = useCallback(e => {
+    dispatch(unselectVessel())
+    e.stopPropagation()
+  }, [])
+
   return (
     <Wrapper
       onClick={() => focusOnVesselSearchInput(true)}
@@ -54,7 +59,7 @@ function VesselName ({ focusOnVesselSearchInput }) {
       </Name>
       <CloseIcon
         data-cy={'vessel-search-selected-vessel-close-title'}
-        onClick={() => dispatch(unselectVessel())}
+        onClick={close}
       />
     </Wrapper>
   )

@@ -21,11 +21,13 @@ const RightMenuOnHoverArea = () => {
   return <>
     {
       selectedVessel
-        ? <Area ref={wrapperRef} onMouseLeave={() => {
-          clearTimeout(timeOutRef.current)
-          timeOutRef.current = setTimeout(() => dispatch(contractRightMenu()), 3000)
-        }
-        }/>
+        ? <Area
+          ref={wrapperRef}
+          onMouseLeave={() => {
+            clearTimeout(timeOutRef.current)
+            timeOutRef.current = setTimeout(() => dispatch(contractRightMenu()), 3000)
+          }}
+        />
         : null
     }
   </>

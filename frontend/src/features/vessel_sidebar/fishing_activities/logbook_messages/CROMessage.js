@@ -4,10 +4,7 @@ import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
 import { getCoordinates } from '../../../../coordinates'
 import { WSG84_PROJECTION } from '../../../../domain/entities/map'
-import countries from 'i18n-iso-countries'
 import { useSelector } from 'react-redux'
-
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 const CROMessage = props => {
   const { coordinatesFormat } = useSelector(state => state.map)

@@ -335,6 +335,7 @@ const vesselSlice = createSlice({
         afterDateTime: null,
         beforeDateTime: null
       }
+      state.isFocusedOnVesselSearch = false
       state.tripMessagesLastToFormerDEPDateTimes = []
 
       if (!atLeastOneVesselSelected(state.vesselsTracksShowed, state.selectedVesselIdentity)) {

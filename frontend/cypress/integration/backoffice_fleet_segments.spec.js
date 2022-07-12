@@ -138,22 +138,31 @@ context('Fleet segments', () => {
 
   it('Should create a fleet segment', () => {
     // Given
-    cy.get('.rs-table-row').should('have.length', 43)
+    cy.get('[role="row"]').should('have.length', 43)
     cy.intercept('POST', '/bff/v1/fleet_segments').as('createFleetSegment')
 
     // When
-    cy.get('*[data-cy="open-create-fleet-segment-modal"]').click()
-    cy.get('*[data-cy="create-fleet-segment-segment"]').type('SEGMENT007')
-    cy.get('*[data-cy="create-fleet-segment-impact-risk-factor"]').type('2.7')
-    cy.get('*[data-cy="create-fleet-segment-description"]').type('Malotru\'s segment')
+    cy.clickLink('Ajouter un segment')
+    cy.wait(1000)
 
-    cy.get('*[data-cy="create-fleet-segment-gears"]').click({ force: true })
+    cy.fill('Nom', 'SEGMENT007')
+    cy.fill('Note d’impact', '2.7')
+    cy.fill('Description', 'Malotru’s segment')
+
+    cy.get('[data-cy="create-fleet-segment-gears"]').click({ force: true })
     cy.get('[data-key="DHS"]').click()
     cy.get('[data-key="FCN"]').click()
 
-    cy.get('*[data-cy="create-fleet-segment-target-species"]').click({ force: true })
+    cy.get('[data-cy="create-fleet-segment-targeted-species"]').click({ force: true })
+    cy.get('[data-cy="create-fleet-segment-targeted-species"] input').type('COD', { force: true })
     cy.get('[data-key="COD"]').click()
+    cy.get('[data-cy="create-fleet-segment-targeted-species"] input').type('SOL', { force: true })
     cy.get('[data-key="SOL"]').click()
+
+    // TODO Investigate why this is not working
+    // cy.get('[data-cy="create-fleet-segment-incidental-species"]').click({ force: true })
+    // cy.get('[data-cy="create-fleet-segment-incidental-species"] input').type('ANE', { force: true })
+    // cy.get('[data-key="ANE"]').click()
 
     cy.get(':nth-child(9) > .rs-picker-tag-wrapper > .rs-picker-search > .rs-picker-search-input > input')
       .type('BF', { force: true })

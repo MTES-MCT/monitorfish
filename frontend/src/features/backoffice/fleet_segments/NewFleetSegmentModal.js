@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Footer, Modal, TagPicker } from 'rsuite'
 import { COLORS } from '../../../constants/constants'
 import { FleetSegmentInput, INPUT_TYPE, renderTagPickerValue } from '../tableCells'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { PrimaryButton } from '../../commonStyles/Buttons.style'
-import createFleetSegment from '../../../domain/use_cases/fleetSegment/createFleetSegment'
+import { cleanInputString } from '../../../utils/cleanInputString'
 
-const AddFleetSegmentModal = ({ isModalOpen, setModalIsOpen, faoAreasList }) => {
-  const dispatch = useDispatch()
+// TODO Use Formik + Yup to handle and validate form
+export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit }) {
   const gearsFAOList = useSelector(state => state.gear.gears)
   const speciesFAOList = useSelector(state => state.species.species)
 
@@ -17,16 +17,37 @@ const AddFleetSegmentModal = ({ isModalOpen, setModalIsOpen, faoAreasList }) => 
   const [impactRiskFactor, setImpactRiskFactor] = useState('')
   const [gears, setGears] = useState([])
   const [faoAreas, setFaoAreas] = useState([])
-  const [targetSpecies, setTargetSpecies] = useState([])
-  const [bycatchSpecies, setBycatchSpecies] = useState([])
+  const [targetSpecies, setTargetSpecies] = useState()
+  const [bycatchSpecies, setBycatchSpecies] = useState()
+
+  const faoSpeciesAsOptions = useMemo(
+    () => {
+      return speciesFAOList.map(species => ({ label: species.code, value: species.code }))
+    },
+    [speciesFAOList]
+  )
+
+  const handleSubmit = () => {
+    const newFleetSegmentData = {
+      segment: cleanInputString(segment),
+      segmentName,
+      impactRiskFactor,
+      gears,
+      faoAreas,
+      targetSpecies: targetSpecies ?? [],
+      bycatchSpecies: bycatchSpecies ?? []
+    }
+
+    onSubmit(newFleetSegmentData)
+  }
 
   return (
     <ModalWithCustomHeight
-      size={'xs'}
       backdrop
-      open={isModalOpen}
+      onClose={onCancel}
+      open
+      size={'xs'}
       style={{ marginTop: 50 }}
-      onClose={() => setModalIsOpen(false)}
     >
       <Modal.Header>
         <Modal.Title>
@@ -38,99 +59,90 @@ const AddFleetSegmentModal = ({ isModalOpen, setModalIsOpen, faoAreasList }) => 
       <Body>
         <Columns>
           <Column>
-            <Label>Nom</Label>
+            <Label htmlFor="newFleetSegmentName">Nom</Label>
             <FleetSegmentInput
-              dataCy={'create-fleet-segment-segment'}
-              value={segment}
-              maxLength={null}
+              id="newFleetSegmentName"
               inputType={INPUT_TYPE.STRING}
+              maxLength={null}
               onChange={(id, key, value) => setSegment(value)}
+              value={segment}
             />
           </Column>
           <Column>
-            <Label>Note d&apos;impact</Label>
+            <Label htmlFor="newFleetSegmentImpactRiskFactor">Note d’impact</Label>
             <FleetSegmentInput
-              dataCy={'create-fleet-segment-impact-risk-factor'}
-              value={impactRiskFactor}
-              maxLength={50}
+              id="newFleetSegmentImpactRiskFactor"
               inputType={INPUT_TYPE.DOUBLE}
+              maxLength={50}
               onChange={(id, key, value) => setImpactRiskFactor(value)}
+              value={impactRiskFactor}
             />
           </Column>
         </Columns>
-        <Label>Description</Label>
+        <Label htmlFor="newFleetSegmentDescription">Description</Label>
         <FleetSegmentInput
           dataCy={'create-fleet-segment-description'}
-          value={segmentName}
-          maxLength={null}
+          id="newFleetSegmentDescription"
           inputType={INPUT_TYPE.STRING}
+          maxLength={null}
           onChange={(id, key, value) => setSegmentName(value)}
+          value={segmentName}
         />
         <Label>Engins</Label>
         <TagPicker
           data-cy={'create-fleet-segment-gears'}
-          searchable
-          value={gears}
-          style={tagPickerStyle}
           data={gearsFAOList.map(gear => ({ label: gear.code, value: gear.code }))}
+          onChange={setGears}
           placeholder={'Engins'}
           placement={'auto'}
-          onChange={gears => setGears(gears)}
           renderValue={(_, items) => renderTagPickerValue(items)}
+          searchable
+          style={tagPickerStyle}
+          value={gears}
+          virtualized
         />
         <Label>Espèces ciblées</Label>
         <TagPicker
-          data-cy={'create-fleet-segment-target-species'}
-          searchable
-          value={targetSpecies}
-          style={tagPickerStyle}
-          data={speciesFAOList?.map(species => ({ label: species.code, value: species.code }))}
+          data={faoSpeciesAsOptions}
+          data-cy={'create-fleet-segment-targeted-species'}
+          onChange={setTargetSpecies}
           placeholder={'Espèces ciblées'}
           placement={'auto'}
-          onChange={targetSpecies => setTargetSpecies(targetSpecies)}
           renderValue={(_, items) => renderTagPickerValue(items)}
-        />
+          searchable
+          style={tagPickerStyle}
+          value={targetSpecies}
+          virtualized />
         <Label>Prises accessoires</Label>
         <TagPicker
-          data-cy={'create-fleet-segment-bycatch-species'}
-          searchable
-          value={bycatchSpecies}
-          style={tagPickerStyle}
-          data={speciesFAOList.map(species => ({ label: species.code, value: species.code }))}
+          data={faoSpeciesAsOptions}
+          data-cy={'create-fleet-segment-incidental-species'}
+          onChange={setBycatchSpecies}
           placeholder={'Prises accessoires'}
           placement={'auto'}
-          onChange={bycatchSpecies => setBycatchSpecies(bycatchSpecies)}
           renderValue={(_, items) => renderTagPickerValue(items)}
+          searchable
+          style={tagPickerStyle}
+          value={bycatchSpecies}
+          virtualized
         />
         <Label>Zones FAO</Label>
         <TagPicker
           data-cy={'create-fleet-segment-fao-zones'}
-          searchable
-          value={faoAreas}
-          style={tagPickerStyle}
           data={faoAreasList?.map(faoAreas => ({ label: faoAreas, value: faoAreas }))}
+          onChange={setFaoAreas}
           placeholder={'Zones FAO'}
           placement={'auto'}
-          onChange={faoAreas => setFaoAreas(faoAreas)}
           renderValue={(_, items) => renderTagPickerValue(items)}
+          searchable
+          style={tagPickerStyle}
+          value={faoAreas}
         />
       </Body>
       <Footer>
         <ValidateButton
           data-cy={'create-fleet-segment'}
-          onClick={() => {
-            const createJSON = {
-              segment: segment?.replace(/[ ]/g, ''),
-              segmentName: segmentName,
-              impactRiskFactor: impactRiskFactor,
-              gears: gears,
-              faoAreas: faoAreas,
-              targetSpecies: targetSpecies,
-              bycatchSpecies: bycatchSpecies
-            }
-
-            dispatch(createFleetSegment(createJSON)).then(() => setModalIsOpen(false))
-          }}
+          onClick={handleSubmit}
         >
           Créer
         </ValidateButton>
@@ -153,40 +165,40 @@ const ValidateButton = styled(PrimaryButton)`
 
 const tagPickerStyle = { width: 350, margin: '5px 10px 20px 0', verticalAlign: 'top' }
 
-const Label = styled.span`
+const Label = styled.label`
   display: inline-block;
   width: 100%;
 `
 
 const Title = styled.div`
+  color: ${COLORS.gainsboro};
   font-size: 16px;
   line-height: 30px;
-  color: ${COLORS.gainsboro};
 `
 
 const Body = styled(Modal.Body)`
   padding: 20px 25px 0 25px !important;
   text-align: left;
-  
+
   .rs-input {
     color: ${COLORS.charcoal};
   }
-  
+
   .rs-picker-default .rs-picker-toggle.rs-btn-xs {
     padding-left: 5px;
   }
-  
+
   .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
     color: ${COLORS.charcoal};
   }
-  
+
   .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn-xs {
     padding-right: 17px;
   }
-  
+
   .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn {
     padding-right: 230px !important;
-  } 
+  }
 `
 
 const ModalWithCustomHeight = styled(Modal)`
@@ -194,5 +206,3 @@ const ModalWithCustomHeight = styled(Modal)`
     height: inherit !important;
   }
 `
-
-export default AddFleetSegmentModal

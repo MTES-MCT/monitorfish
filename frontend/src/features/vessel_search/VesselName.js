@@ -42,6 +42,7 @@ function VesselName ({ focusOnVesselSearchInput }) {
           : null
       }
       <FavoriteIcon
+        data-cy={'sidebar-add-vessel-to-favorites'}
         $flagIsShown={selectedVesselIdentity?.flagState}
         $isFavorite={isFavorite}
         onClick={addOrRemoveToFavorites}

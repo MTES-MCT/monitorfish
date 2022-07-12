@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { ToastProvider } from 'react-toast-notifications'
 import { browserName, browserVersion } from 'react-device-detect'
 import { PersistGate } from 'redux-persist/integration/react'
+import countries from 'i18n-iso-countries'
 
 import Map from './features/map/Map'
 import Backoffice from './features/backoffice/Backoffice'
@@ -37,6 +38,7 @@ import SideWindow from './features/side_window/SideWindow'
 import { sideWindowMenu } from './domain/entities/sideWindow'
 import FavoriteVessels from './features/favorite_vessels/FavoriteVessels'
 import FleetSegments from './features/backoffice/fleet_segments/FleetSegments'
+countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 function App () {
   switch (browserName) {

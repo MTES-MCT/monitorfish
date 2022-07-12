@@ -12,18 +12,30 @@ import { useDispatch, useSelector } from 'react-redux'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import PositionsTable from './PositionsTable'
 import modifyVesselTrackDepth from '../../../../domain/use_cases/vessel/modifyVesselTrackDepth'
+import ExportTrack from './ExportTrack'
 
-const TrackRequest = ({ sidebarIsOpen, rightMenuIsOpen, trackRequestIsOpen, setTrackRequestIsOpen }) => {
+const TrackRequest = ({ sidebarIsOpen }) => {
   const dispatch = useDispatch()
 
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    healthcheckTextWarning,
+    rightMenuIsOpen
+  } = useSelector(state => state.global)
   const { defaultVesselTrackDepth } = useSelector(state => state.map)
+
   const [selectedTrackDepth, setSelectedTrackDepth] = useState(null)
+  const [trackRequestIsOpen, setTrackRequestIsOpen] = useState(false)
   const [selectedDates, setSelectedDates] = useState([])
   const {
     selectedVesselIdentity,
     selectedVesselCustomTrackRequest
   } = useSelector(state => state.vessel)
+
+  useEffect(() => {
+    if (!sidebarIsOpen) {
+      setTrackRequestIsOpen(false)
+    }
+  }, [sidebarIsOpen])
 
   useEffect(() => {
     const { afterDateTime, beforeDateTime, trackDepth } = selectedVesselCustomTrackRequest
@@ -91,6 +103,7 @@ const TrackRequest = ({ sidebarIsOpen, rightMenuIsOpen, trackRequestIsOpen, setT
                 resetToDefaultTrackDepth={resetToDefaultTrackDepth}
                 modifyVesselTrackFromDates={triggerModifyVesselTrackFromDates}
               />
+              <ExportTrack/>
               <Header>Liste des positions VMS affichées</Header>
               <PositionsTable
                 sidebarIsOpen={sidebarIsOpen}
@@ -117,13 +130,12 @@ const TrackRequestButton = styled(MapComponentStyle)`
   width: 30px;
   background: ${props => props.trackRequestIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
   position: absolute;
-  right: 10px;
   margin-right: ${props => props.sidebarIsOpen ? 505 : -45}px;
+  right: ${props => props.rightMenuIsOpen && props.sidebarIsOpen ? 55 : 10}px;
   opacity: ${props => props.sidebarIsOpen ? 1 : 0};
   cursor: pointer;
   border-radius: 1px;
   z-index: 999;
-  right: ${props => props.rightMenuIsOpen && props.sidebarIsOpen ? 55 : 10}px;
   transition: all 0.5s, right 0.3s;
 `
 
@@ -132,18 +144,15 @@ const TrackRequestBody = styled(MapComponentStyle)`
   width: 306px;
   background: ${COLORS.background};
   position: absolute;
-  right: 10px;
+  text-align: left;
   margin-right: ${props => props.sidebarIsOpen && props.trackRequestIsOpen ? '540px' : '217px'};
+  right: ${props => props.rightMenuIsOpen && props.sidebarIsOpen ? 55 : 10}px;
   opacity: ${props => props.sidebarIsOpen && props.trackRequestIsOpen ? '1' : '0'};
   visibility: ${props => props.sidebarIsOpen && props.trackRequestIsOpen ? 'visible' : 'hidden'};
   border-radius: 2px;
   font-size: 13px;
   color: ${COLORS.slateGray};
   transition: all 0.3s;
-
-  animation: ${props => props.rightMenuIsOpen && props.sidebarIsOpen && props.trackRequestIsOpen
-  ? 'vessel-box-opening-with-right-menu-hover'
-  : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
 `
 
 const VesselIcon = styled(VesselSVG)`

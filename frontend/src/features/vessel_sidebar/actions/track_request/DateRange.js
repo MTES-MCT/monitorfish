@@ -56,11 +56,11 @@ const DateRange = ({ dates, resetToDefaultTrackDepth, modifyVesselTrackFromDates
 const Wrapper = styled.div`
   .rs-picker-daterange {
     ${props => props.hasDates ? `background: ${COLORS.gainsboro}` : null}
-  } 
+  }
 `
 
 const wrapperStyle = (width, noMargin) => ({
-  margin: noMargin ? 0 : '12px 0 20px 20px',
+  margin: noMargin ? 0 : '12px 0 15px 20px',
   width: width || 197
 })
 

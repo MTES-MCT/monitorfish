@@ -6,8 +6,11 @@ import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
 import { useDispatch, useSelector } from 'react-redux'
 import { animateToExtent } from '../../../../domain/shared_slices/Map'
 
-const AnimateToTrack = ({ sidebarIsOpen, rightMenuIsOpen }) => {
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+const AnimateToTrack = ({ sidebarIsOpen }) => {
+  const {
+    healthcheckTextWarning,
+    rightMenuIsOpen
+  } = useSelector(state => state.global)
   const dispatch = useDispatch()
 
   return (

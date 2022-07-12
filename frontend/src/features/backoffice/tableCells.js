@@ -33,6 +33,7 @@ export const ModifiableCell = ({ rowData, dataKey, id, inputType, maxLength, onC
 
 export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, withinCell, onChange, dataCy }) => <input
   data-cy={dataCy}
+  id={id}
   style={{
     fontSize: 13,
     marginTop: withinCell ? -8 : 5,

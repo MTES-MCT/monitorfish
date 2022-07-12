@@ -26,6 +26,7 @@
     "nouislider-react": "^3.4.0",
     "ol": "^6.6.1",
     "ol-mapbox-style": "^6.1.4",
+    "ramda": "0.28.0",
     "react": "^17.0.1",
     "react-color": "^2.19.3",
     "react-coordinate-input": "^1.0.0-rc.2",

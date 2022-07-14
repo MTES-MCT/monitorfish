@@ -180,7 +180,7 @@ context('Fleet segments', () => {
     cy.get('.rs-table-row').should('have.length', 44)
     cy.get('[title="SEGMENT007"] > .rs-table-cell-content > .rs-input').should('exist')
     cy.get('*[data-cy="delete-row-SEGMENT007"]').should('exist')
-    cy.get('[title="Malotru\'s segment"] > .rs-table-cell-content > .rs-input').should('exist')
+    cy.get('[title="Malotru’s segment"] > .rs-table-cell-content > .rs-input').should('exist')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
@@ -189,7 +189,7 @@ context('Fleet segments', () => {
     cy.wait(50)
     cy.get('.rs-table-row').should('have.length', 44)
     cy.get('[title="SEGMENT007"] > .rs-table-cell-content > .rs-input').should('exist')
-    cy.get('[title="Malotru\'s segment"] > .rs-table-cell-content > .rs-input').should('exist')
+    cy.get('[title="Malotru’s segment"] > .rs-table-cell-content > .rs-input').should('exist')
     cy.get('*[data-cy="delete-row-SEGMENT007"]').should('exist')
   })
 })

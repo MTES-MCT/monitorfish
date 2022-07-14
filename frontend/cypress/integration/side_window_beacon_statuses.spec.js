@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 
+import { CustomDate } from '../../src/libs/CustomDate'
 import { getDate } from '../../src/utils'
 
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
@@ -14,7 +15,7 @@ context('Side window beacon malfunctions', () => {
   it('A beacon malfunction card Should be moved in the Board', () => {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
-    cy.request('PUT', 'bff/v1/beacon_malfunctions/1', {stage: 'INITIAL_ENCOUNTER'})
+    cy.request('PUT', 'bff/v1/beacon_malfunctions/1', { stage: 'INITIAL_ENCOUNTER' })
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -196,19 +197,20 @@ context('Side window beacon malfunctions', () => {
         'grands fonds pour trouver la ressource qui leur faisait défaut.')
 
     // Show vessel on map
-    let oneWeeksBeforeDate = new Date()
-    oneWeeksBeforeDate.setDate(oneWeeksBeforeDate.getDate() - 8)
-    oneWeeksBeforeDate.setUTCHours(0, 0, 0, 0)
-    oneWeeksBeforeDate = oneWeeksBeforeDate.toISOString()
-    let oneWeeksBeforePlusOneDayDate = new Date()
-    oneWeeksBeforePlusOneDayDate.setDate(oneWeeksBeforePlusOneDayDate.getDate() - 7)
-    oneWeeksBeforePlusOneDayDate.setUTCHours(23, 59, 59, 0)
-    oneWeeksBeforePlusOneDayDate = oneWeeksBeforePlusOneDayDate.toISOString()
-    cy.log(`afterDateTime=${oneWeeksBeforeDate}`)
-    cy.log(`beforeDateTime=${oneWeeksBeforePlusOneDayDate}`)
-    cy.intercept('GET', 'bff/v1/vessels/find?internalReferenceNumber=FAK000999999' +
-      '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER' +
-      '&trackDepth=CUSTOM&afterDateTime=' + oneWeeksBeforeDate + '&beforeDateTime=' + oneWeeksBeforePlusOneDayDate).as('showVesselPositionsOnMap')
+    const oneWeeksBeforeDate = new CustomDate().date.subtract(8, 'days')
+    const oneWeeksBeforePlusOneDayDate = oneWeeksBeforeDate.add(1, 'day')
+    cy.log(`afterDateTime=${oneWeeksBeforeDate.toISOString()}`)
+    cy.log(`beforeDateTime=${oneWeeksBeforePlusOneDayDate.toISOString()}`)
+    cy.intercept(
+      'GET',
+      new RegExp(
+        'bff\\/v1\\/vessels\\/find\\?internalReferenceNumber=FAK000999999' +
+        '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER' +
+        '&trackDepth=CUSTOM' +
+        '&afterDateTime=' + oneWeeksBeforeDate.format('YYYY-MM-DD') + 'T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z' +
+        '&beforeDateTime=' + oneWeeksBeforePlusOneDayDate.format('YYYY-MM-DD') + 'T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z'
+      )
+    ).as('showVesselPositionsOnMap')
     cy.intercept('GET', 'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999' +
       '&externalReferenceNumber=DONTSINK&IRCS=CALLME&voyageRequest=LAST&tripNumber=').as('showVesselVoyageOnMap')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-show-vessel"]').click()

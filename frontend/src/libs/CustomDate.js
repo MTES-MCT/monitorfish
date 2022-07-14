@@ -7,7 +7,7 @@ dayjs.extend(utc)
 
 export class CustomDate {
   /**
-   * @param {Date} date
+   * @param {Date=} date
    */
   constructor (date) {
     this.date = dayjs(date).utc(true)

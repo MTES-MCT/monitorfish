@@ -18,6 +18,10 @@ import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../.
 import { transform } from 'ol/proj'
 import saveInterestPointFeature from '../../domain/use_cases/interestPoint/saveInterestPointFeature'
 
+// TODO Refactor this component
+// - Move the state logic to the reducer
+// - Remove all useEffects
+// - Use formik (or at least uncontrolled form components)
 const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
   const dispatch = useDispatch()
 
@@ -31,14 +35,14 @@ const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
   const [coordinates, setCoordinates] = useState([])
   const [name, setName] = useState('')
   const [observations, setObservations] = useState('')
-  const [type, setType] = useState(null)
+  const [type, setType] = useState()
   const [updateInterestPoint, setUpdateInterestPoint] = useState(false)
 
   useEffect(() => {
     if (!isOpen) {
       setName('')
       setObservations('')
-      setType(interestPointType.FISHING_VESSEL)
+      setType(interestPointType.OTHER)
       setCoordinates([])
       return
     }
@@ -46,7 +50,7 @@ const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
     setUpdateInterestPoint(false)
     setName(interestPointBeingDrawed?.name || '')
     setObservations(interestPointBeingDrawed?.observations || '')
-    setType(interestPointBeingDrawed?.type || interestPointType.FISHING_VESSEL)
+    setType(interestPointBeingDrawed?.type || interestPointType.OTHER)
   }, [interestPointBeingDrawed, isEditing, isOpen])
 
   useEffect(() => {
@@ -128,6 +132,7 @@ const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
     <Wrapper
       data-cy={'save-interest-point'}
       healthcheckTextWarning={healthcheckTextWarning}
+      key={type}
       isOpen={isOpen}>
       <Header>
         Créer un point d&apos;intérêt
@@ -142,7 +147,7 @@ const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
         <RadioWrapper>
           <RadioGroup
             name="interestTypeRadio"
-            value={type}
+            defaultValue={type}
             onChange={value => {
               setUpdateInterestPoint(true)
               setType(value)
@@ -226,7 +231,7 @@ const CancelButton = styled.button`
   margin: 15px 0 0 15px;
   font-size: 13px;
   color: ${COLORS.gunMetal};
-  
+
   :disabled {
     border: 1px solid ${COLORS.lightGray};
     color: ${COLORS.slateGray};
@@ -240,7 +245,7 @@ const OkButton = styled.button`
   margin: 15px 0 0;
   font-size: 13px;
   color: ${COLORS.gainsboro};
-  
+
   :hover, :focus {
     background: ${COLORS.charcoal};
   }
@@ -251,27 +256,27 @@ const Body = styled.div`
   font-size: 13px;
   color: ${COLORS.slateGray};
   margin: 10px 15px;
-  
+
   p {
     margin: 0;
     font-size: 13px;
   }
-  
+
   p:nth-of-type(2) {
     margin-top: 15px;
     font-size: 13px;
   }
-  
+
   p:nth-of-type(3) {
     margin-top: 15px;
     font-size: 13px;
   }
-  
+
   p:nth-of-type(4) {
     margin-top: 15px;
     font-size: 13px;
   }
-  
+
   input {
     margin-top: 7px;
     color: ${COLORS.gunMetal};
@@ -280,7 +285,7 @@ const Body = styled.div`
     height: 27px;
     padding-left: 8px;
   }
-  
+
   textarea {
     color: ${COLORS.gunMetal};
     margin-top: 7px;

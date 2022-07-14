@@ -50,7 +50,6 @@ const FleetSegments = () => {
   }, [])
 
   const createFleetSegment = (newFleetSegmentData) => {
-    console.log('newFleetSegmentData', newFleetSegmentData)
     dispatch(fleetSegmentUseCase.createFleetSegment(newFleetSegmentData))
 
     closeNewFleetSegmentModal()

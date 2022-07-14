@@ -10,7 +10,7 @@ import { getVesselFromAPI } from '../../../api/vessel'
 /**
  * Show a specified vessel track on map and on the vessel right sidebar
  * @function showVessel
- * @param {VesselIdentity} vesselIdentity
+ * @param {VesselNS.VesselIdentity} vesselIdentity
  * @param {boolean} calledFromCron
  * @param {boolean} fromSearch
  */
@@ -32,7 +32,7 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
     adminRole
   } = global
 
-  const lastPositionVessel = vessels.find(vessel => vessel.vesselId === Vessel.getVesselFeatureId(vesselIdentity))
+  const lastPositionVessel = vessels.find(_vessel => _vessel.vesselId === Vessel.getVesselFeatureId(vesselIdentity))
 
   dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 
@@ -41,7 +41,7 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
     dispatch(removeFishingActivitiesFromMap())
   }
 
-  if (fromSearch) {
+  if (fromSearch && addSearchedVessel) {
     dispatch(addSearchedVessel(vesselIdentity))
   }
 
@@ -66,9 +66,9 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
       }
 
       batch(() => {
-        if (error) {
+        if (error && setError) {
           dispatch(setError(error))
-        } else {
+        } else if (removeError) {
           dispatch(removeError())
         }
 
@@ -80,7 +80,10 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
     }).catch(error => {
       console.error(error)
       batch(() => {
-        dispatch(setError(error))
+        if (setError) {
+          dispatch(setError(error))
+        }
+
         dispatch(resetLoadingVessel())
       })
     })
@@ -89,7 +92,9 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
 function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
   batch(() => {
     dispatch(doNotAnimate(calledFromCron))
-    dispatch(removeError())
+    if (removeError) {
+      dispatch(removeError(undefined))
+    }
     dispatch(loadingVessel({
       vesselIdentity,
       calledFromCron

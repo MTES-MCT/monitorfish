@@ -67,10 +67,10 @@ settings:
     version: 16.13.1
 
 overrides:
-  - files: "**/*.d.ts"
+  - files: "**/*.ts"
     parser: "@typescript-eslint/parser"
     parserOptions:
-      ecmaVersion: 2022,
+      ecmaVersion: 2022
       project: ./tsconfig.json
     rules:
       no-shadow: off

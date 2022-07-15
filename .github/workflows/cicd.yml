@@ -3,19 +3,19 @@ name: CI/CD Back & Front
 on:
   push:
     paths:
-    - '**.kt'
-    - '**.png'
-    - '**.js'
-    - '**.json'
-    - '**.ts'
-    - '**.yml'
-    - '.github/workflows/cicd.yml'
-    - 'infra/configurations/**.properties'
-    - 'infra/docker/DockerfileBuildApp'
-    - '**.sql'
-    - 'backend/pom.xml'
-    - 'Makefile'
-    - 'frontend'
+      - "**.kt"
+      - "**.png"
+      - "**.js"
+      - "**.json"
+      - "**.ts"
+      - "**.yml"
+      - ".github/workflows/cicd.yml"
+      - "infra/configurations/**.properties"
+      - "infra/docker/DockerfileBuildApp"
+      - "**.sql"
+      - "backend/pom.xml"
+      - "Makefile"
+      - "frontend"
   schedule:
     - cron: "38 11 */3 * *"
 
@@ -27,106 +27,106 @@ jobs:
       ENV_PROFILE: ${{ steps.env_profile.outputs.ENV_PROFILE }}
       VERSION: ${{ steps.version.outputs.VERSION }}
     steps:
-    - name: Get last release version
-      id: lastrelease
-      uses: pozetroninc/github-action-get-latest-release@master
-      with:
-        repository: mtes-mct/monitorfish
+      - name: Get last release version
+        id: lastrelease
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: mtes-mct/monitorfish
 
-    - id: step1
-      name: Set ENV profile as dev by default
-      run: echo "ENV_PROFILE=dev" >> $GITHUB_ENV
+      - id: step1
+        name: Set ENV profile as dev by default
+        run: echo "ENV_PROFILE=dev" >> $GITHUB_ENV
 
-    - name: Set ENV profile as PROD when it is a release
-      if: startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
-      run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
+      - name: Set ENV profile as PROD when it is a release
+        if: startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
+        run: echo "ENV_PROFILE=prod" >> $GITHUB_ENV
 
-    - id: env_profile
-      name: Set ENV profile output
-      run: ENV_PROFILE=${{ env.ENV_PROFILE }} && echo "::set-output name=ENV_PROFILE::$ENV_PROFILE"
+      - id: env_profile
+        name: Set ENV profile output
+        run: ENV_PROFILE=${{ env.ENV_PROFILE }} && echo "::set-output name=ENV_PROFILE::$ENV_PROFILE"
 
-    - id: version
-      name: Set VERSION env
-      run: |
-        if [ "${ENV_PROFILE}" != "prod" ]; then\
-            export VERSION=${{ steps.lastrelease.outputs.release }}_snapshot
-        else\
-            export VERSION=${{ steps.lastrelease.outputs.release }}
-        fi
-        echo "::set-output name=VERSION::$VERSION"
+      - id: version
+        name: Set VERSION env
+        run: |
+          if [ "${ENV_PROFILE}" != "prod" ]; then\
+              export VERSION=${{ steps.lastrelease.outputs.release }}_snapshot
+          else\
+              export VERSION=${{ steps.lastrelease.outputs.release }}
+          fi
+          echo "::set-output name=VERSION::$VERSION"
 
   build:
     name: Run unit tests, build and package
     needs: version
     runs-on: ubuntu-18.04
     env:
-      ENV_PROFILE:  ${{needs.version.outputs.ENV_PROFILE}}
+      ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
-    - name: Show version
-      run: echo "VERSION:${{ env.VERSION }} ENV_PROFILE:${{ env.ENV_PROFILE }}"
+      - name: Show version
+        run: echo "VERSION:${{ env.VERSION }} ENV_PROFILE:${{ env.ENV_PROFILE }}"
 
-    - name: Setup Java JDK
-      uses: actions/setup-java@v1.4.2
-      with:
-        java-version: 11
+      - name: Setup Java JDK
+        uses: actions/setup-java@v1.4.2
+        with:
+          java-version: 11
 
-    - uses: actions/checkout@v2
-      
-    - name: NPM install with caching
-      uses: bahmutov/npm-install@v1.6.0
-      with:
-        # Working directory to specify subfolder in which dependencies are defined
-        working-directory: frontend/
-        useLockFile: true
-        # Custom install command to use
-        install-command: npm install
-            
-    - name: Unit test
-      run: make test
+      - uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: docker/setup-buildx-action@master
+      - name: NPM install with caching
+        uses: bahmutov/npm-install@v1.6.0
+        with:
+          # Working directory to specify subfolder in which dependencies are defined
+          working-directory: frontend/
+          useLockFile: true
+          # Custom install command to use
+          install-command: npm install
 
-    - name: Cache Docker layers
-      uses: actions/cache@v2
-      with:
-        path: /tmp/.buildx-cache-app
-        key: ${{ runner.os }}-single-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-single-buildx
+      - name: Unit test
+        run: make test
 
-    - name: Build image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        load: true
-        builder: ${{ steps.buildx.outputs.name }}
-        file: infra/docker/DockerfileBuildApp
-        push: false
-        tags: monitorfish-app:${{ env.VERSION }}
-        cache-from: type=local,src=/tmp/.buildx-cache-app
-        cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-app-new
-        build-args: |
-          VERSION=${{ env.VERSION }}
-          ENV_PROFILE=${{ env.ENV_PROFILE }}
-          GITHUB_SHA=${{ github.sha }}
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
 
-      # Temp fix
-      # https://github.com/docker/build-push-action/issues/252
-      # https://github.com/moby/buildkit/issues/1896
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache-app
+          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-single-buildx
 
-    - name: Move cache
-      run: |
-        rm -rf /tmp/.buildx-cache-app
-        mv /tmp/.buildx-cache-app-new /tmp/.buildx-cache-app
+      - name: Build image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          load: true
+          builder: ${{ steps.buildx.outputs.name }}
+          file: infra/docker/DockerfileBuildApp
+          push: false
+          tags: monitorfish-app:${{ env.VERSION }}
+          cache-from: type=local,src=/tmp/.buildx-cache-app
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-app-new
+          build-args: |
+            VERSION=${{ env.VERSION }}
+            ENV_PROFILE=${{ env.ENV_PROFILE }}
+            GITHUB_SHA=${{ github.sha }}
 
-    - name: Upload image to artifacts
-      uses: ishworkh/docker-image-artifact-upload@v1
-      with:
-        image: monitorfish-app:${{ env.VERSION }}
+        # Temp fix
+        # https://github.com/docker/build-push-action/issues/252
+        # https://github.com/moby/buildkit/issues/1896
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache-app
+          mv /tmp/.buildx-cache-app-new /tmp/.buildx-cache-app
+
+      - name: Upload image to artifacts
+        uses: ishworkh/docker-image-artifact-upload@v1
+        with:
+          image: monitorfish-app:${{ env.VERSION }}
 
   e2e_test:
     name: Run E2E tests
@@ -142,59 +142,58 @@ jobs:
         # run 4 copies of the current job in parallel
         containers: [1, 2, 3, 4]
     env:
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       REACT_APP_CYPRESS_PORT: 8880
       CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
       CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      ENV_PROFILE:  ${{needs.version.outputs.ENV_PROFILE}}
+      ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Download image
-      uses: ishworkh/docker-image-artifact-download@v1
-      with:
-        image: monitorfish-app:${{ env.VERSION }}
+      - name: Download image
+        uses: ishworkh/docker-image-artifact-download@v1
+        with:
+          image: monitorfish-app:${{ env.VERSION }}
 
-    - name: Run docker images
-      run: make docker-compose-up
+      - name: Run docker images
+        run: make docker-compose-up
 
-    - name: Curl stubbed geoserver
-      run: until $(curl --output /dev/null --silent --fail "http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27"); do printf '.'; sleep 5; done;
+      - name: Curl stubbed geoserver
+        run: until $(curl --output /dev/null --silent --fail "http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27"); do printf '.'; sleep 5; done;
 
-    - name: Run Cypress tests
-      uses: cypress-io/github-action@v2
-      with:
-        # we have already installed all dependencies above
-        install: true
-        install-command: npm i
-        working-directory: frontend
-        record: true
-        parallel: true
-        wait-on: 'http://localhost:8880'
-        env: PORT=8880
-        browser: firefox
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v4
+        with:
+          browser: firefox
+          env: PORT=8880
+          install: true
+          install-command: npm i
+          parallel: true
+          record: true
+          wait-on: "http://localhost:8880"
+          working-directory: frontend
 
   push_to_registry:
     name: Push to registry
     needs: [version, e2e_test]
     runs-on: ubuntu-18.04
     env:
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true 
-      ENV_PROFILE:  ${{needs.version.outputs.ENV_PROFILE}}
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Download image
-      uses: ishworkh/docker-image-artifact-download@v1
-      with:
-        image: monitorfish-app:${{ env.VERSION }}
+      - name: Download image
+        uses: ishworkh/docker-image-artifact-download@v1
+        with:
+          image: monitorfish-app:${{ env.VERSION }}
 
-    - name: Push docker image to registry
-      if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
-      run: |
-        echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
-        make docker-tag
-        make docker-push
+      - name: Push docker image to registry
+        if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
+          make docker-tag
+          make docker-push

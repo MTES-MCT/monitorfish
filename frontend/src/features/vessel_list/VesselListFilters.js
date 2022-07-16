@@ -83,14 +83,16 @@ const VesselListFilters = ({
   }, [species.species])
 
   const districtsField = useMemo(() => {
-    if (districts.districts && districts.districts.length) {
-      return districts.districts.map(district => {
-        return {
-          value: district.district,
-          label: `${district.district} (${district.districtCode})`
-        }
-      })
+    if (!districts.districts || !districts.districts.length) {
+      return []
     }
+
+    return districts.districts.map(district => {
+      return {
+        value: district.district,
+        label: `${district.district} (${district.districtCode})`
+      }
+    })
   }, [districts.districts])
 
   const { zonesSelected, callRemoveZoneSelected } = zones

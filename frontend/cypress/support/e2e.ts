@@ -145,3 +145,13 @@ Cypress.Commands.addAll(
     dragTo
   }
 )
+
+Cypress.on('uncaught:exception', (err) => {
+  // We ignore uncaught exceptions `Error: ResizeObserver loop completed with undelivered notifications.`
+  // since they only seem to happen (sporadically) within e2e tests
+  if (err.message.includes('ResizeObserver loop completed with undelivered notifications.')) {
+    return false
+  }
+
+  return undefined
+})

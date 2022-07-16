@@ -59,7 +59,7 @@
     "lint": "eslint src/ --fix",
     "type": "tsc",
     "test": "jest --config=./config/jest.config.js --detectOpenHandles",
-    "cypress:open": "cypress open --browser firefox --e2e",
+    "cypress:open": "cypress open --browser electron --e2e",
     "cypress:run": "cypress run ---browser firefox --e2e",
     "eject": "react-scripts eject"
   },

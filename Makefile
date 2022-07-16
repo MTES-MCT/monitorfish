@@ -34,6 +34,8 @@ dev-reset:
 	docker compose -f ./infra/dev/docker-compose.yml up flyway
 	docker compose -f ./infra/dev/docker-compose.yml start app
 	docker compose -f ./infra/dev/docker-compose.yml logs -f app
+dev-stop:
+	docker compose -f ./infra/dev/docker-compose.yml down
 
 # CI commands - app
 docker-build:

@@ -516,7 +516,7 @@ const VesselListIcon = styled(MapButtonStyle)`
   right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
   background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   transition: all 0.3s;
-  
+
   :hover, :focus {
       background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }
@@ -526,7 +526,7 @@ const Vessel = styled(VesselListSVG)`
   width: 25px;
   height: 25px;
   animation: ${props => !props.isTitle ? props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-icon-hidden' : 'vessel-icon-visible' : null} 0.2s ease forwards;
-  
+
   @keyframes vessel-icon-visible {
     0%   {
       opacity: 0;

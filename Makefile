@@ -25,6 +25,7 @@ dev:
 dev-erase:
 	docker compose -f ./infra/dev/docker-compose.yml down -v
 dev-reset:
+	rm -f ./frontend/cypress/downloads/*
 	docker compose -f ./infra/dev/docker-compose.yml stop app geoserver
 	docker compose -f ./infra/dev/docker-compose.yml exec db \
 		psql -U postgres -d postgres -c "DROP DATABASE IF EXISTS  monitorfishdb;"

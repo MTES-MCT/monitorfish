@@ -84,7 +84,7 @@ context('Vessels list', () => {
     cy.get('*[data-cy="download-vessels"]').click()
 
     // Then
-    cy.wait(1000)
+    cy.wait(400)
     cy.exec('cd cypress/downloads && ls').then(result => {
       const downloadedCSVFilename = result.stdout
       return cy.readFile(`cypress/downloads/${downloadedCSVFilename}`)

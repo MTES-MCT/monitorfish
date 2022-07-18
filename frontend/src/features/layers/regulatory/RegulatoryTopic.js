@@ -43,8 +43,8 @@ const RegulatoryTopic = props => {
     .regulatoryLayerLawTypes[lawType][regulatoryTopic]?.length)
 
   const [isOpen, setIsOpen] = useState(false)
-  const [atLeastOneLayerIsShowed, setAtLeastOneLayerIsShowed] = useState(false)
-  const [isLayerNameEditable, setIsLayerNameEditable] = useState(false)
+  const [atLeastOneTopicIsShowed, setAtLeastOneTopicIsShowed] = useState(false)
+  const [isTopicInEdition, setIsTopicInEdition] = useState(false)
   const [isOver, setIsOver] = useState(false)
   const onMouseOver = () => !isOver && setIsOver(true)
   const onMouseOut = () => isOver && setIsOver(false)
@@ -62,7 +62,7 @@ const RegulatoryTopic = props => {
       const topicFoundInSelectedLayers = regulatoryZones
         .some(layer => layer.topic === regulatoryTopic)
 
-      setAtLeastOneLayerIsShowed(topicFoundInShowedLayers && topicFoundInSelectedLayers)
+      setAtLeastOneTopicIsShowed(topicFoundInShowedLayers && topicFoundInSelectedLayers)
     }
   }, [showedLayers, regulatoryZones, regulatoryTopic])
 
@@ -102,7 +102,7 @@ const RegulatoryTopic = props => {
   }, [regulatoryZoneMetadata, regulatoryTopic, regulatoryTopicsOpened, setIsOpen])
 
   const onEditLayerNameClick = () => {
-    setIsLayerNameEditable(true)
+    setIsTopicInEdition(true)
   }
 
   const onRegulatoryTopicClick = useCallback(() => {
@@ -135,15 +135,15 @@ const RegulatoryTopic = props => {
               onClick={onRegulatoryTopicClick}
             >
               {
-                !isLayerNameEditable
-                  ? <Text>
-                    {regulatoryTopic}
-                  </Text>
-                  : <RegulatoryTopicInput
+                isTopicInEdition
+                  ? <RegulatoryTopicInput
                     topic={regulatoryTopic}
                     updateTopic={updateLayerName}
-                    setIsTopicEditable={setIsLayerNameEditable}
+                    setIsTopicEditable={setIsTopicInEdition}
                   />
+                  : <Text>
+                    {regulatoryTopic}
+                  </Text>
               }
             </Name>
             <ZonesNumber>
@@ -152,14 +152,14 @@ const RegulatoryTopic = props => {
             {
               isEditable
                 ? <EditIcon
-                  data-cy="regulatory-layername-edit"
+                  data-cy="regulatory-topic-edit"
                   $isOver={isOver}
                   title="Modifier le nom de la thématique"
                   onClick={() => onEditLayerNameClick()}/>
                 : null
             }
             {
-              atLeastOneLayerIsShowed
+              atLeastOneTopicIsShowed
                 ? <ShowIcon
                   title="Cacher la couche"
                   onClick={() => hideTopic(namespace)}

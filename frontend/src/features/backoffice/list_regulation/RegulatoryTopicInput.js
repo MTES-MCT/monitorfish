@@ -37,7 +37,7 @@ const RegulatoryTopicInput = props => {
 
   return (
     <CustomInput
-      data-cy="layer-name-input"
+      data-cy="regulatory-topic-edit-input"
       inputRef={ref}
       value={value}
       onChange={val => setValue(val)}

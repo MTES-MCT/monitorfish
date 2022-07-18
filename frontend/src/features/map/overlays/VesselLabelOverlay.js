@@ -84,7 +84,7 @@ const VesselLabelOverlay = ({
     if (showRiskFactorDetails) {
       ref.current.parentNode.style.zIndex = 999999999
     } else {
-      ref.current.parentNode.style.zIndex = 'unset'
+      ref.current.parentNode.style.zIndex = 'auto'
     }
   }, [showRiskFactorDetails])
 

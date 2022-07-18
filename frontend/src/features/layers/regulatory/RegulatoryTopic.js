@@ -101,7 +101,7 @@ const RegulatoryTopic = props => {
     }
   }, [regulatoryZoneMetadata, regulatoryTopic, regulatoryTopicsOpened, setIsOpen])
 
-  const onEditLayerNameClick = () => {
+  const onEditTopicClick = () => {
     setIsTopicInEdition(true)
   }
 
@@ -155,7 +155,8 @@ const RegulatoryTopic = props => {
                   data-cy="regulatory-topic-edit"
                   $isOver={isOver}
                   title="Modifier le nom de la thématique"
-                  onClick={() => onEditLayerNameClick()}/>
+                  onClick={onEditTopicClick}
+                />
                 : null
             }
             {

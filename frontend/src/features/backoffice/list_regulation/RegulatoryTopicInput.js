@@ -33,7 +33,7 @@ const RegulatoryTopicInput = props => {
   return (
     <CustomInput
       disabled={false}
-      data-cy="layer-name-input"
+      data-cy="regulatory-topic-edit-input"
       value={value}
       onChange={val => setValue(val)}
       onKeyDown={handleKeyDown}

@@ -43,7 +43,7 @@ context('Backoffice', () => {
     cy.get('[data-cy="Reg. MEMN"]').eq(0).click()
     cy.get('[title="Ouest Cotentin Bivalves"]').eq(0).trigger('mouseover', { force: true })
     cy.get('[data-cy="regulatory-topic-edit"]').should('have.length', 1)
-    cy.get('[data-cy="regulatory-topic-edit"]').click({ force: true })
+    cy.get('[data-cy="regulatory-topic-edit"]').click()
     cy.get('[data-cy="regulatory-topic-edit-input"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-topic-edit-input"]').type(' - changed')
 

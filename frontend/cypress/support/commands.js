@@ -32,7 +32,7 @@ function unquote (str) {
 }
 
 Cypress.Commands.add('cleanScreenshots', fromNumber => {
-  cy.exec(`cd cypress/integration/__image_snapshots__/ && find . | grep -P "[${fromNumber}-7]\.png" | xargs -i rm {}\n`)
+  cy.exec(`cd cypress/e2e/__image_snapshots__/ && find . | grep -P "[${fromNumber}-7]\.png" | xargs -i rm {}\n`)
 })
 
 

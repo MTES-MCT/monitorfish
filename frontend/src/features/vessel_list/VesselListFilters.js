@@ -15,6 +15,7 @@ import { VesselLocation, vesselSize } from '../../domain/entities/vessel'
 import Tag from 'rsuite/lib/Tag'
 import FilterTag from '../vessel_filters/FilterTag'
 
+Countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 const countriesField = Object.keys(Countries.getAlpha2Codes()).map(country => {
   return {
     value: country.toLowerCase(),

@@ -9,7 +9,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
-#      - 5432:5432
+      - 5432:5432
 
   flyway:
     image: flyway/flyway
@@ -18,7 +18,7 @@ services:
       - ../../backend/src/main/resources/db/:/flyway/sql
     depends_on:
       - db
-#
+
   app:
     image: monitorfish-app:$MONITORFISH_VERSION
     container_name: monitorfish_backend

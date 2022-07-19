@@ -1,0 +1,36 @@
+name: CI
+
+on: push
+
+jobs:
+  e2e:
+    name: E2E Test
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: development
+      PORT: 3000
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: npm
+          node-version: 12
+          cache-dependency-path: ./frontend/package.json
+      - name: Install
+        run: npm i
+        working-directory: ./frontend
+      - name: Build & Run Backend
+        run: |
+          docker network inspect monitorfish_network >/dev/null 2>&1 || docker network create monitorfish_network
+          docker compose -f ./infra/dev/docker-compose.yml up -d app
+          sleep 1m
+      - name: Serve Frontend
+        run: sh -c 'npm start' &
+        working-directory: ./frontend
+      - name: Wait for Frontend
+        run: timeout 30 bash -c 'until printf "" 2>>/dev/null >>/dev/tcp/$0/$1; do sleep 1; done' localhost 3000
+      - name: Run Cypress
+        run: npm run cypress:run
+        working-directory: ./frontend

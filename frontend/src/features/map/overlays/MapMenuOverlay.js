@@ -56,10 +56,11 @@ const MapMenuOverlay = ({
       return
     }
 
+    const [startDate, endDate] = dateRange
     const trackRequest = {
       trackDepth: VesselTrackDepth.CUSTOM,
-      afterDateTime: dateRange.startDate,
-      beforeDateTime: dateRange.endDate
+      afterDateTime: startDate,
+      beforeDateTime: endDate
     }
 
     dispatch(showVesselTrack(vessel.vesselProperties, false, trackRequest))
@@ -68,7 +69,7 @@ const MapMenuOverlay = ({
     setIsOpen(false)
     setSelectedDateRange(dateRange)
     setSelectedTrackDepth(undefined)
-  }, [])
+  }, [vessel])
 
   useEffect(() => {
     if (clickedOutsideComponent) {

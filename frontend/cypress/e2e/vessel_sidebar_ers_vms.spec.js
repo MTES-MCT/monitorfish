@@ -49,7 +49,7 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 20000 })
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().eq(0).click()
-    cy.get('*[data-cy="vessel-beacon-malfunction-history-see-more"]', { timeout: 20000 }).click()
+    cy.get('*[data-cy="vessel-beacon-malfunction-history-see-more"]', { timeout: 20000 }).click({ force: true })
     cy.get('*[data-cy="beacon-malfunction-back-to-resume"]', { timeout: 20000 }).click()
     cy.get('*[data-cy="vessel-malfunctions-resume"]', { timeout: 20000 }).should('be.visible')
 

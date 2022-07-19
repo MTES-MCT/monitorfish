@@ -55,7 +55,7 @@ context('Favorite Vessel', () => {
     cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').click()
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]')
-      .should('have.css', 'background', 'rgb(107, 131, 158) none repeat scroll 0% 0%')
+      .should('have.css', 'background', 'rgb(107, 131, 158) none repeat scroll 0% 0% / auto padding-box border-box')
 
     // Then
     cy.get('*[data-cy="favorite-vessels-number"]').contains(1)
@@ -90,7 +90,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessels"]').click()
   })
 
-  it('A favorite vessel track Should be seen on the map and the global track depth Should update the track',() => {
+  it('A favorite vessel track Should be seen on the map and the global track depth Should update the track', () => {
     cy.cleanScreenshots(2)
 
     // Given

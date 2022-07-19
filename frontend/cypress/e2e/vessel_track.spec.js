@@ -6,7 +6,6 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Vessels Track', () => {
   beforeEach(() => {
-    cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
     cy.get('*[data-cy^="first-loader"]', { timeout: 20000 }).should('not.exist')
     cy.url().should('include', '@-82')
@@ -95,9 +94,12 @@ context('Vessels Track', () => {
 
   it('A track Should be showed When clicking on a vessel with CTRL key pressed', () => {
     // When
+    cy.wait(200)
     cy.get('.vessels').click(460, 480, { timeout: 20000, ctrlKey: true, force: true })
+    cy.wait(200)
     cy.get('.vessels').click(504, 289, { timeout: 20000, ctrlKey: true, force: true })
-    cy.get('.vessels').click(297, 298, { timeout: 20000, force: true })
+    cy.wait(200)
+    cy.get('.vessels').click(295, 297, { timeout: 20000, force: true })
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 2)
     cy.wait(200)
 

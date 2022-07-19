@@ -34,7 +34,7 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 20000 }).children().eq(1).contains('Aucune avarie')
 
     // See the details of a beacon malfunction
-    cy.get('*[data-cy="vessel-beacon-malfunction-history-see-more"]', { timeout: 20000 }).click()
+    cy.get('*[data-cy="vessel-beacon-malfunction-history-see-more"]', { timeout: 20000 }).click({ force: true })
     cy.get('*[data-cy="vessel-malfunctions-details"]', { timeout: 20000 }).should('be.visible')
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 20000 }).contains('0 commentaire')
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 20000 }).contains('Avarie en mer ouverte dans MonitorFish, dernière émission à')

@@ -5,7 +5,6 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Control objectives', () => {
   beforeEach(() => {
-    cy.viewport(1280, 1024)
     const currentYear = new Date().getFullYear()
     cy.intercept('GET', `/bff/v1/control_objectives/${currentYear}`).as('controlObjectives')
     cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
@@ -45,6 +44,7 @@ context('Control objectives', () => {
   it('Should update the targetNumberOfControlsAtPort field on an objective', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
+    cy.wait(50)
     cy.get('.rs-table-cell-content').eq(11).children().type('{backspace}{backspace}{backspace}{backspace}{backspace}')
     cy.get('.rs-table-cell-content').eq(11).children().type('23')
     cy.wait('@updateObjective')
@@ -64,6 +64,7 @@ context('Control objectives', () => {
   it('Should update the targetNumberOfControlsAtSea field on an objective', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
+    cy.wait(50)
     cy.get('.rs-table-cell-content').eq(12).children().type('{backspace}{backspace}{backspace}{backspace}{backspace}')
     cy.get('.rs-table-cell-content').eq(12).children().type('23')
     cy.wait('@updateObjective')

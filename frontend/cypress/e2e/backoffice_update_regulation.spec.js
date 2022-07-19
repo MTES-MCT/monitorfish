@@ -6,7 +6,6 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Update Regulation', () => {
   beforeEach(() => {
-    cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/backoffice/regulation`)
     cy.clearLocalStorage()
 
@@ -274,6 +273,7 @@ context('Update Regulation', () => {
 
   it('A modal should not be opened on go back button click, if nothing has been modified', () => {
     // When
+    cy.wait(200)
     cy.get('[data-cy="go-back-link"]').eq(0).click()
 
     // Then
@@ -282,6 +282,7 @@ context('Update Regulation', () => {
   })
 
   it('Form values should be kept when F5 is pressed', () => {
+    cy.wait(200)
     // When F5 is pressed
     cy.reload()
     // then form values are kept

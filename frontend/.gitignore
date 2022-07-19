@@ -152,3 +152,9 @@ dist
 
 # Test exports directory
 /cypress/downloads
+
+# Test snapshots diffs & failures
+/cypress/e2e/__image_snapshots__/*.actual.png
+/cypress/e2e/__image_snapshots__/*.diff.png
+/cypress/e2e/__image_snapshots__/*.diff.png
+/cypress/screenshots

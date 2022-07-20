@@ -7,7 +7,6 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Side window beacon malfunctions', () => {
   beforeEach(() => {
-    cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/side_window`)
     cy.get('*[data-cy="side-window-menu-beacon-malfunctions"]').click()
   })

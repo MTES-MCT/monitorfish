@@ -89,6 +89,7 @@ const RegulatoryLayers = props => {
       </RegulatoryLayersTitle>
       {selectedRegulatoryLayers
         ? <RegulatoryLayersList
+          className={'smooth-scroll'}
           topicLength={Object.keys(selectedRegulatoryLayers).length}
           zoneLength={numberOfZonesOpened}
           showRegulatoryLayers={showRegulatoryLayers}
@@ -131,7 +132,7 @@ const RegulatoryLayersTitle = styled.div`
   border-bottom-left-radius: ${props => props.showRegulatoryLayers ? '0' : '2px'};
   border-bottom-right-radius: ${props => props.showRegulatoryLayers ? '0' : '2px'};
   background: ${COLORS.charcoal};
-  
+
   animation: ${props => props.regulatoryLayersAddedToMySelection ? 'blink' : ''} 0.3s ease forwards;
 
   @keyframes blink {
@@ -154,7 +155,7 @@ const RegulatoryLayersTitle = styled.div`
         background: ${COLORS.charcoal};
     }
   }
-  
+
   color: ${COLORS.gainsboro};
   font-size: 16px;
   cursor: pointer;

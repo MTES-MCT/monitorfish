@@ -17,13 +17,19 @@ export const INPUT_TYPE = {
 
 export const ModifiableCell = ({ rowData, dataKey, id, inputType, maxLength, onChange, ...props }) => {
   return (
-    <Cell title={rowData[dataKey]} key={rowData[id]} {...props} className={'table-content-editing'}>
+    <Cell
+      title={rowData[dataKey]}
+      key={rowData[id]}
+      className={'table-content-editing'}
+      {...props}
+    >
       <FleetSegmentInput
         withinCell
         maxLength={maxLength}
         value={rowData[dataKey]}
         inputType={inputType}
         id={rowData[id]}
+        dataCy={`row-${rowData[id]}-${dataKey}-${rowData[dataKey]}`}
         dataKey={dataKey}
         onChange={onChange}
       />
@@ -70,7 +76,11 @@ export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, wi
 
 export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) => {
   return (
-    <Cell key={rowData.id} {...props} className={'table-content-editing'}>
+    <Cell
+      key={rowData.id}
+      {...props}
+      className={'table-content-editing'}
+    >
       <InputPicker
         value={rowData[dataKey]}
         onChange={value => {

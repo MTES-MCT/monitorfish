@@ -32,7 +32,7 @@ const PendingAlertRow = ({ alert, index, showSilencedAlertForIndex, setShowSilen
 
   useEffect(() => {
     if (focusOnAlert && alert?.id === focusOnAlert?.id) {
-      ref.current?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      ref.current?.scrollIntoView({ block: 'start' })
     }
   }, [focusOnAlert, alert])
 

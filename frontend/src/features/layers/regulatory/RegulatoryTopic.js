@@ -51,7 +51,7 @@ const RegulatoryTopic = props => {
 
   useLayoutEffect(() => {
     if (regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
+      ref.current.scrollIntoView({ block: 'start', inline: 'nearest' })
     }
   }, [])
 
@@ -242,7 +242,7 @@ const Zone = styled.span`
   user-select: none;
   font-weight: 500;
   ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
-  
+
   :hover {
     background: ${COLORS.shadowBlueLittleOpacity};
   }

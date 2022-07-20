@@ -143,8 +143,9 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
           </FlexboxGrid>
         </List.Item>
         <ScrollableContainer
-          style={ScrollableContainerStyle}
           ref={scrollableContainer}
+          className={'smooth-scroll'}
+          style={ScrollableContainerStyle}
         >
           {sortedAlerts.map((alert, index) => (
             <PendingAlertRow

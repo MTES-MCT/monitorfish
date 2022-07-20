@@ -264,7 +264,7 @@ const LastTrip = styled(ArrowLastTripSVG)`
 const Navigation = styled.div`
   width: -moz-available;          /* For Mozilla */
   width: -webkit-fill-available;  /* For Chrome */
-  width: stretch;  
+  width: stretch;
   padding: 0 0 0 10px;
   text-align: center;
   font-size: 13px;
@@ -299,7 +299,7 @@ const Filters = styled.div`
   display: flex;
   margin-top: 8px;
   margin-bottom: 8px;
-  
+
   #react-select-3-input {
     height: 26px;
   }

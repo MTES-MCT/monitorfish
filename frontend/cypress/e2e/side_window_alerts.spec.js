@@ -4,7 +4,6 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Alerts', () => {
   beforeEach(() => {
-    cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/side_window`)
   })
 

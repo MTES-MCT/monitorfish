@@ -45,45 +45,48 @@ context('Control objectives', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(11).children().type('{backspace}{backspace}{backspace}{backspace}{backspace}')
-    cy.get('.rs-table-cell-content').eq(11).children().type('23')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtPort-0"]')
+      .type('{backspace}{backspace}{backspace}{backspace}{backspace}')
+      .type('23')
     cy.wait('@updateObjective')
 
     // Then
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(11).children().should('have.value', '23')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtPort-23"]').should('have.value', '23')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
     cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
     cy.wait('@controlObjectives')
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(11).children().should('have.value', '23')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtPort-23"]').should('have.value', '23')
   })
 
   it('Should update the targetNumberOfControlsAtSea field on an objective', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(12).children().type('{backspace}{backspace}{backspace}{backspace}{backspace}')
-    cy.get('.rs-table-cell-content').eq(12).children().type('23')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtSea-20"]')
+      .type('{backspace}{backspace}{backspace}{backspace}{backspace}')
+      .type('23')
     cy.wait('@updateObjective')
 
     // Then
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(12).children().should('have.value', '23')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtSea-23"]').should('have.value', '23')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
     cy.visit(`http://localhost:${port}/backoffice/control_objectives`)
     cy.wait('@controlObjectives')
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(12).children().should('have.value', '23')
+    cy.get('*[data-cy="row-78-targetNumberOfControlsAtSea-23"]').should('have.value', '23')
   })
 
   it('Should update the controlPriorityLevel field on an objective', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
+    cy.wait(50)
     cy.get('.rs-table-cell-content').eq(14).click()
     cy.get('.rs-picker-select-menu-item').eq(2).click()
     cy.wait('@updateObjective')

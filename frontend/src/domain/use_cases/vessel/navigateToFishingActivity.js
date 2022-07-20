@@ -36,7 +36,7 @@ const navigateToFishingActivity = id => (dispatch, getState) => {
 }
 
 function scrollTo (element) {
-  element.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  element.scrollIntoView()
 }
 
 export default navigateToFishingActivity

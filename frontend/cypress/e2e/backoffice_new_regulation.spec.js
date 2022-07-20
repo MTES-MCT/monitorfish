@@ -5,7 +5,6 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Edit Regulation', () => {
   beforeEach(() => {
-    cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/backoffice/regulation/new`)
     cy.wait(100)
   })
@@ -247,13 +246,13 @@ context('Edit Regulation', () => {
     cy.get('.rs-picker-toggle-placeholder')
       .filter(':contains("catégories d\'espèces")')
       .eq(0)
-      .click({ timeout: 20000 })
+      .click({ timeout: 10000 })
     cy.get('.rs-picker-search-bar-input')
       .type('Espèce{enter}', { force: true })
     cy.get('.rs-picker-toggle-placeholder')
       .filter(':contains("des espèces")')
       .eq(0)
-      .click({ timeout: 20000 })
+      .click({ timeout: 10000 })
     cy.get('.rs-picker-search-bar-input')
       .type('HKE{enter}', { force: true })
 
@@ -272,6 +271,7 @@ context('Edit Regulation', () => {
     cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click()
 
     // Then
+    cy.wait(50)
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')
     cy.get('[data-cy="regulatory-gear-line"]').should('have.length', 4)
     cy.get('[data-cy="mesh-label"]').should('have.length', 2)

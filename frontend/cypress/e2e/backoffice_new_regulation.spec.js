@@ -267,8 +267,8 @@ context('Edit Regulation', () => {
 
     // When
     cy.reload()
-    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
-    cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click()
+    cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click({ force: true })
+    cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click({ force: true })
 
     // Then
     cy.wait(50)

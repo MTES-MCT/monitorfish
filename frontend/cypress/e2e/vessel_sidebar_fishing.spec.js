@@ -17,7 +17,7 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('U_W0')
     cy.wait(50)
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(1).click()
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -37,7 +37,7 @@ context('Vessel sidebar fishing tab', () => {
   it('Fishing Should contain the vessel fishing resume', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -53,7 +53,7 @@ context('Vessel sidebar fishing tab', () => {
   it('Fishing trips Should be walkable', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
@@ -63,19 +63,22 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463715', { timeout: 10000 })
 
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
+    cy.wait(50)
     cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463714', { timeout: 10000 })
 
     cy.get('*[data-cy^="vessel-fishing-previous-trip"]').click({ timeout: 10000 })
+    cy.wait(50)
     cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message - aucune capture', { timeout: 10000 })
 
     cy.get('*[data-cy^="vessel-fishing-next-trip"]').click({ timeout: 10000 })
+    cy.wait(50)
     cy.get('*[data-cy^="vessel-fishing-trip-number"]').contains('Marée n°9463715', { timeout: 10000 })
   })
 
   it('Fishing Should contain the vessel ERS logbook messages', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -119,7 +122,7 @@ context('Vessel sidebar fishing tab', () => {
   it('Fishing Should contain the vessel FLUX logbook messages', () => {
     // Given
     cy.get('.vessels').click(460, 40, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -139,7 +142,7 @@ context('Vessel sidebar fishing tab', () => {
   it('Fishing activities Should be changed according to the actual trip When walking in fishing trips', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000, force: true })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 10000 })
@@ -183,7 +186,7 @@ context('Vessel sidebar fishing tab', () => {
   it('Single fishing activity Should be seen on map When clicking on the position icon', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000, force: true })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 10000 })

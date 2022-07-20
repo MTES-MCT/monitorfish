@@ -5,7 +5,6 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('LayersSidebar', () => {
   beforeEach(() => {
-    cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/#@-224002.65,6302673.54,8.70`)
 
     cy.request('GET', 'http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=' +
@@ -15,18 +14,18 @@ context('LayersSidebar', () => {
       }
     )
 
-    cy.get('*[data-cy^="first-loader"]', { timeout: 20000 }).should('not.exist')
+    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
     cy.url().should('include', '@-22')
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
     // Add the layer to My Zones
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin biva')
-    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 20000 })
-    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 10000 })
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').contains('Ajouter 1 zone')
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()
 
@@ -38,29 +37,29 @@ context('LayersSidebar', () => {
 
     // Show a zone with the zone button
     cy.log('Show a zone with the zone button')
-    cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 20000 })
+    cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 10000 })
     cy.wait(200)
 
-    cy.get('canvas', { timeout: 20000 }).eq(0).click(490, 580, { timeout: 20000, force: true })
+    cy.get('canvas', { timeout: 10000 }).eq(0).click(490, 580, { timeout: 10000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
 
     // Close the metadata modal and hide the zone
     cy.get('*[data-cy="regulatory-layers-metadata-close"]').click()
-    cy.get('*[data-cy="regulatory-layers-my-zones-zone-hide"]').eq(0).click({ timeout: 20000 })
+    cy.get('*[data-cy="regulatory-layers-my-zones-zone-hide"]').eq(0).click({ timeout: 10000 })
 
     // The layer is hidden, the metadata modal should not be opened
-    cy.get('canvas', { timeout: 20000 }).eq(0).click(490, 580, { timeout: 20000, force: true })
-    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 20000 }).should('not.exist')
+    cy.get('canvas', { timeout: 10000 }).eq(0).click(490, 580, { timeout: 10000, force: true })
+    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 10000 }).should('not.exist')
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
     // Add the layer to My Zones
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin', { force: true })
-    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 20000, force: true })
-    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 10000, force: true })
+    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 10000 })
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').contains('Ajouter 1 zone')
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()
 
@@ -72,32 +71,32 @@ context('LayersSidebar', () => {
 
     // Show a zone with the topic button
     cy.log('Show a zone with the topic button')
-    cy.get('*[data-cy="regulatory-layers-my-zones-topic-show"]').eq(0).click({ timeout: 20000 })
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic-show"]').eq(0).click({ timeout: 10000 })
     cy.wait(200)
 
-    cy.get('canvas').eq(0).click(490, 580, { timeout: 20000, force: true })
+    cy.get('canvas').eq(0).click(490, 580, { timeout: 10000, force: true })
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
     cy.get('*[data-cy="regulatory-layers-metadata-close"]').click()
 
     // Delete the zone
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-delete"]').click()
-    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]', { timeout: 20000 }).should('not.exist')
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]', { timeout: 10000 }).should('not.exist')
 
     // The layer is hidden, the metadata modal should not be opened
-    cy.get('canvas').eq(0).click(490, 580, { timeout: 20000, force: true })
-    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 20000 }).should('not.exist')
+    cy.get('canvas').eq(0).click(490, 580, { timeout: 10000, force: true })
+    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 10000 }).should('not.exist')
 
     // Close the layers sidebar
-    cy.get('*[data-cy="layers-sidebar"]', { timeout: 20000 }).click({ timeout: 20000 })
+    cy.get('*[data-cy="layers-sidebar"]', { timeout: 10000 }).click({ timeout: 10000 })
   })
 
   it('The Cotentin regulation metadata Should be opened', () => {
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin')
-    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 20000 })
-    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 10000 })
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
@@ -136,11 +135,11 @@ context('LayersSidebar', () => {
 
   it('The Armor regulation metadata Should be opened', () => {
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
     cy.get('*[data-cy="regulatory-search-input"]').type('Armor')
-    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 20000 })
-    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 10000 })
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
@@ -172,7 +171,7 @@ context('LayersSidebar', () => {
 
   it('An advanced search Should filter the search result', () => {
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin')
     cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
@@ -186,13 +185,13 @@ context('LayersSidebar', () => {
 
   it('A regulation Should be searched with a rectangle', () => {
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
     cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
     cy.get('*[data-cy="regulation-search-box-filter"]').click()
 
-    cy.get('canvas').eq(0).click(490, 580, { timeout: 20000, force: true })
-    cy.get('canvas').eq(0).click(230, 630, { timeout: 20000, force: true })
+    cy.get('canvas').eq(0).click(490, 580, { timeout: 10000, force: true })
+    cy.get('canvas').eq(0).click(230, 630, { timeout: 10000, force: true })
 
     cy.get('*[data-cy="regulation-search-box-filter"]').should('not.exist')
     cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('exist')
@@ -210,14 +209,14 @@ context('LayersSidebar', () => {
 
   it('A regulation Should be searched with a polygon', () => {
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
     cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
     cy.get('*[data-cy="regulation-search-polygon-filter"]').click()
 
-    cy.get('canvas').eq(0).click(490, 580, { timeout: 20000, force: true })
-    cy.get('canvas').eq(0).click(230, 630, { timeout: 20000, force: true })
-    cy.get('canvas').eq(0).dblclick(300, 700, { timeout: 20000, force: true })
+    cy.get('canvas').eq(0).click(490, 580, { timeout: 10000, force: true })
+    cy.get('canvas').eq(0).click(230, 630, { timeout: 10000, force: true })
+    cy.get('canvas').eq(0).dblclick(300, 700, { timeout: 10000, force: true })
 
     cy.get('*[data-cy="regulation-search-polygon-filter"]').should('not.exist')
     cy.get('*[data-cy="regulation-search-polygon-filter-selected"]').should('exist')
@@ -237,13 +236,17 @@ context('LayersSidebar', () => {
     cy.cleanScreenshots(1)
 
     // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 20000 })
-    cy.get('*[data-cy="administrative-zones-open"]').click({ timeout: 20000, force: true })
-    cy.get('*[data-cy="administrative-layer-toggle"]').eq(0).click({ timeout: 20000 })
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="administrative-zones-open"]').click({ timeout: 10000, force: true })
+    cy.get('*[data-cy="administrative-layer-toggle"]').eq(0).click({ timeout: 10000 })
     cy.wait(500)
 
     // Then
     cy.get('.administrative').toMatchImageSnapshot({
+      imageConfig: {
+        threshold: 0.05,
+        thresholdType: "percent",
+      },
       screenshotConfig: {
         clip: { x: 410, y: 0, width: 250, height: 500 }
       }

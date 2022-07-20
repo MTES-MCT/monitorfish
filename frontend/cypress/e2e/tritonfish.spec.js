@@ -4,9 +4,8 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('TritonFish', () => {
   beforeEach(() => {
-    cy.viewport(1280, 1024)
     cy.visit(`http://localhost:${port}/ext#@-824534.42,6082993.21,8.70`)
-    cy.get('*[data-cy="first-loader"]', { timeout: 20000 }).should('not.exist')
+    cy.get('*[data-cy="first-loader"]', { timeout: 10000 }).should('not.exist')
     cy.url().should('include', '@-82')
     cy.wait(200)
   })
@@ -14,8 +13,9 @@ context('TritonFish', () => {
   it('view Should have some features removed', () => {
     // Then
     // Vessel sidebar is minimized
-    cy.get('.vessels').click(460, 480, { timeout: 20000, force: true })
-    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 20000 }).should('be.visible')
+    cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
+    cy.wait(50)
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy="global-risk-factor"]').should('not.exist')
     cy.get('*[data-cy="vessel-sidebar-alert"]').should('not.exist')
     cy.get('*[data-cy="vessel-sidebar-beacon-malfunction"]').should('not.exist')
@@ -38,13 +38,13 @@ context('TritonFish', () => {
     cy.get('*[data-cy="alerts-button"]').should('not.exist')
 
     // No risk factors
-    cy.get('*[data-cy="vessel-labels"]').click({ timeout: 20000 })
-    cy.get('*[data-cy="map-property-trigger"]', { timeout: 20000 })
+    cy.get('*[data-cy="vessel-labels"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("étiquettes des navires")')
-      .click({ timeout: 20000 })
-    cy.get('*[data-cy="vessel-labels"]').click({ timeout: 20000 })
-    cy.wait(200)
-    cy.wait(200)
+      .click({ timeout: 10000 })
+    cy.get('*[data-cy="vessel-labels"]').click({ timeout: 10000 })
+    // For the throttle of labels
+    cy.get('body').type('{upArrow}')
     cy.get('*[data-cy="vessel-label-text"]').should('have.length.to.be.greaterThan', 5)
     cy.get('*[data-cy="vessel-label-risk-factor"]').should('not.exist')
 

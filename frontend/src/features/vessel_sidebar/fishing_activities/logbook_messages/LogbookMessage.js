@@ -330,7 +330,7 @@ const XML = styled(XMLSVG)`
   margin-top: 6.5px;
   margin-right: 8px;
   user-select: none;
-  
+
   tspan {
     font-size: 9px;
   }

@@ -5,7 +5,6 @@ const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Fleet segments', () => {
   beforeEach(() => {
-    cy.viewport(1280, 1024)
     cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
     cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)
     cy.wait('@fleetSegments')

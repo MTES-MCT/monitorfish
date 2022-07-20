@@ -84,7 +84,7 @@ context('Vessel labels', () => {
 
     // But when we click on vessel name it opens the vessel sidebar
     cy.get('*[data-cy="vessel-label-text"]').first().click()
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
   })
 })

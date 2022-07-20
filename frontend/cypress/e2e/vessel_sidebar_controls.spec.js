@@ -16,7 +16,7 @@ context('Vessel sidebar controls tab', () => {
   it('Controls Should contain the controls resume', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -37,7 +37,7 @@ context('Vessel sidebar controls tab', () => {
   it('Last SEA and LAND controls Should be presents', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When

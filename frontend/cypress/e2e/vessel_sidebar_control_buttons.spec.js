@@ -18,7 +18,7 @@ context('Vessel sidebar controls buttons', () => {
   it('Vessel track depth Should be changed', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -40,7 +40,7 @@ context('Vessel sidebar controls buttons', () => {
   it('Vessel track dates Should be changed When walking in fishing trips', () => {
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -64,7 +64,7 @@ context('Vessel sidebar controls buttons', () => {
 
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
@@ -107,7 +107,7 @@ context('Vessel sidebar controls buttons', () => {
     // Given
     cy.wait(50)
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000, force: true })
     cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 10000 })
@@ -119,7 +119,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
     disableSmoothScroll()
     cy.get('*[data-cy^="fishing-activity-name"]').eq(2).click({ force: true, timeout: 10000 })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('#OOF20191030059909').should('be.visible')
     cy.get('#OOF20190627059908').should('not.be.visible')
 
@@ -133,7 +133,7 @@ context('Vessel sidebar controls buttons', () => {
 
     // Given
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When

@@ -17,7 +17,7 @@ context('VesselSearch', () => {
     // When searching a vessel from the last positions table
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // We should be able to search again when the vessel sidebar is already opened
@@ -67,7 +67,7 @@ context('VesselSearch', () => {
     // When
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('BEACON')
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
-    cy.wait(50)
+    cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // Then

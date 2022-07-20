@@ -166,7 +166,7 @@ jobs:
       - name: Run Cypress tests
         uses: cypress-io/github-action@v4
         with:
-          browser: electron
+          browser: firefox
           env: PORT=8880
           install: true
           install-command: npm i

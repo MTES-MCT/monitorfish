@@ -1,7 +1,26 @@
 {
   "name": "monitorfish-frontend",
+  "description": "Monitorfish web application.",
   "version": "0.1.0",
+  "license": "AGPL-3.0",
   "private": true,
+  "engines": {
+    "node": "18",
+    "npm": "8"
+  },
+  "scripts": {
+    "start": "sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
+    "build": "sh -ac '. ../infra/configurations/frontend/.env.${REACT_APP_ENV}; react-scripts build'",
+    "build:dev": "REACT_APP_ENV=dev npm run build",
+    "build:prod": "REACT_APP_ENV=prod npm run build",
+    "build:local": "REACT_APP_ENV=local npm run build",
+    "lint": "eslint src/ --fix",
+    "type": "tsc",
+    "test": "jest --config=./config/jest.config.js --detectOpenHandles",
+    "cypress:open": "cypress open --browser firefox --e2e",
+    "cypress:run": "cypress run --browser firefox --e2e",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@dnd-kit/core": "^4.0.3",
     "@dnd-kit/modifiers": "^4.0.0",
@@ -32,7 +51,7 @@
     "react-device-detect": "^1.17.0",
     "react-dom": "18.2.0",
     "react-epic-spinners": "^0.5.0",
-    "react-highlight-words": "^0.16.0",
+    "react-highlight-words": "0.18.0",
     "react-imask": "^6.1.0",
     "react-markdown": "^6.0.1",
     "react-new-window": "^0.2.1",
@@ -49,22 +68,24 @@
     "timeago.js": "^4.0.2",
     "worker-loader": "^3.0.6"
   },
-  "proxy": "http://localhost:8880",
-  "scripts": {
-    "start": "sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
-    "build": "sh -ac '. ../infra/configurations/frontend/.env.${REACT_APP_ENV}; react-scripts build'",
-    "build:dev": "REACT_APP_ENV=dev npm run build",
-    "build:prod": "REACT_APP_ENV=prod npm run build",
-    "build:local": "REACT_APP_ENV=local npm run build",
-    "lint": "eslint src/ --fix",
-    "type": "tsc",
-    "test": "jest --config=./config/jest.config.js --detectOpenHandles",
-    "cypress:open": "cypress open --browser firefox --e2e",
-    "cypress:run": "cypress run --browser firefox --e2e",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+  "devDependencies": {
+    "@swc/core": "1.2.207",
+    "@swc/jest": "0.2.21",
+    "@tsconfig/create-react-app": "1.0.2",
+    "@types/jest": "^26.0.20",
+    "@types/node": "12.20.55",
+    "@types/react": "18.0.14",
+    "@typescript-eslint/parser": "5.30.5",
+    "cypress": "10.3.0",
+    "cypress-mouse-position": "1.0.0",
+    "eslint": "^7.25.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-react": "^7.23.2",
+    "type-fest": "2.16.0",
+    "typescript": "4.7.4"
   },
   "browserslist": {
     "production": [
@@ -78,24 +99,8 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "@swc/core": "1.2.207",
-    "@swc/jest": "0.2.21",
-    "@tsconfig/create-react-app": "1.0.2",
-    "@types/jest": "^26.0.20",
-    "@types/node": "12.20.55",
-    "@types/react": "18.0.14",
-    "@typescript-eslint/parser": "5.30.5",
-    "cypress": "10.3.0",
-    "cypress-mouse-position": "1.0.0",
-    "cypress-plugin-snapshots": "1.4.4",
-    "eslint": "^7.25.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-react": "^7.23.2",
-    "type-fest": "2.16.0",
-    "typescript": "4.7.4"
-  }
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "proxy": "http://localhost:8880"
 }

@@ -22,7 +22,7 @@ on:
 jobs:
   version:
     name: Set application version and env profile
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     outputs:
       ENV_PROFILE: ${{ steps.env_profile.outputs.ENV_PROFILE }}
       VERSION: ${{ steps.version.outputs.VERSION }}
@@ -58,7 +58,7 @@ jobs:
   build:
     name: Run unit tests, build and package
     needs: version
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     env:
       ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
@@ -72,16 +72,19 @@ jobs:
         with:
           java-version: 11
 
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: NPM install with caching
-        uses: bahmutov/npm-install@v1.6.0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          # Working directory to specify subfolder in which dependencies are defined
-          working-directory: frontend/
-          useLockFile: true
-          # Custom install command to use
-          install-command: npm install
+          cache: npm
+          cache-dependency-path: ./frontend/package-lock.json
+          node-version: 18
+
+      - name: Install Node.js dependencies
+        run: npm ci
+        working-directory: ./frontend
 
       - name: Unit test
         run: make test
@@ -131,7 +134,7 @@ jobs:
   e2e_test:
     name: Run E2E tests
     needs: [version, build]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     strategy:
       # when one test fails, DO NOT cancel the other
       # containers, because this will kill Cypress processes
@@ -150,7 +153,8 @@ jobs:
       ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Download image
         uses: ishworkh/docker-image-artifact-download@v1
@@ -178,13 +182,14 @@ jobs:
   push_to_registry:
     name: Push to registry
     needs: [version, e2e_test]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Download image
         uses: ishworkh/docker-image-artifact-download@v1

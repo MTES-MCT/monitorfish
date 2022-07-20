@@ -29,7 +29,7 @@ RUN mvn clean package -DskipTests=true
 ###########################
 # Build frontend with npm #
 ###########################
-FROM ubuntu:18.04 as buildFront
+FROM ubuntu:22.04 as buildFront
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -47,7 +47,7 @@ RUN apt-get update &&\
     apt-get clean
 USER root
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash &&\
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash && \
  apt-get install -y nodejs
 
 COPY frontend/ /tmp/frontend/
@@ -55,7 +55,7 @@ COPY infra/ /tmp/infra/
 WORKDIR /tmp/frontend
 
 # Files are expected to be in /tmp/frontend/dist/monitorfish-frontend
-RUN npm install &&\
+RUN npm ci && \
     npm run build
 
 ######################

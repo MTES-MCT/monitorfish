@@ -48,7 +48,7 @@ const VesselSidebar = () => {
     isFirstLoad.current = false
   }, [])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setTimeout(() => {
       setSidebarIsShowed(vesselSidebarIsOpen)
     }, 0)

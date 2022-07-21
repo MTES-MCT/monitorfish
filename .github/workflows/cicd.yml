@@ -135,6 +135,11 @@ jobs:
     name: Run E2E tests
     needs: [version, build]
     runs-on: ubuntu-22.04
+    # Mandatory for Firefox to work
+    # https://github.com/cypress-io/github-action#firefox
+    container:
+      image: cypress/browsers:latest
+      options: --user 1001
     strategy:
       # when one test fails, DO NOT cancel the other
       # containers, because this will kill Cypress processes

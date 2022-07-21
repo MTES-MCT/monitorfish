@@ -146,11 +146,13 @@ const VesselList = ({ namespace }) => {
         lastControlMonthsAgo,
         vesselsLocationFilter
       }
-      dispatch(getFilteredVessels(_vessels, filters))
-        .then(_filteredVessels => {
-          setFilteredVessels(_filteredVessels)
-          setVesselsCountShowed(_filteredVessels.length)
-        })
+      setTimeout(() => {
+        dispatch(getFilteredVessels(_vessels, filters))
+          .then(_filteredVessels => {
+            setFilteredVessels(_filteredVessels)
+            setVesselsCountShowed(_filteredVessels.length)
+          })
+      }, 0)
     }
   }, [
     _vessels,

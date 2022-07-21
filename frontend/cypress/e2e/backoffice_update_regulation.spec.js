@@ -113,6 +113,7 @@ context('Update Regulation', () => {
     cy.get('[data-cy="authorized-species-selector"]')
       .filter(':contains("des espèces")')
       .click({ timeout: 10000 })
+    cy.wait(200)
     cy.get('.rs-picker-search-bar-input').type('HKE{enter}')
     cy.get('*[data-cy^="authorized-regulatory-species-remarks"]').eq(0).type('Ne pas en prendre beaucoup please')
 

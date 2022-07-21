@@ -9,7 +9,7 @@ context('Vessel filters', () => {
     cy.url().should('include', '@-82')
   })
 
-  it('A Filter Should be created and added on the map', () => {
+  it.only('A Filter Should be created and added on the map', () => {
     // Given
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-list-country-filter"]')
@@ -17,7 +17,9 @@ context('Vessel filters', () => {
     cy.get('*[data-cy="select-picker-menu-item-France"]')
       .scrollIntoView()
       .click()
+    cy.wait(200)
     cy.get('*[class^="rs-picker-tag-wrapper"]').eq(1).type('NWW01/02{enter}')
+    cy.wait(200)
     cy.get('*[class^="rs-picker-tag-wrapper"]').eq(3).type('HKE{enter}')
 
     // When

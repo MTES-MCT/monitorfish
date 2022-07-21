@@ -1,7 +1,5 @@
-import React from 'react'
 import { BrowserRouter as Router, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
-import { ToastProvider } from 'react-toast-notifications'
 import { browserName, browserVersion } from 'react-device-detect'
 import { PersistGate } from 'redux-persist/integration/react'
 import countries from 'i18n-iso-countries'
@@ -63,7 +61,6 @@ function App () {
 
   return (
     <>
-      <ToastProvider placement="bottom-right">
         <Router>
           <Switch>
             <Route path="/backoffice">
@@ -91,7 +88,6 @@ function App () {
             </Route>
           </Switch>
         </Router>
-      </ToastProvider>
     </>
   )
 }

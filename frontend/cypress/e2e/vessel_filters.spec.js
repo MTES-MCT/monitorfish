@@ -18,7 +18,11 @@ context('Vessel filters', () => {
       .scrollIntoView()
       .click()
     cy.wait(200)
-    cy.get('*[class^="rs-picker-tag-wrapper"]').eq(1).type('NWW01/02{enter}')
+    cy.get('*[data-cy="vessel-list-fleet-segment-filter"]')
+      .click({ force: true })
+    cy.get('*[data-cy^="select-picker-menu-item-NWW01/02"]')
+      .scrollIntoView()
+      .click()
     cy.wait(200)
     cy.get('*[class^="rs-picker-tag-wrapper"]').eq(3).type('HKE{enter}')
 

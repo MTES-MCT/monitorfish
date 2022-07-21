@@ -1,8 +1,6 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-import { disableSmoothScroll } from './utils'
-
 const dayjs = require('dayjs')
 
 const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
@@ -117,7 +115,6 @@ context('Vessel sidebar controls buttons', () => {
     // Then
     cy.wait(200)
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
-    disableSmoothScroll()
     cy.get('*[data-cy^="fishing-activity-name"]').eq(2).click({ force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('#OOF20191030059909').should('be.visible')

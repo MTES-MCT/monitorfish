@@ -153,5 +153,11 @@ Cypress.on('uncaught:exception', (err) => {
     return false
   }
 
+  // This React error does not reproduce in real life
+  // It might be a bug resolved in React 18 : https://github.com/facebook/react/issues/17355#issuecomment-1173055443
+  if (err.message.includes('Should not already be working')) {
+    return false
+  }
+
   return undefined
 })

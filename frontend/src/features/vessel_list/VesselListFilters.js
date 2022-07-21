@@ -137,6 +137,7 @@ const VesselListFilters = ({
         renderValue={(_, items) => renderTagPickerValue(items)}
       />
       <TagPicker
+        data-cy={'vessel-list-fleet-segment-filter'}
         value={fleetSegments.fleetSegmentsFiltered}
         style={tagPickerStyle}
         data={fleetSegmentsField}

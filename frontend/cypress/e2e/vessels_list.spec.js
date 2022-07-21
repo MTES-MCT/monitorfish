@@ -16,6 +16,7 @@ context('Vessels list', () => {
       .filter(':contains("étiquettes des navires")')
       .click({ timeout: 10000 })
 
+    cy.wait(200)
     cy.get('*[data-cy="vessel-list"]').click({ timeout: 20000 })
     cy.wait(200)
     cy.get('*[data-cy="vessel-list-country-filter"]')

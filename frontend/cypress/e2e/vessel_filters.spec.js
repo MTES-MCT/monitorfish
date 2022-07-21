@@ -9,7 +9,7 @@ context('Vessel filters', () => {
     cy.url().should('include', '@-82')
   })
 
-  it.only('A Filter Should be created and added on the map', () => {
+  it('A Filter Should be created and added on the map', () => {
     // Given
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-list-country-filter"]')

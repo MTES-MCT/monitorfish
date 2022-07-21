@@ -1,12 +1,11 @@
 import { useEffect } from 'react'
-import { useToasts } from 'react-toast-notifications'
+import { toast } from 'react-toastify'
 
 import { useSelector } from 'react-redux'
 import { errorType } from '../../domain/entities/errors'
 
 const ErrorToastNotification = () => {
   const error = useSelector(state => state.global.error)
-  const { addToast } = useToasts()
 
   useEffect(() => {
     if (error && error.message) {
@@ -15,16 +14,14 @@ const ErrorToastNotification = () => {
       }
 
       if (error.type) {
-        addToast(error.message.split(':')[0], {
-          appearance: error.type,
-          autoDismiss: true,
-          autoDismissTimeout: 10000
+        toast.error(error.message.split(':')[0], {
+          autoClose: 10000,
+          position: 'bottom-right'
         })
       } else {
-        addToast(error.message.split(':')[0], {
-          appearance: 'warning',
-          autoDismiss: true,
-          autoDismissTimeout: 10000
+        toast.warning(error.message.split(':')[0], {
+          autoClose: 10000,
+          position: 'bottom-right'
         })
       }
     }

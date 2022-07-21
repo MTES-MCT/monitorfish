@@ -6,7 +6,7 @@ export default defineConfig({
   scrollBehavior: false,
   projectId: '9b7q8z',
   retries: {
-    runMode: 2,
+    runMode: 3,
     openMode: 0
   },
   env: {

@@ -12,7 +12,11 @@ context('Vessel filters', () => {
   it('A Filter Should be created and added on the map', () => {
     // Given
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 10000 })
-    cy.get('*[class^="rs-picker-tag-wrapper"]').eq(0).type('France{enter}')
+    cy.get('*[data-cy="vessel-list-country-filter"]')
+      .click({ force: true })
+    cy.get('*[data-cy="select-picker-menu-item-France"]')
+      .scrollIntoView()
+      .click()
     cy.get('*[class^="rs-picker-tag-wrapper"]').eq(1).type('NWW01/02{enter}')
     cy.get('*[class^="rs-picker-tag-wrapper"]').eq(3).type('HKE{enter}')
 

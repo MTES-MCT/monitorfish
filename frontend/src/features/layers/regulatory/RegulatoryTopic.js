@@ -135,15 +135,15 @@ const RegulatoryTopic = props => {
               onClick={onRegulatoryTopicClick}
             >
               {
-                !isLayerNameEditable
-                  ? <Text>
-                    {regulatoryTopic}
-                  </Text>
-                  : <RegulatoryTopicInput
+                isLayerNameEditable
+                  ? <RegulatoryTopicInput
                     topic={regulatoryTopic}
                     updateTopic={updateLayerName}
                     setIsTopicEditable={setIsLayerNameEditable}
                   />
+                  : <Text>
+                    {regulatoryTopic}
+                  </Text>
               }
             </Name>
             <ZonesNumber>

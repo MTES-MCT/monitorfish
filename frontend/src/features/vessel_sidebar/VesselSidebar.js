@@ -34,60 +34,58 @@ const VesselSidebar = () => {
   } = useSelector(state => state.global)
   const {
     selectedVessel,
-    vesselSidebarTab,
-    vesselSidebarIsOpen
+    vesselSidebarTab
   } = useSelector(state => state.vessel)
   const isFocusedOnVesselSearch = useSelector(state => state.vessel.isFocusedOnVesselSearch)
   const adminRole = useSelector(state => state.global.adminRole)
 
-  const isFirstLoad = useRef(true)
   const [isTrackRequestOpen, setIsTrackRequestOpen] = useState(false)
-  const [sidebarIsShowed, setSidebarIsShowed] = useState(false)
+  const [isFirstLoad, setIsFirstLoad] = useState(false)
 
   useEffect(() => {
-    isFirstLoad.current = false
+    const timeoutHandler = setTimeout(() => {
+      setIsFirstLoad(true)
+    }, 0)
+
+    return () => {
+      clearTimeout(timeoutHandler)
+      setIsFirstLoad(false)
+    }
   }, [])
 
-  useEffect(() => {
-    setTimeout(() => {
-      setSidebarIsShowed(vesselSidebarIsOpen)
-    }, 0)
-  }, [vesselSidebarIsOpen])
-
-  return vesselSidebarIsOpen && <>
+  return <>
     <AddToFavorites
-      sidebarIsOpen={sidebarIsShowed}
+      sidebarIsOpen={isFirstLoad}
       rightMenuIsOpen={rightMenuIsOpen}
     />
-    {sidebarIsShowed && <TrackRequest
+    {isFirstLoad && <TrackRequest
       isRightMenuOpen={rightMenuIsOpen}
       isTrackRequestOpen={isTrackRequestOpen}
       setIsTrackRequestOpen={setIsTrackRequestOpen}
     />}
     <AnimateToTrack
-      sidebarIsOpen={sidebarIsShowed}
+      sidebarIsOpen={isFirstLoad}
       rightMenuIsOpen={rightMenuIsOpen}
     />
     <HideNonSelectedVessels
-      sidebarIsOpen={sidebarIsShowed}
+      sidebarIsOpen={isFirstLoad}
       rightMenuIsOpen={rightMenuIsOpen}
     />
     <ShowFishingActivitiesOnMap
-      sidebarIsOpen={sidebarIsShowed}
+      sidebarIsOpen={isFirstLoad}
       rightMenuIsOpen={rightMenuIsOpen}
     />
     <TrackExport
-      sidebarIsOpen={sidebarIsShowed}
+      sidebarIsOpen={isFirstLoad}
       rightMenuIsOpen={rightMenuIsOpen}
     />
     <Wrapper
       data-cy={'vessel-sidebar'}
       healthcheckTextWarning={healthcheckTextWarning}
-      sidebarIsOpen={sidebarIsShowed}
-      firstUpdate={isFirstLoad.current}
+      sidebarIsOpen={isFirstLoad}
       rightMenuIsOpen={rightMenuIsOpen}
     >
-      <GrayOverlay isOverlayed={isFocusedOnVesselSearch && !isFirstLoad.current}/>
+      <GrayOverlay isOverlayed={isFocusedOnVesselSearch && isFirstLoad}/>
       <div>
         <TabList>
           {

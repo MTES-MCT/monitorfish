@@ -253,7 +253,7 @@ context('Edit Regulation', () => {
       .filter(':contains("des espèces")')
       .eq(0)
       .click({ timeout: 10000 })
-    cy.wait(50)
+    cy.wait(200)
     cy.get('.rs-picker-search-bar-input')
       .type('HKE{enter}', { force: true })
 

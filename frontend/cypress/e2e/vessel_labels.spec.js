@@ -80,7 +80,7 @@ context('Vessel labels', () => {
       .trigger('click', { force: true, pointerId: 1 })
 
     // Then
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('not.be.visible')
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('not.exist')
 
     // But when we click on vessel name it opens the vessel sidebar
     cy.get('*[data-cy="vessel-label-text"]').first().click()

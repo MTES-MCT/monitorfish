@@ -19,7 +19,7 @@ const countriesField = Object.keys(Countries.getAlpha2Codes()).map(country => {
 
 function renderTagPickerMenuItem (item) {
   return (
-    <Label>
+    <Label data-cy={`select-picker-menu-item-${item.label}`}>
       {item.label}
     </Label>
   )

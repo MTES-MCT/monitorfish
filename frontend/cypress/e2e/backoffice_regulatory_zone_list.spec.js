@@ -40,14 +40,14 @@ context('Backoffice', () => {
     cy.intercept('POST', '/geoserver/wfs', { hostname: 'localhost' }).as('postRegulation')
 
     cy.get('[data-cy="Reg. MEMN"]').eq(0).click()
-    cy.get('[title="Ouest Cotentin Bivalves"]').eq(0).trigger('mouseover', { force: true })
-    cy.get('[data-cy="regulatory-layername-edit"]').should('have.length', 1)
-    cy.get('[data-cy="regulatory-layername-edit"]').eq(0).click()
-    cy.get('[data-cy="layer-name-input"]').should('have.length', 1)
-    cy.get('[data-cy="layer-name-input"]').eq(0).type(' - changed')
+    cy.get('[title="Ouest Cotentin Bivalves"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="regulatory-layername-edit"]').should('be.visible')
+    cy.get('[data-cy="regulatory-layername-edit"]').click({ force: true })
+    cy.get('[data-cy="layer-name-input"]').should('exist')
+    cy.get('[data-cy="layer-name-input"]').should("not.be.disabled")
+    cy.get('[data-cy="layer-name-input"]').type(' - changed{enter}', { force: true })
 
     // When
-    cy.get('[data-cy="layer-name-input"]').eq(0).type('{enter}')
     cy.get('[data-cy="layer-name-input"]').should('not.exist')
 
     cy.wait('@postRegulation')

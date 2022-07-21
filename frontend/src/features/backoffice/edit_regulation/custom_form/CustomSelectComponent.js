@@ -35,6 +35,7 @@ const CustomSelectComponent = props => {
   return (
     <SelectWrapper padding={padding}>
       <CustomSelectPicker
+        virtualized
         style={style || DEFAULT_SELECT_PICKER_STYLE}
         searchable={searchable}
         cleanable={cleanable}

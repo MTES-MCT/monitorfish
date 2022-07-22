@@ -1,11 +1,9 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('LayersSidebar', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/#@-224002.65,6302673.54,8.70`)
+    cy.visit('/#@-224002.65,6302673.54,8.70')
 
     cy.request('GET', 'http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=' +
       'monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id').then(
@@ -245,7 +243,7 @@ context('LayersSidebar', () => {
     cy.get('.administrative').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
-        thresholdType: "percent",
+        thresholdType: 'percent'
       },
       screenshotConfig: {
         clip: { x: 410, y: 0, width: 250, height: 500 }

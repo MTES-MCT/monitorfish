@@ -1,10 +1,8 @@
 /// <reference types="cypress" />
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('Beacon malfunction', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/#@-689844.87,6014092.52,10.57`)
+    cy.visit('/#@-689844.87,6014092.52,10.57')
     cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
     cy.url().should('include', '@-68')
   })
@@ -23,7 +21,7 @@ context('Beacon malfunction', () => {
     cy.get('.vessels').eq(0).toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
-        thresholdType: "percent",
+        thresholdType: 'percent'
       },
       screenshotConfig: {
         clip: { x: 475, y: 570, width: 200, height: 200 }

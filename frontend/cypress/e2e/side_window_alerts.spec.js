@@ -1,10 +1,8 @@
 /// <reference types="cypress" />
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('Alerts', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/side_window`)
+    cy.visit('/side_window')
   })
 
   it('Nine alerts Should be shown When clicking on the NAMO menu', () => {
@@ -57,7 +55,7 @@ context('Alerts', () => {
       .then(({ request, response }) => expect(response.statusCode).equal(200))
 
     // The value is saved in database when I refresh the page
-    cy.visit(`http://localhost:${port}/side_window`)
+    cy.visit('/side_window')
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 8)
     // As the alert is validated, it will be silenced for 4 hours but not shown in the silenced alerts table
@@ -79,7 +77,7 @@ context('Alerts', () => {
     cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 3)
 
     // The value is saved in database when I refresh the page
-    cy.visit(`http://localhost:${port}/side_window`)
+    cy.visit('/side_window')
     cy.wait(200)
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 7)

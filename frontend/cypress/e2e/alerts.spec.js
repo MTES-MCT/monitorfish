@@ -1,10 +1,8 @@
 /// <reference types="cypress" />
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('Alerts', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
+    cy.visit('/#@-824534.42,6082993.21,8.70')
     cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
     cy.url().should('include', '@-82')
   })
@@ -23,7 +21,7 @@ context('Alerts', () => {
     cy.get('.vessels').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
-        thresholdType: "percent",
+        thresholdType: 'percent'
       },
       screenshotConfig: {
         clip: { x: 400, y: 400, width: 200, height: 200 }

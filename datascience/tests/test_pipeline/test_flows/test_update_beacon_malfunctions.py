@@ -13,6 +13,7 @@ from src.pipeline.flows.update_beacon_malfunctions import (
     EndOfMalfunctionReason,
     extract_beacons_last_emission,
     extract_known_malfunctions,
+    extract_vessels_less_than_twelve_meters_to_monitor,
     extract_vessels_with_beacon,
     flow,
     get_current_malfunctions,
@@ -48,6 +49,11 @@ def test_extract_beacons_last_emission_selects_all_vessels(reset_test_data):
 def test_extract_known_malfunctions(reset_test_data):
     malfunctions = extract_known_malfunctions.run()
     assert set(malfunctions.ircs) == {"OLY7853", "ZZ000000"}
+
+
+def test_extract_vessels_less_than_twelve_meters_to_monitor():
+    vessels = extract_vessels_less_than_twelve_meters_to_monitor.run()
+    assert isinstance(vessels, set)
 
 
 def test_extract_vessels_with_beacon(reset_test_data):
@@ -264,8 +270,8 @@ def test_get_vessels_emitting_filters_on_max_duration_at_sea_and_at_port_and_is_
 def test_get_vessels_that_should_emit():
     vessels_with_beacon = pd.DataFrame(
         {
-            "vessel_ids": [1, 2, 3, 4, 5, 6],
-            "other_data": ["A", "B", "C", "D", "E", "F"],
+            "vessel_ids": range(1, 10),
+            "cfr": list("ABCDEFGHI"),
             "beacon_status": [
                 beaconStatus.ACTIVATED.value,
                 beaconStatus.NON_APPROVED.value,
@@ -273,13 +279,22 @@ def test_get_vessels_that_should_emit():
                 beaconStatus.IN_TEST.value,
                 beaconStatus.DEACTIVATED.value,
                 beaconStatus.ACTIVATED.value,
+                beaconStatus.ACTIVATED.value,
+                beaconStatus.ACTIVATED.value,
+                beaconStatus.ACTIVATED.value,
             ],
+            "length": [11.5, 11.99, 12, 12.01, 12.5, 25.69, 5.69, 11.56, 36.5],
+            "other_data": list("abcdefghi"),
         }
     )
 
-    vessels_that_should_emit = get_vessels_that_should_emit.run(vessels_with_beacon)
+    less_than_twelve_to_monitor = {"A", "E", "F", "G"}
+
+    vessels_that_should_emit = get_vessels_that_should_emit.run(
+        vessels_with_beacon, less_than_twelve_to_monitor
+    )
     expected_vessels_that_should_emit = vessels_with_beacon.loc[
-        [0, 5], ["vessel_ids", "other_data"]
+        [0, 5, 6, 8], ["vessel_ids", "cfr", "length", "other_data"]
     ].reset_index(drop=True)
 
     pd.testing.assert_frame_equal(

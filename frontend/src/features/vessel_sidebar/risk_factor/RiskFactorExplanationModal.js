@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Modal from 'rsuite/lib/Modal'
+import { Modal } from 'rsuite'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as RiskFactorImpactSVG } from '../../icons/Note_impact_poisson.svg'
 import { ReactComponent as RiskFactorControlSVG } from '../../icons/Note_de_controle_gyrophare.svg'
@@ -20,9 +20,9 @@ const RiskFactorExplanationModal = ({ isOpen, setIsOpen }) => {
     <Modal
       size={'lg'}
       backdrop
-      show={isOpen}
+      open={isOpen}
       style={{ marginTop: 50 }}
-      onHide={() => setIsOpen(false)}
+      onClose={() => setIsOpen(false)}
     >
       <Modal.Header>
         <Modal.Title>

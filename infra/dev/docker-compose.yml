@@ -1,0 +1,82 @@
+services:
+  app:
+    container_name: monitorfish_app
+    image: ghcr.io/mtes-mct/monitorfish/monitorfish-app:v1.14.3_snapshot
+    environment:
+      - ENV_DB_URL=jdbc:postgresql://db:5432/monitorfishdb?user=postgres&password=postgres
+      - SPRING_PROFILES_ACTIVE=prod
+      - HOST_IP=127.0.0.1
+      - REACT_APP_GEOSERVER_LOCAL_URL=http://0.0.0.0:8081
+      - REACT_APP_GEOSERVER_REMOTE_URL=http://0.0.0.0:8081
+      - REACT_APP_CYPRESS_TEST=true
+    ports:
+      - 8880:8880
+      - 8000:8000
+      - 5000:5000
+      - 5001:5001
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+    depends_on:
+      - flyway
+      - geoserver
+    networks:
+      - monitorfish_network
+
+  db:
+    container_name: monitorfish_db
+    image: timescale/timescaledb-postgis:1.7.4-pg11
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=monitorfishdb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - monitorfish_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1s
+      timeout: 1s
+      retries: 30
+
+  flyway:
+    container_name: monitorfish_flyway
+    image: flyway/flyway
+    command: -url=jdbc:postgresql://db:5432/monitorfishdb -schemas=public -user=postgres -password=postgres -connectRetries=60 migrate
+    volumes:
+      - ../../backend/src/main/resources/db/:/flyway/sql
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - monitorfish_network
+
+  geoserver:
+    container_name: monitorfish_geoserver
+    image: kartoza/geoserver:2.18.0
+    restart: unless-stopped
+    ports:
+      - 8081:8080
+    links:
+      - "db:db"
+    volumes:
+      - geoserver-data:/opt/geoserver/data_dir
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - monitorfish_network
+
+volumes:
+  db-data:
+    driver: local
+  geoserver-data:
+    driver: local
+
+networks:
+  monitorfish_network:
+    external: true

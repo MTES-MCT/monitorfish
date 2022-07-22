@@ -37,7 +37,7 @@ const DateRange = (props) => {
         Du <CustomDatePicker
           value={startDate}
           saveValue={setStartDate}
-          format='DD/MM/YYYY'
+          format='dd/MM/yyyy'
           placement={'rightStart'}
           style={{ margin: '0px 5px' }}
           disabled={disabled}
@@ -46,7 +46,7 @@ const DateRange = (props) => {
         au <CustomDatePicker
           value={endDate}
           saveValue={setEndDate}
-          format='DD/MM/YYYY'
+          format='dd/MM/yyyy'
           placement={'rightStart'}
           style={{ margin: '0px 0px 0px 5px' }}
           disabled={disabled}

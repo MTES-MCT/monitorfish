@@ -3,8 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { Flag } from '../../vessel_list/tableCells'
 import { batch, useDispatch, useSelector } from 'react-redux'
-import List from 'rsuite/lib/List'
-import FlexboxGrid from 'rsuite/lib/FlexboxGrid'
+import { FlexboxGrid, List } from 'rsuite'
 import countries from 'i18n-iso-countries'
 import * as timeago from 'timeago.js'
 import { getAlertNameFromType, getSilencedAlertPeriodText } from '../../../domain/entities/alerts'
@@ -33,7 +32,7 @@ const PendingAlertRow = ({ alert, index, showSilencedAlertForIndex, setShowSilen
 
   useEffect(() => {
     if (focusOnAlert && alert?.id === focusOnAlert?.id) {
-      ref.current?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      ref.current?.scrollIntoView({ block: 'start' })
     }
   }, [focusOnAlert, alert])
 

@@ -1,32 +1,38 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import { endOfBeaconMalfunctionReasons, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
-import SelectPicker from 'rsuite/lib/SelectPicker'
+import { SelectPicker } from 'rsuite'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
-import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 
-const VesselStatusSelectOrEndOfMalfunction = props => {
-  const {
-    domRef,
-    vesselStatus,
-    /** @type {BeaconMalfunction} */
-    beaconMalfunction,
-    updateVesselStatus,
-    isMalfunctioning,
-    showedInCard,
-    isAbsolute,
-    baseRef
-  } = props
-  const endOfBeaconMalfunctionReason = endOfBeaconMalfunctionReasons[beaconMalfunction?.endOfBeaconMalfunctionReason]
+/**
+ * @typedef {object} VesselStatusSelectOrEndOfMalfunctionProps
+ * @property {BeaconMalfunction} beaconMalfunction
+ * @property {unknown} domRef
+ * @property {boolean=} isAbsolute
+ * @property {boolean} isMalfunctioning
+ * @property {unknown} showedInCard
+ * @property {unknown} updateVesselStatus
+ * @property {unknown} vesselStatus
+ */
+
+/**
+ * @param {VesselStatusSelectOrEndOfMalfunctionProps} props
+ */
+export function VesselStatusSelectOrEndOfMalfunction ({
+  beaconMalfunction,
+  domRef,
+  isAbsolute = false,
+  isMalfunctioning,
+  showedInCard,
+  updateVesselStatus,
+  vesselStatus
+}) {
   const selectMenuRef = useRef()
-  const [vesselStatusSelectIsOpened, setVesselStatusSelectIsOpened] = useState(false)
-  const clickedOutsideVesselStatusMenu = useClickOutsideWhenOpenedWithinRef(selectMenuRef, vesselStatusSelectIsOpened, baseRef)
 
-  useEffect(() => {
-    if (clickedOutsideVesselStatusMenu) {
-      setVesselStatusSelectIsOpened(false)
-    }
-  }, [clickedOutsideVesselStatusMenu])
+  const endOfBeaconMalfunctionReason = useMemo(
+    () => endOfBeaconMalfunctionReasons[beaconMalfunction?.endOfBeaconMalfunctionReason],
+    [beaconMalfunction]
+  )
 
   return vesselStatus && isMalfunctioning
     ? <>
@@ -37,8 +43,6 @@ const VesselStatusSelectOrEndOfMalfunction = props => {
           : { position: 'relative', marginLeft: -10, marginTop: -48 }}
         style={selectPickerStyle}
         searchable={false}
-        open={vesselStatusSelectIsOpened}
-        onClick={() => setVesselStatusSelectIsOpened(true)}
         value={vesselStatus.value}
         onChange={status => updateVesselStatus(beaconMalfunction, status)}
         data={vesselStatuses}

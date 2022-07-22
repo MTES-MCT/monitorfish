@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CustomInput } from '../../commonStyles/Input.style'
 
 const RegulatoryTopicInput = props => {
@@ -9,7 +9,6 @@ const RegulatoryTopicInput = props => {
   } = props
 
   const [value, setValue] = useState()
-  const ref = useRef()
 
   const update = () => {
     if (value && value !== topic) {
@@ -18,7 +17,7 @@ const RegulatoryTopicInput = props => {
     setIsTopicEditable(false)
   }
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = event => {
     if (event.key === 'Enter') {
       update()
     }
@@ -28,19 +27,14 @@ const RegulatoryTopicInput = props => {
   }
 
   useEffect(() => {
-    ref.current.focus()
-  }, [])
-
-  useEffect(() => {
     setValue(topic)
   }, [topic])
 
   return (<CustomInput
+      disabled={false}
       data-cy="layer-name-input"
-      inputRef={ref}
       value={value}
       onChange={val => setValue(val)}
-      onBlur={update}
       onKeyDown={handleKeyDown}
     />)
 }

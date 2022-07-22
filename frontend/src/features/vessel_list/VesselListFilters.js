@@ -1,18 +1,13 @@
 import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import SelectPicker from 'rsuite/lib/SelectPicker'
+import { Checkbox, CheckboxGroup, MultiCascader, SelectPicker, Tag, TagPicker } from 'rsuite'
 import { lastControlAfterLabels, lastPositionTimeAgoLabels } from './dataFormatting'
-import TagPicker from 'rsuite/lib/TagPicker'
-import MultiCascader from 'rsuite/lib/MultiCascader'
 import { layersType as LayersType } from '../../domain/entities/layers'
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as BoxFilterSVG } from '../icons/Filtre_zone_rectangle.svg'
 import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygone.svg'
 import Countries from 'i18n-iso-countries'
-import Checkbox from 'rsuite/lib/Checkbox'
-import CheckboxGroup from 'rsuite/lib/CheckboxGroup'
 import { VesselLocation, vesselSize } from '../../domain/entities/vessel'
-import Tag from 'rsuite/lib/Tag'
 import FilterTag from '../vessel_filters/FilterTag'
 
 const countriesField = Object.keys(Countries.getAlpha2Codes()).map(country => {
@@ -24,7 +19,7 @@ const countriesField = Object.keys(Countries.getAlpha2Codes()).map(country => {
 
 function renderTagPickerMenuItem (item) {
   return (
-    <Label>
+    <Label data-cy={`select-picker-menu-item-${item.label}`}>
       {item.label}
     </Label>
   )
@@ -88,14 +83,16 @@ const VesselListFilters = ({
   }, [species.species])
 
   const districtsField = useMemo(() => {
-    if (districts.districts && districts.districts.length) {
-      return districts.districts.map(district => {
-        return {
-          value: district.district,
-          label: `${district.district} (${district.districtCode})`
-        }
-      })
+    if (!districts.districts || !districts.districts.length) {
+      return []
     }
+
+    return districts.districts.map(district => {
+      return {
+        value: district.district,
+        label: `${district.district} (${district.districtCode})`
+      }
+    })
   }, [districts.districts])
 
   const { zonesSelected, callRemoveZoneSelected } = zones
@@ -140,6 +137,7 @@ const VesselListFilters = ({
         renderValue={(_, items) => renderTagPickerValue(items)}
       />
       <TagPicker
+        data-cy={'vessel-list-fleet-segment-filter'}
         value={fleetSegments.fleetSegmentsFiltered}
         style={tagPickerStyle}
         data={fleetSegmentsField}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import Table from 'rsuite/lib/Table'
+import { SelectPicker, Table } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   ControlPriorityCell,
@@ -15,7 +15,6 @@ import {
 import updateControlObjective from '../../../domain/use_cases/controlObjective/updateControlObjective'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import deleteControlObjective from '../../../domain/use_cases/controlObjective/deleteControlObjective'
-import SelectPicker from 'rsuite/lib/SelectPicker'
 import addControlObjective from '../../../domain/use_cases/controlObjective/addControlObjective'
 
 const { Column, HeaderCell } = Table

@@ -36,11 +36,10 @@ const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselSt
 
   useEffect(() => {
     if (vesselStatus?.color && beaconMalfunction?.id && getIsMalfunctioning(beaconMalfunction?.stage)) {
-      // Target the `select-picker` DOM component
-      vesselStatusRef.current.children[1].style.background = vesselStatus.color
-      // Target the `rs-picker-toggle-value` span DOM component
-      vesselStatusRef.current.children[1].firstChild.firstChild.firstChild.style.color = vesselStatus.textColor
-      vesselStatusRef.current.children[1].style.setProperty('margin', '2px 10px 10px 0px', 'important')
+      // TODO Use styled-component and avoid useEffect to update these elements style.
+      vesselStatusRef.current.querySelector('.rs-picker-select').style.background = vesselStatus.color
+      vesselStatusRef.current.querySelector('[data-cy="side-window-beacon-malfunctions-vessel-status"]').style.color = vesselStatus.textColor
+      vesselStatusRef.current.querySelector('.rs-picker-select').style.setProperty('margin', '2px 10px 10px 0px', 'important')
     }
   }, [vesselStatus, beaconMalfunction, vesselStatusRef])
 
@@ -136,13 +135,12 @@ const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselSt
               AVARIE #{beaconMalfunction?.id} - {' '}{getBeaconCreationOrModificationDate(beaconMalfunction)}
             </ColumnTitle>
             <VesselStatusSelectOrEndOfMalfunction
-              isAbsolute={true}
-              domRef={vesselStatusRef}
               beaconMalfunction={beaconMalfunction}
-              vesselStatus={vesselStatus}
-              updateVesselStatus={updateVesselStatus}
+              domRef={vesselStatusRef}
+              isAbsolute
               isMalfunctioning={getIsMalfunctioning(beaconMalfunction?.stage)}
-              baseRef={baseRef}
+              updateVesselStatus={updateVesselStatus}
+              vesselStatus={vesselStatus}
             />
           </Malfunctioning>
           <LastPosition

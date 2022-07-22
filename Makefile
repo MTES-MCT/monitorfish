@@ -5,22 +5,37 @@ INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 # DEV commands
 install:
 	cd frontend && npm install
-run:
-	docker-compose -f ./docker-compose.yml -f ./infra/dev/docker-compose.dev.yml up -d app
-	make run-front
 run-front:
 	cd frontend && npm start
 run-back:
-	docker-compose up -d
+	docker compose up -d
 	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local"
 erase-db:
-	docker-compose down
+	docker compose down
 	docker volume rm monitorfish_db-data
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
 test: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
 	cd frontend && CI=true npm test
+dev:
+	docker network inspect monitorfish_network >/dev/null 2>&1 || docker network create monitorfish_network
+	docker compose -f ./infra/dev/docker-compose.yml up -d app
+	sh -c 'make run-front'
+dev-erase:
+	docker compose -f ./infra/dev/docker-compose.yml down -v
+dev-reset:
+	rm -f ./frontend/cypress/downloads/*
+	docker compose -f ./infra/dev/docker-compose.yml stop app geoserver
+	docker compose -f ./infra/dev/docker-compose.yml exec db \
+		psql -U postgres -d postgres -c "DROP DATABASE IF EXISTS  monitorfishdb;"
+	docker compose -f ./infra/dev/docker-compose.yml exec db \
+		psql -U postgres -d postgres -c "CREATE DATABASE monitorfishdb;"
+	docker compose -f ./infra/dev/docker-compose.yml up flyway
+	docker compose -f ./infra/dev/docker-compose.yml start app
+	docker compose -f ./infra/dev/docker-compose.yml logs -f app
+dev-stop:
+	docker compose -f ./infra/dev/docker-compose.yml down
 
 # CI commands - app
 docker-build:

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
@@ -15,35 +15,26 @@ import {
 } from '../../../domain/entities/beaconMalfunction'
 import VesselStatusSelectOrEndOfMalfunction from './VesselStatusSelectOrEndOfMalfunction'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
-import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl, verticalScrollRef, isDragging, isDroppedId, activeBeaconId, showed, baseRef }) => {
+const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl, verticalScrollRef, isDragging, isDroppedId, activeBeaconId, showed }) => {
   const dispatch = useDispatch()
   const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconMalfunction?.vesselStatus)
+  /** @type {import('react').MutableRefObject<HTMLDivElement>} */
   const ref = useRef()
-  const [vesselStatusSelectIsOpened, setVesselStatusSelectIsOpened] = useState(false)
-  const clickedOutsideVesselStatusMenu = useClickOutsideWhenOpenedWithinRef(ref, vesselStatusSelectIsOpened, baseRef)
-
-  useEffect(() => {
-    if (clickedOutsideVesselStatusMenu) {
-      setVesselStatusSelectIsOpened(false)
-    }
-  }, [clickedOutsideVesselStatusMenu])
 
   useEffect(() => {
     if (vesselStatus.color && beaconMalfunction?.id && getIsMalfunctioning(beaconMalfunction?.stage)) {
-      // Target the `rs-select-picker` DOM component
-      ref.current.firstChild.style.background = vesselStatus.color
-      // Target the `rs-picker-toggle-value` span DOM component
-      ref.current.firstChild.firstChild.firstChild.firstChild.style.color = vesselStatus.textColor
+      // TODO Use styled-component and avoid useEffect to update these elements style.
+      ref.current.querySelector('.rs-picker-select').style.background = vesselStatus.color
+      ref.current.querySelector('.rs-picker-toggle-value').style.color = vesselStatus.textColor
     }
   }, [vesselStatus, beaconMalfunction, ref])
 
   useEffect(() => {
     if (showed && beaconMalfunction) {
-      ref.current?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      ref.current?.scrollIntoView({ block: 'start' })
     }
   }, [showed, beaconMalfunction, ref])
 
@@ -111,13 +102,12 @@ const BeaconMalfunctionCard = ({ beaconMalfunction, updateVesselStatus, baseUrl,
     </Header>
     <Body ref={ref}>
       <VesselStatusSelectOrEndOfMalfunction
-        domRef={ref}
         beaconMalfunction={beaconMalfunction}
-        vesselStatus={vesselStatus}
-        updateVesselStatus={updateVesselStatus}
+        domRef={ref}
         isMalfunctioning={getIsMalfunctioning(beaconMalfunction?.stage)}
         showedInCard={true}
-        baseRef={baseRef}
+        updateVesselStatus={updateVesselStatus}
+        vesselStatus={vesselStatus}
       />
       <Row style={rowStyle(false)}>
         {getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}

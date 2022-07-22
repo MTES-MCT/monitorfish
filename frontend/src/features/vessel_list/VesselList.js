@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { batch, useDispatch, useSelector } from 'react-redux'
-import Modal from 'rsuite/lib/Modal'
+import { Modal } from 'rsuite'
 
 import { layersType } from '../../domain/entities/layers'
 import { InteractionTypes } from '../../domain/entities/map'
@@ -146,11 +146,13 @@ const VesselList = ({ namespace }) => {
         lastControlMonthsAgo,
         vesselsLocationFilter
       }
-      dispatch(getFilteredVessels(_vessels, filters))
-        .then(_filteredVessels => {
-          setFilteredVessels(_filteredVessels)
-          setVesselsCountShowed(_filteredVessels.length)
-        })
+      setTimeout(() => {
+        dispatch(getFilteredVessels(_vessels, filters))
+          .then(_filteredVessels => {
+            setFilteredVessels(_filteredVessels)
+            setVesselsCountShowed(_filteredVessels.length)
+          })
+      }, 0)
     }
   }, [
     _vessels,
@@ -341,8 +343,8 @@ const VesselList = ({ namespace }) => {
         <Modal
           full
           backdrop={'static'}
-          show={vesselListModalIsOpen}
-          onHide={() => closeAndResetVesselList()}
+          open={vesselListModalIsOpen}
+          onClose={() => closeAndResetVesselList()}
         >
           <Modal.Header>
             <Modal.Title>
@@ -516,7 +518,7 @@ const VesselListIcon = styled(MapButtonStyle)`
   right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
   background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   transition: all 0.3s;
-  
+
   :hover, :focus {
       background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }
@@ -526,7 +528,7 @@ const Vessel = styled(VesselListSVG)`
   width: 25px;
   height: 25px;
   animation: ${props => !props.isTitle ? props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-icon-hidden' : 'vessel-icon-visible' : null} 0.2s ease forwards;
-  
+
   @keyframes vessel-icon-visible {
     0%   {
       opacity: 0;

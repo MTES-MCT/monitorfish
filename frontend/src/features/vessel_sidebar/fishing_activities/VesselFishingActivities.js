@@ -87,7 +87,7 @@ const VesselFishingActivities = () => {
 
   return <>
     { !loadingFishingActivities && !processingMessagesResume
-      ? <Wrapper data-cy={'vessel-fishing'}>
+      ? <Wrapper data-cy={'vessel-fishing'} className={'smooth-scroll'}>
         {
           nextFishingActivities
             ? <>
@@ -160,7 +160,7 @@ const UpdateFishingActivitiesButton = styled.div`
   cursor: pointer;
   animation: pulse 2s infinite;
   z-index: 10;
-  
+
   @-webkit-keyframes pulse {
   0% {
     -webkit-box-shadow: 0 0 0 0 rgba(81,81,81, 0.4);

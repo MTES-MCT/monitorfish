@@ -24,6 +24,7 @@ const StageColumn = ({ stage, beaconMalfunctions, updateVesselStatus, isDroppedI
     <ScrollableContainer
       style={ScrollableContainerStyle}
       ref={verticalScrollRef}
+      className={'smooth-scroll'}
     >
       {
         beaconMalfunctions

@@ -13,6 +13,7 @@ import {
 import { batch, useDispatch } from 'react-redux'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
+import { getVesselId } from '../../../domain/entities/vessel'
 
 const X = 0
 const Y = 1
@@ -120,7 +121,7 @@ const VesselLabelOverlay = ({
     <WrapperToBeKeptForDOMManagement>
       <Wrapper
         ref={ref}
-        data-cy={'vessel-label-draggable'}
+        data-cy={`vessel-label-draggable-${getVesselId(identity)}`}
         onClick={() => {
           if (overlayIsPanning.current) {
             overlayIsPanning.current = false

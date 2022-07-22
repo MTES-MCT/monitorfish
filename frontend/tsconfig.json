@@ -1,0 +1,38 @@
+{
+  "extends": "@tsconfig/create-react-app/tsconfig.json",
+  "compilerOptions": {
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    "baseUrl": ".",
+    "checkJs": true,
+    "exactOptionalPropertyTypes": false,
+    "incremental": true,
+    "isolatedModules": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "target": "ES2022",
+    "types": ["cypress", "node"],
+    "useUnknownInCatchVariables": true
+  },
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules/*"],
+  "ts-node": {
+    "swc": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
+}

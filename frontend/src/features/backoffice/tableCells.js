@@ -1,13 +1,10 @@
-import InputPicker from 'rsuite/lib/InputPicker'
 import { COLORS } from '../../constants/constants'
 import { RiskFactorBox } from '../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../domain/entities/riskFactor'
 import { ReactComponent as DeleteIconSVG } from '../icons/Icone_suppression.svg'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import Table from 'rsuite/lib/Table'
-import TagPicker from 'rsuite/lib/TagPicker'
-import Tag from 'rsuite/lib/Tag'
+import { InputPicker, Table, Tag, TagPicker } from 'rsuite'
 import { useClickOutsideWhenOpenedAndNotInSelector } from '../../hooks/useClickOutsideWhenOpenedAndNotInSelector'
 
 const { Cell } = Table
@@ -20,13 +17,19 @@ export const INPUT_TYPE = {
 
 export const ModifiableCell = ({ rowData, dataKey, id, inputType, maxLength, onChange, ...props }) => {
   return (
-    <Cell title={rowData[dataKey]} key={rowData[id]} {...props} className={'table-content-editing'}>
+    <Cell
+      title={rowData[dataKey]}
+      key={rowData[id]}
+      className={'table-content-editing'}
+      {...props}
+    >
       <FleetSegmentInput
         withinCell
         maxLength={maxLength}
         value={rowData[dataKey]}
         inputType={inputType}
         id={rowData[id]}
+        dataCy={`row-${rowData[id]}-${dataKey}-${rowData[dataKey]}`}
         dataKey={dataKey}
         onChange={onChange}
       />
@@ -36,6 +39,7 @@ export const ModifiableCell = ({ rowData, dataKey, id, inputType, maxLength, onC
 
 export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, withinCell, onChange, dataCy }) => <input
   data-cy={dataCy}
+  id={id}
   style={{
     fontSize: 13,
     marginTop: withinCell ? -8 : 5,
@@ -72,7 +76,11 @@ export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, wi
 
 export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) => {
   return (
-    <Cell key={rowData.id} {...props} className={'table-content-editing'}>
+    <Cell
+      key={rowData.id}
+      {...props}
+      className={'table-content-editing'}
+    >
       <InputPicker
         value={rowData[dataKey]}
         onChange={value => {

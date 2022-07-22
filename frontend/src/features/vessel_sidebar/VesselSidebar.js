@@ -32,9 +32,9 @@ const VesselSidebar = () => {
   }, [])
 
   return <>
-    {isFirstLoad && <TrackRequest
+    <TrackRequest
       sidebarIsOpen={isFirstLoad}
-    />}
+    />
     <AnimateToTrack
       sidebarIsOpen={isFirstLoad}
     />

@@ -381,14 +381,14 @@ VALUES  ('OOF20190227050001', 9463711, 'OOF', '2018-02-17T01:05:00Z', 'DAT', 'OO
         '{"faoZoneExited": "27.8.a", "latitudeExited": 46.488, "longitudeExited": -1.851, "effortZoneExited": "C", "economicZoneExited": "FRA", "targetSpeciesOnExit": "DEM", "effortZoneExitDatetimeUtc": "2020-08-09T13:47:00Z", "statisticalRectangleExited": "21E8"}',
         '2021-01-18T07:17:18.98256Z', 'ERS', 'e-Sacapt Secours ERSV3 V 1.0.10'),
        ('OOF20190617059901', 9463715, 'OOF', '2019-10-17T01:32:00Z', 'DAT', 'OOF20190617059901', null,
-        '2019-06-17T01:32:00Z',
+        '2019-10-17T01:32:00Z',
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'COE',
         '{"faoZoneEntered": "27.8.a", "latitudeEnetered": 46.695, "effortZoneEntered": "C", "longitudeEnetered": -1.943, "economicZoneEntered": "FRA", "targetSpeciesOnEntry": "PEL", "effortZoneEntryDatetimeUtc": "2020-08-10T03:16:00Z", "statisticalRectangleEntered": "22E8"}',
         '2021-01-18T07:17:18.324128Z', 'ERS', 'FP/VISIOCaptures V1.4.7'),
        ('OOF20190617056738', 9463715, 'OOF', '2019-10-17T01:32:00Z', 'DAT', 'OOF20190617056738', null,
-        '2019-06-17T01:32:00Z',
+        '2019-10-17T01:32:00Z',
         'FAK000999999', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FRA', null, 'CRO',
-        '{"faoZoneEntered": "27.8.a", "latitudeEnetered": 46.695, "effortZoneEntered": "C", "longitudeEnetered": -1.943, "economicZoneEntered": "FRA", "targetSpeciesOnEntry": "PEL", "effortZoneEntryDatetimeUtc": "2020-08-10T03:16:00Z", "statisticalRectangleEntered": "22E8", "faoZoneExited": "27.7.d", "latitudeExited": 49.629, "longitudeExited": -0.899, "effortZoneExited": "B", "economicZoneExited": "FRA", "targetSpeciesOnExit": null, "effortZoneExitDatetimeUtc": "2020-11-04T20:50:00Z", "statisticalRectangleExited": "28E9"}',
+        '{"faoZoneEntered": "27.8.a", "latitudeEntered": 46.695, "effortZoneEntered": "C", "longitudeEntered": -1.943, "economicZoneEntered": "FRA", "targetSpeciesOnEntry": "PEL", "effortZoneEntryDatetimeUtc": "2020-08-10T03:16:00Z", "statisticalRectangleEntered": "22E8", "faoZoneExited": "27.7.d", "latitudeExited": 49.629, "longitudeExited": -0.899, "effortZoneExited": "B", "economicZoneExited": "FRA", "targetSpeciesOnExit": null, "effortZoneExitDatetimeUtc": "2020-11-04T20:50:00Z", "statisticalRectangleExited": "28E9"}',
         '2021-01-18T07:17:18.324128Z', 'ERS', 'TurboCatch (3.7-1)'),
        ('OOF20191030059902', 9463715, 'OOF', '2019-10-17T11:32:00Z', 'DAT', 'OOF20191030059902', null,
         '2019-10-30T11:32:00Z',
@@ -501,8 +501,8 @@ WHERE operation_number = 'OOF20190830059906';
 
 UPDATE logbook_reports
 SET
- value = jsonb_set(value, '{landingDatetimeUtc}', concat('"', to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'), '"')::jsonb),
- report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes'
+ value = jsonb_set(value, '{landingDatetimeUtc}', concat('"', to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '11 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'), '"')::jsonb),
+ report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '11 hours 45 minutes'
 WHERE operation_number = 'OOF20190627059908';
 
 UPDATE logbook_reports
@@ -513,6 +513,6 @@ WHERE operation_number = 'OOF20191030059909';
 
 UPDATE logbook_reports
 SET
-    value = jsonb_set("value", array['hauls', '0', 'farDatetimeUtc'], concat('"', to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '11 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'), '"')::jsonb),
-    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '11 hours 45 minutes'
+    value = jsonb_set("value", array['hauls', '0', 'farDatetimeUtc'], concat('"', to_char((now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes', 'YYYY-MM-DD"T"HH24:MI:SSZ'), '"')::jsonb),
+    report_datetime_utc = (now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '19 hours 45 minutes'
 WHERE operation_number = 'OOF20191030059903';

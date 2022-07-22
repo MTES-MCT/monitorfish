@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react'
+import React, { createRef, useCallback, useEffect, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
@@ -22,20 +22,16 @@ const CloseVesselTrackOverlay = props => {
     zIndex: 9999,
     offset: [10, -25]
   }))
-  const [close, setClose] = useState(false)
 
-  useEffect(() => {
-    if (close) {
-      map.removeOverlay(overlay)
-      dispatch(hideVesselTrack(vesselId))
-    }
-  }, [close])
+  const close = useCallback(() => {
+    map.removeOverlay(overlay)
+    dispatch(hideVesselTrack(vesselId))
+  }, [map, overlay, vesselId])
 
   useEffect(() => {
     if (map && coordinates?.length) {
       overlay.setPosition(coordinates)
       overlay.setElement(ref.current)
-      ref.current.parentNode.className = 'ol-overlay-container ol-selectable overlay-active'
 
       map.addOverlay(overlay)
 
@@ -50,7 +46,7 @@ const CloseVesselTrackOverlay = props => {
       <div ref={ref}>
         <CloseVesselTrack
           data-cy={'close-vessel-track'}
-          onClick={() => setClose(true)}
+          onClick={close}
         />
       </div>
     </WrapperToBeKeptForDOMManagement>

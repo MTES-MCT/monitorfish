@@ -198,7 +198,7 @@ jobs:
       - name: Run Cypress tests
         run: |
           while ! echo exit | nc localhost 8880; do sleep 10; done
-          npm run cypress:run --parallel --record
+          npm exec cypress run --browser /snap/bin/firefox --e2e --parallel --port 8880 --record
         working-directory: ./frontend
 
   push_to_registry:

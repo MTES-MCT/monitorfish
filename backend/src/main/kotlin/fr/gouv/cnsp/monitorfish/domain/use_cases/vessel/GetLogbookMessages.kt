@@ -20,7 +20,7 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
     fun execute(internalReferenceNumber: String, afterDepartureDate: ZonedDateTime, beforeDepartureDate: ZonedDateTime, tripNumber: String): List<LogbookMessage> {
         val messages = logbookReportRepository
                 .findAllMessagesByTripNumberBetweenDates(internalReferenceNumber, afterDepartureDate, beforeDepartureDate, tripNumber)
-                .sortedBy { it.operationDateTime }
+                .sortedBy { it.reportDateTime }
                 .map {
                     try {
                         val rawMessage = logbookRawMessageRepository.findRawMessage(it.operationNumber)
@@ -130,38 +130,54 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
 
     private fun setNamesFromCodes(message: COE) {
         message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
-            try {
-                message.targetSpeciesNameOnEntry = speciesRepository.find(targetSpeciesOnEntry).name
-            } catch (e: CodeNotFoundException) {
-                logger.warn(e.message)
+            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find { it.name === targetSpeciesOnEntry }?.value
+
+            if (message.targetSpeciesNameOnEntry == null) {
+                try {
+                    message.targetSpeciesNameOnEntry = speciesRepository.find(targetSpeciesOnEntry).name
+                } catch (e: CodeNotFoundException) {
+                    logger.warn(e.message)
+                }
             }
         }
     }
 
     private fun setNamesFromCodes(message: COX) {
         message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
-            try {
-                message.targetSpeciesNameOnExit = speciesRepository.find(targetSpeciesOnExit).name
-            } catch (e: CodeNotFoundException) {
-                logger.warn(e.message)
+            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find { it.name === targetSpeciesOnExit }?.value
+
+            if (message.targetSpeciesNameOnExit == null) {
+                try {
+                    message.targetSpeciesNameOnExit = speciesRepository.find(targetSpeciesOnExit).name
+                } catch (e: CodeNotFoundException) {
+                    logger.warn(e.message)
+                }
             }
         }
     }
 
     private fun setNamesFromCodes(message: CRO) {
-        message.targetSpeciesOnExit?.let { targetSpeciesOnEntry ->
-            try {
-                message.targetSpeciesNameOnExit = speciesRepository.find(targetSpeciesOnEntry).name
-            } catch (e: CodeNotFoundException) {
-                logger.warn(e.message)
+        message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
+            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find { it.name === targetSpeciesOnExit }?.value
+
+            if (message.targetSpeciesNameOnExit == null) {
+                try {
+                    message.targetSpeciesNameOnExit = speciesRepository.find(targetSpeciesOnExit).name
+                } catch (e: CodeNotFoundException) {
+                    logger.warn(e.message)
+                }
             }
         }
 
         message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
-            try {
-                message.targetSpeciesNameOnEntry = speciesRepository.find(targetSpeciesOnEntry).name
-            } catch (e: CodeNotFoundException) {
-                logger.warn(e.message)
+            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find { it.name === targetSpeciesOnEntry }?.value
+
+            if (message.targetSpeciesNameOnEntry == null) {
+                try {
+                    message.targetSpeciesNameOnEntry = speciesRepository.find(targetSpeciesOnEntry).name
+                } catch (e: CodeNotFoundException) {
+                    logger.warn(e.message)
+                }
             }
         }
     }

@@ -1,12 +1,10 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('Fleet segments', () => {
   beforeEach(() => {
     cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
-    cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)
+    cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
   })
 
@@ -38,7 +36,7 @@ context('Fleet segments', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
-    cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)
+    cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
     cy.get('.rs-table-cell-content').eq(8).children().should('have.value', '1.9')
@@ -58,7 +56,7 @@ context('Fleet segments', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
-    cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)
+    cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
     cy.get('.rs-table-cell-content').eq(9).children().should('have.value', 'ATL036')
@@ -77,7 +75,7 @@ context('Fleet segments', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
-    cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)
+    cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
     cy.get('.rs-table-cell-content').eq(10).children().should('have.value', 'All Trawls 45')
@@ -103,7 +101,7 @@ context('Fleet segments', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
-    cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)
+    cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
     cy.get('.rs-table-cell-content').eq(11).contains('OTM')
@@ -128,7 +126,7 @@ context('Fleet segments', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
-    cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)
+    cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
     cy.get('.rs-table-row').should('have.length', 43)
@@ -183,7 +181,7 @@ context('Fleet segments', () => {
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
-    cy.visit(`http://localhost:${port}/backoffice/fleet_segments`)
+    cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
     cy.get('.rs-table-row').should('have.length', 44)

@@ -1,10 +1,12 @@
 import { defineConfig } from 'cypress'
 
 const IS_CI = Boolean(process.env.CI)
+const DEFAULT_PORT = IS_CI ? 8880 : 3000
 
 export default defineConfig({
   projectId: '9b7q8z',
   e2e: {
+    baseUrl: `http://localhost:${DEFAULT_PORT}`,
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.

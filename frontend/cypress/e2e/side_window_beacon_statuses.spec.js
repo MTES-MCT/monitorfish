@@ -3,11 +3,9 @@
 import { CustomDate } from '../../src/libs/CustomDate'
 import { getDate } from '../../src/utils'
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('Side window beacon malfunctions', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/side_window`)
+    cy.visit('/side_window')
     cy.get('*[data-cy="side-window-menu-beacon-malfunctions"]').click()
   })
 

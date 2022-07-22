@@ -2,11 +2,9 @@
 /// <reference types="cypress" />
 import { getDate } from '../../src/utils'
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('Update Regulation', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/backoffice/regulation`)
+    cy.visit('/backoffice/regulation')
     cy.clearLocalStorage()
 
     // Open a regulation to edit
@@ -228,7 +226,7 @@ context('Update Regulation', () => {
     cy.wait('@postRegulation')
       .then(({ request, response }) => {
         expect(request.body)
-            // Unauthorized
+        // Unauthorized
           .contain('{"unauthorized":{"allGears":false,"allTowedGears":false,"allPassiveGears":false,' +
             '"regulatedGearCategories":{},"regulatedGears":{"OT":{"code":"OT","name":"Chaluts à panneaux (non spécifiés)",' +
             '"category":"Chaluts","groupId":1}},"selectedCategoriesAndGears":["OT"]},' +

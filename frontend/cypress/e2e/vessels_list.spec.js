@@ -1,10 +1,9 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
 
 context('Vessels list', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,7.70`)
+    cy.visit('/#@-824534.42,6082993.21,7.70')
     cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
     cy.url().should('include', '@-82')
   })

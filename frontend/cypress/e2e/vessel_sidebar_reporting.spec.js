@@ -1,11 +1,9 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('Vessel sidebar reporting tab', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
+    cy.visit('/#@-824534.42,6082993.21,8.70')
     cy.get('*[data-cy="first-loader"]', { timeout: 10000 }).should('not.exist')
     cy.url().should('include', '@-82')
   })
@@ -18,7 +16,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
-    cy.intercept('GET', `/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*`).as('reporting')
+    cy.intercept('GET', '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*').as('reporting')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
     cy.wait('@reporting')
@@ -81,7 +79,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
-    cy.intercept('GET', `/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*`).as('reporting')
+    cy.intercept('GET', '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*').as('reporting')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
     cy.wait('@reporting')

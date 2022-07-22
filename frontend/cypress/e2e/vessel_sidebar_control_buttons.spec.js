@@ -3,11 +3,9 @@
 
 const dayjs = require('dayjs')
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('Vessel sidebar controls buttons', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/#@-824534.42,6082993.21,8.70`)
+    cy.visit('/#@-824534.42,6082993.21,8.70')
     cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
     cy.url().should('include', '@-82')
     cy.wait(200)
@@ -140,7 +138,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('.vessels').eq(0).toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
-        thresholdType: "percent",
+        thresholdType: 'percent'
       },
       screenshotConfig: {
         clip: { x: 210, y: 0, width: 500, height: 840 }

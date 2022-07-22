@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import 'rsuite/dist/rsuite.css'
 import 'mini.css'
 import 'nouislider/distribute/nouislider.css'
@@ -27,10 +27,11 @@ if (!(process.env.NODE_ENV === 'development')) {
   })
 }
 
-ReactDOM.render(
-  <React.StrictMode>
+const container = document.getElementById('root')
+const root = createRoot(container)
+
+root.render(
+  <>
     <GlobalFonts/>
     <App/>
-  </React.StrictMode>,
-  document.getElementById('root')
-)
+  </>)

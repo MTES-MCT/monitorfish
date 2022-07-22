@@ -1,11 +1,9 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('Backoffice', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/backoffice/regulation`)
+    cy.visit('/backoffice/regulation')
     cy.wait(200)
   })
 
@@ -44,7 +42,7 @@ context('Backoffice', () => {
     cy.get('[data-cy="regulatory-topic-edit"]').should('be.visible')
     cy.get('[data-cy="regulatory-topic-edit"]').click({ force: true })
     cy.get('[data-cy="regulatory-topic-edit-input"]').should('exist')
-    cy.get('[data-cy="regulatory-topic-edit-input"]').should("not.be.disabled")
+    cy.get('[data-cy="regulatory-topic-edit-input"]').should('not.be.disabled')
     cy.get('[data-cy="regulatory-topic-edit-input"]').type(' - changed{enter}', { force: true })
 
     // When
@@ -59,8 +57,8 @@ context('Backoffice', () => {
 
     // Then
     cy.get('[data-cy="regulatory-layers-my-zones-topic"]').then(elements => {
-      expect(elements.eq(0)).contain("Ouest Cotentin Bivalves - changed")
-      expect(elements.eq(0).parent()).contain("1/1")
+      expect(elements.eq(0)).contain('Ouest Cotentin Bivalves - changed')
+      expect(elements.eq(0).parent()).contain('1/1')
     })
   })
 })

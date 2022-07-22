@@ -1,11 +1,9 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('Edit Regulation', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/backoffice/regulation/new`)
+    cy.visit('/backoffice/regulation/new')
     cy.wait(100)
   })
 

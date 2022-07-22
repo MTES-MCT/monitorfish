@@ -1,10 +1,8 @@
 /// <reference types="cypress" />
 
-const port = Cypress.env('PORT') ? Cypress.env('PORT') : 3000
-
 context('Vessel visibility', () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:${port}/#@-487249.11,6076055.47,15.77`)
+    cy.visit('/#@-487249.11,6076055.47,15.77')
     cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
     cy.url().should('include', '@-48')
   })
@@ -24,5 +22,4 @@ context('Vessel visibility', () => {
     // Then
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 12)
   })
-
 })

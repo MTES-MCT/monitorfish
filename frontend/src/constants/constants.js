@@ -39,7 +39,7 @@ export const COLORS = {
   opal: '#a5bcc0'
 }
 
-export const HIT_PIXEL_TO_TOLERANCE = 3
+export const HIT_PIXEL_TO_TOLERANCE = 10
 
 /**
  * @enum {string}

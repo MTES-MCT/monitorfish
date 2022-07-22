@@ -19,7 +19,7 @@ import Measurement from './features/measurements/Measurement'
 import VesselFilters from './features/vessel_filters/VesselFilters'
 import EditRegulation from './features/backoffice/edit_regulation/EditRegulation'
 import { ReactComponent as AlertSVG } from './features/icons/Picto_alerte.svg'
-import { Provider } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 import { backofficeStore, homeStore, backofficePersistor } from './Store'
 import NamespaceContext from './domain/context/NamespaceContext'
 import Healthcheck from './features/healthcheck/Healthcheck'
@@ -65,13 +65,27 @@ function App () {
         <Router>
           <Switch>
             <Route path="/backoffice">
-              <BackofficePage/>
+              <Provider store={backofficeStore}>
+                <PersistGate loading={null} persistor={backofficePersistor}>
+                  <NamespaceContext.Provider value={'backoffice'}>
+                  <BackofficePage/>
+                </NamespaceContext.Provider>
+                </PersistGate>
+              </Provider>
             </Route>
             <Route exact path="/ext">
-              <TritonFish/>
+              <Provider store={homeStore}>
+                <NamespaceContext.Provider value={'homepage'}>
+                  <TritonFish/>
+                </NamespaceContext.Provider>
+              </Provider>
             </Route>
             <Route path="/">
-              <HomePage/>
+              <Provider store={homeStore}>
+                <NamespaceContext.Provider value={'homepage'}>
+                  <HomePage/>
+                </NamespaceContext.Provider>
+              </Provider>
             </Route>
           </Switch>
         </Router>
@@ -81,8 +95,9 @@ function App () {
 }
 
 function HomePage () {
-  return <Provider store={homeStore}>
-      <NamespaceContext.Provider value={'homepage'}>
+  const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
+
+  return <>
         <StateManager
           inBackofficeMode={false}
           adminRole={true}
@@ -108,7 +123,7 @@ function HomePage () {
               <VesselFilters/>
               <VesselVisibility/>
               <FavoriteVessels/>
-              <VesselSidebar/>
+              {vesselSidebarIsOpen && <VesselSidebar/>}
               <UpdatingVesselLoader/>
               <Measurement/>
               <InterestPoint/>
@@ -119,13 +134,13 @@ function HomePage () {
             </Wrapper>
           </Route>
         </Switch>
-      </NamespaceContext.Provider>
-  </Provider>
+      </>
 }
 
 function TritonFish () {
-  return <Provider store={homeStore}>
-    <NamespaceContext.Provider value={'homepage'}>
+  const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
+
+  return <>
       <StateManager
         inBackofficeMode={false}
         adminRole={false}
@@ -141,7 +156,7 @@ function TritonFish () {
         <VesselFilters/>
         <VesselVisibility/>
         <FavoriteVessels/>
-        <VesselSidebar/>
+        {vesselSidebarIsOpen && <VesselSidebar/>}
         <UpdatingVesselLoader/>
         <Measurement/>
         <InterestPoint/>
@@ -149,16 +164,13 @@ function TritonFish () {
         <APIWorker/>
         <ErrorToastNotification/>
       </Wrapper>
-    </NamespaceContext.Provider>
-  </Provider>
+    </>
 }
 
 function BackofficePage () {
   const match = useRouteMatch()
 
-  return <Provider store={backofficeStore}>
-    <PersistGate loading={null} persistor={backofficePersistor}>
-      <NamespaceContext.Provider value={'backoffice'}>
+  return <>
         <StateManager inBackofficeMode={true}/>
         <BackofficeWrapper>
           <Menu/>
@@ -186,9 +198,7 @@ function BackofficePage () {
           </Switch>
         </BackofficeWrapper>
         <ErrorToastNotification/>
-      </NamespaceContext.Provider>
-    </PersistGate>
-  </Provider>
+      </>
 }
 
 function getUnsupportedBrowser () {

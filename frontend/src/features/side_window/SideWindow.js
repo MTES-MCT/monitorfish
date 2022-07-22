@@ -173,7 +173,7 @@ const Text = styled.span`
 const Wrapper = styled.div`
   display: flex;
   background: ${COLORS.white};
-  
+
   @keyframes blink {
     0%   {
       background: ${COLORS.background};
@@ -185,7 +185,7 @@ const Wrapper = styled.div`
       background: ${COLORS.background};
     }
   }
-  
+
   @keyframes close-alert-transition-item {
     60% {
       height: 15px;
@@ -235,7 +235,7 @@ const Wrapper = styled.div`
   .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-caret, .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-clean {
     top: 5px;
   }
-  
+
   .rs-btn-toggle {
     background: #C8DCE6 0% 0% no-repeat padding-box;
     border: 1px solid #707785;
@@ -246,11 +246,11 @@ const Wrapper = styled.div`
     background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
     top: 1px;
   }
-  
+
   .rs-list-item {
     box-shadow: unset;
   }
-  
+
   .loader {
     width: 15px;
     height: 15px;

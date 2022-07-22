@@ -6,15 +6,19 @@ import { SilencedAlertPeriod } from '../../../domain/entities/alerts'
 import DateRange from '../../vessel_sidebar/actions/track_request/DateRange'
 
 /**
+ * @typedef {object} SilenceAlertMenuProps
+ * @property {*} showSilencedAlertForIndex
+ * @property {*} setShowSilencedAlertForIndex
+ * @property {*} silenceAlert
+ * @property {*} baseRef
+ * @property {*} id
+ * @property {*} scrollableContainer
+ */
+
+/**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
- * @param showSilencedAlertForIndex
- * @param setShowSilencedAlertForIndex
- * @param silenceAlert
- * @param baseRef
- * @param id
- * @param scrollableContainer
- * @return {JSX.Element}
- * @constructor
+ *
+ * @param {SilenceAlertMenuProps} props
  */
 const SilenceAlertMenu = ({
   showSilencedAlertForIndex,
@@ -31,7 +35,8 @@ const SilenceAlertMenu = ({
     }
   }, [])
   const clickedOutside = useClickOutsideWhenOpenedWithinRef(silencedAlertRef, showSilencedAlertForIndex, baseRef)
-  const [selectedDates, setSelectedDates] = useState([])
+  /** @type {[[Date, Date], *]} */
+  const [selectedDates, setSelectedDates] = useState()
 
   useEffect(() => {
     if (clickedOutside) {
@@ -40,17 +45,20 @@ const SilenceAlertMenu = ({
   }, [clickedOutside])
 
   useEffect(() => {
-    if (selectedDates?.length) {
-      setShowSilencedAlertForIndex(null)
-
-      const silenceAlertPeriodRequest = {
-        silencedAlertPeriod: SilencedAlertPeriod.CUSTOM,
-        afterDateTime: selectedDates[0],
-        beforeDateTime: selectedDates[1]
-      }
-      silenceAlert(silenceAlertPeriodRequest, id)
+    if (!selectedDates) {
+      return
     }
-  }, [selectedDates])
+
+    setShowSilencedAlertForIndex(null)
+
+    const silenceAlertPeriodRequest = {
+      silencedAlertPeriod: SilencedAlertPeriod.CUSTOM,
+      afterDateTime: selectedDates[0],
+      beforeDateTime: selectedDates[1]
+    }
+
+    silenceAlert(silenceAlertPeriodRequest, id)
+  }, [id, selectedDates])
 
   return <Wrapper
     ref={silencedAlertRefCallback}
@@ -144,11 +152,11 @@ const SilenceAlertMenu = ({
           silencedAlertRef?.current
             ? <DateRange
                 containerRef={silencedAlertRef?.current}
-                placeholder={'Période précise'}
-                dates={selectedDates}
-                modifyVesselTrackFromDates={setSelectedDates}
-                width={145}
+                defaultValue={selectedDates}
                 noMargin
+                onChange={setSelectedDates}
+                placeholder={'Période précise'}
+                width={145}
               />
             : null
         }

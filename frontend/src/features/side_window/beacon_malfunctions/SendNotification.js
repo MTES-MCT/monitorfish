@@ -3,7 +3,7 @@ import { COLORS } from '../../../constants/constants'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import { beaconMalfunctionNotificationType } from '../../../domain/entities/beaconMalfunction'
-import SelectPicker from 'rsuite/lib/SelectPicker'
+import { SelectPicker } from 'rsuite'
 import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 import sendNotification from '../../../domain/use_cases/beaconMalfunction/sendNotification'
 

@@ -1,8 +1,7 @@
-import Checkbox from 'rsuite/lib/Checkbox'
+import { Checkbox, Table } from 'rsuite'
 import countries from 'i18n-iso-countries'
 import * as timeago from 'timeago.js'
-import React from 'react'
-import Table from 'rsuite/lib/Table'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 const { Cell } = Table
@@ -14,11 +13,14 @@ export const CellUsingVesselProperty = ({ vesselProperty, ...props }) => {
 }
 
 export const CheckedCell = ({ rowData, dataKey, onChange, ...props }) => {
+  const defaultValue = useMemo(() => rowData[dataKey], [rowData[dataKey]])
+  const defaultChecked = useMemo(() => Boolean(defaultValue), [defaultValue])
+
   return (
-    <Cell {...props} className={'table-content-editing'}>
+    <Cell key={defaultValue} {...props} className={'table-content-editing'} >
       <Checkbox
-        value={rowData[dataKey]}
-        checked={rowData[dataKey]}
+        defaultValue={defaultValue}
+        defaultChecked={defaultChecked}
         onChange={value => {
           onChange && onChange(rowData.vesselId, !value)
         }}
@@ -75,8 +77,8 @@ export const Flag = styled.img`
 export const ContentWithEllipsis = styled.span`
   text-overflow: ellipsis;
   overflow: hidden !important;
-  white-space: nowrap;    
-  max-width: 120px; 
+  white-space: nowrap;
+  max-width: 120px;
   line-break: auto;
   display: inline-block;
 `

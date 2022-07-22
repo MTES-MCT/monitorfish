@@ -14,8 +14,8 @@ import { getVesselPositionsFromAPI } from '../../../api/vessel'
 /**
  * Modify the vessel track depth on map
  * @function modifyVesselTrackDepth
- * @param {VesselIdentity} vesselIdentity
- * @param {TrackRequest} trackRequest
+ * @param {Vessel.VesselIdentity} vesselIdentity
+ * @param {Vessel.TrackRequest} trackRequest
  * @param {boolean=} doNotRedrawFishingMessages
  * @param {boolean=} useFullDays
  */
@@ -26,7 +26,7 @@ const modifyVesselTrackDepth = (
   useFullDays = false) => (dispatch, getState) => {
   const fishingActivitiesAreShowedOnMap = getState().fishingActivities.fishingActivitiesAreShowedOnMap
   if (!vesselIdentity || !trackRequest) {
-    return
+    return undefined
   }
 
   dispatchUpdatingVessel(dispatch, true)
@@ -42,10 +42,10 @@ const modifyVesselTrackDepth = (
         trackDepthHasBeenModified,
         false,
         trackRequest)
-      if (error) {
+      if (error && setError) {
         dispatch(setError(error))
-      } else {
-        dispatch(removeError())
+      } else if (removeError) {
+        dispatch(removeError(undefined))
       }
 
       batch(() => {
@@ -59,7 +59,9 @@ const modifyVesselTrackDepth = (
     }).catch(error => {
       console.error(error)
       batch(() => {
-        dispatch(setError(error))
+        if (setError) {
+          dispatch(setError(error))
+        }
         dispatch(resetLoadingVessel())
       })
     })
@@ -68,7 +70,9 @@ const modifyVesselTrackDepth = (
 function dispatchUpdatingVessel (dispatch, doNotAnimateBoolean) {
   batch(() => {
     dispatch(doNotAnimate(doNotAnimateBoolean))
-    dispatch(removeError())
+    if (removeError) {
+      dispatch(removeError(undefined))
+    }
     dispatch(updatingVesselTrackDepth())
   })
 }

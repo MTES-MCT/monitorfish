@@ -1,50 +1,75 @@
-import React, { createRef, useEffect, useRef, useState } from 'react'
+import { createRef, useCallback, useEffect, useRef, useState } from 'react'
 import Overlay from 'ol/Overlay'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import {
-  getTrackRequestFromDates,
   getTrackRequestFromTrackDepth,
   VesselTrackDepth
 } from '../../../domain/entities/vesselTrackDepth'
-import TrackRangeModal from './map_menu/TrackRangeModal'
+import { TrackRangeModal } from './map_menu/TrackRangeModal'
 import { useDispatch } from 'react-redux'
 import showVesselTrack from '../../../domain/use_cases/vessel/showVesselTrack'
 import { addVesselToFavorites } from '../../../domain/shared_slices/FavoriteVessel'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
 
-const MapMenuOverlay = props => {
-  const {
-    map,
-    coordinates,
-    vessel
-  } = props
-
+const MapMenuOverlay = ({
+  map,
+  coordinates,
+  vessel
+}) => {
   const dispatch = useDispatch()
 
   const ref = createRef()
-  const [modalIsOpen, setModalIsOpen] = useState(false)
-  const clickedOutsideComponent = useClickOutsideWhenOpened(ref, modalIsOpen)
+  /** @type {React.MutableRefObject<import('ol').Overlay | undefined>} */
+  const overlayRef = useRef()
+  const [isTrackRangeModalOpen, setIsTrackRangeModalOpen] = useState(false)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(ref, isTrackRangeModalOpen)
   const [showTrackDepthSubMenu, setShowTrackDepthSubMenu] = useState(false)
-  const [iShowed, setIsShowed] = useState(false)
-  const [selectedTrackDepth, setsSelectedTrackDepth] = useState(undefined)
-  const [selectedDates, setSelectedDates] = useState([])
+  const [isOpen, setIsOpen] = useState(false)
+  /** @type {[string | undefined, *]} */
+  const [selectedTrackDepth, setSelectedTrackDepth] = useState()
+  /** @type {[[Date, Date] | undefined, *]} */
+  const [selectedDateRange, setSelectedDateRange] = useState()
 
-  const overlayRef = useRef(null)
-  function getOverlay () {
-    if (overlayRef.current === null) {
+  const getOverlay = useCallback(() => {
+    if (!overlayRef.current) {
       overlayRef.current = new Overlay({
+        autoPan: false,
+        className: 'ol-overlay-container ol-selectable menu-overlay',
         element: ref.current,
         position: coordinates,
-        autoPan: false,
-        positioning: 'left-center',
-        className: 'ol-overlay-container ol-selectable menu-overlay'
+        positioning: 'left-center'
       })
     }
 
     return overlayRef.current
-  }
+  }, [])
+
+  /**
+   * @param {[Date, Date]=} dateRange
+   */
+  const updateDateRange = useCallback((dateRange) => {
+    if (!dateRange) {
+      setSelectedDateRange(undefined)
+
+      return
+    }
+
+    const [startDate, endDate] = dateRange
+    const trackRequest = {
+      trackDepth: VesselTrackDepth.CUSTOM,
+      afterDateTime: startDate,
+      beforeDateTime: endDate
+    }
+
+    dispatch(showVesselTrack(vessel.vesselProperties, false, trackRequest))
+
+    map.removeOverlay(getOverlay())
+    setIsOpen(false)
+    setSelectedDateRange(dateRange)
+    setSelectedTrackDepth(undefined)
+  }, [vessel])
 
   useEffect(() => {
     if (clickedOutsideComponent) {
@@ -53,35 +78,38 @@ const MapMenuOverlay = props => {
   }, [clickedOutsideComponent])
 
   useEffect(() => {
-    if (selectedTrackDepth || selectedDates?.length) {
-      const trackRequest = selectedTrackDepth
-        ? getTrackRequestFromTrackDepth(selectedTrackDepth)
-        : getTrackRequestFromDates(selectedDates[0], selectedDates[1])
-      dispatch(showVesselTrack(vessel.vesselProperties, false, trackRequest))
-
-      map.removeOverlay(getOverlay())
-      setIsShowed(false)
-      setsSelectedTrackDepth(undefined)
-      setSelectedDates([])
+    if (!selectedTrackDepth) {
+      return
     }
-  }, [selectedTrackDepth, selectedDates])
+
+    const trackRequest = getTrackRequestFromTrackDepth(selectedTrackDepth)
+
+    dispatch(showVesselTrack(vessel.vesselProperties, false, trackRequest))
+
+    map.removeOverlay(getOverlay())
+    setIsOpen(false)
+    setSelectedTrackDepth(undefined)
+    setSelectedDateRange(undefined)
+  }, [selectedTrackDepth])
 
   useEffect(() => {
     if (map && coordinates?.length) {
-      getOverlay().setPosition(coordinates)
-      getOverlay().setElement(ref.current)
+      const overlay = getOverlay()
+
+      overlay.setPosition(coordinates)
+      overlay.setElement(ref.current)
       setShowTrackDepthSubMenu(false)
       ref.current.parentNode.className = 'ol-overlay-container ol-selectable menu-overlay'
 
-      setIsShowed(true)
-      map.addOverlay(getOverlay())
+      setIsOpen(true)
+      map.addOverlay(overlay)
+    }
 
-      return () => {
-        map.removeOverlay(getOverlay())
-        setIsShowed(false)
-        setsSelectedTrackDepth(undefined)
-        setSelectedDates([])
-      }
+    return () => {
+      map.removeOverlay(getOverlay())
+      setIsOpen(false)
+      setSelectedTrackDepth(undefined)
+      setSelectedDateRange(undefined)
     }
   }, [coordinates, map])
 
@@ -89,7 +117,7 @@ const MapMenuOverlay = props => {
     <WrapperToBeKeptForDOMManagement ref={ref}>
       <div ref={ref}>
         {
-          iShowed
+          isOpen
             ? <>
               <Wrapper>
                 <div>
@@ -109,7 +137,7 @@ const MapMenuOverlay = props => {
                           <Menu
                             data-cy={'add-vessel-to-favorites'}
                             onMouseEnter={() => setShowTrackDepthSubMenu(false)}
-                            onClick={() => dispatch(addVesselToFavorites(vessel.vesselProperties)) && setIsShowed(false)}
+                            onClick={() => dispatch(addVesselToFavorites(vessel.vesselProperties)) && setIsOpen(false)}
                           >
                             Ajouter le navire aux navires suivis
                           </Menu>
@@ -124,18 +152,18 @@ const MapMenuOverlay = props => {
                       {
                         vessel
                           ? <>
-                            <Menu second onClick={() => setsSelectedTrackDepth(VesselTrackDepth.LAST_DEPARTURE)}>dernier DEP</Menu>
-                            <Menu second onClick={() => setsSelectedTrackDepth(VesselTrackDepth.TWELVE_HOURS)}>12 heures</Menu>
-                            <Menu second onClick={() => setsSelectedTrackDepth(VesselTrackDepth.ONE_DAY)}>24 heures</Menu>
-                            <Menu second onClick={() => setsSelectedTrackDepth(VesselTrackDepth.TWO_DAYS)}>2 jours</Menu>
-                            <Menu second data-cy={'show-vessel-tracks-three-days'} onClick={() => setsSelectedTrackDepth(VesselTrackDepth.THREE_DAYS)}>3 jours</Menu>
-                            <Menu second onClick={() => setsSelectedTrackDepth(VesselTrackDepth.ONE_WEEK)}>1 semaine</Menu>
-                            <Menu second onClick={() => setsSelectedTrackDepth(VesselTrackDepth.TWO_WEEK)}>2 semaines</Menu>
-                            <Menu second onClick={() => setsSelectedTrackDepth(VesselTrackDepth.ONE_MONTH)}>1 mois</Menu>
+                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.LAST_DEPARTURE)}>dernier DEP</Menu>
+                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWELVE_HOURS)}>12 heures</Menu>
+                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_DAY)}>24 heures</Menu>
+                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_DAYS)}>2 jours</Menu>
+                            <Menu second data-cy={'show-vessel-tracks-three-days'} onClick={() => setSelectedTrackDepth(VesselTrackDepth.THREE_DAYS)}>3 jours</Menu>
+                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_WEEK)}>1 semaine</Menu>
+                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWO_WEEK)}>2 semaines</Menu>
+                            <Menu second onClick={() => setSelectedTrackDepth(VesselTrackDepth.ONE_MONTH)}>1 moiss</Menu>
                             <Menu
                               withTopLine
                               second
-                              onClick={() => setModalIsOpen(true)}
+                              onClick={() => setIsTrackRangeModalOpen(true)}
                               data-cy={'show-vessel-tracks-custom-period'}
                             >
                               Choisir une période précise
@@ -148,11 +176,10 @@ const MapMenuOverlay = props => {
                 }
               </Wrapper>
               <TrackRangeModal
-                isModalOpen={modalIsOpen}
-                setModalIsOpen={setModalIsOpen}
-                selectedDates={selectedDates}
-                resetToDefaultTrackDepth={() => setSelectedDates([])}
-                setSelectedDates={setSelectedDates}
+                isOpen={isTrackRangeModalOpen}
+                onClose={() => setIsTrackRangeModalOpen(false)}
+                selectedDates={selectedDateRange}
+                onChange={updateDateRange}
               />
             </>
             : null

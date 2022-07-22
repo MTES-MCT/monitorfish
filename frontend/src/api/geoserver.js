@@ -42,6 +42,12 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
       }
     })
     .catch(error => {
+      if (process.env.NODE_ENV === 'development') {
+        return {
+          features: []
+        }
+      }
+
       console.error(error)
       throw Error(REGULATORY_ZONES_ERROR_MESSAGE)
     })
@@ -173,12 +179,10 @@ function getRegulatoryZoneURL (type, regulatoryZone, geoserverURL) {
   }
 
   const filter = `topic='${encodeURIComponent(regulatoryZone.topic).replace(/'/g, '\'\'')}' AND zone='${encodeURIComponent(regulatoryZone.zone).replace(/'/g, '\'\'')}'`
-  return (
-    `${geoserverURL}/geoserver/wfs?service=WFS` +
-    `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
-    '&outputFormat=application/json&CQL_FILTER=' +
-    filter.replace(/'/g, '%27').replace(/ /g, '%20')
-  )
+  return `${geoserverURL}/geoserver/wfs?service=WFS` +
+  `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
+  '&outputFormat=application/json&CQL_FILTER=' +
+  filter.replace(/'/g, '%27').replace(/ /g, '%20')
 }
 
 /**
@@ -296,6 +300,12 @@ function getAdministrativeSubZonesFromAPI (type, fromBackoffice) {
         })
       }
     }).catch(e => {
+      if (process.env.NODE_ENV === 'development') {
+        return {
+          features: []
+        }
+      }
+
       throwIrretrievableAdministrativeZoneError(e, type)
     })
 }

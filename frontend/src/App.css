@@ -6,6 +6,11 @@ html {
     overflow-y: hidden;
     overflow-x: hidden;
     font-size: 13px;
+    scroll-behavior: smooth;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
 }
 
 .overlay-active {
@@ -291,6 +296,7 @@ a:hover, a:focus {
 
 .rs-picker-tag-wrapper {
     padding-bottom: 0;
+    min-height: 30px;
 }
 
 .rs-picker-input {
@@ -413,11 +419,10 @@ a:hover, a:focus {
     color: #707785;
 }
 
-
 .rs-table-hover .rs-table-row:not(.rs-table-row-header):hover, .rs-table-hover .rs-table-row:hover .rs-table-cell-group, .rs-table-hover .rs-table-row:hover .rs-table-cell {
   /* background: rgba(107, 131, 158, 0.15) !important; */ /* shadowBlueLittleOpacity */
   background: #d6dce3 !important; /* shadowBlueLight */
-  
+
 }
 
 .rs-table-cell, .rs-table-cell-group, .rs-table-row {

@@ -21,7 +21,7 @@ const FishingPeriodDate = ({ date, id, disabled }) => {
       disabled={disabled}
       value={date}
       saveValue={onDateChange}
-      format='DD/MM/YYYY'
+      format='dd/MM/yyyy'
       placement={'rightStart'}
       oneTap
     />

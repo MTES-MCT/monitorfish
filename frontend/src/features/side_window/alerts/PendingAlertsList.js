@@ -3,8 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { useDispatch, useSelector } from 'react-redux'
-import List from 'rsuite/lib/List'
-import FlexboxGrid from 'rsuite/lib/FlexboxGrid'
+import { FlexboxGrid, List } from 'rsuite'
 import { getAlertNameFromType } from '../../../domain/entities/alerts'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
@@ -144,8 +143,9 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
           </FlexboxGrid>
         </List.Item>
         <ScrollableContainer
-          style={ScrollableContainerStyle}
           ref={scrollableContainer}
+          className={'smooth-scroll'}
+          style={ScrollableContainerStyle}
         >
           {sortedAlerts.map((alert, index) => (
             <PendingAlertRow

@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
-import Table from 'rsuite/lib/Table'
+import { Table } from 'rsuite'
 import { useDispatch, useSelector } from 'react-redux'
 import { DeleteCell, INPUT_TYPE, ModifiableCell, TagPickerCell } from '../tableCells'
 import getAllFleetSegments from '../../../domain/use_cases/fleetSegment/getAllFleetSegments'
@@ -9,9 +9,8 @@ import getAllGearCodes from '../../../domain/use_cases/gearCode/getAllGearCodes'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 import getFAOAreas from '../../../domain/use_cases/faoAreas/getFAOAreas'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
-import updateFleetSegment from '../../../domain/use_cases/fleetSegment/updateFleetSegment'
-import deleteFleetSegment from '../../../domain/use_cases/fleetSegment/deleteFleetSegment'
-import AddFleetSegmentModal from './AddFleetSegmentModal'
+import * as fleetSegmentUseCase from '../../../domain/use_cases/fleetSegment'
+import { NewFleetSegmentModal } from './NewFleetSegmentModal'
 
 const { Column, HeaderCell } = Table
 
@@ -22,7 +21,7 @@ const FleetSegments = () => {
   const gears = useSelector(state => state.gear.gears)
   const species = useSelector(state => state.species.species)
   const [faoAreas, setFAOAreas] = useState([])
-  const [isModalOpen, setModalIsOpen] = useState(false)
+  const [isNewFleetSegmentModalOpen, setIsNewFleetSegmentModalOpen] = useState(false)
 
   useEffect(() => {
     dispatch(getFAOAreas()).then(_faoAreas => setFAOAreas(_faoAreas))
@@ -46,6 +45,22 @@ const FleetSegments = () => {
     }
   }, [species])
 
+  const closeNewFleetSegmentModal = useCallback(() => {
+    setIsNewFleetSegmentModalOpen(false)
+  }, [])
+
+  const createFleetSegment = (newFleetSegmentData) => {
+    dispatch(fleetSegmentUseCase.createFleetSegment(newFleetSegmentData))
+
+    closeNewFleetSegmentModal()
+  }
+
+  const deleteFleetSegment = (id) => {
+    doNotUpdateScrollRef.current = true
+
+    dispatch(fleetSegmentUseCase.deleteFleetSegment(id))
+  }
+
   const handleChangeModifiableKey = (segment, key, value) => {
     if (!segment || !key) {
       return
@@ -62,8 +77,12 @@ const FleetSegments = () => {
     }
     updateJSON[key] = value
 
-    dispatch(updateFleetSegment(segment, updateJSON))
+    dispatch(fleetSegmentUseCase.updateFleetSegment(segment, updateJSON))
   }
+
+  const openNewFleetSegmentModal = useCallback(() => {
+    setIsNewFleetSegmentModalOpen(true)
+  }, [])
 
   return (
     <Wrapper>
@@ -71,7 +90,7 @@ const FleetSegments = () => {
         <Title>Segments de flotte</Title><br/>
         <AddSegment
           data-cy={'open-create-fleet-segment-modal'}
-          onClick={() => setModalIsOpen(true)}
+          onClick={openNewFleetSegmentModal}
         >
           Ajouter un segment
         </AddSegment>
@@ -87,7 +106,6 @@ const FleetSegments = () => {
             affixHorizontalScrollbar
             onDataUpdated={() => { doNotUpdateScrollRef.current = true }}
             shouldUpdateScroll={!doNotUpdateScrollRef.current}
-            scrollTop={50}
             locale={{
               emptyMessage: 'Aucun résultat',
               loading: 'Chargement...'
@@ -171,10 +189,7 @@ const FleetSegments = () => {
               <DeleteCell
                 dataKey="segment"
                 id="segment"
-                onClick={(id, _) => {
-                  doNotUpdateScrollRef.current = true
-                  dispatch(deleteFleetSegment(id))
-                }}
+                onClick={deleteFleetSegment}
               />
             </Column>
           </Table>
@@ -185,11 +200,12 @@ const FleetSegments = () => {
               size={100}/>
           </Loading>
       }
-      <AddFleetSegmentModal
-        isModalOpen={isModalOpen}
-        setModalIsOpen={setModalIsOpen}
+
+      {isNewFleetSegmentModalOpen && <NewFleetSegmentModal
         faoAreasList={faoAreas}
-      />
+        onCancel={closeNewFleetSegmentModal}
+        onSubmit={createFleetSegment}
+      />}
     </Wrapper>
   )
 }
@@ -220,50 +236,50 @@ const Wrapper = styled.div`
   margin-top: 20px;
   height: calc(100vh - 50px);
   width: calc(100vw - 200px);
-  
+
   .rs-picker-input {
     border: none;
     margin-left: 7px;
     margin-top: -3px;
   }
-  
+
   .rs-picker-default .rs-picker-toggle.rs-btn-xs {
     padding-left: 5px;
   }
-  
+
   .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
     color: ${COLORS.charcoal};
   }
-  
+
   .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn-xs {
     padding-right: 17px;
   }
-  
+
   .rs-input:focus{
     background: ${COLORS.charcoal};
     color: ${COLORS.background};
   }
-  
+
   .rs-picker-tag-wrapper {
     width: 280px;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: -10px;
   }
-  
+
   .rs-picker-tag {
     width: 280px;
     background: none;
   }
-  
+
   .rs-picker-toggle-clean {
     visibility: hidden !important;
   }
-  
+
   .rs-picker-toggle-caret {
     visibility: hidden !important;
   }
-  
+
   .rs-picker-toggle-placeholder {
     visibility: hidden !important;
   }

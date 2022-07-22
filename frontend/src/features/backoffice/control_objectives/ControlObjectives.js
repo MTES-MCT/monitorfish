@@ -5,7 +5,7 @@ import SeaFrontControlObjectives from './SeaFrontControlObjectives'
 import { useDispatch } from 'react-redux'
 import getAllControlObjectives from '../../../domain/use_cases/controlObjective/getAllControlObjectives'
 import getAllFleetSegments from '../../../domain/use_cases/fleetSegment/getAllFleetSegments'
-import InputPicker from 'rsuite/lib/InputPicker'
+import { InputPicker } from 'rsuite'
 import getControlObjectivesYearEntries from '../../../domain/use_cases/controlObjective/getControlObjectivesYearEntries'
 import addControlObjectiveYear from '../../../domain/use_cases/controlObjective/addControlObjectiveYear'
 

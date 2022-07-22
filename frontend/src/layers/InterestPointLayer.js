@@ -182,7 +182,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
             }))
           }
 
-          startDrawing(event, interestPointBeingDrawed.type || interestPointType.FISHING_VESSEL)
+          startDrawing(event, interestPointBeingDrawed.type || interestPointType.OTHER)
         })
 
         drawObject.once(DRAW_ABORT_EVENT, () => {

@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Modal from 'rsuite/lib/Modal'
+import { Input, InputGroup, Modal } from 'rsuite'
 import { COLORS } from '../../constants/constants'
-import InputGroup from 'rsuite/lib/InputGroup'
-import Input from 'rsuite/lib/Input'
 import { v4 as uuidv4 } from 'uuid'
 
 import { ReactComponent as FilterSVG } from '../icons/Icone_filtres_dark.svg'
@@ -45,9 +43,9 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter, closeAn
     <Modal
       size={'sm'}
       backdrop
-      show={isOpen}
+      open={isOpen}
       style={{ marginTop: 100 }}
-      onHide={cancel}
+      onClose={cancel}
     >
       <Modal.Header>
         <Modal.Title>

@@ -40,15 +40,15 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
   const [textareaHeight, setTextareaHeight] = useState(50)
 
   useEffect(() => {
+    setToday(getDate(new Date().toISOString()))
+
+    const yesterdayDate = new Date()
+    yesterdayDate.setDate(yesterdayDate.getDate() - 1)
+    setYesterday(getDate(yesterdayDate.toISOString()))
+
     if (comments?.length) {
-      setToday(getDate(new Date().toISOString()))
-
-      const yesterdayDate = new Date()
-      yesterdayDate.setDate(yesterdayDate.getDate() - 1)
-      setYesterday(getDate(yesterdayDate.toISOString()))
-
       setTimeout(() => {
-        scrollToRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        scrollToRef.current?.scrollIntoView({ block: 'nearest' })
       }, 500)
     }
   }, [comments])
@@ -147,7 +147,10 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
           {comments?.length} commentaire{comments?.length > 1 ? 's' : ''}
         </NumberCommentsText>
       </NumberComments>
-      <CommentsAndActions style={commentsAndActionsStyle(smallSize, textareaHeight || 0)}>
+      <CommentsAndActions
+        className={'smooth-scroll'}
+        style={commentsAndActionsStyle(smallSize, textareaHeight || 0)}
+      >
         {
           firstStatus
             ? <BeaconMalfunctionDetailsFollowUpRow

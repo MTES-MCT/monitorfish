@@ -7,9 +7,9 @@ services:
         - POSTGRES_PASSWORD=postgres
         - POSTGRES_DB=monitorfishdb
     volumes:
-    - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     ports:
-    - 5432:5432
+      - 5432:5432
 
   geoserver:
     image: kartoza/geoserver:2.18.0

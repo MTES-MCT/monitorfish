@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import Table from 'rsuite/lib/Table'
+import { Table } from 'rsuite'
 import { transform } from 'ol/proj'
 import { useDispatch, useSelector } from 'react-redux'
 import { sortArrayByColumn, SortType } from '../../../vessel_list/tableSort'

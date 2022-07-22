@@ -32,7 +32,7 @@ const TrackRequest = ({ sidebarIsOpen }) => {
   const { selectedVesselCustomTrackRequest } = useSelector(state => state.vessel)
   /** @type {{ selectedVesselIdentity: VesselNS.VesselIdentity }} */
   const { selectedVesselIdentity } = useSelector(state => state.vessel)
-  const [trackRequestIsOpen, setTrackRequestIsOpen] = useState(false)
+  const [isTrackRequestOpen, setIsTrackRequestOpen] = useState(false)
 
   /** @type {[Date, Date] | undefined} */
   const selectedVesselCustomDateRange = useMemo(
@@ -44,7 +44,7 @@ const TrackRequest = ({ sidebarIsOpen }) => {
 
   useEffect(() => {
     if (!sidebarIsOpen) {
-      setTrackRequestIsOpen(false)
+      setIsTrackRequestOpen(false)
     }
   }, [sidebarIsOpen])
 
@@ -84,7 +84,7 @@ const TrackRequest = ({ sidebarIsOpen }) => {
         healthcheckTextWarning={healthcheckTextWarning}
         data-cy={'vessel-track-depth-selection'}
         sidebarIsOpen={sidebarIsOpen}
-        isRightMenuOpen={isRightMenuOpen}
+        isRightMenuOpen={rightMenuIsOpen}
         isTrackRequestOpen={isTrackRequestOpen}
         onClick={() => setIsTrackRequestOpen(!isTrackRequestOpen)}
         title={'Paramétrer l\'affichage de la piste VMS'}
@@ -94,7 +94,7 @@ const TrackRequest = ({ sidebarIsOpen }) => {
       <TrackRequestBody
         healthcheckTextWarning={healthcheckTextWarning}
         sidebarIsOpen={sidebarIsOpen}
-        isRightMenuOpen={isRightMenuOpen}
+        isRightMenuOpen={rightMenuIsOpen}
         isTrackRequestOpen={isTrackRequestOpen}
       >
         <Header>Paramétrer l&apos;affichage de la piste VMS</Header>

@@ -6,19 +6,12 @@ import { Modal } from 'rsuite'
 import { layersType } from '../../domain/entities/layers'
 import { InteractionTypes } from '../../domain/entities/map'
 import { VesselLocation } from '../../domain/entities/vessel'
+import { animateToExtent, setInteraction } from '../../domain/shared_slices/Map'
+import { removeZoneSelected, resetZonesSelected, setZonesSelected } from './VesselList.slice'
 import {
-  animateToExtent,
-  setInteraction
-} from '../../domain/shared_slices/Map'
-import {
-  removeZoneSelected,
-  resetZonesSelected,
-  setZonesSelected
-} from './VesselList.slice'
-import {
+  closeVesselListModal,
   expandRightMenu,
   openVesselListModal,
-  closeVesselListModal,
   setBlockVesselsUpdate,
   setPreviewFilteredVesselsMode
 } from '../../domain/shared_slices/Global'

@@ -83,6 +83,10 @@ const CustomSelectPicker = styled(SelectPicker)`
   .grouped.rs-picker-select-menu-item {
     padding-left: 0px;
   }
+
+  .rs-picker-toggle {
+    width: ${p => p.width ? p.width - 40 : 160};
+  }
 `
 
 export default CustomSelectComponent

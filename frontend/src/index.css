@@ -79,12 +79,12 @@ code {
     background: #3B4559;
 }
 
-.rs-slider-graduator > ul > li::before {
+.rs-slider-graduator > ol > li::before {
     visibility: hidden;
 }
 
 
-.rs-slider-graduator > ul > li:last-child::after, .rs-slider-graduator > ul > li::before {
+.rs-slider-graduator > ol > li:last-child::after, .rs-slider-graduator > ul > li::before {
     top: -3px;
     border: none;
 }

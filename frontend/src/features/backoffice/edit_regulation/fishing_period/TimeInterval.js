@@ -72,6 +72,10 @@ const Wrapper = styled.div`
   ${props => props.$isLast ? '' : 'margin-bottom: 5px;'}
   color: ${COLORS.slateGray};
   opacity: ${props => props.disabled ? '0.4' : '1'};
+
+  .rs-picker-toggle {
+    width: 40px;
+  }
 `
 
 export default TimeInterval

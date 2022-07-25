@@ -6,6 +6,7 @@ import { FleetSegmentInput, INPUT_TYPE, renderTagPickerValue } from '../tableCel
 import { useSelector } from 'react-redux'
 import { PrimaryButton } from '../../commonStyles/Buttons.style'
 import { cleanInputString } from '../../../utils/cleanInputString'
+import StyledModalHeader from '../../commonComponents/StyledModalHeader'
 
 // TODO Use Formik + Yup to handle and validate form
 export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit }) {
@@ -49,13 +50,13 @@ export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit }) {
       size={'xs'}
       style={{ marginTop: 50 }}
     >
-      <Modal.Header>
+      <StyledModalHeader>
         <Modal.Title>
           <Title>
             Ajouter un segment de flotte
           </Title>
         </Modal.Title>
-      </Modal.Header>
+      </StyledModalHeader>
       <Body>
         <Columns>
           <Column>

@@ -18,7 +18,7 @@ export const CheckedCell = ({ rowData, dataKey, onChange, ...props }) => {
 
   return (
     <Cell key={defaultValue} {...props} className={'table-content-editing'} >
-      <Checkbox
+      <StyledCheckbox
         defaultValue={defaultValue}
         defaultChecked={defaultChecked}
         onChange={value => {
@@ -28,6 +28,11 @@ export const CheckedCell = ({ rowData, dataKey, onChange, ...props }) => {
     </Cell>
   )
 }
+
+export const StyledCheckbox = styled(Checkbox)`
+  margin-top: -33px;
+  margin-left: -10px;
+`
 
 export const FlagCell = ({ rowData, vesselProperty, baseUrl, ...props }) => (
   <Cell {...props} style={{ padding: 0 }}>

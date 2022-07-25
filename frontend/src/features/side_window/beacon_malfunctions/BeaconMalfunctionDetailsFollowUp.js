@@ -220,7 +220,6 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
             <SubmitCommentRow style={submitCommentRowStyle}>
               Équipe SIP
               <Toggle
-                style={{ background: `${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray}` }}
                 value={userType === UserType.OPS}
                 onChange={checked => dispatch(setUserType(checked ? UserType.OPS : UserType.SIP))}
                 size="sm"

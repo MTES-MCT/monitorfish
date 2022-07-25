@@ -35,6 +35,7 @@ import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
 import { setProcessingRegulationSearchedZoneExtent } from '../../domain/shared_slices/Regulatory'
 import { getExtentFromGeoJSON } from '../../utils'
 import { COLORS } from '../../constants/constants'
+import StyledModalHeader from '../commonComponents/StyledModalHeader'
 
 const NOT_FOUND = -1
 
@@ -339,14 +340,14 @@ const VesselList = ({ namespace }) => {
           open={vesselListModalIsOpen}
           onClose={() => closeAndResetVesselList()}
         >
-          <Modal.Header>
+          <StyledModalHeader isFull>
             <Modal.Title>
               <Vessel
                 isTitle={true}
                 background={COLORS.charcoal}
               /> Liste des navires avec VMS
             </Modal.Title>
-          </Modal.Header>
+          </StyledModalHeader>
           <Modal.Body>
             <Title>FILTRER LA LISTE</Title>
             <VesselListFilters

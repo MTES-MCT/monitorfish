@@ -1,10 +1,17 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { Checkbox, Table } from 'rsuite'
 
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
-import { CellUsingVesselProperty, ContentWithEllipsis, CellWithTitle, CheckedCell, FlagCell, TimeAgoCell } from './tableCells'
+import {
+  CellUsingVesselProperty,
+  CellWithTitle,
+  CheckedCell,
+  ContentWithEllipsis,
+  FlagCell, StyledCheckbox,
+  TimeAgoCell
+} from './tableCells'
 import { sortVesselsByProperty } from './tableSort'
 import { COLORS } from '../../constants/constants'
 
@@ -34,7 +41,7 @@ const VesselListTable = ({
     setSortType(sortType)
   }
 
-  const getVessels = useCallback(() => {
+  const showedVessels = useMemo(() => {
     if (sortColumn && sortType) {
       return filteredVessels
         .slice()
@@ -63,7 +70,7 @@ const VesselListTable = ({
         virtualized
         height={seeMoreIsOpen ? 480 : 530}
         rowHeight={36}
-        data={getVessels()}
+        data={showedVessels}
         sortColumn={sortColumn}
         sortType={sortType}
         onSortColumn={handleSortColumn}
@@ -75,7 +82,7 @@ const VesselListTable = ({
       >
         <Column resizable width={35} fixed>
           <HeaderCell>
-            <Checkbox
+            <StyledCheckbox
               checked={allVesselsChecked.globalCheckbox && vessels.filter(vessel => vessel.checked === true).length === vessels.length}
               onChange={() => updateAllVesselsChecked()} />
           </HeaderCell>
@@ -181,7 +188,22 @@ const VesselListTable = ({
   )
 }
 
-const TableContent = styled.div``
+const TableContent = styled.div`
+  .rs-table-cell-header-icon-sort {
+    color: ${COLORS.slateGray};
+    position: absolute;
+    right: 0px;
+    top: 13px;
+  }
+
+  .rs-table-cell-header-icon-sort-asc::after {
+    color: ${COLORS.slateGray};
+  }
+
+  .rs-table-cell-header-icon-sort-desc::after {
+    color: ${COLORS.slateGray};
+  }
+`
 
 const VesselsCount = styled.span`
   color: ${COLORS.slateGray};

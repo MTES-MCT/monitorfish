@@ -14,6 +14,7 @@ import {
   getRiskFactorColor
 } from '../../../domain/entities/riskFactor'
 import { basePrimaryButton, SecondaryButton } from '../../commonStyles/Buttons.style'
+import StyledModalHeader from '../../commonComponents/StyledModalHeader'
 
 const RiskFactorExplanationModal = ({ isOpen, setIsOpen }) => {
   return (
@@ -24,13 +25,13 @@ const RiskFactorExplanationModal = ({ isOpen, setIsOpen }) => {
       style={{ marginTop: 50 }}
       onClose={() => setIsOpen(false)}
     >
-      <Modal.Header>
+      <StyledModalHeader>
         <Modal.Title>
           <ModalTitle>
             Explication de la note de risque des navires
           </ModalTitle>
         </Modal.Title>
-      </Modal.Header>
+      </StyledModalHeader>
       <ModalBodyStyled>
         <Title>principe du facteur de risque</Title>
         <Line/>

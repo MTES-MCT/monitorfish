@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Modal } from 'rsuite'
 import DateRange from '../../../vessel_sidebar/actions/track_request/DateRange'
+import StyledModalHeader from '../../../commonComponents/StyledModalHeader'
 
 /**
  * @typedef {object} TrackRangeModalProps
@@ -23,13 +24,13 @@ export const TrackRangeModal = ({ isOpen, onChange, onClose, selectedDates }) =>
       size={'xs'}
       style={{ marginTop: 100 }}
     >
-      <Modal.Header>
+      <StyledModalHeader>
         <Modal.Title>
           <Title>
             Afficher la piste VMS sur une période précise
           </Title>
         </Modal.Title>
-      </Modal.Header>
+      </StyledModalHeader>
       <Body>
         <DateRange
           defaultValue={selectedDates}

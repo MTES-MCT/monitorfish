@@ -172,6 +172,7 @@ export const TagPickerCell = ({ rowData, dataKey, data, id, onChange, ...props }
       {
         isOpened
           ? <TagPicker
+            virtualized
             searchable
             value={rowData[dataKey]}
             style={tagPickerStyle}

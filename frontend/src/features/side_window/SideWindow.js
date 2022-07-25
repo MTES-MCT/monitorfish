@@ -246,6 +246,13 @@ const Wrapper = styled.div`
     background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
     top: 1px;
   }
+  .rs-toggle {
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+  .rs-toggle > input {
+    width: unset;
+  }
 
   .rs-list-item {
     box-shadow: unset;

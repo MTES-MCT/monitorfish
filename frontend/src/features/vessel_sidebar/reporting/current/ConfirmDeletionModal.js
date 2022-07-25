@@ -6,6 +6,7 @@ import { COLORS } from '../../../../constants/constants'
 import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
 import { Modal } from 'rsuite'
 import deleteReporting from '../../../../domain/use_cases/reporting/deleteReporting'
+import StyledModalHeader from '../../../commonComponents/StyledModalHeader'
 
 const ConfirmDeletionModal = ({ modalIsOpenForId, closeModal }) => {
   const dispatch = useDispatch()
@@ -18,13 +19,13 @@ const ConfirmDeletionModal = ({ modalIsOpenForId, closeModal }) => {
       style={{ marginTop: 100 }}
       onClose={closeModal}
     >
-      <Modal.Header>
+      <StyledModalHeader>
         <Modal.Title>
           <Title>
             Voulez-vous supprimer le signalement ?
           </Title>
         </Modal.Title>
-      </Modal.Header>
+      </StyledModalHeader>
       <Body>
         <FooterButton>
           <ValidateButton

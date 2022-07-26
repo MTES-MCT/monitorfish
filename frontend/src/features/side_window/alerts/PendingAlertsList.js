@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
@@ -27,14 +27,41 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
     focusOnAlert
   } = useSelector(state => state.alert)
   const baseUrl = window.location.origin
-  const [sortedAlerts, setSortedAlerts] = useState([])
   const [sortColumn] = useState('creationDate')
   const [sortType] = useState(SortType.DESC)
-  const [filteredAlerts, setFilteredAlerts] = useState([])
   const [searched, setSearched] = useState(undefined)
   const [showSilencedAlertForIndex, setShowSilencedAlertForIndex] = useState(null)
   const [silencedAlertId, setSilencedAlertId] = useState(null)
   const scrollableContainer = useRef()
+
+  const filteredAlerts = useMemo(() => {
+    if (!alerts) {
+      return []
+    }
+
+    if (!searched?.length || searched?.length <= 1) {
+      return alerts
+    }
+
+    if (searched?.length > 1) {
+      return alerts.filter(alert =>
+        getTextForSearch(getAlertNameFromType(alert.type)).includes(getTextForSearch(searched)) ||
+        getTextForSearch(alert.vesselName).includes(getTextForSearch(searched)) ||
+        getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searched)) ||
+        getTextForSearch(alert.externalReferenceNumber).includes(getTextForSearch(searched)) ||
+        getTextForSearch(alert.ircs).includes(getTextForSearch(searched)))
+    }
+  }, [alerts, searched])
+
+  const sortedAlerts = useMemo(() => {
+    if (!filteredAlerts) {
+      return []
+    }
+
+    return filteredAlerts
+      .slice()
+      .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
+  }, [filteredAlerts, sortColumn, sortType])
 
   useEffect(() => {
     if (focusOnAlert) {
@@ -48,37 +75,6 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
       }
     }
   }, [focusOnAlert])
-
-  useEffect(() => {
-    if (filteredAlerts) {
-      const sortedAlerts = filteredAlerts
-        .slice()
-        .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
-
-      setSortedAlerts(sortedAlerts)
-    }
-  }, [filteredAlerts, sortColumn, sortType])
-
-  useEffect(() => {
-    if (!alerts) {
-      return
-    }
-
-    if (!searched?.length || searched?.length <= 1) {
-      setFilteredAlerts(alerts)
-      return
-    }
-
-    if (searched?.length > 1) {
-      const nextFilteredAlerts = alerts.filter(alert =>
-        getTextForSearch(getAlertNameFromType(alert.type)).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.vesselName).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.externalReferenceNumber).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.ircs).includes(getTextForSearch(searched)))
-      setFilteredAlerts(nextFilteredAlerts)
-    }
-  }, [alerts, searched])
 
   const silenceAlertCallback = useCallback((silencedAlertPeriod, id) => {
     setShowSilencedAlertForIndex(null)

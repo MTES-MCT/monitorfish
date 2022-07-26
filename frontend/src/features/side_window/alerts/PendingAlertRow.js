@@ -36,10 +36,6 @@ const PendingAlertRow = ({ alert, index, showSilencedAlertForIndex, setShowSilen
     }
   }, [focusOnAlert, alert])
 
-  const validateAlertCallback = useCallback(id => {
-    dispatch(validateAlert(id))
-  }, [dispatch])
-
   return <List.Item
     ref={ref}
     key={alert.id}
@@ -111,7 +107,7 @@ const PendingAlertRow = ({ alert, index, showSilencedAlertForIndex, setShowSilen
               style={validateAlertIconStyle}
               alt={'Valider'}
               title={'Valider l\'alerte'}
-              onClick={() => validateAlertCallback(alert.id)}
+              onClick={() => dispatch(validateAlert(alert.id))}
               src={`${baseUrl}/Icone_valider_alerte.png`}
               onMouseOver={e => (e.currentTarget.src = `${baseUrl}/Icone_valider_alerte_pleine.png`)}
               onMouseOut={e => (e.currentTarget.src = `${baseUrl}/Icone_valider_alerte.png`)}

@@ -13,7 +13,11 @@ export const measurementStyleWithCenter = new Style({
       color: COLORS.slateGray
     })
   }),
-  geometry: (feature) => {
+  geometry: feature => {
+    if (feature.getGeometry().getType() === 'LineString') {
+      return undefined
+    }
+
     const extent = feature.getGeometry().getExtent()
     const center = getCenter(extent)
     return new Point(center)

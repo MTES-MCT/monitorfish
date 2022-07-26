@@ -42,8 +42,8 @@ const VesselsSearch = () => {
   const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
   const escapeFromKeyboard = useEscapeFromKeyboard()
   const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isFocusedOnVesselSearch)
-  const inputIsShown = isFocusedOnVesselSearch || !selectedVesselIdentity
-  const rightMenuIsShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
+  const isVesselNameShown = !isFocusedOnVesselSearch && selectedVesselIdentity
+  const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
 
   useEffect(() => {
     if (clickedOutsideComponent || escapeFromKeyboard) {
@@ -99,12 +99,15 @@ const VesselsSearch = () => {
         data-cy={'vessel-name'}
         isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
-        rightMenuIsShrinked={rightMenuIsShrinked}
+        rightMenuIsShrinked={isRightMenuShrinked}
       >
         <Flex>
           {
-            inputIsShown
-              ? <Input
+            isVesselNameShown
+              ? <VesselName
+                focusOnVesselSearchInput={focusOnVesselSearchInput}
+              />
+              : <Input
                 data-cy={'vessel-search-input'}
                 ref={input => selectedVesselIdentity ? input && input.focus() : null}
                 type="text"
@@ -113,9 +116,6 @@ const VesselsSearch = () => {
                 placeholder={'Rechercher un navire...'}
                 onChange={e => setSearchText(e.target.value)}
                 isExtended={isFocusedOnVesselSearch || vesselSidebarIsOpen}
-              />
-              : <VesselName
-                focusOnVesselSearchInput={focusOnVesselSearchInput}
               />
           }
         </Flex>
@@ -133,11 +133,11 @@ const VesselsSearch = () => {
         title={'Rechercher un navire'}
         onMouseEnter={() => dispatch(expandRightMenu())}
         onClick={() => focusOnVesselSearchInput(true)}
-        isShrinked={rightMenuIsShrinked}
+        isShrinked={isRightMenuShrinked}
         isOpen={selectedVessel}
       >
         <SearchIcon
-          $isShrinked={rightMenuIsShrinked}
+          $isShrinked={isRightMenuShrinked}
         />
       </SearchButton>
     </>
@@ -194,7 +194,7 @@ const Input = styled.input`
   padding: 0 5px 0 10px;
   flex: 3;
   transition: all 0.7s;
-  
+
   :hover, :focus {
     border: none;
   }
@@ -214,7 +214,7 @@ const SearchButton = styled(MapButtonStyle)`
   right: ${props => props.isShrinked ? 0 : 10}px;
   background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   transition: all 0.3s;
-  
+
   :hover, :focus {
       background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }

@@ -30,13 +30,15 @@ const RegulatoryTopicInput = props => {
     setValue(topic)
   }, [topic])
 
-  return (<CustomInput
+  return (
+    <CustomInput
       disabled={false}
-      data-cy="layer-name-input"
+      data-cy="regulatory-topic-edit-input"
       value={value}
       onChange={val => setValue(val)}
       onKeyDown={handleKeyDown}
-    />)
+    />
+  )
 }
 
 export default RegulatoryTopicInput

@@ -100,7 +100,7 @@ const Reporting = props => {
           <ArchiveButton
             data-cy={'archive-reporting-card'}
             title={'Archiver'}
-            isAlert={!!numberOfAlerts}
+            $isAlert={!!numberOfAlerts}
             onClick={() => dispatch(archiveReporting(reporting.id))}
           />
           <DeleteButton
@@ -199,7 +199,7 @@ const InfractionSuspicionIcon = styled(InfractionSuspicionIconSVG)`
 
 const ArchiveButton = styled(ArchiveIconSVG)`
   cursor: pointer;
-  margin-top: ${props => props.isAlert ? 11 : 7}px;
+  margin-top: ${props => props.$isAlert ? 11 : 7}px;
 `
 
 /*

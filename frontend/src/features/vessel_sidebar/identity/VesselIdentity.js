@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../constants/constants'
+import { COLORS } from '../../../constants/constants'
 import countries from 'i18n-iso-countries'
-import { getDate } from '../../utils'
-import { vesselsAreEquals } from '../../domain/entities/vessel'
+import { getDate } from '../../../utils'
+import { vesselsAreEquals } from '../../../domain/entities/vessel'
 import { useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
-
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 const VesselIdentity = () => {
   const {

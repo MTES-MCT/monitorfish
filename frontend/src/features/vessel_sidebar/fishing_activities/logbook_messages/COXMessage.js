@@ -7,8 +7,6 @@ import { WSG84_PROJECTION } from '../../../../domain/entities/map'
 import countries from 'i18n-iso-countries'
 import { useSelector } from 'react-redux'
 
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
-
 const COXMessage = props => {
   const { coordinatesFormat } = useSelector(state => state.map)
 

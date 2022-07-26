@@ -6,9 +6,12 @@ import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
 import { useDispatch, useSelector } from 'react-redux'
 import { hideFishingActivitiesOnMap, showFishingActivitiesOnMap } from '../../../../domain/shared_slices/FishingActivities'
 
-const ShowFishingActivitiesOnMap = ({ sidebarIsOpen, rightMenuIsOpen }) => {
+const ShowFishingActivitiesOnMap = ({ sidebarIsOpen }) => {
   const dispatch = useDispatch()
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    healthcheckTextWarning,
+    rightMenuIsOpen
+  } = useSelector(state => state.global)
   const {
     /** @type {FishingActivityShowedOnMap[]} fishingActivitiesShowedOnMap */
     fishingActivitiesShowedOnMap,
@@ -46,11 +49,11 @@ const ShowFishingActivitiesOnMapButton = styled(MapButtonStyle)`
   background: ${props => props.fishingActivitiesShowedOnMap ? COLORS.shadowBlue : COLORS.charcoal};
   position: absolute;
   margin-right: ${props => props.sidebarIsOpen ? 505 : -45}px;
+  right: ${props => props.rightMenuIsOpen && props.sidebarIsOpen ? 55 : 10}px;
   opacity: ${props => props.sidebarIsOpen ? 1 : 0};
   ${props => props.isClickable ? 'cursor: pointer;' : null}
   border-radius: 1px;
   z-index: 999;
-  right: ${props => props.rightMenuIsOpen && props.sidebarIsOpen ? 55 : 10}px;
   transition: all 0.5s, right 0.3s;
 
   :hover, :focus {

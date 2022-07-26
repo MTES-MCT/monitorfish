@@ -8,8 +8,7 @@ export const useEscapeFromKeyboard = () => {
   }, [])
 
   const escapeFromKeyboard = event => {
-    const escapeKeyCode = 27
-    if (event.keyCode === escapeKeyCode) {
+    if (event.key === 'Escape') {
       setEscape({ dummyTrigger: true })
     }
 

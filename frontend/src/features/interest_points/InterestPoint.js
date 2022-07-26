@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
@@ -6,7 +6,7 @@ import { expandRightMenu } from '../../domain/shared_slices/Global'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { ReactComponent as InterestPointSVG } from '../icons/Point_interet.svg'
-import SaveInterestPoint from './SaveInterestPoint'
+import EditInterestPoint from './EditInterestPoint'
 import {
   deleteInterestPointBeingDrawed,
   drawInterestPoint,
@@ -15,7 +15,7 @@ import {
 
 const InterestPoint = () => {
   const dispatch = useDispatch()
-  const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const vesselSidebarIsOpen = useSelector(state => state.vessel.selectedVessel)
   const {
     isEditing,
     interestPointBeingDrawed
@@ -26,45 +26,41 @@ const InterestPoint = () => {
     previewFilteredVesselsMode
   } = useSelector(state => state.global)
 
-  const firstUpdate = useRef(true)
-  const [interestPointIsOpen, setInterestPointIsOpen] = useState(false)
+  const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
+  const isInterestPointOpen = isEditing || interestPointBeingDrawed
   const wrapperRef = useRef(null)
 
   useEffect(() => {
-    if (interestPointIsOpen) {
-      dispatch(unselectVessel())
-      firstUpdate.current = false
-      document.addEventListener('keydown', escapeFromKeyboard, false)
-      if (!isEditing) {
-        dispatch(drawInterestPoint())
-      }
-    } else {
-      dispatch(endInterestPointDraw())
-      if (!isEditing) {
-        dispatch(deleteInterestPointBeingDrawed())
-      }
-    }
-  }, [interestPointIsOpen])
+    document.addEventListener('keydown', escapeFromKeyboard)
 
-  useEffect(() => {
-    setInterestPointIsOpen(isEditing)
-  }, [isEditing])
-
-  useEffect(() => {
-    if (!interestPointBeingDrawed) {
-      setInterestPointIsOpen(false)
+    return () => {
+      document.removeEventListener('keydown', escapeFromKeyboard)
     }
-  }, [interestPointBeingDrawed])
+  }, [])
 
   const escapeFromKeyboard = event => {
-    const escapeKeyCode = 27
-    if (event.keyCode === escapeKeyCode) {
-      setInterestPointIsOpen(false)
+    if (event.key === 'Escape') {
+      close()
     }
   }
 
   function openOrCloseInterestPoint () {
-    setInterestPointIsOpen(!interestPointIsOpen)
+    if (!isInterestPointOpen) {
+      dispatch(unselectVessel())
+
+      if (!isEditing) {
+        dispatch(drawInterestPoint())
+      }
+    } else {
+      close()
+    }
+  }
+
+  function close () {
+    dispatch(endInterestPointDraw())
+    if (!isEditing) {
+      dispatch(deleteInterestPointBeingDrawed())
+    }
   }
 
   return (
@@ -73,19 +69,21 @@ const InterestPoint = () => {
         data-cy={'interest-point'}
         isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
-        isOpen={interestPointIsOpen}
-        rightMenuIsOpen={rightMenuIsOpen}
-        selectedVessel={selectedVessel}
+        isOpen={isInterestPointOpen}
+        rightMenuIsShrinked={isRightMenuShrinked}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Créer un point d\'intérêt'}
-        onClick={openOrCloseInterestPoint}>
-        <InterestPointIcon $rightMenuIsOpen={rightMenuIsOpen} $selectedVessel={selectedVessel}/>
+        onClick={openOrCloseInterestPoint}
+      >
+        <InterestPointIcon
+          $rightMenuIsShrinked={isRightMenuShrinked}
+        />
       </InterestPointWrapper>
-      <SaveInterestPoint
+      <EditInterestPoint
         healthcheckTextWarning={healthcheckTextWarning}
-        firstUpdate={firstUpdate.current}
-        isOpen={interestPointIsOpen}
-        close={() => setInterestPointIsOpen(false)}/>
+        isOpen={isInterestPointOpen}
+        close={close}
+      />
     </Wrapper>
   )
 }
@@ -102,15 +100,15 @@ const InterestPointWrapper = styled(MapButtonStyle)`
   top: 291px;
   z-index: 99;
   height: 40px;
-  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
-  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
-  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
+  width: ${props => props.rightMenuIsShrinked ? '5px' : '40px'};
+  border-radius: ${props => props.rightMenuIsShrinked ? '1px' : '2px'};
+  right: ${props => props.rightMenuIsShrinked ? '0' : '10px'};
   transition: all 0.3s;
 
   :hover {
       background: ${COLORS.charcoal};
   }
-  
+
   :focus {
       background: ${COLORS.shadowBlue};
   }
@@ -118,7 +116,7 @@ const InterestPointWrapper = styled(MapButtonStyle)`
 
 const InterestPointIcon = styled(InterestPointSVG)`
   width: 40px;
-  opacity: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '0' : '1'};
+  opacity: ${props => props.$rightMenuIsShrinked ? '0' : '1'};
   transition: all 0.2s;
 `
 

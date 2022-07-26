@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import TrackDepth from './TrackDepth'
 import DateRange from './DateRange'
 import { COLORS } from '../../../../constants/constants'
@@ -12,33 +12,38 @@ import { useDispatch, useSelector } from 'react-redux'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import PositionsTable from './PositionsTable'
 import modifyVesselTrackDepth from '../../../../domain/use_cases/vessel/modifyVesselTrackDepth'
+import ExportTrack from './ExportTrack'
 
 /**
  * @typedef {object} TrackRequestProps
- * @property {boolean} isRightMenuOpen
- * @property {boolean} isTrackRequestOpen
- * @property {(isOpen: boolean) => void} setIsTrackRequestOpen
+ * @property {boolean} sidebarIsOpen
  */
 
 /**
  * @param {TrackRequestProps} props
  */
-const TrackRequest = ({ isRightMenuOpen, setIsTrackRequestOpen, isTrackRequestOpen }) => {
+const TrackRequest = ({ sidebarIsOpen }) => {
   const dispatch = useDispatch()
   /** @type {{ healthcheckTextWarning: string }} */
   const { healthcheckTextWarning } = useSelector(state => state.global)
+  /** @type {{ rightMenuIsOpen: boolean }} */
+  const { rightMenuIsOpen } = useSelector(state => state.global)
   /** @type {{ selectedVesselCustomTrackRequest: VesselNS.TrackRequest }} */
   const { selectedVesselCustomTrackRequest } = useSelector(state => state.vessel)
   /** @type {{ selectedVesselIdentity: VesselNS.VesselIdentity }} */
   const { selectedVesselIdentity } = useSelector(state => state.vessel)
+  const [isOpenedFromClick, setIsOpenedFromClick] = useState(false)
+
+  const isOpen = useMemo(() => {
+    return sidebarIsOpen && isOpenedFromClick
+  }, [sidebarIsOpen, isOpenedFromClick])
 
   /** @type {[Date, Date] | undefined} */
   const selectedVesselCustomDateRange = useMemo(
     () => selectedVesselCustomTrackRequest.trackDepth === VesselTrackDepth.CUSTOM
       ? [selectedVesselCustomTrackRequest.afterDateTime, selectedVesselCustomTrackRequest.beforeDateTime]
       : undefined,
-    [selectedVesselCustomTrackRequest]
-  )
+    [selectedVesselCustomTrackRequest])
 
   /**
    * @param {[Date, Date]} dateRange
@@ -73,19 +78,21 @@ const TrackRequest = ({ isRightMenuOpen, setIsTrackRequestOpen, isTrackRequestOp
   return (
     <>
       <TrackRequestButton
-        data-cy={'vessel-track-depth-selection'}
         healthcheckTextWarning={healthcheckTextWarning}
-        isRightMenuOpen={isRightMenuOpen}
-        isTrackRequestOpen={isTrackRequestOpen}
-        onClick={() => setIsTrackRequestOpen(!isTrackRequestOpen)}
+        data-cy={'vessel-track-depth-selection'}
+        sidebarIsOpen={sidebarIsOpen}
+        isRightMenuOpen={rightMenuIsOpen}
+        isOpen={isOpen}
+        onClick={() => setIsOpenedFromClick(!isOpenedFromClick)}
         title={'Paramétrer l\'affichage de la piste VMS'}
       >
         <VesselIcon/>
       </TrackRequestButton>
       <TrackRequestBody
         healthcheckTextWarning={healthcheckTextWarning}
-        isRightMenuOpen={isRightMenuOpen}
-        isTrackRequestOpen={isTrackRequestOpen}
+        sidebarIsOpen={sidebarIsOpen}
+        isRightMenuOpen={rightMenuIsOpen}
+        isOpen={isOpen}
       >
         <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
         <TrackDepth
@@ -98,6 +105,7 @@ const TrackRequest = ({ isRightMenuOpen, setIsTrackRequestOpen, isTrackRequestOp
           onChange={updateDateRange}
           placeholder={'Choisir une période précise'}
         />
+        <ExportTrack/>
         <Header>Liste des positions VMS affichées</Header>
         <PositionsTable openBox />
       </TrackRequestBody>
@@ -114,14 +122,14 @@ const Header = styled.div`
 `
 
 const TrackRequestButton = styled(MapComponentStyle)`
-  background: ${p => p.isTrackRequestOpen ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${p => p.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   border-radius: 1px;
   cursor: pointer;
   height: 30px;
-  margin-right: 505px;
-  opacity: 1;
+  margin-right: ${props => props.sidebarIsOpen ? 505 : -45}px;
+  right: ${props => props.isRightMenuOpen && props.sidebarIsOpen ? 55 : 10}px;
+  opacity: ${props => props.sidebarIsOpen ? 1 : 0};
   position: absolute;
-  right: ${p => p.isRightMenuOpen ? 55 : 10}px;
   top: 153px;
   transition: all 0.5s, right 0.3s;
   width: 30px;
@@ -129,20 +137,18 @@ const TrackRequestButton = styled(MapComponentStyle)`
 `
 
 const TrackRequestBody = styled(MapComponentStyle)`
-  animation: ${p => p.isRightMenuOpen && p.isTrackRequestOpen
-    ? 'vessel-box-opening-with-right-menu-hover'
-    : 'vessel-box-closing-with-right-menu-hover'} 0.3s ease forwards;
   background: ${COLORS.background};
   border-radius: 2px;
   color: ${COLORS.slateGray};
   font-size: 13px;
-  margin-right: ${p => p.isTrackRequestOpen ? '540px' : '217px'};
-  opacity: ${p => p.isTrackRequestOpen ? '1' : '0'};
+  text-align: left;
+  margin-right: ${p => p.isOpen ? '540px' : '217px'};
+  opacity: ${p => p.isOpen ? '1' : '0'};
   position: absolute;
-  right: 10px;
+  right: ${props => props.isRightMenuOpen && props.sidebarIsOpen ? 55 : 10}px;
   top: 118px;
   transition: all 0.3s;
-  visibility: ${p => p.isTrackRequestOpen ? 'visible' : 'hidden'};
+  visibility: ${p => p.isOpen ? 'visible' : 'hidden'};
   width: 306px;
 `
 

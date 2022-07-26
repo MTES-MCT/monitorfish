@@ -1,23 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import showVessel from '../../domain/use_cases/vessel/showVessel'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
-import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import searchVessels from '../../domain/use_cases/vessel/searchVessels'
 import { vesselsAreEquals } from '../../domain/entities/vessel'
-import focusOnVesselSearch, { focusState } from '../../domain/use_cases/vessel/focusOnVesselSearch'
 import { expandRightMenu } from '../../domain/shared_slices/Global'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
-import VesselSearchList from './VesselSearchList'
-import SelectedVessel from './SelectedVessel'
-import { useClickOutside } from '../../hooks/useClickOutside'
+import VesselSearchResult from './VesselSearchResult'
+import VesselName from './VesselName'
 import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
 import { findMatchingFeature, removeDuplicatedFoundVessels } from './vesselsSearchUtils'
 import getVesselVoyage from '../../domain/use_cases/vessel/getVesselVoyage'
+import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
+import { setFocusOnVesselSearch } from '../../domain/shared_slices/Vessel'
 
 const VesselsSearch = () => {
   const dispatch = useDispatch()
@@ -25,8 +24,8 @@ const VesselsSearch = () => {
   const {
     vessels,
     vesselSidebarIsOpen,
+    selectedVesselIdentity,
     isFocusedOnVesselSearch,
-    selectedVesselIdentity: vesselIdentity,
     selectedVessel
   } = useSelector(state => state.vessel)
 
@@ -36,57 +35,51 @@ const VesselsSearch = () => {
     previewFilteredVesselsMode
   } = useSelector(state => state.global)
 
+  const wrapperRef = useRef(null)
   const [searchText, setSearchText] = useState('')
-  const [vesselsHasBeenUpdated, setVesselsHasBeenUpdated] = useState(false)
   const [foundVesselsOnMap, setFoundVesselsOnMap] = useState([])
   const [foundVesselsFromAPI, setFoundVesselsFromAPI] = useState([])
-  const [selectedVesselIdentity, setSelectedVesselIdentity] = useState(null)
-  const firstUpdate = useRef(true)
-  const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutside(wrapperRef)
-  const escapeFromKeyboard = useEscapeFromKeyboard()
   const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
+  const escapeFromKeyboard = useEscapeFromKeyboard()
+  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isFocusedOnVesselSearch)
+  const isVesselNameShown = !isFocusedOnVesselSearch && selectedVesselIdentity
+  const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
 
   useEffect(() => {
     if (clickedOutsideComponent || escapeFromKeyboard) {
-      dispatch(focusOnVesselSearch())
-      setSearchText('')
-      setShowLastSearchedVessels(false)
+      focusOnVesselSearchInput(false)
     }
   }, [clickedOutsideComponent, escapeFromKeyboard])
 
-  useEffect(() => {
-    let doNotFocus = false
-    if (selectedVesselIdentity &&
-      vesselIdentity &&
-      vesselIdentity === selectedVesselIdentity) {
-      doNotFocus = true
-      setVesselsHasBeenUpdated(true)
-      dispatch(focusOnVesselSearch(null, doNotFocus))
+  const focusOnVesselSearchInput = useCallback(isFocused => {
+    dispatch(setFocusOnVesselSearch(isFocused))
 
+    if (!isFocused) {
+      setSearchText('')
+      setFoundVesselsFromAPI([])
+      setFoundVesselsOnMap([])
+      setShowLastSearchedVessels(false)
       return
     }
 
-    setVesselsHasBeenUpdated(false)
-    dispatch(focusOnVesselSearch(null, doNotFocus))
-    setSelectedVesselIdentity(vesselIdentity)
-  }, [vesselIdentity])
+    if (isFocused && !searchText?.length) {
+      setShowLastSearchedVessels(true)
+    }
+  }, [searchText])
 
-  function getFoundVesselsOnMap () {
-    const foundFeatures = []
-    vessels.forEach(feature => {
-      if (findMatchingFeature(feature, searchText)) {
-        foundFeatures.push(feature)
-      }
-    })
+  const selectVessel = useCallback(vessel => {
+    if (!vesselsAreEquals(vessel, selectedVesselIdentity)) {
+      dispatch(showVessel(vessel, true, false))
+      dispatch(getVesselVoyage(vessel, null, false))
+    }
 
-    return foundFeatures.slice(0, 30)
-  }
+    focusOnVesselSearchInput(false)
+  }, [selectedVesselIdentity])
 
   useEffect(() => {
     if (searchText.length > 1) {
       setShowLastSearchedVessels(false)
-      const foundVesselsOnMap = getFoundVesselsOnMap()
+      const foundVesselsOnMap = getFoundVesselsOnMap(vessels, searchText)
       setFoundVesselsOnMap(foundVesselsOnMap)
 
       dispatch(searchVessels(searchText.toUpperCase())).then(foundVesselsFromAPI => {
@@ -97,89 +90,76 @@ const VesselsSearch = () => {
       setFoundVesselsOnMap([])
       setFoundVesselsFromAPI([])
     }
-  }, [searchText, setFoundVesselsOnMap, selectedVesselIdentity])
-
-  useEffect(() => {
-    if (selectedVesselIdentity) {
-      if (!vesselsHasBeenUpdated) {
-        if (!vesselIdentity ||
-          (vesselIdentity && !vesselsAreEquals(selectedVesselIdentity, vesselIdentity))) {
-          dispatch(showVessel(selectedVesselIdentity, true, false))
-          dispatch(getVesselVoyage(selectedVesselIdentity, null, false))
-        }
-
-        setSearchText('')
-        setFoundVesselsFromAPI([])
-        setFoundVesselsOnMap([])
-        setShowLastSearchedVessels(false)
-      }
-    } else {
-      dispatch(unselectVessel())
-    }
-  }, [selectedVesselIdentity])
+  }, [searchText])
 
   return (
     <>
-      <Wrapper
+      <VesselNameOrInput
+        ref={wrapperRef}
+        data-cy={'vessel-name'}
         isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
-        rightMenuIsOpen={rightMenuIsOpen}
-        vesselSidebarIsOpen={vesselSidebarIsOpen}
-        selectedVesselIdentity={selectedVesselIdentity}
-        ref={wrapperRef}
-        data-cy={'vessel-name'}>
-        <SearchBoxField>
+        rightMenuIsShrinked={isRightMenuShrinked}
+      >
+        <Flex>
           {
-            !isFocusedOnVesselSearch && selectedVesselIdentity
-              ? <SelectedVessel
-                selectedVesselIdentity={selectedVesselIdentity}
-                setSelectedVesselIdentity={setSelectedVesselIdentity}
+            isVesselNameShown
+              ? <VesselName
+                focusOnVesselSearchInput={focusOnVesselSearchInput}
               />
-              : <SearchBoxInput
+              : <Input
                 data-cy={'vessel-search-input'}
                 ref={input => selectedVesselIdentity ? input && input.focus() : null}
                 type="text"
-                firstUpdate={firstUpdate}
-                onClick={() => !searchText?.length && setShowLastSearchedVessels(true)}
+                onClick={() => focusOnVesselSearchInput(true)}
                 value={searchText}
                 placeholder={'Rechercher un navire...'}
                 onChange={e => setSearchText(e.target.value)}
-                isFocusedOnVesselSearch={isFocusedOnVesselSearch}
-                vesselSidebarIsOpen={vesselSidebarIsOpen}
+                isExtended={isFocusedOnVesselSearch || vesselSidebarIsOpen}
               />
           }
-        </SearchBoxField>
-        <VesselSearchList
+        </Flex>
+        <VesselSearchResult
           showLastSearchedVessels={showLastSearchedVessels}
           foundVesselsOnMap={foundVesselsOnMap}
           foundVesselsFromAPI={foundVesselsFromAPI}
-          setVesselsHasBeenUpdated={setVesselsHasBeenUpdated}
-          setSelectedVesselIdentity={setSelectedVesselIdentity}
-          setSearchText={setSearchText}
+          selectVessel={selectVessel}
           searchText={searchText}
         />
-      </Wrapper>
+      </VesselNameOrInput>
       <SearchButton
         isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
         title={'Rechercher un navire'}
         onMouseEnter={() => dispatch(expandRightMenu())}
-        onClick={() => dispatch(focusOnVesselSearch(focusState.CLICK_SEARCH_ICON, !selectedVessel))}
-        rightMenuIsOpen={rightMenuIsOpen}
+        onClick={() => focusOnVesselSearchInput(true)}
+        isShrinked={isRightMenuShrinked}
         isOpen={selectedVessel}
-        selectedVessel={selectedVessel}>
+      >
         <SearchIcon
-          $rightMenuIsOpen={rightMenuIsOpen}
-          $selectedVessel={selectedVessel}/>
+          $isShrinked={isRightMenuShrinked}
+        />
       </SearchButton>
-    </>)
+    </>
+  )
 }
 
-const Wrapper = styled(MapComponentStyle)`
+function getFoundVesselsOnMap (vessels, searchText) {
+  const foundFeatures = []
+  vessels.forEach(feature => {
+    if (findMatchingFeature(feature, searchText)) {
+      foundFeatures.push(feature)
+    }
+  })
+
+  return foundFeatures.slice(0, 30)
+}
+
+const VesselNameOrInput = styled(MapComponentStyle)`
   position: absolute;
   display: inline-block;
   top: 10px;
-  right: 55px;
+  right: ${props => props.rightMenuIsShrinked ? 10 : 55}px;
   z-index: 1000;
   color: ${COLORS.textWhite};
   text-decoration: none;
@@ -190,33 +170,18 @@ const Wrapper = styled(MapComponentStyle)`
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  
-  animation: ${props => props.selectedVesselIdentity
-  ? props.rightMenuIsOpen && props.vesselSidebarIsOpen
-    ? 'vessel-search-box-opening-with-right-menu-hover'
-    : 'vessel-search-box-closing-with-right-menu-hover'
-  : null} 0.3s ease forwards;
-  
-  @keyframes vessel-search-box-opening-with-right-menu-hover {
-    0%   { right: 10px;   }
-    100% { right: 55px; }
-  }
+  transition: all 0.3s;
 
-  @keyframes vessel-search-box-closing-with-right-menu-hover {
-    0% { right: 55px; }
-    100%   { right: 10px;   }
-  }
-  
   :hover, :focus {
     background-color: none;
   }
 `
 
-const SearchBoxField = styled.div`
+const Flex = styled.div`
   display: flex;
 `
 
-const SearchBoxInput = styled.input`
+const Input = styled.input`
   margin: 0;
   background-color: white;
   border: none;
@@ -225,17 +190,11 @@ const SearchBoxInput = styled.input`
   color: ${COLORS.gunMetal};
   font-size: 13px;
   height: 40px;
-  width: ${props => props.isFocusedOnVesselSearch || props.vesselSidebarIsOpen ? '500px' : '320px'};
+  width: ${props => props.isExtended ? 500 : 320}px;
   padding: 0 5px 0 10px;
   flex: 3;
-  
-  animation: ${props => props.isFocusedOnVesselSearch && !props.vesselSidebarIsOpen ? 'vessel-search-closing' : ''}  0.7s ease forwards;
+  transition: all 0.7s;
 
-  @keyframes vessel-search-closing {
-    0% { width: 500px; }
-    100%   { width: 320px;   }
-  }
-  
   :hover, :focus {
     border: none;
   }
@@ -250,12 +209,12 @@ const SearchButton = styled(MapButtonStyle)`
   cursor: pointer;
   border-radius: 2px;
   position: absolute;
-  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
-  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
-  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
+  width: ${props => props.isShrinked ? 5 : 40}px;
+  border-radius: ${props => props.isShrinked ? 1 : 2}px;
+  right: ${props => props.isShrinked ? 0 : 10}px;
   background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   transition: all 0.3s;
-  
+
   :hover, :focus {
       background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }
@@ -265,7 +224,7 @@ const SearchIcon = styled(SearchIconSVG)`
   width: 24px;
   height: 24x;
   margin-top: 4px;
-  opacity: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '0' : '1'};
+  opacity: ${props => props.$isShrinked ? '0' : '1'};
   transition: all 0.2s;
 `
 

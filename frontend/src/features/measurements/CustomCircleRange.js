@@ -16,8 +16,7 @@ const CustomCircleRange = ({
   setCircleRadiusToAdd,
   cancelAddCircleRange,
   addCustomCircleRange,
-  healthcheckTextWarning,
-  measurementIsOpen
+  healthcheckTextWarning
 }) => {
   const {
     circleMeasurementInDrawing
@@ -100,7 +99,7 @@ const CancelButton = styled.button`
   margin: 15px 0 0 15px;
   font-size: 13px;
   color: ${COLORS.gunMetal};
-  
+
   :disabled {
     border: 1px solid ${COLORS.lightGray};
     color: ${COLORS.lightGray};
@@ -114,7 +113,7 @@ const OkButton = styled.button`
   margin: 15px 0 0;
   font-size: 13px;
   color: ${COLORS.gainsboro};
-  
+
   :hover, :focus {
     background: ${COLORS.charcoal};
   }
@@ -125,21 +124,21 @@ const Body = styled.div`
   text-align: left;
   font-size: 13px;
   color: ${COLORS.slateGray};
-  
+
   p {
     margin: 0;
     font-size: 13px;
   }
-  
+
   p:nth-of-type(2) {
     margin-top: 15px;
     font-size: 13px;
   }
-  
+
   span {
     margin-left: 7px;
   }
-  
+
   input {
     color: ${COLORS.charcoal};
     margin-top: 7px;

@@ -20,7 +20,7 @@ const RegulatedGear = props => {
     remarks
   } = props
 
-  return (<>
+  return (<Wrapper>
       <ContentLine data-cy='regulatory-gear-line'>
         <Label>{code ? `Engin ${id + 1}` : `Catégorie ${id + 1}`}</Label>
         <Tag
@@ -99,10 +99,18 @@ const RegulatedGear = props => {
           $isGray={remarks}
         />
       </ContentLine>
-    </>
+    </Wrapper>
   )
 }
-const SecondCustomInput = styled(CustomInput)` 
+
+const Wrapper = styled.div`
+  .rs-picker-toggle {
+    width: 120px;
+  }
+`
+
+const SecondCustomInput = styled(CustomInput)`
   margin-left: 10px;
 `
+
 export default RegulatedGear

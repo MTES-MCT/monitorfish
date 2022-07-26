@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ReactComponent as FilterSVG } from '../icons/Icone_filtres_dark.svg'
 import { CirclePicker } from 'react-color'
 import TagList from './TagList'
+import StyledModalHeader from '../commonComponents/StyledModalHeader'
 
 const styles = {
   width: 200,
@@ -47,13 +48,13 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter, closeAn
       style={{ marginTop: 100 }}
       onClose={cancel}
     >
-      <Modal.Header>
+      <StyledModalHeader>
         <Modal.Title>
           <Title>
             Enregistrer le filtre
           </Title>
         </Modal.Title>
-      </Modal.Header>
+      </StyledModalHeader>
       <Modal.Body>
         <InputGroup inside style={styles}>
           <InputGroup.Addon>
@@ -130,7 +131,7 @@ const SaveButton = styled.button`
   font-size: 13px;
   color: ${COLORS.gainsboro};
   float: right;
-  
+
   :hover {
     background: ${COLORS.charcoal};
   }
@@ -144,7 +145,7 @@ const CancelButton = styled.button`
   color: ${COLORS.gunMetal};
   margin: -28px 0px 20px 10px;
   float: right;
-  
+
   :disabled {
     border: 1px solid ${COLORS.lightGray};
     color: ${COLORS.lightGray};

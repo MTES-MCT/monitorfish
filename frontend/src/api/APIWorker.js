@@ -38,7 +38,7 @@ const APIWorker = () => {
     vesselBeaconMalfunctionsResumeAndHistory
   } = useSelector(state => state.beaconMalfunction)
 
-  const beaconMalfunctionsInterval = useRef(null)
+  const sideWindowInterval = useRef(null)
   const beaconMalfunctionInKanbanInterval = useRef(null)
   const vesselBeaconMalfunctionInterval = useRef(null)
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
@@ -66,10 +66,6 @@ const APIWorker = () => {
         dispatch(setIsUpdatingVessels())
         dispatch(getHealthcheck())
         dispatch(showAllVessels())
-        if (adminRole) {
-          dispatch(getOperationalAlerts())
-          dispatch(getSilencedAlerts())
-        }
         dispatch(updateVesselTracks())
       })
 
@@ -83,17 +79,19 @@ const APIWorker = () => {
 
   useEffect(() => {
     if (adminRole && sideWindowIsOpen) {
-      if (beaconMalfunctionsInterval?.current) {
-        clearInterval(beaconMalfunctionsInterval.current)
+      if (sideWindowInterval?.current) {
+        clearInterval(sideWindowInterval.current)
       }
 
-      beaconMalfunctionsInterval.current = setInterval(() => {
+      sideWindowInterval.current = setInterval(() => {
         dispatch(getAllBeaconMalfunctions())
+        dispatch(getOperationalAlerts())
+        dispatch(getSilencedAlerts())
       }, THIRTY_SECONDS)
     }
 
     return () => {
-      clearInterval(beaconMalfunctionsInterval?.current)
+      clearInterval(sideWindowInterval?.current)
     }
   }, [adminRole, sideWindowIsOpen])
 

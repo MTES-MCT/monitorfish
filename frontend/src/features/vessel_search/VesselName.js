@@ -41,7 +41,7 @@ function VesselName ({ focusOnVesselSearchInput }) {
       vesselSidebarIsOpen={vesselSidebarIsOpen}
     >
       {
-        selectedVesselIdentity?.flagState
+        selectedVesselIdentity.flagState
           ? <Flag
             title={countries.getName(selectedVesselIdentity.flagState, 'fr')}
             src={`flags/${selectedVesselIdentity.flagState.toLowerCase()}.svg`}/>
@@ -49,12 +49,12 @@ function VesselName ({ focusOnVesselSearchInput }) {
       }
       <FavoriteIcon
         data-cy={'sidebar-add-vessel-to-favorites'}
-        $flagIsShown={selectedVesselIdentity?.flagState}
+        $flagIsShown={selectedVesselIdentity.flagState}
         $isFavorite={isFavorite}
         onClick={addOrRemoveToFavorites}
       />
       <Name
-        title={selectedVesselIdentity?.vesselName}
+        title={selectedVesselIdentity.vesselName}
       >
         {getVesselName(selectedVesselIdentity)}
       </Name>
@@ -68,11 +68,11 @@ function VesselName ({ focusOnVesselSearchInput }) {
 
 function getVesselName (selectedVesselIdentity) {
   let flagState = 'INCONNU'
-  if (selectedVesselIdentity?.flagState !== 'UNDEFINED') {
-    flagState = `${selectedVesselIdentity?.flagState}`
+  if (selectedVesselIdentity.flagState !== 'UNDEFINED') {
+    flagState = `${selectedVesselIdentity.flagState}`
   }
 
-  return `${selectedVesselIdentity?.vesselName} (${flagState?.toUpperCase()})`
+  return `${selectedVesselIdentity.vesselName} (${flagState?.toUpperCase()})`
 }
 
 const Wrapper = styled.div`

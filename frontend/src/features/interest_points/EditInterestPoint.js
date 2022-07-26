@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import styled, { css } from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
@@ -20,9 +20,8 @@ import saveInterestPointFeature from '../../domain/use_cases/interestPoint/saveI
 
 // TODO Refactor this component
 // - Move the state logic to the reducer
-// - Remove all useEffects
 // - Use formik (or at least uncontrolled form components)
-const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
+const EditInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
   const dispatch = useDispatch()
 
   const {
@@ -32,82 +31,52 @@ const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
   } = useSelector(state => state.interestPoint)
 
   /** @type {number[]} coordinates - Coordinates formatted in DD [latitude, longitude] */
-  const [coordinates, setCoordinates] = useState([])
-  const [name, setName] = useState('')
-  const [observations, setObservations] = useState('')
-  const [type, setType] = useState()
-  const [updateInterestPoint, setUpdateInterestPoint] = useState(false)
-
-  useEffect(() => {
-    if (!isOpen) {
-      setName('')
-      setObservations('')
-      setType(interestPointType.OTHER)
-      setCoordinates([])
-      return
+  const coordinates = useMemo(() => {
+    if (!interestPointBeingDrawed?.coordinates?.length) {
+      return []
     }
 
-    setUpdateInterestPoint(false)
-    setName(interestPointBeingDrawed?.name || '')
-    setObservations(interestPointBeingDrawed?.observations || '')
-    setType(interestPointBeingDrawed?.type || interestPointType.OTHER)
-  }, [interestPointBeingDrawed, isEditing, isOpen])
+    const ddCoordinates = getCoordinates(interestPointBeingDrawed.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false)
 
-  useEffect(() => {
-    if (type && !interestPointBeingDrawed?.type && !updateInterestPoint) {
-      setUpdateInterestPoint(true)
-    }
-  }, [type, interestPointBeingDrawed, updateInterestPoint])
+    return [
+      parseFloat(ddCoordinates[0].replace(/°/g, '')),
+      parseFloat(ddCoordinates[1].replace(/°/g, ''))
+    ]
+  }, [interestPointBeingDrawed?.coordinates])
 
-  useEffect(() => {
-    if (isOpen) {
-      if (!interestPointBeingDrawed?.coordinates?.length) {
-        setCoordinates([])
-        return
-      }
-
-      const ddCoordinates = getCoordinates(interestPointBeingDrawed.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false)
-
-      setCoordinates([
-        parseFloat(ddCoordinates[0].replace(/°/g, '')),
-        parseFloat(ddCoordinates[1].replace(/°/g, ''))
-      ])
-    }
-  }, [interestPointBeingDrawed, isEditing, isOpen])
-
-  useEffect(() => {
-    if (name && interestPointBeingDrawed?.name !== name && updateInterestPoint) {
+  const updateName = useCallback(name => {
+    if (name && interestPointBeingDrawed?.name !== name) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'name',
         value: name
       }))
     }
-  }, [name, interestPointBeingDrawed, updateInterestPoint])
+  }, [interestPointBeingDrawed?.name])
 
-  useEffect(() => {
-    if (observations && interestPointBeingDrawed?.observations !== observations && updateInterestPoint) {
+  const updateObservations = useCallback(observations => {
+    if (observations && interestPointBeingDrawed?.observations !== observations) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'observations',
         value: observations
       }))
     }
-  }, [observations, interestPointBeingDrawed, updateInterestPoint])
+  }, [interestPointBeingDrawed?.observations])
 
-  useEffect(() => {
-    if (type && interestPointBeingDrawed?.type !== type && updateInterestPoint && coordinates?.length) {
+  const updateType = useCallback(type => {
+    if (type && interestPointBeingDrawed?.type !== type && coordinates?.length) {
       dispatch(updateInterestPointKeyBeingDrawed({
         key: 'type',
         value: type
       }))
     }
-  }, [type, interestPointBeingDrawed, updateInterestPoint, coordinates])
+  }, [interestPointBeingDrawed?.type, coordinates])
 
   /**
    * Compare with previous coordinates and update interest point coordinates
    * @param {number[]} nextCoordinates - Coordinates ([latitude, longitude]) to update, in decimal format.
    * @param {number[]} coordinates - Previous coordinates ([latitude, longitude]), in decimal format.
    */
-  const updateCoordinates = (nextCoordinates, coordinates) => {
+  const updateCoordinates = useCallback((nextCoordinates, coordinates) => {
     if (nextCoordinates?.length) {
       if (!coordinates?.length || coordinatesAreDistinct(nextCoordinates, coordinates)) {
         // Convert to [longitude, latitude] and OpenLayers projection
@@ -118,10 +87,10 @@ const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
         }))
       }
     }
-  }
+  }, [])
 
   const saveInterestPoint = () => {
-    if (type && coordinates?.length) {
+    if (coordinates?.length) {
       dispatch(saveInterestPointFeature())
       dispatch(addInterestPoint())
       close()
@@ -132,8 +101,8 @@ const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
     <Wrapper
       data-cy={'save-interest-point'}
       healthcheckTextWarning={healthcheckTextWarning}
-      key={type}
-      isOpen={isOpen}>
+      isOpen={isOpen}
+    >
       <Header>
         Créer un point d&apos;intérêt
       </Header>
@@ -147,11 +116,8 @@ const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
         <RadioWrapper>
           <RadioGroup
             name="interestTypeRadio"
-            defaultValue={type}
-            onChange={value => {
-              setUpdateInterestPoint(true)
-              setType(value)
-            }}
+            defaultValue={interestPointBeingDrawed?.type || interestPointType.OTHER}
+            onChange={updateType}
           >
             <Radio
               value={interestPointType.CONTROL_ENTITY}
@@ -184,20 +150,14 @@ const SaveInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
         <Name
           data-cy={'interest-point-name-input'}
           type='text'
-          onChange={e => {
-            setUpdateInterestPoint(true)
-            setName(e.target.value)
-          }}
-          value={name}
+          onChange={e => updateName(e.target.value)}
+          value={interestPointBeingDrawed?.name || ''}
         />
         <p>Observations</p>
         <textarea
           data-cy={'interest-point-observations-input'}
-          onChange={e => {
-            setUpdateInterestPoint(true)
-            setObservations(e.target.value)
-          }}
-          value={observations}
+          onChange={e => updateObservations(e.target.value)}
+          value={interestPointBeingDrawed?.observations || ''}
         />
         <OkButton
           data-cy={'interest-point-save'}
@@ -345,4 +305,4 @@ const Other = styled(OtherSVG)`
   ${iconStyle}
 `
 
-export default SaveInterestPoint
+export default EditInterestPoint

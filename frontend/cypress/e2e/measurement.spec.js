@@ -10,9 +10,6 @@ context('Measurement', () => {
   })
 
   it('A circle range measurement Should be created When clicking on the map', () => {
-    // Given
-    cy.get('.measurement', { timeout: 10000 }).should('exist')
-
     // When
     cy.get('*[data-cy="measurement"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
@@ -26,9 +23,6 @@ context('Measurement', () => {
   })
 
   it('A circle range measurement Should be created When the radius in entered in input', () => {
-    // Given
-    cy.get('.measurement', { timeout: 10000 }).should('exist')
-
     // When
     cy.get('*[data-cy="measurement"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
@@ -44,9 +38,6 @@ context('Measurement', () => {
   })
 
   it('A circle range measurement Should be created When the coordinates and radius are entered in input', () => {
-    // Given
-    cy.get('.measurement', { timeout: 10000 }).should('exist')
-
     // When
     cy.get('*[data-cy="measurement"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
@@ -61,9 +52,6 @@ context('Measurement', () => {
   })
 
   it('A multi line range measurement Should be created When clicking on the map', () => {
-    // Given
-    cy.get('.measurement', { timeout: 10000 }).should('exist')
-
     // When
     cy.get('*[data-cy="measurement"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-multiline"]').click({ timeout: 10000 })
@@ -78,9 +66,6 @@ context('Measurement', () => {
   })
 
   it('Many measurements Should be created When clicking on the map', () => {
-    // Given
-    cy.get('.measurement', { timeout: 10000 }).should('exist')
-
     // When
     cy.get('*[data-cy="measurement"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })

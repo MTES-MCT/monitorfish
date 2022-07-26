@@ -133,7 +133,6 @@ const Measurement = () => {
         </MeasurementItem>
       </MeasurementOptions>
       <CustomCircleRange
-        measurementIsOpen={measurementIsOpen}
         healthcheckTextWarning={healthcheckTextWarning}
         measurementTypeToAdd={measurementTypeToAdd}
         circleCoordinatesToAdd={circleCoordinatesToAdd}
@@ -201,7 +200,7 @@ const MeasurementWrapper = styled(MapButtonStyle)`
   right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
   transition: all 0.3s;
   background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
-  
+
   :hover, :focus {
       background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }

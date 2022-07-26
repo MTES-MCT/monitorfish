@@ -71,8 +71,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('.rs-calendar-table-cell')
       .contains(new RegExp(`^${Number(startDay)}$`))
       .click({ timeout: 10000 })
-    cy.get('.rs-calendar-table-cell')
-      .contains(new RegExp(`^${Number(endDay)}$`))
+    cy.get('.rs-calendar-table-cell-is-today')
       .click({ timeout: 10000 })
 
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')

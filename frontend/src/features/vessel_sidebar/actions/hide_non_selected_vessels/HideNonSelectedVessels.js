@@ -7,9 +7,12 @@ import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
 import { useDispatch, useSelector } from 'react-redux'
 import { setHideNonSelectedVessels } from '../../../../domain/shared_slices/Vessel'
 
-const HideNonSelectedVessels = ({ sidebarIsOpen, rightMenuIsOpen }) => {
+const HideNonSelectedVessels = ({ sidebarIsOpen }) => {
   const dispatch = useDispatch()
-  const { healthcheckTextWarning } = useSelector(state => state.global)
+  const {
+    healthcheckTextWarning,
+    rightMenuIsOpen
+  } = useSelector(state => state.global)
   const { hideNonSelectedVessels } = useSelector(state => state.vessel)
 
   return (

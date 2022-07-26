@@ -54,7 +54,8 @@ context('Favorite Vessel', () => {
     cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').click()
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]')
-      .should('have.css', 'background', 'rgb(107, 131, 158) none repeat scroll 0% 0%')
+      .children()
+      .should('have.css', 'fill', 'rgb(229, 229, 235)')
 
     // Then
     cy.get('*[data-cy="favorite-vessels-number"]').contains(1)

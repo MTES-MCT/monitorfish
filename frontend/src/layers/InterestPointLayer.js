@@ -128,7 +128,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
         dispatch(updateInterestPointBeingDrawed({
           uuid: uuidv4(),
           name: null,
-          type: null,
+          type: interestPointType.FISHING_VESSEL,
           coordinates: null,
           observations: null
         }))
@@ -249,7 +249,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     }
 
     modifyFeatureWhenCoordinatesOrTypeModified()
-  }, [interestPointBeingDrawed])
+  }, [interestPointBeingDrawed?.coordinates, interestPointBeingDrawed?.type])
 
   useEffect(() => {
     function initLineWhenInterestPointCoordinatesModified () {

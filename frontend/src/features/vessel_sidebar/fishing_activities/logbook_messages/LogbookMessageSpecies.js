@@ -6,8 +6,6 @@ import { LogbookSpeciesPresentation, LogbookSpeciesPreservationState } from '../
 import countries from 'i18n-iso-countries'
 import { ReactComponent as WarningSVG } from '../../../icons/Point_exclamation_info.svg'
 
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
-
 const LogbookMessageSpecies = props => {
   const [isOpen, setIsOpen] = useState(false)
 

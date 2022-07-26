@@ -167,7 +167,6 @@ jobs:
       - name: Install Cypress dependencies
         run: |
           sudo apt-get install -y \
-            firefox \
             libgtk2.0-0 \
             libgtk-3-0 \
             libgbm-dev \
@@ -179,6 +178,7 @@ jobs:
             libxtst6 \
             xauth \
             xvfb
+          sudo apt-get install -y firefox
 
       - name: Install Node.js dependencies
         run: npm ci
@@ -198,7 +198,7 @@ jobs:
       - name: Run Cypress tests
         run: |
           while ! echo exit | nc localhost 8880; do sleep 10; done
-          npm exec cypress run --browser /snap/bin/firefox --e2e --parallel --record
+          npx cypress run --browser /snap/bin/firefox --e2e --record --parallel
         working-directory: ./frontend
 
   push_to_registry:

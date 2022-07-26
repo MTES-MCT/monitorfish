@@ -26,8 +26,8 @@ const InterestPoint = () => {
     previewFilteredVesselsMode
   } = useSelector(state => state.global)
 
-  const rightMenuIsShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
-  const interestPointIsOpen = isEditing || interestPointBeingDrawed
+  const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
+  const isInterestPointOpen = isEditing || interestPointBeingDrawed
   const wrapperRef = useRef(null)
 
   useEffect(() => {
@@ -39,14 +39,13 @@ const InterestPoint = () => {
   }, [])
 
   const escapeFromKeyboard = event => {
-    const escapeKeyCode = 27
-    if (event.keyCode === escapeKeyCode) {
+    if (event.key === 'Escape') {
       close()
     }
   }
 
   function openOrCloseInterestPoint () {
-    if (!interestPointIsOpen) {
+    if (!isInterestPointOpen) {
       dispatch(unselectVessel())
 
       if (!isEditing) {
@@ -70,19 +69,19 @@ const InterestPoint = () => {
         data-cy={'interest-point'}
         isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
-        isOpen={interestPointIsOpen}
-        rightMenuIsShrinked={rightMenuIsShrinked}
+        isOpen={isInterestPointOpen}
+        rightMenuIsShrinked={isRightMenuShrinked}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Créer un point d\'intérêt'}
         onClick={openOrCloseInterestPoint}
       >
         <InterestPointIcon
-          $rightMenuIsShrinked={rightMenuIsShrinked}
+          $rightMenuIsShrinked={isRightMenuShrinked}
         />
       </InterestPointWrapper>
       <EditInterestPoint
         healthcheckTextWarning={healthcheckTextWarning}
-        isOpen={interestPointIsOpen}
+        isOpen={isInterestPointOpen}
         close={close}
       />
     </Wrapper>

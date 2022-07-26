@@ -19,18 +19,19 @@ function VesselName ({ focusOnVesselSearchInput }) {
   }, [selectedVesselIdentity, favorites])
 
   const addOrRemoveToFavorites = useCallback(e => {
+    e.stopPropagation()
+
     if (isFavorite) {
       dispatch(removeVesselFromFavorites(getVesselId(selectedVesselIdentity)))
     } else {
       dispatch(addVesselToFavorites(selectedVesselIdentity))
     }
-
-    e.stopPropagation()
   }, [selectedVesselIdentity, isFavorite])
 
   const close = useCallback(e => {
-    dispatch(unselectVessel())
     e.stopPropagation()
+
+    dispatch(unselectVessel())
   }, [])
 
   return (

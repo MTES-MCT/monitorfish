@@ -45,14 +45,13 @@ const VesselSearchResult = ({
           </List>
         </Results>
         : showLastSearchedVessels
-          ? <Results isOpen={lastSearchedVessels?.length}>
+          ? <Results>
             <List>
               {
                 lastSearchedVessels.map(vessel => {
                   const vesselId = getVesselId(vessel)
                   return <VesselSearchResultItem
                     key={vesselId}
-                    id={vesselId}
                     vessel={vessel}
                     selectVessel={() => selectVessel(vessel)}
                     searchText={searchText}

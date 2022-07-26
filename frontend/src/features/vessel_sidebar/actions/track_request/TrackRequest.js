@@ -32,21 +32,18 @@ const TrackRequest = ({ sidebarIsOpen }) => {
   const { selectedVesselCustomTrackRequest } = useSelector(state => state.vessel)
   /** @type {{ selectedVesselIdentity: VesselNS.VesselIdentity }} */
   const { selectedVesselIdentity } = useSelector(state => state.vessel)
-  const [isTrackRequestOpen, setIsTrackRequestOpen] = useState(false)
+  const [isOpenedFromClick, setIsOpenedFromClick] = useState(false)
+
+  const isOpen = useMemo(() => {
+    return sidebarIsOpen && isOpenedFromClick
+  }, [sidebarIsOpen, isOpenedFromClick])
 
   /** @type {[Date, Date] | undefined} */
   const selectedVesselCustomDateRange = useMemo(
     () => selectedVesselCustomTrackRequest.trackDepth === VesselTrackDepth.CUSTOM
       ? [selectedVesselCustomTrackRequest.afterDateTime, selectedVesselCustomTrackRequest.beforeDateTime]
       : undefined,
-    [selectedVesselCustomTrackRequest]
-  )
-
-  useEffect(() => {
-    if (!sidebarIsOpen) {
-      setIsTrackRequestOpen(false)
-    }
-  }, [sidebarIsOpen])
+    [selectedVesselCustomTrackRequest])
 
   /**
    * @param {[Date, Date]} dateRange
@@ -85,8 +82,8 @@ const TrackRequest = ({ sidebarIsOpen }) => {
         data-cy={'vessel-track-depth-selection'}
         sidebarIsOpen={sidebarIsOpen}
         isRightMenuOpen={rightMenuIsOpen}
-        isTrackRequestOpen={isTrackRequestOpen}
-        onClick={() => setIsTrackRequestOpen(!isTrackRequestOpen)}
+        isOpen={isOpen}
+        onClick={() => setIsOpenedFromClick(!isOpenedFromClick)}
         title={'Paramétrer l\'affichage de la piste VMS'}
       >
         <VesselIcon/>
@@ -95,7 +92,7 @@ const TrackRequest = ({ sidebarIsOpen }) => {
         healthcheckTextWarning={healthcheckTextWarning}
         sidebarIsOpen={sidebarIsOpen}
         isRightMenuOpen={rightMenuIsOpen}
-        isTrackRequestOpen={isTrackRequestOpen}
+        isOpen={isOpen}
       >
         <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
         <TrackDepth
@@ -125,7 +122,7 @@ const Header = styled.div`
 `
 
 const TrackRequestButton = styled(MapComponentStyle)`
-  background: ${p => p.isTrackRequestOpen ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${p => p.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   border-radius: 1px;
   cursor: pointer;
   height: 30px;
@@ -145,13 +142,13 @@ const TrackRequestBody = styled(MapComponentStyle)`
   color: ${COLORS.slateGray};
   font-size: 13px;
   text-align: left;
-  margin-right: ${p => p.isTrackRequestOpen ? '540px' : '217px'};
-  opacity: ${p => p.isTrackRequestOpen ? '1' : '0'};
+  margin-right: ${p => p.isOpen ? '540px' : '217px'};
+  opacity: ${p => p.isOpen ? '1' : '0'};
   position: absolute;
   right: ${props => props.isRightMenuOpen && props.sidebarIsOpen ? 55 : 10}px;
   top: 118px;
   transition: all 0.3s;
-  visibility: ${p => p.isTrackRequestOpen ? 'visible' : 'hidden'};
+  visibility: ${p => p.isOpen ? 'visible' : 'hidden'};
   width: 306px;
 `
 

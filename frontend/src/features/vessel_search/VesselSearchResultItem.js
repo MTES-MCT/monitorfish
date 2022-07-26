@@ -14,13 +14,11 @@ const VesselSearchResultItem = ({ vessel, selectVessel, searchText }) => {
   >
     <div>
       {
-        flagState
-          ? <Flag
-            rel="preload"
-            title={countries.getName(flagState, 'fr')}
-            src={`flags/${flagState.toLowerCase()}.svg`}
-          />
-          : null
+        flagState && <Flag
+          rel="preload"
+          title={countries.getName(flagState, 'fr')}
+          src={`flags/${flagState.toLowerCase()}.svg`}
+        />
       }
       <Name>
         <Highlighter
@@ -100,14 +98,14 @@ const ListItem = styled.li`
   list-style-type: none;
   cursor: pointer;
   border-bottom: ${COLORS.lightGray} 1px solid;
-  
+
   :hover {
     background: ${COLORS.gainsboro};
   }
 `
 
 const Light = styled.span`
-  font-weight: 300; 
+  font-weight: 300;
 `
 
 const Name = styled.span`
@@ -141,8 +139,8 @@ const Flag = styled.img`
   font-size: 25px;
   margin-left: 5px;
   display: inline-block;
-  width: 1em;                      
-  height: 1em;                      
+  width: 1em;
+  height: 1em;
   vertical-align: middle;
 `
 

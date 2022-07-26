@@ -111,7 +111,7 @@ context('Vessels Track', () => {
     cy.wait(200)
 
     cy.focused()
-      .type('-', { force: true }) // Because of the throttle
+      .type('-', { force: true }) // Because of the throttle, we de-zoom to show labels
     cy.wait(200)
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 3)
     cy.wait(200)

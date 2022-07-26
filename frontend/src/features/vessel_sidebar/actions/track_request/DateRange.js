@@ -96,6 +96,13 @@ const Wrapper = styled.div`
   .rs-picker-daterange {
     background: ${p => p.isEmpty ? COLORS.gainsboro : 'transparent'};
   }
+
+  input {
+    font-size: 13px;
+  }
+  .rs-picker-toggle-placeholder {
+    font-size: 13px;
+  }
 `
 
 export default DateRange

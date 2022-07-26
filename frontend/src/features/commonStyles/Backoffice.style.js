@@ -96,7 +96,7 @@ export const CustomCheckbox = styled(Checkbox)`
   .rs-checkbox-checker {
     padding-top: 0px !important;
     padding-left: 24px !important;
-} 
+}
 `
 
 export const customRadioGroup = css`
@@ -105,7 +105,7 @@ export const customRadioGroup = css`
   align-items: center;
 `
 
-export const AuthorizedRadio = styled(RadioGroup)` 
+export const AuthorizedRadio = styled(RadioGroup)`
   ${customRadioGroup}
 `
 

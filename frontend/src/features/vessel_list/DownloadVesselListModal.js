@@ -9,6 +9,7 @@ import { CSVOptions } from './dataFormatting'
 import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 import { getCoordinates } from '../../coordinates'
 import { useSelector } from 'react-redux'
+import StyledModalHeader from '../commonComponents/StyledModalHeader'
 
 const optionsCSV = {
   fieldSeparator: ',',
@@ -111,13 +112,13 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
       style={{ marginTop: 100 }}
       onClose={() => setIsOpen(false)}
     >
-      <Modal.Header>
+      <StyledModalHeader>
         <Modal.Title>
           <Title>
             Télécharger la liste des navires
           </Title>
         </Modal.Title>
-      </Modal.Header>
+      </StyledModalHeader>
       <Modal.Body>
         <Description>Sélectionnez les colonnes à télécharger</Description>
         <StyledCheckboxGroup
@@ -208,7 +209,7 @@ const DownloadButton = styled.button`
   margin: 20px 20px 20px 10px;
   font-size: 13px;
   color: ${COLORS.gainsboro};
-  
+
   :hover {
     background: ${COLORS.charcoal};
   }

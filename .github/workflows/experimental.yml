@@ -1,0 +1,89 @@
+# In order to locally try out new workflow setups (i.e. for upgrades and improvements),
+# you can use this experimental workflow via act (https://github.com/nektos/act).
+# Act containers are not perfectly ISO with Github Actions ones, but it's close enough.
+# Notable differences are:
+# - Some APT packages are required here when they may not be required in Github Actions.
+# - There is no sudo here whereas there is one in Github Actions Ubuntu image.
+
+name: Experimental
+
+on: workflow_dispatch
+
+jobs:
+  # Run `act -j experimental_e2e_test` to run this job
+  experimental_e2e_test:
+    name: Test
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: npm
+          cache-dependency-path: ./frontend/package-lock.json
+          node-version: 18
+
+      # This step is is not required in GA
+      - name: Prepare Cypress
+        run: |
+          apt-get update
+          apt-get install -y \
+            libgtk2.0-0 \
+            libgtk-3-0 \
+            libgbm-dev \
+            libnotify-dev \
+            libgconf-2-4 \
+            libnss3 \
+            libxss1 \
+            libasound2 \
+            libxtst6 \
+            xauth \
+            xvfb
+          # Because of error: "Unable to locate executable file: zstd."
+          apt-get install -y zstd
+          # This doesn't work in GA because APT repo is missing
+          # apt-get install -y firefox-esr
+
+      # This doesn't work in GA because of this error:
+      # ```
+      # Traceback (most recent call last):
+      #   File "/usr/bin/add-apt-repository", line 364, in <module>
+      #     sys.exit(0 if addaptrepo.main() else 1)
+      # ```
+      # - name: Install Firefox
+      #   run: |
+      #     # https://www.ubuntuupdates.org/ppa/mozilla_esr
+      #     sudo add-apt-repository ppa:mozillateam/ppa
+      #     sudo apt-get update
+      #     sudo apt-get install -y firefox-esr
+
+      - name: Install Firefox
+        run: |
+          apt-get update
+          apt-get install -y \
+            bzip2 \
+            wget
+          wget -O ./firefox.tar.bz2 https://download.mozilla.org/\?product\=firefox-latest-ssl\&os\=linux64\&lang\=fr
+          tar xjf ./firefox.tar.bz2
+           mv ./firefox /opt
+          ls -la
+          rm -f ./firefox ./firefox.tar.bz2
+          ln -s /opt/firefox/firefox /usr/local/bin/firefox
+
+      - name: Check Versions
+        run: |
+          node -v
+          npm -v
+          firefox -v
+          which firefox
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v4
+        with:
+          browser: firefox
+          env: PORT=8880
+          install: true
+          install-command: npm ci
+          working-directory: ./frontend

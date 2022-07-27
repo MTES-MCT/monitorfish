@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReporting
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetAllReportings
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ReportingDataOutput
 import io.swagger.annotations.Api
@@ -17,6 +18,7 @@ import javax.websocket.server.PathParam
 class ReportingController(
     private val archiveReporting: ArchiveReporting,
     private val deleteReporting: DeleteReporting,
+    private val getAllReportings: GetAllReportings,
     private val addReporting: AddReporting) {
 
     @PostMapping(value = [""], consumes = ["application/json"])
@@ -25,6 +27,12 @@ class ReportingController(
     fun createReporting(@RequestBody
                         reportingInput: CreateReportingDataInput): ReportingDataOutput {
         return ReportingDataOutput.fromReporting(addReporting.execute(reportingInput.toReporting()))
+    }
+
+    @GetMapping(value = [""])
+    @ApiOperation("Get all current reportings")
+    fun createReporting(): List<ReportingDataOutput> {
+      return getAllReportings.execute().map { ReportingDataOutput.fromReporting(it) }
     }
 
     @PutMapping(value = ["/{reportingId}/archive"])

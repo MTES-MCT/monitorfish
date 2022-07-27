@@ -9,6 +9,7 @@ interface ReportingRepository {
     fun save(alert: PendingAlert, validationDate: ZonedDateTime?)
     fun save(reporting: Reporting): Reporting
     fun findAll(): List<Reporting>
+    fun findAllCurrent(): List<Reporting>
     fun findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier,
                                                        value: String,
                                                        fromDate: ZonedDateTime): List<Reporting>

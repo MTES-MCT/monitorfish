@@ -335,7 +335,7 @@ const VesselList = ({ namespace }) => {
           />
         </VesselListIcon>
         <Modal
-          full
+          size={'full'}
           backdrop={'static'}
           open={vesselListModalIsOpen}
           onClose={() => closeAndResetVesselList()}

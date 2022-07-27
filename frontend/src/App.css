@@ -305,10 +305,6 @@ a:hover, a:focus {
     max-width: 600px;
 }
 
-.rs-picker-select-menu-items {
-    overflow-y: unset;
-}
-
 .grouped .rs-picker-select-menu-item {
     padding-left: 0px;
 }

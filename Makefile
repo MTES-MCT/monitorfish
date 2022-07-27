@@ -45,7 +45,7 @@ docker-tag:
 docker-push:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
 docker-compose-up:
-	export MONITORFISH_VERSION=$(VERSION) && cd frontend/cypress && docker-compose up -d
+	export MONITORFISH_VERSION=$(VERSION) && cd frontend/cypress && docker compose up -d
 
 # CI commands - data pipeline
 docker-build-pipeline:
@@ -63,12 +63,12 @@ init-local-sig:
 init-remote-sig:
 	./infra/remote/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 restart-remote-app:
-	cd infra/remote && docker-compose pull && docker-compose up -d --build app
+	cd infra/remote && docker compose pull && docker compose up -d --build app
 restart-remote-app-dev:
-	export POSTGRES_USER=postgres && export POSTGRES_PASSWORD=postgres && export POSTGRES_DB=monitorfishdb && cd infra/remote && docker-compose pull && docker-compose up -d --build app
+	export POSTGRES_USER=postgres && export POSTGRES_PASSWORD=postgres && export POSTGRES_DB=monitorfishdb && cd infra/remote && docker compose pull && docker compose up -d --build app
 
 run-local-app:
-	cd infra/local && docker-compose up -d
+	cd infra/local && docker compose up -d
 run-pipeline-server-prod:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION)
 	infra/remote/data-pipeline/prod/start-server.sh

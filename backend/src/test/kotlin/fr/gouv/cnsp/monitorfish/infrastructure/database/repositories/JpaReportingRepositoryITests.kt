@@ -151,4 +151,17 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "ABC000180832", ZonedDateTime.now().minusYears(1))
         assertThat(nextReportingList).hasSize(1)
     }
+
+  @Test
+  @Transactional
+  fun `findAllCurrent Should return current reportings`() {
+    // When
+    val reporting = jpaReportingRepository.findAllCurrent()
+
+    // Then
+    assertThat(reporting).hasSize(3)
+    assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
+    assertThat(reporting.first().isArchived).isEqualTo(false)
+    assertThat(reporting.first().isDeleted).isEqualTo(false)
+  }
 }

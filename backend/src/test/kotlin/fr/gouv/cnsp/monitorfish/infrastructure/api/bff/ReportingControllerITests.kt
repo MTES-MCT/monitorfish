@@ -12,6 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReporting
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetAllReportings
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -24,8 +25,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
@@ -46,6 +46,9 @@ class ReportingControllerITests {
 
     @MockBean
     private lateinit var addReporting: AddReporting
+
+    @MockBean
+    private lateinit var getAllReportings: GetAllReportings
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -103,5 +106,31 @@ class ReportingControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
+
+  @Test
+  fun `Should get all current reportings`() {
+    // Given
+    given(getAllReportings.execute()).willReturn(listOf(
+      Reporting(
+        internalReferenceNumber = "FRFGRGR",
+        externalReferenceNumber = "RGD",
+        ircs = "6554fEE",
+        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+        creationDate = ZonedDateTime.now(),
+        value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+        type = ReportingType.INFRACTION_SUSPICION,
+        isDeleted = false,
+        isArchived = false)
+    ))
+
+    // When
+    mockMvc.perform(get("/bff/v1/reportings"))
+      // Then
+      .andExpect(status().isOk)
+      .andExpect(MockMvcResultMatchers.jsonPath("$.length()", equalTo(1)))
+      .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", equalTo("FRFGRGR")))
+      .andExpect(MockMvcResultMatchers.jsonPath("$[0].isArchived", equalTo(false)))
+      .andExpect(MockMvcResultMatchers.jsonPath("$[0].isDeleted", equalTo(false)))
+  }
 
 }

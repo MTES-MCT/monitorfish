@@ -27,6 +27,10 @@ class JpaReportingRepository(private val dbReportingRepository: DBReportingRepos
         return dbReportingRepository.findAll().map { it.toReporting(mapper) }
     }
 
+    override fun findAllCurrent(): List<Reporting> {
+      return dbReportingRepository.findAllCurrentReportings().map { it.toReporting(mapper) }
+    }
+
     override fun findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String, fromDate: ZonedDateTime): List<Reporting> {
         return dbReportingRepository
             .findCurrentAndArchivedByVesselIdentifier(vesselIdentifier.toString(), value, fromDate.toInstant()).map {

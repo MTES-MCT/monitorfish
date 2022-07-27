@@ -10,42 +10,15 @@ const reportingSlice = createSlice({
   initialState: {
     /** @type {CurrentAndArchivedReportings} */
     currentAndArchivedReportings: {
-      current: [
-        {
-          id: '1',
-          type: 'ALERT',
-          vesselName: '',
-          internalReferenceNumber: '',
-          externalReferenceNumber: '',
-          ircs: '',
-          vesselIdentifier: '',
-          creationDate: new Date(),
-          validationDate: new Date(),
-          value: {
-            type: 'THREE_MILES_TRAWLING_ALERT'
-          }
-        },
-        {
-          id: '2',
-          type: 'OBSERVATION',
-          vesselName: '',
-          internalReferenceNumber: '',
-          externalReferenceNumber: '',
-          ircs: '',
-          vesselIdentifier: '',
-          creationDate: new Date(),
-          validationDate: new Date(),
-          value: {
-            type: 'GEAR'
-          }
-        }
-      ],
+      current: [],
       archived: []
     },
     /** @type {Date} */
     archivedReportingsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
     loadingReporting: false,
-    vesselIdentity: null
+    vesselIdentity: null,
+    /** @type {Reporting[]} */
+    currentReportings: []
   },
   reducers: {
     /**
@@ -85,6 +58,16 @@ const reportingSlice = createSlice({
      */
     loadReporting (state) {
       state.loadingReporting = true
+    },
+    /**
+     * Set current reporting
+     * @function setCurrentReportings
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: Reporting[]}} action
+     */
+    setCurrentReportings (state, action) {
+      state.currentReportings = action.payload
     }
   }
 })
@@ -93,7 +76,8 @@ export const {
   setCurrentAndArchivedReportings,
   resetCurrentAndArchivedReportings,
   setArchivedReportingsFromDate,
-  loadReporting
+  loadReporting,
+  setCurrentReportings
 } = reportingSlice.actions
 
 export default reportingSlice.reducer

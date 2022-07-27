@@ -4,13 +4,14 @@ import { COLORS } from '../../../constants/constants'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { useDispatch, useSelector } from 'react-redux'
 import { FlexboxGrid, List } from 'rsuite'
-import { getAlertNameFromType } from '../../../domain/entities/alerts'
+import { AlertsMenuSeaFrontsToSeaFrontList, getAlertNameFromType } from '../../../domain/entities/alerts'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { getTextForSearch } from '../../../utils'
 import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
 import SilenceAlertMenu from './SilenceAlertMenu'
 import silenceAlert from '../../../domain/use_cases/alert/silenceAlert'
 import PendingAlertRow from './PendingAlertRow'
+import { getAlertForList } from './dataFormatting'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -21,10 +22,11 @@ import PendingAlertRow from './PendingAlertRow'
  * @return {JSX.Element}
  * @constructor
  */
-const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }) => {
+const PendingAlertsList = ({ numberOfSilencedAlerts, seaFront, baseRef }) => {
   const dispatch = useDispatch()
   const {
-    focusOnAlert
+    focusOnAlert,
+    alerts
   } = useSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('creationDate')
@@ -33,6 +35,13 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
   const [showSilencedAlertForIndex, setShowSilencedAlertForIndex] = useState(null)
   const [silencedAlertId, setSilencedAlertId] = useState(null)
   const scrollableContainer = useRef()
+
+  const currentSeaFrontAlerts = useMemo(() => {
+    return alerts
+      .map(alert => getAlertForList(alert))
+      .filter(alert =>
+        (AlertsMenuSeaFrontsToSeaFrontList[seaFront.code]?.seaFronts || []).includes(alert?.seaFront))
+  }, [alerts, seaFront])
 
   const filteredAlerts = useMemo(() => {
     if (!alerts) {
@@ -51,7 +60,7 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
         getTextForSearch(alert.externalReferenceNumber).includes(getTextForSearch(searched)) ||
         getTextForSearch(alert.ircs).includes(getTextForSearch(searched)))
     }
-  }, [alerts, searched])
+  }, [currentSeaFrontAlerts, searched])
 
   const sortedAlerts = useMemo(() => {
     if (!filteredAlerts) {
@@ -93,7 +102,7 @@ const PendingAlertsList = ({ alerts, numberOfSilencedAlerts, seaFront, baseRef }
           data-cy={'side-window-alerts-number-silenced-vessels'}
         >
           <Warning style={warningStyle}>!</Warning>
-          Suspension d&apos;alerte sur {numberOfSilencedAlerts} navire{numberOfSilencedAlerts?.length > 1 ? 's' : ''} en {seaFront}
+          Suspension d&apos;alerte sur {numberOfSilencedAlerts} navire{numberOfSilencedAlerts?.length > 1 ? 's' : ''} en {seaFront.name}
         </NumberOfSilencedAlerts>
         : null
     }

@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { forwardRef, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import SideWindowMenu from './SideWindowMenu'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
 import { AlertsSubMenu } from '../../domain/entities/alerts'
 import SideWindowSubMenu from './SideWindowSubMenu'
-import Alerts from './alerts/Alerts'
+import AlertsAndReportings from './alerts/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import BeaconMalfunctionsBoard from './beacon_malfunctions/BeaconMalfunctionsBoard'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
@@ -18,7 +18,7 @@ import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/g
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 import getSilencedAlerts from '../../domain/use_cases/alert/getSilencedAlerts'
 
-const SideWindow = ({ fromTab }) => {
+const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
   const {
     openedSideWindowTab
   } = useSelector(state => state.global)
@@ -31,7 +31,6 @@ const SideWindow = ({ fromTab }) => {
     focusOnAlert
   } = useSelector(state => state.alert)
   const dispatch = useDispatch()
-  const baseRef = useRef()
   const [isPreloading, setIsPreloading] = useState(true)
   const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
   const [selectedSubMenu, setSelectedSubMenu] = useState(openedSideWindowTab === sideWindowMenu.ALERTS.code
@@ -41,14 +40,10 @@ const SideWindow = ({ fromTab }) => {
   const [subMenuIsFixed, setSubMenuIsFixed] = useState(false)
 
   useEffect(() => {
-    if (openedSideWindowTab) {
-      dispatch(setSideWindowAsOpen())
-
-      setTimeout(() => {
-        setIsPreloading(false)
-      }, 500)
-    }
-  }, [openedSideWindowTab])
+    setTimeout(() => {
+      setIsPreloading(false)
+    }, 500)
+  }, [])
 
   useEffect(() => {
     setIsOverlayed(!!openedBeaconMalfunctionInKanban)
@@ -96,64 +91,62 @@ const SideWindow = ({ fromTab }) => {
     zIndex: isOverlayed ? 11 : -9999
   }
 
-  return <>{openedSideWindowTab
-    ? <Wrapper ref={baseRef}>
-      <SideWindowMenu
-        selectedMenu={openedSideWindowTab}
-      />
-      <SideWindowSubMenu
-        beaconMalfunctions={beaconMalfunctions}
-        alerts={alerts}
-        selectedMenu={openedSideWindowTab}
-        selectedSubMenu={selectedSubMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
-        fixed={subMenuIsFixed}
-        setIsFixed={setSubMenuIsFixed}
-      />
-      <BeaconMalfunctionsBoardGrayOverlay
-        style={beaconMalfunctionBoardGrayOverlayStyle}
-        onClick={() => dispatch(closeBeaconMalfunctionInKanban())}
-      />
-      {
-        isPreloading
-          ? <Loading>
-            <FulfillingBouncingCircleSpinner
-              color={COLORS.grayShadow}
-              className={'update-vessels'}
-              size={100}/>
-            <Text data-cy={'first-loader'}>Chargement...</Text>
-          </Loading>
-          : <Content style={contentStyle(subMenuIsFixed)}>
-            {
-              openedSideWindowTab === sideWindowMenu.ALERTS.code &&
-              <Alerts
-                selectedSubMenu={selectedSubMenu}
-                setSelectedSubMenu={setSelectedSubMenu}
-                baseRef={baseRef}
-              />
-            }
-            {
-              openedSideWindowTab === sideWindowMenu.BEACON_MALFUNCTIONS.code &&
-              <BeaconMalfunctionsBoard
-                baseRef={baseRef}
-              />
-            }
-          </Content>
-      }
-    </Wrapper>
-    : null
-  }
-  </>
-}
-
-const Content = styled.div``
-const contentStyle = fixed => ({
-  marginLeft: fixed ? 0 : 30,
-  width: '100%',
-  height: self.innerHeight + 50,
-  minHeight: 1000,
-  overflow: 'auto'
+  return <Wrapper ref={ref}>
+    <SideWindowMenu
+      selectedMenu={openedSideWindowTab}
+    />
+    <SideWindowSubMenu
+      beaconMalfunctions={beaconMalfunctions}
+      alerts={alerts}
+      selectedMenu={openedSideWindowTab}
+      selectedSubMenu={selectedSubMenu}
+      setSelectedSubMenu={setSelectedSubMenu}
+      fixed={subMenuIsFixed}
+      setIsFixed={setSubMenuIsFixed}
+    />
+    <BeaconMalfunctionsBoardGrayOverlay
+      style={beaconMalfunctionBoardGrayOverlayStyle}
+      onClick={() => dispatch(closeBeaconMalfunctionInKanban())}
+    />
+    {
+      isPreloading
+        ? <Loading>
+          <FulfillingBouncingCircleSpinner
+            color={COLORS.grayShadow}
+            className={'update-vessels'}
+            size={100}/>
+          <Text data-cy={'first-loader'}>Chargement...</Text>
+        </Loading>
+        : <Content
+          isFixed={subMenuIsFixed}
+          height={self.innerHeight + 50}
+        >
+          {
+            openedSideWindowTab === sideWindowMenu.ALERTS.code &&
+            <AlertsAndReportings
+              selectedSubMenu={selectedSubMenu}
+              setSelectedSubMenu={setSelectedSubMenu}
+              baseRef={ref}
+            />
+          }
+          {
+            openedSideWindowTab === sideWindowMenu.BEACON_MALFUNCTIONS.code &&
+            <BeaconMalfunctionsBoard
+              baseRef={ref}
+            />
+          }
+        </Content>
+    }
+  </Wrapper>
 })
+
+const Content = styled.div`
+  margin-left: ${p => p.fixed ? 0 : 30}px;
+  width: 100%;
+  height: ${p => p.height}px;
+  min-height: 1000px;
+  overflow: auto;
+`
 
 const BeaconMalfunctionsBoardGrayOverlay = styled.div``
 

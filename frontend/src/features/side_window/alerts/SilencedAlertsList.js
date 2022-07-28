@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
@@ -16,53 +16,39 @@ import reactivateSilencedAlert from '../../../domain/use_cases/alert/reactivateS
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
- * @param silencedAlerts
+ * @param silencedSeaFrontAlerts
  * @param baseRef
  * @return {JSX.Element}
  * @constructor
  */
-const SilencedAlertsList = ({ silencedAlerts }) => {
+const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
   const dispatch = useDispatch()
   const {
     focusOnAlert
   } = useSelector(state => state.alert)
   const baseUrl = window.location.origin
-  const [sortedAlerts, setSortedAlerts] = useState([])
   const [sortColumn] = useState('silencedBeforeDate')
   const [sortType] = useState(SortType.ASC)
-  const [filteredAlerts, setFilteredAlerts] = useState([])
   const [searched, setSearched] = useState(undefined)
 
-  useEffect(() => {
-    if (filteredAlerts) {
-      const sortedAlerts = filteredAlerts
-        .slice()
-        .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
-
-      setSortedAlerts(sortedAlerts)
-    }
-  }, [filteredAlerts, sortColumn, sortType])
-
-  useEffect(() => {
-    if (!silencedAlerts) {
-      return
-    }
-
+  const filteredAlerts = useMemo(() => {
     if (!searched?.length || searched?.length <= 1) {
-      setFilteredAlerts(silencedAlerts)
-      return
+      return silencedSeaFrontAlerts
     }
 
-    if (searched?.length > 1) {
-      const nextFilteredAlerts = silencedAlerts.filter(alert =>
-        getTextForSearch(getAlertNameFromType(alert.type)).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.vesselName).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.externalReferenceNumber).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.ircs).includes(getTextForSearch(searched)))
-      setFilteredAlerts(nextFilteredAlerts)
-    }
-  }, [silencedAlerts, searched])
+    return silencedSeaFrontAlerts.filter(alert =>
+      getTextForSearch(getAlertNameFromType(alert.value.type)).includes(getTextForSearch(searched)) ||
+      getTextForSearch(alert.vesselName).includes(getTextForSearch(searched)) ||
+      getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searched)) ||
+      getTextForSearch(alert.externalReferenceNumber).includes(getTextForSearch(searched)) ||
+      getTextForSearch(alert.ircs).includes(getTextForSearch(searched)))
+  }, [silencedSeaFrontAlerts, searched])
+
+  const sortedAlerts = useMemo(() => {
+    return filteredAlerts
+      .slice()
+      .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
+  }, [filteredAlerts, sortColumn, sortType])
 
   const reactivateSilencedAlertCallback = useCallback(id => {
     dispatch(reactivateSilencedAlert(id))

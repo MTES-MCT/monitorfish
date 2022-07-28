@@ -63,7 +63,7 @@ const AlertsAndReportings = ({ selectedSubMenu, setSelectedSubMenu, baseRef }) =
           baseRef={baseRef}
         />
         <SilencedAlertsList
-          silencedAlerts={silencedSeaFrontAlerts}
+          silencedSeaFrontAlerts={silencedSeaFrontAlerts}
         />
       </>
     }

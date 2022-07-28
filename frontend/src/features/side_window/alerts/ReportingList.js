@@ -17,7 +17,8 @@ import CardTableRow from '../../card-table/CardTableRow'
 import EmptyCardTable from '../../card-table/EmptyCardTable'
 import CardTableBody from '../../card-table/CardTableBody'
 import CardTableHeader from '../../card-table/CardTableHeader'
-import { ReportingType } from '../../../domain/entities/reporting'
+import { getReportingOrigin } from '../../../domain/entities/reporting'
+import RowVerticalSeparator from '../../card-table/RowVerticalSeparator'
 
 const ReportingList = ({ seaFront }) => {
   const dispatch = useDispatch()
@@ -107,7 +108,7 @@ const ReportingList = ({ seaFront }) => {
                   }
                 </FlexboxGrid.Item>
                 <FlexboxGrid.Item style={columnStyles[1]}>
-                  {ReportingType[reporting.type].name}
+                  {getReportingOrigin(reporting)}
                 </FlexboxGrid.Item>
                 <FlexboxGrid.Item style={columnStyles[2]}>
                   {getAlertNameFromType(reporting.value.type)}
@@ -117,16 +118,17 @@ const ReportingList = ({ seaFront }) => {
                 </FlexboxGrid.Item>
                 <FlexboxGrid.Item style={columnStyles[4]}>
                   <Flag
-                    title={countries.getName(reporting.value.flagState.toLowerCase(), 'fr')}
+                    title={countries.getName(reporting.value.flagState?.toLowerCase(), 'fr')}
                     rel="preload"
-                    src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.value.flagState.toLowerCase()}.svg`}
+                    src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.value.flagState?.toLowerCase()}.svg`}
                     style={{ width: 18, marginRight: 5, marginLeft: 0, marginTop: 1 }}
                   />
                   {reporting.vesselName}
                 </FlexboxGrid.Item>
                 <FlexboxGrid.Item style={columnStyles[5]}>
-                  DMLs
+                  {reporting.value.dml}
                 </FlexboxGrid.Item>
+                <RowVerticalSeparator/>
                 <FlexboxGrid.Item style={columnStyles[6]}>
                   <Icon
                     data-cy={'side-window-silenced-alerts-show-vessel'}
@@ -144,11 +146,11 @@ const ReportingList = ({ seaFront }) => {
                 <FlexboxGrid.Item style={columnStyles[7]}>
                   <Icon
                     data-cy={'side-window-silenced-alerts-delete-silenced-alert'}
-                    style={deleteSilencedAlertIconStyle}
+                    style={editIconStyle}
                     alt={'Réactiver l\'alerte'}
                     title={'Réactiver l\'alerte'}
                     onClick={() => dispatch(reactivateSilencedAlert(reporting.id))}
-                    src={`${baseUrl}/Icone_alertes_gris.png`}
+                    src={`${baseUrl}/Bouton_edition.png`}
                   />
                 </FlexboxGrid.Item>
               </FlexboxGrid>
@@ -229,13 +231,12 @@ const showIconStyle = {
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const Icon = styled.img``
-const deleteSilencedAlertIconStyle = {
+const editIconStyle = {
   paddingRight: 10,
   float: 'right',
   flexShrink: 0,
   cursor: 'pointer',
-  marginLeft: 'auto',
-  height: 18
+  marginLeft: 'auto'
 }
 
 export default ReportingList

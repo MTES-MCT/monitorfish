@@ -25,7 +25,7 @@ import Healthcheck from './features/healthcheck/Healthcheck'
 import InterestPoint from './features/interest_points/InterestPoint'
 import VesselLabels from './features/vessel_labels/VesselLabels'
 import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewFilteredVessels'
-import ErrorToastNotification from './features/commonComponents/ErrorToastNotification'
+import { ErrorToastNotification } from './features/commonComponents/ErrorToastNotification'
 import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import StateManager from './api/BackofficeMode'
@@ -39,23 +39,25 @@ import FleetSegments from './features/backoffice/fleet_segments/FleetSegments'
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 function App () {
+  const browserVersionAsNumber = Number(browserVersion)
+
   switch (browserName) {
     case 'Internet Explorer':
       return getUnsupportedBrowser()
     case 'Edge':
-      if (browserVersion < 79) return getUnsupportedBrowser()
+      if (browserVersionAsNumber < 79) return getUnsupportedBrowser()
       break
     case 'Chrome':
-      if (browserVersion < 69) return getUnsupportedBrowser()
+      if (browserVersionAsNumber < 69) return getUnsupportedBrowser()
       break
     case 'Firefox':
-      if (browserVersion < 62) return getUnsupportedBrowser()
+      if (browserVersionAsNumber < 62) return getUnsupportedBrowser()
       break
     case 'Safari':
-      if (browserVersion < 12) return getUnsupportedBrowser()
+      if (browserVersionAsNumber < 12) return getUnsupportedBrowser()
       break
     case 'Opera':
-      if (browserVersion < 56) return getUnsupportedBrowser()
+      if (browserVersionAsNumber < 56) return getUnsupportedBrowser()
       break
   }
 

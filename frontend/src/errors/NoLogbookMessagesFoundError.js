@@ -1,8 +1,8 @@
-import { errorType } from '../domain/entities/errors'
+import { ErrorType } from '../domain/entities/errors'
 
 export default class NoLogbookMessagesFoundError extends Error {
   name = 'NoLogbookMessagesFoundError'
-  type = errorType.INFO_AND_HIDDEN
+  type = ErrorType.INFO_AND_HIDDEN
   showEmptyComponentFields = true
 
   constructor (message = '') {

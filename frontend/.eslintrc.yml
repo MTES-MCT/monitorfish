@@ -79,10 +79,18 @@ overrides:
       no-shadow: off
       no-undef: off
       no-unused-vars: off
+
       react/react-in-jsx-scope: off
-  - files: "cypress/**/*.js"
+
+  - files:
+      - "cypress/**/*.js"
+      - "cypress/**/*.ts"
+      - "cypress.config.ts"
     globals:
       beforeEach: true
       context: true
       cy: true
       Cypress: true
+    rules:
+      import/no-default-export: off
+      import/no-extraneous-dependencies: off

@@ -163,9 +163,6 @@ function getVesselVoyageFromAPI (vesselIdentity, voyageRequest, tripNumber) {
       if (response.status === OK) {
         return response.json()
       } else if (response.status === NOT_FOUND) {
-        response.text().then(text => {
-          console.error(text)
-        })
         return null
       } else {
         response.text().then(text => {

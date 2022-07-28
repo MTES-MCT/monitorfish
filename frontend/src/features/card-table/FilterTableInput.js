@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import SearchIconSVG from '../icons/Loupe_dark.svg'
 
 const FilterTableInput = styled.input`
-  margin-bottom: 5px;
   background-color: white;
   border: 1px ${COLORS.lightGray} solid;
   border-radius: 0px;
@@ -12,7 +11,6 @@ const FilterTableInput = styled.input`
   height: 40px;
   width: 280px;
   padding: 0 5px 0 10px;
-  flex: 3;
   background-image: url(${p => p.baseUrl}/${SearchIconSVG});
   background-size: 25px;
   background-position: bottom 3px right 5px;

@@ -15,11 +15,10 @@ const StyledCardTableHeader = styled(List.Item)`
   border: 1px solid ${COLORS.lightGray};
   border-radius: 1px;
   height: 15px;
-  margin-top: 6px;
   transition: background 3s;
   overflow: hidden;
   background: ${COLORS.background};
-  color: COLORS.slateGray;
+  color: ${COLORS.slateGray};
 `
 
 export default CardTableHeader

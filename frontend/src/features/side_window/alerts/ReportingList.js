@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { Flag } from '../../vessel_list/tableCells'
 import { useDispatch, useSelector } from 'react-redux'
-import { FlexboxGrid } from 'rsuite'
+import { Checkbox, FlexboxGrid } from 'rsuite'
 import countries from 'i18n-iso-countries'
 import { AlertsMenuSeaFrontsToSeaFrontList, getAlertNameFromType } from '../../../domain/entities/alerts'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
@@ -19,6 +19,13 @@ import CardTableBody from '../../card-table/CardTableBody'
 import CardTableHeader from '../../card-table/CardTableHeader'
 import { getReportingOrigin } from '../../../domain/entities/reporting'
 import RowVerticalSeparator from '../../card-table/RowVerticalSeparator'
+import CardTableFilters from '../../card-table/CardTableFilters'
+import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
+import { ReactComponent as ArchiveIconSVG } from '../../icons/Bouton_archiver.svg'
+import { ReactComponent as DeleteIconSVG } from '../../icons/Bouton_supprimer.svg'
+import { COLORS } from '../../../constants/constants'
+import { PrimaryButton } from '../../commonStyles/Buttons.style'
+import deleteReporting from '../../../domain/use_cases/reporting/deleteReporting'
 
 const ReportingList = ({ seaFront }) => {
   const dispatch = useDispatch()
@@ -29,6 +36,7 @@ const ReportingList = ({ seaFront }) => {
   const [sortColumn] = useState('validationDateTimestamp')
   const [sortType] = useState(SortType.ASC)
   const [searched, setSearched] = useState(undefined)
+  const [checkedReportingIds, setCheckedReportingIds] = useState([])
 
   const currentSeaFrontReportings = useMemo(() => {
     return currentReportings
@@ -54,116 +62,188 @@ const ReportingList = ({ seaFront }) => {
       .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
   }, [filteredReportings, sortColumn, sortType])
 
+  const sortedAndCheckedReportings = useMemo(() => {
+    return sortedReportings.map(reporting => {
+      return {
+        ...reporting,
+        checked: checkedReportingIds.indexOf(reporting.id) !== -1
+      }
+    })
+  }, [sortedReportings, checkedReportingIds])
+
+  function handleSelectReporting (reportingId) {
+    if (checkedReportingIds.indexOf(reportingId) !== -1) {
+      setCheckedReportingIds(checkedReportingIds.filter(checkedReportingId => checkedReportingId !== reportingId))
+    } else {
+      setCheckedReportingIds(checkedReportingIds.concat(reportingId))
+    }
+  }
+
   return <Content>
-    <FilterTableInput
-      data-cy={'side-window-reporting-search'}
-      baseUrl={baseUrl}
-      placeholder={'Rechercher un signalement'}
-      type="text"
-      value={searched}
-      onChange={e => setSearched(e.target.value)}
-    />
-      <CardTable
-        data-cy={'side-window-reporting-list'}
-        hasScroll={filteredReportings.length > 9}
-        width={1513}
-        style={{ marginTop: 10 }}
-      >
-        <CardTableHeader>
-          <FlexboxGrid>
-            <FlexboxGrid.Item style={columnStyles[0]}>
-              Ouvert il y a...
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={columnStyles[1]}>
-              Origine
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={columnStyles[2]}>
-              Titre
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={columnStyles[3]}>
-              NATINF
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={columnStyles[4]}>
-              Navire
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={columnStyles[5]}>
-              DML concernées
-            </FlexboxGrid.Item>
-          </FlexboxGrid>
-        </CardTableHeader>
-        <CardTableBody>
-          {sortedReportings.map((reporting, index) => (
-            <CardTableRow
-              key={reporting.id}
-              index={index + 1}
-            >
-              <FlexboxGrid>
-                <FlexboxGrid.Item style={columnStyles[0]}>
-                  {
-                    reporting.silencedAfterDate
-                      ? new Date(reporting.silencedAfterDate) > new Date()
-                        ? `${getDateDiffInDays(new Date(reporting.silencedAfterDate), new Date(reporting.silencedBeforeDate))} jours`
-                        : timeago.format(reporting.silencedBeforeDate, 'fr')
-                      : timeago.format(reporting.silencedBeforeDate, 'fr')
-                  }
-                </FlexboxGrid.Item>
-                <FlexboxGrid.Item style={columnStyles[1]}>
-                  {getReportingOrigin(reporting)}
-                </FlexboxGrid.Item>
-                <FlexboxGrid.Item style={columnStyles[2]}>
-                  {getAlertNameFromType(reporting.value.type)}
-                </FlexboxGrid.Item>
-                <FlexboxGrid.Item style={columnStyles[3]}>
-                  {reporting.value.natinfCode}
-                </FlexboxGrid.Item>
-                <FlexboxGrid.Item style={columnStyles[4]}>
-                  <Flag
-                    title={countries.getName(reporting.value.flagState?.toLowerCase(), 'fr')}
-                    rel="preload"
-                    src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.value.flagState?.toLowerCase()}.svg`}
-                    style={{ width: 18, marginRight: 5, marginLeft: 0, marginTop: 1 }}
-                  />
-                  {reporting.vesselName}
-                </FlexboxGrid.Item>
-                <FlexboxGrid.Item style={columnStyles[5]}>
-                  {reporting.value.dml}
-                </FlexboxGrid.Item>
-                <RowVerticalSeparator/>
-                <FlexboxGrid.Item style={columnStyles[6]}>
-                  <Icon
-                    data-cy={'side-window-silenced-alerts-show-vessel'}
-                    style={showIconStyle}
-                    alt={'Voir sur la carte'}
-                    title={'Voir sur la carte'}
-                    onClick={() => {
-                      const vesselIdentity = { ...reporting }
-                      dispatch(showVessel(vesselIdentity, false, false, null))
-                      dispatch(getVesselVoyage(vesselIdentity, null, false))
-                    }}
-                    src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
-                  />
-                </FlexboxGrid.Item>
-                <FlexboxGrid.Item style={columnStyles[7]}>
-                  <Icon
-                    data-cy={'side-window-silenced-alerts-delete-silenced-alert'}
-                    style={editIconStyle}
-                    alt={'Réactiver l\'alerte'}
-                    title={'Réactiver l\'alerte'}
-                    onClick={() => dispatch(reactivateSilencedAlert(reporting.id))}
-                    src={`${baseUrl}/Bouton_edition.png`}
-                  />
-                </FlexboxGrid.Item>
-              </FlexboxGrid>
-            </CardTableRow>
-          ))}
-        </CardTableBody>
+    <CardTableFilters>
+      <FilterTableInput
+        data-cy={'side-window-reporting-search'}
+        baseUrl={baseUrl}
+        placeholder={'Rechercher un signalement'}
+        type="text"
+        value={searched}
+        onChange={e => setSearched(e.target.value)}
+      />
+      <RightAligned>
         {
-          !sortedReportings?.length &&
-          <EmptyCardTable>Aucun signalement</EmptyCardTable>
+          checkedReportingIds.length > 0 && <>
+            <ArchiveButton
+              data-cy={'archive-reporting-cards'}
+              title={'Archiver'}
+              onClick={() => dispatch(archiveReporting(null))} // TODO archiveReportings and clean checkboxes array
+            />
+            <DeleteButton
+              data-cy={'delete-reporting-cards'}
+              title={'Supprimer'}
+              onClick={() => dispatch(deleteReporting(null))} // TODO deleteReportings and clean checkboxes array
+            />
+          </>
         }
+        <AddReportingButton
+          onClick={() => console.log('add reporting')} // TODO Implement add reporting sidebar
+        >
+          <Plus>+</Plus> Ouvrir un signalement
+        </AddReportingButton>
+      </RightAligned>
+    </CardTableFilters>
+    <CardTable
+      data-cy={'side-window-reporting-list'}
+      hasScroll={filteredReportings.length > 9}
+      width={1513}
+      style={{ marginTop: 10 }}
+    >
+      <CardTableHeader>
+        <FlexboxGrid>
+          <FlexboxGrid.Item style={columnStyles[0]}/>
+          <FlexboxGrid.Item style={columnStyles[1]}>
+            Ouvert il y a...
+          </FlexboxGrid.Item>
+          <FlexboxGrid.Item style={columnStyles[2]}>
+            Origine
+          </FlexboxGrid.Item>
+          <FlexboxGrid.Item style={columnStyles[3]}>
+            Titre
+          </FlexboxGrid.Item>
+          <FlexboxGrid.Item style={columnStyles[4]}>
+            NATINF
+          </FlexboxGrid.Item>
+          <FlexboxGrid.Item style={columnStyles[5]}>
+            Navire
+          </FlexboxGrid.Item>
+          <FlexboxGrid.Item style={columnStyles[6]}>
+            DML concernées
+          </FlexboxGrid.Item>
+        </FlexboxGrid>
+      </CardTableHeader>
+      <CardTableBody>
+        {sortedAndCheckedReportings.map((reporting, index) => (
+          <CardTableRow
+            key={reporting.id}
+            index={index + 1}
+          >
+            <FlexboxGrid>
+              <FlexboxGrid.Item style={columnStyles[0]}>
+                <StyledCheckbox
+                  checked={reporting.checked}
+                  onChange={_ => handleSelectReporting(reporting.id)}
+                />
+              </FlexboxGrid.Item>
+              <FlexboxGrid.Item style={columnStyles[1]} title={reporting.validationDate}>
+                {timeago.format(reporting.validationDate, 'fr')}
+              </FlexboxGrid.Item>
+              <FlexboxGrid.Item style={columnStyles[2]}>
+                {getReportingOrigin(reporting)}
+              </FlexboxGrid.Item>
+              <FlexboxGrid.Item style={columnStyles[3]}>
+                {getAlertNameFromType(reporting.value.type)}
+              </FlexboxGrid.Item>
+              <FlexboxGrid.Item style={columnStyles[4]}>
+                {reporting.value.natinfCode}
+              </FlexboxGrid.Item>
+              <FlexboxGrid.Item style={columnStyles[5]}>
+                <Flag
+                  title={countries.getName(reporting.value.flagState?.toLowerCase(), 'fr')}
+                  rel="preload"
+                  src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.value.flagState?.toLowerCase()}.svg`}
+                  style={{ width: 18, marginRight: 5, marginLeft: 0, marginTop: 1 }}
+                />
+                {reporting.vesselName}
+              </FlexboxGrid.Item>
+              <FlexboxGrid.Item style={columnStyles[6]}>
+                {reporting.value.dml}
+              </FlexboxGrid.Item>
+              <RowVerticalSeparator/>
+              <FlexboxGrid.Item style={columnStyles[7]}>
+                <Icon
+                  data-cy={'side-window-silenced-alerts-show-vessel'}
+                  style={showIconStyle}
+                  alt={'Voir sur la carte'}
+                  title={'Voir sur la carte'}
+                  onClick={() => {
+                    const vesselIdentity = { ...reporting }
+                    dispatch(showVessel(vesselIdentity, false, false, null))
+                    dispatch(getVesselVoyage(vesselIdentity, null, false))
+                  }}
+                  src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
+                />
+              </FlexboxGrid.Item>
+              <FlexboxGrid.Item style={columnStyles[8]}>
+                <Icon
+                  data-cy={'side-window-silenced-alerts-delete-silenced-alert'}
+                  style={editIconStyle}
+                  alt={'Réactiver l\'alerte'}
+                  title={'Réactiver l\'alerte'}
+                  onClick={() => dispatch(reactivateSilencedAlert(reporting.id))}
+                  src={`${baseUrl}/Bouton_edition.png`}
+                />
+              </FlexboxGrid.Item>
+            </FlexboxGrid>
+          </CardTableRow>
+        ))}
+      </CardTableBody>
+      {
+        !sortedReportings?.length &&
+        <EmptyCardTable>Aucun signalement</EmptyCardTable>
+      }
     </CardTable>
   </Content>
 }
+
+const RightAligned = styled.div`
+  margin-left: auto;
+  align-self: flex-end;
+`
+
+const Plus = styled.span`
+  font-size: 23px;
+  line-height: 0;
+  margin-right: 3px;
+`
+
+const ArchiveButton = styled(ArchiveIconSVG)`
+  border: 1px solid ${COLORS.lightGray};
+  padding: 6.5px 6px;
+  cursor: pointer;
+  vertical-align: bottom;
+  margin-right: 10px;
+`
+
+const DeleteButton = styled(DeleteIconSVG)`
+  border: 1px solid ${COLORS.lightGray};
+  padding: 7px;
+  cursor: pointer;
+  vertical-align: bottom;
+  margin-right: 10px;
+`
+
+const AddReportingButton = styled(PrimaryButton)`
+  margin: 20px 10px 0px 0px;
+`
 
 const styleCenter = {
   display: 'flex',
@@ -174,8 +254,11 @@ const styleCenter = {
 const columnStyles = [
   {
     ...styleCenter,
-    width: 160,
-    marginLeft: 46
+    width: 46
+  },
+  {
+    ...styleCenter,
+    width: 160
   },
   {
     ...styleCenter,
@@ -209,10 +292,13 @@ const columnStyles = [
   }
 ]
 
+export const StyledCheckbox = styled(Checkbox)`
+  height: 36px;
+`
+
 const Content = styled.div`
   width: fit-content;
-  padding: 30px 40px 40px 10px;
-  margin-top: 20px;
+  padding: 20px 40px 40px 10px;
   margin-bottom: 20px;
 `
 

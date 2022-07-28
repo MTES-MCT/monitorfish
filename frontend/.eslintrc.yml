@@ -67,7 +67,10 @@ settings:
     version: 16.13.1
 
 overrides:
-  - files: "**/*.ts"
+  - files:
+      - "**/*.ts"
+      - "**/*.tsx"
+    extends: "@ivangabriele/eslint-config-typescript-react"
     parser: "@typescript-eslint/parser"
     parserOptions:
       ecmaVersion: 2022
@@ -76,6 +79,7 @@ overrides:
       no-shadow: off
       no-undef: off
       no-unused-vars: off
+      react/react-in-jsx-scope: off
   - files: "cypress/**/*.js"
     globals:
       beforeEach: true

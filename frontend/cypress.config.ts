@@ -1,37 +1,42 @@
-import { defineConfig } from 'cypress'
+import { defineConfig } from "cypress";
 
-const IS_CI = Boolean(process.env.CI)
-const DEFAULT_PORT = IS_CI ? 8880 : 3000
+import cypressPlugins from "./cypress/plugins";
+
+const IS_CI = Boolean(process.env.CI);
+const DEFAULT_PORT = IS_CI ? 8880 : 3000;
 
 export default defineConfig({
-  projectId: '9b7q8z',
+  // We do that to avoid e2e logs pollution with useless`GET /security-state-staging/intermediates/` lines
+  // Despite the name, this aso applies to Firefox
+  chromeWebSecurity: false,
   e2e: {
     baseUrl: `http://localhost:${DEFAULT_PORT}`,
-    excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],
+    excludeSpecPattern: ["**/__snapshots__/*", "**/__image_snapshots__/*"],
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
-    setupNodeEvents (on, config) {
-      return require('./cypress/plugins/index.js')(on, config)
+    setupNodeEvents(on, config) {
+      return cypressPlugins(on, config) as any;
     },
-    specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}'
+    specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
   },
   env: {
-    'cypress-plugin-snapshots': {
+    "cypress-plugin-snapshots": {
       imageConfig: {
         threshold: 20,
-        thresholdType: 'pixel'
+        thresholdType: "pixel",
       },
-      updateSnapshots: false
-    }
+      updateSnapshots: false,
+    },
   },
+  projectId: "9b7q8z",
   retries: {
+    openMode: 0,
     runMode: 5,
-    openMode: 0
   },
   screenshotOnRunFailure: true,
   scrollBehavior: false,
   video: !IS_CI,
-  viewportWidth: 1280,
   viewportHeight: 1024,
-  waitForAnimations: true
-})
+  viewportWidth: 1280,
+  waitForAnimations: true,
+});

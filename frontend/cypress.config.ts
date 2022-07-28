@@ -35,7 +35,7 @@ export default defineConfig({
   },
   screenshotOnRunFailure: true,
   scrollBehavior: false,
-  video: !IS_CI,
+  video: false,
   viewportHeight: 1024,
   viewportWidth: 1280,
   waitForAnimations: true,

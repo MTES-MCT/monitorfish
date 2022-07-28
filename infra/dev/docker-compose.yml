@@ -1,7 +1,7 @@
 services:
   app:
     container_name: monitorfish_app
-    image: ghcr.io/mtes-mct/monitorfish/monitorfish-app:v1.14.3_snapshot
+    image: ghcr.io/mtes-mct/monitorfish/monitorfish-app:v1.16.0_snapshot
     environment:
       - ENV_DB_URL=jdbc:postgresql://db:5432/monitorfishdb?user=postgres&password=postgres
       - SPRING_PROFILES_ACTIVE=prod

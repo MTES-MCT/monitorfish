@@ -109,3 +109,20 @@ export const FrenchDMLs = [
   'DML 2b',
   'DML 76/27'
 ]
+
+export const getReportingOrigin = reporting => {
+  if (reporting.type === ReportingType.ALERT.code) {
+    return 'Alerte auto.'
+  }
+
+  switch (reporting.value.reportingActor) {
+    case ReportingOriginActor.UNIT.code: return `${reporting.value.unit} (${reporting.value.authorContact})`
+    case ReportingOriginActor.OPS.code: return `Pôle OPS (${reporting.value.authorTrigram})`
+    case ReportingOriginActor.SIP.code: return `Pôle SIP (${reporting.value.authorTrigram})`
+    case ReportingOriginActor.DIRM.code: return `${reporting.value.dml} (${reporting.value.authorContact})`
+    case ReportingOriginActor.DML.code: return `${reporting.value.dml} (${reporting.value.authorContact})`
+    case ReportingOriginActor.OTHER.code: return `${reporting.value.dml} (${reporting.value.authorContact})`
+  }
+
+  return ''
+}

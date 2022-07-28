@@ -272,7 +272,8 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
             title: title,
             natinfCode: natinfCode,
             dml: dml,
-            description: description
+            description: description,
+            flagState: selectedVesselIdentity?.flagState.toUpperCase()
           }
         }
 

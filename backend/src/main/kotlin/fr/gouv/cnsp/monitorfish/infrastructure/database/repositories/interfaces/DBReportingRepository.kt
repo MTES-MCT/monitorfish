@@ -26,7 +26,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     fun findCurrentAndArchivedByVesselIdentifier(vesselIdentifier: String, value: String, fromDate: Instant): List<ReportingEntity>
 
   @Query(value = """
-        SELECT * FROM reportings WHERE archived IS FALSE AND deleted IS FALSE
+        SELECT * FROM reportings WHERE archived IS FALSE AND deleted IS FALSE AND type IN ('INFRACTION_SUSPICION', 'ALERT')
         """, nativeQuery = true)
   fun findAllCurrentReportings(): List<ReportingEntity>
 

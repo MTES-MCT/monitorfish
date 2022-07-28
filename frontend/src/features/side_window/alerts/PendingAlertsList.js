@@ -38,9 +38,8 @@ const PendingAlertsList = ({ numberOfSilencedAlerts, seaFront, baseRef }) => {
 
   const currentSeaFrontAlerts = useMemo(() => {
     return alerts
-      .map(alert => getAlertForList(alert))
       .filter(alert =>
-        (AlertsMenuSeaFrontsToSeaFrontList[seaFront.code]?.seaFronts || []).includes(alert?.seaFront))
+        (AlertsMenuSeaFrontsToSeaFrontList[seaFront.code]?.seaFronts || []).includes(alert.value.seaFront))
   }, [alerts, seaFront])
 
   const filteredAlerts = useMemo(() => {
@@ -54,7 +53,7 @@ const PendingAlertsList = ({ numberOfSilencedAlerts, seaFront, baseRef }) => {
 
     if (searched?.length > 1) {
       return alerts.filter(alert =>
-        getTextForSearch(getAlertNameFromType(alert.type)).includes(getTextForSearch(searched)) ||
+        getTextForSearch(getAlertNameFromType(alert.value.type)).includes(getTextForSearch(searched)) ||
         getTextForSearch(alert.vesselName).includes(getTextForSearch(searched)) ||
         getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searched)) ||
         getTextForSearch(alert.externalReferenceNumber).includes(getTextForSearch(searched)) ||

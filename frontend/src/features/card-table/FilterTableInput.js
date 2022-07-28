@@ -24,8 +24,3 @@ const FilterTableInput = styled.input`
 `
 
 export default FilterTableInput
-const EmptyTable = styled.div`
-  text-align: center;
-  color: ${COLORS.slateGray};
-  margin-top: 20px;
-`

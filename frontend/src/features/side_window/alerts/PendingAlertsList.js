@@ -11,7 +11,6 @@ import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
 import SilenceAlertMenu from './SilenceAlertMenu'
 import silenceAlert from '../../../domain/use_cases/alert/silenceAlert'
 import PendingAlertRow from './PendingAlertRow'
-import { getAlertForList } from './dataFormatting'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way

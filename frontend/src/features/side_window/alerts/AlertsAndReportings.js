@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import PendingAlertsList from './PendingAlertsList'
-import { getSilencedAlertForList } from './dataFormatting'
 import { useSelector } from 'react-redux'
 import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
 import styled from 'styled-components'
@@ -24,8 +23,7 @@ const AlertsAndReportings = ({ selectedSubMenu, setSelectedSubMenu, baseRef }) =
 
   const silencedSeaFrontAlerts = useMemo(() => {
     return silencedAlerts
-      .map(alert => getSilencedAlertForList(alert))
-      .filter(alert => (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert?.seaFront))
+      .filter(alert => (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert.value.seaFront))
   }, [silencedAlerts, selectedSubMenu])
 
   useEffect(() => {

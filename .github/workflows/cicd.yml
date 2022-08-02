@@ -146,12 +146,14 @@ jobs:
         containers: [1, 2, 3, 4]
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      REACT_APP_CYPRESS_PORT: 8880
-      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
       CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      DB_PUBLIC_PORT: 5432
+      ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
-      VERSION: ${{needs.version.outputs.VERSION}}
+      MONITORFISH_VERSION: ${{ needs.version.outputs.VERSION }}
+      REACT_APP_CYPRESS_PORT: 8880
+      VERSION: ${{ needs.version.outputs.VERSION }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -174,32 +176,18 @@ jobs:
           cache-dependency-path: ./frontend/package-lock.json
           node-version: 18
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Firefox
+        uses: browser-actions/setup-firefox@latest
         with:
-          cache: npm
-          cache-dependency-path: ./frontend/package-lock.json
-          node-version: 18
+          firefox-version: latest
 
-      # - name: Install Firefox
-      #   run: |
-      #     # https://www.ubuntuupdates.org/ppa/mozilla_esr
-      #     sudo add-apt-repository ppa:mozillateam/ppa
-      #     sudo apt-get update
-      #     sudo apt-get install -y firefox-esr
-
-      - name: Install Firefox
+      - name: Check versions
         run: |
-          wget -O ./firefox.tar.bz2 https://download.mozilla.org/\?product\=firefox-latest-ssl\&os\=linux64\&lang\=fr
-          tar xjf ./firefox.tar.bz2
-          sudo mv ./firefox /opt
-          rm -f ./firefox ./firefox.tar.bz2
-          sudo ln -s /opt/firefox/firefox /usr/local/bin/firefox
-
-      - name: Check Versions
-        run: |
+          cat /etc/lsb-release
           node -v
           npm -v
+          docker -v
+          docker compose version
           firefox -v
           which firefox
 

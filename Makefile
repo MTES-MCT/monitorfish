@@ -53,9 +53,9 @@ docker-push:
 docker-compose-down:
 	docker compose -f ./frontend/cypress/docker-compose.yml down -v
 docker-compose-up:
-	docker compose -f ./frontend/cypress/docker-compose.yml up -d db
-	docker compose -f ./frontend/cypress/docker-compose.yml up flyway
-	docker compose -f ./frontend/cypress/docker-compose.yml up -d app
+	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull db
+	docker compose -f ./frontend/cypress/docker-compose.yml up --quiet-pull flyway
+	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull app
 	@printf 'Waiting for backend app to be ready'
 	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 

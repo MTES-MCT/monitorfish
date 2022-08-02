@@ -18,12 +18,16 @@ check-clean-archi:
 test: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
 	cd frontend && CI=true npm test
-dev:
-	make dev-back
+dev: dev-back
 	sh -c 'make run-front'
 dev-back:
+	docker compose -f ./infra/dev/docker-compose.yml down -v
 	docker network inspect monitorfish_network >/dev/null 2>&1 || docker network create monitorfish_network
+	docker compose -f ./infra/dev/docker-compose.yml up -d db
+	docker compose -f ./infra/dev/docker-compose.yml up flyway
 	docker compose -f ./infra/dev/docker-compose.yml up -d app
+	@printf 'Waiting for backend app to be ready'
+	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 dev-down:
 	docker compose -f ./infra/dev/docker-compose.yml down
 dev-prune:
@@ -52,6 +56,8 @@ docker-compose-up:
 	docker compose -f ./frontend/cypress/docker-compose.yml up -d db
 	docker compose -f ./frontend/cypress/docker-compose.yml up flyway
 	docker compose -f ./frontend/cypress/docker-compose.yml up -d app
+	@printf 'Waiting for backend app to be ready'
+	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 
 # CI commands - data pipeline
 docker-build-pipeline:

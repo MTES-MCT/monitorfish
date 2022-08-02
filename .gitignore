@@ -29,3 +29,6 @@ datascience/monitorfish.egg-info
 # Doc
 docs/redmine_wiki/*
 datascience/docs/build
+
+# Secrets (used by act)
+.secrets

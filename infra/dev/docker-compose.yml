@@ -10,7 +10,7 @@ services:
       - REACT_APP_GEOSERVER_REMOTE_URL=http://0.0.0.0:8081
       - REACT_APP_CYPRESS_TEST=true
     ports:
-      - 8880:8880
+      # - 8880:8880
       - 8000:8000
       - 5000:5000
       - 5001:5001
@@ -46,7 +46,7 @@ services:
   flyway:
     container_name: monitorfish_flyway
     image: flyway/flyway
-    command: -url=jdbc:postgresql://db:5432/monitorfishdb -schemas=public -user=postgres -password=postgres -connectRetries=60 migrate
+    command: migrate -password=postgres -schemas=public -user=postgres -url=jdbc:postgresql://db:5432/monitorfishdb
     volumes:
       - ../../backend/src/main/resources/db/:/flyway/sql
     depends_on:

@@ -19,10 +19,14 @@ test: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
 	cd frontend && CI=true npm test
 dev:
+	make dev-back
+	sh -c 'make run-front'
+dev-back:
 	docker network inspect monitorfish_network >/dev/null 2>&1 || docker network create monitorfish_network
 	docker compose -f ./infra/dev/docker-compose.yml up -d app
-	sh -c 'make run-front'
-dev-erase:
+dev-down:
+	docker compose -f ./infra/dev/docker-compose.yml down
+dev-prune:
 	docker compose -f ./infra/dev/docker-compose.yml down -v
 dev-reset:
 	rm -f ./frontend/cypress/downloads/*
@@ -34,8 +38,6 @@ dev-reset:
 	docker compose -f ./infra/dev/docker-compose.yml up flyway
 	docker compose -f ./infra/dev/docker-compose.yml start app
 	docker compose -f ./infra/dev/docker-compose.yml logs -f app
-dev-stop:
-	docker compose -f ./infra/dev/docker-compose.yml down
 
 # CI commands - app
 docker-build:
@@ -44,8 +46,12 @@ docker-tag:
 	docker tag monitorfish-app:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
 docker-push:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
+docker-compose-down:
+	docker compose -f ./frontend/cypress/docker-compose.yml down -v
 docker-compose-up:
-	export MONITORFISH_VERSION=$(VERSION) && cd frontend/cypress && docker compose up -d
+	docker compose -f ./frontend/cypress/docker-compose.yml up -d db
+	docker compose -f ./frontend/cypress/docker-compose.yml up flyway
+	docker compose -f ./frontend/cypress/docker-compose.yml up -d app
 
 # CI commands - data pipeline
 docker-build-pipeline:

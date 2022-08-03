@@ -237,7 +237,7 @@ def test_compute_movement_metrics_on_port_entry_with_time_emitting_at_sea_data()
             [45.41, -4.07, datetime(2021, 10, 2, 15, 23, 0), True, pd.NaT],
             [45.51, -4.17, datetime(2021, 10, 2, 16, 23, 0), False, pd.NaT],
             [45.53, -4.07, datetime(2021, 10, 2, 17, 23, 0), False, pd.NaT],
-            [45.56, -4.02, datetime(2021, 10, 2, 18, 23, 0), False, pd.NaT],
+            [45.56, -4.02, datetime(2021, 10, 2, 18, 23, 0), True, pd.NaT],
             [45.82, -3.99, datetime(2021, 10, 2, 19, 23, 0), False, pd.NaT],
             [45.91, -3.85, datetime(2021, 10, 2, 20, 23, 0), False, pd.NaT],
         ],
@@ -311,9 +311,9 @@ def test_compute_movement_metrics_on_port_entry_with_time_emitting_at_sea_data()
         timedelta(0),
         timedelta(0),
         timedelta(hours=1),
-        timedelta(hours=2),
-        timedelta(hours=3),
-        timedelta(hours=4),
+        timedelta(0),
+        timedelta(0),
+        timedelta(hours=1),
     ]
 
     pd.testing.assert_frame_equal(res, expected_res)

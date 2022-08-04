@@ -403,7 +403,8 @@ def compute_movement_metrics(
         #          |         ___|   .       ____._________ : A: cumsum of time
         #          |        |       .______|    |            intervals at sea only
         #          |   _____|       |           |
-        #          |__|_____________|           |_________ : res = A - A*is_port_entry
+        #          |__|_____________|           |_________ : res = A - cummax(
+        #                                                                 A*is_at_port)
         #          -----------------*-----------*------------------------------------->
         #          pos1    pos2     port        port                         successive
         #                           exit        entry                        positions
@@ -427,9 +428,8 @@ def compute_movement_metrics(
         )
         time_emitting_at_sea = np.cumsum(time_emitting_at_sea_intervals)
 
-        is_port_entry = is_at_port & (~was_previously_at_port)
-        time_emitting_at_sea = time_emitting_at_sea - np.cumsum(
-            time_emitting_at_sea * is_port_entry
+        time_emitting_at_sea = time_emitting_at_sea - np.maximum.accumulate(
+            time_emitting_at_sea * is_at_port
         )
         positions[time_emitting_at_sea_column] = time_emitting_at_sea
 

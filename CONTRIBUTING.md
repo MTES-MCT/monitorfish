@@ -20,6 +20,8 @@
     - [File names should match main function or Class name and case](#file-names-should-match-main-function-or-class-name-and-case)
   - [React](#react-1)
     - [Start uplifter props name with `on`](#start-uplifter-props-name-with-on)
+- [Visual Studio Code](#visual-studio-code)
+  - [`.vscode/settings.json`](#vscodesettingsjson)
 
 ## File Structure
 
@@ -142,3 +144,39 @@ import * as domainActions from '...'
 
 It has been a forever convention for both ECMAScript and Node.js to use `on` for any exposed listening function
 expecting a callback. React native uplifter props follow this convention themselves.
+
+# Recommended IDE Configurations
+
+## Visual Studio Code
+
+### `.vscode/settings.json`
+
+```json
+{
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "eslint.packageManager": "npm",
+  "eslint.workingDirectories": ["./frontend"]
+}
+```
+
+And globally or locally it's highly recommended to 
+
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "editor.formatOnSave": true,
+  "eslint.codeActionsOnSave.mode": "all",
+  "eslint.format.enable": true,
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
+}
+```

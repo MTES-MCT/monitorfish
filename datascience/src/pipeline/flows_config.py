@@ -109,6 +109,7 @@ missing_far_alerts.flow.schedule = Schedule(
                 "states_iso2_to_monitor_everywhere": ["FR"],
                 "states_iso2_to_monitor_in_french_eez": ["BE"],
                 "minimum_length": 12.0,
+                "only_raise_if_route_shows_fishing": True,
             },
         ),
     ]

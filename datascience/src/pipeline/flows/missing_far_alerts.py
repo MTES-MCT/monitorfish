@@ -53,6 +53,7 @@ def make_vessels_at_sea_query(
     minimum_length: float = None,
     eez_areas_table: Table = None,
     eez_to_monitor_iso3: list = None,
+    only_fishing_positions: bool = False,
 ) -> Select:
     """
     Generates the `sqlalchemy.Select` statement to run in order to get the list of
@@ -74,6 +75,9 @@ def make_vessels_at_sea_query(
           Must be provided if `eez_to_monitor_iso3` is not `None`. Defaults to None.
         eez_to_monitor_iso3 (list, optional): If provided, only VMS emission in the
           designated EEZ areas will be considered. Defaults to None.
+        only_fishing_positions (bool, optional): if `True`, only positions which were
+          detected as being in fishing operation will be considered.
+          Defaults to `False`.
 
     Raises:
         ValueError: If `minimum_length` is not `None` and the `vessels_table` is not
@@ -144,6 +148,9 @@ def make_vessels_at_sea_query(
             )
         )
     )
+
+    if only_fishing_positions:
+        q = q.where(positions_table.c.is_fishing)
 
     if states_to_monitor_iso2:
         q = q.where(positions_table.c.flag_state.in_(states_to_monitor_iso2))
@@ -361,6 +368,7 @@ with Flow("Missing FAR alerts") as flow:
         "states_iso2_to_monitor_in_french_eez"
     )
     minimum_length = Parameter("minimum_length")
+    only_raise_if_route_shows_fishing = Parameter("only_raise_if_route_shows_fishing")
 
     # Infras
     positions_table = get_table("positions")
@@ -384,6 +392,7 @@ with Flow("Missing FAR alerts") as flow:
         states_to_monitor_iso2=states_iso2_to_monitor_everywhere,
         vessels_table=vessels_table,
         minimum_length=minimum_length,
+        only_fishing_positions=only_raise_if_route_shows_fishing,
     )
 
     vessels_at_sea_yesterday_in_french_eez_query = make_vessels_at_sea_query(
@@ -396,6 +405,7 @@ with Flow("Missing FAR alerts") as flow:
         minimum_length=minimum_length,
         eez_areas_table=eez_areas_table,
         eez_to_monitor_iso3=["FRA"],
+        only_fishing_positions=only_raise_if_route_shows_fishing,
     )
 
     vessels_at_sea_yesterday_in_french_eez = extract_vessels_at_sea(

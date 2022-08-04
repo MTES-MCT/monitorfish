@@ -739,11 +739,13 @@ def test_send_beacon_malfunction_message(
 def test_load_notifications(reset_test_data, expected_notifications):
 
     initial_notifications = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunction_notifications"
+        "monitorfish_remote",
+        "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
     )
     load_notifications.run(expected_notifications)
     final_notifications = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunction_notifications"
+        "monitorfish_remote",
+        "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
     )
     assert len(initial_notifications) == 2
     assert len(final_notifications) == 11
@@ -764,11 +766,13 @@ def test_load_notifications(reset_test_data, expected_notifications):
 def test_load_notifications_empty_input(reset_test_data):
 
     initial_notifications = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunction_notifications"
+        "monitorfish_remote",
+        "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
     )
     load_notifications.run([])
     final_notifications = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunction_notifications"
+        "monitorfish_remote",
+        "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
     )
     pd.testing.assert_frame_equal(initial_notifications, final_notifications)
 
@@ -777,10 +781,11 @@ def test_flow(reset_test_data):
 
     # Setup
     initial_notifications = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunction_notifications"
+        "monitorfish_remote",
+        "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
     )
     initial_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+        "monitorfish_remote", "SELECT * FROM beacon_malfunctions ORDER BY id"
     )
 
     @task(checkpoint=False)
@@ -819,10 +824,11 @@ def test_flow(reset_test_data):
     state = flow.run(test_mode=False)
 
     final_notifications = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunction_notifications"
+        "monitorfish_remote",
+        "SELECT * FROM beacon_malfunction_notifications ORDER BY id",
     )
     final_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+        "monitorfish_remote", "SELECT * FROM beacon_malfunctions ORDER BY id"
     )
 
     assert state.is_successful()
@@ -899,12 +905,12 @@ def test_flow(reset_test_data):
     assert len(final_notifications) == 12
     inserted_notifications = final_notifications[
         ~final_notifications.id.isin(initial_notifications.id)
-    ]
+    ].reset_index(drop=True)
     expected_inserted_notifications = pd.read_csv(
         Path(__file__).parent / "test_notify_beacon_malfunctions_expected_data.csv",
         parse_dates=["date_time_utc"],
     )
-    expected_inserted_notifications.index = range(2, 12)
+
     expected_inserted_notifications["date_time_utc"] = datetime.utcnow()
     pd.testing.assert_frame_equal(
         inserted_notifications.drop(columns=["date_time_utc"]),

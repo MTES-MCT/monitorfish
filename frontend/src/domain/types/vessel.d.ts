@@ -1,17 +1,17 @@
 declare namespace VesselNS {
   export type FishingActivityShowedOnMap = {
-    /** The operation number for logbook */
-    id: string
-    /** The effective date of message */
-    date: Date
-    /** The message name */
-    name: string
     /** The coordinates of the fishing activity */
     coordinates: string[] | null
+    /** The effective date of message */
+    date: Date
+    /** The operation number for logbook */
+    id: string
     /** true if the message was deleted */
     isDeleted: boolean
     /** true id the message was not acknowledged */
     isNotAcknowledged: boolean
+    /** The message name */
+    name: string
   }
 
   export type Gear = {
@@ -21,77 +21,77 @@ declare namespace VesselNS {
   }
 
   export type SelectedVessel = {
+    course: number
+    dateTime: string | null
     declaredFishingGears: string[]
+    departureDateTime: string | null
+    destination: string | null
     district: string
     districtCode: string
+    emissionPeriod: number | null
     externalReferenceNumber: string
     flagState: string
+    from: string | null
     gauge: number
+    gearOnboard: Gear[] | null
     id: number
     imo: string
     internalReferenceNumber: string
     ircs: string
+    lastControlDateTime: string | null
+    lastControlInfraction: boolean | null
+    lastLogbookMessageDateTime: string | null
+    latitude: number | null
     length: number
+    longitude: number | null
     mmsi: string
     navigationLicenceExpirationDate: string
     operatorEmails: string[]
     operatorName: string
     operatorPhones: string[]
     pinger: boolean
+    positionType: string | null
     positions: VesselPosition[]
+    postControlComment: number | null
     power: number
     proprietorEmails: string[]
     proprietorName: string
     proprietorPhones: string[]
     registryPort: string
-    sailingCategory: string
-    sailingType: string
-    vesselEmails: string[]
-    vesselName: string
-    vesselPhones: string[]
-    vesselType: string
-    width: number
-    course: number
-    dateTime: string | null
-    departureDateTime: string | null
-    destination: string | null
-    emissionPeriod: number | null
-    from: string | null
-    gearOnboard: Gear[] | null
-    lastLogbookMessageDateTime: string | null
-    latitude: number | null
-    longitude: number | null
-    positionType: string | null
     registryPortLocode: string | null
     registryPortName: string | null
+    sailingCategory: string
+    sailingType: string
     segments: string[] | null
     speciesOnboard: Species[] | null
     speed: number | null
     totalWeightOnboard: number | null
     tripNumber: number | null
-    lastControlDateTime: string | null
-    lastControlInfraction: boolean | null
-    postControlComment: number | null
     underCharter: boolean
+    vesselEmails: string[]
+    vesselName: string
+    vesselPhones: string[]
+    vesselType: string
+    width: number
   }
 
   export type ShowedVesselTrack = {
-    vesselId: string
-    vesselIdentity: VesselIdentity
     coordinates: string[]
     course: number
-    positions: VesselPosition[]
-    isDefaultTrackDepth: boolean
     extent: number[]
-    toShow: boolean
+    isDefaultTrackDepth: boolean
+    positions: VesselPosition[]
     toHide: boolean
+    toShow: boolean
     toZoom: boolean
+    vesselId: string
+    vesselIdentity: VesselIdentity
   }
 
   export type Species = {
-    species: string
     faoZone: string
     gear: string
+    species: string
     weight: number
   }
 
@@ -133,12 +133,12 @@ declare namespace VesselNS {
     registryPort: string
     sailingCategory: string
     sailingType: string
+    underCharter: boolean
     vesselEmails: string[]
     vesselName: string
     vesselPhones: string[]
     vesselType: string
     width: number
-    underCharter: boolean
   }
 
   /**
@@ -149,16 +149,17 @@ declare namespace VesselNS {
   export type VesselId = string
 
   export type VesselIdentity = {
-    internalReferenceNumber: string
     externalReferenceNumber: string
+    flagState: string
+    internalReferenceNumber: string
     ircs: string
     mmsi: string
-    flagState: string
-    vesselName: string
     vesselIdentifier: string
+    vesselName: string
   }
 
   export type VesselLastPosition = {
+    alerts: String[] | null
     course: number
     dateTime: string
     departureDateTime: string
@@ -166,37 +167,36 @@ declare namespace VesselNS {
     district: string
     districtCode: string
     emissionPeriod: number
+    estimatedCurrentLatitude: number
+    estimatedCurrentLongitude: number
     externalReferenceNumber: string
     flagState: string
     from: string
     gearOnboard: Gear[]
     internalReferenceNumber: string
     ircs: string
+    isAtPort: boolean
+    lastControlDateTime: string
+    lastControlInfraction: boolean
     lastLogbookMessageDateTime: string
     latitude: number
     length: number
     longitude: number
     mmsi: string
     positionType: string
+    postControlComment: number
     registryPortLocode: string
     registryPortName: string
+    reporting: String[]
     segments: string[]
     speciesOnboard: Species[]
     speed: number
     totalWeightOnboard: number
     tripNumber: number
+    underCharter: boolean
+    vesselIdentifier: string
     vesselName: string
     width: number
-    lastControlDateTime: string
-    vesselIdentifier: string
-    lastControlInfraction: boolean
-    postControlComment: number
-    estimatedCurrentLatitude: number
-    estimatedCurrentLongitude: number
-    isAtPort: boolean
-    underCharter: boolean
-    alerts: String[] | null
-    reporting: String[]
   }
 
   export type VesselPosition = {
@@ -218,16 +218,16 @@ declare namespace VesselNS {
   }
 
   interface VesselTrackDepth {
-    LAST_DEPARTURE: 'LAST_DEPARTURE'
-    TWELVE_HOURS: 'TWELVE_HOURS'
-    ONE_DAY: 'ONE_DAY'
-    TWO_DAYS: 'TWO_DAYS'
-    THREE_DAYS: 'THREE_DAYS'
-    ONE_WEEK: 'ONE_WEEK'
-    TWO_WEEK: 'TWO_WEEK'
-    THREE_WEEK: 'THREE_WEEK'
-    ONE_MONTH: 'ONE_MONTH'
     CUSTOM: 'CUSTOM'
+    LAST_DEPARTURE: 'LAST_DEPARTURE'
+    ONE_DAY: 'ONE_DAY'
+    ONE_MONTH: 'ONE_MONTH'
+    ONE_WEEK: 'ONE_WEEK'
+    THREE_DAYS: 'THREE_DAYS'
+    THREE_WEEK: 'THREE_WEEK'
+    TWELVE_HOURS: 'TWELVE_HOURS'
+    TWO_DAYS: 'TWO_DAYS'
+    TWO_WEEK: 'TWO_WEEK'
   }
 
   export type VesselTrackDepthKey = Common.ValueOf<VesselTrackDepth>

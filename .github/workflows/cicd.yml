@@ -84,7 +84,6 @@ jobs:
 
       - name: Install Node.js dependencies
         run: npm ci
-        working-directory: ./frontend
 
       - name: Unit test
         run: make test

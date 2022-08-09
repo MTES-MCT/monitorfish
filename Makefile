@@ -26,8 +26,7 @@ dev-back:
 	docker compose -f ./infra/dev/docker-compose.yml up -d db
 	docker compose -f ./infra/dev/docker-compose.yml up flyway
 	docker compose -f ./infra/dev/docker-compose.yml up -d app
-	@printf 'Waiting for backend app to be ready'
-	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
+	make dev-wait-for-app
 dev-down:
 	docker compose -f ./infra/dev/docker-compose.yml down
 dev-prune:
@@ -41,7 +40,10 @@ dev-reset:
 		psql -U postgres -d postgres -c "CREATE DATABASE monitorfishdb;"
 	docker compose -f ./infra/dev/docker-compose.yml up flyway
 	docker compose -f ./infra/dev/docker-compose.yml start app
-	docker compose -f ./infra/dev/docker-compose.yml logs -f app
+	make dev-wait-for-app
+dev-wait-for-app:
+	@printf 'Waiting for backend app to be ready'
+	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 
 # CI commands - app
 docker-build:

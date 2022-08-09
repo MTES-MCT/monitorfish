@@ -18,7 +18,9 @@
     "start": "npm run start --workspace=frontend",
     "test:e2e": "npm run test:e2e --workspace=frontend",
     "test:lint": "npm run test:lint --workspace=frontend",
+    "test:lint:partial": "eslint ./frontend/**/*.{ts,tsx}",
     "test:type": "npm run test:type --workspace=frontend",
+    "test:type:partial": "tsc --downlevelIteration --esModuleInterop  --jsx react-jsx --noEmit --skipLibCheck **/*.ts **/*.tsx",
     "test:unit": "npm run test:unit --workspace=frontend"
   },
   "devDependencies": {
@@ -30,8 +32,8 @@
   "lint-staged": {
     "*.{json,md,yaml,yml}": "prettier --write",
     "*.{ts,tsx}": [
-      "test:lint",
-      "tsc --downlevelIteration --esModuleInterop --noEmit --skipLibCheck"
+      "eslint",
+      "tsc --downlevelIteration --esModuleInterop --jsx react-jsx --noEmit --skipLibCheck"
     ]
   },
   "prettier": "@ivangabriele/prettier-config"

@@ -2,9 +2,7 @@
 
 context('Vessel labels', () => {
   beforeEach(() => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.get('*[data-cy="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-82')
+    cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
   it('Risk factors Should be showed on the map', () => {
@@ -31,26 +29,37 @@ context('Vessel labels', () => {
   it('Vessels names Should be movable', () => {
     // When
     cy.get('*[data-cy="vessel-labels"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="map-property-trigger"]')
-      .filter(':contains("étiquettes des navires")')
-      .click({ timeout: 10000 })
+    cy.get('*[data-cy="map-property-trigger"]').filter(':contains("étiquettes des navires")').click({ timeout: 10000 })
     // cy.get('body').type('{upArrow}')
     cy.get('*[data-cy="vessel-label-draggable-FAK000999999/DONTSINK/CALLME"]').click({ timeout: 10000 })
 
     // Then
     cy.get('*[data-cy="vessel-label-draggable-FAK000999999/DONTSINK/CALLME"]')
-      .trigger('pointerdown', { force: true, which: 1, eventConstructor: 'MouseEvent', animationDistanceThreshold: 100, pointerId: 1 })
-      .trigger('pointermove', { force: true, clientX: 600, clientY: 400, pointerId: 1 })
-      .trigger('pointermove', { force: true, clientX: 600, clientY: 600, pointerId: 1 })
+      .trigger('pointerdown', {
+        animationDistanceThreshold: 100,
+        eventConstructor: 'MouseEvent',
+        force: true,
+        pointerId: 1,
+        which: 1,
+      })
+      .trigger('pointermove', { clientX: 600, clientY: 400, force: true, pointerId: 1 })
+      .trigger('pointermove', { clientX: 600, clientY: 600, force: true, pointerId: 1 })
       .trigger('pointerup', { force: true, pointerId: 1 })
   })
 
   it('Vessel risk factors should not open When moved', () => {
     // When
-    cy.get('*[data-cy="vessel-label-risk-factor"]').first()
-      .trigger('pointerdown', { force: true, which: 1, eventConstructor: 'MouseEvent', animationDistanceThreshold: 100, pointerId: 1 })
-      .trigger('pointermove', { force: true, clientX: 600, clientY: 400, pointerId: 1 })
-      .trigger('pointermove', { force: true, clientX: 600, clientY: 600, pointerId: 1 })
+    cy.get('*[data-cy="vessel-label-risk-factor"]')
+      .first()
+      .trigger('pointerdown', {
+        animationDistanceThreshold: 100,
+        eventConstructor: 'MouseEvent',
+        force: true,
+        pointerId: 1,
+        which: 1,
+      })
+      .trigger('pointermove', { clientX: 600, clientY: 400, force: true, pointerId: 1 })
+      .trigger('pointermove', { clientX: 600, clientY: 600, force: true, pointerId: 1 })
       .trigger('pointerup', { force: true, pointerId: 1 })
       .trigger('click', { force: true, pointerId: 1 })
 
@@ -65,15 +74,20 @@ context('Vessel labels', () => {
   it('Vessel sidebar should not open When moved', () => {
     // Given
     cy.get('*[data-cy="vessel-labels"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="map-property-trigger"]')
-      .filter(':contains("étiquettes des navires")')
-      .click({ timeout: 10000 })
+    cy.get('*[data-cy="map-property-trigger"]').filter(':contains("étiquettes des navires")').click({ timeout: 10000 })
 
     // When
-    cy.get('*[data-cy="vessel-label-text"]').first()
-      .trigger('pointerdown', { force: true, which: 1, eventConstructor: 'MouseEvent', animationDistanceThreshold: 100, pointerId: 1 })
-      .trigger('pointermove', { force: true, clientX: 600, clientY: 400, pointerId: 1 })
-      .trigger('pointermove', { force: true, clientX: 600, clientY: 600, pointerId: 1 })
+    cy.get('*[data-cy="vessel-label-text"]')
+      .first()
+      .trigger('pointerdown', {
+        animationDistanceThreshold: 100,
+        eventConstructor: 'MouseEvent',
+        force: true,
+        pointerId: 1,
+        which: 1,
+      })
+      .trigger('pointermove', { clientX: 600, clientY: 400, force: true, pointerId: 1 })
+      .trigger('pointermove', { clientX: 600, clientY: 600, force: true, pointerId: 1 })
       .trigger('pointerup', { force: true, pointerId: 1 })
       .trigger('click', { force: true, pointerId: 1 })
 

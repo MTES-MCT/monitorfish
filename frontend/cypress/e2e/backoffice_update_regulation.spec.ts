@@ -14,9 +14,7 @@ context('Update Regulation', () => {
     cy.get('[data-cy="regulatory-layer-topic-row"]').eq(0).click({ force: true })
     cy.get('[data-cy="regulatory-layer-zone"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-layer-zone"]').eq(0).trigger('mouseover', { force: true })
-    cy.get('[data-cy="regulatory-layer-zone-edit"]')
-      .should('have.length', 1)
-      .click({ force: true })
+    cy.get('[data-cy="regulatory-layer-zone-edit"]').should('have.length', 1).click({ force: true })
     cy.url().should('include', '/regulation/edit')
   })
 
@@ -75,20 +73,21 @@ context('Update Regulation', () => {
     cy.wait(200)
 
     // Then
-    cy.wait('@postRegulation')
-      .then(({ request, response }) => {
-        expect(request.body).contain('typeName="monitorfish:regulations_write"')
-        expect(request.body).contain('<Value>Reg. MEMN</Value>')
-        expect(request.body).contain('<Value>Praires Ouest cotentin</Value>')
-        expect(request.body).contain('<Value>Normandie, Bretagne</Value>')
-        expect(request.body).contain('"reference":"texte de reference"')
-        expect(request.body).contain('"url":"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634"')
-        expect(request.body).not.equal('"startDate":""')
-        expect(request.body).contain('"endDate":"infinite"')
-        expect(request.body).contain('"textType":["creation"]')
-        expect(request.body).contain('<FeatureId fid="regulations_write.598"/>')
-        expect(response.statusCode).equal(200)
-      })
+    cy.wait('@postRegulation').then(({ request, response }) => {
+      expect(request.body).contain('typeName="monitorfish:regulations_write"')
+      expect(request.body).contain('<Value>Reg. MEMN</Value>')
+      expect(request.body).contain('<Value>Praires Ouest cotentin</Value>')
+      expect(request.body).contain('<Value>Normandie, Bretagne</Value>')
+      expect(request.body).contain('"reference":"texte de reference"')
+      expect(request.body).contain(
+        '"url":"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634"',
+      )
+      expect(request.body).not.equal('"startDate":""')
+      expect(request.body).contain('"endDate":"infinite"')
+      expect(request.body).contain('"textType":["creation"]')
+      expect(request.body).contain('<FeatureId fid="regulations_write.598"/>')
+      expect(response && response.statusCode).equal(200)
+    })
     cy.url().should('include', '/backoffice')
   })
 
@@ -108,9 +107,7 @@ context('Update Regulation', () => {
       .scrollIntoView()
       .click({ timeout: 10000 })
     cy.get('.rs-picker-search-bar-input').type('Espèce{enter}')
-    cy.get('[data-cy="authorized-species-selector"]')
-      .filter(':contains("des espèces")')
-      .click({ timeout: 10000 })
+    cy.get('[data-cy="authorized-species-selector"]').filter(':contains("des espèces")').click({ timeout: 10000 })
     cy.wait(200)
     cy.get('.rs-picker-search-bar-input').type('HKE{enter}')
     cy.get('*[data-cy^="authorized-regulatory-species-remarks"]').eq(0).type('Ne pas en prendre beaucoup please')
@@ -122,12 +119,10 @@ context('Update Regulation', () => {
       .scrollIntoView()
       .click({ timeout: 10000 })
     cy.get('.rs-picker-search-bar-input').type('Bival{enter}')
-    cy.get('[data-cy="unauthorized-species-selector"]')
-      .filter(':contains("des espèces")')
-      .click({ timeout: 10000 })
+    cy.get('[data-cy="unauthorized-species-selector"]').filter(':contains("des espèces")').click({ timeout: 10000 })
     cy.get('.rs-picker-search-bar-input').type('MGE{enter}')
 
-    cy.get('*[data-cy^="regulatory-species-other-info"]').type('Mhm pas d\'autre info !')
+    cy.get('*[data-cy^="regulatory-species-other-info"]').type("Mhm pas d'autre info !")
 
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
 
@@ -137,20 +132,21 @@ context('Update Regulation', () => {
     cy.wait(200)
 
     // Then
-    cy.wait('@postRegulation')
-      .then(({ request, response }) => {
-        expect(request.body)
-          // Unauthorized
-          .contain('{"unauthorized":{"species":[{"code":"MGE","name":"MICROGLANIS ATER"}],"speciesGroups":["Bivalves"]},' +
+    cy.wait('@postRegulation').then(({ request, response }) => {
+      expect(request.body)
+        // Unauthorized
+        .contain(
+          '{"unauthorized":{"species":[{"code":"MGE","name":"MICROGLANIS ATER"}],"speciesGroups":["Bivalves"]},' +
             // Authorized
             '"authorized":{"species":[{"code":"URC","remarks":"- Pas plus de 500kg\\n - ' +
             'Autre remarqueNe pas en prendre beaucoup please","name":"OURSINS NCA"},' +
             '{"code":"URX","remarks":"500 kg","name":"OURSINS,ETC. NCA"},' +
             '{"code":"HKE","name":"MERLU D\'EUROPE"}],"speciesGroups":["Espèces eau profonde"]},' +
-            '"otherInfo":"Mhm pas d\'autre info !"}')
+            '"otherInfo":"Mhm pas d\'autre info !"}',
+        )
 
-        expect(response.statusCode).equal(200)
-      })
+      expect(response && response.statusCode).equal(200)
+    })
     cy.url().should('include', '/backoffice')
   })
 
@@ -163,59 +159,29 @@ context('Update Regulation', () => {
     cy.get('*[data-cy^="open-regulated-species"]').click({ force: true })
     cy.scrollTo(0, 500)
     cy.get('*[data-cy^="regulatory-gears-section"]').click({ force: true })
-    cy.get('*[data-cy="authorized-gears-selector"]')
-      .scrollIntoView()
+    cy.get('*[data-cy="authorized-gears-selector"]').scrollIntoView()
 
     cy.log('Select OT - Chaluts à panneaux')
-    cy.get('[data-cy="authorized-gears-selector"]')
-      .click({ timeout: 10000 })
-    cy.get('.rs-checkbox-checker')
-      .filter(':contains("Chaluts")')
-      .click({ timeout: 10000 })
-    cy.get('.rs-checkbox-checker')
-      .filter(':contains("OT - Chaluts à panneaux")')
-      .click({ timeout: 10000 })
-    cy.get('[data-cy="authorized-gears-selector"]')
-      .filter(':contains("des engins")')
-      .type('{esc}')
+    cy.get('[data-cy="authorized-gears-selector"]').click({ timeout: 10000 })
+    cy.get('.rs-checkbox-checker').filter(':contains("Chaluts")').click({ timeout: 10000 })
+    cy.get('.rs-checkbox-checker').filter(':contains("OT - Chaluts à panneaux")').click({ timeout: 10000 })
+    cy.get('[data-cy="authorized-gears-selector"]').filter(':contains("des engins")').type('{esc}')
 
     cy.log('Unselect OT - Chaluts à panneaux')
-    cy.get('[data-cy="authorized-gears-selector"]')
-      .filter(':contains("des engins")')
-      .click({ timeout: 10000 })
-    cy.get('.rs-checkbox-checker')
-      .filter(':contains("Chaluts")')
-      .eq(0)
-      .click({ timeout: 10000 })
-    cy.get('.rs-checkbox-checker')
-      .filter(':contains("OT - Chaluts à panneaux")')
-      .click({ timeout: 10000 })
-    cy.get('[data-cy="authorized-gears-selector"]')
-      .filter(':contains("des engins")')
-      .type('{esc}')
+    cy.get('[data-cy="authorized-gears-selector"]').filter(':contains("des engins")').click({ timeout: 10000 })
+    cy.get('.rs-checkbox-checker').filter(':contains("Chaluts")').eq(0).click({ timeout: 10000 })
+    cy.get('.rs-checkbox-checker').filter(':contains("OT - Chaluts à panneaux")').click({ timeout: 10000 })
+    cy.get('[data-cy="authorized-gears-selector"]').filter(':contains("des engins")').type('{esc}')
 
     cy.log('Modify to lowerThanOrEqualTo')
-    cy.get('.rs-picker-select')
-      .filter(':contains("inférieur à")')
-      .click({ timeout: 10000 })
-    cy.get('.rs-picker-select-menu-item')
-      .eq(3)
-      .click({ timeout: 10000 })
+    cy.get('.rs-picker-select').filter(':contains("inférieur à")').click({ timeout: 10000 })
+    cy.get('.rs-picker-select-menu-item').eq(3).click({ timeout: 10000 })
 
     cy.log('Add unauthorized gear')
-    cy.get('[data-cy="unauthorized-gears-selector"]')
-      .filter(':contains("des engins")')
-      .click({ timeout: 10000 })
-    cy.get('.rs-checkbox-checker')
-      .filter(':contains("Chaluts")')
-      .eq(0)
-      .click({ timeout: 10000 })
-    cy.get('.rs-checkbox-checker')
-      .filter(':contains("OT - Chaluts à panneaux")')
-      .click({ timeout: 10000 })
-    cy.get('[data-cy="unauthorized-gears-selector"]')
-      .filter(':contains("des engins")')
-      .type('{esc}')
+    cy.get('[data-cy="unauthorized-gears-selector"]').filter(':contains("des engins")').click({ timeout: 10000 })
+    cy.get('.rs-checkbox-checker').filter(':contains("Chaluts")').eq(0).click({ timeout: 10000 })
+    cy.get('.rs-checkbox-checker').filter(':contains("OT - Chaluts à panneaux")').click({ timeout: 10000 })
+    cy.get('[data-cy="unauthorized-gears-selector"]').filter(':contains("des engins")').type('{esc}')
 
     // When
     cy.wait(50)
@@ -223,21 +189,22 @@ context('Update Regulation', () => {
     cy.wait(200)
 
     // Then
-    cy.wait('@postRegulation')
-      .then(({ request, response }) => {
-        expect(request.body)
+    cy.wait('@postRegulation').then(({ request, response }) => {
+      expect(request.body)
         // Unauthorized
-          .contain('{"unauthorized":{"allGears":false,"allTowedGears":false,"allPassiveGears":false,' +
+        .contain(
+          '{"unauthorized":{"allGears":false,"allTowedGears":false,"allPassiveGears":false,' +
             '"regulatedGearCategories":{},"regulatedGears":{"OT":{"code":"OT","name":"Chaluts à panneaux (non spécifiés)",' +
             '"category":"Chaluts","groupId":1}},"selectedCategoriesAndGears":["OT"]},' +
             // Authorized
             '"authorized":{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !",' +
             '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines",' +
             '"category":"Chaluts","groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"],"remarks":"Attention à cette espèce!"}},' +
-            '"allPassiveGears":false,"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}}')
+            '"allPassiveGears":false,"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}}',
+        )
 
-        expect(response.statusCode).equal(200)
-      })
+      expect(response && response.statusCode).equal(200)
+    })
     cy.url().should('include', '/backoffice')
   })
 
@@ -254,10 +221,9 @@ context('Update Regulation', () => {
 
     // Then
     cy.get('[data-cy="regulation-modal"]').should('not.exist')
-    cy.wait('@postRegulation')
-      .then(({ request, response }) => {
-        expect(response.statusCode).equal(200)
-      })
+    cy.wait('@postRegulation').then(({ response }) => {
+      expect(response && response.statusCode).equal(200)
+    })
     cy.url().should('include', '/backoffice')
   })
 

@@ -2,25 +2,17 @@
 
 context('Vessel filters', () => {
   beforeEach(() => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-82')
+    cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
   it('A Filter Should be created and added on the map', () => {
     // Given
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="vessel-list-country-filter"]')
-      .click({ force: true })
-    cy.get('*[data-cy="select-picker-menu-item-France"]')
-      .scrollIntoView()
-      .click()
+    cy.get('*[data-cy="vessel-list-country-filter"]').click({ force: true })
+    cy.get('*[data-cy="select-picker-menu-item-France"]').scrollIntoView().click()
     cy.wait(200)
-    cy.get('*[data-cy="vessel-list-fleet-segment-filter"]')
-      .click({ force: true })
-    cy.get('*[data-cy^="select-picker-menu-item-NWW01/02"]')
-      .scrollIntoView()
-      .click()
+    cy.get('*[data-cy="vessel-list-fleet-segment-filter"]').click({ force: true })
+    cy.get('*[data-cy^="select-picker-menu-item-NWW01/02"]').scrollIntoView().click()
     cy.wait(200)
     cy.get('*[class^="rs-picker-tag-wrapper"]').eq(3).type('HKE{enter}')
 
@@ -40,9 +32,7 @@ context('Vessel filters', () => {
 
     // Then
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 19)
-    cy.get('*[data-cy^="map-property-trigger"]')
-      .filter(':contains("les autres navires")')
-      .click({ timeout: 10000 })
+    cy.get('*[data-cy^="map-property-trigger"]').filter(':contains("les autres navires")').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 3)
 
     // Remove tags

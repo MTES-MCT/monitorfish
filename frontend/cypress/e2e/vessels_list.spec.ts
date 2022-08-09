@@ -3,26 +3,19 @@
 
 context('Vessels list', () => {
   beforeEach(() => {
-    cy.visit('/#@-824534.42,6082993.21,7.70')
-    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-82')
+    cy.loadPath('/#@-824534.42,6082993.21,7.70')
   })
 
   it('Vessels Should be filtered and previewed on the map', () => {
     // Given
     cy.get('*[data-cy^="vessel-labels"]').click({ scrollBehavior: false, timeout: 10000 })
-    cy.get('*[data-cy^="map-property-trigger"]')
-      .filter(':contains("étiquettes des navires")')
-      .click({ timeout: 10000 })
+    cy.get('*[data-cy^="map-property-trigger"]').filter(':contains("étiquettes des navires")').click({ timeout: 10000 })
 
     cy.wait(200)
     cy.get('*[data-cy="vessel-list"]').click({ timeout: 20000 })
     cy.wait(200)
-    cy.get('*[data-cy="vessel-list-country-filter"]')
-      .click({ force: true })
-    cy.get('*[data-cy="select-picker-menu-item-France"]')
-      .scrollIntoView()
-      .click()
+    cy.get('*[data-cy="vessel-list-country-filter"]').click({ force: true })
+    cy.get('*[data-cy="select-picker-menu-item-France"]').scrollIntoView().click()
     // Close the tag picker
     cy.get('.rs-modal-title').click()
     cy.wait(200)
@@ -71,8 +64,10 @@ context('Vessels list', () => {
     cy.get('*[data-cy^="download-vessels-modal"]').should('be.disabled')
 
     // When
-    cy.get('[aria-rowindex="2"] > .rs-table-cell-group-fixed-left > .table-content-editing ' +
-      '> .rs-table-cell-content > .rs-checkbox > .rs-checkbox-checker').click({ timeout: 10000 })
+    cy.get(
+      '[aria-rowindex="2"] > .rs-table-cell-group-fixed-left > .table-content-editing ' +
+        '> .rs-table-cell-content > .rs-checkbox > .rs-checkbox-checker',
+    ).click({ timeout: 10000 })
 
     // Then
     cy.get('*[data-cy^="download-vessels-modal"]').should('not.be.disabled')
@@ -82,8 +77,10 @@ context('Vessels list', () => {
   it('Vessels Should be downloaded When a vessel is selected', () => {
     // Given
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 10000 })
-    cy.get('[aria-rowindex="2"] > .rs-table-cell-group-fixed-left > .table-content-editing ' +
-      '> .rs-table-cell-content > .rs-checkbox > .rs-checkbox-checker').click({ timeout: 10000 })
+    cy.get(
+      '[aria-rowindex="2"] > .rs-table-cell-group-fixed-left > .table-content-editing ' +
+        '> .rs-table-cell-content > .rs-checkbox > .rs-checkbox-checker',
+    ).click({ timeout: 10000 })
     cy.get('*[data-cy="download-vessels-modal"]').click()
 
     // When
@@ -93,7 +90,9 @@ context('Vessels list', () => {
     cy.wait(400)
     cy.exec('cd cypress/downloads && ls').then(result => {
       const downloadedCSVFilename = result.stdout
-      return cy.readFile(`cypress/downloads/${downloadedCSVFilename}`)
+
+      return cy
+        .readFile(`cypress/downloads/${downloadedCSVFilename}`)
         .should('contains', 'Quartier,CFR,C/S,Nom,GDH (UTC),MMSI,Latitude,Longitude,Cap,Vitesse')
         .should('contains', '"Pasquier","ABC000990591","ZESW","GRÂCE PLEURER NATION"')
         .should('contains', '"470899268","48°44′35″N","004°00′43″W"')

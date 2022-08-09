@@ -17,7 +17,7 @@ check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
 test: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
-	cd frontend && CI=true npm test
+	CI=true npm test:unit
 dev: dev-back
 	sh -c 'make run-front'
 dev-back:

@@ -1,7 +1,7 @@
 {
   "name": "monitorfish-frontend",
   "description": "Monitorfish web application.",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "license": "AGPL-3.0",
   "private": true,
   "engines": {
@@ -14,13 +14,13 @@
     "build:dev": "REACT_APP_ENV=dev npm run build",
     "build:prod": "REACT_APP_ENV=prod npm run build",
     "build:local": "REACT_APP_ENV=local npm run build",
-    "lint": "eslint src/ --fix",
-    "type": "tsc",
-    "test": "jest --config=./config/jest.config.js --detectOpenHandles",
     "cypress:open": "cypress open --browser firefox --e2e",
     "cypress:open:electron": "cypress open --browser electron --e2e",
-    "cypress:run": "cypress run --browser firefox --e2e",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:e2e": "cypress run --browser firefox --e2e",
+    "test:lint": "eslint src/ --fix",
+    "test:type": "tsc",
+    "test:unit": "jest --config=./config/jest.config.js --detectOpenHandles"
   },
   "dependencies": {
     "@dnd-kit/core": "^4.0.3",
@@ -118,5 +118,6 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "prettier": "@ivangabriele/prettier-config",
   "proxy": "http://localhost:8880"
 }

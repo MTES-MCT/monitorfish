@@ -11,7 +11,9 @@ context('Alerts', () => {
 
     // Then
     cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('9')
-    cy.get('*[data-cy^="side-window-alerts-number-silenced-vessels"]').contains('Suspension d\'alerte sur 2 navire en NAMO')
+    cy.get('*[data-cy^="side-window-alerts-number-silenced-vessels"]').contains(
+      "Suspension d'alerte sur 2 navire en NAMO",
+    )
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 9)
 
     cy.get(':nth-child(9)').contains('3 milles - Chaluts')
@@ -19,15 +21,19 @@ context('Alerts', () => {
     cy.get(':nth-child(9)').contains('7059')
 
     // Show vessel on map
-    cy.intercept('GET', 'bff/v1/vessels/find?internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
-      '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime=').as('showVesselPositionsOnMap')
-    cy.intercept('GET', 'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
-      '&IRCS=CALLME&voyageRequest=LAST&tripNumber=').as('showVesselVoyageOnMap')
+    cy.intercept(
+      'GET',
+      'bff/v1/vessels/find?internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
+        '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime=',
+    ).as('showVesselPositionsOnMap')
+    cy.intercept(
+      'GET',
+      'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
+        '&IRCS=CALLME&voyageRequest=LAST&tripNumber=',
+    ).as('showVesselVoyageOnMap')
     cy.get('*[data-cy="side-window-alerts-show-vessel"]').first().click({ force: true })
-    cy.wait('@showVesselPositionsOnMap')
-      .then(({ request, response }) => expect(response.statusCode).equal(200))
-    cy.wait('@showVesselVoyageOnMap')
-      .then(({ request, response }) => expect(response.statusCode).equal(200))
+    cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
+    cy.wait('@showVesselVoyageOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
   })
 
   it('Alerts Should be filtered based on the search input', () => {
@@ -51,8 +57,7 @@ context('Alerts', () => {
     cy.intercept('PUT', '/bff/v1/operational_alerts/1/validate').as('validateAlert')
     cy.get('*[data-cy="side-window-alerts-validate-alert"]').first().click({ force: true })
     cy.get('*[data-cy="side-window-alerts-is-validated-transition"]').should('be.visible')
-    cy.wait('@validateAlert')
-      .then(({ request, response }) => expect(response.statusCode).equal(200))
+    cy.wait('@validateAlert').then(({ response }) => expect(response && response.statusCode).equal(200))
 
     // The value is saved in database when I refresh the page
     cy.visit('/side_window')
@@ -72,8 +77,7 @@ context('Alerts', () => {
     cy.get('*[data-cy="side-window-alerts-silence-alert"]').first().click({ force: true })
     cy.get('*[data-cy="side-window-silence-alert-one-hour"]').first().click({ force: true })
     cy.get('*[data-cy="side-window-alerts-is-silenced-transition"]').should('be.visible')
-    cy.wait('@silenceAlert')
-      .then(({ request, response }) => expect(response.statusCode).equal(200))
+    cy.wait('@silenceAlert').then(({ response }) => expect(response && response.statusCode).equal(200))
     cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().should('have.length', 3)
 
     // The value is saved in database when I refresh the page

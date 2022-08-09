@@ -2,10 +2,7 @@
 
 context('Favorite Vessel', () => {
   beforeEach(() => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-82')
-    cy.wait(100)
+    cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
   it('Opening the box Should close other boxes', () => {
@@ -28,7 +25,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
 
     // When
-    cy.get('.vessels').rightclick(460, 480, { timeout: 10000, force: true })
+    cy.get('.vessels').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
 
     // Then
@@ -49,11 +46,9 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessel-name"]').should('not.exist')
 
     // When
-    cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
+    cy.get('.vessels').click(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').click()
-    cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]')
-      .children()
-      .should('have.css', 'fill', 'rgb(229, 229, 235)')
+    cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').children().should('have.css', 'fill', 'rgb(229, 229, 235)')
 
     // Then
     cy.get('*[data-cy="favorite-vessels-number"]').contains(1)
@@ -69,7 +64,7 @@ context('Favorite Vessel', () => {
   it('A favorite vessel track Should be shown and then the vessel sidebar opened', () => {
     // Given
     cy.get('*[data-cy="favorite-vessels"]').click()
-    cy.get('.vessels').rightclick(460, 480, { timeout: 10000, force: true })
+    cy.get('.vessels').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
     cy.get('*[data-cy="favorite-vessel-show-vessel-track"]').click()
     cy.get('*[data-cy="close-vessel-track"]').should('have.length', 1)
@@ -95,7 +90,7 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="open-vessels-visibility"]').click()
     cy.get('*[data-cy="global-vessel-track-depth-twelve-hours"]').click()
     cy.get('*[data-cy="open-vessels-visibility"]').click()
-    cy.get('.vessels').rightclick(460, 480, { timeout: 10000, force: true })
+    cy.get('.vessels').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
     cy.get('*[data-cy="favorite-vessels"]').click()
 
@@ -107,11 +102,11 @@ context('Favorite Vessel', () => {
     cy.get('.vessels').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
-        thresholdType: 'percent'
+        thresholdType: 'percent',
       },
       screenshotConfig: {
-        clip: { x: 300, y: 50, width: 400, height: 900 }
-      }
+        clip: { height: 900, width: 400, x: 300, y: 50 },
+      },
     })
 
     cy.get('*[data-cy="open-vessels-visibility"]').click()
@@ -121,11 +116,11 @@ context('Favorite Vessel', () => {
     cy.get('.vessels').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
-        thresholdType: 'percent'
+        thresholdType: 'percent',
       },
       screenshotConfig: {
-        clip: { x: 300, y: 50, width: 400, height: 900 }
-      }
+        clip: { height: 900, width: 400, x: 300, y: 50 },
+      },
     })
 
     cy.get('*[data-cy^="close-vessel-track"]').click()

@@ -2,9 +2,7 @@
 
 context('Measurement', () => {
   beforeEach(() => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-82')
+    cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
   it('A circle range measurement Should be created When clicking on the map', () => {
@@ -73,7 +71,9 @@ context('Measurement', () => {
 
     cy.get('*[data-cy="measurement"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 }).eq(1).should('have.value', '__° __′ __″ _ ___° __′ __″ _')
+    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
+      .eq(1)
+      .should('have.value', '__° __′ __″ _ ___° __′ __″ _')
     cy.get('#root').click(690, 680, { timeout: 10000 })
     cy.get('#root').click(750, 785, { timeout: 10000 })
     cy.get('*[data-cy="measurement-value"]').should('have.length', 2)

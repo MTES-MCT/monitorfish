@@ -2,9 +2,7 @@
 
 context('Beacon malfunction', () => {
   beforeEach(() => {
-    cy.visit('/#@-689844.87,6014092.52,10.57')
-    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-68')
+    cy.loadPath('/#@-689844.87,6014092.52,10.57')
   })
 
   it('Vessels with beacon malfunction Should be showed on map with a yellow circle', () => {
@@ -18,15 +16,17 @@ context('Beacon malfunction', () => {
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('not.exist')
 
     // When
-    cy.get('.vessels').eq(0).toMatchImageSnapshot({
-      imageConfig: {
-        threshold: 0.05,
-        thresholdType: 'percent'
-      },
-      screenshotConfig: {
-        clip: { x: 475, y: 570, width: 200, height: 200 }
-      }
-    })
+    cy.get('.vessels')
+      .eq(0)
+      .toMatchImageSnapshot({
+        imageConfig: {
+          threshold: 0.05,
+          thresholdType: 'percent',
+        },
+        screenshotConfig: {
+          clip: { height: 200, width: 200, x: 475, y: 570 },
+        },
+      })
 
     cy.cleanScreenshots(1)
   })

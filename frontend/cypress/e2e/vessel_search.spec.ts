@@ -1,14 +1,9 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-import { getDate } from '../../src/utils'
-
 context('VesselSearch', () => {
   beforeEach(() => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-82')
-    cy.wait(200)
+    cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
   it('Vessel from last positions and vessels table Should be searched from the search bar', () => {
@@ -70,6 +65,9 @@ context('VesselSearch', () => {
 
     // Then
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
-    cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains('14 nds', { timeout: 10000 })
+    cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains(
+      '14 nds',
+      { timeout: 10000 },
+    )
   })
 })

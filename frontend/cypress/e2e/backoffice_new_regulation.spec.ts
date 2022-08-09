@@ -133,7 +133,10 @@ context('Edit Regulation', () => {
     cy.get('[data-cy="go-back-link"]').eq(0).click()
     // then
     cy.get('[data-cy="regulation-modal"]').should('exist')
-    cy.get('[data-cy="confirm-modal-text"]').should('have.text', 'Voulez-vous enregistrer les modifications\napportées à la réglementation ?')
+    cy.get('[data-cy="confirm-modal-text"]').should(
+      'have.text',
+      'Voulez-vous enregistrer les modifications\napportées à la réglementation ?',
+    )
   })
 
   it('Confirm modal is closed on close icon click', () => {
@@ -241,19 +244,11 @@ context('Edit Regulation', () => {
     cy.get('[data-cy="authorized-all-towed-gears-option"]').click()
     cy.get('*[data-cy^="open-regulated-species"]').scrollIntoView().click({ force: true })
     cy.scrollTo(0, 500)
-    cy.get('.rs-picker-toggle-placeholder')
-      .filter(':contains("catégories d\'espèces")')
-      .eq(0)
-      .click({ timeout: 10000 })
-    cy.get('.rs-picker-search-bar-input')
-      .type('Espèce{enter}', { force: true })
-    cy.get('.rs-picker-toggle-placeholder')
-      .filter(':contains("des espèces")')
-      .eq(0)
-      .click({ timeout: 10000 })
+    cy.get('.rs-picker-toggle-placeholder').filter(':contains("catégories d\'espèces")').eq(0).click({ timeout: 10000 })
+    cy.get('.rs-picker-search-bar-input').type('Espèce{enter}', { force: true })
+    cy.get('.rs-picker-toggle-placeholder').filter(':contains("des espèces")').eq(0).click({ timeout: 10000 })
     cy.wait(200)
-    cy.get('.rs-picker-search-bar-input')
-      .type('HKE{enter}', { force: true })
+    cy.get('.rs-picker-search-bar-input').type('HKE{enter}', { force: true })
 
     // Values are found
     cy.get('[data-cy="tag-Auvergne-Rhône-Alpes"]').should('exist')

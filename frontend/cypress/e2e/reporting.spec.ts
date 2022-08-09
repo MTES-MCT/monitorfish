@@ -2,9 +2,7 @@
 
 context('Reporting', () => {
   beforeEach(() => {
-    cy.visit('/#@-582151.17,6006980.16,10.94')
-    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-58')
+    cy.loadPath('/#@-582151.17,6006980.16,10.94')
   })
 
   it('Should be showed on map When vessels have infraction suspicions', () => {
@@ -21,11 +19,11 @@ context('Reporting', () => {
     cy.get('.vessels').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
-        thresholdType: 'percent'
+        thresholdType: 'percent',
       },
       screenshotConfig: {
-        clip: { x: 500, y: 400, width: 200, height: 200 }
-      }
+        clip: { height: 200, width: 200, x: 500, y: 400 },
+      },
     })
 
     cy.cleanScreenshots(1)

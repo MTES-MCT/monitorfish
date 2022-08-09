@@ -3,15 +3,12 @@
 
 context('Vessel sidebar resume tab', () => {
   beforeEach(() => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-82')
-    cy.wait(200)
+    cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
   it('Resume Should be opened When clicking on a vessel', () => {
     // When
-    cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
+    cy.get('.vessels').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -25,11 +22,11 @@ context('Vessel sidebar resume tab', () => {
     cy.get('*[data-cy^="vessel-sidebar-alert"]').contains('3 milles - Chaluts', { timeout: 10000 })
     cy.get('*[data-cy^="vessel-sidebar-beacon-malfunction"]').contains('NON-ÉMISSION VMS', { timeout: 10000 })
 
-    cy.get('*[data-cy^="impact-risk-factor"]').click({ timeout: 10000, force: true })
-    cy.get('*[data-cy^="probability-risk-factor"]').click({ timeout: 10000, force: true })
-    cy.get('*[data-cy^="detectability-risk-factor"]').click({ timeout: 10000, force: true })
+    cy.get('*[data-cy^="impact-risk-factor"]').click({ force: true, timeout: 10000 })
+    cy.get('*[data-cy^="probability-risk-factor"]').click({ force: true, timeout: 10000 })
+    cy.get('*[data-cy^="detectability-risk-factor"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy^="risk-factor-priority-level"]').contains('2.6 – élevée', { timeout: 10000 })
 
-    cy.get('*[data-cy^="show-risk-factor-explanation-modal"]').click({ timeout: 10000, force: true })
+    cy.get('*[data-cy^="show-risk-factor-explanation-modal"]').click({ force: true, timeout: 10000 })
   })
 })

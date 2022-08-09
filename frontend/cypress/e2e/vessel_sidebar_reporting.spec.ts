@@ -3,9 +3,7 @@
 
 context('Vessel sidebar reporting tab', () => {
   beforeEach(() => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.get('*[data-cy="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-82')
+    cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
   it('Reporting Should contain the current reporting, archive or delete a reporting', () => {
@@ -16,7 +14,10 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
-    cy.intercept('GET', '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*').as('reporting')
+    cy.intercept(
+      'GET',
+      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*',
+    ).as('reporting')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
     cy.wait('@reporting')
@@ -31,7 +32,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="reporting-card"]').should('not.exist')
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history-button"]').click()
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-history"]').should('exist')
-    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').eq(0).contains('2 suspicions d\'infractions')
+    cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').eq(0).contains("2 suspicions d'infractions")
     cy.get('*[data-cy="vessel-sidebar-reporting-tab-archive-year"]').eq(0).click()
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('ALERTE / 3 milles - Chaluts')
     cy.get('*[data-cy="reporting-card"]').eq(1).contains('ALERTE / 3 milles - Chaluts')
@@ -44,7 +45,10 @@ context('Vessel sidebar reporting tab', () => {
       .click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('not.exist')
     cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('PROMETTRE')
-    cy.intercept('GET', '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000232227&externalReferenceNumber=ZJ472279&IRCS=TMG5756&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*').as('reportingTwo')
+    cy.intercept(
+      'GET',
+      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000232227&externalReferenceNumber=ZJ472279&IRCS=TMG5756&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*',
+    ).as('reportingTwo')
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
@@ -79,7 +83,10 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // When
-    cy.intercept('GET', '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*').as('reporting')
+    cy.intercept(
+      'GET',
+      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*',
+    ).as('reporting')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
     cy.wait('@reporting')
@@ -92,7 +99,9 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('[data-key="ULAM 56"] > .rs-picker-select-menu-item').click()
     cy.get('*[data-cy="new-reporting-author-contact"]').type('Jean Bon (0612365896)')
     cy.get('*[data-cy="new-reporting-title"]').type('Sortie non autorisée')
-    cy.get('*[data-cy="new-reporting-description"]').type('Ce navire ne devrait pas être en mer, il n\'a plus de points sur son permis')
+    cy.get('*[data-cy="new-reporting-description"]').type(
+      "Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis",
+    )
     cy.get('*[data-cy="new-reporting-select-natinf"]').click()
     cy.get('[data-key="2608"] > .rs-picker-select-menu-item').click()
     cy.get('*[data-cy="new-reporting-select-dml"]').click()
@@ -102,7 +111,9 @@ context('Vessel sidebar reporting tab', () => {
     // Then
     cy.get('*[data-cy="vessel-menu-reporting"]').contains(3)
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('ULAM 56 / Sortie non autorisée')
-    cy.get('*[data-cy="reporting-card"]').eq(0).contains('Ce navire ne devrait pas être en mer, il n\'a plus de points sur son permis')
+    cy.get('*[data-cy="reporting-card"]')
+      .eq(0)
+      .contains("Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis")
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('Émetteur: Jean Bon (0612365896)')
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
   })

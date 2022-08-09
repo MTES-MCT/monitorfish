@@ -24,10 +24,9 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "target": "ES2022",
-    "types": ["cypress", "node"],
     "useUnknownInCatchVariables": true
   },
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "config/jest.global.js.old", "config/jest.config.js.old"],
   "exclude": ["node_modules/*"],
   "ts-node": {
     "swc": true,

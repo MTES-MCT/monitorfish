@@ -48,12 +48,11 @@ context('Backoffice', () => {
     // When
     cy.get('[data-cy="regulatory-topic-edit-input"]').should('not.exist')
 
-    cy.wait('@postRegulation')
-      .then(({ request, response }) => {
-        expect(request.body).contain('typeName="monitorfish:regulations_write"')
-        expect(request.body).contain('<Value>Ouest Cotentin Bivalves - changed</Value>')
-        expect(response.statusCode).equal(200)
-      })
+    cy.wait('@postRegulation').then(({ request, response }) => {
+      expect(request.body).contain('typeName="monitorfish:regulations_write"')
+      expect(request.body).contain('<Value>Ouest Cotentin Bivalves - changed</Value>')
+      expect(response && response.statusCode).equal(200)
+    })
 
     // Then
     cy.get('[data-cy="regulatory-layers-my-zones-topic"]').then(elements => {

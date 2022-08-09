@@ -116,8 +116,7 @@ context('Fleet segments', () => {
     cy.intercept('DELETE', '/bff/v1/fleet_segments/ATL036').as('deleteFleetSegment')
 
     // When
-    cy.get('*[data-cy="delete-row-ATL036"]')
-      .click({ force: true })
+    cy.get('*[data-cy="delete-row-ATL036"]').click({ force: true })
     cy.wait('@deleteFleetSegment')
 
     // Then
@@ -161,8 +160,9 @@ context('Fleet segments', () => {
     // cy.get('[data-cy="create-fleet-segment-incidental-species"] input').type('ANE', { force: true })
     // cy.get('[data-key="ANE"]').click()
 
-    cy.get(':nth-child(9) > .rs-picker-tag-wrapper > .rs-picker-search > .rs-picker-search-input > input')
-      .type('BF', { force: true })
+    cy.get(':nth-child(9) > .rs-picker-tag-wrapper > .rs-picker-search > .rs-picker-search-input > input').type('BF', {
+      force: true,
+    })
     cy.get('[data-key="BFT"]').click()
 
     cy.get('*[data-cy="create-fleet-segment-fao-zones"]').click({ force: true })

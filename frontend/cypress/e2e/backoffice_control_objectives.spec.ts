@@ -25,18 +25,26 @@ context('Control objectives', () => {
     cy.get('*[data-cy^="control-objectives-year"]').contains(currentYear)
 
     cy.log('Check the FR_SCE control objectives of MEMN')
-    cy.get(':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-      '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input').should('have.value', '247')
-    cy.get(':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-      '> .rs-table-cell-group > [aria-colindex="5"] > .rs-table-cell-content > .rs-input').should('have.value', '242')
+    cy.get(
+      ':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input',
+    ).should('have.value', '247')
+    cy.get(
+      ':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+        '> .rs-table-cell-group > [aria-colindex="5"] > .rs-table-cell-content > .rs-input',
+    ).should('have.value', '242')
 
     cy.log('Navigate to previous year')
     cy.get('*[data-cy^="control-objectives-year"]').click()
     cy.get(`[data-key="${currentYear - 1}"] > .rs-picker-select-menu-item`).click()
-    cy.get(':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-      '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input').should('have.value', '147')
-    cy.get(':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-      '> .rs-table-cell-group > [aria-colindex="5"] > .rs-table-cell-content > .rs-input').should('have.value', '141')
+    cy.get(
+      ':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input',
+    ).should('have.value', '147')
+    cy.get(
+      ':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+        '> .rs-table-cell-group > [aria-colindex="5"] > .rs-table-cell-content > .rs-input',
+    ).should('have.value', '141')
   })
 
   it('Should update the targetNumberOfControlsAtPort field on an objective', () => {
@@ -107,8 +115,7 @@ context('Control objectives', () => {
     cy.intercept('DELETE', '/bff/v1/control_objectives/78').as('deleteObjective')
 
     // When
-    cy.get('*[data-cy="delete-row-78"]')
-      .click()
+    cy.get('*[data-cy="delete-row-78"]').click()
     cy.wait('@deleteObjective')
 
     // Then
@@ -130,11 +137,8 @@ context('Control objectives', () => {
     cy.intercept('POST', '/bff/v1/control_objectives').as('addObjective')
 
     // When
-    cy.get('*[data-cy="add-control-objective"]')
-      .eq(0)
-      .click()
-    cy.get('[data-key="FR_DRB"] > .rs-picker-select-menu-item')
-      .click()
+    cy.get('*[data-cy="add-control-objective"]').eq(0).click()
+    cy.get('[data-key="FR_DRB"] > .rs-picker-select-menu-item').click()
     cy.wait('@addObjective')
 
     // Then
@@ -143,16 +147,20 @@ context('Control objectives', () => {
 
     // Update the row when the value is updated in local memory
     cy.intercept('PUT', '/bff/v1/control_objectives/107').as('updateObjective')
-    cy.get(':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-      '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input')
-      .type('{backspace}{backspace}{backspace}{backspace}{backspace}')
-    cy.get(':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-      '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input')
-      .type('26')
+    cy.get(
+      ':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input',
+    ).type('{backspace}{backspace}{backspace}{backspace}{backspace}')
+    cy.get(
+      ':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input',
+    ).type('26')
     cy.wait('@updateObjective')
     cy.wait(50)
-    cy.get(':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-      '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input').should('have.value', '26')
+    cy.get(
+      ':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
+        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input',
+    ).should('have.value', '26')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
@@ -172,8 +180,7 @@ context('Control objectives', () => {
     cy.get('.rs-picker-select-menu-item').should('have.length', 2)
 
     // Then
-    cy.get('*[data-cy="control-objectives-add-year"]')
-      .contains('2023')
+    cy.get('*[data-cy="control-objectives-add-year"]').contains('2023')
   })
 
   it('Should add the next control objective year', () => {
@@ -184,8 +191,7 @@ context('Control objectives', () => {
     cy.intercept('POST', '/bff/v1/control_objectives/years').as('addObjectiveYear')
 
     // When
-    cy.get('*[data-cy="control-objectives-add-year"]')
-      .click()
+    cy.get('*[data-cy="control-objectives-add-year"]').click()
     cy.wait('@addObjectiveYear')
 
     // Then
@@ -195,7 +201,6 @@ context('Control objectives', () => {
     cy.get('*[data-cy^="control-objectives-year"]').click()
     cy.get('.rs-picker-select-menu-item').should('have.length', 3)
     cy.get('.rs-table-row').should('have.length', 57)
-    cy.get('*[data-cy="control-objectives-add-year"]')
-      .should('be.not.visible')
+    cy.get('*[data-cy="control-objectives-add-year"]').should('be.not.visible')
   })
 })

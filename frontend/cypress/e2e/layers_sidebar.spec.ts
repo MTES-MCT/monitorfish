@@ -3,17 +3,15 @@
 
 context('LayersSidebar', () => {
   beforeEach(() => {
-    cy.visit('/#@-224002.65,6302673.54,8.70')
+    cy.loadPath('/#@-224002.65,6302673.54,8.70')
 
-    cy.request('GET', 'http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=' +
-      'monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id').then(
-      (response) => {
-        cy.log(response.body)
-      }
-    )
-
-    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-22')
+    cy.request(
+      'GET',
+      'http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=' +
+        'monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id',
+    ).then(response => {
+      cy.log(response.body)
+    })
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
@@ -38,7 +36,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-show"]').eq(0).click({ timeout: 10000 })
     cy.wait(200)
 
-    cy.get('canvas', { timeout: 10000 }).eq(0).click(490, 580, { timeout: 10000, force: true })
+    cy.get('canvas', { timeout: 10000 }).eq(0).click(490, 580, { force: true, timeout: 10000 })
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
 
     // Close the metadata modal and hide the zone
@@ -46,7 +44,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-hide"]').eq(0).click({ timeout: 10000 })
 
     // The layer is hidden, the metadata modal should not be opened
-    cy.get('canvas', { timeout: 10000 }).eq(0).click(490, 580, { timeout: 10000, force: true })
+    cy.get('canvas', { timeout: 10000 }).eq(0).click(490, 580, { force: true, timeout: 10000 })
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 10000 }).should('not.exist')
   })
 
@@ -56,7 +54,7 @@ context('LayersSidebar', () => {
 
     // Add the layer to My Zones
     cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin', { force: true })
-    cy.get('*[data-cy="regulatory-layer-topic"]').click({ timeout: 10000, force: true })
+    cy.get('*[data-cy="regulatory-layer-topic"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy="regulatory-zone-check"]').click({ timeout: 10000 })
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').contains('Ajouter 1 zone')
     cy.get('*[data-cy="regulatory-search-add-zones-button"]').click()
@@ -72,7 +70,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-topic-show"]').eq(0).click({ timeout: 10000 })
     cy.wait(200)
 
-    cy.get('canvas').eq(0).click(490, 580, { timeout: 10000, force: true })
+    cy.get('canvas').eq(0).click(490, 580, { force: true, timeout: 10000 })
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
     cy.get('*[data-cy="regulatory-layers-metadata-close"]').click()
 
@@ -81,7 +79,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-my-zones-topic"]', { timeout: 10000 }).should('not.exist')
 
     // The layer is hidden, the metadata modal should not be opened
-    cy.get('canvas').eq(0).click(490, 580, { timeout: 10000, force: true })
+    cy.get('canvas').eq(0).click(490, 580, { force: true, timeout: 10000 })
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 10000 }).should('not.exist')
 
     // Close the layers sidebar
@@ -106,22 +104,30 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-zone"]').contains('Praires Ouest cotentin')
     cy.get('*[data-cy="regulatory-layers-metadata-region"]').contains('Normandie, Bretagne')
 
-    cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Pêche interdite les vendredi, samedi et dimanche, les jours fériés')
+    cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains(
+      'Pêche interdite les vendredi, samedi et dimanche, les jours fériés',
+    )
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Bien vérifier Légipêche!')
 
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('TBN (Chaluts à langoustines)')
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('inférieur à 123 mm')
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('Attention à cette espèce!')
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('Dragues')
-    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('li', 'Drague sans dent et de largeur maximale 1,30 mètre')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains(
+      'li',
+      'Drague sans dent et de largeur maximale 1,30 mètre',
+    )
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('li', 'Dragues avec dents !')
-    cy.get('*[data-cy="regulatory-layers-metadata-gears-category-with-infobox"]')
-      .should('have.attr', 'title', 'DHS - Drague à main manœuvrée à partir du rivage \n' +
+    cy.get('*[data-cy="regulatory-layers-metadata-gears-category-with-infobox"]').should(
+      'have.attr',
+      'title',
+      'DHS - Drague à main manœuvrée à partir du rivage \n' +
         'DHB - Drague à main manœuvrée à partir du bateau \n' +
         'HMD - Dragues mécanisées incluant les dragues suceuses \n' +
-        'DRH - Dragues à main utilisées à bord d\'un bateau \n' +
+        "DRH - Dragues à main utilisées à bord d'un bateau \n" +
         'DRB - Dragues remorquées par bateau \n' +
-        'DRM - Dragues mécanisées \n')
+        'DRM - Dragues mécanisées \n',
+    )
 
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('URC (OURSINS NCA)')
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('li', 'Pas plus de 500kg')
@@ -149,18 +155,26 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').should('not.exist')
 
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('Tous les engins trainants')
-    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears-towed-gears"]').children()
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears-towed-gears"]')
+      .children()
       .should('have.attr', 'title', 'Chaluts, dragues et sennes traînantes')
 
     cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Tous les engins dormants')
-    cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears-passive-gears"]').children()
-      .should('have.attr', 'title', 'Filets maillants et emmêlants, filets soulevés, pièges et casiers, lignes et hameçons')
+    cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears-passive-gears"]')
+      .children()
+      .should(
+        'have.attr',
+        'title',
+        'Filets maillants et emmêlants, filets soulevés, pièges et casiers, lignes et hameçons',
+      )
     cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Chaluts')
     cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Dragues')
     cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Engins non autorisés')
-    cy.get('*[data-cy="regulatory-layers-metadata-gears-other-info"]').contains('Encore une dernière information sur les engins !')
+    cy.get('*[data-cy="regulatory-layers-metadata-gears-other-info"]').contains(
+      'Encore une dernière information sur les engins !',
+    )
 
-    cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('HKE (MERLU D\'EUROPE)')
+    cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains("HKE (MERLU D'EUROPE)")
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('li', 'Pas plus que ça')
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('li', 'OK')
 
@@ -188,8 +202,8 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
     cy.get('*[data-cy="regulation-search-box-filter"]').click()
 
-    cy.get('canvas').eq(0).click(490, 580, { timeout: 10000, force: true })
-    cy.get('canvas').eq(0).click(230, 630, { timeout: 10000, force: true })
+    cy.get('canvas').eq(0).click(490, 580, { force: true, timeout: 10000 })
+    cy.get('canvas').eq(0).click(230, 630, { force: true, timeout: 10000 })
 
     cy.get('*[data-cy="regulation-search-box-filter"]').should('not.exist')
     cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('exist')
@@ -212,9 +226,9 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
     cy.get('*[data-cy="regulation-search-polygon-filter"]').click()
 
-    cy.get('canvas').eq(0).click(490, 580, { timeout: 10000, force: true })
-    cy.get('canvas').eq(0).click(230, 630, { timeout: 10000, force: true })
-    cy.get('canvas').eq(0).dblclick(300, 700, { timeout: 10000, force: true })
+    cy.get('canvas').eq(0).click(490, 580, { force: true, timeout: 10000 })
+    cy.get('canvas').eq(0).click(230, 630, { force: true, timeout: 10000 })
+    cy.get('canvas').eq(0).dblclick(300, 700, { force: true, timeout: 10000 })
 
     cy.get('*[data-cy="regulation-search-polygon-filter"]').should('not.exist')
     cy.get('*[data-cy="regulation-search-polygon-filter-selected"]').should('exist')
@@ -235,7 +249,7 @@ context('LayersSidebar', () => {
 
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="administrative-zones-open"]').click({ timeout: 10000, force: true })
+    cy.get('*[data-cy="administrative-zones-open"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy="administrative-layer-toggle"]').eq(0).click({ timeout: 10000 })
     cy.wait(500)
 
@@ -243,11 +257,11 @@ context('LayersSidebar', () => {
     cy.get('.administrative').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
-        thresholdType: 'percent'
+        thresholdType: 'percent',
       },
       screenshotConfig: {
-        clip: { x: 410, y: 0, width: 250, height: 500 }
-      }
+        clip: { height: 500, width: 250, x: 410, y: 0 },
+      },
     })
 
     cy.cleanScreenshots(1)

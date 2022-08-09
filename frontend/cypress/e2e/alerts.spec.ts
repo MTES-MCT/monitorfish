@@ -2,9 +2,7 @@
 
 context('Alerts', () => {
   beforeEach(() => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.get('*[data-cy^="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-82')
+    cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
   it('Should be showed on map When vessels have alerts', () => {
@@ -21,11 +19,11 @@ context('Alerts', () => {
     cy.get('.vessels').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
-        thresholdType: 'percent'
+        thresholdType: 'percent',
       },
       screenshotConfig: {
-        clip: { x: 400, y: 400, width: 200, height: 200 }
-      }
+        clip: { height: 200, width: 200, x: 400, y: 400 },
+      },
     })
 
     cy.cleanScreenshots(1)

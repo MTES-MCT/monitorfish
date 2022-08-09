@@ -2,16 +2,13 @@
 
 context('TritonFish', () => {
   beforeEach(() => {
-    cy.visit('/ext#@-824534.42,6082993.21,8.70')
-    cy.get('*[data-cy="first-loader"]', { timeout: 10000 }).should('not.exist')
-    cy.url().should('include', '@-82')
-    cy.wait(200)
+    cy.loadPath('/ext#@-824534.42,6082993.21,8.70')
   })
 
   it('view Should have some features removed', () => {
     // Then
     // Vessel sidebar is minimized
-    cy.get('.vessels').click(460, 480, { timeout: 10000, force: true })
+    cy.get('.vessels').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy="global-risk-factor"]').should('not.exist')

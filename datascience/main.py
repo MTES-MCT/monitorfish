@@ -41,4 +41,4 @@ if __name__ == "__main__":
     print("Registering flows")
     for flow in flows_to_register:
         print(f"Registering flow {flow.name}")
-        client.register(flow, project_name=PROJECT_NAME)
+        client.register(flow, project_name=PROJECT_NAME, no_url=True)

@@ -105,18 +105,16 @@ BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA = 6
 BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT = 60
 
 # App URL
-MONITORFISH_HOST = os.getenv("MONITORFISH_HOST")  # monitor.fish
-MONITORFISH_IP = os.getenv("MONITORFISH_IP")  # 1.2.3.4
 MONITORFISH_URL = os.getenv("MONITORFISH_URL")  # http://monitor.fish/
 BACKOFFICE_URL = MONITORFISH_URL + "backoffice/"
+
+# Prefect Server endpoint
+PREFECT_SERVER_URL = os.getenv("PREFECT_SERVER_URL")
 
 # Backend endpoints
 BFF_ENDPOINT = MONITORFISH_URL + "bff/v1/"
 BEACON_MALFUNCTIONS_ENDPOINT = BFF_ENDPOINT + "beacon_malfunctions/"
 HEALTHCHECK_ENDPOINT = BFF_ENDPOINT + "healthcheck/"
-
-# Flows healthcheck URL
-FLOWS_HEALTHCHECK_URL = "http://localhost:8085"
 
 # Email server
 MONITORFISH_EMAIL_SERVER_URL = os.environ.get("MONITORFISH_EMAIL_SERVER_URL")

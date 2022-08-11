@@ -1,3 +1,4 @@
 #!/bin/bash
 source <VENV-LOCATION-TO-CHANGE>/bin/activate && \
-prefect agent docker start --no-pull;
+source ~/.prefect-agent && \
+prefect agent docker start --api "${PREFECT_SERVER_URL}";

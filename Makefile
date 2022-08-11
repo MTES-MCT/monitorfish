@@ -81,10 +81,6 @@ register-pipeline-flows-prod:
 register-pipeline-flows-int:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline/int/register-flows.sh
-run-pipeline-agent-int:
-	cd datascience && poetry run prefect agent docker start --no-pull &
-run-pipeline-agent-prod:
-	cd datascience && source ~/venv/bin/activate && prefect agent docker start --no-pull &
 stop-pipeline-server:
 	infra/remote/data-pipeline/stop-server.sh
 

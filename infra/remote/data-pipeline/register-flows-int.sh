@@ -3,6 +3,7 @@
 docker run -t --rm --network=host --name monitorfish-pipeline-register-flows \
         -v /opt2/monitorfish-data/ers:/opt2/monitorfish-data/ers \
         -v "$(pwd)"/datascience/.env:/home/monitorfish-pipeline/datascience/.env \
+	-v "$(pwd)"/infra/remote/data-pipeline/backend.toml:/home/monitorfish-pipeline/.prefect/backend.toml \
         --env-file datascience/.env \
         -e MONITORFISH_VERSION \
         -e LOGBOOK_FILES_GID="$(getent group di_etlmf | cut -d: -f3)" \

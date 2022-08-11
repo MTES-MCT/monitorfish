@@ -71,12 +71,10 @@ run-local-app:
 	cd infra/local && docker-compose up -d
 register-pipeline-flows-prod:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
-	infra/remote/data-pipeline/prod/register-flows.sh
+	infra/remote/data-pipeline/register-flows-prod.sh
 register-pipeline-flows-int:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
-	infra/remote/data-pipeline/int/register-flows.sh
-stop-pipeline-server:
-	infra/remote/data-pipeline/stop-server.sh
+	infra/remote/data-pipeline/register-flows-int.sh
 
 # DATA commands
 install-pipeline:

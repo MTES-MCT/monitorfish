@@ -69,24 +69,12 @@ restart-remote-app-dev:
 
 run-local-app:
 	cd infra/local && docker-compose up -d
-run-pipeline-server-prod:
-	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION)
-	infra/remote/data-pipeline/prod/start-server.sh
-run-pipeline-server-int:
-	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION)
-	infra/remote/data-pipeline/int/start-server.sh
 register-pipeline-flows-prod:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
-	infra/remote/data-pipeline/prod/register-flows.sh
+	infra/remote/data-pipeline/register-flows-prod.sh
 register-pipeline-flows-int:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
-	infra/remote/data-pipeline/int/register-flows.sh
-run-pipeline-agent-int:
-	cd datascience && poetry run prefect agent docker start --no-pull &
-run-pipeline-agent-prod:
-	cd datascience && source ~/venv/bin/activate && prefect agent docker start --no-pull &
-stop-pipeline-server:
-	infra/remote/data-pipeline/stop-server.sh
+	infra/remote/data-pipeline/register-flows-int.sh
 
 # DATA commands
 install-pipeline:

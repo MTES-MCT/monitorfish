@@ -13,8 +13,6 @@ from config import (
     MIN_FISHING_SPEED_THRESHOLD,
     MINIMUM_CONSECUTIVE_POSITIONS,
     MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
-    MONITORFISH_HOST,
-    MONITORFISH_IP,
     MONITORFISH_VERSION,
     ROOT_DIRECTORY,
 )
@@ -261,15 +259,8 @@ for flow in flows_to_register:
 
 ################### Define flows' run config ####################
 for flow in flows_to_register:
-    host_config = {
-        "extra_hosts": {
-            "host.docker.internal": "host-gateway",
-            MONITORFISH_HOST: MONITORFISH_IP,
-        }
-    }
     if flow.name == "Logbook":
         host_config = {
-            **host_config,
             "group_add": [LOGBOOK_FILES_GID],
             "mounts": [
                 Mount(
@@ -279,6 +270,8 @@ for flow in flows_to_register:
                 )
             ],
         }
+    else:
+        host_config = None
 
     flow.run_config = DockerRun(
         image=f"{DOCKER_IMAGE}:{MONITORFISH_VERSION}",

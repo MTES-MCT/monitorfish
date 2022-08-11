@@ -108,6 +108,9 @@ BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT = 60
 MONITORFISH_URL = os.getenv("MONITORFISH_URL")  # http://monitor.fish/
 BACKOFFICE_URL = MONITORFISH_URL + "backoffice/"
 
+# Prefect Server endpoint
+PREFECT_SERVER_URL = os.getenv("PREFECT_SERVER_URL")
+
 # Backend endpoints
 BFF_ENDPOINT = MONITORFISH_URL + "bff/v1/"
 BEACON_MALFUNCTIONS_ENDPOINT = BFF_ENDPOINT + "beacon_malfunctions/"

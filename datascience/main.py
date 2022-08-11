@@ -1,5 +1,6 @@
 import prefect
 
+from config import PREFECT_SERVER_URL
 from src.pipeline.flows_config import flows_to_register
 
 PROJECT_NAME = "Monitorfish"
@@ -29,9 +30,8 @@ def create_project_if_not_exists(client: prefect.Client, project_name: str) -> N
 if __name__ == "__main__":
     # Initialize a client, which can interact with the Prefect orchestrator.
     # The communication with the orchestrator is done through the Prefect GraphQL API.
-    # This API is served on localhost:4200.
     print("Create client")
-    client = prefect.Client()
+    client = prefect.Client(api_server=PREFECT_SERVER_URL)
 
     # Create the project "Monitorfish" in the orchestrator if it does not yet exist
     print("Create project")

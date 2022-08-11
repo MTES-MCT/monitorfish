@@ -1,8 +1,7 @@
 #!/bin/bash
 
-docker run --rm -t --network=host --name monitorfish-pipeline-agent \
+docker run -t --rm --network=host --name monitorfish-pipeline-register-flows \
         -v /opt2/monitorfish-data/ers:/opt2/monitorfish-data/ers \
-	-v "$(pwd)"/infra/configurations/prefect-agent/backend.toml:/home/monitorfish-pipeline/.prefect/backend.toml \
         -v "$(pwd)"/datascience/.env:/home/monitorfish-pipeline/datascience/.env \
         --env-file datascience/.env \
         -e MONITORFISH_VERSION \

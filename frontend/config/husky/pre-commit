@@ -3,4 +3,4 @@
 
 [ -n "$CI" ] && exit 0
 
-npx lint-staged
+npx lint-staged --cwd ./frontend

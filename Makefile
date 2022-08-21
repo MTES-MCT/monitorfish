@@ -4,9 +4,9 @@ INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 
 # DEV commands
 install:
-	npm i
+	cd ./frontend && npm i
 run-front:
-	npm start
+	cd ./frontend && npm start
 run-back:
 	docker compose up -d
 	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local"
@@ -17,7 +17,7 @@ check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
 test: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
-	CI=true npm test:unit
+	cd frontend && CI=true npm run test:unit
 dev: dev-back
 	sh -c 'make run-front'
 dev-back:

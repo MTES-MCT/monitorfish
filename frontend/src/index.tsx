@@ -3,12 +3,12 @@ import { Integrations } from '@sentry/tracing'
 import { createRoot } from 'react-dom/client'
 
 import { App } from './App'
-import GlobalFonts from './fonts/fonts'
+import GlobalFonts from './assets/fonts/fonts'
 
 import 'mini.css'
 import 'nouislider/distribute/nouislider.css'
 import 'rsuite/dist/rsuite.css'
-import './index.css'
+import './assets/index.css'
 import 'ol/ol.css'
 import './App.css'
 import './ui/shared/ol-override.css'
@@ -31,6 +31,9 @@ if (!(process.env.NODE_ENV === 'development')) {
 }
 
 const container = document.getElementById('root')
+if (!container) {
+  throw new Error('Cannot find container element with id #root.')
+}
 const root = createRoot(container)
 
 root.render(

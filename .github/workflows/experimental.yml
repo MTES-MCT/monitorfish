@@ -33,10 +33,10 @@ jobs:
       CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
       # ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
       # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      MONITORFISH_VERSION: v1.16.0_snapshot
+      MONITORFISH_VERSION: v1.16.5_snapshot
       PORT: 8880
       # REACT_APP_CYPRESS_PORT: 8880
-      VERSION: v1.16.0_snapshot
+      VERSION: v1.16.5_snapshot
     steps:
       - name: Checkout
         uses: actions/checkout@v3

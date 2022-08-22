@@ -1,8 +1,8 @@
-import { errorType } from '../domain/entities/errors'
+import { ErrorType } from '../domain/entities/errors'
 
 export default class NoPositionsFoundError extends Error {
   name = 'NoPositionsFoundError'
-  type = errorType.INFO
+  type = ErrorType.INFO
   showEmptyComponentFields = true
 
   constructor (message = '') {

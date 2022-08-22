@@ -4,9 +4,9 @@ INFRA_FOLDER="$(shell pwd)/infra/configurations/"
 
 # DEV commands
 install:
-	cd frontend && npm install
+	cd ./frontend && npm i
 run-front:
-	cd frontend && npm start
+	cd ./frontend && npm start
 run-back:
 	docker compose up -d
 	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local"
@@ -17,12 +17,19 @@ check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
 test: check-clean-archi
 	cd backend && ./mvnw clean && ./mvnw test
-	cd frontend && CI=true npm test
-dev:
-	docker network inspect monitorfish_network >/dev/null 2>&1 || docker network create monitorfish_network
-	docker compose -f ./infra/dev/docker-compose.yml up -d app
+	cd frontend && CI=true npm run test:unit
+dev: dev-back
 	sh -c 'make run-front'
-dev-erase:
+dev-back:
+	docker compose -f ./infra/dev/docker-compose.yml down -v
+	docker network inspect monitorfish_network >/dev/null 2>&1 || docker network create monitorfish_network
+	docker compose -f ./infra/dev/docker-compose.yml up -d db
+	docker compose -f ./infra/dev/docker-compose.yml up flyway
+	docker compose -f ./infra/dev/docker-compose.yml up -d app
+	make dev-wait-for-app
+dev-down:
+	docker compose -f ./infra/dev/docker-compose.yml down
+dev-prune:
 	docker compose -f ./infra/dev/docker-compose.yml down -v
 dev-reset:
 	rm -f ./frontend/cypress/downloads/*
@@ -33,9 +40,10 @@ dev-reset:
 		psql -U postgres -d postgres -c "CREATE DATABASE monitorfishdb;"
 	docker compose -f ./infra/dev/docker-compose.yml up flyway
 	docker compose -f ./infra/dev/docker-compose.yml start app
-	docker compose -f ./infra/dev/docker-compose.yml logs -f app
-dev-stop:
-	docker compose -f ./infra/dev/docker-compose.yml down
+	make dev-wait-for-app
+dev-wait-for-app:
+	@printf 'Waiting for backend app to be ready'
+	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 
 # CI commands - app
 docker-build:
@@ -44,8 +52,14 @@ docker-tag:
 	docker tag monitorfish-app:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
 docker-push:
 	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
+docker-compose-down:
+	docker compose -f ./frontend/cypress/docker-compose.yml down -v
 docker-compose-up:
-	export MONITORFISH_VERSION=$(VERSION) && cd frontend/cypress && docker-compose up -d
+	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull db
+	docker compose -f ./frontend/cypress/docker-compose.yml up --quiet-pull flyway
+	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull app
+	@printf 'Waiting for backend app to be ready'
+	@until curl --output /dev/null --silent --fail "http://localhost:8880/bff/v1/healthcheck"; do printf '.' && sleep 1; done
 
 # CI commands - data pipeline
 docker-build-pipeline:
@@ -63,12 +77,12 @@ init-local-sig:
 init-remote-sig:
 	./infra/remote/postgis_insert_layers.sh && ./infra/init/geoserver_init_layers.sh
 restart-remote-app:
-	cd infra/remote && docker-compose pull && docker-compose up -d --build app
+	cd infra/remote && docker compose pull && docker compose up -d --build app
 restart-remote-app-dev:
-	export POSTGRES_USER=postgres && export POSTGRES_PASSWORD=postgres && export POSTGRES_DB=monitorfishdb && cd infra/remote && docker-compose pull && docker-compose up -d --build app
+	export POSTGRES_USER=postgres && export POSTGRES_PASSWORD=postgres && export POSTGRES_DB=monitorfishdb && cd infra/remote && docker compose pull && docker compose up -d --build app
 
 run-local-app:
-	cd infra/local && docker-compose up -d
+	cd infra/local && docker compose up -d
 register-pipeline-flows-prod:
 	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline/register-flows-prod.sh

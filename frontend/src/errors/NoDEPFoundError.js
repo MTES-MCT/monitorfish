@@ -1,8 +1,8 @@
-import { errorType } from '../domain/entities/errors'
+import { ErrorType } from '../domain/entities/errors'
 
 export default class NoDEPFoundError extends Error {
   name = 'NoDEPFoundError'
-  type = errorType.INFO
+  type = ErrorType.INFO
   showEmptyComponentFields = true
 
   constructor (message = '') {

@@ -22,7 +22,7 @@ on:
 jobs:
   version:
     name: Set application version and env profile
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     outputs:
       ENV_PROFILE: ${{ steps.env_profile.outputs.ENV_PROFILE }}
       VERSION: ${{ steps.version.outputs.VERSION }}
@@ -58,7 +58,7 @@ jobs:
   build:
     name: Run unit tests, build and package
     needs: version
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     env:
       ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
@@ -72,16 +72,27 @@ jobs:
         with:
           java-version: 11
 
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: NPM install with caching
-        uses: bahmutov/npm-install@v1.6.0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          # Working directory to specify subfolder in which dependencies are defined
-          working-directory: frontend/
-          useLockFile: true
-          # Custom install command to use
-          install-command: npm install
+          cache: npm
+          cache-dependency-path: ./frontend/package-lock.json
+          node-version: 18
+
+      - name: Install Node.js dependencies
+        run: npm ci
+        working-directory: ./frontend
+
+      - name: Lint Frontend
+        run: npm run test:lint:partial
+        working-directory: ./frontend
+
+      - name: Check Frontend types
+        run: npm run test:type:partial
+        working-directory: ./frontend
 
       - name: Unit test
         run: make test
@@ -131,7 +142,7 @@ jobs:
   e2e_test:
     name: Run E2E tests
     needs: [version, build]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     strategy:
       # when one test fails, DO NOT cancel the other
       # containers, because this will kill Cypress processes
@@ -139,18 +150,21 @@ jobs:
       # https://github.com/cypress-io/github-action/issues/48
       fail-fast: false
       matrix:
-        # run 4 copies of the current job in parallel
-        containers: [1, 2, 3, 4]
+        # Run 10 copies of the current job in parallel
+        containers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      REACT_APP_CYPRESS_PORT: 8880
-      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
       CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      DB_PUBLIC_PORT: 5432
+      ENV_PROFILE: ${{ needs.version.outputs.ENV_PROFILE }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
-      VERSION: ${{needs.version.outputs.VERSION}}
+      MONITORFISH_VERSION: ${{ needs.version.outputs.VERSION }}
+      REACT_APP_CYPRESS_PORT: 8880
+      VERSION: ${{ needs.version.outputs.VERSION }}
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Download image
         uses: ishworkh/docker-image-artifact-download@v1
@@ -160,31 +174,50 @@ jobs:
       - name: Run docker images
         run: make docker-compose-up
 
-      - name: Curl stubbed geoserver
-        run: until $(curl --output /dev/null --silent --fail "http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27"); do printf '.'; sleep 5; done;
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: npm
+          cache-dependency-path: ./frontend/package-lock.json
+          node-version: 18
 
-      - name: Run Cypress tests
-        uses: cypress-io/github-action@v4
+      - name: Setup Firefox
+        uses: browser-actions/setup-firefox@latest
+        with:
+          firefox-version: latest
+
+      - name: Check versions
+        run: |
+          cat /etc/lsb-release
+          node -v
+          npm -v
+          docker -v
+          docker compose version
+          firefox -v
+          which firefox
+
+      - uses: cypress-io/github-action@v4
         with:
           browser: firefox
           env: PORT=8880
           install: true
-          install-command: npm i
+          install-command: npm ci
           parallel: true
           record: true
           wait-on: "http://localhost:8880"
-          working-directory: frontend
+          working-directory: ./frontend
 
   push_to_registry:
     name: Push to registry
     needs: [version, e2e_test]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
       VERSION: ${{needs.version.outputs.VERSION}}
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Download image
         uses: ishworkh/docker-image-artifact-download@v1
@@ -192,7 +225,9 @@ jobs:
           image: monitorfish-app:${{ env.VERSION }}
 
       - name: Push docker image to registry
-        if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
+        if:
+          github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref,
+          'refs/heads/v')
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
           make docker-tag

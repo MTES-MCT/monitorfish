@@ -1,4 +1,4 @@
-name: 'Set issue state'
+name: "Set issue state"
 
 on:
   project_card:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   set-state:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: dessant/issue-states@v2
         with:

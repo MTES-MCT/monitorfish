@@ -44,8 +44,8 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-observations-input"]').type('Est encore dans la bergerie')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
     cy.get('*[data-cy="save-interest-point"]').should('be.visible')
-    cy.get('*[data-cy="interest-point-observations"]').eq(0).contains('Est encore dans la bergerie', { timeout: 10000 })
     cy.get('*[data-cy="interest-point-observations"]').should('have.length', 2)
+    cy.get('*[data-cy="interest-point-observations"]').eq(0).contains('Est encore dans la bergerie', { timeout: 10000 })
 
     cy.get('*[data-cy="interest-point"]').click({ timeout: 10000 })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
@@ -56,10 +56,10 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-observations-input"]').type('Est encore encore dans la bergerie')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
     cy.get('*[data-cy="save-interest-point"]').should('be.visible')
+    cy.get('*[data-cy="interest-point-observations"]').should('have.length', 3)
     cy.get('*[data-cy="interest-point-observations"]')
       .eq(0)
       .contains('Est encore encore dans la bergerie', { timeout: 10000 })
-    cy.get('*[data-cy="interest-point-observations"]').should('have.length', 3)
   })
 
   it('An interest Should be created from input When DD coordinates are selected', () => {

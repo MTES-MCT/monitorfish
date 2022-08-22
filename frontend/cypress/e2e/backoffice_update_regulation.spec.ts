@@ -118,8 +118,10 @@ context('Update Regulation', () => {
       .eq(1)
       .scrollIntoView()
       .click({ timeout: 10000 })
+    cy.get('.rs-picker-search-bar-input').should('have.length', 1)
     cy.get('.rs-picker-search-bar-input').type('Bival{enter}')
     cy.get('[data-cy="unauthorized-species-selector"]').filter(':contains("des espèces")').click({ timeout: 10000 })
+    cy.get('.rs-picker-search-bar-input').should('have.length', 1)
     cy.get('.rs-picker-search-bar-input').type('MGE{enter}')
 
     cy.get('*[data-cy^="regulatory-species-other-info"]').type("Mhm pas d'autre info !")
@@ -240,7 +242,7 @@ context('Update Regulation', () => {
 
   it('A modal should not be opened on go back button click, if nothing has been modified', () => {
     // When
-    cy.wait(200)
+    cy.wait(1000)
     cy.get('[data-cy="go-back-link"]').eq(0).click()
 
     // Then

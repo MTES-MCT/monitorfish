@@ -1,4 +1,3 @@
-
 #####################
 # Multi stage build #
 #####################
@@ -21,42 +20,29 @@ RUN mvn dependency:go-offline -B
 COPY backend/ /tmp/
 COPY backend/pom.xml /tmp/POM_WITH_ENV_VARS
 RUN sed -e 's/COMMIT_TO_CHANGE/${GITHUB_SHA}/' \
-        -e 's/VERSION_TO_CHANGE/${VERSION}/' \
-        POM_WITH_ENV_VARS > pom.xml
+  -e 's/VERSION_TO_CHANGE/${VERSION}/' \
+  POM_WITH_ENV_VARS > pom.xml
 
 RUN mvn clean package -DskipTests=true
 
 ###########################
 # Build frontend with npm #
 ###########################
-FROM ubuntu:22.04 as buildFront
-
-ENV DEBIAN_FRONTEND=noninteractive
+FROM node:18-alpine as buildFront
 
 ARG ENV_PROFILE
-ENV REACT_APP_ENV $ENV_PROFILE
+ENV CI=true
+ENV REACT_APP_ENV=$ENV_PROFILE
 
 RUN echo ${REACT_APP_ENV}
-
-RUN apt-get update &&\
-    apt-get install  --no-install-recommends -y \
-                   curl \
-                   zip \
-                   unzip \
-                   ca-certificates &&\
-    apt-get clean
-USER root
-
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash && \
- apt-get install -y nodejs
 
 COPY frontend/ /tmp/frontend/
 COPY infra/ /tmp/infra/
 WORKDIR /tmp/frontend
 
 # Files are expected to be in /tmp/frontend/dist/monitorfish-frontend
-RUN npm ci && \
-    npm run build
+RUN npm ci
+RUN npm run build
 
 ######################
 # Create final image #
@@ -65,13 +51,13 @@ RUN npm ci && \
 FROM azul/zulu-openjdk-alpine:11
 
 ARG VERSION
-ENV VERSION $VERSION
+ENV VERSION=$VERSION
 
 ARG ENV_PROFILE
-ENV ENV_PROFILE $ENV_PROFILE
+ENV ENV_PROFILE=$ENV_PROFILE
 
-ENV REACT_APP_ENV $ENV_PROFILE
-ENV ENV_DB_URL=
+ENV REACT_APP_ENV=$ENV_PROFILE
+ENV ENV_DB_URL=""
 
 # Add bash
 RUN apk add --no-cache bash
@@ -84,13 +70,13 @@ EXPOSE 5000
 EXPOSE 5001
 WORKDIR /home/monitorfish
 
-ENV JAVA_TOOL_OPTIONS "-Dcom.sun.management.jmxremote.ssl=false \
- -Dcom.sun.management.jmxremote.authenticate=false \
- -Dcom.sun.management.jmxremote.port=5000 \
- -Dcom.sun.management.jmxremote.rmi.port=5001 \
- -Dcom.sun.management.jmxremote.registry.ssl=false \
- -Dcom.sun.management.jmxremote.host=0.0.0.0 \
- -Djava.rmi.server.hostname=0.0.0.0"
+ENV JAVA_TOOL_OPTIONS="-Dcom.sun.management.jmxremote.ssl=false \
+  -Dcom.sun.management.jmxremote.authenticate=false \
+  -Dcom.sun.management.jmxremote.port=5000 \
+  -Dcom.sun.management.jmxremote.rmi.port=5001 \
+  -Dcom.sun.management.jmxremote.registry.ssl=false \
+  -Dcom.sun.management.jmxremote.host=0.0.0.0 \
+  -Djava.rmi.server.hostname=0.0.0.0"
 
 # Copy files for the back
 COPY --from=buildBack /tmp/target/monitorfish-${VERSION}-exec.jar /home/monitorfish
@@ -107,10 +93,10 @@ RUN mkdir /home/monitorfish/logs
 
 # Set up environement variable that define the root folder use for serving static files
 # It must point to the front (React) files
-ENV STATIC_FILES_PATH /home/monitorfish/public
+ENV STATIC_FILES_PATH="/home/monitorfish/public"
 
 # Default profile is for local. Can be overiden at start : docker run -e "SPRING_PROFILES_ACTIVE=prod"
-ENV SPRING_PROFILES_ACTIVE ${ENV_PROFILE}
+ENV SPRING_PROFILES_ACTIVE=$ENV_PROFILE
 
 RUN echo ${ENV_PROFILE}
 
@@ -119,7 +105,7 @@ RUN chown monitorfish /home/monitorfish/env.sh
 RUN chmod +x /home/monitorfish/env.sh
 USER monitorfish
 
-ENV REACT_APP_GEOSERVER_LOCAL_URL=
+ENV REACT_APP_GEOSERVER_LOCAL_URL=""
 
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 

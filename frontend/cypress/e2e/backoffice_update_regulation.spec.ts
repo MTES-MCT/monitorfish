@@ -5,7 +5,7 @@ import { getDate } from '../../src/utils'
 context('Update Regulation', () => {
   beforeEach(() => {
     cy.visit('/backoffice/regulation')
-    cy.clearLocalStorage()
+    cy.clearLocalStorage(/persist/)
 
     // Open a regulation to edit
     cy.get('[data-cy="law-type"]').should('have.length', 3)
@@ -16,6 +16,7 @@ context('Update Regulation', () => {
     cy.get('[data-cy="regulatory-layer-zone"]').eq(0).trigger('mouseover', { force: true })
     cy.get('[data-cy="regulatory-layer-zone-edit"]').should('have.length', 1).click({ force: true })
     cy.url().should('include', '/regulation/edit')
+    cy.wait(500)
   })
 
   it('A layer zone Should be edited', () => {
@@ -242,7 +243,7 @@ context('Update Regulation', () => {
 
   it('A modal should not be opened on go back button click, if nothing has been modified', () => {
     // When
-    cy.wait(1000)
+    cy.wait(2000)
     cy.get('[data-cy="go-back-link"]').eq(0).click()
 
     // Then

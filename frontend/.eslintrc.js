@@ -1,0 +1,50 @@
+const path = require('path')
+
+module.exports = {
+  extends: '@ivangabriele/eslint-config-typescript-react',
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 2022,
+    project: path.join(__dirname, 'tsconfig.json'),
+  },
+  ignorePatterns: ['.eslintrc.js'],
+  env: {
+    browser: true,
+  },
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+    jest: 'readonly',
+  },
+  rules: {
+    '@typescript/no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': 'off',
+
+    'react/react-in-jsx-scope': 'off',
+    'react/require-default-props': 'off',
+  },
+  overrides: [
+    {
+      files: ['cypress/**/*.js', 'cypress/**/*.ts', 'cypress.config.ts'],
+      globals: {
+        beforeEach: true,
+        context: true,
+        cy: true,
+        Cypress: true,
+        expect: 'readonly',
+        describe: 'readonly',
+        it: 'readonly',
+      },
+      rules: {
+        'import/no-default-export': 'off',
+        'import/no-extraneous-dependencies': 'off',
+      },
+    },
+    {
+      files: ['src/ui/**/*.tsx'],
+      rules: {
+        'react/jsx-props-no-spreading': 'off',
+      },
+    },
+  ],
+}

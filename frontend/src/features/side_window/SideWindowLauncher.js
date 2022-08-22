@@ -1,7 +1,6 @@
-import React from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import { closeSideWindow } from '../../domain/shared_slices/Global'
-import NewWindow from 'react-new-window'
+import { NewWindow } from './NewWindow'
 import { resetFocusOnAlert } from '../../domain/shared_slices/Alert'
 import SideWindow from './SideWindow'
 

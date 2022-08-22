@@ -99,7 +99,7 @@ const RegulationTopicLine = props => {
     </ContentLine>
 }
 
-const CustomLabel = styled(Label)` 
+const CustomLabel = styled(Label)`
   margin-right: 8px;
 `
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
@@ -8,19 +8,16 @@ import { useSelector } from 'react-redux'
 import { coordinatesAreDistinct, getCoordinates } from '../../coordinates'
 import SetCoordinates from '../coordinates/SetCoordinates'
 
-const CustomCircleRange = ({
-  measurementTypeToAdd,
-  setCircleCoordinatesToAdd,
-  circleCoordinatesToAdd,
-  circleRadiusToAdd,
-  setCircleRadiusToAdd,
-  cancelAddCircleRange,
-  addCustomCircleRange,
-  healthcheckTextWarning
-}) => {
+const CustomCircleRange = ({ onCancelAddCircleRange, onAddCustomCircleRange }) => {
   const {
+    measurementTypeToAdd,
     circleMeasurementInDrawing
   } = useSelector(state => state.measurement)
+  const {
+    healthcheckTextWarning
+  } = useSelector(state => state.global)
+  const [circleCoordinatesToAdd, setCircleCoordinatesToAdd] = useState([])
+  const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
 
   useEffect(() => {
     if (measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE) {
@@ -55,6 +52,12 @@ const CustomCircleRange = ({
     }
   }
 
+  const addCustomCircleRange = (circleCoordinatesToAdd, circleRadiusToAdd) => {
+    onAddCustomCircleRange(circleCoordinatesToAdd, circleRadiusToAdd)
+    setCircleCoordinatesToAdd([])
+    setCircleRadiusToAdd('')
+  }
+
   return (
     <Wrapper
       healthcheckTextWarning={healthcheckTextWarning}
@@ -79,12 +82,12 @@ const CustomCircleRange = ({
         <span>(Nm)</span><br/>
         <OkButton
           data-cy={'measurement-circle-add'}
-          onClick={() => addCustomCircleRange()}
+          onClick={() => addCustomCircleRange(circleCoordinatesToAdd, circleRadiusToAdd)}
         >
           OK
         </OkButton>
         <CancelButton
-          onClick={() => cancelAddCircleRange()}>
+          onClick={() => onCancelAddCircleRange()}>
           Annuler
         </CancelButton>
       </Body>
@@ -162,8 +165,8 @@ const Header = styled.div`
 const Wrapper = styled(MapComponentStyle)`
   width: 306px;
   background: ${COLORS.background};
-  margin-right: ${props => !props.firstUpdate && props.isOpen ? '45px' : '-320px'};
-  opacity:  ${props => !props.firstUpdate && props.isOpen ? '1' : '0'};
+  margin-right: ${props => props.isOpen ? '45px' : '-320px'};
+  opacity:  ${props => props.isOpen ? '1' : '0'};
   top: 249px;
   right: 10px;
   border-radius: 2px;

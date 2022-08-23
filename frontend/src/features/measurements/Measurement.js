@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -32,72 +32,66 @@ const Measurement = () => {
     previewFilteredVesselsMode
   } = useSelector(state => state.global)
 
-  const [measurementIsOpen, setMeasurementIsOpen] = useState(false)
-  const [circleCoordinatesToAdd, setCircleCoordinatesToAdd] = useState([])
-  const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, measurementIsOpen)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isOpen)
   const escapeFromKeyboard = useEscapeFromKeyboard()
 
   useEffect(() => {
-    setCircleCoordinatesToAdd([])
-    setCircleRadiusToAdd('')
-  }, [measurementIsOpen])
-
-  useEffect(() => {
     if (clickedOutsideComponent) {
-      setMeasurementIsOpen(false)
+      setIsOpen(false)
     }
   }, [clickedOutsideComponent])
 
   useEffect(() => {
     if (escapeFromKeyboard) {
       dispatch(setMeasurementTypeToAdd(null))
-      setMeasurementIsOpen(false)
+      setIsOpen(false)
     }
   }, [escapeFromKeyboard])
 
   const makeMeasurement = measurementTypeToAdd => {
     dispatch(setMeasurementTypeToAdd(measurementTypeToAdd))
-    setMeasurementIsOpen(false)
+    setIsOpen(false)
   }
 
-  const getMeasurementIcon = measurementTypeToAdd => {
+  const measurementIcon = useMemo(() => {
     switch (measurementTypeToAdd) {
       case MeasurementTypes.MULTILINE:
         return <MultiLineIcon/>
       case MeasurementTypes.CIRCLE_RANGE:
         return <CircleRangeIcon/>
       default:
-        return <MeasurementIcon $rightMenuIsOpen={rightMenuIsOpen} $selectedVessel={selectedVessel}/>
+        return <MeasurementIcon
+          $rightMenuIsOpen={rightMenuIsOpen}
+          $selectedVessel={selectedVessel}
+        />
     }
-  }
+  }, [measurementTypeToAdd])
 
   function openOrCloseMeasurement () {
     if (measurementTypeToAdd) {
       dispatch(setMeasurementTypeToAdd(null))
-      setMeasurementIsOpen(false)
+      setIsOpen(false)
     } else {
-      setMeasurementIsOpen(!measurementIsOpen)
+      setIsOpen(!isOpen)
       dispatch(unselectVessel())
     }
   }
 
-  function addCustomCircleRange () {
+  function addCustomCircleRange (circleCoordinatesToAdd, circleRadiusToAdd) {
     dispatch(setCircleMeasurementToAdd({
       circleCoordinatesToAdd: circleCoordinatesToAdd,
       circleRadiusToAdd: circleRadiusToAdd
     }))
-    setCircleCoordinatesToAdd([])
-    setCircleRadiusToAdd('')
     dispatch(setMeasurementTypeToAdd(null))
-    setMeasurementIsOpen(false)
+    setIsOpen(false)
   }
 
   function cancelAddCircleRange () {
     dispatch(setMeasurementTypeToAdd(null))
     dispatch(resetCircleMeasurementInDrawing())
-    setMeasurementIsOpen(false)
+    setIsOpen(false)
   }
 
   return (
@@ -106,41 +100,37 @@ const Measurement = () => {
         data-cy={'measurement'}
         isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
-        isOpen={measurementIsOpen || measurementTypeToAdd}
+        isOpen={isOpen || measurementTypeToAdd}
         rightMenuIsOpen={rightMenuIsOpen}
         selectedVessel={selectedVessel}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Mesurer une distance'}
         onClick={openOrCloseMeasurement}>
-        {
-          getMeasurementIcon(measurementTypeToAdd)
-        }
+        {measurementIcon}
       </MeasurementWrapper>
       <MeasurementOptions
         healthcheckTextWarning={healthcheckTextWarning}
-        measurementBoxIsOpen={measurementIsOpen}>
+        isOpen={isOpen}
+      >
         <MeasurementItem
           data-cy={'measurement-multiline'}
           title={'Mesure d\'une distance avec lignes brisées'}
-          onClick={() => makeMeasurement(MeasurementTypes.MULTILINE)}>
+          onClick={() => makeMeasurement(MeasurementTypes.MULTILINE)}
+        >
           <MultiLineIcon/>
         </MeasurementItem>
         <MeasurementItem
           data-cy={'measurement-circle-range'}
           title={'Rayon d\'action'}
-          onClick={() => makeMeasurement(MeasurementTypes.CIRCLE_RANGE)}>
+          onClick={() => makeMeasurement(MeasurementTypes.CIRCLE_RANGE)}
+        >
           <CircleRangeIcon/>
         </MeasurementItem>
       </MeasurementOptions>
       <CustomCircleRange
-        healthcheckTextWarning={healthcheckTextWarning}
-        measurementTypeToAdd={measurementTypeToAdd}
-        circleCoordinatesToAdd={circleCoordinatesToAdd}
-        circleRadiusToAdd={circleRadiusToAdd}
-        setCircleCoordinatesToAdd={setCircleCoordinatesToAdd}
-        setCircleRadiusToAdd={setCircleRadiusToAdd}
-        cancelAddCircleRange={cancelAddCircleRange}
-        addCustomCircleRange={addCustomCircleRange}/>
+        onCancelAddCircleRange={cancelAddCircleRange}
+        onAddCustomCircleRange={addCustomCircleRange}
+      />
     </Wrapper>
   )
 }
@@ -178,8 +168,8 @@ const Wrapper = styled.div`
 
 const MeasurementOptions = styled(MapComponentStyle)`
   width: 175px;
-  margin-right: ${props => props.measurementBoxIsOpen ? '45px' : '-200px'};
-  opacity: ${props => props.measurementBoxIsOpen ? '1' : '0'};
+  margin-right: ${props => props.isOpen ? '45px' : '-200px'};
+  opacity: ${props => props.isOpen ? '1' : '0'};
   top: 249px;
   right: 10px;
   border-radius: 2px;

@@ -28,7 +28,7 @@
     "target": "ES2022",
     "useUnknownInCatchVariables": true
   },
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "config/jest.global.js.old", "config/jest.config.js.old"],
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules/*"],
   "ts-node": {
     "swc": true,

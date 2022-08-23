@@ -3,7 +3,7 @@ import { Integrations } from '@sentry/tracing'
 import { createRoot } from 'react-dom/client'
 
 import { App } from './App'
-import GlobalFonts from './assets/fonts/fonts'
+import { FontStyle } from './assets/fonts/fonts'
 
 import 'mini.css'
 import 'nouislider/distribute/nouislider.css'
@@ -36,7 +36,7 @@ const root = createRoot(container)
 
 root.render(
   <>
-    <GlobalFonts />
+    <FontStyle />
     <App />
   </>,
 )

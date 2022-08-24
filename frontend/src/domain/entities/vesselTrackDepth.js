@@ -3,16 +3,16 @@ import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
 
 /** @type {VesselNS.VesselTrackDepth} */
 export const VesselTrackDepth = {
+  CUSTOM: 'CUSTOM',
   LAST_DEPARTURE: 'LAST_DEPARTURE',
-  TWELVE_HOURS: 'TWELVE_HOURS',
   ONE_DAY: 'ONE_DAY',
-  TWO_DAYS: 'TWO_DAYS',
-  THREE_DAYS: 'THREE_DAYS',
-  ONE_WEEK: 'ONE_WEEK',
-  TWO_WEEK: 'TWO_WEEK',
-  THREE_WEEK: 'THREE_WEEK',
   ONE_MONTH: 'ONE_MONTH',
-  CUSTOM: 'CUSTOM'
+  ONE_WEEK: 'ONE_WEEK',
+  THREE_DAYS: 'THREE_DAYS',
+  THREE_WEEK: 'THREE_WEEK',
+  TWELVE_HOURS: 'TWELVE_HOURS',
+  TWO_DAYS: 'TWO_DAYS',
+  TWO_WEEK: 'TWO_WEEK',
 }
 
 /**
@@ -27,9 +27,9 @@ export const getCustomOrDefaultTrackRequest = (customTrackRequest, defaultTrackD
   if (customTrackRequest) {
     if (fullDays) {
       return getUTCFullDayTrackRequest({ ...customTrackRequest })
-    } else {
-      return customTrackRequest
     }
+
+    return customTrackRequest
   }
 
   return getTrackRequestFromTrackDepth(defaultTrackDepth)
@@ -41,9 +41,9 @@ export const getCustomOrDefaultTrackRequest = (customTrackRequest, defaultTrackD
  * @returns {VesselNS.TrackRequestPredefined} vessel track request
  */
 export const getTrackRequestFromTrackDepth = trackDepth => ({
-  trackDepth,
   afterDateTime: null,
-  beforeDateTime: null
+  beforeDateTime: null,
+  trackDepth,
 })
 
 /**
@@ -51,9 +51,9 @@ export const getTrackRequestFromTrackDepth = trackDepth => ({
  * @returns {VesselNS.TrackRequest} vessel track request
  */
 export const getTrackRequestFromDates = (afterDateTime, beforeDateTime) => ({
+  afterDateTime,
+  beforeDateTime,
   trackDepth: VesselTrackDepth.CUSTOM,
-  afterDateTime: afterDateTime,
-  beforeDateTime: beforeDateTime
 })
 
 /**
@@ -72,27 +72,31 @@ export const getUTCFullDayTrackRequest = trackRequest => {
   return getTrackRequestFromDates(trackRequest?.afterDateTime, trackRequest?.beforeDateTime)
 }
 
-export function getTrackResponseError (positions, trackDepthHasBeenModified, calledFromCron, nextTrackRequest) {
+export function getTrackResponseError(positions, trackDepthHasBeenModified, calledFromCron, nextTrackRequest) {
   if (trackDepthHasBeenModifiedFromAPI(positions, trackDepthHasBeenModified, calledFromCron)) {
-    return new NoDEPFoundError('Nous n\'avons pas trouvé de dernier DEP pour ce navire, nous affichons ' +
-      'les positions des dernières 24 heures.')
-  } else if (noPositionsFoundForVessel(positions, calledFromCron)) {
-    return new NoPositionsFoundError('Nous n\'avons trouvé aucune position.')
-  } else if (noPositionsFoundForEnteredDateTime(positions, nextTrackRequest)) {
-    return new NoPositionsFoundError('Nous n\'avons trouvé aucune position pour ces dates.')
+    return new NoDEPFoundError(
+      "Nous n'avons pas trouvé de dernier DEP pour ce navire, nous affichons " +
+        'les positions des dernières 24 heures.',
+    )
+  }
+  if (noPositionsFoundForVessel(positions, calledFromCron)) {
+    return new NoPositionsFoundError("Nous n'avons trouvé aucune position.")
+  }
+  if (noPositionsFoundForEnteredDateTime(positions, nextTrackRequest)) {
+    return new NoPositionsFoundError("Nous n'avons trouvé aucune position pour ces dates.")
   }
 
   return null
 }
 
-function noPositionsFoundForVessel (positions, updateShowedVessel) {
+function noPositionsFoundForVessel(positions, updateShowedVessel) {
   return !positions?.length && !updateShowedVessel
 }
 
-function noPositionsFoundForEnteredDateTime (positions, trackRequest) {
+function noPositionsFoundForEnteredDateTime(positions, trackRequest) {
   return !positions?.length && trackRequest
 }
 
-function trackDepthHasBeenModifiedFromAPI (positions, trackDepthHasBeenModified, updateShowedVessel) {
+function trackDepthHasBeenModifiedFromAPI(positions, trackDepthHasBeenModified, updateShowedVessel) {
   return positions?.length && trackDepthHasBeenModified && !updateShowedVessel
 }

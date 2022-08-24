@@ -1,17 +1,20 @@
-import React, { createRef, useEffect, useState } from 'react'
 import Overlay from 'ol/Overlay'
+import React, { createRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 
-const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }) => {
+function MeasurementOverlay({ coordinates, deleteFeature, id, map, measurement }) {
   const ref = createRef()
-  const [overlay] = useState(new Overlay({
-    element: ref.current,
-    position: coordinates,
-    offset: [0, -7],
-    positioning: 'bottom-center'
-  }))
+  const [overlay] = useState(
+    new Overlay({
+      element: ref.current,
+      offset: [0, -7],
+      position: coordinates,
+      positioning: 'bottom-center',
+    }),
+  )
 
   useEffect(() => {
     if (map) {
@@ -30,14 +33,11 @@ const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }
     <div>
       <MeasurementOverlayElement ref={ref}>
         <ZoneSelected>
-          <ZoneText data-cy={'measurement-value'}>{measurement}</ZoneText>
-          <CloseIcon
-            data-cy={'close-measurement'}
-            onClick={() => deleteFeature(id)}
-          />
+          <ZoneText data-cy="measurement-value">{measurement}</ZoneText>
+          <CloseIcon data-cy="close-measurement" onClick={() => deleteFeature(id)} />
         </ZoneSelected>
         <TrianglePointer>
-          <TriangleShadow/>
+          <TriangleShadow />
         </TrianglePointer>
       </MeasurementOverlayElement>
     </div>
@@ -47,7 +47,7 @@ const MeasurementOverlay = ({ map, measurement, coordinates, deleteFeature, id }
 const TrianglePointer = styled.div`
   margin-left: auto;
   margin-right: auto;
-  height: auto; 
+  height: auto;
   width: auto;
 `
 

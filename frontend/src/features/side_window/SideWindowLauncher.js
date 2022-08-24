@@ -1,33 +1,34 @@
 import { batch, useDispatch, useSelector } from 'react-redux'
+
+import { resetFocusOnAlert } from '../../domain/shared_slices/Alert'
 import { closeSideWindow } from '../../domain/shared_slices/Global'
 import { NewWindow } from './NewWindow'
-import { resetFocusOnAlert } from '../../domain/shared_slices/Alert'
 import SideWindow from './SideWindow'
 
-const SideWindowLauncher = () => {
-  const {
-    openedSideWindowTab
-  } = useSelector(state => state.global)
+function SideWindowLauncher() {
+  const { openedSideWindowTab } = useSelector(state => state.global)
   const dispatch = useDispatch()
 
-  return <>{openedSideWindowTab
-    ? <NewWindow
-      copyStyles
-      name={'MonitorFish'}
-      title={'MonitorFish'}
-      features={{ scrollbars: true, width: window.innerWidth, height: '1200px' }}
-      onUnload={() => {
-        batch(() => {
-          dispatch(closeSideWindow())
-          dispatch(resetFocusOnAlert())
-        })
-      }}
-    >
-      <SideWindow/>
-    </NewWindow>
-    : null
-  }
-  </>
+  return (
+    <>
+      {openedSideWindowTab ? (
+        <NewWindow
+          copyStyles
+          features={{ height: '1200px', scrollbars: true, width: window.innerWidth }}
+          name="MonitorFish"
+          onUnload={() => {
+            batch(() => {
+              dispatch(closeSideWindow())
+              dispatch(resetFocusOnAlert())
+            })
+          }}
+          title="MonitorFish"
+        >
+          <SideWindow />
+        </NewWindow>
+      ) : null}
+    </>
+  )
 }
 
 export default SideWindowLauncher

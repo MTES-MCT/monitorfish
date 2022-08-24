@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
 import SpeciesAndWeightChart from './SpeciesAndWeightChart'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 
-const DISMessageResume = props => {
+function DISMessageResume(props) {
   const [isOpen, setIsOpen] = useState(false)
   const firstUpdate = useRef(true)
   const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
@@ -18,9 +19,9 @@ const DISMessageResume = props => {
         .sort((a, b) => {
           if (a.weight < b.weight) {
             return 1
-          } else {
+          } 
             return -1
-          }
+          
         })
       setSpeciesAndWeightArray(array)
     }
@@ -32,44 +33,48 @@ const DISMessageResume = props => {
     }
   }, [isOpen])
 
-  const getDISMessageResumeTitleText = () => props.totalDISWeight > 0
-    ? `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalDISWeight} kg rejetés au total`
-    : `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - aucun rejet ${props.allDISMessagesAreNotAcknowledged ? 'acquitté' : ''}`
+  const getDISMessageResumeTitleText = () =>
+    props.totalDISWeight > 0
+      ? `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${
+          props.totalDISWeight
+        } kg rejetés au total`
+      : `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - aucun rejet ${
+          props.allDISMessagesAreNotAcknowledged ? 'acquitté' : ''
+        }`
 
-  return <Wrapper>
-    <LogbookMessageResumeHeader
+  return (
+    <Wrapper>
+      <LogbookMessageResumeHeader
+        hasNoMessage={props.hasNoMessage}
       isNotAcknowledged={props.allDISMessagesAreNotAcknowledged}
-      onHoverText={props.hasNoMessage ? null : getDISMessageResumeTitleText()}
-      title={props.hasNoMessage ? null : <>{getDISMessageResumeTitleText()}</>}
-      hasNoMessage={props.hasNoMessage}
-      noContent={!props.hasNoMessage && !props.totalDISWeight}
-      showLogbookMessages={props.showLogbookMessages}
+      isOpen={isOpen}
       messageType={LogbookMessageTypeEnum.DIS.code.toString()}
+      noContent={!props.hasNoMessage && !props.totalDISWeight}
+      onHoverText={props.hasNoMessage ? null : getDISMessageResumeTitleText()}
       setIsOpen={setIsOpen}
-      isOpen={isOpen}/>
-    {
-      props.hasNoMessage
-        ? null
-        : <LogbookMessageContent
-          id={props.id}
+      showLogbookMessages={props.showLogbookMessages}
+      title={props.hasNoMessage ? null : <>{getDISMessageResumeTitleText()}</>}/>
+      />
+      {props.hasNoMessage ? null : (
+        <LogbookMessageContent
           chartHeight={chartHeight}
-          species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}
           firstUpdate={firstUpdate}
+          id={props.id}
           isOpen={isOpen}
-          name={LogbookMessageTypeEnum.DIS.code.toString()}>
+          name={LogbookMessageTypeEnum.DIS.code.toString()}
+          species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}>
           <Zone>
-            <WeightInfo>
-              Tous les poids sont vifs.
-            </WeightInfo>
+            <WeightInfo>Tous les poids sont vifs.</WeightInfo>
             <SpeciesAndWeightChart
-              setChartHeight={setChartHeight}
               compareWithTotalWeight={true}
+              setChartHeight={setChartHeight}
               speciesAndWeightArray={speciesAndWeightArray}
             />
           </Zone>
         </LogbookMessageContent>
-    }
-  </Wrapper>
+      )}
+    </Wrapper>
+  )
 }
 
 const WeightInfo = styled.span`
@@ -98,13 +103,10 @@ const LogbookMessageContent = styled.div`
   overflow: hidden;
   padding-left: 20px;
   border-bottom: 1px solid ${COLORS.gray};
-  opacity: ${props => props.isOpen ? 1 : 0};
-  height: ${props => props.isOpen && props.chartHeight
-    ? props.chartHeight + 50
-    : 0
-  }px;
+  opacity: ${props => (props.isOpen ? 1 : 0)};
+  height: ${props => (props.isOpen && props.chartHeight ? props.chartHeight + 50 : 0)}px;
   transition: 0.2s all;
-  margin-bottom: ${props => props.isOpen ? 5 : -1}px;
+  margin-bottom: ${props => (props.isOpen ? 5 : -1)}px;
 `
 
 export default DISMessageResume

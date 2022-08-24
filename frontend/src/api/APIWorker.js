@@ -1,42 +1,36 @@
 import { useEffect, useRef, useState } from 'react'
-import showAllVessels from '../domain/use_cases/vessel/showVesselsLastPosition'
 import { batch, useDispatch, useSelector } from 'react-redux'
-import getAllGearCodes from '../domain/use_cases/gearCode/getAllGearCodes'
-import updateVesselTracks from '../domain/use_cases/vessel/updateVesselTracks'
-import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
-import getAllFleetSegments from '../domain/use_cases/fleetSegment/getAllFleetSegments'
-import getHealthcheck from '../domain/use_cases/healthcheck/getHealthcheck'
-import getVesselVoyage from '../domain/use_cases/vessel/getVesselVoyage'
-import getVesselControls from '../domain/use_cases/vessel/getVesselControls'
+
 import { VesselSidebarTab } from '../domain/entities/vessel'
-import getAllRegulatoryLayers from '../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
+import { setIsUpdatingVessels } from '../domain/shared_slices/Global'
 import getOperationalAlerts from '../domain/use_cases/alert/getOperationalAlerts'
-import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
-import openBeaconMalfunctionInKanban from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import getVesselBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import getVesselReportings from '../domain/use_cases/vessel/getVesselReportings'
 import getSilencedAlerts from '../domain/use_cases/alert/getSilencedAlerts'
+import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
+import openBeaconMalfunctionInKanban from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import getFishingInfractions from '../domain/use_cases/infraction/getFishingInfractions'
 import getAllControllers from '../domain/use_cases/controller/getAllControllers'
+import getAllFleetSegments from '../domain/use_cases/fleetSegment/getAllFleetSegments'
+import getAllGearCodes from '../domain/use_cases/gearCode/getAllGearCodes'
+import getHealthcheck from '../domain/use_cases/healthcheck/getHealthcheck'
+import getAllRegulatoryLayers from '../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
+import getVesselControls from '../domain/use_cases/vessel/getVesselControls'
+import getVesselVoyage from '../domain/use_cases/vessel/getVesselVoyage'
+import showAllVessels from '../domain/use_cases/vessel/showVesselsLastPosition'
+import updateVesselTracks from '../domain/use_cases/vessel/updateVesselTracks'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
 export const THIRTY_SECONDS = 30 * 1000
 
-const APIWorker = () => {
+function APIWorker() {
   const dispatch = useDispatch()
-  const {
-    vesselSidebarTab,
-    selectedVesselIdentity
-  } = useSelector(state => state.vessel)
-  const {
-    sideWindowIsOpen,
-    adminRole
-  } = useSelector(state => state.global)
-  const {
-    openedBeaconMalfunctionInKanban,
-    vesselBeaconMalfunctionsResumeAndHistory
-  } = useSelector(state => state.beaconMalfunction)
+  const { selectedVesselIdentity, vesselSidebarTab } = useSelector(state => state.vessel)
+  const { adminRole, sideWindowIsOpen } = useSelector(state => state.global)
+  const { openedBeaconMalfunctionInKanban, vesselBeaconMalfunctionsResumeAndHistory } = useSelector(
+    state => state.beaconMalfunction,
+  )
 
   const sideWindowInterval = useRef(null)
   const beaconMalfunctionInKanbanInterval = useRef(null)

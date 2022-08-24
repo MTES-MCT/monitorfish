@@ -1,29 +1,35 @@
+import Draw from 'ol/interaction/Draw'
+import VectorSource from 'ol/source/Vector'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import VectorSource from 'ol/source/Vector'
 import { MeasurementTypes, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
-import Draw from 'ol/interaction/Draw'
+
 import { unByKey } from 'ol/Observable'
 import LineString from 'ol/geom/LineString'
 import { getLength } from 'ol/sphere'
+
 import {
   removeMeasurementDrawed,
   resetMeasurementTypeToAdd,
-  setCircleMeasurementInDrawing
+  setCircleMeasurementInDrawing,
 } from '../domain/shared_slices/Measurement'
+
 import VectorLayer from 'ol/layer/Vector'
 import Circle from 'ol/geom/Circle'
 import { circular, fromCircle } from 'ol/geom/Polygon'
 import Feature from 'ol/Feature'
 import { METERS_PER_UNIT } from 'ol/proj/Units'
 import GeoJSON from 'ol/format/GeoJSON'
+
+import saveMeasurement from '../domain/use_cases/measurement/saveMeasurement'
 import MeasurementOverlay from '../features/map/overlays/MeasurementOverlay'
 import { getNauticalMilesFromMeters } from '../utils'
-import saveMeasurement from '../domain/use_cases/measurement/saveMeasurement'
 import { measurementStyle, measurementStyleWithCenter } from './styles/measurement.style'
+
 import { transform } from 'ol/proj'
 import { getCenter } from 'ol/extent'
+
 import Layers from '../domain/entities/layers'
 
 const DRAW_START_EVENT = 'drawstart'
@@ -42,21 +48,17 @@ const getNauticalMilesOfLine = line => {
   return `${getNauticalMilesFromMeters(length)} nm`
 }
 
-function getNauticalMilesRadiusOfCircularPolygon (polygon) {
+function getNauticalMilesRadiusOfCircularPolygon(polygon) {
   const length = getLength(polygon)
   const radius = length / (2 * Math.PI)
 
   return `r = ${getNauticalMilesFromMeters(radius)} nm`
 }
 
-const MeasurementLayer = ({ map }) => {
+function MeasurementLayer({ map }) {
   const dispatch = useDispatch()
 
-  const {
-    measurementTypeToAdd,
-    measurementsDrawed,
-    circleMeasurementToAdd
-  } = useSelector(state => state.measurement)
+  const { measurementTypeToAdd, measurementsDrawed, circleMeasurementToAdd } = useSelector(state => state.measurement)
 
   const [measurementInProgress, _setMeasurementInProgress] = useState(null)
   const measurementInProgressRef = useRef(measurementInProgress)
@@ -65,22 +67,26 @@ const MeasurementLayer = ({ map }) => {
     _setMeasurementInProgress(value)
   }
   const [drawObject, setDrawObject] = useState(null)
-  const [vectorSource] = useState(new VectorSource({
-    wrapX: false,
-    projection: OPENLAYERS_PROJECTION
-  }))
-  const [vectorLayer] = useState(new VectorLayer({
-    source: vectorSource,
-    renderBuffer: 7,
-    updateWhileAnimating: true,
+  const [vectorSource] = useState(
+    new VectorSource({
+      wrapX: false,
+      projection: OPENLAYERS_PROJECTION,
+    }),
+  )
+  const [vectorLayer] = useState(
+    new VectorLayer({
+      source: vectorSource,
+      renderBuffer: 7,
+      updateWhileAnimating: true,
+      style: [measurementStyle, measurementStyleWithCenter],
     updateWhileInteracting: true,
-    style: [measurementStyle, measurementStyleWithCenter],
-    className: Layers.MEASUREMENT.code,
-    zIndex: Layers.MEASUREMENT.zIndex
-  }))
+      className: Layers.MEASUREMENT.code,
+      zIndex: Layers.MEASUREMENT.zIndex,
+    }),
+  )
 
   useEffect(() => {
-    function addLayerToMap () {
+    function addLayerToMap() {
       if (map && vectorLayer) {
         map.getLayers().push(vectorLayer)
       }
@@ -96,11 +102,11 @@ const MeasurementLayer = ({ map }) => {
   }, [map, vectorLayer])
 
   useEffect(() => {
-    function drawExistingFeaturesOnMap () {
+    function drawExistingFeaturesOnMap() {
       if (measurementsDrawed && map) {
         measurementsDrawed.forEach(measurement => {
           const feature = new GeoJSON({
-            featureProjection: OPENLAYERS_PROJECTION
+            featureProjection: OPENLAYERS_PROJECTION,
           }).readFeature(measurement.feature)
 
           vectorSource.addFeature(feature)
@@ -113,19 +119,19 @@ const MeasurementLayer = ({ map }) => {
 
   useEffect(() => {
     if (map && measurementTypeToAdd) {
-      function addEmptyNextMeasurement () {
+      function addEmptyNextMeasurement() {
         setMeasurementInProgress({
           feature: null,
-          measurement: null,
-          coordinates: null
+          coordinates: null,
+          measurement: null
         })
       }
 
-      function drawNewFeatureOnMap () {
+      function drawNewFeatureOnMap() {
         const draw = new Draw({
           source: vectorSource,
-          type: measurementTypeToAdd,
-          style: [measurementStyle, measurementStyleWithCenter]
+          style: [measurementStyle, measurementStyleWithCenter],
+          type: measurementTypeToAdd
         })
 
         map.addInteraction(draw)
@@ -138,7 +144,7 @@ const MeasurementLayer = ({ map }) => {
   }, [map, measurementTypeToAdd])
 
   useEffect(() => {
-    function removeInteraction () {
+    function removeInteraction() {
       if (!measurementTypeToAdd && drawObject) {
         setDrawObject(null)
         setMeasurementInProgress(null)
@@ -147,7 +153,7 @@ const MeasurementLayer = ({ map }) => {
       }
     }
 
-    function waitForUnwantedZoomAndQuitInteraction () {
+    function waitForUnwantedZoomAndQuitInteraction() {
       setTimeout(() => {
         map.removeInteraction(drawObject)
       }, 300)
@@ -157,35 +163,44 @@ const MeasurementLayer = ({ map }) => {
   }, [measurementTypeToAdd])
 
   useEffect(() => {
-    function addCustomCircleMeasurement () {
+    function addCustomCircleMeasurement() {
       const metersForOneNauticalMile = 1852
       const longitude = 1
       const latitude = 0
       const numberOfVertices = 64
 
-      if (!circleMeasurementHasCoordinatesAndRadiusFromForm() && !circleMeasurementHasRadiusFromFormAndCoordinatesFromDraw()) {
+      if (
+        !circleMeasurementHasCoordinatesAndRadiusFromForm() &&
+        !circleMeasurementHasRadiusFromFormAndCoordinatesFromDraw()
+      ) {
         return
       }
 
-      function circleMeasurementHasCoordinatesAndRadiusFromForm () {
+      function circleMeasurementHasCoordinatesAndRadiusFromForm() {
         return circleMeasurementToAdd?.circleCoordinatesToAdd?.length === 2 && circleMeasurementToAdd?.circleRadiusToAdd
       }
 
-      function circleMeasurementHasRadiusFromFormAndCoordinatesFromDraw () {
+      function circleMeasurementHasRadiusFromFormAndCoordinatesFromDraw() {
         return circleMeasurementToAdd?.circleRadiusToAdd && measurementInProgress?.center?.length === 2
       }
 
       const radiusInMeters = METERS_PER_UNIT.m * circleMeasurementToAdd.circleRadiusToAdd * metersForOneNauticalMile
       let coordinates = []
       if (circleMeasurementHasCoordinatesAndRadiusFromForm()) {
-        coordinates = [circleMeasurementToAdd.circleCoordinatesToAdd[longitude], circleMeasurementToAdd.circleCoordinatesToAdd[latitude]]
+        coordinates = [
+          circleMeasurementToAdd.circleCoordinatesToAdd[longitude],
+          circleMeasurementToAdd.circleCoordinatesToAdd[latitude],
+        ]
       } else if (circleMeasurementHasRadiusFromFormAndCoordinatesFromDraw()) {
         coordinates = transform(measurementInProgress?.center, OPENLAYERS_PROJECTION, WSG84_PROJECTION)
       }
 
       const circleFeature = new Feature({
-        geometry: circular(coordinates, radiusInMeters, numberOfVertices).transform(WSG84_PROJECTION, OPENLAYERS_PROJECTION),
-        style: [measurementStyle, measurementStyleWithCenter]
+        geometry: circular(coordinates, radiusInMeters, numberOfVertices).transform(
+          WSG84_PROJECTION,
+          OPENLAYERS_PROJECTION,
+        ),
+        style: [measurementStyle, measurementStyleWithCenter],
       })
       dispatch(saveMeasurement(circleFeature, `r = ${circleMeasurementToAdd.circleRadiusToAdd} nm`))
     }
@@ -194,7 +209,7 @@ const MeasurementLayer = ({ map }) => {
   }, [circleMeasurementToAdd])
 
   useEffect(() => {
-    function handleDrawEvents () {
+    function handleDrawEvents() {
       if (drawObject) {
         let listener
 
@@ -223,14 +238,16 @@ const MeasurementLayer = ({ map }) => {
 
   useEffect(() => {
     if (measurementInProgress?.center || measurementInProgress?.measurement) {
-      dispatch(setCircleMeasurementInDrawing({
-        measurement: measurementInProgress.measurement,
-        coordinates: measurementInProgress.center
-      }))
+      dispatch(
+        setCircleMeasurementInDrawing({
+          measurement: measurementInProgress.measurement,
+          coordinates: measurementInProgress.center,
+        }),
+      )
     }
   }, [measurementInProgress])
 
-  function deleteFeature (featureId) {
+  function deleteFeature(featureId) {
     const feature = vectorSource.getFeatureById(featureId)
     if (feature) {
       vectorSource.removeFeature(feature)
@@ -240,17 +257,17 @@ const MeasurementLayer = ({ map }) => {
     dispatch(removeMeasurementDrawed(featureId))
   }
 
-  function startDrawing (event) {
+  function startDrawing(event) {
     const firstTooltipCoordinates = event.coordinate
 
     setMeasurementInProgress({
-      measurement: 0,
       coordinates: event.feature.getGeometry().getLastCoordinate(),
-      center: getCenter(event.feature.getGeometry().getExtent())
+      measurement: 0,
+      center: getCenter(event.feature.getGeometry().getExtent()),
     })
 
     return event.feature.getGeometry().on('change', changeEvent => {
-      function updateMeasurementOnNewPoint (event, tooltipCoordinates) {
+      function updateMeasurementOnNewPoint(event, tooltipCoordinates) {
         const geom = event.target
 
         if (geom instanceof LineString) {
@@ -258,17 +275,17 @@ const MeasurementLayer = ({ map }) => {
           tooltipCoordinates = geom.getLastCoordinate()
 
           setMeasurementInProgress({
-            measurement: nextMeasurementOutput,
-            coordinates: tooltipCoordinates
+            coordinates: tooltipCoordinates,
+            measurement: nextMeasurementOutput
           })
         } else if (geom instanceof Circle) {
           const nextMeasurementOutput = getNauticalMilesRadiusOfCircle(geom)
           tooltipCoordinates = geom.getLastCoordinate()
 
           setMeasurementInProgress({
-            measurement: nextMeasurementOutput,
             coordinates: tooltipCoordinates,
-            center: getCenter(geom.getExtent())
+            measurement: nextMeasurementOutput,
+            center: getCenter(geom.getExtent()),
           })
         }
       }
@@ -279,29 +296,24 @@ const MeasurementLayer = ({ map }) => {
 
   return (
     <>
-      {
-        measurementsDrawed.map(measurement => {
-          return <MeasurementOverlay
+      {measurementsDrawed.map(measurement => <MeasurementOverlay
             id={measurement.feature.id}
             key={measurement.feature.id}
             map={map}
             measurement={measurement.measurement}
             coordinates={measurement.coordinates}
             deleteFeature={deleteFeature}
-          />
-        })
-      }
+          />)
+      })}
 
       <div>
-        {
-          measurementInProgress
-            ? <MeasurementOverlay
-              map={map}
-              measurement={measurementInProgress?.measurement}
-              coordinates={measurementInProgress?.coordinates}
-            />
-            : null
-        }
+        {measurementInProgress ? (
+          <MeasurementOverlay
+            map={map}
+            measurement={measurementInProgress?.measurement}
+            coordinates={measurementInProgress?.coordinates}
+          />
+        ) : null}
       </div>
     </>
   )

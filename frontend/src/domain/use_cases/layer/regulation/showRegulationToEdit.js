@@ -1,8 +1,8 @@
-import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../../../entities/regulatory'
-import { setError } from '../../../shared_slices/Global'
+import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../../../api/geoserver'
 import { setProcessingRegulation, setSelectedRegulatoryZoneId } from '../../../../features/backoffice/Regulation.slice'
 import Layers from '../../../entities/layers'
-import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../../../api/geoserver'
+import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../../../entities/regulatory'
+import { setError } from '../../../shared_slices/Global'
 
 const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
   const { speciesByCode } = getState().species
@@ -12,32 +12,35 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature, speciesByCode)
 
       const {
+        fishingPeriod,
+        gearRegulation,
+        geometry,
+        id,
         lawType,
-        topic,
-        zone,
         region,
         regulatoryReferences,
-        id,
-        fishingPeriod,
         speciesRegulation,
-        gearRegulation,
-        geometry
-      } = regulatoryZoneMetadata
-
-      dispatch(setProcessingRegulation({
-        lawType,
         topic,
         zone,
-        region: region ? region.split(', ') : [],
-        id,
-        regulatoryReferences: regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT],
-        fishingPeriod,
-        speciesRegulation,
-        gearRegulation,
-        geometry
-      }))
+      } = regulatoryZoneMetadata
+
+      dispatch(
+        setProcessingRegulation({
+          fishingPeriod,
+          gearRegulation,
+          geometry,
+          id,
+          lawType,
+          region: region ? region.split(', ') : [],
+          regulatoryReferences: regulatoryReferences?.length > 0 ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT],
+          speciesRegulation,
+          topic,
+          zone,
+        }),
+      )
       dispatch(setSelectedRegulatoryZoneId(id))
-    }).catch(error => {
+    })
+    .catch(error => {
       console.error(error)
       dispatch(setError(new Error(REGULATORY_ZONE_METADATA_ERROR_MESSAGE)))
     })

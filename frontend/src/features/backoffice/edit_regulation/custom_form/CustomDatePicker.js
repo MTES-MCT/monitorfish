@@ -2,74 +2,73 @@
 import React, { useState, useCallback } from 'react'
 import { DatePicker } from 'rsuite'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 
 /**
  * @enum {string}
  */
 export const CUSTOM_DATEPICKER_TYPES = {
-  TIME: 'time'
+  TIME: 'time',
 }
 
-const CustomDatePicker = props => {
-  const {
-    type,
-    value,
-    saveValue,
-    isRequired,
-    format,
-    placement,
-    style,
-    oneTap,
-    disabled
-  } = props
+function CustomDatePicker(props) {
+  const { disabled, format, isRequired, oneTap, placement, saveValue, style, type, value } = props
 
   const [val, setVal] = useState(undefined)
 
-  const onSelect = useCallback(_value => {
-    if (oneTap) {
-      saveValue(_value)
-    } else {
-      setVal(_value)
-    }
-  }, [setVal, saveValue, oneTap])
+  const onSelect = useCallback(
+    _value => {
+      if (oneTap) {
+        saveValue(_value)
+      } else {
+        setVal(_value)
+      }
+    },
+    [setVal, saveValue, oneTap],
+  )
 
   const onOk = useCallback(_value => !oneTap && saveValue(_value), [oneTap, saveValue])
   const onExit = useCallback(_ => val && saveValue(val), [val, saveValue])
 
-  return <DatePickerStyled
-    key={value}
-    data-cy={`custom-date-picker-${value}`}
-    $isrequired={isRequired}
-    disabled={disabled}
-    oneTap={oneTap}
-    ranges={[]}
-    value={value}
-    onSelect={onSelect}
-    onOk={onOk}
-    onExit={onExit}
-    cleanable={false}
-    placement={placement}
-    placeholder={type === CUSTOM_DATEPICKER_TYPES.TIME
-      ? '\xa0\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0\xa0'
-      : '\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0'}
-    format={format}
-    style={style}
-    locale={{
-      sunday: 'Dim',
-      monday: 'Lundi',
-      tuesday: 'Mardi',
-      wednesday: 'Merc',
-      thursday: 'Jeudi',
-      friday: 'Vend',
-      saturday: 'Sam',
-      ok: 'OK',
-      hours: 'Heures',
-      minutes: 'Minutes',
-      seconds: 'Secondes',
-      formattedMonthPattern: 'dd/MM/yyyy',
-      formattedDayPattern: 'dd/MM/yyyy'
-    }} />
+  return (
+    <DatePickerStyled
+      key={value}
+      $isrequired={isRequired}
+      cleanable={false}
+      data-cy={`custom-date-picker-${value}`}
+      disabled={disabled}
+      format={format}
+      locale={{
+        friday: 'Vend',
+        hours: 'Heures',
+        monday: 'Lundi',
+        formattedMonthPattern: 'dd/MM/yyyy',
+        saturday: 'Sam',
+        formattedDayPattern: 'dd/MM/yyyy',
+        sunday: 'Dim',
+        minutes: 'Minutes',
+        tuesday: 'Mardi',
+        ok: 'OK',
+        wednesday: 'Merc',
+        seconds: 'Secondes',
+        thursday: 'Jeudi',
+      }}
+      oneTap={oneTap}
+      onExit={onExit}
+      onOk={onOk}
+      onSelect={onSelect}
+      placeholder={
+        type === CUSTOM_DATEPICKER_TYPES.TIME
+          ? '\xa0\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0\xa0'
+          : '\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0/\xa0\xa0\xa0\xa0\xa0\xa0'
+      }
+      placement={placement}
+      ranges={[]}
+      style={style}
+      value={value}
+    />
+  )
 }
 
 const DatePickerStyled = styled(DatePicker)`
@@ -92,18 +91,18 @@ const DatePickerStyled = styled(DatePicker)`
   }
 
   .rs-picker-toggle.rs-btn {
-    border: 1px solid ${props => props.$isrequired ? COLORS.maximumRed : COLORS.lightGray}  !important;
-    border-color: ${props => props.$isrequired ? COLORS.maximumRed : COLORS.lightGray} !important;
+    border: 1px solid ${props => (props.$isrequired ? COLORS.maximumRed : COLORS.lightGray)} !important;
+    border-color: ${props => (props.$isrequired ? COLORS.maximumRed : COLORS.lightGray)} !important;
     box-sizing: border-box;
     padding: 6px;
   }
   .rs-picker-toggle.rs-btn:focus {
-    border: 1px solid ${props => props.$isrequired ? COLORS.maximumRed : COLORS.lightGray}  !important;
-    border-color: ${props => props.$isrequired ? COLORS.maximumRed : COLORS.lightGray} !important;
+    border: 1px solid ${props => (props.$isrequired ? COLORS.maximumRed : COLORS.lightGray)} !important;
+    border-color: ${props => (props.$isrequired ? COLORS.maximumRed : COLORS.lightGray)} !important;
   }
   .rs-picker-toggle.rs-btn:hover {
-    border: 1px solid ${props => props.$isrequired ? COLORS.maximumRed : COLORS.lightGray}  !important;
-    border-color: ${props => props.$isrequired ? COLORS.maximumRed : COLORS.lightGray} !important;
+    border: 1px solid ${props => (props.$isrequired ? COLORS.maximumRed : COLORS.lightGray)} !important;
+    border-color: ${props => (props.$isrequired ? COLORS.maximumRed : COLORS.lightGray)} !important;
   }
   .rs-calendar-month-dropdown-row {
     width: unset !important;

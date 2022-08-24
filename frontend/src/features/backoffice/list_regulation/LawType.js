@@ -1,34 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch, batch } from 'react-redux'
 import styled from 'styled-components'
-import { EmptyResult } from '../../commonStyles/Text.style'
-import RegulatoryLayerTopic from '../../layers/regulatory/RegulatoryTopic'
+
 import { COLORS } from '../../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 import { setLawTypeOpened, setRegulatoryTopicsOpened, closeRegulatoryZoneMetadataPanel } from '../../../domain/shared_slices/Regulatory'
 import updateTopicForAllZones from '../../../domain/use_cases/layer/regulation/updateTopicForAllZones'
+import { EmptyResult } from '../../commonStyles/Text.style'
+import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
+import RegulatoryLayerTopic from '../../layers/regulatory/RegulatoryTopic'
 
-const LawType = props => {
+function LawType(props) {
   const dispatch = useDispatch()
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const lawTypeOpened = useSelector(state => state.regulatory.lawTypeOpened)
-  const {
-    lawType,
-    regZoneByLawType,
-    isEditable,
-    territory
-  } = props
+  const { isEditable, lawType, regZoneByLawType, territory } = props
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     setIsOpen(lawTypeOpened === lawType)
   }, [lawType, lawTypeOpened, setIsOpen])
 
-  function increaseNumberOfZonesOpened (number) {
+  function increaseNumberOfZonesOpened(number) {
     setNumberOfZonesOpened(numberOfZonesOpened + number)
   }
 
-  function decreaseNumberOfZonesOpened (number) {
+  function decreaseNumberOfZonesOpened(number) {
     const value = numberOfZonesOpened - number
     if (value < 0) {
       setNumberOfZonesOpened(0)
@@ -37,17 +33,15 @@ const LawType = props => {
     }
   }
 
-  function updateLayerName (oldLayerName, newLayerName) {
+  function updateLayerName(oldLayerName, newLayerName) {
     dispatch(updateTopicForAllZones(territory, lawType, oldLayerName, newLayerName))
   }
 
-  const displayRegulatoryTopics = (regulatoryTopics) => {
-    return (
-      regulatoryTopics && Object.keys(regulatoryTopics).length > 0
-        ? Object.keys(regulatoryTopics)
-          .sort()
-          .map((regulatoryTopic, index) => {
-            return <RegulatoryLayerTopic
+  const displayRegulatoryTopics = regulatoryTopics =>
+    regulatoryTopics && Object.keys(regulatoryTopics).length > 0 ? (
+      Object.keys(regulatoryTopics)
+        .sort()
+        .map((regulatoryTopic, index) => <RegulatoryLayerTopic
               key={regulatoryTopic}
               increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
               decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
@@ -57,11 +51,11 @@ const LawType = props => {
               allowRemoveZone={false}
               isEditable={isEditable}
               updateLayerName={updateLayerName}
-            />
-          })
-        : <EmptyResult>Aucun résultat</EmptyResult>
+            />)
+        })
+    ) : (
+      <EmptyResult>Aucun résultat</EmptyResult>
     )
-  }
 
   const openLawTypeList = () => {
     if (isOpen) {
@@ -76,15 +70,19 @@ const LawType = props => {
     setIsOpen(!isOpen)
   }
 
-  return (<LawTypeContainer data-cy='law-type'>
-    <LawTypeName onClick={openLawTypeList} data-cy={lawType}>
-      <LawTypeText>{lawType}</LawTypeText>
-      <ChevronIcon $isOpen={isOpen}/>
-    </LawTypeName>
-    {isOpen && <RegulatoryZoneLayerList isOpen={isOpen}>
-      {displayRegulatoryTopics(regZoneByLawType[lawType])}
-    </RegulatoryZoneLayerList>}
-  </LawTypeContainer>)
+  return (
+    <LawTypeContainer data-cy="law-type">
+      <LawTypeName data-cy={lawType} onClick={openLawTypeList}>
+        <LawTypeText>{lawType}</LawTypeText>
+        <ChevronIcon $isOpen={isOpen} />
+      </LawTypeName>
+      {isOpen && (
+        <RegulatoryZoneLayerList isOpen={isOpen}>
+          {displayRegulatoryTopics(regZoneByLawType[lawType])}
+        </RegulatoryZoneLayerList>
+      )}
+    </LawTypeContainer>
+  )
 }
 
 const LawTypeContainer = styled.div`
@@ -125,15 +123,15 @@ const RegulatoryZoneLayerList = styled.ul`
   border-bottom-right-radius: 2px;
   padding: 0;
   color: ${COLORS.gunMetal};
-  height: ${props => props.isOpen ? 'unset' : '0'};
-  opacity: ${props => props.isOpen ? '1' : '0'};
-  transition:  all 0.5s;
+  height: ${props => (props.isOpen ? 'unset' : '0')};
+  opacity: ${props => (props.isOpen ? '1' : '0')};
+  transition: all 0.5s;
   overflow-x: hidden;
   max-width: 100%;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`
-  transform: ${props => props.$isOpen ? 'rotate(0deg)' : 'rotate(180deg)'};
+  transform: ${props => (props.$isOpen ? 'rotate(0deg)' : 'rotate(180deg)')};
   width: 17px;
   float: right;
   margin-right: 10px;

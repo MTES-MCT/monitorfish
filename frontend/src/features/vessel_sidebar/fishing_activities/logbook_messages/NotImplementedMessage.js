@@ -1,11 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 
-const NotImplementedMessage = () => {
-  return <Zone>
-    <Message>L&apos;affichage de ce type de message n&apos;est pas encore supporté.</Message>
-  </Zone>
+function NotImplementedMessage() {
+  return (
+    <Zone>
+      <Message>L&apos;affichage de ce type de message n&apos;est pas encore supporté.</Message>
+    </Zone>
+  )
 }
 
 const Zone = styled.div`
@@ -25,6 +28,6 @@ const Message = styled.div`
   line-height: 0.2em;
   margin-top: 5px;
   margin-bottom: 5px;
-  color: ${COLORS.slateGray} ;
+  color: ${COLORS.slateGray};
 `
 export default NotImplementedMessage

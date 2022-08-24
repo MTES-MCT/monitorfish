@@ -1,70 +1,63 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getDateTime } from '../../../../utils'
-import BeaconMalfunctionDetailBody from '../resume/BeaconMalfunctionBody'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
-import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
-import { setBeaconMalfunctionsTab } from '../../../../domain/shared_slices/BeaconMalfunction'
 import { BeaconMalfunctionsTab, getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
+import { setBeaconMalfunctionsTab } from '../../../../domain/shared_slices/BeaconMalfunction'
+import { getDateTime } from '../../../../utils'
+import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import BeaconMalfunctionDetailsFollowUp from '../../../side_window/beacon_malfunctions/BeaconMalfunctionDetailsFollowUp'
+import BeaconMalfunctionDetailBody from '../resume/BeaconMalfunctionBody'
 import CurrentBeaconMalfunctionBody from '../resume/CurrentBeaconMalfunctionBody'
 
-const BeaconMalfunctionDetails = props => {
-  const {
-    isCurrentBeaconMalfunctionDetails
-  } = props
+function BeaconMalfunctionDetails(props) {
+  const { isCurrentBeaconMalfunctionDetails } = props
   const {
     /** @type {BeaconMalfunctionResumeAndDetails || null} */
-    openedBeaconMalfunction
+    openedBeaconMalfunction,
   } = useSelector(state => state.beaconMalfunction)
   const dispatch = useDispatch()
 
   const navigateToResume = () => dispatch(setBeaconMalfunctionsTab(BeaconMalfunctionsTab.RESUME))
 
-  return <Wrapper data-cy={'vessel-malfunctions-details'}>
-    <Arrow onClick={navigateToResume}/>
-    <Previous
-      data-cy={'beacon-malfunction-back-to-resume'}
-      onClick={navigateToResume}
-    >
-      Revenir au résumé des avaries
-    </Previous>
-    {
-      isCurrentBeaconMalfunctionDetails
-        ? <Zone data-cy={'beacon-malfunction-current-details'}>
-          <Title>
-            Résumé de l&apos;avarie en cours
-          </Title>
-          <CurrentBeaconMalfunctionBody currentBeaconMalfunctionWithDetails={openedBeaconMalfunction}/>
-      </Zone>
-        : <Zone data-cy={'beacon-malfunction-details'}>
-          <Title>
-            Résumé de l&apos;avarie du {getDateTime(openedBeaconMalfunction?.beaconMalfunction?.malfunctionStartDateTime, true)}
-          </Title>
-          <BeaconMalfunctionDetailBody beaconMalfunctionWithDetails={openedBeaconMalfunction}/>
+  return (
+    <Wrapper data-cy="vessel-malfunctions-details">
+      <Arrow onClick={navigateToResume} />
+      <Previous data-cy="beacon-malfunction-back-to-resume" onClick={navigateToResume}>
+        Revenir au résumé des avaries
+      </Previous>
+      {isCurrentBeaconMalfunctionDetails ? (
+        <Zone data-cy="beacon-malfunction-current-details">
+          <Title>Résumé de l&apos;avarie en cours</Title>
+          <CurrentBeaconMalfunctionBody currentBeaconMalfunctionWithDetails={openedBeaconMalfunction} />
         </Zone>
-    }
-    <Zone data-cy={'beacon-malfunction-details-follow-up'}>
-      <Title>
-        Main courante de l&apos;avarie
-      </Title>
-      {
-        openedBeaconMalfunction
-          ? <BeaconMalfunctionDetailsFollowUp
-            smallSize
+      ) : (
+        <Zone data-cy="beacon-malfunction-details">
+          <Title>
+            Résumé de l&apos;avarie du{' '}
+            {getDateTime(openedBeaconMalfunction?.beaconMalfunction?.malfunctionStartDateTime, true)}
+          </Title>
+          <BeaconMalfunctionDetailBody beaconMalfunctionWithDetails={openedBeaconMalfunction} />
+        </Zone>
+      )}
+      <Zone data-cy="beacon-malfunction-details-follow-up">
+        <Title>Main courante de l&apos;avarie</Title>
+        {openedBeaconMalfunction ? (
+          <BeaconMalfunctionDetailsFollowUp
             beaconMalfunctionWithDetails={openedBeaconMalfunction}
             firstStatus={getFirstVesselStatus(openedBeaconMalfunction)}
+            smallSize
           />
-          : null
-      }
-    </Zone>
-  </Wrapper>
+        ) : null}
+      </Zone>
+    </Wrapper>
+  )
 }
 
 const Wrapper = styled.div`
- text-align: left;
- padding: 5px;
+  text-align: left;
+  padding: 5px;
 `
 
 const Arrow = styled(ArrowSVG)`

@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import AdministrativeLayer from './AdministrativeLayer'
 import { COLORS } from '../../../constants/constants'
-import AdministrativeLayerGroup from './AdministrativeLayerGroup'
 import getAdministrativeZonesAndSubZones from '../../../domain/use_cases/layer/administrative/getAdministrativeZonesAndSubZones'
 import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
@@ -13,16 +11,13 @@ import LayersEnum, { layersType } from '../../../domain/entities/layers'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
 import showAdministrativeLayer from '../../../domain/use_cases/layer/administrative/showAdministrativeLayer'
 import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import AdministrativeLayer from './AdministrativeLayer'
+import AdministrativeLayerGroup from './AdministrativeLayerGroup'
 
-const AdministrativeLayers = props => {
-  const {
-    hideLayersListWhenSearching,
-    namespace
-  } = props
+function AdministrativeLayers(props) {
+  const { hideLayersListWhenSearching, namespace } = props
 
-  const {
-    setLayersSideBarOpenedZone
-  } = layer[namespace].actions
+  const { setLayersSideBarOpenedZone } = layer[namespace].actions
 
   const dispatch = useDispatch()
   const showedLayers = useSelector(state => state.layer.showedLayers)
@@ -37,10 +32,9 @@ const AdministrativeLayers = props => {
       .filter(layer => layer.type === layersType.ADMINISTRATIVE)
 
     if (administrativeLayers && administrativeLayers.length) {
-      dispatch(getAdministrativeZonesAndSubZones(administrativeLayers))
-        .then(nextZones => {
-          setZones(nextZones)
-        })
+      dispatch(getAdministrativeZonesAndSubZones(administrativeLayers)).then(nextZones => {
+        setZones(nextZones)
+      })
     }
   }, [])
 
@@ -55,19 +49,23 @@ const AdministrativeLayers = props => {
   }, [hideLayersListWhenSearching])
 
   const callShowAdministrativeLayer = namespace => (type, zone) => {
-    dispatch(showAdministrativeLayer({
-      type: type,
-      zone: zone,
-      namespace
-    }))
+    dispatch(
+      showAdministrativeLayer({
+        type: type,
+        zone,
+        namespace,
+      }),
+    )
   }
 
   const callHideAdministrativeLayer = namespace => (type, zone) => {
-    dispatch(hideLayer({
-      type: type,
-      zone: zone,
-      namespace
-    }))
+    dispatch(
+      hideLayer({
+        type: type,
+        zone,
+        namespace,
+      }),
+    )
   }
 
   const onSectionTitleClicked = () => {
@@ -81,19 +79,14 @@ const AdministrativeLayers = props => {
 
   return (
     <>
-      <SectionTitle
-        onClick={onSectionTitleClicked}
-        showZones={showZones}
-        data-cy={'administrative-zones-open'}
-      >
-        Zones administratives <ChevronIcon $isOpen={showZones}/>
+      <SectionTitle onClick={onSectionTitleClicked} showZones={showZones} data-cy={'administrative-zones-open'}>
+        Zones administratives <ChevronIcon $isOpen={showZones} />
       </SectionTitle>
       <NamespaceContext.Consumer>
-        {namespace => (
-          zones && zones.length
-            ? <ZonesList showZones={showZones} zonesLength={zones.length}>
-              {
-                zones.map((layers, index) => {
+        {namespace =>
+          zones && zones.length ? (
+            <ZonesList showZones={showZones} zonesLength={zones.length}>
+              {zones.map((layers, index) => {
                   if (layers.length === 1 && layers[0]) {
                     return <ListItem key={layers[0].code}>
                       <AdministrativeLayer
@@ -104,7 +97,7 @@ const AdministrativeLayers = props => {
                         callHideAdministrativeZone={callHideAdministrativeLayer(namespace)}
                       />
                     </ListItem>
-                  } else {
+                  } 
                     return <ListItem key={layers[0].group.code}>
                       <AdministrativeLayerGroup
                         isLastItem={zones.length === index + 1}
@@ -114,12 +107,11 @@ const AdministrativeLayers = props => {
                         callHideAdministrativeZone={callHideAdministrativeLayer(namespace)}
                       />
                     </ListItem>
-                  }
+                  
                 })
-              }
+              })}
             </ZonesList>
-            : null
-        )
+          ) : null
         }
       </NamespaceContext.Consumer>
     </>
@@ -139,8 +131,8 @@ const SectionTitle = styled.div`
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  border-bottom-left-radius: ${props => props.showZones ? '0' : '2px'};
-  border-bottom-right-radius: ${props => props.showZones ? '0' : '2px'};
+  border-bottom-left-radius: ${props => (props.showZones ? '0' : '2px')};
+  border-bottom-right-radius: ${props => (props.showZones ? '0' : '2px')};
 `
 
 const ZonesList = styled.ul`
@@ -148,7 +140,7 @@ const ZonesList = styled.ul`
   padding: 0;
   overflow-x: hidden;
   max-height: 70vh;
-  height: ${props => props.showZones && props.zonesLength ? 36 * props.zonesLength : 0}px;
+  height: ${props => (props.showZones && props.zonesLength ? 36 * props.zonesLength : 0)}px;
   background: ${COLORS.background};
   transition: 0.5s all;
   border-bottom-left-radius: 2px;

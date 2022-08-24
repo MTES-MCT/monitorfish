@@ -1,105 +1,94 @@
 import React, { useRef } from 'react'
-import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
 
-import { ReactComponent as FavoriteSVG } from '../icons/favorite.svg'
 import { COLORS } from '../../constants/constants'
-import FavoriteVessel from './FavoriteVessel'
-import { getVesselId } from '../../domain/entities/vessel'
-import { MapComponentStyle } from '../commonStyles/MapComponent.style'
-import { MapButtonStyle } from '../commonStyles/MapButton.style'
-import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
-import { setHideNonSelectedVessels } from '../../domain/shared_slices/Vessel'
-import { ReactComponent as ShowingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_inactif.svg'
-import { ReactComponent as HidingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_actif.svg'
 import { LeftBoxOpened } from '../../domain/entities/global'
+import { getVesselId } from '../../domain/entities/vessel'
 import { setLeftBoxOpened } from '../../domain/shared_slices/Global'
+import { setHideNonSelectedVessels } from '../../domain/shared_slices/Vessel'
+import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
+import { MapButtonStyle } from '../commonStyles/MapButton.style'
+import { MapComponentStyle } from '../commonStyles/MapComponent.style'
+import { ReactComponent as HidingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_actif.svg'
+import { ReactComponent as ShowingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_inactif.svg'
+import { ReactComponent as FavoriteSVG } from '../icons/favorite.svg'
+import FavoriteVessel from './FavoriteVessel'
 
-const FavoriteVessels = () => {
+function FavoriteVessels() {
   const dispatch = useDispatch()
-  const {
-    favorites
-  } = useSelector(state => state.favoriteVessel)
+  const { favorites } = useSelector(state => state.favoriteVessel)
   const {
     /** @type {Object.<string, ShowedVesselTrack>} */
-    vesselsTracksShowed,
+    hideNonSelectedVessels,
     selectedVesselIdentity,
-    hideNonSelectedVessels
+    vesselsTracksShowed,
   } = useSelector(state => state.vessel)
-  const {
-    healthcheckTextWarning,
-    previewFilteredVesselsMode,
-    leftBoxOpened
-  } = useSelector(state => state.global)
+  const { healthcheckTextWarning, leftBoxOpened, previewFilteredVesselsMode } = useSelector(state => state.global)
 
   const wrapperRef = useRef(null)
 
   return (
-    <>
-      <Wrapper ref={wrapperRef}>
-        <FavoriteVesselsNumber
-          data-cy={'favorite-vessels-number'}
-          healthcheckTextWarning={healthcheckTextWarning}
-          isHidden={previewFilteredVesselsMode}
-          isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
-        >
-          {favorites?.length || 0}
-        </FavoriteVesselsNumber>
-        <FavoriteVesselsIcon
-          data-cy={'favorite-vessels'}
-          healthcheckTextWarning={healthcheckTextWarning}
-          isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
-          isHidden={previewFilteredVesselsMode}
-          title={'Mes navires suivis'}
-          onClick={() => dispatch(setLeftBoxOpened(leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS ? null : LeftBoxOpened.FAVORITE_VESSELS))}
-        >
-          <FavoritesIcon/>
-        </FavoriteVesselsIcon>
-        <FavoriteVesselsBox
-          data-cy={'favorite-vessels-box'}
-          healthcheckTextWarning={healthcheckTextWarning}
-          isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
-          isHidden={previewFilteredVesselsMode}
-        >
-          <Header isFirst={true}>
-            Mes navires suivis
-          </Header>
-          {
-            favorites?.length
-              ? <List>
-                {
-                  favorites
-                    .map((favoriteVessel, index) => {
-                      const vesselId = getVesselId(favoriteVessel)
+    <Wrapper ref={wrapperRef}>
+      <FavoriteVesselsNumber
+        data-cy="favorite-vessels-number"
+        healthcheckTextWarning={healthcheckTextWarning}
+        isHidden={previewFilteredVesselsMode}
+        isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
+      >
+        {favorites?.length || 0}
+      </FavoriteVesselsNumber>
+      <FavoriteVesselsIcon
+        data-cy="favorite-vessels"
+        healthcheckTextWarning={healthcheckTextWarning}
+        isHidden={previewFilteredVesselsMode}
+        isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
+        onClick={() =>
+          dispatch(
+            setLeftBoxOpened(leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS ? null : LeftBoxOpened.FAVORITE_VESSELS),
+          )
+        }
+        title="Mes navires suivis"
+      >
+        <FavoritesIcon />
+      </FavoriteVesselsIcon>
+      <FavoriteVesselsBox
+        data-cy="favorite-vessels-box"
+        healthcheckTextWarning={healthcheckTextWarning}
+        isHidden={previewFilteredVesselsMode}
+        isOpen={leftBoxOpened === LeftBoxOpened.FAVORITE_VESSELS}
+      >
+        <Header isFirst>Mes navires suivis</Header>
+        {favorites?.length ? (
+          <List>
+            {favorites.map((favoriteVessel, index) => {
+              const vesselId = getVesselId(favoriteVessel)
 
-                      return <FavoriteVessel
-                        key={vesselId}
-                        favorite={favoriteVessel}
-                        vesselId={vesselId}
-                        vesselIsShowed={selectedVesselIdentity
-                          ? vesselId === getVesselId(selectedVesselIdentity)
-                          : false}
-                        trackIsShowed={Object.values(vesselsTracksShowed)?.find(vessel => vessel.vesselId === vesselId)}
-                        isLastItem={favorites.length === index + 1}
-                      />
-                    })
-                }
-              </List>
-              : <NoVesselInFavorites>
-                Aucun navire suivi
-              </NoVesselInFavorites>
-          }
-          <MapPropertyTrigger
-            disabled={!favorites?.length}
-            inverse
-            booleanProperty={hideNonSelectedVessels}
-            updateBooleanProperty={isHidden => dispatch(setHideNonSelectedVessels(isHidden))}
-            text={'les navires non sélectionnés'}
-            Icon={hideNonSelectedVessels ? ShowingOtherTracksSVG : HidingOtherTracksSVG}
-          />
-        </FavoriteVesselsBox>
-      </Wrapper>
-    </>
+              return (
+                <FavoriteVessel
+                  key={vesselId}
+                  favorite={favoriteVessel}
+                  isLastItem={favorites.length === index + 1}
+                  trackIsShowed={Object.values(vesselsTracksShowed)?.find(vessel => vessel.vesselId === vesselId)}
+                  vesselId={vesselId}
+                  vesselIsShowed={selectedVesselIdentity ? vesselId === getVesselId(selectedVesselIdentity) : false}
+                />
+              )
+            })}
+          </List>
+        ) : (
+          <NoVesselInFavorites>Aucun navire suivi</NoVesselInFavorites>
+        )}
+        <MapPropertyTrigger
+          booleanProperty={hideNonSelectedVessels}
+          disabled={!favorites?.length}
+          Icon={hideNonSelectedVessels ? ShowingOtherTracksSVG : HidingOtherTracksSVG}
+          inverse
+          text="les navires non sélectionnés"
+          updateBooleanProperty={isHidden => dispatch(setHideNonSelectedVessels(isHidden))}
+        />
+      </FavoriteVesselsBox>
+    </Wrapper>
   )
 }
 
@@ -112,9 +101,9 @@ const FavoriteVesselsNumber = styled(MapComponentStyle)`
   top: 56px;
   line-height: 15px;
   left: 40px;
-  background-color: ${props => props.isOpen ? COLORS.charcoal : COLORS.shadowBlueLight};
+  background-color: ${props => (props.isOpen ? COLORS.charcoal : COLORS.shadowBlueLight)};
   transition: all 0.5s;
-  color:${props => props.isOpen ? COLORS.white : COLORS.gunMetal};
+  color: ${props => (props.isOpen ? COLORS.white : COLORS.gunMetal)};
   z-index: 100;
   padding: 0 2px;
 `
@@ -148,15 +137,15 @@ const Header = styled.div`
   padding: 9px 0 7px 15px;
   font-size: 16px;
   text-align: left;
-  border-top-left-radius: ${props => props.isFirst ? '2px' : '0'};
-  border-top-right-radius: ${props => props.isFirst ? '2px' : '0'};
+  border-top-left-radius: ${props => (props.isFirst ? '2px' : '0')};
+  border-top-right-radius: ${props => (props.isFirst ? '2px' : '0')};
 `
 
 const FavoriteVesselsBox = styled(MapComponentStyle)`
   width: 305px;
   background: ${COLORS.background};
-  margin-left: ${props => props.isOpen ? '45px' : '-420px'};
-  opacity: ${props => props.isOpen ? '1' : '0'};
+  margin-left: ${props => (props.isOpen ? '45px' : '-420px')};
+  opacity: ${props => (props.isOpen ? '1' : '0')};
   top: 65px;
   left: 12px;
   border-radius: 2px;
@@ -175,11 +164,12 @@ const FavoriteVesselsIcon = styled(MapButtonStyle)`
   width: 40px;
   border-radius: 2px;
   left: 12px;
-  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${props => (props.isOpen ? COLORS.shadowBlue : COLORS.charcoal)};
   transition: all 0.3s;
-  
-  :hover, :focus {
-      background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
+
+  :hover,
+  :focus {
+    background: ${props => (props.isOpen ? COLORS.shadowBlue : COLORS.charcoal)};
   }
 `
 

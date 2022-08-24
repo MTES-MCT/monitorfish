@@ -2,64 +2,50 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
-import RegulatedGears from './RegulatedGears'
+
 import {
   DEFAULT_AUTHORIZED_REGULATED_GEARS,
-  DEFAULT_UNAUTHORIZED_REGULATED_GEARS
+  DEFAULT_UNAUTHORIZED_REGULATED_GEARS,
 } from '../../../../../domain/entities/regulatory'
 import { Section } from '../RegulatoryMetadata.style'
+import RegulatedGears from './RegulatedGears'
 
-const GearRegulationDisplayed = () => {
+function GearRegulationDisplayed() {
   const { gearRegulation } = useSelector(state => state.regulatory.regulatoryZoneMetadata)
 
-  const {
-    otherInfo,
-    authorized,
-    unauthorized
-  } = gearRegulation
+  const { authorized, otherInfo, unauthorized } = gearRegulation
 
   const hasAuthorizedContent = regulatedGearsIsNotEmpty(authorized)
   const hasUnauthorizedContent = regulatedGearsIsNotEmpty(unauthorized)
   const gearRegulationIsNotEmpty = hasAuthorizedContent || hasUnauthorizedContent || otherInfo
 
-  return <>
-    {
-      gearRegulationIsNotEmpty
-        ? <Section>
-          {
-            hasAuthorizedContent
-              ? <RegulatedGears
-                authorized={true}
-                regulatedGearsObject={authorized || DEFAULT_AUTHORIZED_REGULATED_GEARS}
-              />
-              : null
-          }
-          {
-            hasUnauthorizedContent
-              ? <RegulatedGears
-                hasPreviousRegulatedGearsBloc={hasAuthorizedContent}
-                authorized={false}
-                regulatedGearsObject={unauthorized || DEFAULT_UNAUTHORIZED_REGULATED_GEARS}
-              />
-              : null
-          }
-          {
-            otherInfo &&
-            <MarkdownWithMargin
-              data-cy={'regulatory-layers-metadata-gears-other-info'}
-            >
-              <ReactMarkdown>
-                {otherInfo}
-              </ReactMarkdown>
+  return (
+    <>
+      {gearRegulationIsNotEmpty ? (
+        <Section>
+          {hasAuthorizedContent ? (
+            <RegulatedGears authorized regulatedGearsObject={authorized || DEFAULT_AUTHORIZED_REGULATED_GEARS} />
+          ) : null}
+          {hasUnauthorizedContent ? (
+            <RegulatedGears
+              authorized={false}
+              hasPreviousRegulatedGearsBloc={hasAuthorizedContent}
+              regulatedGearsObject={unauthorized || DEFAULT_UNAUTHORIZED_REGULATED_GEARS}
+            />
+          ) : null}
+          {otherInfo && (
+            <MarkdownWithMargin data-cy="regulatory-layers-metadata-gears-other-info">
+              <ReactMarkdown>{otherInfo}</ReactMarkdown>
             </MarkdownWithMargin>
-          }
+          )}
         </Section>
-        : null
-    }
-  </>
+      ) : null}
+    </>
+  )
 }
 
-export const regulatedGearsIsNotEmpty = regulatedGearsObject => regulatedGearsObject?.allGears ||
+export const regulatedGearsIsNotEmpty = regulatedGearsObject =>
+  regulatedGearsObject?.allGears ||
   regulatedGearsObject?.allTowedGears ||
   regulatedGearsObject?.allPassiveGears ||
   Object.keys(regulatedGearsObject?.regulatedGears || {})?.length ||

@@ -1,28 +1,27 @@
-import { removeError, setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
+
+import { getVesselBeaconsMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
+import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../../entities/vessel'
 import {
   loadVesselBeaconMalfunctions,
-  setVesselBeaconMalfunctionsResumeAndHistory
+  setVesselBeaconMalfunctionsResumeAndHistory,
 } from '../../shared_slices/BeaconMalfunction'
-import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../../entities/vessel'
-import { getVesselBeaconsMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
+import { removeError, setError } from '../../shared_slices/Global'
 import openBeaconMalfunction from './openBeaconMalfunction'
 
 const getVesselBeaconMalfunctions = fromCron => (dispatch, getState) => {
-  const {
-    selectedVessel
-  } = getState().vessel
+  const { selectedVessel } = getState().vessel
   if (!selectedVessel) {
     return
   }
   const vesselIdentity = getOnlyVesselIdentityProperties(selectedVessel)
 
   const {
-    vesselBeaconMalfunctionsFromDate,
+    openedBeaconMalfunction,
     /** @type {VesselBeaconMalfunctionsResumeAndHistory || null} */
-    vesselBeaconMalfunctionsResumeAndHistory,
+    vesselBeaconMalfunctionsFromDate,
     /** @type {BeaconMalfunctionResumeAndDetails || null} */
-    openedBeaconMalfunction
+    vesselBeaconMalfunctionsResumeAndHistory,
   } = getState().beaconMalfunction
 
   const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, selectedVessel)
@@ -31,23 +30,27 @@ const getVesselBeaconMalfunctions = fromCron => (dispatch, getState) => {
     dispatch(loadVesselBeaconMalfunctions())
   }
 
-  getVesselBeaconsMalfunctionsFromAPI(vesselIdentity, vesselBeaconMalfunctionsFromDate).then(vesselBeaconsMalfunctions => {
-    dispatch(setVesselBeaconMalfunctionsResumeAndHistory({
-      ...vesselBeaconsMalfunctions,
-      vesselIdentity
-    }))
+  getVesselBeaconsMalfunctionsFromAPI(vesselIdentity, vesselBeaconMalfunctionsFromDate)
+    .then(vesselBeaconsMalfunctions => {
+      dispatch(
+        setVesselBeaconMalfunctionsResumeAndHistory({
+          ...vesselBeaconsMalfunctions,
+          vesselIdentity,
+        }),
+      )
 
-    if (openedBeaconMalfunction) {
-      dispatch(openBeaconMalfunction(openedBeaconMalfunction, fromCron))
-    }
+      if (openedBeaconMalfunction) {
+        dispatch(openBeaconMalfunction(openedBeaconMalfunction, fromCron))
+      }
 
-    dispatch(removeError())
-  }).catch(error => {
-    console.error(error)
-    batch(() => {
-      dispatch(setError(error))
+      dispatch(removeError())
     })
-  })
+    .catch(error => {
+      console.error(error)
+      batch(() => {
+        dispatch(setError(error))
+      })
+    })
 }
 
 export default getVesselBeaconMalfunctions

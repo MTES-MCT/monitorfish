@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react'
+
 import { CustomInput } from '../../commonStyles/Input.style'
 
-const RegulatoryTopicInput = props => {
-  const {
-    topic,
-    updateTopic,
-    setIsTopicEditable
-  } = props
+function RegulatoryTopicInput(props) {
+  const { setIsTopicEditable, topic, updateTopic } = props
 
   const [value, setValue] = useState()
 
@@ -32,11 +29,11 @@ const RegulatoryTopicInput = props => {
 
   return (
     <CustomInput
-      disabled={false}
       data-cy="regulatory-topic-edit-input"
-      value={value}
+      disabled={false}
       onChange={val => setValue(val)}
       onKeyDown={handleKeyDown}
+      value={value}
     />
   )
 }

@@ -1,5 +1,6 @@
 import { Style } from 'ol/style'
 import Stroke from 'ol/style/Stroke'
+
 import { COLORS } from '../../constants/constants'
 import { getColorWithAlpha } from '../../utils'
 
@@ -16,8 +17,8 @@ export const getLabelLineStyle = feature => {
       stroke: new Stroke({
         color: colorWithAlpha,
         lineDash: [4, 4],
-        width: 2
-      })
+        width: 2,
+      }),
     })
 
     labelLineStyleCache.set(key, [style])

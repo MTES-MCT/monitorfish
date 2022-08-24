@@ -1,27 +1,26 @@
+import Nouislider from 'nouislider-react'
 import React, { useEffect, useState } from 'react'
 import { RangeSlider } from 'rsuite'
 import styled from 'styled-components'
-import Nouislider from 'nouislider-react'
 
-const LastPositionsSlider = props => {
+function LastPositionsSlider(props) {
   const [value, setValue] = useState(null)
   // Hours
   const labels = [48, 24, 12, 6, 3, 2, 1]
 
   useEffect(() => {
     if (props.vesselsLastPositionVisibility && !value) {
-      const opacityReducedIndex = labels.findIndex(label => props.vesselsLastPositionVisibility.opacityReduced === label)
+      const opacityReducedIndex = labels.findIndex(
+        label => props.vesselsLastPositionVisibility.opacityReduced === label,
+      )
       const hiddenIndex = labels.findIndex(label => props.vesselsLastPositionVisibility.hidden === label)
       setValue([hiddenIndex, opacityReducedIndex])
     }
   }, [props.vesselsLastPositionVisibility])
 
-  function updateValue (nextValue) {
+  function updateValue(nextValue) {
     if (nextValue[0] !== value[0] || nextValue[1] !== value[1]) {
-      nextValue = [
-        parseInt(nextValue[0]),
-        parseInt(nextValue[1])
-      ]
+      nextValue = [parseInt(nextValue[0]), parseInt(nextValue[1])]
       setValue(nextValue)
       props.updateVesselsLastPositionVisibility(labels[nextValue[0]], labels[nextValue[1]])
     }
@@ -29,25 +28,23 @@ const LastPositionsSlider = props => {
 
   return (
     <>
-      {value
-        ? <SliderWrapper>
+      {value ? (
+        <SliderWrapper>
           <Nouislider
-            range={{
-              min: [0, 1],
-              max: [6]
-            }}
-            start={value}
+            behaviour="tap"
             connect={[true, true, true]}
             onSlide={(render, handle, nextValue) => updateValue(nextValue)}
-            behaviour="tap"
+            range={{
+              max: [6],
+              min: [0, 1],
+            }}
+            start={value}
           />
           <RangeSlider
-            min={0}
-            max={labels.length - 1}
-            value={value}
             defaultValue={value}
             graduated
-            tooltip={false}
+            max={labels.length - 1}
+            min={0}
             onChange={nextValue => updateValue(nextValue)}
             renderMark={mark => {
               switch (mark) {
@@ -69,10 +66,11 @@ const LastPositionsSlider = props => {
                   return null
               }
             }}
+            tooltip={false}
+            value={value}
           />
         </SliderWrapper>
-        : null
-      }
+      ) : null}
     </>
   )
 }

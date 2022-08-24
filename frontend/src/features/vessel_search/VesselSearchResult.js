@@ -1,68 +1,66 @@
 import React from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../constants/constants'
 import { useSelector } from 'react-redux'
-import VesselSearchResultItem from './VesselSearchResultItem'
-import { getVesselId } from '../../domain/entities/vessel'
+import styled from 'styled-components'
 
-const VesselSearchResult = ({
-  searchText,
-  foundVesselsOnMap,
+import { COLORS } from '../../constants/constants'
+import { getVesselId } from '../../domain/entities/vessel'
+import VesselSearchResultItem from './VesselSearchResultItem'
+
+function VesselSearchResult({
   foundVesselsFromAPI,
+  foundVesselsOnMap,
+  searchText,
   selectVessel,
   showLastSearchedVessels
-}) => {
-  const {
-    lastSearchedVessels
-  } = useSelector(state => state.global)
+}) {
+  const { lastSearchedVessels } = useSelector(state => state.global)
 
-  return <>
-    {
-      (foundVesselsOnMap?.length) || (foundVesselsFromAPI?.length)
-        ? <Results>
+  return (
+    <>
+      {foundVesselsOnMap?.length || foundVesselsFromAPI?.length ? (
+        <Results>
           <List>
-            {
-              foundVesselsOnMap?.map(feature => {
-                return <VesselSearchResultItem
+            {foundVesselsOnMap?.map(feature => <VesselSearchResultItem
                   key={feature.vesselId}
                   vessel={feature.vesselProperties}
                   selectVessel={() => selectVessel(feature.vesselProperties)}
                   searchText={searchText}
+                />)
+            })}
+            {foundVesselsFromAPI?.map(vessel => {
+              const vesselId = getVesselId(vessel)
+              return (
+                <VesselSearchResultItem
+                  key={vesselId}
+                  searchText={searchText}
+                  selectVessel={() => selectVessel(vessel)}
+                  vessel={vessel}
                 />
-              })
-            }
-            {
-              foundVesselsFromAPI?.map(vessel => {
-                const vesselId = getVesselId(vessel)
-                return <VesselSearchResultItem
+              )
+            })}
+          </List>
+        </Results>
+      ) : showLastSearchedVessels ? (
+        <Results>
+          <List>
+            {lastSearchedVessels.map(vessel => {
+              const vesselId = getVesselId(vessel)
+              return (
+                <VesselSearchResultItem
                   key={vesselId}
                   vessel={vessel}
                   selectVessel={() => selectVessel(vessel)}
                   searchText={searchText}
                 />
-              })
-            }
+              )
+            })}
           </List>
         </Results>
-        : showLastSearchedVessels
-          ? <Results>
-            <List>
-              {
-                lastSearchedVessels.map(vessel => {
-                  const vesselId = getVesselId(vessel)
-                  return <VesselSearchResultItem
-                    key={vesselId}
-                    vessel={vessel}
-                    selectVessel={() => selectVessel(vessel)}
-                    searchText={searchText}
-                  />
-                })
-              }
-            </List>
-          </Results>
-          : ''
-    }
-  </>
+      ) : (
+        ''
+      )}
+    </>
+  )
 }
 
 const Results = styled.div`

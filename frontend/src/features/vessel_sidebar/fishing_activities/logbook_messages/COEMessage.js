@@ -1,70 +1,108 @@
+import countries from 'i18n-iso-countries'
 import React from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 import { getCoordinates } from '../../../../coordinates'
-import { getDateTime } from '../../../../utils'
 import { WSG84_PROJECTION } from '../../../../domain/entities/map'
-import countries from 'i18n-iso-countries'
-import { useSelector } from 'react-redux'
+import { getDateTime } from '../../../../utils'
 
-const COEMessage = props => {
+function COEMessage(props) {
   const { coordinatesFormat } = useSelector(state => state.map)
 
-  return <>
-    {props.message
-      ? <>
-        <Zone>
-          <Fields>
-            <TableBody>
-              <Field>
-                <Key>Date d&apos;entrée</Key>
-                <Value>{props.message.effortZoneEntryDatetimeUtc
-                  ? <>{getDateTime(props.message.effortZoneEntryDatetimeUtc, true)}{' '}
-                    <Gray>(UTC)</Gray></>
-                  : <NoValue>-</NoValue>}</Value>
-              </Field>
-              <Field>
-                <Key>Position d&apos;entrée</Key>
-                <Value>
-                  <FirstInlineKey>Lat.</FirstInlineKey> {props.message.latitudeEntered && props.message.longitudeEntered
-                    ? getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION, coordinatesFormat)[0]
-                    : <NoValue>-</NoValue>}
-                  <InlineKey>Lon.</InlineKey> {props.message.latitudeEntered && props.message.longitudeEntered
-                    ? getCoordinates([props.message.longitudeEntered, props.message.latitudeEntered], WSG84_PROJECTION, coordinatesFormat)[1]
-                    : <NoValue>-</NoValue>}<br/>
-                  <FirstInlineKey>ZEE</FirstInlineKey> {props.message.economicZoneEntered
-                    ? <>{countries.getName(props.message.economicZoneEntered, 'fr')} ({props.message.economicZoneEntered})</>
-                    : <NoValue>-</NoValue>}<br/>
-                  <FirstInlineKey>Zone
-                    FAO</FirstInlineKey>{props.message.faoZoneEntered
-                    ? props.message.faoZoneEntered
-                    : <NoValue>-</NoValue>}<br/>
-                  <FirstInlineKey>Rect.
-                    stat.</FirstInlineKey>{props.message.statisticalRectangleEntered
-                    ? props.message.statisticalRectangleEntered
-                    : <NoValue>-</NoValue>}<br/>
-                </Value>
-              </Field>
-            </TableBody>
-          </Fields>
-        </Zone>
-        <Zone>
-          <Fields>
-            <TableBody>
-              <Field>
-                <Key>Espèces ciblées</Key>
-                <Value>{props.message.targetSpeciesOnEntry && props.message.targetSpeciesNameOnEntry
-                  ? <>{props.message.targetSpeciesNameOnEntry} ({props.message.targetSpeciesOnEntry})</>
-                  : props.message.targetSpeciesOnEntry
-                    ? props.message.targetSpeciesOnEntry
-                    : <NoValue>-</NoValue>}</Value>
-              </Field>
-            </TableBody>
-          </Fields>
-        </Zone>
-      </>
-      : null}
-  </>
+  return (
+    <>
+      {props.message ? (
+        <>
+          <Zone>
+            <Fields>
+              <TableBody>
+                <Field>
+                  <Key>Date d&apos;entrée</Key>
+                  <Value>
+                    {props.message.effortZoneEntryDatetimeUtc ? (
+                      <>
+                        {getDateTime(props.message.effortZoneEntryDatetimeUtc, true)} <Gray>(UTC)</Gray>
+                      </>
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
+                </Field>
+                <Field>
+                  <Key>Position d&apos;entrée</Key>
+                  <Value>
+                    <FirstInlineKey>Lat.</FirstInlineKey>{' '}
+                    {props.message.latitudeEntered && props.message.longitudeEntered ? (
+                      getCoordinates(
+                        [props.message.longitudeEntered, props.message.latitudeEntered],
+                        WSG84_PROJECTION,
+                        coordinatesFormat,
+                      )[0]
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                    <InlineKey>Lon.</InlineKey>{' '}
+                    {props.message.latitudeEntered && props.message.longitudeEntered ? (
+                      getCoordinates(
+                        [props.message.longitudeEntered, props.message.latitudeEntered],
+                        WSG84_PROJECTION,
+                        coordinatesFormat,
+                      )[1]
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                    <br />
+                    <FirstInlineKey>ZEE</FirstInlineKey>{' '}
+                    {props.message.economicZoneEntered ? (
+                      <>
+                        {countries.getName(props.message.economicZoneEntered, 'fr')} (
+                        {props.message.economicZoneEntered})
+                      </>
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                    <br />
+                    <FirstInlineKey>Zone FAO</FirstInlineKey>
+                    {props.message.faoZoneEntered ? props.message.faoZoneEntered : <NoValue>-</NoValue>}
+                    <br />
+                    <FirstInlineKey>Rect. stat.</FirstInlineKey>
+                    {props.message.statisticalRectangleEntered ? (
+                      props.message.statisticalRectangleEntered
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                    <br />
+                  </Value>
+                </Field>
+              </TableBody>
+            </Fields>
+          </Zone>
+          <Zone>
+            <Fields>
+              <TableBody>
+                <Field>
+                  <Key>Espèces ciblées</Key>
+                  <Value>
+                    {props.message.targetSpeciesOnEntry && props.message.targetSpeciesNameOnEntry ? (
+                      <>
+                        {props.message.targetSpeciesNameOnEntry} ({props.message.targetSpeciesOnEntry})
+                      </>
+                    ) : props.message.targetSpeciesOnEntry ? (
+                      props.message.targetSpeciesOnEntry
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
+                </Field>
+              </TableBody>
+            </Fields>
+          </Zone>
+        </>
+      ) : null}
+    </>
+  )
 }
 
 const FirstInlineKey = styled.div`
@@ -98,7 +136,7 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 0px 5px 0 5px; 
+  padding: 0px 5px 0 5px;
   width: inherit;
   display: table;
   margin: 0;

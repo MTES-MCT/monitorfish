@@ -1,16 +1,23 @@
-import { setError } from '../../../shared_slices/Global'
-import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, REGULATION_ACTION_TYPE } from '../../../entities/regulatory'
 import { Feature } from 'ol'
 
-import { setLayersTopicsByRegTerritory, setRegulatoryLayerLawTypes } from '../../../shared_slices/Regulatory'
 import { sendRegulationTransaction } from '../../../../api/geoserver'
+import {
+  getRegulatoryFeatureId,
+  mapToRegulatoryFeatureObject,
+  REGULATION_ACTION_TYPE,
+} from '../../../entities/regulatory'
+import { setError } from '../../../shared_slices/Global'
+import { setLayersTopicsByRegTerritory, setRegulatoryLayerLawTypes } from '../../../shared_slices/Regulatory'
 
 const UPDATE_TOPIC_NAME_ERROR = 'Une erreur est survenue lors la mise à jour de la thématique'
 
 const updateTopicForAllZones = (territory, lawType, oldLayerName, newLayerName) => (dispatch, getState) => {
   const { layersTopicsByRegTerritory } = getState().regulatory
-  if (!layersTopicsByRegTerritory || !layersTopicsByRegTerritory[territory] ||
-    !layersTopicsByRegTerritory[territory][lawType]) {
+  if (
+    !layersTopicsByRegTerritory ||
+    !layersTopicsByRegTerritory[territory] ||
+    !layersTopicsByRegTerritory[territory][lawType]
+  ) {
     console.error(`${UPDATE_TOPIC_NAME_ERROR}
       One value is undefined: 
       layersTopicsByRegTerritory is ${layersTopicsByRegTerritory}
@@ -23,7 +30,7 @@ const updateTopicForAllZones = (territory, lawType, oldLayerName, newLayerName) 
 
   if (layersTopicsByRegTerritory[territory][lawType][oldLayerName]) {
     const zoneListToUpdate = layersTopicsByRegTerritory[territory][lawType][oldLayerName]
-    const promiseList = zoneListToUpdate.map((zone) => {
+    const promiseList = zoneListToUpdate.map(zone => {
       const feature = buildZoneFeature(zone, newLayerName)
 
       return new Promise((resolve, reject) => {
@@ -35,7 +42,13 @@ const updateTopicForAllZones = (territory, lawType, oldLayerName, newLayerName) 
 
     return Promise.all(promiseList)
       .then(_ => {
-        const newLayersTopicsByRegTerritory = mutateLayersTopicsWithNewTopic(layersTopicsByRegTerritory, territory, lawType, newLayerName, oldLayerName)
+        const newLayersTopicsByRegTerritory = mutateLayersTopicsWithNewTopic(
+          layersTopicsByRegTerritory,
+          territory,
+          lawType,
+          newLayerName,
+          oldLayerName,
+        )
         dispatch(setLayersTopicsByRegTerritory(newLayersTopicsByRegTerritory))
         dispatch(setRegulatoryLayerLawTypes(newLayersTopicsByRegTerritory))
       })
@@ -46,17 +59,18 @@ const updateTopicForAllZones = (territory, lawType, oldLayerName, newLayerName) 
   }
 }
 
-function buildZoneFeature (zone, newLayerName) {
+function buildZoneFeature(zone, newLayerName) {
   const featureObject = mapToRegulatoryFeatureObject({
     ...zone,
-    topic: newLayerName
+    topic: newLayerName,
   })
   const feature = new Feature(featureObject)
   feature.setId(getRegulatoryFeatureId(zone.id))
+
   return feature
 }
 
-function mutateLayersTopicsWithNewTopic (layersTopicsByRegTerritory, territory, lawType, newTopic, oldTopic) {
+function mutateLayersTopicsWithNewTopic(layersTopicsByRegTerritory, territory, lawType, newTopic, oldTopic) {
   const newTerritoryObject = { ...layersTopicsByRegTerritory[territory] }
   const newLawTypeObject = { ...newTerritoryObject[lawType] }
   newLawTypeObject[newTopic] = [...newLawTypeObject[oldTopic]]
@@ -65,7 +79,7 @@ function mutateLayersTopicsWithNewTopic (layersTopicsByRegTerritory, territory, 
 
   return {
     ...layersTopicsByRegTerritory,
-    [territory]: newTerritoryObject
+    [territory]: newTerritoryObject,
   }
 }
 

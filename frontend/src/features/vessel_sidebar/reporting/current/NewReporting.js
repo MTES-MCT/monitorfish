@@ -1,40 +1,36 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
+import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
 import NewReportingForm from './NewReportingForm'
-import { PrimaryButton } from '../../../commonStyles/Buttons.style'
-import { useSelector } from 'react-redux'
 
-const NewReporting = () => {
+function NewReporting() {
   const selectedVesselIdentity = useSelector(state => state.vessel.selectedVesselIdentity)
   const [newReportingFormIsOpen, setNewReportingFormIsOpen] = useState(false)
 
-  return <>
-    {
-      newReportingFormIsOpen
-        ? <FormWrapper>
+  return (
+    <>
+      {newReportingFormIsOpen ? (
+        <FormWrapper>
           <Header>
-            <HeaderText>
-              Ouvrir un signalement
-            </HeaderText>
-            <CloseIcon
-              onClick={() => setNewReportingFormIsOpen(false)}
-            />
+            <HeaderText>Ouvrir un signalement</HeaderText>
+            <CloseIcon onClick={() => setNewReportingFormIsOpen(false)} />
           </Header>
           <NewReportingForm
-            selectedVesselIdentity={selectedVesselIdentity}
             closeForm={() => setNewReportingFormIsOpen(false)}
+            selectedVesselIdentity={selectedVesselIdentity}
           />
         </FormWrapper>
-        : <NewReportingButton
-          data-cy={'vessel-sidebar-open-reporting'}
-          onClick={() => setNewReportingFormIsOpen(true)}
-        >
+      ) : (
+        <NewReportingButton data-cy="vessel-sidebar-open-reporting" onClick={() => setNewReportingFormIsOpen(true)}>
           Ouvrir un signalement
         </NewReportingButton>
-    }
-  </>
+      )}
+    </>
+  )
 }
 
 const NewReportingButton = styled(PrimaryButton)`

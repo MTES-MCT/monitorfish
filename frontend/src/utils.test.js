@@ -1,5 +1,5 @@
-import { getDateTime } from './utils'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map'
+import { getDateTime } from './utils'
 
 describe('utils', () => {
   it('getDateTime Should respect the timezone given fur UTC', async () => {

@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { ReactComponent as ArrowSVG } from '../../icons/Picto_fleche-pleine-droite.svg'
-import { ReactComponent as ArrowTripSVG } from '../../icons/Fleche_navigation_marees.svg'
-import { ReactComponent as ArrowLastTripSVG } from '../../icons/Double_fleche_navigation_marees.svg'
-import DEPMessageResume from './logbook_messages_resumes/DEPMessageResume'
-import DISMessageResume from './logbook_messages_resumes/DISMessageResume'
-import FARMessageResume from './logbook_messages_resumes/FARMessageResume'
-import PNOMessageResume from './logbook_messages_resumes/PNOMessageResume'
-import LANMessageResume from './logbook_messages_resumes/LANMessageResume'
-import { AlertType } from '../../../domain/entities/alerts'
-import FleetSegments from '../../fleet_segments/FleetSegments'
 import { useSelector } from 'react-redux'
+import styled from 'styled-components'
+
+import { COLORS } from '../../../constants/constants'
+import { AlertType } from '../../../domain/entities/alerts'
 import {
   getDEPMessageFromMessages,
   getDISMessagesFromMessages,
-  getFAOZonesFromFARMessages, getFARMessagesFromMessages,
-  getDISSpeciesToWeightObject, getFARSpeciesToWeightObject, getLANMessageFromMessages, getPNOMessageFromMessages,
+  getFAOZonesFromFARMessages,
+  getFARMessagesFromMessages,
+  getDISSpeciesToWeightObject,
+  getFARSpeciesToWeightObject,
+  getLANMessageFromMessages,
+  getPNOMessageFromMessages,
   getSpeciesAndPresentationToWeightFARObject,
   getSpeciesToWeightLANObject,
   getSpeciesToWeightPNOObject,
@@ -25,21 +21,24 @@ import {
   getTotalFARWeightFromMessages,
   getTotalLANWeightFromMessage,
   getTotalPNOWeightFromMessage,
-  LogbookOperationType, getAllFAROrDISMessagesAreNotAcknowledged
+  LogbookOperationType,
+  getAllFAROrDISMessagesAreNotAcknowledged,
 } from '../../../domain/entities/logbook'
+import FleetSegments from '../../fleet_segments/FleetSegments'
+import { ReactComponent as ArrowLastTripSVG } from '../../icons/Double_fleche_navigation_marees.svg'
+import { ReactComponent as ArrowTripSVG } from '../../icons/Fleche_navigation_marees.svg'
+import { ReactComponent as ArrowSVG } from '../../icons/Picto_fleche-pleine-droite.svg'
 import CustomDatesShowedInfo from './CustomDatesShowedInfo'
+import DEPMessageResume from './logbook_messages_resumes/DEPMessageResume'
+import DISMessageResume from './logbook_messages_resumes/DISMessageResume'
+import FARMessageResume from './logbook_messages_resumes/FARMessageResume'
+import LANMessageResume from './logbook_messages_resumes/LANMessageResume'
+import PNOMessageResume from './logbook_messages_resumes/PNOMessageResume'
 
-const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessingMessagesResume }) => {
-  const {
-    selectedVessel
-  } = useSelector(state => state.vessel)
+function FishingActivitiesSummary({ navigation, setProcessingMessagesResume, showLogbookMessages }) {
+  const { selectedVessel } = useSelector(state => state.vessel)
 
-  const {
-    fishingActivities,
-    tripNumber,
-    isLastVoyage,
-    isFirstVoyage
-  } = useSelector(state => state.fishingActivities)
+  const { fishingActivities, isFirstVoyage, isLastVoyage, tripNumber } = useSelector(state => state.fishingActivities)
 
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
 
@@ -69,7 +68,7 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
   useEffect(() => {
     if (fishingActivities?.logbookMessages?.length) {
       setProcessingMessagesResume(true)
-      const logbookMessages = fishingActivities.logbookMessages
+      const { logbookMessages } = fishingActivities
       const depMessage = getDEPMessageFromMessages(logbookMessages)
       setDEPMessage(depMessage)
 
@@ -157,178 +156,206 @@ const FishingActivitiesSummary = ({ showLogbookMessages, navigation, setProcessi
 
   const getCatchesOverToleranceAlert = () => {
     if (fishingActivities?.alerts?.length) {
-      return fishingActivities.alerts.find(alert => alert?.value?.type === AlertType.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code).value
+      return fishingActivities.alerts.find(
+        alert => alert?.value?.type === AlertType.PNO_LAN_WEIGHT_TOLERANCE_ALERT.code,
+      ).value
     }
 
     return null
   }
 
-  function getGears () {
+  function getGears() {
     if (depMessage?.message?.gearOnboard?.length) {
       const uniqueGears = depMessage.message.gearOnboard.reduce((acc, current) => {
-        const found = acc.find(item =>
-          item.gear === current.gear &&
-          item.gearName === current.gearName)
+        const found = acc.find(item => item.gear === current.gear && item.gearName === current.gearName)
         if (!found) {
           return acc.concat([current])
-        } else {
-          return acc
         }
+
+        return acc
       }, [])
 
-      return uniqueGears.map(gear => {
-        return gear.gearName
-          ? <span key={gear.gear}>{gear.gearName} ({gear.gear})<br/></span>
-          : <span key={gear.gear}>{gear.gear}<br/></span>
-      })
+      return uniqueGears.map(gear =>
+        gear.gearName ? (
+          <span key={gear.gear}>
+            {gear.gearName} ({gear.gear})<br />
+          </span>
+        ) : (
+          <span key={gear.gear}>
+            {gear.gear}
+            <br />
+          </span>
+        ),
+      )
     }
 
     return <NoValue>-</NoValue>
   }
 
-  return <>
-    {fishingActivities
-      ? <Body>
-        <Zone white>
-          <Title>
-            <Text>Segment(s) de flotte(s) actuel(s)</Text>
-            <TextValue>
-              <FleetSegments
-                selectedVessel={selectedVessel}
-                fleetSegmentsReferential={fleetSegments}
-              />
-            </TextValue>
-          </Title>
-          <Fields>
-            <TableBody>
-              <Field>
-                <Key>Engins à bord (JPE)</Key>
-                <Value data-cy={'vessel-fishing-gears'}>
-                  {
-                    getGears()
-                  }
-                </Value>
-              </Field>
-              <Field>
-                <Key>Zones de la marée (JPE)</Key>
-                <Value>{faoZones?.length
-                  ? faoZones.map((faoZone, index) => {
-                    return <span
-                      key={index}>{faoZone}{index === faoZones.length - 1 ? '' : ', '}</span>
-                  })
-                  : <NoValue>-</NoValue>}</Value>
-              </Field>
-            </TableBody>
-          </Fields>
-        </Zone>
-        <Zone>
-          <Title hasTwoLines={false}>
-            <Text hasTwoLines={false}>Résumé de la marée</Text>
-            <TextValue hasTwoLines={false} data-cy={'vessel-fishing-trip-number'}>
-              <PreviousTrip
-                disabled={isFirstVoyage}
-                onClick={!isFirstVoyage ? navigation.goToPreviousTrip : undefined}
-                title={'Marée précédente'}
-                data-cy={'vessel-fishing-previous-trip'}
-              />
-              {
-                tripNumber
-                  ? `Marée n°${tripNumber}`
-                  : <NoValue>-</NoValue>
-              }
-              <NextTrip
-                disabled={isLastVoyage}
-                onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
-                title={'Marée suivante'}
-              />
-              <LastTrip
-                disabled={isLastVoyage}
-                onClick={!isLastVoyage ? navigation.goToLastTrip : undefined}
-                title={'Dernière marée'}
-                data-cy={'vessel-fishing-next-trip'}
-              />
-            </TextValue>
-            <SeeAll onClick={() => showLogbookMessages()} data-cy={'vessel-fishing-see-all'}>Voir tous les messages</SeeAll>
-            <Arrow onClick={() => showLogbookMessages()}/>
-          </Title>
-          <CustomDatesShowedInfo/>
-          {
-            fishingActivities?.logbookMessages?.length
-              ? <LogbookMessages>
-                {depMessage
-                  ? <DEPMessageResume
-                    id={depMessage.reportId}
-                    showLogbookMessages={showLogbookMessages}
+  return (
+    <>
+      {fishingActivities ? (
+        <Body>
+          <Zone white>
+            <Title>
+              <Text>Segment(s) de flotte(s) actuel(s)</Text>
+              <TextValue>
+                <FleetSegments fleetSegmentsReferential={fleetSegments} selectedVessel={selectedVessel} />
+              </TextValue>
+            </Title>
+            <Fields>
+              <TableBody>
+                <Field>
+                  <Key>Engins à bord (JPE)</Key>
+                  <Value data-cy="vessel-fishing-gears">{getGears()}</Value>
+                </Field>
+                <Field>
+                  <Key>Zones de la marée (JPE)</Key>
+                  <Value>
+                    {faoZones?.length ? (
+                      faoZones.map((faoZone, index) => (
+                        <span key={index}>
+                          {faoZone}
+                          {index === faoZones.length - 1 ? '' : ', '}
+                        </span>
+                      ))
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
+                </Field>
+              </TableBody>
+            </Fields>
+          </Zone>
+          <Zone>
+            <Title hasTwoLines={false}>
+              <Text hasTwoLines={false}>Résumé de la marée</Text>
+              <TextValue data-cy="vessel-fishing-trip-number" hasTwoLines={false}>
+                <PreviousTrip
+                  data-cy="vessel-fishing-previous-trip"
+                  disabled={isFirstVoyage}
+                  onClick={!isFirstVoyage ? navigation.goToPreviousTrip : undefined}
+                  title="Marée précédente"
+                />
+                {tripNumber ? `Marée n°${tripNumber}` : <NoValue>-</NoValue>}
+                <NextTrip
+                  disabled={isLastVoyage}
+                  onClick={!isLastVoyage ? navigation.goToNextTrip : undefined}
+                  title="Marée suivante"
+                />
+                <LastTrip
+                  data-cy="vessel-fishing-next-trip"
+                  disabled={isLastVoyage}
+                  onClick={!isLastVoyage ? navigation.goToLastTrip : undefined}
+                  title="Dernière marée"
+                />
+              </TextValue>
+              <SeeAll data-cy="vessel-fishing-see-all" onClick={() => showLogbookMessages()}>
+                Voir tous les messages
+              </SeeAll>
+              <Arrow onClick={() => showLogbookMessages()} />
+            </Title>
+            <CustomDatesShowedInfo />
+            {fishingActivities?.logbookMessages?.length ? (
+              <LogbookMessages>
+                {depMessage ? (
+                  <DEPMessageResume
                     depMessage={depMessage.message}
-                    isNotAcknowledged={depMessage.acknowledge && depMessage.acknowledge.isSuccess === false}
+                    id={depMessage.reportId}
                     isDeleted={depMessage.deleted}
-                    rejectionCause={depMessage.acknowledge && depMessage.acknowledge.rejectionCause ? depMessage.acknowledge.rejectionCause : null}/>
-                  : <DEPMessageResume hasNoMessage={true}/>
-                }
+                    isNotAcknowledged={depMessage.acknowledge && depMessage.acknowledge.isSuccess === false}
+                    rejectionCause={
+                      depMessage.acknowledge && depMessage.acknowledge.rejectionCause
+                        ? depMessage.acknowledge.rejectionCause
+                        : null
+                    }
+                    showLogbookMessages={showLogbookMessages}
+                  />
+                ) : (
+                  <DEPMessageResume hasNoMessage />
+                )}
 
-                {farMessages?.length && farMessages[0]
-                  ? <FARMessageResume
+                {farMessages?.length && farMessages[0] ? (
+                  <FARMessageResume
+                    allFARMessagesAreNotAcknowledged={allFARMessagesAreNotAcknowledged}
                     id={farMessages[0].reportId}
+                    numberOfMessages={
+                      farMessages
+                        ? farMessages.filter(message => message.operationType === LogbookOperationType.DAT).length
+                        : 0
+                    }
                     showLogbookMessages={showLogbookMessages}
-                    totalFARWeight={totalFARWeight}
-                    numberOfMessages={farMessages ? farMessages.filter(message => message.operationType === LogbookOperationType.DAT).length : 0}
-                    speciesToWeightOfFAR={speciesToWeightOfFAR}
                     speciesAndPresentationToWeightOfFAR={speciesAndPresentationToWeightOfFAR}
-                    allFARMessagesAreNotAcknowledged={allFARMessagesAreNotAcknowledged}/>
-                  : <FARMessageResume hasNoMessage={true}/>
-                }
-
-                {disMessages?.length && disMessages[0]
-                  ? <DISMessageResume
-                    id={disMessages[0].reportId}
-                    totalDISWeight={totalDISWeight}
-                    numberOfMessages={disMessages ? disMessages.filter(message => message.operationType === LogbookOperationType.DAT).length : 0}
-                    speciesToWeightOfDIS={speciesToWeightOfDIS}
-                    showLogbookMessages={showLogbookMessages}
-                    allDISMessagesAreNotAcknowledged={allDISMessagesAreNotAcknowledged}/>
-                  : <DISMessageResume hasNoMessage={true}/>
-                }
-
-                {pnoMessage
-                  ? <PNOMessageResume
-                    id={pnoMessage.reportId}
-                    totalPNOWeight={totalPNOWeight}
-                    totalFARAndDEPWeight={totalFARAndDEPWeight}
-                    speciesToWeightOfPNO={speciesToWeightOfPNO}
                     speciesToWeightOfFAR={speciesToWeightOfFAR}
-                    showLogbookMessages={showLogbookMessages}
-                    isNotAcknowledged={pnoMessage.acknowledge && pnoMessage.acknowledge.isSuccess === false}
-                    isDeleted={pnoMessage.deleted}
-                    pnoMessage={pnoMessage}/>
-                  : <PNOMessageResume hasNoMessage={true}/>
-                }
+                    totalFARWeight={totalFARWeight}
+                  />
+                ) : (
+                  <FARMessageResume hasNoMessage />
+                )}
 
-                {lanMessage
-                  ? <LANMessageResume
-                    id={lanMessage.reportId}
+                {disMessages?.length && disMessages[0] ? (
+                  <DISMessageResume
+                    allDISMessagesAreNotAcknowledged={allDISMessagesAreNotAcknowledged}
+                    id={disMessages[0].reportId}
+                    numberOfMessages={
+                      disMessages
+                        ? disMessages.filter(message => message.operationType === LogbookOperationType.DAT).length
+                        : 0
+                    }
+                    showLogbookMessages={showLogbookMessages}
+                    speciesToWeightOfDIS={speciesToWeightOfDIS}
+                    totalDISWeight={totalDISWeight}
+                  />
+                ) : (
+                  <DISMessageResume hasNoMessage />
+                )}
+
+                {pnoMessage ? (
+                  <PNOMessageResume
+                    id={pnoMessage.reportId}
+                    isDeleted={pnoMessage.deleted}
+                    isNotAcknowledged={pnoMessage.acknowledge && pnoMessage.acknowledge.isSuccess === false}
+                    pnoMessage={pnoMessage}
+                    showLogbookMessages={showLogbookMessages}
+                    speciesToWeightOfFAR={speciesToWeightOfFAR}
+                    speciesToWeightOfPNO={speciesToWeightOfPNO}
+                    totalFARAndDEPWeight={totalFARAndDEPWeight}
+                    totalPNOWeight={totalPNOWeight}
+                  />
+                ) : (
+                  <PNOMessageResume hasNoMessage />
+                )}
+
+                {lanMessage ? (
+                  <LANMessageResume
                     catchesOverToleranceAlert={getCatchesOverToleranceAlert()}
+                    id={lanMessage.reportId}
+                    isDeleted={lanMessage.deleted}
+                    isNotAcknowledged={lanMessage.acknowledge && lanMessage.acknowledge.isSuccess === false}
+                    lanMessage={lanMessage.message}
+                    showLogbookMessages={showLogbookMessages}
+                    speciesToWeightOfFAR={speciesToWeightOfFAR}
+                    speciesToWeightOfLAN={speciesToWeightOfLAN}
+                    speciesToWeightOfPNO={speciesToWeightOfPNO}
                     totalLANWeight={totalLANWeight}
                     totalPNOWeight={totalPNOWeight}
-                    speciesToWeightOfFAR={speciesToWeightOfFAR}
-                    speciesToWeightOfPNO={speciesToWeightOfPNO}
-                    speciesToWeightOfLAN={speciesToWeightOfLAN}
-                    showLogbookMessages={showLogbookMessages}
-                    isNotAcknowledged={lanMessage.acknowledge && lanMessage.acknowledge.isSuccess === false}
-                    isDeleted={lanMessage.deleted}
-                    lanMessage={lanMessage.message}/>
-                  : <LANMessageResume hasNoMessage={true}/>
-                }
+                  />
+                ) : (
+                  <LANMessageResume hasNoMessage />
+                )}
               </LogbookMessages>
-              : <NoMessage>Aucun message reçu</NoMessage>
-          }
-        </Zone>
-      </Body>
-      : null}
-  </>
+            ) : (
+              <NoMessage>Aucun message reçu</NoMessage>
+            )}
+          </Zone>
+        </Body>
+      ) : null}
+    </>
+  )
 }
 
 const PreviousTrip = styled(ArrowTripSVG)`
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   vertical-align: sub;
   width: 14px;
   margin-right: 10px;
@@ -336,14 +363,14 @@ const PreviousTrip = styled(ArrowTripSVG)`
 `
 
 const NextTrip = styled(ArrowTripSVG)`
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   vertical-align: sub;
   width: 14px;
   margin-left: 10px;
 `
 
 const LastTrip = styled(ArrowLastTripSVG)`
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   vertical-align: sub;
   width: 14px;
   margin-left: 5px;
@@ -388,7 +415,7 @@ const Text = styled.div`
   color: ${COLORS.slateGray};
   font-size: 13px;
   font-weight: 500;
-  padding-top: ${props => props.hasTwoLines ? '6px' : '0'};
+  padding-top: ${props => (props.hasTwoLines ? '6px' : '0')};
 `
 
 const TextValue = styled.div`
@@ -397,7 +424,7 @@ const TextValue = styled.div`
   font-weight: 500;
   margin: 0;
   padding-left: 10px;
-  padding-top: ${props => props.hasTwoLines ? '6px' : '0'};
+  padding-top: ${props => (props.hasTwoLines ? '6px' : '0')};
 `
 
 const Body = styled.div`
@@ -409,7 +436,7 @@ const TableBody = styled.tbody``
 const Title = styled.div`
   color: ${COLORS.slateGray};
   background: ${COLORS.lightGray};
-  padding: ${props => props.hasTwoLines ? '7px 10px 7px 20px;' : '8.5px 10px 8px 20px;'}
+  padding: ${props => (props.hasTwoLines ? '7px 10px 7px 20px;' : '8.5px 10px 8px 20px;')}
   font-size: 13px;
   flex-shrink: 0;
   flex-grow: 2;
@@ -422,11 +449,11 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${props => props.white ? COLORS.background : 'unset'};
+  background: ${props => (props.white ? COLORS.background : 'unset')};
 `
 
 const Fields = styled.table`
-  padding: 10px 5px 5px 35px; 
+  padding: 10px 5px 5px 35px;
   width: inherit;
   display: table;
   margin: 0;

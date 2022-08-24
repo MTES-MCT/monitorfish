@@ -1,21 +1,24 @@
-import React, { createRef, useEffect, useState } from 'react'
 import Overlay from 'ol/Overlay'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
+import React, { createRef, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import styled from 'styled-components'
+
+import { COLORS } from '../../../constants/constants'
+import navigateToFishingActivity from '../../../domain/use_cases/vessel/navigateToFishingActivity'
 import { ReactComponent as AckNOkSVG } from '../../icons/Message_JPE_non_acquitte_clair.svg'
 import { ReactComponent as DeletedSVG } from '../../icons/Suppression_clair.svg'
-import navigateToFishingActivity from '../../../domain/use_cases/vessel/navigateToFishingActivity'
 
-const FishingActivityOverlay = ({ map, id, name, coordinates, isDeleted, isNotAcknowledged }) => {
+function FishingActivityOverlay({ coordinates, id, isDeleted, isNotAcknowledged, map, name }) {
   const ref = createRef()
   const dispatch = useDispatch()
-  const [overlay] = useState(new Overlay({
-    element: ref.current,
-    position: coordinates,
-    offset: [0, -4],
-    positioning: 'bottom-center'
-  }))
+  const [overlay] = useState(
+    new Overlay({
+      element: ref.current,
+      offset: [0, -4],
+      position: coordinates,
+      positioning: 'bottom-center',
+    }),
+  )
 
   useEffect(() => {
     if (map && overlay) {
@@ -34,23 +37,15 @@ const FishingActivityOverlay = ({ map, id, name, coordinates, isDeleted, isNotAc
     <div>
       <FishingActivityOverlayElement ref={ref}>
         <ZoneSelected
-          title={`Voir le message ${isDeleted ? 'supprimé ' : ''}${isNotAcknowledged ? 'non acquitté' : ''}`}
           onClick={() => dispatch(navigateToFishingActivity(id))}
+          title={`Voir le message ${isDeleted ? 'supprimé ' : ''}${isNotAcknowledged ? 'non acquitté' : ''}`}
         >
-          {
-            isNotAcknowledged
-              ? <AckNOk/>
-              : null
-          }
-          {
-            isDeleted
-              ? <Deleted/>
-              : null
-          }
-          <ZoneText data-cy={'fishing-activity-name'}>{name}</ZoneText>
+          {isNotAcknowledged ? <AckNOk /> : null}
+          {isDeleted ? <Deleted /> : null}
+          <ZoneText data-cy="fishing-activity-name">{name}</ZoneText>
         </ZoneSelected>
         <TrianglePointer>
-          <TriangleShadow/>
+          <TriangleShadow />
         </TrianglePointer>
       </FishingActivityOverlayElement>
     </div>
@@ -60,7 +55,7 @@ const FishingActivityOverlay = ({ map, id, name, coordinates, isDeleted, isNotAc
 const TrianglePointer = styled.div`
   margin-left: auto;
   margin-right: auto;
-  height: auto; 
+  height: auto;
   width: auto;
 `
 

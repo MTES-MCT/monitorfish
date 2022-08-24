@@ -1,22 +1,23 @@
-import React from 'react'
 import { useDraggable } from '@dnd-kit/core'
+import React from 'react'
+
 import { COLORS } from '../../../constants/constants'
 import { beaconMalfunctionsStages } from '../../../domain/entities/beaconMalfunction'
 
-const Draggable = ({ id, stageId, children }) => {
+function Draggable({ children, id, stageId }) {
   const { attributes, listeners, setNodeRef } = useDraggable({
-    id: id,
     data: {
-      stageId: stageId
+      stageId,
     },
-    disabled: stageId === beaconMalfunctionsStages.ARCHIVED.code
+    disabled: stageId === beaconMalfunctionsStages.ARCHIVED.code,
+    id,
   })
 
   const style = {
-    margin: '0 10px 8px 10px',
     background: COLORS.background,
     color: COLORS.gunMetal,
-    cursor: 'move'
+    cursor: 'move',
+    margin: '0 10px 8px 10px',
   }
 
   return (

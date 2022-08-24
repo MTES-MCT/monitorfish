@@ -1,40 +1,42 @@
 import React from 'react'
 import styled from 'styled-components'
-import YearBeaconMalfunctions from './YearBeaconMalfunctions'
-import { COLORS } from '../../../../constants/constants'
 
-const YearsToBeaconMalfunctionList = props => {
+import { COLORS } from '../../../../constants/constants'
+import YearBeaconMalfunctions from './YearBeaconMalfunctions'
+
+function YearsToBeaconMalfunctionList(props) {
   const {
     /** @type {Object.<string, BeaconMalfunctionResumeAndDetails[]>} */
-    yearsToBeaconMalfunctions,
+    setIsCurrentBeaconMalfunctionDetails,
     /** @type {Date} */
     vesselBeaconMalfunctionsFromDate,
-    setIsCurrentBeaconMalfunctionDetails
+    yearsToBeaconMalfunctions
   } = props
 
-  return <Zone>
-    <Title>Historique des avaries VMS</Title>
-    {
-      yearsToBeaconMalfunctions && Object.keys(yearsToBeaconMalfunctions)?.length
-        ? <List data-cy={'vessel-beacon-malfunctions-history'}>
-          {
-            Object.keys(yearsToBeaconMalfunctions)
-              .sort((a, b) => b - a)
-              .map((year, index) => {
-                return <YearBeaconMalfunctions
+  return (
+    <Zone>
+      <Title>Historique des avaries VMS</Title>
+      {yearsToBeaconMalfunctions && Object.keys(yearsToBeaconMalfunctions)?.length ? (
+        <List data-cy="vessel-beacon-malfunctions-history">
+          {Object.keys(yearsToBeaconMalfunctions)
+            .sort((a, b) => b - a)
+            .map((year, index) => <YearBeaconMalfunctions
                   key={year + index}
                   year={year}
                   yearBeaconMalfunctions={yearsToBeaconMalfunctions[year]}
                   isLastItem={yearsToBeaconMalfunctions[year].length === index + 1}
                   setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
-                />
-              })
-          }
+                />)
+            })}
         </List>
-        : <NoBeaconMalfunction>
-          Aucune avarie {vesselBeaconMalfunctionsFromDate && `depuis ${vesselBeaconMalfunctionsFromDate.getUTCFullYear() + 1}`}
+      ) : (
+        <NoBeaconMalfunction>
+          Aucune avarie{' '}
+          {vesselBeaconMalfunctionsFromDate && `depuis ${vesselBeaconMalfunctionsFromDate.getUTCFullYear() + 1}`}
         </NoBeaconMalfunction>
-    }</Zone>
+      )}
+    </Zone>
+  )
 }
 
 const List = styled.ul`
@@ -48,7 +50,7 @@ const NoBeaconMalfunction = styled.div`
   padding: 10px 0 10px 0;
   color: ${COLORS.gunMetal};
   font-size: 13px;
-  width: 100%
+  width: 100%;
 `
 
 const Zone = styled.div`

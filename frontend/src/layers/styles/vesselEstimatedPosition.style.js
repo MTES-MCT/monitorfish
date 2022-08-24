@@ -1,7 +1,8 @@
-import Style from 'ol/style/Style'
+import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
-import CircleStyle from 'ol/style/Circle'
+import Style from 'ol/style/Style'
+
 import { EstimatedPosition } from '../../domain/entities/estimatedPosition'
 import { getColorWithAlpha } from '../../utils'
 
@@ -24,16 +25,18 @@ export const getEstimatedPositionStyle = feature => {
 
     const style = new Style({
       fill: new Fill({ color: opacity ? color : colorWithAlpha, weight: 4 }),
-      stroke: new Stroke({ color: opacity ? color : colorWithAlpha, width: 3 })
+      stroke: new Stroke({ color: opacity ? color : colorWithAlpha, width: 3 }),
     })
 
     if (isCircle) {
-      style.setImage(new CircleStyle({
-        radius: 3,
-        fill: new Fill({
-          color: colorWithAlpha
-        })
-      }))
+      style.setImage(
+        new CircleStyle({
+          fill: new Fill({
+            color: colorWithAlpha,
+          }),
+          radius: 3,
+        }),
+      )
     }
 
     estimatedPositionStyleCache.set(key, [style])

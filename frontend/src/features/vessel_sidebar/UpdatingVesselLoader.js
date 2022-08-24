@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { COLORS } from '../../constants/constants'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { ReactComponent as VesselSVG } from '../icons/Icone_navire.svg'
-import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 
-const UpdatingVesselLoader = () => {
+import { COLORS } from '../../constants/constants'
+import { MapComponentStyle } from '../commonStyles/MapComponent.style'
+import { ReactComponent as VesselSVG } from '../icons/Icone_navire.svg'
+
+function UpdatingVesselLoader() {
   const isUpdatingVessels = useSelector(state => state.global.isUpdatingVessels)
-  const {
-    vesselSidebarIsOpen,
-    loadingPositions
-  } = useSelector(state => state.vessel)
+  const { loadingPositions, vesselSidebarIsOpen } = useSelector(state => state.vessel)
   const { healthcheckTextWarning } = useSelector(state => state.global)
   const [loadingApp, setLoadingApp] = useState(false)
   const [appIsLoaded, setAppIsLoaded] = useState(false)
@@ -27,31 +25,20 @@ const UpdatingVesselLoader = () => {
 
   return (
     <>
-      {loadingApp
-        ? <FirstLoadWrapper healthcheckTextWarning={healthcheckTextWarning}>
-          <FulfillingBouncingCircleSpinner
-            color={COLORS.background}
-            className={'update-vessels'}
-            size={100}/>
-          <BigVessel/>
-          <Text data-cy={'first-loader'}>Chargement...</Text>
+      {loadingApp ? (
+        <FirstLoadWrapper healthcheckTextWarning={healthcheckTextWarning}>
+          <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.background} size={100} />
+          <BigVessel />
+          <Text data-cy="first-loader">Chargement...</Text>
         </FirstLoadWrapper>
-        : null
-      }
-      <UpdateWrapper
-        healthcheckTextWarning={healthcheckTextWarning}
-        vesselSidebarIsOpen={vesselSidebarIsOpen}>
-        {
-          (isUpdatingVessels || loadingPositions) && !loadingApp
-            ? <>
-              <FulfillingBouncingCircleSpinner
-                color={COLORS.background}
-                className={'update-vessels'}
-                size={30}/>
-              <Vessel/>
-            </>
-            : null
-        }
+      ) : null}
+      <UpdateWrapper healthcheckTextWarning={healthcheckTextWarning} vesselSidebarIsOpen={vesselSidebarIsOpen}>
+        {(isUpdatingVessels || loadingPositions) && !loadingApp ? (
+          <>
+            <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.background} size={30} />
+            <Vessel />
+          </>
+        ) : null}
       </UpdateWrapper>
     </>
   )
@@ -83,7 +70,7 @@ const BigVessel = styled(VesselSVG)`
 const UpdateWrapper = styled(MapComponentStyle)`
   position: absolute;
   top: 30px;
-  right: ${props => props.vesselSidebarIsOpen ? '510px' : '370px'};
+  right: ${props => (props.vesselSidebarIsOpen ? '510px' : '370px')};
   width: 30px;
   transform: translate(-50%, -50%);
 `

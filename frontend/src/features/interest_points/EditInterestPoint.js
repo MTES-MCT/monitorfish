@@ -1,33 +1,32 @@
+import { transform } from 'ol/proj'
 import React, { useCallback, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Radio, RadioGroup } from 'rsuite'
 import styled, { css } from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
-import { MapComponentStyle } from '../commonStyles/MapComponent.style'
-import { Radio, RadioGroup } from 'rsuite'
+import { coordinatesAreDistinct, getCoordinates } from '../../coordinates'
 import { interestPointType } from '../../domain/entities/interestPoints'
-
-import { ReactComponent as GearSVG } from '../icons/Label_engin_de_peche.svg'
+import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
+import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../domain/shared_slices/InterestPoint'
+import saveInterestPointFeature from '../../domain/use_cases/interestPoint/saveInterestPointFeature'
+import { MapComponentStyle } from '../commonStyles/MapComponent.style'
+import SetCoordinates from '../coordinates/SetCoordinates'
 import { ReactComponent as ControlSVG } from '../icons/Label_controle.svg'
+import { ReactComponent as GearSVG } from '../icons/Label_engin_de_peche.svg'
 import { ReactComponent as VesselSVG } from '../icons/Label_segment_de_flotte.svg'
 import { ReactComponent as OtherSVG } from '../icons/Point_interet_autre.svg'
-import SetCoordinates from '../coordinates/SetCoordinates'
-import { useDispatch, useSelector } from 'react-redux'
-import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../domain/shared_slices/InterestPoint'
-import { coordinatesAreDistinct, getCoordinates } from '../../coordinates'
-import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
-import { transform } from 'ol/proj'
-import saveInterestPointFeature from '../../domain/use_cases/interestPoint/saveInterestPointFeature'
 
 // TODO Refactor this component
 // - Move the state logic to the reducer
 // - Use formik (or at least uncontrolled form components)
-const EditInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
+function EditInterestPoint({ close, healthcheckTextWarning, isOpen }) {
   const dispatch = useDispatch()
 
   const {
     /** @type {InterestPoint | null} interestPointBeingDrawed */
     interestPointBeingDrawed,
-    isEditing
+    isEditing,
   } = useSelector(state => state.interestPoint)
 
   /** @type {number[]} coordinates - Coordinates formatted in DD [latitude, longitude] */
@@ -36,40 +35,57 @@ const EditInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
       return []
     }
 
-    const ddCoordinates = getCoordinates(interestPointBeingDrawed.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false)
+    const ddCoordinates = getCoordinates(
+      interestPointBeingDrawed.coordinates,
+      OPENLAYERS_PROJECTION,
+      CoordinatesFormat.DECIMAL_DEGREES,
+      false,
+    )
 
-    return [
-      parseFloat(ddCoordinates[0].replace(/°/g, '')),
-      parseFloat(ddCoordinates[1].replace(/°/g, ''))
-    ]
+    return [parseFloat(ddCoordinates[0].replace(/°/g, '')), parseFloat(ddCoordinates[1].replace(/°/g, ''))]
   }, [interestPointBeingDrawed?.coordinates])
 
-  const updateName = useCallback(name => {
-    if (name && interestPointBeingDrawed?.name !== name) {
-      dispatch(updateInterestPointKeyBeingDrawed({
-        key: 'name',
-        value: name
-      }))
-    }
-  }, [interestPointBeingDrawed?.name])
+  const updateName = useCallback(
+    name => {
+      if (name && interestPointBeingDrawed?.name !== name) {
+        dispatch(
+          updateInterestPointKeyBeingDrawed({
+            key: 'name',
+            value: name,
+          }),
+        )
+      }
+    },
+    [interestPointBeingDrawed?.name],
+  )
 
-  const updateObservations = useCallback(observations => {
-    if (observations && interestPointBeingDrawed?.observations !== observations) {
-      dispatch(updateInterestPointKeyBeingDrawed({
-        key: 'observations',
-        value: observations
-      }))
-    }
-  }, [interestPointBeingDrawed?.observations])
+  const updateObservations = useCallback(
+    observations => {
+      if (observations && interestPointBeingDrawed?.observations !== observations) {
+        dispatch(
+          updateInterestPointKeyBeingDrawed({
+            key: 'observations',
+            value: observations,
+          }),
+        )
+      }
+    },
+    [interestPointBeingDrawed?.observations],
+  )
 
-  const updateType = useCallback(type => {
-    if (type && interestPointBeingDrawed?.type !== type && coordinates?.length) {
-      dispatch(updateInterestPointKeyBeingDrawed({
-        key: 'type',
-        value: type
-      }))
-    }
-  }, [interestPointBeingDrawed?.type, coordinates])
+  const updateType = useCallback(
+    type => {
+      if (type && interestPointBeingDrawed?.type !== type && coordinates?.length) {
+        dispatch(
+          updateInterestPointKeyBeingDrawed({
+            key: 'type',
+            value: type,
+          }),
+        )
+      }
+    },
+    [interestPointBeingDrawed?.type, coordinates],
+  )
 
   /**
    * Compare with previous coordinates and update interest point coordinates
@@ -80,11 +96,17 @@ const EditInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
     if (nextCoordinates?.length) {
       if (!coordinates?.length || coordinatesAreDistinct(nextCoordinates, coordinates)) {
         // Convert to [longitude, latitude] and OpenLayers projection
-        const updatedCoordinates = transform([nextCoordinates[1], nextCoordinates[0]], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-        dispatch(updateInterestPointKeyBeingDrawed({
-          key: 'coordinates',
-          value: updatedCoordinates
-        }))
+        const updatedCoordinates = transform(
+          [nextCoordinates[1], nextCoordinates[0]],
+          WSG84_PROJECTION,
+          OPENLAYERS_PROJECTION,
+        )
+        dispatch(
+          updateInterestPointKeyBeingDrawed({
+            key: 'coordinates',
+            value: updatedCoordinates,
+          }),
+        )
       }
     }
   }, [])
@@ -98,77 +120,53 @@ const EditInterestPoint = ({ healthcheckTextWarning, isOpen, close }) => {
   }
 
   return (
-    <Wrapper
-      data-cy={'save-interest-point'}
-      healthcheckTextWarning={healthcheckTextWarning}
-      isOpen={isOpen}
-    >
-      <Header>
-        Créer un point d&apos;intérêt
-      </Header>
+    <Wrapper data-cy="save-interest-point" healthcheckTextWarning={healthcheckTextWarning} isOpen={isOpen}>
+      <Header>Créer un point d&apos;intérêt</Header>
       <Body>
         <p>Coordonnées</p>
-        <SetCoordinates
-          coordinates={coordinates}
-          updateCoordinates={updateCoordinates}
-        />
+        <SetCoordinates coordinates={coordinates} updateCoordinates={updateCoordinates} />
         <p>Type de point</p>
         <RadioWrapper>
           <RadioGroup
-            name="interestTypeRadio"
             defaultValue={interestPointBeingDrawed?.type || interestPointType.OTHER}
+            name="interestTypeRadio"
             onChange={updateType}
           >
-            <Radio
-              value={interestPointType.CONTROL_ENTITY}
-            >
-              <Control/>
+            <Radio value={interestPointType.CONTROL_ENTITY}>
+              <Control />
               Moyen de contrôle
             </Radio>
-            <Radio
-              value={interestPointType.FISHING_VESSEL}
-            >
-              <Vessel/>
+            <Radio value={interestPointType.FISHING_VESSEL}>
+              <Vessel />
               Navire de pêche
             </Radio>
-            <Radio
-              value={interestPointType.FISHING_GEAR}
-            >
-              <Gear/>
+            <Radio value={interestPointType.FISHING_GEAR}>
+              <Gear />
               Engin de pêche
             </Radio>
-            <Radio
-              data-cy={'interest-point-type-radio-input'}
-              value={interestPointType.OTHER}
-            >
-              <Other/>
+            <Radio data-cy="interest-point-type-radio-input" value={interestPointType.OTHER}>
+              <Other />
               Autre point
             </Radio>
           </RadioGroup>
         </RadioWrapper>
         <p>Libellé du point</p>
         <Name
-          data-cy={'interest-point-name-input'}
-          type='text'
+          data-cy="interest-point-name-input"
           onChange={e => updateName(e.target.value)}
+          type="text"
           value={interestPointBeingDrawed?.name || ''}
         />
         <p>Observations</p>
         <textarea
-          data-cy={'interest-point-observations-input'}
+          data-cy="interest-point-observations-input"
           onChange={e => updateObservations(e.target.value)}
           value={interestPointBeingDrawed?.observations || ''}
         />
-        <OkButton
-          data-cy={'interest-point-save'}
-          onClick={saveInterestPoint}
-        >
+        <OkButton data-cy="interest-point-save" onClick={saveInterestPoint}>
           OK
         </OkButton>
-        <CancelButton
-          disabled={isEditing}
-          onClick={close}
-        >
+        <CancelButton disabled={isEditing} onClick={close}>
           Annuler
         </CancelButton>
       </Body>
@@ -206,7 +204,8 @@ const OkButton = styled.button`
   font-size: 13px;
   color: ${COLORS.gainsboro};
 
-  :hover, :focus {
+  :hover,
+  :focus {
     background: ${COLORS.charcoal};
   }
 `
@@ -272,8 +271,8 @@ const Header = styled.div`
 const Wrapper = styled(MapComponentStyle)`
   width: 306px;
   background: ${COLORS.background};
-  margin-right: ${props => props.isOpen ? '45px' : '-320px'};
-  opacity:  ${props => props.isOpen ? '1' : '0'};
+  margin-right: ${props => (props.isOpen ? '45px' : '-320px')};
+  opacity: ${props => (props.isOpen ? '1' : '0')};
   top: 291px;
   right: 10px;
   border-radius: 2px;

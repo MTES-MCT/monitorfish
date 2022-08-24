@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../constants/constants'
 
 /**
@@ -13,56 +14,51 @@ import { COLORS } from '../../constants/constants'
  * @return {JSX.Element}
  * @constructor
  */
-const SideWindowSubMenuLink = ({ isOpen, menu, isSelected, setSelected, number, oneLine }) => {
+function SideWindowSubMenuLink({ isOpen, isSelected, menu, number, oneLine, setSelected }) {
   const linkStyle = {
-    height: oneLine ? 47 : 64,
-    padding: '0px 20px',
+    alignItems: 'center',
     background: isOpen && isSelected ? COLORS.lightGray : 'unset',
+    borderBottom: isOpen ? `0.5px solid ${COLORS.lightGray}` : 'unset',
     cursor: 'pointer',
     display: 'flex',
-    alignItems: 'center',
-    borderBottom: isOpen ? `0.5px solid ${COLORS.lightGray}` : 'unset',
-    width: isOpen ? 160 : 0,
+    height: oneLine ? 47 : 64,
     opacity: isOpen ? 1 : 0,
-    transition: 'all 0.5s ease'
+    padding: '0px 20px',
+    transition: 'all 0.5s ease',
+    width: isOpen ? 160 : 0,
   }
 
   const textStyle = {
-    maxWidth: isOpen ? oneLine ? 170 : 100 : 0,
     color: isSelected ? COLORS.gunMetal : COLORS.slateGray,
-    height: oneLine ? 22 : 50,
     fontSize: 16,
     fontWeight: 500,
+    height: oneLine ? 22 : 50,
+    maxWidth: isOpen ? (oneLine ? 170 : 100) : 0,
     opacity: isOpen ? 1 : 0,
-    width: isOpen ? 160 : 0,
-    transition: 'max-width 0.5s ease, opacity 0.5s ease',
-    overflowY: 'hidden',
     overflowX: !oneLine ? 'unset' : 'hidden',
+    overflowY: 'hidden',
     textOverflow: !oneLine ? 'unset' : 'clip',
-    whiteSpace: !oneLine ? 'unset' : 'nowrap'
+    transition: 'max-width 0.5s ease, opacity 0.5s ease',
+    whiteSpace: !oneLine ? 'unset' : 'nowrap',
+    width: isOpen ? 160 : 0,
   }
 
-  return <Link
-    data-cy={`side-window-sub-menu-${menu.name}`}
-    selected={isSelected}
-    onClick={() => setSelected(menu)}
-    oneLine={oneLine}
-    style={linkStyle}
-  >
-    <Text style={textStyle}>
-      { menu.name }
-    </Text>
-    {
-      number
-        ? <CircleWithKeyMetric
-          data-cy={`side-window-sub-menu-${menu.name}-number`}
-          style={circleMetricStyle(isOpen)}
-        >
+  return (
+    <Link
+      data-cy={`side-window-sub-menu-${menu.name}`}
+      onClick={() => setSelected(menu)}
+      oneLine={oneLine}
+      selected={isSelected}
+      style={linkStyle}
+    >
+      <Text style={textStyle}>{menu.name}</Text>
+      {number ? (
+        <CircleWithKeyMetric data-cy={`side-window-sub-menu-${menu.name}-number`} style={circleMetricStyle(isOpen)}>
           {number}
-      </CircleWithKeyMetric>
-        : null
-    }
-  </Link>
+        </CircleWithKeyMetric>
+      ) : null}
+    </Link>
+  )
 }
 
 const Text = styled.div``
@@ -71,19 +67,19 @@ const Link = styled.div``
 
 const CircleWithKeyMetric = styled.span``
 const circleMetricStyle = isOpen => ({
-  display: 'inline-block',
-  height: 7,
-  borderRadius: 2,
-  padding: '0px 6px 12px 5px',
-  color: 'white',
   background: COLORS.charcoal,
-  fontSize: 13,
+  borderRadius: 2,
+  color: 'white',
+  display: 'inline-block',
   flexShrink: 0,
+  fontSize: 13,
+  height: 7,
+  lineHeight: '17px',
   marginLeft: 'auto',
   minWidth: 7,
-  lineHeight: '17px',
   opacity: isOpen ? 1 : 0,
-  transition: 'opacity 0.5s ease'
+  padding: '0px 6px 12px 5px',
+  transition: 'opacity 0.5s ease',
 })
 
 export default SideWindowSubMenuLink

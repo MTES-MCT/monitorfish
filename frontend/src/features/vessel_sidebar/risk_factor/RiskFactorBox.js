@@ -1,28 +1,31 @@
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
 import React from 'react'
+import styled from 'styled-components'
 
-export const RiskFactorBox = ({ hide, color, marginRight, isBig, children }) => {
+import { COLORS } from '../../../constants/constants'
+
+export function RiskFactorBox({ children, color, hide, isBig, marginRight }) {
   const riskFactorBoxStyle = {
-    height: isBig ? 20 : 17,
-    paddingTop: isBig ? 4 : 1,
+    background: color,
+    color: COLORS.background,
+    display: 'inline-block',
     fontSize: isBig ? 14 : 13,
     fontWeight: 500,
-    display: 'inline-block',
-    userSelect: 'none',
-    color: COLORS.background,
-    background: color,
+    borderRadius: 1,
+    height: isBig ? 20 : 17,
     lineHeight: '14px',
-    textAlign: 'center',
     marginRight: marginRight || 8,
+    paddingTop: isBig ? 4 : 1,
+    textAlign: 'center',
+    userSelect: 'none',
     visibility: hide ? 'hidden' : 'visible',
     width: hide ? 13 : isBig ? 36 : 28,
-    borderRadius: 1
   }
 
-  return <RiskFactorBoxDOM data-cy={'risk-factor'} style={riskFactorBoxStyle}>
-    {children}
-  </RiskFactorBoxDOM>
+  return (
+    <RiskFactorBoxDOM data-cy="risk-factor" style={riskFactorBoxStyle}>
+      {children}
+    </RiskFactorBoxDOM>
+  )
 }
 
 const RiskFactorBoxDOM = styled.div``

@@ -1,62 +1,42 @@
-import { COLORS } from '../../../constants/constants'
 import React from 'react'
 import styled from 'styled-components'
-import { ReactComponent as RiskFactorImpactSVG } from '../../icons/Note_impact_poisson.svg'
+
+import { COLORS } from '../../../constants/constants'
 import { ReactComponent as RiskFactorControlSVG } from '../../icons/Note_de_controle_gyrophare.svg'
+import { ReactComponent as RiskFactorImpactSVG } from '../../icons/Note_impact_poisson.svg'
 import { ReactComponent as RiskFactorInfractionsSVG } from '../../icons/Note_infraction_stop.svg'
 import { RiskFactorBox } from './RiskFactorBox'
 
-const RiskFactorExplanationSchema = () => {
+function RiskFactorExplanationSchema() {
   return (
     <Schema>
       <GlobalBox>
-        <RiskFactorBox
-          isBig={true}
-          color={COLORS.charcoal}
-        >
+        <RiskFactorBox color={COLORS.charcoal} isBig>
           3.3
         </RiskFactorBox>
         Note de risque
       </GlobalBox>
       <SchemaText>=</SchemaText>
       <Box>
-        <RiskFactorImpact/>
-        <RiskFactorExponent>
-          0.2
-        </RiskFactorExponent>
-        <RiskFactorBox
-          color={COLORS.slateGray}
-        >
-          2.6
-        </RiskFactorBox>
+        <RiskFactorImpact />
+        <RiskFactorExponent>0.2</RiskFactorExponent>
+        <RiskFactorBox color={COLORS.slateGray}>2.6</RiskFactorBox>
         Score d&apos;impact
       </Box>
       <SchemaText>x</SchemaText>
       <Box>
         <MoreTopPadding>
-          <RiskFactorInfractions/>
-          <RiskFactorExponent>
-            0.3
-          </RiskFactorExponent>
-          <RiskFactorBox
-            color={COLORS.slateGray}
-          >
-            3
-          </RiskFactorBox>
+          <RiskFactorInfractions />
+          <RiskFactorExponent>0.3</RiskFactorExponent>
+          <RiskFactorBox color={COLORS.slateGray}>3</RiskFactorBox>
           Score de probabilité d&apos;infraction
         </MoreTopPadding>
       </Box>
       <SchemaText>x</SchemaText>
       <Box>
         <RiskFactorControl />
-        <RiskFactorExponent>
-          0.5
-        </RiskFactorExponent>
-        <RiskFactorBox
-          color={COLORS.slateGray}
-        >
-          3.5
-        </RiskFactorBox>
+        <RiskFactorExponent>0.5</RiskFactorExponent>
+        <RiskFactorBox color={COLORS.slateGray}>3.5</RiskFactorBox>
         Score de &quot;détéctabilité&quot; (priorité et taux de contrôle)
       </Box>
     </Schema>

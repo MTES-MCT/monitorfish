@@ -1,34 +1,38 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
-import { COLORS } from '../../../constants/constants'
-import LayersEnum from '../../../domain/entities/layers'
-import VesselEstimatedPositionCard from '../cards/VesselEstimatedPositionCard'
-import { getCoordinates } from '../../../coordinates'
-import { WSG84_PROJECTION } from '../../../domain/entities/map'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+import styled from 'styled-components'
 
-const VesselEstimatedPositionCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
+import { COLORS } from '../../../constants/constants'
+import { getCoordinates } from '../../../coordinates'
+import LayersEnum from '../../../domain/entities/layers'
+import { WSG84_PROJECTION } from '../../../domain/entities/map'
+import VesselEstimatedPositionCard from '../cards/VesselEstimatedPositionCard'
+
+function VesselEstimatedPositionCardOverlay({ feature, map, pointerMoveEventPixel }) {
   const { coordinatesFormat } = useSelector(state => state.map)
   const [coordinates, setCoordinates] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
 
-  const overlayCallback = useCallback(ref => {
-    overlayRef.current = ref
-    if (ref) {
-      overlayObjectRef.current = new Overlay({
-        element: ref,
-        autoPan: true,
-        autoPanAnimation: {
-          duration: 400
-        },
-        className: 'ol-overlay-container ol-selectable'
-      })
-    } else {
-      overlayObjectRef.current = null
-    }
-  }, [overlayRef, overlayObjectRef])
+  const overlayCallback = useCallback(
+    ref => {
+      overlayRef.current = ref
+      if (ref) {
+        overlayObjectRef.current = new Overlay({
+          autoPan: true,
+          autoPanAnimation: {
+            duration: 400,
+          },
+          className: 'ol-overlay-container ol-selectable',
+          element: ref,
+        })
+      } else {
+        overlayObjectRef.current = null
+      }
+    },
+    [overlayRef, overlayObjectRef],
+  )
 
   useEffect(() => {
     if (map) {
@@ -41,8 +45,8 @@ const VesselEstimatedPositionCardOverlay = ({ map, pointerMoveEventPixel, featur
       if (feature?.getId()?.toString()?.includes(`${LayersEnum.VESSEL_ESTIMATED_POSITION.code}:circle`)) {
         overlayRef.current.style.display = 'block'
 
-        const latitude = feature.estimatedPosition.latitude
-        const longitude = feature.estimatedPosition.longitude
+        const { latitude } = feature.estimatedPosition
+        const { longitude } = feature.estimatedPosition
         const coordinates = getCoordinates([longitude, latitude], WSG84_PROJECTION, coordinatesFormat)
         setCoordinates(coordinates)
         if (pointerMoveEventPixel) {
@@ -56,9 +60,7 @@ const VesselEstimatedPositionCardOverlay = ({ map, pointerMoveEventPixel, featur
 
   return (
     <VesselEstimatedPositionCardOverlayComponent ref={overlayCallback}>
-      {
-        coordinates ? <VesselEstimatedPositionCard coordinates={coordinates}/> : null
-      }
+      {coordinates ? <VesselEstimatedPositionCard coordinates={coordinates} /> : null}
     </VesselEstimatedPositionCardOverlayComponent>
   )
 }

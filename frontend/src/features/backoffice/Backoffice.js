@@ -2,16 +2,15 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
+import BaseLayer from '../../layers/BaseLayer'
+import RegulatoryZoneMetadata from '../layers/regulatory/RegulatoryZoneMetadata'
 import BaseMap from '../map/BaseMap'
 import LawType from './list_regulation/LawType'
 import SearchRegulations from './list_regulation/SearchRegulations'
-import RegulatoryZoneMetadata from '../layers/regulatory/RegulatoryZoneMetadata'
-import BaseLayer from '../../layers/BaseLayer'
 import RegulatoryLayers from '../../layers/RegulatoryLayers'
 import AdministrativeLayers from '../../layers/AdministrativeLayers'
 import RegulatoryPreviewLayer from '../../layers/RegulatoryPreviewLayer'
 import ShowRegulatoryMetadata from '../map/ShowRegulatoryMetadata'
-
 import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
 import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
 import closeRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
@@ -23,24 +22,22 @@ import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory
 import layer from '../../domain/shared_slices/Layer'
 import getAllSpecies from '../../domain/use_cases/species/getAllSpecies'
 
-const Backoffice = () => {
+function Backoffice() {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
   const gears = useSelector(state => state.gear.gears)
   const dispatch = useDispatch()
   const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState(null)
-  const {
-    resetShowedLayer
-  } = layer.backoffice.actions
+  const { resetShowedLayer } = layer.backoffice.actions
 
   const handleMovingAndZoom = () => {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
   const {
-    regulatoryZoneMetadataPanelIsOpen,
+    layersTopicsByRegTerritory,
     loadingRegulatoryZoneMetadata,
     regulatoryZoneMetadata,
-    layersTopicsByRegTerritory
+    regulatoryZoneMetadataPanelIsOpen
   } = useSelector(state => state.regulatory)
 
   const { regulationSaved } = useSelector(state => state.regulation)
@@ -60,7 +57,8 @@ const Backoffice = () => {
    */
   useEffect(() => {
     initBackoffice()
-    return () => {
+    
+return () => {
       dispatch(resetShowedLayer('backoffice'))
     }
   }, [])
@@ -78,8 +76,8 @@ const Backoffice = () => {
     dispatch(closeRegulatoryZoneMetadata())
   }, [])
 
-  const displayRegulatoryZoneListByLawType = useCallback((territory, regZoneByLawType) => {
-    return (regZoneByLawType && Object.keys(regZoneByLawType)
+  const displayRegulatoryZoneListByLawType = useCallback(
+    (territory, regZoneByLawType) => (regZoneByLawType && Object.keys(regZoneByLawType)
       .sort()
       .length > 0
       ? Object.keys(regZoneByLawType).map(lawType => {
@@ -91,18 +89,24 @@ const Backoffice = () => {
           territory={territory}
         />
       })
-      : <EmptyResult>Aucun résultat</EmptyResult>)
-  }, [foundRegulatoryZonesByRegTerritory])
+      : <EmptyResult>Aucun résultat</EmptyResult>), [foundRegulatoryZonesByRegTerritory])
 
-  const displayRegulatoryZoneByRegTerritory = useCallback(territory => {
-    const territoryRegList = foundRegulatoryZonesByRegTerritory[territory]
-    return territoryRegList
-      ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(territory, territoryRegList)}</RegulatoryZoneListByLawTypeList>
-      : <EmptyResult>Aucune zone pour ce territoire</EmptyResult>
-  }, [foundRegulatoryZonesByRegTerritory])
+  const displayRegulatoryZoneByRegTerritory = useCallback(
+    territory => {
+      const territoryRegList = foundRegulatoryZonesByRegTerritory[territory]
+    
+return territoryRegList
+        <RegulatoryZoneListByLawTypeList>
+          {displayRegulatoryZoneListByLawType(territory, territoryRegList)}
+        </RegulatoryZoneListByLawTypeList>
+      ) : (
+        <EmptyResult>Aucune zone pour ce territoire</EmptyResult>
+      )
+    },
+    [foundRegulatoryZonesByRegTerritory],
+  )
 
-  const searchResultList = useMemo(() => {
-    return (
+  const searchResultList = useMemo(() => (
       <SearchResultList>
         <Columns>
           <Territory key={FRANCE}>
@@ -118,44 +122,43 @@ const Backoffice = () => {
           <TerritoryName>{UK}</TerritoryName>
           {displayRegulatoryZoneByRegTerritory(UK)}
         </Territory>
-      </SearchResultList>)
-  }, [foundRegulatoryZonesByRegTerritory])
+      </SearchResultList>), [foundRegulatoryZonesByRegTerritory])
 
   return (
     <>
       <BackofficeContainer>
-        <RegulatoryZonePanel
-          regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-        >
+        <RegulatoryZonePanel regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
           <SearchRegulations
-            setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
             regulatoryZoneListByRegTerritory={layersTopicsByRegTerritory}
+            setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
           />
-          {layersTopicsByRegTerritory && layersTopicsByRegTerritory !== {}
-            ? searchResultList
-            : <div>En attente de chargement</div>}
+          {layersTopicsByRegTerritory && layersTopicsByRegTerritory !== {} ? (
+            searchResultList
+          ) : (
+            <div>En attente de chargement</div>
+          )}
         </RegulatoryZonePanel>
-        <BaseMap handleMovingAndZoom={handleMovingAndZoom} >
-          <BaseLayer/>
-          <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
-          <AdministrativeLayers/>
-          <ShowRegulatoryMetadata hasClickEvent/>
-          <RegulatoryPreviewLayer/>
+        <BaseMap handleMovingAndZoom={handleMovingAndZoom}>
+          <BaseLayer />
+          <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
+          <AdministrativeLayers />
+          <ShowRegulatoryMetadata hasClickEvent />
+          <RegulatoryPreviewLayer />
         </BaseMap>
       </BackofficeContainer>
-      {regulatoryZoneMetadataPanelIsOpen && <MetadataWrapper
-        regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-      >
-        <RegulatoryZoneMetadata
-          loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
-          regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-          regulatoryZoneMetadata={regulatoryZoneMetadata}
-          callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+      {regulatoryZoneMetadataPanelIsOpen && (
+        <MetadataWrapper regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
+          <RegulatoryZoneMetadata
+            callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+          fromBackoffice={true}
           gears={gears}
           layersSidebarIsOpen={true}
-          fromBackoffice={true}
-        />
-      </MetadataWrapper>}
+          loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
+          regulatoryZoneMetadata={regulatoryZoneMetadata}
+          regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+          />
+        </MetadataWrapper>
+      )}
     </>
   )
 }
@@ -186,7 +189,7 @@ const Territory = styled.div`
   box-sizing: border-box;
   max-width: 50%;
   min-width: 250px;
-  margin-right: ${props => props.isLast ? '0px' : '20px'}
+  margin-right: ${props => (props.isLast ? '0px' : '20px')};
 `
 
 const TerritoryName = styled.div`
@@ -223,7 +226,7 @@ const RegulatoryZonePanel = styled.div`
 `
 
 const MetadataWrapper = styled.div`
-  display: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none'};
+  display: ${props => (props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none')};
   position: absolute;
   top: 0;
   left: calc(50% + 72px);
@@ -233,8 +236,8 @@ const MetadataWrapper = styled.div`
   flex-direction: column;
   max-height: 95vh;
   transition: all 0.5s;
-  opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0'};
-  background: linear-gradient(${COLORS.gainsboro} 70%, rgb(0,0,0,0));
+  opacity: ${props => (props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0')};
+  background: linear-gradient(${COLORS.gainsboro} 70%, rgb(0, 0, 0, 0));
 `
 
 export default Backoffice

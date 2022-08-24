@@ -1,27 +1,22 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
-import RegulatoryLayerTopic from './RegulatoryTopic'
-import { COLORS } from '../../../constants/constants'
-import removeRegulatoryZoneFromMySelection from '../../../domain/use_cases/layer/regulation/removeRegulatoryZoneFromMySelection'
-import LayersEnum, { layersType } from '../../../domain/entities/layers'
-import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 import { useDispatch, useSelector } from 'react-redux'
-import layer from '../../../domain/shared_slices/Layer'
-import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
-import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import styled from 'styled-components'
 
-const RegulatoryLayers = props => {
+import { COLORS } from '../../../constants/constants'
+import LayersEnum, { layersType } from '../../../domain/entities/layers'
+import layer from '../../../domain/shared_slices/Layer'
+import hideLayer from '../../../domain/use_cases/layer/hideLayer'
+import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import removeRegulatoryZoneFromMySelection from '../../../domain/use_cases/layer/regulation/removeRegulatoryZoneFromMySelection'
+import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
+import RegulatoryLayerTopic from './RegulatoryTopic'
+
+function RegulatoryLayers(props) {
   const dispatch = useDispatch()
-  const {
-    namespace,
-    hideLayersListWhenSearching,
-    regulatoryLayersAddedToMySelection
-  } = props
+  const { hideLayersListWhenSearching, namespace, regulatoryLayersAddedToMySelection } = props
   const { setLayersSideBarOpenedZone } = layer[namespace].actions
 
-  const {
-    selectedRegulatoryLayers
-  } = useSelector(state => state.regulatory)
+  const { selectedRegulatoryLayers } = useSelector(state => state.regulatory)
   const { layersSidebarOpenedLayer } = useSelector(state => state.layer)
 
   const [showRegulatoryLayers, setShowRegulatoryLayers] = useState(false)
@@ -33,11 +28,11 @@ const RegulatoryLayers = props => {
   }, [layersSidebarOpenedLayer, setShowRegulatoryLayers])
 
   const increaseNumberOfZonesOpened = useCallback(number => {
-    setNumberOfZonesOpened((numberOfZonesOpened) => numberOfZonesOpened + number)
+    setNumberOfZonesOpened(numberOfZonesOpened => numberOfZonesOpened + number)
   }, [])
 
   const decreaseNumberOfZonesOpened = useCallback(number => {
-    setNumberOfZonesOpened((numberOfZonesOpened) => numberOfZonesOpened - number)
+    setNumberOfZonesOpened(numberOfZonesOpened => numberOfZonesOpened - number)
   }, [])
 
   useEffect(() => {
@@ -46,25 +41,28 @@ const RegulatoryLayers = props => {
     }
   }, [numberOfZonesOpened])
 
-  const callRemoveRegulatoryLayerFromMySelection = useCallback((regulatoryZone, numberOfZones, namespace) => {
-    decreaseNumberOfZonesOpened(numberOfZones)
-    dispatch(hideLayer({
-      type: LayersEnum.REGULATORY.code,
-      ...regulatoryZone,
-      namespace
-    }))
-    dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
-  }, [numberOfZonesOpened])
+  const callRemoveRegulatoryLayerFromMySelection = useCallback(
+    (regulatoryZone, numberOfZones, namespace) => {
+      decreaseNumberOfZonesOpened(numberOfZones)
+      dispatch(
+        hideLayer({
+          type: LayersEnum.REGULATORY.code,
+          ...regulatoryZone,
+          namespace,
+        }),
+      )
+      dispatch(removeRegulatoryZoneFromMySelection(regulatoryZone))
+    },
+    [numberOfZonesOpened],
+  )
 
   useEffect(() => {
     if (firstUpdate) {
       firstUpdate.current = false
+    } else if (hideLayersListWhenSearching) {
+      setShowRegulatoryLayers(false)
     } else {
-      if (hideLayersListWhenSearching) {
-        setShowRegulatoryLayers(false)
-      } else {
-        setShowRegulatoryLayers(true)
-      }
+      setShowRegulatoryLayers(true)
     }
   }, [hideLayersListWhenSearching])
 
@@ -80,39 +78,39 @@ const RegulatoryLayers = props => {
   return (
     <>
       <RegulatoryLayersTitle
-        data-cy={'regulatory-layers-my-zones'}
+        data-cy="regulatory-layers-my-zones"
         onClick={() => onTitleClicked()}
         regulatoryLayersAddedToMySelection={regulatoryLayersAddedToMySelection}
         showRegulatoryLayers={showRegulatoryLayers}
       >
-        Mes zones réglementaires <ChevronIcon $isOpen={showRegulatoryLayers}/>
+        Mes zones réglementaires <ChevronIcon $isOpen={showRegulatoryLayers} />
       </RegulatoryLayersTitle>
-      {selectedRegulatoryLayers
-        ? <RegulatoryLayersList
-          className={'smooth-scroll'}
+      {selectedRegulatoryLayers ? (
+        <RegulatoryLayersList
+          className="smooth-scroll"
+          showRegulatoryLayers={showRegulatoryLayers}
           topicLength={Object.keys(selectedRegulatoryLayers).length}
           zoneLength={numberOfZonesOpened}
-          showRegulatoryLayers={showRegulatoryLayers}
         >
-          {
-            selectedRegulatoryLayers && Object.keys(selectedRegulatoryLayers).length > 0
-              ? Object.keys(selectedRegulatoryLayers).map((regulatoryTopic, index) => {
-                return (<RegulatoryLayerTopic
-                  isEditable={false}
-                  key={regulatoryTopic}
-                  increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
-                  decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
-                  callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryLayerFromMySelection}
-                  regulatoryTopic={regulatoryTopic}
-                  regulatoryZones={selectedRegulatoryLayers[regulatoryTopic]}
-                  isLastItem={Object.keys(selectedRegulatoryLayers).length === index + 1}
-                  allowRemoveZone={true}
-                />)
-              })
-              : <NoLayerSelected>Aucune zone sélectionnée</NoLayerSelected>
-          }
+          {selectedRegulatoryLayers && Object.keys(selectedRegulatoryLayers).length > 0 ? (
+            Object.keys(selectedRegulatoryLayers).map((regulatoryTopic, index) => (
+              <RegulatoryLayerTopic
+                key={regulatoryTopic}
+                allowRemoveZone
+                callRemoveRegulatoryZoneFromMySelection={callRemoveRegulatoryLayerFromMySelection}
+                decreaseNumberOfZonesOpened={decreaseNumberOfZonesOpened}
+                increaseNumberOfZonesOpened={increaseNumberOfZonesOpened}
+                isEditable={false}
+                isLastItem={Object.keys(selectedRegulatoryLayers).length === index + 1}
+                regulatoryTopic={regulatoryTopic}
+                regulatoryZones={selectedRegulatoryLayers[regulatoryTopic]}
+              />
+            ))
+          ) : (
+            <NoLayerSelected>Aucune zone sélectionnée</NoLayerSelected>
+          )}
         </RegulatoryLayersList>
-        : null}
+      ) : null}
     </>
   )
 }
@@ -129,30 +127,30 @@ const RegulatoryLayersTitle = styled.div`
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  border-bottom-left-radius: ${props => props.showRegulatoryLayers ? '0' : '2px'};
-  border-bottom-right-radius: ${props => props.showRegulatoryLayers ? '0' : '2px'};
+  border-bottom-left-radius: ${props => (props.showRegulatoryLayers ? '0' : '2px')};
+  border-bottom-right-radius: ${props => (props.showRegulatoryLayers ? '0' : '2px')};
   background: ${COLORS.charcoal};
 
-  animation: ${props => props.regulatoryLayersAddedToMySelection ? 'blink' : ''} 0.3s ease forwards;
+  animation: ${props => (props.regulatoryLayersAddedToMySelection ? 'blink' : '')} 0.3s ease forwards;
 
   @keyframes blink {
-    0%   {
-        background: ${COLORS.lightGray};
+    0% {
+      background: ${COLORS.lightGray};
     }
-    20%   {
-        background: ${COLORS.charcoal};
+    20% {
+      background: ${COLORS.charcoal};
     }
     40% {
-        background: ${COLORS.charcoal};
+      background: ${COLORS.charcoal};
     }
-    60%   {
-        background: ${COLORS.lightGray};
+    60% {
+      background: ${COLORS.lightGray};
     }
-    80%   {
-        background: ${COLORS.lightGray};
+    80% {
+      background: ${COLORS.lightGray};
     }
     100% {
-        background: ${COLORS.charcoal};
+      background: ${COLORS.charcoal};
     }
   }
 
@@ -174,11 +172,12 @@ const RegulatoryLayersList = styled.ul`
   max-height: 70vh;
   overflow-x: hidden;
   color: ${COLORS.gunMetal};
-  height: ${props => props.showRegulatoryLayers
-  ? props.topicLength || props.zoneLength
-      ? 40 * props.topicLength + props.zoneLength * 36
-      : 40
-  : 0}px;
+  height: ${props =>
+    props.showRegulatoryLayers
+      ? props.topicLength || props.zoneLength
+        ? 40 * props.topicLength + props.zoneLength * 36
+        : 40
+      : 0}px;
   transition: 0.5s all;
 `
 

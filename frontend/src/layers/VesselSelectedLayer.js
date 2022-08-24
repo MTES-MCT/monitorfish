@@ -1,35 +1,38 @@
-import React, { useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
-import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
 import { transform } from 'ol/proj'
+import VectorSource from 'ol/source/Vector'
+import React, { useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import Layers from '../domain/entities/layers'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import { Vessel } from '../domain/entities/vessel'
-
 import { getSelectedVesselStyle } from './styles/vessel.style'
 
-const VesselSelectedLayer = ({ map }) => {
+function VesselSelectedLayer({ map }) {
   const { selectedVessel, vesselsTracksShowed } = useSelector(state => state.vessel)
   const { selectedBaseLayer } = useSelector(state => state.map)
 
-  const vectorSourceRef = useRef(new VectorSource({
-    features: [],
-    wrapX: false
-  }))
+  const vectorSourceRef = useRef(
+    new VectorSource({
+      features: [],
+      wrapX: false,
+    }),
+  )
   const isLight = Vessel.iconIsLight(selectedBaseLayer)
   const style = getSelectedVesselStyle({ isLight })
-  const layerRef = useRef(new Vector({
-    renderBuffer: 4,
-    source: vectorSourceRef.current,
-    zIndex: Layers.SELECTED_VESSEL.zIndex,
-    updateWhileAnimating: true,
-    updateWhileInteracting: true,
-    style
-  }))
+  const layerRef = useRef(
+    new Vector({
+      renderBuffer: 4,
+      source: vectorSourceRef.current,
+      style,
+      updateWhileAnimating: true,
+      updateWhileInteracting: true,
+      zIndex: Layers.SELECTED_VESSEL.zIndex,
+    }),
+  )
 
   useEffect(() => {
     layerRef.current?.setStyle(getSelectedVesselStyle({ isLight }))
@@ -52,10 +55,14 @@ const VesselSelectedLayer = ({ map }) => {
     vectorSourceRef.current?.clear(true)
 
     if (selectedVessel) {
-      const coordinates = transform([selectedVessel.longitude, selectedVessel.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+      const coordinates = transform(
+        [selectedVessel.longitude, selectedVessel.latitude],
+        WSG84_PROJECTION,
+        OPENLAYERS_PROJECTION,
+      )
       const feature = new Feature({
         ...selectedVessel,
-        geometry: new Point(coordinates)
+        geometry: new Point(coordinates),
       })
       vectorSourceRef.current?.addFeature(feature)
     }
@@ -65,9 +72,10 @@ const VesselSelectedLayer = ({ map }) => {
       const features = vesselsTracks?.map(vesselTrack => {
         const feature = new Feature({
           course: vesselTrack.course,
-          geometry: new Point(vesselTrack.coordinates)
+          geometry: new Point(vesselTrack.coordinates),
         })
         feature.setId(vesselTrack.vesselId)
+
         return feature
       })
       vectorSourceRef.current?.addFeatures(features)

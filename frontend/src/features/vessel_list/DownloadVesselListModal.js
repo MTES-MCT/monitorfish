@@ -1,35 +1,36 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { Checkbox, CheckboxGroup, Modal } from 'rsuite'
-import { COLORS } from '../../constants/constants'
 import { ExportToCsv } from 'export-to-csv'
 import countries from 'i18n-iso-countries'
-import { formatToCSVColumnsForExport, getDate } from '../../utils'
-import { CSVOptions } from './dataFormatting'
-import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
-import { getCoordinates } from '../../coordinates'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { Checkbox, CheckboxGroup, Modal } from 'rsuite'
+import styled from 'styled-components'
+
+import { COLORS } from '../../constants/constants'
+import { getCoordinates } from '../../coordinates'
+import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+import { formatToCSVColumnsForExport, getDate } from '../../utils'
 import StyledModalHeader from '../commonComponents/StyledModalHeader'
+import { CSVOptions } from './dataFormatting'
 
 const optionsCSV = {
+  decimalSeparator: '.',
   fieldSeparator: ',',
   quoteStrings: '"',
-  decimalSeparator: '.',
   showLabels: true,
   showTitle: false,
-  useTextFile: false,
   useBom: true,
-  useKeysAsHeaders: true
+  useKeysAsHeaders: true,
+  useTextFile: false,
 }
 
 const csvExporter = new ExportToCsv(optionsCSV)
 
-const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
+function DownloadVesselListModal({ filteredVessels, isOpen, setIsOpen }) {
   const { coordinatesFormat } = useSelector(state => state.map)
   const [checkboxState, setCheckboxState] = useState({
     checkAll: true,
     indeterminate: false,
-    valuesChecked: []
+    valuesChecked: [],
   })
 
   useEffect(() => {
@@ -43,48 +44,56 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
       CSVOptions.gears.code,
       CSVOptions.lastControlDateTime.code,
       CSVOptions.lastControlInfraction.code,
-      CSVOptions.postControlComment.code
+      CSVOptions.postControlComment.code,
     ]
 
     const values = Object.keys(CSVOptions)
       .map(value => CSVOptions[value].code)
       .filter(value => !columnsNotCheckedByDefault.includes(value))
 
-    setCheckboxState((checkboxState) => ({ ...checkboxState, valuesChecked: values || [] }))
+    setCheckboxState(checkboxState => ({ ...checkboxState, valuesChecked: values || [] }))
   }, [])
 
   const handleCheckAll = (value, checked) => {
     const nextValue = checked ? Object.keys(CSVOptions).map(value => CSVOptions[value].code) : []
 
-    setCheckboxState(({
+    setCheckboxState({
       checkAll: checked,
       indeterminate: false,
-      valuesChecked: nextValue
-    }))
+      valuesChecked: nextValue,
+    })
   }
 
   const handleChange = value => {
-    setCheckboxState(({
+    setCheckboxState({
       checkAll: value.length === CSVOptions.length,
       indeterminate: value.length > 0 && value.length < Object.keys(CSVOptions).length,
-      valuesChecked: value
-    }))
+      valuesChecked: value,
+    })
   }
 
   const download = () => {
     const objectsToExports = filteredVessels
       .filter(vessel => vessel.checked)
       .map(vessel => {
-        vessel.vesselProperties.latitude = getCoordinates(vessel.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0]
-          .replace(/[ ]/g, '')
-        vessel.vesselProperties.longitude = getCoordinates(vessel.coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]
-          .replace(/[ ]/g, '')
+        vessel.vesselProperties.latitude = getCoordinates(
+          vessel.coordinates,
+          OPENLAYERS_PROJECTION,
+          coordinatesFormat,
+        )[0].replace(/[ ]/g, '')
+        vessel.vesselProperties.longitude = getCoordinates(
+          vessel.coordinates,
+          OPENLAYERS_PROJECTION,
+          coordinatesFormat,
+        )[1].replace(/[ ]/g, '')
 
         const filteredVesselObject = {}
         checkboxState.valuesChecked.forEach(valueChecked => {
           switch (valueChecked) {
             case CSVOptions.flagState.code:
-              filteredVesselObject[CSVOptions.flagState.code] = vessel?.vesselProperties?.flagState ? countries.getName(vessel?.vesselProperties?.flagState, 'fr') : ''
+              filteredVesselObject[CSVOptions.flagState.code] = vessel?.vesselProperties?.flagState
+                ? countries.getName(vessel?.vesselProperties?.flagState, 'fr')
+                : ''
               break
             default: {
               const value = vessel[valueChecked] || vessel?.vesselProperties[valueChecked] || ''
@@ -105,18 +114,10 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
   }
 
   return (
-    <Modal
-      size={'sm'}
-      backdrop
-      open={isOpen}
-      style={{ marginTop: 100 }}
-      onClose={() => setIsOpen(false)}
-    >
+    <Modal backdrop onClose={() => setIsOpen(false)} open={isOpen} size="sm" style={{ marginTop: 100 }}>
       <StyledModalHeader>
         <Modal.Title>
-          <Title>
-            Télécharger la liste des navires
-          </Title>
+          <Title>Télécharger la liste des navires</Title>
         </Modal.Title>
       </StyledModalHeader>
       <Modal.Body>
@@ -124,51 +125,67 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
         <StyledCheckboxGroup
           inline
           name="checkboxList"
-          value={checkboxState.valuesChecked || []}
           onChange={handleChange}
+          value={checkboxState.valuesChecked || []}
         >
           <div>
-            <Checkbox value={CSVOptions.riskFactor.code}>Note de risque</Checkbox><br/>
-            <Checkbox value={CSVOptions.vesselName.code}>Nom</Checkbox><br/>
-            <Checkbox value={CSVOptions.externalReferenceNumber.code}>Marquage extérieur</Checkbox><br/>
-            <Checkbox value={CSVOptions.ircs.code}>Call Sign (IRCS)</Checkbox><br/>
-            <Checkbox value={CSVOptions.mmsi.code}>MMSI</Checkbox><br/>
-            <Checkbox value={CSVOptions.internalReferenceNumber.code}>CFR</Checkbox><br/>
-            <Checkbox value={CSVOptions.flagState.code}>Nationalité</Checkbox><br/>
-            <Checkbox value={CSVOptions.district.code}>Quartier</Checkbox><br/>
-            <Checkbox value={CSVOptions.lastControlDateTime.code}>Dernier contrôle</Checkbox><br/>
-            <Checkbox value={CSVOptions.lastControlInfraction.code}>Infraction</Checkbox><br/>
-            <Checkbox value={CSVOptions.postControlComment.code}>Observations</Checkbox><br/>
+            <Checkbox value={CSVOptions.riskFactor.code}>Note de risque</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.vesselName.code}>Nom</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.externalReferenceNumber.code}>Marquage extérieur</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.ircs.code}>Call Sign (IRCS)</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.mmsi.code}>MMSI</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.internalReferenceNumber.code}>CFR</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.flagState.code}>Nationalité</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.district.code}>Quartier</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.lastControlDateTime.code}>Dernier contrôle</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.lastControlInfraction.code}>Infraction</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.postControlComment.code}>Observations</Checkbox>
+            <br />
           </div>
           <div>
-            <Checkbox value={CSVOptions.dateTime.code}>Date et heure du dernier signal</Checkbox><br/>
-            <Checkbox value={CSVOptions.latitude.code}>Latitude</Checkbox><br/>
-            <Checkbox value={CSVOptions.longitude.code}>Longitude</Checkbox><br/>
-            <Checkbox value={CSVOptions.course.code}>Cap</Checkbox><br/>
-            <Checkbox value={CSVOptions.speed.code}>Vitesse</Checkbox><br/>
-            <Checkbox value={CSVOptions.fleetSegments.code}>Segments de flotte</Checkbox><br/>
-            <Checkbox value={CSVOptions.gears.code}>Engins à bord</Checkbox><br/>
-            <Checkbox value={CSVOptions.species.code}>Espèces à bord</Checkbox><br/>
-            <Checkbox value={CSVOptions.length.code}>Longueur</Checkbox><br/>
+            <Checkbox value={CSVOptions.dateTime.code}>Date et heure du dernier signal</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.latitude.code}>Latitude</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.longitude.code}>Longitude</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.course.code}>Cap</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.speed.code}>Vitesse</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.fleetSegments.code}>Segments de flotte</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.gears.code}>Engins à bord</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.species.code}>Espèces à bord</Checkbox>
+            <br />
+            <Checkbox value={CSVOptions.length.code}>Longueur</Checkbox>
+            <br />
           </div>
         </StyledCheckboxGroup>
         <SelectAll>
           <Checkbox
-            className={'checkbox-hidden'}
-            indeterminate={checkboxState.indeterminate}
             checked={checkboxState.checkAll}
+            className="checkbox-hidden"
+            indeterminate={checkboxState.indeterminate}
             onChange={handleCheckAll}
           >
-            <SelectAllText>
-              Tout {checkboxState.checkAll ? 'dé' : ''}sélectionner
-            </SelectAllText>
+            <SelectAllText>Tout {checkboxState.checkAll ? 'dé' : ''}sélectionner</SelectAllText>
           </Checkbox>
         </SelectAll>
       </Modal.Body>
       <Modal.Footer>
-        <DownloadButton
-          data-cy={'download-vessels'}
-          onClick={download}>
+        <DownloadButton data-cy="download-vessels" onClick={download}>
           Télécharger le tableau
         </DownloadButton>
       </Modal.Footer>

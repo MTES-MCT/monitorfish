@@ -1,11 +1,12 @@
 import styled from 'styled-components'
+
 import { COLORS } from '../../../constants/constants'
 
 export const Red = styled.span`
   height: 8px;
   width: 8px;
   margin-left: 5px;
-  background-color: #E1000F;
+  background-color: #e1000f;
   border-radius: 50%;
   display: inline-block;
 `

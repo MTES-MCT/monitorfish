@@ -1,49 +1,49 @@
 export const ReportingType = {
   ALERT: {
     code: 'ALERT',
-    name: 'ALERTE',
     inputName: null,
-    isInfractionSuspicion: true
-  },
-  OBSERVATION: {
-    code: 'OBSERVATION',
-    name: 'OBSERVATION',
-    inputName: 'Observation',
-    isInfractionSuspicion: false
+    isInfractionSuspicion: true,
+    name: 'ALERTE',
   },
   INFRACTION_SUSPICION: {
     code: 'INFRACTION_SUSPICION',
-    name: 'SUSPICION d\'INFRACTION',
     inputName: 'Infraction (suspicion)',
-    isInfractionSuspicion: true
-  }
+    isInfractionSuspicion: true,
+    name: "SUSPICION d'INFRACTION",
+  },
+  OBSERVATION: {
+    code: 'OBSERVATION',
+    inputName: 'Observation',
+    isInfractionSuspicion: false,
+    name: 'OBSERVATION',
+  },
 }
 
 export const ReportingOriginActor = {
-  OPS: {
-    code: 'OPS',
-    name: 'OPS'
-  },
-  SIP: {
-    code: 'SIP',
-    name: 'SIP'
-  },
-  UNIT: {
-    code: 'UNIT',
-    name: 'Unité'
+  DIRM: {
+    code: 'DIRM',
+    name: 'DIRM',
   },
   DML: {
     code: 'DML',
-    name: 'DML'
+    name: 'DML',
   },
-  DIRM: {
-    code: 'DIRM',
-    name: 'DIRM'
+  OPS: {
+    code: 'OPS',
+    name: 'OPS',
   },
   OTHER: {
     code: 'OTHER',
-    name: 'Autre'
-  }
+    name: 'Autre',
+  },
+  SIP: {
+    code: 'SIP',
+    name: 'SIP',
+  },
+  UNIT: {
+    code: 'UNIT',
+    name: 'Unité',
+  },
 }
 
 export const infractionSuspicionReportingTypes = Object.values(ReportingType)
@@ -107,5 +107,5 @@ export const FrenchDMLs = [
   'DML 06',
   'DML 2a',
   'DML 2b',
-  'DML 76/27'
+  'DML 76/27',
 ]

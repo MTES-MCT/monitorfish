@@ -1,22 +1,23 @@
 import { useCallback, useMemo } from 'react'
 import { DateRangePicker } from 'rsuite'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 import { CustomDate } from '../../../../libs/CustomDate'
 
 /** @type {import('rsuite').DateRangePickerLocale} */
 const DATE_RANGE_PICKER_LOCALE = {
-  sunday: 'Di',
+  friday: 'Ve',
+  last7Days: '7 derniers jours',
   monday: 'Lu',
+  ok: 'OK',
+  saturday: 'Sa',
+  sunday: 'Di',
+  thursday: 'Je',
+  today: "Aujourd'hui",
   tuesday: 'Ma',
   wednesday: 'Me',
-  thursday: 'Je',
-  friday: 'Ve',
-  saturday: 'Sa',
-  ok: 'OK',
-  today: "Aujourd'hui",
   yesterday: 'Hier',
-  last7Days: '7 derniers jours'
 }
 
 /**
@@ -33,36 +34,37 @@ const DATE_RANGE_PICKER_LOCALE = {
 /**
  * @param {DateRangeProps} props
  */
-const DateRange = ({
+function DateRange({
   containerRef,
   defaultValue,
   isDisabledAfterToday = false,
   noMargin = false,
   onChange,
   placeholder,
-  width
-}) => {
+  width,
+}) {
   /** @type {[Date, Date] | undefined} */
   const normalizedDefaultValue = useMemo(
-    () => defaultValue
-      ? [CustomDate.fixOffset(defaultValue[0]), CustomDate.fixOffset(defaultValue[1])]
-      : undefined,
-    [defaultValue]
+    () => (defaultValue ? [CustomDate.fixOffset(defaultValue[0]), CustomDate.fixOffset(defaultValue[1])] : undefined),
+    [defaultValue],
   )
   const disabledDate = useMemo(
-    () => isDisabledAfterToday ? DateRangePicker.afterToday() : DateRangePicker.beforeToday(),
-    [isDisabledAfterToday]
+    () => (isDisabledAfterToday ? DateRangePicker.afterToday() : DateRangePicker.beforeToday()),
+    [isDisabledAfterToday],
   )
 
   /**
    * @param {[Date, Date]} dateRange
    */
-  const handleChange = useCallback(([startDate, endDate]) => {
-    const cleanStartDate = new CustomDate(startDate).toStartOfDay()
-    const cleanEndDate = new CustomDate(endDate).toEndOfDay()
+  const handleChange = useCallback(
+    ([startDate, endDate]) => {
+      const cleanStartDate = new CustomDate(startDate).toStartOfDay()
+      const cleanEndDate = new CustomDate(endDate).toEndOfDay()
 
-    onChange([cleanStartDate, cleanEndDate])
-  }, [onChange])
+      onChange([cleanStartDate, cleanEndDate])
+    },
+    [onChange],
+  )
 
   const handleClear = useCallback(() => {
     onChange(undefined)
@@ -71,30 +73,30 @@ const DateRange = ({
   return (
     <Wrapper key={normalizedDefaultValue} isEmpty={!normalizedDefaultValue} noMargin={noMargin} width={width}>
       <DateRangePicker
+        cleanable
         container={containerRef}
         defaultValue={normalizedDefaultValue}
-        showOneCalendar
-        placeholder={placeholder}
-        cleanable
-        size={'sm'}
         disabledDate={disabledDate}
-        onOk={handleChange}
-        onClean={handleClear}
-        ranges={[]}
         format="dd-MM-yyyy"
-        placement={'auto'}
         locale={DATE_RANGE_PICKER_LOCALE}
+        onClean={handleClear}
+        onOk={handleChange}
+        placeholder={placeholder}
+        placement="auto"
+        ranges={[]}
+        showOneCalendar
+        size="sm"
       />
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
-  margin: ${p => p.noMargin ? 0 : '12px 0 20px 20px'};
+  margin: ${p => (p.noMargin ? 0 : '12px 0 20px 20px')};
   width: ${p => p.width || 197}px;
 
   .rs-picker-daterange {
-    background: ${p => p.isEmpty ? COLORS.gainsboro : 'transparent'};
+    background: ${p => (p.isEmpty ? COLORS.gainsboro : 'transparent')};
   }
 
   input {

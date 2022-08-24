@@ -1,50 +1,49 @@
+import countries from 'i18n-iso-countries'
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
-import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
 import { LogbookSpeciesPresentation, LogbookSpeciesPreservationState } from '../../../../domain/entities/logbook'
-import countries from 'i18n-iso-countries'
+import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
 import { ReactComponent as WarningSVG } from '../../../icons/Point_exclamation_info.svg'
 
-const LogbookMessageSpecies = props => {
+function LogbookMessageSpecies(props) {
   const [isOpen, setIsOpen] = useState(false)
 
   const getSpeciesName = species => {
     if (species.speciesName && species.species) {
       return `${species.speciesName} (${species.species})`
-    } else if (species.species) {
+    } if (species.species) {
       return species.species
     }
 
     return 'Aucun Nom'
   }
 
-  return <>
-    {props.species
-      ? <Species>
-        <Title isLast={props.isLast} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
-          <TitleText title={getSpeciesName(props.species)}>
-            {getSpeciesName(props.species)}
-          </TitleText>
-          <Weight title={`${props.species.weight} kg (vif)`}>
-            <InlineKey>Poids total (estimé) </InlineKey>
-            <Kg>{props.species.weight ? props.species.weight : <NoValue>-</NoValue>} kg</Kg>
-          </Weight>
-          <ChevronIcon $isOpen={isOpen} name={props.species.species}/>
-        </Title>
-        <Content isOpen={isOpen} name={props.species.species}
-                 length={props.species.properties ? props.species.properties.length : 1}>
-          {
-            props.species.properties && props.species.properties.length > 1
-              ? <MultipleProperties>
-                <Warning/> Plusieurs zones de pêche et/ou présentations pour cette espèce
+  return (
+    <>
+      {props.species ? (
+        <Species>
+          <Title isLast={props.isLast} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
+            <TitleText title={getSpeciesName(props.species)}>{getSpeciesName(props.species)}</TitleText>
+            <Weight title={`${props.species.weight} kg (vif)`}>
+              <InlineKey>Poids total (estimé) </InlineKey>
+              <Kg>{props.species.weight ? props.species.weight : <NoValue>-</NoValue>} kg</Kg>
+            </Weight>
+            <ChevronIcon $isOpen={isOpen} name={props.species.species} />
+          </Title>
+          <Content
+            isOpen={isOpen}
+            name={props.species.species}
+            length={props.species.properties ? props.species.properties.length : 1}
+          >
+            {props.species.properties && props.species.properties.length > 1 ? (
+              <MultipleProperties>
+                <Warning /> Plusieurs zones de pêche et/ou présentations pour cette espèce
               </MultipleProperties>
-              : null
-          }
-          {
-            props.species.properties && props.species.properties.length
-              ? props.species.properties.map((species, index) => {
-                return <Property key={props.species.species + index}>
+            ) : null}
+            {props.species.properties && props.species.properties.length
+              ? props.species.properties.map((species, index) => <Property key={props.species.species + index}>
                   <Fields>
                     <TableBody>
                       <Field>
@@ -134,14 +133,14 @@ const LogbookMessageSpecies = props => {
                       </Field>
                     </TableBody>
                   </Fields>
-                </Property>
-              })
-              : null
-          }
-        </Content>
-      </Species>
-      : null}
-  </>
+                </Property>)
+                })
+              : null}
+          </Content>
+        </Species>
+      ) : null}
+    </>
+  )
 }
 
 const Warning = styled(WarningSVG)`
@@ -186,8 +185,8 @@ const TitleText = styled.span`
   font-size: 13px;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  white-space: nowrap;    
-  max-width: 180px; 
+  white-space: nowrap;
+  max-width: 180px;
 `
 
 const Weight = styled.span`
@@ -214,8 +213,8 @@ const Title = styled.div`
   padding: 0 0 0 20px;
   user-select: none;
   cursor: pointer;
-  ${props => props.isLast && !props.isOpen ? '' : `border-bottom: 1px solid ${COLORS.gray};`}
- 
+  ${props => (props.isLast && !props.isOpen ? '' : `border-bottom: 1px solid ${COLORS.gray};`)}
+
   display: flex;
   flex-wrap: wrap;
   overflow: hidden;
@@ -227,11 +226,8 @@ const Content = styled.div`
   overflow: hidden;
   padding: 0;
   border-bottom: 1px solid ${COLORS.gray};
-  height: ${props => props.isOpen
-    ? props.length > 0
-      ? props.length * 115 + (props.length > 1 ? 30 : 0)
-      : 110
-    : 0}px;
+  height: ${props =>
+    props.isOpen ? (props.length > 0 ? props.length * 115 + (props.length > 1 ? 30 : 0) : 110) : 0}px;
   transition: 0.2s all;
 `
 
@@ -241,8 +237,9 @@ const ChevronIcon = styled(ChevronIconSVG)`
   float: right;
   margin-right: 10px;
   margin-top: 2px;
-  
-  animation: ${props => props.$isOpen ? `chevron-${props.name}-zones-opening` : `chevron-${props.name}-zones-closing`} 0.2s ease forwards;
+
+  animation: ${props => (props.$isOpen ? `chevron-${props.name}-zones-opening` : `chevron-${props.name}-zones-closing`)}
+    0.2s ease forwards;
 
   ${props => `
       @keyframes chevron-${props.name}-zones-opening {
@@ -254,14 +251,13 @@ const ChevronIcon = styled(ChevronIconSVG)`
         0%   { transform: rotate(0deg); }
         100% { transform: rotate(180deg);   }
       }
-      `
-}
+      `}
 `
 
 const TableBody = styled.tbody``
 
 const Fields = styled.table`
-  padding: 10px 5px 5px 20px; 
+  padding: 10px 5px 5px 20px;
   width: inherit;
   display: table;
   margin: 0;
@@ -302,8 +298,8 @@ const TrimmedValue = styled.td`
   line-height: normal;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  white-space: nowrap;    
-  max-width: 90px; 
+  white-space: nowrap;
+  max-width: 90px;
 `
 
 const Value = styled.td`

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 
 export const Label = styled.div`
@@ -14,7 +15,7 @@ export const List = styled.ul`
   flex-direction: column;
   font-size: 13px;
   color: ${COLORS.gunMetal};
-  padding-bottom: ${props => props.isLast ? 0 : 20}px;
+  padding-bottom: ${props => (props.isLast ? 0 : 20)}px;
   margin: 0;
 `
 
@@ -37,13 +38,13 @@ export const Value = styled.td`
   color: ${COLORS.gunMetal};
   margin: 0;
   text-align: left;
-  padding: 1px 5px ${props => props.isNotLastItem ? 0 : 5}px 5px;
+  padding: 1px 5px ${props => (props.isNotLastItem ? 0 : 5)}px 5px;
   background: none;
   border: none;
   line-height: normal;
   font-size: 13px;
   font-weight: 500;
-  
+
   p {
     margin: 0;
   }
@@ -61,7 +62,7 @@ export const Section = styled.div`
   padding: 15px 45px 15px 20px;
   text-align: left;
   border-bottom: 1px solid ${COLORS.lightGray};
-  
+
   p {
     margin: 0;
   }
@@ -76,7 +77,7 @@ export const SectionTitle = styled.span`
   color: ${COLORS.slateGray};
   font-size: 13px;
   align-items: center;
-  margin-top: ${props => props.hasPreviousRegulatedGearsBloc ? 20 : 0}px;
+  margin-top: ${props => (props.hasPreviousRegulatedGearsBloc ? 20 : 0)}px;
 `
 
 export const Fields = styled.table`

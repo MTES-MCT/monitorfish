@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 import { getDateTime } from '../../../../utils'
 import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 
-const DEPMessageResume = props => {
+function DEPMessageResume(props) {
   const [isOpen, setIsOpen] = useState(false)
   const firstUpdate = useRef(true)
 
@@ -15,42 +16,37 @@ const DEPMessageResume = props => {
     }
   }, [isOpen])
 
-  const getDEPMessageResumeTitleText = () => {
-    return `${props.depMessage.departurePortName ? props.depMessage.departurePortName : props.depMessage.departurePort} le ${getDateTime(props.depMessage.departureDatetimeUtc, true)} (UTC)`
-  }
+  const getDEPMessageResumeTitleText = () => `${props.depMessage.departurePortName ? props.depMessage.departurePortName : props.depMessage.departurePort} le ${getDateTime(props.depMessage.departureDatetimeUtc, true)} (UTC)`
 
-  const getDEPMessageResumeTitle = () => {
-    return <>{props.depMessage.departurePortName ? props.depMessage.departurePortName : props.depMessage.departurePort}
+  const getDEPMessageResumeTitle = () => <>{props.depMessage.departurePortName ? props.depMessage.departurePortName : props.depMessage.departurePort}
       {' '}le {getDateTime(props.depMessage.departureDatetimeUtc, true)} <Gray>(UTC)</Gray></>
-  }
 
-  return <>
-    <Wrapper>
-      <LogbookMessageResumeHeader
-        isNotAcknowledged={props.isNotAcknowledged}
+  return (
+    <>
+      <Wrapper>
+        <LogbookMessageResumeHeader
+          hasNoMessage={props.hasNoMessage}
         isDeleted={props.isDeleted}
-        rejectionCause={props.rejectionCause}
-        onHoverText={props.hasNoMessage ? null : getDEPMessageResumeTitleText()}
-        title={props.hasNoMessage ? null : getDEPMessageResumeTitle()}
-        hasNoMessage={props.hasNoMessage}
-        showLogbookMessages={props.showLogbookMessages}
+        isNotAcknowledged={props.isNotAcknowledged}
+        isOpen={isOpen}
         messageType={LogbookMessageTypeEnum.DEP.code.toString()}
+        onHoverText={props.hasNoMessage ? null : getDEPMessageResumeTitleText()}
+        rejectionCause={props.rejectionCause}
         setIsOpen={setIsOpen}
-        isOpen={isOpen}/>
-      {
-        props.hasNoMessage
-          ? null
-          : <LogbookMessageContent
-            id={props.id}
-            speciesOnboard={(props.depMessage.speciesOnboard?.length > 0) ? props.depMessage.speciesOnboard.length : 1}
-            gearOnboard={props.depMessage.gearOnboard ? props.depMessage.gearOnboard.length : 1}
+        showLogbookMessages={props.showLogbookMessages}
+        title={props.hasNoMessage ? null : getDEPMessageResumeTitle()}/>
+        />
+        {props.hasNoMessage ? null : (
+          <LogbookMessageContent
             firstUpdate={firstUpdate}
+            gearOnboard={props.depMessage.gearOnboard ? props.depMessage.gearOnboard.length : 1}
+            id={props.id}
             isOpen={isOpen}
-            name={LogbookMessageTypeEnum.DEP.code.toString()}>
+            name={LogbookMessageTypeEnum.DEP.code.toString()}
+            speciesOnboard={(props.depMessage.speciesOnboard?.length > 0) ? props.depMessage.speciesOnboard.length : 1}>
             <Zone>
-              {props.depMessage.gearOnboard?.length
-                ? props.depMessage.gearOnboard.map((gear, index) => {
-                  return <Gear key={gear.gear + index} isFirst={index === '0'}>
+              {props.depMessage.gearOnboard?.length ? (
+                props.depMessage.gearOnboard.map((gear, index) => <Gear key={gear.gear + index} isFirst={index === '0'}>
                     <SubKey>Engin à bord {index + 1}</SubKey>{' '}
                     <SubValue>
                       {
@@ -64,38 +60,42 @@ const DEPMessageResume = props => {
                       ? <>{gear.dimensions} m</>
                       : <NoValue>-</NoValue>}</SubValue>
                     <br/>
-                  </Gear>
-                })
-                : <NoValue>Pas d&apos;engins à bord</NoValue>}
+                  </Gear>)
+              ) : (
+                <NoValue>Pas d&apos;engins à bord</NoValue>
+              )}
               <Fields>
                 <TableBody>
                   <Field>
                     <Key>Captures à bord</Key>
-                    <Value>{props.depMessage.speciesOnboard?.length
-                      ? props.depMessage.speciesOnboard.map(speciesCatch => {
-                        return <span key={speciesCatch.species}>
+                    <Value>
+                      {props.depMessage.speciesOnboard?.length ? (
+                        props.depMessage.speciesOnboard.map(speciesCatch => <span key={speciesCatch.species}>
                                         {
                                           speciesCatch.speciesName
                                             ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
                                             : speciesCatch.species
                                         }
                           {''} - {speciesCatch.weight} kg<br/>
-                                    </span>
-                      })
-                      : <NoValue>aucune</NoValue>}</Value>
+                                    </span>)
+                      ) : (
+                        <NoValue>aucune</NoValue>
+                      )}
+                    </Value>
                   </Field>
                 </TableBody>
               </Fields>
             </Zone>
           </LogbookMessageContent>
-      }
-    </Wrapper>
-  </>
+        )}
+      </Wrapper>
+    </>
+  )
 }
 
 const Gear = styled.div`
   margin-left: 5px;
-  margin-top: ${props => props.isFirst ? '15px' : '5px'};
+  margin-top: ${props => (props.isFirst ? '15px' : '5px')};
 `
 
 const SubKey = styled.span`
@@ -120,7 +120,7 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 10px 5px 5px 5px; 
+  padding: 10px 5px 5px 5px;
   width: inherit;
   display: table;
   margin: 0;
@@ -186,13 +186,10 @@ const LogbookMessageContent = styled.div`
   overflow: hidden;
   padding: 0 0 0 20px;
   border-bottom: 1px solid ${COLORS.gray};
-  opacity: ${props => props.isOpen ? 1 : 0};
-  height: ${props => props.isOpen
-    ? props.speciesOnboard * 22 + props.gearOnboard * 50 + 20
-    : 0
-  }px;
+  opacity: ${props => (props.isOpen ? 1 : 0)};
+  height: ${props => (props.isOpen ? props.speciesOnboard * 22 + props.gearOnboard * 50 + 20 : 0)}px;
   transition: 0.2s all;
-  margin-bottom: ${props => props.isOpen ? 5 : -1}px;
+  margin-bottom: ${props => (props.isOpen ? 5 : -1)}px;
 `
 
 export default DEPMessageResume

@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
-import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
-import { COLORS } from '../../../constants/constants'
 
-const AdministrativeLayer = props => {
-  const {
-    isShownOnInit,
-    layer,
-    callShowAdministrativeZone,
-    callHideAdministrativeZone,
-    isGrouped,
-    isFirst
-  } = props
+import { COLORS } from '../../../constants/constants'
+import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
+import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
+
+function AdministrativeLayer(props) {
+  const { callHideAdministrativeZone, callShowAdministrativeZone, isFirst, isGrouped, isShownOnInit, layer } = props
 
   const [showLayer_, setShowLayer] = useState(undefined)
 
@@ -29,38 +23,28 @@ const AdministrativeLayer = props => {
       } else {
         callShowAdministrativeZone(layer.code)
       }
+    } else if (layer.showMultipleZonesInAdministrativeZones) {
+      callHideAdministrativeZone(layer.groupCode, layer.code)
     } else {
-      if (layer.showMultipleZonesInAdministrativeZones) {
-        callHideAdministrativeZone(layer.groupCode, layer.code)
-      } else {
-        callHideAdministrativeZone(layer.code)
-      }
+      callHideAdministrativeZone(layer.code)
     }
   }, [showLayer_])
 
-  return <>
-    {
-      props.layer
-        ? <Row
+  return (
+    <>
+      {props.layer ? (
+        <Row
+          data-cy="administrative-layer-toggle"
           isFirst={isFirst}
           isGrouped={isGrouped}
           onClick={() => setShowLayer(!showLayer_)}
-          data-cy={'administrative-layer-toggle'}
         >
-          <LayerName
-            title={layer.name}
-          >
-            {layer.name}
-          </LayerName>
-          {
-            showLayer_
-              ? <ShowIcon/>
-              : <HideIcon/>
-          }
+          <LayerName title={layer.name}>{layer.name}</LayerName>
+          {showLayer_ ? <ShowIcon /> : <HideIcon />}
         </Row>
-        : null
-    }
-  </>
+      ) : null}
+    </>
+  )
 }
 
 const LayerName = styled.span`
@@ -71,9 +55,9 @@ const LayerName = styled.span`
 `
 
 const Row = styled.span`
-  margin-top: ${props => props.isFirst ? 5 : 0}px;
-  padding: ${props => props.isGrouped ? '4px 0 3px 20px' : '4px 0 4px 20px'};
-  padding-left: ${props => props.isGrouped ? '38px' : '20px'};
+  margin-top: ${props => (props.isFirst ? 5 : 0)}px;
+  padding: ${props => (props.isGrouped ? '4px 0 3px 20px' : '4px 0 4px 20px')};
+  padding-left: ${props => (props.isGrouped ? '38px' : '20px')};
   line-height: 18px;
   display: block;
   user-select: none;
@@ -83,7 +67,7 @@ const Row = styled.span`
   width: -moz-available;
   width: -webkit-fill-available;
   width: stretch;
-  
+
   :hover {
     background: ${COLORS.shadowBlueLittleOpacity};
   }

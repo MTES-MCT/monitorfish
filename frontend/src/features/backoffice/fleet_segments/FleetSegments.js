@@ -1,20 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { Table } from 'rsuite'
+import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { useDispatch, useSelector } from 'react-redux'
-import { DeleteCell, INPUT_TYPE, ModifiableCell, TagPickerCell } from '../tableCells'
+import { Table } from 'rsuite'
+import styled from 'styled-components'
+
+import { COLORS } from '../../../constants/constants'
+import getFAOAreas from '../../../domain/use_cases/faoAreas/getFAOAreas'
+import * as fleetSegmentUseCase from '../../../domain/use_cases/fleetSegment'
 import getAllFleetSegments from '../../../domain/use_cases/fleetSegment/getAllFleetSegments'
 import getAllGearCodes from '../../../domain/use_cases/gearCode/getAllGearCodes'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
-import getFAOAreas from '../../../domain/use_cases/faoAreas/getFAOAreas'
-import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
-import * as fleetSegmentUseCase from '../../../domain/use_cases/fleetSegment'
+import { DeleteCell, INPUT_TYPE, ModifiableCell, TagPickerCell } from '../tableCells'
 import { NewFleetSegmentModal } from './NewFleetSegmentModal'
 
 const { Column, HeaderCell } = Table
 
-const FleetSegments = () => {
+function FleetSegments() {
   const dispatch = useDispatch()
   const doNotUpdateScrollRef = useRef(false)
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
@@ -49,13 +50,13 @@ const FleetSegments = () => {
     setIsNewFleetSegmentModalOpen(false)
   }, [])
 
-  const createFleetSegment = (newFleetSegmentData) => {
+  const createFleetSegment = newFleetSegmentData => {
     dispatch(fleetSegmentUseCase.createFleetSegment(newFleetSegmentData))
 
     closeNewFleetSegmentModal()
   }
 
-  const deleteFleetSegment = (id) => {
+  const deleteFleetSegment = id => {
     doNotUpdateScrollRef.current = true
 
     dispatch(fleetSegmentUseCase.deleteFleetSegment(id))
@@ -67,13 +68,13 @@ const FleetSegments = () => {
     }
 
     const updateJSON = {
+      bycatchSpecies: null,
+      faoAreas: null,
+      gears: null,
+      impactRiskFactor: null,
       segment: null,
       segmentName: null,
-      impactRiskFactor: null,
-      gears: null,
-      faoAreas: null,
       targetSpecies: null,
-      bycatchSpecies: null
     }
     updateJSON[key] = value
 
@@ -87,125 +88,120 @@ const FleetSegments = () => {
   return (
     <Wrapper>
       <Header>
-        <Title>Segments de flotte</Title><br/>
-        <AddSegment
-          data-cy={'open-create-fleet-segment-modal'}
-          onClick={openNewFleetSegmentModal}
-        >
+        <Title>Segments de flotte</Title>
+        <br />
+        <AddSegment data-cy="open-create-fleet-segment-modal" onClick={openNewFleetSegmentModal}>
           Ajouter un segment
         </AddSegment>
       </Header>
-      {
-        fleetSegments?.length && gears?.length && species?.length && faoAreas?.length
-          ? <Table
-            height={document.body.clientHeight < 900 ? document.body.clientHeight - 100 : 830}
-            width={document.body.clientWidth < 1800 ? document.body.clientWidth - 200 : 1600}
-            data={fleetSegments}
-            rowHeight={36}
-            rowKey={'segment'}
-            affixHorizontalScrollbar
-            onDataUpdated={() => { doNotUpdateScrollRef.current = true }}
-            shouldUpdateScroll={!doNotUpdateScrollRef.current}
-            locale={{
-              emptyMessage: 'Aucun résultat',
-              loading: 'Chargement...'
-            }}
-          >
-            <Column width={70}>
-              <HeaderCell>N. impact</HeaderCell>
-              <ModifiableCell
-                dataKey={'impactRiskFactor'}
-                id={'segment'}
-                maxLength={3}
-                inputType={INPUT_TYPE.DOUBLE}
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
-              />
-            </Column>
+      {fleetSegments?.length && gears?.length && species?.length && faoAreas?.length ? (
+        <Table
+          affixHorizontalScrollbar
+          data={fleetSegments}
+          height={document.body.clientHeight < 900 ? document.body.clientHeight - 100 : 830}
+          locale={{
+            emptyMessage: 'Aucun résultat',
+            loading: 'Chargement...',
+          }}
+          onDataUpdated={() => {
+            doNotUpdateScrollRef.current = true
+          }}
+          rowHeight={36}
+          rowKey="segment"
+          shouldUpdateScroll={!doNotUpdateScrollRef.current}
+          width={document.body.clientWidth < 1800 ? document.body.clientWidth - 200 : 1600}
+        >
+          <Column width={70}>
+            <HeaderCell>N. impact</HeaderCell>
+            <ModifiableCell
+              dataKey="impactRiskFactor"
+              id="segment"
+              inputType={INPUT_TYPE.DOUBLE}
+              maxLength={3}
+              onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
+            />
+          </Column>
 
-            <Column width={110}>
-              <HeaderCell>Segment</HeaderCell>
-              <ModifiableCell
-                dataKey={'segment'}
-                id={'segment'}
-                maxLength={null}
-                inputType={INPUT_TYPE.STRING}
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value?.replace(/[ ]/g, ''))}
-              />
-            </Column>
+          <Column width={110}>
+            <HeaderCell>Segment</HeaderCell>
+            <ModifiableCell
+              dataKey="segment"
+              id="segment"
+              inputType={INPUT_TYPE.STRING}
+              maxLength={null}
+              onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value?.replace(/[ ]/g, ''))}
+            />
+          </Column>
 
-            <Column width={200}>
-              <HeaderCell>Nom du segment</HeaderCell>
-              <ModifiableCell
-                dataKey={'segmentName'}
-                id={'segment'}
-                maxLength={null}
-                inputType={INPUT_TYPE.STRING}
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
-              />
-            </Column>
+          <Column width={200}>
+            <HeaderCell>Nom du segment</HeaderCell>
+            <ModifiableCell
+              dataKey="segmentName"
+              id="segment"
+              inputType={INPUT_TYPE.STRING}
+              maxLength={null}
+              onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
+            />
+          </Column>
 
-            <Column width={290}>
-              <HeaderCell>Engins</HeaderCell>
-              <TagPickerCell
-                dataKey={'gears'}
-                id={'segment'}
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
-                data={gears.map(gear => ({ label: gear.code, value: gear.code }))}
-              />
-            </Column>
+          <Column width={290}>
+            <HeaderCell>Engins</HeaderCell>
+            <TagPickerCell
+              data={gears.map(gear => ({ label: gear.code, value: gear.code }))}
+              dataKey="gears"
+              id="segment"
+              onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
+            />
+          </Column>
 
-            <Column width={290}>
-              <HeaderCell>Espèces ciblées</HeaderCell>
-              <TagPickerCell
-                dataKey={'targetSpecies'}
-                id={'segment'}
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
-                data={species.map(gear => ({ label: gear.code, value: gear.code }))}
-              />
-            </Column>
+          <Column width={290}>
+            <HeaderCell>Espèces ciblées</HeaderCell>
+            <TagPickerCell
+              data={species.map(gear => ({ label: gear.code, value: gear.code }))}
+              dataKey="targetSpecies"
+              id="segment"
+              onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
+            />
+          </Column>
 
-            <Column width={290}>
-              <HeaderCell>Prises accessoires</HeaderCell>
-              <TagPickerCell
-                dataKey={'bycatchSpecies'}
-                id={'segment'}
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
-                data={species.map(species => ({ label: species.code, value: species.code }))}
-              />
-            </Column>
+          <Column width={290}>
+            <HeaderCell>Prises accessoires</HeaderCell>
+            <TagPickerCell
+              data={species.map(species => ({ label: species.code, value: species.code }))}
+              dataKey="bycatchSpecies"
+              id="segment"
+              onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
+            />
+          </Column>
 
-            <Column width={300}>
-              <HeaderCell>FAO</HeaderCell>
-              <TagPickerCell
-                dataKey={'faoAreas'}
-                id={'segment'}
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
-                data={faoAreas.map(faoArea => ({ label: faoArea, value: faoArea }))}
-              />
-            </Column>
+          <Column width={300}>
+            <HeaderCell>FAO</HeaderCell>
+            <TagPickerCell
+              data={faoAreas.map(faoArea => ({ label: faoArea, value: faoArea }))}
+              dataKey="faoAreas"
+              id="segment"
+              onChange={(segment, key, value) => handleChangeModifiableKey(segment, key, value)}
+            />
+          </Column>
 
-            <Column width={30}>
-              <HeaderCell/>
-              <DeleteCell
-                dataKey="segment"
-                id="segment"
-                onClick={deleteFleetSegment}
-              />
-            </Column>
-          </Table>
-          : <Loading>
-            <FulfillingBouncingCircleSpinner
-              color={COLORS.grayShadow}
-              className={'update-vessels'}
-              size={100}/>
-          </Loading>
-      }
+          <Column width={30}>
+            <HeaderCell />
+            <DeleteCell dataKey="segment" id="segment" onClick={deleteFleetSegment} />
+          </Column>
+        </Table>
+      ) : (
+        <Loading>
+          <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.grayShadow} size={100} />
+        </Loading>
+      )}
 
-      {isNewFleetSegmentModalOpen && <NewFleetSegmentModal
-        faoAreasList={faoAreas}
-        onCancel={closeNewFleetSegmentModal}
-        onSubmit={createFleetSegment}
-      />}
+      {isNewFleetSegmentModalOpen && (
+        <NewFleetSegmentModal
+          faoAreasList={faoAreas}
+          onCancel={closeNewFleetSegmentModal}
+          onSubmit={createFleetSegment}
+        />
+      )}
     </Wrapper>
   )
 }
@@ -247,7 +243,8 @@ const Wrapper = styled.div`
     padding-left: 5px;
   }
 
-  .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+  .rs-picker-has-value .rs-btn .rs-picker-toggle-value,
+  .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
     color: ${COLORS.charcoal};
   }
 
@@ -255,7 +252,7 @@ const Wrapper = styled.div`
     padding-right: 17px;
   }
 
-  .rs-input:focus{
+  .rs-input:focus {
     background: ${COLORS.charcoal};
     color: ${COLORS.background};
   }
@@ -287,7 +284,7 @@ const Wrapper = styled.div`
 
 const Title = styled.h2`
   font-size: 16px;
-  color: #282F3E;
+  color: #282f3e;
   border-bottom: 2px solid ${COLORS.squareBorder};
   font-weight: 700;
   text-align: left;

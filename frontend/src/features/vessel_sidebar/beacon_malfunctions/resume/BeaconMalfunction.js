@@ -1,55 +1,53 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
+import { BeaconMalfunctionVesselStatus, getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
+import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconMalfunction'
+import { getDateTime } from '../../../../utils'
 import { ReactComponent as AtSeaSVG } from '../../../icons/Icone_avarie_mer.svg'
 import { ReactComponent as AtPortSVG } from '../../../icons/Icone_avarie_quai.svg'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
-import { getDateTime } from '../../../../utils'
-import { BeaconMalfunctionVesselStatus, getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
-import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconMalfunction'
-import { useDispatch } from 'react-redux'
 import BeaconMalfunctionBody from './BeaconMalfunctionBody'
 
-const BeaconMalfunction = props => {
+function BeaconMalfunction(props) {
   const {
     /** @type {BeaconMalfunctionResumeAndDetails} */
     beaconMalfunctionWithDetails,
     index,
     isLastItem,
-    setIsCurrentBeaconMalfunctionDetails
+    setIsCurrentBeaconMalfunctionDetails,
   } = props
   const dispatch = useDispatch()
 
-  return beaconMalfunctionWithDetails
-    ? <Wrapper
-      key={index}
-      isLastItem={isLastItem}
-      data-cy={'vessel-beacon-malfunction-single-history'}
-    >
+  return beaconMalfunctionWithDetails ? (
+    <Wrapper key={index} data-cy="vessel-beacon-malfunction-single-history" isLastItem={isLastItem}>
       <Title>
-        {
-          getFirstVesselStatus(beaconMalfunctionWithDetails) === BeaconMalfunctionVesselStatus.AT_PORT
-            ? <AtPort/>
-            : <AtSea/>
-        }
+        {getFirstVesselStatus(beaconMalfunctionWithDetails) === BeaconMalfunctionVesselStatus.AT_PORT ? (
+          <AtPort />
+        ) : (
+          <AtSea />
+        )}
         AVARIE DU {getDateTime(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime, true)}
       </Title>
-      <BeaconMalfunctionBody beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}/>
+      <BeaconMalfunctionBody beaconMalfunctionWithDetails={beaconMalfunctionWithDetails} />
       <SeeMore
-        data-cy={'vessel-beacon-malfunction-history-see-more'}
+        data-cy="vessel-beacon-malfunction-history-see-more"
         onClick={() => {
           setIsCurrentBeaconMalfunctionDetails(false)
-          dispatch(setOpenedBeaconMalfunction({
-            beaconMalfunction: beaconMalfunctionWithDetails,
-            showTab: true
-          }))
+          dispatch(
+            setOpenedBeaconMalfunction({
+              beaconMalfunction: beaconMalfunctionWithDetails,
+              showTab: true,
+            }),
+          )
         }}
       >
-        voir les détails de l&apos;avarie <Arrow/>
+        voir les détails de l&apos;avarie <Arrow />
       </SeeMore>
     </Wrapper>
-    : null
+  ) : null
 }
 
 const Arrow = styled(ArrowSVG)`
@@ -78,7 +76,7 @@ const Title = styled.div`
 const Wrapper = styled.div`
   width: -moz-available;
   width: -webkit-fill-available;
-  ${props => !props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null}
+  ${props => (!props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null)}
 `
 
 const AtSea = styled(AtSeaSVG)`

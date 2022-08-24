@@ -1,37 +1,29 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../constants/constants'
 
-const MapPropertyTrigger = ({ booleanProperty, updateBooleanProperty, text, Icon, inverse, disabled }) => {
-  function update () {
+function MapPropertyTrigger({ booleanProperty, disabled, Icon, inverse, text, updateBooleanProperty }) {
+  function update() {
     if (!disabled) {
       updateBooleanProperty(!booleanProperty)
     }
   }
 
   return (
-    <Wrapper
-      onClick={update}
-      disabled={disabled}
-    >
+    <Wrapper disabled={disabled} onClick={update}>
       <Icon
         style={{
-          width: 36,
-          height: 36,
           background: booleanProperty ? COLORS.shadowBlue : COLORS.charcoal,
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          height: 36,
           transition: 'all 0.2s',
-          cursor: disabled ? 'not-allowed' : 'pointer'
+          width: 36,
         }}
       />
-      <ShowLabelText
-        data-cy={'map-property-trigger'}
-      >
-        {
-          inverse
-            ? booleanProperty ? 'Afficher' : 'Masquer'
-            : booleanProperty ? 'Masquer' : 'Afficher'
-        }
-        {''} {text}
+      <ShowLabelText data-cy="map-property-trigger">
+        {inverse ? (booleanProperty ? 'Afficher' : 'Masquer') : booleanProperty ? 'Masquer' : 'Afficher'}
+        {text}
       </ShowLabelText>
     </Wrapper>
   )
@@ -44,7 +36,7 @@ const Wrapper = styled.div`
   border-top: 1px solid ${COLORS.lightGray};
   text-align: left;
   height: 36px;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 `
 
 const ShowLabelText = styled.span`

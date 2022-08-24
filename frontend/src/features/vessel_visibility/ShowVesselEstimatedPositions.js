@@ -1,11 +1,12 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Checkbox } from 'rsuite'
 import styled from 'styled-components'
+
 import { COLORS } from '../../constants/constants'
-import { useDispatch, useSelector } from 'react-redux'
 import { showVesselsEstimatedPositions } from '../../domain/shared_slices/Map'
 
-const ShowVesselEstimatedPositions = () => {
+function ShowVesselEstimatedPositions() {
   const dispatch = useDispatch()
   const { showingVesselsEstimatedPositions } = useSelector(state => state.map)
 
@@ -17,8 +18,10 @@ const ShowVesselEstimatedPositions = () => {
           onChange={(value, isChecked) => {
             dispatch(showVesselsEstimatedPositions(isChecked))
           }}
-
-        >{' '} <ShowLabelText>Afficher les positions estimées des navires</ShowLabelText></Checkbox>
+        >
+          {' '}
+          <ShowLabelText>Afficher les positions estimées des navires</ShowLabelText>
+        </Checkbox>
       </RadioWrapper>
     </Wrapper>
   )

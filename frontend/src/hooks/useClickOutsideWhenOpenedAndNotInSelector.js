@@ -4,7 +4,7 @@ export const useClickOutsideWhenOpenedAndNotInSelector = (ref, isOpened, selecto
   const [clicked, setClicked] = useState(null)
 
   useEffect(() => {
-    function handleClickOutside (event) {
+    function handleClickOutside(event) {
       const element = document.querySelector(selector)
       if (ref.current && !ref.current.contains(event.target) && !element?.contains(event.target)) {
         setClicked({})
@@ -17,6 +17,7 @@ export const useClickOutsideWhenOpenedAndNotInSelector = (ref, isOpened, selecto
     if (isOpened) {
       document.addEventListener('mousedown', handleClickOutside)
     }
+
     return () => {
       // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside)

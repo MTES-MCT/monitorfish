@@ -49,4 +49,4 @@
  * @property {string} obligations
  * @property {string} rejections
  * @property {string} deposit
-  */
+ */

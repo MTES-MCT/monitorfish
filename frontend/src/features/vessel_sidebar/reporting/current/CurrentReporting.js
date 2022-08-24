@@ -2,65 +2,59 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import Reporting from '../Reporting'
 import { COLORS } from '../../../../constants/constants'
 import { operationalAlertTypes } from '../../../../domain/entities/alerts'
 import { ReportingType } from '../../../../domain/entities/reporting'
+import Reporting from '../Reporting'
 import ConfirmDeletionModal from './ConfirmDeletionModal'
 import NewReporting from './NewReporting'
 
-const CurrentReporting = () => {
+function CurrentReporting() {
   const {
     /** @type {CurrentAndArchivedReportings} */
-    currentAndArchivedReportings
+    currentAndArchivedReportings,
   } = useSelector(state => state.reporting)
   const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState(undefined)
 
-  return <Wrapper>
-    <NewReporting/>
-    {
-      operationalAlertTypes
-        .map(alertType => {
-          const alertReportings = currentAndArchivedReportings?.current
-            ?.filter(reporting => reporting.type === ReportingType.ALERT.code && reporting.value.type === alertType.code)
-            ?.sort((a, b) => sortByValidationDate(a, b))
+  return (
+    <Wrapper>
+      <NewReporting />
+      {operationalAlertTypes.map(alertType => {
+        const alertReportings = currentAndArchivedReportings?.current
+          ?.filter(reporting => reporting.type === ReportingType.ALERT.code && reporting.value.type === alertType.code)
+          ?.sort((a, b) => sortByValidationDate(a, b))
 
-          if (alertReportings?.length) {
-            return <Reporting
+        if (alertReportings?.length) {
+          return (
+            <Reporting
               key={alertReportings[alertReportings?.length - 1].id}
-              reporting={alertReportings[alertReportings?.length - 1]}
               numberOfAlerts={alertReportings?.length}
               openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
+              reporting={alertReportings[alertReportings?.length - 1]}
             />
-          }
+          )
+        }
 
-          return null
-        })
-    }
-    {
-      currentAndArchivedReportings?.current
+        return null
+      })}
+      {currentAndArchivedReportings?.current
         ?.filter(reporting => reporting.type !== ReportingType.ALERT.code)
-        .map(reporting => {
-          return <Reporting
+        .map(reporting => <Reporting
             key={reporting.id}
             reporting={reporting}
             openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
-          />
-        })
-    }
-    {
-      !currentAndArchivedReportings?.current?.length
-        ? <NoReporting>Aucun signalement</NoReporting>
-        : null
-    }
-    <ConfirmDeletionModal
-      closeModal={() => setDeletionModalIsOpenForId(null)}
-      modalIsOpenForId={deletionModalIsOpenForId}
-    />
-  </Wrapper>
+          />)
+        })}
+      {!currentAndArchivedReportings?.current?.length ? <NoReporting>Aucun signalement</NoReporting> : null}
+      <ConfirmDeletionModal
+        closeModal={() => setDeletionModalIsOpenForId(null)}
+        modalIsOpenForId={deletionModalIsOpenForId}
+      />
+    </Wrapper>
+  )
 }
 
-function sortByValidationDate (a, b) {
+function sortByValidationDate(a, b) {
   if (a.validationDate && b.validationDate) {
     return a.validationDate.localeCompare(b.validationDate)
   }

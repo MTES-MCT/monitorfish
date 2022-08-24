@@ -1,95 +1,79 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+
+import { COLORS } from '../../../constants/constants'
+import { getAlertNameFromType } from '../../../domain/entities/alerts'
 import {
   reportingIsAnInfractionSuspicion,
   ReportingOriginActor,
-  ReportingType
+  ReportingType,
 } from '../../../domain/entities/reporting'
-import { COLORS } from '../../../constants/constants'
+import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
 import { getDateTime } from '../../../utils'
-
-import { ReactComponent as ObservationIconSVG } from '../../icons/Icone_observations.svg'
-import { ReactComponent as InfractionSuspicionIconSVG } from '../../icons/Icone_alerte_signalement_rouge_16.svg'
 import { ReactComponent as ArchiveIconSVG } from '../../icons/Bouton_archiver.svg'
 /*
 import { ReactComponent as EditIconSVG } from '../../icons/Bouton_editer.svg'
  */
 import { ReactComponent as DeleteIconSVG } from '../../icons/Bouton_supprimer.svg'
-import { getAlertNameFromType } from '../../../domain/entities/alerts'
-import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
-import { useDispatch } from 'react-redux'
+import { ReactComponent as InfractionSuspicionIconSVG } from '../../icons/Icone_alerte_signalement_rouge_16.svg'
+import { ReactComponent as ObservationIconSVG } from '../../icons/Icone_observations.svg'
 
-const Reporting = props => {
+function Reporting(props) {
   const dispatch = useDispatch()
   const {
     /** @type Reporting */
-    reporting,
-    numberOfAlerts,
     isArchive,
-    openConfirmDeletionModalForId
+    numberOfAlerts,
+    openConfirmDeletionModalForId,
+    reporting,
   } = props
   const isAnInfractionSuspicion = reportingIsAnInfractionSuspicion(reporting.type)
-  const reportingName = Object.values(ReportingType)
-    .find(reportingType => reportingType.code === reporting?.type)?.name
+  const reportingName = Object.values(ReportingType).find(reportingType => reportingType.code === reporting?.type)?.name
 
-  return <Wrapper
-    data-cy={'reporting-card'}
-    isInfractionSuspicion={isAnInfractionSuspicion}
-  >
-    <Icon>
-      {
-        isAnInfractionSuspicion
-          ? <InfractionSuspicionIcon/>
-          : <ObservationIcon/>
-      }
-    </Icon>
-    <Body isInfractionSuspicion={isAnInfractionSuspicion}>
-      <Title>
-        {
-          reporting?.type === ReportingType.ALERT.code
+  return (
+    <Wrapper data-cy="reporting-card" isInfractionSuspicion={isAnInfractionSuspicion}>
+      <Icon>{isAnInfractionSuspicion ? <InfractionSuspicionIcon /> : <ObservationIcon />}</Icon>
+      <Body isInfractionSuspicion={isAnInfractionSuspicion}>
+        <Title>
+          {reporting?.type === ReportingType.ALERT.code
             ? reportingName
-            : getReportingActor(reporting?.value?.reportingActor, reporting?.value?.unit)
-        }
-        {' '}/{' '}
-        {
-          reporting?.type === ReportingType.ALERT.code
+            : getReportingActor(reporting?.value?.reportingActor, reporting?.value?.unit)}{' '}
+          /{' '}
+          {reporting?.type === ReportingType.ALERT.code
             ? getAlertNameFromType(reporting?.value?.type)
-            : reporting?.value?.title
-        }
-      </Title>
-      <Date>
-        {
-          numberOfAlerts
-            ? 'Dernière alerte le'
-            : 'Le'
-        } {getDateTime(reporting?.type === ReportingType.ALERT.code ? reporting?.validationDate : reporting?.creationDate, true)}
-      </Date>
-      {
-        reporting?.type !== ReportingType.ALERT.code
-          ? <Description>{reporting?.value?.description}</Description>
-          : null
-      }
-      {
-        reporting?.type !== ReportingType.ALERT.code && reporting?.value?.authorContact
-          ? <Author>Émetteur: {reporting?.value?.authorContact}</Author>
-          : null
-      }
-      {
-        reporting?.value?.natinfCode
-          ? <Natinf title={reporting?.infraction ? `${reporting?.infraction?.natinfCode || ''}: ${reporting?.infraction?.infraction || ''} (réglementation "${reporting?.infraction?.regulation || ''}")` : ''}>
+            : reporting?.value?.title}
+        </Title>
+        <Date>
+          {numberOfAlerts ? 'Dernière alerte le' : 'Le'}{' '}
+          {getDateTime(
+            reporting?.type === ReportingType.ALERT.code ? reporting?.validationDate : reporting?.creationDate,
+            true,
+          )}
+        </Date>
+        {reporting?.type !== ReportingType.ALERT.code ? (
+          <Description>{reporting?.value?.description}</Description>
+        ) : null}
+        {reporting?.type !== ReportingType.ALERT.code && reporting?.value?.authorContact ? (
+          <Author>Émetteur: {reporting?.value?.authorContact}</Author>
+        ) : null}
+        {reporting?.value?.natinfCode ? (
+          <Natinf
+            title={
+              reporting?.infraction
+                ? `${reporting?.infraction?.natinfCode || ''}: ${
+                    reporting?.infraction?.infraction || ''
+                  } (réglementation "${reporting?.infraction?.regulation || ''}")`
+                : ''
+            }
+          >
             NATINF {reporting?.value?.natinfCode}
           </Natinf>
-          : null
-      }
-    </Body>
-    {
-      !isArchive
-        ? <Actions isAlert={!!numberOfAlerts} isInfractionSuspicion={isAnInfractionSuspicion}>
-          {
-            numberOfAlerts
-              ? <NumberOfAlerts>{numberOfAlerts}</NumberOfAlerts>
-              : null
-          }
+        ) : null}
+      </Body>
+      {!isArchive ? (
+        <Actions isAlert={!!numberOfAlerts} isInfractionSuspicion={isAnInfractionSuspicion}>
+          {numberOfAlerts ? <NumberOfAlerts>{numberOfAlerts}</NumberOfAlerts> : null}
           {/* {
             reporting?.type === ReportingType.OBSERVATION.code
               ? <EditButton
@@ -98,34 +82,36 @@ const Reporting = props => {
               : null
           } */}
           <ArchiveButton
-            data-cy={'archive-reporting-card'}
-            title={'Archiver'}
             $isAlert={!!numberOfAlerts}
+            data-cy="archive-reporting-card"
             onClick={() => dispatch(archiveReporting(reporting.id))}
+            title="Archiver"
           />
           <DeleteButton
-            data-cy={'delete-reporting-card'}
-            title={'Supprimer'}
+            data-cy="delete-reporting-card"
             onClick={() => openConfirmDeletionModalForId(reporting.id)}
+            title="Supprimer"
           />
         </Actions>
-        : null
-    }
-  </Wrapper>
+      ) : null}
+    </Wrapper>
+  )
 }
 
 const getReportingActor = (reportingActor, unit) => {
   switch (reportingActor) {
-    case ReportingOriginActor.UNIT.code: return unit
-    default: return reportingActor
+    case ReportingOriginActor.UNIT.code:
+      return unit
+    default:
+      return reportingActor
   }
 }
 
 const Wrapper = styled.div`
   margin-bottom: 10px;
   display: flex;
-  background: ${props => props.isInfractionSuspicion ? '#E1000F1A' : COLORS.cultured} 0% 0% no-repeat padding-box;
-  border: 1px solid ${props => props.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray};
+  background: ${props => (props.isInfractionSuspicion ? '#E1000F1A' : COLORS.cultured)} 0% 0% no-repeat padding-box;
+  border: 1px solid ${props => (props.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray)};
 `
 
 const Icon = styled.div`
@@ -136,14 +122,14 @@ const Body = styled.div`
   width: 365px;
   margin-top: 12px;
   margin-bottom: 12px;
-  color: ${props => props.isInfractionSuspicion ? COLORS.maximumRed : COLORS.gunMetal};
+  color: ${props => (props.isInfractionSuspicion ? COLORS.maximumRed : COLORS.gunMetal)};
 `
 
 const Actions = styled.div`
-  padding-top: ${props => props.isAlert ? 8 : 3}px;
+  padding-top: ${props => (props.isAlert ? 8 : 3)}px;
   width: 30px;
   text-align: center;
-  border-left: 1px solid ${props => props.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray};
+  border-left: 1px solid ${props => (props.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray)};
 `
 
 const NumberOfAlerts = styled.span`
@@ -199,7 +185,7 @@ const InfractionSuspicionIcon = styled(InfractionSuspicionIconSVG)`
 
 const ArchiveButton = styled(ArchiveIconSVG)`
   cursor: pointer;
-  margin-top: ${props => props.$isAlert ? 11 : 7}px;
+  margin-top: ${props => (props.$isAlert ? 11 : 7)}px;
 `
 
 /*

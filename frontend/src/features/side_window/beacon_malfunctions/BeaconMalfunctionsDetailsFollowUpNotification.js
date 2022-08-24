@@ -1,30 +1,36 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
+import { COLORS } from '../../../constants/constants'
 import {
   beaconMalfunctionNotificationRecipientFunction,
   beaconMalfunctionNotificationType,
-  communicationMeans
+  communicationMeans,
 } from '../../../domain/entities/beaconMalfunction'
 import { ReactComponent as NotOkSVG } from '../../icons/Icon_not_OK.svg'
 import { ReactComponent as OkSVG } from '../../icons/Icon_OK.svg'
-import { COLORS } from '../../../constants/constants'
 
-const BeaconMalfunctionsDetailsFollowUpNotification = ({ notification }) => {
+function BeaconMalfunctionsDetailsFollowUpNotification({ notification }) {
   const [showDetails, setShowDetails] = useState(false)
-  const followUpMessage = beaconMalfunctionNotificationType[notification.notificationType]?.followUpMessage || 'Un message a été envoyé'
+  const followUpMessage =
+    beaconMalfunctionNotificationType[notification.notificationType]?.followUpMessage || 'Un message a été envoyé'
 
   const notReceivedMeans = notification.notifications
     .filter(notificationMeans => notificationMeans.success === false)
     .map(notificationMeans => {
       const means = communicationMeans[notificationMeans.communicationMeans]?.denomination || ''
       const addresseePreposition = communicationMeans[notificationMeans.communicationMeans]?.addresseePreposition || ''
-      return <>
-        <NotOk
-          style={notOkStyle}
-          title={notificationMeans.errorMessage ? notificationMeans.errorMessage : 'Erreur inconnue'}
-        />
-        {means} non reçu {addresseePreposition} {notificationMeans.recipientAddressOrNumber}<br/>
-      </>
+      
+return (
+        <>
+          <NotOk
+            style={notOkStyle}
+            title={notificationMeans.errorMessage ? notificationMeans.errorMessage : 'Erreur inconnue'}
+          />
+          {means} non reçu {addresseePreposition} {notificationMeans.recipientAddressOrNumber}
+          <br />
+        </>
+      )
     })
 
   const recipientFunctions = notification.notifications.reduce((recipientFunctionGroup, notification) => {
@@ -36,15 +42,13 @@ const BeaconMalfunctionsDetailsFollowUpNotification = ({ notification }) => {
     return recipientFunctionGroup
   }, {})
 
-  return <>
-    Une <FollowUpMessage style={followUpMessageStyle}>{followUpMessage}</FollowUpMessage> a été envoyée<br/>
-    {
-      showDetails
-        ? <Fields style={fieldsStyle}>
-          {
-            Object.keys(recipientFunctions)
-              .map(recipientFunction => {
-                return <Field key={recipientFunction} style={fieldStyle}>
+  return (
+    <>
+      Une <FollowUpMessage style={followUpMessageStyle}>{followUpMessage}</FollowUpMessage> a été envoyée
+      <br />
+      {showDetails ? (
+        <Fields style={fieldsStyle}>
+          {Object.keys(recipientFunctions).map(recipientFunction => <Field key={recipientFunction} style={fieldStyle}>
                   <Key style={keyStyle}>{beaconMalfunctionNotificationRecipientFunction[recipientFunction]?.addressee || ''}</Key>
                   <Value style={valueStyle}>
                     {
@@ -64,35 +68,35 @@ const BeaconMalfunctionsDetailsFollowUpNotification = ({ notification }) => {
                         })
                     }
                   </Value>
-                </Field>
-              })
-          }
+                </Field>)
+          })}
         </Fields>
-        : notReceivedMeans.map(notReceived => notReceived)
-    }
-    <ShowDetails
-      data-cy={'side-window-beacon-malfunctions-notification-show-details'}
-      style={showDetailsStyle}
-      onClick={() => setShowDetails(!showDetails)}
-    >
-      {showDetails ? 'Masquer' : 'Voir'} le détail
-    </ShowDetails>
-  </>
+      ) : (
+        notReceivedMeans.map(notReceived => notReceived)
+      )}
+      <ShowDetails
+        data-cy="side-window-beacon-malfunctions-notification-show-details"
+        style={showDetailsStyle}
+        onClick={() => setShowDetails(!showDetails)}
+      >
+        {showDetails ? 'Masquer' : 'Voir'} le détail
+      </ShowDetails>
+    </>
+  )
 }
 
-function getMeansResponseIcon (notification) {
+function getMeansResponseIcon(notification) {
   let meansResponse = ''
 
   if (communicationMeans[notification.communicationMeans] === communicationMeans.EMAIL) {
     switch (notification.success) {
       case true:
-        meansResponse = <Ok style={okStyle}/>
+        meansResponse = <Ok style={okStyle} />
         break
       case false:
-        meansResponse = <NotOk
-          style={notOkStyle}
-          title={notification.errorMessage ? notification.errorMessage : 'Erreur inconnue'}
-        />
+        meansResponse = (
+          <NotOk style={notOkStyle} title={notification.errorMessage ? notification.errorMessage : 'Erreur inconnue'} />
+        )
         break
     }
   }
@@ -103,67 +107,67 @@ function getMeansResponseIcon (notification) {
 const FollowUpMessage = styled.span``
 const followUpMessageStyle = {
   fontWeight: 700,
-  textTransform: 'lowercase'
+  textTransform: 'lowercase',
 }
 
 const ShowDetails = styled.div``
 const showDetailsStyle = {
-  textDecoration: 'underline',
   font: 'normal normal medium 13px/22px Marianne',
   color: COLORS.gunMetal,
-  cursor: 'pointer'
+  textDecoration: 'underline',
+  cursor: 'pointer',
 }
 
 const NotOk = styled(NotOkSVG)``
 const notOkStyle = {
   marginRight: 5,
-  verticalAlign: 'sub'
+  verticalAlign: 'sub',
 }
 
 const Ok = styled(OkSVG)``
 const okStyle = {
   marginRight: 5,
-  verticalAlign: 'sub'
+  verticalAlign: 'sub',
 }
 
 const Fields = styled.table``
 const fieldsStyle = {
-  width: 'inherit',
   display: 'table',
-  margin: 0
+  margin: 0,
+  width: 'inherit',
 }
 
 const Field = styled.tr``
 const fieldStyle = {
-  margin: '5px 5px 5px 0',
   border: 'none',
-  background: 'none'
+  background: 'none',
+  margin: '5px 5px 5px 0',
 }
 
 const Key = styled.th``
 const keyStyle = {
   color: COLORS.slateGray,
-  display: 'inline-block',
-  margin: 0,
   border: 'none',
-  padding: '5px 5px 5px 0',
+  display: 'inline-block',
   background: 'none',
-  width: 100,
+  margin: 0,
   fontSize: 13,
-  fontWeight: 'normal'
+  padding: '5px 5px 5px 0',
+  fontWeight: 'normal',
+  width: 100,
 }
 
 const Value = styled.td``
 const valueStyle = {
-  fontSize: 13,
   color: COLORS.gunMetal,
+  fontSize: 13,
   margin: 0,
-  textAlign: 'left',
   padding: '5px 5px 5px 5px',
   background: 'none',
+  textAlign: 'left',
   border: 'none',
+  fontWeight: 500,
   lineHeight: 'normal',
-  fontWeight: 500
 }
 
 export default BeaconMalfunctionsDetailsFollowUpNotification

@@ -1,30 +1,20 @@
 import React from 'react'
-import styled from 'styled-components'
-import RegulatoryLayerSearchResultLawType from './RegulatoryLayerSearchResultLawType'
-import { COLORS } from '../../../../constants/constants'
 import { useSelector } from 'react-redux'
+import styled from 'styled-components'
 
-const RegulatoryLayerSearchResultList = () => {
-  const {
-    regulatoryLayersSearchResult,
-    advancedSearchIsOpen
-  } = useSelector(state => state.regulatoryLayerSearch)
+import { COLORS } from '../../../../constants/constants'
+import RegulatoryLayerSearchResultLawType from './RegulatoryLayerSearchResultLawType'
+
+function RegulatoryLayerSearchResultList() {
+  const { advancedSearchIsOpen, regulatoryLayersSearchResult } = useSelector(state => state.regulatoryLayerSearch)
 
   return (
     <List $advancedSearchIsOpen={advancedSearchIsOpen}>
-      {
-        regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0
-          ? Object.entries(regulatoryLayersSearchResult)?.map(([lawType, topic]) => {
-            return (
-              <RegulatoryLayerSearchResultLawType
-                key={lawType}
-                regulatoryLayerLawType={lawType}
-                topic={topic}
-              />
-            )
-          })
-          : null
-      }
+      {regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0
+        ? Object.entries(regulatoryLayersSearchResult)?.map(([lawType, topic]) => (
+            <RegulatoryLayerSearchResultLawType key={lawType} regulatoryLayerLawType={lawType} topic={topic} />
+          ))
+        : null}
     </List>
   )
 }
@@ -34,7 +24,7 @@ const List = styled.ul`
   background: ${COLORS.background};
   border-radius: 0;
   padding: 0;
-  max-height: ${props => props.$advancedSearchIsOpen ? '55vh' : '74vh'};
+  max-height: ${props => (props.$advancedSearchIsOpen ? '55vh' : '74vh')};
   overflow-y: auto;
   overflow-x: hidden;
   color: ${COLORS.slateGray};

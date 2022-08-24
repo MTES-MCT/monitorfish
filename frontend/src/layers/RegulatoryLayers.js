@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector, useStore } from 'react-redux'
+
 import Layers, { getLayerNameNormalized } from '../domain/entities/layers'
 import { showSimplifiedGeometries, showWholeGeometries } from '../domain/shared_slices/Regulatory'
 import { getVectorOLLayer } from '../domain/use_cases/layer/regulation/showRegulatoryZone'
@@ -7,25 +8,16 @@ import { getVectorOLLayer } from '../domain/use_cases/layer/regulation/showRegul
 export const metadataIsShowedPropertyName = 'metadataIsShowed'
 const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5
 
-const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
+function RegulatoryLayers({ map, mapMovingAndZoomEvent }) {
   const throttleDuration = 500 // ms
   const dispatch = useDispatch()
   const { getState } = useStore()
 
-  const {
-    showedLayers,
-    lastShowedFeatures,
-    layersToFeatures
-  } = useSelector(state => state.layer)
+  const { lastShowedFeatures, layersToFeatures, showedLayers } = useSelector(state => state.layer)
 
-  const {
-    regulatoryZoneMetadata,
-    simplifiedGeometries
-  } = useSelector(state => state.regulatory)
+  const { regulatoryZoneMetadata, simplifiedGeometries } = useSelector(state => state.regulatory)
 
-  const {
-    gears
-  } = useSelector(state => state.gear)
+  const { gears } = useSelector(state => state.gear)
 
   const previousMapZoom = useRef('')
   const isThrottled = useRef(false)
@@ -45,13 +37,18 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   }, [showedLayers, gears])
 
   useEffect(() => {
-    function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers () {
+    function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers() {
       if (map) {
-        const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(Layers.REGULATORY.code))
+        const regulatoryLayers = map
+          .getLayers()
+          .getArray()
+          .filter(layer => layer?.name?.includes(Layers.REGULATORY.code))
         if (regulatoryZoneMetadata) {
-          const layerToAddProperty = regulatoryLayers.find(layer => {
-            return layer?.name === `${Layers.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
-          })
+          const layerToAddProperty = regulatoryLayers.find(
+            layer =>
+              layer?.name ===
+              `${Layers.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`,
+          )
 
           if (layerToAddProperty) {
             addMetadataIsShowedProperty(lastShowedFeatures, layerToAddProperty)
@@ -70,7 +67,7 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
       return
     }
 
-    function showSimplifiedOrWholeFeatures () {
+    function showSimplifiedOrWholeFeatures() {
       const currentZoom = map.getView().getZoom().toFixed(2)
 
       if (currentZoom !== previousMapZoom.current) {
@@ -81,7 +78,10 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
           return
         }
 
-        const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(Layers.REGULATORY.code))
+        const regulatoryLayers = map
+          .getLayers()
+          .getArray()
+          .filter(layer => layer?.name?.includes(Layers.REGULATORY.code))
         regulatoryLayers.forEach(layer => {
           const vectorSource = layer.getSource()
 
@@ -116,11 +116,11 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   return null
 }
 
-function sortRegulatoryLayersFromAreas (layersToFeatures, olLayers) {
+function sortRegulatoryLayersFromAreas(layersToFeatures, olLayers) {
   const sortedLayersToArea = [...layersToFeatures].sort((a, b) => a.area - b.area).reverse()
 
   sortedLayersToArea.forEach((layerAndArea, index) => {
-    index = index + 1
+    index += 1
     const layer = olLayers.find(layer => layer?.name === layerAndArea.name)
 
     if (layer) {
@@ -129,27 +129,27 @@ function sortRegulatoryLayersFromAreas (layersToFeatures, olLayers) {
   })
 }
 
-function layersNotInCurrentOLMap (olLayers, layer) {
-  return !olLayers.some(olLayer => olLayer.name ===
-    getLayerNameNormalized({ type: Layers.REGULATORY.code, ...layer }))
+function layersNotInCurrentOLMap(olLayers, layer) {
+  return !olLayers.some(olLayer => olLayer.name === getLayerNameNormalized({ type: Layers.REGULATORY.code, ...layer }))
 }
 
-function layersOfTypeRegulatoryLayer (layer) {
+function layersOfTypeRegulatoryLayer(layer) {
   return layer.type === Layers.REGULATORY.code
 }
 
-function getShowSimplifiedFeatures (currentZoom) {
+function getShowSimplifiedFeatures(currentZoom) {
   return currentZoom < SIMPLIFIED_FEATURE_ZOOM_LEVEL
 }
 
-function featuresAreAlreadyDrawWithTheSameTolerance (showSimplifiedFeatures, simplifiedGeometries) {
+function featuresAreAlreadyDrawWithTheSameTolerance(showSimplifiedFeatures, simplifiedGeometries) {
   return (!showSimplifiedFeatures && !simplifiedGeometries) || (showSimplifiedFeatures && simplifiedGeometries)
 }
 
-function removeRegulatoryLayersToMap (showedLayers, olLayers) {
+function removeRegulatoryLayersToMap(showedLayers, olLayers) {
   const _showedLayers = showedLayers?.length ? showedLayers : []
 
-  const layersToRemove = olLayers.getArray()
+  const layersToRemove = olLayers
+    .getArray()
     .filter(olLayer => layersOfTypeRegulatoryLayerInCurrentMap(olLayer))
     .filter(olLayer => layersNotPresentInShowedLayers(_showedLayers, olLayer))
 
@@ -158,33 +158,34 @@ function removeRegulatoryLayersToMap (showedLayers, olLayers) {
   })
 }
 
-function layersNotPresentInShowedLayers (_showedLayers, olLayer) {
+function layersNotPresentInShowedLayers(_showedLayers, olLayer) {
   return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.name)
 }
 
-function layersOfTypeRegulatoryLayerInCurrentMap (olLayer) {
+function layersOfTypeRegulatoryLayerInCurrentMap(olLayer) {
   return olLayer?.name?.includes(Layers.REGULATORY.code)
 }
 
-function addMetadataIsShowedProperty (lastShowedFeatures, layerToAddProperty) {
+function addMetadataIsShowedProperty(lastShowedFeatures, layerToAddProperty) {
   const features = layerToAddProperty.getSource().getFeatures()
   if (features?.length) {
     features.forEach(feature => feature.set(metadataIsShowedPropertyName, true))
   } else if (lastShowedFeatures?.length) {
-    lastShowedFeatures
-      .forEach(feature => feature.set(metadataIsShowedPropertyName, true))
+    lastShowedFeatures.forEach(feature => feature.set(metadataIsShowedPropertyName, true))
   }
 }
 
-function removeMetadataIsShowedProperty (regulatoryLayers) {
+function removeMetadataIsShowedProperty(regulatoryLayers) {
   regulatoryLayers.forEach(layer => {
-    layer.getSource().getFeatures()
+    layer
+      .getSource()
+      .getFeatures()
       .filter(feature => feature.get(metadataIsShowedPropertyName))
       .forEach(feature => feature.set(metadataIsShowedPropertyName, false))
   })
 }
 
-function addRegulatoryLayersToMap (dispatch, getState, olLayers, showedLayers) {
+function addRegulatoryLayersToMap(dispatch, getState, olLayers, showedLayers) {
   if (showedLayers.length) {
     const layersToInsert = showedLayers
       .filter(layer => layersNotInCurrentOLMap(olLayers.getArray(), layer))

@@ -1,20 +1,17 @@
 import React from 'react'
-import { COLORS } from '../../../constants/constants'
 import styled from 'styled-components'
 
-const BeaconMalfunctionDetailsFollowUpRow = ({ dateText, children, smallSize, index }) => {
+import { COLORS } from '../../../constants/constants'
+
+function BeaconMalfunctionDetailsFollowUpRow({ children, dateText, index, smallSize }) {
   return (
     <span key={dateText}>
       <DateSeparator
-        data-cy={'side-window-beacon-malfunctions-detail-comment-date'}
+        data-cy="side-window-beacon-malfunctions-detail-comment-date"
         style={dateSeparatorStyle(index === 0)}
       >
-        <Line style={lineStyle(smallSize)}/>
-        <RowDate
-          style={rowDateStyle(dateText === 'Aujourd\'hui', dateText === 'Hier', smallSize)}
-        >
-          {dateText}
-        </RowDate>
+        <Line style={lineStyle(smallSize)} />
+        <RowDate style={rowDateStyle(dateText === "Aujourd'hui", dateText === 'Hier', smallSize)}>{dateText}</RowDate>
       </DateSeparator>
       {children}
     </span>
@@ -24,28 +21,34 @@ const BeaconMalfunctionDetailsFollowUpRow = ({ dateText, children, smallSize, in
 const DateSeparator = styled.div``
 const dateSeparatorStyle = first => ({
   height: 20,
+  marginTop: first ? 10 : 30,
   width: 558,
-  marginTop: first ? 10 : 30
 })
 
 const RowDate = styled.div``
 const rowDateStyle = (isToday, isYesterday, smallSize) => ({
-  marginTop: -23,
-  width: 'fit-content',
   background: 'white',
-  padding: 10,
+  color: COLORS.slateGray,
   marginLeft: isToday
-    ? smallSize ? 'calc(220px - 45px)' : 'calc(50% - 45px)'
+    ? smallSize
+      ? 'calc(220px - 45px)'
+      : 'calc(50% - 45px)'
     : isYesterday
-      ? smallSize ? 'calc(220px - 23px)' : 'calc(50% - 23px)'
-      : smallSize ? 'calc(220px - 43px)' : 'calc(50% - 43px)',
-  color: COLORS.slateGray
+    ? smallSize
+      ? 'calc(220px - 23px)'
+      : 'calc(50% - 23px)'
+    : smallSize
+    ? 'calc(220px - 43px)'
+    : 'calc(50% - 43px)',
+  marginTop: -23,
+  padding: 10,
+  width: 'fit-content',
 })
 
 const Line = styled.div``
 const lineStyle = smallSize => ({
+  borderBottom: `1px solid ${COLORS.lightGray}`,
   width: smallSize ? 445 : 558,
-  borderBottom: `1px solid ${COLORS.lightGray}`
 })
 
 export default BeaconMalfunctionDetailsFollowUpRow

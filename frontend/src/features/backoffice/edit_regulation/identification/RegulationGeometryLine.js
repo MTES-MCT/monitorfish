@@ -1,24 +1,20 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
+
+import { COLORS } from '../../../../constants/constants'
+import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 import { ContentLine } from '../../../commonStyles/Backoffice.style'
 import { Label } from '../../../commonStyles/Input.style'
+import { ReactComponent as ShowIconSVG } from '../../../icons/oeil_affiche.svg'
+import { ReactComponent as HideIconSVG } from '../../../icons/oeil_masque.svg'
+import { updateProcessingRegulationByKey } from '../../Regulation.slice'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 import MenuItem from '../custom_form/MenuItem'
 import Tag from '../Tag'
-import { ReactComponent as ShowIconSVG } from '../../../icons/oeil_affiche.svg'
-import { ReactComponent as HideIconSVG } from '../../../icons/oeil_masque.svg'
-import { COLORS } from '../../../../constants/constants'
-import { updateProcessingRegulationByKey } from '../../Regulation.slice'
-import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 
-const RegulationGeometryLine = props => {
-  const {
-    geometryIdList,
-    setShowRegulatoryPreview,
-    showRegulatoryPreview,
-    geometryIsMissing
-  } = props
+function RegulationGeometryLine(props) {
+  const { geometryIdList, geometryIsMissing, setShowRegulatoryPreview, showRegulatoryPreview } = props
 
   const dispatch = useDispatch()
 
@@ -29,35 +25,34 @@ const RegulationGeometryLine = props => {
     setShowRegulatoryPreview(false)
   }
 
-  return <CustomContentLine>
-    <Label>Géométrie</Label>
-    <CustomSelectComponent
-        searchable={false}
-        placeholder='Choisir un tracé'
-        value={'Choisir un tracé'}
-        onChange={value => dispatch(updateProcessingRegulationByKey({ key: 'id', value }))}
+  return (
+    <CustomContentLine>
+      <Label>Géométrie</Label>
+      <CustomSelectComponent
         data={geometryIdList}
-        valueIsMissing={geometryIsMissing}
-        emptyMessage={'aucun tracé à associer'}
-        renderMenuItem={(_, item) =>
-          <MenuItem checked={item.value === id}
-            item={item} tag={'Radio'}/>}
+        emptyMessage="aucun tracé à associer"
         menuClassName={DEFAULT_MENU_CLASSNAME}
+        onChange={value => dispatch(updateProcessingRegulationByKey({ key: 'id', value }))}
+        placeholder="Choisir un tracé"
+        renderMenuItem={(_, item) => <MenuItem checked={item.value === id} item={item} tag="Radio" />}
+        searchable={false}
+        value="Choisir un tracé"
+        valueIsMissing={geometryIsMissing}
       />
-    {id &&
-      <><Tag
-        tagValue={id}
-        onCloseIconClicked={onCloseIconClicked}
-      />
-      <EyeWrapper>
-        { showRegulatoryPreview
-          ? <ShowIcon onClick={() => setShowRegulatoryPreview(false)}/>
-          : <HideIcon onClick={() => setShowRegulatoryPreview(true)}/>
-        }
-      </EyeWrapper>
-      </>
-    }
-  </CustomContentLine>
+      {id && (
+        <>
+          <Tag onCloseIconClicked={onCloseIconClicked} tagValue={id} />
+          <EyeWrapper>
+            {showRegulatoryPreview ? (
+              <ShowIcon onClick={() => setShowRegulatoryPreview(false)} />
+            ) : (
+              <HideIcon onClick={() => setShowRegulatoryPreview(true)} />
+            )}
+          </EyeWrapper>
+        </>
+      )}
+    </CustomContentLine>
+  )
 }
 
 const CustomContentLine = styled(ContentLine)`

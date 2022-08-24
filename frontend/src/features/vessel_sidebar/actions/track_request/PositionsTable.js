@@ -1,26 +1,24 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
-import { Table } from 'rsuite'
 import { transform } from 'ol/proj'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { sortArrayByColumn, SortType } from '../../../vessel_list/tableSort'
+import { Table } from 'rsuite'
+import styled from 'styled-components'
+
 import { getCoordinates } from '../../../../coordinates'
-import { highlightVesselTrackPosition } from '../../../../domain/shared_slices/Vessel'
-import { CSVOptions } from '../../../vessel_list/dataFormatting'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../domain/entities/map'
 import { animateToCoordinates } from '../../../../domain/shared_slices/Map'
-import { ReactComponent as ManualPositionSVG } from '../../../icons/Pastille_position_manuelle.svg'
+import { highlightVesselTrackPosition } from '../../../../domain/shared_slices/Vessel'
 import { useClickOutsideWhenOpened } from '../../../../hooks/useClickOutsideWhenOpened'
+import { ReactComponent as ManualPositionSVG } from '../../../icons/Pastille_position_manuelle.svg'
+import { CSVOptions } from '../../../vessel_list/dataFormatting'
+import { sortArrayByColumn, SortType } from '../../../vessel_list/tableSort'
 
-const { Column, HeaderCell, Cell } = Table
+const { Cell, Column, HeaderCell } = Table
 
-const PositionsTable = ({ openBox }) => {
+function PositionsTable({ openBox }) {
   const dispatch = useDispatch()
   const { coordinatesFormat } = useSelector(state => state.map)
-  const {
-    selectedVesselPositions,
-    highlightedVesselTrackPosition
-  } = useSelector(state => state.vessel)
+  const { highlightedVesselTrackPosition, selectedVesselPositions } = useSelector(state => state.vessel)
 
   const [sortColumn, setSortColumn] = useState(CSVOptions.dateTime.code)
   const [sortType, setSortType] = useState(SortType.DESC)
@@ -40,9 +38,7 @@ const PositionsTable = ({ openBox }) => {
 
   const getPositions = useCallback(() => {
     if (sortColumn && sortType && Array.isArray(selectedVesselPositions)) {
-      return selectedVesselPositions
-        .slice()
-        .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
+      return selectedVesselPositions.slice().sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
     }
 
     return []
@@ -51,91 +47,99 @@ const PositionsTable = ({ openBox }) => {
   return (
     <div ref={wrapperRef}>
       <Table
-        virtualized
-        height={400}
         data={getPositions()}
+        height={400}
+        onSortColumn={handleSortColumn}
         rowHeight={36}
+        shouldUpdateScroll={false}
         sortColumn={sortColumn}
         sortType={sortType}
-        onSortColumn={handleSortColumn}
-        shouldUpdateScroll={false}
+        virtualized
       >
-        <Column width={175} fixed sortable>
+        <Column fixed sortable width={175}>
           <HeaderCell>GDH</HeaderCell>
-          <DateTimeCell dispatch={dispatch} dataKey="dateTime" coordinatesFormat={coordinatesFormat}/>
+          <DateTimeCell coordinatesFormat={coordinatesFormat} dataKey="dateTime" dispatch={dispatch} />
         </Column>
-        <Column width={70} fixed sortable>
+        <Column fixed sortable width={70}>
           <HeaderCell>Vitesse</HeaderCell>
-          <SpeedCell dispatch={dispatch} dataKey="speed" coordinatesFormat={coordinatesFormat}/>
+          <SpeedCell coordinatesFormat={coordinatesFormat} dataKey="speed" dispatch={dispatch} />
         </Column>
-        <Column width={60} fixed sortable>
+        <Column fixed sortable width={60}>
           <HeaderCell>Cap</HeaderCell>
-          <CourseCell dispatch={dispatch} dataKey="course" coordinatesFormat={coordinatesFormat}/>
+          <CourseCell coordinatesFormat={coordinatesFormat} dataKey="course" dispatch={dispatch} />
         </Column>
       </Table>
     </div>
   )
 }
 
-export const SpeedCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...props }) => {
-  const coordinates = rowData ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat) : ''
-  const olCoordinates = rowData ? transform([rowData.longitude, rowData.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION) : []
+export function SpeedCell({ coordinatesFormat, dataKey, dispatch, rowData, ...props }) {
+  const coordinates = rowData
+    ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat)
+    : ''
+  const olCoordinates = rowData
+    ? transform([rowData.longitude, rowData.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+    : []
 
   return (
     <Cell
       {...props}
+      onClick={() => dispatch(animateToCoordinates(olCoordinates))}
+      onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
-      onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
-      onClick={() => dispatch(animateToCoordinates(olCoordinates))}
     >
-      {
-        Number.isNaN(parseFloat(rowData[dataKey]))
-          ? ''
-          : `${rowData[dataKey]} nds`
-      }
-
+      {Number.isNaN(parseFloat(rowData[dataKey])) ? '' : `${rowData[dataKey]} nds`}
     </Cell>
   )
 }
 
-export const CourseCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...props }) => {
-  const coordinates = rowData ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat) : ''
-  const olCoordinates = rowData ? transform([rowData.longitude, rowData.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION) : []
+export function CourseCell({ coordinatesFormat, dataKey, dispatch, rowData, ...props }) {
+  const coordinates = rowData
+    ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat)
+    : ''
+  const olCoordinates = rowData
+    ? transform([rowData.longitude, rowData.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+    : []
 
   return (
     <Cell
       {...props}
+      onClick={() => dispatch(animateToCoordinates(olCoordinates))}
+      onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
-      onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
-      onClick={() => dispatch(animateToCoordinates(olCoordinates))}
     >
-      { rowData[dataKey] || rowData[dataKey] === 0 ? `${rowData[dataKey]}°` : '' }
+      {rowData[dataKey] || rowData[dataKey] === 0 ? `${rowData[dataKey]}°` : ''}
     </Cell>
   )
 }
 
-export const DateTimeCell = ({ coordinatesFormat, rowData, dataKey, dispatch, ...props }) => {
-  const coordinates = rowData ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat) : ''
-  const olCoordinates = rowData ? transform([rowData.longitude, rowData.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION) : []
+export function DateTimeCell({ coordinatesFormat, dataKey, dispatch, rowData, ...props }) {
+  const coordinates = rowData
+    ? getCoordinates([rowData.longitude, rowData.latitude], WSG84_PROJECTION, coordinatesFormat)
+    : ''
+  const olCoordinates = rowData
+    ? transform([rowData.longitude, rowData.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+    : []
 
   let dateTimeStringWithoutMilliSeconds = rowData[dataKey].split('.')[0]
   if (rowData[dataKey].includes('Z') && !dateTimeStringWithoutMilliSeconds.includes('Z')) {
     dateTimeStringWithoutMilliSeconds += 'Z'
   } else if (rowData[dataKey].includes('+') && !dateTimeStringWithoutMilliSeconds.includes('+')) {
-    dateTimeStringWithoutMilliSeconds += '+' + rowData[dataKey].split('+')[1]
+    dateTimeStringWithoutMilliSeconds += `+${rowData[dataKey].split('+')[1]}`
   }
 
   return (
     <Cell
       {...props}
+      onClick={() => dispatch(animateToCoordinates(olCoordinates))}
+      onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
       style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
-      onMouseEnter={() => dispatch(highlightVesselTrackPosition(rowData))}
-      onClick={() => dispatch(animateToCoordinates(olCoordinates))}
     >
-      { dateTimeStringWithoutMilliSeconds } { rowData.isManual ? <ManualPosition title={'Position manuelle (4h-report)'}/> : '' }
+      {dateTimeStringWithoutMilliSeconds}{' '}
+      {rowData.isManual ? <ManualPosition title="Position manuelle (4h-report)" /> : ''}
     </Cell>
   )
 }

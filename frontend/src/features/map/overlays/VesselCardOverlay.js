@@ -1,61 +1,68 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
-import VesselCard from '../cards/VesselCard'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
+import styled from 'styled-components'
+
 import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
+import VesselCard from '../cards/VesselCard'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from './position'
-import { useSelector } from 'react-redux'
 
 const overlayHeight = 260
 export const marginsWithoutAlert = {
-  xRight: -407,
-  xMiddle: -185,
   xLeft: 20,
-  yTop: 20,
+  xMiddle: -185,
+  xRight: -407,
+  yBottom: -277,
   yMiddle: -127,
-  yBottom: -277
+  yTop: 20,
 }
 
 export const marginsWithOneWarning = {
-  xRight: -407,
-  xMiddle: -185,
   xLeft: 20,
-  yTop: 20,
+  xMiddle: -185,
+  xRight: -407,
+  yBottom: -307,
   yMiddle: -141,
-  yBottom: -307
+  yTop: 20,
 }
 
 export const marginsWithTwoWarning = {
-  xRight: -407,
-  xMiddle: -185,
   xLeft: 20,
-  yTop: 20,
+  xMiddle: -185,
+  xRight: -407,
+  yBottom: -337,
   yMiddle: -155,
-  yBottom: -337
+  yTop: 20,
 }
 
-const VesselCardOverlay = ({ feature, map }) => {
+function VesselCardOverlay({ feature, map }) {
   const { adminRole } = useSelector(state => state.global)
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
-  const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState([marginsWithoutAlert.yBottom, marginsWithoutAlert.xMiddle])
+  const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState([
+    marginsWithoutAlert.yBottom,
+    marginsWithoutAlert.xMiddle,
+  ])
   const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
   const numberOfWarnings = useRef(0)
 
-  const overlayCallback = useCallback(ref => {
-    overlayRef.current = ref
-    if (ref) {
-      overlayObjectRef.current = new Overlay({
-        element: ref,
-        autoPan: false,
-        className: 'ol-overlay-container ol-selectable vessel-card'
-      })
-    } else {
-      overlayObjectRef.current = null
-    }
-  }, [overlayRef, overlayObjectRef])
+  const overlayCallback = useCallback(
+    ref => {
+      overlayRef.current = ref
+      if (ref) {
+        overlayObjectRef.current = new Overlay({
+          autoPan: false,
+          className: 'ol-overlay-container ol-selectable vessel-card',
+          element: ref,
+        })
+      } else {
+        overlayObjectRef.current = null
+      }
+    },
+    [overlayRef, overlayObjectRef],
+  )
 
   useEffect(() => {
     if (map) {
@@ -68,7 +75,9 @@ const VesselCardOverlay = ({ feature, map }) => {
       if (feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
         setVesselFeatureToShowOnCard(feature)
         numberOfWarnings.current = adminRole
-          ? feature?.vesselProperties?.hasAlert + !!feature?.vesselProperties?.beaconMalfunctionId + feature?.vesselProperties?.hasInfractionSuspicion
+          ? feature?.vesselProperties?.hasAlert +
+            !!feature?.vesselProperties?.beaconMalfunctionId +
+            feature?.vesselProperties?.hasInfractionSuspicion
           : false
         overlayRef.current.style.display = 'block'
         overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
@@ -78,9 +87,14 @@ const VesselCardOverlay = ({ feature, map }) => {
 
         let margins
         switch (numberOfWarnings.current) {
-          case 1: margins = marginsWithOneWarning; break
-          case 2: margins = marginsWithTwoWarning; break
-          default: margins = marginsWithoutAlert
+          case 1:
+            margins = marginsWithOneWarning
+            break
+          case 2:
+            margins = marginsWithTwoWarning
+            break
+          default:
+            margins = marginsWithoutAlert
         }
 
         setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, margins))
@@ -91,7 +105,7 @@ const VesselCardOverlay = ({ feature, map }) => {
     }
   }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef, adminRole])
 
-  function getNextOverlayPosition (numberOfWarnings) {
+  function getNextOverlayPosition(numberOfWarnings) {
     const [x, y] = feature.getGeometry().getCoordinates()
     const extent = map.getView().calculateExtent()
     const boxSize = map.getView().getResolution() * overlayHeight + (numberOfWarnings ? 30 * numberOfWarnings : 0)
@@ -101,15 +115,13 @@ const VesselCardOverlay = ({ feature, map }) => {
 
   return (
     <VesselCardOverlayComponent ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>
-      {
-        vesselFeatureToShowOnCard
-          ? <VesselCard
-            feature={vesselFeatureToShowOnCard}
-            overlayPosition={overlayPosition}
-            numberOfWarnings={numberOfWarnings.current}
-          />
-          : null
-      }
+      {vesselFeatureToShowOnCard ? (
+        <VesselCard
+          feature={vesselFeatureToShowOnCard}
+          numberOfWarnings={numberOfWarnings.current}
+          overlayPosition={overlayPosition}
+        />
+      ) : null}
     </VesselCardOverlayComponent>
   )
 }

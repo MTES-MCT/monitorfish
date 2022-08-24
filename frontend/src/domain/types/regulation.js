@@ -24,11 +24,11 @@
 
 /**
  * @typedef {Map<string, RegulatoryZone[]>} RegulatoryTopics - key is a topic
- **/
+ * */
 
 /**
  * @typedef {Map<string, RegulatoryTopics>} RegulatoryLawTypes - key is the law type name
- **/
+ * */
 
 /**
  * @typedef DateInterval
@@ -111,7 +111,7 @@
  * @property {Object<string,GearCategory>} regulatedGearCategories
  * @property {string[]} selectedCategoriesAndGears - a list of categories name and gears code
  * @property {boolean} derogation
-*/
+ */
 
 /**
  * @typedef RegulatedSpeciesDetail

@@ -1,18 +1,19 @@
 import React, { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
+
+import { COLORS } from '../../../../constants/constants'
 import { getYearsToReportingList } from '../../../../domain/entities/reporting'
 import { Title, Zone } from '../../common_styles/common.style'
-import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
 import YearReporting from './YearReporting'
 import { setArchivedReportingsFromDate } from '../../../../domain/shared_slices/Reporting'
 
-const ArchivedReportings = () => {
+function ArchivedReportings() {
   const dispatch = useDispatch()
   const {
     /** @type {CurrentAndArchivedReportings} */
-    currentAndArchivedReportings,
-    archivedReportingsFromDate
+    archivedReportingsFromDate,
+    currentAndArchivedReportings
   } = useSelector(state => state.reporting)
 
   /** @type {Object.<string, Reporting[]>} yearsToReportings */
@@ -21,44 +22,42 @@ const ArchivedReportings = () => {
     if (currentAndArchivedReportings?.archived) {
       nextYearsToControls = getYearsToReportingList(archivedReportingsFromDate, currentAndArchivedReportings.archived)
     }
-    return nextYearsToControls
+    
+return nextYearsToControls
   }, [currentAndArchivedReportings, archivedReportingsFromDate])
 
-  function seeMore () {
+  function seeMore() {
     const nextDate = new Date(archivedReportingsFromDate.getTime())
     nextDate.setMonth(nextDate.getMonth() - 12)
 
     dispatch(setArchivedReportingsFromDate(nextDate))
   }
 
-  return <Zone data-cy={'vessel-sidebar-reporting-tab-history'}>
-    <Title>Historique des signalements</Title>
-    {
-      yearsToReportings && Object.keys(yearsToReportings)?.length
-        ? <List>
-          {
-            Object.keys(yearsToReportings)
-              .sort((a, b) => b - a)
-              .map((year, index) => {
-                return <YearReporting
+  return (
+    <Zone data-cy="vessel-sidebar-reporting-tab-history">
+      <Title>Historique des signalements</Title>
+      {yearsToReportings && Object.keys(yearsToReportings)?.length ? (
+        <List>
+          {Object.keys(yearsToReportings)
+            .sort((a, b) => b - a)
+            .map((year, index) => <YearReporting
                   key={year + index}
                   year={year}
                   yearReportings={yearsToReportings[year]}
                   isLastItem={yearsToReportings[year].length === index + 1}
-                />
-              })
-          }
+                />)
+            })}
         </List>
-        : <NoReporting>
+      ) : (
+        <NoReporting>
           Aucun signalement {archivedReportingsFromDate && `depuis ${archivedReportingsFromDate.getUTCFullYear() + 1}`}
         </NoReporting>
-    }
-    <SeeMoreBackground>
-      <SeeMore onClick={seeMore}>
-        Afficher plus de signalements
-      </SeeMore>
-    </SeeMoreBackground>
-  </Zone>
+      )}
+      <SeeMoreBackground>
+        <SeeMore onClick={seeMore}>Afficher plus de signalements</SeeMore>
+      </SeeMoreBackground>
+    </Zone>
+  )
 }
 
 const List = styled.ul`
@@ -72,7 +71,7 @@ const NoReporting = styled.div`
   padding: 10px 0 10px 0;
   color: ${COLORS.gunMetal};
   font-size: 13px;
-  width: 100%
+  width: 100%;
 `
 
 const SeeMoreBackground = styled.div`

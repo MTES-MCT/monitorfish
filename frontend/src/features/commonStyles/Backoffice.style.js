@@ -1,11 +1,13 @@
-import styled, { css } from 'styled-components'
-import { COLORS } from '../../constants/constants'
 import { Checkbox, RadioGroup } from 'rsuite'
+import styled, { css } from 'styled-components'
+
+import { COLORS } from '../../constants/constants'
 
 export const ContentLine = styled.div`
   display: flex;
-  flex-direction : ${props => props.isFormOpened && props.isInfoTextShown ? 'column' : 'row'};
-  align-items: ${props => (props.isFormOpened && props.isInfoTextShown) || props.alignedToTop ? 'flex-start' : 'center'};
+  flex-direction: ${props => (props.isFormOpened && props.isInfoTextShown ? 'column' : 'row')};
+  align-items: ${props =>
+    (props.isFormOpened && props.isInfoTextShown) || props.alignedToTop ? 'flex-start' : 'center'};
   margin-bottom: 8px;
 `
 
@@ -19,7 +21,7 @@ export const Title = styled.span`
   border-bottom: 1px solid ${COLORS.lightGray};
   margin-bottom: 20px;
   padding-bottom: 8px;
-  cursor: ${props => props.onClick !== undefined ? 'pointer' : 'auto'};
+  cursor: ${props => (props.onClick !== undefined ? 'pointer' : 'auto')};
 `
 
 export const Footer = styled.div`
@@ -29,7 +31,7 @@ export const Footer = styled.div`
   left: O;
   bottom: 0;
   width: 100%;
-  background-color:${COLORS.white};
+  background-color: ${COLORS.white};
   z-index: 100;
 `
 
@@ -42,17 +44,17 @@ export const FooterButton = styled.div`
 `
 
 export const Delimiter = styled.div`
-  width: ${props => props.width ? props.width : '700'}px;
+  width: ${props => (props.width ? props.width : '700')}px;
   border-bottom: 1px solid ${COLORS.lightGray};
   margin-bottom: 15px;
 `
 
 export const Link = styled.a`
-  color: ${props => props.tagUrl ? COLORS.gainsboro : COLORS.gunMetal};
+  color: ${props => (props.tagUrl ? COLORS.gainsboro : COLORS.gunMetal)};
   font-size: 13px;
   padding: 0px 8px;
   cursor: pointer;
-  ${props => !props.tagUrl ? 'font-weight: 500;' : ''}
+  ${props => (!props.tagUrl ? 'font-weight: 500;' : '')}
 `
 export const InfoTextWrapper = styled.div`
   display: flex;
@@ -62,11 +64,11 @@ export const InfoTextWrapper = styled.div`
 `
 
 export const InfoText = styled.span`
-  ${props => props.bold ? 'font-weight: bold;' : ''}
+  ${props => (props.bold ? 'font-weight: bold;' : '')}
   text-align: left;
   display: inline-block;
   font-size: 13px;
-  color: ${props => props.red ? COLORS.maximumRed : COLORS.gunMetal};
+  color: ${props => (props.red ? COLORS.maximumRed : COLORS.gunMetal)};
   padding-left: 8px;
   white-space: pre-line;
 `
@@ -81,11 +83,11 @@ export const CustomCheckbox = styled(Checkbox)`
   .rs-checkbox-wrapper {
     top: 0px !important;
     left: 0px !important;
-    border: 1px solid ${props => props.$isRequired ? COLORS.maximumRed : COLORS.lightGray};
+    border: 1px solid ${props => (props.$isRequired ? COLORS.maximumRed : COLORS.lightGray)};
   }
   .rs-checkbox-wrapper .rs-checkbox-inner {
     &:before {
-      border: none!important;
+      border: none !important;
       box-sizing: border-box;
     }
     &:after {
@@ -96,7 +98,7 @@ export const CustomCheckbox = styled(Checkbox)`
   .rs-checkbox-checker {
     padding-top: 0px !important;
     padding-left: 24px !important;
-}
+  }
 `
 
 export const customRadioGroup = css`
@@ -118,26 +120,26 @@ export const RegulatorySectionTitle = styled.div`
 `
 
 export const FormSection = styled.div`
-  display: ${props => props.show ? 'flex' : 'none'};
-  ${props => props.show ? 'flex-direction: column;' : ''};
+  display: ${props => (props.show ? 'flex' : 'none')};
+  ${props => (props.show ? 'flex-direction: column;' : '')};
   margin-right: 40px;
 `
 
 export const FormContent = styled.div`
-  display: ${props => !props.display ? 'none' : 'flex'};
+  display: ${props => (!props.display ? 'none' : 'flex')};
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 15px;
 `
 
 export const Section = styled(FormSection)`
-  display: ${props => props.show ? 'flex' : 'none'};
-  ${props => props.show ? 'flex-direction: column;' : ''};
+  display: ${props => (props.show ? 'flex' : 'none')};
+  ${props => (props.show ? 'flex-direction: column;' : '')};
   padding-bottom: 60px;
 `
 
 export const OtherRemark = styled.div`
-  display: ${props => props.show ? 'flex' : 'none'};
+  display: ${props => (props.show ? 'flex' : 'none')};
   margin-top: 15px;
 `
 export const Content = styled.div`

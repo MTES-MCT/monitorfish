@@ -1,16 +1,14 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { getHash } from '../../../utils'
-import { getAdministrativeAndRegulatoryLayersStyle } from '../../../layers/styles/administrativeAndRegulatoryLayers.style'
-import Layers, { getGearCategory } from '../../../domain/entities/layers'
 
-const LayerDetailsBox = props => {
-  const {
-    feature,
-    gears
-  } = props
+import { COLORS } from '../../../constants/constants'
+import Layers, { getGearCategory } from '../../../domain/entities/layers'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../../layers/styles/administrativeAndRegulatoryLayers.style'
+import { getHash } from '../../../utils'
+
+function LayerDetailsBox(props) {
+  const { feature, gears } = props
 
   const [vectorLayerStyle, setVectorLayerStyle] = useState(null)
   const [regulatoryFeatureToShowOnCard, setRegulatoryFeatureToShowOnCard] = useState(null)
@@ -25,11 +23,7 @@ const LayerDetailsBox = props => {
 
   useEffect(() => {
     if (regulatoryFeatureToShowOnCard) {
-      const {
-        zone,
-        topic,
-        gears: layerGears
-      } = regulatoryFeatureToShowOnCard.getProperties()
+      const { gears: layerGears, topic, zone } = regulatoryFeatureToShowOnCard.getProperties()
 
       if (zone && topic && gears) {
         const hash = getHash(`${topic}:${zone}`)
@@ -41,28 +35,33 @@ const LayerDetailsBox = props => {
     }
   }, [regulatoryFeatureToShowOnCard, gears, setVectorLayerStyle])
 
-  return (regulatoryFeatureToShowOnCard && <Details>
-    {
-      regulatoryFeatureToShowOnCard && <>
-        <Rectangle vectorLayerStyle={vectorLayerStyle}/>
-        <Text>
-          {regulatoryFeatureToShowOnCard.getProperties().topic}
-          {
-            regulatoryFeatureToShowOnCard.getProperties().zone
-              ? <ZoneName>{regulatoryFeatureToShowOnCard.getProperties().zone}</ZoneName>
-              : null
-          }
-        </Text>
-      </>
-    }
-  </Details>)
+  return (
+    regulatoryFeatureToShowOnCard && (
+      <Details>
+        {regulatoryFeatureToShowOnCard && (
+          <>
+            <Rectangle vectorLayerStyle={vectorLayerStyle} />
+            <Text>
+              {regulatoryFeatureToShowOnCard.getProperties().topic}
+              {regulatoryFeatureToShowOnCard.getProperties().zone ? (
+                <ZoneName>{regulatoryFeatureToShowOnCard.getProperties().zone}</ZoneName>
+              ) : null}
+            </Text>
+          </>
+        )}
+      </Details>
+    )
+  )
 }
 
 const Rectangle = styled.div`
   width: 14px;
   height: 14px;
-  background: ${props => props.vectorLayerStyle?.getFill() ? props.vectorLayerStyle.getFill().getColor() : COLORS.gray};
-  border: 1px solid ${props => props.vectorLayerStyle?.getStroke() ? props.vectorLayerStyle.getStroke().getColor() : COLORS.grayDarkerTwo};
+  background: ${props =>
+    props.vectorLayerStyle?.getFill() ? props.vectorLayerStyle.getFill().getColor() : COLORS.gray};
+  border: 1px solid
+    ${props =>
+      props.vectorLayerStyle?.getStroke() ? props.vectorLayerStyle.getStroke().getColor() : COLORS.grayDarkerTwo};
   margin-right: 7px;
   margin-top: 5px;
 `
@@ -87,7 +86,7 @@ const Details = styled.span`
   background: ${COLORS.gainsboro};
   font-size: 13px;
   font-weight: 500;
-  color: ${COLORS.charcoal}
+  color: ${COLORS.charcoal};
 `
 
 const ZoneName = styled.span`

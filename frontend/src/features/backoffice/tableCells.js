@@ -1,142 +1,144 @@
-import { COLORS } from '../../constants/constants'
-import { RiskFactorBox } from '../vessel_sidebar/risk_factor/RiskFactorBox'
-import { getRiskFactorColor } from '../../domain/entities/riskFactor'
-import { ReactComponent as DeleteIconSVG } from '../icons/Icone_suppression.svg'
 import React, { useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
 import { InputPicker, Table, Tag, TagPicker } from 'rsuite'
+import styled from 'styled-components'
+
+import { COLORS } from '../../constants/constants'
+import { getRiskFactorColor } from '../../domain/entities/riskFactor'
 import { useClickOutsideWhenOpenedAndNotInSelector } from '../../hooks/useClickOutsideWhenOpenedAndNotInSelector'
+import { ReactComponent as DeleteIconSVG } from '../icons/Icone_suppression.svg'
+import { RiskFactorBox } from '../vessel_sidebar/risk_factor/RiskFactorBox'
 
 const { Cell } = Table
 const rowKey = 'id'
 export const INPUT_TYPE = {
-  STRING: 'STRING',
+  DOUBLE: 'DOUBLE',
   INT: 'INT',
-  DOUBLE: 'DOUBLE'
+  STRING: 'STRING',
 }
 
-export const ModifiableCell = ({ rowData, dataKey, id, inputType, maxLength, onChange, ...props }) => {
+export function ModifiableCell({ dataKey, id, inputType, maxLength, onChange, rowData, ...props }) {
   return (
-    <Cell
-      title={rowData[dataKey]}
-      key={rowData[id]}
-      className={'table-content-editing'}
-      {...props}
-    >
+    <Cell key={rowData[id]} className="table-content-editing" title={rowData[dataKey]} {...props}>
       <FleetSegmentInput
-        withinCell
-        maxLength={maxLength}
-        value={rowData[dataKey]}
-        inputType={inputType}
-        id={rowData[id]}
         dataCy={`row-${rowData[id]}-${dataKey}-${rowData[dataKey]}`}
         dataKey={dataKey}
+        id={rowData[id]}
+        inputType={inputType}
+        maxLength={maxLength}
         onChange={onChange}
+        value={rowData[dataKey]}
+        withinCell
       />
     </Cell>
   )
 }
 
-export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, withinCell, onChange, dataCy }) => <input
-  data-cy={dataCy}
-  id={id}
-  style={{
-    fontSize: 13,
-    marginTop: withinCell ? -8 : 5,
-    marginBottom: withinCell ? 0 : 20,
-    marginLeft: withinCell ? -7 : 0,
-    marginRight: 0,
-    paddingLeft: 5,
-    paddingRight: 10,
-    fontWeight: 500
-  }}
-  type="text"
-  maxLength={maxLength}
-  className="rs-input"
-  value={value}
-  onChange={event => {
-    let value = null
-    switch (inputType) {
-      case INPUT_TYPE.INT: {
-        value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : 0
-        break
-      }
-      case INPUT_TYPE.DOUBLE: {
-        value = event.target.value ? event.target.value : 0.0
-        break
-      }
-      case INPUT_TYPE.STRING: {
-        value = event.target.value
-        break
-      }
-    }
-    onChange && onChange(id, dataKey, value)
-  }}
-/>
-
-export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) => {
+export function FleetSegmentInput({ dataCy, dataKey, id, inputType, maxLength, onChange, value, withinCell }) {
   return (
-    <Cell
-      key={rowData.id}
-      {...props}
-      className={'table-content-editing'}
-    >
+    <input
+      className="rs-input"
+      data-cy={dataCy}
+      id={id}
+      maxLength={maxLength}
+      onChange={event => {
+        let value = null
+        switch (inputType) {
+          case INPUT_TYPE.INT: {
+            value = event.target.value && !isNaN(parseInt(event.target.value)) ? parseInt(event.target.value) : 0
+            break
+          }
+          case INPUT_TYPE.DOUBLE: {
+            value = event.target.value ? event.target.value : 0.0
+            break
+          }
+          case INPUT_TYPE.STRING: {
+            value = event.target.value
+            break
+          }
+        }
+        onChange && onChange(id, dataKey, value)
+      }}
+      style={{
+        fontSize: 13,
+        fontWeight: 500,
+        marginBottom: withinCell ? 0 : 20,
+        marginLeft: withinCell ? -7 : 0,
+        marginRight: 0,
+        marginTop: withinCell ? -8 : 5,
+        paddingLeft: 5,
+        paddingRight: 10,
+      }}
+      type="text"
+      value={value}
+    />
+  )
+}
+
+export function ControlPriorityCell({ dataKey, onChange, rowData, ...props }) {
+  return (
+    <Cell key={rowData.id} {...props} className="table-content-editing">
       <InputPicker
-        value={rowData[dataKey]}
+        cleanable={false}
+        creatable={false}
+        data={[
+          { label: 1, value: 1 },
+          { label: 2, value: 2 },
+          { label: 3, value: 3 },
+          { label: 4, value: 4 },
+        ]}
         onChange={value => {
-          const controlPriority = (value && !isNaN(parseInt(value))) ? parseInt(value) : ''
+          const controlPriority = value && !isNaN(parseInt(value)) ? parseInt(value) : ''
           onChange && onChange(rowData.id, dataKey, controlPriority)
         }}
-        data={[{ label: 1, value: 1 }, { label: 2, value: 2 }, { label: 3, value: 3 }, { label: 4, value: 4 }]}
+        size="xs"
         style={{ width: 20 }}
-        creatable={false}
-        cleanable={false}
-        size={'xs'}
+        value={rowData[dataKey]}
       />
     </Cell>
   )
 }
 
-export const SegmentCellWithTitle = ({ rowData, dataKey, ...props }) => (
-  <Cell
-    title={`Segment ${rowData[dataKey] || 'inconnu'}`}
-    style={{ background: rowData.segmentName ? 'unset' : COLORS.tumbleweed }}
-    {...props}
-  >
-    {rowData[dataKey]}
-  </Cell>
-)
-
-export const ExpandCell = ({ rowData, dataKey, expandedRowKeys, onChange, ...props }) => (
-  <Cell
-    {...props}
-    onClick={() => {
-      onChange(rowData)
-    }}
-    style={{
-      cursor: 'pointer',
-      width: 35,
-      fontSize: 19,
-      lineHeight: '13px',
-      background: COLORS.gainsboro
-    }}
-  >
-    {expandedRowKeys.some((key) => key === rowData[rowKey]) ? '-' : '+'}
-  </Cell>
-)
-
-export const ImpactRiskFactorCell = ({ rowData, expandedRowKeys, onChange, ...props }) =>
-  <Cell
-    {...props}
-    style={{ marginLeft: 13 }}
-  >
-    <RiskFactorBox
-      height={8}
-      color={getRiskFactorColor(rowData.impactRiskFactor)}
+export function SegmentCellWithTitle({ dataKey, rowData, ...props }) {
+  return (
+    <Cell
+      style={{ background: rowData.segmentName ? 'unset' : COLORS.tumbleweed }}
+      title={`Segment ${rowData[dataKey] || 'inconnu'}`}
+      {...props}
     >
-      {rowData.impactRiskFactor}
-    </RiskFactorBox>
-  </Cell>
+      {rowData[dataKey]}
+    </Cell>
+  )
+}
+
+export function ExpandCell({ dataKey, expandedRowKeys, onChange, rowData, ...props }) {
+  return (
+    <Cell
+      {...props}
+      onClick={() => {
+        onChange(rowData)
+      }}
+      style={{
+        background: COLORS.gainsboro,
+        cursor: 'pointer',
+        fontSize: 19,
+        lineHeight: '13px',
+        width: 35,
+      }}
+    >
+      {expandedRowKeys.some(key => key === rowData[rowKey]) ? '-' : '+'}
+    </Cell>
+  )
+}
+
+export function ImpactRiskFactorCell({ expandedRowKeys, onChange, rowData, ...props }) {
+  return (
+    <Cell {...props} style={{ marginLeft: 13 }}>
+      <RiskFactorBox color={getRiskFactorColor(rowData.impactRiskFactor)} height={8}>
+        {rowData.impactRiskFactor}
+      </RiskFactorBox>
+    </Cell>
+  )
+}
 
 /**
  * This component show a list of tag by default and only open the tagPicker if the user click, for performance reason
@@ -149,7 +151,7 @@ export const ImpactRiskFactorCell = ({ rowData, expandedRowKeys, onChange, ...pr
  * @return {JSX.Element}
  * @constructor
  */
-export const TagPickerCell = ({ rowData, dataKey, data, id, onChange, ...props }) => {
+export function TagPickerCell({ data, dataKey, id, onChange, rowData, ...props }) {
   const wrapperRef = useRef(null)
   const [isOpened, setIsOpened] = useState(false)
   const clickedOutsideComponent = useClickOutsideWhenOpenedAndNotInSelector(wrapperRef, isOpened, '.rs-picker-menu')
@@ -158,61 +160,52 @@ export const TagPickerCell = ({ rowData, dataKey, data, id, onChange, ...props }
     setIsOpened(false)
   }, [clickedOutsideComponent])
 
-  return <div ref={wrapperRef}>
-    <Cell
-      {...props}
-      style={{
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden'
-      }}
-      onClick={() => setIsOpened(true)}
-      title={rowData[dataKey]?.join(', ')}
-    >
-      {
-        isOpened
-          ? <TagPicker
-            virtualized
-            searchable
-            value={rowData[dataKey]}
-            style={tagPickerStyle}
+  return (
+    <div ref={wrapperRef}>
+      <Cell
+        {...props}
+        onClick={() => setIsOpened(true)}
+        style={{
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        }}
+        title={rowData[dataKey]?.join(', ')}
+      >
+        {isOpened ? (
+          <TagPicker
             data={data}
-            placeholder={''}
-            placement={'auto'}
-            open={isOpened}
             onChange={value => onChange && onChange(rowData[id], dataKey, value)}
+            open={isOpened}
+            placeholder=""
+            placement="auto"
             renderMenuItem={(_, item) => renderTagPickerMenuItem(onChange, item)}
             renderValue={(_, items) => renderTagPickerValue(items)}
+            searchable
+            style={tagPickerStyle}
+            value={rowData[dataKey]}
+            virtualized
           />
-          : <TagOnly className="rs-picker-tag-wrapper">
-            {
-              rowData[dataKey]?.map(tag =>
-                <div key={tag} className="rs-tag rs-tag-default">
-                  <span className="rs-tag-text">{tag}</span>
-                </div>)
-            }
+        ) : (
+          <TagOnly className="rs-picker-tag-wrapper">
+            {rowData[dataKey]?.map(tag => (
+              <div key={tag} className="rs-tag rs-tag-default">
+                <span className="rs-tag-text">{tag}</span>
+              </div>
+            ))}
           </TagOnly>
-      }
-    </Cell>
-  </div>
-}
-
-export function renderTagPickerMenuItem (onChange, item) {
-  return (
-    <Label onClick={() => onChange(item.label)}>
-      {item.label}
-    </Label>
+        )}
+      </Cell>
+    </div>
   )
 }
 
-export function renderTagPickerValue (items) {
-  return items
-    .filter(tag => tag)
-    .map(tag => (
-      <Tag key={tag?.label}>
-        {tag?.label}
-      </Tag>
-    ))
+export function renderTagPickerMenuItem(onChange, item) {
+  return <Label onClick={() => onChange(item.label)}>{item.label}</Label>
+}
+
+export function renderTagPickerValue(items) {
+  return items.filter(tag => tag).map(tag => <Tag key={tag?.label}>{tag?.label}</Tag>)
 }
 
 const TagOnly = styled.div`
@@ -224,50 +217,48 @@ const Label = styled.span`
   font-size: 13px;
 `
 
-const tagPickerStyle = { width: 250, margin: '2px 10px 10px 0', verticalAlign: 'top' }
+const tagPickerStyle = { margin: '2px 10px 10px 0', verticalAlign: 'top', width: 250 }
 
-export const renderRowExpanded = rowData => {
-  return (
-    <div
-      style={{
-        float: 'left',
-        background: COLORS.background,
-        padding: '0 20px 20px 40px'
-      }}
-    >
-      <Fields>
-        <TableBody>
-          <Field>
-            <Key>Engins</Key>
-            <Value>{rowData.gears?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </Field>
-          <Field>
-            <Key>Zones FAO</Key>
-            <Value>{rowData.faoAreas?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </Field>
-          <Field>
-            <Key>Espèces cibles</Key>
-            <Value>{rowData.targetSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </Field>
-          <Field>
-            <Key>Prises accessoires</Key>
-            <Value>{rowData.bycatchSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
-          </Field>
-        </TableBody>
-      </Fields>
-    </div>
-  )
-}
+export const renderRowExpanded = rowData => (
+  <div
+    style={{
+      background: COLORS.background,
+      float: 'left',
+      padding: '0 20px 20px 40px',
+    }}
+  >
+    <Fields>
+      <TableBody>
+        <Field>
+          <Key>Engins</Key>
+          <Value>{rowData.gears?.join(', ') || <NoValue>-</NoValue>}</Value>
+        </Field>
+        <Field>
+          <Key>Zones FAO</Key>
+          <Value>{rowData.faoAreas?.join(', ') || <NoValue>-</NoValue>}</Value>
+        </Field>
+        <Field>
+          <Key>Espèces cibles</Key>
+          <Value>{rowData.targetSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
+        </Field>
+        <Field>
+          <Key>Prises accessoires</Key>
+          <Value>{rowData.bycatchSpecies?.join(', ') || <NoValue>-</NoValue>}</Value>
+        </Field>
+      </TableBody>
+    </Fields>
+  </div>
+)
 
-export const DeleteCell = ({ rowData, dataKey, id, onClick, ...props }) => {
+export function DeleteCell({ dataKey, id, onClick, rowData, ...props }) {
   return (
     <Cell key={rowData[id]} {...props}>
       <Delete
-        title={'Supprimer la ligne'}
         data-cy={`delete-row-${rowData[id]}`}
         onClick={() => onClick && onClick(rowData[id], dataKey)}
+        title="Supprimer la ligne"
       >
-        <DeleteIcon/>
+        <DeleteIcon />
       </Delete>
     </Cell>
   )

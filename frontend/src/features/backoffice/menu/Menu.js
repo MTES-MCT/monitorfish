@@ -1,58 +1,60 @@
 import React from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
 import { Link, useRouteMatch } from 'react-router-dom'
+import styled from 'styled-components'
+
+import { COLORS } from '../../../constants/constants'
 import { ReactComponent as LayersSVG } from '../../icons/Couches.svg'
 import { ReactComponent as FleetSVG } from '../../icons/Label_segment_de_flotte_white.svg'
 import { ReactComponent as ControlObjectivesSVG } from '../../icons/objectifs_controle.svg'
 
-const Menu = () => {
+function Menu() {
   const onRegulationPage = useRouteMatch('/backoffice/regulation')
   const onControlObjectivePage = useRouteMatch('/backoffice/control_objectives')
   const onFleetSegmentsPage = useRouteMatch('/backoffice/fleet_segments')
 
   return (
     <Wrapper>
-      <Title>
-        Backoffice
-      </Title>
+      <Title>Backoffice</Title>
       <MenuLink
         style={{
-          background: onRegulationPage ? COLORS.shadowBlue : 'none'
+          background: onRegulationPage ? COLORS.shadowBlue : 'none',
         }}
-        to={'/backoffice/regulation'}
-        title={'Zones réglementaires'}
+        title="Zones réglementaires"
+        to="/backoffice/regulation"
       >
-        <Layers/>
+        <Layers />
         <LinkText>
-          Zones <br/>réglementaires
+          Zones <br />
+          réglementaires
         </LinkText>
       </MenuLink>
       <MenuLink
         style={{
-          background: onControlObjectivePage ? COLORS.shadowBlue : 'none'
+          background: onControlObjectivePage ? COLORS.shadowBlue : 'none',
         }}
-        to={'/backoffice/control_objectives'}
-        title={'Objectifs de contrôle'}
+        title="Objectifs de contrôle"
+        to="/backoffice/control_objectives"
       >
-        <ControlObjectives/>
+        <ControlObjectives />
         <LinkText>
-          Objectifs <br/>de contrôle
+          Objectifs <br />
+          de contrôle
         </LinkText>
       </MenuLink>
       <MenuLink
         style={{
-          background: onFleetSegmentsPage ? COLORS.shadowBlue : 'none'
+          background: onFleetSegmentsPage ? COLORS.shadowBlue : 'none',
         }}
-        to={'/backoffice/fleet_segments'}
-        title={'Segments de flotte'}
+        title="Segments de flotte"
+        to="/backoffice/fleet_segments"
       >
-        <Fleet/>
+        <Fleet />
         <LinkText>
-          Segments <br/>de flotte
+          Segments <br />
+          de flotte
         </LinkText>
       </MenuLink>
-  </Wrapper>
+    </Wrapper>
   )
 }
 

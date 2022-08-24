@@ -1,50 +1,64 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { getDate } from '../../../utils'
-import { Green, Red } from './Controls.style'
-import { getNumberOfInfractions } from '../../../domain/entities/controls'
-import { NoValue, StrongText } from '../common_styles/common.style'
 
-const ControlField = ({ field, type, isFirst }) => {
+import { COLORS } from '../../../constants/constants'
+import { getNumberOfInfractions } from '../../../domain/entities/controls'
+import { getDate } from '../../../utils'
+import { NoValue, StrongText } from '../common_styles/common.style'
+import { Green, Red } from './Controls.style'
+
+function ControlField({ field, isFirst, type }) {
   const {
     /** @type {VesselControl} control */
     control,
-    text
+    text,
   } = field
 
-  const numberOfInfractions = useMemo(() => {
-    return getNumberOfInfractions(control)
-  }, [control])
+  const numberOfInfractions = useMemo(() => getNumberOfInfractions(control), [control])
 
-  return <Fields key={type} isFirst={isFirst}>
-    <ControlResumeLine>
-      <ResumeText isFirst={isFirst}>
-        {text}
-        <StrongText data-cy={'vessel-controls-last-control-date'}>
-          {
-            control
-              ? <>le {getDate(control.controlDatetimeUtc)}</>
-              : <>Aucun</>
-          }
-        </StrongText>
-      </ResumeText>
-    </ControlResumeLine>
-    {
-      control
-        ? <ControlResumeLine>
-          <LastControlResumeElement data-cy={'vessel-controls-last-control-unit'}>Unité <StrongText
-            title={control.controller && control.controller.controller}>{control.controller && control.controller.controller
-              ? control.controller.controller
-              : <NoValue>-</NoValue>}</StrongText></LastControlResumeElement>
-          <LastControlResumeElement data-cy={'vessel-controls-last-control-infractions'}>Infractions <StrongText>{numberOfInfractions
-            ? <> {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''}
-              <Red/></>
-            : <>Pas d&apos;infraction<Green/></>}</StrongText></LastControlResumeElement>
+  return (
+    <Fields key={type} isFirst={isFirst}>
+      <ControlResumeLine>
+        <ResumeText isFirst={isFirst}>
+          {text}
+          <StrongText data-cy="vessel-controls-last-control-date">
+            {control ? <>le {getDate(control.controlDatetimeUtc)}</> : <>Aucun</>}
+          </StrongText>
+        </ResumeText>
+      </ControlResumeLine>
+      {control ? (
+        <ControlResumeLine>
+          <LastControlResumeElement data-cy="vessel-controls-last-control-unit">
+            Unité{' '}
+            <StrongText title={control.controller && control.controller.controller}>
+              {control.controller && control.controller.controller ? (
+                control.controller.controller
+              ) : (
+                <NoValue>-</NoValue>
+              )}
+            </StrongText>
+          </LastControlResumeElement>
+          <LastControlResumeElement data-cy="vessel-controls-last-control-infractions">
+            Infractions{' '}
+            <StrongText>
+              {numberOfInfractions ? (
+                <>
+                  {' '}
+                  {numberOfInfractions} infraction{numberOfInfractions > 1 ? 's' : ''}
+                  <Red />
+                </>
+              ) : (
+                <>
+                  Pas d&apos;infraction
+                  <Green />
+                </>
+              )}
+            </StrongText>
+          </LastControlResumeElement>
         </ControlResumeLine>
-        : null
-    }
-  </Fields>
+      ) : null}
+    </Fields>
+  )
 }
 
 const LastControlResumeElement = styled.span`
@@ -52,11 +66,11 @@ const LastControlResumeElement = styled.span`
 `
 
 const ResumeText = styled.span`
-  margin: ${props => props.isFirst ? '5px' : '0'} 0 0 0;
+  margin: ${props => (props.isFirst ? '5px' : '0')} 0 0 0;
 `
 
 const Fields = styled.div`
-  padding: ${props => props.isFirst ? '10px' : '0'} 5px ${props => props.isFirst ? '5px' : '10px'} 20px; 
+  padding: ${props => (props.isFirst ? '10px' : '0')} 5px ${props => (props.isFirst ? '5px' : '10px')} 20px;
   width: 100%;
   margin: 0;
   line-height: 0.2em;

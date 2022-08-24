@@ -6,14 +6,15 @@ const SpeciesReducer = null
 /* eslint-enable */
 
 const speciesSlice = createSlice({
-  name: 'species',
   initialState: {
-    /** @type {Map<string, Species>} */
-    speciesByCode: {},
     /** @type {Species[]} */
     species: [],
-    speciesGroups: []
+
+    /** @type {Map<string, Species>} */
+    speciesByCode: {},
+    speciesGroups: [],
   },
+  name: 'species',
   reducers: {
     /**
      * Set the species FAO codes and species groups
@@ -22,16 +23,14 @@ const speciesSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: SpeciesAndSpeciesGroups}} action - the species
      */
-    setSpeciesAndSpeciesGroups (state, action) {
+    setSpeciesAndSpeciesGroups(state, action) {
       state.species = action.payload.species
       state.speciesByCode = action.payload.speciesByCode
       state.speciesGroups = action.payload.groups
-    }
-  }
+    },
+  },
 })
 
-export const {
-  setSpeciesAndSpeciesGroups
-} = speciesSlice.actions
+export const { setSpeciesAndSpeciesGroups } = speciesSlice.actions
 
 export default speciesSlice.reducer

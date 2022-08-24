@@ -2,24 +2,25 @@ import { Icon, Style } from 'ol/style'
 import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
+
 import { COLORS } from '../../constants/constants'
 
 const trackLineStyleCache = new Map()
 
 export const getLineStyle = (isTimeEllipsis, trackType) => {
-  const key = JSON.stringify({ isTimeEllipsis, color: trackType.color })
+  const key = JSON.stringify({ color: trackType.color, isTimeEllipsis })
 
   if (!trackLineStyleCache.has(key)) {
     const style = new Style({
       fill: new Fill({
         color: trackType.color,
-        weight: 4
+        weight: 4,
       }),
       stroke: new Stroke({
         color: isTimeEllipsis ? COLORS.slateGrayLittleOpacity : trackType.color,
+        lineDash: isTimeEllipsis ? [0.1, 5] : [],
         width: 3,
-        lineDash: isTimeEllipsis ? [0.1, 5] : []
-      })
+      }),
     })
 
     trackLineStyleCache.set(key, [style])
@@ -34,11 +35,11 @@ export const getCircleStyle = (color, radius) => {
   if (!trackLineStyleCache.has(key)) {
     const circleStyle = new Style({
       image: new CircleStyle({
-        radius: radius || 3,
         fill: new Fill({
-          color: color
-        })
-      })
+          color,
+        }),
+        radius: radius || 3,
+      }),
     })
 
     trackLineStyleCache.set(key, [circleStyle])
@@ -48,17 +49,17 @@ export const getCircleStyle = (color, radius) => {
 }
 
 export const getArrowStyle = (trackArrow, course) => {
-  const key = JSON.stringify({ trackArrow, course })
+  const key = JSON.stringify({ course, trackArrow })
 
   if (!trackLineStyleCache.has(trackArrow)) {
     const arrowStyle = new Style({
       image: new Icon({
-        src: trackArrow,
-        offset: [0, 0],
         imgSize: [15, 20],
+        offset: [0, 0],
+        rotation: course,
         scale: 1,
-        rotation: course
-      })
+        src: trackArrow,
+      }),
     })
 
     trackLineStyleCache.set(key, [arrowStyle])
@@ -73,15 +74,15 @@ export const getFishingActivityCircleStyle = () => {
   if (!trackLineStyleCache.has(key)) {
     const circleStyle = new Style({
       image: new CircleStyle({
-        radius: 3,
         fill: new Fill({
-          color: COLORS.gainsboro
+          color: COLORS.gainsboro,
         }),
+        radius: 3,
         stroke: new Stroke({
           color: COLORS.charcoal,
-          width: 2
-        })
-      })
+          width: 2,
+        }),
+      }),
     })
 
     trackLineStyleCache.set(key, [circleStyle])

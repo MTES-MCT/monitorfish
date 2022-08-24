@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 import { FISHING_PERIOD_KEYS, WEEKDAYS } from '../../../../domain/entities/regulatory'
 import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 
-const DayPicker = ({ disabled }) => {
+function DayPicker({ disabled }) {
   const { weekdays } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
   const setWeekdays = useSetFishingPeriod(FISHING_PERIOD_KEYS.WEEKDAYS)
 
@@ -15,37 +16,36 @@ const DayPicker = ({ disabled }) => {
     }
   }, [disabled])
 
-  const onClick = useCallback(e => {
-    let newSelectedList
-    const value = e.currentTarget.getAttribute('value')
-    if (weekdays?.includes(value)) {
-      newSelectedList = weekdays.filter(elem => elem !== value)
-    } else {
-      newSelectedList = [
-        ...weekdays,
-        value
-      ]
-    }
-    setWeekdays(newSelectedList)
-  }, [weekdays, setWeekdays])
+  const onClick = useCallback(
+    e => {
+      let newSelectedList
+      const value = e.currentTarget.getAttribute('value')
+      if (weekdays?.includes(value)) {
+        newSelectedList = weekdays.filter(elem => elem !== value)
+      } else {
+        newSelectedList = [...weekdays, value]
+      }
+      setWeekdays(newSelectedList)
+    },
+    [weekdays, setWeekdays],
+  )
 
-  return <>
-    {
-      Object.keys(WEEKDAYS).map(weekday => {
-        return <Circle
+  return (
+    <>
+      {Object.keys(WEEKDAYS).map(weekday => <Circle
           key={weekday}
           disabled={disabled}
           value={weekday}
           $isGray={weekdays?.includes(weekday)}
           onClick={onClick}>
             {WEEKDAYS[weekday]}
-          </Circle>
-      })
-    }
-  </>
+          </Circle>)
+      })}
+    </>
+  )
 }
 
-const Circle = styled.a` 
+const Circle = styled.a`
   display: inline-block;
   height: 30px;
   width: 30px;
@@ -55,11 +55,11 @@ const Circle = styled.a`
   margin-right: 5px;
   text-align: center;
   line-height: 2em;
-  color: ${props => props.$isGray ? COLORS.slateGray : COLORS.grayShadow};
-  ${props => props.$isGray ? `background-color: ${COLORS.gainsboro}` : ''};
+  color: ${props => (props.$isGray ? COLORS.slateGray : COLORS.grayShadow)};
+  ${props => (props.$isGray ? `background-color: ${COLORS.gainsboro}` : '')};
   text-decoration: none;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  opacity: ${props => props.disabled ? '0.4' : '1'};
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${props => (props.disabled ? '0.4' : '1')};
   &:hover {
     text-decoration: none;
     color: ${COLORS.slateGray};

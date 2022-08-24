@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+
 import { getLocalStorageState } from '../../utils'
 
 /* eslint-disable */
@@ -9,44 +10,27 @@ const InterestPointReducer = null
 const interestPointsLocalStorageKey = 'interestPoints'
 
 const interestPointSlice = createSlice({
-  name: 'interestPoint',
   initialState: {
-    isDrawing: false,
-    isEditing: false,
     /** @type {InterestPoint | null} interestPointBeingDrawed */
     interestPointBeingDrawed: null,
+
     /** @type {InterestPoint[]} interestPoints */
     interestPoints: getLocalStorageState([], interestPointsLocalStorageKey),
-    triggerInterestPointFeatureDeletion: null
+
+    isDrawing: false,
+
+    isEditing: false,
+    triggerInterestPointFeatureDeletion: null,
   },
+  name: 'interestPoint',
   reducers: {
-    /**
-     * Start drawing an interest point with a clickable map
-     * @function drawInterestPoint
-     * @memberOf InterestPointReducer
-     * @param {Object=} state
-     */
-    drawInterestPoint (state) {
-      state.isDrawing = true
-      state.isEditing = false
-    },
-    /**
-     * End drawing
-     * @function endInterestPointDraw
-     * @memberOf InterestPointReducer
-     * @param {Object=} state
-     */
-    endInterestPointDraw (state) {
-      state.isDrawing = false
-      state.isEditing = false
-    },
     /**
      * Add a new interest point
      * @function addInterestPoint
      * @memberOf InterestPointReducer
      * @param {Object=} state
      */
-    addInterestPoint (state) {
+    addInterestPoint(state) {
       if (!state.isEditing) {
         state.interestPoints = state.interestPoints.concat(state.interestPointBeingDrawed)
       }
@@ -54,21 +38,31 @@ const interestPointSlice = createSlice({
       state.interestPointBeingDrawed = null
       window.localStorage.setItem(interestPointsLocalStorageKey, JSON.stringify(state.interestPoints))
     },
+
     /**
-     * Delete an existing interest point
-     * @function removeInterestPoint
+     * Delete the interest point being drawed and trigger the deletion of the interest point feature currently showed
+     * @function deleteInterestPointBeingDrawed
      * @memberOf InterestPointReducer
      * @param {Object=} state
-     * @param {{
-     * payload: string
-     * }} action - The UUID of the interest point
      */
-    removeInterestPoint (state, action) {
-      state.interestPoints = state.interestPoints.filter(interestPoint => interestPoint.uuid !== action.payload)
-      state.isEditing = false
+    deleteInterestPointBeingDrawed(state) {
+      if (state.interestPointBeingDrawed) {
+        state.triggerInterestPointFeatureDeletion = state.interestPointBeingDrawed.uuid
+      }
       state.interestPointBeingDrawed = null
-      window.localStorage.setItem(interestPointsLocalStorageKey, JSON.stringify(state.interestPoints))
     },
+
+    /**
+     * Start drawing an interest point with a clickable map
+     * @function drawInterestPoint
+     * @memberOf InterestPointReducer
+     * @param {Object=} state
+     */
+    drawInterestPoint(state) {
+      state.isDrawing = true
+      state.isEditing = false
+    },
+
     /**
      * Edit an existing interest point
      * @function editInterestPoint
@@ -78,10 +72,48 @@ const interestPointSlice = createSlice({
      * payload: string
      * }} action - The UUID of the interest point
      */
-    editInterestPoint (state, action) {
+    editInterestPoint(state, action) {
       state.interestPointBeingDrawed = state.interestPoints.find(interestPoint => interestPoint.uuid === action.payload)
       state.isEditing = true
     },
+
+    /**
+     * End drawing
+     * @function endInterestPointDraw
+     * @memberOf InterestPointReducer
+     * @param {Object=} state
+     */
+    endInterestPointDraw(state) {
+      state.isDrawing = false
+      state.isEditing = false
+    },
+
+    /**
+     * Delete an existing interest point
+     * @function removeInterestPoint
+     * @memberOf InterestPointReducer
+     * @param {Object=} state
+     * @param {{
+     * payload: string
+     * }} action - The UUID of the interest point
+     */
+    removeInterestPoint(state, action) {
+      state.interestPoints = state.interestPoints.filter(interestPoint => interestPoint.uuid !== action.payload)
+      state.isEditing = false
+      state.interestPointBeingDrawed = null
+      window.localStorage.setItem(interestPointsLocalStorageKey, JSON.stringify(state.interestPoints))
+    },
+
+    /**
+     * Reset the trigger of the interest point deletion feature currently showed
+     * @function resetInterestPointFeatureDeletion
+     * @memberOf InterestPointReducer
+     * @param {Object=} state
+     */
+    resetInterestPointFeatureDeletion(state) {
+      state.triggerInterestPointFeatureDeletion = null
+    },
+
     /**
      * Update the interest point being drawed
      * @function updateInterestPointBeingDrawed
@@ -91,21 +123,10 @@ const interestPointSlice = createSlice({
      * payload: InterestPoint | null
      * }} action - The interest point to add
      */
-    updateInterestPointBeingDrawed (state, action) {
+    updateInterestPointBeingDrawed(state, action) {
       state.interestPointBeingDrawed = action.payload
     },
-    /**
-     * Delete the interest point being drawed and trigger the deletion of the interest point feature currently showed
-     * @function deleteInterestPointBeingDrawed
-     * @memberOf InterestPointReducer
-     * @param {Object=} state
-     */
-    deleteInterestPointBeingDrawed (state) {
-      if (state.interestPointBeingDrawed) {
-        state.triggerInterestPointFeatureDeletion = state.interestPointBeingDrawed.uuid
-      }
-      state.interestPointBeingDrawed = null
-    },
+
     /**
      * Update the specified key of the interest point being drawed
      * @function updateInterestPointBeingDrawed
@@ -118,7 +139,7 @@ const interestPointSlice = createSlice({
      * }
      * }} action - The interest point to add
      */
-    updateInterestPointKeyBeingDrawed (state, action) {
+    updateInterestPointKeyBeingDrawed(state, action) {
       const nextInterestPointBeingDrawed = { ...state.interestPointBeingDrawed }
       nextInterestPointBeingDrawed[action.payload.key] = action.payload.value
       state.interestPointBeingDrawed = nextInterestPointBeingDrawed
@@ -133,28 +154,19 @@ const interestPointSlice = createSlice({
         })
       }
     },
-    /**
-     * Reset the trigger of the interest point deletion feature currently showed
-     * @function resetInterestPointFeatureDeletion
-     * @memberOf InterestPointReducer
-     * @param {Object=} state
-     */
-    resetInterestPointFeatureDeletion (state) {
-      state.triggerInterestPointFeatureDeletion = null
-    }
-  }
+  },
 })
 
 export const {
-  drawInterestPoint,
-  endInterestPointDraw,
   addInterestPoint,
-  removeInterestPoint,
+  deleteInterestPointBeingDrawed,
+  drawInterestPoint,
   editInterestPoint,
+  endInterestPointDraw,
+  removeInterestPoint,
+  resetInterestPointFeatureDeletion,
   updateInterestPointBeingDrawed,
   updateInterestPointKeyBeingDrawed,
-  deleteInterestPointBeingDrawed,
-  resetInterestPointFeatureDeletion
 } = interestPointSlice.actions
 
 export default interestPointSlice.reducer

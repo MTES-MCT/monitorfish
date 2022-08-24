@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import PendingAlertsList from './PendingAlertsList'
-import { getAlertForList, getSilencedAlertForList } from './dataFormatting'
 import { useSelector } from 'react-redux'
-import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../constants/constants'
+import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
+import { getAlertForList, getSilencedAlertForList } from './dataFormatting'
+import PendingAlertsList from './PendingAlertsList'
 import SilencedAlertsList from './SilencedAlertsList'
 
 /**
@@ -15,15 +16,13 @@ import SilencedAlertsList from './SilencedAlertsList'
  * @return {JSX.Element}
  * @constructor
  */
-const Alerts = ({ selectedSubMenu, setSelectedSubMenu, baseRef }) => {
-  const {
-    alerts,
-    silencedAlerts,
-    focusOnAlert
-  } = useSelector(state => state.alert)
+function Alerts({ baseRef, selectedSubMenu, setSelectedSubMenu }) {
+  const { alerts, focusOnAlert, silencedAlerts } = useSelector(state => state.alert)
   const silencedAlertsOfSeaFront = silencedAlerts
     .map(alert => getSilencedAlertForList(alert))
-    .filter(alert => (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert?.seaFront))
+    .filter(alert =>
+      (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert?.seaFront),
+    )
 
   useEffect(() => {
     if (focusOnAlert) {
@@ -39,34 +38,34 @@ const Alerts = ({ selectedSubMenu, setSelectedSubMenu, baseRef }) => {
     }
   }, [focusOnAlert])
 
-  return <>
-    <Title style={titleStyle}>Alertes</Title>
-    <PendingAlertsList
-      alerts={alerts
-        .map(alert => getAlertForList(alert))
-        .filter(alert =>
-          (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert?.seaFront))
-      }
-      seaFront={selectedSubMenu?.name}
-      numberOfSilencedAlerts={silencedAlertsOfSeaFront.length}
-      baseRef={baseRef}
-    />
-    <SilencedAlertsList
-      silencedAlerts={silencedAlertsOfSeaFront}
-    />
-  </>
+  return (
+    <>
+      <Title style={titleStyle}>Alertes</Title>
+      <PendingAlertsList
+        alerts={alerts
+          .map(alert => getAlertForList(alert))
+          .filter(alert =>
+            (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert?.seaFront),
+          )}
+        baseRef={baseRef}
+        numberOfSilencedAlerts={silencedAlertsOfSeaFront.length}
+        seaFront={selectedSubMenu?.name}
+      />
+      <SilencedAlertsList silencedAlerts={silencedAlertsOfSeaFront} />
+    </>
+  )
 }
 
 const Title = styled.h2``
 const titleStyle = {
-  margin: '30px 40px 30px 40px',
-  fontSize: 22,
-  color: COLORS.gunMetal,
   borderBottom: `5px solid ${COLORS.charcoal}`,
+  color: COLORS.gunMetal,
+  fontSize: 22,
   fontWeight: 700,
-  textAlign: 'left',
+  margin: '30px 40px 30px 40px',
   paddingBottom: 5,
-  width: 'fit-content'
+  textAlign: 'left',
+  width: 'fit-content',
 }
 
 export default Alerts

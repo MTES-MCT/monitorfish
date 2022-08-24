@@ -1,26 +1,28 @@
 import React from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
 import { Radio, Checkbox } from 'rsuite'
+import styled from 'styled-components'
 
-const MenuItem = ({ checked, item, tag }) => {
+import { COLORS } from '../../../../constants/constants'
+
+function MenuItem({ checked, item, tag }) {
   const { label } = item
   const labelToDisplay = label
-  return <>{
-    tag === 'Radio'
-      ? <CustomRadio
-          checked={checked}
-          title={labelToDisplay}
-        >{labelToDisplay}
+
+  return (
+    <>
+      {tag === 'Radio' ? (
+        <CustomRadio checked={checked} title={labelToDisplay}>
+          {labelToDisplay}
         </CustomRadio>
-      : tag === 'Checkbox'
-        ? <CustomCheckbox
-            checked={checked}
-            title={labelToDisplay}
-          >{labelToDisplay}
-          </CustomCheckbox>
-        : <Text>{labelToDisplay}</Text>
-    }</>
+      ) : tag === 'Checkbox' ? (
+        <CustomCheckbox checked={checked} title={labelToDisplay}>
+          {labelToDisplay}
+        </CustomCheckbox>
+      ) : (
+        <Text>{labelToDisplay}</Text>
+      )}
+    </>
+  )
 }
 
 const Text = styled.span`
@@ -41,7 +43,7 @@ const CustomRadio = styled(Radio)`
       box-sizing: border-box;
     }
   }
-  
+
   .rs-radio-checker > label {
     font-size: 13px;
     color: ${COLORS.slateGray};
@@ -71,7 +73,7 @@ const CustomCheckbox = styled(Checkbox)`
       border: 1px solid ${COLORS.lightGray} !important;
       box-sizing: border-box;
     }
-    
+
     &:after {
       margin-top: 0px !important;
       margin-left: 4px !important;

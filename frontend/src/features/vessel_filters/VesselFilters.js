@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
 
-import { ReactComponent as FilterSVG } from '../icons/Icone_filtres.svg'
 import { COLORS } from '../../constants/constants'
-import { expandRightMenu } from '../../domain/shared_slices/Global'
 import Filter from './Filter'
 import {
   hideFilters,
@@ -13,20 +11,19 @@ import {
   setNonFilteredVesselsAreHidden,
   showFilter
 } from '../../domain/shared_slices/Filter'
+import { expandRightMenu } from '../../domain/shared_slices/Global'
 import FilterParameters from './FilterParameters'
-import { usePrevious } from '../../hooks/usePrevious'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
+import { usePrevious } from '../../hooks/usePrevious'
+import { ReactComponent as FilterSVG } from '../icons/Icone_filtres.svg'
 
-const VesselFilters = () => {
+function VesselFilters() {
   const dispatch = useDispatch()
   const { filters, nonFilteredVesselsAreHidden } = useSelector(state => state.filter)
-  const {
-    healthcheckTextWarning,
-    previewFilteredVesselsMode
-  } = useSelector(state => state.global)
+  const { healthcheckTextWarning, previewFilteredVesselsMode } = useSelector(state => state.global)
   const previousFilters = usePrevious(filters)
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
@@ -67,39 +64,31 @@ const VesselFilters = () => {
     dispatch(setNonFilteredVesselsAreHidden(areHidden))
   }, [])
 
-  const hasOneFilterAdded = useCallback(() =>
-    !!(previousFilters && filters.length && filters.length > previousFilters.length), [previousFilters, filters])
+  const hasOneFilterAdded = useCallback(
+    () => !!(previousFilters && filters.length && filters.length > previousFilters.length),
+    [previousFilters, filters],
+  )
 
   return (
     <>
       <Wrapper ref={wrapperRef}>
         <VesselFilterIcon
           data-cy={'vessel-filters'}
+          healthcheckTextWarning={healthcheckTextWarning}
           isHidden={previewFilteredVesselsMode}
-          healthcheckTextWarning={healthcheckTextWarning}
-          rightMenuIsOpen={rightMenuIsOpen}
           isOpen={vesselFilterBoxIsOpen}
-          selectedVessel={selectedVessel}
+          onClick={() => setVesselFilterBoxIsOpen(!vesselFilterBoxIsOpen)}
           onMouseEnter={() => dispatch(expandRightMenu())}
-          title={'Mes filtres'}
-          onClick={() => setVesselFilterBoxIsOpen(!vesselFilterBoxIsOpen)}>
-          <FilterIcon
-            $rightMenuIsOpen={rightMenuIsOpen}
-            $selectedVessel={selectedVessel}/>
+          rightMenuIsOpen={rightMenuIsOpen}
+          selectedVessel={selectedVessel}
+          title={'Mes filtres'}>
+          <FilterIcon $rightMenuIsOpen={rightMenuIsOpen} $selectedVessel={selectedVessel} />
         </VesselFilterIcon>
-        <VesselFilterBox
-          healthcheckTextWarning={healthcheckTextWarning}
-          vesselFilterBoxIsOpen={vesselFilterBoxIsOpen}>
-          <Header isFirst={true}>
-            Mes filtres
-          </Header>
-          {
-            filters && filters.length
-              ? <FiltersSelectedList>
-                {
-                  filters
-                    .map((filter, index) => {
-                      return <Filter
+        <VesselFilterBox healthcheckTextWarning={healthcheckTextWarning} vesselFilterBoxIsOpen={vesselFilterBoxIsOpen}>
+          <Header isFirst>Mes filtres</Header>
+          {filters && filters.length ? (
+            <FiltersSelectedList>
+              {filters.map((filter, index) => <Filter
                         key={filter.uuid}
                         index={index + 1}
                         filter={filter}
@@ -108,24 +97,19 @@ const VesselFilters = () => {
                         showFilter={showFilterCallback}
                         hideFilters={hideFiltersCallback}
                         removeTagFromFilter={removeTagFromFilterCallback}
-                      />
-                    })
-                }
-              </FiltersSelectedList>
-              : <LastPositionInfo>
-                Aucun filtre
-              </LastPositionInfo>
-          }
+                      />)
+              })}
+            </FiltersSelectedList>
+          ) : (
+            <LastPositionInfo>Aucun filtre</LastPositionInfo>
+          )}
           <FilterParameters
-            setNonFilteredVesselsAreHidden={setNonFilteredVesselsAreHiddenCallback}
             nonFilteredVesselsAreHidden={nonFilteredVesselsAreHidden}
+            setNonFilteredVesselsAreHidden={setNonFilteredVesselsAreHiddenCallback}
           />
-
         </VesselFilterBox>
       </Wrapper>
-      <NewFilterAdded hasOneFilterAdded={hasOneFilterAdded()}>
-        1 filtre ajouté
-      </NewFilterAdded>
+      <NewFilterAdded hasOneFilterAdded={hasOneFilterAdded()}>1 filtre ajouté</NewFilterAdded>
     </>
   )
 }
@@ -144,8 +128,8 @@ const NewFilterAdded = styled.div`
   color: ${COLORS.gunMetal};
   font-size: 13px;
   z-index: 9999;
-  
-  animation: ${props => props.hasOneFilterAdded ? 'new-filter-added' : ''} 4.5s ease;
+
+  animation: ${props => (props.hasOneFilterAdded ? 'new-filter-added' : '')} 4.5s ease;
 
   @keyframes new-filter-added {
     0% {
@@ -198,15 +182,15 @@ const Header = styled.div`
   padding: 9px 0 7px 15px;
   font-size: 16px;
   text-align: left;
-  border-top-left-radius: ${props => props.isFirst ? '2px' : '0'};
-  border-top-right-radius: ${props => props.isFirst ? '2px' : '0'};
+  border-top-left-radius: ${props => (props.isFirst ? '2px' : '0')};
+  border-top-right-radius: ${props => (props.isFirst ? '2px' : '0')};
 `
 
 const VesselFilterBox = styled(MapComponentStyle)`
   width: 305px;
   background: ${COLORS.background};
-  margin-right: ${props => props.vesselFilterBoxIsOpen ? '45px' : '-420px'};
-  opacity: ${props => props.vesselFilterBoxIsOpen ? '1' : '0'};
+  margin-right: ${props => (props.vesselFilterBoxIsOpen ? '45px' : '-420px')};
+  opacity: ${props => (props.vesselFilterBoxIsOpen ? '1' : '0')};
   top: 110px;
   right: 10px;
   border-radius: 2px;
@@ -223,14 +207,15 @@ const VesselFilterIcon = styled(MapButtonStyle)`
   top: 110px;
   padding: 3px 0px 0 2px;
   height: 40px;
-  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
-  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
-  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
-  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
+  width: ${props => (props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px')};
+  border-radius: ${props => (props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px')};
+  right: ${props => (props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px')};
+  background: ${props => (props.isOpen ? COLORS.shadowBlue : COLORS.charcoal)};
   transition: all 0.3s;
-  
-  :hover, :focus {
-      background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
+
+  :hover,
+  :focus {
+    background: ${props => (props.isOpen ? COLORS.shadowBlue : COLORS.charcoal)};
   }
 `
 
@@ -239,7 +224,7 @@ const FilterIcon = styled(FilterSVG)`
   height: 23px;
   margin-right: 3px;
   margin-top: 2px;
-  opacity: ${props => props.$selectedVessel && !props.$rightMenuIsOpen ? '0' : '1'};
+  opacity: ${props => (props.$selectedVessel && !props.$rightMenuIsOpen ? '0' : '1')};
   transition: all 0.2s;
 `
 

@@ -3,9 +3,4 @@ import deleteFleetSegment from './deleteFleetSegment'
 import getAllFleetSegments from './getAllFleetSegments'
 import updateFleetSegment from './updateFleetSegment'
 
-export {
-  createFleetSegment,
-  deleteFleetSegment,
-  getAllFleetSegments,
-  updateFleetSegment
-}
+export { createFleetSegment, deleteFleetSegment, getAllFleetSegments, updateFleetSegment }

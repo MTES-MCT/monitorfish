@@ -1,30 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import styled from 'styled-components'
-import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { useSelector } from 'react-redux'
-import { Label, List, SectionTitle } from '../RegulatoryMetadata.style'
-import GearsOrGearCategories from './GearsOrGearCategories'
+import styled from 'styled-components'
+
 import { COLORS } from '../../../../../constants/constants'
-import InfoPoint from '../../../../backoffice/edit_regulation/InfoPoint'
 import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../../domain/entities/backoffice'
 import { INFO_TEXT } from '../../../../backoffice/constants'
+import InfoPoint from '../../../../backoffice/edit_regulation/InfoPoint'
+import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
+import { Label, List, SectionTitle } from '../RegulatoryMetadata.style'
+import GearsOrGearCategories from './GearsOrGearCategories'
 
-const RegulatedGears = ({ authorized, regulatedGearsObject, hasPreviousRegulatedGearsBloc }) => {
-  const {
-    groupsToCategories,
-    categoriesToGears
-  } = useSelector(state => state.gear)
+function RegulatedGears({ authorized, hasPreviousRegulatedGearsBloc, regulatedGearsObject }) {
+  const { categoriesToGears, groupsToCategories } = useSelector(state => state.gear)
 
-  const {
-    regulatedGears,
-    regulatedGearCategories,
-    derogation,
-    otherInfo,
-    allGears,
-    allTowedGears,
-    allPassiveGears
-  } = regulatedGearsObject
+  const { allGears, allPassiveGears, allTowedGears, derogation, otherInfo, regulatedGearCategories, regulatedGears } =
+    regulatedGearsObject
 
   const [filteredRegulatedGearCategories, setFilteredRegulatedGearCategories] = useState(regulatedGearCategories)
   const towedGearsCategories = getGroupCategories(REGULATED_GEARS_KEYS.ALL_TOWED_GEARS, groupsToCategories)
@@ -49,72 +40,51 @@ const RegulatedGears = ({ authorized, regulatedGearsObject, hasPreviousRegulated
 
   const dataCyTarget = authorized ? 'authorized' : 'unauthorized'
 
-  return <div data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears`}>
-      <SectionTitle
-        hasPreviousRegulatedGearsBloc={hasPreviousRegulatedGearsBloc}
-      >
-        {
-          authorized
-            ? <GreenCircle margin={'0 5px 0 0'} />
-            : <RedCircle margin={'0 5px 0 0'} />
-        }
+  return (
+    <div data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears`}>
+      <SectionTitle hasPreviousRegulatedGearsBloc={hasPreviousRegulatedGearsBloc}>
+        {authorized ? <GreenCircle margin="0 5px 0 0" /> : <RedCircle margin="0 5px 0 0" />}
         Engins {authorized ? 'réglementés' : 'interdits'}
       </SectionTitle>
-      {allGears
-        ? <Label>{'Tous les engins'}</Label>
-        : <List>
-          {
-            allTowedGears && <Label
-              title={INFO_TEXT.TOWED_GEAR}
+      {allGears ? (
+        <Label>Tous les engins</Label>
+      ) : (
+        <List>
+          {allTowedGears && (
+            <Label
               data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears-towed-gears`}
+              title={INFO_TEXT.TOWED_GEAR}
             >
               Tous les engins trainants
-              <InfoPoint
-                title={INFO_TEXT.TOWED_GEAR}
-                margin={'3px'}
-              />
+              <InfoPoint margin="3px" title={INFO_TEXT.TOWED_GEAR} />
             </Label>
-          }
-          {
-            allPassiveGears && <Label
-              title={INFO_TEXT.PASSIVE_GEAR}
+          )}
+          {allPassiveGears && (
+            <Label
               data-cy={`${dataCyTarget}-regulatory-layers-metadata-gears-passive-gears`}
+              title={INFO_TEXT.PASSIVE_GEAR}
             >
               Tous les engins dormants
-              <InfoPoint
-                title={INFO_TEXT.PASSIVE_GEAR}
-                margin={'3px'}
-              />
+              <InfoPoint margin="3px" title={INFO_TEXT.PASSIVE_GEAR} />
             </Label>
-          }
+          )}
+          <GearsOrGearCategories list={regulatedGears} />
           <GearsOrGearCategories
-            list={regulatedGears}
-          />
-          <GearsOrGearCategories
-            isCategory
             categoriesToGears={categoriesToGears}
+            isCategory
             list={filteredRegulatedGearCategories}
           />
-        </List>}
-      {!authorized && derogation &&
+        </List>
+      )}
+      {!authorized && derogation && (
         <Derogation>
-          <InfoPoint
-            margin={'3px 0 0 0'}
-            backgroundColor={COLORS.yellowMunsell}
-            color={COLORS.charcoal}
-          />
-          <DerogationMessage>
-            {'Mesures dérogatoire: consulter les références réglementaires'}
-          </DerogationMessage>
+          <InfoPoint backgroundColor={COLORS.yellowMunsell} color={COLORS.charcoal} margin="3px 0 0 0" />
+          <DerogationMessage>Mesures dérogatoire: consulter les références réglementaires</DerogationMessage>
         </Derogation>
-      }
-      {
-        otherInfo &&
-        <ReactMarkdown>
-          {otherInfo}
-        </ReactMarkdown>
-      }
-  </div>
+      )}
+      {otherInfo && <ReactMarkdown>{otherInfo}</ReactMarkdown>}
+    </div>
+  )
 }
 
 const Derogation = styled.span`

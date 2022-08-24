@@ -1,30 +1,24 @@
 import React, { useEffect, useRef } from 'react'
-import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
+
 import { COLORS } from '../../constants/constants'
 import { expandRightMenu } from '../../domain/shared_slices/Global'
+import {
+  deleteInterestPointBeingDrawed,
+  drawInterestPoint,
+  endInterestPointDraw,
+} from '../../domain/shared_slices/InterestPoint'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { ReactComponent as InterestPointSVG } from '../icons/Point_interet.svg'
 import EditInterestPoint from './EditInterestPoint'
-import {
-  deleteInterestPointBeingDrawed,
-  drawInterestPoint,
-  endInterestPointDraw
-} from '../../domain/shared_slices/InterestPoint'
 
-const InterestPoint = () => {
+function InterestPoint() {
   const dispatch = useDispatch()
   const vesselSidebarIsOpen = useSelector(state => state.vessel.selectedVessel)
-  const {
-    isEditing,
-    interestPointBeingDrawed
-  } = useSelector(state => state.interestPoint)
-  const {
-    healthcheckTextWarning,
-    rightMenuIsOpen,
-    previewFilteredVesselsMode
-  } = useSelector(state => state.global)
+  const { interestPointBeingDrawed, isEditing } = useSelector(state => state.interestPoint)
+  const { healthcheckTextWarning, previewFilteredVesselsMode, rightMenuIsOpen } = useSelector(state => state.global)
 
   const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
   const isInterestPointOpen = isEditing || interestPointBeingDrawed
@@ -44,7 +38,7 @@ const InterestPoint = () => {
     }
   }
 
-  function openOrCloseInterestPoint () {
+  function openOrCloseInterestPoint() {
     if (!isInterestPointOpen) {
       dispatch(unselectVessel())
 
@@ -56,7 +50,7 @@ const InterestPoint = () => {
     }
   }
 
-  function close () {
+  function close() {
     dispatch(endInterestPointDraw())
     if (!isEditing) {
       dispatch(deleteInterestPointBeingDrawed())
@@ -66,24 +60,18 @@ const InterestPoint = () => {
   return (
     <Wrapper ref={wrapperRef}>
       <InterestPointWrapper
-        data-cy={'interest-point'}
+        data-cy="interest-point"
+        healthcheckTextWarning={healthcheckTextWarning}
         isHidden={previewFilteredVesselsMode}
-        healthcheckTextWarning={healthcheckTextWarning}
         isOpen={isInterestPointOpen}
-        rightMenuIsShrinked={isRightMenuShrinked}
-        onMouseEnter={() => dispatch(expandRightMenu())}
-        title={'Créer un point d\'intérêt'}
         onClick={openOrCloseInterestPoint}
+        onMouseEnter={() => dispatch(expandRightMenu())}
+        rightMenuIsShrinked={isRightMenuShrinked}
+        title={"Créer un point d'intérêt"}
       >
-        <InterestPointIcon
-          $rightMenuIsShrinked={isRightMenuShrinked}
-        />
+        <InterestPointIcon $rightMenuIsShrinked={isRightMenuShrinked} />
       </InterestPointWrapper>
-      <EditInterestPoint
-        healthcheckTextWarning={healthcheckTextWarning}
-        isOpen={isInterestPointOpen}
-        close={close}
-      />
+      <EditInterestPoint close={close} healthcheckTextWarning={healthcheckTextWarning} isOpen={isInterestPointOpen} />
     </Wrapper>
   )
 }
@@ -96,27 +84,27 @@ const Wrapper = styled.div`
 const InterestPointWrapper = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
-  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${props => (props.isOpen ? COLORS.shadowBlue : COLORS.charcoal)};
   top: 291px;
   z-index: 99;
   height: 40px;
-  width: ${props => props.rightMenuIsShrinked ? '5px' : '40px'};
-  border-radius: ${props => props.rightMenuIsShrinked ? '1px' : '2px'};
-  right: ${props => props.rightMenuIsShrinked ? '0' : '10px'};
+  width: ${props => (props.rightMenuIsShrinked ? '5px' : '40px')};
+  border-radius: ${props => (props.rightMenuIsShrinked ? '1px' : '2px')};
+  right: ${props => (props.rightMenuIsShrinked ? '0' : '10px')};
   transition: all 0.3s;
 
   :hover {
-      background: ${COLORS.charcoal};
+    background: ${COLORS.charcoal};
   }
 
   :focus {
-      background: ${COLORS.shadowBlue};
+    background: ${COLORS.shadowBlue};
   }
 `
 
 const InterestPointIcon = styled(InterestPointSVG)`
   width: 40px;
-  opacity: ${props => props.$rightMenuIsShrinked ? '0' : '1'};
+  opacity: ${props => (props.$rightMenuIsShrinked ? '0' : '1')};
   transition: all 0.2s;
 `
 

@@ -6,48 +6,75 @@ const ReportingReducer = null
 /* eslint-enable */
 
 const reportingSlice = createSlice({
-  name: 'reporting',
   initialState: {
-    /** @type {CurrentAndArchivedReportings} */
-    currentAndArchivedReportings: {
-      current: [
-        {
-          id: '1',
-          type: 'ALERT',
-          vesselName: '',
-          internalReferenceNumber: '',
-          externalReferenceNumber: '',
-          ircs: '',
-          vesselIdentifier: '',
-          creationDate: new Date(),
-          validationDate: new Date(),
-          value: {
-            type: 'THREE_MILES_TRAWLING_ALERT'
-          }
-        },
-        {
-          id: '2',
-          type: 'OBSERVATION',
-          vesselName: '',
-          internalReferenceNumber: '',
-          externalReferenceNumber: '',
-          ircs: '',
-          vesselIdentifier: '',
-          creationDate: new Date(),
-          validationDate: new Date(),
-          value: {
-            type: 'GEAR'
-          }
-        }
-      ],
-      archived: []
-    },
     /** @type {Date} */
     archivedReportingsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
+
+    /** @type {CurrentAndArchivedReportings} */
+    currentAndArchivedReportings: {
+      archived: [],
+      current: [
+        {
+          creationDate: new Date(),
+          externalReferenceNumber: '',
+          id: '1',
+          internalReferenceNumber: '',
+          ircs: '',
+          type: 'ALERT',
+          validationDate: new Date(),
+          value: {
+            type: 'THREE_MILES_TRAWLING_ALERT',
+          },
+          vesselIdentifier: '',
+          vesselName: '',
+        },
+        {
+          creationDate: new Date(),
+          externalReferenceNumber: '',
+          id: '2',
+          internalReferenceNumber: '',
+          ircs: '',
+          type: 'OBSERVATION',
+          validationDate: new Date(),
+          value: {
+            type: 'GEAR',
+          },
+          vesselIdentifier: '',
+          vesselName: '',
+        },
+      ],
+    },
     loadingReporting: false,
-    vesselIdentity: null
+    vesselIdentity: null,
   },
+  name: 'reporting',
   reducers: {
+    /**
+     * Set the loading of reporting to true, and shows a loader in the reporting tab
+     * @function loadReporting
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     */
+    loadReporting(state) {
+      state.loadingReporting = true
+    },
+
+    resetCurrentAndArchivedReportings(state) {
+      state.currentAndArchivedReportings = null
+      state.vesselIdentity = null
+    },
+
+    /**
+     * Set the date since archived reporting are fetched
+     * @function setArchivedReportingsFromDate
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: Date}} action - The "from" date
+     */
+    setArchivedReportingsFromDate(state, action) {
+      state.archivedReportingsFromDate = action.payload
+    },
+
     /**
      * Set current and archived reporting
      * @function setCurrentAndArchivedReportings
@@ -58,42 +85,19 @@ const reportingSlice = createSlice({
      *   vesselIdentity: VesselIdentity
      * }}} action - the reporting
      */
-    setCurrentAndArchivedReportings (state, action) {
+    setCurrentAndArchivedReportings(state, action) {
       state.currentAndArchivedReportings = action.payload.currentAndArchivedReportings
       state.vesselIdentity = action.payload.vesselIdentity
       state.loadingReporting = false
     },
-    resetCurrentAndArchivedReportings (state) {
-      state.currentAndArchivedReportings = null
-      state.vesselIdentity = null
-    },
-    /**
-     * Set the date since archived reporting are fetched
-     * @function setArchivedReportingsFromDate
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     * @param {{payload: Date}} action - The "from" date
-     */
-    setArchivedReportingsFromDate (state, action) {
-      state.archivedReportingsFromDate = action.payload
-    },
-    /**
-     * Set the loading of reporting to true, and shows a loader in the reporting tab
-     * @function loadReporting
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     */
-    loadReporting (state) {
-      state.loadingReporting = true
-    }
-  }
+  },
 })
 
 export const {
-  setCurrentAndArchivedReportings,
+  loadReporting,
   resetCurrentAndArchivedReportings,
   setArchivedReportingsFromDate,
-  loadReporting
+  setCurrentAndArchivedReportings,
 } = reportingSlice.actions
 
 export default reportingSlice.reducer

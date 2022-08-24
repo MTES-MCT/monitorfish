@@ -1,12 +1,13 @@
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
+
 import Layers from './layers'
 
 export const vesselLabel = {
-  VESSEL_NATIONALITY: 'VESSEL_NATIONALITY',
-  VESSEL_NAME: 'VESSEL_NAME',
+  VESSEL_FLEET_SEGMENT: 'VESSEL_FLEET_SEGMENT',
   VESSEL_INTERNAL_REFERENCE_NUMBER: 'VESSEL_INTERNAL_REFERENCE_NUMBER',
-  VESSEL_FLEET_SEGMENT: 'VESSEL_FLEET_SEGMENT'
+  VESSEL_NAME: 'VESSEL_NAME',
+  VESSEL_NATIONALITY: 'VESSEL_NATIONALITY',
 }
 
 export class VesselLabelLine {
@@ -19,22 +20,28 @@ export class VesselLabelLine {
    * @param {string} featureId - The feature identifier
    * @param {number} opacity - The opacity
    */
-  static getFeature (fromCoordinates, toCoordinates, featureId, opacity) {
+  static getFeature(fromCoordinates, toCoordinates, featureId, opacity) {
     const labelLineFeature = new Feature({
+      geometry: new LineString([fromCoordinates, toCoordinates]),
       opacity,
-      geometry: new LineString([fromCoordinates, toCoordinates])
     })
     labelLineFeature.setId(featureId)
 
     return labelLineFeature
   }
 
-  static getFeatureId (identity) {
+  static getFeatureId(identity) {
     return `${Layers.VESSELS_LABEL.code}:${identity.internalReferenceNumber}/${identity.ircs}/${identity.externalReferenceNumber}`
   }
 }
 
-export function drawMovedLabelIfFoundAndReturnOffset (vectorSource, vesselToCoordinates, labelLineFeatureId, feature, opacity) {
+export function drawMovedLabelIfFoundAndReturnOffset(
+  vectorSource,
+  vesselToCoordinates,
+  labelLineFeatureId,
+  feature,
+  opacity,
+) {
   let offset = null
 
   if (vesselToCoordinates.has(labelLineFeatureId)) {
@@ -43,16 +50,20 @@ export function drawMovedLabelIfFoundAndReturnOffset (vectorSource, vesselToCoor
 
     const existingLabelLineFeature = vectorSource.getFeatureById(labelLineFeatureId)
     if (existingLabelLineFeature) {
-      existingLabelLineFeature.getGeometry().setCoordinates([feature.getGeometry().getCoordinates(), coordinatesAndOffset.coordinates])
+      existingLabelLineFeature
+        .getGeometry()
+        .setCoordinates([feature.getGeometry().getCoordinates(), coordinatesAndOffset.coordinates])
     } else {
       const labelLineFeature = VesselLabelLine.getFeature(
         feature.getGeometry().getCoordinates(),
         coordinatesAndOffset.coordinates,
         labelLineFeatureId,
-        opacity)
+        opacity,
+      )
       labelLineFeature.setId(labelLineFeatureId)
       vectorSource.addFeature(labelLineFeature)
     }
   }
+
   return offset
 }

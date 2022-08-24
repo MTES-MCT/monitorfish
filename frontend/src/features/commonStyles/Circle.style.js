@@ -1,11 +1,12 @@
 import styled, { css } from 'styled-components'
+
 import { COLORS } from '../../constants/constants'
 
 const circle = css`
   display: inline-block;
   height: 10px;
   width: 10px;
-  ${props => props.margin ? `margin: ${props.margin};` : ''}
+  ${props => (props.margin ? `margin: ${props.margin};` : '')}
   border-radius: 50%;
   vertical-align: middle;
 `

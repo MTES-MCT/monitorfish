@@ -1,41 +1,37 @@
+import ScaleLine from 'ol/control/ScaleLine'
+import Zoom from 'ol/control/Zoom'
+import { platformModifierKeyOnly } from 'ol/events/condition'
+import OpenLayerMap from 'ol/Map'
+import { transform } from 'ol/proj'
+import View from 'ol/View'
 import React, { Children, cloneElement, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import OpenLayerMap from 'ol/Map'
-import View from 'ol/View'
-import { transform } from 'ol/proj'
-import ScaleLine from 'ol/control/ScaleLine'
-import Zoom from 'ol/control/Zoom'
 
+import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
 import { resetAnimateToRegulatoryLayer } from '../../domain/shared_slices/Map'
-import MapCoordinatesBox from './controls/MapCoordinatesBox'
 import MapAttributionsBox from './controls/MapAttributionsBox'
-import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
-import { platformModifierKeyOnly } from 'ol/events/condition'
+import MapCoordinatesBox from './controls/MapCoordinatesBox'
 
-let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
+let lastEventForPointerMove
+let timeoutForPointerMove
+let timeoutForMove
 
-const BaseMap = props => {
+function BaseMap(props) {
   const {
+    children,
+    container,
     handleMovingAndZoom,
     handlePointerMove,
-    children,
-    showCoordinates,
     setCurrentFeature,
     showAttributions,
-    container
+    showCoordinates,
   } = props
 
-  const {
-    selectedBaseLayer,
-    animateToRegulatoryLayer
-  } = useSelector(state => state.map)
+  const { animateToRegulatoryLayer, selectedBaseLayer } = useSelector(state => state.map)
 
-  const {
-    healthcheckTextWarning,
-    previewFilteredVesselsMode
-  } = useSelector(state => state.global)
+  const { healthcheckTextWarning, previewFilteredVesselsMode } = useSelector(state => state.global)
   const dispatch = useDispatch()
 
   const [map, setMap] = useState()
@@ -51,9 +47,11 @@ const BaseMap = props => {
 
   const handleMapClick = (event, map) => {
     if (event && map) {
-      const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
+      const feature = map.forEachFeatureAtPixel(event.pixel, feature => feature, {
+        hitTolerance: HIT_PIXEL_TO_TOLERANCE,
+      })
       const isCtrl = platformModifierKeyOnly(event)
-      setMapClickEvent({ feature, ctrlKeyPressed: isCtrl })
+      setMapClickEvent({ ctrlKeyPressed: isCtrl, feature })
     }
   }
 
@@ -88,26 +86,26 @@ const BaseMap = props => {
     animateToLayer()
   }, [animateToRegulatoryLayer, map])
 
-  function initMap () {
+  function initMap() {
     if (!map) {
       const centeredOnFrance = [2.99049, 46.82801]
       const initialMap = new OpenLayerMap({
-        keyboardEventTarget: document,
-        target: mapElement.current,
-        layers: [],
-        renderer: (['webgl', 'canvas']),
-        view: new View({
-          projection: OPENLAYERS_PROJECTION,
-          center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
-          zoom: 6,
-          minZoom: 3
-        }),
         controls: [
           new ScaleLine({ units: 'nautical' }),
           new Zoom({
-            className: 'zoom'
-          })
-        ]
+            className: 'zoom',
+          }),
+        ],
+        keyboardEventTarget: document,
+        layers: [],
+        renderer: ['webgl', 'canvas'],
+        target: mapElement.current,
+        view: new View({
+          center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
+          minZoom: 3,
+          projection: OPENLAYERS_PROJECTION,
+          zoom: 6,
+        }),
       })
 
       initialMap.on('click', event => handleMapClick(event, initialMap))
@@ -128,7 +126,7 @@ const BaseMap = props => {
     }
   }
 
-  function throttleAndHandleMovingAndZoom (initialMap) {
+  function throttleAndHandleMovingAndZoom(initialMap) {
     if (timeoutForMove) {
       return
     }
@@ -141,11 +139,12 @@ const BaseMap = props => {
     }, 100)
   }
 
-  function throttleAndHandlePointerMove (event, map) {
+  function throttleAndHandlePointerMove(event, map) {
     if (event.dragging || timeoutForPointerMove) {
       if (timeoutForPointerMove) {
         lastEventForPointerMove = event
       }
+
       return
     }
 
@@ -159,23 +158,21 @@ const BaseMap = props => {
     }, 50)
   }
 
-  function animateToLayer () {
+  function animateToLayer() {
     if (map && animateToRegulatoryLayer && !isAnimating && initRenderIsDone) {
       if (animateToRegulatoryLayer.extent) {
         map.getView().fit(animateToRegulatoryLayer.extent, {
+          callback: () => dispatch(resetAnimateToRegulatoryLayer()),
           duration: 1000,
-          callback: () => dispatch(resetAnimateToRegulatoryLayer())
         })
+
         return
       }
 
       if (animateToRegulatoryLayer.center) {
         const animateObject = {
-          center: [
-            animateToRegulatoryLayer.center[0],
-            animateToRegulatoryLayer.center[1]
-          ],
-          duration: 1000
+          center: [animateToRegulatoryLayer.center[0], animateToRegulatoryLayer.center[1]],
+          duration: 1000,
         }
         if (map.getView().getZoom() < 8) {
           animateObject.zoom = 8
@@ -189,7 +186,7 @@ const BaseMap = props => {
     }
   }
 
-  function saveCoordinates (event) {
+  function saveCoordinates(event) {
     if (event) {
       const clickedCoordinates = mapRef.current.getCoordinateFromPixel(event.pixel)
       setCursorCoordinates(clickedCoordinates)
@@ -203,16 +200,17 @@ const BaseMap = props => {
         healthcheckTextWarning={healthcheckTextWarning}
         previewFilteredVesselsMode={previewFilteredVesselsMode}
       />
-      {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates}/>}
-      {showAttributions && <MapAttributionsBox/>}
-      {map && Children.map(children, child => {
-        const props = { map }
-        if (child.props.hasClickEvent) {
-          props.mapClickEvent = mapClickEvent
-        }
+      {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates} />}
+      {showAttributions && <MapAttributionsBox />}
+      {map &&
+        Children.map(children, child => {
+          const props = { map }
+          if (child.props.hasClickEvent) {
+            props.mapClickEvent = mapClickEvent
+          }
 
-        return cloneElement(child, props)
-      })}
+          return cloneElement(child, props)
+        })}
     </MapWrapper>
   )
 }
@@ -223,7 +221,8 @@ const MapWrapper = styled.div`
 `
 
 const MapContainer = styled.div`
-  height: ${props => props.healthcheckTextWarning || props.previewFilteredVesselsMode ? 'calc(100vh - 50px)' : '100vh'};
+  height: ${props =>
+    props.healthcheckTextWarning || props.previewFilteredVesselsMode ? 'calc(100vh - 50px)' : '100vh'};
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;

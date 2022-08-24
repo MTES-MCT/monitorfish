@@ -1,93 +1,89 @@
+import countries from 'i18n-iso-countries'
 import React from 'react'
+import Highlighter from 'react-highlight-words'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
-import countries from 'i18n-iso-countries'
-import Highlighter from 'react-highlight-words'
 
-const VesselSearchResultItem = ({ vessel, selectVessel, searchText }) => {
+function VesselSearchResultItem({ searchText, selectVessel, vessel }) {
   const flagState = vessel.flagState || vessel.vesselProperties?.flagState
   const vesselName = vessel.vesselName || vessel.vesselProperties?.vesselName
 
-  return <ListItem
-    data-cy={'vessel-search-item'}
-    onClick={selectVessel}
-  >
-    <div>
-      {
-        flagState && <Flag
+  return (
+    <ListItem data-cy={'vessel-search-item'} onClick={selectVessel}>
+      <div>
+        {flagState && (
           rel="preload"
-          title={countries.getName(flagState, 'fr')}
           src={`flags/${flagState.toLowerCase()}.svg`}
+          title={countries.getName(flagState, 'fr')}
         />
-      }
-      <Name>
-        <Highlighter
+        )}
+        <Name>
+          <Highlighter
+            autoEscape={true}
           highlightClassName="highlight"
           searchWords={[searchText]}
-          autoEscape={true}
           textToHighlight={vesselName || 'SANS NOM'}
-        />
-      </Name>
-    </div>
-    <IdentityDataWrapper>
-      {showVesselIdentityData(vessel, searchText)}
-    </IdentityDataWrapper>
-  </ListItem>
+          />
+        </Name>
+      </div>
+      <IdentityDataWrapper>{showVesselIdentityData(vessel, searchText)}</IdentityDataWrapper>
+    </ListItem>
+  )
 }
 
 const showVesselIdentityData = (vessel, searchText) => {
   const arrayOfInformation = [
     {
+      name: 'CFR',
       value: vessel.internalReferenceNumber,
-      name: 'CFR'
     },
     {
+      name: 'Marq. Ext.',
       value: vessel.externalReferenceNumber,
-      name: 'Marq. Ext.'
     },
     {
+      name: 'MMSI',
       value: vessel.mmsi,
-      name: 'MMSI'
     },
     {
+      name: 'Call Sign',
       value: vessel.ircs,
-      name: 'Call Sign'
     },
     {
+      name: 'Balise n°',
       value: vessel.beaconNumber,
-      name: 'Balise n°'
-    }
+    },
   ]
 
   return arrayOfInformation
     .filter(information => information.value)
     .map((information, index) => {
-      const informationToShow = <>
-        <Highlighter
-          highlightClassName="highlight"
-          searchWords={[searchText]}
-          autoEscape={true}
-          textToHighlight={information.value || ''}
-        />
-        {' '}<Light>({information.name})</Light>
-      </>
+      const informationToShow = (
+        <>
+          <Highlighter
+            autoEscape
+            highlightClassName="highlight"
+            searchWords={[searchText]}
+            textToHighlight={information.value || ''}
+          />{' '}
+          <Light>({information.name})</Light>
+        </>
+      )
 
       const fifthElement = 5
       if (index + 1 === fifthElement) {
-        return <LongIdentityData
-          key={information.value}
-          style={{ flex: index % 2 }}
-        >
-          {informationToShow}
-        </LongIdentityData>
+        return (
+          <LongIdentityData key={information.value} style={{ flex: index % 2 }}>
+            {informationToShow}
+          </LongIdentityData>
+        )
       }
 
-      return <IdentityData
-        key={information.value}
-        style={{ flex: index % 2 }}
-      >
-        {informationToShow}
-      </IdentityData>
+      return (
+        <IdentityData key={information.value} style={{ flex: index % 2 }}>
+          {informationToShow}
+        </IdentityData>
+      )
     })
 }
 

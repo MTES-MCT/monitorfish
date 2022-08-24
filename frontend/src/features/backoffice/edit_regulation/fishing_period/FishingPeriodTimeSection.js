@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { TimeRow, DateRanges, ContentWrapper } from '../../../commonStyles/FishingPeriod.style'
-import { SquareButton } from '../../../commonStyles/Buttons.style'
+
 import { SQUARE_BUTTON_TYPE } from '../../../../constants/constants'
 import TimeInterval from './TimeInterval'
 import { FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulatory'
@@ -9,9 +8,11 @@ import useUpdateArrayInFishingPeriod from '../../../../hooks/fishingPeriod/useUp
 import usePopArrayInFishingPeriod from '../../../../hooks/fishingPeriod/usePopArrayInFishingPeriod'
 import usePushArrayInFishingPeriod from '../../../../hooks/fishingPeriod/usePushArrayInFishingPeriod'
 import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
+import { SquareButton } from '../../../commonStyles/Buttons.style'
+import { TimeRow, DateRanges, ContentWrapper } from '../../../commonStyles/FishingPeriod.style'
 
-const FishingPeriodTimeSection = ({ timeIsDisabled, disabled }) => {
-  const { timeIntervals, daytime } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
+function FishingPeriodTimeSection({ disabled, timeIsDisabled }) {
+  const { daytime, timeIntervals } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
   const onTimeIntervalChange = useUpdateArrayInFishingPeriod(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals)
   const addTimeToTimeInterval = usePushArrayInFishingPeriod(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals, {})
   const removeTimeFromTimeInterval = usePopArrayInFishingPeriod(FISHING_PERIOD_KEYS.TIME_INTERVALS, timeIntervals)
@@ -29,39 +30,43 @@ const FishingPeriodTimeSection = ({ timeIsDisabled, disabled }) => {
     }
   }, [setTimeInterval, daytime])
 
-  return <TimeRow disabled={timeIsDisabled}>
-    <DateRanges>
-        { timeIntervals?.length > 0
-          ? timeIntervals.map((timeInterval, id) => {
-            return <TimeInterval
+  return (
+    <TimeRow disabled={timeIsDisabled}>
+      <DateRanges>
+        {timeIntervals?.length > 0 ? (
+          timeIntervals.map((timeInterval, id) => <TimeInterval
               key={timeInterval}
               id={id}
               isLast={id === timeIntervals.length - 1}
               timeInterval={timeInterval}
               disabled={timeIsDisabled || disabled || daytime}
               onTimeIntervalChange={onTimeIntervalChange}
-            />
+            />)
           })
-          : <TimeInterval
+        ) : (
+          <TimeInterval
             key={-1}
+            disabled={timeIsDisabled || disabled || daytime}
             id={-1}
             isLast
-            timeInterval={undefined}
-            disabled={timeIsDisabled || disabled || daytime}
             onTimeIntervalChange={onTimeIntervalChange}
+            timeInterval={undefined}
           />
-        }
-    </DateRanges>
-    <ContentWrapper alignSelf={'flex-end'}>
-      <SquareButton
-        disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
-        onClick={addTimeToTimeInterval} />
-      <SquareButton
-        type={SQUARE_BUTTON_TYPE.DELETE}
-        disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
-        onClick={removeTimeFromTimeInterval} />
-    </ContentWrapper>
-  </TimeRow>
+        )}
+      </DateRanges>
+      <ContentWrapper alignSelf="flex-end">
+        <SquareButton
+          disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
+          onClick={addTimeToTimeInterval}
+        />
+        <SquareButton
+          type={SQUARE_BUTTON_TYPE.DELETE}
+          disabled={timeIsDisabled || disabled || timeIntervals?.length === 0}
+          onClick={removeTimeFromTimeInterval}
+        />
+      </ContentWrapper>
+    </TimeRow>
+  )
 }
 
 export default FishingPeriodTimeSection

@@ -1,15 +1,17 @@
 import Feature from 'ol/Feature'
+
 import {
   REGULATION_ACTION_TYPE,
-  getRegulatoryFeatureId, mapToRegulatoryFeatureObject
+  getRegulatoryFeatureId,
+  mapToRegulatoryFeatureObject,
 } from '../../../entities/regulatory'
-import updateRegulation from './updateRegulation'
 import resetPreviousRegulation from './resetRegulation'
+import updateRegulation from './updateRegulation'
 
 const createOrUpdateRegulation = (processingRegulation, id, previousId) => dispatch => {
   const featureObject = mapToRegulatoryFeatureObject({
     ...processingRegulation,
-    region: processingRegulation.region?.join(', ')
+    region: processingRegulation.region?.join(', '),
   })
 
   const feature = new Feature(featureObject)
@@ -21,7 +23,7 @@ const createOrUpdateRegulation = (processingRegulation, id, previousId) => dispa
   }
 }
 
-function geometryHasChanged (previousId, id) {
+function geometryHasChanged(previousId, id) {
   return previousId && previousId !== id
 }
 

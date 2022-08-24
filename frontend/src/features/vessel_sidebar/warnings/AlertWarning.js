@@ -1,50 +1,44 @@
+import React from 'react'
 import { batch, useDispatch } from 'react-redux'
-import { openSideWindowTab } from '../../../domain/shared_slices/Global'
+import styled from 'styled-components'
+
+import { getAlertNameFromType } from '../../../domain/entities/alerts'
 import { sideWindowMenu } from '../../../domain/entities/sideWindow'
 import { focusOnAlert } from '../../../domain/shared_slices/Alert'
-import { getAlertNameFromType } from '../../../domain/entities/alerts'
-import React from 'react'
-import styled from 'styled-components'
+import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
 
-const AlertWarning = ({ selectedVessel }) => {
+function AlertWarning({ selectedVessel }) {
   const dispatch = useDispatch()
 
-  return (<>
-    {
-      selectedVessel?.alerts?.length
-        ? <Alerts
-          onClick={() => showAlertInSideWindow(dispatch, selectedVessel)}
-          data-cy={'vessel-sidebar-alert'}
-        >
-          <AlertIcon/>
-          {
-            selectedVessel?.alerts.length === 1
-              ? getAlertNameFromType(selectedVessel?.alerts[0])
-              : `${selectedVessel?.alerts.length} alertes`
-          }
+  return (
+    <>
+      {selectedVessel?.alerts?.length ? (
+        <Alerts data-cy="vessel-sidebar-alert" onClick={() => showAlertInSideWindow(dispatch, selectedVessel)}>
+          <AlertIcon />
+          {selectedVessel?.alerts.length === 1
+            ? getAlertNameFromType(selectedVessel?.alerts[0])
+            : `${selectedVessel?.alerts.length} alertes`}
           <SeeAlert>
-            {
-              selectedVessel?.alerts.length === 1
-                ? 'Voir l\'alerte dans la liste'
-                : 'Voir les alertes dans la liste'
-            }
+            {selectedVessel?.alerts.length === 1 ? "Voir l'alerte dans la liste" : 'Voir les alertes dans la liste'}
           </SeeAlert>
         </Alerts>
-        : null
-    }
-    </>)
+      ) : null}
+    </>
+  )
 }
 
 const showAlertInSideWindow = (dispatch, selectedVessel) => {
   batch(() => {
     dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
-    dispatch(focusOnAlert({
-      name: selectedVessel?.alerts[0],
-      internalReferenceNumber: selectedVessel.internalReferenceNumber,
-      externalReferenceNumber: selectedVessel.externalReferenceNumber,
-      ircs: selectedVessel.ircs
-    }))
+    dispatch(
+      focusOnAlert({
+        externalReferenceNumber: selectedVessel.externalReferenceNumber,
+        internalReferenceNumber: selectedVessel.internalReferenceNumber,
+        ircs: selectedVessel.ircs,
+        name: selectedVessel?.alerts[0],
+      }),
+    )
   })
 }
 
@@ -63,45 +57,93 @@ const AlertIcon = styled(AlertSVG)`
   margin-bottom: -4px;
   margin-right: 9px;
   margin-left: 7px;
-  
-  animation: ring 4s .7s ease-in-out;
+
+  animation: ring 4s 0.7s ease-in-out;
   animation-iteration-count: 1;
   transform-origin: 50% 4px;
-  
+
   @keyframes ring {
-    0% { transform: rotate(0); }
-    1% { transform: rotate(30deg); }
-    3% { transform: rotate(-28deg); }
-    5% { transform: rotate(34deg); }
-    7% { transform: rotate(-32deg); }
-    9% { transform: rotate(30deg); }
-    11% { transform: rotate(-28deg); }
-    13% { transform: rotate(26deg); }
-    15% { transform: rotate(-24deg); }
-    17% { transform: rotate(22deg); }
-    19% { transform: rotate(-20deg); }
-    21% { transform: rotate(18deg); }
-    23% { transform: rotate(-16deg); }
-    25% { transform: rotate(14deg); }
-    27% { transform: rotate(-12deg); }
-    29% { transform: rotate(10deg); }
-    31% { transform: rotate(-8deg); }
-    33% { transform: rotate(6deg); }
-    35% { transform: rotate(-4deg); }
-    37% { transform: rotate(2deg); }
-    39% { transform: rotate(-1deg); }
-    41% { transform: rotate(1deg); }
-    43% { transform: rotate(0); }
-    100% { transform: rotate(0); }
+    0% {
+      transform: rotate(0);
+    }
+    1% {
+      transform: rotate(30deg);
+    }
+    3% {
+      transform: rotate(-28deg);
+    }
+    5% {
+      transform: rotate(34deg);
+    }
+    7% {
+      transform: rotate(-32deg);
+    }
+    9% {
+      transform: rotate(30deg);
+    }
+    11% {
+      transform: rotate(-28deg);
+    }
+    13% {
+      transform: rotate(26deg);
+    }
+    15% {
+      transform: rotate(-24deg);
+    }
+    17% {
+      transform: rotate(22deg);
+    }
+    19% {
+      transform: rotate(-20deg);
+    }
+    21% {
+      transform: rotate(18deg);
+    }
+    23% {
+      transform: rotate(-16deg);
+    }
+    25% {
+      transform: rotate(14deg);
+    }
+    27% {
+      transform: rotate(-12deg);
+    }
+    29% {
+      transform: rotate(10deg);
+    }
+    31% {
+      transform: rotate(-8deg);
+    }
+    33% {
+      transform: rotate(6deg);
+    }
+    35% {
+      transform: rotate(-4deg);
+    }
+    37% {
+      transform: rotate(2deg);
+    }
+    39% {
+      transform: rotate(-1deg);
+    }
+    41% {
+      transform: rotate(1deg);
+    }
+    43% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(0);
+    }
   }
 `
 
 const Alerts = styled.div`
   cursor: pointer;
-  background: #E1000F;
+  background: #e1000f;
   font-weight: 500;
   font-size: 13px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-transform: uppercase;
   width: 100%;
   text-align: left;

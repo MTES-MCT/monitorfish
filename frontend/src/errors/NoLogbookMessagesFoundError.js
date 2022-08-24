@@ -5,7 +5,7 @@ export default class NoLogbookMessagesFoundError extends Error {
   type = ErrorType.INFO_AND_HIDDEN
   showEmptyComponentFields = true
 
-  constructor (message = '') {
+  constructor(message = '') {
     super(message)
 
     if (Error.captureStackTrace) {

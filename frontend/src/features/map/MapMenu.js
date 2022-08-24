@@ -1,23 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react'
-import MapMenuOverlay from './overlays/MapMenuOverlay'
+import { useSelector } from 'react-redux'
+
 import { HIT_PIXEL_TO_TOLERANCE } from '../../constants/constants'
 import LayersEnum from '../../domain/entities/layers'
-import { useSelector } from 'react-redux'
+import MapMenuOverlay from './overlays/MapMenuOverlay'
 
 /**
  * Handle map menu - Note that the map parameter is given from
  * the BaseMap component, event if it's not seen in the props passed to MapMenu
  */
-const MapMenu = ({ map }) => {
-  const {
-    vessels
-  } = useSelector(state => state.vessel)
+function MapMenu({ map }) {
+  const { vessels } = useSelector(state => state.vessel)
   const [coordinates, setCoordinates] = useState([])
   const vessel = useRef(null)
 
   useEffect(() => {
     if (map) {
-      function showMenu (event) {
+      function showMenu(event) {
         event.preventDefault()
 
         const pixel = map.getEventPixel(event)
@@ -25,13 +24,12 @@ const MapMenu = ({ map }) => {
         const clickedFeatureId = feature?.getId()
 
         if (clickedFeatureId?.toString()?.includes(LayersEnum.VESSELS.code)) {
-          const clickedVessel = vessels.find(vessel => {
-            return clickedFeatureId?.toString()?.includes(vessel.vesselId)
-          })
+          const clickedVessel = vessels.find(vessel => clickedFeatureId?.toString()?.includes(vessel.vesselId))
 
           if (clickedVessel) {
             vessel.current = clickedVessel
             setCoordinates(feature.getGeometry().getCoordinates())
+
             return
           }
 
@@ -50,11 +48,7 @@ const MapMenu = ({ map }) => {
     }
   }, [map, vessels])
 
-  return (
-    <>
-      <MapMenuOverlay map={map} coordinates={coordinates} vessel={vessel.current}/>
-    </>
-  )
+  return <MapMenuOverlay coordinates={coordinates} map={map} vessel={vessel.current} />
 }
 
 export default MapMenu

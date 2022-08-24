@@ -1,9 +1,9 @@
-import { setError } from '../../shared_slices/Global'
-import { setAlerts, setSilencedAlerts } from '../../shared_slices/Alert'
 import { silenceAlertFromAPI } from '../../../api/alert'
-import { removeAlert } from './validateAlert'
-import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
 import { Vessel } from '../../entities/vessel'
+import { setAlerts, setSilencedAlerts } from '../../shared_slices/Alert'
+import { setError } from '../../shared_slices/Global'
+import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
+import { removeAlert } from './validateAlert'
 
 /**
  * Silence an alert
@@ -22,34 +22,40 @@ const silenceAlert = (silencedAlertPeriodRequest, id) => (dispatch, getState) =>
     dispatch(setAlerts(previousAlertsWithoutSilenced))
   }, 3200)
 
-  silenceAlertFromAPI(id, silencedAlertPeriodRequest).then(silencedAlert => {
-    dispatch(removeVesselAlertAndUpdateReporting({
-      vesselId: Vessel.getVesselFeatureId(silencedAlert),
-      alertType: silencedAlert.value?.type,
-      isValidated: false
-    }))
-    const previousSilencedAlertsWithNewSilencedAlert = [silencedAlert].concat(previousSilencedAlerts)
-    dispatch(setSilencedAlerts(previousSilencedAlertsWithNewSilencedAlert))
-  }).catch(error => {
-    clearTimeout(timeout)
-    dispatch(setAlerts(previousAlerts))
-    dispatch(setSilencedAlerts(previousSilencedAlerts))
-    console.error(error)
-    dispatch(setError(error))
-  })
+  silenceAlertFromAPI(id, silencedAlertPeriodRequest)
+    .then(silencedAlert => {
+      dispatch(
+        removeVesselAlertAndUpdateReporting({
+          alertType: silencedAlert.value?.type,
+          isValidated: false,
+          vesselId: Vessel.getVesselFeatureId(silencedAlert),
+        }),
+      )
+      const previousSilencedAlertsWithNewSilencedAlert = [silencedAlert].concat(previousSilencedAlerts)
+      dispatch(setSilencedAlerts(previousSilencedAlertsWithNewSilencedAlert))
+    })
+    .catch(error => {
+      clearTimeout(timeout)
+      dispatch(setAlerts(previousAlerts))
+      dispatch(setSilencedAlerts(previousSilencedAlerts))
+      console.error(error)
+      dispatch(setError(error))
+    })
 }
 
-function setSilencedAlertAs (previousAlerts, id, silenced) {
+function setSilencedAlertAs(previousAlerts, id, silenced) {
   return previousAlerts.reduce((acc, alert) => {
     if (alert.id === id) {
-      const silencedAlert = Object.assign({}, alert)
+      const silencedAlert = { ...alert }
       silencedAlert.silencedPeriod = silenced
 
       acc.push(silencedAlert)
+
       return acc
     }
 
     acc.push(alert)
+
     return acc
   }, [])
 }

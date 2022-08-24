@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import styled from 'styled-components'
+
+import { COLORS } from '../../../../constants/constants'
 import {
   CustomCheckbox,
   customRadioGroup,
@@ -8,43 +11,34 @@ import {
   FormSection,
   RegulatorySectionTitle
 } from '../../../commonStyles/Backoffice.style'
-import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
+
 import { MultiCascader, Radio, RadioGroup } from 'rsuite'
+
+import { INFO_TEXT } from '../../constants'
+import InfoBox from '../InfoBox'
 import RegulatedGear from './RegulatedGear'
 import { GEARS_CATEGORIES_WITH_MESH } from '../../../../domain/entities/regulatory'
-import InfoBox from '../InfoBox'
-import { INFO_TEXT } from '../../constants'
 import { GreenCircle, RedCircle } from '../../../commonStyles/Circle.style'
 import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../domain/entities/backoffice'
 
-const RegulatedGears = props => {
-  const {
-    regulatedGearsObject,
-    setRegulatedGearsObject,
-    show,
-    authorized,
-    formattedAndFilteredCategoriesToGears
-  } = props
+function RegulatedGears(props) {
+  const { regulatedGearsObject, setRegulatedGearsObject, show, authorized, formattedAndFilteredCategoriesToGears } =
+    props
 
   const {
     /** @type {Gear[]} */
-    regulatedGears,
-    /** @type {GearCategory[]} */
-    regulatedGearCategories,
-    /** @type {string[]} */
-    selectedCategoriesAndGears,
     allGears,
-    allTowedGears,
+    /** @type {GearCategory[]} */
     allPassiveGears,
-    derogation
+    /** @type {string[]} */
+    allTowedGears,
+    derogation,
+    regulatedGearCategories,
+    regulatedGears,
+    selectedCategoriesAndGears
   } = regulatedGearsObject
 
-  const {
-    categoriesToGears,
-    groupsToCategories,
-    gearsByCode
-  } = useSelector(state => state.gear)
+  const { categoriesToGears, groupsToCategories, gearsByCode } = useSelector(state => state.gear)
 
   const onCheckboxChange = (groupName, checked) => {
     let nextSelectedCategoriesAndGears = selectedCategoriesAndGears ? [...selectedCategoriesAndGears] : []
@@ -54,22 +48,26 @@ const RegulatedGears = props => {
       const set = new Set(nextSelectedCategoriesAndGears.concat(gearsListToConcatOrFilter))
       nextSelectedCategoriesAndGears = Array.from(set.values())
     } else {
-      nextSelectedCategoriesAndGears = nextSelectedCategoriesAndGears.filter(value => !gearsListToConcatOrFilter.includes(value))
+      nextSelectedCategoriesAndGears = nextSelectedCategoriesAndGears.filter(
+        value => !gearsListToConcatOrFilter.includes(value),
+      )
     }
 
     set(REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES, nextSelectedCategoriesAndGears)
   }
 
-  const set = useCallback((key, value) => {
-    setRegulatedGearsObject(authorized, {
-      ...regulatedGearsObject,
-      [key]: value
-    })
-  }, [regulatedGearsObject, authorized, setRegulatedGearsObject])
+  const set = useCallback(
+    (key, value) => {
+      setRegulatedGearsObject(authorized, {
+        ...regulatedGearsObject,
+        [key]: value,
+      })
+    },
+    [regulatedGearsObject, authorized, setRegulatedGearsObject],
+  )
 
-  const isCategory = useCallback(value => {
-    return categoriesToGears && Object.keys(categoriesToGears).includes(value)
-  }, [categoriesToGears])
+  const isCategory = useCallback(
+    value => categoriesToGears && Object.keys(categoriesToGears).includes(value), [categoriesToGears])
 
   const updateRegulatedGearsAndCategories = () => {
     if (categoriesToGears && groupsToCategories) {
@@ -96,22 +94,22 @@ const RegulatedGears = props => {
           }
 
           categories += 1
-        } else {
-          if (currentRegulatedGears.includes(value)) {
+        } else if (currentRegulatedGears.includes(value)) {
             nextRegulatedGears[value] = { ...regulatedGears[value] }
           } else if (gearsByCode[value]) {
             nextRegulatedGears[value] = gearsByCode[value]
           }
-        }
       })
 
       setRegulatedGearsObject(authorized, {
         ...regulatedGearsObject,
         [REGULATED_GEARS_KEYS.ALL_GEARS]: categories === formattedAndFilteredCategoriesToGears.length,
-        [REGULATED_GEARS_KEYS.ALL_TOWED_GEARS]: towedGearCategories === groupsToCategories[REGULATED_GEARS_KEYS.ALL_TOWED_GEARS].length,
-        [REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS]: passiveGearCategories === groupsToCategories[REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS].length,
+        [REGULATED_GEARS_KEYS.ALL_TOWED_GEARS]:
+          towedGearCategories === groupsToCategories[REGULATED_GEARS_KEYS.ALL_TOWED_GEARS].length,
+        [REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS]:
+          passiveGearCategories === groupsToCategories[REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS].length,
         [REGULATED_GEARS_KEYS.REGULATED_GEARS]: nextRegulatedGears,
-        [REGULATED_GEARS_KEYS.REGULATED_GEAR_CATEGORIES]: nextRegulatedGearCategories
+        [REGULATED_GEARS_KEYS.REGULATED_GEAR_CATEGORIES]: nextRegulatedGearCategories,
       })
     }
   }
@@ -123,7 +121,10 @@ const RegulatedGears = props => {
   }, [selectedCategoriesAndGears])
 
   const removeGearOrCategory = gearOrCategory => {
-    set(REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES, selectedCategoriesAndGears.filter(value => value !== gearOrCategory))
+    set(
+      REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES,
+      selectedCategoriesAndGears.filter(value => value !== gearOrCategory),
+    )
   }
 
   const setRegulatedGears = (key, value, gearCode) => {
@@ -131,8 +132,8 @@ const RegulatedGears = props => {
       ...regulatedGears,
       [gearCode]: {
         ...regulatedGears[gearCode],
-        [key]: value
-      }
+        [key]: value,
+      },
     }
 
     set(REGULATED_GEARS_KEYS.REGULATED_GEARS, nextRegulatedGears)
@@ -143,8 +144,8 @@ const RegulatedGears = props => {
       ...regulatedGearCategories,
       [category]: {
         ...regulatedGearCategories[category],
-        [key]: value
-      }
+        [key]: value,
+      },
     }
 
     set(REGULATED_GEARS_KEYS.REGULATED_GEAR_CATEGORIES, nextRegulatedGearCategories)
@@ -152,63 +153,60 @@ const RegulatedGears = props => {
 
   const dataCyTarget = authorized ? 'authorized' : 'unauthorized'
 
-  return <FormSection show={show}>
-    <RegulatorySectionTitle>
-      {
-        authorized
-          ? <GreenCircle margin={'0 6px'} />
-          : <RedCircle margin={'0 6px'} />
-      }
-      Engins { authorized ? 'autorisés' : 'interdits'}
-    </RegulatorySectionTitle>
-    <Delimiter width='523' />
-    <FormContent
-      authorized={authorized}
-      display={authorized !== undefined}
+  return (
+    <FormSection show={show}>
+      <RegulatorySectionTitle>
+        {authorized ? <GreenCircle margin={'0 6px'} /> : <RedCircle margin={'0 6px'} />}
+        Engins {authorized ? 'autorisés' : 'interdits'}
+      </RegulatorySectionTitle>
+      <Delimiter width="523" />
+      <FormContent
+        authorized={authorized}
       data-cy={`${dataCyTarget}-gears-section-content`}
-    >
-      {!authorized && <GearCheckBox
-        data-cy={`${dataCyTarget}-all-gears-option`}
-        value={REGULATED_GEARS_KEYS.ALL_GEARS}
-        onChange={onCheckboxChange}
-        checked={allGears}
+      display={authorized !== undefined}
       >
-        Tous les engins
-      </GearCheckBox>}
-      <CheckboxWrapper>
-        <GearCheckBox
+        {!authorized && (
+          <GearCheckBox
+            checked={allGears}
+        data-cy={`${dataCyTarget}-all-gears-option`}
+        onChange={onCheckboxChange}
+        value={REGULATED_GEARS_KEYS.ALL_GEARS}
+          >
+            Tous les engins
+          </GearCheckBox>
+        )}
+        <CheckboxWrapper>
+          <GearCheckBox
+            checked={allTowedGears}
           data-cy={`${dataCyTarget}-all-towed-gears-option`}
+          onChange={onCheckboxChange}
           value={REGULATED_GEARS_KEYS.ALL_TOWED_GEARS}
-          onChange={onCheckboxChange}
-          checked={allTowedGears}
-        >
-          Engins trainants
-        </GearCheckBox>
-        <InfoBox pointer><InfoText>{INFO_TEXT.TOWED_GEAR}</InfoText></InfoBox>
-      </CheckboxWrapper>
-      <CheckboxWrapper>
-        <GearCheckBox
+          >
+            Engins trainants
+          </GearCheckBox>
+          <InfoBox pointer>
+            <InfoText>{INFO_TEXT.TOWED_GEAR}</InfoText>
+          </InfoBox>
+        </CheckboxWrapper>
+        <CheckboxWrapper>
+          <GearCheckBox
+            checked={allPassiveGears}
           data-cy={`${dataCyTarget}-all-passive-gears-option`}
-          value={REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS}
           onChange={onCheckboxChange}
-          checked={allPassiveGears}
-        >
-          Engins dormants
-        </GearCheckBox>
-        <InfoBox pointer><InfoText>{INFO_TEXT.PASSIVE_GEAR}</InfoText></InfoBox>
-      </CheckboxWrapper>
-      <CustomMultiCascader
-        data-cy={`${dataCyTarget}-gears-selector`}
+          value={REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS}
+          >
+            Engins dormants
+          </GearCheckBox>
+          <InfoBox pointer>
+            <InfoText>{INFO_TEXT.PASSIVE_GEAR}</InfoText>
+          </InfoBox>
+        </CheckboxWrapper>
+        <CustomMultiCascader
+          cleanable={false}
         data={formattedAndFilteredCategoriesToGears}
-        style={{ width: 200 }}
+        data-cy={`${dataCyTarget}-gears-selector`}
         menuWidth={250}
-        searchable={true}
-        cleanable={false}
-        placeholder='Choisir un ou des engins'
-        renderValue={() => <MultiCascaderLabel>Choisir un ou des engins</MultiCascaderLabel>}
         onChange={values => set(REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES, values)}
-        value={selectedCategoriesAndGears || []}
-        placement='autoVerticalStart'
         onSelect={(item, activePaths) => {
           if (activePaths.length !== 2) {
             return
@@ -222,12 +220,16 @@ const RegulatedGears = props => {
             set(REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES, selectedCategoriesAndGears.filter(tag => tag !== item.value))
           }
         }}
-      />
-      {(Object.keys(regulatedGears)?.length > 0 || Object.keys(regulatedGearCategories)?.length > 0)
-        ? <GearList>
-        {
-          Object.keys(regulatedGears).map((gearCode, index) => {
-            return <RegulatedGear
+        placeholder='Choisir un ou des engins'
+        placement='autoVerticalStart'
+        renderValue={() => <MultiCascaderLabel>Choisir un ou des engins</MultiCascaderLabel>}
+        searchable={true}
+        style={{ width: 200 }}
+        value={selectedCategoriesAndGears || []}
+        />
+        {Object.keys(regulatedGears)?.length > 0 || Object.keys(regulatedGearCategories)?.length > 0 ? (
+          <GearList>
+            {Object.keys(regulatedGears).map((gearCode, index) => <RegulatedGear
                 key={gearCode + index}
                 id={index}
                 label={regulatedGears[gearCode].name}
@@ -238,12 +240,10 @@ const RegulatedGears = props => {
                 mesh={regulatedGears[gearCode].mesh}
                 remarks={regulatedGears[gearCode].remarks}
                 onCloseIconClicked={_ => removeGearOrCategory(gearCode)}
-              />
-          })
+              />)
         }
         {
-          Object.keys(regulatedGearCategories).map((category, index) => {
-            return <RegulatedGear
+            {Object.keys(regulatedGearCategories).map((category, index) => <RegulatedGear
               key={category + index}
               id={index}
               label={category}
@@ -253,26 +253,27 @@ const RegulatedGears = props => {
               mesh={regulatedGearCategories[category].mesh}
               remarks={regulatedGearCategories[category].remarks}
               onCloseIconClicked={_ => removeGearOrCategory(category)}
-            />
-          })
-        }
-        </GearList>
-        : null
-      }
-      {!authorized && <DerogationRadioWrapper>
-        <DerogationRadio
-          inline
-          onChange={value => set(REGULATED_GEARS_KEYS.DEROGATION, value)}
-          value={derogation}
-          $isYellow={derogation}
-        >
-          <Text>{'Mesures dérogatoires'}</Text>
-          <CustomRadio value={true} >oui</CustomRadio>
-          <CustomRadio value={false} >non</CustomRadio>
-        </DerogationRadio>
-      </DerogationRadioWrapper>}
-    </FormContent>
-  </FormSection>
+            />)
+            })}
+          </GearList>
+        ) : null}
+        {!authorized && (
+          <DerogationRadioWrapper>
+            <DerogationRadio
+              inline
+              onChange={value => set(REGULATED_GEARS_KEYS.DEROGATION, value)}
+              value={derogation}
+              $isYellow={derogation}
+            >
+              <Text>Mesures dérogatoires</Text>
+              <CustomRadio value={true}>oui</CustomRadio>
+              <CustomRadio value={false}>non</CustomRadio>
+            </DerogationRadio>
+          </DerogationRadioWrapper>
+        )}
+      </FormContent>
+    </FormSection>
+  )
 }
 
 const CheckboxWrapper = styled.div`
@@ -297,15 +298,15 @@ const MultiCascaderLabel = styled.span`
 const CustomMultiCascader = styled(MultiCascader)`
   a {
     box-sizing: border-box;
-    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
+    border-color: ${props => (props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray)}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:hover {
-    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
+    border-color: ${props => (props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray)}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:focus {
-    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
+    border-color: ${props => (props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray)}!important;
   }
 
   .rs-checkbox-checker {
@@ -322,12 +323,12 @@ const GearCheckBox = styled(CustomCheckbox)`
 const DerogationRadioWrapper = styled.div`
   padding-top: 15px;
 `
-const DerogationRadio = styled(RadioGroup)` 
+const DerogationRadio = styled(RadioGroup)`
   ${customRadioGroup}
   padding-right: 10px!important;
-  border: 1.5px solid ${props => props.$isYellow ? COLORS.yellowMunsell : COLORS.lightGray}!important;
+  border: 1.5px solid ${props => (props.$isYellow ? COLORS.yellowMunsell : COLORS.lightGray)}!important;
   :focus {
-    border: 1.5px solid ${props => props.$isYellow ? COLORS.yellowMunsell : COLORS.lightGray}!important;
+    border: 1.5px solid ${props => (props.$isYellow ? COLORS.yellowMunsell : COLORS.lightGray)}!important;
   }
 `
 

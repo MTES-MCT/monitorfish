@@ -1,12 +1,13 @@
 import _ from 'lodash'
+import React from 'react'
 import styled from 'styled-components'
+
+import { COLORS } from '../../constants/constants'
+import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../features/icons/Avarie_statut_activite_detectee.svg'
+import { ReactComponent as VesselStatusAtPortSVG } from '../../features/icons/Avarie_statut_navire_a_quai.svg'
+import { ReactComponent as VesselStatusAtSeaSVG } from '../../features/icons/Avarie_statut_navire_en_mer.svg'
 import { ReactComponent as VesselStatusNoNewsSVG } from '../../features/icons/Avarie_statut_sans_nouvelles.svg'
 import { ReactComponent as VesselStatusNeverEmittedSVG } from '../../features/icons/never_emitted.svg'
-import { ReactComponent as VesselStatusAtPortSVG } from '../../features/icons/Avarie_statut_navire_a_quai.svg'
-import { COLORS } from '../../constants/constants'
-import React from 'react'
-import { ReactComponent as VesselStatusAtSeaSVG } from '../../features/icons/Avarie_statut_navire_en_mer.svg'
-import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../features/icons/Avarie_statut_activite_detectee.svg'
 import { getReducedTimeAgo } from '../../features/side_window/beacon_malfunctions/beaconMalfunctions'
 import { getDate } from '../../utils'
 

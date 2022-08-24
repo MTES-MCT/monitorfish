@@ -1,85 +1,84 @@
 import React from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../constants/constants'
-import showVesselTrack from '../../domain/use_cases/vessel/showVesselTrack'
-import hideVesselTrack from '../../domain/use_cases/vessel/hideVesselTrack'
-import { removeVesselFromFavorites } from '../../domain/shared_slices/FavoriteVessel'
 import { useDispatch } from 'react-redux'
-import { Flag } from '../vessel_list/tableCells'
-import { ShowIcon } from '../commonStyles/icons/ShowIcon.style'
-import { HideIcon } from '../commonStyles/icons/HideIcon.style'
-import { CloseIcon } from '../commonStyles/icons/CloseIcon.style'
-import { PaperDarkIcon, PaperIcon } from '../commonStyles/icons/REGPaperIcon.style'
-import showVessel from '../../domain/use_cases/vessel/showVessel'
-import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
-import getVesselVoyage from '../../domain/use_cases/vessel/getVesselVoyage'
+import styled from 'styled-components'
 
-const FavoriteVessel = props => {
+import { COLORS } from '../../constants/constants'
+import { removeVesselFromFavorites } from '../../domain/shared_slices/FavoriteVessel'
+import getVesselVoyage from '../../domain/use_cases/vessel/getVesselVoyage'
+import hideVesselTrack from '../../domain/use_cases/vessel/hideVesselTrack'
+import showVessel from '../../domain/use_cases/vessel/showVessel'
+import showVesselTrack from '../../domain/use_cases/vessel/showVesselTrack'
+import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
+import { CloseIcon } from '../commonStyles/icons/CloseIcon.style'
+import { HideIcon } from '../commonStyles/icons/HideIcon.style'
+import { PaperDarkIcon, PaperIcon } from '../commonStyles/icons/REGPaperIcon.style'
+import { ShowIcon } from '../commonStyles/icons/ShowIcon.style'
+import { Flag } from '../vessel_list/tableCells'
+
+function FavoriteVessel(props) {
   const {
     /** {VesselIdentity} */
     favorite,
     /** {VesselId} vesselId */
-    vesselId,
+    isLastItem,
     trackIsShowed,
+    vesselId,
     vesselIsShowed,
-    isLastItem
   } = props
   const dispatch = useDispatch()
 
   return (
     <Wrapper>
       <Item isLastItem={isLastItem}>
-        <Flag rel="preload" src={`flags/${favorite.flagState.toLowerCase()}.svg`}/>
-        <Text
-          data-cy={'favorite-vessel-name'}
-          title={favorite.vesselName}>
+        <Flag rel="preload" src={`flags/${favorite.flagState.toLowerCase()}.svg`} />
+        <Text data-cy="favorite-vessel-name" title={favorite.vesselName}>
           {favorite.vesselName}
         </Text>
-        {
-          vesselIsShowed
-            ? <PaperDarkIcon
-              data-cy={'favorite-vessel-close-vessel-sidebar'}
-              title="Fermer la fiche navire"
-              onClick={() => dispatch(unselectVessel(true))}
-            />
-            : <PaperIcon
-              data-cy={'favorite-vessel-show-vessel-sidebar'}
-              title="Afficher la fiche navire"
-              onClick={() => {
-                if (trackIsShowed) {
-                  dispatch(hideVesselTrack(vesselId))
-                }
-                dispatch(showVessel(favorite))
-                dispatch(getVesselVoyage(favorite, null, false))
-              }}
-            />
-        }
-        {
-          trackIsShowed || vesselIsShowed
-            ? <ShowIcon
-              data-cy={'favorite-vessel-hide-vessel-track'}
-              style={buttonStyle}
-              title="Cacher la piste"
-              onClick={() => {
-                if (trackIsShowed) {
-                  dispatch(hideVesselTrack(vesselId))
-                } else if (vesselIsShowed) {
-                  dispatch(unselectVessel())
-                }
-              }}
-            />
-            : <HideIcon
-              data-cy={'favorite-vessel-show-vessel-track'}
-              style={buttonStyle}
-              title="Afficher la piste"
-              onClick={() => dispatch(showVesselTrack(favorite, false, null, true))}
-            />
-        }
+        {vesselIsShowed ? (
+          <PaperDarkIcon
+            data-cy="favorite-vessel-close-vessel-sidebar"
+            onClick={() => dispatch(unselectVessel(true))}
+            title="Fermer la fiche navire"
+          />
+        ) : (
+          <PaperIcon
+            data-cy="favorite-vessel-show-vessel-sidebar"
+            onClick={() => {
+              if (trackIsShowed) {
+                dispatch(hideVesselTrack(vesselId))
+              }
+              dispatch(showVessel(favorite))
+              dispatch(getVesselVoyage(favorite, null, false))
+            }}
+            title="Afficher la fiche navire"
+          />
+        )}
+        {trackIsShowed || vesselIsShowed ? (
+          <ShowIcon
+            data-cy="favorite-vessel-hide-vessel-track"
+            onClick={() => {
+              if (trackIsShowed) {
+                dispatch(hideVesselTrack(vesselId))
+              } else if (vesselIsShowed) {
+                dispatch(unselectVessel())
+              }
+            }}
+            style={buttonStyle}
+            title="Cacher la piste"
+          />
+        ) : (
+          <HideIcon
+            data-cy="favorite-vessel-show-vessel-track"
+            onClick={() => dispatch(showVesselTrack(favorite, false, null, true))}
+            style={buttonStyle}
+            title="Afficher la piste"
+          />
+        )}
         <CloseIcon
-          data-cy={'favorite-vessel-delete-vessel'}
+          data-cy="favorite-vessel-delete-vessel"
+          onClick={() => dispatch(removeVesselFromFavorites(vesselId))}
           style={{ marginTop: 4 }}
           title="Supprimer le navire de mes navires suivis"
-          onClick={() => dispatch(removeVesselFromFavorites(vesselId))}
         />
       </Item>
     </Wrapper>
@@ -87,7 +86,7 @@ const FavoriteVessel = props => {
 }
 
 const buttonStyle = {
-  marginTop: 3
+  marginTop: 3,
 }
 
 const Text = styled.span`
@@ -106,7 +105,7 @@ const Item = styled.span`
   width: 100%;
   display: flex;
   user-select: none;
-  ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
+  ${props => (!props.isOpen && props.isLastItem ? null : `border-bottom: 1px solid ${COLORS.lightGray};`)}
   cursor: pointer;
 `
 

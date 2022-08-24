@@ -1,30 +1,28 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
+import { coordinatesAreDistinct, getCoordinates } from '../../coordinates'
 import { CoordinatesFormat, MeasurementTypes, OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
-import { useSelector } from 'react-redux'
-import { coordinatesAreDistinct, getCoordinates } from '../../coordinates'
 import SetCoordinates from '../coordinates/SetCoordinates'
 
-const CustomCircleRange = ({ onCancelAddCircleRange, onAddCustomCircleRange }) => {
-  const {
-    measurementTypeToAdd,
-    circleMeasurementInDrawing
-  } = useSelector(state => state.measurement)
-  const {
-    healthcheckTextWarning
-  } = useSelector(state => state.global)
+function CustomCircleRange({ onAddCustomCircleRange, onCancelAddCircleRange }) {
+  const { circleMeasurementInDrawing, measurementTypeToAdd } = useSelector(state => state.measurement)
+  const { healthcheckTextWarning } = useSelector(state => state.global)
   const [circleCoordinatesToAdd, setCircleCoordinatesToAdd] = useState([])
   const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
 
   useEffect(() => {
     if (measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE) {
       if (circleMeasurementInDrawing?.coordinates?.length) {
-        const ddCoordinates = getCoordinates(circleMeasurementInDrawing?.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false).map(coordinate => {
-          return parseFloat(coordinate.replace(/°/g, ''))
-        })
+        const ddCoordinates = getCoordinates(
+          circleMeasurementInDrawing?.coordinates,
+          OPENLAYERS_PROJECTION,
+          CoordinatesFormat.DECIMAL_DEGREES,
+          false,
+        ).map(coordinate => parseFloat(coordinate.replace(/°/g, '')))
         setCircleCoordinatesToAdd(ddCoordinates)
       }
 
@@ -61,35 +59,29 @@ const CustomCircleRange = ({ onCancelAddCircleRange, onAddCustomCircleRange }) =
   return (
     <Wrapper
       healthcheckTextWarning={healthcheckTextWarning}
-      isOpen={measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE}>
-      <Header>
-        Définir une valeur
-      </Header>
+      isOpen={measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE}
+    >
+      <Header>Définir une valeur</Header>
       <Body>
         <p>Coordonnées</p>
-        <SetCoordinates
-          coordinates={circleCoordinatesToAdd}
-          updateCoordinates={updateCoordinates}
-        />
+        <SetCoordinates coordinates={circleCoordinatesToAdd} updateCoordinates={updateCoordinates} />
         <p>Distance (rayon)</p>
         <input
-          style={{ width: 62 }}
-          data-cy={'measurement-circle-radius-input'}
-          type='text'
+          data-cy="measurement-circle-radius-input"
           onChange={e => setCircleRadiusToAdd(e.target.value)}
+          style={{ width: 62 }}
+          type="text"
           value={circleRadiusToAdd}
         />
-        <span>(Nm)</span><br/>
+        <span>(Nm)</span>
+        <br />
         <OkButton
-          data-cy={'measurement-circle-add'}
+          data-cy="measurement-circle-add"
           onClick={() => addCustomCircleRange(circleCoordinatesToAdd, circleRadiusToAdd)}
         >
           OK
         </OkButton>
-        <CancelButton
-          onClick={() => onCancelAddCircleRange()}>
-          Annuler
-        </CancelButton>
+        <CancelButton onClick={() => onCancelAddCircleRange()}>Annuler</CancelButton>
       </Body>
     </Wrapper>
   )
@@ -117,7 +109,8 @@ const OkButton = styled.button`
   font-size: 13px;
   color: ${COLORS.gainsboro};
 
-  :hover, :focus {
+  :hover,
+  :focus {
     background: ${COLORS.charcoal};
   }
 `
@@ -165,8 +158,8 @@ const Header = styled.div`
 const Wrapper = styled(MapComponentStyle)`
   width: 306px;
   background: ${COLORS.background};
-  margin-right: ${props => props.isOpen ? '45px' : '-320px'};
-  opacity:  ${props => props.isOpen ? '1' : '0'};
+  margin-right: ${props => (props.isOpen ? '45px' : '-320px')};
+  opacity: ${props => (props.isOpen ? '1' : '0')};
   top: 249px;
   right: 10px;
   border-radius: 2px;

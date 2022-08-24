@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import RegulatoryLayerZone from './RegulatoryZone'
-import Layers from '../../../domain/entities/layers'
+
 import { COLORS } from '../../../constants/constants'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
+import Layers from '../../../domain/entities/layers'
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
-import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { EditIcon } from '../../commonStyles/icons/EditIcon.style'
 import RegulatoryTopicInput from '../../backoffice/list_regulation/RegulatoryTopicInput'
@@ -17,30 +16,30 @@ import {
 } from '../../../domain/shared_slices/Regulatory'
 import showRegulatoryTopic from '../../../domain/use_cases/layer/regulation/showRegulatoryTopic'
 import hideLayer from '../../../domain/use_cases/layer/hideLayer'
+import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
+import RegulatoryLayerZone from './RegulatoryZone'
 
-const RegulatoryTopic = props => {
+function RegulatoryTopic(props) {
   const {
-    callRemoveRegulatoryZoneFromMySelection,
-    regulatoryTopic,
     allowRemoveZone,
-    increaseNumberOfZonesOpened,
+    callRemoveRegulatoryZoneFromMySelection,
     decreaseNumberOfZonesOpened,
-    regulatoryZones,
-    isLastItem,
+    increaseNumberOfZonesOpened,
     isEditable,
+    isLastItem,
+    regulatoryTopic,
+    regulatoryZones,
     updateLayerName
   } = props
 
   const dispatch = useDispatch()
   const ref = useRef()
   const showedLayers = useSelector(state => state.layer.showedLayers)
-  const {
-    regulatoryZoneMetadata,
-    regulatoryTopicsOpened
-  } = useSelector(state => state.regulatory)
+  const { regulatoryZoneMetadata, regulatoryTopicsOpened } = useSelector(state => state.regulatory)
   const lawType = regulatoryZones[0]?.lawType
-  const numberOfTotalZones = useSelector(state => state.regulatory
-    .regulatoryLayerLawTypes[lawType][regulatoryTopic]?.length)
+  const numberOfTotalZones = useSelector(
+    state => state.regulatory.regulatoryLayerLawTypes[lawType][regulatoryTopic]?.length,
+  )
 
   const [isOpen, setIsOpen] = useState(false)
   const [atLeastOneTopicIsShowed, setAtLeastOneTopicIsShowed] = useState(false)
@@ -57,29 +56,31 @@ const RegulatoryTopic = props => {
 
   useEffect(() => {
     if (showedLayers && regulatoryTopic) {
-      const topicFoundInShowedLayers = showedLayers
-        .some(layer => layer.topic === regulatoryTopic)
-      const topicFoundInSelectedLayers = regulatoryZones
-        .some(layer => layer.topic === regulatoryTopic)
+      const topicFoundInShowedLayers = showedLayers.some(layer => layer.topic === regulatoryTopic)
+      const topicFoundInSelectedLayers = regulatoryZones.some(layer => layer.topic === regulatoryTopic)
 
       setAtLeastOneTopicIsShowed(topicFoundInShowedLayers && topicFoundInSelectedLayers)
     }
   }, [showedLayers, regulatoryZones, regulatoryTopic])
 
   const showTopic = namespace => {
-    dispatch(showRegulatoryTopic({
-      type: Layers.REGULATORY.code,
-      regulatoryZones,
-      namespace
-    }))
+    dispatch(
+      showRegulatoryTopic({
+        type: Layers.REGULATORY.code,
+        regulatoryZones,
+        namespace,
+      }),
+    )
   }
 
   const hideTopic = namespace => {
-    dispatch(hideLayer({
-      type: Layers.REGULATORY.code,
-      topic: regulatoryTopic,
-      namespace
-    }))
+    dispatch(
+      hideLayer({
+        type: Layers.REGULATORY.code,
+        topic: regulatoryTopic,
+        namespace,
+      }),
+    )
   }
 
   useEffect(() => {
@@ -93,8 +94,11 @@ const RegulatoryTopic = props => {
   }, [isOpen])
 
   useEffect(() => {
-    if (regulatoryTopic && ((regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
-      (regulatoryTopicsOpened && regulatoryTopicsOpened.includes(regulatoryTopic)))) {
+    if (
+      regulatoryTopic &&
+      ((regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
+        (regulatoryTopicsOpened && regulatoryTopicsOpened.includes(regulatoryTopic)))
+    ) {
       setIsOpen(true)
     } else {
       setIsOpen(false)
@@ -119,75 +123,50 @@ const RegulatoryTopic = props => {
   return (
     <NamespaceContext.Consumer>
       {namespace => (
-        <Row
-          ref={ref}
-          data-cy="regulatory-layer-topic-row"
-          isOpen={isOpen}>
-          <Zone
-            isLastItem={isLastItem}
-            isOpen={isOpen}
-            onMouseOver={onMouseOver}
-            onMouseOut={onMouseOut}
-          >
-            <Name
-              data-cy={'regulatory-layers-my-zones-topic'}
-              title={regulatoryTopic}
-              onClick={onRegulatoryTopicClick}
-            >
-              {
-                isTopicInEdition
-                  ? <RegulatoryTopicInput
-                    topic={regulatoryTopic}
-                    updateTopic={updateLayerName}
-                    setIsTopicEditable={setIsTopicInEdition}
-                  />
-                  : <Text>
-                    {regulatoryTopic}
-                  </Text>
-              }
+        <Row ref={ref} data-cy="regulatory-layer-topic-row" isOpen={isOpen}>
+          <Zone isLastItem={isLastItem} isOpen={isOpen} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
+            <Name data-cy={'regulatory-layers-my-zones-topic'} title={regulatoryTopic} onClick={onRegulatoryTopicClick}>
+              {isTopicInEdition ? (
+                <RegulatoryTopicInput
+                  topic={regulatoryTopic}
+                  updateTopic={updateLayerName}
+                  setIsTopicEditable={setIsTopicInEdition}
+                />
+              ) : (
+                <Text>{regulatoryTopic}</Text>
+              )}
             </Name>
-            <ZonesNumber>
-              {`${regulatoryZones?.length}/${numberOfTotalZones}`}
-            </ZonesNumber>
-            {
-              isEditable
-                ? <EditIcon
+            <ZonesNumber>{`${regulatoryZones?.length}/${numberOfTotalZones}`}</ZonesNumber>
+            {isEditable ? (
+              <EditIcon
+                $isOver={isOver}
                   data-cy="regulatory-topic-edit"
-                  $isOver={isOver}
-                  title="Modifier le nom de la thématique"
                   onClick={onEditTopicClick}
-                />
-                : null
-            }
-            {
-              atLeastOneTopicIsShowed
-                ? <ShowIcon
-                  title="Cacher la couche"
-                  onClick={() => hideTopic(namespace)}
-                />
-                : <HideIcon
-                  data-cy={'regulatory-layers-my-zones-topic-show'}
-                  title="Afficher la couche"
-                  onClick={() => showTopic(namespace)}
-                />
-            }
-            {
-              allowRemoveZone
-                ? <CloseIcon title="Supprimer la couche de ma sélection"
-                             onClick={() => callRemoveRegulatoryZoneFromMySelection(
-                               getRegulatoryLayerName(regulatoryZones), regulatoryZones.length, namespace)}/>
-                : null
-            }
+                  title="Modifier le nom de la thématique"
+              />
+            ) : null}
+            {atLeastOneTopicIsShowed ? (
+              <ShowIcon title="Cacher la couche" onClick={() => hideTopic(namespace)} />
+            ) : (
+              <HideIcon
+                data-cy="regulatory-layers-my-zones-topic-show"
+                title="Afficher la couche"
+                onClick={() => showTopic(namespace)}
+              />
+            )}
+            {allowRemoveZone ? (
+              <CloseIcon
+                onClick={() => callRemoveRegulatoryZoneFromMySelection(
+                               getRegulatoryLayerName(regulatoryZones), regulatoryZones.length, namespace)}
+                             title="Supprimer la couche de ma sélection"/>
+                  )
+                }
+              />
+            ) : null}
           </Zone>
-          <List
-            isOpen={isOpen}
-            name={regulatoryTopic.replace(/\s/g, '-')}
-            zonesLength={regulatoryZones.length}
-          >
-            {
-              regulatoryZones && showedLayers
-                ? regulatoryZones.map((regulatoryZone, index) => {
-                  return (
+          <List isOpen={isOpen} name={regulatoryTopic.replace(/\s/g, '-')} zonesLength={regulatoryZones.length}>
+            {regulatoryZones && showedLayers
+              ? regulatoryZones.map((regulatoryZone, index) => (
                     <RegulatoryLayerZone
                       isLast={regulatoryZones.length === index + 1}
                       regulatoryZone={regulatoryZone}
@@ -198,10 +177,8 @@ const RegulatoryTopic = props => {
                       isEditable={isEditable}
                       regulatoryTopic={regulatoryTopic}
                     />
-                  )
-                })
-                : null
-            }
+                  ))
+              : null}
           </List>
         </Row>
       )}
@@ -209,11 +186,9 @@ const RegulatoryTopic = props => {
   )
 }
 
-const getRegulatoryLayerName = regulatoryZones => {
-  return {
-    topic: regulatoryZones[0].topic
-  }
-}
+const getRegulatoryLayerName = regulatoryZones => ({
+  topic: regulatoryZones[0].topic,
+})
 
 const Text = styled.span`
   margin-left: 5px;
@@ -242,7 +217,7 @@ const Zone = styled.span`
   align-items: center;
   user-select: none;
   font-weight: 500;
-  ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
+  ${props => (!props.isOpen && props.isLastItem ? null : `border-bottom: 1px solid ${COLORS.lightGray};`)}
 
   :hover {
     background: ${COLORS.shadowBlueLittleOpacity};
@@ -253,7 +228,7 @@ const List = styled.div`
   height: inherit;
   overflow: hidden;
   transition: all 0.5s;
-  height: ${props => props.isOpen ? props.zonesLength * 36 : 0}px;
+  height: ${props => (props.isOpen ? props.zonesLength * 36 : 0)}px;
 `
 
 const Row = styled.li`

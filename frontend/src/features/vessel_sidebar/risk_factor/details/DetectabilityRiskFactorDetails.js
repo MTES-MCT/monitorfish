@@ -1,69 +1,63 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 import {
   getControlPriorityLevel,
   getControlRateRiskFactorText,
-  getRiskFactorColor
+  getRiskFactorColor,
 } from '../../../../domain/entities/riskFactor'
-import RiskFactorCursor from '../RiskFactorCursor'
-import { useSelector } from 'react-redux'
 import { getDate } from '../../../../utils'
+import RiskFactorCursor from '../RiskFactorCursor'
 
-const DetectabilityRiskFactorDetails = ({ isOpen }) => {
-  const {
-    selectedVessel
-  } = useSelector(state => state.vessel)
+function DetectabilityRiskFactorDetails({ isOpen }) {
+  const { selectedVessel } = useSelector(state => state.vessel)
 
-  const {
-    riskFactor
-  } = selectedVessel
+  const { riskFactor } = selectedVessel
 
   return (
     <SubRiskDetails isOpen={isOpen}>
-      <Line/>
+      <Line />
       <Zone>
         <InlineKey>
-          Priorité du segment{' '}
-          {
-            riskFactor?.segmentHighestPriority
-              ? riskFactor?.segmentHighestPriority
-              : null
-          }
+          Priorité du segment {riskFactor?.segmentHighestPriority ? riskFactor?.segmentHighestPriority : null}
         </InlineKey>
-        <InlineValue
-          data-cy={'risk-factor-priority-level'}
-        >
-          {
-            riskFactor?.controlPriorityLevel
-              ? `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getControlPriorityLevel(riskFactor?.controlPriorityLevel)}`
-              : <NoValue>-</NoValue>
-          }
+        <InlineValue data-cy="risk-factor-priority-level">
+          {riskFactor?.controlPriorityLevel ? (
+            `${riskFactor?.controlPriorityLevel?.toFixed(1)} – ${getControlPriorityLevel(
+              riskFactor?.controlPriorityLevel,
+            )}`
+          ) : (
+            <NoValue>-</NoValue>
+          )}
         </InlineValue>
         <FullWidth>
           <RiskFactorCursor
-            height={5}
-            withoutBox
-            value={riskFactor?.controlPriorityLevel}
             color={getRiskFactorColor(riskFactor?.controlPriorityLevel)}
-            progress={100 * riskFactor?.controlPriorityLevel / 4}
+            height={5}
+            progress={(100 * riskFactor?.controlPriorityLevel) / 4}
+            value={riskFactor?.controlPriorityLevel}
+            withoutBox
           />
         </FullWidth>
         <InlineKey>Priorité du navire</InlineKey>
         <InlineValue>
-          {
-            riskFactor?.controlRateRiskFactor
-              ? `${riskFactor?.controlRateRiskFactor?.toFixed(1)} – ${getControlRateRiskFactorText(riskFactor?.controlRateRiskFactor)}`
-              : <NoValue>-</NoValue>
-          }
+          {riskFactor?.controlRateRiskFactor ? (
+            `${riskFactor?.controlRateRiskFactor?.toFixed(1)} – ${getControlRateRiskFactorText(
+              riskFactor?.controlRateRiskFactor,
+            )}`
+          ) : (
+            <NoValue>-</NoValue>
+          )}
         </InlineValue>
         <FullWidth>
           <RiskFactorCursor
-            height={5}
-            withoutBox
-            value={riskFactor?.controlRateRiskFactor}
             color={getRiskFactorColor(riskFactor?.controlRateRiskFactor)}
-            progress={100 * riskFactor?.controlRateRiskFactor / 4}
+            height={5}
+            progress={(100 * riskFactor?.controlRateRiskFactor) / 4}
+            value={riskFactor?.controlRateRiskFactor}
+            withoutBox
           />
         </FullWidth>
         <Fields>
@@ -71,21 +65,23 @@ const DetectabilityRiskFactorDetails = ({ isOpen }) => {
             <Field>
               <Key>Temporalité</Key>
               <Value>
-                {
-                  riskFactor?.numberControlsLastThreeYears || riskFactor?.numberControlsLastThreeYears === 0
-                    ? `${riskFactor?.numberControlsLastThreeYears} contrôle${riskFactor?.numberControlsLastThreeYears > 1 ? 's' : ''} sur les 3 dernières années`
-                    : <NoValue>-</NoValue>
-                }
+                {riskFactor?.numberControlsLastThreeYears || riskFactor?.numberControlsLastThreeYears === 0 ? (
+                  `${riskFactor?.numberControlsLastThreeYears} contrôle${
+                    riskFactor?.numberControlsLastThreeYears > 1 ? 's' : ''
+                  } sur les 3 dernières années`
+                ) : (
+                  <NoValue>-</NoValue>
+                )}
               </Value>
             </Field>
             <Field>
               <Key>Dernier contrôle</Key>
               <Value>
-                {
-                  riskFactor?.lastControlDatetime
-                    ? `Le ${getDate(riskFactor?.lastControlDatetime)}`
-                    : <NoValue>-</NoValue>
-                }
+                {riskFactor?.lastControlDatetime ? (
+                  `Le ${getDate(riskFactor?.lastControlDatetime)}`
+                ) : (
+                  <NoValue>-</NoValue>
+                )}
               </Value>
             </Field>
           </TableBody>
@@ -112,9 +108,9 @@ const Line = styled.div`
 
 const SubRiskDetails = styled.div`
   width: 100%;
-  height: ${props => props.isOpen ? '170' : '0'}px;
-  opacity: ${props => props.isOpen ? '1' : '0'};
-  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
+  height: ${props => (props.isOpen ? '170' : '0')}px;
+  opacity: ${props => (props.isOpen ? '1' : '0')};
+  visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
   overflow: hidden;
   transition: 0.2s all;
 `
@@ -130,7 +126,7 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 5px 5px 5px 20px; 
+  padding: 5px 5px 5px 20px;
   width: inherit;
   display: table;
   margin: 0;
@@ -153,7 +149,7 @@ const Key = styled.th`
   border: none;
   padding: 5px 5px 5px 0;
   background: none;
-  width: ${props => props.big ? '160px' : '120px'};
+  width: ${props => (props.big ? '160px' : '120px')};
   line-height: 0.5em;
   height: 0.5em;
   font-size: 13px;

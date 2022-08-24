@@ -1,36 +1,36 @@
 import React, { useCallback, useMemo } from 'react'
-import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { Checkbox, Table } from 'rsuite'
+import styled from 'styled-components'
 
+import { COLORS } from '../../constants/constants'
+import { getCoordinates } from '../../coordinates'
+import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
 import { ReactComponent as FlagSVG } from '../icons/flag.svg'
 import {
   CellUsingVesselProperty,
   CellWithTitle,
   CheckedCell,
   ContentWithEllipsis,
-  FlagCell, StyledCheckbox,
-  TimeAgoCell
+  FlagCell,
+  StyledCheckbox,
+  TimeAgoCell,
 } from './tableCells'
 import { sortVesselsByProperty } from './tableSort'
-import { COLORS } from '../../constants/constants'
 
-import { getCoordinates } from '../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+const { Cell, Column, HeaderCell } = Table
 
-const { Column, HeaderCell, Cell } = Table
-
-const VesselListTable = ({
-  filteredVessels,
-  vessels,
+function VesselListTable({
   allVesselsChecked,
+  filteredVessels,
+  filters,
+  seeMoreIsOpen,
   setAllVesselsChecked,
+  toggleSelectRow,
+  vessels,
   vesselsCountShowed,
   vesselsCountTotal,
-  seeMoreIsOpen,
-  toggleSelectRow,
-  filters
-}) => {
+}) {
   const adminRole = useSelector(state => state.global.adminRole)
   const { coordinatesFormat } = useSelector(state => state.map)
   const [sortColumn, setSortColumn] = React.useState()
@@ -43,17 +43,15 @@ const VesselListTable = ({
 
   const showedVessels = useMemo(() => {
     if (sortColumn && sortType) {
-      return filteredVessels
-        .slice()
-        .sort((a, b) => sortVesselsByProperty(a, b, sortColumn, sortType))
+      return filteredVessels.slice().sort((a, b) => sortVesselsByProperty(a, b, sortColumn, sortType))
     }
 
     return filteredVessels
   }, [sortColumn, sortType, filteredVessels])
 
   const updateAllVesselsChecked = useCallback(() => {
-    const isChecked = allVesselsChecked.globalCheckbox &&
-      vessels.filter(vessel => vessel.checked === true).length === vessels.length
+    const isChecked =
+      allVesselsChecked.globalCheckbox && vessels.filter(vessel => vessel.checked === true).length === vessels.length
     if (isChecked === false) {
       setAllVesselsChecked({ globalCheckbox: true })
     } else {
@@ -63,40 +61,42 @@ const VesselListTable = ({
 
   return (
     <TableContent>
-      <VesselsCount data-cy={'vessel-list-table-count'}>
+      <VesselsCount data-cy="vessel-list-table-count">
         {vesselsCountShowed} navires sur {vesselsCountTotal}
       </VesselsCount>
       <Table
-        virtualized
-        height={seeMoreIsOpen ? 480 : 530}
-        rowHeight={36}
-        data={showedVessels}
-        sortColumn={sortColumn}
-        sortType={sortType}
-        onSortColumn={handleSortColumn}
         affixHorizontalScrollbar
+        data={showedVessels}
+        height={seeMoreIsOpen ? 480 : 530}
         locale={{
           emptyMessage: 'Aucun résultat',
-          loading: 'Chargement...'
+          loading: 'Chargement...',
         }}
+        onSortColumn={handleSortColumn}
+        rowHeight={36}
+        sortColumn={sortColumn}
+        sortType={sortType}
+        virtualized
       >
-        <Column resizable width={35} fixed>
+        <Column fixed resizable width={35}>
           <HeaderCell>
             <StyledCheckbox
-              checked={allVesselsChecked.globalCheckbox && vessels.filter(vessel => vessel.checked === true).length === vessels.length}
-              onChange={() => updateAllVesselsChecked()} />
+              checked={
+                allVesselsChecked.globalCheckbox &&
+                vessels.filter(vessel => vessel.checked === true).length === vessels.length
+              }
+              onChange={() => updateAllVesselsChecked()}
+            />
           </HeaderCell>
           <CheckedCell dataKey="checked" onChange={toggleSelectRow} />
         </Column>
-        {
-          adminRole
-            ? <Column resizable sortable width={95} fixed>
-              <HeaderCell>N. de risque</HeaderCell>
-              <Cell dataKey="riskFactor">{rowData => parseFloat(rowData?.vesselProperties?.riskFactor).toFixed(1)}</Cell>
-            </Column>
-            : null
-        }
-        <Column resizable sortable width={170} fixed>
+        {adminRole ? (
+          <Column fixed resizable sortable width={95}>
+            <HeaderCell>N. de risque</HeaderCell>
+            <Cell dataKey="riskFactor">{rowData => parseFloat(rowData?.vesselProperties?.riskFactor).toFixed(1)}</Cell>
+          </Column>
+        ) : null}
+        <Column fixed resizable sortable width={170}>
           <HeaderCell>Nom du navire</HeaderCell>
           <CellUsingVesselProperty dataKey="vesselName" vesselProperty="vesselName" />
         </Column>
@@ -118,15 +118,23 @@ const VesselListTable = ({
         </Column>
         <Column resizable width={120}>
           <HeaderCell>Seg. flotte</HeaderCell>
-          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.fleetSegmentsArray?.join(', ')}</ContentWithEllipsis>}</Cell>
+          <Cell>
+            {rowData => (
+              <ContentWithEllipsis>{rowData.vesselProperties?.fleetSegmentsArray?.join(', ')}</ContentWithEllipsis>
+            )}
+          </Cell>
         </Column>
         <Column resizable width={120}>
           <HeaderCell>Engins à bord</HeaderCell>
-          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.gearsArray?.join(', ')}</ContentWithEllipsis>}</Cell>
+          <Cell>
+            {rowData => <ContentWithEllipsis>{rowData.vesselProperties?.gearsArray?.join(', ')}</ContentWithEllipsis>}
+          </Cell>
         </Column>
         <Column resizable width={115}>
           <HeaderCell>Espèces à bord</HeaderCell>
-          <Cell>{rowData => <ContentWithEllipsis>{rowData.vesselProperties?.speciesArray?.join(', ')}</ContentWithEllipsis>}</Cell>
+          <Cell>
+            {rowData => <ContentWithEllipsis>{rowData.vesselProperties?.speciesArray?.join(', ')}</ContentWithEllipsis>}
+          </Cell>
         </Column>
         <Column resizable sortable width={50}>
           <HeaderCell>
@@ -160,29 +168,26 @@ const VesselListTable = ({
         </Column>
         <Column sortable width={50}>
           <HeaderCell>Infr.</HeaderCell>
-          <Cell dataKey="lastControlInfraction">{rowData => rowData?.vesselProperties?.lastControlInfraction ? 'Oui' : 'Non'}</Cell>
+          <Cell dataKey="lastControlInfraction">
+            {rowData => (rowData?.vesselProperties?.lastControlInfraction ? 'Oui' : 'Non')}
+          </Cell>
         </Column>
         <Column resizable sortable width={300}>
           <HeaderCell>Observations</HeaderCell>
           <CellWithTitle dataKey="postControlComment" />
         </Column>
-        {
-          filters.districtsFiltered?.length
-            ? <Column resizable sortable width={100}>
-              <HeaderCell>Quartier</HeaderCell>
-              <CellUsingVesselProperty dataKey="district" vesselProperty="district" />
-            </Column>
-            : null
-        }
-        {
-          filters.vesselsSizeValuesChecked?.length
-            ? <Column resizable sortable width={100}>
-              <HeaderCell>Longueur</HeaderCell>
-              <CellUsingVesselProperty dataKey="length" vesselProperty="length" />
-            </Column>
-            : null
-        }
-
+        {filters.districtsFiltered?.length ? (
+          <Column resizable sortable width={100}>
+            <HeaderCell>Quartier</HeaderCell>
+            <CellUsingVesselProperty dataKey="district" vesselProperty="district" />
+          </Column>
+        ) : null}
+        {filters.vesselsSizeValuesChecked?.length ? (
+          <Column resizable sortable width={100}>
+            <HeaderCell>Longueur</HeaderCell>
+            <CellUsingVesselProperty dataKey="length" vesselProperty="length" />
+          </Column>
+        ) : null}
       </Table>
     </TableContent>
   )

@@ -1,45 +1,105 @@
 import { createSlice } from '@reduxjs/toolkit'
+
 import { DEFAULT_REGULATION, REGULATORY_REFERENCE_KEYS } from '../../domain/entities/regulatory'
 
 const INITIAL_STATE = {
+  /** @type {boolean} */
+  atLeastOneValueIsMissing: undefined,
+
   /** @type {Object} */
   processingRegulation: DEFAULT_REGULATION,
+
+  
+  /** @type {boolean} */
+isConfirmModalOpen: false,
+
+  
+  
+/** @type {boolean} */
+regulationDeleted: false,
+
+  /** @type {boolean} */
+  regulationSaved: false,
+
+  /** @type {boolean} */
+  isRemoveModalOpen: false,
+
+  
+  /** @type {boolean} */
+regulationModified: false,
+
+  
   /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */
-  regulatoryTextCheckedMap: undefined,
+regulatoryTextCheckedMap: undefined,
+
   /** @type {boolean} */
   saveOrUpdateRegulation: false,
   /** @type {boolean} */
-  regulationSaved: false,
-  /** @type {boolean} */
-  regulationDeleted: false,
-  /** @type {boolean} */
-  regulationModified: false,
-  /** @type {boolean} */
-  atLeastOneValueIsMissing: undefined,
-  /** @type {boolean} */
-  isRemoveModalOpen: false,
-  /** @type {boolean} */
-  isConfirmModalOpen: false,
-  /** @type {boolean} */
-  selectedRegulatoryZoneId: undefined
+  selectedRegulatoryZoneId: undefined,
 }
 
 const regulationSlice = createSlice({
-  name: 'regulation',
   initialState: INITIAL_STATE,
+  name: 'regulation',
   reducers: {
-    resetState: () => INITIAL_STATE,
-    setSelectedRegulatoryZoneId (state, action) {
-      state.selectedRegulatoryZoneId = action.payload
+    addObjectToRegulatoryTextCheckedMap(state, action) {
+      const {
+        /** @type {boolean} */
+        complete,
+        /** @type {number} */
+        id,
+      } = action.payload
+      state.regulatoryTextCheckedMap = {
+        ...(state.regulatoryTextCheckedMap || {}),
+        [id]: complete,
+      }
     },
-    setRegulationModified (state, action) {
+    resetState: () => INITIAL_STATE,
+    setFishingPeriod(state, { payload: { key, value } }) {
+      const nextFishingPeriod = {
+        ...state.processingRegulation.fishingPeriod,
+        [key]: value,
+      }
+      state.processingRegulation = {
+        ...state.processingRegulation,
+        [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: nextFishingPeriod,
+      }
+    },
+    setAtLeastOneValueIsMissing (state, action) {
+      state.atLeastOneValueIsMissing = action.payload
+    },
+    setFishingPeriodOtherInfo(state, action) {
+      state.processingRegulation[REGULATORY_REFERENCE_KEYS.FISHING_PERIOD].otherInfo = action.payload
+    },
+    setIsRemoveModalOpen (state, action) {
+      state.isRemoveModalOpen = action.payload
+    },
+    setProcessingRegulation(state, { payload }) {
+      state.processingRegulation = payload
+    },
+    setIsConfirmModalOpen(state, action) {
+      state.isConfirmModalOpen = action.payload
+    },
+    setRegulationModified(state, action) {
       state.regulationModified = action.payload
     },
-    updateProcessingRegulationByKey (state, { payload: { key, value } }) {
+    setProcessingRegulationDeleted(state, action) {
+      state.regulationDeleted = action.payload
+    },
+    setSelectedRegulatoryZoneId(state, action) {
+      state.selectedRegulatoryZoneId = action.payload
+    },
+    setProcessingRegulationSaved(state, action) {
+      state.regulationSaved = action.payload
+    },
+    updateProcessingRegulationByKey(state, { payload: { key, value } }) {
       state.processingRegulation[key] = value
       if (!state.regulationModified) {
         state.regulationModified = true
       }
+    },
+    setRegulatoryTextCheckedMap(state, action) {
+      state.regulatoryTextCheckedMap = { ...action.payload }
     },
     updateProcessingRegulationByKeyAndSubKey (state, { payload: { key, subKey, value } }) {
       state.processingRegulation[key][subKey] = value
@@ -47,78 +107,32 @@ const regulationSlice = createSlice({
         state.regulationModified = true
       }
     },
-    setProcessingRegulation (state, { payload }) {
-      state.processingRegulation = payload
-    },
-    setFishingPeriod (state, { payload: { key, value } }) {
-      const nextFishingPeriod = {
-        ...state.processingRegulation.fishingPeriod,
-        [key]: value
-      }
-      state.processingRegulation = {
-        ...state.processingRegulation,
-        [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: nextFishingPeriod
-      }
-    },
-    setFishingPeriodOtherInfo (state, action) {
-      state.processingRegulation[REGULATORY_REFERENCE_KEYS.FISHING_PERIOD].otherInfo = action.payload
-    },
-    setSelectedRegulation (state, action) {
-      state.selectedRegulation = action.payload
-    },
-    addObjectToRegulatoryTextCheckedMap (state, action) {
-      const {
-        /** @type {boolean} */
-        complete,
-        /** @type {number} */
-        id
-      } = action.payload
-      state.regulatoryTextCheckedMap = {
-        ...(state.regulatoryTextCheckedMap || {}),
-        [id]: complete
-      }
-    },
-    setRegulatoryTextCheckedMap (state, action) {
-      state.regulatoryTextCheckedMap = { ...action.payload }
-    },
-    setProcessingRegulationSaved (state, action) {
-      state.regulationSaved = action.payload
-    },
-    setSaveOrUpdateRegulation (state, action) {
+    setSaveOrUpdateRegulation(state, action) {
       state.saveOrUpdateRegulation = action.payload
     },
-    setAtLeastOneValueIsMissing (state, action) {
-      state.atLeastOneValueIsMissing = action.payload
+    setSelectedRegulation(state, action) {
+      state.selectedRegulation = action.payload
     },
-    setProcessingRegulationDeleted (state, action) {
-      state.regulationDeleted = action.payload
-    },
-    setIsRemoveModalOpen (state, action) {
-      state.isRemoveModalOpen = action.payload
-    },
-    setIsConfirmModalOpen (state, action) {
-      state.isConfirmModalOpen = action.payload
-    }
-  }
+  },
 })
 
 export const {
-  resetState,
-  setProcessingRegulationSaved,
-  setRegulatoryTextCheckedMap,
   addObjectToRegulatoryTextCheckedMap,
-  setSaveOrUpdateRegulation,
+  resetState,
   setAtLeastOneValueIsMissing,
-  setProcessingRegulationDeleted,
-  setIsRemoveModalOpen,
-  setIsConfirmModalOpen,
-  updateProcessingRegulationByKey,
-  updateProcessingRegulationByKeyAndSubKey,
-  setProcessingRegulation,
   setFishingPeriod,
   setFishingPeriodOtherInfo,
+  setIsConfirmModalOpen,
+  setIsRemoveModalOpen,
+  setProcessingRegulation,
+  setProcessingRegulationDeleted,
+  setProcessingRegulationSaved,
+  setRegulationModified,
+  setRegulatoryTextCheckedMap,
+  setSaveOrUpdateRegulation,
   setSelectedRegulatoryZoneId,
-  setRegulationModified
+  updateProcessingRegulationByKey,
+  updateProcessingRegulationByKeyAndSubKey,
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

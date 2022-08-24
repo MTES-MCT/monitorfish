@@ -1,39 +1,42 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+
+import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 import { ContentLine, InfoText, InfoTextWrapper } from '../../../commonStyles/Backoffice.style'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
-import InfoBox from '../InfoBox'
 import { INFO_TEXT } from '../../constants'
 import { updateProcessingRegulationByKey } from '../../Regulation.slice'
-import { REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
+import InfoBox from '../InfoBox'
 
-const RegulationLayerZoneLine = props => {
+function RegulationLayerZoneLine(props) {
   const dispatch = useDispatch()
-  const {
-    nameZoneIsMissing
-  } = props
+  const { nameZoneIsMissing } = props
 
   const { zone } = useSelector(state => state.regulation.processingRegulation)
 
-  const setZoneName = (value) => {
+  const setZoneName = value => {
     dispatch(updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ZONE, value }))
   }
 
-  return <ContentLine>
-    <Label>Nom de la zone</Label>
-    <CustomInput
-      data-cy={`input-${zone}`}
-      placeholder=''
-      value={zone}
-      onChange={setZoneName}
-      width={'200px'}
-      $isGray={zone && zone !== ''}
-      $isRed={nameZoneIsMissing}
-    />
-    <InfoBox pointer>
-      <InfoTextWrapper><InfoText>{INFO_TEXT.ZONE_NAME}</InfoText></InfoTextWrapper>
-    </InfoBox>
-  </ContentLine>
+  return (
+    <ContentLine>
+      <Label>Nom de la zone</Label>
+      <CustomInput
+        $isGray={zone && zone !== ''}
+        $isRed={nameZoneIsMissing}
+        data-cy={`input-${zone}`}
+        onChange={setZoneName}
+        placeholder=""
+        value={zone}
+        width="200px"
+      />
+      <InfoBox pointer>
+        <InfoTextWrapper>
+          <InfoText>{INFO_TEXT.ZONE_NAME}</InfoText>
+        </InfoTextWrapper>
+      </InfoBox>
+    </ContentLine>
+  )
 }
 
 export default RegulationLayerZoneLine

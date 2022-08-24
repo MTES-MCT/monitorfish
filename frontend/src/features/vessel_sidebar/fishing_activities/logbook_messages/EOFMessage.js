@@ -1,29 +1,34 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
 
-const EOFMessage = props => {
-  return <>
-    {props.message
-      ? <>
+function EOFMessage(props) {
+  return (
+    <>
+      {props.message ? (
         <Zone>
           <Fields>
             <TableBody>
               <Field>
                 <Key>Date de fin de pêche</Key>
-                <Value>{props.message.endOfFishingDatetimeUtc
-                  ? <>{getDateTime(props.message.endOfFishingDatetimeUtc, true)}{' '}
-                    <Gray>(UTC)</Gray></>
-                  : <NoValue>-</NoValue>}</Value>
+                <Value>
+                  {props.message.endOfFishingDatetimeUtc ? (
+                    <>
+                      {getDateTime(props.message.endOfFishingDatetimeUtc, true)} <Gray>(UTC)</Gray>
+                    </>
+                  ) : (
+                    <NoValue>-</NoValue>
+                  )}
+                </Value>
               </Field>
-
             </TableBody>
           </Fields>
         </Zone>
-      </>
-      : null}
-  </>
+      ) : null}
+    </>
+  )
 }
 
 const Gray = styled.span`
@@ -43,7 +48,7 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 0px 5px 0 5px; 
+  padding: 0px 5px 0 5px;
   width: inherit;
   display: table;
   margin: 0;

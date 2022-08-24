@@ -1,24 +1,73 @@
 import React from 'react'
 
-export const VesselListSVG = ({ background, isTitle }) => {
+export function VesselListSVG({ background, isTitle }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24.707" height="23.707" viewBox="0 0 24.707 23.707"
-         style={ isTitle ? { verticalAlign: 'text-bottom' } : null }>
-      <g id="Groupe_223" data-name="Groupe 223" transform="translate(-1876 -76)">
-        <line id="Ligne_854" data-name="Ligne 854" x2="24" transform="translate(1876 82)" fill="none" stroke="#E5E5EB"
-              strokeWidth="2"/>
-        <line id="Ligne_851" data-name="Ligne 851" x2="24" transform="translate(1876 87)" fill="none" stroke="#E5E5EB"
-              strokeWidth="2"/>
-        <line id="Ligne_852" data-name="Ligne 852" x2="12" transform="translate(1876 92)" fill="none" stroke="#E5E5EB"
-              strokeWidth="2"/>
-        <line id="Ligne_855" data-name="Ligne 855" x2="24" transform="translate(1876 77)" fill="none" stroke="#E5E5EB"
-              strokeWidth="2"/>
-        <g id="Loupe_24_px" data-name="Loupe 24 px" transform="translate(1881 81)">
+    <svg
+      height="23.707"
+      style={isTitle ? { verticalAlign: 'text-bottom' } : null}
+      viewBox="0 0 24.707 23.707"
+      width="24.707"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g data-name="Groupe 223" id="Groupe_223" transform="translate(-1876 -76)">
+        <line
+          data-name="Ligne 854"
+          fill="none"
+          id="Ligne_854"
+          stroke="#E5E5EB"
+          strokeWidth="2"
+          transform="translate(1876 82)"
+          x2="24"
+        />
+        <line
+          data-name="Ligne 851"
+          fill="none"
+          id="Ligne_851"
+          stroke="#E5E5EB"
+          strokeWidth="2"
+          transform="translate(1876 87)"
+          x2="24"
+        />
+        <line
+          data-name="Ligne 852"
+          fill="none"
+          id="Ligne_852"
+          stroke="#E5E5EB"
+          strokeWidth="2"
+          transform="translate(1876 92)"
+          x2="12"
+        />
+        <line
+          data-name="Ligne 855"
+          fill="none"
+          id="Ligne_855"
+          stroke="#E5E5EB"
+          strokeWidth="2"
+          transform="translate(1876 77)"
+          x2="24"
+        />
+        <g data-name="Loupe 24 px" id="Loupe_24_px" transform="translate(1881 81)">
           <g id="Loupe" transform="translate(1)">
-            <line id="Ligne_1" data-name="Ligne 1" x2="6" y2="6" transform="translate(12 12)" fill="none"
-                  stroke="#E5E5EB" strokeWidth="2"/>
-            <circle id="Ellipse_1" data-name="Ellipse 1" cx="7" cy="7" r="7" fill={background} stroke="#E5E5EB"
-                    strokeWidth="2"/>
+            <line
+              data-name="Ligne 1"
+              fill="none"
+              id="Ligne_1"
+              stroke="#E5E5EB"
+              strokeWidth="2"
+              transform="translate(12 12)"
+              x2="6"
+              y2="6"
+            />
+            <circle
+              cx="7"
+              cy="7"
+              data-name="Ellipse 1"
+              fill={background}
+              id="Ellipse_1"
+              r="7"
+              stroke="#E5E5EB"
+              strokeWidth="2"
+            />
           </g>
         </g>
       </g>

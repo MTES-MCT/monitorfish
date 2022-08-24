@@ -1,12 +1,13 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
+import { DEFAULT_REGULATORY_TEXT, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 import { Section, Title } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton } from '../../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
-import { DEFAULT_REGULATORY_TEXT, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
 import { updateProcessingRegulationByKey } from '../../Regulation.slice'
-import { useDispatch } from 'react-redux'
 
 /**
  * @typedef {object} Props
@@ -15,18 +16,17 @@ import { useDispatch } from 'react-redux'
  * @prop {RegulatoryTextSource} source
  * @prop {Boolean} saveForm
  */
-const RegulatoryTextSection = props => {
-  const {
-    regulatoryTextList,
-    source,
-    saveForm
-  } = props
+function RegulatoryTextSection(props) {
+  const { regulatoryTextList, source, saveForm } = props
   const dispatch = useDispatch()
 
-  const setRegulatoryTextList = texts => dispatch(updateProcessingRegulationByKey({
-    key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES,
-    value: texts
-  }))
+  const setRegulatoryTextList = texts =>
+    dispatch(
+      updateProcessingRegulationByKey({
+        key: REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES,
+        value: texts,
+      }),
+    )
 
   const addOrRemoveRegulatoryTextInList = id => {
     let newRegulatoryTextList = regulatoryTextList ? [...regulatoryTextList] : []
@@ -52,14 +52,11 @@ const RegulatoryTextSection = props => {
     setRegulatoryTextList(newRegulatoryTextList)
   }
 
-  return <Section show>
-    <Title>
-      références réglementaires en vigueur
-    </Title>
-    {
-      (regulatoryTextList && regulatoryTextList.length > 0)
-        ? regulatoryTextList.map((regulatoryText, id) => {
-          return <RegulatoryText
+  return (
+    <Section show>
+      <Title>références réglementaires en vigueur</Title>
+      {regulatoryTextList && regulatoryTextList.length > 0 ? (
+        regulatoryTextList.map((regulatoryText, id) => <RegulatoryText
               key={regulatoryText}
               id={id}
               regulatoryText={regulatoryText}
@@ -68,28 +65,27 @@ const RegulatoryTextSection = props => {
               listLength={regulatoryTextList.length}
               saveForm={saveForm}
               setRegulatoryText={setRegulatoryText}
-            />
+            />)
         })
-        : <RegulatoryText
-          regulatoryText={DEFAULT_REGULATORY_TEXT}
+      ) : (
+        <RegulatoryText
           key={0}
-          id={0}
           addOrRemoveRegulatoryTextInList={addOrRemoveRegulatoryTextInList}
-          source={source}
+          id={0}
           listLength={0}
+          regulatoryText={DEFAULT_REGULATORY_TEXT}
           saveForm={saveForm}
           setRegulatoryText={setRegulatoryText}
+          source={source}
         />
-    }
-    <ButtonLine>
-      <ValidateButton
-        disabled={false}
-        isLast={false}
-        onClick={addRegRefInEffect}>
-        Ajouter un autre texte en vigueur
-      </ValidateButton>
-    </ButtonLine>
-  </Section>
+      )}
+      <ButtonLine>
+        <ValidateButton disabled={false} isLast={false} onClick={addRegRefInEffect}>
+          Ajouter un autre texte en vigueur
+        </ValidateButton>
+      </ButtonLine>
+    </Section>
+  )
 }
 
 const ButtonLine = styled.div`

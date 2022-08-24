@@ -1,91 +1,80 @@
+import countries from 'i18n-iso-countries'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../constants/constants'
-import countries from 'i18n-iso-countries'
+import { vesselSize } from '../../domain/entities/vessel'
 import FilterTag from './FilterTag'
 import { IconTypes } from './TagIconType'
-import { vesselSize } from '../../domain/entities/vessel'
 
-const TagList = ({ filters, uuid, removeTagFromFilter }) => {
+function TagList({ filters, removeTagFromFilter, uuid }) {
   const [tags, setTags] = useState([])
 
   useEffect(() => {
     let nextTags = []
 
     if (filters.countriesFiltered?.length) {
-      const countriesTags = filters.countriesFiltered.map(country => {
-        return {
+      const countriesTags = filters.countriesFiltered.map(country => ({
           iconElement: <Flag title={countries.getName(country, 'fr')} rel="preload" src={`flags/${country}.svg`}/>,
           text: countries.getName(country, 'fr'),
           value: country,
           type: 'countriesFiltered'
-        }
-      })
+        }))
 
       nextTags = nextTags.concat(countriesTags)
     }
 
     if (filters.gearsFiltered?.length) {
-      const gearsTags = filters.gearsFiltered.map(gear => {
-        return {
+      const gearsTags = filters.gearsFiltered.map(gear => ({
           iconElement: IconTypes.GEAR,
           text: gear,
           value: gear,
           type: 'gearsFiltered'
-        }
-      })
+        }))
 
       nextTags = nextTags.concat(gearsTags)
     }
 
     if (filters.speciesFiltered?.length) {
-      const speciesTags = filters.speciesFiltered.map(species => {
-        return {
+      const speciesTags = filters.speciesFiltered.map(species => ({
           iconElement: IconTypes.SPECIES,
           text: species,
           value: species,
           type: 'speciesFiltered'
-        }
-      })
+        }))
 
       nextTags = nextTags.concat(speciesTags)
     }
 
     if (filters.zonesSelected?.length) {
-      const zonesSelectedTags = filters.zonesSelected.map(zoneSelected => {
-        return {
+      const zonesSelectedTags = filters.zonesSelected.map(zoneSelected => ({
           iconElement: IconTypes.ZONE,
           text: zoneSelected.name,
           value: zoneSelected.name,
           type: 'zonesSelected'
-        }
-      })
+        }))
 
       nextTags = nextTags.concat(zonesSelectedTags)
     }
 
     if (filters.fleetSegmentsFiltered?.length) {
-      const fleetSegmentsTags = filters.fleetSegmentsFiltered.map(fleetSegment => {
-        return {
+      const fleetSegmentsTags = filters.fleetSegmentsFiltered.map(fleetSegment => ({
           iconElement: IconTypes.FLEET_SEGMENT,
           text: fleetSegment,
           value: fleetSegment,
           type: 'fleetSegmentsFiltered'
-        }
-      })
+        }))
 
       nextTags = nextTags.concat(fleetSegmentsTags)
     }
 
     if (filters.districtsFiltered?.length) {
-      const districtsTags = filters.districtsFiltered.map(district => {
-        return {
+      const districtsTags = filters.districtsFiltered.map(district => ({
           iconElement: IconTypes.DISTRICTS,
           text: district,
           value: district,
           type: 'districtsFiltered'
-        }
-      })
+        }))
 
       nextTags = nextTags.concat(districtsTags)
     }
@@ -99,8 +88,8 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
         return {
           iconElement: IconTypes.LENGTH,
           text: sizeObject ? sizeObject.text : '',
-          value: sizeObject ? sizeObject.code : '',
-          type: 'vesselsSizeValuesChecked'
+          type: 'vesselsSizeValuesChecked',
+          value: sizeObject ? sizeObject.code : ''
         }
       })
 
@@ -111,8 +100,8 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
       const lastControlMonthAgoTag = {
         iconElement: IconTypes.CONTROL,
         text: `Plus de ${filters.lastControlMonthsAgo} mois`,
-        value: filters.lastControlMonthsAgo,
-        type: 'lastControlMonthsAgo'
+        type: 'lastControlMonthsAgo',
+        value: filters.lastControlMonthsAgo
       }
 
       nextTags = nextTags.concat(lastControlMonthAgoTag)
@@ -123,10 +112,8 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
 
   return (
     <List>
-      {
-        tags?.length
-          ? tags.map(tag => {
-            return <FilterTag
+      {tags?.length ? (
+        tags.map(tag => <FilterTag
               uuid={uuid}
               type={tag.type}
               iconType={tag.iconType}
@@ -135,10 +122,11 @@ const TagList = ({ filters, uuid, removeTagFromFilter }) => {
               text={tag.text}
               value={tag.value}
               removeTagFromFilter={removeTagFromFilter}
-            />
-          })
-          : <NoTag>Aucun filtre</NoTag>
-      }
+            />)
+        })
+      ) : (
+        <NoTag>Aucun filtre</NoTag>
+      )}
     </List>
   )
 }

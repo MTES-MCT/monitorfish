@@ -1,14 +1,15 @@
 import styled from 'styled-components'
+
 import { COLORS } from '../../constants/constants'
 
 export const Row = styled.div`
-  display: ${props => props.display === false ? 'none' : 'flex'};
+  display: ${props => (props.display === false ? 'none' : 'flex')};
   margin-bottom: 8px;
-  color: ${COLORS.slateGray}
+  color: ${COLORS.slateGray};
 `
 
 export const TimeRow = styled(Row)`
-  opacity: ${props => props.disabled ? '0.4' : '1'};
+  opacity: ${props => (props.disabled ? '0.4' : '1')};
 `
 
 export const DateRanges = styled.div`
@@ -24,5 +25,5 @@ export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: row;
   height: 100%;
-  ${props => props.alignSelf ? `align-self: ${props.alignSelf}` : ''};
+  ${props => (props.alignSelf ? `align-self: ${props.alignSelf}` : '')};
 `

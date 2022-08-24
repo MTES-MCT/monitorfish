@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+
 import { ReactComponent as REGPaperSVG } from '../../icons/reg_paper.svg'
 import { ReactComponent as REGPaperDarkSVG } from '../../icons/reg_paper_dark.svg'
 

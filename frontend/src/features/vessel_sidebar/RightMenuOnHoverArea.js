@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+
 import { contractRightMenu } from '../../domain/shared_slices/Global'
 import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
 
-const RightMenuOnHoverArea = () => {
+function RightMenuOnHoverArea() {
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
   const dispatch = useDispatch()
 
@@ -18,19 +19,19 @@ const RightMenuOnHoverArea = () => {
     }
   }, [clickedOutsideComponent])
 
-  return <>
-    {
-      selectedVessel
-        ? <Area
+  return (
+    <>
+      {selectedVessel ? (
+        <Area
           ref={wrapperRef}
           onMouseLeave={() => {
             clearTimeout(timeOutRef.current)
             timeOutRef.current = setTimeout(() => dispatch(contractRightMenu()), 3000)
           }}
         />
-        : null
-    }
-  </>
+      ) : null}
+    </>
+  )
 }
 
 const Area = styled.div`

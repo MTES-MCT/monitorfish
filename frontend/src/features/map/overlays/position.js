@@ -1,51 +1,51 @@
 import { containsXY } from 'ol/extent'
 
-function getOuterExtentPosition (boxSize, x, y) {
+function getOuterExtentPosition(boxSize, x, y) {
   return {
-    TOP_LEFT: {
-      x: x - boxSize,
-      y: y + boxSize
-    },
-    TOP_RIGHT: {
-      x: x + boxSize,
-      y: y + boxSize
+    BOTTOM: {
+      x,
+      y: y - boxSize,
     },
     BOTTOM_LEFT: {
       x: x - boxSize,
-      y: y - boxSize
+      y: y - boxSize,
     },
     BOTTOM_RIGHT: {
       x: x + boxSize,
-      y: y - boxSize
-    },
-    TOP: {
-      x: x,
-      y: y + boxSize
-    },
-    RIGHT: {
-      x: x + boxSize,
-      y: y
+      y: y - boxSize,
     },
     LEFT: {
       x: x - boxSize,
-      y: y
+      y,
     },
-    BOTTOM: {
-      x: x,
-      y: y - boxSize
-    }
+    RIGHT: {
+      x: x + boxSize,
+      y,
+    },
+    TOP: {
+      x,
+      y: y + boxSize,
+    },
+    TOP_LEFT: {
+      x: x - boxSize,
+      y: y + boxSize,
+    },
+    TOP_RIGHT: {
+      x: x + boxSize,
+      y: y + boxSize,
+    },
   }
 }
 
 export const OverlayPosition = {
-  TOP_LEFT: 'TOP_LEFT',
-  TOP_RIGHT: 'TOP_RIGHT',
+  BOTTOM: 'BOTTOM',
   BOTTOM_LEFT: 'BOTTOM_LEFT',
   BOTTOM_RIGHT: 'BOTTOM_RIGHT',
-  TOP: 'TOP',
-  RIGHT: 'RIGHT',
   LEFT: 'LEFT',
-  BOTTOM: 'BOTTOM'
+  RIGHT: 'RIGHT',
+  TOP: 'TOP',
+  TOP_LEFT: 'TOP_LEFT',
+  TOP_RIGHT: 'TOP_RIGHT',
 }
 
 /**
@@ -61,15 +61,8 @@ export const OverlayPosition = {
   }} margins
  * @returns {number[]} margins - The [top, left] overlay margins (and not the x, y margins)
  */
-export function getTopLeftMargin (nextOverlayPosition, margins) {
-  const {
-    xRight,
-    xMiddle,
-    xLeft,
-    yTop,
-    yMiddle,
-    yBottom
-  } = margins
+export function getTopLeftMargin(nextOverlayPosition, margins) {
+  const { xLeft, xMiddle, xRight, yBottom, yMiddle, yTop } = margins
 
   switch (nextOverlayPosition) {
     case OverlayPosition.TOP_LEFT:
@@ -93,30 +86,39 @@ export function getTopLeftMargin (nextOverlayPosition, margins) {
   }
 }
 
-export function getOverlayPosition (boxSize, x, y, extent) {
+export function getOverlayPosition(boxSize, x, y, extent) {
   const position = getOuterExtentPosition(boxSize, x, y)
 
-  if (!containsXY(extent, position.TOP.x, position.TOP.y) &&
-    !containsXY(extent, position.LEFT.x, position.LEFT.y)) {
+  if (!containsXY(extent, position.TOP.x, position.TOP.y) && !containsXY(extent, position.LEFT.x, position.LEFT.y)) {
     return OverlayPosition.TOP_LEFT
-  } else if (!containsXY(extent, position.TOP.x, position.TOP.y) &&
-    !containsXY(extent, position.RIGHT.x, position.RIGHT.y)) {
+  }
+  if (!containsXY(extent, position.TOP.x, position.TOP.y) && !containsXY(extent, position.RIGHT.x, position.RIGHT.y)) {
     return OverlayPosition.TOP_RIGHT
-  } else if (!containsXY(extent, position.BOTTOM.x, position.BOTTOM.y) &&
-    !containsXY(extent, position.LEFT.x, position.LEFT.y)) {
+  }
+  if (
+    !containsXY(extent, position.BOTTOM.x, position.BOTTOM.y) &&
+    !containsXY(extent, position.LEFT.x, position.LEFT.y)
+  ) {
     return OverlayPosition.BOTTOM_LEFT
-  } else if (!containsXY(extent, position.BOTTOM.x, position.BOTTOM.y) &&
-    !containsXY(extent, position.RIGHT.x, position.RIGHT.y)) {
+  }
+  if (
+    !containsXY(extent, position.BOTTOM.x, position.BOTTOM.y) &&
+    !containsXY(extent, position.RIGHT.x, position.RIGHT.y)
+  ) {
     return OverlayPosition.BOTTOM_RIGHT
-  } else if (!containsXY(extent, position.TOP.x, position.TOP.y)) {
+  }
+  if (!containsXY(extent, position.TOP.x, position.TOP.y)) {
     return OverlayPosition.TOP
-  } else if (!containsXY(extent, position.RIGHT.x, position.RIGHT.y)) {
+  }
+  if (!containsXY(extent, position.RIGHT.x, position.RIGHT.y)) {
     return OverlayPosition.RIGHT
-  } else if (!containsXY(extent, position.LEFT.x, position.LEFT.y)) {
+  }
+  if (!containsXY(extent, position.LEFT.x, position.LEFT.y)) {
     return OverlayPosition.LEFT
-  } else if (!containsXY(extent, position.BOTTOM.x, position.BOTTOM.y)) {
-    return OverlayPosition.BOTTOM
-  } else {
+  }
+  if (!containsXY(extent, position.BOTTOM.x, position.BOTTOM.y)) {
     return OverlayPosition.BOTTOM
   }
+  
+return OverlayPosition.BOTTOM
 }

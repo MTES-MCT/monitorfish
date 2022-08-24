@@ -1,19 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const infractionSlice = createSlice({
-  name: 'infraction',
   initialState: {
-    infractions: []
+    infractions: [],
   },
+  name: 'infraction',
   reducers: {
-    setInfractions (state, action) {
+    setInfractions(state, action) {
       state.infractions = action.payload
-    }
-  }
+    },
+  },
 })
 
-export const {
-  setInfractions
-} = infractionSlice.actions
+export const { setInfractions } = infractionSlice.actions
 
 export default infractionSlice.reducer

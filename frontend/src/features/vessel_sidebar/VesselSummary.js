@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { ReactComponent as NoVesselSVG } from '../icons/Picto_photo_navire_manquante.svg'
-
-import { getCoordinates } from '../../coordinates'
-import { getDateTime, timeagoFrenchLocale } from '../../utils'
-import { WSG84_PROJECTION } from '../../domain/entities/map'
-import { COLORS } from '../../constants/constants'
-import * as timeago from 'timeago.js'
-import { ReactComponent as InfoSVG } from '../icons/Information.svg'
-import { useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
+import { useSelector } from 'react-redux'
+import styled from 'styled-components'
+import * as timeago from 'timeago.js'
+
+import { COLORS } from '../../constants/constants'
+import { getCoordinates } from '../../coordinates'
+import { WSG84_PROJECTION } from '../../domain/entities/map'
+import { getDateTime, timeagoFrenchLocale } from '../../utils'
+import { ReactComponent as InfoSVG } from '../icons/Information.svg'
+import { ReactComponent as NoVesselSVG } from '../icons/Picto_photo_navire_manquante.svg'
 import RiskFactorResume from './risk_factor/RiskFactorResume'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const VesselSummary = props => {
+function VesselSummary(props) {
   const { coordinatesFormat } = useSelector(state => state.map)
-  const {
-    loadingVessel,
-    selectedVessel,
-    selectedVesselPositions
-  } = useSelector(state => state.vessel)
+  const { loadingVessel, selectedVessel, selectedVesselPositions } = useSelector(state => state.vessel)
   const [photoFallback, setPhotoFallback] = useState(false)
   const [lastPosition, setLastPosition] = useState(null)
 
@@ -36,23 +32,18 @@ const VesselSummary = props => {
 
   useEffect(() => {
     if (selectedVessel && selectedVessel?.dateTime) {
-      const {
-        course,
-        latitude,
-        longitude,
-        speed,
-        dateTime
-      } = selectedVessel
+      const { course, dateTime, latitude, longitude, speed } = selectedVessel
 
       setLastPosition({
         course,
+        dateTime,
         latitude,
         longitude,
         speed,
-        dateTime
       })
     } else if (selectedVesselPositions?.length) {
-      const sortedPositionsByDateTimeDesc = selectedVesselPositions.slice()
+      const sortedPositionsByDateTimeDesc = selectedVesselPositions
+        .slice()
         .sort((a, b) => -a.dateTime.localeCompare(b.dateTime))
       setLastPosition(sortedPositionsByDateTimeDesc[0])
     } else {
@@ -60,71 +51,78 @@ const VesselSummary = props => {
     }
   }, [selectedVessel, selectedVesselPositions])
 
-  return !loadingVessel
-    ? (
-      <Body>
-        <PhotoZone>
-          {
-            photoFallback
-              ? <NoVessel/>
-              : <>
-                {
-                  selectedVessel?.mmsi
-                    ? <Photo referrerpolicy="no-referrer" onError={() => setPhotoFallback(true)}
-                             src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${selectedVessel?.mmsi}&size=thumb300`}/>
-                    : <NoVessel/>
-                }
+  return !loadingVessel ? (
+    <Body>
+      <PhotoZone>
+        {photoFallback ? (
+          <NoVessel />
+        ) : (
+          <>
+            {selectedVessel?.mmsi ? (
+              <Photo
+                onError={() => setPhotoFallback(true)}
+                referrerpolicy="no-referrer"
+                src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${selectedVessel?.mmsi}&size=thumb300`}
+              />
+            ) : (
+              <NoVessel />
+            )}
+          </>
+        )}
+      </PhotoZone>
+      <ZoneWithoutBackground>
+        <LatLon>
+          <FieldName>Latitude</FieldName>
+          <FieldValue data-cy="vessel-summary-latitude">
+            {!isNaN(lastPosition?.latitude) && !isNaN(lastPosition?.longitude) ? (
+              getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, coordinatesFormat)[0]
+            ) : (
+              <NoValue>-</NoValue>
+            )}
+          </FieldValue>
+          <FieldName>Longitude</FieldName>
+          <FieldValue>
+            {!isNaN(lastPosition?.latitude) && !isNaN(lastPosition?.longitude) ? (
+              getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, coordinatesFormat)[1]
+            ) : (
+              <NoValue>-</NoValue>
+            )}
+          </FieldValue>
+        </LatLon>
+        <Course>
+          <FieldName>Route</FieldName>
+          <FieldValue>{!isNaN(lastPosition?.course) ? <>{lastPosition?.course}°</> : <NoValue>-</NoValue>}</FieldValue>
+          <FieldName>Vitesse</FieldName>
+          <FieldValue>{!isNaN(lastPosition?.speed) ? <>{lastPosition?.speed} Nds</> : <NoValue>-</NoValue>}</FieldValue>
+        </Course>
+        <Position>
+          <FieldName>Dernier signal VMS</FieldName>
+          <FieldValue>
+            {lastPosition?.dateTime ? (
+              <>
+                {getDateTime(lastPosition?.dateTime, true)} <Gray>(UTC)</Gray>
               </>
-          }
-        </PhotoZone>
-        <ZoneWithoutBackground>
-          <LatLon>
-            <FieldName>Latitude</FieldName>
-            <FieldValue data-cy={'vessel-summary-latitude'}>{!isNaN(lastPosition?.latitude) && !isNaN(lastPosition?.longitude)
-              ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, coordinatesFormat)[0]
-              : <NoValue>-</NoValue>}</FieldValue>
-            <FieldName>Longitude</FieldName>
-            <FieldValue>{!isNaN(lastPosition?.latitude) && !isNaN(lastPosition?.longitude)
-              ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, coordinatesFormat)[1]
-              : <NoValue>-</NoValue>}</FieldValue>
-          </LatLon>
-          <Course>
-            <FieldName>Route</FieldName>
-            <FieldValue>{!isNaN(lastPosition?.course)
-              ? <>{lastPosition?.course}°</>
-              : <NoValue>-</NoValue>}</FieldValue>
-            <FieldName>Vitesse</FieldName>
-            <FieldValue>{!isNaN(lastPosition?.speed)
-              ? <>{lastPosition?.speed} Nds</>
-              : <NoValue>-</NoValue>}</FieldValue>
-          </Course>
-          <Position>
-            <FieldName>Dernier signal VMS</FieldName>
-            <FieldValue>
-              {
-                lastPosition?.dateTime
-                  ? <>
-                    {getDateTime(lastPosition?.dateTime, true)}{' '}
-                    <Gray>(UTC)</Gray></>
-                  : <NoValue>-</NoValue>
-              }
-            </FieldValue>
-            <FieldName>Dernier cadencement <Info
-              title={'Cette valeur est calculée à partir des 2 dernières positions VMS reçues'}/></FieldName>
-            <FieldValue>
-              {
-                selectedVessel?.emissionPeriod
-                  ? <>1 signal toutes
-                    les {selectedVessel?.emissionPeriod / 60} minutes</>
-                  : <NoValue>-</NoValue>
-              }
-            </FieldValue>
-          </Position>
-        </ZoneWithoutBackground>
-        <RiskFactorResume/>
-      </Body>
-      )
-    : <FingerprintSpinner color={COLORS.charcoal} className={'radar'} size={100}/>
+            ) : (
+              <NoValue>-</NoValue>
+            )}
+          </FieldValue>
+          <FieldName>
+            Dernier cadencement <Info title="Cette valeur est calculée à partir des 2 dernières positions VMS reçues" />
+          </FieldName>
+          <FieldValue>
+            {selectedVessel?.emissionPeriod ? (
+              <>1 signal toutes les {selectedVessel?.emissionPeriod / 60} minutes</>
+            ) : (
+              <NoValue>-</NoValue>
+            )}
+          </FieldValue>
+        </Position>
+      </ZoneWithoutBackground>
+      <RiskFactorResume />
+    </Body>
+  ) : (
+    <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+  )
 }
 
 const Gray = styled.span`
@@ -216,7 +214,7 @@ const Info = styled(InfoSVG)`
   width: 14px;
   vertical-align: text-bottom;
   margin-bottom: 2px;
-  margin-left: ${props => props.$isInfoSegment ? '5px' : '2px'};
+  margin-left: ${props => (props.$isInfoSegment ? '5px' : '2px')};
 `
 
 export default VesselSummary

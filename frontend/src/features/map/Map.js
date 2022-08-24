@@ -1,20 +1,10 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import BaseMap from './BaseMap'
-import LayerDetailsBox from './controls/LayerDetailsBox'
-import VesselsTracksLayer from '../../layers/VesselsTracksLayer'
-import VesselsLayer from '../../layers/VesselsLayer'
-import FilterLayer from '../../layers/FilterLayer'
-import DrawLayer from '../../layers/DrawLayer'
-import BaseLayer from '../../layers/BaseLayer'
-import RegulatoryLayers from '../../layers/RegulatoryLayers'
 import AdministrativeLayers from '../../layers/AdministrativeLayers'
-import ShowRegulatoryMetadata from './ShowRegulatoryMetadata'
-import RegulatoryPreviewLayer from '../../layers/RegulatoryPreviewLayer'
-import MeasurementLayer from '../../layers/MeasurementLayer'
-import MapHistory from './MapHistory'
-import VesselCardOverlay from './overlays/VesselCardOverlay'
+import BaseLayer from '../../layers/BaseLayer'
+import DrawLayer from '../../layers/DrawLayer'
+import FilterLayer from '../../layers/FilterLayer'
 import VesselTrackCardOverlay from './overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from './overlays/TrackTypeCardOverlay'
 import MapVesselClickAndAnimationHandler from './MapVesselClickAndAnimationHandler'
@@ -23,13 +13,23 @@ import VesselSelectedLayer from '../../layers/VesselSelectedLayer'
 import VesselEstimatedPositionCardOverlay from './overlays/VesselEstimatedPositionCardOverlay'
 import VesselsLabelsLayer from '../../layers/VesselsLabelsLayer'
 import InterestPointLayer from '../../layers/InterestPointLayer'
-import MapMenu from './MapMenu'
+import MeasurementLayer from '../../layers/MeasurementLayer'
+import RegulatoryLayers from '../../layers/RegulatoryLayers'
+import RegulatoryPreviewLayer from '../../layers/RegulatoryPreviewLayer'
+import VesselAlertAndBeaconMalfunctionLayer from '../../layers/VesselAlertAndBeaconMalfunctionLayer'
 import VesselAlertLayer from '../../layers/VesselAlertLayer'
 import VesselBeaconMalfunctionLayer from '../../layers/VesselBeaconMalfunctionLayer'
-import VesselAlertAndBeaconMalfunctionLayer from '../../layers/VesselAlertAndBeaconMalfunctionLayer'
 import VesselInfractionSuspicionLayer from '../../layers/VesselInfractionSuspicionLayer'
+import VesselsLayer from '../../layers/VesselsLayer'
+import VesselsTracksLayer from '../../layers/VesselsTracksLayer'
+import BaseMap from './BaseMap'
+import LayerDetailsBox from './controls/LayerDetailsBox'
+import MapHistory from './MapHistory'
+import MapMenu from './MapMenu'
+import VesselCardOverlay from './overlays/VesselCardOverlay'
+import ShowRegulatoryMetadata from './ShowRegulatoryMetadata'
 
-const Map = () => {
+function Map() {
   const gears = useSelector(state => state.gear.gears)
   const adminRole = useSelector(state => state.global.adminRole)
 
@@ -47,7 +47,7 @@ const Map = () => {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
-  const handlePointerMove = (event) => {
+  const handlePointerMove = event => {
     if (event) {
       setHandlePointerMoveEventPixel(event.pixel)
     }
@@ -56,42 +56,45 @@ const Map = () => {
   return (
     <BaseMap
       // BaseMap forwards map & mapClickEvent as props to children
+      container="map"
       handleMovingAndZoom={handleMovingAndZoom}
       handlePointerMove={handlePointerMove}
       setCurrentFeature={setCurrentFeature}
-      showCoordinates={true}
-      showAttributions={true}
-      container={'map'}
+      showAttributions
+      showCoordinates
     >
       <BaseLayer />
-      <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
+      <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
       <AdministrativeLayers />
-      <ShowRegulatoryMetadata hasClickEvent/>
-      <MapVesselClickAndAnimationHandler hasClickEvent/>
+      <ShowRegulatoryMetadata hasClickEvent />
+      <MapVesselClickAndAnimationHandler hasClickEvent />
       <MapHistory
-        shouldUpdateView={shouldUpdateView}
-        setShouldUpdateView={setShouldUpdateView}
         historyMoveTrigger={historyMoveTrigger}
+        setShouldUpdateView={setShouldUpdateView}
+        shouldUpdateView={shouldUpdateView}
       />
-      <MapMenu/>
-      <MeasurementLayer/>
-      <VesselsLayer/>
-      <FilterLayer/>
-      <VesselsTracksLayer/>
-      <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
-      <DrawLayer/>
-      <VesselEstimatedPositionLayer/>
-      <VesselSelectedLayer/>
-      <VesselAlertLayer adminRole={adminRole}/>
-      <VesselBeaconMalfunctionLayer adminRole={adminRole}/>
-      <VesselAlertAndBeaconMalfunctionLayer adminRole={adminRole}/>
-      <VesselInfractionSuspicionLayer adminRole={adminRole}/>
-      <VesselCardOverlay feature={currentFeature}/>
-      <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
-      <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
-      <VesselTrackCardOverlay feature={currentFeature}/>
-      <LayerDetailsBox gears={gears} feature={currentFeature}/>
-      <InterestPointLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
+      <MapMenu />
+      <MeasurementLayer />
+      <VesselsLayer />
+      <FilterLayer />
+      <VesselsTracksLayer />
+      <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
+      <DrawLayer />
+      <VesselEstimatedPositionLayer />
+      <VesselSelectedLayer />
+      <VesselAlertLayer adminRole={adminRole} />
+      <VesselBeaconMalfunctionLayer adminRole={adminRole} />
+      <VesselAlertAndBeaconMalfunctionLayer adminRole={adminRole} />
+      <VesselInfractionSuspicionLayer adminRole={adminRole} />
+      <VesselCardOverlay feature={currentFeature} />
+      <TrackTypeCardOverlay feature={currentFeature} pointerMoveEventPixel={handlePointerMoveEventPixel} />
+      <VesselEstimatedPositionCardOverlay
+        feature={currentFeature}
+        pointerMoveEventPixel={handlePointerMoveEventPixel}
+      />
+      <VesselTrackCardOverlay feature={currentFeature} />
+      <LayerDetailsBox feature={currentFeature} gears={gears} />
+      <InterestPointLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
       <RegulatoryPreviewLayer />
     </BaseMap>
   )

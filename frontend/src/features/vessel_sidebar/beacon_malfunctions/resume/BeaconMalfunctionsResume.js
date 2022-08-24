@@ -1,48 +1,53 @@
 import React from 'react'
-import { getDateTime } from '../../../../utils'
 import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
-import { NoValue, Title, Zone } from '../../common_styles/common.style'
-import { vesselStatuses } from '../../../../domain/entities/beaconMalfunction'
 
-const BeaconMalfunctionsResume = props => {
+import { COLORS } from '../../../../constants/constants'
+import { vesselStatuses } from '../../../../domain/entities/beaconMalfunction'
+import { getDateTime } from '../../../../utils'
+import { NoValue, Title, Zone } from '../../common_styles/common.style'
+
+function BeaconMalfunctionsResume(props) {
   const {
     /** @type {VesselBeaconMalfunctionsResume} */
-    vesselBeaconMalfunctionsResume
+    vesselBeaconMalfunctionsResume,
   } = props
 
-  return vesselBeaconMalfunctionsResume
-    ? <Zone>
-      <Title>
-        Résumé des avaries VMS (sur 1 an)
-      </Title>
+  return vesselBeaconMalfunctionsResume ? (
+    <Zone>
+      <Title>Résumé des avaries VMS (sur 1 an)</Title>
       <Table>
         <Fields>
           <TableBody>
             <Field>
               <Key>Nombre d&apos;avaries</Key>
-              <Value data-cy={'vessel-beacon-malfunctions-resume-number'}>
+              <Value data-cy="vessel-beacon-malfunctions-resume-number">
                 <AtSea>en mer</AtSea> {vesselBeaconMalfunctionsResume?.numberOfBeaconsAtSea}
                 <AtPort>à quai</AtPort> {vesselBeaconMalfunctionsResume?.numberOfBeaconsAtPort}
               </Value>
             </Field>
             <Field>
               <Key>Dernière avarie</Key>
-              <Value data-cy={'vessel-beacon-malfunctions-resume-last'}>
-                {
-                  vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime
-                    ? <>Le {getDateTime(vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime, true)}
-                      {' '}
-                    ({vesselStatuses.find(status => status.value === vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionVesselStatus)?.label})</>
-                    : <NoValue>-</NoValue>
-                }
+              <Value data-cy="vessel-beacon-malfunctions-resume-last">
+                {vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime ? (
+                  <>
+                    Le {getDateTime(vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime, true)} (
+                    {
+                      vesselStatuses.find(
+                        status => status.value === vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionVesselStatus,
+                      )?.label
+                    }
+                    )
+                  </>
+                ) : (
+                  <NoValue>-</NoValue>
+                )}
               </Value>
             </Field>
           </TableBody>
         </Fields>
       </Table>
     </Zone>
-    : null
+  ) : null
 }
 
 const AtSea = styled.span`
@@ -69,7 +74,7 @@ const Table = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 10px 5px 0 15px; 
+  padding: 10px 5px 0 15px;
   width: inherit;
   display: table;
   margin: 0;

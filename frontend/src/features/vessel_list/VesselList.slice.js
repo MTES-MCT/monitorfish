@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const vesselListSlice = createSlice({
-  name: 'vesselList',
   initialState: {
-    zonesSelected: []
+    zonesSelected: [],
   },
+  name: 'vesselList',
   reducers: {
     /**
      * Add a selected zone to filter vessels or regulations
@@ -16,7 +16,7 @@ const vesselListSlice = createSlice({
      *  feature: GeoJSON
      * }}} action - The zone to add
      */
-    addZoneSelected (state, action) {
+    addZoneSelected(state, action) {
       if (!state.zonesSelected.find(zone => zone.code === action.payload.code)) {
         state.zonesSelected = state.zonesSelected.concat(action.payload)
       }
@@ -27,25 +27,18 @@ const vesselListSlice = createSlice({
      * @param {{
      * payload: string}} action - The name of the zone
      */
-    removeZoneSelected (state, action) {
-      state.zonesSelected = state.zonesSelected.filter(zoneSelected => {
-        return zoneSelected.code !== action.payload
-      })
+    removeZoneSelected(state, action) {
+      state.zonesSelected = state.zonesSelected.filter(zoneSelected => zoneSelected.code !== action.payload)
     },
-    setZonesSelected (state, action) {
+    resetZonesSelected(state) {
+      state.zonesSelected = []
+    },
+    setZonesSelected(state, action) {
       state.zonesSelected = action.payload
     },
-    resetZonesSelected (state) {
-      state.zonesSelected = []
-    }
-  }
+  },
 })
 
-export const {
-  addZoneSelected,
-  setZonesSelected,
-  removeZoneSelected,
-  resetZonesSelected
-} = vesselListSlice.actions
+export const { addZoneSelected, removeZoneSelected, resetZonesSelected, setZonesSelected } = vesselListSlice.actions
 
 export default vesselListSlice.reducer

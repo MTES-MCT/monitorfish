@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
+import {
+  LogbookMessagePNOPurposeType,
+  LogbookMessageType as LogbookMessageTypeEnum,
+} from '../../../../domain/entities/logbook'
+import { getDateTime } from '../../../../utils'
 import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
 import SpeciesAndWeightChart from './SpeciesAndWeightChart'
-import { getDateTime } from '../../../../utils'
-import { LogbookMessagePNOPurposeType, LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 
-const PNOMessageResume = props => {
+function PNOMessageResume(props) {
   const [isOpen, setIsOpen] = useState(false)
   const firstUpdate = useRef(true)
   const [chartHeight, setChartHeight] = useState(0)
@@ -23,24 +27,22 @@ const PNOMessageResume = props => {
         .sort((a, b) => {
           if (a.weight < b.weight) {
             return 1
-          } else {
+          } 
             return -1
-          }
+          
         })
       setSpeciesAndWeightArray(pnoSpeciesAndWeight)
 
       const speciesNotLandedArray = Object.keys(props.speciesToWeightOfFAR)
         .map(speciesToWeightKey => props.speciesToWeightOfFAR[speciesToWeightKey])
-        .filter(speciesToWeight => {
-          return !props.pnoMessage.message.catchOnboard
-            .some(landedSpecies => landedSpecies.species === speciesToWeight.species)
-        })
+        .filter(speciesToWeight => !props.pnoMessage.message.catchOnboard
+            .some(landedSpecies => landedSpecies.species === speciesToWeight.species))
         .sort((a, b) => {
           if (a.weight < b.weight) {
             return 1
-          } else {
+          } 
             return -1
-          }
+          
         })
       setSpeciesNotLandedArray(speciesNotLandedArray)
       setBoxHeight(speciesNotLandedArray.length ? speciesNotLandedArray.length * 18 : 0)
@@ -55,109 +57,115 @@ const PNOMessageResume = props => {
     }
   }, [isOpen])
 
-  function getTotalFARNotLandedWeight (speciesNotLandedArray) {
-    return speciesNotLandedArray.reduce((subAccumulator, speciesCatch) => {
-      return subAccumulator + speciesCatch.weight
-    }, 0)
+  function getTotalFARNotLandedWeight(speciesNotLandedArray) {
+    return speciesNotLandedArray.reduce((subAccumulator, speciesCatch) => subAccumulator + speciesCatch.weight, 0)
   }
 
-  const getPercentOfTotalWeight = (speciesAndWeightNotLanded, speciesAndWeightTotal) => {
-    return parseFloat(((speciesAndWeightNotLanded * 100) / speciesAndWeightTotal).toFixed(1))
-  }
+  const getPercentOfTotalWeight = (speciesAndWeightNotLanded, speciesAndWeightTotal) => parseFloat(((speciesAndWeightNotLanded * 100) / speciesAndWeightTotal).toFixed(1))
 
-  const getPNOMessageResumeTitleText = () => {
-    return `${props.pnoMessage.message.portName ? props.pnoMessage.message.portName : props.pnoMessage.message.port}, prévu le ${getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)} (UTC)`
-  }
+  const getPNOMessageResumeTitleText = () => `${props.pnoMessage.message.portName ? props.pnoMessage.message.portName : props.pnoMessage.message.port}, prévu le ${getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)} (UTC)`
 
-  const getPNOMessageResumeTitle = () => {
-    return <>{props.pnoMessage.message.portName ? props.pnoMessage.message.portName : props.pnoMessage.message.port}
+  const getPNOMessageResumeTitle = () => <>{props.pnoMessage.message.portName ? props.pnoMessage.message.portName : props.pnoMessage.message.port}
       ,{' '} prévu le {getDateTime(props.pnoMessage.message.predictedArrivalDatetimeUtc, true)} <Gray>(UTC)</Gray></>
-  }
 
-  return <Wrapper>
-    <LogbookMessageResumeHeader
-      isNotAcknowledged={props.isNotAcknowledged}
-      isDeleted={props.isDeleted}
+  return (
+    <Wrapper>
+      <LogbookMessageResumeHeader
+        hasNoMessage={props.hasNoMessage}
       id={props.id}
-      onHoverText={props.hasNoMessage ? null : getPNOMessageResumeTitleText()}
-      title={props.hasNoMessage ? null : getPNOMessageResumeTitle()}
-      hasNoMessage={props.hasNoMessage}
-      showLogbookMessages={props.showLogbookMessages}
+      isDeleted={props.isDeleted}
+      isNotAcknowledged={props.isNotAcknowledged}
+      isOpen={isOpen}
       messageType={LogbookMessageTypeEnum.PNO.code.toString()}
+      onHoverText={props.hasNoMessage ? null : getPNOMessageResumeTitleText()}
       setIsOpen={setIsOpen}
-      isOpen={isOpen}/>
-    {
-      props.hasNoMessage
-        ? null
-        : <LogbookMessageContent
-          id={props.id}
+      showLogbookMessages={props.showLogbookMessages}
+      title={props.hasNoMessage ? null : getPNOMessageResumeTitle()}/>
+      />
+      {props.hasNoMessage ? null : (
+        <LogbookMessageContent
           chartHeight={chartHeight + boxHeight}
-          speciesNotLandedArray={speciesNotLandedArray}
           firstUpdate={firstUpdate}
+          id={props.id}
           isOpen={isOpen}
-          name={LogbookMessageTypeEnum.PNO.code.toString()}>
+          name={LogbookMessageTypeEnum.PNO.code.toString()}
+          speciesNotLandedArray={speciesNotLandedArray}>
           <Zone>
             <Fields>
               <TableBody>
                 <Field>
                   <Key>Date de saisie</Key>
-                  <Value>{props.pnoMessage.reportDateTime
-                    ? <>Le {getDateTime(props.pnoMessage.reportDateTime, true)}{' '}
-                      <Gray>(UTC)</Gray></>
-                    : <NoValue>-</NoValue>}</Value>
+                  <Value>
+                    {props.pnoMessage.reportDateTime ? (
+                      <>
+                        Le {getDateTime(props.pnoMessage.reportDateTime, true)} <Gray>(UTC)</Gray>
+                      </>
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
                 </Field>
                 <Field>
                   <Key>Port d&apos;arrivée</Key>
-                  <Value>{props.pnoMessage.message.port && props.pnoMessage.message.portName
-                    ? <>{props.pnoMessage.message.portName} ({props.pnoMessage.message.port})</>
-                    : <NoValue>-</NoValue>}</Value>
+                  <Value>
+                    {props.pnoMessage.message.port && props.pnoMessage.message.portName ? (
+                      <>
+                        {props.pnoMessage.message.portName} ({props.pnoMessage.message.port})
+                      </>
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
                 </Field>
                 <Field>
                   <Key>Raison du préavis</Key>
-                  <Value>{props.pnoMessage.message.purpose
-                    ? <>{LogbookMessagePNOPurposeType[props.pnoMessage.message.purpose]} ({props.pnoMessage.message.purpose})</>
-                    : <NoValue>-</NoValue>}</Value>
+                  <Value>
+                    {props.pnoMessage.message.purpose ? (
+                      <>
+                        {LogbookMessagePNOPurposeType[props.pnoMessage.message.purpose]} (
+                        {props.pnoMessage.message.purpose})
+                      </>
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
                 </Field>
                 <Field>
                   <Key>Poids total</Key>
-                  <Value>{props.totalPNOWeight
-                    ? <>{props.totalPNOWeight} kg</>
-                    : <NoValue>-</NoValue>}</Value>
+                  <Value>{props.totalPNOWeight ? <>{props.totalPNOWeight} kg</> : <NoValue>-</NoValue>}</Value>
                 </Field>
               </TableBody>
             </Fields>
-            <WeightInfo>
-              Tous les poids sont vifs.
-            </WeightInfo>
+            <WeightInfo>Tous les poids sont vifs.</WeightInfo>
             <SpeciesAndWeightChart
-              setChartHeight={setChartHeight}
               compareWithTotalWeight={true}
+              setChartHeight={setChartHeight}
               speciesAndWeightArray={speciesAndWeightArray}
             />
-            {
-              speciesNotLandedArray && speciesNotLandedArray.length
-                ? <SpeciesNotLanded>
-                  Poids des captures non débarquées
-                  ({getPercentOfTotalWeight(totalWeightNotLanded, props.totalFARAndDEPWeight)}%)
-                  {speciesNotLandedArray && speciesNotLandedArray.length
-                    ? speciesNotLandedArray.map(speciesCatch => {
-                      return <IndividualSpeciesNotLanded key={speciesCatch.species}>
+            {speciesNotLandedArray && speciesNotLandedArray.length ? (
+              <SpeciesNotLanded>
+                Poids des captures non débarquées (
+                {getPercentOfTotalWeight(totalWeightNotLanded, props.totalFARAndDEPWeight)}%)
+                {speciesNotLandedArray && speciesNotLandedArray.length ? (
+                  speciesNotLandedArray.map(speciesCatch => <IndividualSpeciesNotLanded key={speciesCatch.species}>
                         {
                           speciesCatch.speciesName
                             ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
                             : speciesCatch.species
                         }
                         {''} - {speciesCatch.weight} kg<br/>
-                      </IndividualSpeciesNotLanded>
-                    })
-                    : <NoValue>-</NoValue>}
-                </SpeciesNotLanded>
-                : null
-            }
+                      </IndividualSpeciesNotLanded>)
+                  })
+                ) : (
+                  <NoValue>-</NoValue>
+                )}
+              </SpeciesNotLanded>
+            ) : null}
           </Zone>
         </LogbookMessageContent>
-    }
-  </Wrapper>
+      )}
+    </Wrapper>
+  )
 }
 
 const WeightInfo = styled.span`
@@ -187,7 +195,7 @@ const Gray = styled.span`
 const TableBody = styled.tbody``
 
 const Fields = styled.table`
-  padding: 5px 5px 5px 5px; 
+  padding: 5px 5px 5px 5px;
   width: inherit;
   display: table;
   margin: 0;
@@ -256,14 +264,11 @@ const LogbookMessageContent = styled.div`
   width: inherit;
   overflow: hidden;
   padding: 0 0 0 20px;
-  border-bottom: 1px solid ${COLORS.gray};  
-  opacity: ${props => props.isOpen ? 1 : 0};
-  height: ${props => props.isOpen
-    ? props.chartHeight + 130 + (props.speciesNotLandedArray?.length ? 80 : 0)
-    : 0
-  }px;
+  border-bottom: 1px solid ${COLORS.gray};
+  opacity: ${props => (props.isOpen ? 1 : 0)};
+  height: ${props => (props.isOpen ? props.chartHeight + 130 + (props.speciesNotLandedArray?.length ? 80 : 0) : 0)}px;
   transition: 0.2s all;
-  margin-bottom: ${props => props.isOpen ? 5 : -1}px;
+  margin-bottom: ${props => (props.isOpen ? 5 : -1)}px;
 `
 
 export default PNOMessageResume

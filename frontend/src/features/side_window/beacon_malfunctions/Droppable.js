@@ -1,20 +1,21 @@
-import React from 'react'
 import { useDroppable } from '@dnd-kit/core'
+import React from 'react'
+
 import { COLORS } from '../../../constants/constants'
 
-const Droppable = ({ id, index, disabled, children }) => {
+function Droppable({ children, disabled, id, index }) {
   const { isOver, setNodeRef } = useDroppable({
-    id: id,
     data: {
-      index: index
+      index,
     },
-    disabled: disabled
+    disabled,
+    id,
   })
   const style = {
     background: isOver ? COLORS.lightGray : COLORS.gainsboro,
-    margin: '10px 5px',
     height: 'calc(100vh - 100px)',
-    transition: '0.5s all'
+    margin: '10px 5px',
+    transition: '0.5s all',
   }
 
   return (

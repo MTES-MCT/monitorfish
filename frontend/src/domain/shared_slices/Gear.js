@@ -1,38 +1,36 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const gearSlice = createSlice({
-  name: 'gear',
   initialState: {
-    /** @type {Gear[]} */
-    gears: [],
     /** @type {Map<String, Gear[]>} */
     categoriesToGears: undefined,
+
+    /** @type {Gear[]} */
+    gears: [],
+
+    /** @type {Map<String, Gear>} */
+    gearsByCode: undefined,
+
     /** @type {Map<String, String>} */
     groupsToCategories: undefined,
-    /** @type {Map<String, Gear>} */
-    gearsByCode: undefined
   },
+  name: 'gear',
   reducers: {
-    setGears (state, action) {
-      state.gears = action.payload
-    },
-    setCategoriesToGears (state, action) {
+    setCategoriesToGears(state, action) {
       state.categoriesToGears = action.payload
     },
-    setGroupsToCategories (state, action) {
+    setGears(state, action) {
+      state.gears = action.payload
+    },
+    setGearsByCode(state, action) {
+      state.gearsByCode = action.payload
+    },
+    setGroupsToCategories(state, action) {
       state.groupsToCategories = action.payload
     },
-    setGearsByCode (state, action) {
-      state.gearsByCode = action.payload
-    }
-  }
+  },
 })
 
-export const {
-  setGears,
-  setCategoriesToGears,
-  setGroupsToCategories,
-  setGearsByCode
-} = gearSlice.actions
+export const { setCategoriesToGears, setGears, setGearsByCode, setGroupsToCategories } = gearSlice.actions
 
 export default gearSlice.reducer

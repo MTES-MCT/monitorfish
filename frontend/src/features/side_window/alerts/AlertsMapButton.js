@@ -1,36 +1,30 @@
 import React from 'react'
-import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
 
-import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes.svg'
 import { COLORS } from '../../../constants/constants'
-import { MapButtonStyle } from '../../commonStyles/MapButton.style'
-import { closeSideWindow, openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { sideWindowMenu } from '../../../domain/entities/sideWindow'
+import { closeSideWindow, openSideWindowTab } from '../../../domain/shared_slices/Global'
+import { MapButtonStyle } from '../../commonStyles/MapButton.style'
+import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes.svg'
 
-const AlertsMapButton = () => {
+function AlertsMapButton() {
   const dispatch = useDispatch()
-  const {
-    regulatoryZoneMetadataPanelIsOpen
-  } = useSelector(state => state.regulatory)
-  const {
-    healthcheckTextWarning,
-    previewFilteredVesselsMode,
-    openedSideWindowTab,
-    sideWindowIsOpen
-  } = useSelector(state => state.global)
+  const { regulatoryZoneMetadataPanelIsOpen } = useSelector(state => state.regulatory)
+  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode, sideWindowIsOpen } = useSelector(
+    state => state.global,
+  )
 
-  return <>
+  return (
     <AlertsButton
-      data-cy={'alerts-button'}
-      title={'Alertes'}
-      isVisible={openedSideWindowTab === sideWindowMenu.ALERTS.code}
-      regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+      data-cy="alerts-button"
       healthcheckTextWarning={healthcheckTextWarning}
       isHidden={previewFilteredVesselsMode}
+      isVisible={openedSideWindowTab === sideWindowMenu.ALERTS.code}
       onClick={() => {
         if (!sideWindowIsOpen || (sideWindowIsOpen && openedSideWindowTab !== sideWindowMenu.ALERTS.code)) {
           dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
+
           return
         }
 
@@ -38,17 +32,19 @@ const AlertsMapButton = () => {
           dispatch(closeSideWindow())
         }
       }}
+      regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+      title="Alertes"
     >
-      <AlertsIcon/>
+      <AlertsIcon />
     </AlertsButton>
-  </>
+  )
 }
 
 const AlertsButton = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${props => props.isVisible ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${props => (props.isVisible ? COLORS.shadowBlue : COLORS.charcoal)};
   padding: 2px 2px 2px 2px;
   top: 120px;
   left: 12px;
@@ -56,8 +52,9 @@ const AlertsButton = styled(MapButtonStyle)`
   height: 40px;
   width: 40px;
 
-  :hover, :focus {
-      background: ${props => props.isVisible ? COLORS.shadowBlue : COLORS.charcoal};
+  :hover,
+  :focus {
+    background: ${props => (props.isVisible ? COLORS.shadowBlue : COLORS.charcoal)};
   }
 `
 

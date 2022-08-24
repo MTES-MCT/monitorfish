@@ -1,24 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../constants/constants'
 import { ReactComponent as CloseIconSVG } from '../icons/Croix_grise.svg'
 
-const FilterTag = ({ text, value, uuid, type, iconElement, removeTagFromFilter }) => {
+function FilterTag({ iconElement, removeTagFromFilter, text, type, uuid, value }) {
   const callRemoveTagFromFilter = () => {
-    const removeObject = { value, uuid, type }
+    const removeObject = { type, uuid, value }
 
     removeTagFromFilter(removeObject)
   }
 
   return (
     <TagWrapper>
-      {
-        iconElement
-          ? <TagIcon>{iconElement}</TagIcon>
-          : null
-      }
-      <TagName data-cy={'vessel-filter-tag'}>{text}</TagName>
-      <CloseIcon data-cy={'vessel-filter-remove-tag'} onClick={callRemoveTagFromFilter}/>
+      {iconElement ? <TagIcon>{iconElement}</TagIcon> : null}
+      <TagName data-cy="vessel-filter-tag">{text}</TagName>
+      <CloseIcon data-cy="vessel-filter-remove-tag" onClick={callRemoveTagFromFilter} />
     </TagWrapper>
   )
 }

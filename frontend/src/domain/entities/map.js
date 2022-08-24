@@ -2,17 +2,17 @@ export const WSG84_PROJECTION = 'EPSG:4326'
 export const OPENLAYERS_PROJECTION = 'EPSG:3857'
 
 export const InteractionTypes = {
+  POLYGON: 'POLYGON',
   SQUARE: 'SQUARE',
-  POLYGON: 'POLYGON'
 }
 
 export const MeasurementTypes = {
+  CIRCLE_RANGE: 'Circle',
   MULTILINE: 'LineString',
-  CIRCLE_RANGE: 'Circle'
 }
 
 export const CoordinatesFormat = {
-  DEGREES_MINUTES_SECONDS: 'DMS',
+  DECIMAL_DEGREES: 'DD',
   DEGREES_MINUTES_DECIMALS: 'DMD',
-  DECIMAL_DEGREES: 'DD'
+  DEGREES_MINUTES_SECONDS: 'DMS',
 }

@@ -3,16 +3,14 @@ import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { setIsConfirmModalOpen, setSaveOrUpdateRegulation } from '../Regulation.slice'
-import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
+import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
+import { setIsConfirmModalOpen, setSaveOrUpdateRegulation } from '../Regulation.slice'
 
-const ConfirmRegulationModal = ({ goBackofficeHome }) => {
+function ConfirmRegulationModal({ goBackofficeHome }) {
   const dispatch = useDispatch()
-  const {
-    isConfirmModalOpen
-  } = useSelector(state => state.regulation)
+  const { isConfirmModalOpen } = useSelector(state => state.regulation)
 
   const save = () => {
     batch(() => {
@@ -21,43 +19,31 @@ const ConfirmRegulationModal = ({ goBackofficeHome }) => {
     })
   }
 
-  return (<RegulationModal
-      $isOpen={isConfirmModalOpen}
-      data-cy='regulation-modal'
-    >
-    <ModalContent>
-      <Body>
-        <ModalTitle>
-          Enregistrer les modifications
-          <CloseIcon
-            data-cy='confirm-modal-close-icon'
-            onClick={() => dispatch(setIsConfirmModalOpen(false))}
-          />
-        </ModalTitle>
-        <Section data-cy='confirm-modal-text' >
-          {'Voulez-vous enregistrer les modifications\napportées à la réglementation ?'}
-        </Section>
-      </Body>
-      <Footer>
-        <FooterButton>
-          <ValidateButton
-            onClick={save}
-            width={'120px'}
-            data-cy='confirm-modal-confirm-button'
-          >
-            Oui
-          </ValidateButton>
-          <CancelButton
-            onClick={goBackofficeHome}
-            width={'120px'}
-            data-cy='confirm-modal-cancel-button'
-          >
-            Non
-          </CancelButton>
-        </FooterButton>
-      </Footer>
-    </ModalContent>
-  </RegulationModal>)
+  return (
+    <RegulationModal $isOpen={isConfirmModalOpen} data-cy="regulation-modal">
+      <ModalContent>
+        <Body>
+          <ModalTitle>
+            Enregistrer les modifications
+            <CloseIcon data-cy="confirm-modal-close-icon" onClick={() => dispatch(setIsConfirmModalOpen(false))} />
+          </ModalTitle>
+          <Section data-cy="confirm-modal-text">
+            {'Voulez-vous enregistrer les modifications\napportées à la réglementation ?'}
+          </Section>
+        </Body>
+        <Footer>
+          <FooterButton>
+            <ValidateButton data-cy="confirm-modal-confirm-button" onClick={save} width="120px">
+              Oui
+            </ValidateButton>
+            <CancelButton data-cy="confirm-modal-cancel-button" onClick={goBackofficeHome} width="120px">
+              Non
+            </CancelButton>
+          </FooterButton>
+        </Footer>
+      </ModalContent>
+    </RegulationModal>
+  )
 }
 
 const Body = styled.div`
@@ -80,7 +66,7 @@ const CloseIcon = styled(CloseIconSVG)`
 `
 
 const RegulationModal = styled.div`
-  display: ${props => props.$isOpen ? 'block' : 'none'};
+  display: ${props => (props.$isOpen ? 'block' : 'none')};
   overflow: none;
   width: 100%;
   height: 100vh;

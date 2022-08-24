@@ -1,15 +1,14 @@
 import React from 'react'
-import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
+import styled from 'styled-components'
 
+import { COLORS } from '../../constants/constants'
 import { openVesselListModal } from '../../domain/shared_slices/Global'
 import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
-
 import { ReactComponent as HidingOtherVesselsSVG } from '../icons/Bouton_masquer_pistes_actif.svg'
 import { ReactComponent as ShowingOtherVesselsSVG } from '../icons/Bouton_masquer_pistes_inactif.svg'
-import { COLORS } from '../../constants/constants'
 
-const FilterParameters = ({ nonFilteredVesselsAreHidden, setNonFilteredVesselsAreHidden }) => {
+function FilterParameters({ nonFilteredVesselsAreHidden, setNonFilteredVesselsAreHidden }) {
   const dispatch = useDispatch()
 
   const handleCreateFilter = () => {
@@ -20,16 +19,14 @@ const FilterParameters = ({ nonFilteredVesselsAreHidden, setNonFilteredVesselsAr
     <Wrapper>
       <CreateFilterWrapper onClick={handleCreateFilter}>
         <CreateFilterButton>+</CreateFilterButton>
-        <ShowLabelText data-cy={'vessel-filters-create-new-filter'} >
-          Créer un nouveau filtre
-        </ShowLabelText>
+        <ShowLabelText data-cy="vessel-filters-create-new-filter">Créer un nouveau filtre</ShowLabelText>
       </CreateFilterWrapper>
       <MapPropertyTrigger
-        inverse
         booleanProperty={nonFilteredVesselsAreHidden}
-        updateBooleanProperty={isChecked => setNonFilteredVesselsAreHidden(isChecked)}
-        text={'les autres navires'}
         Icon={nonFilteredVesselsAreHidden ? ShowingOtherVesselsSVG : HidingOtherVesselsSVG}
+        inverse
+        text="les autres navires"
+        updateBooleanProperty={isChecked => setNonFilteredVesselsAreHidden(isChecked)}
       />
     </Wrapper>
   )

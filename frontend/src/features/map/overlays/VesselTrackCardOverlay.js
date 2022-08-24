@@ -1,40 +1,44 @@
+import Overlay from 'ol/Overlay'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import Overlay from 'ol/Overlay'
-import VesselTrackCard from '../cards/VesselTrackCard'
+
 import { COLORS } from '../../../constants/constants'
 import LayersEnum from '../../../domain/entities/layers'
+import VesselTrackCard from '../cards/VesselTrackCard'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from './position'
 
 const overlayBoxSize = 240
 const margins = {
-  xRight: -397,
-  xMiddle: -175,
   xLeft: 20,
-  yTop: 20,
+  xMiddle: -175,
+  xRight: -397,
+  yBottom: -170,
   yMiddle: -85,
-  yBottom: -170
+  yTop: 20,
 }
 
-const VesselTrackCardOverlay = ({ map, feature }) => {
+function VesselTrackCardOverlay({ feature, map }) {
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
   const [overlayTopLeftMargin, setOverlayTopLeftMargin] = useState([margins.yBottom, margins.xMiddle])
   const [overlayPosition, setOverlayPosition] = useState(OverlayPosition.BOTTOM)
 
-  const overlayCallback = useCallback(ref => {
-    overlayRef.current = ref
-    if (ref) {
-      overlayObjectRef.current = new Overlay({
-        element: ref,
-        autoPan: false,
-        className: 'ol-overlay-container ol-selectable vessel-card'
-      })
-    } else {
-      overlayObjectRef.current = null
-    }
-  }, [overlayRef, overlayObjectRef])
+  const overlayCallback = useCallback(
+    ref => {
+      overlayRef.current = ref
+      if (ref) {
+        overlayObjectRef.current = new Overlay({
+          autoPan: false,
+          className: 'ol-overlay-container ol-selectable vessel-card',
+          element: ref,
+        })
+      } else {
+        overlayObjectRef.current = null
+      }
+    },
+    [overlayRef, overlayObjectRef],
+  )
 
   useEffect(() => {
     if (map) {
@@ -44,7 +48,10 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
 
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
-      if (feature?.getId()?.toString()?.includes(LayersEnum.VESSEL_TRACK.code) && feature?.getId()?.toString()?.includes('position')) {
+      if (
+        feature?.getId()?.toString()?.includes(LayersEnum.VESSEL_TRACK.code) &&
+        feature?.getId()?.toString()?.includes('position')
+      ) {
         setVesselFeatureToShowOnCard(feature)
         overlayRef.current.style.display = 'block'
         overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
@@ -59,7 +66,7 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
     }
   }, [setVesselFeatureToShowOnCard, feature, overlayRef, overlayObjectRef])
 
-  function getNextOverlayPosition () {
+  function getNextOverlayPosition() {
     const [x, y] = feature.getGeometry().getCoordinates()
     const extent = map.getView().calculateExtent()
     const boxSize = map.getView().getResolution() * overlayBoxSize
@@ -69,12 +76,9 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
 
   return (
     <VesselTrackCardOverlayComponent ref={overlayCallback} overlayTopLeftMargin={overlayTopLeftMargin}>
-      {
-        vesselFeatureToShowOnCard
-          ? <VesselTrackCard feature={vesselFeatureToShowOnCard}
-                             overlayPosition={overlayPosition}/>
-          : null
-      }
+      {vesselFeatureToShowOnCard ? (
+        <VesselTrackCard feature={vesselFeatureToShowOnCard} overlayPosition={overlayPosition} />
+      ) : null}
     </VesselTrackCardOverlayComponent>
   )
 }

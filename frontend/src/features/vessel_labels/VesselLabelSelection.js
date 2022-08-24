@@ -1,30 +1,22 @@
 import React from 'react'
 import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
+
 import { vesselLabel as label } from '../../domain/entities/vesselLabelLine'
 
-const VesselLabelSelection = ({ vesselLabel, updateVesselLabel, adminRole }) => {
+function VesselLabelSelection({ adminRole, updateVesselLabel, vesselLabel }) {
   return (
     <>
-      {vesselLabel
-        ? <RadioWrapper>
-          <RadioGroup
-            name="vesselLabelRadio"
-            value={vesselLabel}
-            onChange={updateVesselLabel}
-          >
+      {vesselLabel ? (
+        <RadioWrapper>
+          <RadioGroup name="vesselLabelRadio" onChange={updateVesselLabel} value={vesselLabel}>
             <Radio value={label.VESSEL_NATIONALITY}>Nationalité (nom)</Radio>
             <Radio value={label.VESSEL_NAME}>Nom du navire</Radio>
             <Radio value={label.VESSEL_INTERNAL_REFERENCE_NUMBER}>CFR</Radio>
-            {
-              adminRole
-                ? <Radio value={label.VESSEL_FLEET_SEGMENT}>Segment de flotte</Radio>
-                : null
-            }
+            {adminRole ? <Radio value={label.VESSEL_FLEET_SEGMENT}>Segment de flotte</Radio> : null}
           </RadioGroup>
         </RadioWrapper>
-        : null
-      }
+      ) : null}
     </>
   )
 }

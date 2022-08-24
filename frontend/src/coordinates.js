@@ -1,9 +1,10 @@
 import { transform } from 'ol/proj'
+
 import { CoordinatesFormat, WSG84_PROJECTION } from './domain/entities/map'
 
 const CoordinateLatLon = {
   LATITUDE: 'LATITUDE',
-  LONGITUDE: 'LONGITUDE'
+  LONGITUDE: 'LONGITUDE',
 }
 
 /**
@@ -36,11 +37,13 @@ export const getCoordinates = (coordinates, projection, coordinatesFormat, forPr
  * @param {boolean} forPrint - If it's for print or not
  * @returns {string[]} coordinates - The [latitude, longitude] coordinates in DD format
  */
-function getDDCoordinates (transformedCoordinates, forPrint) {
-  if (!Array.isArray(transformedCoordinates) ||
+function getDDCoordinates(transformedCoordinates, forPrint) {
+  if (
+    !Array.isArray(transformedCoordinates) ||
     transformedCoordinates.length !== 2 ||
     !transformedCoordinates[0] ||
-    !transformedCoordinates[1]) {
+    !transformedCoordinates[1]
+  ) {
     return []
   }
 
@@ -53,10 +56,7 @@ function getDDCoordinates (transformedCoordinates, forPrint) {
     const decimals = degreeSplit[1] ? degreeSplit[1].substring(0, precision) : '000000'
     longitude = `${negative ? '-' : ''}${getPaddedDegrees(longitude, CoordinateLatLon.LONGITUDE)}.${decimals}`
 
-    return [
-      `${transformedCoordinates[1].toFixed(precision)}°`,
-      `${longitude}°`
-    ]
+    return [`${transformedCoordinates[1].toFixed(precision)}°`, `${longitude}°`]
   }
 }
 
@@ -65,7 +65,7 @@ function getDDCoordinates (transformedCoordinates, forPrint) {
  * @param {number[]} transformedCoordinates - Coordinates ([longitude, latitude]) in decimal format.
  * @returns {string[]} coordinates - The [latitude, longitude] coordinates in DMD format
  */
-function getDMDCoordinates (transformedCoordinates) {
+function getDMDCoordinates(transformedCoordinates) {
   const latitudeDMD = getDMDFromDecimal(transformedCoordinates[1], CoordinateLatLon.LATITUDE)
   const longitudeDMD = getDMDFromDecimal(transformedCoordinates[0], CoordinateLatLon.LONGITUDE)
 
@@ -77,21 +77,21 @@ function getDMDCoordinates (transformedCoordinates) {
  * @param {number[]} transformedCoordinates - Coordinates ([longitude, latitude]) in decimal format.
  * @returns {string[]} coordinates - The [latitude, longitude] coordinates in DMS format
  */
-function getDMSCoordinates (transformedCoordinates) {
+function getDMSCoordinates(transformedCoordinates) {
   const latitudeDMS = getDMSFromDecimal(transformedCoordinates[1], CoordinateLatLon.LATITUDE)
   const longitudeDMS = getDMSFromDecimal(transformedCoordinates[0], CoordinateLatLon.LONGITUDE)
 
   return [latitudeDMS, longitudeDMS]
 }
 
-function getDMDFromDecimal (dd, latitudeOrLongitude) {
+function getDMDFromDecimal(dd, latitudeOrLongitude) {
   const hemisphere = getHemisphere(dd, latitudeOrLongitude)
 
   const absDD = Math.abs(dd)
   const degrees = truncate(absDD)
   const minutes = truncate((absDD - degrees) * 60)
   let decimal = (absDD - degrees) * 60
-  decimal = decimal - Math.floor(decimal)
+  decimal -= Math.floor(decimal)
   decimal = Math.round(decimal * 1000)
 
   const formattedDegrees = getPaddedDegrees(degrees, latitudeOrLongitude)
@@ -101,13 +101,13 @@ function getDMDFromDecimal (dd, latitudeOrLongitude) {
   return `${formattedDegrees}° ${formattedMinutes}.${formattedDecimal}′ ${hemisphere}`
 }
 
-function getDMSFromDecimal (dd, latitudeOrLongitude) {
+function getDMSFromDecimal(dd, latitudeOrLongitude) {
   const hemisphere = getHemisphere(dd, latitudeOrLongitude)
 
   const absDD = Math.abs(dd)
   const degrees = truncate(absDD)
   const minutes = truncate((absDD - degrees) * 60)
-  const seconds = (Math.round(((((absDD - degrees) * 60 - minutes) * 60) + Number.EPSILON) * 100) / 100).toFixed(0)
+  const seconds = (Math.round((((absDD - degrees) * 60 - minutes) * 60 + Number.EPSILON) * 100) / 100).toFixed(0)
 
   const formattedDegrees = getPaddedDegrees(degrees, latitudeOrLongitude)
   const formattedMinutes = minutes.toString().padStart(2, '0')
@@ -117,18 +117,16 @@ function getDMSFromDecimal (dd, latitudeOrLongitude) {
 }
 
 const getHemisphere = (dd, latitudeOrLongitude) => {
-  if (dd === 0) return ''
+  if (dd === 0) {
+    return ''
+  }
 
   switch (latitudeOrLongitude) {
     case CoordinateLatLon.LATITUDE: {
-      return dd < 0
-        ? 'S'
-        : 'N'
+      return dd < 0 ? 'S' : 'N'
     }
     case CoordinateLatLon.LONGITUDE: {
-      return dd < 0
-        ? 'W'
-        : 'E'
+      return dd < 0 ? 'W' : 'E'
     }
   }
 }
@@ -144,10 +142,8 @@ const getPaddedDegrees = (degrees, latitudeOrLongitude) => {
   }
 }
 
-function truncate (n) {
-  return n > 0
-    ? Math.floor(n)
-    : Math.ceil(n)
+function truncate(n) {
+  return n > 0 ? Math.floor(n) : Math.ceil(n)
 }
 
 /**
@@ -159,10 +155,15 @@ function truncate (n) {
 export const coordinatesAreDistinct = (nextCoordinates, coordinates) => {
   const roundingDifference = 0.000002
 
-  return nextCoordinates?.length && coordinates.length &&
-    !isNaN(coordinates[0]) && !isNaN(coordinates[1]) &&
-    !isNaN(nextCoordinates[0]) && !isNaN(nextCoordinates[1]) &&
+  return (
+    nextCoordinates?.length &&
+    coordinates.length &&
+    !isNaN(coordinates[0]) &&
+    !isNaN(coordinates[1]) &&
+    !isNaN(nextCoordinates[0]) &&
+    !isNaN(nextCoordinates[1]) &&
     (coordinates[0] !== nextCoordinates[0] || coordinates[1] !== nextCoordinates[1]) &&
     (Math.abs(nextCoordinates[0] - coordinates[0]) > roundingDifference ||
       Math.abs(nextCoordinates[1] - coordinates[1]) > roundingDifference)
+  )
 }

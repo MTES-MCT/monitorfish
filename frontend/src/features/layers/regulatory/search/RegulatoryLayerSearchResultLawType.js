@@ -4,20 +4,19 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import RegulatoryLayerSearchResultTopic from './RegulatoryLayerSearchResultTopic'
 
-const RegulatoryLayerSearchResultLawType = ({ regulatoryLayerLawType, topic }) => {
+function RegulatoryLayerSearchResultLawType({ regulatoryLayerLawType, topic }) {
   return (
     <Wrapper>
-      <LayerLawType >
-        {regulatoryLayerLawType}
-      </LayerLawType>
-      {Object.keys(topic).length > 0 && Object.entries(topic).map(([regulatoryLayerTopic, topicDetails]) => {
-        return <RegulatoryLayerSearchResultTopic
-          key={regulatoryLayerTopic}
-          regulatoryLayerLawType={regulatoryLayerLawType}
-          regulatoryLayerTopic={regulatoryLayerTopic}
-          topicDetails={topicDetails}
-        />
-      })}
+      <LayerLawType>{regulatoryLayerLawType}</LayerLawType>
+      {Object.keys(topic).length > 0 &&
+        Object.entries(topic).map(([regulatoryLayerTopic, topicDetails]) => (
+          <RegulatoryLayerSearchResultTopic
+            key={regulatoryLayerTopic}
+            regulatoryLayerLawType={regulatoryLayerLawType}
+            regulatoryLayerTopic={regulatoryLayerTopic}
+            topicDetails={topicDetails}
+          />
+        ))}
     </Wrapper>
   )
 }

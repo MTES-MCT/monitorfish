@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
+import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
 import SpeciesAndWeightChart from './SpeciesAndWeightChart'
-import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
 
-const FARMessageResume = props => {
+function FARMessageResume(props) {
   const [isOpen, setIsOpen] = useState(false)
   const firstUpdate = useRef(true)
   const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState([])
@@ -20,9 +21,9 @@ const FARMessageResume = props => {
         .sort((a, b) => {
           if (a.weight < b.weight) {
             return 1
-          } else {
+          } 
             return -1
-          }
+          
         })
       setSpeciesAndWeightArray(array)
     }
@@ -39,9 +40,9 @@ const FARMessageResume = props => {
               return -1
             }
           })
-        } else {
+        } 
           return []
-        }
+        
       })
 
       setSpeciesPresentationAndWeightArray(array)
@@ -56,8 +57,12 @@ const FARMessageResume = props => {
 
   const getFARMessageResumeTitleText = () =>
     props.totalFARWeight > 0
-      ? `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${props.totalFARWeight} kg pêchés au total`
-      : `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - aucune capture ${props.allFARMessagesAreNotAcknowledged ? 'acquittée' : ''}`
+      ? `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - ${
+          props.totalFARWeight
+        } kg pêchés au total`
+      : `${props.numberOfMessages} message${props.numberOfMessages > 1 ? 's' : ''} - aucune capture ${
+          props.allFARMessagesAreNotAcknowledged ? 'acquittée' : ''
+        }`
 
   useEffect(() => {
     if (chartHeight !== 0 && initialChartHeight === 0) {
@@ -77,44 +82,43 @@ const FARMessageResume = props => {
     setChartHeight(initialChartHeight)
   }
 
-  return <Wrapper>
-    <LogbookMessageResumeHeader
+  return (
+    <Wrapper>
+      <LogbookMessageResumeHeader
+        hasNoMessage={props.hasNoMessage}
       isNotAcknowledged={props.allFARMessagesAreNotAcknowledged}
-      onHoverText={props.hasNoMessage ? null : getFARMessageResumeTitleText()}
-      title={props.hasNoMessage ? null : <>{getFARMessageResumeTitleText()}</>}
-      hasNoMessage={props.hasNoMessage}
-      noContent={!props.hasNoMessage && !props.totalFARWeight}
-      showLogbookMessages={props.showLogbookMessages}
+      isOpen={isOpen}
       messageType={LogbookMessageTypeEnum.FAR.code.toString()}
+      noContent={!props.hasNoMessage && !props.totalFARWeight}
+      onHoverText={props.hasNoMessage ? null : getFARMessageResumeTitleText()}
       setIsOpen={setIsOpen}
-      isOpen={isOpen}/>
-    {
-      props.hasNoMessage
-        ? null
-        : <LogbookMessageContent
-          id={props.id}
+      showLogbookMessages={props.showLogbookMessages}
+      title={props.hasNoMessage ? null : <>{getFARMessageResumeTitleText()}</>}/>
+      />
+      {props.hasNoMessage ? null : (
+        <LogbookMessageContent
           chartHeight={chartHeight}
-          species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}
           firstUpdate={firstUpdate}
+          id={props.id}
           isOpen={isOpen}
-          name={LogbookMessageTypeEnum.FAR.code.toString()}>
+          name={LogbookMessageTypeEnum.FAR.code.toString()}
+          species={(speciesAndWeightArray && speciesAndWeightArray.length > 0) ? speciesAndWeightArray.length : 1}>
           <Zone>
-            <WeightInfo>
-              Tous les poids sont vifs.
-            </WeightInfo>
+            <WeightInfo>Tous les poids sont vifs.</WeightInfo>
             <SpeciesAndWeightChart
-              setChartHeight={setChartHeight}
-              resetChartHeight={resetChartHeight}
               compareWithTotalWeight={true}
+              increaseChartTotalHeight={increaseChartTotalHeight}
+              resetChartHeight={resetChartHeight}
+              resetInitialChartHeight={resetInitialChartHeight}
+              setChartHeight={setChartHeight}
               speciesAndWeightArray={speciesAndWeightArray}
               speciesPresentationAndWeightArray={speciesPresentationAndWeightArray}
-              increaseChartTotalHeight={increaseChartTotalHeight}
-              resetInitialChartHeight={resetInitialChartHeight}
             />
           </Zone>
         </LogbookMessageContent>
-    }
-  </Wrapper>
+      )}
+    </Wrapper>
+  )
 }
 
 const WeightInfo = styled.span`
@@ -140,13 +144,13 @@ const Wrapper = styled.li`
 const LogbookMessageContent = styled.div`
   background: ${COLORS.background};
   width: inherit;
-  height: ${props => props.isOpen && props.chartHeight ? props.chartHeight + 50 : 0}px;
-  opacity: ${props => props.isOpen ? 1 : 0};
+  height: ${props => (props.isOpen && props.chartHeight ? props.chartHeight + 50 : 0)}px;
+  opacity: ${props => (props.isOpen ? 1 : 0)};
   overflow: hidden;
   padding-left: 20px;
   border-bottom: 1px solid ${COLORS.gray};
   transition: all 0.2s;
-  margin-bottom: ${props => props.isOpen ? 5 : -1}px;
+  margin-bottom: ${props => (props.isOpen ? 5 : -1)}px;
 `
 
 export default FARMessageResume

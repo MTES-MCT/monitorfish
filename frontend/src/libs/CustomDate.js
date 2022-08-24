@@ -9,7 +9,7 @@ export class CustomDate {
   /**
    * @param {Date=} date
    */
-  constructor (date) {
+  constructor(date) {
     this.date = dayjs(date).utc(true)
   }
 
@@ -17,7 +17,7 @@ export class CustomDate {
    * @param {Date} date
    * @returns {Date}
    */
-  static fixOffset (date) {
+  static fixOffset(date) {
     const timezone = dayjs.tz.guess()
     const utcOffset = dayjs().utcOffset()
 
@@ -27,7 +27,7 @@ export class CustomDate {
   /**
    * @return {Date}
    */
-  toEndOfDay () {
+  toEndOfDay() {
     // TODO For some reason the API can't handle miliseconds in date.
     return this.date.endOf('day').millisecond(0).toDate()
   }
@@ -35,7 +35,7 @@ export class CustomDate {
   /**
    * @return {Date}
    */
-  toStartOfDay () {
+  toStartOfDay() {
     return this.date.startOf('day').toDate()
   }
 }

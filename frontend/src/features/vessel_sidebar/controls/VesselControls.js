@@ -1,34 +1,32 @@
 import React, { useEffect, useMemo } from 'react'
+import { FingerprintSpinner } from 'react-epic-spinners'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import LastControlZone from './LastControlZone'
-import ControlsResumeZone from './ControlsResumeZone'
-import YearsToControlList from './YearsToControlList'
 import { getYearsToControl, lastControlByType } from '../../../domain/entities/controls'
-import getVesselControls from '../../../domain/use_cases/vessel/getVesselControls'
 import {
   resetNextControlResumeAndControls,
   setControlFromDate,
-  setControlResumeAndControls
+  setControlResumeAndControls,
 } from '../../../domain/shared_slices/Control'
-import { useDispatch, useSelector } from 'react-redux'
-import { FingerprintSpinner } from 'react-epic-spinners'
+import getVesselControls from '../../../domain/use_cases/vessel/getVesselControls'
+import ControlsResumeZone from './ControlsResumeZone'
+import LastControlZone from './LastControlZone'
+import YearsToControlList from './YearsToControlList'
 
-const VesselControls = () => {
+function VesselControls() {
   const dispatch = useDispatch()
 
-  const {
-    selectedVessel
-  } = useSelector(state => state.vessel)
+  const { selectedVessel } = useSelector(state => state.vessel)
 
   const {
     /** @type {ControlResume} controlResumeAndControls */
     controlResumeAndControls,
     /** @type {ControlResume} nextControlResumeAndControls */
-    nextControlResumeAndControls,
     controlsFromDate,
-    loadingControls
+    loadingControls,
+    nextControlResumeAndControls,
   } = useSelector(state => state.controls)
 
   /** @type {Object.<string, VesselControl[]>} yearsToControls */
@@ -37,6 +35,7 @@ const VesselControls = () => {
     if (controlResumeAndControls?.controls) {
       nextYearsToControls = getYearsToControl(controlsFromDate, controlResumeAndControls.controls)
     }
+
     return nextYearsToControls
   }, [controlResumeAndControls, controlsFromDate])
 
@@ -46,6 +45,7 @@ const VesselControls = () => {
     if (controlResumeAndControls?.controls) {
       lastControlListByType = lastControlByType(yearsToControls)
     }
+
     return lastControlListByType
   }, [yearsToControls])
 
@@ -62,37 +62,37 @@ const VesselControls = () => {
     }
   }
 
-  function seeMore () {
+  function seeMore() {
     const nextDate = new Date(controlsFromDate.getTime())
     nextDate.setMonth(nextDate.getMonth() - 12)
 
     dispatch(setControlFromDate(nextDate))
   }
 
-  return <>
-    {nextControlResumeAndControls && <>
-      <UpdateControls/>
-      <UpdateControlsButton
-        onClick={() => updateControlResumeAndControls(nextControlResumeAndControls)}>
-        Nouveaux contrôles
-      </UpdateControlsButton>
-    </>
-    }
-    {
-      !loadingControls
-        ? <Body data-cy={'vessel-controls'}>
-          <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls}/>
-          <LastControlZone lastControlList={lastControlList} controlsFromDate={controlsFromDate}/>
-          <YearsToControlList yearsToControls={yearsToControls} controlsFromDate={controlsFromDate}/>
+  return (
+    <>
+      {nextControlResumeAndControls && (
+        <>
+          <UpdateControls />
+          <UpdateControlsButton onClick={() => updateControlResumeAndControls(nextControlResumeAndControls)}>
+            Nouveaux contrôles
+          </UpdateControlsButton>
+        </>
+      )}
+      {!loadingControls ? (
+        <Body data-cy="vessel-controls">
+          <ControlsResumeZone controlsFromDate={controlsFromDate} resume={controlResumeAndControls} />
+          <LastControlZone controlsFromDate={controlsFromDate} lastControlList={lastControlList} />
+          <YearsToControlList controlsFromDate={controlsFromDate} yearsToControls={yearsToControls} />
           <SeeMoreBackground>
-            <SeeMore onClick={seeMore}>
-              Afficher plus de contrôles
-            </SeeMore>
+            <SeeMore onClick={seeMore}>Afficher plus de contrôles</SeeMore>
           </SeeMoreBackground>
         </Body>
-        : <FingerprintSpinner color={COLORS.charcoal} className={'radar'} size={100}/>
-    }
-  </>
+      ) : (
+        <FingerprintSpinner className="radar" color={COLORS.charcoal} size={100} />
+      )}
+    </>
+  )
 }
 
 const SeeMoreBackground = styled.div`
@@ -122,7 +122,7 @@ const UpdateControls = styled.div`
   width: -moz-available;
   width: -webkit-fill-available;
   height: 55px;
-  box-shadow: -10px 5px 7px 0px rgba(81,81,81, 0.2);
+  box-shadow: -10px 5px 7px 0px rgba(81, 81, 81, 0.2);
   z-index: 9;
 `
 
@@ -138,32 +138,32 @@ const UpdateControlsButton = styled.div`
   cursor: pointer;
   animation: pulse 2s infinite;
   z-index: 10;
-  
+
   @-webkit-keyframes pulse {
-  0% {
-    -webkit-box-shadow: 0 0 0 0 rgba(81,81,81, 0.4);
+    0% {
+      -webkit-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0.4);
+    }
+    70% {
+      -webkit-box-shadow: 0 0 0 10px rgba(81, 81, 81, 0);
+    }
+    100% {
+      -webkit-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
+    }
   }
-  70% {
-      -webkit-box-shadow: 0 0 0 10px rgba(81,81,81, 0);
+  @keyframes pulse {
+    0% {
+      -moz-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0.4);
+      box-shadow: 0 0 0 0 rgba(81, 81, 81, 0.4);
+    }
+    70% {
+      -moz-box-shadow: 0 0 0 10px rgba(81, 81, 81, 0);
+      box-shadow: 0 0 0 10px rgba(81, 81, 81, 0);
+    }
+    100% {
+      -moz-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
+      box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
+    }
   }
-  100% {
-      -webkit-box-shadow: 0 0 0 0 rgba(81,81,81, 0);
-  }
-}
-@keyframes pulse {
-  0% {
-    -moz-box-shadow: 0 0 0 0 rgba(81,81,81, 0.4);
-    box-shadow: 0 0 0 0 rgba(81,81,81, 0.4);
-  }
-  70% {
-      -moz-box-shadow: 0 0 0 10px rgba(81,81,81, 0);
-      box-shadow: 0 0 0 10px rgba(81,81,81, 0);
-  }
-  100% {
-      -moz-box-shadow: 0 0 0 0 rgba(81,81,81, 0);
-      box-shadow: 0 0 0 0 rgba(81,81,81, 0);
-  }
-}
 `
 
 const Body = styled.div`

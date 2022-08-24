@@ -1,15 +1,13 @@
 import React from 'react'
-import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-import { COLORS } from '../../../../constants/constants'
-import { ReactComponent as AlertSVG } from '../../../icons/Picto_alerte.svg'
-import { INFINITE } from '../../../backoffice/constants'
+import styled from 'styled-components'
 
-const OutdatedRegulatoryReferences = () => {
-  const {
-    hasOneRegulatoryReference,
-    referenceIsOutdated
-  } = useSelector(state => {
+import { COLORS } from '../../../../constants/constants'
+import { INFINITE } from '../../../backoffice/constants'
+import { ReactComponent as AlertSVG } from '../../../icons/Picto_alerte.svg'
+
+function OutdatedRegulatoryReferences() {
+  const { hasOneRegulatoryReference, referenceIsOutdated } = useSelector(state => {
     const today = new Date()
     const hasOneRegulatoryReference = state.regulatory.regulatoryZoneMetadata?.regulatoryReferences?.length === 1
     let referenceIsOutdated = false
@@ -24,23 +22,20 @@ const OutdatedRegulatoryReferences = () => {
 
     return {
       hasOneRegulatoryReference,
-      referenceIsOutdated
+      referenceIsOutdated,
     }
   })
 
-  return <>
-    {
-      referenceIsOutdated && <Warning>
-        <WarningIcon/>
-        {
-          hasOneRegulatoryReference
-            ? 'La'
-            : 'Une'
-        }{' '}
-        réglementation de cette zone n&apos;est plus valide.
-      </Warning>
-    }
+  return (
+    <>
+      {referenceIsOutdated && (
+        <Warning>
+          <WarningIcon />
+          {hasOneRegulatoryReference ? 'La' : 'Une'} réglementation de cette zone n&apos;est plus valide.
+        </Warning>
+      )}
     </>
+  )
 }
 
 const Warning = styled.div`

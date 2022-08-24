@@ -1,9 +1,9 @@
 import { CREATED, OK } from './api'
 
-export const FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les segments de flotte'
-export const UPDATE_FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu modifier le segment de flotte'
-export const CREATE_FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu créer le segment de flotte'
-export const DELETE_FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu supprimer le segment de flotte'
+export const FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les segments de flotte"
+export const UPDATE_FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu modifier le segment de flotte"
+export const CREATE_FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu créer le segment de flotte"
+export const DELETE_FLEET_SEGMENT_ERROR_MESSAGE = "Nous n'avons pas pu supprimer le segment de flotte"
 
 /**
  * Get Fleet segments
@@ -11,18 +11,18 @@ export const DELETE_FLEET_SEGMENT_ERROR_MESSAGE = 'Nous n\'avons pas pu supprime
  * @returns {Promise<FleetSegment[]>} The fleet segments
  * @throws {Error}
  */
-function getAllFleetSegmentFromAPI () {
+function getAllFleetSegmentFromAPI() {
   return fetch('/bff/v1/fleet_segments')
     .then(response => {
       if (response.status === OK) {
         return response.json()
-      } else {
-        response.text().then(text => {
-          console.error(text)
-        })
-        throw Error(FLEET_SEGMENT_ERROR_MESSAGE)
       }
-    }).catch(error => {
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(FLEET_SEGMENT_ERROR_MESSAGE)
+    })
+    .catch(error => {
       console.error(error)
       throw Error(FLEET_SEGMENT_ERROR_MESSAGE)
     })
@@ -36,27 +36,28 @@ function getAllFleetSegmentFromAPI () {
  * @returns {Promise<FleetSegment>} The updated fleet segment
  * @throws {Error}
  */
-function updateFleetSegmentFromAPI (segment, updatedFields) {
+function updateFleetSegmentFromAPI(segment, updatedFields) {
   return fetch(`/bff/v1/fleet_segments/${segment}`, {
-    method: 'PUT',
+    body: JSON.stringify(updatedFields),
     headers: {
       Accept: 'application/json, text/plain',
-      'Content-Type': 'application/json;charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8',
     },
-    body: JSON.stringify(updatedFields)
-  }).then(response => {
-    if (response.status === OK) {
-      return response.json()
-    } else {
+    method: 'PUT',
+  })
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      }
       response.text().then(text => {
         console.error(text)
       })
       throw Error(UPDATE_FLEET_SEGMENT_ERROR_MESSAGE)
-    }
-  }).catch(error => {
-    console.error(error)
-    throw Error(UPDATE_FLEET_SEGMENT_ERROR_MESSAGE)
-  })
+    })
+    .catch(error => {
+      console.error(error)
+      throw Error(UPDATE_FLEET_SEGMENT_ERROR_MESSAGE)
+    })
 }
 
 /**
@@ -65,17 +66,19 @@ function updateFleetSegmentFromAPI (segment, updatedFields) {
  * @param {string} segment - The segment
  * @throws {Error}
  */
-function deleteFleetSegmentFromAPI (segment) {
+function deleteFleetSegmentFromAPI(segment) {
   return fetch(`/bff/v1/fleet_segments/${segment}`, {
-    method: 'DELETE'
-  }).then(response => {
-    if (response.status !== OK) {
-      throw Error(DELETE_FLEET_SEGMENT_ERROR_MESSAGE)
-    }
-  }).catch(error => {
-    console.error(error)
-    throw Error(DELETE_FLEET_SEGMENT_ERROR_MESSAGE)
+    method: 'DELETE',
   })
+    .then(response => {
+      if (response.status !== OK) {
+        throw Error(DELETE_FLEET_SEGMENT_ERROR_MESSAGE)
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      throw Error(DELETE_FLEET_SEGMENT_ERROR_MESSAGE)
+    })
 }
 
 /**
@@ -85,27 +88,24 @@ function deleteFleetSegmentFromAPI (segment) {
  * @returns {Promise<FleetSegment>} The updated fleet segment
  * @throws {Error}
  */
-function createFleetSegmentFromAPI (segmentFields) {
+function createFleetSegmentFromAPI(segmentFields) {
   return fetch('/bff/v1/fleet_segments', {
-    method: 'POST',
+    body: JSON.stringify(segmentFields),
     headers: {
       Accept: 'application/json, text/plain',
-      'Content-Type': 'application/json;charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8',
     },
-    body: JSON.stringify(segmentFields)
-  }).then(response => {
-    if (response.status !== CREATED) {
-      throw Error(CREATE_FLEET_SEGMENT_ERROR_MESSAGE)
-    }
-  }).catch(error => {
-    console.error(error)
-    throw Error(CREATE_FLEET_SEGMENT_ERROR_MESSAGE)
+    method: 'POST',
   })
+    .then(response => {
+      if (response.status !== CREATED) {
+        throw Error(CREATE_FLEET_SEGMENT_ERROR_MESSAGE)
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      throw Error(CREATE_FLEET_SEGMENT_ERROR_MESSAGE)
+    })
 }
 
-export {
-  getAllFleetSegmentFromAPI,
-  updateFleetSegmentFromAPI,
-  deleteFleetSegmentFromAPI,
-  createFleetSegmentFromAPI
-}
+export { getAllFleetSegmentFromAPI, updateFleetSegmentFromAPI, deleteFleetSegmentFromAPI, createFleetSegmentFromAPI }

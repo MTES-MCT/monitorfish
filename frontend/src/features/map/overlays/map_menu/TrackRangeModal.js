@@ -1,8 +1,9 @@
-import styled from 'styled-components'
-import { COLORS } from '../../../../constants/constants'
 import { Modal } from 'rsuite'
-import DateRange from '../../../vessel_sidebar/actions/track_request/DateRange'
+import styled from 'styled-components'
+
+import { COLORS } from '../../../../constants/constants'
 import StyledModalHeader from '../../../commonComponents/StyledModalHeader'
+import DateRange from '../../../vessel_sidebar/actions/track_request/DateRange'
 
 /**
  * @typedef {object} TrackRangeModalProps
@@ -15,20 +16,12 @@ import StyledModalHeader from '../../../commonComponents/StyledModalHeader'
 /**
  * @param {TrackRangeModalProps} props
  */
-export const TrackRangeModal = ({ isOpen, onChange, onClose, selectedDates }) => {
+export function TrackRangeModal({ isOpen, onChange, onClose, selectedDates }) {
   return (
-    <ModalWithCustomHeight
-      backdrop
-      onClose={onClose}
-      open={isOpen}
-      size={'xs'}
-      style={{ marginTop: 100 }}
-    >
+    <ModalWithCustomHeight backdrop onClose={onClose} open={isOpen} size="xs" style={{ marginTop: 100 }}>
       <StyledModalHeader>
         <Modal.Title>
-          <Title>
-            Afficher la piste VMS sur une période précise
-          </Title>
+          <Title>Afficher la piste VMS sur une période précise</Title>
         </Modal.Title>
       </StyledModalHeader>
       <Body>
@@ -36,7 +29,7 @@ export const TrackRangeModal = ({ isOpen, onChange, onClose, selectedDates }) =>
           defaultValue={selectedDates}
           isDisabledAfterToday
           onChange={onChange}
-          placeholder={'Choisir une période précise'}
+          placeholder="Choisir une période précise"
           width={265}
         />
       </Body>

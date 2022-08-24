@@ -1,16 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../constants/constants'
 
-const TrackTypeCard = props => {
+function TrackTypeCard(props) {
   return (
     <>
       <Body>
-        <Square color={props.trackType.color}/>
+        <Square color={props.trackType.color} />
         <Text>{props.trackType.description}</Text>
       </Body>
       <TrianglePointer>
-        <TriangleShadow isBig={props.isBig}/>
+        <TriangleShadow isBig={props.isBig} />
       </TrianglePointer>
     </>
   )
@@ -25,7 +26,7 @@ const Text = styled.div`
 
 const Square = styled.div`
   margin: 5px 7px 5px 7px;
-  background: ${props => props.color ? props.color : 'white'};
+  background: ${props => (props.color ? props.color : 'white')};
   width: 14px;
   height: 14px;
   display: inline-block;
@@ -35,7 +36,7 @@ const Square = styled.div`
 const TrianglePointer = styled.div`
   margin-left: auto;
   margin-right: auto;
-  height: auto; 
+  height: auto;
   width: auto;
 `
 
@@ -46,7 +47,7 @@ const TriangleShadow = styled.div`
   border-style: solid;
   border-width: 11px 6px 0 6px;
   border-color: ${COLORS.gainsboro} transparent transparent transparent;
-  margin-left: ${props => props.isBig ? '165px' : '95px'};
+  margin-left: ${props => (props.isBig ? '165px' : '95px')};
   margin-top: -1px;
   clear: top;
 `

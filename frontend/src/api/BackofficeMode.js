@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+
 import { setAdminRole, setInBackofficeMode } from '../domain/shared_slices/Global'
 
-const BackofficeMode = ({ inBackofficeMode, adminRole }) => {
+function BackofficeMode({ adminRole, inBackofficeMode }) {
   const dispatch = useDispatch()
 
   useEffect(() => {

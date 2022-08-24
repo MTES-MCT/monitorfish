@@ -1,15 +1,16 @@
-import CoordinateInput from 'react-coordinate-input'
 import React, { useCallback, useMemo } from 'react'
+import CoordinateInput from 'react-coordinate-input'
 import styled from 'styled-components'
+
 import { COLORS } from '../../constants/constants'
 
-const DMSCoordinatesInput = props => {
+function DMSCoordinatesInput(props) {
   const {
-    getCoordinatesFromFormat,
-    /** @type {string} coordinates - In the [latitude, longitude] format */
     coordinates,
+    /** @type {string} coordinates - In the [latitude, longitude] format */
     coordinatesFormat,
-    updateCoordinates
+    getCoordinatesFromFormat,
+    updateCoordinates,
   } = props
 
   /** Convert the coordinates to the [latitude, longitude] string format */
@@ -21,19 +22,24 @@ const DMSCoordinatesInput = props => {
     return getCoordinatesFromFormat(coordinates, coordinatesFormat)
   }, [coordinates, coordinatesFormat])
 
-  const update = useCallback(nextCoordinates => {
-    updateCoordinates(nextCoordinates, coordinates)
-  }, [coordinates])
+  const update = useCallback(
+    nextCoordinates => {
+      updateCoordinates(nextCoordinates, coordinates)
+    },
+    [coordinates],
+  )
 
-  return <Body>
-    <CoordinateInput
-      data-cy={'dms-coordinates-input'}
-      onChange={(_, { dd }) => update(dd)}
-      ddPrecision={6}
-      value={showedValue}
-    />
-    <CoordinatesType>(DMS)</CoordinatesType>
-  </Body>
+  return (
+    <Body>
+      <CoordinateInput
+        data-cy="dms-coordinates-input"
+        ddPrecision={6}
+        onChange={(_, { dd }) => update(dd)}
+        value={showedValue}
+      />
+      <CoordinatesType>(DMS)</CoordinatesType>
+    </Body>
+  )
 }
 
 const CoordinatesType = styled.span`

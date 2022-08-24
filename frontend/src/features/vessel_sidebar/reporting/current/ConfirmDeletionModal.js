@@ -1,48 +1,36 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
+import { Modal } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
-import { Modal } from 'rsuite'
 import deleteReporting from '../../../../domain/use_cases/reporting/deleteReporting'
 import StyledModalHeader from '../../../commonComponents/StyledModalHeader'
+import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
 
-const ConfirmDeletionModal = ({ modalIsOpenForId, closeModal }) => {
+function ConfirmDeletionModal({ closeModal, modalIsOpenForId }) {
   const dispatch = useDispatch()
 
   return (
-    <ModalWithCustomHeight
-      size={'xs'}
-      backdrop
-      open={modalIsOpenForId}
-      style={{ marginTop: 100 }}
-      onClose={closeModal}
-    >
+    <ModalWithCustomHeight backdrop onClose={closeModal} open={modalIsOpenForId} size="xs" style={{ marginTop: 100 }}>
       <StyledModalHeader>
         <Modal.Title>
-          <Title>
-            Voulez-vous supprimer le signalement ?
-          </Title>
+          <Title>Voulez-vous supprimer le signalement ?</Title>
         </Modal.Title>
       </StyledModalHeader>
       <Body>
         <FooterButton>
           <ValidateButton
+            data-cy="confirm-reporting-deletion-button"
             onClick={() => {
               dispatch(deleteReporting(modalIsOpenForId))
               closeModal()
             }}
-            width={'120px'}
-            data-cy='confirm-reporting-deletion-button'
+            width="120px"
           >
             Oui
           </ValidateButton>
-          <CancelButton
-            onClick={closeModal}
-            width={'120px'}
-            data-cy='close-reporting-deletion-modal'
-          >
+          <CancelButton data-cy="close-reporting-deletion-modal" onClick={closeModal} width="120px">
             Non
           </CancelButton>
         </FooterButton>

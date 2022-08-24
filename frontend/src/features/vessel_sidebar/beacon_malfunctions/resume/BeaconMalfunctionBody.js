@@ -2,61 +2,70 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { getDateTime } from '../../../../utils'
 import {
   BeaconMalfunctionPropertyName,
-  BeaconMalfunctionVesselStatus, endOfBeaconMalfunctionReasons,
+  BeaconMalfunctionVesselStatus,
+  endOfBeaconMalfunctionReasons,
   getFirstVesselStatus,
-  vesselStatuses
+  vesselStatuses,
 } from '../../../../domain/entities/beaconMalfunction'
+import { getDateTime } from '../../../../utils'
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24
 
-const BeaconMalfunctionBody = props => {
+function BeaconMalfunctionBody(props) {
   const {
     /** @type {BeaconMalfunctionResumeAndDetails} */
-    beaconMalfunctionWithDetails
+    beaconMalfunctionWithDetails,
   } = props
 
-  return beaconMalfunctionWithDetails
-    ? <Wrapper>
+  return beaconMalfunctionWithDetails ? (
+    <Wrapper>
       <Key width={120}>Dernière pos.</Key>
       <SubValue>
         {vesselStatuses.find(status => status.value === getFirstVesselStatus(beaconMalfunctionWithDetails))?.label}
-      </SubValue><br/>
+      </SubValue>
+      <br />
       <Key width={120}>Durée avarie</Key>
       <SubValue>
-        {
-          beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime &&
-          beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime
-            ? <>{Math.floor(
+        {beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime &&
+        beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime ? (
+          <>
+            {Math.floor(
               (new Date(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime) -
-              new Date(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime)) / MS_PER_DAY)}{' '}jours</>
-            : null
-        }
-      </SubValue><br/>
-      <Key width={120}>Date reprise</Key>
-      <SubValue>
-        {getDateTime(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime, true)}
-      </SubValue><br/>
-      {
-        beaconMalfunctionWithDetails.beaconMalfunction?.endOfBeaconMalfunctionReason
-          ? <>
-            <Key width={120}>Raison fin d&apos;avarie</Key>
-            <SubValue>
-              {endOfBeaconMalfunctionReasons[beaconMalfunctionWithDetails.beaconMalfunction?.endOfBeaconMalfunctionReason]?.label}
-            </SubValue><br/>
+                new Date(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionStartDateTime)) /
+                MS_PER_DAY,
+            )}{' '}
+            jours
           </>
-          : null
-      }
-      {
-        beaconMalfunctionWithDetails.actions.find(action =>
-          action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS && action.nextValue === BeaconMalfunctionVesselStatus.ACTIVITY_DETECTED)
-          ? <ActivityDetectedLabel>Activité détectée</ActivityDetectedLabel>
-          : null
-      }
+        ) : null}
+      </SubValue>
+      <br />
+      <Key width={120}>Date reprise</Key>
+      <SubValue>{getDateTime(beaconMalfunctionWithDetails.beaconMalfunction.malfunctionEndDateTime, true)}</SubValue>
+      <br />
+      {beaconMalfunctionWithDetails.beaconMalfunction?.endOfBeaconMalfunctionReason ? (
+        <>
+          <Key width={120}>Raison fin d&apos;avarie</Key>
+          <SubValue>
+            {
+              endOfBeaconMalfunctionReasons[
+                beaconMalfunctionWithDetails.beaconMalfunction?.endOfBeaconMalfunctionReason
+              ]?.label
+            }
+          </SubValue>
+          <br />
+        </>
+      ) : null}
+      {beaconMalfunctionWithDetails.actions.find(
+        action =>
+          action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS &&
+          action.nextValue === BeaconMalfunctionVesselStatus.ACTIVITY_DETECTED,
+      ) ? (
+        <ActivityDetectedLabel>Activité détectée</ActivityDetectedLabel>
+      ) : null}
     </Wrapper>
-    : null
+  ) : null
 }
 
 const Wrapper = styled.div`
@@ -68,7 +77,7 @@ const ActivityDetectedLabel = styled.span`
   margin-top: 10px;
   margin-right: 5px;
   padding: 0 8px 0 8px;
-  background: #E1000F 0% 0% no-repeat padding-box;
+  background: #e1000f 0% 0% no-repeat padding-box;
   border-radius: 11px;
   color: ${COLORS.white};
   font-size: 13px;
@@ -79,7 +88,7 @@ const Key = styled.span`
   font-size: 13px;
   color: ${COLORS.slateGray};
   margin-right: 10px;
-  width: ${props => props.width ? props.width : '47'}px;
+  width: ${props => (props.width ? props.width : '47')}px;
   display: inline-block;
   vertical-align: top;
   padding-top: 4px;

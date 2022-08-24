@@ -2,29 +2,28 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Radio, RadioGroup } from 'rsuite'
 import styled, { css } from 'styled-components'
-import useSetFishingPeriod from '../../../hooks/fishingPeriod/useSetFishingPeriod'
-import { FISHING_PERIOD_KEYS } from '../../../domain/entities/regulatory'
-import { COLORS } from '../../../constants/constants'
 
-const AuthorizedRadioButtonGroup = ({ title }) => {
+import { COLORS } from '../../../constants/constants'
+import { FISHING_PERIOD_KEYS } from '../../../domain/entities/regulatory'
+import useSetFishingPeriod from '../../../hooks/fishingPeriod/useSetFishingPeriod'
+
+function AuthorizedRadioButtonGroup({ title }) {
   const { authorized } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
   const setAuthorized = useSetFishingPeriod(FISHING_PERIOD_KEYS.AUTHORIZED)
 
-  return <AuthorizedRadio
-    inline
-    onChange={setAuthorized}
-    value={authorized}
-  >
-    {title}
-    <CustomRadio checked={authorized} value={true} >
-      autorisées
-      <GreenCircle />
-    </CustomRadio>
-    <CustomRadio checked={authorized === false} value={false} >
-      interdites
-      <RedCircle />
-    </CustomRadio>
-  </AuthorizedRadio>
+  return (
+    <AuthorizedRadio inline onChange={setAuthorized} value={authorized}>
+      {title}
+      <CustomRadio checked={authorized} value>
+        autorisées
+        <GreenCircle />
+      </CustomRadio>
+      <CustomRadio checked={authorized === false} value={false}>
+        interdites
+        <RedCircle />
+      </CustomRadio>
+    </AuthorizedRadio>
+  )
 }
 
 const circle = css`
@@ -76,7 +75,7 @@ export const customRadioGroup = css`
   align-items: center;
 `
 
-export const AuthorizedRadio = styled(RadioGroup)` 
+export const AuthorizedRadio = styled(RadioGroup)`
   ${customRadioGroup}
 `
 

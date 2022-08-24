@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
-import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
+
 import { FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulatory'
+import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
+import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
 import { Row } from '../../../commonStyles/FishingPeriod.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
 
-const Always = ({ authorized }) => {
+function Always({ authorized }) {
   const { always } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
   const setAlways = useSetFishingPeriod(FISHING_PERIOD_KEYS.ALWAYS)
   const onChange = useCallback(_ => setAlways(!always), [setAlways, always])
@@ -18,19 +19,16 @@ const Always = ({ authorized }) => {
     }
   }, [authorized])
 
-  return <>
-    {
-      !authorized
-        ? <Row>
+  return (
+    <>
+      {!authorized ? (
+        <Row>
           <Label>En tous temps</Label>
-          <AlwaysCheckbox
-            onChange={onChange}
-            checked={always}
-          />
+          <AlwaysCheckbox checked={always} onChange={onChange} />
         </Row>
-        : null
-    }
-  </>
+      ) : null}
+    </>
+  )
 }
 
 const AlwaysCheckbox = styled(CustomCheckbox)`

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+
 import { getLocalStorageState } from '../../../../utils'
 
 const newReportingLocalStorageKey = 'new-reporting'
@@ -8,6 +9,7 @@ export const useSaveReportingInLocalStorage = (key, value, isWithinValueObject) 
   useEffect(() => {
     if (firstUpdate.current) {
       firstUpdate.current = false
+
       return
     }
 

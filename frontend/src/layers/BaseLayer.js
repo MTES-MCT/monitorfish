@@ -1,37 +1,56 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { MapboxVector } from 'ol/layer'
-import Layers, { baseLayers } from '../domain/entities/layers'
 import TileLayer from 'ol/layer/Tile'
 import { OSM } from 'ol/source'
-import XYZ from 'ol/source/XYZ'
 import TileWMS from 'ol/source/TileWMS'
+import XYZ from 'ol/source/XYZ'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
-const BaseLayer = ({ map }) => {
+import Layers, { baseLayers } from '../domain/entities/layers'
+
+function BaseLayer({ map }) {
   let selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
 
   const [baseLayersObjects] = useState({
-    LIGHT: () => new MapboxVector({
-      styleUrl: 'mapbox://styles/monitorfish/ckrbusml50wgv17nrzy3q374b',
-      accessToken: process.env.REACT_APP_MAPBOX_KEY,
-      className: Layers.BASE_LAYER.code,
-      zIndex: 0
-    }),
-    OSM: () => new TileLayer({
-      source: new OSM({
-        attributions: '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+    LIGHT: () =>
+      new MapboxVector({
+        accessToken: process.env.REACT_APP_MAPBOX_KEY,
+        className: Layers.BASE_LAYER.code,
+        styleUrl: 'mapbox://styles/monitorfish/ckrbusml50wgv17nrzy3q374b',
+        zIndex: 0,
       }),
-      className: Layers.BASE_LAYER.code,
-      zIndex: 0
-    }),
-    SATELLITE: () => new TileLayer({
-      source: new XYZ({
-        url: 'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=' + process.env.REACT_APP_MAPBOX_KEY,
-        maxZoom: 19
+    OSM: () =>
+      new TileLayer({
+        className: Layers.BASE_LAYER.code,
+        source: new OSM({
+          attributions:
+            '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+        }),
+        zIndex: 0,
       }),
-      className: Layers.BASE_LAYER.code,
-      zIndex: 0
-    }),
+    SATELLITE: () =>
+      new TileLayer({
+        className: Layers.BASE_LAYER.code,
+        source: new XYZ({
+          maxZoom: 19,
+          url: `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=${process.env.REACT_APP_MAPBOX_KEY}`,
+        }),
+        zIndex: 0,
+      }),
+
+    SCAN_LITTORAL: () =>
+      new TileLayer({
+        className: Layers.BASE_LAYER.code,
+        source: new TileWMS({
+          params: { LAYERS: 'FDC_GEBCO_PYR-PNG_3857_WMTS', TILED: true },
+          serverType: 'geoserver',
+          // Countries have transparency, so do not fade tiles:
+          transition: 0,
+
+          url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`,
+        }),
+        zIndex: 0,
+      }),
     /*
     DARK: () => new MapboxVector({
       styleUrl: 'mapbox://styles/monitorfish/cklv7vc0f1ej817o5ivmkjmrs',
@@ -40,32 +59,23 @@ const BaseLayer = ({ map }) => {
       zIndex: 0
     }),
     */
-    SHOM: () => new TileLayer({
-      source: new TileWMS({
-        url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`,
-        params: { LAYERS: 'RASTER_MARINE_3857_WMSR', TILED: true },
-        serverType: 'geoserver',
-        // Countries have transparency, so do not fade tiles:
-        transition: 0
+    SHOM: () =>
+      new TileLayer({
+        className: Layers.BASE_LAYER.code,
+        source: new TileWMS({
+          params: { LAYERS: 'RASTER_MARINE_3857_WMSR', TILED: true },
+          serverType: 'geoserver',
+          // Countries have transparency, so do not fade tiles:
+          transition: 0,
+
+          url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`,
+        }),
+        zIndex: 0,
       }),
-      className: Layers.BASE_LAYER.code,
-      zIndex: 0
-    }),
-    SCAN_LITTORAL: () => new TileLayer({
-      source: new TileWMS({
-        url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`,
-        params: { LAYERS: 'FDC_GEBCO_PYR-PNG_3857_WMTS', TILED: true },
-        serverType: 'geoserver',
-        // Countries have transparency, so do not fade tiles:
-        transition: 0
-      }),
-      className: Layers.BASE_LAYER.code,
-      zIndex: 0
-    })
   })
 
   useEffect(() => {
-    function addLayerToMap () {
+    function addLayerToMap() {
       if (map) {
         if (!selectedBaseLayer) {
           selectedBaseLayer = baseLayers.OSM.code
@@ -80,11 +90,10 @@ const BaseLayer = ({ map }) => {
   }, [map])
 
   useEffect(() => {
-    function showAnotherBaseLayer () {
+    function showAnotherBaseLayer() {
       if (map && selectedBaseLayer && baseLayersObjects[selectedBaseLayer]) {
         const olLayers = map.getLayers()
-        const layerToRemove = olLayers.getArray()
-          .find(layer => layer.className_ === Layers.BASE_LAYER.code)
+        const layerToRemove = olLayers.getArray().find(layer => layer.className_ === Layers.BASE_LAYER.code)
 
         if (!layerToRemove) {
           return

@@ -1,30 +1,30 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import { CirclePicker } from 'react-color'
 import { Input, InputGroup, Modal } from 'rsuite'
-import { COLORS } from '../../constants/constants'
+import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ReactComponent as FilterSVG } from '../icons/Icone_filtres_dark.svg'
-import { CirclePicker } from 'react-color'
-import TagList from './TagList'
+import { COLORS } from '../../constants/constants'
 import StyledModalHeader from '../commonComponents/StyledModalHeader'
+import { ReactComponent as FilterSVG } from '../icons/Icone_filtres_dark.svg'
+import TagList from './TagList'
 
 const styles = {
+  marginBottom: 20,
   width: 200,
-  marginBottom: 20
 }
 
-const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter, closeAndResetVesselList }) => {
+function SaveVesselFiltersModal({ addFilter, closeAndResetVesselList, filters, isOpen, setIsOpen }) {
   const [filterName, setFilterName] = useState('')
   const [filterColor, setFilterColor] = useState('#2c6e49')
 
   const save = () => {
     const filter = {
-      filters: filters,
-      name: filterName,
       color: filterColor,
+      filters,
+      name: filterName,
       showed: true,
-      uuid: uuidv4()
+      uuid: uuidv4(),
     }
 
     addFilter(filter)
@@ -41,40 +41,27 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter, closeAn
   }
 
   return (
-    <Modal
-      size={'sm'}
-      backdrop
-      open={isOpen}
-      style={{ marginTop: 100 }}
-      onClose={cancel}
-    >
+    <Modal backdrop onClose={cancel} open={isOpen} size="sm" style={{ marginTop: 100 }}>
       <StyledModalHeader>
         <Modal.Title>
-          <Title>
-            Enregistrer le filtre
-          </Title>
+          <Title>Enregistrer le filtre</Title>
         </Modal.Title>
       </StyledModalHeader>
       <Modal.Body>
         <InputGroup inside style={styles}>
           <InputGroup.Addon>
-            <Filter fill={filterColor}/>
+            <Filter fill={filterColor} />
           </InputGroup.Addon>
-          <Input
-            placeholder={'FILTRE SANS NOM'}
-            onChange={setFilterName}
-          />
+          <Input onChange={setFilterName} placeholder="FILTRE SANS NOM" />
         </InputGroup>
-        <TagList filters={filters}/>
+        <TagList filters={filters} />
         <SelectedFilterColor>
-          <Square color={filterColor}/>
+          <Square color={filterColor} />
           Couleur des navires du filtre
         </SelectedFilterColor>
         <CirclePicker
-          width={'300px'}
           circleSize={20}
           circleSpacing={10}
-          onChangeComplete={color => setFilterColor(color.hex)}
           color={filterColor}
           colors={[
             '#2c6e49',
@@ -86,17 +73,15 @@ const SaveVesselFiltersModal = ({ isOpen, setIsOpen, filters, addFilter, closeAn
             '#af6f1b',
             '#e0876c',
             '#eabd00',
-            '#fc4c0d']}
+            '#fc4c0d',
+          ]}
+          onChangeComplete={color => setFilterColor(color.hex)}
+          width="300px"
         />
-        <SaveButton
-          data-cy={'save-filter'}
-          onClick={save}>
+        <SaveButton data-cy="save-filter" onClick={save}>
           Enregistrer
         </SaveButton>
-        <CancelButton
-          onClick={cancel}>
-          Annuler
-        </CancelButton>
+        <CancelButton onClick={cancel}>Annuler</CancelButton>
       </Modal.Body>
     </Modal>
   )
@@ -111,12 +96,12 @@ const SelectedFilterColor = styled.div`
 const Square = styled.div`
   margin: 5px 7px;
   margin: 4px 7px 6px 0px;
-  background: ${props => props.color ? props.color : 'white'};
+  background: ${props => (props.color ? props.color : 'white')};
   border: 2px solid ${COLORS.squareBorder};
-    width: 14px;
-    height: 14px;
-    display: inline-block;
-    vertical-align: middle;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
 `
 
 const Title = styled.div`

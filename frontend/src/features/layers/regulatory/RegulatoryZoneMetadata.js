@@ -1,26 +1,24 @@
 import React, { useCallback } from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { ReactComponent as REGPaperSVG } from '../../icons/reg_paper_dark.svg'
 import { FingerprintSpinner } from 'react-epic-spinners'
-import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import { useDispatch, useSelector } from 'react-redux'
-import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
+import styled from 'styled-components'
+
+import { COLORS } from '../../../constants/constants'
 import { getTitle } from '../../../domain/entities/regulatory'
-import IdentificationDisplayed from './metadata/identification/IdentificationDisplayed'
+import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
+import { ReactComponent as REGPaperSVG } from '../../icons/reg_paper_dark.svg'
 import FishingPeriodDisplayed from './metadata/fishingPeriod/FishingPeriodDisplayed'
 import GearRegulationDisplayed from './metadata/gearRegulation/GearRegulationDisplayed'
-import RegulatoryReferencesDisplayed from './metadata/regulatoryReferences/RegulatoryReferencesDisplayed'
+import IdentificationDisplayed from './metadata/identification/IdentificationDisplayed'
 import OutdatedRegulatoryReferences from './metadata/OutdatedRegulatoryReferences'
+import RegulatoryReferencesDisplayed from './metadata/regulatoryReferences/RegulatoryReferencesDisplayed'
 import SpeciesRegulationDisplayed from './metadata/speciesRegulation/SpeciesRegulationDisplayed'
 
-const RegulatoryZoneMetadata = () => {
+function RegulatoryZoneMetadata() {
   const dispatch = useDispatch()
 
-  const {
-    regulatoryZoneMetadata,
-    regulatoryZoneMetadataPanelIsOpen
-  } = useSelector(state => state.regulatory)
+  const { regulatoryZoneMetadata, regulatoryZoneMetadataPanelIsOpen } = useSelector(state => state.regulatory)
 
   const { healthcheckTextWarning } = useSelector(state => state.global)
 
@@ -31,32 +29,30 @@ const RegulatoryZoneMetadata = () => {
   return (
     <Wrapper
       healthcheckTextWarning={healthcheckTextWarning}
-      regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
-      {
-        regulatoryZoneMetadata
-          ? <>
-            <Header>
-              <REGPaperIcon/>
-              <RegulatoryZoneName title={getTitle(regulatoryZoneMetadata)}>
-                {getTitle(regulatoryZoneMetadata)}
-              </RegulatoryZoneName>
-              <CloseIcon
-                data-cy={'regulatory-layers-metadata-close'}
-                onClick={onCloseIconClicked}
-              />
-            </Header>
-            <OutdatedRegulatoryReferences/>
-            <Content>
-              <IdentificationDisplayed/>
-              <FishingPeriodDisplayed/>
-              <GearRegulationDisplayed/>
-              <SpeciesRegulationDisplayed/>
-              <RegulatoryReferencesDisplayed/>
-            </Content>
-          </>
-          // eslint-disable-next-line react/forbid-component-props
-          : <FingerprintSpinner color={COLORS.background} className={'radar'} size={100}/>
-      }
+      regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+    >
+      {regulatoryZoneMetadata ? (
+        <>
+          <Header>
+            <REGPaperIcon />
+            <RegulatoryZoneName title={getTitle(regulatoryZoneMetadata)}>
+              {getTitle(regulatoryZoneMetadata)}
+            </RegulatoryZoneName>
+            <CloseIcon data-cy="regulatory-layers-metadata-close" onClick={onCloseIconClicked} />
+          </Header>
+          <OutdatedRegulatoryReferences />
+          <Content>
+            <IdentificationDisplayed />
+            <FishingPeriodDisplayed />
+            <GearRegulationDisplayed />
+            <SpeciesRegulationDisplayed />
+            <RegulatoryReferencesDisplayed />
+          </Content>
+        </>
+      ) : (
+        // eslint-disable-next-line react/forbid-component-props
+        <FingerprintSpinner className="radar" color={COLORS.background} size={100} />
+      )}
     </Wrapper>
   )
 }
@@ -66,7 +62,7 @@ const Wrapper = styled.div`
   width: 400px;
   display: block;
   color: ${COLORS.charcoal};
-  opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 1 : 0};
+  opacity: ${props => (props.regulatoryZoneMetadataPanelIsOpen ? 1 : 0)};
   z-index: -1;
   padding: 0;
   transition: all 0.5s;

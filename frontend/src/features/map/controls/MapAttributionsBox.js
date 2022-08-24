@@ -1,27 +1,31 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../constants/constants'
 
-const MapAttributionsBox = () => {
+function MapAttributionsBox() {
   const [isVisible, setIsVisible] = useState(false)
 
-  return (<Wrapper className={'ol-unselectable ol-control'}>
-    <List className={isVisible ? '' : 'collapsed'}>
-      <ListItem><Link href="https://www.openstreetmap.org/copyright" target="_blank" data-bcup-haslogintext="no">©
-        OpenStreetMap contributors</Link></ListItem>
-    </List>
-    <Button onClick={() => setIsVisible(!isVisible)} type="button" title="Attributions" data-bcup-haslogintext="no">
-      <ButtonText>
-        ©
-      </ButtonText>
-    </Button>
-  </Wrapper>)
+  return (
+    <Wrapper className="ol-unselectable ol-control">
+      <List className={isVisible ? '' : 'collapsed'}>
+        <ListItem>
+          <Link data-bcup-haslogintext="no" href="https://www.openstreetmap.org/copyright" target="_blank">
+            © OpenStreetMap contributors
+          </Link>
+        </ListItem>
+      </List>
+      <Button data-bcup-haslogintext="no" onClick={() => setIsVisible(!isVisible)} title="Attributions" type="button">
+        <ButtonText>©</ButtonText>
+      </Button>
+    </Wrapper>
+  )
 }
 
 const Wrapper = styled.div`
   bottom: 8px;
-  left: .5em;
-  max-width: calc(100% - 1.3em);  
+  left: 0.5em;
+  max-width: calc(100% - 1.3em);
   background: none;
 `
 
@@ -29,7 +33,7 @@ const Button = styled.button`
   float: left;
   width: 25px !important;
   height: 25px !important;
-  
+
   :hover {
     background: none;
   }

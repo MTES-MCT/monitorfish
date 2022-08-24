@@ -1,53 +1,47 @@
 import * as Comlink from 'comlink'
+
 import {
   getMergedRegulatoryLayers,
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryZone,
   orderByAlphabeticalLayer,
   searchByLawType,
-  FRANCE
+  FRANCE,
 } from '../domain/entities/regulatory'
-import { getDateMonthsBefore } from '../utils'
 import { VesselLocation, vesselSize } from '../domain/entities/vessel'
+import { getDateMonthsBefore } from '../utils'
 
 class MonitorFishWebWorker {
   #getLayerTopicList = (features, speciesByCode) => {
-    const featuresWithoutGeometry = features.features.map(feature => {
-      return mapToRegulatoryZone(feature, speciesByCode)
-    })
+    const featuresWithoutGeometry = features.features.map(feature => mapToRegulatoryZone(feature, speciesByCode))
 
     const uniqueFeaturesWithoutGeometry = featuresWithoutGeometry.reduce((acc, current) => {
-      const found = acc.find(item =>
-        item.topic === current.topic &&
-        item.zone === current.zone)
+      const found = acc.find(item => item.topic === current.topic && item.zone === current.zone)
       if (!found) {
         return acc.concat([current])
-      } else {
-        return acc
       }
+
+      return acc
     }, [])
 
     const uniqueFeaturesWithoutGeometryByTopics = uniqueFeaturesWithoutGeometry
       .map(layer => layer.topic)
-      .map(topic => {
-        return uniqueFeaturesWithoutGeometry.filter(layer => layer.topic === topic)
-      })
+      .map(topic => uniqueFeaturesWithoutGeometry.filter(layer => layer.topic === topic))
 
     return {
       featuresWithoutGeometry,
-      uniqueFeaturesWithoutGeometryByTopics
+      uniqueFeaturesWithoutGeometryByTopics,
     }
   }
 
-  #getGeometryIdFromFeatureId = feature => {
-    return feature.properties?.id || feature.id.split('.')[1]
-  }
+  #getGeometryIdFromFeatureId = feature => feature.properties?.id || feature.id.split('.')[1]
 
-  getGeometryWithoutRegulationRef (features) {
+  getGeometryWithoutRegulationRef(features) {
     const geometryListAsObject = {}
     features.features.forEach(feature => {
       geometryListAsObject[this.#getGeometryIdFromFeatureId(feature)] = feature.geometry
     })
+
     return geometryListAsObject
   }
 
@@ -104,17 +98,14 @@ class MonitorFishWebWorker {
    *     }
    * }
    */
-  convertGeoJSONFeaturesToStructuredRegulatoryObject (features, speciesByCode) {
+  convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode) {
     const regulatoryTopicList = new Set()
-    const {
-      featuresWithoutGeometry,
-      uniqueFeaturesWithoutGeometryByTopics: layerTopicArray
-    } = this.#getLayerTopicList(features, speciesByCode)
+    const { featuresWithoutGeometry, uniqueFeaturesWithoutGeometryByTopics: layerTopicArray } = this.#getLayerTopicList(
+      features,
+      speciesByCode,
+    )
     const layersTopicsByRegulatoryTerritory = layerTopicArray.reduce((accumulatedObject, zone) => {
-      const {
-        lawType,
-        topic
-      } = zone[0]
+      const { lawType, topic } = zone[0]
 
       if (topic && lawType) {
         regulatoryTopicList.add(topic)
@@ -128,11 +119,12 @@ class MonitorFishWebWorker {
           }
           let orderZoneList = zone
           if (zone.length > 1) {
-            orderZoneList = zone.sort((a, b) => a.zone > b.zone ? 1 : a.zone === b.zone ? 0 : -1)
+            orderZoneList = zone.sort((a, b) => (a.zone > b.zone ? 1 : a.zone === b.zone ? 0 : -1))
           }
           accumulatedObject[regulatoryTerritory][lawType][topic] = orderZoneList
         }
       }
+
       return accumulatedObject
     }, {})
 
@@ -148,11 +140,11 @@ class MonitorFishWebWorker {
 
     return {
       layersTopicsByRegulatoryTerritory,
-      layersWithoutGeometry: featuresWithoutGeometry
+      layersWithoutGeometry: featuresWithoutGeometry,
     }
   }
 
-  getUniqueSpeciesAndDistricts (vessels) {
+  getUniqueSpeciesAndDistricts(vessels) {
     const species = vessels
       .map(vessel => vessel.speciesOnboard)
       .flat()
@@ -166,40 +158,40 @@ class MonitorFishWebWorker {
       .filter(_species => _species)
 
     const districts = vessels
-      .map(vessel => {
-        return {
-          district: vessel.district,
-          districtCode: vessel.districtCode
-        }
-      })
+      .map(vessel => ({
+        district: vessel.district,
+        districtCode: vessel.districtCode,
+      }))
       .reduce((acc, district) => {
         const found = acc.find(item => item.district === district.district)
 
         if (!found) {
           return acc.concat([district])
-        } else {
-          return acc
         }
+
+        return acc
       }, [])
 
-    return { species, districts }
+    return { districts, species }
   }
 
-  getFilteredVessels (vessels, filters) {
+  getFilteredVessels(vessels, filters) {
     const {
       countriesFiltered,
-      lastPositionTimeAgoFilter,
+      districtsFiltered,
       fleetSegmentsFiltered,
       gearsFiltered,
-      districtsFiltered,
-      speciesFiltered,
-      vesselsSizeValuesChecked,
       lastControlMonthsAgo,
-      vesselsLocationFilter
+      lastPositionTimeAgoFilter,
+      speciesFiltered,
+      vesselsLocationFilter,
+      vesselsSizeValuesChecked,
     } = filters
 
     if (countriesFiltered?.length) {
-      vessels = vessels.filter(vessel => countriesFiltered.some(country => vessel.vesselProperties?.flagState === country))
+      vessels = vessels.filter(vessel =>
+        countriesFiltered.some(country => vessel.vesselProperties?.flagState === country),
+      )
     }
 
     if (lastPositionTimeAgoFilter) {
@@ -229,36 +221,30 @@ class MonitorFishWebWorker {
 
     if (fleetSegmentsFiltered?.length) {
       vessels = vessels.filter(vessel =>
-        fleetSegmentsFiltered.some(fleetSegment => {
-          return vessel.vesselProperties?.fleetSegmentsArray.includes(fleetSegment)
-        }))
+        fleetSegmentsFiltered.some(fleetSegment => vessel.vesselProperties?.fleetSegmentsArray.includes(fleetSegment)),
+      )
     }
 
     if (gearsFiltered?.length) {
-      vessels = vessels.filter(vessel =>
-        gearsFiltered.some(gear => {
-          return vessel.vesselProperties?.gearsArray.includes(gear)
-        }))
+      vessels = vessels.filter(vessel => gearsFiltered.some(gear => vessel.vesselProperties?.gearsArray.includes(gear)))
     }
 
     if (speciesFiltered?.length) {
       vessels = vessels.filter(vessel =>
-        speciesFiltered.some(species => {
-          return vessel.vesselProperties?.speciesArray.includes(species)
-        }))
+        speciesFiltered.some(species => vessel.vesselProperties?.speciesArray.includes(species)),
+      )
     }
 
     if (districtsFiltered?.length) {
       vessels = vessels.filter(vessel =>
-        districtsFiltered.some(district => {
-          return vessel.vesselProperties?.district === district
-        }))
+        districtsFiltered.some(district => vessel.vesselProperties?.district === district),
+      )
     }
 
     if (vesselsSizeValuesChecked?.length) {
-      vessels = vessels.filter(vessel => {
-        return this.evaluateVesselsSize(vesselsSizeValuesChecked, vessel.vesselProperties?.length)
-      })
+      vessels = vessels.filter(vessel =>
+        this.evaluateVesselsSize(vesselsSizeValuesChecked, vessel.vesselProperties?.length),
+      )
     }
 
     if (vesselsLocationFilter?.length === 1) {
@@ -274,23 +260,29 @@ class MonitorFishWebWorker {
     return vessels
   }
 
-  evaluateVesselsSize (vesselsSizeValuesChecked, length) {
+  evaluateVesselsSize(vesselsSizeValuesChecked, length) {
     if (vesselsSizeValuesChecked.length === 3) {
       return true
     }
 
-    if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TEN_METERS.code) &&
-      vesselsSizeValuesChecked.includes(vesselSize.ABOVE_TWELVE_METERS.code)) {
+    if (
+      vesselsSizeValuesChecked.includes(vesselSize.BELOW_TEN_METERS.code) &&
+      vesselsSizeValuesChecked.includes(vesselSize.ABOVE_TWELVE_METERS.code)
+    ) {
       return vesselSize.BELOW_TEN_METERS.evaluate(length) || vesselSize.ABOVE_TWELVE_METERS.evaluate(length)
     }
 
-    if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TEN_METERS.code) &&
-      vesselsSizeValuesChecked.includes(vesselSize.BELOW_TWELVE_METERS.code)) {
+    if (
+      vesselsSizeValuesChecked.includes(vesselSize.BELOW_TEN_METERS.code) &&
+      vesselsSizeValuesChecked.includes(vesselSize.BELOW_TWELVE_METERS.code)
+    ) {
       return vesselSize.BELOW_TWELVE_METERS.evaluate(length)
     }
 
-    if (vesselsSizeValuesChecked.includes(vesselSize.BELOW_TWELVE_METERS.code) &&
-      vesselsSizeValuesChecked.includes(vesselSize.ABOVE_TWELVE_METERS.code)) {
+    if (
+      vesselsSizeValuesChecked.includes(vesselSize.BELOW_TWELVE_METERS.code) &&
+      vesselsSizeValuesChecked.includes(vesselSize.ABOVE_TWELVE_METERS.code)
+    ) {
       return true
     }
 
@@ -307,7 +299,7 @@ class MonitorFishWebWorker {
     }
   }
 
-  searchLayers (searchFields, regulatoryLayers, gears, species) {
+  searchLayers(searchFields, regulatoryLayers, gears, species) {
     let foundRegulatoryLayers = {}
 
     Object.keys(searchFields).forEach(searchProperty => {
@@ -317,7 +309,8 @@ class MonitorFishWebWorker {
           searchFields[searchProperty].properties,
           searchFields[searchProperty].searchText,
           gears,
-          species)
+          species,
+        )
 
         if (foundRegulatoryLayers && Object.keys(foundRegulatoryLayers).length === 0) {
           foundRegulatoryLayers = searchResultByLawType

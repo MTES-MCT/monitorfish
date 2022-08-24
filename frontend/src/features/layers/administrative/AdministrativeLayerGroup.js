@@ -1,38 +1,28 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import AdministrativeLayer from './AdministrativeLayer'
 import { useSelector } from 'react-redux'
-import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
+import styled from 'styled-components'
 
-const AdministrativeLayerGroup = props => {
+import { COLORS } from '../../../constants/constants'
+import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
+import AdministrativeLayer from './AdministrativeLayer'
+
+function AdministrativeLayerGroup(props) {
   const showedLayers = useSelector(state => state.layer.showedLayers)
 
   const [isOpen, setIsOpen] = useState(false)
 
-  return <>
-    {
-      props.layers && props.layers.length && props.layers[0]
-        ? <Row>
+  return (
+    <>
+      {props.layers && props.layers.length && props.layers[0] ? (
+        <Row>
           <Zone isLastItem={props.isLastItem} isOpen={isOpen}>
-            <Text
-              title={props.layers[0].group.name}
-              onClick={() => setIsOpen(!isOpen)}
-            >
+            <Text title={props.layers[0].group.name} onClick={() => setIsOpen(!isOpen)}>
               {props.layers[0].group.name}
             </Text>
-            <Chevron
-              $isOpen={isOpen}
-              onClick={() => setIsOpen(!isOpen)}
-            />
+            <Chevron $isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
           </Zone>
-          <List
-            isOpen={isOpen}
-            name={props.layers[0].group.name.replace(/\s/g, '-')}
-            length={props.layers.length}>
-            {
-              props.layers.map((layer, index) => {
-                return <AdministrativeLayer
+          <List isOpen={isOpen} name={props.layers[0].group.name.replace(/\s/g, '-')} length={props.layers.length}>
+            {props.layers.map((layer, index) => <AdministrativeLayer
                   key={layer.code}
                   isFirst={index === 0}
                   isShownOnInit={showedLayers.some(layer_ => {
@@ -46,13 +36,13 @@ const AdministrativeLayerGroup = props => {
                   callShowAdministrativeZone={props.callShowAdministrativeZone}
                   callHideAdministrativeZone={props.callHideAdministrativeZone}
                   isGrouped={true}
-                />
-              })
-            }
+                />)
+            })}
           </List>
         </Row>
-        : null
-    }</>
+      ) : null}
+    </>
+  )
 }
 
 const Row = styled.div`
@@ -81,15 +71,15 @@ const Zone = styled.span`
   display: flex;
   user-select: none;
   padding-bottom: 2px;
-  ${props => !props.isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
-  
+  ${props => (!props.isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`)}
+
   :hover {
     background: ${COLORS.shadowBlueLittleOpacity};
   }
 `
 
 const List = styled.div`
-  height: ${props => props.isOpen && props.length ? props.length * 34 + 10 : 0}px;
+  height: ${props => (props.isOpen && props.length ? props.length * 34 + 10 : 0)}px;
   overflow: hidden;
   transition: 0.2s all;
 `

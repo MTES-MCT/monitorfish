@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { ReactComponent as ChevronIconSVG } from '../../icons/Chevron_simple_gris.svg'
 
 export const ChevronIcon = styled(ChevronIconSVG)`
@@ -6,7 +7,7 @@ export const ChevronIcon = styled(ChevronIconSVG)`
   float: right;
   margin-right: 10px;
   margin-top: 9px;
-  transform: ${props => !props.$isOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
+  transform: ${props => (!props.$isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
   transition: all 0.5s
   cursor: pointer;
 `

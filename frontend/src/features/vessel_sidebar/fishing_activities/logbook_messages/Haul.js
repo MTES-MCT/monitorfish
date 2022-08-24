@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 import { getCoordinates } from '../../../../coordinates'
-import { getDateTime } from '../../../../utils'
 import { WSG84_PROJECTION } from '../../../../domain/entities/map'
+import { getDateTime } from '../../../../utils'
 import LogbookMessageSpecies from './LogbookMessageSpecies'
 import { buildCatchArray } from '../../../../domain/entities/logbook'
-import { useSelector } from 'react-redux'
 
-const Haul = ({ haul, haulNumber, hasManyHauls }) => {
+function Haul({ hasManyHauls, haul, haulNumber }) {
   const { coordinatesFormat } = useSelector(state => state.map)
   const [catches, setCatches] = useState([])
 
@@ -21,48 +22,58 @@ const Haul = ({ haul, haulNumber, hasManyHauls }) => {
     }
   }, [haul])
 
-  return <>
-    {haul
-      ? <>
-            {
-                hasManyHauls
-                  ? <HaulNumber data-cy='logbook-haul-number'>Trait de pêche {haulNumber }</HaulNumber>
-                  : null
-            }
-        <Zone>
-          <Fields>
-            <TableBody>
-              <Field>
-                <Key>Date opération</Key>
-                <Value>{haul.farDatetimeUtc
-                  ? <>{getDateTime(haul.farDatetimeUtc, true)}{' '}
-                    <Gray>(UTC)</Gray></>
-                  : <NoValue>-</NoValue>}</Value>
-              </Field>
-              <Field>
-                <Key>Position opération</Key>
-                <Value>
-                  <FirstInlineKey>Lat.</FirstInlineKey> {haul.latitude && haul.longitude
-                    ? getCoordinates([haul.longitude, haul.latitude], WSG84_PROJECTION, coordinatesFormat)[0]
-                    : <NoValue>-</NoValue>}
-                  <InlineKey>Lon.</InlineKey> {haul.latitude && haul.longitude
-                    ? getCoordinates([haul.longitude, haul.latitude], WSG84_PROJECTION, coordinatesFormat)[1]
-                    : <NoValue>-</NoValue>}
-                </Value>
-              </Field>
-            </TableBody>
-          </Fields>
-          {
-            haul.gear
-              ? <Gear>
+  return (
+    <>
+      {haul ? (
+        <>
+          {hasManyHauls ? <HaulNumber data-cy="logbook-haul-number">Trait de pêche {haulNumber}</HaulNumber> : null}
+          <Zone>
+            <Fields>
+              <TableBody>
+                <Field>
+                  <Key>Date opération</Key>
+                  <Value>
+                    {haul.farDatetimeUtc ? (
+                      <>
+                        {getDateTime(haul.farDatetimeUtc, true)} <Gray>(UTC)</Gray>
+                      </>
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
+                </Field>
+                <Field>
+                  <Key>Position opération</Key>
+                  <Value>
+                    <FirstInlineKey>Lat.</FirstInlineKey>{' '}
+                    {haul.latitude && haul.longitude ? (
+                      getCoordinates([haul.longitude, haul.latitude], WSG84_PROJECTION, coordinatesFormat)[0]
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                    <InlineKey>Lon.</InlineKey>{' '}
+                    {haul.latitude && haul.longitude ? (
+                      getCoordinates([haul.longitude, haul.latitude], WSG84_PROJECTION, coordinatesFormat)[1]
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
+                </Field>
+              </TableBody>
+            </Fields>
+            {haul.gear ? (
+              <Gear>
                 <SubKey>Engin à bord</SubKey>{' '}
                 <SubValue>
-                  {
-                    haul.gearName
-                      ? <>{haul.gearName} ({haul.gear})</>
-                      : haul.gear
-                  }
-                </SubValue><br/>
+                  {haul.gearName ? (
+                    <>
+                      {haul.gearName} ({haul.gear})
+                    </>
+                  ) : (
+                    haul.gear
+                  )}
+                </SubValue>
+                <br />
                 <SubFields>
                   <SubField>
                     <SubKey>Maillage</SubKey>
@@ -74,26 +85,22 @@ const Haul = ({ haul, haulNumber, hasManyHauls }) => {
                   </SubField>
                 </SubFields>
               </Gear>
-              : null
-          }
-        </Zone>
-        <SpeciesList hasCatches={catches?.length}>
-          {
-            catches
-              .map((speciesCatch, index) => {
-                return <LogbookMessageSpecies
+            ) : null}
+          </Zone>
+          <SpeciesList hasCatches={catches?.length}>
+            {catches.map((speciesCatch, index) => <LogbookMessageSpecies
                   index={index + 1}
                   hasManyProperties={speciesCatch.properties.length > 1}
                   isLast={catches.length === index + 1}
                   species={speciesCatch}
                   key={'FAR' + speciesCatch.species}
-                />
-              })
-          }
-        </SpeciesList>
-      </>
-      : null}
-  </>
+                />)
+            })}
+          </SpeciesList>
+        </>
+      ) : null}
+    </>
+  )
 }
 
 const HaulNumber = styled.div`
@@ -143,7 +150,7 @@ const SubValue = styled.span`
 `
 
 const SpeciesList = styled.ul`
-  margin: ${props => props.hasCatches ? 10 : 0}px 0 0 0;
+  margin: ${props => (props.hasCatches ? 10 : 0)}px 0 0 0;
   padding: 0;
   width: -moz-available;
   width: -webkit-fill-available;
@@ -161,7 +168,7 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 0px 5px 0 5px; 
+  padding: 0px 5px 0 5px;
   width: inherit;
   display: table;
   margin: 0;

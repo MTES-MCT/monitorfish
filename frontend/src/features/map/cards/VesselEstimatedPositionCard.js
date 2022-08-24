@@ -1,15 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../constants/constants'
 
-const VesselEstimatedPositionCard = ({ coordinates }) => {
+function VesselEstimatedPositionCard({ coordinates }) {
   return (
     <>
       <Body>
-        <Text>Position estimée : <b>{coordinates[0]} {coordinates[1]}</b></Text>
+        <Text>
+          Position estimée :{' '}
+          <b>
+            {coordinates[0]} {coordinates[1]}
+          </b>
+        </Text>
       </Body>
       <TrianglePointer>
-        <TriangleShadow/>
+        <TriangleShadow />
       </TrianglePointer>
     </>
   )
@@ -25,7 +31,7 @@ const Text = styled.div`
 const TrianglePointer = styled.div`
   margin-left: auto;
   margin-right: auto;
-  height: auto; 
+  height: auto;
   width: auto;
 `
 

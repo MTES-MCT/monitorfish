@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { Radio, RadioGroup } from 'rsuite'
-import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../../domain/entities/map'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCoordinatesFormat } from '../../../domain/shared_slices/Map'
+import { Radio, RadioGroup } from 'rsuite'
+import styled from 'styled-components'
+
+import { COLORS } from '../../../constants/constants'
 import { getCoordinates } from '../../../coordinates'
+import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '../../../domain/entities/map'
+import { setCoordinatesFormat } from '../../../domain/shared_slices/Map'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
 
-const MapCoordinatesBox = ({ coordinates }) => {
+function MapCoordinatesBox({ coordinates }) {
   const wrapperRef = useRef(null)
 
   const dispatch = useDispatch()
@@ -22,49 +23,44 @@ const MapCoordinatesBox = ({ coordinates }) => {
     }
   }, [clickedOutsideComponent])
 
-  return (<div ref={wrapperRef}>
-    <CoordinatesTypeSelection isOpen={coordinatesSelectionIsOpen}>
-      <Header
-        data-cy={'coordinates-selection'}
-        onClick={() => setCoordinatesSelectionIsOpen(false)}
-      >
-        Unités des coordonnées
-      </Header>
-      <RadioWrapper
-        inline
-        name="coordinatesRadio"
-        value={coordinatesFormat}
-        onChange={value => dispatch(setCoordinatesFormat(value))}
-      >
-        <Radio
+  return (
+    <div ref={wrapperRef}>
+      <CoordinatesTypeSelection isOpen={coordinatesSelectionIsOpen}>
+        <Header data-cy="coordinates-selection" onClick={() => setCoordinatesSelectionIsOpen(false)}>
+          Unités des coordonnées
+        </Header>
+        <RadioWrapper
           inline
-          value={CoordinatesFormat.DEGREES_MINUTES_SECONDS}
-          title={'Degrés Minutes Secondes'}
+          name="coordinatesRadio"
+          onChange={value => dispatch(setCoordinatesFormat(value))}
+          value={coordinatesFormat}
         >
-          DMS
-        </Radio>
-        <Radio
-          data-cy={'coordinates-selection-dmd'}
-          inline
-          value={CoordinatesFormat.DEGREES_MINUTES_DECIMALS}
-          title={'Degrés Minutes Décimales'}
-        >
-          DMD
-        </Radio>
-        <Radio
-          data-cy={'coordinates-selection-dd'}
-          inline
-          value={CoordinatesFormat.DECIMAL_DEGREES}
-          title={'Degrés Décimales'}
-        >
-          DD
-        </Radio>
-      </RadioWrapper>
-    </CoordinatesTypeSelection>
-    <Coordinates onClick={() => setCoordinatesSelectionIsOpen(!coordinatesSelectionIsOpen)}>
-      {getShowedCoordinates(coordinates, coordinatesFormat)} ({coordinatesFormat})
-    </Coordinates>
-    </div>)
+          <Radio inline title="Degrés Minutes Secondes" value={CoordinatesFormat.DEGREES_MINUTES_SECONDS}>
+            DMS
+          </Radio>
+          <Radio
+            data-cy="coordinates-selection-dmd"
+            inline
+            title="Degrés Minutes Décimales"
+            value={CoordinatesFormat.DEGREES_MINUTES_DECIMALS}
+          >
+            DMD
+          </Radio>
+          <Radio
+            data-cy="coordinates-selection-dd"
+            inline
+            title="Degrés Décimales"
+            value={CoordinatesFormat.DECIMAL_DEGREES}
+          >
+            DD
+          </Radio>
+        </RadioWrapper>
+      </CoordinatesTypeSelection>
+      <Coordinates onClick={() => setCoordinatesSelectionIsOpen(!coordinatesSelectionIsOpen)}>
+        {getShowedCoordinates(coordinates, coordinatesFormat)} ({coordinatesFormat})
+      </Coordinates>
+    </div>
+  )
 }
 
 const getShowedCoordinates = (coordinates, coordinatesFormat) => {
@@ -108,9 +104,9 @@ const CoordinatesTypeSelection = styled.span`
   border: none;
   border-radius: 2px;
   width: 237px;
-  opacity: ${props => props.isOpen ? 1 : 0};
-  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
-  height: ${props => props.isOpen ? 69 : 0}px;
+  opacity: ${props => (props.isOpen ? 1 : 0)};
+  visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
+  height: ${props => (props.isOpen ? 69 : 0)}px;
   transition: all 0.5s;
   overflow: hidden;
 `

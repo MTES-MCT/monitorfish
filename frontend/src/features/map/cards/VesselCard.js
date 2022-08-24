@@ -1,20 +1,21 @@
 import React from 'react'
-import styled from 'styled-components'
-import { getCoordinates } from '../../../coordinates'
-import { timeagoFrenchLocale } from '../../../utils'
-import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map'
-import { COLORS } from '../../../constants/constants'
-import * as timeago from 'timeago.js'
-import { OverlayPosition } from '../overlays/position'
 import { useSelector } from 'react-redux'
+import styled from 'styled-components'
+import * as timeago from 'timeago.js'
+
+import { COLORS } from '../../../constants/constants'
+import { getCoordinates } from '../../../coordinates'
+import { getAlertNameFromType } from '../../../domain/entities/alerts'
+import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map'
+import { timeagoFrenchLocale } from '../../../utils'
 import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
 import { ReactComponent as BeaconMalfunctionSVG } from '../../icons/Icone_VMS_dark.svg'
-import { getAlertNameFromType } from '../../../domain/entities/alerts'
+import { OverlayPosition } from '../overlays/position'
 import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } from '../overlays/VesselCardOverlay'
 
 timeago.register('fr', timeagoFrenchLocale)
 
-const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
+function VesselCard({ feature, numberOfWarnings, overlayPosition }) {
   const { coordinatesFormat } = useSelector(state => state.map)
   const { adminRole } = useSelector(state => state.global)
   const { vesselProperties } = feature
@@ -23,97 +24,88 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
   return (
     <>
       <VesselCardHeader>
-        {
-          vesselProperties.flagState
-            ? <>
-              <Flag rel="preload" src={`flags/${vesselProperties.flagState.toLowerCase()}.svg`}/>{' '}</>
-            : null
-        }
-        <VesselCardTitle data-cy={'vessel-card-name'}>
-          {
-            vesselProperties.vesselName
-              ? vesselProperties.vesselName
-              : 'NOM INCONNU'
-          }{' '}
-          {
-            vesselProperties.flagState
-              ? <>({vesselProperties.flagState.toUpperCase()})</>
-              : ''
-          }
+        {vesselProperties.flagState ? (
+          <>
+            <Flag rel="preload" src={`flags/${vesselProperties.flagState.toLowerCase()}.svg`} />{' '}
+          </>
+        ) : null}
+        <VesselCardTitle data-cy="vessel-card-name">
+          {vesselProperties.vesselName ? vesselProperties.vesselName : 'NOM INCONNU'}{' '}
+          {vesselProperties.flagState ? <>({vesselProperties.flagState.toUpperCase()})</> : ''}
         </VesselCardTitle>
-        {
-          vesselProperties.lastLogbookMessageDateTime
-            ? <Logbook>
-              <LogbookOK/>
-              <MessageText>JPE</MessageText>
-            </Logbook>
-            : <Logbook>
-              <NoLogbook/>
-              <MessageText>JPE</MessageText>
-            </Logbook>
-        }
+        {vesselProperties.lastLogbookMessageDateTime ? (
+          <Logbook>
+            <LogbookOK />
+            <MessageText>JPE</MessageText>
+          </Logbook>
+        ) : (
+          <Logbook>
+            <NoLogbook />
+            <MessageText>JPE</MessageText>
+          </Logbook>
+        )}
       </VesselCardHeader>
-      {
-        adminRole && vesselProperties.alerts?.length
-          ? <VesselCardAlert data-cy={'vessel-card-alert'}>
-            <AlertIcon/>
-            {
-              vesselProperties.alerts?.length === 1
-                ? getAlertNameFromType(vesselProperties.alerts[0])
-                : `${vesselProperties.alerts?.length} alertes`
-            }
-          </VesselCardAlert>
-          : null
-      }
-      {
-        adminRole && vesselProperties.hasInfractionSuspicion
-          ? <VesselCardAlert>
-            <AlertIcon/>
-            Suspicion d&apos;infraction
-          </VesselCardAlert>
-          : null
-      }
-      {
-        adminRole && vesselProperties.beaconMalfunctionId
-          ? <VesselCardBeaconMalfunction data-cy={'vessel-card-beacon-malfunction'}>
-            <BeaconMalfunctionIcon/>
-            NON-ÉMISSION VMS
-          </VesselCardBeaconMalfunction>
-          : null
-      }
+      {adminRole && vesselProperties.alerts?.length ? (
+        <VesselCardAlert data-cy="vessel-card-alert">
+          <AlertIcon />
+          {vesselProperties.alerts?.length === 1
+            ? getAlertNameFromType(vesselProperties.alerts[0])
+            : `${vesselProperties.alerts?.length} alertes`}
+        </VesselCardAlert>
+      ) : null}
+      {adminRole && vesselProperties.hasInfractionSuspicion ? (
+        <VesselCardAlert>
+          <AlertIcon />
+          Suspicion d&apos;infraction
+        </VesselCardAlert>
+      ) : null}
+      {adminRole && vesselProperties.beaconMalfunctionId ? (
+        <VesselCardBeaconMalfunction data-cy="vessel-card-beacon-malfunction">
+          <BeaconMalfunctionIcon />
+          NON-ÉMISSION VMS
+        </VesselCardBeaconMalfunction>
+      ) : null}
       <VesselCardBody>
         <LatLon>
           <FieldName>Latitude</FieldName>
-          <FieldValue data-cy={'vessel-card-latitude'}>{getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0]}</FieldValue>
+          <FieldValue data-cy="vessel-card-latitude">
+            {getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0]}
+          </FieldValue>
           <FieldName>Longitude</FieldName>
-          <FieldValue data-cy={'vessel-card-longitude'}>{getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]}</FieldValue>
+          <FieldValue data-cy="vessel-card-longitude">
+            {getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]}
+          </FieldValue>
         </LatLon>
         <Course>
           <FieldName>Route</FieldName>
-          <FieldValue>{vesselProperties.course === 0 || vesselProperties.course
-            ? <>{vesselProperties.course}°</>
-            : <NoValue>-</NoValue>}</FieldValue>
+          <FieldValue>
+            {vesselProperties.course === 0 || vesselProperties.course ? (
+              <>{vesselProperties.course}°</>
+            ) : (
+              <NoValue>-</NoValue>
+            )}
+          </FieldValue>
           <FieldName>Vitesse</FieldName>
-          <FieldValue>{vesselProperties.speed === 0 || vesselProperties.speed
-            ? <>{vesselProperties.speed} Nds</>
-            : <NoValue>-</NoValue>}</FieldValue>
+          <FieldValue>
+            {vesselProperties.speed === 0 || vesselProperties.speed ? (
+              <>{vesselProperties.speed} Nds</>
+            ) : (
+              <NoValue>-</NoValue>
+            )}
+          </FieldValue>
         </Course>
         <Position>
           <FieldName>Dernier signal VMS</FieldName>
           <FieldValue>
-            {
-              vesselProperties.dateTime
-                ? <>{timeago.format(vesselProperties.dateTime, 'fr')}</>
-                : <NoValue>-</NoValue>
-            }
+            {vesselProperties.dateTime ? <>{timeago.format(vesselProperties.dateTime, 'fr')}</> : <NoValue>-</NoValue>}
           </FieldValue>
           <FieldName>Cadencement</FieldName>
           <FieldValue>
-            {
-              vesselProperties.emissionPeriod
-                ? <>1 signal toutes les {vesselProperties.emissionPeriod / 60} min</>
-                : <NoValue>-</NoValue>
-            }
+            {vesselProperties.emissionPeriod ? (
+              <>1 signal toutes les {vesselProperties.emissionPeriod / 60} min</>
+            ) : (
+              <NoValue>-</NoValue>
+            )}
           </FieldValue>
         </Position>
       </VesselCardBody>
@@ -123,15 +115,19 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
             <Body>
               <Field>
                 <Key>CFR</Key>
-                <Value data-cy={'vessel-card-internal-reference-number'}>{vesselProperties.internalReferenceNumber
-                  ? vesselProperties.internalReferenceNumber
-                  : <NoValue>-</NoValue>}</Value>
+                <Value data-cy="vessel-card-internal-reference-number">
+                  {vesselProperties.internalReferenceNumber ? (
+                    vesselProperties.internalReferenceNumber
+                  ) : (
+                    <NoValue>-</NoValue>
+                  )}
+                </Value>
               </Field>
               <Field>
                 <Key>MMSI</Key>
-                <Value data-cy={'vessel-card-mmsi'}>{vesselProperties.mmsi
-                  ? vesselProperties.mmsi
-                  : <NoValue>-</NoValue>}</Value>
+                <Value data-cy="vessel-card-mmsi">
+                  {vesselProperties.mmsi ? vesselProperties.mmsi : <NoValue>-</NoValue>}
+                </Value>
               </Field>
             </Body>
           </Fields>
@@ -141,15 +137,19 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
             <Body>
               <Field>
                 <Key>Marquage ext.</Key>
-                <Value data-cy={'vessel-card-external-reference-number'}>{vesselProperties.externalReferenceNumber
-                  ? vesselProperties.externalReferenceNumber
-                  : <NoValue>-</NoValue>}</Value>
+                <Value data-cy="vessel-card-external-reference-number">
+                  {vesselProperties.externalReferenceNumber ? (
+                    vesselProperties.externalReferenceNumber
+                  ) : (
+                    <NoValue>-</NoValue>
+                  )}
+                </Value>
               </Field>
               <Field>
                 <Key>Call Sign (IRCS)</Key>
-                <Value data-cy={'vessel-card-ircs'}>{vesselProperties.ircs
-                  ? vesselProperties.ircs
-                  : <NoValue>-</NoValue>}</Value>
+                <Value data-cy="vessel-card-ircs">
+                  {vesselProperties.ircs ? vesselProperties.ircs : <NoValue>-</NoValue>}
+                </Value>
               </Field>
             </Body>
           </Fields>
@@ -162,34 +162,21 @@ const VesselCard = ({ feature, overlayPosition, numberOfWarnings }) => {
               <Field>
                 <Key>Taille du navire</Key>
                 <Value>
-                  {
-                    vesselProperties.length ? vesselProperties.length : <NoValue>-</NoValue>
-                  }
-                  {' '}x{' '}
-                  {
-                    vesselProperties.width ? vesselProperties.width : <NoValue>-</NoValue>
-                  }
-                  {' '}m
+                  {vesselProperties.length ? vesselProperties.length : <NoValue>-</NoValue>} x{' '}
+                  {vesselProperties.width ? vesselProperties.width : <NoValue>-</NoValue>} m
                 </Value>
               </Field>
             </Body>
           </Fields>
         </ColumnOne>
-
       </VesselCardBottom>
       <TrianglePointer>
-        {
-          overlayPosition === OverlayPosition.BOTTOM ? <BottomTriangleShadow numberOfWarnings={numberOfWarnings}/> : null
-        }
-        {
-          overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow numberOfWarnings={numberOfWarnings}/> : null
-        }
-        {
-          overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow numberOfWarnings={numberOfWarnings}/> : null
-        }
-        {
-          overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow numberOfWarnings={numberOfWarnings}/> : null
-        }
+        {overlayPosition === OverlayPosition.BOTTOM ? (
+          <BottomTriangleShadow numberOfWarnings={numberOfWarnings} />
+        ) : null}
+        {overlayPosition === OverlayPosition.TOP ? <TopTriangleShadow numberOfWarnings={numberOfWarnings} /> : null}
+        {overlayPosition === OverlayPosition.RIGHT ? <RightTriangleShadow numberOfWarnings={numberOfWarnings} /> : null}
+        {overlayPosition === OverlayPosition.LEFT ? <LeftTriangleShadow numberOfWarnings={numberOfWarnings} /> : null}
       </TrianglePointer>
     </>
   )
@@ -210,7 +197,7 @@ const BeaconMalfunctionIcon = styled(BeaconMalfunctionSVG)`
 `
 
 const VesselCardAlert = styled.div`
-  background: #E1000F;
+  background: #e1000f;
   font-weight: 500;
   font-size: 13px;
   color: ${COLORS.background};
@@ -241,7 +228,7 @@ const NoLogbook = styled.span`
   height: 14px;
   margin-left: 3px;
   width: 14px;
-  background-color: #E1000F;
+  background-color: #e1000f;
   border-radius: 50%;
   display: inline-block;
 `
@@ -250,7 +237,7 @@ const LogbookOK = styled.span`
   height: 14px;
   margin-left: 3px;
   width: 14px;
-  background-color: #8CC61F;
+  background-color: #8cc61f;
   border-radius: 50%;
   display: inline-block;
 `
@@ -324,7 +311,7 @@ const Value = styled.td`
 const TrianglePointer = styled.div`
   margin-left: auto;
   margin-right: auto;
-  height: auto; 
+  height: auto;
   width: auto;
 `
 
@@ -335,12 +322,12 @@ const BottomTriangleShadow = styled.div`
   border-style: solid;
   border-width: 11px 6px 0 6px;
   border-color: ${COLORS.gainsboro} transparent transparent transparent;
-  margin-left: ${props => -(
-    props.numberOfWarnings === 1
+  margin-left: ${props =>
+    -(props.numberOfWarnings === 1
       ? marginsWithOneWarning.xMiddle
       : props.numberOfWarnings === 2
-        ? marginsWithTwoWarning.xMiddle
-        : marginsWithoutAlert.xMiddle) - 6}px;
+      ? marginsWithTwoWarning.xMiddle
+      : marginsWithoutAlert.xMiddle) - 6}px;
   margin-top: -1px;
   clear: top;
 `
@@ -350,21 +337,21 @@ const TopTriangleShadow = styled.div`
   width: 0;
   height: 0;
   border-top: transparent;
-  border-right : 6px solid transparent;
-  border-bottom : 11px solid ${COLORS.gainsboro};
-  border-left : 6px solid transparent;
-  margin-left: ${props => -(
-    props.numberOfWarnings === 1
+  border-right: 6px solid transparent;
+  border-bottom: 11px solid ${COLORS.gainsboro};
+  border-left: 6px solid transparent;
+  margin-left: ${props =>
+    -(props.numberOfWarnings === 1
       ? marginsWithOneWarning.xMiddle
       : props.numberOfWarnings === 2
-        ? marginsWithTwoWarning.xMiddle
-        : marginsWithoutAlert.xMiddle) - 6}px;
-  margin-top: ${props => (
-    props.numberOfWarnings === 1
+      ? marginsWithTwoWarning.xMiddle
+      : marginsWithoutAlert.xMiddle) - 6}px;
+  margin-top: ${props =>
+    (props.numberOfWarnings === 1
       ? marginsWithOneWarning.yBottom
       : props.numberOfWarnings === 2
-        ? marginsWithTwoWarning.yBottom
-        : marginsWithoutAlert.yBottom) + 10}px;
+      ? marginsWithTwoWarning.yBottom
+      : marginsWithoutAlert.yBottom) + 10}px;
   clear: top;
 `
 
@@ -373,21 +360,21 @@ const RightTriangleShadow = styled.div`
   width: 0;
   height: 0;
   border-right: transparent;
-  border-top : 6px solid transparent;
-  border-bottom : 6px solid transparent;
-  border-left : 11px solid ${COLORS.gainsboro};
-  margin-left: ${props => -(
-    props.numberOfWarnings === 1
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 11px solid ${COLORS.gainsboro};
+  margin-left: ${props =>
+    -(props.numberOfWarnings === 1
       ? marginsWithOneWarning.xRight
       : props.numberOfWarnings === 2
-        ? marginsWithTwoWarning.xRight
-        : marginsWithoutAlert.xRight) - 20}px;
-  margin-top: ${props => (
-    props.numberOfWarnings === 1
+      ? marginsWithTwoWarning.xRight
+      : marginsWithoutAlert.xRight) - 20}px;
+  margin-top: ${props =>
+    (props.numberOfWarnings === 1
       ? marginsWithOneWarning.yMiddle
       : props.numberOfWarnings === 2
-        ? marginsWithTwoWarning.yMiddle
-        : marginsWithoutAlert.yMiddle) - 6}px;
+      ? marginsWithTwoWarning.yMiddle
+      : marginsWithoutAlert.yMiddle) - 6}px;
   clear: top;
 `
 
@@ -401,12 +388,12 @@ const LeftTriangleShadow = styled.div`
   border-bottom: 6px solid transparent;
   border-left: transparent;
   margin-left: -11px;
-  margin-top: ${props => (
-    props.numberOfWarnings === 1
+  margin-top: ${props =>
+    (props.numberOfWarnings === 1
       ? marginsWithOneWarning.yMiddle
       : props.numberOfWarnings === 2
-        ? marginsWithTwoWarning.yMiddle
-        : marginsWithoutAlert.yMiddle) - 6}px;
+      ? marginsWithTwoWarning.yMiddle
+      : marginsWithoutAlert.yMiddle) - 6}px;
   clear: top;
 `
 

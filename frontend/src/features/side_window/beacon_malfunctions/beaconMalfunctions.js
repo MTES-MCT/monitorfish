@@ -1,25 +1,26 @@
 import React from 'react'
 import * as timeago from 'timeago.js'
+
 import {
   BeaconMalfunctionPropertyName,
   beaconMalfunctionsStages,
   endOfBeaconMalfunctionReasons,
-  vesselStatuses
+  vesselStatuses,
 } from '../../../domain/entities/beaconMalfunction'
 
 export const BeaconMalfunctionsSubMenu = {
-  PAIRING: {
-    name: 'Apparaige des balises',
-    code: 'PAIRING'
+  HISTORIC: {
+    code: 'MED',
+    name: 'Historique des avaries',
   },
   MALFUNCTIONING: {
+    code: 'MALFUNCTIONING',
     name: 'Avaries VMS en cours',
-    code: 'MALFUNCTIONING'
   },
-  HISTORIC: {
-    name: 'Historique des avaries',
-    code: 'MED'
-  }
+  PAIRING: {
+    code: 'PAIRING',
+    name: 'Apparaige des balises',
+  },
 }
 
 const BEACON_CREATION_AT_SEA_OFFSET = 6
@@ -39,13 +40,16 @@ export const getBeaconCreationDate = (dateLastEmission, status) => {
 
       return beaconCreationDate
     }
-    default: return dateLastEmission
+    default:
+      return dateLastEmission
   }
 }
 
-export function getBeaconCreationOrModificationDate (beaconMalfunction) {
+export function getBeaconCreationOrModificationDate(beaconMalfunction) {
   if (beaconMalfunction?.stage === beaconMalfunctionsStages.INITIAL_ENCOUNTER.code) {
-    return `ouverte ${getReducedTimeAgo(getBeaconCreationDate(beaconMalfunction?.malfunctionStartDateTime, beaconMalfunction?.vesselStatus))}`
+    return `ouverte ${getReducedTimeAgo(
+      getBeaconCreationDate(beaconMalfunction?.malfunctionStartDateTime, beaconMalfunction?.vesselStatus),
+    )}`
   }
 
   return `modifiée ${getReducedTimeAgo(beaconMalfunction?.vesselStatusLastModificationDateTime)}`
@@ -56,8 +60,13 @@ export const getActionText = (action, endOfBeaconMalfunctionReason) => {
     const previousValue = vesselStatuses.find(status => status.value === action.previousValue)?.label
     const nextValue = vesselStatuses.find(status => status.value === action.nextValue)?.label
 
-    return <>Le statut du ticket a été modifié, de <b>{previousValue}</b> à <b>{nextValue}</b>.</>
-  } else if (action.propertyName === BeaconMalfunctionPropertyName.STAGE) {
+    return (
+      <>
+        Le statut du ticket a été modifié, de <b>{previousValue}</b> à <b>{nextValue}</b>.
+      </>
+    )
+  }
+  if (action.propertyName === BeaconMalfunctionPropertyName.STAGE) {
     const previousValue = beaconMalfunctionsStages[action.previousValue].title
     const nextValue = beaconMalfunctionsStages[action.nextValue].title
 
@@ -76,18 +85,22 @@ export const getActionText = (action, endOfBeaconMalfunctionReason) => {
       }
     }
 
-    return <>Le ticket a été déplacé de <b>{previousValue}</b> à <b>{nextValue}</b>.
-      {
-        additionalText
-          ? <>{' '}Il a été clôturé pour cause de <b>{additionalText}</b>.</>
-          : ''
-      }
-    </>
+    return (
+      <>
+        Le ticket a été déplacé de <b>{previousValue}</b> à <b>{nextValue}</b>.
+        {additionalText ? (
+          <>
+            {' '}
+            Il a été clôturé pour cause de <b>{additionalText}</b>.
+          </>
+        ) : (
+          ''
+        )}
+      </>
+    )
   }
 }
 
-export function getReducedTimeAgo (dateTime) {
-  return timeago.format(dateTime, 'fr')
-    .replace('semaines', 'sem.')
-    .replace('semaine', 'sem.')
+export function getReducedTimeAgo(dateTime) {
+  return timeago.format(dateTime, 'fr').replace('semaines', 'sem.').replace('semaine', 'sem.')
 }

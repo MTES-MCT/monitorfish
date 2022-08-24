@@ -1,21 +1,24 @@
 import React, { useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
+import { SelectPicker } from 'rsuite'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 import { getMalfunctionStartDateText, vesselStatuses } from '../../../../domain/entities/beaconMalfunction'
-import { VesselStatusSelectValue } from '../../../side_window/beacon_malfunctions/VesselStatusSelectValue'
-import { SelectPicker } from 'rsuite'
 import updateBeaconMalfunctionFromKanban from '../../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
-import { useDispatch } from 'react-redux'
 import { ReactComponent as TimeAgoSVG } from '../../../icons/Label_horaire_VMS.svg'
+import { VesselStatusSelectValue } from '../../../side_window/beacon_malfunctions/VesselStatusSelectValue'
 
-const CurrentBeaconMalfunctionBody = props => {
+function CurrentBeaconMalfunctionBody(props) {
   const {
     /** @type {BeaconMalfunctionResumeAndDetails} */
-    currentBeaconMalfunctionWithDetails
+    currentBeaconMalfunctionWithDetails,
   } = props
   const dispatch = useDispatch()
   const vesselStatusRef = useRef()
-  const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === currentBeaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus)
+  const vesselStatus = vesselStatuses.find(
+    vesselStatus => vesselStatus.value === currentBeaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus,
+  )
 
   useEffect(() => {
     if (vesselStatus?.color && currentBeaconMalfunctionWithDetails?.beaconMalfunction?.id) {
@@ -30,33 +33,35 @@ const CurrentBeaconMalfunctionBody = props => {
     const nextBeaconMalfunction = {
       ...beaconMalfunction,
       vesselStatus: status,
-      vesselStatusLastModificationDateTime: new Date().toISOString()
+      vesselStatusLastModificationDateTime: new Date().toISOString(),
     }
 
-    dispatch(updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconMalfunction, {
-      vesselStatus: nextBeaconMalfunction.vesselStatus
-    }))
+    dispatch(
+      updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconMalfunction, {
+        vesselStatus: nextBeaconMalfunction.vesselStatus,
+      }),
+    )
   }
 
-  return currentBeaconMalfunctionWithDetails
-    ? <Body ref={vesselStatusRef}>
+  return currentBeaconMalfunctionWithDetails ? (
+    <Body ref={vesselStatusRef}>
       <SelectPicker
+        cleanable={false}
+        data={vesselStatuses}
+        onChange={status => updateVesselStatus(currentBeaconMalfunctionWithDetails?.beaconMalfunction, status)}
+        renderValue={(_, item) => <VesselStatusSelectValue item={item} />}
         searchable={false}
         value={vesselStatus?.value}
-        onChange={status => updateVesselStatus(currentBeaconMalfunctionWithDetails?.beaconMalfunction, status)}
-        data={vesselStatuses}
-        renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
-        cleanable={false}
       />
       <LastPosition
-        title={currentBeaconMalfunctionWithDetails?.beaconMalfunction?.malfunctionStartDateTime}
         style={lastPositionStyle}
+        title={currentBeaconMalfunctionWithDetails?.beaconMalfunction?.malfunctionStartDateTime}
       >
-        <TimeAgo style={timeAgoStyle}/>
+        <TimeAgo style={timeAgoStyle} />
         {getMalfunctionStartDateText(vesselStatus, currentBeaconMalfunctionWithDetails?.beaconMalfunction)}
       </LastPosition>
     </Body>
-    : null
+  ) : null
 }
 
 const Body = styled.div`
@@ -69,9 +74,9 @@ const Body = styled.div`
 
 const TimeAgo = styled(TimeAgoSVG)``
 const timeAgoStyle = {
-  verticalAlign: 'sub',
   marginRight: 5,
-  width: 15
+  verticalAlign: 'sub',
+  width: 15,
 }
 
 const LastPosition = styled.div``
@@ -79,8 +84,8 @@ const lastPositionStyle = {
   background: `${COLORS.gainsboro} 0% 0% no-repeat padding-box`,
   borderRadius: 1,
   display: 'inline-block',
+  fontWeight: 500,
   padding: '5px 8px',
-  fontWeight: 500
 }
 
 export default CurrentBeaconMalfunctionBody

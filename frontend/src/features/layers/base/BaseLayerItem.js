@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
-import { baseLayers } from '../../../domain/entities/layers'
-import { Radio } from 'rsuite'
-import { selectBaseLayer } from '../../../domain/shared_slices/Map'
 import { useDispatch } from 'react-redux'
+import { Radio } from 'rsuite'
+import styled from 'styled-components'
 
-const BaseLayerItem = ({ layer, isShownOnInit }) => {
+import { baseLayers } from '../../../domain/entities/layers'
+import { selectBaseLayer } from '../../../domain/shared_slices/Map'
+
+function BaseLayerItem({ isShownOnInit, layer }) {
   const dispatch = useDispatch()
 
   const firstUpdate = useRef(true)
@@ -20,6 +21,7 @@ const BaseLayerItem = ({ layer, isShownOnInit }) => {
   useEffect(() => {
     if (firstUpdate.current) {
       firstUpdate.current = false
+
       return
     }
 
@@ -28,28 +30,27 @@ const BaseLayerItem = ({ layer, isShownOnInit }) => {
     }
   }, [showLayer_])
 
-  function callSelectBaseLayer (baseLayer) {
+  function callSelectBaseLayer(baseLayer) {
     dispatch(selectBaseLayer(baseLayer))
   }
 
-  return <>
-    {layer
-      ? <Row
-        className={'base-layers-selection'}
-      >
-        <Radio
-          onChange={() => {
-            callSelectBaseLayer(baseLayers[layer].code)
-          }}
-          checked={isShownOnInit}
-          value={layer}>
-          {baseLayers[layer].text}
-        </Radio>
-
-      </Row>
-      : null
-    }
-  </>
+  return (
+    <>
+      {layer ? (
+        <Row className="base-layers-selection">
+          <Radio
+            checked={isShownOnInit}
+            onChange={() => {
+              callSelectBaseLayer(baseLayers[layer].code)
+            }}
+            value={layer}
+          >
+            {baseLayers[layer].text}
+          </Radio>
+        </Row>
+      ) : null}
+    </>
+  )
 }
 
 const Row = styled.span`

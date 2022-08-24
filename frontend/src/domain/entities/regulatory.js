@@ -294,23 +294,23 @@ export const DEFAULT_SPECIES_REGULATION = {
 
 /** @type {RegulatedGears} */
 export const DEFAULT_AUTHORIZED_REGULATED_GEARS = {
-  allTowedGears: undefined,
-  allPassiveGears: undefined,
+  allTowedGears: null,
+  allPassiveGears: null,
   regulatedGearCategories: {},
   regulatedGears: {},
   selectedCategoriesAndGears: [],
-  derogation: undefined
+  derogation: null
 }
 
 /** @type {RegulatedGears} */
 export const DEFAULT_UNAUTHORIZED_REGULATED_GEARS = {
-  allGears: undefined,
-  allTowedGears: undefined,
-  allPassiveGears: undefined,
+  allGears: null,
+  allTowedGears: null,
+  allPassiveGears: null,
   regulatedGearCategories: {},
   regulatedGears: {},
   selectedCategoriesAndGears: [],
-  derogation: undefined
+  derogation: null
 }
 
 /** @type {GearRegulation} */

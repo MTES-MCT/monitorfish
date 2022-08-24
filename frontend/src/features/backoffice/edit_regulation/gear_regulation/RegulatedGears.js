@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
+import _ from 'lodash'
 import { useSelector } from 'react-redux'
 import {
   CustomCheckbox,
@@ -105,14 +106,18 @@ const RegulatedGears = props => {
         }
       })
 
-      setRegulatedGearsObject(authorized, {
+      const nextRegulatedGearsObject = {
         ...regulatedGearsObject,
         [REGULATED_GEARS_KEYS.ALL_GEARS]: categories === formattedAndFilteredCategoriesToGears.length,
         [REGULATED_GEARS_KEYS.ALL_TOWED_GEARS]: towedGearCategories === groupsToCategories[REGULATED_GEARS_KEYS.ALL_TOWED_GEARS].length,
         [REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS]: passiveGearCategories === groupsToCategories[REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS].length,
         [REGULATED_GEARS_KEYS.REGULATED_GEARS]: nextRegulatedGears,
         [REGULATED_GEARS_KEYS.REGULATED_GEAR_CATEGORIES]: nextRegulatedGearCategories
-      })
+      }
+
+      if (!_.isEqual(nextRegulatedGearsObject, regulatedGearsObject)) {
+        setRegulatedGearsObject(authorized, nextRegulatedGearsObject)
+      }
     }
   }
 
@@ -322,7 +327,7 @@ const GearCheckBox = styled(CustomCheckbox)`
 const DerogationRadioWrapper = styled.div`
   padding-top: 15px;
 `
-const DerogationRadio = styled(RadioGroup)` 
+const DerogationRadio = styled(RadioGroup)`
   ${customRadioGroup}
   padding-right: 10px!important;
   border: 1.5px solid ${props => props.$isYellow ? COLORS.yellowMunsell : COLORS.lightGray}!important;

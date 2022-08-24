@@ -108,8 +108,11 @@ const EditRegulation = ({ title, isEdition }) => {
         dispatch(getAllRegulatoryLayersByRegTerritory())
       }
       dispatch(closeRegulatoryZoneMetadataPanel())
-      dispatch(setRegulationModified(false))
+      // dispatch(setRegulationModified(false))
     })
+    // TODO Remove this setTimeout (used to avoid the race condition of the setter updateRegulatedGearsAndCategories in RegulatedGears.js)
+    setTimeout(() => {
+    }, 0)
 
     return () => {
       dispatch(setProcessingRegulation(DEFAULT_REGULATION))

@@ -1,11 +1,17 @@
 import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../../../entities/regulatory'
 import { setError } from '../../../shared_slices/Global'
-import { setProcessingRegulation, setSelectedRegulatoryZoneId } from '../../../../features/backoffice/Regulation.slice'
+import {
+  setProcessingRegulation,
+  setSelectedRegulatoryZoneId,
+  setStatus
+} from '../../../../features/backoffice/Regulation.slice'
 import Layers from '../../../entities/layers'
 import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../../../api/geoserver'
+import { STATUS } from '../../../../features/backoffice/constants'
 
 const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
   const { speciesByCode } = getState().species
+  dispatch(setStatus(STATUS.LOADING))
 
   return getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZone, getState().global.inBackofficeMode)
     .then(feature => {

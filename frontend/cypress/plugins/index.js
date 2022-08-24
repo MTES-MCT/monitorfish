@@ -51,6 +51,6 @@ module.exports = (on, config) => {
 
     return launchOptions
   })
+
   return config
 }
-

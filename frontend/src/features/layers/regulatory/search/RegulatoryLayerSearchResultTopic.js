@@ -31,8 +31,12 @@ const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLa
     selectedRegulatoryLayers
   } = useSelector(state => state.regulatory)
 
-  const numberOfTotalZones = useSelector(state => state.regulatory
-    .regulatoryLayerLawTypes[regulatoryLayerLawType][regulatoryLayerTopic]?.length)
+  const numberOfTotalZones = useSelector(state => {
+    const regulatoryLayerLawTypes = state.regulatory.regulatoryLayerLawTypes
+    if (regulatoryLayerLawTypes && regulatoryLayerLawType && regulatoryLayerTopic) {
+      return regulatoryLayerLawTypes[regulatoryLayerLawType][regulatoryLayerTopic]?.length
+    }
+  })
 
   const allZonesAreAlreadySelected = selectedRegulatoryLayers[regulatoryLayerTopic]?.length === searchResultZonesLength
 
@@ -141,15 +145,15 @@ const LayerTopic = styled.div`
   font-weight: 700;
   color: ${COLORS.gunMetal};
   border-bottom: 1px solid ${COLORS.lightGray};
- 
+
   :hover {
     background: ${COLORS.shadowBlueLittleOpacity};
   }
-  
+
   .rs-checkbox-checker {
     padding-top: 24px;
   }
-  
+
   .rs-checkbox {
     margin-left: 0;
   }

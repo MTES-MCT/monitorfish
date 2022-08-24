@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { DEFAULT_REGULATION, REGULATORY_REFERENCE_KEYS } from '../../domain/entities/regulatory'
+import { STATUS } from './constants'
 
 const INITIAL_STATE = {
+  status: STATUS.IDLE,
   /** @type {Object} */
   processingRegulation: DEFAULT_REGULATION,
   /** @type {Map<number, RegulatoryText | null>} regulatoryTextCheckedMap */
@@ -36,18 +38,27 @@ const regulationSlice = createSlice({
       state.regulationModified = action.payload
     },
     updateProcessingRegulationByKey (state, { payload: { key, value } }) {
+      if (state.status !== STATUS.READY) {
+        return
+      }
+
       state.processingRegulation[key] = value
       if (!state.regulationModified) {
         state.regulationModified = true
       }
     },
     updateProcessingRegulationByKeyAndSubKey (state, { payload: { key, subKey, value } }) {
+      if (state.status !== STATUS.READY) {
+        return
+      }
+
       state.processingRegulation[key][subKey] = value
       if (!state.regulationModified) {
         state.regulationModified = true
       }
     },
     setProcessingRegulation (state, { payload }) {
+      state.status = STATUS.READY
       state.processingRegulation = payload
     },
     setFishingPeriod (state, { payload: { key, value } }) {
@@ -98,6 +109,9 @@ const regulationSlice = createSlice({
     },
     setIsConfirmModalOpen (state, action) {
       state.isConfirmModalOpen = action.payload
+    },
+    setStatus (state, action) {
+      state.status = action.payload
     }
   }
 })
@@ -118,7 +132,8 @@ export const {
   setFishingPeriod,
   setFishingPeriodOtherInfo,
   setSelectedRegulatoryZoneId,
-  setRegulationModified
+  setRegulationModified,
+  setStatus
 } = regulationSlice.actions
 
 export default regulationSlice.reducer

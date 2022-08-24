@@ -47,12 +47,13 @@ import {
   setProcessingRegulation,
   setRegulationModified,
   setRegulatoryTextCheckedMap,
-  setSaveOrUpdateRegulation
+  setSaveOrUpdateRegulation, setStatus
 } from '../Regulation.slice'
 import { setError } from '../../../domain/shared_slices/Global'
 import { DEFAULT_REGULATION, FRANCE, LAWTYPES_TO_TERRITORY } from '../../../domain/entities/regulatory'
 import SpeciesRegulation from './species_regulation/SpeciesRegulation'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
+import { STATUS } from '../constants'
 
 const EditRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -101,6 +102,12 @@ const EditRegulation = ({ title, isEdition }) => {
   } = processingRegulation
 
   useEffect(() => {
+    if (!isEdition) {
+      dispatch(setStatus(STATUS.READY))
+    }
+  }, [isEdition])
+
+  useEffect(() => {
     getGeometryObjectList()
     batch(async () => {
       await dispatch(getAllSpecies())
@@ -108,11 +115,7 @@ const EditRegulation = ({ title, isEdition }) => {
         dispatch(getAllRegulatoryLayersByRegTerritory())
       }
       dispatch(closeRegulatoryZoneMetadataPanel())
-      // dispatch(setRegulationModified(false))
     })
-    // TODO Remove this setTimeout (used to avoid the race condition of the setter updateRegulatedGearsAndCategories in RegulatedGears.js)
-    setTimeout(() => {
-    }, 0)
 
     return () => {
       dispatch(setProcessingRegulation(DEFAULT_REGULATION))

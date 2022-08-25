@@ -23,7 +23,8 @@
     "test:lint:partial": "eslint --config=./.eslintrc.partial.js ./src",
     "test:type": "tsc",
     "test:type:partial": "tsc --project ./tsconfig.partial.json",
-    "test:unit": "jest --config=./config/jest.config.js --detectOpenHandles"
+    "test:unit": "jest --config=./config/jest.config.js --detectOpenHandles",
+    "test:unit:watch": "npm run test:unit -- --watch"
   },
   "dependencies": {
     "@dnd-kit/core": "^4.0.3",

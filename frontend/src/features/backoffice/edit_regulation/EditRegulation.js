@@ -102,12 +102,6 @@ const EditRegulation = ({ title, isEdition }) => {
   } = processingRegulation
 
   useEffect(() => {
-    if (!isEdition) {
-      dispatch(setStatus(STATUS.READY))
-    }
-  }, [isEdition])
-
-  useEffect(() => {
     getGeometryObjectList()
     batch(async () => {
       await dispatch(getAllSpecies())
@@ -118,6 +112,7 @@ const EditRegulation = ({ title, isEdition }) => {
     })
 
     return () => {
+      dispatch(setStatus(STATUS.IDLE))
       dispatch(setProcessingRegulation(DEFAULT_REGULATION))
       dispatch(setRegulatoryZoneMetadata(undefined))
       dispatch(resetRegulatoryGeometriesToPreview())

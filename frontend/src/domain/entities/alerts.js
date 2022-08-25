@@ -1,4 +1,5 @@
 import { getDate } from '../../utils'
+import { ReportingType } from './reporting'
 
 export const AlertType = {
   PNO_LAN_WEIGHT_TOLERANCE_ALERT: {

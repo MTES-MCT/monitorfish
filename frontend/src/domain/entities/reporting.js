@@ -1,3 +1,5 @@
+import { getAlertNameFromType } from './alerts'
+
 export const ReportingType = {
   ALERT: {
     code: 'ALERT',
@@ -125,4 +127,12 @@ export const getReportingOrigin = reporting => {
   }
 
   return ''
+}
+
+export function getReportingTitle (reporting) {
+  if (reporting.type === ReportingType.ALERT.code) {
+    return getAlertNameFromType(reporting.value.type)
+  }
+
+  return reporting.value.title
 }

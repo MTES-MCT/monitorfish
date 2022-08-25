@@ -10,8 +10,8 @@ import { getLocalStorageState } from '../../../../utils'
 import { useSaveReportingInLocalStorage } from './useSaveInLocalStorage'
 import addReporting from '../../../../domain/use_cases/reporting/addReporting'
 
-const newReportingLocalStorageKey = 'new-reporting'
-const ReportingForm = ({ selectedVesselIdentity, closeForm }) => {
+const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, editedReporting }) => {
+  const reportingLocalStorageKey = fromSideWindow ? 'side-window-reporting-in-edit' : 'reporting-in-edit'
   // TODO Make the edition possible
 
   const dispatch = useDispatch()
@@ -19,28 +19,42 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm }) => {
   const controllers = useSelector(state => state.controls.controllers)
 
   const [reportingType, setReportingType] = useState(ReportingType.INFRACTION_SUSPICION.code)
-  useSaveReportingInLocalStorage('type', reportingType, false)
+  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'type', reportingType, false)
   const [unit, setUnit] = useState('')
-  useSaveReportingInLocalStorage('unit', unit, true)
+  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'unit', unit, true)
   const [authorTrigram, setAuthorTrigram] = useState('')
-  useSaveReportingInLocalStorage('authorTrigram', authorTrigram, true)
+  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'authorTrigram', authorTrigram, true)
   const [authorContact, setAuthorContact] = useState('')
-  useSaveReportingInLocalStorage('authorContact', authorContact, true)
+  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'authorContact', authorContact, true)
   const [reportingActor, setReportingActor] = useState(ReportingOriginActor.OPS.code)
-  useSaveReportingInLocalStorage('reportingActor', reportingActor, true)
+  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'reportingActor', reportingActor, true)
   const [title, setTitle] = useState('')
-  useSaveReportingInLocalStorage('title', title, true)
+  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'title', title, true)
   const [natinfCode, setNatinfCode] = useState('')
-  useSaveReportingInLocalStorage('natinfCode', natinfCode, true)
+  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'natinfCode', natinfCode, true)
   const [dml, setDml] = useState('')
-  useSaveReportingInLocalStorage('dml', dml, true)
+  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'dml', dml, true)
   const [description, setDescription] = useState('')
-  useSaveReportingInLocalStorage('description', description, true)
+  useSaveReportingInLocalStorage(reportingLocalStorageKey, 'description', description, true)
   const [hasError, setHasError] = useState(false)
 
   useEffect(() => {
-    const savedReporting = getLocalStorageState(null, newReportingLocalStorageKey)
+    if (editedReporting) {
+      console.log(editedReporting)
+      setHasError(false)
+      setReportingType(editedReporting?.type || ReportingType.INFRACTION_SUSPICION.code)
+      setUnit(editedReporting?.value?.unit || '')
+      setAuthorTrigram(editedReporting?.value?.authorTrigram || '')
+      setAuthorContact(editedReporting?.value?.authorContact || '')
+      setReportingActor(editedReporting?.value?.reportingActor || ReportingOriginActor.OPS.code)
+      setTitle(editedReporting?.value?.title || '')
+      setNatinfCode(editedReporting?.value?.natinfCode || '')
+      setDml(editedReporting?.value?.dml || '')
+      setDescription(editedReporting?.value?.description || '')
+      return
+    }
 
+    const savedReporting = getLocalStorageState(null, reportingLocalStorageKey)
     if (savedReporting) {
       setHasError(false)
       setReportingType(savedReporting?.type || ReportingType.INFRACTION_SUSPICION.code)
@@ -53,7 +67,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm }) => {
       setDml(savedReporting?.value?.dml || '')
       setDescription(savedReporting?.value?.description || '')
     }
-  }, [])
+  }, [editedReporting])
 
   useEffect(() => {
     switch (reportingType) {

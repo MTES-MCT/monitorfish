@@ -17,7 +17,7 @@ import CardTableRow from '../../card-table/CardTableRow'
 import EmptyCardTable from '../../card-table/EmptyCardTable'
 import CardTableBody from '../../card-table/CardTableBody'
 import CardTableHeader from '../../card-table/CardTableHeader'
-import { getReportingOrigin } from '../../../domain/entities/reporting'
+import { getReportingOrigin, getReportingTitle, ReportingType } from '../../../domain/entities/reporting'
 import RowVerticalSeparator from '../../card-table/RowVerticalSeparator'
 import CardTableFilters from '../../card-table/CardTableFilters'
 import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
@@ -95,6 +95,12 @@ const ReportingList = ({ seaFront }) => {
       .then(() => setCheckedReportingIds([]))
   }
 
+  function edit (disabled, reporting) {
+    if (!disabled) {
+      dispatch(setEditedReportingInSideWindow(reporting))
+    }
+  }
+
   return <Content>
     <CardTableFilters>
       <FilterTableInput
@@ -157,75 +163,80 @@ const ReportingList = ({ seaFront }) => {
         </FlexboxGrid>
       </CardTableHeader>
       <CardTableBody>
-        {sortedAndCheckedReportings.map((reporting, index) => (
-          <CardTableRow
-            key={reporting.id}
-            index={index + 1}
-          >
-            <FlexboxGrid>
-              <FlexboxGrid.Item style={columnStyles[0]}>
-                <StyledCheckbox
-                  checked={reporting.checked}
-                  onChange={_ => handleSelectReporting(reporting.id)}
-                />
-              </FlexboxGrid.Item>
-              <FlexboxGrid.Item style={columnStyles[1]} title={reporting.validationDate}>
-                {timeago.format(reporting.validationDate, 'fr')}
-              </FlexboxGrid.Item>
-              <FlexboxGrid.Item style={columnStyles[2]}>
-                {getReportingOrigin(reporting)}
-              </FlexboxGrid.Item>
-              <FlexboxGrid.Item style={columnStyles[3]}>
-                {getAlertNameFromType(reporting.value.type)}
-              </FlexboxGrid.Item>
-              <FlexboxGrid.Item style={columnStyles[4]}>
-                {reporting.value.natinfCode}
-              </FlexboxGrid.Item>
-              <FlexboxGrid.Item style={columnStyles[5]}>
-                <Flag
-                  title={countries.getName(reporting.value.flagState?.toLowerCase(), 'fr')}
-                  rel="preload"
-                  src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.value.flagState?.toLowerCase()}.svg`}
-                  style={{ width: 18, marginRight: 5, marginLeft: 0, marginTop: 1 }}
-                />
-                {reporting.vesselName}
-              </FlexboxGrid.Item>
-              <FlexboxGrid.Item style={columnStyles[6]}>
-                {reporting.value.dml}
-              </FlexboxGrid.Item>
-              <FlexboxGrid.Item style={columnStyles[7]}>
-                {
-                  reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>
-                }
-              </FlexboxGrid.Item>
-              <RowVerticalSeparator/>
-              <FlexboxGrid.Item style={columnStyles[8]}>
-                <Icon
-                  data-cy={'side-window-silenced-alerts-show-vessel'}
-                  style={showIconStyle}
-                  alt={'Voir sur la carte'}
-                  title={'Voir sur la carte'}
-                  onClick={() => {
-                    const vesselIdentity = { ...reporting }
-                    dispatch(showVessel(vesselIdentity, false, false, null))
-                    dispatch(getVesselVoyage(vesselIdentity, null, false))
-                  }}
-                  src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
-                />
-              </FlexboxGrid.Item>
-              <FlexboxGrid.Item style={columnStyles[9]}>
-                <Icon
-                  data-cy={'side-window-edit-reporting'}
-                  style={editIconStyle}
-                  alt={'Editer le signalement'}
-                  title={'Editer le signalement'}
-                  onClick={() => dispatch(setEditedReportingInSideWindow(reporting))}
-                  src={`${baseUrl}/Bouton_edition.png`}
-                />
-              </FlexboxGrid.Item>
-            </FlexboxGrid>
-          </CardTableRow>
-        ))}
+        {sortedAndCheckedReportings.map((reporting, index) => {
+          const editingIsDisabled = reporting.type === ReportingType.ALERT.code
+
+          return (
+            <CardTableRow
+              key={reporting.id}
+              index={index + 1}
+            >
+              <FlexboxGrid>
+                <FlexboxGrid.Item style={columnStyles[0]}>
+                  <StyledCheckbox
+                    checked={reporting.checked}
+                    onChange={_ => handleSelectReporting(reporting.id)}
+                  />
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item style={columnStyles[1]} title={reporting.validationDate}>
+                  {timeago.format(reporting.validationDate, 'fr')}
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item title={getReportingOrigin(reporting)} style={columnStyles[2]}>
+                  {getReportingOrigin(reporting)}
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item title={getReportingTitle(reporting)} style={columnStyles[3]}>
+                  {getReportingTitle(reporting)}
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item style={columnStyles[4]}>
+                  {reporting.value.natinfCode}
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item title={reporting.vesselName} style={columnStyles[5]}>
+                  <Flag
+                    title={countries.getName(reporting.value.flagState?.toLowerCase(), 'fr')}
+                    rel="preload"
+                    src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.value.flagState?.toLowerCase()}.svg`}
+                    style={{ width: 18, marginRight: 5, marginLeft: 0, marginTop: -2 }}
+                  />
+                  {reporting.vesselName}
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item style={columnStyles[6]}>
+                  {reporting.value.dml}
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item style={columnStyles[7]}>
+                  {
+                    reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>
+                  }
+                </FlexboxGrid.Item>
+                <RowVerticalSeparator/>
+                <FlexboxGrid.Item style={columnStyles[8]}>
+                  <Icon
+                    data-cy={'side-window-silenced-alerts-show-vessel'}
+                    style={showIconStyle}
+                    alt={'Voir sur la carte'}
+                    title={'Voir sur la carte'}
+                    onClick={() => {
+                      const vesselIdentity = { ...reporting }
+                      dispatch(showVessel(vesselIdentity, false, false, null))
+                      dispatch(getVesselVoyage(vesselIdentity, null, false))
+                    }}
+                    src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
+                  />
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item style={columnStyles[9]}>
+                  <Icon
+                    data-cy={'side-window-edit-reporting'}
+                    style={editIconStyle(editingIsDisabled)}
+                    alt={'Editer le signalement'}
+                    title={'Editer le signalement'}
+                    onClick={() => edit(editingIsDisabled, reporting)}
+                    src={`${baseUrl}/Bouton_edition.png`}
+                    disabled={editingIsDisabled}
+                  />
+                </FlexboxGrid.Item>
+              </FlexboxGrid>
+            </CardTableRow>
+          )
+        })}
       </CardTableBody>
       {
         !sortedReportings?.length &&
@@ -283,45 +294,67 @@ const styleCenter = {
 const columnStyles = [
   {
     ...styleCenter,
-    width: 46
+    paddingRight: 10,
+    width: 36
   },
   {
     ...styleCenter,
-    width: 160
-  },
-  {
-    ...styleCenter,
-    width: 180
-  },
-  {
-    ...styleCenter,
-    width: 300
-  },
-  {
-    ...styleCenter,
+    paddingRight: 10,
     width: 150
   },
   {
     ...styleCenter,
-    width: 230
+    paddingRight: 10,
+    width: 170
   },
   {
     ...styleCenter,
-    width: 190
+    paddingRight: 10,
+    width: 290,
+    height: 20,
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    display: 'inline-block',
+    marginTop: -3
   },
   {
     ...styleCenter,
-    width: 155
+    paddingRight: 10,
+    width: 140
+  },
+  {
+    ...styleCenter,
+    paddingRight: 10,
+    width: 220,
+    height: 20,
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    display: 'inline-block',
+    marginTop: -3
+  },
+  {
+    ...styleCenter,
+    paddingRight: 10,
+    width: 180
+  },
+  {
+    ...styleCenter,
+    paddingRight: 10,
+    width: 145
   },
   {
     ...styleCenter,
     marginLeft: 10,
-    width: 30
+    paddingRight: 10,
+    width: 20
   },
   {
     ...styleCenter,
     marginLeft: 10,
-    width: 30
+    paddingRight: 10,
+    width: 20
   }
 ]
 
@@ -350,12 +383,12 @@ const showIconStyle = {
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const Icon = styled.img``
-const editIconStyle = {
+const editIconStyle = disabled => ({
   paddingRight: 10,
   float: 'right',
   flexShrink: 0,
-  cursor: 'pointer',
+  cursor: disabled ? 'not-allowed' : 'pointer',
   marginLeft: 'auto'
-}
+})
 
 export default ReportingList

@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
@@ -51,7 +48,7 @@ class ReportingControllerITests {
     private lateinit var addReporting: AddReporting
 
     @MockBean
-    private lateinit var getAllReportings: GetAllReportings
+    private lateinit var getAllCurrentReportings: GetAllCurrentReportings
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -137,7 +134,7 @@ class ReportingControllerITests {
   @Test
   fun `Should get all current reportings`() {
     // Given
-    given(getAllReportings.execute()).willReturn(listOf(
+    given(getAllCurrentReportings.execute()).willReturn(listOf(
       Reporting(
         internalReferenceNumber = "FRFGRGR",
         externalReferenceNumber = "RGD",
@@ -147,7 +144,8 @@ class ReportingControllerITests {
         value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
         type = ReportingType.INFRACTION_SUSPICION,
         isDeleted = false,
-        isArchived = false)
+        isArchived = false,
+        underCharter = true)
     ))
 
     // When
@@ -158,6 +156,7 @@ class ReportingControllerITests {
       .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", equalTo("FRFGRGR")))
       .andExpect(MockMvcResultMatchers.jsonPath("$[0].isArchived", equalTo(false)))
       .andExpect(MockMvcResultMatchers.jsonPath("$[0].isDeleted", equalTo(false)))
+      .andExpect(MockMvcResultMatchers.jsonPath("$[0].underCharter", equalTo(true)))
   }
 
 }

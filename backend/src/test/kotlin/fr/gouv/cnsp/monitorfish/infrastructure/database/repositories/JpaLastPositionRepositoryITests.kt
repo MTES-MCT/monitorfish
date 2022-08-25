@@ -175,4 +175,16 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(lastPosition.reportings).hasSize(0)
     }
 
+    @Test
+    @Transactional
+    fun `findUnderCharterForVessel Should get the underCharter field of a vessel`() {
+        // When
+        val underCharter = jpaLastPositionRepository.findUnderCharterForVessel(
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            "ABC000180832")
+
+        // Then
+        assertThat(underCharter).isTrue
+    }
+
 }

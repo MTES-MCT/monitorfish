@@ -14,7 +14,7 @@ interface LastPositionRepository {
                                                           vesselIdentifier: VesselIdentifier,
                                                           value: String,
                                                           isValidated: Boolean)
-
+    fun findUnderCharterForVessel(vesselIdentifier: VesselIdentifier, value: String): Boolean
     // For test purpose
     fun deleteAll()
 }

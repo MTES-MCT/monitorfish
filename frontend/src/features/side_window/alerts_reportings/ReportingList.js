@@ -189,8 +189,13 @@ const ReportingList = ({ seaFront }) => {
               <FlexboxGrid.Item style={columnStyles[6]}>
                 {reporting.value.dml}
               </FlexboxGrid.Item>
-              <RowVerticalSeparator/>
               <FlexboxGrid.Item style={columnStyles[7]}>
+                {
+                  reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>
+                }
+              </FlexboxGrid.Item>
+              <RowVerticalSeparator/>
+              <FlexboxGrid.Item style={columnStyles[8]}>
                 <Icon
                   data-cy={'side-window-silenced-alerts-show-vessel'}
                   style={showIconStyle}
@@ -204,13 +209,13 @@ const ReportingList = ({ seaFront }) => {
                   src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                 />
               </FlexboxGrid.Item>
-              <FlexboxGrid.Item style={columnStyles[8]}>
+              <FlexboxGrid.Item style={columnStyles[9]}>
                 <Icon
                   data-cy={'side-window-silenced-alerts-delete-silenced-alert'}
                   style={editIconStyle}
                   alt={'Réactiver l\'alerte'}
                   title={'Réactiver l\'alerte'}
-                  onClick={() => dispatch(reactivateSilencedAlert(reporting.id))}
+                  onClick={() => console.log('edit')}
                   src={`${baseUrl}/Bouton_edition.png`}
                 />
               </FlexboxGrid.Item>
@@ -225,6 +230,13 @@ const ReportingList = ({ seaFront }) => {
     </CardTable>
   </Content>
 }
+
+const UnderCharter = styled.div`
+  background: ${COLORS.mediumSeaGreen} 0% 0% no-repeat padding-box;
+  padding: 2px 8px;
+  border-radius: 1px;
+  color: ${COLORS.gunMetal};
+`
 
 const RightAligned = styled.div`
   margin-left: auto;
@@ -290,7 +302,11 @@ const columnStyles = [
   },
   {
     ...styleCenter,
-    width: 250
+    width: 190
+  },
+  {
+    ...styleCenter,
+    width: 155
   },
   {
     ...styleCenter,

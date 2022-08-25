@@ -26,6 +26,7 @@ import { ReactComponent as DeleteIconSVG } from '../../icons/Bouton_supprimer.sv
 import { COLORS } from '../../../constants/constants'
 import { PrimaryButton } from '../../commonStyles/Buttons.style'
 import deleteReporting from '../../../domain/use_cases/reporting/deleteReporting'
+import archiveReportings from '../../../domain/use_cases/reporting/archiveReportings'
 
 const ReportingList = ({ seaFront }) => {
   const dispatch = useDispatch()
@@ -79,6 +80,11 @@ const ReportingList = ({ seaFront }) => {
     }
   }
 
+  function archive () {
+    dispatch(archiveReportings(checkedReportingIds.map(Number)))
+      .then(() => setCheckedReportingIds([]))
+  }
+
   return <Content>
     <CardTableFilters>
       <FilterTableInput
@@ -95,12 +101,12 @@ const ReportingList = ({ seaFront }) => {
             <ArchiveButton
               data-cy={'archive-reporting-cards'}
               title={'Archiver'}
-              onClick={() => dispatch(archiveReporting(null))} // TODO archiveReportings and clean checkboxes array
+              onClick={archive}
             />
             <DeleteButton
               data-cy={'delete-reporting-cards'}
               title={'Supprimer'}
-              onClick={() => dispatch(deleteReporting(null))} // TODO deleteReportings and clean checkboxes array
+              onClick={() => dispatch(deleteReporting(null))}
             />
           </>
         }
@@ -113,8 +119,8 @@ const ReportingList = ({ seaFront }) => {
     </CardTableFilters>
     <CardTable
       data-cy={'side-window-reporting-list'}
-      hasScroll={filteredReportings.length > 9}
-      width={1513}
+      $hasScroll={filteredReportings.length > 9}
+      $width={1513}
       style={{ marginTop: 10 }}
     >
       <CardTableHeader>

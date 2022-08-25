@@ -1,11 +1,17 @@
 import { removeError, setError } from '../../shared_slices/Global'
-import { batch } from 'react-redux'
-import { setCurrentAndArchivedReportings } from '../../shared_slices/Reporting'
-import { archiveReportingFromAPI } from '../../../api/reporting'
+import {
+  removeReportingsIdsFromCurrentReportings,
+  setCurrentAndArchivedReportings
+} from '../../shared_slices/Reporting'
+import { archiveReportingsFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../entities/vessel'
-import { removeVesselReporting } from '../../shared_slices/Vessel'
+import { removeVesselReportings } from '../../shared_slices/Vessel'
 
-const archiveReportings = ids => (dispatch, getState) => {
+/**
+ * Archive multiple reportings
+ * @param {number[]} ids - The ids of reporting to archive
+ */
+const archiveReportings = ids => async (dispatch, getState) => {
   const {
     selectedVesselIdentity
   } = getState().vessel
@@ -14,41 +20,57 @@ const archiveReportings = ids => (dispatch, getState) => {
     currentReportings,
     vesselIdentity
   } = getState().reporting
-  // TODO Write the logic of archiveReporting.js for multiple reportings and also mutate currentReportings state
+  const reportingsToArchive = getReportingsToArchiveObjects(ids, currentReportings)
 
-  if (vesselIdentity) {
-    ids.forEach(id => {
-      const archivedReporting = currentAndArchivedReportings.current.find(reporting => reporting.id === id)
-      const nextCurrentAndArchivedReporting = moveReportingToArchived(currentAndArchivedReportings, archivedReporting)
+  return archiveReportingsFromAPI(ids).then(() => {
+    dispatch(removeReportingsIdsFromCurrentReportings(ids))
+    dispatch(removeVesselReportings(reportingsToArchive))
+    if (vesselIdentity && currentAndArchivedReportings.current?.length) {
+      const reportingsToArchive = getReportingsToArchiveOfSelectedVessel(ids, currentAndArchivedReportings)
+
+      const nextCurrentAndArchivedReporting = moveReportingsToArchived(currentAndArchivedReportings, reportingsToArchive)
       dispatch(setCurrentAndArchivedReportings({
         currentAndArchivedReportings: nextCurrentAndArchivedReporting,
         vesselIdentity: selectedVesselIdentity
       }))
-    })
-  }
-
-  archiveReportingFromAPI(id).then(() => {
-    dispatch(removeVesselReporting({
-      vesselId: Vessel.getVesselFeatureId(selectedVesselIdentity),
-      reportingType: archivedReporting?.type
-    }))
+    }
     dispatch(removeError())
   }).catch(error => {
     console.error(error)
-    if (vesselIdentity) {
-      dispatch(setCurrentAndArchivedReportings({
-        currentAndArchivedReportings: currentAndArchivedReportings,
-        vesselIdentity: selectedVesselIdentity
-      }))
-    }
     dispatch(setError(error))
   })
 }
 
-function moveReportingToArchived (currentAndArchivedReportings, archivedReporting) {
+function getReportingsToArchiveObjects (ids, currentReportings) {
+  return ids.map(id => {
+    const reporting = currentReportings.find(reporting => reporting.id === id)
+    if (!reporting) {
+      return null
+    }
+
+    return {
+      id: reporting.id,
+      type: reporting.type,
+      vesselId: Vessel.getVesselFeatureId(reporting),
+    }
+  }).filter(reporting => reporting)
+}
+
+function getReportingsToArchiveOfSelectedVessel (ids, currentAndArchivedReportings) {
+  return ids.map(id => {
+    const reportingToArchive = currentAndArchivedReportings.current.find(reporting => reporting.id === id)
+    if (reportingToArchive) {
+      return reportingToArchive
+    }
+  }).filter(reporting => reporting)
+}
+
+function moveReportingsToArchived (currentAndArchivedReportings, reportingsToArchive) {
   const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportings }
-  nextCurrentAndArchivedReporting.current = nextCurrentAndArchivedReporting.current.filter(reporting => reporting.id !== archivedReporting.id)
-  nextCurrentAndArchivedReporting.archived = nextCurrentAndArchivedReporting.archived.concat(archivedReporting)
+  reportingsToArchive.forEach(reportingToArchive => {
+    nextCurrentAndArchivedReporting.current = nextCurrentAndArchivedReporting.current.filter(reporting => reporting.id !== reportingToArchive.id)
+    nextCurrentAndArchivedReporting.archived = nextCurrentAndArchivedReporting.archived.concat(reportingToArchive)
+  })
 
   return nextCurrentAndArchivedReporting
 }

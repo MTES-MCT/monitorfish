@@ -29,7 +29,7 @@ import { ErrorToastNotification } from './features/commonComponents/ErrorToastNo
 import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import StateManager from './api/BackofficeMode'
-import AlertsMapButton from './features/side_window/alerts/AlertsMapButton'
+import AlertsMapButton from './features/side_window/alerts_reportings/AlertsMapButton'
 import BeaconMalfunctionsMapButton from './features/side_window/beacon_malfunctions/BeaconMalfunctionsMapButton'
 import SideWindowLauncher from './features/side_window/SideWindowLauncher'
 import SideWindow from './features/side_window/SideWindow'

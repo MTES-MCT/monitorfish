@@ -1,6 +1,9 @@
 import { removeError, setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
-import { setCurrentAndArchivedReportings } from '../../shared_slices/Reporting'
+import {
+  removeReportingsIdsFromCurrentReportings,
+  setCurrentAndArchivedReportings
+} from '../../shared_slices/Reporting'
 import { deleteReportingFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../entities/vessel'
 import { removeVesselReporting } from '../../shared_slices/Vessel'
@@ -21,6 +24,7 @@ const deleteReporting = id => (dispatch, getState) => {
   }))
 
   deleteReportingFromAPI(id).then(() => {
+    dispatch(removeReportingsIdsFromCurrentReportings([id]))
     dispatch(removeVesselReporting({
       vesselId: Vessel.getVesselFeatureId(selectedVesselIdentity),
       reportingType: deletedReporting?.type

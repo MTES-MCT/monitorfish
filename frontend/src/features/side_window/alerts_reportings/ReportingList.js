@@ -27,6 +27,7 @@ import { COLORS } from '../../../constants/constants'
 import { PrimaryButton } from '../../commonStyles/Buttons.style'
 import deleteReporting from '../../../domain/use_cases/reporting/deleteReporting'
 import archiveReportings from '../../../domain/use_cases/reporting/archiveReportings'
+import deleteReportings from '../../../domain/use_cases/reporting/deleteReportings'
 
 const ReportingList = ({ seaFront }) => {
   const dispatch = useDispatch()
@@ -85,6 +86,11 @@ const ReportingList = ({ seaFront }) => {
       .then(() => setCheckedReportingIds([]))
   }
 
+  function remove () {
+    dispatch(deleteReportings(checkedReportingIds.map(Number)))
+      .then(() => setCheckedReportingIds([]))
+  }
+
   return <Content>
     <CardTableFilters>
       <FilterTableInput
@@ -106,7 +112,7 @@ const ReportingList = ({ seaFront }) => {
             <DeleteButton
               data-cy={'delete-reporting-cards'}
               title={'Supprimer'}
-              onClick={() => dispatch(deleteReporting(null))}
+              onClick={remove}
             />
           </>
         }

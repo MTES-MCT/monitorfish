@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
 import { COLORS } from '../../../constants/constants'

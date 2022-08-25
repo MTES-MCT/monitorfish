@@ -193,18 +193,17 @@ context('Update Regulation', () => {
 
     // Then
     cy.wait('@postRegulation').then(({ request, response }) => {
-      expect(request.body)
+      expect(request.body).contain(
         // Unauthorized
-        .contain(
-          '{"unauthorized":{"allGears":false,"allTowedGears":false,"allPassiveGears":false,' +
-            '"regulatedGearCategories":{},"regulatedGears":{"OT":{"code":"OT","name":"Chaluts à panneaux (non spécifiés)",' +
-            '"category":"Chaluts","groupId":1}},"selectedCategoriesAndGears":["OT"]},' +
-            // Authorized
-            '"authorized":{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !",' +
-            '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines",' +
-            '"category":"Chaluts","groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"],"remarks":"Attention à cette espèce!"}},' +
-            '"allPassiveGears":false,"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}}',
-        )
+        '{"unauthorized":{"allGears":false,"otherInfo":null,"allTowedGears":false,' +
+          '"regulatedGears":{"OT":{"code":"OT","name":"Chaluts à panneaux (non spécifiés)","category":"Chaluts","groupId":1}},' +
+          '"allPassiveGears":false,"regulatedGearCategories":{},"selectedCategoriesAndGears":["OT"]},' +
+          // Authorized
+          '"authorized":{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !",' +
+          '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines",' +
+          '"category":"Chaluts","groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"],"remarks":"Attention à cette espèce!"}},' +
+          '"allPassiveGears":false,"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}}',
+      )
 
       expect(response && response.statusCode).equal(200)
     })

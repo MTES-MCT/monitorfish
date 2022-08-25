@@ -47,12 +47,13 @@ import {
   setProcessingRegulation,
   setRegulationModified,
   setRegulatoryTextCheckedMap,
-  setSaveOrUpdateRegulation
+  setSaveOrUpdateRegulation, setStatus
 } from '../Regulation.slice'
 import { setError } from '../../../domain/shared_slices/Global'
 import { DEFAULT_REGULATION, FRANCE, LAWTYPES_TO_TERRITORY } from '../../../domain/entities/regulatory'
 import SpeciesRegulation from './species_regulation/SpeciesRegulation'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
+import { STATUS } from '../constants'
 
 const EditRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -108,10 +109,10 @@ const EditRegulation = ({ title, isEdition }) => {
         dispatch(getAllRegulatoryLayersByRegTerritory())
       }
       dispatch(closeRegulatoryZoneMetadataPanel())
-      dispatch(setRegulationModified(false))
     })
 
     return () => {
+      dispatch(setStatus(STATUS.IDLE))
       dispatch(setProcessingRegulation(DEFAULT_REGULATION))
       dispatch(setRegulatoryZoneMetadata(undefined))
       dispatch(resetRegulatoryGeometriesToPreview())

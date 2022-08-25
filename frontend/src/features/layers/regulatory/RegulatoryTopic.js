@@ -39,8 +39,12 @@ const RegulatoryTopic = props => {
     regulatoryTopicsOpened
   } = useSelector(state => state.regulatory)
   const lawType = regulatoryZones[0]?.lawType
-  const numberOfTotalZones = useSelector(state => state.regulatory
-    .regulatoryLayerLawTypes[lawType][regulatoryTopic]?.length)
+  const numberOfTotalZones = useSelector(state => {
+    const regulatoryLayerLawTypes = state.regulatory.regulatoryLayerLawTypes
+    if (regulatoryLayerLawTypes && lawType && regulatoryTopic) {
+      return regulatoryLayerLawTypes[lawType][regulatoryTopic]?.length
+    }
+  })
 
   const [isOpen, setIsOpen] = useState(false)
   const [atLeastOneTopicIsShowed, setAtLeastOneTopicIsShowed] = useState(false)

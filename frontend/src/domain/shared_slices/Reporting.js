@@ -68,6 +68,17 @@ const reportingSlice = createSlice({
      */
     setCurrentReportings (state, action) {
       state.currentReportings = action.payload
+    },
+    /**
+     * Remove reporting from current reporting
+     * @function removeReportingsIdsFromCurrentReportings
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: number[]}} action - the ids of the reporting to remove
+     */
+    removeReportingsIdsFromCurrentReportings (state, action) {
+      state.currentReportings = state.currentReportings
+        .filter(reporting => !action.payload.find(reportingId => reportingId === reporting.id))
     }
   }
 })
@@ -77,7 +88,8 @@ export const {
   resetCurrentAndArchivedReportings,
   setArchivedReportingsFromDate,
   loadReporting,
-  setCurrentReportings
+  setCurrentReportings,
+  removeReportingsIdsFromCurrentReportings
 } = reportingSlice.actions
 
 export default reportingSlice.reducer

@@ -9,10 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReporting
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReporting
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetAllReportings
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -45,6 +42,12 @@ class ReportingControllerITests {
     private lateinit var deleteReporting: DeleteReporting
 
     @MockBean
+    private lateinit var archiveReportings: ArchiveReportings
+
+    @MockBean
+    private lateinit var deleteReportings: DeleteReportings
+
+    @MockBean
     private lateinit var addReporting: AddReporting
 
     @MockBean
@@ -64,6 +67,18 @@ class ReportingControllerITests {
     }
 
     @Test
+    fun `Should archive multiple reportings`() {
+        // When
+        mockMvc.perform(put("/bff/v1/reportings/archive")
+            .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
+            .contentType(MediaType.APPLICATION_JSON))
+            // Then
+            .andExpect(status().isOk)
+
+        Mockito.verify(archiveReportings).execute(listOf(1, 2, 3))
+    }
+
+    @Test
     fun `Should delete a reporting`() {
         // When
         mockMvc.perform(put("/bff/v1/reportings/123/delete"))
@@ -71,6 +86,18 @@ class ReportingControllerITests {
             .andExpect(status().isOk)
 
         Mockito.verify(deleteReporting).execute(123)
+    }
+
+    @Test
+    fun `Should delete multiple reportings`() {
+        // When
+        mockMvc.perform(put("/bff/v1/reportings/delete")
+            .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
+            .contentType(MediaType.APPLICATION_JSON))
+            // Then
+            .andExpect(status().isOk)
+
+        Mockito.verify(deleteReportings).execute(listOf(1, 2, 3))
     }
 
     @Test

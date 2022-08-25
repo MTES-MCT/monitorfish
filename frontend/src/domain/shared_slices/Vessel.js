@@ -8,18 +8,29 @@ import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 
 const NOT_FOUND = -1
 
-function filterFirstFoundReportingType (action) {
+function filterFirstFoundReportingType (reportingType) {
   let reportingTypeHasBeenRemoved = false
 
-  return (acc, reportingType) => {
-    if (reportingType === action.payload.reportingType && !reportingTypeHasBeenRemoved) {
+  return (acc, returnedReportingType) => {
+    if (returnedReportingType === reportingType && !reportingTypeHasBeenRemoved) {
       reportingTypeHasBeenRemoved = true
       return acc
     }
 
-    acc.push(reportingType)
+    acc.push(returnedReportingType)
     return acc
   }
+}
+
+function filterFirstFoundReportingTypes (reportingTypes, vesselReportingsToRemove) {
+  let vesselReportingWithoutFirstFoundReportingTypes = reportingTypes
+
+  vesselReportingsToRemove.forEach(reportingToRemove => {
+    vesselReportingWithoutFirstFoundReportingTypes = vesselReportingWithoutFirstFoundReportingTypes
+      ?.reduce(filterFirstFoundReportingType(reportingToRemove.type), [])
+  })
+
+  return vesselReportingWithoutFirstFoundReportingTypes
 }
 
 const vesselSlice = createSlice({
@@ -107,7 +118,6 @@ const vesselSlice = createSlice({
      * Remove the vessel alert and update the reporting in the vessels array and selected vessel object
      * before the /vessels API is fetched from the cron
      * @function removeVesselAlertAndUpdateReporting
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: {
      *   vesselId: string,
@@ -163,14 +173,13 @@ const vesselSlice = createSlice({
      * Remove the reporting from vessels array
      * before the /vessels API is fetched from the cron
      * @function removeVesselReporting
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{
      *   payload: {
      *     vesselId: string
      *     reportingType: string
      *   }
-     * }} action - the vessel alert to validate or silence
+     * }} action
      */
     removeVesselReporting (state, action) {
       state.vessels = state.vessels.map(vessel => {
@@ -179,7 +188,7 @@ const vesselSlice = createSlice({
         }
 
         const vesselReportingWithoutFirstFoundReportingType = vessel.vesselProperties.reportings
-          ?.reduce(filterFirstFoundReportingType(action), [])
+          ?.reduce(filterFirstFoundReportingType(action.payload.reportingType), [])
 
         return {
           ...vessel,
@@ -193,7 +202,7 @@ const vesselSlice = createSlice({
 
       if (Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselId) {
         const vesselReportingWithoutFirstFoundReportingType = state.selectedVessel.reportings
-          ?.reduce(filterFirstFoundReportingType(action), [])
+          ?.reduce(filterFirstFoundReportingType(action.payload.reportingType), [])
 
         state.selectedVessel = {
           ...state.selectedVessel,
@@ -203,10 +212,58 @@ const vesselSlice = createSlice({
       }
     },
     /**
+     * Remove multiple reportings from vessels array
+     * before the /vessels API is fetched from the cron
+     * @function removeVesselReporting
+     * @param {Object} state
+     * @param {{
+     *   payload: {
+     *     id: number
+     *     type: string
+     *     vesselId: string
+     *   }[]
+     * }} action - the reportings to remove
+     */
+    removeVesselReportings (state, action) {
+      const vesselsIds = action.payload.map(reporting => reporting.vesselId)
+      state.vessels = state.vessels.map(vessel => {
+        if (!vesselsIds.find(vesselId => vessel.vesselId === vesselId)) {
+          return vessel
+        }
+
+        const vesselReportingsToRemove = action.payload.filter(reporting => vessel.vesselId === reporting.vesselId)
+        let vesselReportingWithoutFirstFoundReportingTypes = filterFirstFoundReportingTypes(vessel.vesselProperties.reportings, vesselReportingsToRemove)
+
+        return {
+          ...vessel,
+          vesselProperties: {
+            ...vessel.vesselProperties,
+            reportings: vesselReportingWithoutFirstFoundReportingTypes,
+            hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+          }
+        }
+      })
+
+      if (!state.selectedVesselIdentity) {
+        return
+      }
+
+      const selectedVesselId = Vessel.getVesselFeatureId(state.selectedVesselIdentity)
+      if (vesselsIds.find(vesselId => selectedVesselId === vesselId)) {
+        const vesselReportingsToRemove = action.payload.filter(reporting => selectedVesselId === reporting.vesselId)
+        let vesselReportingWithoutFirstFoundReportingTypes = filterFirstFoundReportingTypes(state.selectedVessel.reportings, vesselReportingsToRemove)
+
+        state.selectedVessel = {
+          ...state.selectedVessel,
+          reportings: vesselReportingWithoutFirstFoundReportingTypes,
+          hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+        }
+      }
+    },
+    /**
      * Add a reporting to the vessels array
      * before the /vessels API is fetched from the cron
      * @function addVesselReporting
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{
      *   payload: {
@@ -249,7 +306,6 @@ const vesselSlice = createSlice({
     /**
      * Set filtered features as true
      * @function setFilteredVesselsFeatures
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: string[]}} action - the vessel features uids
      */
@@ -271,7 +327,6 @@ const vesselSlice = createSlice({
     /**
      * Set  previewed vessel features
      * @function setPreviewFilteredVesselsFeatures
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: string[]}} action - the previewed vessel features uids
      */
@@ -305,7 +360,6 @@ const vesselSlice = createSlice({
     /**
      * Set the selected vessel and positions
      * @function setSelectedVessel
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: {
      *   vessel: Vessel,
@@ -321,7 +375,6 @@ const vesselSlice = createSlice({
     /**
      * Update the positions of the vessel
      * @function updateSelectedVesselPositions
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: VesselNS.VesselPosition[]}} action - The positions
      */
@@ -366,7 +419,6 @@ const vesselSlice = createSlice({
      * When fetching the track from the API
      *
      * @function setSelectedVesselCustomTrackRequest
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: VesselNS.TrackRequest}} action - The track request
      */
@@ -376,7 +428,6 @@ const vesselSlice = createSlice({
     /**
      * Highlight a vessel position on map from the vessel track positions table
      * @function highlightVesselTrackPosition
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: VesselNS.VesselPosition | null}} action - The position
      */
@@ -386,7 +437,6 @@ const vesselSlice = createSlice({
     /**
      * Reset the highlighted vessel position
      * @function resetHighlightedVesselTrackPosition
-     * @memberOf VesselReducer
      * @param {Object} state
      */
     resetHighlightedVesselTrackPosition (state) {
@@ -395,7 +445,6 @@ const vesselSlice = createSlice({
     /**
      * Show the specified vessel tab
      * @function showVesselSidebarTab
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: number}} action - The tab (VesselSidebarTab)
      */
@@ -409,7 +458,6 @@ const vesselSlice = createSlice({
     /**
      * Show or hide other vessels (than the selected vessel)
      * @function setHideNonSelectedVessels
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: boolean}} action - hide (true) or show (false)
      */
@@ -422,7 +470,6 @@ const vesselSlice = createSlice({
      * - The `toShow` property trigger the layer to show the track
      * - The `toHide` property trigger the layer to hide the track
      * @function addVesselTrackShowed
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: {
      *   vesselId: string,
@@ -435,7 +482,6 @@ const vesselSlice = createSlice({
     /**
      * Update a given vessel track as showed by the layer
      * @function updateVesselTrackAsShowed
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: {
      *   vesselId: string,
@@ -455,7 +501,6 @@ const vesselSlice = createSlice({
     /**
      * Update a given vessel track as zoomed
      * @function updateVesselTrackAsZoomed
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: string}} action - the vessel id
      */
@@ -467,7 +512,6 @@ const vesselSlice = createSlice({
     /**
      * Update a given vessel track as to be hidden by the layer
      * @function updateVesselTrackAsShowed
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: string}} action - the vessel id
      */
@@ -479,7 +523,6 @@ const vesselSlice = createSlice({
     /**
      * Remove the vessel track to the list
      * @function updateVesselTrackAsHidden
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: string}} action - the vessel id
      */
@@ -493,7 +536,6 @@ const vesselSlice = createSlice({
     /**
      * Set the vessel track features extent - used to fit the extent into the OpenLayers view
      * @function setVesselTrackExtent
-     * @memberOf VesselReducer
      * @param {Object} state
      * @param {{payload: number[]}} action - the extent
      */
@@ -503,7 +545,6 @@ const vesselSlice = createSlice({
     /**
      * Reset the vessel track features extent
      * @function setVesselTrackExtent
-     * @memberOf VesselReducer
      * @param {Object} state
      */
     resetVesselTrackExtent (state) {
@@ -540,6 +581,7 @@ export const {
   setHideNonSelectedVessels,
   removeVesselAlertAndUpdateReporting,
   removeVesselReporting,
+  removeVesselReportings,
   addVesselReporting
 } = vesselSlice.actions
 

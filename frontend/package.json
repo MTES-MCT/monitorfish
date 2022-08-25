@@ -89,6 +89,7 @@
     "@typescript-eslint/eslint-plugin": "5.33.1",
     "@typescript-eslint/parser": "5.33.0",
     "babel-eslint": "10.1.0",
+    "codecov": "3.8.3",
     "cypress": "10.4.0",
     "cypress-mouse-position": "1.0.0",
     "cypress-plugin-snapshots": "github:ivangabriele/cypress-plugin-snapshots",

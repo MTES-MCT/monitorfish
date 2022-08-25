@@ -28,6 +28,9 @@ import { PrimaryButton } from '../../commonStyles/Buttons.style'
 import deleteReporting from '../../../domain/use_cases/reporting/deleteReporting'
 import archiveReportings from '../../../domain/use_cases/reporting/archiveReportings'
 import deleteReportings from '../../../domain/use_cases/reporting/deleteReportings'
+import ConfirmDeletionModal from '../../vessel_sidebar/reporting/current/ConfirmDeletionModal'
+import EditReporting from './EditReporting'
+import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
 
 const ReportingList = ({ seaFront }) => {
   const dispatch = useDispatch()
@@ -39,6 +42,7 @@ const ReportingList = ({ seaFront }) => {
   const [sortType] = useState(SortType.ASC)
   const [searched, setSearched] = useState(undefined)
   const [checkedReportingIds, setCheckedReportingIds] = useState([])
+  const [confirmDeletionModalIsOpen, setConfirmeDeletionModalIsOpen] = useState(undefined)
 
   const currentSeaFrontReportings = useMemo(() => {
     return currentReportings
@@ -211,11 +215,11 @@ const ReportingList = ({ seaFront }) => {
               </FlexboxGrid.Item>
               <FlexboxGrid.Item style={columnStyles[9]}>
                 <Icon
-                  data-cy={'side-window-silenced-alerts-delete-silenced-alert'}
+                  data-cy={'side-window-edit-reporting'}
                   style={editIconStyle}
-                  alt={'Réactiver l\'alerte'}
-                  title={'Réactiver l\'alerte'}
-                  onClick={() => console.log('edit')}
+                  alt={'Editer le signalement'}
+                  title={'Editer le signalement'}
+                  onClick={() => dispatch(setEditedReportingInSideWindow(reporting))}
                   src={`${baseUrl}/Bouton_edition.png`}
                 />
               </FlexboxGrid.Item>
@@ -228,6 +232,7 @@ const ReportingList = ({ seaFront }) => {
         <EmptyCardTable>Aucun signalement</EmptyCardTable>
       }
     </CardTable>
+    <EditReporting/>
   </Content>
 }
 

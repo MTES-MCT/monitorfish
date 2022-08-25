@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
-import NewReportingForm from './NewReportingForm'
+import ReportingForm from './ReportingForm'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 import { useSelector } from 'react-redux'
 
@@ -22,7 +22,7 @@ const NewReporting = () => {
               onClick={() => setNewReportingFormIsOpen(false)}
             />
           </Header>
-          <NewReportingForm
+          <ReportingForm
             selectedVesselIdentity={selectedVesselIdentity}
             closeForm={() => setNewReportingFormIsOpen(false)}
           />

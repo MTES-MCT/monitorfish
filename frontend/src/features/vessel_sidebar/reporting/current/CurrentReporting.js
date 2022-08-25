@@ -8,8 +8,10 @@ import { operationalAlertTypes } from '../../../../domain/entities/alerts'
 import { ReportingType } from '../../../../domain/entities/reporting'
 import ConfirmDeletionModal from './ConfirmDeletionModal'
 import NewReporting from './NewReporting'
+import deleteReporting from '../../../../domain/use_cases/reporting/deleteReporting'
 
 const CurrentReporting = () => {
+  const dispatch = useDispatch()
   const {
     /** @type {CurrentAndArchivedReportings} */
     currentAndArchivedReportings
@@ -55,7 +57,8 @@ const CurrentReporting = () => {
     }
     <ConfirmDeletionModal
       closeModal={() => setDeletionModalIsOpenForId(null)}
-      modalIsOpenForId={deletionModalIsOpenForId}
+      isOpened={deletionModalIsOpenForId}
+      validateCallback={() => dispatch(deleteReporting(deletionModalIsOpenForId))}
     />
   </Wrapper>
 }

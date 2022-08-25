@@ -11,7 +11,9 @@ import { useSaveReportingInLocalStorage } from './useSaveInLocalStorage'
 import addReporting from '../../../../domain/use_cases/reporting/addReporting'
 
 const newReportingLocalStorageKey = 'new-reporting'
-const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
+const ReportingForm = ({ selectedVesselIdentity, closeForm }) => {
+  // TODO Make the edition possible
+
   const dispatch = useDispatch()
   const infractions = useSelector(state => state.infraction.infractions)
   const controllers = useSelector(state => state.controls.controllers)
@@ -370,4 +372,4 @@ const Form = styled.div`
   }
 `
 
-export default NewReportingForm
+export default ReportingForm

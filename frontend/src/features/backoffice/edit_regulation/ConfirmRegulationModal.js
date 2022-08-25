@@ -3,7 +3,7 @@ import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { setIsConfirmModalOpen, setSaveOrUpdateRegulation } from '../Regulation.slice'
+import { setIsConfirmModalOpen, setRegulationModified, setSaveOrUpdateRegulation } from '../Regulation.slice'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
 import { FooterButton } from '../../commonStyles/Backoffice.style'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise_clair.svg'
@@ -18,7 +18,13 @@ const ConfirmRegulationModal = ({ goBackofficeHome }) => {
     batch(() => {
       dispatch(setIsConfirmModalOpen(false))
       dispatch(setSaveOrUpdateRegulation(true))
+      dispatch(setRegulationModified(false))
     })
+  }
+
+  const close = () => {
+    dispatch(setIsConfirmModalOpen(false))
+    dispatch(setRegulationModified(false))
   }
 
   return (<RegulationModal
@@ -31,7 +37,7 @@ const ConfirmRegulationModal = ({ goBackofficeHome }) => {
           Enregistrer les modifications
           <CloseIcon
             data-cy='confirm-modal-close-icon'
-            onClick={() => dispatch(setIsConfirmModalOpen(false))}
+            onClick={close}
           />
         </ModalTitle>
         <Section data-cy='confirm-modal-text' >

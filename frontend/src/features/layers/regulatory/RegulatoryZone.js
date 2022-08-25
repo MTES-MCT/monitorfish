@@ -106,13 +106,11 @@ const RegulatoryZone = props => {
   }
 
   const onEditRegulationClick = () => {
+    dispatch(showRegulationToEdit(regulatoryZone))
     history.push(`${match.path}/edit`)
-    batch(() => {
-      dispatch(showRegulationToEdit(regulatoryZone))
-      dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
-      dispatch(addRegulatoryTopicOpened(regulatoryTopic))
-      dispatch(closeRegulatoryZoneMetadataPanel())
-    })
+    dispatch(removeRegulatoryTopicOpened(regulatoryTopic))
+    dispatch(addRegulatoryTopicOpened(regulatoryTopic))
+    dispatch(closeRegulatoryZoneMetadataPanel())
   }
 
   const onMouseOver = () => !isOver && setIsOver(true)

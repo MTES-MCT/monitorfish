@@ -39,3 +39,9 @@ export const INFO_TEXT = {
 }
 
 export const INFINITE = 'infinite'
+
+export const STATUS = {
+  IDLE: 'IDLE',
+  LOADING: 'LOADING',
+  READY: 'READY'
+}

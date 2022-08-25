@@ -1,0 +1,12 @@
+<svg id="Bouton_afficher_toute_la_piste" data-name="Bouton afficher toute la piste" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <g id="Bouton_piste_navire" data-name="Bouton_piste navire">
+    <rect id="Rectangle_1699" data-name="Rectangle 1699" width="30" height="30" fill="#3b4559"/>
+    <path id="Tracé_297" data-name="Tracé 297" d="M628.213,795.672l3.15,2.419v-7.51l-3.15-6.49-3.15,6.49v7.51Z" transform="translate(130.849 -988.923) rotate(45)" fill="#e5e5eb" stroke="#e5e5eb" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="0.5"/>
+  </g>
+  <g id="Groupe_813" data-name="Groupe 813" transform="translate(-25 -15)">
+    <path id="Tracé_565" data-name="Tracé 565" d="M28,30V26h4" transform="translate(2 -5)" fill="none" stroke="#e5e5eb" stroke-miterlimit="10" stroke-width="1.8"/>
+    <path id="Tracé_566" data-name="Tracé 566" d="M46,26h4v4" transform="translate(0 -5)" fill="none" stroke="#e5e5eb" stroke-miterlimit="10" stroke-width="1.8"/>
+    <path id="Tracé_567" data-name="Tracé 567" d="M50,38v4H46" transform="translate(0 -3)" fill="none" stroke="#e5e5eb" stroke-miterlimit="10" stroke-width="1.8"/>
+    <path id="Tracé_568" data-name="Tracé 568" d="M32,42H28V38" transform="translate(2 -3)" fill="none" stroke="#e5e5eb" stroke-miterlimit="10" stroke-width="1.8"/>
+  </g>
+</svg>

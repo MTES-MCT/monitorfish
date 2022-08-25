@@ -98,6 +98,10 @@ jobs:
       - name: Unit test
         run: make test
 
+      - name: Upload coverage
+        run: npx codecov
+        working-directory: ./frontend
+
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@master

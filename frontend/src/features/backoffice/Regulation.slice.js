@@ -38,7 +38,7 @@ const regulationSlice = createSlice({
       state.regulationModified = action.payload
     },
     updateProcessingRegulationByKey (state, { payload: { key, value } }) {
-      if (state.status !== STATUS.READY || state.status !== STATUS.IDLE) {
+      if (state.status !== STATUS.READY && state.status !== STATUS.IDLE) {
         return
       }
 
@@ -48,7 +48,7 @@ const regulationSlice = createSlice({
       }
     },
     updateProcessingRegulationByKeyAndSubKey (state, { payload: { key, subKey, value } }) {
-      if (state.status !== STATUS.READY || state.status !== STATUS.IDLE) {
+      if (state.status !== STATUS.READY && state.status !== STATUS.IDLE) {
         return
       }
 

@@ -17,6 +17,7 @@ import getOperationalAlerts from '../../domain/use_cases/alert/getOperationalAle
 import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 import getSilencedAlerts from '../../domain/use_cases/alert/getSilencedAlerts'
+import { setEditedReportingInSideWindow } from '../../domain/shared_slices/Reporting'
 
 const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
   const {
@@ -26,6 +27,7 @@ const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
     beaconMalfunctions,
     openedBeaconMalfunctionInKanban
   } = useSelector(state => state.beaconMalfunction)
+  const editedReportingInSideWindow = useSelector(state => state.reporting.editedReportingInSideWindow)
   const {
     alerts,
     focusOnAlert
@@ -46,12 +48,15 @@ const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
   }, [])
 
   useEffect(() => {
-    setIsOverlayed(!!openedBeaconMalfunctionInKanban)
+    if (editedReportingInSideWindow || openedBeaconMalfunctionInKanban) {
+      setIsOverlayed(true)
+      return
+    }
 
     if (openedSideWindowTab === sideWindowMenu.ALERTS.code) {
       setIsOverlayed(false)
     }
-  }, [openedBeaconMalfunctionInKanban, openedSideWindowTab])
+  }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, openedSideWindowTab])
 
   useEffect(() => {
     if (fromTab) {
@@ -82,6 +87,11 @@ const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
     }
   }, [openedSideWindowTab, setSelectedSubMenu, focusOnAlert])
 
+  function closeRightSidebar () {
+    dispatch(closeBeaconMalfunctionInKanban())
+    dispatch(setEditedReportingInSideWindow(null))
+  }
+
   const beaconMalfunctionBoardGrayOverlayStyle = {
     position: 'absolute',
     height: '100%',
@@ -106,7 +116,7 @@ const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
     />
     <BeaconMalfunctionsBoardGrayOverlay
       style={beaconMalfunctionBoardGrayOverlayStyle}
-      onClick={() => dispatch(closeBeaconMalfunctionInKanban())}
+      onClick={closeRightSidebar}
     />
     {
       isPreloading

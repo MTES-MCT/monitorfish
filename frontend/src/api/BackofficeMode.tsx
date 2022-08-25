@@ -18,7 +18,7 @@ export function BackofficeMode({ adminRole = false, inBackofficeMode }: Backoffi
     }
 
     dispatch(setInBackofficeMode(inBackofficeMode))
-  }, [inBackofficeMode])
+  }, [dispatch, inBackofficeMode])
 
   useEffect(() => {
     // TODO Remove once actions are typed
@@ -27,7 +27,7 @@ export function BackofficeMode({ adminRole = false, inBackofficeMode }: Backoffi
     }
 
     dispatch(setAdminRole(adminRole))
-  }, [adminRole])
+  }, [dispatch, adminRole])
 
   return null
 }

@@ -17,7 +17,7 @@ class ReportingController(
     private val archiveReportings: ArchiveReportings,
     private val deleteReporting: DeleteReporting,
     private val deleteReportings: DeleteReportings,
-    private val getAllReportings: GetAllReportings,
+    private val getAllCurrentReportings: GetAllCurrentReportings,
     private val addReporting: AddReporting) {
 
     @PostMapping(value = [""], consumes = ["application/json"])
@@ -31,7 +31,7 @@ class ReportingController(
     @GetMapping(value = [""])
     @ApiOperation("Get all current reportings")
     fun getAllReportings(): List<ReportingDataOutput> {
-        return getAllReportings.execute().map { ReportingDataOutput.fromReporting(it) }
+        return getAllCurrentReportings.execute().map { ReportingDataOutput.fromReporting(it) }
     }
 
     @PutMapping(value = ["/{reportingId}/archive"])

@@ -4,7 +4,6 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
-    "baseUrl": ".",
     "checkJs": true,
     "exactOptionalPropertyTypes": false,
     "incremental": true,

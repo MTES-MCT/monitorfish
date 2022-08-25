@@ -52,6 +52,7 @@ const EditReporting = () => {
               : null
           }
           <VesselName
+            title={editedReportingInSideWindow?.vesselName}
             data-cy={'side-window-beacon-malfunctions-detail-vessel-name'}
             style={vesselNameStyle}
           >
@@ -81,7 +82,11 @@ const EditReporting = () => {
       </Header>
       <Line style={lineStyle}/>
       <ReportingFormWrapper>
-        <ReportingForm selectedVesselIdentity={editedReportingInSideWindow} />
+        <ReportingForm
+          selectedVesselIdentity={editedReportingInSideWindow}
+          editedReporting={editedReportingInSideWindow}
+          fromSideWindow
+        />
       </ReportingFormWrapper>
     </EditReportingWrapper>
   )
@@ -113,7 +118,10 @@ const VesselName = styled.div``
 const vesselNameStyle = {
   font: 'normal normal bold 16px/22px Marianne',
   marginLeft: 8,
-  color: COLORS.gunMetal
+  color: COLORS.gunMetal,
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden'
 }
 
 const InternalReferenceNumber = styled.div``

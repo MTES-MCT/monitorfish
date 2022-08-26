@@ -1,3 +1,5 @@
+// TODO Use `date-fns` instead of `dayjs`.
+
 import { dayjs } from './dayjs'
 
 import type { Dayjs } from 'dayjs'

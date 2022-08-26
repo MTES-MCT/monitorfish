@@ -61,7 +61,7 @@ export function App() {
           </Provider>
         </Route>
 
-        <Route path="/ui">
+        <Route exact path="/ui">
           <NamespaceContext.Provider value="ui">
             <UiPage />
           </NamespaceContext.Provider>

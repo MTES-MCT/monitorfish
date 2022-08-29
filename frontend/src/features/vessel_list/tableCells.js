@@ -32,6 +32,7 @@ export const CheckedCell = ({ rowData, dataKey, onChange, ...props }) => {
 export const StyledCheckbox = styled(Checkbox)`
   margin-top: -33px;
   margin-left: -10px;
+  height: 36px;
 `
 
 export const FlagCell = ({ rowData, vesselProperty, baseUrl, ...props }) => (

@@ -18,7 +18,7 @@ Une fois l'environnement activé, les commandes sont :
 - pour le démarrage :
 
 ```bash
-prefect server start -d --use-volume --volume-path ~/.prefect/server/pg_data --expose --no-postgres-port --no-graphql-port --no-hasura-port &
+prefect server start -d --use-volume --volume-path /var/log/prefect/server/pg_data --expose --no-postgres-port --no-graphql-port --no-hasura-port &
 ```
 - pour l'arrêt
 ```bash

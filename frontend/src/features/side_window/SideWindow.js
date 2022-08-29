@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import SideWindowMenu from './SideWindowMenu'
@@ -12,7 +12,7 @@ import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import { COLORS } from '../../constants/constants'
 import { usePrevious } from '../../hooks/usePrevious'
 import { useDispatch, useSelector } from 'react-redux'
-import { openSideWindowTab, setSideWindowAsOpen } from '../../domain/shared_slices/Global'
+import { openSideWindowTab } from '../../domain/shared_slices/Global'
 import getOperationalAlerts from '../../domain/use_cases/alert/getOperationalAlerts'
 import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
@@ -20,24 +20,17 @@ import getSilencedAlerts from '../../domain/use_cases/alert/getSilencedAlerts'
 import { setEditedReportingInSideWindow } from '../../domain/shared_slices/Reporting'
 
 const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
-  const {
-    openedSideWindowTab
-  } = useSelector(state => state.global)
-  const {
-    beaconMalfunctions,
-    openedBeaconMalfunctionInKanban
-  } = useSelector(state => state.beaconMalfunction)
+  const openedSideWindowTab = useSelector(state => state.global.openedSideWindowTab)
+  const openedBeaconMalfunctionInKanban = useSelector(state => state.beaconMalfunction.openedBeaconMalfunctionInKanban)
   const editedReportingInSideWindow = useSelector(state => state.reporting.editedReportingInSideWindow)
-  const {
-    alerts,
-    focusOnAlert
-  } = useSelector(state => state.alert)
+  const focusOnAlert = useSelector(state => state.alert.focusOnAlert)
   const dispatch = useDispatch()
   const [isPreloading, setIsPreloading] = useState(true)
   const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
   const [selectedSubMenu, setSelectedSubMenu] = useState(openedSideWindowTab === sideWindowMenu.ALERTS.code
     ? AlertsSubMenu.MEMN
     : BeaconMalfunctionsSubMenu.MALFUNCTIONING)
+  const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [subMenuIsFixed, setSubMenuIsFixed] = useState(false)
 
@@ -106,11 +99,10 @@ const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
       selectedMenu={openedSideWindowTab}
     />
     <SideWindowSubMenu
-      beaconMalfunctions={beaconMalfunctions}
-      alerts={alerts}
       selectedMenu={openedSideWindowTab}
       selectedSubMenu={selectedSubMenu}
       setSelectedSubMenu={setSelectedSubMenu}
+      selectedTab={selectedTab}
       fixed={subMenuIsFixed}
       setIsFixed={setSubMenuIsFixed}
     />
@@ -136,6 +128,8 @@ const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
             <AlertsAndReportings
               selectedSubMenu={selectedSubMenu}
               setSelectedSubMenu={setSelectedSubMenu}
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
               baseRef={ref}
             />
           }
@@ -149,6 +143,11 @@ const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
     }
   </Wrapper>
 })
+
+export const AlertAndReportingTab = {
+  ALERT: 'ALERT',
+  REPORTING: 'REPORTING'
+}
 
 const Content = styled.div`
   margin-left: ${p => p.fixed ? 0 : 30}px;

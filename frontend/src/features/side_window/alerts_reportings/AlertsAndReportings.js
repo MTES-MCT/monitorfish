@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import PendingAlertsList from './PendingAlertsList'
 import { useSelector } from 'react-redux'
 import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
@@ -6,20 +6,22 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import SilencedAlertsList from './SilencedAlertsList'
 import ReportingList from './ReportingList'
+import { AlertAndReportingTab } from '../SideWindow'
 
 /**
  * @param selectedSubMenu
  * @param setSelectedSubMenu
+ * @param selectedTab
+ * @param setSelectedTab
  * @param baseRef
  * @return {JSX.Element}
  * @constructor
  */
-const AlertsAndReportings = ({ selectedSubMenu, setSelectedSubMenu, baseRef }) => {
+const AlertsAndReportings = ({ selectedSubMenu, setSelectedSubMenu, selectedTab, setSelectedTab, baseRef }) => {
   const {
     silencedAlerts,
     focusOnAlert
   } = useSelector(state => state.alert)
-  const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
 
   const silencedSeaFrontAlerts = useMemo(() => {
     return silencedAlerts
@@ -73,11 +75,6 @@ const AlertsAndReportings = ({ selectedSubMenu, setSelectedSubMenu, baseRef }) =
       </>
     }
   </>
-}
-
-const AlertAndReportingTab = {
-  ALERT: 'ALERT',
-  REPORTING: 'REPORTING'
 }
 
 const Title = styled.h2`

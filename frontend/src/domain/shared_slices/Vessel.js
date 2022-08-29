@@ -187,10 +187,8 @@ const vesselSlice = createSlice({
           return vessel
         }
 
-        console.log(action.payload)
         const vesselReportingWithoutFirstFoundReportingType = vessel.vesselProperties.reportings
           ?.reduce(filterFirstFoundReportingType(action.payload.reportingType), [])
-        console.log(vessel.vesselProperties.reportings, vesselReportingWithoutFirstFoundReportingType)
 
         return {
           ...vessel,

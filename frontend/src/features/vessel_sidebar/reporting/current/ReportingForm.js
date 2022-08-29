@@ -40,7 +40,6 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
 
   useEffect(() => {
     if (editedReporting) {
-      console.log(editedReporting)
       setHasError(false)
       setReportingType(editedReporting?.type || ReportingType.INFRACTION_SUSPICION.code)
       setUnit(editedReporting?.value?.unit || '')

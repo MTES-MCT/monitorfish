@@ -147,7 +147,7 @@ context('Fleet segments', () => {
 
     cy.get('[data-cy="create-fleet-segment-gears"]').click({ force: true })
     cy.get('[data-key="DHS"]').click()
-    cy.get('[data-key="FCN"]').click()
+    cy.get('[data-key="FCN"]').scrollIntoView().click()
 
     cy.get('[data-cy="create-fleet-segment-targeted-species"]').click({ force: true })
     cy.get('[data-cy="create-fleet-segment-targeted-species"] input').type('COD', { force: true })

@@ -179,6 +179,14 @@ const DownloadVesselListModal = ({ filteredVessels, isOpen, setIsOpen }) => {
 const StyledCheckboxGroup = styled(CheckboxGroup)`
   display: flex;
   flex: 1 1 1;
+
+  .rs-checkbox-checker {
+    padding-bottom: 0;
+    padding-left: 36px;
+    padding-top: 8px;
+    min-height: 0;
+    line-height: 1;
+  }
 `
 
 const SelectAllText = styled.span`

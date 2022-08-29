@@ -42,16 +42,16 @@ const PendingAlertsList = ({ numberOfSilencedAlerts, seaFront, baseRef }) => {
   }, [alerts, seaFront])
 
   const filteredAlerts = useMemo(() => {
-    if (!alerts) {
+    if (!currentSeaFrontAlerts) {
       return []
     }
 
     if (!searched?.length || searched?.length <= 1) {
-      return alerts
+      return currentSeaFrontAlerts
     }
 
     if (searched?.length > 1) {
-      return alerts.filter(alert =>
+      return currentSeaFrontAlerts.filter(alert =>
         getTextForSearch(getAlertNameFromType(alert.value.type)).includes(getTextForSearch(searched)) ||
         getTextForSearch(alert.vesselName).includes(getTextForSearch(searched)) ||
         getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searched)) ||

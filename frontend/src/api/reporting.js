@@ -4,6 +4,7 @@ export const ARCHIVE_REPORTING_ERROR_MESSAGE = 'Nous n\'avons pas pu archiver le
 export const ARCHIVE_REPORTINGS_ERROR_MESSAGE = 'Nous n\'avons pas pu archiver les signalements'
 export const DELETE_REPORTING_ERROR_MESSAGE = 'Nous n\'avons pas pu supprimer le signalement'
 export const DELETE_REPORTINGS_ERROR_MESSAGE = 'Nous n\'avons pas pu supprimer les signalements'
+export const UPDATE_REPORTING_ERROR_MESSAGE = 'Nous n\'avons pas pu éditer le signalement'
 export const ADD_REPORTING_ERROR_MESSAGE = 'Nous n\'avons pas pu créer le signalement'
 export const GET_REPORTINGS_ERROR_MESSAGE = 'Nous n\'avons pas pu créer les signalements'
 
@@ -85,7 +86,7 @@ function deleteReportingFromAPI (id) {
  * @throws {Error}
  */
 function deleteReportingsFromAPI (ids) {
-  return fetch(`/bff/v1/reportings/delete`, {
+  return fetch('/bff/v1/reportings/delete', {
     method: 'PUT',
     headers: {
       Accept: 'application/json, text/plain',
@@ -137,6 +138,37 @@ function addReportingFromAPI (newReporting) {
 }
 
 /**
+ * Update a reporting
+ * @memberOf API
+ * @param {string[]} id - The id of the reporting
+ * @param {UpdatedReporting} updatedReporting - The updated reporting
+ * @return {Reporting} reporting - The updated reporting
+ * @throws {Error}
+ */
+function updateReportingFromAPI (id, updatedReporting) {
+  return fetch(`/bff/v1/reportings/${id}/update`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json, text/plain',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    body: JSON.stringify(updatedReporting)
+  }).then(response => {
+    if (response.status === OK) {
+      return response.json()
+    } else {
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(UPDATE_REPORTING_ERROR_MESSAGE)
+    }
+  }).catch(error => {
+    console.error(error)
+    throw Error(UPDATE_REPORTING_ERROR_MESSAGE)
+  })
+}
+
+/**
  * Get all current reportings
  * @memberOf API
  * @returns {Promise<Reporting[]>} The reportings
@@ -166,5 +198,6 @@ export {
   deleteReportingFromAPI,
   deleteReportingsFromAPI,
   addReportingFromAPI,
+  updateReportingFromAPI,
   getAllCurrentReportingsFromAPI
 }

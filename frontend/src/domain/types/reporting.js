@@ -39,3 +39,15 @@
  * @property {string} title
  * @property {string} description
  */
+
+/**
+ * @typedef UpdatedReporting
+ * @property {string} reportingActor
+ * @property {string | null} unit
+ * @property {string | null} authorTrigram
+ * @property {string | null} authorContact
+ * @property {string} title
+ * @property {string | null} description
+ * @property {string | null} natinfCode
+ * @property {string | null} dml
+ */

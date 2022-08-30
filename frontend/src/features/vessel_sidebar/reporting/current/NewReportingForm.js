@@ -99,7 +99,6 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
   return <Form>
     <Label>Origine</Label>
     <RadioGroup
-      appearance="picker"
       inline
       value={reportingActor}
       onChange={value => setReportingActor(value)}
@@ -107,7 +106,7 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
     >
       {
         Object.entries(ReportingOriginActor).map(([key, val]) =>
-          <Radio data-cy={`new-reporting-reporting-actor-${key}`} style={radioStyle} key={key} value={key}>{val.name}</Radio>)
+          <Radio data-cy={`new-reporting-reporting-actor-${key}`} key={key} value={key}>{val.name}</Radio>)
       }
     </RadioGroup>
     {
@@ -176,14 +175,12 @@ const NewReportingForm = ({ selectedVesselIdentity, closeForm }) => {
       defaultValue={ReportingType.INFRACTION_SUSPICION.code}
     >
       <Radio
-        style={radioStyle}
         key={ReportingType.INFRACTION_SUSPICION.code}
         value={ReportingType.INFRACTION_SUSPICION.code}
       >
         {ReportingType.INFRACTION_SUSPICION.inputName}
       </Radio>
       <Radio
-        style={radioStyle}
         key={ReportingType.OBSERVATION.code}
         value={ReportingType.OBSERVATION.code}
       >
@@ -310,15 +307,13 @@ const deleteLocalStorageReportingEntry = () => window.localStorage.setItem(newRe
 const DescriptionTextarea = styled.textarea`
   resize: none;
   width: 100%;
-  margin-top: 5px;
   background-color: white;
-  margin-bottom: 10px;
   padding: 5px;
   height: 50px;
   max-height: 150px;
   border: 1px solid ${COLORS.lightGray};
   border-radius: 2px;
-  
+
   :hover, :focus {
     border: 1px solid ${COLORS.slateGray} !important;
   }
@@ -337,13 +332,9 @@ const CancelButton = styled(SecondaryButton)`
   padding-top: 4px;
 `
 
-const Label = styled.div`
-  margin-top: 5px;
-`
+const Label = styled.div``
 
 const Input = styled.input`
-  margin-top: 5px;
-  margin-bottom: 10px;
   background-color: white;
   border: none;
   border-radius: 0;
@@ -354,7 +345,7 @@ const Input = styled.input`
   padding: 0 5px 0 5px;
   border: 1px solid ${props => props.$hasError ? COLORS.maximumRed : COLORS.lightGray};
   border-radius: 2px;
-  
+
   :hover, :focus {
     border: 1px solid ${props => props.$hasError ? COLORS.maximumRed : COLORS.slateGray} !important;
   }
@@ -367,52 +358,15 @@ const Input = styled.input`
 const Form = styled.div`
   margin: 15px;
   flex-direction: column;
-  
-  .rs-picker-toggle-value {
-    color: ${COLORS.gunMetal} !important;
-  }
-  
-  .rs-radio-group {
-    border: 1px solid ${COLORS.lightGray};
-    border-radius: 2px;
-    overflow: hidden;
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-  
-  .rs-radio-checker > label {
-    font-size: 13px;
-    color: ${COLORS.slateGray};
-  }
-  
-  .rs-radio-inline > .rs-radio-checker {
-    padding-top: 0px;
-    margin-right: 0px;
-  }
-  
-  .rs-radio-checked {
-    border-bottom: 1px solid ${COLORS.slateGray};
-    color: ${COLORS.gunMetal};
-  }
-  .rs-radio-group-picker .rs-radio-checked .rs-radio-checker > label {
-    color: ${COLORS.gunMetal};
-    font-weight: 500;
-  }
-  
+
   .rs-picker-select {
-    margin: 5px 0 10px 0 !important;
+    margin: 0 !important;
     background-color: ${COLORS.white};
   }
-  
+
   .rs-picker-default .rs-btn, .rs-picker-input .rs-btn, .rs-picker-default .rs-picker-toggle, .rs-picker-input .rs-picker-toggle {
     background-color: ${COLORS.white} !important;
   }
-  
 `
-
-const radioStyle = {
-  background: COLORS.background,
-  fontSize: 11
-}
 
 export default NewReportingForm

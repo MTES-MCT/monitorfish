@@ -318,21 +318,6 @@ a:hover, a:focus {
     color: #707785;
 }
 
-.rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::before, .rs-checkbox-indeterminate .rs-checkbox-wrapper .rs-checkbox-inner::before {
-    border-color: #707785;
-    background-color: #E5E5EB;
-}
-
-.rs-checkbox-indeterminate .rs-checkbox-wrapper .rs-checkbox-inner::after {
-    border: solid #CCCFD6;
-    border-width: 0 0 2px;
-    -webkit-transform: rotate(0deg) scale(1);
-    transform: rotate(0deg) scale(1);
-    width: 8px;
-    margin-top: -1px;
-    margin-left: 5px;
-}
-
 .rs-picker-check-menu {
     width: 280px;
 }
@@ -347,26 +332,6 @@ a:hover, a:focus {
 
 .rs-picker-check-menu-items .rs-picker-check-menu-group:not(:first-child) {
     padding-top: 0px !important;
-}
-
-.rs-checkbox-wrapper .rs-checkbox-inner::before {
-    border: 2px solid #CCCFD6 !important;
-    background: #E5E5EB 0% 0% no-repeat padding-box !important;
-    border-radius: 1px !important;
-}
-
-.rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::after, .rs-checkbox-indeterminate .rs-checkbox-wrapper .rs-checkbox-inner::after {
-    margin-top: 3px !important;
-    margin-left: 6px !important;
-}
-
-.rs-checkbox-wrapper {
-    top: 8px !important;
-}
-
-.rs-checkbox-disabled > .rs-checkbox-checker > label > span > span::after {
-    border: solid #c5c6c7 !important;
-    border-width: 0 2px 2px 0 !important;
 }
 
 .rs-table-cell-header .rs-table-cell-content {

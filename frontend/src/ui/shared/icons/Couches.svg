@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="46" height="46"
+     viewBox="0 0 46 46">
+    <defs>
+        <clipPath id="clip-Plan_de_travail_2">
+            <rect width="46" height="46"/>
+        </clipPath>
+    </defs>
+    <g id="Plan_de_travail_2" data-name="Plan de travail – 2" clip-path="url(#clip-Plan_de_travail_2)">
+        <g id="Composant_9_14" data-name="Composant 9 – 14" transform="translate(7 7)">
+            <path id="Tracé_3" data-name="Tracé 3" d="M301.6,43.261l-15.955,9.058,15.962,9.107,16.038-9.244Z"
+                  transform="translate(-285.646 -43.261)" fill="none" stroke="#f6f6f6" stroke-linejoin="round"
+                  stroke-width="2"/>
+            <path id="Tracé_4" data-name="Tracé 4" d="M285.646,54.324l15.962,9.107,16.038-9.244"
+                  transform="translate(-285.646 -38.07)" fill="none" stroke="#f6f6f6" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="2"/>
+            <path id="Tracé_5" data-name="Tracé 5" d="M285.646,58.824l15.962,9.107,16.038-9.244"
+                  transform="translate(-285.646 -35.931)" fill="none" stroke="#f6f6f6" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="2"/>
+        </g>
+    </g>
+</svg>

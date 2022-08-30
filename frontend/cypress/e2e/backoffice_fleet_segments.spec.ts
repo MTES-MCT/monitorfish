@@ -163,7 +163,7 @@ context('Fleet segments', () => {
     cy.get(':nth-child(9) > .rs-picker-tag-wrapper > .rs-picker-search > .rs-picker-search-input > input').type('BF', {
       force: true,
     })
-    cy.get('[data-key="BFT"]').click()
+    cy.get('[data-key="BFT"]').scrollIntoView().click()
 
     cy.get('*[data-cy="create-fleet-segment-fao-zones"]').click({ force: true })
     cy.get('[data-key="21.1.A"]').click()

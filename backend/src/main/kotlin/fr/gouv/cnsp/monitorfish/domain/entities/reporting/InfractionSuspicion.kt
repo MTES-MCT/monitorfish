@@ -1,5 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.reporting
 
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedReporting
+
 class InfractionSuspicion(
         override val reportingActor: ReportingActor,
         override val unit: String? = null,
@@ -15,4 +17,22 @@ class InfractionSuspicion(
   natinfCode = natinfCode,
   title = title,
   type = ReportingTypeMapping.INFRACTION_SUSPICION,
-  flagState = flagState)
+  flagState = flagState) {
+    companion object {
+        fun fromUpdatedReporting(updatedReporting: UpdatedReporting): InfractionSuspicion {
+            require(!updatedReporting.natinfCode.isNullOrEmpty()) {
+                "NATINF code should not be null or empty"
+            }
+
+            return InfractionSuspicion(
+                reportingActor = updatedReporting.reportingActor,
+                unit = updatedReporting.unit,
+                authorTrigram = updatedReporting.authorTrigram,
+                authorContact = updatedReporting.authorContact,
+                title = updatedReporting.title,
+                description = updatedReporting.description,
+                natinfCode = updatedReporting.natinfCode,
+                dml = updatedReporting.dml)
+        }
+    }
+}

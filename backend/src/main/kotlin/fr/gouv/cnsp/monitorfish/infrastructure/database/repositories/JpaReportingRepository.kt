@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedReporting
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBReportingRepository
 import org.springframework.stereotype.Repository
@@ -23,8 +24,19 @@ class JpaReportingRepository(private val dbReportingRepository: DBReportingRepos
         return dbReportingRepository.save(ReportingEntity.fromReporting(reporting, mapper)).toReporting(mapper)
     }
 
+    @Transactional
+    override fun update(reportingId: Int, updatedReporting: UpdatedReporting): Reporting {
+        dbReportingRepository.update(reportingId, mapper.writeValueAsString(updatedReporting))
+
+        return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
+    }
+
     override fun findAll(): List<Reporting> {
         return dbReportingRepository.findAll().map { it.toReporting(mapper) }
+    }
+
+    override fun findById(reportingId: Int): Reporting {
+        return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
     }
 
     override fun findAllCurrent(): List<Reporting> {

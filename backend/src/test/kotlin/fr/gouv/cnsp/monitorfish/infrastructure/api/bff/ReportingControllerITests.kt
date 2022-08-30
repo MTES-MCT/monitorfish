@@ -2,12 +2,17 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateReportingDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -46,6 +51,9 @@ class ReportingControllerITests {
 
     @MockBean
     private lateinit var addReporting: AddReporting
+
+    @MockBean
+    private lateinit var updateReporting: UpdateReporting
 
     @MockBean
     private lateinit var getAllCurrentReportings: GetAllCurrentReportings
@@ -131,32 +139,48 @@ class ReportingControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
 
-  @Test
-  fun `Should get all current reportings`() {
-    // Given
-    given(getAllCurrentReportings.execute()).willReturn(listOf(
-      Reporting(
-        internalReferenceNumber = "FRFGRGR",
-        externalReferenceNumber = "RGD",
-        ircs = "6554fEE",
-        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-        creationDate = ZonedDateTime.now(),
-        value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
-        type = ReportingType.INFRACTION_SUSPICION,
-        isDeleted = false,
-        isArchived = false,
-        underCharter = true)
-    ))
+    @Test
+    fun `Should get all current reportings`() {
+        // Given
+        given(getAllCurrentReportings.execute()).willReturn(listOf(
+            Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                underCharter = true)
+        ))
 
-    // When
-    mockMvc.perform(get("/bff/v1/reportings"))
-      // Then
-      .andExpect(status().isOk)
-      .andExpect(MockMvcResultMatchers.jsonPath("$.length()", equalTo(1)))
-      .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", equalTo("FRFGRGR")))
-      .andExpect(MockMvcResultMatchers.jsonPath("$[0].isArchived", equalTo(false)))
-      .andExpect(MockMvcResultMatchers.jsonPath("$[0].isDeleted", equalTo(false)))
-      .andExpect(MockMvcResultMatchers.jsonPath("$[0].underCharter", equalTo(true)))
-  }
+        // When
+        mockMvc.perform(get("/bff/v1/reportings"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.length()", equalTo(1)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].isArchived", equalTo(false)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].isDeleted", equalTo(false)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].underCharter", equalTo(true)))
+    }
+
+    @Test
+    fun `Should update a reporting`() {
+        // When
+        mockMvc.perform(put("/bff/v1/reportings/123/update")
+            .content(objectMapper.writeValueAsString(UpdateReportingDataInput(
+                reportingActor = ReportingActor.OPS,
+                natinfCode = "123456",
+                title = "A title"
+            )))
+            .contentType(MediaType.APPLICATION_JSON))
+            // Then
+            .andExpect(status().isOk)
+
+        Mockito.verify(updateReporting).execute(eq(123), any())
+    }
 
 }

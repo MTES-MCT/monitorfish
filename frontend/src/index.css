@@ -196,29 +196,6 @@ button:hover, button:focus, [type="button"]:hover, [type="button"]:focus, [type=
     margin-top: 0;
 }
 
-.rs-checkbox-checker > label {
-    font-size: 13px;
-    color: #282F3E;
-}
-
-.rs-checkbox-checker {
-    padding-bottom: 0;
-    padding-left: 36px;
-    padding-top: 8px;
-    min-height: 0;
-    line-height: 1;
-}
-
-.rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::before {
-    border-color: #707785;
-    background-color: #E5E5EB;
-}
-
-.rs-checkbox-checked .rs-checkbox-wrapper .rs-checkbox-inner::after {
-    border: solid #707785;
-    border-width: 0 2px 2px 0;
-}
-
 .rs-radio-wrapper {
     top: 5px;
 }

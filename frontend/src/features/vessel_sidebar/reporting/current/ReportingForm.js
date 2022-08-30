@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getLocalStorageState } from '../../../../utils'
 import { useSaveReportingInLocalStorage } from './useSaveInLocalStorage'
 import addReporting from '../../../../domain/use_cases/reporting/addReporting'
+import updateReporting from '../../../../domain/use_cases/reporting/updateReporting'
 
 const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, editedReporting }) => {
   const reportingLocalStorageKey = fromSideWindow ? 'side-window-reporting-in-edit' : 'reporting-in-edit'
@@ -110,6 +111,79 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
       }
     }
   }, [reportingActor])
+
+  function createOrEditReporting () {
+    if (!title) {
+      setHasError(true)
+      return
+    }
+
+    let nextReporting = {
+      type: reportingType,
+      value: {
+        type: reportingType,
+        unit: unit,
+        authorTrigram: authorTrigram,
+        authorContact: authorContact,
+        reportingActor: reportingActor,
+        title: title,
+        natinfCode: natinfCode,
+        dml: dml,
+        description: description
+      }
+    }
+
+    if (editedReporting) {
+      editReporting(editedReporting, nextReporting)
+      return
+    }
+
+    createReporting(nextReporting)
+  }
+
+  function editReporting (editedReporting, nextReporting) {
+    nextReporting = {
+      ...editedReporting,
+      ...nextReporting,
+      value: {
+        ...editedReporting.value,
+        ...nextReporting.value
+      }
+    }
+
+    dispatch(updateReporting(editedReporting.it, nextReporting))
+      .then(() => {
+        closeForm()
+        deleteLocalStorageReportingEntry()
+      })
+      .catch(console.error)
+  }
+
+  function createReporting (nextReporting) {
+    nextReporting = {
+      ...nextReporting,
+      creationDate: new Date().toISOString(),
+      validationDate: null,
+      vesselName: selectedVesselIdentity?.vesselName,
+      internalReferenceNumber: selectedVesselIdentity?.internalReferenceNumber,
+      externalReferenceNumber: selectedVesselIdentity?.externalReferenceNumber,
+      ircs: selectedVesselIdentity?.ircs,
+      vesselIdentifier: selectedVesselIdentity?.vesselIdentifier,
+      value: {
+        ...nextReporting.value,
+        flagState: selectedVesselIdentity?.flagState.toUpperCase()
+      }
+    }
+
+    dispatch(addReporting(nextReporting))
+      .then(() => {
+        closeForm()
+        deleteLocalStorageReportingEntry()
+      })
+      .catch(console.error)
+  }
+
+  const deleteLocalStorageReportingEntry = () => window.localStorage.setItem(reportingLocalStorageKey, null)
 
   return <Form>
     <Label>Origine</Label>
@@ -263,42 +337,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
     }<br/>
     <ValidateButton
       data-cy={'new-reporting-create-button'}
-      onClick={() => {
-        if (!title) {
-          setHasError(true)
-          return
-        }
-
-        const newReporting = {
-          vesselName: selectedVesselIdentity?.vesselName,
-          internalReferenceNumber: selectedVesselIdentity?.internalReferenceNumber,
-          externalReferenceNumber: selectedVesselIdentity?.externalReferenceNumber,
-          ircs: selectedVesselIdentity?.ircs,
-          vesselIdentifier: selectedVesselIdentity?.vesselIdentifier,
-          type: reportingType,
-          creationDate: new Date().toISOString(),
-          validationDate: null,
-          value: {
-            type: reportingType,
-            unit: unit,
-            authorTrigram: authorTrigram,
-            authorContact: authorContact,
-            reportingActor: reportingActor,
-            title: title,
-            natinfCode: natinfCode,
-            dml: dml,
-            description: description,
-            flagState: selectedVesselIdentity?.flagState.toUpperCase()
-          }
-        }
-
-        dispatch(addReporting(newReporting))
-          .then(() => {
-            closeForm()
-            deleteLocalStorageReportingEntry()
-          })
-          .catch(console.error)
-      }}
+      onClick={createOrEditReporting}
     >
       Valider
     </ValidateButton>
@@ -317,8 +356,6 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
     }
   </Form>
 }
-
-const deleteLocalStorageReportingEntry = () => window.localStorage.setItem(newReportingLocalStorageKey, null)
 
 const DescriptionTextarea = styled.textarea`
   resize: none;

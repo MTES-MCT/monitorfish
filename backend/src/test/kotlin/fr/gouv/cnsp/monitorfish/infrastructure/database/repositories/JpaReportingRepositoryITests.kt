@@ -39,7 +39,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reporting).hasSize(6)
+        assertThat(reporting).hasSize(8)
         assertThat(reporting.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reporting.last().externalReferenceNumber).isEqualTo("RGD")
         val alert = reporting.last().value as ThreeMilesTrawlingAlert
@@ -69,7 +69,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reportings = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reportings).hasSize(6)
+        assertThat(reportings).hasSize(8)
         assertThat(reportings.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reportings.last().externalReferenceNumber).isEqualTo("RGD")
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
@@ -160,7 +160,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     val reporting = jpaReportingRepository.findAllCurrent()
 
     // Then
-    assertThat(reporting).hasSize(3)
+    assertThat(reporting).hasSize(5)
     assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
     assertThat(reporting.first().isArchived).isEqualTo(false)
     assertThat(reporting.first().isDeleted).isEqualTo(false)

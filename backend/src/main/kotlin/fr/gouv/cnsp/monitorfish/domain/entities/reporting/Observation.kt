@@ -1,5 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.reporting
 
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedReporting
+
 class Observation(
         override val reportingActor: ReportingActor,
         override val unit: String? = null,
@@ -13,4 +15,14 @@ class Observation(
   natinfCode = null,
   title = title,
   type = ReportingTypeMapping.OBSERVATION,
-  flagState = flagState)
+  flagState = flagState) {
+    companion object {
+        fun fromUpdatedReporting(updatedReporting: UpdatedReporting): Observation = Observation(
+            reportingActor = updatedReporting.reportingActor,
+            unit = updatedReporting.unit,
+            authorTrigram = updatedReporting.authorTrigram,
+            authorContact = updatedReporting.authorContact,
+            title = updatedReporting.title,
+            description = updatedReporting.description)
+    }
+}

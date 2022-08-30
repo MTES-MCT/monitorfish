@@ -36,7 +36,7 @@ class ReportingMapperUTests {
         val alert = ThreeMilesTrawlingAlert("NAMO", "FR", 2.356)
 
         // When
-        val jsonString = mapper.writeValueAsString(alert);
+        val jsonString = mapper.writeValueAsString(alert)
         val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, jsonString, ReportingType.ALERT)
 
         // Then

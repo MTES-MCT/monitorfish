@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedReporting
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -164,4 +165,36 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     assertThat(reporting.first().isArchived).isEqualTo(false)
     assertThat(reporting.first().isDeleted).isEqualTo(false)
   }
+
+    @Test
+    @Transactional
+    fun `update Should update a given reporting`() {
+        // Given
+        val updatedReporting = UpdatedReporting(
+            ReportingType.INFRACTION_SUSPICION.name,
+            ReportingActor.UNIT,
+            "An unit",
+            "",
+            "Jean Bon",
+            "Une observation",
+            "Une description",
+            "1236",
+            "MEMN",
+            "DML 56")
+
+        // When
+        val reporting = jpaReportingRepository.update(6, updatedReporting)
+
+        // Then
+        assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
+        assertThat((reporting.value as InfractionSuspicion).reportingActor).isEqualTo(updatedReporting.reportingActor)
+        assertThat((reporting.value as InfractionSuspicion).unit).isEqualTo(updatedReporting.unit)
+        assertThat((reporting.value as InfractionSuspicion).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
+        assertThat((reporting.value as InfractionSuspicion).authorContact).isEqualTo(updatedReporting.authorContact)
+        assertThat((reporting.value as InfractionSuspicion).title).isEqualTo(updatedReporting.title)
+        assertThat((reporting.value as InfractionSuspicion).description).isEqualTo(updatedReporting.description)
+        assertThat((reporting.value as InfractionSuspicion).natinfCode).isEqualTo(updatedReporting.natinfCode)
+        assertThat((reporting.value as InfractionSuspicion).seaFront).isEqualTo(updatedReporting.seaFront)
+        assertThat((reporting.value as InfractionSuspicion).dml).isEqualTo(updatedReporting.dml)
+    }
 }

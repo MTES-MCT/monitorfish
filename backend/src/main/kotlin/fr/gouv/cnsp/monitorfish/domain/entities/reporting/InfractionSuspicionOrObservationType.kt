@@ -14,4 +14,25 @@ abstract class InfractionSuspicionOrObservationType(
         open var seaFront: String? = null,
         open val flagState: String? = null,
         override val natinfCode: String? = null
-): ReportingValue(natinfCode)
+): ReportingValue(natinfCode) {
+    fun checkReportingActorAndFieldsRequirements () = when (reportingActor) {
+        ReportingActor.OPS -> require(!authorTrigram.isNullOrEmpty()) {
+            "An author trigram must be set"
+        }
+        ReportingActor.SIP -> require(!authorTrigram.isNullOrEmpty()) {
+            "An author trigram must be set"
+        }
+        ReportingActor.UNIT -> require(!unit.isNullOrEmpty()) {
+            "An unit must be set"
+        }
+        ReportingActor.DML -> require(!authorContact.isNullOrEmpty()) {
+            "An author contact must be set"
+        }
+        ReportingActor.DIRM -> require(!authorContact.isNullOrEmpty()) {
+            "An author contact must be set"
+        }
+        ReportingActor.OTHER -> require(!authorContact.isNullOrEmpty()) {
+            "An author contact must be set"
+        }
+    }
+}

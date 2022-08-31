@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedReporting
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import org.hibernate.annotations.DynamicUpdate
 import org.springframework.data.jpa.repository.Modifying

@@ -1,15 +1,15 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedReporting
 import java.time.ZonedDateTime
 
 interface ReportingRepository {
     fun save(alert: PendingAlert, validationDate: ZonedDateTime?)
     fun save(reporting: Reporting): Reporting
-    fun update(reportingId: Int, updatedReporting: UpdatedReporting): Reporting
+    fun update(reportingId: Int, updatedInfractionSuspicion: InfractionSuspicion): Reporting
     fun findAll(): List<Reporting>
     fun findById(reportingId: Int): Reporting
     fun findAllCurrent(): List<Reporting>

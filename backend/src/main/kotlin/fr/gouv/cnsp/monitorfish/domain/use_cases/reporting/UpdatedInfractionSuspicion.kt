@@ -2,8 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 
-class UpdatedReporting(
-    var type: String? = null,
+class UpdatedInfractionSuspicion(
     val reportingActor: ReportingActor,
     val unit: String? = null,
     val authorTrigram: String? = null,
@@ -12,4 +11,5 @@ class UpdatedReporting(
     val description: String? = null,
     val natinfCode: String? = null,
     var seaFront: String? = null,
+    var flagState: String? = null,
     val dml: String? = null)

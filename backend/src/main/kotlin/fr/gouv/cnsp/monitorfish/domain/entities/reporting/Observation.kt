@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.reporting
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedReporting
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicion
 
 class Observation(
         override val reportingActor: ReportingActor,
@@ -9,6 +9,7 @@ class Observation(
         override val authorContact: String? = null,
         override val title: String,
         override val description: String? = null,
+        override var seaFront: String? = null,
         override val flagState: String? = null
 ): InfractionSuspicionOrObservationType(
   reportingActor = reportingActor,
@@ -17,12 +18,13 @@ class Observation(
   type = ReportingTypeMapping.OBSERVATION,
   flagState = flagState) {
     companion object {
-        fun fromUpdatedReporting(updatedReporting: UpdatedReporting): Observation = Observation(
-            reportingActor = updatedReporting.reportingActor,
-            unit = updatedReporting.unit,
-            authorTrigram = updatedReporting.authorTrigram,
-            authorContact = updatedReporting.authorContact,
-            title = updatedReporting.title,
-            description = updatedReporting.description)
+        fun fromUpdatedReporting(updatedInfractionSuspicion: UpdatedInfractionSuspicion): Observation = Observation(
+            reportingActor = updatedInfractionSuspicion.reportingActor,
+            unit = updatedInfractionSuspicion.unit,
+            authorTrigram = updatedInfractionSuspicion.authorTrigram,
+            authorContact = updatedInfractionSuspicion.authorContact,
+            title = updatedInfractionSuspicion.title,
+            seaFront = updatedInfractionSuspicion.seaFront,
+            description = updatedInfractionSuspicion.description)
     }
 }

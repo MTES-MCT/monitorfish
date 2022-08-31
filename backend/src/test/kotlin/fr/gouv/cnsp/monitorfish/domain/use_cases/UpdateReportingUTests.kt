@@ -8,9 +8,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAl
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdateReporting
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedReporting
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicion
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -48,11 +47,11 @@ class UpdateReportingUTests {
         // When
         val throwable = catchThrowable {
             UpdateReporting(reportingRepository)
-                .execute(1, UpdatedReporting(reportingActor = ReportingActor.UNIT, title = "A reporting"))
+                .execute(1, UpdatedInfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "A reporting"))
         }
 
         // Then
-        assertThat(throwable.message).contains("The updated reporting must be an OBSERVATION or INFRACTION_SUSPICION")
+        assertThat(throwable.message).contains("The edited reporting must be an INFRACTION_SUSPICION")
     }
 
     @ParameterizedTest
@@ -61,7 +60,7 @@ class UpdateReportingUTests {
         // Given
         given(reportingRepository.findById(any())).willReturn(Reporting(
             id = 1,
-            type = ReportingType.OBSERVATION,
+            type = ReportingType.INFRACTION_SUSPICION,
             vesselName = "BIDUBULE",
             internalReferenceNumber = "FR224226850",
             externalReferenceNumber = "1236514",
@@ -69,14 +68,14 @@ class UpdateReportingUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert() as ReportingValue,
+            value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
             isArchived = false,
             isDeleted = false))
 
         // When
         val throwable = catchThrowable {
             UpdateReporting(reportingRepository)
-                .execute(1, UpdatedReporting(reportingActor = reportingActor, title = "A reporting"))
+                .execute(1, UpdatedInfractionSuspicion(reportingActor = reportingActor, title = "A reporting", dml = "DML 56", natinfCode = "123456"))
         }
 
         // Then
@@ -103,13 +102,13 @@ class UpdateReportingUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert() as ReportingValue,
+            value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
             isArchived = false,
             isDeleted = false))
 
         // When
         val throwable = catchThrowable {
-            UpdateReporting(reportingRepository).execute(1, UpdatedReporting(
+            UpdateReporting(reportingRepository).execute(1, UpdatedInfractionSuspicion(
                 reportingActor = ReportingActor.UNIT,
                 title = "A reporting",
                 dml = "DML 62/80"))
@@ -132,24 +131,59 @@ class UpdateReportingUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert() as ReportingValue,
+            value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
             isArchived = false,
             isDeleted = false))
 
       // When
-      UpdateReporting(reportingRepository).execute(1, UpdatedReporting(
+      UpdateReporting(reportingRepository).execute(1, UpdatedInfractionSuspicion(
           reportingActor = ReportingActor.UNIT,
           unit = "AN UNIT",
           title = "A reporting",
+          description = "Test 2",
           dml = "DML 62/80",
           natinfCode = "1234"))
 
       // Then
-      argumentCaptor<UpdatedReporting>().apply {
+      argumentCaptor<InfractionSuspicion>().apply {
         verify(reportingRepository).update(any(), capture())
 
         assertThat(allValues.first().seaFront).isEqualTo("MEMN")
+        assertThat(allValues.first().description).isEqualTo("Test 2")
       }
+    }
+
+    @Test
+    fun `execute Should add the flagState of the previous reporting`() {
+        // Given
+        given(reportingRepository.findById(any())).willReturn(Reporting(
+            id = 1,
+            type = ReportingType.INFRACTION_SUSPICION,
+            vesselName = "BIDUBULE",
+            internalReferenceNumber = "FR224226850",
+            externalReferenceNumber = "1236514",
+            ircs = "IRCS",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            creationDate = ZonedDateTime.now(),
+            validationDate = ZonedDateTime.now(),
+            value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234", flagState = "FR") as ReportingValue,
+            isArchived = false,
+            isDeleted = false))
+
+        // When
+        UpdateReporting(reportingRepository).execute(1, UpdatedInfractionSuspicion(
+            reportingActor = ReportingActor.UNIT,
+            unit = "AN UNIT",
+            title = "A reporting",
+            dml = "DML 62/80",
+            natinfCode = "1234"))
+
+        // Then
+        argumentCaptor<InfractionSuspicion>().apply {
+            verify(reportingRepository).update(any(), capture())
+
+            assertThat(allValues.first().flagState).isEqualTo("FR")
+        }
     }
 
     @Test
@@ -165,13 +199,13 @@ class UpdateReportingUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             creationDate = ZonedDateTime.now(),
             validationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert() as ReportingValue,
+            value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234", flagState = "FR") as ReportingValue,
             isArchived = false,
             isDeleted = false))
 
         // When
         val throwable = catchThrowable {
-            UpdateReporting(reportingRepository).execute(1, UpdatedReporting(
+            UpdateReporting(reportingRepository).execute(1, UpdatedInfractionSuspicion(
                 reportingActor = ReportingActor.UNIT,
                 unit = "AN UNIT",
                 title = "A reporting",
@@ -180,6 +214,6 @@ class UpdateReportingUTests {
         }
 
         // Then
-        assertThat(throwable.message).contains("A DML must be set")
+        assertThat(throwable.message).contains("DML should not be null or empty")
     }
 }

@@ -26,6 +26,10 @@ const EditReporting = () => {
     transition: 'margin-right 0.5s'
   }
 
+  function closeForm () {
+    dispatch(setEditedReportingInSideWindow(null))
+  }
+
   return (
     <EditReportingWrapper
       hasMargin={editedReportingInSideWindow}
@@ -85,6 +89,7 @@ const EditReporting = () => {
         <ReportingForm
           selectedVesselIdentity={editedReportingInSideWindow}
           editedReporting={editedReportingInSideWindow}
+          closeForm={closeForm}
           fromSideWindow
         />
       </ReportingFormWrapper>

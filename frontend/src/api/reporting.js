@@ -141,18 +141,18 @@ function addReportingFromAPI (newReporting) {
  * Update a reporting
  * @memberOf API
  * @param {string[]} id - The id of the reporting
- * @param {UpdatedReporting} updatedReporting - The updated reporting
+ * @param {UpdateReporting} nextReporting - The updated reporting
  * @return {Reporting} reporting - The updated reporting
  * @throws {Error}
  */
-function updateReportingFromAPI (id, updatedReporting) {
+function updateReportingFromAPI (id, nextReporting) {
   return fetch(`/bff/v1/reportings/${id}/update`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json, text/plain',
       'Content-Type': 'application/json;charset=UTF-8'
     },
-    body: JSON.stringify(updatedReporting)
+    body: JSON.stringify(nextReporting)
   }).then(response => {
     if (response.status === OK) {
       return response.json()

@@ -13,7 +13,6 @@ import updateReporting from '../../../../domain/use_cases/reporting/updateReport
 
 const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, editedReporting }) => {
   const reportingLocalStorageKey = fromSideWindow ? 'side-window-reporting-in-edit' : 'reporting-in-edit'
-  // TODO Make the edition possible
 
   const dispatch = useDispatch()
   const infractions = useSelector(state => state.infraction.infractions)
@@ -78,6 +77,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
     }
   }, [reportingType])
 
+  // TODO Why the descriptino is not updated after an update ?
   useEffect(() => {
     switch (reportingActor) {
       case ReportingOriginActor.OPS.code: {
@@ -121,7 +121,6 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
     let nextReporting = {
       type: reportingType,
       value: {
-        type: reportingType,
         unit: unit,
         authorTrigram: authorTrigram,
         authorContact: authorContact,
@@ -142,16 +141,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
   }
 
   function editReporting (editedReporting, nextReporting) {
-    nextReporting = {
-      ...editedReporting,
-      ...nextReporting,
-      value: {
-        ...editedReporting.value,
-        ...nextReporting.value
-      }
-    }
-
-    dispatch(updateReporting(editedReporting.it, nextReporting))
+    dispatch(updateReporting(editedReporting.id, nextReporting.value))
       .then(() => {
         closeForm()
         deleteLocalStorageReportingEntry()
@@ -257,6 +247,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
     }
     <Label>Type</Label>
     <RadioGroup
+      disabled={editedReporting}
       appearance="picker"
       inline
       value={reportingType}

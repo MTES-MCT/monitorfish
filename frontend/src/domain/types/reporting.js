@@ -41,7 +41,7 @@
  */
 
 /**
- * @typedef UpdatedReporting
+ * @typedef UpdateReporting
  * @property {string} reportingActor
  * @property {string | null} unit
  * @property {string | null} authorTrigram

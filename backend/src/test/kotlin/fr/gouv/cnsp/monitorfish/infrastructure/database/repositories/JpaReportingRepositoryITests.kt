@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedReporting
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicion
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -170,8 +170,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `update Should update a given reporting`() {
         // Given
-        val updatedReporting = UpdatedReporting(
-            ReportingType.INFRACTION_SUSPICION.name,
+        val updatedReporting = InfractionSuspicion(
             ReportingActor.UNIT,
             "An unit",
             "",
@@ -180,6 +179,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             "Une description",
             "1236",
             "MEMN",
+            "FR",
             "DML 56")
 
         // When
@@ -195,6 +195,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting.value as InfractionSuspicion).description).isEqualTo(updatedReporting.description)
         assertThat((reporting.value as InfractionSuspicion).natinfCode).isEqualTo(updatedReporting.natinfCode)
         assertThat((reporting.value as InfractionSuspicion).seaFront).isEqualTo(updatedReporting.seaFront)
+        assertThat((reporting.value as InfractionSuspicion).flagState).isEqualTo(updatedReporting.flagState)
         assertThat((reporting.value as InfractionSuspicion).dml).isEqualTo(updatedReporting.dml)
     }
 }

@@ -91,6 +91,18 @@ const reportingSlice = createSlice({
     setEditedReportingInSideWindow (state, action) {
       state.editedReportingInSideWindow = action.payload
     },
+    /**
+     * Update a given current reporting
+     * @function updateCurrentReporting
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: Reporting}} action - the reporting to update
+     */
+    updateCurrentReporting (state, action) {
+      state.currentReportings = state.currentReportings
+        .filter(reporting => reporting.id === action.payload.id)
+        .concat(action.payload)
+    },
   }
 })
 
@@ -101,7 +113,8 @@ export const {
   loadReporting,
   setCurrentReportings,
   removeReportingsIdsFromCurrentReportings,
-  setEditedReportingInSideWindow
+  setEditedReportingInSideWindow,
+  updateCurrentReporting
 } = reportingSlice.actions
 
 export default reportingSlice.reducer

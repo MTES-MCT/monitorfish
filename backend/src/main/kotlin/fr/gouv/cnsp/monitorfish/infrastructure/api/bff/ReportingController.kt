@@ -50,8 +50,10 @@ class ReportingController(
                         @PathVariable(name = "reportingId")
                         reportingId: Int,
                         @RequestBody
-                        updateReportingInput: UpdateReportingDataInput) {
-        updateReporting.execute(reportingId, updateReportingInput.toUpdatedReportingValues())
+                        updateReportingInput: UpdateReportingDataInput): ReportingDataOutput {
+        val reporting = updateReporting.execute(reportingId, updateReportingInput.toUpdatedReportingValues())
+
+        return ReportingDataOutput.fromReporting(reporting)
     }
 
     @PutMapping(value = ["/archive"])

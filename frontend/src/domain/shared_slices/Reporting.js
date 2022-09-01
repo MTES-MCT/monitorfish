@@ -100,7 +100,7 @@ const reportingSlice = createSlice({
      */
     updateCurrentReporting (state, action) {
       state.currentReportings = state.currentReportings
-        .filter(reporting => reporting.id === action.payload.id)
+        .filter(reporting => reporting.id !== action.payload.id)
         .concat(action.payload)
     },
   }

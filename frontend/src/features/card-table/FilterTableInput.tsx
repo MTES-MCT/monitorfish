@@ -1,8 +1,11 @@
-import { COLORS } from '../../constants/constants'
 import styled from 'styled-components'
+
+import { COLORS } from '../../constants/constants'
 import SearchIconSVG from '../icons/Loupe_dark.svg'
 
-const FilterTableInput = styled.input`
+export const FilterTableInput = styled.input<{
+  baseUrl: string
+}>`
   background-color: white;
   border: 1px ${COLORS.lightGray} solid;
   border-radius: 0px;
@@ -16,9 +19,8 @@ const FilterTableInput = styled.input`
   background-position: bottom 3px right 5px;
   background-repeat: no-repeat;
 
-  :hover, :focus {
+  :hover,
+  :focus {
     border-bottom: 1px ${COLORS.lightGray} solid;
   }
 `
-
-export default FilterTableInput

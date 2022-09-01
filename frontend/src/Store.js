@@ -1,6 +1,6 @@
 import { backofficeReducers, homeReducers } from './domain/shared_slices'
 import { configureStore } from '@reduxjs/toolkit'
-import { persistStore, persistReducer, createTransform } from 'redux-persist'
+import { createTransform, persistReducer, persistStore } from 'redux-persist'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/lib/storage' // localStorage
 import thunk from 'redux-thunk'

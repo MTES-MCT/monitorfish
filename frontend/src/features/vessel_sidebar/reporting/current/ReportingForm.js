@@ -36,35 +36,30 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
   useSaveReportingInLocalStorage(reportingLocalStorageKey, 'dml', dml, true)
   const [description, setDescription] = useState('')
   useSaveReportingInLocalStorage(reportingLocalStorageKey, 'description', description, true)
-  const [hasError, setHasError] = useState(false)
+  const [errorFields, setErrorFields] = useState([])
+
+  function fillForm (editedOrSavedReporting) {
+    setErrorFields([])
+    setReportingType(editedOrSavedReporting.type || ReportingType.INFRACTION_SUSPICION.code)
+    setUnit(editedOrSavedReporting.value?.unit || '')
+    setAuthorTrigram(editedOrSavedReporting.value?.authorTrigram || '')
+    setAuthorContact(editedOrSavedReporting.value?.authorContact || '')
+    setReportingActor(editedOrSavedReporting.value?.reportingActor || ReportingOriginActor.OPS.code)
+    setTitle(editedOrSavedReporting.value?.title || '')
+    setNatinfCode(editedOrSavedReporting.value?.natinfCode || '')
+    setDml(editedOrSavedReporting.value?.dml || '')
+    setDescription(editedOrSavedReporting.value?.description || '')
+  }
 
   useEffect(() => {
     if (editedReporting) {
-      setHasError(false)
-      setReportingType(editedReporting?.type || ReportingType.INFRACTION_SUSPICION.code)
-      setUnit(editedReporting?.value?.unit || '')
-      setAuthorTrigram(editedReporting?.value?.authorTrigram || '')
-      setAuthorContact(editedReporting?.value?.authorContact || '')
-      setReportingActor(editedReporting?.value?.reportingActor || ReportingOriginActor.OPS.code)
-      setTitle(editedReporting?.value?.title || '')
-      setNatinfCode(editedReporting?.value?.natinfCode || '')
-      setDml(editedReporting?.value?.dml || '')
-      setDescription(editedReporting?.value?.description || '')
+      fillForm(editedReporting)
       return
     }
 
     const savedReporting = getLocalStorageState(null, reportingLocalStorageKey)
     if (savedReporting) {
-      setHasError(false)
-      setReportingType(savedReporting?.type || ReportingType.INFRACTION_SUSPICION.code)
-      setUnit(savedReporting?.value?.unit || '')
-      setAuthorTrigram(savedReporting?.value?.authorTrigram || '')
-      setAuthorContact(savedReporting?.value?.authorContact || '')
-      setReportingActor(savedReporting?.value?.reportingActor || ReportingOriginActor.OPS.code)
-      setTitle(savedReporting?.value?.title || '')
-      setNatinfCode(savedReporting?.value?.natinfCode || '')
-      setDml(savedReporting?.value?.dml || '')
-      setDescription(savedReporting?.value?.description || '')
+      fillForm(savedReporting)
     }
   }, [editedReporting])
 
@@ -112,9 +107,60 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
     }
   }, [reportingActor])
 
-  function createOrEditReporting () {
+  function checkErrors () {
+    let nextErrorsFields = []
+
     if (!title) {
-      setHasError(true)
+      nextErrorsFields = nextErrorsFields.concat("title")
+    }
+
+    switch (reportingActor) {
+      case ReportingOriginActor.OPS.code: {
+        if(!authorTrigram) {
+          nextErrorsFields = nextErrorsFields.concat("authorTrigram")
+        }
+        break
+      }
+      case ReportingOriginActor.SIP.code: {
+        if(!authorTrigram) {
+          nextErrorsFields = nextErrorsFields.concat("authorTrigram")
+        }
+        break
+      }
+      case ReportingOriginActor.UNIT.code: {
+        if(!unit) {
+          nextErrorsFields = nextErrorsFields.concat("unit")
+        }
+        break
+      }
+      case ReportingOriginActor.DML.code: {
+        if(!authorContact) {
+          nextErrorsFields = nextErrorsFields.concat("authorContact")
+        }
+        break
+      }
+      case ReportingOriginActor.DIRM.code: {
+        if(!authorContact) {
+          nextErrorsFields = nextErrorsFields.concat("authorContact")
+        }
+        break
+      }
+      case ReportingOriginActor.OTHER.code: {
+        if(!authorContact) {
+          nextErrorsFields = nextErrorsFields.concat("authorContact")
+        }
+        break
+      }
+    }
+
+    setErrorFields(nextErrorsFields)
+    return !!nextErrorsFields.length
+  }
+
+  function createOrEditReporting () {
+    const hasErrors = checkErrors()
+    if (hasErrors) {
+      console.log('hasErrors', errorFields)
       return
     }
 
@@ -274,7 +320,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
         ? 'Ex: Dérogation temporaire licence'
         : 'Ex: Infraction maille cul de chalut'
       }
-      $hasError={hasError}
+      $hasError={errorFields.includes('title')}
       width={390}
       type="text"
       value={title}
@@ -340,11 +386,10 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
     >
       Annuler
     </CancelButton>
-    {
-      hasError
-        ? <><br/>Le champ Titre est obligatoire</>
-        : null
-    }
+    {errorFields.includes('title') && <><br/>Le champ "Titre" est obligatoire.</>}
+    {errorFields.includes('authorTrigram') && <><br/>Le champ "Identité de l&apos;émetteur" est obligatoire.</>}
+    {errorFields.includes('unit') && <><br/>Le champ "Nom de l&apos;unité" est obligatoire.</>}
+    {errorFields.includes('authorContact') && <><br/>Le champ "Nom et contact de l&apos;émetteur" est obligatoire.</>}
   </Form>
 }
 
@@ -402,6 +447,11 @@ const Input = styled.input`
 const Form = styled.div`
   margin: 15px;
   flex-direction: column;
+
+  .rs-radio-group {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
 
   .rs-picker-select {
     margin: 0 !important;

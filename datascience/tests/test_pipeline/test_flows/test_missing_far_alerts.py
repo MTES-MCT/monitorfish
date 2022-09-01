@@ -58,6 +58,7 @@ def test_make_vessels_at_sea_query():
         Column("flag_state", VARCHAR),
         Column("date_time", TIMESTAMP),
         Column("is_at_port", BOOLEAN),
+        Column("is_fishing", BOOLEAN),
         Column("geometry", Geometry),
     )
 
@@ -81,6 +82,7 @@ def test_make_vessels_at_sea_query():
         minimum_length=12.0,
         eez_areas_table=eez_areas_table,
         eez_to_monitor_iso3=["FRA"],
+        only_fishing_positions=True,
     )
 
     query_string = str(query.compile(compile_kwargs={"literal_binds": True}))
@@ -104,8 +106,9 @@ def test_make_vessels_at_sea_query():
         "positions.date_time < '2020-12-05 12:23:00' AND "
         "positions.internal_reference_number IS NOT NULL AND "
         "NOT positions.is_at_port AND "
+        "positions.is_fishing AND "
         "positions.flag_state IN ('ES') AND "
-        "vessels.length >= 12.0 AND "
+        "(vessels.length >= 12.0 OR positions.flag_state != 'FR') AND "
         "eez_areas.iso_sov1 IN ('FRA')"
     )
 
@@ -319,6 +322,7 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
         states_iso2_to_monitor_everywhere=["FR", "NL"],
         states_iso2_to_monitor_in_french_eez=["ES", "DE"],
         minimum_length=12.0,
+        only_raise_if_route_shows_fishing=True,
     )
 
     assert state.is_successful()
@@ -328,7 +332,10 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
     )
 
     assert len(initial_pending_alerts) == 1
-    # Only two alerts are kept, as one alert is filtered by the filter_silenced_alerts task
+    # Only one alert alert (out of the two) is kept, as one alert is filtered by the
+    # filter_silenced_alerts task
+    assert len(state.result[flow.get_tasks("make_alerts")[0]].result) == 2
+    assert len(state.result[flow.get_tasks("filter_silenced_alerts")[0]].result) == 1
     assert len(final_pending_alerts) == 2
     assert "ABC000055481" in final_pending_alerts.internal_reference_number.values
     assert "MISSING_FAR_ALERT" in final_pending_alerts.alert_config_name.values

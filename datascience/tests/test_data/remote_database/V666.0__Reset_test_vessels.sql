@@ -29,7 +29,7 @@ INSERT INTO public.vessels (
 ),
 (
     3,
-    'ABC000055481', 'AS761555', NULL, 'IL2468', 'PLACE SPECTACLE SUBIR', 'NL', 4.59, 21.5, 
+    'ABC000055481', 'AS761555', NULL, 'IL2468', 'PLACE SPECTACLE SUBIR', 'NL', 4.59, 11.5,
     'Concarneau', 'CC', 3.7, 'Concarneau', 553, 'Chalutier', '4ème', 'Grande pêche', 
     '{OTM,OTB,OTT}', NULL,
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur de fonds', '{0000000000}', 

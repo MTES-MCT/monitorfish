@@ -38,7 +38,7 @@ const updateReporting = (id, nextReporting) => async (dispatch, getState) => {
 function updateCurrentAndArchivedReporting (currentAndArchivedReportings, updatedReporting) {
   const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportings }
   nextCurrentAndArchivedReporting.current = nextCurrentAndArchivedReporting.current
-    .filter(reporting => reporting.id === updatedReporting.id)
+    .filter(reporting => reporting.id !== updatedReporting.id)
     .concat(updatedReporting)
 
   return nextCurrentAndArchivedReporting

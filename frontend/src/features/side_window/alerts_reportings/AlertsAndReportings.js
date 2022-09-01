@@ -5,7 +5,7 @@ import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domai
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import SilencedAlertsList from './SilencedAlertsList'
-import ReportingList from './ReportingList'
+import { ReportingList } from './ReportingList'
 import { AlertAndReportingTab } from '../SideWindow'
 
 /**

@@ -5,7 +5,7 @@ from typing import Tuple
 import pandas as pd
 from geoalchemy2.functions import ST_Intersects
 from prefect import Flow, Parameter, task
-from sqlalchemy import Table, and_, not_, select
+from sqlalchemy import Table, and_, not_, or_, select
 from sqlalchemy.sql import Select
 
 from src.pipeline.generic_tasks import extract
@@ -70,7 +70,8 @@ def make_vessels_at_sea_query(
         vessels_table (Table, optional): `sqlalchemy.Table` representing `vessels`. Must
           be provided if `minimum_length` is not `None`. Defaults to None.
         minimum_length (float, optional): If provided, only vessels longer than the
-          given value will be queried. Defaults to None.
+          given value will be queried (only applies to french vessels). Defaults to
+          None.
         eez_areas_table (Table, optional): `sqlalchemy.Table` representing `eez_areas`.
           Must be provided if `eez_to_monitor_iso3` is not `None`. Defaults to None.
         eez_to_monitor_iso3 (list, optional): If provided, only VMS emission in the
@@ -156,7 +157,12 @@ def make_vessels_at_sea_query(
         q = q.where(positions_table.c.flag_state.in_(states_to_monitor_iso2))
 
     if minimum_length:
-        q = q.where(vessels_table.c.length >= minimum_length)
+        q = q.where(
+            or_(
+                vessels_table.c.length >= minimum_length,
+                positions_table.c.flag_state != "FR",
+            )
+        )
 
     if eez_to_monitor_iso3:
         q = q.where(eez_areas_table.c.iso_sov1.in_(eez_to_monitor_iso3))

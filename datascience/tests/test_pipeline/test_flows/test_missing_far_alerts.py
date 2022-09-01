@@ -108,7 +108,7 @@ def test_make_vessels_at_sea_query():
         "NOT positions.is_at_port AND "
         "positions.is_fishing AND "
         "positions.flag_state IN ('ES') AND "
-        "vessels.length >= 12.0 AND "
+        "(vessels.length >= 12.0 OR positions.flag_state != 'FR') AND "
         "eez_areas.iso_sov1 IN ('FRA')"
     )
 

@@ -13,7 +13,6 @@ const updateReporting = (id, nextReporting) => async (dispatch, getState) => {
   } = getState().reporting
 
   updateReportingFromAPI(id, nextReporting).then(updatedReporting => {
-    console.log(updatedReporting)
     dispatch(updateCurrentReporting(updatedReporting))
     if (vesselIdentity && currentAndArchivedReportings.current?.length) {
       const nextCurrentAndArchivedReporting = updateCurrentAndArchivedReporting(currentAndArchivedReportings, updatedReporting)

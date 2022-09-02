@@ -7,19 +7,20 @@ import { COLORS } from '../../../../constants/constants'
 import { operationalAlertTypes } from '../../../../domain/entities/alerts'
 import { ReportingType } from '../../../../domain/entities/reporting'
 import ConfirmDeletionModal from './ConfirmDeletionModal'
-import NewReporting from './NewReporting'
+import CreateOrEditReporting from './CreateOrEditReporting'
 import deleteReporting from '../../../../domain/use_cases/reporting/deleteReporting'
 
 const CurrentReporting = () => {
   const dispatch = useDispatch()
   const {
     /** @type {CurrentAndArchivedReportings} */
-    currentAndArchivedReportings
+    currentAndArchivedReportings,
+    editedReporting
   } = useSelector(state => state.reporting)
   const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState(undefined)
 
   return <Wrapper>
-    <NewReporting/>
+    <CreateOrEditReporting/>
     {
       operationalAlertTypes
         .map(alertType => {
@@ -42,6 +43,7 @@ const CurrentReporting = () => {
     {
       currentAndArchivedReportings?.current
         ?.filter(reporting => reporting.type !== ReportingType.ALERT.code)
+        ?.filter(reporting => reporting.id !== editedReporting?.id)
         .map(reporting => {
           return <Reporting
             key={reporting.id}

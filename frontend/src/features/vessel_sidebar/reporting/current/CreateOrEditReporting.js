@@ -4,28 +4,37 @@ import { COLORS } from '../../../../constants/constants'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
 import ReportingForm from './ReportingForm'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setEditedReporting } from '../../../../domain/shared_slices/Reporting'
 
-const NewReporting = () => {
+const CreateOrEditReporting = () => {
+  const dispatch = useDispatch()
   const selectedVesselIdentity = useSelector(state => state.vessel.selectedVesselIdentity)
+  const editedReporting = useSelector(state => state.reporting.editedReporting)
   const [newReportingFormIsOpen, setNewReportingFormIsOpen] = useState(false)
+
+  function close () {
+    setNewReportingFormIsOpen(false)
+    dispatch(setEditedReporting(null))
+  }
 
   return <>
     {
-      newReportingFormIsOpen
+      newReportingFormIsOpen || editedReporting
         ? <FormWrapper>
           <Header>
             <HeaderText>
-              Ouvrir un signalement
+              {editedReporting ? 'Editer' : 'Ouvrir'} un signalement
             </HeaderText>
             <CloseIcon
-              onClick={() => setNewReportingFormIsOpen(false)}
+              onClick={close}
             />
           </Header>
           <ReportingForm
+            editedReporting={editedReporting}
             hasWhiteBackground={false}
             selectedVesselIdentity={selectedVesselIdentity}
-            closeForm={() => setNewReportingFormIsOpen(false)}
+            closeForm={close}
           />
         </FormWrapper>
         : <NewReportingButton
@@ -68,4 +77,4 @@ const CloseIcon = styled(CloseIconSVG)`
   margin: 2px 10px 0 auto;
 `
 
-export default NewReporting
+export default CreateOrEditReporting

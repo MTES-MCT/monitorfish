@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { Radio, RadioGroup, SelectPicker } from 'rsuite'
+import { Input, Radio, RadioGroup, SelectPicker } from 'rsuite'
 import { FrenchDMLs, ReportingOriginActor, ReportingType } from '../../../../domain/entities/reporting'
 import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.style'
 import { sortArrayByColumn } from '../../../vessel_list/tableSort'
@@ -10,9 +10,8 @@ import { getLocalStorageState } from '../../../../utils'
 import { useSaveReportingInLocalStorage } from './useSaveInLocalStorage'
 import addReporting from '../../../../domain/use_cases/reporting/addReporting'
 import updateReporting from '../../../../domain/use_cases/reporting/updateReporting'
-import { PLACEMENT } from 'rsuite/utils'
 
-const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, editedReporting }) => {
+const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, editedReporting, hasWhiteBackground }) => {
   const reportingLocalStorageKey = fromSideWindow ? 'side-window-reporting-in-edit' : 'reporting-in-edit'
 
   const dispatch = useDispatch()
@@ -224,10 +223,11 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
 
   const deleteLocalStorageReportingEntry = () => window.localStorage.setItem(reportingLocalStorageKey, null)
 
-  return <Form>
+  return <Form hasWhiteBackground={hasWhiteBackground}>
     <Label>Origine</Label>
     <RadioGroup
       inline
+      appearance="picker"
       value={reportingActor}
       onChange={value => setReportingActor(value)}
       defaultValue={ReportingOriginActor.OPS.code}
@@ -263,13 +263,14 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
       reportingActor === ReportingOriginActor.OPS.code || reportingActor === ReportingOriginActor.SIP.code
         ? <>
           <Label>Identité de l&apos;émetteur (trigramme)</Label>
-          <Input
+          <StyledInput
+            hasWhiteBackground={hasWhiteBackground}
             data-cy={''}
             width={100}
             placeholder={'Ex: LTH'}
             type="text"
             value={authorTrigram}
-            onChange={e => setAuthorTrigram(e.target.value)}
+            onChange={(value, _) => setAuthorTrigram(value)}
           />
           </>
         : null
@@ -286,13 +287,14 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
       reportingActor === ReportingOriginActor.OTHER.code
         ? <>
           <Label>Nom et contact (numéro, mail…) de l&apos;émetteur</Label>
-          <Input
+          <StyledInput
             data-cy={'new-reporting-author-contact'}
+            hasWhiteBackground={hasWhiteBackground}
             width={230}
             placeholder={'Ex: Yannick Attal (06 24 25 01 91)'}
             type="text"
             value={authorContact}
-            onChange={e => setAuthorContact(e.target.value)}
+            onChange={(value, _) => setAuthorContact(value)}
           />
         </>
         : null
@@ -320,8 +322,9 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
       </Radio>
     </RadioGroup>
     <Label>Titre</Label>
-    <Input
+    <StyledInput
       data-cy={'new-reporting-title'}
+      hasWhiteBackground={hasWhiteBackground}
       placeholder={reportingType === ReportingType.OBSERVATION.code
         ? 'Ex: Dérogation temporaire licence'
         : 'Ex: Infraction maille cul de chalut'
@@ -330,17 +333,20 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
       width={390}
       type="text"
       value={title}
-      onChange={e => setTitle(e.target.value)}
+      onChange={(value, _) => setTitle(value)}
     />
     <Label>Description</Label>
     <DescriptionTextarea
+      as="textarea"
+      hasWhiteBackground={hasWhiteBackground}
+      rows={3}
       data-cy={'new-reporting-description'}
       placeholder={reportingType === ReportingType.OBSERVATION.code
         ? 'Ex: Licence en cours de renouvellement, dérogation accordée par la DML jusqu\'au 01/08/2022.'
         : 'Ex: Infraction constatée sur la taille de la maille en cul de chalut'
       }
       value={description}
-      onChange={e => setDescription(e.target.value)}
+      onChange={(value, _) => setDescription(value)}
     />
     {
       reportingType === ReportingType.INFRACTION_SUSPICION.code
@@ -405,23 +411,11 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
   </Form>
 }
 
-const DescriptionTextarea = styled.textarea`
-  resize: none;
-  width: 100%;
-  background-color: white;
-  padding: 5px;
-  height: 50px;
+const DescriptionTextarea = styled(Input)`
+  margin: 5px 0px 10px 0px;
   max-height: 150px;
-  border: 1px solid ${COLORS.lightGray};
-  border-radius: 2px;
-
-  :hover, :focus {
-    border: 1px solid ${COLORS.slateGray} !important;
-  }
-  ::placeholder {
-    font-style: italic;
-    color: ${COLORS.slateGrayLittleOpacity};
-  }
+  width: 100%;
+  background: ${p => p.hasWhiteBackground ? COLORS.gainsboro : COLORS.white };
 `
 
 const ValidateButton = styled(PrimaryButton)`
@@ -433,45 +427,32 @@ const CancelButton = styled(SecondaryButton)`
   padding-top: 4px;
 `
 
-const Label = styled.div``
+const Label = styled.div`
+  margin-top: 10px
+`
 
-const Input = styled.input`
-  background-color: white;
-  border: none;
-  border-radius: 0;
-  color: ${COLORS.gunMetal};
-  font-size: 13px;
-  height: 25px;
+const StyledInput = styled(Input)`
+  margin: 5px 0px 10px 0px;
   width: ${props => props.width}px;
-  padding: 0 5px 0 5px;
-  border: 1px solid ${props => props.$hasError ? COLORS.maximumRed : COLORS.lightGray};
-  border-radius: 2px;
-
-  :hover, :focus {
-    border: 1px solid ${props => props.$hasError ? COLORS.maximumRed : COLORS.slateGray} !important;
-  }
-  ::placeholder {
-    font-style: italic;
-    color: ${COLORS.slateGrayLittleOpacity};
-  }
+  border: 1px solid ${props => props.$hasError ? COLORS.maximumRed : 'unset'};
+  background: ${p => p.hasWhiteBackground ? COLORS.gainsboro : COLORS.white };
 `
 
 const Form = styled.div`
   margin: 15px;
   flex-direction: column;
+  .rs-picker-toggle {
+    background: ${p => p.hasWhiteBackground ? COLORS.gainsboro : COLORS.white } !important;
+  }
 
   .rs-radio-group {
     margin-top: 5px;
     margin-bottom: 5px;
+    background: ${p => p.hasWhiteBackground ? COLORS.gainsboro : COLORS.white } !important;
   }
 
   .rs-picker-select {
     margin: 5px 0 10px 0 !important;
-    background-color: ${COLORS.white};
-  }
-
-  .rs-picker-default .rs-btn, .rs-picker-input .rs-btn, .rs-picker-default .rs-picker-toggle, .rs-picker-input .rs-picker-toggle {
-    background-color: ${COLORS.white} !important;
   }
 `
 

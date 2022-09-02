@@ -87,6 +87,7 @@ const EditReporting = () => {
       <Line style={lineStyle}/>
       <ReportingFormWrapper>
         <ReportingForm
+          hasWhiteBackground={true}
           selectedVesselIdentity={editedReportingInSideWindow}
           editedReporting={editedReportingInSideWindow}
           closeForm={closeForm}

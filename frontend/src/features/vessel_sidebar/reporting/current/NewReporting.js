@@ -23,6 +23,7 @@ const NewReporting = () => {
             />
           </Header>
           <ReportingForm
+            hasWhiteBackground={false}
             selectedVesselIdentity={selectedVesselIdentity}
             closeForm={() => setNewReportingFormIsOpen(false)}
           />

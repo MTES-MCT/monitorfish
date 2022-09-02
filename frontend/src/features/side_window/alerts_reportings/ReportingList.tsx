@@ -117,6 +117,14 @@ export function ReportingList({ seaFront }: ReportingListProps) {
     setSortType(sortType === SortType.ASC ? SortType.DESC : SortType.ASC)
   }
 
+  function getVesselNameTitle (reporting) {
+    return `${reporting.vesselName}
+CFR: ${reporting.internalReferenceNumber || ''}
+MARQUAGE EXT.: ${reporting.externalReferenceNumber || ''}
+IRCS: ${reporting.ircs || ''}
+MMSI: ${reporting.mmsi || ''}`
+  }
+
   return (
     <Content>
       <CardTableFilters>
@@ -203,14 +211,14 @@ export function ReportingList({ seaFront }: ReportingListProps) {
                   <FlexboxGrid.Item style={columnStyles[1]} title={reporting.validationDate}>
                     {timeago.format(reporting.validationDate, 'fr')}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[2]} title={getReportingOrigin(reporting)}>
-                    {getReportingOrigin(reporting)}
+                  <FlexboxGrid.Item style={columnStyles[2]} title={getReportingOrigin(reporting, true)}>
+                    {getReportingOrigin(reporting, false)}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[3]} title={getReportingTitle(reporting)}>
-                    {getReportingTitle(reporting)}
+                  <FlexboxGrid.Item style={columnStyles[3]} title={getReportingTitle(reporting, true)}>
+                    {getReportingTitle(reporting, false)}
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[4]}>{reporting.value.natinfCode}</FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[5]} title={reporting.vesselName}>
+                  <FlexboxGrid.Item style={columnStyles[5]} title={getVesselNameTitle(reporting)}>
                     <Flag
                       rel="preload"
                       src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.value.flagState?.toLowerCase()}.svg`}

@@ -27,6 +27,8 @@
   --wheat: #EDD6A4;
   --opal: #A5BCC0;
 
+  /* text */
+  --rs-text-primary: var(--gunMetal);
 
   /* btn vars */
   --rs-btn-primary-text: var(--white);
@@ -51,6 +53,15 @@
   --rs-input-bg: var(--gainsboro);
 
   --rs-menuitem-active-text: var(--steel-blue);
+
+  /* tags */
+  --rs-tag-bg: var(--gainsboro);
+}
+
+label {
+  color: var(--slateGray);
+  font-size: 13px;
+  line-height: 18px;
 }
 
 .rs-input {
@@ -142,7 +153,6 @@
 .rs-checkbox-checker {
   padding-bottom: 0;
   padding-left: 36px;
-  min-height: 0px;
 }
 
 .rs-checkbox label {
@@ -263,7 +273,7 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
 
 /* form */
 .rs-form:not(.rs-form-inline) .rs-form-group:not(:last-child) {
-  margin-bottom: 16px;
+  margin-bottom: 32px;
 }
 
 /* dropdown */
@@ -287,6 +297,42 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   border-bottom: 1px solid var(--lightGray);
 }
 
+/* Tags */
+
+.rs-tag-default {
+  font-weight: 500;
+}
+
+.rs-tag-closable.rs-tag-md {
+  padding-right: 32px;
+}
+
+.rs-tag-md {
+  font-size: 13px;
+  line-height: 18px;
+  border-radius: 0px;
+  padding-top: 1px;
+  padding-bottom: 3px;
+}
+
+/* TagPicker */
+.rs-picker-tag .rs-tag {
+  max-width: calc(100% - 30px) !important;
+  background-color: var(--white);
+}
+
+.rs-tag-md .rs-tag-icon-close {
+  padding: 6px 6px;
+}
+
+.rs-tag-icon-close.rs-btn-close {
+  border-left: 1px solid var(--lightGray);
+
+}
+
+.rs-picker-tag .rs-picker-toggle.rs-btn-sm~.rs-picker-tag-wrapper .rs-tag {
+  margin-top: 3px;
+}
 
 /* */
 .rs-modal-lg {
@@ -585,10 +631,6 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
 .rs-picker-toggle-clean,
 .rs-picker-toggle-caret {
   color: var(--slateGray);
-}
-
-.rs-picker-tag .rs-tag {
-  max-width: calc(100% - 25px) !important;
 }
 
 .rs-picker-check-menu-group[role="listitem"] {

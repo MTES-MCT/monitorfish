@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Radio, RadioGroup, SelectPicker } from 'rsuite'
@@ -10,11 +10,15 @@ import { getLocalStorageState } from '../../../../utils'
 import { useSaveReportingInLocalStorage } from './useSaveInLocalStorage'
 import addReporting from '../../../../domain/use_cases/reporting/addReporting'
 import updateReporting from '../../../../domain/use_cases/reporting/updateReporting'
+import { PLACEMENT } from 'rsuite/utils'
 
 const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, editedReporting }) => {
   const reportingLocalStorageKey = fromSideWindow ? 'side-window-reporting-in-edit' : 'reporting-in-edit'
 
   const dispatch = useDispatch()
+  const unitRef = useRef()
+  const natinfRef = useRef()
+  const dmlRef = useRef()
   const infractions = useSelector(state => state.infraction.infractions)
   const controllers = useSelector(state => state.controls.controllers)
 
@@ -72,7 +76,6 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
     }
   }, [reportingType])
 
-  // TODO Why the descriptino is not updated after an update ?
   useEffect(() => {
     switch (reportingActor) {
       case ReportingOriginActor.OPS.code: {
@@ -239,6 +242,8 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
         ? <>
           <Label>Nom de l&apos;unité</Label>
           <SelectPicker
+            container={fromSideWindow ? () => unitRef.current : undefined}
+            menuStyle={fromSideWindow ? { position: 'absolute', marginTop: 263, marginLeft: 40 } : undefined}
             data-cy={'new-reporting-select-unit'}
             style={{ width: unit ? 250 : 80, margin: '0px 10px 10px 10px' }}
             searchable={true}
@@ -250,6 +255,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
               .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))
             }
           />
+          <div ref={unitRef} />
         </>
         : null
     }
@@ -341,12 +347,14 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
         ? <>
         <Label>NATINF</Label>
         <SelectPicker
+          container={fromSideWindow ? () => natinfRef.current : undefined}
+          menuStyle={fromSideWindow ? { position: 'absolute', marginTop: reportingActor === ReportingOriginActor.UNIT.code ? 620 : 560, marginLeft: -150 } : undefined}
           title={infractions?.find(infraction => infraction.natinfCode === natinfCode)?.infraction}
           data-cy={'new-reporting-select-natinf'}
           style={{ width: natinfCode ? 335 : 70, margin: '0px 10px 10px 10px' }}
           searchable={true}
           virtualized={false}
-          placement={'topLeft'}
+          placement={!fromSideWindow  ? 'topLeft' : undefined}
           placeholder="Natinf"
           value={natinfCode}
           onChange={natinf => setNatinfCode(natinf)}
@@ -355,12 +363,15 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
             .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))
           }
         />
+        <div ref={natinfRef} />
         <Label>DML concernée</Label>
         <SelectPicker
           data-cy={'new-reporting-select-dml'}
+          container={fromSideWindow ? () => dmlRef.current : undefined}
+          menuStyle={fromSideWindow ? { position: 'absolute', marginTop: reportingActor === ReportingOriginActor.UNIT.code ? 685 : 620, marginLeft: 40 } : undefined}
           style={{ width: 70, margin: '0px 10px 10px 10px' }}
           searchable={true}
-          placement={'topLeft'}
+          placement={!fromSideWindow  ? 'topLeft' : undefined}
           placeholder="DML"
           value={dml}
           onChange={_dml => setDml(_dml)}
@@ -369,6 +380,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
             .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))
           }
         />
+        <div ref={dmlRef} />
         </>
         : null
     }<br/>
@@ -454,7 +466,7 @@ const Form = styled.div`
   }
 
   .rs-picker-select {
-    margin: 0 !important;
+    margin: 5px 0 10px 0 !important;
     background-color: ${COLORS.white};
   }
 

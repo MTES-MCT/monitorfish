@@ -67,7 +67,11 @@ export function ReportingList({ seaFront }: ReportingListProps) {
   const sortedReportings = useMemo(
     () =>
       filteredReportings
-        .map(reporting => ({ ...reporting, validationDateTimestamp: new Date(reporting.validationDate).getTime() }))
+        .map(reporting => ({
+          ...reporting,
+          dml: reporting.value.dml,
+          validationDateTimestamp: new Date(reporting.validationDate).getTime(),
+        }))
         .slice()
         .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType)),
     [filteredReportings, sortColumn, sortType],
@@ -146,26 +150,41 @@ export function ReportingList({ seaFront }: ReportingListProps) {
           <FlexboxGrid>
             <FlexboxGrid.Item style={columnStyles[0]} />
             <FlexboxGrid.Item style={columnStyles[1]}>
-              <CardTableColumnTitle isSortable onClick={() => sortByColumn('validationDate')}>
+              <CardTableColumnTitle
+                isAscending={sortType === SortType.ASC}
+                isSortable
+                isSortColumn={sortColumn === 'validationDateTimestamp'}
+                onClick={() => sortByColumn('validationDateTimestamp')}
+              >
                 Ouvert il y a...
               </CardTableColumnTitle>
             </FlexboxGrid.Item>
             <FlexboxGrid.Item style={columnStyles[2]}>
-              <CardTableColumnTitle isSortable={false}>Origine</CardTableColumnTitle>
+              <CardTableColumnTitle>Origine</CardTableColumnTitle>
             </FlexboxGrid.Item>
             <FlexboxGrid.Item style={columnStyles[3]}>
-              <CardTableColumnTitle isSortable={false}>Titre</CardTableColumnTitle>
+              <CardTableColumnTitle>Titre</CardTableColumnTitle>
             </FlexboxGrid.Item>
             <FlexboxGrid.Item style={columnStyles[4]}>
-              <CardTableColumnTitle isSortable={false}>NATINF</CardTableColumnTitle>
+              <CardTableColumnTitle>NATINF</CardTableColumnTitle>
             </FlexboxGrid.Item>
             <FlexboxGrid.Item style={columnStyles[5]}>
-              <CardTableColumnTitle isSortable onClick={() => sortByColumn('vesselName')}>
+              <CardTableColumnTitle
+                isAscending={sortType === SortType.ASC}
+                isSortable
+                isSortColumn={sortColumn === 'vesselName'}
+                onClick={() => sortByColumn('vesselName')}
+              >
                 Navire
               </CardTableColumnTitle>
             </FlexboxGrid.Item>
             <FlexboxGrid.Item style={columnStyles[6]}>
-              <CardTableColumnTitle isSortable onClick={() => sortByColumn('dml')}>
+              <CardTableColumnTitle
+                isAscending={sortType === SortType.ASC}
+                isSortable
+                isSortColumn={sortColumn === 'dml'}
+                onClick={() => sortByColumn('dml')}
+              >
                 DML concernées
               </CardTableColumnTitle>
             </FlexboxGrid.Item>

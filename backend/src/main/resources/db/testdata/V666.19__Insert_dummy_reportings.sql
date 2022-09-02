@@ -59,5 +59,16 @@ INSERT INTO reportings (type, vessel_name, internal_reference_number, external_r
     '"dml": "DML 29",' ||
     '"type": "INFRACTION_SUSPICION",' ||
     '"seaFront": "NAMO"' ||
+    '}')::jsonb),
+('OBSERVATION', 'RENCONTRER VEILLER APPARTEMENT"', 'ABC000597493', 'JL026591', 'CMQ7994', 'INTERNAL_REFERENCE_NUMBER', NOW() - ('1 DAY')::interval, NOW() - ('1 DAY')::interval, false, false, ('{' ||
+    '"reportingActor": "UNIT",' ||
+    '"unit": "ULAM 56",' ||
+    '"authorTrigram": "",' ||
+    '"authorContact": "Jean Bon (0600000000)",' ||
+    '"title": "OBSERVATION: Pêche sans VMS ni JPE",' ||
+    '"description": "OBSERVATION: Pêche thon rouge sans VMS détecté ni JPE",' ||
+    '"flagState": "FR",' ||
+    '"type": "OBSERVATION",' ||
+    '"seaFront": "NAMO"' ||
     '}')::jsonb)
 ;

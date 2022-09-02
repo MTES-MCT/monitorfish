@@ -15,6 +15,8 @@ module.exports = {
     '@typescript/no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
 
+    // See https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/#you-may-not-need-defaultprops
+    "react/require-default-props": "off",
     'react/react-in-jsx-scope': 'off',
   },
   overrides: [

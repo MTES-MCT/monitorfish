@@ -169,6 +169,21 @@ class ReportingControllerITests {
 
     @Test
     fun `Should update a reporting`() {
+        // Given
+        given(updateReporting.execute(any(), any())).willReturn(
+            Reporting(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                underCharter = true)
+        )
+
         // When
         mockMvc.perform(put("/bff/v1/reportings/123/update")
             .content(objectMapper.writeValueAsString(UpdateReportingDataInput(

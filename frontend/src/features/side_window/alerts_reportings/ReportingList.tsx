@@ -117,7 +117,7 @@ export function ReportingList({ seaFront }: ReportingListProps) {
     setSortType(sortType === SortType.ASC ? SortType.DESC : SortType.ASC)
   }
 
-  function getVesselNameTitle (reporting) {
+  function getVesselNameTitle(reporting) {
     return `${reporting.vesselName}
 CFR: ${reporting.internalReferenceNumber || ''}
 MARQUAGE EXT.: ${reporting.externalReferenceNumber || ''}

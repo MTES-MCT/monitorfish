@@ -8,6 +8,7 @@ on:
       - "**.js"
       - "**.json"
       - "**.ts"
+      - "**.tsx"
       - "**.yml"
       - ".github/workflows/cicd.yml"
       - "infra/configurations/**.properties"

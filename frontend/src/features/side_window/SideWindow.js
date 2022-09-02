@@ -46,9 +46,7 @@ const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
       return
     }
 
-    if (openedSideWindowTab === sideWindowMenu.ALERTS.code) {
-      setIsOverlayed(false)
-    }
+    setIsOverlayed(false)
   }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, openedSideWindowTab])
 
   useEffect(() => {

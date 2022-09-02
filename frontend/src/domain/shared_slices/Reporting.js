@@ -19,7 +19,8 @@ const reportingSlice = createSlice({
     vesselIdentity: null,
     /** @type {Reporting[]} */
     currentReportings: [],
-    editedReportingInSideWindow: undefined
+    editedReportingInSideWindow: undefined,
+    editedReporting: undefined
   },
   reducers: {
     /**
@@ -82,7 +83,7 @@ const reportingSlice = createSlice({
         .filter(reporting => !action.payload.find(reportingId => reportingId === reporting.id))
     },
     /**
-     * Set the edited reporting
+     * Set the edited reporting in side window
      * @function setEditedReportingInSideWindow
      * @memberOf ReportingReducer
      * @param {Object=} state
@@ -90,6 +91,16 @@ const reportingSlice = createSlice({
      */
     setEditedReportingInSideWindow (state, action) {
       state.editedReportingInSideWindow = action.payload
+    },
+    /**
+     * Set the edited reporting
+     * @function setEditedReporting
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: boolean}} action
+     */
+    setEditedReporting (state, action) {
+      state.editedReporting = action.payload
     },
     /**
      * Update a given current reporting
@@ -114,7 +125,8 @@ export const {
   setCurrentReportings,
   removeReportingsIdsFromCurrentReportings,
   setEditedReportingInSideWindow,
-  updateCurrentReporting
+  updateCurrentReporting,
+  setEditedReporting
 } = reportingSlice.actions
 
 export default reportingSlice.reducer

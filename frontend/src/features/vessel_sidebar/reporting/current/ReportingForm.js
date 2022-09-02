@@ -15,9 +15,9 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
   const reportingLocalStorageKey = fromSideWindow ? 'side-window-reporting-in-edit' : 'reporting-in-edit'
 
   const dispatch = useDispatch()
-  const unitRef = useRef()
-  const natinfRef = useRef()
-  const dmlRef = useRef()
+  const unitSelectRef = useRef()
+  const natinfSelectRef = useRef()
+  const dmlSelectRef = useRef()
   const infractions = useSelector(state => state.infraction.infractions)
   const controllers = useSelector(state => state.controls.controllers)
 
@@ -75,40 +75,6 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
     }
   }, [reportingType])
 
-  useEffect(() => {
-    switch (reportingActor) {
-      case ReportingOriginActor.OPS.code: {
-        setUnit('')
-        setAuthorContact('')
-        break
-      }
-      case ReportingOriginActor.SIP.code: {
-        setUnit('')
-        setAuthorContact('')
-        break
-      }
-      case ReportingOriginActor.UNIT.code: {
-        setAuthorTrigram('')
-        break
-      }
-      case ReportingOriginActor.DML.code: {
-        setUnit('')
-        setAuthorTrigram('')
-        break
-      }
-      case ReportingOriginActor.DIRM.code: {
-        setUnit('')
-        setAuthorTrigram('')
-        break
-      }
-      case ReportingOriginActor.OTHER.code: {
-        setUnit('')
-        setAuthorTrigram('')
-        break
-      }
-    }
-  }, [reportingActor])
-
   function checkErrors () {
     let nextErrorsFields = []
 
@@ -162,7 +128,6 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
   function createOrEditReporting () {
     const hasErrors = checkErrors()
     if (hasErrors) {
-      console.log('hasErrors', errorFields)
       return
     }
 
@@ -209,6 +174,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
       vesselIdentifier: selectedVesselIdentity?.vesselIdentifier,
       value: {
         ...nextReporting.value,
+        type: reportingType,
         flagState: selectedVesselIdentity?.flagState.toUpperCase()
       }
     }
@@ -221,6 +187,42 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
       .catch(console.error)
   }
 
+  function updateReportingActor (nextReportingActor) {
+    setReportingActor(nextReportingActor)
+
+    switch (nextReportingActor) {
+      case ReportingOriginActor.OPS.code: {
+        setUnit('')
+        setAuthorContact('')
+        break
+      }
+      case ReportingOriginActor.SIP.code: {
+        setUnit('')
+        setAuthorContact('')
+        break
+      }
+      case ReportingOriginActor.UNIT.code: {
+        setAuthorTrigram('')
+        break
+      }
+      case ReportingOriginActor.DML.code: {
+        setUnit('')
+        setAuthorTrigram('')
+        break
+      }
+      case ReportingOriginActor.DIRM.code: {
+        setUnit('')
+        setAuthorTrigram('')
+        break
+      }
+      case ReportingOriginActor.OTHER.code: {
+        setUnit('')
+        setAuthorTrigram('')
+        break
+      }
+    }
+  }
+
   const deleteLocalStorageReportingEntry = () => window.localStorage.setItem(reportingLocalStorageKey, null)
 
   return <Form hasWhiteBackground={hasWhiteBackground}>
@@ -229,7 +231,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
       inline
       appearance="picker"
       value={reportingActor}
-      onChange={value => setReportingActor(value)}
+      onChange={value => updateReportingActor(value)}
       defaultValue={ReportingOriginActor.OPS.code}
     >
       {
@@ -242,8 +244,8 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
         ? <>
           <Label>Nom de l&apos;unité</Label>
           <SelectPicker
-            container={fromSideWindow ? () => unitRef.current : undefined}
-            menuStyle={fromSideWindow ? { position: 'absolute', marginTop: 263, marginLeft: 40 } : undefined}
+            container={fromSideWindow ? () => unitSelectRef.current : undefined}
+            menuStyle={fromSideWindow ? { position: 'absolute', marginTop: 270, marginLeft: 40 } : undefined}
             data-cy={'new-reporting-select-unit'}
             style={{ width: unit ? 250 : 80, margin: '0px 10px 10px 10px' }}
             searchable={true}
@@ -255,7 +257,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
               .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))
             }
           />
-          <div ref={unitRef} />
+          <div ref={unitSelectRef} />
         </>
         : null
     }
@@ -346,15 +348,18 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
         : 'Ex: Infraction constatée sur la taille de la maille en cul de chalut'
       }
       value={description}
-      onChange={(value, _) => setDescription(value)}
+      onChange={e => setDescription(e.target.value)}
     />
     {
       reportingType === ReportingType.INFRACTION_SUSPICION.code
         ? <>
         <Label>NATINF</Label>
         <SelectPicker
-          container={fromSideWindow ? () => natinfRef.current : undefined}
-          menuStyle={fromSideWindow ? { position: 'absolute', marginTop: reportingActor === ReportingOriginActor.UNIT.code ? 620 : 560, marginLeft: -150 } : undefined}
+          container={fromSideWindow ? () => natinfSelectRef.current : undefined}
+          menuStyle={fromSideWindow
+            ? { position: 'absolute', marginTop: reportingActor === ReportingOriginActor.UNIT.code ? 685 : 610, marginLeft: -150 }
+            : undefined
+          }
           title={infractions?.find(infraction => infraction.natinfCode === natinfCode)?.infraction}
           data-cy={'new-reporting-select-natinf'}
           style={{ width: natinfCode ? 335 : 70, margin: '0px 10px 10px 10px' }}
@@ -369,12 +374,12 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
             .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))
           }
         />
-        <div ref={natinfRef} />
+        <div ref={natinfSelectRef} />
         <Label>DML concernée</Label>
         <SelectPicker
           data-cy={'new-reporting-select-dml'}
-          container={fromSideWindow ? () => dmlRef.current : undefined}
-          menuStyle={fromSideWindow ? { position: 'absolute', marginTop: reportingActor === ReportingOriginActor.UNIT.code ? 685 : 620, marginLeft: 40 } : undefined}
+          container={fromSideWindow ? () => dmlSelectRef.current : undefined}
+          menuStyle={fromSideWindow ? { position: 'absolute', marginTop: reportingActor === ReportingOriginActor.UNIT.code ? 765 : 685, marginLeft: 40 } : undefined}
           style={{ width: 70, margin: '0px 10px 10px 10px' }}
           searchable={true}
           placement={!fromSideWindow  ? 'topLeft' : undefined}
@@ -386,7 +391,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
             .sort((a, b) => sortArrayByColumn(a, b, 'label', 'asc'))
           }
         />
-        <div ref={dmlRef} />
+        <div ref={dmlSelectRef} />
         </>
         : null
     }<br/>

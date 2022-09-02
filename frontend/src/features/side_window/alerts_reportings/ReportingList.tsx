@@ -1,5 +1,5 @@
 import countries from 'i18n-iso-countries'
-import { CSSProperties, useCallback, useMemo, useState } from 'react'
+import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Checkbox, FlexboxGrid } from 'rsuite'
 import styled from 'styled-components'
@@ -23,7 +23,6 @@ import { CardTableRow } from '../../card-table/CardTableRow'
 import { EmptyCardTable } from '../../card-table/EmptyCardTable'
 import { FilterTableInput } from '../../card-table/FilterTableInput'
 import { RowVerticalSeparator } from '../../card-table/RowVerticalSeparator'
-import { PrimaryButton } from '../../commonStyles/Buttons.style'
 import { ReactComponent as ArchiveIconSVG } from '../../icons/Bouton_archiver.svg'
 import { ReactComponent as DeleteIconSVG } from '../../icons/Bouton_supprimer.svg'
 import { Flag } from '../../vessel_list/tableCells'
@@ -41,6 +40,10 @@ export function ReportingList({ seaFront }: ReportingListProps) {
   const [sortType, setSortType] = useState<string>(SortType.DESC)
   const [searched, setSearched] = useState<string | undefined>(undefined)
   const [checkedReportingIds, setCheckedReportingIds] = useState<number[]>([])
+
+  useEffect(() => {
+    setCheckedReportingIds([])
+  }, [seaFront])
 
   const currentSeaFrontReportings = useMemo(
     () =>
@@ -143,9 +146,6 @@ MMSI: ${reporting.mmsi || ''}`
               <DeleteButton data-cy="delete-reporting-cards" onClick={remove} title="Supprimer" />
             </>
           )}
-          <AddReportingButton>
-            <Plus>+</Plus> Ouvrir un signalement
-          </AddReportingButton>
         </RightAligned>
       </CardTableFilters>
       <CardTable
@@ -280,12 +280,6 @@ const RightAligned = styled.div`
   align-self: flex-end;
 `
 
-const Plus = styled.span`
-  font-size: 23px;
-  line-height: 0;
-  margin-right: 3px;
-`
-
 const ArchiveButton = styled(ArchiveIconSVG)`
   border: 1px solid ${COLORS.lightGray};
   padding: 6.5px 6px;
@@ -300,10 +294,6 @@ const DeleteButton = styled(DeleteIconSVG)`
   cursor: pointer;
   vertical-align: bottom;
   margin-right: 10px;
-`
-
-const AddReportingButton = styled(PrimaryButton)`
-  margin: 20px 10px 0px 0px;
 `
 
 const styleCenter = {

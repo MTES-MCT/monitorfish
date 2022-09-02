@@ -67,10 +67,16 @@ label {
 .rs-input {
   border-radius: 0;
   color: var(--gunMetal);
+  padding-left: 5px;
 }
 
 .rs-input.ghost {
   background-color: var(--white);
+}
+
+/* rs input textarea */
+textarea {
+  padding: 5px;
 }
 
 .rs-input-group,
@@ -229,6 +235,10 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
 }
 
 /* radio */
+
+.rs-radio-group {
+  border-radius: 2px;
+}
 
 .rs-radio-wrapper::before,
 .rs-radio-wrapper .rs-radio-inner::before,
@@ -632,6 +642,10 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
 .rs-picker-toggle-clean,
 .rs-picker-toggle-caret {
   color: var(--slateGray);
+}
+
+.rs-picker-toggle-clean:hover {
+  padding: 4px 0px !important;
 }
 
 .rs-picker-check-menu-group[role="listitem"] {

@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicionOrObservation
 
 class UpdateReportingDataInput(
     val reportingActor: ReportingActor,
@@ -12,7 +12,7 @@ class UpdateReportingDataInput(
     val description: String? = null,
     val natinfCode: String? = null,
     val dml: String? = null) {
-    fun toUpdatedReportingValues() = UpdatedInfractionSuspicion(
+    fun toUpdatedReportingValues() = UpdatedInfractionSuspicionOrObservation(
         reportingActor = this.reportingActor,
         unit = this.unit,
         authorTrigram = this.authorTrigram,

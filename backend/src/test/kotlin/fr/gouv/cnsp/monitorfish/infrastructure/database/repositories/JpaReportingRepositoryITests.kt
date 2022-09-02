@@ -2,12 +2,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicion
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,7 +35,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reporting).hasSize(8)
+        assertThat(reporting).hasSize(9)
         assertThat(reporting.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reporting.last().externalReferenceNumber).isEqualTo("RGD")
         val alert = reporting.last().value as ThreeMilesTrawlingAlert
@@ -69,7 +65,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reportings = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reportings).hasSize(8)
+        assertThat(reportings).hasSize(9)
         assertThat(reportings.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reportings.last().externalReferenceNumber).isEqualTo("RGD")
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
@@ -168,7 +164,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `update Should update a given reporting`() {
+    fun `update Should update a given InfractionSuspicion`() {
         // Given
         val updatedReporting = InfractionSuspicion(
             ReportingActor.UNIT,
@@ -197,5 +193,34 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting.value as InfractionSuspicion).seaFront).isEqualTo(updatedReporting.seaFront)
         assertThat((reporting.value as InfractionSuspicion).flagState).isEqualTo(updatedReporting.flagState)
         assertThat((reporting.value as InfractionSuspicion).dml).isEqualTo(updatedReporting.dml)
+    }
+
+    @Test
+    @Transactional
+    fun `update Should update a given Observation`() {
+        // Given
+        val updatedReporting = Observation(
+            ReportingActor.UNIT,
+            "An unit",
+            "",
+            "Jean Bon",
+            "Une observation",
+            "Une description",
+            "MEMN",
+            "FR")
+
+        // When
+        val reporting = jpaReportingRepository.update(8, updatedReporting)
+
+        // Then
+        assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000597493")
+        assertThat((reporting.value as Observation).reportingActor).isEqualTo(updatedReporting.reportingActor)
+        assertThat((reporting.value as Observation).unit).isEqualTo(updatedReporting.unit)
+        assertThat((reporting.value as Observation).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
+        assertThat((reporting.value as Observation).authorContact).isEqualTo(updatedReporting.authorContact)
+        assertThat((reporting.value as Observation).title).isEqualTo(updatedReporting.title)
+        assertThat((reporting.value as Observation).description).isEqualTo(updatedReporting.description)
+        assertThat((reporting.value as Observation).seaFront).isEqualTo(updatedReporting.seaFront)
+        assertThat((reporting.value as Observation).flagState).isEqualTo(updatedReporting.flagState)
     }
 }

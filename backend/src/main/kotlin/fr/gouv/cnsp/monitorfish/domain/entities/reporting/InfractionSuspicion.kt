@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.reporting
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdatedInfractionSuspicionOrObservation
 
 class InfractionSuspicion(
     override val reportingActor: ReportingActor,
@@ -26,26 +26,26 @@ class InfractionSuspicion(
     type = ReportingTypeMapping.INFRACTION_SUSPICION
 ) {
     companion object {
-        fun fromUpdatedReporting(updatedInfractionSuspicion: UpdatedInfractionSuspicion): InfractionSuspicion {
-            require(!updatedInfractionSuspicion.dml.isNullOrEmpty()) {
+        fun fromUpdatedReporting(updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation): InfractionSuspicion {
+            require(!updatedInfractionSuspicionOrObservation.dml.isNullOrEmpty()) {
                 "DML should not be null or empty"
             }
 
-            require(!updatedInfractionSuspicion.natinfCode.isNullOrEmpty()) {
+            require(!updatedInfractionSuspicionOrObservation.natinfCode.isNullOrEmpty()) {
                 "NATINF code should not be null or empty"
             }
 
             return InfractionSuspicion(
-                reportingActor = updatedInfractionSuspicion.reportingActor,
-                unit = updatedInfractionSuspicion.unit,
-                authorTrigram = updatedInfractionSuspicion.authorTrigram,
-                authorContact = updatedInfractionSuspicion.authorContact,
-                title = updatedInfractionSuspicion.title,
-                description = updatedInfractionSuspicion.description,
-                natinfCode = updatedInfractionSuspicion.natinfCode,
-                flagState = updatedInfractionSuspicion.flagState,
-                seaFront = Reporting.getSeaFrontFromDML(updatedInfractionSuspicion.dml),
-                dml = updatedInfractionSuspicion.dml)
+                reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
+                unit = updatedInfractionSuspicionOrObservation.unit,
+                authorTrigram = updatedInfractionSuspicionOrObservation.authorTrigram,
+                authorContact = updatedInfractionSuspicionOrObservation.authorContact,
+                title = updatedInfractionSuspicionOrObservation.title,
+                description = updatedInfractionSuspicionOrObservation.description,
+                natinfCode = updatedInfractionSuspicionOrObservation.natinfCode,
+                flagState = updatedInfractionSuspicionOrObservation.flagState,
+                seaFront = Reporting.getSeaFrontFromDML(updatedInfractionSuspicionOrObservation.dml),
+                dml = updatedInfractionSuspicionOrObservation.dml)
         }
     }
 }

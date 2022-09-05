@@ -24,9 +24,21 @@ from src.pipeline.flows.last_positions import (
     validate_action,
 )
 from src.read_query import read_query
-from tests.mocks import mock_check_flow_not_running
+from tests.mocks import (
+    get_monitorfish_healthcheck_mock_factory,
+    mock_check_flow_not_running,
+    mock_extract_monitorfish_recent_positions_histogram,
+)
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
+flow.replace(
+    flow.get_tasks("get_monitorfish_healthcheck")[0],
+    get_monitorfish_healthcheck_mock_factory(),
+)
+flow.replace(
+    flow.get_tasks("extract_monitorfish_recent_positions_histogram")[0],
+    mock_extract_monitorfish_recent_positions_histogram,
+)
 
 
 def test_extract_risk_factors(reset_test_data):

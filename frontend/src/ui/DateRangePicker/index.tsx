@@ -52,6 +52,14 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
 
   const forceUpdate = useForceUpdate()
 
+  const rangeCalendarPickerDefaultValue =
+    selectedStartDateTupleRef.current && selectedEndDateTupleRef.current
+      ? ([
+          getDateFromDateAndTimeTuple(selectedStartDateTupleRef.current, [0, 0]),
+          getDateFromDateAndTimeTuple(selectedEndDateTupleRef.current, [0, 0], true),
+        ] as DateRange)
+      : undefined
+
   const submit = useCallback(() => {
     if (!selectedStartDateRef.current || !selectedEndDateRef.current) {
       return
@@ -266,7 +274,12 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
         )}
       </Box>
 
-      {isRangeCalendarPickerOpen.current && <RangeCalendarPicker onChange={handleRangeCalendarPickerChange} />}
+      {isRangeCalendarPickerOpen.current && (
+        <RangeCalendarPicker
+          defaultValue={rangeCalendarPickerDefaultValue}
+          onChange={handleRangeCalendarPickerChange}
+        />
+      )}
     </>
   )
 }

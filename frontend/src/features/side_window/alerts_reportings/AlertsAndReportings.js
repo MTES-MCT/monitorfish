@@ -50,6 +50,7 @@ const AlertsAndReportings = ({ selectedSubMenu, setSelectedSubMenu, selectedTab,
       Alertes
     </Title>
     <Title
+      data-cy={'side-window-reporting-tab'}
       onClick={() => setSelectedTab(AlertAndReportingTab.REPORTING)}
       isSelected={selectedTab === AlertAndReportingTab.REPORTING}
     >

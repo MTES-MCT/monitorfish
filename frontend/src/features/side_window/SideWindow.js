@@ -18,8 +18,9 @@ import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/g
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 import getSilencedAlerts from '../../domain/use_cases/alert/getSilencedAlerts'
 import { setEditedReportingInSideWindow } from '../../domain/shared_slices/Reporting'
+import getAllCurrentReportings from '../../domain/use_cases/reporting/getAllCurrentReportings'
 
-const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
+const SideWindow = forwardRef(function SideWindowComponent ({ fromURL }, ref) {
   const openedSideWindowTab = useSelector(state => state.global.openedSideWindowTab)
   const openedBeaconMalfunctionInKanban = useSelector(state => state.beaconMalfunction.openedBeaconMalfunctionInKanban)
   const editedReportingInSideWindow = useSelector(state => state.reporting.editedReportingInSideWindow)
@@ -50,14 +51,15 @@ const SideWindow = forwardRef(function SideWindowComponent ({ fromTab }, ref) {
   }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, openedSideWindowTab])
 
   useEffect(() => {
-    if (fromTab) {
+    if (fromURL) {
       dispatch(getOperationalAlerts())
       dispatch(getAllBeaconMalfunctions())
       dispatch(getSilencedAlerts())
+      dispatch(getAllCurrentReportings())
 
       dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
     }
-  }, [fromTab])
+  }, [fromURL])
 
   useEffect(() => {
     if (openedSideWindowTab === previousOpenedSideWindowTab) {

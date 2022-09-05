@@ -159,6 +159,7 @@ MMSI: ${reporting.mmsi || ''}`
             <FlexboxGrid.Item style={columnStyles[0]} />
             <FlexboxGrid.Item style={columnStyles[1]}>
               <CardTableColumnTitle
+                dataCy="side-window-order-by-date"
                 isAscending={sortType === SortType.ASC}
                 isSortable
                 isSortColumn={sortColumn === 'validationDateTimestamp'}
@@ -203,7 +204,7 @@ MMSI: ${reporting.mmsi || ''}`
             const editingIsDisabled = reporting.type === ReportingType.ALERT.code
 
             return (
-              <CardTableRow key={reporting.id} index={index + 1}>
+              <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1}>
                 <FlexboxGrid>
                   <FlexboxGrid.Item style={columnStyles[0]}>
                     <StyledCheckbox checked={reporting.checked} onChange={() => handleSelectReporting(reporting.id)} />

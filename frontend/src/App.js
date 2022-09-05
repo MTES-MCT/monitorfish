@@ -107,7 +107,7 @@ function HomePage () {
         <Switch>
           <Route exact path="/side_window">
             <SideWindow
-              fromTab
+              fromURL={true}
               ref={ref}
             />
           </Route>

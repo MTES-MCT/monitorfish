@@ -17,6 +17,11 @@ from src.pipeline.processing import (
     left_isin_right_by_decreasing_priority,
 )
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
+from src.pipeline.shared_tasks.healthcheck import (
+    assert_positions_health,
+    extract_monitorfish_recent_positions_histogram,
+    get_monitorfish_healthcheck,
+)
 from src.pipeline.shared_tasks.positions import (
     add_vessel_identifier,
     tag_positions_at_port,
@@ -430,6 +435,13 @@ with Flow("Last positions") as flow:
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):
 
+        healthcheck = get_monitorfish_healthcheck()
+        recent_positions_histogram = extract_monitorfish_recent_positions_histogram()
+        positions_healthcheck = assert_positions_health(
+            healthcheck=healthcheck,
+            recent_positions_histogram=recent_positions_histogram,
+        )
+
         # Parameters
         current_position_estimation_max_hours = Parameter(
             "current_position_estimation_max_hours",
@@ -437,15 +449,19 @@ with Flow("Last positions") as flow:
         )
         minutes = Parameter("minutes", default=5)
         action = Parameter("action", default="update")
-        action = validate_action(action)
+        action = validate_action(action, upstream_tasks=[positions_healthcheck])
 
         # Extract & Transform
-        risk_factors = extract_risk_factors()
-        pending_alerts = extract_pending_alerts()
-        reportings = extract_reportings()
-        beacon_malfunctions = extract_beacon_malfunctions()
+        risk_factors = extract_risk_factors(upstream_tasks=[positions_healthcheck])
+        pending_alerts = extract_pending_alerts(upstream_tasks=[positions_healthcheck])
+        reportings = extract_reportings(upstream_tasks=[positions_healthcheck])
+        beacon_malfunctions = extract_beacon_malfunctions(
+            upstream_tasks=[positions_healthcheck]
+        )
 
-        last_positions = extract_last_positions(minutes=minutes)
+        last_positions = extract_last_positions(
+            minutes=minutes, upstream_tasks=[positions_healthcheck]
+        )
         last_positions = drop_duplicates(last_positions)
         last_positions = add_vessel_identifier(last_positions)
         last_positions = tag_positions_at_port(last_positions)

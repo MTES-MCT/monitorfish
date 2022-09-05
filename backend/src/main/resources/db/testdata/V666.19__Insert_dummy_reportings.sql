@@ -47,7 +47,7 @@ INSERT INTO reportings (type, vessel_name, internal_reference_number, external_r
     '"type": "INFRACTION_SUSPICION",' ||
     '"seaFront": "NAMO"' ||
     '}')::jsonb),
-('INFRACTION_SUSPICION', 'RENCONTRER VEILLER APPARTEMENT"', 'ABC000597493', 'JL026591', 'CMQ7994', 'INTERNAL_REFERENCE_NUMBER', NOW() - ('1 DAY')::interval, NOW() - ('1 DAY')::interval, false, false, ('{' ||
+('INFRACTION_SUSPICION', 'RENCONTRER VEILLER APPARTEMENT"', 'ABC000597493', 'JL026591', 'CMQ7994', 'INTERNAL_REFERENCE_NUMBER', NOW() - ('1 DAY 1 HOUR')::interval, NOW() - ('1 DAY 1 HOUR')::interval, false, false, ('{' ||
     '"reportingActor": "UNIT",' ||
     '"unit": "ULAM 56",' ||
     '"authorTrigram": "",' ||
@@ -60,7 +60,7 @@ INSERT INTO reportings (type, vessel_name, internal_reference_number, external_r
     '"type": "INFRACTION_SUSPICION",' ||
     '"seaFront": "NAMO"' ||
     '}')::jsonb),
-('OBSERVATION', 'RENCONTRER VEILLER APPARTEMENT"', 'ABC000597493', 'JL026591', 'CMQ7994', 'INTERNAL_REFERENCE_NUMBER', NOW() - ('1 DAY')::interval, NOW() - ('1 DAY')::interval, false, false, ('{' ||
+('OBSERVATION', 'RENCONTRER VEILLER APPARTEMENT"', 'ABC000597493', 'JL026591', 'CMQ7994', 'INTERNAL_REFERENCE_NUMBER', NOW() - ('1 DAY 1 HOUR')::interval, NOW() - ('1 DAY  1 HOUR')::interval, false, false, ('{' ||
     '"reportingActor": "UNIT",' ||
     '"unit": "ULAM 56",' ||
     '"authorTrigram": "",' ||

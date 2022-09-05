@@ -5,19 +5,21 @@ import { ReactComponent as SortSVG } from '../icons/ascendant-descendant.svg'
 
 type CardTableColumnTitleProps = HTMLAttributes<HTMLDivElement> & {
   children: string
+  dataCy?: string
   isAscending?: boolean
   isSortColumn?: boolean
   isSortable?: boolean
 }
 export function CardTableColumnTitle({
   children,
+  dataCy = '',
   isAscending = false,
   isSortable = false,
   isSortColumn = false,
   onClick,
 }: CardTableColumnTitleProps) {
   return (
-    <StyledCardTableColumnTitle isSortable={isSortable} onClick={onClick}>
+    <StyledCardTableColumnTitle data-cy={dataCy} isSortable={isSortable} onClick={onClick}>
       {children}
       {isSortable && isSortColumn && (
         <Sort isAscending={isAscending} title={isAscending ? 'Croissant' : 'Décroissant'} />

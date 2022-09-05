@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { useCallback, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { DateRangePicker as RsuiteDateRangePicker } from 'rsuite'
 import styled, { createGlobalStyle } from 'styled-components'
 
@@ -14,10 +14,16 @@ import type { DateTuple, DateTupleRange } from './types'
 import type { Promisable } from 'type-fest'
 
 type RangeCalendarPickerProps = {
+  defaultValue?: DateRange
   onChange: (newDateTupleRange: DateTupleRange) => Promisable<void>
 }
-export function RangeCalendarPicker({ onChange }: RangeCalendarPickerProps) {
+export function RangeCalendarPicker({ defaultValue, onChange }: RangeCalendarPickerProps) {
   const selectedFirstDate = useRef<Date>()
+
+  const controlledValue = useMemo(
+    () => (defaultValue ? (sortDates(defaultValue) as DateRange) : undefined),
+    [defaultValue],
+  )
 
   const handleSelect = useCallback(
     (newDate: Date) => {
@@ -50,6 +56,8 @@ export function RangeCalendarPicker({ onChange }: RangeCalendarPickerProps) {
         open
         ranges={[]}
         renderTitle={renderTitle}
+        // `defaultValue` seems to be immediatly cancelled so we come down to using a controlled `value`
+        value={controlledValue}
       />
     </Box>
   )

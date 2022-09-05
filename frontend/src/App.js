@@ -36,6 +36,7 @@ import SideWindow from './features/side_window/SideWindow'
 import { sideWindowMenu } from './domain/entities/sideWindow'
 import FavoriteVessels from './features/favorite_vessels/FavoriteVessels'
 import FleetSegments from './features/backoffice/fleet_segments/FleetSegments'
+import { useRef } from 'react'
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 function App () {
@@ -96,6 +97,7 @@ function App () {
 
 function HomePage () {
   const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
+  const ref = useRef()
 
   return <>
         <StateManager
@@ -105,8 +107,8 @@ function HomePage () {
         <Switch>
           <Route exact path="/side_window">
             <SideWindow
-              openedSideWindowTab={sideWindowMenu.ALERTS.code}
               fromTab
+              ref={ref}
             />
           </Route>
           <Route exact path="/">

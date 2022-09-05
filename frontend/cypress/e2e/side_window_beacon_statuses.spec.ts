@@ -415,7 +415,7 @@ context('Side window beacon malfunctions', () => {
 
     // Then
     cy.get('*[data-cy="side-window-beacon-malfunctions-sending-notification"]').contains(
-      "Envoi en cours d'une Relance pour avarie en mer",
+      "En attente d'envoi d'une Relance pour avarie en mer",
     )
   })
 })

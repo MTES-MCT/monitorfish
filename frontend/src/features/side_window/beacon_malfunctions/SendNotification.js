@@ -58,7 +58,7 @@ const SendNotification = ({ beaconMalfunction, baseRef }) => {
           style={sendingNotificationStyle}
         >
           <span className={'loader'}/>
-          Envoi en cours  {beaconMalfunctionNotificationType[isSendingNotification].preposition}{' '}
+          En attente d&apos;envoi  {beaconMalfunctionNotificationType[isSendingNotification].preposition}{' '}
           {beaconMalfunctionNotificationType[isSendingNotification].followUpMessage}
         </SendingNotification>
         : null

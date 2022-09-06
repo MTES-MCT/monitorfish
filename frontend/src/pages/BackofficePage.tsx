@@ -17,7 +17,7 @@ export function BackofficePage() {
 
   return (
     <>
-      <BackofficeMode inBackofficeMode />
+      <BackofficeMode isBackoffice />
       <BackofficeWrapper>
         <Menu />
         <Switch>

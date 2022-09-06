@@ -85,7 +85,7 @@ function HomePage() {
 
   return (
     <>
-      <BackofficeMode adminRole inBackofficeMode={false} />
+      <BackofficeMode isAdmin />
       <Switch>
         <Route exact path="/side_window">
           <SideWindow fromTab />
@@ -125,7 +125,7 @@ function TritonFish() {
 
   return (
     <>
-      <BackofficeMode adminRole={false} inBackofficeMode={false} />
+      <BackofficeMode />
       <Healthcheck />
       <PreviewFilteredVessels />
       <Wrapper>

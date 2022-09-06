@@ -10,7 +10,7 @@ import {
 
 const AdministrativeLayers = ({ map }) => {
   const { showedLayers } = useSelector(state => state.layer)
-  const inBackofficeMode = useSelector(state => state.global.inBackofficeMode)
+  const isBackoffice = useSelector(state => state.global.isBackoffice)
 
   const administrativeLayers = Object.keys(Layers)
     .map(topic => Layers[topic])
@@ -28,7 +28,7 @@ const AdministrativeLayers = ({ map }) => {
           if (!layerToInsert) {
             return
           }
-          const VectorLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, inBackofficeMode)
+          const VectorLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, isBackoffice)
           olLayers.push(VectorLayer)
         })
       }

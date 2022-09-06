@@ -34,7 +34,7 @@ export class Vessel {
    * Add text label to vessel feature
    * @param {Object} feature - The OpenLayers feature.getProperties() object
    * @param {{
-   *   adminRole: any
+   *   isAdmin: any
    *   vesselLabel: string
    *   vesselsLastPositionVisibility: Object
    *   vesselLabelsShowedOnMap: boolean
@@ -53,7 +53,7 @@ export class Vessel {
    */
   static getVesselFeatureLabel (feature, options) {
     const {
-      adminRole,
+      isAdmin,
       vesselLabel,
       vesselsLastPositionVisibility,
       riskFactorShowedOnMap,
@@ -103,7 +103,7 @@ export class Vessel {
       }
     }
 
-    if (adminRole && riskFactorShowedOnMap) {
+    if (isAdmin && riskFactorShowedOnMap) {
       label.riskFactor = {
         globalRisk: feature.riskFactor,
         impactRiskFactor: feature.impactRiskFactor,

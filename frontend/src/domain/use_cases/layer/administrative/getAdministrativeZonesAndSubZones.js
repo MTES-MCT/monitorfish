@@ -25,7 +25,7 @@ const getAdministrativeZonesAndSubZones = administrativeZones => async (dispatch
     .filter(zone => zone.showMultipleZonesInAdministrativeZones)
     .map(zone => {
       if (zone.containsMultipleZones) {
-        return getAdministrativeSubZonesFromAPI(zone.code, getState().global.inBackofficeMode).then(subZonesFeatures => {
+        return getAdministrativeSubZonesFromAPI(zone.code, getState().global.isBackoffice).then(subZonesFeatures => {
           return subZonesFeatures.features.map(subZone => {
             return {
               group: zone.group,

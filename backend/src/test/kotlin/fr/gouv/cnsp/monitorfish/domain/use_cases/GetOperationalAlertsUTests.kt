@@ -33,13 +33,13 @@ class GetOperationalAlertsUTests {
     fun `execute Should return alerts with associated infractions`() {
         // Given
         val pendingAlert = PendingAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = "123456",
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert())
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = ThreeMilesTrawlingAlert())
         given(infractionRepository.findInfractionByNatinfCode(eq("7059"))).willReturn(Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value))
         given(pendingAlertRepository.findAlertsOfTypes(any())).willReturn(listOf(pendingAlert))
 
@@ -52,10 +52,10 @@ class GetOperationalAlertsUTests {
         assertThat(alerts.first().infraction?.infractionCategory).isEqualTo(InfractionCategory.FISHING.value)
 
         Mockito.verify(pendingAlertRepository).findAlertsOfTypes(listOf(
-                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-                AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
-                AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
-                AlertTypeMapping.MISSING_FAR_ALERT))
+            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+            AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
+            AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+            AlertTypeMapping.MISSING_FAR_ALERT))
         Mockito.verify(infractionRepository, Mockito.times(1)).findInfractionByNatinfCode(eq("7059"))
     }
 }

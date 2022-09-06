@@ -7,8 +7,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.PNOAndLANWeightToler
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.Rule
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.PNOAndLANWeightTolerance
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.RuleTypeMapping
-import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RuleRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyPNOAndLANLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyPNOAndLANLogbookMessagesWithSpeciesInDouble
@@ -38,16 +38,16 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
     fun `execute Should not save any alert When LAN and PNO weights are below the tolerance threshold or the minimum weight threshold`() {
         // Given
         val rule = Rule(UUID.randomUUID(),
-                "Save an alert when PNO and LAN weights are below tolerance",
-                true,
-                ZonedDateTime.now(),
-                null,
-                null,
-                null,
-                PNOAndLANWeightTolerance(10.0, 50.0)
+            "Save an alert when PNO and LAN weights are below tolerance",
+            true,
+            ZonedDateTime.now(),
+            null,
+            null,
+            null,
+            PNOAndLANWeightTolerance(10.0, 50.0)
         )
         given(logbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name))
-                .willReturn(getDummyPNOAndLANLogbookMessages())
+            .willReturn(getDummyPNOAndLANLogbookMessages())
 
         // When
         ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, PNOAndLANAlertRepository).execute(rule)
@@ -60,16 +60,16 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
     fun `execute Should save an alert When LAN and PNO weights are above the tolerance threshold`() {
         // Given
         val rule = Rule(UUID.randomUUID(),
-                "Save an alert when PNO and LAN weights are below tolerance",
-                true,
-                ZonedDateTime.now(),
-                null,
-                null,
-                null,
-                PNOAndLANWeightTolerance(10.0, 50.0)
+            "Save an alert when PNO and LAN weights are below tolerance",
+            true,
+            ZonedDateTime.now(),
+            null,
+            null,
+            null,
+            PNOAndLANWeightTolerance(10.0, 50.0)
         )
         given(logbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name))
-                .willReturn(getDummyPNOAndLANLogbookMessages(1000.0, true))
+            .willReturn(getDummyPNOAndLANLogbookMessages(1000.0, true))
 
         // When
         ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, PNOAndLANAlertRepository).execute(rule)
@@ -108,16 +108,16 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
     fun `execute Should save an alert When LAN and PNO weights are above the tolerance threshold And species is found in double`() {
         // Given
         val rule = Rule(UUID.randomUUID(),
-                "Save an alert when PNO and LAN weights are below tolerance",
-                true,
-                ZonedDateTime.now(),
-                null,
-                null,
-                null,
-                PNOAndLANWeightTolerance(10.0, 50.0)
+            "Save an alert when PNO and LAN weights are below tolerance",
+            true,
+            ZonedDateTime.now(),
+            null,
+            null,
+            null,
+            PNOAndLANWeightTolerance(10.0, 50.0)
         )
         given(logbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name))
-                .willReturn(getDummyPNOAndLANLogbookMessagesWithSpeciesInDouble(1000.0, true))
+            .willReturn(getDummyPNOAndLANLogbookMessagesWithSpeciesInDouble(1000.0, true))
 
         // When
         ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, PNOAndLANAlertRepository).execute(rule)
@@ -146,16 +146,16 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
     fun `execute Should update the ers messages When they are processed`() {
         // Given
         val rule = Rule(UUID.randomUUID(),
-                "Save an alert when PNO and LAN weights are below tolerance",
-                true,
-                ZonedDateTime.now(),
-                null,
-                null,
-                null,
-                PNOAndLANWeightTolerance(10.0, 50.0)
+            "Save an alert when PNO and LAN weights are below tolerance",
+            true,
+            ZonedDateTime.now(),
+            null,
+            null,
+            null,
+            PNOAndLANWeightTolerance(10.0, 50.0)
         )
         given(logbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name))
-                .willReturn(getDummyPNOAndLANLogbookMessages(1000.0))
+            .willReturn(getDummyPNOAndLANLogbookMessages(1000.0))
 
         // When
         ExecutePnoAndLanWeightToleranceRule(logbookReportRepository, PNOAndLANAlertRepository).execute(rule)
@@ -163,7 +163,7 @@ class ExecutePnoAndLanWeightToleranceRuleUTests {
         // Then
         argumentCaptor<PNOAndLANAlert>().apply {
             verify(logbookReportRepository, times(1))
-                    .updateLogbookMessagesAsProcessedByRule(listOf(1, 2, 3, 4), "PNO_LAN_WEIGHT_TOLERANCE")
+                .updateLogbookMessagesAsProcessedByRule(listOf(1, 2, 3, 4), "PNO_LAN_WEIGHT_TOLERANCE")
         }
     }
 }

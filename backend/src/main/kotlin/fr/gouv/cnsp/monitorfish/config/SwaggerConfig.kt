@@ -21,19 +21,19 @@ class SwaggerConfig {
     @Bean
     fun api(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
-                .host(hostProperties?.ip ?: "localhost")
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("fr.gouv.cnsp.monitorfish"))
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(ApiInfo(
-                        "API Documentation",
-                        "This is a public API",
-                        "v1",
-                        "",
-                        Contact("CNSP", "URL", "EMAIL"),
-                        "APACHE 2",
-                        "https://github.com/MTES-MCT/monitorfish/blob/master/LICENCE", emptyList()))
-                .enableUrlTemplating(true)
+            .host(hostProperties?.ip ?: "localhost")
+            .select()
+            .apis(RequestHandlerSelectors.basePackage("fr.gouv.cnsp.monitorfish"))
+            .paths(PathSelectors.any())
+            .build()
+            .apiInfo(ApiInfo(
+                "API Documentation",
+                "This is a public API",
+                "v1",
+                "",
+                Contact("CNSP", "URL", "EMAIL"),
+                "APACHE 2",
+                "https://github.com/MTES-MCT/monitorfish/blob/master/LICENCE", emptyList()))
+            .enableUrlTemplating(true)
     }
 }

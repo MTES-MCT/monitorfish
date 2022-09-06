@@ -17,10 +17,10 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("/bff/v1/fleet_segments")
 @Api(description = "APIs for Fleet segments")
 class FleetSegmentController(
-        private val getAllFleetSegments: GetAllFleetSegments,
-        private val updateFleetSegment: UpdateFleetSegment,
-        private val deleteFleetSegment: DeleteFleetSegment,
-        private val createFleetSegment: CreateFleetSegment) {
+    private val getAllFleetSegments: GetAllFleetSegments,
+    private val updateFleetSegment: UpdateFleetSegment,
+    private val deleteFleetSegment: DeleteFleetSegment,
+    private val createFleetSegment: CreateFleetSegment) {
 
     @GetMapping("")
     @ApiOperation("Get fleet segments")
@@ -39,8 +39,8 @@ class FleetSegmentController(
         val segment = request.requestURI.split(request.contextPath + "/fleet_segments/")[segmentPartOfURL]
 
         return updateFleetSegment.execute(
-                segment = segment,
-                fields = createOrUpdateFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
+            segment = segment,
+            fields = createOrUpdateFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
     }
 
     @DeleteMapping(value = ["/**"])

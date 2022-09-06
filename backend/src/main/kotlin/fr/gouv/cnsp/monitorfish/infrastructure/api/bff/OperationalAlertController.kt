@@ -13,11 +13,11 @@ import javax.websocket.server.PathParam
 @RequestMapping("/bff/v1/operational_alerts")
 @Api(description = "APIs for Operational alerts")
 class OperationalAlertController(
-        private val getOperationalAlerts: GetOperationalAlerts,
-        private val validateOperationalAlert: ValidateOperationalAlert,
-        private val silenceOperationalAlert: SilenceOperationalAlert,
-        private val getSilencedAlerts: GetSilencedAlerts,
-        private val deleteSilencedOperationalAlert: DeleteSilencedOperationalAlert) {
+    private val getOperationalAlerts: GetOperationalAlerts,
+    private val validateOperationalAlert: ValidateOperationalAlert,
+    private val silenceOperationalAlert: SilenceOperationalAlert,
+    private val getSilencedAlerts: GetSilencedAlerts,
+    private val deleteSilencedOperationalAlert: DeleteSilencedOperationalAlert) {
 
     @GetMapping("")
     @ApiOperation("Get operational alerts")
@@ -43,10 +43,10 @@ class OperationalAlertController(
                      @RequestBody
                      silenceOperationalAlertData: SilenceOperationalAlertDataInput): SilencedAlertDataOutput {
         val silencedAlert = silenceOperationalAlert.execute(
-                id,
-                silenceOperationalAlertData.silencedAlertPeriod,
-                silenceOperationalAlertData.afterDateTime,
-                silenceOperationalAlertData.beforeDateTime)
+            id,
+            silenceOperationalAlertData.silencedAlertPeriod,
+            silenceOperationalAlertData.afterDateTime,
+            silenceOperationalAlertData.beforeDateTime)
 
         return SilencedAlertDataOutput.fromSilencedAlert(silencedAlert)
     }

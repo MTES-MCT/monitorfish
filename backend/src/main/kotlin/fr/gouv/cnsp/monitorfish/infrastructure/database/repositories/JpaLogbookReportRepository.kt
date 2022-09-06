@@ -1,12 +1,12 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
@@ -27,9 +27,9 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
 
     override fun findLastTripBeforeDateTime(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): VoyageDatesAndTripNumber {
         try {
-            if(internalReferenceNumber.isNotEmpty()) {
+            if (internalReferenceNumber.isNotEmpty()) {
                 val lastTrip = dbERSRepository.findTripsBeforeDatetime(
-                        internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0, 1)).first()
+                    internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0, 1)).first()
 
                 return VoyageDatesAndTripNumber(lastTrip.tripNumber, lastTrip.startDate.atZone(UTC), lastTrip.endDate.atZone(UTC))
             }
@@ -45,15 +45,15 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
     @Cacheable(value = ["previous_logbook"])
     override fun findTripBeforeTripNumber(internalReferenceNumber: String, tripNumber: String): VoyageDatesAndTripNumber {
         try {
-            if(internalReferenceNumber.isNotEmpty()) {
+            if (internalReferenceNumber.isNotEmpty()) {
                 val previousTripNumber = dbERSRepository.findPreviousTripNumber(
-                        internalReferenceNumber, tripNumber, PageRequest.of(0, 1)).first().tripNumber
+                    internalReferenceNumber, tripNumber, PageRequest.of(0, 1)).first().tripNumber
                 val previousTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, previousTripNumber)
 
                 return VoyageDatesAndTripNumber(
-                        previousTripNumber,
-                        previousTrip.startDate.atZone(UTC),
-                        previousTrip.endDate.atZone(UTC))
+                    previousTripNumber,
+                    previousTrip.startDate.atZone(UTC),
+                    previousTrip.endDate.atZone(UTC))
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
@@ -69,15 +69,15 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
     @Cacheable(value = ["next_logbook"])
     override fun findTripAfterTripNumber(internalReferenceNumber: String, tripNumber: String): VoyageDatesAndTripNumber {
         try {
-            if(internalReferenceNumber.isNotEmpty()) {
+            if (internalReferenceNumber.isNotEmpty()) {
                 val nextTripNumber = dbERSRepository.findNextTripNumber(
-                        internalReferenceNumber, tripNumber, PageRequest.of(0, 1)).first().tripNumber
+                    internalReferenceNumber, tripNumber, PageRequest.of(0, 1)).first().tripNumber
                 val nextTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, nextTripNumber)
 
                 return VoyageDatesAndTripNumber(
-                        nextTripNumber,
-                        nextTrip.startDate.atZone(UTC),
-                        nextTrip.endDate.atZone(UTC))
+                    nextTripNumber,
+                    nextTrip.startDate.atZone(UTC),
+                    nextTrip.endDate.atZone(UTC))
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
@@ -91,7 +91,7 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
     }
 
     private fun getTripNotFoundExceptionMessage(internalReferenceNumber: String) =
-            "No trip found found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
+        "No trip found found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 
     @Cacheable(value = ["logbook_messages"])
     override fun findAllMessagesByTripNumberBetweenDates(
@@ -100,7 +100,7 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
         beforeDate: ZonedDateTime,
         tripNumber: String): List<LogbookMessage> {
         try {
-            if(internalReferenceNumber.isNotEmpty()) {
+            if (internalReferenceNumber.isNotEmpty()) {
                 return dbERSRepository.findAllMessagesByTripNumberBetweenDates(
                     internalReferenceNumber,
                     afterDate.toInstant(),
@@ -128,13 +128,13 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
 
         return lanAndPnoMessagesWithoutCorrectedMessages.filter {
             it.internalReferenceNumber != null &&
-                    it.tripNumber != null &&
-                    it.messageType == LogbookMessageTypeMapping.LAN.name
+                it.tripNumber != null &&
+                it.messageType == LogbookMessageTypeMapping.LAN.name
         }.map { lanMessage ->
             val pnoMessage = lanAndPnoMessagesWithoutCorrectedMessages.singleOrNull { message ->
                 message.internalReferenceNumber == lanMessage.internalReferenceNumber &&
-                        message.tripNumber == lanMessage.tripNumber &&
-                        message.messageType == LogbookMessageTypeMapping.PNO.name
+                    message.tripNumber == lanMessage.tripNumber &&
+                    message.messageType == LogbookMessageTypeMapping.PNO.name
             }
 
             Pair(lanMessage.toLogbookMessage(mapper), pnoMessage?.toLogbookMessage(mapper))
@@ -149,7 +149,7 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
 
     override fun findById(id: Long): LogbookMessage {
         return dbERSRepository.findById(id)
-                .get().toLogbookMessage(mapper)
+            .get().toLogbookMessage(mapper)
     }
 
     @Modifying
@@ -171,5 +171,5 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
     }
 
     private fun getAllMessagesExceptionMessage(internalReferenceNumber: String) =
-            "No messages found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
+        "No messages found for the vessel. (internalReferenceNumber: \"$internalReferenceNumber\")"
 }

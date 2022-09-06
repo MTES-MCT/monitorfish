@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.CommunicationMeans
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetBeaconMalfunction
 import org.assertj.core.api.Assertions.assertThat
@@ -38,21 +38,21 @@ class GetBeaconMalfunctionUTests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         given(beaconMalfunctionsRepository.find(1))
-                .willReturn(BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
-                        null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
-                        true, ZonedDateTime.now(), null, ZonedDateTime.now()))
+            .willReturn(BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
+                null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                true, ZonedDateTime.now(), null, ZonedDateTime.now()))
         given(beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), eq("FR224226850"), any()))
-                .willReturn(listOf(
-                        BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
-                                null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
-                                true, ZonedDateTime.now(), null, ZonedDateTime.now()),
-                        BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
-                                null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                                true, ZonedDateTime.now(), null, ZonedDateTime.now())))
+            .willReturn(listOf(
+                BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
+                    null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                    true, ZonedDateTime.now(), null, ZonedDateTime.now()),
+                BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
+                    null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                    true, ZonedDateTime.now(), null, ZonedDateTime.now())))
         given(beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(1)).willReturn(listOf(BeaconMalfunctionComment(
-                beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)))
+            beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)))
         given(beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).willReturn(listOf(BeaconMalfunctionAction(
-                beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = VesselStatus.ACTIVITY_DETECTED.toString(), previousValue = VesselStatus.AT_PORT.toString(), dateTime = now)))
+            beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = VesselStatus.ACTIVITY_DETECTED.toString(), previousValue = VesselStatus.AT_PORT.toString(), dateTime = now)))
         given(beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
             listOf(BeaconMalfunctionNotification(
                 id = 1, beaconMalfunctionId = 1, dateTimeUtc = now,
@@ -65,7 +65,7 @@ class GetBeaconMalfunctionUTests {
 
         // When
         val beaconMalfunctions = GetBeaconMalfunction(beaconMalfunctionsRepository, beaconMalfunctionCommentsRepository, beaconMalfunctionActionsRepository, lastPositionRepository, beaconMalfunctionNotificationsRepository)
-                .execute(1)
+            .execute(1)
 
         // Then
         assertThat(beaconMalfunctions.resume?.numberOfBeaconsAtSea).isEqualTo(1)

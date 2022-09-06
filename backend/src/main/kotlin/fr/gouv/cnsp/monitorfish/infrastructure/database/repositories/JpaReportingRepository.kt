@@ -29,31 +29,31 @@ class JpaReportingRepository(private val dbReportingRepository: DBReportingRepos
 
     override fun findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String, fromDate: ZonedDateTime): List<Reporting> {
         return dbReportingRepository
-                .findCurrentAndArchivedByVesselIdentifier(vesselIdentifier.toString(), value, fromDate.toInstant()).map {
-                    it.toReporting(mapper)
-                }
+            .findCurrentAndArchivedByVesselIdentifier(vesselIdentifier.toString(), value, fromDate.toInstant()).map {
+                it.toReporting(mapper)
+            }
     }
 
     override fun findCurrentAndArchivedWithoutVesselIdentifier(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String, fromDate: ZonedDateTime): List<Reporting> {
-        if(internalReferenceNumber.isNotEmpty()) {
+        if (internalReferenceNumber.isNotEmpty()) {
             return dbReportingRepository
-                    .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(), internalReferenceNumber, fromDate.toInstant()).map {
-                        it.toReporting(mapper)
-                    }
+                .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(), internalReferenceNumber, fromDate.toInstant()).map {
+                    it.toReporting(mapper)
+                }
         }
 
-        if(ircs.isNotEmpty()) {
+        if (ircs.isNotEmpty()) {
             return dbReportingRepository
-                    .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.IRCS.toString(), ircs, fromDate.toInstant()).map {
-                        it.toReporting(mapper)
-                    }
+                .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.IRCS.toString(), ircs, fromDate.toInstant()).map {
+                    it.toReporting(mapper)
+                }
         }
 
-        if(externalReferenceNumber.isNotEmpty()) {
+        if (externalReferenceNumber.isNotEmpty()) {
             return dbReportingRepository
-                    .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.EXTERNAL_REFERENCE_NUMBER.toString(), externalReferenceNumber, fromDate.toInstant()).map {
-                        it.toReporting(mapper)
-                    }
+                .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.EXTERNAL_REFERENCE_NUMBER.toString(), externalReferenceNumber, fromDate.toInstant()).map {
+                    it.toReporting(mapper)
+                }
         }
 
         return listOf()

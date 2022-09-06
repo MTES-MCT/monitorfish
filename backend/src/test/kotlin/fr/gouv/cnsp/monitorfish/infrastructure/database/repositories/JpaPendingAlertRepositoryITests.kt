@@ -20,13 +20,13 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
     fun `findAlertsOfTypes Should return an alert with the type entered`() {
         // Given
         val alertOne = PendingAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = "123456",
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert())
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = ThreeMilesTrawlingAlert())
         jpaPendingAlertRepository.save(alertOne)
 
         // When

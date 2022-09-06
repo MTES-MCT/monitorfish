@@ -29,7 +29,7 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
                         toDateTime: ZonedDateTime? = null): Pair<Boolean, Deferred<List<Position>>> {
         var vesselTrackDepthHasBeenModified = false
 
-        if(trackDepth == VesselTrackDepth.CUSTOM) {
+        if (trackDepth == VesselTrackDepth.CUSTOM) {
             requireNotNull(fromDateTime) {
                 "begin date must be not null when requesting custom track depth"
             }
@@ -45,7 +45,7 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
                     // We substract 4h to this date to ensure the track starts at the port
                     // (the departure message may be sent after the departure)
                     logbookReportRepository.findLastTripBeforeDateTime(internalReferenceNumber, ZonedDateTime.now())
-                            .startDate.minusHours(4)
+                        .startDate.minusHours(4)
                 } catch (e: NoLogbookFishingTripFound) {
                     logger.warn(e.message)
                     vesselTrackDepthHasBeenModified = true
@@ -69,16 +69,16 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
 
         return coroutineScope {
             val positionsFuture = findPositionsAsync(
-                    vesselIdentifier,
-                    internalReferenceNumber,
-                    from,
-                    to,
-                    ircs,
-                    externalReferenceNumber)
+                vesselIdentifier,
+                internalReferenceNumber,
+                from,
+                to,
+                ircs,
+                externalReferenceNumber)
 
             Pair(
-                    vesselTrackDepthHasBeenModified,
-                    positionsFuture
+                vesselTrackDepthHasBeenModified,
+                positionsFuture
             )
         }
     }
@@ -90,19 +90,25 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
                                                   ircs: String,
                                                   externalReferenceNumber: String): Deferred<List<Position>> {
         return when (vesselIdentifier) {
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> async { positionRepository.findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber, from!!, to!!)
-                    .sortedBy { it.dateTime }}
-            VesselIdentifier.IRCS -> async { positionRepository.findVesselLastPositionsByIrcs(ircs, from!!, to!!)
-                    .sortedBy { it.dateTime }}
-            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> async { positionRepository.findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber, from!!, to!!)
-                    .sortedBy { it.dateTime }}
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> async {
+                positionRepository.findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber, from!!, to!!)
+                    .sortedBy { it.dateTime }
+            }
+            VesselIdentifier.IRCS -> async {
+                positionRepository.findVesselLastPositionsByIrcs(ircs, from!!, to!!)
+                    .sortedBy { it.dateTime }
+            }
+            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> async {
+                positionRepository.findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber, from!!, to!!)
+                    .sortedBy { it.dateTime }
+            }
             else -> async {
                 positionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(
-                        internalReferenceNumber = internalReferenceNumber,
-                        externalReferenceNumber = externalReferenceNumber,
-                        ircs = ircs,
-                        from = from!!,
-                        to = to!!).sortedBy { it.dateTime }
+                    internalReferenceNumber = internalReferenceNumber,
+                    externalReferenceNumber = externalReferenceNumber,
+                    ircs = ircs,
+                    from = from!!,
+                    to = to!!).sortedBy { it.dateTime }
             }
         }
     }

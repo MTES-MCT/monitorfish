@@ -14,9 +14,9 @@ class PrometheusMetricsRepository(meterRegistry: MeterRegistry) : MetricsReposit
 
     init {
         Counter.builder(MISSING_CODE_WARNING)
-                .description("Missing codes")
-                .tags(CODE_TYPE_TAG, "", CODE_TAG, "")
-                .register(meterRegistry);
+            .description("Missing codes")
+            .tags(CODE_TYPE_TAG, "", CODE_TAG, "")
+            .register(meterRegistry);
     }
 
     override fun sendMissingCodeWarning(codeType: String, code: String) {

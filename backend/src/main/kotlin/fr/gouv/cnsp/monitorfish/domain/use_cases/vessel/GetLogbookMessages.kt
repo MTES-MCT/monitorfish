@@ -19,28 +19,28 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
 
     fun execute(internalReferenceNumber: String, afterDepartureDate: ZonedDateTime, beforeDepartureDate: ZonedDateTime, tripNumber: String): List<LogbookMessage> {
         val messages = logbookReportRepository
-                .findAllMessagesByTripNumberBetweenDates(internalReferenceNumber, afterDepartureDate, beforeDepartureDate, tripNumber)
-                .sortedBy { it.reportDateTime }
-                .map {
-                    try {
-                        val rawMessage = logbookRawMessageRepository.findRawMessage(it.operationNumber)
-                        it.rawMessage = rawMessage
-                    } catch (e: NoERSMessagesFound) {
-                        logger.warn(e.message)
-                    }
-
-                    if(it.operationType == LogbookOperationType.DAT || it.operationType == LogbookOperationType.COR) {
-                        setGearPortAndSpeciesNames(it)
-                    }
-
-                    it
+            .findAllMessagesByTripNumberBetweenDates(internalReferenceNumber, afterDepartureDate, beforeDepartureDate, tripNumber)
+            .sortedBy { it.reportDateTime }
+            .map {
+                try {
+                    val rawMessage = logbookRawMessageRepository.findRawMessage(it.operationNumber)
+                    it.rawMessage = rawMessage
+                } catch (e: NoERSMessagesFound) {
+                    logger.warn(e.message)
                 }
+
+                if (it.operationType == LogbookOperationType.DAT || it.operationType == LogbookOperationType.COR) {
+                    setGearPortAndSpeciesNames(it)
+                }
+
+                it
+            }
 
         flagCorrectedAcknowledgedAndDeletedMessages(messages)
 
         return messages.filter {
             it.operationType == LogbookOperationType.DAT ||
-                    it.operationType == LogbookOperationType.COR
+                it.operationType == LogbookOperationType.COR
         }
     }
 
@@ -90,7 +90,7 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
                 flagMessageAsDeleted(messages, logbookMessage)
             }
 
-            if (logbookMessage.software !== null  && logbookMessage.software.contains(LogbookSoftware.E_SACAPT.software)) {
+            if (logbookMessage.software !== null && logbookMessage.software.contains(LogbookSoftware.E_SACAPT.software)) {
                 logbookMessage.isSentByFailoverSoftware = true
             }
         }

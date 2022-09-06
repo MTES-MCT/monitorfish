@@ -12,10 +12,10 @@ data class BeaconMalfunctionCommentDataOutput(
     companion object {
         fun fromBeaconMalfunctionComment(beaconMalfunctionComment: BeaconMalfunctionComment): BeaconMalfunctionCommentDataOutput {
             return BeaconMalfunctionCommentDataOutput(
-                    beaconMalfunctionId = beaconMalfunctionComment.beaconMalfunctionId,
-                    comment = beaconMalfunctionComment.comment,
-                    userType = beaconMalfunctionComment.userType,
-                    dateTime = beaconMalfunctionComment.dateTime
+                beaconMalfunctionId = beaconMalfunctionComment.beaconMalfunctionId,
+                comment = beaconMalfunctionComment.comment,
+                userType = beaconMalfunctionComment.userType,
+                dateTime = beaconMalfunctionComment.dateTime
             )
         }
     }

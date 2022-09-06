@@ -20,9 +20,9 @@ class GetFAOAreasUTests {
     fun `execute Should return a concatenated list of FAO properties`() {
         // Given
         given(faoAreasRepository.findAll()).willReturn(listOf(
-                FAOArea("123", "27.1", "27.1.0"),
-                FAOArea("124", "28.1", "28.1.0"),
-                FAOArea("125", "28.1", "28.1.1")))
+            FAOArea("123", "27.1", "27.1.0"),
+            FAOArea("124", "28.1", "28.1.0"),
+            FAOArea("125", "28.1", "28.1.1")))
 
         // When
         val faoList = GetFAOAreas(faoAreasRepository).execute()

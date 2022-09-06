@@ -23,8 +23,8 @@ class JpaBeaconMalfunctionCommentsRepositoryITests : AbstractDBTests() {
         assertThat(comments.last().id).isEqualTo(2)
         assertThat(comments.last().beaconMalfunctionId).isEqualTo(1)
         assertThat(comments.last().comment).isEqualTo("La pêche profonde résulte directement de l’épuisement " +
-                "des ressources marines dans les eaux de surface. Après avoir surexploité les stocks de poissons en surface, " +
-                "les flottes de pêche industrielles se sont tournées vers les grands fonds pour trouver la ressource qui leur faisait défaut.")
+            "des ressources marines dans les eaux de surface. Après avoir surexploité les stocks de poissons en surface, " +
+            "les flottes de pêche industrielles se sont tournées vers les grands fonds pour trouver la ressource qui leur faisait défaut.")
         assertThat(comments.last().dateTime).isNotNull
         assertThat(comments.last().userType).isEqualTo(BeaconMalfunctionCommentUserType.SIP)
     }
@@ -37,11 +37,11 @@ class JpaBeaconMalfunctionCommentsRepositoryITests : AbstractDBTests() {
 
         // When
         val comment = BeaconMalfunctionComment(
-                null,
-                1,
-                "A comment",
-                BeaconMalfunctionCommentUserType.SIP,
-                ZonedDateTime.now())
+            null,
+            1,
+            "A comment",
+            BeaconMalfunctionCommentUserType.SIP,
+            ZonedDateTime.now())
         jpaBeaconMalfunctionCommentsRepository.save(comment)
 
         // Then

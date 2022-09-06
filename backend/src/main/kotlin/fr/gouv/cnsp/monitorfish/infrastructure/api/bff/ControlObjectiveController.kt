@@ -14,12 +14,12 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveData
 @RequestMapping("/bff/v1/control_objectives")
 @Api(description = "APIs for Control objectives")
 class ControlObjectiveController(
-        private val getControlObjectivesOfYear: GetControlObjectivesOfYear,
-        private val getControlObjectiveYearEntries: GetControlObjectiveYearEntries,
-        private val addControlObjectiveYear: AddControlObjectiveYear,
-        private val updateControlObjective: UpdateControlObjective,
-        private val deleteControlObjective: DeleteControlObjective,
-        private val addControlObjective: AddControlObjective) {
+    private val getControlObjectivesOfYear: GetControlObjectivesOfYear,
+    private val getControlObjectiveYearEntries: GetControlObjectiveYearEntries,
+    private val addControlObjectiveYear: AddControlObjectiveYear,
+    private val updateControlObjective: UpdateControlObjective,
+    private val deleteControlObjective: DeleteControlObjective,
+    private val addControlObjective: AddControlObjective) {
 
     @GetMapping("/{year}")
     @ApiOperation("Get control objectives of a given year")
@@ -52,10 +52,10 @@ class ControlObjectiveController(
                                @RequestBody
                                updateControlObjectiveData: UpdateControlObjectiveDataInput) {
         updateControlObjective.execute(
-                id = controlObjectiveId,
-                targetNumberOfControlsAtSea = updateControlObjectiveData.targetNumberOfControlsAtSea,
-                targetNumberOfControlsAtPort = updateControlObjectiveData.targetNumberOfControlsAtPort,
-                controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel)
+            id = controlObjectiveId,
+            targetNumberOfControlsAtSea = updateControlObjectiveData.targetNumberOfControlsAtSea,
+            targetNumberOfControlsAtPort = updateControlObjectiveData.targetNumberOfControlsAtPort,
+            controlPriorityLevel = updateControlObjectiveData.controlPriorityLevel)
     }
 
     @DeleteMapping(value = ["/{controlObjectiveId}"])
@@ -71,9 +71,9 @@ class ControlObjectiveController(
     fun addControlObjective(@RequestBody
                             addControlObjectiveData: AddControlObjectiveDataInput1): Int {
         return addControlObjective.execute(
-                segment = addControlObjectiveData.segment,
-                facade = addControlObjectiveData.facade,
-                year = addControlObjectiveData.year
+            segment = addControlObjectiveData.segment,
+            facade = addControlObjectiveData.facade,
+            year = addControlObjectiveData.year
         )
     }
 

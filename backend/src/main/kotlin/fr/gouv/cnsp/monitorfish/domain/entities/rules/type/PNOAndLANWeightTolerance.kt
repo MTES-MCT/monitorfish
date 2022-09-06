@@ -1,16 +1,15 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.rules.type
 
 import fr.gouv.cnsp.monitorfish.domain.entities.rules.InputSource
-import java.lang.IllegalArgumentException
 import kotlin.math.absoluteValue
 
-class PNOAndLANWeightTolerance (
-        var percentOfTolerance: Double? = null,
-        var minimumWeightThreshold: Double? = null,
-): RuleType(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE, InputSource.Logbook) {
+class PNOAndLANWeightTolerance(
+    var percentOfTolerance: Double? = null,
+    var minimumWeightThreshold: Double? = null,
+) : RuleType(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE, InputSource.Logbook) {
     override fun evaluate(parameterToAssert: Double): Boolean {
         val percentOfTolerance = percentOfTolerance
-                ?: throw IllegalArgumentException("Percent of tolerance is not given, rule could not be evaluated.")
+            ?: throw IllegalArgumentException("Percent of tolerance is not given, rule could not be evaluated.")
 
         return parameterToAssert > percentOfTolerance
     }
@@ -21,6 +20,6 @@ class PNOAndLANWeightTolerance (
 
     fun isAboveMinimumWeightThreshold(lanWeight: Double): Boolean {
         return lanWeight > minimumWeightThreshold
-                ?: throw IllegalArgumentException("Minimum weight threshold is not given, rule could not be evaluated.")
+            ?: throw IllegalArgumentException("Minimum weight threshold is not given, rule could not be evaluated.")
     }
 }

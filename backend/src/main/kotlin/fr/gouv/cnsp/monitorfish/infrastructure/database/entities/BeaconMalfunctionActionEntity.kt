@@ -17,24 +17,24 @@ data class BeaconMalfunctionActionEntity(
     @Column(name = "id", unique = true, nullable = false)
     val id: Int?,
     @Column(name = "beacon_malfunction_id")
-        val beaconMalfunctionId: Int,
+    val beaconMalfunctionId: Int,
     @Column(name = "property_name")
-        @Enumerated(EnumType.STRING)
-        val propertyName: BeaconMalfunctionActionPropertyName,
+    @Enumerated(EnumType.STRING)
+    val propertyName: BeaconMalfunctionActionPropertyName,
     @Column(name = "previous_value")
-        val previousValue: String,
+    val previousValue: String,
     @Column(name = "next_value")
-        val nextValue: String,
+    val nextValue: String,
     @Column(name = "date_time_utc")
-        val dateTime: Instant) {
+    val dateTime: Instant) {
 
     fun toBeaconMalfunctionAction() = BeaconMalfunctionAction(
-            id = id!!,
-            beaconMalfunctionId = beaconMalfunctionId,
-            propertyName = propertyName,
-            previousValue = previousValue,
-            nextValue = nextValue,
-            dateTime = dateTime.atZone(ZoneOffset.UTC))
+        id = id!!,
+        beaconMalfunctionId = beaconMalfunctionId,
+        propertyName = propertyName,
+        previousValue = previousValue,
+        nextValue = nextValue,
+        dateTime = dateTime.atZone(ZoneOffset.UTC))
 
     companion object {
         fun fromBeaconMalfunctionAction(beaconMalfunctionAction: BeaconMalfunctionAction): BeaconMalfunctionActionEntity {
@@ -44,8 +44,8 @@ data class BeaconMalfunctionActionEntity(
                     VesselStatus.valueOf(beaconMalfunctionAction.nextValue)
                 } catch (e: IllegalArgumentException) {
                     throw IllegalArgumentException("One of the previous or next values are incorrect for the property " +
-                            "${BeaconMalfunctionActionPropertyName.VESSEL_STATUS}. Previous value is " +
-                            "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'.")
+                        "${BeaconMalfunctionActionPropertyName.VESSEL_STATUS}. Previous value is " +
+                        "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'.")
                 }
             }
 
@@ -55,18 +55,18 @@ data class BeaconMalfunctionActionEntity(
                     Stage.valueOf(beaconMalfunctionAction.nextValue)
                 } catch (e: IllegalArgumentException) {
                     throw IllegalArgumentException("One of the previous or next values are incorrect for the property " +
-                            "${BeaconMalfunctionActionPropertyName.STAGE}. Previous value is " +
-                            "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'.")
+                        "${BeaconMalfunctionActionPropertyName.STAGE}. Previous value is " +
+                        "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'.")
                 }
             }
 
             return BeaconMalfunctionActionEntity(
-                    id = beaconMalfunctionAction.id,
-                    beaconMalfunctionId = beaconMalfunctionAction.beaconMalfunctionId,
-                    propertyName = beaconMalfunctionAction.propertyName,
-                    previousValue = beaconMalfunctionAction.previousValue,
-                    nextValue = beaconMalfunctionAction.nextValue,
-                    dateTime = beaconMalfunctionAction.dateTime.toInstant()
+                id = beaconMalfunctionAction.id,
+                beaconMalfunctionId = beaconMalfunctionAction.beaconMalfunctionId,
+                propertyName = beaconMalfunctionAction.propertyName,
+                previousValue = beaconMalfunctionAction.previousValue,
+                nextValue = beaconMalfunctionAction.nextValue,
+                dateTime = beaconMalfunctionAction.dateTime.toInstant()
             )
         }
     }

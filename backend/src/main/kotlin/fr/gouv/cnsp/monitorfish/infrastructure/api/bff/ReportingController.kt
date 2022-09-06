@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReporting
@@ -16,9 +15,9 @@ import javax.websocket.server.PathParam
 @RequestMapping("/bff/v1/reportings")
 @Api(description = "APIs for reporting")
 class ReportingController(
-        private val archiveReporting: ArchiveReporting,
-        private val deleteReporting: DeleteReporting,
-        private val addReporting: AddReporting) {
+    private val archiveReporting: ArchiveReporting,
+    private val deleteReporting: DeleteReporting,
+    private val addReporting: AddReporting) {
 
     @PostMapping(value = [""], consumes = ["application/json"])
     @ApiOperation("Create a reporting")

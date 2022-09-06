@@ -21,7 +21,7 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
                 silenceAlertPeriod: SilenceAlertPeriod,
                 afterDateTime: ZonedDateTime? = null,
                 beforeDateTime: ZonedDateTime? = null): SilencedAlert {
-        if(silenceAlertPeriod == SilenceAlertPeriod.CUSTOM) {
+        if (silenceAlertPeriod == SilenceAlertPeriod.CUSTOM) {
             requireNotNull(afterDateTime) {
                 "begin date must be not null when ignoring an operational alert with a custom period"
             }
@@ -39,7 +39,7 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
             SilenceAlertPeriod.ONE_DAY -> ZonedDateTime.now().plusDays(1)
             SilenceAlertPeriod.ONE_WEEK -> ZonedDateTime.now().plusWeeks(1)
             SilenceAlertPeriod.ONE_MONTH -> ZonedDateTime.now().plusMonths(1)
-            SilenceAlertPeriod.ONE_YEAR ->  ZonedDateTime.now().plusYears(1)
+            SilenceAlertPeriod.ONE_YEAR -> ZonedDateTime.now().plusYears(1)
             SilenceAlertPeriod.CUSTOM -> beforeDateTime!!
         }
 
@@ -51,10 +51,10 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
         val silencedAlert = pendingAlertRepository.find(alertId)
 
         val savedSilencedAlert = silencedAlertRepository.save(
-                alert = silencedAlert,
-                silencedAfterDate = after,
-                silencedBeforeDate = before,
-                isValidated = false)
+            alert = silencedAlert,
+            silencedAfterDate = after,
+            silencedBeforeDate = before,
+            isValidated = false)
 
         pendingAlertRepository.delete(alertId)
         updateLastPositionBeforePipelineUpdate(silencedAlert)
@@ -70,30 +70,30 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
                     "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                        silencedAlert.value.type,
-                        silencedAlert.vesselIdentifier,
-                        silencedAlert.internalReferenceNumber,
-                        isValidated = false)
+                    silencedAlert.value.type,
+                    silencedAlert.vesselIdentifier,
+                    silencedAlert.internalReferenceNumber,
+                    isValidated = false)
             }
             VesselIdentifier.IRCS -> {
                 require(silencedAlert.ircs != null) {
                     "The fields 'ircs' must be not null when the vessel identifier is IRCS."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                        silencedAlert.value.type,
-                        silencedAlert.vesselIdentifier,
-                        silencedAlert.ircs,
-                        isValidated = false)
+                    silencedAlert.value.type,
+                    silencedAlert.vesselIdentifier,
+                    silencedAlert.ircs,
+                    isValidated = false)
             }
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
                 require(silencedAlert.externalReferenceNumber != null) {
                     "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                        silencedAlert.value.type,
-                        silencedAlert.vesselIdentifier,
-                        silencedAlert.externalReferenceNumber,
-                        isValidated = false)
+                    silencedAlert.value.type,
+                    silencedAlert.vesselIdentifier,
+                    silencedAlert.externalReferenceNumber,
+                    isValidated = false)
             }
         }
     }

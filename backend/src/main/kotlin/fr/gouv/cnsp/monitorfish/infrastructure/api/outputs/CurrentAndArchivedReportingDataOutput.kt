@@ -6,11 +6,11 @@ class CurrentAndArchivedReportingDataOutput(val current: List<ReportingDataOutpu
                                             val archived: List<ReportingDataOutput>) {
     companion object {
         fun fromCurrentAndArchivedReporting(currentAndArchivedReportings: CurrentAndArchivedReportings) = CurrentAndArchivedReportingDataOutput(
-                currentAndArchivedReportings.current.map {
-                    ReportingDataOutput.fromReporting(it)
-                },
-                currentAndArchivedReportings.archived.map {
-                    ReportingDataOutput.fromReporting(it)
-                })
+            currentAndArchivedReportings.current.map {
+                ReportingDataOutput.fromReporting(it)
+            },
+            currentAndArchivedReportings.archived.map {
+                ReportingDataOutput.fromReporting(it)
+            })
     }
 }

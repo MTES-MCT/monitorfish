@@ -63,11 +63,11 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         jpaPositionRepository.save(thirdPosition)
         jpaPositionRepository.save(fourthPosition)
         val lastPositions = jpaPositionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(
-                "FR224226850",
-                "",
-                "",
-                ZonedDateTime.now().minusHours(2).minusMinutes(10),
-                ZonedDateTime.now())
+            "FR224226850",
+            "",
+            "",
+            ZonedDateTime.now().minusHours(2).minusMinutes(10),
+            ZonedDateTime.now())
 
         // Then
         // For this vessel, we inserted
@@ -90,11 +90,11 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         jpaPositionRepository.save(thirdPosition)
         jpaPositionRepository.save(fourthPosition)
         val lastPositions = jpaPositionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(
-                "FR224226850",
-                "",
-                "",
-                ZonedDateTime.now().minusHours(6),
-                ZonedDateTime.now())
+            "FR224226850",
+            "",
+            "",
+            ZonedDateTime.now().minusHours(6),
+            ZonedDateTime.now())
 
         // Then
         // For this vessel, we inserted
@@ -117,11 +117,11 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         jpaPositionRepository.save(thirdPosition)
         jpaPositionRepository.save(fourthPosition)
         val lastPositions = jpaPositionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(
-                "",
-                "NOT_NULL",
-                "",
-                ZonedDateTime.now().minusHours(6),
-                ZonedDateTime.now())
+            "",
+            "NOT_NULL",
+            "",
+            ZonedDateTime.now().minusHours(6),
+            ZonedDateTime.now())
 
         // Then
         assertThat(lastPositions).hasSize(4)
@@ -143,11 +143,11 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
         jpaPositionRepository.save(thirdPosition)
         jpaPositionRepository.save(fourthPosition)
         val lastPositions = jpaPositionRepository.findVesselLastPositionsWithoutSpecifiedIdentifier(
-                "",
-                "",
-                "NOT_NULL",
-                ZonedDateTime.now().minusHours(6),
-                ZonedDateTime.now())
+            "",
+            "",
+            "NOT_NULL",
+            ZonedDateTime.now().minusHours(6),
+            ZonedDateTime.now())
 
         // Then
         assertThat(lastPositions).hasSize(4)

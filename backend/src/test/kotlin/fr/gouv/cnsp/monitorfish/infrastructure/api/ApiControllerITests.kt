@@ -39,9 +39,9 @@ class ApiControllerITests {
 
         // When
         val body = mockMvc.perform(post("/api/v1/positions").content("TEST"))
-                // Then
-                .andExpect(status().isOk)
-                .andReturn().response.contentAsString
+            // Then
+            .andExpect(status().isOk)
+            .andReturn().response.contentAsString
 
         assertThat(body).contains("ARGH for NAF message")
     }
@@ -53,7 +53,7 @@ class ApiControllerITests {
 
         // When
         mockMvc.perform(post("/api/v1/positions").content(naf))
-                // Then
-                .andExpect(status().isCreated)
+            // Then
+            .andExpect(status().isCreated)
     }
 }

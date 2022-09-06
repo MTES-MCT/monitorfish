@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 @DynamicUpdate
 interface DBRiskFactorsRepository : JpaRepository<RiskFactorsEntity, Int> {
-    fun findByCfrEquals(cfr: String) : RiskFactorsEntity
+    fun findByCfrEquals(cfr: String): RiskFactorsEntity
 }

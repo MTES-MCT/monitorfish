@@ -10,10 +10,10 @@ data class InfractionDataOutput(
 ) {
     companion object {
         fun fromInfraction(infraction: Infraction) = InfractionDataOutput(
-                natinfCode = infraction.natinfCode,
-                regulation = infraction.regulation,
-                infractionCategory = infraction.infractionCategory,
-                infraction = infraction.infraction
+            natinfCode = infraction.natinfCode,
+            regulation = infraction.regulation,
+            infractionCategory = infraction.infractionCategory,
+            infraction = infraction.infraction
         )
     }
 }

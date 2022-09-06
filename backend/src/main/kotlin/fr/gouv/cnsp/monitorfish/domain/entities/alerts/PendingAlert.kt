@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.alerts
 
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
 class PendingAlert(val id: Int? = null,

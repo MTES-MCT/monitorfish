@@ -1,11 +1,11 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
-import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
+import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetAllBeaconMalfunctions
@@ -36,11 +36,11 @@ class GetAllBeaconMalfunctionsUTests {
         val fourthPosition = LastPosition(null, "FR224226857", "224226850", null, null, null, null, PositionType.AIS, 16.445, 48.2525, 1.8, 180.0, riskFactor = 1.24, dateTime = now.minusHours(1), vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER)
         given(lastPositionRepository.findAll()).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
         given(beaconMalfunctionsRepository.findAllExceptEndOfFollowUp()).willReturn(listOf(BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
-                null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                true, ZonedDateTime.now(), null, ZonedDateTime.now())))
+            null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+            true, ZonedDateTime.now(), null, ZonedDateTime.now())))
         given(beaconMalfunctionsRepository.findLastThirtyEndOfFollowUp()).willReturn(listOf(BeaconMalfunction(2, "FR123456785", "9876543", "IRCS",
-                null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                true, ZonedDateTime.now(), null, ZonedDateTime.now())))
+            null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+            true, ZonedDateTime.now(), null, ZonedDateTime.now())))
 
         // When
         val enrichedBeaconMalfunctions = GetAllBeaconMalfunctions(beaconMalfunctionsRepository, lastPositionRepository).execute()

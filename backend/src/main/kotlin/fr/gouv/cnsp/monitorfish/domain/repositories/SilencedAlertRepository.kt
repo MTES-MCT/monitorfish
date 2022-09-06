@@ -9,6 +9,7 @@ interface SilencedAlertRepository {
              silencedBeforeDate: ZonedDateTime,
              silencedAfterDate: ZonedDateTime?,
              isValidated: Boolean): SilencedAlert
+
     fun findAllCurrentSilencedAlerts(): List<SilencedAlert>
     fun delete(id: Int)
 }

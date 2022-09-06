@@ -44,13 +44,13 @@ class GetVesselPositionsUTests {
         // When
         val pair = runBlocking {
             GetVesselPositions(positionRepository, logbookReportRepository)
-                    .execute("FR224226850",
-                            "",
-                            "",
-                            VesselTrackDepth.LAST_DEPARTURE,
-                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            null,
-                            null)
+                .execute("FR224226850",
+                    "",
+                    "",
+                    VesselTrackDepth.LAST_DEPARTURE,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    null,
+                    null)
         }
 
         // Then
@@ -70,13 +70,13 @@ class GetVesselPositionsUTests {
         val throwable = catchThrowable {
             runBlocking {
                 GetVesselPositions(positionRepository, logbookReportRepository)
-                        .execute("FR224226850",
-                                "",
-                                "",
-                                VesselTrackDepth.TWELVE_HOURS,
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                                null,
-                                null)
+                    .execute("FR224226850",
+                        "",
+                        "",
+                        VesselTrackDepth.TWELVE_HOURS,
+                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        null,
+                        null)
             }
         }
 
@@ -93,13 +93,13 @@ class GetVesselPositionsUTests {
         val throwable = catchThrowable {
             runBlocking {
                 GetVesselPositions(positionRepository, logbookReportRepository)
-                        .execute("FR224226850",
-                                "",
-                                "",
-                                VesselTrackDepth.LAST_DEPARTURE,
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                                null,
-                                null)
+                    .execute("FR224226850",
+                        "",
+                        "",
+                        VesselTrackDepth.LAST_DEPARTURE,
+                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        null,
+                        null)
             }
         }
 
@@ -116,13 +116,13 @@ class GetVesselPositionsUTests {
         val throwable = catchThrowable {
             runBlocking {
                 GetVesselPositions(positionRepository, logbookReportRepository)
-                        .execute("FR224226850",
-                                "",
-                                "",
-                                VesselTrackDepth.CUSTOM,
-                                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                                null,
-                                ZonedDateTime.now())
+                    .execute("FR224226850",
+                        "",
+                        "",
+                        VesselTrackDepth.CUSTOM,
+                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        null,
+                        ZonedDateTime.now())
             }
         }
 
@@ -141,14 +141,14 @@ class GetVesselPositionsUTests {
         val toDateTime = ZonedDateTime.now()
         runBlocking {
             GetVesselPositions(positionRepository, logbookReportRepository)
-                    .execute(
-                            "FR224226850",
-                            "",
-                            "",
-                            VesselTrackDepth.CUSTOM,
-                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            fromDateTime,
-                            toDateTime)
+                .execute(
+                    "FR224226850",
+                    "",
+                    "",
+                    VesselTrackDepth.CUSTOM,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    fromDateTime,
+                    toDateTime)
         }
 
         // Then
@@ -168,13 +168,13 @@ class GetVesselPositionsUTests {
         // When
         runBlocking {
             GetVesselPositions(positionRepository, logbookReportRepository)
-                    .execute("FR224226850",
-                            "",
-                            "",
-                            VesselTrackDepth.TWELVE_HOURS,
-                            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            null,
-                            null)
+                .execute("FR224226850",
+                    "",
+                    "",
+                    VesselTrackDepth.TWELVE_HOURS,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    null,
+                    null)
         }
 
         // Then
@@ -195,13 +195,13 @@ class GetVesselPositionsUTests {
         // When
         val pair = runBlocking {
             GetVesselPositions(positionRepository, logbookReportRepository)
-                    .execute("FR224226850",
-                            "",
-                            "",
-                            VesselTrackDepth.TWELVE_HOURS,
-                            null,
-                            null,
-                            null)
+                .execute("FR224226850",
+                    "",
+                    "",
+                    VesselTrackDepth.TWELVE_HOURS,
+                    null,
+                    null,
+                    null)
         }
 
         // Then

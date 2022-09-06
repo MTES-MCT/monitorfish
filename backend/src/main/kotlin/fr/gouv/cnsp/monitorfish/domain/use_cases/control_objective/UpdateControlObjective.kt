@@ -2,9 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
-import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
-import java.lang.IllegalArgumentException
 
 @UseCase
 class UpdateControlObjective(private val controlObjectivesRepository: ControlObjectivesRepository) {

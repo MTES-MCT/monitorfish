@@ -23,32 +23,32 @@ class GetSilencedAlertsUTests {
     fun `execute Should return silenced alerts without validated alerts`() {
         // Given
         val silencedAlertOne = SilencedAlert(
-                internalReferenceNumber = "INTERNAL_REF_ONE",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                value = ThreeMilesTrawlingAlert(),
-                silencedBeforeDate = ZonedDateTime.now().plusHours(5))
+            internalReferenceNumber = "INTERNAL_REF_ONE",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            value = ThreeMilesTrawlingAlert(),
+            silencedBeforeDate = ZonedDateTime.now().plusHours(5))
         val silencedAlertTwo = SilencedAlert(
-                internalReferenceNumber = "INTERNAL_REF_TWO",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                value = ThreeMilesTrawlingAlert(),
-                silencedBeforeDate = ZonedDateTime.now().plusHours(5),
-                wasValidated = true)
+            internalReferenceNumber = "INTERNAL_REF_TWO",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            value = ThreeMilesTrawlingAlert(),
+            silencedBeforeDate = ZonedDateTime.now().plusHours(5),
+            wasValidated = true)
         val silencedAlertThree = SilencedAlert(
-                internalReferenceNumber = "INTERNAL_REF_THREE",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                value = ThreeMilesTrawlingAlert(),
-                silencedBeforeDate = ZonedDateTime.now().plusHours(5),
-                wasValidated = false)
+            internalReferenceNumber = "INTERNAL_REF_THREE",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            value = ThreeMilesTrawlingAlert(),
+            silencedBeforeDate = ZonedDateTime.now().plusHours(5),
+            wasValidated = false)
         given(silencedAlertRepository.findAllCurrentSilencedAlerts()).willReturn(listOf(
-                silencedAlertOne,
-                silencedAlertTwo,
-                silencedAlertThree))
+            silencedAlertOne,
+            silencedAlertTwo,
+            silencedAlertThree))
 
         // When
         val silencedAlerts = GetSilencedAlerts(silencedAlertRepository).execute()

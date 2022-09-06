@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.CommunicationMeans
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotification
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationRecipientFunction
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType
 import java.time.Instant
 import java.time.ZoneOffset
 import javax.persistence.*
@@ -37,7 +39,7 @@ data class BeaconMalfunctionNotificationEntity(
     fun toBeaconMalfunctionNotification() = BeaconMalfunctionNotification(
         id = id,
         beaconMalfunctionId = beaconMalfunctionId,
-        dateTimeUtc  = dateTimeUtc.atZone(ZoneOffset.UTC),
+        dateTimeUtc = dateTimeUtc.atZone(ZoneOffset.UTC),
         notificationType = notificationType,
         communicationMeans = communicationMeans,
         recipientFunction = recipientFunction,

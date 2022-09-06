@@ -27,39 +27,39 @@ class GetVesselReportings(private val reportingRepository: ReportingRepository,
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
                 reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, externalReferenceNumber, fromDate)
             else -> reportingRepository.findCurrentAndArchivedWithoutVesselIdentifier(
-                    internalReferenceNumber,
-                    externalReferenceNumber,
-                    ircs,
-                    fromDate)
+                internalReferenceNumber,
+                externalReferenceNumber,
+                ircs,
+                fromDate)
         }
 
         val current = reportings
-                .filter { !it.isArchived }
-                .map { report ->
-                    report.value.natinfCode?.let {
-                        try {
-                            report.infraction = infractionRepository.findInfractionByNatinfCode(it)
-                        } catch (e: NatinfCodeNotFoundException) {
-                            logger.warn(e.message)
-                        }
+            .filter { !it.isArchived }
+            .map { report ->
+                report.value.natinfCode?.let {
+                    try {
+                        report.infraction = infractionRepository.findInfractionByNatinfCode(it)
+                    } catch (e: NatinfCodeNotFoundException) {
+                        logger.warn(e.message)
                     }
-
-                    report
                 }
+
+                report
+            }
 
         val archived = reportings
-                .filter { it.isArchived }
-                .map { report ->
-                    report.value.natinfCode?.let {
-                        try {
-                            report.infraction = infractionRepository.findInfractionByNatinfCode(it)
-                        } catch (e: NatinfCodeNotFoundException) {
-                            logger.warn(e.message)
-                        }
+            .filter { it.isArchived }
+            .map { report ->
+                report.value.natinfCode?.let {
+                    try {
+                        report.infraction = infractionRepository.findInfractionByNatinfCode(it)
+                    } catch (e: NatinfCodeNotFoundException) {
+                        logger.warn(e.message)
                     }
-
-                    report
                 }
+
+                report
+            }
 
         return CurrentAndArchivedReportings(current, archived)
     }

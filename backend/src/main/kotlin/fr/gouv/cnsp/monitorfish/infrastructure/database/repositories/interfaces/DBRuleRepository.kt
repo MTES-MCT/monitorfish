@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository
 
 @DynamicUpdate
 interface DBRuleRepository : CrudRepository<RuleEntity, Long> {
-    override fun findAll() : List<RuleEntity>
+    override fun findAll(): List<RuleEntity>
 }

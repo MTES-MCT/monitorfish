@@ -54,30 +54,30 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
 
     override fun findAllByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String, afterDateTime: ZonedDateTime): List<BeaconMalfunction> {
         return dbBeaconMalfunctionsRepository
-                .findAllByVesselIdentifierEqualsAfterDateTime(vesselIdentifier.toString(), value, afterDateTime.toInstant()).map {
-                    it.toBeaconMalfunction()
-                }
+            .findAllByVesselIdentifierEqualsAfterDateTime(vesselIdentifier.toString(), value, afterDateTime.toInstant()).map {
+                it.toBeaconMalfunction()
+            }
     }
 
     override fun findAllByVesselWithoutVesselIdentifier(internalReferenceNumber: String,
                                                         externalReferenceNumber: String,
                                                         ircs: String,
                                                         afterDateTime: ZonedDateTime): List<BeaconMalfunction> {
-        if(internalReferenceNumber.isNotEmpty()) {
+        if (internalReferenceNumber.isNotEmpty()) {
             return dbBeaconMalfunctionsRepository
                 .findAllByVesselIdentifierEqualsAfterDateTime(VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(), internalReferenceNumber, afterDateTime.toInstant()).map {
                     it.toBeaconMalfunction()
                 }
         }
 
-        if(ircs.isNotEmpty()) {
+        if (ircs.isNotEmpty()) {
             return dbBeaconMalfunctionsRepository
                 .findAllByVesselIdentifierEqualsAfterDateTime(VesselIdentifier.IRCS.toString(), ircs, afterDateTime.toInstant()).map {
                     it.toBeaconMalfunction()
                 }
         }
 
-        if(externalReferenceNumber.isNotEmpty()) {
+        if (externalReferenceNumber.isNotEmpty()) {
             return dbBeaconMalfunctionsRepository
                 .findAllByVesselIdentifierEqualsAfterDateTime(VesselIdentifier.EXTERNAL_REFERENCE_NUMBER.toString(), externalReferenceNumber, afterDateTime.toInstant()).map {
                     it.toBeaconMalfunction()

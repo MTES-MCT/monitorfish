@@ -33,9 +33,9 @@ class ExecutePnoAndLanWeightToleranceRule(private val logbookReportRepository: L
         lanAndPnos.forEach { pairOfLanAndPno ->
             val (lan, pno) = pairOfLanAndPno
 
-            if(pno == null) {
+            if (pno == null) {
                 logger.warn("PNO_LAN_WEIGHT_TOLERANCE: No PNO associated to the LAN of " +
-                        "trip ${lan.tripNumber} of the vessel ${lan.internalReferenceNumber} found.")
+                    "trip ${lan.tripNumber} of the vessel ${lan.internalReferenceNumber} found.")
             } else {
                 lan.message as LAN
                 pno.message as PNO
@@ -44,7 +44,7 @@ class ExecutePnoAndLanWeightToleranceRule(private val logbookReportRepository: L
 
                 if (catchesOverTolerance.isNotEmpty()) {
                     logger.info("PNO_LAN_WEIGHT_TOLERANCE: Found ${catchesOverTolerance.size} catches which are over tolerance " +
-                            "for LAN ${lan.operationNumber} and PNO ${pno.operationNumber}")
+                        "for LAN ${lan.operationNumber} and PNO ${pno.operationNumber}")
                     val alert = buildAlert(lan, pno, rule.value, catchesOverTolerance)
 
                     PNOAndLANAlertRepository.save(alert)
@@ -54,85 +54,85 @@ class ExecutePnoAndLanWeightToleranceRule(private val logbookReportRepository: L
         }
 
         val listOfLanAndPnoIds = lanAndPnos.map { listOf(it.first, it.second) }.flatten()
-                .mapNotNull { it?.id }
-        if(listOfLanAndPnoIds.isNotEmpty()) {
+            .mapNotNull { it?.id }
+        if (listOfLanAndPnoIds.isNotEmpty()) {
             logbookReportRepository.updateLogbookMessagesAsProcessedByRule(listOfLanAndPnoIds, RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE.name)
             logger.info("PNO_LAN_WEIGHT_TOLERANCE: ${listOfLanAndPnoIds.size} Logbook messages marked as processed")
         }
     }
 
-    private fun buildAlert(lan: LogbookMessage, pno: LogbookMessage, value: PNOAndLANWeightTolerance, catchesOverTolerance: List<PNOAndLANCatches>) : PNOAndLANAlert {
+    private fun buildAlert(lan: LogbookMessage, pno: LogbookMessage, value: PNOAndLANWeightTolerance, catchesOverTolerance: List<PNOAndLANCatches>): PNOAndLANAlert {
         val toleranceAlert = PNOAndLANWeightToleranceAlert(
-                lan.operationNumber,
-                pno.operationNumber,
-                value.percentOfTolerance,
-                value.minimumWeightThreshold,
-                catchesOverTolerance)
+            lan.operationNumber,
+            pno.operationNumber,
+            value.percentOfTolerance,
+            value.minimumWeightThreshold,
+            catchesOverTolerance)
 
         return PNOAndLANAlert(
-                id = UUID.randomUUID(),
-                internalReferenceNumber = lan.internalReferenceNumber,
-                externalReferenceNumber = lan.externalReferenceNumber,
-                ircs = lan.ircs,
-                tripNumber = lan.tripNumber,
-                creationDate = ZonedDateTime.now(),
-                value = toleranceAlert)
+            id = UUID.randomUUID(),
+            internalReferenceNumber = lan.internalReferenceNumber,
+            externalReferenceNumber = lan.externalReferenceNumber,
+            ircs = lan.ircs,
+            tripNumber = lan.tripNumber,
+            creationDate = ZonedDateTime.now(),
+            value = toleranceAlert)
     }
 
     private fun getCatchesOverTolerance(lan: LAN, pno: PNO, value: PNOAndLANWeightTolerance): List<PNOAndLANCatches> {
         val catchesLandedBySpecies = lan.catchLanded
-                .groupBy { it.species }
+            .groupBy { it.species }
         val catchesOnboardBySpecies = pno.catchOnboard
-                .groupBy { it.species }
+            .groupBy { it.species }
 
         return catchesLandedBySpecies
-                .keys
-                .mapNotNull { lanSpeciesKey ->
-            val lanWeight = catchesLandedBySpecies[lanSpeciesKey]
+            .keys
+            .mapNotNull { lanSpeciesKey ->
+                val lanWeight = catchesLandedBySpecies[lanSpeciesKey]
                     ?.mapNotNull { it.weight }
                     ?.sum()
-            val speciesName = catchesLandedBySpecies[lanSpeciesKey]?.first()?.speciesName
-            val lanCatch = Catch(species = lanSpeciesKey, speciesName = speciesName, weight = lanWeight)
+                val speciesName = catchesLandedBySpecies[lanSpeciesKey]?.first()?.speciesName
+                val lanCatch = Catch(species = lanSpeciesKey, speciesName = speciesName, weight = lanWeight)
 
-            try {
-                if(lanWeight != null && value.isAboveMinimumWeightThreshold(lanWeight)) {
-                    val pnoWeight = getPNOWeight(catchesOnboardBySpecies, lanSpeciesKey)
-                    val pnoCatch = pnoWeight?.let {
-                        Catch(species = lanSpeciesKey, speciesName = speciesName, weight = pnoWeight)
-                    }
-
-                    if (pnoCatch == null) {
-                        PNOAndLANCatches( null, lanCatch)
-                    } else run {
-                        val percentOfPnoWeightOverLan = value.getPercentBetweenLANAndPNO(lanWeight, pnoWeight)
-
-                        val weightIsOverTolerance = value.evaluate(percentOfPnoWeightOverLan)
-
-                        if (weightIsOverTolerance) {
-                            PNOAndLANCatches(pnoCatch, lanCatch)
-                        } else {
-                            null
+                try {
+                    if (lanWeight != null && value.isAboveMinimumWeightThreshold(lanWeight)) {
+                        val pnoWeight = getPNOWeight(catchesOnboardBySpecies, lanSpeciesKey)
+                        val pnoCatch = pnoWeight?.let {
+                            Catch(species = lanSpeciesKey, speciesName = speciesName, weight = pnoWeight)
                         }
+
+                        if (pnoCatch == null) {
+                            PNOAndLANCatches(null, lanCatch)
+                        } else run {
+                            val percentOfPnoWeightOverLan = value.getPercentBetweenLANAndPNO(lanWeight, pnoWeight)
+
+                            val weightIsOverTolerance = value.evaluate(percentOfPnoWeightOverLan)
+
+                            if (weightIsOverTolerance) {
+                                PNOAndLANCatches(pnoCatch, lanCatch)
+                            } else {
+                                null
+                            }
+                        }
+                    } else {
+                        null
                     }
-                } else {
+                } catch (e: Exception) {
+                    logger.error("PNO_LAN_WEIGHT_TOLERANCE: Error while executing rule", e)
                     null
                 }
-            } catch (e: Exception) {
-                logger.error("PNO_LAN_WEIGHT_TOLERANCE: Error while executing rule", e)
-                null
             }
-        }
     }
 
     private fun getPNOWeight(catchesOnboardBySpecies: Map<String?, List<Catch>>, lanSpeciesKey: String?): Double? {
         val species = catchesOnboardBySpecies
-                .keys
-                .singleOrNull { species -> species == lanSpeciesKey }
+            .keys
+            .singleOrNull { species -> species == lanSpeciesKey }
 
         return species?.let {
             catchesOnboardBySpecies[species]
-                    ?.mapNotNull { it.weight }
-                    ?.sum()
+                ?.mapNotNull { it.weight }
+                ?.sum()
         }
     }
 }

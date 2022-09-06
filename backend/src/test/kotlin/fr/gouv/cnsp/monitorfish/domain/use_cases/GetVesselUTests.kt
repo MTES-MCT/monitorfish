@@ -4,7 +4,9 @@ import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorsRepository
@@ -48,14 +50,14 @@ class GetVesselUTests {
 
         // When
         val pair = runBlocking {
-             GetVessel(vesselRepository, positionRepository, logbookReportRepository, riskFactorsRepository)
-                     .execute("FR224226850",
-                             "",
-                             "",
-                             VesselTrackDepth.TWELVE_HOURS,
-                             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                             null,
-                             null)
+            GetVessel(vesselRepository, positionRepository, logbookReportRepository, riskFactorsRepository)
+                .execute("FR224226850",
+                    "",
+                    "",
+                    VesselTrackDepth.TWELVE_HOURS,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    null,
+                    null)
         }
 
         // Then

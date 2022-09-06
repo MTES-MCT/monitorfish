@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 object RuleMapper {
     fun getRuleTypeFromJSON(mapper: ObjectMapper, value: String): RuleType {
         return try {
-            if(value.isEmpty()) {
+            if (value.isEmpty()) {
                 throw EntityConversionException("Error while converting 'RuleType'. RuleType is empty.")
             }
 

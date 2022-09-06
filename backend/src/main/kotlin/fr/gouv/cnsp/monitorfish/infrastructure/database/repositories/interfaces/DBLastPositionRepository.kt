@@ -26,7 +26,7 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
                 WHEN :isValidated IS TRUE THEN array_append(reportings, 'ALERT')
                 ELSE reportings
             END
-        WHERE 
+        WHERE
             CASE
                 WHEN :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER' THEN cfr
                 WHEN :vesselIdentifier = 'IRCS' THEN ircs

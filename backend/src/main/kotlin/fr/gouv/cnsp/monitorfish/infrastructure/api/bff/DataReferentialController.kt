@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFAOAreas
 import fr.gouv.cnsp.monitorfish.domain.use_cases.gear.GetAllGears
 import fr.gouv.cnsp.monitorfish.domain.use_cases.species.GetAllSpeciesAndSpeciesGroups
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFAOAreas
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.GearDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.SpeciesAndSpeciesGroupsDataOutput
 import io.swagger.annotations.Api
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/bff")
 @Api(description = "APIs for Data referential")
 class DataReferentialController(
-        private val getAllGears: GetAllGears,
-        private val getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups,
-        private val getFAOAreas: GetFAOAreas) {
+    private val getAllGears: GetAllGears,
+    private val getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups,
+    private val getFAOAreas: GetFAOAreas) {
 
     @GetMapping("/v1/gears")
     @ApiOperation("Get FAO fishing gear codes")

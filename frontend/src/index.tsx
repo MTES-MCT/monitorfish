@@ -3,14 +3,14 @@ import { Integrations } from '@sentry/tracing'
 import { createRoot } from 'react-dom/client'
 
 import { App } from './App'
-import { FontStyle } from './assets/fonts/fonts'
+import { FontStyle } from './ui/assets/fonts/fonts'
 
+import 'rsuite/dist/rsuite.css'
 import 'mini.css'
 import 'nouislider/distribute/nouislider.css'
-import 'rsuite/dist/rsuite.css'
-import './assets/index.css'
+import './ui/assets/index.css'
 import 'ol/ol.css'
-import './App.css'
+import './ui/assets/App.css'
 import './ui/shared/ol-override.css'
 import './ui/shared/rsuite-override.css'
 

@@ -91,6 +91,34 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
     [closeRangeCalendarPicker],
   )
 
+  const handleEndDateInputNext = useCallback(() => {
+    if (!withTime) {
+      return
+    }
+
+    endTimeInput.current.focus()
+  }, [withTime])
+
+  const handleEndDateInputPrevious = useCallback(() => {
+    if (withTime) {
+      startTimeInput.current.focus(true)
+
+      return
+    }
+
+    startDateInput.current.focus(true)
+  }, [withTime])
+
+  const handleStartDateInputNext = useCallback(() => {
+    if (withTime) {
+      startTimeInput.current.focus()
+
+      return
+    }
+
+    endDateInput.current.focus()
+  }, [withTime])
+
   const handleDateInputFilled = useCallback(
     (position: DateRangePosition, newDateTuple: DateTuple) => {
       if (position === DateRangePosition.START) {
@@ -106,7 +134,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
           submit()
         }
 
-        startTimeInput.current.focus()
+        handleStartDateInputNext()
       } else {
         selectedEndDateTupleRef.current = newDateTuple
 
@@ -120,10 +148,10 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
           submit()
         }
 
-        endTimeInput.current.focus()
+        handleEndDateInputNext()
       }
     },
-    [submit],
+    [handleEndDateInputNext, handleStartDateInputNext, submit],
   )
 
   const handleRangeCalendarPickerChange = useCallback(
@@ -231,7 +259,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
           defaultValue={selectedStartDateTupleRef.current}
           onChange={newDateTuple => handleDateInputFilled(DateRangePosition.START, newDateTuple)}
           onClick={openRangeCalendarPicker}
-          onNext={() => startTimeInput.current.focus()}
+          onNext={handleStartDateInputNext}
         />
         {withTime && (
           <>
@@ -252,11 +280,11 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
         <DateInput
           ref={endDateInput}
           defaultValue={selectedEndDateTupleRef.current}
-          onBack={() => startTimeInput.current.focus(true)}
+          onBack={handleEndDateInputPrevious}
           onChange={newDateTuple => handleDateInputFilled(DateRangePosition.END, newDateTuple)}
           onClick={openRangeCalendarPicker}
-          onNext={() => endTimeInput.current.focus()}
-          onPrevious={() => startTimeInput.current.focus(true)}
+          onNext={handleEndDateInputNext}
+          onPrevious={handleEndDateInputPrevious}
         />
         {withTime && (
           <>

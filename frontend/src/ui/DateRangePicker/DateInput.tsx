@@ -67,9 +67,9 @@ function DateInputWithRef(
     }
 
     const newDateTuple: DateTuple = [
-      Number(yearInput.current.value),
-      Number(monthInput.current.value),
-      Number(dayInput.current.value),
+      String(yearInput.current.value),
+      formatNumberAsDoubleDigit(monthInput.current.value),
+      formatNumberAsDoubleDigit(dayInput.current.value),
     ]
 
     onChange(newDateTuple)

@@ -24,6 +24,7 @@ export type NumberInputProps = Omit<
 }
 function NumberInputWithRef(
   {
+    defaultValue,
     hasError = false,
     max,
     min,
@@ -130,7 +131,9 @@ function NumberInputWithRef(
 
   return (
     <StyledNumberInput
+      key={String(defaultValue)}
       ref={inputRef}
+      defaultValue={defaultValue}
       hasError={hasError || hasFormatError}
       maxLength={size}
       onClick={handleClick}

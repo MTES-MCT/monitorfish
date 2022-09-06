@@ -10,6 +10,6 @@ describe('ui/DateRangePicker/utils.getDateTupleFromDate()', () => {
 
     const result = getDateTupleFromDate(localizedDate)
 
-    expect(result).toMatchObject([2022, 3, 4] as any)
+    expect(result).toMatchObject(['2022', '03', '04'] as any)
   })
 })

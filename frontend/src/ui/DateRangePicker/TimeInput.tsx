@@ -125,7 +125,7 @@ function TimeInputWithRef(
 
     closeRangedTimePicker()
 
-    const newTimeTuple: TimeTuple = [Number(hourInput.current.value), Number(minuteInput.current.value)]
+    const newTimeTuple: TimeTuple = [hourInput.current.value, minuteInput.current.value]
     onChange(newTimeTuple)
   }, [closeRangedTimePicker, onChange])
 

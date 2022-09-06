@@ -7,8 +7,8 @@ import type { DateTuple, TimeTuple } from '../types'
 
 describe('ui/DateRangePicker/utils.getDateFromDateAndTimeTuple()', () => {
   it('should return the expected date from a date and a time tuple', () => {
-    const dateTuple = [2022, 2, 1] as DateTuple
-    const timeTuple = [3, 4] as TimeTuple
+    const dateTuple = ['2022', '02', '01'] as DateTuple
+    const timeTuple = ['03', '04'] as TimeTuple
 
     const result = getDateFromDateAndTimeTuple(dateTuple, timeTuple)
 
@@ -16,8 +16,8 @@ describe('ui/DateRangePicker/utils.getDateFromDateAndTimeTuple()', () => {
   })
 
   it('should return the expected date from a date and a time tuple with `isEnd` = `true`', () => {
-    const dateTuple = [2022, 2, 1] as DateTuple
-    const timeTuple = [3, 4] as TimeTuple
+    const dateTuple = ['2022', '02', '01'] as DateTuple
+    const timeTuple = ['03', '04'] as TimeTuple
 
     const result = getDateFromDateAndTimeTuple(dateTuple, timeTuple, true)
 

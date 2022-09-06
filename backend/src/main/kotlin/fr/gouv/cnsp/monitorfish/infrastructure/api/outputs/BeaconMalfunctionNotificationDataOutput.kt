@@ -12,8 +12,8 @@ data class BeaconMalfunctionNotificationDataOutput(
     val notificationType: BeaconMalfunctionNotificationType,
     val communicationMeans: CommunicationMeans,
     val recipientFunction: BeaconMalfunctionNotificationRecipientFunction,
-    val recipientName:  String?,
-    val recipientAddressOrNumber:  String,
+    val recipientName: String?,
+    val recipientAddressOrNumber: String,
     val success: Boolean?,
     val errorMessage: String?) {
 

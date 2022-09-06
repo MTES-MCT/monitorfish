@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/bff/v1/healthcheck")
 @Api(description = "API for Healthcheck")
 class HealthcheckController(
-        private val getHealthcheck: GetHealthcheck) {
+    private val getHealthcheck: GetHealthcheck) {
 
     @GetMapping("")
     @ApiOperation("Get healtcheck of positions and logbook")

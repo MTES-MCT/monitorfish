@@ -24,7 +24,7 @@ class GetVesselControls(private val controlRepository: ControlRepository,
         val controlAndInfractionIds = controlRepository.findVesselControlsAfterDateTime(vesselId, afterDateTime)
         logger.debug("Found ${controlAndInfractionIds.size} controls for vessel $vesselId")
 
-        val controlWithInfractions =  controlAndInfractionIds.map {
+        val controlWithInfractions = controlAndInfractionIds.map {
             val infractions = infractionRepository.findInfractions(it.infractionIds)
             logger.debug("Found ${infractions.size} infractions for control ${it.control.id} of vessel $vesselId")
 
@@ -51,45 +51,45 @@ class GetVesselControls(private val controlRepository: ControlRepository,
         }
 
         val numberOfSeaControls = controlWithInfractions
-                .filter { it.controlType == ControlType.SEA.value }
-                .size
+            .filter { it.controlType == ControlType.SEA.value }
+            .size
         val numberOfLandControls = controlWithInfractions
-                .filter { it.controlType == ControlType.LAND.value }
-                .size
+            .filter { it.controlType == ControlType.LAND.value }
+            .size
         val numberOfAerialControls = controlWithInfractions
-                .filter { it.controlType == ControlType.AERIAL.value }
-                .size
+            .filter { it.controlType == ControlType.AERIAL.value }
+            .size
 
         val numberOfDiversions = controlWithInfractions
-                .filter { it.diversion == true }
-                .size
+            .filter { it.diversion == true }
+            .size
         val numberOfEscortsToQuay = controlWithInfractions
-                .filter { it.escortToQuay == true }
-                .size
+            .filter { it.escortToQuay == true }
+            .size
         val numberOfSeizures = controlWithInfractions
-                .filter { it.seizure == true }
-                .size
+            .filter { it.seizure == true }
+            .size
 
         val numberOfFishingInfractions = controlWithInfractions
-                .flatMap { it.infractions }
-                .filter { it.infractionCategory == InfractionCategory.FISHING.value }
-                .size
+            .flatMap { it.infractions }
+            .filter { it.infractionCategory == InfractionCategory.FISHING.value }
+            .size
 
         val numberOfSecurityInfractions = controlWithInfractions
-                .flatMap { it.infractions }
-                .filter { it.infractionCategory == InfractionCategory.SECURITY.value }
-                .size
+            .flatMap { it.infractions }
+            .filter { it.infractionCategory == InfractionCategory.SECURITY.value }
+            .size
 
         return ControlResumeAndControls(
-                vesselId = vesselId,
-                numberOfSeaControls = numberOfSeaControls,
-                numberOfLandControls = numberOfLandControls,
-                numberOfAerialControls = numberOfAerialControls,
-                numberOfDiversions = numberOfDiversions,
-                numberOfEscortsToQuay = numberOfEscortsToQuay,
-                numberOfSeizures = numberOfSeizures,
-                numberOfFishingInfractions = numberOfFishingInfractions,
-                numberOfSecurityInfractions = numberOfSecurityInfractions,
-                controls = controlWithInfractions)
-        }
+            vesselId = vesselId,
+            numberOfSeaControls = numberOfSeaControls,
+            numberOfLandControls = numberOfLandControls,
+            numberOfAerialControls = numberOfAerialControls,
+            numberOfDiversions = numberOfDiversions,
+            numberOfEscortsToQuay = numberOfEscortsToQuay,
+            numberOfSeizures = numberOfSeizures,
+            numberOfFishingInfractions = numberOfFishingInfractions,
+            numberOfSecurityInfractions = numberOfSecurityInfractions,
+            controls = controlWithInfractions)
+    }
 }

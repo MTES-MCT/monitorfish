@@ -1,10 +1,10 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselWithData
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorsRepository
@@ -32,25 +32,25 @@ class GetVessel(private val vesselRepository: VesselRepository,
 
         return coroutineScope {
             val (vesselTrackHasBeenModified, positions) = GetVesselPositions(positionRepository, logbookReportRepository).execute(
-                    internalReferenceNumber = internalReferenceNumber,
-                    externalReferenceNumber = externalReferenceNumber,
-                    ircs = ircs,
-                    trackDepth = trackDepth,
-                    vesselIdentifier = vesselIdentifier,
-                    fromDateTime = fromDateTime,
-                    toDateTime = toDateTime)
+                internalReferenceNumber = internalReferenceNumber,
+                externalReferenceNumber = externalReferenceNumber,
+                ircs = ircs,
+                trackDepth = trackDepth,
+                vesselIdentifier = vesselIdentifier,
+                fromDateTime = fromDateTime,
+                toDateTime = toDateTime)
 
             val vesselFuture = async { vesselRepository.findVessel(internalReferenceNumber, externalReferenceNumber, ircs) }
 
             val vesselRiskFactorsFuture = async { riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber) }
 
             Pair(
-                    vesselTrackHasBeenModified,
-                    VesselWithData(
-                            vesselFuture.await(),
-                            positions.await(),
-                            vesselRiskFactorsFuture.await() ?: VesselRiskFactor()
-                    )
+                vesselTrackHasBeenModified,
+                VesselWithData(
+                    vesselFuture.await(),
+                    positions.await(),
+                    vesselRiskFactorsFuture.await() ?: VesselRiskFactor()
+                )
             )
         }
     }

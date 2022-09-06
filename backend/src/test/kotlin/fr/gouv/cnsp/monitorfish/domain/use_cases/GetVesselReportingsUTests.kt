@@ -34,54 +34,54 @@ class GetVesselReportingsUTests {
         // Given
         given(infractionRepository.findInfractionByNatinfCode(eq("7059"))).willReturn(Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value))
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
-                listOf(
-                        Reporting(
-                                id = 1,
-                                type = ReportingType.ALERT,
-                                vesselName = "BIDUBULE",
-                                internalReferenceNumber = "FR224226850",
-                                externalReferenceNumber = "1236514",
-                                ircs = "IRCS",
-                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                                creationDate = ZonedDateTime.now(),
-                                validationDate = ZonedDateTime.now(),
-                                value = ThreeMilesTrawlingAlert() as ReportingValue,
-                                isArchived = false,
-                                isDeleted = false),
-                        Reporting(
-                                id = 1,
-                                type = ReportingType.ALERT,
-                                vesselName = "BIDUBULE",
-                                internalReferenceNumber = "FR224226850",
-                                externalReferenceNumber = "1236514",
-                                ircs = "IRCS",
-                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                                creationDate = ZonedDateTime.now(),
-                                validationDate = ZonedDateTime.now(),
-                                value = ThreeMilesTrawlingAlert() as ReportingValue,
-                                isArchived = false,
-                                isDeleted = false),
-                        Reporting(
-                                id = 666,
-                                type = ReportingType.ALERT,
-                                vesselName = "BIDUBULE",
-                                internalReferenceNumber = "FR224226850",
-                                externalReferenceNumber = "1236514",
-                                ircs = "IRCS",
-                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                                creationDate = ZonedDateTime.now().minusYears(1),
-                                validationDate = ZonedDateTime.now().minusYears(1),
-                                value = ThreeMilesTrawlingAlert() as ReportingValue,
-                                isArchived = true,
-                                isDeleted = false)))
+            listOf(
+                Reporting(
+                    id = 1,
+                    type = ReportingType.ALERT,
+                    vesselName = "BIDUBULE",
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "1236514",
+                    ircs = "IRCS",
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    creationDate = ZonedDateTime.now(),
+                    validationDate = ZonedDateTime.now(),
+                    value = ThreeMilesTrawlingAlert() as ReportingValue,
+                    isArchived = false,
+                    isDeleted = false),
+                Reporting(
+                    id = 1,
+                    type = ReportingType.ALERT,
+                    vesselName = "BIDUBULE",
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "1236514",
+                    ircs = "IRCS",
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    creationDate = ZonedDateTime.now(),
+                    validationDate = ZonedDateTime.now(),
+                    value = ThreeMilesTrawlingAlert() as ReportingValue,
+                    isArchived = false,
+                    isDeleted = false),
+                Reporting(
+                    id = 666,
+                    type = ReportingType.ALERT,
+                    vesselName = "BIDUBULE",
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "1236514",
+                    ircs = "IRCS",
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    creationDate = ZonedDateTime.now().minusYears(1),
+                    validationDate = ZonedDateTime.now().minusYears(1),
+                    value = ThreeMilesTrawlingAlert() as ReportingValue,
+                    isArchived = true,
+                    isDeleted = false)))
 
         // When
         val currentAndArchivedReportings = GetVesselReportings(reportingRepository, infractionRepository).execute(
-                "FR224226850",
-                "1236514",
-                "IRCS",
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                ZonedDateTime.now().minusYears(1))
+            "FR224226850",
+            "1236514",
+            "IRCS",
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            ZonedDateTime.now().minusYears(1))
 
         // Then
         assertThat(currentAndArchivedReportings.current).hasSize(2)

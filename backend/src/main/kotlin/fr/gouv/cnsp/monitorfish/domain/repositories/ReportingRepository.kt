@@ -10,12 +10,14 @@ interface ReportingRepository {
     fun save(reporting: Reporting): Reporting
     fun findAll(): List<Reporting>
     fun findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier,
-                                        value: String,
-                                        fromDate: ZonedDateTime): List<Reporting>
+                                                       value: String,
+                                                       fromDate: ZonedDateTime): List<Reporting>
+
     fun findCurrentAndArchivedWithoutVesselIdentifier(internalReferenceNumber: String,
-                                               externalReferenceNumber: String,
-                                               ircs: String,
-                                               fromDate: ZonedDateTime): List<Reporting>
+                                                      externalReferenceNumber: String,
+                                                      ircs: String,
+                                                      fromDate: ZonedDateTime): List<Reporting>
+
     fun archive(id: Int)
     fun delete(id: Int)
 }

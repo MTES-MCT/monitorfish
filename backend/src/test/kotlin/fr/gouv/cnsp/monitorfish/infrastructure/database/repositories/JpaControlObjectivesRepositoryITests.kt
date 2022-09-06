@@ -52,10 +52,10 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         // When
         assertThat(controlObjectives.find { it.id == 9 }?.targetNumberOfControlsAtPort).isEqualTo(50)
         jpaControlObjectivesRepository.update(
-                id = 9,
-                targetNumberOfControlsAtPort = 153,
-                targetNumberOfControlsAtSea = null,
-                controlPriorityLevel = null)
+            id = 9,
+            targetNumberOfControlsAtPort = 153,
+            targetNumberOfControlsAtSea = null,
+            controlPriorityLevel = null)
 
         // Then
         val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(2021).find { it.id == 9 }
@@ -71,10 +71,10 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         // When
         assertThat(controlObjectives.find { it.id == 9 }?.targetNumberOfControlsAtSea).isEqualTo(20)
         jpaControlObjectivesRepository.update(
-                id = 9,
-                targetNumberOfControlsAtPort = null,
-                targetNumberOfControlsAtSea = 10,
-                controlPriorityLevel = null)
+            id = 9,
+            targetNumberOfControlsAtPort = null,
+            targetNumberOfControlsAtSea = 10,
+            controlPriorityLevel = null)
 
         // Then
         val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(2021).find { it.id == 9 }
@@ -90,10 +90,10 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         // When
         assertThat(controlObjectives.find { it.id == 9 }?.controlPriorityLevel).isEqualTo(1.0)
         jpaControlObjectivesRepository.update(
-                id = 9,
-                targetNumberOfControlsAtPort = null,
-                targetNumberOfControlsAtSea = null,
-                controlPriorityLevel = 2.0)
+            id = 9,
+            targetNumberOfControlsAtPort = null,
+            targetNumberOfControlsAtSea = null,
+            controlPriorityLevel = 2.0)
 
         // Then
         val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(2021).find { it.id == 9 }
@@ -109,12 +109,12 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
 
         // When
         jpaControlObjectivesRepository.add(ControlObjective(
-                segment = "SEGMENT",
-                facade = "FACADE",
-                year = 2021,
-                targetNumberOfControlsAtSea = 25,
-                targetNumberOfControlsAtPort = 64,
-                controlPriorityLevel = 2.0
+            segment = "SEGMENT",
+            facade = "FACADE",
+            year = 2021,
+            targetNumberOfControlsAtSea = 25,
+            targetNumberOfControlsAtPort = 64,
+            controlPriorityLevel = 2.0
         ))
 
         // Then

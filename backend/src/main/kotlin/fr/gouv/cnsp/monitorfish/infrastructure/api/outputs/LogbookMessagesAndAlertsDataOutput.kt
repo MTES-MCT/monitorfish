@@ -8,8 +8,8 @@ data class LogbookMessagesAndAlertsDataOutput(
     val alerts: List<PNOAndLANAlert>) {
     companion object {
         fun fromLogbookMessagesAndAlerts(logbookMessagesAndAlerts: LogbookMessagesAndAlerts) = LogbookMessagesAndAlertsDataOutput(
-                logbookMessagesAndAlerts.logbookMessages.map { LogbookMessageDataOutput.fromLogbookMessage(it) },
-                logbookMessagesAndAlerts.alerts
+            logbookMessagesAndAlerts.logbookMessages.map { LogbookMessageDataOutput.fromLogbookMessage(it) },
+            logbookMessagesAndAlerts.alerts
         )
     }
 }

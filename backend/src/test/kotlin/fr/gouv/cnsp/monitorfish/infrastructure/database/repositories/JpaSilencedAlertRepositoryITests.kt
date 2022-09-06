@@ -21,13 +21,13 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
         // Given
         val now = ZonedDateTime.now()
         val alertOne = PendingAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = "123456",
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert())
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = ThreeMilesTrawlingAlert())
 
         // When
         val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null, false)
@@ -50,13 +50,13 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
         // Given
         val now = ZonedDateTime.now()
         val alertOne = PendingAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = null,
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = "123456",
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert())
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = null,
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = ThreeMilesTrawlingAlert())
 
         // When
         val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null, false)
@@ -79,13 +79,13 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
         assertThat(jpaSilencedAlertRepository.findAllCurrentSilencedAlerts()).hasSize(4)
         val now = ZonedDateTime.now()
         val alertOne = PendingAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = "123456",
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert())
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = ThreeMilesTrawlingAlert())
         jpaSilencedAlertRepository.save(alertOne, now, null, false)
 
         // When

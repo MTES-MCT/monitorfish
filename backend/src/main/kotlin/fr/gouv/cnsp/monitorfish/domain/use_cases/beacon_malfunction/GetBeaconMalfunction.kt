@@ -51,10 +51,10 @@ class GetBeaconMalfunction(
                 beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(beaconMalfunction.vesselIdentifier, beaconMalfunction.externalReferenceNumber, oneYearBefore)
             }
             else -> beaconMalfunctionsRepository.findAllByVesselWithoutVesselIdentifier(
-                    beaconMalfunction.internalReferenceNumber ?: "",
-                    beaconMalfunction.externalReferenceNumber ?: "",
-                    beaconMalfunction.ircs ?: "",
-                    oneYearBefore)
+                beaconMalfunction.internalReferenceNumber ?: "",
+                beaconMalfunction.externalReferenceNumber ?: "",
+                beaconMalfunction.ircs ?: "",
+                oneYearBefore)
         }
 
         val beaconMalfunctionsWithDetails = vesselBeaconMalfunctions.map { vesselBeaconMalfunction ->
@@ -67,15 +67,15 @@ class GetBeaconMalfunction(
         val vesselBeaconMalfunctionsResume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconMalfunctionsWithDetails)
 
         val notifications = beaconMalfunctionNotifications
-                .groupBy { it.toGroupByKeys() }
-                .map {
-                    BeaconMalfunctionNotifications(
-                            dateTimeUtc = it.key.dateTimeUtc,
-                            beaconMalfunctionId = it.key.beaconMalfunctionId,
-                            notificationType = it.key.notificationType,
-                            notifications = it.value
-                    )
-                }
+            .groupBy { it.toGroupByKeys() }
+            .map {
+                BeaconMalfunctionNotifications(
+                    dateTimeUtc = it.key.dateTimeUtc,
+                    beaconMalfunctionId = it.key.beaconMalfunctionId,
+                    notificationType = it.key.notificationType,
+                    notifications = it.value
+                )
+            }
 
         return BeaconMalfunctionResumeAndDetails(
             beaconMalfunction = beaconMalfunction,

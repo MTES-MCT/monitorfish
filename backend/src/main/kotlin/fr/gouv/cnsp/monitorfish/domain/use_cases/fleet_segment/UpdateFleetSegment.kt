@@ -11,12 +11,12 @@ class UpdateFleetSegment(private val fleetSegmentRepository: FleetSegmentReposit
     @Throws(CouldNotUpdateFleetSegmentException::class, IllegalArgumentException::class)
     fun execute(segment: String, fields: CreateOrUpdateFleetSegmentFields): FleetSegment {
         require(fields.segment != null ||
-                fields.bycatchSpecies != null ||
-                fields.segmentName != null ||
-                fields.faoAreas != null ||
-                fields.gears != null ||
-                fields.impactRiskFactor != null ||
-                fields.targetSpecies != null) {
+            fields.bycatchSpecies != null ||
+            fields.segmentName != null ||
+            fields.faoAreas != null ||
+            fields.gears != null ||
+            fields.impactRiskFactor != null ||
+            fields.targetSpecies != null) {
             "No value to update"
         }
 

@@ -22,10 +22,10 @@ class ValidateOperationalAlert(private val pendingAlertRepository: PendingAlertR
         val validatedAlert = pendingAlertRepository.find(alertId)
 
         silencedAlertRepository.save(
-                alert = validatedAlert,
-                silencedAfterDate = null,
-                silencedBeforeDate = now.plusHours(4),
-                isValidated = true)
+            alert = validatedAlert,
+            silencedAfterDate = null,
+            silencedBeforeDate = now.plusHours(4),
+            isValidated = true)
 
         reportingRepository.save(validatedAlert, now)
 
@@ -41,30 +41,30 @@ class ValidateOperationalAlert(private val pendingAlertRepository: PendingAlertR
                     "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                        validatedAlert.value.type,
-                        validatedAlert.vesselIdentifier,
-                        validatedAlert.internalReferenceNumber,
-                        isValidated = true)
+                    validatedAlert.value.type,
+                    validatedAlert.vesselIdentifier,
+                    validatedAlert.internalReferenceNumber,
+                    isValidated = true)
             }
             VesselIdentifier.IRCS -> {
                 require(validatedAlert.ircs != null) {
                     "The fields 'ircs' must be not null when the vessel identifier is IRCS."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                        validatedAlert.value.type,
-                        validatedAlert.vesselIdentifier,
-                        validatedAlert.ircs,
-                        isValidated = true)
+                    validatedAlert.value.type,
+                    validatedAlert.vesselIdentifier,
+                    validatedAlert.ircs,
+                    isValidated = true)
             }
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
                 require(validatedAlert.externalReferenceNumber != null) {
                     "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
                 }
                 lastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                        validatedAlert.value.type,
-                        validatedAlert.vesselIdentifier,
-                        validatedAlert.externalReferenceNumber,
-                        isValidated = true)
+                    validatedAlert.value.type,
+                    validatedAlert.vesselIdentifier,
+                    validatedAlert.externalReferenceNumber,
+                    isValidated = true)
             }
         }
     }

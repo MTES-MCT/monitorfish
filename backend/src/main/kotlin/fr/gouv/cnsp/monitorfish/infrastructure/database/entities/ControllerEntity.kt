@@ -18,10 +18,10 @@ data class ControllerEntity(
     var controllerType: String? = null,
     @Column(name = "administration")
     var administration: String? = null) {
-        
+
     fun toController() = Controller(
-            id = id,
-            controller = controller,
-            controllerType = controllerType,
-            administration = administration)
+        id = id,
+        controller = controller,
+        controllerType = controllerType,
+        administration = administration)
 }

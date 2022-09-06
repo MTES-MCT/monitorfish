@@ -96,8 +96,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     fun `findTripBeforeTripNumber Should return the previous trip number When there is an overlap between the current and previous trip`() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
-                "FAK000999999",
-                "9463714")
+            "FAK000999999",
+            "9463714")
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463713")
@@ -111,8 +111,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val throwable = catchThrowable {
             jpaLogbookReportRepository.findTripBeforeTripNumber(
-                    "FAK000999999",
-                    "9463712")
+                "FAK000999999",
+                "9463712")
         }
 
         // Then
@@ -125,8 +125,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     fun `findTripBeforeTripNumber Should return the previous trip number When there is no overlap between the current and previous trip`() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
-                "FAK000999999",
-                "9463715")
+            "FAK000999999",
+            "9463715")
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463714")
@@ -139,8 +139,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     fun `findTripAfterTripNumber Should return the next trip number When there is an overlap between the current and previous trip`() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripAfterTripNumber(
-                "FAK000999999",
-                "9463713")
+            "FAK000999999",
+            "9463713")
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463714")
@@ -153,8 +153,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     fun `findTripAfterTripNumber Should return the next trip number When there is no overlap between the current and previous trip`() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripAfterTripNumber(
-                "FAK000999999",
-                "9463714")
+            "FAK000999999",
+            "9463714")
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463715")
@@ -168,8 +168,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val throwable = catchThrowable {
             jpaLogbookReportRepository.findTripAfterTripNumber(
-                    "FAK000999999",
-                    "9463715")
+                "FAK000999999",
+                "9463715")
         }
 
         // Then
@@ -186,7 +186,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // When
         val messages = jpaLogbookReportRepository
-                .findAllMessagesByTripNumberBetweenDates("FAK000999999", lastDepartureDate, now, "9463715")
+            .findAllMessagesByTripNumberBetweenDates("FAK000999999", lastDepartureDate, now, "9463715")
 
         // Then
         assertThat(messages).hasSize(19)

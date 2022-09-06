@@ -11,7 +11,7 @@ internal class NAFMessageMapperUTests {
     internal fun `init should parse this example NAF message`() {
         // Given
         val naf = "//SR//AD/FRA//FR/GBR//RD/20201006//RT/2141//FS/GBR//RC/MGXR6//IR/GBROOC21250//" +
-                "DA/20201006//TI/1625//LT/53.254//LG/.940//SP/96//CO/8//TM/POS//ER//"
+            "DA/20201006//TI/1625//LT/53.254//LG/.940//SP/96//CO/8//TM/POS//ER//"
 
         // When
         val position = NAFMessageMapper(naf).toPosition()
@@ -37,7 +37,7 @@ internal class NAFMessageMapperUTests {
     internal fun `init should parse this other example NAF message`() {
         // Given
         val naf = "//SR//AD/FRA//FR/NLD//RD/20201006//NA/GENGI//RT/2133//FS/NLD//RC/PCVC//XR/SCH43//" +
-                "IR/NLD201901153//DA/20201006//TI/2126//LT/52.099//LG/4.269//SP/0//CO/173//TM/POS//ER//"
+            "IR/NLD201901153//DA/20201006//TI/2126//LT/52.099//LG/4.269//SP/0//CO/173//TM/POS//ER//"
 
         // When
         val position = NAFMessageMapper(naf).toPosition()
@@ -63,7 +63,7 @@ internal class NAFMessageMapperUTests {
     internal fun `init should parse this another example NAF message`() {
         // Given
         val naf = "//SR//FR/SWE//TM/POS//RC/F1007//IR/SWE0000F1007//XR/EXT3//LT/57.037//LG/12.214//" +
-                "SP/50//CO/190//DA/20170817//TI/0500//NA/Ship1007//FS/SWE//ER//"
+            "SP/50//CO/190//DA/20170817//TI/0500//NA/Ship1007//FS/SWE//ER//"
 
         // When
         val position = NAFMessageMapper(naf).toPosition()
@@ -90,7 +90,7 @@ internal class NAFMessageMapperUTests {
     internal fun `init should throw an exception When invalid message type`() {
         // Given
         val naf = "//SR//AD/FRA//FR/NLD//RD/20201006//NA/GENGI//RT/2133//FS/NLD//RC/PCVC//XR/SCH43//" +
-                "IR/NLD201901153//DA/20201006//TI/2126//LT/52.099//LG/4.269//SP/0//CO/173//TM/ACK//ER//"
+            "IR/NLD201901153//DA/20201006//TI/2126//LT/52.099//LG/4.269//SP/0//CO/173//TM/ACK//ER//"
 
         // When
         val throwable = catchThrowable { NAFMessageMapper(naf) }
@@ -103,7 +103,7 @@ internal class NAFMessageMapperUTests {
     internal fun `init Should throw an exception When no date or time`() {
         // Given
         val naf = "//SR//AD/FRA//FR/NLD//RD/20201006//NA/GENGI//RT/2133//FS/NLD//RC/PCVC//XR/SCH43//" +
-                "IR/NLD201901153//DA/20201006//LT/52.099//LG/4.269//SP/0//CO/173//TM/POS//ER//"
+            "IR/NLD201901153//DA/20201006//LT/52.099//LG/4.269//SP/0//CO/173//TM/POS//ER//"
 
         // When
         val throwable = catchThrowable { NAFMessageMapper(naf) }
@@ -116,7 +116,7 @@ internal class NAFMessageMapperUTests {
     internal fun `init Should throw an exception When bad from country three letters found`() {
         // Given
         val naf = "//SR//AD/FRA//FR/LOL//RD/20201006//NA/GENGI//RT/2133//FS/NLD//RC/PCVC//XR/SCH43//" +
-                "TI/1025//IR/NLD201901153//DA/20201006//LT/52.099//LG/4.269//SP/0//CO/173//TM/POS//ER//"
+            "TI/1025//IR/NLD201901153//DA/20201006//LT/52.099//LG/4.269//SP/0//CO/173//TM/POS//ER//"
 
         // When
         val throwable = catchThrowable { NAFMessageMapper(naf) }
@@ -126,9 +126,9 @@ internal class NAFMessageMapperUTests {
     }
 
     @Test
-    internal fun `init Should parse invalid start record`(){
+    internal fun `init Should parse invalid start record`() {
         val naf = "//FR/SWE//AD/UVM//TM/POS//IR/SWE0000F1007//LT/57.037//LG/12.214//" +
-                "SP/50//CO/190//DA/20170817//TI/0500//ER//"
+            "SP/50//CO/190//DA/20170817//TI/0500//ER//"
 
         // When
         val throwable = catchThrowable { NAFMessageMapper(naf) }
@@ -138,9 +138,9 @@ internal class NAFMessageMapperUTests {
     }
 
     @Test
-    internal fun `init Should parse invalid latitude`(){
+    internal fun `init Should parse invalid latitude`() {
         val naf = "//SR//FR/SWE//TM/POS//IR/SWE0000F1007//LT/LOL//LG/12.214//" +
-                "SP/50//CO/190//DA/20170817//TI/0500//ER//"
+            "SP/50//CO/190//DA/20170817//TI/0500//ER//"
 
         // When
         val throwable = catchThrowable { NAFMessageMapper(naf) }
@@ -150,9 +150,9 @@ internal class NAFMessageMapperUTests {
     }
 
     @Test
-    internal fun `init Should skip an empty field`(){
+    internal fun `init Should skip an empty field`() {
         val naf = "//SR//FR/SWE//TM/POS//IR/SWE0000F1007//LT///LG/12.214//" +
-                "SP/50//CO/190//DA/20170817//TI/0500//ER//"
+            "SP/50//CO/190//DA/20170817//TI/0500//ER//"
 
         // When
         val throwable = catchThrowable { NAFMessageMapper(naf) }
@@ -165,7 +165,7 @@ internal class NAFMessageMapperUTests {
     internal fun `init Should not throw an exception When no course`() {
         // Given
         val naf = "//SR//FR/SWE//TM/POS//RC/F1007//IR/SWE0000F1007//XR/EXT3//LT/57.037//LG/12.214" +
-                "//SP/0//DA/20170817//TI/0500//NA/Ship1007//FS/SWE//ER//"
+            "//SP/0//DA/20170817//TI/0500//NA/Ship1007//FS/SWE//ER//"
 
         // When
         val position = NAFMessageMapper(naf).toPosition()

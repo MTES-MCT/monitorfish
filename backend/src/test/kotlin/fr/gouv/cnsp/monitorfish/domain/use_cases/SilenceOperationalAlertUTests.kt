@@ -35,33 +35,33 @@ class SilenceOperationalAlertUTests {
     fun `execute Should silence a pending alert for one day`() {
         // Given
         val pendingAlert = PendingAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = "123456",
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert())
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = ThreeMilesTrawlingAlert())
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
         // When
         SilenceOperationalAlert(
-                pendingAlertRepository,
-                silencedAlertRepository,
-                lastPositionRepository).execute(666, SilenceAlertPeriod.ONE_DAY)
+            pendingAlertRepository,
+            silencedAlertRepository,
+            lastPositionRepository).execute(666, SilenceAlertPeriod.ONE_DAY)
 
         // Then
         Mockito.verify(pendingAlertRepository).delete(eq(666))
         Mockito.verify(lastPositionRepository).removeAlertToLastPositionByVesselIdentifierEquals(
-                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                "FRFGRGR",
-                false)
+            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            "FRFGRGR",
+            false)
         argumentCaptor<ZonedDateTime>().apply {
             verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), anyOrNull(), any())
 
             assertThat(allValues.first().toString().split("T")[0])
-                    .isEqualTo(ZonedDateTime.now().plusDays(1).toString().split("T")[0])
+                .isEqualTo(ZonedDateTime.now().plusDays(1).toString().split("T")[0])
         }
     }
 
@@ -69,24 +69,24 @@ class SilenceOperationalAlertUTests {
     fun `execute Should silence a pending alert for a custom period`() {
         // Given
         val pendingAlert = PendingAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = "123456",
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert())
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = ThreeMilesTrawlingAlert())
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
         // When
         SilenceOperationalAlert(
-                pendingAlertRepository,
-                silencedAlertRepository,
-                lastPositionRepository).execute(
-                666,
-                SilenceAlertPeriod.CUSTOM,
-                ZonedDateTime.now().plusDays(2),
-                ZonedDateTime.now().plusDays(26))
+            pendingAlertRepository,
+            silencedAlertRepository,
+            lastPositionRepository).execute(
+            666,
+            SilenceAlertPeriod.CUSTOM,
+            ZonedDateTime.now().plusDays(2),
+            ZonedDateTime.now().plusDays(26))
 
         // Then
         Mockito.verify(pendingAlertRepository).delete(eq(666))
@@ -94,9 +94,9 @@ class SilenceOperationalAlertUTests {
             verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), capture(), any())
 
             assertThat(allValues.first().toString().split("T")[0])
-                    .isEqualTo(ZonedDateTime.now().plusDays(26).toString().split("T")[0])
+                .isEqualTo(ZonedDateTime.now().plusDays(26).toString().split("T")[0])
             assertThat(allValues.last().toString().split("T")[0])
-                    .isEqualTo(ZonedDateTime.now().plusDays(2).toString().split("T")[0])
+                .isEqualTo(ZonedDateTime.now().plusDays(2).toString().split("T")[0])
         }
     }
 
@@ -104,25 +104,25 @@ class SilenceOperationalAlertUTests {
     fun `execute Should throw an exception When silencing a pending alert for a custom period Without after or before dates`() {
         // Given
         val pendingAlert = PendingAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = "123456",
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert())
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = ThreeMilesTrawlingAlert())
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
         // When
         val throwable = catchThrowable {
             SilenceOperationalAlert(
-                    pendingAlertRepository,
-                    silencedAlertRepository,
-                    lastPositionRepository).execute(
-                    666,
-                    SilenceAlertPeriod.CUSTOM,
-                    ZonedDateTime.now().plusDays(2),
-                    null)
+                pendingAlertRepository,
+                silencedAlertRepository,
+                lastPositionRepository).execute(
+                666,
+                SilenceAlertPeriod.CUSTOM,
+                ZonedDateTime.now().plusDays(2),
+                null)
         }
 
         // Then

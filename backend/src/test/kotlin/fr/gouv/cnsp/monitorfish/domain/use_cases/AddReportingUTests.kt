@@ -26,18 +26,18 @@ class AddReportingUTests {
     fun `execute Should throw an exception When the reporting is an alert`() {
         // Given
         val reportingToAdd = Reporting(
-                id = 1,
-                type = ReportingType.ALERT,
-                vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
-                ircs = "IRCS",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                creationDate = ZonedDateTime.now(),
-                validationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert() as ReportingValue,
-                isArchived = false,
-                isDeleted = false)
+            id = 1,
+            type = ReportingType.ALERT,
+            vesselName = "BIDUBULE",
+            internalReferenceNumber = "FR224226850",
+            externalReferenceNumber = "1236514",
+            ircs = "IRCS",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            creationDate = ZonedDateTime.now(),
+            validationDate = ZonedDateTime.now(),
+            value = ThreeMilesTrawlingAlert() as ReportingValue,
+            isArchived = false,
+            isDeleted = false)
 
         // When
         val throwable = catchThrowable {
@@ -53,18 +53,18 @@ class AddReportingUTests {
     fun `execute Should throw an exception When fields of reporting actor are not rights`(reportingActor: ReportingActor) {
         // Given
         val reportingToAdd = Reporting(
-                id = 1,
-                type = ReportingType.OBSERVATION,
-                vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
-                ircs = "IRCS",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                creationDate = ZonedDateTime.now(),
-                validationDate = ZonedDateTime.now(),
-                value = Observation(reportingActor = reportingActor, title = "A title"),
-                isArchived = false,
-                isDeleted = false)
+            id = 1,
+            type = ReportingType.OBSERVATION,
+            vesselName = "BIDUBULE",
+            internalReferenceNumber = "FR224226850",
+            externalReferenceNumber = "1236514",
+            ircs = "IRCS",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            creationDate = ZonedDateTime.now(),
+            validationDate = ZonedDateTime.now(),
+            value = Observation(reportingActor = reportingActor, title = "A title"),
+            isArchived = false,
+            isDeleted = false)
 
         // When
         val throwable = catchThrowable {

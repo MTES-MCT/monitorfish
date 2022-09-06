@@ -7,33 +7,33 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
 class ReportingDataOutput(
-        val id: Int? = null,
-        val type: ReportingType,
-        val vesselName: String? = null,
-        val internalReferenceNumber: String? = null,
-        val externalReferenceNumber: String? = null,
-        val ircs: String? = null,
-        val vesselIdentifier: VesselIdentifier,
-        val creationDate: ZonedDateTime,
-        val validationDate: ZonedDateTime? = null,
-        val value: ReportingValue,
-        val isArchived: Boolean,
-        val isDeleted: Boolean,
-        val infraction: InfractionDataOutput? = null) {
+    val id: Int? = null,
+    val type: ReportingType,
+    val vesselName: String? = null,
+    val internalReferenceNumber: String? = null,
+    val externalReferenceNumber: String? = null,
+    val ircs: String? = null,
+    val vesselIdentifier: VesselIdentifier,
+    val creationDate: ZonedDateTime,
+    val validationDate: ZonedDateTime? = null,
+    val value: ReportingValue,
+    val isArchived: Boolean,
+    val isDeleted: Boolean,
+    val infraction: InfractionDataOutput? = null) {
     companion object {
         fun fromReporting(reporting: Reporting) = ReportingDataOutput(
-                id = reporting.id,
-                type = reporting.type,
-                vesselName = reporting.vesselName,
-                internalReferenceNumber = reporting.internalReferenceNumber,
-                externalReferenceNumber = reporting.externalReferenceNumber,
-                ircs = reporting.ircs,
-                vesselIdentifier = reporting.vesselIdentifier,
-                creationDate = reporting.creationDate,
-                validationDate = reporting.validationDate,
-                value = reporting.value,
-                isArchived = reporting.isArchived,
-                isDeleted = reporting.isDeleted,
-                infraction = reporting.infraction?.let { InfractionDataOutput.fromInfraction(it) })
+            id = reporting.id,
+            type = reporting.type,
+            vesselName = reporting.vesselName,
+            internalReferenceNumber = reporting.internalReferenceNumber,
+            externalReferenceNumber = reporting.externalReferenceNumber,
+            ircs = reporting.ircs,
+            vesselIdentifier = reporting.vesselIdentifier,
+            creationDate = reporting.creationDate,
+            validationDate = reporting.validationDate,
+            value = reporting.value,
+            isArchived = reporting.isArchived,
+            isDeleted = reporting.isDeleted,
+            infraction = reporting.infraction?.let { InfractionDataOutput.fromInfraction(it) })
     }
 }

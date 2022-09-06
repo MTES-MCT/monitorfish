@@ -9,16 +9,16 @@ import javax.persistence.Table
 @Entity
 @Table(name = "fao_areas")
 data class FAOAreasEntity(
-        @Id
-        @Column(name = "f_code")
-        val faoCode: String,
-        @Column(name = "f_subarea")
-        val subArea: String? = null,
-        @Column(name = "f_division")
-        val division: String? = null) {
+    @Id
+    @Column(name = "f_code")
+    val faoCode: String,
+    @Column(name = "f_subarea")
+    val subArea: String? = null,
+    @Column(name = "f_division")
+    val division: String? = null) {
 
-        fun toFAOArea() = FAOArea(
-                faoCode = faoCode,
-                subArea = subArea,
-                division = division)
+    fun toFAOArea() = FAOArea(
+        faoCode = faoCode,
+        subArea = subArea,
+        division = division)
 }

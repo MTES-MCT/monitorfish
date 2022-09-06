@@ -17,7 +17,7 @@ class UnitsController(private val getAllControllers: GetAllControllers) {
     @ApiOperation("Get all controllers")
     fun getControlObjectivesOfYear(): List<ControllerDataOutput> {
         return getAllControllers.execute().map { controller ->
-            ControllerDataOutput.fromController (controller)
+            ControllerDataOutput.fromController(controller)
         }
     }
 

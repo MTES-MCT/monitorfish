@@ -2,9 +2,9 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
+import fr.gouv.cnsp.monitorfish.domain.entities.controls.*
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
@@ -49,39 +49,39 @@ class GetVesselControlsUTests {
         val gearControls = listOf(gearControl)
 
         val expectedControlsAndInfractionIds = listOf(
-                ControlAndInfractionIds(
-                        Control(id = 1,
-                                vesselId = 1,
-                                portLocode = "AEFAT",
-                                controlType = ControlType.LAND.value,
-                                gearControls = gearControls,
-                                controller = Controller(1, "Controlleur"),
-                                seizure = true,
-                                diversion = false,
-                                escortToQuay = true),
-                        listOf(1)),
-                ControlAndInfractionIds(
-                        Control(id = 1,
-                                vesselId = 1,
-                                controlType = ControlType.SEA.value,
-                                controller = Controller(1, "Controlleur"),
-                                seizure = false,
-                                diversion = true,
-                                escortToQuay = false),
-                        listOf(1, 2)),
-                ControlAndInfractionIds(
-                        Control(id = 1,
-                                vesselId = 1,
-                                controlType = ControlType.SEA.value,
-                                controller = Controller(1, "Controlleur"),
-                                seizure = false,
-                                diversion = true,
-                                escortToQuay = true),
-                        listOf(1, 2)))
+            ControlAndInfractionIds(
+                Control(id = 1,
+                    vesselId = 1,
+                    portLocode = "AEFAT",
+                    controlType = ControlType.LAND.value,
+                    gearControls = gearControls,
+                    controller = Controller(1, "Controlleur"),
+                    seizure = true,
+                    diversion = false,
+                    escortToQuay = true),
+                listOf(1)),
+            ControlAndInfractionIds(
+                Control(id = 1,
+                    vesselId = 1,
+                    controlType = ControlType.SEA.value,
+                    controller = Controller(1, "Controlleur"),
+                    seizure = false,
+                    diversion = true,
+                    escortToQuay = false),
+                listOf(1, 2)),
+            ControlAndInfractionIds(
+                Control(id = 1,
+                    vesselId = 1,
+                    controlType = ControlType.SEA.value,
+                    controller = Controller(1, "Controlleur"),
+                    seizure = false,
+                    diversion = true,
+                    escortToQuay = true),
+                listOf(1, 2)))
         given(controlRepository.findVesselControlsAfterDateTime(any(), any())).willReturn(expectedControlsAndInfractionIds)
         given(infractionRepository.findInfractions(listOf(1))).willReturn(listOf(Infraction(1, infractionCategory = InfractionCategory.FISHING.value)))
         given(infractionRepository.findInfractions(listOf(1, 2))).willReturn(listOf(
-                Infraction(1, infractionCategory = InfractionCategory.FISHING.value), Infraction(2, infractionCategory = InfractionCategory.SECURITY.value)))
+            Infraction(1, infractionCategory = InfractionCategory.FISHING.value), Infraction(2, infractionCategory = InfractionCategory.SECURITY.value)))
         given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
         given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chalut de fond"))
 

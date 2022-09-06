@@ -12,7 +12,7 @@ enum class LogbookOperationTypeMapping(private val clazz: Class<out LogbookMessa
 
     companion object {
         fun getClassFromName(operationType: String): Class<out LogbookMessageValue> {
-            return values().first{ it.name == operationType }.getImplementation()
+            return values().first { it.name == operationType }.getImplementation()
         }
     }
 }

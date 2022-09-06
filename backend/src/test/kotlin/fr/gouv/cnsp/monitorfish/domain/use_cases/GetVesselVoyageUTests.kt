@@ -4,8 +4,8 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.times
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
-import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVoyage
@@ -41,7 +41,7 @@ class GetVesselVoyageUTests {
 
         // When
         val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
-                .execute("FR224226850", VoyageRequest.LAST, null)
+            .execute("FR224226850", VoyageRequest.LAST, null)
 
         val (_, alerts) = voyage.logbookMessagesAndAlerts
 
@@ -61,7 +61,7 @@ class GetVesselVoyageUTests {
         // When
         val throwable = catchThrowable {
             GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
-                    .execute("FR224226850", VoyageRequest.PREVIOUS, null)
+                .execute("FR224226850", VoyageRequest.PREVIOUS, null)
         }
 
         // Then
@@ -79,7 +79,7 @@ class GetVesselVoyageUTests {
 
         // When
         val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
-                .execute("FR224226850", VoyageRequest.LAST, "12345")
+            .execute("FR224226850", VoyageRequest.LAST, "12345")
 
         val (_, alerts) = voyage.logbookMessagesAndAlerts
 
@@ -105,7 +105,7 @@ class GetVesselVoyageUTests {
 
         // When
         val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
-                .execute("FR224226850", VoyageRequest.NEXT, "123456788")
+            .execute("FR224226850", VoyageRequest.NEXT, "123456788")
 
         val (_, alerts) = voyage.logbookMessagesAndAlerts
 

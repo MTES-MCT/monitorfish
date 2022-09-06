@@ -47,27 +47,27 @@ class DataReferentialControllerITests {
 
         // When
         mockMvc.perform(get("/bff/v1/gears"))
-                // Then
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.length()", equalTo(1)))
-                .andExpect(jsonPath("$[0].code", equalTo("CHL")))
-                .andExpect(jsonPath("$[0].name", equalTo("SUPER CHALUT")))
-                .andExpect(jsonPath("$[0].category", equalTo("CHALUT")))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].code", equalTo("CHL")))
+            .andExpect(jsonPath("$[0].name", equalTo("SUPER CHALUT")))
+            .andExpect(jsonPath("$[0].category", equalTo("CHALUT")))
     }
 
     @Test
     fun `Should get all species`() {
         // Given
         given(this.getAllSpeciesAndSpeciesGroups.execute()).willReturn(SpeciesAndSpeciesGroups(
-                listOf(Species("FAK", "Facochère")),
-                listOf(SpeciesGroup("FAKOKO", "Facochère group"))))
+            listOf(Species("FAK", "Facochère")),
+            listOf(SpeciesGroup("FAKOKO", "Facochère group"))))
 
         // When
         mockMvc.perform(get("/bff/v1/species"))
-                // Then
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.species.length()", equalTo(1)))
-                .andExpect(jsonPath("$.groups.length()", equalTo(1)))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.species.length()", equalTo(1)))
+            .andExpect(jsonPath("$.groups.length()", equalTo(1)))
     }
 
     @Test
@@ -77,9 +77,9 @@ class DataReferentialControllerITests {
 
         // When
         mockMvc.perform(get("/bff/v1/fao_areas"))
-                // Then
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.length()", equalTo(5)))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(5)))
     }
 
 }

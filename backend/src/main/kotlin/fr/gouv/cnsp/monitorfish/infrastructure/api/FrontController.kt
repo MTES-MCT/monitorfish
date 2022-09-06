@@ -23,7 +23,7 @@ class FrontController : ErrorController {
 
     @GetMapping("/auth-callback", "/home")
     @ApiOperation("Get the Single Page Application index file")
-    fun redirectToSPA() : String {
+    fun redirectToSPA(): String {
         return "index.html"
     }
 
@@ -39,7 +39,7 @@ class FrontController : ErrorController {
     fun errorHandler(request: HttpServletRequest, webRequest: WebRequest, response: HttpServletResponse): String {
         val requestURI = request.getAttribute(requestURIAttribute)
 
-        return if(requestURI.toString().contains(api) || requestURI.toString().contains(bff)) {
+        return if (requestURI.toString().contains(api) || requestURI.toString().contains(bff)) {
             val errorJSON = getErrorJSON(webRequest)
             logger.error(errorJSON)
             buildErrorResponse(response, errorJSON)

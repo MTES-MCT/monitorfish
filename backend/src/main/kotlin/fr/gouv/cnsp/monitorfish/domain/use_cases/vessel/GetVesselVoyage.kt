@@ -1,11 +1,12 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagesAndAlerts
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertTypeMapping
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PNOAndLANAlertRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -56,12 +57,12 @@ class GetVesselVoyage(private val logbookReportRepository: LogbookReportReposito
         )
 
         return Voyage(
-                isLastVoyage,
-                isFirstVoyage,
-                trip.startDate,
-                trip.endDate,
-                trip.tripNumber,
-                LogbookMessagesAndAlerts(logbookMessages, alerts)
+            isLastVoyage,
+            isFirstVoyage,
+            trip.startDate,
+            trip.endDate,
+            trip.tripNumber,
+            LogbookMessagesAndAlerts(logbookMessages, alerts)
         )
     }
 

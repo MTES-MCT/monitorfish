@@ -14,14 +14,14 @@ class CreateFleetSegment(private val fleetSegmentRepository: FleetSegmentReposit
 
         val newSegment = fields.let {
             FleetSegment(
-                    segment = it.segment ?: "",
-                    segmentName = it.segmentName ?: "",
-                    dirm = listOf(),
-                    gears = it.gears ?: listOf(),
-                    faoAreas = it.faoAreas ?: listOf(),
-                    targetSpecies = it.targetSpecies ?: listOf(),
-                    bycatchSpecies = it.bycatchSpecies ?: listOf(),
-                    impactRiskFactor = it.impactRiskFactor ?: 0.0
+                segment = it.segment ?: "",
+                segmentName = it.segmentName ?: "",
+                dirm = listOf(),
+                gears = it.gears ?: listOf(),
+                faoAreas = it.faoAreas ?: listOf(),
+                targetSpecies = it.targetSpecies ?: listOf(),
+                bycatchSpecies = it.bycatchSpecies ?: listOf(),
+                impactRiskFactor = it.impactRiskFactor ?: 0.0
             )
         }
 

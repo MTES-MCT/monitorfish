@@ -1,15 +1,15 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.NotImplemented as NotImplementedMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP as DEPMessage
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DIS as DISMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.COE as COEMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.COX as COXMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.CRO as CROMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP as DEPMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DIS as DISMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.EOF as EOFMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR as FARMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LAN as LANMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.NotImplemented as NotImplementedMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO as PNOMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.RTP as RTPMessage
 
@@ -40,7 +40,7 @@ enum class LogbookMessageTypeMapping(private val clazz: Class<out LogbookMessage
 
     companion object {
         fun getClassFromName(messageType: String): Class<out LogbookMessageValue> {
-            return values().first{ it.name == messageType }.getImplementation()
+            return values().first { it.name == messageType }.getImplementation()
         }
     }
 }

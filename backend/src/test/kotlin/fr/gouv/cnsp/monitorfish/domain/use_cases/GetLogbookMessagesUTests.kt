@@ -3,12 +3,12 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
-import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
-import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
+import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
+import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyCorrectedLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyFluxAndVisioCaptureLogbookMessages
@@ -57,7 +57,7 @@ class GetLogbookMessagesUTests {
 
         // When
         val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(4)
@@ -118,7 +118,7 @@ class GetLogbookMessagesUTests {
 
         // When
         val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(2)
@@ -154,7 +154,7 @@ class GetLogbookMessagesUTests {
 
         // When
         val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -206,7 +206,7 @@ class GetLogbookMessagesUTests {
 
         // When
         val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -230,7 +230,7 @@ class GetLogbookMessagesUTests {
 
         // When
         val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(3)
@@ -256,7 +256,7 @@ class GetLogbookMessagesUTests {
 
         // When
         val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
-                .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
         assertThat(ersMessages).hasSize(4)

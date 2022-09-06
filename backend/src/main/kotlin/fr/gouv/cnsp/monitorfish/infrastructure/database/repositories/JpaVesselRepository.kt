@@ -49,6 +49,6 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
         }
 
         return dbVesselRepository.searchBy(searched)
-                .map { it.toVessel() }
+            .map { it.toVessel() }
     }
 }

@@ -12,6 +12,7 @@ class CRO() : LogbookMessageValue {
     var targetSpeciesOnExit: String? = null
     var targetSpeciesNameOnExit: String? = null
     var statisticalRectangleExited: String? = null
+
     @JsonProperty("effortZoneExitDatetimeUtc")
     var effortZoneExitDatetime: ZonedDateTime? = null
 
@@ -23,6 +24,7 @@ class CRO() : LogbookMessageValue {
     var targetSpeciesOnEntry: String? = null
     var targetSpeciesNameOnEntry: String? = null
     var statisticalRectangleEntered: String? = null
+
     @JsonProperty("effortZoneEntryDatetimeUtc")
     var effortZoneEntryDatetime: ZonedDateTime? = null
 }

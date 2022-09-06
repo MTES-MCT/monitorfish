@@ -9,7 +9,6 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.containers.output.OutputFrame
 import org.testcontainers.containers.output.ToStringConsumer
 import org.testcontainers.containers.wait.strategy.Wait
-import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.Duration
 import java.time.temporal.ChronoUnit
@@ -25,17 +24,17 @@ abstract class AbstractDBTests {
 
         init {
             container = GenericContainer<Nothing>("timescale/timescaledb-postgis:1.7.4-pg11")
-                    .apply {
-                        withExposedPorts(5432)
-                        withEnv("POSTGRES_DB", "testdb")
-                        withEnv("POSTGRES_USER", "postgres")
-                        withEnv("POSTGRES_PASSWORD", "postgres")
-                        waitingFor(
-                                Wait.forLogMessage(".*ready to accept connections.*\\s", 2)
-                        );
-                        withStartupTimeout(Duration.of(60L, ChronoUnit.SECONDS))
-                        this.start()
-                    }
+                .apply {
+                    withExposedPorts(5432)
+                    withEnv("POSTGRES_DB", "testdb")
+                    withEnv("POSTGRES_USER", "postgres")
+                    withEnv("POSTGRES_PASSWORD", "postgres")
+                    waitingFor(
+                        Wait.forLogMessage(".*ready to accept connections.*\\s", 2)
+                    );
+                    withStartupTimeout(Duration.of(60L, ChronoUnit.SECONDS))
+                    this.start()
+                }
         }
 
         @JvmStatic

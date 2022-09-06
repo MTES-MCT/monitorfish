@@ -10,10 +10,10 @@ data class SpeciesLastPositionDataOutput(
 ) {
     companion object {
         fun fromSpeciesLastPosition(species: Species) = SpeciesLastPositionDataOutput(
-                weight = species.weight,
-                species = species.species,
-                faoZone = species.faoZone,
-                gear = species.gear
+            weight = species.weight,
+            species = species.species,
+            faoZone = species.faoZone,
+            gear = species.gear
         )
     }
 }

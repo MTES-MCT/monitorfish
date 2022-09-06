@@ -11,7 +11,7 @@ internal class PNOAndLANWeightToleranceUTests {
     fun `getPercentBetweenLANAndPNO Should return percent difference between PNO and LAN`() {
         // When LAN is 10% above than PNO
         val percent = PNOAndLANWeightTolerance(10.0, 50.0)
-                .getPercentBetweenLANAndPNO(155.0, 100.0)
+            .getPercentBetweenLANAndPNO(155.0, 100.0)
 
         assertThat(percent.toInt()).isEqualTo(35)
     }
@@ -20,7 +20,7 @@ internal class PNOAndLANWeightToleranceUTests {
     fun `getPercentBetweenLANAndPNO Should return percent difference between LAN and PNO`() {
         // When PNO is 10% above than LAN
         val percent = PNOAndLANWeightTolerance(10.0, 50.0)
-                .getPercentBetweenLANAndPNO(110.0, 180.0)
+            .getPercentBetweenLANAndPNO(110.0, 180.0)
 
         assertThat(percent.toInt()).isEqualTo(63)
     }

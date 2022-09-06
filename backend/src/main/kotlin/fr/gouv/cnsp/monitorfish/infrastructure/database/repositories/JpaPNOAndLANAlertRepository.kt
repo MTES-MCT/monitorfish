@@ -20,6 +20,6 @@ class JpaPNOAndLANAlertRepository(private val dbPNOAndLANAlertRepository: DBPNOA
         val rulesAsString = types.map { it.name }
 
         return dbPNOAndLANAlertRepository.findAlertsOfRules(rulesAsString, internalReferenceNumber, tripNumber)
-                .map { it.toAlert(mapper) }
+            .map { it.toAlert(mapper) }
     }
 }

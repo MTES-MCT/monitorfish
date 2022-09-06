@@ -14,7 +14,7 @@ class JpaLogbookRawMessageRepository(private val DBLogbookRawMessageRepository: 
     override fun findRawMessage(operationNumber: String): String? {
         return try {
             DBLogbookRawMessageRepository.findByOperationNumberEquals(operationNumber)
-                    .rawMessage
+                .rawMessage
         } catch (e: EmptyResultDataAccessException) {
             throw NoERSMessagesFound("Raw message of operation number $operationNumber not found")
         }

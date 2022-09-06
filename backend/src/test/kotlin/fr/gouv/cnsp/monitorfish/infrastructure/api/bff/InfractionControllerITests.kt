@@ -30,16 +30,16 @@ class InfractionControllerITests {
     fun `Should get all fishing infractions`() {
         // Given
         given(this.getFishingInfractions.execute()).willReturn(listOf(
-                Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value),
-                Infraction(1, natinfCode = "7065", infractionCategory = InfractionCategory.FISHING.value)))
+            Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value),
+            Infraction(1, natinfCode = "7065", infractionCategory = InfractionCategory.FISHING.value)))
 
         // When
         mockMvc.perform(get("/bff/v1/infractions"))
-                // Then
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.length()", equalTo(2)))
-                .andExpect(jsonPath("$[0].natinfCode", equalTo("7059")))
-                .andExpect(jsonPath("$[1].natinfCode", equalTo("7065")))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].natinfCode", equalTo("7059")))
+            .andExpect(jsonPath("$[1].natinfCode", equalTo("7065")))
     }
 
 }

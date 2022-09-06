@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class MonitorFishApplication
 
 fun main(args: Array<String>) {
-	runApplication<MonitorFishApplication>(*args)
+    runApplication<MonitorFishApplication>(*args)
 }

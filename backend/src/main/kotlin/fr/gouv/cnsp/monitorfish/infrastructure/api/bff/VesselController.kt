@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselBeaconMalfunctions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
@@ -24,15 +23,15 @@ import javax.websocket.server.PathParam
 @RequestMapping("/bff/v1/vessels")
 @Api(description = "APIs for Vessels")
 class VesselController(
-        private val getLastPositions: GetLastPositions,
-        private val getVessel: GetVessel,
-        private val getVesselPositions: GetVesselPositions,
-        private val getVesselVoyage: GetVesselVoyage,
-        private val searchVessels: SearchVessels,
-        private val getVesselControls: GetVesselControls,
-        private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
-        private val getVesselReportings: GetVesselReportings,
-        meterRegistry: MeterRegistry) {
+    private val getLastPositions: GetLastPositions,
+    private val getVessel: GetVessel,
+    private val getVesselPositions: GetVesselPositions,
+    private val getVesselVoyage: GetVesselVoyage,
+    private val searchVessels: SearchVessels,
+    private val getVesselControls: GetVesselControls,
+    private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
+    private val getVesselReportings: GetVesselReportings,
+    meterRegistry: MeterRegistry) {
 
     // TODO Move this the it's own infrastructure Metric class
     val vesselsTimer = meterRegistry.timer("ws_vessel_requests_latency_seconds_summary");
@@ -81,13 +80,13 @@ class VesselController(
             val start = System.currentTimeMillis()
 
             val (vesselTrackHasBeenModified, vesselWithData) = getVessel.execute(
-                    internalReferenceNumber,
-                    externalReferenceNumber,
-                    IRCS,
-                    trackDepth,
-                    vesselIdentifier,
-                    afterDateTime,
-                    beforeDateTime)
+                internalReferenceNumber,
+                externalReferenceNumber,
+                IRCS,
+                trackDepth,
+                vesselIdentifier,
+                afterDateTime,
+                beforeDateTime)
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
@@ -116,11 +115,11 @@ class VesselController(
                                     @DateTimeFormat(pattern = zoneDateTimePattern)
                                     afterDateTime: ZonedDateTime): BeaconMalfunctionsResumeAndHistoryDataOutput {
         val beaconMalfunctionsWithDetails = getVesselBeaconMalfunctions.execute(
-                internalReferenceNumber,
-                externalReferenceNumber,
-                IRCS,
-                vesselIdentifier,
-                afterDateTime)
+            internalReferenceNumber,
+            externalReferenceNumber,
+            IRCS,
+            vesselIdentifier,
+            afterDateTime)
 
         return BeaconMalfunctionsResumeAndHistoryDataOutput.fromBeaconMalfunctionsResumeAndHistory(beaconMalfunctionsWithDetails)
     }
@@ -154,13 +153,13 @@ class VesselController(
             val start = System.currentTimeMillis()
 
             val (vesselTrackHasBeenModified, positions) = getVesselPositions.execute(
-                    internalReferenceNumber,
-                    externalReferenceNumber,
-                    IRCS,
-                    trackDepth,
-                    vesselIdentifier,
-                    afterDateTime,
-                    beforeDateTime)
+                internalReferenceNumber,
+                externalReferenceNumber,
+                IRCS,
+                trackDepth,
+                vesselIdentifier,
+                afterDateTime,
+                beforeDateTime)
 
             val returnCode = if (vesselTrackHasBeenModified) HttpStatus.ACCEPTED else HttpStatus.OK
 
@@ -210,11 +209,11 @@ class VesselController(
                            @DateTimeFormat(pattern = zoneDateTimePattern)
                            fromDate: ZonedDateTime): CurrentAndArchivedReportingDataOutput {
         val currentAndArchivedReportings = getVesselReportings.execute(
-                internalReferenceNumber,
-                externalReferenceNumber,
-                IRCS,
-                vesselIdentifier,
-                fromDate)
+            internalReferenceNumber,
+            externalReferenceNumber,
+            IRCS,
+            vesselIdentifier,
+            fromDate)
 
         return CurrentAndArchivedReportingDataOutput.fromCurrentAndArchivedReporting(currentAndArchivedReportings)
     }

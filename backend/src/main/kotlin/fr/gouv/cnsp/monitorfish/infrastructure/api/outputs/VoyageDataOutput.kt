@@ -13,13 +13,13 @@ data class VoyageDataOutput(
     companion object {
         fun fromVoyage(voyage: Voyage): VoyageDataOutput {
             return VoyageDataOutput(
-                    isLastVoyage = voyage.isLastVoyage,
-                    isFirstVoyage = voyage.isFirstVoyage,
-                    startDate = voyage.startDate,
-                    endDate = voyage.endDate,
-                    tripNumber = voyage.tripNumber,
-                    logbookMessagesAndAlerts = LogbookMessagesAndAlertsDataOutput
-                            .fromLogbookMessagesAndAlerts(voyage.logbookMessagesAndAlerts)
+                isLastVoyage = voyage.isLastVoyage,
+                isFirstVoyage = voyage.isFirstVoyage,
+                startDate = voyage.startDate,
+                endDate = voyage.endDate,
+                tripNumber = voyage.tripNumber,
+                logbookMessagesAndAlerts = LogbookMessagesAndAlertsDataOutput
+                    .fromLogbookMessagesAndAlerts(voyage.logbookMessagesAndAlerts)
             )
         }
     }

@@ -9,9 +9,9 @@ data class ControllerDataOutput(
 ) {
     companion object {
         fun fromController(controller: Controller) = ControllerDataOutput(
-                controller = controller.controller,
-                controllerType = controller.controllerType,
-                administration = controller.administration
+            controller = controller.controller,
+            controllerType = controller.controllerType,
+            administration = controller.administration
         )
     }
 }

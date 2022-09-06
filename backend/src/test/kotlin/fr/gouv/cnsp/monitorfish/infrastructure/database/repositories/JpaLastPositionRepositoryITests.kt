@@ -111,10 +111,10 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
         // When
         jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                "ABC000926735",
-                isValidated = true)
+            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            "ABC000926735",
+            isValidated = true)
 
         // Then
         val lastPositions = jpaLastPositionRepository.findAll()
@@ -137,10 +137,10 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
         // When
         jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                "ABC000339263",
-                isValidated = false)
+            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            "ABC000339263",
+            isValidated = false)
 
         // Then
         val lastPositions = jpaLastPositionRepository.findAll()
@@ -162,10 +162,10 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
         // When
         jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
-                AlertTypeMapping.MISSING_FAR_ALERT,
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                "ABC000498845",
-                isValidated = false)
+            AlertTypeMapping.MISSING_FAR_ALERT,
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            "ABC000498845",
+            isValidated = false)
 
         // Then
         val lastPositions = jpaLastPositionRepository.findAll()

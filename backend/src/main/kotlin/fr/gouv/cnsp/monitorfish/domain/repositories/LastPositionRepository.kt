@@ -14,6 +14,7 @@ interface LastPositionRepository {
                                                           vesselIdentifier: VesselIdentifier,
                                                           value: String,
                                                           isValidated: Boolean)
+
     // For test purpose
     fun deleteAll()
 }

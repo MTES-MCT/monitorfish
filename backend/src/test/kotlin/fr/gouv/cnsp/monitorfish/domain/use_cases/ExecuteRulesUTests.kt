@@ -28,13 +28,13 @@ class ExecuteRulesUTests {
     fun `execute Should call executePNOAndLANWeightTolerance When a PNOAndLANWeightTolerance rule is found`() {
         // Given
         val rule = Rule(UUID.randomUUID(),
-                "Save an alert when PNO and LAN weights are below tolerance",
-                true,
-                ZonedDateTime.now(),
-                null,
-                null,
-                null,
-                PNOAndLANWeightTolerance(10.0)
+            "Save an alert when PNO and LAN weights are below tolerance",
+            true,
+            ZonedDateTime.now(),
+            null,
+            null,
+            null,
+            PNOAndLANWeightTolerance(10.0)
         )
         given(rulesRepository.findAll()).willReturn(listOf(rule))
 

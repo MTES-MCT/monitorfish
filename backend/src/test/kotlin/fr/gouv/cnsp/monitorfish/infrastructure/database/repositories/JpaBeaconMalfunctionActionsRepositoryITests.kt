@@ -37,12 +37,12 @@ class JpaBeaconMalfunctionActionsRepositoryITests : AbstractDBTests() {
 
         // When
         val action = BeaconMalfunctionAction(
-                null,
-                1,
-                BeaconMalfunctionActionPropertyName.STAGE,
-                Stage.CROSS_CHECK.toString(),
-                Stage.FOUR_HOUR_REPORT.toString(),
-                ZonedDateTime.now())
+            null,
+            1,
+            BeaconMalfunctionActionPropertyName.STAGE,
+            Stage.CROSS_CHECK.toString(),
+            Stage.FOUR_HOUR_REPORT.toString(),
+            ZonedDateTime.now())
         jpaBeaconMalfunctionActionsRepository.save(action)
 
         // Then

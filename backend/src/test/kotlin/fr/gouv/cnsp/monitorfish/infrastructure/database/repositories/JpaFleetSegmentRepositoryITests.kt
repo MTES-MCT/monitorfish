@@ -114,14 +114,14 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
 
         // When
         jpaFleetSegmentRepository.create(FleetSegment(
-                segment = "SEGMENT1",
-                segmentName = "A NAME",
-                dirm = listOf(),
-                gears = listOf(),
-                faoAreas = listOf(),
-                targetSpecies = listOf(),
-                bycatchSpecies = listOf(),
-                impactRiskFactor = 2.3))
+            segment = "SEGMENT1",
+            segmentName = "A NAME",
+            dirm = listOf(),
+            gears = listOf(),
+            faoAreas = listOf(),
+            targetSpecies = listOf(),
+            bycatchSpecies = listOf(),
+            impactRiskFactor = 2.3))
 
         // Then
         val createdFleetSegment = jpaFleetSegmentRepository.findAll().find { it.segment == "SEGMENT1" }

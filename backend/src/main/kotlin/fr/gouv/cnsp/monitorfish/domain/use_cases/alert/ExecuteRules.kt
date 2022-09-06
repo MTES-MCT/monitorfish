@@ -20,7 +20,7 @@ class ExecuteRules(private val ruleRepository: RuleRepository,
     fun execute() {
         logger.info("RULES: Starting rules executor")
         val rules = ruleRepository.findAll()
-                .filter { it.active }
+            .filter { it.active }
         logger.info("RULES: Found ${rules.size} rules to execute")
 
         rules.forEach {

@@ -1,8 +1,11 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionWithDetails
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeaconMalfunctionsResume
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeaconMalfunctionsResumeAndHistory
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionCommentsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
@@ -27,10 +30,10 @@ class GetVesselBeaconMalfunctions(private val beaconMalfunctionsRepository: Beac
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
                 beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(vesselIdentifier, externalReferenceNumber, afterDateTime)
             else -> beaconMalfunctionsRepository.findAllByVesselWithoutVesselIdentifier(
-                    internalReferenceNumber,
-                    externalReferenceNumber,
-                    ircs,
-                    afterDateTime)
+                internalReferenceNumber,
+                externalReferenceNumber,
+                ircs,
+                afterDateTime)
         }
 
         val beaconMalfunctionsWithDetails = beaconMalfunctions.map {
@@ -49,9 +52,9 @@ class GetVesselBeaconMalfunctions(private val beaconMalfunctionsRepository: Beac
         }
 
         return VesselBeaconMalfunctionsResumeAndHistory(
-                resume = resume,
-                current = currentBeaconMalfunction,
-                history = history
+            resume = resume,
+            current = currentBeaconMalfunction,
+            history = history
         )
     }
 }

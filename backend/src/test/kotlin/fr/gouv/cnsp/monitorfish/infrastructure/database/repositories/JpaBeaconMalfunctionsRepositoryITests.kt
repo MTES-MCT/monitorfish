@@ -61,11 +61,11 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // When
         assertThat(beaconMalfunctions.find { it.id == 1 }?.vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
         jpaBeaconMalfunctionsRepository.update(
-                id = 1,
-                vesselStatus = VesselStatus.AT_SEA,
-                null,
-                null,
-                updateDateTime)
+            id = 1,
+            vesselStatus = VesselStatus.AT_SEA,
+            null,
+            null,
+            updateDateTime)
 
         // Then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
@@ -83,11 +83,11 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         // When
         assertThat(beaconMalfunctions.find { it.id == 1 }?.vesselStatus).isEqualTo(VesselStatus.ACTIVITY_DETECTED)
         jpaBeaconMalfunctionsRepository.update(
-                id = 1,
-                null,
-                Stage.END_OF_MALFUNCTION,
-                EndOfBeaconMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION,
-                updateDateTime)
+            id = 1,
+            null,
+            Stage.END_OF_MALFUNCTION,
+            EndOfBeaconMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION,
+            updateDateTime)
 
         // Then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
@@ -102,10 +102,10 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
     fun `findAllByVesselWithoutVesselIdentifier Should return beacon attached to a vessel When there is no vessel identifier`() {
         // When
         val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllByVesselWithoutVesselIdentifier(
-                "FR263465414",
-                "",
-                "",
-                ZonedDateTime.now().minusYears(1))
+            "FR263465414",
+            "",
+            "",
+            ZonedDateTime.now().minusYears(1))
 
         assertThat(baconMalfunctions).hasSize(1)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")
@@ -122,7 +122,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
         // When
         jpaBeaconMalfunctionsRepository
-                .requestNotification(2, BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION)
+            .requestNotification(2, BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION)
 
         // then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }

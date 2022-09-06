@@ -45,11 +45,11 @@ class UpdateBeaconMalfunction(private val beaconMalfunctionsRepository: BeaconMa
         }
 
         val beaconMalfunctionAction = BeaconMalfunctionAction(
-                beaconMalfunctionId = id,
-                propertyName = propertyName,
-                previousValue = previousValue,
-                nextValue = nextValue,
-                dateTime = updateDateTime)
+            beaconMalfunctionId = id,
+            propertyName = propertyName,
+            previousValue = previousValue,
+            nextValue = nextValue,
+            dateTime = updateDateTime)
 
         beaconMalfunctionActionsRepository.save(beaconMalfunctionAction)
 

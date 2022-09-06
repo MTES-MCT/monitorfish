@@ -30,7 +30,7 @@ class AJPConfig {
         connector.secure = false
         connector.allowTrace = false
         (connector.protocolHandler as AbstractAjpProtocol<*>).secretRequired = false
-        (connector.protocolHandler as AbstractAjpProtocol<*>).address = InetAddress.getByName( "0.0.0.0" )
+        (connector.protocolHandler as AbstractAjpProtocol<*>).address = InetAddress.getByName("0.0.0.0")
 
         return connector
     }

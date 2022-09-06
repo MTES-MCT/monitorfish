@@ -13,10 +13,10 @@ class SaveBeaconMalfunctionComment(private val beaconMalfunctionCommentsReposito
     @Throws(IllegalArgumentException::class)
     fun execute(beaconMalfunctionId: Int, comment: String, userType: BeaconMalfunctionCommentUserType): BeaconMalfunctionResumeAndDetails {
         val beaconMalfunctionComment = BeaconMalfunctionComment(
-                beaconMalfunctionId = beaconMalfunctionId,
-                comment = comment,
-                userType = userType,
-                dateTime = ZonedDateTime.now())
+            beaconMalfunctionId = beaconMalfunctionId,
+            comment = comment,
+            userType = userType,
+            dateTime = ZonedDateTime.now())
 
         beaconMalfunctionCommentsRepository.save(beaconMalfunctionComment)
 

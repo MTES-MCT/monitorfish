@@ -5,18 +5,18 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import java.time.ZonedDateTime
 
 data class BeaconMalfunctionNotificationsDataOutput(
-        val beaconMalfunctionId: Int,
-        val dateTime: ZonedDateTime,
-        val notificationType: BeaconMalfunctionNotificationType,
-        val notifications: List<BeaconMalfunctionNotificationDataOutput>) {
+    val beaconMalfunctionId: Int,
+    val dateTime: ZonedDateTime,
+    val notificationType: BeaconMalfunctionNotificationType,
+    val notifications: List<BeaconMalfunctionNotificationDataOutput>) {
     companion object {
         fun fromBeaconMalfunctionNotifications(beaconMalfunctionNotifications: BeaconMalfunctionNotifications): BeaconMalfunctionNotificationsDataOutput =
-                BeaconMalfunctionNotificationsDataOutput(
-                        beaconMalfunctionId = beaconMalfunctionNotifications.beaconMalfunctionId,
-                        dateTime = beaconMalfunctionNotifications.dateTimeUtc,
-                        notificationType = beaconMalfunctionNotifications.notificationType,
-                        notifications = beaconMalfunctionNotifications.notifications
-                                .map { BeaconMalfunctionNotificationDataOutput.fromBeaconMalfunctionNotification(it) }
-                )
+            BeaconMalfunctionNotificationsDataOutput(
+                beaconMalfunctionId = beaconMalfunctionNotifications.beaconMalfunctionId,
+                dateTime = beaconMalfunctionNotifications.dateTimeUtc,
+                notificationType = beaconMalfunctionNotifications.notificationType,
+                notifications = beaconMalfunctionNotifications.notifications
+                    .map { BeaconMalfunctionNotificationDataOutput.fromBeaconMalfunctionNotification(it) }
+            )
     }
 }

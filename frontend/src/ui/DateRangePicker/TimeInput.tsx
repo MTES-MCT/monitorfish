@@ -14,7 +14,7 @@ export type TimeInputProps = Pick<NumberInputProps, 'onBack' | 'onPrevious' | 'o
   defaultValue?: TimeTuple
   minutesRange?: number
   /** Called each time the time input is changed to a new valid value. */
-  onChange: (newTimeTuple: TimeTuple) => Promisable<void>
+  onChange: (nextTimeTuple: TimeTuple) => Promisable<void>
   onFocus?: () => Promisable<void>
   onNext?: () => Promisable<void>
   onPrevious?: () => Promisable<void>
@@ -77,21 +77,21 @@ function TimeInputWithRef(
   )
 
   const handleRangedTimePickedChange = useCallback(
-    (newTimeTuple: TimeTuple) => {
+    (nextTimeTuple: TimeTuple) => {
       closeRangedTimePicker()
 
-      setControlledDefaultValue(newTimeTuple)
+      setControlledDefaultValue(nextTimeTuple)
 
-      onChange(newTimeTuple)
+      onChange(nextTimeTuple)
     },
     [closeRangedTimePicker, onChange],
   )
 
-  const handleHourInput = useCallback((newValue: string) => {
+  const handleHourInput = useCallback((nextValue: string) => {
     // eslint-disable-next-line no-nested-ternary
-    const newRangedTimePickerFilter = newValue.length ? new RegExp(`^${newValue}`) : /.*/
+    const nextRangedTimePickerFilter = nextValue.length ? new RegExp(`^${nextValue}`) : /.*/
 
-    setRangedTimePickerFilter(newRangedTimePickerFilter)
+    setRangedTimePickerFilter(nextRangedTimePickerFilter)
   }, [])
 
   const openRangedTimePicker = useCallback(() => {
@@ -125,8 +125,8 @@ function TimeInputWithRef(
 
     closeRangedTimePicker()
 
-    const newTimeTuple: TimeTuple = [hourInput.current.value, minuteInput.current.value]
-    onChange(newTimeTuple)
+    const nextTimeTuple: TimeTuple = [hourInput.current.value, minuteInput.current.value]
+    onChange(nextTimeTuple)
   }, [closeRangedTimePicker, onChange])
 
   return (

@@ -15,7 +15,7 @@ export type NumberInputProps = Omit<
   onBack?: () => Promisable<void>
   /** Called when the input value reaches the size property. */
   onFilled?: () => Promisable<void>
-  onInput?: (newValue: string) => Promisable<void>
+  onInput?: (nextValue: string) => Promisable<void>
   /** Called when the right arrow is pressed while the cursor is positionned at the input end. */
   onNext?: () => Promisable<void>
   /** Called when the left arrow is pressed while the cursor is positionned at the input start. */

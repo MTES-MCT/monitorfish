@@ -7,13 +7,13 @@ import java.time.ZonedDateTime
 
 @JsonTypeName("haul")
 class Haul() {
-    var gear: String? = null
-    var gearName: String? = null
-    var catches: List<Catch> = listOf()
-    var mesh: Double? = null
-    var latitude: Double? = null
-    var longitude: Double? = null
+  var gear: String? = null
+  var gearName: String? = null
+  var catches: List<Catch> = listOf()
+  var mesh: Double? = null
+  var latitude: Double? = null
+  var longitude: Double? = null
 
-    @JsonProperty("farDatetimeUtc")
-    var catchDateTime: ZonedDateTime? = null
+  @JsonProperty("farDatetimeUtc")
+  var catchDateTime: ZonedDateTime? = null
 }

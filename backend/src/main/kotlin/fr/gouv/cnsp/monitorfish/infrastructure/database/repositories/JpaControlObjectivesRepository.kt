@@ -12,49 +12,49 @@ import org.springframework.transaction.annotation.Transactional
 @Repository
 class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: DBControlObjectivesRepository) : ControlObjectivesRepository {
 
-    override fun findAllByYear(year: Int): List<ControlObjective> {
-        return dbControlObjectivesRepository.findAllByYearEquals(year).map {
-            it.toControlObjective()
-        }
+  override fun findAllByYear(year: Int): List<ControlObjective> {
+    return dbControlObjectivesRepository.findAllByYearEquals(year).map {
+      it.toControlObjective()
     }
+  }
 
-    override fun findYearEntries(): List<Int> {
-        return dbControlObjectivesRepository.findDistinctYears()
+  override fun findYearEntries(): List<Int> {
+    return dbControlObjectivesRepository.findDistinctYears()
+  }
+
+  @Transactional
+  override fun update(id: Int, targetNumberOfControlsAtSea: Int?, targetNumberOfControlsAtPort: Int?, controlPriorityLevel: Double?) {
+    try {
+      controlPriorityLevel?.let {
+        dbControlObjectivesRepository.updateControlPriorityLevel(id, it)
+      }
+
+      targetNumberOfControlsAtSea?.let {
+        dbControlObjectivesRepository.updateTargetNumberOfControlsAtSea(id, it)
+      }
+
+      targetNumberOfControlsAtPort?.let {
+        dbControlObjectivesRepository.updateTargetNumberOfControlsAtPort(id, it)
+      }
+    } catch (e: Throwable) {
+      throw CouldNotUpdateControlObjectiveException("Could not update control objective: ${e.message}")
     }
+  }
 
-    @Transactional
-    override fun update(id: Int, targetNumberOfControlsAtSea: Int?, targetNumberOfControlsAtPort: Int?, controlPriorityLevel: Double?) {
-        try {
-            controlPriorityLevel?.let {
-                dbControlObjectivesRepository.updateControlPriorityLevel(id, it)
-            }
-
-            targetNumberOfControlsAtSea?.let {
-                dbControlObjectivesRepository.updateTargetNumberOfControlsAtSea(id, it)
-            }
-
-            targetNumberOfControlsAtPort?.let {
-                dbControlObjectivesRepository.updateTargetNumberOfControlsAtPort(id, it)
-            }
-        } catch (e: Throwable) {
-            throw CouldNotUpdateControlObjectiveException("Could not update control objective: ${e.message}")
-        }
+  override fun delete(id: Int) {
+    try {
+      dbControlObjectivesRepository.deleteById(id)
+    } catch (e: Throwable) {
+      throw CouldNotDeleteException("Could not delete control objective: ${e.message}")
     }
+  }
 
-    override fun delete(id: Int) {
-        try {
-            dbControlObjectivesRepository.deleteById(id)
-        } catch (e: Throwable) {
-            throw CouldNotDeleteException("Could not delete control objective: ${e.message}")
-        }
-    }
+  override fun add(controlObjective: ControlObjective): Int {
+    return dbControlObjectivesRepository.save(ControlObjectivesEntity.fromControlObjective(controlObjective)).id!!
+  }
 
-    override fun add(controlObjective: ControlObjective): Int {
-        return dbControlObjectivesRepository.save(ControlObjectivesEntity.fromControlObjective(controlObjective)).id!!
-    }
-
-    @Transactional
-    override fun addYear(currentYear: Int, nextYear: Int) {
-        dbControlObjectivesRepository.insertNextYearFromCurrentYear(currentYear, nextYear)
-    }
+  @Transactional
+  override fun addYear(currentYear: Int, nextYear: Int) {
+    dbControlObjectivesRepository.insertNextYearFromCurrentYear(currentYear, nextYear)
+  }
 }

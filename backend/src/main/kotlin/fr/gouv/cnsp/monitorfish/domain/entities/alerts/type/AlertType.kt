@@ -5,7 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValue
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 abstract class AlertType(
-        val type: AlertTypeMapping,
-        open val seaFront: String? = null,
-        override val natinfCode: String? = null
-): ReportingValue(natinfCode)
+  val type: AlertTypeMapping,
+  open val seaFront: String? = null,
+  override val natinfCode: String? = null
+) : ReportingValue(natinfCode)

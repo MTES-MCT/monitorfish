@@ -19,66 +19,66 @@ import java.time.ZonedDateTime
 @ExtendWith(SpringExtension::class)
 class AddReportingUTests {
 
-    @MockBean
-    private lateinit var reportingRepository: ReportingRepository
+  @MockBean
+  private lateinit var reportingRepository: ReportingRepository
 
-    @Test
-    fun `execute Should throw an exception When the reporting is an alert`() {
-        // Given
-        val reportingToAdd = Reporting(
-                id = 1,
-                type = ReportingType.ALERT,
-                vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
-                ircs = "IRCS",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                creationDate = ZonedDateTime.now(),
-                validationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert() as ReportingValue,
-                isArchived = false,
-                isDeleted = false)
+  @Test
+  fun `execute Should throw an exception When the reporting is an alert`() {
+    // Given
+    val reportingToAdd = Reporting(
+      id = 1,
+      type = ReportingType.ALERT,
+      vesselName = "BIDUBULE",
+      internalReferenceNumber = "FR224226850",
+      externalReferenceNumber = "1236514",
+      ircs = "IRCS",
+      vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+      creationDate = ZonedDateTime.now(),
+      validationDate = ZonedDateTime.now(),
+      value = ThreeMilesTrawlingAlert() as ReportingValue,
+      isArchived = false,
+      isDeleted = false)
 
-        // When
-        val throwable = catchThrowable {
-            AddReporting(reportingRepository).execute(reportingToAdd)
-        }
-
-        // Then
-        assertThat(throwable.message).contains("The reporting type must be OBSERVATION or INFRACTION_SUSPICION")
+    // When
+    val throwable = catchThrowable {
+      AddReporting(reportingRepository).execute(reportingToAdd)
     }
 
-    @ParameterizedTest
-    @EnumSource(ReportingActor::class)
-    fun `execute Should throw an exception When fields of reporting actor are not rights`(reportingActor: ReportingActor) {
-        // Given
-        val reportingToAdd = Reporting(
-                id = 1,
-                type = ReportingType.OBSERVATION,
-                vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
-                ircs = "IRCS",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                creationDate = ZonedDateTime.now(),
-                validationDate = ZonedDateTime.now(),
-                value = Observation(reportingActor = reportingActor, title = "A title"),
-                isArchived = false,
-                isDeleted = false)
+    // Then
+    assertThat(throwable.message).contains("The reporting type must be OBSERVATION or INFRACTION_SUSPICION")
+  }
 
-        // When
-        val throwable = catchThrowable {
-            AddReporting(reportingRepository).execute(reportingToAdd)
-        }
+  @ParameterizedTest
+  @EnumSource(ReportingActor::class)
+  fun `execute Should throw an exception When fields of reporting actor are not rights`(reportingActor: ReportingActor) {
+    // Given
+    val reportingToAdd = Reporting(
+      id = 1,
+      type = ReportingType.OBSERVATION,
+      vesselName = "BIDUBULE",
+      internalReferenceNumber = "FR224226850",
+      externalReferenceNumber = "1236514",
+      ircs = "IRCS",
+      vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+      creationDate = ZonedDateTime.now(),
+      validationDate = ZonedDateTime.now(),
+      value = Observation(reportingActor = reportingActor, title = "A title"),
+      isArchived = false,
+      isDeleted = false)
 
-        // Then
-        when (reportingActor) {
-            ReportingActor.OPS -> assertThat(throwable.message).contains("An author trigram must be set")
-            ReportingActor.SIP -> assertThat(throwable.message).contains("An author trigram must be set")
-            ReportingActor.UNIT -> assertThat(throwable.message).contains("An unit must be set")
-            ReportingActor.DML -> assertThat(throwable.message).contains("An author contact must be set")
-            ReportingActor.DIRM -> assertThat(throwable.message).contains("An author contact must be set")
-            ReportingActor.OTHER -> assertThat(throwable.message).contains("An author contact must be set")
-        }
+    // When
+    val throwable = catchThrowable {
+      AddReporting(reportingRepository).execute(reportingToAdd)
     }
+
+    // Then
+    when (reportingActor) {
+      ReportingActor.OPS -> assertThat(throwable.message).contains("An author trigram must be set")
+      ReportingActor.SIP -> assertThat(throwable.message).contains("An author trigram must be set")
+      ReportingActor.UNIT -> assertThat(throwable.message).contains("An unit must be set")
+      ReportingActor.DML -> assertThat(throwable.message).contains("An author contact must be set")
+      ReportingActor.DIRM -> assertThat(throwable.message).contains("An author contact must be set")
+      ReportingActor.OTHER -> assertThat(throwable.message).contains("An author contact must be set")
+    }
+  }
 }

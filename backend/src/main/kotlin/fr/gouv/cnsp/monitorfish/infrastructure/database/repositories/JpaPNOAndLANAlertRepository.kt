@@ -12,14 +12,14 @@ import org.springframework.stereotype.Repository
 class JpaPNOAndLANAlertRepository(private val dbPNOAndLANAlertRepository: DBPNOAndLANAlertRepository,
                                   private val mapper: ObjectMapper) : PNOAndLANAlertRepository {
 
-    override fun save(alert: PNOAndLANAlert) {
-        dbPNOAndLANAlertRepository.save(AlertEntity.fromAlert(alert, mapper))
-    }
+  override fun save(alert: PNOAndLANAlert) {
+    dbPNOAndLANAlertRepository.save(AlertEntity.fromAlert(alert, mapper))
+  }
 
-    override fun findAlertsOfTypes(types: List<AlertTypeMapping>, internalReferenceNumber: String, tripNumber: String): List<PNOAndLANAlert> {
-        val rulesAsString = types.map { it.name }
+  override fun findAlertsOfTypes(types: List<AlertTypeMapping>, internalReferenceNumber: String, tripNumber: String): List<PNOAndLANAlert> {
+    val rulesAsString = types.map { it.name }
 
-        return dbPNOAndLANAlertRepository.findAlertsOfRules(rulesAsString, internalReferenceNumber, tripNumber)
-                .map { it.toAlert(mapper) }
-    }
+    return dbPNOAndLANAlertRepository.findAlertsOfRules(rulesAsString, internalReferenceNumber, tripNumber)
+      .map { it.toAlert(mapper) }
+  }
 }

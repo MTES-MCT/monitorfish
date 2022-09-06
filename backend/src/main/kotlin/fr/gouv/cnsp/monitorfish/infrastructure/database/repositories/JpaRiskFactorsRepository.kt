@@ -13,16 +13,16 @@ import org.springframework.stereotype.Repository
 @Repository
 class JpaRiskFactorsRepository(private val dbRiskFactorsRepository: DBRiskFactorsRepository,
                                private val mapper: ObjectMapper) : RiskFactorsRepository {
-    private val logger: Logger = LoggerFactory.getLogger(JpaRiskFactorsRepository::class.java)
+  private val logger: Logger = LoggerFactory.getLogger(JpaRiskFactorsRepository::class.java)
 
-    @Cacheable(value = ["risk_factors"])
-    override fun findVesselRiskFactors(internalReferenceNumber: String): VesselRiskFactor? {
-        try {
-            return dbRiskFactorsRepository.findByCfrEquals(internalReferenceNumber).toVesselRiskFactor(mapper)
-        } catch (e: EmptyResultDataAccessException) {
-            logger.warn("No current segment found for CFR $internalReferenceNumber", e)
-        }
-
-        return null
+  @Cacheable(value = ["risk_factors"])
+  override fun findVesselRiskFactors(internalReferenceNumber: String): VesselRiskFactor? {
+    try {
+      return dbRiskFactorsRepository.findByCfrEquals(internalReferenceNumber).toVesselRiskFactor(mapper)
+    } catch (e: EmptyResultDataAccessException) {
+      logger.warn("No current segment found for CFR $internalReferenceNumber", e)
     }
+
+    return null
+  }
 }

@@ -12,55 +12,55 @@ import java.time.ZonedDateTime
 @UseCase
 class GetVesselReportings(private val reportingRepository: ReportingRepository,
                           private val infractionRepository: InfractionRepository) {
-    private val logger = LoggerFactory.getLogger(GetVesselReportings::class.java)
+  private val logger = LoggerFactory.getLogger(GetVesselReportings::class.java)
 
-    fun execute(internalReferenceNumber: String,
-                externalReferenceNumber: String,
-                ircs: String,
-                vesselIdentifier: VesselIdentifier?,
-                fromDate: ZonedDateTime): CurrentAndArchivedReportings {
-        val reportings = when (vesselIdentifier) {
-            VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
-                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, internalReferenceNumber, fromDate)
-            VesselIdentifier.IRCS ->
-                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, ircs, fromDate)
-            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
-                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, externalReferenceNumber, fromDate)
-            else -> reportingRepository.findCurrentAndArchivedWithoutVesselIdentifier(
-                    internalReferenceNumber,
-                    externalReferenceNumber,
-                    ircs,
-                    fromDate)
+  fun execute(internalReferenceNumber: String,
+              externalReferenceNumber: String,
+              ircs: String,
+              vesselIdentifier: VesselIdentifier?,
+              fromDate: ZonedDateTime): CurrentAndArchivedReportings {
+    val reportings = when (vesselIdentifier) {
+      VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
+        reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, internalReferenceNumber, fromDate)
+      VesselIdentifier.IRCS ->
+        reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, ircs, fromDate)
+      VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
+        reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, externalReferenceNumber, fromDate)
+      else -> reportingRepository.findCurrentAndArchivedWithoutVesselIdentifier(
+        internalReferenceNumber,
+        externalReferenceNumber,
+        ircs,
+        fromDate)
+    }
+
+    val current = reportings
+      .filter { !it.isArchived }
+      .map { report ->
+        report.value.natinfCode?.let {
+          try {
+            report.infraction = infractionRepository.findInfractionByNatinfCode(it)
+          } catch (e: NatinfCodeNotFoundException) {
+            logger.warn(e.message)
+          }
         }
 
-        val current = reportings
-                .filter { !it.isArchived }
-                .map { report ->
-                    report.value.natinfCode?.let {
-                        try {
-                            report.infraction = infractionRepository.findInfractionByNatinfCode(it)
-                        } catch (e: NatinfCodeNotFoundException) {
-                            logger.warn(e.message)
-                        }
-                    }
+        report
+      }
 
-                    report
-                }
+    val archived = reportings
+      .filter { it.isArchived }
+      .map { report ->
+        report.value.natinfCode?.let {
+          try {
+            report.infraction = infractionRepository.findInfractionByNatinfCode(it)
+          } catch (e: NatinfCodeNotFoundException) {
+            logger.warn(e.message)
+          }
+        }
 
-        val archived = reportings
-                .filter { it.isArchived }
-                .map { report ->
-                    report.value.natinfCode?.let {
-                        try {
-                            report.infraction = infractionRepository.findInfractionByNatinfCode(it)
-                        } catch (e: NatinfCodeNotFoundException) {
-                            logger.warn(e.message)
-                        }
-                    }
+        report
+      }
 
-                    report
-                }
-
-        return CurrentAndArchivedReportings(current, archived)
-    }
+    return CurrentAndArchivedReportings(current, archived)
+  }
 }

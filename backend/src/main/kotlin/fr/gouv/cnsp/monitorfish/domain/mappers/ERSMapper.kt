@@ -10,23 +10,23 @@ import org.springframework.stereotype.Component
 
 @Component
 object ERSMapper {
-    private const val jsonbNullString = "null"
+  private const val jsonbNullString = "null"
 
-    fun getERSMessageValueFromJSON(mapper: ObjectMapper, message: String?, messageType: String?, operationType: LogbookOperationType): LogbookMessageValue? {
-        return try {
-            if (operationType == LogbookOperationType.RET && !message.isNullOrEmpty() && message != jsonbNullString) {
-                val classType = LogbookOperationTypeMapping.getClassFromName(operationType.name)
+  fun getERSMessageValueFromJSON(mapper: ObjectMapper, message: String?, messageType: String?, operationType: LogbookOperationType): LogbookMessageValue? {
+    return try {
+      if (operationType == LogbookOperationType.RET && !message.isNullOrEmpty() && message != jsonbNullString) {
+        val classType = LogbookOperationTypeMapping.getClassFromName(operationType.name)
 
-                mapper.readValue(message, classType)
-            } else if (!messageType.isNullOrEmpty() && !message.isNullOrEmpty() && message != jsonbNullString) {
-                val classType = LogbookMessageTypeMapping.getClassFromName(messageType)
+        mapper.readValue(message, classType)
+      } else if (!messageType.isNullOrEmpty() && !message.isNullOrEmpty() && message != jsonbNullString) {
+        val classType = LogbookMessageTypeMapping.getClassFromName(messageType)
 
-                mapper.readValue(message, classType)
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            throw EntityConversionException("Error while converting 'LogbookMessage'. $message", e)
-        }
+        mapper.readValue(message, classType)
+      } else {
+        null
+      }
+    } catch (e: Exception) {
+      throw EntityConversionException("Error while converting 'LogbookMessage'. $message", e)
     }
+  }
 }

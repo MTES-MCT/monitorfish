@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api")
 @Api(description = "External API")
 class ApiController(
-        private val parseAndSavePosition: ParseAndSavePosition,
-        private val meterRegistry: MeterRegistry) {
+  private val parseAndSavePosition: ParseAndSavePosition,
+  private val meterRegistry: MeterRegistry) {
 
-    val counter = meterRegistry.counter("ws_vessels_positions_received_counter")
+  val counter = meterRegistry.counter("ws_vessels_positions_received_counter")
 
-    @PostMapping(value = ["/v1/positions"])
-    @ApiOperation("Receive position")
-    @ResponseStatus(HttpStatus.CREATED)
-    fun postPosition(
-            @ApiParam("VMS NAF", required = true)
-            @RequestBody naf: String
-    ) {
-        counter.increment()
-        parseAndSavePosition.execute(naf)
-    }
+  @PostMapping(value = ["/v1/positions"])
+  @ApiOperation("Receive position")
+  @ResponseStatus(HttpStatus.CREATED)
+  fun postPosition(
+    @ApiParam("VMS NAF", required = true)
+    @RequestBody naf: String
+  ) {
+    counter.increment()
+    parseAndSavePosition.execute(naf)
+  }
 }

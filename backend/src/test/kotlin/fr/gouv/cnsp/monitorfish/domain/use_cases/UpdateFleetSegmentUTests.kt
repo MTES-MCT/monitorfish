@@ -14,30 +14,30 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 class UpdateFleetSegmentUTests {
 
-    @MockBean
-    private lateinit var fleetSegmentRepository: FleetSegmentRepository
+  @MockBean
+  private lateinit var fleetSegmentRepository: FleetSegmentRepository
 
-    @Test
-    fun `execute Should throw an exception When there is no fields given`() {
-        // When
-        val throwable = catchThrowable {
-            UpdateFleetSegment(fleetSegmentRepository).execute("SEGMENT", CreateOrUpdateFleetSegmentFields())
-        }
-
-        // Then
-        assertThat(throwable).isNotNull
-        assertThat(throwable.message).isEqualTo("No value to update")
+  @Test
+  fun `execute Should throw an exception When there is no fields given`() {
+    // When
+    val throwable = catchThrowable {
+      UpdateFleetSegment(fleetSegmentRepository).execute("SEGMENT", CreateOrUpdateFleetSegmentFields())
     }
 
-    @Test
-    fun `execute Should update repository When a field is given`() {
-        // Given
-        val fields = CreateOrUpdateFleetSegmentFields(bycatchSpecies = listOf("AMZ", "HKE"))
+    // Then
+    assertThat(throwable).isNotNull
+    assertThat(throwable.message).isEqualTo("No value to update")
+  }
 
-        // When
-        UpdateFleetSegment(fleetSegmentRepository).execute("SEGMENT", fields)
+  @Test
+  fun `execute Should update repository When a field is given`() {
+    // Given
+    val fields = CreateOrUpdateFleetSegmentFields(bycatchSpecies = listOf("AMZ", "HKE"))
 
-        // Then
-        Mockito.verify(fleetSegmentRepository).update("SEGMENT", fields)
-    }
+    // When
+    UpdateFleetSegment(fleetSegmentRepository).execute("SEGMENT", fields)
+
+    // Then
+    Mockito.verify(fleetSegmentRepository).update("SEGMENT", fields)
+  }
 }

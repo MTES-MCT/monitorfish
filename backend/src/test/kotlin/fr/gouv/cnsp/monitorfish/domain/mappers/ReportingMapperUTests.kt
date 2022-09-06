@@ -15,137 +15,137 @@ import org.springframework.context.annotation.Import
 @JsonTest
 class ReportingMapperUTests {
 
-    @Autowired
-    private lateinit var mapper: ObjectMapper
+  @Autowired
+  private lateinit var mapper: ObjectMapper
 
-    @Test
-    fun `getReportingValueFromJSON Should throw an exception When the message value is null`() {
-        // When
-        val throwable = catchThrowable {
-            ReportingMapper.getReportingValueFromJSON(mapper, "null", ReportingType.ALERT)
-        }
-
-        // Then
-        assertThat(throwable).isNotNull
-        assertThat(throwable.message).isEqualTo("No 'Reporting' value found.")
+  @Test
+  fun `getReportingValueFromJSON Should throw an exception When the message value is null`() {
+    // When
+    val throwable = catchThrowable {
+      ReportingMapper.getReportingValueFromJSON(mapper, "null", ReportingType.ALERT)
     }
 
-    @Test
-    fun `getReportingValueFromJSON Should deserialize an THREE_MILES_TRAWLING_ALERT When it is first serialized`() {
-        // Given
-        val alert = ThreeMilesTrawlingAlert("NAMO", "FR", 2.356)
+    // Then
+    assertThat(throwable).isNotNull
+    assertThat(throwable.message).isEqualTo("No 'Reporting' value found.")
+  }
 
-        // When
-        val jsonString = mapper.writeValueAsString(alert);
-        val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, jsonString, ReportingType.ALERT)
+  @Test
+  fun `getReportingValueFromJSON Should deserialize an THREE_MILES_TRAWLING_ALERT When it is first serialized`() {
+    // Given
+    val alert = ThreeMilesTrawlingAlert("NAMO", "FR", 2.356)
 
-        // Then
-        assertThat(parsedReporting).isInstanceOf(ThreeMilesTrawlingAlert::class.java)
-        parsedReporting as ThreeMilesTrawlingAlert
-        assertThat(parsedReporting.seaFront).isEqualTo("NAMO")
-        assertThat(parsedReporting.flagState).isEqualTo("FR")
-        assertThat(parsedReporting.riskFactor).isEqualTo(2.356)
-    }
+    // When
+    val jsonString = mapper.writeValueAsString(alert);
+    val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, jsonString, ReportingType.ALERT)
 
-    @Test
-    fun `getReportingValueFromJSON Should deserialize an THREE_MILES_TRAWLING_ALERT json`() {
-        // Given
-        val alert = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\", \"seaFront\": \"MEMN\", \"flagState\": \"FR\", \"riskFactor\": 1.2311444133}"
+    // Then
+    assertThat(parsedReporting).isInstanceOf(ThreeMilesTrawlingAlert::class.java)
+    parsedReporting as ThreeMilesTrawlingAlert
+    assertThat(parsedReporting.seaFront).isEqualTo("NAMO")
+    assertThat(parsedReporting.flagState).isEqualTo("FR")
+    assertThat(parsedReporting.riskFactor).isEqualTo(2.356)
+  }
 
-        val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, alert, ReportingType.ALERT)
+  @Test
+  fun `getReportingValueFromJSON Should deserialize an THREE_MILES_TRAWLING_ALERT json`() {
+    // Given
+    val alert = "{\"type\": \"THREE_MILES_TRAWLING_ALERT\", \"seaFront\": \"MEMN\", \"flagState\": \"FR\", \"riskFactor\": 1.2311444133}"
 
-        // Then
-        assertThat(parsedReporting).isInstanceOf(ThreeMilesTrawlingAlert::class.java)
-        parsedReporting as ThreeMilesTrawlingAlert
-        assertThat(parsedReporting.seaFront).isEqualTo("MEMN")
-        assertThat(parsedReporting.flagState).isEqualTo("FR")
-        assertThat(parsedReporting.riskFactor).isEqualTo(1.2311444133)
-    }
+    val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, alert, ReportingType.ALERT)
 
-    @Test
-    fun `readValue Should deserialize an OBSERVATION json`() {
-        // Given
-        val observation = "{" +
-                "\"type\": \"OBSERVATION\"," +
-                "\"reportingActor\": \"OPS\"," +
-                "\"unit\": null, " +
-                "\"authorTrigram\": \"LTH\"," +
-                "\"authorContact\": null," +
-                "\"title\": \"A title !\"," +
-                "\"description\": \"A description !\"" +
-                "}"
+    // Then
+    assertThat(parsedReporting).isInstanceOf(ThreeMilesTrawlingAlert::class.java)
+    parsedReporting as ThreeMilesTrawlingAlert
+    assertThat(parsedReporting.seaFront).isEqualTo("MEMN")
+    assertThat(parsedReporting.flagState).isEqualTo("FR")
+    assertThat(parsedReporting.riskFactor).isEqualTo(1.2311444133)
+  }
 
-        val parsedReporting = mapper.readValue(observation, InfractionSuspicionOrObservationType::class.java)
+  @Test
+  fun `readValue Should deserialize an OBSERVATION json`() {
+    // Given
+    val observation = "{" +
+      "\"type\": \"OBSERVATION\"," +
+      "\"reportingActor\": \"OPS\"," +
+      "\"unit\": null, " +
+      "\"authorTrigram\": \"LTH\"," +
+      "\"authorContact\": null," +
+      "\"title\": \"A title !\"," +
+      "\"description\": \"A description !\"" +
+      "}"
 
-        // Then
-        assertThat(parsedReporting).isInstanceOf(Observation::class.java)
-        parsedReporting as Observation
-        assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
-        assertThat(parsedReporting.unit).isNull()
-        assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
-        assertThat(parsedReporting.authorContact).isNull()
-        assertThat(parsedReporting.title).isEqualTo("A title !")
-        assertThat(parsedReporting.description).isEqualTo("A description !")
-    }
+    val parsedReporting = mapper.readValue(observation, InfractionSuspicionOrObservationType::class.java)
 
-    @Test
-    fun `getReportingValueFromJSON Should deserialize an INFRACTION_SUSPICION`() {
-        // Given
-        val infraction = "{" +
-                "\"type\": \"INFRACTION_SUSPICION\"," +
-                "\"reportingActor\": \"OPS\"," +
-                "\"unit\": null, " +
-                "\"authorTrigram\": \"LTH\"," +
-                "\"authorContact\": null," +
-                "\"title\": \"A title !\"," +
-                "\"description\": \"A description !\"," +
-                "\"natinfCode\": \"1234\"," +
-                "\"dml\": \"DML 56\"" +
-                "}"
+    // Then
+    assertThat(parsedReporting).isInstanceOf(Observation::class.java)
+    parsedReporting as Observation
+    assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
+    assertThat(parsedReporting.unit).isNull()
+    assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
+    assertThat(parsedReporting.authorContact).isNull()
+    assertThat(parsedReporting.title).isEqualTo("A title !")
+    assertThat(parsedReporting.description).isEqualTo("A description !")
+  }
 
-        val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, infraction, ReportingType.INFRACTION_SUSPICION)
+  @Test
+  fun `getReportingValueFromJSON Should deserialize an INFRACTION_SUSPICION`() {
+    // Given
+    val infraction = "{" +
+      "\"type\": \"INFRACTION_SUSPICION\"," +
+      "\"reportingActor\": \"OPS\"," +
+      "\"unit\": null, " +
+      "\"authorTrigram\": \"LTH\"," +
+      "\"authorContact\": null," +
+      "\"title\": \"A title !\"," +
+      "\"description\": \"A description !\"," +
+      "\"natinfCode\": \"1234\"," +
+      "\"dml\": \"DML 56\"" +
+      "}"
 
-        // Then
-        assertThat(parsedReporting).isInstanceOf(InfractionSuspicion::class.java)
-        parsedReporting as InfractionSuspicion
-        assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
-        assertThat(parsedReporting.unit).isNull()
-        assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
-        assertThat(parsedReporting.authorContact).isNull()
-        assertThat(parsedReporting.title).isEqualTo("A title !")
-        assertThat(parsedReporting.description).isEqualTo("A description !")
-        assertThat(parsedReporting.natinfCode).isEqualTo("1234")
-        assertThat(parsedReporting.dml).isEqualTo("DML 56")
-    }
+    val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, infraction, ReportingType.INFRACTION_SUSPICION)
 
-    @Test
-    fun `readValue Should deserialize an INFRACTION_SUSPICION`() {
-        // Given
-        val infraction = "{" +
-                "\"type\": \"INFRACTION_SUSPICION\"," +
-                "\"reportingActor\": \"OPS\"," +
-                "\"unit\": null, " +
-                "\"authorTrigram\": \"LTH\"," +
-                "\"authorContact\": null," +
-                "\"title\": \"A title !\"," +
-                "\"description\": \"A description !\"," +
-                "\"natinfCode\": \"1234\"," +
-                "\"dml\": \"DML 56\"" +
-                "}"
+    // Then
+    assertThat(parsedReporting).isInstanceOf(InfractionSuspicion::class.java)
+    parsedReporting as InfractionSuspicion
+    assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
+    assertThat(parsedReporting.unit).isNull()
+    assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
+    assertThat(parsedReporting.authorContact).isNull()
+    assertThat(parsedReporting.title).isEqualTo("A title !")
+    assertThat(parsedReporting.description).isEqualTo("A description !")
+    assertThat(parsedReporting.natinfCode).isEqualTo("1234")
+    assertThat(parsedReporting.dml).isEqualTo("DML 56")
+  }
 
-        val parsedReporting = mapper.readValue(infraction, InfractionSuspicionOrObservationType::class.java)
+  @Test
+  fun `readValue Should deserialize an INFRACTION_SUSPICION`() {
+    // Given
+    val infraction = "{" +
+      "\"type\": \"INFRACTION_SUSPICION\"," +
+      "\"reportingActor\": \"OPS\"," +
+      "\"unit\": null, " +
+      "\"authorTrigram\": \"LTH\"," +
+      "\"authorContact\": null," +
+      "\"title\": \"A title !\"," +
+      "\"description\": \"A description !\"," +
+      "\"natinfCode\": \"1234\"," +
+      "\"dml\": \"DML 56\"" +
+      "}"
 
-        // Then
-        assertThat(parsedReporting).isInstanceOf(InfractionSuspicion::class.java)
-        parsedReporting as InfractionSuspicion
-        assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
-        assertThat(parsedReporting.unit).isNull()
-        assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
-        assertThat(parsedReporting.authorContact).isNull()
-        assertThat(parsedReporting.title).isEqualTo("A title !")
-        assertThat(parsedReporting.description).isEqualTo("A description !")
-        assertThat(parsedReporting.natinfCode).isEqualTo("1234")
-        assertThat(parsedReporting.dml).isEqualTo("DML 56")
-    }
+    val parsedReporting = mapper.readValue(infraction, InfractionSuspicionOrObservationType::class.java)
+
+    // Then
+    assertThat(parsedReporting).isInstanceOf(InfractionSuspicion::class.java)
+    parsedReporting as InfractionSuspicion
+    assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
+    assertThat(parsedReporting.unit).isNull()
+    assertThat(parsedReporting.authorTrigram).isEqualTo("LTH")
+    assertThat(parsedReporting.authorContact).isNull()
+    assertThat(parsedReporting.title).isEqualTo("A title !")
+    assertThat(parsedReporting.description).isEqualTo("A description !")
+    assertThat(parsedReporting.natinfCode).isEqualTo("1234")
+    assertThat(parsedReporting.dml).isEqualTo("DML 56")
+  }
 
 }

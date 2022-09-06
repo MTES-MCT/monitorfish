@@ -25,61 +25,61 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @WebMvcTest(value = [(DataReferentialController::class)])
 class DataReferentialControllerITests {
 
-    @Autowired
-    private lateinit var mockMvc: MockMvc
+  @Autowired
+  private lateinit var mockMvc: MockMvc
 
-    @MockBean
-    private lateinit var getAllGears: GetAllGears
+  @MockBean
+  private lateinit var getAllGears: GetAllGears
 
-    @MockBean
-    private lateinit var getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups
+  @MockBean
+  private lateinit var getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups
 
-    @MockBean
-    private lateinit var getFAOAreas: GetFAOAreas
+  @MockBean
+  private lateinit var getFAOAreas: GetFAOAreas
 
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
+  @Autowired
+  private lateinit var objectMapper: ObjectMapper
 
-    @Test
-    fun `Should get all gears`() {
-        // Given
-        given(this.getAllGears.execute()).willReturn(listOf(Gear("CHL", "SUPER CHALUT", "CHALUT")))
+  @Test
+  fun `Should get all gears`() {
+    // Given
+    given(this.getAllGears.execute()).willReturn(listOf(Gear("CHL", "SUPER CHALUT", "CHALUT")))
 
-        // When
-        mockMvc.perform(get("/bff/v1/gears"))
-                // Then
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.length()", equalTo(1)))
-                .andExpect(jsonPath("$[0].code", equalTo("CHL")))
-                .andExpect(jsonPath("$[0].name", equalTo("SUPER CHALUT")))
-                .andExpect(jsonPath("$[0].category", equalTo("CHALUT")))
-    }
+    // When
+    mockMvc.perform(get("/bff/v1/gears"))
+      // Then
+      .andExpect(status().isOk)
+      .andExpect(jsonPath("$.length()", equalTo(1)))
+      .andExpect(jsonPath("$[0].code", equalTo("CHL")))
+      .andExpect(jsonPath("$[0].name", equalTo("SUPER CHALUT")))
+      .andExpect(jsonPath("$[0].category", equalTo("CHALUT")))
+  }
 
-    @Test
-    fun `Should get all species`() {
-        // Given
-        given(this.getAllSpeciesAndSpeciesGroups.execute()).willReturn(SpeciesAndSpeciesGroups(
-                listOf(Species("FAK", "Facochère")),
-                listOf(SpeciesGroup("FAKOKO", "Facochère group"))))
+  @Test
+  fun `Should get all species`() {
+    // Given
+    given(this.getAllSpeciesAndSpeciesGroups.execute()).willReturn(SpeciesAndSpeciesGroups(
+      listOf(Species("FAK", "Facochère")),
+      listOf(SpeciesGroup("FAKOKO", "Facochère group"))))
 
-        // When
-        mockMvc.perform(get("/bff/v1/species"))
-                // Then
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.species.length()", equalTo(1)))
-                .andExpect(jsonPath("$.groups.length()", equalTo(1)))
-    }
+    // When
+    mockMvc.perform(get("/bff/v1/species"))
+      // Then
+      .andExpect(status().isOk)
+      .andExpect(jsonPath("$.species.length()", equalTo(1)))
+      .andExpect(jsonPath("$.groups.length()", equalTo(1)))
+  }
 
-    @Test
-    fun `Should get FAO areas`() {
-        // Given
-        given(this.getFAOAreas.execute()).willReturn(listOf("27.1", "27.1.0", "28.1", "28.1.0", "28.1.1"))
+  @Test
+  fun `Should get FAO areas`() {
+    // Given
+    given(this.getFAOAreas.execute()).willReturn(listOf("27.1", "27.1.0", "28.1", "28.1.0", "28.1.1"))
 
-        // When
-        mockMvc.perform(get("/bff/v1/fao_areas"))
-                // Then
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.length()", equalTo(5)))
-    }
+    // When
+    mockMvc.perform(get("/bff/v1/fao_areas"))
+      // Then
+      .andExpect(status().isOk)
+      .andExpect(jsonPath("$.length()", equalTo(5)))
+  }
 
 }

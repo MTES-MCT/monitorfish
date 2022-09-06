@@ -7,29 +7,29 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import java.time.ZonedDateTime
 
 data class BeaconMalfunctionNotificationDataOutput(
-    val beaconMalfunctionId: Int,
-    val dateTime: ZonedDateTime,
-    val notificationType: BeaconMalfunctionNotificationType,
-    val communicationMeans: CommunicationMeans,
-    val recipientFunction: BeaconMalfunctionNotificationRecipientFunction,
-    val recipientName:  String?,
-    val recipientAddressOrNumber:  String,
-    val success: Boolean?,
-    val errorMessage: String?) {
+  val beaconMalfunctionId: Int,
+  val dateTime: ZonedDateTime,
+  val notificationType: BeaconMalfunctionNotificationType,
+  val communicationMeans: CommunicationMeans,
+  val recipientFunction: BeaconMalfunctionNotificationRecipientFunction,
+  val recipientName: String?,
+  val recipientAddressOrNumber: String,
+  val success: Boolean?,
+  val errorMessage: String?) {
 
-    companion object {
-        fun fromBeaconMalfunctionNotification(beaconMalfunctionNotification: BeaconMalfunctionNotification): BeaconMalfunctionNotificationDataOutput {
-            return BeaconMalfunctionNotificationDataOutput(
-                beaconMalfunctionId = beaconMalfunctionNotification.beaconMalfunctionId,
-                dateTime = beaconMalfunctionNotification.dateTimeUtc,
-                notificationType = beaconMalfunctionNotification.notificationType,
-                communicationMeans = beaconMalfunctionNotification.communicationMeans,
-                recipientFunction = beaconMalfunctionNotification.recipientFunction,
-                recipientName = beaconMalfunctionNotification.recipientName,
-                recipientAddressOrNumber = beaconMalfunctionNotification.recipientAddressOrNumber,
-                success = beaconMalfunctionNotification.success,
-                errorMessage = beaconMalfunctionNotification.errorMessage
-            )
-        }
+  companion object {
+    fun fromBeaconMalfunctionNotification(beaconMalfunctionNotification: BeaconMalfunctionNotification): BeaconMalfunctionNotificationDataOutput {
+      return BeaconMalfunctionNotificationDataOutput(
+        beaconMalfunctionId = beaconMalfunctionNotification.beaconMalfunctionId,
+        dateTime = beaconMalfunctionNotification.dateTimeUtc,
+        notificationType = beaconMalfunctionNotification.notificationType,
+        communicationMeans = beaconMalfunctionNotification.communicationMeans,
+        recipientFunction = beaconMalfunctionNotification.recipientFunction,
+        recipientName = beaconMalfunctionNotification.recipientName,
+        recipientAddressOrNumber = beaconMalfunctionNotification.recipientAddressOrNumber,
+        success = beaconMalfunctionNotification.success,
+        errorMessage = beaconMalfunctionNotification.errorMessage
+      )
     }
+  }
 }

@@ -19,26 +19,26 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @WebMvcTest(value = [(UnitsController::class)])
 class UnitsControllerITests {
 
-    @Autowired
-    private lateinit var mockMvc: MockMvc
+  @Autowired
+  private lateinit var mockMvc: MockMvc
 
-    @MockBean
-    private lateinit var getAllControllers: GetAllControllers
+  @MockBean
+  private lateinit var getAllControllers: GetAllControllers
 
-    @Test
-    fun `Should return all controllers`() {
-        // Given
-        given(getAllControllers.execute()).willReturn(listOf(
-                Controller(1, "ULAM 56", "Terrestre", "Affaires Maritimes")
-        ))
+  @Test
+  fun `Should return all controllers`() {
+    // Given
+    given(getAllControllers.execute()).willReturn(listOf(
+      Controller(1, "ULAM 56", "Terrestre", "Affaires Maritimes")
+    ))
 
-        // When
-        mockMvc.perform(get("/bff/v1/controllers"))
-                // Then
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].controller", equalTo("ULAM 56")))
-                .andExpect(jsonPath("$[0].controllerType", equalTo("Terrestre")))
-                .andExpect(jsonPath("$[0].administration", equalTo("Affaires Maritimes")))
-    }
+    // When
+    mockMvc.perform(get("/bff/v1/controllers"))
+      // Then
+      .andExpect(status().isOk)
+      .andExpect(jsonPath("$[0].controller", equalTo("ULAM 56")))
+      .andExpect(jsonPath("$[0].controllerType", equalTo("Terrestre")))
+      .andExpect(jsonPath("$[0].administration", equalTo("Affaires Maritimes")))
+  }
 
 }

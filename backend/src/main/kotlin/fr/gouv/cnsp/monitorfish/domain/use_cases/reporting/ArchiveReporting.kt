@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory
 
 @UseCase
 class ArchiveReporting(private val reportingRepository: ReportingRepository) {
-    private val logger: Logger = LoggerFactory.getLogger(ArchiveReporting::class.java)
+  private val logger: Logger = LoggerFactory.getLogger(ArchiveReporting::class.java)
 
-    fun execute(id: Int) {
-        logger.info("Archiving reporting $id")
-        reportingRepository.archive(id)
-    }
+  fun execute(id: Int) {
+    logger.info("Archiving reporting $id")
+    reportingRepository.archive(id)
+  }
 }

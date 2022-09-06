@@ -12,30 +12,30 @@ import java.time.ZonedDateTime
 
 class JpaPendingAlertRepositoryITests : AbstractDBTests() {
 
-    @Autowired
-    private lateinit var jpaPendingAlertRepository: JpaPendingAlertRepository
+  @Autowired
+  private lateinit var jpaPendingAlertRepository: JpaPendingAlertRepository
 
-    @Test
-    @Transactional
-    fun `findAlertsOfTypes Should return an alert with the type entered`() {
-        // Given
-        val alertOne = PendingAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = "123456",
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert())
-        jpaPendingAlertRepository.save(alertOne)
+  @Test
+  @Transactional
+  fun `findAlertsOfTypes Should return an alert with the type entered`() {
+    // Given
+    val alertOne = PendingAlert(
+      internalReferenceNumber = "FRFGRGR",
+      externalReferenceNumber = "RGD",
+      ircs = "6554fEE",
+      vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+      tripNumber = "123456",
+      creationDate = ZonedDateTime.now(),
+      value = ThreeMilesTrawlingAlert())
+    jpaPendingAlertRepository.save(alertOne)
 
-        // When
-        val alerts = jpaPendingAlertRepository.findAlertsOfTypes(listOf(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT))
+    // When
+    val alerts = jpaPendingAlertRepository.findAlertsOfTypes(listOf(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT))
 
-        // Then
-        assertThat(alerts).hasSize(15)
-        assertThat(alerts.first().externalReferenceNumber).isEqualTo("DONTSINK")
-        assertThat(alerts.first().internalReferenceNumber).isEqualTo("FAK000999999")
-        assertThat(alerts.first().value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
-    }
+    // Then
+    assertThat(alerts).hasSize(15)
+    assertThat(alerts.first().externalReferenceNumber).isEqualTo("DONTSINK")
+    assertThat(alerts.first().internalReferenceNumber).isEqualTo("FAK000999999")
+    assertThat(alerts.first().value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+  }
 }

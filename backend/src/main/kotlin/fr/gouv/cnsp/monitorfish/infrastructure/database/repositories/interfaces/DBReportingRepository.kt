@@ -9,8 +9,8 @@ import java.time.Instant
 
 @DynamicUpdate
 interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
-    @Query(value = """
-        SELECT * FROM reportings WHERE 
+  @Query(value = """
+        SELECT * FROM reportings WHERE
             CASE
                 WHEN :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER' THEN internal_reference_number
                 WHEN :vesselIdentifier = 'IRCS' THEN ircs
@@ -23,21 +23,21 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
                 (archived IS FALSE AND
                     deleted IS FALSE))
         """, nativeQuery = true)
-    fun findCurrentAndArchivedByVesselIdentifier(vesselIdentifier: String, value: String, fromDate: Instant): List<ReportingEntity>
+  fun findCurrentAndArchivedByVesselIdentifier(vesselIdentifier: String, value: String, fromDate: Instant): List<ReportingEntity>
 
-    @Modifying(clearAutomatically = true)
-    @Query(value = """
+  @Modifying(clearAutomatically = true)
+  @Query(value = """
         UPDATE reportings
         SET archived = TRUE
         WHERE id = :id
     """, nativeQuery = true)
-    fun archiveReporting(id: Int)
+  fun archiveReporting(id: Int)
 
-    @Modifying(clearAutomatically = true)
-    @Query(value = """
+  @Modifying(clearAutomatically = true)
+  @Query(value = """
         UPDATE reportings
         SET deleted = TRUE
         WHERE id = :id
     """, nativeQuery = true)
-    fun deleteReporting(id: Int)
+  fun deleteReporting(id: Int)
 }

@@ -11,45 +11,45 @@ import org.springframework.transaction.annotation.Transactional
 
 class JpaGearRepositoryITests : AbstractDBTests() {
 
-    @Autowired
-    private lateinit var jpaGearRepository: JpaGearRepository
+  @Autowired
+  private lateinit var jpaGearRepository: JpaGearRepository
 
-    @Autowired
-    lateinit var cacheManager: CacheManager
+  @Autowired
+  lateinit var cacheManager: CacheManager
 
-    @BeforeEach
-    fun setup() {
-        cacheManager.getCache("gear")?.clear()
-        cacheManager.getCache("gears")?.clear()
-    }
+  @BeforeEach
+  fun setup() {
+    cacheManager.getCache("gear")?.clear()
+    cacheManager.getCache("gears")?.clear()
+  }
 
-    @Test
-    @Transactional
-    fun `findAll Should return all gears`() {
-        // When
-        val gears = jpaGearRepository.findAll()
+  @Test
+  @Transactional
+  fun `findAll Should return all gears`() {
+    // When
+    val gears = jpaGearRepository.findAll()
 
-        assertThat(gears).hasSize(83)
-        assertThat(gears.first().code).isEqualTo("MIS")
-        assertThat(gears.first().name).isEqualTo("Engin divers")
-        assertThat(gears.first().category).isEqualTo("Engin inconnu")
-    }
+    assertThat(gears).hasSize(83)
+    assertThat(gears.first().code).isEqualTo("MIS")
+    assertThat(gears.first().name).isEqualTo("Engin divers")
+    assertThat(gears.first().category).isEqualTo("Engin inconnu")
+  }
 
-    @Test
-    @Transactional
-    fun `find Should return a gear`() {
-        // When
-        val gear = jpaGearRepository.find("OTB")
+  @Test
+  @Transactional
+  fun `find Should return a gear`() {
+    // When
+    val gear = jpaGearRepository.find("OTB")
 
-        assertThat(gear.name).isEqualTo("Chaluts de fond à panneaux")
-    }
+    assertThat(gear.name).isEqualTo("Chaluts de fond à panneaux")
+  }
 
-    @Test
-    @Transactional
-    fun `find Should throw an exception When there is no gear found`() {
-        // When
-        val throwable = catchThrowable { jpaGearRepository.find("BAD_GEAR") }
+  @Test
+  @Transactional
+  fun `find Should throw an exception When there is no gear found`() {
+    // When
+    val throwable = catchThrowable { jpaGearRepository.find("BAD_GEAR") }
 
-        assertThat(throwable).isInstanceOf(CodeNotFoundException::class.java)
-    }
+    assertThat(throwable).isInstanceOf(CodeNotFoundException::class.java)
+  }
 }

@@ -23,32 +23,32 @@ function TimeInputWithRef(
   { defaultValue, minutesRange = 15, onBack, onChange, onFocus, onNext, onPrevious }: TimeInputProps,
   ref: ForwardedRef<DateOrTimeInputRef>,
 ) {
-  const boxSpan = useRef() as MutableRefObject<HTMLSpanElement>
-  const hourInput = useRef() as MutableRefObject<HTMLInputElement>
-  const minuteInput = useRef() as MutableRefObject<HTMLInputElement>
+  const boxSpanRef = useRef() as MutableRefObject<HTMLSpanElement>
+  const hourInputRef = useRef() as MutableRefObject<HTMLInputElement>
+  const minuteInputRef = useRef() as MutableRefObject<HTMLInputElement>
 
   const [controlledDefaultValue, setControlledDefaultValue] = useState(defaultValue)
   const [hasError, setHasError] = useState(false)
 
   useImperativeHandle<DateOrTimeInputRef, DateOrTimeInputRef>(ref, () => ({
-    boxSpan: boxSpan.current,
+    boxSpan: boxSpanRef.current,
     focus: (inLastInputOfTheGroup = false) => {
       if (inLastInputOfTheGroup) {
-        minuteInput.current.focus()
+        minuteInputRef.current.focus()
       } else {
-        hourInput.current.focus()
+        hourInputRef.current.focus()
       }
     },
   }))
 
-  const isRangedTimePickerOpen = useRef(false)
+  const isRangedTimePickerOpenRef = useRef(false)
 
   const [rangedTimePickerFilter, setRangedTimePickerFilter] = useState<RegExp>(/.*/)
 
   const forceUpdate = useForceUpdate()
 
   const closeRangedTimePicker = useCallback(() => {
-    isRangedTimePickerOpen.current = false
+    isRangedTimePickerOpenRef.current = false
 
     forceUpdate()
   }, [forceUpdate])
@@ -67,7 +67,7 @@ function TimeInputWithRef(
     (event: globalThis.MouseEvent) => {
       const target = event.target as Node | null
 
-      if (hourInput.current.contains(target) || minuteInput.current.contains(target)) {
+      if (hourInputRef.current.contains(target) || minuteInputRef.current.contains(target)) {
         return
       }
 
@@ -95,7 +95,7 @@ function TimeInputWithRef(
   }, [])
 
   const openRangedTimePicker = useCallback(() => {
-    isRangedTimePickerOpen.current = true
+    isRangedTimePickerOpenRef.current = true
 
     forceUpdate()
   }, [forceUpdate])
@@ -111,12 +111,12 @@ function TimeInputWithRef(
   const submit = useCallback(() => {
     setHasError(false)
 
-    if (window.document.activeElement === hourInput.current) {
-      minuteInput.current.focus()
+    if (window.document.activeElement === hourInputRef.current) {
+      minuteInputRef.current.focus()
     }
 
-    if (!hourInput.current.value.length || !minuteInput.current.value.length) {
-      if (minuteInput.current.value.length && !hourInput.current.value.length) {
+    if (!hourInputRef.current.value.length || !minuteInputRef.current.value.length) {
+      if (minuteInputRef.current.value.length && !hourInputRef.current.value.length) {
         setHasError(true)
       }
 
@@ -125,15 +125,15 @@ function TimeInputWithRef(
 
     closeRangedTimePicker()
 
-    const nextTimeTuple: TimeTuple = [hourInput.current.value, minuteInput.current.value]
+    const nextTimeTuple: TimeTuple = [hourInputRef.current.value, minuteInputRef.current.value]
     onChange(nextTimeTuple)
   }, [closeRangedTimePicker, onChange])
 
   return (
-    <Box ref={boxSpan}>
+    <Box ref={boxSpanRef}>
       <>
         <NumberInput
-          ref={hourInput}
+          ref={hourInputRef}
           defaultValue={controlledDefaultValue && controlledDefaultValue[0]}
           hasError={hasError}
           max={23}
@@ -143,28 +143,28 @@ function TimeInputWithRef(
           onFilled={submit}
           onFocus={onFocus}
           onInput={handleHourInput}
-          onNext={() => minuteInput.current.focus()}
+          onNext={() => minuteInputRef.current.focus()}
           onPrevious={onPrevious}
           size={2}
         />
         :
         <NumberInput
-          ref={minuteInput}
+          ref={minuteInputRef}
           defaultValue={controlledDefaultValue && controlledDefaultValue[1]}
           hasError={hasError}
           max={59}
           min={0}
-          onBack={() => hourInput.current.focus()}
+          onBack={() => hourInputRef.current.focus()}
           onClick={openRangedTimePicker}
           onFilled={submit}
           onFocus={onFocus}
           onNext={onNext}
-          onPrevious={() => hourInput.current.focus()}
+          onPrevious={() => hourInputRef.current.focus()}
           size={2}
         />
       </>
 
-      {isRangedTimePickerOpen.current && (
+      {isRangedTimePickerOpenRef.current && (
         <RangedTimePicker
           filter={rangedTimePickerFilter}
           minutesRange={minutesRange}

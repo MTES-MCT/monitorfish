@@ -32,12 +32,12 @@ export type DateRangePickerProps = {
   withTime?: boolean
 }
 export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, withTime = false }: DateRangePickerProps) {
-  const startDateInput = useRef() as MutableRefObject<DateOrTimeInputRef>
-  const startTimeInput = useRef() as MutableRefObject<DateOrTimeInputRef>
-  const endDateInput = useRef() as MutableRefObject<DateOrTimeInputRef>
-  const endTimeInput = useRef() as MutableRefObject<DateOrTimeInputRef>
+  const startDateInputRef = useRef() as MutableRefObject<DateOrTimeInputRef>
+  const startTimeInputRef = useRef() as MutableRefObject<DateOrTimeInputRef>
+  const endDateInputRef = useRef() as MutableRefObject<DateOrTimeInputRef>
+  const endTimeInputRef = useRef() as MutableRefObject<DateOrTimeInputRef>
 
-  const isRangeCalendarPickerOpen = useRef(false)
+  const isRangeCalendarPickerOpenRef = useRef(false)
 
   const selectedStartDateRef = useRef<Date | undefined>(
     defaultValue ? getLocalizedDayjs(defaultValue[0]).toDate() : undefined,
@@ -73,7 +73,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
   }, [onChange])
 
   const closeRangeCalendarPicker = useCallback(() => {
-    isRangeCalendarPickerOpen.current = false
+    isRangeCalendarPickerOpenRef.current = false
 
     forceUpdate()
   }, [forceUpdate])
@@ -82,7 +82,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
     (event: globalThis.MouseEvent) => {
       const target = event.target as Node | null
 
-      if (startDateInput.current.boxSpan.contains(target) || endDateInput.current.boxSpan.contains(target)) {
+      if (startDateInputRef.current.boxSpan.contains(target) || endDateInputRef.current.boxSpan.contains(target)) {
         return
       }
 
@@ -96,27 +96,27 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
       return
     }
 
-    endTimeInput.current.focus()
+    endTimeInputRef.current.focus()
   }, [withTime])
 
   const handleEndDateInputPrevious = useCallback(() => {
     if (withTime) {
-      startTimeInput.current.focus(true)
+      startTimeInputRef.current.focus(true)
 
       return
     }
 
-    startDateInput.current.focus(true)
+    startDateInputRef.current.focus(true)
   }, [withTime])
 
   const handleStartDateInputNext = useCallback(() => {
     if (withTime) {
-      startTimeInput.current.focus()
+      startTimeInputRef.current.focus()
 
       return
     }
 
-    endDateInput.current.focus()
+    endDateInputRef.current.focus()
   }, [withTime])
 
   const handleDateInputFilled = useCallback(
@@ -218,7 +218,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
 
         selectedStartTimeTupleRef.current = nextTimeTuple
 
-        endDateInput.current.focus()
+        endDateInputRef.current.focus()
       } else {
         // If an end date has already been selected
         if (selectedEndDateTupleRef.current) {
@@ -239,7 +239,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
   )
 
   const openRangeCalendarPicker = useCallback(() => {
-    isRangeCalendarPickerOpen.current = true
+    isRangeCalendarPickerOpenRef.current = true
 
     forceUpdate()
   }, [forceUpdate])
@@ -257,7 +257,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
       <Box>
         Du{' '}
         <DateInput
-          ref={startDateInput}
+          ref={startDateInputRef}
           defaultValue={selectedStartDateTupleRef.current}
           onChange={nextDateTuple => handleDateInputFilled(DateRangePosition.START, nextDateTuple)}
           onClick={openRangeCalendarPicker}
@@ -267,20 +267,20 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
           <>
             ,{' '}
             <TimeInput
-              ref={startTimeInput}
+              ref={startTimeInputRef}
               defaultValue={selectedStartTimeTupleRef.current}
               minutesRange={minutesRange}
-              onBack={() => startDateInput.current.focus(true)}
+              onBack={() => startDateInputRef.current.focus(true)}
               onChange={nextTimeTuple => handleTimeInputFilled(DateRangePosition.START, nextTimeTuple)}
               onFocus={closeRangeCalendarPicker}
-              onNext={() => endDateInput.current.focus()}
-              onPrevious={() => startDateInput.current.focus(true)}
+              onNext={() => endDateInputRef.current.focus()}
+              onPrevious={() => startDateInputRef.current.focus(true)}
             />
           </>
         )}{' '}
         au{' '}
         <DateInput
-          ref={endDateInput}
+          ref={endDateInputRef}
           defaultValue={selectedEndDateTupleRef.current}
           onBack={handleEndDateInputPrevious}
           onChange={nextDateTuple => handleDateInputFilled(DateRangePosition.END, nextDateTuple)}
@@ -292,19 +292,19 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
           <>
             ,{' '}
             <TimeInput
-              ref={endTimeInput}
+              ref={endTimeInputRef}
               defaultValue={selectedEndTimeTupleRef.current}
               minutesRange={minutesRange}
-              onBack={() => endDateInput.current.focus(true)}
+              onBack={() => endDateInputRef.current.focus(true)}
               onChange={nextTimeTuple => handleTimeInputFilled(DateRangePosition.END, nextTimeTuple)}
               onFocus={closeRangeCalendarPicker}
-              onPrevious={() => endDateInput.current.focus(true)}
+              onPrevious={() => endDateInputRef.current.focus(true)}
             />
           </>
         )}
       </Box>
 
-      {isRangeCalendarPickerOpen.current && (
+      {isRangeCalendarPickerOpenRef.current && (
         <RangeCalendarPicker
           defaultValue={rangeCalendarPickerDefaultValue}
           onChange={handleRangeCalendarPickerChange}

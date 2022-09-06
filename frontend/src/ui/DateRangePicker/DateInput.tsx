@@ -19,20 +19,20 @@ function DateInputWithRef(
   { defaultValue, onBack, onChange, onClick, onNext, onPrevious }: DateInputProps,
   ref: ForwardedRef<DateOrTimeInputRef>,
 ) {
-  const boxSpan = useRef() as MutableRefObject<HTMLSpanElement>
-  const dayInput = useRef() as MutableRefObject<HTMLInputElement>
-  const monthInput = useRef() as MutableRefObject<HTMLInputElement>
-  const yearInput = useRef() as MutableRefObject<HTMLInputElement>
+  const boxSpanRef = useRef() as MutableRefObject<HTMLSpanElement>
+  const dayInputRef = useRef() as MutableRefObject<HTMLInputElement>
+  const monthInputRef = useRef() as MutableRefObject<HTMLInputElement>
+  const yearInputRef = useRef() as MutableRefObject<HTMLInputElement>
 
   const [hasError, setHasError] = useState(false)
 
   useImperativeHandle<DateOrTimeInputRef, DateOrTimeInputRef>(ref, () => ({
-    boxSpan: boxSpan.current,
+    boxSpan: boxSpanRef.current,
     focus: (inLastInputOfTheGroup = false) => {
       if (inLastInputOfTheGroup) {
-        yearInput.current.focus()
+        yearInputRef.current.focus()
       } else {
-        dayInput.current.focus()
+        dayInputRef.current.focus()
       }
     },
   }))
@@ -43,22 +43,27 @@ function DateInputWithRef(
     setHasError(false)
 
     switch (window.document.activeElement) {
-      case dayInput.current:
-        monthInput.current.focus()
+      case dayInputRef.current:
+        monthInputRef.current.focus()
         break
 
-      case monthInput.current:
-        yearInput.current.focus()
+      case monthInputRef.current:
+        yearInputRef.current.focus()
         break
 
       default:
         break
     }
 
-    if (!yearInput.current.value.length || !monthInput.current.value.length || !dayInput.current.value.length) {
+    if (
+      !yearInputRef.current.value.length ||
+      !monthInputRef.current.value.length ||
+      !dayInputRef.current.value.length
+    ) {
       if (
-        (monthInput.current.value.length && !dayInput.current.value.length) ||
-        (yearInput.current.value.length && (!dayInput.current.value.length || !monthInput.current.value.length))
+        (monthInputRef.current.value.length && !dayInputRef.current.value.length) ||
+        (yearInputRef.current.value.length &&
+          (!dayInputRef.current.value.length || !monthInputRef.current.value.length))
       ) {
         setHasError(true)
       }
@@ -67,18 +72,18 @@ function DateInputWithRef(
     }
 
     const nextDateTuple: DateTuple = [
-      String(yearInput.current.value),
-      formatNumberAsDoubleDigit(monthInput.current.value),
-      formatNumberAsDoubleDigit(dayInput.current.value),
+      String(yearInputRef.current.value),
+      formatNumberAsDoubleDigit(monthInputRef.current.value),
+      formatNumberAsDoubleDigit(dayInputRef.current.value),
     ]
 
     onChange(nextDateTuple)
   }, [onChange])
 
   return (
-    <span ref={boxSpan}>
+    <span ref={boxSpanRef}>
       <NumberInput
-        ref={dayInput}
+        ref={dayInputRef}
         defaultValue={defaultValue && formatNumberAsDoubleDigit(defaultValue[2])}
         hasError={hasError}
         max={31}
@@ -86,36 +91,36 @@ function DateInputWithRef(
         onBack={onBack}
         onClick={onClick}
         onFilled={submit}
-        onNext={() => monthInput.current.focus()}
+        onNext={() => monthInputRef.current.focus()}
         onPrevious={onPrevious}
         size={2}
       />
       /
       <NumberInput
-        ref={monthInput}
+        ref={monthInputRef}
         defaultValue={defaultValue && formatNumberAsDoubleDigit(defaultValue[1])}
         hasError={hasError}
         max={12}
         min={1}
-        onBack={() => dayInput.current.focus()}
+        onBack={() => dayInputRef.current.focus()}
         onClick={onClick}
         onFilled={submit}
-        onNext={() => yearInput.current.focus()}
-        onPrevious={() => dayInput.current.focus()}
+        onNext={() => yearInputRef.current.focus()}
+        onPrevious={() => dayInputRef.current.focus()}
         size={2}
       />
       /
       <NumberInput
-        ref={yearInput}
+        ref={yearInputRef}
         defaultValue={defaultValue && defaultValue[0]}
         hasError={hasError}
         max={currentUtcYear}
         min={2020}
-        onBack={() => monthInput.current.focus()}
+        onBack={() => monthInputRef.current.focus()}
         onClick={onClick}
         onFilled={submit}
         onNext={onNext}
-        onPrevious={() => monthInput.current.focus()}
+        onPrevious={() => monthInputRef.current.focus()}
         size={4}
       />
     </span>

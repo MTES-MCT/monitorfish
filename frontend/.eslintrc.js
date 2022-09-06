@@ -21,6 +21,12 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['src/domain/shared_slices/**/*.ts'],
+      rules: {
+        'no-param-reassign': 'off',
+      },
+    },
+    {
       files: ['src/ui/**/*.tsx'],
       rules: {
         'react/jsx-props-no-spreading': 'off',

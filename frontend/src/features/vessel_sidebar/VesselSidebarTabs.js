@@ -17,12 +17,12 @@ const VesselSidebarTabs = () => {
     selectedVessel,
     vesselSidebarTab
   } = useSelector(state => state.vessel)
-  const adminRole = useSelector(state => state.global.adminRole)
+  const isAdmin = useSelector(state => state.global.isAdmin)
 
   return (
     <TabList>
       {
-        adminRole
+        isAdmin
           ? <Tab
             isActive={vesselSidebarTab === VesselSidebarTab.SUMMARY}
             onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.SUMMARY))}
@@ -47,7 +47,7 @@ const VesselSidebarTabs = () => {
         <FisheriesIcon/> <br/> Pêche
       </Tab>
       {
-        adminRole
+        isAdmin
           ? <Tab
             isActive={vesselSidebarTab === VesselSidebarTab.REPORTING}
             onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.REPORTING))}
@@ -72,7 +72,7 @@ const VesselSidebarTabs = () => {
         <ControlsIcon/> <br/> Contrôles
       </Tab>
       {
-        adminRole
+        isAdmin
           ? <Tab
             isLast
             isActive={vesselSidebarTab === VesselSidebarTab.ERSVMS}

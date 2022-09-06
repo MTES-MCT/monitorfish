@@ -13,7 +13,7 @@ const showRegulatoryZoneMetadata = (regulatoryZone, previewZone) => (dispatch, g
   if (regulatoryZone) {
     dispatch(setLoadingRegulatoryZoneMetadata())
     const speciesByCode = getState().species.speciesByCode
-    getRegulatoryFeatureMetadataFromAPI(regulatoryZone, getState().global.inBackofficeMode).then(feature => {
+    getRegulatoryFeatureMetadataFromAPI(regulatoryZone, getState().global.isBackoffice).then(feature => {
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature, speciesByCode)
       dispatch(setRegulatoryZoneMetadata(regulatoryZoneMetadata))
 

@@ -1,33 +1,23 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { setAdminRole, setInBackofficeMode } from '../domain/shared_slices/Global'
+import { setIsAdmin, setIsBackoffice } from '../domain/shared_slices/Global'
 
-// TODO Are these types correct? Rename them is they are boolean.
 export type BackofficeModeProps = {
-  adminRole?: boolean
-  inBackofficeMode: boolean
+  isAdmin?: boolean
+  isBackoffice?: boolean
 }
-export function BackofficeMode({ adminRole = false, inBackofficeMode }: BackofficeModeProps) {
+// TODO Find a better way than a component to initialize these state props (a HOC may be more fit for that?).
+export function BackofficeMode({ isAdmin = false, isBackoffice = false }: BackofficeModeProps) {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // TODO Remove once actions are typed
-    if (!setInBackofficeMode) {
-      return
-    }
-
-    dispatch(setInBackofficeMode(inBackofficeMode))
-  }, [dispatch, inBackofficeMode])
+    dispatch(setIsBackoffice(isBackoffice))
+  }, [dispatch, isBackoffice])
 
   useEffect(() => {
-    // TODO Remove once actions are typed
-    if (!setAdminRole) {
-      return
-    }
-
-    dispatch(setAdminRole(adminRole))
-  }, [dispatch, adminRole])
+    dispatch(setIsAdmin(isAdmin))
+  }, [dispatch, isAdmin])
 
   return null
 }

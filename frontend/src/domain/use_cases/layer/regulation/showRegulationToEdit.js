@@ -13,7 +13,7 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
   const { speciesByCode } = getState().species
   dispatch(setStatus(STATUS.LOADING))
 
-  return getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZone, getState().global.inBackofficeMode)
+  return getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZone, getState().global.isBackoffice)
     .then(feature => {
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature, speciesByCode)
 

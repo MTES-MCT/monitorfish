@@ -31,7 +31,7 @@ const VesselListTable = ({
   toggleSelectRow,
   filters
 }) => {
-  const adminRole = useSelector(state => state.global.adminRole)
+  const isAdmin = useSelector(state => state.global.isAdmin)
   const { coordinatesFormat } = useSelector(state => state.map)
   const [sortColumn, setSortColumn] = React.useState()
   const [sortType, setSortType] = React.useState()
@@ -89,7 +89,7 @@ const VesselListTable = ({
           <CheckedCell dataKey="checked" onChange={toggleSelectRow} />
         </Column>
         {
-          adminRole
+          isAdmin
             ? <Column resizable sortable width={95} fixed>
               <HeaderCell>N. de risque</HeaderCell>
               <Cell dataKey="riskFactor">{rowData => parseFloat(rowData?.vesselProperties?.riskFactor).toFixed(1)}</Cell>

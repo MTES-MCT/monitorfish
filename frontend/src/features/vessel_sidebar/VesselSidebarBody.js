@@ -20,17 +20,17 @@ const VesselSidebarBody = () => {
     selectedVessel,
     vesselSidebarTab
   } = useSelector(state => state.vessel)
-  const adminRole = useSelector(state => state.global.adminRole)
+  const isAdmin = useSelector(state => state.global.isAdmin)
 
   return (
     <Body healthcheckTextWarning={healthcheckTextWarning}>
       {
-        adminRole
+        isAdmin
           ? <AlertWarning selectedVessel={selectedVessel}/>
           : null
       }
       {
-        adminRole
+        isAdmin
           ? <BeaconMalfunctionWarning selectedVessel={selectedVessel}/>
           : null
       }

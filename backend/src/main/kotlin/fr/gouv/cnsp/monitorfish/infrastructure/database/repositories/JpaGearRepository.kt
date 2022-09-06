@@ -11,19 +11,19 @@ import org.springframework.stereotype.Repository
 @Repository
 class JpaGearRepository(private val dbGearRepository: DBGearRepository) : GearRepository {
 
-    @Cacheable(value = ["gears"])
-    override fun findAll(): List<Gear> {
-        return dbGearRepository.findAll().map {
-            it.toGear()
-        }
+  @Cacheable(value = ["gears"])
+  override fun findAll(): List<Gear> {
+    return dbGearRepository.findAll().map {
+      it.toGear()
     }
+  }
 
-    @Cacheable(value = ["gear"])
-    override fun find(code: String): Gear {
-        return try {
-            dbGearRepository.findByCodeEquals(code).toGear()
-        } catch (e: EmptyResultDataAccessException) {
-            throw CodeNotFoundException("Gear: code $code not found")
-        }
+  @Cacheable(value = ["gear"])
+  override fun find(code: String): Gear {
+    return try {
+      dbGearRepository.findByCodeEquals(code).toGear()
+    } catch (e: EmptyResultDataAccessException) {
+      throw CodeNotFoundException("Gear: code $code not found")
     }
+  }
 }

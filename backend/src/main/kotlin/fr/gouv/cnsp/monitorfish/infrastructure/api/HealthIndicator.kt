@@ -8,5 +8,5 @@ import org.springframework.boot.actuate.health.HealthEndpoint
 private val healthEndpoint: HealthEndpoint? = null
 
 fun getAlive(): HealthComponent? {
-    return healthEndpoint?.health()
+  return healthEndpoint?.health()
 }

@@ -17,47 +17,47 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("/bff/v1/fleet_segments")
 @Api(description = "APIs for Fleet segments")
 class FleetSegmentController(
-        private val getAllFleetSegments: GetAllFleetSegments,
-        private val updateFleetSegment: UpdateFleetSegment,
-        private val deleteFleetSegment: DeleteFleetSegment,
-        private val createFleetSegment: CreateFleetSegment) {
+  private val getAllFleetSegments: GetAllFleetSegments,
+  private val updateFleetSegment: UpdateFleetSegment,
+  private val deleteFleetSegment: DeleteFleetSegment,
+  private val createFleetSegment: CreateFleetSegment) {
 
-    @GetMapping("")
-    @ApiOperation("Get fleet segments")
-    fun getFleetSegments(): List<FleetSegmentDataOutput> {
-        return getAllFleetSegments.execute().map { fleetSegment ->
-            FleetSegmentDataOutput.fromFleetSegment(fleetSegment)
-        }
+  @GetMapping("")
+  @ApiOperation("Get fleet segments")
+  fun getFleetSegments(): List<FleetSegmentDataOutput> {
+    return getAllFleetSegments.execute().map { fleetSegment ->
+      FleetSegmentDataOutput.fromFleetSegment(fleetSegment)
     }
+  }
 
-    @PutMapping(value = ["/**"], consumes = ["application/json"])
-    @ApiOperation("Update a fleet segment")
-    fun updateFleetSegment(request: HttpServletRequest,
-                           @RequestBody
-                           createOrUpdateFleetSegmentData: CreateOrUpdateFleetSegmentDataInput): FleetSegment {
-        val segmentPartOfURL = 1
-        val segment = request.requestURI.split(request.contextPath + "/fleet_segments/")[segmentPartOfURL]
+  @PutMapping(value = ["/**"], consumes = ["application/json"])
+  @ApiOperation("Update a fleet segment")
+  fun updateFleetSegment(request: HttpServletRequest,
+                         @RequestBody
+                         createOrUpdateFleetSegmentData: CreateOrUpdateFleetSegmentDataInput): FleetSegment {
+    val segmentPartOfURL = 1
+    val segment = request.requestURI.split(request.contextPath + "/fleet_segments/")[segmentPartOfURL]
 
-        return updateFleetSegment.execute(
-                segment = segment,
-                fields = createOrUpdateFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
-    }
+    return updateFleetSegment.execute(
+      segment = segment,
+      fields = createOrUpdateFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
+  }
 
-    @DeleteMapping(value = ["/**"])
-    @ApiOperation("Delete a fleet segment")
-    fun deleteFleetSegment(request: HttpServletRequest) {
-        val segmentPartOfURL = 1
-        val segment = request.requestURI.split(request.contextPath + "/fleet_segments/")[segmentPartOfURL]
+  @DeleteMapping(value = ["/**"])
+  @ApiOperation("Delete a fleet segment")
+  fun deleteFleetSegment(request: HttpServletRequest) {
+    val segmentPartOfURL = 1
+    val segment = request.requestURI.split(request.contextPath + "/fleet_segments/")[segmentPartOfURL]
 
-        deleteFleetSegment.execute(segment)
-    }
+    deleteFleetSegment.execute(segment)
+  }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = [""])
-    @ApiOperation("Create a fleet segment")
-    fun createFleetSegment(@RequestBody
-                           newFleetSegmentData: CreateOrUpdateFleetSegmentDataInput) {
+  @ResponseStatus(HttpStatus.CREATED)
+  @PostMapping(value = [""])
+  @ApiOperation("Create a fleet segment")
+  fun createFleetSegment(@RequestBody
+                         newFleetSegmentData: CreateOrUpdateFleetSegmentDataInput) {
 
-        createFleetSegment.execute(newFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
-    }
+    createFleetSegment.execute(newFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
+  }
 }

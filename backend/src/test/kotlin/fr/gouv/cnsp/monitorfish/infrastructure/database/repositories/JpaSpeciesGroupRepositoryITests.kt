@@ -9,25 +9,25 @@ import org.springframework.transaction.annotation.Transactional
 
 class JpaSpeciesGroupRepositoryITests : AbstractDBTests() {
 
-    @Autowired
-    private lateinit var jpaSpeciesGroupRepository: JpaSpeciesGroupRepository
+  @Autowired
+  private lateinit var jpaSpeciesGroupRepository: JpaSpeciesGroupRepository
 
-    @Autowired
-    lateinit var cacheManager: CacheManager
+  @Autowired
+  lateinit var cacheManager: CacheManager
 
-    @BeforeEach
-    fun setup() {
-        cacheManager.getCache("all_species_groups")?.clear()
-    }
+  @BeforeEach
+  fun setup() {
+    cacheManager.getCache("all_species_groups")?.clear()
+  }
 
-    @Test
-    @Transactional
-    fun `findAll Should return all species`() {
-        // When
-        val species = jpaSpeciesGroupRepository.findAll()
+  @Test
+  @Transactional
+  fun `findAll Should return all species`() {
+    // When
+    val species = jpaSpeciesGroupRepository.findAll()
 
-        assertThat(species).hasSize(14)
-        assertThat(species.first().group).isEqualTo("Espèces eau profonde")
-        assertThat(species.first().comment).isEqualTo("Liste des espèces eau profondes définies dans l'annexe XI de l'AM_27-05-2016")
-    }
+    assertThat(species).hasSize(14)
+    assertThat(species.first().group).isEqualTo("Espèces eau profonde")
+    assertThat(species.first().comment).isEqualTo("Liste des espèces eau profondes définies dans l'annexe XI de l'AM_27-05-2016")
+  }
 }

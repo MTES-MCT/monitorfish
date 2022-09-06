@@ -10,93 +10,93 @@ import org.springframework.transaction.annotation.Transactional
 
 class JpaVesselRepositoryITests : AbstractDBTests() {
 
-    @Autowired
-    private lateinit var jpaVesselRepository: JpaVesselRepository
+  @Autowired
+  private lateinit var jpaVesselRepository: JpaVesselRepository
 
-    @Autowired
-    lateinit var cacheManager: CacheManager
+  @Autowired
+  lateinit var cacheManager: CacheManager
 
-    @BeforeEach
-    fun setup() {
-        cacheManager.getCache("vessel")?.clear()
-    }
+  @BeforeEach
+  fun setup() {
+    cacheManager.getCache("vessel")?.clear()
+  }
 
-    @Test
-    @Transactional
-    fun `findVessel Should return an empty Vessel object When no vessel is found`() {
-        // When
-        val vessel = jpaVesselRepository.findVessel("DUMMY", "", "")
+  @Test
+  @Transactional
+  fun `findVessel Should return an empty Vessel object When no vessel is found`() {
+    // When
+    val vessel = jpaVesselRepository.findVessel("DUMMY", "", "")
 
-        assertThat(vessel.internalReferenceNumber).isNull()
-        assertThat(vessel.externalReferenceNumber).isNull()
-        assertThat(vessel.mmsi).isNull()
-        assertThat(vessel.ircs).isNull()
-    }
+    assertThat(vessel.internalReferenceNumber).isNull()
+    assertThat(vessel.externalReferenceNumber).isNull()
+    assertThat(vessel.mmsi).isNull()
+    assertThat(vessel.ircs).isNull()
+  }
 
-    @Test
-    @Transactional
-    fun `findVessel Should return a vessel When the CFR is given`() {
-        // When
-        val vessel = jpaVesselRepository.findVessel("FAK000999999", "", "")
+  @Test
+  @Transactional
+  fun `findVessel Should return a vessel When the CFR is given`() {
+    // When
+    val vessel = jpaVesselRepository.findVessel("FAK000999999", "", "")
 
-        assertThat(vessel.internalReferenceNumber).isEqualTo("FAK000999999")
-    }
+    assertThat(vessel.internalReferenceNumber).isEqualTo("FAK000999999")
+  }
 
-    @Test
-    @Transactional
-    fun `findVessel Should return a vessel When the external marking is given`() {
-        // When
-        val vessel = jpaVesselRepository.findVessel("BAD_IDEA", "TALK2ME", "")
+  @Test
+  @Transactional
+  fun `findVessel Should return a vessel When the external marking is given`() {
+    // When
+    val vessel = jpaVesselRepository.findVessel("BAD_IDEA", "TALK2ME", "")
 
-        assertThat(vessel.internalReferenceNumber).isEqualTo("U_W0NTFINDME")
-    }
+    assertThat(vessel.internalReferenceNumber).isEqualTo("U_W0NTFINDME")
+  }
 
-    @Test
-    @Transactional
-    fun `search Should return a vessel When part of the CFR is given`() {
-        // When
-        val vessels = jpaVesselRepository.search("FAK0")
+  @Test
+  @Transactional
+  fun `search Should return a vessel When part of the CFR is given`() {
+    // When
+    val vessels = jpaVesselRepository.search("FAK0")
 
-        assertThat(vessels).hasSize(1)
-        assertThat(vessels.first().internalReferenceNumber).isEqualTo("FAK000999999")
-    }
+    assertThat(vessels).hasSize(1)
+    assertThat(vessels.first().internalReferenceNumber).isEqualTo("FAK000999999")
+  }
 
-    @Test
-    @Transactional
-    fun `search Should return a vessel When part of the beacon number is given`() {
-        // When
-        val vessels = jpaVesselRepository.search("BEACON_IS")
+  @Test
+  @Transactional
+  fun `search Should return a vessel When part of the beacon number is given`() {
+    // When
+    val vessels = jpaVesselRepository.search("BEACON_IS")
 
-        assertThat(vessels).hasSize(1)
-        assertThat(vessels.first().beaconNumber).isEqualTo("BEACON_IS_NOT_BACON")
-    }
+    assertThat(vessels).hasSize(1)
+    assertThat(vessels.first().beaconNumber).isEqualTo("BEACON_IS_NOT_BACON")
+  }
 
-    @Test
-    @Transactional
-    fun `search Should return no vessel When no search string is given`() {
-        // When
-        val vessels = jpaVesselRepository.search("")
+  @Test
+  @Transactional
+  fun `search Should return no vessel When no search string is given`() {
+    // When
+    val vessels = jpaVesselRepository.search("")
 
-        assertThat(vessels).hasSize(0)
-    }
+    assertThat(vessels).hasSize(0)
+  }
 
-    @Test
-    @Transactional
-    fun `search Should return a vessel When part of the vessel name is given`() {
-        // When
-        val vessels = jpaVesselRepository.search("LE b")
+  @Test
+  @Transactional
+  fun `search Should return a vessel When part of the vessel name is given`() {
+    // When
+    val vessels = jpaVesselRepository.search("LE b")
 
-        assertThat(vessels).hasSize(1)
-        assertThat(vessels.first().internalReferenceNumber).isEqualTo("FR263418260")
-    }
+    assertThat(vessels).hasSize(1)
+    assertThat(vessels.first().internalReferenceNumber).isEqualTo("FR263418260")
+  }
 
-    @Test
-    @Transactional
-    fun `search Should return an UNDEFINED flag state When a wrong flag state is given`() {
-        // When
-        val vessels = jpaVesselRepository.search("U_W0NTFINDME")
+  @Test
+  @Transactional
+  fun `search Should return an UNDEFINED flag state When a wrong flag state is given`() {
+    // When
+    val vessels = jpaVesselRepository.search("U_W0NTFINDME")
 
-        assertThat(vessels).hasSize(1)
-        assertThat(vessels.first().flagState).isEqualTo(CountryCode.UNDEFINED)
-    }
+    assertThat(vessels).hasSize(1)
+    assertThat(vessels.first().flagState).isEqualTo(CountryCode.UNDEFINED)
+  }
 }

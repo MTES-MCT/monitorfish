@@ -15,25 +15,25 @@ import org.springframework.context.annotation.Import
 @JsonTest
 class RuleMapperUTests {
 
-    @Autowired
-    private lateinit var mapper: ObjectMapper
+  @Autowired
+  private lateinit var mapper: ObjectMapper
 
-    @Test
-    fun `getRuleTypeFromJSON Should deserialize PNOAndLANWeightTolerance When it is first serialized`() {
-        // Given
-        val pnoAndLANWeightTolerance = PNOAndLANWeightTolerance(10.0)
+  @Test
+  fun `getRuleTypeFromJSON Should deserialize PNOAndLANWeightTolerance When it is first serialized`() {
+    // Given
+    val pnoAndLANWeightTolerance = PNOAndLANWeightTolerance(10.0)
 
-        // When
-        val jsonString = mapper.writeValueAsString(pnoAndLANWeightTolerance);
-        val parsedPNOAndLANWeightTolerance = RuleMapper.getRuleTypeFromJSON(mapper, jsonString)
+    // When
+    val jsonString = mapper.writeValueAsString(pnoAndLANWeightTolerance);
+    val parsedPNOAndLANWeightTolerance = RuleMapper.getRuleTypeFromJSON(mapper, jsonString)
 
-        // Then
-        assertThat(parsedPNOAndLANWeightTolerance).isInstanceOf(PNOAndLANWeightTolerance::class.java)
-        parsedPNOAndLANWeightTolerance as PNOAndLANWeightTolerance
+    // Then
+    assertThat(parsedPNOAndLANWeightTolerance).isInstanceOf(PNOAndLANWeightTolerance::class.java)
+    parsedPNOAndLANWeightTolerance as PNOAndLANWeightTolerance
 
-        assertThat(parsedPNOAndLANWeightTolerance.percentOfTolerance).isEqualTo(10.0)
-        assertThat(parsedPNOAndLANWeightTolerance.name).isEqualTo(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE)
-        assertThat(parsedPNOAndLANWeightTolerance.inputSource).isEqualTo(InputSource.Logbook)
-    }
+    assertThat(parsedPNOAndLANWeightTolerance.percentOfTolerance).isEqualTo(10.0)
+    assertThat(parsedPNOAndLANWeightTolerance.name).isEqualTo(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE)
+    assertThat(parsedPNOAndLANWeightTolerance.inputSource).isEqualTo(InputSource.Logbook)
+  }
 
 }

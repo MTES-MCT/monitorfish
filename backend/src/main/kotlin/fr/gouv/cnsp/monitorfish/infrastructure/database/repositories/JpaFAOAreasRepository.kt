@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository
 @Repository
 class JpaFAOAreasRepository(private val dbFAOAreasRepository: DBFAOAreasRepository) : FAOAreasRepository {
 
-    @Cacheable(value = ["fao_areas"])
-    override fun findAll(): List<FAOArea> {
-        return dbFAOAreasRepository.findAll().map {
-            it.toFAOArea()
-        }
+  @Cacheable(value = ["fao_areas"])
+  override fun findAll(): List<FAOArea> {
+    return dbFAOAreasRepository.findAll().map {
+      it.toFAOArea()
     }
+  }
 }

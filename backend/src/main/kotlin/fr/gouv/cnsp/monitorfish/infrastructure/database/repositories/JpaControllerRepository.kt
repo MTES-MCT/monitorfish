@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class JpaControllerRepository(private val dbControllerRepository: DBControllerRepository) : ControllerRepository {
 
-    override fun findAll(): List<Controller> {
-        return dbControllerRepository.findAll().map { it.toController() }
-    }
+  override fun findAll(): List<Controller> {
+    return dbControllerRepository.findAll().map { it.toController() }
+  }
 }

@@ -7,20 +7,20 @@ import org.springframework.transaction.annotation.Transactional
 
 class JpaControllerRepositoryITests : AbstractDBTests() {
 
-    @Autowired
-    private lateinit var jpaControllerRepository: JpaControllerRepository
+  @Autowired
+  private lateinit var jpaControllerRepository: JpaControllerRepository
 
-    @Test
-    @Transactional
-    fun `findAll Should return all controllers`() {
-        // When
-        val controllers = jpaControllerRepository.findAll()
+  @Test
+  @Transactional
+  fun `findAll Should return all controllers`() {
+    // When
+    val controllers = jpaControllerRepository.findAll()
 
-        // Then
-        assertThat(controllers).hasSize(2)
-        assertThat(controllers.first().controller).isEqualTo("ULAM 56")
-        assertThat(controllers.first().administration).isEqualTo("Affaires Maritimes")
-        assertThat(controllers.first().controllerType).isEqualTo("Terrestre")
-    }
+    // Then
+    assertThat(controllers).hasSize(2)
+    assertThat(controllers.first().controller).isEqualTo("ULAM 56")
+    assertThat(controllers.first().administration).isEqualTo("Affaires Maritimes")
+    assertThat(controllers.first().controllerType).isEqualTo("Terrestre")
+  }
 
 }

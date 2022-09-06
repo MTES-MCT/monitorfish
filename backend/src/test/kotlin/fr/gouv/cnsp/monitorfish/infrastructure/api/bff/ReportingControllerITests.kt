@@ -1,20 +1,18 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.jsontype.NamedType
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
-import fr.gouv.cnsp.monitorfish.MeterRegistryConfiguration
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionCommentUserType
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReporting
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -30,7 +28,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.testcontainers.shaded.com.github.dockerjava.core.dockerfile.DockerfileStatement
 import java.time.ZonedDateTime
 
 @Import(MapperConfiguration::class)
@@ -38,73 +35,73 @@ import java.time.ZonedDateTime
 @WebMvcTest(value = [(ReportingController::class)])
 class ReportingControllerITests {
 
-    @Autowired
-    private lateinit var mockMvc: MockMvc
+  @Autowired
+  private lateinit var mockMvc: MockMvc
 
-    @MockBean
-    private lateinit var archiveReporting: ArchiveReporting
+  @MockBean
+  private lateinit var archiveReporting: ArchiveReporting
 
-    @MockBean
-    private lateinit var deleteReporting: DeleteReporting
+  @MockBean
+  private lateinit var deleteReporting: DeleteReporting
 
-    @MockBean
-    private lateinit var addReporting: AddReporting
+  @MockBean
+  private lateinit var addReporting: AddReporting
 
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
+  @Autowired
+  private lateinit var objectMapper: ObjectMapper
 
-    @Test
-    fun `Should archive a reporting`() {
-        // When
-        mockMvc.perform(put("/bff/v1/reportings/123/archive"))
-                // Then
-                .andExpect(status().isOk)
+  @Test
+  fun `Should archive a reporting`() {
+    // When
+    mockMvc.perform(put("/bff/v1/reportings/123/archive"))
+      // Then
+      .andExpect(status().isOk)
 
-        Mockito.verify(archiveReporting).execute(123)
-    }
+    Mockito.verify(archiveReporting).execute(123)
+  }
 
-    @Test
-    fun `Should delete a reporting`() {
-        // When
-        mockMvc.perform(put("/bff/v1/reportings/123/delete"))
-                // Then
-                .andExpect(status().isOk)
+  @Test
+  fun `Should delete a reporting`() {
+    // When
+    mockMvc.perform(put("/bff/v1/reportings/123/delete"))
+      // Then
+      .andExpect(status().isOk)
 
-        Mockito.verify(deleteReporting).execute(123)
-    }
+    Mockito.verify(deleteReporting).execute(123)
+  }
 
-    @Test
-    fun `Should create a reporting`() {
-        // Given
-        given(addReporting.execute(any())).willReturn(Reporting(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                creationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
-                type = ReportingType.INFRACTION_SUSPICION,
-                isDeleted = false,
-                isArchived = false))
+  @Test
+  fun `Should create a reporting`() {
+    // Given
+    given(addReporting.execute(any())).willReturn(Reporting(
+      internalReferenceNumber = "FRFGRGR",
+      externalReferenceNumber = "RGD",
+      ircs = "6554fEE",
+      vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+      creationDate = ZonedDateTime.now(),
+      value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+      type = ReportingType.INFRACTION_SUSPICION,
+      isDeleted = false,
+      isArchived = false))
 
-        // When
-        mockMvc.perform(post("/bff/v1/reportings")
-                .content(objectMapper.writeValueAsString(CreateReportingDataInput(
-                        internalReferenceNumber = "FRFGRGR",
-                        externalReferenceNumber = "RGD",
-                        ircs = "6554fEE",
-                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                        creationDate = ZonedDateTime.now(),
-                        value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
-                        type = ReportingType.INFRACTION_SUSPICION
-                )))
-                .contentType(MediaType.APPLICATION_JSON))
-                // Then
-                .andExpect(status().isCreated)
-                .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("OPS")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
-    }
+    // When
+    mockMvc.perform(post("/bff/v1/reportings")
+      .content(objectMapper.writeValueAsString(CreateReportingDataInput(
+        internalReferenceNumber = "FRFGRGR",
+        externalReferenceNumber = "RGD",
+        ircs = "6554fEE",
+        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+        creationDate = ZonedDateTime.now(),
+        value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+        type = ReportingType.INFRACTION_SUSPICION
+      )))
+      .contentType(MediaType.APPLICATION_JSON))
+      // Then
+      .andExpect(status().isCreated)
+      .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("OPS")))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
+      .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
+  }
 
 }

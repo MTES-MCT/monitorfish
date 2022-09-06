@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "monitorfish.ajp")
 class AJPProperties {
-    var port: String? = null
+  var port: String? = null
 }

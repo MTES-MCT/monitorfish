@@ -5,8 +5,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Catch
 import java.time.ZonedDateTime
 
 class DIS() : LogbookMessageValue {
-    var catches: List<Catch> = listOf()
+  var catches: List<Catch> = listOf()
 
-    @JsonProperty("discardDatetimeUtc")
-    var discardDateTime: ZonedDateTime? = null
+  @JsonProperty("discardDatetimeUtc")
+  var discardDateTime: ZonedDateTime? = null
 }

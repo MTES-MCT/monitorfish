@@ -1,5 +1,5 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.alerts.type
 
 interface IHasImplementation {
-    fun getImplementation(): Class<out AlertType>
+  fun getImplementation(): Class<out AlertType>
 }

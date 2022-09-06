@@ -10,7 +10,7 @@ import type { Promisable } from 'type-fest'
 type RangedTimePickerProps = {
   filter: RegExp
   minutesRange: number
-  onChange: (newTimeTuple: TimeTuple) => Promisable<void>
+  onChange: (nextTimeTuple: TimeTuple) => Promisable<void>
 }
 export function RangedTimePicker({ filter, minutesRange, onChange }: RangedTimePickerProps) {
   const rangedTimeOptions = useMemo(() => getRangedTimeOptions(minutesRange), [minutesRange])
@@ -26,23 +26,23 @@ export function RangedTimePicker({ filter, minutesRange, onChange }: RangedTimeP
       if (event.key === 'ArrowDown') {
         event.preventDefault()
 
-        const newSelectedOptionIndex =
+        const nextSelectedOptionIndex =
           selectedOptionIndex < filteredRangedTimeOptions.length - 1 ? selectedOptionIndex + 1 : 0
 
-        setSelectedOptionIndex(newSelectedOptionIndex)
+        setSelectedOptionIndex(nextSelectedOptionIndex)
 
-        window.document.querySelectorAll('.js-ranged-time-picker-option')[newSelectedOptionIndex]?.scrollIntoView()
+        window.document.querySelectorAll('.js-ranged-time-picker-option')[nextSelectedOptionIndex]?.scrollIntoView()
       }
 
       if (event.key === 'ArrowUp') {
         event.preventDefault()
 
-        const newSelectedOptionIndex =
+        const nextSelectedOptionIndex =
           selectedOptionIndex > 0 ? selectedOptionIndex - 1 : filteredRangedTimeOptions.length - 1
 
-        setSelectedOptionIndex(newSelectedOptionIndex)
+        setSelectedOptionIndex(nextSelectedOptionIndex)
 
-        window.document.querySelectorAll('.js-ranged-time-picker-option')[newSelectedOptionIndex]?.scrollIntoView()
+        window.document.querySelectorAll('.js-ranged-time-picker-option')[nextSelectedOptionIndex]?.scrollIntoView()
       }
 
       if (['Enter', 'Space', 'Tab'].includes(event.key)) {

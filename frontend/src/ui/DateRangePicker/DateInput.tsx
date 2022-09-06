@@ -12,7 +12,7 @@ import type { Promisable } from 'type-fest'
 export type DateInputProps = Pick<NumberInputProps, 'onBack' | 'onPrevious' | 'onNext'> & {
   defaultValue?: DateTuple
   /** Called each time the date input is changed to a new valid value. */
-  onChange: (newDateTuple: DateTuple) => Promisable<void>
+  onChange: (nextDateTuple: DateTuple) => Promisable<void>
   onClick: () => Promisable<void>
 }
 function DateInputWithRef(
@@ -66,13 +66,13 @@ function DateInputWithRef(
       return
     }
 
-    const newDateTuple: DateTuple = [
+    const nextDateTuple: DateTuple = [
       String(yearInput.current.value),
       formatNumberAsDoubleDigit(monthInput.current.value),
       formatNumberAsDoubleDigit(dayInput.current.value),
     ]
 
-    onChange(newDateTuple)
+    onChange(nextDateTuple)
   }, [onChange])
 
   return (

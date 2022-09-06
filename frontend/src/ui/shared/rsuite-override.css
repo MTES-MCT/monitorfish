@@ -153,6 +153,7 @@ label {
 .rs-checkbox-checker {
   padding-bottom: 0;
   padding-left: 36px;
+  min-height: 0px;
 }
 
 .rs-checkbox label {

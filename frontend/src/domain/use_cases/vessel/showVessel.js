@@ -29,7 +29,7 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
     fishingActivitiesAreShowedOnMap
   } = fishingActivities
   const {
-    adminRole
+    isAdmin
   } = global
 
   const lastPositionVessel = vessels.find(_vessel => _vessel.vesselId === Vessel.getVesselFeatureId(vesselIdentity))
@@ -45,7 +45,7 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
     dispatch(addSearchedVessel(vesselIdentity))
   }
 
-  if (!adminRole) {
+  if (!isAdmin) {
     dispatch(showVesselSidebarTab(VesselSidebarTab.IDENTITY))
   }
 

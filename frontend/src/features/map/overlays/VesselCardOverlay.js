@@ -36,7 +36,7 @@ export const marginsWithTwoWarning = {
 }
 
 const VesselCardOverlay = ({ feature, map }) => {
-  const { adminRole } = useSelector(state => state.global)
+  const { isAdmin } = useSelector(state => state.global)
   const [vesselFeatureToShowOnCard, setVesselFeatureToShowOnCard] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
@@ -67,7 +67,7 @@ const VesselCardOverlay = ({ feature, map }) => {
     if (overlayRef.current && overlayObjectRef.current) {
       if (feature?.getId()?.toString()?.includes(LayersEnum.VESSELS.code)) {
         setVesselFeatureToShowOnCard(feature)
-        numberOfWarnings.current = adminRole
+        numberOfWarnings.current = isAdmin
           ? feature?.vesselProperties?.hasAlert + !!feature?.vesselProperties?.beaconMalfunctionId + feature?.vesselProperties?.hasInfractionSuspicion
           : false
         overlayRef.current.style.display = 'block'
@@ -89,7 +89,7 @@ const VesselCardOverlay = ({ feature, map }) => {
         setVesselFeatureToShowOnCard(null)
       }
     }
-  }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef, adminRole])
+  }, [feature, setVesselFeatureToShowOnCard, overlayRef, overlayObjectRef, isAdmin])
 
   function getNextOverlayPosition (numberOfWarnings) {
     const [x, y] = feature.getGeometry().getCoordinates()

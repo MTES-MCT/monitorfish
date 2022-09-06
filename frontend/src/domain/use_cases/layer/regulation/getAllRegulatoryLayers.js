@@ -14,7 +14,7 @@ const getAllRegulatoryLayers = () => async (dispatch, getState) => {
   const { setShowedLayersWithLocalStorageValues } = layer.homepage.actions
   const { speciesByCode } = getState().species
 
-  return getAllRegulatoryLayersFromAPI(getState().global.inBackofficeMode)
+  return getAllRegulatoryLayersFromAPI(getState().global.isBackoffice)
     .then(features => {
       return monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode)
     })

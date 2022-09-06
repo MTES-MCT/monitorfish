@@ -11,7 +11,7 @@ const getAllRegulatoryLayersByRegTerritory = () => async (dispatch, getState) =>
   const monitorFishWorker = await new MonitorFishWorker()
   const { speciesByCode } = getState().species
 
-  return getAllRegulatoryLayersFromAPI(getState().global.inBackofficeMode)
+  return getAllRegulatoryLayersFromAPI(getState().global.isBackoffice)
     .then(features => {
       return monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode)
     })

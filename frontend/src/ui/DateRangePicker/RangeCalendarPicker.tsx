@@ -10,7 +10,7 @@ import { RSUITE_CALENDAR_LOCALE } from './constants'
 import { getDateTupleFromDate } from './utils'
 
 import type { DateRange } from '../../types'
-import type { DateTuple, DateTupleRange } from './types'
+import type { DateTupleRange } from './types'
 import type { Promisable } from 'type-fest'
 
 type RangeCalendarPickerProps = {
@@ -35,8 +35,8 @@ export function RangeCalendarPicker({ defaultValue, onChange }: RangeCalendarPic
 
       const sortedDateRange = sortDates([selectedFirstDate.current, nextDate]) as DateRange
       const [startDate, endDate] = sortedDateRange
-      const startDateTuple = getDateTupleFromDate(startDate) as DateTuple
-      const endDateTuple = getDateTupleFromDate(endDate) as DateTuple
+      const startDateTuple = getDateTupleFromDate(startDate)
+      const endDateTuple = getDateTupleFromDate(endDate)
       const nextDateTupleRange = [startDateTuple, endDateTuple] as DateTupleRange
 
       onChange(nextDateTupleRange)

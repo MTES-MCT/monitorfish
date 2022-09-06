@@ -11,27 +11,27 @@ import java.net.InetAddress
 
 @Configuration
 class AJPConfig {
-  @Autowired
-  private val AJPProperties: AJPProperties? = null
+    @Autowired
+    private val AJPProperties: AJPProperties? = null
 
-  @Bean
-  fun servletContainer(): WebServerFactoryCustomizer<TomcatServletWebServerFactory?>? {
-    return WebServerFactoryCustomizer { server: TomcatServletWebServerFactory? ->
-      if (server is TomcatServletWebServerFactory) {
-        server.addAdditionalTomcatConnectors(redirectConnector())
-      }
+    @Bean
+    fun servletContainer(): WebServerFactoryCustomizer<TomcatServletWebServerFactory?>? {
+        return WebServerFactoryCustomizer { server: TomcatServletWebServerFactory? ->
+            if (server is TomcatServletWebServerFactory) {
+                server.addAdditionalTomcatConnectors(redirectConnector())
+            }
+        }
     }
-  }
 
-  private fun redirectConnector(): Connector? {
-    val connector = Connector("AJP/1.3")
-    connector.scheme = "http"
-    connector.port = AJPProperties?.port?.toInt() ?: 8000
-    connector.secure = false
-    connector.allowTrace = false
-    (connector.protocolHandler as AbstractAjpProtocol<*>).secretRequired = false
-    (connector.protocolHandler as AbstractAjpProtocol<*>).address = InetAddress.getByName("0.0.0.0")
+    private fun redirectConnector(): Connector? {
+        val connector = Connector("AJP/1.3")
+        connector.scheme = "http"
+        connector.port = AJPProperties?.port?.toInt() ?: 8000
+        connector.secure = false
+        connector.allowTrace = false
+        (connector.protocolHandler as AbstractAjpProtocol<*>).secretRequired = false
+        (connector.protocolHandler as AbstractAjpProtocol<*>).address = InetAddress.getByName("0.0.0.0")
 
-    return connector
-  }
+        return connector
+    }
 }

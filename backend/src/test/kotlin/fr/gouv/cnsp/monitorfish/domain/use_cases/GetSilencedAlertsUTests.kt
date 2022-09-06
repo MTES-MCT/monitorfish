@@ -16,46 +16,46 @@ import java.time.ZonedDateTime
 @ExtendWith(SpringExtension::class)
 class GetSilencedAlertsUTests {
 
-  @MockBean
-  private lateinit var silencedAlertRepository: SilencedAlertRepository
+    @MockBean
+    private lateinit var silencedAlertRepository: SilencedAlertRepository
 
-  @Test
-  fun `execute Should return silenced alerts without validated alerts`() {
-    // Given
-    val silencedAlertOne = SilencedAlert(
-      internalReferenceNumber = "INTERNAL_REF_ONE",
-      externalReferenceNumber = "RGD",
-      ircs = "6554fEE",
-      vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-      value = ThreeMilesTrawlingAlert(),
-      silencedBeforeDate = ZonedDateTime.now().plusHours(5))
-    val silencedAlertTwo = SilencedAlert(
-      internalReferenceNumber = "INTERNAL_REF_TWO",
-      externalReferenceNumber = "RGD",
-      ircs = "6554fEE",
-      vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-      value = ThreeMilesTrawlingAlert(),
-      silencedBeforeDate = ZonedDateTime.now().plusHours(5),
-      wasValidated = true)
-    val silencedAlertThree = SilencedAlert(
-      internalReferenceNumber = "INTERNAL_REF_THREE",
-      externalReferenceNumber = "RGD",
-      ircs = "6554fEE",
-      vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-      value = ThreeMilesTrawlingAlert(),
-      silencedBeforeDate = ZonedDateTime.now().plusHours(5),
-      wasValidated = false)
-    given(silencedAlertRepository.findAllCurrentSilencedAlerts()).willReturn(listOf(
-      silencedAlertOne,
-      silencedAlertTwo,
-      silencedAlertThree))
+    @Test
+    fun `execute Should return silenced alerts without validated alerts`() {
+        // Given
+        val silencedAlertOne = SilencedAlert(
+            internalReferenceNumber = "INTERNAL_REF_ONE",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            value = ThreeMilesTrawlingAlert(),
+            silencedBeforeDate = ZonedDateTime.now().plusHours(5))
+        val silencedAlertTwo = SilencedAlert(
+            internalReferenceNumber = "INTERNAL_REF_TWO",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            value = ThreeMilesTrawlingAlert(),
+            silencedBeforeDate = ZonedDateTime.now().plusHours(5),
+            wasValidated = true)
+        val silencedAlertThree = SilencedAlert(
+            internalReferenceNumber = "INTERNAL_REF_THREE",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            value = ThreeMilesTrawlingAlert(),
+            silencedBeforeDate = ZonedDateTime.now().plusHours(5),
+            wasValidated = false)
+        given(silencedAlertRepository.findAllCurrentSilencedAlerts()).willReturn(listOf(
+            silencedAlertOne,
+            silencedAlertTwo,
+            silencedAlertThree))
 
-    // When
-    val silencedAlerts = GetSilencedAlerts(silencedAlertRepository).execute()
+        // When
+        val silencedAlerts = GetSilencedAlerts(silencedAlertRepository).execute()
 
-    // Then
-    assertThat(silencedAlerts).hasSize(2)
-    assertThat(silencedAlerts.first().internalReferenceNumber).isEqualTo("INTERNAL_REF_ONE")
-    assertThat(silencedAlerts.last().internalReferenceNumber).isEqualTo("INTERNAL_REF_THREE")
-  }
+        // Then
+        assertThat(silencedAlerts).hasSize(2)
+        assertThat(silencedAlerts.first().internalReferenceNumber).isEqualTo("INTERNAL_REF_ONE")
+        assertThat(silencedAlerts.last().internalReferenceNumber).isEqualTo("INTERNAL_REF_THREE")
+    }
 }

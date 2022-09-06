@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory
 
 @UseCase
 class DeleteSilencedOperationalAlert(private val silencedAlertRepository: SilencedAlertRepository) {
-  private val logger = LoggerFactory.getLogger(DeleteSilencedOperationalAlert::class.java)
+    private val logger = LoggerFactory.getLogger(DeleteSilencedOperationalAlert::class.java)
 
-  fun execute(silencedAlertId: Int) {
-    logger.info("Deleting silenced alert ${silencedAlertId}.")
-    silencedAlertRepository.delete(silencedAlertId)
-  }
+    fun execute(silencedAlertId: Int) {
+        logger.info("Deleting silenced alert ${silencedAlertId}.")
+        silencedAlertRepository.delete(silencedAlertId)
+    }
 }

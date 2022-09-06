@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository
 import java.time.Instant
 
 interface DBControlRepository : CrudRepository<ControlEntity, Long> {
-  fun findAllByVesselIdEqualsAndControlDatetimeUtcAfter(vesselId: Int, afterDateTime: Instant): List<ControlEntity>
+    fun findAllByVesselIdEqualsAndControlDatetimeUtcAfter(vesselId: Int, afterDateTime: Instant): List<ControlEntity>
 }

@@ -12,64 +12,64 @@ import java.util.*
 
 class JpaPNOAndLANAlertRepositoryITests : AbstractDBTests() {
 
-  @Autowired
-  private lateinit var jpaAlertRepository: JpaPNOAndLANAlertRepository
+    @Autowired
+    private lateinit var jpaAlertRepository: JpaPNOAndLANAlertRepository
 
-  @Test
-  @Transactional
-  fun `findAlertsOfTypes Should return all alert of a specific rule`() {
-    // Given
-    val alertOne = PNOAndLANAlert(
-      id = UUID.randomUUID(),
-      internalReferenceNumber = "FRFGRGR",
-      externalReferenceNumber = "RGD",
-      ircs = "6554fEE",
-      tripNumber = "123456",
-      creationDate = ZonedDateTime.now(),
-      value = PNOAndLANWeightToleranceAlert())
-    jpaAlertRepository.save(alertOne)
+    @Test
+    @Transactional
+    fun `findAlertsOfTypes Should return all alert of a specific rule`() {
+        // Given
+        val alertOne = PNOAndLANAlert(
+            id = UUID.randomUUID(),
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = PNOAndLANWeightToleranceAlert())
+        jpaAlertRepository.save(alertOne)
 
-    val alertTwo = PNOAndLANAlert(
-      id = UUID.randomUUID(),
-      internalReferenceNumber = "FRFGRGR",
-      externalReferenceNumber = "RGD",
-      ircs = "6554fEE",
-      tripNumber = "123456",
-      creationDate = ZonedDateTime.now(),
-      value = PNOAndLANWeightToleranceAlert())
-    jpaAlertRepository.save(alertTwo)
+        val alertTwo = PNOAndLANAlert(
+            id = UUID.randomUUID(),
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = PNOAndLANWeightToleranceAlert())
+        jpaAlertRepository.save(alertTwo)
 
-    // When
-    val alerts = jpaAlertRepository.findAlertsOfTypes(
-      listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
-      "FRFGRGR",
-      "123456")
+        // When
+        val alerts = jpaAlertRepository.findAlertsOfTypes(
+            listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
+            "FRFGRGR",
+            "123456")
 
-    // Then
-    assertThat(alerts).hasSize(2)
-  }
+        // Then
+        assertThat(alerts).hasSize(2)
+    }
 
-  @Test
-  @Transactional
-  fun `findAlertsOfTypes Should return no alert When the rule name is wrong`() {
-    // Given
-    val alertOne = PNOAndLANAlert(
-      id = UUID.randomUUID(),
-      internalReferenceNumber = "FRFGRGR",
-      externalReferenceNumber = "RGD",
-      ircs = "6554fEE",
-      tripNumber = "123456",
-      creationDate = ZonedDateTime.now(),
-      value = PNOAndLANWeightToleranceAlert())
-    jpaAlertRepository.save(alertOne)
+    @Test
+    @Transactional
+    fun `findAlertsOfTypes Should return no alert When the rule name is wrong`() {
+        // Given
+        val alertOne = PNOAndLANAlert(
+            id = UUID.randomUUID(),
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = PNOAndLANWeightToleranceAlert())
+        jpaAlertRepository.save(alertOne)
 
-    // When
-    val alerts = jpaAlertRepository.findAlertsOfTypes(
-      listOf(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT),
-      "FRFGRGR",
-      "123456")
+        // When
+        val alerts = jpaAlertRepository.findAlertsOfTypes(
+            listOf(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT),
+            "FRFGRGR",
+            "123456")
 
-    // Then
-    assertThat(alerts).hasSize(0)
-  }
+        // Then
+        assertThat(alerts).hasSize(0)
+    }
 }

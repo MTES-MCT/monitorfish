@@ -20,26 +20,26 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @WebMvcTest(value = [(InfractionController::class)])
 class InfractionControllerITests {
 
-  @Autowired
-  private lateinit var mockMvc: MockMvc
+    @Autowired
+    private lateinit var mockMvc: MockMvc
 
-  @MockBean
-  private lateinit var getFishingInfractions: GetFishingInfractions
+    @MockBean
+    private lateinit var getFishingInfractions: GetFishingInfractions
 
-  @Test
-  fun `Should get all fishing infractions`() {
-    // Given
-    given(this.getFishingInfractions.execute()).willReturn(listOf(
-      Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value),
-      Infraction(1, natinfCode = "7065", infractionCategory = InfractionCategory.FISHING.value)))
+    @Test
+    fun `Should get all fishing infractions`() {
+        // Given
+        given(this.getFishingInfractions.execute()).willReturn(listOf(
+            Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value),
+            Infraction(1, natinfCode = "7065", infractionCategory = InfractionCategory.FISHING.value)))
 
-    // When
-    mockMvc.perform(get("/bff/v1/infractions"))
-      // Then
-      .andExpect(status().isOk)
-      .andExpect(jsonPath("$.length()", equalTo(2)))
-      .andExpect(jsonPath("$[0].natinfCode", equalTo("7059")))
-      .andExpect(jsonPath("$[1].natinfCode", equalTo("7065")))
-  }
+        // When
+        mockMvc.perform(get("/bff/v1/infractions"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].natinfCode", equalTo("7059")))
+            .andExpect(jsonPath("$[1].natinfCode", equalTo("7065")))
+    }
 
 }

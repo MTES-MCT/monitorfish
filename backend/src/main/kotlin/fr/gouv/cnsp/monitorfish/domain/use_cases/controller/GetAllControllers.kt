@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ControllerRepository
 
 @UseCase
 class GetAllControllers(private val controllerRepository: ControllerRepository) {
-  fun execute(): List<Controller> {
-    return controllerRepository.findAll()
-  }
+    fun execute(): List<Controller> {
+        return controllerRepository.findAll()
+    }
 }

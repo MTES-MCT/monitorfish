@@ -9,16 +9,16 @@ import javax.persistence.Table
 @Entity
 @Table(name = "species_groups")
 data class SpeciesGroupEntity(
-  @Id
-  @Column(name = "id")
-  val id: Int? = null,
-  @Column(name = "species_group")
-  val group: String,
-  @Column(name = "comment")
-  val comment: String) {
+    @Id
+    @Column(name = "id")
+    val id: Int? = null,
+    @Column(name = "species_group")
+    val group: String,
+    @Column(name = "comment")
+    val comment: String) {
 
-  fun toSpeciesGroup() = SpeciesGroup(
-    group = group,
-    comment = comment
-  )
+    fun toSpeciesGroup() = SpeciesGroup(
+        group = group,
+        comment = comment
+    )
 }

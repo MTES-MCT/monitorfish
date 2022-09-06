@@ -9,80 +9,80 @@ import java.time.ZonedDateTime
 
 @UseCase
 class GetBeaconMalfunction(
-  private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
-  private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
-  private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
-  private val lastPositionRepository: LastPositionRepository,
-  private val beaconMalfunctionNotificationsRepository: BeaconMalfunctionNotificationsRepository) {
-  private val logger = LoggerFactory.getLogger(GetBeaconMalfunction::class.java)
+    private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
+    private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
+    private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
+    private val lastPositionRepository: LastPositionRepository,
+    private val beaconMalfunctionNotificationsRepository: BeaconMalfunctionNotificationsRepository) {
+    private val logger = LoggerFactory.getLogger(GetBeaconMalfunction::class.java)
 
-  fun execute(beaconMalfunctionId: Int): BeaconMalfunctionResumeAndDetails {
-    val lastPositions = lastPositionRepository.findAll()
-    val beaconMalfunction = beaconMalfunctionsRepository.find(beaconMalfunctionId)
-    val beaconMalfunctionComments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
-    val beaconMalfunctionActions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
-    val beaconMalfunctionNotifications = beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
+    fun execute(beaconMalfunctionId: Int): BeaconMalfunctionResumeAndDetails {
+        val lastPositions = lastPositionRepository.findAll()
+        val beaconMalfunction = beaconMalfunctionsRepository.find(beaconMalfunctionId)
+        val beaconMalfunctionComments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
+        val beaconMalfunctionActions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
+        val beaconMalfunctionNotifications = beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
 
-    val riskFactor = lastPositions.find(BeaconMalfunction.getVesselFromBeaconMalfunction(beaconMalfunction))?.riskFactor
-    beaconMalfunction.riskFactor = riskFactor
+        val riskFactor = lastPositions.find(BeaconMalfunction.getVesselFromBeaconMalfunction(beaconMalfunction))?.riskFactor
+        beaconMalfunction.riskFactor = riskFactor
 
-    if (riskFactor == null) {
-      logger.warn("No risk factor for vessel ${beaconMalfunction.internalReferenceNumber} found in last positions table")
-    }
-
-    val oneYearBefore = ZonedDateTime.now().minusYears(1)
-    val vesselBeaconMalfunctions = when (beaconMalfunction.vesselIdentifier) {
-      VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> {
-        require(beaconMalfunction.internalReferenceNumber != null) {
-          "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
+        if (riskFactor == null) {
+            logger.warn("No risk factor for vessel ${beaconMalfunction.internalReferenceNumber} found in last positions table")
         }
-        beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(beaconMalfunction.vesselIdentifier, beaconMalfunction.internalReferenceNumber, oneYearBefore)
-      }
-      VesselIdentifier.IRCS -> {
-        require(beaconMalfunction.ircs != null) {
-          "The fields 'ircs' must be not null when the vessel identifier is IRCS."
+
+        val oneYearBefore = ZonedDateTime.now().minusYears(1)
+        val vesselBeaconMalfunctions = when (beaconMalfunction.vesselIdentifier) {
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> {
+                require(beaconMalfunction.internalReferenceNumber != null) {
+                    "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
+                }
+                beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(beaconMalfunction.vesselIdentifier, beaconMalfunction.internalReferenceNumber, oneYearBefore)
+            }
+            VesselIdentifier.IRCS -> {
+                require(beaconMalfunction.ircs != null) {
+                    "The fields 'ircs' must be not null when the vessel identifier is IRCS."
+                }
+                beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(beaconMalfunction.vesselIdentifier, beaconMalfunction.ircs, oneYearBefore)
+            }
+            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
+                require(beaconMalfunction.externalReferenceNumber != null) {
+                    "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
+                }
+                beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(beaconMalfunction.vesselIdentifier, beaconMalfunction.externalReferenceNumber, oneYearBefore)
+            }
+            else -> beaconMalfunctionsRepository.findAllByVesselWithoutVesselIdentifier(
+                beaconMalfunction.internalReferenceNumber ?: "",
+                beaconMalfunction.externalReferenceNumber ?: "",
+                beaconMalfunction.ircs ?: "",
+                oneYearBefore)
         }
-        beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(beaconMalfunction.vesselIdentifier, beaconMalfunction.ircs, oneYearBefore)
-      }
-      VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
-        require(beaconMalfunction.externalReferenceNumber != null) {
-          "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
+
+        val beaconMalfunctionsWithDetails = vesselBeaconMalfunctions.map { vesselBeaconMalfunction ->
+            val comments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(vesselBeaconMalfunction.id)
+            val actions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(vesselBeaconMalfunction.id)
+
+            BeaconMalfunctionWithDetails(vesselBeaconMalfunction, comments, actions)
         }
-        beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(beaconMalfunction.vesselIdentifier, beaconMalfunction.externalReferenceNumber, oneYearBefore)
-      }
-      else -> beaconMalfunctionsRepository.findAllByVesselWithoutVesselIdentifier(
-        beaconMalfunction.internalReferenceNumber ?: "",
-        beaconMalfunction.externalReferenceNumber ?: "",
-        beaconMalfunction.ircs ?: "",
-        oneYearBefore)
-    }
 
-    val beaconMalfunctionsWithDetails = vesselBeaconMalfunctions.map { vesselBeaconMalfunction ->
-      val comments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(vesselBeaconMalfunction.id)
-      val actions = beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(vesselBeaconMalfunction.id)
+        val vesselBeaconMalfunctionsResume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconMalfunctionsWithDetails)
 
-      BeaconMalfunctionWithDetails(vesselBeaconMalfunction, comments, actions)
-    }
+        val notifications = beaconMalfunctionNotifications
+            .groupBy { it.toGroupByKeys() }
+            .map {
+                BeaconMalfunctionNotifications(
+                    dateTimeUtc = it.key.dateTimeUtc,
+                    beaconMalfunctionId = it.key.beaconMalfunctionId,
+                    notificationType = it.key.notificationType,
+                    notifications = it.value
+                )
+            }
 
-    val vesselBeaconMalfunctionsResume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconMalfunctionsWithDetails)
-
-    val notifications = beaconMalfunctionNotifications
-      .groupBy { it.toGroupByKeys() }
-      .map {
-        BeaconMalfunctionNotifications(
-          dateTimeUtc = it.key.dateTimeUtc,
-          beaconMalfunctionId = it.key.beaconMalfunctionId,
-          notificationType = it.key.notificationType,
-          notifications = it.value
+        return BeaconMalfunctionResumeAndDetails(
+            beaconMalfunction = beaconMalfunction,
+            resume = vesselBeaconMalfunctionsResume,
+            comments = beaconMalfunctionComments,
+            actions = beaconMalfunctionActions,
+            notifications = notifications
         )
-      }
-
-    return BeaconMalfunctionResumeAndDetails(
-      beaconMalfunction = beaconMalfunction,
-      resume = vesselBeaconMalfunctionsResume,
-      comments = beaconMalfunctionComments,
-      actions = beaconMalfunctionActions,
-      notifications = notifications
-    )
-  }
+    }
 }

@@ -11,19 +11,19 @@ import org.springframework.stereotype.Repository
 @Repository
 class JpaPortRepository(private val dbPortRepository: DBPortRepository) : PortRepository {
 
-  @Cacheable(value = ["ports"])
-  override fun findAll(): List<Port> {
-    return dbPortRepository.findAll().map {
-      it.toPort()
+    @Cacheable(value = ["ports"])
+    override fun findAll(): List<Port> {
+        return dbPortRepository.findAll().map {
+            it.toPort()
+        }
     }
-  }
 
-  @Cacheable(value = ["port"])
-  override fun find(code: String): Port {
-    return try {
-      dbPortRepository.findByLocodeEquals(code).toPort()
-    } catch (e: EmptyResultDataAccessException) {
-      throw CodeNotFoundException("Port: code $code not found")
+    @Cacheable(value = ["port"])
+    override fun find(code: String): Port {
+        return try {
+            dbPortRepository.findByLocodeEquals(code).toPort()
+        } catch (e: EmptyResultDataAccessException) {
+            throw CodeNotFoundException("Port: code $code not found")
+        }
     }
-  }
 }

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
 interface DBBeaconMalfunctionCommentsRepository : CrudRepository<BeaconMalfunctionCommentEntity, Int> {
-  @Query
-  fun findAllByBeaconMalfunctionId(beaconMalfunctionId: Int): List<BeaconMalfunctionCommentEntity>
+    @Query
+    fun findAllByBeaconMalfunctionId(beaconMalfunctionId: Int): List<BeaconMalfunctionCommentEntity>
 }

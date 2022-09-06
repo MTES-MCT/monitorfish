@@ -13,21 +13,21 @@ import java.time.ZonedDateTime
 class JpaSilencedAlertRepository(private val dbSilencedAlertRepository: DBSilencedAlertRepository,
                                  private val mapper: ObjectMapper) : SilencedAlertRepository {
 
-  override fun save(alert: PendingAlert,
-                    silencedBeforeDate: ZonedDateTime,
-                    silencedAfterDate: ZonedDateTime?,
-                    isValidated: Boolean): SilencedAlert {
-    return dbSilencedAlertRepository.save(
-      SilencedAlertEntity.fromPendingAlert(mapper, alert, silencedBeforeDate, silencedAfterDate, isValidated)
-    ).toSilencedAlert(mapper)
-  }
+    override fun save(alert: PendingAlert,
+                      silencedBeforeDate: ZonedDateTime,
+                      silencedAfterDate: ZonedDateTime?,
+                      isValidated: Boolean): SilencedAlert {
+        return dbSilencedAlertRepository.save(
+            SilencedAlertEntity.fromPendingAlert(mapper, alert, silencedBeforeDate, silencedAfterDate, isValidated)
+        ).toSilencedAlert(mapper)
+    }
 
-  override fun findAllCurrentSilencedAlerts(): List<SilencedAlert> {
-    val now = ZonedDateTime.now()
-    return dbSilencedAlertRepository.findAllBySilencedBeforeDateAfter(now).map { it.toSilencedAlert(mapper) }
-  }
+    override fun findAllCurrentSilencedAlerts(): List<SilencedAlert> {
+        val now = ZonedDateTime.now()
+        return dbSilencedAlertRepository.findAllBySilencedBeforeDateAfter(now).map { it.toSilencedAlert(mapper) }
+    }
 
-  override fun delete(id: Int) {
-    dbSilencedAlertRepository.deleteById(id)
-  }
+    override fun delete(id: Int) {
+        dbSilencedAlertRepository.deleteById(id)
+    }
 }

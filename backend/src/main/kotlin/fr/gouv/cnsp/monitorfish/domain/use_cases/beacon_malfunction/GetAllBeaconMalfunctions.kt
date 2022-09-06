@@ -10,22 +10,22 @@ import org.slf4j.LoggerFactory
 @UseCase
 class GetAllBeaconMalfunctions(private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
                                private val lastPositionRepository: LastPositionRepository) {
-  private val logger = LoggerFactory.getLogger(GetAllBeaconMalfunctions::class.java)
-  fun execute(): List<BeaconMalfunction> {
-    val lastPositions = lastPositionRepository.findAll()
+    private val logger = LoggerFactory.getLogger(GetAllBeaconMalfunctions::class.java)
+    fun execute(): List<BeaconMalfunction> {
+        val lastPositions = lastPositionRepository.findAll()
 
-    val beaconMalfunctionsExceptResumedTransmission = beaconMalfunctionsRepository.findAllExceptEndOfFollowUp()
-    val lastThirtyResumedTransmissions = beaconMalfunctionsRepository.findLastThirtyEndOfFollowUp()
+        val beaconMalfunctionsExceptResumedTransmission = beaconMalfunctionsRepository.findAllExceptEndOfFollowUp()
+        val lastThirtyResumedTransmissions = beaconMalfunctionsRepository.findLastThirtyEndOfFollowUp()
 
-    return (beaconMalfunctionsExceptResumedTransmission + lastThirtyResumedTransmissions).map { beaconMalfunction ->
-      val riskFactor = lastPositions.find(getVesselFromBeaconMalfunction(beaconMalfunction))?.riskFactor
-      beaconMalfunction.riskFactor = riskFactor
+        return (beaconMalfunctionsExceptResumedTransmission + lastThirtyResumedTransmissions).map { beaconMalfunction ->
+            val riskFactor = lastPositions.find(getVesselFromBeaconMalfunction(beaconMalfunction))?.riskFactor
+            beaconMalfunction.riskFactor = riskFactor
 
-      if (riskFactor == null) {
-        logger.warn("No risk factor for vessel ${beaconMalfunction.internalReferenceNumber} found in last positions table")
-      }
+            if (riskFactor == null) {
+                logger.warn("No risk factor for vessel ${beaconMalfunction.internalReferenceNumber} found in last positions table")
+            }
 
-      beaconMalfunction
+            beaconMalfunction
+        }
     }
-  }
 }

@@ -20,40 +20,40 @@ import fr.gouv.cnsp.monitorfish.domain.entities.rules.type.IHasImplementation as
 
 @Configuration
 class MapperConfiguration {
-  @Bean
-  fun objectMapper(): ObjectMapper {
-    val mapper = Jackson2ObjectMapperBuilder().build<ObjectMapper>()
+    @Bean
+    fun objectMapper(): ObjectMapper {
+        val mapper = Jackson2ObjectMapperBuilder().build<ObjectMapper>()
 
-    // needed to handle java.time.ZonedDateTime serialization
-    mapper.registerModule(JavaTimeModule())
-    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-    mapper.propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
+        // needed to handle java.time.ZonedDateTime serialization
+        mapper.registerModule(JavaTimeModule())
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        mapper.propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
 
-    mapper.registerSubtypes(NamedType(Catch::class.java, "catch"))
-    mapper.registerSubtypes(NamedType(GearLogbook::class.java, "gear"))
+        mapper.registerSubtypes(NamedType(Catch::class.java, "catch"))
+        mapper.registerSubtypes(NamedType(GearLogbook::class.java, "gear"))
 
-    registerRulesSubType(mapper, RuleTypeMapping::class.java)
-    registerAlertsSubType(mapper, AlertTypeMapping::class.java)
-    registerReportingsSubType(mapper, ReportingTypeMapping::class.java)
+        registerRulesSubType(mapper, RuleTypeMapping::class.java)
+        registerAlertsSubType(mapper, AlertTypeMapping::class.java)
+        registerReportingsSubType(mapper, ReportingTypeMapping::class.java)
 
-    return mapper
-  }
+        return mapper
+    }
 
-  private fun <E> registerRulesSubType(mapper: ObjectMapper, enumOfTypeToAdd: Class<E>) where E : Enum<E>?, E : IRulesHasImplementation? {
-    Arrays.stream(enumOfTypeToAdd.enumConstants)
-      .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }
-      .forEach { type -> mapper.registerSubtypes(type) }
-  }
+    private fun <E> registerRulesSubType(mapper: ObjectMapper, enumOfTypeToAdd: Class<E>) where E : Enum<E>?, E : IRulesHasImplementation? {
+        Arrays.stream(enumOfTypeToAdd.enumConstants)
+            .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }
+            .forEach { type -> mapper.registerSubtypes(type) }
+    }
 
-  private fun <E> registerAlertsSubType(mapper: ObjectMapper, enumOfTypeToAdd: Class<E>) where E : Enum<E>?, E : IAlertsHasImplementation? {
-    Arrays.stream(enumOfTypeToAdd.enumConstants)
-      .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }
-      .forEach { type -> mapper.registerSubtypes(type) }
-  }
+    private fun <E> registerAlertsSubType(mapper: ObjectMapper, enumOfTypeToAdd: Class<E>) where E : Enum<E>?, E : IAlertsHasImplementation? {
+        Arrays.stream(enumOfTypeToAdd.enumConstants)
+            .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }
+            .forEach { type -> mapper.registerSubtypes(type) }
+    }
 
-  private fun <E> registerReportingsSubType(mapper: ObjectMapper, enumOfTypeToAdd: Class<E>) where E : Enum<E>?, E : IReportingsHasImplementation? {
-    Arrays.stream(enumOfTypeToAdd.enumConstants)
-      .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }
-      .forEach { type -> mapper.registerSubtypes(type) }
-  }
+    private fun <E> registerReportingsSubType(mapper: ObjectMapper, enumOfTypeToAdd: Class<E>) where E : Enum<E>?, E : IReportingsHasImplementation? {
+        Arrays.stream(enumOfTypeToAdd.enumConstants)
+            .map { enumItem -> NamedType(enumItem.getImplementation(), enumItem.name) }
+            .forEach { type -> mapper.registerSubtypes(type) }
+    }
 }

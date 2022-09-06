@@ -17,35 +17,35 @@ import javax.persistence.Table
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType::class)
 @Table(name = "rules")
 data class RuleEntity(
-  @Id
-  @Column(name = "rule_id")
-  val id: UUID,
-  @Column(name = "title", nullable = false)
-  val title: String,
-  @Column(name = "active", nullable = false)
-  val active: Boolean,
-  @Column(name = "creation_date", nullable = false)
-  val creationDate: ZonedDateTime,
-  @Column(name = "last_update_date")
-  val lastUpdateDate: ZonedDateTime? = null,
-  @Column(name = "last_run_date")
-  val lastRunDate: ZonedDateTime? = null,
-  @Column(name = "last_run_success")
-  val lastRunSuccess: Boolean? = null,
-  @Type(type = "jsonb")
-  @Column(name = "value", nullable = false, columnDefinition = "jsonb")
-  val value: String) {
+    @Id
+    @Column(name = "rule_id")
+    val id: UUID,
+    @Column(name = "title", nullable = false)
+    val title: String,
+    @Column(name = "active", nullable = false)
+    val active: Boolean,
+    @Column(name = "creation_date", nullable = false)
+    val creationDate: ZonedDateTime,
+    @Column(name = "last_update_date")
+    val lastUpdateDate: ZonedDateTime? = null,
+    @Column(name = "last_run_date")
+    val lastRunDate: ZonedDateTime? = null,
+    @Column(name = "last_run_success")
+    val lastRunSuccess: Boolean? = null,
+    @Type(type = "jsonb")
+    @Column(name = "value", nullable = false, columnDefinition = "jsonb")
+    val value: String) {
 
-  fun toRule(mapper: ObjectMapper): Rule {
-    return Rule(
-      id = id,
-      title = title,
-      active = active,
-      creationDate = creationDate,
-      lastUpdateDate = lastUpdateDate,
-      lastRunDate = lastRunDate,
-      lastRunSuccess = lastRunSuccess,
-      value = mapper.readValue(value, RuleType::class.java)
-    )
-  }
+    fun toRule(mapper: ObjectMapper): Rule {
+        return Rule(
+            id = id,
+            title = title,
+            active = active,
+            creationDate = creationDate,
+            lastUpdateDate = lastUpdateDate,
+            lastRunDate = lastRunDate,
+            lastRunSuccess = lastRunSuccess,
+            value = mapper.readValue(value, RuleType::class.java)
+        )
+    }
 }

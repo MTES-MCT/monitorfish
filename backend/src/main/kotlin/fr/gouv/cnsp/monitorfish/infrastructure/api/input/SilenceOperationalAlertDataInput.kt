@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SilenceAlertPeriod
 import java.time.ZonedDateTime
 
 data class SilenceOperationalAlertDataInput(
-  var silencedAlertPeriod: SilenceAlertPeriod,
-  var afterDateTime: ZonedDateTime? = null,
-  var beforeDateTime: ZonedDateTime? = null
+    var silencedAlertPeriod: SilenceAlertPeriod,
+    var afterDateTime: ZonedDateTime? = null,
+    var beforeDateTime: ZonedDateTime? = null
 )

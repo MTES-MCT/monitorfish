@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "host")
 class HostProperties {
-  var ip: String? = null
+    var ip: String? = null
 }

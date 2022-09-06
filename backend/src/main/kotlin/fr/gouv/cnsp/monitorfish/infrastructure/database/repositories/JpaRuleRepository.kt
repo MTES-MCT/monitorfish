@@ -10,10 +10,10 @@ import org.springframework.stereotype.Repository
 class JpaRuleRepository(private val dbRuleRepository: DBRuleRepository,
                         private val mapper: ObjectMapper) : RuleRepository {
 
-  override fun findAll(): List<Rule> {
-    return dbRuleRepository.findAll().map {
-      it.toRule(mapper)
+    override fun findAll(): List<Rule> {
+        return dbRuleRepository.findAll().map {
+            it.toRule(mapper)
+        }
     }
-  }
 
 }

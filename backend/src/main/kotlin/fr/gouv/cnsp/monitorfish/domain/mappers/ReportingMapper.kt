@@ -11,21 +11,21 @@ import org.springframework.stereotype.Component
 
 @Component
 object ReportingMapper {
-  private const val jsonbNullString = "null"
+    private const val jsonbNullString = "null"
 
-  fun getReportingValueFromJSON(mapper: ObjectMapper, message: String?, reportingType: ReportingType): ReportingValue {
-    return try {
-      if (!message.isNullOrEmpty() && message != jsonbNullString) {
-        when (reportingType) {
-          ReportingType.ALERT -> mapper.readValue(message, AlertType::class.java)
-          ReportingType.OBSERVATION -> mapper.readValue(message, Observation::class.java)
-          ReportingType.INFRACTION_SUSPICION -> mapper.readValue(message, InfractionSuspicion::class.java)
+    fun getReportingValueFromJSON(mapper: ObjectMapper, message: String?, reportingType: ReportingType): ReportingValue {
+        return try {
+            if (!message.isNullOrEmpty() && message != jsonbNullString) {
+                when (reportingType) {
+                    ReportingType.ALERT -> mapper.readValue(message, AlertType::class.java)
+                    ReportingType.OBSERVATION -> mapper.readValue(message, Observation::class.java)
+                    ReportingType.INFRACTION_SUSPICION -> mapper.readValue(message, InfractionSuspicion::class.java)
+                }
+            } else {
+                throw EntityConversionException("No 'Reporting' value found.")
+            }
+        } catch (e: Exception) {
+            throw EntityConversionException("Error while converting 'Reporting'. $message", e)
         }
-      } else {
-        throw EntityConversionException("No 'Reporting' value found.")
-      }
-    } catch (e: Exception) {
-      throw EntityConversionException("Error while converting 'Reporting'. $message", e)
     }
-  }
 }

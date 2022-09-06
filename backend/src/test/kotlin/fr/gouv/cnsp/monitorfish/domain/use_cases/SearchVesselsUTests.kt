@@ -14,19 +14,19 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 class SearchVesselsUTests {
 
-  @MockBean
-  private lateinit var vesselRepository: VesselRepository
+    @MockBean
+    private lateinit var vesselRepository: VesselRepository
 
-  @Test
-  fun `execute Should return no vessel When the is no identification number`() {
-    // Given
-    given(vesselRepository.search(any())).willReturn(listOf(Vessel()))
+    @Test
+    fun `execute Should return no vessel When the is no identification number`() {
+        // Given
+        given(vesselRepository.search(any())).willReturn(listOf(Vessel()))
 
-    // When
-    val vessels = SearchVessels(vesselRepository).execute("DUMMY VESSEL")
+        // When
+        val vessels = SearchVessels(vesselRepository).execute("DUMMY VESSEL")
 
-    // Then
-    assertThat(vessels).isEmpty()
-  }
+        // Then
+        assertThat(vessels).isEmpty()
+    }
 
 }

@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Bean
 
 @TestConfiguration
 class MeterRegistryConfiguration {
-  @Bean
-  fun meterRegistry(): MeterRegistry {
-    return SimpleMeterRegistry()
-  }
+    @Bean
+    fun meterRegistry(): MeterRegistry {
+        return SimpleMeterRegistry()
+    }
 }

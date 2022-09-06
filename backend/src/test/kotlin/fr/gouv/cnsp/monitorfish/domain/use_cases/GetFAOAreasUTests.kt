@@ -13,27 +13,27 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 class GetFAOAreasUTests {
 
-  @MockBean
-  private lateinit var faoAreasRepository: FAOAreasRepository
+    @MockBean
+    private lateinit var faoAreasRepository: FAOAreasRepository
 
-  @Test
-  fun `execute Should return a concatenated list of FAO properties`() {
-    // Given
-    given(faoAreasRepository.findAll()).willReturn(listOf(
-      FAOArea("123", "27.1", "27.1.0"),
-      FAOArea("124", "28.1", "28.1.0"),
-      FAOArea("125", "28.1", "28.1.1")))
+    @Test
+    fun `execute Should return a concatenated list of FAO properties`() {
+        // Given
+        given(faoAreasRepository.findAll()).willReturn(listOf(
+            FAOArea("123", "27.1", "27.1.0"),
+            FAOArea("124", "28.1", "28.1.0"),
+            FAOArea("125", "28.1", "28.1.1")))
 
-    // When
-    val faoList = GetFAOAreas(faoAreasRepository).execute()
+        // When
+        val faoList = GetFAOAreas(faoAreasRepository).execute()
 
-    // Then
-    assertThat(faoList).hasSize(5)
-    assertThat(faoList[0]).isEqualTo("27.1")
-    assertThat(faoList[1]).isEqualTo("27.1.0")
-    assertThat(faoList[2]).isEqualTo("28.1")
-    assertThat(faoList[3]).isEqualTo("28.1.0")
-    assertThat(faoList[4]).isEqualTo("28.1.1")
-  }
+        // Then
+        assertThat(faoList).hasSize(5)
+        assertThat(faoList[0]).isEqualTo("27.1")
+        assertThat(faoList[1]).isEqualTo("27.1.0")
+        assertThat(faoList[2]).isEqualTo("28.1")
+        assertThat(faoList[3]).isEqualTo("28.1.0")
+        assertThat(faoList[4]).isEqualTo("28.1.1")
+    }
 
 }

@@ -4,5 +4,5 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.GearEntity
 import org.springframework.data.repository.CrudRepository
 
 interface DBGearRepository : CrudRepository<GearEntity, Long> {
-  fun findByCodeEquals(code: String): GearEntity
+    fun findByCodeEquals(code: String): GearEntity
 }

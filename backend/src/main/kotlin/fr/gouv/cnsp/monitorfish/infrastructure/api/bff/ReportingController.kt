@@ -15,31 +15,31 @@ import javax.websocket.server.PathParam
 @RequestMapping("/bff/v1/reportings")
 @Api(description = "APIs for reporting")
 class ReportingController(
-  private val archiveReporting: ArchiveReporting,
-  private val deleteReporting: DeleteReporting,
-  private val addReporting: AddReporting) {
+    private val archiveReporting: ArchiveReporting,
+    private val deleteReporting: DeleteReporting,
+    private val addReporting: AddReporting) {
 
-  @PostMapping(value = [""], consumes = ["application/json"])
-  @ApiOperation("Create a reporting")
-  @ResponseStatus(HttpStatus.CREATED)
-  fun createReporting(@RequestBody
-                      reportingInput: CreateReportingDataInput): ReportingDataOutput {
-    return ReportingDataOutput.fromReporting(addReporting.execute(reportingInput.toReporting()))
-  }
+    @PostMapping(value = [""], consumes = ["application/json"])
+    @ApiOperation("Create a reporting")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createReporting(@RequestBody
+                        reportingInput: CreateReportingDataInput): ReportingDataOutput {
+        return ReportingDataOutput.fromReporting(addReporting.execute(reportingInput.toReporting()))
+    }
 
-  @PutMapping(value = ["/{reportingId}/archive"])
-  @ApiOperation("Archive a reporting")
-  fun archiveReporting(@PathParam("Reporting id")
-                       @PathVariable(name = "reportingId")
-                       reportingId: Int) {
-    archiveReporting.execute(reportingId)
-  }
+    @PutMapping(value = ["/{reportingId}/archive"])
+    @ApiOperation("Archive a reporting")
+    fun archiveReporting(@PathParam("Reporting id")
+                         @PathVariable(name = "reportingId")
+                         reportingId: Int) {
+        archiveReporting.execute(reportingId)
+    }
 
-  @PutMapping(value = ["/{reportingId}/delete"])
-  @ApiOperation("Delete a reporting")
-  fun deleteReporting(@PathParam("Reporting id")
-                      @PathVariable(name = "reportingId")
-                      reportingId: Int) {
-    deleteReporting.execute(reportingId)
-  }
+    @PutMapping(value = ["/{reportingId}/delete"])
+    @ApiOperation("Delete a reporting")
+    fun deleteReporting(@PathParam("Reporting id")
+                        @PathVariable(name = "reportingId")
+                        reportingId: Int) {
+        deleteReporting.execute(reportingId)
+    }
 }

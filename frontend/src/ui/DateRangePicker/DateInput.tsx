@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react'
+import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
 
 import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 import { NumberInput } from './NumberInput'
@@ -24,6 +24,8 @@ function DateInputWithRef(
   const monthInput = useRef() as MutableRefObject<HTMLInputElement>
   const yearInput = useRef() as MutableRefObject<HTMLInputElement>
 
+  const [hasError, setHasError] = useState(false)
+
   useImperativeHandle<DateOrTimeInputRef, DateOrTimeInputRef>(ref, () => ({
     boxSpan: boxSpan.current,
     focus: (inLastInputOfTheGroup = false) => {
@@ -38,6 +40,32 @@ function DateInputWithRef(
   const currentUtcYear = useMemo(() => getUtcizedDayjs().year(), [])
 
   const submit = useCallback(() => {
+    setHasError(false)
+
+    switch (window.document.activeElement) {
+      case dayInput.current:
+        monthInput.current.focus()
+        break
+
+      case monthInput.current:
+        yearInput.current.focus()
+        break
+
+      default:
+        break
+    }
+
+    if (!yearInput.current.value.length || !monthInput.current.value.length || !dayInput.current.value.length) {
+      if (
+        (monthInput.current.value.length && !dayInput.current.value.length) ||
+        (yearInput.current.value.length && (!dayInput.current.value.length || !monthInput.current.value.length))
+      ) {
+        setHasError(true)
+      }
+
+      return
+    }
+
     const newDateTuple: DateTuple = [
       Number(yearInput.current.value),
       Number(monthInput.current.value),
@@ -52,11 +80,12 @@ function DateInputWithRef(
       <NumberInput
         ref={dayInput}
         defaultValue={defaultValue && formatNumberAsDoubleDigit(defaultValue[2])}
+        hasError={hasError}
         max={31}
         min={1}
         onBack={onBack}
         onClick={onClick}
-        onFilled={() => monthInput.current.focus()}
+        onFilled={submit}
         onNext={() => monthInput.current.focus()}
         onPrevious={onPrevious}
         size={2}
@@ -65,11 +94,12 @@ function DateInputWithRef(
       <NumberInput
         ref={monthInput}
         defaultValue={defaultValue && formatNumberAsDoubleDigit(defaultValue[1])}
+        hasError={hasError}
         max={12}
         min={1}
         onBack={() => dayInput.current.focus()}
         onClick={onClick}
-        onFilled={() => yearInput.current.focus()}
+        onFilled={submit}
         onNext={() => yearInput.current.focus()}
         onPrevious={() => dayInput.current.focus()}
         size={2}
@@ -78,6 +108,7 @@ function DateInputWithRef(
       <NumberInput
         ref={yearInput}
         defaultValue={defaultValue && defaultValue[0]}
+        hasError={hasError}
         max={currentUtcYear}
         min={2020}
         onBack={() => monthInput.current.focus()}

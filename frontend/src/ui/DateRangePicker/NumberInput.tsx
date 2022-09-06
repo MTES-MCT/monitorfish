@@ -8,6 +8,7 @@ export type NumberInputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'maxLength' | 'onInput' | 'pattern' | 'type'
 > & {
+  hasError?: boolean
   max: number
   min: number
   /** Called when the use press backspace key while the input is empty. */
@@ -22,11 +23,24 @@ export type NumberInputProps = Omit<
   size: number
 }
 function NumberInputWithRef(
-  { max, min, onBack, onClick, onFilled, onFocus, onInput, onNext, onPrevious, size, ...nativeProps }: NumberInputProps,
+  {
+    hasError = false,
+    max,
+    min,
+    onBack,
+    onClick,
+    onFilled,
+    onFocus,
+    onInput,
+    onNext,
+    onPrevious,
+    size,
+    ...nativeProps
+  }: NumberInputProps,
   ref: ForwardedRef<HTMLInputElement>,
 ) {
   const inputRef = useRef<HTMLInputElement>() as MutableRefObject<HTMLInputElement>
-  const [hasError, setHasError] = useState(false)
+  const [hasFormatError, setHasFormatError] = useState(false)
 
   useImperativeHandle(ref, () => inputRef.current as HTMLInputElement)
 
@@ -53,7 +67,7 @@ function NumberInputWithRef(
   )
 
   const handleInput = useCallback(() => {
-    setHasError(false)
+    setHasFormatError(false)
 
     const { value } = inputRef.current
     if (onInput) {
@@ -65,7 +79,7 @@ function NumberInputWithRef(
 
     const valueAsNumber = Number(inputRef.current.value)
     if (Number.isNaN(valueAsNumber) || valueAsNumber < min || valueAsNumber > max) {
-      setHasError(true)
+      setHasFormatError(true)
 
       return
     }
@@ -117,7 +131,7 @@ function NumberInputWithRef(
   return (
     <StyledNumberInput
       ref={inputRef}
-      hasError={hasError}
+      hasError={hasError || hasFormatError}
       maxLength={size}
       onClick={handleClick}
       onFocus={handleFocus}
@@ -139,7 +153,9 @@ const StyledNumberInput = styled.input<{
 }>`
   background-color: transparent;
   border: 0;
-  color: ${p => (p.hasError ? 'red' : 'inherit')};
+  border-bottom: solid 2px ${p => (p.hasError ? 'darkred' : 'transparent')} !important;
+  color: ${p => (p.hasError ? 'darkred' : 'inherit')};
+  font-weight: ${p => (p.hasError ? 'bold' : 'inherit')};
   outline: none;
   padding: 0;
   text-align: center;

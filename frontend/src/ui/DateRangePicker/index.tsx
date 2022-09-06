@@ -55,8 +55,8 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
   const rangeCalendarPickerDefaultValue =
     selectedStartDateTupleRef.current && selectedEndDateTupleRef.current
       ? ([
-          getDateFromDateAndTimeTuple(selectedStartDateTupleRef.current, [0, 0]),
-          getDateFromDateAndTimeTuple(selectedEndDateTupleRef.current, [0, 0], true),
+          getDateFromDateAndTimeTuple(selectedStartDateTupleRef.current, ['00', '00']),
+          getDateFromDateAndTimeTuple(selectedEndDateTupleRef.current, ['00', '00'], true),
         ] as DateRange)
       : undefined
 
@@ -161,9 +161,9 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
       // If this is a date picker without a time input,
       if (!withTime) {
         // we have to fix the start date at the beginning of the day
-        const newStartDate = getDateFromDateAndTimeTuple(newStartDateTuple, [0, 0])
+        const newStartDate = getDateFromDateAndTimeTuple(newStartDateTuple, ['00', '00'])
         // and the end date at the end of the day
-        const newEndDate = getDateFromDateAndTimeTuple(newEndDateTuple, [23, 59], true)
+        const newEndDate = getDateFromDateAndTimeTuple(newEndDateTuple, ['23', '59'], true)
 
         selectedStartDateRef.current = newStartDate
         selectedEndDateRef.current = newEndDate

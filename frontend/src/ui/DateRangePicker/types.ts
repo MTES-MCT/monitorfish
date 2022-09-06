@@ -13,10 +13,10 @@ export enum DateRangePosition {
   START = 'START',
 }
 
-/** In the shape of [year, month, day]. */
-export type DateTuple = [number, number, number]
+/** In the shape of ["YYYY", "MM", "DD"]. */
+export type DateTuple = [string, string, string]
 
 export type DateTupleRange = [DateTuple, DateTuple]
 
-/** In the shape of [hour, minute]. */
-export type TimeTuple = [number, number]
+/** In the shape of ["hh", "mm"]. */
+export type TimeTuple = [string, string]

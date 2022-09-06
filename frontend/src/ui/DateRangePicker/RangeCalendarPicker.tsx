@@ -15,7 +15,7 @@ import type { Promisable } from 'type-fest'
 
 type RangeCalendarPickerProps = {
   defaultValue?: DateRange
-  onChange: (newDateTupleRange: DateTupleRange) => Promisable<void>
+  onChange: (nextDateTupleRange: DateTupleRange) => Promisable<void>
 }
 export function RangeCalendarPicker({ defaultValue, onChange }: RangeCalendarPickerProps) {
   const selectedFirstDate = useRef<Date>()
@@ -26,20 +26,20 @@ export function RangeCalendarPicker({ defaultValue, onChange }: RangeCalendarPic
   )
 
   const handleSelect = useCallback(
-    (newDate: Date) => {
+    (nextDate: Date) => {
       if (!selectedFirstDate.current) {
-        selectedFirstDate.current = newDate
+        selectedFirstDate.current = nextDate
 
         return
       }
 
-      const sortedDateRange = sortDates([selectedFirstDate.current, newDate]) as DateRange
+      const sortedDateRange = sortDates([selectedFirstDate.current, nextDate]) as DateRange
       const [startDate, endDate] = sortedDateRange
       const startDateTuple = getDateTupleFromDate(startDate) as DateTuple
       const endDateTuple = getDateTupleFromDate(endDate) as DateTuple
-      const newDateTupleRange = [startDateTuple, endDateTuple] as DateTupleRange
+      const nextDateTupleRange = [startDateTuple, endDateTuple] as DateTupleRange
 
-      onChange(newDateTupleRange)
+      onChange(nextDateTupleRange)
     },
     [onChange],
   )

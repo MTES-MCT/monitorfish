@@ -26,9 +26,9 @@ export type DateRangePickerProps = {
   /**
    * Called each time the date range picker is changed to a new valid value.
    *
-   * @param newUtcDateRange - A utcized date to be used as is to interact with the API.
+   * @param nextUtcDateRange - A utcized date to be used as is to interact with the API.
    */
-  onChange: (newUtcDateRange: DateRange) => Promisable<void>
+  onChange: (nextUtcDateRange: DateRange) => Promisable<void>
   withTime?: boolean
 }
 export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, withTime = false }: DateRangePickerProps) {
@@ -68,8 +68,8 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
     const utcizedStartDate = getUtcizedDayjs(selectedStartDateRef.current).toDate()
     const utcizedEndDate = getUtcizedDayjs(selectedEndDateRef.current).toDate()
 
-    const newDateRange: DateRange = [utcizedStartDate, utcizedEndDate]
-    onChange(newDateRange)
+    const nextDateRange: DateRange = [utcizedStartDate, utcizedEndDate]
+    onChange(nextDateRange)
   }, [onChange])
 
   const closeRangeCalendarPicker = useCallback(() => {
@@ -120,32 +120,32 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
   }, [withTime])
 
   const handleDateInputFilled = useCallback(
-    (position: DateRangePosition, newDateTuple: DateTuple) => {
+    (position: DateRangePosition, nextDateTuple: DateTuple) => {
       if (position === DateRangePosition.START) {
-        selectedStartDateTupleRef.current = newDateTuple
+        selectedStartDateTupleRef.current = nextDateTuple
 
         // If there is no time input or a start time has already been selected,
         if (!withTime || selectedStartTimeTupleRef.current) {
           // we must update the selected start date and call onChange()
           const startTimeTuple = (withTime ? selectedStartTimeTupleRef.current : ['00', '00']) as TimeTuple
-          const newStartDate = getDateFromDateAndTimeTuple(newDateTuple, startTimeTuple)
+          const nextStartDate = getDateFromDateAndTimeTuple(nextDateTuple, startTimeTuple)
 
-          selectedStartDateRef.current = newStartDate
+          selectedStartDateRef.current = nextStartDate
 
           submit()
         }
 
         handleStartDateInputNext()
       } else {
-        selectedEndDateTupleRef.current = newDateTuple
+        selectedEndDateTupleRef.current = nextDateTuple
 
         // If there is no time input or an end time has already been selected,
         if (!withTime || selectedEndTimeTupleRef.current) {
           // we must update the selected end date and call onChange()
           const endTimeTuple = (withTime ? selectedEndTimeTupleRef.current : ['23', '59']) as TimeTuple
-          const newEndDate = getDateFromDateAndTimeTuple(newDateTuple, endTimeTuple, true)
+          const nextEndDate = getDateFromDateAndTimeTuple(nextDateTuple, endTimeTuple, true)
 
-          selectedEndDateRef.current = newEndDate
+          selectedEndDateRef.current = nextEndDate
 
           submit()
         }
@@ -157,18 +157,18 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
   )
 
   const handleRangeCalendarPickerChange = useCallback(
-    (newDateTupleRange: DateTupleRange) => {
-      const [newStartDateTuple, newEndDateTuple] = newDateTupleRange
+    (nextDateTupleRange: DateTupleRange) => {
+      const [nextStartDateTuple, nextEndDateTuple] = nextDateTupleRange
 
       // If this is a date picker without a time input,
       if (!withTime) {
         // we have to fix the start date at the beginning of the day
-        const newStartDate = getDateFromDateAndTimeTuple(newStartDateTuple, ['00', '00'])
+        const nextStartDate = getDateFromDateAndTimeTuple(nextStartDateTuple, ['00', '00'])
         // and the end date at the end of the day
-        const newEndDate = getDateFromDateAndTimeTuple(newEndDateTuple, ['23', '59'], true)
+        const nextEndDate = getDateFromDateAndTimeTuple(nextEndDateTuple, ['23', '59'], true)
 
-        selectedStartDateRef.current = newStartDate
-        selectedEndDateRef.current = newEndDate
+        selectedStartDateRef.current = nextStartDate
+        selectedEndDateRef.current = nextEndDate
       }
 
       // If this is a date picker with a time input,
@@ -176,23 +176,23 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
         // and a start time has already been selected,
         if (selectedStartTimeTupleRef.current) {
           // we must update the selected start date accordingly
-          const newStartDate = getDateFromDateAndTimeTuple(newStartDateTuple, selectedStartTimeTupleRef.current)
+          const nextStartDate = getDateFromDateAndTimeTuple(nextStartDateTuple, selectedStartTimeTupleRef.current)
 
-          selectedStartDateRef.current = newStartDate
+          selectedStartDateRef.current = nextStartDate
         }
 
         // and an end time has already been selected,
         if (selectedEndTimeTupleRef.current) {
           // we must update the selected end date accordingly
-          const newEndDate = getDateFromDateAndTimeTuple(newEndDateTuple, selectedEndTimeTupleRef.current, true)
+          const nextEndDate = getDateFromDateAndTimeTuple(nextEndDateTuple, selectedEndTimeTupleRef.current, true)
 
-          selectedEndDateRef.current = newEndDate
+          selectedEndDateRef.current = nextEndDate
         }
       }
 
-      selectedStartDateTupleRef.current = newStartDateTuple
+      selectedStartDateTupleRef.current = nextStartDateTuple
       selectedStartTimeTupleRef.current = getTimeTupleFromDate(selectedStartDateRef.current)
-      selectedEndDateTupleRef.current = newEndDateTuple
+      selectedEndDateTupleRef.current = nextEndDateTuple
       selectedEndTimeTupleRef.current = getTimeTupleFromDate(selectedEndDateRef.current)
 
       closeRangeCalendarPicker()
@@ -204,33 +204,33 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
   )
 
   const handleTimeInputFilled = useCallback(
-    (position: DateRangePosition, newTimeTuple: TimeTuple) => {
+    (position: DateRangePosition, nextTimeTuple: TimeTuple) => {
       if (position === DateRangePosition.START) {
         // If a start date has already been selected
         if (selectedStartDateTupleRef.current) {
           // we must update the selected start date accordingly and submit it
-          const newStartDate = getDateFromDateAndTimeTuple(selectedStartDateTupleRef.current, newTimeTuple)
+          const nextStartDate = getDateFromDateAndTimeTuple(selectedStartDateTupleRef.current, nextTimeTuple)
 
-          selectedStartDateRef.current = newStartDate
+          selectedStartDateRef.current = nextStartDate
 
           submit()
         }
 
-        selectedStartTimeTupleRef.current = newTimeTuple
+        selectedStartTimeTupleRef.current = nextTimeTuple
 
         endDateInput.current.focus()
       } else {
         // If an end date has already been selected
         if (selectedEndDateTupleRef.current) {
           // we must update the selected end date accordingly and submit it
-          const newEndDate = getDateFromDateAndTimeTuple(selectedEndDateTupleRef.current, newTimeTuple, true)
+          const nextEndDate = getDateFromDateAndTimeTuple(selectedEndDateTupleRef.current, nextTimeTuple, true)
 
-          selectedEndDateRef.current = newEndDate
+          selectedEndDateRef.current = nextEndDate
 
           submit()
         }
 
-        selectedEndTimeTupleRef.current = newTimeTuple
+        selectedEndTimeTupleRef.current = nextTimeTuple
       }
 
       submit()
@@ -259,7 +259,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
         <DateInput
           ref={startDateInput}
           defaultValue={selectedStartDateTupleRef.current}
-          onChange={newDateTuple => handleDateInputFilled(DateRangePosition.START, newDateTuple)}
+          onChange={nextDateTuple => handleDateInputFilled(DateRangePosition.START, nextDateTuple)}
           onClick={openRangeCalendarPicker}
           onNext={handleStartDateInputNext}
         />
@@ -271,7 +271,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
               defaultValue={selectedStartTimeTupleRef.current}
               minutesRange={minutesRange}
               onBack={() => startDateInput.current.focus(true)}
-              onChange={newTimeTuple => handleTimeInputFilled(DateRangePosition.START, newTimeTuple)}
+              onChange={nextTimeTuple => handleTimeInputFilled(DateRangePosition.START, nextTimeTuple)}
               onFocus={closeRangeCalendarPicker}
               onNext={() => endDateInput.current.focus()}
               onPrevious={() => startDateInput.current.focus(true)}
@@ -283,7 +283,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
           ref={endDateInput}
           defaultValue={selectedEndDateTupleRef.current}
           onBack={handleEndDateInputPrevious}
-          onChange={newDateTuple => handleDateInputFilled(DateRangePosition.END, newDateTuple)}
+          onChange={nextDateTuple => handleDateInputFilled(DateRangePosition.END, nextDateTuple)}
           onClick={openRangeCalendarPicker}
           onNext={handleEndDateInputNext}
           onPrevious={handleEndDateInputPrevious}
@@ -296,7 +296,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
               defaultValue={selectedEndTimeTupleRef.current}
               minutesRange={minutesRange}
               onBack={() => endDateInput.current.focus(true)}
-              onChange={newTimeTuple => handleTimeInputFilled(DateRangePosition.END, newTimeTuple)}
+              onChange={nextTimeTuple => handleTimeInputFilled(DateRangePosition.END, nextTimeTuple)}
               onFocus={closeRangeCalendarPicker}
               onPrevious={() => endDateInput.current.focus(true)}
             />

@@ -12,4 +12,12 @@ describe('ui/DateRangePicker/utils.getDateTupleFromDate()', () => {
 
     expect(result).toMatchObject(['2022', '03', '04'] as any)
   })
+
+  it('should return undefined from an undefined date', () => {
+    const localizedDate = undefined
+
+    const result = getDateTupleFromDate(localizedDate)
+
+    expect(result).toBeUndefined()
+  })
 })

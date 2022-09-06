@@ -30,6 +30,9 @@ export function getDateFromDateAndTimeTuple(dateTuple: DateTuple, timeTuple: Tim
     : rawDateAsDayjs.startOf('minute').toDate()
 }
 
+export function getDateTupleFromDate(date: undefined): undefined
+export function getDateTupleFromDate(date: Date): DateTuple
+export function getDateTupleFromDate(date?: Date): DateTuple | undefined
 export function getDateTupleFromDate(date?: Date): DateTuple | undefined {
   if (!date) {
     return undefined

@@ -19,47 +19,47 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 @RestControllerAdvice
 @Order(HIGHEST_PRECEDENCE)
 class ControllersExceptionHandler {
-  private val logger: Logger = LoggerFactory.getLogger(ControllersExceptionHandler::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(ControllersExceptionHandler::class.java)
 
-  @ResponseStatus(HttpStatus.OK)
-  @ExceptionHandler(NAFMessageParsingException::class)
-  fun handleNAFMessageParsingException(e: Exception): ApiError {
-    logger.error(e.message, e.cause)
-    return ApiError(e)
-  }
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(NAFMessageParsingException::class)
+    fun handleNAFMessageParsingException(e: Exception): ApiError {
+        logger.error(e.message, e.cause)
+        return ApiError(e)
+    }
 
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  @ExceptionHandler(NoLogbookFishingTripFound::class)
-  fun handleNoLogbookLastDepartureDateFound(e: Exception): ApiError {
-    logger.error(e.message, e.cause)
-    return ApiError(e)
-  }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoLogbookFishingTripFound::class)
+    fun handleNoLogbookLastDepartureDateFound(e: Exception): ApiError {
+        logger.error(e.message, e.cause)
+        return ApiError(e)
+    }
 
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler(CouldNotUpdateControlObjectiveException::class)
-  fun handleCouldNotUpdateControlObjectiveException(e: Exception): ApiError {
-    logger.error(e.message, e.cause)
-    return ApiError(CouldNotUpdateControlObjectiveException(e.message.toString(), e))
-  }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(CouldNotUpdateControlObjectiveException::class)
+    fun handleCouldNotUpdateControlObjectiveException(e: Exception): ApiError {
+        logger.error(e.message, e.cause)
+        return ApiError(CouldNotUpdateControlObjectiveException(e.message.toString(), e))
+    }
 
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler(IllegalArgumentException::class)
-  fun handleIllegalArgumentException(e: Exception): ApiError {
-    logger.error(e.message, e.cause)
-    return ApiError(IllegalArgumentException(e.message.toString(), e))
-  }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgumentException(e: Exception): ApiError {
+        logger.error(e.message, e.cause)
+        return ApiError(IllegalArgumentException(e.message.toString(), e))
+    }
 
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler(CouldNotUpdateFleetSegmentException::class)
-  fun handleCouldNotUpdateFleetSegmentException(e: Exception): ApiError {
-    logger.error(e.message, e.cause)
-    return ApiError(CouldNotUpdateFleetSegmentException(e.message.toString(), e))
-  }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(CouldNotUpdateFleetSegmentException::class)
+    fun handleCouldNotUpdateFleetSegmentException(e: Exception): ApiError {
+        logger.error(e.message, e.cause)
+        return ApiError(CouldNotUpdateFleetSegmentException(e.message.toString(), e))
+    }
 
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler(MissingServletRequestParameterException::class)
-  fun handleNoParameter(e: MissingServletRequestParameterException): MissingParameterApiError {
-    logger.error(e.message, e.cause)
-    return MissingParameterApiError("Parameter \"${e.parameterName}\" is missing.")
-  }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MissingServletRequestParameterException::class)
+    fun handleNoParameter(e: MissingServletRequestParameterException): MissingParameterApiError {
+        logger.error(e.message, e.cause)
+        return MissingParameterApiError("Parameter \"${e.parameterName}\" is missing.")
+    }
 }

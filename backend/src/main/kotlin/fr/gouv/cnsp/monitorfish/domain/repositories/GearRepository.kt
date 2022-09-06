@@ -4,8 +4,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 
 interface GearRepository {
-  fun findAll(): List<Gear>
+    fun findAll(): List<Gear>
 
-  @Throws(CodeNotFoundException::class)
-  fun find(code: String): Gear
+    @Throws(CodeNotFoundException::class)
+    fun find(code: String): Gear
 }

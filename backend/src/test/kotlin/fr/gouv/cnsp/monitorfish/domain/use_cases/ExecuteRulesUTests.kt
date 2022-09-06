@@ -18,31 +18,31 @@ import java.util.*
 @ExtendWith(SpringExtension::class)
 class ExecuteRulesUTests {
 
-  @MockBean
-  private lateinit var rulesRepository: RuleRepository
+    @MockBean
+    private lateinit var rulesRepository: RuleRepository
 
-  @MockBean
-  private lateinit var executePNOAndLANWeightTolerance: ExecutePnoAndLanWeightToleranceRule
+    @MockBean
+    private lateinit var executePNOAndLANWeightTolerance: ExecutePnoAndLanWeightToleranceRule
 
-  @Test
-  fun `execute Should call executePNOAndLANWeightTolerance When a PNOAndLANWeightTolerance rule is found`() {
-    // Given
-    val rule = Rule(UUID.randomUUID(),
-      "Save an alert when PNO and LAN weights are below tolerance",
-      true,
-      ZonedDateTime.now(),
-      null,
-      null,
-      null,
-      PNOAndLANWeightTolerance(10.0)
-    )
-    given(rulesRepository.findAll()).willReturn(listOf(rule))
+    @Test
+    fun `execute Should call executePNOAndLANWeightTolerance When a PNOAndLANWeightTolerance rule is found`() {
+        // Given
+        val rule = Rule(UUID.randomUUID(),
+            "Save an alert when PNO and LAN weights are below tolerance",
+            true,
+            ZonedDateTime.now(),
+            null,
+            null,
+            null,
+            PNOAndLANWeightTolerance(10.0)
+        )
+        given(rulesRepository.findAll()).willReturn(listOf(rule))
 
-    // When
-    ExecuteRules(rulesRepository, executePNOAndLANWeightTolerance).execute()
+        // When
+        ExecuteRules(rulesRepository, executePNOAndLANWeightTolerance).execute()
 
-    // Then
-    Mockito.verify(executePNOAndLANWeightTolerance).execute(eq(rule))
-  }
+        // Then
+        Mockito.verify(executePNOAndLANWeightTolerance).execute(eq(rule))
+    }
 
 }

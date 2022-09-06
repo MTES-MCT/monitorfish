@@ -11,10 +11,10 @@ import java.time.ZonedDateTime
 class JpaControlRepository(private val dbControlRepository: DBControlRepository,
                            private val mapper: ObjectMapper) : ControlRepository {
 
-  override fun findVesselControlsAfterDateTime(vesselId: Int, afterDateTime: ZonedDateTime): List<ControlAndInfractionIds> {
-    return dbControlRepository.findAllByVesselIdEqualsAndControlDatetimeUtcAfter(vesselId, afterDateTime.toInstant())
-      .map { control ->
-        ControlAndInfractionIds(control.toControl(mapper), control.infractionIds ?: listOf())
-      }
-  }
+    override fun findVesselControlsAfterDateTime(vesselId: Int, afterDateTime: ZonedDateTime): List<ControlAndInfractionIds> {
+        return dbControlRepository.findAllByVesselIdEqualsAndControlDatetimeUtcAfter(vesselId, afterDateTime.toInstant())
+            .map { control ->
+                ControlAndInfractionIds(control.toControl(mapper), control.infractionIds ?: listOf())
+            }
+    }
 }

@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository
 
 @DynamicUpdate
 interface DBPendingAlertRepository : CrudRepository<PendingAlertEntity, Int> {
-  @Query("select * from pending_alerts where value->>'type' in (:types)", nativeQuery = true)
-  fun findAlertsOfRules(types: List<String>): List<PendingAlertEntity>
+    @Query("select * from pending_alerts where value->>'type' in (:types)", nativeQuery = true)
+    fun findAlertsOfRules(types: List<String>): List<PendingAlertEntity>
 }

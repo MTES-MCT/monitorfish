@@ -7,15 +7,15 @@ import org.springframework.stereotype.Component
 
 @Component
 object RuleMapper {
-  fun getRuleTypeFromJSON(mapper: ObjectMapper, value: String): RuleType {
-    return try {
-      if (value.isEmpty()) {
-        throw EntityConversionException("Error while converting 'RuleType'. RuleType is empty.")
-      }
+    fun getRuleTypeFromJSON(mapper: ObjectMapper, value: String): RuleType {
+        return try {
+            if (value.isEmpty()) {
+                throw EntityConversionException("Error while converting 'RuleType'. RuleType is empty.")
+            }
 
-      mapper.readValue(value, RuleType::class.java)
-    } catch (e: Exception) {
-      throw EntityConversionException("Error while converting 'RuleType'. $value", e)
+            mapper.readValue(value, RuleType::class.java)
+        } catch (e: Exception) {
+            throw EntityConversionException("Error while converting 'RuleType'. $value", e)
+        }
     }
-  }
 }

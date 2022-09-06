@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController
 @Api(description = "APIs for Controllers (Units)")
 class UnitsController(private val getAllControllers: GetAllControllers) {
 
-  @GetMapping("")
-  @ApiOperation("Get all controllers")
-  fun getControlObjectivesOfYear(): List<ControllerDataOutput> {
-    return getAllControllers.execute().map { controller ->
-      ControllerDataOutput.fromController(controller)
+    @GetMapping("")
+    @ApiOperation("Get all controllers")
+    fun getControlObjectivesOfYear(): List<ControllerDataOutput> {
+        return getAllControllers.execute().map { controller ->
+            ControllerDataOutput.fromController(controller)
+        }
     }
-  }
 
 }

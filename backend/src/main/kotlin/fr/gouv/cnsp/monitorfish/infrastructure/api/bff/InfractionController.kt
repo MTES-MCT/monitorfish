@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController
 @Api(description = "APIs for Infractions")
 class InfractionController(private val getFishingInfractions: GetFishingInfractions) {
 
-  @GetMapping("")
-  @ApiOperation("Get fishing infractions")
-  fun getFishingInfractions(): List<InfractionDataOutput> {
-    return getFishingInfractions.execute().map { infraction ->
-      InfractionDataOutput.fromInfraction(infraction)
+    @GetMapping("")
+    @ApiOperation("Get fishing infractions")
+    fun getFishingInfractions(): List<InfractionDataOutput> {
+        return getFishingInfractions.execute().map { infraction ->
+            InfractionDataOutput.fromInfraction(infraction)
+        }
     }
-  }
 }

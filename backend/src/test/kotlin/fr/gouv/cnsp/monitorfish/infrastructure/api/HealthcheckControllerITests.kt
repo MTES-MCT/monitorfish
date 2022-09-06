@@ -20,27 +20,27 @@ import java.time.ZonedDateTime
 @WebMvcTest(value = [(HealthcheckController::class)])
 class HealthcheckControllerITests {
 
-  @Autowired
-  private lateinit var mockMvc: MockMvc
+    @Autowired
+    private lateinit var mockMvc: MockMvc
 
-  @MockBean
-  private lateinit var getHealthcheck: GetHealthcheck
+    @MockBean
+    private lateinit var getHealthcheck: GetHealthcheck
 
-  @Test
-  fun `Should get the health check`() {
-    // Given
-    given(this.getHealthcheck.execute()).willReturn(Health(
-      ZonedDateTime.parse("2020-12-21T15:01:00Z"),
-      ZonedDateTime.parse("2020-12-21T16:01:00Z"),
-      ZonedDateTime.parse("2020-12-21T17:01:00Z")))
+    @Test
+    fun `Should get the health check`() {
+        // Given
+        given(this.getHealthcheck.execute()).willReturn(Health(
+            ZonedDateTime.parse("2020-12-21T15:01:00Z"),
+            ZonedDateTime.parse("2020-12-21T16:01:00Z"),
+            ZonedDateTime.parse("2020-12-21T17:01:00Z")))
 
-    // When
-    mockMvc.perform(get("/bff/v1/healthcheck"))
-      // Then
-      .andExpect(status().isOk)
-      .andExpect(jsonPath("$.datePositionReceived", equalTo("2020-12-21T15:01:00Z")))
-      .andExpect(jsonPath("$.dateLastPosition", equalTo("2020-12-21T16:01:00Z")))
-      .andExpect(jsonPath("$.dateLogbookMessageReceived", equalTo("2020-12-21T17:01:00Z")))
-  }
+        // When
+        mockMvc.perform(get("/bff/v1/healthcheck"))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.datePositionReceived", equalTo("2020-12-21T15:01:00Z")))
+            .andExpect(jsonPath("$.dateLastPosition", equalTo("2020-12-21T16:01:00Z")))
+            .andExpect(jsonPath("$.dateLogbookMessageReceived", equalTo("2020-12-21T17:01:00Z")))
+    }
 
 }

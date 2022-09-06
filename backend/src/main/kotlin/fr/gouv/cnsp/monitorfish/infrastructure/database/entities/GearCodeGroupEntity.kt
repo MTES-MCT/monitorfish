@@ -9,14 +9,14 @@ import javax.persistence.Table
 @Entity
 @Table(name = "fishing_gear_codes_groups")
 data class GearCodeGroupEntity(
-  @Id
-  @Column(name = "fishing_gear_code")
-  val code: String,
-  @Column(name = "fishing_gear_group_id")
-  val groupId: Int) {
+    @Id
+    @Column(name = "fishing_gear_code")
+    val code: String,
+    @Column(name = "fishing_gear_group_id")
+    val groupId: Int) {
 
-  fun toGearCodeGroup() = GearCodeGroup(
-    code = code,
-    groupId = groupId,
-  )
+    fun toGearCodeGroup() = GearCodeGroup(
+        code = code,
+        groupId = groupId,
+    )
 }

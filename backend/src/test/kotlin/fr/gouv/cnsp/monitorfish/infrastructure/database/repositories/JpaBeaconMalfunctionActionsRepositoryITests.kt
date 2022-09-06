@@ -11,41 +11,41 @@ import java.time.ZonedDateTime
 
 class JpaBeaconMalfunctionActionsRepositoryITests : AbstractDBTests() {
 
-  @Autowired
-  private lateinit var jpaBeaconMalfunctionActionsRepository: JpaBeaconMalfunctionActionsRepository
+    @Autowired
+    private lateinit var jpaBeaconMalfunctionActionsRepository: JpaBeaconMalfunctionActionsRepository
 
-  @Test
-  @Transactional
-  fun `findAllByBeaconMalfunctionId Should return all actions for a given beacon malfunction`() {
-    // When
-    val comments = jpaBeaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)
+    @Test
+    @Transactional
+    fun `findAllByBeaconMalfunctionId Should return all actions for a given beacon malfunction`() {
+        // When
+        val comments = jpaBeaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)
 
-    assertThat(comments).hasSize(1)
-    assertThat(comments.last().id).isEqualTo(4)
-    assertThat(comments.last().beaconMalfunctionId).isEqualTo(1)
-    assertThat(comments.last().propertyName).isEqualTo(BeaconMalfunctionActionPropertyName.VESSEL_STATUS)
-    assertThat(comments.last().previousValue).isEqualTo("AT_PORT")
-    assertThat(comments.last().nextValue).isEqualTo("ACTIVITY_DETECTED")
-    assertThat(comments.last().dateTime).isNotNull
-  }
+        assertThat(comments).hasSize(1)
+        assertThat(comments.last().id).isEqualTo(4)
+        assertThat(comments.last().beaconMalfunctionId).isEqualTo(1)
+        assertThat(comments.last().propertyName).isEqualTo(BeaconMalfunctionActionPropertyName.VESSEL_STATUS)
+        assertThat(comments.last().previousValue).isEqualTo("AT_PORT")
+        assertThat(comments.last().nextValue).isEqualTo("ACTIVITY_DETECTED")
+        assertThat(comments.last().dateTime).isNotNull
+    }
 
-  @Test
-  @Transactional
-  fun `save Should save an action for a given beacon malfunction`() {
-    // Given
-    assertThat(jpaBeaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).hasSize(1)
+    @Test
+    @Transactional
+    fun `save Should save an action for a given beacon malfunction`() {
+        // Given
+        assertThat(jpaBeaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).hasSize(1)
 
-    // When
-    val action = BeaconMalfunctionAction(
-      null,
-      1,
-      BeaconMalfunctionActionPropertyName.STAGE,
-      Stage.CROSS_CHECK.toString(),
-      Stage.FOUR_HOUR_REPORT.toString(),
-      ZonedDateTime.now())
-    jpaBeaconMalfunctionActionsRepository.save(action)
+        // When
+        val action = BeaconMalfunctionAction(
+            null,
+            1,
+            BeaconMalfunctionActionPropertyName.STAGE,
+            Stage.CROSS_CHECK.toString(),
+            Stage.FOUR_HOUR_REPORT.toString(),
+            ZonedDateTime.now())
+        jpaBeaconMalfunctionActionsRepository.save(action)
 
-    // Then
-    assertThat(jpaBeaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).hasSize(2)
-  }
+        // Then
+        assertThat(jpaBeaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).hasSize(2)
+    }
 }

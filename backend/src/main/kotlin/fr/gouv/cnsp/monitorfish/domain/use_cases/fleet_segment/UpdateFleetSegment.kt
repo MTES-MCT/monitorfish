@@ -8,18 +8,18 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegment
 
 @UseCase
 class UpdateFleetSegment(private val fleetSegmentRepository: FleetSegmentRepository) {
-  @Throws(CouldNotUpdateFleetSegmentException::class, IllegalArgumentException::class)
-  fun execute(segment: String, fields: CreateOrUpdateFleetSegmentFields): FleetSegment {
-    require(fields.segment != null ||
-      fields.bycatchSpecies != null ||
-      fields.segmentName != null ||
-      fields.faoAreas != null ||
-      fields.gears != null ||
-      fields.impactRiskFactor != null ||
-      fields.targetSpecies != null) {
-      "No value to update"
-    }
+    @Throws(CouldNotUpdateFleetSegmentException::class, IllegalArgumentException::class)
+    fun execute(segment: String, fields: CreateOrUpdateFleetSegmentFields): FleetSegment {
+        require(fields.segment != null ||
+            fields.bycatchSpecies != null ||
+            fields.segmentName != null ||
+            fields.faoAreas != null ||
+            fields.gears != null ||
+            fields.impactRiskFactor != null ||
+            fields.targetSpecies != null) {
+            "No value to update"
+        }
 
-    return fleetSegmentRepository.update(segment, fields)
-  }
+        return fleetSegmentRepository.update(segment, fields)
+    }
 }

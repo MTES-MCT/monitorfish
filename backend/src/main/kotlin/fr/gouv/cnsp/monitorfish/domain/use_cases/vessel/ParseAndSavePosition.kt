@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory
 
 @UseCase
 class ParseAndSavePosition(private val positionRepository: PositionRepository) {
-  private val logger: Logger = LoggerFactory.getLogger(ParseAndSavePosition::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(ParseAndSavePosition::class.java)
 
-  @Throws(NAFMessageParsingException::class)
-  fun execute(naf: String) {
-    val position = NAFMessageMapper(naf).toPosition()
-    if (position.internalReferenceNumber == null) {
-      logger.warn("No internal reference number for position $position")
+    @Throws(NAFMessageParsingException::class)
+    fun execute(naf: String) {
+        val position = NAFMessageMapper(naf).toPosition()
+        if (position.internalReferenceNumber == null) {
+            logger.warn("No internal reference number for position $position")
+        }
+        positionRepository.save(position)
+
+        logger.debug("Saved new position $position")
     }
-    positionRepository.save(position)
-
-    logger.debug("Saved new position $position")
-  }
 }

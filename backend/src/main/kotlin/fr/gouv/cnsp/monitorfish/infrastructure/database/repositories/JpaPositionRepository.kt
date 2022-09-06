@@ -15,70 +15,70 @@ import javax.transaction.Transactional
 @Repository
 class JpaPositionRepository(private val dbPositionRepository: DBPositionRepository) : PositionRepository {
 
-  private val logger: Logger = LoggerFactory.getLogger(JpaPositionRepository::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(JpaPositionRepository::class.java)
 
-  override fun findAll(): List<Position> {
-    return dbPositionRepository.findAll()
-      .map(PositionEntity::toPosition)
-  }
-
-  override fun findVesselLastPositionsWithoutSpecifiedIdentifier(internalReferenceNumber: String,
-                                                                 externalReferenceNumber: String,
-                                                                 ircs: String,
-                                                                 from: ZonedDateTime,
-                                                                 to: ZonedDateTime): List<Position> {
-
-    if (internalReferenceNumber.isNotEmpty()) {
-      return findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber, from, to)
+    override fun findAll(): List<Position> {
+        return dbPositionRepository.findAll()
+            .map(PositionEntity::toPosition)
     }
 
-    if (ircs.isNotEmpty()) {
-      return findVesselLastPositionsByIrcs(ircs, from, to)
+    override fun findVesselLastPositionsWithoutSpecifiedIdentifier(internalReferenceNumber: String,
+                                                                   externalReferenceNumber: String,
+                                                                   ircs: String,
+                                                                   from: ZonedDateTime,
+                                                                   to: ZonedDateTime): List<Position> {
+
+        if (internalReferenceNumber.isNotEmpty()) {
+            return findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber, from, to)
+        }
+
+        if (ircs.isNotEmpty()) {
+            return findVesselLastPositionsByIrcs(ircs, from, to)
+        }
+
+        if (externalReferenceNumber.isNotEmpty()) {
+            return findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber, from, to)
+        }
+
+        return listOf()
     }
 
-    if (externalReferenceNumber.isNotEmpty()) {
-      return findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber, from, to)
+    @Cacheable(value = ["vessel_track"])
+    override fun findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber: String,
+                                                                  from: ZonedDateTime,
+                                                                  to: ZonedDateTime): List<Position> {
+        return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber, from, to)
+            .map(PositionEntity::toPosition)
     }
 
-    return listOf()
-  }
+    @Cacheable(value = ["vessel_track"])
+    override fun findVesselLastPositionsByIrcs(ircs: String,
+                                               from: ZonedDateTime,
+                                               to: ZonedDateTime): List<Position> {
+        return dbPositionRepository.findLastByIrcs(ircs, from, to)
+            .map(PositionEntity::toPosition)
+    }
 
-  @Cacheable(value = ["vessel_track"])
-  override fun findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber: String,
-                                                                from: ZonedDateTime,
-                                                                to: ZonedDateTime): List<Position> {
-    return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber, from, to)
-      .map(PositionEntity::toPosition)
-  }
+    @Cacheable(value = ["vessel_track"])
+    override fun findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber: String,
+                                                                  from: ZonedDateTime,
+                                                                  to: ZonedDateTime): List<Position> {
+        return dbPositionRepository.findLastByExternalReferenceNumber(externalReferenceNumber, from, to)
+            .map(PositionEntity::toPosition)
+    }
 
-  @Cacheable(value = ["vessel_track"])
-  override fun findVesselLastPositionsByIrcs(ircs: String,
-                                             from: ZonedDateTime,
-                                             to: ZonedDateTime): List<Position> {
-    return dbPositionRepository.findLastByIrcs(ircs, from, to)
-      .map(PositionEntity::toPosition)
-  }
+    @Transactional
+    override fun save(position: Position) {
+        val positionEntity = PositionEntity.fromPosition(position)
+        dbPositionRepository.save(positionEntity)
+    }
 
-  @Cacheable(value = ["vessel_track"])
-  override fun findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber: String,
-                                                                from: ZonedDateTime,
-                                                                to: ZonedDateTime): List<Position> {
-    return dbPositionRepository.findLastByExternalReferenceNumber(externalReferenceNumber, from, to)
-      .map(PositionEntity::toPosition)
-  }
+    override fun findAllByMmsi(mmsi: String): List<Position> {
+        return dbPositionRepository.findAllByMmsi(mmsi)
+            .map(PositionEntity::toPosition)
+    }
 
-  @Transactional
-  override fun save(position: Position) {
-    val positionEntity = PositionEntity.fromPosition(position)
-    dbPositionRepository.save(positionEntity)
-  }
-
-  override fun findAllByMmsi(mmsi: String): List<Position> {
-    return dbPositionRepository.findAllByMmsi(mmsi)
-      .map(PositionEntity::toPosition)
-  }
-
-  override fun findLastPositionDate(): ZonedDateTime {
-    return dbPositionRepository.findLastPositionDateTime().atZone(ZoneOffset.UTC)
-  }
+    override fun findLastPositionDate(): ZonedDateTime {
+        return dbPositionRepository.findLastPositionDateTime().atZone(ZoneOffset.UTC)
+    }
 }

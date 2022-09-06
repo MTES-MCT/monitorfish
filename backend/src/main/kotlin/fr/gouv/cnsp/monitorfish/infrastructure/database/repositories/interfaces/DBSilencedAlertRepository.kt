@@ -7,5 +7,5 @@ import java.time.ZonedDateTime
 
 @DynamicUpdate
 interface DBSilencedAlertRepository : CrudRepository<SilencedAlertEntity, Int> {
-  fun findAllBySilencedBeforeDateAfter(date: ZonedDateTime): List<SilencedAlertEntity>
+    fun findAllBySilencedBeforeDateAfter(date: ZonedDateTime): List<SilencedAlertEntity>
 }

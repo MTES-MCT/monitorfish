@@ -6,15 +6,15 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
 interface LastPositionRepository {
-  fun findAll(): List<LastPosition>
-  fun findAllInLast48Hours(): List<LastPosition>
-  fun findAllWithBeaconMalfunctionBeforeLast48Hours(): List<LastPosition>
-  fun findLastPositionDate(): ZonedDateTime
-  fun removeAlertToLastPositionByVesselIdentifierEquals(alertType: AlertTypeMapping,
-                                                        vesselIdentifier: VesselIdentifier,
-                                                        value: String,
-                                                        isValidated: Boolean)
+    fun findAll(): List<LastPosition>
+    fun findAllInLast48Hours(): List<LastPosition>
+    fun findAllWithBeaconMalfunctionBeforeLast48Hours(): List<LastPosition>
+    fun findLastPositionDate(): ZonedDateTime
+    fun removeAlertToLastPositionByVesselIdentifierEquals(alertType: AlertTypeMapping,
+                                                          vesselIdentifier: VesselIdentifier,
+                                                          value: String,
+                                                          isValidated: Boolean)
 
-  // For test purpose
-  fun deleteAll()
+    // For test purpose
+    fun deleteAll()
 }

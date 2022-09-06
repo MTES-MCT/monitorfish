@@ -23,39 +23,39 @@ import java.time.ZonedDateTime
 @ExtendWith(SpringExtension::class)
 class GetOperationalAlertsUTests {
 
-  @MockBean
-  private lateinit var pendingAlertRepository: PendingAlertRepository
+    @MockBean
+    private lateinit var pendingAlertRepository: PendingAlertRepository
 
-  @MockBean
-  private lateinit var infractionRepository: InfractionRepository
+    @MockBean
+    private lateinit var infractionRepository: InfractionRepository
 
-  @Test
-  fun `execute Should return alerts with associated infractions`() {
-    // Given
-    val pendingAlert = PendingAlert(
-      internalReferenceNumber = "FRFGRGR",
-      externalReferenceNumber = "RGD",
-      ircs = "6554fEE",
-      vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-      tripNumber = "123456",
-      creationDate = ZonedDateTime.now(),
-      value = ThreeMilesTrawlingAlert())
-    given(infractionRepository.findInfractionByNatinfCode(eq("7059"))).willReturn(Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value))
-    given(pendingAlertRepository.findAlertsOfTypes(any())).willReturn(listOf(pendingAlert))
+    @Test
+    fun `execute Should return alerts with associated infractions`() {
+        // Given
+        val pendingAlert = PendingAlert(
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+            tripNumber = "123456",
+            creationDate = ZonedDateTime.now(),
+            value = ThreeMilesTrawlingAlert())
+        given(infractionRepository.findInfractionByNatinfCode(eq("7059"))).willReturn(Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value))
+        given(pendingAlertRepository.findAlertsOfTypes(any())).willReturn(listOf(pendingAlert))
 
-    // When
-    val alerts = GetOperationalAlerts(pendingAlertRepository, infractionRepository).execute()
+        // When
+        val alerts = GetOperationalAlerts(pendingAlertRepository, infractionRepository).execute()
 
-    // Then
-    assertThat(alerts.first().value.natinfCode).isEqualTo("7059")
-    assertThat(alerts.first().infraction?.natinfCode).isEqualTo("7059")
-    assertThat(alerts.first().infraction?.infractionCategory).isEqualTo(InfractionCategory.FISHING.value)
+        // Then
+        assertThat(alerts.first().value.natinfCode).isEqualTo("7059")
+        assertThat(alerts.first().infraction?.natinfCode).isEqualTo("7059")
+        assertThat(alerts.first().infraction?.infractionCategory).isEqualTo(InfractionCategory.FISHING.value)
 
-    Mockito.verify(pendingAlertRepository).findAlertsOfTypes(listOf(
-      AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-      AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
-      AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
-      AlertTypeMapping.MISSING_FAR_ALERT))
-    Mockito.verify(infractionRepository, Mockito.times(1)).findInfractionByNatinfCode(eq("7059"))
-  }
+        Mockito.verify(pendingAlertRepository).findAlertsOfTypes(listOf(
+            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+            AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
+            AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+            AlertTypeMapping.MISSING_FAR_ALERT))
+        Mockito.verify(infractionRepository, Mockito.times(1)).findInfractionByNatinfCode(eq("7059"))
+    }
 }

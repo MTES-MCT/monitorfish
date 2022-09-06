@@ -4,5 +4,5 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookRawMessa
 import org.springframework.data.repository.CrudRepository
 
 interface DBLogbookRawMessageRepository : CrudRepository<LogbookRawMessageEntity, Long> {
-  fun findByOperationNumberEquals(operationNumber: String): LogbookRawMessageEntity
+    fun findByOperationNumberEquals(operationNumber: String): LogbookRawMessageEntity
 }

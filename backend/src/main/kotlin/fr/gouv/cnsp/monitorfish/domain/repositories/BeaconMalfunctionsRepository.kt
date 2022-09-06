@@ -5,23 +5,23 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
 interface BeaconMalfunctionsRepository {
-  fun findAll(): List<BeaconMalfunction>
-  fun findAllByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier,
-                                      value: String,
-                                      afterDateTime: ZonedDateTime): List<BeaconMalfunction>
+    fun findAll(): List<BeaconMalfunction>
+    fun findAllByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier,
+                                        value: String,
+                                        afterDateTime: ZonedDateTime): List<BeaconMalfunction>
 
-  fun findAllExceptEndOfFollowUp(): List<BeaconMalfunction>
-  fun findLastThirtyEndOfFollowUp(): List<BeaconMalfunction>
-  fun find(beaconMalfunctionId: Int): BeaconMalfunction
-  fun update(id: Int,
-             vesselStatus: VesselStatus?,
-             stage: Stage?,
-             endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
-             updateDateTime: ZonedDateTime)
+    fun findAllExceptEndOfFollowUp(): List<BeaconMalfunction>
+    fun findLastThirtyEndOfFollowUp(): List<BeaconMalfunction>
+    fun find(beaconMalfunctionId: Int): BeaconMalfunction
+    fun update(id: Int,
+               vesselStatus: VesselStatus?,
+               stage: Stage?,
+               endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
+               updateDateTime: ZonedDateTime)
 
-  fun requestNotification(id: Int, notificationType: BeaconMalfunctionNotificationType)
-  fun findAllByVesselWithoutVesselIdentifier(internalReferenceNumber: String,
-                                             externalReferenceNumber: String,
-                                             ircs: String,
-                                             afterDateTime: ZonedDateTime): List<BeaconMalfunction>
+    fun requestNotification(id: Int, notificationType: BeaconMalfunctionNotificationType)
+    fun findAllByVesselWithoutVesselIdentifier(internalReferenceNumber: String,
+                                               externalReferenceNumber: String,
+                                               ircs: String,
+                                               afterDateTime: ZonedDateTime): List<BeaconMalfunction>
 }

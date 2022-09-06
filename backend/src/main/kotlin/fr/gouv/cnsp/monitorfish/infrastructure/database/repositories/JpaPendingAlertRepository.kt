@@ -12,23 +12,23 @@ import org.springframework.stereotype.Repository
 class JpaPendingAlertRepository(private val dbPendingAlertRepository: DBPendingAlertRepository,
                                 private val mapper: ObjectMapper) : PendingAlertRepository {
 
-  override fun save(alert: PendingAlert) {
-    dbPendingAlertRepository.save(PendingAlertEntity.fromPendingAlert(alert, mapper))
-  }
+    override fun save(alert: PendingAlert) {
+        dbPendingAlertRepository.save(PendingAlertEntity.fromPendingAlert(alert, mapper))
+    }
 
-  override fun findAlertsOfTypes(types: List<AlertTypeMapping>): List<PendingAlert> {
-    val rulesAsString = types.map { it.name }
+    override fun findAlertsOfTypes(types: List<AlertTypeMapping>): List<PendingAlert> {
+        val rulesAsString = types.map { it.name }
 
-    return dbPendingAlertRepository.findAlertsOfRules(rulesAsString)
-      .map { it.toPendingAlert(mapper) }
-  }
+        return dbPendingAlertRepository.findAlertsOfRules(rulesAsString)
+            .map { it.toPendingAlert(mapper) }
+    }
 
-  override fun find(id: Int): PendingAlert {
-    return dbPendingAlertRepository.findById(id).get()
-      .toPendingAlert(mapper)
-  }
+    override fun find(id: Int): PendingAlert {
+        return dbPendingAlertRepository.findById(id).get()
+            .toPendingAlert(mapper)
+    }
 
-  override fun delete(id: Int) {
-    dbPendingAlertRepository.deleteById(id)
-  }
+    override fun delete(id: Int) {
+        dbPendingAlertRepository.deleteById(id)
+    }
 }

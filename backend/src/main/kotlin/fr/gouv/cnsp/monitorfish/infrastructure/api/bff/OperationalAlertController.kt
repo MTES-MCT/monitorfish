@@ -13,57 +13,57 @@ import javax.websocket.server.PathParam
 @RequestMapping("/bff/v1/operational_alerts")
 @Api(description = "APIs for Operational alerts")
 class OperationalAlertController(
-  private val getOperationalAlerts: GetOperationalAlerts,
-  private val validateOperationalAlert: ValidateOperationalAlert,
-  private val silenceOperationalAlert: SilenceOperationalAlert,
-  private val getSilencedAlerts: GetSilencedAlerts,
-  private val deleteSilencedOperationalAlert: DeleteSilencedOperationalAlert) {
+    private val getOperationalAlerts: GetOperationalAlerts,
+    private val validateOperationalAlert: ValidateOperationalAlert,
+    private val silenceOperationalAlert: SilenceOperationalAlert,
+    private val getSilencedAlerts: GetSilencedAlerts,
+    private val deleteSilencedOperationalAlert: DeleteSilencedOperationalAlert) {
 
-  @GetMapping("")
-  @ApiOperation("Get operational alerts")
-  fun getOperationalAlerts(): List<PendingAlertDataOutput> {
-    return getOperationalAlerts.execute().map {
-      PendingAlertDataOutput.fromPendingAlert(it)
+    @GetMapping("")
+    @ApiOperation("Get operational alerts")
+    fun getOperationalAlerts(): List<PendingAlertDataOutput> {
+        return getOperationalAlerts.execute().map {
+            PendingAlertDataOutput.fromPendingAlert(it)
+        }
     }
-  }
 
-  @PutMapping(value = ["/{id}/validate"])
-  @ApiOperation("Validate an operational alert")
-  fun validateAlert(@PathParam("Alert id")
-                    @PathVariable(name = "id")
-                    id: Int) {
-    return validateOperationalAlert.execute(id)
-  }
-
-  @PutMapping(value = ["/{id}/silence"], consumes = ["application/json"])
-  @ApiOperation("Silence an operational alert")
-  fun silenceAlert(@PathParam("Alert id")
-                   @PathVariable(name = "id")
-                   id: Int,
-                   @RequestBody
-                   silenceOperationalAlertData: SilenceOperationalAlertDataInput): SilencedAlertDataOutput {
-    val silencedAlert = silenceOperationalAlert.execute(
-      id,
-      silenceOperationalAlertData.silencedAlertPeriod,
-      silenceOperationalAlertData.afterDateTime,
-      silenceOperationalAlertData.beforeDateTime)
-
-    return SilencedAlertDataOutput.fromSilencedAlert(silencedAlert)
-  }
-
-  @GetMapping(value = ["/silenced"])
-  @ApiOperation("Get all silenced operational alert")
-  fun getSilencedAlerts(): List<SilencedAlertDataOutput> {
-    return getSilencedAlerts.execute().map {
-      SilencedAlertDataOutput.fromSilencedAlert(it)
+    @PutMapping(value = ["/{id}/validate"])
+    @ApiOperation("Validate an operational alert")
+    fun validateAlert(@PathParam("Alert id")
+                      @PathVariable(name = "id")
+                      id: Int) {
+        return validateOperationalAlert.execute(id)
     }
-  }
 
-  @DeleteMapping(value = ["/silenced/{id}"])
-  @ApiOperation("Delete a silenced operational alert")
-  fun getSilencedAlerts(@PathParam("Alert id")
-                        @PathVariable(name = "id")
-                        id: Int) {
-    return deleteSilencedOperationalAlert.execute(id)
-  }
+    @PutMapping(value = ["/{id}/silence"], consumes = ["application/json"])
+    @ApiOperation("Silence an operational alert")
+    fun silenceAlert(@PathParam("Alert id")
+                     @PathVariable(name = "id")
+                     id: Int,
+                     @RequestBody
+                     silenceOperationalAlertData: SilenceOperationalAlertDataInput): SilencedAlertDataOutput {
+        val silencedAlert = silenceOperationalAlert.execute(
+            id,
+            silenceOperationalAlertData.silencedAlertPeriod,
+            silenceOperationalAlertData.afterDateTime,
+            silenceOperationalAlertData.beforeDateTime)
+
+        return SilencedAlertDataOutput.fromSilencedAlert(silencedAlert)
+    }
+
+    @GetMapping(value = ["/silenced"])
+    @ApiOperation("Get all silenced operational alert")
+    fun getSilencedAlerts(): List<SilencedAlertDataOutput> {
+        return getSilencedAlerts.execute().map {
+            SilencedAlertDataOutput.fromSilencedAlert(it)
+        }
+    }
+
+    @DeleteMapping(value = ["/silenced/{id}"])
+    @ApiOperation("Delete a silenced operational alert")
+    fun getSilencedAlerts(@PathParam("Alert id")
+                          @PathVariable(name = "id")
+                          id: Int) {
+        return deleteSilencedOperationalAlert.execute(id)
+    }
 }

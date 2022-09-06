@@ -6,8 +6,8 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
 
 @UseCase
 class DeleteFleetSegment(private val fleetSegmentRepository: FleetSegmentRepository) {
-  @Throws(CouldNotDeleteException::class, IllegalArgumentException::class)
-  fun execute(segment: String) {
-    fleetSegmentRepository.delete(segment)
-  }
+    @Throws(CouldNotDeleteException::class, IllegalArgumentException::class)
+    fun execute(segment: String) {
+        fleetSegmentRepository.delete(segment)
+    }
 }

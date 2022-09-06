@@ -124,10 +124,11 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
       if (position === DateRangePosition.START) {
         selectedStartDateTupleRef.current = newDateTuple
 
-        // If a start time has already been selected,
-        if (selectedStartTimeTupleRef.current) {
+        // If there is no time input or a start time has already been selected,
+        if (!withTime || selectedStartTimeTupleRef.current) {
           // we must update the selected start date and call onChange()
-          const newStartDate = getDateFromDateAndTimeTuple(newDateTuple, selectedStartTimeTupleRef.current)
+          const startTimeTuple = (withTime ? selectedStartTimeTupleRef.current : ['00', '00']) as TimeTuple
+          const newStartDate = getDateFromDateAndTimeTuple(newDateTuple, startTimeTuple)
 
           selectedStartDateRef.current = newStartDate
 
@@ -138,10 +139,11 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
       } else {
         selectedEndDateTupleRef.current = newDateTuple
 
-        // If an end time has already been selected,
-        if (selectedEndTimeTupleRef.current) {
+        // If there is no time input or an end time has already been selected,
+        if (!withTime || selectedEndTimeTupleRef.current) {
           // we must update the selected end date and call onChange()
-          const newEndDate = getDateFromDateAndTimeTuple(newDateTuple, selectedEndTimeTupleRef.current, true)
+          const endTimeTuple = (withTime ? selectedEndTimeTupleRef.current : ['23', '59']) as TimeTuple
+          const newEndDate = getDateFromDateAndTimeTuple(newDateTuple, endTimeTuple, true)
 
           selectedEndDateRef.current = newEndDate
 
@@ -151,7 +153,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
         handleEndDateInputNext()
       }
     },
-    [handleEndDateInputNext, handleStartDateInputNext, submit],
+    [handleEndDateInputNext, handleStartDateInputNext, submit, withTime],
   )
 
   const handleRangeCalendarPickerChange = useCallback(

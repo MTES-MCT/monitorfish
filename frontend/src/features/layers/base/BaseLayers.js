@@ -12,24 +12,24 @@ import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulat
 const BaseLayers = ({ namespace }) => {
   const dispatch = useDispatch()
   const selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
-  const { layersSidebarOpenedLayer } = useSelector(state => state.layer)
+  const { layersSidebarOpenedLayerType } = useSelector(state => state.layer)
 
   const baseLayersKeys = Object.keys(baseLayers).filter(key => key !== baseLayers.DARK.code)
   const [showBaseLayers, setShowBaseLayers] = useState(false)
 
   const {
-    setLayersSideBarOpenedZone
+    setLayersSideBarOpenedLayerType
   } = layer[namespace].actions
 
   useEffect(() => {
-    setShowBaseLayers(layersSidebarOpenedLayer === layersType.BASE_LAYER)
-  }, [layersSidebarOpenedLayer, setShowBaseLayers])
+    setShowBaseLayers(layersSidebarOpenedLayerType === layersType.BASE_LAYER)
+  }, [layersSidebarOpenedLayerType, setShowBaseLayers])
 
   const onSectionTitleClicked = () => {
     if (showBaseLayers) {
-      dispatch(setLayersSideBarOpenedZone(''))
+      dispatch(setLayersSideBarOpenedLayerType(''))
     } else {
-      dispatch(setLayersSideBarOpenedZone(layersType.BASE_LAYER))
+      dispatch(setLayersSideBarOpenedLayerType(layersType.BASE_LAYER))
       dispatch(closeRegulatoryZoneMetadata())
     }
   }
@@ -83,19 +83,19 @@ const BaseLayersList = styled.ul`
   overflow-y: hidden;
   overflow-x: hidden;
   background: ${COLORS.background};
-  
+
   animation: ${props => props.showBaseLayers ? 'zones-opening' : 'zones-closing'} 0.5s ease forwards;
 
   @keyframes zones-opening {
     0%   { height: 0;   }
-    100% { height: ${props => props.baseLayersLength ? `${34 * props.baseLayersLength}px` : '175px'}; }
+    100% { height: ${props => props.baseLayersLength ? `${37 * props.baseLayersLength}px` : '175px'}; }
   }
 
   @keyframes zones-closing {
-    0%   { height: ${props => props.baseLayersLength ? `${34 * props.baseLayersLength}px` : '175px'}; }
+    0%   { height: ${props => props.baseLayersLength ? `${37 * props.baseLayersLength}px` : '175px'}; }
     100% { height: 0;   }
   }
-  
+
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 `
@@ -114,7 +114,7 @@ const ListItem = styled.li`
   color: ${COLORS.gunMetal};
   border-bottom: 1px solid ${COLORS.lightGray};
   line-height: 1.9em;
-  
+
   :hover {
     background: ${COLORS.shadowBlueLittleOpacity};
   }

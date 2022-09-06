@@ -21,6 +21,7 @@
     "test:e2e": "cypress run --browser firefox --e2e",
     "test:lint": "eslint ./src",
     "test:lint:partial": "eslint --config=./.eslintrc.partial.js ./src",
+    "test:lint:partial:fix": "eslint --config=./.eslintrc.partial.js ./src --fix",
     "test:type": "tsc",
     "test:type:partial": "tsc --project ./tsconfig.partial.json",
     "test:unit": "jest --config=./config/jest.config.js --detectOpenHandles"

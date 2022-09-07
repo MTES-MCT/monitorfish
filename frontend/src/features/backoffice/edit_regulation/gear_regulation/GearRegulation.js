@@ -88,7 +88,7 @@ const GearRegulation = () => {
       />
     </RegulatedGearsForms>
     <OtherRemark show={show}>
-      <Label>Remarques générales</Label>
+      <Label>Remarques</Label>
       <CustomInput
         as="textarea"
         rows={2}

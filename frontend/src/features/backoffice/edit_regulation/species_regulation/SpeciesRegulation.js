@@ -98,7 +98,7 @@ const SpeciesRegulation = () => {
       />
     </RegulatedSpeciesForms>
     <OtherRemark show={show}>
-      <Label>Remarques générales</Label>
+      <Label>Remarques</Label>
       <CustomInput
         data-cy={'regulatory-species-other-info'}
         as="textarea"

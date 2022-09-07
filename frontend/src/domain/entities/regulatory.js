@@ -141,6 +141,7 @@ export const mapToRegulatoryFeatureObject = properties => {
     fishingPeriod,
     speciesRegulation,
     gearRegulation,
+    otherInfo,
     nextId
   } = properties
 
@@ -153,6 +154,7 @@ export const mapToRegulatoryFeatureObject = properties => {
     fishing_period: JSON.stringify(fishingPeriod),
     species: JSON.stringify(speciesRegulation),
     gears: JSON.stringify(gearRegulation),
+    otherInfo: otherInfo,
     next_id: nextId
   }
 }
@@ -329,14 +331,16 @@ export const REGULATORY_REFERENCE_KEYS = {
   REGULATORY_REFERENCES: 'regulatoryReferences',
   FISHING_PERIOD: 'fishingPeriod',
   SPECIES_REGULATION: 'speciesRegulation',
-  GEAR_REGULATION: 'gearRegulation'
+  GEAR_REGULATION: 'gearRegulation',
+  OTHER_INFO: 'otherInfo'
 }
 
 export const DEFAULT_REGULATION = {
   [REGULATORY_REFERENCE_KEYS.REGULATORY_REFERENCES]: [DEFAULT_REGULATORY_TEXT],
   [REGULATORY_REFERENCE_KEYS.FISHING_PERIOD]: DEFAULT_FISHING_PERIOD_VALUES,
   [REGULATORY_REFERENCE_KEYS.SPECIES_REGULATION]: DEFAULT_SPECIES_REGULATION,
-  [REGULATORY_REFERENCE_KEYS.GEAR_REGULATION]: DEFAULT_GEAR_REGULATION
+  [REGULATORY_REFERENCE_KEYS.GEAR_REGULATION]: DEFAULT_GEAR_REGULATION,
+  [REGULATORY_REFERENCE_KEYS.OTHER_INFO]: null
 }
 
 export const GEARS_CATEGORIES_WITH_MESH = [

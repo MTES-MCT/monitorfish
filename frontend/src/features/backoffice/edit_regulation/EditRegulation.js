@@ -38,22 +38,29 @@ import createOrUpdateRegulation from '../../../domain/use_cases/layer/regulation
 
 import { formatDataForSelectPicker } from '../../../utils'
 import { CancelButton, ValidateButton } from '../../commonStyles/Buttons.style'
-import { Footer, FooterButton, Section, Title } from '../../commonStyles/Backoffice.style'
+import { Footer, FooterButton, OtherRemark, Section, Title } from '../../commonStyles/Backoffice.style'
 import {
   resetState,
   setAtLeastOneValueIsMissing,
   setIsConfirmModalOpen,
   setIsRemoveModalOpen,
   setProcessingRegulation,
-  setRegulationModified,
   setRegulatoryTextCheckedMap,
-  setSaveOrUpdateRegulation, setStatus
+  setSaveOrUpdateRegulation,
+  setStatus,
+  updateProcessingRegulationByKey
 } from '../Regulation.slice'
 import { setError } from '../../../domain/shared_slices/Global'
-import { DEFAULT_REGULATION, FRANCE, LAWTYPES_TO_TERRITORY } from '../../../domain/entities/regulatory'
+import {
+  DEFAULT_REGULATION,
+  FRANCE,
+  LAWTYPES_TO_TERRITORY,
+  REGULATORY_REFERENCE_KEYS
+} from '../../../domain/entities/regulatory'
 import SpeciesRegulation from './species_regulation/SpeciesRegulation'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 import { STATUS } from '../constants'
+import { CustomInput, Label } from '../../commonStyles/Input.style'
 
 const EditRegulation = ({ title, isEdition }) => {
   const dispatch = useDispatch()
@@ -98,7 +105,8 @@ const EditRegulation = ({ title, isEdition }) => {
     zone,
     region,
     id,
-    regulatoryReferences
+    regulatoryReferences,
+    otherInfo
   } = processingRegulation
 
   useEffect(() => {
@@ -238,6 +246,13 @@ const EditRegulation = ({ title, isEdition }) => {
       })
   }
 
+  const setOtherInfo = value => {
+    dispatch(updateProcessingRegulationByKey({
+      key: REGULATORY_REFERENCE_KEYS.OTHER_INFO,
+      value
+    }))
+  }
+
   return (
     <>
     <Wrapper>
@@ -287,6 +302,19 @@ const EditRegulation = ({ title, isEdition }) => {
             <FishingPeriodSection />
             <SpeciesRegulation />
             <GearRegulation />
+            <OtherRemark show>
+              <Label>Remarques générales</Label>
+              <CustomInput
+                data-cy={'regulatory-general-other-info'}
+                as="textarea"
+                rows={2}
+                placeholder=''
+                value={otherInfo || ''}
+                onChange={event => setOtherInfo(event.target.value)}
+                width={'500px'}
+                $isGray={otherInfo && otherInfo !== ''}
+              />
+            </OtherRemark>
           </ContentWrapper>
         </Body>
         <Footer>

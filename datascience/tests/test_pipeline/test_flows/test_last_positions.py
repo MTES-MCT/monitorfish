@@ -6,6 +6,7 @@ import pytest
 
 from config import default_risk_factors
 from src.pipeline.flows.last_positions import (
+    add_catchup,
     compute_emission_period,
     concatenate,
     drop_duplicates,
@@ -16,6 +17,7 @@ from src.pipeline.flows.last_positions import (
     extract_previous_last_positions,
     extract_reportings,
     extract_risk_factors,
+    extract_seconds_since_most_recent_last_position,
     flow,
     load_last_positions,
     merge_last_positions_beacon_malfunctions,
@@ -24,9 +26,53 @@ from src.pipeline.flows.last_positions import (
     validate_action,
 )
 from src.read_query import read_query
-from tests.mocks import mock_check_flow_not_running
+from tests.mocks import (
+    get_monitorfish_healthcheck_mock_factory,
+    mock_check_flow_not_running,
+    mock_extract_monitorfish_recent_positions_histogram,
+)
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
+flow.replace(
+    flow.get_tasks("get_monitorfish_healthcheck")[0],
+    get_monitorfish_healthcheck_mock_factory(),
+)
+flow.replace(
+    flow.get_tasks("extract_monitorfish_recent_positions_histogram")[0],
+    mock_extract_monitorfish_recent_positions_histogram,
+)
+
+
+def test_extract_seconds_since_most_recent_last_position(reset_test_data):
+    seconds = extract_seconds_since_most_recent_last_position.run()
+    # The most recent last_position inserted in test data in ten minutes old.
+    assert 599 < seconds < 601
+
+
+def test_add_catchup():
+    assert isinstance(
+        add_catchup.run(minutes=30, seconds_since_most_recent_last_position=83.25), int
+    )
+    assert (
+        add_catchup.run(minutes=30, seconds_since_most_recent_last_position=83.25) == 30
+    )
+    assert (
+        add_catchup.run(minutes=240, seconds_since_most_recent_last_position=83.25)
+        == 240
+    )
+    assert (
+        add_catchup.run(minutes=30, seconds_since_most_recent_last_position=1183.456)
+        == 30
+    )
+
+    assert isinstance(
+        add_catchup.run(minutes=30, seconds_since_most_recent_last_position=1683.25),
+        int,
+    )
+    assert (
+        add_catchup.run(minutes=30, seconds_since_most_recent_last_position=1683.25)
+        == 268
+    )
 
 
 def test_extract_risk_factors(reset_test_data):

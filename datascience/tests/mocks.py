@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Union
 from unittest.mock import MagicMock, patch
 
+import pandas as pd
 from prefect import task
 
 from src.pipeline.entities.monitorfish_healthcheck import MonitorfishHealthcheck
@@ -57,6 +58,19 @@ def mock_datetime_utcnow(utcnow: datetime):
 @task(checkpoint=False)
 def mock_check_flow_not_running():
     return True
+
+
+@task(checkpoint=False)
+def mock_extract_monitorfish_recent_positions_histogram():
+    truncated_utwnow = datetime.utcnow().replace(minute=0, second=0, microsecond=0)
+    return pd.DataFrame(
+        {
+            "datetime_utc_hour": [
+                truncated_utwnow - timedelta(hours=i) for i in range(48, 0, -1)
+            ],
+            "number_of_positions": [780 + 10 * i for i in range(48)],
+        }
+    )
 
 
 def get_monitorfish_healthcheck_mock_factory(

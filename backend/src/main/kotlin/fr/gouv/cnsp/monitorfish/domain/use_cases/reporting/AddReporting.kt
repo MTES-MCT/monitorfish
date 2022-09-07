@@ -1,7 +1,10 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,14 +23,14 @@ class AddReporting(private val reportingRepository: ReportingRepository) {
         newReporting.value as InfractionSuspicionOrObservationType
         newReporting.value.checkReportingActorAndFieldsRequirements()
 
-      if (newReporting.type == ReportingType.INFRACTION_SUSPICION) {
-        newReporting.value as InfractionSuspicion
-        require(!newReporting.value.dml.isNullOrEmpty()) {
-          "A DML must be set"
-        }
+        if (newReporting.type == ReportingType.INFRACTION_SUSPICION) {
+            newReporting.value as InfractionSuspicion
+            require(!newReporting.value.dml.isNullOrEmpty()) {
+                "A DML must be set"
+            }
 
-        newReporting.value.seaFront = Reporting.getSeaFrontFromDML(newReporting.value.dml)
-      }
+            newReporting.value.seaFront = Reporting.getSeaFrontFromDML(newReporting.value.dml)
+        }
 
         return reportingRepository.save(newReporting)
     }

@@ -1,4 +1,5 @@
 import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import styled from 'styled-components'
 
 import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 import { NumberInput } from './NumberInput'
@@ -11,12 +12,13 @@ import type { Promisable } from 'type-fest'
 
 export type DateInputProps = Pick<NumberInputProps, 'onBack' | 'onPrevious' | 'onNext'> & {
   defaultValue?: DateTuple
+  isStartDate?: boolean
   /** Called each time the date input is changed to a new valid value. */
   onChange: (nextDateTuple: DateTuple) => Promisable<void>
   onClick: () => Promisable<void>
 }
 function DateInputWithRef(
-  { defaultValue, onBack, onChange, onClick, onNext, onPrevious }: DateInputProps,
+  { defaultValue, isStartDate = false, onBack, onChange, onClick, onNext, onPrevious }: DateInputProps,
   ref: ForwardedRef<DateOrTimeInputRef>,
 ) {
   const boxSpanRef = useRef() as MutableRefObject<HTMLSpanElement>
@@ -24,7 +26,8 @@ function DateInputWithRef(
   const monthInputRef = useRef() as MutableRefObject<HTMLInputElement>
   const yearInputRef = useRef() as MutableRefObject<HTMLInputElement>
 
-  const [hasError, setHasError] = useState(false)
+  const [hasFormatError, setHasFormatError] = useState(false)
+  const [hasValidationError, setHasValidationError] = useState(false)
 
   useImperativeHandle<DateOrTimeInputRef, DateOrTimeInputRef>(ref, () => ({
     boxSpan: boxSpanRef.current,
@@ -39,8 +42,12 @@ function DateInputWithRef(
 
   const currentUtcYear = useMemo(() => getUtcizedDayjs().year(), [])
 
+  const handleFormatError = useCallback((hasNextFormatError: boolean) => {
+    setHasFormatError(hasNextFormatError)
+  }, [])
+
   const submit = useCallback(() => {
-    setHasError(false)
+    setHasValidationError(false)
 
     switch (window.document.activeElement) {
       case dayInputRef.current:
@@ -65,7 +72,7 @@ function DateInputWithRef(
         (yearInputRef.current.value.length &&
           (!dayInputRef.current.value.length || !monthInputRef.current.value.length))
       ) {
-        setHasError(true)
+        setHasValidationError(true)
       }
 
       return
@@ -81,16 +88,17 @@ function DateInputWithRef(
   }, [onChange])
 
   return (
-    <span ref={boxSpanRef}>
+    <Box ref={boxSpanRef} hasError={hasFormatError || hasValidationError}>
+      {isStartDate ? 'Du ' : 'au '}
       <NumberInput
         ref={dayInputRef}
         defaultValue={defaultValue && formatNumberAsDoubleDigit(defaultValue[2])}
-        hasError={hasError}
         max={31}
         min={1}
         onBack={onBack}
         onClick={onClick}
         onFilled={submit}
+        onFormatError={handleFormatError}
         onNext={() => monthInputRef.current.focus()}
         onPrevious={onPrevious}
         size={2}
@@ -99,12 +107,12 @@ function DateInputWithRef(
       <NumberInput
         ref={monthInputRef}
         defaultValue={defaultValue && formatNumberAsDoubleDigit(defaultValue[1])}
-        hasError={hasError}
         max={12}
         min={1}
         onBack={() => dayInputRef.current.focus()}
         onClick={onClick}
         onFilled={submit}
+        onFormatError={handleFormatError}
         onNext={() => yearInputRef.current.focus()}
         onPrevious={() => dayInputRef.current.focus()}
         size={2}
@@ -113,18 +121,27 @@ function DateInputWithRef(
       <NumberInput
         ref={yearInputRef}
         defaultValue={defaultValue && defaultValue[0]}
-        hasError={hasError}
         max={currentUtcYear}
         min={2020}
         onBack={() => monthInputRef.current.focus()}
         onClick={onClick}
         onFilled={submit}
+        onFormatError={handleFormatError}
         onNext={onNext}
         onPrevious={() => monthInputRef.current.focus()}
         size={4}
       />
-    </span>
+    </Box>
   )
 }
 
 export const DateInput = forwardRef(DateInputWithRef)
+
+const Box = styled.span<{
+  hasError: boolean
+}>`
+  background-color: ${p => p.theme.color.gainsboro};
+  border: solid 1px ${p => (p.hasError ? 'red' : p.theme.color.lightGray)} !important;
+  display: inline-block;
+  padding: 0.3125rem 0.5rem 0.4375rem;
+`

@@ -555,7 +555,7 @@ def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
         test_mode=False,
     )
 
-    subject = m.notification_type.to_message_subject()
+    subject = m.get_notification_subject()
     email_to_send = create_email.run(html=html, pdf=pdf, m=m)
 
     malfunction_to_notify = email_to_send.beacon_malfunction_to_notify

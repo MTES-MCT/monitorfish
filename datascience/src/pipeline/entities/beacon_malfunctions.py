@@ -44,15 +44,15 @@ class BeaconMalfunctionNotificationType(Enum):
     MALFUNCTION_AT_PORT_REMINDER = "MALFUNCTION_AT_PORT_REMINDER"
     END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
 
-    def to_message_subject(self):
-        type_object_mapping = {
-            "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION": "Interruption en mer des émissions VMS de votre navire",
-            "MALFUNCTION_AT_SEA_REMINDER": "RAPPEL : Interruption en mer des émissions VMS de votre navire",
-            "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION": "Interruption à quai des émissions VMS de votre navire",
-            "MALFUNCTION_AT_PORT_REMINDER": "RAPPEL : Interruption à quai des émissions VMS de votre navire",
-            "END_OF_MALFUNCTION": "Reprise des émissions VMS de votre navire",
+    def to_notification_subject_template(self):
+        type_subject_mapping = {
+            "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION": "{vessel_name} ({immat}) : interruption en mer des émissions VMS",
+            "MALFUNCTION_AT_SEA_REMINDER": "{vessel_name} ({immat}) : RAPPEL : interruption en mer des émissions VMS",
+            "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION": "{vessel_name} ({immat}) : interruption à quai des émissions VMS",
+            "MALFUNCTION_AT_PORT_REMINDER": "{vessel_name} ({immat}) : RAPPEL : interruption à quai des émissions VMS",
+            "END_OF_MALFUNCTION": "{vessel_name} ({immat}) : reprise des émissions VMS",
         }
-        return type_object_mapping[self.name]
+        return type_subject_mapping[self.name]
 
 
 class BeaconMalfunctionNotificationRecipientFunction(Enum):
@@ -232,6 +232,12 @@ class BeaconMalfunctionToNotify:
                 else []
             )
         return addressees
+
+    def get_notification_subject(self):
+        template = self.notification_type.to_notification_subject_template()
+        return template.format(
+            vessel_name=self.vessel_name, immat=self.vessel_cfr_or_immat_or_ircs
+        )
 
 
 @dataclass

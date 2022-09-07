@@ -1,2 +1,1 @@
-alter table positions
-    alter column speed drop not null;
+alter table positions alter column speed drop not null;

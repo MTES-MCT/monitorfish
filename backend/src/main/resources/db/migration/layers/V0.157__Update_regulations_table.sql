@@ -1,6 +1,8 @@
 ALTER TABLE public.regulations
     ADD COLUMN other_info varchar;
 
+DROP VIEW regulations_view;
+
 CREATE OR REPLACE VIEW regulations_view AS
 SELECT id,
        law_type,

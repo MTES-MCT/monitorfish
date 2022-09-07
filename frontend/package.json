@@ -66,6 +66,7 @@
     "react-toastify": "9.0.7",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
+    "redux-thunk": "2.4.1",
     "rsuite": "5.15.2",
     "rsuite-table": "5.6.0",
     "simplify-geojson": "^1.0.4",

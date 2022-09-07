@@ -95,39 +95,40 @@ export function RangedTimePicker({ filter, minutesRange, onChange }: RangedTimeP
 }
 
 const Box = styled.div`
-  background-color: white;
-  border: solid 1px darkgray;
+  background-color: ${p => p.theme.color.gainsboro};
+  border: solid 1px ${p => p.theme.color.lightGray};
   display: flex;
   flex-direction: column;
+  left: -1px;
   max-height: 10rem;
   overflow: auto;
   position: absolute;
-  top: 2.5rem;
-  z-index: 1;
+  top: 2.75rem;
+  z-index: 9999;
 
   ::-webkit-scrollbar {
     -webkit-appearance: none;
   }
   ::-webkit-scrollbar:vertical {
-    width: 0.25rem;
+    width: 0.33rem;
   }
   ::-webkit-scrollbar-thumb {
     border: 0;
-    background-color: darkgray;
+    background-color: ${p => p.theme.color.grayDarkerTwo};
   }
   ::-webkit-scrollbar-track {
-    background-color: lightgray;
+    background-color: ${p => p.theme.color.grayLighter};
   }
 `
 
 const Option = styled.div<{
   isSelected: boolean
 }>`
-  background-color: ${p => (p.isSelected ? 'darkgray' : 'transparent')};
+  background-color: ${p => (p.isSelected ? p.theme.color.grayDarkerTwo : 'transparent')};
   cursor: pointer;
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 5px;
 
   :hover {
-    background-color: ${p => (p.isSelected ? 'darkgray' : 'lightgray')};
+    background-color: ${p => (p.isSelected ? p.theme.color.grayDarkerTwo : p.theme.color.grayBackground)};
   }
 `

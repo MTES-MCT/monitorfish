@@ -28,7 +28,8 @@ function TimeInputWithRef(
   const minuteInputRef = useRef() as MutableRefObject<HTMLInputElement>
 
   const [controlledDefaultValue, setControlledDefaultValue] = useState(defaultValue)
-  const [hasError, setHasError] = useState(false)
+  const [hasFormatError, setHasFormatError] = useState(false)
+  const [hasValidationError, setHasValidationError] = useState(false)
 
   useImperativeHandle<DateOrTimeInputRef, DateOrTimeInputRef>(ref, () => ({
     boxSpan: boxSpanRef.current,
@@ -76,6 +77,10 @@ function TimeInputWithRef(
     [closeRangedTimePicker],
   )
 
+  const handleFormatError = useCallback((hasNextFormatError: boolean) => {
+    setHasFormatError(hasNextFormatError)
+  }, [])
+
   const handleRangedTimePickedChange = useCallback(
     (nextTimeTuple: TimeTuple) => {
       closeRangedTimePicker()
@@ -109,7 +114,7 @@ function TimeInputWithRef(
   }, [handleClickOutside])
 
   const submit = useCallback(() => {
-    setHasError(false)
+    setHasValidationError(false)
 
     if (window.document.activeElement === hourInputRef.current) {
       minuteInputRef.current.focus()
@@ -117,7 +122,7 @@ function TimeInputWithRef(
 
     if (!hourInputRef.current.value.length || !minuteInputRef.current.value.length) {
       if (minuteInputRef.current.value.length && !hourInputRef.current.value.length) {
-        setHasError(true)
+        setHasValidationError(true)
       }
 
       return
@@ -130,18 +135,18 @@ function TimeInputWithRef(
   }, [closeRangedTimePicker, onChange])
 
   return (
-    <Box ref={boxSpanRef}>
+    <Box ref={boxSpanRef} hasError={hasFormatError || hasValidationError}>
       <>
         <NumberInput
           ref={hourInputRef}
           defaultValue={controlledDefaultValue && controlledDefaultValue[0]}
-          hasError={hasError}
           max={23}
           min={0}
           onBack={handleBack}
           onClick={openRangedTimePicker}
           onFilled={submit}
           onFocus={onFocus}
+          onFormatError={handleFormatError}
           onInput={handleHourInput}
           onNext={() => minuteInputRef.current.focus()}
           onPrevious={onPrevious}
@@ -151,13 +156,13 @@ function TimeInputWithRef(
         <NumberInput
           ref={minuteInputRef}
           defaultValue={controlledDefaultValue && controlledDefaultValue[1]}
-          hasError={hasError}
           max={59}
           min={0}
           onBack={() => hourInputRef.current.focus()}
           onClick={openRangedTimePicker}
           onFilled={submit}
           onFocus={onFocus}
+          onFormatError={handleFormatError}
           onNext={onNext}
           onPrevious={() => hourInputRef.current.focus()}
           size={2}
@@ -177,7 +182,12 @@ function TimeInputWithRef(
 
 export const TimeInput = forwardRef(TimeInputWithRef)
 
-const Box = styled.span`
+const Box = styled.span<{
+  hasError: boolean
+}>`
+  background-color: ${p => p.theme.color.gainsboro};
+  border: solid 1px ${p => (p.hasError ? 'red' : p.theme.color.lightGray)} !important;
   display: inline-block;
+  padding: 0.3125rem 0.5rem 0.4375rem;
   position: relative;
 `

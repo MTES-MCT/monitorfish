@@ -255,17 +255,19 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
   return (
     <>
       <Box>
-        Du{' '}
-        <DateInput
-          ref={startDateInputRef}
-          defaultValue={selectedStartDateTupleRef.current}
-          onChange={nextDateTuple => handleDateInputFilled(DateRangePosition.START, nextDateTuple)}
-          onClick={openRangeCalendarPicker}
-          onNext={handleStartDateInputNext}
-        />
+        <Field>
+          <DateInput
+            ref={startDateInputRef}
+            defaultValue={selectedStartDateTupleRef.current}
+            isStartDate
+            onChange={nextDateTuple => handleDateInputFilled(DateRangePosition.START, nextDateTuple)}
+            onClick={openRangeCalendarPicker}
+            onNext={handleStartDateInputNext}
+          />
+        </Field>
+
         {withTime && (
-          <>
-            ,{' '}
+          <Field isTimeField>
             <TimeInput
               ref={startTimeInputRef}
               defaultValue={selectedStartTimeTupleRef.current}
@@ -276,21 +278,23 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
               onNext={() => endDateInputRef.current.focus()}
               onPrevious={() => startDateInputRef.current.focus(true)}
             />
-          </>
-        )}{' '}
-        au{' '}
-        <DateInput
-          ref={endDateInputRef}
-          defaultValue={selectedEndDateTupleRef.current}
-          onBack={handleEndDateInputPrevious}
-          onChange={nextDateTuple => handleDateInputFilled(DateRangePosition.END, nextDateTuple)}
-          onClick={openRangeCalendarPicker}
-          onNext={handleEndDateInputNext}
-          onPrevious={handleEndDateInputPrevious}
-        />
+          </Field>
+        )}
+
+        <Field isEndDateField>
+          <DateInput
+            ref={endDateInputRef}
+            defaultValue={selectedEndDateTupleRef.current}
+            onBack={handleEndDateInputPrevious}
+            onChange={nextDateTuple => handleDateInputFilled(DateRangePosition.END, nextDateTuple)}
+            onClick={openRangeCalendarPicker}
+            onNext={handleEndDateInputNext}
+            onPrevious={handleEndDateInputPrevious}
+          />
+        </Field>
+
         {withTime && (
-          <>
-            ,{' '}
+          <Field isTimeField>
             <TimeInput
               ref={endTimeInputRef}
               defaultValue={selectedEndTimeTupleRef.current}
@@ -300,7 +304,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
               onFocus={closeRangeCalendarPicker}
               onPrevious={() => endDateInputRef.current.focus(true)}
             />
-          </>
+          </Field>
         )}
       </Box>
 
@@ -315,7 +319,23 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
 }
 
 const Box = styled.div`
-  background-color: lightgray;
-  border: solid 1px gray;
-  padding: 0.5rem;
+  * {
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  position: relative;
+`
+
+const Field = styled.span<{
+  isEndDateField?: boolean
+  isTimeField?: boolean
+}>`
+  margin-left: ${p => {
+    if (p.isEndDateField) {
+      return '0.625rem'
+    }
+
+    return p.isTimeField ? '0.125rem' : 0
+  }};
 `

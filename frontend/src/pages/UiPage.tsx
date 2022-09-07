@@ -12,6 +12,10 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html {
+    overflow: auto;
+  }
+
   body {
     background-color: #eeeeee;
     padding: 1rem;
@@ -76,6 +80,25 @@ export function UiPage() {
                 {
                   startDate: dateRangePickerOutput[0].toISOString(),
                   endDate: dateRangePickerOutput[1].toISOString(),
+                },
+                null,
+                2,
+              )}
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <h3>With time</h3>
+        <DateRangePicker onChange={setDateRangePickerithTimeOutput} withTime />
+        <h4>Output</h4>
+        <pre>
+          <code>
+            {dateRangePickerWithTimeOutput &&
+              JSON.stringify(
+                {
+                  startDate: dateRangePickerWithTimeOutput[0].toISOString(),
+                  endDate: dateRangePickerWithTimeOutput[1].toISOString(),
                 },
                 null,
                 2,

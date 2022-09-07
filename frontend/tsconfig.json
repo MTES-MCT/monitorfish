@@ -28,7 +28,7 @@
     "target": "ES2022",
     "useUnknownInCatchVariables": true
   },
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "src/ui/styled.d.ts"],
   "exclude": ["node_modules/*"],
   "ts-node": {
     "swc": true,

@@ -53,7 +53,7 @@ const mapSlice = createSlice({
      * Animate map to the specified OpenLayers coordinates
      * @param {Object} state
      * @param {{
-     *   payload: String[]
+     *   payload: import('ol/coordinate').Coordinate
      * }} action - The OpenLayers internal [longitude, latitude] coordinates
      */
     animateToCoordinates (state, action) {

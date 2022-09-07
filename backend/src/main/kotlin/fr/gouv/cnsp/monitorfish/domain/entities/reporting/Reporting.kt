@@ -5,22 +5,22 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
 class Reporting(
-        val id: Int? = null,
-        val type: ReportingType,
-        val vesselName: String? = null,
-        val internalReferenceNumber: String? = null,
-        val externalReferenceNumber: String? = null,
-        val ircs: String? = null,
-        val vesselIdentifier: VesselIdentifier,
-        val creationDate: ZonedDateTime,
-        val validationDate: ZonedDateTime? = null,
-        val value: ReportingValue,
-        val isArchived: Boolean,
-        val isDeleted: Boolean,
-        var infraction: Infraction? = null,
-        var underCharter: Boolean? = null) {
+    val id: Int? = null,
+    val type: ReportingType,
+    val vesselName: String? = null,
+    val internalReferenceNumber: String? = null,
+    val externalReferenceNumber: String? = null,
+    val ircs: String? = null,
+    val vesselIdentifier: VesselIdentifier,
+    val creationDate: ZonedDateTime,
+    val validationDate: ZonedDateTime? = null,
+    val value: ReportingValue,
+    val isArchived: Boolean,
+    val isDeleted: Boolean,
+    var infraction: Infraction? = null,
+    var underCharter: Boolean? = null) {
     companion object {
-        fun getSeaFrontFromDML (dml: String) = when (dml) {
+        fun getSeaFrontFromDML(dml: String) = when (dml) {
             "DML 62/80" -> Facade.MEMN.name
             "DML 76" -> Facade.MEMN.name
             "DML 76/27" -> Facade.MEMN.name
@@ -45,7 +45,7 @@ class Reporting(
             else -> Facade.UNDEFINED.name
         }
 
-        fun checkReportingActorAndFieldsRequirements (value: InfractionSuspicionOrObservationType) = when (value.reportingActor) {
+        fun checkReportingActorAndFieldsRequirements(value: InfractionSuspicionOrObservationType) = when (value.reportingActor) {
             ReportingActor.OPS -> require(!value.authorTrigram.isNullOrEmpty()) {
                 "An author trigram must be set"
             }

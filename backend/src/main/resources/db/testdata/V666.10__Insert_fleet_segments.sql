@@ -1,5 +1,4 @@
-COPY public.fleet_segments (segment, segment_name, dirm, gears, fao_areas, target_species, bycatch_species, flag_states,
-                            impact_risk_factor) FROM stdin;
+COPY public.fleet_segments (segment, segment_name, dirm, gears, fao_areas, target_species, bycatch_species, flag_states, impact_risk_factor) FROM stdin;
 SWW01/02/03	Bottom trawls	{NAMO,SA}	{OTB,OTT,PTB,OT,PT,TBN,TBS,TX,TB}	{27.8.c,27.8,27.9}	{HKE,SOL,NEP,ANF}	{LEZ,ANF}	{FRA,ESP,PRT}	1.8
 SWW04	Midwater trawls	{NAMO,SA}	{OTM,PTM}	{27.8.c,27.8}	{HKE}	{NEP,SOL,ANF}	{FRA,IRL}	1.7
 SWW06	Seines	{NAMO,SA}	{SDN,SSC,SPR,SX,SV}	{27.8.c,27.8,27.9}	{HKE}	{ANF,LEZ,PLE,SOL}	{FRA,ESP}	2.7

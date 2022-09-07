@@ -1,15 +1,13 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-create table rules
-(
-    rule_id          uuid primary key,
-    title            varchar(255)             not null,
-    active           boolean                  not null,
-    creation_date    timestamp with time zone not null,
-    last_update_date timestamp with time zone,
-    last_run_date    timestamp with time zone,
-    last_run_success boolean,
-    value            jsonb                    not null
+create table rules (rule_id uuid primary key,
+                    title varchar(255) not null,
+                    active boolean not null,
+                    creation_date timestamp with time zone not null,
+                    last_update_date timestamp with time zone,
+                    last_run_date timestamp with time zone,
+                    last_run_success boolean,
+                    value jsonb not null
 );
 
 INSERT INTO rules

@@ -1,2 +1,1 @@
-ALTER TABLE public.alerts
-    DROP COLUMN name;
+ALTER TABLE public.alerts DROP COLUMN name;

@@ -1,33 +1,16 @@
 DROP TABLE IF EXISTS "public"."coast_lines" CASCADE;
-DELETE
-FROM geometry_columns
-WHERE f_table_name = 'coast_lines'
-  AND f_table_schema = 'public';
-CREATE TABLE "public"."coast_lines"
-(
-    "ogc_fid" SERIAL,
-    CONSTRAINT "coast_lines_pk" PRIMARY KEY ("ogc_fid")
-);
-SELECT AddGeometryColumn('public', 'coast_lines', 'wkb_geometry', 4326, 'MULTILINESTRING', 2);
+DELETE FROM geometry_columns WHERE f_table_name = 'coast_lines' AND f_table_schema = 'public';
+CREATE TABLE "public"."coast_lines" ( "ogc_fid" SERIAL, CONSTRAINT "coast_lines_pk" PRIMARY KEY ("ogc_fid") );
+SELECT AddGeometryColumn('public','coast_lines','wkb_geometry',4326,'MULTILINESTRING',2);
 CREATE INDEX "coast_lines_wkb_geometry_geom_idx" ON "public"."coast_lines" USING GIST ("wkb_geometry");
 COMMENT ON TABLE "public"."coast_lines" IS NULL;
-ALTER TABLE "public"."coast_lines"
-    ADD COLUMN "gml_id" VARCHAR;
-ALTER TABLE "public"."coast_lines"
-    ADD COLUMN "identifie" FLOAT8;
-ALTER TABLE "public"."coast_lines"
-    ADD COLUMN "identifi1" VARCHAR;
-ALTER TABLE "public"."coast_lines"
-    ADD COLUMN "name_1" VARCHAR;
-ALTER TABLE "public"."coast_lines"
-    ADD COLUMN "source" VARCHAR;
-ALTER TABLE "public"."coast_lines"
-    ADD COLUMN "numdep" VARCHAR;
-ALTER TABLE "public"."coast_lines"
-    ADD COLUMN "date_pva" VARCHAR;
-ALTER TABLE "public"."coast_lines"
-    ADD COLUMN "annee" VARCHAR;
-ALTER TABLE "public"."coast_lines"
-    ADD COLUMN "num" VARCHAR;
-ALTER TABLE "public"."coast_lines"
-    ADD COLUMN "comm" VARCHAR;
+ALTER TABLE "public"."coast_lines" ADD COLUMN "gml_id" VARCHAR;
+ALTER TABLE "public"."coast_lines" ADD COLUMN "identifie" FLOAT8;
+ALTER TABLE "public"."coast_lines" ADD COLUMN "identifi1" VARCHAR;
+ALTER TABLE "public"."coast_lines" ADD COLUMN "name_1" VARCHAR;
+ALTER TABLE "public"."coast_lines" ADD COLUMN "source" VARCHAR;
+ALTER TABLE "public"."coast_lines" ADD COLUMN "numdep" VARCHAR;
+ALTER TABLE "public"."coast_lines" ADD COLUMN "date_pva" VARCHAR;
+ALTER TABLE "public"."coast_lines" ADD COLUMN "annee" VARCHAR;
+ALTER TABLE "public"."coast_lines" ADD COLUMN "num" VARCHAR;
+ALTER TABLE "public"."coast_lines" ADD COLUMN "comm" VARCHAR;

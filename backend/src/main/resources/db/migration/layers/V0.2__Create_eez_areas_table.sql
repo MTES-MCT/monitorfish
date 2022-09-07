@@ -1,73 +1,36 @@
 DROP TABLE IF EXISTS "public"."eez_areas" CASCADE;
-DELETE
-FROM geometry_columns
-WHERE f_table_name = 'eez_areas'
-  AND f_table_schema = 'public';
-CREATE TABLE "public"."eez_areas"
-(
-    "ogc_fid" SERIAL,
-    CONSTRAINT "eez_areas_pk" PRIMARY KEY ("ogc_fid")
-);
-SELECT AddGeometryColumn('public', 'eez_areas', 'wkb_geometry', 32631, 'MULTIPOLYGON', 2);
+DELETE FROM geometry_columns WHERE f_table_name = 'eez_areas' AND f_table_schema = 'public';
+CREATE TABLE "public"."eez_areas" ( "ogc_fid" SERIAL, CONSTRAINT "eez_areas_pk" PRIMARY KEY ("ogc_fid") );
+SELECT AddGeometryColumn('public','eez_areas','wkb_geometry',32631,'MULTIPOLYGON',2);
 CREATE INDEX "eez_areas_wkb_geometry_geom_idx" ON "public"."eez_areas" USING GIST ("wkb_geometry");
 COMMENT ON TABLE "public"."eez_areas" IS NULL;
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "union" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "mrgid_eez" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "territory1" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "mrgid_ter1" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "iso_ter1" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "un_ter1" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "sovereign1" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "mrgid_sov1" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "iso_sov1" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "un_sov1" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "territory2" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "mrgid_ter2" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "iso_ter2" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "un_ter2" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "sovereign2" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "mrgid_sov2" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "iso_sov2" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "un_sov2" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "territory3" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "mrgid_ter3" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "iso_ter3" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "un_ter3" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "sovereign3" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "mrgid_sov3" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "iso_sov3" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "un_sov3" NUMERIC(10, 0);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "pol_type" VARCHAR(254);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "y_1" NUMERIC(24, 15);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "x_1" NUMERIC(24, 15);
-ALTER TABLE "public"."eez_areas"
-    ADD COLUMN "area_km2" NUMERIC(10, 0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "union" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "mrgid_eez" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "territory1" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "mrgid_ter1" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "iso_ter1" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "un_ter1" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "sovereign1" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "mrgid_sov1" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "iso_sov1" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "un_sov1" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "territory2" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "mrgid_ter2" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "iso_ter2" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "un_ter2" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "sovereign2" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "mrgid_sov2" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "iso_sov2" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "un_sov2" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "territory3" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "mrgid_ter3" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "iso_ter3" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "un_ter3" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "sovereign3" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "mrgid_sov3" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "iso_sov3" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "un_sov3" NUMERIC(10,0);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "pol_type" VARCHAR(254);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "y_1" NUMERIC(24,15);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "x_1" NUMERIC(24,15);
+ALTER TABLE "public"."eez_areas" ADD COLUMN "area_km2" NUMERIC(10,0);

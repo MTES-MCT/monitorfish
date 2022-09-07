@@ -1,6 +1,5 @@
-CREATE TABLE public.saltwater_limit_areas
-(
-    id     integer NOT NULL,
-    geom   public.geometry(MultiLineString, 4326),
+CREATE TABLE public.saltwater_limit_areas (
+    id integer NOT NULL,
+    geom public.geometry(MultiLineString,4326),
     objnam character varying(254)
 );

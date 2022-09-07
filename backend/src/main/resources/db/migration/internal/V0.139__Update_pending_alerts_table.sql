@@ -1,5 +1,4 @@
-DELETE
-FROM public.pending_alerts;
+DELETE FROM public.pending_alerts;
 
 ALTER TABLE public.pending_alerts
-    ADD COLUMN alert_config_name VARCHAR(200);
+ADD COLUMN alert_config_name VARCHAR(200);

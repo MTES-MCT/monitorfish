@@ -198,4 +198,36 @@ class ReportingControllerITests {
         Mockito.verify(updateReporting).execute(eq(123), any())
     }
 
+    @Test
+    fun `Should create a reporting When no vesselIdentifier given`() {
+        // Given
+        given(addReporting.execute(any())).willReturn(Reporting(
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            creationDate = ZonedDateTime.now(),
+            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+            type = ReportingType.INFRACTION_SUSPICION,
+            isDeleted = false,
+            isArchived = false))
+
+        // When
+        mockMvc.perform(post("/bff/v1/reportings")
+            .content(objectMapper.writeValueAsString(CreateReportingDataInput(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                creationDate = ZonedDateTime.now(),
+                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                type = ReportingType.INFRACTION_SUSPICION
+            )))
+            .contentType(MediaType.APPLICATION_JSON))
+            // Then
+            .andExpect(status().isCreated)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("OPS")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
+    }
+
 }

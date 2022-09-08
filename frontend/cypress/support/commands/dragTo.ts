@@ -14,7 +14,7 @@ const getElementCenterPosition = (element: Element): Position => {
 
 function triggerMouseEvent(window: ScopedWindow, element: Element, position: Position, type: string): void {
   element.dispatchEvent(
-    new window.MouseEvent(type, { bubbles: true, cancelable: true, clientX: position.x, clientY: position.y }),
+    new window.MouseEvent(type, { bubbles: true, cancelable: true, clientX: position.x, clientY: position.y })
   )
 }
 
@@ -25,7 +25,7 @@ function drag({
   log,
   steps,
   toPosition,
-  window,
+  window
 }: {
   delay: number
   draggedElement: Element
@@ -57,7 +57,7 @@ function drag({
 
           const toStepPosition: Position = {
             x: fromPosition.x + perStepDeltaX * stepIndex,
-            y: fromPosition.y + perStepDeltaY * stepIndex,
+            y: fromPosition.y + perStepDeltaY * stepIndex
           }
 
           triggerMouseEvent(window, draggedElement, toStepPosition, 'mousemove')
@@ -65,18 +65,18 @@ function drag({
 
           return Cypress.Promise.delay(delay)
         },
-        { concurrency: 1 },
+        { concurrency: 1 }
       )
     }).then(() => {
       triggerMouseEvent(window, draggedElement, toPosition, 'mouseup')
-    }),
+    })
   )
 }
 
 Cypress.Commands.add(
   'dragTo',
   {
-    prevSubject: 'element',
+    prevSubject: 'element'
   },
   (
     prevSubject: JQuery<Element>,
@@ -84,7 +84,7 @@ Cypress.Commands.add(
     options: Partial<{
       delay: number
       isSmooth: boolean
-    }> = {},
+    }> = {}
   ) => {
     const { delay = 250, isSmooth = false } = options
 
@@ -114,10 +114,10 @@ Cypress.Commands.add(
         delay,
         fromPosition,
         steps,
-        toPosition,
-      }),
+        toPosition
+      })
     }).snapshot('0%')
 
     drag({ delay, draggedElement, fromPosition, log, steps, toPosition, window })
-  },
+  }
 )

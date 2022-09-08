@@ -40,10 +40,10 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       selectedVesselCustomTrackRequest.trackDepth === VesselTrackDepth.CUSTOM
         ? ([
             selectedVesselCustomTrackRequest.afterDateTime,
-            selectedVesselCustomTrackRequest.beforeDateTime,
+            selectedVesselCustomTrackRequest.beforeDateTime
           ] as DateRange)
         : undefined,
-    [selectedVesselCustomTrackRequest],
+    [selectedVesselCustomTrackRequest]
   )
 
   /**
@@ -55,7 +55,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
 
       dispatch(modifyVesselTrackDepth(selectedVesselIdentity, trackRequest, false, false) as any)
     },
-    [dispatch, selectedVesselIdentity],
+    [dispatch, selectedVesselIdentity]
   )
 
   /**
@@ -74,12 +74,12 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       const trackRequest = {
         afterDateTime: startDate,
         beforeDateTime: endDate,
-        trackDepth: VesselTrackDepth.CUSTOM,
+        trackDepth: VesselTrackDepth.CUSTOM
       }
 
       dispatch(modifyVesselTrackDepth(selectedVesselIdentity, trackRequest, false, true) as any)
     },
-    [dispatch, selectedVesselIdentity, updateTrackDepth],
+    [dispatch, selectedVesselIdentity, updateTrackDepth]
   )
 
   return (

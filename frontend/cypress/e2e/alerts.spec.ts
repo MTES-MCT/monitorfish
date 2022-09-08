@@ -19,11 +19,11 @@ context('Alerts', () => {
     cy.get('.vessels').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
-        thresholdType: 'percent',
+        thresholdType: 'percent'
       },
       screenshotConfig: {
-        clip: { height: 200, width: 200, x: 400, y: 400 },
-      },
+        clip: { height: 200, width: 200, x: 400, y: 400 }
+      }
     })
 
     cy.cleanScreenshots(1)

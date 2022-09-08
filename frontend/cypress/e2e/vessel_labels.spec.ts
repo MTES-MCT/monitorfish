@@ -40,7 +40,7 @@ context('Vessel labels', () => {
         eventConstructor: 'MouseEvent',
         force: true,
         pointerId: 1,
-        which: 1,
+        which: 1
       })
       .trigger('pointermove', { clientX: 600, clientY: 400, force: true, pointerId: 1 })
       .trigger('pointermove', { clientX: 600, clientY: 600, force: true, pointerId: 1 })
@@ -56,7 +56,7 @@ context('Vessel labels', () => {
         eventConstructor: 'MouseEvent',
         force: true,
         pointerId: 1,
-        which: 1,
+        which: 1
       })
       .trigger('pointermove', { clientX: 600, clientY: 400, force: true, pointerId: 1 })
       .trigger('pointermove', { clientX: 600, clientY: 600, force: true, pointerId: 1 })
@@ -84,7 +84,7 @@ context('Vessel labels', () => {
         eventConstructor: 'MouseEvent',
         force: true,
         pointerId: 1,
-        which: 1,
+        which: 1
       })
       .trigger('pointermove', { clientX: 600, clientY: 400, force: true, pointerId: 1 })
       .trigger('pointermove', { clientX: 600, clientY: 600, force: true, pointerId: 1 })

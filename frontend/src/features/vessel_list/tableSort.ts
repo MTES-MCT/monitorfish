@@ -4,7 +4,7 @@ import { CSVOptions } from './dataFormatting'
 
 export enum SortType {
   ASC = 'asc',
-  DESC = 'desc',
+  DESC = 'desc'
 }
 
 export function sortArrayByColumn(a, b, sortColumn, sortType) {

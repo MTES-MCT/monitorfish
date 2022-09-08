@@ -41,7 +41,7 @@ export function getDateTupleFromDate(date?: Date): DateTuple | undefined {
   return [
     String(date.getFullYear()),
     formatNumberAsDoubleDigit(date.getMonth() + 1),
-    formatNumberAsDoubleDigit(date.getDate()),
+    formatNumberAsDoubleDigit(date.getDate())
   ]
 }
 
@@ -72,7 +72,7 @@ export const getRangedTimeOptions = (minutesRange: number): Option<TimeTuple>[] 
 
     return {
       label,
-      value,
+      value
     }
   })
 }

@@ -42,10 +42,10 @@ context('Vessel sidebar fishing tab', () => {
     // Then
     cy.get('*[data-cy^="vessel-fishing-gears"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-fishing-gears"]').contains('Trémails et filets maillants combinés (GTN)', {
-      timeout: 10000,
+      timeout: 10000
     })
     cy.get('*[data-cy^="vessel-fishing-resume-title"]').contains('1 message - 2256 kg pêchés au total', {
-      timeout: 10000,
+      timeout: 10000
     })
   })
 
@@ -166,7 +166,7 @@ context('Vessel sidebar fishing tab', () => {
         'eq',
         'http://localhost:8880/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
           '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
-          '&afterDateTime=2019-02-16T21:05:00.000Z&beforeDateTime=2019-10-15T13:01:00.000Z',
+          '&afterDateTime=2019-02-16T21:05:00.000Z&beforeDateTime=2019-10-15T13:01:00.000Z'
       )
 
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
@@ -182,7 +182,7 @@ context('Vessel sidebar fishing tab', () => {
         'eq',
         'http://localhost:8880/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
           '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
-          '&afterDateTime=2019-10-10T22:06:00.000Z&beforeDateTime=2019-10-22T12:06:00.000Z',
+          '&afterDateTime=2019-10-10T22:06:00.000Z&beforeDateTime=2019-10-22T12:06:00.000Z'
       )
     cy.get('*[data-cy^="fishing-activity-name"]').should('not.exist')
     cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 10/10/19 au 22/10/19')

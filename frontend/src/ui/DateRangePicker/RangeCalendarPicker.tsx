@@ -27,7 +27,7 @@ export function RangeCalendarPicker({ defaultValue, onChange }: RangeCalendarPic
 
   const controlledValue = useMemo(
     () => (defaultValue ? (sortDates(defaultValue) as DateRange) : undefined),
-    [defaultValue],
+    [defaultValue]
   )
 
   const handleSelect = useCallback(
@@ -46,7 +46,7 @@ export function RangeCalendarPicker({ defaultValue, onChange }: RangeCalendarPic
 
       onChange(nextDateTupleRange)
     },
-    [onChange],
+    [onChange]
   )
 
   const renderTitle = useCallback((date: Date) => capitalizeFirstLetter(dayjs(date).format('MMMM YYYY')), [])

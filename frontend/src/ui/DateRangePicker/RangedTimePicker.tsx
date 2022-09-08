@@ -16,7 +16,7 @@ export function RangedTimePicker({ filter, minutesRange, onChange }: RangedTimeP
   const rangedTimeOptions = useMemo(() => getRangedTimeOptions(minutesRange), [minutesRange])
   const filteredRangedTimeOptions = useMemo(
     () => rangedTimeOptions.filter(({ label }) => filter.test(label)),
-    [filter, rangedTimeOptions],
+    [filter, rangedTimeOptions]
   )
 
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0)
@@ -54,12 +54,12 @@ export function RangedTimePicker({ filter, minutesRange, onChange }: RangedTimeP
         onChange(selectedRangedTimeOption.value)
       }
     },
-    [filteredRangedTimeOptions, selectedOptionIndex, onChange],
+    [filteredRangedTimeOptions, selectedOptionIndex, onChange]
   )
 
   useEffect(() => {
     window.addEventListener('keydown', handleBoxKeyDown, {
-      once: true,
+      once: true
     })
 
     return () => {

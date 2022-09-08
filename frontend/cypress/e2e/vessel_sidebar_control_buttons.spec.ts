@@ -21,23 +21,23 @@ context('Vessel sidebar controls buttons', () => {
     // Then
     cy.get('[aria-rowindex="6"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains(
       '0 nds',
-      { timeout: 10000 },
+      { timeout: 10000 }
     )
 
     // And click on a position to zoom in
     cy.get('[aria-rowindex="6"] > .rs-table-cell-group > [aria-colindex="1"] > .rs-table-cell-content').trigger(
       'pointermove',
-      { force: true, pointerId: 1 },
+      { force: true, pointerId: 1 }
     )
     cy.get('[aria-rowindex="6"] > .rs-table-cell-group > [aria-colindex="1"] > .rs-table-cell-content').click({
-      force: true,
+      force: true
     })
 
     // The table should be sorted in ascending datetime order
     cy.get('.rs-table-cell-group > :nth-child(1) > .rs-table-cell > .rs-table-cell-content').click({ timeout: 10000 })
     cy.get('[aria-rowindex="2"] > .rs-table-cell-group > [aria-colindex="2"] > .rs-table-cell-content').contains(
       '8.7 nds',
-      { timeout: 10000 },
+      { timeout: 10000 }
     )
   })
 
@@ -100,7 +100,7 @@ context('Vessel sidebar controls buttons', () => {
 
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="custom-dates-showed-text"]').contains(
-      new RegExp(`Piste affichée du ${startDay}/\\d{2}/\\d{2} au ${endDay}/\\d{2}/\\d{2}`),
+      new RegExp(`Piste affichée du ${startDay}/\\d{2}/\\d{2} au ${endDay}/\\d{2}/\\d{2}`)
     )
   })
 
@@ -146,11 +146,11 @@ context('Vessel sidebar controls buttons', () => {
       .toMatchImageSnapshot({
         imageConfig: {
           threshold: 0.05,
-          thresholdType: 'percent',
+          thresholdType: 'percent'
         },
         screenshotConfig: {
-          clip: { height: 840, width: 500, x: 210, y: 0 },
-        },
+          clip: { height: 840, width: 500, x: 210, y: 0 }
+        }
       })
 
     cy.cleanScreenshots(1)

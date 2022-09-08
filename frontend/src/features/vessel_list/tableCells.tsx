@@ -2,7 +2,7 @@
 import countries from 'i18n-iso-countries'
 import { useMemo } from 'react'
 import { CellProps, Checkbox, Table } from 'rsuite'
-import { InnerCellProps } from 'rsuite-table/es/Cell'
+import type { InnerCellProps } from 'rsuite-table/es/Cell'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 

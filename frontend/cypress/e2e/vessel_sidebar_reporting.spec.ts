@@ -16,7 +16,7 @@ context('Vessel sidebar reporting tab', () => {
     // When
     cy.intercept(
       'GET',
-      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*',
+      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
     ).as('reporting')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
@@ -47,7 +47,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('PROMETTRE')
     cy.intercept(
       'GET',
-      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000232227&externalReferenceNumber=ZJ472279&IRCS=TMG5756&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*',
+      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000232227&externalReferenceNumber=ZJ472279&IRCS=TMG5756&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
     ).as('reportingTwo')
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
@@ -85,7 +85,7 @@ context('Vessel sidebar reporting tab', () => {
     // When
     cy.intercept(
       'GET',
-      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*',
+      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
     ).as('reporting')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
@@ -100,7 +100,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="new-reporting-author-contact"]').type('Jean Bon (0612365896)')
     cy.get('*[data-cy="new-reporting-title"]').type('Sortie non autorisée')
     cy.get('*[data-cy="new-reporting-description"]').type(
-      "Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis",
+      "Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis"
     )
     cy.get('*[data-cy="new-reporting-select-natinf"]').click()
     cy.get('[data-key="2608"] > .rs-picker-select-menu-item').click()

@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as SortSVG } from '../../features/icons/ascendant-descendant.svg'

@@ -8,5 +8,5 @@ export const exportToCsv = new ExportToCsv({
   showTitle: false,
   useBom: true,
   useKeysAsHeaders: true,
-  useTextFile: false,
+  useTextFile: false
 })

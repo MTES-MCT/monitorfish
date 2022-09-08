@@ -31,10 +31,10 @@ export function ExportTrack() {
           longitude: coordinates[1] || '',
           mmsi: position.mmsi || '',
           speed: position.speed || '',
-          vesselName: position.vesselName || '',
+          vesselName: position.vesselName || ''
         }
       }) || [],
-    [selectedVesselPositions, coordinatesFormat],
+    [selectedVesselPositions, coordinatesFormat]
   )
 
   const downloadCSV = useCallback(positions => {

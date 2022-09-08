@@ -19,7 +19,7 @@ export type DateInputProps = Pick<NumberInputProps, 'onBack' | 'onPrevious' | 'o
 }
 function DateInputWithRef(
   { defaultValue, isStartDate = false, onBack, onChange, onClick, onNext, onPrevious }: DateInputProps,
-  ref: ForwardedRef<DateOrTimeInputRef>,
+  ref: ForwardedRef<DateOrTimeInputRef>
 ) {
   const boxSpanRef = useRef() as MutableRefObject<HTMLSpanElement>
   const dayInputRef = useRef() as MutableRefObject<HTMLInputElement>
@@ -37,7 +37,7 @@ function DateInputWithRef(
       } else {
         dayInputRef.current.focus()
       }
-    },
+    }
   }))
 
   const currentUtcYear = useMemo(() => getUtcizedDayjs().year(), [])
@@ -81,7 +81,7 @@ function DateInputWithRef(
     const nextDateTuple: DateTuple = [
       String(yearInputRef.current.value),
       formatNumberAsDoubleDigit(monthInputRef.current.value),
-      formatNumberAsDoubleDigit(dayInputRef.current.value),
+      formatNumberAsDoubleDigit(dayInputRef.current.value)
     ]
 
     onChange(nextDateTuple)

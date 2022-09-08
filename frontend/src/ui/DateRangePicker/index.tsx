@@ -40,10 +40,10 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
   const isRangeCalendarPickerOpenRef = useRef(false)
 
   const selectedStartDateRef = useRef<Date | undefined>(
-    defaultValue ? getLocalizedDayjs(defaultValue[0]).toDate() : undefined,
+    defaultValue ? getLocalizedDayjs(defaultValue[0]).toDate() : undefined
   )
   const selectedEndDateRef = useRef<Date | undefined>(
-    defaultValue ? getLocalizedDayjs(defaultValue[1]).toDate() : undefined,
+    defaultValue ? getLocalizedDayjs(defaultValue[1]).toDate() : undefined
   )
   const selectedStartDateTupleRef = useRef<DateTuple | undefined>(getDateTupleFromDate(selectedStartDateRef.current))
   const selectedEndDateTupleRef = useRef<DateTuple | undefined>(getDateTupleFromDate(selectedEndDateRef.current))
@@ -56,7 +56,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
     selectedStartDateTupleRef.current && selectedEndDateTupleRef.current
       ? ([
           getDateFromDateAndTimeTuple(selectedStartDateTupleRef.current, ['00', '00']),
-          getDateFromDateAndTimeTuple(selectedEndDateTupleRef.current, ['00', '00'], true),
+          getDateFromDateAndTimeTuple(selectedEndDateTupleRef.current, ['00', '00'], true)
         ] as DateRange)
       : undefined
 
@@ -88,7 +88,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
 
       closeRangeCalendarPicker()
     },
-    [closeRangeCalendarPicker],
+    [closeRangeCalendarPicker]
   )
 
   const handleEndDateInputNext = useCallback(() => {
@@ -153,7 +153,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
         handleEndDateInputNext()
       }
     },
-    [handleEndDateInputNext, handleStartDateInputNext, submit, withTime],
+    [handleEndDateInputNext, handleStartDateInputNext, submit, withTime]
   )
 
   const handleRangeCalendarPickerChange = useCallback(
@@ -200,7 +200,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
 
       submit()
     },
-    [closeRangeCalendarPicker, forceUpdate, submit, withTime],
+    [closeRangeCalendarPicker, forceUpdate, submit, withTime]
   )
 
   const handleTimeInputFilled = useCallback(
@@ -235,7 +235,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
 
       submit()
     },
-    [submit],
+    [submit]
   )
 
   const openRangeCalendarPicker = useCallback(() => {

@@ -21,7 +21,7 @@ export type TimeInputProps = Pick<NumberInputProps, 'onBack' | 'onPrevious' | 'o
 }
 function TimeInputWithRef(
   { defaultValue, minutesRange = 15, onBack, onChange, onFocus, onNext, onPrevious }: TimeInputProps,
-  ref: ForwardedRef<DateOrTimeInputRef>,
+  ref: ForwardedRef<DateOrTimeInputRef>
 ) {
   const boxSpanRef = useRef() as MutableRefObject<HTMLSpanElement>
   const hourInputRef = useRef() as MutableRefObject<HTMLInputElement>
@@ -39,7 +39,7 @@ function TimeInputWithRef(
       } else {
         hourInputRef.current.focus()
       }
-    },
+    }
   }))
 
   const isRangedTimePickerOpenRef = useRef(false)
@@ -74,7 +74,7 @@ function TimeInputWithRef(
 
       closeRangedTimePicker()
     },
-    [closeRangedTimePicker],
+    [closeRangedTimePicker]
   )
 
   const handleFormatError = useCallback((hasNextFormatError: boolean) => {
@@ -89,7 +89,7 @@ function TimeInputWithRef(
 
       onChange(nextTimeTuple)
     },
-    [closeRangedTimePicker, onChange],
+    [closeRangedTimePicker, onChange]
   )
 
   const handleHourInput = useCallback((nextValue: string) => {

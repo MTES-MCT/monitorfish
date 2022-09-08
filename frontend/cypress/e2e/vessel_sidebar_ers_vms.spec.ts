@@ -41,10 +41,10 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.get('*[data-cy="vessel-malfunctions-details"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 10000 }).contains('0 commentaire')
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 10000 }).contains(
-      'Avarie en mer ouverte dans MonitorFish, dernière émission à',
+      'Avarie en mer ouverte dans MonitorFish, dernière émission à'
     )
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 10000 }).contains(
-      "Le ticket a été déplacé de Premier contact à Fin de l'avarie.",
+      "Le ticket a été déplacé de Premier contact à Fin de l'avarie."
     )
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 10000 }).contains('Navire en mer')
     cy.get('*[data-cy="beacon-malfunction-details"]', { timeout: 10000 }).contains('14 jours')

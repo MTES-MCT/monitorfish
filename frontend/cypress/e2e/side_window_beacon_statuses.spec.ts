@@ -216,7 +216,7 @@ context('Side window beacon malfunctions', () => {
       .contains(
         'La pêche profonde résulte directement de l’épuisement des ressources marines dans les eaux de surface. ' +
           'Après avoir surexploité les stocks de poissons en surface, les flottes de pêche industrielles se sont tournées vers les ' +
-          'grands fonds pour trouver la ressource qui leur faisait défaut.',
+          'grands fonds pour trouver la ressource qui leur faisait défaut.'
       )
 
     // Show vessel on map
@@ -231,13 +231,13 @@ context('Side window beacon malfunctions', () => {
           `&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER` +
           `&trackDepth=CUSTOM` +
           `&afterDateTime=${oneWeeksBeforeDate.format('YYYY-MM-DD')}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z` +
-          `&beforeDateTime=${oneWeeksBeforePlusOneDayDate.format('YYYY-MM-DD')}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z`,
-      ),
+          `&beforeDateTime=${oneWeeksBeforePlusOneDayDate.format('YYYY-MM-DD')}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z`
+      )
     ).as('showVesselPositionsOnMap')
     cy.intercept(
       'GET',
       'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999' +
-        '&externalReferenceNumber=DONTSINK&IRCS=CALLME&voyageRequest=LAST&tripNumber=',
+        '&externalReferenceNumber=DONTSINK&IRCS=CALLME&voyageRequest=LAST&tripNumber='
     ).as('showVesselVoyageOnMap')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-show-vessel"]').click()
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
@@ -413,7 +413,7 @@ context('Side window beacon malfunctions', () => {
 
     // Then
     cy.get('*[data-cy="side-window-beacon-malfunctions-sending-notification"]').contains(
-      "Envoi en cours d'une Relance pour avarie en mer",
+      "Envoi en cours d'une Relance pour avarie en mer"
     )
   })
 })

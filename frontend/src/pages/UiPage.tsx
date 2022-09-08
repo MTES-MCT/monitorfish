@@ -79,10 +79,10 @@ export function UiPage() {
               JSON.stringify(
                 {
                   startDate: dateRangePickerOutput[0].toISOString(),
-                  endDate: dateRangePickerOutput[1].toISOString(),
+                  endDate: dateRangePickerOutput[1].toISOString()
                 },
                 null,
-                2,
+                2
               )}
           </code>
         </pre>
@@ -98,10 +98,10 @@ export function UiPage() {
               JSON.stringify(
                 {
                   startDate: dateRangePickerWithTimeOutput[0].toISOString(),
-                  endDate: dateRangePickerWithTimeOutput[1].toISOString(),
+                  endDate: dateRangePickerWithTimeOutput[1].toISOString()
                 },
                 null,
-                2,
+                2
               )}
           </code>
         </pre>
@@ -117,10 +117,10 @@ export function UiPage() {
               JSON.stringify(
                 {
                   startDate: dateRangePickerWithTimeOutput[0].toISOString(),
-                  endDate: dateRangePickerWithTimeOutput[1].toISOString(),
+                  endDate: dateRangePickerWithTimeOutput[1].toISOString()
                 },
                 null,
-                2,
+                2
               )}
           </code>
         </pre>

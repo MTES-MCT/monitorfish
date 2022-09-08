@@ -7,7 +7,7 @@ function unquote(str: string): string {
 Cypress.Commands.add(
   'before',
   {
-    prevSubject: 'element',
+    prevSubject: 'element'
   },
   (el: JQuery<Element>, property: string): string => {
     if (!el[0]) {
@@ -22,7 +22,7 @@ Cypress.Commands.add(
     const before = win.getComputedStyle(el[0], 'before')
 
     return unquote(before.getPropertyValue(property))
-  },
+  }
 )
 
 Cypress.Commands.add('cleanScreenshots', (fromNumber: number): void => {
@@ -31,11 +31,11 @@ Cypress.Commands.add('cleanScreenshots', (fromNumber: number): void => {
 
 Cypress.Commands.add(
   'clickButton',
-  (buttonText: string): Cypress.Chainable<JQuery<HTMLButtonElement>> => cy.get('button').contains(buttonText).click(),
+  (buttonText: string): Cypress.Chainable<JQuery<HTMLButtonElement>> => cy.get('button').contains(buttonText).click()
 )
 Cypress.Commands.add(
   'clickLink',
-  (linkText: string): Cypress.Chainable<JQuery<HTMLAnchorElement>> => cy.get('a').contains(linkText).click(),
+  (linkText: string): Cypress.Chainable<JQuery<HTMLAnchorElement>> => cy.get('a').contains(linkText).click()
 )
 
 /**
@@ -51,6 +51,7 @@ Cypress.Commands.add('clickOutside', () => cy.get('body').click(0, 0))
  * ```
  */
 Cypress.Commands.add('fill', (label: string, value: string): void => {
+  // eslint-disable-next-line cypress/no-assigning-return-values
   const cypressLabelElement = cy.get('label').contains(label)
   if (!cypressLabelElement) {
     throw new Error(`Could not find label element with text "${label}".`)
@@ -63,6 +64,7 @@ Cypress.Commands.add('fill', (label: string, value: string): void => {
 
     // If the label has a for attribute, we can use it to find the input
     if (!isEmpty(labelElement.htmlFor)) {
+      // eslint-disable-next-line cypress/no-assigning-return-values
       const cypressInputElement = cy.get(`#${labelElement.htmlFor}`)
       cypressInputElement.type(value)
 

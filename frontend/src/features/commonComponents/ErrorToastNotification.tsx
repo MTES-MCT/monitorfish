@@ -19,7 +19,7 @@ export function ErrorToastNotification() {
   useEffect(() => {
     const toastOptions: ToastOptions = {
       autoClose: 3000,
-      position: 'bottom-right',
+      position: 'bottom-right'
     }
 
     if (error instanceof Error) {

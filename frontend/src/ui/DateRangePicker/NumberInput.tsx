@@ -38,7 +38,7 @@ function NumberInputWithRef(
     size,
     ...nativeProps
   }: NumberInputProps,
-  ref: ForwardedRef<HTMLInputElement>,
+  ref: ForwardedRef<HTMLInputElement>
 ) {
   const inputRef = useRef<HTMLInputElement>() as MutableRefObject<HTMLInputElement>
 
@@ -52,7 +52,7 @@ function NumberInputWithRef(
         onClick(event)
       }
     },
-    [onClick],
+    [onClick]
   )
 
   const handleFocus = useCallback(
@@ -63,7 +63,7 @@ function NumberInputWithRef(
         onFocus(event)
       }
     },
-    [onFocus],
+    [onFocus]
   )
 
   const handleInput = useCallback(() => {
@@ -125,7 +125,7 @@ function NumberInputWithRef(
         onBack()
       }
     },
-    [onBack, onNext, onPrevious],
+    [onBack, onNext, onPrevious]
   )
 
   return (

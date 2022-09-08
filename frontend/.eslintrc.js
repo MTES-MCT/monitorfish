@@ -5,30 +5,30 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2022,
-    project: path.join(__dirname, 'tsconfig.json'),
+    project: path.join(__dirname, 'tsconfig.json')
   },
   ignorePatterns: ['.eslintrc.js', '.eslintrc.partial.js'],
   env: {
-    browser: true,
+    browser: true
   },
   rules: {
     '@typescript/no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
 
-    'react/react-in-jsx-scope': 'off',
+    'react/react-in-jsx-scope': 'off'
   },
   overrides: [
     {
       files: ['src/domain/shared_slices/**/*.ts'],
       rules: {
-        'no-param-reassign': 'off',
-      },
+        'no-param-reassign': 'off'
+      }
     },
     {
       files: ['src/ui/**/*.tsx'],
       rules: {
-        'react/jsx-props-no-spreading': 'off',
-      },
+        'react/jsx-props-no-spreading': 'off'
+      }
     },
     {
       files: ['cypress/**/*.js', 'cypress/**/*.ts', 'cypress.config.ts'],
@@ -44,8 +44,8 @@ module.exports = {
         'cypress/no-pause': 'error',
 
         'import/no-default-export': 'off',
-        'import/no-extraneous-dependencies': 'off',
-      },
-    },
-  ],
+        'import/no-extraneous-dependencies': 'off'
+      }
+    }
+  ]
 }

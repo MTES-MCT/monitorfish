@@ -17,26 +17,26 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       return cypressPlugins(on, config) as any
     },
-    specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
+    specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}'
   },
   env: {
     'cypress-plugin-snapshots': {
       imageConfig: {
         threshold: 20,
-        thresholdType: 'pixel',
+        thresholdType: 'pixel'
       },
-      updateSnapshots: false,
-    },
+      updateSnapshots: false
+    }
   },
   projectId: '9b7q8z',
   retries: {
     openMode: 0,
-    runMode: 5,
+    runMode: 5
   },
   screenshotOnRunFailure: true,
   scrollBehavior: false,
   video: false,
   viewportHeight: 1024,
   viewportWidth: 1280,
-  waitForAnimations: true,
+  waitForAnimations: true
 })

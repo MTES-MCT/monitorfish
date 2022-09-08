@@ -21,11 +21,11 @@ context('Beacon malfunction', () => {
       .toMatchImageSnapshot({
         imageConfig: {
           threshold: 0.05,
-          thresholdType: 'percent',
+          thresholdType: 'percent'
         },
         screenshotConfig: {
-          clip: { height: 200, width: 200, x: 475, y: 570 },
-        },
+          clip: { height: 200, width: 200, x: 475, y: 570 }
+        }
       })
 
     cy.cleanScreenshots(1)

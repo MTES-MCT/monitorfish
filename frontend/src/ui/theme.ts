@@ -39,6 +39,6 @@ export const theme = {
     vesselLightColor: '#cacce0',
     wheat: '#edd6a4',
     white: '#FFFFFF',
-    yellowMunsell: '#F6D012',
-  },
+    yellowMunsell: '#F6D012'
+  }
 }

@@ -14,7 +14,7 @@ describe('utils/getLocalizedDayjs()', () => {
 
     // 020-01-02T03:04:05.006Z => 020-01-02T03:04:05.006+01:00 (or +02:00 during DST) in Europe/Paris timezone
     expect(result.tz(GUESSED_TIMEZONE).format('YYYY-MM-DDTHH:mm:ss.SSSZ')).toStrictEqual(
-      `2022-01-02T03:04:05.006${utcDateAsDayjs.format('Z')}`,
+      `2022-01-02T03:04:05.006${utcDateAsDayjs.format('Z')}`
     )
   })
 })

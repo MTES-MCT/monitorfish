@@ -14,10 +14,10 @@ const SetTransform = createTransform(
   // transform state being rehydrated
   (outboundState: any) => ({
     ...outboundState,
-    processingRegulation: mapToProcessingRegulation(outboundState.processingRegulation),
+    processingRegulation: mapToProcessingRegulation(outboundState.processingRegulation)
   }),
   // define which reducers this transform gets called for.
-  { whitelist: ['regulation'] },
+  { whitelist: ['regulation'] }
 )
 
 const backofficePersistConfig = {
@@ -25,19 +25,19 @@ const backofficePersistConfig = {
   stateReconciler: autoMergeLevel2,
   storage,
   transforms: [SetTransform],
-  whitelist: ['regulation'],
+  whitelist: ['regulation']
 }
 
 // TODO Why 2 stores?
 const homeStore = configureStore({
   middleware: [thunk],
-  reducer: homeReducers,
+  reducer: homeReducers
 })
 
 const backofficeStore = configureStore({
   middleware: [thunk],
   // TODO Properly type all reducer states.
-  reducer: persistReducer(backofficePersistConfig, backofficeReducers as any),
+  reducer: persistReducer(backofficePersistConfig, backofficeReducers as any)
 })
 
 // TODO Either use a single persisted store or use another mechanism.

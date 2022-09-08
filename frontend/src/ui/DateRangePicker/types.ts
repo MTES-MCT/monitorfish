@@ -10,7 +10,7 @@ export type DateOrTimeInputRef = {
 
 export enum DateRangePosition {
   END = 'END',
-  START = 'START',
+  START = 'START'
 }
 
 /** In the shape of ["YYYY", "MM", "DD"]. */

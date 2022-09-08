@@ -18,7 +18,7 @@ declare global {
         options?: Partial<{
           delay: number
           isSmooth: boolean
-        }>,
+        }>
       ): void
       fill(label: string, value: string): Chainable<Element>
       loadPath(path: string): void

@@ -41,7 +41,7 @@ const INITIAL_STATE: GlobalState = {
   rightMenuIsOpen: false,
   sideWindowIsOpen: false,
   userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey),
-  vesselListModalIsOpen: false,
+  vesselListModalIsOpen: false
 }
 
 // TODO Properly type this redux reducers.
@@ -62,7 +62,7 @@ export const globalSlice = createSlice({
 
       // Remove vessel if already in the list
       state.lastSearchedVessels = state.lastSearchedVessels.filter(
-        searchedVessel => !vesselsAreEquals(searchedVessel, vesselIdentityToAdd),
+        searchedVessel => !vesselsAreEquals(searchedVessel, vesselIdentityToAdd)
       )
 
       // Add vessel in the beginning
@@ -204,8 +204,8 @@ export const globalSlice = createSlice({
     setUserType(state, action) {
       state.userType = action.payload
       window.localStorage.setItem(userTypeLocalStorageKey, JSON.stringify(state.userType))
-    },
-  },
+    }
+  }
 })
 
 export const {
@@ -227,7 +227,7 @@ export const {
   setLeftBoxOpened,
   setPreviewFilteredVesselsMode,
   setSideWindowAsOpen,
-  setUserType,
+  setUserType
 } = globalSlice.actions
 
 export const globalSliceReducer = globalSlice.reducer

@@ -81,7 +81,7 @@ context('Update Regulation', () => {
       expect(request.body).contain('<Value>Normandie, Bretagne</Value>')
       expect(request.body).contain('"reference":"texte de reference"')
       expect(request.body).contain(
-        '"url":"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634"',
+        '"url":"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634"'
       )
       expect(request.body).not.equal('"startDate":""')
       expect(request.body).contain('"endDate":"infinite"')
@@ -145,7 +145,7 @@ context('Update Regulation', () => {
             'Autre remarqueNe pas en prendre beaucoup please","name":"OURSINS NCA"},' +
             '{"code":"URX","remarks":"500 kg","name":"OURSINS,ETC. NCA"},' +
             '{"code":"HKE","name":"MERLU D\'EUROPE"}],"speciesGroups":["Espèces eau profonde"]},' +
-            '"otherInfo":"Mhm pas d\'autre info !"}',
+            '"otherInfo":"Mhm pas d\'autre info !"}'
         )
 
       expect(response && response.statusCode).equal(200)
@@ -202,7 +202,7 @@ context('Update Regulation', () => {
           '"authorized":{"allGears":false,"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !",' +
           '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines",' +
           '"category":"Chaluts","groupId":1,"meshType":"lowerThanOrEqualTo","mesh":["123"],"remarks":"Attention à cette espèce!"}},' +
-          '"allPassiveGears":false,"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}}',
+          '"allPassiveGears":false,"regulatedGearCategories":{"Dragues":{"name":"Dragues"}},"selectedCategoriesAndGears":["Dragues","TBN"]}}'
       )
 
       expect(response && response.statusCode).equal(200)

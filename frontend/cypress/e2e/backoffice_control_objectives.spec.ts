@@ -27,11 +27,11 @@ context('Control objectives', () => {
     cy.log('Check the FR_SCE control objectives of MEMN')
     cy.get(
       ':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input',
+        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input'
     ).should('have.value', '247')
     cy.get(
       ':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-        '> .rs-table-cell-group > [aria-colindex="5"] > .rs-table-cell-content > .rs-input',
+        '> .rs-table-cell-group > [aria-colindex="5"] > .rs-table-cell-content > .rs-input'
     ).should('have.value', '242')
 
     cy.log('Navigate to previous year')
@@ -39,11 +39,11 @@ context('Control objectives', () => {
     cy.get(`[data-key="${currentYear - 1}"] > .rs-picker-select-menu-item`).click()
     cy.get(
       ':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input',
+        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input'
     ).should('have.value', '147')
     cy.get(
       ':nth-child(2) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-        '> .rs-table-cell-group > [aria-colindex="5"] > .rs-table-cell-content > .rs-input',
+        '> .rs-table-cell-group > [aria-colindex="5"] > .rs-table-cell-content > .rs-input'
     ).should('have.value', '141')
   })
 
@@ -149,17 +149,17 @@ context('Control objectives', () => {
     cy.intercept('PUT', '/bff/v1/control_objectives/107').as('updateObjective')
     cy.get(
       ':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input',
+        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input'
     ).type('{backspace}{backspace}{backspace}{backspace}{backspace}')
     cy.get(
       ':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input',
+        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input'
     ).type('26')
     cy.wait('@updateObjective')
     cy.wait(50)
     cy.get(
       ':nth-child(1) > .rs-table > .rs-table-body-row-wrapper > .rs-table-body-wheel-area > [aria-rowindex="2"] ' +
-        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input',
+        '> .rs-table-cell-group > [aria-colindex="4"] > .rs-table-cell-content > .rs-input'
     ).should('have.value', '26')
 
     // The value is saved in database when I refresh the page

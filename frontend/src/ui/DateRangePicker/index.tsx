@@ -324,6 +324,8 @@ const Box = styled.div`
     line-height: 1;
   }
 
+  color: ${p => p.theme.color.gunMetal};
+  font-size: 13px;
   position: relative;
 `
 
@@ -331,6 +333,7 @@ const Field = styled.span<{
   isEndDateField?: boolean
   isTimeField?: boolean
 }>`
+  font-size: inherit;
   margin-left: ${p => {
     if (p.isEndDateField) {
       return '0.625rem'

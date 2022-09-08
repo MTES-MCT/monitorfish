@@ -153,9 +153,10 @@ const StyledNumberInput = styled.input<{
 }>`
   background-color: transparent;
   border: 0;
+  font-size: inherit;
   outline: none;
   padding: 0;
   text-align: center;
-  /* 1 digit = 0.625rem */
-  width: ${p => p.size * 0.625}rem;
+  /* 1 digit = 0.5rem */
+  width: ${p => p.size * 0.5}rem;
 `

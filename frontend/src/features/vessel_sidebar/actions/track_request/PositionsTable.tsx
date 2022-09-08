@@ -63,11 +63,11 @@ export function PositionsTable({ openBox }) {
           <HeaderCell>GDH</HeaderCell>
           <DateTimeCell coordinatesFormat={coordinatesFormat} dataKey="dateTime" />
         </Column>
-        <Column fixed sortable width={100}>
+        <Column fixed sortable width={96}>
           <HeaderCell>Vitesse</HeaderCell>
           <SpeedCell coordinatesFormat={coordinatesFormat} dataKey="speed" />
         </Column>
-        <Column fixed sortable width={100}>
+        <Column fixed sortable width={64}>
           <HeaderCell>Cap</HeaderCell>
           <CourseCell coordinatesFormat={coordinatesFormat} dataKey="course" />
         </Column>

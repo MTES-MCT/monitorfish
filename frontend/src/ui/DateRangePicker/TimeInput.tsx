@@ -188,6 +188,7 @@ const Box = styled.span<{
   background-color: ${p => p.theme.color.gainsboro};
   border: solid 1px ${p => (p.hasError ? 'red' : p.theme.color.lightGray)} !important;
   display: inline-block;
+  font-size: inherit;
   padding: 0.3125rem 0.5rem 0.4375rem;
   position: relative;
 `

@@ -1,3 +1,5 @@
+// TODO This component is still use by 2 others, we need to replace it and delete this file.
+
 import { useCallback, useMemo } from 'react'
 import { DateRangePicker } from 'rsuite'
 import styled from 'styled-components'

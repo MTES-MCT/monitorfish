@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js'
 import countries from 'i18n-iso-countries'
 import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,22 +8,26 @@ import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
 import { AlertsMenuSeaFrontsToSeaFrontList } from '../../../domain/entities/alerts'
-import { getReportingOrigin, getReportingTitle, ReportingType } from '../../../domain/entities/reporting'
+import {
+  getReportingOrigin,
+  getReportingTitle,
+  reportingSearchOptions,
+  ReportingType
+} from '../../../domain/entities/reporting'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
 import archiveReportings from '../../../domain/use_cases/reporting/archiveReportings'
 import deleteReportings from '../../../domain/use_cases/reporting/deleteReportings'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
-import { getTextForSearch } from '../../../utils'
-import { CardTable } from '../../card-table/CardTable'
-import { CardTableBody } from '../../card-table/CardTableBody'
-import { CardTableColumnTitle } from '../../card-table/CardTableColumnTitle'
-import { CardTableFilters } from '../../card-table/CardTableFilters'
-import { CardTableHeader } from '../../card-table/CardTableHeader'
-import { CardTableRow } from '../../card-table/CardTableRow'
-import { EmptyCardTable } from '../../card-table/EmptyCardTable'
-import { FilterTableInput } from '../../card-table/FilterTableInput'
-import { RowVerticalSeparator } from '../../card-table/RowVerticalSeparator'
+import { CardTable } from '../../../ui/card-table/CardTable'
+import { CardTableBody } from '../../../ui/card-table/CardTableBody'
+import { CardTableColumnTitle } from '../../../ui/card-table/CardTableColumnTitle'
+import { CardTableFilters } from '../../../ui/card-table/CardTableFilters'
+import { CardTableHeader } from '../../../ui/card-table/CardTableHeader'
+import { CardTableRow } from '../../../ui/card-table/CardTableRow'
+import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
+import { FilterTableInput } from '../../../ui/card-table/FilterTableInput'
+import { RowVerticalSeparator } from '../../../ui/card-table/RowVerticalSeparator'
 import { ReactComponent as ArchiveIconSVG } from '../../icons/Bouton_archiver.svg'
 import { ReactComponent as DeleteIconSVG } from '../../icons/Bouton_supprimer.svg'
 import { Flag } from '../../vessel_list/tableCells'
@@ -47,46 +52,44 @@ export function ReportingList({ seaFront }: ReportingListProps) {
 
   const currentSeaFrontReportings = useMemo(
     () =>
-      currentReportings.filter(reporting =>
-        (AlertsMenuSeaFrontsToSeaFrontList[seaFront.code]?.seaFronts || []).includes(reporting.value.seaFront),
-      ),
-    [currentReportings, seaFront],
+      currentReportings
+        .filter(reporting =>
+          (AlertsMenuSeaFrontsToSeaFrontList[seaFront.code]?.seaFronts || []).includes(reporting.value.seaFront)
+        )
+        .map(reporting => ({
+          ...reporting,
+          dml: reporting.value.dml,
+          validationDateTimestamp: new Date(reporting.validationDate).getTime()
+        })),
+    [currentReportings, seaFront]
   )
 
+  const fuse = useMemo(() => new Fuse(currentSeaFrontReportings, reportingSearchOptions), [currentSeaFrontReportings])
+
   const filteredReportings = useMemo(() => {
+    if (!currentSeaFrontReportings) {
+      return []
+    }
+
     if (!searched?.length || searched?.length <= 1) {
       return currentSeaFrontReportings
     }
 
-    return currentSeaFrontReportings.filter(
-      reporting =>
-        getTextForSearch(reporting.vesselName).includes(getTextForSearch(searched)) ||
-        getTextForSearch(reporting.internalReferenceNumber).includes(getTextForSearch(searched)) ||
-        getTextForSearch(reporting.externalReferenceNumber).includes(getTextForSearch(searched)) ||
-        getTextForSearch(reporting.ircs).includes(getTextForSearch(searched)),
-    )
-  }, [currentSeaFrontReportings, searched])
+    return fuse.search(searched).map(result => result.item)
+  }, [currentSeaFrontReportings, searched, fuse])
 
   const sortedReportings = useMemo(
-    () =>
-      filteredReportings
-        .map(reporting => ({
-          ...reporting,
-          dml: reporting.value.dml,
-          validationDateTimestamp: new Date(reporting.validationDate).getTime(),
-        }))
-        .slice()
-        .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType)),
-    [filteredReportings, sortColumn, sortType],
+    () => filteredReportings.slice().sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType)),
+    [filteredReportings, sortColumn, sortType]
   )
 
   const sortedAndCheckedReportings = useMemo(
     () =>
       sortedReportings.map(reporting => ({
         ...reporting,
-        checked: checkedReportingIds.indexOf(reporting.id) !== -1,
+        checked: checkedReportingIds.indexOf(reporting.id) !== -1
       })),
-    [sortedReportings, checkedReportingIds],
+    [sortedReportings, checkedReportingIds]
   )
 
   function handleSelectReporting(reportingId) {
@@ -240,7 +243,7 @@ MMSI: ${reporting.mmsi || ''}`
                       onClick={() => {
                         const vesselIdentity = { ...reporting }
                         dispatch(showVessel(vesselIdentity, false, false))
-                        dispatch(getVesselVoyage(vesselIdentity, null, false))
+                        dispatch(getVesselVoyage(vesselIdentity, undefined, false))
                       }}
                       src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       style={showIconStyle}
@@ -300,40 +303,24 @@ const DeleteButton = styled(DeleteIconSVG)`
 const styleCenter = {
   alignItems: 'center',
   display: 'flex',
-  height: 15,
+  height: 15
 }
 
 const columnStyles: CSSProperties[] = [
   {
     ...styleCenter,
     paddingRight: 10,
-    width: 36,
+    width: 36
   },
   {
     ...styleCenter,
     paddingRight: 10,
-    width: 150,
+    width: 150
   },
   {
     ...styleCenter,
     paddingRight: 10,
-    width: 170,
-  },
-  {
-    ...styleCenter,
-    display: 'inline-block',
-    height: 20,
-    marginTop: -3,
-    overflow: 'hidden',
-    paddingRight: 10,
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    width: 290,
-  },
-  {
-    ...styleCenter,
-    paddingRight: 10,
-    width: 140,
+    width: 170
   },
   {
     ...styleCenter,
@@ -344,30 +331,46 @@ const columnStyles: CSSProperties[] = [
     paddingRight: 10,
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
-    width: 220,
+    width: 290
   },
   {
     ...styleCenter,
     paddingRight: 10,
-    width: 180,
+    width: 140
+  },
+  {
+    ...styleCenter,
+    display: 'inline-block',
+    height: 20,
+    marginTop: -3,
+    overflow: 'hidden',
+    paddingRight: 10,
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: 220
   },
   {
     ...styleCenter,
     paddingRight: 10,
-    width: 145,
+    width: 180
+  },
+  {
+    ...styleCenter,
+    paddingRight: 10,
+    width: 145
   },
   {
     ...styleCenter,
     marginLeft: 10,
     paddingRight: 10,
-    width: 20,
+    width: 20
   },
   {
     ...styleCenter,
     marginLeft: 10,
     paddingRight: 10,
-    width: 20,
-  },
+    width: 20
+  }
 ]
 
 export const StyledCheckbox = styled(Checkbox)`
@@ -389,7 +392,7 @@ const showIconStyle: CSSProperties = {
   height: 16,
   marginLeft: 'auto',
   paddingRight: 7,
-  width: 20,
+  width: 20
 }
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
@@ -400,5 +403,5 @@ const editIconStyle: (disabled: boolean) => CSSProperties = (disabled: boolean) 
   flexShrink: 0,
   float: 'right',
   marginLeft: 'auto',
-  paddingRight: 10,
+  paddingRight: 10
 })

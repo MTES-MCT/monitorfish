@@ -2,7 +2,7 @@ import { removeError, setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
 import {
   removeReportingsIdsFromCurrentReportings,
-  setCurrentAndArchivedReportings
+  setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../../shared_slices/Reporting'
 import { archiveReportingFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../entities/vessel'
@@ -13,13 +13,13 @@ const archiveReporting = id => (dispatch, getState) => {
     selectedVesselIdentity
   } = getState().vessel
   const {
-    currentAndArchivedReportings
+    currentAndArchivedReportingsOfSelectedVessel
   } = getState().reporting
 
-  const archivedReporting = currentAndArchivedReportings.current.find(reporting => reporting.id === id)
-  const nextCurrentAndArchivedReporting = moveReportingToArchived(currentAndArchivedReportings, archivedReporting)
-  dispatch(setCurrentAndArchivedReportings({
-    currentAndArchivedReportings: nextCurrentAndArchivedReporting,
+  const archivedReporting = currentAndArchivedReportingsOfSelectedVessel.current.find(reporting => reporting.id === id)
+  const nextCurrentAndArchivedReporting = moveReportingOfSelectedVesselToArchived(currentAndArchivedReportingsOfSelectedVessel, archivedReporting)
+  dispatch(setCurrentAndArchivedReportingsOfSelectedVessel({
+    currentAndArchivedReportingsOfSelectedVessel: nextCurrentAndArchivedReporting,
     vesselIdentity: selectedVesselIdentity
   }))
 
@@ -33,8 +33,8 @@ const archiveReporting = id => (dispatch, getState) => {
   }).catch(error => {
     console.error(error)
     batch(() => {
-      dispatch(setCurrentAndArchivedReportings({
-        currentAndArchivedReportings: currentAndArchivedReportings,
+      dispatch(setCurrentAndArchivedReportingsOfSelectedVessel({
+        currentAndArchivedReportingsOfSelectedVessel: currentAndArchivedReportingsOfSelectedVessel,
         vesselIdentity: selectedVesselIdentity
       }))
       dispatch(setError(error))
@@ -42,8 +42,8 @@ const archiveReporting = id => (dispatch, getState) => {
   })
 }
 
-function moveReportingToArchived (currentAndArchivedReportings, archivedReporting) {
-  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportings }
+function moveReportingOfSelectedVesselToArchived (currentAndArchivedReportingsOfSelectedVessel, archivedReporting) {
+  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportingsOfSelectedVessel }
   nextCurrentAndArchivedReporting.current = nextCurrentAndArchivedReporting.current.filter(reporting => reporting.id !== archivedReporting.id)
   nextCurrentAndArchivedReporting.archived = nextCurrentAndArchivedReporting.archived.concat(archivedReporting)
 

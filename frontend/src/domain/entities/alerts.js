@@ -1,5 +1,6 @@
 import { getDate } from '../../utils'
-import { ReportingType } from './reporting'
+import Fuse from 'fuse.js'
+import _ from 'lodash'
 
 export const AlertType = {
   PNO_LAN_WEIGHT_TOLERANCE_ALERT: {
@@ -141,5 +142,28 @@ export const getSilencedAlertPeriodText = silencedAlertPeriodRequest => {
     case SilencedAlertPeriod.CUSTOM: {
       return `du ${getDate(silencedAlertPeriodRequest.afterDateTime)} au ${getDate(silencedAlertPeriodRequest.beforeDateTime)}`
     }
+  }
+}
+
+const alertTypeKey = ["value", "type"]
+export const alertSearchOptions = {
+  includeScore: true,
+  distance: 50,
+  threshold: 0.4,
+  keys: [
+    'vesselName',
+    'internalReferenceNumber',
+    'externalReferenceNumber',
+    'ircs',
+    alertTypeKey,
+  ],
+  getFn: (alert, path) => {
+    const value = Fuse.config.getFn(alert, path)
+
+    if (_.isEqual(path,alertTypeKey)) {
+      return getAlertNameFromType(alert.value.type)
+    }
+
+    return value
   }
 }

@@ -13,8 +13,8 @@ import deleteReporting from '../../../../domain/use_cases/reporting/deleteReport
 const CurrentReporting = () => {
   const dispatch = useDispatch()
   const {
-    /** @type {CurrentAndArchivedReportings} */
-    currentAndArchivedReportings,
+    /** @type {CurrentAndArchivedReportingsOfSelectedVessel} */
+    currentAndArchivedReportingsOfSelectedVessel,
     editedReporting
   } = useSelector(state => state.reporting)
   const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState(undefined)
@@ -24,7 +24,7 @@ const CurrentReporting = () => {
     {
       operationalAlertTypes
         .map(alertType => {
-          const alertReportings = currentAndArchivedReportings?.current
+          const alertReportings = currentAndArchivedReportingsOfSelectedVessel?.current
             ?.filter(reporting => reporting.type === ReportingType.ALERT.code && reporting.value.type === alertType.code)
             ?.sort((a, b) => sortByValidationDate(a, b))
 
@@ -41,7 +41,7 @@ const CurrentReporting = () => {
         })
     }
     {
-      currentAndArchivedReportings?.current
+      currentAndArchivedReportingsOfSelectedVessel?.current
         ?.filter(reporting => reporting.type !== ReportingType.ALERT.code)
         ?.filter(reporting => reporting.id !== editedReporting?.id)
         .map(reporting => {
@@ -53,7 +53,7 @@ const CurrentReporting = () => {
         })
     }
     {
-      !currentAndArchivedReportings?.current?.length
+      !currentAndArchivedReportingsOfSelectedVessel?.current?.length
         ? <NoReporting>Aucun signalement</NoReporting>
         : null
     }

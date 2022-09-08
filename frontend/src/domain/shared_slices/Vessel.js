@@ -27,7 +27,7 @@ function filterFirstFoundReportingTypes (reportingTypes, vesselReportingsToRemov
 
   vesselReportingsToRemove.forEach(reportingToRemove => {
     vesselReportingWithoutFirstFoundReportingTypes = vesselReportingWithoutFirstFoundReportingTypes
-      ?.reduce(filterFirstFoundReportingType(reportingToRemove.type), [])
+      .reduce(filterFirstFoundReportingType(reportingToRemove.type), [])
   })
 
   return vesselReportingWithoutFirstFoundReportingTypes
@@ -54,10 +54,10 @@ const vesselSlice = createSlice({
       afterDateTime: null,
       beforeDateTime: null
     },
-    /** @type {VesselNS.VesselIdentity | null} */
-    selectedVesselIdentity: null,
-    /** @type {VesselNS.VesselPosition[] | null} */
-    selectedVesselPositions: null,
+    /** @type {VesselNS.VesselIdentity | undefined} */
+    selectedVesselIdentity: undefined,
+    /** @type {VesselNS.VesselPosition[] | undefined} */
+    selectedVesselPositions: undefined,
     /** @type {any[]} */
     tripMessagesLastToFormerDEPDateTimes: [],
     /** @type {any[]} */
@@ -188,7 +188,7 @@ const vesselSlice = createSlice({
         }
 
         const vesselReportingWithoutFirstFoundReportingType = vessel.vesselProperties.reportings
-          ?.reduce(filterFirstFoundReportingType(action.payload.reportingType), [])
+          .reduce(filterFirstFoundReportingType(action.payload.reportingType), [])
 
         return {
           ...vessel,
@@ -202,7 +202,7 @@ const vesselSlice = createSlice({
 
       if (Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselId) {
         const vesselReportingWithoutFirstFoundReportingType = state.selectedVessel.reportings
-          ?.reduce(filterFirstFoundReportingType(action.payload.reportingType), [])
+          .reduce(filterFirstFoundReportingType(action.payload.reportingType), [])
 
         state.selectedVessel = {
           ...state.selectedVessel,

@@ -206,7 +206,7 @@ function getVesselControlsFromAPI (vesselId, fromDate) {
 /**
  * Get vessel reporting
  * @memberOf API
- * @returns {Promise<CurrentAndArchivedReportings>} The reportings
+ * @returns {Promise<CurrentAndArchivedReportingsOfSelectedVessel>} The reportings
  * @throws {Error}
  */
 function getVesselReportingsFromAPI (identity, fromDate) {

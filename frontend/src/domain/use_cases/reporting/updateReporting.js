@@ -1,6 +1,6 @@
 import { removeError, setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
-import { setCurrentAndArchivedReportings, updateCurrentReporting } from '../../shared_slices/Reporting'
+import { setCurrentAndArchivedReportingsOfSelectedVessel, updateCurrentReporting } from '../../shared_slices/Reporting'
 import { updateReportingFromAPI } from '../../../api/reporting'
 
 const updateReporting = (id, nextReporting) => async (dispatch, getState) => {
@@ -8,16 +8,16 @@ const updateReporting = (id, nextReporting) => async (dispatch, getState) => {
     selectedVesselIdentity
   } = getState().vessel
   const {
-    currentAndArchivedReportings,
+    currentAndArchivedReportingsOfSelectedVessel,
     vesselIdentity
   } = getState().reporting
 
   updateReportingFromAPI(id, nextReporting).then(updatedReporting => {
     dispatch(updateCurrentReporting(updatedReporting))
-    if (vesselIdentity && currentAndArchivedReportings.current?.length) {
-      const nextCurrentAndArchivedReporting = updateCurrentAndArchivedReporting(currentAndArchivedReportings, updatedReporting)
-      dispatch(setCurrentAndArchivedReportings({
-        currentAndArchivedReportings: nextCurrentAndArchivedReporting,
+    if (vesselIdentity && currentAndArchivedReportingsOfSelectedVessel.current?.length) {
+      const nextCurrentAndArchivedReporting = getUpdatedCurrentAndArchivedReportingOfSelectedVessel(currentAndArchivedReportingsOfSelectedVessel, updatedReporting)
+      dispatch(setCurrentAndArchivedReportingsOfSelectedVessel({
+        currentAndArchivedReportingsOfSelectedVessel: nextCurrentAndArchivedReporting,
         vesselIdentity: selectedVesselIdentity
       }))
     }
@@ -25,8 +25,8 @@ const updateReporting = (id, nextReporting) => async (dispatch, getState) => {
   }).catch(error => {
     console.error(error)
     batch(() => {
-      dispatch(setCurrentAndArchivedReportings({
-        currentAndArchivedReportings: currentAndArchivedReportings,
+      dispatch(setCurrentAndArchivedReportingsOfSelectedVessel({
+        currentAndArchivedReportingsOfSelectedVessel: currentAndArchivedReportingsOfSelectedVessel,
         vesselIdentity: selectedVesselIdentity
       }))
       dispatch(setError(error))
@@ -34,8 +34,8 @@ const updateReporting = (id, nextReporting) => async (dispatch, getState) => {
   })
 }
 
-function updateCurrentAndArchivedReporting (currentAndArchivedReportings, updatedReporting) {
-  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportings }
+function getUpdatedCurrentAndArchivedReportingOfSelectedVessel (currentAndArchivedReportingsOfSelectedVessel, updatedReporting) {
+  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportingsOfSelectedVessel }
   nextCurrentAndArchivedReporting.current = nextCurrentAndArchivedReporting.current
     .filter(reporting => reporting.id !== updatedReporting.id)
     .concat(updatedReporting)

@@ -6,13 +6,14 @@ import { Flag } from '../../vessel_list/tableCells'
 import { useDispatch, useSelector } from 'react-redux'
 import { FlexboxGrid, List } from 'rsuite'
 import countries from 'i18n-iso-countries'
-import { getAlertNameFromType } from '../../../domain/entities/alerts'
+import { getAlertNameFromType, alertSearchOptions } from '../../../domain/entities/alerts'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
-import { getDateDiffInDays, getDateTime, getTextForSearch } from '../../../utils'
+import { getDateDiffInDays, getDateTime } from '../../../utils'
 import * as timeago from 'timeago.js'
 import reactivateSilencedAlert from '../../../domain/use_cases/alert/reactivateSilencedAlert'
+import Fuse from 'fuse.js'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -31,18 +32,17 @@ const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
   const [sortType] = useState(SortType.ASC)
   const [searched, setSearched] = useState(undefined)
 
+  const fuse = useMemo(() =>
+    new Fuse(silencedSeaFrontAlerts, alertSearchOptions),
+    [silencedSeaFrontAlerts])
+
   const filteredAlerts = useMemo(() => {
     if (!searched?.length || searched?.length <= 1) {
       return silencedSeaFrontAlerts
     }
 
-    return silencedSeaFrontAlerts.filter(alert =>
-      getTextForSearch(getAlertNameFromType(alert.value.type)).includes(getTextForSearch(searched)) ||
-      getTextForSearch(alert.vesselName).includes(getTextForSearch(searched)) ||
-      getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searched)) ||
-      getTextForSearch(alert.externalReferenceNumber).includes(getTextForSearch(searched)) ||
-      getTextForSearch(alert.ircs).includes(getTextForSearch(searched)))
-  }, [silencedSeaFrontAlerts, searched])
+    return fuse.search(searched).map(result => result.item)
+  }, [silencedSeaFrontAlerts, searched, fuse])
 
   const sortedAlerts = useMemo(() => {
     return filteredAlerts
@@ -159,7 +159,7 @@ const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
                         onClick={() => {
                           const vesselIdentity = { ...alert }
                           dispatch(showVessel(vesselIdentity, false, false, null))
-                          dispatch(getVesselVoyage(vesselIdentity, null, false))
+                          dispatch(getVesselVoyage(vesselIdentity, undefined, false))
                         }}
                         src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       />

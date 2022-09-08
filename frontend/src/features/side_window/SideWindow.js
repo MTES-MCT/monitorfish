@@ -1,26 +1,26 @@
 import React, { forwardRef, useEffect, useState } from 'react'
-import styled from 'styled-components'
+import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 
-import SideWindowMenu from './SideWindowMenu'
-import { sideWindowMenu } from '../../domain/entities/sideWindow'
+import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
+import { COLORS } from '../../constants/constants'
 import { AlertsSubMenu } from '../../domain/entities/alerts'
-import SideWindowSubMenu from './SideWindowSubMenu'
+import { sideWindowMenu } from '../../domain/entities/sideWindow'
+import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
+import { openSideWindowTab } from '../../domain/shared_slices/Global'
+import { setEditedReportingInSideWindow } from '../../domain/shared_slices/Reporting'
+import getOperationalAlerts from '../../domain/use_cases/alert/getOperationalAlerts'
+import getSilencedAlerts from '../../domain/use_cases/alert/getSilencedAlerts'
+import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
+import getAllCurrentReportings from '../../domain/use_cases/reporting/getAllCurrentReportings'
+import { usePrevious } from '../../hooks/usePrevious'
 import AlertsAndReportings from './alerts_reportings/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import BeaconMalfunctionsBoard from './beacon_malfunctions/BeaconMalfunctionsBoard'
-import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
-import { COLORS } from '../../constants/constants'
-import { usePrevious } from '../../hooks/usePrevious'
-import { useDispatch, useSelector } from 'react-redux'
-import { openSideWindowTab } from '../../domain/shared_slices/Global'
-import getOperationalAlerts from '../../domain/use_cases/alert/getOperationalAlerts'
-import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
-import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
-import getSilencedAlerts from '../../domain/use_cases/alert/getSilencedAlerts'
-import { setEditedReportingInSideWindow } from '../../domain/shared_slices/Reporting'
-import getAllCurrentReportings from '../../domain/use_cases/reporting/getAllCurrentReportings'
+import SideWindowMenu from './SideWindowMenu'
+import SideWindowSubMenu from './SideWindowSubMenu'
 
-const SideWindow = forwardRef(function SideWindowComponent ({ isFromURL }, ref) {
+const SideWindow = forwardRef(({ isFromURL }, ref) => {
   const openedSideWindowTab = useSelector(state => state.global.openedSideWindowTab)
   const openedBeaconMalfunctionInKanban = useSelector(state => state.beaconMalfunction.openedBeaconMalfunctionInKanban)
   const editedReportingInSideWindow = useSelector(state => state.reporting.editedReportingInSideWindow)
@@ -28,9 +28,9 @@ const SideWindow = forwardRef(function SideWindowComponent ({ isFromURL }, ref) 
   const dispatch = useDispatch()
   const [isPreloading, setIsPreloading] = useState(true)
   const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
-  const [selectedSubMenu, setSelectedSubMenu] = useState(openedSideWindowTab === sideWindowMenu.ALERTS.code
-    ? AlertsSubMenu.MEMN
-    : BeaconMalfunctionsSubMenu.MALFUNCTIONING)
+  const [selectedSubMenu, setSelectedSubMenu] = useState(
+    openedSideWindowTab === sideWindowMenu.ALERTS.code ? AlertsSubMenu.MEMN : BeaconMalfunctionsSubMenu.MALFUNCTIONING
+  )
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [subMenuIsFixed, setSubMenuIsFixed] = useState(false)
@@ -44,6 +44,7 @@ const SideWindow = forwardRef(function SideWindowComponent ({ isFromURL }, ref) 
   useEffect(() => {
     if (editedReportingInSideWindow || openedBeaconMalfunctionInKanban) {
       setIsOverlayed(true)
+
       return
     }
 
@@ -80,68 +81,54 @@ const SideWindow = forwardRef(function SideWindowComponent ({ isFromURL }, ref) 
     }
   }, [openedSideWindowTab, setSelectedSubMenu, focusOnAlert])
 
-  function closeRightSidebar () {
+  function closeRightSidebar() {
     dispatch(closeBeaconMalfunctionInKanban())
     dispatch(setEditedReportingInSideWindow(null))
   }
 
   const beaconMalfunctionBoardGrayOverlayStyle = {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    opacity: isOverlayed ? 0.5 : 0,
     background: COLORS.charcoal,
+    height: '100%',
+    opacity: isOverlayed ? 0.5 : 0,
+    position: 'absolute',
+    width: '100%',
     zIndex: isOverlayed ? 11 : -9999
   }
 
-  return <Wrapper ref={ref}>
-    <SideWindowMenu
-      selectedMenu={openedSideWindowTab}
-    />
-    <SideWindowSubMenu
-      selectedMenu={openedSideWindowTab}
-      selectedSubMenu={selectedSubMenu}
-      setSelectedSubMenu={setSelectedSubMenu}
-      selectedTab={selectedTab}
-      fixed={subMenuIsFixed}
-      setIsFixed={setSubMenuIsFixed}
-    />
-    <BeaconMalfunctionsBoardGrayOverlay
-      style={beaconMalfunctionBoardGrayOverlayStyle}
-      onClick={closeRightSidebar}
-    />
-    {
-      isPreloading
-        ? <Loading>
-          <FulfillingBouncingCircleSpinner
-            color={COLORS.grayShadow}
-            className={'update-vessels'}
-            size={100}/>
-          <Text data-cy={'first-loader'}>Chargement...</Text>
+  return (
+    <Wrapper ref={ref}>
+      <SideWindowMenu selectedMenu={openedSideWindowTab} />
+      <SideWindowSubMenu
+        fixed={subMenuIsFixed}
+        selectedMenu={openedSideWindowTab}
+        selectedSubMenu={selectedSubMenu}
+        selectedTab={selectedTab}
+        setIsFixed={setSubMenuIsFixed}
+        setSelectedSubMenu={setSelectedSubMenu}
+      />
+      <BeaconMalfunctionsBoardGrayOverlay onClick={closeRightSidebar} style={beaconMalfunctionBoardGrayOverlayStyle} />
+      {isPreloading && (
+        <Loading>
+          <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.grayShadow} size={100} />
+          <Text data-cy="first-loader">Chargement...</Text>
         </Loading>
-        : <Content
-          isFixed={subMenuIsFixed}
-          height={self.innerHeight + 50}
-        >
-          {
-            openedSideWindowTab === sideWindowMenu.ALERTS.code &&
+      )}
+      {!isPreloading && (
+        <Content height={self.innerHeight + 50} isFixed={subMenuIsFixed}>
+          {openedSideWindowTab === sideWindowMenu.ALERTS.code && (
             <AlertsAndReportings
+              baseRef={ref}
               selectedSubMenu={selectedSubMenu}
-              setSelectedSubMenu={setSelectedSubMenu}
               selectedTab={selectedTab}
+              setSelectedSubMenu={setSelectedSubMenu}
               setSelectedTab={setSelectedTab}
-              baseRef={ref}
             />
-          }
-          {
-            openedSideWindowTab === sideWindowMenu.BEACON_MALFUNCTIONS.code &&
-            <BeaconMalfunctionsBoard
-              baseRef={ref}
-            />
-          }
+          )}
+          {openedSideWindowTab === sideWindowMenu.BEACON_MALFUNCTIONS.code && <BeaconMalfunctionsBoard baseRef={ref} />}
         </Content>
-    }
-  </Wrapper>
+      )}
+    </Wrapper>
+  )
 })
 
 export const AlertAndReportingTab = {
@@ -150,7 +137,7 @@ export const AlertAndReportingTab = {
 }
 
 const Content = styled.div`
-  margin-left: ${p => p.fixed ? 0 : 30}px;
+  margin-left: ${p => (p.fixed ? 0 : 30)}px;
   width: 100%;
   height: ${p => p.height}px;
   min-height: 1000px;
@@ -177,7 +164,7 @@ const Wrapper = styled.div`
   background: ${COLORS.white};
 
   @keyframes blink {
-    0%   {
+    0% {
       background: ${COLORS.background};
     }
     50% {
@@ -214,14 +201,14 @@ const Wrapper = styled.div`
     animation: rotation 1s linear infinite;
     margin-right: 5px;
     margin-top: 2px;
-   }
+  }
 
-    @keyframes rotation {
+  @keyframes rotation {
     0% {
-        transform: rotate(0deg);
+      transform: rotate(0deg);
     }
     100% {
-        transform: rotate(360deg);
+      transform: rotate(360deg);
     }
   }
 `

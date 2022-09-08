@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import countries from 'i18n-iso-countries'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { CellProps, Checkbox, Table } from 'rsuite'
 import { InnerCellProps } from 'rsuite-table/es/Cell'
 import styled from 'styled-components'
@@ -84,7 +84,9 @@ export function CellWithTitle({ dataKey, rowData, ...props }: CellProps) {
   )
 }
 
-export const Flag = styled.img<React.AnchorHTMLAttributes<HTMLAnchorElement>>`
+export const Flag = styled.img<{
+  rel?: 'preload'
+}>`
   font-size: 1.5em;
   margin-left: 14px;
   margin-top: 8px;

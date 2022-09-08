@@ -25,7 +25,7 @@ export const NAVIGATE_TO = {
  * Get the vessel fishing voyage and update the vessel positions track when navigating in the trips
  * @function getVesselVoyage
  * @param {VesselNS.VesselIdentity} vesselIdentity
- * @param {keyof typeof NAVIGATE_TO | null} navigateTo
+ * @param {keyof typeof NAVIGATE_TO | undefined} navigateTo
  * @param {boolean} fromCron
  */
 const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, getState) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import SideWindowSubMenuLink from './SideWindowSubMenuLink'
@@ -36,7 +36,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
     }
   }, [selectedMenu])
 
-  function getNumberOfAlertsOrReporting (seaFronts) {
+  function getNumberOfAlertsOrReportingFromSeaFronts (seaFronts) {
     if (selectedTab === AlertAndReportingTab.ALERT) {
       return alerts.filter(alert => seaFronts.includes(alert?.value?.seaFront)).length
     }
@@ -46,11 +46,11 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
     }
   }
 
-  function getNumberOfBeaconMalfunctions () {
-    return beaconMalfunctions.filter(beaconMalfunction =>
+  const numberOfBeaconMalfunctions = useMemo(() =>
+    beaconMalfunctions.filter(beaconMalfunction =>
       beaconMalfunction.stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
-      beaconMalfunction.stage !== beaconMalfunctionsStages.ARCHIVED.code).length
-  }
+      beaconMalfunction.stage !== beaconMalfunctionsStages.ARCHIVED.code).length,
+    [beaconMalfunctions])
 
   return <Menu
     style={menuStyle(isOpen, fixed)}
@@ -73,7 +73,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={getNumberOfAlertsOrReporting(AlertsMenuSeaFrontsToSeaFrontList.MEMN.seaFronts)}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.MEMN.seaFronts)}
             menu={AlertsSubMenu.MEMN}
             isSelected={selectedSubMenu.code === AlertsSubMenu.MEMN.code}
             setSelected={setSelectedSubMenu}
@@ -81,7 +81,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={getNumberOfAlertsOrReporting(AlertsMenuSeaFrontsToSeaFrontList.NAMO.seaFronts)}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.NAMO.seaFronts)}
             menu={AlertsSubMenu.NAMO}
             isSelected={selectedSubMenu.code === AlertsSubMenu.NAMO.code}
             setSelected={setSelectedSubMenu}
@@ -89,7 +89,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={getNumberOfAlertsOrReporting(AlertsMenuSeaFrontsToSeaFrontList.SA.seaFronts)}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.SA.seaFronts)}
             menu={AlertsSubMenu.SA}
             isSelected={selectedSubMenu.code === AlertsSubMenu.SA.code}
             setSelected={setSelectedSubMenu}
@@ -97,7 +97,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={getNumberOfAlertsOrReporting(AlertsMenuSeaFrontsToSeaFrontList.MED.seaFronts)}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.MED.seaFronts)}
             menu={AlertsSubMenu.MED}
             isSelected={selectedSubMenu.code === AlertsSubMenu.MED.code}
             setSelected={setSelectedSubMenu}
@@ -105,7 +105,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={getNumberOfAlertsOrReporting(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROA.seaFronts)}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROA.seaFronts)}
             menu={AlertsSubMenu.OUTREMEROA}
             isSelected={selectedSubMenu.code === AlertsSubMenu.OUTREMEROA.code}
             setSelected={setSelectedSubMenu}
@@ -113,7 +113,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={getNumberOfAlertsOrReporting(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROI.seaFronts)}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROI.seaFronts)}
             menu={AlertsSubMenu.OUTREMEROI}
             isSelected={selectedSubMenu.code === AlertsSubMenu.OUTREMEROI.code}
             setSelected={setSelectedSubMenu}
@@ -125,7 +125,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
       <>
         <SideWindowSubMenuLink
           isOpen={isOpen}
-          number={getNumberOfBeaconMalfunctions()}
+          number={numberOfBeaconMalfunctions}
           menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING}
           isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}
           setSelected={setSelectedSubMenu}

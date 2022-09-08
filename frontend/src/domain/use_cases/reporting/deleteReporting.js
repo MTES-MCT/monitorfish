@@ -2,7 +2,7 @@ import { removeError, setError } from '../../shared_slices/Global'
 import { batch } from 'react-redux'
 import {
   removeReportingsIdsFromCurrentReportings,
-  setCurrentAndArchivedReportings
+  setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../../shared_slices/Reporting'
 import { deleteReportingFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../entities/vessel'
@@ -13,13 +13,13 @@ const deleteReporting = id => (dispatch, getState) => {
     selectedVesselIdentity
   } = getState().vessel
   const {
-    currentAndArchivedReportings
+    currentAndArchivedReportingsOfSelectedVessel
   } = getState().reporting
 
-  const deletedReporting = currentAndArchivedReportings.current.find(reporting => reporting.id === id)
-  const nextCurrentAndArchivedReporting = deleteFromCurrentReportingList(currentAndArchivedReportings, deletedReporting)
-  dispatch(setCurrentAndArchivedReportings({
-    currentAndArchivedReportings: nextCurrentAndArchivedReporting,
+  const deletedReporting = currentAndArchivedReportingsOfSelectedVessel.current.find(reporting => reporting.id === id)
+  const nextCurrentAndArchivedReporting = getUpdatedCurrentAndArchivedReportingOfSelectedVessel(currentAndArchivedReportingsOfSelectedVessel, deletedReporting)
+  dispatch(setCurrentAndArchivedReportingsOfSelectedVessel({
+    currentAndArchivedReportingsOfSelectedVessel: nextCurrentAndArchivedReporting,
     vesselIdentity: selectedVesselIdentity
   }))
 
@@ -33,8 +33,8 @@ const deleteReporting = id => (dispatch, getState) => {
   }).catch(error => {
     console.error(error)
     batch(() => {
-      dispatch(setCurrentAndArchivedReportings({
-        currentAndArchivedReportings: currentAndArchivedReportings,
+      dispatch(setCurrentAndArchivedReportingsOfSelectedVessel({
+        currentAndArchivedReportingsOfSelectedVessel: currentAndArchivedReportingsOfSelectedVessel,
         vesselIdentity: selectedVesselIdentity
       }))
       dispatch(setError(error))
@@ -42,9 +42,9 @@ const deleteReporting = id => (dispatch, getState) => {
   })
 }
 
-function deleteFromCurrentReportingList (currentAndArchivedReportings, archivedReporting) {
-  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportings }
-  nextCurrentAndArchivedReporting.current = nextCurrentAndArchivedReporting.current.filter(reporting => reporting.id !== archivedReporting.id)
+function getUpdatedCurrentAndArchivedReportingOfSelectedVessel (currentAndArchivedReportingsOfSelectedVessel, deletedReporting) {
+  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportingsOfSelectedVessel }
+  nextCurrentAndArchivedReporting.current = nextCurrentAndArchivedReporting.current.filter(reporting => reporting.id !== deletedReporting.id)
 
   return nextCurrentAndArchivedReporting
 }

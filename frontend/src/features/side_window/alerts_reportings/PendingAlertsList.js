@@ -4,13 +4,13 @@ import { COLORS } from '../../../constants/constants'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { useDispatch, useSelector } from 'react-redux'
 import { FlexboxGrid, List } from 'rsuite'
-import { AlertsMenuSeaFrontsToSeaFrontList, getAlertNameFromType } from '../../../domain/entities/alerts'
+import { AlertsMenuSeaFrontsToSeaFrontList, alertSearchOptions } from '../../../domain/entities/alerts'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
-import { getTextForSearch } from '../../../utils'
 import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
 import SilenceAlertMenu from './SilenceAlertMenu'
 import silenceAlert from '../../../domain/use_cases/alert/silenceAlert'
 import PendingAlertRow from './PendingAlertRow'
+import Fuse from 'fuse.js'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -41,6 +41,10 @@ const PendingAlertsList = ({ numberOfSilencedAlerts, seaFront, baseRef }) => {
         (AlertsMenuSeaFrontsToSeaFrontList[seaFront.code]?.seaFronts || []).includes(alert.value.seaFront))
   }, [alerts, seaFront])
 
+  const fuse = useMemo(() =>
+      new Fuse(currentSeaFrontAlerts, alertSearchOptions),
+    [currentSeaFrontAlerts])
+
   const filteredAlerts = useMemo(() => {
     if (!currentSeaFrontAlerts) {
       return []
@@ -50,15 +54,8 @@ const PendingAlertsList = ({ numberOfSilencedAlerts, seaFront, baseRef }) => {
       return currentSeaFrontAlerts
     }
 
-    if (searched?.length > 1) {
-      return currentSeaFrontAlerts.filter(alert =>
-        getTextForSearch(getAlertNameFromType(alert.value.type)).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.vesselName).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.externalReferenceNumber).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.ircs).includes(getTextForSearch(searched)))
-    }
-  }, [currentSeaFrontAlerts, searched])
+    return fuse.search(searched).map(result => result.item)
+  }, [currentSeaFrontAlerts, searched, fuse])
 
   const sortedAlerts = useMemo(() => {
     if (!filteredAlerts) {

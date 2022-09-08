@@ -1,7 +1,7 @@
 import { removeError, setError } from '../../shared_slices/Global'
 import {
   removeReportingsIdsFromCurrentReportings,
-  setCurrentAndArchivedReportings
+  setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../../shared_slices/Reporting'
 import { deleteReportingsFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../entities/vessel'
@@ -16,21 +16,21 @@ const deleteReportings = ids => async (dispatch, getState) => {
     selectedVesselIdentity
   } = getState().vessel
   const {
-    currentAndArchivedReportings,
+    currentAndArchivedReportingsOfSelectedVessel,
     currentReportings,
     vesselIdentity
   } = getState().reporting
-  const reportingsToDelete = getReportingsToDeleteObjects(ids, currentReportings)
+  const deletedReportings = getDeletedReportingsFromIds(ids, currentReportings)
 
   return deleteReportingsFromAPI(ids).then(() => {
     dispatch(removeReportingsIdsFromCurrentReportings(ids))
-    dispatch(removeVesselReportings(reportingsToDelete))
-    if (vesselIdentity && currentAndArchivedReportings.current?.length) {
-      const reportingsToDelete = getReportingsToDeleteOfSelectedVessel(ids, currentAndArchivedReportings)
+    dispatch(removeVesselReportings(deletedReportings))
+    if (vesselIdentity && currentAndArchivedReportingsOfSelectedVessel.current?.length) {
+      const deletedReportingsOfSelectedVessel = getDeletedReportingOfSelectedVesselFromIds(ids, currentAndArchivedReportingsOfSelectedVessel)
 
-      const nextCurrentAndArchivedReporting = deleteReportingsFromSelectedVessel(currentAndArchivedReportings, reportingsToDelete)
-      dispatch(setCurrentAndArchivedReportings({
-        currentAndArchivedReportings: nextCurrentAndArchivedReporting,
+      const nextCurrentAndArchivedReporting = getUpdatedCurrentAndArchivedReportingOfSelectedVessel(currentAndArchivedReportingsOfSelectedVessel, deletedReportingsOfSelectedVessel)
+      dispatch(setCurrentAndArchivedReportingsOfSelectedVessel({
+        currentAndArchivedReportingsOfSelectedVessel: nextCurrentAndArchivedReporting,
         vesselIdentity: selectedVesselIdentity
       }))
     }
@@ -41,7 +41,7 @@ const deleteReportings = ids => async (dispatch, getState) => {
   })
 }
 
-function getReportingsToDeleteObjects (ids, currentReportings) {
+function getDeletedReportingsFromIds (ids, currentReportings) {
   return ids.map(id => {
     const reporting = currentReportings.find(reporting => reporting.id === id)
     if (!reporting) {
@@ -56,18 +56,18 @@ function getReportingsToDeleteObjects (ids, currentReportings) {
   }).filter(reporting => reporting)
 }
 
-function getReportingsToDeleteOfSelectedVessel (ids, currentAndArchivedReportings) {
+function getDeletedReportingOfSelectedVesselFromIds (ids, currentAndArchivedReportingsOfSelectedVessel) {
   return ids.map(id => {
-    const reportingToArchive = currentAndArchivedReportings.current.find(reporting => reporting.id === id)
+    const reportingToArchive = currentAndArchivedReportingsOfSelectedVessel.current.find(reporting => reporting.id === id)
     if (reportingToArchive) {
       return reportingToArchive
     }
   }).filter(reporting => reporting)
 }
 
-function deleteReportingsFromSelectedVessel (currentAndArchivedReportings, reportingsToArchive) {
-  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportings }
-  reportingsToArchive.forEach(reportingToArchive => {
+function getUpdatedCurrentAndArchivedReportingOfSelectedVessel (currentAndArchivedReportingsOfSelectedVessel, deletedReportings) {
+  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportingsOfSelectedVessel }
+  deletedReportings.forEach(reportingToArchive => {
     nextCurrentAndArchivedReporting.current = nextCurrentAndArchivedReporting.current.filter(reporting => reporting.id !== reportingToArchive.id)
   })
 

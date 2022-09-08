@@ -8,15 +8,15 @@ const ReportingReducer = null
 const reportingSlice = createSlice({
   name: 'reporting',
   initialState: {
-    /** @type {CurrentAndArchivedReportings} */
-    currentAndArchivedReportings: {
+    /** @type {CurrentAndArchivedReportingsOfSelectedVessel} */
+    currentAndArchivedReportingsOfSelectedVessel: {
       current: [],
       archived: []
     },
     /** @type {Date} */
     archivedReportingsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
     loadingReporting: false,
-    vesselIdentity: null,
+    vesselIdentity: undefined,
     /** @type {Reporting[]} */
     currentReportings: [],
     editedReportingInSideWindow: undefined,
@@ -25,21 +25,21 @@ const reportingSlice = createSlice({
   reducers: {
     /**
      * Set current and archived reporting
-     * @function setCurrentAndArchivedReportings
+     * @function setCurrentAndArchivedReportingsOfSelectedVessel
      * @memberOf ReportingReducer
      * @param {Object=} state
      * @param {{payload: {
-     *   currentAndArchivedReportings: CurrentAndArchivedReportings,
+     *   currentAndArchivedReportingsOfSelectedVessel: CurrentAndArchivedReportingsOfSelectedVessel,
      *   vesselIdentity: VesselIdentity
      * }}} action - the reporting
      */
-    setCurrentAndArchivedReportings (state, action) {
-      state.currentAndArchivedReportings = action.payload.currentAndArchivedReportings
+    setCurrentAndArchivedReportingsOfSelectedVessel (state, action) {
+      state.currentAndArchivedReportingsOfSelectedVessel = action.payload.currentAndArchivedReportingsOfSelectedVessel
       state.vesselIdentity = action.payload.vesselIdentity
       state.loadingReporting = false
     },
-    resetCurrentAndArchivedReportings (state) {
-      state.currentAndArchivedReportings = null
+    resetCurrentAndArchivedReportingsOfSelectedVessel (state) {
+      state.currentAndArchivedReportingsOfSelectedVessel = null
       state.vesselIdentity = null
     },
     /**
@@ -118,8 +118,8 @@ const reportingSlice = createSlice({
 })
 
 export const {
-  setCurrentAndArchivedReportings,
-  resetCurrentAndArchivedReportings,
+  setCurrentAndArchivedReportingsOfSelectedVessel,
+  resetCurrentAndArchivedReportingsOfSelectedVessel,
   setArchivedReportingsFromDate,
   loadReporting,
   setCurrentReportings,

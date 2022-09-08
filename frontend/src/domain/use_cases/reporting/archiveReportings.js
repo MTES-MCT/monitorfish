@@ -1,7 +1,7 @@
 import { removeError, setError } from '../../shared_slices/Global'
 import {
   removeReportingsIdsFromCurrentReportings,
-  setCurrentAndArchivedReportings
+  setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../../shared_slices/Reporting'
 import { archiveReportingsFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../entities/vessel'
@@ -16,21 +16,21 @@ const archiveReportings = ids => async (dispatch, getState) => {
     selectedVesselIdentity
   } = getState().vessel
   const {
-    currentAndArchivedReportings,
+    currentAndArchivedReportingsOfSelectedVessel,
     currentReportings,
     vesselIdentity
   } = getState().reporting
-  const reportingsToArchive = getReportingsToArchiveObjects(ids, currentReportings)
+  const archivedReportings = getArchivedReportingsFromIds(ids, currentReportings)
 
   return archiveReportingsFromAPI(ids).then(() => {
     dispatch(removeReportingsIdsFromCurrentReportings(ids))
-    dispatch(removeVesselReportings(reportingsToArchive))
-    if (vesselIdentity && currentAndArchivedReportings.current?.length) {
-      const reportingsToArchive = getReportingsToArchiveOfSelectedVessel(ids, currentAndArchivedReportings)
+    dispatch(removeVesselReportings(archivedReportings))
+    if (vesselIdentity && currentAndArchivedReportingsOfSelectedVessel.current?.length) {
+      const archivedReportingsOfSelectedVessel = getArchivedReportingsOfSelectedVesselFromIds(ids, currentAndArchivedReportingsOfSelectedVessel)
 
-      const nextCurrentAndArchivedReporting = moveReportingsToArchived(currentAndArchivedReportings, reportingsToArchive)
-      dispatch(setCurrentAndArchivedReportings({
-        currentAndArchivedReportings: nextCurrentAndArchivedReporting,
+      const nextCurrentAndArchivedReporting = getUpdatedCurrentAndArchivedReportingOfSelectedVessel(currentAndArchivedReportingsOfSelectedVessel, archivedReportingsOfSelectedVessel)
+      dispatch(setCurrentAndArchivedReportingsOfSelectedVessel({
+        currentAndArchivedReportingsOfSelectedVessel: nextCurrentAndArchivedReporting,
         vesselIdentity: selectedVesselIdentity
       }))
     }
@@ -41,7 +41,7 @@ const archiveReportings = ids => async (dispatch, getState) => {
   })
 }
 
-function getReportingsToArchiveObjects (ids, currentReportings) {
+function getArchivedReportingsFromIds (ids, currentReportings) {
   return ids.map(id => {
     const reporting = currentReportings.find(reporting => reporting.id === id)
     if (!reporting) {
@@ -56,18 +56,18 @@ function getReportingsToArchiveObjects (ids, currentReportings) {
   }).filter(reporting => reporting)
 }
 
-function getReportingsToArchiveOfSelectedVessel (ids, currentAndArchivedReportings) {
+function getArchivedReportingsOfSelectedVesselFromIds (ids, currentAndArchivedReportingsOfSelectedVessel) {
   return ids.map(id => {
-    const reportingToArchive = currentAndArchivedReportings.current.find(reporting => reporting.id === id)
+    const reportingToArchive = currentAndArchivedReportingsOfSelectedVessel.current.find(reporting => reporting.id === id)
     if (reportingToArchive) {
       return reportingToArchive
     }
   }).filter(reporting => reporting)
 }
 
-function moveReportingsToArchived (currentAndArchivedReportings, reportingsToArchive) {
-  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportings }
-  reportingsToArchive.forEach(reportingToArchive => {
+function getUpdatedCurrentAndArchivedReportingOfSelectedVessel (currentAndArchivedReportingsOfSelectedVessel, archivedReportings) {
+  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportingsOfSelectedVessel }
+  archivedReportings.forEach(reportingToArchive => {
     nextCurrentAndArchivedReporting.current = nextCurrentAndArchivedReporting.current.filter(reporting => reporting.id !== reportingToArchive.id)
     nextCurrentAndArchivedReporting.archived = nextCurrentAndArchivedReporting.archived.concat(reportingToArchive)
   })

@@ -7,7 +7,7 @@ import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.st
 import { sortArrayByColumn } from '../../../vessel_list/tableSort'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLocalStorageState } from '../../../../utils'
-import { useSaveReportingInLocalStorage } from './useSaveInLocalStorage'
+import { useSaveReportingInLocalStorage } from '../../../../hooks/useSaveInLocalStorage'
 import addReporting from '../../../../domain/use_cases/reporting/addReporting'
 import updateReporting from '../../../../domain/use_cases/reporting/updateReporting'
 

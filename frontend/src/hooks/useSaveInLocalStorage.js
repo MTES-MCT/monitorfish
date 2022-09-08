@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { getLocalStorageState } from '../../../../utils'
+import { getLocalStorageState } from '../utils'
 
 export const useSaveReportingInLocalStorage = (localStorageKey, key, value, isWithinValueObject) => {
   const firstUpdate = useRef(true)

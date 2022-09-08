@@ -1,7 +1,7 @@
 import { HTMLAttributes } from 'react'
 import styled from 'styled-components'
 
-import { ReactComponent as SortSVG } from '../icons/ascendant-descendant.svg'
+import { ReactComponent as SortSVG } from '../../features/icons/ascendant-descendant.svg'
 
 type CardTableColumnTitleProps = HTMLAttributes<HTMLDivElement> & {
   children: string
@@ -16,7 +16,7 @@ export function CardTableColumnTitle({
   isAscending = false,
   isSortable = false,
   isSortColumn = false,
-  onClick,
+  onClick
 }: CardTableColumnTitleProps) {
   return (
     <StyledCardTableColumnTitle data-cy={dataCy} isSortable={isSortable} onClick={onClick}>

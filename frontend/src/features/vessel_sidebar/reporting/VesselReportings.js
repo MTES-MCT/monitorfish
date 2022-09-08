@@ -22,8 +22,8 @@ const VesselReportings = () => {
   } = useSelector(state => state.vessel)
 
   const {
-    /** @type {CurrentAndArchivedReportings} */
-    currentAndArchivedReportings,
+    /** @type {CurrentAndArchivedReportingsOfSelectedVessel} */
+    currentAndArchivedReportingsOfSelectedVessel,
     archivedReportingsFromDate,
     loadingReporting
   } = useSelector(state => state.reporting)
@@ -49,7 +49,7 @@ const VesselReportings = () => {
               isActive={reportingTab === ReportingTab.CURRENT_REPORTING}
               onClick={() => setReportingTab(ReportingTab.CURRENT_REPORTING)}
             >
-              Signalements en cours ({currentAndArchivedReportings?.current?.length})
+              Signalements en cours ({currentAndArchivedReportingsOfSelectedVessel?.current?.length})
             </CurrentOrHistoryReportingButton>
             <CurrentOrHistoryReportingButton
               data-cy={'vessel-sidebar-reporting-tab-history-button'}

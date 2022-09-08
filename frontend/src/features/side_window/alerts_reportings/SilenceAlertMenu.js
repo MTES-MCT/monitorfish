@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 import { SilencedAlertPeriod } from '../../../domain/entities/alerts'
-import DateRange from '../../vessel_sidebar/actions/track_request/DateRange'
+import DateRange from '../../vessel_sidebar/actions/TrackRequest/DateRange'
 
 /**
  * @typedef {object} SilenceAlertMenuProps

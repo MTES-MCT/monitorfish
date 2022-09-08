@@ -440,21 +440,26 @@ def test_render(
     malfunction_to_notify_data, templates, notification_type, output_format
 ):
 
-    test_filepath = TEST_DATA_LOCATION / f"emails/{notification_type}.{output_format}"
-    mode_suffix = "b" if output_format == "pdf" else ""
-
-    with open(test_filepath, "r" + mode_suffix) as f:
-        if output_format == "html":
-            expected_res = f.read()
-        else:
-            expected_res = PyPDF2.PdfReader(io.BytesIO(f.read()))
-
     m = BeaconMalfunctionToNotify(
         **malfunction_to_notify_data,
         notification_type=notification_type,
         test_mode=False,
     )
     pdf_or_html = render.run(m=m, templates=templates, output_format=output_format)
+
+    test_filepath = TEST_DATA_LOCATION / f"emails/{notification_type}.{output_format}"
+    mode_suffix = "b" if output_format == "pdf" else ""
+
+    ######################### Uncomment to replace test files #########################
+    # with open(test_filepath, "w" + mode_suffix) as f:
+    #     f.write(pdf_or_html)
+    ###################################################################################
+
+    with open(test_filepath, "r" + mode_suffix) as f:
+        if output_format == "html":
+            expected_res = f.read()
+        else:
+            expected_res = PyPDF2.PdfReader(io.BytesIO(f.read()))
 
     if output_format == "html":
         assert pdf_or_html == expected_res
@@ -464,11 +469,6 @@ def test_render(
         # actual textual content of the pdf, but we use it here as a kind of hash
         # function for the pdf's content to test that the result is as expected.
         assert expected_res.pages[0].extract_text() == pdf.pages[0].extract_text()
-
-    ######################### Uncomment to replace test files #########################
-    # with open(test_filepath, "w" + mode_suffix) as f:
-    #     f.write(pdf_or_html)
-    ###################################################################################
 
 
 @pytest.mark.parametrize(
@@ -487,11 +487,6 @@ def test_render(
 )
 def test_render_sms(malfunction_to_notify_data, sms_templates, notification_type):
 
-    test_filepath = TEST_DATA_LOCATION / f"sms/{notification_type}.txt"
-
-    with open(test_filepath, "r") as f:
-        expected_res = f.read()
-
     m = BeaconMalfunctionToNotify(
         **malfunction_to_notify_data,
         notification_type=notification_type,
@@ -499,12 +494,17 @@ def test_render_sms(malfunction_to_notify_data, sms_templates, notification_type
     )
     sms_text = render_sms.run(m=m, templates=sms_templates)
 
-    assert sms_text == expected_res
+    test_filepath = TEST_DATA_LOCATION / f"sms/{notification_type}.txt"
 
     ######################### Uncomment to replace test files #########################
     # with open(test_filepath, "w") as f:
     #     f.write(sms_text)
     ###################################################################################
+
+    with open(test_filepath, "r") as f:
+        expected_res = f.read()
+
+    assert sms_text == expected_res
 
 
 @patch(
@@ -513,14 +513,6 @@ def test_render_sms(malfunction_to_notify_data, sms_templates, notification_type
 )
 def test_render_with_null_values(malfunction_to_notify_data_with_nulls, templates):
 
-    test_filepath = (
-        TEST_DATA_LOCATION
-        / "emails/MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_WITH_NULLS.html"
-    )
-
-    with open(test_filepath, "r") as f:
-        expected_res = f.read()
-
     m = BeaconMalfunctionToNotify(
         **malfunction_to_notify_data_with_nulls,
         notification_type="MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION",
@@ -528,12 +520,20 @@ def test_render_with_null_values(malfunction_to_notify_data_with_nulls, template
     )
     html = render.run(m=m, templates=templates, output_format="html")
 
-    assert html == expected_res
+    test_filepath = (
+        TEST_DATA_LOCATION
+        / "emails/MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_WITH_NULLS.html"
+    )
 
     ######################### Uncomment to replace test file ##########################
     # with open(test_filepath, "w") as f:
     #     f.write(html)
     ###################################################################################
+
+    with open(test_filepath, "r") as f:
+        expected_res = f.read()
+
+    assert html == expected_res
 
 
 @pytest.mark.parametrize(
@@ -555,7 +555,7 @@ def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
         test_mode=False,
     )
 
-    subject = m.notification_type.to_message_subject()
+    subject = m.get_notification_subject()
     email_to_send = create_email.run(html=html, pdf=pdf, m=m)
 
     malfunction_to_notify = email_to_send.beacon_malfunction_to_notify

@@ -13,7 +13,7 @@ class ReportingDataOutput(
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
     val ircs: String? = null,
-    val vesselIdentifier: VesselIdentifier,
+    val vesselIdentifier: VesselIdentifier? = null,
     val creationDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
     val value: ReportingValue,

@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
 import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 import modifyVesselTrackDepth from '../../../../domain/use_cases/vessel/modifyVesselTrackDepth'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
@@ -9,9 +8,9 @@ import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { DateRangePicker } from '../../../../ui/DateRangePicker'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import { ReactComponent as VesselSVG } from '../../../icons/Icone_navire.svg'
-import ExportTrack from './ExportTrack'
+import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
-import TrackDepth from './TrackDepth'
+import { TrackDepth } from './TrackDepth'
 
 import type { DateRange } from '../../../../types'
 
@@ -103,11 +102,16 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
         isSidebarOpen={isSidebarOpen}
       >
         <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
-        <TrackDepth onChange={updateTrackDepth} value={selectedVesselCustomTrackRequest.trackDepth} />
-        <Field>
-          <DateRangePicker defaultValue={selectedVesselCustomDateRange} onChange={updateDateRange} withTime />
-        </Field>
-        <ExportTrack />
+        <Section>
+          <p>Afficher la piste VMS du navire depuis :</p>
+          <Field>
+            <TrackDepth onChange={updateTrackDepth} value={selectedVesselCustomTrackRequest.trackDepth} />
+          </Field>
+          <Field>
+            <DateRangePicker defaultValue={selectedVesselCustomDateRange} onChange={updateDateRange} withTime />
+          </Field>
+          <ExportTrack />
+        </Section>
         <Header>Liste des positions VMS affichées</Header>
         <PositionsTable openBox />
       </TrackRequestBody>
@@ -115,18 +119,24 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   )
 }
 
+const Section = styled.div`
+  padding: 1rem;
+
+  > p {
+    margin: 0 0 0.5rem;
+  }
+`
+
 const Header = styled.div`
-  background: ${COLORS.charcoal};
-  color: ${COLORS.gainsboro};
+  background: ${p => p.theme.color.charcoal};
+  color: ${p => p.theme.color.gainsboro};
   font-size: 13px;
   padding: 5px 0 5px 15px;
   text-align: left;
 `
 
 const Field = styled.div`
-  margin: 0.5rem;
-  padding: 0.5rem;
-  width: auto;
+  margin-bottom: 1rem;
 `
 
 const TrackRequestButton = styled(MapComponentStyle)<{
@@ -134,7 +144,7 @@ const TrackRequestButton = styled(MapComponentStyle)<{
   isRightMenuOpen: boolean
   isSidebarOpen: boolean
 }>`
-  background: ${p => (p.isOpen ? COLORS.shadowBlue : COLORS.charcoal)};
+  background: ${p => (p.isOpen ? p.theme.color.shadowBlue : p.theme.color.charcoal)};
   border-radius: 1px;
   cursor: pointer;
   height: 30px;
@@ -153,9 +163,9 @@ const TrackRequestBody = styled(MapComponentStyle)<{
   isRightMenuOpen: boolean
   isSidebarOpen: boolean
 }>`
-  background: ${COLORS.background};
+  background: ${p => p.theme.color.background};
   border-radius: 2px;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   display: flex;
   flex-direction: column;
   font-size: 13px;
@@ -167,7 +177,7 @@ const TrackRequestBody = styled(MapComponentStyle)<{
   top: 118px;
   transition: all 0.3s;
   visibility: ${p => (p.isOpen ? 'visible' : 'hidden')};
-  width: 39rem;
+  width: 379px;
 `
 
 const VesselIcon = styled(VesselSVG)`

@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
 import HideNonSelectedVessels from './actions/hide_non_selected_vessels/HideNonSelectedVessels'
 import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFishingActivitiesOnMap'
-import ExportTrack from './actions/track_request/ExportTrack'
+import { ExportTrack } from './actions/track_request/ExportTrack'
 import { TrackRequest } from './actions/track_request/TrackRequest'
 import { VesselSidebarBody } from './VesselSidebarBody'
 import VesselSidebarTabs from './VesselSidebarTabs'
@@ -56,7 +55,7 @@ const GrayOverlay = styled.div<{
   isOverlayed: boolean
 }>`
   animation: ${p => (p.isOverlayed ? 'opacity-up' : 'opacity-down')} 0.5s ease forwards;
-  background: ${COLORS.charcoal};
+  background: ${p => p.theme.color.charcoal};
   height: 100%;
   opacity: 0;
   position: absolute;
@@ -87,7 +86,7 @@ const Wrapper = styled(MapComponentStyle)<{
   isRightMenuOpen: boolean
   isSidebarOpen: boolean
 }>`
-  background: ${COLORS.gainsboro};
+  background: ${p => p.theme.color.gainsboro};
   margin-right: ${p => (p.isSidebarOpen ? 0 : -510)}px;
   max-height: 93vh;
   opacity: ${p => (p.isSidebarOpen ? 1 : 0)};

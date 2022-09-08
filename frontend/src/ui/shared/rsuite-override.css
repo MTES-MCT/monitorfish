@@ -1,31 +1,31 @@
 /* variables */
 :root {
   /* colors */
-  --gunMetal: #282F3E;
-  --charcoal: #3B4559;
+  --gunMetal: #282f3e;
+  --charcoal: #3b4559;
   --slateGray: #707785;
-  --lightGray: #CCCFD6;
-  --gainsboro: #E5E5EB;
-  --cultured: #F7F7FA;
+  --lightGray: #cccfd6;
+  --gainsboro: #e5e5eb;
+  --cultured: #f7f7fa;
   --white: #ffffff;
 
-  --steel-blue: #5E87AD;
-  --steel-blue-25: #D6E1EA;
-  --blue-jeans: #42A7FF;
-  --blue-jeans-25: #CFE9FF;
+  --steel-blue: #5e87ad;
+  --steel-blue-25: #d6e1ea;
+  --blue-jeans: #42a7ff;
+  --blue-jeans-25: #cfe9ff;
 
   --mediumSeaGreen: #29b361;
-  --golden-poppy: #FAC11A;
-  --maximum-red: #E1000F;
+  --golden-poppy: #fac11a;
+  --maximum-red: #e1000f;
 
-  --cadet-grey: #8E9A9F;
-  --grullo: #B89B8C;
-  --copper-red: #CF6A4E;
-  --chinese-red: #A13112;
+  --cadet-grey: #8e9a9f;
+  --grullo: #b89b8c;
+  --copper-red: #cf6a4e;
+  --chinese-red: #a13112;
 
-  --powder-blue: #9ED7D9;
-  --wheat: #EDD6A4;
-  --opal: #A5BCC0;
+  --powder-blue: #9ed7d9;
+  --wheat: #edd6a4;
+  --opal: #a5bcc0;
 
   /* text */
   --rs-text-primary: var(--gunMetal);
@@ -58,6 +58,19 @@
   --rs-tag-bg: var(--gainsboro);
 }
 
+/*
+  Default font size should be 16px instead of 14px as stated in Rsuite CSS,
+  so we need to apply this fix in order to have consistent 16px-based rems
+  while overriding both Rsuite CSS and mini.css.
+*/
+html {
+  font-size: 16px;
+}
+
+html * {
+  font-size: 0.875rem;
+}
+
 label {
   color: var(--slateGray);
   font-size: 13px;
@@ -75,13 +88,13 @@ label {
 
 .rs-input-group,
 .rs-input-group:not(.rs-input-group-inside) .rs-auto-complete:first-child .rs-input,
-.rs-input-group:not(.rs-input-group-inside) .rs-form-control-wrapper:first-child>.rs-input,
+.rs-input-group:not(.rs-input-group-inside) .rs-form-control-wrapper:first-child > .rs-input,
 .rs-input-group:not(.rs-input-group-inside) .rs-picker-date:first-child .rs-picker-toggle,
-.rs-input-group:not(.rs-input-group-inside)>:first-child,
+.rs-input-group:not(.rs-input-group-inside) > :first-child,
 .rs-input-group:not(.rs-input-group-inside) .rs-auto-complete:last-child .rs-input,
-.rs-input-group:not(.rs-input-group-inside) .rs-form-control-wrapper:last-child>.rs-input,
+.rs-input-group:not(.rs-input-group-inside) .rs-form-control-wrapper:last-child > .rs-input,
 .rs-input-group:not(.rs-input-group-inside) .rs-picker-date:last-child .rs-picker-toggle,
-.rs-input-group:not(.rs-input-group-inside)>:last-child {
+.rs-input-group:not(.rs-input-group-inside) > :last-child {
   border-radius: 0;
 }
 
@@ -92,7 +105,6 @@ label {
 .rs-input-group.rs-input-group-inside .rs-input-group-addon {
   padding: 8px 13px 8px 11px;
 }
-
 
 /* button */
 .rs-ripple-pond {
@@ -134,13 +146,13 @@ label {
   line-height: 18px;
 }
 
-.rs-btn-icon-with-text.rs-btn>.rs-icon {
+.rs-btn-icon-with-text.rs-btn > .rs-icon {
   width: 30px;
   height: 30px;
   padding: 8px;
 }
 
-.rs-btn-icon-with-text.rs-btn-sm>.rs-icon {
+.rs-btn-icon-with-text.rs-btn-sm > .rs-icon {
   width: 24px;
   height: 24px;
 }
@@ -160,7 +172,7 @@ label {
   font-weight: 500;
 }
 
-.rs-checkbox-checker>label {
+.rs-checkbox-checker > label {
   font-size: 13px;
   color: var(--gunMetal);
 }
@@ -196,7 +208,9 @@ label {
   margin-left: 6px;
 }
 
-.rs-checkbox-disabled:not(.rs-checkbox-checked):not(.rs-checkbox-indeterminate) .rs-checkbox-wrapper .rs-checkbox-inner:before {
+.rs-checkbox-disabled:not(.rs-checkbox-checked):not(.rs-checkbox-indeterminate)
+  .rs-checkbox-wrapper
+  .rs-checkbox-inner:before {
   border-color: var(--lightGray);
 }
 
@@ -222,7 +236,7 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   margin-left: 6px !important;
 }
 
-.checkbox-hidden>div>label>.rs-checkbox-wrapper {
+.checkbox-hidden > div > label > .rs-checkbox-wrapper {
   opacity: 0 !important;
   margin-left: -40px;
   position: inherit;
@@ -265,8 +279,7 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   border-color: var(--lightGray);
 }
 
-
-.rs-radio-checker>label {
+.rs-radio-checker > label {
   color: var(--charcoal);
   font-weight: 500;
   line-height: 17px;
@@ -290,7 +303,7 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   line-height: 38px;
 }
 
-.rs-dropdown-item-with-icon>svg {
+.rs-dropdown-item-with-icon > svg {
   vertical-align: text-bottom;
 }
 
@@ -328,10 +341,9 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
 
 .rs-tag-icon-close.rs-btn-close {
   border-left: 1px solid var(--lightGray);
-
 }
 
-.rs-picker-tag .rs-picker-toggle.rs-btn-sm~.rs-picker-tag-wrapper .rs-tag {
+.rs-picker-tag .rs-picker-toggle.rs-btn-sm ~ .rs-picker-tag-wrapper .rs-tag {
   margin-top: 3px;
 }
 
@@ -360,14 +372,12 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   background: none;
 }
 
-
-.rs-slider-graduator>ul>li::before {
+.rs-slider-graduator > ul > li::before {
   visibility: hidden;
 }
 
-
-.rs-slider-graduator>ul>li:last-child::after,
-.rs-slider-graduator>ul>li::before {
+.rs-slider-graduator > ul > li:last-child::after,
+.rs-slider-graduator > ul > li::before {
   top: -3px;
   border: none;
 }
@@ -386,21 +396,19 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   margin-top: -10px;
 }
 
-.rs-slider-graduated>div:nth-child(2)::before {
-  background: #9095A2;
+.rs-slider-graduated > div:nth-child(2)::before {
+  background: #9095a2;
   z-index: 99;
 }
 
-.rs-slider-graduated>div:nth-child(2) {
+.rs-slider-graduated > div:nth-child(2) {
   z-index: 9999;
 }
 
-.rs-slider-graduated>div:nth-child(3)::before {
+.rs-slider-graduated > div:nth-child(3)::before {
   background: var(--charcoal);
   z-index: 99;
 }
-
-
 
 .rs-picker-menu {
   border-radius: 2px;
@@ -414,7 +422,7 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   border-color: var(--slateGray) !important;
 }
 
-.rs-table:not(.rs-table-column-resizing) .rs-table-cell-header .rs-table-cell:hover~.rs-table-column-resize-spanner,
+.rs-table:not(.rs-table-column-resizing) .rs-table-cell-header .rs-table-cell:hover ~ .rs-table-column-resize-spanner,
 .rs-table:not(.rs-table-column-resizing) .rs-table-column-resize-spanner:hover {
   background-color: var(--slateGray);
 }
@@ -442,13 +450,13 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
 }
 
 .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
-  color: #F0F0F0;
+  color: #f0f0f0;
   border-color: var(--charcoal);
   background-color: var(--charcoal);
 }
 
 .rs-calendar-table-cell-in-range::before {
-  background-color: #E0E0E0;
+  background-color: #e0e0e0;
 }
 
 .rs-picker-toolbar-right-btn-ok {
@@ -474,12 +482,10 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   padding: 20px 25px 0 25px !important;
 }
 
-
 .rs-table-body-info {
   font-size: 13px;
   color: var(--slateGray);
 }
-
 
 .rs-modal-full .rs-modal-dialog {
   width: 100%;
@@ -506,17 +512,17 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
 }
 
 .rs-modal-header .rs-modal-title {
-  color: #F0F0F0;
+  color: #f0f0f0;
   font-size: 22px;
   font-weight: normal;
 }
 
 .rs-table-cell-header,
-.rs-table-cell[role="columnheader"],
+.rs-table-cell[role='columnheader'],
 .rs-table-cell-header:focus,
-.rs-table-cell[role="columnheader"]:focus,
+.rs-table-cell[role='columnheader']:focus,
 .rs-table-cell-header:hover,
-.rs-table-cell[role="columnheader"]:hover {
+.rs-table-cell[role='columnheader']:hover {
   background: var(--gainsboro);
   color: white;
 }
@@ -530,12 +536,12 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   background: var(--gainsboro);
 }
 
-.rs-table-cell[role="columnheader"]>.rs-table-cell-content {
+.rs-table-cell[role='columnheader'] > .rs-table-cell-content {
   color: var(--slateGray);
 }
 
 .rs-table-cell {
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
 }
 
 .rs-table-cell-content {
@@ -545,7 +551,7 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   text-align: left;
 }
 
-.rs-table-cell-content>input {
+.rs-table-cell-content > input {
   border: none;
   width: inherit;
   background: none;
@@ -563,7 +569,7 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   border-radius: 4px;
 }
 
-.rs-table-cell-content>.rs-checkbox {
+.rs-table-cell-content > .rs-checkbox {
   margin-top: -10px;
   margin-left: -10px;
 }
@@ -618,8 +624,6 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   font-weight: normal;
 }
 
-
-
 .grouped .rs-picker-select-menu-item {
   padding-left: 0px;
 }
@@ -634,7 +638,7 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   color: var(--slateGray);
 }
 
-.rs-picker-check-menu-group[role="listitem"] {
+.rs-picker-check-menu-group[role='listitem'] {
   height: 48px !important;
 }
 
@@ -666,7 +670,6 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   color: var(--slateGray);
 }
 
-
 .rs-table-hover .rs-table-row:not(.rs-table-row-header):hover,
 .rs-table-hover .rs-table-row:hover .rs-table-cell-group,
 .rs-table-hover .rs-table-row:hover .rs-table-cell {
@@ -674,14 +677,13 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   /* shadowBlueLittleOpacity */
   background: #d6dce3 !important;
   /* shadowBlueLight */
-
 }
 
 .rs-table-cell,
 .rs-table-cell-group,
 .rs-table-row {
-  -webkit-transition: background-color .1s linear !important;
-  transition: background-color .1s linear !important;
+  -webkit-transition: background-color 0.1s linear !important;
+  transition: background-color 0.1s linear !important;
 }
 
 .rs-table-row-expanded {

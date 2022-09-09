@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
-import { expandRightMenu } from '../../domain/shared_slices/Global'
-import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
+import { expandRightMenu, setMapToolOpened } from '../../domain/shared_slices/Global'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { ReactComponent as InterestPointSVG } from '../icons/Point_interet.svg'
 import EditInterestPoint from './EditInterestPoint'
@@ -12,44 +11,37 @@ import {
   drawInterestPoint,
   endInterestPointDraw
 } from '../../domain/shared_slices/InterestPoint'
+import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
+import { MapTool } from '../../domain/entities/map'
 
 const InterestPoint = () => {
   const dispatch = useDispatch()
-  const vesselSidebarIsOpen = useSelector(state => state.vessel.selectedVessel)
   const {
-    isEditing,
-    interestPointBeingDrawed
+    isEditing
   } = useSelector(state => state.interestPoint)
   const {
     healthcheckTextWarning,
     rightMenuIsOpen,
-    previewFilteredVesselsMode
+    previewFilteredVesselsMode,
+    mapToolOpened
   } = useSelector(state => state.global)
 
-  const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
-  const isInterestPointOpen = isEditing || interestPointBeingDrawed
+  const isRightMenuShrinked = !rightMenuIsOpen
+  const isInterestPointOpen = useMemo(() => mapToolOpened === MapTool.INTEREST_POINT, [mapToolOpened])
   const wrapperRef = useRef(null)
+  const escapeFromKeyboard = useEscapeFromKeyboard()
 
   useEffect(() => {
-    document.addEventListener('keydown', escapeFromKeyboard)
-
-    return () => {
-      document.removeEventListener('keydown', escapeFromKeyboard)
-    }
-  }, [])
-
-  const escapeFromKeyboard = event => {
-    if (event.key === 'Escape') {
+    if (escapeFromKeyboard) {
       close()
     }
-  }
+  }, [escapeFromKeyboard])
 
   function openOrCloseInterestPoint () {
     if (!isInterestPointOpen) {
-      dispatch(unselectVessel())
-
       if (!isEditing) {
         dispatch(drawInterestPoint())
+        dispatch(setMapToolOpened(MapTool.INTEREST_POINT))
       }
     } else {
       close()
@@ -58,6 +50,7 @@ const InterestPoint = () => {
 
   function close () {
     dispatch(endInterestPointDraw())
+    dispatch(setMapToolOpened(undefined))
     if (!isEditing) {
       dispatch(deleteInterestPointBeingDrawed())
     }

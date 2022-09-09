@@ -4,6 +4,7 @@ import Circle from 'ol/geom/Circle'
 import { fromCircle } from 'ol/geom/Polygon'
 import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '../../shared_slices/Measurement'
 import { batch } from 'react-redux'
+import { setMapToolOpened } from '../../shared_slices/Global'
 
 const saveMeasurement = (feature, measurement) => dispatch => {
   feature.setId(feature.ol_uid)
@@ -21,7 +22,8 @@ const saveMeasurement = (feature, measurement) => dispatch => {
       measurement: measurement,
       coordinates: tooltipCoordinates
     }))
-    resetCircleMeasurementInDrawing()
+    dispatch(resetCircleMeasurementInDrawing())
+    dispatch(setMapToolOpened(undefined))
   })
 }
 

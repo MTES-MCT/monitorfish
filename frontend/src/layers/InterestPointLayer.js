@@ -29,6 +29,7 @@ import { InterestPointLine } from '../domain/entities/interestPointLine'
 import { usePrevious } from '../hooks/usePrevious'
 import { getLength } from 'ol/sphere'
 import Layers from '../domain/entities/layers'
+import { setMapToolOpened } from '../domain/shared_slices/Global'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
@@ -188,6 +189,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
         drawObject.once(DRAW_ABORT_EVENT, () => {
           dispatch(endInterestPointDraw())
           dispatch(deleteInterestPointBeingDrawed())
+          dispatch(setMapToolOpened(undefined))
         })
 
         drawObject.once(DRAW_END_EVENT, event => {

@@ -149,9 +149,11 @@ context('Vessels Track', () => {
     cy.get('.rs-picker-daterange > .rs-btn').eq(0).click(460, 480, { force: true, timeout: 10000 })
 
     cy.get('.rs-calendar-table-cell-day')
-      .contains(dayjs().subtract(1, 'day').format('D'))
+      .contains(new RegExp(`^${dayjs().subtract(1, 'day').format('D')}$`))
       .click({ force: true, timeout: 10000 })
-    cy.get('.rs-calendar-table-cell-day').contains(dayjs().format('D')).click({ force: true, timeout: 10000 })
+    cy.get('.rs-calendar-table-cell-day')
+      .contains(new RegExp(`^${dayjs().format('D')}$`))
+      .click({ force: true, timeout: 10000 })
     cy.get('.rs-picker-toolbar-right > .rs-btn').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 2)
   })

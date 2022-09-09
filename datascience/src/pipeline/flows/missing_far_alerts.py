@@ -9,11 +9,12 @@ from sqlalchemy import Table, and_, not_, or_, select
 from sqlalchemy.sql import Select
 
 from src.pipeline.generic_tasks import extract
-from src.pipeline.processing import df_to_dict_series, join_on_multiple_keys
+from src.pipeline.processing import join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
     extract_silenced_alerts,
     filter_silenced_alerts,
     load_alerts,
+    make_alerts,
 )
 from src.pipeline.shared_tasks.infrastructure import get_table
 from src.pipeline.shared_tasks.positions import add_vessel_identifier
@@ -305,65 +306,6 @@ def merge_risk_factor(
     )
 
 
-@task(checkpoint=False)
-def make_alerts(
-    vessels_with_missing_fars: pd.DataFrame,
-    alert_type: str,
-    alert_config_name: str,
-    creation_date: datetime,
-) -> pd.DataFrame:
-    """
-    Generates alerts from the input `vessels_with_missing_fars`.
-
-    Args:
-        vessels_with_missing_fars (pd.DataFrame): `DateFrame` of vessels for which to
-          create an alert.
-        alert_type (str): `type` to specify in the built alerts.
-        alert_config_name (str): `alert_config_name` to specify in the built alerts.
-        creation_date (datetime): `creation_date` to specify in the built alerts.
-
-    Returns:
-        pd.DataFrame: `DataFrame` of alerts.
-    """
-    alerts = vessels_with_missing_fars.copy(deep=True)
-    alerts = alerts.rename(
-        columns={
-            "cfr": "internal_reference_number",
-            "external_immatriculation": "external_reference_number",
-        }
-    )
-
-    alerts["creation_date"] = creation_date
-
-    alerts["type"] = alert_type
-    alerts["value"] = df_to_dict_series(
-        alerts.rename(
-            columns={
-                "facade": "seaFront",
-                "flag_state": "flagState",
-                "risk_factor": "riskFactor",
-            }
-        )[["seaFront", "flagState", "type", "riskFactor"]]
-    )
-
-    alerts["alert_config_name"] = alert_config_name
-
-    return alerts[
-        [
-            "vessel_name",
-            "internal_reference_number",
-            "external_reference_number",
-            "ircs",
-            "vessel_identifier",
-            "creation_date",
-            "type",
-            "facade",
-            "value",
-            "alert_config_name",
-        ]
-    ]
-
-
 with Flow("Missing FAR alerts") as flow:
 
     # Parameters
@@ -445,12 +387,7 @@ with Flow("Missing FAR alerts") as flow:
         vessels_with_missing_fars, current_risk_factors
     )
 
-    alerts = make_alerts(
-        vessels_with_missing_fars=vessels_with_missing_fars,
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        creation_date=utcnow,
-    )
+    alerts = make_alerts(vessels_with_missing_fars, alert_type, alert_config_name)
     silenced_alerts = extract_silenced_alerts()
     alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
 

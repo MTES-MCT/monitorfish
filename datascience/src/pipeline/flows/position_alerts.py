@@ -13,11 +13,12 @@ from sqlalchemy.sql import Select
 
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract
-from src.pipeline.processing import coalesce, df_to_dict_series, join_on_multiple_keys
+from src.pipeline.processing import coalesce, join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
     extract_silenced_alerts,
     filter_silenced_alerts,
     load_alerts,
+    make_alerts,
 )
 from src.pipeline.shared_tasks.facades import get_facades_table
 from src.pipeline.shared_tasks.positions import (
@@ -421,16 +422,14 @@ def merge_risk_factor(
 
 
 @task(checkpoint=False)
-def make_alerts(
-    positions_in_alert: pd.DataFrame,
-    alert_type: str,
-    alert_config_name: str,
-) -> pd.DataFrame:
+def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
     """
-    Generates alerts from the input `positions_in_alert`, essentially by grouping all
-    positions of the same vessel as one alert.
+    Returns a `DataFrame` of unique vessels in alert from the input `DataFrame` of
+    positions in alert.
+    For each vessel, the date of the most recent position is used as
+    `creation_datetime` for the alert.
     """
-    alerts = (
+    vessels_in_alerts = (
         positions_in_alert.groupby(
             [
                 "cfr",
@@ -448,40 +447,11 @@ def make_alerts(
         .agg({"date_time": "max"})
         .rename(
             columns={
-                "cfr": "internal_reference_number",
-                "external_immatriculation": "external_reference_number",
                 "date_time": "creation_date",
             }
         )
     )
-
-    alerts["type"] = alert_type
-    alerts["value"] = df_to_dict_series(
-        alerts.rename(
-            columns={
-                "facade": "seaFront",
-                "flag_state": "flagState",
-                "risk_factor": "riskFactor",
-            }
-        )[["seaFront", "flagState", "type", "riskFactor"]]
-    )
-
-    alerts["alert_config_name"] = alert_config_name
-
-    return alerts[
-        [
-            "vessel_name",
-            "internal_reference_number",
-            "external_reference_number",
-            "ircs",
-            "vessel_identifier",
-            "creation_date",
-            "type",
-            "facade",
-            "value",
-            "alert_config_name",
-        ]
-    ]
+    return vessels_in_alerts
 
 
 with Flow("Position alert") as flow:
@@ -547,7 +517,8 @@ with Flow("Position alert") as flow:
     positions_in_alert = add_vessel_identifier(positions_in_alert)
     current_risk_factors = extract_current_risk_factors()
     positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
-    alerts = make_alerts(positions_in_alert, alert_type, alert_config_name)
+    vessels_in_alert = get_vessels_in_alert(positions_in_alert)
+    alerts = make_alerts(vessels_in_alert, alert_type, alert_config_name)
     silenced_alerts = extract_silenced_alerts()
     alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
     load_alerts(alert_without_silenced, alert_config_name)

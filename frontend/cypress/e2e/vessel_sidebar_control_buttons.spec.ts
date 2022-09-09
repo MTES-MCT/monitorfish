@@ -64,44 +64,33 @@ context('Vessel sidebar controls buttons', () => {
   })
 
   it('Vessel track dates Should be changed from the agenda', () => {
-    const startDay = dayjs().subtract(1, 'day').format('DD')
-    const endDay = dayjs().format('DD')
+    const startDateAsDayjs = dayjs().subtract(1, 'day').hour(1).minute(2)
+    const endDateAsDayjs = dayjs().hour(3).minute(4)
 
     // Given
-    cy.get('.vessels').click(460, 480, { force: true, timeout: 10000 })
+    cy.get('.vessels').click(460, 480, { force: true })
     cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    cy.getDataCy('vessel-sidebar').should('be.visible')
 
     // When
-    cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
-    cy.get('.rs-picker-daterange').click({ timeout: 10000 })
-    cy.get('.rs-calendar-table-cell')
-      .contains(new RegExp(`^${Number(startDay)}$`))
-      .click({ timeout: 10000 })
-    cy.get('.rs-calendar-table-cell-is-today').click({ timeout: 10000 })
-
     cy.intercept('GET', '/bff/v1/vessels/positions*').as('getPositions')
-    cy.get('.rs-picker-daterange-panel').within(() => {
-      cy.get('button').contains('OK').click({ timeout: 10000 })
-    })
+    cy.getDataCy('vessel-track-depth-selection').click()
+    cy.fillDateRangePicker('Plage de temps sur mesure', startDateAsDayjs.toDate(), endDateAsDayjs.toDate())
 
     // Then
     cy.wait('@getPositions').then(({ request }) => {
-      expect(request.url).contains(`${startDay}T00:00:00.000Z`)
-      expect(request.url).contains(`${endDay}T23:59:59.000Z`)
+      expect(request.url).contains(`${startDateAsDayjs.format('DD')}T01:02:00.000Z`)
+      expect(request.url).contains(`${endDateAsDayjs.format('DD')}T03:04:59.000Z`)
     })
-    cy.get('*[data-cy^="vessel-track-depth-three-days"]').should('not.have.class', 'rs-radio-checked')
-    cy.get('.rs-picker-daterange').within(() => {
-      const startDateRegexp = new RegExp(`${startDay}-\\d{2}-\\d{4}`)
-      const endDateRegexp = new RegExp(`${endDay}-\\d{2}-\\d{4}`)
+    cy.getDataCy('vessel-track-depth-three-days').should('not.have.class', 'rs-radio-checked')
 
-      cy.get('.rs-picker-toggle-value').contains(startDateRegexp, {})
-      cy.get('.rs-picker-toggle-value').contains(endDateRegexp)
-    })
-
-    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
-    cy.get('*[data-cy^="custom-dates-showed-text"]').contains(
-      new RegExp(`Piste affichée du ${startDay}/\\d{2}/\\d{2} au ${endDay}/\\d{2}/\\d{2}`)
+    cy.getDataCy('vessel-menu-fishing').click()
+    cy.getDataCy('custom-dates-showed-text').contains(
+      new RegExp(
+        `Piste affichée du ${startDateAsDayjs.format('DD')}/\\d{2}/\\d{2} au ${endDateAsDayjs.format(
+          'DD'
+        )}/\\d{2}/\\d{2}`
+      )
     )
   })
 

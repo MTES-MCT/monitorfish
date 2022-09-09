@@ -1,3 +1,5 @@
+// TODO We should make this component both form- & a11y-compliant with a `name` and proper (aria-)labels.
+
 import { useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
@@ -16,6 +18,8 @@ import type { Promisable } from 'type-fest'
 
 export type DateRangePickerProps = {
   defaultValue?: DateRange
+  isLabelHidden?: boolean
+  label: string
   /**
    * Range of minutes used to generate the time picker list.
    *
@@ -31,7 +35,14 @@ export type DateRangePickerProps = {
   onChange: (nextUtcDateRange: DateRange) => Promisable<void>
   withTime?: boolean
 }
-export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, withTime = false }: DateRangePickerProps) {
+export function DateRangePicker({
+  defaultValue,
+  isLabelHidden = false,
+  label,
+  minutesRange = 15,
+  onChange,
+  withTime = false
+}: DateRangePickerProps) {
   const startDateInputRef = useRef() as MutableRefObject<DateOrTimeInputRef>
   const startTimeInputRef = useRef() as MutableRefObject<DateOrTimeInputRef>
   const endDateInputRef = useRef() as MutableRefObject<DateOrTimeInputRef>
@@ -253,7 +264,9 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
   }, [handleClickOutside])
 
   return (
-    <>
+    <Fieldset className="DateRangePicker">
+      <Legend isHidden={isLabelHidden}>{label}</Legend>
+
       <Box>
         <Field>
           <DateInput
@@ -271,6 +284,7 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
             <TimeInput
               ref={startTimeInputRef}
               defaultValue={selectedStartTimeTupleRef.current}
+              isStartDate
               minutesRange={minutesRange}
               onBack={() => startDateInputRef.current.focus(true)}
               onChange={nextTimeTuple => handleTimeInputFilled(DateRangePosition.START, nextTimeTuple)}
@@ -314,9 +328,15 @@ export function DateRangePicker({ defaultValue, minutesRange = 15, onChange, wit
           onChange={handleRangeCalendarPickerChange}
         />
       )}
-    </>
+    </Fieldset>
   )
 }
+
+const Fieldset = styled.fieldset`
+  border: 0;
+  margin: 0;
+  padding: 0;
+`
 
 const Box = styled.div`
   * {
@@ -327,6 +347,15 @@ const Box = styled.div`
   color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   position: relative;
+`
+
+const Legend = styled.legend<{
+  isHidden: boolean
+}>`
+  display: ${p => (p.isHidden ? 'none' : 'table')};
+  font-weight: inherit;
+  margin-bottom: 0.5rem;
+  padding: 0;
 `
 
 const Field = styled.span<{

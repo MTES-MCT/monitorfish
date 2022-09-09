@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { getLocalStorageState } from '../../../../utils'
+import { getLocalStorageState } from '../utils'
 
-const newReportingLocalStorageKey = 'new-reporting'
-export const useSaveReportingInLocalStorage = (key, value, isWithinValueObject) => {
+export const useSaveReportingInLocalStorage = (localStorageKey, key, value, isWithinValueObject) => {
   const firstUpdate = useRef(true)
 
   useEffect(() => {
@@ -11,7 +10,7 @@ export const useSaveReportingInLocalStorage = (key, value, isWithinValueObject) 
       return
     }
 
-    const savedReporting = getLocalStorageState({}, newReportingLocalStorageKey) || {}
+    const savedReporting = getLocalStorageState({}, localStorageKey) || {}
 
     if (isWithinValueObject) {
       if (!savedReporting.value) {
@@ -22,6 +21,6 @@ export const useSaveReportingInLocalStorage = (key, value, isWithinValueObject) 
       savedReporting[key] = value
     }
 
-    window.localStorage.setItem(newReportingLocalStorageKey, JSON.stringify(savedReporting))
+    window.localStorage.setItem(localStorageKey, JSON.stringify(savedReporting))
   }, [key, value, isWithinValueObject])
 }

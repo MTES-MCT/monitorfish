@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import SideWindowSubMenuLink from './SideWindowSubMenuLink'
@@ -7,21 +7,25 @@ import { sideWindowMenu } from '../../domain/entities/sideWindow'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { beaconMalfunctionsStages } from '../../domain/entities/beaconMalfunction'
+import { AlertAndReportingTab } from './SideWindow'
+import { useSelector } from 'react-redux'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  * @param selectedMenu
  * @param selectedSubMenu
  * @param setSelectedSubMenu
- * @param beaconMalfunctions
- * @param alerts
+ * @param selectedTab
  * @param fixed
  * @param setIsFixed
  * @return {JSX.Element}
  * @constructor
  */
-const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, beaconMalfunctions, alerts, fixed, setIsFixed }) => {
+const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, selectedTab, fixed, setIsFixed }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const alerts = useSelector(state => state.alert.alerts)
+  const currentReportings = useSelector(state => state.reporting.currentReportings)
+  const beaconMalfunctions = useSelector(state => state.beaconMalfunction.beaconMalfunctions)
 
   useEffect(() => {
     if (selectedMenu === sideWindowMenu.ALERTS.code) {
@@ -31,6 +35,22 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
       setIsFixed(false)
     }
   }, [selectedMenu])
+
+  function getNumberOfAlertsOrReportingFromSeaFronts (seaFronts) {
+    if (selectedTab === AlertAndReportingTab.ALERT) {
+      return alerts.filter(alert => seaFronts.includes(alert?.value?.seaFront)).length
+    }
+
+    if (selectedTab === AlertAndReportingTab.REPORTING) {
+      return currentReportings.filter(alert => seaFronts.includes(alert?.value?.seaFront)).length
+    }
+  }
+
+  const numberOfBeaconMalfunctions = useMemo(() =>
+    beaconMalfunctions.filter(beaconMalfunction =>
+      beaconMalfunction.stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
+      beaconMalfunction.stage !== beaconMalfunctionsStages.ARCHIVED.code).length,
+    [beaconMalfunctions])
 
   return <Menu
     style={menuStyle(isOpen, fixed)}
@@ -53,7 +73,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={alerts.filter(alert => AlertsMenuSeaFrontsToSeaFrontList.MEMN.seaFronts.includes(alert?.value?.seaFront)).length}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.MEMN.seaFronts)}
             menu={AlertsSubMenu.MEMN}
             isSelected={selectedSubMenu.code === AlertsSubMenu.MEMN.code}
             setSelected={setSelectedSubMenu}
@@ -61,7 +81,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={alerts.filter(alert => AlertsMenuSeaFrontsToSeaFrontList.NAMO.seaFronts.includes(alert?.value?.seaFront)).length}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.NAMO.seaFronts)}
             menu={AlertsSubMenu.NAMO}
             isSelected={selectedSubMenu.code === AlertsSubMenu.NAMO.code}
             setSelected={setSelectedSubMenu}
@@ -69,7 +89,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={alerts.filter(alert => AlertsMenuSeaFrontsToSeaFrontList.SA.seaFronts.includes(alert?.value?.seaFront)).length}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.SA.seaFronts)}
             menu={AlertsSubMenu.SA}
             isSelected={selectedSubMenu.code === AlertsSubMenu.SA.code}
             setSelected={setSelectedSubMenu}
@@ -77,7 +97,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={alerts.filter(alert => AlertsMenuSeaFrontsToSeaFrontList.MED.seaFronts.includes(alert?.value?.seaFront)).length}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.MED.seaFronts)}
             menu={AlertsSubMenu.MED}
             isSelected={selectedSubMenu.code === AlertsSubMenu.MED.code}
             setSelected={setSelectedSubMenu}
@@ -85,7 +105,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={alerts.filter(alert => AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROA.seaFronts.includes(alert?.value?.seaFront)).length}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROA.seaFronts)}
             menu={AlertsSubMenu.OUTREMEROA}
             isSelected={selectedSubMenu.code === AlertsSubMenu.OUTREMEROA.code}
             setSelected={setSelectedSubMenu}
@@ -93,7 +113,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
           <SideWindowSubMenuLink
             isOpen={isOpen}
             oneLine
-            number={alerts.filter(alert => AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROI.seaFronts.includes(alert?.value?.seaFront)).length}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROI.seaFronts)}
             menu={AlertsSubMenu.OUTREMEROI}
             isSelected={selectedSubMenu.code === AlertsSubMenu.OUTREMEROI.code}
             setSelected={setSelectedSubMenu}
@@ -105,9 +125,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
       <>
         <SideWindowSubMenuLink
           isOpen={isOpen}
-          number={beaconMalfunctions.filter(beaconMalfunction =>
-            beaconMalfunction.stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
-            beaconMalfunction.stage !== beaconMalfunctionsStages.ARCHIVED.code).length}
+          number={numberOfBeaconMalfunctions}
           menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING}
           isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}
           setSelected={setSelectedSubMenu}

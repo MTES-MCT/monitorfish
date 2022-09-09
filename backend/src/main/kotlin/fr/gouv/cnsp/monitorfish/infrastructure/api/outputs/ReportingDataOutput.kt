@@ -19,7 +19,8 @@ class ReportingDataOutput(
     val value: ReportingValue,
     val isArchived: Boolean,
     val isDeleted: Boolean,
-    val infraction: InfractionDataOutput? = null) {
+    val infraction: InfractionDataOutput? = null,
+    val underCharter: Boolean? = null) {
     companion object {
         fun fromReporting(reporting: Reporting) = ReportingDataOutput(
             id = reporting.id,
@@ -34,6 +35,8 @@ class ReportingDataOutput(
             value = reporting.value,
             isArchived = reporting.isArchived,
             isDeleted = reporting.isDeleted,
-            infraction = reporting.infraction?.let { InfractionDataOutput.fromInfraction(it) })
+            infraction = reporting.infraction?.let { InfractionDataOutput.fromInfraction(it) },
+            underCharter = reporting.underCharter
+        )
     }
 }

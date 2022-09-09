@@ -2,6 +2,8 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
@@ -23,8 +25,30 @@ class JpaReportingRepository(private val dbReportingRepository: DBReportingRepos
         return dbReportingRepository.save(ReportingEntity.fromReporting(reporting, mapper)).toReporting(mapper)
     }
 
+    @Transactional
+    override fun update(reportingId: Int, updatedInfractionSuspicion: InfractionSuspicion): Reporting {
+        dbReportingRepository.update(reportingId, mapper.writeValueAsString(updatedInfractionSuspicion))
+
+        return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
+    }
+
+    @Transactional
+    override fun update(reportingId: Int, updatedObservation: Observation): Reporting {
+        dbReportingRepository.update(reportingId, mapper.writeValueAsString(updatedObservation))
+
+        return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
+    }
+
     override fun findAll(): List<Reporting> {
         return dbReportingRepository.findAll().map { it.toReporting(mapper) }
+    }
+
+    override fun findById(reportingId: Int): Reporting {
+        return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
+    }
+
+    override fun findAllCurrent(): List<Reporting> {
+        return dbReportingRepository.findAllCurrentReportings().map { it.toReporting(mapper) }
     }
 
     override fun findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String, fromDate: ZonedDateTime): List<Reporting> {

@@ -29,13 +29,14 @@ import { ErrorToastNotification } from './features/commonComponents/ErrorToastNo
 import Menu from './features/backoffice/menu/Menu'
 import ControlObjectives from './features/backoffice/control_objectives/ControlObjectives'
 import StateManager from './api/BackofficeMode'
-import AlertsMapButton from './features/side_window/alerts/AlertsMapButton'
+import AlertsMapButton from './features/side_window/alerts_reportings/AlertsMapButton'
 import BeaconMalfunctionsMapButton from './features/side_window/beacon_malfunctions/BeaconMalfunctionsMapButton'
 import SideWindowLauncher from './features/side_window/SideWindowLauncher'
 import SideWindow from './features/side_window/SideWindow'
 import { sideWindowMenu } from './domain/entities/sideWindow'
 import FavoriteVessels from './features/favorite_vessels/FavoriteVessels'
 import FleetSegments from './features/backoffice/fleet_segments/FleetSegments'
+import { useRef } from 'react'
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
 function App () {
@@ -96,6 +97,7 @@ function App () {
 
 function HomePage () {
   const vesselSidebarIsOpen = useSelector(state => state.vessel.vesselSidebarIsOpen)
+  const ref = useRef()
 
   return <>
         <StateManager
@@ -105,8 +107,8 @@ function HomePage () {
         <Switch>
           <Route exact path="/side_window">
             <SideWindow
-              openedSideWindowTab={sideWindowMenu.ALERTS.code}
-              fromTab
+              isFromURL={true}
+              ref={ref}
             />
           </Route>
           <Route exact path="/">

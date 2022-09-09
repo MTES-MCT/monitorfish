@@ -1,21 +1,17 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
 import { Modal } from 'rsuite'
-import deleteReporting from '../../../../domain/use_cases/reporting/deleteReporting'
 import StyledModalHeader from '../../../commonComponents/StyledModalHeader'
 
-const ConfirmDeletionModal = ({ modalIsOpenForId, closeModal }) => {
-  const dispatch = useDispatch()
-
+const ConfirmDeletionModal = ({ isOpened, validateCallback, closeModal }) => {
   return (
     <ModalWithCustomHeight
       size={'xs'}
       backdrop
-      open={modalIsOpenForId}
+      open={isOpened}
       style={{ marginTop: 100 }}
       onClose={closeModal}
     >
@@ -30,7 +26,7 @@ const ConfirmDeletionModal = ({ modalIsOpenForId, closeModal }) => {
         <FooterButton>
           <ValidateButton
             onClick={() => {
-              dispatch(deleteReporting(modalIsOpenForId))
+              validateCallback()
               closeModal()
             }}
             width={'120px'}

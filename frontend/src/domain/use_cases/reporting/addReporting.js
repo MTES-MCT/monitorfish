@@ -1,5 +1,5 @@
 import { removeError, setError } from '../../shared_slices/Global'
-import { setCurrentAndArchivedReportings } from '../../shared_slices/Reporting'
+import { setCurrentAndArchivedReportingsOfSelectedVessel } from '../../shared_slices/Reporting'
 import { Vessel } from '../../entities/vessel'
 import { addVesselReporting } from '../../shared_slices/Vessel'
 import { addReportingFromAPI } from '../../../api/reporting'
@@ -9,13 +9,13 @@ const addReporting = newReporting => (dispatch, getState) => {
     selectedVesselIdentity
   } = getState().vessel
   const {
-    currentAndArchivedReportings
+    currentAndArchivedReportingsOfSelectedVessel
   } = getState().reporting
 
   return addReportingFromAPI(newReporting).then(reporting => {
-    const nextCurrentAndArchivedReporting = addReportingToCurrent(currentAndArchivedReportings, reporting)
-    dispatch(setCurrentAndArchivedReportings({
-      currentAndArchivedReportings: nextCurrentAndArchivedReporting,
+    const nextCurrentAndArchivedReporting = addReportingToCurrent(currentAndArchivedReportingsOfSelectedVessel, reporting)
+    dispatch(setCurrentAndArchivedReportingsOfSelectedVessel({
+      currentAndArchivedReportingsOfSelectedVessel: nextCurrentAndArchivedReporting,
       vesselIdentity: selectedVesselIdentity
     }))
     dispatch(addVesselReporting({
@@ -32,8 +32,8 @@ const addReporting = newReporting => (dispatch, getState) => {
   })
 }
 
-function addReportingToCurrent (currentAndArchivedReportings, newReporting) {
-  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportings }
+function addReportingToCurrent (currentAndArchivedReportingsOfSelectedVessel, newReporting) {
+  const nextCurrentAndArchivedReporting = { ...currentAndArchivedReportingsOfSelectedVessel }
   nextCurrentAndArchivedReporting.current = nextCurrentAndArchivedReporting.current.concat(newReporting)
 
   return nextCurrentAndArchivedReporting

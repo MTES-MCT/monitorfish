@@ -1,5 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases
 
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.ThreeMilesTrawlingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -80,5 +82,71 @@ class AddReportingUTests {
             ReportingActor.DIRM -> assertThat(throwable.message).contains("An author contact must be set")
             ReportingActor.OTHER -> assertThat(throwable.message).contains("An author contact must be set")
         }
+    }
+
+    @Test
+    fun `execute Should add the seaFront When the DML is set`() {
+      // Given
+      val expectedInfractionSuspicion = InfractionSuspicion(
+        reportingActor = ReportingActor.OPS,
+        dml = "DML 17",
+        natinfCode = "1235",
+        authorTrigram = "LTH",
+        title = "Chalut en boeuf illégal")
+      val reportingToAdd = Reporting(
+        id = 1,
+        type = ReportingType.INFRACTION_SUSPICION,
+        vesselName = "BIDUBULE",
+        internalReferenceNumber = "FR224226850",
+        externalReferenceNumber = "1236514",
+        ircs = "IRCS",
+        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+        creationDate = ZonedDateTime.now(),
+        validationDate = ZonedDateTime.now(),
+        value = expectedInfractionSuspicion,
+        isArchived = false,
+        isDeleted = false)
+
+      // When
+      AddReporting(reportingRepository).execute(reportingToAdd)
+
+      // Then
+      argumentCaptor<Reporting>().apply {
+        verify(reportingRepository).save(capture())
+
+        val infraction = allValues.first().value as InfractionSuspicion
+        assertThat(infraction.seaFront).isEqualTo("SA")
+      }
+    }
+
+    @Test
+    fun `execute Should throw an exception When an infraction suspicion has no DML set`() {
+      // Given
+      val reportingToAdd = Reporting(
+        id = 1,
+        type = ReportingType.INFRACTION_SUSPICION,
+        vesselName = "BIDUBULE",
+        internalReferenceNumber = "FR224226850",
+        externalReferenceNumber = "1236514",
+        ircs = "IRCS",
+        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+        creationDate = ZonedDateTime.now(),
+        validationDate = ZonedDateTime.now(),
+        value = InfractionSuspicion(
+          reportingActor = ReportingActor.OPS,
+          dml = "",
+          natinfCode = "1235",
+          authorTrigram = "LTH",
+          title = "Chalut en boeuf illégal"),
+        isArchived = false,
+        isDeleted = false)
+
+      // When
+      val throwable = catchThrowable {
+        AddReporting(reportingRepository).execute(reportingToAdd)
+      }
+
+      // Then
+      assertThat(throwable.message).contains("A DML must be set")
     }
 }

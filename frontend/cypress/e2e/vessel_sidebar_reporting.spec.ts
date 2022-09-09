@@ -104,7 +104,7 @@ context('Vessel sidebar reporting tab', () => {
     )
     cy.get('*[data-cy="new-reporting-select-natinf"]').click()
     cy.get('[data-key="2608"] > .rs-picker-select-menu-item').click()
-    cy.get('*[data-cy="new-reporting-select-dml"]').click()
+    cy.get('*[data-cy="new-reporting-select-dml"]').scrollIntoView().click()
     cy.get('[data-key="DML 22"] > .rs-picker-select-menu-item').click()
     cy.get('*[data-cy="new-reporting-create-button"]').scrollIntoView().click()
 

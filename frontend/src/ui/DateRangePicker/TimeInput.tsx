@@ -12,6 +12,7 @@ import type { Promisable } from 'type-fest'
 
 export type TimeInputProps = Pick<NumberInputProps, 'onBack' | 'onPrevious' | 'onNext'> & {
   defaultValue?: TimeTuple
+  isStartDate?: boolean
   minutesRange?: number
   /** Called each time the time input is changed to a new valid value. */
   onChange: (nextTimeTuple: TimeTuple) => Promisable<void>
@@ -20,7 +21,16 @@ export type TimeInputProps = Pick<NumberInputProps, 'onBack' | 'onPrevious' | 'o
   onPrevious?: () => Promisable<void>
 }
 function TimeInputWithRef(
-  { defaultValue, minutesRange = 15, onBack, onChange, onFocus, onNext, onPrevious }: TimeInputProps,
+  {
+    defaultValue,
+    isStartDate = false,
+    minutesRange = 15,
+    onBack,
+    onChange,
+    onFocus,
+    onNext,
+    onPrevious
+  }: TimeInputProps,
   ref: ForwardedRef<DateOrTimeInputRef>
 ) {
   const boxSpanRef = useRef() as MutableRefObject<HTMLSpanElement>
@@ -139,6 +149,7 @@ function TimeInputWithRef(
       <>
         <NumberInput
           ref={hourInputRef}
+          data-cy={`date-range-picker-${isStartDate ? 'start' : 'end'}-hour`}
           defaultValue={controlledDefaultValue && controlledDefaultValue[0]}
           max={23}
           min={0}
@@ -155,6 +166,7 @@ function TimeInputWithRef(
         :
         <NumberInput
           ref={minuteInputRef}
+          data-cy={`date-range-picker-${isStartDate ? 'start' : 'end'}-minute`}
           defaultValue={controlledDefaultValue && controlledDefaultValue[1]}
           max={59}
           min={0}

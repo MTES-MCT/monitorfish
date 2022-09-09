@@ -71,7 +71,7 @@ export function UiPage() {
 
       <section>
         <h3>Default</h3>
-        <DateRangePicker onChange={setDateRangePickerOutput} />
+        <DateRangePicker label="A date range picker" onChange={setDateRangePickerOutput} />
         <h4>Output</h4>
         <pre>
           <code>
@@ -90,26 +90,7 @@ export function UiPage() {
 
       <section>
         <h3>With time</h3>
-        <DateRangePicker onChange={setDateRangePickerithTimeOutput} withTime />
-        <h4>Output</h4>
-        <pre>
-          <code>
-            {dateRangePickerWithTimeOutput &&
-              JSON.stringify(
-                {
-                  startDate: dateRangePickerWithTimeOutput[0].toISOString(),
-                  endDate: dateRangePickerWithTimeOutput[1].toISOString()
-                },
-                null,
-                2
-              )}
-          </code>
-        </pre>
-      </section>
-
-      <section>
-        <h3>With time</h3>
-        <DateRangePicker onChange={setDateRangePickerithTimeOutput} withTime />
+        <DateRangePicker label="A date range picker with time" onChange={setDateRangePickerithTimeOutput} withTime />
         <h4>Output</h4>
         <pre>
           <code>

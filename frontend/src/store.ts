@@ -51,3 +51,4 @@ export type HomeRootState = ReturnType<typeof homeStore.getState>
 export type BakcofficeRootState = ReturnType<typeof backofficeStore.getState>
 // Inferred type: { global: GlobalState, vessel: VesselState, ... }
 export type AppDispatch = typeof homeStore.dispatch
+export type AppGetState = typeof homeStore.getState

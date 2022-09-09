@@ -8,7 +8,7 @@ import beaconMalfunction from './BeaconMalfunction'
 import controls from './Control'
 import favoriteVessel from './FavoriteVessel'
 import filter from './Filter'
-import fishingActivities from './FishingActivities'
+import { fishingActivitiesReducer } from './FishingActivities'
 import fleetSegment from './FleetSegment'
 import gear from './Gear'
 import { globalSliceReducer } from './Global'
@@ -20,14 +20,14 @@ import measurement from './Measurement'
 import regulatory from './Regulatory'
 import reporting from './Reporting'
 import species from './Species'
-import vessel from './Vessel'
+import { vesselSliceReducer } from './Vessel'
 
 const commonReducerList = {
   gear,
   global: globalSliceReducer,
   map,
   regulatory,
-  species,
+  species
 }
 
 const homeReducers = combineReducers({
@@ -37,7 +37,7 @@ const homeReducers = combineReducers({
   controls,
   favoriteVessel,
   filter,
-  fishingActivities,
+  fishingActivities: fishingActivitiesReducer,
   fleetSegment,
   infraction,
   interestPoint,
@@ -45,15 +45,15 @@ const homeReducers = combineReducers({
   measurement,
   regulatoryLayerSearch,
   reporting,
-  vessel,
-  vesselList,
+  vessel: vesselSliceReducer,
+  vesselList
 })
 
 const backofficeReducers = combineReducers({
   ...commonReducerList,
   fleetSegment,
   layer: layer.backoffice.reducer,
-  regulation,
+  regulation
 })
 
 export { homeReducers, backofficeReducers }

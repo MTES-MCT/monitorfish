@@ -18,26 +18,17 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
   vesselIdentity = getOnlyVesselIdentityProperties(vesselIdentity)
 
   const { vessel, fishingActivities, map, global } = getState()
-  const {
-    vessels,
-    selectedVesselCustomTrackRequest
-  } = vessel
-  const {
-    defaultVesselTrackDepth
-  } = map
-  const {
-    fishingActivitiesAreShowedOnMap
-  } = fishingActivities
-  const {
-    isAdmin
-  } = global
+  const { vessels, selectedVesselTrackRequest } = vessel
+  const { defaultVesselTrackDepth } = map
+  const { areFishingActivitiesShowedOnMap } = fishingActivities
+  const { isAdmin } = global
 
   const lastPositionVessel = vessels.find(_vessel => _vessel.vesselId === Vessel.getVesselFeatureId(vesselIdentity))
 
   dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 
-  const nextTrackRequest = getCustomOrDefaultTrackRequest(selectedVesselCustomTrackRequest, defaultVesselTrackDepth, false)
-  if (fishingActivitiesAreShowedOnMap && !calledFromCron) {
+  const nextTrackRequest = getCustomOrDefaultTrackRequest(selectedVesselTrackRequest, defaultVesselTrackDepth, false)
+  if (areFishingActivitiesShowedOnMap && !calledFromCron) {
     dispatch(removeFishingActivitiesFromMap())
   }
 
@@ -55,7 +46,8 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
         vesselAndPositions.positions,
         trackDepthHasBeenModified,
         calledFromCron,
-        nextTrackRequest)
+        nextTrackRequest
+      )
 
       const selectedVessel = {
         ...vesselIdentity,
@@ -72,12 +64,15 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
           dispatch(removeError())
         }
 
-        return dispatch(setSelectedVessel({
-          vessel: selectedVessel,
-          positions: vesselAndPositions.positions
-        }))
+        return dispatch(
+          setSelectedVessel({
+            vessel: selectedVessel,
+            positions: vesselAndPositions.positions
+          })
+        )
       })
-    }).catch(error => {
+    })
+    .catch(error => {
       console.error(error)
       batch(() => {
         if (setError) {
@@ -89,16 +84,18 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
     })
 }
 
-function dispatchLoadingVessel (dispatch, calledFromCron, vesselIdentity) {
+function dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity) {
   batch(() => {
     dispatch(doNotAnimate(calledFromCron))
     if (removeError) {
       dispatch(removeError(undefined))
     }
-    dispatch(loadingVessel({
-      vesselIdentity,
-      calledFromCron
-    }))
+    dispatch(
+      loadingVessel({
+        vesselIdentity,
+        calledFromCron
+      })
+    )
   })
 }
 

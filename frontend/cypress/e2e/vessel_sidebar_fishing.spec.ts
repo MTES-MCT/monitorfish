@@ -148,7 +148,7 @@ context('Vessel sidebar fishing tab', () => {
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
-    cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 10000 })
+    cy.get('[data-cy="vessel-track-depth-three-days"] input').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })
 
@@ -163,8 +163,8 @@ context('Vessel sidebar fishing tab', () => {
     cy.wait('@previousTripPositions')
       .its('response.url')
       .should(
-        'eq',
-        'http://localhost:8880/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
+        'have.string',
+        '/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
           '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
           '&afterDateTime=2019-02-16T21:05:00.000Z&beforeDateTime=2019-10-15T13:01:00.000Z'
       )
@@ -179,8 +179,8 @@ context('Vessel sidebar fishing tab', () => {
     cy.wait('@previousTripPositions')
       .its('response.url')
       .should(
-        'eq',
-        'http://localhost:8880/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
+        'have.string',
+        '/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
           '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
           '&afterDateTime=2019-10-10T22:06:00.000Z&beforeDateTime=2019-10-22T12:06:00.000Z'
       )
@@ -191,7 +191,7 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy="custom-dates-show-last-positions"]').click()
     cy.get('*[data-cy="custom-dates-showed-text"]').should('not.exist')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
-    cy.get('*[data-cy^="vessel-track-depth-twelve-hours"]').should('have.class', 'rs-radio-checked')
+    cy.get('[data-cy="vessel-track-depth-twelve-hours"]').should('have.class', 'rs-radio-checked')
   })
 
   it('Single fishing activity Should be seen on map When clicking on the position icon', () => {
@@ -200,7 +200,7 @@ context('Vessel sidebar fishing tab', () => {
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
-    cy.get('*[data-cy^="vessel-track-depth-three-days"]').click({ timeout: 10000 })
+    cy.get('[data-cy="vessel-track-depth-three-days"] input').click({ timeout: 10000 })
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ force: true, timeout: 10000 })
 
     // When

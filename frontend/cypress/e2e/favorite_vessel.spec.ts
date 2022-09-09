@@ -88,7 +88,7 @@ context('Favorite Vessel', () => {
 
     // Given
     cy.get('*[data-cy="open-vessels-visibility"]').click()
-    cy.get('*[data-cy="global-vessel-track-depth-twelve-hours"]').click()
+    cy.get('[data-cy="global-vessel-track-depth-twelve-hours"] input').click()
     cy.get('*[data-cy="open-vessels-visibility"]').click()
     cy.get('.vessels').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()

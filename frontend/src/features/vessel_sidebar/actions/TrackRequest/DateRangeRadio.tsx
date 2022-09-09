@@ -21,12 +21,16 @@ export function DateRangeRadio({ defaultValue, onChange }: DateRangeRadioProps) 
       <ColumnsBox>
         <Column>
           <StyledRadio value={VesselTrackDepth.LAST_DEPARTURE}>le dernier DEP</StyledRadio>
-          <StyledRadio value={VesselTrackDepth.TWELVE_HOURS}>12 heures</StyledRadio>
+          <StyledRadio data-cy="vessel-track-depth-twelve-hours" value={VesselTrackDepth.TWELVE_HOURS}>
+            12 heures
+          </StyledRadio>
           <StyledRadio value={VesselTrackDepth.ONE_DAY}>24 heures</StyledRadio>
           <StyledRadio value={VesselTrackDepth.TWO_DAYS}>2 jours</StyledRadio>
         </Column>
         <Column>
-          <StyledRadio value={VesselTrackDepth.THREE_DAYS}>3 jours</StyledRadio>
+          <StyledRadio data-cy="vessel-track-depth-three-days" value={VesselTrackDepth.THREE_DAYS}>
+            3 jours
+          </StyledRadio>
           <StyledRadio value={VesselTrackDepth.ONE_WEEK}>1 semaine</StyledRadio>
           <StyledRadio value={VesselTrackDepth.TWO_WEEK}>2 semaines</StyledRadio>
           <StyledRadio value={VesselTrackDepth.ONE_MONTH}>1 mois</StyledRadio>

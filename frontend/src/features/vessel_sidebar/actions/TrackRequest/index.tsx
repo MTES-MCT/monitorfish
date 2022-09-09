@@ -1,23 +1,19 @@
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
-import modifyVesselTrackDepth from '../../../../domain/use_cases/vessel/modifyVesselTrackDepth'
+import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
+import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { DateRangePicker } from '../../../../ui/DateRangePicker'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import { ReactComponent as VesselSVG } from '../../../icons/Icone_navire.svg'
+import { DateRangeRadio } from './DateRangeRadio'
 import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
-import { TrackDepth } from './TrackDepth'
 
+import type { TrackRequestCustom, TrackRequestPredefined } from '../../../../domain/types/vessel'
 import type { DateRange } from '../../../../types'
-
-/**
- * @typedef {object} TrackRequestProps
- * @property {boolean} sidebarIsOpen
- */
 
 type TrackRequestProps = {
   isSidebarOpen: boolean
@@ -26,60 +22,54 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   const dispatch = useAppDispatch()
   const { healthcheckTextWarning } = useAppSelector(state => state.global)
   const { rightMenuIsOpen } = useAppSelector(state => state.global)
-  /** @type {{ selectedVesselCustomTrackRequest: VesselNS.TrackRequest }} */
-  const { selectedVesselCustomTrackRequest } = useAppSelector(state => state.vessel)
-  /** @type {{ selectedVesselIdentity: VesselNS.VesselIdentity }} */
+  const { selectedVesselTrackRequest } = useAppSelector(state => state.vessel)
   const { selectedVesselIdentity } = useAppSelector(state => state.vessel)
   const [isOpenedFromClick, setIsOpenedFromClick] = useState(false)
 
+  const dateRangePickerDefaultValue = useMemo(
+    () =>
+      selectedVesselTrackRequest.trackDepth === VesselTrackDepth.CUSTOM
+        ? ([selectedVesselTrackRequest.afterDateTime, selectedVesselTrackRequest.beforeDateTime] as DateRange)
+        : undefined,
+    [selectedVesselTrackRequest]
+  )
   const isOpen = useMemo(() => isSidebarOpen && isOpenedFromClick, [isSidebarOpen, isOpenedFromClick])
 
-  /** @type {[Date, Date] | undefined} */
-  const selectedVesselCustomDateRange = useMemo(
-    () =>
-      selectedVesselCustomTrackRequest.trackDepth === VesselTrackDepth.CUSTOM
-        ? ([
-            selectedVesselCustomTrackRequest.afterDateTime,
-            selectedVesselCustomTrackRequest.beforeDateTime
-          ] as DateRange)
-        : undefined,
-    [selectedVesselCustomTrackRequest]
-  )
+  const handleDateRangeRadioChange = useCallback(
+    (nextTrackDepth: Exclude<VesselTrackDepth, VesselTrackDepth.CUSTOM>) => {
+      if (!selectedVesselIdentity) {
+        return
+      }
 
-  /**
-   * @param {VesselNS.VesselTrackDepthKey} newTrackDepth
-   */
-  const updateTrackDepth = useCallback(
-    newTrackDepth => {
-      const trackRequest = getTrackRequestFromTrackDepth(newTrackDepth)
+      const trackRequest: TrackRequestPredefined = {
+        afterDateTime: null,
+        beforeDateTime: null,
+        trackDepth: nextTrackDepth
+      }
 
-      dispatch(modifyVesselTrackDepth(selectedVesselIdentity, trackRequest, false, false) as any)
+      // TODO Find why dispatch doesn't type actions correctly.
+      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest) as any)
     },
     [dispatch, selectedVesselIdentity]
   )
 
-  /**
-   * @param {[Date, Date]} dateRange
-   */
-  const updateDateRange = useCallback(
-    dateRange => {
-      if (!dateRange) {
-        updateTrackDepth(VesselTrackDepth.TWELVE_HOURS)
-
+  const handleDateRangePickerChange = useCallback(
+    (dateRange: DateRange) => {
+      if (!selectedVesselIdentity) {
         return
       }
 
       const [startDate, endDate] = dateRange
-      /** @type {VesselNS.TrackRequestCustom} */
-      const trackRequest = {
+      const trackRequest: TrackRequestCustom = {
         afterDateTime: startDate,
         beforeDateTime: endDate,
         trackDepth: VesselTrackDepth.CUSTOM
       }
 
-      dispatch(modifyVesselTrackDepth(selectedVesselIdentity, trackRequest, false, true) as any)
+      // TODO Find why dispatch doesn't type actions correctly.
+      dispatch(updateSelectedVesselTrackRequest(selectedVesselIdentity, trackRequest) as any)
     },
-    [dispatch, selectedVesselIdentity, updateTrackDepth]
+    [dispatch, selectedVesselIdentity]
   )
 
   return (
@@ -105,10 +95,18 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
         <Section>
           <p>Afficher la piste VMS du navire depuis :</p>
           <Field>
-            <TrackDepth onChange={updateTrackDepth} value={selectedVesselCustomTrackRequest.trackDepth} />
+            <DateRangeRadio
+              defaultValue={selectedVesselTrackRequest.trackDepth}
+              onChange={handleDateRangeRadioChange}
+            />
           </Field>
           <Field>
-            <DateRangePicker defaultValue={selectedVesselCustomDateRange} onChange={updateDateRange} withTime />
+            <DateRangePicker
+              key={selectedVesselTrackRequest.trackDepth}
+              defaultValue={dateRangePickerDefaultValue}
+              onChange={handleDateRangePickerChange}
+              withTime
+            />
           </Field>
           <ExportTrack />
         </Section>

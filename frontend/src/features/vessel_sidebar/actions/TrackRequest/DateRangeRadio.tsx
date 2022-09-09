@@ -4,20 +4,20 @@ import styled from 'styled-components'
 
 import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 
-/**
- * @typedef {object} TrackDepthProps
- * @property {VesselNS.VesselTrackDepthKey} value
- * @property {(newValue: Omit<VesselNS.VesselTrackDepthKey, 'CUSTOM'>) => void} onChange
- */
+import type { Promisable } from 'type-fest'
 
-/**
- * @param {TrackDepthProps} props
- */
-export function TrackDepth({ onChange, value }) {
-  const controlledValue = useMemo(() => (value !== VesselTrackDepth.CUSTOM ? value : undefined), [value])
+type DateRangeRadioProps = {
+  defaultValue?: VesselTrackDepth
+  onChange: (nextTrackDepth: Exclude<VesselTrackDepth, 'CUSTOM'>) => Promisable<void>
+}
+export function DateRangeRadio({ defaultValue, onChange }: DateRangeRadioProps) {
+  const normalizedDefaultValue = useMemo(
+    () => (defaultValue !== VesselTrackDepth.CUSTOM ? defaultValue : undefined),
+    [defaultValue]
+  )
 
   return (
-    <RadioGroup inline onChange={onChange} value={controlledValue}>
+    <RadioGroup key={defaultValue} defaultValue={normalizedDefaultValue} inline onChange={onChange as any}>
       <ColumnsBox>
         <Column>
           <StyledRadio value={VesselTrackDepth.LAST_DEPARTURE}>le dernier DEP</StyledRadio>

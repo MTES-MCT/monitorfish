@@ -1,4 +1,9 @@
-import { removeError, setError } from '../../shared_slices/Global'
+import { batch } from 'react-redux'
+
+import { getVesselVoyageFromAPI } from '../../../api/vessel'
+import NoLogbookMessagesFoundError from '../../../errors/NoLogbookMessagesFoundError'
+import { vesselsAreEquals } from '../../entities/vessel'
+import { getTrackRequestFromDates } from '../../entities/vesselTrackDepth'
 import {
   hideFishingActivitiesOnMap,
   loadFishingActivities,
@@ -8,17 +13,13 @@ import {
   setVoyage,
   showFishingActivitiesOnMap
 } from '../../shared_slices/FishingActivities'
-import NoLogbookMessagesFoundError from '../../../errors/NoLogbookMessagesFoundError'
-import { vesselsAreEquals } from '../../entities/vessel'
-import { batch } from 'react-redux'
-import { getTrackRequestFromDates } from '../../entities/vesselTrackDepth'
-import modifyVesselTrackDepth from './modifyVesselTrackDepth'
-import { getVesselVoyageFromAPI } from '../../../api/vessel'
+import { removeError, setError } from '../../shared_slices/Global'
+import { updateSelectedVesselTrackRequest } from './updateSelectedVesselTrackRequest'
 
 export const NAVIGATE_TO = {
-  PREVIOUS: 'PREVIOUS',
+  LAST: 'LAST',
   NEXT: 'NEXT',
-  LAST: 'LAST'
+  PREVIOUS: 'PREVIOUS'
 }
 
 /**
@@ -31,12 +32,8 @@ export const NAVIGATE_TO = {
 const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, getState) => {
   if (vesselIdentity) {
     const currentSelectedVesselIdentity = getState().vessel.selectedVesselIdentity
-    const {
-      lastFishingActivities,
-      isLastVoyage,
-      tripNumber,
-      fishingActivitiesAreShowedOnMap
-    } = getState().fishingActivities
+    const { areFishingActivitiesShowedOnMap, isLastVoyage, lastFishingActivities, tripNumber } =
+      getState().fishingActivities
 
     const updateVesselTrack = navigateTo && !fromCron
     const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
@@ -44,6 +41,7 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
 
     if (navigateTo === NAVIGATE_TO.NEXT && isLastVoyage) {
       console.error('This voyage is the last one.')
+
       return
     }
 
@@ -51,55 +49,60 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       dispatch(loadFishingActivities())
     }
 
-    getVesselVoyageFromAPI(vesselIdentity, navigateTo, tripNumber).then(voyage => {
-      if (!voyage) {
+    getVesselVoyageFromAPI(vesselIdentity, navigateTo, tripNumber)
+      .then(voyage => {
+        if (!voyage) {
+          batch(() => {
+            dispatch(setVoyage(emptyVoyage))
+            dispatch(hideFishingActivitiesOnMap())
+            dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
+          })
+
+          return
+        }
+
+        if (isSameVesselAsCurrentlyShowed && fromCron) {
+          if (gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage)) {
+            dispatch(setNextFishingActivities(voyage.logbookMessagesAndAlerts))
+            dispatch(removeError())
+          }
+
+          return
+        }
+
+        if (updateVesselTrack) {
+          modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishingActivitiesShowedOnMap)
+
+          return
+        }
+
+        dispatch(setLastVoyage(voyage))
+        dispatch(setVoyage(voyage))
+        if (areFishingActivitiesShowedOnMap) {
+          dispatch(showFishingActivitiesOnMap(true))
+        } else {
+          dispatch(hideFishingActivitiesOnMap())
+        }
+
+        dispatch(removeError())
+      })
+      .catch(error => {
+        console.error(error)
         batch(() => {
           dispatch(setVoyage(emptyVoyage))
-          dispatch(hideFishingActivitiesOnMap())
-          dispatch(setError(new NoLogbookMessagesFoundError('Ce navire n\'a pas envoyé de message JPE.')))
+          dispatch(setError(error))
         })
-        return
-      }
-
-      if (isSameVesselAsCurrentlyShowed && fromCron) {
-        if (gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage)) {
-          dispatch(setNextFishingActivities(voyage.logbookMessagesAndAlerts))
-          dispatch(removeError())
-        }
-        return
-      }
-
-      if (updateVesselTrack) {
-        modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, fishingActivitiesAreShowedOnMap)
-        return
-      }
-
-      dispatch(setLastVoyage(voyage))
-      dispatch(setVoyage(voyage))
-      if (fishingActivitiesAreShowedOnMap) {
-        dispatch(showFishingActivitiesOnMap(true))
-      } else {
-        dispatch(hideFishingActivitiesOnMap())
-      }
-
-      dispatch(removeError())
-    }).catch(error => {
-      console.error(error)
-      batch(() => {
-        dispatch(setVoyage(emptyVoyage))
-        dispatch(setError(error))
       })
-    })
   }
 }
 
-function modifyVesselTrackAndVoyage (voyage, dispatch, vesselIdentity, fishingActivitiesAreShowedOnMap) {
+function modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishingActivitiesShowedOnMap) {
   const { afterDateTime, beforeDateTime } = getDateRangeMinusFourHoursPlusOneHour(voyage.startDate, voyage.endDate)
 
   const trackRequest = getTrackRequestFromDates(afterDateTime, beforeDateTime)
-  dispatch(modifyVesselTrackDepth(vesselIdentity, trackRequest, true, false)).then(() => {
+  dispatch(updateSelectedVesselTrackRequest(vesselIdentity, trackRequest, true)).then(() => {
     dispatch(setVoyage(voyage))
-    if (fishingActivitiesAreShowedOnMap) {
+    if (areFishingActivitiesShowedOnMap) {
       batch(() => {
         dispatch(showFishingActivitiesOnMap(true))
       })
@@ -109,7 +112,7 @@ function modifyVesselTrackAndVoyage (voyage, dispatch, vesselIdentity, fishingAc
   })
 }
 
-function getDateRangeMinusFourHoursPlusOneHour (afterDateTime, beforeDateTime) {
+function getDateRangeMinusFourHoursPlusOneHour(afterDateTime, beforeDateTime) {
   if (!afterDateTime && !beforeDateTime) {
     return {
       afterDateTime: null,
@@ -119,11 +122,11 @@ function getDateRangeMinusFourHoursPlusOneHour (afterDateTime, beforeDateTime) {
 
   afterDateTime = new Date(afterDateTime)
   const fourHours = 4
-  afterDateTime.setTime(afterDateTime.getTime() - (fourHours * 60 * 60 * 1000))
+  afterDateTime.setTime(afterDateTime.getTime() - fourHours * 60 * 60 * 1000)
 
   beforeDateTime = new Date(beforeDateTime)
   const oneHour = 1
-  beforeDateTime.setTime(beforeDateTime.getTime() + (oneHour * 60 * 60 * 1000))
+  beforeDateTime.setTime(beforeDateTime.getTime() + oneHour * 60 * 60 * 1000)
 
   return {
     afterDateTime,
@@ -131,18 +134,22 @@ function getDateRangeMinusFourHoursPlusOneHour (afterDateTime, beforeDateTime) {
   }
 }
 
-function gotNewFishingActivitiesWithMoreMessagesOrAlerts (lastFishingActivities, voyage) {
-  return (lastFishingActivities.logbookMessages && !lastFishingActivities.logbookMessages.length) ||
-    (lastFishingActivities.alerts && voyage.logbookMessagesAndAlerts.alerts &&
+function gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage) {
+  return (
+    (lastFishingActivities.logbookMessages && !lastFishingActivities.logbookMessages.length) ||
+    (lastFishingActivities.alerts &&
+      voyage.logbookMessagesAndAlerts.alerts &&
       voyage.logbookMessagesAndAlerts.alerts.length > lastFishingActivities.alerts.length) ||
-    (lastFishingActivities.logbookMessages && voyage.logbookMessagesAndAlerts.logbookMessages &&
+    (lastFishingActivities.logbookMessages &&
+      voyage.logbookMessagesAndAlerts.logbookMessages &&
       voyage.logbookMessagesAndAlerts.logbookMessages.length > lastFishingActivities.logbookMessages.length)
+  )
 }
 
 const emptyVoyage = {
   logbookMessagesAndAlerts: {
-    logbookMessages: [],
-    alerts: []
+    alerts: [],
+    logbookMessages: []
   }
 }
 

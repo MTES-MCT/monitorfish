@@ -21,6 +21,8 @@ declare global {
         }>
       ): void
       fill(label: string, value: string): Chainable<Element>
+      fillDateRangePicker(label: string, startDate: Date, endDate: Date): Chainable<Element>
+      getDataCy(dataCy: string): Chainable<JQuery<HTMLElement>>
       loadPath(path: string): void
       toMatchImageSnapshot(settings: any): Chainable<Element>
     }

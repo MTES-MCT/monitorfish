@@ -92,6 +92,7 @@ function DateInputWithRef(
       {isStartDate ? 'Du ' : 'Au '}
       <NumberInput
         ref={dayInputRef}
+        data-cy={`date-range-picker-${isStartDate ? 'start' : 'end'}-day`}
         defaultValue={defaultValue && formatNumberAsDoubleDigit(defaultValue[2])}
         max={31}
         min={1}
@@ -106,6 +107,7 @@ function DateInputWithRef(
       /
       <NumberInput
         ref={monthInputRef}
+        data-cy={`date-range-picker-${isStartDate ? 'start' : 'end'}-month`}
         defaultValue={defaultValue && formatNumberAsDoubleDigit(defaultValue[1])}
         max={12}
         min={1}
@@ -120,6 +122,7 @@ function DateInputWithRef(
       /
       <NumberInput
         ref={yearInputRef}
+        data-cy={`date-range-picker-${isStartDate ? 'start' : 'end'}-year`}
         defaultValue={defaultValue && defaultValue[0]}
         max={currentUtcYear}
         min={2020}

@@ -1,5 +1,8 @@
 import { isEmpty } from 'ramda'
 
+import { fillDateRangePicker } from './commands/fillDateRangePicker'
+import { getDataCy } from './commands/getDataCy'
+
 function unquote(str: string): string {
   return str.replace(/(^")|("$)/g, '')
 }
@@ -90,3 +93,6 @@ Cypress.Commands.add('fill', (label: string, value: string): void => {
     throw new Error(`Could not find input or textarea with label "${label}".`)
   })
 })
+
+Cypress.Commands.add('fillDateRangePicker', fillDateRangePicker)
+Cypress.Commands.add('getDataCy', getDataCy)

@@ -8,63 +8,38 @@ const ReportingReducer = null
 const reportingSlice = createSlice({
   name: 'reporting',
   initialState: {
-    /** @type {CurrentAndArchivedReportings} */
-    currentAndArchivedReportings: {
-      current: [
-        {
-          id: '1',
-          type: 'ALERT',
-          vesselName: '',
-          internalReferenceNumber: '',
-          externalReferenceNumber: '',
-          ircs: '',
-          vesselIdentifier: '',
-          creationDate: new Date(),
-          validationDate: new Date(),
-          value: {
-            type: 'THREE_MILES_TRAWLING_ALERT'
-          }
-        },
-        {
-          id: '2',
-          type: 'OBSERVATION',
-          vesselName: '',
-          internalReferenceNumber: '',
-          externalReferenceNumber: '',
-          ircs: '',
-          vesselIdentifier: '',
-          creationDate: new Date(),
-          validationDate: new Date(),
-          value: {
-            type: 'GEAR'
-          }
-        }
-      ],
+    /** @type {CurrentAndArchivedReportingsOfSelectedVessel} */
+    currentAndArchivedReportingsOfSelectedVessel: {
+      current: [],
       archived: []
     },
     /** @type {Date} */
     archivedReportingsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
     loadingReporting: false,
-    vesselIdentity: null
+    vesselIdentity: undefined,
+    /** @type {Reporting[]} */
+    currentReportings: [],
+    editedReportingInSideWindow: undefined,
+    editedReporting: undefined
   },
   reducers: {
     /**
      * Set current and archived reporting
-     * @function setCurrentAndArchivedReportings
+     * @function setCurrentAndArchivedReportingsOfSelectedVessel
      * @memberOf ReportingReducer
      * @param {Object=} state
      * @param {{payload: {
-     *   currentAndArchivedReportings: CurrentAndArchivedReportings,
+     *   currentAndArchivedReportingsOfSelectedVessel: CurrentAndArchivedReportingsOfSelectedVessel,
      *   vesselIdentity: VesselIdentity
      * }}} action - the reporting
      */
-    setCurrentAndArchivedReportings (state, action) {
-      state.currentAndArchivedReportings = action.payload.currentAndArchivedReportings
+    setCurrentAndArchivedReportingsOfSelectedVessel (state, action) {
+      state.currentAndArchivedReportingsOfSelectedVessel = action.payload.currentAndArchivedReportingsOfSelectedVessel
       state.vesselIdentity = action.payload.vesselIdentity
       state.loadingReporting = false
     },
-    resetCurrentAndArchivedReportings (state) {
-      state.currentAndArchivedReportings = null
+    resetCurrentAndArchivedReportingsOfSelectedVessel (state) {
+      state.currentAndArchivedReportingsOfSelectedVessel = null
       state.vesselIdentity = null
     },
     /**
@@ -85,15 +60,73 @@ const reportingSlice = createSlice({
      */
     loadReporting (state) {
       state.loadingReporting = true
-    }
+    },
+    /**
+     * Set current reporting
+     * @function setCurrentReportings
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: Reporting[]}} action
+     */
+    setCurrentReportings (state, action) {
+      state.currentReportings = action.payload
+    },
+    /**
+     * Remove reporting from current reporting
+     * @function removeReportingsIdsFromCurrentReportings
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: number[]}} action - the ids of the reporting to remove
+     */
+    removeReportingsIdsFromCurrentReportings (state, action) {
+      state.currentReportings = state.currentReportings
+        .filter(reporting => !action.payload.find(reportingId => reportingId === reporting.id))
+    },
+    /**
+     * Set the edited reporting in side window
+     * @function setEditedReportingInSideWindow
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: boolean}} action
+     */
+    setEditedReportingInSideWindow (state, action) {
+      state.editedReportingInSideWindow = action.payload
+    },
+    /**
+     * Set the edited reporting
+     * @function setEditedReporting
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: boolean}} action
+     */
+    setEditedReporting (state, action) {
+      state.editedReporting = action.payload
+    },
+    /**
+     * Update a given current reporting
+     * @function updateCurrentReporting
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: Reporting}} action - the reporting to update
+     */
+    updateCurrentReporting (state, action) {
+      state.currentReportings = state.currentReportings
+        .filter(reporting => reporting.id !== action.payload.id)
+        .concat(action.payload)
+    },
   }
 })
 
 export const {
-  setCurrentAndArchivedReportings,
-  resetCurrentAndArchivedReportings,
+  setCurrentAndArchivedReportingsOfSelectedVessel,
+  resetCurrentAndArchivedReportingsOfSelectedVessel,
   setArchivedReportingsFromDate,
-  loadReporting
+  loadReporting,
+  setCurrentReportings,
+  removeReportingsIdsFromCurrentReportings,
+  setEditedReportingInSideWindow,
+  updateCurrentReporting,
+  setEditedReporting
 } = reportingSlice.actions
 
 export default reportingSlice.reducer

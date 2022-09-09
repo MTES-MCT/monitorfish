@@ -1,28 +1,44 @@
+import { getAlertNameFromType } from './alerts'
+import Fuse from 'fuse.js'
+import _ from 'lodash'
+
 export const ReportingType = {
   ALERT: {
     code: 'ALERT',
-    name: 'ALERTE',
     inputName: null,
-    isInfractionSuspicion: true
-  },
-  OBSERVATION: {
-    code: 'OBSERVATION',
-    name: 'OBSERVATION',
-    inputName: 'Observation',
-    isInfractionSuspicion: false
+    isInfractionSuspicion: true,
+    name: 'ALERTE'
   },
   INFRACTION_SUSPICION: {
     code: 'INFRACTION_SUSPICION',
-    name: 'SUSPICION d\'INFRACTION',
     inputName: 'Infraction (suspicion)',
-    isInfractionSuspicion: true
+    isInfractionSuspicion: true,
+    name: "SUSPICION d'INFRACTION"
+  },
+  OBSERVATION: {
+    code: 'OBSERVATION',
+    inputName: 'Observation',
+    isInfractionSuspicion: false,
+    name: 'OBSERVATION'
   }
 }
 
 export const ReportingOriginActor = {
+  DIRM: {
+    code: 'DIRM',
+    name: 'DIRM'
+  },
+  DML: {
+    code: 'DML',
+    name: 'DML'
+  },
   OPS: {
     code: 'OPS',
     name: 'OPS'
+  },
+  OTHER: {
+    code: 'OTHER',
+    name: 'Autre'
   },
   SIP: {
     code: 'SIP',
@@ -31,18 +47,6 @@ export const ReportingOriginActor = {
   UNIT: {
     code: 'UNIT',
     name: 'Unité'
-  },
-  DML: {
-    code: 'DML',
-    name: 'DML'
-  },
-  DIRM: {
-    code: 'DIRM',
-    name: 'DIRM'
-  },
-  OTHER: {
-    code: 'OTHER',
-    name: 'Autre'
   }
 }
 
@@ -109,3 +113,57 @@ export const FrenchDMLs = [
   'DML 2b',
   'DML 76/27'
 ]
+
+export const getReportingOrigin = (reporting, isHovering) => {
+  if (reporting.type === ReportingType.ALERT.code) {
+    return 'Alerte auto.'
+  }
+
+  switch (reporting.value.reportingActor) {
+    case ReportingOriginActor.UNIT.code:
+      return `${reporting.value.unit}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
+    case ReportingOriginActor.OPS.code:
+      return `Pôle OPS (${reporting.value.authorTrigram})`
+    case ReportingOriginActor.SIP.code:
+      return `Pôle SIP (${reporting.value.authorTrigram})`
+    case ReportingOriginActor.DIRM.code:
+      return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
+    case ReportingOriginActor.DML.code:
+      return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
+    case ReportingOriginActor.OTHER.code:
+      return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
+    default:
+      return ''
+  }
+}
+
+export function getReportingTitle(reporting, isHovering) {
+  if (reporting.type === ReportingType.ALERT.code) {
+    return getAlertNameFromType(reporting.value.type)
+  }
+
+  return isHovering ? `${reporting.value.title}: ${reporting.value.description}` : reporting.value.title
+}
+
+export const reportingSearchOptions = {
+  includeScore: true,
+  distance: 50,
+  threshold: 0.4,
+  keys: [
+    'vesselName',
+    'internalReferenceNumber',
+    'externalReferenceNumber',
+    'ircs',
+    'dml',
+    'reportingTitle'
+  ],
+  getFn: (reporting, path) => {
+    const value = Fuse.config.getFn(reporting, path)
+
+    if (_.isEqual(path, ['reportingTitle'])) {
+      return getReportingTitle(reporting)
+    }
+
+    return value
+  }
+}

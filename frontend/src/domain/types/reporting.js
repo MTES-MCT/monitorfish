@@ -13,7 +13,7 @@
  */
 
 /**
- * @typedef CurrentAndArchivedReportings
+ * @typedef CurrentAndArchivedReportingsOfSelectedVessel
  * @property {Reporting[]} current
  * @property {Reporting[]} archived
  */
@@ -38,4 +38,16 @@
  * @property {string | null} authorContact
  * @property {string} title
  * @property {string} description
+ */
+
+/**
+ * @typedef UpdateReporting
+ * @property {string} reportingActor
+ * @property {string | undefined} unit
+ * @property {string | undefined} authorTrigram
+ * @property {string | undefined} authorContact
+ * @property {string} title
+ * @property {string | undefined} description
+ * @property {string | undefined} natinfCode
+ * @property {string | undefined} dml
  */

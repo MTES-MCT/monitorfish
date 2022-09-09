@@ -1,9 +1,9 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import org.slf4j.Logger
@@ -21,25 +21,15 @@ class AddReporting(private val reportingRepository: ReportingRepository) {
         }
 
         newReporting.value as InfractionSuspicionOrObservationType
-        when (newReporting.value.reportingActor) {
-            ReportingActor.OPS -> requireNotNull(newReporting.value.authorTrigram) {
-                "An author trigram must be set"
+        newReporting.value.checkReportingActorAndFieldsRequirements()
+
+        if (newReporting.type == ReportingType.INFRACTION_SUSPICION) {
+            newReporting.value as InfractionSuspicion
+            require(!newReporting.value.dml.isNullOrEmpty()) {
+                "A DML must be set"
             }
-            ReportingActor.SIP -> requireNotNull(newReporting.value.authorTrigram) {
-                "An author trigram must be set"
-            }
-            ReportingActor.UNIT -> requireNotNull(newReporting.value.unit) {
-                "An unit must be set"
-            }
-            ReportingActor.DML -> requireNotNull(newReporting.value.authorContact) {
-                "An author contact must be set"
-            }
-            ReportingActor.DIRM -> requireNotNull(newReporting.value.authorContact) {
-                "An author contact must be set"
-            }
-            ReportingActor.OTHER -> requireNotNull(newReporting.value.authorContact) {
-                "An author contact must be set"
-            }
+
+            newReporting.value.seaFront = Reporting.getSeaFrontFromDML(newReporting.value.dml)
         }
 
         return reportingRepository.save(newReporting)

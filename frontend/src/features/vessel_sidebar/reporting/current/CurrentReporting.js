@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import Reporting from '../Reporting'
@@ -7,21 +7,24 @@ import { COLORS } from '../../../../constants/constants'
 import { operationalAlertTypes } from '../../../../domain/entities/alerts'
 import { ReportingType } from '../../../../domain/entities/reporting'
 import ConfirmDeletionModal from './ConfirmDeletionModal'
-import NewReporting from './NewReporting'
+import CreateOrEditReporting from './CreateOrEditReporting'
+import deleteReporting from '../../../../domain/use_cases/reporting/deleteReporting'
 
 const CurrentReporting = () => {
+  const dispatch = useDispatch()
   const {
-    /** @type {CurrentAndArchivedReportings} */
-    currentAndArchivedReportings
+    /** @type {CurrentAndArchivedReportingsOfSelectedVessel} */
+    currentAndArchivedReportingsOfSelectedVessel,
+    editedReporting
   } = useSelector(state => state.reporting)
   const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState(undefined)
 
   return <Wrapper>
-    <NewReporting/>
+    <CreateOrEditReporting/>
     {
       operationalAlertTypes
         .map(alertType => {
-          const alertReportings = currentAndArchivedReportings?.current
+          const alertReportings = currentAndArchivedReportingsOfSelectedVessel?.current
             ?.filter(reporting => reporting.type === ReportingType.ALERT.code && reporting.value.type === alertType.code)
             ?.sort((a, b) => sortByValidationDate(a, b))
 
@@ -38,8 +41,9 @@ const CurrentReporting = () => {
         })
     }
     {
-      currentAndArchivedReportings?.current
+      currentAndArchivedReportingsOfSelectedVessel?.current
         ?.filter(reporting => reporting.type !== ReportingType.ALERT.code)
+        ?.filter(reporting => reporting.id !== editedReporting?.id)
         .map(reporting => {
           return <Reporting
             key={reporting.id}
@@ -49,13 +53,14 @@ const CurrentReporting = () => {
         })
     }
     {
-      !currentAndArchivedReportings?.current?.length
+      !currentAndArchivedReportingsOfSelectedVessel?.current?.length
         ? <NoReporting>Aucun signalement</NoReporting>
         : null
     }
     <ConfirmDeletionModal
       closeModal={() => setDeletionModalIsOpenForId(null)}
-      modalIsOpenForId={deletionModalIsOpenForId}
+      isOpened={deletionModalIsOpenForId}
+      validateCallback={() => dispatch(deleteReporting(deletionModalIsOpenForId))}
     />
   </Wrapper>
 }

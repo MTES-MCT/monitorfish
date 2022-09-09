@@ -1,72 +1,66 @@
-import React, { useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
+import React, { forwardRef, useEffect, useState } from 'react'
+import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 
-import SideWindowMenu from './SideWindowMenu'
-import { sideWindowMenu } from '../../domain/entities/sideWindow'
+import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
+import { COLORS } from '../../constants/constants'
 import { AlertsSubMenu } from '../../domain/entities/alerts'
-import SideWindowSubMenu from './SideWindowSubMenu'
-import Alerts from './alerts/Alerts'
+import { sideWindowMenu } from '../../domain/entities/sideWindow'
+import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
+import { openSideWindowTab } from '../../domain/shared_slices/Global'
+import { setEditedReportingInSideWindow } from '../../domain/shared_slices/Reporting'
+import getOperationalAlerts from '../../domain/use_cases/alert/getOperationalAlerts'
+import getSilencedAlerts from '../../domain/use_cases/alert/getSilencedAlerts'
+import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
+import getAllCurrentReportings from '../../domain/use_cases/reporting/getAllCurrentReportings'
+import { usePrevious } from '../../hooks/usePrevious'
+import AlertsAndReportings from './alerts_reportings/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import BeaconMalfunctionsBoard from './beacon_malfunctions/BeaconMalfunctionsBoard'
-import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
-import { COLORS } from '../../constants/constants'
-import { usePrevious } from '../../hooks/usePrevious'
-import { useDispatch, useSelector } from 'react-redux'
-import { openSideWindowTab, setSideWindowAsOpen } from '../../domain/shared_slices/Global'
-import getOperationalAlerts from '../../domain/use_cases/alert/getOperationalAlerts'
-import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
-import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
-import getSilencedAlerts from '../../domain/use_cases/alert/getSilencedAlerts'
+import SideWindowMenu from './SideWindowMenu'
+import SideWindowSubMenu from './SideWindowSubMenu'
 
-const SideWindow = ({ fromTab }) => {
-  const {
-    openedSideWindowTab
-  } = useSelector(state => state.global)
-  const {
-    beaconMalfunctions,
-    openedBeaconMalfunctionInKanban
-  } = useSelector(state => state.beaconMalfunction)
-  const {
-    alerts,
-    focusOnAlert
-  } = useSelector(state => state.alert)
+const SideWindow = forwardRef(({ isFromURL }, ref) => {
+  const openedSideWindowTab = useSelector(state => state.global.openedSideWindowTab)
+  const openedBeaconMalfunctionInKanban = useSelector(state => state.beaconMalfunction.openedBeaconMalfunctionInKanban)
+  const editedReportingInSideWindow = useSelector(state => state.reporting.editedReportingInSideWindow)
+  const focusOnAlert = useSelector(state => state.alert.focusOnAlert)
   const dispatch = useDispatch()
-  const baseRef = useRef()
   const [isPreloading, setIsPreloading] = useState(true)
   const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
-  const [selectedSubMenu, setSelectedSubMenu] = useState(openedSideWindowTab === sideWindowMenu.ALERTS.code
-    ? AlertsSubMenu.MEMN
-    : BeaconMalfunctionsSubMenu.MALFUNCTIONING)
+  const [selectedSubMenu, setSelectedSubMenu] = useState(
+    openedSideWindowTab === sideWindowMenu.ALERTS.code ? AlertsSubMenu.MEMN : BeaconMalfunctionsSubMenu.MALFUNCTIONING
+  )
+  const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [subMenuIsFixed, setSubMenuIsFixed] = useState(false)
 
   useEffect(() => {
-    if (openedSideWindowTab) {
-      dispatch(setSideWindowAsOpen())
-
-      setTimeout(() => {
-        setIsPreloading(false)
-      }, 500)
-    }
-  }, [openedSideWindowTab])
+    setTimeout(() => {
+      setIsPreloading(false)
+    }, 500)
+  }, [])
 
   useEffect(() => {
-    setIsOverlayed(!!openedBeaconMalfunctionInKanban)
+    if (editedReportingInSideWindow || openedBeaconMalfunctionInKanban) {
+      setIsOverlayed(true)
 
-    if (openedSideWindowTab === sideWindowMenu.ALERTS.code) {
-      setIsOverlayed(false)
+      return
     }
-  }, [openedBeaconMalfunctionInKanban, openedSideWindowTab])
+
+    setIsOverlayed(false)
+  }, [openedBeaconMalfunctionInKanban, editedReportingInSideWindow, openedSideWindowTab])
 
   useEffect(() => {
-    if (fromTab) {
+    if (isFromURL) {
       dispatch(getOperationalAlerts())
       dispatch(getAllBeaconMalfunctions())
       dispatch(getSilencedAlerts())
+      dispatch(getAllCurrentReportings())
 
       dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
     }
-  }, [fromTab])
+  }, [isFromURL])
 
   useEffect(() => {
     if (openedSideWindowTab === previousOpenedSideWindowTab) {
@@ -87,73 +81,68 @@ const SideWindow = ({ fromTab }) => {
     }
   }, [openedSideWindowTab, setSelectedSubMenu, focusOnAlert])
 
+  function closeRightSidebar() {
+    dispatch(closeBeaconMalfunctionInKanban())
+    dispatch(setEditedReportingInSideWindow(null))
+  }
+
   const beaconMalfunctionBoardGrayOverlayStyle = {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    opacity: isOverlayed ? 0.5 : 0,
     background: COLORS.charcoal,
+    height: '100%',
+    opacity: isOverlayed ? 0.5 : 0,
+    position: 'absolute',
+    width: '100%',
     zIndex: isOverlayed ? 11 : -9999
   }
 
-  return <>{openedSideWindowTab
-    ? <Wrapper ref={baseRef}>
-      <SideWindowMenu
-        selectedMenu={openedSideWindowTab}
-      />
+  return (
+    <Wrapper ref={ref}>
+      <SideWindowMenu selectedMenu={openedSideWindowTab} />
       <SideWindowSubMenu
-        beaconMalfunctions={beaconMalfunctions}
-        alerts={alerts}
+        fixed={subMenuIsFixed}
         selectedMenu={openedSideWindowTab}
         selectedSubMenu={selectedSubMenu}
-        setSelectedSubMenu={setSelectedSubMenu}
-        fixed={subMenuIsFixed}
+        selectedTab={selectedTab}
         setIsFixed={setSubMenuIsFixed}
+        setSelectedSubMenu={setSelectedSubMenu}
       />
-      <BeaconMalfunctionsBoardGrayOverlay
-        style={beaconMalfunctionBoardGrayOverlayStyle}
-        onClick={() => dispatch(closeBeaconMalfunctionInKanban())}
-      />
-      {
-        isPreloading
-          ? <Loading>
-            <FulfillingBouncingCircleSpinner
-              color={COLORS.grayShadow}
-              className={'update-vessels'}
-              size={100}/>
-            <Text data-cy={'first-loader'}>Chargement...</Text>
-          </Loading>
-          : <Content style={contentStyle(subMenuIsFixed)}>
-            {
-              openedSideWindowTab === sideWindowMenu.ALERTS.code &&
-              <Alerts
-                selectedSubMenu={selectedSubMenu}
-                setSelectedSubMenu={setSelectedSubMenu}
-                baseRef={baseRef}
-              />
-            }
-            {
-              openedSideWindowTab === sideWindowMenu.BEACON_MALFUNCTIONS.code &&
-              <BeaconMalfunctionsBoard
-                baseRef={baseRef}
-              />
-            }
-          </Content>
-      }
+      <BeaconMalfunctionsBoardGrayOverlay onClick={closeRightSidebar} style={beaconMalfunctionBoardGrayOverlayStyle} />
+      {isPreloading && (
+        <Loading>
+          <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.grayShadow} size={100} />
+          <Text data-cy="first-loader">Chargement...</Text>
+        </Loading>
+      )}
+      {!isPreloading && (
+        <Content height={self.innerHeight + 50} isFixed={subMenuIsFixed}>
+          {openedSideWindowTab === sideWindowMenu.ALERTS.code && (
+            <AlertsAndReportings
+              baseRef={ref}
+              selectedSubMenu={selectedSubMenu}
+              selectedTab={selectedTab}
+              setSelectedSubMenu={setSelectedSubMenu}
+              setSelectedTab={setSelectedTab}
+            />
+          )}
+          {openedSideWindowTab === sideWindowMenu.BEACON_MALFUNCTIONS.code && <BeaconMalfunctionsBoard baseRef={ref} />}
+        </Content>
+      )}
     </Wrapper>
-    : null
-  }
-  </>
+  )
+})
+
+export const AlertAndReportingTab = {
+  ALERT: 'ALERT',
+  REPORTING: 'REPORTING'
 }
 
-const Content = styled.div``
-const contentStyle = fixed => ({
-  marginLeft: fixed ? 0 : 30,
-  width: '100%',
-  height: self.innerHeight + 50,
-  minHeight: 1000,
-  overflow: 'auto'
-})
+const Content = styled.div`
+  margin-left: ${p => (p.fixed ? 0 : 30)}px;
+  width: 100%;
+  height: ${p => p.height}px;
+  min-height: 1000px;
+  overflow: auto;
+`
 
 const BeaconMalfunctionsBoardGrayOverlay = styled.div``
 
@@ -175,7 +164,7 @@ const Wrapper = styled.div`
   background: ${COLORS.white};
 
   @keyframes blink {
-    0%   {
+    0% {
       background: ${COLORS.background};
     }
     50% {
@@ -201,63 +190,6 @@ const Wrapper = styled.div`
     }
   }
 
-  .rs-btn rs-btn-default rs-picker-toggle {
-    background: #1675e0 !important;
-  }
-  .rs-picker-toggle-wrapper {
-    display: block;
-  }
-  .rs-picker-select-menu-item.rs-picker-select-menu-item-active, .rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover,
-  .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover, .rs-picker-select-menu-item.rs-picker-select-menu-item-focus, .rs-picker-select-menu-item {
-    color: #707785;
-    font-size: 13px;
-    font-weight: normal;
-  }
-  .rs-picker-select-menu-items {
-    overflow-y: unset;
-  }
-  .rs-picker-select {
-    width: 155px !important;
-    margin: 8px 10px 0 10px !important;
-    background: ${props => props.background};
-    height: 30px;
-  }
-  .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn {
-    padding-right: 27px;
-    padding-left: 10px;
-    height: 15px;
-    padding-top: 5px;
-    padding-bottom: 8px;
-  }
-  .rs-picker-toggle.rs-btn {
-    padding-left: 5px !important;
-  }
-  .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-caret, .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-clean {
-    top: 5px;
-  }
-
-  .rs-btn-toggle {
-    background: #C8DCE6 0% 0% no-repeat padding-box;
-    border: 1px solid #707785;
-    border-radius: 7px;
-    margin: 3px 7px 0 7px;
-  }
-  .rs-btn-toggle::after {
-    background: ${COLORS.slateGray} 0% 0% no-repeat padding-box;
-    top: 1px;
-  }
-  .rs-toggle {
-    margin-right: 5px;
-    margin-left: 5px;
-  }
-  .rs-toggle > input {
-    width: unset;
-  }
-
-  .rs-list-item {
-    box-shadow: unset;
-  }
-
   .loader {
     width: 15px;
     height: 15px;
@@ -269,14 +201,14 @@ const Wrapper = styled.div`
     animation: rotation 1s linear infinite;
     margin-right: 5px;
     margin-top: 2px;
-   }
+  }
 
-    @keyframes rotation {
+  @keyframes rotation {
     0% {
-        transform: rotate(0deg);
+      transform: rotate(0deg);
     }
     100% {
-        transform: rotate(360deg);
+      transform: rotate(360deg);
     }
   }
 `

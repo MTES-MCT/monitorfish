@@ -68,20 +68,20 @@ const PendingAlertRow = ({ alert, index, showSilencedAlertForIndex, setShowSilen
     {
       !alert.isValidated && !alert.silencedPeriod
         ? <FlexboxGrid>
-          <FlexboxGrid.Item style={timeAgoColumnStyle} title={new Date(alert.creationDateTimestamp)}>
-            {timeago.format(alert.creationDateTimestamp, 'fr')}
+          <FlexboxGrid.Item style={timeAgoColumnStyle} title={alert.creationDate}>
+            {timeago.format(new Date(alert.creationDate).getTime(), 'fr')}
           </FlexboxGrid.Item>
           <FlexboxGrid.Item style={alertTypeStyle}>
-            {getAlertNameFromType(alert.type)}
+            {getAlertNameFromType(alert.value.type)}
           </FlexboxGrid.Item>
           <FlexboxGrid.Item style={alertNatinfStyle}>
-            {alert.natinfCode}
+            {alert.value.natinfCode}
           </FlexboxGrid.Item>
           <FlexboxGrid.Item style={vesselNameColumnStyle}>
             <Flag
-              title={countries.getName(alert.flagState, 'fr')}
+              title={countries.getName(alert.value.flagState?.toLowerCase(), 'fr')}
               rel="preload"
-              src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.flagState}.svg`}
+              src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.value.flagState?.toLowerCase()}.svg`}
               style={{ width: 18, marginRight: 5, marginLeft: 0, marginTop: 1 }}
             />
             {alert.vesselName}
@@ -96,7 +96,7 @@ const PendingAlertRow = ({ alert, index, showSilencedAlertForIndex, setShowSilen
               onClick={() => {
                 const vesselIdentity = { ...alert }
                 dispatch(showVessel(vesselIdentity, false, false, null))
-                dispatch(getVesselVoyage(vesselIdentity, null, false))
+                dispatch(getVesselVoyage(vesselIdentity, undefined, false))
               }}
               src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
             />

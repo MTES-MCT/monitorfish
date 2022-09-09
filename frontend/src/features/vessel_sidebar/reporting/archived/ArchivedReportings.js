@@ -10,19 +10,19 @@ import { setArchivedReportingsFromDate } from '../../../../domain/shared_slices/
 const ArchivedReportings = () => {
   const dispatch = useDispatch()
   const {
-    /** @type {CurrentAndArchivedReportings} */
-    currentAndArchivedReportings,
+    /** @type {CurrentAndArchivedReportingsOfSelectedVessel} */
+    currentAndArchivedReportingsOfSelectedVessel,
     archivedReportingsFromDate
   } = useSelector(state => state.reporting)
 
   /** @type {Object.<string, Reporting[]>} yearsToReportings */
   const yearsToReportings = useMemo(() => {
     let nextYearsToControls
-    if (currentAndArchivedReportings?.archived) {
-      nextYearsToControls = getYearsToReportingList(archivedReportingsFromDate, currentAndArchivedReportings.archived)
+    if (currentAndArchivedReportingsOfSelectedVessel?.archived) {
+      nextYearsToControls = getYearsToReportingList(archivedReportingsFromDate, currentAndArchivedReportingsOfSelectedVessel.archived)
     }
     return nextYearsToControls
-  }, [currentAndArchivedReportings, archivedReportingsFromDate])
+  }, [currentAndArchivedReportingsOfSelectedVessel, archivedReportingsFromDate])
 
   function seeMore () {
     const nextDate = new Date(archivedReportingsFromDate.getTime())

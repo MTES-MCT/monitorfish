@@ -66,6 +66,11 @@ class JpaLastPositionRepository(private val dbLastPositionRepository: DBLastPosi
         dbLastPositionRepository.removeAlertByVesselIdentifierEquals(vesselIdentifier.name, value, alertType.name, isValidated)
     }
 
+    override fun findUnderCharterForVessel(vesselIdentifier: VesselIdentifier,
+                                           value: String): Boolean {
+        return dbLastPositionRepository.findUnderCharterByVesselIdentifierEquals(vesselIdentifier.name, value)
+    }
+
     override fun deleteAll() {
         dbLastPositionRepository.deleteAllInBatch()
     }

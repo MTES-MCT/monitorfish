@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
@@ -6,63 +6,49 @@ import { Flag } from '../../vessel_list/tableCells'
 import { useDispatch, useSelector } from 'react-redux'
 import { FlexboxGrid, List } from 'rsuite'
 import countries from 'i18n-iso-countries'
-import { getAlertNameFromType } from '../../../domain/entities/alerts'
+import { getAlertNameFromType, alertSearchOptions } from '../../../domain/entities/alerts'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
-import { getDateDiffInDays, getDateTime, getTextForSearch } from '../../../utils'
+import { getDateDiffInDays, getDateTime } from '../../../utils'
 import * as timeago from 'timeago.js'
 import reactivateSilencedAlert from '../../../domain/use_cases/alert/reactivateSilencedAlert'
+import Fuse from 'fuse.js'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
- * @param silencedAlerts
+ * @param silencedSeaFrontAlerts
  * @param baseRef
  * @return {JSX.Element}
  * @constructor
  */
-const SilencedAlertsList = ({ silencedAlerts }) => {
+const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
   const dispatch = useDispatch()
   const {
     focusOnAlert
   } = useSelector(state => state.alert)
   const baseUrl = window.location.origin
-  const [sortedAlerts, setSortedAlerts] = useState([])
   const [sortColumn] = useState('silencedBeforeDate')
   const [sortType] = useState(SortType.ASC)
-  const [filteredAlerts, setFilteredAlerts] = useState([])
   const [searched, setSearched] = useState(undefined)
 
-  useEffect(() => {
-    if (filteredAlerts) {
-      const sortedAlerts = filteredAlerts
-        .slice()
-        .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
+  const fuse = useMemo(() =>
+    new Fuse(silencedSeaFrontAlerts, alertSearchOptions),
+    [silencedSeaFrontAlerts])
 
-      setSortedAlerts(sortedAlerts)
-    }
-  }, [filteredAlerts, sortColumn, sortType])
-
-  useEffect(() => {
-    if (!silencedAlerts) {
-      return
-    }
-
+  const filteredAlerts = useMemo(() => {
     if (!searched?.length || searched?.length <= 1) {
-      setFilteredAlerts(silencedAlerts)
-      return
+      return silencedSeaFrontAlerts
     }
 
-    if (searched?.length > 1) {
-      const nextFilteredAlerts = silencedAlerts.filter(alert =>
-        getTextForSearch(getAlertNameFromType(alert.type)).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.vesselName).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.internalReferenceNumber).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.externalReferenceNumber).includes(getTextForSearch(searched)) ||
-        getTextForSearch(alert.ircs).includes(getTextForSearch(searched)))
-      setFilteredAlerts(nextFilteredAlerts)
-    }
-  }, [silencedAlerts, searched])
+    return fuse.search(searched).map(result => result.item)
+  }, [silencedSeaFrontAlerts, searched, fuse])
+
+  const sortedAlerts = useMemo(() => {
+    return filteredAlerts
+      .slice()
+      .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
+  }, [filteredAlerts, sortColumn, sortType])
 
   const reactivateSilencedAlertCallback = useCallback(id => {
     dispatch(reactivateSilencedAlert(id))
@@ -138,9 +124,9 @@ const SilencedAlertsList = ({ silencedAlerts }) => {
                   ? <FlexboxGrid>
                     <FlexboxGrid.Item style={vesselNameColumnStyle}>
                       <Flag
-                        title={countries.getName(alert.flagState, 'fr')}
+                        title={countries.getName(alert.value.flagState?.toLowerCase(), 'fr')}
                         rel="preload"
-                        src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.flagState}.svg`}
+                        src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.value.flagState?.toLowerCase()}.svg`}
                         style={{ width: 18, marginRight: 5, marginLeft: 0, marginTop: 1 }}
                       />
                       {alert.vesselName}
@@ -149,7 +135,7 @@ const SilencedAlertsList = ({ silencedAlerts }) => {
                       {getAlertNameFromType(alert.type)}
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={alertNatinfStyle}>
-                      {alert.natinfCode}
+                      {alert.value.natinfCode}
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={ignoredForStyle}>
                       {
@@ -173,7 +159,7 @@ const SilencedAlertsList = ({ silencedAlerts }) => {
                         onClick={() => {
                           const vesselIdentity = { ...alert }
                           dispatch(showVessel(vesselIdentity, false, false, null))
-                          dispatch(getVesselVoyage(vesselIdentity, null, false))
+                          dispatch(getVesselVoyage(vesselIdentity, undefined, false))
                         }}
                         src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       />

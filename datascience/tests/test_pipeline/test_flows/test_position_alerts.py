@@ -16,7 +16,7 @@ from src.pipeline.flows.position_alerts import (
     flow,
     get_alert_type_zones_table,
     get_fishing_gears_table,
-    make_alerts,
+    get_vessels_in_alert,
     make_fishing_gears_query,
     make_positions_in_alert_query,
 )
@@ -359,7 +359,7 @@ def test_filter_on_gears():
     )
 
 
-def test_make_alerts():
+def test_get_vessels_in_alert():
 
     now = datetime(2020, 1, 1, 0, 0, 0)
     td = timedelta(hours=1)
@@ -386,44 +386,25 @@ def test_make_alerts():
         }
     )
 
-    alert_type = "USER_DEFINED_ALERT_TYPE"
-    alert_config_name = "ALERTE_CHALUTAGE_CONFIG_1"
+    vessels_in_alert = get_vessels_in_alert.run(positions_in_alert)
 
-    alerts = make_alerts.run(
-        positions_in_alert, alert_type=alert_type, alert_config_name=alert_config_name
-    )
-
-    expected_alerts = pd.DataFrame(
+    expected_vessels_in_alert = pd.DataFrame(
         {
-            "vessel_name": ["v_A", "v_B"],
-            "internal_reference_number": ["A", "B"],
-            "external_reference_number": ["AA", "BB"],
+            "cfr": ["A", "B"],
+            "external_immatriculation": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
+            "vessel_name": ["v_A", "v_B"],
+            "flag_state": ["FR", "FR"],
+            "facade": ["NAMO", "MEMN"],
+            "risk_factor": [1.23, None],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "creation_date": [now, now - 0.5 * td],
-            "type": [alert_type, alert_type],
-            "facade": ["NAMO", "MEMN"],
-            "value": [
-                {
-                    "seaFront": "NAMO",
-                    "flagState": "FR",
-                    "type": alert_type,
-                    "riskFactor": 1.23,
-                },
-                {
-                    "seaFront": "MEMN",
-                    "flagState": "FR",
-                    "type": alert_type,
-                    "riskFactor": None,
-                },
-            ],
-            "alert_config_name": [alert_config_name, alert_config_name],
         }
     )
-    pd.testing.assert_frame_equal(alerts, expected_alerts)
+    pd.testing.assert_frame_equal(vessels_in_alert, expected_vessels_in_alert)
 
 
 def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test_data):

@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { contractRightMenu } from '../../domain/shared_slices/Global'
+import { contractRightMenu, expandRightMenu } from '../../domain/shared_slices/Global'
 import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
 
 const RightMenuOnHoverArea = () => {
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
+  const mapToolOpened = useSelector(state => state.global.mapToolOpened)
   const dispatch = useDispatch()
 
   const wrapperRef = useRef(null)
@@ -13,19 +14,24 @@ const RightMenuOnHoverArea = () => {
   const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, selectedVessel)
 
   useEffect(() => {
-    if (clickedOutsideComponent) {
+    if (clickedOutsideComponent && mapToolOpened === undefined) {
       dispatch(contractRightMenu())
+    } else {
+      dispatch(expandRightMenu())
     }
-  }, [clickedOutsideComponent])
+  }, [clickedOutsideComponent, mapToolOpened])
 
   return <>
     {
       selectedVessel
         ? <Area
+        data-cy={'areaa'}
           ref={wrapperRef}
           onMouseLeave={() => {
             clearTimeout(timeOutRef.current)
-            timeOutRef.current = setTimeout(() => dispatch(contractRightMenu()), 3000)
+            if (mapToolOpened === undefined) {
+              timeOutRef.current = setTimeout(() => dispatch(contractRightMenu()), 3000)
+            }
           }}
         />
         : null
@@ -34,7 +40,7 @@ const RightMenuOnHoverArea = () => {
 }
 
 const Area = styled.div`
-  height: 300px;
+  height: 500px;
   right: 0;
   width: 550px;
   opacity: 0;

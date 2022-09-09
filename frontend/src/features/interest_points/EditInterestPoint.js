@@ -280,6 +280,8 @@ const Wrapper = styled(MapComponentStyle)`
   position: absolute;
   display: inline-block;
   transition: all 0.5s;
+  box-shadow: 0px 3px 10px rgba(59, 69, 89, 0.5);
+  z-index: 999;
 `
 
 const iconStyle = css`

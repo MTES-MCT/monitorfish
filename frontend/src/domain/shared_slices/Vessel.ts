@@ -30,8 +30,10 @@ function filterFirstFoundReportingTypes(reportingTypes, vesselReportingsToRemove
   let vesselReportingWithoutFirstFoundReportingTypes = reportingTypes
 
   vesselReportingsToRemove.forEach(reportingToRemove => {
-    vesselReportingWithoutFirstFoundReportingTypes = vesselReportingWithoutFirstFoundReportingTypes
-      .reduce(filterFirstFoundReportingType(reportingToRemove.type), [])
+    vesselReportingWithoutFirstFoundReportingTypes = vesselReportingWithoutFirstFoundReportingTypes.reduce(
+      filterFirstFoundReportingType(reportingToRemove.type),
+      []
+    )
   })
 
   return vesselReportingWithoutFirstFoundReportingTypes
@@ -315,7 +317,7 @@ const vesselSlice = createSlice({
      *   }[]
      * }} action - the reportings to remove
      */
-    removeVesselReportings (state, action) {
+    removeVesselReportings(state, action) {
       const vesselsIds = action.payload.map(reporting => reporting.vesselId)
       state.vessels = state.vessels.map(vessel => {
         if (!vesselsIds.find(vesselId => vessel.vesselId === vesselId)) {
@@ -323,14 +325,19 @@ const vesselSlice = createSlice({
         }
 
         const vesselReportingsToRemove = action.payload.filter(reporting => vessel.vesselId === reporting.vesselId)
-        let vesselReportingWithoutFirstFoundReportingTypes = filterFirstFoundReportingTypes(vessel.vesselProperties.reportings, vesselReportingsToRemove)
+        const vesselReportingWithoutFirstFoundReportingTypes = filterFirstFoundReportingTypes(
+          vessel.vesselProperties.reportings,
+          vesselReportingsToRemove
+        )
 
         return {
           ...vessel,
           vesselProperties: {
             ...vessel.vesselProperties,
-            reportings: vesselReportingWithoutFirstFoundReportingTypes,
-            hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+            hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType =>
+              reportingIsAnInfractionSuspicion(reportingType)
+            ),
+            reportings: vesselReportingWithoutFirstFoundReportingTypes
           }
         }
       })
@@ -342,12 +349,17 @@ const vesselSlice = createSlice({
       const selectedVesselId = Vessel.getVesselFeatureId(state.selectedVesselIdentity)
       if (vesselsIds.find(vesselId => selectedVesselId === vesselId)) {
         const vesselReportingsToRemove = action.payload.filter(reporting => selectedVesselId === reporting.vesselId)
-        let vesselReportingWithoutFirstFoundReportingTypes = filterFirstFoundReportingTypes(state.selectedVessel.reportings, vesselReportingsToRemove)
+        const vesselReportingWithoutFirstFoundReportingTypes = filterFirstFoundReportingTypes(
+          state.selectedVessel.reportings,
+          vesselReportingsToRemove
+        )
 
         state.selectedVessel = {
           ...state.selectedVessel,
-          reportings: vesselReportingWithoutFirstFoundReportingTypes,
-          hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType => reportingIsAnInfractionSuspicion(reportingType))
+          hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType =>
+            reportingIsAnInfractionSuspicion(reportingType)
+          ),
+          reportings: vesselReportingWithoutFirstFoundReportingTypes
         }
       }
     },

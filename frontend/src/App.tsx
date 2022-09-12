@@ -1,13 +1,14 @@
 import countries from 'i18n-iso-countries'
+import { useRef } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import styled, { ThemeProvider } from 'styled-components'
 
 import APIWorker from './api/APIWorker'
-import {BackofficeMode} from './api/BackofficeMode'
+import { BackofficeMode } from './api/BackofficeMode'
 import NamespaceContext from './domain/context/NamespaceContext'
-import {ErrorToastNotification} from './features/commonComponents/ErrorToastNotification'
+import { ErrorToastNotification } from './features/commonComponents/ErrorToastNotification'
 import FavoriteVessels from './features/favorite_vessels/FavoriteVessels'
 import Healthcheck from './features/healthcheck/Healthcheck'
 import InterestPoint from './features/interest_points/InterestPoint'
@@ -15,7 +16,7 @@ import LayersSidebar from './features/layers/LayersSidebar'
 import Map from './features/map/Map'
 import Measurement from './features/measurements/Measurement'
 import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewFilteredVessels'
-import AlertsMapButton from "./features/side_window/alerts_reportings/AlertsMapButton";
+import AlertsMapButton from './features/side_window/alerts_reportings/AlertsMapButton'
 import BeaconMalfunctionsMapButton from './features/side_window/beacon_malfunctions/BeaconMalfunctionsMapButton'
 import SideWindow from './features/side_window/SideWindow'
 import SideWindowLauncher from './features/side_window/SideWindowLauncher'
@@ -34,7 +35,6 @@ import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
 import { backofficeStore, homeStore, backofficePersistor } from './store'
 import { theme } from './ui/theme'
 import { isBrowserSupported } from './utils/isBrowserSupported'
-import {useRef} from "react";
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
@@ -94,9 +94,9 @@ function HomePage() {
       <Switch>
         <Route exact path="/side_window">
           <SideWindow
-            // @ts-ignore
-            isFromURL={true}
             ref={ref}
+            // @ts-ignore
+            isFromURL
           />
         </Route>
         <Route exact path="/">

@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Set
 
+import geopandas as gpd
 import h3
 import pandas as pd
 import prefect
@@ -13,6 +14,7 @@ from vptree import VPTree
 from config import (
     ANCHORAGES_H3_CELL_RESOLUTION,
     ANCHORAGES_URL,
+    LIBRARY_LOCATION,
     PROXIES,
     ROOT_DIRECTORY,
 )
@@ -148,7 +150,7 @@ def extract_ers_ports_locodes() -> Set[str]:
             WHEN log_type = 'DEP' THEN value->>'departurePort'
             WHEN log_type IN ('PNO', 'LAN') THEN value->>'port'
         END AS locode
-    FROM ers
+    FROM logbook_reports
     WHERE operation_datetime_utc >= CURRENT_TIMESTAMP - INTERVAL '2 years'
     AND log_type IN ('DEP', 'PNO', 'LAN')
     """
@@ -177,51 +179,30 @@ def extract_ais_anchorage_coordinates() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def extract_vms_static_positions(parquet_file_location) -> pd.DataFrame:
+def extract_vms_static_positions(parquet_file_relative_path) -> pd.DataFrame:
     """
     Read local file with vms positions that have speed zero.
 
     Returns:
         pd.DataFrame: DataFrame with latitude and longitude columns.
     """
-    return pd.read_parquet(parquet_file_location)
+    return pd.read_parquet(ROOT_DIRECTORY / parquet_file_relative_path)
 
 
 @task(checkpoint=False)
-def get_ais_anchorage_h3_cells(
-    ais_anchorage_coordinates: pd.DataFrame,
-    lat: str = "latitude",
-    lon: str = "longitude",
-    h3_resolution: int = 9,
-) -> Set[str]:
-    """
-    Returns a set of H3 cell ids corresponding to the latitudes and longitudes
-    contained in the input DataFrame at the given H3 resolution.
-
-    Args:
-        anchorages (pd.DataFrame): DataFrame of anchorage points, with
-          latitude and longitude columns
-        lat (str): latitude column name
-        long (str): longitude column name
-        h3_res (int): H3 resolution. Defaults to 9.
-
-    Returns:
-        Set[str]: set of H3 ids.
-    """
-
-    ais_anchorage_h3_cells = set(
-        get_h3_indices(
-            ais_anchorage_coordinates[["latitude", "longitude"]],
-            resolution=h3_resolution,
-        )
+def extract_manual_anchorages_coordinates() -> pd.DataFrame:
+    gdf = gpd.read_file(LIBRARY_LOCATION / "pipeline/data/mymaps_manual_anchorages.csv")
+    gdf = gdf.drop(columns=["WKT"])
+    gdf.crs = 4326
+    manual_anchorages_coordinates = pd.DataFrame(
+        {"longitude": gdf.geometry.x.values, "latitude": gdf.geometry.y.values}
     )
-
-    return ais_anchorage_h3_cells
+    return manual_anchorages_coordinates
 
 
 @task(checkpoint=False)
-def get_vms_anchorage_h3_cells(
-    vms_static_positions: pd.DataFrame,
+def get_anchorage_h3_cells(
+    static_positions: pd.DataFrame,
     h3_resolution: int = 9,
     number_signals_threshold: int = 100,
 ) -> pd.DataFrame:
@@ -231,38 +212,38 @@ def get_vms_anchorage_h3_cells(
     in the dataset.
 
     Args:
-        vms_static_positions (pd.DataFrame): DataFrame with latitude and longitude
+        static_positions (pd.DataFrame): DataFrame with latitude and longitude
           columns
         h3_resolution (int): h3 resolution to use
         number_signals_threshold (int): number of occurences below which h3 cells are
           filtered out
     """
 
-    vms_static_positions = vms_static_positions[["latitude", "longitude"]].copy()
+    static_positions = static_positions[["latitude", "longitude"]].copy()
 
-    vms_static_positions["h3"] = get_h3_indices(
-        vms_static_positions, resolution=h3_resolution
-    )
+    static_positions["h3"] = get_h3_indices(static_positions, resolution=h3_resolution)
 
     signals_by_hexagon = (
-        vms_static_positions.groupby("h3")
+        static_positions.groupby("h3")
         .count()
         .rename(columns={"longitude": "number_signals"})
         .reset_index()[["h3", "number_signals"]]
     )
 
-    vms_anchorage_h3_cells = set(
+    anchorage_h3_cells = set(
         signals_by_hexagon.loc[
             signals_by_hexagon.number_signals >= number_signals_threshold, "h3"
         ]
     )
 
-    return vms_anchorage_h3_cells
+    return anchorage_h3_cells
 
 
 @task(checkpoint=False)
 def get_anchorage_h3_cells_rings(
-    ais_anchorage_h3_cells: Set[str], vms_anchorage_h3_cells: Set[str]
+    ais_anchorage_h3_cells: Set[str],
+    vms_anchorage_h3_cells: Set[str],
+    manual_anchorage_h3_cells: Set[str],
 ) -> pd.DataFrame:
     """
     Unites two sets of h3 cells corresponding to anchorage locations of vessels
@@ -276,11 +257,13 @@ def get_anchorage_h3_cells_rings(
           vessels anchor (AIS data)
         vms_anchorage_h3_cells (Set[str]): set of indices of h3 cells where
           vessels anchor (VMS data)
-
+        manual_anchorage_h3_cells (Set[str]): set of additional indices of h3 cells
     returns:
         pd.DataFrame: DataFrame of h3 cells with 2 levels of rings added
     """
-    anchorage_h3_cells = ais_anchorage_h3_cells.union(vms_anchorage_h3_cells)
+    anchorage_h3_cells = ais_anchorage_h3_cells.union(vms_anchorage_h3_cells).union(
+        manual_anchorage_h3_cells
+    )
 
     anchorage_h3_cells_ring_1 = (
         get_k_ring_of_h3_cells(anchorage_h3_cells, k=1) - anchorage_h3_cells
@@ -411,7 +394,7 @@ def load_processed_anchorages(anchorages: pd.DataFrame):
     e = create_engine("monitorfish_remote")
 
     anchorages.to_sql(
-        name="anchorages",
+        name="anchorages_2022_09",
         con=e,
         schema="processed",
         if_exists="replace",
@@ -424,32 +407,41 @@ with Flow("Anchorages") as flow_compute_anchorages:
 
     h3_resolution = Parameter("h3_resolution", ANCHORAGES_H3_CELL_RESOLUTION)
     number_signals_threshold = Parameter("number_signals_threshold", 100)
-    static_vms_positions_file_path = Parameter(
+    static_vms_positions_file_relative_path = Parameter(
         "static_vms_positions_file_path",
-        ROOT_DIRECTORY
-        / "data/raw/anchorages/static_vms_positions_2021_03_to_10.parquet",
+        "data/raw/anchorages/static_vms_positions_2021_03_to_10.parquet",
     )
 
     # Extract
     ais_anchorage_coordinates = extract_ais_anchorage_coordinates()
-    vms_static_positions = extract_vms_static_positions(static_vms_positions_file_path)
+    vms_static_positions = extract_vms_static_positions(
+        static_vms_positions_file_relative_path
+    )
     ports = extract_ports()
     ers_ports_locodes = extract_ers_ports_locodes()
     control_ports_locodes = extract_control_ports_locodes()
+    manual_anchorages_coordinates = extract_manual_anchorages_coordinates()
 
     # Transform
-    ais_anchorage_h3_cells = get_ais_anchorage_h3_cells(
-        ais_anchorage_coordinates, h3_resolution=h3_resolution
+    manual_anchorage_h3_cells = get_anchorage_h3_cells(
+        manual_anchorages_coordinates,
+        h3_resolution=h3_resolution,
+        number_signals_threshold=0,
+    )
+    ais_anchorage_h3_cells = get_anchorage_h3_cells(
+        ais_anchorage_coordinates,
+        h3_resolution=h3_resolution,
+        number_signals_threshold=0,
     )
 
-    vms_anchorage_h3_cells = get_vms_anchorage_h3_cells(
+    vms_anchorage_h3_cells = get_anchorage_h3_cells(
         vms_static_positions,
         h3_resolution=h3_resolution,
         number_signals_threshold=number_signals_threshold,
     )
 
     anchorage_h3_cells_rings = get_anchorage_h3_cells_rings(
-        ais_anchorage_h3_cells, vms_anchorage_h3_cells
+        ais_anchorage_h3_cells, vms_anchorage_h3_cells, manual_anchorage_h3_cells
     )
 
     ports_locations = get_ports_locations(ports)

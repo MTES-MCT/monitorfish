@@ -4,7 +4,7 @@ import regulation from '../../features/backoffice/Regulation.slice'
 import regulatoryLayerSearch from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
 import vesselList from '../../features/vessel_list/VesselList.slice'
 import { alertReducer } from './Alert'
-import beaconMalfunction from './BeaconMalfunction'
+import { beaconMalfunctionReducer } from './BeaconMalfunction'
 import controls from './Control'
 import favoriteVessel from './FavoriteVessel'
 import filter from './Filter'
@@ -33,7 +33,7 @@ const commonReducerList = {
 const homeReducers = combineReducers({
   ...commonReducerList,
   alert: alertReducer,
-  beaconMalfunction,
+  beaconMalfunction: beaconMalfunctionReducer,
   controls,
   favoriteVessel,
   filter,

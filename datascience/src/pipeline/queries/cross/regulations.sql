@@ -5,6 +5,7 @@ SELECT
     topic,
     zone,
     region,
+    other_info,
     fishing_period,
     gears,
     species,

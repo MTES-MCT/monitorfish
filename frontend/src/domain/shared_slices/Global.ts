@@ -3,8 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getLocalStorageState } from '../../utils'
 import { UserType } from '../entities/beaconMalfunction'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel'
-import { MapTool } from '../entities/map'
 
+import type { MapTool } from '../entities/map'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 const userTypeLocalStorageKey = 'userType'
@@ -182,7 +182,7 @@ export const globalSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: MapTool.MEASUREMENT}} action - The map tool
      */
-    setMapToolOpened (state, action) {
+    setMapToolOpened(state, action) {
       state.mapToolOpened = action.payload
     },
 

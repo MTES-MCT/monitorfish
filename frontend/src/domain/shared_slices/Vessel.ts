@@ -129,7 +129,7 @@ const vesselSlice = createSlice({
       if (Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselId) {
         let reportings = []
 
-        if (state.selectedVessel.reportings?.length) {
+        if (state.selectedVessel.reportings.length) {
           reportings = state.selectedVessel.reportings
         }
 

@@ -3,7 +3,7 @@ import { combineReducers } from '@reduxjs/toolkit'
 import regulation from '../../features/backoffice/Regulation.slice'
 import regulatoryLayerSearch from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
 import vesselList from '../../features/vessel_list/VesselList.slice'
-import alert from './Alert'
+import { alertReducer } from './Alert'
 import beaconMalfunction from './BeaconMalfunction'
 import controls from './Control'
 import favoriteVessel from './FavoriteVessel'
@@ -32,7 +32,7 @@ const commonReducerList = {
 
 const homeReducers = combineReducers({
   ...commonReducerList,
-  alert,
+  alert: alertReducer,
   beaconMalfunction,
   controls,
   favoriteVessel,

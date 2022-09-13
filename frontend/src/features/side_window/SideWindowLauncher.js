@@ -4,7 +4,7 @@ import { StyleSheetManager } from 'styled-components'
 import { NewWindow } from './NewWindow'
 import { resetFocusOnAlert } from '../../domain/shared_slices/Alert'
 import { closeSideWindow } from '../../domain/shared_slices/Global'
-import SideWindow from './SideWindow'
+import { SideWindow } from './SideWindow'
 
 const SideWindowLauncher = () => {
   const dispatch = useDispatch()
@@ -30,7 +30,10 @@ const SideWindowLauncher = () => {
           })
         }}
       >
-        <SideWindow ref={newWindowRef}/>
+        <SideWindow
+          ref={newWindowRef}
+          isFromURL={false}
+        />
       </NewWindow>
       </StyleSheetManager>
   }

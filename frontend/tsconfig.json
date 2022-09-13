@@ -4,10 +4,10 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
-    "baseUrl": ".",
     "checkJs": true,
     "exactOptionalPropertyTypes": false,
     "incremental": true,
+    "importsNotUsedAsValues": "error",
     "isolatedModules": true,
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "noEmit": true,
@@ -28,7 +28,7 @@
     "target": "ES2022",
     "useUnknownInCatchVariables": true
   },
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "config/jest.global.js.old", "config/jest.config.js.old"],
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "src/ui/styled.d.ts"],
   "exclude": ["node_modules/*"],
   "ts-node": {
     "swc": true,

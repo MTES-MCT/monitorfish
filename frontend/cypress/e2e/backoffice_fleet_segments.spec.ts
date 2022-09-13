@@ -161,7 +161,7 @@ context('Fleet segments', () => {
     // cy.get('[data-key="ANE"]').click()
 
     cy.get(':nth-child(9) > .rs-picker-tag-wrapper > .rs-picker-search > .rs-picker-search-input > input').type('BF', {
-      force: true,
+      force: true
     })
     cy.get('[data-key="BFT"]').scrollIntoView().click()
 

@@ -5,7 +5,7 @@ import { MonitorFishWorker } from '../../../../workers/MonitorFishWorker'
 const getGeometryWithoutRegulationReference = () => async (dispatch, getState) => {
   const monitorFishWorker = await new MonitorFishWorker()
 
-  return getAllGeometryWithoutProperty(getState().global.inBackofficeMode)
+  return getAllGeometryWithoutProperty(getState().global.isBackoffice)
     .then(features => {
       return monitorFishWorker.getGeometryWithoutRegulationRef(features)
     }).catch(error => {

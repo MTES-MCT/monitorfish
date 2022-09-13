@@ -28,7 +28,7 @@ const VesselLabels = () => {
     healthcheckTextWarning,
     previewFilteredVesselsMode,
     rightMenuIsOpen,
-    adminRole
+    isAdmin
   } = useSelector(state => state.global)
 
   const [vesselVisibilityBoxIsOpen, setVesselLabelsBoxIsOpen] = useState(false)
@@ -67,7 +67,7 @@ const VesselLabels = () => {
         healthcheckTextWarning={healthcheckTextWarning}
         vesselVisibilityBoxIsOpen={vesselVisibilityBoxIsOpen}>
         <Header isFirst={false}>
-          Affichage des étiquettes { adminRole ? 'et notes des navires' : ''}
+          Affichage des étiquettes { isAdmin ? 'et notes des navires' : ''}
         </Header>
         <VesselLabel>
           Choisir le libellé des étiquettes des navires
@@ -75,7 +75,7 @@ const VesselLabels = () => {
         <VesselLabelSelection
           updateVesselLabel={label => dispatch(setVesselLabel(label))}
           vesselLabel={vesselLabel}
-          adminRole={adminRole}
+          isAdmin={isAdmin}
         />
         <MapPropertyTrigger
           booleanProperty={vesselLabelsShowedOnMap}
@@ -84,7 +84,7 @@ const VesselLabels = () => {
           Icon={LabelSVG}
         />
         {
-          adminRole
+          isAdmin
             ? <MapPropertyTrigger
               booleanProperty={riskFactorShowedOnMap}
               updateBooleanProperty={isShowed => dispatch(setRiskFactorShowedOnMap(isShowed))}

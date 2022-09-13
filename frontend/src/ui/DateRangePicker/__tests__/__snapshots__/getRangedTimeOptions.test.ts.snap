@@ -1,0 +1,678 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ui/DateRangePicker/utils.getRangedTimeOptions() should return the expected array of options 1`] = `
+Array [
+  Object {
+    "label": "00:00",
+    "value": Array [
+      "00",
+      "00",
+    ],
+  },
+  Object {
+    "label": "00:15",
+    "value": Array [
+      "00",
+      "15",
+    ],
+  },
+  Object {
+    "label": "00:30",
+    "value": Array [
+      "00",
+      "30",
+    ],
+  },
+  Object {
+    "label": "00:45",
+    "value": Array [
+      "00",
+      "45",
+    ],
+  },
+  Object {
+    "label": "01:00",
+    "value": Array [
+      "01",
+      "00",
+    ],
+  },
+  Object {
+    "label": "01:15",
+    "value": Array [
+      "01",
+      "15",
+    ],
+  },
+  Object {
+    "label": "01:30",
+    "value": Array [
+      "01",
+      "30",
+    ],
+  },
+  Object {
+    "label": "01:45",
+    "value": Array [
+      "01",
+      "45",
+    ],
+  },
+  Object {
+    "label": "02:00",
+    "value": Array [
+      "02",
+      "00",
+    ],
+  },
+  Object {
+    "label": "02:15",
+    "value": Array [
+      "02",
+      "15",
+    ],
+  },
+  Object {
+    "label": "02:30",
+    "value": Array [
+      "02",
+      "30",
+    ],
+  },
+  Object {
+    "label": "02:45",
+    "value": Array [
+      "02",
+      "45",
+    ],
+  },
+  Object {
+    "label": "03:00",
+    "value": Array [
+      "03",
+      "00",
+    ],
+  },
+  Object {
+    "label": "03:15",
+    "value": Array [
+      "03",
+      "15",
+    ],
+  },
+  Object {
+    "label": "03:30",
+    "value": Array [
+      "03",
+      "30",
+    ],
+  },
+  Object {
+    "label": "03:45",
+    "value": Array [
+      "03",
+      "45",
+    ],
+  },
+  Object {
+    "label": "04:00",
+    "value": Array [
+      "04",
+      "00",
+    ],
+  },
+  Object {
+    "label": "04:15",
+    "value": Array [
+      "04",
+      "15",
+    ],
+  },
+  Object {
+    "label": "04:30",
+    "value": Array [
+      "04",
+      "30",
+    ],
+  },
+  Object {
+    "label": "04:45",
+    "value": Array [
+      "04",
+      "45",
+    ],
+  },
+  Object {
+    "label": "05:00",
+    "value": Array [
+      "05",
+      "00",
+    ],
+  },
+  Object {
+    "label": "05:15",
+    "value": Array [
+      "05",
+      "15",
+    ],
+  },
+  Object {
+    "label": "05:30",
+    "value": Array [
+      "05",
+      "30",
+    ],
+  },
+  Object {
+    "label": "05:45",
+    "value": Array [
+      "05",
+      "45",
+    ],
+  },
+  Object {
+    "label": "06:00",
+    "value": Array [
+      "06",
+      "00",
+    ],
+  },
+  Object {
+    "label": "06:15",
+    "value": Array [
+      "06",
+      "15",
+    ],
+  },
+  Object {
+    "label": "06:30",
+    "value": Array [
+      "06",
+      "30",
+    ],
+  },
+  Object {
+    "label": "06:45",
+    "value": Array [
+      "06",
+      "45",
+    ],
+  },
+  Object {
+    "label": "07:00",
+    "value": Array [
+      "07",
+      "00",
+    ],
+  },
+  Object {
+    "label": "07:15",
+    "value": Array [
+      "07",
+      "15",
+    ],
+  },
+  Object {
+    "label": "07:30",
+    "value": Array [
+      "07",
+      "30",
+    ],
+  },
+  Object {
+    "label": "07:45",
+    "value": Array [
+      "07",
+      "45",
+    ],
+  },
+  Object {
+    "label": "08:00",
+    "value": Array [
+      "08",
+      "00",
+    ],
+  },
+  Object {
+    "label": "08:15",
+    "value": Array [
+      "08",
+      "15",
+    ],
+  },
+  Object {
+    "label": "08:30",
+    "value": Array [
+      "08",
+      "30",
+    ],
+  },
+  Object {
+    "label": "08:45",
+    "value": Array [
+      "08",
+      "45",
+    ],
+  },
+  Object {
+    "label": "09:00",
+    "value": Array [
+      "09",
+      "00",
+    ],
+  },
+  Object {
+    "label": "09:15",
+    "value": Array [
+      "09",
+      "15",
+    ],
+  },
+  Object {
+    "label": "09:30",
+    "value": Array [
+      "09",
+      "30",
+    ],
+  },
+  Object {
+    "label": "09:45",
+    "value": Array [
+      "09",
+      "45",
+    ],
+  },
+  Object {
+    "label": "10:00",
+    "value": Array [
+      "10",
+      "00",
+    ],
+  },
+  Object {
+    "label": "10:15",
+    "value": Array [
+      "10",
+      "15",
+    ],
+  },
+  Object {
+    "label": "10:30",
+    "value": Array [
+      "10",
+      "30",
+    ],
+  },
+  Object {
+    "label": "10:45",
+    "value": Array [
+      "10",
+      "45",
+    ],
+  },
+  Object {
+    "label": "11:00",
+    "value": Array [
+      "11",
+      "00",
+    ],
+  },
+  Object {
+    "label": "11:15",
+    "value": Array [
+      "11",
+      "15",
+    ],
+  },
+  Object {
+    "label": "11:30",
+    "value": Array [
+      "11",
+      "30",
+    ],
+  },
+  Object {
+    "label": "11:45",
+    "value": Array [
+      "11",
+      "45",
+    ],
+  },
+  Object {
+    "label": "12:00",
+    "value": Array [
+      "12",
+      "00",
+    ],
+  },
+  Object {
+    "label": "12:15",
+    "value": Array [
+      "12",
+      "15",
+    ],
+  },
+  Object {
+    "label": "12:30",
+    "value": Array [
+      "12",
+      "30",
+    ],
+  },
+  Object {
+    "label": "12:45",
+    "value": Array [
+      "12",
+      "45",
+    ],
+  },
+  Object {
+    "label": "13:00",
+    "value": Array [
+      "13",
+      "00",
+    ],
+  },
+  Object {
+    "label": "13:15",
+    "value": Array [
+      "13",
+      "15",
+    ],
+  },
+  Object {
+    "label": "13:30",
+    "value": Array [
+      "13",
+      "30",
+    ],
+  },
+  Object {
+    "label": "13:45",
+    "value": Array [
+      "13",
+      "45",
+    ],
+  },
+  Object {
+    "label": "14:00",
+    "value": Array [
+      "14",
+      "00",
+    ],
+  },
+  Object {
+    "label": "14:15",
+    "value": Array [
+      "14",
+      "15",
+    ],
+  },
+  Object {
+    "label": "14:30",
+    "value": Array [
+      "14",
+      "30",
+    ],
+  },
+  Object {
+    "label": "14:45",
+    "value": Array [
+      "14",
+      "45",
+    ],
+  },
+  Object {
+    "label": "15:00",
+    "value": Array [
+      "15",
+      "00",
+    ],
+  },
+  Object {
+    "label": "15:15",
+    "value": Array [
+      "15",
+      "15",
+    ],
+  },
+  Object {
+    "label": "15:30",
+    "value": Array [
+      "15",
+      "30",
+    ],
+  },
+  Object {
+    "label": "15:45",
+    "value": Array [
+      "15",
+      "45",
+    ],
+  },
+  Object {
+    "label": "16:00",
+    "value": Array [
+      "16",
+      "00",
+    ],
+  },
+  Object {
+    "label": "16:15",
+    "value": Array [
+      "16",
+      "15",
+    ],
+  },
+  Object {
+    "label": "16:30",
+    "value": Array [
+      "16",
+      "30",
+    ],
+  },
+  Object {
+    "label": "16:45",
+    "value": Array [
+      "16",
+      "45",
+    ],
+  },
+  Object {
+    "label": "17:00",
+    "value": Array [
+      "17",
+      "00",
+    ],
+  },
+  Object {
+    "label": "17:15",
+    "value": Array [
+      "17",
+      "15",
+    ],
+  },
+  Object {
+    "label": "17:30",
+    "value": Array [
+      "17",
+      "30",
+    ],
+  },
+  Object {
+    "label": "17:45",
+    "value": Array [
+      "17",
+      "45",
+    ],
+  },
+  Object {
+    "label": "18:00",
+    "value": Array [
+      "18",
+      "00",
+    ],
+  },
+  Object {
+    "label": "18:15",
+    "value": Array [
+      "18",
+      "15",
+    ],
+  },
+  Object {
+    "label": "18:30",
+    "value": Array [
+      "18",
+      "30",
+    ],
+  },
+  Object {
+    "label": "18:45",
+    "value": Array [
+      "18",
+      "45",
+    ],
+  },
+  Object {
+    "label": "19:00",
+    "value": Array [
+      "19",
+      "00",
+    ],
+  },
+  Object {
+    "label": "19:15",
+    "value": Array [
+      "19",
+      "15",
+    ],
+  },
+  Object {
+    "label": "19:30",
+    "value": Array [
+      "19",
+      "30",
+    ],
+  },
+  Object {
+    "label": "19:45",
+    "value": Array [
+      "19",
+      "45",
+    ],
+  },
+  Object {
+    "label": "20:00",
+    "value": Array [
+      "20",
+      "00",
+    ],
+  },
+  Object {
+    "label": "20:15",
+    "value": Array [
+      "20",
+      "15",
+    ],
+  },
+  Object {
+    "label": "20:30",
+    "value": Array [
+      "20",
+      "30",
+    ],
+  },
+  Object {
+    "label": "20:45",
+    "value": Array [
+      "20",
+      "45",
+    ],
+  },
+  Object {
+    "label": "21:00",
+    "value": Array [
+      "21",
+      "00",
+    ],
+  },
+  Object {
+    "label": "21:15",
+    "value": Array [
+      "21",
+      "15",
+    ],
+  },
+  Object {
+    "label": "21:30",
+    "value": Array [
+      "21",
+      "30",
+    ],
+  },
+  Object {
+    "label": "21:45",
+    "value": Array [
+      "21",
+      "45",
+    ],
+  },
+  Object {
+    "label": "22:00",
+    "value": Array [
+      "22",
+      "00",
+    ],
+  },
+  Object {
+    "label": "22:15",
+    "value": Array [
+      "22",
+      "15",
+    ],
+  },
+  Object {
+    "label": "22:30",
+    "value": Array [
+      "22",
+      "30",
+    ],
+  },
+  Object {
+    "label": "22:45",
+    "value": Array [
+      "22",
+      "45",
+    ],
+  },
+  Object {
+    "label": "23:00",
+    "value": Array [
+      "23",
+      "00",
+    ],
+  },
+  Object {
+    "label": "23:15",
+    "value": Array [
+      "23",
+      "15",
+    ],
+  },
+  Object {
+    "label": "23:30",
+    "value": Array [
+      "23",
+      "30",
+    ],
+  },
+  Object {
+    "label": "23:45",
+    "value": Array [
+      "23",
+      "45",
+    ],
+  },
+]
+`;

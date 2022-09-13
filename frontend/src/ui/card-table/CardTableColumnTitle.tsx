@@ -1,7 +1,8 @@
-import { HTMLAttributes } from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as SortSVG } from '../../features/icons/ascendant-descendant.svg'
+
+import type { HTMLAttributes } from 'react'
 
 type CardTableColumnTitleProps = HTMLAttributes<HTMLDivElement> & {
   children: string

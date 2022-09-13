@@ -3,7 +3,7 @@ import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 import { vesselLabel as label } from '../../domain/entities/vesselLabelLine'
 
-const VesselLabelSelection = ({ vesselLabel, updateVesselLabel, adminRole }) => {
+const VesselLabelSelection = ({ vesselLabel, updateVesselLabel, isAdmin }) => {
   return (
     <>
       {vesselLabel
@@ -17,7 +17,7 @@ const VesselLabelSelection = ({ vesselLabel, updateVesselLabel, adminRole }) => 
             <Radio value={label.VESSEL_NAME}>Nom du navire</Radio>
             <Radio value={label.VESSEL_INTERNAL_REFERENCE_NUMBER}>CFR</Radio>
             {
-              adminRole
+              isAdmin
                 ? <Radio value={label.VESSEL_FLEET_SEGMENT}>Segment de flotte</Radio>
                 : null
             }

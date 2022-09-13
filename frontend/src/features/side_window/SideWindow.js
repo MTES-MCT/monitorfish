@@ -20,7 +20,7 @@ import BeaconMalfunctionsBoard from './beacon_malfunctions/BeaconMalfunctionsBoa
 import SideWindowMenu from './SideWindowMenu'
 import SideWindowSubMenu from './SideWindowSubMenu'
 
-const SideWindow = forwardRef(({ isFromURL }, ref) => {
+const SideWindowWithoutRef = ({ isFromURL }, ref) => {
   const openedSideWindowTab = useSelector(state => state.global.openedSideWindowTab)
   const openedBeaconMalfunctionInKanban = useSelector(state => state.beaconMalfunction.openedBeaconMalfunctionInKanban)
   const editedReportingInSideWindow = useSelector(state => state.reporting.editedReportingInSideWindow)
@@ -129,7 +129,7 @@ const SideWindow = forwardRef(({ isFromURL }, ref) => {
       )}
     </Wrapper>
   )
-})
+}
 
 export const AlertAndReportingTab = {
   ALERT: 'ALERT',
@@ -213,4 +213,4 @@ const Wrapper = styled.div`
   }
 `
 
-export default SideWindow
+export const SideWindow = forwardRef(SideWindowWithoutRef)

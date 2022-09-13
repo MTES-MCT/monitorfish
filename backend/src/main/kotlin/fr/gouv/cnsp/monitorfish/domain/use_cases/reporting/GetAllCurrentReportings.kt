@@ -37,6 +37,7 @@ class GetAllCurrentReportings(private val reportingRepository: ReportingReposito
                         }
                         lastPositionRepository.findUnderCharterForVessel(it.vesselIdentifier, it.externalReferenceNumber)
                     }
+                    else -> null
                 }
             } catch (e: Throwable) {
                 logger.error(e.message)

@@ -17,11 +17,7 @@ import './ui/shared/rsuite-override.css'
 if (!(process.env.NODE_ENV === 'development')) {
   Sentry.init({
     dsn: 'https://a5f3272efa794bb9ada2ffea90f2fec5@sentry.incubateur.net/8',
-    integrations: [
-      new Integrations.BrowserTracing({
-        tracingOrigins: ['monitorfish-test.csam.e2.rie.gouv.fr', 'monitorfish.din.developpement-durable.gouv.fr']
-      })
-    ],
+    integrations: [new Integrations.BrowserTracing()],
 
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.

@@ -1,5 +1,4 @@
-/**
- * @typedef MapClickEvent
- * @property {Object} feature
- * @property {boolean} ctrlKeyPressed
- */
+export type MapClickEvent = {
+  ctrlKeyPressed: boolean
+  feature: Object
+}

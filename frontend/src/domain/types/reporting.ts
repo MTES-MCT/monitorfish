@@ -1,53 +1,52 @@
-/**
- * @typedef Reporting
- * @property {string} id
- * @property {ReportingType<string>} type
- * @property {string} vesselName
- * @property {string} internalReferenceNumber
- * @property {string} externalReferenceNumber
- * @property {string} ircs
- * @property {string} vesselIdentifier
- * @property {string} creationDate
- * @property {string} validationDate
- * @property {PendingAlert | InfractionSuspicion | Observation} value
- */
+import type { PendingAlert } from './alert'
 
-/**
- * @typedef CurrentAndArchivedReportingsOfSelectedVessel
- * @property {Reporting[]} current
- * @property {Reporting[]} archived
- */
+export type Reporting = {
+  creationDate: string
+  externalReferenceNumber: string
+  id: string
+  internalReferenceNumber: string
+  ircs: string
+  // TODO Doesn't exists.
+  type: any
+  // type: ReportingType<string>
+  validationDate: string
+  value: PendingAlert | InfractionSuspicion | Observation
+  vesselIdentifier: string
+  vesselName: string
+}
 
-/**
- * @typedef InfractionSuspicion
- * @property {string} reportingActor
- * @property {string | null} unit
- * @property {string | null} authorTrigram
- * @property {string | null} authorContact
- * @property {string} title
- * @property {string} description
- * @property {string} natinfCode
- * @property {string} dml
- */
+export type CurrentAndArchivedReportingsOfSelectedVessel = {
+  archived: Reporting[]
+  current: Reporting[]
+}
 
-/**
- * @typedef Observation
- * @property {string} reportingActor
- * @property {string | null} unit
- * @property {string | null} authorTrigram
- * @property {string | null} authorContact
- * @property {string} title
- * @property {string} description
- */
+export type InfractionSuspicion = {
+  authorContact: string | null
+  authorTrigram: string | null
+  description: string
+  dml: string
+  natinfCode: string
+  reportingActor: string
+  title: string
+  unit: string | null
+}
 
-/**
- * @typedef UpdateReporting
- * @property {string} reportingActor
- * @property {string | undefined} unit
- * @property {string | undefined} authorTrigram
- * @property {string | undefined} authorContact
- * @property {string} title
- * @property {string | undefined} description
- * @property {string | undefined} natinfCode
- * @property {string | undefined} dml
- */
+export type Observation = {
+  authorContact: string | null
+  authorTrigram: string | null
+  description: string
+  reportingActor: string
+  title: string
+  unit: string | null
+}
+
+export type UpdateReporting = {
+  authorContact: string | undefined
+  authorTrigram: string | undefined
+  description: string | undefined
+  dml: string | undefined
+  natinfCode: string | undefined
+  reportingActor: string
+  title: string
+  unit: string | undefined
+}

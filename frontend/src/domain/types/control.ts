@@ -1,76 +1,72 @@
-/**
- * @typedef Infraction
- * @property {string} infraction
- * @property {string} infractionCategory
- * @property {string} natinfCode
- * @property {string} regulation
- */
+export type Infraction = {
+  infraction: string
+  infractionCategory: string
+  natinfCode: string
+  regulation: string
+}
 
-/**
- * @typedef GearControl
- * @property {number} controlledMesh
- * @property {number} declaredMesh
- * @property {string} gearCode
- * @property {string} gearName
- * @property {boolean} gearWasControlled
- */
+export type GearControl = {
+  controlledMesh: number
+  declaredMesh: number
+  gearCode: string
+  gearName: string
+  gearWasControlled: boolean
+}
 
-/**
- * @typedef Controller
- * @property {string} administration
- * @property {string} controller
- * @property {string} controllerType
- */
+export type Controller = {
+  administration: string
+  controller: string
+  controllerType: string
+}
 
-/**
- * @typedef VesselControl
- * @property {boolean} cnspCalledUnit
- * @property {string} controlDatetimeUtc
- * @property {string} controlType
- * @property {boolean} cooperative
- * @property {boolean} diversion
- * @property {boolean} escortToQuay
- * @property {string} facade
- * @property {boolean} infraction
- * @property {string} inputEndDatetimeUtc
- * @property {string} inputStartDatetimeUtc
- * @property {string} latitude
- * @property {string} longitude
- * @property {string} missionOrder
- * @property {string} portLocode
- * @property {string} portName
- * @property {string} postControlComments
- * @property {string} preControlComments
- * @property {boolean} seizure
- * @property {string} seizureComments
- * @property {boolean} vesselTargeted
- * @property {Controller} controller
- * @property {GearControl[]} gearControls
- * @property {Infraction[]} infractions
- */
+export type VesselControl = {
+  cnspCalledUnit: boolean
+  controlDatetimeUtc: string
+  controlType: string
+  controller: Controller
+  cooperative: boolean
+  diversion: boolean
+  escortToQuay: boolean
+  facade: string
+  gearControls: GearControl[]
+  infraction: boolean
+  infractions: Infraction[]
+  inputEndDatetimeUtc: string
+  inputStartDatetimeUtc: string
+  latitude: string
+  longitude: string
+  missionOrder: string
+  portLocode: string
+  portName: string
+  postControlComments: string
+  preControlComments: string
+  seizure: boolean
+  seizureComments: string
+  vesselTargeted: boolean
+}
 
-/**
- * @typedef ControlResume
- * @property {VesselControl[]} controls
- * @property {number} numberOfAerialControls
- * @property {number} numberOfDiversions
- * @property {number} numberOfEscortsToQuay
- * @property {number} numberOfFishingInfractions
- * @property {number} numberOfLandControls
- * @property {number} numberOfSeaControls
- * @property {number} numberOfSecurityInfractions
- * @property {number} numberOfSeizures
- * @property {number} vesselId
- */
+export type ControlResume = {
+  controls: VesselControl[]
+  numberOfAerialControls: number
+  numberOfDiversions: number
+  numberOfEscortsToQuay: number
+  numberOfFishingInfractions: number
+  numberOfLandControls: number
+  numberOfSeaControls: number
+  numberOfSecurityInfractions: number
+  numberOfSeizures: number
+  vesselId: number
+}
 
-/**
- * @typedef LastControls
- * @property {ControlAndText} SEA - Contrôle_en_mer
- * @property {ControlAndText} LAND - Contrôle à la débarque
- */
+// TODO Check that these comments are not some sort of enum value.
+export type LastControls = {
+  // Contrôle à la débarque
+  LAND: ControlAndText
+  // Contrôle_en_mer
+  SEA: ControlAndText
+}
 
-/**
- * @typedef ControlAndText
- * @property {VesselControl} control
- * @property {string} text
- */
+export type ControlAndText = {
+  control: VesselControl
+  text: string
+}

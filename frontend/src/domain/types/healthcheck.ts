@@ -1,6 +1,5 @@
-/**
- * @typedef Healthcheck
- * @property {string} dateLogbookMessageReceived
- * @property {string} dateLastPosition
- * @property {string} datePositionReceived
- */
+export type Healthcheck = {
+  dateLastPosition: string
+  dateLogbookMessageReceived: string
+  datePositionReceived: string
+}

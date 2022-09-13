@@ -1,21 +1,21 @@
-/**
- * @typedef FleetSegment
- * @property {string | null} segment
- * @property {string | null} segmentName
- * @property {string[] | null} gears
- * @property {string[] | null} faoAreas
- * @property {string[] | null} targetSpecies
- * @property {string[] | null} bycatchSpecies
- * @property {float | null} impactRiskFactor
- */
+import type { Float } from 'type-fest'
 
-/**
- * @typedef UpdateFleetSegment
- * @property {string | null} segment
- * @property {string | null} segmentName
- * @property {string[] | null} gears
- * @property {string[] | null} faoAreas
- * @property {string[] | null} targetSpecies
- * @property {string[] | null} bycatchSpecies
- * @property {float | null} impactRiskFactor
- */
+export type FleetSegment = {
+  bycatchSpecies: string[] | null
+  faoAreas: string[] | null
+  gears: string[] | null
+  impactRiskFactor: Float<number> | null
+  segment: string | null
+  segmentName: string | null
+  targetSpecies: string[] | null
+}
+
+export type UpdateFleetSegment = {
+  bycatchSpecies: string[] | null
+  faoAreas: string[] | null
+  gears: string[] | null
+  impactRiskFactor: Float<number> | null
+  segment: string | null
+  segmentName: string | null
+  targetSpecies: string[] | null
+}

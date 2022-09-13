@@ -1,9 +1,11 @@
-/**
- * @typedef InterestPoint
- * @property {string} uuid
- * @property {string | null} name
- * @property {string} type
- * @property {number[]} coordinates - [longitude, latitude] coordinates
- * @property {string | null} observations
- * @property {GeoJSON} feature
- */
+import type { GeoJSON } from './geojson'
+
+export type InterestPoint = {
+  /** [longitude, latitude] coordinates */
+  coordinates: [number, number]
+  feature: GeoJSON
+  name: string | null
+  observations: string | null
+  type: string
+  uuid: string
+}

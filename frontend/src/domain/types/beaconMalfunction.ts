@@ -1,3 +1,4 @@
+import type { VesselIdentity } from './vessel'
 import type { Integer } from 'type-fest'
 
 export type BeaconMalfunction = {

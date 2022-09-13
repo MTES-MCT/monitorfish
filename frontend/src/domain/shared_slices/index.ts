@@ -13,7 +13,7 @@ import fleetSegment from './FleetSegment'
 import gear from './Gear'
 import { globalSliceReducer } from './Global'
 import infraction from './Infraction'
-import interestPoint from './InterestPoint'
+import { interestPointReducer } from './InterestPoint'
 import layer from './Layer'
 import map from './Map'
 import measurement from './Measurement'
@@ -41,7 +41,7 @@ const homeReducers = combineReducers({
   fishingActivities: fishingActivitiesReducer,
   fleetSegment,
   infraction,
-  interestPoint,
+  interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
   measurement,
   regulatoryLayerSearch,

@@ -34,6 +34,12 @@ import { Flag } from '../../vessel_list/tableCells'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import EditReporting from './EditReporting'
 
+enum SortColumns {
+  dml = 'dml',
+  validationDateTimestamp = 'validationDateTimestamp',
+  vesselName = 'vesselName'
+}
+
 type ReportingListProps = {
   seaFront: any
 }
@@ -41,7 +47,7 @@ export function ReportingList({ seaFront }: ReportingListProps) {
   const dispatch = useDispatch()
   const { currentReportings } = useSelector(state => (state as any).reporting)
   const baseUrl = window.location.origin
-  const [sortColumn, setSortColumn] = useState<string>('validationDateTimestamp')
+  const [sortColumn, setSortColumn] = useState<string>(SortColumns.validationDateTimestamp)
   const [sortType, setSortType] = useState<string>(SortType.DESC)
   const [searched, setSearched] = useState<string | undefined>(undefined)
   const [checkedReportingIds, setCheckedReportingIds] = useState<number[]>([])
@@ -165,8 +171,8 @@ MMSI: ${reporting.mmsi || ''}`
                 dataCy="side-window-order-by-date"
                 isAscending={sortType === SortType.ASC}
                 isSortable
-                isSortColumn={sortColumn === 'validationDateTimestamp'}
-                onClick={() => sortByColumn('validationDateTimestamp')}
+                isSortColumn={sortColumn === SortColumns.validationDateTimestamp}
+                onClick={() => sortByColumn(SortColumns.validationDateTimestamp)}
               >
                 Ouvert il y a...
               </CardTableColumnTitle>
@@ -184,8 +190,8 @@ MMSI: ${reporting.mmsi || ''}`
               <CardTableColumnTitle
                 isAscending={sortType === SortType.ASC}
                 isSortable
-                isSortColumn={sortColumn === 'vesselName'}
-                onClick={() => sortByColumn('vesselName')}
+                isSortColumn={sortColumn === SortColumns.vesselName}
+                onClick={() => sortByColumn(SortColumns.vesselName)}
               >
                 Navire
               </CardTableColumnTitle>
@@ -194,8 +200,8 @@ MMSI: ${reporting.mmsi || ''}`
               <CardTableColumnTitle
                 isAscending={sortType === SortType.ASC}
                 isSortable
-                isSortColumn={sortColumn === 'dml'}
-                onClick={() => sortByColumn('dml')}
+                isSortColumn={sortColumn === SortColumns.dml}
+                onClick={() => sortByColumn(SortColumns.dml)}
               >
                 DML concernées
               </CardTableColumnTitle>

@@ -5,7 +5,7 @@ import regulatoryLayerSearch from '../../features/layers/regulatory/search/Regul
 import vesselList from '../../features/vessel_list/VesselList.slice'
 import { alertReducer } from './Alert'
 import { beaconMalfunctionReducer } from './BeaconMalfunction'
-import controls from './Control'
+import { controlReducer } from './Control'
 import favoriteVessel from './FavoriteVessel'
 import filter from './Filter'
 import { fishingActivitiesReducer } from './FishingActivities'
@@ -34,7 +34,8 @@ const homeReducers = combineReducers({
   ...commonReducerList,
   alert: alertReducer,
   beaconMalfunction: beaconMalfunctionReducer,
-  controls,
+  //  TODO Pass that to singular.
+  controls: controlReducer,
   favoriteVessel,
   filter,
   fishingActivities: fishingActivitiesReducer,

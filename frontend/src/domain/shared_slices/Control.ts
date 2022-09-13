@@ -1,40 +1,42 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-/* eslint-disable */
-/** @namespace ControlReducer */
-const ControlReducer = null
-/* eslint-enable */
+import type { ControlResume } from '../types/control'
+
+export type ControlState = {
+  // TODO Understand & check that.
+  controlResumeAndControls: Partial<ControlResume>
+  controllers: []
+  controlsFromDate: Date
+  loadingControls: boolean
+  nextControlResumeAndControls: ControlResume | null
+}
+const INITIAL_STATE: ControlState = {
+  controllers: [],
+  // TODO Understand & check that.
+  controlResumeAndControls: {},
+  controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
+  loadingControls: false,
+  nextControlResumeAndControls: null
+}
 
 const controlSlice = createSlice({
+  initialState: INITIAL_STATE,
   name: 'controls',
-  initialState: {
-    /** @type {ControlResume} */
-    controlResumeAndControls: {},
-    /** @type {ControlResume || null} */
-    nextControlResumeAndControls: null,
-    /** @type {Date} */
-    controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
-    loadingControls: false,
-    controllers: []
-  },
   reducers: {
     /**
-     * Set selected vessel control resume and control
-     * @function setControlResumeAndControls
+     * Set the loading of controls to true, and shows a loader in the controls tab
+     * @function loadControls
      * @memberOf ControlReducer
      * @param {Object=} state
-     * @param {{payload: ControlResume}} action - the control resume
      */
-    setControlResumeAndControls (state, action) {
-      state.controlResumeAndControls = action.payload
-      state.loadingControls = false
+    loadControls(state) {
+      state.loadingControls = true
     },
-    setNextControlResumeAndControls (state, action) {
-      state.nextControlResumeAndControls = action.payload
-    },
-    resetNextControlResumeAndControls (state) {
+
+    resetNextControlResumeAndControls(state) {
       state.nextControlResumeAndControls = null
     },
+
     /**
      * Set the date since controls are fetched
      * @function setControlFromDate
@@ -42,18 +44,10 @@ const controlSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: Date}} action - The "from" date
      */
-    setControlFromDate (state, action) {
+    setControlFromDate(state, action) {
       state.controlsFromDate = action.payload
     },
-    /**
-     * Set the loading of controls to true, and shows a loader in the controls tab
-     * @function loadControls
-     * @memberOf ControlReducer
-     * @param {Object=} state
-     */
-    loadControls (state) {
-      state.loadingControls = true
-    },
+
     /**
      * Set controllers
      * @function setControllers
@@ -61,19 +55,35 @@ const controlSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: Controller[]}} action - the controllers
      */
-    setControllers (state, action) {
+    setControllers(state, action) {
       state.controllers = action.payload
+    },
+
+    /**
+     * Set selected vessel control resume and control
+     * @function setControlResumeAndControls
+     * @memberOf ControlReducer
+     * @param {Object=} state
+     * @param {{payload: ControlResume}} action - the control resume
+     */
+    setControlResumeAndControls(state, action) {
+      state.controlResumeAndControls = action.payload
+      state.loadingControls = false
+    },
+
+    setNextControlResumeAndControls(state, action) {
+      state.nextControlResumeAndControls = action.payload
     }
   }
 })
 
 export const {
-  setControlResumeAndControls,
-  setNextControlResumeAndControls,
-  resetNextControlResumeAndControls,
   loadControls,
+  resetNextControlResumeAndControls,
   setControlFromDate,
-  setControllers
+  setControllers,
+  setControlResumeAndControls,
+  setNextControlResumeAndControls
 } = controlSlice.actions
 
-export default controlSlice.reducer
+export const controlReducer = controlSlice.reducer

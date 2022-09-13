@@ -14,6 +14,7 @@ BEGIN
         COALESCE(NEW.topic::text, '') ||
         COALESCE(NEW.zone::text, '') ||
         COALESCE(NEW.region::text, '') ||
+        COALESCE(NEW.other_info::text, '') ||
         COALESCE(NEW.fishing_period::text, '') ||
         COALESCE(NEW.species::text, '') ||
         COALESCE(NEW.gears::text, '') ||

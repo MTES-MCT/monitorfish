@@ -85,7 +85,7 @@ const CustomSelectPicker = styled(SelectPicker)`
   }
 
   .rs-picker-toggle {
-    width: ${p => p.width ? p.width - 40 : 160};
+    width: ${p => p.width ? p.width - 40 : 160}px;
   }
 `
 

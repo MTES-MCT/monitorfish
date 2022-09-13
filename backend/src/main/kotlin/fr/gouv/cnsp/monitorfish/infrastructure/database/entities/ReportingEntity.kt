@@ -41,7 +41,7 @@ data class ReportingEntity(
     @Column(name = "vessel_identifier")
     @Enumerated(EnumType.STRING)
     @Type(type = "pgsql_enum")
-    val vesselIdentifier: VesselIdentifier,
+    val vesselIdentifier: VesselIdentifier? = null,
     @Column(name = "creation_date", nullable = false)
     val creationDate: ZonedDateTime,
     @Column(name = "validation_date", nullable = true)

@@ -7,7 +7,7 @@ import { alertReducer } from './Alert'
 import { beaconMalfunctionReducer } from './BeaconMalfunction'
 import { controlReducer } from './Control'
 import { favoriteVesselReducer } from './FavoriteVessel'
-import filter from './Filter'
+import { filterReducer } from './Filter'
 import { fishingActivitiesReducer } from './FishingActivities'
 import fleetSegment from './FleetSegment'
 import gear from './Gear'
@@ -37,7 +37,7 @@ const homeReducers = combineReducers({
   //  TODO Pass that to singular.
   controls: controlReducer,
   favoriteVessel: favoriteVesselReducer,
-  filter,
+  filter: filterReducer,
   fishingActivities: fishingActivitiesReducer,
   fleetSegment,
   infraction,

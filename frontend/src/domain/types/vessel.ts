@@ -1,6 +1,7 @@
 // TODO This should be moved to `entities/vessel/types.ts`
 
 import type { VesselTrackDepth } from '../entities/vesselTrackDepth'
+import type { ValueOf } from 'type-fest'
 
 export type FishingActivityShowedOnMap = {
   /** The coordinates of the fishing activity */
@@ -220,4 +221,4 @@ export type VesselPosition = {
   vesselName: string
 }
 
-export type VesselTrackDepthKey = Common.ValueOf<VesselTrackDepth>
+export type VesselTrackDepthKey = ValueOf<VesselTrackDepth>

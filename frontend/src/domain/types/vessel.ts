@@ -153,6 +153,8 @@ export type Vessel = {
 export type VesselId = string
 
 export type VesselIdentity = {
+  // TODO Check that.
+  beaconNumber: number
   externalReferenceNumber: string
   flagState: string
   internalReferenceNumber: string

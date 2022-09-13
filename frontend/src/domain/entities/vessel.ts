@@ -133,15 +133,16 @@ export class Vessel {
     selectedBaseLayer === baseLayers.DARK.code || selectedBaseLayer === baseLayers.SATELLITE.code
 }
 
-export const getOnlyVesselIdentityProperties = vessel => ({
-  beaconNumber: vessel?.beaconNumber,
-  externalReferenceNumber: vessel?.externalReferenceNumber,
-  flagState: vessel?.flagState,
-  internalReferenceNumber: vessel?.internalReferenceNumber,
-  ircs: vessel?.ircs,
-  mmsi: vessel?.mmsi,
-  vesselIdentifier: vessel?.vesselIdentifier,
-  vesselName: vessel?.vesselName
+// TODO <vessel> is not a Vessel. What is it?
+export const getOnlyVesselIdentityProperties = (vessel: any): VesselIdentity => ({
+  beaconNumber: vessel.beaconNumber,
+  externalReferenceNumber: vessel.externalReferenceNumber,
+  flagState: vessel.flagState,
+  internalReferenceNumber: vessel.internalReferenceNumber,
+  ircs: vessel.ircs,
+  mmsi: vessel.mmsi,
+  vesselIdentifier: vessel.vesselIdentifier,
+  vesselName: vessel.vesselName
 })
 
 /**

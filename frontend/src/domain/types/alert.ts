@@ -1,60 +1,54 @@
-/**
- * @typedef Alert
- * @property {string} id
- * @property {string} type
- * @property {string} vesselName
- * @property {string} internalReferenceNumber
- * @property {string} externalReferenceNumber
- * @property {string} ircs
- * @property {string} vesselIdentifier
- * @property {string} creationDate
- * @property {number} tripNumber
- * @property {PendingAlert | PNOAndLANWeightToleranceAlert} value
- */
+export type Alert = {
+  creationDate: string
+  externalReferenceNumber: string
+  id: string
+  internalReferenceNumber: string
+  ircs: string
+  tripNumber: number
+  type: string
+  value: PendingAlert | PNOAndLANWeightToleranceAlert
+  vesselIdentifier: string
+  vesselName: string
+}
 
-/**
- * @typedef PendingAlert
- * @property {number} speed
- * @property {string} type
- * @property {string | null} natinfCode
- * @property {string} seaFront
- * @property {string} flagState
- */
+export type PendingAlert = {
+  flagState: string
+  natinfCode: string | null
+  seaFront: string
+  speed: number
+  type: string
+}
 
-/**
- * @typedef SilencedAlert
- * @property {string} id
- * @property {string} vesselName
- * @property {string} internalReferenceNumber
- * @property {string} externalReferenceNumber
- * @property {string} ircs
- * @property {string} vesselIdentifier
- * @property {Date} silencedBeforeDate
- * @property {Date} silencedAfterDate
- * @property {PendingAlert | PNOAndLANWeightToleranceAlert} value
- * @property {boolean | null} isReactivated
- */
+export type SilencedAlert = {
+  externalReferenceNumber: string
+  id: string
+  internalReferenceNumber: string
+  ircs: string
+  isReactivated: boolean | null
+  silencedAfterDate: Date
+  silencedBeforeDate: Date
+  value: PendingAlert | PNOAndLANWeightToleranceAlert
+  vesselIdentifier: string
+  vesselName: string
+}
 
-/**
- * @typedef PNOAndLANWeightToleranceAlert
- * @property {string} lanOperationNumber
- * @property {string} pnoOperationNumber
- * @property {number} percentOfTolerance
- * @property {number} minimumWeightThreshold
- * @property {PNOAndLANCatches[]} catchesOverTolerance
- * @property {string} type
- * @property {string} name
- */
+export type PNOAndLANWeightToleranceAlert = {
+  catchesOverTolerance: PNOAndLANCatches[]
+  lanOperationNumber: string
+  minimumWeightThreshold: number
+  name: string
+  percentOfTolerance: number
+  pnoOperationNumber: string
+  type: string
+}
 
-/**
- * @typedef PNOAndLANCatches
- * @property {Object} pno
- * @property {Object} lan
- */
+export type PNOAndLANCatches = {
+  lan: Object
+  pno: Object
+}
 
-/**
- * @typedef SilencedAlertPeriodRequest
- * @property {string | null} silencedAlertPeriod
- * @property {Date | null} afterDateTime
- * @property {Date | null} beforeDateTime
- */
+export type SilencedAlertPeriodRequest = {
+  afterDateTime: Date | null
+  beforeDateTime: Date | null
+  silencedAlertPeriod: string | null
+}

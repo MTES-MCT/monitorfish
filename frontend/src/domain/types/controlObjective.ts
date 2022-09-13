@@ -1,17 +1,17 @@
-/**
- * @typedef ControlObjective
- * @property {int} id
- * @property {string} facade
- * @property {string} segment
- * @property {int} year
- * @property {int} targetNumberOfControlsAtSea
- * @property {int} targetNumberOfControlsAtPort
- * @property {float} controlPriorityLevel
- */
+import type { Float, Integer } from 'type-fest'
 
-/**
- * @typedef UpdateControlObjective
- * @property {int | null} targetNumberOfControlsAtSea
- * @property {int | null} targetNumberOfControlsAtPort
- * @property {float | null} controlPriorityLevel
- */
+export type ControlObjective = {
+  controlPriorityLevel: Float<number>
+  facade: string
+  id: Integer<number>
+  segment: string
+  targetNumberOfControlsAtPort: Integer<number>
+  targetNumberOfControlsAtSea: Integer<number>
+  year: Integer<number>
+}
+
+export type UpdateControlObjective = {
+  controlPriorityLevel: Float<number> | null
+  targetNumberOfControlsAtPort: Integer<number> | null
+  targetNumberOfControlsAtSea: Integer<number> | null
+}

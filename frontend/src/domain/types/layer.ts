@@ -1,52 +1,46 @@
-/**
- * @typedef AdministrativeOrRegulatoryLayer
- * @property {string} type
- * @property {string | null} topic
- * @property {string | null} zone
- * @property {string} namespace
- */
+export type AdministrativeOrRegulatoryLayer = {
+  namespace: string
+  topic: string | null
+  type: string
+  zone: string | null
+}
 
-/**
- * @typedef LayerAndArea
- * @property {string} name
- * @property {number} area
- */
+export type LayerAndArea = {
+  area: number
+  name: string
+}
 
-/**
- * @typedef LayerToFeatures
- * @property {string} name
- * @property {number} area
- * @property {Object[]} features
- * @property {Object[]} simplifiedFeatures
- * @property {number[]} center
- */
+export type LayerToFeatures = {
+  area: number
+  center: number[]
+  features: Object[]
+  name: string
+  simplifiedFeatures: Object[]
+}
 
-/**
- * @typedef RegulatoryZone
- * @property {string} type
- * @property {string} topic
- * @property {string} zone
- * @property {string} lawType
- * @property {string} topic
- * @property {string} prohibitedGears
- * @property {string} gears
- * @property {string} zone
- * @property {string} species
- * @property {string} prohibitedSpecies
- * @property {string} regulatoryReferences
- * @property {string} permissions
- * @property {string} bycatch
- * @property {string} openingDate
- * @property {string} closingDate
- * @property {string} mandatoryDocuments
- * @property {string} state
- * @property {string} prohibitions
- * @property {string} technicalMeasurements
- * @property {string} period
- * @property {string} quantity
- * @property {string} size
- * @property {string} region
- * @property {string} obligations
- * @property {string} rejections
- * @property {string} deposit
-  */
+export type RegulatoryZone = {
+  bycatch: string
+  closingDate: string
+  deposit: string
+  gears: string
+  lawType: string
+  mandatoryDocuments: string
+  obligations: string
+  openingDate: string
+  period: string
+  permissions: string
+  prohibitedGears: string
+  prohibitedSpecies: string
+  prohibitions: string
+  quantity: string
+  region: string
+  regulatoryReferences: string
+  rejections: string
+  size: string
+  species: string
+  state: string
+  technicalMeasurements: string
+  topic: string
+  type: string
+  zone: string
+}

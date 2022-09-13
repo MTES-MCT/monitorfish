@@ -1,24 +1,20 @@
-/**
- * @typedef Species
- * @property {string} code
- * @property {string} name
- */
+export type Species = {
+  code: string
+  name: string
+}
 
-/**
- * @typedef SpeciesGroup
- * @property {string} group
- * @property {string} comment
- */
+export type SpeciesGroup = {
+  comment: string
+  group: string
+}
 
-/**
- * @typedef SpeciesAndSpeciesGroupsAPIData
- * @property {Species[]} species
- * @property {SpeciesGroup[]} groups
- */
+export type SpeciesAndSpeciesGroupsAPIData = {
+  groups: SpeciesGroup[]
+  species: Species[]
+}
 
-/**
- * @typedef SpeciesAndSpeciesGroups
- * @property {Species[]} species
- * @property {Object<string, Object>} speciesByCode
- * @property {SpeciesGroup[]} groups
- */
+export type SpeciesAndSpeciesGroups = {
+  groups: SpeciesGroup[]
+  species: Species[]
+  speciesByCode: Record<string, Record<string, any>>
+}

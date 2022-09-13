@@ -1,120 +1,117 @@
-/**
- * @typedef RegulatoryZone
- * @property {string} lawType
- * @property {string} topic
- * @property {string} zone
- * @property {GearRegulation} gearRegulation
- * @property {SpeciesRegulation} speciesRegulation
- * @property {RegulatoryText[]} regulatoryReference
- * @property {GeoJSONGeometry} geometry
- * @property {string} region
- * @property {string} color
- * @property {boolean} showed
- * @property {string} uuid
- */
+import type { GeoJSONGeometry } from './geojson'
 
-/**
- * @typedef RegulatoryText
- * @property {string} textName
- * @property {string} textURL
- * @property {startDate} Date
- * @property {endDate | 'infinite'} Date
- * @property {RegulatoryTextType} textType
- */
+export type RegulatoryZone = {
+  color: string
+  gearRegulation: GearRegulation
+  geometry: GeoJSONGeometry
+  lawType: string
+  region: string
+  regulatoryReference: RegulatoryText[]
+  showed: boolean
+  speciesRegulation: SpeciesRegulation
+  topic: string
+  uuid: string
+  zone: string
+}
 
-/**
- * @typedef {Map<string, RegulatoryZone[]>} RegulatoryTopics - key is a topic
- **/
+export type RegulatoryText = {
+  // TODO Use `Infinity`
+  endDate: Date | 'infinite'
+  startDate: Date
+  textName: string
+  // TODO Doesn't exist.
+  textType: any
+  // textType: RegulatoryTextType
+  textURL: string
+}
 
-/**
- * @typedef {Map<string, RegulatoryTopics>} RegulatoryLawTypes - key is the law type name
- **/
+// TODO Check that.
+/** key is a topic */
+export type RegulatoryTopics = Map<string, RegulatoryZone[]>
 
-/**
- * @typedef DateInterval
- * @property {date} startDate
- * @property {date} endDate
- * /
+// TODO Check that.
+/** key is the law type name */
+export type RegulatoryLawTypes = Map<string, RegulatoryTopics[]>
 
-/**
- * @typedef TimeInterval
- * @property {date} from
- * @property {date} to
- */
+export type DateInterval = {
+  endDate: Date
+  startDate: Date
+}
 
-/**
- * @typedef FishingPeriod
- * @property {boolean} authorized
- * @property {boolean} annualRecurrence
- * @property {[DateInterval]} dateRanges
- * @property {[date]} dates
- * @property {[string]} weekdays
- * @property {boolean} holidays
- * @property {TimeInterval} timeIntervals
- * @property {boolean} holidays
- * @property {boolean} daytime
- * @property {string} otherInfo
- * @property {boolean} allYear
- */
+export type TimeInterval = {
+  from: Date
+  to: Date
+}
 
-/**
- * @typedef RegulatorySpeciesDetail
- * @property {string} code - FAO code
- * @property {string} remarks
- */
+export type FishingPeriod = {
+  allYear: boolean
+  annualRecurrence: boolean
+  authorized: boolean
+  dateRanges: [DateInterval]
+  // TODO Check that.
+  dates: [Date]
+  daytime: boolean
+  holidays: boolean
+  otherInfo: string
+  timeIntervals: TimeInterval
+  weekdays: [string]
+}
 
-/**
- * @typedef RegulatedSpecies
- * @property {boolean} allSpecies
- * @property {string} otherInfo
- * @property {RegulatedSpeciesDetail[]} species
- * @property {string[]} speciesGroups - group name
- */
+export type RegulatorySpeciesDetail = {
+  /** FAO code */
+  code: string
+  remarks: string
+}
 
-/**
- * @typedef SpeciesRegulation
- * @property {RegulatedSpecies} authorized
- * @property {RegulatedSpecies} unauthorized
- * @property {string} otherInfo
- */
+export type RegulatedSpecies = {
+  allSpecies: boolean
+  otherInfo: string
+  species: RegulatedSpeciesDetail[]
+  /** group name */
+  speciesGroups: string[]
+}
 
-/**
- * @typedef Gear
- * @property {string} code
- * @property {string} name
- * @property {string} groupId
- * @property {string} category
- * @property {string} meshType - (One of greaterThan, greaterThanOrEqualTo, lowerThan, lowerThanOrEqualTo, equal, between)
- * @property {string[]} mesh
- */
+export type SpeciesRegulation = {
+  authorized: RegulatedSpecies
+  otherInfo: string
+  unauthorized: RegulatedSpecies
+}
 
-/**
- * @typedef GearCategory
- * @property {string} name
- * @property {string} meshType
- * @property {string[]} mesh
- */
+export type Gear = {
+  category: string
+  code: string
+  groupId: string
+  mesh: string[]
+  /** (One of greaterThan, greaterThanOrEqualTo, lowerThan, lowerThanOrEqualTo, equal, between) */
+  meshType: string
+  name: string
+}
 
-/**
- * @typedef GearRegulation
- * @property {RegulatedGears} authorized
- * @property {RegulatedGears} unauthorized
- * @property {string} otherInfo
- */
+export type GearCategory = {
+  mesh: string[]
+  meshType: string
+  name: string
+}
 
-/**
- * @typedef RegulatedGears
- * @property {boolean} allGears
- * @property {boolean} allTowedGears
- * @property {boolean} allPassiveGears
- * @property {Gear[]} regulatedGears
- * @property {Object<string,GearCategory>} regulatedGearCategories
- * @property {string[]} selectedCategoriesAndGears - a list of categories name and gears code
- * @property {boolean} derogation
-*/
+export type GearRegulation = {
+  authorized: RegulatedGears
+  otherInfo: string
+  unauthorized: RegulatedGears
+}
 
-/**
- * @typedef RegulatedSpeciesDetail
- * @property {string} code - FAO code
- * @property {string} remarks
- */
+export type RegulatedGears = {
+  allGears: boolean
+  allPassiveGears: boolean
+  allTowedGears: boolean
+  derogation: boolean
+  regulatedGearCategories: Record<string, GearCategory>
+  regulatedGears: Gear[]
+  /**  a list of categories name and gears code */
+  selectedCategoriesAndGears: string[]
+}
+
+export type RegulatedSpeciesDetail = {
+  /** FAO code */
+  code: string
+  remarks: string
+}

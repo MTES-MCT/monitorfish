@@ -1,26 +1,25 @@
-/**
- * @typedef VesselFilter
- * @property {FilterValues} filters
- * @property {string} name
- * @property {string} color
- * @property {boolean} showed
- * @property {string} uuid
- */
+import type { GeoJSONGeometry } from './geojson'
 
-/**
- * @typedef FilterValues
- * @property {string[]} countriesFiltered
- * @property {string[]} fleetSegmentsFiltered
- * @property {string[]} gearsFiltered
- * @property {string[]} speciesFiltered
- * @property {string[]} districtsFiltered
- * @property {string[]} vesselsSizeValuesChecked
- * @property {ZoneSelected[]} zonesSelected
- */
+export type VesselFilter = {
+  color: string
+  filters: FilterValues
+  name: string
+  showed: boolean
+  uuid: string
+}
 
-/**
- * @typedef ZoneSelected
- * @property {string} name
- * @property {string} code
- * @property {GeoJSONGeometry} feature
- */
+export type FilterValues = {
+  countriesFiltered: string[]
+  districtsFiltered: string[]
+  fleetSegmentsFiltered: string[]
+  gearsFiltered: string[]
+  speciesFiltered: string[]
+  vesselsSizeValuesChecked: string[]
+  zonesSelected: ZoneSelected[]
+}
+
+export type ZoneSelected = {
+  code: string
+  feature: GeoJSONGeometry
+  name: string
+}

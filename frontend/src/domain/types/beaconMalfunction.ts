@@ -1,95 +1,87 @@
-/**
- * @typedef BeaconMalfunction
- * @property {number} id
- * @property {string} internalReferenceNumber
- * @property {string} externalReferenceNumber
- * @property {string} ircs
- * @property {string} flagState
- * @property {string} vesselIdentifier
- * @property {string} vesselName
- * @property {string} vesselStatus
- * @property {string} stage
- * @property {boolean} priority
- * @property {string} malfunctionStartDateTime
- * @property {string | null} malfunctionEndDateTime
- * @property {string} vesselStatusLastModificationDateTime
- * @property {string} endOfBeaconMalfunctionReason
- * @property {string} notificationRequested
- */
+import type { Integer } from 'type-fest'
 
-/**
- * @typedef UpdateBeaconMalfunction
- * @property {string | null} [vesselStatus]
- * @property {string | null} [stage]
- */
+export type BeaconMalfunction = {
+  endOfBeaconMalfunctionReason: string
+  externalReferenceNumber: string
+  flagState: string
+  id: number
+  internalReferenceNumber: string
+  ircs: string
+  malfunctionEndDateTime: string | null
+  malfunctionStartDateTime: string
+  notificationRequested: string
+  priority: boolean
+  stage: string
+  vesselIdentifier: string
+  vesselName: string
+  vesselStatus: string
+  vesselStatusLastModificationDateTime: string
+}
 
-/**
- * @typedef BeaconMalfunctionComment
- * @property {number} id
- * @property {string} comment
- * @property {string} userType
- * @property {string} dateTime
- */
+export type UpdateBeaconMalfunction = {
+  stage: string | null
+  vesselStatus: string | null
+}
 
-/**
- * @typedef BeaconMalfunctionAction
- * @property {number} id
- * @property {int} beaconMalfunctionId
- * @property {string} propertyName
- * @property {string} previousValue
- * @property {string} nextValue
- * @property {string} dateTime
- */
+export type BeaconMalfunctionComment = {
+  comment: string
+  dateTime: string
+  id: number
+  userType: string
+}
 
-/**
- * @typedef BeaconMalfunctionNotification
- * @property {number} id
- * @property {int} beaconMalfunctionId
- * @property {string} notificationType
- * @property {string} communicationMeans
- * @property {string} recipientFunction
- * @property {string} recipientName
- * @property {string} recipientAddressOrNumber
- * @property {string} dateTime
- * @property {boolean || null} success
- * @property {string || null} errorMessage
- */
+export type BeaconMalfunctionAction = {
+  beaconMalfunctionId: Integer<number>
+  dateTime: string
+  id: number
+  nextValue: string
+  previousValue: string
+  propertyName: string
+}
 
-/**
- * @typedef BeaconMalfunctionNotifications
- * @property {int} beaconMalfunctionId
- * @property {string} notificationType
- * @property {string} dateTimeUtc
- * @property {BeaconMalfunctionNotification[]} notifications
- */
+export type BeaconMalfunctionNotification = {
+  beaconMalfunctionId: Integer<number>
+  communicationMeans: string
+  dateTime: string
+  errorMessage: string | null
+  id: number
+  notificationType: string
+  recipientAddressOrNumber: string
+  recipientFunction: string
+  recipientName: string
+  success: boolean | null
+}
 
-/**
- * @typedef BeaconMalfunctionCommentInput
- * @property {string} comment
- * @property {string} userType
- */
+export type BeaconMalfunctionNotifications = {
+  beaconMalfunctionId: Integer<number>
+  dateTimeUtc: string
+  notificationType: string
+  notifications: BeaconMalfunctionNotification[]
+}
 
-/**
- * @typedef BeaconMalfunctionResumeAndDetails
- * @property {BeaconMalfunction} beaconMalfunction
- * @property {BeaconMalfunctionComment[]} comments
- * @property {BeaconMalfunctionAction[]} actions
- * @property {VesselBeaconMalfunctionsResume} resume
- * @property {BeaconMalfunctionNotifications[]} notifications
- */
+export type BeaconMalfunctionCommentInput = {
+  comment: string
+  userType: string
+}
 
-/**
- * @typedef VesselBeaconMalfunctionsResumeAndHistory
- * @property {BeaconMalfunctionResumeAndDetails || null} current
- * @property {VesselBeaconMalfunctionsResume} resume
- * @property {BeaconMalfunctionResumeAndDetails[]} history
- * @property {VesselIdentity} vesselIdentity
- */
+export type BeaconMalfunctionResumeAndDetails = {
+  actions: BeaconMalfunctionAction[]
+  beaconMalfunction: BeaconMalfunction
+  comments: BeaconMalfunctionComment[]
+  notifications: BeaconMalfunctionNotifications[]
+  resume: VesselBeaconMalfunctionsResume
+}
 
-/**
- * @typedef VesselBeaconMalfunctionsResume
- * @property {number} numberOfBeaconsAtSea
- * @property {number} numberOfBeaconsAtPort
- * @property {string || null} lastBeaconMalfunctionDateTime
- * @property {string || null} lastBeaconMalfunctionVesselStatus
- */
+export type VesselBeaconMalfunctionsResumeAndHistory = {
+  current: BeaconMalfunctionResumeAndDetails | null
+  history: BeaconMalfunctionResumeAndDetails[]
+  resume: VesselBeaconMalfunctionsResume
+  vesselIdentity: VesselIdentity
+}
+
+export type VesselBeaconMalfunctionsResume = {
+  lastBeaconMalfunctionDateTime: string | null
+  lastBeaconMalfunctionVesselStatus: string | null
+  numberOfBeaconsAtPort: number
+  numberOfBeaconsAtSea: number
+}

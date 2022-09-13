@@ -15,7 +15,7 @@ import { globalSliceReducer } from './Global'
 import infraction from './Infraction'
 import { interestPointReducer } from './InterestPoint'
 import layer from './Layer'
-import map from './Map'
+import { mapReducer } from './Map'
 import measurement from './Measurement'
 import regulatory from './Regulatory'
 import reporting from './Reporting'
@@ -25,7 +25,7 @@ import { vesselSliceReducer } from './Vessel'
 const commonReducerList = {
   gear,
   global: globalSliceReducer,
-  map,
+  map: mapReducer,
   regulatory,
   species
 }

@@ -29,7 +29,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   const {
     previewFilteredVesselsMode,
-    adminRole
+    isAdmin
   } = useSelector(state => state.global)
 
   const {
@@ -210,7 +210,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
         .map(feature => {
           const { vesselProperties } = feature
           const label = Vessel.getVesselFeatureLabel(vesselProperties, {
-            adminRole,
+            isAdmin,
             vesselLabel,
             vesselsLastPositionVisibility,
             riskFactorShowedOnMap,
@@ -245,7 +245,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
     }
 
     function addVesselLabelToAllFeaturesInExtent () {
-      const doNotShowLabels = (adminRole && !vesselLabelsShowedOnMap && !riskFactorShowedOnMap) || (!adminRole && !vesselLabelsShowedOnMap)
+      const doNotShowLabels = (isAdmin && !vesselLabelsShowedOnMap && !riskFactorShowedOnMap) || (!isAdmin && !vesselLabelsShowedOnMap)
       if (doNotShowLabels) {
         setFeaturesAndLabels([])
         getVectorSource().clear()
@@ -289,7 +289,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       isThrottled.current = false
     }, throttleDuration)
   }, [
-    adminRole,
+    isAdmin,
     map,
     vessels,
     selectedVessel,

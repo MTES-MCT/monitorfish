@@ -1,8 +1,9 @@
-import { ReactNode } from 'react'
 import { List } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
+
+import type { ReactNode } from 'react'
 
 type CardTableHeaderProps = {
   children: ReactNode

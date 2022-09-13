@@ -75,7 +75,7 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
       featureProjection: OPENLAYERS_PROJECTION
     }),
     loader: extent => {
-      getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZoneProperties, getState().global.inBackofficeMode)
+      getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZoneProperties, getState().global.isBackoffice)
         .then(regulatoryZone => {
           if (!regulatoryZone.geometry) {
             vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(new Error('Aucune géometrie dans la zone')))

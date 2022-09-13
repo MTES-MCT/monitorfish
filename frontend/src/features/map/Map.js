@@ -31,7 +31,7 @@ import VesselInfractionSuspicionLayer from '../../layers/VesselInfractionSuspici
 
 const Map = () => {
   const gears = useSelector(state => state.gear.gears)
-  const adminRole = useSelector(state => state.global.adminRole)
+  const isAdmin = useSelector(state => state.global.isAdmin)
 
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
@@ -82,10 +82,10 @@ const Map = () => {
       <DrawLayer/>
       <VesselEstimatedPositionLayer/>
       <VesselSelectedLayer/>
-      <VesselAlertLayer adminRole={adminRole}/>
-      <VesselBeaconMalfunctionLayer adminRole={adminRole}/>
-      <VesselAlertAndBeaconMalfunctionLayer adminRole={adminRole}/>
-      <VesselInfractionSuspicionLayer adminRole={adminRole}/>
+      <VesselAlertLayer isAdmin={isAdmin}/>
+      <VesselBeaconMalfunctionLayer isAdmin={isAdmin}/>
+      <VesselAlertAndBeaconMalfunctionLayer isAdmin={isAdmin}/>
+      <VesselInfractionSuspicionLayer isAdmin={isAdmin}/>
       <VesselCardOverlay feature={currentFeature}/>
       <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
       <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>

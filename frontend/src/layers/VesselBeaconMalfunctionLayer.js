@@ -23,7 +23,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
 
   const {
     previewFilteredVesselsMode,
-    adminRole
+    isAdmin
   } = useSelector(state => state.global)
 
   const {
@@ -56,7 +56,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
   }
 
   useEffect(() => {
-    if (adminRole && map) {
+    if (isAdmin && map) {
       getLayer().name = Layers.VESSEL_BEACON_MALFUNCTION.code
       map.getLayers().push(getLayer())
     }
@@ -66,10 +66,10 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
         map.removeLayer(getLayer())
       }
     }
-  }, [adminRole, map, getLayer])
+  }, [isAdmin, map, getLayer])
 
   useEffect(() => {
-    if (adminRole && vessels?.length) {
+    if (isAdmin && vessels?.length) {
       const features = vessels.reduce((_features, vessel) => {
         if (!vessel.hasBeaconMalfunction) return _features
         if (vessel.vesselProperties.hasAlert) return _features
@@ -91,7 +91,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
       getVectorSource()?.addFeatures(features)
     }
   }, [
-    adminRole,
+    isAdmin,
     vessels,
     selectedVesselIdentity,
     vesselsTracksShowed,

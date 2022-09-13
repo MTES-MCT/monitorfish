@@ -23,7 +23,7 @@ const VesselInfractionSuspicionLayer = ({ map }) => {
 
   const {
     previewFilteredVesselsMode,
-    adminRole
+    isAdmin
   } = useSelector(state => state.global)
 
   const {
@@ -58,7 +58,7 @@ const VesselInfractionSuspicionLayer = ({ map }) => {
   }
 
   useEffect(() => {
-    if (adminRole && map) {
+    if (isAdmin && map) {
       getLayer().name = Layers.VESSEL_INFRACTION_SUSPICION.code
       map.getLayers().push(getLayer())
     }
@@ -68,10 +68,10 @@ const VesselInfractionSuspicionLayer = ({ map }) => {
         map.removeLayer(getLayer())
       }
     }
-  }, [adminRole, map])
+  }, [isAdmin, map])
 
   useEffect(() => {
-    if (adminRole && vessels?.length) {
+    if (isAdmin && vessels?.length) {
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
       const features = vessels.reduce((features, vessel) => {
@@ -95,7 +95,7 @@ const VesselInfractionSuspicionLayer = ({ map }) => {
       getVectorSource()?.addFeatures(features)
     }
   }, [
-    adminRole,
+    isAdmin,
     vessels,
     selectedVesselIdentity,
     vesselsTracksShowed,

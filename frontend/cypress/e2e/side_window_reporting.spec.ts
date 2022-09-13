@@ -30,6 +30,7 @@ context('Reportings', () => {
     cy.intercept('PUT', 'bff/v1/reportings/delete').as('deleteReportings')
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
+    cy.wait(200)
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 3)
     cy.get('*[data-cy="side-window-current-reportings"]').first().contains('MARIAGE ÎLE HASARD')
     cy.get('*[data-cy="side-window-current-reportings"]').last().contains('RENCONTRER VEILLER APPARTEMENT"')
@@ -54,6 +55,7 @@ context('Reportings', () => {
     cy.intercept('PUT', 'bff/v1/reportings/delete').as('deleteReportings')
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
+    cy.wait(200)
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 3)
 
     // When
@@ -81,7 +83,7 @@ context('Reportings', () => {
     // When
     cy.get('[data-cy="side-window-edit-reporting"]').click()
     cy.get('[data-cy="new-reporting-title"]').type(
-      '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace} km',
+      '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace} km'
     )
     cy.get('[data-cy="new-reporting-select-dml"]').click()
     cy.get('[data-key="DML 13"] > .rs-picker-select-menu-item').click()

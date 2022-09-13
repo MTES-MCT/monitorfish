@@ -1,7 +1,5 @@
-/// <reference types="cypress" />
-
-import { CustomDate } from '../../src/libs/CustomDate'
 import { getDate } from '../../src/utils'
+import { getUtcizedDayjs } from '../../src/utils/getUtcizedDayjs'
 
 context('Side window beacon malfunctions', () => {
   beforeEach(() => {
@@ -222,7 +220,7 @@ context('Side window beacon malfunctions', () => {
       )
 
     // Show vessel on map
-    const oneWeeksBeforeDate = new CustomDate().date.subtract(8, 'days')
+    const oneWeeksBeforeDate = getUtcizedDayjs().subtract(8, 'days')
     const oneWeeksBeforePlusOneDayDate = oneWeeksBeforeDate.add(1, 'day')
     cy.log(`afterDateTime=${oneWeeksBeforeDate.toISOString()}`)
     cy.log(`beforeDateTime=${oneWeeksBeforePlusOneDayDate.toISOString()}`)

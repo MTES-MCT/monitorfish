@@ -12,7 +12,7 @@ context('Alerts', () => {
     // Then
     cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('9')
     cy.get('*[data-cy^="side-window-alerts-number-silenced-vessels"]').contains(
-      "Suspension d'alerte sur 2 navire en NAMO",
+      "Suspension d'alerte sur 2 navire en NAMO"
     )
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 9)
 
@@ -24,12 +24,12 @@ context('Alerts', () => {
     cy.intercept(
       'GET',
       'bff/v1/vessels/find?internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
-        '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime=',
+        '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
     ).as('showVesselPositionsOnMap')
     cy.intercept(
       'GET',
       'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
-        '&IRCS=CALLME&voyageRequest=LAST&tripNumber=',
+        '&IRCS=CALLME&voyageRequest=LAST&tripNumber='
     ).as('showVesselVoyageOnMap')
     cy.get('*[data-cy="side-window-alerts-show-vessel"]').first().click({ force: true })
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))

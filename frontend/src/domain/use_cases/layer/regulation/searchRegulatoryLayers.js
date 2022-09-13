@@ -35,7 +35,7 @@ const searchRegulatoryLayers = (searchFields, inputsAreEmpty) => {
     }
 
     if (extent?.length === 4) {
-      return getRegulatoryZonesInExtentFromAPI(extent, state.global.inBackofficeMode)
+      return getRegulatoryZonesInExtentFromAPI(extent, state.global.isBackoffice)
         .then(features => monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode))
         .then(result => getRegulatoryLayersWithoutTerritory(result.layersTopicsByRegulatoryTerritory))
         .then(filteredRegulatoryLayers => {

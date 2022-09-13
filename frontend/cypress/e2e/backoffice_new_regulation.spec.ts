@@ -135,7 +135,7 @@ context('Edit Regulation', () => {
     cy.get('[data-cy="regulation-modal"]').should('exist')
     cy.get('[data-cy="confirm-modal-text"]').should(
       'have.text',
-      'Voulez-vous enregistrer les modifications\napportées à la réglementation ?',
+      'Voulez-vous enregistrer les modifications\napportées à la réglementation ?'
     )
   })
 

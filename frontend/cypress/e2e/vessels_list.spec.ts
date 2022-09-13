@@ -66,7 +66,7 @@ context('Vessels list', () => {
     // When
     cy.get(
       '[aria-rowindex="2"] > .rs-table-cell-group-fixed-left > .table-content-editing ' +
-        '> .rs-table-cell-content > .rs-checkbox > .rs-checkbox-checker',
+        '> .rs-table-cell-content > .rs-checkbox > .rs-checkbox-checker'
     ).click({ timeout: 10000 })
 
     // Then
@@ -79,7 +79,7 @@ context('Vessels list', () => {
     cy.get('*[data-cy^="vessel-list"]').click({ timeout: 10000 })
     cy.get(
       '[aria-rowindex="2"] > .rs-table-cell-group-fixed-left > .table-content-editing ' +
-        '> .rs-table-cell-content > .rs-checkbox > .rs-checkbox-checker',
+        '> .rs-table-cell-content > .rs-checkbox > .rs-checkbox-checker'
     ).click({ timeout: 10000 })
     cy.get('*[data-cy="download-vessels-modal"]').click()
 

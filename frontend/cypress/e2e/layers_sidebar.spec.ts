@@ -8,7 +8,7 @@ context('LayersSidebar', () => {
     cy.request(
       'GET',
       'http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=' +
-        'monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id',
+        'monitorfish:regulations&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id'
     ).then(response => {
       cy.log(response.body)
     })
@@ -105,7 +105,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-region"]').contains('Normandie, Bretagne')
 
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains(
-      'Pêche interdite les vendredi, samedi et dimanche, les jours fériés',
+      'Pêche interdite les vendredi, samedi et dimanche, les jours fériés'
     )
     cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Bien vérifier Légipêche!')
 
@@ -115,7 +115,7 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('Dragues')
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains(
       'li',
-      'Drague sans dent et de largeur maximale 1,30 mètre',
+      'Drague sans dent et de largeur maximale 1,30 mètre'
     )
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('li', 'Dragues avec dents !')
     cy.get('*[data-cy="regulatory-layers-metadata-gears-category-with-infobox"]').should(
@@ -126,7 +126,7 @@ context('LayersSidebar', () => {
         'HMD - Dragues mécanisées incluant les dragues suceuses \n' +
         "DRH - Dragues à main utilisées à bord d'un bateau \n" +
         'DRB - Dragues remorquées par bateau \n' +
-        'DRM - Dragues mécanisées \n',
+        'DRM - Dragues mécanisées \n'
     )
 
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('URC (OURSINS NCA)')
@@ -165,13 +165,13 @@ context('LayersSidebar', () => {
       .should(
         'have.attr',
         'title',
-        'Filets maillants et emmêlants, filets soulevés, pièges et casiers, lignes et hameçons',
+        'Filets maillants et emmêlants, filets soulevés, pièges et casiers, lignes et hameçons'
       )
     cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Chaluts')
     cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Dragues')
     cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-gears"]').contains('Engins non autorisés')
     cy.get('*[data-cy="regulatory-layers-metadata-gears-other-info"]').contains(
-      'Encore une dernière information sur les engins !',
+      'Encore une dernière information sur les engins !'
     )
 
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains("HKE (MERLU D'EUROPE)")
@@ -257,11 +257,11 @@ context('LayersSidebar', () => {
     cy.get('.administrative').toMatchImageSnapshot({
       imageConfig: {
         threshold: 0.05,
-        thresholdType: 'percent',
+        thresholdType: 'percent'
       },
       screenshotConfig: {
-        clip: { height: 500, width: 250, x: 410, y: 0 },
-      },
+        clip: { height: 500, width: 250, x: 410, y: 0 }
+      }
     })
 
     cy.cleanScreenshots(1)

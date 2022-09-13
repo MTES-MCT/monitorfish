@@ -151,8 +151,8 @@ const interestPointSlice = createSlice({
         return
       }
 
-      const currentInterestPointBeingDrawed = { ...state.interestPointBeingDrawed } as InterestPoint
-      const nextInterestPointBeingDrawed = { ...state.interestPointBeingDrawed } as InterestPoint
+      const currentInterestPointBeingDrawed = { ...state.interestPointBeingDrawed }
+      const nextInterestPointBeingDrawed = { ...state.interestPointBeingDrawed }
       nextInterestPointBeingDrawed[action.payload.key] = action.payload.value
       state.interestPointBeingDrawed = nextInterestPointBeingDrawed
 

@@ -13,6 +13,7 @@ export type FilterValues = {
   districtsFiltered: string[]
   fleetSegmentsFiltered: string[]
   gearsFiltered: string[]
+  lastControlMonthsAgo: number | null
   speciesFiltered: string[]
   vesselsSizeValuesChecked: string[]
   zonesSelected: ZoneSelected[]

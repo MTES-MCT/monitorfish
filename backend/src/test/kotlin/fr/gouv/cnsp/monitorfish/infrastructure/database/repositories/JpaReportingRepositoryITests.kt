@@ -79,6 +79,38 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `save Should save a reporting When no vessel identifier given`() {
+        // Given
+        val creationDate = ZonedDateTime.now()
+        val reporting = Reporting(
+            internalReferenceNumber = "FRFGRGR",
+            externalReferenceNumber = "RGD",
+            ircs = "6554fEE",
+            creationDate = creationDate,
+            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+            type = ReportingType.INFRACTION_SUSPICION,
+            isDeleted = false,
+            isArchived = false)
+
+        // When
+        jpaReportingRepository.save(reporting)
+        val reportings = jpaReportingRepository.findAll()
+
+        // Then
+        assertThat(reportings).hasSize(9)
+        assertThat(reportings.last().internalReferenceNumber).isEqualTo("FRFGRGR")
+        assertThat(reportings.last().externalReferenceNumber).isEqualTo("RGD")
+        assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
+        val infraction = reportings.last().value as InfractionSuspicion
+        assertThat(infraction.reportingActor).isEqualTo(ReportingActor.OPS)
+        assertThat(infraction.natinfCode).isEqualTo("123456")
+        assertThat(infraction.title).isEqualTo("A title")
+        assertThat(reportings.last().creationDate).isEqualTo(creationDate)
+        assertThat(reportings.last().validationDate).isNull()
+    }
+
+    @Test
+    @Transactional
     fun `findCurrentAndArchivedByVesselIdentifierEquals Should return current and archived reporting`() {
         // When
         val reporting = jpaReportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(

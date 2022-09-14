@@ -1,28 +1,73 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-/* eslint-disable */
-/** @namespace ReportingReducer */
-const ReportingReducer = null
-/* eslint-enable */
+import type { CurrentAndArchivedReportingsOfSelectedVessel, Reporting } from '../types/reporting'
+import type { VesselIdentity } from '../types/vessel'
+
+export type ReportingState = {
+  archivedReportingsFromDate: Date
+  currentAndArchivedReportingsOfSelectedVessel: CurrentAndArchivedReportingsOfSelectedVessel | undefined
+  currentReportings: Reporting[]
+  editedReporting: undefined
+  editedReportingInSideWindow: undefined
+  loadingReporting: boolean
+  vesselIdentity: VesselIdentity | undefined
+}
+const INITIAL_STATE: ReportingState = {
+  archivedReportingsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
+  currentAndArchivedReportingsOfSelectedVessel: {
+    archived: [],
+    current: []
+  },
+  currentReportings: [],
+  editedReporting: undefined,
+  editedReportingInSideWindow: undefined,
+  loadingReporting: false,
+  vesselIdentity: undefined
+}
 
 const reportingSlice = createSlice({
+  initialState: INITIAL_STATE,
   name: 'reporting',
-  initialState: {
-    /** @type {CurrentAndArchivedReportingsOfSelectedVessel} */
-    currentAndArchivedReportingsOfSelectedVessel: {
-      current: [],
-      archived: []
-    },
-    /** @type {Date} */
-    archivedReportingsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
-    loadingReporting: false,
-    vesselIdentity: undefined,
-    /** @type {Reporting[]} */
-    currentReportings: [],
-    editedReportingInSideWindow: undefined,
-    editedReporting: undefined
-  },
   reducers: {
+    /**
+     * Set the loading of reporting to true, and shows a loader in the reporting tab
+     * @function loadReporting
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     */
+    loadReporting(state) {
+      state.loadingReporting = true
+    },
+
+    /**
+     * Remove reporting from current reporting
+     * @function removeReportingsIdsFromCurrentReportings
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: number[]}} action - the ids of the reporting to remove
+     */
+    removeReportingsIdsFromCurrentReportings(state, action) {
+      state.currentReportings = state.currentReportings.filter(
+        reporting => !action.payload.find(reportingId => reportingId === reporting.id)
+      )
+    },
+
+    resetCurrentAndArchivedReportingsOfSelectedVessel(state) {
+      state.currentAndArchivedReportingsOfSelectedVessel = undefined
+      state.vesselIdentity = undefined
+    },
+
+    /**
+     * Set the date since archived reporting are fetched
+     * @function setArchivedReportingsFromDate
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: Date}} action - The "from" date
+     */
+    setArchivedReportingsFromDate(state, action) {
+      state.archivedReportingsFromDate = action.payload
+    },
+
     /**
      * Set current and archived reporting
      * @function setCurrentAndArchivedReportingsOfSelectedVessel
@@ -33,34 +78,12 @@ const reportingSlice = createSlice({
      *   vesselIdentity: VesselIdentity
      * }}} action - the reporting
      */
-    setCurrentAndArchivedReportingsOfSelectedVessel (state, action) {
+    setCurrentAndArchivedReportingsOfSelectedVessel(state, action) {
       state.currentAndArchivedReportingsOfSelectedVessel = action.payload.currentAndArchivedReportingsOfSelectedVessel
       state.vesselIdentity = action.payload.vesselIdentity
       state.loadingReporting = false
     },
-    resetCurrentAndArchivedReportingsOfSelectedVessel (state) {
-      state.currentAndArchivedReportingsOfSelectedVessel = null
-      state.vesselIdentity = null
-    },
-    /**
-     * Set the date since archived reporting are fetched
-     * @function setArchivedReportingsFromDate
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     * @param {{payload: Date}} action - The "from" date
-     */
-    setArchivedReportingsFromDate (state, action) {
-      state.archivedReportingsFromDate = action.payload
-    },
-    /**
-     * Set the loading of reporting to true, and shows a loader in the reporting tab
-     * @function loadReporting
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     */
-    loadReporting (state) {
-      state.loadingReporting = true
-    },
+
     /**
      * Set current reporting
      * @function setCurrentReportings
@@ -68,30 +91,10 @@ const reportingSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: Reporting[]}} action
      */
-    setCurrentReportings (state, action) {
+    setCurrentReportings(state, action) {
       state.currentReportings = action.payload
     },
-    /**
-     * Remove reporting from current reporting
-     * @function removeReportingsIdsFromCurrentReportings
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     * @param {{payload: number[]}} action - the ids of the reporting to remove
-     */
-    removeReportingsIdsFromCurrentReportings (state, action) {
-      state.currentReportings = state.currentReportings
-        .filter(reporting => !action.payload.find(reportingId => reportingId === reporting.id))
-    },
-    /**
-     * Set the edited reporting in side window
-     * @function setEditedReportingInSideWindow
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     * @param {{payload: boolean}} action
-     */
-    setEditedReportingInSideWindow (state, action) {
-      state.editedReportingInSideWindow = action.payload
-    },
+
     /**
      * Set the edited reporting
      * @function setEditedReporting
@@ -99,8 +102,19 @@ const reportingSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: boolean}} action
      */
-    setEditedReporting (state, action) {
+    setEditedReporting(state, action) {
       state.editedReporting = action.payload
+    },
+
+    /**
+     * Set the edited reporting in side window
+     * @function setEditedReportingInSideWindow
+     * @memberOf ReportingReducer
+     * @param {Object=} state
+     * @param {{payload: boolean}} action
+     */
+    setEditedReportingInSideWindow(state, action) {
+      state.editedReportingInSideWindow = action.payload
     },
     /**
      * Update a given current reporting
@@ -109,24 +123,24 @@ const reportingSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: Reporting}} action - the reporting to update
      */
-    updateCurrentReporting (state, action) {
+    updateCurrentReporting(state, action) {
       state.currentReportings = state.currentReportings
         .filter(reporting => reporting.id !== action.payload.id)
         .concat(action.payload)
-    },
+    }
   }
 })
 
 export const {
-  setCurrentAndArchivedReportingsOfSelectedVessel,
+  loadReporting,
+  removeReportingsIdsFromCurrentReportings,
   resetCurrentAndArchivedReportingsOfSelectedVessel,
   setArchivedReportingsFromDate,
-  loadReporting,
+  setCurrentAndArchivedReportingsOfSelectedVessel,
   setCurrentReportings,
-  removeReportingsIdsFromCurrentReportings,
+  setEditedReporting,
   setEditedReportingInSideWindow,
-  updateCurrentReporting,
-  setEditedReporting
+  updateCurrentReporting
 } = reportingSlice.actions
 
-export default reportingSlice.reducer
+export const reportingReducer = reportingSlice.reducer

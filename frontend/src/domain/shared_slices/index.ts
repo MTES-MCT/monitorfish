@@ -18,7 +18,7 @@ import layer from './Layer'
 import { mapReducer } from './Map'
 import measurement from './Measurement'
 import { regulatoryReducer } from './Regulatory'
-import reporting from './Reporting'
+import { reportingReducer } from './Reporting'
 import species from './Species'
 import { vesselSliceReducer } from './Vessel'
 
@@ -45,7 +45,7 @@ const homeReducers = combineReducers({
   layer: layer.homepage.reducer,
   measurement,
   regulatoryLayerSearch,
-  reporting,
+  reporting: reportingReducer,
   vessel: vesselSliceReducer,
   vesselList
 })

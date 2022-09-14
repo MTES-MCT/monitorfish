@@ -1,15 +1,16 @@
+import countries from 'i18n-iso-countries'
 import React, { useCallback, useEffect, useRef } from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { Flag } from '../../vessel_list/tableCells'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import { FlexboxGrid, List } from 'rsuite'
-import countries from 'i18n-iso-countries'
+import styled from 'styled-components'
 import * as timeago from 'timeago.js'
+
+import { COLORS } from '../../../constants/constants'
 import { getAlertNameFromType, getSilencedAlertPeriodText } from '../../../domain/entities/alerts'
-import showVessel from '../../../domain/use_cases/vessel/showVessel'
-import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import validateAlert from '../../../domain/use_cases/alert/validateAlert'
+import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
+import showVessel from '../../../domain/use_cases/vessel/showVessel'
+import { Flag } from '../../vessel_list/tableCells'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -22,12 +23,16 @@ import validateAlert from '../../../domain/use_cases/alert/validateAlert'
  * @return {JSX.Element}
  * @constructor
  */
-const PendingAlertRow = ({ alert, index, showSilencedAlertForIndex, setShowSilencedAlertForIndex, setSilencedAlertId }) => {
+function PendingAlertRow({
+  alert,
+  index,
+  setShowSilencedAlertForIndex,
+  setSilencedAlertId,
+  showSilencedAlertForIndex
+}) {
   const dispatch = useDispatch()
   const ref = useRef()
-  const {
-    focusOnAlert
-  } = useSelector(state => state.alert)
+  const { focusOnAlert } = useSelector(state => state.alert)
   const baseUrl = window.location.origin
 
   useEffect(() => {
@@ -36,110 +41,98 @@ const PendingAlertRow = ({ alert, index, showSilencedAlertForIndex, setShowSilen
     }
   }, [focusOnAlert, alert])
 
-  return <List.Item
-    ref={ref}
-    key={alert.id}
-    index={index + 1}
-    style={listItemStyle(focusOnAlert
-      ? alert.id === focusOnAlert?.id
-      : false,
-    alert.silencedPeriod || alert.isValidated)}
-  >
-    {
-      alert.isValidated
-        ? <AlertTransition
-          data-cy={'side-window-alerts-is-validated-transition'}
-          style={alertValidatedTransition}
-        >
+  return (
+    <List.Item
+      key={alert.id}
+      ref={ref}
+      index={index + 1}
+      style={listItemStyle(
+        focusOnAlert ? alert.id === focusOnAlert?.id : false,
+        alert.silencedPeriod || alert.isValidated
+      )}
+    >
+      {alert.isValidated ? (
+        <AlertTransition data-cy="side-window-alerts-is-validated-transition" style={alertValidatedTransition}>
           Alerte ajoutée à la fiche du navire
         </AlertTransition>
-        : null
-    }
-    {
-      alert.silencedPeriod
-        ? <AlertTransition
-          data-cy={'side-window-alerts-is-silenced-transition'}
-          style={alertSilencedTransition}
-        >
+      ) : null}
+      {alert.silencedPeriod ? (
+        <AlertTransition data-cy="side-window-alerts-is-silenced-transition" style={alertSilencedTransition}>
           L&apos;alerte sera ignorée {getSilencedAlertPeriodText(alert.silencedPeriod)}
         </AlertTransition>
-        : null
-    }
-    {
-      !alert.isValidated && !alert.silencedPeriod
-        ? <FlexboxGrid>
+      ) : null}
+      {!alert.isValidated && !alert.silencedPeriod ? (
+        <FlexboxGrid>
           <FlexboxGrid.Item style={timeAgoColumnStyle} title={alert.creationDate}>
             {timeago.format(new Date(alert.creationDate).getTime(), 'fr')}
           </FlexboxGrid.Item>
-          <FlexboxGrid.Item style={alertTypeStyle}>
-            {getAlertNameFromType(alert.value.type)}
-          </FlexboxGrid.Item>
-          <FlexboxGrid.Item style={alertNatinfStyle}>
-            {alert.value.natinfCode}
-          </FlexboxGrid.Item>
+          <FlexboxGrid.Item style={alertTypeStyle}>{getAlertNameFromType(alert.value.type)}</FlexboxGrid.Item>
+          <FlexboxGrid.Item style={alertNatinfStyle}>{alert.value.natinfCode}</FlexboxGrid.Item>
           <FlexboxGrid.Item style={vesselNameColumnStyle}>
             <Flag
-              title={countries.getName(alert.value.flagState?.toLowerCase(), 'fr')}
               rel="preload"
               src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.value.flagState?.toLowerCase()}.svg`}
-              style={{ width: 18, marginRight: 5, marginLeft: 0, marginTop: 1 }}
+              style={{ marginLeft: 0, marginRight: 5, marginTop: 1, width: 18 }}
+              title={countries.getName(alert.value.flagState?.toLowerCase(), 'fr')}
             />
             {alert.vesselName}
           </FlexboxGrid.Item>
-          <FlexboxGrid.Item style={rowBorderStyle}/>
+          <FlexboxGrid.Item style={rowBorderStyle} />
           <FlexboxGrid.Item style={iconStyle}>
             <Icon
-              data-cy={'side-window-alerts-show-vessel'}
-              style={showIconStyle}
-              alt={'Voir sur la carte'}
-              title={'Voir sur la carte'}
+              alt="Voir sur la carte"
+              data-cy="side-window-alerts-show-vessel"
               onClick={() => {
                 const vesselIdentity = { ...alert, flagState: alert.value.flagState }
                 dispatch(showVessel(vesselIdentity, false, false, null))
                 dispatch(getVesselVoyage(vesselIdentity, undefined, false))
               }}
               src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
+              style={showIconStyle}
+              title="Voir sur la carte"
             />
           </FlexboxGrid.Item>
           <FlexboxGrid.Item style={iconStyle}>
             <Icon
-              data-cy={'side-window-alerts-validate-alert'}
-              style={validateAlertIconStyle}
-              alt={'Valider'}
-              title={'Valider l\'alerte'}
+              alt="Valider"
+              data-cy="side-window-alerts-validate-alert"
               onClick={() => dispatch(validateAlert(alert.id))}
-              src={`${baseUrl}/Icone_valider_alerte.png`}
-              onMouseOver={e => (e.currentTarget.src = `${baseUrl}/Icone_valider_alerte_pleine.png`)}
               onMouseOut={e => (e.currentTarget.src = `${baseUrl}/Icone_valider_alerte.png`)}
+              onMouseOver={e => (e.currentTarget.src = `${baseUrl}/Icone_valider_alerte_pleine.png`)}
+              src={`${baseUrl}/Icone_valider_alerte.png`}
+              style={validateAlertIconStyle}
+              title={"Valider l'alerte"}
             />
           </FlexboxGrid.Item>
           <FlexboxGrid.Item style={iconStyle}>
             <Icon
-              data-cy={'side-window-alerts-silence-alert'}
-              style={silenceAlertStyle}
-              alt={'Ignorer'}
-              title={'Ignorer l\'alerte'}
+              alt="Ignorer"
+              data-cy="side-window-alerts-silence-alert"
               onClick={() => {
                 batch(() => {
                   setShowSilencedAlertForIndex(index + 1)
                   setSilencedAlertId(alert.id)
                 })
               }}
-              src={showSilencedAlertForIndex === index + 1
-                ? `${baseUrl}/Icone_ignorer_alerte_pleine.png`
-                : `${baseUrl}/Icone_ignorer_alerte.png`}
-              onMouseOver={e => (e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte_pleine.png`)}
               onMouseOut={e => {
                 if (showSilencedAlertForIndex !== index + 1) {
                   e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte.png`
                 }
               }}
+              onMouseOver={e => (e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte_pleine.png`)}
+              src={
+                showSilencedAlertForIndex === index + 1
+                  ? `${baseUrl}/Icone_ignorer_alerte_pleine.png`
+                  : `${baseUrl}/Icone_ignorer_alerte.png`
+              }
+              style={silenceAlertStyle}
+              title={"Ignorer l'alerte"}
             />
           </FlexboxGrid.Item>
         </FlexboxGrid>
-        : null
-    }
-  </List.Item>
+      ) : null}
+    </List.Item>
+  )
 }
 
 const AlertTransition = styled.div``
@@ -148,9 +141,9 @@ const alertSilencedTransition = {
   color: COLORS.maximumRed,
   fontWeight: 500,
   height: 41,
+  lineHeight: '41px',
   marginTop: -13,
-  textAlign: 'center',
-  lineHeight: '41px'
+  textAlign: 'center'
 }
 
 const alertValidatedTransition = {
@@ -158,60 +151,60 @@ const alertValidatedTransition = {
   color: COLORS.mediumSeaGreen,
   fontWeight: 500,
   height: 41,
+  lineHeight: '41px',
   marginTop: -13,
-  textAlign: 'center',
-  lineHeight: '41px'
+  textAlign: 'center'
 }
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const showIconStyle = {
-  width: 20,
-  paddingRight: 5,
-  float: 'right',
-  flexShrink: 0,
   cursor: 'pointer',
+  flexShrink: 0,
+  float: 'right',
+  height: 16,
   marginLeft: 'auto',
-  height: 16
+  paddingRight: 5,
+  width: 20
 }
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const Icon = styled.img``
 const validateAlertIconStyle = {
-  paddingRight: 5,
-  float: 'right',
-  flexShrink: 0,
   cursor: 'pointer',
+  flexShrink: 0,
+  float: 'right',
+  height: 16,
   marginLeft: 'auto',
-  height: 16
+  paddingRight: 5
 }
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const silenceAlertStyle = {
-  paddingRight: 5,
-  float: 'right',
-  flexShrink: 0,
   cursor: 'pointer',
+  flexShrink: 0,
+  float: 'right',
+  height: 16,
   marginLeft: 'auto',
-  height: 16
+  paddingRight: 5
 }
 
 const listItemStyle = (isFocused, toClose) => ({
+  animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
   background: isFocused ? COLORS.gainsboro : COLORS.cultured,
   border: `1px solid ${COLORS.lightGray}`,
   borderRadius: 1,
   height: 15,
   marginTop: 6,
-  transition: 'background 3s',
-  animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  transition: 'background 3s'
 })
 
 const styleCenter = {
-  display: 'flex',
   alignItems: 'center',
+  display: 'flex',
   height: 15
 }
 
@@ -245,11 +238,11 @@ const iconStyle = {
 
 const rowBorderStyle = {
   ...styleCenter,
-  height: 43,
-  width: 2,
   borderLeft: `1px solid ${COLORS.lightGray}`,
+  height: 43,
+  marginRight: 5,
   marginTop: -14,
-  marginRight: 5
+  width: 2
 }
 
 export default PendingAlertRow

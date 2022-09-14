@@ -1,8 +1,8 @@
 import React, { forwardRef, useEffect, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
-
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+
 import { COLORS } from '../../constants/constants'
 import { AlertsSubMenu } from '../../domain/entities/alerts'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
@@ -20,7 +20,7 @@ import BeaconMalfunctionsBoard from './beacon_malfunctions/BeaconMalfunctionsBoa
 import SideWindowMenu from './SideWindowMenu'
 import SideWindowSubMenu from './SideWindowSubMenu'
 
-const SideWindowWithoutRef = ({ isFromURL }, ref) => {
+function SideWindowWithoutRef({ isFromURL }, ref) {
   const openedSideWindowTab = useSelector(state => state.global.openedSideWindowTab)
   const openedBeaconMalfunctionInKanban = useSelector(state => state.beaconMalfunction.openedBeaconMalfunctionInKanban)
   const editedReportingInSideWindow = useSelector(state => state.reporting.editedReportingInSideWindow)

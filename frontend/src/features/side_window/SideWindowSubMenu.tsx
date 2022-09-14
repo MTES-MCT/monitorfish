@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../constants/constants'
-import SideWindowSubMenuLink from './SideWindowSubMenuLink'
-import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../domain/entities/alerts'
-import { sideWindowMenu } from '../../domain/entities/sideWindow'
-import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
-import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
-import { beaconMalfunctionsStages } from '../../domain/entities/beaconMalfunction'
-import { AlertAndReportingTab } from './SideWindow'
 import { useSelector } from 'react-redux'
+import styled from 'styled-components'
+
+import { COLORS } from '../../constants/constants'
+import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../domain/entities/alerts'
+import { beaconMalfunctionsStages } from '../../domain/entities/beaconMalfunction'
+import { sideWindowMenu } from '../../domain/entities/sideWindow'
+import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
+import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
+import { AlertAndReportingTab } from './SideWindow'
+import SideWindowSubMenuLink from './SideWindowSubMenuLink'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -21,7 +22,7 @@ import { useSelector } from 'react-redux'
  * @return {JSX.Element}
  * @constructor
  */
-const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, selectedTab, fixed, setIsFixed }) => {
+function SideWindowSubMenu({ fixed, selectedMenu, selectedSubMenu, selectedTab, setIsFixed, setSelectedSubMenu }) {
   const [isOpen, setIsOpen] = useState(false)
   const alerts = useSelector(state => state.alert.alerts)
   const currentReportings = useSelector(state => state.reporting.currentReportings)
@@ -36,7 +37,7 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
     }
   }, [selectedMenu])
 
-  function getNumberOfAlertsOrReportingFromSeaFronts (seaFronts) {
+  function getNumberOfAlertsOrReportingFromSeaFronts(seaFronts) {
     if (selectedTab === AlertAndReportingTab.ALERT) {
       return alerts.filter(alert => seaFronts.includes(alert?.value?.seaFront)).length
     }
@@ -46,106 +47,102 @@ const SideWindowSubMenu = ({ selectedMenu, selectedSubMenu, setSelectedSubMenu, 
     }
   }
 
-  const numberOfBeaconMalfunctions = useMemo(() =>
-    beaconMalfunctions.filter(beaconMalfunction =>
-      beaconMalfunction.stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
-      beaconMalfunction.stage !== beaconMalfunctionsStages.ARCHIVED.code).length,
-    [beaconMalfunctions])
+  const numberOfBeaconMalfunctions = useMemo(
+    () =>
+      beaconMalfunctions.filter(
+        beaconMalfunction =>
+          beaconMalfunction.stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
+          beaconMalfunction.stage !== beaconMalfunctionsStages.ARCHIVED.code
+      ).length,
+    [beaconMalfunctions]
+  )
 
-  return <Menu
-    style={menuStyle(isOpen, fixed)}
-    onMouseEnter={() => setIsOpen(true)}
-    onMouseLeave={() => !fixed && setIsOpen(false)}
-  >
-    <Chevron
-      data-cy={'side-window-sub-menu-trigger'}
-      style={chevronStyle(isOpen)}
-      onClick={() => setIsFixed(!fixed)}
+  return (
+    <Menu
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => !fixed && setIsOpen(false)}
+      style={menuStyle(isOpen, fixed)}
     >
-      <ChevronIcon style={chevronIconStyle(isOpen)}/>
-    </Chevron>
-    <Title style={titleStyle(isOpen)}>
-      Vue d&apos;ensemble
-    </Title>
-    {
-      selectedMenu === sideWindowMenu.ALERTS.code &&
+      <Chevron data-cy="side-window-sub-menu-trigger" onClick={() => setIsFixed(!fixed)} style={chevronStyle(isOpen)}>
+        <ChevronIcon style={chevronIconStyle(isOpen)} />
+      </Chevron>
+      <Title style={titleStyle(isOpen)}>Vue d&apos;ensemble</Title>
+      {selectedMenu === sideWindowMenu.ALERTS.code && (
         <>
           <SideWindowSubMenuLink
             isOpen={isOpen}
-            oneLine
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.MEMN.seaFronts)}
-            menu={AlertsSubMenu.MEMN}
             isSelected={selectedSubMenu.code === AlertsSubMenu.MEMN.code}
+            menu={AlertsSubMenu.MEMN}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.MEMN.seaFronts)}
+            oneLine
             setSelected={setSelectedSubMenu}
           />
           <SideWindowSubMenuLink
             isOpen={isOpen}
-            oneLine
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.NAMO.seaFronts)}
-            menu={AlertsSubMenu.NAMO}
             isSelected={selectedSubMenu.code === AlertsSubMenu.NAMO.code}
+            menu={AlertsSubMenu.NAMO}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.NAMO.seaFronts)}
+            oneLine
             setSelected={setSelectedSubMenu}
           />
           <SideWindowSubMenuLink
             isOpen={isOpen}
-            oneLine
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.SA.seaFronts)}
-            menu={AlertsSubMenu.SA}
             isSelected={selectedSubMenu.code === AlertsSubMenu.SA.code}
+            menu={AlertsSubMenu.SA}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.SA.seaFronts)}
+            oneLine
             setSelected={setSelectedSubMenu}
           />
           <SideWindowSubMenuLink
             isOpen={isOpen}
-            oneLine
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.MED.seaFronts)}
-            menu={AlertsSubMenu.MED}
             isSelected={selectedSubMenu.code === AlertsSubMenu.MED.code}
+            menu={AlertsSubMenu.MED}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.MED.seaFronts)}
+            oneLine
             setSelected={setSelectedSubMenu}
           />
           <SideWindowSubMenuLink
             isOpen={isOpen}
-            oneLine
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROA.seaFronts)}
-            menu={AlertsSubMenu.OUTREMEROA}
             isSelected={selectedSubMenu.code === AlertsSubMenu.OUTREMEROA.code}
+            menu={AlertsSubMenu.OUTREMEROA}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROA.seaFronts)}
+            oneLine
             setSelected={setSelectedSubMenu}
           />
           <SideWindowSubMenuLink
             isOpen={isOpen}
-            oneLine
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROI.seaFronts)}
-            menu={AlertsSubMenu.OUTREMEROI}
             isSelected={selectedSubMenu.code === AlertsSubMenu.OUTREMEROI.code}
+            menu={AlertsSubMenu.OUTREMEROI}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROI.seaFronts)}
+            oneLine
             setSelected={setSelectedSubMenu}
           />
         </>
-    }
-    {
-      selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code &&
-      <>
+      )}
+      {selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code && (
         <SideWindowSubMenuLink
           isOpen={isOpen}
-          number={numberOfBeaconMalfunctions}
-          menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING}
           isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}
+          menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING}
+          number={numberOfBeaconMalfunctions}
           setSelected={setSelectedSubMenu}
         />
-      </>
-    }
-  </Menu>
+      )}
+    </Menu>
+  )
 }
 
 const Chevron = styled.div``
 const chevronStyle = isOpen => ({
-  width: 24,
-  height: 24,
-  cursor: 'pointer',
-  position: 'absolute',
-  marginLeft: isOpen ? 186 : 15,
-  transition: 'all 0.5s',
-  border: `1px solid ${COLORS.lightGray}`,
   background: COLORS.background,
-  borderRadius: '50%'
+  border: `1px solid ${COLORS.lightGray}`,
+  borderRadius: '50%',
+  cursor: 'pointer',
+  height: 24,
+  marginLeft: isOpen ? 186 : 15,
+  position: 'absolute',
+  transition: 'all 0.5s',
+  width: 24
 })
 
 const ChevronIcon = styled(ChevronIconSVG)``
@@ -159,35 +156,34 @@ const chevronIconStyle = isOpen => ({
 
 const Menu = styled.div``
 const menuStyle = (isOpen, fixed) => ({
-  width: isOpen ? 200 : 30,
-  height: 'calc(100vh - 28px)',
   background: COLORS.gainsboro,
+  borderRight: `1px solid ${COLORS.lightGray}`,
+  boxShadow: isOpen && !fixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset',
+  color: COLORS.slateGray,
   flexShrink: 0,
   fontSize: 16,
   fontWeight: 500,
-  color: COLORS.slateGray,
-  padding: '14px 0',
-  transition: 'width 0.5s',
-  position: fixed ? 'unset' : 'absolute',
+  height: 'calc(100vh - 28px)',
   marginLeft: fixed ? 0 : 66,
-  boxShadow: isOpen && !fixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset',
-  zIndex: 999,
-  borderRight: `1px solid ${COLORS.lightGray}`
-
+  padding: '14px 0',
+  position: fixed ? 'unset' : 'absolute',
+  transition: 'width 0.5s',
+  width: isOpen ? 200 : 30,
+  zIndex: 999
 })
 
 const Title = styled.span``
 const titleStyle = isOpen => ({
+  borderBottom: `1px solid ${COLORS.lightGray}`,
   display: 'inline-block',
+  opacity: isOpen ? 1 : 0,
+  overflow: 'hidden',
   paddingBottom: 11,
   paddingLeft: 20,
-  borderBottom: `1px solid ${COLORS.lightGray}`,
-  opacity: isOpen ? 1 : 0,
-  width: isOpen ? 180 : 0,
-  transition: 'width 0.8s ease',
-  overflow: 'hidden',
   textOverflow: 'clip',
-  whiteSpace: 'nowrap'
+  transition: 'width 0.8s ease',
+  whiteSpace: 'nowrap',
+  width: isOpen ? 180 : 0
 })
 
 export default SideWindowSubMenu

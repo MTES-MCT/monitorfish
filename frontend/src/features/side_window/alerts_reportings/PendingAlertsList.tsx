@@ -1,16 +1,16 @@
+import Fuse from 'fuse.js'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { alertSearchOptions, AlertsMenuSeaFrontsToSeaFrontList } from '../../../domain/entities/alerts'
-import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
 import silenceAlert from '../../../domain/use_cases/alert/silenceAlert'
+import SearchIconSVG from '../../icons/Loupe_dark.svg'
+import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import PendingAlertRow from './PendingAlertRow'
-import Fuse from 'fuse.js'
 import SilenceAlertMenu from './SilenceAlertMenu'
 
 /**
@@ -24,10 +24,7 @@ import SilenceAlertMenu from './SilenceAlertMenu'
  */
 function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
   const dispatch = useDispatch()
-  const {
-    focusOnAlert,
-    alerts
-  } = useSelector(state => state.alert)
+  const { alerts, focusOnAlert } = useSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('creationDate')
   const [sortType] = useState(SortType.DESC)
@@ -36,15 +33,15 @@ function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
   const [silencedAlertId, setSilencedAlertId] = useState(null)
   const scrollableContainer = useRef()
 
-  const currentSeaFrontAlerts = useMemo(() => {
-    return alerts
-      .filter(alert =>
-        (AlertsMenuSeaFrontsToSeaFrontList[seaFront.code]?.seaFronts || []).includes(alert.value.seaFront))
-  }, [alerts, seaFront])
+  const currentSeaFrontAlerts = useMemo(
+    () =>
+      alerts.filter(alert =>
+        (AlertsMenuSeaFrontsToSeaFrontList[seaFront.code]?.seaFronts || []).includes(alert.value.seaFront)
+      ),
+    [alerts, seaFront]
+  )
 
-  const fuse = useMemo(() =>
-      new Fuse(currentSeaFrontAlerts, alertSearchOptions),
-    [currentSeaFrontAlerts])
+  const fuse = useMemo(() => new Fuse(currentSeaFrontAlerts, alertSearchOptions), [currentSeaFrontAlerts])
 
   const filteredAlerts = useMemo(() => {
     if (!currentSeaFrontAlerts) {
@@ -85,7 +82,7 @@ function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
       setSilencedAlertId(null)
       dispatch(silenceAlert(silencedAlertPeriod, id))
     },
-    [dispatch],
+    [dispatch]
   )
 
   return (
@@ -115,7 +112,7 @@ function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
         style={{
           ...rowStyle(sortedAlerts?.length),
           marginTop: 10,
-          overflow: 'visible',
+          overflow: 'visible'
         }}
       >
         <List.Item
@@ -125,7 +122,7 @@ function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
             ...listItemStyle,
             background: COLORS.background,
             border: `1px solid ${COLORS.lightGray}`,
-            color: COLORS.slateGray,
+            color: COLORS.slateGray
           }}
         >
           <FlexboxGrid>
@@ -180,14 +177,14 @@ const warningStyle = {
   lineHeight: '7px',
   marginRight: 5,
   padding: '5px 4px 5px 6px',
-  width: 5,
+  width: 5
 }
 
 const NumberOfSilencedAlerts = styled.div``
 const numberOfSilencedAlertsStyle = {
   color: COLORS.slateGray,
   marginBottom: 15,
-  textDecoration: 'underline',
+  textDecoration: 'underline'
 }
 
 const Title = styled.div``
@@ -195,40 +192,40 @@ const titleStyle = {
   color: COLORS.gunMetal,
   fontSize: 16,
   fontWeight: 700,
-  marginBottom: 20,
+  marginBottom: 20
 }
 
 const searchVesselInputStyle = baseUrl => ({
+  ':hover, :focus': {
+    borderBottom: `1px ${COLORS.lightGray} solid`
+  },
   backgroundColor: 'white',
   backgroundImage: `url(${baseUrl}/${SearchIconSVG})`,
   backgroundPosition: 'bottom 3px right 5px',
-  border: `1px ${COLORS.lightGray} solid`,
-  ':hover, :focus': {
-    borderBottom: `1px ${COLORS.lightGray} solid`,
-  },
-  borderRadius: 0,
   backgroundRepeat: 'no-repeat',
-  color: COLORS.gunMetal,
   backgroundSize: 25,
-  fontSize: 13,
+  border: `1px ${COLORS.lightGray} solid`,
+  borderRadius: 0,
+  color: COLORS.gunMetal,
   flex: 3,
-  marginBottom: 5,
+  fontSize: 13,
   height: 40,
+  marginBottom: 5,
   padding: '0 5px 0 10px',
-  width: 280,
+  width: 280
 })
 
 const ScrollableContainer = styled.div``
 const ScrollableContainerStyle = {
   maxHeight: '50vh',
-  overflowY: 'auto',
+  overflowY: 'auto'
 }
 
 const NoAlerts = styled.div``
 const noAlertsStyle = {
   color: COLORS.slateGray,
   marginTop: 20,
-  textAlign: 'center',
+  textAlign: 'center'
 }
 
 const SearchVesselInput = styled.input``
@@ -241,13 +238,13 @@ const listItemStyle = (isFocused, toClose) => ({
   height: 15,
   marginTop: 6,
   overflow: 'hidden',
-  transition: 'background 3s',
+  transition: 'background 3s'
 })
 
 const styleCenter = {
   alignItems: 'center',
   display: 'flex',
-  height: 15,
+  height: 15
 }
 
 // The width of the scrolling bar is 16 px. When we have more than
@@ -256,29 +253,29 @@ const rowStyle = numberOfAlerts => ({
   boxShadow: 'unset',
   color: COLORS.gunMetal,
   fontWeight: 500,
-  width: numberOfAlerts > 9 ? 1180 + 16 : 1180,
+  width: numberOfAlerts > 9 ? 1180 + 16 : 1180
 })
 
 const vesselNameColumnStyle = {
   ...styleCenter,
   display: 'flex',
-  width: 280,
+  width: 280
 }
 
 const timeAgoColumnStyle = {
   ...styleCenter,
   marginLeft: 20,
-  width: 190,
+  width: 190
 }
 
 const alertTypeStyle = {
   ...styleCenter,
-  width: 410,
+  width: 410
 }
 
 const alertNatinfStyle = {
   ...styleCenter,
-  width: 150,
+  width: 150
 }
 
 const Content = styled.div``
@@ -287,7 +284,7 @@ const contentStyle = {
   marginLeft: 40,
   marginTop: 20,
   padding: '30px 40px 40px 40px',
-  width: 'fit-content',
+  width: 'fit-content'
 }
 
 export default PendingAlertsList

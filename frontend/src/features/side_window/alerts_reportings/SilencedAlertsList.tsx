@@ -1,19 +1,20 @@
+import Fuse from 'fuse.js'
+import countries from 'i18n-iso-countries'
 import React, { useCallback, useMemo, useState } from 'react'
-import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
-import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
-import { Flag } from '../../vessel_list/tableCells'
 import { useDispatch, useSelector } from 'react-redux'
 import { FlexboxGrid, List } from 'rsuite'
-import countries from 'i18n-iso-countries'
-import { getAlertNameFromType, alertSearchOptions } from '../../../domain/entities/alerts'
-import showVessel from '../../../domain/use_cases/vessel/showVessel'
-import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
-import SearchIconSVG from '../../icons/Loupe_dark.svg'
-import { getDateDiffInDays, getDateTime } from '../../../utils'
+import styled from 'styled-components'
 import * as timeago from 'timeago.js'
+
+import { COLORS } from '../../../constants/constants'
+import { getAlertNameFromType, alertSearchOptions } from '../../../domain/entities/alerts'
 import reactivateSilencedAlert from '../../../domain/use_cases/alert/reactivateSilencedAlert'
-import Fuse from 'fuse.js'
+import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
+import showVessel from '../../../domain/use_cases/vessel/showVessel'
+import { getDateDiffInDays, getDateTime } from '../../../utils'
+import SearchIconSVG from '../../icons/Loupe_dark.svg'
+import { Flag } from '../../vessel_list/tableCells'
+import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -22,19 +23,15 @@ import Fuse from 'fuse.js'
  * @return {JSX.Element}
  * @constructor
  */
-const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
+function SilencedAlertsList({ silencedSeaFrontAlerts }) {
   const dispatch = useDispatch()
-  const {
-    focusOnAlert
-  } = useSelector(state => state.alert)
+  const { focusOnAlert } = useSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('silencedBeforeDate')
   const [sortType] = useState(SortType.ASC)
   const [searched, setSearched] = useState(undefined)
 
-  const fuse = useMemo(() =>
-    new Fuse(silencedSeaFrontAlerts, alertSearchOptions),
-    [silencedSeaFrontAlerts])
+  const fuse = useMemo(() => new Fuse(silencedSeaFrontAlerts, alertSearchOptions), [silencedSeaFrontAlerts])
 
   const filteredAlerts = useMemo(() => {
     if (!searched?.length || searched?.length <= 1) {
@@ -44,30 +41,32 @@ const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
     return fuse.search(searched).map(result => result.item)
   }, [silencedSeaFrontAlerts, searched, fuse])
 
-  const sortedAlerts = useMemo(() => {
-    return filteredAlerts
-      .slice()
-      .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
-  }, [filteredAlerts, sortColumn, sortType])
+  const sortedAlerts = useMemo(
+    () => filteredAlerts.slice().sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType)),
+    [filteredAlerts, sortColumn, sortType]
+  )
 
-  const reactivateSilencedAlertCallback = useCallback(id => {
-    dispatch(reactivateSilencedAlert(id))
-  }, [dispatch])
+  const reactivateSilencedAlertCallback = useCallback(
+    id => {
+      dispatch(reactivateSilencedAlert(id))
+    },
+    [dispatch]
+  )
 
-  return <Content style={contentStyle}>
-    <Title style={titleStyle}>
-      SUSPENSION D&apos;ALERTES
-    </Title>
-    <SearchVesselInput
-      style={searchVesselInputStyle(baseUrl)}
-      baseUrl={baseUrl}
-      data-cy={'side-window-silenced-alerts-search-vessel'}
-      placeholder={'Rechercher un navire ou une alerte'}
-      type="text"
-      value={searched}
-      onChange={e => setSearched(e.target.value)}/>
+  return (
+    <Content style={contentStyle}>
+      <Title style={titleStyle}>SUSPENSION D&apos;ALERTES</Title>
+      <SearchVesselInput
+        baseUrl={baseUrl}
+        data-cy="side-window-silenced-alerts-search-vessel"
+        onChange={e => setSearched(e.target.value)}
+        placeholder="Rechercher un navire ou une alerte"
+        style={searchVesselInputStyle(baseUrl)}
+        type="text"
+        value={searched}
+      />
       <List
-        data-cy={'side-window-silenced-alerts-list'}
+        data-cy="side-window-silenced-alerts-list"
         style={{
           ...rowStyle(sortedAlerts?.length),
           marginTop: 10,
@@ -79,27 +78,19 @@ const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
           index={0}
           style={{
             ...listItemStyle,
-            border: `1px solid ${COLORS.lightGray}`,
             background: COLORS.background,
+            border: `1px solid ${COLORS.lightGray}`,
             color: COLORS.slateGray
           }}
         >
           <FlexboxGrid>
-            <FlexboxGrid.Item style={vesselNameColumnStyle}>
-              Navire
-            </FlexboxGrid.Item>
+            <FlexboxGrid.Item style={vesselNameColumnStyle}>Navire</FlexboxGrid.Item>
             <FlexboxGrid.Item colspan={7} style={alertTypeStyle}>
               Titre
             </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={alertNatinfStyle}>
-              NATINF
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={ignoredForStyle}>
-              Ignorée pour...
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item style={ignoredForStyle}>
-              Reprise le...
-            </FlexboxGrid.Item>
+            <FlexboxGrid.Item style={alertNatinfStyle}>NATINF</FlexboxGrid.Item>
+            <FlexboxGrid.Item style={ignoredForStyle}>Ignorée pour...</FlexboxGrid.Item>
+            <FlexboxGrid.Item style={ignoredForStyle}>Reprise le...</FlexboxGrid.Item>
           </FlexboxGrid>
         </List.Item>
         <ScrollableContainer style={ScrollableContainerStyle}>
@@ -107,86 +98,71 @@ const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
             <List.Item
               key={alert.id}
               index={index + 1}
-              style={listItemStyle(focusOnAlert
-                ? alert.id === focusOnAlert?.id
-                : false,
-              alert.isReactivated)}
+              style={listItemStyle(focusOnAlert ? alert.id === focusOnAlert?.id : false, alert.isReactivated)}
             >
-              {
-                alert.isReactivated
-                  ? <AlertTransition style={alertValidatedTransition}>
-                    L&apos;alerte est réactivée
-                  </AlertTransition>
-                  : null
-              }
-              {
-                !alert.isReactivated
-                  ? <FlexboxGrid>
-                    <FlexboxGrid.Item style={vesselNameColumnStyle}>
-                      <Flag
-                        title={countries.getName(alert.value.flagState?.toLowerCase(), 'fr')}
-                        rel="preload"
-                        src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.value.flagState?.toLowerCase()}.svg`}
-                        style={{ width: 18, marginRight: 5, marginLeft: 0, marginTop: 1 }}
-                      />
-                      {alert.vesselName}
-                    </FlexboxGrid.Item>
-                    <FlexboxGrid.Item style={alertTypeStyle}>
-                      {getAlertNameFromType(alert.type)}
-                    </FlexboxGrid.Item>
-                    <FlexboxGrid.Item style={alertNatinfStyle}>
-                      {alert.value.natinfCode}
-                    </FlexboxGrid.Item>
-                    <FlexboxGrid.Item style={ignoredForStyle}>
-                      {
-                        alert.silencedAfterDate
-                          ? new Date(alert.silencedAfterDate) > new Date()
-                            ? `${getDateDiffInDays(new Date(alert.silencedAfterDate), new Date(alert.silencedBeforeDate))} jours`
-                            : timeago.format(alert.silencedBeforeDate, 'fr')
-                          : timeago.format(alert.silencedBeforeDate, 'fr')
-                      }
-                    </FlexboxGrid.Item>
-                    <FlexboxGrid.Item style={ignoredForStyle}>
-                      {getDateTime(alert.silencedBeforeDate, true)}
-                    </FlexboxGrid.Item>
-                    <FlexboxGrid.Item style={rowBorderStyle}/>
-                    <FlexboxGrid.Item style={iconStyle}>
-                      <Icon
-                        data-cy={'side-window-silenced-alerts-show-vessel'}
-                        style={showIconStyle}
-                        alt={'Voir sur la carte'}
-                        title={'Voir sur la carte'}
-                        onClick={() => {
-                          const vesselIdentity = { ...alert }
-                          dispatch(showVessel(vesselIdentity, false, false, null))
-                          dispatch(getVesselVoyage(vesselIdentity, undefined, false))
-                        }}
-                        src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
-                      />
-                    </FlexboxGrid.Item>
-                    <FlexboxGrid.Item style={iconStyle}>
-                      <Icon
-                        data-cy={'side-window-silenced-alerts-delete-silenced-alert'}
-                        style={deleteSilencedAlertIconStyle}
-                        alt={'Réactiver l\'alerte'}
-                        title={'Réactiver l\'alerte'}
-                        onClick={() => reactivateSilencedAlertCallback(alert.id)}
-                        src={`${baseUrl}/Icone_alertes_gris.png`}
-                      />
-                    </FlexboxGrid.Item>
-                  </FlexboxGrid>
-                  : null
-              }
+              {alert.isReactivated ? (
+                <AlertTransition style={alertValidatedTransition}>L&apos;alerte est réactivée</AlertTransition>
+              ) : null}
+              {!alert.isReactivated ? (
+                <FlexboxGrid>
+                  <FlexboxGrid.Item style={vesselNameColumnStyle}>
+                    <Flag
+                      rel="preload"
+                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.value.flagState?.toLowerCase()}.svg`}
+                      style={{ marginLeft: 0, marginRight: 5, marginTop: 1, width: 18 }}
+                      title={countries.getName(alert.value.flagState?.toLowerCase(), 'fr')}
+                    />
+                    {alert.vesselName}
+                  </FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={alertTypeStyle}>{getAlertNameFromType(alert.type)}</FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={alertNatinfStyle}>{alert.value.natinfCode}</FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={ignoredForStyle}>
+                    {alert.silencedAfterDate
+                      ? new Date(alert.silencedAfterDate) > new Date()
+                        ? `${getDateDiffInDays(
+                            new Date(alert.silencedAfterDate),
+                            new Date(alert.silencedBeforeDate)
+                          )} jours`
+                        : timeago.format(alert.silencedBeforeDate, 'fr')
+                      : timeago.format(alert.silencedBeforeDate, 'fr')}
+                  </FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={ignoredForStyle}>
+                    {getDateTime(alert.silencedBeforeDate, true)}
+                  </FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={rowBorderStyle} />
+                  <FlexboxGrid.Item style={iconStyle}>
+                    <Icon
+                      alt="Voir sur la carte"
+                      data-cy="side-window-silenced-alerts-show-vessel"
+                      onClick={() => {
+                        const vesselIdentity = { ...alert }
+                        dispatch(showVessel(vesselIdentity, false, false, null))
+                        dispatch(getVesselVoyage(vesselIdentity, undefined, false))
+                      }}
+                      src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
+                      style={showIconStyle}
+                      title="Voir sur la carte"
+                    />
+                  </FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={iconStyle}>
+                    <Icon
+                      alt={"Réactiver l'alerte"}
+                      data-cy="side-window-silenced-alerts-delete-silenced-alert"
+                      onClick={() => reactivateSilencedAlertCallback(alert.id)}
+                      src={`${baseUrl}/Icone_alertes_gris.png`}
+                      style={deleteSilencedAlertIconStyle}
+                      title={"Réactiver l'alerte"}
+                    />
+                  </FlexboxGrid.Item>
+                </FlexboxGrid>
+              ) : null}
             </List.Item>
           ))}
         </ScrollableContainer>
-        {
-          !sortedAlerts?.length
-            ? <NoAlerts style={noAlertsStyle}>Aucune alerte suspendue</NoAlerts>
-            : null
-        }
-    </List>
-  </Content>
+        {!sortedAlerts?.length ? <NoAlerts style={noAlertsStyle}>Aucune alerte suspendue</NoAlerts> : null}
+      </List>
+    </Content>
+  )
 }
 
 const AlertTransition = styled.div``
@@ -196,50 +172,50 @@ const alertValidatedTransition = {
   color: COLORS.mediumSeaGreen,
   fontWeight: 500,
   height: 41,
+  lineHeight: '41px',
   marginTop: -13,
-  textAlign: 'center',
-  lineHeight: '41px'
+  textAlign: 'center'
 }
 
 const Title = styled.div``
 const titleStyle = {
-  fontWeight: 700,
-  fontSize: 16,
   color: COLORS.gunMetal,
+  fontSize: 16,
+  fontWeight: 700,
   marginBottom: 20
 }
 
 const searchVesselInputStyle = baseUrl => ({
-  marginBottom: 5,
+  ':hover, :focus': {
+    borderBottom: `1px ${COLORS.lightGray} solid`
+  },
   backgroundColor: 'white',
+  backgroundImage: `url(${baseUrl}/${SearchIconSVG})`,
+  backgroundPosition: 'bottom 3px right 5px',
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 25,
   border: `1px ${COLORS.lightGray} solid`,
   borderRadius: 0,
   color: COLORS.gunMetal,
+  flex: 3,
   fontSize: 13,
   height: 40,
-  width: 280,
+  marginBottom: 5,
   padding: '0 5px 0 10px',
-  flex: 3,
-  backgroundImage: `url(${baseUrl}/${SearchIconSVG})`,
-  backgroundSize: 25,
-  backgroundPosition: 'bottom 3px right 5px',
-  backgroundRepeat: 'no-repeat',
-  ':hover, :focus': {
-    borderBottom: `1px ${COLORS.lightGray} solid`
-  }
+  width: 280
 })
 
 const ScrollableContainer = styled.div``
 const ScrollableContainerStyle = {
-  overflowY: 'auto',
-  maxHeight: 'calc(100vh - 170px)'
+  maxHeight: 'calc(100vh - 170px)',
+  overflowY: 'auto'
 }
 
 const NoAlerts = styled.div``
 const noAlertsStyle = {
-  textAlign: 'center',
   color: COLORS.slateGray,
-  marginTop: 20
+  marginTop: 20,
+  textAlign: 'center'
 }
 
 const SearchVesselInput = styled.input``
@@ -247,51 +223,51 @@ const SearchVesselInput = styled.input``
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const showIconStyle = {
-  width: 20,
-  paddingRight: 7,
-  float: 'right',
-  flexShrink: 0,
   cursor: 'pointer',
+  flexShrink: 0,
+  float: 'right',
+  height: 16,
   marginLeft: 'auto',
-  height: 16
+  paddingRight: 7,
+  width: 20
 }
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const Icon = styled.img``
 const deleteSilencedAlertIconStyle = {
-  paddingRight: 10,
-  float: 'right',
-  flexShrink: 0,
   cursor: 'pointer',
+  flexShrink: 0,
+  float: 'right',
+  height: 18,
   marginLeft: 'auto',
-  height: 18
+  paddingRight: 10
 }
 
 const listItemStyle = (isFocused, toClose) => ({
+  animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
   background: isFocused ? COLORS.gainsboro : COLORS.cultured,
   border: `1px solid ${COLORS.lightGray}`,
   borderRadius: 1,
   height: 15,
   marginTop: 6,
-  transition: 'background 3s',
-  animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  transition: 'background 3s'
 })
 
 const styleCenter = {
-  display: 'flex',
   alignItems: 'center',
+  display: 'flex',
   height: 15
 }
 
 // The width of the scrolling bar is 16 px. When we have more than
 // 9 items, the scrolling bar is showed
 const rowStyle = numberOfAlerts => ({
-  width: numberOfAlerts > 9 ? 1260 + 16 : 1260,
-  fontWeight: 500,
+  boxShadow: 'unset',
   color: COLORS.gunMetal,
-  boxShadow: 'unset'
+  fontWeight: 500,
+  width: numberOfAlerts > 9 ? 1260 + 16 : 1260
 })
 
 const vesselNameColumnStyle = {
@@ -324,19 +300,19 @@ const iconStyle = {
 
 const rowBorderStyle = {
   ...styleCenter,
-  height: 43,
-  width: 2,
   borderLeft: `1px solid ${COLORS.lightGray}`,
+  height: 43,
+  marginRight: 5,
   marginTop: -14,
-  marginRight: 5
+  width: 2
 }
 
 const Content = styled.div``
 const contentStyle = {
-  width: 'fit-content',
-  padding: '30px 40px 40px 40px',
+  marginBottom: 20,
   marginTop: 20,
-  marginBottom: 20
+  padding: '30px 40px 40px 40px',
+  width: 'fit-content'
 }
 
 export default SilencedAlertsList

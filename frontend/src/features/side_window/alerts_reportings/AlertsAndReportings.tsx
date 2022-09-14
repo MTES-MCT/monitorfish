@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo } from 'react'
-import PendingAlertsList from './PendingAlertsList'
 import { useSelector } from 'react-redux'
-import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
 import styled from 'styled-components'
+
 import { COLORS } from '../../../constants/constants'
-import SilencedAlertsList from './SilencedAlertsList'
-import { ReportingList } from './ReportingList'
+import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
 import { AlertAndReportingTab } from '../SideWindow'
+import PendingAlertsList from './PendingAlertsList'
+import { ReportingList } from './ReportingList'
+import SilencedAlertsList from './SilencedAlertsList'
 
 /**
  * @param selectedSubMenu
@@ -17,16 +18,16 @@ import { AlertAndReportingTab } from '../SideWindow'
  * @return {JSX.Element}
  * @constructor
  */
-const AlertsAndReportings = ({ selectedSubMenu, setSelectedSubMenu, selectedTab, setSelectedTab, baseRef }) => {
-  const {
-    silencedAlerts,
-    focusOnAlert
-  } = useSelector(state => state.alert)
+function AlertsAndReportings({ baseRef, selectedSubMenu, selectedTab, setSelectedSubMenu, setSelectedTab }) {
+  const { focusOnAlert, silencedAlerts } = useSelector(state => state.alert)
 
-  const silencedSeaFrontAlerts = useMemo(() => {
-    return silencedAlerts
-      .filter(alert => (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert.value.seaFront))
-  }, [silencedAlerts, selectedSubMenu])
+  const silencedSeaFrontAlerts = useMemo(
+    () =>
+      silencedAlerts.filter(alert =>
+        (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert.value.seaFront)
+      ),
+    [silencedAlerts, selectedSubMenu]
+  )
 
   useEffect(() => {
     if (focusOnAlert) {
@@ -42,47 +43,41 @@ const AlertsAndReportings = ({ selectedSubMenu, setSelectedSubMenu, selectedTab,
     }
   }, [focusOnAlert])
 
-  return <>
-    <Title
-      onClick={() => setSelectedTab(AlertAndReportingTab.ALERT)}
-      isSelected={selectedTab === AlertAndReportingTab.ALERT}
-    >
-      Alertes
-    </Title>
-    <Title
-      data-cy={'side-window-reporting-tab'}
-      onClick={() => setSelectedTab(AlertAndReportingTab.REPORTING)}
-      isSelected={selectedTab === AlertAndReportingTab.REPORTING}
-    >
-      Signalements
-    </Title>
-    {
-      selectedTab === AlertAndReportingTab.ALERT && <>
-        <PendingAlertsList
-          seaFront={selectedSubMenu}
-          numberOfSilencedAlerts={silencedSeaFrontAlerts.length}
-          baseRef={baseRef}
-        />
-        <SilencedAlertsList
-          silencedSeaFrontAlerts={silencedSeaFrontAlerts}
-        />
-      </>
-    }
-    {
-      selectedTab === AlertAndReportingTab.REPORTING && <>
-        <ReportingList
-          seaFront={selectedSubMenu}
-        />
-      </>
-    }
-  </>
+  return (
+    <>
+      <Title
+        isSelected={selectedTab === AlertAndReportingTab.ALERT}
+        onClick={() => setSelectedTab(AlertAndReportingTab.ALERT)}
+      >
+        Alertes
+      </Title>
+      <Title
+        data-cy="side-window-reporting-tab"
+        isSelected={selectedTab === AlertAndReportingTab.REPORTING}
+        onClick={() => setSelectedTab(AlertAndReportingTab.REPORTING)}
+      >
+        Signalements
+      </Title>
+      {selectedTab === AlertAndReportingTab.ALERT && (
+        <>
+          <PendingAlertsList
+            baseRef={baseRef}
+            numberOfSilencedAlerts={silencedSeaFrontAlerts.length}
+            seaFront={selectedSubMenu}
+          />
+          <SilencedAlertsList silencedSeaFrontAlerts={silencedSeaFrontAlerts} />
+        </>
+      )}
+      {selectedTab === AlertAndReportingTab.REPORTING && <ReportingList seaFront={selectedSubMenu} />}
+    </>
+  )
 }
 
 const Title = styled.h2`
   margin: 30px 10px 30px 10px;
   font-size: 22px;
   color: ${COLORS.gunMetal};
-  border-bottom: 5px solid ${p => p.isSelected ? COLORS.charcoal : COLORS.white};
+  border-bottom: 5px solid ${p => (p.isSelected ? COLORS.charcoal : COLORS.white)};
   font-weight: 700;
   text-align: left;
   padding-bottom: 5px;

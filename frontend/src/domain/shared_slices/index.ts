@@ -9,7 +9,7 @@ import { controlReducer } from './Control'
 import { favoriteVesselReducer } from './FavoriteVessel'
 import { filterReducer } from './Filter'
 import { fishingActivitiesReducer } from './FishingActivities'
-import fleetSegment from './FleetSegment'
+import { fleetSegmentReducer } from './FleetSegment'
 import { gearReducer } from './Gear'
 import { globalSliceReducer } from './Global'
 import infraction from './Infraction'
@@ -39,7 +39,7 @@ const homeReducers = combineReducers({
   favoriteVessel: favoriteVesselReducer,
   filter: filterReducer,
   fishingActivities: fishingActivitiesReducer,
-  fleetSegment,
+  fleetSegment: fleetSegmentReducer,
   infraction,
   interestPoint: interestPointReducer,
   layer: layerReducerForHomepage,
@@ -52,7 +52,7 @@ const homeReducers = combineReducers({
 
 const backofficeReducers = combineReducers({
   ...commonReducerList,
-  fleetSegment,
+  fleetSegment: fleetSegmentReducer,
   layer: layerReducerForBackoffice,
   regulation
 })

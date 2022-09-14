@@ -14,7 +14,7 @@ import gear from './Gear'
 import { globalSliceReducer } from './Global'
 import infraction from './Infraction'
 import { interestPointReducer } from './InterestPoint'
-import layer from './Layer'
+import { layerReducerForBackoffice, layerReducerForHomepage } from './Layer'
 import { mapReducer } from './Map'
 import { measurementReducer } from './Measurement'
 import { regulatoryReducer } from './Regulatory'
@@ -42,7 +42,7 @@ const homeReducers = combineReducers({
   fleetSegment,
   infraction,
   interestPoint: interestPointReducer,
-  layer: layer.homepage.reducer,
+  layer: layerReducerForHomepage,
   measurement: measurementReducer,
   regulatoryLayerSearch,
   reporting: reportingReducer,
@@ -53,7 +53,7 @@ const homeReducers = combineReducers({
 const backofficeReducers = combineReducers({
   ...commonReducerList,
   fleetSegment,
-  layer: layer.backoffice.reducer,
+  layer: layerReducerForBackoffice,
   regulation
 })
 

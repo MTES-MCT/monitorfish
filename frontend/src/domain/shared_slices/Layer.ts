@@ -1,17 +1,26 @@
-import Layers, { getLayerNameNormalized } from '../entities/layers'
+// TODO Review that "double" logic for Layer slice.
+
 import { createGenericSlice, getLocalStorageState } from '../../utils'
+import Layers, { getLayerNameNormalized } from '../entities/layers'
 
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 
-const initialState = {
-  lastShowedFeatures: [],
-  layersToFeatures: [],
+// TODO Type all these props
+export type LayerState = {
+  administrativeZonesGeometryCache: Record<string, any>[]
+  lastShowedFeatures: Record<string, any>[]
+  layersSidebarOpenedLayer: string
+  layersToFeatures: Record<string, any>[]
+}
+const INITIAL_STATE = {
   administrativeZonesGeometryCache: [],
-  layersSidebarOpenedLayer: ''
+  lastShowedFeatures: [],
+  layersSidebarOpenedLayer: '',
+  layersToFeatures: []
 }
 
-const reOrderOldObjectHierarchyIfFound = zones => {
-  return zones.map(zone => {
+const reOrderOldObjectHierarchyIfFound = zones =>
+  zones.map(zone => {
     if (zone && zone.layerName) {
       return {
         topic: zone.layerName,
@@ -21,20 +30,21 @@ const reOrderOldObjectHierarchyIfFound = zones => {
 
     return zone
   })
+
+const HOMEPAGE_INITIAL_STATE = {
+  ...INITIAL_STATE,
+  showedLayers: reOrderOldObjectHierarchyIfFound(
+    getLocalStorageState([], `homepage${layersShowedOnMapLocalStorageKey}`)
+  )
 }
 
-const homepageInitialState = {
-  ...initialState,
-  showedLayers: reOrderOldObjectHierarchyIfFound(getLocalStorageState([], `homepage${layersShowedOnMapLocalStorageKey}`))
-}
-
-const backofficeInitialState = {
-  ...initialState,
+const BACKOFFICE_INITIAL_STATE = {
+  ...INITIAL_STATE,
   showedLayers: []
 }
 
 const reducers = {
-  addAdministrativeZoneGeometryToCache (state, action) {
+  addAdministrativeZoneGeometryToCache(state, action) {
     state.administrativeZonesGeometryCache = state.administrativeZonesGeometryCache.concat(action.payload)
   },
   /**
@@ -42,48 +52,58 @@ const reducers = {
    * @param {Object=} state
    * @param {{payload: AdministrativeOrRegulatoryLayer | null}} action - The layer to show
    */
-  addShowedLayer (state, action) {
-    const {
-      type,
-      topic,
-      zone,
-      id,
-      namespace,
-      gearRegulation
-    } = action.payload
+  addShowedLayer(state, action) {
+    const { gearRegulation, id, namespace, topic, type, zone } = action.payload
 
     if (type !== Layers.VESSELS.code) {
-      const searchedLayerName = getLayerNameNormalized({ type, topic, zone })
-      const found = !!state.showedLayers
-        .find(layer => getLayerNameNormalized(layer) === searchedLayerName)
+      const searchedLayerName = getLayerNameNormalized({ topic, type, zone })
+      const found = !!state.showedLayers.find(layer => getLayerNameNormalized(layer) === searchedLayerName)
 
       if (!found) {
         state.showedLayers = state.showedLayers.concat({
-          type,
-          topic,
-          zone,
+          gears: gearRegulation,
           id,
           namespace,
-          gears: gearRegulation
+          topic,
+          type,
+          zone
         })
         if (namespace !== 'backoffice') {
-          window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
+          window.localStorage.setItem(
+            `${namespace}${layersShowedOnMapLocalStorageKey}`,
+            JSON.stringify(state.showedLayers)
+          )
         }
       }
     }
   },
+
+  /**
+   * Store layer to feature and simplified feature - To show simplified features if the zoom is low
+   * @param {Object=} state
+   * @param {{payload: LayerToFeatures | null}} action - The layer and features
+   */
+  pushLayerToFeatures(state, action) {
+    state.layersToFeatures = state.layersToFeatures.filter(layer => layer.name !== action.payload.name)
+    state.layersToFeatures = state.layersToFeatures.concat(action.payload)
+  },
+
+  /**
+   * Remove a layer and the features
+   * @param {Object=} state
+   * @param {{payload: string | null}} action - The layer name
+   */
+  removeLayerToFeatures(state, action) {
+    state.layersToFeatures = state.layersToFeatures.filter(layer => layer.name !== action.payload)
+  },
+
   /**
    * Remove a Regulatory or Administrative layer
    * @param {Object=} state
    * @param {{payload: AdministrativeOrRegulatoryLayer | null}} action - The layer to remove
    */
-  removeShowedLayer (state, action) {
-    const {
-      type,
-      topic,
-      zone,
-      namespace
-    } = action.payload
+  removeShowedLayer(state, action) {
+    const { namespace, topic, type, zone } = action.payload
 
     if (type === Layers.VESSELS.code) {
       return
@@ -108,19 +128,32 @@ const reducers = {
       window.localStorage.setItem(`${namespace}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
     }
   },
-  resetShowedLayer (state, action) {
+
+  resetShowedLayer(state, action) {
     state.showedLayers = []
     if (action.payload !== 'backoffice') {
-      window.localStorage.setItem(`${action.payload}${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
+      window.localStorage.setItem(
+        `${action.payload}${layersShowedOnMapLocalStorageKey}`,
+        JSON.stringify(state.showedLayers)
+      )
     } else {
       window.localStorage.removeItem(`${action.payload}${layersShowedOnMapLocalStorageKey}`)
     }
   },
-  setShowedLayersWithLocalStorageValues (state, action) {
-    const regulatoryZones = action.payload.regulatoryZones
+
+  setLastShowedFeatures(state, action) {
+    state.lastShowedFeatures = action.payload
+  },
+  setLayersSideBarOpenedZone(state, action) {
+    state.layersSidebarOpenedLayer = action.payload
+  },
+  setShowedLayersWithLocalStorageValues(state, action) {
+    const { regulatoryZones } = action.payload
     let nextShowedLayers = []
     if (action.payload.namespace === 'homepage') {
-      const showedLayersInLocalStorage = reOrderOldObjectHierarchyIfFound(getLocalStorageState([], `homepage${layersShowedOnMapLocalStorageKey}`))
+      const showedLayersInLocalStorage = reOrderOldObjectHierarchyIfFound(
+        getLocalStorageState([], `homepage${layersShowedOnMapLocalStorageKey}`)
+      )
 
       nextShowedLayers = showedLayersInLocalStorage
         .filter(layer => layer)
@@ -129,22 +162,24 @@ const reducers = {
             let nextRegulatoryZone = regulatoryZones.find(regulatoryZone => {
               if (showedLayer.id) {
                 return regulatoryZone.id === showedLayer.id
-              } else {
-                return regulatoryZone.topic === showedLayer.topic && regulatoryZone.zone === showedLayer.zone
               }
+
+              return regulatoryZone.topic === showedLayer.topic && regulatoryZone.zone === showedLayer.zone
             })
 
             if (nextRegulatoryZone) {
               if (!(nextRegulatoryZone.topic && nextRegulatoryZone.lawType) && nextRegulatoryZone.nextId) {
-                nextRegulatoryZone = regulatoryZones.find(regulatoryZone => regulatoryZone.id === nextRegulatoryZone.nextId)
+                nextRegulatoryZone = regulatoryZones.find(
+                  regulatoryZone => regulatoryZone.id === nextRegulatoryZone.nextId
+                )
               }
 
               return {
-                type: showedLayer.type,
-                namespace: showedLayer.namespace,
                 gears: nextRegulatoryZone.gearRegulation,
-                topic: nextRegulatoryZone.topic,
                 id: nextRegulatoryZone.id,
+                namespace: showedLayer.namespace,
+                topic: nextRegulatoryZone.topic,
+                type: showedLayer.type,
                 zone: nextRegulatoryZone.zone
               }
             }
@@ -153,42 +188,17 @@ const reducers = {
           }
 
           return showedLayer
-        }).filter(layer => layer)
+        })
+        .filter(layer => layer)
     }
 
     state.showedLayers = nextShowedLayers
     window.localStorage.setItem(`homepage${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
-  },
-  /**
-   * Store layer to feature and simplified feature - To show simplified features if the zoom is low
-   * @param {Object=} state
-   * @param {{payload: LayerToFeatures | null}} action - The layer and features
-   */
-  pushLayerToFeatures (state, action) {
-    state.layersToFeatures = state.layersToFeatures.filter(layer => {
-      return layer.name !== action.payload.name
-    })
-    state.layersToFeatures = state.layersToFeatures.concat(action.payload)
-  },
-  /**
-   * Remove a layer and the features
-   * @param {Object=} state
-   * @param {{payload: string | null}} action - The layer name
-   */
-  removeLayerToFeatures (state, action) {
-    state.layersToFeatures = state.layersToFeatures.filter(layer => {
-      return layer.name !== action.payload
-    })
-  },
-  setLastShowedFeatures (state, action) {
-    state.lastShowedFeatures = action.payload
-  },
-  setLayersSideBarOpenedZone (state, action) {
-    state.layersSidebarOpenedLayer = action.payload
   }
 }
 
-export default {
-  homepage: createGenericSlice(homepageInitialState, reducers, 'HomePageLayerSlice'),
-  backoffice: createGenericSlice(backofficeInitialState, reducers, 'BackofficeLayerSlice')
-}
+const layerSliceForBackoffice = createGenericSlice(BACKOFFICE_INITIAL_STATE, reducers, 'BackofficeLayerSlice')
+const layerSliceForHomepage = createGenericSlice(HOMEPAGE_INITIAL_STATE, reducers, 'HomePageLayerSlice')
+
+export const layerReducerForBackoffice = layerSliceForBackoffice.reducer
+export const layerReducerForHomepage = layerSliceForHomepage.reducer

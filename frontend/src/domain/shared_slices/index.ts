@@ -10,7 +10,7 @@ import { favoriteVesselReducer } from './FavoriteVessel'
 import { filterReducer } from './Filter'
 import { fishingActivitiesReducer } from './FishingActivities'
 import fleetSegment from './FleetSegment'
-import gear from './Gear'
+import { gearReducer } from './Gear'
 import { globalSliceReducer } from './Global'
 import infraction from './Infraction'
 import { interestPointReducer } from './InterestPoint'
@@ -23,7 +23,7 @@ import { speciesReducer } from './Species'
 import { vesselSliceReducer } from './Vessel'
 
 const commonReducerList = {
-  gear,
+  gear: gearReducer,
   global: globalSliceReducer,
   map: mapReducer,
   regulatory: regulatoryReducer,

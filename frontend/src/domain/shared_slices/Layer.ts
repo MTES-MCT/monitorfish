@@ -202,3 +202,10 @@ const layerSliceForHomepage = createGenericSlice(HOMEPAGE_INITIAL_STATE, reducer
 
 export const layerReducerForBackoffice = layerSliceForBackoffice.reducer
 export const layerReducerForHomepage = layerSliceForHomepage.reducer
+
+// TODO Remove default export once cleaned.
+// eslint-disable-next-line import/no-default-export
+export default {
+  backoffice: layerSliceForBackoffice,
+  homepage: layerReducerForHomepage
+}

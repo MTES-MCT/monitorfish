@@ -92,6 +92,7 @@ export type ShowedVesselTrack = {
   vesselIdentity: VesselIdentity
 }
 
+// TODO Exist both in Vessel and Species.
 export type Species = {
   faoZone: string
   gear: string

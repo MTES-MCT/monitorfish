@@ -3,6 +3,8 @@
 import { createGenericSlice, getLocalStorageState } from '../../utils'
 import Layers, { getLayerNameNormalized } from '../entities/layers'
 
+import type { Slice } from '@reduxjs/toolkit'
+
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 
 // TODO Type all these props
@@ -12,7 +14,7 @@ export type LayerState = {
   layersSidebarOpenedLayer: string
   layersToFeatures: Record<string, any>[]
 }
-const INITIAL_STATE = {
+const INITIAL_STATE: LayerState = {
   administrativeZonesGeometryCache: [],
   lastShowedFeatures: [],
   layersSidebarOpenedLayer: '',
@@ -197,15 +199,9 @@ const reducers = {
   }
 }
 
-const layerSliceForBackoffice = createGenericSlice(BACKOFFICE_INITIAL_STATE, reducers, 'BackofficeLayerSlice')
-const layerSliceForHomepage = createGenericSlice(HOMEPAGE_INITIAL_STATE, reducers, 'HomePageLayerSlice')
-
-export const layerReducerForBackoffice = layerSliceForBackoffice.reducer
-export const layerReducerForHomepage = layerSliceForHomepage.reducer
-
 // TODO Remove default export once cleaned.
 // eslint-disable-next-line import/no-default-export
 export default {
-  backoffice: layerSliceForBackoffice,
-  homepage: layerReducerForHomepage
+  backoffice: createGenericSlice(HOMEPAGE_INITIAL_STATE, reducers, 'BackofficeLayerSlice') as Slice<LayerState>,
+  homepage: createGenericSlice(BACKOFFICE_INITIAL_STATE, reducers, 'HomePageLayerSlice') as Slice<LayerState>
 }

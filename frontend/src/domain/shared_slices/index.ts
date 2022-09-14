@@ -16,7 +16,7 @@ import infraction from './Infraction'
 import { interestPointReducer } from './InterestPoint'
 import layer from './Layer'
 import { mapReducer } from './Map'
-import measurement from './Measurement'
+import { measurementReducer } from './Measurement'
 import { regulatoryReducer } from './Regulatory'
 import { reportingReducer } from './Reporting'
 import { speciesReducer } from './Species'
@@ -43,7 +43,7 @@ const homeReducers = combineReducers({
   infraction,
   interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
-  measurement,
+  measurement: measurementReducer,
   regulatoryLayerSearch,
   reporting: reportingReducer,
   vessel: vesselSliceReducer,

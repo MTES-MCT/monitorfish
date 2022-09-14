@@ -1,9 +1,12 @@
 import type { GeoJSONGeometry } from './geojson'
 
+// TODO Why do we have that both in layer.ts and regulation.ts?
 export type RegulatoryZone = {
   color: string
   gearRegulation: GearRegulation
   geometry: GeoJSONGeometry
+  // TODO Check this added prop.
+  id: string
   lawType: string
   region: string
   regulatoryReference: RegulatoryText[]
@@ -27,10 +30,12 @@ export type RegulatoryText = {
 
 // TODO Check that.
 /** key is a topic */
+// TODO Is it a matrix? The name doesn't reflect that.
 export type RegulatoryTopics = Map<string, RegulatoryZone[]>
 
 // TODO Check that.
 /** key is the law type name */
+// TODO Is it a matrix? The name doesn't reflect that.
 export type RegulatoryLawTypes = Map<string, RegulatoryTopics[]>
 
 export type DateInterval = {

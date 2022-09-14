@@ -1,6 +1,7 @@
 {
   "extends": "..",
   "compilerOptions": {
+    "baseUrl": "..",
     "isolatedModules": false,
     "types": ["cypress", "node"]
   }

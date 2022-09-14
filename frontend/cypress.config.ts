@@ -1,9 +1,10 @@
 import { defineConfig } from 'cypress'
+import { platform } from 'os'
 
 import cypressPlugins from './cypress/plugins'
 
 const IS_CI = Boolean(process.env.CI)
-const DEFAULT_PORT = IS_CI ? 8880 : 3000
+const DEFAULT_PORT = IS_CI || platform() === 'darwin' ? 8880 : 3000
 
 export default defineConfig({
   // We do that to avoid e2e logs pollution with useless`GET /security-state-staging/intermediates/` lines

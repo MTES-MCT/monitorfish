@@ -19,7 +19,7 @@ import { mapReducer } from './Map'
 import measurement from './Measurement'
 import { regulatoryReducer } from './Regulatory'
 import { reportingReducer } from './Reporting'
-import species from './Species'
+import { speciesReducer } from './Species'
 import { vesselSliceReducer } from './Vessel'
 
 const commonReducerList = {
@@ -27,7 +27,7 @@ const commonReducerList = {
   global: globalSliceReducer,
   map: mapReducer,
   regulatory: regulatoryReducer,
-  species
+  species: speciesReducer
 }
 
 const homeReducers = combineReducers({

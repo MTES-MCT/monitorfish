@@ -1,19 +1,24 @@
+// TODO Make this state name singular for consistency (even if wrong in English). Extend that principle to props.
+
 import { createSlice } from '@reduxjs/toolkit'
 
-/* eslint-disable */
-/** @namespace SpeciesReducer */
-const SpeciesReducer = null
-/* eslint-enable */
+import type { Specy, SpecyGroup } from '../types/specy'
+
+export type SpecyState = {
+  species: Specy[]
+  // TODO Type this prop.
+  speciesByCode: Record<string, Record<string, any>>
+  speciesGroups: SpecyGroup[]
+}
+const INITIAL_STATE: SpecyState = {
+  species: [],
+  speciesByCode: {},
+  speciesGroups: []
+}
 
 const speciesSlice = createSlice({
+  initialState: INITIAL_STATE,
   name: 'species',
-  initialState: {
-    /** @type {Map<string, Species>} */
-    speciesByCode: {},
-    /** @type {Species[]} */
-    species: [],
-    speciesGroups: []
-  },
   reducers: {
     /**
      * Set the species FAO codes and species groups
@@ -22,7 +27,7 @@ const speciesSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: SpeciesAndSpeciesGroups}} action - the species
      */
-    setSpeciesAndSpeciesGroups (state, action) {
+    setSpeciesAndSpeciesGroups(state, action) {
       state.species = action.payload.species
       state.speciesByCode = action.payload.speciesByCode
       state.speciesGroups = action.payload.groups
@@ -30,8 +35,6 @@ const speciesSlice = createSlice({
   }
 })
 
-export const {
-  setSpeciesAndSpeciesGroups
-} = speciesSlice.actions
+export const { setSpeciesAndSpeciesGroups } = speciesSlice.actions
 
-export default speciesSlice.reducer
+export const speciesReducer = speciesSlice.reducer

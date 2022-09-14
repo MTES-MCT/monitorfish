@@ -1,33 +1,36 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+
 import { COLORS } from '../../constants/constants'
-import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
-import { ReactComponent as BeaconMalfunctionsSVG } from '../icons/Icone_VMS.svg'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
-import { useDispatch } from 'react-redux'
+import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
+import { ReactComponent as BeaconMalfunctionsSVG } from '../icons/Icone_VMS.svg'
 
-const SideWindowMenu = ({ selectedMenu }) => {
+function SideWindowMenu({ selectedMenu }) {
   const dispatch = useDispatch()
 
-  return <Menu>
-    <Link/>
-    <Link
-      title={sideWindowMenu.ALERTS.name}
-      selected={selectedMenu === sideWindowMenu.ALERTS.code}
-      onClick={() => dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))}
-    >
-      <AlertsIcon/>
-    </Link>
-    <Link
-      data-cy={'side-window-menu-beacon-malfunctions'}
-      title={sideWindowMenu.BEACON_MALFUNCTIONS.name}
-      selected={selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code}
-      onClick={() => dispatch(openSideWindowTab(sideWindowMenu.BEACON_MALFUNCTIONS.code))}
-    >
-      <BeaconMalfunctionsIcon/>
-    </Link>
-  </Menu>
+  return (
+    <Menu>
+      <Link />
+      <Link
+        onClick={() => dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))}
+        selected={selectedMenu === sideWindowMenu.ALERTS.code}
+        title={sideWindowMenu.ALERTS.name}
+      >
+        <AlertsIcon />
+      </Link>
+      <Link
+        data-cy="side-window-menu-beacon-malfunctions"
+        onClick={() => dispatch(openSideWindowTab(sideWindowMenu.BEACON_MALFUNCTIONS.code))}
+        selected={selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code}
+        title={sideWindowMenu.BEACON_MALFUNCTIONS.name}
+      >
+        <BeaconMalfunctionsIcon />
+      </Link>
+    </Menu>
+  )
 }
 
 const Menu = styled.div`
@@ -42,7 +45,7 @@ const Menu = styled.div`
 
 const Link = styled.div`
   text-align: center;
-  background: ${props => props.selected ? COLORS.shadowBlue : 'none'};
+  background: ${props => (props.selected ? COLORS.shadowBlue : 'none')};
   padding: 7px 5px;
   height: 50px;
   cursor: pointer;

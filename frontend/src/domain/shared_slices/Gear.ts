@@ -1,38 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import type { Gear } from '../types/vessel'
+
+export type GearState = {
+  categoriesToGears: Map<string, Gear[]> | undefined
+  gears: Gear[]
+  gearsByCode: Map<string, Gear> | undefined
+  groupsToCategories: Map<string, string> | undefined
+}
+const INITIAL_STATE: GearState = {
+  categoriesToGears: undefined,
+  gears: [],
+  gearsByCode: undefined,
+  groupsToCategories: undefined
+}
+
 const gearSlice = createSlice({
+  initialState: INITIAL_STATE,
   name: 'gear',
-  initialState: {
-    /** @type {Gear[]} */
-    gears: [],
-    /** @type {Map<String, Gear[]>} */
-    categoriesToGears: undefined,
-    /** @type {Map<String, String>} */
-    groupsToCategories: undefined,
-    /** @type {Map<String, Gear>} */
-    gearsByCode: undefined
-  },
   reducers: {
-    setGears (state, action) {
-      state.gears = action.payload
-    },
-    setCategoriesToGears (state, action) {
+    setCategoriesToGears(state, action) {
       state.categoriesToGears = action.payload
     },
-    setGroupsToCategories (state, action) {
-      state.groupsToCategories = action.payload
+    setGears(state, action) {
+      state.gears = action.payload
     },
-    setGearsByCode (state, action) {
+    setGearsByCode(state, action) {
       state.gearsByCode = action.payload
+    },
+    setGroupsToCategories(state, action) {
+      state.groupsToCategories = action.payload
     }
   }
 })
 
-export const {
-  setGears,
-  setCategoriesToGears,
-  setGroupsToCategories,
-  setGearsByCode
-} = gearSlice.actions
+export const { setCategoriesToGears, setGears, setGearsByCode, setGroupsToCategories } = gearSlice.actions
 
-export default gearSlice.reducer
+export const gearReducer = gearSlice.reducer

@@ -18,6 +18,7 @@ export type LayerToFeatures = {
   simplifiedFeatures: Object[]
 }
 
+// TODO Why do we have that both in layer.ts and regulation.ts?
 export type RegulatoryZone = {
   bycatch: string
   closingDate: string

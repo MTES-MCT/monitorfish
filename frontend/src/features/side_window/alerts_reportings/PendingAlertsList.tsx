@@ -14,7 +14,12 @@ import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { PendingAlertRow } from './PendingAlertRow'
 import { SilenceAlertMenu } from './SilenceAlertMenu'
 
-import type { PendingAlert, SilencedAlertPeriodRequest } from '../../../domain/types/alert'
+import type {
+  PendingAlert,
+  SilencedAlertPeriodRequest,
+  PendingAlert,
+  SilencedAlertPeriodRequest
+} from '../../../domain/types/alert'
 import type { MenuItem } from '../types'
 
 export type PendingAlertsListProps = {

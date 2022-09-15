@@ -184,21 +184,21 @@ export function DateRangePicker({
 
       // If this is a date picker with a time input,
       else {
-        // and a start time has already been selected,
-        if (selectedStartTimeTupleRef.current) {
-          // we must update the selected start date accordingly
-          const nextStartDate = getDateFromDateAndTimeTuple(nextStartDateTuple, selectedStartTimeTupleRef.current)
+        // we include the selected start time if it exists, set it at the beginning of the day if not
+        const nextStartDate = getDateFromDateAndTimeTuple(
+          nextStartDateTuple,
+          selectedStartTimeTupleRef.current || ['00', '00']
+        )
+        selectedStartDateRef.current = nextStartDate
 
-          selectedStartDateRef.current = nextStartDate
-        }
+        // we include the selected end time if it exists, set it at the end of the day if not
+        const nextEndDate = getDateFromDateAndTimeTuple(
+          nextEndDateTuple,
+          selectedEndTimeTupleRef.current || ['23', '59'],
+          true
+        )
 
-        // and an end time has already been selected,
-        if (selectedEndTimeTupleRef.current) {
-          // we must update the selected end date accordingly
-          const nextEndDate = getDateFromDateAndTimeTuple(nextEndDateTuple, selectedEndTimeTupleRef.current, true)
-
-          selectedEndDateRef.current = nextEndDate
-        }
+        selectedEndDateRef.current = nextEndDate
       }
 
       selectedStartDateTupleRef.current = nextStartDateTuple

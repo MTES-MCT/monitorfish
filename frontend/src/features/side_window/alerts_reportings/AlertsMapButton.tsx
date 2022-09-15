@@ -1,17 +1,15 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
 import { sideWindowMenu } from '../../../domain/entities/sideWindow'
 import { closeSideWindow, openSideWindowTab } from '../../../domain/shared_slices/Global'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes.svg'
 
-function AlertsMapButton() {
-  const dispatch = useDispatch()
-  const { regulatoryZoneMetadataPanelIsOpen } = useSelector(state => state.regulatory)
-  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode, sideWindowIsOpen } = useSelector(
+export function AlertsMapButton() {
+  const dispatch = useAppDispatch()
+  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode, sideWindowIsOpen } = useAppSelector(
     state => state.global
   )
 
@@ -19,7 +17,7 @@ function AlertsMapButton() {
     <AlertsButton
       data-cy="alerts-button"
       healthcheckTextWarning={healthcheckTextWarning}
-      isHidden={previewFilteredVesselsMode}
+      isHidden={Boolean(previewFilteredVesselsMode)}
       isVisible={openedSideWindowTab === sideWindowMenu.ALERTS.code}
       onClick={() => {
         if (!sideWindowIsOpen || (sideWindowIsOpen && openedSideWindowTab !== sideWindowMenu.ALERTS.code)) {
@@ -32,7 +30,6 @@ function AlertsMapButton() {
           dispatch(closeSideWindow())
         }
       }}
-      regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
       title="Alertes"
     >
       <AlertsIcon />
@@ -40,11 +37,13 @@ function AlertsMapButton() {
   )
 }
 
-const AlertsButton = styled(MapButtonStyle)`
+const AlertsButton = styled(MapButtonStyle)<{
+  isVisible: boolean
+}>`
   position: absolute;
   display: inline-block;
-  color: ${COLORS.blue};
-  background: ${props => (props.isVisible ? COLORS.shadowBlue : COLORS.charcoal)};
+  color: ${p => p.theme.color.blue};
+  background: ${p => (p.isVisible ? p.theme.color.shadowBlue : p.theme.color.charcoal)};
   padding: 2px 2px 2px 2px;
   top: 120px;
   left: 12px;
@@ -54,7 +53,7 @@ const AlertsButton = styled(MapButtonStyle)`
 
   :hover,
   :focus {
-    background: ${props => (props.isVisible ? COLORS.shadowBlue : COLORS.charcoal)};
+    background: ${p => (p.isVisible ? p.theme.color.shadowBlue : p.theme.color.charcoal)};
   }
 `
 
@@ -62,5 +61,3 @@ const AlertsIcon = styled(AlertsSVG)`
   margin-top: 5px;
   width: 20px;
 `
-
-export default AlertsMapButton

@@ -3,6 +3,8 @@ import _ from 'lodash'
 
 import { getDate } from '../../utils'
 
+import type { SilencedAlertPeriodRequest } from '../types/alert'
+
 export const AlertType = {
   FRENCH_EEZ_FISHING_ALERT: {
     code: 'FRENCH_EEZ_FISHING_ALERT',
@@ -93,53 +95,56 @@ export const AlertsMenuSeaFrontsToSeaFrontList = {
   }
 }
 
-export const SilencedAlertPeriod = {
-  CUSTOM: 'CUSTOM',
-  ONE_DAY: 'ONE_DAY',
-  ONE_HOUR: 'ONE_HOUR',
-  ONE_MONTH: 'ONE_MONTH',
-  ONE_WEEK: 'ONE_WEEK',
-  ONE_YEAR: 'ONE_YEAR',
-  SIX_HOURS: 'SIX_HOURS',
-  THIS_OCCURRENCE: 'THIS_OCCURRENCE',
-  TWELVE_HOURS: 'TWELVE_HOURS',
-  TWO_HOURS: 'TWO_HOURS'
+// TODO Is it the same as `VesselTrackDepth`?
+export enum SilencedAlertPeriod {
+  CUSTOM = 'CUSTOM',
+  ONE_DAY = 'ONE_DAY',
+  ONE_HOUR = 'ONE_HOUR',
+  ONE_MONTH = 'ONE_MONTH',
+  ONE_WEEK = 'ONE_WEEK',
+  ONE_YEAR = 'ONE_YEAR',
+  SIX_HOURS = 'SIX_HOURS',
+  THIS_OCCURRENCE = 'THIS_OCCURRENCE',
+  TWELVE_HOURS = 'TWELVE_HOURS',
+  TWO_HOURS = 'TWO_HOURS'
 }
 
-export const getSilencedAlertPeriodText = silencedAlertPeriodRequest => {
-  switch (silencedAlertPeriodRequest?.silencedAlertPeriod) {
-    case SilencedAlertPeriod.THIS_OCCURRENCE: {
+export const getSilencedAlertPeriodText = (silencedAlertPeriodRequest: SilencedAlertPeriodRequest) => {
+  switch (silencedAlertPeriodRequest.silencedAlertPeriod) {
+    case SilencedAlertPeriod.THIS_OCCURRENCE:
       return 'pour cette occurence'
-    }
-    case SilencedAlertPeriod.ONE_HOUR: {
+
+    case SilencedAlertPeriod.ONE_HOUR:
       return 'pendant 1 heure'
-    }
-    case SilencedAlertPeriod.TWO_HOURS: {
+
+    case SilencedAlertPeriod.TWO_HOURS:
       return 'pendant 2 heures'
-    }
-    case SilencedAlertPeriod.SIX_HOURS: {
+
+    case SilencedAlertPeriod.SIX_HOURS:
       return 'pendant 6 heures'
-    }
-    case SilencedAlertPeriod.TWELVE_HOURS: {
+
+    case SilencedAlertPeriod.TWELVE_HOURS:
       return 'pendant 12 heures'
-    }
-    case SilencedAlertPeriod.ONE_DAY: {
+
+    case SilencedAlertPeriod.ONE_DAY:
       return 'pendant 24 heures'
-    }
-    case SilencedAlertPeriod.ONE_WEEK: {
+
+    case SilencedAlertPeriod.ONE_WEEK:
       return 'pendant 1 semaine'
-    }
-    case SilencedAlertPeriod.ONE_MONTH: {
+
+    case SilencedAlertPeriod.ONE_MONTH:
       return 'pendant 1 mois'
-    }
-    case SilencedAlertPeriod.ONE_YEAR: {
+
+    case SilencedAlertPeriod.ONE_YEAR:
       return 'pendant 1 année'
-    }
-    case SilencedAlertPeriod.CUSTOM: {
+
+    case SilencedAlertPeriod.CUSTOM:
       return `du ${getDate(silencedAlertPeriodRequest.afterDateTime)} au ${getDate(
         silencedAlertPeriodRequest.beforeDateTime
       )}`
-    }
+
+    default:
+      throw new Error('This should never happen.')
   }
 }
 

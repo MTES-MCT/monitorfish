@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const MapComponentStyle = styled.div<{
-  healthcheckTextWarning: string | null
+  healthcheckTextWarning?: string
   isHidden?: boolean
 }>`
   margin-top: ${p => (p.healthcheckTextWarning ? 50 : 0)}px;

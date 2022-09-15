@@ -13,7 +13,16 @@ module.exports = {
   },
   rules: {
     '@typescript/no-use-before-define': 'off',
+    '@typescript-eslint/no-restricted-imports': [
+      'error',
+      {
+        name: 'react-redux',
+        importNames: ['useSelector', 'useDispatch'],
+        message: 'Use typed hooks `useAppDispatch` and `useAppSelector` instead.'
+      }
+    ],
     '@typescript-eslint/no-use-before-define': 'off',
+
 
     // See https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/#you-may-not-need-defaultprops
     "react/require-default-props": "off",

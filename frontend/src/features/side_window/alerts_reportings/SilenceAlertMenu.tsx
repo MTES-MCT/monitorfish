@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
@@ -6,65 +6,59 @@ import { SilencedAlertPeriod } from '../../../domain/entities/alerts'
 import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 import DateRange from '../../vessel_sidebar/actions/TrackRequest/DateRange'
 
-/**
- * @typedef {object} SilenceAlertMenuProps
- * @property {*} showSilencedAlertForIndex
- * @property {*} setShowSilencedAlertForIndex
- * @property {*} silenceAlert
- * @property {*} baseRef
- * @property {*} id
- * @property {*} scrollableContainer
- */
+import type { SilencedAlertPeriodRequest } from '../../../domain/types/alert'
+import type { DateRange as DateRangeType } from '../../../types'
+import type { CSSProperties, MutableRefObject } from 'react'
+import type { Promisable } from 'type-fest'
 
+export type SilenceAlertMenuProps = {
+  baseRef: any
+  id: string
+  scrollableContainer: MutableRefObject<HTMLDivElement>
+  setShowSilencedAlertForIndex: (index?: number) => Promisable<void>
+  showSilencedAlertForIndex: number
+  silenceAlert: (silencerAlerPeriodtRequest: SilencedAlertPeriodRequest, id: string) => Promisable<void>
+}
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
- *
- * @param {SilenceAlertMenuProps} props
  */
-function SilenceAlertMenu({
+export function SilenceAlertMenu({
   baseRef,
   id,
   scrollableContainer,
   setShowSilencedAlertForIndex,
   showSilencedAlertForIndex,
   silenceAlert
-}) {
-  const [silencedAlertRef, setSilencedAlertRef] = useState(null)
-  const silencedAlertRefCallback = useCallback(node => {
-    if (node !== null) {
-      setSilencedAlertRef({ current: node })
-    }
-  }, [])
+}: SilenceAlertMenuProps) {
+  const silencedAlertRef = useRef() as MutableRefObject<HTMLDivElement>
   const clickedOutside = useClickOutsideWhenOpenedWithinRef(silencedAlertRef, showSilencedAlertForIndex, baseRef)
-  /** @type {[[Date, Date], *]} */
-  const [selectedDates, setSelectedDates] = useState()
+  const [selectedDates, setSelectedDates] = useState<DateRangeType>()
 
   useEffect(() => {
     if (clickedOutside) {
-      setShowSilencedAlertForIndex(null)
+      setShowSilencedAlertForIndex()
     }
-  }, [clickedOutside])
+  }, [clickedOutside, setShowSilencedAlertForIndex])
 
   useEffect(() => {
     if (!selectedDates) {
       return
     }
 
-    setShowSilencedAlertForIndex(null)
+    setShowSilencedAlertForIndex()
 
-    const silenceAlertPeriodRequest = {
+    const silenceAlertPeriodRequest: SilencedAlertPeriodRequest = {
       afterDateTime: selectedDates[0],
       beforeDateTime: selectedDates[1],
       silencedAlertPeriod: SilencedAlertPeriod.CUSTOM
     }
 
     silenceAlert(silenceAlertPeriodRequest, id)
-  }, [id, selectedDates])
+  }, [id, selectedDates, setShowSilencedAlertForIndex, silenceAlert])
 
   return (
     <Wrapper
-      ref={silencedAlertRefCallback}
-      index={showSilencedAlertForIndex}
+      ref={silencedAlertRef}
       style={silenceMenuStyle(showSilencedAlertForIndex, scrollableContainer?.current.scrollTop || 0)}
     >
       <>
@@ -178,7 +172,7 @@ function setBackgroundAsNotHovered(e) {
 }
 
 const Wrapper = styled.div``
-const silenceMenuStyle = (index, scrollY) => ({
+const silenceMenuStyle = (index: number, scrollY: number): CSSProperties => ({
   boxShadow: `1px 2px 5px ${COLORS.overlayShadowDarker}`,
   marginLeft: 940,
   marginTop: 35 + index * 49 - scrollY,
@@ -189,7 +183,7 @@ const silenceMenuStyle = (index, scrollY) => ({
 })
 
 const MenuLink = styled.span``
-const menuLinkStyle = (withBottomLine, hasLink, isCalendar) => ({
+const menuLinkStyle = (withBottomLine: boolean, hasLink: boolean, isCalendar: boolean = false): CSSProperties => ({
   background: COLORS.background,
   borderBottom: `${withBottomLine ? 1 : 0}px solid ${COLORS.lightGray}`,
   color: COLORS.slateGray,
@@ -198,5 +192,3 @@ const menuLinkStyle = (withBottomLine, hasLink, isCalendar) => ({
   height: 25,
   padding: isCalendar ? '3px 15px 15px' : '5px 15px 0px 15px'
 })
-
-export default SilenceAlertMenu

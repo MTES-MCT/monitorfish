@@ -6,7 +6,7 @@ context('Vessels list', () => {
     cy.loadPath('/#@-824534.42,6082993.21,7.70')
   })
 
-  it('Vessels Should be filtered and previewed on the map', () => {
+  it.only('Vessels Should be filtered and previewed on the map', () => {
     // Given
     cy.get('*[data-cy^="vessel-labels"]').click({ scrollBehavior: false, timeout: 10000 })
     cy.get('*[data-cy^="map-property-trigger"]').filter(':contains("étiquettes des navires")').click({ timeout: 10000 })

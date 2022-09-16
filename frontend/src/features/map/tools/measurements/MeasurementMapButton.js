@@ -2,34 +2,33 @@ import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { ReactComponent as MeasurementSVG } from '../icons/Mesure.svg'
-import { ReactComponent as MultiLineSVG } from '../icons/Mesure_ligne_brisee.svg'
-import { ReactComponent as CircleRangeSVG } from '../icons/Mesure_rayon_action.svg'
-import { COLORS } from '../../constants/constants'
+import { ReactComponent as MeasurementSVG } from '../../../icons/Mesure.svg'
+import { ReactComponent as MultiLineSVG } from '../../../icons/Mesure_ligne_brisee.svg'
+import { ReactComponent as CircleRangeSVG } from '../../../icons/Mesure_rayon_action.svg'
+import { COLORS } from '../../../../constants/constants'
 import {
   resetCircleMeasurementInDrawing,
   setCircleMeasurementToAdd,
   setMeasurementTypeToAdd
-} from '../../domain/shared_slices/Measurement'
-import { expandRightMenu, setMapToolOpened } from '../../domain/shared_slices/Global'
-import { MapTool, MeasurementTypes } from '../../domain/entities/map'
+} from '../../../../domain/shared_slices/Measurement'
+import { expandRightMenu, setMapToolOpened } from '../../../../domain/shared_slices/Global'
+import { MapTool, MeasurementTypes } from '../../../../domain/entities/map'
 import CustomCircleRange from './CustomCircleRange'
-import { MapComponentStyle } from '../commonStyles/MapComponent.style'
-import { MapButtonStyle } from '../commonStyles/MapButton.style'
-import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
-import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
+import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
+import { MapButtonStyle } from '../../../commonStyles/MapButton.style'
+import { useEscapeFromKeyboard } from '../../../../hooks/useEscapeFromKeyboard'
+import { useClickOutsideWhenOpened } from '../../../../hooks/useClickOutsideWhenOpened'
+import { MapToolButton } from '../MapToolButton'
 
-const Measurement = () => {
+const MeasurementMapButton = () => {
   const dispatch = useDispatch()
   const selectedVessel = useSelector(state => state.vessel.selectedVessel)
-  const rightMenuIsOpen = useSelector(state => state.global.rightMenuIsOpen)
-  const {
-    measurementTypeToAdd
-  } = useSelector(state => state.measurement)
+  const measurementTypeToAdd = useSelector(state => state.measurement.measurementTypeToAdd)
   const {
     healthcheckTextWarning,
     previewFilteredVesselsMode,
-    mapToolOpened
+    mapToolOpened,
+    rightMenuIsOpen
   } = useSelector(state => state.global)
 
   const isOpen = useMemo(() => mapToolOpened === MapTool.MEASUREMENT_MENU, [mapToolOpened])
@@ -67,7 +66,7 @@ const Measurement = () => {
           $selectedVessel={selectedVessel}
         />
     }
-  }, [measurementTypeToAdd])
+  }, [measurementTypeToAdd, rightMenuIsOpen, selectedVessel])
 
   function openOrCloseMeasurementMenu () {
     if (measurementTypeToAdd) {
@@ -94,19 +93,18 @@ const Measurement = () => {
   }
 
   return (
-    <Wrapper ref={wrapperRef} className={'.map-menu'}>
-      <MeasurementWrapper
+    <Wrapper ref={wrapperRef}>
+      <MeasurementButton
         data-cy={'measurement'}
         isHidden={previewFilteredVesselsMode}
         healthcheckTextWarning={healthcheckTextWarning}
         isOpen={isOpen || measurementTypeToAdd}
         rightMenuIsOpen={rightMenuIsOpen}
-        selectedVessel={selectedVessel}
         onMouseEnter={() => dispatch(expandRightMenu())}
         title={'Mesurer une distance'}
         onClick={openOrCloseMeasurementMenu}>
         {measurementIcon}
-      </MeasurementWrapper>
+      </MeasurementButton>
       <MeasurementOptions
         healthcheckTextWarning={healthcheckTextWarning}
         isOpen={isOpen}
@@ -180,22 +178,8 @@ const MeasurementOptions = styled(MapComponentStyle)`
   z-index: 999;
 `
 
-const MeasurementWrapper = styled(MapButtonStyle)`
-  position: absolute;
-  display: inline-block;
-  color: ${COLORS.blue};
+const MeasurementButton = styled(MapToolButton)`
   top: 249px;
-  z-index: 999;
-  height: 40px;
-  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
-  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
-  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
-  transition: all 0.3s;
-  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
-
-  :hover, :focus {
-      background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
-  }
 `
 
 const MeasurementIcon = styled(MeasurementSVG)`
@@ -204,4 +188,4 @@ const MeasurementIcon = styled(MeasurementSVG)`
   transition: all 0.2s;
 `
 
-export default Measurement
+export default MeasurementMapButton

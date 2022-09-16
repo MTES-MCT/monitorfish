@@ -1,22 +1,23 @@
 import React, { useCallback, useMemo } from 'react'
 import styled, { css } from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
-import { MapComponentStyle } from '../commonStyles/MapComponent.style'
+import { COLORS } from '../../../../constants/constants'
+import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import { Radio, RadioGroup } from 'rsuite'
-import { interestPointType } from '../../domain/entities/interestPoints'
+import { interestPointType } from '../../../../domain/entities/interestPoints'
 
-import { ReactComponent as GearSVG } from '../icons/Label_engin_de_peche.svg'
-import { ReactComponent as ControlSVG } from '../icons/Label_controle.svg'
-import { ReactComponent as VesselSVG } from '../icons/Label_segment_de_flotte.svg'
-import { ReactComponent as OtherSVG } from '../icons/Point_interet_autre.svg'
-import SetCoordinates from '../coordinates/SetCoordinates'
+import { ReactComponent as GearSVG } from '../../../icons/Label_engin_de_peche.svg'
+import { ReactComponent as ControlSVG } from '../../../icons/Label_controle.svg'
+import { ReactComponent as VesselSVG } from '../../../icons/Label_segment_de_flotte.svg'
+import { ReactComponent as OtherSVG } from '../../../icons/Point_interet_autre.svg'
+import SetCoordinates from '../../../coordinates/SetCoordinates'
 import { useDispatch, useSelector } from 'react-redux'
-import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../domain/shared_slices/InterestPoint'
-import { coordinatesAreDistinct, getCoordinates } from '../../coordinates'
-import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
+import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../../../domain/shared_slices/InterestPoint'
+import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
+import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../domain/entities/map'
 import { transform } from 'ol/proj'
-import saveInterestPointFeature from '../../domain/use_cases/interestPoint/saveInterestPointFeature'
+import saveInterestPointFeature from '../../../../domain/use_cases/interestPoint/saveInterestPointFeature'
+import { MapToolBox } from '../MapToolBox'
 
 // TODO Refactor this component
 // - Move the state logic to the reducer
@@ -269,19 +270,9 @@ const Header = styled.div`
   border-top-right-radius: 2px;
 `
 
-const Wrapper = styled(MapComponentStyle)`
-  width: 306px;
-  background: ${COLORS.background};
-  margin-right: ${props => props.isOpen ? '45px' : '-320px'};
-  opacity:  ${props => props.isOpen ? '1' : '0'};
+const Wrapper = styled(MapToolBox)`
   top: 291px;
-  right: 10px;
-  border-radius: 2px;
-  position: absolute;
-  display: inline-block;
-  transition: all 0.5s;
-  box-shadow: 0px 3px 10px rgba(59, 69, 89, 0.5);
-  z-index: 999;
+  width: 306px;
 `
 
 const iconStyle = css`

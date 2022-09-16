@@ -19,7 +19,7 @@ import { ReactComponent as PolygonFilterSelectedSVG } from '../../../icons/Filtr
 import { setInteraction } from '../../../../domain/shared_slices/Map'
 import { InteractionTypes } from '../../../../domain/entities/map'
 import { layersType } from '../../../../domain/entities/layers'
-import FilterTag from '../../../vessel_filters/FilterTag'
+import FilterTag from '../../../map/tools/vessel_filters/FilterTag'
 
 const MINIMUM_SEARCH_CHARACTERS_NUMBER = 2
 
@@ -315,7 +315,7 @@ const SearchBoxInput = styled.input`
   width: 270px;
   padding: 0 5px 0 10px;
   border-bottom: 1px ${COLORS.lightGray} solid;
-  
+
   :hover, :focus {
     border-bottom: 1px ${COLORS.slateGray} solid;
   }

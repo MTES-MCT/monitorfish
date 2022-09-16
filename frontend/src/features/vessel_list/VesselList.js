@@ -22,7 +22,7 @@ import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import getFilteredVessels from '../../domain/use_cases/vessel/getFilteredVessels'
 import { getZonesAndSubZonesPromises } from '../../domain/use_cases/layer/administrative/getZonesAndSubZonesPromises'
 
-import SaveVesselFiltersModal from '../vessel_filters/SaveVesselFiltersModal'
+import SaveVesselFiltersModal from '../map/tools/vessel_filters/SaveVesselFiltersModal'
 import VesselListTable from './VesselListTable'
 import DownloadVesselListModal from './DownloadVesselListModal'
 import VesselListFilters from './VesselListFilters'

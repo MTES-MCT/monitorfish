@@ -8,7 +8,7 @@ import { ReactComponent as BoxFilterSVG } from '../icons/Filtre_zone_rectangle.s
 import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygone.svg'
 import Countries from 'i18n-iso-countries'
 import { VesselLocation, vesselSize } from '../../domain/entities/vessel'
-import FilterTag from '../vessel_filters/FilterTag'
+import FilterTag from '../map/tools/vessel_filters/FilterTag'
 
 Countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 const countriesField = Object.keys(Countries.getAlpha2Codes()).map(country => {

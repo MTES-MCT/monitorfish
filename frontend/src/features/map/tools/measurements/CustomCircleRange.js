@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
-import { CoordinatesFormat, MeasurementTypes, OPENLAYERS_PROJECTION } from '../../domain/entities/map'
-import { MapComponentStyle } from '../commonStyles/MapComponent.style'
+import { COLORS } from '../../../../constants/constants'
+import { CoordinatesFormat, MeasurementTypes, OPENLAYERS_PROJECTION } from '../../../../domain/entities/map'
 import { useSelector } from 'react-redux'
-import { coordinatesAreDistinct, getCoordinates } from '../../coordinates'
-import SetCoordinates from '../coordinates/SetCoordinates'
+import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
+import SetCoordinates from '../../../coordinates/SetCoordinates'
+import { MapToolBox } from '../MapToolBox'
 
 const CustomCircleRange = ({ onCancelAddCircleRange, onAddCustomCircleRange }) => {
   const {
@@ -162,19 +162,9 @@ const Header = styled.div`
   border-top-right-radius: 2px;
 `
 
-const Wrapper = styled(MapComponentStyle)`
+const Wrapper = styled(MapToolBox)`
   width: 306px;
-  background: ${COLORS.background};
-  margin-right: ${props => props.isOpen ? '45px' : '-320px'};
-  opacity:  ${props => props.isOpen ? '1' : '0'};
   top: 249px;
-  right: 10px;
-  border-radius: 2px;
-  position: absolute;
-  display: inline-block;
-  transition: all 0.5s;
-  z-index: 999;
-  box-shadow: 0px 3px 10px rgba(59, 69, 89, 0.5);
 `
 
 export default CustomCircleRange

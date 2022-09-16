@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RangeSlider } from 'rsuite'
 import styled from 'styled-components'
 import Nouislider from 'nouislider-react'

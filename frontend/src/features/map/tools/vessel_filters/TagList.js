@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 import countries from 'i18n-iso-countries'
 import FilterTag from './FilterTag'
 import { IconTypes } from './TagIconType'
-import { vesselSize } from '../../domain/entities/vessel'
+import { vesselSize } from '../../../../domain/entities/vessel'
 
 const TagList = ({ filters, uuid, removeTagFromFilter }) => {
   const [tags, setTags] = useState([])

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
@@ -321,6 +321,12 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
     dispatch(editInterestPoint(uuid))
   }
 
+  function deleteInterestPointBeingDrawedAndCloseTool () {
+    dispatch(endInterestPointDraw())
+    dispatch(setMapToolOpened(undefined))
+    dispatch(deleteInterestPointBeingDrawed())
+  }
+
   return (
     <>
       <div>
@@ -352,7 +358,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
               observations={interestPointBeingDrawed.observations}
               coordinates={interestPointBeingDrawed.coordinates}
               featureIsShowed={drawObject}
-              deleteInterestPoint={() => dispatch(endInterestPointDraw()) && dispatch(deleteInterestPointBeingDrawed())}
+              deleteInterestPoint={deleteInterestPointBeingDrawedAndCloseTool}
               modifyInterestPoint={() => {}}
               zoomHasChanged={previousMapZoom.current}
               moveLine={moveInterestPointLine}

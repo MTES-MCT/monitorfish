@@ -55,7 +55,7 @@ const ColumnTwo = styled.div``
 const ColumnThree = styled.div``
 
 const Columns = styled.div`
-  margin-left: 3px;
+  margin-left: 13px;
   display: flex;
   flex: 1 1 1;
 `

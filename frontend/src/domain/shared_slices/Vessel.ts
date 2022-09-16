@@ -129,7 +129,7 @@ const vesselSlice = createSlice({
       if (Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselId) {
         let reportings = []
 
-        if (state.selectedVessel.reportings.length) {
+        if (state.selectedVessel.reportings?.length) {
           reportings = state.selectedVessel.reportings
         }
 
@@ -247,15 +247,20 @@ const vesselSlice = createSlice({
 
       if (state.selectedVessel) {
         const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType)
-        const addedReportings = state.selectedVessel.reportings?.concat(ReportingType.ALERT.code)
+
+        let reportingsWithAlert: Array<string> = []
+        if (state.selectedVessel.reportings?.length) {
+          reportingsWithAlert = state.selectedVessel.reportings
+        }
+        reportingsWithAlert = reportingsWithAlert.concat([ReportingType.ALERT.code])
         state.selectedVessel = {
           ...state.selectedVessel,
           alerts: filteredAlerts,
           hasAlert: !!filteredAlerts.length,
-          hasInfractionSuspicion: addedReportings.some(reportingType =>
+          hasInfractionSuspicion: reportingsWithAlert.some(reportingType =>
             reportingIsAnInfractionSuspicion(reportingType)
           ),
-          reportings: addedReportings
+          reportings: reportingsWithAlert
         }
       }
     },
@@ -356,7 +361,7 @@ const vesselSlice = createSlice({
       if (vesselsIds.find(vesselId => selectedVesselId === vesselId)) {
         const vesselReportingsToRemove = action.payload.filter(reporting => selectedVesselId === reporting.vesselId)
         const vesselReportingWithoutFirstFoundReportingTypes = filterFirstFoundReportingTypes(
-          state.selectedVessel.reportings,
+          state.selectedVessel.reportings || [],
           vesselReportingsToRemove
         )
 

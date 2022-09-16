@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Input, InputGroup, Modal } from 'rsuite'
-import { COLORS } from '../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ReactComponent as FilterSVG } from '../icons/Icone_filtres_dark.svg'
+import { ReactComponent as FilterSVG } from '../../../icons/Icone_filtres_dark.svg'
 import { CirclePicker } from 'react-color'
 import TagList from './TagList'
-import StyledModalHeader from '../commonComponents/StyledModalHeader'
+import StyledModalHeader from '../../../commonComponents/StyledModalHeader'
 
 const styles = {
   width: 200,

@@ -1,9 +1,8 @@
-import React from 'react'
 import { Checkbox } from 'rsuite'
 import styled from 'styled-components'
-import { COLORS } from '../../constants/constants'
+import { COLORS } from '../../../../constants/constants'
 import { useDispatch, useSelector } from 'react-redux'
-import { showVesselsEstimatedPositions } from '../../domain/shared_slices/Map'
+import { showVesselsEstimatedPositions } from '../../../../domain/shared_slices/Map'
 
 const ShowVesselEstimatedPositions = () => {
   const dispatch = useDispatch()

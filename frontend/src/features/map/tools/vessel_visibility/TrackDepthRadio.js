@@ -1,9 +1,8 @@
-import React from 'react'
 import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
-import { VesselTrackDepth } from '../../domain/entities/vesselTrackDepth'
+import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 import { useDispatch, useSelector } from 'react-redux'
-import updateDefaultVesselTrackDepth from '../../domain/use_cases/vessel/updateDefaultVesselTrackDepth'
+import updateDefaultVesselTrackDepth from '../../../../domain/use_cases/vessel/updateDefaultVesselTrackDepth'
 
 const TrackDepthRadio = () => {
   const dispatch = useDispatch()

@@ -15,7 +15,7 @@ const LANMessageResume = props => {
     if (props.lanMessage) {
       const count = props.lanMessage.catchLanded.reduce(filterSameSpecies(), [])
       const height = count.length > 0
-        ? count.length * 58
+        ? count.length * 49
         : 0
       setChartHeight(height)
     }
@@ -253,7 +253,7 @@ const SubValueWeight = styled.span`
 const TableBody = styled.tbody``
 
 const Fields = styled.table`
-  padding: 0px 5px ${props => props.withoutMarginBottom ? '0' : '5px'} 5px; 
+  padding: 0px 5px ${props => props.withoutMarginBottom ? '0' : '5px'} 5px;
   width: inherit;
   display: table;
   margin: 0;
@@ -323,7 +323,7 @@ const LogbookMessageContent = styled.div`
   padding: 0 0 0 20px;
   border-bottom: 1px solid ${COLORS.gray};
   height: ${props => props.isOpen
-    ? props.chartHeight + 80
+    ? props.chartHeight + 105
     : 0
   }px;
   transition: 0.2s all;

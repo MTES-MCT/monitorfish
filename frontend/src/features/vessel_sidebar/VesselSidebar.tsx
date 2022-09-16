@@ -7,7 +7,6 @@ import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
 import HideNonSelectedVessels from './actions/hide_non_selected_vessels/HideNonSelectedVessels'
 import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFishingActivitiesOnMap'
 import { TrackRequest } from './actions/TrackRequest'
-import { ExportTrack } from './actions/TrackRequest/ExportTrack'
 import { VesselSidebarBody } from './VesselSidebarBody'
 import VesselSidebarTabs from './VesselSidebarTabs'
 
@@ -34,7 +33,6 @@ export function VesselSidebar() {
       <AnimateToTrack sidebarIsOpen={isFirstLoad} />
       <HideNonSelectedVessels sidebarIsOpen={isFirstLoad} />
       <ShowFishingActivitiesOnMap sidebarIsOpen={isFirstLoad} />
-      <ExportTrack />
       <Wrapper
         data-cy="vessel-sidebar"
         healthcheckTextWarning={healthcheckTextWarning}

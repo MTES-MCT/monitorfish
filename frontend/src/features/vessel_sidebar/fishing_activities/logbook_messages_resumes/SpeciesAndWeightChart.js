@@ -43,7 +43,7 @@ const SpeciesAndWeightChart = ({
   }, [speciesAndWeightArray])
 
   const openPresentation = (species, speciesPresentationAndWeight) => {
-    const height = speciesPresentationAndWeight ? speciesPresentationAndWeight.length * 22 : 0
+    const height = speciesPresentationAndWeight ? speciesPresentationAndWeight.length * 22 + 4 : 0
 
     if (speciesPresentationOpened === species) {
       setSpeciesPresentationOpened(null)

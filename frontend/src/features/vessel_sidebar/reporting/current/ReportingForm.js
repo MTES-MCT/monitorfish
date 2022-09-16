@@ -362,7 +362,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
           }
           title={infractions?.find(infraction => infraction.natinfCode === natinfCode)?.infraction}
           data-cy={'new-reporting-select-natinf'}
-          style={{ width: natinfCode ? 335 : 70, margin: '0px 10px 10px 10px' }}
+          style={{ width: natinfCode ? 335 : 70, margin: '10px 0px 0px 0px' }}
           searchable={true}
           virtualized={false}
           placement={!fromSideWindow  ? 'topLeft' : undefined}
@@ -380,7 +380,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
           data-cy={'new-reporting-select-dml'}
           container={fromSideWindow ? () => dmlSelectRef.current : undefined}
           menuStyle={fromSideWindow ? { position: 'absolute', marginTop: reportingActor === ReportingOriginActor.UNIT.code ? 765 : 685, marginLeft: 40 } : undefined}
-          style={{ width: 70, margin: '0px 10px 10px 10px' }}
+          style={{ width: 70, margin: '10px 0px 0px 0px' }}
           searchable={true}
           placement={!fromSideWindow  ? 'topLeft' : undefined}
           placeholder="DML"
@@ -394,7 +394,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
         <div ref={dmlSelectRef} />
         </>
         : null
-    }<br/>
+    }
     <ValidateButton
       data-cy={'new-reporting-create-button'}
       onClick={createOrEditReporting}
@@ -454,10 +454,6 @@ const Form = styled.div`
     margin-top: 5px;
     margin-bottom: 5px;
     background: ${p => p.hasWhiteBackground ? COLORS.gainsboro : COLORS.white } !important;
-  }
-
-  .rs-picker-select {
-    margin: 5px 0 10px 0 !important;
   }
 `
 

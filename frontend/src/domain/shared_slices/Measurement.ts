@@ -1,37 +1,55 @@
 import { createSlice } from '@reduxjs/toolkit'
+
 import { getLocalStorageState } from '../../utils'
 
 const measurementsLocalStorageKey = 'measurements'
 
+export type MeasurementState = {
+  // TODO Type this prop.
+  circleMeasurementInDrawing: null
+  // TODO Type this prop.
+  circleMeasurementToAdd: null
+  // TODO Type this prop.
+  measurementTypeToAdd: null
+  // TODO Type this prop.
+  measurementsDrawed: Record<string, any>[]
+}
+const INITIAL_STATE: MeasurementState = {
+  circleMeasurementInDrawing: null,
+  circleMeasurementToAdd: null,
+  measurementsDrawed: getLocalStorageState([], measurementsLocalStorageKey),
+  measurementTypeToAdd: null
+}
+
 const measurementSlice = createSlice({
+  initialState: INITIAL_STATE,
   name: 'measurement',
-  initialState: {
-    measurementTypeToAdd: null,
-    circleMeasurementToAdd: null,
-    circleMeasurementInDrawing: null,
-    measurementsDrawed: getLocalStorageState([], measurementsLocalStorageKey)
-  },
   reducers: {
-    setMeasurementTypeToAdd (state, action) {
-      state.measurementTypeToAdd = action.payload
-    },
-    resetMeasurementTypeToAdd (state) {
-      state.measurementTypeToAdd = null
-    },
-    addMeasurementDrawed (state, action) {
+    addMeasurementDrawed(state, action) {
       const nextMeasurementsDrawed = state.measurementsDrawed.concat(action.payload)
 
       window.localStorage.setItem(measurementsLocalStorageKey, JSON.stringify(nextMeasurementsDrawed))
       state.measurementsDrawed = nextMeasurementsDrawed
     },
-    removeMeasurementDrawed (state, action) {
-      const nextMeasurementsDrawed = state.measurementsDrawed.filter(measurement => {
-        return measurement.feature.id !== action.payload
-      })
+    removeMeasurementDrawed(state, action) {
+      const nextMeasurementsDrawed = state.measurementsDrawed.filter(
+        measurement => measurement.feature.id !== action.payload
+      )
 
       window.localStorage.setItem(measurementsLocalStorageKey, JSON.stringify(nextMeasurementsDrawed))
       state.measurementsDrawed = nextMeasurementsDrawed
     },
+    resetCircleMeasurementInDrawing(state) {
+      state.circleMeasurementInDrawing = null
+    },
+    resetCircleMeasurementToAdd(state) {
+      state.circleMeasurementToAdd = null
+    },
+
+    resetMeasurementTypeToAdd(state) {
+      state.measurementTypeToAdd = null
+    },
+
     /**
      * Add a circle measurement currently in drawing mode - so the
      * current measurement done in the map is showed in the Measurement box
@@ -43,12 +61,10 @@ const measurementSlice = createSlice({
         }
      * }} action - The coordinates and radius of the measurement
      */
-    setCircleMeasurementInDrawing (state, action) {
+    setCircleMeasurementInDrawing(state, action) {
       state.circleMeasurementInDrawing = action.payload
     },
-    resetCircleMeasurementInDrawing (state) {
-      state.circleMeasurementInDrawing = null
-    },
+
     /**
      * Add a circle measurement to the measurements list from the measurement input form
      * @param {Object=} state
@@ -59,24 +75,25 @@ const measurementSlice = createSlice({
         }
      * }} action - The coordinates and radius of the measurement
      */
-    setCircleMeasurementToAdd (state, action) {
+    setCircleMeasurementToAdd(state, action) {
       state.circleMeasurementToAdd = action.payload
     },
-    resetCircleMeasurementToAdd (state) {
-      state.circleMeasurementToAdd = null
+
+    setMeasurementTypeToAdd(state, action) {
+      state.measurementTypeToAdd = action.payload
     }
   }
 })
 
 export const {
-  setMeasurementTypeToAdd,
-  resetMeasurementTypeToAdd,
   addMeasurementDrawed,
   removeMeasurementDrawed,
-  setCircleMeasurementToAdd,
+  resetCircleMeasurementInDrawing,
   resetCircleMeasurementToAdd,
+  resetMeasurementTypeToAdd,
   setCircleMeasurementInDrawing,
-  resetCircleMeasurementInDrawing
+  setCircleMeasurementToAdd,
+  setMeasurementTypeToAdd
 } = measurementSlice.actions
 
-export default measurementSlice.reducer
+export const measurementReducer = measurementSlice.reducer

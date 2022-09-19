@@ -1,6 +1,7 @@
 // TODO This should be moved to `entities/vessel/types.ts`
 
 import type { VesselTrackDepth } from '../entities/vesselTrackDepth'
+import type { ValueOf } from 'type-fest'
 
 export type FishingActivityShowedOnMap = {
   /** The coordinates of the fishing activity */
@@ -91,6 +92,7 @@ export type ShowedVesselTrack = {
   vesselIdentity: VesselIdentity
 }
 
+// TODO Exist both in Vessel and Species.
 export type Species = {
   faoZone: string
   gear: string
@@ -152,6 +154,8 @@ export type Vessel = {
 export type VesselId = string
 
 export type VesselIdentity = {
+  // TODO Check that.
+  beaconNumber: number
   externalReferenceNumber: string
   flagState: string
   internalReferenceNumber: string
@@ -220,4 +224,4 @@ export type VesselPosition = {
   vesselName: string
 }
 
-export type VesselTrackDepthKey = Common.ValueOf<VesselTrackDepth>
+export type VesselTrackDepthKey = ValueOf<VesselTrackDepth>

@@ -59,7 +59,7 @@
 }
 
 /*
-  Default font size should be 16px instead of 14px as stated in Rsuite CSS,
+  Default font size should be 16px instead of 13px as stated in Rsuite CSS,
   so we need to apply this fix in order to have consistent 16px-based rems
   while overriding both Rsuite CSS and mini.css.
 */
@@ -67,8 +67,11 @@ html {
   font-size: 16px;
 }
 
+/*
+  We reduce the default font-size to 13px for the app.
+ */
 html * {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 label {
@@ -632,6 +635,7 @@ label:hover .rs-checkbox-wrapper .rs-checkbox-inner:before {
   color: var(--slateGray);
   font-size: 13px;
   font-weight: normal;
+  width: inherit;
 }
 
 .grouped .rs-picker-select-menu-item {

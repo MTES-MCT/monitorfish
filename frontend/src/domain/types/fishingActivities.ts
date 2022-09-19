@@ -1,3 +1,5 @@
+import type { Alert } from './alert'
+
 export type VesselVoyage = {
   endDate: string | null
   isFirstVoyage: boolean

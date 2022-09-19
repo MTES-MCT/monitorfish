@@ -1,20 +1,24 @@
+// TODO Move that into Vessel slice, or into a User slice if there are other per-user customizable data.
+
 import { createSlice } from '@reduxjs/toolkit'
+
 import { getLocalStorageState } from '../../utils'
 import { getOnlyVesselIdentityProperties, getVesselId, vesselsAreEquals } from '../entities/vessel'
 
-/* eslint-disable */
-/** @namespace FavoriteVesselReducer */
-const FavoriteVesselReducer = null
-/* eslint-enable */
+import type { VesselIdentity } from '../types/vessel'
 
-const favoriteVesselsLocalStorageKey = 'favoriteVessels'
+const FAVORITE_VESSELS_LOCAL_STORAGE_KEY = 'favoriteVessels'
 
-const favoriteVesselsSlice = createSlice({
+export type FavoriteVesselState = {
+  favorites: VesselIdentity[]
+}
+const INITIAL_STATE: FavoriteVesselState = {
+  favorites: getLocalStorageState([], FAVORITE_VESSELS_LOCAL_STORAGE_KEY)
+}
+
+const favoriteVesselSlice = createSlice({
+  initialState: INITIAL_STATE,
   name: 'favoriteVessels',
-  initialState: {
-    /** @type {Vessel[]} favorites */
-    favorites: getLocalStorageState([], favoriteVesselsLocalStorageKey)
-  },
   reducers: {
     /**
      * Add a new vessel to the favorite list
@@ -23,7 +27,7 @@ const favoriteVesselsSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: Vessel}} action - The vessel
      */
-    addVesselToFavorites (state, action) {
+    addVesselToFavorites(state, action) {
       const newFavorite = getOnlyVesselIdentityProperties(action.payload)
 
       // Remove vessel if found
@@ -31,7 +35,7 @@ const favoriteVesselsSlice = createSlice({
 
       // Add vessel
       state.favorites = state.favorites.concat(newFavorite)
-      window.localStorage.setItem(favoriteVesselsLocalStorageKey, JSON.stringify(state.favorites))
+      window.localStorage.setItem(FAVORITE_VESSELS_LOCAL_STORAGE_KEY, JSON.stringify(state.favorites))
     },
     /**
      * Remove a given vessel from the favorite list
@@ -40,16 +44,13 @@ const favoriteVesselsSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: string}} action - The vessel id
      */
-    removeVesselFromFavorites (state, action) {
+    removeVesselFromFavorites(state, action) {
       state.favorites = state.favorites.filter(favoriteVessel => getVesselId(favoriteVessel) !== action.payload)
-      window.localStorage.setItem(favoriteVesselsLocalStorageKey, JSON.stringify(state.favorites))
+      window.localStorage.setItem(FAVORITE_VESSELS_LOCAL_STORAGE_KEY, JSON.stringify(state.favorites))
     }
   }
 })
 
-export const {
-  addVesselToFavorites,
-  removeVesselFromFavorites
-} = favoriteVesselsSlice.actions
+export const { addVesselToFavorites, removeVesselFromFavorites } = favoriteVesselSlice.actions
 
-export default favoriteVesselsSlice.reducer
+export const favoriteVesselReducer = favoriteVesselSlice.reducer

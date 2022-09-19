@@ -43,7 +43,7 @@ const GreenCircle = styled.span`
 
 const RedCircle = styled.span`
   ${circle}
-  background-color: ${COLORS.red};
+  background-color: ${COLORS.maximumRed};
 `
 
 const CustomRadio = styled(Radio)`
@@ -76,7 +76,7 @@ export const customRadioGroup = css`
   align-items: center;
 `
 
-export const AuthorizedRadio = styled(RadioGroup)` 
+export const AuthorizedRadio = styled(RadioGroup)`
   ${customRadioGroup}
 `
 

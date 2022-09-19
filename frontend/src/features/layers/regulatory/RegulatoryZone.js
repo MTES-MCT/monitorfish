@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-import { batch, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { COLORS } from '../../../constants/constants'
 import Layers, { getGearCategory } from '../../../domain/entities/layers'
@@ -44,7 +44,6 @@ const RegulatoryZone = props => {
   const dispatch = useDispatch()
   const match = useRouteMatch()
   const history = useHistory()
-  const ref = useRef()
   const {
     callRemoveRegulatoryZoneFromMySelection,
     regulatoryZone,
@@ -113,16 +112,16 @@ const RegulatoryZone = props => {
     dispatch(closeRegulatoryZoneMetadataPanel())
   }
 
-  const onMouseOver = () => !isOver && setIsOver(true)
-  const onMouseOut = () => isOver && setIsOver(false)
+  const onMouseEnter = () => !isOver && setIsOver(true)
+  const onMouseLeave = () => isOver && setIsOver(false)
 
   return (
     <Zone
-      ref={ref}
       data-cy="regulatory-layer-zone"
       isLast={isLast}
-      onMouseOver={onMouseOver}
-      onMouseOut={onMouseOut}>
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <Rectangle onClick={() => dispatch(zoomInLayer({ topicAndZone: regulatoryZone }))} vectorLayerStyle={vectorLayerStyle}/>
       <ZoneText
         data-cy={'regulatory-layers-my-zones-zone'}
@@ -138,13 +137,13 @@ const RegulatoryZone = props => {
         }
       </ZoneText>
       <Icons>
-
         { isEditable &&
           <EditIcon
             data-cy="regulatory-layer-zone-edit"
             $isOver={isOver}
             title="Editer la réglementation"
-            onClick={onEditRegulationClick}/>
+            onClick={onEditRegulationClick}
+          />
         }
         {
           metadataIsShown

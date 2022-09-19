@@ -178,6 +178,7 @@ const Description = styled.div`
   margin-top: 10px;
   font: normal normal bold 13px/18px Marianne;
   color: ${COLORS.gunMetal};
+  white-space: normal;
 `
 
 const Author = styled.div`

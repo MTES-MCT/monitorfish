@@ -107,12 +107,18 @@ export function ReportingList({ seaFront }: ReportingListProps) {
   }
 
   const archive = useCallback(() => {
+    if (!(checkedReportingIds.length > 0)) {
+      return
+    }
     // TODO Remove ts-ignore once Redux Root State typed
     // @ts-ignore
     dispatch(archiveReportings(checkedReportingIds.map(Number))).then(() => setCheckedReportingIds([]))
   }, [checkedReportingIds, dispatch, setCheckedReportingIds])
 
   const remove = useCallback(() => {
+    if (!(checkedReportingIds.length > 0)) {
+      return
+    }
     // TODO Remove ts-ignore once Redux Root State typed
     // @ts-ignore
     dispatch(deleteReportings(checkedReportingIds.map(Number))).then(() => setCheckedReportingIds([]))
@@ -149,12 +155,18 @@ MMSI: ${reporting.mmsi || ''}`
           value={searched}
         />
         <RightAligned>
-          {checkedReportingIds.length > 0 && (
-            <>
-              <ArchiveButton data-cy="archive-reporting-cards" onClick={archive} title="Archiver" />
-              <DeleteButton data-cy="delete-reporting-cards" onClick={remove} title="Supprimer" />
-            </>
-          )}
+          <ArchiveButton
+            data-cy="archive-reporting-cards"
+            isShowed={checkedReportingIds.length > 0}
+            onClick={archive}
+            title={`Archiver ${checkedReportingIds.length} signalement${checkedReportingIds.length > 1 ? 's' : ''}`}
+          />
+          <DeleteButton
+            data-cy="delete-reporting-cards"
+            isShowed={checkedReportingIds.length > 0}
+            onClick={remove}
+            title={`Supprimer ${checkedReportingIds.length} signalement${checkedReportingIds.length > 1 ? 's' : ''}`}
+          />
         </RightAligned>
       </CardTableFilters>
       <CardTable
@@ -290,20 +302,23 @@ const RightAligned = styled.div`
   align-self: flex-end;
 `
 
-const ArchiveButton = styled(ArchiveIconSVG)`
+const ArchiveButton = styled(ArchiveIconSVG)<{
+  isShowed?: boolean
+}>`
   border: 1px solid ${COLORS.lightGray};
   padding: 6.5px 6px;
-  cursor: pointer;
+  cursor: ${p => (p.isShowed ? 'pointer' : 'not-allowed')};
   vertical-align: bottom;
   margin-right: 10px;
 `
 
-const DeleteButton = styled(DeleteIconSVG)`
+const DeleteButton = styled(DeleteIconSVG)<{
+  isShowed?: boolean
+}>`
   border: 1px solid ${COLORS.lightGray};
   padding: 7px;
-  cursor: pointer;
+  cursor: ${p => (p.isShowed ? 'pointer' : 'not-allowed')};
   vertical-align: bottom;
-  margin-right: 10px;
 `
 
 const styleCenter = {

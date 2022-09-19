@@ -247,7 +247,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
             container={fromSideWindow ? () => unitSelectRef.current : undefined}
             menuStyle={fromSideWindow ? { position: 'absolute', marginTop: 270, marginLeft: 40 } : undefined}
             data-cy={'new-reporting-select-unit'}
-            style={{ width: unit ? 250 : 80, margin: '0px 10px 10px 10px' }}
+            style={{ width: unit ? 250 : 80, margin: '0px 10px 10px 0px' }}
             searchable={true}
             placeholder="Choisir l'unité"
             value={unit}

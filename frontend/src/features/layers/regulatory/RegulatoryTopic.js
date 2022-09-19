@@ -50,8 +50,8 @@ const RegulatoryTopic = props => {
   const [atLeastOneTopicIsShowed, setAtLeastOneTopicIsShowed] = useState(false)
   const [isTopicInEdition, setIsTopicInEdition] = useState(false)
   const [isOver, setIsOver] = useState(false)
-  const onMouseOver = () => !isOver && setIsOver(true)
-  const onMouseOut = () => isOver && setIsOver(false)
+  const onMouseEnter = () => !isOver && setIsOver(true)
+  const onMouseLeave = () => isOver && setIsOver(false)
 
   useLayoutEffect(() => {
     if (regulatoryTopicsOpened[regulatoryTopicsOpened.length - 1] === regulatoryTopic) {
@@ -130,8 +130,8 @@ const RegulatoryTopic = props => {
           <Zone
             isLastItem={isLastItem}
             isOpen={isOpen}
-            onMouseOver={onMouseOver}
-            onMouseOut={onMouseOut}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
           >
             <Name
               data-cy={'regulatory-layers-my-zones-topic'}

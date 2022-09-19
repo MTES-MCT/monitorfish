@@ -187,7 +187,7 @@ const Gray = styled.span`
 const TableBody = styled.tbody``
 
 const Fields = styled.table`
-  padding: 5px 5px 5px 5px; 
+  padding: 5px 5px 5px 5px;
   width: inherit;
   display: table;
   margin: 0;
@@ -256,10 +256,10 @@ const LogbookMessageContent = styled.div`
   width: inherit;
   overflow: hidden;
   padding: 0 0 0 20px;
-  border-bottom: 1px solid ${COLORS.gray};  
+  border-bottom: 1px solid ${COLORS.gray};
   opacity: ${props => props.isOpen ? 1 : 0};
   height: ${props => props.isOpen
-    ? props.chartHeight + 130 + (props.speciesNotLandedArray?.length ? 80 : 0)
+    ? props.chartHeight + 160 + (props.speciesNotLandedArray?.length ? 55 : 0)
     : 0
   }px;
   transition: 0.2s all;

@@ -13,12 +13,12 @@ const RightMenuOnHoverArea = () => {
   const clickedOutsideComponent = useClickOutsideWhenOpened(areaRef, selectedVessel)
 
   useEffect(() => {
-    if (clickedOutsideComponent && mapToolOpened === undefined) {
+    if (clickedOutsideComponent && selectedVessel && mapToolOpened === undefined) {
       dispatch(contractRightMenu())
     } else {
       dispatch(expandRightMenu())
     }
-  }, [clickedOutsideComponent, mapToolOpened])
+  }, [clickedOutsideComponent, mapToolOpened, selectedVessel])
 
   return <>
     {

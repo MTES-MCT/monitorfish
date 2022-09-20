@@ -35,7 +35,7 @@ export function VesselSidebar() {
       <ShowFishingActivitiesOnMap sidebarIsOpen={isFirstLoad} />
       <Wrapper
         data-cy="vessel-sidebar"
-        healthcheckTextWarning={healthcheckTextWarning}
+        healthcheckTextWarning={!!healthcheckTextWarning}
         isRightMenuOpen={rightMenuIsOpen}
         isSidebarOpen={isFirstLoad}
       >
@@ -81,6 +81,8 @@ const GrayOverlay = styled.div<{
 `
 
 const Wrapper = styled(MapComponentStyle)<{
+  healthcheckTextWarning: boolean
+  isHidden?: boolean
   isRightMenuOpen: boolean
   isSidebarOpen: boolean
 }>`

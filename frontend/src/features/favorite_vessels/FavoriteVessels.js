@@ -8,7 +8,7 @@ import FavoriteVessel from './FavoriteVessel'
 import { getVesselId } from '../../domain/entities/vessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
-import MapPropertyTrigger from '../commonComponents/MapPropertyTrigger'
+import { MapPropertyTrigger } from '../commonComponents/MapPropertyTrigger'
 import { setHideNonSelectedVessels } from '../../domain/shared_slices/Vessel'
 import { ReactComponent as ShowingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_inactif.svg'
 import { ReactComponent as HidingOtherTracksSVG } from '../icons/Bouton_masquer_pistes_actif.svg'
@@ -177,7 +177,7 @@ const FavoriteVesselsIcon = styled(MapButtonStyle)`
   left: 12px;
   background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   transition: all 0.3s;
-  
+
   :hover, :focus {
       background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
   }

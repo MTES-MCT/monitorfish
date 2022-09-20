@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react'
 import styled, { css } from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import { Radio, RadioGroup } from 'rsuite'
 import { interestPointType } from '../../../../domain/entities/interestPoints'
 

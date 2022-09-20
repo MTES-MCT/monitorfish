@@ -11,7 +11,7 @@ import {
   setVesselLabelsShowedOnMap
 } from '../../../../domain/shared_slices/Map'
 import VesselLabelSelection from './VesselLabelSelection'
-import MapPropertyTrigger from '../../../commonComponents/MapPropertyTrigger'
+import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
 import { MapTool } from '../../../../domain/entities/map'
 import { MapToolBox } from '../MapToolBox'
 

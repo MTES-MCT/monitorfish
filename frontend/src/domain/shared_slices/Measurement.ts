@@ -2,6 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
 
+import type { MeasurementTypes } from '../entities/map'
+
 const measurementsLocalStorageKey = 'measurements'
 
 export type MeasurementState = {
@@ -10,7 +12,7 @@ export type MeasurementState = {
   // TODO Type this prop.
   circleMeasurementToAdd: null
   // TODO Type this prop.
-  measurementTypeToAdd: null
+  measurementTypeToAdd: MeasurementTypes | null
   // TODO Type this prop.
   measurementsDrawed: Record<string, any>[]
 }

@@ -1,4 +1,18 @@
-import { OK } from './api'
+// TODO We could remove the type discrimation normalization step if we had it done on API side.
+
+import ky from 'ky'
+
+import {
+  ActiveAlert,
+  AlertType,
+  LEGACY_ActiveAlert,
+  LEGACY_SilencedAlert,
+  SilencedAlert,
+  SilencedAlertPeriodRequest
+} from '../domain/types/alert'
+import { ApiError } from '../libs/ApiError'
+
+import type { Integer } from 'type-fest'
 
 export const ALERTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les alertes opérationelles"
 export const VALIDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu valider l'alerte opérationelle"
@@ -6,147 +20,115 @@ export const SILENCE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu ignorer l'alerte
 export const DELETE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu réactiver l'alerte opérationelle"
 
 /**
- * Get operational alerts
- * @memberOf API
- * @returns {Promise<Alert[]>} The alerts
- * @throws {Error}
+ * Type-discriminate active alerts
  */
-function getOperationalAlertsFromAPI() {
-  return fetch('/bff/v1/operational_alerts')
-    .then(response => {
-      if (response.status === OK) {
-        return response.json()
-      }
-      response.text().then(text => {
-        // eslint-disable-next-line no-console
-        console.error(text)
-      })
-      throw Error(ALERTS_ERROR_MESSAGE)
-    })
-    .catch(error => {
-      // eslint-disable-next-line no-console
-      console.error(error)
-      throw Error(ALERTS_ERROR_MESSAGE)
-    })
+function normalizeActiveAlert(alert: LEGACY_ActiveAlert): ActiveAlert {
+  return {
+    ...alert,
+    type: AlertType.ACTIVE
+  }
+}
+
+/**
+ * Type-discriminate silenced alerts
+ */
+function normalizeSilencedAlert(alert: LEGACY_SilencedAlert): SilencedAlert {
+  return {
+    ...alert,
+    type: AlertType.SILENCED
+  }
+}
+
+/**
+ * Get operational alerts
+ *
+ * @throws {@link ApiError}
+ */
+async function getOperationalAlertsFromAPI(): Promise<ActiveAlert[]> {
+  try {
+    const data = await ky.get('/bff/v1/operational_alerts').json<LEGACY_ActiveAlert[]>()
+
+    return data.map(normalizeActiveAlert)
+  } catch (err) {
+    throw new ApiError(ALERTS_ERROR_MESSAGE, err)
+  }
 }
 
 /**
  * Validate an alert
- * @memberOf API
- * @param {int} id
- * @throws {Error}
+ *
+ * @throws {@link ApiError}
  */
-function validateAlertFromAPI(id) {
-  return fetch(`/bff/v1/operational_alerts/${id}/validate`, {
-    method: 'PUT'
-  })
-    .then(response => {
-      if (response.status !== OK) {
-        response.text().then(text => {
-          // eslint-disable-next-line no-console
-          console.error(text)
-        })
-        throw Error(VALIDATE_ALERT_ERROR_MESSAGE)
-      }
-    })
-    .catch(error => {
-      // eslint-disable-next-line no-console
-      console.error(error)
-      throw Error(VALIDATE_ALERT_ERROR_MESSAGE)
-    })
+async function validateAlertFromAPI(id: Integer<number>): Promise<void> {
+  try {
+    await ky.put(`/bff/v1/operational_alerts/${id}/validate`)
+  } catch (err) {
+    throw new ApiError(VALIDATE_ALERT_ERROR_MESSAGE, err)
+  }
 }
 
 /**
  * Silence an alert and returns the saved silenced alert
- * @memberOf API
- * @param {int} id
- * @param {SilencedAlertPeriodRequest} silencedAlertPeriodRequest
- * @return {SilencedAlert} silencedAlert
- * @throws {Error}
+ *
+ * @throws {@link ApiError}
  */
-function silenceAlertFromAPI(id, silencedAlertPeriodRequest) {
+async function silenceAlertFromAPI(
+  id: Integer<number>,
+  silencedAlertPeriodRequest: SilencedAlertPeriodRequest
+): Promise<SilencedAlert> {
+  // TODO Normalize this data before calling the api service rather than here.
   const silencedAlertPeriod = silencedAlertPeriodRequest.silencedAlertPeriod || ''
   const afterDateTime = silencedAlertPeriodRequest.afterDateTime?.toISOString() || ''
   const beforeDateTime = silencedAlertPeriodRequest.beforeDateTime?.toISOString() || ''
 
-  return fetch(`/bff/v1/operational_alerts/${id}/silence`, {
-    body: JSON.stringify({
-      afterDateTime,
-      beforeDateTime,
-      silencedAlertPeriod
-    }),
-    headers: {
-      Accept: 'application/json, text/plain',
-      'Content-Type': 'application/json;charset=UTF-8'
-    },
-    method: 'PUT'
-  })
-    .then(response => {
-      if (response.status === OK) {
-        return response.json()
-      }
-      response.text().then(text => {
-        // eslint-disable-next-line no-console
-        console.error(text)
+  try {
+    const data = await ky
+      .put(`/bff/v1/operational_alerts/${id}/silence`, {
+        // TODO Is this necessary?
+        headers: {
+          Accept: 'application/json, text/plain',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        json: {
+          afterDateTime,
+          beforeDateTime,
+          silencedAlertPeriod
+        }
       })
-      throw Error(SILENCE_ALERT_ERROR_MESSAGE)
-    })
-    .catch(error => {
-      // eslint-disable-next-line no-console
-      console.error(error)
-      throw Error(SILENCE_ALERT_ERROR_MESSAGE)
-    })
+      .json<LEGACY_SilencedAlert>()
+
+    return normalizeSilencedAlert(data)
+  } catch (err) {
+    throw new ApiError(SILENCE_ALERT_ERROR_MESSAGE, err)
+  }
 }
 
 /**
  * Get silenced alerts
- * @memberOf API
- * @returns {Promise<SilencedAlert[]>} The silenced alerts
- * @throws {Error}
+ *
+ * @throws {@link ApiError}
  */
-function getSilencedAlertsFromAPI() {
-  return fetch('/bff/v1/operational_alerts/silenced')
-    .then(response => {
-      if (response.status === OK) {
-        return response.json()
-      }
-      response.text().then(text => {
-        // eslint-disable-next-line no-console
-        console.error(text)
-      })
-      throw Error(ALERTS_ERROR_MESSAGE)
-    })
-    .catch(error => {
-      // eslint-disable-next-line no-console
-      console.error(error)
-      throw Error(ALERTS_ERROR_MESSAGE)
-    })
+async function getSilencedAlertsFromAPI(): Promise<SilencedAlert[]> {
+  try {
+    const data = await ky.get('/bff/v1/operational_alerts/silenced').json<LEGACY_SilencedAlert[]>()
+
+    return data.map(normalizeSilencedAlert)
+  } catch (err) {
+    throw new ApiError(ALERTS_ERROR_MESSAGE, err)
+  }
 }
 
 /**
  * Delete a silenced alert
- * @memberOf API
- * @param id silenced alert id
- * @throws {Error}
+ *
+ * @throws {@link ApiError}
  */
-function deleteSilencedAlertFromAPI(id) {
-  return fetch(`/bff/v1/operational_alerts/silenced/${id}`, {
-    method: 'DELETE'
-  })
-    .then(response => {
-      if (response.status !== OK) {
-        response.text().then(text => {
-          // eslint-disable-next-line no-console
-          console.error(text)
-        })
-        throw Error(DELETE_SILENCED_ALERT_ERROR_MESSAGE)
-      }
-    })
-    .catch(error => {
-      // eslint-disable-next-line no-console
-      console.error(error)
-      throw Error(DELETE_SILENCED_ALERT_ERROR_MESSAGE)
-    })
+async function deleteSilencedAlertFromAPI(id: Integer<number>): Promise<void> {
+  try {
+    await ky.delete(`/bff/v1/operational_alerts/silenced/${id}`)
+  } catch (err) {
+    throw new ApiError(DELETE_SILENCED_ALERT_ERROR_MESSAGE, err)
+  }
 }
 
 export {

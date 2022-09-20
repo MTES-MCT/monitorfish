@@ -43,6 +43,7 @@
     "i18n-iso-countries": "^6.4.0",
     "imask": "^6.1.0",
     "immer": "^9.0.6",
+    "ky": "0.31.3",
     "lodash": "^4.17.21",
     "mini.css": "^3.0.1",
     "nouislider": "14.7.0",

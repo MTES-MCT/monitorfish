@@ -9,7 +9,7 @@ import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/Beaco
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
 import { setEditedReportingInSideWindow } from '../../domain/shared_slices/Reporting'
 import { getOperationalAlerts } from '../../domain/use_cases/alert/getOperationalAlerts'
-import getSilencedAlerts from '../../domain/use_cases/alert/getSilencedAlerts'
+import { getSilencedAlerts } from '../../domain/use_cases/alert/getSilencedAlerts'
 import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import getAllCurrentReportings from '../../domain/use_cases/reporting/getAllCurrentReportings'
 import { useAppDispatch } from '../../hooks/useAppDispatch'

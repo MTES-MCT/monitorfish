@@ -1,11 +1,16 @@
 import styled from 'styled-components'
-import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
-import { COLORS } from '../../../constants/constants'
 
-export const MapToolBox = styled(MapComponentStyle)`
+import { COLORS } from '../../../constants/constants'
+import { MapComponentStyle } from '../../commonStyles/MapComponent.style'
+
+export const MapToolBox = styled(MapComponentStyle)<{
+  healthcheckTextWarning: boolean
+  isHidden?: boolean
+  isOpen: boolean
+}>`
   background: ${COLORS.background};
-  margin-right: ${props => props.isOpen ? '45px' : '-420px'};
-  opacity: ${props => props.isOpen ? '1' : '0'};
+  margin-right: ${p => (p.isOpen ? '45px' : '-420px')};
+  opacity: ${p => (p.isOpen ? '1' : '0')};
   right: 10px;
   border-radius: 2px;
   position: absolute;

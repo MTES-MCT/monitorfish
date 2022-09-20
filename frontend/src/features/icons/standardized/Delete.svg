@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Delete" transform="translate(-23.798 -14.096)">
+    <g id="Groupe_4114" data-name="Groupe 4114">
+      <rect id="Rectangle_6078" data-name="Rectangle 6078" width="1.5" height="6" transform="translate(31.548 22.096)" fill="#707785"/>
+      <rect id="Rectangle_6079" data-name="Rectangle 6079" width="1.5" height="6" transform="translate(34.548 22.096)" fill="#707785"/>
+      <path id="Tracé_1340" data-name="Tracé 1340" d="M41.8,17.6h-4V16.1h-8v1.5h-4v2h1.5V31.1a1,1,0,0,0,1,1h11a1,1,0,0,0,1-1V19.6h1.5ZM38.3,30.1h-9V19.6h9Z" fill="#707785"/>
+    </g>
+    <rect id="Rectangle_6080" data-name="Rectangle 6080" width="20" height="20" transform="translate(23.798 14.096)" fill="none"/>
+  </g>
+</svg>

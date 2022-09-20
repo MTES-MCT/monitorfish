@@ -52,8 +52,6 @@ function VesselList({ namespace }) {
   const fleetSegments = useSelector(state => state.fleetSegment.fleetSegments)
   const gears = useSelector(state => state.gear.gears)
 
-  console.log(vesselListModalIsOpen)
-
   const firstUpdate = useRef(true)
   const [downloadVesselListModalIsOpen, setDownloadVesselListModalIsOpen] = useState(false)
   const [saveVesselFilterModalIsOpen, setSaveVesselFilterModalIsOpen] = useState(false)

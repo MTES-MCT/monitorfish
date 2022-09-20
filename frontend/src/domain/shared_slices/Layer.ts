@@ -11,13 +11,13 @@ const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 export type LayerState = {
   administrativeZonesGeometryCache: Record<string, any>[]
   lastShowedFeatures: Record<string, any>[]
-  layersSidebarOpenedLayer: string
+  layersSidebarOpenedLayerType: string
   layersToFeatures: Record<string, any>[]
 }
 const INITIAL_STATE: LayerState = {
   administrativeZonesGeometryCache: [],
   lastShowedFeatures: [],
-  layersSidebarOpenedLayer: '',
+  layersSidebarOpenedLayerType: '',
   layersToFeatures: []
 }
 
@@ -146,8 +146,8 @@ const reducers = {
   setLastShowedFeatures(state, action) {
     state.lastShowedFeatures = action.payload
   },
-  setLayersSideBarOpenedZone(state, action) {
-    state.layersSidebarOpenedLayer = action.payload
+  setLayersSideBarOpenedLayerType(state, action) {
+    state.layersSidebarOpenedLayerType = action.payload
   },
   setShowedLayersWithLocalStorageValues(state, action) {
     const { regulatoryZones } = action.payload

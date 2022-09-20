@@ -25,8 +25,8 @@ const RegulatoryLayerSearch = props => {
   } = props
 
   const dispatch = useDispatch()
-  const { setLayersSideBarOpenedZone } = layer[namespace].actions
-  const { layersSidebarOpenedLayer } = useSelector(state => state.layer)
+  const { setLayersSideBarOpenedLayerType } = layer[namespace].actions
+  const { layersSidebarOpenedLayerType } = useSelector(state => state.layer)
   const {
     regulatoryLayersSearchResult,
     regulatoryZonesChecked
@@ -37,14 +37,14 @@ const RegulatoryLayerSearch = props => {
   const wrapperRef = useRef(null)
 
   useEffect(() => {
-    if (layersSidebarOpenedLayer !== '') {
+    if (layersSidebarOpenedLayerType !== '') {
       batch(() => {
         dispatch(resetRegulatoryGeometriesToPreview())
-        dispatch(setRegulatoryLayersSearchResult(null))
         dispatch(resetRegulatoryZonesChecked())
+        // dispatch(setRegulatoryLayersSearchResult(null))
       })
     }
-  }, [layersSidebarOpenedLayer])
+  }, [layersSidebarOpenedLayerType])
 
   useEffect(() => {
     if (initSearchFields) {
@@ -65,7 +65,7 @@ const RegulatoryLayerSearch = props => {
 
   useEffect(() => {
     if (regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0) {
-      dispatch(setLayersSideBarOpenedZone(''))
+      dispatch(setLayersSideBarOpenedLayerType(''))
     }
   }, [regulatoryLayersSearchResult])
 
@@ -85,7 +85,7 @@ const RegulatoryLayerSearch = props => {
         setInitSearchFields={setInitSearchFields}
         layersSidebarIsOpen={layersSidebarIsOpen}
       />
-      <RegulatoryLayerSearchResultList/>
+      <RegulatoryLayerSearchResultList namespace={namespace}/>
       <AddRegulatoryLayer
         data-cy={'regulatory-search-add-zones-button'}
         onClick={() => saveRegulatoryLayers(regulatoryZonesChecked)}

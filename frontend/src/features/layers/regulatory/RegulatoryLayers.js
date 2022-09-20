@@ -17,20 +17,20 @@ const RegulatoryLayers = props => {
     hideLayersListWhenSearching,
     regulatoryLayersAddedToMySelection
   } = props
-  const { setLayersSideBarOpenedZone } = layer[namespace].actions
+  const { setLayersSideBarOpenedLayerType } = layer[namespace].actions
 
   const {
     selectedRegulatoryLayers
   } = useSelector(state => state.regulatory)
-  const { layersSidebarOpenedLayer } = useSelector(state => state.layer)
+  const { layersSidebarOpenedLayerType } = useSelector(state => state.layer)
 
   const [showRegulatoryLayers, setShowRegulatoryLayers] = useState(false)
   const [numberOfZonesOpened, setNumberOfZonesOpened] = useState(0)
   const firstUpdate = useRef(true)
 
   useEffect(() => {
-    setShowRegulatoryLayers(layersSidebarOpenedLayer === layersType.REGULATORY)
-  }, [layersSidebarOpenedLayer, setShowRegulatoryLayers])
+    setShowRegulatoryLayers(layersSidebarOpenedLayerType === layersType.REGULATORY)
+  }, [layersSidebarOpenedLayerType, setShowRegulatoryLayers])
 
   const increaseNumberOfZonesOpened = useCallback(number => {
     setNumberOfZonesOpened((numberOfZonesOpened) => numberOfZonesOpened + number)
@@ -70,9 +70,9 @@ const RegulatoryLayers = props => {
 
   const onTitleClicked = () => {
     if (showRegulatoryLayers) {
-      dispatch(setLayersSideBarOpenedZone(''))
+      dispatch(setLayersSideBarOpenedLayerType(''))
     } else {
-      dispatch(setLayersSideBarOpenedZone(layersType.REGULATORY))
+      dispatch(setLayersSideBarOpenedLayerType(layersType.REGULATORY))
       dispatch(closeRegulatoryZoneMetadata())
     }
   }

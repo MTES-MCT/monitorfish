@@ -48,6 +48,23 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]', { timeout: 10000 }).should('not.exist')
   })
 
+  it('A regulation Should be searched and the result Should be kept When we go to My Zones section', () => {
+    // When
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+
+    // Add the layer to My Zones
+    cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin biva')
+    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1)
+
+    // Then go to "My Zones"
+    cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
+    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 0)
+
+    // Back to the search result
+    cy.get('*[data-cy="regulatory-search-show-results"]').click()
+    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1)
+  })
+
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {
     // When
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })

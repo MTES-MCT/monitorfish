@@ -21,12 +21,12 @@ const AdministrativeLayers = props => {
   } = props
 
   const {
-    setLayersSideBarOpenedZone
+    setLayersSideBarOpenedLayerType
   } = layer[namespace].actions
 
   const dispatch = useDispatch()
   const showedLayers = useSelector(state => state.layer.showedLayers)
-  const { layersSidebarOpenedLayer } = useSelector(state => state.layer)
+  const { layersSidebarOpenedLayerType } = useSelector(state => state.layer)
 
   const [showZones, setShowZones] = useState(false)
   const [zones, setZones] = useState([])
@@ -45,8 +45,8 @@ const AdministrativeLayers = props => {
   }, [])
 
   useEffect(() => {
-    setShowZones(layersSidebarOpenedLayer === layersType.ADMINISTRATIVE)
-  }, [layersSidebarOpenedLayer, setShowZones])
+    setShowZones(layersSidebarOpenedLayerType === layersType.ADMINISTRATIVE)
+  }, [layersSidebarOpenedLayerType, setShowZones])
 
   useEffect(() => {
     if (hideLayersListWhenSearching) {
@@ -72,9 +72,9 @@ const AdministrativeLayers = props => {
 
   const onSectionTitleClicked = () => {
     if (showZones) {
-      dispatch(setLayersSideBarOpenedZone(''))
+      dispatch(setLayersSideBarOpenedLayerType(''))
     } else {
-      dispatch(setLayersSideBarOpenedZone(layersType.ADMINISTRATIVE))
+      dispatch(setLayersSideBarOpenedLayerType(layersType.ADMINISTRATIVE))
       dispatch(closeRegulatoryZoneMetadata())
     }
   }
@@ -147,7 +147,7 @@ const ZonesList = styled.ul`
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  max-height: 70vh;
+  max-height: 48vh;
   height: ${props => props.showZones && props.zonesLength ? 36 * props.zonesLength : 0}px;
   background: ${COLORS.background};
   transition: 0.5s all;

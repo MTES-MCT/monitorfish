@@ -12,8 +12,6 @@ import {
 } from '../domain/types/alert'
 import { ApiError } from '../libs/ApiError'
 
-import type { Integer } from 'type-fest'
-
 export const ALERTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les alertes opérationelles"
 export const VALIDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu valider l'alerte opérationelle"
 export const SILENCE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu ignorer l'alerte opérationelle"
@@ -59,7 +57,7 @@ async function getOperationalAlertsFromAPI(): Promise<ActiveAlert[]> {
  *
  * @throws {@link ApiError}
  */
-async function validateAlertFromAPI(id: Integer<number>): Promise<void> {
+async function validateAlertFromAPI(id: string): Promise<void> {
   try {
     await ky.put(`/bff/v1/operational_alerts/${id}/validate`)
   } catch (err) {
@@ -73,7 +71,7 @@ async function validateAlertFromAPI(id: Integer<number>): Promise<void> {
  * @throws {@link ApiError}
  */
 async function silenceAlertFromAPI(
-  id: Integer<number>,
+  id: string,
   silencedAlertPeriodRequest: SilencedAlertPeriodRequest
 ): Promise<SilencedAlert> {
   // TODO Normalize this data before calling the api service rather than here.
@@ -123,7 +121,7 @@ async function getSilencedAlertsFromAPI(): Promise<SilencedAlert[]> {
  *
  * @throws {@link ApiError}
  */
-async function deleteSilencedAlertFromAPI(id: Integer<number>): Promise<void> {
+async function deleteSilencedAlertFromAPI(id: string): Promise<void> {
   try {
     await ky.delete(`/bff/v1/operational_alerts/silenced/${id}`)
   } catch (err) {

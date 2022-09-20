@@ -7,7 +7,7 @@ import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
 import { getAlertNameFromType, alertSearchOptions } from '../../../domain/entities/alerts'
-import reactivateSilencedAlert from '../../../domain/use_cases/alert/reactivateSilencedAlert'
+import { reactivateSilencedAlert } from '../../../domain/use_cases/alert/reactivateSilencedAlert'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'

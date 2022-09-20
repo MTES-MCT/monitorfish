@@ -1,9 +1,9 @@
 import { OK } from './api'
 
-export const ALERTS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les alertes opérationelles'
-export const VALIDATE_ALERT_ERROR_MESSAGE = 'Nous n\'avons pas pu valider l\'alerte opérationelle'
-export const SILENCE_ALERT_ERROR_MESSAGE = 'Nous n\'avons pas pu ignorer l\'alerte opérationelle'
-export const DELETE_SILENCED_ALERT_ERROR_MESSAGE = 'Nous n\'avons pas pu réactiver l\'alerte opérationelle'
+export const ALERTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les alertes opérationelles"
+export const VALIDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu valider l'alerte opérationelle"
+export const SILENCE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu ignorer l'alerte opérationelle"
+export const DELETE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu réactiver l'alerte opérationelle"
 
 /**
  * Get operational alerts
@@ -11,18 +11,20 @@ export const DELETE_SILENCED_ALERT_ERROR_MESSAGE = 'Nous n\'avons pas pu réacti
  * @returns {Promise<Alert[]>} The alerts
  * @throws {Error}
  */
-function getOperationalAlertsFromAPI () {
+function getOperationalAlertsFromAPI() {
   return fetch('/bff/v1/operational_alerts')
     .then(response => {
       if (response.status === OK) {
         return response.json()
-      } else {
-        response.text().then(text => {
-          console.error(text)
-        })
-        throw Error(ALERTS_ERROR_MESSAGE)
       }
-    }).catch(error => {
+      response.text().then(text => {
+        // eslint-disable-next-line no-console
+        console.error(text)
+      })
+      throw Error(ALERTS_ERROR_MESSAGE)
+    })
+    .catch(error => {
+      // eslint-disable-next-line no-console
       console.error(error)
       throw Error(ALERTS_ERROR_MESSAGE)
     })
@@ -34,20 +36,24 @@ function getOperationalAlertsFromAPI () {
  * @param {int} id
  * @throws {Error}
  */
-function validateAlertFromAPI (id) {
+function validateAlertFromAPI(id) {
   return fetch(`/bff/v1/operational_alerts/${id}/validate`, {
     method: 'PUT'
-  }).then(response => {
-    if (response.status !== OK) {
-      response.text().then(text => {
-        console.error(text)
-      })
-      throw Error(VALIDATE_ALERT_ERROR_MESSAGE)
-    }
-  }).catch(error => {
-    console.error(error)
-    throw Error(VALIDATE_ALERT_ERROR_MESSAGE)
   })
+    .then(response => {
+      if (response.status !== OK) {
+        response.text().then(text => {
+          // eslint-disable-next-line no-console
+          console.error(text)
+        })
+        throw Error(VALIDATE_ALERT_ERROR_MESSAGE)
+      }
+    })
+    .catch(error => {
+      // eslint-disable-next-line no-console
+      console.error(error)
+      throw Error(VALIDATE_ALERT_ERROR_MESSAGE)
+    })
 }
 
 /**
@@ -58,35 +64,38 @@ function validateAlertFromAPI (id) {
  * @return {SilencedAlert} silencedAlert
  * @throws {Error}
  */
-function silenceAlertFromAPI (id, silencedAlertPeriodRequest) {
+function silenceAlertFromAPI(id, silencedAlertPeriodRequest) {
   const silencedAlertPeriod = silencedAlertPeriodRequest.silencedAlertPeriod || ''
   const afterDateTime = silencedAlertPeriodRequest.afterDateTime?.toISOString() || ''
   const beforeDateTime = silencedAlertPeriodRequest.beforeDateTime?.toISOString() || ''
 
   return fetch(`/bff/v1/operational_alerts/${id}/silence`, {
-    method: 'PUT',
+    body: JSON.stringify({
+      afterDateTime,
+      beforeDateTime,
+      silencedAlertPeriod
+    }),
     headers: {
       Accept: 'application/json, text/plain',
       'Content-Type': 'application/json;charset=UTF-8'
     },
-    body: JSON.stringify({
-      silencedAlertPeriod: silencedAlertPeriod,
-      afterDateTime: afterDateTime,
-      beforeDateTime: beforeDateTime
-    })
-  }).then(response => {
-    if (response.status === OK) {
-      return response.json()
-    } else {
+    method: 'PUT'
+  })
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      }
       response.text().then(text => {
+        // eslint-disable-next-line no-console
         console.error(text)
       })
       throw Error(SILENCE_ALERT_ERROR_MESSAGE)
-    }
-  }).catch(error => {
-    console.error(error)
-    throw Error(SILENCE_ALERT_ERROR_MESSAGE)
-  })
+    })
+    .catch(error => {
+      // eslint-disable-next-line no-console
+      console.error(error)
+      throw Error(SILENCE_ALERT_ERROR_MESSAGE)
+    })
 }
 
 /**
@@ -95,18 +104,20 @@ function silenceAlertFromAPI (id, silencedAlertPeriodRequest) {
  * @returns {Promise<SilencedAlert[]>} The silenced alerts
  * @throws {Error}
  */
-function getSilencedAlertsFromAPI () {
+function getSilencedAlertsFromAPI() {
   return fetch('/bff/v1/operational_alerts/silenced')
     .then(response => {
       if (response.status === OK) {
         return response.json()
-      } else {
-        response.text().then(text => {
-          console.error(text)
-        })
-        throw Error(ALERTS_ERROR_MESSAGE)
       }
-    }).catch(error => {
+      response.text().then(text => {
+        // eslint-disable-next-line no-console
+        console.error(text)
+      })
+      throw Error(ALERTS_ERROR_MESSAGE)
+    })
+    .catch(error => {
+      // eslint-disable-next-line no-console
       console.error(error)
       throw Error(ALERTS_ERROR_MESSAGE)
     })
@@ -118,18 +129,21 @@ function getSilencedAlertsFromAPI () {
  * @param id silenced alert id
  * @throws {Error}
  */
-function deleteSilencedAlertFromAPI (id) {
+function deleteSilencedAlertFromAPI(id) {
   return fetch(`/bff/v1/operational_alerts/silenced/${id}`, {
     method: 'DELETE'
   })
     .then(response => {
       if (response.status !== OK) {
         response.text().then(text => {
+          // eslint-disable-next-line no-console
           console.error(text)
         })
         throw Error(DELETE_SILENCED_ALERT_ERROR_MESSAGE)
       }
-    }).catch(error => {
+    })
+    .catch(error => {
+      // eslint-disable-next-line no-console
       console.error(error)
       throw Error(DELETE_SILENCED_ALERT_ERROR_MESSAGE)
     })

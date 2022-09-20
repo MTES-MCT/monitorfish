@@ -37,6 +37,7 @@ export type LEGACY_SilencedAlert = LEGACY_Alert & {
 }
 
 export type SilencedAlert = LEGACY_SilencedAlert & {
+  silencedPeriod?: SilencedAlertPeriodRequest
   type: AlertType.SILENCED
 }
 

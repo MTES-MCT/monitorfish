@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import RegulatoryLayerSearchResultLawType from './RegulatoryLayerSearchResultLawType'
-import { COLORS } from '../../../../constants/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import layer from '../../../../domain/shared_slices/Layer'
 
@@ -17,14 +16,15 @@ const RegulatoryLayerSearchResultList = ({ namespace }) => {
 
   return (<>
     {
-      hasOneLayerTypeOpen
-        ? <ShowResultList
-          data-cy={'regulatory-search-show-results'}
-          onClick={() => dispatch(setLayersSideBarOpenedLayerType(''))}
-        >
-          Afficher les résultats
+      hasOneLayerTypeOpen && <ShowResultList
+        data-cy={'regulatory-search-show-results'}
+        onClick={() => dispatch(setLayersSideBarOpenedLayerType(''))}
+      >
+        Afficher les résultats
       </ShowResultList>
-        : <List $advancedSearchIsOpen={advancedSearchIsOpen}>
+    }
+    {
+      !hasOneLayerTypeOpen && <List $advancedSearchIsOpen={advancedSearchIsOpen}>
         {
           regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0
             ? Object.entries(regulatoryLayersSearchResult)?.map(([lawType, topic]) => {
@@ -45,8 +45,8 @@ const RegulatoryLayerSearchResultList = ({ namespace }) => {
 
 const ShowResultList = styled.div`
   cursor: pointer;
-  background: ${COLORS.charcoal};
-  color: ${COLORS.gray};
+  background: ${p => p.theme.color.charcoal};
+  color: ${p => p.theme.color.gray};
   padding: 0;
   line-height: 2.5em;
   margin: 0;
@@ -60,13 +60,13 @@ const ShowResultList = styled.div`
 
 const List = styled.ul`
   margin: 0;
-  background: ${COLORS.background};
+  background: ${p => p.theme.color.background};
   border-radius: 0;
   padding: 0;
   max-height: ${props => props.$advancedSearchIsOpen ? '52vh' : '74vh'};
   overflow-y: auto;
   overflow-x: hidden;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   transition: 0.5s all;
 `
 

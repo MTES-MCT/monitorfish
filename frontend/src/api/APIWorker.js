@@ -16,7 +16,7 @@ import openBeaconMalfunctionInKanban from '../domain/use_cases/beaconMalfunction
 import getVesselBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import getVesselReportings from '../domain/use_cases/vessel/getVesselReportings'
-import getSilencedAlerts from '../domain/use_cases/alert/getSilencedAlerts'
+import { getSilencedAlerts } from '../domain/use_cases/alert/getSilencedAlerts'
 import getFishingInfractions from '../domain/use_cases/infraction/getFishingInfractions'
 import getAllControllers from '../domain/use_cases/controller/getAllControllers'
 import getAllCurrentReportings from '../domain/use_cases/reporting/getAllCurrentReportings'

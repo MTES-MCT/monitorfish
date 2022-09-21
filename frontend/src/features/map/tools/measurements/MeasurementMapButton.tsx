@@ -37,7 +37,7 @@ export function MeasurementMapButton() {
     if (clickedOutsideComponent && isOpen) {
       dispatch(setMapToolOpened(undefined))
     }
-  }, [clickedOutsideComponent])
+  }, [dispatch, clickedOutsideComponent, isOpen])
 
   useEffect(() => {
     if (!isOpen && !isMeasurementToolOpen) {
@@ -50,7 +50,7 @@ export function MeasurementMapButton() {
       dispatch(setMeasurementTypeToAdd(null))
       dispatch(setMapToolOpened(undefined))
     }
-  }, [escapeFromKeyboard])
+  }, [dispatch, escapeFromKeyboard])
 
   const makeMeasurement = nextMeasurementTypeToAdd => {
     dispatch(setMeasurementTypeToAdd(nextMeasurementTypeToAdd))
@@ -66,7 +66,7 @@ export function MeasurementMapButton() {
       default:
         return <MeasurementIcon $isRightMenuShrinked={isRightMenuShrinked} />
     }
-  }, [measurementTypeToAdd, rightMenuIsOpen, selectedVessel])
+  }, [measurementTypeToAdd, rightMenuIsOpen, selectedVessel, isRightMenuShrinked])
 
   const openOrCloseMeasurementMenu = useCallback(() => {
     if (measurementTypeToAdd) {

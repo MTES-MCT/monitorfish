@@ -20,7 +20,7 @@ export function RightMenuOnHoverArea() {
     } else {
       dispatch(expandRightMenu())
     }
-  }, [clickedOutsideComponent, mapToolOpened, selectedVessel])
+  }, [dispatch, clickedOutsideComponent, mapToolOpened, selectedVessel])
 
   return selectedVessel && <Area ref={areaRef} onMouseEnter={() => dispatch(expandRightMenu())} />
 }

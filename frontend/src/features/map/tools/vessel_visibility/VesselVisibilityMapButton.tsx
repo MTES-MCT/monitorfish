@@ -23,7 +23,7 @@ export function VesselVisibilityMapButton() {
     if (clickedOutsideComponent && isOpen) {
       dispatch(setMapToolOpened(undefined))
     }
-  }, [clickedOutsideComponent])
+  }, [dispatch, clickedOutsideComponent, isOpen])
 
   const openOrCloseVesselVisibility = useCallback(() => {
     if (isOpen) {

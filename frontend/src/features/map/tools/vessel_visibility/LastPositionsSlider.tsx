@@ -24,7 +24,7 @@ export function LastPositionsSlider({
       const hiddenIndex = labels.findIndex(label => vesselsLastPositionVisibility.hidden === label)
       setValue([hiddenIndex, opacityReducedIndex])
     }
-  }, [vesselsLastPositionVisibility])
+  }, [value, labels, vesselsLastPositionVisibility])
 
   function updateValue(nextValue) {
     if (nextValue[0] !== value[0] || nextValue[1] !== value[1]) {

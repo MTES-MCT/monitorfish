@@ -115,6 +115,7 @@ export const globalSlice = createSlice({
 
     openVesselListModal(state) {
       state.vesselListModalIsOpen = true
+      state.mapToolOpened = undefined
     },
 
     removeError(state) {

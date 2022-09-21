@@ -23,11 +23,17 @@ export function InterestPointMapButton() {
   const wrapperRef = useRef(null)
   const escapeFromKeyboard = useEscapeFromKeyboard()
 
+  const close = useCallback(() => {
+    dispatch(endInterestPointDraw())
+    dispatch(setMapToolOpened(undefined))
+    dispatch(deleteInterestPointBeingDrawed())
+  }, [dispatch])
+
   useEffect(() => {
     if (escapeFromKeyboard && isOpen) {
       close()
     }
-  }, [escapeFromKeyboard])
+  }, [escapeFromKeyboard, isOpen, close])
 
   useEffect(() => {
     if (!isOpen) {
@@ -35,12 +41,6 @@ export function InterestPointMapButton() {
       dispatch(deleteInterestPointBeingDrawed())
     }
   }, [dispatch, isOpen])
-
-  const close = useCallback(() => {
-    dispatch(endInterestPointDraw())
-    dispatch(setMapToolOpened(undefined))
-    dispatch(deleteInterestPointBeingDrawed())
-  }, [dispatch])
 
   const openOrCloseInterestPoint = useCallback(() => {
     if (!isOpen) {

@@ -28,7 +28,7 @@ export function VesselFiltersMapButton() {
     if (clickedOutsideComponent && isOpen) {
       dispatch(setMapToolOpened(undefined))
     }
-  }, [clickedOutsideComponent])
+  }, [dispatch, clickedOutsideComponent, isOpen])
 
   const openOrCloseVesselFilters = useCallback(() => {
     if (isOpen) {

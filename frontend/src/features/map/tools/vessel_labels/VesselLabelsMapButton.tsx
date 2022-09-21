@@ -23,7 +23,7 @@ export function VesselLabelsMapButton() {
     if (clickedOutsideComponent && isOpen) {
       dispatch(setMapToolOpened(undefined))
     }
-  }, [clickedOutsideComponent, isOpen])
+  }, [dispatch, clickedOutsideComponent, isOpen])
 
   const openOrCloseVesselLabels = useCallback(() => {
     if (!isOpen) {

@@ -25,7 +25,7 @@ export function VesselFiltersMapButton() {
   const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isOpen)
 
   useEffect(() => {
-    if (clickedOutsideComponent) {
+    if (clickedOutsideComponent && isOpen) {
       dispatch(setMapToolOpened(undefined))
     }
   }, [clickedOutsideComponent])

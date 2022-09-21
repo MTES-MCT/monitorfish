@@ -20,7 +20,7 @@ export function VesselVisibilityMapButton() {
   const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isOpen)
 
   useEffect(() => {
-    if (clickedOutsideComponent) {
+    if (clickedOutsideComponent && isOpen) {
       dispatch(setMapToolOpened(undefined))
     }
   }, [clickedOutsideComponent])
@@ -36,7 +36,7 @@ export function VesselVisibilityMapButton() {
   return (
     <Wrapper ref={wrapperRef}>
       <VesselVisibilityButton
-        dataCy="open-vessels-visibility"
+        dataCy="vessel-visibility"
         isOpen={isOpen}
         onClick={openOrCloseVesselVisibility}
         style={{ top: 152 }}

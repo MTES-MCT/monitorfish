@@ -41,14 +41,13 @@ export function MapPropertyTrigger({
         style={{
           background: booleanProperty ? COLORS.shadowBlue : COLORS.charcoal,
           cursor: disabled ? 'not-allowed' : 'pointer',
-          height: '36',
+          height: 36,
           transition: 'all 0.2s',
-          width: '36'
+          width: 36
         }}
       />
       <ShowLabelText data-cy="map-property-trigger">
-        {showOrHideText}
-        {text}
+        {showOrHideText} {text}
       </ShowLabelText>
     </Wrapper>
   )

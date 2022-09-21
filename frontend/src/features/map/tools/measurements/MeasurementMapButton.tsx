@@ -28,15 +28,22 @@ export function MeasurementMapButton() {
 
   const isRightMenuShrinked = !rightMenuIsOpen
   const isOpen = useMemo(() => mapToolOpened === MapTool.MEASUREMENT_MENU, [mapToolOpened])
+  const isMeasurementToolOpen = useMemo(() => mapToolOpened === MapTool.MEASUREMENT, [mapToolOpened])
   const wrapperRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isOpen)
   const escapeFromKeyboard = useEscapeFromKeyboard()
 
   useEffect(() => {
-    if (clickedOutsideComponent) {
+    if (clickedOutsideComponent && isOpen) {
       dispatch(setMapToolOpened(undefined))
     }
   }, [clickedOutsideComponent])
+
+  useEffect(() => {
+    if (!isOpen && !isMeasurementToolOpen) {
+      dispatch(setMeasurementTypeToAdd(null))
+    }
+  }, [dispatch, isOpen, isMeasurementToolOpen])
 
   useEffect(() => {
     if (escapeFromKeyboard) {

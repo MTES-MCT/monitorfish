@@ -1,13 +1,15 @@
 import { useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+
 import { contractRightMenu, expandRightMenu } from '../../../domain/shared_slices/Global'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
 
-const RightMenuOnHoverArea = () => {
-  const selectedVessel = useSelector(state => state.vessel.selectedVessel)
-  const mapToolOpened = useSelector(state => state.global.mapToolOpened)
-  const dispatch = useDispatch()
+export function RightMenuOnHoverArea() {
+  const dispatch = useAppDispatch()
+  const selectedVessel = useAppSelector(state => state.vessel.selectedVessel)
+  const mapToolOpened = useAppSelector(state => state.global.mapToolOpened)
 
   const areaRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideWhenOpened(areaRef, selectedVessel)
@@ -20,11 +22,7 @@ const RightMenuOnHoverArea = () => {
     }
   }, [clickedOutsideComponent, mapToolOpened, selectedVessel])
 
-  return <>
-    {
-      selectedVessel && <Area ref={areaRef}/>
-    }
-  </>
+  return selectedVessel && <Area ref={areaRef} onMouseEnter={() => dispatch(expandRightMenu())} />
 }
 
 const Area = styled.div`
@@ -35,5 +33,3 @@ const Area = styled.div`
   position: absolute;
   top: 0;
 `
-
-export default RightMenuOnHoverArea

@@ -44,6 +44,7 @@ const StyledMapToolButton = styled(MapButtonStyle)<{
   display: inline-block;
   color: ${COLORS.blue};
   padding-top: 5px;
+  margin-left: 5px;
   z-index: 99;
   height: 40px;
   width: ${p => (p.isRightMenuShrinked ? '5px' : '40px')};

@@ -19,15 +19,22 @@ export function InterestPointMapButton() {
   const dispatch = useAppDispatch()
   const { healthcheckTextWarning, mapToolOpened, rightMenuIsOpen } = useAppSelector(state => state.global)
   const isRightMenuShrinked = !rightMenuIsOpen
-  const isInterestPointOpen = useMemo(() => mapToolOpened === MapTool.INTEREST_POINT, [mapToolOpened])
+  const isOpen = useMemo(() => mapToolOpened === MapTool.INTEREST_POINT, [mapToolOpened])
   const wrapperRef = useRef(null)
   const escapeFromKeyboard = useEscapeFromKeyboard()
 
   useEffect(() => {
-    if (escapeFromKeyboard) {
+    if (escapeFromKeyboard && isOpen) {
       close()
     }
   }, [escapeFromKeyboard])
+
+  useEffect(() => {
+    if (!isOpen) {
+      dispatch(endInterestPointDraw())
+      dispatch(deleteInterestPointBeingDrawed())
+    }
+  }, [dispatch, isOpen])
 
   const close = useCallback(() => {
     dispatch(endInterestPointDraw())
@@ -36,26 +43,26 @@ export function InterestPointMapButton() {
   }, [dispatch])
 
   const openOrCloseInterestPoint = useCallback(() => {
-    if (!isInterestPointOpen) {
+    if (!isOpen) {
       dispatch(drawInterestPoint())
       dispatch(setMapToolOpened(MapTool.INTEREST_POINT))
     } else {
       close()
     }
-  }, [dispatch, isInterestPointOpen, close])
+  }, [dispatch, isOpen, close])
 
   return (
     <Wrapper ref={wrapperRef}>
       <InterestPointButton
         dataCy="interest-point"
-        isOpen={isInterestPointOpen}
+        isOpen={isOpen}
         onClick={openOrCloseInterestPoint}
         style={{ top: 291 }}
         title={"Créer un point d'intérêt"}
       >
         <InterestPointIcon $isRightMenuShrinked={isRightMenuShrinked} />
       </InterestPointButton>
-      <EditInterestPoint close={close} healthcheckTextWarning={healthcheckTextWarning} isOpen={isInterestPointOpen} />
+      <EditInterestPoint close={close} healthcheckTextWarning={healthcheckTextWarning} isOpen={isOpen} />
     </Wrapper>
   )
 }

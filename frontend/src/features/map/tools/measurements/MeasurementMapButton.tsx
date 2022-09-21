@@ -14,8 +14,8 @@ import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useClickOutsideWhenOpened } from '../../../../hooks/useClickOutsideWhenOpened'
 import { useEscapeFromKeyboard } from '../../../../hooks/useEscapeFromKeyboard'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
-import { ReactComponent as MultiLineSVG } from '../../../icons/Mesure_ligne_brisee.svg'
-import { ReactComponent as CircleRangeSVG } from '../../../icons/Mesure_rayon_action.svg'
+import { ReactComponent as MultiLineSVG } from '../../../icons/standardized/Measure_broken_line.svg'
+import { ReactComponent as CircleRangeSVG } from '../../../icons/standardized/Measure_circle.svg'
 import { ReactComponent as MeasurementSVG } from '../../../icons/standardized/Measure_line.svg'
 import { MapToolButton } from '../MapToolButton'
 import CustomCircleRange from './CustomCircleRange'
@@ -137,9 +137,10 @@ const MeasurementItem = styled.div`
   padding: 0;
   z-index: 99;
   right: 0;
-  height: 40px;
+  height: 32px;
   width: 40px;
   border-radius: 2px;
+  padding-top: 8px;
   cursor: pointer;
   position: relative;
   margin-left: 5px;
@@ -147,13 +148,21 @@ const MeasurementItem = styled.div`
 `
 
 const MultiLineIcon = styled(MultiLineSVG)`
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
+
+  path {
+    fill: ${p => p.theme.color.gainsboro};
+  }
 `
 
 const CircleRangeIcon = styled(CircleRangeSVG)`
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
+
+  path {
+    fill: ${p => p.theme.color.gainsboro};
+  }
 `
 
 const Wrapper = styled.div`

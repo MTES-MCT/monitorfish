@@ -5,7 +5,11 @@ import styled from 'styled-components'
 
 import type { LastPositionVisibility } from '../../../../domain/types/map'
 
+// Hours
+const labels = [48, 24, 12, 6, 3, 2, 1]
+
 declare type Range = [number, number]
+
 type LastPositionsSliderProps = {
   updateVesselsLastPositionVisibility: (hidden, opacityReduced) => void
   vesselsLastPositionVisibility: LastPositionVisibility
@@ -15,8 +19,6 @@ export function LastPositionsSlider({
   vesselsLastPositionVisibility
 }: LastPositionsSliderProps) {
   const [value, setValue] = useState<Range>([0, 0])
-  // Hours
-  const labels = [48, 24, 12, 6, 3, 2, 1]
 
   useEffect(() => {
     if (vesselsLastPositionVisibility && !value) {

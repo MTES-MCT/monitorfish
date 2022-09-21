@@ -22,7 +22,6 @@ import CustomCircleRange from './CustomCircleRange'
 
 export function MeasurementMapButton() {
   const dispatch = useAppDispatch()
-  const selectedVessel = useAppSelector(state => state.vessel.selectedVessel)
   const measurementTypeToAdd = useAppSelector(state => state.measurement.measurementTypeToAdd)
   const { healthcheckTextWarning, mapToolOpened, rightMenuIsOpen } = useAppSelector(state => state.global)
 
@@ -66,7 +65,7 @@ export function MeasurementMapButton() {
       default:
         return <MeasurementIcon $isRightMenuShrinked={isRightMenuShrinked} />
     }
-  }, [measurementTypeToAdd, rightMenuIsOpen, selectedVessel, isRightMenuShrinked])
+  }, [measurementTypeToAdd, isRightMenuShrinked])
 
   const openOrCloseMeasurementMenu = useCallback(() => {
     if (measurementTypeToAdd) {

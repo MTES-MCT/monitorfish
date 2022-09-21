@@ -748,7 +748,7 @@ def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):
 
     flow.replace(
         flow.get_tasks("get_monitorfish_healthcheck")[0],
-        get_monitorfish_healthcheck_mock_factory(last_position_minutes_ago=15),
+        get_monitorfish_healthcheck_mock_factory(position_received_minutes_ago=15),
     )
 
     state = flow.run()

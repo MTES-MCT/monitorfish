@@ -59,7 +59,7 @@ def assert_positions_health(
     """
     Checks :
 
-      - if the `date_position_received` of the input `MonitorfishHealthcheck` is within
+      - if the `date_last_position` of the input `MonitorfishHealthcheck` is within
         `max_minutes_without_data` minutes of `utcnow`.
       - if input the `recent_positions_histogram` contains the 48 hours before `utcnow`
         and has at least `min_number_of_positions_by_hour` for each 1 hour bin.
@@ -83,7 +83,7 @@ def assert_positions_health(
     if not utcnow:
         utcnow = datetime.utcnow()
 
-    time_without_data = utcnow - healthcheck.date_position_received
+    time_without_data = utcnow - healthcheck.date_last_position
     minutes_without_data = time_without_data.total_seconds() / 60
 
     try:
@@ -151,7 +151,7 @@ def assert_last_positions_health(
     if not utcnow:
         utcnow = datetime.utcnow()
 
-    time_without_data = utcnow - healthcheck.date_last_position
+    time_without_data = utcnow - healthcheck.date_position_received
     minutes_without_data = time_without_data.total_seconds() / 60
 
     try:

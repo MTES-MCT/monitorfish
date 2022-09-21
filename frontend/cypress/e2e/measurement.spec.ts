@@ -26,6 +26,7 @@ context('Measurement', () => {
     cy.get('*[data-cy="dms-coordinates-input"]').eq(0).should('have.value', '47° 48′ 56″ N 007° 54′ 51″ W')
     cy.get('*[data-cy="measurement-circle-radius-input"]').type('35', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-add"]').click({ timeout: 10000 })
+    cy.wait(100)
 
     // Then
     cy.get('*[data-cy="measurement-value"]').contains('r = 35 nm', { timeout: 10000 })
@@ -40,6 +41,7 @@ context('Measurement', () => {
     cy.get('*[data-cy="dms-coordinates-input"]').eq(0).type('470123N0070123W', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-radius-input"]').type('47', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-add"]').click({ timeout: 10000 })
+    cy.wait(100)
 
     // Then
     cy.get('*[data-cy="measurement-value"]').contains('r = 47 nm', { timeout: 10000 })

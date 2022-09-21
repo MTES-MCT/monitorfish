@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
-import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
+import { MapTool, OPENLAYERS_PROJECTION } from '../domain/entities/map'
 import Draw from 'ol/interaction/Draw'
 import VectorLayer from 'ol/layer/Vector'
 import { getInterestPointStyle, POIStyle } from './styles/interestPoint.style'
@@ -321,6 +321,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   function modifyInterestPoint (uuid) {
     dispatch(editInterestPoint(uuid))
+    dispatch(setMapToolOpened(MapTool.INTEREST_POINT))
   }
 
   function deleteInterestPointBeingDrawedAndCloseTool () {

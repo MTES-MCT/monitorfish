@@ -183,7 +183,9 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
             }))
           }
 
-          startDrawing(event, interestPointBeingDrawed.type || interestPointType.OTHER)
+          if (interestPointBeingDrawed) {
+            startDrawing(event, interestPointBeingDrawed.type || interestPointType.OTHER)
+          }
         })
 
         drawObject.once(DRAW_ABORT_EVENT, () => {

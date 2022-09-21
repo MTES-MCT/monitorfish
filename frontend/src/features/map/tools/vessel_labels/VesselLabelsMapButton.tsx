@@ -20,10 +20,10 @@ export function VesselLabelsMapButton() {
   const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isOpen)
 
   useEffect(() => {
-    if (clickedOutsideComponent) {
+    if (clickedOutsideComponent && isOpen) {
       dispatch(setMapToolOpened(undefined))
     }
-  }, [clickedOutsideComponent])
+  }, [clickedOutsideComponent, isOpen])
 
   const openOrCloseVesselLabels = useCallback(() => {
     if (!isOpen) {

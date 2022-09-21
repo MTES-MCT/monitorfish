@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const VesselListSVG = ({ background, isTitle }) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24.707" height="23.707" viewBox="0 0 24.707 23.707"

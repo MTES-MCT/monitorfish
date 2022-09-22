@@ -1,4 +1,4 @@
-import type { PendingAlert } from './alert'
+import type { AlertValueForPending } from './alert'
 
 export type Reporting = {
   creationDate: string
@@ -13,7 +13,7 @@ export type Reporting = {
   // type: ReportingType<string>
   validationDate: string
   // TODO Create a specific type with a discriminator prop to avoid type-guessing issues
-  value: PendingAlert | InfractionSuspicion | Observation
+  value: AlertValueForPending | InfractionSuspicion | Observation
   vesselIdentifier: string
   vesselName: string
 }

@@ -9,7 +9,7 @@ import { PendingAlertsList } from './PendingAlertsList'
 import { ReportingList } from './ReportingList'
 import { SilencedAlertsList } from './SilencedAlertsList'
 
-import type { PendingAlert } from '../../../domain/types/alert'
+import type { AlertValueForPending } from '../../../domain/types/alert'
 import type { MenuItem } from '../types'
 
 type AlertsAndReportingsProps = {
@@ -36,7 +36,7 @@ export function AlertsAndReportings({
           : []
         ).includes(
           // TODO Remove the `as` as soon as the discriminator is added.
-          (alert.value as PendingAlert).seaFront
+          (alert.value as AlertValueForPending).seaFront
         )
       ),
     [silencedAlerts, selectedSubMenu]
@@ -45,7 +45,7 @@ export function AlertsAndReportings({
   useEffect(() => {
     if (focusOnAlert) {
       // TODO Remove the `as` as soon as the discriminator is added.
-      const { seaFront } = focusOnAlert.value as PendingAlert
+      const { seaFront } = focusOnAlert.value as AlertValueForPending
 
       const menuSeaFrontName = Object.keys(AlertsMenuSeaFrontsToSeaFrontList)
         .map(menuSeaFrontKey => AlertsMenuSeaFrontsToSeaFrontList[menuSeaFrontKey])

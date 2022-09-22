@@ -1,10 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import type { Alert, SilencedAlert } from '../types/alert'
+import type { ActiveAlert, SilencedAlert } from '../types/alert'
 
 export type AlertState = {
-  alerts: Alert[]
-  focusOnAlert: Alert | undefined
+  alerts: ActiveAlert[]
+  focusOnAlert: ActiveAlert | undefined
   silencedAlerts: SilencedAlert[]
 }
 const INITIAL_STATE: AlertState = {
@@ -44,9 +44,6 @@ const alertSlice = createSlice({
 
     /**
      * Reset focus on alert
-     * @function setFocusOnAlert
-     * @memberOf AlertReducer
-     * @param {Object=} state
      */
     resetFocusOnAlert(state) {
       state.focusOnAlert = undefined
@@ -54,22 +51,15 @@ const alertSlice = createSlice({
 
     /**
      * Set alerts
-     * @function setAlerts
-     * @memberOf AlertReducer
-     * @param {Object=} state
-     * @param {{payload: Alert[]}} action - The alerts
      */
-    setAlerts(state, action) {
+    setAlerts(state, action: PayloadAction<ActiveAlert[]>) {
       state.alerts = action.payload
     },
+
     /**
      * Set silenced alerts
-     * @function setSilencedAlerts
-     * @memberOf AlertReducer
-     * @param {Object=} state
-     * @param {{payload: SilencedAlert[]}} action - The silenced alerts
      */
-    setSilencedAlerts(state, action) {
+    setSilencedAlerts(state, action: PayloadAction<SilencedAlert[]>) {
       state.silencedAlerts = action.payload
     }
   }

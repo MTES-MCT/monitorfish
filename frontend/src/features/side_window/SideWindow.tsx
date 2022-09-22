@@ -22,7 +22,7 @@ import { AlertAndReportingTab } from './constants'
 import { SideWindowMenu } from './SideWindowMenu'
 import { SideWindowSubMenu } from './SideWindowSubMenu'
 
-import type { PendingAlert } from '../../domain/types/alert'
+import type { AlertValueForPending } from '../../domain/types/alert'
 import type { MenuItem } from './types'
 import type { CSSProperties, ForwardedRef } from 'react'
 
@@ -94,7 +94,9 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
         case sideWindowMenu.ALERTS.code:
           if (focusOnAlert) {
             // TODO Remove the `as` as soon as the discriminator is added.
-            setSelectedSubMenu(AlertsSubMenu[(focusOnAlert.value as PendingAlert).seaFront] || AlertsSubMenu.MEMN)
+            setSelectedSubMenu(
+              AlertsSubMenu[(focusOnAlert.value as AlertValueForPending).seaFront] || AlertsSubMenu.MEMN
+            )
           }
           break
 

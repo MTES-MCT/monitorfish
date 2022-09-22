@@ -1,4 +1,4 @@
-import type { Alert } from './alert'
+import type { ActiveAlert } from './alert'
 
 export type VesselVoyage = {
   endDate: string | null
@@ -10,7 +10,7 @@ export type VesselVoyage = {
 }
 
 export type FishingActivities = {
-  alerts: Alert[]
+  alerts: ActiveAlert[]
   logbookMessages: LogbookMessage[]
 }
 

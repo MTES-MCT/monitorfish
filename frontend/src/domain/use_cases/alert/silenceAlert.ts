@@ -1,25 +1,27 @@
 import { silenceAlertFromAPI } from '../../../api/alert'
+import { deleteListItems } from '../../../utils/deleteListItems'
+import { updateListItemsProp } from '../../../utils/updateListItemsProp'
 import { Vessel } from '../../entities/vessel'
 import { setAlerts, setSilencedAlerts } from '../../shared_slices/Alert'
 import { setError } from '../../shared_slices/Global'
 import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
-import { removeAlert } from './validateAlert'
 
+import type { AppGetState } from '../../../store'
 import type { SilencedAlert, SilencedAlertPeriodRequest } from '../../types/alert'
-import type { Integer } from 'type-fest'
 
 /**
  * Silence an alert
  */
 export const silenceAlert =
-  (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, id: Integer<number>) => (dispatch, getState) => {
+  (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, id: string) => (dispatch, getState: AppGetState) => {
     const previousAlerts = getState().alert.alerts
     const previousSilencedAlerts = getState().alert.silencedAlerts
-    const previousAlertsWithSilencedFlag = setSilencedAlertAs(previousAlerts, id, silencedAlertPeriodRequest)
-    dispatch(setAlerts(previousAlertsWithSilencedFlag))
+    // TODO Investigate the mechanism here: why is a silenced alert in the active alert array?
+    const previousAlertsWithSilencedFlag = setSilencedAlertAs(previousAlerts as any, id, silencedAlertPeriodRequest)
+    dispatch(setAlerts(previousAlertsWithSilencedFlag as any))
 
     const timeout = setTimeout(() => {
-      const previousAlertsWithoutSilenced = removeAlert(getState().alert.alerts, id)
+      const previousAlertsWithoutSilenced = deleteListItems(getState().alert.alerts, 'id', id)
       dispatch(setAlerts(previousAlertsWithoutSilenced))
     }, 3200)
 
@@ -32,14 +34,15 @@ export const silenceAlert =
             vesselId: Vessel.getVesselFeatureId(silencedAlert)
           })
         )
+
         const previousSilencedAlertsWithNewSilencedAlert = [silencedAlert].concat(previousSilencedAlerts)
         dispatch(setSilencedAlerts(previousSilencedAlertsWithNewSilencedAlert))
       })
       .catch(error => {
         clearTimeout(timeout)
+
         dispatch(setAlerts(previousAlerts))
         dispatch(setSilencedAlerts(previousSilencedAlerts))
-        console.error(error)
         dispatch(setError(error))
       })
   }
@@ -48,18 +51,8 @@ function setSilencedAlertAs(
   previousAlerts: SilencedAlert[],
   id: string,
   silencedAlertPeriodRequest: SilencedAlertPeriodRequest
-) {
-  return previousAlerts.reduce<SilencedAlert[]>((acc, silencedAlert) => {
-    if (silencedAlert.id === id) {
-      return [
-        ...acc,
-        {
-          ...silencedAlert,
-          silencedPeriod: silencedAlertPeriodRequest
-        } as SilencedAlert
-      ]
-    }
-
-    return [...acc, silencedAlert]
-  }, [])
+): SilencedAlert[] {
+  return updateListItemsProp(previousAlerts, 'id', id, {
+    silencedPeriod: silencedAlertPeriodRequest
+  })
 }

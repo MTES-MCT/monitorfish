@@ -7,20 +7,19 @@ import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
 import { getAlertNameFromType, getSilencedAlertPeriodText } from '../../../domain/entities/alerts'
-import validateAlert from '../../../domain/use_cases/alert/validateAlert'
+import { ActiveAlert, AlertType, AlertValueForPending, SilencedAlert } from '../../../domain/types/alert'
+import { validateAlert } from '../../../domain/use_cases/alert/validateAlert'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { Flag } from '../../vessel_list/tableCells'
 
-import type { VesselAlert } from '../../../domain/types/vessel'
 import type { CSSProperties } from 'react'
 
 // TODO Type these props.
 export type PendingAlertRowProps = {
-  alert: VesselAlert
-  focusOnAlert: any
+  alert: ActiveAlert | SilencedAlert
   index: number
   setShowSilencedAlertForIndex: any
   setSilencedAlertId: any
@@ -35,15 +34,18 @@ export function PendingAlertRow({
   setShowSilencedAlertForIndex,
   setSilencedAlertId,
   showSilencedAlertForIndex
-}) {
+}: PendingAlertRowProps) {
   const dispatch = useAppDispatch()
   const ref = useRef() as MutableRefObject<HTMLDivElement>
   const { focusOnAlert } = useAppSelector(state => state.alert)
   const baseUrl = window.location.origin
 
   useEffect(() => {
-    if (focusOnAlert && alert?.id === focusOnAlert?.id) {
-      ref.current.scrollIntoView({ block: 'start' })
+    if (focusOnAlert && alert.id === focusOnAlert.id) {
+      ref.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      })
     }
   }, [focusOnAlert, alert])
 
@@ -54,32 +56,37 @@ export function PendingAlertRow({
       index={index + 1}
       style={listItemStyle(
         focusOnAlert ? alert.id === focusOnAlert?.id : false,
-        alert.silencedPeriod || alert.isValidated
+        (alert.type === AlertType.SILENCED && alert.silencedPeriod) ||
+          (alert.type === AlertType.ACTIVE && (alert as any).isValidated)
       )}
     >
-      {alert.isValidated ? (
+      {alert.type === AlertType.ACTIVE && alert.isValidated && (
         <AlertTransition data-cy="side-window-alerts-is-validated-transition" style={alertValidatedTransition}>
           Alerte ajoutée à la fiche du navire
         </AlertTransition>
-      ) : null}
-      {alert.silencedPeriod ? (
+      )}
+      {alert.type === AlertType.SILENCED && alert.silencedPeriod && (
         <AlertTransition data-cy="side-window-alerts-is-silenced-transition" style={alertSilencedTransition}>
           L&apos;alerte sera ignorée {getSilencedAlertPeriodText(alert.silencedPeriod)}
         </AlertTransition>
-      ) : null}
-      {!alert.isValidated && !alert.silencedPeriod ? (
+      )}
+      {alert.type === AlertType.ACTIVE && !alert.isValidated && (
         <FlexboxGrid>
           <FlexboxGrid.Item style={timeAgoColumnStyle} title={alert.creationDate}>
             {timeago.format(new Date(alert.creationDate).getTime(), 'fr')}
           </FlexboxGrid.Item>
           <FlexboxGrid.Item style={alertTypeStyle}>{getAlertNameFromType(alert.value.type)}</FlexboxGrid.Item>
-          <FlexboxGrid.Item style={alertNatinfStyle}>{alert.value.natinfCode}</FlexboxGrid.Item>
+          <FlexboxGrid.Item style={alertNatinfStyle}>
+            {(alert.value as AlertValueForPending).natinfCode}
+          </FlexboxGrid.Item>
           <FlexboxGrid.Item style={vesselNameColumnStyle}>
             <Flag
               rel="preload"
-              src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.value.flagState?.toLowerCase()}.svg`}
+              src={`${baseUrl ? `${baseUrl}/` : ''}flags/${(
+                alert.value as AlertValueForPending
+              ).flagState?.toLowerCase()}.svg`}
               style={{ marginLeft: 0, marginRight: 5, marginTop: 1, width: 18 }}
-              title={countries.getName(alert.value.flagState?.toLowerCase(), 'fr')}
+              title={countries.getName((alert.value as AlertValueForPending).flagState?.toLowerCase(), 'fr')}
             />
             {alert.vesselName}
           </FlexboxGrid.Item>
@@ -142,7 +149,7 @@ export function PendingAlertRow({
             />
           </FlexboxGrid.Item>
         </FlexboxGrid>
-      ) : null}
+      )}
     </List.Item>
   )
 }

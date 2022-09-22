@@ -11,7 +11,7 @@ import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfuncti
 import { AlertAndReportingTab } from './constants'
 import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
 
-import type { PendingAlert } from '../../domain/types/alert'
+import type { AlertValueForPending } from '../../domain/types/alert'
 import type { MenuItem } from './types'
 import type { CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'
@@ -56,12 +56,13 @@ export function SideWindowSubMenu({
     (seaFronts): number => {
       if (selectedTab === AlertAndReportingTab.ALERT) {
         // TODO Remove the `as` as soon as the discriminator is added.
-        return alerts.filter(alert => seaFronts.includes((alert.value as PendingAlert).seaFront)).length
+        return alerts.filter(alert => seaFronts.includes((alert.value as AlertValueForPending).seaFront)).length
       }
 
       if (selectedTab === AlertAndReportingTab.REPORTING) {
         // TODO Remove the `as` as soon as the discriminator is added.
-        return currentReportings.filter(alert => seaFronts.includes((alert.value as PendingAlert).seaFront)).length
+        return currentReportings.filter(alert => seaFronts.includes((alert.value as AlertValueForPending).seaFront))
+          .length
       }
 
       return 0

@@ -27,6 +27,7 @@ export type LEGACY_ActiveAlert = LEGACY_Alert & {
 }
 
 export type ActiveAlert = LEGACY_ActiveAlert & {
+  isValidated: boolean
   type: AlertType.ACTIVE
 }
 

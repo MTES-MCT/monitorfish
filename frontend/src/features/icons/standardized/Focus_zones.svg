@@ -1,0 +1,13 @@
+<svg id="Focus_zones" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Groupe_4194" data-name="Groupe 4194">
+    <path id="Tracé_1433" data-name="Tracé 1433" d="M10,5.333A7.524,7.524,0,0,0,3,10a7.583,7.583,0,0,0,14,0A7.524,7.524,0,0,0,10,5.333Zm0,7.778A3.111,3.111,0,1,1,13.111,10,3.111,3.111,0,0,1,10,13.111Z" fill="#707785"/>
+    <circle id="Ellipse_758" data-name="Ellipse 758" cx="1.75" cy="1.75" r="1.75" transform="translate(8.25 8.25)" fill="#707785"/>
+  </g>
+  <rect id="Rectangle_6175" data-name="Rectangle 6175" width="20" height="20" fill="none"/>
+  <g id="Groupe_4195" data-name="Groupe 4195">
+    <path id="Tracé_1434" data-name="Tracé 1434" d="M1,1V6H3V3H6V1Z" fill="#707785"/>
+    <path id="Tracé_1435" data-name="Tracé 1435" d="M14,1V3h3V6h2V1Z" fill="#707785"/>
+    <path id="Tracé_1436" data-name="Tracé 1436" d="M17,17H14v2h5V14H17Z" fill="#707785"/>
+    <path id="Tracé_1437" data-name="Tracé 1437" d="M3,14H1v5H6V17H3Z" fill="#707785"/>
+  </g>
+</svg>

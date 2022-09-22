@@ -4,6 +4,7 @@ import { getLocalStorageState } from '../../utils'
 import { UserType } from '../entities/beaconMalfunction'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel'
 
+import type { MapToolType } from '../entities/map'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 const userTypeLocalStorageKey = 'userType'
@@ -19,6 +20,7 @@ export type GlobalState = {
   isUpdatingVessels: boolean
   lastSearchedVessels: any[]
   leftBoxOpened: any
+  mapToolOpened: MapToolType | undefined
   openedSideWindowTab: any
   previewFilteredVesselsMode: undefined
   rightMenuIsOpen: boolean
@@ -36,6 +38,7 @@ const INITIAL_STATE: GlobalState = {
   isUpdatingVessels: false,
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),
   leftBoxOpened: null,
+  mapToolOpened: undefined,
   openedSideWindowTab: null,
   previewFilteredVesselsMode: undefined,
   rightMenuIsOpen: false,
@@ -112,6 +115,7 @@ export const globalSlice = createSlice({
 
     openVesselListModal(state) {
       state.vesselListModalIsOpen = true
+      state.mapToolOpened = undefined
     },
 
     removeError(state) {
@@ -175,6 +179,13 @@ export const globalSlice = createSlice({
     },
 
     /**
+     * Set the map tool opened
+     */
+    setMapToolOpened(state, action: PayloadAction<MapToolType | undefined>) {
+      state.mapToolOpened = action.payload
+    },
+
+    /**
      * Set the preview mode of the application - Hide the map tooling if the preview mode is true
      * @param {Object=} state
      * @param {{payload: boolean}} action - in preview mode when true
@@ -225,6 +236,7 @@ export const {
   setIsBackoffice,
   setIsUpdatingVessels,
   setLeftBoxOpened,
+  setMapToolOpened,
   setPreviewFilteredVesselsMode,
   setSideWindowAsOpen,
   setUserType

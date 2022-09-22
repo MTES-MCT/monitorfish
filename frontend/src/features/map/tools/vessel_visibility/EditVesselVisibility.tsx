@@ -1,0 +1,150 @@
+import { useMemo } from 'react'
+import styled from 'styled-components'
+
+import { COLORS } from '../../../../constants/constants'
+import { MapToolType } from '../../../../domain/entities/map'
+import {
+  setHideVesselsAtPort,
+  setVesselsLastPositionVisibility,
+  showVesselsEstimatedPositions
+} from '../../../../domain/shared_slices/Map'
+import { setHideNonSelectedVessels } from '../../../../domain/shared_slices/Vessel'
+import { useAppDispatch } from '../../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
+import { ReactComponent as HidingOtherTracksSVG } from '../../../icons/Bouton_masquer_pistes_actif.svg'
+import { ReactComponent as ShowingOtherTracksSVG } from '../../../icons/Bouton_masquer_pistes_inactif.svg'
+import { ReactComponent as HideVesselsAtPortSVG } from '../../../icons/Masquer_navires_au_port.svg'
+import { ReactComponent as EstimatedPositionSVG } from '../../../icons/Positions_estimees.svg'
+import { MapToolBox } from '../MapToolBox'
+import { LastPositionsSlider } from './LastPositionsSlider'
+import TrackDepthRadio from './TrackDepthRadio'
+
+export function EditVesselVisibility() {
+  const dispatch = useAppDispatch()
+  const { hideNonSelectedVessels } = useAppSelector(state => state.vessel)
+  const { healthcheckTextWarning, mapToolOpened } = useAppSelector(state => state.global)
+  const { hideVesselsAtPort, showingVesselsEstimatedPositions, vesselsLastPositionVisibility } = useAppSelector(
+    state => state.map
+  )
+
+  const isOpen = useMemo(() => mapToolOpened === MapToolType.VESSEL_VISIBILITY, [mapToolOpened])
+
+  const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
+    dispatch(
+      setVesselsLastPositionVisibility({
+        hidden,
+        opacityReduced
+      })
+    )
+  }
+
+  return (
+    <Wrapper healthcheckTextWarning={!!healthcheckTextWarning} isOpen={isOpen}>
+      <Header isFirst>Gérer l&apos;affichage des dernières positions</Header>
+      <LastPositionInfo>
+        <VesselHidden /> navires masqués <VesselAlmostHidden /> navires estompés <VesselShowed /> navires normaux
+      </LastPositionInfo>
+      <LastPositionsSlider
+        updateVesselsLastPositionVisibility={updateVesselsLastPositionVisibility}
+        vesselsLastPositionVisibility={vesselsLastPositionVisibility}
+      />
+      <LastPositionLegend>
+        Ces seuils permettent de régler l&apos;affichage, l&apos;estompage et le masquage des dernières positions des
+        navires.
+      </LastPositionLegend>
+      <Header isFirst={false}>Paramétrer la longueur par défaut des pistes</Header>
+      <TrackDepthRadio />
+      <MapPropertyTrigger
+        booleanProperty={showingVesselsEstimatedPositions}
+        Icon={EstimatedPosition}
+        text="les positions estimées des navires"
+        updateBooleanProperty={isShowed => dispatch(showVesselsEstimatedPositions(isShowed))}
+      />
+      <MapPropertyTrigger
+        booleanProperty={hideNonSelectedVessels}
+        Icon={hideNonSelectedVessels ? ShowingOtherTracksSVG : HidingOtherTracksSVG}
+        inverse
+        text="les navires non sélectionnés"
+        updateBooleanProperty={isHidden => dispatch(setHideNonSelectedVessels(isHidden))}
+      />
+      <MapPropertyTrigger
+        booleanProperty={hideVesselsAtPort}
+        Icon={HideVesselsAtPortSVG}
+        inverse
+        text="les navires au port"
+        updateBooleanProperty={isHidden => dispatch(setHideVesselsAtPort(isHidden))}
+      />
+    </Wrapper>
+  )
+}
+
+const EstimatedPosition = styled(EstimatedPositionSVG)`
+  width: 10px;
+`
+
+const LastPositionLegend = styled.div`
+  margin: 5px 5px 15px 25px;
+  font-size: 13px;
+  color: ${COLORS.slateGray};
+  text-align: left;
+`
+
+const VesselHidden = styled.span`
+  background: #cccfd6;
+  border: unset;
+  margin-right: 5px;
+  width: 8px;
+  height: 3px;
+  display: inline-block;
+  margin-bottom: 1px;
+`
+
+const VesselAlmostHidden = styled.span`
+  background: #9095a2;
+  border: unset;
+  margin-right: 5px;
+  margin-left: 25px;
+  width: 8px;
+  height: 3px;
+  display: inline-block;
+  margin-bottom: 1px;
+`
+
+const VesselShowed = styled.span`
+  background: ${COLORS.charcoal};
+  border: unset;
+  margin-right: 5px;
+  margin-left: 25px;
+  width: 8px;
+  height: 3px;
+  display: inline-block;
+  margin-bottom: 1px;
+`
+
+const LastPositionInfo = styled.div`
+  font-size: 10px;
+  margin: 15px;
+  color: ${COLORS.gunMetal};
+`
+
+const Header = styled.div<{
+  isFirst: boolean
+}>`
+  background: ${COLORS.charcoal};
+  color: ${COLORS.gainsboro};
+  padding: 9px 0 7px 15px;
+  font-size: 16px;
+  text-align: left;
+  border-top-left-radius: ${p => (p.isFirst ? '2px' : '0')};
+  border-top-right-radius: ${p => (p.isFirst ? '2px' : '0')};
+`
+
+const Wrapper = styled(MapToolBox)<{
+  healthcheckTextWarning: boolean
+  isHidden?: boolean
+  isOpen: boolean
+}>`
+  width: 406px;
+  top: 152px;
+`

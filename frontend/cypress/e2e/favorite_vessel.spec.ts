@@ -87,9 +87,9 @@ context('Favorite Vessel', () => {
     cy.cleanScreenshots(2)
 
     // Given
-    cy.get('*[data-cy="open-vessels-visibility"]').click()
+    cy.get('*[data-cy="vessel-visibility"]').click()
     cy.get('[data-cy="global-vessel-track-depth-twelve-hours"] input').click()
-    cy.get('*[data-cy="open-vessels-visibility"]').click()
+    cy.get('*[data-cy="vessel-visibility"]').click()
     cy.get('.vessels').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="add-vessel-to-favorites"]').click()
     cy.get('*[data-cy="favorite-vessels"]').click()
@@ -109,7 +109,7 @@ context('Favorite Vessel', () => {
       }
     })
 
-    cy.get('*[data-cy="open-vessels-visibility"]').click()
+    cy.get('*[data-cy="vessel-visibility"]').click()
     cy.get('*[data-cy="global-vessel-track-depth-one-week"]').click()
     cy.wait(1500)
 

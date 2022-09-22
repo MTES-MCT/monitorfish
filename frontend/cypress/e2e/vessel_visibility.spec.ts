@@ -10,7 +10,7 @@ context('Vessel visibility', () => {
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 1)
 
     // When
-    cy.get('*[data-cy="open-vessels-visibility"]').click()
+    cy.get('*[data-cy="vessel-visibility"]').click()
     cy.get('*[data-cy="map-property-trigger"]')
       .filter(':contains("les navires au port")')
       .click({ force: true, timeout: 10000 })

@@ -11,23 +11,23 @@ import NamespaceContext from './domain/context/NamespaceContext'
 import { ErrorToastNotification } from './features/commonComponents/ErrorToastNotification'
 import FavoriteVessels from './features/favorite_vessels/FavoriteVessels'
 import Healthcheck from './features/healthcheck/Healthcheck'
-import InterestPoint from './features/interest_points/InterestPoint'
 import LayersSidebar from './features/layers/LayersSidebar'
 import Map from './features/map/Map'
-import Measurement from './features/measurements/Measurement'
+import { InterestPointMapButton } from './features/map/tools/interest_points/InterestPointMapButton'
+import { MeasurementMapButton } from './features/map/tools/measurements/MeasurementMapButton'
+import { RightMenuOnHoverArea } from './features/map/tools/RightMenuOnHoverArea'
+import { VesselFiltersMapButton } from './features/map/tools/vessel_filters/VesselFiltersMapButton'
+import { VesselLabelsMapButton } from './features/map/tools/vessel_labels/VesselLabelsMapButton'
+import { VesselVisibilityMapButton } from './features/map/tools/vessel_visibility/VesselVisibilityMapButton'
 import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewFilteredVessels'
 import AlertsMapButton from './features/side_window/alerts_reportings/AlertsMapButton'
 import BeaconMalfunctionsMapButton from './features/side_window/beacon_malfunctions/BeaconMalfunctionsMapButton'
 import { SideWindow } from './features/side_window/SideWindow'
 import SideWindowLauncher from './features/side_window/SideWindowLauncher'
-import VesselFilters from './features/vessel_filters/VesselFilters'
-import VesselLabels from './features/vessel_labels/VesselLabels'
 import VesselList from './features/vessel_list/VesselList'
 import VesselsSearch from './features/vessel_search/VesselsSearch'
-import RightMenuOnHoverArea from './features/vessel_sidebar/RightMenuOnHoverArea'
 import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader'
 import { VesselSidebar } from './features/vessel_sidebar/VesselSidebar'
-import VesselVisibility from './features/vessel_visibility/VesselVisibility'
 import { useAppSelector } from './hooks/useAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
 import { UiPage } from './pages/UiPage'
@@ -106,14 +106,14 @@ function HomePage() {
             <BeaconMalfunctionsMapButton />
             <RightMenuOnHoverArea />
             <VesselList namespace="homepage" />
-            <VesselFilters />
-            <VesselVisibility />
+            <VesselFiltersMapButton />
+            <VesselVisibilityMapButton />
             <FavoriteVessels />
             {isVesselSidebarOpen && <VesselSidebar />}
             <UpdatingVesselLoader />
-            <Measurement />
-            <InterestPoint />
-            <VesselLabels />
+            <MeasurementMapButton />
+            <InterestPointMapButton />
+            <VesselLabelsMapButton />
             <APIWorker />
             <ErrorToastNotification />
             <SideWindowLauncher />
@@ -138,14 +138,14 @@ function TritonFish() {
         <VesselsSearch />
         <RightMenuOnHoverArea />
         <VesselList namespace="homepage" />
-        <VesselFilters />
-        <VesselVisibility />
+        <VesselFiltersMapButton />
+        <VesselVisibilityMapButton />
         <FavoriteVessels />
         {isVesselSidebarOpen && <VesselSidebar />}
         <UpdatingVesselLoader />
-        <Measurement />
-        <InterestPoint />
-        <VesselLabels />
+        <MeasurementMapButton />
+        <InterestPointMapButton />
+        <VesselLabelsMapButton />
         <APIWorker />
         <ErrorToastNotification />
       </Wrapper>

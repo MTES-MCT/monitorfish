@@ -17,9 +17,9 @@ import { ReactComponent as PolygonFilterSVG } from '../../../icons/Filtre_zone_p
 import { ReactComponent as BoxFilterSelectedSVG } from '../../../icons/Filtre_zone_rectangle_selected.svg'
 import { ReactComponent as PolygonFilterSelectedSVG } from '../../../icons/Filtre_zone_polygone_selected.svg'
 import { setInteraction } from '../../../../domain/shared_slices/Map'
-import { InteractionTypes } from '../../../../domain/entities/map'
+import { InteractionType } from '../../../../domain/entities/map'
 import { layersType } from '../../../../domain/entities/layers'
-import FilterTag from '../../../vessel_filters/FilterTag'
+import FilterTag from '../../../map/tools/vessel_filters/FilterTag'
 
 const MINIMUM_SEARCH_CHARACTERS_NUMBER = 2
 
@@ -43,10 +43,10 @@ const RegulatoryLayerSearchInput = props => {
   const [gearSearchText, setGearSearchText] = useState('')
   const [speciesSearchText, setSpeciesSearchText] = useState('')
   const [regulatoryReferencesSearchText, setRegulatoryReferenceSearchText] = useState('')
-  const selectedOrSelectingZoneIsSquare = JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.SQUARE ||
-    interaction?.type === InteractionTypes.SQUARE
-  const selectedOrSelectingZoneIsPolygon = JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionTypes.POLYGON ||
-    interaction?.type === InteractionTypes.POLYGON
+  const selectedOrSelectingZoneIsSquare = JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionType.SQUARE ||
+    interaction?.type === InteractionType.SQUARE
+  const selectedOrSelectingZoneIsPolygon = JSON.parse(zoneSelected?.feature || '{}')?.properties?.type === InteractionType.POLYGON ||
+    interaction?.type === InteractionType.POLYGON
 
   const inputsAreEmpty = nameSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
     placeSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
@@ -127,7 +127,7 @@ const RegulatoryLayerSearchInput = props => {
   const drawSquare = () => {
     if (!selectedOrSelectingZoneIsPolygon) {
       dispatch(setInteraction({
-        type: InteractionTypes.SQUARE,
+        type: InteractionType.SQUARE,
         listener: layersType.REGULATORY
       }))
     }
@@ -136,7 +136,7 @@ const RegulatoryLayerSearchInput = props => {
   const drawPolygon = () => {
     if (!selectedOrSelectingZoneIsSquare) {
       dispatch(setInteraction({
-        type: InteractionTypes.POLYGON,
+        type: InteractionType.POLYGON,
         listener: layersType.REGULATORY
       }))
     }
@@ -315,7 +315,7 @@ const SearchBoxInput = styled.input`
   width: 270px;
   padding: 0 5px 0 10px;
   border-bottom: 1px ${COLORS.lightGray} solid;
-  
+
   :hover, :focus {
     border-bottom: 1px ${COLORS.slateGray} solid;
   }

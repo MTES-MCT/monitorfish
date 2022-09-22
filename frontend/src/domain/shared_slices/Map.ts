@@ -6,6 +6,8 @@ import { CoordinatesFormat } from '../entities/map'
 import { vesselLabel } from '../entities/vesselLabelLine'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 
+import type { LastPositionVisibility } from '../types/map'
+
 const vesselLabelsShowedOnMapLocalStorageKey = 'vesselLabelsShowedOnMap'
 const vesselsLastPositionVisibilityLocalStorageKey = 'vesselsLastPositionVisibility'
 export const vesselTrackDepthLocalStorageKey = 'vesselTrackDepth'
@@ -35,10 +37,7 @@ export type MapState = {
   vesselLabel: string
   vesselLabelsShowedOnMap: boolean
   /** Vessels map properties */
-  vesselsLastPositionVisibility: {
-    hidden: 48
-    opacityReduced: 6
-  }
+  vesselsLastPositionVisibility: LastPositionVisibility
   view: {
     center: null
     zoom: null

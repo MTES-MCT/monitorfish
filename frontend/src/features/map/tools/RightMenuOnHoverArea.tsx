@@ -12,7 +12,7 @@ export function RightMenuOnHoverArea() {
   const mapToolOpened = useAppSelector(state => state.global.mapToolOpened)
 
   const areaRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideWhenOpened(areaRef, selectedVessel)
+  const clickedOutsideComponent = useClickOutsideWhenOpened(areaRef, !!selectedVessel)
 
   useEffect(() => {
     if (clickedOutsideComponent && selectedVessel && !mapToolOpened) {

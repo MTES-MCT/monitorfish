@@ -7,7 +7,13 @@ import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
 import { getAlertNameFromType, getSilencedAlertPeriodText } from '../../../domain/entities/alerts'
-import { ActiveAlert, AlertType, AlertValueForPending, SilencedAlert } from '../../../domain/types/alert'
+import {
+  ActiveAlert,
+  AlertType,
+  AlertValueForPending,
+  SilencedAlert,
+  SilencedAlertPeriodRequest
+} from '../../../domain/types/alert'
 import { validateAlert } from '../../../domain/use_cases/alert/validateAlert'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
@@ -65,9 +71,11 @@ export function PendingAlertRow({
           Alerte ajoutée à la fiche du navire
         </AlertTransition>
       )}
-      {alert.type === AlertType.SILENCED && alert.silencedPeriod && (
+      {/* TODO Check the `silenceAlert.ts` use case comment. This is an active and not silence alert. */}
+      {(alert as SilencedAlert).silencedPeriod && (
         <AlertTransition data-cy="side-window-alerts-is-silenced-transition" style={alertSilencedTransition}>
-          L&apos;alerte sera ignorée {getSilencedAlertPeriodText(alert.silencedPeriod)}
+          L&apos;alerte sera ignorée{' '}
+          {getSilencedAlertPeriodText((alert as SilencedAlert).silencedPeriod as SilencedAlertPeriodRequest)}
         </AlertTransition>
       )}
       {alert.type === AlertType.ACTIVE && !alert.isValidated && (

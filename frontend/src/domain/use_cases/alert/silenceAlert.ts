@@ -17,6 +17,8 @@ export const silenceAlert =
     const previousAlerts = getState().alert.alerts
     const previousSilencedAlerts = getState().alert.silencedAlerts
     // TODO Investigate the mechanism here: why is a silenced alert in the active alert array?
+    // We need a better principle than creating a temporary wrong prop to "enable" the <AlertTransition />
+    // and then timeout to run the real update
     const previousAlertsWithSilencedFlag = setSilencedAlertAs(previousAlerts as any, id, silencedAlertPeriodRequest)
     dispatch(setAlerts(previousAlertsWithSilencedFlag as any))
 
@@ -29,13 +31,13 @@ export const silenceAlert =
       .then(silencedAlert => {
         dispatch(
           removeVesselAlertAndUpdateReporting({
-            alertType: silencedAlert.value?.type,
+            alertType: silencedAlert.value.type,
             isValidated: false,
             vesselId: Vessel.getVesselFeatureId(silencedAlert)
           })
         )
 
-        const previousSilencedAlertsWithNewSilencedAlert = [silencedAlert].concat(previousSilencedAlerts)
+        const previousSilencedAlertsWithNewSilencedAlert = [silencedAlert, ...previousSilencedAlerts]
         dispatch(setSilencedAlerts(previousSilencedAlertsWithNewSilencedAlert))
       })
       .catch(error => {

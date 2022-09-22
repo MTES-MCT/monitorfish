@@ -141,7 +141,7 @@ export function SilenceAlertMenu({
           onMouseOver={e => setBackgroundAsHovered(e)}
           style={menuLinkStyle(false, true, true)}
         >
-          {silencedAlertRef?.current ? (
+          {silencedAlertRef.current && (
             <DateRange
               containerRef={silencedAlertRef?.current}
               defaultValue={selectedDates}
@@ -150,7 +150,7 @@ export function SilenceAlertMenu({
               placeholder="Période précise"
               width={145}
             />
-          ) : null}
+          )}
         </MenuLink>
       </>
     </Wrapper>

@@ -23,6 +23,7 @@ export const DELETE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu réactiv
 function normalizeActiveAlert(alert: LEGACY_ActiveAlert): ActiveAlert {
   return {
     ...alert,
+    isValidated: false,
     type: AlertType.ACTIVE
   }
 }

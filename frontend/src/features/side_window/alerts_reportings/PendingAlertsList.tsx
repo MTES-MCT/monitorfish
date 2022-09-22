@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { alertSearchOptions, AlertsMenuSeaFrontsToSeaFrontList } from '../../../domain/entities/alerts'
 import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
-import silenceAlert from '../../../domain/use_cases/alert/silenceAlert'
+import { silenceAlert } from '../../../domain/use_cases/alert/silenceAlert'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
@@ -14,12 +14,7 @@ import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { PendingAlertRow } from './PendingAlertRow'
 import { SilenceAlertMenu } from './SilenceAlertMenu'
 
-import type {
-  PendingAlert,
-  SilencedAlertPeriodRequest,
-  PendingAlert,
-  SilencedAlertPeriodRequest
-} from '../../../domain/types/alert'
+import type { AlertValueForPending, SilencedAlertPeriodRequest } from '../../../domain/types/alert'
 import type { MenuItem } from '../types'
 
 export type PendingAlertsListProps = {
@@ -46,7 +41,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSub
       alerts.filter(alert =>
         (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu.code]?.seaFronts || []).includes(
           // TODO Remove the `as` as soon as the discriminator is added.
-          (alert.value as PendingAlert).seaFront
+          (alert.value as AlertValueForPending).seaFront
         )
       ),
     [alerts, selectedSubMenu]
@@ -153,6 +148,22 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSub
           </FlexboxGrid>
         </List.Item>
         <ScrollableContainer ref={scrollableContainerRef} className="smooth-scroll" style={ScrollableContainerStyle}>
+          {sortedAlerts
+            .map(alert => ({
+              ...alert,
+              id: `${alert.id}a`,
+              vesselName: 'Dummy'
+            }))
+            .map((alert, index) => (
+              <PendingAlertRow
+                key={alert.id}
+                alert={alert}
+                index={index}
+                setShowSilencedAlertForIndex={setShowSilencedAlertForIndex}
+                setSilencedAlertId={setSilencedAlertId}
+                showSilencedAlertForIndex={showSilencedAlertForIndex}
+              />
+            ))}
           {sortedAlerts.map((alert, index) => (
             <PendingAlertRow
               key={alert.id}

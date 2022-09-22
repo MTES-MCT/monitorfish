@@ -11,7 +11,7 @@ import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
 import ReportingForm from '../../vessel_sidebar/reporting/current/ReportingForm'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 
-import type { PendingAlert } from '../../../domain/types/alert'
+import type { AlertValueForPending } from '../../../domain/types/alert'
 
 export function EditReporting() {
   const dispatch = useAppDispatch()
@@ -47,12 +47,12 @@ export function EditReporting() {
         </Row>
         <Row style={rowStyle(10)}>
           {/* TODO Remove the `as` as soon as the discriminator is added. */}
-          {editedReportingInSideWindow && (editedReportingInSideWindow.value as PendingAlert).flagState && (
+          {editedReportingInSideWindow && (editedReportingInSideWindow.value as AlertValueForPending).flagState && (
             <Flag
               rel="preload"
               src={`${baseUrl}/flags/${
                 // TODO Remove the `as` as soon as the discriminator is added.
-                (editedReportingInSideWindow.value as PendingAlert).flagState.toLowerCase()
+                (editedReportingInSideWindow.value as AlertValueForPending).flagState.toLowerCase()
               }.svg`}
               style={flagStyle}
             />

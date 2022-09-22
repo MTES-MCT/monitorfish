@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { CoordinatesFormat, MeasurementTypes, OPENLAYERS_PROJECTION } from '../../../../domain/entities/map'
+import { CoordinatesFormat, MeasurementType, OPENLAYERS_PROJECTION } from '../../../../domain/entities/map'
 import { useSelector } from 'react-redux'
 import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
 import SetCoordinates from '../../../coordinates/SetCoordinates'
@@ -20,7 +20,7 @@ const CustomCircleRange = ({ onCancelAddCircleRange, onAddCustomCircleRange }) =
   const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
 
   useEffect(() => {
-    if (measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE) {
+    if (measurementTypeToAdd === MeasurementType.CIRCLE_RANGE) {
       if (circleMeasurementInDrawing?.coordinates?.length) {
         const ddCoordinates = getCoordinates(circleMeasurementInDrawing?.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false).map(coordinate => {
           return parseFloat(coordinate.replace(/°/g, ''))
@@ -61,7 +61,7 @@ const CustomCircleRange = ({ onCancelAddCircleRange, onAddCustomCircleRange }) =
   return (
     <Wrapper
       healthcheckTextWarning={healthcheckTextWarning}
-      isOpen={measurementTypeToAdd === MeasurementTypes.CIRCLE_RANGE}>
+      isOpen={measurementTypeToAdd === MeasurementType.CIRCLE_RANGE}>
       <Header>
         Définir une valeur
       </Header>

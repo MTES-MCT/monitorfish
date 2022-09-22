@@ -4,7 +4,7 @@ import { getLocalStorageState } from '../../utils'
 import { UserType } from '../entities/beaconMalfunction'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel'
 
-import type { MapTool } from '../entities/map'
+import type { MapToolType } from '../entities/map'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 const userTypeLocalStorageKey = 'userType'
@@ -20,7 +20,7 @@ export type GlobalState = {
   isUpdatingVessels: boolean
   lastSearchedVessels: any[]
   leftBoxOpened: any
-  mapToolOpened: MapTool | undefined
+  mapToolOpened: MapToolType | undefined
   openedSideWindowTab: any
   previewFilteredVesselsMode: undefined
   rightMenuIsOpen: boolean
@@ -181,7 +181,7 @@ export const globalSlice = createSlice({
     /**
      * Set the map tool opened
      * @param {Object=} state
-     * @param {{payload: MapTool.MEASUREMENT}} action - The map tool
+     * @param {{payload: MapToolType.MEASUREMENT}} action - The map tool
      */
     setMapToolOpened(state, action) {
       state.mapToolOpened = action.payload

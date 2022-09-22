@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { MapTool, MeasurementTypes } from '../../../../domain/entities/map'
+import { MapToolType, MeasurementType } from '../../../../domain/entities/map'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import {
   resetCircleMeasurementInDrawing,
@@ -11,8 +11,8 @@ import {
 } from '../../../../domain/shared_slices/Measurement'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { useClickOutsideWhenOpened } from '../../../../hooks/useClickOutsideWhenOpened'
-import { useEscapeFromKeyboard } from '../../../../hooks/useEscapeFromKeyboard'
+import { useClickOutsideWhenOpenedAndExecute } from '../../../../hooks/useClickOutsideWhenOpenedAndExecute'
+import { useEscapeFromKeyboardAndExecute } from '../../../../hooks/useEscapeFromKeyboardAndExecute'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import { ReactComponent as MultiLineSVG } from '../../../icons/standardized/Measure_broken_line.svg'
 import { ReactComponent as CircleRangeSVG } from '../../../icons/standardized/Measure_circle.svg'
@@ -26,17 +26,17 @@ export function MeasurementMapButton() {
   const { healthcheckTextWarning, mapToolOpened, rightMenuIsOpen } = useAppSelector(state => state.global)
 
   const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => mapToolOpened === MapTool.MEASUREMENT_MENU, [mapToolOpened])
-  const isMeasurementToolOpen = useMemo(() => mapToolOpened === MapTool.MEASUREMENT, [mapToolOpened])
+  const isOpen = useMemo(() => mapToolOpened === MapToolType.MEASUREMENT_MENU, [mapToolOpened])
+  const isMeasurementToolOpen = useMemo(() => mapToolOpened === MapToolType.MEASUREMENT, [mapToolOpened])
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isOpen)
-  const escapeFromKeyboard = useEscapeFromKeyboard()
 
-  useEffect(() => {
-    if (clickedOutsideComponent && isOpen) {
-      dispatch(setMapToolOpened(undefined))
-    }
-  }, [dispatch, clickedOutsideComponent, isOpen])
+  useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpen, () => {
+    dispatch(setMapToolOpened(undefined))
+  })
+  useEscapeFromKeyboardAndExecute(() => {
+    dispatch(setMeasurementTypeToAdd(null))
+    dispatch(setMapToolOpened(undefined))
+  })
 
   useEffect(() => {
     if (!isOpen && !isMeasurementToolOpen) {
@@ -44,23 +44,16 @@ export function MeasurementMapButton() {
     }
   }, [dispatch, isOpen, isMeasurementToolOpen])
 
-  useEffect(() => {
-    if (escapeFromKeyboard) {
-      dispatch(setMeasurementTypeToAdd(null))
-      dispatch(setMapToolOpened(undefined))
-    }
-  }, [dispatch, escapeFromKeyboard])
-
   const makeMeasurement = nextMeasurementTypeToAdd => {
     dispatch(setMeasurementTypeToAdd(nextMeasurementTypeToAdd))
-    dispatch(setMapToolOpened(MapTool.MEASUREMENT))
+    dispatch(setMapToolOpened(MapToolType.MEASUREMENT))
   }
 
   const measurementIcon = useMemo(() => {
     switch (measurementTypeToAdd) {
-      case MeasurementTypes.MULTILINE:
+      case MeasurementType.MULTILINE:
         return <MultiLineIcon />
-      case MeasurementTypes.CIRCLE_RANGE:
+      case MeasurementType.CIRCLE_RANGE:
         return <CircleRangeIcon />
       default:
         return <MeasurementIcon $isRightMenuShrinked={isRightMenuShrinked} />
@@ -72,7 +65,7 @@ export function MeasurementMapButton() {
       dispatch(setMeasurementTypeToAdd(null))
       dispatch(setMapToolOpened(undefined))
     } else {
-      dispatch(setMapToolOpened(MapTool.MEASUREMENT_MENU))
+      dispatch(setMapToolOpened(MapToolType.MEASUREMENT_MENU))
     }
   }, [dispatch, measurementTypeToAdd])
 
@@ -111,7 +104,7 @@ export function MeasurementMapButton() {
         <MeasurementItem
           className=".map-menu"
           data-cy="measurement-multiline"
-          onClick={() => makeMeasurement(MeasurementTypes.MULTILINE)}
+          onClick={() => makeMeasurement(MeasurementType.MULTILINE)}
           title={"Mesure d'une distance avec lignes brisées"}
         >
           <MultiLineIcon />
@@ -119,7 +112,7 @@ export function MeasurementMapButton() {
         <MeasurementItem
           className=".map-menu"
           data-cy="measurement-circle-range"
-          onClick={() => makeMeasurement(MeasurementTypes.CIRCLE_RANGE)}
+          onClick={() => makeMeasurement(MeasurementType.CIRCLE_RANGE)}
           title={"Rayon d'action"}
         >
           <CircleRangeIcon />

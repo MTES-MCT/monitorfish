@@ -1,12 +1,12 @@
 export const WSG84_PROJECTION = 'EPSG:4326'
 export const OPENLAYERS_PROJECTION = 'EPSG:3857'
 
-export enum InteractionTypes {
+export enum InteractionType {
   POLYGON = 'POLYGON',
   SQUARE = 'SQUARE'
 }
 
-export enum MeasurementTypes {
+export enum MeasurementType {
   CIRCLE_RANGE = 'Circle',
   MULTILINE = 'LineString'
 }
@@ -17,7 +17,7 @@ export enum CoordinatesFormat {
   DEGREES_MINUTES_SECONDS = 'DMS'
 }
 
-export enum MapTool {
+export enum MapToolType {
   MEASUREMENT_MENU,
   MEASUREMENT,
   INTEREST_POINT,

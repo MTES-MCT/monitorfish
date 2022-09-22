@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { MapTool } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map'
 import {
   setHideVesselsAtPort,
   setVesselsLastPositionVisibility,
@@ -28,7 +28,7 @@ export function EditVesselVisibility() {
     state => state.map
   )
 
-  const isOpen = useMemo(() => mapToolOpened === MapTool.VESSEL_VISIBILITY, [mapToolOpened])
+  const isOpen = useMemo(() => mapToolOpened === MapToolType.VESSEL_VISIBILITY, [mapToolOpened])
 
   const updateVesselsLastPositionVisibility = (hidden, opacityReduced) => {
     dispatch(

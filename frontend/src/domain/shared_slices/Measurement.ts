@@ -11,7 +11,6 @@ export type MeasurementState = {
   circleMeasurementInDrawing: null
   // TODO Type this prop.
   circleMeasurementToAdd: null
-  // TODO Type this prop.
   measurementTypeToAdd: MeasurementType | null
   // TODO Type this prop.
   measurementsDrawed: Record<string, any>[]

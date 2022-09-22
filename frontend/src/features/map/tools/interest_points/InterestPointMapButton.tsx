@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { MapTool } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import {
   deleteInterestPointBeingDrawed,
@@ -10,7 +10,7 @@ import {
 } from '../../../../domain/shared_slices/InterestPoint'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { useEscapeFromKeyboard } from '../../../../hooks/useEscapeFromKeyboard'
+import { useEscapeFromKeyboardAndExecute } from '../../../../hooks/useEscapeFromKeyboardAndExecute'
 import { ReactComponent as InterestPointSVG } from '../../../icons/standardized/Landmark.svg'
 import { MapToolButton } from '../MapToolButton'
 import EditInterestPoint from './EditInterestPoint'
@@ -19,21 +19,14 @@ export function InterestPointMapButton() {
   const dispatch = useAppDispatch()
   const { healthcheckTextWarning, mapToolOpened, rightMenuIsOpen } = useAppSelector(state => state.global)
   const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => mapToolOpened === MapTool.INTEREST_POINT, [mapToolOpened])
+  const isOpen = useMemo(() => mapToolOpened === MapToolType.INTEREST_POINT, [mapToolOpened])
   const wrapperRef = useRef(null)
-  const escapeFromKeyboard = useEscapeFromKeyboard()
 
   const close = useCallback(() => {
-    dispatch(endInterestPointDraw())
     dispatch(setMapToolOpened(undefined))
-    dispatch(deleteInterestPointBeingDrawed())
   }, [dispatch])
 
-  useEffect(() => {
-    if (escapeFromKeyboard && isOpen) {
-      close()
-    }
-  }, [escapeFromKeyboard, isOpen, close])
+  useEscapeFromKeyboardAndExecute(close)
 
   useEffect(() => {
     if (!isOpen) {
@@ -45,7 +38,7 @@ export function InterestPointMapButton() {
   const openOrCloseInterestPoint = useCallback(() => {
     if (!isOpen) {
       dispatch(drawInterestPoint())
-      dispatch(setMapToolOpened(MapTool.INTEREST_POINT))
+      dispatch(setMapToolOpened(MapToolType.INTEREST_POINT))
     } else {
       close()
     }

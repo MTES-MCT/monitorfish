@@ -11,7 +11,7 @@ import {
   showFilter
 } from '../../../../domain/shared_slices/Filter'
 import FilterParameters from './FilterParameters'
-import { MapTool } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map'
 import { MapToolBox } from '../MapToolBox'
 
 const Filters = () => {
@@ -25,7 +25,7 @@ const Filters = () => {
     mapToolOpened
   } = useSelector(state => state.global)
 
-  const isOpen = useMemo(() => mapToolOpened === MapTool.FILTERS, [mapToolOpened])
+  const isOpen = useMemo(() => mapToolOpened === MapToolType.FILTERS, [mapToolOpened])
 
   const removeFilterCallback = useCallback(filterUUID => {
     dispatch(removeFilter(filterUUID))

@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { MapTool } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { useClickOutsideWhenOpened } from '../../../../hooks/useClickOutsideWhenOpened'
+import { useClickOutsideWhenOpenedAndExecute } from '../../../../hooks/useClickOutsideWhenOpenedAndExecute'
 import { usePrevious } from '../../../../hooks/usePrevious'
 import { ReactComponent as FilterSVG } from '../../../icons/standardized/Filter.svg'
 import { MapToolButton } from '../MapToolButton'
@@ -20,21 +20,18 @@ export function VesselFiltersMapButton() {
   const rightMenuIsOpen = useAppSelector(state => state.global.rightMenuIsOpen)
 
   const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => mapToolOpened === MapTool.FILTERS, [mapToolOpened])
+  const isOpen = useMemo(() => mapToolOpened === MapToolType.FILTERS, [mapToolOpened])
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isOpen)
 
-  useEffect(() => {
-    if (clickedOutsideComponent && isOpen) {
-      dispatch(setMapToolOpened(undefined))
-    }
-  }, [dispatch, clickedOutsideComponent, isOpen])
+  useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpen, () => {
+    dispatch(setMapToolOpened(undefined))
+  })
 
   const openOrCloseVesselFilters = useCallback(() => {
     if (isOpen) {
       dispatch(setMapToolOpened(undefined))
     } else {
-      dispatch(setMapToolOpened(MapTool.FILTERS))
+      dispatch(setMapToolOpened(MapToolType.FILTERS))
     }
   }, [dispatch, isOpen])
 

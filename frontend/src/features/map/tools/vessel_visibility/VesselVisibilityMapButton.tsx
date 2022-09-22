@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
-import { MapTool } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { useClickOutsideWhenOpened } from '../../../../hooks/useClickOutsideWhenOpened'
+import { useClickOutsideWhenOpenedAndExecute } from '../../../../hooks/useClickOutsideWhenOpenedAndExecute'
 import { ReactComponent as VesselSVG } from '../../../icons/standardized/Vessel.svg'
-import { MapToolButton } from '../MapToolButton'
+import { MapToolButton as VesselVisibilityButton } from '../MapToolButton'
 import { EditVesselVisibility } from './EditVesselVisibility'
 
 export function VesselVisibilityMapButton() {
@@ -15,21 +15,18 @@ export function VesselVisibilityMapButton() {
   const { mapToolOpened, rightMenuIsOpen } = useAppSelector(state => state.global)
 
   const isRightMenuShrinked = !rightMenuIsOpen
-  const isOpen = useMemo(() => mapToolOpened === MapTool.VESSEL_VISIBILITY, [mapToolOpened])
+  const isOpen = useMemo(() => mapToolOpened === MapToolType.VESSEL_VISIBILITY, [mapToolOpened])
   const wrapperRef = useRef(null)
-  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isOpen)
 
-  useEffect(() => {
-    if (clickedOutsideComponent && isOpen) {
-      dispatch(setMapToolOpened(undefined))
-    }
-  }, [dispatch, clickedOutsideComponent, isOpen])
+  useClickOutsideWhenOpenedAndExecute(wrapperRef, isOpen, () => {
+    dispatch(setMapToolOpened(undefined))
+  })
 
   const openOrCloseVesselVisibility = useCallback(() => {
     if (isOpen) {
       dispatch(setMapToolOpened(undefined))
     } else {
-      dispatch(setMapToolOpened(MapTool.VESSEL_VISIBILITY))
+      dispatch(setMapToolOpened(MapToolType.VESSEL_VISIBILITY))
     }
   }, [dispatch, isOpen])
 
@@ -53,8 +50,6 @@ const Wrapper = styled.div`
   transition: all 0.2s;
   z-index: 1000;
 `
-
-const VesselVisibilityButton = styled(MapToolButton)``
 
 const VesselIcon = styled(VesselSVG)<{
   $isRightMenuShrinked: boolean

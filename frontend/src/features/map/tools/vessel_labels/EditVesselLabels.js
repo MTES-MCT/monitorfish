@@ -12,7 +12,7 @@ import {
 } from '../../../../domain/shared_slices/Map'
 import VesselLabelSelection from './VesselLabelSelection'
 import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
-import { MapTool } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map'
 import { MapToolBox } from '../MapToolBox'
 
 const EditVesselLabels = () => {
@@ -28,7 +28,7 @@ const EditVesselLabels = () => {
     mapToolOpened
   } = useSelector(state => state.global)
 
-  const isOpen = useMemo(() => mapToolOpened === MapTool.VESSEL_LABELS, [mapToolOpened])
+  const isOpen = useMemo(() => mapToolOpened === MapToolType.VESSEL_LABELS, [mapToolOpened])
 
   return (
     <Wrapper

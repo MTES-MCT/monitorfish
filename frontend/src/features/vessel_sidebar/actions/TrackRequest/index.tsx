@@ -76,7 +76,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
     <>
       <TrackRequestButton
         data-cy="vessel-track-depth-selection"
-        healthcheckTextWarning={healthcheckTextWarning}
+        healthcheckTextWarning={!!healthcheckTextWarning}
         isOpen={isOpen}
         isRightMenuOpen={rightMenuIsOpen}
         isSidebarOpen={isSidebarOpen}
@@ -86,7 +86,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
         <VesselIcon />
       </TrackRequestButton>
       <TrackRequestBody
-        healthcheckTextWarning={healthcheckTextWarning}
+        healthcheckTextWarning={!!healthcheckTextWarning}
         isOpen={isOpen}
         isRightMenuOpen={rightMenuIsOpen}
         isSidebarOpen={isSidebarOpen}
@@ -140,6 +140,8 @@ const Field = styled.div`
 `
 
 const TrackRequestButton = styled(MapComponentStyle)<{
+  healthcheckTextWarning: boolean
+  isHidden?: boolean
   isOpen: boolean
   isRightMenuOpen: boolean
   isSidebarOpen: boolean
@@ -159,6 +161,8 @@ const TrackRequestButton = styled(MapComponentStyle)<{
 `
 
 const TrackRequestBody = styled(MapComponentStyle)<{
+  healthcheckTextWarning: boolean
+  isHidden?: boolean
   isOpen: boolean
   isRightMenuOpen: boolean
   isSidebarOpen: boolean

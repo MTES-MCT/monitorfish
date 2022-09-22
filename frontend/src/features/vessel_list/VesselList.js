@@ -4,13 +4,12 @@ import { batch, useDispatch, useSelector } from 'react-redux'
 import { Modal } from 'rsuite'
 
 import { layersType } from '../../domain/entities/layers'
-import { InteractionTypes } from '../../domain/entities/map'
+import { InteractionType } from '../../domain/entities/map'
 import { VesselLocation } from '../../domain/entities/vessel'
 import { animateToExtent, setInteraction } from '../../domain/shared_slices/Map'
 import { removeZoneSelected, resetZonesSelected, setZonesSelected } from './VesselList.slice'
 import {
   closeVesselListModal,
-  expandRightMenu,
   openVesselListModal,
   setBlockVesselsUpdate,
   setPreviewFilteredVesselsMode
@@ -22,20 +21,20 @@ import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import getFilteredVessels from '../../domain/use_cases/vessel/getFilteredVessels'
 import { getZonesAndSubZonesPromises } from '../../domain/use_cases/layer/administrative/getZonesAndSubZonesPromises'
 
-import SaveVesselFiltersModal from '../vessel_filters/SaveVesselFiltersModal'
+import SaveVesselFiltersModal from '../map/tools/vessel_filters/SaveVesselFiltersModal'
 import VesselListTable from './VesselListTable'
 import DownloadVesselListModal from './DownloadVesselListModal'
 import VesselListFilters from './VesselListFilters'
 
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
-import { MapButtonStyle } from '../commonStyles/MapButton.style'
-import { VesselListSVG } from '../commonStyles/icons/VesselListSVG'
 import { PrimaryButton, SecondaryButton } from '../commonStyles/Buttons.style'
 import { ReactComponent as PreviewSVG } from '../icons/Oeil_apercu_carte.svg'
+import { ReactComponent as VesselListSVG } from '../icons/Icone_liste_navires.svg'
 import { setProcessingRegulationSearchedZoneExtent } from '../../domain/shared_slices/Regulatory'
 import { getExtentFromGeoJSON } from '../../utils'
 import { COLORS } from '../../constants/constants'
 import StyledModalHeader from '../commonComponents/StyledModalHeader'
+import { MapToolButton } from '../map/tools/MapToolButton'
 
 const NOT_FOUND = -1
 
@@ -44,12 +43,10 @@ const VesselList = ({ namespace }) => {
   const {
     rightMenuIsOpen,
     vesselListModalIsOpen,
-    healthcheckTextWarning,
     previewFilteredVesselsMode
   } = useSelector(state => state.global)
   const {
     vessels,
-    selectedVessel,
     uniqueVesselsSpecies: species,
     uniqueVesselsDistricts: districts
   } = useSelector(state => state.vessel)
@@ -209,7 +206,7 @@ const VesselList = ({ namespace }) => {
     batch(() => {
       dispatch(closeVesselListModal())
       dispatch(setInteraction({
-        type: InteractionTypes.SQUARE,
+        type: InteractionType.SQUARE,
         listener: layersType.VESSEL
       }))
       dispatch(setBlockVesselsUpdate(true))
@@ -220,7 +217,7 @@ const VesselList = ({ namespace }) => {
     batch(() => {
       dispatch(closeVesselListModal())
       dispatch(setInteraction({
-        type: InteractionTypes.POLYGON,
+        type: InteractionType.POLYGON,
         listener: layersType.VESSEL
       }))
       dispatch(setBlockVesselsUpdate(true))
@@ -315,25 +312,23 @@ const VesselList = ({ namespace }) => {
     }
   }, [administrativeZonesFiltered])
 
+  const isRightMenuShrinked = !rightMenuIsOpen
+
   return (
     <>
       <Wrapper isFiltering={isFiltering}>
-        <VesselListIcon
-          data-cy={'vessel-list'}
-          isHidden={previewFilteredVesselsMode}
-          healthcheckTextWarning={healthcheckTextWarning}
+        <VesselListButton
+          dataCy={'vessel-list'}
           isOpen={vesselListModalIsOpen}
-          selectedVessel={selectedVessel}
-          onMouseEnter={() => dispatch(expandRightMenu())}
-          rightMenuIsOpen={rightMenuIsOpen}
           title={'Liste des navires avec VMS'}
-          onClick={() => dispatch(openVesselListModal())}>
-          <Vessel
-            background={vesselListModalIsOpen ? COLORS.shadowBlue : COLORS.charcoal}
-            selectedVessel={selectedVessel}
-            rightMenuIsOpen={rightMenuIsOpen}
+          style={{top: 68}}
+          onClick={() => dispatch(openVesselListModal())}
+        >
+          <VesselIcon
+            $background={vesselListModalIsOpen ? COLORS.shadowBlue : COLORS.charcoal}
+            $isRightMenuShrinked={isRightMenuShrinked}
           />
-        </VesselListIcon>
+        </VesselListButton>
         <Modal
           size={'full'}
           backdrop={'static'}
@@ -342,9 +337,9 @@ const VesselList = ({ namespace }) => {
         >
           <StyledModalHeader isFull>
             <Modal.Title>
-              <Vessel
-                isTitle={true}
-                background={COLORS.charcoal}
+              <VesselIcon
+                $isTitle={true}
+                $background={COLORS.charcoal}
               /> Liste des navires avec VMS
             </Modal.Title>
           </StyledModalHeader>
@@ -499,47 +494,19 @@ const Title = styled.div`
   font-weight: 500;
 `
 
-const VesselListIcon = styled(MapButtonStyle)`
-  position: absolute;
-  display: inline-block;
-  color: ${COLORS.blue};
-  padding: 8px 0px 0 1px;
-  top: 68px;
-  z-index: 99;
-  height: 40px;
-  width: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '5px' : '40px'};
-  border-radius: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '1px' : '2px'};
-  right: ${props => props.selectedVessel && !props.rightMenuIsOpen ? '0' : '10px'};
-  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
-  transition: all 0.3s;
+const VesselListButton = styled(MapToolButton)``
 
-  :hover, :focus {
-      background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
-  }
-`
-
-const Vessel = styled(VesselListSVG)`
+const VesselIcon = styled(VesselListSVG)`
   width: 25px;
   height: 25px;
-  animation: ${props => !props.isTitle ? props.selectedVessel && !props.rightMenuIsOpen ? 'vessel-icon-hidden' : 'vessel-icon-visible' : null} 0.2s ease forwards;
-
-  @keyframes vessel-icon-visible {
-    0%   {
-      opacity: 0;
-     }
-    100% {
-      opacity: 1;
-    }
+  margin-top: 4px;
+  animation: ${p => !p.$isTitle ? p.$isRightMenuShrinked ? 'vessel-icon-hidden' : 'vessel-icon-visible' : null} 0.2s ease forwards;
+  opacity: ${p => (p.$isRightMenuShrinked ? '0' : '1')};
+  vertical-align: ${p => p.$isTitle ? 'text-bottom' : 'baseline'};
+  circle {
+    fill: ${p => p.$background};
   }
-
-  @keyframes vessel-icon-hidden {
-    0% {
-      opacity: 1;
-    }
-    100%   {
-      opacity: 0;
-    }
-  }
+  transition: all 0.3s;
 `
 
 const Preview = styled(PreviewSVG)`

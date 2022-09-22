@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
 import { layersType, layersType as LayersType } from '../domain/entities/layers'
-import { InteractionTypes, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
+import { InteractionType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import Draw, { createBox } from 'ol/interaction/Draw'
 import { resetInteraction } from '../domain/shared_slices/Map'
 import { addZoneSelected } from '../features/vessel_list/VesselList.slice'
@@ -70,10 +70,10 @@ const DrawLayer = ({ map }) => {
 
         let type = null
         switch (interaction.type) {
-          case InteractionTypes.SQUARE:
+          case InteractionType.SQUARE:
             type = 'Circle'
             break
-          case InteractionTypes.POLYGON:
+          case InteractionType.POLYGON:
             type = 'Polygon'
             break
           default:
@@ -85,7 +85,7 @@ const DrawLayer = ({ map }) => {
           source: source,
           type: type,
           style: drawStyle,
-          geometryFunction: interaction.type === InteractionTypes.SQUARE ? createBox() : null
+          geometryFunction: interaction.type === InteractionType.SQUARE ? createBox() : null
         })
         map.addInteraction(draw.current)
 

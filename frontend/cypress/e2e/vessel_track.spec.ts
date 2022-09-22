@@ -121,7 +121,7 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
 
     cy.log('Hide other vessels')
-    cy.get('*[data-cy^="open-vessels-visibility"]').click()
+    cy.get('*[data-cy^="vessel-visibility"]').click()
     cy.get('*[data-cy^="map-property-trigger"]')
       .filter(':contains("les navires non sélectionnés")')
       .eq(1)

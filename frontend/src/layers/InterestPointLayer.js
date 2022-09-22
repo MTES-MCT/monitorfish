@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
-import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
+import { MapToolType, OPENLAYERS_PROJECTION } from '../domain/entities/map'
 import Draw from 'ol/interaction/Draw'
 import VectorLayer from 'ol/layer/Vector'
 import { getInterestPointStyle, POIStyle } from './styles/interestPoint.style'
@@ -29,6 +29,7 @@ import { InterestPointLine } from '../domain/entities/interestPointLine'
 import { usePrevious } from '../hooks/usePrevious'
 import { getLength } from 'ol/sphere'
 import Layers from '../domain/entities/layers'
+import { setMapToolOpened } from '../domain/shared_slices/Global'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'
@@ -182,12 +183,15 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
             }))
           }
 
-          startDrawing(event, interestPointBeingDrawed.type || interestPointType.OTHER)
+          if (interestPointBeingDrawed) {
+            startDrawing(event, interestPointBeingDrawed.type || interestPointType.OTHER)
+          }
         })
 
         drawObject.once(DRAW_ABORT_EVENT, () => {
           dispatch(endInterestPointDraw())
           dispatch(deleteInterestPointBeingDrawed())
+          dispatch(setMapToolOpened(undefined))
         })
 
         drawObject.once(DRAW_END_EVENT, event => {
@@ -317,6 +321,13 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   function modifyInterestPoint (uuid) {
     dispatch(editInterestPoint(uuid))
+    dispatch(setMapToolOpened(MapToolType.INTEREST_POINT))
+  }
+
+  function deleteInterestPointBeingDrawedAndCloseTool () {
+    dispatch(endInterestPointDraw())
+    dispatch(setMapToolOpened(undefined))
+    dispatch(deleteInterestPointBeingDrawed())
   }
 
   return (
@@ -350,7 +361,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
               observations={interestPointBeingDrawed.observations}
               coordinates={interestPointBeingDrawed.coordinates}
               featureIsShowed={drawObject}
-              deleteInterestPoint={() => dispatch(endInterestPointDraw()) && dispatch(deleteInterestPointBeingDrawed())}
+              deleteInterestPoint={deleteInterestPointBeingDrawedAndCloseTool}
               modifyInterestPoint={() => {}}
               zoomHasChanged={previousMapZoom.current}
               moveLine={moveInterestPointLine}

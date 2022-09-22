@@ -3,6 +3,7 @@ import { resetSelectedVessel, closeVesselSidebar } from '../../shared_slices/Ves
 import { hideFishingActivitiesOnMap } from '../../shared_slices/FishingActivities'
 import { resetVesselBeaconMalfunctionsResumeAndHistory } from '../../shared_slices/BeaconMalfunction'
 import { resetCurrentAndArchivedReportingsOfSelectedVessel } from '../../shared_slices/Reporting'
+import { expandRightMenu } from '../../shared_slices/Global'
 
 const unselectVessel = () => dispatch => {
   batch(() => {
@@ -11,6 +12,7 @@ const unselectVessel = () => dispatch => {
     dispatch(closeVesselSidebar())
     dispatch(resetCurrentAndArchivedReportingsOfSelectedVessel())
     dispatch(resetVesselBeaconMalfunctionsResumeAndHistory())
+    dispatch(expandRightMenu())
   })
 }
 

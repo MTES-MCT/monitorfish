@@ -183,7 +183,7 @@ export const globalSlice = createSlice({
      * @param {Object=} state
      * @param {{payload: MapToolType.MEASUREMENT}} action - The map tool
      */
-    setMapToolOpened(state, action) {
+    setMapToolOpened(state, action: ActionPayload<MapToolType>) {
       state.mapToolOpened = action.payload
     },
 

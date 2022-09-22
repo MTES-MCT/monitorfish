@@ -1,51 +1,46 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
 import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../domain/entities/alerts'
 import { beaconMalfunctionsStages } from '../../domain/entities/beaconMalfunction'
 import { sideWindowMenu } from '../../domain/entities/sideWindow'
+import { useAppSelector } from '../../hooks/useAppSelector'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
-import { AlertAndReportingTab } from './SideWindow'
-import SideWindowSubMenuLink from './SideWindowSubMenuLink'
+import { AlertAndReportingTab } from './constants'
+import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
+
+import type { PendingAlert } from '../../domain/types/alert'
+import type { MenuItem } from './types'
+import type { CSSProperties } from 'react'
+import type { Promisable } from 'type-fest'
+
+export type SideWindowSubMenuProps = {
+  fixed: boolean
+  selectedMenu?: string
+  selectedSubMenu: MenuItem
+  selectedTab: AlertAndReportingTab
+  // TODO Rename that.
+  setIsFixed: (isFixed: boolean) => Promisable<void>
+  setSelectedSubMenu: any
+}
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
- * @param selectedMenu
- * @param selectedSubMenu
- * @param setSelectedSubMenu
- * @param selectedTab
- * @param fixed
- * @param setIsFixed
- * @return {JSX.Element}
- * @constructor
  */
-function SideWindowSubMenu({ fixed, selectedMenu, selectedSubMenu, selectedTab, setIsFixed, setSelectedSubMenu }) {
+export function SideWindowSubMenu({
+  fixed,
+  selectedMenu,
+  selectedSubMenu,
+  selectedTab,
+  setIsFixed,
+  setSelectedSubMenu
+}: SideWindowSubMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const alerts = useSelector(state => state.alert.alerts)
-  const currentReportings = useSelector(state => state.reporting.currentReportings)
-  const beaconMalfunctions = useSelector(state => state.beaconMalfunction.beaconMalfunctions)
-
-  useEffect(() => {
-    if (selectedMenu === sideWindowMenu.ALERTS.code) {
-      setIsFixed(true)
-      setIsOpen(true)
-    } else if (selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code) {
-      setIsFixed(false)
-    }
-  }, [selectedMenu])
-
-  function getNumberOfAlertsOrReportingFromSeaFronts(seaFronts) {
-    if (selectedTab === AlertAndReportingTab.ALERT) {
-      return alerts.filter(alert => seaFronts.includes(alert?.value?.seaFront)).length
-    }
-
-    if (selectedTab === AlertAndReportingTab.REPORTING) {
-      return currentReportings.filter(alert => seaFronts.includes(alert?.value?.seaFront)).length
-    }
-  }
+  const alerts = useAppSelector(state => state.alert.alerts)
+  const currentReportings = useAppSelector(state => state.reporting.currentReportings)
+  const beaconMalfunctions = useAppSelector(state => state.beaconMalfunction.beaconMalfunctions)
 
   const numberOfBeaconMalfunctions = useMemo(
     () =>
@@ -56,6 +51,32 @@ function SideWindowSubMenu({ fixed, selectedMenu, selectedSubMenu, selectedTab, 
       ).length,
     [beaconMalfunctions]
   )
+
+  const getNumberOfAlertsOrReportingFromSeaFronts = useCallback(
+    (seaFronts): number => {
+      if (selectedTab === AlertAndReportingTab.ALERT) {
+        // TODO Remove the `as` as soon as the discriminator is added.
+        return alerts.filter(alert => seaFronts.includes((alert.value as PendingAlert).seaFront)).length
+      }
+
+      if (selectedTab === AlertAndReportingTab.REPORTING) {
+        // TODO Remove the `as` as soon as the discriminator is added.
+        return currentReportings.filter(alert => seaFronts.includes((alert.value as PendingAlert).seaFront)).length
+      }
+
+      return 0
+    },
+    [alerts, currentReportings, selectedTab]
+  )
+
+  useEffect(() => {
+    if (selectedMenu === sideWindowMenu.ALERTS.code) {
+      setIsFixed(true)
+      setIsOpen(true)
+    } else if (selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code) {
+      setIsFixed(false)
+    }
+  }, [selectedMenu, setIsFixed])
 
   return (
     <Menu
@@ -133,7 +154,7 @@ function SideWindowSubMenu({ fixed, selectedMenu, selectedSubMenu, selectedTab, 
 }
 
 const Chevron = styled.div``
-const chevronStyle = isOpen => ({
+const chevronStyle = (isOpen: boolean): CSSProperties => ({
   background: COLORS.background,
   border: `1px solid ${COLORS.lightGray}`,
   borderRadius: '50%',
@@ -155,7 +176,7 @@ const chevronIconStyle = isOpen => ({
 })
 
 const Menu = styled.div``
-const menuStyle = (isOpen, fixed) => ({
+const menuStyle = (isOpen: boolean, fixed: boolean): CSSProperties => ({
   background: COLORS.gainsboro,
   borderRight: `1px solid ${COLORS.lightGray}`,
   boxShadow: isOpen && !fixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset',
@@ -173,7 +194,7 @@ const menuStyle = (isOpen, fixed) => ({
 })
 
 const Title = styled.span``
-const titleStyle = isOpen => ({
+const titleStyle = (isOpen: boolean): CSSProperties => ({
   borderBottom: `1px solid ${COLORS.lightGray}`,
   display: 'inline-block',
   opacity: isOpen ? 1 : 0,
@@ -185,5 +206,3 @@ const titleStyle = isOpen => ({
   whiteSpace: 'nowrap',
   width: isOpen ? 180 : 0
 })
-
-export default SideWindowSubMenu

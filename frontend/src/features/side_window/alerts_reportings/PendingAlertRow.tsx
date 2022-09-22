@@ -1,6 +1,6 @@
 import countries from 'i18n-iso-countries'
-import React, { useCallback, useEffect, useRef } from 'react'
-import { batch, useDispatch, useSelector } from 'react-redux'
+import { MutableRefObject, useEffect, useRef } from 'react'
+import { batch } from 'react-redux'
 import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
@@ -10,34 +10,40 @@ import { getAlertNameFromType, getSilencedAlertPeriodText } from '../../../domai
 import validateAlert from '../../../domain/use_cases/alert/validateAlert'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 import { Flag } from '../../vessel_list/tableCells'
 
+import type { VesselAlert } from '../../../domain/types/vessel'
+import type { CSSProperties } from 'react'
+
+// TODO Type these props.
+export type PendingAlertRowProps = {
+  alert: VesselAlert
+  focusOnAlert: any
+  index: number
+  setShowSilencedAlertForIndex: any
+  setSilencedAlertId: any
+  showSilencedAlertForIndex: any
+}
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
- * @param alert
- * @param index
- * @param showSilencedAlertForIndex
- * @param setShowSilencedAlertForIndex
- * @param setSilencedAlertId
- * @param focusOnAlert
- * @return {JSX.Element}
- * @constructor
  */
-function PendingAlertRow({
+export function PendingAlertRow({
   alert,
   index,
   setShowSilencedAlertForIndex,
   setSilencedAlertId,
   showSilencedAlertForIndex
 }) {
-  const dispatch = useDispatch()
-  const ref = useRef()
-  const { focusOnAlert } = useSelector(state => state.alert)
+  const dispatch = useAppDispatch()
+  const ref = useRef() as MutableRefObject<HTMLDivElement>
+  const { focusOnAlert } = useAppSelector(state => state.alert)
   const baseUrl = window.location.origin
 
   useEffect(() => {
     if (focusOnAlert && alert?.id === focusOnAlert?.id) {
-      ref.current?.scrollIntoView({ block: 'start' })
+      ref.current.scrollIntoView({ block: 'start' })
     }
   }, [focusOnAlert, alert])
 
@@ -84,8 +90,8 @@ function PendingAlertRow({
               data-cy="side-window-alerts-show-vessel"
               onClick={() => {
                 const vesselIdentity = { ...alert, flagState: alert.value.flagState }
-                dispatch(showVessel(vesselIdentity, false, false, null))
-                dispatch(getVesselVoyage(vesselIdentity, undefined, false))
+                dispatch(showVessel(vesselIdentity, false, false) as any)
+                dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
               }}
               src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
               style={showIconStyle}
@@ -96,9 +102,13 @@ function PendingAlertRow({
             <Icon
               alt="Valider"
               data-cy="side-window-alerts-validate-alert"
-              onClick={() => dispatch(validateAlert(alert.id))}
-              onMouseOut={e => (e.currentTarget.src = `${baseUrl}/Icone_valider_alerte.png`)}
-              onMouseOver={e => (e.currentTarget.src = `${baseUrl}/Icone_valider_alerte_pleine.png`)}
+              onClick={() => dispatch(validateAlert(alert.id) as any)}
+              onMouseOut={e => {
+                e.currentTarget.src = `${baseUrl}/Icone_valider_alerte.png`
+              }}
+              onMouseOver={e => {
+                e.currentTarget.src = `${baseUrl}/Icone_valider_alerte_pleine.png`
+              }}
               src={`${baseUrl}/Icone_valider_alerte.png`}
               style={validateAlertIconStyle}
               title={"Valider l'alerte"}
@@ -119,7 +129,9 @@ function PendingAlertRow({
                   e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte.png`
                 }
               }}
-              onMouseOver={e => (e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte_pleine.png`)}
+              onMouseOver={e => {
+                e.currentTarget.src = `${baseUrl}/Icone_ignorer_alerte_pleine.png`
+              }}
               src={
                 showSilencedAlertForIndex === index + 1
                   ? `${baseUrl}/Icone_ignorer_alerte_pleine.png`
@@ -136,7 +148,7 @@ function PendingAlertRow({
 }
 
 const AlertTransition = styled.div``
-const alertSilencedTransition = {
+const alertSilencedTransition: CSSProperties = {
   background: '#E1000F33 0% 0% no-repeat padding-box',
   color: COLORS.maximumRed,
   fontWeight: 500,
@@ -146,7 +158,7 @@ const alertSilencedTransition = {
   textAlign: 'center'
 }
 
-const alertValidatedTransition = {
+const alertValidatedTransition: CSSProperties = {
   background: '#29B36133 0% 0% no-repeat padding-box',
   color: COLORS.mediumSeaGreen,
   fontWeight: 500,
@@ -158,7 +170,7 @@ const alertValidatedTransition = {
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
-const showIconStyle = {
+const showIconStyle: CSSProperties = {
   cursor: 'pointer',
   flexShrink: 0,
   float: 'right',
@@ -171,7 +183,7 @@ const showIconStyle = {
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const Icon = styled.img``
-const validateAlertIconStyle = {
+const validateAlertIconStyle: CSSProperties = {
   cursor: 'pointer',
   flexShrink: 0,
   float: 'right',
@@ -182,7 +194,7 @@ const validateAlertIconStyle = {
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
-const silenceAlertStyle = {
+const silenceAlertStyle: CSSProperties = {
   cursor: 'pointer',
   flexShrink: 0,
   float: 'right',
@@ -244,5 +256,3 @@ const rowBorderStyle = {
   marginTop: -14,
   width: 2
 }
-
-export default PendingAlertRow

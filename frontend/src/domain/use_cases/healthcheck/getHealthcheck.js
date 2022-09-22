@@ -43,7 +43,7 @@ function getWarningText (logbookMessagesReceivedMinutesAgo, positionsReceivedMin
     return `Les dernières positions des navires ne sont plus actualisées depuis ${getTimeAgo(healthCheck.dateLastPosition)} (ni sur la carte, ni dans la liste des navires).`
   }
 
-  return null
+  return undefined
 }
 
 function getMinutesAgoFromNow (now, dateToCompare) {

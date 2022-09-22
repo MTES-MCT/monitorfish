@@ -6,10 +6,13 @@ export type Reporting = {
   id: string
   internalReferenceNumber: string
   ircs: string
+  // TODO This prop seemed to be missing. Check that.
+  riskFactor: number | undefined
   // TODO Doesn't exists.
   type: any
   // type: ReportingType<string>
   validationDate: string
+  // TODO Create a specific type with a discriminator prop to avoid type-guessing issues
   value: PendingAlert | InfractionSuspicion | Observation
   vesselIdentifier: string
   vesselName: string

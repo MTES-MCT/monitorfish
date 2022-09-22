@@ -1,6 +1,5 @@
 import Fuse from 'fuse.js'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { CSSProperties, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
 
@@ -8,37 +7,51 @@ import { COLORS } from '../../../constants/constants'
 import { alertSearchOptions, AlertsMenuSeaFrontsToSeaFrontList } from '../../../domain/entities/alerts'
 import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
 import silenceAlert from '../../../domain/use_cases/alert/silenceAlert'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
-import PendingAlertRow from './PendingAlertRow'
-import SilenceAlertMenu from './SilenceAlertMenu'
+import { PendingAlertRow } from './PendingAlertRow'
+import { SilenceAlertMenu } from './SilenceAlertMenu'
 
+import type { PendingAlert, SilencedAlertPeriodRequest } from '../../../domain/types/alert'
+import type { MenuItem } from '../types'
+
+export type PendingAlertsListProps = {
+  baseRef: any
+  numberOfSilencedAlerts: number
+  selectedSubMenu: MenuItem
+}
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
- * @param alerts
- * @param numberOfSilencedAlerts
- * @param seaFront
- * @param baseRef
- * @return {JSX.Element}
- * @constructor
  */
-function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
-  const dispatch = useDispatch()
-  const { alerts, focusOnAlert } = useSelector(state => state.alert)
+export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSubMenu }: PendingAlertsListProps) {
+  const dispatch = useAppDispatch()
+  const { alerts, focusOnAlert } = useAppSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('creationDate')
   const [sortType] = useState(SortType.DESC)
-  const [searched, setSearched] = useState(undefined)
-  const [showSilencedAlertForIndex, setShowSilencedAlertForIndex] = useState(null)
-  const [silencedAlertId, setSilencedAlertId] = useState(null)
-  const scrollableContainer = useRef()
+  const [searchQuery, setSearchQuery] = useState<string>()
+  const [showSilencedAlertForIndex, setShowSilencedAlertForIndex] = useState<number>()
+  const [silencedAlertId, setSilencedAlertId] = useState<string>()
+  const scrollableContainerRef = useRef() as MutableRefObject<HTMLDivElement>
 
   const currentSeaFrontAlerts = useMemo(
     () =>
       alerts.filter(alert =>
-        (AlertsMenuSeaFrontsToSeaFrontList[seaFront.code]?.seaFronts || []).includes(alert.value.seaFront)
+        (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu.code]?.seaFronts || []).includes(
+          // TODO Remove the `as` as soon as the discriminator is added.
+          (alert.value as PendingAlert).seaFront
+        )
       ),
-    [alerts, seaFront]
+    [alerts, selectedSubMenu]
+  )
+  const numberOfAlertsMessage = useMemo(
+    () =>
+      `Suspension d’alerte sur ${numberOfSilencedAlerts} navire${numberOfSilencedAlerts > 1 ? 's' : ''} en ${
+        selectedSubMenu.name
+      }`,
+    [numberOfSilencedAlerts, selectedSubMenu.name]
   )
 
   const fuse = useMemo(() => new Fuse(currentSeaFrontAlerts, alertSearchOptions), [currentSeaFrontAlerts])
@@ -48,12 +61,12 @@ function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
       return []
     }
 
-    if (!searched?.length || searched?.length <= 1) {
+    if (!searchQuery || searchQuery.length <= 1) {
       return currentSeaFrontAlerts
     }
 
-    return fuse.search(searched).map(result => result.item)
-  }, [currentSeaFrontAlerts, searched, fuse])
+    return fuse.search(searchQuery).map(result => result.item)
+  }, [currentSeaFrontAlerts, searchQuery, fuse])
 
   const sortedAlerts = useMemo(() => {
     if (!filteredAlerts) {
@@ -65,7 +78,7 @@ function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
 
   useEffect(() => {
     if (focusOnAlert) {
-      setSearched(undefined)
+      setSearchQuery(undefined)
       const timeoutHandler = setTimeout(() => {
         dispatch(resetFocusOnAlert())
       }, 2000)
@@ -74,13 +87,15 @@ function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
         clearTimeout(timeoutHandler)
       }
     }
-  }, [focusOnAlert])
+
+    return undefined
+  }, [dispatch, focusOnAlert])
 
   const silenceAlertCallback = useCallback(
-    (silencedAlertPeriod, id) => {
-      setShowSilencedAlertForIndex(null)
-      setSilencedAlertId(null)
-      dispatch(silenceAlert(silencedAlertPeriod, id))
+    (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, id: string) => {
+      setShowSilencedAlertForIndex(undefined)
+      setSilencedAlertId(undefined)
+      dispatch(silenceAlert(silencedAlertPeriodRequest, id) as any)
     },
     [dispatch]
   )
@@ -88,24 +103,22 @@ function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
   return (
     <Content style={contentStyle}>
       <Title style={titleStyle}>ALERTES AUTOMATIQUES À VÉRIFIER</Title>
-      {numberOfSilencedAlerts ? (
+      {numberOfSilencedAlerts && (
         <NumberOfSilencedAlerts
           data-cy="side-window-alerts-number-silenced-vessels"
           style={numberOfSilencedAlertsStyle}
         >
           <Warning style={warningStyle}>!</Warning>
-          Suspension d&apos;alerte sur {numberOfSilencedAlerts} navire{numberOfSilencedAlerts?.length > 1 ? 's' : ''} en{' '}
-          {seaFront.name}
+          {numberOfAlertsMessage}
         </NumberOfSilencedAlerts>
-      ) : null}
+      )}
       <SearchVesselInput
-        baseUrl={baseUrl}
         data-cy="side-window-alerts-search-vessel"
-        onChange={e => setSearched(e.target.value)}
+        onChange={e => setSearchQuery(e.target.value)}
         placeholder="Rechercher un navire ou une alerte"
         style={searchVesselInputStyle(baseUrl)}
         type="text"
-        value={searched || ''}
+        value={searchQuery || ''}
       />
       <List
         data-cy="side-window-alerts-list"
@@ -127,18 +140,14 @@ function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
         >
           <FlexboxGrid>
             <FlexboxGrid.Item style={timeAgoColumnStyle}>Ouverte il y a...</FlexboxGrid.Item>
-            <FlexboxGrid.Item colspan={7} sortable style={alertTypeStyle}>
+            <FlexboxGrid.Item colspan={7} style={alertTypeStyle}>
               Titre
             </FlexboxGrid.Item>
-            <FlexboxGrid.Item sortable style={alertNatinfStyle}>
-              NATINF
-            </FlexboxGrid.Item>
-            <FlexboxGrid.Item sortable style={vesselNameColumnStyle}>
-              Navire
-            </FlexboxGrid.Item>
+            <FlexboxGrid.Item style={alertNatinfStyle}>NATINF</FlexboxGrid.Item>
+            <FlexboxGrid.Item style={vesselNameColumnStyle}>Navire</FlexboxGrid.Item>
           </FlexboxGrid>
         </List.Item>
-        <ScrollableContainer ref={scrollableContainer} className="smooth-scroll" style={ScrollableContainerStyle}>
+        <ScrollableContainer ref={scrollableContainerRef} className="smooth-scroll" style={ScrollableContainerStyle}>
           {sortedAlerts.map((alert, index) => (
             <PendingAlertRow
               key={alert.id}
@@ -150,17 +159,17 @@ function PendingAlertsList({ baseRef, numberOfSilencedAlerts, seaFront }) {
             />
           ))}
         </ScrollableContainer>
-        {showSilencedAlertForIndex ? (
+        {showSilencedAlertForIndex && silencedAlertId && (
           <SilenceAlertMenu
             baseRef={baseRef}
             id={silencedAlertId}
-            scrollableContainer={scrollableContainer}
+            scrollableContainer={scrollableContainerRef}
             setShowSilencedAlertForIndex={setShowSilencedAlertForIndex}
             showSilencedAlertForIndex={showSilencedAlertForIndex}
             silenceAlert={silenceAlertCallback}
           />
-        ) : null}
-        {!sortedAlerts?.length ? <NoAlerts style={noAlertsStyle}>Aucune alerte à vérifier</NoAlerts> : null}
+        )}
+        {!sortedAlerts.length && <NoAlerts style={noAlertsStyle}>Aucune alerte à vérifier</NoAlerts>}
       </List>
     </Content>
   )
@@ -216,13 +225,13 @@ const searchVesselInputStyle = baseUrl => ({
 })
 
 const ScrollableContainer = styled.div``
-const ScrollableContainerStyle = {
+const ScrollableContainerStyle: CSSProperties = {
   maxHeight: '50vh',
   overflowY: 'auto'
 }
 
 const NoAlerts = styled.div``
-const noAlertsStyle = {
+const noAlertsStyle: CSSProperties = {
   color: COLORS.slateGray,
   marginTop: 20,
   textAlign: 'center'
@@ -230,7 +239,7 @@ const noAlertsStyle = {
 
 const SearchVesselInput = styled.input``
 
-const listItemStyle = (isFocused, toClose) => ({
+const listItemStyle = (isFocused: boolean, toClose: boolean): CSSProperties => ({
   animation: toClose ? 'close-alert-transition-item 3s ease forwards' : 'unset',
   background: isFocused ? COLORS.gainsboro : COLORS.cultured,
   border: `1px solid ${COLORS.lightGray}`,
@@ -249,7 +258,7 @@ const styleCenter = {
 
 // The width of the scrolling bar is 16 px. When we have more than
 // 9 items, the scrolling bar is showed
-const rowStyle = numberOfAlerts => ({
+const rowStyle = (numberOfAlerts: number): CSSProperties => ({
   boxShadow: 'unset',
   color: COLORS.gunMetal,
   fontWeight: 500,
@@ -286,5 +295,3 @@ const contentStyle = {
   padding: '30px 40px 40px 40px',
   width: 'fit-content'
 }
-
-export default PendingAlertsList

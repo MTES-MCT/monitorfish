@@ -1,56 +1,62 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { CSSProperties, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
 import ReportingForm from '../../vessel_sidebar/reporting/current/ReportingForm'
 import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 
-function EditReporting() {
-  const dispatch = useDispatch()
+import type { PendingAlert } from '../../../domain/types/alert'
+
+export function EditReporting() {
+  const dispatch = useAppDispatch()
   const baseUrl = window.location.origin
-  const editedReportingInSideWindow = useSelector(state => state.reporting.editedReportingInSideWindow)
+  const { editedReportingInSideWindow } = useAppSelector(state => state.reporting)
 
-  const editReportingWrapperStyle = {
-    background: COLORS.white,
-    height: '100vh',
-    marginRight: editedReportingInSideWindow ? 0 : -490,
-    position: 'fixed',
-    right: 0,
-    top: 0,
-    transition: 'margin-right 0.5s',
-    width: 490,
-    zIndex: 999
-  }
+  const editReportingWrapperStyle: CSSProperties = useMemo(
+    () => ({
+      background: COLORS.white,
+      height: '100vh',
+      marginRight: editedReportingInSideWindow ? 0 : -490,
+      position: 'fixed',
+      right: 0,
+      top: 0,
+      transition: 'margin-right 0.5s',
+      width: 490,
+      zIndex: 999
+    }),
+    [editedReportingInSideWindow]
+  )
 
-  function closeForm() {
-    dispatch(setEditedReportingInSideWindow(null))
-  }
+  const closeForm = useCallback(() => {
+    dispatch(setEditedReportingInSideWindow())
+  }, [dispatch])
 
   return (
-    <EditReportingWrapper
-      data-cy="side-window-beacon-malfunctions-detail"
-      hasMargin={editedReportingInSideWindow}
-      style={editReportingWrapperStyle}
-    >
+    <EditReportingWrapper data-cy="side-window-beacon-malfunctions-detail" style={editReportingWrapperStyle}>
       <Header style={headerStyle}>
         <Row style={rowStyle()}>
           <AlertsIcon style={alertsIconStyle} />
           <Title style={titleStyle}>ÉDITER LE SIGNALEMENT</Title>
-          <CloseIcon onClick={() => dispatch(setEditedReportingInSideWindow(null))} style={closeIconStyle} />
+          <CloseIcon onClick={() => dispatch(setEditedReportingInSideWindow())} style={closeIconStyle} />
         </Row>
         <Row style={rowStyle(10)}>
-          {editedReportingInSideWindow?.value.flagState ? (
+          {/* TODO Remove the `as` as soon as the discriminator is added. */}
+          {editedReportingInSideWindow && (editedReportingInSideWindow.value as PendingAlert).flagState && (
             <Flag
               rel="preload"
-              src={`${baseUrl}/flags/${editedReportingInSideWindow?.value.flagState.toLowerCase()}.svg`}
+              src={`${baseUrl}/flags/${
+                // TODO Remove the `as` as soon as the discriminator is added.
+                (editedReportingInSideWindow.value as PendingAlert).flagState.toLowerCase()
+              }.svg`}
               style={flagStyle}
             />
-          ) : null}
+          )}
           <VesselName
             data-cy="side-window-beacon-malfunctions-detail-vessel-name"
             style={vesselNameStyle}
@@ -66,16 +72,11 @@ function EditReporting() {
           </InternalReferenceNumber>
         </Row>
         <Row style={rowStyle(10)}>
-          {editedReportingInSideWindow?.riskFactor ? (
-            <RiskFactorBox
-              color={getRiskFactorColor(editedReportingInSideWindow?.riskFactor)}
-              height={24}
-              isBig
-              marginRight={5}
-            >
-              {parseFloat(editedReportingInSideWindow?.riskFactor).toFixed(1)}
+          {editedReportingInSideWindow && editedReportingInSideWindow.riskFactor && (
+            <RiskFactorBox color={getRiskFactorColor(editedReportingInSideWindow.riskFactor)} isBig marginRight={5}>
+              {editedReportingInSideWindow.riskFactor.toFixed(1)}
             </RiskFactorBox>
-          ) : null}
+          )}
         </Row>
       </Header>
       <Line style={lineStyle} />
@@ -104,7 +105,9 @@ const lineStyle = {
   width: '100%'
 }
 
-const Flag = styled.img``
+const Flag = styled.img<{
+  rel?: 'preload'
+}>``
 const flagStyle = {
   cursor: 'pointer',
   display: 'inline-block',
@@ -114,7 +117,7 @@ const flagStyle = {
 }
 
 const VesselName = styled.div``
-const vesselNameStyle = {
+const vesselNameStyle: CSSProperties = {
   color: COLORS.gunMetal,
   font: 'normal normal bold 16px/22px Marianne',
   marginLeft: 8,
@@ -141,9 +144,9 @@ const closeIconStyle = {
 }
 
 const Row = styled.div``
-const rowStyle = topMargin => ({
+const rowStyle = (topMargin: number = 0): CSSProperties => ({
   display: 'flex',
-  marginTop: topMargin || 0
+  marginTop: topMargin
 })
 
 const Header = styled.div``
@@ -164,5 +167,3 @@ const AlertsIcon = styled(AlertsSVG)``
 const alertsIconStyle = {
   width: 17
 }
-
-export default EditReporting

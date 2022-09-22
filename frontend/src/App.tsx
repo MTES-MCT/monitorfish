@@ -20,10 +20,10 @@ import { VesselFiltersMapButton } from './features/map/tools/vessel_filters/Vess
 import { VesselLabelsMapButton } from './features/map/tools/vessel_labels/VesselLabelsMapButton'
 import { VesselVisibilityMapButton } from './features/map/tools/vessel_visibility/VesselVisibilityMapButton'
 import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewFilteredVessels'
-import AlertsMapButton from './features/side_window/alerts_reportings/AlertsMapButton'
+import { AlertsMapButton } from './features/side_window/alerts_reportings/AlertsMapButton'
 import BeaconMalfunctionsMapButton from './features/side_window/beacon_malfunctions/BeaconMalfunctionsMapButton'
 import { SideWindow } from './features/side_window/SideWindow'
-import SideWindowLauncher from './features/side_window/SideWindowLauncher'
+import { SideWindowLauncher } from './features/side_window/SideWindowLauncher'
 import VesselList from './features/vessel_list/VesselList'
 import VesselsSearch from './features/vessel_search/VesselsSearch'
 import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader'
@@ -35,6 +35,8 @@ import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
 import { backofficeStore, homeStore, backofficePersistor } from './store'
 import { theme } from './ui/theme'
 import { isBrowserSupported } from './utils/isBrowserSupported'
+
+import type { MutableRefObject } from 'react'
 
 countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
 
@@ -86,7 +88,7 @@ export function App() {
 
 function HomePage() {
   const isVesselSidebarOpen = useAppSelector(state => state.vessel.vesselSidebarIsOpen)
-  const ref = useRef()
+  const ref = useRef() as MutableRefObject<HTMLDivElement>
 
   return (
     <>

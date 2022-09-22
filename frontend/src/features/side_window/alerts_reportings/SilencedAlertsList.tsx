@@ -1,7 +1,6 @@
 import Fuse from 'fuse.js'
 import countries from 'i18n-iso-countries'
-import React, { useCallback, useMemo, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useCallback, useMemo, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
@@ -11,10 +10,14 @@ import { getAlertNameFromType, alertSearchOptions } from '../../../domain/entiti
 import reactivateSilencedAlert from '../../../domain/use_cases/alert/reactivateSilencedAlert'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 import { getDateDiffInDays, getDateTime } from '../../../utils'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { Flag } from '../../vessel_list/tableCells'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
+
+import type { CSSProperties } from 'react'
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
@@ -23,23 +26,23 @@ import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
  * @return {JSX.Element}
  * @constructor
  */
-function SilencedAlertsList({ silencedSeaFrontAlerts }) {
-  const dispatch = useDispatch()
-  const { focusOnAlert } = useSelector(state => state.alert)
+export function SilencedAlertsList({ silencedSeaFrontAlerts }) {
+  const dispatch = useAppDispatch()
+  const { focusOnAlert } = useAppSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('silencedBeforeDate')
   const [sortType] = useState(SortType.ASC)
-  const [searched, setSearched] = useState(undefined)
+  const [searchQuery, setSearchQuery] = useState<string>()
 
   const fuse = useMemo(() => new Fuse(silencedSeaFrontAlerts, alertSearchOptions), [silencedSeaFrontAlerts])
 
   const filteredAlerts = useMemo(() => {
-    if (!searched?.length || searched?.length <= 1) {
+    if (!searchQuery || searchQuery.length <= 1) {
       return silencedSeaFrontAlerts
     }
 
-    return fuse.search(searched).map(result => result.item)
-  }, [silencedSeaFrontAlerts, searched, fuse])
+    return fuse.search(searchQuery).map(result => result.item)
+  }, [silencedSeaFrontAlerts, searchQuery, fuse])
 
   const sortedAlerts = useMemo(
     () => filteredAlerts.slice().sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType)),
@@ -47,8 +50,8 @@ function SilencedAlertsList({ silencedSeaFrontAlerts }) {
   )
 
   const reactivateSilencedAlertCallback = useCallback(
-    id => {
-      dispatch(reactivateSilencedAlert(id))
+    (id: string) => {
+      dispatch(reactivateSilencedAlert(id) as any)
     },
     [dispatch]
   )
@@ -57,13 +60,12 @@ function SilencedAlertsList({ silencedSeaFrontAlerts }) {
     <Content style={contentStyle}>
       <Title style={titleStyle}>SUSPENSION D&apos;ALERTES</Title>
       <SearchVesselInput
-        baseUrl={baseUrl}
         data-cy="side-window-silenced-alerts-search-vessel"
-        onChange={e => setSearched(e.target.value)}
+        onChange={e => setSearchQuery(e.target.value)}
         placeholder="Rechercher un navire ou une alerte"
         style={searchVesselInputStyle(baseUrl)}
         type="text"
-        value={searched}
+        value={searchQuery}
       />
       <List
         data-cy="side-window-silenced-alerts-list"
@@ -117,14 +119,19 @@ function SilencedAlertsList({ silencedSeaFrontAlerts }) {
                   <FlexboxGrid.Item style={alertTypeStyle}>{getAlertNameFromType(alert.type)}</FlexboxGrid.Item>
                   <FlexboxGrid.Item style={alertNatinfStyle}>{alert.value.natinfCode}</FlexboxGrid.Item>
                   <FlexboxGrid.Item style={ignoredForStyle}>
-                    {alert.silencedAfterDate
-                      ? new Date(alert.silencedAfterDate) > new Date()
-                        ? `${getDateDiffInDays(
+                    {/* TODO Move that into a `SilenceAlertRow` component. */}
+                    {alert.silencedAfterDate && (
+                      <>
+                        {new Date(alert.silencedAfterDate) > new Date() &&
+                          `${getDateDiffInDays(
                             new Date(alert.silencedAfterDate),
                             new Date(alert.silencedBeforeDate)
-                          )} jours`
-                        : timeago.format(alert.silencedBeforeDate, 'fr')
-                      : timeago.format(alert.silencedBeforeDate, 'fr')}
+                          )} jours`}
+                        {new Date(alert.silencedAfterDate) <= new Date() &&
+                          timeago.format(alert.silencedBeforeDate, 'fr')}
+                      </>
+                    )}
+                    {!alert.silencedAfterDate && timeago.format(alert.silencedBeforeDate, 'fr')}
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={ignoredForStyle}>
                     {getDateTime(alert.silencedBeforeDate, true)}
@@ -136,8 +143,8 @@ function SilencedAlertsList({ silencedSeaFrontAlerts }) {
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
                         const vesselIdentity = { ...alert, flagState: alert.value.flagState }
-                        dispatch(showVessel(vesselIdentity, false, false))
-                        dispatch(getVesselVoyage(vesselIdentity, undefined, false))
+                        dispatch(showVessel(vesselIdentity, false, false) as any)
+                        dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
                       }}
                       src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       style={showIconStyle}
@@ -167,7 +174,7 @@ function SilencedAlertsList({ silencedSeaFrontAlerts }) {
 
 const AlertTransition = styled.div``
 
-const alertValidatedTransition = {
+const alertValidatedTransition: CSSProperties = {
   background: '#29B36133 0% 0% no-repeat padding-box',
   color: COLORS.mediumSeaGreen,
   fontWeight: 500,
@@ -206,13 +213,13 @@ const searchVesselInputStyle = baseUrl => ({
 })
 
 const ScrollableContainer = styled.div``
-const ScrollableContainerStyle = {
+const ScrollableContainerStyle: CSSProperties = {
   maxHeight: 'calc(100vh - 170px)',
   overflowY: 'auto'
 }
 
 const NoAlerts = styled.div``
-const noAlertsStyle = {
+const noAlertsStyle: CSSProperties = {
   color: COLORS.slateGray,
   marginTop: 20,
   textAlign: 'center'
@@ -222,7 +229,7 @@ const SearchVesselInput = styled.input``
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
-const showIconStyle = {
+const showIconStyle: CSSProperties = {
   cursor: 'pointer',
   flexShrink: 0,
   float: 'right',
@@ -235,7 +242,7 @@ const showIconStyle = {
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const Icon = styled.img``
-const deleteSilencedAlertIconStyle = {
+const deleteSilencedAlertIconStyle: CSSProperties = {
   cursor: 'pointer',
   flexShrink: 0,
   float: 'right',
@@ -314,5 +321,3 @@ const contentStyle = {
   padding: '30px 40px 40px 40px',
   width: 'fit-content'
 }
-
-export default SilencedAlertsList

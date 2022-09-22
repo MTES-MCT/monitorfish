@@ -1,24 +1,34 @@
 import { validateAlertFromAPI } from '../../../api/alert'
+import { deleteListItems } from '../../../utils/deleteListItems'
+import { updateListItemsProp } from '../../../utils/updateListItemsProp'
 import { Vessel } from '../../entities/vessel'
 import { setAlerts } from '../../shared_slices/Alert'
 import { setError } from '../../shared_slices/Global'
 import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
 import getVesselReportings from '../vessel/getVesselReportings'
 
-export const validateAlert = id => (dispatch, getState) => {
+import type { AppGetState } from '../../../store'
+import type { ActiveAlert } from '../../types/alert'
+
+export const validateAlert = (id: string) => (dispatch, getState: AppGetState) => {
   const previousAlerts = getState().alert.alerts
   const previousAlertsWithValidatedFlag = setAlertAsValidated(previousAlerts, id)
   dispatch(setAlerts(previousAlertsWithValidatedFlag))
 
   const timeout = setTimeout(() => {
-    const previousAlertsWithoutValidated = removeAlert(getState().alert.alerts, id)
+    const previousAlertsWithoutValidated = deleteListItems(getState().alert.alerts, 'id', id)
     dispatch(setAlerts(previousAlertsWithoutValidated))
   }, 3200)
 
   validateAlertFromAPI(id)
     .then(() => {
       dispatch(getVesselReportings())
-      const validatedAlert = previousAlertsWithValidatedFlag?.find(alert => alert.id === id)
+
+      const validatedAlert = previousAlertsWithValidatedFlag.find(alert => alert.id === id)
+      if (!validatedAlert) {
+        return
+      }
+
       dispatch(
         removeVesselAlertAndUpdateReporting({
           alertType: validatedAlert.value?.type,
@@ -34,31 +44,8 @@ export const validateAlert = id => (dispatch, getState) => {
     })
 }
 
-function setAlertAsValidated(previousAlerts, id) {
-  return previousAlerts.reduce((acc, alert) => {
-    if (alert.id === id) {
-      const validatedAlert = { ...alert }
-      validatedAlert.isValidated = true
-
-      acc.push(validatedAlert)
-
-      return acc
-    }
-
-    acc.push(alert)
-
-    return acc
-  }, [])
-}
-
-export function removeAlert(previousAlerts, id) {
-  return previousAlerts.reduce((acc, alert) => {
-    if (alert.id === id) {
-      return acc
-    }
-
-    acc.push(alert)
-
-    return acc
-  }, [])
+function setAlertAsValidated(previousAlerts: ActiveAlert[], id: string): ActiveAlert[] {
+  return updateListItemsProp(previousAlerts, 'id', id, {
+    isValidated: true
+  })
 }

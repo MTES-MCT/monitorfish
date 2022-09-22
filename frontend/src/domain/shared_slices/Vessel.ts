@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { transform } from 'ol/proj'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
@@ -194,15 +194,15 @@ const vesselSlice = createSlice({
     /**
      * Remove the vessel alert and update the reporting in the vessels array and selected vessel object
      * before the /vessels API is fetched from the cron
-     * @function removeVesselAlertAndUpdateReporting
-     * @param {Object} state
-     * @param {{payload: {
-     *   vesselId: string,
-     *   alertType: string,
-     *   isValidated: boolean
-     * }}} action - the vessel alert to validate or silence
      */
-    removeVesselAlertAndUpdateReporting(state, action) {
+    removeVesselAlertAndUpdateReporting(
+      state,
+      action: PayloadAction<{
+        alertType: string
+        isValidated: boolean
+        vesselId: string
+      }>
+    ) {
       state.vessels = state.vessels.map(vessel => {
         if (vessel.vesselId !== action.payload.vesselId) {
           return vessel

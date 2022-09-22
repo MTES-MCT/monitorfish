@@ -17,5 +17,5 @@ export const useClickOutsideWhenOpenedAndExecute = (ref, isOpen, callback: () =>
       // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [ref, isOpen])
+  }, [ref, isOpen, callback])
 }

@@ -7,7 +7,7 @@ export const useEscapeFromKeyboardAndExecute = (callback?: () => void) => {
     return () => {
       document.removeEventListener('keydown', escapeFromKeyboard, false)
     }
-  }, [])
+  }, [callback])
 
   const escapeFromKeyboard = event => {
     if (event.key === 'Escape' && callback) {

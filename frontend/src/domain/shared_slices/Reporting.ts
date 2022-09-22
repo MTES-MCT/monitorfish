@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import type { CurrentAndArchivedReportingsOfSelectedVessel, Reporting } from '../types/reporting'
 import type { VesselIdentity } from '../types/vessel'
@@ -7,8 +7,9 @@ export type ReportingState = {
   archivedReportingsFromDate: Date
   currentAndArchivedReportingsOfSelectedVessel: CurrentAndArchivedReportingsOfSelectedVessel | undefined
   currentReportings: Reporting[]
-  editedReporting: undefined
-  editedReportingInSideWindow: undefined
+  editedReporting: Reporting | undefined
+  editedReportingInSideWindow: Reporting | undefined
+  // TODO Rename this prop.
   loadingReporting: boolean
   vesselIdentity: VesselIdentity | undefined
 }
@@ -108,12 +109,8 @@ const reportingSlice = createSlice({
 
     /**
      * Set the edited reporting in side window
-     * @function setEditedReportingInSideWindow
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     * @param {{payload: boolean}} action
      */
-    setEditedReportingInSideWindow(state, action) {
+    setEditedReportingInSideWindow(state, action: PayloadAction<Reporting | undefined>) {
       state.editedReportingInSideWindow = action.payload
     },
     /**

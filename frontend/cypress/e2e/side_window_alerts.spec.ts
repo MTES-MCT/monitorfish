@@ -12,7 +12,7 @@ context('Alerts', () => {
     // Then
     cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('9')
     cy.get('*[data-cy^="side-window-alerts-number-silenced-vessels"]').contains(
-      "Suspension d'alerte sur 2 navire en NAMO"
+      'Suspension d’alerte sur 2 navires en NAMO'
     )
     cy.get('*[data-cy^="side-window-alerts-list"]').children().eq(1).children().should('have.length', 9)
 

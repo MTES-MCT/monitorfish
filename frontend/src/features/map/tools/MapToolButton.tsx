@@ -22,7 +22,7 @@ export function MapToolButton({ children, dataCy, isOpen, onClick, style, title 
     <StyledMapToolButton
       data-cy={dataCy}
       healthcheckTextWarning={!!healthcheckTextWarning}
-      isHidden={previewFilteredVesselsMode}
+      isHidden={!!previewFilteredVesselsMode}
       isOpen={isOpen}
       isRightMenuShrinked={isRightMenuShrinked}
       onClick={onClick}
@@ -35,8 +35,6 @@ export function MapToolButton({ children, dataCy, isOpen, onClick, style, title 
 }
 
 const StyledMapToolButton = styled(MapButtonStyle)<{
-  healthcheckTextWarning: boolean
-  isHidden: boolean | undefined
   isOpen: boolean
   isRightMenuShrinked: boolean
 }>`

@@ -1,37 +1,51 @@
-import React, { useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../../domain/entities/alerts'
-import { AlertAndReportingTab } from '../SideWindow'
-import PendingAlertsList from './PendingAlertsList'
+import { useAppSelector } from '../../../hooks/useAppSelector'
+import { AlertAndReportingTab } from '../constants'
+import { PendingAlertsList } from './PendingAlertsList'
 import { ReportingList } from './ReportingList'
-import SilencedAlertsList from './SilencedAlertsList'
+import { SilencedAlertsList } from './SilencedAlertsList'
 
-/**
- * @param selectedSubMenu
- * @param setSelectedSubMenu
- * @param selectedTab
- * @param setSelectedTab
- * @param baseRef
- * @return {JSX.Element}
- * @constructor
- */
-function AlertsAndReportings({ baseRef, selectedSubMenu, selectedTab, setSelectedSubMenu, setSelectedTab }) {
-  const { focusOnAlert, silencedAlerts } = useSelector(state => state.alert)
+import type { PendingAlert } from '../../../domain/types/alert'
+import type { MenuItem } from '../types'
+
+type AlertsAndReportingsProps = {
+  baseRef: any
+  selectedSubMenu: MenuItem
+  selectedTab: any
+  setSelectedSubMenu: any
+  setSelectedTab: any
+}
+export function AlertsAndReportings({
+  baseRef,
+  selectedSubMenu,
+  selectedTab,
+  setSelectedSubMenu,
+  setSelectedTab
+}: AlertsAndReportingsProps) {
+  const { focusOnAlert, silencedAlerts } = useAppSelector(state => state.alert)
 
   const silencedSeaFrontAlerts = useMemo(
     () =>
       silencedAlerts.filter(alert =>
-        (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu?.code]?.seaFronts || []).includes(alert.value.seaFront)
+        (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu.code]
+          ? AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu.code].seaFronts
+          : []
+        ).includes(
+          // TODO Remove the `as` as soon as the discriminator is added.
+          (alert.value as PendingAlert).seaFront
+        )
       ),
     [silencedAlerts, selectedSubMenu]
   )
 
   useEffect(() => {
     if (focusOnAlert) {
-      const seaFront = focusOnAlert?.value?.seaFront
+      // TODO Remove the `as` as soon as the discriminator is added.
+      const { seaFront } = focusOnAlert.value as PendingAlert
 
       const menuSeaFrontName = Object.keys(AlertsMenuSeaFrontsToSeaFrontList)
         .map(menuSeaFrontKey => AlertsMenuSeaFrontsToSeaFrontList[menuSeaFrontKey])
@@ -41,7 +55,7 @@ function AlertsAndReportings({ baseRef, selectedSubMenu, selectedTab, setSelecte
         setSelectedSubMenu(AlertsSubMenu[menuSeaFrontName.menuSeaFront])
       }
     }
-  }, [focusOnAlert])
+  }, [focusOnAlert, setSelectedSubMenu])
 
   return (
     <>
@@ -63,17 +77,19 @@ function AlertsAndReportings({ baseRef, selectedSubMenu, selectedTab, setSelecte
           <PendingAlertsList
             baseRef={baseRef}
             numberOfSilencedAlerts={silencedSeaFrontAlerts.length}
-            seaFront={selectedSubMenu}
+            selectedSubMenu={selectedSubMenu}
           />
           <SilencedAlertsList silencedSeaFrontAlerts={silencedSeaFrontAlerts} />
         </>
       )}
-      {selectedTab === AlertAndReportingTab.REPORTING && <ReportingList seaFront={selectedSubMenu} />}
+      {selectedTab === AlertAndReportingTab.REPORTING && <ReportingList selectedSubMenu={selectedSubMenu} />}
     </>
   )
 }
 
-const Title = styled.h2`
+const Title = styled.h2<{
+  isSelected: boolean
+}>`
   margin: 30px 10px 30px 10px;
   font-size: 22px;
   color: ${COLORS.gunMetal};
@@ -86,5 +102,3 @@ const Title = styled.h2`
   cursor: pointer;
   transition: all 0.2s;
 `
-
-export default AlertsAndReportings

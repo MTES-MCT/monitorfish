@@ -80,7 +80,7 @@ context('Update Regulation', () => {
       expect(request.body).contain('<Value>Reg. MEMN</Value>')
       expect(request.body).contain('<Value>Praires Ouest cotentin</Value>')
       expect(request.body).contain('<Value>Normandie, Bretagne</Value>')
-      expect(request.body).contain('<Name>otherInfo</Name><Value>Une information générale</Value>')
+      expect(request.body).contain('<Name>other_info</Name><Value>Une information générale</Value>')
       expect(request.body).contain('"reference":"texte de reference"')
       expect(request.body).contain(
         '"url":"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634"'

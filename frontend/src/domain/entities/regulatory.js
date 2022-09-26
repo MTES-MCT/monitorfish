@@ -154,7 +154,7 @@ export const mapToRegulatoryFeatureObject = properties => {
     fishing_period: JSON.stringify(fishingPeriod),
     species: JSON.stringify(speciesRegulation),
     gears: JSON.stringify(gearRegulation),
-    otherInfo: otherInfo,
+    other_info: otherInfo,
     next_id: nextId
   }
 }

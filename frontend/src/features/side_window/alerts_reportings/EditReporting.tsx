@@ -2,14 +2,12 @@ import { CSSProperties, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
 import ReportingForm from '../../vessel_sidebar/reporting/current/ReportingForm'
-import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 
 import type { AlertValueForPending } from '../../../domain/types/alert'
 
@@ -70,13 +68,6 @@ export function EditReporting() {
           >
             ({editedReportingInSideWindow?.internalReferenceNumber || 'Aucun CFR'})
           </InternalReferenceNumber>
-        </Row>
-        <Row style={rowStyle(10)}>
-          {editedReportingInSideWindow && editedReportingInSideWindow.riskFactor && (
-            <RiskFactorBox color={getRiskFactorColor(editedReportingInSideWindow.riskFactor)} isBig marginRight={5}>
-              {editedReportingInSideWindow.riskFactor.toFixed(1)}
-            </RiskFactorBox>
-          )}
         </Row>
       </Header>
       <Line style={lineStyle} />

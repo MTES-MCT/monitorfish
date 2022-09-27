@@ -13,6 +13,7 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }, speciesByCode)
     regulatoryReferences: parseRegulatoryReferences(properties.regulatory_references),
     fishingPeriod: parseFishingPeriod(properties.fishing_period),
     region: properties.region,
+    otherInfo: properties.other_info,
     nextId: properties.next_id
   }
 }

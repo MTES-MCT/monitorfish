@@ -20,4 +20,21 @@ context('Vessel visibility', () => {
     // Then
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 12)
   })
+
+  it('Vessels default track depth Should be taken into account', () => {
+    // Given
+    cy.get('*[data-cy="vessel-visibility"]').click()
+    cy.get('[data-cy="global-vessel-track-depth-one-week"] input').click()
+    cy.get('*[data-cy="vessel-visibility"]').click()
+
+    // When
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
+    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.wait(200)
+    cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+
+    // Then
+    cy.get('*[data-cy^="vessel-track-depth-selection"]').click()
+    cy.get('*[data-cy^="vessel-track-depth-one-week"]').should('have.class', 'rs-radio-checked')
+  })
 })

@@ -11,7 +11,7 @@ context('Edit Regulation', () => {
     cy.get('.rs-picker-toggle-placeholder').eq(0).should('have.text', 'Choisir un ensemble')
     cy.get('.rs-btn.rs-btn-default.rs-picker-toggle').eq(0).click()
     cy.get('.rs-picker-select-menu-items').should('exist').should('have.length', 1)
-    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 11)
+    cy.get('.rs-picker-select-menu-item').should('exist').should('have.length', 12)
   })
 
   it('Select, change and remove law type Reg. MEMN', () => {

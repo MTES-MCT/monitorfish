@@ -259,7 +259,7 @@ MMSI: ${reporting.mmsi || ''}`
                       alt="Voir sur la carte"
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
-                        const vesselIdentity = { ...reporting }
+                        const vesselIdentity = { ...reporting, flagState: reporting.value.flagState }
                         dispatch(showVessel(vesselIdentity, false, false))
                         dispatch(getVesselVoyage(vesselIdentity, undefined, false))
                       }}

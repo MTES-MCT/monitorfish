@@ -33,6 +33,7 @@ context('Update Regulation', () => {
     cy.get('[data-cy="tag-Dragues"]').should('exist')
     cy.get('[data-cy="input-Praires Ouest cotentin"]').should('exist')
     cy.get('.rs-picker-toggle-value').eq(0).should('have.text', getDate(new Date().toISOString()))
+    cy.get('[data-cy="regulatory-general-other-info"]').contains('Encore une info importante')
 
     // Then try to save
     cy.get('[data-cy="validate-button"]').contains('Enregister les modifications')

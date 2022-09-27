@@ -45,6 +45,7 @@ const SpeciesRegulationDisplayed = () => {
           {
             otherInfo &&
             <MarkdownWithMargin
+              hasMargin={hasAuthorizedContent || hasUnauthorizedContent}
               data-cy={'regulatory-layers-metadata-species-other-info'}
             >
               <ReactMarkdown>
@@ -63,7 +64,7 @@ const regulatedSpeciesIsNotEmpty = regulatedSpecies => regulatedSpecies?.species
   regulatedSpecies?.allSpecies
 
 const MarkdownWithMargin = styled.div`
-  margin-top: 20px;
+  margin-top: ${p => p.hasMargin ? 20 : 0}px;
 `
 
 export default SpeciesRegulationDisplayed

@@ -151,6 +151,8 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('li', 'Autre remarque')
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-species"]').contains('URX (OURSINS,ETC. NCA)')
 
+    cy.get('*[data-cy="regulatory-layers-metadata-other-info"]').contains('Encore une info importante')
+
     cy.get('*[data-cy="regulatory-layers-metadata-references"]').should('have.length', 1)
   })
 

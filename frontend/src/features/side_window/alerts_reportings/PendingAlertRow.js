@@ -94,7 +94,7 @@ const PendingAlertRow = ({ alert, index, showSilencedAlertForIndex, setShowSilen
               alt={'Voir sur la carte'}
               title={'Voir sur la carte'}
               onClick={() => {
-                const vesselIdentity = { ...alert }
+                const vesselIdentity = { ...alert, flagState: alert.value.flagState }
                 dispatch(showVessel(vesselIdentity, false, false, null))
                 dispatch(getVesselVoyage(vesselIdentity, undefined, false))
               }}

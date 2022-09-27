@@ -31,7 +31,9 @@ export function DateRangeRadio({ defaultValue, onChange }: DateRangeRadioProps) 
           <StyledRadio data-cy="vessel-track-depth-three-days" value={VesselTrackDepth.THREE_DAYS}>
             3 jours
           </StyledRadio>
-          <StyledRadio value={VesselTrackDepth.ONE_WEEK}>1 semaine</StyledRadio>
+          <StyledRadio data-cy="vessel-track-depth-one-week" value={VesselTrackDepth.ONE_WEEK}>
+            1 semaine
+          </StyledRadio>
           <StyledRadio value={VesselTrackDepth.TWO_WEEK}>2 semaines</StyledRadio>
           <StyledRadio value={VesselTrackDepth.ONE_MONTH}>1 mois</StyledRadio>
         </Column>

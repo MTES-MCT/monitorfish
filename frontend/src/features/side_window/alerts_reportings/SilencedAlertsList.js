@@ -53,6 +53,7 @@ const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
   const reactivateSilencedAlertCallback = useCallback(id => {
     dispatch(reactivateSilencedAlert(id))
   }, [dispatch])
+  console.log(sortedAlerts)
 
   return <Content style={contentStyle}>
     <Title style={titleStyle}>
@@ -132,7 +133,7 @@ const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
                       {alert.vesselName}
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={alertTypeStyle}>
-                      {getAlertNameFromType(alert.type)}
+                      {getAlertNameFromType(alert.value.type)}
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={alertNatinfStyle}>
                       {alert.value.natinfCode}

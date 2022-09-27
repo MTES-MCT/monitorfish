@@ -188,6 +188,8 @@ context('Edit Regulation', () => {
 
     // when
     cy.get('[data-cy="regulatory-gears-section"]').scrollIntoView().click()
+    cy.wait(1000)
+    cy.get('[data-cy="unauthorized-all-gears-option"]').should('not.have.class', 'rs-checkbox-checked')
     cy.get('[data-cy="unauthorized-all-gears-option"]').click()
 
     // then

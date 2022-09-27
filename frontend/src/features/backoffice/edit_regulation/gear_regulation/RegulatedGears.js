@@ -108,7 +108,7 @@ const RegulatedGears = props => {
 
       const nextRegulatedGearsObject = {
         ...regulatedGearsObject,
-        [REGULATED_GEARS_KEYS.ALL_GEARS]: categories === formattedAndFilteredCategoriesToGears.length,
+        [REGULATED_GEARS_KEYS.ALL_GEARS]: formattedAndFilteredCategoriesToGears.length > 0 && categories === formattedAndFilteredCategoriesToGears.length,
         [REGULATED_GEARS_KEYS.ALL_TOWED_GEARS]: towedGearCategories === groupsToCategories[REGULATED_GEARS_KEYS.ALL_TOWED_GEARS].length,
         [REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS]: passiveGearCategories === groupsToCategories[REGULATED_GEARS_KEYS.ALL_PASSIVE_GEARS].length,
         [REGULATED_GEARS_KEYS.REGULATED_GEARS]: nextRegulatedGears,

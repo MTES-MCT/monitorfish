@@ -63,6 +63,13 @@ context('LayersSidebar', () => {
     // Back to the search result
     cy.get('*[data-cy="regulatory-search-show-results"]').click()
     cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 1)
+
+    // Back to My Zones
+    cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
+
+    // Clean the search input
+    cy.get('*[data-cy="regulatory-search-clean-input"]').click()
+    cy.get('*[data-cy="regulatory-search-show-results"]').should('not.exist')
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Topic button', () => {

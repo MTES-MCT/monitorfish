@@ -29,6 +29,8 @@ data class ReportingEntity(
     @Basic(optional = false)
     @Column(name = "id", unique = true, nullable = false)
     val id: Int? = null,
+    @Column(name = "vessel_id")
+    val vesselId: Int? = null,
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     @Type(type = "pgsql_enum")
@@ -61,6 +63,7 @@ data class ReportingEntity(
     fun toReporting(mapper: ObjectMapper): Reporting {
         return Reporting(
             id = id,
+            vesselId = vesselId,
             type = type,
             vesselName = vesselName,
             internalReferenceNumber = internalReferenceNumber,
@@ -92,6 +95,7 @@ data class ReportingEntity(
 
         fun fromReporting(reporting: Reporting, mapper: ObjectMapper) = ReportingEntity(
             vesselName = reporting.vesselName,
+            vesselId = reporting.vesselId,
             type = reporting.type,
             internalReferenceNumber = reporting.internalReferenceNumber,
             externalReferenceNumber = reporting.externalReferenceNumber,

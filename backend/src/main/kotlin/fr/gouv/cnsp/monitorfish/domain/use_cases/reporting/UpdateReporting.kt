@@ -20,19 +20,17 @@ class UpdateReporting(private val reportingRepository: ReportingRepository) {
             )
             ReportingType.OBSERVATION -> {
                 currentReporting.value as InfractionSuspicionOrObservationType
-                updatedInfractionSuspicionOrObservation.flagState = currentReporting.value.flagState
 
-                val nextObservation = Observation.fromUpdatedReporting(updatedInfractionSuspicionOrObservation)
+                val nextObservation = Observation.fromUpdatedReporting(updatedInfractionSuspicionOrObservation, currentReporting.value)
                 nextObservation.checkReportingActorAndFieldsRequirements()
 
                 reportingRepository.update(reportingId, nextObservation)
             }
             ReportingType.INFRACTION_SUSPICION -> {
-                currentReporting.value as InfractionSuspicionOrObservationType
-                updatedInfractionSuspicionOrObservation.flagState = currentReporting.value.flagState
+                currentReporting.value as InfractionSuspicion
 
                 val nextInfractionSuspicion = InfractionSuspicion.fromUpdatedReporting(
-                    updatedInfractionSuspicionOrObservation
+                    updatedInfractionSuspicionOrObservation, currentReporting.value
                 )
                 nextInfractionSuspicion.checkReportingActorAndFieldsRequirements()
 

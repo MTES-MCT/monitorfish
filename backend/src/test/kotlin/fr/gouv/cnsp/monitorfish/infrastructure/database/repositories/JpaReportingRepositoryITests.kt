@@ -260,8 +260,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             "Jean Bon",
             "Une observation",
             "Une description",
-            "MEMN",
-            "FR"
+            "MEMN"
         )
 
         // When
@@ -275,7 +274,6 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting.value as Observation).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting.value as Observation).title).isEqualTo(updatedReporting.title)
         assertThat((reporting.value as Observation).description).isEqualTo(updatedReporting.description)
-        assertThat((reporting.value as Observation).seaFront).isEqualTo(updatedReporting.seaFront)
         assertThat((reporting.value as Observation).flagState).isEqualTo(updatedReporting.flagState)
     }
 }

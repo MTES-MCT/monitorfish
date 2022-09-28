@@ -9,8 +9,4 @@ class UpdatedInfractionSuspicionOrObservation(
     val authorContact: String? = null,
     val title: String,
     val description: String? = null,
-    val natinfCode: String? = null,
-    var seaFront: String? = null,
-    var flagState: String? = null,
-    val dml: String? = null
-)
+    val natinfCode: String? = null)

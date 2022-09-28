@@ -85,22 +85,20 @@ context('Reportings', () => {
     cy.get('[data-cy="new-reporting-title"]').type(
       '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace} km'
     )
-    cy.get('[data-cy="new-reporting-select-dml"]').click()
-    cy.get('[data-key="DML 13"] > .rs-picker-select-menu-item').click()
+    cy.get('[data-cy="new-reporting-select-natinf"]').click()
+    cy.get('.rs-picker-search-bar-input').type('maille{enter}')
     cy.wait(500)
     cy.get('[data-cy="new-reporting-create-button"]').click()
 
     // Then
     cy.wait('@updateReporting').then(({ request, response }) => {
-      expect(request.body.dml).contains('DML 13')
+      expect(request.body.natinfCode).contains('23581')
       expect(request.body.title).contains('Suspicion de chalutage dans les 3  km')
       expect(response && response.statusCode).equal(200)
     })
 
-    // The reporting is moved in the MED facade
-    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 0)
-    cy.get('[data-cy="side-window-sub-menu-MED"]').click()
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 1)
-    cy.get('*[data-cy="side-window-current-reportings"]').first().contains('DML 13')
+    cy.get('*[data-cy="side-window-current-reportings"]').first().contains('DML 29')
+    cy.get('*[data-cy="side-window-current-reportings"]').first().contains('23581')
   })
 })

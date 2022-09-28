@@ -57,6 +57,7 @@ export type InfractionSuspicion = {
   reportingActor: string
   seaFront: SeaFront
   title: string
+  type: string
   unit: string | null
 }
 
@@ -67,6 +68,7 @@ export type Observation = {
   flagState: string
   reportingActor: string
   title: string
+  type: string
   unit: string | null
 }
 

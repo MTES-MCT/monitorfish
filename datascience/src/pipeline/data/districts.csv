@@ -1,55 +1,55 @@
-district_code,district,department_code,department,dml
-NI,Nice,6,Alpes-Maritimes,DML 06
-MA,Marseille,13,Bouches-du-Rhône,DML 13
-RI,Marseille (Rif),13,Bouches-du-Rhône,DML 13
-MT,Martigues,13,Bouches-du-Rhône,DML 13
-CN,Caen,14,Calvados,DML 14
-IO,Ile D'Oleron,17,Charente-Maritime,DML 17
-LR,La Rochelle,17,Charente-Maritime,DML 17
-MN,Marennes,17,Charente-Maritime,DML 17
-PL,Paimpol,22,Côtes-d'Armor,DML 22
-SB,Saint Brieuc,22,Côtes-d'Armor,DML 22
-AD,Audierne,29,Finistère,DML 29
-BR,Brest,29,Finistère,DML 29
-CM,Camaret,29,Finistère,DML 29
-CC,Concarneau,29,Finistère,DML 29
-DZ,Douarnenez,29,Finistère,DML 29
-GV,Le Guilvinec,29,Finistère,DML 29
-MX,Morlaix,29,Finistère,DML 29
-AC,Arcachon,33,Gironde,DML 33
-BX,Bordeaux,33,Gironde,DML 33
-ST,Sete,34,Hérault,DML 34
-SM,Saint Malo,35,Ille-et-Vilaine,DML 35
-NA,Nantes,44,Loire-Atlantique,DML 44
-SN,Saint Nazaire,44,Loire-Atlantique,DML 44
-CH,Cherbourg,50,Manche,DML 50
-AY,Auray,56,Morbihan,DML 56
-LO,Lorient,56,Morbihan,DML 56
-VA,Vannes,56,Morbihan,DML 56
-DK,Dunkerque,59,Nord,DML 59
-BL,Boulogne Sur Mer,62,Pas-de-Calais,DML 62
-BA,Bayonne,64,Pyrénées-Atlantiques,DML 64
-PV,Port Vendres,66,Pyrénées-Orientales,DML 66
-DP,Dieppe,76,Seine-Maritime,DML 76
-FC,Fecamp,76,Seine-Maritime,DML 76
-LH,Le Havre,76,Seine-Maritime,DML 76
-RO,Rouen,76,Seine-Maritime,DML 76
-TL,Toulon,83,Var,DML 83
-YE,Ile D'Yeu,85,Vendée,DML 85
-LS,Les Sables D'Olonne,85,Vendée,DML 85
-NO,Noirmoutier,85,Vendée,DML 85
-PP,Pointe A Pitre,971,Guadeloupe,DM 971
-FF,Fort De France,972,Martinique,DM 972
-CY,Cayenne,973,Guyane,DM 973
-RU,Saint Denis De La Reunion,974,Réunion,DM SOI
-SP,Saint Pierre Et Miquelon,975,Saint-Pierre-et-Miquelon,DM 975
-DI,Dzaoudzi (Mayotte),976,Mayotte,DM SOI
-MY,Mayotte ,976,Mayotte,DM SOI
-BY,Saint Barthelemy,977,Saint-Barthélemy,DM 972
-SW,Saint Martin,978,Saint-Martin,DM 972
-FK,Port Aux Francais,984,Port Aux Français,DM SOI
-MU,Mata Utu (Wallis),986,Wallis et Futuna,
-PY,Papeete,987,Polynésie Française,
-NC,Noumea,988,Nouvelle-Calédonie,DAM NC
-AJ,Ajaccio,2A,Corse-du-Sud,DML C
-BI,Bastia,2B,Haute-Corse,DML C
+district_code,district,department_code,department,dml,facade
+NI,Nice,6,Alpes-Maritimes,DML 06,MED
+MA,Marseille,13,Bouches-du-Rhône,DML 13,MED
+RI,Marseille (Rif),13,Bouches-du-Rhône,DML 13,MED
+MT,Martigues,13,Bouches-du-Rhône,DML 13,MED
+CN,Caen,14,Calvados,DML 14,MEMN
+IO,Ile D'Oleron,17,Charente-Maritime,DML 17,SA
+LR,La Rochelle,17,Charente-Maritime,DML 17,SA
+MN,Marennes,17,Charente-Maritime,DML 17,SA
+PL,Paimpol,22,Côtes-d'Armor,DML 22,NAMO
+SB,Saint Brieuc,22,Côtes-d'Armor,DML 22,NAMO
+AD,Audierne,29,Finistère,DML 29,NAMO
+BR,Brest,29,Finistère,DML 29,NAMO
+CM,Camaret,29,Finistère,DML 29,NAMO
+CC,Concarneau,29,Finistère,DML 29,NAMO
+DZ,Douarnenez,29,Finistère,DML 29,NAMO
+GV,Le Guilvinec,29,Finistère,DML 29,NAMO
+MX,Morlaix,29,Finistère,DML 29,NAMO
+AC,Arcachon,33,Gironde,DML 33,SA
+BX,Bordeaux,33,Gironde,DML 33,SA
+ST,Sete,34,Hérault,DML 34,MED
+SM,Saint Malo,35,Ille-et-Vilaine,DML 35,NAMO
+NA,Nantes,44,Loire-Atlantique,DML 44,NAMO
+SN,Saint Nazaire,44,Loire-Atlantique,DML 44,NAMO
+CH,Cherbourg,50,Manche,DML 50,MEMN
+AY,Auray,56,Morbihan,DML 56,NAMO
+LO,Lorient,56,Morbihan,DML 56,NAMO
+VA,Vannes,56,Morbihan,DML 56,NAMO
+DK,Dunkerque,59,Nord,DML 59,MEMN
+BL,Boulogne Sur Mer,62,Pas-de-Calais,DML 62,MEMN
+BA,Bayonne,64,Pyrénées-Atlantiques,DML 64,SA
+PV,Port Vendres,66,Pyrénées-Orientales,DML 66,MED
+DP,Dieppe,76,Seine-Maritime,DML 76,MEMN
+FC,Fecamp,76,Seine-Maritime,DML 76,MEMN
+LH,Le Havre,76,Seine-Maritime,DML 76,MEMN
+RO,Rouen,76,Seine-Maritime,DML 76,MEMN
+TL,Toulon,83,Var,DML 83,MED
+YE,Ile D'Yeu,85,Vendée,DML 85,NAMO
+LS,Les Sables D'Olonne,85,Vendée,DML 85,NAMO
+NO,Noirmoutier,85,Vendée,DML 85,NAMO
+PP,Pointe A Pitre,971,Guadeloupe,DM 971,OUTREMEROA
+FF,Fort De France,972,Martinique,DM 972,OUTREMEROA
+CY,Cayenne,973,Guyane,DM 973,OUTREMEROA
+RU,Saint Denis De La Reunion,974,Réunion,DM SOI,OUTREMEROI
+SP,Saint Pierre Et Miquelon,975,Saint-Pierre-et-Miquelon,DM 975,OUTREMEROA
+DI,Dzaoudzi (Mayotte),976,Mayotte,DM SOI,OUTREMEROI
+MY,Mayotte ,976,Mayotte,DM SOI,OUTREMEROI
+BY,Saint Barthelemy,977,Saint-Barthélemy,DM 972,OUTREMEROA
+SW,Saint Martin,978,Saint-Martin,DM 972,OUTREMEROA
+FK,Port Aux Francais,984,Port Aux Français,DM SOI,OUTREMEROI
+MU,Mata Utu (Wallis),986,Wallis et Futuna,,
+PY,Papeete,987,Polynésie Française,,
+NC,Noumea,988,Nouvelle-Calédonie,DAM NC,
+AJ,Ajaccio,2A,Corse-du-Sud,DML C,MED
+BI,Bastia,2B,Haute-Corse,DML C,MED

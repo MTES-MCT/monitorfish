@@ -104,33 +104,8 @@ export const getYearsToReportingList = (
   return nextYearsToReporting
 }
 
-export const FrenchDMLs = [
-  'DML 62/80',
-  'DML 76',
-  'DML 14',
-  'DML 50',
-  'DML 35',
-  'DML 22',
-  'DML 29',
-  'DML 56',
-  'DML 44',
-  'DML 17',
-  'DML 33',
-  'DML 85',
-  'DML 64/40',
-  'DML 66/11',
-  'DML 34/30',
-  'DML 13',
-  'DML 83',
-  'DML 06',
-  'DML 2a',
-  'DML 2b',
-  'DML 76/27'
-]
-
-// TODO Improve typings logic to avoid double switch.
-export const getReportingOrigin = (reporting: Reporting, isHovering: boolean): string => {
-  if (reporting.type === ReportingType.ALERT) {
+export const getReportingOrigin = (reporting, isHovering) => {
+  if (reporting.type === ReportingType.ALERT.code) {
     return 'Alerte auto.'
   }
 

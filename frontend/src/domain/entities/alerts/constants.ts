@@ -110,7 +110,6 @@ export const ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS: Record<
   }
 }
 
-// TODO Is it the same as `VesselTrackDepth`?
 export enum SilencedAlertPeriod {
   CUSTOM = 'CUSTOM',
   ONE_DAY = 'ONE_DAY',

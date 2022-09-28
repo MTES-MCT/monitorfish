@@ -16,14 +16,15 @@ import { getAlertNameFromType, getSilencedAlertPeriodText } from './utils'
 
 import type { PendingAlert, SilencedAlert, SilencedAlertPeriodRequest } from '../../../domain/types/alert'
 import type { CSSProperties } from 'react'
+import type { Promisable } from 'type-fest'
 
 // TODO Type these props.
 export type PendingAlertRowProps = {
   alert: PendingAlert
   index: number
-  setShowSilencedAlertForIndex: any
-  setSilencedAlertId: any
-  showSilencedAlertForIndex: any
+  setShowSilencedAlertForIndex: (index: number) => Promisable<void>
+  setSilencedAlertId: (id: string) => Promisable<void>
+  showSilencedAlertForIndex?: number
 }
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way

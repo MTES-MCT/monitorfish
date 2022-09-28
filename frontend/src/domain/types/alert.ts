@@ -1,68 +1,55 @@
-// TODO Find a way to associate `Alert`, `PendingAlert` and `SilencedAlert` via data/extra props.
-
-export enum AlertType {
-  'ACTIVE' = 'ACTIVE',
-  'SILENCED' = 'SILENCED'
+export enum PendingAlertValueType {
+  FRENCH_EEZ_FISHING_ALERT = 'FRENCH_EEZ_FISHING_ALERT',
+  MISSING_FAR_ALERT = 'MISSING_FAR_ALERT',
+  THREE_MILES_TRAWLING_ALERT = 'THREE_MILES_TRAWLING_ALERT',
+  TWELVE_MILES_FISHING_ALERT = 'TWELVE_MILES_FISHING_ALERT'
 }
 
-export type LEGACY_Alert = {
+export type LEGACY_PendingAlert = {
+  creationDate: string
   externalReferenceNumber: string
   id: string
-  internalReferenceNumber: string
-  ircs: string
-  value: AlertValueForPending | AlertValueForPNOAndLANWeightTolerance
-  vesselIdentifier: string
-  vesselName: string
-}
-
-export type LEGACY_ActiveAlert = LEGACY_Alert & {
-  creationDate: string
   infraction: {
     infraction: string
     infractionCategory: string
     natinfCode: string
     regulation: string
   }
+  internalReferenceNumber: string
+  ircs: string
   tripNumber: string
+  value: PendingAlertValue
+  vesselIdentifier: string
+  vesselName: string
 }
 
-export type ActiveAlert = LEGACY_ActiveAlert & {
-  isValidated: boolean
-  type: AlertType.ACTIVE
-}
-
-export type LEGACY_SilencedAlert = LEGACY_Alert & {
-  isReactivated: boolean | null
-  silencedAfterDate: Date
-  silencedBeforeDate: Date
-}
-
-export type SilencedAlert = LEGACY_SilencedAlert & {
-  silencedPeriod?: SilencedAlertPeriodRequest
-  type: AlertType.SILENCED
-}
-
-export type AlertValueForPending = {
+export type PendingAlertValue = {
   flagState: string
   natinfCode: string | null
   seaFront: string
   speed: number
-  type: '' // ???
+  type: PendingAlertValueType
 }
 
-export type AlertValueForPNOAndLANWeightTolerance = {
-  catchesOverTolerance: PNOAndLANWeightToleranceCatches[]
-  lanOperationNumber: string
-  minimumWeightThreshold: number
-  name: string
-  percentOfTolerance: number
-  pnoOperationNumber: string
-  type: 'THREE_MILES_TRAWLING_ALERT' | 'FRENCH_EEZ_FISHING_ALERT' | 'TWELVE_MILES_FISHING_ALERT' | 'MISSING_FAR_ALERT'
+export type PendingAlert = LEGACY_PendingAlert & {
+  isValidated: boolean
 }
 
-export type PNOAndLANWeightToleranceCatches = {
-  lan: Object
-  pno: Object
+export type LEGACY_SilencedAlert = {
+  externalReferenceNumber: string
+  id: string
+  internalReferenceNumber: string
+  ircs: string
+  isReactivated: boolean | null
+  silencedAfterDate: Date
+  silencedBeforeDate: Date
+  value: PendingAlertValue
+  vesselIdentifier: string
+  vesselName: string
+}
+
+export type SilencedAlert = LEGACY_SilencedAlert & {
+  silencedPeriod?: SilencedAlertPeriodRequest
 }
 
 export type SilencedAlertPeriodRequest = {

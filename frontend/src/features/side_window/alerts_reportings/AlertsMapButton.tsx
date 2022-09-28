@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 
-import { sideWindowMenu } from '../../../domain/entities/sideWindow'
 import { closeSideWindow, openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes.svg'
+import { SIDE_WINDOW_MENU } from '../constants'
 
 export function AlertsMapButton() {
   const dispatch = useAppDispatch()
@@ -18,15 +18,15 @@ export function AlertsMapButton() {
       data-cy="alerts-button"
       healthcheckTextWarning={!!healthcheckTextWarning}
       isHidden={Boolean(previewFilteredVesselsMode)}
-      isVisible={openedSideWindowTab === sideWindowMenu.ALERTS.code}
+      isVisible={openedSideWindowTab === SIDE_WINDOW_MENU.ALERTS.code}
       onClick={() => {
-        if (!sideWindowIsOpen || (sideWindowIsOpen && openedSideWindowTab !== sideWindowMenu.ALERTS.code)) {
-          dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))
+        if (!sideWindowIsOpen || (sideWindowIsOpen && openedSideWindowTab !== SIDE_WINDOW_MENU.ALERTS.code)) {
+          dispatch(openSideWindowTab(SIDE_WINDOW_MENU.ALERTS.code))
 
           return
         }
 
-        if (sideWindowIsOpen && openedSideWindowTab === sideWindowMenu.ALERTS.code) {
+        if (sideWindowIsOpen && openedSideWindowTab === SIDE_WINDOW_MENU.ALERTS.code) {
           dispatch(closeSideWindow())
         }
       }}

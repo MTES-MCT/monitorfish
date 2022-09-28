@@ -2,15 +2,15 @@
 
 import ky from 'ky'
 
-import {
-  ActiveAlert,
-  AlertType,
-  LEGACY_ActiveAlert,
+import { ApiError } from '../libs/ApiError'
+
+import type {
+  PendingAlert,
+  LEGACY_PendingAlert,
   LEGACY_SilencedAlert,
   SilencedAlert,
   SilencedAlertPeriodRequest
 } from '../domain/types/alert'
-import { ApiError } from '../libs/ApiError'
 
 export const ALERTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les alertes opérationelles"
 export const VALIDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu valider l'alerte opérationelle"
@@ -20,11 +20,10 @@ export const DELETE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu réactiv
 /**
  * Type-discriminate active alerts
  */
-function normalizeActiveAlert(alert: LEGACY_ActiveAlert): ActiveAlert {
+function normalizePendingAlert(alert: LEGACY_PendingAlert): PendingAlert {
   return {
     ...alert,
-    isValidated: false,
-    type: AlertType.ACTIVE
+    isValidated: false
   }
 }
 
@@ -33,8 +32,7 @@ function normalizeActiveAlert(alert: LEGACY_ActiveAlert): ActiveAlert {
  */
 function normalizeSilencedAlert(alert: LEGACY_SilencedAlert): SilencedAlert {
   return {
-    ...alert,
-    type: AlertType.SILENCED
+    ...alert
   }
 }
 
@@ -43,11 +41,11 @@ function normalizeSilencedAlert(alert: LEGACY_SilencedAlert): SilencedAlert {
  *
  * @throws {@link ApiError}
  */
-async function getOperationalAlertsFromAPI(): Promise<ActiveAlert[]> {
+async function getOperationalAlertsFromAPI(): Promise<PendingAlert[]> {
   try {
-    const data = await ky.get('/bff/v1/operational_alerts').json<LEGACY_ActiveAlert[]>()
+    const data = await ky.get('/bff/v1/operational_alerts').json<LEGACY_PendingAlert[]>()
 
-    return data.map(normalizeActiveAlert)
+    return data.map(normalizePendingAlert)
   } catch (err) {
     throw new ApiError(ALERTS_ERROR_MESSAGE, err)
   }

@@ -2,22 +2,22 @@ import { validateAlertFromAPI } from '../../../api/alert'
 import { deleteListItems } from '../../../utils/deleteListItems'
 import { updateListItemsProp } from '../../../utils/updateListItemsProp'
 import { Vessel } from '../../entities/vessel'
-import { setAlerts } from '../../shared_slices/Alert'
+import { setPendingAlerts } from '../../shared_slices/Alert'
 import { setError } from '../../shared_slices/Global'
 import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
 import getVesselReportings from '../vessel/getVesselReportings'
 
 import type { AppGetState } from '../../../store'
-import type { ActiveAlert } from '../../types/alert'
+import type { PendingAlert } from '../../types/alert'
 
 export const validateAlert = (id: string) => (dispatch, getState: AppGetState) => {
-  const previousAlerts = getState().alert.alerts
+  const previousAlerts = getState().alert.pendingAlerts
   const previousAlertsWithValidatedFlag = setAlertAsValidated(previousAlerts, id)
-  dispatch(setAlerts(previousAlertsWithValidatedFlag))
+  dispatch(setPendingAlerts(previousAlertsWithValidatedFlag))
 
   const timeout = setTimeout(() => {
-    const previousAlertsWithoutValidated = deleteListItems(getState().alert.alerts, 'id', id)
-    dispatch(setAlerts(previousAlertsWithoutValidated))
+    const previousAlertsWithoutValidated = deleteListItems(getState().alert.pendingAlerts, 'id', id)
+    dispatch(setPendingAlerts(previousAlertsWithoutValidated))
   }, 3200)
 
   validateAlertFromAPI(id)
@@ -39,12 +39,12 @@ export const validateAlert = (id: string) => (dispatch, getState: AppGetState) =
     })
     .catch(error => {
       clearTimeout(timeout)
-      dispatch(setAlerts(previousAlerts))
+      dispatch(setPendingAlerts(previousAlerts))
       dispatch(setError(error))
     })
 }
 
-function setAlertAsValidated(previousAlerts: ActiveAlert[], id: string): ActiveAlert[] {
+function setAlertAsValidated(previousAlerts: PendingAlert[], id: string): PendingAlert[] {
   return updateListItemsProp(previousAlerts, 'id', id, {
     isValidated: true
   })

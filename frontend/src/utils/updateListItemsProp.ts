@@ -13,18 +13,6 @@ export function updateListItemsProp<
   ItemStringKeysWithNativeValues = PickStringKeysWithNativeValues<Item>,
   Key extends keyof ItemStringKeysWithNativeValues = keyof ItemStringKeysWithNativeValues,
   Value extends ValueOf<ItemStringKeysWithNativeValues, Key> = ValueOf<ItemStringKeysWithNativeValues, Key>
->(list: Item[], whereProp: Key, equals: Value, set: Partial<Item>): Item[]
-export function updateListItemsProp<
-  Item extends Record<any, any> = Record<any, any>,
-  ItemStringKeysWithNativeValues = PickStringKeysWithNativeValues<Item>,
-  Key extends keyof ItemStringKeysWithNativeValues = keyof ItemStringKeysWithNativeValues,
-  Value extends ValueOf<ItemStringKeysWithNativeValues, Key> = ValueOf<ItemStringKeysWithNativeValues, Key>
->(list: Item[], whereProp: Key, satisfies: (value: Value) => boolean, set: Partial<Item>): Item[]
-export function updateListItemsProp<
-  Item extends Record<any, any> = Record<any, any>,
-  ItemStringKeysWithNativeValues = PickStringKeysWithNativeValues<Item>,
-  Key extends keyof ItemStringKeysWithNativeValues = keyof ItemStringKeysWithNativeValues,
-  Value extends ValueOf<ItemStringKeysWithNativeValues, Key> = ValueOf<ItemStringKeysWithNativeValues, Key>
 >(list: Item[], whereProp: Key, equalsOrSatisfies: Value | ((value: Value) => boolean), set: Partial<Item>): Item[] {
   const predicate: (obj: Item) => boolean =
     typeof equalsOrSatisfies === 'function'

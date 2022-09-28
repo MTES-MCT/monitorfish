@@ -4,6 +4,7 @@ import { getLocalStorageState } from '../../utils'
 import { UserType } from '../entities/beaconMalfunction'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel'
 
+import type { SideWindowMenuKey } from '../../features/side_window/constants'
 import type { MapToolType } from '../entities/map'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -22,7 +23,8 @@ export type GlobalState = {
   lastSearchedVessels: any[]
   leftBoxOpened: any
   mapToolOpened: MapToolType | undefined
-  openedSideWindowTab: string | undefined
+  // TODO Make that an enum.
+  openedSideWindowTab: SideWindowMenuKey | undefined
   // TODO Rename this prop.
   // TODO Investigate that. Should be a defined boolean.
   previewFilteredVesselsMode: boolean | undefined
@@ -106,12 +108,8 @@ export const globalSlice = createSlice({
 
     /**
      * Open a side window tab
-     * @function openSideWindowTab
-     * @memberOf GlobalReducer
-     * @param {Object=} state
-     * @param {{payload: string}} action - The tab to show, see `sideWindowMenu`
      */
-    openSideWindowTab(state, action) {
+    openSideWindowTab(state, action: PayloadAction<SideWindowMenuKey>) {
       state.openedSideWindowTab = action.payload
     },
 
@@ -172,12 +170,8 @@ export const globalSlice = createSlice({
 
     /**
      * Set the left box opened as LeftBoxOpened, so the other boxes can close
-     * @function setLeftBoxOpened
-     * @memberOf GlobalReducer
-     * @param {Object=} state
-     * @param {{payload: string<LeftBoxOpened>}} action - the oepend box
      */
-    setLeftBoxOpened(state, action) {
+    setLeftBoxOpened(state, action: PayloadAction<any>) {
       state.leftBoxOpened = action.payload
     },
 

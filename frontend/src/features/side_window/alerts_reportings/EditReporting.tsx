@@ -3,13 +3,12 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
+import { isReportingWithPendingAlert } from '../../../domain/use_cases/alert/utils'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
 import ReportingForm from '../../vessel_sidebar/reporting/current/ReportingForm'
-
-import type { AlertValueForPending } from '../../../domain/types/alert'
 
 export function EditReporting() {
   const dispatch = useAppDispatch()
@@ -44,17 +43,15 @@ export function EditReporting() {
           <CloseIcon onClick={() => dispatch(setEditedReportingInSideWindow())} style={closeIconStyle} />
         </Row>
         <Row style={rowStyle(10)}>
-          {/* TODO Remove the `as` as soon as the discriminator is added. */}
-          {editedReportingInSideWindow && (editedReportingInSideWindow.value as AlertValueForPending).flagState && (
-            <Flag
-              rel="preload"
-              src={`${baseUrl}/flags/${
-                // TODO Remove the `as` as soon as the discriminator is added.
-                (editedReportingInSideWindow.value as AlertValueForPending).flagState.toLowerCase()
-              }.svg`}
-              style={flagStyle}
-            />
-          )}
+          {editedReportingInSideWindow &&
+            isReportingWithPendingAlert(editedReportingInSideWindow) &&
+            editedReportingInSideWindow.value.flagState && (
+              <Flag
+                rel="preload"
+                src={`${baseUrl}/flags/${editedReportingInSideWindow.value.flagState.toLowerCase()}.svg`}
+                style={flagStyle}
+              />
+            )}
           <VesselName
             data-cy="side-window-beacon-malfunctions-detail-vessel-name"
             style={vesselNameStyle}

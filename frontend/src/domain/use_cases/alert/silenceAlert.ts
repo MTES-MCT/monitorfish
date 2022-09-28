@@ -1,30 +1,32 @@
 import { silenceAlertFromAPI } from '../../../api/alert'
 import { deleteListItems } from '../../../utils/deleteListItems'
-import { updateListItemsProp } from '../../../utils/updateListItemsProp'
 import { Vessel } from '../../entities/vessel'
-import { setAlerts, setSilencedAlerts } from '../../shared_slices/Alert'
+import {
+  addToPendingAlertsBeingSilenced,
+  removeFromPendingAlertsBeingSilenced,
+  setPendingAlerts,
+  setSilencedAlerts
+} from '../../shared_slices/Alert'
 import { setError } from '../../shared_slices/Global'
 import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
 
 import type { AppGetState } from '../../../store'
-import type { SilencedAlert, SilencedAlertPeriodRequest } from '../../types/alert'
+import type { SilencedAlertPeriodRequest } from '../../types/alert'
 
 /**
  * Silence an alert
  */
 export const silenceAlert =
   (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, id: string) => (dispatch, getState: AppGetState) => {
-    const previousAlerts = getState().alert.alerts
+    const previousAlerts = getState().alert.pendingAlerts
     const previousSilencedAlerts = getState().alert.silencedAlerts
-    // TODO Investigate the mechanism here: why is a silenced alert in the active alert array?
-    // We need a better principle than creating a temporary wrong prop to "enable" the <AlertTransition />
-    // and then timeout to run the real update
-    const previousAlertsWithSilencedFlag = setSilencedAlertAs(previousAlerts as any, id, silencedAlertPeriodRequest)
-    dispatch(setAlerts(previousAlertsWithSilencedFlag as any))
 
+    dispatch(addToPendingAlertsBeingSilenced(id))
     const timeout = setTimeout(() => {
-      const previousAlertsWithoutSilenced = deleteListItems(getState().alert.alerts, 'id', id)
-      dispatch(setAlerts(previousAlertsWithoutSilenced))
+      const nextPendingAlerts = deleteListItems(getState().alert.pendingAlerts, 'id', id)
+      dispatch(setPendingAlerts(nextPendingAlerts))
+
+      dispatch(removeFromPendingAlertsBeingSilenced(id))
     }, 3200)
 
     silenceAlertFromAPI(id, silencedAlertPeriodRequest)
@@ -37,24 +39,14 @@ export const silenceAlert =
           })
         )
 
-        const previousSilencedAlertsWithNewSilencedAlert = [silencedAlert, ...previousSilencedAlerts]
-        dispatch(setSilencedAlerts(previousSilencedAlertsWithNewSilencedAlert))
+        const nextSilencedAlerts = [silencedAlert, ...previousSilencedAlerts]
+        dispatch(setSilencedAlerts(nextSilencedAlerts))
       })
       .catch(error => {
         clearTimeout(timeout)
 
-        dispatch(setAlerts(previousAlerts))
+        dispatch(setPendingAlerts(previousAlerts))
         dispatch(setSilencedAlerts(previousSilencedAlerts))
         dispatch(setError(error))
       })
   }
-
-function setSilencedAlertAs(
-  previousAlerts: SilencedAlert[],
-  id: string,
-  silencedAlertPeriodRequest: SilencedAlertPeriodRequest
-): SilencedAlert[] {
-  return updateListItemsProp(previousAlerts, 'id', id, {
-    silencedPeriod: silencedAlertPeriodRequest
-  })
-}

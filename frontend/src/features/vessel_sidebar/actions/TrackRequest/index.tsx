@@ -22,13 +22,14 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   const dispatch = useAppDispatch()
   const { healthcheckTextWarning } = useAppSelector(state => state.global)
   const { rightMenuIsOpen } = useAppSelector(state => state.global)
+  const { defaultVesselTrackDepth } = useAppSelector(state => state.map)
   const { selectedVesselTrackRequest } = useAppSelector(state => state.vessel)
   const { selectedVesselIdentity } = useAppSelector(state => state.vessel)
   const [isOpenedFromClick, setIsOpenedFromClick] = useState(false)
 
   const dateRangePickerDefaultValue = useMemo(
     () =>
-      selectedVesselTrackRequest.trackDepth === VesselTrackDepth.CUSTOM
+      selectedVesselTrackRequest && selectedVesselTrackRequest.trackDepth === VesselTrackDepth.CUSTOM
         ? ([selectedVesselTrackRequest.afterDateTime, selectedVesselTrackRequest.beforeDateTime] as DateRange)
         : undefined,
     [selectedVesselTrackRequest]
@@ -96,13 +97,13 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
           <p>Afficher la piste VMS du navire depuis :</p>
           <Field>
             <DateRangeRadio
-              defaultValue={selectedVesselTrackRequest.trackDepth}
+              defaultValue={selectedVesselTrackRequest?.trackDepth || defaultVesselTrackDepth}
               onChange={handleDateRangeRadioChange}
             />
           </Field>
           <Field>
             <DateRangePicker
-              key={selectedVesselTrackRequest.trackDepth}
+              key={selectedVesselTrackRequest?.trackDepth}
               defaultValue={dateRangePickerDefaultValue}
               isLabelHidden
               label="Plage de temps sur mesure"

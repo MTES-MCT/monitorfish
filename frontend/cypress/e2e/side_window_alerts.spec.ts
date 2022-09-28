@@ -34,6 +34,8 @@ context('Alerts', () => {
     cy.get('*[data-cy="side-window-alerts-show-vessel"]').first().click({ force: true })
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
     cy.wait('@showVesselVoyageOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
+
+    cy.get('*[data-cy^="side-window-silenced-alerts-list"]').children().eq(1).children().contains('3 milles - Chaluts')
   })
 
   it('Alerts Should be filtered based on the search input', () => {

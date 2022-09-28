@@ -4,7 +4,6 @@ import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 import { reportingIsAnInfractionSuspicion, ReportingType } from '../entities/reporting'
 import { atLeastOneVesselSelected, Vessel, VesselSidebarTab } from '../entities/vessel'
-import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 
 import type { FishingActivityShowedOnMap, TrackRequest, VesselIdentity, VesselPosition } from '../types/vessel'
 
@@ -52,7 +51,7 @@ export type VesselState = {
   selectedVessel: any | null
   selectedVesselIdentity: VesselIdentity | null
   selectedVesselPositions: VesselPosition[] | null
-  selectedVesselTrackRequest: TrackRequest
+  selectedVesselTrackRequest: TrackRequest | null
   tripMessagesLastToFormerDEPDateTimes: any[]
   uniqueVesselsDistricts: any[]
   uniqueVesselsSpecies: any[]
@@ -73,11 +72,7 @@ const INITIAL_STATE: VesselState = {
   selectedVessel: null,
   selectedVesselIdentity: null,
   selectedVesselPositions: null,
-  selectedVesselTrackRequest: {
-    afterDateTime: null,
-    beforeDateTime: null,
-    trackDepth: VesselTrackDepth.TWELVE_HOURS
-  },
+  selectedVesselTrackRequest: null,
   tripMessagesLastToFormerDEPDateTimes: [],
   uniqueVesselsDistricts: [],
   uniqueVesselsSpecies: [],
@@ -166,11 +161,7 @@ const vesselSlice = createSlice({
       state.vesselSidebarIsOpen = false
       state.selectedVessel = null
       state.selectedVesselIdentity = null
-      state.selectedVesselTrackRequest = {
-        afterDateTime: null,
-        beforeDateTime: null,
-        trackDepth: VesselTrackDepth.TWELVE_HOURS
-      }
+      state.selectedVesselTrackRequest = null
       state.isFocusedOnVesselSearch = false
       state.tripMessagesLastToFormerDEPDateTimes = []
 

@@ -84,13 +84,13 @@ export function ReportingForm({
     if (savedReporting) {
       fillForm(savedReporting)
     }
-  }, [editedReporting])
+  }, [editedReporting, reportingLocalStorageKey])
 
   useEffect(() => {
     if (reportingType === ReportingTypeCharacteristics.OBSERVATION.code) {
       setNatinfCode('')
     }
-  }, [reportingType, reportingLocalStorageKey])
+  }, [reportingType])
 
   function checkErrors(reportingValue) {
     const {

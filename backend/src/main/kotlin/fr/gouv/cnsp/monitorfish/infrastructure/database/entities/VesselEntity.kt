@@ -27,7 +27,7 @@ import javax.persistence.*
 data class VesselEntity(
     @Id
     @Column(name = "id")
-    val id: Int? = null,
+    val id: Int,
     @Column(name = "cfr")
     val internalReferenceNumber: String? = null,
     @Column(name = "mmsi")
@@ -136,39 +136,5 @@ data class VesselEntity(
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(VesselEntity::class.java)
-
-        fun fromVessel(vessel: Vessel): VesselEntity {
-            return VesselEntity(
-                id = vessel.id,
-                internalReferenceNumber = vessel.internalReferenceNumber,
-                ircs = vessel.ircs,
-                mmsi = vessel.mmsi,
-                externalReferenceNumber = vessel.externalReferenceNumber,
-                vesselName = vessel.vesselName,
-                flagState = vessel.flagState?.alpha2,
-                width = vessel.width,
-                length = vessel.length,
-                district = vessel.district,
-                districtCode = vessel.districtCode,
-                gauge = vessel.gauge,
-                registryPort = vessel.registryPort,
-                power = vessel.power,
-                vesselType = vessel.vesselType,
-                sailingCategory = vessel.sailingCategory,
-                sailingType = vessel.sailingType,
-                declaredFishingGears = vessel.declaredFishingGears,
-                navigationLicenceExpirationDate = vessel.navigationLicenceExpirationDate,
-                operatorName = vessel.operatorName,
-                operatorPhones = vessel.operatorPhones,
-                operatorEmail = vessel.operatorEmail,
-                proprietorName = vessel.proprietorName,
-                proprietorPhones = vessel.proprietorPhones,
-                proprietorEmails = vessel.proprietorEmails,
-                vesselPhones = vessel.vesselPhones,
-                vesselEmails = vessel.vesselEmails,
-                beaconNumber = vessel.beaconNumber,
-                underCharter = vessel.underCharter
-            )
-        }
     }
 }

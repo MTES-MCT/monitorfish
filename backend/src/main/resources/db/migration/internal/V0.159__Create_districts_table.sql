@@ -3,5 +3,6 @@ create table public.districts (
     district VARCHAR,
     department_code VARCHAR,
     department VARCHAR,
-    dml VARCHAR
+    dml VARCHAR,
+    facade VARCHAR
 );

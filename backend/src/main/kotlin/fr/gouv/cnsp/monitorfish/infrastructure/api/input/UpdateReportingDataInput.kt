@@ -10,8 +10,7 @@ class UpdateReportingDataInput(
     val authorContact: String? = null,
     val title: String,
     val description: String? = null,
-    val natinfCode: String? = null,
-    val dml: String? = null
+    val natinfCode: String? = null
 ) {
     fun toUpdatedReportingValues() = UpdatedInfractionSuspicionOrObservation(
         reportingActor = this.reportingActor,
@@ -20,7 +19,6 @@ class UpdateReportingDataInput(
         authorContact = this.authorContact,
         title = this.title,
         description = this.description,
-        natinfCode = this.natinfCode,
-        dml = this.dml
+        natinfCode = this.natinfCode
     )
 }

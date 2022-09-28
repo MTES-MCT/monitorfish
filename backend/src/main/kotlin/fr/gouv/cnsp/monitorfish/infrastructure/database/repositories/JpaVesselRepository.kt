@@ -42,6 +42,10 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
         return Vessel()
     }
 
+    override fun findVessel(vesselId: Int): Vessel {
+        return dbVesselRepository.findById(vesselId).get().toVessel()
+    }
+
     @Cacheable(value = ["search_vessels"])
     override fun search(searched: String): List<Vessel> {
         if (searched.isEmpty()) {

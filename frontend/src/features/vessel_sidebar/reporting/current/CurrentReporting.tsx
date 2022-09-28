@@ -4,12 +4,12 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/constants'
 import { ReportingType } from '../../../../domain/types/reporting'
-import deleteReporting from '../../../../domain/use_cases/reporting/deleteReporting'
+import { deleteReporting } from '../../../../domain/use_cases/reporting/deleteReporting'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { Reporting } from '../Reporting'
-import ConfirmDeletionModal from './ConfirmDeletionModal'
-import CreateOrEditReporting from './CreateOrEditReporting'
+import {Reporting} from '../Reporting'
+import { ConfirmDeletionModal } from './ConfirmDeletionModal'
+import { CreateOrEditReporting } from './CreateOrEditReporting'
 
 // TODO Move that into a constants file.
 export const operationalAlertTypes = Object.keys(COMMON_ALERT_TYPE_OPTION)
@@ -18,20 +18,19 @@ export const operationalAlertTypes = Object.keys(COMMON_ALERT_TYPE_OPTION)
 
 export function CurrentReporting() {
   const dispatch = useAppDispatch()
-  const {
-    /** @type {CurrentAndArchivedReportingsOfSelectedVessel} */
-    currentAndArchivedReportingsOfSelectedVessel,
-    editedReporting
-  } = useAppSelector(state => state.reporting)
+  const { currentAndArchivedReportingsOfSelectedVessel, editedReporting } = useAppSelector(state => state.reporting)
   const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState<string | undefined>(undefined)
 
   return (
     <Wrapper>
       <CreateOrEditReporting />
       {operationalAlertTypes.map(alertType => {
-        const alertReportings = currentAndArchivedReportingsOfSelectedVessel?.current
-          ?.filter(reporting => reporting.type === ReportingType.ALERT && reporting.value.type === alertType.code)
-          ?.sort((a, b) => sortByValidationDate(a, b))
+        const alertReportings =
+          currentAndArchivedReportingsOfSelectedVessel?.current
+            ?.filter(
+              reporting => reporting.type === ReportingType.ALERT && reporting.value.type === alertType.code
+            )
+            ?.sort((a, b) => sortByValidationDate(a, b)) || []
 
         if (alertReportings?.length) {
           return (
@@ -41,7 +40,6 @@ export function CurrentReporting() {
               key={(alertReportings as any)[alertReportings?.length - 1].id}
               numberOfAlerts={alertReportings?.length}
               openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
-              // TODO We need to change that with a proper cursor.
               // eslint-disable-next-line no-unsafe-optional-chaining
               reporting={alertReportings[alertReportings?.length - 1]}
             />

@@ -18,6 +18,7 @@ import { usePrevious } from '../../hooks/usePrevious'
 import { AlertsAndReportings } from './alerts_reportings/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import BeaconMalfunctionsBoard from './beacon_malfunctions/BeaconMalfunctionsBoard'
+import getFishingInfractions from '../../domain/use_cases/infraction/getFishingInfractions'
 import { AlertAndReportingTab, SIDE_WINDOW_MENU } from './constants'
 import { SideWindowMenu } from './SideWindowMenu'
 import { SideWindowSubMenu } from './SideWindowSubMenu'
@@ -73,6 +74,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       dispatch(getAllBeaconMalfunctions() as any)
       dispatch(getSilencedAlerts() as any)
       dispatch(getAllCurrentReportings() as any)
+      dispatch(getFishingInfractions() as any)
 
       dispatch(openSideWindowTab(SIDE_WINDOW_MENU.ALERTS.code))
     }

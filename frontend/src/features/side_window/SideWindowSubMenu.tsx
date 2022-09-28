@@ -2,43 +2,42 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
-import { AlertsMenuSeaFrontsToSeaFrontList, AlertsSubMenu } from '../../domain/entities/alerts'
+import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU, SeaFront } from '../../domain/entities/alerts/constants'
 import { beaconMalfunctionsStages } from '../../domain/entities/beaconMalfunction'
-import { sideWindowMenu } from '../../domain/entities/sideWindow'
+import { isReportingWithPendingAlert } from '../../domain/use_cases/alert/utils'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
-import { AlertAndReportingTab } from './constants'
+import { AlertAndReportingTab, SIDE_WINDOW_MENU } from './constants'
 import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
 
-import type { AlertValueForPending } from '../../domain/types/alert'
-import type { MenuItem } from './types'
+import type { MenuItem } from '../../types'
 import type { CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'
 
 export type SideWindowSubMenuProps = {
-  fixed: boolean
+  isFixed: boolean
   selectedMenu?: string
-  selectedSubMenu: MenuItem
+  selectedSeaFront: MenuItem<SeaFront>
   selectedTab: AlertAndReportingTab
   // TODO Rename that.
   setIsFixed: (isFixed: boolean) => Promisable<void>
-  setSelectedSubMenu: any
+  setSelectedSeaFront: (nexSeaFront: MenuItem<SeaFront>) => Promisable<void>
 }
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
 export function SideWindowSubMenu({
-  fixed,
+  isFixed,
   selectedMenu,
-  selectedSubMenu,
+  selectedSeaFront,
   selectedTab,
   setIsFixed,
-  setSelectedSubMenu
+  setSelectedSeaFront
 }: SideWindowSubMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const alerts = useAppSelector(state => state.alert.alerts)
+  const pendingAlerts = useAppSelector(state => state.alert.pendingAlerts)
   const currentReportings = useAppSelector(state => state.reporting.currentReportings)
   const beaconMalfunctions = useAppSelector(state => state.beaconMalfunction.beaconMalfunctions)
 
@@ -53,28 +52,27 @@ export function SideWindowSubMenu({
   )
 
   const getNumberOfAlertsOrReportingFromSeaFronts = useCallback(
-    (seaFronts): number => {
+    (seaFronts: string[]): number => {
       if (selectedTab === AlertAndReportingTab.ALERT) {
-        // TODO Remove the `as` as soon as the discriminator is added.
-        return alerts.filter(alert => seaFronts.includes((alert.value as AlertValueForPending).seaFront)).length
+        return pendingAlerts.filter(pendingAlert => seaFronts.includes(pendingAlert.value.seaFront)).length
       }
 
       if (selectedTab === AlertAndReportingTab.REPORTING) {
-        // TODO Remove the `as` as soon as the discriminator is added.
-        return currentReportings.filter(alert => seaFronts.includes((alert.value as AlertValueForPending).seaFront))
-          .length
+        return currentReportings.filter(
+          reporting => isReportingWithPendingAlert(reporting) && seaFronts.includes(reporting.value.seaFront)
+        ).length
       }
 
       return 0
     },
-    [alerts, currentReportings, selectedTab]
+    [currentReportings, pendingAlerts, selectedTab]
   )
 
   useEffect(() => {
-    if (selectedMenu === sideWindowMenu.ALERTS.code) {
+    if (selectedMenu === SIDE_WINDOW_MENU.ALERTS.code) {
       setIsFixed(true)
       setIsOpen(true)
-    } else if (selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code) {
+    } else if (selectedMenu === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code) {
       setIsFixed(false)
     }
   }, [selectedMenu, setIsFixed])
@@ -82,72 +80,72 @@ export function SideWindowSubMenu({
   return (
     <Menu
       onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => !fixed && setIsOpen(false)}
-      style={menuStyle(isOpen, fixed)}
+      onMouseLeave={() => !isFixed && setIsOpen(false)}
+      style={menuStyle(isOpen, isFixed)}
     >
-      <Chevron data-cy="side-window-sub-menu-trigger" onClick={() => setIsFixed(!fixed)} style={chevronStyle(isOpen)}>
+      <Chevron data-cy="side-window-sub-menu-trigger" onClick={() => setIsFixed(!isFixed)} style={chevronStyle(isOpen)}>
         <ChevronIcon style={chevronIconStyle(isOpen)} />
       </Chevron>
-      <Title style={titleStyle(isOpen)}>Vue d&apos;ensemble</Title>
-      {selectedMenu === sideWindowMenu.ALERTS.code && (
+      <Title style={titleStyle(isOpen)}>Vue d’ensemble</Title>
+      {selectedMenu === SIDE_WINDOW_MENU.ALERTS.code && (
         <>
           <SideWindowSubMenuLink
+            isOneLine
             isOpen={isOpen}
-            isSelected={selectedSubMenu.code === AlertsSubMenu.MEMN.code}
-            menu={AlertsSubMenu.MEMN}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.MEMN.seaFronts)}
-            oneLine
-            setSelected={setSelectedSubMenu}
+            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.MEMN.code}
+            menu={ALERTS_SUBMENU.MEMN}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.MEMN.seaFronts)}
+            setSelectedSeaFront={setSelectedSeaFront}
           />
           <SideWindowSubMenuLink
+            isOneLine
             isOpen={isOpen}
-            isSelected={selectedSubMenu.code === AlertsSubMenu.NAMO.code}
-            menu={AlertsSubMenu.NAMO}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.NAMO.seaFronts)}
-            oneLine
-            setSelected={setSelectedSubMenu}
+            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.NAMO.code}
+            menu={ALERTS_SUBMENU.NAMO}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.NAMO.seaFronts)}
+            setSelectedSeaFront={setSelectedSeaFront}
           />
           <SideWindowSubMenuLink
+            isOneLine
             isOpen={isOpen}
-            isSelected={selectedSubMenu.code === AlertsSubMenu.SA.code}
-            menu={AlertsSubMenu.SA}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.SA.seaFronts)}
-            oneLine
-            setSelected={setSelectedSubMenu}
+            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.SA.code}
+            menu={ALERTS_SUBMENU.SA}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.SA.seaFronts)}
+            setSelectedSeaFront={setSelectedSeaFront}
           />
           <SideWindowSubMenuLink
+            isOneLine
             isOpen={isOpen}
-            isSelected={selectedSubMenu.code === AlertsSubMenu.MED.code}
-            menu={AlertsSubMenu.MED}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.MED.seaFronts)}
-            oneLine
-            setSelected={setSelectedSubMenu}
+            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.MED.code}
+            menu={ALERTS_SUBMENU.MED}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.MED.seaFronts)}
+            setSelectedSeaFront={setSelectedSeaFront}
           />
           <SideWindowSubMenuLink
+            isOneLine
             isOpen={isOpen}
-            isSelected={selectedSubMenu.code === AlertsSubMenu.OUTREMEROA.code}
-            menu={AlertsSubMenu.OUTREMEROA}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROA.seaFronts)}
-            oneLine
-            setSelected={setSelectedSubMenu}
+            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.OUTREMEROA.code}
+            menu={ALERTS_SUBMENU.OUTREMEROA}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.OUTREMEROA.seaFronts)}
+            setSelectedSeaFront={setSelectedSeaFront}
           />
           <SideWindowSubMenuLink
+            isOneLine
             isOpen={isOpen}
-            isSelected={selectedSubMenu.code === AlertsSubMenu.OUTREMEROI.code}
-            menu={AlertsSubMenu.OUTREMEROI}
-            number={getNumberOfAlertsOrReportingFromSeaFronts(AlertsMenuSeaFrontsToSeaFrontList.OUTREMEROI.seaFronts)}
-            oneLine
-            setSelected={setSelectedSubMenu}
+            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.OUTREMEROI.code}
+            menu={ALERTS_SUBMENU.OUTREMEROI}
+            number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.OUTREMEROI.seaFronts)}
+            setSelectedSeaFront={setSelectedSeaFront}
           />
         </>
       )}
-      {selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code && (
+      {selectedMenu === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code && (
         <SideWindowSubMenuLink
           isOpen={isOpen}
-          isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}
-          menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING}
+          isSelected={selectedSeaFront.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}
+          menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING as MenuItem<SeaFront>}
           number={numberOfBeaconMalfunctions}
-          setSelected={setSelectedSubMenu}
+          setSelectedSeaFront={setSelectedSeaFront}
         />
       )}
     </Menu>
@@ -177,18 +175,18 @@ const chevronIconStyle = isOpen => ({
 })
 
 const Menu = styled.div``
-const menuStyle = (isOpen: boolean, fixed: boolean): CSSProperties => ({
+const menuStyle = (isOpen: boolean, isFixed: boolean): CSSProperties => ({
   background: COLORS.gainsboro,
   borderRight: `1px solid ${COLORS.lightGray}`,
-  boxShadow: isOpen && !fixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset',
+  boxShadow: isOpen && !isFixed ? '#CCCFD6 10px 0px 10px -8px' : 'unset',
   color: COLORS.slateGray,
   flexShrink: 0,
   fontSize: 16,
   fontWeight: 500,
   height: 'calc(100vh - 28px)',
-  marginLeft: fixed ? 0 : 66,
+  marginLeft: isFixed ? 0 : 66,
   padding: '14px 0',
-  position: fixed ? 'unset' : 'absolute',
+  position: isFixed ? 'unset' : 'absolute',
   transition: 'width 0.5s',
   width: isOpen ? 200 : 30,
   zIndex: 999

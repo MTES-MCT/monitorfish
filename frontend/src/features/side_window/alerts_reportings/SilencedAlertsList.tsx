@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
-import { getAlertNameFromType, alertSearchOptions } from '../../../domain/entities/alerts'
 import { reactivateSilencedAlert } from '../../../domain/use_cases/alert/reactivateSilencedAlert'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
@@ -16,6 +15,8 @@ import { getDateDiffInDays, getDateTime } from '../../../utils'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { Flag } from '../../vessel_list/tableCells'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
+import { PENDING_ALERTS_SEARCH_OPTIONS } from './constants'
+import { getAlertNameFromType } from './utils'
 
 import type { CSSProperties } from 'react'
 
@@ -28,13 +29,13 @@ import type { CSSProperties } from 'react'
  */
 export function SilencedAlertsList({ silencedSeaFrontAlerts }) {
   const dispatch = useAppDispatch()
-  const { focusOnAlert } = useAppSelector(state => state.alert)
+  const { focusedPendingAlertId } = useAppSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('silencedBeforeDate')
   const [sortType] = useState(SortType.ASC)
   const [searchQuery, setSearchQuery] = useState<string>()
 
-  const fuse = useMemo(() => new Fuse(silencedSeaFrontAlerts, alertSearchOptions), [silencedSeaFrontAlerts])
+  const fuse = useMemo(() => new Fuse(silencedSeaFrontAlerts, PENDING_ALERTS_SEARCH_OPTIONS), [silencedSeaFrontAlerts])
 
   const filteredAlerts = useMemo(() => {
     if (!searchQuery || searchQuery.length <= 1) {
@@ -58,7 +59,7 @@ export function SilencedAlertsList({ silencedSeaFrontAlerts }) {
 
   return (
     <Content style={contentStyle}>
-      <Title style={titleStyle}>SUSPENSION D&apos;ALERTES</Title>
+      <Title style={titleStyle}>SUSPENSION D’ALERTES</Title>
       <SearchVesselInput
         data-cy="side-window-silenced-alerts-search-vessel"
         onChange={e => setSearchQuery(e.target.value)}
@@ -100,11 +101,11 @@ export function SilencedAlertsList({ silencedSeaFrontAlerts }) {
             <List.Item
               key={alert.id}
               index={index + 1}
-              style={listItemStyle(focusOnAlert ? alert.id === focusOnAlert?.id : false, alert.isReactivated)}
+              style={listItemStyle(alert.id === focusedPendingAlertId, alert.isReactivated)}
             >
-              {alert.isReactivated ? (
+              {alert.isReactivated && (
                 <AlertTransition style={alertValidatedTransition}>L&apos;alerte est réactivée</AlertTransition>
-              ) : null}
+              )}
               {!alert.isReactivated ? (
                 <FlexboxGrid>
                   <FlexboxGrid.Item style={vesselNameColumnStyle}>

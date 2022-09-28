@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
-import { sideWindowMenu } from '../../domain/entities/sideWindow'
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
 import { ReactComponent as BeaconMalfunctionsSVG } from '../icons/Icone_VMS.svg'
+import { SIDE_WINDOW_MENU } from './constants'
 
 export type SideWindowMenuProps = {
   selectedMenu?: string
@@ -16,18 +16,18 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
     <Menu role="menu">
       <MenuButton />
       <MenuButton
-        onClick={() => dispatch(openSideWindowTab(sideWindowMenu.ALERTS.code))}
+        onClick={() => dispatch(openSideWindowTab(SIDE_WINDOW_MENU.ALERTS.code))}
         role="menuitem"
-        selected={selectedMenu === sideWindowMenu.ALERTS.code}
-        title={sideWindowMenu.ALERTS.name}
+        selected={selectedMenu === SIDE_WINDOW_MENU.ALERTS.code}
+        title={SIDE_WINDOW_MENU.ALERTS.name}
       >
         <AlertsIcon />
       </MenuButton>
       <MenuButton
         data-cy="side-window-menu-beacon-malfunctions"
-        onClick={() => dispatch(openSideWindowTab(sideWindowMenu.BEACON_MALFUNCTIONS.code))}
-        selected={selectedMenu === sideWindowMenu.BEACON_MALFUNCTIONS.code}
-        title={sideWindowMenu.BEACON_MALFUNCTIONS.name}
+        onClick={() => dispatch(openSideWindowTab(SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code))}
+        selected={selectedMenu === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code}
+        title={SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.name}
       >
         <BeaconMalfunctionsIcon />
       </MenuButton>

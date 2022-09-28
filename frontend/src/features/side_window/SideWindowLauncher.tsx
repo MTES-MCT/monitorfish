@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { batch } from 'react-redux'
 import { StyleSheetManager } from 'styled-components'
 
-import { resetFocusOnAlert } from '../../domain/shared_slices/Alert'
+import { resetFocusOnPendingAlert } from '../../domain/shared_slices/Alert'
 import { closeSideWindow } from '../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
@@ -32,7 +32,7 @@ export function SideWindowLauncher() {
         onUnload={() => {
           batch(() => {
             dispatch(closeSideWindow())
-            dispatch(resetFocusOnAlert())
+            dispatch(resetFocusOnPendingAlert())
           })
         }}
         title="MonitorFish"

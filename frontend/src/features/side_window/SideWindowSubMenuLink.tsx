@@ -3,30 +3,31 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
 
-import type { MenuItem } from './types'
+import type { SeaFront } from '../../domain/entities/alerts/constants'
+import type { MenuItem } from '../../types'
 import type { CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'
 
 export type SideWindowSubMenuLinkProps = {
+  isOneLine?: boolean
   isOpen: boolean
   isSelected: boolean
-  menu: MenuItem
+  menu: MenuItem<SeaFront>
   number: number
-  oneLine?: boolean
-  setSelected: (nextMenu: MenuItem) => Promisable<void>
+  setSelectedSeaFront: (nextSeaFront: MenuItem<SeaFront>) => Promisable<void>
 }
 
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
 export function SideWindowSubMenuLink({
+  isOneLine = false,
   isOpen,
   isSelected,
   menu,
-  number,
   // TODO Rename this prop.
-  oneLine = false,
-  setSelected
+  number,
+  setSelectedSeaFront
 }: SideWindowSubMenuLinkProps) {
   const linkStyle: CSSProperties = useMemo(
     () => ({
@@ -35,13 +36,13 @@ export function SideWindowSubMenuLink({
       borderBottom: isOpen ? `0.5px solid ${COLORS.lightGray}` : 'unset',
       cursor: 'pointer',
       display: 'flex',
-      height: oneLine ? 47 : 64,
+      height: isOneLine ? 47 : 64,
       opacity: isOpen ? 1 : 0,
       padding: '0px 20px',
       transition: 'all 0.5s ease',
       width: isOpen ? 160 : 0
     }),
-    [isOpen, isSelected, oneLine]
+    [isOneLine, isOpen, isSelected]
   )
 
   const textStyle: CSSProperties = useMemo(
@@ -49,28 +50,32 @@ export function SideWindowSubMenuLink({
       color: isSelected ? COLORS.gunMetal : COLORS.slateGray,
       fontSize: 16,
       fontWeight: 500,
-      height: oneLine ? 22 : 50,
+      height: isOneLine ? 22 : 50,
       // eslint-disable-next-line no-nested-ternary
-      maxWidth: isOpen ? (oneLine ? 170 : 100) : 0,
+      maxWidth: isOpen ? (isOneLine ? 170 : 100) : 0,
       opacity: isOpen ? 1 : 0,
-      overflowX: !oneLine ? 'unset' : 'hidden',
+      overflowX: !isOneLine ? 'unset' : 'hidden',
       overflowY: 'hidden',
-      textOverflow: !oneLine ? 'unset' : 'clip',
+      textOverflow: !isOneLine ? 'unset' : 'clip',
       transition: 'max-width 0.5s ease, opacity 0.5s ease',
-      whiteSpace: !oneLine ? 'unset' : 'nowrap',
+      whiteSpace: !isOneLine ? 'unset' : 'nowrap',
       width: isOpen ? 160 : 0
     }),
-    [isOpen, isSelected, oneLine]
+    [isOneLine, isOpen, isSelected]
   )
 
   return (
-    <MenuButton data-cy={`side-window-sub-menu-${menu.name}`} onClick={() => setSelected(menu)} style={linkStyle}>
+    <MenuButton
+      data-cy={`side-window-sub-menu-${menu.name}`}
+      onClick={() => setSelectedSeaFront(menu)}
+      style={linkStyle}
+    >
       <Text style={textStyle}>{menu.name}</Text>
-      {number ? (
+      {number && (
         <CircleWithKeyMetric data-cy={`side-window-sub-menu-${menu.name}-number`} style={circleMetricStyle(isOpen)}>
           {number}
         </CircleWithKeyMetric>
-      ) : null}
+      )}
     </MenuButton>
   )
 }

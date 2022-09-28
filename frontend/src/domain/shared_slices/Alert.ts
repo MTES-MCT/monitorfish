@@ -1,15 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { equals, reject } from 'ramda'
 
-import type { ActiveAlert, SilencedAlert } from '../types/alert'
+import type { PendingAlert, SilencedAlert } from '../types/alert'
+import type { SelectedVessel } from '../types/vessel'
 
 export type AlertState = {
-  alerts: ActiveAlert[]
-  focusOnAlert: ActiveAlert | undefined
+  focusedPendingAlertId: string | undefined
+  /** Pending alerts that were just silenced a few seconds ago */
+  pendingAlertIdsBeingSilenced: string[]
+  pendingAlerts: PendingAlert[]
   silencedAlerts: SilencedAlert[]
 }
 const INITIAL_STATE: AlertState = {
-  alerts: [],
-  focusOnAlert: undefined,
+  focusedPendingAlertId: undefined,
+  pendingAlertIdsBeingSilenced: [],
+  pendingAlerts: [],
   silencedAlerts: []
 }
 
@@ -17,43 +22,45 @@ const alertSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'alert',
   reducers: {
-    /**
-     * Focus on alert in the alert list
-     * @function setFocusOnAlert
-     * @memberOf AlertReducer
-     * @param {Object=} state
-     * @param {{payload: {
-     *   name: string,
-     *   internalReferenceNumber: string,
-     *   externalReferenceNumber: string,
-     *   ircs: string,
-     * }}} action - An alert to be focused on
-     */
-    focusOnAlert(state, action) {
-      const { externalReferenceNumber, internalReferenceNumber, ircs, name } = action.payload
+    addToPendingAlertsBeingSilenced(state, action: PayloadAction<string>) {
+      state.pendingAlertIdsBeingSilenced = [...state.pendingAlertIdsBeingSilenced, action.payload]
+    },
 
-      // TODO Clarify that (what, undefined?).
-      state.focusOnAlert = state.alerts.find(
+    /**
+     * Focus a pending alert in the alert list
+     */
+    focusOnAlert(state, action: PayloadAction<SelectedVessel>) {
+      const { externalReferenceNumber, internalReferenceNumber, ircs, name } = action.payload
+      const foundPendingAlert = state.pendingAlerts.find(
         alert =>
           alert.value.type === name &&
           alert.internalReferenceNumber === internalReferenceNumber &&
           alert.externalReferenceNumber === externalReferenceNumber &&
           alert.ircs === ircs
       )
+      if (!foundPendingAlert) {
+        return
+      }
+
+      state.focusedPendingAlertId = foundPendingAlert.id
+    },
+
+    removeFromPendingAlertsBeingSilenced(state, action: PayloadAction<string>) {
+      state.pendingAlertIdsBeingSilenced = reject(equals(action.payload))(state.pendingAlertIdsBeingSilenced)
     },
 
     /**
      * Reset focus on alert
      */
-    resetFocusOnAlert(state) {
-      state.focusOnAlert = undefined
+    resetFocusOnPendingAlert(state) {
+      state.focusedPendingAlertId = undefined
     },
 
     /**
      * Set alerts
      */
-    setAlerts(state, action: PayloadAction<ActiveAlert[]>) {
-      state.alerts = action.payload
+    setPendingAlerts(state, action: PayloadAction<PendingAlert[]>) {
+      state.pendingAlerts = action.payload
     },
 
     /**
@@ -65,6 +72,13 @@ const alertSlice = createSlice({
   }
 })
 
-export const { focusOnAlert, resetFocusOnAlert, setAlerts, setSilencedAlerts } = alertSlice.actions
+export const {
+  addToPendingAlertsBeingSilenced,
+  focusOnAlert,
+  removeFromPendingAlertsBeingSilenced,
+  resetFocusOnPendingAlert,
+  setPendingAlerts,
+  setSilencedAlerts
+} = alertSlice.actions
 
 export const alertReducer = alertSlice.reducer

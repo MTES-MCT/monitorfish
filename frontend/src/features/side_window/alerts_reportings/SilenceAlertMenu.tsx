@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { SilencedAlertPeriod } from '../../../domain/entities/alerts'
+import { SilencedAlertPeriod } from '../../../domain/entities/alerts/constants'
 import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 import DateRange from '../../vessel_sidebar/actions/TrackRequest/DateRange'
 
@@ -62,7 +62,7 @@ export function SilenceAlertMenu({
       style={silenceMenuStyle(showSilencedAlertForIndex, scrollableContainer?.current.scrollTop || 0)}
     >
       <>
-        <MenuLink style={menuLinkStyle(true, false)}>Ignorer l&apos;alerte pour...</MenuLink>
+        <MenuLink style={menuLinkStyle(true, false)}>Ignorer l’alerte pour...</MenuLink>
         <MenuLink
           onClick={() => silenceAlert(silenceAlertRequestFromMenu(SilencedAlertPeriod.THIS_OCCURRENCE), id)}
           onMouseOut={e => setBackgroundAsNotHovered(e)}

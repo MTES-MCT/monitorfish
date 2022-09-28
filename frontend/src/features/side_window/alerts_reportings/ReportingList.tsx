@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
-import { AlertsMenuSeaFrontsToSeaFrontList } from '../../../domain/entities/alerts'
+import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, SeaFront } from '../../../domain/entities/alerts/constants'
 import {
   getReportingOrigin,
   getReportingTitle,
@@ -35,7 +35,7 @@ import { Flag } from '../../vessel_list/tableCells'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { EditReporting } from './EditReporting'
 
-import type { MenuItem } from '../types'
+import type { MenuItem } from '../../../types'
 
 enum SortColumns {
   dml = 'dml',
@@ -44,9 +44,9 @@ enum SortColumns {
 }
 
 type ReportingListProps = {
-  selectedSubMenu: MenuItem
+  selectedSeaFront: MenuItem<SeaFront>
 }
-export function ReportingList({ selectedSubMenu }: ReportingListProps) {
+export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   const dispatch = useAppDispatch()
   const { currentReportings } = useAppSelector(state => (state as any).reporting)
   const baseUrl = window.location.origin
@@ -57,14 +57,14 @@ export function ReportingList({ selectedSubMenu }: ReportingListProps) {
 
   useEffect(() => {
     setCheckedReportingIds([])
-  }, [selectedSubMenu])
+  }, [selectedSeaFront])
 
   const currentSeaFrontReportings = useMemo(
     () =>
       currentReportings
         .filter(reporting =>
-          (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu.code]
-            ? AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu.code].seaFronts
+          (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code]
+            ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code].seaFronts
             : []
           ).includes(reporting.value.seaFront)
         )
@@ -73,7 +73,7 @@ export function ReportingList({ selectedSubMenu }: ReportingListProps) {
           dml: reporting.value.dml,
           validationDateTimestamp: new Date(reporting.validationDate).getTime()
         })),
-    [currentReportings, selectedSubMenu]
+    [currentReportings, selectedSeaFront]
   )
 
   const fuse = useMemo(() => new Fuse(currentSeaFrontReportings, reportingSearchOptions), [currentSeaFrontReportings])

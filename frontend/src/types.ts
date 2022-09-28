@@ -14,6 +14,11 @@ export type Option<V = string> = {
   value: V
 }
 
+export type MenuItem<T = string> = {
+  code: T
+  name: string
+}
+
 export type PickStringKeysWithNativeValues<T extends Record<any, any>> = Exact<
   {
     [Key in string & ConditionalKeys<T, Native>]: T[Key]

@@ -4,30 +4,32 @@ import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { alertSearchOptions, AlertsMenuSeaFrontsToSeaFrontList } from '../../../domain/entities/alerts'
-import { resetFocusOnAlert } from '../../../domain/shared_slices/Alert'
+import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, SeaFront } from '../../../domain/entities/alerts/constants'
+import { resetFocusOnPendingAlert } from '../../../domain/shared_slices/Alert'
 import { silenceAlert } from '../../../domain/use_cases/alert/silenceAlert'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
+import { PENDING_ALERTS_SEARCH_OPTIONS } from './constants'
 import { PendingAlertRow } from './PendingAlertRow'
 import { SilenceAlertMenu } from './SilenceAlertMenu'
 
-import type { AlertValueForPending, SilencedAlertPeriodRequest } from '../../../domain/types/alert'
-import type { MenuItem } from '../types'
+import type { SilencedAlertPeriodRequest } from '../../../domain/types/alert'
+import type { MenuItem } from '../../../types'
+import type { ForwardedRef } from 'react'
 
 export type PendingAlertsListProps = {
-  baseRef: any
+  baseRef: ForwardedRef<HTMLDivElement>
   numberOfSilencedAlerts: number
-  selectedSubMenu: MenuItem
+  selectedSeaFront: MenuItem<SeaFront>
 }
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
  */
-export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSubMenu }: PendingAlertsListProps) {
+export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSeaFront }: PendingAlertsListProps) {
   const dispatch = useAppDispatch()
-  const { alerts, focusOnAlert } = useAppSelector(state => state.alert)
+  const { focusedPendingAlertId, pendingAlerts } = useAppSelector(state => state.alert)
   const baseUrl = window.location.origin
   const [sortColumn] = useState('creationDate')
   const [sortType] = useState(SortType.DESC)
@@ -38,23 +40,22 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSub
 
   const currentSeaFrontAlerts = useMemo(
     () =>
-      alerts.filter(alert =>
-        (AlertsMenuSeaFrontsToSeaFrontList[selectedSubMenu.code]?.seaFronts || []).includes(
-          // TODO Remove the `as` as soon as the discriminator is added.
-          (alert.value as AlertValueForPending).seaFront
+      pendingAlerts.filter(pendingAlert =>
+        (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code].seaFronts || []).includes(
+          pendingAlert.value.seaFront
         )
       ),
-    [alerts, selectedSubMenu]
+    [pendingAlerts, selectedSeaFront]
   )
   const numberOfAlertsMessage = useMemo(
     () =>
       `Suspension d’alerte sur ${numberOfSilencedAlerts} navire${numberOfSilencedAlerts > 1 ? 's' : ''} en ${
-        selectedSubMenu.name
+        selectedSeaFront.name
       }`,
-    [numberOfSilencedAlerts, selectedSubMenu.name]
+    [numberOfSilencedAlerts, selectedSeaFront.name]
   )
 
-  const fuse = useMemo(() => new Fuse(currentSeaFrontAlerts, alertSearchOptions), [currentSeaFrontAlerts])
+  const fuse = useMemo(() => new Fuse(currentSeaFrontAlerts, PENDING_ALERTS_SEARCH_OPTIONS), [currentSeaFrontAlerts])
 
   const filteredAlerts = useMemo(() => {
     if (!currentSeaFrontAlerts) {
@@ -77,10 +78,10 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSub
   }, [filteredAlerts, sortColumn, sortType])
 
   useEffect(() => {
-    if (focusOnAlert) {
+    if (focusedPendingAlertId) {
       setSearchQuery(undefined)
       const timeoutHandler = setTimeout(() => {
-        dispatch(resetFocusOnAlert())
+        dispatch(resetFocusOnPendingAlert())
       }, 2000)
 
       return () => {
@@ -89,7 +90,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSub
     }
 
     return undefined
-  }, [dispatch, focusOnAlert])
+  }, [dispatch, focusedPendingAlertId])
 
   const silenceAlertCallback = useCallback(
     (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, id: string) => {

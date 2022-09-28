@@ -11,7 +11,7 @@ from config import (
 )
 
 
-class beaconStatus(Enum):
+class BeaconStatus(Enum):
     ACTIVATED = "ACTIVATED"
     DEACTIVATED = "DEACTIVATED"
     IN_TEST = "IN_TEST"
@@ -21,11 +21,11 @@ class beaconStatus(Enum):
     @staticmethod
     def from_poseidon_status(poseidon_status: str):
         mapping = {
-            "Activée": beaconStatus.ACTIVATED,
-            "Désactivée": beaconStatus.DEACTIVATED,
-            "En test": beaconStatus.IN_TEST,
-            "Non agréée": beaconStatus.NON_APPROVED,
-            "Non surveillée": beaconStatus.UNSUPERVISED,
+            "Activée": BeaconStatus.ACTIVATED,
+            "Désactivée": BeaconStatus.DEACTIVATED,
+            "En test": BeaconStatus.IN_TEST,
+            "Non agréée": BeaconStatus.NON_APPROVED,
+            "Non surveillée": BeaconStatus.UNSUPERVISED,
         }
         return mapping[poseidon_status]
 

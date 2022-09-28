@@ -7,7 +7,7 @@ from prefect.engine.signals import TRIGGERFAIL
 
 from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationType,
-    beaconStatus,
+    BeaconStatus,
 )
 from src.pipeline.exceptions import MonitorfishHealthError
 from src.pipeline.flows.update_beacon_malfunctions import (
@@ -275,15 +275,15 @@ def test_get_vessels_that_should_emit():
             "vessel_ids": range(1, 10),
             "cfr": list("ABCDEFGHI"),
             "beacon_status": [
-                beaconStatus.ACTIVATED.value,
-                beaconStatus.NON_APPROVED.value,
-                beaconStatus.UNSUPERVISED.value,
-                beaconStatus.IN_TEST.value,
-                beaconStatus.DEACTIVATED.value,
-                beaconStatus.ACTIVATED.value,
-                beaconStatus.ACTIVATED.value,
-                beaconStatus.ACTIVATED.value,
-                beaconStatus.ACTIVATED.value,
+                BeaconStatus.ACTIVATED.value,
+                BeaconStatus.NON_APPROVED.value,
+                BeaconStatus.UNSUPERVISED.value,
+                BeaconStatus.IN_TEST.value,
+                BeaconStatus.DEACTIVATED.value,
+                BeaconStatus.ACTIVATED.value,
+                BeaconStatus.ACTIVATED.value,
+                BeaconStatus.ACTIVATED.value,
+                BeaconStatus.ACTIVATED.value,
             ],
             "length": [11.5, 11.99, 12, 12.01, 12.5, 25.69, 5.69, 11.56, 36.5],
             "other_data": list("abcdefghi"),
@@ -310,12 +310,12 @@ def test_get_temporarily_unsupervised_vessels():
             "vessel_ids": [1, 2, 3, 4, 5, 6],
             "other_data": ["A", "B", "C", "D", "E", "F"],
             "beacon_status": [
-                beaconStatus.ACTIVATED.value,
-                beaconStatus.NON_APPROVED.value,
-                beaconStatus.UNSUPERVISED.value,
-                beaconStatus.IN_TEST.value,
-                beaconStatus.DEACTIVATED.value,
-                beaconStatus.ACTIVATED.value,
+                BeaconStatus.ACTIVATED.value,
+                BeaconStatus.NON_APPROVED.value,
+                BeaconStatus.UNSUPERVISED.value,
+                BeaconStatus.IN_TEST.value,
+                BeaconStatus.DEACTIVATED.value,
+                BeaconStatus.ACTIVATED.value,
             ],
         }
     )
@@ -388,6 +388,7 @@ def test_prepare_new_beacon_malfunctions():
             ],
             "latitude": [45.23, -12.256, None],
             "longitude": [12.8, -2.961, None],
+            "beacon_number": ["beacon_1", "beacon_2", "beacon_3"],
         }
     )
 
@@ -435,6 +436,7 @@ def test_prepare_new_beacon_malfunctions():
             ],
             "latitude": [45.23, -12.256, None],
             "longitude": [12.8, -2.961, None],
+            "beacon_number": ["beacon_1", "beacon_2", "beacon_3"],
         }
     )
 
@@ -479,6 +481,7 @@ def test_load_new_beacon_malfunctions(reset_test_data):
             ],
             "latitude": [45.23, -12.256],
             "longitude": [12.8, -2.961],
+            "beacon_number": ["beacon_1", "beacon_2"],
         }
     )
 

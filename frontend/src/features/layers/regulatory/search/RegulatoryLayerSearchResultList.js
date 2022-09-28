@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 import RegulatoryLayerSearchResultLawType from './RegulatoryLayerSearchResultLawType'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,10 +13,11 @@ const RegulatoryLayerSearchResultList = ({ namespace }) => {
   } = useSelector(state => state.regulatoryLayerSearch)
   const layersSidebarOpenedLayerType = useSelector(state => state.layer.layersSidebarOpenedLayerType)
   const hasOneLayerTypeOpen = useMemo(() => layersSidebarOpenedLayerType !== '', [layersSidebarOpenedLayerType])
+  const hasSearchResults = useMemo(() => regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0, [regulatoryLayersSearchResult])
 
   return (<>
     {
-      hasOneLayerTypeOpen && <ShowResultList
+      hasOneLayerTypeOpen && hasSearchResults && <ShowResultList
         data-cy={'regulatory-search-show-results'}
         onClick={() => dispatch(setLayersSideBarOpenedLayerType(''))}
       >
@@ -26,7 +27,7 @@ const RegulatoryLayerSearchResultList = ({ namespace }) => {
     {
       !hasOneLayerTypeOpen && <List $advancedSearchIsOpen={advancedSearchIsOpen}>
         {
-          regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0
+          hasSearchResults
             ? Object.entries(regulatoryLayersSearchResult)?.map(([lawType, topic]) => {
               return (
                 <RegulatoryLayerSearchResultLawType

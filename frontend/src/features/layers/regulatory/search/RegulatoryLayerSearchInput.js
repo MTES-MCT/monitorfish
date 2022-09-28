@@ -156,7 +156,10 @@ const RegulatoryLayerSearchInput = props => {
         {
           inputsAreEmpty
             ? <SearchIcon/>
-            : <CloseIcon onClick={() => setInitSearchFields(true)}/>
+            : <CloseIcon
+              data-cy={'regulatory-search-clean-input'}
+              onClick={() => setInitSearchFields(true)}
+            />
         }
         <AdvancedSearch
           data-cy={'regulatory-layers-advanced-search'}

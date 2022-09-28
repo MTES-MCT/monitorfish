@@ -13,13 +13,23 @@ import { getLocalStorageState } from '../../../../utils'
 import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.style'
 import { sortArrayByColumn } from '../../../vessel_list/tableSort'
 
+import type { Reporting } from '../../../../domain/types/reporting'
+import type { VesselIdentity } from '../../../../domain/types/vessel'
+
+type ReportingFormProps = {
+  closeForm: () => void
+  editedReporting: Reporting | undefined
+  fromSideWindow: boolean
+  hasWhiteBackground: boolean
+  selectedVesselIdentity: VesselIdentity
+}
 export function ReportingForm({
   closeForm,
   editedReporting,
   fromSideWindow,
   hasWhiteBackground,
   selectedVesselIdentity
-}) {
+}: ReportingFormProps) {
   const reportingLocalStorageKey = fromSideWindow ? 'side-window-reporting-in-edit' : 'reporting-in-edit'
 
   const dispatch = useAppDispatch()
@@ -80,7 +90,7 @@ export function ReportingForm({
     if (reportingType === ReportingTypeCharacteristics.OBSERVATION.code) {
       setNatinfCode('')
     }
-  }, [reportingType])
+  }, [reportingType, reportingLocalStorageKey])
 
   function checkErrors(reportingValue) {
     const {
@@ -151,7 +161,7 @@ export function ReportingForm({
         deleteLocalStorageReportingEntry()
       })
     },
-    [dispatch, closeForm]
+    [dispatch, closeForm, deleteLocalStorageReportingEntry]
   )
 
   const createReporting = useCallback(
@@ -165,9 +175,10 @@ export function ReportingForm({
         validationDate: null,
         value: {
           ...nextReporting.value,
-          flagState: selectedVesselIdentity?.flagState.toUpperCase(),
+          flagState: selectedVesselIdentity?.flagState?.toUpperCase(),
           type: nextReporting.type
         },
+        vesselId: selectedVesselIdentity?.vesselId,
         vesselIdentifier: selectedVesselIdentity?.vesselIdentifier,
         vesselName: selectedVesselIdentity?.vesselName
       }
@@ -177,7 +188,7 @@ export function ReportingForm({
         deleteLocalStorageReportingEntry()
       })
     },
-    [dispatch, selectedVesselIdentity]
+    [dispatch, selectedVesselIdentity, closeForm, deleteLocalStorageReportingEntry]
   )
 
   const createOrEditReporting = useCallback(
@@ -314,7 +325,7 @@ export function ReportingForm({
       <RadioGroup
         appearance="picker"
         defaultValue={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
-        disabled={editedReporting}
+        disabled={!!editedReporting}
         inline
         onChange={value => setReportingType(value as string)}
         value={reportingType}

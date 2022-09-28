@@ -157,14 +157,15 @@ export type VesselId = string
 
 export type VesselIdentity = {
   // TODO Check that.
-  beaconNumber: number
-  externalReferenceNumber: string
-  flagState: string
-  internalReferenceNumber: string
-  ircs: string
-  mmsi: string
-  vesselIdentifier: string
-  vesselName: string
+  beaconNumber?: number | undefined
+  externalReferenceNumber: string | undefined
+  flagState: string | undefined
+  internalReferenceNumber: string | undefined
+  ircs: string | undefined
+  mmsi: string | undefined
+  vesselId?: number | undefined
+  vesselIdentifier: string | undefined
+  vesselName: string | undefined
 }
 
 export type VesselLastPosition = {

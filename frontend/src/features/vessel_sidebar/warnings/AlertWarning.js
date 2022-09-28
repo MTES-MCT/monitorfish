@@ -1,11 +1,11 @@
 import { batch, useDispatch } from 'react-redux'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { focusOnAlert } from '../../../domain/shared_slices/Alert'
-import { getAlertNameFromType } from '../../../domain/entities/alerts'
 import React from 'react'
 import styled from 'styled-components'
 import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
 import { SIDE_WINDOW_MENU } from '../../side_window/constants'
+import { getAlertNameFromType } from '../../side_window/alerts_reportings/utils'
 
 const AlertWarning = ({ selectedVessel }) => {
   const dispatch = useDispatch()

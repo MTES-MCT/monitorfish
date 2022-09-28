@@ -18,8 +18,8 @@ from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionStage,
     BeaconMalfunctionVesselStatus,
+    BeaconStatus,
     EndOfMalfunctionReason,
-    beaconStatus,
 )
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
@@ -95,7 +95,7 @@ def get_vessels_that_should_emit(
     """
     vessels_that_should_emit = (
         vessels_with_beacon.loc[
-            (vessels_with_beacon.beacon_status == beaconStatus.ACTIVATED.value)
+            (vessels_with_beacon.beacon_status == BeaconStatus.ACTIVATED.value)
             & (
                 (vessels_with_beacon.length >= 12)
                 | (vessels_with_beacon.cfr.isin(less_than_twelve_to_monitor))
@@ -122,7 +122,7 @@ def get_temporarily_unsupervised_vessels(
     """
     temporarily_unsupervised_vessels = (
         vessels_with_beacon.loc[
-            vessels_with_beacon.beacon_status == beaconStatus.UNSUPERVISED.value
+            vessels_with_beacon.beacon_status == BeaconStatus.UNSUPERVISED.value
         ]
         .drop(columns=["beacon_status"])
         .reset_index(drop=True)
@@ -414,6 +414,7 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         "notification_requested",
         "latitude",
         "longitude",
+        "beacon_number",
     ]
     return new_malfunctions.loc[:, ordered_columns]
 

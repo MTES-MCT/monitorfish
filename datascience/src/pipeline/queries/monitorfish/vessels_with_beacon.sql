@@ -1,15 +1,17 @@
 SELECT
-    id AS vessel_id,
-    cfr,
-    external_immatriculation,
-    ircs,
-    vessel_name,
-    flag_state,
-    (COALESCE(length, 0) >= 12) AS priority,
-    beacon_status,
-    length
-FROM vessels
+    v.id AS vessel_id,
+    v.cfr,
+    v.external_immatriculation,
+    v.ircs,
+    v.vessel_name,
+    v.flag_state,
+    (COALESCE(v.length, 0) >= 12) AS priority,
+    b.beacon_status,
+    b.beacon_number,
+    v.length
+FROM beacons b
+JOIN vessels v
+ON v.id = b.vessel_id
 WHERE
-    beacon_number IS NOT NULL AND
     -- Flag_states whose emissions are monitored
-    flag_state IN ('FR', 'VE')
+    v.flag_state IN ('FR', 'VE')

@@ -18,7 +18,8 @@ INSERT INTO beacon_malfunctions (
     vessel_id,
     notification_requested,
     latitude,
-    longitude
+    longitude,
+    beacon_number
 ) VALUES
 (
     1,
@@ -38,7 +39,8 @@ INSERT INTO beacon_malfunctions (
     2,
     'END_OF_MALFUNCTION',
     45.236,
-    -3.569
+    -3.569,
+    '123456'
 ),
 (
     2,
@@ -58,7 +60,8 @@ INSERT INTO beacon_malfunctions (
     4,
     'MALFUNCTION_AT_SEA_REMINDER',
     42.843,
-    -8.568
+    -8.568,
+    'A56CZ2'
 ),
 (
     3,
@@ -78,7 +81,8 @@ INSERT INTO beacon_malfunctions (
     6,
     'MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION',
     -8.569,
-    -23.1569
+    -23.1569,
+    'BEA951357'
 );
 
 ALTER SEQUENCE beacon_malfunctions_id_seq RESTART WITH 4;

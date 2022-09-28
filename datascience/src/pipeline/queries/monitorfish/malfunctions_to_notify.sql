@@ -2,7 +2,7 @@ WITH requested_notifications AS (
     SELECT
         bm.id AS beacon_malfunction_id,
         COALESCE(v.cfr, v.external_immatriculation, v.ircs) AS vessel_cfr_or_immat_or_ircs,
-        v.beacon_number,
+        bm.beacon_number,
         v.vessel_name,
         bm.malfunction_start_date_utc,
         bm.latitude AS last_position_latitude,
@@ -18,10 +18,12 @@ WITH requested_notifications AS (
         so.name AS satellite_operator,
         so.emails AS satellite_operator_emails
     FROM beacon_malfunctions bm
+    LEFT JOIN beacons b
+    ON b.beacon_number = bm.beacon_number
     JOIN vessels v
-    ON bm.vessel_id = v.id
+    ON b.vessel_id = v.id
     LEFT JOIN satellite_operators so
-    ON so.id = v.satellite_operator_id
+    ON so.id = b.satellite_operator_id
     WHERE notification_requested IS NOT NULL
 ),
 

@@ -5,7 +5,10 @@ import pandas as pd
 import pytest
 from prefect.engine.signals import TRIGGERFAIL
 
-from src.pipeline.entities.beacon_malfunctions import BeaconMalfunctionNotificationType
+from src.pipeline.entities.beacon_malfunctions import (
+    BeaconMalfunctionNotificationType,
+    beaconStatus,
+)
 from src.pipeline.exceptions import MonitorfishHealthError
 from src.pipeline.flows.update_beacon_malfunctions import (
     BeaconMalfunctionStage,
@@ -26,7 +29,6 @@ from src.pipeline.flows.update_beacon_malfunctions import (
     prepare_new_beacon_malfunctions,
     update_beacon_malfunction,
 )
-from src.pipeline.shared_tasks.beacons import beaconStatus
 from src.read_query import read_query
 from tests.mocks import get_monitorfish_healthcheck_mock_factory, mock_datetime_utcnow
 

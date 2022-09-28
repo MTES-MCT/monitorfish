@@ -19,13 +19,13 @@ from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionStage,
     BeaconMalfunctionVesselStatus,
     EndOfMalfunctionReason,
+    beaconStatus,
 )
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import (
     join_on_multiple_keys,
     left_isin_right_by_decreasing_priority,
 )
-from src.pipeline.shared_tasks.beacons import beaconStatus
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 from src.pipeline.shared_tasks.healthcheck import (
     assert_last_positions_health,

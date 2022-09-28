@@ -11,6 +11,25 @@ from config import (
 )
 
 
+class beaconStatus(Enum):
+    ACTIVATED = "ACTIVATED"
+    DEACTIVATED = "DEACTIVATED"
+    IN_TEST = "IN_TEST"
+    NON_APPROVED = "NON_APPROVED"
+    UNSUPERVISED = "UNSUPERVISED"
+
+    @staticmethod
+    def from_poseidon_status(poseidon_status: str):
+        mapping = {
+            "Activée": beaconStatus.ACTIVATED,
+            "Désactivée": beaconStatus.DEACTIVATED,
+            "En test": beaconStatus.IN_TEST,
+            "Non agréée": beaconStatus.NON_APPROVED,
+            "Non surveillée": beaconStatus.UNSUPERVISED,
+        }
+        return mapping[poseidon_status]
+
+
 class BeaconMalfunctionStage(Enum):
     INITIAL_ENCOUNTER = "INITIAL_ENCOUNTER"
     FOUR_HOUR_REPORT = "FOUR_HOUR_REPORT"

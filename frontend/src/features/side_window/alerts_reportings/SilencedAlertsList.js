@@ -132,7 +132,7 @@ const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
                       {alert.vesselName}
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={alertTypeStyle}>
-                      {getAlertNameFromType(alert.type)}
+                      {getAlertNameFromType(alert.value.type)}
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item style={alertNatinfStyle}>
                       {alert.value.natinfCode}
@@ -157,7 +157,7 @@ const SilencedAlertsList = ({ silencedSeaFrontAlerts }) => {
                         alt={'Voir sur la carte'}
                         title={'Voir sur la carte'}
                         onClick={() => {
-                          const vesselIdentity = { ...alert }
+                          const vesselIdentity = { ...alert, flagState: alert.value.flagState }
                           dispatch(showVessel(vesselIdentity, false, false, null))
                           dispatch(getVesselVoyage(vesselIdentity, undefined, false))
                         }}

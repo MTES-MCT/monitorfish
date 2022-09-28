@@ -26,6 +26,7 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
       <MenuButton
         data-cy="side-window-menu-beacon-malfunctions"
         onClick={() => dispatch(openSideWindowTab(SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code))}
+        role="menuitem"
         selected={selectedMenu === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code}
         title={SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.name}
       >

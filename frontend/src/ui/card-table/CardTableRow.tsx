@@ -6,7 +6,6 @@ import { COLORS } from '../../constants/constants'
 export const CardTableRow = styled(List.Item)<{
   index: number
   isFocused?: boolean
-  key: number
   toClose?: boolean
 }>`
   background: ${p => (p.isFocused ? COLORS.gainsboro : COLORS.cultured)};

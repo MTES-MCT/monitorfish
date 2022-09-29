@@ -1,5 +1,5 @@
 import countries from 'i18n-iso-countries'
-import { MutableRefObject, useEffect, useRef } from 'react'
+import { MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { batch } from 'react-redux'
 import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
@@ -11,10 +11,11 @@ import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
+import { getFromList } from '../../../utils/getFromList'
 import { Flag } from '../../vessel_list/tableCells'
 import { getAlertNameFromType, getSilencedAlertPeriodText } from './utils'
 
-import type { PendingAlert, SilencedAlert, SilencedAlertPeriodRequest } from '../../../domain/types/alert'
+import type { PendingAlert } from '../../../domain/types/alert'
 import type { CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'
 
@@ -38,8 +39,13 @@ export function PendingAlertRow({
 }: PendingAlertRowProps) {
   const dispatch = useAppDispatch()
   const ref = useRef() as MutableRefObject<HTMLDivElement>
-  const { focusedPendingAlertId, pendingAlertIdsBeingSilenced } = useAppSelector(state => state.alert)
+  const { focusedPendingAlertId, silencedAlertsQueue } = useAppSelector(state => state.alert)
   const baseUrl = window.location.origin
+
+  const silencedAlertsQueueMatch = useMemo(
+    () => getFromList(silencedAlertsQueue, 'pendingAlertId', alert.id),
+    [alert.id, silencedAlertsQueue]
+  )
 
   useEffect(() => {
     if (focusedPendingAlertId && alert.id === focusedPendingAlertId) {
@@ -62,10 +68,9 @@ export function PendingAlertRow({
           Alerte ajoutée à la fiche du navire
         </AlertTransition>
       )}
-      {pendingAlertIdsBeingSilenced.includes(alert.id) && (
+      {silencedAlertsQueueMatch && (
         <AlertTransition data-cy="side-window-alerts-is-silenced-transition" style={alertSilencedTransition}>
-          L&apos;alerte sera ignorée{' '}
-          {getSilencedAlertPeriodText((alert as unknown as SilencedAlert).silencedPeriod as SilencedAlertPeriodRequest)}
+          L’alerte sera ignorée {getSilencedAlertPeriodText(silencedAlertsQueueMatch.silencedAlertPeriodRequest)}
         </AlertTransition>
       )}
       {!alert.isValidated && (

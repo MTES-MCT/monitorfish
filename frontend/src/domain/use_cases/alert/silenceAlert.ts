@@ -3,7 +3,7 @@ import { deleteListItems } from '../../../utils/deleteListItems'
 import { Vessel } from '../../entities/vessel'
 import {
   addToPendingAlertsBeingSilenced,
-  removeFromPendingAlertsBeingSilenced,
+  removeFromSilencedAlertsQueue,
   setPendingAlerts,
   setSilencedAlerts
 } from '../../shared_slices/Alert'
@@ -17,19 +17,25 @@ import type { SilencedAlertPeriodRequest } from '../../types/alert'
  * Silence an alert
  */
 export const silenceAlert =
-  (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, id: string) => (dispatch, getState: AppGetState) => {
-    const previousAlerts = getState().alert.pendingAlerts
+  (silencedAlertPeriodRequest: SilencedAlertPeriodRequest, pendingAlertId: string) =>
+  (dispatch, getState: AppGetState) => {
+    const previousPendingAlerts = getState().alert.pendingAlerts
     const previousSilencedAlerts = getState().alert.silencedAlerts
 
-    dispatch(addToPendingAlertsBeingSilenced(id))
+    dispatch(
+      addToPendingAlertsBeingSilenced({
+        pendingAlertId,
+        silencedAlertPeriodRequest
+      })
+    )
     const timeout = setTimeout(() => {
-      const nextPendingAlerts = deleteListItems(getState().alert.pendingAlerts, 'id', id)
+      const nextPendingAlerts = deleteListItems(getState().alert.pendingAlerts, 'id', pendingAlertId)
       dispatch(setPendingAlerts(nextPendingAlerts))
 
-      dispatch(removeFromPendingAlertsBeingSilenced(id))
+      dispatch(removeFromSilencedAlertsQueue(pendingAlertId))
     }, 3200)
 
-    silenceAlertFromAPI(id, silencedAlertPeriodRequest)
+    silenceAlertFromAPI(pendingAlertId, silencedAlertPeriodRequest)
       .then(silencedAlert => {
         dispatch(
           removeVesselAlertAndUpdateReporting({
@@ -45,7 +51,7 @@ export const silenceAlert =
       .catch(error => {
         clearTimeout(timeout)
 
-        dispatch(setPendingAlerts(previousAlerts))
+        dispatch(setPendingAlerts(previousPendingAlerts))
         dispatch(setSilencedAlerts(previousSilencedAlerts))
         dispatch(setError(error))
       })

@@ -104,7 +104,7 @@ export function SilencedAlertsList({ silencedSeaFrontAlerts }) {
               style={listItemStyle(alert.id === focusedPendingAlertId, alert.isReactivated)}
             >
               {alert.isReactivated && (
-                <AlertTransition style={alertValidatedTransition}>L&apos;alerte est réactivée</AlertTransition>
+                <AlertTransition style={alertValidatedTransition}>L’alerte est réactivée</AlertTransition>
               )}
               {!alert.isReactivated ? (
                 <FlexboxGrid>

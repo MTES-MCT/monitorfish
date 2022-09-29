@@ -1,29 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { equals, reject } from 'ramda'
 
-import type { PendingAlert, SilencedAlert } from '../types/alert'
+import { deleteListItems } from '../../utils/deleteListItems'
+
+import type { PendingAlert, SilenceAlertQueueItem, SilencedAlert } from '../types/alert'
 import type { SelectedVessel } from '../types/vessel'
 
 export type AlertState = {
   focusedPendingAlertId: string | undefined
-  /** Pending alerts that were just silenced a few seconds ago */
-  pendingAlertIdsBeingSilenced: string[]
   pendingAlerts: PendingAlert[]
   silencedAlerts: SilencedAlert[]
+  silencedAlertsQueue: SilenceAlertQueueItem[]
 }
 const INITIAL_STATE: AlertState = {
   focusedPendingAlertId: undefined,
-  pendingAlertIdsBeingSilenced: [],
   pendingAlerts: [],
-  silencedAlerts: []
+  silencedAlerts: [],
+  silencedAlertsQueue: []
 }
 
 const alertSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'alert',
   reducers: {
-    addToPendingAlertsBeingSilenced(state, action: PayloadAction<string>) {
-      state.pendingAlertIdsBeingSilenced = [...state.pendingAlertIdsBeingSilenced, action.payload]
+    addToPendingAlertsBeingSilenced(state, action: PayloadAction<SilenceAlertQueueItem>) {
+      state.silencedAlertsQueue = [...state.silencedAlertsQueue, action.payload]
     },
 
     /**
@@ -45,8 +45,11 @@ const alertSlice = createSlice({
       state.focusedPendingAlertId = foundPendingAlert.id
     },
 
-    removeFromPendingAlertsBeingSilenced(state, action: PayloadAction<string>) {
-      state.pendingAlertIdsBeingSilenced = reject(equals(action.payload))(state.pendingAlertIdsBeingSilenced)
+    /**
+     * @param action - Original `PendingAlert.id`
+     */
+    removeFromSilencedAlertsQueue(state, action: PayloadAction<string>) {
+      state.silencedAlertsQueue = deleteListItems(state.silencedAlertsQueue, 'pendingAlertId', action.payload)
     },
 
     /**
@@ -75,7 +78,7 @@ const alertSlice = createSlice({
 export const {
   addToPendingAlertsBeingSilenced,
   focusOnAlert,
-  removeFromPendingAlertsBeingSilenced,
+  removeFromSilencedAlertsQueue,
   resetFocusOnPendingAlert,
   setPendingAlerts,
   setSilencedAlerts

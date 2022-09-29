@@ -57,3 +57,8 @@ export type SilencedAlertPeriodRequest = {
   beforeDateTime: Date | null
   silencedAlertPeriod: string | null
 }
+
+export type SilenceAlertQueueItem = {
+  pendingAlertId: string
+  silencedAlertPeriodRequest: SilencedAlertPeriodRequest
+}

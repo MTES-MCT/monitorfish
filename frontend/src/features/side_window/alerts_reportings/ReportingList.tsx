@@ -1,6 +1,7 @@
 import Fuse from 'fuse.js'
 import countries from 'i18n-iso-countries'
-import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
+import { prop } from 'ramda'
+import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Checkbox, FlexboxGrid } from 'rsuite'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
@@ -47,13 +48,17 @@ type ReportingListProps = {
   selectedSeaFront: MenuItem<SeaFront>
 }
 export function ReportingList({ selectedSeaFront }: ReportingListProps) {
-  const dispatch = useAppDispatch()
-  const { currentReportings } = useAppSelector(state => (state as any).reporting)
-  const baseUrl = window.location.origin
+  const isAllCheckboxCheckedRef = useRef(false)
+
   const [sortColumn, setSortColumn] = useState<string>(SortColumns.validationDateTimestamp)
   const [sortType, setSortType] = useState<string>(SortType.DESC)
   const [searched, setSearched] = useState<string | undefined>(undefined)
-  const [checkedReportingIds, setCheckedReportingIds] = useState<number[]>([])
+  const [checkedReportingIds, setCheckedReportingIds] = useState<string[]>([])
+
+  const dispatch = useAppDispatch()
+  const { currentReportings } = useAppSelector(state => state.reporting)
+
+  const baseUrl = useMemo(() => window.location.origin, [])
 
   useEffect(() => {
     setCheckedReportingIds([])
@@ -66,11 +71,11 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
           (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code]
             ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code].seaFronts
             : []
-          ).includes(reporting.value.seaFront)
+          ).includes((reporting.value as any).seaFront)
         )
         .map(reporting => ({
           ...reporting,
-          dml: reporting.value.dml,
+          dml: (reporting.value as any).dml,
           validationDateTimestamp: new Date(reporting.validationDate).getTime()
         })),
     [currentReportings, selectedSeaFront]
@@ -104,13 +109,24 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     [sortedReportings, checkedReportingIds]
   )
 
-  function handleSelectReporting(reportingId) {
-    if (checkedReportingIds.indexOf(reportingId) !== -1) {
-      setCheckedReportingIds(checkedReportingIds.filter(checkedReportingId => checkedReportingId !== reportingId))
-    } else {
-      setCheckedReportingIds(checkedReportingIds.concat(reportingId))
-    }
-  }
+  const handleSelectAllReportings = useCallback(() => {
+    setCheckedReportingIds(isAllCheckboxCheckedRef.current ? [] : sortedAndCheckedReportings.map(prop('id')))
+
+    isAllCheckboxCheckedRef.current = !isAllCheckboxCheckedRef.current
+  }, [sortedAndCheckedReportings])
+
+  const handleSelectOneReporting = useCallback(
+    reportingId => {
+      isAllCheckboxCheckedRef.current = false
+
+      if (checkedReportingIds.indexOf(reportingId) !== -1) {
+        setCheckedReportingIds(checkedReportingIds.filter(checkedReportingId => checkedReportingId !== reportingId))
+      } else {
+        setCheckedReportingIds(checkedReportingIds.concat(reportingId))
+      }
+    },
+    [checkedReportingIds]
+  )
 
   const archive = useCallback(() => {
     if (!(checkedReportingIds.length > 0)) {
@@ -183,7 +199,9 @@ MMSI: ${reporting.mmsi || ''}`
       >
         <CardTableHeader>
           <FlexboxGrid>
-            <FlexboxGrid.Item style={columnStyles[0]} />
+            <FlexboxGrid.Item style={columnStyles[0]}>
+              <StyledCheckbox checked={isAllCheckboxCheckedRef.current} onChange={handleSelectAllReportings} />
+            </FlexboxGrid.Item>
             <FlexboxGrid.Item style={columnStyles[1]}>
               <CardTableColumnTitle
                 dataCy="side-window-order-by-date"
@@ -234,7 +252,10 @@ MMSI: ${reporting.mmsi || ''}`
               <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1}>
                 <FlexboxGrid>
                   <FlexboxGrid.Item style={columnStyles[0]}>
-                    <StyledCheckbox checked={reporting.checked} onChange={() => handleSelectReporting(reporting.id)} />
+                    <StyledCheckbox
+                      checked={reporting.checked}
+                      onChange={() => handleSelectOneReporting(reporting.id)}
+                    />
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[1]} title={reporting.validationDate}>
                     {timeago.format(reporting.validationDate, 'fr')}
@@ -245,19 +266,21 @@ MMSI: ${reporting.mmsi || ''}`
                   <FlexboxGrid.Item style={columnStyles[3]} title={getReportingTitle(reporting, true)}>
                     {getReportingTitle(reporting, false)}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[4]}>{reporting.value.natinfCode}</FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={columnStyles[4]}>{(reporting.value as any).natinfCode}</FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[5]} title={getVesselNameTitle(reporting)}>
                     <Flag
                       rel="preload"
-                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.value.flagState?.toLowerCase()}.svg`}
+                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${(
+                        reporting.value as any
+                      ).flagState?.toLowerCase()}.svg`}
                       style={{ marginLeft: 0, marginRight: 5, marginTop: -2, width: 18 }}
-                      title={countries.getName(reporting.value.flagState?.toLowerCase(), 'fr')}
+                      title={countries.getName((reporting.value as any).flagState?.toLowerCase(), 'fr')}
                     />
                     {reporting.vesselName}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[6]}>{reporting.value.dml}</FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={columnStyles[6]}>{(reporting.value as any).dml}</FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[7]}>
-                    {reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
+                    {(reporting as any).underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
                   </FlexboxGrid.Item>
                   <RowVerticalSeparator />
                   <FlexboxGrid.Item style={columnStyles[8]}>
@@ -265,7 +288,11 @@ MMSI: ${reporting.mmsi || ''}`
                       alt="Voir sur la carte"
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
-                        const vesselIdentity = { ...reporting, flagState: reporting.value.flagState }
+                        const vesselIdentity = {
+                          ...reporting,
+                          // TODO Where is the flagState prop in TS types?
+                          flagState: (reporting.value as any).flagState
+                        }
                         dispatch(showVessel(vesselIdentity, false, false) as any)
                         dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
                       }}

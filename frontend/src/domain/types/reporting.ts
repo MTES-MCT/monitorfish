@@ -12,8 +12,8 @@ export type Reporting<Value = PendingAlertValue | InfractionSuspicion | Observat
   id: string
   internalReferenceNumber: string
   ircs: string
-  // TODO Doesn't exists.
-  // type: ReportingType
+  // TODO Remove local props from API collection.
+  type?: string
   underCharter: boolean
   validationDate: string
   // TODO Create a specific type with a discriminator prop to avoid type-guessing issues

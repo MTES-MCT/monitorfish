@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
 import Hammer from 'hammerjs'
 import { unByKey } from 'ol/Observable'
+import { useEffect } from 'react'
 
 const X = 0
 const Y = 1

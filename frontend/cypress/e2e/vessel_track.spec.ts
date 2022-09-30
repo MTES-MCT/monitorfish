@@ -126,7 +126,7 @@ context('Vessels Track', () => {
       .filter(':contains("les navires non sélectionnés")')
       .eq(1)
       .click({ force: true, timeout: 10000 })
-    cy.wait(200)
+    cy.wait(1000)
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 1)
 
     cy.log('Close the last track')

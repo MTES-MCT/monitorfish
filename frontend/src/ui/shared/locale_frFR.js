@@ -1,3 +1,5 @@
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+
 import { fr } from 'date-fns/locale'
 
 export const Calendar = {
@@ -17,7 +19,7 @@ export const Calendar = {
   formattedMonthPattern: 'MMM, yyyy',
   formattedDayPattern: 'MMM dd, yyyy',
   dateLocale: fr
-};
+}
 
 export default {
   common: {
@@ -75,4 +77,4 @@ export default {
     on: 'Ouvrir',
     off: 'Fermer'
   }
-};
+}

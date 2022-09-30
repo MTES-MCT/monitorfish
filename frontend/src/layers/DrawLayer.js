@@ -1,44 +1,46 @@
-import React, { useEffect, useRef, useState } from 'react'
-
-import { useDispatch, useSelector } from 'react-redux'
+import GeoJSON from 'ol/format/GeoJSON'
+import Draw, { createBox } from 'ol/interaction/Draw'
+import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
+import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { layersType, layersType as LayersType } from '../domain/entities/layers'
 import { InteractionType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
-import Draw, { createBox } from 'ol/interaction/Draw'
 import { resetInteraction } from '../domain/shared_slices/Map'
-import { addZoneSelected } from '../features/vessel_list/VesselList.slice'
-import GeoJSON from 'ol/format/GeoJSON'
-import { drawStyle } from './styles/draw.style'
 import { setZoneSelected } from '../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
-import VectorLayer from 'ol/layer/Vector'
-import { dottedLayerStyle } from './styles/dottedLayer.style'
+import { addZoneSelected } from '../features/vessel_list/VesselList.slice'
 import { useEscapeFromKeyboard } from '../hooks/useEscapeFromKeyboard'
+import { dottedLayerStyle } from './styles/dottedLayer.style'
+import { drawStyle } from './styles/draw.style'
 
-const DrawLayer = ({ map }) => {
+function DrawLayer({ map }) {
   const interaction = useSelector(state => state.map.interaction)
-  const {
-    zoneSelected
-  } = useSelector(state => state.regulatoryLayerSearch)
+  const { zoneSelected } = useSelector(state => state.regulatoryLayerSearch)
   const dispatch = useDispatch()
   const draw = useRef()
   const escape = useEscapeFromKeyboard()
 
-  const [vectorSource] = useState(new VectorSource({
-    format: new GeoJSON({
-      dataProjection: WSG84_PROJECTION,
-      featureProjection: OPENLAYERS_PROJECTION
-    }),
-    projection: OPENLAYERS_PROJECTION,
-    wrapX: false
-  }))
-  const [vectorLayer] = useState(new VectorLayer({
-    source: vectorSource,
-    renderBuffer: 7,
-    updateWhileAnimating: true,
-    updateWhileInteracting: true,
-    zIndex: 999,
-    style: dottedLayerStyle
-  }))
+  const [vectorSource] = useState(
+    new VectorSource({
+      format: new GeoJSON({
+        dataProjection: WSG84_PROJECTION,
+        featureProjection: OPENLAYERS_PROJECTION
+      }),
+      projection: OPENLAYERS_PROJECTION,
+      wrapX: false
+    })
+  )
+  const [vectorLayer] = useState(
+    new VectorLayer({
+      renderBuffer: 7,
+      source: vectorSource,
+      style: dottedLayerStyle,
+      updateWhileAnimating: true,
+      updateWhileInteracting: true,
+      zIndex: 999
+    })
+  )
 
   useEffect(() => {
     if (escape) {
@@ -48,7 +50,7 @@ const DrawLayer = ({ map }) => {
   }, [escape])
 
   useEffect(() => {
-    function addLayerToMap () {
+    function addLayerToMap() {
       if (map) {
         map.getLayers().push(vectorLayer)
       }
@@ -64,7 +66,7 @@ const DrawLayer = ({ map }) => {
   }, [map, vectorLayer])
 
   useEffect(() => {
-    function drawOnMap () {
+    function drawOnMap() {
       if (map && interaction) {
         const source = new VectorSource({ wrapX: false })
 
@@ -78,20 +80,21 @@ const DrawLayer = ({ map }) => {
             break
           default:
             console.error('No interaction type specified')
+
             return
         }
 
         draw.current = new Draw({
-          source: source,
-          type: type,
+          geometryFunction: interaction.type === InteractionType.SQUARE ? createBox() : null,
+          source,
           style: drawStyle,
-          geometryFunction: interaction.type === InteractionType.SQUARE ? createBox() : null
+          type
         })
         map.addInteraction(draw.current)
 
         draw.current.on('drawend', event => {
           const format = new GeoJSON()
-          const feature = event.feature
+          const { feature } = event
           feature.set('type', interaction.type)
           const geoJSONString = format.writeFeature(event.feature, {
             dataProjection: WSG84_PROJECTION,
@@ -99,14 +102,16 @@ const DrawLayer = ({ map }) => {
           })
 
           const newSelectedZone = {
-            name: 'Tracé libre',
             code: LayersType.FREE_DRAW,
-            feature: geoJSONString
+            feature: geoJSONString,
+            name: 'Tracé libre'
           }
           switch (interaction.listener) {
-            case layersType.VESSEL: dispatch(addZoneSelected(newSelectedZone))
+            case layersType.VESSEL:
+              dispatch(addZoneSelected(newSelectedZone))
               break
-            case layersType.REGULATORY: dispatch(setZoneSelected(newSelectedZone))
+            case layersType.REGULATORY:
+              dispatch(setZoneSelected(newSelectedZone))
               break
           }
 

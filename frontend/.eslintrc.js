@@ -7,7 +7,7 @@ module.exports = {
     ecmaVersion: 2022,
     project: path.join(__dirname, 'tsconfig.json')
   },
-  ignorePatterns: ['.eslintrc.js', '.eslintrc.partial.js'],
+  ignorePatterns: ['.eslintrc.js', '.eslintrc.partial.js', 'src/ui/shared/icons/flags.js'],
   env: {
     browser: true
   },
@@ -16,7 +16,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': 'off',
 
     // See https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/#you-may-not-need-defaultprops
-    "react/require-default-props": "off",
+    'react/require-default-props': 'off',
     'react/react-in-jsx-scope': 'off'
   },
   overrides: [

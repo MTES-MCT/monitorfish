@@ -1,11 +1,12 @@
-import { addVesselTrackShowed, resetLoadingVessel } from '../../shared_slices/Vessel'
-import { removeError, setError } from '../../shared_slices/Global'
-import { getVesselId } from '../../entities/vessel'
-import { doNotAnimate } from '../../shared_slices/Map'
-import { getCustomOrDefaultTrackRequest, getTrackResponseError } from '../../entities/vesselTrackDepth'
-import { getVesselPositionsFromAPI } from '../../../api/vessel'
 import { transform } from 'ol/proj'
+
+import { getVesselPositionsFromAPI } from '../../../api/vessel'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map'
+import { getVesselId } from '../../entities/vessel'
+import { getCustomOrDefaultTrackRequest, getTrackResponseError } from '../../entities/vesselTrackDepth'
+import { removeError, setError } from '../../shared_slices/Global'
+import { doNotAnimate } from '../../shared_slices/Map'
+import { addVesselTrackShowed, resetLoadingVessel } from '../../shared_slices/Vessel'
 
 /**
  * Show a specified vessel track on map
@@ -16,9 +17,7 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map'
  * @param {boolean=} zoom
  */
 const showVesselTrack = (vesselIdentity, calledFromCron, trackRequest, zoom) => (dispatch, getState) => {
-  const {
-    defaultVesselTrackDepth
-  } = getState().map
+  const { defaultVesselTrackDepth } = getState().map
   const nextTrackRequest = getCustomOrDefaultTrackRequest(trackRequest, defaultVesselTrackDepth, true)
 
   dispatch(doNotAnimate(calledFromCron))
@@ -26,11 +25,7 @@ const showVesselTrack = (vesselIdentity, calledFromCron, trackRequest, zoom) => 
 
   getVesselPositionsFromAPI(vesselIdentity, nextTrackRequest)
     .then(({ positions, trackDepthHasBeenModified }) => {
-      const error = getTrackResponseError(
-        positions,
-        trackDepthHasBeenModified,
-        calledFromCron,
-        trackRequest)
+      const error = getTrackResponseError(positions, trackDepthHasBeenModified, calledFromCron, trackRequest)
 
       if (error) {
         dispatch(setError(error))
@@ -41,26 +36,33 @@ const showVesselTrack = (vesselIdentity, calledFromCron, trackRequest, zoom) => 
       if (positions?.length) {
         const vesselId = getVesselId(vesselIdentity)
         const firstPosition = positions[positions.length - 1]
-        const coordinates = transform([firstPosition.longitude, firstPosition.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-        const course = firstPosition.course
+        const coordinates = transform(
+          [firstPosition.longitude, firstPosition.latitude],
+          WSG84_PROJECTION,
+          OPENLAYERS_PROJECTION
+        )
+        const { course } = firstPosition
 
-        dispatch(addVesselTrackShowed({
-          vesselId: vesselId,
-          showedVesselTrack: {
-            vesselId: vesselId,
-            vesselIdentity: vesselIdentity,
-            positions: positions,
-            coordinates: coordinates,
-            course: course,
-            isDefaultTrackDepth: !trackRequest,
-            extent: null,
-            toZoom: zoom,
-            toShow: true,
-            toHide: false
-          }
-        }))
+        dispatch(
+          addVesselTrackShowed({
+            showedVesselTrack: {
+              coordinates,
+              course,
+              extent: null,
+              isDefaultTrackDepth: !trackRequest,
+              positions,
+              toHide: false,
+              toShow: true,
+              toZoom: zoom,
+              vesselId,
+              vesselIdentity
+            },
+            vesselId
+          })
+        )
       }
-    }).catch(error => {
+    })
+    .catch(error => {
       console.error(error)
       dispatch(setError(error))
       dispatch(resetLoadingVessel())

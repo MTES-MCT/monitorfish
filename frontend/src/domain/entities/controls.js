@@ -20,7 +20,8 @@ const lastControlByType = yearsToControls => {
   const landControlText = 'Dernier contrôle à la débarque'
 
   const lastControlList = {}
-  const sortedLastYearControlList = Object.values(yearsToControls).flat()
+  const sortedLastYearControlList = Object.values(yearsToControls)
+    .flat()
     .sort((a, b) => {
       if (a.controlDatetimeUtc < b.controlDatetimeUtc) {
         return 1
@@ -115,9 +116,4 @@ const getNumberOfInfractions = control => {
   return 0
 }
 
-export {
-  controlType,
-  lastControlByType,
-  getYearsToControl,
-  getNumberOfInfractions
-}
+export { controlType, lastControlByType, getYearsToControl, getNumberOfInfractions }

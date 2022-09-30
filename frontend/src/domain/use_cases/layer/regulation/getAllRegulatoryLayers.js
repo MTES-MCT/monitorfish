@@ -1,13 +1,14 @@
 import { batch } from 'react-redux'
+
+import { getAllRegulatoryLayersFromAPI } from '../../../../api/geoserver'
+import { MonitorFishWorker } from '../../../../workers/MonitorFishWorker'
 import { setError } from '../../../shared_slices/Global'
+import layer from '../../../shared_slices/Layer'
 import {
   setSelectedRegulatoryZone,
   setLayersTopicsByRegTerritory,
   setRegulatoryLayerLawTypes
 } from '../../../shared_slices/Regulatory'
-import layer from '../../../shared_slices/Layer'
-import { getAllRegulatoryLayersFromAPI } from '../../../../api/geoserver'
-import { MonitorFishWorker } from '../../../../workers/MonitorFishWorker'
 
 const getAllRegulatoryLayers = () => async (dispatch, getState) => {
   const monitorFishWorker = await new MonitorFishWorker()
@@ -15,19 +16,16 @@ const getAllRegulatoryLayers = () => async (dispatch, getState) => {
   const { speciesByCode } = getState().species
 
   return getAllRegulatoryLayersFromAPI(getState().global.isBackoffice)
-    .then(features => {
-      return monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode)
-    })
+    .then(features => monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode))
     .then(response => {
-      const {
-        layersWithoutGeometry,
-        layersTopicsByRegulatoryTerritory
-      } = response
+      const { layersTopicsByRegulatoryTerritory, layersWithoutGeometry } = response
       batch(() => {
         dispatch(setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
         dispatch(setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
         dispatch(setSelectedRegulatoryZone(layersWithoutGeometry))
-        dispatch(setShowedLayersWithLocalStorageValues({ regulatoryZones: layersWithoutGeometry, namespace: 'homepage' }))
+        dispatch(
+          setShowedLayersWithLocalStorageValues({ namespace: 'homepage', regulatoryZones: layersWithoutGeometry })
+        )
       })
     })
     .catch(error => {

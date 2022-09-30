@@ -1,8 +1,8 @@
-import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
+import VectorSource from 'ol/source/Vector'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map'
 
 const vectorSource = new VectorSource({
   format: new GeoJSON({
@@ -19,30 +19,31 @@ const getFilteredVessels = (vessels, filters) => async (dispatch, getState) => {
     if (filters.zonesSelected?.length) {
       filteredVessels = filterByZones(filteredVessels, filters.zonesSelected)
     }
+
     return filteredVessels
   })
 }
 
-function getFiltersWithoutZonesSelected (filters) {
+function getFiltersWithoutZonesSelected(filters) {
   const workerFilters = { ...filters }
   workerFilters.zonesSelected = null
+
   return workerFilters
 }
 
-function filterByZones (filteredVessels, zonesSelected) {
+function filterByZones(filteredVessels, zonesSelected) {
   const featuresGeometries = zonesSelected
     .map(zone => zone.feature)
     .map(feature => vectorSource.getFormat().readFeatures(feature))
 
   if (featuresGeometries && featuresGeometries.length) {
-    const flattenFeaturesGeometries = featuresGeometries
-      .flat()
-      .map(feature => feature.getGeometry())
+    const flattenFeaturesGeometries = featuresGeometries.flat().map(feature => feature.getGeometry())
 
-    filteredVessels = filteredVessels
-      .filter(vessel => {
-        return vessel.coordinates && flattenFeaturesGeometries.some(featureGeometry => featureGeometry.intersectsCoordinate(vessel.coordinates))
-      })
+    filteredVessels = filteredVessels.filter(
+      vessel =>
+        vessel.coordinates &&
+        flattenFeaturesGeometries.some(featureGeometry => featureGeometry.intersectsCoordinate(vessel.coordinates))
+    )
   }
 
   return filteredVessels

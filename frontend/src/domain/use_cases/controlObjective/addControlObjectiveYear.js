@@ -1,13 +1,12 @@
-import { setError } from '../../shared_slices/Global'
 import { addControlObjectiveYearFromAPI } from '../../../api/controlObjective'
+import { setError } from '../../shared_slices/Global'
 
 /**
  * Add a new control Objective year
  */
-const addControlObjectiveYear = () => dispatch => {
-  return addControlObjectiveYearFromAPI().catch(error => {
+const addControlObjectiveYear = () => dispatch =>
+  addControlObjectiveYearFromAPI().catch(error => {
     dispatch(setError(error))
   })
-}
 
 export default addControlObjectiveYear

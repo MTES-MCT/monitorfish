@@ -1,6 +1,7 @@
 import { batch } from 'react-redux'
-import showRegulatoryZone from './showRegulatoryZone'
+
 import LayersEnum from '../../../entities/layers'
+import showRegulatoryZone from './showRegulatoryZone'
 
 let currentNamespace = 'homepage'
 
@@ -13,11 +14,13 @@ const showRegulatoryTopic = topicToShow => dispatch => {
 
   batch(() => {
     topicToShow.regulatoryZones.forEach(regulatoryZone => {
-      dispatch(showRegulatoryZone({
-        type: LayersEnum.REGULATORY.code,
-        ...regulatoryZone,
-        namespace: currentNamespace
-      }))
+      dispatch(
+        showRegulatoryZone({
+          type: LayersEnum.REGULATORY.code,
+          ...regulatoryZone,
+          namespace: currentNamespace
+        })
+      )
     })
   })
 }

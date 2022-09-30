@@ -1,4 +1,5 @@
 import Feature from 'ol/Feature'
+
 import {
   REGULATION_ACTION_TYPE,
   getRegulatoryFeatureId,
@@ -6,7 +7,7 @@ import {
 } from '../../../entities/regulatory'
 import updateRegulation from './updateRegulation'
 
-const resetRegulation = (id, nextId) => (dispatch) => {
+const resetRegulation = (id, nextId) => dispatch => {
   emptyRegulatoryFeatureObject.next_id = nextId
   const emptyFeature = new Feature(emptyRegulatoryFeatureObject)
   emptyFeature.setId(getRegulatoryFeatureId(id))

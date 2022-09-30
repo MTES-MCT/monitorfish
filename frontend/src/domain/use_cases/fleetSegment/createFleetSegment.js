@@ -1,6 +1,6 @@
-import { setError } from '../../shared_slices/Global'
-import { setFleetSegments } from '../../shared_slices/FleetSegment'
 import { createFleetSegmentFromAPI } from '../../../api/fleetSegment'
+import { setFleetSegments } from '../../shared_slices/FleetSegment'
+import { setError } from '../../shared_slices/Global'
 
 /**
  * Create a fleet segment
@@ -8,19 +8,18 @@ import { createFleetSegmentFromAPI } from '../../../api/fleetSegment'
  * @param {UpdateFleetSegment} segmentFields - The fields of the fleet segment
  * @throws {Error}
  */
-const createFleetSegment = (segmentFields) => (dispatch, getState) => {
+const createFleetSegment = segmentFields => (dispatch, getState) => {
   if (!segmentFields?.segment) {
-    dispatch(setError(new Error('Le segment de flotte n\'a pas de nom')))
+    dispatch(setError(new Error("Le segment de flotte n'a pas de nom")))
+
     return
   }
   const previousFleetSegments = Object.assign([], getState().fleetSegment.fleetSegments)
   const nextFleetSegments = previousFleetSegments.concat(segmentFields)
-  dispatch(setFleetSegments(nextFleetSegments
-    .sort((a, b) => a.segment.localeCompare(b.segment))))
+  dispatch(setFleetSegments(nextFleetSegments.sort((a, b) => a.segment.localeCompare(b.segment))))
 
   return createFleetSegmentFromAPI(segmentFields).catch(error => {
-    dispatch(setFleetSegments(previousFleetSegments
-      .sort((a, b) => a.segment.localeCompare(b.segment))))
+    dispatch(setFleetSegments(previousFleetSegments.sort((a, b) => a.segment.localeCompare(b.segment))))
     dispatch(setError(error))
   })
 }

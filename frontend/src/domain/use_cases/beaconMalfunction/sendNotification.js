@@ -1,5 +1,5 @@
-import { setError } from '../../shared_slices/Global'
 import { sendNotificationFromAPI } from '../../../api/beaconMalfunction'
+import { setError } from '../../shared_slices/Global'
 
 /**
  * Send a notification
@@ -7,11 +7,10 @@ import { sendNotificationFromAPI } from '../../../api/beaconMalfunction'
  * @param {number} beaconMalfunctionId
  * @param {string} notificationType
  */
-const sendNotification = (beaconMalfunctionId, notificationType) => dispatch => {
-  return sendNotificationFromAPI(beaconMalfunctionId, notificationType).catch(error => {
+const sendNotification = (beaconMalfunctionId, notificationType) => dispatch =>
+  sendNotificationFromAPI(beaconMalfunctionId, notificationType).catch(error => {
     console.error(error)
     dispatch(setError(error))
   })
-}
 
 export default sendNotification

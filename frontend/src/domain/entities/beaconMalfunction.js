@@ -55,52 +55,52 @@ const vesselStatuses = [
     value: 'AT_PORT',
     color: '#F4DEAF',
     textColor: COLORS.charcoal,
-    icon: <VesselStatusAtPort style={iconStyle}/>
+    icon: <VesselStatusAtPort style={iconStyle} />
   },
   {
     label: 'Navire en mer',
     value: 'AT_SEA',
     color: '#9ED7D9',
     textColor: COLORS.charcoal,
-    icon: <VesselStatusAtSea style={iconStyle}/>
+    icon: <VesselStatusAtSea style={iconStyle} />
   },
   {
     label: 'Sans nouvelles',
     value: 'NO_NEWS',
     color: '#E6BC51',
     textColor: COLORS.charcoal,
-    icon: <VesselStatusNoNews style={iconStyle}/>
+    icon: <VesselStatusNoNews style={iconStyle} />
   },
   {
-    label: 'N\'a jamais émis',
+    label: "N'a jamais émis",
     value: 'NEVER_EMITTED',
     color: COLORS.charcoal,
     textColor: COLORS.white,
-    icon: <VesselStatusNeverEmitted style={iconStyle}/>
+    icon: <VesselStatusNeverEmitted style={iconStyle} />
   },
   {
     label: 'Activité détectée',
     value: 'ACTIVITY_DETECTED',
     color: '#C41812',
     textColor: COLORS.white,
-    icon: <VesselStatusActivityDetected style={iconStyle}/>
+    icon: <VesselStatusActivityDetected style={iconStyle} />
   }
 ]
 
 const endOfBeaconMalfunctionReasons = {
-  'RESUMED_TRANSMISSION': {
+  RESUMED_TRANSMISSION: {
     label: 'Reprise des émissions',
     value: 'RESUMED_TRANSMISSION',
     color: COLORS.mediumSeaGreen,
     textColor: COLORS.white
   },
-  'TEMPORARY_INTERRUPTION_OF_SUPERVISION': {
+  TEMPORARY_INTERRUPTION_OF_SUPERVISION: {
     label: 'Arrêt temporaire du suivi',
     value: 'TEMPORARY_INTERRUPTION_OF_SUPERVISION',
     color: COLORS.opal,
     textColor: COLORS.gunMetal
   },
-  'PERMANENT_INTERRUPTION_OF_SUPERVISION': {
+  PERMANENT_INTERRUPTION_OF_SUPERVISION: {
     label: 'Arrêt définitif du suivi',
     value: 'PERMANENT_INTERRUPTION_OF_SUPERVISION',
     color: COLORS.opal,
@@ -136,7 +136,7 @@ const getYearsToBeaconMalfunctions = (beaconMalfunctionsFromDate, beaconMalfunct
   return nextYearsToBeaconMalfunctions
 }
 
-function initYears (beaconMalfunctionsFromDate, nextYearsToBeaconMalfunctions) {
+function initYears(beaconMalfunctionsFromDate, nextYearsToBeaconMalfunctions) {
   let fromYear = beaconMalfunctionsFromDate.getUTCFullYear() + 1
   while (fromYear < new Date().getUTCFullYear()) {
     nextYearsToBeaconMalfunctions[fromYear] = []
@@ -154,8 +154,14 @@ function initYears (beaconMalfunctionsFromDate, nextYearsToBeaconMalfunctions) {
  * }} The sum of beacon malfunctions at sea and port
  */
 const getNumberOfSeaAndLandBeaconMalfunctions = beaconMalfunctions => {
-  const numberOfBeaconMalfunctionsAtSea = getNumberOfBeaconMalfunctionsAt(BeaconMalfunctionVesselStatus.AT_SEA, beaconMalfunctions)
-  const numberOfBeaconMalfunctionsAtPort = getNumberOfBeaconMalfunctionsAt(BeaconMalfunctionVesselStatus.AT_PORT, beaconMalfunctions)
+  const numberOfBeaconMalfunctionsAtSea = getNumberOfBeaconMalfunctionsAt(
+    BeaconMalfunctionVesselStatus.AT_SEA,
+    beaconMalfunctions
+  )
+  const numberOfBeaconMalfunctionsAtPort = getNumberOfBeaconMalfunctionsAt(
+    BeaconMalfunctionVesselStatus.AT_PORT,
+    beaconMalfunctions
+  )
 
   return {
     numberOfBeaconMalfunctionsAtSea: numberOfBeaconMalfunctionsAtSea,
@@ -171,9 +177,9 @@ const getNumberOfSeaAndLandBeaconMalfunctions = beaconMalfunctions => {
  * @returns {number} The sum of beacon malfunctions at sea and port
  */
 const getNumberOfBeaconMalfunctionsAt = (vesselStatus, beaconMalfunctionsWithDetails) => {
-  return beaconMalfunctionsWithDetails
-    .filter(beaconMalfunctionWithDetails => getFirstVesselStatus(beaconMalfunctionWithDetails) === vesselStatus)
-    .length
+  return beaconMalfunctionsWithDetails.filter(
+    beaconMalfunctionWithDetails => getFirstVesselStatus(beaconMalfunctionWithDetails) === vesselStatus
+  ).length
 }
 
 /**
@@ -183,8 +189,9 @@ const getNumberOfBeaconMalfunctionsAt = (vesselStatus, beaconMalfunctionsWithDet
  * @returns {string<BeaconMalfunctionVesselStatus>} The vessel status
  */
 const getFirstVesselStatus = beaconMalfunctionWithDetails => {
-  const beaconMalfunctionsVesselStatusActions = beaconMalfunctionWithDetails?.actions
-    ?.filter(action => action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS)
+  const beaconMalfunctionsVesselStatusActions = beaconMalfunctionWithDetails?.actions?.filter(
+    action => action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS
+  )
 
   switch (beaconMalfunctionsVesselStatusActions?.length === 0) {
     case true:
@@ -199,37 +206,41 @@ const beaconMalfunctionsStages = {
     code: 'INITIAL_ENCOUNTER',
     title: 'Premier contact',
     isColumn: true,
-    description: 'Obtenir une réponse des navires qui ont cessé d\'émettre.'
+    description: "Obtenir une réponse des navires qui ont cessé d'émettre."
   },
   FOUR_HOUR_REPORT: {
     code: 'FOUR_HOUR_REPORT',
     title: '4h report',
     isColumn: true,
-    description: 'Suivre les navires qui font leurs 4h report ou les relancer s\'ils l\'ont cessé.'
+    description: "Suivre les navires qui font leurs 4h report ou les relancer s'ils l'ont cessé."
   },
   RELAUNCH_REQUEST: {
     code: 'RELAUNCH_REQUEST',
     title: 'Relance pour reprise',
     isColumn: true,
-    description: 'Relancer les navires qui sont à quai (ou supposés à quai) et qui n\'ont pas encore repris leurs émissions.'
+    description:
+      "Relancer les navires qui sont à quai (ou supposés à quai) et qui n'ont pas encore repris leurs émissions."
   },
   TARGETING_VESSEL: {
     code: 'TARGETING_VESSEL',
     title: 'Ciblage du navire',
     isColumn: true,
-    description: 'Mobiliser les unités sur les navires dont on n\'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.'
+    description:
+      "Mobiliser les unités sur les navires dont on n'a pas de nouvelles et/ou qui sont actifs en mer sans VMS."
   },
   CROSS_CHECK: {
     code: 'CROSS_CHECK',
     title: 'Contrôle croisé',
     isColumn: true,
-    description: 'Mobiliser les unités sur les navires dont on n\'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.'
+    description:
+      "Mobiliser les unités sur les navires dont on n'a pas de nouvelles et/ou qui sont actifs en mer sans VMS."
   },
   END_OF_MALFUNCTION: {
     code: 'END_OF_MALFUNCTION',
-    title: 'Fin de l\'avarie',
+    title: "Fin de l'avarie",
     isColumn: true,
-    description: 'Envoyer un message de reprise aux unités dont les émissions ont repris et archiver les avaries qu\'on ne suit plus.'
+    description:
+      "Envoyer un message de reprise aux unités dont les émissions ont repris et archiver les avaries qu'on ne suit plus."
   },
   ARCHIVED: {
     code: 'ARCHIVED',
@@ -242,15 +253,17 @@ const beaconMalfunctionsStages = {
     title: 'Reprise des émissions',
     code: 'RESUMED_TRANSMISSION',
     isColumn: false
-  },
+  }
 }
 
-const getIsMalfunctioning = stage => stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
-  stage !== beaconMalfunctionsStages.ARCHIVED.code
+const getIsMalfunctioning = stage =>
+  stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code && stage !== beaconMalfunctionsStages.ARCHIVED.code
 
 const getMalfunctionStartDateText = (vesselStatus, beaconMalfunction) => {
-  if (beaconMalfunction?.stage === beaconMalfunctionsStages.END_OF_MALFUNCTION.code ||
-    beaconMalfunction?.stage === beaconMalfunctionsStages.ARCHIVED.code) {
+  if (
+    beaconMalfunction?.stage === beaconMalfunctionsStages.END_OF_MALFUNCTION.code ||
+    beaconMalfunction?.stage === beaconMalfunctionsStages.ARCHIVED.code
+  ) {
     switch (beaconMalfunction?.endOfBeaconMalfunctionReason) {
       case endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value:
         return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
@@ -275,23 +288,23 @@ const getFirstStatusActionDate = (vesselStatus, malfunctionStartDateTime) => {
 
 const beaconMalfunctionNotificationType = {
   MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: {
-    followUpMessage: 'Notification initiale d\'avarie en mer',
+    followUpMessage: "Notification initiale d'avarie en mer",
     preposition: 'de la'
   },
   MALFUNCTION_AT_SEA_REMINDER: {
     followUpMessage: 'Relance pour avarie en mer',
-    preposition: 'd\'une'
+    preposition: "d'une"
   },
   MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: {
-    followUpMessage: 'Notification initiale d\'avarie à quai',
+    followUpMessage: "Notification initiale d'avarie à quai",
     preposition: 'de la'
   },
   MALFUNCTION_AT_PORT_REMINDER: {
     followUpMessage: 'Relance pour avarie à quai',
-    preposition: 'd\'une'
+    preposition: "d'une"
   },
   END_OF_MALFUNCTION: {
-    followUpMessage: 'Notification de fin d\'avarie',
+    followUpMessage: "Notification de fin d'avarie",
     preposition: 'de la'
   }
 }

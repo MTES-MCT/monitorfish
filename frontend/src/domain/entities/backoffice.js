@@ -40,19 +40,29 @@ export const SPECIES_REGULATION_KEYS = {
 }
 
 export const SORTED_CATEGORY_LIST = [
-  'Chaluts', 'Sennes traînantes', 'Dragues', 'Sennes tournantes coulissantes',
-  'Filets tournants', 'Filets maillants et filets emmêlants', 'Filets soulevés',
-  'Lignes et hameçons', 'Pièges et casiers', 'Palangres', 'Gangui', 'Engins de récolte', 'Engins divers'
+  'Chaluts',
+  'Sennes traînantes',
+  'Dragues',
+  'Sennes tournantes coulissantes',
+  'Filets tournants',
+  'Filets maillants et filets emmêlants',
+  'Filets soulevés',
+  'Lignes et hameçons',
+  'Pièges et casiers',
+  'Palangres',
+  'Gangui',
+  'Engins de récolte',
+  'Engins divers'
 ]
 
-const CATEGORIES_TO_HIDE = ['engins inconnus', 'pas d\'engin', 'engins de pêche récréative']
+const CATEGORIES_TO_HIDE = ['engins inconnus', "pas d'engin", 'engins de pêche récréative']
 
 /**
  *
  * @param {Object.<string, Gear[]>} categoriesToGears
  * @returns
  */
-export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
+export const prepareCategoriesAndGearsToDisplay = categoriesToGears => {
   return SORTED_CATEGORY_LIST.map(category => {
     if (!CATEGORIES_TO_HIDE.includes(category) && categoriesToGears[category]) {
       const categoryGearList = [...categoriesToGears[category]]
@@ -66,7 +76,7 @@ export const prepareCategoriesAndGearsToDisplay = (categoriesToGears) => {
           }
           return 0
         })
-        .map((gear) => {
+        .map(gear => {
           return {
             label: `${gear.code} - ${gear.name}`,
             value: gear.code

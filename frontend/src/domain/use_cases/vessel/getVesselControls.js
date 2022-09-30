@@ -1,51 +1,50 @@
-import { removeError, setError } from '../../shared_slices/Global'
-import {
-  loadControls,
-  setControlResumeAndControls,
-  setNextControlResumeAndControls
-} from '../../shared_slices/Control'
-import NoControlsFoundError from '../../../errors/NoControlsFoundError'
 import { batch } from 'react-redux'
+
 import { getVesselControlsFromAPI } from '../../../api/vessel'
+import NoControlsFoundError from '../../../errors/NoControlsFoundError'
+import { loadControls, setControlResumeAndControls, setNextControlResumeAndControls } from '../../shared_slices/Control'
+import { removeError, setError } from '../../shared_slices/Global'
 
 const getVesselControls = userRequest => (dispatch, getState) => {
-  const {
-    selectedVessel
-  } = getState().vessel
+  const { selectedVessel } = getState().vessel
 
-  const {
-    currentControlResumeAndControls,
-    controlsFromDate
-  } = getState().controls
+  const { controlsFromDate, currentControlResumeAndControls } = getState().controls
 
   if (selectedVessel?.id) {
-    const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(selectedVessel.id, currentControlResumeAndControls)
+    const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(
+      selectedVessel.id,
+      currentControlResumeAndControls
+    )
 
     if (!isSameVesselAsCurrentlyShowed) {
       dispatch(loadControls())
     }
 
-    getVesselControlsFromAPI(selectedVessel.id, controlsFromDate).then(controlResumeAndControls => {
-      if (isSameVesselAsCurrentlyShowed && !userRequest) {
-        if (controlResumeAndControls.controls?.length > currentControlResumeAndControls.controls?.length) {
-          dispatch(setNextControlResumeAndControls(controlResumeAndControls))
+    getVesselControlsFromAPI(selectedVessel.id, controlsFromDate)
+      .then(controlResumeAndControls => {
+        if (isSameVesselAsCurrentlyShowed && !userRequest) {
+          if (controlResumeAndControls.controls?.length > currentControlResumeAndControls.controls?.length) {
+            dispatch(setNextControlResumeAndControls(controlResumeAndControls))
+          }
+        } else {
+          dispatch(setControlResumeAndControls(controlResumeAndControls))
         }
-      } else {
-        dispatch(setControlResumeAndControls(controlResumeAndControls))
-      }
-      dispatch(removeError())
-    }).catch(error => {
-      console.error(error)
-      batch(() => {
-        dispatch(setError(error))
+        dispatch(removeError())
       })
-    })
+      .catch(error => {
+        console.error(error)
+        batch(() => {
+          dispatch(setError(error))
+        })
+      })
   } else {
     batch(() => {
       dispatch(setError(new NoControlsFoundError('Aucun contrôle connu')))
-      dispatch(setControlResumeAndControls({
-        controls: []
-      }))
+      dispatch(
+        setControlResumeAndControls({
+          controls: []
+        })
+      )
     })
   }
 }

@@ -1,6 +1,6 @@
-import { setError } from '../../shared_slices/Global'
-import { setFleetSegments } from '../../shared_slices/FleetSegment'
 import { updateFleetSegmentFromAPI } from '../../../api/fleetSegment'
+import { setFleetSegments } from '../../shared_slices/FleetSegment'
+import { setError } from '../../shared_slices/Global'
 
 /**
  * Update a fleet segment
@@ -12,22 +12,21 @@ import { updateFleetSegmentFromAPI } from '../../../api/fleetSegment'
 const updateFleetSegment = (segment, updatedFields) => (dispatch, getState) => {
   if (!segment) {
     dispatch(setError(new Error('Erreur lors de la modification du segment de flotte')))
+
     return
   }
   const previousFleetSegments = Object.assign([], getState().fleetSegment.fleetSegments)
   const nextFleetSegments = updateFleetSegments(previousFleetSegments, segment, updatedFields)
-  dispatch(setFleetSegments(nextFleetSegments
-    .sort((a, b) => a.segment.localeCompare(b.segment))))
+  dispatch(setFleetSegments(nextFleetSegments.sort((a, b) => a.segment.localeCompare(b.segment))))
 
   updateFleetSegmentFromAPI(segment, updatedFields).catch(error => {
-    dispatch(setFleetSegments(previousFleetSegments
-      .sort((a, b) => a.segment.localeCompare(b.segment))))
+    dispatch(setFleetSegments(previousFleetSegments.sort((a, b) => a.segment.localeCompare(b.segment))))
     dispatch(setError(error))
   })
 }
 
-function updateFleetSegments (previousFleetSegments, segment, updatedFields) {
-  const fleetSegmentToUpdate = Object.assign({}, previousFleetSegments.find(_segment => _segment.segment === segment))
+function updateFleetSegments(previousFleetSegments, segment, updatedFields) {
+  const fleetSegmentToUpdate = { ...previousFleetSegments.find(_segment => _segment.segment === segment) }
 
   Object.keys(updatedFields).forEach(key => {
     if (updatedFields[key] || updatedFields[key] === 0) {

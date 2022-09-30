@@ -1,5 +1,5 @@
-import LayersEnum, { layersType } from '../../../entities/layers'
 import { getAdministrativeSubZonesFromAPI } from '../../../../api/geoserver'
+import LayersEnum, { layersType } from '../../../entities/layers'
 
 const getAdministrativeZonesAndSubZones = administrativeZones => async (dispatch, getState) => {
   let nextZones = []
@@ -9,14 +9,17 @@ const getAdministrativeZonesAndSubZones = administrativeZones => async (dispatch
     .filter(zone => !zone.group)
     .map(zone => [zone])
 
-  const groups = [...new Set(administrativeZones
-    .filter(zone => zone.group)
-    .filter(zone => !zone.showMultipleZonesInAdministrativeZones)
-    .map(zone => zone.group))]
+  const groups = [
+    ...new Set(
+      administrativeZones
+        .filter(zone => zone.group)
+        .filter(zone => !zone.showMultipleZonesInAdministrativeZones)
+        .map(zone => zone.group)
+    )
+  ]
 
   groups.forEach(group => {
-    nextZones.push(administrativeZones
-      .filter(zone => zone.group && zone.group === group))
+    nextZones.push(administrativeZones.filter(zone => zone.group && zone.group === group))
   })
 
   const nextSubZonesPromises = Object.keys(LayersEnum)
@@ -25,20 +28,20 @@ const getAdministrativeZonesAndSubZones = administrativeZones => async (dispatch
     .filter(zone => zone.showMultipleZonesInAdministrativeZones)
     .map(zone => {
       if (zone.containsMultipleZones) {
-        return getAdministrativeSubZonesFromAPI(zone.code, getState().global.isBackoffice).then(subZonesFeatures => {
-          return subZonesFeatures.features.map(subZone => {
-            return {
+        return getAdministrativeSubZonesFromAPI(zone.code, getState().global.isBackoffice)
+          .then(subZonesFeatures =>
+            subZonesFeatures.features.map(subZone => ({
+              code: subZone.id,
               group: zone.group,
               groupCode: zone.code,
+              isSubZone: true,
               name: subZone.properties[zone.subZoneFieldKey] ? subZone.properties[zone.subZoneFieldKey] : 'Aucun nom',
-              code: subZone.id,
-              showMultipleZonesInAdministrativeZones: zone.showMultipleZonesInAdministrativeZones,
-              isSubZone: true
-            }
+              showMultipleZonesInAdministrativeZones: zone.showMultipleZonesInAdministrativeZones
+            }))
+          )
+          .catch(error => {
+            console.error(error)
           })
-        }).catch(error => {
-          console.error(error)
-        })
       }
 
       const nextSubZone = { ...zone }
@@ -48,7 +51,7 @@ const getAdministrativeZonesAndSubZones = administrativeZones => async (dispatch
       return nextSubZone
     })
 
-  return Promise.all(nextSubZonesPromises).then((nextSubZones) => {
+  return Promise.all(nextSubZonesPromises).then(nextSubZones => {
     const nextSubZonesWithoutNulls = nextSubZones.flat().filter(zone => zone)
 
     const groups = [...new Set(nextSubZonesWithoutNulls.map(zone => zone.group))]

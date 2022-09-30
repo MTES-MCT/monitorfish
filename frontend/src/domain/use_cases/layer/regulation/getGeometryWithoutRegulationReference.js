@@ -1,14 +1,13 @@
-import { setError } from '../../../shared_slices/Global'
 import { getAllGeometryWithoutProperty } from '../../../../api/geoserver'
 import { MonitorFishWorker } from '../../../../workers/MonitorFishWorker'
+import { setError } from '../../../shared_slices/Global'
 
 const getGeometryWithoutRegulationReference = () => async (dispatch, getState) => {
   const monitorFishWorker = await new MonitorFishWorker()
 
   return getAllGeometryWithoutProperty(getState().global.isBackoffice)
-    .then(features => {
-      return monitorFishWorker.getGeometryWithoutRegulationRef(features)
-    }).catch(error => {
+    .then(features => monitorFishWorker.getGeometryWithoutRegulationRef(features))
+    .catch(error => {
       dispatch(setError(error))
     })
 }

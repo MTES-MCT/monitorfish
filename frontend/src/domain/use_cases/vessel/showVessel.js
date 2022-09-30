@@ -1,11 +1,12 @@
 import { batch } from 'react-redux'
+
+import { getVesselFromAPI } from '../../../api/vessel'
 import { getOnlyVesselIdentityProperties, Vessel, VesselSidebarTab } from '../../entities/vessel'
-import { loadingVessel, resetLoadingVessel, setSelectedVessel, showVesselSidebarTab } from '../../shared_slices/Vessel'
-import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
-import { doNotAnimate } from '../../shared_slices/Map'
 import { getCustomOrDefaultTrackRequest, getTrackResponseError } from '../../entities/vesselTrackDepth'
 import { removeFishingActivitiesFromMap } from '../../shared_slices/FishingActivities'
-import { getVesselFromAPI } from '../../../api/vessel'
+import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
+import { doNotAnimate } from '../../shared_slices/Map'
+import { loadingVessel, resetLoadingVessel, setSelectedVessel, showVesselSidebarTab } from '../../shared_slices/Vessel'
 
 /**
  * Show a specified vessel track on map and on the vessel right sidebar
@@ -17,8 +18,8 @@ import { getVesselFromAPI } from '../../../api/vessel'
 const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispatch, getState) => {
   vesselIdentity = getOnlyVesselIdentityProperties(vesselIdentity)
 
-  const { vessel, fishingActivities, map, global } = getState()
-  const { vessels, selectedVesselTrackRequest } = vessel
+  const { fishingActivities, global, map, vessel } = getState()
+  const { selectedVesselTrackRequest, vessels } = vessel
   const { defaultVesselTrackDepth } = map
   const { areFishingActivitiesShowedOnMap } = fishingActivities
   const { isAdmin } = global
@@ -41,7 +42,7 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
   }
 
   return getVesselFromAPI(vesselIdentity, nextTrackRequest)
-    .then(({ vesselAndPositions, trackDepthHasBeenModified }) => {
+    .then(({ trackDepthHasBeenModified, vesselAndPositions }) => {
       const error = getTrackResponseError(
         vesselAndPositions.positions,
         trackDepthHasBeenModified,
@@ -66,8 +67,8 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
 
         return dispatch(
           setSelectedVessel({
-            vessel: selectedVessel,
-            positions: vesselAndPositions.positions
+            positions: vesselAndPositions.positions,
+            vessel: selectedVessel
           })
         )
       })
@@ -92,8 +93,8 @@ function dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity) {
     }
     dispatch(
       loadingVessel({
-        vesselIdentity,
-        calledFromCron
+        calledFromCron,
+        vesselIdentity
       })
     )
   })

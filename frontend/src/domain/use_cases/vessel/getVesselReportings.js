@@ -1,44 +1,43 @@
-import { removeError, setError } from '../../shared_slices/Global'
 import { getVesselReportingsFromAPI } from '../../../api/vessel'
+import { vesselsAreEquals } from '../../entities/vessel'
+import { removeError, setError } from '../../shared_slices/Global'
 import {
   loadReporting,
   resetCurrentAndArchivedReportingsOfSelectedVessel,
   setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../../shared_slices/Reporting'
-import { vesselsAreEquals } from '../../entities/vessel'
 
 const getVesselReportings = () => (dispatch, getState) => {
-  const {
-    selectedVesselIdentity
-  } = getState().vessel
+  const { selectedVesselIdentity } = getState().vessel
 
   if (!selectedVesselIdentity) {
     return
   }
 
-  const {
-    currentAndArchivedReportingsOfSelectedVessel,
-    archivedReportingsFromDate,
-    vesselIdentity
-  } = getState().reporting
+  const { archivedReportingsFromDate, currentAndArchivedReportingsOfSelectedVessel, vesselIdentity } =
+    getState().reporting
 
   if (!currentAndArchivedReportingsOfSelectedVessel) {
     dispatch(loadReporting())
   }
 
-  getVesselReportingsFromAPI(selectedVesselIdentity, archivedReportingsFromDate).then(nextCurrentAndArchivedReporting => {
-    dispatch(setCurrentAndArchivedReportingsOfSelectedVessel({
-      currentAndArchivedReportingsOfSelectedVessel: nextCurrentAndArchivedReporting,
-      vesselIdentity: selectedVesselIdentity
-    }))
-    dispatch(removeError())
-  }).catch(error => {
-    if (!vesselsAreEquals(selectedVesselIdentity, vesselIdentity)) {
-      dispatch(resetCurrentAndArchivedReportingsOfSelectedVessel())
-    }
-    console.error(error)
-    dispatch(setError(error))
-  })
+  getVesselReportingsFromAPI(selectedVesselIdentity, archivedReportingsFromDate)
+    .then(nextCurrentAndArchivedReporting => {
+      dispatch(
+        setCurrentAndArchivedReportingsOfSelectedVessel({
+          currentAndArchivedReportingsOfSelectedVessel: nextCurrentAndArchivedReporting,
+          vesselIdentity: selectedVesselIdentity
+        })
+      )
+      dispatch(removeError())
+    })
+    .catch(error => {
+      if (!vesselsAreEquals(selectedVesselIdentity, vesselIdentity)) {
+        dispatch(resetCurrentAndArchivedReportingsOfSelectedVessel())
+      }
+      console.error(error)
+      dispatch(setError(error))
+    })
 }
 
 export default getVesselReportings

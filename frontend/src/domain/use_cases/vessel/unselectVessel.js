@@ -1,9 +1,10 @@
 import { batch } from 'react-redux'
-import { resetSelectedVessel, closeVesselSidebar } from '../../shared_slices/Vessel'
-import { hideFishingActivitiesOnMap } from '../../shared_slices/FishingActivities'
+
 import { resetVesselBeaconMalfunctionsResumeAndHistory } from '../../shared_slices/BeaconMalfunction'
-import { resetCurrentAndArchivedReportingsOfSelectedVessel } from '../../shared_slices/Reporting'
+import { hideFishingActivitiesOnMap } from '../../shared_slices/FishingActivities'
 import { expandRightMenu } from '../../shared_slices/Global'
+import { resetCurrentAndArchivedReportingsOfSelectedVessel } from '../../shared_slices/Reporting'
+import { resetSelectedVessel, closeVesselSidebar } from '../../shared_slices/Vessel'
 
 const unselectVessel = () => dispatch => {
   batch(() => {

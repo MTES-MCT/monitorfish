@@ -106,6 +106,8 @@ module.exports = {
       files: ['cypress/**/*.js', 'cypress/**/*.ts', 'cypress.config.ts'],
       plugins: ['cypress'],
       rules: {
+        '@typescript-eslint/naming-convention': 'off',
+
         'cypress/no-assigning-return-values': 'error',
         // TODO Hopefully we'll able to enforce that rule someday.
         'cypress/no-unnecessary-waiting': 'off',

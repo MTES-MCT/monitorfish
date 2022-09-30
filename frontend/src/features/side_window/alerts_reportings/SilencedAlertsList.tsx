@@ -18,16 +18,16 @@ import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { PENDING_ALERTS_SEARCH_OPTIONS } from './constants'
 import { getAlertNameFromType } from './utils'
 
+import type { SilencedAlert } from '../../../domain/types/alert'
 import type { CSSProperties } from 'react'
 
+export type SilencedAlertsListProps = {
+  silencedAlerts: SilencedAlert[]
+}
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way
- * @param silencedSeaFrontAlerts
- * @param baseRef
- * @return {JSX.Element}
- * @constructor
  */
-export function SilencedAlertsList({ silencedSeaFrontAlerts }) {
+export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) {
   const dispatch = useAppDispatch()
   const { focusedPendingAlertId } = useAppSelector(state => state.alert)
   const baseUrl = window.location.origin
@@ -35,15 +35,15 @@ export function SilencedAlertsList({ silencedSeaFrontAlerts }) {
   const [sortType] = useState(SortType.ASC)
   const [searchQuery, setSearchQuery] = useState<string>()
 
-  const fuse = useMemo(() => new Fuse(silencedSeaFrontAlerts, PENDING_ALERTS_SEARCH_OPTIONS), [silencedSeaFrontAlerts])
+  const fuse = useMemo(() => new Fuse(silencedAlerts, PENDING_ALERTS_SEARCH_OPTIONS), [silencedAlerts])
 
   const filteredAlerts = useMemo(() => {
     if (!searchQuery || searchQuery.length <= 1) {
-      return silencedSeaFrontAlerts
+      return silencedAlerts
     }
 
     return fuse.search(searchQuery).map(result => result.item)
-  }, [silencedSeaFrontAlerts, searchQuery, fuse])
+  }, [silencedAlerts, searchQuery, fuse])
 
   const sortedAlerts = useMemo(
     () => filteredAlerts.slice().sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType)),
@@ -106,7 +106,7 @@ export function SilencedAlertsList({ silencedSeaFrontAlerts }) {
               {alert.isReactivated && (
                 <AlertTransition style={alertValidatedTransition}>L’alerte est réactivée</AlertTransition>
               )}
-              {!alert.isReactivated ? (
+              {!alert.isReactivated && (
                 <FlexboxGrid>
                   <FlexboxGrid.Item style={vesselNameColumnStyle}>
                     <Flag
@@ -117,7 +117,7 @@ export function SilencedAlertsList({ silencedSeaFrontAlerts }) {
                     />
                     {alert.vesselName}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={alertTypeStyle}>{getAlertNameFromType(alert.type)}</FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={alertTypeStyle}>{getAlertNameFromType(alert.value.type)}</FlexboxGrid.Item>
                   <FlexboxGrid.Item style={alertNatinfStyle}>{alert.value.natinfCode}</FlexboxGrid.Item>
                   <FlexboxGrid.Item style={ignoredForStyle}>
                     {/* TODO Move that into a `SilenceAlertRow` component. */}
@@ -163,7 +163,7 @@ export function SilencedAlertsList({ silencedSeaFrontAlerts }) {
                     />
                   </FlexboxGrid.Item>
                 </FlexboxGrid>
-              ) : null}
+              )}
             </List.Item>
           ))}
         </ScrollableContainer>

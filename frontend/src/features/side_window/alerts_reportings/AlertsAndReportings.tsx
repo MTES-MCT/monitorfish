@@ -35,7 +35,7 @@ export function AlertsAndReportings({
 }: AlertsAndReportingsProps) {
   const { focusedPendingAlertId, pendingAlerts, silencedAlerts } = useAppSelector(state => state.alert)
 
-  const silencedSeaFrontAlerts = useMemo(
+  const filteredSilencedAlerts = useMemo(
     () =>
       silencedAlerts.filter(silencedAlert =>
         (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code]
@@ -86,10 +86,10 @@ export function AlertsAndReportings({
         <>
           <PendingAlertsList
             baseRef={baseRef}
-            numberOfSilencedAlerts={silencedSeaFrontAlerts.length}
+            numberOfSilencedAlerts={filteredSilencedAlerts.length}
             selectedSeaFront={selectedSeaFront}
           />
-          <SilencedAlertsList silencedSeaFrontAlerts={silencedSeaFrontAlerts} />
+          <SilencedAlertsList silencedAlerts={filteredSilencedAlerts} />
         </>
       )}
       {selectedTab === AlertAndReportingTab.REPORTING && <ReportingList selectedSeaFront={selectedSeaFront} />}

@@ -3,11 +3,11 @@ import { isEqual } from 'lodash'
 
 import { getAlertNameFromType } from './utils'
 
-import type { PendingAlert } from '../../../domain/types/alert'
+import type { PendingAlert, SilencedAlert } from '../../../domain/types/alert'
 
 const alertTypeKey = ['value', 'type']
 
-export const PENDING_ALERTS_SEARCH_OPTIONS: Fuse.IFuseOptions<PendingAlert> = {
+export const PENDING_ALERTS_SEARCH_OPTIONS: Fuse.IFuseOptions<PendingAlert | SilencedAlert> = {
   distance: 50,
   getFn: (alert, path) => {
     const value = Fuse.config.getFn(alert, path)

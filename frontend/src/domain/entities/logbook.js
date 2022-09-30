@@ -1,6 +1,3 @@
-import { Feature } from 'ol'
-import Point from 'ol/geom/Point'
-
 import {
   COEMessage,
   COXMessage,
@@ -14,36 +11,24 @@ import {
   RTPMessage,
   NotImplementedMessage
 } from '../../features/vessel_sidebar/fishing_activities/logbook_messages/index.js'
+import { Feature } from 'ol'
+import Point from 'ol/geom/Point'
 import { getFishingActivityCircleStyle } from '../../layers/styles/vesselTrack.style'
 import Layers from './layers'
 
 export const LogbookMessageType = {
   DEP: {
     code: 'DEP',
-    component: DEPMessage,
     displayCode: 'DEP',
-    name: 'Départ'
+    name: 'Départ',
+    component: DEPMessage
   },
   FAR: {
     code: 'FAR',
     displayCode: 'FAR',
+    name: 'Captures',
     fullName: 'Déclaration de capture',
-    component: FARMessage,
-    name: 'Captures'
-  },
-  LAN: {
-    code: 'LAN',
-    displayCode: 'LAN',
-    fullName: 'Débarquement',
-    name: 'Débarquement',
-    component: LANMessage
-  },
-  EOF: {
-    code: 'EOF',
-    displayCode: 'EOF',
-    name: 'Fin de la marée',
-    fullName: 'Fin de pêche',
-    component: EOFMessage
+    component: FARMessage
   },
   PNO: {
     code: 'PNO',
@@ -52,12 +37,12 @@ export const LogbookMessageType = {
     fullName: 'Préavis (notification de retour au port)',
     component: PNOMessage
   },
-  COE: {
-    code: 'COE',
-    displayCode: 'COE',
-    fullName: "Entrée dans une zone d'effort",
-    component: COEMessage,
-    name: 'Entrée dans une zone d\'effort'
+  LAN: {
+    code: 'LAN',
+    displayCode: 'LAN',
+    name: 'Débarquement',
+    fullName: 'Débarquement',
+    component: LANMessage
   },
   RTP: {
     code: 'RTP',
@@ -66,11 +51,39 @@ export const LogbookMessageType = {
     fullName: 'Retour au port',
     component: RTPMessage
   },
+  EOF: {
+    code: 'EOF',
+    displayCode: 'EOF',
+    name: 'Fin de la marée',
+    fullName: 'Fin de pêche',
+    component: EOFMessage
+  },
+  COE: {
+    code: 'COE',
+    displayCode: 'COE',
+    fullName: 'Entrée dans une zone d\'effort',
+    name: 'Entrée dans une zone d\'effort',
+    component: COEMessage
+  },
+  NOT_COE: {
+    code: 'NOT_COE',
+    displayCode: 'COE',
+    fullName: 'Notification d\'entrée dans une zone d\'effort',
+    name: 'Notification d\'entrée dans une zone d\'effort',
+    component: COEMessage
+  },
   COX: {
     code: 'COX',
     displayCode: 'COX',
-    fullName: 'Sortie d\'une zone d\'effort',
     name: 'Sortie d\'une zone d\'effort',
+    fullName: 'Sortie d\'une zone d\'effort',
+    component: COXMessage
+  },
+  NOT_COX: {
+    code: 'NOT_COX',
+    displayCode: 'COX',
+    fullName: 'Notification de sortie d\'une zone d\'effort',
+    name: 'Notification de sortie d\'une zone d\'effort',
     component: COXMessage
   },
   JFO: {
@@ -80,58 +93,30 @@ export const LogbookMessageType = {
     name: 'Opération de pêche conjointe',
     component: NotImplementedMessage
   },
-  NOT_COE: {
-    code: 'NOT_COE',
-    displayCode: 'COE',
-    fullName: 'Notification d\'entrée dans une zone d\'effort',
-    name: 'Notification d\'entrée dans une zone d\'effort',
-    component: COEMessage
-  },
   CRO: {
     code: 'CRO',
     displayCode: 'CRO',
-    fullName: 'Traversée d\'une zone d\'effort',
     name: 'Traversée d\'une zone d\'effort',
+    fullName: 'Traversée d\'une zone d\'effort',
     component: CROMessage
   },
-  NOT_COX: {
-    code: 'NOT_COX',
-    displayCode: 'COX',
-    fullName: 'Notification de sortie d\'une zone d\'effort',
-    name: 'Notification de sortie d\'une zone d\'effort',
-    component: COXMessage
+  DIS: {
+    code: 'DIS',
+    displayCode: 'DIS',
+    name: 'Rejets',
+    fullName: 'Déclaration de rejets',
+    component: DISMessage
   },
   DIM: {
     code: 'DIM',
     displayCode: 'DIM',
     name: 'Rejets minimis'
   },
-  DIS: {
-    code: 'DIS',
-    displayCode: 'DIS',
-    fullName: 'Déclaration de rejets',
-    name: 'Rejets',
-    component: DISMessage
-  },
-  NOT_TRA: {
-    code: 'NOT_TRA',
-    displayCode: 'TRA',
-    fullName: 'Notification de transbordement',
-    name: 'Notification de transbordement',
-    component: NotImplementedMessage
-  },
   RLC: {
     code: 'RLC',
     displayCode: 'RLC',
     fullName: 'Déclaration de transfert',
-    component: NotImplementedMessage,
-    name: 'Transfert'
-  },
-  GEAR_RETRIEVAL: {
-    code: 'GEAR_RETRIEVAL',
-    displayCode: 'RTV',
-    fullName: 'Sortie de l\'eau d`engin',
-    name: 'Sortie de l\'eau d`engin',
+    name: 'Transfert',
     component: NotImplementedMessage
   },
   TRA: {
@@ -141,19 +126,46 @@ export const LogbookMessageType = {
     name: 'Transbordement',
     component: NotImplementedMessage
   },
+  NOT_TRA: {
+    code: 'NOT_TRA',
+    displayCode: 'TRA',
+    fullName: 'Notification de transbordement',
+    name: 'Notification de transbordement',
+    component: NotImplementedMessage
+  },
   GEAR_SHOT: {
     code: 'GEAR_SHOT',
     displayCode: 'SHT',
-    fullName: "Mise à l'eau d'engin",
-    component: NotImplementedMessage,
-    name: 'Mise à l\'eau d\'engin'
+    fullName: 'Mise à l\'eau d\'engin',
+    name: 'Mise à l\'eau d\'engin',
+    component: NotImplementedMessage
+  },
+  GEAR_RETRIEVAL: {
+    code: 'GEAR_RETRIEVAL',
+    displayCode: 'RTV',
+    fullName: 'Sortie de l\'eau d`engin',
+    name: 'Sortie de l\'eau d`engin',
+    component: NotImplementedMessage
   },
   START_ACTIVITY: {
     code: 'START_ACTIVITY',
     displayCode: 'STA',
-    component: NotImplementedMessage,
-    fullName: "Début d'activité de pêche",
-    name: "Début d'activité de pêche"
+    fullName: 'Début d\'activité de pêche',
+    name: 'Début d\'activité de pêche',
+    component: NotImplementedMessage
+  },
+  START_FISHING: {
+    code: 'START_FISHING',
+    displayCode: 'STF',
+    fullName: 'Début de pêche',
+    name: 'Début de pêche',
+    component: NotImplementedMessage
+  },
+  TRZ: {
+    code: 'TRZ',
+    displayCode: 'TRZ',
+    fullName: 'Pêche trans-zone',
+    name: 'Pêche trans-zone'
   },
   INS: {
     code: 'INS',
@@ -161,30 +173,17 @@ export const LogbookMessageType = {
     fullName: 'Déclaration d\'inspection',
     name: 'Inspection'
   },
-  START_FISHING: {
-    code: 'START_FISHING',
-    displayCode: 'STF',
-    fullName: 'Début de pêche',
-    component: NotImplementedMessage,
-    name: 'Début de pêche'
-  },
   PNT: {
     code: 'PNT',
     displayCode: 'PNT',
     fullName: 'Pré-notification de transfert',
     name: 'Pré-notification de transfert'
-  },
-  TRZ: {
-    code: 'TRZ',
-    displayCode: 'TRZ',
-    fullName: 'Pêche trans-zone',
-    name: 'Pêche trans-zone'
   }
 }
 
 export const LogbookOperationType = {
-  COR: 'COR',
-  DAT: 'DAT'
+  DAT: 'DAT',
+  COR: 'COR'
 }
 
 export const LogbookMessageActivityType = {
@@ -196,8 +195,8 @@ export const LogbookMessageSender = {
 }
 
 export const LogbookMessagePNOPurposeType = {
-  LAN: 'Débarquement',
-  SHE: "Mise à l'abri"
+  SHE: 'Mise à l\'abri',
+  LAN: 'Débarquement'
 }
 
 export const LogbookSpeciesPreservationState = {
@@ -244,15 +243,15 @@ export const LogbookSpeciesPresentation = {
   WNG: 'Ailerons'
 }
 
-function getPropertiesObject(logbookCatch) {
+function getPropertiesObject (logbookCatch) {
   return {
+    weight: logbookCatch.weight,
     faoZone: logbookCatch.faoZone,
     conversionFactor: logbookCatch.conversionFactor,
-    weight: logbookCatch.weight,
-    effortZone: logbookCatch.effortZone,
-    economicZone: logbookCatch.economicZone,
     packaging: logbookCatch.packaging,
+    effortZone: logbookCatch.effortZone,
     presentation: logbookCatch.presentation,
+    economicZone: logbookCatch.economicZone,
     preservationState: logbookCatch.preservationState,
     statisticalRectangle: logbookCatch.statisticalRectangle
   }
@@ -262,37 +261,40 @@ export const buildCatchArray = catches => {
   const notFound = -1
 
   return catches.reduce((accumulator, logbookCatch) => {
-    const sameSpeciesIndex = accumulator.findIndex(accCatch => accCatch.species === logbookCatch.species)
+    const sameSpeciesIndex = accumulator.findIndex(accCatch => {
+      return accCatch.species === logbookCatch.species
+    })
 
     if (sameSpeciesIndex === notFound) {
       accumulator.push({
         species: logbookCatch.species,
+        speciesName: logbookCatch.speciesName,
+        weight: logbookCatch.weight ? logbookCatch.weight : 0,
         properties: [
           getPropertiesObject(logbookCatch)
-        ],
-        speciesName: logbookCatch.speciesName,
-        weight: logbookCatch.weight ? logbookCatch.weight : 0
+        ]
       })
     } else {
       accumulator[sameSpeciesIndex].properties.push(getPropertiesObject(logbookCatch))
       accumulator[sameSpeciesIndex].weight += logbookCatch.weight ? parseFloat(logbookCatch.weight) : 0
     }
-
     return accumulator.sort((catchA, catchB) => catchB.weight - catchA.weight)
   }, [])
 }
-export const getDEPMessageFromMessages = logbookMessages =>
-  logbookMessages.find(message => message.messageType === LogbookMessageType.DEP.code)
-export const getDISMessagesFromMessages = logbookMessages =>
-  logbookMessages.filter(message => message.messageType === LogbookMessageType.DIS.code)
-export const getPNOMessageFromMessages = logbookMessages =>
-  logbookMessages.find(message => message.messageType === LogbookMessageType.PNO.code)
-export const getFARMessagesFromMessages = logbookMessages =>
-  logbookMessages.filter(message => message.messageType === LogbookMessageType.FAR.code)
-export const getLANMessageFromMessages = logbookMessages =>
-  logbookMessages.find(message => message.messageType === LogbookMessageType.LAN.code)
+export const getDEPMessageFromMessages = logbookMessages => logbookMessages
+  .find(message => message.messageType === LogbookMessageType.DEP.code)
+export const getDISMessagesFromMessages = logbookMessages => logbookMessages
+  .filter(message => message.messageType === LogbookMessageType.DIS.code)
+export const getPNOMessageFromMessages = logbookMessages => logbookMessages
+  .find(message => message.messageType === LogbookMessageType.PNO.code)
+export const getFARMessagesFromMessages = logbookMessages => logbookMessages
+  .filter(message => message.messageType === LogbookMessageType.FAR.code)
+export const getLANMessageFromMessages = logbookMessages => {
+  return logbookMessages
+    .find(message => message.messageType === LogbookMessageType.LAN.code)
+}
 
-function sortByCorrectedMessagesFirst() {
+function sortByCorrectedMessagesFirst () {
   return (x, y) => {
     if (x.operationType === LogbookOperationType.COR) {
       return -1
@@ -308,28 +310,19 @@ function sortByCorrectedMessagesFirst() {
 
 export const getTotalDISWeightFromMessages = logbookMessages => {
   let correctedMessagesReferencedIds = []
-
-  return parseFloat(
-    logbookMessages
-      .sort(sortByCorrectedMessagesFirst())
-      .reduce((accumulator, logbookMessage) => {
-        if (logbookMessage.operationType === LogbookOperationType.COR) {
-          correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(logbookMessage.referencedReportId)
-        }
-        const sumOfCatches =
-          !correctedMessagesReferencedIds.includes(logbookMessage.reportId) &&
-          logbookMessage.acknowledge &&
-          logbookMessage.acknowledge.isSuccess
-            ? logbookMessage.message.catches.reduce(
-                (subAccumulator, speciesCatch) => subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0),
-                0
-              )
-            : 0
-
-        return accumulator + sumOfCatches
-      }, 0)
-      .toFixed(1)
-  )
+  return parseFloat(logbookMessages
+    .sort(sortByCorrectedMessagesFirst())
+    .reduce((accumulator, logbookMessage) => {
+      if (logbookMessage.operationType === LogbookOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(logbookMessage.referencedReportId)
+      }
+      const sumOfCatches = !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledge && logbookMessage.acknowledge.isSuccess
+        ? logbookMessage.message.catches.reduce((subAccumulator, speciesCatch) => {
+          return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
+        }, 0)
+        : 0
+      return accumulator + sumOfCatches
+    }, 0).toFixed(1))
 }
 
 export const getAllFAROrDISMessagesAreNotAcknowledged = logbookMessages =>
@@ -338,85 +331,76 @@ export const getAllFAROrDISMessagesAreNotAcknowledged = logbookMessages =>
 export const getTotalFARWeightFromMessages = logbookMessages => {
   let correctedMessagesReferencedIds = []
 
-  return parseFloat(
-    logbookMessages
-      .sort(sortByCorrectedMessagesFirst())
-      .reduce((accumulator, logbookMessage) => {
-        if (logbookMessage.operationType === LogbookOperationType.COR) {
-          correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(logbookMessage.referencedReportId)
-        }
+  return parseFloat(logbookMessages
+    .sort(sortByCorrectedMessagesFirst())
+    .reduce((accumulator, logbookMessage) => {
+      if (logbookMessage.operationType === LogbookOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(logbookMessage.referencedReportId)
+      }
 
-        const sumOfCatches =
-          !correctedMessagesReferencedIds.includes(logbookMessage.reportId) &&
-          logbookMessage.acknowledge &&
-          logbookMessage.acknowledge.isSuccess
-            ? logbookMessage.message.hauls.reduce(
-                (subAccumulator, haul) =>
-                  subAccumulator +
-                  haul.catches.reduce((haulAccumulator, speciesCatch) => haulAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0), 0)), 0)
-            : 0
-
-        return accumulator + sumOfCatches
-      }, 0)
-      .toFixed(1)
-  )
+      const sumOfCatches = !correctedMessagesReferencedIds.includes(logbookMessage.reportId) && logbookMessage.acknowledge && logbookMessage.acknowledge.isSuccess
+        ? logbookMessage.message.hauls.reduce((subAccumulator, haul) => {
+          return subAccumulator + (haul.catches.reduce((haulAccumulator, speciesCatch) => {
+            return haulAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
+          }, 0))
+        }, 0)
+        : 0
+      return accumulator + sumOfCatches
+    }, 0).toFixed(1))
 }
-export const getTotalDEPWeightFromMessage = logbookMessage =>
-  parseFloat(
-    logbookMessage.message.speciesOnboard
-      .reduce((subAccumulator, speciesCatch) => subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0), 0).toFixed(1))
-export const getTotalLANWeightFromMessage = logbookMessage =>
-  parseFloat(
-    logbookMessage.message.catchLanded
-      .reduce((subAccumulator, speciesCatch) => subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0), 0).toFixed(1))
-export const getTotalPNOWeightFromMessage = logbookMessage =>
-  parseFloat(
-    logbookMessage.message.catchOnboard
-      .reduce((subAccumulator, speciesCatch) => subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0), 0).toFixed(1))
+export const getTotalDEPWeightFromMessage = logbookMessage => {
+  return parseFloat(logbookMessage.message.speciesOnboard.reduce((subAccumulator, speciesCatch) => {
+    return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
+  }, 0).toFixed(1))
+}
+export const getTotalLANWeightFromMessage = logbookMessage => {
+  return parseFloat(logbookMessage.message.catchLanded.reduce((subAccumulator, speciesCatch) => {
+    return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
+  }, 0).toFixed(1))
+}
+export const getTotalPNOWeightFromMessage = logbookMessage => {
+  return parseFloat(logbookMessage.message.catchOnboard.reduce((subAccumulator, speciesCatch) => {
+    return subAccumulator + (speciesCatch.weight ? speciesCatch.weight : 0)
+  }, 0).toFixed(1))
+}
 
-function setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight) {
+function setSpeciesToWeightObject (speciesToWeightObject, speciesCatch, totalWeight) {
   if (speciesToWeightObject[speciesCatch.species]) {
-    speciesToWeightObject[speciesCatch.species].weight = parseFloat(
-      (
-        speciesToWeightObject[speciesCatch.species].weight + (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)
-      ).toFixed(1)
-    )
+    speciesToWeightObject[speciesCatch.species].weight = parseFloat((
+      speciesToWeightObject[speciesCatch.species].weight +
+      (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1))
   } else {
     speciesToWeightObject[speciesCatch.species] = {
       species: speciesCatch.species,
+      weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0,
       speciesName: speciesCatch.speciesName,
-      totalWeight,
-      weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0
+      totalWeight: totalWeight
     }
   }
 }
 
-function getSpeciesObject(speciesCatch) {
+function getSpeciesObject (speciesCatch) {
   return {
-    presentation: speciesCatch.presentation,
     species: speciesCatch.species,
-    speciesName: speciesCatch.speciesName,
-    weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0
+    presentation: speciesCatch.presentation,
+    weight: speciesCatch.weight ? parseFloat(speciesCatch.weight.toFixed(1)) : 0,
+    speciesName: speciesCatch.speciesName
   }
 }
 
-function getSpeciesAndPresentationToWeightObject(speciesToWeightObject, speciesCatch) {
-  if (
-    speciesToWeightObject[speciesCatch.species] &&
+function getSpeciesAndPresentationToWeightObject (speciesToWeightObject, speciesCatch) {
+  if (speciesToWeightObject[speciesCatch.species] &&
     speciesToWeightObject[speciesCatch.species].length &&
-    speciesToWeightObject[speciesCatch.species].find(species => species.presentation === speciesCatch.presentation)
-  ) {
-    speciesToWeightObject[speciesCatch.species] = speciesToWeightObject[speciesCatch.species].map(
-      speciesAndPresentation => {
-        if (speciesAndPresentation.presentation === speciesCatch.presentation) {
-          speciesAndPresentation.weight = parseFloat(
-            (speciesAndPresentation.weight + (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1)
-          )
-        }
-
-        return speciesAndPresentation
+    speciesToWeightObject[speciesCatch.species].find(species => species.presentation === speciesCatch.presentation)) {
+    speciesToWeightObject[speciesCatch.species] = speciesToWeightObject[speciesCatch.species].map(speciesAndPresentation => {
+      if (speciesAndPresentation.presentation === speciesCatch.presentation) {
+        speciesAndPresentation.weight = parseFloat((
+          speciesAndPresentation.weight +
+          (speciesCatch.weight ? parseFloat(speciesCatch.weight) : 0)).toFixed(1))
       }
-    )
+
+      return speciesAndPresentation
+    })
   } else if (speciesToWeightObject[speciesCatch.species] && speciesToWeightObject[speciesCatch.species].length) {
     speciesToWeightObject[speciesCatch.species].push(getSpeciesObject(speciesCatch))
   } else {
@@ -428,21 +412,19 @@ export const getFARSpeciesToWeightObject = (messages, totalWeight) => {
   const speciesToWeightObject = {}
   let correctedMessagesReferencedIds = []
 
-  messages.sort(sortByCorrectedMessagesFirst()).forEach(message => {
-    if (message.operationType === LogbookOperationType.COR) {
-      correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedReportId)
-    }
+  messages
+    .sort(sortByCorrectedMessagesFirst())
+    .forEach(message => {
+      if (message.operationType === LogbookOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedReportId)
+      }
 
-    if (
-      !correctedMessagesReferencedIds.includes(message.reportId) &&
-      message.acknowledge &&
-      message.acknowledge.isSuccess
-    ) {
-      message.message.hauls.forEach(haul => {
-        haul.catches.forEach(speciesCatch => setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight))
-      })
-    }
-  })
+      if (!correctedMessagesReferencedIds.includes(message.reportId) && message.acknowledge && message.acknowledge.isSuccess) {
+        message.message.hauls.forEach(haul => {
+          haul.catches.forEach(speciesCatch => setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight))
+        })
+      }
+    })
 
   return speciesToWeightObject
 }
@@ -451,21 +433,19 @@ export const getDISSpeciesToWeightObject = (messages, totalWeight) => {
   const speciesToWeightObject = {}
   let correctedMessagesReferencedIds = []
 
-  messages.sort(sortByCorrectedMessagesFirst()).forEach(message => {
-    if (message.operationType === LogbookOperationType.COR) {
-      correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedReportId)
-    }
+  messages
+    .sort(sortByCorrectedMessagesFirst())
+    .forEach(message => {
+      if (message.operationType === LogbookOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedReportId)
+      }
 
-    if (
-      !correctedMessagesReferencedIds.includes(message.reportId) &&
-      message.acknowledge &&
-      message.acknowledge.isSuccess
-    ) {
-      message.message.catches.forEach(speciesCatch => {
-        setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight)
-      })
-    }
-  })
+      if (!correctedMessagesReferencedIds.includes(message.reportId) && message.acknowledge && message.acknowledge.isSuccess) {
+        message.message.catches.forEach(speciesCatch => {
+          setSpeciesToWeightObject(speciesToWeightObject, speciesCatch, totalWeight)
+        })
+      }
+    })
 
   return speciesToWeightObject
 }
@@ -474,23 +454,21 @@ export const getSpeciesAndPresentationToWeightFARObject = farMessages => {
   const speciesAndPresentationToWeightFARObject = {}
   let correctedMessagesReferencedIds = []
 
-  farMessages.sort(sortByCorrectedMessagesFirst()).forEach(message => {
-    if (message.operationType === LogbookOperationType.COR) {
-      correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedReportId)
-    }
+  farMessages
+    .sort(sortByCorrectedMessagesFirst())
+    .forEach(message => {
+      if (message.operationType === LogbookOperationType.COR) {
+        correctedMessagesReferencedIds = correctedMessagesReferencedIds.concat(message.referencedReportId)
+      }
 
-    if (
-      !correctedMessagesReferencedIds.includes(message.reportId) &&
-      message.acknowledge &&
-      message.acknowledge.isSuccess
-    ) {
-      message.message.hauls.forEach(haul => {
-        haul.catches.forEach(speciesCatch => {
-          getSpeciesAndPresentationToWeightObject(speciesAndPresentationToWeightFARObject, speciesCatch)
+      if (!correctedMessagesReferencedIds.includes(message.reportId) && message.acknowledge && message.acknowledge.isSuccess) {
+        message.message.hauls.forEach(haul => {
+          haul.catches.forEach(speciesCatch => {
+            getSpeciesAndPresentationToWeightObject(speciesAndPresentationToWeightFARObject, speciesCatch)
+          })
         })
-      })
-    }
-  })
+      }
+    })
 
   return speciesAndPresentationToWeightFARObject
 }
@@ -516,9 +494,11 @@ export const getSpeciesToWeightPNOObject = (pnoMessage, totalFARAndDEPWeight) =>
   return speciesToWeightPNOObject
 }
 
-export const getFAOZonesFromFARMessages = farMessages =>
-  farMessages
-    .map(farMessage => farMessage.message.hauls.map(haul => haul.catches.map(speciesCatch => speciesCatch.faoZone)).flat())
+export const getFAOZonesFromFARMessages = farMessages => {
+  return farMessages
+    .map(farMessage => {
+      return farMessage.message.hauls.map(haul => haul.catches.map(speciesCatch => speciesCatch.faoZone)).flat()
+    })
     .flat()
     .reduce((acc, faoZone) => {
       if (acc.indexOf(faoZone) < 0) {
@@ -527,6 +507,7 @@ export const getFAOZonesFromFARMessages = farMessages =>
 
       return acc
     }, [])
+}
 
 /**
  * Get effective datetime from logbook message
@@ -563,16 +544,9 @@ export const getEffectiveDateTimeFromMessage = message => {
   }
 }
 
-export const getFishingActivityFeatureOnTrackLine = (
-  fishingActivity,
-  lineOfFishingActivity,
-  fishingActivityDateTimestamp
-) => {
-  const totalDistance =
-    new Date(lineOfFishingActivity.secondPositionDate).getTime() -
-    new Date(lineOfFishingActivity.firstPositionDate).getTime()
-  const fishingActivityDistanceFromFirstPoint =
-    fishingActivityDateTimestamp - new Date(lineOfFishingActivity.firstPositionDate).getTime()
+export const getFishingActivityFeatureOnTrackLine = (fishingActivity, lineOfFishingActivity, fishingActivityDateTimestamp) => {
+  const totalDistance = new Date(lineOfFishingActivity.secondPositionDate).getTime() - new Date(lineOfFishingActivity.firstPositionDate).getTime()
+  const fishingActivityDistanceFromFirstPoint = fishingActivityDateTimestamp - new Date(lineOfFishingActivity.firstPositionDate).getTime()
   const distanceFraction = fishingActivityDistanceFromFirstPoint / totalDistance
 
   const coordinates = lineOfFishingActivity.getGeometry().getCoordinateAt(distanceFraction)
@@ -584,8 +558,8 @@ export const getFishingActivityFeatureOnTrackLine = (
   feature.setId(`${Layers.VESSEL_TRACK.code}:logbook:${fishingActivityDateTimestamp}`)
 
   return {
-    coordinates,
     feature,
+    coordinates,
     id: fishingActivity.id
   }
 }
@@ -596,12 +570,9 @@ export const getFishingActivityFeatureOnTrackLine = (
  * @return {string} messageType - The message type
  */
 export const getLogbookMessageType = message => {
-  if (
-    message.messageType === LogbookMessageType.DIS.code &&
-    message.message.catches.some(aCatch => aCatch.presentation === LogbookMessageType.DIM.code)
-  ) {
+  if (message.messageType === LogbookMessageType.DIS.code &&
+    message.message.catches.some(aCatch => aCatch.presentation === LogbookMessageType.DIM.code)) {
     return LogbookMessageType.DIM.code
   }
-
   return LogbookMessageType[message.messageType].displayCode
 }

@@ -13,6 +13,7 @@ import GearRegulationDisplayed from './metadata/gearRegulation/GearRegulationDis
 import RegulatoryReferencesDisplayed from './metadata/regulatoryReferences/RegulatoryReferencesDisplayed'
 import OutdatedRegulatoryReferences from './metadata/OutdatedRegulatoryReferences'
 import SpeciesRegulationDisplayed from './metadata/speciesRegulation/SpeciesRegulationDisplayed'
+import OtherInfoDisplayed from './metadata/otherInfo/OtherInfoDisplayed'
 
 const RegulatoryZoneMetadata = () => {
   const dispatch = useDispatch()
@@ -51,6 +52,7 @@ const RegulatoryZoneMetadata = () => {
               <FishingPeriodDisplayed/>
               <GearRegulationDisplayed/>
               <SpeciesRegulationDisplayed/>
+              <OtherInfoDisplayed/>
               <RegulatoryReferencesDisplayed/>
             </Content>
           </>

@@ -13,6 +13,7 @@ export const mapToRegulatoryZone = ({ properties, geometry, id }, speciesByCode)
     regulatoryReferences: parseRegulatoryReferences(properties.regulatory_references),
     fishingPeriod: parseFishingPeriod(properties.fishing_period),
     region: properties.region,
+    otherInfo: properties.other_info,
     nextId: properties.next_id
   }
 }
@@ -154,7 +155,7 @@ export const mapToRegulatoryFeatureObject = properties => {
     fishing_period: JSON.stringify(fishingPeriod),
     species: JSON.stringify(speciesRegulation),
     gears: JSON.stringify(gearRegulation),
-    otherInfo: otherInfo,
+    other_info: otherInfo,
     next_id: nextId
   }
 }
@@ -186,6 +187,7 @@ const REG_MEMN = 'Reg. MEMN'
 const REG_OUTRE_MER = 'Reg. Outre-mer'
 const RUE_2019 = 'R(UE) 2019/1241'
 const RUE_1380 = 'R(UE) 1380/2013'
+const RUE_2022 = 'R(UE) 2022/1614'
 const RUE_494 = 'R(CE) 494/2002'
 const RUE_2017 = 'R(CE) 2017/118'
 
@@ -199,6 +201,7 @@ export const LAWTYPES_TO_TERRITORY = {
   [RUE_1380]: UE,
   [RUE_494]: UE,
   [RUE_2017]: UE,
+  [RUE_2022]: UE,
   [REG_RTC]: UE,
   [REG_UK]: UK
 }

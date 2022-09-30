@@ -46,6 +46,7 @@ const GearRegulationDisplayed = () => {
           {
             otherInfo &&
             <MarkdownWithMargin
+              hasMargin={hasAuthorizedContent || hasUnauthorizedContent}
               data-cy={'regulatory-layers-metadata-gears-other-info'}
             >
               <ReactMarkdown>
@@ -68,7 +69,7 @@ export const regulatedGearsIsNotEmpty = regulatedGearsObject => regulatedGearsOb
   regulatedGearsObject?.derogation
 
 const MarkdownWithMargin = styled.div`
-  margin-top: 20px;
+  margin-top: ${p => p.hasMargin ? 20 : 0}px;
 `
 
 export default GearRegulationDisplayed

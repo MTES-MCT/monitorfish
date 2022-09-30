@@ -33,6 +33,7 @@ context('Update Regulation', () => {
     cy.get('[data-cy="tag-Dragues"]').should('exist')
     cy.get('[data-cy="input-Praires Ouest cotentin"]').should('exist')
     cy.get('.rs-picker-toggle-value').eq(0).should('have.text', getDate(new Date().toISOString()))
+    cy.get('[data-cy="regulatory-general-other-info"]').contains('Encore une info importante')
 
     // Then try to save
     cy.get('[data-cy="validate-button"]').contains('Enregister les modifications')
@@ -70,7 +71,7 @@ context('Update Regulation', () => {
     cy.get('[type="checkbox"]').eq(2).check({ force: true })
 
     // When save form
-    cy.get('[data-cy="regulatory-general-other-info"]').scrollIntoView().type('Une information générale')
+    cy.get('[data-cy="regulatory-general-other-info"]').scrollIntoView().type(' et une information générale')
     cy.get('[data-cy="validate-button"]').click()
     cy.wait(200)
 
@@ -80,7 +81,9 @@ context('Update Regulation', () => {
       expect(request.body).contain('<Value>Reg. MEMN</Value>')
       expect(request.body).contain('<Value>Praires Ouest cotentin</Value>')
       expect(request.body).contain('<Value>Normandie, Bretagne</Value>')
-      expect(request.body).contain('<Name>otherInfo</Name><Value>Une information générale</Value>')
+      expect(request.body).contain(
+        '<Name>other_info</Name><Value>Encore une info importante et une information générale</Value>'
+      )
       expect(request.body).contain('"reference":"texte de reference"')
       expect(request.body).contain(
         '"url":"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634"'

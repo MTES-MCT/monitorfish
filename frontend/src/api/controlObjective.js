@@ -1,11 +1,12 @@
 import { CREATED, OK } from './api'
 
-export const CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les objectifs de contrôle'
-export const CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer les années des objectifs de contrôle'
-export const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu mettre à jour l\'objectif de contrôle'
-export const DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu supprimer l\'objectif de contrôle'
-export const ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter l\'objectif de contrôle'
-export const ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE = 'Nous n\'avons pas pu ajouter une nouvelle année'
+export const CONTROL_OBJECTIVES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les objectifs de contrôle"
+export const CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE =
+  "Nous n'avons pas pu récupérer les années des objectifs de contrôle"
+export const UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour l'objectif de contrôle"
+export const DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE = "Nous n'avons pas pu supprimer l'objectif de contrôle"
+export const ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE = "Nous n'avons pas pu ajouter l'objectif de contrôle"
+export const ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE = "Nous n'avons pas pu ajouter une nouvelle année"
 
 /**
  * Get control Objectives
@@ -14,18 +15,18 @@ export const ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE = 'Nous n\'avons pas pu a
  * @returns {Promise<ControlObjective[]>} The control objectives
  * @throws {Error}
  */
-function getControlObjectivesFromAPI (year) {
+function getControlObjectivesFromAPI(year) {
   return fetch(`/bff/v1/control_objectives/${year}`)
     .then(response => {
       if (response.status === OK) {
         return response.json()
-      } else {
-        response.text().then(text => {
-          console.error(text)
-        })
-        throw Error(CONTROL_OBJECTIVES_ERROR_MESSAGE)
       }
-    }).catch(error => {
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(CONTROL_OBJECTIVES_ERROR_MESSAGE)
+    })
+    .catch(error => {
       console.error(error)
       throw Error(CONTROL_OBJECTIVES_ERROR_MESSAGE)
     })
@@ -37,18 +38,18 @@ function getControlObjectivesFromAPI (year) {
  * @returns {Promise<ControlObjective[]>} The years
  * @throws {Error}
  */
-function getControlObjectiveYearEntriesFromAPI () {
+function getControlObjectiveYearEntriesFromAPI() {
   return fetch('/bff/v1/control_objectives/years')
     .then(response => {
       if (response.status === OK) {
         return response.json()
-      } else {
-        response.text().then(text => {
-          console.error(text)
-        })
-        throw Error(CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE)
       }
-    }).catch(error => {
+      response.text().then(text => {
+        console.error(text)
+      })
+      throw Error(CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE)
+    })
+    .catch(error => {
       console.error(error)
       throw Error(CONTROL_OBJECTIVE_YEARS_ERROR_MESSAGE)
     })
@@ -61,25 +62,27 @@ function getControlObjectiveYearEntriesFromAPI () {
  * @param {UpdateControlObjective} updatedFields - The fields to update
  * @throws {Error}
  */
-function updateControlObjectiveFromAPI (id, updatedFields) {
+function updateControlObjectiveFromAPI(id, updatedFields) {
   return fetch(`/bff/v1/control_objectives/${id}`, {
-    method: 'PUT',
+    body: JSON.stringify(updatedFields),
     headers: {
       Accept: 'application/json, text/plain',
       'Content-Type': 'application/json;charset=UTF-8'
     },
-    body: JSON.stringify(updatedFields)
-  }).then(response => {
-    if (response.status !== OK) {
-      response.text().then(text => {
-        console.error(text)
-      })
-      throw Error(UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE)
-    }
-  }).catch(error => {
-    console.error(error)
-    throw Error(UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE)
+    method: 'PUT'
   })
+    .then(response => {
+      if (response.status !== OK) {
+        response.text().then(text => {
+          console.error(text)
+        })
+        throw Error(UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE)
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      throw Error(UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE)
+    })
 }
 
 /**
@@ -88,17 +91,19 @@ function updateControlObjectiveFromAPI (id, updatedFields) {
  * @param {string} id - The id of the control objective
  * @throws {Error}
  */
-function deleteControlObjectiveFromAPI (id) {
+function deleteControlObjectiveFromAPI(id) {
   return fetch(`/bff/v1/control_objectives/${id}`, {
     method: 'DELETE'
-  }).then(response => {
-    if (response.status !== OK) {
-      throw Error(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE)
-    }
-  }).catch(error => {
-    console.error(error)
-    throw Error(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE)
   })
+    .then(response => {
+      if (response.status !== OK) {
+        throw Error(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE)
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      throw Error(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE)
+    })
 }
 
 /**
@@ -110,33 +115,34 @@ function deleteControlObjectiveFromAPI (id) {
  * @returns {Promise} The control objectives
  * @throws {Error}
  */
-function addControlObjectiveFromAPI (segment, facade, year) {
+function addControlObjectiveFromAPI(segment, facade, year) {
   const createFields = {
-    segment,
     facade,
+    segment,
     year
   }
 
   return fetch('/bff/v1/control_objectives', {
-    method: 'POST',
+    body: JSON.stringify(createFields),
     headers: {
       Accept: 'application/json, text/plain',
       'Content-Type': 'application/json;charset=UTF-8'
     },
-    body: JSON.stringify(createFields)
-  }).then(response => {
-    if (response.status === OK) {
-      return response.json()
-    } else {
+    method: 'POST'
+  })
+    .then(response => {
+      if (response.status === OK) {
+        return response.json()
+      }
       response.text().then(text => {
         console.error(text)
       })
       throw Error(ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE)
-    }
-  }).catch(error => {
-    console.error(error)
-    throw Error(ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE)
-  })
+    })
+    .catch(error => {
+      console.error(error)
+      throw Error(ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE)
+    })
 }
 
 /**
@@ -144,17 +150,19 @@ function addControlObjectiveFromAPI (segment, facade, year) {
  * @memberOf API
  * @throws {Error}
  */
-function addControlObjectiveYearFromAPI () {
+function addControlObjectiveYearFromAPI() {
   return fetch('/bff/v1/control_objectives/years', {
     method: 'POST'
-  }).then(response => {
-    if (response.status !== CREATED) {
-      throw Error(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE)
-    }
-  }).catch(error => {
-    console.error(error)
-    throw Error(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE)
   })
+    .then(response => {
+      if (response.status !== CREATED) {
+        throw Error(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE)
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      throw Error(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE)
+    })
 }
 
 export {

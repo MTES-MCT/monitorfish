@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
-import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
+
 import { FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulatory'
+import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
+import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
 import { Row } from '../../../commonStyles/FishingPeriod.style'
 import { Label } from '../../../commonStyles/Input.style'
-import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
 
-const HolidayCheckbox = ({ disabled }) => {
+function HolidayCheckbox({ disabled }) {
   const { holidays } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)
   const setHolidays = useSetFishingPeriod(FISHING_PERIOD_KEYS.HOLIDAYS)
   const onChange = useCallback(_ => setHolidays(!holidays), [setHolidays, holidays])
@@ -18,14 +19,12 @@ const HolidayCheckbox = ({ disabled }) => {
     }
   }, [disabled])
 
-  return <Row>
-    <Label>Jours fériés</Label>
-    <HolidaysCheckbox
-      disabled={disabled}
-      onChange={onChange}
-      checked={holidays}
-    />
-  </Row>
+  return (
+    <Row>
+      <Label>Jours fériés</Label>
+      <HolidaysCheckbox checked={holidays} disabled={disabled} onChange={onChange} />
+    </Row>
+  )
 }
 
 const HolidaysCheckbox = styled(CustomCheckbox)`

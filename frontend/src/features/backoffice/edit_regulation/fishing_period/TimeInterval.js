@@ -1,17 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import { convertTimeToString, TIMES_SELECT_PICKER_VALUES } from '../../../../domain/entities/regulatory'
+
 import { COLORS } from '../../../../constants/constants'
+import { convertTimeToString, TIMES_SELECT_PICKER_VALUES } from '../../../../domain/entities/regulatory'
 import CustomSelectComponent from '../custom_form/CustomSelectComponent'
 
-const TimeInterval = props => {
-  const {
-    disabled,
-    id,
-    timeInterval,
-    onTimeIntervalChange,
-    isLast
-  } = props
+function TimeInterval(props) {
+  const { disabled, id, isLast, onTimeIntervalChange, timeInterval } = props
 
   const setTimeInterval = (key, value) => {
     const split = value.split('h')
@@ -29,49 +24,49 @@ const TimeInterval = props => {
     <Wrapper $isLast={isLast}>
       De
       <CustomSelectComponent
-        style={selectPickerStyle}
-        disabled={disabled}
-        data={TIMES_SELECT_PICKER_VALUES}
-        searchable={false}
         cleanable={false}
-        value={convertTimeToString(timeInterval?.from)}
+        data={TIMES_SELECT_PICKER_VALUES}
+        disabled={disabled}
         onChange={value => setTimeInterval('from', value)}
+        padding="0px"
         placeholder={'\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0'}
-        padding='0px'
-        placement='topStart'
+        placement="topStart"
+        searchable={false}
+        style={selectPickerStyle}
+        value={convertTimeToString(timeInterval?.from)}
       />
       à
       <CustomSelectComponent
-        style={selectPickerStyle}
-        disabled={disabled}
-        data={TIMES_SELECT_PICKER_VALUES}
-        searchable={false}
         cleanable={false}
-        value={convertTimeToString(timeInterval?.to)}
+        data={TIMES_SELECT_PICKER_VALUES}
+        disabled={disabled}
         onChange={value => setTimeInterval('to', value)}
+        padding="0px"
         placeholder={'\xa0\xa0\xa0\xa0\xa0:\xa0\xa0\xa0\xa0\xa0'}
-        padding='0px'
-        placement='topStart'
+        placement="topStart"
+        searchable={false}
+        style={selectPickerStyle}
+        value={convertTimeToString(timeInterval?.to)}
       />
     </Wrapper>
   )
 }
 
 const selectPickerStyle = {
-  width: '85px',
-  margin: '0px 5px',
   borderColor: COLORS.lightGray,
   boxSizing: 'border-box',
-  textOverflow: 'ellipsis'
+  margin: '0px 5px',
+  textOverflow: 'ellipsis',
+  width: '85px'
 }
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  ${props => props.$isLast ? '' : 'margin-bottom: 5px;'}
+  ${props => (props.$isLast ? '' : 'margin-bottom: 5px;')}
   color: ${COLORS.slateGray};
-  opacity: ${props => props.disabled ? '0.4' : '1'};
+  opacity: ${props => (props.disabled ? '0.4' : '1')};
 
   .rs-picker-toggle {
     width: 40px;

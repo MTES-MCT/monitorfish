@@ -1,12 +1,13 @@
 import React, { useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import FishingPeriodForm from './FishingPeriodForm'
-import SectionTitle from '../../SectionTitle'
+
+import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
 import { Label, CustomInput } from '../../../commonStyles/Input.style'
 import { setFishingPeriodOtherInfo } from '../../Regulation.slice'
-import { Section, OtherRemark } from '../../../commonStyles/Backoffice.style'
+import SectionTitle from '../../SectionTitle'
+import FishingPeriodForm from './FishingPeriodForm'
 
-const FishingPeriodSection = () => {
+function FishingPeriodSection() {
   const { fishingPeriod } = useSelector(state => state.regulation.processingRegulation)
 
   const dispatch = useDispatch()
@@ -15,29 +16,24 @@ const FishingPeriodSection = () => {
 
   const onChange = useCallback(value => dispatch(setFishingPeriodOtherInfo(value)), [dispatch])
 
-  return <Section show>
-    <SectionTitle
-      title={'Périodes de pêche'}
-      isOpen={show}
-      setIsOpen={setShow}
-    />
-    <FishingPeriodForm
-      show={show}
-      fishingPeriod={fishingPeriod}
-    />
-    <OtherRemark show={show}>
-      <Label>Remarques</Label>
-      <CustomInput
-        as="textarea"
-        rows={2}
-        placeholder=''
-        value={fishingPeriod?.otherInfo || ''}
-        onChange={event => onChange(event.target.value)}
-        width={'500px'}
-        $isGray={fishingPeriod?.otherInfo && fishingPeriod?.otherInfo !== ''}
-      />
-    </OtherRemark>
-  </Section>
+  return (
+    <Section show>
+      <SectionTitle isOpen={show} setIsOpen={setShow} title="Périodes de pêche" />
+      <FishingPeriodForm fishingPeriod={fishingPeriod} show={show} />
+      <OtherRemark show={show}>
+        <Label>Remarques</Label>
+        <CustomInput
+          $isGray={fishingPeriod?.otherInfo && fishingPeriod?.otherInfo !== ''}
+          as="textarea"
+          onChange={event => onChange(event.target.value)}
+          placeholder=""
+          rows={2}
+          value={fishingPeriod?.otherInfo || ''}
+          width="500px"
+        />
+      </OtherRemark>
+    </Section>
+  )
 }
 
 export default FishingPeriodSection

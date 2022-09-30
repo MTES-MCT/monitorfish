@@ -1,60 +1,62 @@
 import React from 'react'
-import styled from 'styled-components'
 import { SelectPicker } from 'rsuite'
+import styled from 'styled-components'
+
 import { COLORS } from '../../../../constants/constants'
 
-const CustomSelectComponent = props => {
+function CustomSelectComponent(props) {
   const {
-    searchable,
-    placeholder,
-    value,
-    onChange,
+    cleanable,
     data,
-    renderMenuItem,
-    menuStyle,
-    valueIsMissing,
-    groupBy,
+    dataCy,
     disabled,
     emptyMessage,
-    placement,
-    cleanable,
-    style,
+    groupBy,
     menuClassName,
+    menuStyle,
+    onChange,
     padding,
-    width,
-    dataCy
+    placeholder,
+    placement,
+    renderMenuItem,
+    searchable,
+    style,
+    value,
+    valueIsMissing,
+    width
   } = props
 
   const DEFAULT_SELECT_PICKER_STYLE = {
-    width: width || 200,
-    margin: '0',
     borderColor: COLORS.lightGray,
     boxSizing: 'border-box',
-    textOverflow: 'ellipsis'
+    margin: '0',
+    textOverflow: 'ellipsis',
+    width: width || 200
   }
+
   return (
     <SelectWrapper padding={padding}>
       <CustomSelectPicker
-        virtualized
-        style={style || DEFAULT_SELECT_PICKER_STYLE}
-        searchable={searchable}
-        cleanable={cleanable}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        data={data}
-        renderMenuItem={renderMenuItem}
-        menuStyle={menuStyle}
-        menuClassName={menuClassName}
         $valueIsMissing={valueIsMissing}
-        locale={{
-          noResultsText: emptyMessage,
-          emptyMessage: emptyMessage
-        }}
-        groupBy={groupBy}
-        disabled={disabled}
-        placement={placement || 'auto'}
+        cleanable={cleanable}
+        data={data}
         data-cy={dataCy}
+        disabled={disabled}
+        groupBy={groupBy}
+        locale={{
+          emptyMessage,
+          noResultsText: emptyMessage
+        }}
+        menuClassName={menuClassName}
+        menuStyle={menuStyle}
+        onChange={onChange}
+        placeholder={placeholder}
+        placement={placement || 'auto'}
+        renderMenuItem={renderMenuItem}
+        searchable={searchable}
+        style={style || DEFAULT_SELECT_PICKER_STYLE}
+        value={value}
+        virtualized
       />
     </SelectWrapper>
   )
@@ -62,22 +64,22 @@ const CustomSelectComponent = props => {
 
 const SelectWrapper = styled.div`
   display: inline-block;
-  margin: ${props => props.padding ? props.padding : '0px 10px 0px 0px'};
+  margin: ${props => (props.padding ? props.padding : '0px 10px 0px 0px')};
   vertical-align: sub;
 `
 
 const CustomSelectPicker = styled(SelectPicker)`
   a {
     box-sizing: border-box;
-    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
+    border-color: ${props => (props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray)}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:hover {
-    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
+    border-color: ${props => (props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray)}!important;
   }
 
   .rs-btn-default.rs-picker-toggle:focus {
-    border-color: ${props => props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray}!important;
+    border-color: ${props => (props.$valueIsMissing ? COLORS.maximumRed : COLORS.lightGray)}!important;
   }
 
   .grouped.rs-picker-select-menu-item {
@@ -85,7 +87,7 @@ const CustomSelectPicker = styled(SelectPicker)`
   }
 
   .rs-picker-toggle {
-    width: ${p => p.width ? p.width - 40 : 160}px;
+    width: ${p => (p.width ? p.width - 40 : 160)}px;
   }
 `
 

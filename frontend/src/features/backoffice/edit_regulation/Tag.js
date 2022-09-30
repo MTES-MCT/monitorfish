@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
+
 import { COLORS } from '../../../constants/constants'
 import { Link } from '../../commonStyles/Backoffice.style'
+import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 
 /**
  * @typedef Props
@@ -10,28 +11,23 @@ import { Link } from '../../commonStyles/Backoffice.style'
  * @prop {Function} onCloseIconClicked
  * @prop {URL} tagUrl
  */
-const Tag = props => {
-  const {
-    tagValue,
-    tagUrl,
-    onCloseIconClicked,
-    onClickText
-  } = props
+function Tag(props) {
+  const { onClickText, onCloseIconClicked, tagUrl, tagValue } = props
 
-  return <TagWrapper data-cy={`tag-${tagValue}`}>
-    {tagUrl
-      ? <Link
-          tagUrl
-          href={tagUrl}
-          target={'_blank'}
-        >{tagValue}</Link>
-      : onClickText
-        ? <Link onClick={onClickText}
-          >{tagValue}</Link>
-        : <SelectedValue >{tagValue}</SelectedValue>
-    }
-    <CloseIcon data-cy={`close-tag-${tagValue}`} onClick={_ => onCloseIconClicked(tagValue)}/>
-  </TagWrapper>
+  return (
+    <TagWrapper data-cy={`tag-${tagValue}`}>
+      {tagUrl ? (
+        <Link href={tagUrl} tagUrl target="_blank">
+          {tagValue}
+        </Link>
+      ) : onClickText ? (
+        <Link onClick={onClickText}>{tagValue}</Link>
+      ) : (
+        <SelectedValue>{tagValue}</SelectedValue>
+      )}
+      <CloseIcon data-cy={`close-tag-${tagValue}`} onClick={_ => onCloseIconClicked(tagValue)} />
+    </TagWrapper>
+  )
 }
 
 const TagWrapper = styled.div`

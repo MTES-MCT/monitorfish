@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
 import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
 import { CustomInput } from '../../../commonStyles/Input.style'
 
-const CreateRegulationTopicForm = props => {
-  const {
-    onCancelEdit,
-    updateTopic
-  } = props
+function CreateRegulationTopicForm(props) {
+  const { onCancelEdit, updateTopic } = props
   const [topicPlace, setTopicPlace] = useState('')
   const [topicPlaceIsRed, setTopicPlaceIsRed] = useState(false)
   const [topicGears, setTopicGears] = useState('')
@@ -26,50 +24,31 @@ const CreateRegulationTopicForm = props => {
       setTopicPlaceIsRed(true)
     } else {
       const regulationTopic = `${topicPlace}
-        ${topicSpecies ? ' - ' + topicSpecies : ''}
-        ${topicGears ? ' - ' + topicGears : ''}
-        ${topicOtherIndications ? ' - ' + topicOtherIndications : ''}`
+        ${topicSpecies ? ` - ${topicSpecies}` : ''}
+        ${topicGears ? ` - ${topicGears}` : ''}
+        ${topicOtherIndications ? ` - ${topicOtherIndications}` : ''}`
       updateTopic(regulationTopic)
       resetThemeForm()
       onCancelEdit()
       setTopicPlaceIsRed(false)
     }
   }
+
   return (
     <CreateRegulationBloc>
+      <CustomInput $isRed={topicPlaceIsRed} onChange={setTopicPlace} placeholder="Lieu *" value={topicPlace} />
+      <CustomInput onChange={setTopicSpecies} placeholder="Espèce" value={topicSpecies} />
+      <CustomInput onChange={setTopicGears} placeholder="Engins" value={topicGears} />
       <CustomInput
-        placeholder='Lieu *'
-        value={topicPlace}
-        onChange={setTopicPlace}
-        $isRed={topicPlaceIsRed}
-      />
-      <CustomInput
-        placeholder='Espèce'
-        value={topicSpecies}
-        onChange={setTopicSpecies}
-      />
-      <CustomInput
-        placeholder='Engins'
-        value={topicGears}
-        onChange={setTopicGears}
-      />
-      <CustomInput
-        placeholder='Autres indications'
-        value={topicOtherIndications}
         onChange={setTopicOtherIndications}
-        width={'115px'}
+        placeholder="Autres indications"
+        value={topicOtherIndications}
+        width="115px"
       />
-      <ValidateButton
-        disabled={false}
-        isLast={false}
-        onClick={addNewTopic}>
+      <ValidateButton disabled={false} isLast={false} onClick={addNewTopic}>
         Enregistrer
       </ValidateButton>
-      <CancelButton
-        disabled={false}
-        isLast={false}
-        onClick={onCancelEdit}
-      >
+      <CancelButton disabled={false} isLast={false} onClick={onCancelEdit}>
         Annuler
       </CancelButton>
     </CreateRegulationBloc>

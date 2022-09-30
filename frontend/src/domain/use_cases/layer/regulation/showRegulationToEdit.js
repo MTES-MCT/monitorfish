@@ -27,7 +27,8 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
         fishingPeriod,
         speciesRegulation,
         gearRegulation,
-        geometry
+        geometry,
+        otherInfo
       } = regulatoryZoneMetadata
 
       dispatch(setProcessingRegulation({
@@ -40,7 +41,8 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
         fishingPeriod,
         speciesRegulation,
         gearRegulation,
-        geometry
+        geometry,
+        otherInfo
       }))
       dispatch(setSelectedRegulatoryZoneId(id))
     }).catch(error => {

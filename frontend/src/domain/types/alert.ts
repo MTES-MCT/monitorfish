@@ -1,22 +1,39 @@
-export type Alert = {
+export enum PendingAlertValueType {
+  FRENCH_EEZ_FISHING_ALERT = 'FRENCH_EEZ_FISHING_ALERT',
+  MISSING_FAR_ALERT = 'MISSING_FAR_ALERT',
+  THREE_MILES_TRAWLING_ALERT = 'THREE_MILES_TRAWLING_ALERT',
+  TWELVE_MILES_FISHING_ALERT = 'TWELVE_MILES_FISHING_ALERT'
+}
+
+export type PendingAlert = {
   creationDate: string
   externalReferenceNumber: string
   id: string
+  infraction: {
+    infraction: string
+    infractionCategory: string
+    natinfCode: string
+    regulation: string
+  }
   internalReferenceNumber: string
   ircs: string
-  tripNumber: number
-  type: string
-  value: PendingAlert | PNOAndLANWeightToleranceAlert
+  tripNumber: string
+  value: PendingAlertValue
   vesselIdentifier: string
   vesselName: string
 }
 
-export type PendingAlert = {
+export type PendingAlertValue = {
   flagState: string
   natinfCode: string | null
+  riskFactor: number
   seaFront: string
   speed: number
-  type: string
+  type: PendingAlertValueType
+}
+
+export type LEGACY_PendingAlert = PendingAlert & {
+  isValidated: boolean
 }
 
 export type SilencedAlert = {
@@ -27,28 +44,22 @@ export type SilencedAlert = {
   isReactivated: boolean | null
   silencedAfterDate: Date
   silencedBeforeDate: Date
-  value: PendingAlert | PNOAndLANWeightToleranceAlert
+  value: PendingAlertValue
   vesselIdentifier: string
   vesselName: string
 }
 
-export type PNOAndLANWeightToleranceAlert = {
-  catchesOverTolerance: PNOAndLANCatches[]
-  lanOperationNumber: string
-  minimumWeightThreshold: number
-  name: string
-  percentOfTolerance: number
-  pnoOperationNumber: string
-  type: string
-}
-
-export type PNOAndLANCatches = {
-  lan: Object
-  pno: Object
+export type LEGACY_SilencedAlert = SilencedAlert & {
+  silencedPeriod?: SilencedAlertPeriodRequest
 }
 
 export type SilencedAlertPeriodRequest = {
   afterDateTime: Date | null
   beforeDateTime: Date | null
   silencedAlertPeriod: string | null
+}
+
+export type SilenceAlertQueueItem = {
+  pendingAlertId: string
+  silencedAlertPeriodRequest: SilencedAlertPeriodRequest
 }

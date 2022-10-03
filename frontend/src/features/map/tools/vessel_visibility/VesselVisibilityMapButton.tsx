@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useRef } from 'react'
-import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 import { MapToolType } from '../../../../domain/entities/map'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
+import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../../hooks/useClickOutsideWhenOpenedAndExecute'
 import { ReactComponent as VesselSVG } from '../../../icons/standardized/Vessel.svg'
@@ -11,7 +11,7 @@ import { MapToolButton as VesselVisibilityButton } from '../MapToolButton'
 import { EditVesselVisibility } from './EditVesselVisibility'
 
 export function VesselVisibilityMapButton() {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { mapToolOpened, rightMenuIsOpen } = useAppSelector(state => state.global)
 
   const isRightMenuShrinked = !rightMenuIsOpen

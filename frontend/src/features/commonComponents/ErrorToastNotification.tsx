@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import { toast, ToastContainer } from 'react-toastify'
 
 import { ErrorType } from '../../domain/entities/errors'
+import { useAppSelector } from '../../hooks/useAppSelector'
 
 import type { ToastOptions } from 'react-toastify'
 
@@ -14,7 +14,7 @@ export function ErrorToastNotification() {
   const error: {
     message: string
     type: ErrorType
-  } | null = useSelector<any, any>(state => state.global.error)
+  } | null = useAppSelector(state => state.global.error)
 
   useEffect(() => {
     const toastOptions: ToastOptions = {

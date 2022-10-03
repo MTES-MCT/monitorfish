@@ -4,11 +4,15 @@ import styled from 'styled-components'
 
 import Reporting from '../Reporting'
 import { COLORS } from '../../../../constants/constants'
-import { operationalAlertTypes } from '../../../../domain/entities/alerts'
 import { ReportingType } from '../../../../domain/entities/reporting'
 import ConfirmDeletionModal from './ConfirmDeletionModal'
 import CreateOrEditReporting from './CreateOrEditReporting'
 import deleteReporting from '../../../../domain/use_cases/reporting/deleteReporting'
+import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/constants'
+
+export const operationalAlertTypes = Object.keys(COMMON_ALERT_TYPE_OPTION)
+  .map(alertTypeName => COMMON_ALERT_TYPE_OPTION[alertTypeName])
+  .filter(alertType => alertType.isOperationalAlert)
 
 const CurrentReporting = () => {
   const dispatch = useDispatch()
@@ -19,53 +23,52 @@ const CurrentReporting = () => {
   } = useSelector(state => state.reporting)
   const [deletionModalIsOpenForId, setDeletionModalIsOpenForId] = useState(undefined)
 
-  return <Wrapper>
-    <CreateOrEditReporting/>
-    {
-      operationalAlertTypes
-        .map(alertType => {
-          const alertReportings = currentAndArchivedReportingsOfSelectedVessel?.current
-            ?.filter(reporting => reporting.type === ReportingType.ALERT.code && reporting.value.type === alertType.code)
-            ?.sort((a, b) => sortByValidationDate(a, b))
+  return (
+    <Wrapper>
+      <CreateOrEditReporting />
+      {operationalAlertTypes.map(alertType => {
+        const alertReportings = currentAndArchivedReportingsOfSelectedVessel?.current
+          ?.filter(reporting => reporting.type === ReportingType.ALERT.code && reporting.value.type === alertType.code)
+          ?.sort((a, b) => sortByValidationDate(a, b))
 
-          if (alertReportings?.length) {
-            return <Reporting
+        if (alertReportings?.length) {
+          return (
+            <Reporting
               key={alertReportings[alertReportings?.length - 1].id}
               reporting={alertReportings[alertReportings?.length - 1]}
               numberOfAlerts={alertReportings?.length}
               openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
             />
-          }
+          )
+        }
 
-          return null
-        })
-    }
-    {
-      currentAndArchivedReportingsOfSelectedVessel?.current
+        return null
+      })}
+      {currentAndArchivedReportingsOfSelectedVessel?.current
         ?.filter(reporting => reporting.type !== ReportingType.ALERT.code)
         ?.filter(reporting => reporting.id !== editedReporting?.id)
         .map(reporting => {
-          return <Reporting
-            key={reporting.id}
-            reporting={reporting}
-            openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
-          />
-        })
-    }
-    {
-      !currentAndArchivedReportingsOfSelectedVessel?.current?.length
-        ? <NoReporting>Aucun signalement</NoReporting>
-        : null
-    }
-    <ConfirmDeletionModal
-      closeModal={() => setDeletionModalIsOpenForId(null)}
-      isOpened={deletionModalIsOpenForId}
-      validateCallback={() => dispatch(deleteReporting(deletionModalIsOpenForId))}
-    />
-  </Wrapper>
+          return (
+            <Reporting
+              key={reporting.id}
+              reporting={reporting}
+              openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
+            />
+          )
+        })}
+      {!currentAndArchivedReportingsOfSelectedVessel?.current?.length ? (
+        <NoReporting>Aucun signalement</NoReporting>
+      ) : null}
+      <ConfirmDeletionModal
+        closeModal={() => setDeletionModalIsOpenForId(null)}
+        isOpened={deletionModalIsOpenForId}
+        validateCallback={() => dispatch(deleteReporting(deletionModalIsOpenForId))}
+      />
+    </Wrapper>
+  )
 }
 
-function sortByValidationDate (a, b) {
+function sortByValidationDate(a, b) {
   if (a.validationDate && b.validationDate) {
     return a.validationDate.localeCompare(b.validationDate)
   }

@@ -1,6 +1,6 @@
-import { getAlertNameFromType } from './alerts'
 import Fuse from 'fuse.js'
 import _ from 'lodash'
+import { getAlertNameFromType } from '../../features/side_window/alerts_reportings/utils'
 
 export const ReportingType = {
   ALERT: {
@@ -149,14 +149,7 @@ export const reportingSearchOptions = {
   includeScore: true,
   distance: 50,
   threshold: 0.4,
-  keys: [
-    'vesselName',
-    'internalReferenceNumber',
-    'externalReferenceNumber',
-    'ircs',
-    'dml',
-    'reportingTitle'
-  ],
+  keys: ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs', 'dml', 'reportingTitle'],
   getFn: (reporting, path) => {
     const value = Fuse.config.getFn(reporting, path)
 

@@ -1,80 +1,87 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import type { Alert, SilencedAlert } from '../types/alert'
+import { deleteListItems } from '../../utils/deleteListItems'
+
+import type { LEGACY_PendingAlert, SilenceAlertQueueItem, LEGACY_SilencedAlert } from '../types/alert'
+import type { SelectedVessel } from '../types/vessel'
 
 export type AlertState = {
-  alerts: Alert[]
-  focusOnAlert: Alert | undefined
-  silencedAlerts: SilencedAlert[]
+  focusedPendingAlertId: string | undefined
+  pendingAlerts: LEGACY_PendingAlert[]
+  silencedAlerts: LEGACY_SilencedAlert[]
+  silencedAlertsQueue: SilenceAlertQueueItem[]
 }
 const INITIAL_STATE: AlertState = {
-  alerts: [],
-  focusOnAlert: undefined,
-  silencedAlerts: []
+  focusedPendingAlertId: undefined,
+  pendingAlerts: [],
+  silencedAlerts: [],
+  silencedAlertsQueue: []
 }
 
 const alertSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'alert',
   reducers: {
-    /**
-     * Focus on alert in the alert list
-     * @function setFocusOnAlert
-     * @memberOf AlertReducer
-     * @param {Object=} state
-     * @param {{payload: {
-     *   name: string,
-     *   internalReferenceNumber: string,
-     *   externalReferenceNumber: string,
-     *   ircs: string,
-     * }}} action - An alert to be focused on
-     */
-    focusOnAlert(state, action) {
-      const { externalReferenceNumber, internalReferenceNumber, ircs, name } = action.payload
+    addToPendingAlertsBeingSilenced(state, action: PayloadAction<SilenceAlertQueueItem>) {
+      state.silencedAlertsQueue = [...state.silencedAlertsQueue, action.payload]
+    },
 
-      // TODO Clarify that (what, undefined?).
-      state.focusOnAlert = state.alerts.find(
+    /**
+     * Focus a pending alert in the alert list
+     */
+    focusOnAlert(state, action: PayloadAction<SelectedVessel>) {
+      const { externalReferenceNumber, internalReferenceNumber, ircs, name } = action.payload
+      const foundPendingAlert = state.pendingAlerts.find(
         alert =>
           alert.value.type === name &&
           alert.internalReferenceNumber === internalReferenceNumber &&
           alert.externalReferenceNumber === externalReferenceNumber &&
           alert.ircs === ircs
       )
+      if (!foundPendingAlert) {
+        return
+      }
+
+      state.focusedPendingAlertId = foundPendingAlert.id
+    },
+
+    /**
+     * @param action - Original `PendingAlert.id`
+     */
+    removeFromSilencedAlertsQueue(state, action: PayloadAction<string>) {
+      state.silencedAlertsQueue = deleteListItems(state.silencedAlertsQueue, 'pendingAlertId', action.payload)
     },
 
     /**
      * Reset focus on alert
-     * @function setFocusOnAlert
-     * @memberOf AlertReducer
-     * @param {Object=} state
      */
-    resetFocusOnAlert(state) {
-      state.focusOnAlert = undefined
+    resetFocusOnPendingAlert(state) {
+      state.focusedPendingAlertId = undefined
     },
 
     /**
      * Set alerts
-     * @function setAlerts
-     * @memberOf AlertReducer
-     * @param {Object=} state
-     * @param {{payload: Alert[]}} action - The alerts
      */
-    setAlerts(state, action) {
-      state.alerts = action.payload
+    setPendingAlerts(state, action: PayloadAction<LEGACY_PendingAlert[]>) {
+      state.pendingAlerts = action.payload
     },
+
     /**
      * Set silenced alerts
-     * @function setSilencedAlerts
-     * @memberOf AlertReducer
-     * @param {Object=} state
-     * @param {{payload: SilencedAlert[]}} action - The silenced alerts
      */
-    setSilencedAlerts(state, action) {
+    setSilencedAlerts(state, action: PayloadAction<LEGACY_SilencedAlert[]>) {
       state.silencedAlerts = action.payload
     }
   }
 })
 
-export const { focusOnAlert, resetFocusOnAlert, setAlerts, setSilencedAlerts } = alertSlice.actions
+export const {
+  addToPendingAlertsBeingSilenced,
+  focusOnAlert,
+  removeFromSilencedAlertsQueue,
+  resetFocusOnPendingAlert,
+  setPendingAlerts,
+  setSilencedAlerts
+} = alertSlice.actions
 
 export const alertReducer = alertSlice.reducer

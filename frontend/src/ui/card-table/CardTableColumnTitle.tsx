@@ -22,9 +22,7 @@ export function CardTableColumnTitle({
   return (
     <StyledCardTableColumnTitle data-cy={dataCy} isSortable={isSortable} onClick={onClick}>
       {children}
-      {isSortable && isSortColumn && (
-        <Sort isAscending={isAscending} title={isAscending ? 'Croissant' : 'Décroissant'} />
-      )}
+      {isSortable && isSortColumn && <Sort title={isAscending ? 'Croissant' : 'Décroissant'} />}
     </StyledCardTableColumnTitle>
   )
 }
@@ -43,5 +41,5 @@ const Sort = styled(SortSVG)<{
   padding: 0px;
   margin-left: auto;
   cursor: pointer;
-  ${props => (props.isAscending ? 'transform: rotate(180deg);' : null)}
+  transform: ${p => (p.isAscending ? 'rotate(180deg)' : 'none')};
 `

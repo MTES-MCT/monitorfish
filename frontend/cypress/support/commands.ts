@@ -1,6 +1,7 @@
 import { isEmpty } from 'ramda'
 
 import { fillDateRangePicker } from './commands/fillDateRangePicker'
+import { forceClick } from './commands/forceClick'
 import { getDataCy } from './commands/getDataCy'
 
 function unquote(str: string): string {
@@ -95,4 +96,6 @@ Cypress.Commands.add('fill', (label: string, value: string): void => {
 })
 
 Cypress.Commands.add('fillDateRangePicker', fillDateRangePicker)
+// Maybe because of https://github.com/cypress-io/cypress/issues/19564
+Cypress.Commands.add('forceClick', { prevSubject: true }, forceClick)
 Cypress.Commands.add('getDataCy', getDataCy)

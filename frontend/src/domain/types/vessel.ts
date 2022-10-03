@@ -1,5 +1,6 @@
 // TODO This should be moved to `entities/vessel/types.ts`
 
+import type { SilencedAlertPeriod } from '../entities/alerts/constants'
 import type { VesselTrackDepth } from '../entities/vesselTrackDepth'
 import type { ValueOf } from 'type-fest'
 
@@ -49,6 +50,7 @@ export type SelectedVessel = {
   length: number
   longitude: number | null
   mmsi: string
+  name: string
   navigationLicenceExpirationDate: string
   operatorEmails: string[]
   operatorName: string
@@ -225,3 +227,7 @@ export type VesselPosition = {
 }
 
 export type VesselTrackDepthKey = ValueOf<VesselTrackDepth>
+
+export type VesselAlert = {
+  silenceAlertPeriod: SilencedAlertPeriod
+}

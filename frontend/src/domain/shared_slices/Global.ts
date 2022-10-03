@@ -4,6 +4,7 @@ import { getLocalStorageState } from '../../utils'
 import { UserType } from '../entities/beaconMalfunction'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel'
 
+import type { SideWindowMenuKey } from '../../features/side_window/constants'
 import type { MapToolType } from '../entities/map'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -14,15 +15,19 @@ const lastSearchedVesselsLocalStorageKey = 'lastSearchedVessels'
 export type GlobalState = {
   blockVesselsUpdate: boolean
   error: any
-  healthcheckTextWarning: string | null
+  // TODO Rename this prop.
+  healthcheckTextWarning: string | undefined
   isAdmin: boolean
   isBackoffice: boolean
   isUpdatingVessels: boolean
   lastSearchedVessels: any[]
   leftBoxOpened: any
   mapToolOpened: MapToolType | undefined
-  openedSideWindowTab: any
-  previewFilteredVesselsMode: undefined
+  // TODO Make that an enum.
+  openedSideWindowTab: SideWindowMenuKey | undefined
+  // TODO Rename this prop.
+  // TODO Investigate that. Should be a defined boolean.
+  previewFilteredVesselsMode: boolean | undefined
   rightMenuIsOpen: boolean
   sideWindowIsOpen: boolean
   userType: string
@@ -31,15 +36,14 @@ export type GlobalState = {
 const INITIAL_STATE: GlobalState = {
   blockVesselsUpdate: false,
   error: null,
-  /** @type {string | null} healthcheckTextWarning */
-  healthcheckTextWarning: null,
+  healthcheckTextWarning: undefined,
   isAdmin: false,
   isBackoffice: false,
   isUpdatingVessels: false,
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),
   leftBoxOpened: null,
   mapToolOpened: undefined,
-  openedSideWindowTab: null,
+  openedSideWindowTab: undefined,
   previewFilteredVesselsMode: undefined,
   rightMenuIsOpen: false,
   sideWindowIsOpen: false,
@@ -86,7 +90,7 @@ export const globalSlice = createSlice({
      * @param {Object=} state
      */
     closeSideWindow(state) {
-      state.openedSideWindowTab = null
+      state.openedSideWindowTab = undefined
       state.sideWindowIsOpen = false
     },
 
@@ -104,12 +108,8 @@ export const globalSlice = createSlice({
 
     /**
      * Open a side window tab
-     * @function openSideWindowTab
-     * @memberOf GlobalReducer
-     * @param {Object=} state
-     * @param {{payload: string}} action - The tab to show, see `sideWindowMenu`
      */
-    openSideWindowTab(state, action) {
+    openSideWindowTab(state, action: PayloadAction<SideWindowMenuKey>) {
       state.openedSideWindowTab = action.payload
     },
 
@@ -136,16 +136,17 @@ export const globalSlice = createSlice({
       state.blockVesselsUpdate = action.payload
     },
 
-    setError(state, action) {
+    setError(state, action: PayloadAction<any>) {
+      // eslint-disable-next-line no-console
+      console.error(action.payload)
+
       state.error = action.payload
     },
 
     /**
      * Set warning to show on application header
-     * @param {Object=} state
-     * @param {{payload: string | null}} action - the warning(s) or null if no warning are found
      */
-    setHealthcheckTextWarning(state, action) {
+    setHealthcheckTextWarning(state, action: PayloadAction<string | undefined>) {
       state.healthcheckTextWarning = action.payload
     },
 
@@ -169,12 +170,8 @@ export const globalSlice = createSlice({
 
     /**
      * Set the left box opened as LeftBoxOpened, so the other boxes can close
-     * @function setLeftBoxOpened
-     * @memberOf GlobalReducer
-     * @param {Object=} state
-     * @param {{payload: string<LeftBoxOpened>}} action - the oepend box
      */
-    setLeftBoxOpened(state, action) {
+    setLeftBoxOpened(state, action: PayloadAction<any>) {
       state.leftBoxOpened = action.payload
     },
 
@@ -186,11 +183,10 @@ export const globalSlice = createSlice({
     },
 
     /**
-     * Set the preview mode of the application - Hide the map tooling if the preview mode is true
-     * @param {Object=} state
-     * @param {{payload: boolean}} action - in preview mode when true
+     * Set the preview mode of the application - Hide the map tooling if the preview mode
+     * (`previewFilteredVesselsMode`) is true
      */
-    setPreviewFilteredVesselsMode(state, action) {
+    setPreviewFilteredVesselsMode(state, action: PayloadAction<boolean>) {
       state.previewFilteredVesselsMode = action.payload
       state.blockVesselsUpdate = action.payload
     },

@@ -1,5 +1,3 @@
-import type { Alert } from './alert'
-
 export type VesselVoyage = {
   endDate: string | null
   isFirstVoyage: boolean
@@ -10,7 +8,7 @@ export type VesselVoyage = {
 }
 
 export type FishingActivities = {
-  alerts: Alert[]
+  alerts: PNOAndLANWeightToleranceAlert[]
   logbookMessages: LogbookMessage[]
 }
 
@@ -40,4 +38,29 @@ export type LogbookMessage = {
   reportId: string
   tripNumber: number
   vesselName: string
+}
+
+export type PNOAndLANWeightToleranceAlert = {
+  externalReferenceNumber: string
+  id: string
+  internalReferenceNumber: string
+  ircs: string
+  value: PNOAndLANWeightToleranceAlertValue
+  vesselIdentifier: string
+  vesselName: string
+}
+
+export type PNOAndLANWeightToleranceAlertValue = {
+  catchesOverTolerance: PNOAndLANWeightToleranceAlertValueCatches[]
+  lanOperationNumber: string
+  minimumWeightThreshold: number
+  name: string
+  percentOfTolerance: number
+  pnoOperationNumber: string
+  type: 'PNO_LAN_WEIGHT_TOLERANCE_ALERT'
+}
+
+export type PNOAndLANWeightToleranceAlertValueCatches = {
+  lan: Object
+  pno: Object
 }

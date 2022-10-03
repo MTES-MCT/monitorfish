@@ -1,13 +1,12 @@
 import Fuse from 'fuse.js'
 import countries from 'i18n-iso-countries'
 import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { Checkbox, FlexboxGrid } from 'rsuite'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
-import { AlertsMenuSeaFrontsToSeaFrontList } from '../../../domain/entities/alerts'
+import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, SeaFront } from '../../../domain/entities/alerts/constants'
 import {
   getReportingOrigin,
   getReportingTitle,
@@ -19,6 +18,8 @@ import archiveReportings from '../../../domain/use_cases/reporting/archiveReport
 import deleteReportings from '../../../domain/use_cases/reporting/deleteReportings'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 import { CardTable } from '../../../ui/card-table/CardTable'
 import { CardTableBody } from '../../../ui/card-table/CardTableBody'
 import { CardTableColumnTitle } from '../../../ui/card-table/CardTableColumnTitle'
@@ -32,7 +33,9 @@ import { ReactComponent as ArchiveIconSVG } from '../../icons/Bouton_archiver.sv
 import { ReactComponent as DeleteIconSVG } from '../../icons/Bouton_supprimer.svg'
 import { Flag } from '../../vessel_list/tableCells'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
-import EditReporting from './EditReporting'
+import { EditReporting } from './EditReporting'
+
+import type { MenuItem } from '../../../types'
 
 enum SortColumns {
   dml = 'dml',
@@ -41,11 +44,11 @@ enum SortColumns {
 }
 
 type ReportingListProps = {
-  seaFront: any
+  selectedSeaFront: MenuItem<SeaFront>
 }
-export function ReportingList({ seaFront }: ReportingListProps) {
-  const dispatch = useDispatch()
-  const { currentReportings } = useSelector(state => (state as any).reporting)
+export function ReportingList({ selectedSeaFront }: ReportingListProps) {
+  const dispatch = useAppDispatch()
+  const { currentReportings } = useAppSelector(state => (state as any).reporting)
   const baseUrl = window.location.origin
   const [sortColumn, setSortColumn] = useState<string>(SortColumns.validationDateTimestamp)
   const [sortType, setSortType] = useState<string>(SortType.DESC)
@@ -54,20 +57,23 @@ export function ReportingList({ seaFront }: ReportingListProps) {
 
   useEffect(() => {
     setCheckedReportingIds([])
-  }, [seaFront])
+  }, [selectedSeaFront])
 
   const currentSeaFrontReportings = useMemo(
     () =>
       currentReportings
         .filter(reporting =>
-          (AlertsMenuSeaFrontsToSeaFrontList[seaFront.code]?.seaFronts || []).includes(reporting.value.seaFront)
+          (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code]
+            ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code].seaFronts
+            : []
+          ).includes(reporting.value.seaFront)
         )
         .map(reporting => ({
           ...reporting,
           dml: reporting.value.dml,
           validationDateTimestamp: new Date(reporting.validationDate).getTime()
         })),
-    [currentReportings, seaFront]
+    [currentReportings, selectedSeaFront]
   )
 
   const fuse = useMemo(() => new Fuse(currentSeaFrontReportings, reportingSearchOptions), [currentSeaFrontReportings])
@@ -260,8 +266,8 @@ MMSI: ${reporting.mmsi || ''}`
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
                         const vesselIdentity = { ...reporting, flagState: reporting.value.flagState }
-                        dispatch(showVessel(vesselIdentity, false, false))
-                        dispatch(getVesselVoyage(vesselIdentity, undefined, false))
+                        dispatch(showVessel(vesselIdentity, false, false) as any)
+                        dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
                       }}
                       src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       style={showIconStyle}

@@ -258,11 +258,12 @@ const VesselList = ({ namespace }) => {
   useEffect(() => {
     if (previewFilteredVesselsMode) {
       dispatch(closeVesselListModal())
-    } else if (previewFilteredVesselsMode !== undefined) {
+    // TODO Investigate that. Should be a defined boolean.
+    } else if (previewFilteredVesselsMode !== undefined)  {
       dispatch(openVesselListModal())
     }
   }, [previewFilteredVesselsMode])
-
+  
   useEffect(() => {
     if (zonesSelected?.length) {
       dispatch(openVesselListModal())

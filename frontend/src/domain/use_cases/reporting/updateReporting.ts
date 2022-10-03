@@ -28,7 +28,6 @@ export const updateReporting =
           )
         }
         dispatch(removeError())
-        throw Error('tet')
       })
       .catch(error => {
         console.error(error)

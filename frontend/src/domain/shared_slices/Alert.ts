@@ -2,13 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { deleteListItems } from '../../utils/deleteListItems'
 
-import type { PendingAlert, SilenceAlertQueueItem, SilencedAlert } from '../types/alert'
+import type { LEGACY_PendingAlert, SilenceAlertQueueItem, LEGACY_SilencedAlert } from '../types/alert'
 import type { SelectedVessel } from '../types/vessel'
 
 export type AlertState = {
   focusedPendingAlertId: string | undefined
-  pendingAlerts: PendingAlert[]
-  silencedAlerts: SilencedAlert[]
+  pendingAlerts: LEGACY_PendingAlert[]
+  silencedAlerts: LEGACY_SilencedAlert[]
   silencedAlertsQueue: SilenceAlertQueueItem[]
 }
 const INITIAL_STATE: AlertState = {
@@ -62,14 +62,14 @@ const alertSlice = createSlice({
     /**
      * Set alerts
      */
-    setPendingAlerts(state, action: PayloadAction<PendingAlert[]>) {
+    setPendingAlerts(state, action: PayloadAction<LEGACY_PendingAlert[]>) {
       state.pendingAlerts = action.payload
     },
 
     /**
      * Set silenced alerts
      */
-    setSilencedAlerts(state, action: PayloadAction<SilencedAlert[]>) {
+    setSilencedAlerts(state, action: PayloadAction<LEGACY_SilencedAlert[]>) {
       state.silencedAlerts = action.payload
     }
   }

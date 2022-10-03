@@ -18,11 +18,11 @@ import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { PENDING_ALERTS_SEARCH_OPTIONS } from './constants'
 import { getAlertNameFromType } from './utils'
 
-import type { SilencedAlert } from '../../../domain/types/alert'
+import type { LEGACY_SilencedAlert } from '../../../domain/types/alert'
 import type { CSSProperties } from 'react'
 
 export type SilencedAlertsListProps = {
-  silencedAlerts: SilencedAlert[]
+  silencedAlerts: LEGACY_SilencedAlert[]
 }
 /**
  * This component use JSON styles and not styled-components ones so the new window can load the styles not in a lazy way

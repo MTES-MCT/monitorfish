@@ -15,13 +15,13 @@ import { getFromList } from '../../../utils/getFromList'
 import { Flag } from '../../vessel_list/tableCells'
 import { getAlertNameFromType, getSilencedAlertPeriodText } from './utils'
 
-import type { PendingAlert } from '../../../domain/types/alert'
+import type { LEGACY_PendingAlert } from '../../../domain/types/alert'
 import type { CSSProperties } from 'react'
 import type { Promisable } from 'type-fest'
 
 // TODO Type these props.
 export type PendingAlertRowProps = {
-  alert: PendingAlert
+  alert: LEGACY_PendingAlert
   index: number
   setShowSilencedAlertForIndex: (index: number) => Promisable<void>
   setSilencedAlertId: (id: string) => Promisable<void>

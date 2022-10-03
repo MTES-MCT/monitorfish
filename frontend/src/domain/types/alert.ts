@@ -26,6 +26,7 @@ export type LEGACY_PendingAlert = {
 export type PendingAlertValue = {
   flagState: string
   natinfCode: string | null
+  riskFactor: number
   seaFront: string
   speed: number
   type: PendingAlertValueType

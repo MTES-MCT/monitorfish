@@ -21,7 +21,7 @@ export function CreateOrEditReporting() {
     () =>
       ({
         ...selectedVesselIdentity,
-        vesselId: selectedVessel.vesselId
+        vesselId: selectedVessel?.vesselId
       } as VesselIdentity),
     [selectedVesselIdentity, selectedVessel]
   )

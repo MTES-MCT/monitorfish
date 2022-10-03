@@ -4,7 +4,7 @@ import { COLORS } from '../../../../constants/constants'
 import LogbookMessageResumeHeader from './LogbookMessageResumeHeader'
 import { getDateTime } from '../../../../utils'
 import { LogbookMessageType as LogbookMessageTypeEnum } from '../../../../domain/entities/logbook'
-import { AlertType } from '../../../../domain/entities/alerts'
+import { COMMON_ALERT_TYPE_OPTION } from '../../../../domain/entities/alerts/constants'
 
 const LANMessageResume = props => {
   const [isOpen, setIsOpen] = useState(false)
@@ -14,16 +14,18 @@ const LANMessageResume = props => {
   useEffect(() => {
     if (props.lanMessage) {
       const count = props.lanMessage.catchLanded.reduce(filterSameSpecies(), [])
-      const height = count.length > 0
-        ? count.length * 49
-        : 0
+      const height = count.length > 0 ? count.length * 49 : 0
       setChartHeight(height)
     }
   }, [props.lanMessage])
 
   const getPortName = message => {
     if (message.portName && message.port) {
-      return <>{message.portName} ({message.port})</>
+      return (
+        <>
+          {message.portName} ({message.port})
+        </>
+      )
     } else if (message.port) {
       return <>{message.port}</>
     }
@@ -38,16 +40,20 @@ const LANMessageResume = props => {
   }, [isOpen])
 
   const getWeightOverToleranceInfo = () => {
-    if (props.catchesOverToleranceAlert) {
-      return AlertType.PNO_LAN_WEIGHT_TOLERANCE_ALERT.nameWithAlertDetails(
+    if (
+      props.catchesOverToleranceAlert &&
+      COMMON_ALERT_TYPE_OPTION.PNO_LAN_WEIGHT_TOLERANCE_ALERT.nameWithAlertDetails
+    ) {
+      return COMMON_ALERT_TYPE_OPTION.PNO_LAN_WEIGHT_TOLERANCE_ALERT.nameWithAlertDetails(
         props.catchesOverToleranceAlert.percentOfTolerance,
-        props.catchesOverToleranceAlert.minimumWeightThreshold)
+        props.catchesOverToleranceAlert.minimumWeightThreshold
+      )
     }
 
     return ''
   }
 
-  function filterSameSpecies () {
+  function filterSameSpecies() {
     return (acc, current) => {
       const x = acc.find(item => item.species === current.species)
       if (!x) {
@@ -58,37 +64,47 @@ const LANMessageResume = props => {
     }
   }
 
-  return <Wrapper>
-    <LogbookMessageResumeHeader
-      isNotAcknowledged={props.isNotAcknowledged}
-      isDeleted={props.isDeleted}
-      isAlert={!!props.catchesOverToleranceAlert}
-      title={props.hasNoMessage ? null : props.catchesOverToleranceAlert ? AlertType.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name : null}
-      onHoverText={getWeightOverToleranceInfo()}
-      hasNoMessage={props.hasNoMessage}
-      showLogbookMessages={props.showLogbookMessages}
-      messageType={LogbookMessageTypeEnum.LAN.code.toString()}
-      setIsOpen={setIsOpen}
-      isOpen={isOpen}
-      isLastItem={true}
-    />
-    {
-      props.hasNoMessage
-        ? null
-        : <LogbookMessageContent
+  return (
+    <Wrapper>
+      <LogbookMessageResumeHeader
+        isNotAcknowledged={props.isNotAcknowledged}
+        isDeleted={props.isDeleted}
+        isAlert={!!props.catchesOverToleranceAlert}
+        title={
+          props.hasNoMessage
+            ? null
+            : props.catchesOverToleranceAlert
+            ? COMMON_ALERT_TYPE_OPTION.PNO_LAN_WEIGHT_TOLERANCE_ALERT.name
+            : null
+        }
+        onHoverText={getWeightOverToleranceInfo()}
+        hasNoMessage={props.hasNoMessage}
+        showLogbookMessages={props.showLogbookMessages}
+        messageType={LogbookMessageTypeEnum.LAN.code.toString()}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        isLastItem={true}
+      />
+      {props.hasNoMessage ? null : (
+        <LogbookMessageContent
           id={props.id}
           chartHeight={chartHeight}
           firstUpdate={firstUpdate}
           isOpen={isOpen}
-          name={LogbookMessageTypeEnum.LAN.code.toString()}>
+          name={LogbookMessageTypeEnum.LAN.code.toString()}
+        >
           <Zone>
             <Fields withoutMarginBottom={true}>
               <TableBody>
                 <Field>
                   <Key>Date de fin de débarquement</Key>
-                  <Value>{props.lanMessage.landingDatetimeUtc
-                    ? getDateTime(props.lanMessage.landingDatetimeUtc, true)
-                    : <NoValue>-</NoValue>}</Value>
+                  <Value>
+                    {props.lanMessage.landingDatetimeUtc ? (
+                      getDateTime(props.lanMessage.landingDatetimeUtc, true)
+                    ) : (
+                      <NoValue>-</NoValue>
+                    )}
+                  </Value>
                 </Field>
                 <Field>
                   <Key>Port de débarquement</Key>
@@ -102,86 +118,92 @@ const LANMessageResume = props => {
                   <Key>Poids débarqué</Key>
                   <Value>
                     {props.totalLANWeight ? props.totalLANWeight : <NoValue>-</NoValue>} kg
-                    {
-                      props.totalPNOWeight ? <> sur les {props.totalPNOWeight} kg annoncés dans le PNO</> : null
-                    }
+                    {props.totalPNOWeight ? <> sur les {props.totalPNOWeight} kg annoncés dans le PNO</> : null}
                   </Value>
                 </Field>
               </TableBody>
             </Fields>
-            {props.lanMessage.catchLanded?.length
-              ? props.lanMessage.catchLanded
-                .reduce(filterSameSpecies(), [])
-                .map((speciesCatch, index) => {
-                  return <Species key={index}>
+            {props.lanMessage.catchLanded?.length ? (
+              props.lanMessage.catchLanded.reduce(filterSameSpecies(), []).map((speciesCatch, index) => {
+                return (
+                  <Species key={index}>
                     <SubKey>Espèce {index + 1}</SubKey>{' '}
                     <SubValue>
-                      {
-                        speciesCatch.speciesName
-                          ? <>{speciesCatch.speciesName} ({speciesCatch.species})</>
-                          : speciesCatch.species
-                      }
-                      {
-                        props.catchesOverToleranceAlert && props.catchesOverToleranceAlert.catchesOverTolerance && props.catchesOverToleranceAlert.catchesOverTolerance.length
-                          ? props.catchesOverToleranceAlert.catchesOverTolerance.some(catchWithAlert => catchWithAlert.lan.species === speciesCatch.species)
-                            ? <OverWeightTolerance title={getWeightOverToleranceInfo()}>
-                              <OverWeightToleranceText>10 %</OverWeightToleranceText>
-                            </OverWeightTolerance>
-                            : null
-                          : null
-                      }
-                    </SubValue><br/>
+                      {speciesCatch.speciesName ? (
+                        <>
+                          {speciesCatch.speciesName} ({speciesCatch.species})
+                        </>
+                      ) : (
+                        speciesCatch.species
+                      )}
+                      {props.catchesOverToleranceAlert &&
+                      props.catchesOverToleranceAlert.catchesOverTolerance &&
+                      props.catchesOverToleranceAlert.catchesOverTolerance.length ? (
+                        props.catchesOverToleranceAlert.catchesOverTolerance.some(
+                          catchWithAlert => catchWithAlert.lan.species === speciesCatch.species
+                        ) ? (
+                          <OverWeightTolerance title={getWeightOverToleranceInfo()}>
+                            <OverWeightToleranceText>10 %</OverWeightToleranceText>
+                          </OverWeightTolerance>
+                        ) : null
+                      ) : null}
+                    </SubValue>
+                    <br />
                     <Weights>
                       <Weight>
                         <SubKey>Poids FAR</SubKey>
                         <SubValueWeight
-                          withPNOWeight={props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]}>
-                          {
-                            props.speciesToWeightOfFAR && props.speciesToWeightOfFAR[speciesCatch.species]
-                              ? <span
-                                title={`${props.speciesToWeightOfFAR[speciesCatch.species].weight} kg`}>
+                          withPNOWeight={props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]}
+                        >
+                          {props.speciesToWeightOfFAR && props.speciesToWeightOfFAR[speciesCatch.species] ? (
+                            <span title={`${props.speciesToWeightOfFAR[speciesCatch.species].weight} kg`}>
                               {props.speciesToWeightOfFAR[speciesCatch.species].weight} kg
-                          </span>
-                              : <NoValue>0 kg</NoValue>
-                          }
+                            </span>
+                          ) : (
+                            <NoValue>0 kg</NoValue>
+                          )}
                         </SubValueWeight>
                       </Weight>
                       <Weight>
                         <SubKey>Poids PNO</SubKey>
                         <SubValueWeight
-                          withPNOWeight={props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]}>
-                          {
-                            props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]
-                              ? <span
-                                title={`${props.speciesToWeightOfPNO[speciesCatch.species].weight} kg`}>
+                          withPNOWeight={props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]}
+                        >
+                          {props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species] ? (
+                            <span title={`${props.speciesToWeightOfPNO[speciesCatch.species].weight} kg`}>
                               {props.speciesToWeightOfPNO[speciesCatch.species].weight} kg
                             </span>
-                              : <NoValue>0 kg</NoValue>
-                          }
+                          ) : (
+                            <NoValue>0 kg</NoValue>
+                          )}
                         </SubValueWeight>
                       </Weight>
                       <Weight>
                         <SubKey>Poids LAN</SubKey>
                         <SubValueWeight
-                          withPNOWeight={props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]}>
-                          {
-                            props.speciesToWeightOfLAN && props.speciesToWeightOfLAN[speciesCatch.species]
-                              ? <span
-                                title={`${props.speciesToWeightOfLAN[speciesCatch.species].weight} kg`}>
+                          withPNOWeight={props.speciesToWeightOfPNO && props.speciesToWeightOfPNO[speciesCatch.species]}
+                        >
+                          {props.speciesToWeightOfLAN && props.speciesToWeightOfLAN[speciesCatch.species] ? (
+                            <span title={`${props.speciesToWeightOfLAN[speciesCatch.species].weight} kg`}>
                               {props.speciesToWeightOfLAN[speciesCatch.species].weight} kg
-                          </span>
-                              : <NoValue>0 kg</NoValue>
-                          }
+                            </span>
+                          ) : (
+                            <NoValue>0 kg</NoValue>
+                          )}
                         </SubValueWeight>
                       </Weight>
                     </Weights>
                   </Species>
-                })
-              : <Gray>Aucune capture à bord</Gray>}
+                )
+              })
+            ) : (
+              <Gray>Aucune capture à bord</Gray>
+            )}
           </Zone>
         </LogbookMessageContent>
-    }
-  </Wrapper>
+      )}
+    </Wrapper>
+  )
 }
 
 const OverWeightToleranceText = styled.span`
@@ -192,7 +214,7 @@ const OverWeightToleranceText = styled.span`
 
 const OverWeightTolerance = styled.span`
   border-radius: 11px;
-  background: #E1000F;
+  background: #e1000f;
   font-size: 11px;
   color: ${COLORS.background};
   margin: 7px 7px 7px 5px;
@@ -241,7 +263,7 @@ const SubValueWeight = styled.span`
   font-size: 13px;
   color: ${COLORS.gunMetal};
   margin-right: 10px;
-  max-width: ${props => props.withPNOWeight ? '50' : '90'}px;
+  max-width: ${props => (props.withPNOWeight ? '50' : '90')}px;
   text-overflow: ellipsis;
   overflow: hidden !important;
   white-space: nowrap;
@@ -253,13 +275,13 @@ const SubValueWeight = styled.span`
 const TableBody = styled.tbody``
 
 const Fields = styled.table`
-  padding: 0px 5px ${props => props.withoutMarginBottom ? '0' : '5px'} 5px;
+  padding: 0px 5px ${props => (props.withoutMarginBottom ? '0' : '5px')} 5px;
   width: inherit;
   display: table;
   margin: 0;
   line-height: 0.2em;
-  margin-top: ${props => props.withoutMarginTop ? '0' : '5px'};
-  margin-bottom: ${props => props.withoutMarginBottom ? '0' : '5px'};
+  margin-top: ${props => (props.withoutMarginTop ? '0' : '5px')};
+  margin-bottom: ${props => (props.withoutMarginBottom ? '0' : '5px')};
 `
 
 const Field = styled.tr`
@@ -318,14 +340,11 @@ const Wrapper = styled.li`
 const LogbookMessageContent = styled.div`
   background: ${COLORS.background};
   width: inherit;
-  opacity: ${props => props.isOpen ? 1 : 0};
+  opacity: ${props => (props.isOpen ? 1 : 0)};
   overflow: hidden;
   padding: 0 0 0 20px;
   border-bottom: 1px solid ${COLORS.gray};
-  height: ${props => props.isOpen
-    ? props.chartHeight + 105
-    : 0
-  }px;
+  height: ${props => (props.isOpen ? props.chartHeight + 105 : 0)}px;
   transition: 0.2s all;
 `
 

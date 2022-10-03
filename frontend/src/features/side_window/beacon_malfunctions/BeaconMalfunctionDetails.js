@@ -160,7 +160,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselSt
             AVARIES DE LA DERNIÈRE ANNÉE
           </ColumnTitle>
           <ResumeLine style={resumeLineStyle}>
-            <ResumeKey style={resumeKeyStyle}>Nombre d&apos;avaries</ResumeKey>
+            <ResumeKey style={resumeKeyStyle}>Nombre d’avaries</ResumeKey>
             <ResumeSubKey style={resumeSubKeyStyle}>en mer</ResumeSubKey>
             <ResumeValue style={resumeValueStyle}>{resume?.numberOfBeaconsAtSea}</ResumeValue>
             <ResumeSubKey style={resumeSubKeyStyle}>à quai</ResumeSubKey>
@@ -177,7 +177,7 @@ const BeaconMalfunctionDetails = ({ beaconMalfunctionWithDetails, updateVesselSt
             <ShowHistory
               style={showHistoryStyle}
               onClick={() => dispatch(showVesselFromBeaconMalfunctionsKanban(beaconMalfunction, true))}>
-              voir l&apos;historique
+              voir l’historique
             </ShowHistory>
           </ResumeLine>
         </SecondColumn>

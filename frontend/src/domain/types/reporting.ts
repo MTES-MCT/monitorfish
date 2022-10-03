@@ -1,16 +1,23 @@
-import type { PendingAlert } from './alert'
+import type { PendingAlertValue } from './alert'
 
-export type Reporting = {
+// export enum ReportingType {
+//   ALERT = 'ALERT',
+//   INFRACTION_SUSPICION = 'INFRACTION_SUSPICION',
+//   OBSERVATION = 'OBSERVATION'
+// }
+
+export type Reporting<Value = PendingAlertValue | InfractionSuspicion | Observation> = {
   creationDate: string
   externalReferenceNumber: string
   id: string
   internalReferenceNumber: string
   ircs: string
   // TODO Doesn't exists.
-  type: any
-  // type: ReportingType<string>
+  // type: ReportingType
+  underCharter: boolean
   validationDate: string
-  value: PendingAlert | InfractionSuspicion | Observation
+  // TODO Create a specific type with a discriminator prop to avoid type-guessing issues
+  value: Value
   vesselIdentifier: string
   vesselName: string
 }
@@ -28,6 +35,8 @@ export type InfractionSuspicion = {
   natinfCode: string
   reportingActor: string
   title: string
+  // TODO We ne a type here.
+  // type: ReportingValueType.InfractionSuspicion
   unit: string | null
 }
 
@@ -37,6 +46,8 @@ export type Observation = {
   description: string
   reportingActor: string
   title: string
+  // TODO We ne a type here.
+  // type: ReportingValueType.Observation
   unit: string | null
 }
 

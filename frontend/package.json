@@ -43,6 +43,7 @@
     "i18n-iso-countries": "^6.4.0",
     "imask": "^6.1.0",
     "immer": "^9.0.6",
+    "ky": "0.31.3",
     "lodash": "^4.17.21",
     "mini.css": "^3.0.1",
     "nouislider": "14.7.0",
@@ -75,13 +76,14 @@
     "worker-loader": "^3.0.6"
   },
   "devDependencies": {
-    "@ivangabriele/eslint-config-typescript-react": "4.2.0",
+    "@ivangabriele/eslint-config-typescript-react": "4.3.0",
     "@jest/globals": "28.1.3",
     "@swc/core": "1.2.207",
     "@swc/jest": "0.2.21",
     "@tsconfig/create-react-app": "1.0.2",
     "@types/jest": "28.1.6",
     "@types/node": "18.0.6",
+    "@types/ramda": "0.28.15",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
     "@types/react-router-dom": "5.3.3",

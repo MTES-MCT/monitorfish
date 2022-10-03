@@ -6,7 +6,7 @@ context('Vessel sidebar resume tab', () => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
-  it('Resume Should be opened When clicking on a vessel', () => {
+  it.only('Resume Should be opened When clicking on a vessel', () => {
     // When
     cy.get('.vessels').click(460, 480, { force: true, timeout: 10000 })
     cy.wait(200)

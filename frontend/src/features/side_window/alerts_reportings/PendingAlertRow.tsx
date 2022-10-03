@@ -11,7 +11,6 @@ import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { getFromList } from '../../../utils/getFromList'
 import { Flag } from '../../vessel_list/tableCells'
 import { getAlertNameFromType, getSilencedAlertPeriodText } from './utils'
 
@@ -43,7 +42,7 @@ export function PendingAlertRow({
   const baseUrl = window.location.origin
 
   const silencedAlertsQueueMatch = useMemo(
-    () => getFromList(silencedAlertsQueue, 'pendingAlertId', alert.id),
+    () => silencedAlertsQueue.find(({ pendingAlertId }) => pendingAlertId === alert.id),
     [alert.id, silencedAlertsQueue]
   )
 

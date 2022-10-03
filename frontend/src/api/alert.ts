@@ -6,9 +6,9 @@ import { ApiError } from '../libs/ApiError'
 
 import type {
   PendingAlert,
+  SilencedAlert,
   LEGACY_PendingAlert,
   LEGACY_SilencedAlert,
-  SilencedAlert,
   SilencedAlertPeriodRequest
 } from '../domain/types/alert'
 
@@ -20,19 +20,10 @@ export const DELETE_SILENCED_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu réactiv
 /**
  * Type-discriminate active alerts
  */
-function normalizePendingAlert(alert: LEGACY_PendingAlert): PendingAlert {
+function normalizePendingAlert(alert: PendingAlert): LEGACY_PendingAlert {
   return {
     ...alert,
     isValidated: false
-  }
-}
-
-/**
- * Type-discriminate silenced alerts
- */
-function normalizeSilencedAlert(alert: LEGACY_SilencedAlert): SilencedAlert {
-  return {
-    ...alert
   }
 }
 
@@ -41,9 +32,9 @@ function normalizeSilencedAlert(alert: LEGACY_SilencedAlert): SilencedAlert {
  *
  * @throws {@link ApiError}
  */
-async function getOperationalAlertsFromAPI(): Promise<PendingAlert[]> {
+async function getOperationalAlertsFromAPI(): Promise<LEGACY_PendingAlert[]> {
   try {
-    const data = await ky.get('/bff/v1/operational_alerts').json<LEGACY_PendingAlert[]>()
+    const data = await ky.get('/bff/v1/operational_alerts').json<PendingAlert[]>()
 
     return data.map(normalizePendingAlert)
   } catch (err) {
@@ -72,7 +63,7 @@ async function validateAlertFromAPI(id: string): Promise<void> {
 async function silenceAlertFromAPI(
   id: string,
   silencedAlertPeriodRequest: SilencedAlertPeriodRequest
-): Promise<SilencedAlert> {
+): Promise<LEGACY_SilencedAlert> {
   // TODO Normalize this data before calling the api service rather than here.
   const silencedAlertPeriod = silencedAlertPeriodRequest.silencedAlertPeriod || ''
   const afterDateTime = silencedAlertPeriodRequest.afterDateTime?.toISOString() || ''
@@ -92,9 +83,9 @@ async function silenceAlertFromAPI(
           silencedAlertPeriod
         }
       })
-      .json<LEGACY_SilencedAlert>()
+      .json<SilencedAlert>()
 
-    return normalizeSilencedAlert(data)
+    return data
   } catch (err) {
     throw new ApiError(SILENCE_ALERT_ERROR_MESSAGE, err)
   }
@@ -105,11 +96,11 @@ async function silenceAlertFromAPI(
  *
  * @throws {@link ApiError}
  */
-async function getSilencedAlertsFromAPI(): Promise<SilencedAlert[]> {
+async function getSilencedAlertsFromAPI(): Promise<LEGACY_SilencedAlert[]> {
   try {
-    const data = await ky.get('/bff/v1/operational_alerts/silenced').json<LEGACY_SilencedAlert[]>()
+    const data = await ky.get('/bff/v1/operational_alerts/silenced').json<SilencedAlert[]>()
 
-    return data.map(normalizeSilencedAlert)
+    return data
   } catch (err) {
     throw new ApiError(ALERTS_ERROR_MESSAGE, err)
   }

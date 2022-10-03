@@ -5,7 +5,7 @@ export enum PendingAlertValueType {
   TWELVE_MILES_FISHING_ALERT = 'TWELVE_MILES_FISHING_ALERT'
 }
 
-export type LEGACY_PendingAlert = {
+export type PendingAlert = {
   creationDate: string
   externalReferenceNumber: string
   id: string
@@ -32,11 +32,11 @@ export type PendingAlertValue = {
   type: PendingAlertValueType
 }
 
-export type PendingAlert = LEGACY_PendingAlert & {
+export type LEGACY_PendingAlert = PendingAlert & {
   isValidated: boolean
 }
 
-export type LEGACY_SilencedAlert = {
+export type SilencedAlert = {
   externalReferenceNumber: string
   id: string
   internalReferenceNumber: string
@@ -49,7 +49,7 @@ export type LEGACY_SilencedAlert = {
   vesselName: string
 }
 
-export type SilencedAlert = LEGACY_SilencedAlert & {
+export type LEGACY_SilencedAlert = SilencedAlert & {
   silencedPeriod?: SilencedAlertPeriodRequest
 }
 

@@ -5,7 +5,7 @@ import { setSilencedAlerts } from '../../shared_slices/Alert'
 import { setError } from '../../shared_slices/Global'
 
 import type { AppGetState } from '../../../store'
-import type { SilencedAlert } from '../../types/alert'
+import type { LEGACY_SilencedAlert } from '../../types/alert'
 
 export const reactivateSilencedAlert = id => (dispatch, getState: AppGetState) => {
   const previousSilencedAlerts = getState().alert.silencedAlerts
@@ -24,12 +24,12 @@ export const reactivateSilencedAlert = id => (dispatch, getState: AppGetState) =
   })
 }
 
-function setAlertAsReactivated(previousSilencedAlerts: SilencedAlert[], id: string) {
+function setAlertAsReactivated(previousSilencedAlerts: LEGACY_SilencedAlert[], id: string) {
   return updateListItemsProp(previousSilencedAlerts, 'id', id, {
     isReactivated: true
   })
 }
 
-export function removeAlert(previousAlerts: SilencedAlert[], id: string) {
+export function removeAlert(previousAlerts: LEGACY_SilencedAlert[], id: string) {
   return deleteListItems(previousAlerts, 'id', id)
 }

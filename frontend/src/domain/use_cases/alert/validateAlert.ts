@@ -8,7 +8,7 @@ import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
 import getVesselReportings from '../vessel/getVesselReportings'
 
 import type { AppGetState } from '../../../store'
-import type { PendingAlert } from '../../types/alert'
+import type { LEGACY_PendingAlert } from '../../types/alert'
 
 export const validateAlert = (id: string) => (dispatch, getState: AppGetState) => {
   const previousAlerts = getState().alert.pendingAlerts
@@ -46,7 +46,7 @@ export const validateAlert = (id: string) => (dispatch, getState: AppGetState) =
     })
 }
 
-function setAlertAsValidated(previousAlerts: PendingAlert[], id: string): PendingAlert[] {
+function setAlertAsValidated(previousAlerts: LEGACY_PendingAlert[], id: string): LEGACY_PendingAlert[] {
   return updateListItemsProp(previousAlerts, 'id', id, {
     isValidated: true
   })

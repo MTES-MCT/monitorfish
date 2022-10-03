@@ -4,11 +4,12 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
 import { ReportingType } from '../../../domain/types/reporting'
+import { toVesselIdentity } from '../../../domain/types/reporting'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { ReportingForm } from '../../vessel_sidebar/reporting/current/ReportingForm'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes_gris.svg'
+import { ReportingForm } from '../../vessel_sidebar/reporting/current/ReportingForm'
 
 export function EditReporting() {
   const dispatch = useAppDispatch()
@@ -74,7 +75,7 @@ export function EditReporting() {
           editedReporting={editedReportingInSideWindow}
           fromSideWindow
           hasWhiteBackground
-          selectedVesselIdentity={editedReportingInSideWindow}
+          selectedVesselIdentity={toVesselIdentity(editedReportingInSideWindow)}
         />
       </ReportingFormWrapper>
     </EditReportingWrapper>

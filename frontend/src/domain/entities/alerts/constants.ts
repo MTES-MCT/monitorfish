@@ -122,3 +122,7 @@ export enum SilencedAlertPeriod {
   TWELVE_HOURS = 'TWELVE_HOURS',
   TWO_HOURS = 'TWO_HOURS'
 }
+
+export const operationalAlertTypes = Object.keys(COMMON_ALERT_TYPE_OPTION)
+  .map(alertTypeName => COMMON_ALERT_TYPE_OPTION[alertTypeName])
+  .filter(alertType => alertType.isOperationalAlert)

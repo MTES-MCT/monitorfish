@@ -16,6 +16,7 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
     <Menu role="menu">
       <MenuButton />
       <MenuButton
+        data-cy="side-window-menu-alerts"
         onClick={() => dispatch(openSideWindowTab(SIDE_WINDOW_MENU.ALERTS.code))}
         role="menuitem"
         selected={selectedMenu === SIDE_WINDOW_MENU.ALERTS.code}
@@ -46,7 +47,7 @@ const Menu = styled.div`
   padding: 0;
 `
 
-const MenuButton = styled.button<{
+const MenuButton = styled.div<{
   selected?: boolean
 }>`
   text-align: center;

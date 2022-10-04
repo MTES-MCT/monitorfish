@@ -18,11 +18,11 @@ import type { Promisable } from 'type-fest'
 export type SideWindowSubMenuProps = {
   isFixed: boolean
   selectedMenu?: string
-  selectedSeaFront: MenuItem<SeaFront>
+  selectedSubMenu: MenuItem<SeaFront | string>
   selectedTab: AlertAndReportingTab
   // TODO Rename that.
   setIsFixed: (isFixed: boolean) => Promisable<void>
-  setSelectedSeaFront: (nexSeaFront: MenuItem<SeaFront>) => Promisable<void>
+  setSelectedSubMenu: (nexSubMenu: MenuItem<SeaFront | string>) => Promisable<void>
 }
 
 /**
@@ -31,10 +31,10 @@ export type SideWindowSubMenuProps = {
 export function SideWindowSubMenu({
   isFixed,
   selectedMenu,
-  selectedSeaFront,
+  selectedSubMenu,
   selectedTab,
   setIsFixed,
-  setSelectedSeaFront
+  setSelectedSubMenu
 }: SideWindowSubMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const pendingAlerts = useAppSelector(state => state.alert.pendingAlerts)
@@ -92,60 +92,60 @@ export function SideWindowSubMenu({
           <SideWindowSubMenuLink
             isOneLine
             isOpen={isOpen}
-            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.MEMN.code}
+            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.MEMN.code}
             menu={ALERTS_SUBMENU.MEMN}
             number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.MEMN.seaFronts)}
-            setSelectedSeaFront={setSelectedSeaFront}
+            setSelectedSubMenu={setSelectedSubMenu}
           />
           <SideWindowSubMenuLink
             isOneLine
             isOpen={isOpen}
-            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.NAMO.code}
+            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.NAMO.code}
             menu={ALERTS_SUBMENU.NAMO}
             number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.NAMO.seaFronts)}
-            setSelectedSeaFront={setSelectedSeaFront}
+            setSelectedSubMenu={setSelectedSubMenu}
           />
           <SideWindowSubMenuLink
             isOneLine
             isOpen={isOpen}
-            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.SA.code}
+            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.SA.code}
             menu={ALERTS_SUBMENU.SA}
             number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.SA.seaFronts)}
-            setSelectedSeaFront={setSelectedSeaFront}
+            setSelectedSubMenu={setSelectedSubMenu}
           />
           <SideWindowSubMenuLink
             isOneLine
             isOpen={isOpen}
-            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.MED.code}
+            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.MED.code}
             menu={ALERTS_SUBMENU.MED}
             number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.MED.seaFronts)}
-            setSelectedSeaFront={setSelectedSeaFront}
+            setSelectedSubMenu={setSelectedSubMenu}
           />
           <SideWindowSubMenuLink
             isOneLine
             isOpen={isOpen}
-            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.OUTREMEROA.code}
+            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.OUTREMEROA.code}
             menu={ALERTS_SUBMENU.OUTREMEROA}
             number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.OUTREMEROA.seaFronts)}
-            setSelectedSeaFront={setSelectedSeaFront}
+            setSelectedSubMenu={setSelectedSubMenu}
           />
           <SideWindowSubMenuLink
             isOneLine
             isOpen={isOpen}
-            isSelected={selectedSeaFront.code === ALERTS_SUBMENU.OUTREMEROI.code}
+            isSelected={selectedSubMenu.code === ALERTS_SUBMENU.OUTREMEROI.code}
             menu={ALERTS_SUBMENU.OUTREMEROI}
             number={getNumberOfAlertsOrReportingFromSeaFronts(ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS.OUTREMEROI.seaFronts)}
-            setSelectedSeaFront={setSelectedSeaFront}
+            setSelectedSubMenu={setSelectedSubMenu}
           />
         </>
       )}
       {selectedMenu === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code && (
         <SideWindowSubMenuLink
           isOpen={isOpen}
-          isSelected={selectedSeaFront.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}
+          isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}
           menu={BeaconMalfunctionsSubMenu.MALFUNCTIONING as MenuItem<SeaFront>}
           number={numberOfBeaconMalfunctions}
-          setSelectedSeaFront={setSelectedSeaFront}
+          setSelectedSubMenu={setSelectedSubMenu}
         />
       )}
     </Menu>

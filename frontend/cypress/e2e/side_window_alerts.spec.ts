@@ -5,6 +5,22 @@ context('Alerts', () => {
     cy.visit('/side_window')
   })
 
+  it('Going to beacon malfunction then back in alerts Should not throw an exception', () => {
+    // Given
+    cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
+
+    // When
+    cy.get('[data-cy="side-window-menu-beacon-malfunctions"]').click()
+
+    // Then
+    cy.get('[data-cy="side-window-menu-alerts"]').click()
+    cy.get('[data-cy="side-window-sub-menu-MEMN"]').should(
+      'have.css',
+      'background',
+      'rgb(204, 207, 214) none repeat scroll 0% 0%'
+    )
+  })
+
   it('Nine alerts Should be shown When clicking on the NAMO menu', () => {
     // When
     cy.get('*[data-cy="side-window-sub-menu-NAMO"]').click()

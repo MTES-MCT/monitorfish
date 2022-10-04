@@ -4,9 +4,8 @@ import { SideWindowMenuKey } from './constants'
 
 import type { MenuItem } from '../../types'
 
-export function getSelectedSeaFront(openedSideWindowTab: SideWindowMenuKey | undefined): MenuItem<SeaFront> {
+export function getSelectedSubMenu(openedSideWindowTab: SideWindowMenuKey | undefined): MenuItem<SeaFront | string> {
   return !openedSideWindowTab || openedSideWindowTab === SideWindowMenuKey.ALERTS
     ? ALERTS_SUBMENU.MEMN
-    : // TODO Why?
-      (BeaconMalfunctionsSubMenu.MALFUNCTIONING as MenuItem<SeaFront>)
+    : BeaconMalfunctionsSubMenu.MALFUNCTIONING
 }

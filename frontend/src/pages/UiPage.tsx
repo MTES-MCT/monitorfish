@@ -1,4 +1,4 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
+/* eslint-disable no-null/no-null, sort-keys-fix/sort-keys-fix */
 
 import { useState } from 'react'
 import { createGlobalStyle } from 'styled-components'

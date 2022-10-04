@@ -19,7 +19,6 @@ context('Alerts', () => {
       'background',
       'rgb(204, 207, 214) none repeat scroll 0% 0%'
     )
-    cy.get('[data-cy="side-window-sub-menu-MEMN"]').should('have.css', 'width', '200px')
   })
 
   it('Nine alerts Should be shown When clicking on the NAMO menu', () => {

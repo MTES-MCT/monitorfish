@@ -1,9 +1,11 @@
-import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DateRangePicker as RsuiteDateRangePicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter'
+import { dayjs } from '../../utils/dayjs'
+import { getUtcDayjs } from '../../utils/getUtcDayjs'
+import { getUtcizedDayjs } from '../../utils/getUtcizedDayjs'
 import { sortDates } from '../../utils/sortDates'
 import { stopMouseEventPropagation } from '../../utils/stopMouseEventPropagation'
 import { RSUITE_CALENDAR_LOCALE } from './constants'
@@ -16,9 +18,10 @@ import type { Promisable } from 'type-fest'
 
 type RangeCalendarPickerProps = {
   defaultValue?: DateRange
+  isHistorical?: boolean
   onChange: (nextDateTupleRange: DateTupleRange) => Promisable<void>
 }
-export function RangeCalendarPicker({ defaultValue, onChange }: RangeCalendarPickerProps) {
+export function RangeCalendarPicker({ defaultValue, isHistorical, onChange }: RangeCalendarPickerProps) {
   const boxRef = useRef() as MutableRefObject<HTMLDivElement>
   const selectedFirstDate = useRef<Date>()
   const calendarRef = useRef<any>()
@@ -28,6 +31,11 @@ export function RangeCalendarPicker({ defaultValue, onChange }: RangeCalendarPic
   const controlledValue = useMemo(
     () => (defaultValue ? (sortDates(defaultValue) as DateRange) : undefined),
     [defaultValue]
+  )
+  const utcTodayAsDayjs = useMemo(() => getUtcDayjs().endOf('day'), [])
+  const disabledDate = useMemo(
+    () => (date: Date) => isHistorical ? getUtcizedDayjs(date).isAfter(utcTodayAsDayjs) : false,
+    [isHistorical, utcTodayAsDayjs]
   )
 
   const handleSelect = useCallback(
@@ -63,6 +71,7 @@ export function RangeCalendarPicker({ defaultValue, onChange }: RangeCalendarPic
         <RsuiteDateRangePicker
           ref={calendarRef}
           container={boxRef.current}
+          disabledDate={disabledDate}
           format="yyyy-MM-dd"
           locale={RSUITE_CALENDAR_LOCALE}
           onSelect={handleSelect}

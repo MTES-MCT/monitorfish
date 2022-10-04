@@ -1,6 +1,6 @@
 // TODO We should make this component both form- & a11y-compliant with a `name` and proper (aria-)labels.
 
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { useForceUpdate } from '../../hooks/useForceUpdate'
@@ -18,6 +18,8 @@ import type { Promisable } from 'type-fest'
 
 export type DateRangePickerProps = {
   defaultValue?: DateRange
+  /** Only allow past dates until today. */
+  isHistorical?: boolean
   isLabelHidden?: boolean
   label: string
   /**
@@ -37,6 +39,7 @@ export type DateRangePickerProps = {
 }
 export function DateRangePicker({
   defaultValue,
+  isHistorical = false,
   isLabelHidden = false,
   label,
   minutesRange = 15,
@@ -63,13 +66,17 @@ export function DateRangePicker({
 
   const forceUpdate = useForceUpdate()
 
-  const rangeCalendarPickerDefaultValue =
-    selectedStartDateTupleRef.current && selectedEndDateTupleRef.current
-      ? ([
-          getDateFromDateAndTimeTuple(selectedStartDateTupleRef.current, ['00', '00']),
-          getDateFromDateAndTimeTuple(selectedEndDateTupleRef.current, ['00', '00'], true)
-        ] as DateRange)
-      : undefined
+  const rangeCalendarPickerDefaultValue = useMemo(
+    () =>
+      selectedStartDateTupleRef.current && selectedEndDateTupleRef.current
+        ? ([
+            getDateFromDateAndTimeTuple(selectedStartDateTupleRef.current, ['00', '00']),
+            getDateFromDateAndTimeTuple(selectedEndDateTupleRef.current, ['00', '00'], true)
+          ] as DateRange)
+        : undefined,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedEndDateTupleRef.current, selectedStartDateTupleRef.current]
+  )
 
   const submit = useCallback(() => {
     if (!selectedStartDateRef.current || !selectedEndDateRef.current) {
@@ -325,6 +332,7 @@ export function DateRangePicker({
       {isRangeCalendarPickerOpenRef.current && (
         <RangeCalendarPicker
           defaultValue={rangeCalendarPickerDefaultValue}
+          isHistorical={isHistorical}
           onChange={handleRangeCalendarPickerChange}
         />
       )}

@@ -21,7 +21,7 @@ import BeaconMalfunctionsBoard from './beacon_malfunctions/BeaconMalfunctionsBoa
 import { AlertAndReportingTab, SIDE_WINDOW_MENU } from './constants'
 import { SideWindowMenu } from './SideWindowMenu'
 import { SideWindowSubMenu } from './SideWindowSubMenu'
-import { getSelectedSeaFront } from './utils'
+import { getSelectedSubMenu } from './utils'
 
 import type { MenuItem } from '../../types'
 import type { CSSProperties, ForwardedRef } from 'react'
@@ -39,7 +39,9 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   const dispatch = useAppDispatch()
   const [isPreloading, setIsPreloading] = useState(true)
   const previousOpenedSideWindowTab = usePrevious(openedSideWindowTab)
-  const [selectedSeaFront, setSelectedSeaFront] = useState<MenuItem<SeaFront>>(getSelectedSeaFront(openedSideWindowTab))
+  const [selectedSubMenu, setSelectedSubMenu] = useState<MenuItem<SeaFront | string>>(
+    getSelectedSubMenu(openedSideWindowTab)
+  )
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [isSubmenuFixed, setIsSubmenuFixed] = useState(false)
@@ -81,24 +83,30 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       return
     }
 
-    if (selectedSeaFront) {
+    if (selectedSubMenu) {
       switch (openedSideWindowTab) {
         case SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code:
-          setSelectedSeaFront(BeaconMalfunctionsSubMenu.MALFUNCTIONING as unknown as MenuItem<SeaFront>)
+          setSelectedSubMenu(BeaconMalfunctionsSubMenu.MALFUNCTIONING as unknown as MenuItem<SeaFront>)
           break
 
         case SIDE_WINDOW_MENU.ALERTS.code:
-          if (focusedPendingAlertId) {
-            const focusedPendingAlert = pendingAlerts.find(propEq('id', focusedPendingAlertId))
-            if (!focusedPendingAlert) {
+          {
+            if (!focusedPendingAlertId) {
+              setSelectedSubMenu(ALERTS_SUBMENU.MEMN)
+
               return
             }
 
-            // TODO Remove the `as` as soon as the discriminator is added.
-            setSelectedSeaFront(ALERTS_SUBMENU[focusedPendingAlert.value.seaFront] || ALERTS_SUBMENU.MEMN)
+            const focusedPendingAlert = pendingAlerts.find(propEq('id', focusedPendingAlertId))
+            if (!focusedPendingAlert) {
+              setSelectedSubMenu(ALERTS_SUBMENU.MEMN)
+
+              return
+            }
+
+            setSelectedSubMenu(ALERTS_SUBMENU[focusedPendingAlert.value.seaFront] || ALERTS_SUBMENU.MEMN)
           }
           break
-
         default:
           throw new Error('This should never happen.')
       }
@@ -108,8 +116,8 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
     openedSideWindowTab,
     pendingAlerts,
     previousOpenedSideWindowTab,
-    selectedSeaFront,
-    setSelectedSeaFront
+    selectedSubMenu,
+    setSelectedSubMenu
   ])
 
   const beaconMalfunctionBoardGrayOverlayStyle: CSSProperties = useMemo(
@@ -130,10 +138,10 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       <SideWindowSubMenu
         isFixed={isSubmenuFixed}
         selectedMenu={openedSideWindowTab}
-        selectedSeaFront={selectedSeaFront}
+        selectedSubMenu={selectedSubMenu}
         selectedTab={selectedTab}
         setIsFixed={setIsSubmenuFixed}
-        setSelectedSeaFront={setSelectedSeaFront}
+        setSelectedSubMenu={setSelectedSubMenu}
       />
       <BeaconMalfunctionsBoardGrayOverlay onClick={closeRightSidebar} style={beaconMalfunctionBoardGrayOverlayStyle} />
       {isPreloading && (
@@ -143,13 +151,17 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
         </Loading>
       )}
       {!isPreloading && (
-        <Content height={window.innerHeight + 50} isFixed={isSubmenuFixed}>
+        <Content height={window.innerHeight + 50}>
           {openedSideWindowTab === SIDE_WINDOW_MENU.ALERTS.code && (
             <AlertsAndReportings
               baseRef={ref}
-              selectedSeaFront={selectedSeaFront}
+              selectedSubMenu={
+                Object.values<string>(SeaFront).includes(selectedSubMenu.code)
+                  ? (selectedSubMenu as MenuItem<SeaFront>)
+                  : ALERTS_SUBMENU.MEMN
+              }
               selectedTab={selectedTab}
-              setSelectedSeaFront={setSelectedSeaFront as any}
+              setSelectedSeaFront={setSelectedSubMenu as any}
               setSelectedTab={setSelectedTab}
             />
           )}
@@ -164,9 +176,8 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
 
 const Content = styled.div<{
   height: number
-  isFixed: boolean
 }>`
-  margin-left: ${p => (p.isFixed ? 0 : 30)}px;
+  margin-left: 30px;
   width: 100%;
   height: ${p => p.height}px;
   min-height: 1000px;

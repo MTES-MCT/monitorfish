@@ -20,7 +20,7 @@ import type { Promisable } from 'type-fest'
 
 type AlertsAndReportingsProps = {
   baseRef: ForwardedRef<HTMLDivElement>
-  selectedSeaFront: MenuItem<SeaFront>
+  selectedSubMenu: MenuItem<SeaFront>
   selectedTab: any
   // TODO Change this param to only use the `SeaFront` enum.
   setSelectedSeaFront: (nextSeaFront: SeaFront) => Promisable<void>
@@ -28,7 +28,7 @@ type AlertsAndReportingsProps = {
 }
 export function AlertsAndReportings({
   baseRef,
-  selectedSeaFront,
+  selectedSubMenu,
   selectedTab,
   setSelectedSeaFront,
   setSelectedTab
@@ -38,12 +38,12 @@ export function AlertsAndReportings({
   const filteredSilencedAlerts = useMemo(
     () =>
       silencedAlerts.filter(silencedAlert =>
-        (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code]
-          ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code].seaFronts
+        (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSubMenu.code]
+          ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSubMenu.code].seaFronts
           : []
         ).includes(silencedAlert.value.seaFront)
       ),
-    [silencedAlerts, selectedSeaFront]
+    [silencedAlerts, selectedSubMenu]
   )
 
   useEffect(() => {
@@ -87,12 +87,12 @@ export function AlertsAndReportings({
           <PendingAlertsList
             baseRef={baseRef}
             numberOfSilencedAlerts={filteredSilencedAlerts.length}
-            selectedSeaFront={selectedSeaFront}
+            selectedSeaFront={selectedSubMenu}
           />
           <SilencedAlertsList silencedAlerts={filteredSilencedAlerts} />
         </>
       )}
-      {selectedTab === AlertAndReportingTab.REPORTING && <ReportingList selectedSeaFront={selectedSeaFront} />}
+      {selectedTab === AlertAndReportingTab.REPORTING && <ReportingList selectedSeaFront={selectedSubMenu} />}
     </>
   )
 }

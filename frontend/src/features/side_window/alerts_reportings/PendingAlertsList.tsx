@@ -104,7 +104,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
   return (
     <Content style={contentStyle}>
       <Title style={titleStyle}>ALERTES AUTOMATIQUES À VÉRIFIER</Title>
-      {numberOfSilencedAlerts && (
+      {numberOfSilencedAlerts > 0 && (
         <NumberOfSilencedAlerts
           data-cy="side-window-alerts-number-silenced-vessels"
           style={numberOfSilencedAlertsStyle}

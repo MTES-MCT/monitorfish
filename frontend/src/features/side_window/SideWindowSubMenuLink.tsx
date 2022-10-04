@@ -14,7 +14,7 @@ export type SideWindowSubMenuLinkProps = {
   isSelected: boolean
   menu: MenuItem<SeaFront>
   number: number
-  setSelectedSeaFront: (nextSeaFront: MenuItem<SeaFront>) => Promisable<void>
+  setSelectedSubMenu: (nextSubMenu: MenuItem<SeaFront | string>) => Promisable<void>
 }
 
 /**
@@ -27,7 +27,7 @@ export function SideWindowSubMenuLink({
   menu,
   // TODO Rename this prop.
   number,
-  setSelectedSeaFront
+  setSelectedSubMenu
 }: SideWindowSubMenuLinkProps) {
   const linkStyle: CSSProperties = useMemo(
     () => ({
@@ -67,11 +67,11 @@ export function SideWindowSubMenuLink({
   return (
     <MenuButton
       data-cy={`side-window-sub-menu-${menu.name}`}
-      onClick={() => setSelectedSeaFront(menu)}
+      onClick={() => setSelectedSubMenu(menu)}
       style={linkStyle}
     >
       <Text style={textStyle}>{menu.name}</Text>
-      {number && (
+      {number > 0 && (
         <CircleWithKeyMetric data-cy={`side-window-sub-menu-${menu.name}-number`} style={circleMetricStyle(isOpen)}>
           {number}
         </CircleWithKeyMetric>
@@ -82,7 +82,7 @@ export function SideWindowSubMenuLink({
 
 const Text = styled.div``
 
-const MenuButton = styled.button``
+const MenuButton = styled.div``
 
 const CircleWithKeyMetric = styled.span``
 const circleMetricStyle = (isOpen: boolean): CSSProperties => ({

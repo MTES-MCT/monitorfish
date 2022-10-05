@@ -20,8 +20,7 @@ data class BeaconMalfunctionDataOutput(
     val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason? = null,
     var riskFactor: Double?,
     val notificationRequested: BeaconMalfunctionNotificationType? = null,
-    val beaconNumber: String? = null,
-    val vesselStatusAtMalfunctionCreation: VesselStatus? = null) {
+    val beaconNumber: String? = null) {
     companion object {
         fun fromBeaconMalfunction(beaconMalfunction: BeaconMalfunction): BeaconMalfunctionDataOutput {
             return BeaconMalfunctionDataOutput(
@@ -40,8 +39,7 @@ data class BeaconMalfunctionDataOutput(
                 endOfBeaconMalfunctionReason = beaconMalfunction.endOfBeaconMalfunctionReason,
                 riskFactor = beaconMalfunction.riskFactor,
                 notificationRequested = beaconMalfunction.notificationRequested,
-                beaconNumber = beaconMalfunction.beaconNumber,
-                vesselStatusAtMalfunctionCreation = beaconMalfunction.vesselStatusAtMalfunctionCreation)
+                beaconNumber = beaconMalfunction.beaconNumber)
         }
     }
 }

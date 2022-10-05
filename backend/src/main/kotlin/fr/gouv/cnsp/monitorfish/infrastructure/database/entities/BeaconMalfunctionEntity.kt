@@ -47,9 +47,9 @@ data class BeaconMalfunctionEntity(
     val notificationRequested: BeaconMalfunctionNotificationType?,
     @Column(name = "beacon_number")
     val beaconNumber: String,
-    @Column(name = "vessel_status_at_malfunction_creation")
+    @Column(name = "beacon_status_at_malfunction_creation")
     @Enumerated(EnumType.STRING)
-    val vesselStatusAtMalfunctionCreation: VesselStatus) {
+    val beaconStatusAtMalfunctionCreation: BeaconStatus) {
     fun toBeaconMalfunction() = BeaconMalfunction(
         id = id,
         internalReferenceNumber = internalReferenceNumber,
@@ -67,6 +67,6 @@ data class BeaconMalfunctionEntity(
         vesselId = vesselId,
         notificationRequested = notificationRequested,
         beaconNumber = beaconNumber,
-        vesselStatusAtMalfunctionCreation = vesselStatusAtMalfunctionCreation
+        beaconStatusAtMalfunctionCreation = beaconStatusAtMalfunctionCreation
     )
 }

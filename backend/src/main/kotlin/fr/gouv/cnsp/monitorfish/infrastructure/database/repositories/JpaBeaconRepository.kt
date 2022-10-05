@@ -24,4 +24,8 @@ class JpaBeaconRepository(private val dbBeaconRepository: DBBeaconRepository) : 
     override fun findBeaconNumberByVesselId(vesselId: Int): String {
         return dbBeaconRepository.findByVesselId(vesselId).beaconNumber
     }
+
+    override fun findActivatedVesselIds(): List<Int> {
+       return dbBeaconRepository.findActivatedVesselIds()
+    }
 }

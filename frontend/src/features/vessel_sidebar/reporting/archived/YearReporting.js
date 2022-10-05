@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
 import { reportingIsAnInfractionSuspicion } from '../../../../domain/entities/reporting'
-import Reporting from '../Reporting'
+import { Reporting } from '../Reporting'
 
 const YearReporting = props => {
   const {

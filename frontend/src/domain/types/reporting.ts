@@ -1,26 +1,42 @@
 import type { PendingAlertValue } from './alert'
 
-// export enum ReportingType {
-//   ALERT = 'ALERT',
-//   INFRACTION_SUSPICION = 'INFRACTION_SUSPICION',
-//   OBSERVATION = 'OBSERVATION'
-// }
+export enum ReportingType {
+  // TODO Should be renamed 'PENDING_ALERT'.
+  ALERT = 'ALERT',
+  INFRACTION_SUSPICION = 'INFRACTION_SUSPICION',
+  OBSERVATION = 'OBSERVATION'
+}
 
-export type Reporting<Value = PendingAlertValue | InfractionSuspicion | Observation> = {
+export type BaseReporting = {
   creationDate: string
   externalReferenceNumber: string
   id: string
   internalReferenceNumber: string
   ircs: string
-  // TODO Remove local props from API collection.
-  type?: string
+  type: ReportingType
   underCharter: boolean
   validationDate: string
-  // TODO Create a specific type with a discriminator prop to avoid type-guessing issues
-  value: Value
+  value: Record<string, any>
   vesselIdentifier: string
   vesselName: string
 }
+
+export type InfractionSuspicionReporting = BaseReporting & {
+  type: ReportingType.INFRACTION_SUSPICION
+  value: InfractionSuspicion
+}
+
+export type ObservationReporting = BaseReporting & {
+  type: ReportingType.OBSERVATION
+  value: Observation
+}
+
+export type PendingAlertReporting = BaseReporting & {
+  type: ReportingType.ALERT
+  value: PendingAlertValue
+}
+
+export type Reporting = InfractionSuspicionReporting | ObservationReporting | PendingAlertReporting
 
 export type CurrentAndArchivedReportingsOfSelectedVessel = {
   archived: Reporting[]

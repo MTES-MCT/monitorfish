@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
-import { isReportingWithPendingAlert } from '../../../domain/use_cases/alert/utils'
+import { ReportingType } from '../../../domain/types/reporting'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
@@ -44,7 +44,7 @@ export function EditReporting() {
         </Row>
         <Row style={rowStyle(10)}>
           {editedReportingInSideWindow &&
-            isReportingWithPendingAlert(editedReportingInSideWindow) &&
+            editedReportingInSideWindow.type === ReportingType.ALERT &&
             editedReportingInSideWindow.value.flagState && (
               <Flag
                 rel="preload"

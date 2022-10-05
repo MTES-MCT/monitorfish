@@ -128,9 +128,24 @@ export const FrenchDMLs = [
   'DML 76/27'
 ]
 
+// TODO Improve typings logic to avoid double switch.
 export const getReportingOrigin = (reporting: Reporting, isHovering: boolean): string => {
   if (reporting.type === ReportingType.ALERT) {
     return 'Alerte auto.'
+  }
+
+  // eslint-disable-next-line default-case
+  switch (reporting.value.reportingActor) {
+    case ReportingOriginActor.UNIT.code:
+      return `${reporting.value.unit}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
+    case ReportingOriginActor.OPS.code:
+      return `Pôle OPS (${reporting.value.authorTrigram})`
+    case ReportingOriginActor.SIP.code:
+      return `Pôle SIP (${reporting.value.authorTrigram})`
+  }
+
+  if (reporting.type !== ReportingType.INFRACTION_SUSPICION) {
+    return ''
   }
 
   switch (reporting.value.reportingActor) {

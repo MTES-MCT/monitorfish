@@ -14,14 +14,15 @@ data class BeaconMalfunction(
     val vesselName: String,
     val vesselStatus: VesselStatus,
     val stage: Stage,
-    val priority: Boolean,
     val malfunctionStartDateTime: ZonedDateTime,
     val malfunctionEndDateTime: ZonedDateTime?,
     val vesselStatusLastModificationDateTime: ZonedDateTime,
     var riskFactor: Double? = null,
     val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason? = null,
     val vesselId: Int? = null,
-    val notificationRequested: BeaconMalfunctionNotificationType? = null
+    val notificationRequested: BeaconMalfunctionNotificationType? = null,
+    val beaconNumber: String,
+    val vesselStatusAtMalfunctionCreation: VesselStatus
 ) {
     companion object {
         fun getVesselFromBeaconMalfunction(beaconMalfunction: BeaconMalfunction): (LastPosition) -> Boolean {

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Input, Radio, RadioGroup, SelectPicker } from 'rsuite'
-import { FrenchDMLs, ReportingOriginActor, ReportingType } from '../../../../domain/entities/reporting'
+import { FrenchDMLs, ReportingOriginActor, ReportingTypeCharacteristics } from '../../../../domain/entities/reporting'
 import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.style'
 import { sortArrayByColumn } from '../../../vessel_list/tableSort'
 import { useDispatch, useSelector } from 'react-redux'
@@ -21,7 +21,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
   const infractions = useSelector(state => state.infraction.infractions)
   const controllers = useSelector(state => state.controls.controllers)
 
-  const [reportingType, setReportingType] = useState(ReportingType.INFRACTION_SUSPICION.code)
+  const [reportingType, setReportingType] = useState(ReportingTypeCharacteristics.INFRACTION_SUSPICION.code)
   useSaveReportingInLocalStorage(reportingLocalStorageKey, 'type', reportingType, false)
   const [unit, setUnit] = useState('')
   useSaveReportingInLocalStorage(reportingLocalStorageKey, 'unit', unit, true)
@@ -43,7 +43,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
 
   function fillForm (editedOrSavedReporting) {
     setErrorFields([])
-    setReportingType(editedOrSavedReporting.type || ReportingType.INFRACTION_SUSPICION.code)
+    setReportingType(editedOrSavedReporting.type || ReportingTypeCharacteristics.INFRACTION_SUSPICION.code)
     setUnit(editedOrSavedReporting.value?.unit || '')
     setAuthorTrigram(editedOrSavedReporting.value?.authorTrigram || '')
     setAuthorContact(editedOrSavedReporting.value?.authorContact || '')
@@ -68,7 +68,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
 
   useEffect(() => {
     switch (reportingType) {
-      case ReportingType.OBSERVATION.code: {
+      case ReportingTypeCharacteristics.OBSERVATION.code: {
         setNatinfCode('')
         setDml('')
       }
@@ -308,26 +308,26 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
       inline
       value={reportingType}
       onChange={value => setReportingType(value)}
-      defaultValue={ReportingType.INFRACTION_SUSPICION.code}
+      defaultValue={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
     >
       <Radio
-        key={ReportingType.INFRACTION_SUSPICION.code}
-        value={ReportingType.INFRACTION_SUSPICION.code}
+        key={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+        value={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
       >
-        {ReportingType.INFRACTION_SUSPICION.inputName}
+        {ReportingTypeCharacteristics.INFRACTION_SUSPICION.inputName}
       </Radio>
       <Radio
-        key={ReportingType.OBSERVATION.code}
-        value={ReportingType.OBSERVATION.code}
+        key={ReportingTypeCharacteristics.OBSERVATION.code}
+        value={ReportingTypeCharacteristics.OBSERVATION.code}
       >
-        {ReportingType.OBSERVATION.inputName}
+        {ReportingTypeCharacteristics.OBSERVATION.inputName}
       </Radio>
     </RadioGroup>
     <Label>Titre</Label>
     <StyledInput
       data-cy={'new-reporting-title'}
       hasWhiteBackground={hasWhiteBackground}
-      placeholder={reportingType === ReportingType.OBSERVATION.code
+      placeholder={reportingType === ReportingTypeCharacteristics.OBSERVATION.code
         ? 'Ex: Dérogation temporaire licence'
         : 'Ex: Infraction maille cul de chalut'
       }
@@ -343,7 +343,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
       hasWhiteBackground={hasWhiteBackground}
       rows={3}
       data-cy={'new-reporting-description'}
-      placeholder={reportingType === ReportingType.OBSERVATION.code
+      placeholder={reportingType === ReportingTypeCharacteristics.OBSERVATION.code
         ? 'Ex: Licence en cours de renouvellement, dérogation accordée par la DML jusqu\'au 01/08/2022.'
         : 'Ex: Infraction constatée sur la taille de la maille en cul de chalut'
       }
@@ -351,7 +351,7 @@ const ReportingForm = ({ selectedVesselIdentity, closeForm, fromSideWindow, edit
       onChange={e => setDescription(e.target.value)}
     />
     {
-      reportingType === ReportingType.INFRACTION_SUSPICION.code
+      reportingType === ReportingTypeCharacteristics.INFRACTION_SUSPICION.code
         ? <>
         <Label>NATINF</Label>
         <SelectPicker

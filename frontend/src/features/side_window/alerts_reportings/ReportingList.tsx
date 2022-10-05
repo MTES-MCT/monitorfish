@@ -8,13 +8,9 @@ import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, SeaFront } from '../../../domain/entities/alerts/constants'
-import {
-  getReportingOrigin,
-  getReportingTitle,
-  reportingSearchOptions,
-  ReportingType
-} from '../../../domain/entities/reporting'
+import { getReportingOrigin, getReportingTitle, reportingSearchOptions } from '../../../domain/entities/reporting'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
+import { ReportingType } from '../../../domain/types/reporting'
 import archiveReportings from '../../../domain/use_cases/reporting/archiveReportings'
 import deleteReportings from '../../../domain/use_cases/reporting/deleteReportings'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
@@ -67,6 +63,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   const currentSeaFrontReportings = useMemo(
     () =>
       currentReportings
+        .filter(reporting => reporting.type === ReportingType.ALERT)
         .filter(reporting =>
           (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code]
             ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code].seaFronts
@@ -246,7 +243,7 @@ MMSI: ${reporting.mmsi || ''}`
         </CardTableHeader>
         <CardTableBody>
           {sortedAndCheckedReportings.map((reporting, index) => {
-            const editingIsDisabled = reporting.type === ReportingType.ALERT.code
+            const editingIsDisabled = reporting.type === ReportingType.ALERT
 
             return (
               <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1}>

@@ -1,22 +1,33 @@
 import Fuse from 'fuse.js'
 import _ from 'lodash'
-import { getAlertNameFromType } from '../../features/side_window/alerts_reportings/utils'
 
-export const ReportingType = {
+import { getAlertNameFromType } from '../../features/side_window/alerts_reportings/utils'
+import { Reporting, ReportingType } from '../types/reporting'
+
+type ReportingTypeCharacteristic = {
+  code: ReportingType
+  inputName: string | null
+  // TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.
+  isInfractionSuspicion: boolean
+  // TODO It should be useless now that types are discriminated.
+  name: string
+}
+
+export const ReportingTypeCharacteristics: Record<ReportingType, ReportingTypeCharacteristic> = {
   ALERT: {
-    code: 'ALERT',
+    code: ReportingType.ALERT,
     inputName: null,
     isInfractionSuspicion: true,
     name: 'ALERTE'
   },
   INFRACTION_SUSPICION: {
-    code: 'INFRACTION_SUSPICION',
+    code: ReportingType.INFRACTION_SUSPICION,
     inputName: 'Infraction (suspicion)',
     isInfractionSuspicion: true,
     name: "SUSPICION d'INFRACTION"
   },
   OBSERVATION: {
-    code: 'OBSERVATION',
+    code: ReportingType.OBSERVATION,
     inputName: 'Observation',
     isInfractionSuspicion: false,
     name: 'OBSERVATION'
@@ -50,21 +61,24 @@ export const ReportingOriginActor = {
   }
 }
 
-export const infractionSuspicionReportingTypes = Object.values(ReportingType)
+// TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.
+export const infractionSuspicionReportingTypes = Object.values(ReportingTypeCharacteristics)
   .filter(type => type.isInfractionSuspicion === true)
   .map(type => type.code)
 
-export const reportingIsAnInfractionSuspicion = reportingType =>
+// TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.
+export const reportingIsAnInfractionSuspicion = (reportingType: ReportingType): boolean =>
   infractionSuspicionReportingTypes.indexOf(reportingType) >= 0
 
 /**
  * Get reporting for each years : Years are keys and reporting are values
- * @memberOf Reporting
- * @param {Date} archivedReportingsFromDate - The date
- * @param {Reporting[]} reportingList
- * @returns {Object.<string, Reporting[]>} The reporting for all years
  */
-export const getYearsToReportingList = (archivedReportingsFromDate, reportingList) => {
+// TODO Make that functional.
+// TODO Use an object with string keys instead of number ones.
+export const getYearsToReportingList = (
+  archivedReportingsFromDate: Date,
+  reportings: Reporting[]
+): Record<number, Reporting> => {
   const nextYearsToReporting = {}
   if (archivedReportingsFromDate) {
     let fromYear = archivedReportingsFromDate.getUTCFullYear() + 1
@@ -75,7 +89,7 @@ export const getYearsToReportingList = (archivedReportingsFromDate, reportingLis
     }
   }
 
-  reportingList.forEach(reporting => {
+  reportings.forEach(reporting => {
     if (reporting?.creationDate) {
       const year = new Date(reporting.validationDate || reporting.creationDate).getUTCFullYear()
 
@@ -114,8 +128,8 @@ export const FrenchDMLs = [
   'DML 76/27'
 ]
 
-export const getReportingOrigin = (reporting, isHovering) => {
-  if (reporting.type === ReportingType.ALERT.code) {
+export const getReportingOrigin = (reporting: Reporting, isHovering: boolean): string => {
+  if (reporting.type === ReportingType.ALERT) {
     return 'Alerte auto.'
   }
 
@@ -137,19 +151,16 @@ export const getReportingOrigin = (reporting, isHovering) => {
   }
 }
 
-export function getReportingTitle(reporting, isHovering) {
-  if (reporting.type === ReportingType.ALERT.code) {
+export function getReportingTitle(reporting: Reporting, isHovering: boolean = false): string {
+  if (reporting.type === ReportingType.ALERT) {
     return getAlertNameFromType(reporting.value.type)
   }
 
   return isHovering ? `${reporting.value.title}: ${reporting.value.description}` : reporting.value.title
 }
 
-export const reportingSearchOptions = {
-  includeScore: true,
+export const reportingSearchOptions: Fuse.IFuseOptions<Reporting> = {
   distance: 50,
-  threshold: 0.4,
-  keys: ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs', 'dml', 'reportingTitle'],
   getFn: (reporting, path) => {
     const value = Fuse.config.getFn(reporting, path)
 
@@ -158,5 +169,8 @@ export const reportingSearchOptions = {
     }
 
     return value
-  }
+  },
+  includeScore: true,
+  keys: ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs', 'dml', 'reportingTitle'],
+  threshold: 0.4
 }

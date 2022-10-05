@@ -103,7 +103,10 @@ const Box = styled.div`
   max-height: 10rem;
   overflow: auto;
   position: absolute;
-  top: 2.75rem;
+  /* Non-WebKit Firefox Compatibility */
+  scrollbar-color: ${p => p.theme.color.grayDarkerTwo};
+  scrollbar-width: thin;
+  top: 2.25rem;
   z-index: 9999;
 
   ::-webkit-scrollbar {
@@ -126,7 +129,9 @@ const Option = styled.div<{
 }>`
   background-color: ${p => (p.isSelected ? p.theme.color.grayDarkerTwo : 'transparent')};
   cursor: pointer;
-  padding: 0.25rem 5px;
+  line-height: 1;
+  padding: 5px 9px 7px 8px;
+  text-align: center;
 
   :hover {
     background-color: ${p => (p.isSelected ? p.theme.color.grayDarkerTwo : p.theme.color.grayBackground)};

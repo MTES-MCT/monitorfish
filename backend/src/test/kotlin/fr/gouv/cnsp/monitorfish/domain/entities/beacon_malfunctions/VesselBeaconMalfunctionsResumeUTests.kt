@@ -20,64 +20,35 @@ class VesselBeaconMalfunctionsResumeUTests {
                 beaconMalfunction = BeaconMalfunction(
                     1, "FR224226850", "1236514", "IRCS",
                     "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA,
-                    Stage.END_OF_MALFUNCTION, true, now.minusYears(2), null, now.minusYears(2)
-                ),
-                comments = listOf(
-                    BeaconMalfunctionComment(
-                        beaconMalfunctionId = 1,
-                        comment = "A comment",
-                        userType = BeaconMalfunctionCommentUserType.SIP,
-                        dateTime = now.minusYears(2)
-                    )
-                ),
-                actions = listOf(
-                    BeaconMalfunctionAction(
-                        beaconMalfunctionId = 1,
-                        propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
-                        nextValue = "A VALUE",
-                        previousValue = VesselStatus.AT_SEA.toString(),
-                        dateTime = now.minusYears(2)
-                    )
-                )
-            ),
+                    Stage.END_OF_MALFUNCTION, now.minusYears(2), null, now.minusYears(2),
+                    beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA),
+                comments = listOf(BeaconMalfunctionComment(
+                    beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP,
+                    dateTime = now.minusYears(2))),
+                actions = listOf(BeaconMalfunctionAction(
+                    beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE",
+                    previousValue = VesselStatus.AT_SEA.toString(), dateTime = now.minusYears(2)))),
             BeaconMalfunctionWithDetails(
                 beaconMalfunction = BeaconMalfunction(
                     2, "FR224226850", "1236514", "IRCS",
                     "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA,
-                    Stage.END_OF_MALFUNCTION, true, now.minusMinutes(23), null, now.minusMinutes(23)
-                ),
-                comments = listOf(
-                    BeaconMalfunctionComment(
-                        beaconMalfunctionId = 1,
-                        comment = "A comment",
-                        userType = BeaconMalfunctionCommentUserType.SIP,
-                        dateTime = now.minusMinutes(23)
-                    )
-                ),
-                actions = listOf(
-                    BeaconMalfunctionAction(
-                        beaconMalfunctionId = 1,
-                        propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
-                        nextValue = "A VALUE",
-                        previousValue = VesselStatus.AT_SEA.toString(),
-                        dateTime = now.minusMinutes(23)
-                    )
-                )
-            ),
+                    Stage.END_OF_MALFUNCTION, now.minusMinutes(23), null, now.minusMinutes(23),
+                    beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA),
+                comments = listOf(BeaconMalfunctionComment(
+                    beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP,
+                    dateTime = now.minusMinutes(23))),
+                actions = listOf(BeaconMalfunctionAction(
+                    beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE",
+                    previousValue = VesselStatus.AT_SEA.toString(), dateTime = now.minusMinutes(23)))),
             BeaconMalfunctionWithDetails(
                 beaconMalfunction = BeaconMalfunction(
                     3, "FR224226850", "1236514", "IRCS",
                     "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA,
-                    Stage.END_OF_MALFUNCTION, true, now.minusMinutes(5), null, now.minusMinutes(5)
-                ),
-                comments = listOf(
-                    BeaconMalfunctionComment(
-                        beaconMalfunctionId = 1,
-                        comment = "A comment",
-                        userType = BeaconMalfunctionCommentUserType.SIP,
-                        dateTime = now.minusMinutes(5)
-                    )
-                ),
+                    Stage.END_OF_MALFUNCTION, now.minusMinutes(5), null, now.minusMinutes(5),
+                    beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA),
+                comments = listOf(BeaconMalfunctionComment(
+                    beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP,
+                    dateTime = now.minusMinutes(5))),
                 actions = listOf(
                     BeaconMalfunctionAction(
                         beaconMalfunctionId = 1,
@@ -99,16 +70,11 @@ class VesselBeaconMalfunctionsResumeUTests {
                 beaconMalfunction = BeaconMalfunction(
                     4, "FR224226850", "1236514", "IRCS",
                     "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_PORT,
-                    Stage.END_OF_MALFUNCTION, true, lastBeaconDateTime, null, lastBeaconDateTime
-                ),
-                comments = listOf(
-                    BeaconMalfunctionComment(
-                        beaconMalfunctionId = 1,
-                        comment = "A comment",
-                        userType = BeaconMalfunctionCommentUserType.SIP,
-                        dateTime = lastBeaconDateTime
-                    )
-                ),
+                    Stage.END_OF_MALFUNCTION, lastBeaconDateTime, null, lastBeaconDateTime,
+                    beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA),
+                comments = listOf(BeaconMalfunctionComment(
+                    beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP,
+                    dateTime = lastBeaconDateTime)),
                 actions = listOf(
                     BeaconMalfunctionAction(
                         beaconMalfunctionId = 1,
@@ -148,35 +114,22 @@ class VesselBeaconMalfunctionsResumeUTests {
                 beaconMalfunction = BeaconMalfunction(
                     1, "FR224226850", "1236514", "IRCS",
                     "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA,
-                    Stage.END_OF_MALFUNCTION, true, lastBeaconDateTime, null, lastBeaconDateTime
-                ),
-                comments = listOf(
-                    BeaconMalfunctionComment(
-                        beaconMalfunctionId = 1,
-                        comment = "A comment",
-                        userType = BeaconMalfunctionCommentUserType.SIP,
-                        dateTime = lastBeaconDateTime
-                    )
-                ),
-                actions = listOf()
-            ),
+                    Stage.END_OF_MALFUNCTION, lastBeaconDateTime, null, lastBeaconDateTime,
+                    beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA),
+                comments = listOf(BeaconMalfunctionComment(
+                    beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP,
+                    dateTime = lastBeaconDateTime)),
+                actions = listOf()),
             BeaconMalfunctionWithDetails(
                 beaconMalfunction = BeaconMalfunction(
                     2, "FR224226852", "1236514", "IRCS",
                     "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_PORT,
-                    Stage.END_OF_MALFUNCTION, true, now, null, now
-                ),
-                comments = listOf(
-                    BeaconMalfunctionComment(
-                        beaconMalfunctionId = 1,
-                        comment = "A comment",
-                        userType = BeaconMalfunctionCommentUserType.SIP,
-                        dateTime = now
-                    )
-                ),
-                actions = listOf()
-            )
-        )
+                    Stage.END_OF_MALFUNCTION, now, null, now,
+                    beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA),
+                comments = listOf(BeaconMalfunctionComment(
+                    beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP,
+                    dateTime = now)),
+                actions = listOf()))
 
         // When
         val resume = VesselBeaconMalfunctionsResume.fromBeaconMalfunctions(beaconMalfunctions)

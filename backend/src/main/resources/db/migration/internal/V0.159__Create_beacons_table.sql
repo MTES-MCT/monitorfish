@@ -4,3 +4,5 @@ CREATE TABLE public.beacons (
     beacon_status public.beacon_status,
     satellite_operator_id integer
 );
+
+CREATE INDEX ON public.beacons(vessel_id);

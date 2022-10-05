@@ -5,10 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselWithData
-import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.slf4j.Logger
@@ -16,12 +13,11 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVessel(
-    private val vesselRepository: VesselRepository,
-    private val positionRepository: PositionRepository,
-    private val logbookReportRepository: LogbookReportRepository,
-    private val riskFactorsRepository: RiskFactorsRepository
-) {
+class GetVessel(private val vesselRepository: VesselRepository,
+                private val positionRepository: PositionRepository,
+                private val logbookReportRepository: LogbookReportRepository,
+                private val riskFactorsRepository: RiskFactorsRepository,
+                private val beaconRepository: BeaconRepository) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
     suspend fun execute(
@@ -57,10 +53,17 @@ class GetVessel(
 
             val vesselRiskFactorsFuture = async { riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber) }
 
+            val vessel = vesselFuture.await()
+            val vesselWithBeaconNumber = vessel.id?.let {
+                val beaconNumber = beaconRepository.findBeaconNumberByVesselId(it)
+
+                vessel.copy(beaconNumber = beaconNumber)
+            } ?: vessel
+
             Pair(
                 vesselTrackHasBeenModified,
                 VesselWithData(
-                    vesselFuture.await(),
+                    vesselWithBeaconNumber,
                     positions.await(),
                     vesselRiskFactorsFuture.await() ?: VesselRiskFactor()
                 )

@@ -63,16 +63,6 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `search Should return a vessel When part of the beacon number is given`() {
-        // When
-        val vessels = jpaVesselRepository.search("BEACON_IS")
-
-        assertThat(vessels).hasSize(1)
-        assertThat(vessels.first().beaconNumber).isEqualTo("BEACON_IS_NOT_BACON")
-    }
-
-    @Test
-    @Transactional
     fun `search Should return no vessel When no search string is given`() {
         // When
         val vessels = jpaVesselRepository.search("")
@@ -98,5 +88,16 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
         assertThat(vessels).hasSize(1)
         assertThat(vessels.first().flagState).isEqualTo(CountryCode.UNDEFINED)
+    }
+
+    @Test
+    @Transactional
+    fun `findVesselsByIds Should return vessels from vessel ids`() {
+        // When
+        val vessels = jpaVesselRepository.findVesselsByIds(listOf(1, 2, 3, 4, 66666666))
+
+        assertThat(vessels).hasSize(4)
+        assertThat(vessels.first().internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(vessels.first().vesselName).isEqualTo("PHENOMENE")
     }
 }

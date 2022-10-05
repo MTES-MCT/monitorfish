@@ -87,17 +87,14 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
             id = 1,
             null,
             Stage.END_OF_MALFUNCTION,
-            EndOfBeaconMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION,
-            updateDateTime
-        )
+            EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
+            updateDateTime)
 
         // Then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
         assertThat(updatedBeaconMalfunction?.stage).isEqualTo(Stage.END_OF_MALFUNCTION)
         assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isEqualTo(updateDateTime)
-        assertThat(updatedBeaconMalfunction?.endOfBeaconMalfunctionReason).isEqualTo(
-            EndOfBeaconMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION
-        )
+        assertThat(updatedBeaconMalfunction?.endOfBeaconMalfunctionReason).isEqualTo(EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED)
         assertThat(updatedBeaconMalfunction?.malfunctionEndDateTime).isEqualTo(updateDateTime)
     }
 

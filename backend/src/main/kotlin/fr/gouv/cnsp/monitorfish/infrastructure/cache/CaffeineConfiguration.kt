@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit
 class CaffeineConfiguration {
     val vessels = "vessel"
     val searchVessels = "search_vessels"
+    val searchBeacons = "search_beacons"
     val gearCodeGroups = "gear_code_groups"
     val gearCodeGroup = "gear_code_group"
     val gears = "gears"
@@ -84,6 +85,7 @@ class CaffeineConfiguration {
             1
         )
         val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 180)
+        val searchBeaconsCache = buildMinutesCache(searchBeacons, ticker, 1)
 
         val manager = SimpleCacheManager()
         manager.setCaches(
@@ -102,6 +104,7 @@ class CaffeineConfiguration {
                 allSpeciesCache,
                 speciesCache,
                 searchVesselsCache,
+                searchBeaconsCache,
                 logbookCache,
                 nextLogbookCache,
                 previousLogbookCache,

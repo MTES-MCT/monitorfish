@@ -14,14 +14,14 @@ data class BeaconMalfunctionDataOutput(
     val vesselName: String,
     val vesselStatus: VesselStatus,
     val stage: Stage,
-    val priority: Boolean,
     val malfunctionStartDateTime: ZonedDateTime,
     val malfunctionEndDateTime: ZonedDateTime?,
     val vesselStatusLastModificationDateTime: ZonedDateTime,
     val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason? = null,
     var riskFactor: Double?,
-    val notificationRequested: BeaconMalfunctionNotificationType? = null
-) {
+    val notificationRequested: BeaconMalfunctionNotificationType? = null,
+    val beaconNumber: String? = null,
+    val vesselStatusAtMalfunctionCreation: VesselStatus? = null) {
     companion object {
         fun fromBeaconMalfunction(beaconMalfunction: BeaconMalfunction): BeaconMalfunctionDataOutput {
             return BeaconMalfunctionDataOutput(
@@ -34,14 +34,14 @@ data class BeaconMalfunctionDataOutput(
                 vesselIdentifier = beaconMalfunction.vesselIdentifier,
                 vesselStatus = beaconMalfunction.vesselStatus,
                 stage = beaconMalfunction.stage,
-                priority = beaconMalfunction.priority,
                 malfunctionStartDateTime = beaconMalfunction.malfunctionStartDateTime,
                 malfunctionEndDateTime = beaconMalfunction.malfunctionEndDateTime,
                 vesselStatusLastModificationDateTime = beaconMalfunction.vesselStatusLastModificationDateTime,
                 endOfBeaconMalfunctionReason = beaconMalfunction.endOfBeaconMalfunctionReason,
                 riskFactor = beaconMalfunction.riskFactor,
-                notificationRequested = beaconMalfunction.notificationRequested
-            )
+                notificationRequested = beaconMalfunction.notificationRequested,
+                beaconNumber = beaconMalfunction.beaconNumber,
+                vesselStatusAtMalfunctionCreation = beaconMalfunction.vesselStatusAtMalfunctionCreation)
         }
     }
 }

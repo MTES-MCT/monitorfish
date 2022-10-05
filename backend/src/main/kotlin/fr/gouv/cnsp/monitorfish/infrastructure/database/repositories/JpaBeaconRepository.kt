@@ -20,6 +20,7 @@ class JpaBeaconRepository(private val dbBeaconRepository: DBBeaconRepository) : 
         return dbBeaconRepository.searchBy(searched).map { it.toBeacon() }
     }
 
+    @Cacheable(value = ["find_beacon"])
     override fun findBeaconNumberByVesselId(vesselId: Int): String {
         return dbBeaconRepository.findByVesselId(vesselId).beaconNumber
     }

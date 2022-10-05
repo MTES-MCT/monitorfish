@@ -276,21 +276,21 @@ MMSI: ${reporting.mmsi || ''}`
                   <FlexboxGrid.Item style={columnStyles[3]} title={getReportingTitle(reporting, true)}>
                     {getReportingTitle(reporting, false)}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[4]}>{(reporting.value as any).natinfCode}</FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={columnStyles[4]}>{reporting.value.natinfCode}</FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[5]} title={getVesselNameTitle(reporting)}>
                     <Flag
                       rel="preload"
-                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${(
-                        reporting.value as any
-                      ).flagState?.toLowerCase()}.svg`}
+                      src={`${baseUrl ? `${baseUrl}/` : ''}flags/${reporting.value.flagState?.toLowerCase()}.svg`}
                       style={{ marginLeft: 0, marginRight: 5, marginTop: -2, width: 18 }}
-                      title={countries.getName((reporting.value as any).flagState?.toLowerCase(), 'fr')}
+                      title={countries.getName(reporting.value.flagState?.toLowerCase(), 'fr')}
                     />
                     {reporting.vesselName}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[6]}>{(reporting.value as any).dml}</FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={columnStyles[6]}>
+                    {isInfractionSuspicionReporting(reporting) && reporting.value.dml}
+                  </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[7]}>
-                    {(reporting as any).underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
+                    {reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
                   </FlexboxGrid.Item>
                   <RowVerticalSeparator />
                   <FlexboxGrid.Item style={columnStyles[8]}>
@@ -298,11 +298,12 @@ MMSI: ${reporting.mmsi || ''}`
                       alt="Voir sur la carte"
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
+                        // TODO Move that into a callback function.
                         const vesselIdentity = {
                           ...reporting,
-                          // TODO Where is the flagState prop in TS types?
-                          flagState: (reporting.value as any).flagState
+                          flagState: reporting.value.flagState
                         }
+
                         dispatch(showVessel(vesselIdentity, false, false) as any)
                         dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
                       }}

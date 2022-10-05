@@ -1,3 +1,4 @@
+import type { SeaFront } from '../entities/alerts/constants'
 import type { PendingAlertValue } from './alert'
 
 export enum ReportingType {
@@ -13,12 +14,15 @@ export type BaseReporting = {
   id: string
   internalReferenceNumber: string
   ircs: string
-  type: ReportingType
   underCharter: boolean
   validationDate: string
-  value: Record<string, any>
   vesselIdentifier: string
   vesselName: string
+
+  // TODO These 2 props shouldn't be there at all and should be treated in a separated redux state.
+  // eslint-disable-next-line typescript-sort-keys/interface
+  dml?: string
+  validationDateTimestamp?: number
 }
 
 export type InfractionSuspicionReporting = BaseReporting & {
@@ -50,6 +54,7 @@ export type InfractionSuspicion = {
   dml: string
   natinfCode: string
   reportingActor: string
+  seaFront: SeaFront
   title: string
   // TODO We ne a type here.
   // type: ReportingValueType.InfractionSuspicion

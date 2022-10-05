@@ -10,7 +10,7 @@ import { COLORS } from '../../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, SeaFront } from '../../../domain/entities/alerts/constants'
 import { getReportingOrigin, getReportingTitle, reportingSearchOptions } from '../../../domain/entities/reporting'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
-import { ReportingType } from '../../../domain/types/reporting'
+import { PendingAlertReporting, ReportingType } from '../../../domain/types/reporting'
 import archiveReportings from '../../../domain/use_cases/reporting/archiveReportings'
 import deleteReportings from '../../../domain/use_cases/reporting/deleteReportings'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
@@ -32,8 +32,20 @@ import { Flag } from '../../vessel_list/tableCells'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { EditReporting } from './EditReporting'
 
+import type { InfractionSuspicionReporting, Reporting } from '../../../domain/types/reporting'
 import type { MenuItem } from '../../../types'
 
+// TODO Move that into a `constants` file.
+const isInfractionSuspicionReporting = (reporting: Reporting): reporting is InfractionSuspicionReporting =>
+  reporting.type === ReportingType.INFRACTION_SUSPICION
+
+// TODO Move that into a `constants` file.
+const isInfractionSuspicionOrPendingAlertReporting = (
+  reporting: Reporting
+): reporting is InfractionSuspicionReporting | PendingAlertReporting =>
+  [ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION].includes(reporting.type)
+
+// TODO Uppercase.
 enum SortColumns {
   dml = 'dml',
   validationDateTimestamp = 'validationDateTimestamp',
@@ -63,18 +75,23 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   const currentSeaFrontReportings = useMemo(
     () =>
       currentReportings
-        .filter(reporting => reporting.type === ReportingType.ALERT)
+        .filter(isInfractionSuspicionOrPendingAlertReporting)
         .filter(reporting =>
           (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code]
             ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code].seaFronts
             : []
-          ).includes((reporting.value as any).seaFront)
+          ).includes(reporting.value.seaFront)
         )
-        .map(reporting => ({
-          ...reporting,
-          dml: (reporting.value as any).dml,
-          validationDateTimestamp: new Date(reporting.validationDate).getTime()
-        })),
+        .map(reporting =>
+          isInfractionSuspicionReporting(reporting)
+            ? {
+                ...reporting,
+                // TODO Move that into a local ref rather than polluting the original collection.
+                dml: reporting.value.dml,
+                validationDateTimestamp: new Date(reporting.validationDate).getTime()
+              }
+            : reporting
+        ),
     [currentReportings, selectedSeaFront]
   )
 
@@ -129,18 +146,14 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     if (!(checkedReportingIds.length > 0)) {
       return
     }
-    // TODO Remove ts-ignore once Redux Root State typed
-    // @ts-ignore
-    dispatch(archiveReportings(checkedReportingIds.map(Number))).then(() => setCheckedReportingIds([]))
+    dispatch(archiveReportings(checkedReportingIds.map(Number)) as any).then(() => setCheckedReportingIds([]))
   }, [checkedReportingIds, dispatch, setCheckedReportingIds])
 
   const remove = useCallback(() => {
     if (!(checkedReportingIds.length > 0)) {
       return
     }
-    // TODO Remove ts-ignore once Redux Root State typed
-    // @ts-ignore
-    dispatch(deleteReportings(checkedReportingIds.map(Number))).then(() => setCheckedReportingIds([]))
+    dispatch(deleteReportings(checkedReportingIds.map(Number)) as any).then(() => setCheckedReportingIds([]))
   }, [checkedReportingIds, dispatch, setCheckedReportingIds])
 
   function edit(disabled, reporting) {

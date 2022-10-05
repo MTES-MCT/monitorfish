@@ -36,10 +36,6 @@ import type { InfractionSuspicionReporting, Reporting } from '../../../domain/ty
 import type { MenuItem } from '../../../types'
 
 // TODO Move that into a `constants` file.
-const isInfractionSuspicionReporting = (reporting: Reporting): reporting is InfractionSuspicionReporting =>
-  reporting.type === ReportingType.INFRACTION_SUSPICION
-
-// TODO Move that into a `constants` file.
 const isInfractionSuspicionOrPendingAlertReporting = (
   reporting: Reporting
 ): reporting is InfractionSuspicionReporting | PendingAlertReporting =>
@@ -83,7 +79,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
           ).includes(reporting.value.seaFront)
         )
         .map(reporting =>
-          isInfractionSuspicionReporting(reporting)
+          isInfractionSuspicionOrPendingAlertReporting(reporting)
             ? {
                 ...reporting,
                 // TODO Move that into a local ref rather than polluting the original collection.
@@ -291,7 +287,7 @@ MMSI: ${reporting.mmsi || ''}`
                     {reporting.vesselName}
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[6]}>
-                    {isInfractionSuspicionReporting(reporting) && reporting.value.dml}
+                    {isInfractionSuspicionOrPendingAlertReporting(reporting) && reporting.value.dml}
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[7]}>
                     {reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}

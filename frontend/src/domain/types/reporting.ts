@@ -52,12 +52,11 @@ export type InfractionSuspicion = {
   authorTrigram: string | null
   description: string
   dml: string
+  flagState: string
   natinfCode: string
   reportingActor: string
   seaFront: SeaFront
   title: string
-  // TODO We ne a type here.
-  // type: ReportingValueType.InfractionSuspicion
   unit: string | null
 }
 
@@ -65,10 +64,9 @@ export type Observation = {
   authorContact: string | null
   authorTrigram: string | null
   description: string
+  flagState: string
   reportingActor: string
   title: string
-  // TODO We ne a type here.
-  // type: ReportingValueType.Observation
   unit: string | null
 }
 

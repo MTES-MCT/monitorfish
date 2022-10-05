@@ -41,17 +41,17 @@ class GetBeaconMalfunctionUTests {
             .willReturn(BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
                 null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
                  ZonedDateTime.now(), null, ZonedDateTime.now(),
-                beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA))
+                beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED))
         given(beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), eq("FR224226850"), any()))
             .willReturn(listOf(
                 BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
                     null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
                      ZonedDateTime.now(), null, ZonedDateTime.now(),
-                    beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA),
+                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED),
                 BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
                     null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                      ZonedDateTime.now(), null, ZonedDateTime.now(),
-                    beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA)))
+                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED)))
         given(beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(1)).willReturn(listOf(BeaconMalfunctionComment(
             beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)))
         given(beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).willReturn(listOf(BeaconMalfunctionAction(

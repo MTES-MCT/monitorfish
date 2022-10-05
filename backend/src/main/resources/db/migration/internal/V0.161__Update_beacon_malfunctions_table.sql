@@ -7,7 +7,7 @@ ALTER TABLE beacon_malfunctions
     DROP COLUMN priority,
     DROP COLUMN end_of_malfunction_reason,
     ADD COLUMN beacon_number character varying(100) NOT NULL,
-    ADD COLUMN vessel_status_at_malfunction_creation public.beacon_malfunctions_vessel_status NOT NULL;
+    ADD COLUMN beacon_status_at_malfunction_creation public.beacon_status NOT NULL;
 
 -- Enum must be dropped and recreated as it is not possible to remove values from an enum.
 DROP TYPE public.beacon_malfunctions_end_of_malfunction_reason;

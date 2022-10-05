@@ -519,7 +519,7 @@ class VesselControllerITests {
                     beaconMalfunction = BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
                         ZonedDateTime.now(), null, ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
-                        beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA),
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED),
                     comments = listOf(BeaconMalfunctionComment(
                         beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
                     actions = listOf(BeaconMalfunctionAction(
@@ -528,7 +528,7 @@ class VesselControllerITests {
                     beaconMalfunction = BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA),
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED),
                     comments = listOf(BeaconMalfunctionComment(
                         beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
                     actions = listOf(BeaconMalfunctionAction(
@@ -573,7 +573,7 @@ class VesselControllerITests {
                     beaconMalfunction = BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
                         ZonedDateTime.now(), null, ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
-                        beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA),
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED),
                     comments = listOf(BeaconMalfunctionComment(
                         beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
                     actions = listOf(BeaconMalfunctionAction(
@@ -582,7 +582,7 @@ class VesselControllerITests {
                     beaconMalfunction = BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", vesselStatusAtMalfunctionCreation = VesselStatus.AT_SEA),
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED),
                     comments = listOf(BeaconMalfunctionComment(
                         beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
                     actions = listOf(BeaconMalfunctionAction(

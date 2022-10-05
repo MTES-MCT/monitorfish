@@ -30,4 +30,14 @@ class JpaBeaconRepositoryITests : AbstractDBTests() {
         assertThat(vessels.first().beaconNumber).isEqualTo("FGEDX85")
     }
 
+    @Test
+    @Transactional
+    fun `findActivatedVesselIds Should return ids of activated vessels`() {
+        // When
+        val vesselIds = jpaBeaconRepository.findActivatedVesselIds()
+
+        assertThat(vesselIds).hasSize(6)
+        assertThat(vesselIds).isEqualTo(listOf(1, 2, 3, 4, 8, 9))
+    }
+
 }

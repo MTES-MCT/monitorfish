@@ -22,8 +22,7 @@ data class BeaconMalfunction(
     val vesselId: Int? = null,
     val notificationRequested: BeaconMalfunctionNotificationType? = null,
     val beaconNumber: String,
-    val vesselStatusAtMalfunctionCreation: VesselStatus
-) {
+    val beaconStatusAtMalfunctionCreation: BeaconStatus) {
     companion object {
         fun getVesselFromBeaconMalfunction(beaconMalfunction: BeaconMalfunction): (LastPosition) -> Boolean {
             return { lastPosition ->

@@ -78,7 +78,7 @@ export function RangeCalendarPicker({ defaultValue, isHistorical, onChange }: Ra
           open
           ranges={[]}
           renderTitle={renderTitle}
-          // `defaultValue` seems to be immediatly cancelledso we come down to using a controlled `value`
+          // `defaultValue` seems to be immediatly cancelled so we come down to using a controlled `value`
           value={controlledValue}
         />
       )}
@@ -93,10 +93,14 @@ const Box = styled.div`
     display: none;
   }
 
+  .rs-picker-daterange-panel {
+    height: 290px;
+  }
+
   .rs-picker-daterange-menu {
     border: solid 1px ${p => p.theme.color.lightGray};
     border-radius: 0;
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
 
     .rs-picker-daterange-header,
     .rs-calendar-header-time-toolbar,
@@ -123,12 +127,37 @@ const Box = styled.div`
 
           .rs-calendar-header-title {
             font-size: inherit;
+            text-transform: uppercase;
           }
         }
       }
 
       .rs-calendar-view {
         padding: 0.75rem 0.5rem 0;
+
+        .rs-calendar-table-cell {
+          padding: 0;
+          width: 33px;
+
+          &.rs-calendar-table-cell-in-range:before {
+            background-color: ${p => p.theme.color.blueGray[25]};
+            height: 33px;
+            margin-top: 0;
+          }
+
+          > .rs-calendar-table-cell-content {
+            align-items: center;
+            border-radius: 0 !important;
+            display: inline-flex;
+            height: 33px;
+            justify-content: center;
+            padding-bottom: 3px;
+            width: 33px;
+          }
+          &.rs-calendar-table-cell-selected > .rs-calendar-table-cell-content {
+            background-color: ${p => p.theme.color.blueGray[100]};
+          }
+        }
       }
     }
   }

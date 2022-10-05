@@ -1,9 +1,17 @@
 export type Theme = typeof theme
 
+// TODO Name and shades should absolutely match original UI
 export const theme = {
   color: {
     background: '#FFFFFF',
     blue: '#0A18DF',
+    blueGray: {
+      100: '#5697D2',
+      25: '#D4E5F4'
+    },
+    blueWonder: {
+      25: '#D4DDE7'
+    },
     charcoal: '#3B4559',
     cultured: '#F7F7FA',
     gainsboro: '#E5E5EB',

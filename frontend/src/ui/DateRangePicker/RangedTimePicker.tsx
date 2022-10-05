@@ -72,7 +72,7 @@ export function RangedTimePicker({ filter, minutesRange, onChange }: RangedTimeP
   }, [filteredRangedTimeOptions])
 
   if (!filteredRangedTimeOptions.length) {
-    return undefined
+    return null
   }
 
   return (

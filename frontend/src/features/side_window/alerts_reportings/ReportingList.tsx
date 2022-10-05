@@ -110,6 +110,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   }, [currentSeaFrontReportings, searched, fuse])
 
   const sortedReportings = useMemo(
+    // TODO Why the slice?
     () => filteredReportings.slice().sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType)),
     [filteredReportings, sortColumn, sortType]
   )
@@ -130,16 +131,19 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   }, [sortedAndCheckedReportings])
 
   const handleSelectOneReporting = useCallback(
-    reportingId => {
-      isAllCheckboxCheckedRef.current = false
-
+    (reportingId: string) => {
       if (checkedReportingIds.indexOf(reportingId) !== -1) {
+        isAllCheckboxCheckedRef.current = false
+
         setCheckedReportingIds(checkedReportingIds.filter(checkedReportingId => checkedReportingId !== reportingId))
       } else {
+        // If we checked the last reporting to be checked, the 'check all' checkbox should be checked
+        isAllCheckboxCheckedRef.current = checkedReportingIds.length === filteredReportings.length - 1
+
         setCheckedReportingIds(checkedReportingIds.concat(reportingId))
       }
     },
-    [checkedReportingIds]
+    [checkedReportingIds, filteredReportings]
   )
 
   const archive = useCallback(() => {

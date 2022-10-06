@@ -1,7 +1,7 @@
 const path = require('path')
 
-const BOOLEAN_CAMEL_PREFIXES = ['can', 'did', 'is', 'had', 'has', 'must', 'should', 'was', 'will']
-const BOOLEAN_UPPER_PREFIXES = ['CAN_', 'DID_', 'IS_', 'HAD_', 'HAS_', 'MUST_', 'SHOULD_', 'WAS_', 'WILL_']
+const BOOLEAN_CAMEL_PREFIXES = ['can', 'did', 'is', 'had', 'has', 'must', 'should', 'was', 'will', 'with']
+const BOOLEAN_UPPER_PREFIXES = ['CAN_', 'DID_', 'IS_', 'HAD_', 'HAS_', 'MUST_', 'SHOULD_', 'WAS_', 'WILL_', 'WITH_']
 
 module.exports = {
   extends: '@ivangabriele/eslint-config-typescript-react',

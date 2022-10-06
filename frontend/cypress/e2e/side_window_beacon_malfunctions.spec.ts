@@ -15,12 +15,12 @@ context('Side window beacon malfunctions', () => {
       .children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 6)
+      .should('have.length', 4)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(2)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 1)
+      .should('have.length', 0)
     cy.intercept('PUT', 'bff/v1/beacon_malfunctions/1').as('moveBeaconMalfunctionCardInColumn')
 
     // When
@@ -38,17 +38,17 @@ context('Side window beacon malfunctions', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 5)
+      .should('have.length', 3)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-RELAUNCH_REQUEST"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 2)
+      .should('have.length', 1)
   })
 
   it('Board Should be initialized with the beacon malfunctions', () => {
     // Then
     cy.get('*[data-cy="side-window-sub-menu-trigger"]').click({ force: true })
-    cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('8')
+    cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('5')
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children().should('have.length', 7)
 
     // Count the number of cards in the columns' header
@@ -56,7 +56,7 @@ context('Side window beacon malfunctions', () => {
       .children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-header"]')
-      .contains('5')
+      .contains('3')
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(1)
@@ -66,14 +66,14 @@ context('Side window beacon malfunctions', () => {
       .children()
       .eq(2)
       .find('*[data-cy="side-window-beacon-malfunctions-header"]')
-      .contains('2')
+      .contains('1')
 
     // Count the number of cards in the columns' body
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 5)
+      .should('have.length', 3)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(1)
@@ -83,7 +83,7 @@ context('Side window beacon malfunctions', () => {
       .children()
       .eq(2)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 2)
+      .should('have.length', 1)
 
     // Inspect the card body
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
@@ -105,7 +105,7 @@ context('Side window beacon malfunctions', () => {
       .eq(2)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
-      .contains('Prioritaire')
+      .contains('2.5')
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
@@ -124,8 +124,8 @@ context('Side window beacon malfunctions', () => {
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
-      .contains('Navire à quai')
-    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/10').as('moveBeaconMalfunctionCardVesselStatus')
+      .contains('Navire en mer')
+    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/8').as('moveBeaconMalfunctionCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
@@ -174,7 +174,6 @@ context('Side window beacon malfunctions', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]').find('*[data-cy="risk-factor"]').contains('2.5')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-vessel-name"]').contains('PHENOMENE')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-cfr"]').contains('FAK000999999')
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-priority"]').contains('Prioritaire')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Activité détectée')
@@ -258,7 +257,7 @@ context('Side window beacon malfunctions', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Sans nouvelles')
-    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/10').as('moveBeaconMalfunctionCardVesselStatus')
+    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/8').as('moveBeaconMalfunctionCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
@@ -291,7 +290,7 @@ context('Side window beacon malfunctions', () => {
 
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-textarea"]').type('I just added a new comment')
-    cy.intercept('POST', 'bff/v1/beacon_malfunctions/10/comments').as('addBeaconMalfunctionComment')
+    cy.intercept('POST', 'bff/v1/beacon_malfunctions/8/comments').as('addBeaconMalfunctionComment')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-add"]').click({ force: true })
 
     // Then
@@ -339,19 +338,19 @@ context('Side window beacon malfunctions', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .eq(2)
+      .eq(1)
       .contains("N'a jamais émis")
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .eq(2)
+      .eq(1)
       .contains('Balise activée le')
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .eq(2)
+      .eq(1)
       .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
       .click()
 

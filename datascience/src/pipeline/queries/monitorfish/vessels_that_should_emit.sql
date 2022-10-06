@@ -5,13 +5,12 @@ SELECT
     v.ircs,
     v.vessel_name,
     v.flag_state,
-    (COALESCE(v.length, 0) >= 12) AS priority,
     b.beacon_status,
-    b.beacon_number,
-    v.length
+    b.beacon_number
 FROM beacons b
 JOIN vessels v
 ON v.id = b.vessel_id
 WHERE
+    b.beacon_status IN ('ACTIVATED', 'UNSUPERVISED') AND
     -- Flag_states whose emissions are monitored
     v.flag_state IN ('FR', 'VE')

@@ -43,7 +43,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastThirtyEndOfFollowUp Should return last thirty end of follow up beacon malfunctions`() {
         // When
-        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findLastThirtyEndOfFollowUp()
+        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findLastSixtyEndOfFollowUp()
 
         assertThat(baconMalfunctions).hasSize(1)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")

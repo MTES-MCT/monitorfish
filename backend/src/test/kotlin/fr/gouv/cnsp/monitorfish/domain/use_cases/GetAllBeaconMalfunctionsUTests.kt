@@ -49,7 +49,7 @@ class GetAllBeaconMalfunctionsUTests {
                 null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                 ZonedDateTime.now(), null, ZonedDateTime.now(),
                 beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED)))
-        given(beaconMalfunctionsRepository.findLastThirtyEndOfFollowUp()).willReturn(listOf(BeaconMalfunction(2, "FR123456785", "9876543", "IRCS",
+        given(beaconMalfunctionsRepository.findLastSixtyEndOfFollowUp()).willReturn(listOf(BeaconMalfunction(2, "FR123456785", "9876543", "IRCS",
             null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
             ZonedDateTime.now(), null, ZonedDateTime.now(),
             beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED)))

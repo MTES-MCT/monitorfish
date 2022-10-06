@@ -1,7 +1,6 @@
 SELECT
     id,
-    internal_reference_number AS cfr,
-    external_reference_number AS external_immatriculation,
-    ircs
+    beacon_number,
+    vessel_status
 FROM beacon_malfunctions
 WHERE stage NOT IN ('END_OF_MALFUNCTION', 'ARCHIVED')

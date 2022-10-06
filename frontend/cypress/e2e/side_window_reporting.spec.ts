@@ -60,7 +60,7 @@ context('Reportings', () => {
 
     // When
     // Select and delete a reporting
-    cy.get('.rs-checkbox-wrapper').first().click()
+    cy.get('.rs-checkbox-wrapper').eq(1).click()
     cy.get('.rs-checkbox-wrapper').last().click()
     cy.get('*[data-cy="delete-reporting-cards"]').click({ force: true })
     cy.wait('@deleteReportings').then(({ request, response }) => {

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU, SeaFront } from '../../domain/entities/alerts/constants'
 import { beaconMalfunctionsStages } from '../../domain/entities/beaconMalfunction'
-import { isReportingWithPendingAlert } from '../../domain/use_cases/alert/utils'
+import { ReportingType } from '../../domain/types/reporting'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
@@ -59,7 +59,7 @@ export function SideWindowSubMenu({
 
       if (selectedTab === AlertAndReportingTab.REPORTING) {
         return currentReportings.filter(
-          reporting => isReportingWithPendingAlert(reporting) && seaFronts.includes(reporting.value.seaFront)
+          reporting => reporting.type === ReportingType.ALERT && seaFronts.includes(reporting.value.seaFront)
         ).length
       }
 

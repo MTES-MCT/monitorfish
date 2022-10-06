@@ -1,19 +1,16 @@
 import Fuse from 'fuse.js'
 import countries from 'i18n-iso-countries'
-import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
+import { prop } from 'ramda'
+import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Checkbox, FlexboxGrid } from 'rsuite'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, SeaFront } from '../../../domain/entities/alerts/constants'
-import {
-  getReportingOrigin,
-  getReportingTitle,
-  reportingSearchOptions,
-  ReportingType
-} from '../../../domain/entities/reporting'
+import { getReportingOrigin, getReportingTitle, REPORTINGS_SEARCH_OPTIONS } from '../../../domain/entities/reporting'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
+import { InfractionSuspicionReporting, PendingAlertReporting, ReportingType } from '../../../domain/types/reporting'
 import archiveReportings from '../../../domain/use_cases/reporting/archiveReportings'
 import deleteReportings from '../../../domain/use_cases/reporting/deleteReportings'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
@@ -37,6 +34,7 @@ import { EditReporting } from './EditReporting'
 
 import type { MenuItem } from '../../../types'
 
+// TODO Enum keys in uppercase.
 enum SortColumns {
   dml = 'dml',
   validationDateTimestamp = 'validationDateTimestamp',
@@ -47,13 +45,17 @@ type ReportingListProps = {
   selectedSeaFront: MenuItem<SeaFront>
 }
 export function ReportingList({ selectedSeaFront }: ReportingListProps) {
-  const dispatch = useAppDispatch()
-  const { currentReportings } = useAppSelector(state => (state as any).reporting)
-  const baseUrl = window.location.origin
+  const isAllCheckboxCheckedRef = useRef(false)
+
   const [sortColumn, setSortColumn] = useState<string>(SortColumns.validationDateTimestamp)
   const [sortType, setSortType] = useState<string>(SortType.DESC)
   const [searched, setSearched] = useState<string | undefined>(undefined)
-  const [checkedReportingIds, setCheckedReportingIds] = useState<number[]>([])
+  const [checkedReportingIds, setCheckedReportingIds] = useState<string[]>([])
+
+  const dispatch = useAppDispatch()
+  const { currentReportings } = useAppSelector(state => state.reporting)
+
+  const baseUrl = useMemo(() => window.location.origin, [])
 
   useEffect(() => {
     setCheckedReportingIds([])
@@ -70,13 +72,17 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
         )
         .map(reporting => ({
           ...reporting,
+          // TODO Move that into a local ref rather than polluting the original collection.
           dml: reporting.value.dml,
           validationDateTimestamp: new Date(reporting.validationDate).getTime()
         })),
     [currentReportings, selectedSeaFront]
   )
 
-  const fuse = useMemo(() => new Fuse(currentSeaFrontReportings, reportingSearchOptions), [currentSeaFrontReportings])
+  const fuse = useMemo(
+    () => new Fuse(currentSeaFrontReportings, REPORTINGS_SEARCH_OPTIONS),
+    [currentSeaFrontReportings]
+  )
 
   const filteredReportings = useMemo(() => {
     if (!currentSeaFrontReportings) {
@@ -91,6 +97,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   }, [currentSeaFrontReportings, searched, fuse])
 
   const sortedReportings = useMemo(
+    // TODO Why the slice?
     () => filteredReportings.slice().sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType)),
     [filteredReportings, sortColumn, sortType]
   )
@@ -104,37 +111,51 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     [sortedReportings, checkedReportingIds]
   )
 
-  function handleSelectReporting(reportingId) {
-    if (checkedReportingIds.indexOf(reportingId) !== -1) {
-      setCheckedReportingIds(checkedReportingIds.filter(checkedReportingId => checkedReportingId !== reportingId))
-    } else {
-      setCheckedReportingIds(checkedReportingIds.concat(reportingId))
-    }
-  }
+  const handleSelectAllReportings = useCallback(() => {
+    setCheckedReportingIds(isAllCheckboxCheckedRef.current ? [] : sortedAndCheckedReportings.map(prop('id')))
+
+    isAllCheckboxCheckedRef.current = !isAllCheckboxCheckedRef.current
+  }, [sortedAndCheckedReportings])
+
+  const handleSelectOneReporting = useCallback(
+    (reportingId: string) => {
+      if (checkedReportingIds.indexOf(reportingId) !== -1) {
+        isAllCheckboxCheckedRef.current = false
+
+        setCheckedReportingIds(checkedReportingIds.filter(checkedReportingId => checkedReportingId !== reportingId))
+      } else {
+        // If we checked the last reporting to be checked, the 'check all' checkbox should be checked
+        isAllCheckboxCheckedRef.current = checkedReportingIds.length === filteredReportings.length - 1
+
+        setCheckedReportingIds(checkedReportingIds.concat(reportingId))
+      }
+    },
+    [checkedReportingIds, filteredReportings]
+  )
 
   const archive = useCallback(() => {
     if (!(checkedReportingIds.length > 0)) {
       return
     }
-    // TODO Remove ts-ignore once Redux Root State typed
-    // @ts-ignore
-    dispatch(archiveReportings(checkedReportingIds.map(Number))).then(() => setCheckedReportingIds([]))
+    dispatch(archiveReportings(checkedReportingIds.map(Number)) as any).then(() => setCheckedReportingIds([]))
   }, [checkedReportingIds, dispatch, setCheckedReportingIds])
 
   const remove = useCallback(() => {
     if (!(checkedReportingIds.length > 0)) {
       return
     }
-    // TODO Remove ts-ignore once Redux Root State typed
-    // @ts-ignore
-    dispatch(deleteReportings(checkedReportingIds.map(Number))).then(() => setCheckedReportingIds([]))
+    dispatch(deleteReportings(checkedReportingIds.map(Number)) as any).then(() => setCheckedReportingIds([]))
   }, [checkedReportingIds, dispatch, setCheckedReportingIds])
 
-  function edit(disabled, reporting) {
-    if (!disabled) {
-      dispatch(setEditedReportingInSideWindow(reporting))
-    }
-  }
+  // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.
+  const edit = useCallback(
+    (isDisabled: boolean, reporting: InfractionSuspicionReporting | PendingAlertReporting) => {
+      if (!isDisabled) {
+        dispatch(setEditedReportingInSideWindow(reporting))
+      }
+    },
+    [dispatch]
+  )
 
   function sortByColumn(nextSortedColumn) {
     setSortColumn(nextSortedColumn)
@@ -183,7 +204,9 @@ MMSI: ${reporting.mmsi || ''}`
       >
         <CardTableHeader>
           <FlexboxGrid>
-            <FlexboxGrid.Item style={columnStyles[0]} />
+            <FlexboxGrid.Item style={columnStyles[0]}>
+              <StyledCheckbox checked={isAllCheckboxCheckedRef.current} onChange={handleSelectAllReportings} />
+            </FlexboxGrid.Item>
             <FlexboxGrid.Item style={columnStyles[1]}>
               <CardTableColumnTitle
                 dataCy="side-window-order-by-date"
@@ -228,13 +251,16 @@ MMSI: ${reporting.mmsi || ''}`
         </CardTableHeader>
         <CardTableBody>
           {sortedAndCheckedReportings.map((reporting, index) => {
-            const editingIsDisabled = reporting.type === ReportingType.ALERT.code
+            const editingIsDisabled = reporting.type === ReportingType.ALERT
 
             return (
               <CardTableRow key={reporting.id} data-cy="side-window-current-reportings" index={index + 1}>
                 <FlexboxGrid>
                   <FlexboxGrid.Item style={columnStyles[0]}>
-                    <StyledCheckbox checked={reporting.checked} onChange={() => handleSelectReporting(reporting.id)} />
+                    <StyledCheckbox
+                      checked={reporting.checked}
+                      onChange={() => handleSelectOneReporting(reporting.id)}
+                    />
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[1]} title={reporting.validationDate}>
                     {timeago.format(reporting.validationDate, 'fr')}
@@ -265,7 +291,12 @@ MMSI: ${reporting.mmsi || ''}`
                       alt="Voir sur la carte"
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
-                        const vesselIdentity = { ...reporting, flagState: reporting.value.flagState }
+                        // TODO Move that into a callback function.
+                        const vesselIdentity = {
+                          ...reporting,
+                          flagState: reporting.value.flagState
+                        }
+
                         dispatch(showVessel(vesselIdentity, false, false) as any)
                         dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
                       }}

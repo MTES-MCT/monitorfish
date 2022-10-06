@@ -8,9 +8,9 @@ import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, SeaFront } from '../../../domain/entities/alerts/constants'
-import { getReportingOrigin, getReportingTitle, reportingSearchOptions } from '../../../domain/entities/reporting'
+import { getReportingOrigin, getReportingTitle, REPORTINGS_SEARCH_OPTIONS } from '../../../domain/entities/reporting'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
-import { PendingAlertReporting, ReportingType } from '../../../domain/types/reporting'
+import { InfractionSuspicionReporting, PendingAlertReporting, ReportingType } from '../../../domain/types/reporting'
 import archiveReportings from '../../../domain/use_cases/reporting/archiveReportings'
 import deleteReportings from '../../../domain/use_cases/reporting/deleteReportings'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
@@ -32,16 +32,9 @@ import { Flag } from '../../vessel_list/tableCells'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { EditReporting } from './EditReporting'
 
-import type { InfractionSuspicionReporting, Reporting } from '../../../domain/types/reporting'
 import type { MenuItem } from '../../../types'
 
-// TODO Move that into a `constants` file.
-const isInfractionSuspicionOrPendingAlertReporting = (
-  reporting: Reporting
-): reporting is InfractionSuspicionReporting | PendingAlertReporting =>
-  [ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION].includes(reporting.type)
-
-// TODO Uppercase.
+// TODO Enum keys in uppercase.
 enum SortColumns {
   dml = 'dml',
   validationDateTimestamp = 'validationDateTimestamp',
@@ -71,27 +64,25 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   const currentSeaFrontReportings = useMemo(
     () =>
       currentReportings
-        .filter(isInfractionSuspicionOrPendingAlertReporting)
         .filter(reporting =>
           (ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code]
             ? ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS[selectedSeaFront.code].seaFronts
             : []
           ).includes(reporting.value.seaFront)
         )
-        .map(reporting =>
-          isInfractionSuspicionOrPendingAlertReporting(reporting)
-            ? {
-                ...reporting,
-                // TODO Move that into a local ref rather than polluting the original collection.
-                dml: reporting.value.dml,
-                validationDateTimestamp: new Date(reporting.validationDate).getTime()
-              }
-            : reporting
-        ),
+        .map(reporting => ({
+          ...reporting,
+          // TODO Move that into a local ref rather than polluting the original collection.
+          dml: reporting.value.dml,
+          validationDateTimestamp: new Date(reporting.validationDate).getTime()
+        })),
     [currentReportings, selectedSeaFront]
   )
 
-  const fuse = useMemo(() => new Fuse(currentSeaFrontReportings, reportingSearchOptions), [currentSeaFrontReportings])
+  const fuse = useMemo(
+    () => new Fuse(currentSeaFrontReportings, REPORTINGS_SEARCH_OPTIONS),
+    [currentSeaFrontReportings]
+  )
 
   const filteredReportings = useMemo(() => {
     if (!currentSeaFrontReportings) {
@@ -156,11 +147,15 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     dispatch(deleteReportings(checkedReportingIds.map(Number)) as any).then(() => setCheckedReportingIds([]))
   }, [checkedReportingIds, dispatch, setCheckedReportingIds])
 
-  function edit(disabled, reporting) {
-    if (!disabled) {
-      dispatch(setEditedReportingInSideWindow(reporting))
-    }
-  }
+  // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.
+  const edit = useCallback(
+    (isDisabled: boolean, reporting: InfractionSuspicionReporting | PendingAlertReporting) => {
+      if (!isDisabled) {
+        dispatch(setEditedReportingInSideWindow(reporting))
+      }
+    },
+    [dispatch]
+  )
 
   function sortByColumn(nextSortedColumn) {
     setSortColumn(nextSortedColumn)
@@ -286,9 +281,7 @@ MMSI: ${reporting.mmsi || ''}`
                     />
                     {reporting.vesselName}
                   </FlexboxGrid.Item>
-                  <FlexboxGrid.Item style={columnStyles[6]}>
-                    {isInfractionSuspicionOrPendingAlertReporting(reporting) && reporting.value.dml}
-                  </FlexboxGrid.Item>
+                  <FlexboxGrid.Item style={columnStyles[6]}>{reporting.value.dml}</FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[7]}>
                     {reporting.underCharter && <UnderCharter>Navire sous charte</UnderCharter>}
                   </FlexboxGrid.Item>

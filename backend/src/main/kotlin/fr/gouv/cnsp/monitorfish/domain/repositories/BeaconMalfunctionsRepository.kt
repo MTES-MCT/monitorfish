@@ -13,7 +13,7 @@ interface BeaconMalfunctionsRepository {
     ): List<BeaconMalfunction>
 
     fun findAllExceptEndOfFollowUp(): List<BeaconMalfunction>
-    fun findLastThirtyEndOfFollowUp(): List<BeaconMalfunction>
+    fun findLastSixtyEndOfFollowUp(): List<BeaconMalfunction>
     fun find(beaconMalfunctionId: Int): BeaconMalfunction
     fun update(
         id: Int,

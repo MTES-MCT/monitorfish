@@ -17,10 +17,10 @@ class GetAllBeaconMalfunctions(private val beaconMalfunctionsRepository: BeaconM
         val lastPositions = lastPositionRepository.findAll()
 
         val beaconMalfunctionsExceptResumedTransmission = beaconMalfunctionsRepository.findAllExceptEndOfFollowUp()
-        val lastThirtyResumedTransmissions = beaconMalfunctionsRepository.findLastThirtyEndOfFollowUp()
+        val lastSixtyResumedTransmissions = beaconMalfunctionsRepository.findLastSixtyEndOfFollowUp()
         val activatedVesselIds = beaconRepository.findActivatedVesselIds()
 
-        return (beaconMalfunctionsExceptResumedTransmission + lastThirtyResumedTransmissions)
+        return (beaconMalfunctionsExceptResumedTransmission + lastSixtyResumedTransmissions)
             .filter { activatedVesselIds.contains(it.id) }
             .map { beaconMalfunction ->
             val riskFactor = lastPositions.find(getVesselFromBeaconMalfunction(beaconMalfunction))?.riskFactor

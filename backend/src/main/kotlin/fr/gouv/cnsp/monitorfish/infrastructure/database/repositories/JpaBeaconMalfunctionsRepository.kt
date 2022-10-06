@@ -20,8 +20,8 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
         return dbBeaconMalfunctionsRepository.findAllExceptArchived().map { it.toBeaconMalfunction() }
     }
 
-    override fun findLastThirtyEndOfFollowUp(): List<BeaconMalfunction> {
-        return dbBeaconMalfunctionsRepository.findLastThirtyArchived().map { it.toBeaconMalfunction() }
+    override fun findLastSixtyEndOfFollowUp(): List<BeaconMalfunction> {
+        return dbBeaconMalfunctionsRepository.findLastSixtyArchived().map { it.toBeaconMalfunction() }
     }
 
     override fun find(beaconMalfunctionId: Int): BeaconMalfunction {

@@ -5,11 +5,11 @@ import { getAlertNameFromType } from '../../features/side_window/alerts_reportin
 import { Reporting, ReportingType } from '../types/reporting'
 
 type ReportingTypeCharacteristic = {
+  // TODO It should be useless now that types are discriminated.
   code: ReportingType
   inputName: string | null
   // TODO This should be named differently to avoid confusion with `ReportingType.INFRACTION_SUSPICION` type.
   isInfractionSuspicion: boolean
-  // TODO It should be useless now that types are discriminated.
   name: string
 }
 
@@ -144,7 +144,7 @@ export const getReportingOrigin = (reporting: Reporting, isHovering: boolean): s
       return `Pôle SIP (${reporting.value.authorTrigram})`
   }
 
-  if (reporting.type !== ReportingType.INFRACTION_SUSPICION) {
+  if (reporting.type === ReportingType.OBSERVATION) {
     return ''
   }
 
@@ -174,7 +174,7 @@ export function getReportingTitle(reporting: Reporting, isHovering: boolean = fa
   return isHovering ? `${reporting.value.title}: ${reporting.value.description}` : reporting.value.title
 }
 
-export const reportingSearchOptions: Fuse.IFuseOptions<Reporting> = {
+export const REPORTINGS_SEARCH_OPTIONS: Fuse.IFuseOptions<Reporting> = {
   distance: 50,
   getFn: (reporting, path) => {
     const value = Fuse.config.getFn(reporting, path)

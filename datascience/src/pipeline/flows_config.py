@@ -121,7 +121,7 @@ missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 notify_beacon_malfunctions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
-            "0 * * * *",
+            "* * * * *",
             parameter_defaults={
                 "test_mode": True,
             },

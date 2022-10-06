@@ -24,6 +24,7 @@ export type PendingAlert = {
 }
 
 export type PendingAlertValue = {
+  dml: string
   flagState: string
   natinfCode: string | null
   riskFactor: number

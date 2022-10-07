@@ -91,3 +91,25 @@ export function getReducedTimeAgo (dateTime) {
     .replace('semaines', 'sem.')
     .replace('semaine', 'sem.')
 }
+
+const getByStage = (stage, beaconMalfunctions) =>
+  beaconMalfunctions
+    .filter(item => item.stage === stage)
+    .sort((a, b) => b.vesselStatusLastModificationDateTime?.localeCompare(a.vesselStatusLastModificationDateTime))
+
+export const getBeaconMalfunctionsByStage = beaconsMalfunctions =>
+  Object.keys(beaconMalfunctionsStages)
+    .filter(stage => beaconMalfunctionsStages[stage].isColumn)
+    .reduce(
+      (previous, stage) => ({
+        ...previous,
+        [stage]: getByStage(stage, beaconsMalfunctions)
+      }),
+      {}
+    )
+
+export const BeaconMalfunctionDetailsType = {
+  ACTION: 'ACTION',
+  COMMENT: 'COMMENT',
+  NOTIFICATION: 'NOTIFICATION'
+}

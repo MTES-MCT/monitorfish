@@ -1,6 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { CSSProperties, Ref, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
 import {
@@ -8,50 +7,69 @@ import {
   getMalfunctionStartDateText,
   vesselStatuses
 } from '../../../domain/entities/beaconMalfunction'
-import { getRiskFactorColor } from '../../../domain/entities/riskFactor'
 import openBeaconMalfunctionInKanban from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { timeagoFrenchLocale } from '../../../utils'
-import { RiskFactorBox } from '../../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import { VesselStatusSelectOrEndOfMalfunction } from './VesselStatusSelectOrEndOfMalfunction'
 
-timeago.register('fr', timeagoFrenchLocale)
+import type { BeaconMalfunction } from '../../../domain/types/beaconMalfunction'
 
-function BeaconMalfunctionCard({
+export type BeaconMalfunctionCardProps = {
+  activeBeaconId: number
+  baseUrl: string
+  beaconMalfunction: BeaconMalfunction
+  isDragging: boolean
+  isDroppedId: boolean
+  isShowed: boolean
+  updateVesselStatus: () => {}
+  verticalScrollRef: Ref<HTMLDivElement>
+}
+
+export function BeaconMalfunctionCard({
   activeBeaconId,
   baseUrl,
   beaconMalfunction,
   isDragging,
   isDroppedId,
-  showed,
+  isShowed,
   updateVesselStatus,
   verticalScrollRef
 }) {
   const dispatch = useAppDispatch()
-  const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === beaconMalfunction?.vesselStatus)
-  /** @type {import('react').MutableRefObject<HTMLDivElement>} */
-  const bodyRef = useRef()
-  /** @type {import('react').MutableRefObject<HTMLDivElement>} */
-  const wrapperRef = useRef()
+  const vesselStatus = vesselStatuses.find(_vesselStatus => _vesselStatus.value === beaconMalfunction?.vesselStatus)
+  const bodyRef = useRef<HTMLDivElement>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (vesselStatus && vesselStatus.color && beaconMalfunction?.id && getIsMalfunctioning(beaconMalfunction?.stage)) {
+    if (
+      bodyRef.current &&
+      vesselStatus &&
+      vesselStatus.color &&
+      beaconMalfunction?.id &&
+      getIsMalfunctioning(beaconMalfunction?.stage)
+    ) {
       // TODO Use styled-component and avoid useEffect to update these elements style.
-      bodyRef.current.querySelector('.rs-picker-select').style.background = vesselStatus.color
-      bodyRef.current.querySelector('.rs-picker-toggle-value').style.color = vesselStatus.textColor
+      const selectElement = bodyRef.current.querySelector('.rs-picker-select') as HTMLElement
+      if (selectElement?.style) {
+        selectElement.style.background = vesselStatus.color
+      }
+
+      const toggleElement = bodyRef.current.querySelector('.rs-picker-toggle-value') as HTMLElement
+      if (toggleElement?.style) {
+        toggleElement.style.color = vesselStatus.textColor
+      }
     }
   }, [vesselStatus, beaconMalfunction])
 
   useEffect(() => {
-    if (showed && beaconMalfunction) {
+    if (isShowed && beaconMalfunction && wrapperRef.current) {
       wrapperRef.current.scrollIntoView({
         behavior: 'smooth',
         block: 'nearest'
       })
     }
-  }, [showed, beaconMalfunction])
+  }, [isShowed, beaconMalfunction])
 
   return (
     <Wrapper
@@ -72,6 +90,8 @@ function BeaconMalfunctionCard({
           </Id>
           <ShowIcon
             alt="Voir sur la carte"
+            // TODO Fix the TS error when an action returns a Promise
+            // @ts-ignore
             onClick={() => dispatch(showVesselFromBeaconMalfunctionsKanban(beaconMalfunction, false))}
             src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
             style={showIconStyle}
@@ -79,36 +99,25 @@ function BeaconMalfunctionCard({
         </Row>
         <Row style={rowStyle(false)}>
           {beaconMalfunction?.flagState ? (
-            <Flag
-              rel="preload"
-              src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`}
-              style={flagStyle}
-            />
+            <Flag src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`} style={flagStyle} />
           ) : null}
           <VesselName
             className="hover-border"
             data-cy="side-window-beacon-malfunctions-card-vessel-name"
+            // TODO Fix the TS error when an action returns a Promise
+            // @ts-ignore
             onClick={() => dispatch(openBeaconMalfunctionInKanban({ beaconMalfunction }))}
             style={vesselNameStyle}
           >
             {beaconMalfunction.vesselName || 'Aucun nom'}
           </VesselName>
         </Row>
-        <Row style={rowStyle(false)}>
-          {beaconMalfunction?.riskFactor ? (
-            <RiskFactorBox color={getRiskFactorColor(beaconMalfunction?.riskFactor)} height={24} isBig marginRight={5}>
-              {parseFloat(beaconMalfunction?.riskFactor).toFixed(1)}
-            </RiskFactorBox>
-          ) : null}
-          <Priority style={priorityStyle(beaconMalfunction?.priority)}>
-            {beaconMalfunction?.priority ? 'Prioritaire' : 'Non prioritaire'}
-          </Priority>
-        </Row>
       </Header>
       <Body ref={bodyRef}>
         <VesselStatusSelectOrEndOfMalfunction
           beaconMalfunction={beaconMalfunction}
           domRef={bodyRef}
+          isAbsolute={false}
           isMalfunctioning={getIsMalfunctioning(beaconMalfunction?.stage)}
           showedInCard
           updateVesselStatus={updateVesselStatus}
@@ -129,7 +138,7 @@ const idStyle = {
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
 const ShowIcon = styled.img``
-const showIconStyle = {
+const showIconStyle: CSSProperties = {
   cursor: 'pointer',
   flexShrink: 0,
   float: 'right',
@@ -176,7 +185,7 @@ const flagStyle = {
 }
 
 const VesselName = styled.div``
-const vesselNameStyle = {
+const vesselNameStyle: CSSProperties = {
   cursor: 'pointer',
   fontSize: 13,
   fontWeight: 500,
@@ -202,5 +211,3 @@ export const priorityStyle = priority => ({
   textAlign: 'center',
   userSelect: 'none'
 })
-
-export default BeaconMalfunctionCard

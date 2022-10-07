@@ -9,16 +9,10 @@ import { setUserType } from '../../../domain/shared_slices/Global'
 import { BeaconMalfunctionVesselStatus, UserType, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
 import saveBeaconMalfunctionCommentFromKanban
   from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
-import BeaconMalfunctionDetailsFollowUpRow from './BeaconMalfunctionDetailsFollowUpRow'
-import BeaconMalfunctionDetailsFollowUpItem from './BeaconMalfunctionDetailsFollowUpItem'
+import { BeaconMalfunctionDetailsFollowUpRow } from './BeaconMalfunctionDetailsFollowUpRow'
+import { BeaconMalfunctionDetailsFollowUpItem } from './BeaconMalfunctionDetailsFollowUpItem'
 import { getActionText } from './beaconMalfunctions'
-import BeaconMalfunctionsDetailsFollowUpNotification from './BeaconMalfunctionsDetailsFollowUpNotification'
-
-export const Type = {
-  ACTION: 'ACTION',
-  COMMENT: 'COMMENT',
-  NOTIFICATION: 'NOTIFICATION'
-}
+import { BeaconMalfunctionsDetailsFollowUpNotification } from './BeaconMalfunctionsDetailsFollowUpNotification'
 
 const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallSize, firstStatus }) => {
   const {
@@ -67,7 +61,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
 
   const commentsByDate = comments?.reduce((commentsByDayAccumulated, comment) => {
     const dateWithoutTime = comment.dateTime.split('T')[0]
-    comment = { ...comment, type: Type.COMMENT }
+    comment = { ...comment, type: BeaconMalfunctionDetailsType.COMMENT }
 
     if (commentsByDayAccumulated[dateWithoutTime]) {
       commentsByDayAccumulated[dateWithoutTime].push(comment)
@@ -80,7 +74,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
 
   const actionsByDate = actions?.reduce((actionsByDayAccumulated, action) => {
     const dateWithoutTime = action.dateTime.split('T')[0]
-    action = { ...action, type: Type.ACTION }
+    action = { ...action, type: BeaconMalfunctionDetailsType.ACTION }
 
     if (actionsByDayAccumulated[dateWithoutTime]) {
       actionsByDayAccumulated[dateWithoutTime].push(action)
@@ -93,7 +87,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
 
   const notificationsByDate = notifications?.reduce((notificationsByDayAccumulated, notification) => {
     const dateWithoutTime = notification.dateTime.split('T')[0]
-    notification = { ...notification, type: Type.NOTIFICATION }
+    notification = { ...notification, type: BeaconMalfunctionDetailsType.NOTIFICATION }
 
     if (notificationsByDayAccumulated[dateWithoutTime]) {
       notificationsByDayAccumulated[dateWithoutTime].push(notification)
@@ -161,7 +155,7 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
             >
               <BeaconMalfunctionDetailsFollowUpItem
                 item={{
-                  type: Type.ACTION,
+                  type: BeaconMalfunctionDetailsType.ACTION,
                   dateTime: beaconMalfunction?.malfunctionStartDateTime
                 }}
                 contentText={getFirstStatusAction(vesselStatus, beaconMalfunction?.malfunctionStartDateTime)}
@@ -243,9 +237,9 @@ const BeaconMalfunctionDetailsFollowUp = ({ beaconMalfunctionWithDetails, smallS
 
 function getContent (item, beaconMalfunction) {
   switch (item?.type) {
-    case Type.COMMENT: return item.comment
-    case Type.ACTION: return getActionText(item, beaconMalfunction?.endOfBeaconMalfunctionReason)
-    case Type.NOTIFICATION: return <BeaconMalfunctionsDetailsFollowUpNotification notification={item}/>
+    case BeaconMalfunctionDetailsType.COMMENT: return item.comment
+    case BeaconMalfunctionDetailsType.ACTION: return getActionText(item, beaconMalfunction?.endOfBeaconMalfunctionReason)
+    case BeaconMalfunctionDetailsType.NOTIFICATION: return <BeaconMalfunctionsDetailsFollowUpNotification notification={item}/>
   }
 }
 

@@ -42,6 +42,7 @@ def make_alerts(
       - `vessel_identifier`
       - `vessel_name`
       - `facade`
+      - `dml`
       - `flag_state`
       - `risk_factor`
       - and optionally, `creation_date`
@@ -78,7 +79,7 @@ def make_alerts(
                 "flag_state": "flagState",
                 "risk_factor": "riskFactor",
             }
-        )[["seaFront", "flagState", "type", "riskFactor"]]
+        )[["seaFront", "flagState", "type", "riskFactor", "dml"]]
     )
 
     alerts["alert_config_name"] = alert_config_name
@@ -202,8 +203,8 @@ def load_alerts(alerts: pd.DataFrame, alert_config_name: str):
 
         load(
             alerts,
-            table_name="pending_alerts",
-            schema="public",
+            table_name=table_name,
+            schema=schema,
             logger=logger,
             how="append",
             jsonb_columns=["value"],

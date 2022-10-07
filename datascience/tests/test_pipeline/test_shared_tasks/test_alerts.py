@@ -29,6 +29,7 @@ def test_make_alerts():
             ],
             "risk_factor": [1.23, 3.56],
             "creation_date": [date_1, date_2],
+            "dml": ["dml 007", "dml 22"],
         }
     )
 
@@ -57,12 +58,14 @@ def test_make_alerts():
                     "flagState": "FR",
                     "type": "MISSING_FAR_ALERT",
                     "riskFactor": 1.23,
+                    "dml": "dml 007",
                 },
                 {
                     "seaFront": "MEMN",
                     "flagState": "BE",
                     "type": "MISSING_FAR_ALERT",
                     "riskFactor": 3.56,
+                    "dml": "dml 22",
                 },
             ],
             "alert_config_name": [
@@ -114,12 +117,14 @@ def test_filter_silenced_alerts():
                     "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": 1.23,
+                    "dml": "dml A",
                 },
                 {
                     "seaFront": "MEMN",
                     "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": None,
+                    "dml": "dml B",
                 },
             ],
             "alert_config_name": [alert_config_name, alert_config_name],
@@ -154,6 +159,7 @@ def test_filter_silenced_alerts():
                     "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": None,
+                    "dml": "dml B",
                 },
             ],
             "alert_config_name": [alert_config_name],
@@ -190,12 +196,14 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
                     "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": 1.23,
+                    "dml": "dml A",
                 },
                 {
                     "seaFront": "MEMN",
                     "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": None,
+                    "dml": "dml B",
                 },
             ],
             "alert_config_name": [alert_config_name, alert_config_name],
@@ -234,6 +242,7 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
                     "flagState": "FR",
                     "type": alert_type,
                     "riskFactor": None,
+                    "dml": "dml B",
                 },
             ],
             "alert_config_name": [alert_config_name],

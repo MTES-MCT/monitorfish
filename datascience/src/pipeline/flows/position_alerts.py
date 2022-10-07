@@ -12,6 +12,7 @@ from sqlalchemy import Table, and_, or_, select
 from sqlalchemy.sql import Select
 
 from src.db_config import create_engine
+from src.pipeline import utils
 from src.pipeline.generic_tasks import extract
 from src.pipeline.processing import coalesce, join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
@@ -20,13 +21,9 @@ from src.pipeline.shared_tasks.alerts import (
     load_alerts,
     make_alerts,
 )
-from src.pipeline.shared_tasks.facades import get_facades_table
-from src.pipeline.shared_tasks.positions import (
-    add_vessel_identifier,
-    get_positions_table,
-)
+from src.pipeline.shared_tasks.infrastructure import get_table
+from src.pipeline.shared_tasks.positions import add_vessel_identifier
 from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
-from src.pipeline.utils import get_table
 from src.read_query import read_query
 
 
@@ -145,7 +142,7 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
             )
         )
 
-    zones_table = get_table(
+    zones_table = utils.get_table(
         table_info["table"],
         schema="public",
         conn=create_engine("monitorfish_remote"),
@@ -159,23 +156,6 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
     )
 
     return zones_table
-
-
-@task(checkpoint=False)
-def get_fishing_gears_table() -> Table:
-    """
-    Return a `Table` representing the table in which fishing gears are stored.
-
-    Returns:
-        - Table: table of fishing gears
-    """
-
-    return get_table(
-        table_name="fishing_gear_codes",
-        schema="public",
-        conn=create_engine("monitorfish_remote"),
-        logger=prefect.context.get("logger"),
-    )
 
 
 @task(checkpoint=False)
@@ -473,9 +453,9 @@ with Flow("Position alert") as flow:
         fishing_gears, fishing_gear_categories
     )
 
-    positions_table = get_positions_table()
+    positions_table = get_table("positions")
     zones_table = get_alert_type_zones_table(alert_type)
-    facades_table = get_facades_table()
+    facades_table = get_table("facade_areas_subdivided")
 
     positions_query = make_positions_in_alert_query(
         positions_table=positions_table,
@@ -491,7 +471,7 @@ with Flow("Position alert") as flow:
     positions_in_alert = extract_positions_in_alert(positions_query)
 
     with case(must_filter_on_gears, True):
-        fishing_gears_table = get_fishing_gears_table()
+        fishing_gears_table = get_table("fishing_gear_codes")
         fishing_gears_query = make_fishing_gears_query(
             fishing_gears_table=fishing_gears_table,
             fishing_gears=fishing_gears,

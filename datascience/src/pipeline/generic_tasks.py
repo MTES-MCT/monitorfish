@@ -4,13 +4,15 @@ from typing import Union
 
 import geopandas as gpd
 import pandas as pd
+from prefect import task
 from sqlalchemy.engine import Connection
+from sqlalchemy.sql import Select
 
 from src.db_config import create_engine
 from src.pipeline import utils
 from src.pipeline.processing import prepare_df_for_loading
 from src.pipeline.utils import get_table, psql_insert_copy
-from src.read_query import read_saved_query
+from src.read_query import read_query, read_saved_query
 
 
 def extract(
@@ -293,3 +295,12 @@ def delete_rows(
                 connection=connection,
                 logger=logger,
             )
+
+
+@task(checkpoint=False)
+def read_query_task(database: str, query: Select) -> pd.DataFrame:
+    """
+    Prefect `task` decorated version of `read_query`.
+    """
+
+    return read_query(database, query)

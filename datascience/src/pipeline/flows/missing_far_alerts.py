@@ -8,7 +8,7 @@ from prefect import Flow, Parameter, task
 from sqlalchemy import Table, and_, not_, or_, select
 from sqlalchemy.sql import Select
 
-from src.pipeline.generic_tasks import extract
+from src.pipeline.generic_tasks import extract, read_query_task
 from src.pipeline.processing import join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
     extract_silenced_alerts,
@@ -19,7 +19,6 @@ from src.pipeline.shared_tasks.alerts import (
 from src.pipeline.shared_tasks.infrastructure import get_table
 from src.pipeline.shared_tasks.positions import add_vessel_identifier
 from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
-from src.read_query import read_query
 
 
 @task(checkpoint=False)
@@ -169,25 +168,6 @@ def make_vessels_at_sea_query(
         q = q.where(eez_areas_table.c.iso_sov1.in_(eez_to_monitor_iso3))
 
     return q
-
-
-@task(checkpoint=False)
-def extract_vessels_at_sea(query: Select) -> pd.DataFrame:
-    """
-    Runs the input `Select` statement on the `monitorfish_remote` database and returns
-    the results as a `pandas.DataFrame`.
-
-    Args:
-        query (Select): `Select` statement to execute.
-
-    Returns:
-        pd.DataFrame: Result of the execution of the input `Select` statement.
-    """
-
-    return read_query(
-        "monitorfish_remote",
-        query,
-    )
 
 
 @task(checkpoint=False)
@@ -356,11 +336,11 @@ with Flow("Missing FAR alerts") as flow:
         only_fishing_positions=only_raise_if_route_shows_fishing,
     )
 
-    vessels_at_sea_yesterday_in_french_eez = extract_vessels_at_sea(
-        vessels_at_sea_yesterday_in_french_eez_query
+    vessels_at_sea_yesterday_in_french_eez = read_query_task(
+        "monitorfish_remote", vessels_at_sea_yesterday_in_french_eez_query
     )
-    vessels_at_sea_yesterday_everywhere = extract_vessels_at_sea(
-        vessels_at_sea_yesterday_everywhere_query
+    vessels_at_sea_yesterday_everywhere = read_query_task(
+        "monitorfish_remote", vessels_at_sea_yesterday_everywhere_query
     )
 
     vessels_that_emitted_fars = extract_vessels_that_emitted_fars(

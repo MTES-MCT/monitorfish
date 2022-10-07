@@ -13,7 +13,7 @@ from sqlalchemy.sql import Select
 
 from src.db_config import create_engine
 from src.pipeline import utils
-from src.pipeline.generic_tasks import extract
+from src.pipeline.generic_tasks import extract, read_query_task
 from src.pipeline.processing import coalesce, join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
     extract_silenced_alerts,
@@ -184,8 +184,8 @@ def make_positions_in_alert_query(
           `positions` table will be scanned. Defaults to 8.
         flag_states (List, optional): If given, filters positions to keep only those of
           vessels that belong to these flag_states. Defaults to None.
-        except_flag_states (List, optional): If given, filters positions to keep only those of
-          vessels that do NOT belong to these flag_states. Defaults to None.
+        except_flag_states (List, optional): If given, filters positions to keep only
+          those of vessels that do NOT belong to these flag_states. Defaults to None.
 
     Returns:
         Select: `SQLAlchemy.Select` statement corresponding to the given parameters.
@@ -326,17 +326,6 @@ def extract_gear_codes(query: Select) -> set:
 
 
 @task(checkpoint=False)
-def extract_positions_in_alert(query: Select) -> pd.DataFrame:
-    """
-    Executes the input `sqlalchemy.Select` statement, returns query results.
-    """
-    return read_query(
-        "monitorfish_remote",
-        query,
-    )
-
-
-@task(checkpoint=False)
 def filter_on_gears(
     positions_in_alert: pd.DataFrame,
     current_gears: pd.DataFrame,
@@ -468,7 +457,7 @@ with Flow("Position alert") as flow:
         except_flag_states=except_flag_states,
     )
 
-    positions_in_alert = extract_positions_in_alert(positions_query)
+    positions_in_alert = read_query_task("monitorfish_remote", positions_query)
 
     with case(must_filter_on_gears, True):
         fishing_gears_table = get_table("fishing_gear_codes")

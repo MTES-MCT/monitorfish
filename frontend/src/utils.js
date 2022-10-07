@@ -58,6 +58,8 @@ export const getDate = dateString => {
     const date = new Date(dateString)
     return `${getDay(date)}/${getMonth(date)}/${date.getUTCFullYear()}`
   }
+
+  return ''
 }
 
 export const getTime = (dateString, withoutSeconds) => {

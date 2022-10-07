@@ -7,7 +7,7 @@ import { COLORS } from '../../../../constants/constants'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { setBeaconMalfunctionsTab } from '../../../../domain/shared_slices/BeaconMalfunction'
 import { BeaconMalfunctionsTab, getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
-import BeaconMalfunctionDetailsFollowUp from '../../../side_window/beacon_malfunctions/BeaconMalfunctionDetailsFollowUp'
+import { BeaconMalfunctionDetailsFollowUp } from '../../../side_window/beacon_malfunctions/BeaconMalfunctionDetailsFollowUp'
 import CurrentBeaconMalfunctionBody from '../resume/CurrentBeaconMalfunctionBody'
 
 const BeaconMalfunctionDetails = props => {

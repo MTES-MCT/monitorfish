@@ -3,7 +3,7 @@ from logging import Logger
 import pandas as pd
 
 from src.db_config import create_engine
-from src.pipeline.shared_tasks.vessels import make_find_vessels_query
+from src.pipeline.helpers.vessels import make_find_vessels_query
 from src.pipeline.utils import get_table
 
 
@@ -22,7 +22,7 @@ def test_make_find_vessels_query(reset_test_data):
     logger = Logger("test_logger")
     vessels_table = get_table("vessels", "public", e, logger)
 
-    query = make_find_vessels_query.run(vessels=vessels, vessels_table=vessels_table)
+    query = make_find_vessels_query(vessels=vessels, vessels_table=vessels_table)
     query_string = str(query.compile(compile_kwargs={"literal_binds": True}))
 
     expected_query_string = (

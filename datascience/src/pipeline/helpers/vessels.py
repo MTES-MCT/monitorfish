@@ -1,10 +1,8 @@
 import pandas as pd
-from prefect import task
 from sqlalchemy import Table, select
 from sqlalchemy.sql import Select
 
 
-@task(checkpoint=False)
 def make_find_vessels_query(
     vessels: pd.DataFrame,
     vessels_table: Table,

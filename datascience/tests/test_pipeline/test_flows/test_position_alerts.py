@@ -15,7 +15,6 @@ from src.pipeline.flows.position_alerts import (
     filter_on_gears,
     flow,
     get_alert_type_zones_table,
-    get_fishing_gears_table,
     get_vessels_in_alert,
     make_fishing_gears_query,
     make_positions_in_alert_query,
@@ -83,11 +82,6 @@ def test_get_alert_type_zones_table(reset_test_data):
 
     zones_tables = get_alert_type_zones_table.run("THREE_MILES_TRAWLING_ALERT")
     assert isinstance(zones_tables, ZonesTable)
-
-
-def test_get_fishing_gears_table(reset_test_data):
-    fishing_gears_table = get_fishing_gears_table.run()
-    assert isinstance(fishing_gears_table, Table)
 
 
 @patch(

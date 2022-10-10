@@ -1,9 +1,9 @@
-import { CSSProperties, Ref, useEffect, useRef } from 'react'
+import { CSSProperties, Ref, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import {
-  getIsMalfunctioning,
+  endOfBeaconMalfunctionReasons,
   getMalfunctionStartDateText,
   vesselStatuses
 } from '../../../domain/entities/beaconMalfunction'
@@ -11,7 +11,7 @@ import openBeaconMalfunctionInKanban from '../../../domain/use_cases/beaconMalfu
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
-import { VesselStatusSelectOrEndOfMalfunction } from './VesselStatusSelectOrEndOfMalfunction'
+import { VesselStatusSelect } from './VesselStatusSelect'
 
 import type { BeaconMalfunction } from '../../../domain/types/beaconMalfunction'
 
@@ -41,21 +41,22 @@ export function BeaconMalfunctionCard({
   const bodyRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
+  const endOfBeaconMalfunctionReason = useMemo(
+    () => endOfBeaconMalfunctionReasons[beaconMalfunction?.endOfBeaconMalfunctionReason],
+    [beaconMalfunction]
+  )
+
   useEffect(() => {
-    if (
-      bodyRef.current &&
-      vesselStatus &&
-      vesselStatus.color &&
-      beaconMalfunction?.id &&
-      getIsMalfunctioning(beaconMalfunction?.stage)
-    ) {
+    if (bodyRef.current && vesselStatus && vesselStatus.color && beaconMalfunction?.id) {
       // TODO Use styled-component and avoid useEffect to update these elements style.
       const selectElement = bodyRef.current.querySelector('.rs-picker-select') as HTMLElement
       if (selectElement?.style) {
         selectElement.style.background = vesselStatus.color
       }
 
-      const toggleElement = bodyRef.current.querySelector('.rs-picker-toggle-value') as HTMLElement
+      const toggleElement = bodyRef.current.querySelector(
+        '*[data-cy="side-window-beacon-malfunctions-vessel-status"]'
+      ) as HTMLElement
       if (toggleElement?.style) {
         toggleElement.style.color = vesselStatus.textColor
       }
@@ -80,11 +81,12 @@ export function BeaconMalfunctionCard({
         isDragging,
         isDroppedId,
         beaconMalfunction?.id,
-        activeBeaconId
+        activeBeaconId,
+        endOfBeaconMalfunctionReason
       )}
     >
       <Header style={headerStyle}>
-        <Row style={rowStyle(true)}>
+        <Row style={rowStyle(true, 8)}>
           <Id data-cy="side-window-vessel-id" style={idStyle}>
             #{beaconMalfunction?.id} - {getBeaconCreationOrModificationDate(beaconMalfunction)}
           </Id>
@@ -97,7 +99,7 @@ export function BeaconMalfunctionCard({
             style={showIconStyle}
           />
         </Row>
-        <Row style={rowStyle(false)}>
+        <Row style={rowStyle(false, 4)}>
           {beaconMalfunction?.flagState ? (
             <Flag src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`} style={flagStyle} />
           ) : null}
@@ -113,17 +115,25 @@ export function BeaconMalfunctionCard({
           </VesselName>
         </Row>
       </Header>
-      <Body ref={bodyRef}>
-        <VesselStatusSelectOrEndOfMalfunction
-          beaconMalfunction={beaconMalfunction}
-          domRef={bodyRef}
-          isAbsolute={false}
-          isMalfunctioning={getIsMalfunctioning(beaconMalfunction?.stage)}
-          showedInCard
-          updateVesselStatus={updateVesselStatus}
-          vesselStatus={vesselStatus}
-        />
-        <Row style={rowStyle(false)}>{getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}</Row>
+      <Body ref={bodyRef} style={bodyStyle}>
+        {vesselStatus && (
+          <VesselStatusSelect
+            beaconMalfunction={beaconMalfunction}
+            domRef={bodyRef}
+            isAbsolute={false}
+            updateVesselStatus={updateVesselStatus}
+            vesselStatus={vesselStatus}
+          />
+        )}
+        {endOfBeaconMalfunctionReason && (
+          <EndOfMalfunction
+            data-cy="side-window-beacon-malfunctions-end-of-malfunction"
+            style={endOfMalfunctionStyle(endOfBeaconMalfunctionReason)}
+          >
+            {endOfBeaconMalfunctionReason?.label || 'Sans raison'}
+          </EndOfMalfunction>
+        )}
+        <Row style={rowStyle(false, 8)}>{getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}</Row>
       </Body>
     </Wrapper>
   )
@@ -144,36 +154,41 @@ const showIconStyle: CSSProperties = {
   float: 'right',
   height: 16,
   marginLeft: 'auto',
-  marginTop: 5,
+  marginTop: 0,
   paddingRight: 9,
   width: 20
 }
 
 const Row = styled.div``
-const rowStyle = isFirstRow => ({
+const rowStyle = (isFirstRow, marginTop) => ({
   display: 'flex',
   height: `${isFirstRow ? '16px' : 'unset'}`,
-  margin: `${isFirstRow ? 4 : 5}px 0 0 10px`
+  margin: `${marginTop || 4}px 0 0 12px`
 })
 
 const Wrapper = styled.div``
-const wrapperStyle = (hasScroll, isDragging, isDroppedId, id, activeBeaconId) => ({
+const wrapperStyle = (hasScroll, isDragging, isDroppedId, id, activeBeaconId, isMalfunctionEnded) => ({
   animation: isDroppedId === id ? 'blink 1s' : 'unset',
   background: activeBeaconId === id ? COLORS.lightGray : COLORS.background,
   border: `1px solid ${COLORS.lightGray}`,
   borderRadius: 2,
   boxShadow: isDragging ? `0px 0px 10px -3px ${COLORS.gunMetal}` : 'unset',
-  height: 150,
+  height: isMalfunctionEnded ? 163 : 133,
   width: hasScroll ? 230 : 245
 })
 
 const Header = styled.div``
 const headerStyle = {
   borderBottom: `1px solid ${COLORS.lightGray}`,
-  paddingBottom: 8
+  paddingBottom: 8,
+  paddingLeft: 2
 }
 
 const Body = styled.div``
+const bodyStyle = {
+  paddingLeft: 2,
+  paddingTop: 4
+}
 
 const Flag = styled.img``
 const flagStyle = {
@@ -188,10 +203,10 @@ const VesselName = styled.div``
 const vesselNameStyle: CSSProperties = {
   cursor: 'pointer',
   fontSize: 13,
-  fontWeight: 500,
-  height: 20.5,
+  fontWeight: 700,
+  height: 18,
   marginLeft: 8,
-  maxWidth: 180,
+  maxWidth: 193,
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap'
@@ -210,4 +225,17 @@ export const priorityStyle = priority => ({
   padding: '3px 9px 0px 9px',
   textAlign: 'center',
   userSelect: 'none'
+})
+
+const EndOfMalfunction = styled.div``
+const endOfMalfunctionStyle: (endOfBeaconMalfunctionReason) => CSSProperties = endOfBeaconMalfunctionReason => ({
+  background: endOfBeaconMalfunctionReason?.color || 'unset',
+  borderRadius: 11,
+  color: endOfBeaconMalfunctionReason?.textColor || 'unset',
+  fontWeight: 500,
+  height: 20,
+  margin: '8px 12px 5px 12px',
+  padding: '1px 10px',
+  textAlign: 'left',
+  width: 'fit-content'
 })

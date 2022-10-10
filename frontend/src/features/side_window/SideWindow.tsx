@@ -167,9 +167,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
               setSelectedTab={setSelectedTab}
             />
           )}
-          {openedSideWindowTab === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code && (
-            <BeaconMalfunctionsBoard baseRef={ref} />
-          )}
+          {openedSideWindowTab === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code && <BeaconMalfunctionsBoard />}
         </Content>
       )}
     </Wrapper>

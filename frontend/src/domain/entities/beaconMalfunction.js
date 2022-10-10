@@ -245,9 +245,6 @@ const beaconMalfunctionsStages = {
   },
 }
 
-const getIsMalfunctioning = stage => stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
-  stage !== beaconMalfunctionsStages.ARCHIVED.code
-
 const getMalfunctionStartDateText = (vesselStatus, beaconMalfunction) => {
   if (beaconMalfunction?.stage === beaconMalfunctionsStages.END_OF_MALFUNCTION.code ||
     beaconMalfunction?.stage === beaconMalfunctionsStages.ARCHIVED.code) {
@@ -343,7 +340,6 @@ export {
   vesselStatuses,
   BeaconMalfunctionsTab,
   endOfBeaconMalfunctionReasons,
-  getIsMalfunctioning,
   getMalfunctionStartDateText,
   beaconMalfunctionsStages,
   beaconMalfunctionNotificationType,

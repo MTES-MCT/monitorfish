@@ -131,9 +131,17 @@ export function BeaconMalfunctionDetails({
           <ResumeLine style={resumeLineStyle}>
             <ResumeKey style={resumeKeyStyle}>Nombre d’avaries</ResumeKey>
             <ResumeSubKey style={resumeSubKeyStyle}>en mer</ResumeSubKey>
-            <ResumeValue style={resumeValueStyle}>{resume?.numberOfBeaconsAtSea}</ResumeValue>
+            <ResumeValue style={resumeValueStyle}>
+              <Ellipsed style={resumeValueIntegerStyle} title={resume?.numberOfBeaconsAtSea.toString()}>
+                {resume?.numberOfBeaconsAtSea}
+              </Ellipsed>
+            </ResumeValue>
             <ResumeSubKey style={resumeSubKeyStyle}>à quai</ResumeSubKey>
-            <ResumeValue style={resumeValueStyle}>{resume?.numberOfBeaconsAtPort}</ResumeValue>
+            <ResumeValue style={resumeValueStyle}>
+              <Ellipsed style={resumeValueIntegerStyle} title={resume?.numberOfBeaconsAtSea.toString()}>
+                {resume?.numberOfBeaconsAtPort}
+              </Ellipsed>
+            </ResumeValue>
           </ResumeLine>
           <ResumeLine style={resumeLineStyle}>
             <ResumeKey style={resumeKeyStyle}>Dernière avarie</ResumeKey>
@@ -172,24 +180,33 @@ const showHistoryStyle = {
 }
 
 const ResumeValue = styled.span``
-const resumeValueStyle = {
+const Ellipsed = styled.span``
+const resumeValueStyle: CSSProperties = {
   color: COLORS.gunMetal,
   fontWeight: 500,
-  marginRight: 10,
-  maxWidth: 130
+  marginRight: 5
+}
+
+const resumeValueIntegerStyle: CSSProperties = {
+  maxWidth: 25,
+  overflow: 'hidden',
+  paddingLeft: 5,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap'
 }
 
 const ResumeKey = styled.div``
 const resumeKeyStyle = {
   color: COLORS.slateGray,
+  flexShrink: 0,
   fontSize: 13,
-  width: 130
+  width: 120
 }
 
 const ResumeSubKey = styled.span``
 const resumeSubKeyStyle = {
   color: COLORS.slateGray,
-  margin: '0 10px 0 0'
+  margin: '0 0 0 0'
 }
 
 const ResumeLine = styled.span``

@@ -95,7 +95,7 @@ export function BeaconMalfunctionCard({
             // TODO Fix the TS error when an action returns a Promise
             // @ts-ignore
             onClick={() => dispatch(showVesselFromBeaconMalfunctionsKanban(beaconMalfunction, false))}
-            src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
+            src={`${baseUrl}/View_on_map.png`}
             style={showIconStyle}
           />
         </Row>
@@ -133,7 +133,11 @@ export function BeaconMalfunctionCard({
             {endOfBeaconMalfunctionReason?.label || 'Sans raison'}
           </EndOfMalfunction>
         )}
-        <Row style={rowStyle(false, 8)}>{getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}</Row>
+        <Row style={rowStyle(false, 8)}>
+          <MalfunctionStartOrEndDateText style={malfunctionStartOrEndDateTextStyle}>
+            {getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}
+          </MalfunctionStartOrEndDateText>
+        </Row>
       </Body>
     </Wrapper>
   )
@@ -152,18 +156,19 @@ const showIconStyle: CSSProperties = {
   cursor: 'pointer',
   flexShrink: 0,
   float: 'right',
-  height: 16,
+  height: 18,
   marginLeft: 'auto',
   marginTop: 0,
-  paddingRight: 9,
-  width: 20
+  width: 18
 }
 
 const Row = styled.div``
-const rowStyle = (isFirstRow, marginTop) => ({
+const rowStyle = (isFirstRow, marginTop): CSSProperties => ({
   display: 'flex',
   height: `${isFirstRow ? '16px' : 'unset'}`,
-  margin: `${marginTop || 4}px 0 0 12px`
+  margin: `${marginTop || 4}px 0 0 12px`,
+  maxWidth: 223,
+  textAlign: 'left'
 })
 
 const Wrapper = styled.div``
@@ -207,6 +212,13 @@ const vesselNameStyle: CSSProperties = {
   height: 18,
   marginLeft: 8,
   maxWidth: 193,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap'
+}
+
+const MalfunctionStartOrEndDateText = styled.div``
+const malfunctionStartOrEndDateTextStyle: CSSProperties = {
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap'

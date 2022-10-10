@@ -105,13 +105,6 @@ context('Side window beacon malfunctions', () => {
       .eq(2)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
-      .contains('2.5')
-
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
-      .children()
-      .eq(2)
-      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .first()
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Activité détectée')
   })
@@ -171,7 +164,6 @@ context('Side window beacon malfunctions', () => {
     // Then, check the beacon malfunction data
     cy.wait('@showBeaconMalfunction').then(({ response }) => expect(response && response.statusCode).equal(200))
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]').should('be.visible')
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]').find('*[data-cy="risk-factor"]').contains('2.5')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-vessel-name"]').contains('PHENOMENE')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-cfr"]').contains('FAK000999999')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')

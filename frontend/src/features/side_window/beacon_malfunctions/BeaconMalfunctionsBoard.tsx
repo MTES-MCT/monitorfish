@@ -36,7 +36,7 @@ const getMemoizedBeaconMalfunctionsByStage = createSelector(
 
 const baseUrl = window.location.origin
 
-export function BeaconMalfunctionsBoard({ baseRef }) {
+export function BeaconMalfunctionsBoard() {
   const dispatch = useAppDispatch()
   const { openedBeaconMalfunctionInKanban } = useAppSelector(state => state.beaconMalfunction)
   const beaconMalfunctions = useAppSelector(state => getMemoizedBeaconMalfunctionsByStage(state))
@@ -255,7 +255,6 @@ export function BeaconMalfunctionsBoard({ baseRef }) {
       </DndContext>
       {openedBeaconMalfunctionInKanban ? (
         <BeaconMalfunctionDetails
-          baseRef={baseRef}
           beaconMalfunctionWithDetails={openedBeaconMalfunctionInKanban}
           updateVesselStatus={updateVesselStatus}
         />

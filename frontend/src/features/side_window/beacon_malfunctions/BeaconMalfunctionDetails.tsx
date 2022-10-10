@@ -1,11 +1,10 @@
-import { CSSProperties, Ref, useEffect, useRef } from 'react'
+import { CSSProperties, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
 import {
   getFirstVesselStatus,
-  getIsMalfunctioning,
   getMalfunctionStartDateText,
   vesselStatuses
 } from '../../../domain/entities/beaconMalfunction'
@@ -19,18 +18,16 @@ import { ReactComponent as TimeAgoSVG } from '../../icons/Label_horaire_VMS.svg'
 import { BeaconMalfunctionDetailsFollowUp } from './BeaconMalfunctionDetailsFollowUp'
 import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import SendNotification from './SendNotification'
-import { VesselStatusSelectOrEndOfMalfunction } from './VesselStatusSelectOrEndOfMalfunction'
+import { VesselStatusSelect } from './VesselStatusSelect'
 
 import type { BeaconMalfunction, BeaconMalfunctionResumeAndDetails } from '../../../domain/types/beaconMalfunction'
 
 export type BeaconMalfunctionDetailsProps = {
-  baseRef: Ref<HTMLDivElement>
   beaconMalfunctionWithDetails: BeaconMalfunctionResumeAndDetails
   updateVesselStatus: (beaconMalfunction: BeaconMalfunction, status: any) => void
 }
 
 export function BeaconMalfunctionDetails({
-  baseRef,
   beaconMalfunctionWithDetails,
   updateVesselStatus
 }: BeaconMalfunctionDetailsProps) {
@@ -42,12 +39,7 @@ export function BeaconMalfunctionDetails({
   const vesselStatusRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (
-      vesselStatusRef.current &&
-      vesselStatus?.color &&
-      beaconMalfunction?.id &&
-      getIsMalfunctioning(beaconMalfunction?.stage)
-    ) {
+    if (vesselStatusRef.current && vesselStatus?.color && beaconMalfunction?.id) {
       // TODO Use styled-component and avoid useEffect to update these elements style.
       const vesselStatusElement = vesselStatusRef.current.querySelector(
         '[data-cy="side-window-beacon-malfunctions-vessel-status"]'
@@ -100,8 +92,6 @@ export function BeaconMalfunctionDetails({
           >
             ({beaconMalfunction?.internalReferenceNumber || 'Aucun CFR'})
           </InternalReferenceNumber>
-        </Row>
-        <Row style={rowStyle(10)}>
           <ShowVessel
             data-cy="side-window-beacon-malfunctions-detail-show-vessel"
             // @ts-ignore
@@ -120,21 +110,21 @@ export function BeaconMalfunctionDetails({
             <ColumnTitle style={malfunctioningTextStyle}>
               AVARIE #{beaconMalfunction?.id} - {getBeaconCreationOrModificationDate(beaconMalfunction)}
             </ColumnTitle>
-            <VesselStatusSelectOrEndOfMalfunction
-              beaconMalfunction={beaconMalfunction}
-              domRef={vesselStatusRef}
-              isAbsolute
-              isMalfunctioning={getIsMalfunctioning(beaconMalfunction?.stage)}
-              showedInCard={false}
-              updateVesselStatus={updateVesselStatus}
-              vesselStatus={vesselStatus}
-            />
+            {vesselStatus && (
+              <VesselStatusSelect
+                beaconMalfunction={beaconMalfunction}
+                domRef={vesselStatusRef}
+                isAbsolute
+                updateVesselStatus={updateVesselStatus}
+                vesselStatus={vesselStatus}
+              />
+            )}
           </Malfunctioning>
           <LastPosition style={lastPositionStyle} title={getDateTime(beaconMalfunction?.malfunctionStartDateTime)}>
             <TimeAgo style={timeAgoStyle} />
             {getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}
           </LastPosition>
-          <SendNotification baseRef={baseRef} beaconMalfunction={beaconMalfunction} />
+          <SendNotification beaconMalfunction={beaconMalfunction} />
         </FirstColumn>
         <SecondColumn style={secondColumnStyle}>
           <ColumnTitle style={malfunctioningTextStyle}>AVARIES DE LA DERNIÈRE ANNÉE</ColumnTitle>
@@ -318,13 +308,13 @@ const rowStyle: (topMargin?: number) => CSSProperties = (topMargin?: number) => 
 
 const FirstHeader = styled.div``
 const firstHeaderStyle = {
-  margin: '20px 20px 15px 40px'
+  margin: '20px 20px 16px 40px'
 }
 
 const SecondHeader = styled.div``
 const secondHeaderStyle = {
   display: 'flex',
-  margin: '20px 20px 15px 40px'
+  margin: '20px 20px 16px 40px'
 }
 
 const Title = styled.span``

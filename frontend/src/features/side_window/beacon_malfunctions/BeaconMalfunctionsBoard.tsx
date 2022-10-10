@@ -153,6 +153,16 @@ export function BeaconMalfunctionsBoard() {
         return
       }
 
+      if (
+        previousStage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
+        nextStage === beaconMalfunctionsStages.ARCHIVED.code
+      ) {
+        dispatch(setError(new Error('Seulement une avarie terminée peut être archivée')))
+        setActiveBeaconMalfunction(null)
+
+        return
+      }
+
       if (previousStage === nextStage) {
         setActiveBeaconMalfunction(null)
 

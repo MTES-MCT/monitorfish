@@ -307,21 +307,6 @@ context('Side window beacon malfunctions', () => {
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-end-of-malfunction"]')
       .contains('Reprise des émissions')
-
-    // In the details
-    // When
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
-      .children()
-      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .first()
-      .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
-      .scrollIntoView()
-      .click()
-
-    // Then
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
-      .find('*[data-cy="side-window-beacon-malfunctions-end-of-malfunction"]')
-      .contains('Reprise des émissions')
   })
 
   it('Beacon activated should be showed When the vessel status is NEVER_EMITTED', () => {

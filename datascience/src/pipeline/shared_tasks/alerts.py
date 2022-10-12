@@ -39,6 +39,7 @@ def make_alerts(
       - `cfr`
       - `external_immatriculation`
       - `ircs`
+      - `vessel_id`
       - `vessel_identifier`
       - `vessel_name`
       - `facade`
@@ -90,6 +91,7 @@ def make_alerts(
             "internal_reference_number",
             "external_reference_number",
             "ircs",
+            "vessel_id",
             "vessel_identifier",
             "creation_date",
             "type",
@@ -105,13 +107,23 @@ def filter_silenced_alerts(
     alerts: pd.DataFrame, silenced_alerts: pd.DataFrame
 ) -> pd.DataFrame:
     """
-    Filters `alerts` to keep only alerts that are not in `silenced_alerts`. Both input DataFrames must have columns :
+    Filters `alerts` to keep only alerts that are not in `silenced_alerts`. Both input
+    DataFrames must have columns :
 
       - internal_reference_number
       - external_reference_number
       - ircs
       - facade
       - type
+
+    In addition, the `alerts` DataFrame must have columns :
+
+      - vessel_id
+      - vessel_name
+      - vessel_identifier
+      - creation_date
+      - value
+      - alert_config_name
 
     Args:
         alerts (pd.DataFrame): positions alerts.
@@ -144,6 +156,7 @@ def filter_silenced_alerts(
             "internal_reference_number",
             "external_reference_number",
             "ircs",
+            "vessel_id",
             "vessel_identifier",
             "creation_date",
             "value",
@@ -208,5 +221,6 @@ def load_alerts(alerts: pd.DataFrame, alert_config_name: str):
             logger=logger,
             how="append",
             jsonb_columns=["value"],
+            nullable_integer_columns=["vessel_id"],
             connection=connection,
         )

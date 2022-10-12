@@ -579,6 +579,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                 "IRCS",
             ],
             "alert_config_name": [alert_config_name] * 5,
+            "vessel_id": [3, 1, 2, None, 6],
         }
     )
 
@@ -702,6 +703,7 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
                 "IRCS",
             ],
             "alert_config_name": [alert_config_name] * 4,
+            "vessel_id": [3, 1, 2, 6],
         }
     )
 
@@ -800,6 +802,7 @@ def test_flow_filters_on_gears(reset_test_data):
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "alert_config_name": [alert_config_name] * 2,
+            "vessel_id": [3, 2],
         }
     )
 
@@ -911,6 +914,7 @@ def test_flow_filters_on_time(reset_test_data):
                 "IRCS",
             ],
             "alert_config_name": [alert_config_name] * 3,
+            "vessel_id": [1, 2, 6],
         }
     )
 
@@ -996,6 +1000,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "alert_config_name": [alert_config_name],
+            "vessel_id": [3],
         }
     )
 
@@ -1089,6 +1094,7 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
                 "IRCS",
             ],
             "alert_config_name": [alert_config_name] * 2,
+            "vessel_id": [2, 6],
         }
     )
 

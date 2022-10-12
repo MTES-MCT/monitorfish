@@ -22,5 +22,4 @@ class JpaControllerRepositoryITests : AbstractDBTests() {
         assertThat(controllers.first().administration).isEqualTo("Affaires Maritimes")
         assertThat(controllers.first().controllerType).isEqualTo("Terrestre")
     }
-
 }

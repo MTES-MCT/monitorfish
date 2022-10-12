@@ -12,7 +12,8 @@ data class ControlResumeAndControlsDataOutput(
     val numberOfEscortsToQuay: Int,
     val numberOfFishingInfractions: Int,
     val numberOfSecurityInfractions: Int,
-    val controls: List<ControlDataOutput>) {
+    val controls: List<ControlDataOutput>
+) {
     companion object {
         fun fromControlResumeAndControls(controlResumeAndControls: ControlResumeAndControls) = ControlResumeAndControlsDataOutput(
             vesselId = controlResumeAndControls.vesselId,
@@ -24,7 +25,7 @@ data class ControlResumeAndControlsDataOutput(
             numberOfEscortsToQuay = controlResumeAndControls.numberOfEscortsToQuay,
             numberOfFishingInfractions = controlResumeAndControls.numberOfFishingInfractions,
             numberOfSecurityInfractions = controlResumeAndControls.numberOfSecurityInfractions,
-            controls = controlResumeAndControls.controls.map { ControlDataOutput.fromControl(it) },
+            controls = controlResumeAndControls.controls.map { ControlDataOutput.fromControl(it) }
         )
     }
 }

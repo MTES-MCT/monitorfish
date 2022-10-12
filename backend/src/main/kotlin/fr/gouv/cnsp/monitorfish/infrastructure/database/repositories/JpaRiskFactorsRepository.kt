@@ -11,8 +11,10 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaRiskFactorsRepository(private val dbRiskFactorsRepository: DBRiskFactorsRepository,
-                               private val mapper: ObjectMapper) : RiskFactorsRepository {
+class JpaRiskFactorsRepository(
+    private val dbRiskFactorsRepository: DBRiskFactorsRepository,
+    private val mapper: ObjectMapper
+) : RiskFactorsRepository {
     private val logger: Logger = LoggerFactory.getLogger(JpaRiskFactorsRepository::class.java)
 
     @Cacheable(value = ["risk_factors"])

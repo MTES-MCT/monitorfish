@@ -10,16 +10,28 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepository,
-                         private val gearRepository: GearRepository,
-                         private val speciesRepository: SpeciesRepository,
-                         private val portRepository: PortRepository,
-                         private val logbookRawMessageRepository: LogbookRawMessageRepository) {
+class GetLogbookMessages(
+    private val logbookReportRepository: LogbookReportRepository,
+    private val gearRepository: GearRepository,
+    private val speciesRepository: SpeciesRepository,
+    private val portRepository: PortRepository,
+    private val logbookRawMessageRepository: LogbookRawMessageRepository
+) {
     private val logger = LoggerFactory.getLogger(GetLogbookMessages::class.java)
 
-    fun execute(internalReferenceNumber: String, afterDepartureDate: ZonedDateTime, beforeDepartureDate: ZonedDateTime, tripNumber: String): List<LogbookMessage> {
+    fun execute(
+        internalReferenceNumber: String,
+        afterDepartureDate: ZonedDateTime,
+        beforeDepartureDate: ZonedDateTime,
+        tripNumber: String
+    ): List<LogbookMessage> {
         val messages = logbookReportRepository
-            .findAllMessagesByTripNumberBetweenDates(internalReferenceNumber, afterDepartureDate, beforeDepartureDate, tripNumber)
+            .findAllMessagesByTripNumberBetweenDates(
+                internalReferenceNumber,
+                afterDepartureDate,
+                beforeDepartureDate,
+                tripNumber
+            )
             .sortedBy { it.reportDateTime }
             .map {
                 try {
@@ -84,7 +96,10 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
                 flagMessageAsAcknowledged(messages, logbookMessage)
             } else if (logbookMessage.transmissionFormat == LogbookTransmissionFormat.FLUX) {
                 flagMessageAsSuccess(logbookMessage)
-            } else if (logbookMessage.software !== null && logbookMessage.software.contains(LogbookSoftware.VISIOCAPTURE.software)) {
+            } else if (logbookMessage.software !== null && logbookMessage.software.contains(
+                    LogbookSoftware.VISIOCAPTURE.software
+                )
+            ) {
                 flagMessageAsSuccess(logbookMessage)
             } else if (logbookMessage.operationType == LogbookOperationType.DEL && !logbookMessage.referencedReportId.isNullOrEmpty()) {
                 flagMessageAsDeleted(messages, logbookMessage)
@@ -130,7 +145,9 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
         if (correctedMessage != null) {
             correctedMessage.isCorrected = true
         } else {
-            logger.warn("Original message ${logbookMessage.referencedReportId} corrected by message COR ${logbookMessage.operationNumber} is not found.")
+            logger.warn(
+                "Original message ${logbookMessage.referencedReportId} corrected by message COR ${logbookMessage.operationNumber} is not found."
+            )
         }
     }
 

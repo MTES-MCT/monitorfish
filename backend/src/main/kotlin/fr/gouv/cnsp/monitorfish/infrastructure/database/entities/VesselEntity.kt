@@ -11,14 +11,19 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "vessels", indexes = [
-    Index(columnList = "id", unique = true),
-    Index(columnList = "cfr", unique = false),
-    Index(columnList = "external_immatriculation", unique = false),
-    Index(columnList = "ircs", unique = false)])
+@Table(
+    name = "vessels",
+    indexes = [
+        Index(columnList = "id", unique = true),
+        Index(columnList = "cfr", unique = false),
+        Index(columnList = "external_immatriculation", unique = false),
+        Index(columnList = "ircs", unique = false)
+    ]
+)
 @TypeDef(
     name = "list-array",
-    typeClass = ListArrayType::class)
+    typeClass = ListArrayType::class
+)
 data class VesselEntity(
     @Id
     @Column(name = "id")
@@ -87,7 +92,8 @@ data class VesselEntity(
     @Column(name = "beacon_number")
     val beaconNumber: String? = null,
     @Column(name = "under_charter")
-    val underCharter: Boolean? = null) {
+    val underCharter: Boolean? = null
+) {
 
     fun toVessel() = Vessel(
         id = id,
@@ -125,7 +131,8 @@ data class VesselEntity(
         vesselPhones = vesselPhones,
         vesselEmails = vesselEmails,
         beaconNumber = beaconNumber,
-        underCharter = underCharter)
+        underCharter = underCharter
+    )
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(VesselEntity::class.java)

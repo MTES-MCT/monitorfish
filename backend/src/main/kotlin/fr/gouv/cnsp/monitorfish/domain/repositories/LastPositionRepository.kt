@@ -10,10 +10,12 @@ interface LastPositionRepository {
     fun findAllInLast48Hours(): List<LastPosition>
     fun findAllWithBeaconMalfunctionBeforeLast48Hours(): List<LastPosition>
     fun findLastPositionDate(): ZonedDateTime
-    fun removeAlertToLastPositionByVesselIdentifierEquals(alertType: AlertTypeMapping,
-                                                          vesselIdentifier: VesselIdentifier,
-                                                          value: String,
-                                                          isValidated: Boolean)
+    fun removeAlertToLastPositionByVesselIdentifierEquals(
+        alertType: AlertTypeMapping,
+        vesselIdentifier: VesselIdentifier,
+        value: String,
+        isValidated: Boolean
+    )
 
     fun findUnderCharterForVessel(vesselIdentifier: VesselIdentifier, value: String): Boolean
 

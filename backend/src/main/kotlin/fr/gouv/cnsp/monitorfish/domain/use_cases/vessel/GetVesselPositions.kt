@@ -16,17 +16,21 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVesselPositions(private val positionRepository: PositionRepository,
-                         private val logbookReportRepository: LogbookReportRepository) {
+class GetVesselPositions(
+    private val positionRepository: PositionRepository,
+    private val logbookReportRepository: LogbookReportRepository
+) {
     private val logger: Logger = LoggerFactory.getLogger(GetVesselPositions::class.java)
 
-    suspend fun execute(internalReferenceNumber: String,
-                        externalReferenceNumber: String,
-                        ircs: String,
-                        trackDepth: VesselTrackDepth,
-                        vesselIdentifier: VesselIdentifier?,
-                        fromDateTime: ZonedDateTime? = null,
-                        toDateTime: ZonedDateTime? = null): Pair<Boolean, Deferred<List<Position>>> {
+    suspend fun execute(
+        internalReferenceNumber: String,
+        externalReferenceNumber: String,
+        ircs: String,
+        trackDepth: VesselTrackDepth,
+        vesselIdentifier: VesselIdentifier?,
+        fromDateTime: ZonedDateTime? = null,
+        toDateTime: ZonedDateTime? = null
+    ): Pair<Boolean, Deferred<List<Position>>> {
         var vesselTrackDepthHasBeenModified = false
 
         if (trackDepth == VesselTrackDepth.CUSTOM) {
@@ -74,7 +78,8 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
                 from,
                 to,
                 ircs,
-                externalReferenceNumber)
+                externalReferenceNumber
+            )
 
             Pair(
                 vesselTrackDepthHasBeenModified,
@@ -83,15 +88,21 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
         }
     }
 
-    private fun CoroutineScope.findPositionsAsync(vesselIdentifier: VesselIdentifier?,
-                                                  internalReferenceNumber: String,
-                                                  from: ZonedDateTime?,
-                                                  to: ZonedDateTime?,
-                                                  ircs: String,
-                                                  externalReferenceNumber: String): Deferred<List<Position>> {
+    private fun CoroutineScope.findPositionsAsync(
+        vesselIdentifier: VesselIdentifier?,
+        internalReferenceNumber: String,
+        from: ZonedDateTime?,
+        to: ZonedDateTime?,
+        ircs: String,
+        externalReferenceNumber: String
+    ): Deferred<List<Position>> {
         return when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> async {
-                positionRepository.findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber, from!!, to!!)
+                positionRepository.findVesselLastPositionsByInternalReferenceNumber(
+                    internalReferenceNumber,
+                    from!!,
+                    to!!
+                )
                     .sortedBy { it.dateTime }
             }
             VesselIdentifier.IRCS -> async {
@@ -99,7 +110,11 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
                     .sortedBy { it.dateTime }
             }
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> async {
-                positionRepository.findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber, from!!, to!!)
+                positionRepository.findVesselLastPositionsByExternalReferenceNumber(
+                    externalReferenceNumber,
+                    from!!,
+                    to!!
+                )
                     .sortedBy { it.dateTime }
             }
             else -> async {
@@ -108,7 +123,8 @@ class GetVesselPositions(private val positionRepository: PositionRepository,
                     externalReferenceNumber = externalReferenceNumber,
                     ircs = ircs,
                     from = from!!,
-                    to = to!!).sortedBy { it.dateTime }
+                    to = to!!
+                ).sortedBy { it.dateTime }
             }
         }
     }

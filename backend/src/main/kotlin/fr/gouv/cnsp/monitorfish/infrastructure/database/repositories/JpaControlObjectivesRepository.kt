@@ -23,7 +23,12 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
     }
 
     @Transactional
-    override fun update(id: Int, targetNumberOfControlsAtSea: Int?, targetNumberOfControlsAtPort: Int?, controlPriorityLevel: Double?) {
+    override fun update(
+        id: Int,
+        targetNumberOfControlsAtSea: Int?,
+        targetNumberOfControlsAtPort: Int?,
+        controlPriorityLevel: Double?
+    ) {
         try {
             controlPriorityLevel?.let {
                 dbControlObjectivesRepository.updateControlPriorityLevel(id, it)

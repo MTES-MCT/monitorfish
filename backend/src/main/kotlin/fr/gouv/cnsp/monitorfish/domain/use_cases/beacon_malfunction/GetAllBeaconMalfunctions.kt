@@ -8,8 +8,10 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import org.slf4j.LoggerFactory
 
 @UseCase
-class GetAllBeaconMalfunctions(private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
-                               private val lastPositionRepository: LastPositionRepository) {
+class GetAllBeaconMalfunctions(
+    private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
+    private val lastPositionRepository: LastPositionRepository
+) {
     private val logger = LoggerFactory.getLogger(GetAllBeaconMalfunctions::class.java)
     fun execute(): List<BeaconMalfunction> {
         val lastPositions = lastPositionRepository.findAll()
@@ -22,7 +24,9 @@ class GetAllBeaconMalfunctions(private val beaconMalfunctionsRepository: BeaconM
             beaconMalfunction.riskFactor = riskFactor
 
             if (riskFactor == null) {
-                logger.warn("No risk factor for vessel ${beaconMalfunction.internalReferenceNumber} found in last positions table")
+                logger.warn(
+                    "No risk factor for vessel ${beaconMalfunction.internalReferenceNumber} found in last positions table"
+                )
             }
 
             beaconMalfunction

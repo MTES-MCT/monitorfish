@@ -9,8 +9,10 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 @UseCase
-class GetAllCurrentReportings(private val reportingRepository: ReportingRepository,
-                              private val lastPositionRepository: LastPositionRepository) {
+class GetAllCurrentReportings(
+    private val reportingRepository: ReportingRepository,
+    private val lastPositionRepository: LastPositionRepository
+) {
     private val logger: Logger = LoggerFactory.getLogger(GetAllCurrentReportings::class.java)
 
     fun execute(): List<Reporting> {
@@ -23,7 +25,10 @@ class GetAllCurrentReportings(private val reportingRepository: ReportingReposito
                         require(it.internalReferenceNumber != null) {
                             "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
                         }
-                        lastPositionRepository.findUnderCharterForVessel(it.vesselIdentifier, it.internalReferenceNumber)
+                        lastPositionRepository.findUnderCharterForVessel(
+                            it.vesselIdentifier,
+                            it.internalReferenceNumber
+                        )
                     }
                     VesselIdentifier.IRCS -> {
                         require(it.ircs != null) {
@@ -35,7 +40,10 @@ class GetAllCurrentReportings(private val reportingRepository: ReportingReposito
                         require(it.externalReferenceNumber != null) {
                             "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
                         }
-                        lastPositionRepository.findUnderCharterForVessel(it.vesselIdentifier, it.externalReferenceNumber)
+                        lastPositionRepository.findUnderCharterForVessel(
+                            it.vesselIdentifier,
+                            it.externalReferenceNumber
+                        )
                     }
                     else -> null
                 }

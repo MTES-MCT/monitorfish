@@ -53,7 +53,8 @@ data class PositionEntity(
     @Column(name = "course")
     val course: Double? = null,
     @Column(name = "date_time")
-    val dateTime: ZonedDateTime) {
+    val dateTime: ZonedDateTime
+) {
 
     fun toPosition() = Position(
         id = id,
@@ -72,7 +73,8 @@ data class PositionEntity(
         from = from,
         tripNumber = tripNumber,
         positionType = positionType,
-        isManual = isManual)
+        isManual = isManual
+    )
 
     companion object {
         fun fromPosition(position: Position): PositionEntity {

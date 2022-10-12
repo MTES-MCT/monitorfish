@@ -27,7 +27,8 @@ class ExecuteRulesUTests {
     @Test
     fun `execute Should call executePNOAndLANWeightTolerance When a PNOAndLANWeightTolerance rule is found`() {
         // Given
-        val rule = Rule(UUID.randomUUID(),
+        val rule = Rule(
+            UUID.randomUUID(),
             "Save an alert when PNO and LAN weights are below tolerance",
             true,
             ZonedDateTime.now(),
@@ -44,5 +45,4 @@ class ExecuteRulesUTests {
         // Then
         Mockito.verify(executePNOAndLANWeightTolerance).execute(eq(rule))
     }
-
 }

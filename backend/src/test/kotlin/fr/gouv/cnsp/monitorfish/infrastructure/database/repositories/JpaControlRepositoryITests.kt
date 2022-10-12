@@ -46,5 +46,4 @@ class JpaControlRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(controls).hasSize(0)
     }
-
 }

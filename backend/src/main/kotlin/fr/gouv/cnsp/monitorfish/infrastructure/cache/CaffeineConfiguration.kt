@@ -75,55 +75,68 @@ class CaffeineConfiguration {
         val vesselTrackCache = buildMinutesCache(vesselTrack, ticker, 1)
         val vesselsPositionsCache = buildSecondsCache(vesselsPositions, ticker, 30)
         val vesselsAllPositionsCache = buildSecondsCache(vesselsAllPositions, ticker, 30)
-        val vesselsPositionsWithBeaconMalfunctionsCache = buildMinutesCache(vesselsPositionsWithBeaconMalfunctions, ticker, 1)
+        val vesselsPositionsWithBeaconMalfunctionsCache = buildMinutesCache(
+            vesselsPositionsWithBeaconMalfunctions,
+            ticker,
+            1
+        )
         val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 180)
 
         val manager = SimpleCacheManager()
-        manager.setCaches(listOf(
-            vesselCache,
-            vesselTrackCache,
-            vesselsPositionsCache,
-            vesselsAllPositionsCache,
-            vesselsPositionsWithBeaconMalfunctionsCache,
-            gearCodeGroupsCache,
-            gearCodeGroupCache,
-            gearsCache,
-            gearCache,
-            portsCache,
-            portCache,
-            allSpeciesCache,
-            speciesCache,
-            searchVesselsCache,
-            logbookCache,
-            nextLogbookCache,
-            previousLogbookCache,
-            logbookRawMessageCache,
-            infractionsCache,
-            infractionCache,
-            fishingInfractionsCache,
-            currentSegmentsCache,
-            controlAnteriorityCache,
-            riskFactorsCache,
-            allSpeciesGroupsCache,
-            faoAreasCache))
+        manager.setCaches(
+            listOf(
+                vesselCache,
+                vesselTrackCache,
+                vesselsPositionsCache,
+                vesselsAllPositionsCache,
+                vesselsPositionsWithBeaconMalfunctionsCache,
+                gearCodeGroupsCache,
+                gearCodeGroupCache,
+                gearsCache,
+                gearCache,
+                portsCache,
+                portCache,
+                allSpeciesCache,
+                speciesCache,
+                searchVesselsCache,
+                logbookCache,
+                nextLogbookCache,
+                previousLogbookCache,
+                logbookRawMessageCache,
+                infractionsCache,
+                infractionCache,
+                fishingInfractionsCache,
+                currentSegmentsCache,
+                controlAnteriorityCache,
+                riskFactorsCache,
+                allSpeciesGroupsCache,
+                faoAreasCache
+            )
+        )
 
         return manager
     }
 
     private fun buildMinutesCache(name: String, ticker: Ticker, minutesToExpire: Int): CaffeineCache {
-        return CaffeineCache(name, Caffeine.newBuilder()
-            .expireAfterWrite(minutesToExpire.toLong(), TimeUnit.MINUTES)
-            .recordStats()
-            .ticker(ticker)
-            .build())
+        return CaffeineCache(
+            name,
+            Caffeine.newBuilder()
+                .expireAfterWrite(minutesToExpire.toLong(), TimeUnit.MINUTES)
+                .recordStats()
+                .ticker(ticker)
+                .build()
+        )
     }
 
     private fun buildSecondsCache(name: String, ticker: Ticker, secondsToExpire: Int): CaffeineCache {
-        return CaffeineCache(name, Caffeine.newBuilder()
-            .expireAfterWrite(secondsToExpire.toLong(), TimeUnit.SECONDS)
-            .recordStats()
-            .ticker(ticker)
-            .build())
+        return CaffeineCache(
+            name,
+            Caffeine.newBuilder()
+                .expireAfterWrite(secondsToExpire.toLong(), TimeUnit.SECONDS)
+                .recordStats()
+                .ticker(ticker)
+                .build()
+        )
     }
 
     @Bean

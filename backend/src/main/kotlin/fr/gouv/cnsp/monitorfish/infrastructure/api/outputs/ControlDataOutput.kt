@@ -26,7 +26,8 @@ data class ControlDataOutput(
     var seizure: Boolean? = null,
     var seizureComments: String? = null,
     var postControlComments: String? = null,
-    var gearControls: List<GearControlDataOutput>) {
+    var gearControls: List<GearControlDataOutput>
+) {
     companion object {
         fun fromControl(control: Control) = ControlDataOutput(
             controller = ControllerDataOutput.fromController(control.controller),

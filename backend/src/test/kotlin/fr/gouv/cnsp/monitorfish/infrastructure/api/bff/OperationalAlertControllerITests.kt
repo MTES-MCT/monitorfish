@@ -54,14 +54,18 @@ class OperationalAlertControllerITests {
     fun `Should get all operational alerts`() {
         // Given
         BDDMockito.given(this.getOperationalAlerts.execute()).willReturn(
-            listOf(PendingAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = "123456",
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert())))
+            listOf(
+                PendingAlert(
+                    internalReferenceNumber = "FRFGRGR",
+                    externalReferenceNumber = "RGD",
+                    ircs = "6554fEE",
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    tripNumber = "123456",
+                    creationDate = ZonedDateTime.now(),
+                    value = ThreeMilesTrawlingAlert()
+                )
+            )
+        )
 
         // When
         mockMvc.perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts"))
@@ -92,17 +96,26 @@ class OperationalAlertControllerITests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 silencedBeforeDate = ZonedDateTime.now(),
                 silencedAfterDate = ZonedDateTime.now().plusDays(2),
-                value = ThreeMilesTrawlingAlert()))
+                value = ThreeMilesTrawlingAlert()
+            )
+        )
         val before = ZonedDateTime.now()
         val after = ZonedDateTime.now().minusMinutes(56)
 
         // When
-        mockMvc.perform(MockMvcRequestBuilders.put("/bff/v1/operational_alerts/666/silence")
-            .content(objectMapper.writeValueAsString(SilenceOperationalAlertDataInput(
-                silencedAlertPeriod = SilenceAlertPeriod.CUSTOM,
-                beforeDateTime = before,
-                afterDateTime = after)))
-            .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/bff/v1/operational_alerts/666/silence")
+                .content(
+                    objectMapper.writeValueAsString(
+                        SilenceOperationalAlertDataInput(
+                            silencedAlertPeriod = SilenceAlertPeriod.CUSTOM,
+                            beforeDateTime = before,
+                            afterDateTime = after
+                        )
+                    )
+                )
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             // Then
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
@@ -113,8 +126,12 @@ class OperationalAlertControllerITests {
             verify(silenceOperationalAlert).execute(eq(666), eq(SilenceAlertPeriod.CUSTOM), capture(), capture())
 
             assertThat(allValues).hasSize(2)
-            assertThat(allValues.first().withZoneSameInstant(UTC).toString()).isEqualTo(after.withZoneSameInstant(UTC).toString())
-            assertThat(allValues.last().withZoneSameInstant(UTC).toString()).isEqualTo(before.withZoneSameInstant(UTC).toString())
+            assertThat(allValues.first().withZoneSameInstant(UTC).toString()).isEqualTo(
+                after.withZoneSameInstant(UTC).toString()
+            )
+            assertThat(allValues.last().withZoneSameInstant(UTC).toString()).isEqualTo(
+                before.withZoneSameInstant(UTC).toString()
+            )
         }
     }
 
@@ -122,14 +139,18 @@ class OperationalAlertControllerITests {
     fun `Should get all silenced alerts`() {
         // Given
         BDDMockito.given(this.getSilencedAlerts.execute()).willReturn(
-            listOf(SilencedAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                silencedBeforeDate = ZonedDateTime.now(),
-                silencedAfterDate = ZonedDateTime.now().plusDays(2),
-                value = ThreeMilesTrawlingAlert())))
+            listOf(
+                SilencedAlert(
+                    internalReferenceNumber = "FRFGRGR",
+                    externalReferenceNumber = "RGD",
+                    ircs = "6554fEE",
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    silencedBeforeDate = ZonedDateTime.now(),
+                    silencedAfterDate = ZonedDateTime.now().plusDays(2),
+                    value = ThreeMilesTrawlingAlert()
+                )
+            )
+        )
 
         // When
         mockMvc.perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts/silenced"))
@@ -138,7 +159,9 @@ class OperationalAlertControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.equalTo(1)))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", Matchers.equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].value.natinfCode", Matchers.equalTo("7059")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT")))
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT"))
+            )
     }
 
     @Test

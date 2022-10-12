@@ -18,7 +18,8 @@ class Reporting(
     val isArchived: Boolean,
     val isDeleted: Boolean,
     var infraction: Infraction? = null,
-    var underCharter: Boolean? = null) {
+    var underCharter: Boolean? = null
+) {
     companion object {
         fun getSeaFrontFromDML(dml: String) = when (dml) {
             "DML 62/80" -> Facade.MEMN.name

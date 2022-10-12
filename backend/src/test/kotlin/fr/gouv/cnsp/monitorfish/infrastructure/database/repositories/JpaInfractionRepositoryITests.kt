@@ -71,5 +71,4 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
         assertThat(infractions.first().natinfCode).isEqualTo("23581")
         assertThat(infractions.first().regulation).isEqualTo("Arreté du 12/01/3021")
     }
-
 }

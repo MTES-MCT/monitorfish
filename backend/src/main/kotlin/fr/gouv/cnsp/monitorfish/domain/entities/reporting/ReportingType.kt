@@ -5,4 +5,3 @@ enum class ReportingType {
     OBSERVATION,
     INFRACTION_SUSPICION
 }
-

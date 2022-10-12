@@ -26,7 +26,8 @@ class JpaPNOAndLANAlertRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = PNOAndLANWeightToleranceAlert())
+            value = PNOAndLANWeightToleranceAlert()
+        )
         jpaAlertRepository.save(alertOne)
 
         val alertTwo = PNOAndLANAlert(
@@ -36,14 +37,16 @@ class JpaPNOAndLANAlertRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = PNOAndLANWeightToleranceAlert())
+            value = PNOAndLANWeightToleranceAlert()
+        )
         jpaAlertRepository.save(alertTwo)
 
         // When
         val alerts = jpaAlertRepository.findAlertsOfTypes(
             listOf(AlertTypeMapping.PNO_LAN_WEIGHT_TOLERANCE_ALERT),
             "FRFGRGR",
-            "123456")
+            "123456"
+        )
 
         // Then
         assertThat(alerts).hasSize(2)
@@ -60,14 +63,16 @@ class JpaPNOAndLANAlertRepositoryITests : AbstractDBTests() {
             ircs = "6554fEE",
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = PNOAndLANWeightToleranceAlert())
+            value = PNOAndLANWeightToleranceAlert()
+        )
         jpaAlertRepository.save(alertOne)
 
         // When
         val alerts = jpaAlertRepository.findAlertsOfTypes(
             listOf(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT),
             "FRFGRGR",
-            "123456")
+            "123456"
+        )
 
         // Then
         assertThat(alerts).hasSize(0)

@@ -47,8 +47,12 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should return an ordered list of last ERS messages with the codes' names`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyLogbookMessages())
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+        )
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            getDummyLogbookMessages()
+        )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -59,7 +63,13 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
+        val ersMessages = GetLogbookMessages(
+            logbookReportRepository,
+            gearRepository,
+            speciesRepository,
+            portRepository,
+            logbookRawMessageRepository
+        )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
@@ -108,8 +118,12 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should flag a corrected message as true`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyCorrectedLogbookMessages())
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+        )
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            getDummyCorrectedLogbookMessages()
+        )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -120,7 +134,13 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
+        val ersMessages = GetLogbookMessages(
+            logbookReportRepository,
+            gearRepository,
+            speciesRepository,
+            portRepository,
+            logbookRawMessageRepository
+        )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
@@ -144,8 +164,12 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should filter to return only DAT and COR messages and add the acknowledge property`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyRETLogbookMessages())
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+        )
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            getDummyRETLogbookMessages()
+        )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -156,7 +180,13 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
+        val ersMessages = GetLogbookMessages(
+            logbookReportRepository,
+            gearRepository,
+            speciesRepository,
+            portRepository,
+            logbookRawMessageRepository
+        )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
@@ -202,16 +232,29 @@ class GetLogbookMessagesUTests {
         given(logbookReportRepository.findLastTripBeforeDateTime(any(), any()))
             .willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
         given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any()))
-            .willReturn(getDummyRETLogbookMessages() + LogbookMessage(
-                id = 2, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646816", referencedReportId = "9065646811", operationType = LogbookOperationType.RET, messageType = "",
-                message = lastAck, reportDateTime = ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS))
+            .willReturn(
+                getDummyRETLogbookMessages() + LogbookMessage(
+                    id = 2, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646816", referencedReportId = "9065646811", operationType = LogbookOperationType.RET, messageType = "",
+                    message = lastAck,
+                    reportDateTime = ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC).minusHours(
+                        12
+                    ),
+                    transmissionFormat = LogbookTransmissionFormat.ERS
+                )
+            )
         given(speciesRepository.find(any())).willThrow(CodeNotFoundException("not found"))
         given(gearRepository.find(any())).willThrow(CodeNotFoundException("not found"))
         given(portRepository.find(any())).willThrow(CodeNotFoundException("not found"))
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
+        val ersMessages = GetLogbookMessages(
+            logbookReportRepository,
+            gearRepository,
+            speciesRepository,
+            portRepository,
+            logbookRawMessageRepository
+        )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
@@ -226,8 +269,12 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should add the deleted property`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyRETLogbookMessages())
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+        )
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            getDummyRETLogbookMessages()
+        )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -238,7 +285,13 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
+        val ersMessages = GetLogbookMessages(
+            logbookReportRepository,
+            gearRepository,
+            speciesRepository,
+            portRepository,
+            logbookRawMessageRepository
+        )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
@@ -250,8 +303,12 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should acknowledge FLUX and VISIOCAPTURE messages`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyFluxAndVisioCaptureLogbookMessages())
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+        )
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            getDummyFluxAndVisioCaptureLogbookMessages()
+        )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -262,7 +319,13 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
+        val ersMessages = GetLogbookMessages(
+            logbookReportRepository,
+            gearRepository,
+            speciesRepository,
+            portRepository,
+            logbookRawMessageRepository
+        )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
@@ -276,8 +339,12 @@ class GetLogbookMessagesUTests {
     @Test
     fun `execute Should flag messages sent by the failover software e-Sacapt`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
-        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(getDummyLogbookMessages())
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now())
+        )
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any())).willReturn(
+            getDummyLogbookMessages()
+        )
         given(speciesRepository.find(eq("TTV"))).willReturn(Species("TTV", "TORPILLE OCELLÉE"))
         given(speciesRepository.find(eq("SMV"))).willReturn(Species("SMV", "STOMIAS BREVIBARBATUS"))
         given(speciesRepository.find(eq("PNB"))).willReturn(Species("PNB", "CREVETTE ROYALE ROSE"))
@@ -288,7 +355,13 @@ class GetLogbookMessagesUTests {
         given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
 
         // When
-        val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
+        val ersMessages = GetLogbookMessages(
+            logbookReportRepository,
+            gearRepository,
+            speciesRepository,
+            portRepository,
+            logbookRawMessageRepository
+        )
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then

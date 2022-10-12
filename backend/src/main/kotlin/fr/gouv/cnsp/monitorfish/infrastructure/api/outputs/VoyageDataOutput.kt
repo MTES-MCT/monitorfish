@@ -9,7 +9,8 @@ data class VoyageDataOutput(
     val startDate: ZonedDateTime?,
     val endDate: ZonedDateTime?,
     val tripNumber: String,
-    val logbookMessagesAndAlerts: LogbookMessagesAndAlertsDataOutput) {
+    val logbookMessagesAndAlerts: LogbookMessagesAndAlertsDataOutput
+) {
     companion object {
         fun fromVoyage(voyage: Voyage): VoyageDataOutput {
             return VoyageDataOutput(

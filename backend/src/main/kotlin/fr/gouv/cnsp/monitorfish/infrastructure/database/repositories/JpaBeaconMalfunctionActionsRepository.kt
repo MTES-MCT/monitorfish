@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
-class JpaBeaconMalfunctionActionsRepository(private val dbBeaconMalfunctionActionsRepository: DBBeaconMalfunctionActionsRepository) : BeaconMalfunctionActionsRepository {
+class JpaBeaconMalfunctionActionsRepository(
+    private val dbBeaconMalfunctionActionsRepository: DBBeaconMalfunctionActionsRepository
+) : BeaconMalfunctionActionsRepository {
     override fun findAllByBeaconMalfunctionId(beaconMalfunctionId: Int): List<BeaconMalfunctionAction> {
         return dbBeaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
             .map {
@@ -18,6 +20,8 @@ class JpaBeaconMalfunctionActionsRepository(private val dbBeaconMalfunctionActio
 
     @Transactional
     override fun save(beaconMalfunctionAction: BeaconMalfunctionAction) {
-        dbBeaconMalfunctionActionsRepository.save(BeaconMalfunctionActionEntity.fromBeaconMalfunctionAction(beaconMalfunctionAction))
+        dbBeaconMalfunctionActionsRepository.save(
+            BeaconMalfunctionActionEntity.fromBeaconMalfunctionAction(beaconMalfunctionAction)
+        )
     }
 }

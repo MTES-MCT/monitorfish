@@ -37,5 +37,4 @@ class UpdateControlObjectiveUTests {
         // Then
         assertThat(throwable).isNull()
     }
-
 }

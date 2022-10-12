@@ -39,9 +39,15 @@ class GetAllCurrentReportingsUTests {
             value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
-            isArchived = false)
+            isArchived = false
+        )
         given(reportingRepository.findAllCurrent()).willReturn(listOf(currentReporting))
-        given(lastPositionRepository.findUnderCharterForVessel(eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), eq("FRFGRGR")))
+        given(
+            lastPositionRepository.findUnderCharterForVessel(
+                eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
+                eq("FRFGRGR")
+            )
+        )
             .willReturn(true)
 
         // When
@@ -65,7 +71,8 @@ class GetAllCurrentReportingsUTests {
             value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
             type = ReportingType.INFRACTION_SUSPICION,
             isDeleted = false,
-            isArchived = false)
+            isArchived = false
+        )
         given(reportingRepository.findAllCurrent()).willReturn(listOf(currentReporting))
 
         // When
@@ -74,5 +81,4 @@ class GetAllCurrentReportingsUTests {
         // Then
         assertThat(throwable).isNull()
     }
-
 }

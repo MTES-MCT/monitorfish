@@ -65,7 +65,8 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
             vesselStatus = VesselStatus.AT_SEA,
             null,
             null,
-            updateDateTime)
+            updateDateTime
+        )
 
         // Then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
@@ -87,13 +88,16 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
             null,
             Stage.END_OF_MALFUNCTION,
             EndOfBeaconMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION,
-            updateDateTime)
+            updateDateTime
+        )
 
         // Then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
         assertThat(updatedBeaconMalfunction?.stage).isEqualTo(Stage.END_OF_MALFUNCTION)
         assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isEqualTo(updateDateTime)
-        assertThat(updatedBeaconMalfunction?.endOfBeaconMalfunctionReason).isEqualTo(EndOfBeaconMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION)
+        assertThat(updatedBeaconMalfunction?.endOfBeaconMalfunctionReason).isEqualTo(
+            EndOfBeaconMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION
+        )
         assertThat(updatedBeaconMalfunction?.malfunctionEndDateTime).isEqualTo(updateDateTime)
     }
 
@@ -105,7 +109,8 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
             "FR263465414",
             "",
             "",
-            ZonedDateTime.now().minusYears(1))
+            ZonedDateTime.now().minusYears(1)
+        )
 
         assertThat(baconMalfunctions).hasSize(1)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")
@@ -126,6 +131,8 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
         // then
         val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
-        assertThat(updatedBeaconMalfunction?.notificationRequested).isEqualTo(BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION)
+        assertThat(updatedBeaconMalfunction?.notificationRequested).isEqualTo(
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION
+        )
     }
 }

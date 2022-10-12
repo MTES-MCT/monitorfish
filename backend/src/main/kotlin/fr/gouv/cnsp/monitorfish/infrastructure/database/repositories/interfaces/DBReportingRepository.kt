@@ -9,7 +9,8 @@ import java.time.Instant
 
 @DynamicUpdate
 interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
-    @Query(value = """
+    @Query(
+        value = """
         SELECT * FROM reportings WHERE
             CASE
                 WHEN :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER' THEN internal_reference_number
@@ -22,35 +23,49 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
                 OR
                 (archived IS FALSE AND
                     deleted IS FALSE))
-        """, nativeQuery = true)
+        """,
+        nativeQuery = true
+    )
     fun findCurrentAndArchivedByVesselIdentifier(vesselIdentifier: String, value: String, fromDate: Instant): List<ReportingEntity>
 
-    @Query(value = """
+    @Query(
+        value = """
         SELECT * FROM reportings WHERE archived IS FALSE AND deleted IS FALSE AND type IN ('INFRACTION_SUSPICION', 'ALERT')
-        """, nativeQuery = true)
+        """,
+        nativeQuery = true
+    )
     fun findAllCurrentReportings(): List<ReportingEntity>
 
     @Modifying(clearAutomatically = true)
-    @Query(value = """
+    @Query(
+        value = """
         UPDATE reportings
         SET archived = TRUE
         WHERE id = :id
-    """, nativeQuery = true)
+    """,
+        nativeQuery = true
+    )
     fun archiveReporting(id: Int)
 
     @Modifying(clearAutomatically = true)
-    @Query(value = """
+    @Query(
+        value = """
         UPDATE reportings
         SET deleted = TRUE
         WHERE id = :id
-    """, nativeQuery = true)
+    """,
+        nativeQuery = true
+    )
     fun deleteReporting(id: Int)
 
     @Modifying(clearAutomatically = true)
-    @Query(value = """
+    @Query(
+        value = """
         UPDATE reportings
         SET value = CAST(:value AS JSONB)
         WHERE id = :id
-    """, nativeQuery = true)
+    """,
+        nativeQuery = true
+    )
     fun update(id: Int, value: String)
 }

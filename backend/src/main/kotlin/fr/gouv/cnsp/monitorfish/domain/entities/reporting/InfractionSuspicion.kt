@@ -45,7 +45,8 @@ class InfractionSuspicion(
                 natinfCode = updatedInfractionSuspicionOrObservation.natinfCode,
                 flagState = updatedInfractionSuspicionOrObservation.flagState,
                 seaFront = Reporting.getSeaFrontFromDML(updatedInfractionSuspicionOrObservation.dml),
-                dml = updatedInfractionSuspicionOrObservation.dml)
+                dml = updatedInfractionSuspicionOrObservation.dml
+            )
         }
     }
 }

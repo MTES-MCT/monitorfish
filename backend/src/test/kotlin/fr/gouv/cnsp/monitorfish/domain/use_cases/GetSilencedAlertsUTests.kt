@@ -28,7 +28,8 @@ class GetSilencedAlertsUTests {
             ircs = "6554fEE",
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             value = ThreeMilesTrawlingAlert(),
-            silencedBeforeDate = ZonedDateTime.now().plusHours(5))
+            silencedBeforeDate = ZonedDateTime.now().plusHours(5)
+        )
         val silencedAlertTwo = SilencedAlert(
             internalReferenceNumber = "INTERNAL_REF_TWO",
             externalReferenceNumber = "RGD",
@@ -36,7 +37,8 @@ class GetSilencedAlertsUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             value = ThreeMilesTrawlingAlert(),
             silencedBeforeDate = ZonedDateTime.now().plusHours(5),
-            wasValidated = true)
+            wasValidated = true
+        )
         val silencedAlertThree = SilencedAlert(
             internalReferenceNumber = "INTERNAL_REF_THREE",
             externalReferenceNumber = "RGD",
@@ -44,11 +46,15 @@ class GetSilencedAlertsUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             value = ThreeMilesTrawlingAlert(),
             silencedBeforeDate = ZonedDateTime.now().plusHours(5),
-            wasValidated = false)
-        given(silencedAlertRepository.findAllCurrentSilencedAlerts()).willReturn(listOf(
-            silencedAlertOne,
-            silencedAlertTwo,
-            silencedAlertThree))
+            wasValidated = false
+        )
+        given(silencedAlertRepository.findAllCurrentSilencedAlerts()).willReturn(
+            listOf(
+                silencedAlertOne,
+                silencedAlertTwo,
+                silencedAlertThree
+            )
+        )
 
         // When
         val silencedAlerts = GetSilencedAlerts(silencedAlertRepository).execute()

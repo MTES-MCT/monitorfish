@@ -8,15 +8,18 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionCommentsRep
 import java.time.ZonedDateTime
 
 @UseCase
-class SaveBeaconMalfunctionComment(private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
-                                   private val getBeaconMalfunction: GetBeaconMalfunction) {
+class SaveBeaconMalfunctionComment(
+    private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
+    private val getBeaconMalfunction: GetBeaconMalfunction
+) {
     @Throws(IllegalArgumentException::class)
     fun execute(beaconMalfunctionId: Int, comment: String, userType: BeaconMalfunctionCommentUserType): BeaconMalfunctionResumeAndDetails {
         val beaconMalfunctionComment = BeaconMalfunctionComment(
             beaconMalfunctionId = beaconMalfunctionId,
             comment = comment,
             userType = userType,
-            dateTime = ZonedDateTime.now())
+            dateTime = ZonedDateTime.now()
+        )
 
         beaconMalfunctionCommentsRepository.save(beaconMalfunctionComment)
 

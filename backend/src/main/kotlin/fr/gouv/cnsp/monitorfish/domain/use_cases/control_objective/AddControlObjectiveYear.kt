@@ -6,8 +6,10 @@ import java.time.Clock
 import java.time.ZonedDateTime
 
 @UseCase
-class AddControlObjectiveYear(private val controlObjectivesRepository: ControlObjectivesRepository,
-                              private val clock: Clock) {
+class AddControlObjectiveYear(
+    private val controlObjectivesRepository: ControlObjectivesRepository,
+    private val clock: Clock
+) {
     fun execute() {
         val lastYearFoundInEntries = controlObjectivesRepository.findYearEntries().first()
         val currentYear = ZonedDateTime.now(clock).year

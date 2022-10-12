@@ -20,5 +20,4 @@ class UnitsController(private val getAllControllers: GetAllControllers) {
             ControllerDataOutput.fromController(controller)
         }
     }
-
 }

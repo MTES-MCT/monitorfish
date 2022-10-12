@@ -16,7 +16,8 @@ class Observation(
     natinfCode = null,
     title = title,
     type = ReportingTypeMapping.OBSERVATION,
-    flagState = flagState) {
+    flagState = flagState
+) {
     companion object {
         fun fromUpdatedReporting(updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation): Observation = Observation(
             reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
@@ -26,6 +27,7 @@ class Observation(
             title = updatedInfractionSuspicionOrObservation.title,
             flagState = updatedInfractionSuspicionOrObservation.flagState,
             seaFront = updatedInfractionSuspicionOrObservation.seaFront,
-            description = updatedInfractionSuspicionOrObservation.description)
+            description = updatedInfractionSuspicionOrObservation.description
+        )
     }
 }

@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController
 class DataReferentialController(
     private val getAllGears: GetAllGears,
     private val getAllSpeciesAndSpeciesGroups: GetAllSpeciesAndSpeciesGroups,
-    private val getFAOAreas: GetFAOAreas) {
+    private val getFAOAreas: GetFAOAreas
+) {
 
     @GetMapping("/v1/gears")
     @ApiOperation("Get FAO fishing gear codes")

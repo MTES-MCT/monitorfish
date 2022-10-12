@@ -55,7 +55,8 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
             id = 9,
             targetNumberOfControlsAtPort = 153,
             targetNumberOfControlsAtSea = null,
-            controlPriorityLevel = null)
+            controlPriorityLevel = null
+        )
 
         // Then
         val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(2021).find { it.id == 9 }
@@ -74,7 +75,8 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
             id = 9,
             targetNumberOfControlsAtPort = null,
             targetNumberOfControlsAtSea = 10,
-            controlPriorityLevel = null)
+            controlPriorityLevel = null
+        )
 
         // Then
         val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(2021).find { it.id == 9 }
@@ -93,7 +95,8 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
             id = 9,
             targetNumberOfControlsAtPort = null,
             targetNumberOfControlsAtSea = null,
-            controlPriorityLevel = 2.0)
+            controlPriorityLevel = 2.0
+        )
 
         // Then
         val updatedControlObjective = jpaControlObjectivesRepository.findAllByYear(2021).find { it.id == 9 }
@@ -108,14 +111,16 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
         assertThat(controlObjectives).hasSize(53)
 
         // When
-        jpaControlObjectivesRepository.add(ControlObjective(
-            segment = "SEGMENT",
-            facade = "FACADE",
-            year = 2021,
-            targetNumberOfControlsAtSea = 25,
-            targetNumberOfControlsAtPort = 64,
-            controlPriorityLevel = 2.0
-        ))
+        jpaControlObjectivesRepository.add(
+            ControlObjective(
+                segment = "SEGMENT",
+                facade = "FACADE",
+                year = 2021,
+                targetNumberOfControlsAtSea = 25,
+                targetNumberOfControlsAtPort = 64,
+                controlPriorityLevel = 2.0
+            )
+        )
 
         // Then
         val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(2021)

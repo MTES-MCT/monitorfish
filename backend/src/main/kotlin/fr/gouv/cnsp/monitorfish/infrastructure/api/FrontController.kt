@@ -60,7 +60,9 @@ class FrontController : ErrorController {
 
     private fun getErrorJSON(webRequest: WebRequest): String? {
         val mapper = ObjectMapper()
-        return mapper.writeValueAsString(getErrorAttributes(webRequest, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.STACK_TRACE)))
+        return mapper.writeValueAsString(
+            getErrorAttributes(webRequest, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.STACK_TRACE))
+        )
     }
 
     private fun getErrorAttributes(webRequest: WebRequest, options: ErrorAttributeOptions): Map<String, Any> {

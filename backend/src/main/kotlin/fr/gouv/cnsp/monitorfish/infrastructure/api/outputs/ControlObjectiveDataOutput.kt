@@ -9,7 +9,8 @@ data class ControlObjectiveDataOutput(
     val year: Int?,
     val targetNumberOfControlsAtSea: Int,
     val targetNumberOfControlsAtPort: Int,
-    val controlPriorityLevel: Double) {
+    val controlPriorityLevel: Double
+) {
     companion object {
         fun fromControlObjective(controlObjective: ControlObjective): ControlObjectiveDataOutput {
             requireNotNull(controlObjective.id) {
@@ -23,7 +24,8 @@ data class ControlObjectiveDataOutput(
                 year = controlObjective.year,
                 targetNumberOfControlsAtSea = controlObjective.targetNumberOfControlsAtSea,
                 targetNumberOfControlsAtPort = controlObjective.targetNumberOfControlsAtPort,
-                controlPriorityLevel = controlObjective.controlPriorityLevel)
+                controlPriorityLevel = controlObjective.controlPriorityLevel
+            )
         }
     }
 }

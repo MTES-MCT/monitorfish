@@ -103,7 +103,11 @@ class ReportingMapperUTests {
             "\"dml\": \"DML 56\"" +
             "}"
 
-        val parsedReporting = ReportingMapper.getReportingValueFromJSON(mapper, infraction, ReportingType.INFRACTION_SUSPICION)
+        val parsedReporting = ReportingMapper.getReportingValueFromJSON(
+            mapper,
+            infraction,
+            ReportingType.INFRACTION_SUSPICION
+        )
 
         // Then
         assertThat(parsedReporting).isInstanceOf(InfractionSuspicion::class.java)
@@ -147,5 +151,4 @@ class ReportingMapperUTests {
         assertThat(parsedReporting.natinfCode).isEqualTo("1234")
         assertThat(parsedReporting.dml).isEqualTo("DML 56")
     }
-
 }

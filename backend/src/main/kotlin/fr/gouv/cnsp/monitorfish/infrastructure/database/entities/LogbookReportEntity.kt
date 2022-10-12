@@ -16,10 +16,14 @@ import javax.persistence.*
 
 @Entity
 @TypeDefs(
-    TypeDef(name = "jsonb",
-        typeClass = JsonBinaryType::class),
-    TypeDef(name = "string-array",
-        typeClass = ListArrayType::class)
+    TypeDef(
+        name = "jsonb",
+        typeClass = JsonBinaryType::class
+    ),
+    TypeDef(
+        name = "string-array",
+        typeClass = ListArrayType::class
+    )
 )
 @Table(name = "logbook_reports")
 data class LogbookReportEntity(
@@ -72,7 +76,8 @@ data class LogbookReportEntity(
     @Enumerated(EnumType.STRING)
     val transmissionFormat: LogbookTransmissionFormat,
     @Column(name = "software")
-    val software: String? = null) {
+    val software: String? = null
+) {
 
     fun toLogbookMessage(mapper: ObjectMapper) = LogbookMessage(
         id = id,

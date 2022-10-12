@@ -28,6 +28,8 @@ class JpaSpeciesGroupRepositoryITests : AbstractDBTests() {
 
         assertThat(species).hasSize(14)
         assertThat(species.first().group).isEqualTo("Espèces eau profonde")
-        assertThat(species.first().comment).isEqualTo("Liste des espèces eau profondes définies dans l'annexe XI de l'AM_27-05-2016")
+        assertThat(species.first().comment).isEqualTo(
+            "Liste des espèces eau profondes définies dans l'annexe XI de l'AM_27-05-2016"
+        )
     }
 }

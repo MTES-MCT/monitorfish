@@ -20,7 +20,8 @@ class FleetSegmentController(
     private val getAllFleetSegments: GetAllFleetSegments,
     private val updateFleetSegment: UpdateFleetSegment,
     private val deleteFleetSegment: DeleteFleetSegment,
-    private val createFleetSegment: CreateFleetSegment) {
+    private val createFleetSegment: CreateFleetSegment
+) {
 
     @GetMapping("")
     @ApiOperation("Get fleet segments")
@@ -32,15 +33,18 @@ class FleetSegmentController(
 
     @PutMapping(value = ["/**"], consumes = ["application/json"])
     @ApiOperation("Update a fleet segment")
-    fun updateFleetSegment(request: HttpServletRequest,
-                           @RequestBody
-                           createOrUpdateFleetSegmentData: CreateOrUpdateFleetSegmentDataInput): FleetSegment {
+    fun updateFleetSegment(
+        request: HttpServletRequest,
+        @RequestBody
+        createOrUpdateFleetSegmentData: CreateOrUpdateFleetSegmentDataInput
+    ): FleetSegment {
         val segmentPartOfURL = 1
         val segment = request.requestURI.split(request.contextPath + "/fleet_segments/")[segmentPartOfURL]
 
         return updateFleetSegment.execute(
             segment = segment,
-            fields = createOrUpdateFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
+            fields = createOrUpdateFleetSegmentData.toCreateOrUpdateFleetSegmentFields()
+        )
     }
 
     @DeleteMapping(value = ["/**"])
@@ -55,9 +59,10 @@ class FleetSegmentController(
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = [""])
     @ApiOperation("Create a fleet segment")
-    fun createFleetSegment(@RequestBody
-                           newFleetSegmentData: CreateOrUpdateFleetSegmentDataInput) {
-
+    fun createFleetSegment(
+        @RequestBody
+        newFleetSegmentData: CreateOrUpdateFleetSegmentDataInput
+    ) {
         createFleetSegment.execute(newFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
     }
 }

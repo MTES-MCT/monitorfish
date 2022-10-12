@@ -11,7 +11,8 @@ data class VesselIdentityDataOutput(
     val externalReferenceNumber: String? = null,
     val vesselName: String? = null,
     val flagState: CountryCode? = null,
-    val beaconNumber: String? = null) {
+    val beaconNumber: String? = null
+) {
     companion object {
         fun fromVessel(vessel: Vessel): VesselIdentityDataOutput {
             return VesselIdentityDataOutput(

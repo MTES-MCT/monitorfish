@@ -12,7 +12,12 @@ import org.springframework.stereotype.Component
 object ERSMapper {
     private const val jsonbNullString = "null"
 
-    fun getERSMessageValueFromJSON(mapper: ObjectMapper, message: String?, messageType: String?, operationType: LogbookOperationType): LogbookMessageValue? {
+    fun getERSMessageValueFromJSON(
+        mapper: ObjectMapper,
+        message: String?,
+        messageType: String?,
+        operationType: LogbookOperationType
+    ): LogbookMessageValue? {
         return try {
             if (operationType == LogbookOperationType.RET && !message.isNullOrEmpty() && message != jsonbNullString) {
                 val classType = LogbookOperationTypeMapping.getClassFromName(operationType.name)

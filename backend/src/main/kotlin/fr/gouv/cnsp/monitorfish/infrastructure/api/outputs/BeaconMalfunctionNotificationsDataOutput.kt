@@ -8,7 +8,8 @@ data class BeaconMalfunctionNotificationsDataOutput(
     val beaconMalfunctionId: Int,
     val dateTime: ZonedDateTime,
     val notificationType: BeaconMalfunctionNotificationType,
-    val notifications: List<BeaconMalfunctionNotificationDataOutput>) {
+    val notifications: List<BeaconMalfunctionNotificationDataOutput>
+) {
     companion object {
         fun fromBeaconMalfunctionNotifications(beaconMalfunctionNotifications: BeaconMalfunctionNotifications): BeaconMalfunctionNotificationsDataOutput =
             BeaconMalfunctionNotificationsDataOutput(

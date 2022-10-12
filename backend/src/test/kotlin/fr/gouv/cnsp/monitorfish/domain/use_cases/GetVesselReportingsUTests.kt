@@ -32,7 +32,9 @@ class GetVesselReportingsUTests {
     @Test
     fun `execute Should return the reporting of a specified vessel`() {
         // Given
-        given(infractionRepository.findInfractionByNatinfCode(eq("7059"))).willReturn(Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value))
+        given(infractionRepository.findInfractionByNatinfCode(eq("7059"))).willReturn(
+            Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value)
+        )
         given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
             listOf(
                 Reporting(
@@ -47,7 +49,8 @@ class GetVesselReportingsUTests {
                     validationDate = ZonedDateTime.now(),
                     value = ThreeMilesTrawlingAlert() as ReportingValue,
                     isArchived = false,
-                    isDeleted = false),
+                    isDeleted = false
+                ),
                 Reporting(
                     id = 1,
                     type = ReportingType.ALERT,
@@ -60,7 +63,8 @@ class GetVesselReportingsUTests {
                     validationDate = ZonedDateTime.now(),
                     value = ThreeMilesTrawlingAlert() as ReportingValue,
                     isArchived = false,
-                    isDeleted = false),
+                    isDeleted = false
+                ),
                 Reporting(
                     id = 666,
                     type = ReportingType.ALERT,
@@ -73,7 +77,10 @@ class GetVesselReportingsUTests {
                     validationDate = ZonedDateTime.now().minusYears(1),
                     value = ThreeMilesTrawlingAlert() as ReportingValue,
                     isArchived = true,
-                    isDeleted = false)))
+                    isDeleted = false
+                )
+            )
+        )
 
         // When
         val currentAndArchivedReportings = GetVesselReportings(reportingRepository, infractionRepository).execute(
@@ -81,7 +88,8 @@ class GetVesselReportingsUTests {
             "1236514",
             "IRCS",
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            ZonedDateTime.now().minusYears(1))
+            ZonedDateTime.now().minusYears(1)
+        )
 
         // Then
         assertThat(currentAndArchivedReportings.current).hasSize(2)

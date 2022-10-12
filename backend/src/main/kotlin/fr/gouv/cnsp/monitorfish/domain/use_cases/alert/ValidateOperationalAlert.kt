@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class ValidateOperationalAlert(private val pendingAlertRepository: PendingAlertRepository,
-                               private val reportingRepository: ReportingRepository,
-                               private val silencedAlertRepository: SilencedAlertRepository,
-                               private val lastPositionRepository: LastPositionRepository) {
+class ValidateOperationalAlert(
+    private val pendingAlertRepository: PendingAlertRepository,
+    private val reportingRepository: ReportingRepository,
+    private val silencedAlertRepository: SilencedAlertRepository,
+    private val lastPositionRepository: LastPositionRepository
+) {
     private val logger = LoggerFactory.getLogger(ValidateOperationalAlert::class.java)
 
     fun execute(alertId: Int) {
@@ -25,7 +27,8 @@ class ValidateOperationalAlert(private val pendingAlertRepository: PendingAlertR
             alert = validatedAlert,
             silencedAfterDate = null,
             silencedBeforeDate = now.plusHours(4),
-            isValidated = true)
+            isValidated = true
+        )
 
         reportingRepository.save(validatedAlert, now)
 
@@ -44,7 +47,8 @@ class ValidateOperationalAlert(private val pendingAlertRepository: PendingAlertR
                     validatedAlert.value.type,
                     validatedAlert.vesselIdentifier,
                     validatedAlert.internalReferenceNumber,
-                    isValidated = true)
+                    isValidated = true
+                )
             }
             VesselIdentifier.IRCS -> {
                 require(validatedAlert.ircs != null) {
@@ -54,7 +58,8 @@ class ValidateOperationalAlert(private val pendingAlertRepository: PendingAlertR
                     validatedAlert.value.type,
                     validatedAlert.vesselIdentifier,
                     validatedAlert.ircs,
-                    isValidated = true)
+                    isValidated = true
+                )
             }
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
                 require(validatedAlert.externalReferenceNumber != null) {
@@ -64,7 +69,8 @@ class ValidateOperationalAlert(private val pendingAlertRepository: PendingAlertR
                     validatedAlert.value.type,
                     validatedAlert.vesselIdentifier,
                     validatedAlert.externalReferenceNumber,
-                    isValidated = true)
+                    isValidated = true
+                )
             }
         }
     }

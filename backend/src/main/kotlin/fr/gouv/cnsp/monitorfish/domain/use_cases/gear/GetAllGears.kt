@@ -8,8 +8,10 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import org.slf4j.LoggerFactory
 
 @UseCase
-class GetAllGears(private val gearRepository: GearRepository,
-                  private val GearCodeGroupRepository: GearCodeGroupRepository) {
+class GetAllGears(
+    private val gearRepository: GearRepository,
+    private val GearCodeGroupRepository: GearCodeGroupRepository
+) {
     private val logger = LoggerFactory.getLogger(GetAllGears::class.java)
     fun execute(): List<Gear> {
         val allGears = gearRepository.findAll()

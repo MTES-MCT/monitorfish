@@ -15,7 +15,9 @@ class UpdateReporting(private val reportingRepository: ReportingRepository) {
         val currentReporting = reportingRepository.findById(reportingId)
 
         return when (currentReporting.type) {
-            ReportingType.ALERT -> throw IllegalArgumentException("The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION")
+            ReportingType.ALERT -> throw IllegalArgumentException(
+                "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION"
+            )
             ReportingType.OBSERVATION -> {
                 currentReporting.value as InfractionSuspicionOrObservationType
                 updatedInfractionSuspicionOrObservation.flagState = currentReporting.value.flagState
@@ -29,7 +31,9 @@ class UpdateReporting(private val reportingRepository: ReportingRepository) {
                 currentReporting.value as InfractionSuspicionOrObservationType
                 updatedInfractionSuspicionOrObservation.flagState = currentReporting.value.flagState
 
-                val nextInfractionSuspicion = InfractionSuspicion.fromUpdatedReporting(updatedInfractionSuspicionOrObservation)
+                val nextInfractionSuspicion = InfractionSuspicion.fromUpdatedReporting(
+                    updatedInfractionSuspicionOrObservation
+                )
                 nextInfractionSuspicion.checkReportingActorAndFieldsRequirements()
 
                 reportingRepository.update(reportingId, nextInfractionSuspicion)

@@ -14,10 +14,14 @@ import javax.persistence.*
 
 @Entity
 @TypeDefs(
-    TypeDef(name = "jsonb",
-        typeClass = JsonBinaryType::class),
-    TypeDef(name = "integer-array",
-        typeClass = ListArrayType::class)
+    TypeDef(
+        name = "jsonb",
+        typeClass = JsonBinaryType::class
+    ),
+    TypeDef(
+        name = "integer-array",
+        typeClass = ListArrayType::class
+    )
 )
 @Table(name = "controls")
 @SecondaryTable(name = "infractions", pkJoinColumns = [PrimaryKeyJoinColumn(name = "id")])
@@ -73,7 +77,8 @@ data class ControlEntity(
     var postControlComments: String? = null,
     @Type(type = "jsonb")
     @Column(name = "gear_controls", columnDefinition = "jsonb")
-    var gearControls: String? = null) {
+    var gearControls: String? = null
+) {
 
     fun toControl(mapper: ObjectMapper) = Control(
         id = id,
@@ -98,7 +103,10 @@ data class ControlEntity(
         seizure = seizure,
         seizureComments = seizureComments,
         postControlComments = postControlComments,
-        gearControls = mapper.readValue(gearControls, mapper.typeFactory
-            .constructCollectionType(MutableList::class.java, GearControl::class.java))
+        gearControls = mapper.readValue(
+            gearControls,
+            mapper.typeFactory
+                .constructCollectionType(MutableList::class.java, GearControl::class.java)
+        )
     )
 }

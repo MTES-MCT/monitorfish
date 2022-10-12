@@ -6,7 +6,8 @@ data class GearDataOutput(
     val code: String,
     val name: String,
     val category: String? = null,
-    val groupId: Int? = null) {
+    val groupId: Int? = null
+) {
     companion object {
         fun fromGear(gear: Gear): GearDataOutput {
             return GearDataOutput(

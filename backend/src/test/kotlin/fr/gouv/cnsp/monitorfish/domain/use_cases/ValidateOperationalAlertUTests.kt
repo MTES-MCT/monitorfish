@@ -45,7 +45,8 @@ class ValidateOperationalAlertUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert())
+            value = ThreeMilesTrawlingAlert()
+        )
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 
         // When
@@ -53,7 +54,8 @@ class ValidateOperationalAlertUTests {
             pendingAlertRepository,
             reportingRepository,
             silencedAlertRepository,
-            lastPositionRepository).execute(666)
+            lastPositionRepository
+        ).execute(666)
 
         // Then
         Mockito.verify(silencedAlertRepository).save(eq(pendingAlert), any(), anyOrNull(), any())
@@ -63,7 +65,7 @@ class ValidateOperationalAlertUTests {
             AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             "FRFGRGR",
-            true)
+            true
+        )
     }
-
 }

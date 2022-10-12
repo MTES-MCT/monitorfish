@@ -26,9 +26,13 @@ class JpaBeaconMalfunctionNotificationsRepositoryITests : AbstractDBTests() {
         assertThat(notifications.last().id).isEqualTo(9)
         assertThat(notifications.last().beaconMalfunctionId).isEqualTo(2)
         assertThat(notifications.last().dateTimeUtc).isNotNull
-        assertThat(notifications.last().recipientFunction).isEqualTo(BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN)
+        assertThat(notifications.last().recipientFunction).isEqualTo(
+            BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN
+        )
         assertThat(notifications.last().communicationMeans).isEqualTo(CommunicationMeans.SMS)
-        assertThat(notifications.last().notificationType).isEqualTo(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION)
+        assertThat(notifications.last().notificationType).isEqualTo(
+            BeaconMalfunctionNotificationType.END_OF_MALFUNCTION
+        )
         assertThat(notifications.last().recipientName).isNull()
         assertThat(notifications.last().recipientAddressOrNumber).isEqualTo("0600000000")
         assertThat(notifications[7].success).isFalse

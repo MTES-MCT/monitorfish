@@ -85,7 +85,6 @@ internal class NAFMessageMapperUTests {
         assertThat(position.destination).isNull()
     }
 
-
     @Test
     internal fun `init should throw an exception When invalid message type`() {
         // Given

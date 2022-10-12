@@ -32,7 +32,8 @@ data class AlertEntity(
     val tripNumber: String? = null,
     @Type(type = "jsonb")
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
-    val value: String) {
+    val value: String
+) {
 
     fun toAlert(mapper: ObjectMapper): PNOAndLANAlert {
         return PNOAndLANAlert(
@@ -54,6 +55,7 @@ data class AlertEntity(
             ircs = alert.ircs,
             creationDate = alert.creationDate,
             tripNumber = alert.tripNumber,
-            value = mapper.writeValueAsString(alert.value))
+            value = mapper.writeValueAsString(alert.value)
+        )
     }
 }

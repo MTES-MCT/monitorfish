@@ -58,9 +58,12 @@ class DataReferentialControllerITests {
     @Test
     fun `Should get all species`() {
         // Given
-        given(this.getAllSpeciesAndSpeciesGroups.execute()).willReturn(SpeciesAndSpeciesGroups(
-            listOf(Species("FAK", "Facochère")),
-            listOf(SpeciesGroup("FAKOKO", "Facochère group"))))
+        given(this.getAllSpeciesAndSpeciesGroups.execute()).willReturn(
+            SpeciesAndSpeciesGroups(
+                listOf(Species("FAK", "Facochère")),
+                listOf(SpeciesGroup("FAKOKO", "Facochère group"))
+            )
+        )
 
         // When
         mockMvc.perform(get("/bff/v1/species"))
@@ -81,5 +84,4 @@ class DataReferentialControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(5)))
     }
-
 }

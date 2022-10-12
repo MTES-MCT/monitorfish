@@ -4,7 +4,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesAndSpeciesGroups
 
 data class SpeciesAndSpeciesGroupsDataOutput(
     val species: List<SpeciesDataOutput>,
-    val groups: List<SpeciesGroupDataOutput>) {
+    val groups: List<SpeciesGroupDataOutput>
+) {
     companion object {
         fun fromSpeciesAndSpeciesGroups(speciesAndSpeciesGroups: SpeciesAndSpeciesGroups): SpeciesAndSpeciesGroupsDataOutput {
             return SpeciesAndSpeciesGroupsDataOutput(

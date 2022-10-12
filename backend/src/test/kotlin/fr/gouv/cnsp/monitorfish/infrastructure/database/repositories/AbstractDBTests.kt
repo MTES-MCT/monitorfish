@@ -31,7 +31,7 @@ abstract class AbstractDBTests {
                     withEnv("POSTGRES_PASSWORD", "postgres")
                     waitingFor(
                         Wait.forLogMessage(".*ready to accept connections.*\\s", 2)
-                    );
+                    )
                     withStartupTimeout(Duration.of(60L, ChronoUnit.SECONDS))
                     this.start()
                 }
@@ -44,11 +44,13 @@ abstract class AbstractDBTests {
         }
 
         private fun getJdbcUrl(): String {
-            val toStringConsumer = ToStringConsumer();
-            container.followOutput(toStringConsumer, OutputFrame.OutputType.STDOUT);
+            val toStringConsumer = ToStringConsumer()
+            container.followOutput(toStringConsumer, OutputFrame.OutputType.STDOUT)
             println(toStringConsumer.toUtf8String())
 
-            return "jdbc:postgresql://" + container.containerIpAddress + ":" + container.getMappedPort(PostgreSQLContainer.POSTGRESQL_PORT).toString() + "/testdb?user=postgres&password=postgres"
+            return "jdbc:postgresql://" + container.containerIpAddress + ":" + container.getMappedPort(
+                PostgreSQLContainer.POSTGRESQL_PORT
+            ).toString() + "/testdb?user=postgres&password=postgres"
         }
     }
 }

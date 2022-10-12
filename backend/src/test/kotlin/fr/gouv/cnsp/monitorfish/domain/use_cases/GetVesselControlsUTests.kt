@@ -50,7 +50,8 @@ class GetVesselControlsUTests {
 
         val expectedControlsAndInfractionIds = listOf(
             ControlAndInfractionIds(
-                Control(id = 1,
+                Control(
+                    id = 1,
                     vesselId = 1,
                     portLocode = "AEFAT",
                     controlType = ControlType.LAND.value,
@@ -58,35 +59,57 @@ class GetVesselControlsUTests {
                     controller = Controller(1, "Controlleur"),
                     seizure = true,
                     diversion = false,
-                    escortToQuay = true),
-                listOf(1)),
+                    escortToQuay = true
+                ),
+                listOf(1)
+            ),
             ControlAndInfractionIds(
-                Control(id = 1,
+                Control(
+                    id = 1,
                     vesselId = 1,
                     controlType = ControlType.SEA.value,
                     controller = Controller(1, "Controlleur"),
                     seizure = false,
                     diversion = true,
-                    escortToQuay = false),
-                listOf(1, 2)),
+                    escortToQuay = false
+                ),
+                listOf(1, 2)
+            ),
             ControlAndInfractionIds(
-                Control(id = 1,
+                Control(
+                    id = 1,
                     vesselId = 1,
                     controlType = ControlType.SEA.value,
                     controller = Controller(1, "Controlleur"),
                     seizure = false,
                     diversion = true,
-                    escortToQuay = true),
-                listOf(1, 2)))
-        given(controlRepository.findVesselControlsAfterDateTime(any(), any())).willReturn(expectedControlsAndInfractionIds)
-        given(infractionRepository.findInfractions(listOf(1))).willReturn(listOf(Infraction(1, infractionCategory = InfractionCategory.FISHING.value)))
-        given(infractionRepository.findInfractions(listOf(1, 2))).willReturn(listOf(
-            Infraction(1, infractionCategory = InfractionCategory.FISHING.value), Infraction(2, infractionCategory = InfractionCategory.SECURITY.value)))
+                    escortToQuay = true
+                ),
+                listOf(1, 2)
+            )
+        )
+        given(controlRepository.findVesselControlsAfterDateTime(any(), any())).willReturn(
+            expectedControlsAndInfractionIds
+        )
+        given(infractionRepository.findInfractions(listOf(1))).willReturn(
+            listOf(Infraction(1, infractionCategory = InfractionCategory.FISHING.value))
+        )
+        given(infractionRepository.findInfractions(listOf(1, 2))).willReturn(
+            listOf(
+                Infraction(1, infractionCategory = InfractionCategory.FISHING.value),
+                Infraction(2, infractionCategory = InfractionCategory.SECURITY.value)
+            )
+        )
         given(portRepository.find(eq("AEFAT"))).willReturn(Port("AEFAT", "Al Jazeera Port"))
         given(gearRepository.find(eq("OTB"))).willReturn(Gear("OTB", "Chalut de fond"))
 
         // When
-        val controlResumeAndControls = GetVesselControls(controlRepository, infractionRepository, portRepository, gearRepository).execute(vesselId, now)
+        val controlResumeAndControls = GetVesselControls(
+            controlRepository,
+            infractionRepository,
+            portRepository,
+            gearRepository
+        ).execute(vesselId, now)
 
         // Then
         assertThat(controlResumeAndControls.numberOfSeaControls).isEqualTo(2)

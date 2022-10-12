@@ -109,12 +109,18 @@ class GetLogbookMessages(private val logbookReportRepository: LogbookReportRepos
         deletedMessage?.deleted = true
     }
 
-    private fun flagMessageAsAcknowledged(messages: List<LogbookMessage>, logbookMessage: LogbookMessage) {
-        val acknowledgedOrNotMessage = messages.find { message -> message.reportId == logbookMessage.referencedReportId }
+    private fun flagMessageAsAcknowledged(messages: List<LogbookMessage>, acknowledgeLogbookMessage: LogbookMessage) {
+        val acknowledgedOrNotMessage = messages.find { message -> message.reportId == acknowledgeLogbookMessage.referencedReportId }
 
-        acknowledgedOrNotMessage?.acknowledge = logbookMessage.message as Acknowledge
+        val acknowledgeDateTime = acknowledgedOrNotMessage?.acknowledge?.dateTime
+        if (acknowledgeDateTime != null && acknowledgeDateTime > acknowledgeLogbookMessage.reportDateTime) {
+            return
+        }
+
+        acknowledgedOrNotMessage?.acknowledge = acknowledgeLogbookMessage.message as Acknowledge
         acknowledgedOrNotMessage?.acknowledge?.let {
             it.isSuccess = it.returnStatus == RETReturnErrorCode.SUCCESS.number
+            it.dateTime = acknowledgeLogbookMessage.reportDateTime
         }
     }
 

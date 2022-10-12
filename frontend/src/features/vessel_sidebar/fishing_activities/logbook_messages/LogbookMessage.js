@@ -70,7 +70,7 @@ const LogbookMessage = ({ message, isFirst }) => {
             message.isCorrected
               ? <CorrectedMessage>
                 <MessageCorrected/>
-                <CorrectedMessageText>ANCIEN MESSAGE</CorrectedMessageText>
+                <MessageText>ANCIEN MESSAGE</MessageText>
               </CorrectedMessage>
               : null
           }
@@ -78,7 +78,7 @@ const LogbookMessage = ({ message, isFirst }) => {
             message.deleted
               ? <CorrectedMessage>
                 <MessageCorrected/>
-                <CorrectedMessageText>MESSAGE SUPPRIMÉ</CorrectedMessageText>
+                <MessageText>MESSAGE SUPPRIMÉ</MessageText>
               </CorrectedMessage>
               : null
           }
@@ -86,7 +86,7 @@ const LogbookMessage = ({ message, isFirst }) => {
             message.referencedReportId
               ? <CorrectedMessage>
                 <MessageOK/>
-                <OKMessageText>MESSAGE CORRIGÉ</OKMessageText>
+                <MessageText>MESSAGE CORRIGÉ</MessageText>
               </CorrectedMessage>
               : null
           }
@@ -174,16 +174,11 @@ const MessageSentByFailoverSoftwareIcon = styled.span`
   display: inline-block;
 `
 
-const OKMessageText = styled.span`
+const MessageText = styled.span`
   vertical-align: text-top;
   line-height: 11px;
   margin: 0 3px 0 3px;
-`
-
-const CorrectedMessageText = styled.span`
-  vertical-align: text-top;
-  line-height: 11px;
-  margin: 0 3px 0 3px;
+  font-size: 11px;
 `
 
 const MessageCorrected = styled.span`

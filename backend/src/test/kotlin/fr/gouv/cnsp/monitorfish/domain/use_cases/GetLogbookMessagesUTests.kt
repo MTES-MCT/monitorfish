@@ -3,12 +3,14 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyCorrectedLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyFluxAndVisioCaptureLogbookMessages
@@ -21,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
@@ -188,6 +191,36 @@ class GetLogbookMessagesUTests {
         assertThat(ackThree.isSuccess).isTrue
         assertThat(ackThree.rejectionCause).isNull()
         assertThat(ackThree.returnStatus).isNull()
+    }
+
+    @Test
+    fun `execute Should add only the last received acknowledge message`() {
+        // Given
+        val lastAck = Acknowledge()
+        lastAck.returnStatus = "000"
+
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any()))
+            .willReturn(VoyageDatesAndTripNumber("123", ZonedDateTime.now(), ZonedDateTime.now()))
+        given(logbookReportRepository.findAllMessagesByTripNumberBetweenDates(any(), any(), any(), any()))
+            .willReturn(getDummyRETLogbookMessages() + LogbookMessage(
+                id = 2, analyzedByRules = listOf(), operationNumber = "", reportId = "9065646816", referencedReportId = "9065646811", operationType = LogbookOperationType.RET, messageType = "",
+                message = lastAck, reportDateTime = ZonedDateTime.of(2021, 5, 5, 3, 4, 5, 3, ZoneOffset.UTC).minusHours(12), transmissionFormat = LogbookTransmissionFormat.ERS))
+        given(speciesRepository.find(any())).willThrow(CodeNotFoundException("not found"))
+        given(gearRepository.find(any())).willThrow(CodeNotFoundException("not found"))
+        given(portRepository.find(any())).willThrow(CodeNotFoundException("not found"))
+        given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+
+        // When
+        val ersMessages = GetLogbookMessages(logbookReportRepository, gearRepository, speciesRepository, portRepository, logbookRawMessageRepository)
+            .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
+
+        // Then
+        assertThat(ersMessages).hasSize(3)
+
+        // The last ACK message by date time is saved in the acknowledge property
+        val ack = ersMessages[0].acknowledge as Acknowledge
+        assertThat(ack.returnStatus).isEqualTo("000")
+        assertThat(ack.isSuccess).isTrue
     }
 
     @Test

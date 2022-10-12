@@ -20,6 +20,7 @@ def test_make_alerts():
             "cfr": ["A", "B"],
             "external_immatriculation": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
+            "vessel_id": [1, 12],
             "vessel_name": ["Vessel_A", "Vessel_B"],
             "flag_state": ["FR", "BE"],
             "facade": ["NAMO", "MEMN"],
@@ -45,6 +46,7 @@ def test_make_alerts():
             "internal_reference_number": ["A", "B"],
             "external_reference_number": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
+            "vessel_id": [1, 12],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
@@ -104,6 +106,7 @@ def test_filter_silenced_alerts():
             "internal_reference_number": ["A", "B"],
             "external_reference_number": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
+            "vessel_id": [1, 12],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
@@ -149,6 +152,7 @@ def test_filter_silenced_alerts():
             "internal_reference_number": ["B"],
             "external_reference_number": ["BB"],
             "ircs": ["BBB"],
+            "vessel_id": [12],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
             ],
@@ -183,6 +187,7 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
             "internal_reference_number": ["A", "B"],
             "external_reference_number": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
+            "vessel_id": [1, 12],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
@@ -232,6 +237,7 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
             "internal_reference_number": ["B"],
             "external_reference_number": ["BB"],
             "ircs": ["BBB"],
+            "vessel_id": [12],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
             ],

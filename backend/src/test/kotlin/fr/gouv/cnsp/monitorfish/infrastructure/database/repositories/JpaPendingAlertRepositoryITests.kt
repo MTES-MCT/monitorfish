@@ -23,6 +23,7 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
             internalReferenceNumber = "FRFGRGR",
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
+            vesselId = 123,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
@@ -38,5 +39,6 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
         assertThat(alerts.first().externalReferenceNumber).isEqualTo("DONTSINK")
         assertThat(alerts.first().internalReferenceNumber).isEqualTo("FAK000999999")
         assertThat(alerts.first().value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+        assertThat(alerts.last().vesselId).isEqualTo(123)
     }
 }

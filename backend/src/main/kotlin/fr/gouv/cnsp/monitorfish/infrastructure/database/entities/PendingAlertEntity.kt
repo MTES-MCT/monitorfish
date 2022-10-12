@@ -35,6 +35,8 @@ data class PendingAlertEntity(
     val externalReferenceNumber: String? = null,
     @Column(name = "ircs")
     val ircs: String? = null,
+    @Column(name = "vessel_id")
+    val vesselId: Int? = null,
     @Column(name = "vessel_identifier")
     @Enumerated(EnumType.STRING)
     @Type(type = "pgsql_enum")
@@ -55,6 +57,7 @@ data class PendingAlertEntity(
             internalReferenceNumber = internalReferenceNumber,
             externalReferenceNumber = externalReferenceNumber,
             ircs = ircs,
+            vesselId = vesselId,
             vesselIdentifier = vesselIdentifier,
             creationDate = creationDate,
             tripNumber = tripNumber,
@@ -68,6 +71,7 @@ data class PendingAlertEntity(
             internalReferenceNumber = alert.internalReferenceNumber,
             externalReferenceNumber = alert.externalReferenceNumber,
             ircs = alert.ircs,
+            vesselId = alert.vesselId,
             vesselIdentifier = alert.vesselIdentifier,
             creationDate = alert.creationDate,
             tripNumber = alert.tripNumber,

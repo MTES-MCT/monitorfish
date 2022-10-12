@@ -28,4 +28,5 @@ data class Position(
     val dateTime: ZonedDateTime,
     val from: CountryCode? = null,
     val destination: CountryCode? = null,
-    val tripNumber: String? = null)
+    val tripNumber: String? = null
+)

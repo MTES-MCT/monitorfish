@@ -20,13 +20,16 @@ class ReportingController(
     private val deleteReporting: DeleteReporting,
     private val deleteReportings: DeleteReportings,
     private val getAllCurrentReportings: GetAllCurrentReportings,
-    private val addReporting: AddReporting) {
+    private val addReporting: AddReporting
+) {
 
     @PostMapping(value = [""], consumes = ["application/json"])
     @ApiOperation("Create a reporting")
     @ResponseStatus(HttpStatus.CREATED)
-    fun createReporting(@RequestBody
-                        reportingInput: CreateReportingDataInput): ReportingDataOutput {
+    fun createReporting(
+        @RequestBody
+        reportingInput: CreateReportingDataInput
+    ): ReportingDataOutput {
         return ReportingDataOutput.fromReporting(addReporting.execute(reportingInput.toReporting()))
     }
 
@@ -38,19 +41,23 @@ class ReportingController(
 
     @PutMapping(value = ["/{reportingId}/archive"])
     @ApiOperation("Archive a reporting")
-    fun archiveReporting(@PathParam("Reporting id")
-                         @PathVariable(name = "reportingId")
-                         reportingId: Int) {
+    fun archiveReporting(
+        @PathParam("Reporting id")
+        @PathVariable(name = "reportingId")
+        reportingId: Int
+    ) {
         archiveReporting.execute(reportingId)
     }
 
     @PutMapping(value = ["/{reportingId}/update"], consumes = ["application/json"])
     @ApiOperation("Update a reporting")
-    fun updateReporting(@PathParam("Reporting id")
-                        @PathVariable(name = "reportingId")
-                        reportingId: Int,
-                        @RequestBody
-                        updateReportingInput: UpdateReportingDataInput): ReportingDataOutput {
+    fun updateReporting(
+        @PathParam("Reporting id")
+        @PathVariable(name = "reportingId")
+        reportingId: Int,
+        @RequestBody
+        updateReportingInput: UpdateReportingDataInput
+    ): ReportingDataOutput {
         val reporting = updateReporting.execute(reportingId, updateReportingInput.toUpdatedReportingValues())
 
         return ReportingDataOutput.fromReporting(reporting)
@@ -64,9 +71,11 @@ class ReportingController(
 
     @PutMapping(value = ["/{reportingId}/delete"])
     @ApiOperation("Delete a reporting")
-    fun deleteReporting(@PathParam("Reporting id")
-                        @PathVariable(name = "reportingId")
-                        reportingId: Int) {
+    fun deleteReporting(
+        @PathParam("Reporting id")
+        @PathVariable(name = "reportingId")
+        reportingId: Int
+    ) {
         deleteReporting.execute(reportingId)
     }
 

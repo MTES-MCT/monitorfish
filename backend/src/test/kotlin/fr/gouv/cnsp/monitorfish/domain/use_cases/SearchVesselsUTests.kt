@@ -28,5 +28,4 @@ class SearchVesselsUTests {
         // Then
         assertThat(vessels).isEmpty()
     }
-
 }

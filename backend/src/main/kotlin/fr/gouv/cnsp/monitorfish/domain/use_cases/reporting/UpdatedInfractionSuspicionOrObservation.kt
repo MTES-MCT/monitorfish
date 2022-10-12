@@ -12,4 +12,5 @@ class UpdatedInfractionSuspicionOrObservation(
     val natinfCode: String? = null,
     var seaFront: String? = null,
     var flagState: String? = null,
-    val dml: String? = null)
+    val dml: String? = null
+)

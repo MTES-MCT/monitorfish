@@ -9,8 +9,10 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaPNOAndLANAlertRepository(private val dbPNOAndLANAlertRepository: DBPNOAndLANAlertRepository,
-                                  private val mapper: ObjectMapper) : PNOAndLANAlertRepository {
+class JpaPNOAndLANAlertRepository(
+    private val dbPNOAndLANAlertRepository: DBPNOAndLANAlertRepository,
+    private val mapper: ObjectMapper
+) : PNOAndLANAlertRepository {
 
     override fun save(alert: PNOAndLANAlert) {
         dbPNOAndLANAlertRepository.save(AlertEntity.fromAlert(alert, mapper))

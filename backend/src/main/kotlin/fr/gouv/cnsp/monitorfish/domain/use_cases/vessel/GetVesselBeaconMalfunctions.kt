@@ -13,27 +13,40 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVesselBeaconMalfunctions(private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
-                                  private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
-                                  private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository) {
+class GetVesselBeaconMalfunctions(
+    private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
+    private val beaconMalfunctionCommentsRepository: BeaconMalfunctionCommentsRepository,
+    private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository
+) {
     private val logger = LoggerFactory.getLogger(GetVesselBeaconMalfunctions::class.java)
-    fun execute(internalReferenceNumber: String,
-                externalReferenceNumber: String,
-                ircs: String,
-                vesselIdentifier: VesselIdentifier?,
-                afterDateTime: ZonedDateTime): VesselBeaconMalfunctionsResumeAndHistory {
+    fun execute(
+        internalReferenceNumber: String,
+        externalReferenceNumber: String,
+        ircs: String,
+        vesselIdentifier: VesselIdentifier?,
+        afterDateTime: ZonedDateTime
+    ): VesselBeaconMalfunctionsResumeAndHistory {
         val beaconMalfunctions = when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
-                beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(vesselIdentifier, internalReferenceNumber, afterDateTime)
+                beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(
+                    vesselIdentifier,
+                    internalReferenceNumber,
+                    afterDateTime
+                )
             VesselIdentifier.IRCS ->
                 beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(vesselIdentifier, ircs, afterDateTime)
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
-                beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(vesselIdentifier, externalReferenceNumber, afterDateTime)
+                beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(
+                    vesselIdentifier,
+                    externalReferenceNumber,
+                    afterDateTime
+                )
             else -> beaconMalfunctionsRepository.findAllByVesselWithoutVesselIdentifier(
                 internalReferenceNumber,
                 externalReferenceNumber,
                 ircs,
-                afterDateTime)
+                afterDateTime
+            )
         }
 
         val beaconMalfunctionsWithDetails = beaconMalfunctions.map {

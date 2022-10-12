@@ -10,4 +10,5 @@ data class ControlResumeAndControls(
     val numberOfEscortsToQuay: Int,
     val numberOfFishingInfractions: Int,
     val numberOfSecurityInfractions: Int,
-    val controls: List<Control>)
+    val controls: List<Control>
+)

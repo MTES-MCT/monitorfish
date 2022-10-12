@@ -26,7 +26,8 @@ data class BeaconMalfunctionActionEntity(
     @Column(name = "next_value")
     val nextValue: String,
     @Column(name = "date_time_utc")
-    val dateTime: Instant) {
+    val dateTime: Instant
+) {
 
     fun toBeaconMalfunctionAction() = BeaconMalfunctionAction(
         id = id!!,
@@ -34,7 +35,8 @@ data class BeaconMalfunctionActionEntity(
         propertyName = propertyName,
         previousValue = previousValue,
         nextValue = nextValue,
-        dateTime = dateTime.atZone(ZoneOffset.UTC))
+        dateTime = dateTime.atZone(ZoneOffset.UTC)
+    )
 
     companion object {
         fun fromBeaconMalfunctionAction(beaconMalfunctionAction: BeaconMalfunctionAction): BeaconMalfunctionActionEntity {
@@ -43,9 +45,11 @@ data class BeaconMalfunctionActionEntity(
                     VesselStatus.valueOf(beaconMalfunctionAction.previousValue)
                     VesselStatus.valueOf(beaconMalfunctionAction.nextValue)
                 } catch (e: IllegalArgumentException) {
-                    throw IllegalArgumentException("One of the previous or next values are incorrect for the property " +
-                        "${BeaconMalfunctionActionPropertyName.VESSEL_STATUS}. Previous value is " +
-                        "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'.")
+                    throw IllegalArgumentException(
+                        "One of the previous or next values are incorrect for the property " +
+                            "${BeaconMalfunctionActionPropertyName.VESSEL_STATUS}. Previous value is " +
+                            "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'."
+                    )
                 }
             }
 
@@ -54,9 +58,11 @@ data class BeaconMalfunctionActionEntity(
                     Stage.valueOf(beaconMalfunctionAction.previousValue)
                     Stage.valueOf(beaconMalfunctionAction.nextValue)
                 } catch (e: IllegalArgumentException) {
-                    throw IllegalArgumentException("One of the previous or next values are incorrect for the property " +
-                        "${BeaconMalfunctionActionPropertyName.STAGE}. Previous value is " +
-                        "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'.")
+                    throw IllegalArgumentException(
+                        "One of the previous or next values are incorrect for the property " +
+                            "${BeaconMalfunctionActionPropertyName.STAGE}. Previous value is " +
+                            "'${beaconMalfunctionAction.previousValue}' and next value is '${beaconMalfunctionAction.nextValue}'."
+                    )
                 }
             }
 

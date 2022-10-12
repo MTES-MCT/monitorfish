@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.entities.controls
 
 import java.time.ZonedDateTime
 
-
 data class Control(
     var id: Int,
     var vesselId: Int,
@@ -28,4 +27,5 @@ data class Control(
     var seizure: Boolean? = null,
     var seizureComments: String? = null,
     var postControlComments: String? = null,
-    var gearControls: List<GearControl> = listOf())
+    var gearControls: List<GearControl> = listOf()
+)

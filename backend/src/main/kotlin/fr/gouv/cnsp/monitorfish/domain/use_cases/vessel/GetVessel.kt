@@ -16,31 +16,44 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVessel(private val vesselRepository: VesselRepository,
-                private val positionRepository: PositionRepository,
-                private val logbookReportRepository: LogbookReportRepository,
-                private val riskFactorsRepository: RiskFactorsRepository) {
+class GetVessel(
+    private val vesselRepository: VesselRepository,
+    private val positionRepository: PositionRepository,
+    private val logbookReportRepository: LogbookReportRepository,
+    private val riskFactorsRepository: RiskFactorsRepository
+) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
-    suspend fun execute(internalReferenceNumber: String,
-                        externalReferenceNumber: String,
-                        ircs: String,
-                        trackDepth: VesselTrackDepth,
-                        vesselIdentifier: VesselIdentifier?,
-                        fromDateTime: ZonedDateTime? = null,
-                        toDateTime: ZonedDateTime? = null): Pair<Boolean, VesselWithData> {
-
+    suspend fun execute(
+        internalReferenceNumber: String,
+        externalReferenceNumber: String,
+        ircs: String,
+        trackDepth: VesselTrackDepth,
+        vesselIdentifier: VesselIdentifier?,
+        fromDateTime: ZonedDateTime? = null,
+        toDateTime: ZonedDateTime? = null
+    ): Pair<Boolean, VesselWithData> {
         return coroutineScope {
-            val (vesselTrackHasBeenModified, positions) = GetVesselPositions(positionRepository, logbookReportRepository).execute(
+            val (vesselTrackHasBeenModified, positions) = GetVesselPositions(
+                positionRepository,
+                logbookReportRepository
+            ).execute(
                 internalReferenceNumber = internalReferenceNumber,
                 externalReferenceNumber = externalReferenceNumber,
                 ircs = ircs,
                 trackDepth = trackDepth,
                 vesselIdentifier = vesselIdentifier,
                 fromDateTime = fromDateTime,
-                toDateTime = toDateTime)
+                toDateTime = toDateTime
+            )
 
-            val vesselFuture = async { vesselRepository.findVessel(internalReferenceNumber, externalReferenceNumber, ircs) }
+            val vesselFuture = async {
+                vesselRepository.findVessel(
+                    internalReferenceNumber,
+                    externalReferenceNumber,
+                    ircs
+                )
+            }
 
             val vesselRiskFactorsFuture = async { riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber) }
 

@@ -7,15 +7,24 @@ import org.springframework.data.repository.CrudRepository
 
 interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity, Int> {
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE control_objectives SET target_number_of_controls_at_sea = :targetNumberOfControlsAtSea WHERE id = :controlObjectiveId", nativeQuery = true)
+    @Query(
+        value = "UPDATE control_objectives SET target_number_of_controls_at_sea = :targetNumberOfControlsAtSea WHERE id = :controlObjectiveId",
+        nativeQuery = true
+    )
     fun updateTargetNumberOfControlsAtSea(controlObjectiveId: Int, targetNumberOfControlsAtSea: Int)
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE control_objectives SET target_number_of_controls_at_port = :targetNumberOfControlsAtPort WHERE id = :controlObjectiveId", nativeQuery = true)
+    @Query(
+        value = "UPDATE control_objectives SET target_number_of_controls_at_port = :targetNumberOfControlsAtPort WHERE id = :controlObjectiveId",
+        nativeQuery = true
+    )
     fun updateTargetNumberOfControlsAtPort(controlObjectiveId: Int, targetNumberOfControlsAtPort: Int)
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE control_objectives SET control_priority_level = :controlPriorityLevel WHERE id = :controlObjectiveId", nativeQuery = true)
+    @Query(
+        value = "UPDATE control_objectives SET control_priority_level = :controlPriorityLevel WHERE id = :controlObjectiveId",
+        nativeQuery = true
+    )
     fun updateControlPriorityLevel(controlObjectiveId: Int, controlPriorityLevel: Double)
 
     @Query
@@ -25,11 +34,14 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
     fun findDistinctYears(): List<Int>
 
     @Modifying(clearAutomatically = true)
-    @Query(value = """
+    @Query(
+        value = """
     INSERT INTO control_objectives (facade, segment, year, target_number_of_controls_at_sea, target_number_of_controls_at_port, control_priority_level)
         SELECT facade, segment, :nextYear, target_number_of_controls_at_sea, target_number_of_controls_at_port, control_priority_level
         FROM control_objectives AS old
         WHERE old.year = :currentYear
-    """, nativeQuery = true)
+    """,
+        nativeQuery = true
+    )
     fun insertNextYearFromCurrentYear(currentYear: Int, nextYear: Int)
 }

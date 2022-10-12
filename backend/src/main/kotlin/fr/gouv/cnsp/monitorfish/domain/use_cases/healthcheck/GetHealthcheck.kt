@@ -7,9 +7,11 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 
 @UseCase
-class GetHealthcheck(private val lastPositionRepository: LastPositionRepository,
-                     private val positionRepository: PositionRepository,
-                     private val logbookReportRepository: LogbookReportRepository) {
+class GetHealthcheck(
+    private val lastPositionRepository: LastPositionRepository,
+    private val positionRepository: PositionRepository,
+    private val logbookReportRepository: LogbookReportRepository
+) {
     fun execute(): Health {
         val positionDateTime = lastPositionRepository.findLastPositionDate()
         val lastPositionDateTime = positionRepository.findLastPositionDate()

@@ -26,14 +26,18 @@ class SwaggerConfig {
             .apis(RequestHandlerSelectors.basePackage("fr.gouv.cnsp.monitorfish"))
             .paths(PathSelectors.any())
             .build()
-            .apiInfo(ApiInfo(
-                "API Documentation",
-                "This is a public API",
-                "v1",
-                "",
-                Contact("CNSP", "URL", "EMAIL"),
-                "APACHE 2",
-                "https://github.com/MTES-MCT/monitorfish/blob/master/LICENCE", emptyList()))
+            .apiInfo(
+                ApiInfo(
+                    "API Documentation",
+                    "This is a public API",
+                    "v1",
+                    "",
+                    Contact("CNSP", "URL", "EMAIL"),
+                    "APACHE 2",
+                    "https://github.com/MTES-MCT/monitorfish/blob/master/LICENCE",
+                    emptyList()
+                )
+            )
             .enableUrlTemplating(true)
     }
 }

@@ -17,8 +17,11 @@ import javax.persistence.*
 @Entity
 @TypeDefs(
     TypeDef(name = "jsonb", typeClass = JsonBinaryType::class),
-    TypeDef(name = "pgsql_enum",
-        typeClass = PostgreSQLEnumType::class))
+    TypeDef(
+        name = "pgsql_enum",
+        typeClass = PostgreSQLEnumType::class
+    )
+)
 @Table(name = "reportings")
 data class ReportingEntity(
     @Id
@@ -52,7 +55,8 @@ data class ReportingEntity(
     @Column(name = "archived", nullable = false)
     val isArchived: Boolean,
     @Column(name = "deleted", nullable = false)
-    val isDeleted: Boolean) {
+    val isDeleted: Boolean
+) {
 
     fun toReporting(mapper: ObjectMapper): Reporting {
         return Reporting(
@@ -67,7 +71,8 @@ data class ReportingEntity(
             validationDate = validationDate,
             value = ReportingMapper.getReportingValueFromJSON(mapper, value, type),
             isArchived = isArchived,
-            isDeleted = isDeleted)
+            isDeleted = isDeleted
+        )
     }
 
     companion object {
@@ -82,7 +87,8 @@ data class ReportingEntity(
             validationDate = validationDate,
             value = mapper.writeValueAsString(alert.value),
             isArchived = false,
-            isDeleted = false)
+            isDeleted = false
+        )
 
         fun fromReporting(reporting: Reporting, mapper: ObjectMapper) = ReportingEntity(
             vesselName = reporting.vesselName,
@@ -95,6 +101,7 @@ data class ReportingEntity(
             validationDate = reporting.validationDate,
             value = mapper.writeValueAsString(reporting.value),
             isArchived = false,
-            isDeleted = false)
+            isDeleted = false
+        )
     }
 }

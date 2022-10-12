@@ -12,15 +12,19 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRepository,
-                              private val silencedAlertRepository: SilencedAlertRepository,
-                              private val lastPositionRepository: LastPositionRepository) {
+class SilenceOperationalAlert(
+    private val pendingAlertRepository: PendingAlertRepository,
+    private val silencedAlertRepository: SilencedAlertRepository,
+    private val lastPositionRepository: LastPositionRepository
+) {
     private val logger = LoggerFactory.getLogger(SilenceOperationalAlert::class.java)
 
-    fun execute(alertId: Int,
-                silenceAlertPeriod: SilenceAlertPeriod,
-                afterDateTime: ZonedDateTime? = null,
-                beforeDateTime: ZonedDateTime? = null): SilencedAlert {
+    fun execute(
+        alertId: Int,
+        silenceAlertPeriod: SilenceAlertPeriod,
+        afterDateTime: ZonedDateTime? = null,
+        beforeDateTime: ZonedDateTime? = null
+    ): SilencedAlert {
         if (silenceAlertPeriod == SilenceAlertPeriod.CUSTOM) {
             requireNotNull(afterDateTime) {
                 "begin date must be not null when ignoring an operational alert with a custom period"
@@ -54,7 +58,8 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
             alert = silencedAlert,
             silencedAfterDate = after,
             silencedBeforeDate = before,
-            isValidated = false)
+            isValidated = false
+        )
 
         pendingAlertRepository.delete(alertId)
         updateLastPositionBeforePipelineUpdate(silencedAlert)
@@ -73,7 +78,8 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
                     silencedAlert.value.type,
                     silencedAlert.vesselIdentifier,
                     silencedAlert.internalReferenceNumber,
-                    isValidated = false)
+                    isValidated = false
+                )
             }
             VesselIdentifier.IRCS -> {
                 require(silencedAlert.ircs != null) {
@@ -83,7 +89,8 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
                     silencedAlert.value.type,
                     silencedAlert.vesselIdentifier,
                     silencedAlert.ircs,
-                    isValidated = false)
+                    isValidated = false
+                )
             }
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
                 require(silencedAlert.externalReferenceNumber != null) {
@@ -93,7 +100,8 @@ class SilenceOperationalAlert(private val pendingAlertRepository: PendingAlertRe
                     silencedAlert.value.type,
                     silencedAlert.vesselIdentifier,
                     silencedAlert.externalReferenceNumber,
-                    isValidated = false)
+                    isValidated = false
+                )
             }
         }
     }

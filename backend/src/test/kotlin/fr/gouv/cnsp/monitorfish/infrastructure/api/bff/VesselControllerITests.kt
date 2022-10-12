@@ -90,7 +90,7 @@ class VesselControllerITests {
     @Test
     fun `Should get all vessels last positions`() {
         // Given
-        val farPastFixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"));
+        val farPastFixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"))
         val position = LastPosition(0, "MMSI", null, null, null, null, null, PositionType.AIS, 16.445, 48.2525, 16.445, 48.2525, 1.8, 180.0, farPastFixedDateTime, vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER)
         given(this.getLastPositions.execute()).willReturn(listOf(position))
 
@@ -126,18 +126,48 @@ class VesselControllerITests {
     fun `Should get vessels with last positions and risk factor`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
-        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
-        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        val firstPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                4
+            )
+        )
+        val secondPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                3
+            )
+        )
+        val thirdPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                2
+            )
+        )
         givenSuspended { getVessel.execute(any(), any(), any(), any(), any(), eq(null), eq(null)) } willReturn {
-            Pair(false, VesselWithData(
-                Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing", underCharter = true),
-                listOf(firstPosition, secondPosition, thirdPosition),
-                VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
+            Pair(
+                false,
+                VesselWithData(
+                    Vessel(
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true
+                    ),
+                    listOf(firstPosition, secondPosition, thirdPosition),
+                    VesselRiskFactor(2.3, 2.0, 1.9, 3.2)
+                )
+            )
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
+        mockMvc.perform(
+            get(
+                "/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"
+            )
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.vessel.declaredFishingGears[0]", equalTo("Trémails")))
@@ -151,7 +181,15 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.vessel.underCharter", equalTo(true)))
 
         runBlocking {
-            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, null, null)
+            Mockito.verify(getVessel).execute(
+                "FR224226850",
+                "123",
+                "IEF4",
+                VesselTrackDepth.TWELVE_HOURS,
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                null,
+                null
+            )
         }
     }
 
@@ -159,18 +197,47 @@ class VesselControllerITests {
     fun `Should get vessels's last positions and data with a FOUND header When the DEP message was not found`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
-        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
-        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        val firstPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                4
+            )
+        )
+        val secondPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                3
+            )
+        )
+        val thirdPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                2
+            )
+        )
         givenSuspended { getVessel.execute(any(), any(), any(), any(), any(), eq(null), eq(null)) } willReturn {
-            Pair(true, VesselWithData(
-                Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
-                listOf(firstPosition, secondPosition, thirdPosition),
-                VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
+            Pair(
+                true,
+                VesselWithData(
+                    Vessel(
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing"
+                    ),
+                    listOf(firstPosition, secondPosition, thirdPosition),
+                    VesselRiskFactor(2.3, 2.0, 1.9, 3.2)
+                )
+            )
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
+        mockMvc.perform(
+            get(
+                "/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"
+            )
+        )
             // Then
             .andExpect(status().isAccepted)
             .andExpect(jsonPath("$.vessel.declaredFishingGears[0]", equalTo("Trémails")))
@@ -181,7 +248,15 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.positions.length()", equalTo(3)))
 
         runBlocking {
-            Mockito.verify(getVessel).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, null, null)
+            Mockito.verify(getVessel).execute(
+                "FR224226850",
+                "123",
+                "IEF4",
+                VesselTrackDepth.TWELVE_HOURS,
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                null,
+                null
+            )
         }
     }
 
@@ -189,19 +264,48 @@ class VesselControllerITests {
     fun `Should get vessels's last positions and data When from and to date parameters are set`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
-        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
-        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        val firstPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                4
+            )
+        )
+        val secondPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                3
+            )
+        )
+        val thirdPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                2
+            )
+        )
         givenSuspended { getVessel.execute(any(), any(), any(), any(), any(), any(), any()) } willReturn {
-            Pair(false, VesselWithData(
-                Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
-                listOf(firstPosition, secondPosition, thirdPosition),
-                VesselRiskFactor(2.3, 2.0, 1.9, 3.2)))
+            Pair(
+                false,
+                VesselWithData(
+                    Vessel(
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing"
+                    ),
+                    listOf(firstPosition, secondPosition, thirdPosition),
+                    VesselRiskFactor(2.3, 2.0, 1.9, 3.2)
+                )
+            )
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123" +
-            "&IRCS=IEF4&trackDepth=CUSTOM&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z&beforeDateTime=2021-04-24T22:07:00.000Z"))
+        mockMvc.perform(
+            get(
+                "/bff/v1/vessels/find?internalReferenceNumber=FR224226850&externalReferenceNumber=123" +
+                    "&IRCS=IEF4&trackDepth=CUSTOM&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z&beforeDateTime=2021-04-24T22:07:00.000Z"
+            )
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.vessel.declaredFishingGears[0]", equalTo("Trémails")))
@@ -219,7 +323,8 @@ class VesselControllerITests {
                 VesselTrackDepth.CUSTOM,
                 VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 ZonedDateTime.parse("2021-03-24T22:07:00Z"),
-                ZonedDateTime.parse("2021-04-24T22:07:00Z"))
+                ZonedDateTime.parse("2021-04-24T22:07:00Z")
+            )
         }
     }
 
@@ -227,30 +332,72 @@ class VesselControllerITests {
     fun `Should get vessels positions`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
-        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
-        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
+        val firstPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                4
+            )
+        )
+        val secondPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                3
+            )
+        )
+        val thirdPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                2
+            )
+        )
         givenSuspended { getVesselPositions.execute(any(), any(), any(), any(), any(), eq(null), eq(null)) } willReturn {
             Pair(false, CompletableDeferred(listOf(firstPosition, secondPosition, thirdPosition)))
         }
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/positions?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"))
+        mockMvc.perform(
+            get(
+                "/bff/v1/vessels/positions?internalReferenceNumber=FR224226850&externalReferenceNumber=123&IRCS=IEF4&trackDepth=TWELVE_HOURS&vesselIdentifier=INTERNAL_REFERENCE_NUMBER"
+            )
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(3)))
 
         runBlocking {
-            Mockito.verify(getVesselPositions).execute("FR224226850", "123", "IEF4", VesselTrackDepth.TWELVE_HOURS, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, null, null)
+            Mockito.verify(getVesselPositions).execute(
+                "FR224226850",
+                "123",
+                "IEF4",
+                VesselTrackDepth.TWELVE_HOURS,
+                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                null,
+                null
+            )
         }
     }
 
     @Test
     fun `Should search for a vessel`() {
         // Given
-        given(this.searchVessels.execute(any())).willReturn(listOf(
-            Vessel(internalReferenceNumber = "FR224226850", vesselName = "MY AWESOME VESSEL", flagState = CountryCode.FR, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing"),
-            Vessel(internalReferenceNumber = "GBR21555445", vesselName = "ANOTHER VESSEL", flagState = CountryCode.GB, declaredFishingGears = listOf("Trémails"), vesselType = "Fishing")))
+        given(this.searchVessels.execute(any())).willReturn(
+            listOf(
+                Vessel(
+                    internalReferenceNumber = "FR224226850",
+                    vesselName = "MY AWESOME VESSEL",
+                    flagState = CountryCode.FR,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing"
+                ),
+                Vessel(
+                    internalReferenceNumber = "GBR21555445",
+                    vesselName = "ANOTHER VESSEL",
+                    flagState = CountryCode.GB,
+                    declaredFishingGears = listOf("Trémails"),
+                    vesselType = "Fishing"
+                )
+            )
+        )
 
         // When
         mockMvc.perform(get("/bff/v1/vessels/search?searched=VESSEL"))
@@ -270,11 +417,20 @@ class VesselControllerITests {
     @Test
     fun `Should find the last logbook messages of vessels`() {
         // Given
-        val voyage = Voyage(true, false, ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"), null, "1234", LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()))
+        val voyage = Voyage(
+            true,
+            false,
+            ZonedDateTime.parse("2021-01-21T10:21:26.617301+01:00"),
+            null,
+            "1234",
+            LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf())
+        )
         given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime="))
+        mockMvc.perform(
+            get("/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=LAST&beforeDateTime=")
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(6)))
@@ -286,7 +442,12 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages.length()", equalTo(4)))
             .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].messageType", equalTo("DEP")))
             .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].tripNumber", equalTo("345")))
-            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].reportDateTime", equalTo("2020-05-04T03:04:05.000000003Z")))
+            .andExpect(
+                jsonPath(
+                    "$.logbookMessagesAndAlerts.logbookMessages[1].reportDateTime",
+                    equalTo("2020-05-04T03:04:05.000000003Z")
+                )
+            )
 
         Mockito.verify(getVesselVoyage).execute("FR224226850", VoyageRequest.LAST, null)
     }
@@ -294,32 +455,47 @@ class VesselControllerITests {
     @Test
     fun `Should find the logbook messages of vessels before a specified date`() {
         // Given
-        val voyage = Voyage(true, false, ZonedDateTime.now().minusMonths(5), null, "1234", LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf()))
+        val voyage = Voyage(
+            true,
+            false,
+            ZonedDateTime.now().minusMonths(5),
+            null,
+            "1234",
+            LogbookMessagesAndAlerts(TestUtils.getDummyLogbookMessages(), listOf())
+        )
         given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&tripNumber=12345"))
+        mockMvc.perform(
+            get(
+                "/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=PREVIOUS&tripNumber=12345"
+            )
+        )
 
         Mockito.verify(getVesselVoyage).execute(
             "FR224226850",
             VoyageRequest.PREVIOUS,
-            "12345")
+            "12345"
+        )
     }
 
     @Test
     fun `Should get all controls for a vessel`() {
         // Given
-        given(this.getVesselControls.execute(any(), any())).willReturn(ControlResumeAndControls(
-            1,
-            1,
-            3,
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            listOf(Control(1, 1, Controller(1, "Controlleur")))))
+        given(this.getVesselControls.execute(any(), any())).willReturn(
+            ControlResumeAndControls(
+                1,
+                1,
+                3,
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                listOf(Control(1, 1, Controller(1, "Controlleur")))
+            )
+        )
 
         // When
         mockMvc.perform(get("/bff/v1/vessels/123/controls?afterDateTime=2020-05-04T03:04:05.000Z"))
@@ -336,30 +512,78 @@ class VesselControllerITests {
     fun `Should get vessel's beacon malfunctions`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        given(this.getVesselBeaconMalfunctions.execute(eq("FR224226850"), eq("123"), eq("IEF4"), eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), any()))
-            .willReturn(VesselBeaconMalfunctionsResumeAndHistory(
-                resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
-                history = listOf(BeaconMalfunctionWithDetails(
-                    beaconMalfunction = BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
-                        "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
-                        true, ZonedDateTime.now(), null, ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION),
-                    comments = listOf(BeaconMalfunctionComment(
-                        beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
-                    actions = listOf(BeaconMalfunctionAction(
-                        beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))),
-                current = BeaconMalfunctionWithDetails(
-                    beaconMalfunction = BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
-                        "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                        true, ZonedDateTime.now(), null, ZonedDateTime.now()),
-                    comments = listOf(BeaconMalfunctionComment(
-                        beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
-                    actions = listOf(BeaconMalfunctionAction(
-                        beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))
-            ))
+        given(
+            this.getVesselBeaconMalfunctions.execute(
+                eq("FR224226850"),
+                eq("123"),
+                eq("IEF4"),
+                eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
+                any()
+            )
+        )
+            .willReturn(
+                VesselBeaconMalfunctionsResumeAndHistory(
+                    resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
+                    history = listOf(
+                        BeaconMalfunctionWithDetails(
+                            beaconMalfunction = BeaconMalfunction(
+                                1, "FR224226850", "1236514", "IRCS",
+                                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                                true, ZonedDateTime.now(), null, ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION
+                            ),
+                            comments = listOf(
+                                BeaconMalfunctionComment(
+                                    beaconMalfunctionId = 1,
+                                    comment = "A comment",
+                                    userType = BeaconMalfunctionCommentUserType.SIP,
+                                    dateTime = now
+                                )
+                            ),
+                            actions = listOf(
+                                BeaconMalfunctionAction(
+                                    beaconMalfunctionId = 1,
+                                    propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
+                                    nextValue = "A VALUE",
+                                    previousValue = "A VALUE",
+                                    dateTime = now
+                                )
+                            )
+                        )
+                    ),
+                    current = BeaconMalfunctionWithDetails(
+                        beaconMalfunction = BeaconMalfunction(
+                            2, "FR224226850", "1236514", "IRCS",
+                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                            true, ZonedDateTime.now(), null, ZonedDateTime.now()
+                        ),
+                        comments = listOf(
+                            BeaconMalfunctionComment(
+                                beaconMalfunctionId = 1,
+                                comment = "A comment",
+                                userType = BeaconMalfunctionCommentUserType.SIP,
+                                dateTime = now
+                            )
+                        ),
+                        actions = listOf(
+                            BeaconMalfunctionAction(
+                                beaconMalfunctionId = 1,
+                                propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
+                                nextValue = "A VALUE",
+                                previousValue = "A VALUE",
+                                dateTime = now
+                            )
+                        )
+                    )
+                )
+            )
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/beacon_malfunctions?internalReferenceNumber=FR224226850" +
-            "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z"))
+        mockMvc.perform(
+            get(
+                "/bff/v1/vessels/beacon_malfunctions?internalReferenceNumber=FR224226850" +
+                    "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&afterDateTime=2021-03-24T22:07:00.000Z"
+            )
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))
@@ -371,7 +595,9 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.history[0].beaconMalfunction.internalReferenceNumber", equalTo("FR224226850")))
             .andExpect(jsonPath("$.history[0].beaconMalfunction.flagState", equalTo("fr")))
             .andExpect(jsonPath("$.history[0].beaconMalfunction.externalReferenceNumber", equalTo("1236514")))
-            .andExpect(jsonPath("$.history[0].beaconMalfunction.endOfBeaconMalfunctionReason", equalTo("RESUMED_TRANSMISSION")))
+            .andExpect(
+                jsonPath("$.history[0].beaconMalfunction.endOfBeaconMalfunctionReason", equalTo("RESUMED_TRANSMISSION"))
+            )
             .andExpect(jsonPath("$.history[0].actions[0].beaconMalfunctionId", equalTo(1)))
             .andExpect(jsonPath("$.history[0].actions[0].propertyName", equalTo("VESSEL_STATUS")))
             .andExpect(jsonPath("$.history[0].comments[0].beaconMalfunctionId", equalTo(1)))
@@ -383,29 +609,69 @@ class VesselControllerITests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         given(this.getVesselBeaconMalfunctions.execute(eq("FR224226850"), eq("123"), eq("IEF4"), eq(null), any()))
-            .willReturn(VesselBeaconMalfunctionsResumeAndHistory(
-                resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
-                history = listOf(BeaconMalfunctionWithDetails(
-                    beaconMalfunction = BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
-                        "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
-                        true, ZonedDateTime.now(), null, ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION),
-                    comments = listOf(BeaconMalfunctionComment(
-                        beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
-                    actions = listOf(BeaconMalfunctionAction(
-                        beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))),
-                current = BeaconMalfunctionWithDetails(
-                    beaconMalfunction = BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
-                        "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                        true, ZonedDateTime.now(), null, ZonedDateTime.now()),
-                    comments = listOf(BeaconMalfunctionComment(
-                        beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)),
-                    actions = listOf(BeaconMalfunctionAction(
-                        beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = "A VALUE", previousValue = "A VALUE", dateTime = now)))
-            ))
+            .willReturn(
+                VesselBeaconMalfunctionsResumeAndHistory(
+                    resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
+                    history = listOf(
+                        BeaconMalfunctionWithDetails(
+                            beaconMalfunction = BeaconMalfunction(
+                                1, "FR224226850", "1236514", "IRCS",
+                                "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                                true, ZonedDateTime.now(), null, ZonedDateTime.now(), endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION
+                            ),
+                            comments = listOf(
+                                BeaconMalfunctionComment(
+                                    beaconMalfunctionId = 1,
+                                    comment = "A comment",
+                                    userType = BeaconMalfunctionCommentUserType.SIP,
+                                    dateTime = now
+                                )
+                            ),
+                            actions = listOf(
+                                BeaconMalfunctionAction(
+                                    beaconMalfunctionId = 1,
+                                    propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
+                                    nextValue = "A VALUE",
+                                    previousValue = "A VALUE",
+                                    dateTime = now
+                                )
+                            )
+                        )
+                    ),
+                    current = BeaconMalfunctionWithDetails(
+                        beaconMalfunction = BeaconMalfunction(
+                            2, "FR224226850", "1236514", "IRCS",
+                            "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                            true, ZonedDateTime.now(), null, ZonedDateTime.now()
+                        ),
+                        comments = listOf(
+                            BeaconMalfunctionComment(
+                                beaconMalfunctionId = 1,
+                                comment = "A comment",
+                                userType = BeaconMalfunctionCommentUserType.SIP,
+                                dateTime = now
+                            )
+                        ),
+                        actions = listOf(
+                            BeaconMalfunctionAction(
+                                beaconMalfunctionId = 1,
+                                propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
+                                nextValue = "A VALUE",
+                                previousValue = "A VALUE",
+                                dateTime = now
+                            )
+                        )
+                    )
+                )
+            )
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/beacon_malfunctions?internalReferenceNumber=FR224226850" +
-            "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=&afterDateTime=2021-03-24T22:07:00.000Z"))
+        mockMvc.perform(
+            get(
+                "/bff/v1/vessels/beacon_malfunctions?internalReferenceNumber=FR224226850" +
+                    "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=&afterDateTime=2021-03-24T22:07:00.000Z"
+            )
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.resume.numberOfBeaconsAtSea", equalTo(1)))
@@ -417,7 +683,9 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.history[0].beaconMalfunction.internalReferenceNumber", equalTo("FR224226850")))
             .andExpect(jsonPath("$.history[0].beaconMalfunction.flagState", equalTo("fr")))
             .andExpect(jsonPath("$.history[0].beaconMalfunction.externalReferenceNumber", equalTo("1236514")))
-            .andExpect(jsonPath("$.history[0].beaconMalfunction.endOfBeaconMalfunctionReason", equalTo("RESUMED_TRANSMISSION")))
+            .andExpect(
+                jsonPath("$.history[0].beaconMalfunction.endOfBeaconMalfunctionReason", equalTo("RESUMED_TRANSMISSION"))
+            )
             .andExpect(jsonPath("$.history[0].actions[0].beaconMalfunctionId", equalTo(1)))
             .andExpect(jsonPath("$.history[0].actions[0].propertyName", equalTo("VESSEL_STATUS")))
             .andExpect(jsonPath("$.history[0].comments[0].beaconMalfunctionId", equalTo(1)))
@@ -428,55 +696,78 @@ class VesselControllerITests {
     fun `Should get vessel's reporting`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        given(this.getVesselReportings.execute(eq("FR224226850"), eq("123"), eq("IEF4"), eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), any()))
-            .willReturn(CurrentAndArchivedReportings(
-                current = listOf(
-                    Reporting(
-                        id = 1,
-                        type = ReportingType.ALERT,
-                        vesselName = "BIDUBULE",
-                        internalReferenceNumber = "FR224226850",
-                        externalReferenceNumber = "1236514",
-                        ircs = "IRCS",
-                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                        creationDate = ZonedDateTime.now(),
-                        validationDate = ZonedDateTime.now(),
-                        value = ThreeMilesTrawlingAlert() as ReportingValue,
-                        isArchived = false,
-                        isDeleted = false,
-                        infraction = Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value)),
-                    Reporting(
-                        id = 1,
-                        type = ReportingType.ALERT,
-                        vesselName = "BIDUBULE",
-                        internalReferenceNumber = "FR224226850",
-                        externalReferenceNumber = "1236514",
-                        ircs = "IRCS",
-                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                        creationDate = ZonedDateTime.now(),
-                        validationDate = ZonedDateTime.now(),
-                        value = ThreeMilesTrawlingAlert() as ReportingValue,
-                        isArchived = false,
-                        isDeleted = false)),
-                archived = listOf(
-                    Reporting(
-                        id = 666,
-                        type = ReportingType.ALERT,
-                        vesselName = "BIDUBULE",
-                        internalReferenceNumber = "FR224226850",
-                        externalReferenceNumber = "1236514",
-                        ircs = "IRCS",
-                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                        creationDate = ZonedDateTime.now().minusYears(1),
-                        validationDate = ZonedDateTime.now().minusYears(1),
-                        value = ThreeMilesTrawlingAlert() as ReportingValue,
-                        isArchived = true,
-                        isDeleted = false)))
+        given(
+            this.getVesselReportings.execute(
+                eq("FR224226850"),
+                eq("123"),
+                eq("IEF4"),
+                eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
+                any()
+            )
+        )
+            .willReturn(
+                CurrentAndArchivedReportings(
+                    current = listOf(
+                        Reporting(
+                            id = 1,
+                            type = ReportingType.ALERT,
+                            vesselName = "BIDUBULE",
+                            internalReferenceNumber = "FR224226850",
+                            externalReferenceNumber = "1236514",
+                            ircs = "IRCS",
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            creationDate = ZonedDateTime.now(),
+                            validationDate = ZonedDateTime.now(),
+                            value = ThreeMilesTrawlingAlert() as ReportingValue,
+                            isArchived = false,
+                            isDeleted = false,
+                            infraction = Infraction(
+                                1,
+                                natinfCode = "7059",
+                                infractionCategory = InfractionCategory.FISHING.value
+                            )
+                        ),
+                        Reporting(
+                            id = 1,
+                            type = ReportingType.ALERT,
+                            vesselName = "BIDUBULE",
+                            internalReferenceNumber = "FR224226850",
+                            externalReferenceNumber = "1236514",
+                            ircs = "IRCS",
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            creationDate = ZonedDateTime.now(),
+                            validationDate = ZonedDateTime.now(),
+                            value = ThreeMilesTrawlingAlert() as ReportingValue,
+                            isArchived = false,
+                            isDeleted = false
+                        )
+                    ),
+                    archived = listOf(
+                        Reporting(
+                            id = 666,
+                            type = ReportingType.ALERT,
+                            vesselName = "BIDUBULE",
+                            internalReferenceNumber = "FR224226850",
+                            externalReferenceNumber = "1236514",
+                            ircs = "IRCS",
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            creationDate = ZonedDateTime.now().minusYears(1),
+                            validationDate = ZonedDateTime.now().minusYears(1),
+                            value = ThreeMilesTrawlingAlert() as ReportingValue,
+                            isArchived = true,
+                            isDeleted = false
+                        )
+                    )
+                )
             )
 
         // When
-        mockMvc.perform(get("/bff/v1/vessels/reporting?internalReferenceNumber=FR224226850" +
-            "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z"))
+        mockMvc.perform(
+            get(
+                "/bff/v1/vessels/reporting?internalReferenceNumber=FR224226850" +
+                    "&externalReferenceNumber=123&IRCS=IEF4&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&fromDate=2021-03-24T22:07:00.000Z"
+            )
+        )
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.current.length()", equalTo(2)))

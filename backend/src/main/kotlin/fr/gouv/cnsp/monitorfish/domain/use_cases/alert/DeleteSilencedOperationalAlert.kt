@@ -9,7 +9,7 @@ class DeleteSilencedOperationalAlert(private val silencedAlertRepository: Silenc
     private val logger = LoggerFactory.getLogger(DeleteSilencedOperationalAlert::class.java)
 
     fun execute(silencedAlertId: Int) {
-        logger.info("Deleting silenced alert ${silencedAlertId}.")
+        logger.info("Deleting silenced alert $silencedAlertId.")
         silencedAlertRepository.delete(silencedAlertId)
     }
 }

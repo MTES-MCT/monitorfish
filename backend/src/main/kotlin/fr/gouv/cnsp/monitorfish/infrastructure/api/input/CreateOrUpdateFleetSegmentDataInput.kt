@@ -18,5 +18,6 @@ data class CreateOrUpdateFleetSegmentDataInput(
         faoAreas = this.faoAreas,
         targetSpecies = this.targetSpecies,
         bycatchSpecies = this.bycatchSpecies,
-        impactRiskFactor = this.impactRiskFactor)
+        impactRiskFactor = this.impactRiskFactor
+    )
 }

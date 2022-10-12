@@ -29,10 +29,13 @@ class HealthcheckControllerITests {
     @Test
     fun `Should get the health check`() {
         // Given
-        given(this.getHealthcheck.execute()).willReturn(Health(
-            ZonedDateTime.parse("2020-12-21T15:01:00Z"),
-            ZonedDateTime.parse("2020-12-21T16:01:00Z"),
-            ZonedDateTime.parse("2020-12-21T17:01:00Z")))
+        given(this.getHealthcheck.execute()).willReturn(
+            Health(
+                ZonedDateTime.parse("2020-12-21T15:01:00Z"),
+                ZonedDateTime.parse("2020-12-21T16:01:00Z"),
+                ZonedDateTime.parse("2020-12-21T17:01:00Z")
+            )
+        )
 
         // When
         mockMvc.perform(get("/bff/v1/healthcheck"))
@@ -42,5 +45,4 @@ class HealthcheckControllerITests {
             .andExpect(jsonPath("$.dateLastPosition", equalTo("2020-12-21T16:01:00Z")))
             .andExpect(jsonPath("$.dateLogbookMessageReceived", equalTo("2020-12-21T17:01:00Z")))
     }
-
 }

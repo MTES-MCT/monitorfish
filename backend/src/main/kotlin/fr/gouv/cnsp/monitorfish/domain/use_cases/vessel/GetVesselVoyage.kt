@@ -12,15 +12,20 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVesselVoyage(private val logbookReportRepository: LogbookReportRepository,
-                      private val PNOAndLANAlertRepository: PNOAndLANAlertRepository,
-                      private val getLogbookMessages: GetLogbookMessages) {
+class GetVesselVoyage(
+    private val logbookReportRepository: LogbookReportRepository,
+    private val PNOAndLANAlertRepository: PNOAndLANAlertRepository,
+    private val getLogbookMessages: GetLogbookMessages
+) {
     private val logger = LoggerFactory.getLogger(GetVesselVoyage::class.java)
 
     fun execute(internalReferenceNumber: String, voyageRequest: VoyageRequest, currentTripNumber: String?): Voyage {
         val trip = try {
             when (voyageRequest) {
-                VoyageRequest.LAST -> logbookReportRepository.findLastTripBeforeDateTime(internalReferenceNumber, ZonedDateTime.now())
+                VoyageRequest.LAST -> logbookReportRepository.findLastTripBeforeDateTime(
+                    internalReferenceNumber,
+                    ZonedDateTime.now()
+                )
                 VoyageRequest.PREVIOUS -> {
                     require(currentTripNumber != null) {
                         "Current trip number parameter must be not null"
@@ -66,10 +71,12 @@ class GetVesselVoyage(private val logbookReportRepository: LogbookReportReposito
         )
     }
 
-    private fun getIsLastVoyage(currentTripNumber: String?,
-                                voyageRequest: VoyageRequest,
-                                internalReferenceNumber: String,
-                                tripNumber: String): Boolean {
+    private fun getIsLastVoyage(
+        currentTripNumber: String?,
+        voyageRequest: VoyageRequest,
+        internalReferenceNumber: String,
+        tripNumber: String
+    ): Boolean {
         if (currentTripNumber == null) {
             return true
         }
@@ -87,8 +94,10 @@ class GetVesselVoyage(private val logbookReportRepository: LogbookReportReposito
         }
     }
 
-    private fun getIsFirstVoyage(internalReferenceNumber: String,
-                                 tripNumber: String): Boolean {
+    private fun getIsFirstVoyage(
+        internalReferenceNumber: String,
+        tripNumber: String
+    ): Boolean {
         return try {
             logbookReportRepository.findTripBeforeTripNumber(internalReferenceNumber, tripNumber)
 

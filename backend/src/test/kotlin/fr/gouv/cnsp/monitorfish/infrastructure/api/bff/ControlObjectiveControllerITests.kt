@@ -50,9 +50,13 @@ class ControlObjectiveControllerITests {
     @Test
     fun `Should return Created When an update of a control objective is done`() {
         // When
-        mockMvc.perform(put("/bff/v1/control_objectives/123")
-            .content(objectMapper.writeValueAsString(UpdateControlObjectiveDataInput(targetNumberOfControlsAtSea = 123)))
-            .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+            put("/bff/v1/control_objectives/123")
+                .content(
+                    objectMapper.writeValueAsString(UpdateControlObjectiveDataInput(targetNumberOfControlsAtSea = 123))
+                )
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             // Then
             .andExpect(status().isOk)
     }
@@ -68,9 +72,15 @@ class ControlObjectiveControllerITests {
     @Test
     fun `Should return the id When a adding a control objective`() {
         // When
-        mockMvc.perform(post("/bff/v1/control_objectives")
-            .content(objectMapper.writeValueAsString(AddControlObjectiveDataInput(segment = "SEGMENT", facade = "FACADE", year = 2021)))
-            .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+            post("/bff/v1/control_objectives")
+                .content(
+                    objectMapper.writeValueAsString(
+                        AddControlObjectiveDataInput(segment = "SEGMENT", facade = "FACADE", year = 2021)
+                    )
+                )
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             // Then
             .andExpect(status().isOk)
     }
@@ -78,10 +88,37 @@ class ControlObjectiveControllerITests {
     @Test
     fun `Should get all control objective for a given year`() {
         // Given
-        given(this.getControlObjectiveOfYear.execute(2021)).willReturn(listOf(
-            ControlObjective(1, facade = "NAME", segment = "SWW01", targetNumberOfControlsAtSea = 23, targetNumberOfControlsAtPort = 102, controlPriorityLevel = 1.0, year = 2021),
-            ControlObjective(1, facade = "NAME", segment = "SWW01", targetNumberOfControlsAtSea = 23, targetNumberOfControlsAtPort = 102, controlPriorityLevel = 1.0, year = 2021),
-            ControlObjective(1, facade = "NAME", segment = "SWW01", targetNumberOfControlsAtSea = 23, targetNumberOfControlsAtPort = 102, controlPriorityLevel = 1.0, year = 2021)))
+        given(this.getControlObjectiveOfYear.execute(2021)).willReturn(
+            listOf(
+                ControlObjective(
+                    1,
+                    facade = "NAME",
+                    segment = "SWW01",
+                    targetNumberOfControlsAtSea = 23,
+                    targetNumberOfControlsAtPort = 102,
+                    controlPriorityLevel = 1.0,
+                    year = 2021
+                ),
+                ControlObjective(
+                    1,
+                    facade = "NAME",
+                    segment = "SWW01",
+                    targetNumberOfControlsAtSea = 23,
+                    targetNumberOfControlsAtPort = 102,
+                    controlPriorityLevel = 1.0,
+                    year = 2021
+                ),
+                ControlObjective(
+                    1,
+                    facade = "NAME",
+                    segment = "SWW01",
+                    targetNumberOfControlsAtSea = 23,
+                    targetNumberOfControlsAtPort = 102,
+                    controlPriorityLevel = 1.0,
+                    year = 2021
+                )
+            )
+        )
 
         // When
         mockMvc.perform(get("/bff/v1/control_objectives/2021"))

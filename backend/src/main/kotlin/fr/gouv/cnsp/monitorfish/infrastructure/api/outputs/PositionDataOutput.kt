@@ -21,7 +21,8 @@ data class PositionDataOutput(
     val destination: CountryCode? = null,
     val tripNumber: String? = null,
     val positionType: PositionType,
-    val isManual: Boolean? = null) {
+    val isManual: Boolean? = null
+) {
     companion object {
         fun fromPosition(position: Position): PositionDataOutput {
             return PositionDataOutput(

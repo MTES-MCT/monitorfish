@@ -29,9 +29,12 @@ class InfractionControllerITests {
     @Test
     fun `Should get all fishing infractions`() {
         // Given
-        given(this.getFishingInfractions.execute()).willReturn(listOf(
-            Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value),
-            Infraction(1, natinfCode = "7065", infractionCategory = InfractionCategory.FISHING.value)))
+        given(this.getFishingInfractions.execute()).willReturn(
+            listOf(
+                Infraction(1, natinfCode = "7059", infractionCategory = InfractionCategory.FISHING.value),
+                Infraction(1, natinfCode = "7065", infractionCategory = InfractionCategory.FISHING.value)
+            )
+        )
 
         // When
         mockMvc.perform(get("/bff/v1/infractions"))
@@ -41,5 +44,4 @@ class InfractionControllerITests {
             .andExpect(jsonPath("$[0].natinfCode", equalTo("7059")))
             .andExpect(jsonPath("$[1].natinfCode", equalTo("7065")))
     }
-
 }

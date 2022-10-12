@@ -22,7 +22,8 @@ data class ControlObjectivesEntity(
     @Column(name = "target_number_of_controls_at_port")
     val targetNumberOfControlsAtPort: Int,
     @Column(name = "control_priority_level")
-    val controlPriorityLevel: Double) {
+    val controlPriorityLevel: Double
+) {
 
     fun toControlObjective() = ControlObjective(
         id = id,

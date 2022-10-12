@@ -37,7 +37,8 @@ data class VesselDataOutput(
     val vesselEmails: List<String>? = null,
     val beaconNumber: String? = null,
     val riskFactor: RiskFactorDataOutput? = null,
-    val underCharter: Boolean? = null) {
+    val underCharter: Boolean? = null
+) {
     companion object {
         fun fromVesselAndRiskFactor(vessel: Vessel, vesselRiskFactor: VesselRiskFactor): VesselDataOutput {
             return VesselDataOutput(

@@ -14,7 +14,9 @@ class AddReporting(private val reportingRepository: ReportingRepository) {
     private val logger: Logger = LoggerFactory.getLogger(AddReporting::class.java)
 
     fun execute(newReporting: Reporting): Reporting {
-        logger.info("Adding reporting for vessel ${newReporting.internalReferenceNumber}/${newReporting.externalReferenceNumber}/${newReporting.ircs}")
+        logger.info(
+            "Adding reporting for vessel ${newReporting.internalReferenceNumber}/${newReporting.externalReferenceNumber}/${newReporting.ircs}"
+        )
 
         require(newReporting.type != ReportingType.ALERT) {
             "The reporting type must be OBSERVATION or INFRACTION_SUSPICION"

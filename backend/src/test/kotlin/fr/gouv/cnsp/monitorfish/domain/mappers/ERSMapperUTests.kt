@@ -50,7 +50,7 @@ class ERSMapperUTests {
         farMessage.hauls = listOf(haul)
 
         // When
-        val jsonString = mapper.writeValueAsString(farMessage);
+        val jsonString = mapper.writeValueAsString(farMessage)
         val parsedFARMessage = ERSMapper.getERSMessageValueFromJSON(mapper, jsonString, "FAR", LogbookOperationType.DAT)
 
         // Then

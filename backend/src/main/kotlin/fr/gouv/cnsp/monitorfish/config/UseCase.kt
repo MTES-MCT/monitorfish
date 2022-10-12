@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.config;
+package fr.gouv.cnsp.monitorfish.config
 
 import org.springframework.stereotype.Component
 

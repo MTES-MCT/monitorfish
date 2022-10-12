@@ -84,7 +84,12 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `findLastTripBefore Should throw an exception When the vessel could not be found`() {
         // When
-        val throwable = catchThrowable { jpaLogbookReportRepository.findLastTripBeforeDateTime("ARGH", ZonedDateTime.now()) }
+        val throwable = catchThrowable {
+            jpaLogbookReportRepository.findLastTripBeforeDateTime(
+                "ARGH",
+                ZonedDateTime.now()
+            )
+        }
 
         // Then
         assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
@@ -97,7 +102,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
             "FAK000999999",
-            "9463714")
+            "9463714"
+        )
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463713")
@@ -112,7 +118,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val throwable = catchThrowable {
             jpaLogbookReportRepository.findTripBeforeTripNumber(
                 "FAK000999999",
-                "9463712")
+                "9463712"
+            )
         }
 
         // Then
@@ -126,7 +133,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
             "FAK000999999",
-            "9463715")
+            "9463715"
+        )
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463714")
@@ -140,7 +148,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripAfterTripNumber(
             "FAK000999999",
-            "9463713")
+            "9463713"
+        )
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463714")
@@ -154,7 +163,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripAfterTripNumber(
             "FAK000999999",
-            "9463714")
+            "9463714"
+        )
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463715")
@@ -169,7 +179,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val throwable = catchThrowable {
             jpaLogbookReportRepository.findTripAfterTripNumber(
                 "FAK000999999",
-                "9463715")
+                "9463715"
+            )
         }
 
         // Then
@@ -359,12 +370,16 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then, the origin LAN message is not present (3 messages in place of 4)
         assertThat(messages).hasSize(3)
 
-        assertThat(messages.any {
-            it.first.operationType == LogbookOperationType.DAT && it.first.reportId == lanMessageBeingCorrected
-        }).isFalse
-        assertThat(messages.any {
-            it.first.operationType == LogbookOperationType.COR && it.first.referencedReportId == lanMessageBeingCorrected
-        }).isTrue
+        assertThat(
+            messages.any {
+                it.first.operationType == LogbookOperationType.DAT && it.first.reportId == lanMessageBeingCorrected
+            }
+        ).isFalse
+        assertThat(
+            messages.any {
+                it.first.operationType == LogbookOperationType.COR && it.first.referencedReportId == lanMessageBeingCorrected
+            }
+        ).isTrue
     }
 
     @Test

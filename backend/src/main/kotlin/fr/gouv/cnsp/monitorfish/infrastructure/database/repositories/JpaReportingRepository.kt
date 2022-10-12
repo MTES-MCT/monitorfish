@@ -14,8 +14,10 @@ import java.time.ZonedDateTime
 import javax.transaction.Transactional
 
 @Repository
-class JpaReportingRepository(private val dbReportingRepository: DBReportingRepository,
-                             private val mapper: ObjectMapper) : ReportingRepository {
+class JpaReportingRepository(
+    private val dbReportingRepository: DBReportingRepository,
+    private val mapper: ObjectMapper
+) : ReportingRepository {
 
     override fun save(alert: PendingAlert, validationDate: ZonedDateTime?) {
         dbReportingRepository.save(ReportingEntity.fromPendingAlert(alert, validationDate, mapper))
@@ -51,17 +53,30 @@ class JpaReportingRepository(private val dbReportingRepository: DBReportingRepos
         return dbReportingRepository.findAllCurrentReportings().map { it.toReporting(mapper) }
     }
 
-    override fun findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String, fromDate: ZonedDateTime): List<Reporting> {
+    override fun findCurrentAndArchivedByVesselIdentifierEquals(
+        vesselIdentifier: VesselIdentifier,
+        value: String,
+        fromDate: ZonedDateTime
+    ): List<Reporting> {
         return dbReportingRepository
             .findCurrentAndArchivedByVesselIdentifier(vesselIdentifier.toString(), value, fromDate.toInstant()).map {
                 it.toReporting(mapper)
             }
     }
 
-    override fun findCurrentAndArchivedWithoutVesselIdentifier(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String, fromDate: ZonedDateTime): List<Reporting> {
+    override fun findCurrentAndArchivedWithoutVesselIdentifier(
+        internalReferenceNumber: String,
+        externalReferenceNumber: String,
+        ircs: String,
+        fromDate: ZonedDateTime
+    ): List<Reporting> {
         if (internalReferenceNumber.isNotEmpty()) {
             return dbReportingRepository
-                .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(), internalReferenceNumber, fromDate.toInstant()).map {
+                .findCurrentAndArchivedByVesselIdentifier(
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(),
+                    internalReferenceNumber,
+                    fromDate.toInstant()
+                ).map {
                     it.toReporting(mapper)
                 }
         }
@@ -75,7 +90,11 @@ class JpaReportingRepository(private val dbReportingRepository: DBReportingRepos
 
         if (externalReferenceNumber.isNotEmpty()) {
             return dbReportingRepository
-                .findCurrentAndArchivedByVesselIdentifier(VesselIdentifier.EXTERNAL_REFERENCE_NUMBER.toString(), externalReferenceNumber, fromDate.toInstant()).map {
+                .findCurrentAndArchivedByVesselIdentifier(
+                    VesselIdentifier.EXTERNAL_REFERENCE_NUMBER.toString(),
+                    externalReferenceNumber,
+                    fromDate.toInstant()
+                ).map {
                     it.toReporting(mapper)
                 }
         }

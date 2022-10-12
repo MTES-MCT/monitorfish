@@ -33,5 +33,4 @@ class PendingAlertMapperUTests {
         assertThat(parsedAlert.riskFactor).isEqualTo(1.2311444133)
         assertThat(parsedAlert.natinfCode).isEqualTo("7059")
     }
-
 }

@@ -36,8 +36,12 @@ class GetVesselVoyageUTests {
         // Given
         val endDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
         val startDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
-        given(logbookReportRepository.findTripBeforeTripNumber(any(), any())).willThrow(NoLogbookFishingTripFound("Not found"))
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber("1234", startDate, endDate))
+        given(logbookReportRepository.findTripBeforeTripNumber(any(), any())).willThrow(
+            NoLogbookFishingTripFound("Not found")
+        )
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber("1234", startDate, endDate)
+        )
 
         // When
         val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
@@ -66,7 +70,9 @@ class GetVesselVoyageUTests {
 
         // Then
         assertThat(throwable).isNotNull
-        assertThat(throwable.message).isEqualTo("Could not fetch voyage for request \"PREVIOUS\": Current trip number parameter must be not null")
+        assertThat(throwable.message).isEqualTo(
+            "Could not fetch voyage for request \"PREVIOUS\": Current trip number parameter must be not null"
+        )
     }
 
     @Test
@@ -75,7 +81,9 @@ class GetVesselVoyageUTests {
         val endDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
         val startDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
         val tripNumber = "123456789"
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(VoyageDatesAndTripNumber(tripNumber, startDate, endDate))
+        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willReturn(
+            VoyageDatesAndTripNumber(tripNumber, startDate, endDate)
+        )
 
         // When
         val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)
@@ -100,8 +108,12 @@ class GetVesselVoyageUTests {
         val expectedEndDate = ZonedDateTime.parse("2021-06-21T10:24:46.021615+02:00")
         val expectedStartDate = ZonedDateTime.parse("2021-05-21T10:24:46.021615+02:00")
         val expectedTripNumber = "123456789"
-        given(logbookReportRepository.findTripAfterTripNumber("FR224226850", "123456788")).willReturn(VoyageDatesAndTripNumber(expectedTripNumber, expectedStartDate, expectedEndDate))
-        given(logbookReportRepository.findTripAfterTripNumber("FR224226850", expectedTripNumber)).willThrow(NoLogbookFishingTripFound("Not found"))
+        given(logbookReportRepository.findTripAfterTripNumber("FR224226850", "123456788")).willReturn(
+            VoyageDatesAndTripNumber(expectedTripNumber, expectedStartDate, expectedEndDate)
+        )
+        given(logbookReportRepository.findTripAfterTripNumber("FR224226850", expectedTripNumber)).willThrow(
+            NoLogbookFishingTripFound("Not found")
+        )
 
         // When
         val voyage = GetVesselVoyage(logbookReportRepository, PNOAndLANAlertRepository, getLogbookMessages)

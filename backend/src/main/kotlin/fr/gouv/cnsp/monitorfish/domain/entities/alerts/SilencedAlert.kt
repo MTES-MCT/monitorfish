@@ -14,4 +14,5 @@ class SilencedAlert(
     val silencedBeforeDate: ZonedDateTime,
     val silencedAfterDate: ZonedDateTime? = null,
     val value: AlertType,
-    val wasValidated: Boolean? = null)
+    val wasValidated: Boolean? = null
+)

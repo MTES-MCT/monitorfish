@@ -28,9 +28,11 @@ class UnitsControllerITests {
     @Test
     fun `Should return all controllers`() {
         // Given
-        given(getAllControllers.execute()).willReturn(listOf(
-            Controller(1, "ULAM 56", "Terrestre", "Affaires Maritimes")
-        ))
+        given(getAllControllers.execute()).willReturn(
+            listOf(
+                Controller(1, "ULAM 56", "Terrestre", "Affaires Maritimes")
+            )
+        )
 
         // When
         mockMvc.perform(get("/bff/v1/controllers"))
@@ -40,5 +42,4 @@ class UnitsControllerITests {
             .andExpect(jsonPath("$[0].controllerType", equalTo("Terrestre")))
             .andExpect(jsonPath("$[0].administration", equalTo("Affaires Maritimes")))
     }
-
 }

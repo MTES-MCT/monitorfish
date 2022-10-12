@@ -8,11 +8,18 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 import java.time.ZonedDateTime
 
 @UseCase
-class UpdateBeaconMalfunction(private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
-                              private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
-                              private val getBeaconMalfunction: GetBeaconMalfunction) {
+class UpdateBeaconMalfunction(
+    private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
+    private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository,
+    private val getBeaconMalfunction: GetBeaconMalfunction
+) {
     @Throws(CouldNotUpdateBeaconMalfunctionException::class, IllegalArgumentException::class)
-    fun execute(id: Int, vesselStatus: VesselStatus?, stage: Stage?, endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?): BeaconMalfunctionResumeAndDetails {
+    fun execute(
+        id: Int,
+        vesselStatus: VesselStatus?,
+        stage: Stage?,
+        endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?
+    ): BeaconMalfunctionResumeAndDetails {
         require(vesselStatus != null || stage != null) {
             "No value to update"
         }
@@ -49,7 +56,8 @@ class UpdateBeaconMalfunction(private val beaconMalfunctionsRepository: BeaconMa
             propertyName = propertyName,
             previousValue = previousValue,
             nextValue = nextValue,
-            dateTime = updateDateTime)
+            dateTime = updateDateTime
+        )
 
         beaconMalfunctionActionsRepository.save(beaconMalfunctionAction)
 

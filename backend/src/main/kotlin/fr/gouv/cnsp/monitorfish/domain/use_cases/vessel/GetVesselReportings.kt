@@ -10,27 +10,40 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVesselReportings(private val reportingRepository: ReportingRepository,
-                          private val infractionRepository: InfractionRepository) {
+class GetVesselReportings(
+    private val reportingRepository: ReportingRepository,
+    private val infractionRepository: InfractionRepository
+) {
     private val logger = LoggerFactory.getLogger(GetVesselReportings::class.java)
 
-    fun execute(internalReferenceNumber: String,
-                externalReferenceNumber: String,
-                ircs: String,
-                vesselIdentifier: VesselIdentifier?,
-                fromDate: ZonedDateTime): CurrentAndArchivedReportings {
+    fun execute(
+        internalReferenceNumber: String,
+        externalReferenceNumber: String,
+        ircs: String,
+        vesselIdentifier: VesselIdentifier?,
+        fromDate: ZonedDateTime
+    ): CurrentAndArchivedReportings {
         val reportings = when (vesselIdentifier) {
             VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
-                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, internalReferenceNumber, fromDate)
+                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                    vesselIdentifier,
+                    internalReferenceNumber,
+                    fromDate
+                )
             VesselIdentifier.IRCS ->
                 reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, ircs, fromDate)
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
-                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(vesselIdentifier, externalReferenceNumber, fromDate)
+                reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(
+                    vesselIdentifier,
+                    externalReferenceNumber,
+                    fromDate
+                )
             else -> reportingRepository.findCurrentAndArchivedWithoutVesselIdentifier(
                 internalReferenceNumber,
                 externalReferenceNumber,
                 ircs,
-                fromDate)
+                fromDate
+            )
         }
 
         val current = reportings

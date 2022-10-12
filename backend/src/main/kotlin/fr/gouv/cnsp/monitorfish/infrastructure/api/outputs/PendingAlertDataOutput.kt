@@ -15,7 +15,8 @@ data class PendingAlertDataOutput(
     val creationDate: ZonedDateTime,
     val tripNumber: String? = null,
     val value: AlertType,
-    var infraction: InfractionDataOutput? = null) {
+    var infraction: InfractionDataOutput? = null
+) {
     companion object {
         fun fromPendingAlert(pendingAlert: PendingAlert) = PendingAlertDataOutput(
             id = pendingAlert.id,

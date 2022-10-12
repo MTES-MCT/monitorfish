@@ -15,7 +15,8 @@ class CreateReportingDataInput(
     val vesselIdentifier: VesselIdentifier? = null,
     val creationDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
-    val value: InfractionSuspicionOrObservationType) {
+    val value: InfractionSuspicionOrObservationType
+) {
     fun toReporting() = Reporting(
         type = this.type,
         vesselName = this.vesselName,
@@ -27,5 +28,6 @@ class CreateReportingDataInput(
         validationDate = this.validationDate,
         isDeleted = false,
         isArchived = false,
-        value = this.value)
+        value = this.value
+    )
 }

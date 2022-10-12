@@ -40,8 +40,6 @@ def test_make_add_vessels_columns_query(reset_test_data):
 
     assert query_string == expected_query_string
 
-    breakpoint()
-
 
 def test_make_find_vessels_query(reset_test_data):
 

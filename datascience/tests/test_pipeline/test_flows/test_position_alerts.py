@@ -536,30 +536,35 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
             "trip_number": [None, None, None, None, None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
                     "riskFactor": 1.74110112659225003,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
                     "riskFactor": None,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
                     "riskFactor": 1.41421356237310003,
                 },
                 {
+                    "dml": None,
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
                     "riskFactor": None,
                 },
                 {
+                    "dml": "DML 13",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
@@ -662,24 +667,28 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
             "trip_number": [None, None, None, None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
                     "riskFactor": 1.74110112659225003,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
                     "riskFactor": None,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
                     "riskFactor": 1.41421356237310003,
                 },
                 {
+                    "dml": "DML 13",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
@@ -772,12 +781,14 @@ def test_flow_filters_on_gears(reset_test_data):
             "trip_number": [None, None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
                     "riskFactor": 1.74110112659225003,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
@@ -873,18 +884,21 @@ def test_flow_filters_on_time(reset_test_data):
             "trip_number": [None, None, None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
                     "riskFactor": None,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
                     "riskFactor": 1.41421356237310003,
                 },
                 {
+                    "dml": "DML 13",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
@@ -971,6 +985,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
             "trip_number": [None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
@@ -1055,12 +1070,14 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
             "trip_number": [None, None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "FRENCH_EEZ_FISHING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
                     "riskFactor": 1.4142135624,
                 },
                 {
+                    "dml": "DML 13",
                     "type": "FRENCH_EEZ_FISHING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",

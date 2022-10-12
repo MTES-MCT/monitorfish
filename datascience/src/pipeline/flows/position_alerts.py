@@ -24,6 +24,7 @@ from src.pipeline.shared_tasks.alerts import (
 from src.pipeline.shared_tasks.infrastructure import get_table
 from src.pipeline.shared_tasks.positions import add_vessel_identifier
 from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
+from src.pipeline.shared_tasks.vessels import add_vessel_id, add_vessels_columns
 from src.read_query import read_query
 
 
@@ -443,6 +444,8 @@ with Flow("Position alert") as flow:
     )
 
     positions_table = get_table("positions")
+    vessels_table = get_table("vessels")
+    districts_table = get_table("districts")
     zones_table = get_alert_type_zones_table(alert_type)
     facades_table = get_table("facade_areas_subdivided")
 
@@ -487,6 +490,13 @@ with Flow("Position alert") as flow:
     current_risk_factors = extract_current_risk_factors()
     positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
     vessels_in_alert = get_vessels_in_alert(positions_in_alert)
+    vessels_in_alert = add_vessel_id(vessels_in_alert, vessels_table)
+    vessels_in_alert = add_vessels_columns(
+        vessels_in_alert,
+        vessels_table,
+        districts_table=districts_table,
+        districts_columns_to_add=["dml"],
+    )
     alerts = make_alerts(vessels_in_alert, alert_type, alert_config_name)
     silenced_alerts = extract_silenced_alerts()
     alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)

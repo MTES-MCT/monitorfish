@@ -19,6 +19,7 @@ from src.pipeline.shared_tasks.alerts import (
 from src.pipeline.shared_tasks.infrastructure import get_table
 from src.pipeline.shared_tasks.positions import add_vessel_identifier
 from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
+from src.pipeline.shared_tasks.vessels import add_vessel_id, add_vessels_columns
 
 
 @task(checkpoint=False)
@@ -299,6 +300,7 @@ with Flow("Missing FAR alerts") as flow:
     only_raise_if_route_shows_fishing = Parameter("only_raise_if_route_shows_fishing")
 
     # Infras
+    districts_table = get_table("districts")
     positions_table = get_table("positions")
     facade_areas_table = get_table("facade_areas_subdivided")
     eez_areas_table = get_table("eez_areas")
@@ -366,7 +368,13 @@ with Flow("Missing FAR alerts") as flow:
     vessels_with_missing_fars = merge_risk_factor(
         vessels_with_missing_fars, current_risk_factors
     )
-
+    vessels_with_missing_fars = add_vessel_id(vessels_with_missing_fars, vessels_table)
+    vessels_with_missing_fars = add_vessels_columns(
+        vessels_with_missing_fars,
+        vessels_table,
+        districts_table=districts_table,
+        districts_columns_to_add=["dml"],
+    )
     alerts = make_alerts(vessels_with_missing_fars, alert_type, alert_config_name)
     silenced_alerts = extract_silenced_alerts()
     alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)

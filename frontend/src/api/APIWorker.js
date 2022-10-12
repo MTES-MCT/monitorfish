@@ -31,7 +31,7 @@ const APIWorker = () => {
     selectedVesselIdentity
   } = useSelector(state => state.vessel)
   const {
-    sideWindowIsOpen,
+    openedSideWindowTab,
     isAdmin
   } = useSelector(state => state.global)
   const {
@@ -80,7 +80,7 @@ const APIWorker = () => {
   }, [isAdmin])
 
   useEffect(() => {
-    if (isAdmin && sideWindowIsOpen) {
+    if (isAdmin && openedSideWindowTab) {
       if (sideWindowInterval?.current) {
         clearInterval(sideWindowInterval.current)
       }
@@ -96,10 +96,10 @@ const APIWorker = () => {
     return () => {
       clearInterval(sideWindowInterval?.current)
     }
-  }, [isAdmin, sideWindowIsOpen])
+  }, [isAdmin, openedSideWindowTab])
 
   useEffect(() => {
-    if (isAdmin && sideWindowIsOpen && openedBeaconMalfunctionInKanban) {
+    if (isAdmin && openedSideWindowTab && openedBeaconMalfunctionInKanban) {
       if (beaconMalfunctionInKanbanInterval?.current) {
         clearInterval(beaconMalfunctionInKanbanInterval.current)
       }
@@ -112,7 +112,7 @@ const APIWorker = () => {
     return () => {
       clearInterval(beaconMalfunctionInKanbanInterval?.current)
     }
-  }, [isAdmin, sideWindowIsOpen, openedBeaconMalfunctionInKanban])
+  }, [isAdmin, openedSideWindowTab, openedBeaconMalfunctionInKanban])
 
   useEffect(() => {
     if (isAdmin && vesselBeaconMalfunctionsResumeAndHistory) {

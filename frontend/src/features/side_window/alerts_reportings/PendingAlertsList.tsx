@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js'
-import { CSSProperties, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { CSSProperties, MutableRefObject, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlexboxGrid, List } from 'rsuite'
 import styled from 'styled-components'
 
@@ -17,10 +17,9 @@ import { SilenceAlertMenu } from './SilenceAlertMenu'
 
 import type { SilencedAlertPeriodRequest } from '../../../domain/types/alert'
 import type { MenuItem } from '../../../types'
-import type { ForwardedRef } from 'react'
 
 export type PendingAlertsListProps = {
-  baseRef: ForwardedRef<HTMLDivElement>
+  baseRef: RefObject<HTMLDivElement>
   numberOfSilencedAlerts: number
   selectedSeaFront: MenuItem<SeaFront>
 }

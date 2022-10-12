@@ -82,6 +82,7 @@ data class ReportingEntity(
         fun fromPendingAlert(alert: PendingAlert, validationDate: ZonedDateTime?, mapper: ObjectMapper) = ReportingEntity(
             vesselName = alert.vesselName,
             type = ReportingType.ALERT,
+            vesselId = alert.vesselId,
             internalReferenceNumber = alert.internalReferenceNumber,
             externalReferenceNumber = alert.externalReferenceNumber,
             ircs = alert.ircs,

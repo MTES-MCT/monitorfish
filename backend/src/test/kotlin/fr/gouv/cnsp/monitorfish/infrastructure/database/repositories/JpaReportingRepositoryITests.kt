@@ -25,6 +25,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             internalReferenceNumber = "FRFGRGR",
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
+            vesselId = 125,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = creationDate,
@@ -43,6 +44,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(alert.seaFront).isEqualTo("NAMO")
         assertThat(reporting.last().creationDate).isEqualTo(creationDate)
         assertThat(reporting.last().validationDate).isEqualTo(now)
+        assertThat(reporting.last().vesselId).isEqualTo(125)
     }
 
     @Test
@@ -54,6 +56,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             internalReferenceNumber = "FRFGRGR",
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
+            vesselId = 126,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             creationDate = creationDate,
             value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
@@ -77,6 +80,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(infraction.title).isEqualTo("A title")
         assertThat(reportings.last().creationDate).isEqualTo(creationDate)
         assertThat(reportings.last().validationDate).isNull()
+        assertThat(reportings.last().vesselId).isEqualTo(126)
     }
 
     @Test
@@ -88,6 +92,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             internalReferenceNumber = "FRFGRGR",
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
+            vesselId = 523,
             creationDate = creationDate,
             value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
             type = ReportingType.INFRACTION_SUSPICION,
@@ -110,6 +115,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(infraction.title).isEqualTo("A title")
         assertThat(reportings.last().creationDate).isEqualTo(creationDate)
         assertThat(reportings.last().validationDate).isNull()
+        assertThat(reportings.last().vesselId).isEqualTo(523)
     }
 
     @Test

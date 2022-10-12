@@ -49,7 +49,8 @@ data class LastPositionDataOutput(
     val isAtPort: Boolean? = null,
     val alerts: List<String>? = listOf(),
     val beaconMalfunctionId: Int? = null,
-    val reportings: List<String> = listOf()) {
+    val reportings: List<String> = listOf()
+) {
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
             return LastPositionDataOutput(
@@ -80,7 +81,11 @@ data class LastPositionDataOutput(
                 districtCode = position.districtCode,
                 gearOnboard = position.gearOnboard?.map { GearLastPositionDataOutput.fromGearLastPosition(it) },
                 segments = position.segments,
-                speciesOnboard = position.speciesOnboard?.map { SpeciesLastPositionDataOutput.fromSpeciesLastPosition(it) },
+                speciesOnboard = position.speciesOnboard?.map {
+                    SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
+                        it
+                    )
+                },
                 totalWeightOnboard = position.totalWeightOnboard,
                 lastControlDateTime = position.lastControlDateTime,
                 lastControlInfraction = position.lastControlInfraction,
@@ -94,7 +99,8 @@ data class LastPositionDataOutput(
                 isAtPort = position.isAtPort,
                 alerts = position.alerts,
                 beaconMalfunctionId = position.beaconMalfunctionId,
-                reportings = position.reportings)
+                reportings = position.reportings
+            )
         }
     }
 }

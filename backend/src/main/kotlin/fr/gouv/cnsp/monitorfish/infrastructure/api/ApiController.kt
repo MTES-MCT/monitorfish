@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*
 @Api(description = "External API")
 class ApiController(
     private val parseAndSavePosition: ParseAndSavePosition,
-    private val meterRegistry: MeterRegistry) {
+    private val meterRegistry: MeterRegistry
+) {
 
     val counter = meterRegistry.counter("ws_vessels_positions_received_counter")
 
@@ -22,7 +23,8 @@ class ApiController(
     @ResponseStatus(HttpStatus.CREATED)
     fun postPosition(
         @ApiParam("VMS NAF", required = true)
-        @RequestBody naf: String
+        @RequestBody
+        naf: String
     ) {
         counter.increment()
         parseAndSavePosition.execute(naf)

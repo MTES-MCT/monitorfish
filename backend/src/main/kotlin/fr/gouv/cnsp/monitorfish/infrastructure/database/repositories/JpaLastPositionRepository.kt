@@ -14,8 +14,10 @@ import java.time.ZonedDateTime
 import javax.transaction.Transactional
 
 @Repository
-class JpaLastPositionRepository(private val dbLastPositionRepository: DBLastPositionRepository,
-                                private val mapper: ObjectMapper) : LastPositionRepository {
+class JpaLastPositionRepository(
+    private val dbLastPositionRepository: DBLastPositionRepository,
+    private val mapper: ObjectMapper
+) : LastPositionRepository {
 
     @Cacheable(value = ["vessels_all_position"])
     override fun findAll(): List<LastPosition> {
@@ -59,15 +61,24 @@ class JpaLastPositionRepository(private val dbLastPositionRepository: DBLastPosi
     }
 
     @Transactional
-    override fun removeAlertToLastPositionByVesselIdentifierEquals(alertType: AlertTypeMapping,
-                                                                   vesselIdentifier: VesselIdentifier,
-                                                                   value: String,
-                                                                   isValidated: Boolean) {
-        dbLastPositionRepository.removeAlertByVesselIdentifierEquals(vesselIdentifier.name, value, alertType.name, isValidated)
+    override fun removeAlertToLastPositionByVesselIdentifierEquals(
+        alertType: AlertTypeMapping,
+        vesselIdentifier: VesselIdentifier,
+        value: String,
+        isValidated: Boolean
+    ) {
+        dbLastPositionRepository.removeAlertByVesselIdentifierEquals(
+            vesselIdentifier.name,
+            value,
+            alertType.name,
+            isValidated
+        )
     }
 
-    override fun findUnderCharterForVessel(vesselIdentifier: VesselIdentifier,
-                                           value: String): Boolean {
+    override fun findUnderCharterForVessel(
+        vesselIdentifier: VesselIdentifier,
+        value: String
+    ): Boolean {
         return dbLastPositionRepository.findUnderCharterByVesselIdentifierEquals(vesselIdentifier.name, value)
     }
 

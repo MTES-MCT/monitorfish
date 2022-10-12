@@ -9,17 +9,21 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.PendingAlertRepository
 import org.slf4j.LoggerFactory
 
 @UseCase
-class GetOperationalAlerts(private val pendingAlertRepository: PendingAlertRepository,
-                           private val infractionRepository: InfractionRepository) {
+class GetOperationalAlerts(
+    private val pendingAlertRepository: PendingAlertRepository,
+    private val infractionRepository: InfractionRepository
+) {
     private val logger = LoggerFactory.getLogger(GetOperationalAlerts::class.java)
 
     fun execute(): List<PendingAlert> {
-        return pendingAlertRepository.findAlertsOfTypes(listOf(
-            AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
-            AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
-            AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
-            AlertTypeMapping.MISSING_FAR_ALERT
-        )).map { pendingAlert ->
+        return pendingAlertRepository.findAlertsOfTypes(
+            listOf(
+                AlertTypeMapping.THREE_MILES_TRAWLING_ALERT,
+                AlertTypeMapping.FRENCH_EEZ_FISHING_ALERT,
+                AlertTypeMapping.TWELVE_MILES_FISHING_ALERT,
+                AlertTypeMapping.MISSING_FAR_ALERT
+            )
+        ).map { pendingAlert ->
             pendingAlert.value.natinfCode?.let {
                 try {
                     pendingAlert.infraction = infractionRepository.findInfractionByNatinfCode(it)

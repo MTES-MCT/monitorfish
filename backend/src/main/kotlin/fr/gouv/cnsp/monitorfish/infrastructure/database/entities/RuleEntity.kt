@@ -34,7 +34,8 @@ data class RuleEntity(
     val lastRunSuccess: Boolean? = null,
     @Type(type = "jsonb")
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
-    val value: String) {
+    val value: String
+) {
 
     fun toRule(mapper: ObjectMapper): Rule {
         return Rule(

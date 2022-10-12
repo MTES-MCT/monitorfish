@@ -15,7 +15,8 @@ data class SpeciesGroupEntity(
     @Column(name = "species_group")
     val group: String,
     @Column(name = "comment")
-    val comment: String) {
+    val comment: String
+) {
 
     fun toSpeciesGroup() = SpeciesGroup(
         group = group,

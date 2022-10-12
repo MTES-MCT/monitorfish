@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeName
 import java.time.ZonedDateTime
 
-
 @JsonTypeName("haul")
 class Haul() {
     var gear: String? = null

@@ -4,4 +4,5 @@ data class Species(
     var weight: Double? = null,
     var species: String? = null,
     var faoZone: String? = null,
-    var gear: String? = null)
+    var gear: String? = null
+)

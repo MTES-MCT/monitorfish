@@ -74,9 +74,11 @@ class ReportingControllerITests {
     @Test
     fun `Should archive multiple reportings`() {
         // When
-        mockMvc.perform(put("/bff/v1/reportings/archive")
-            .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
-            .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+            put("/bff/v1/reportings/archive")
+                .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             // Then
             .andExpect(status().isOk)
 
@@ -96,9 +98,11 @@ class ReportingControllerITests {
     @Test
     fun `Should delete multiple reportings`() {
         // When
-        mockMvc.perform(put("/bff/v1/reportings/delete")
-            .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
-            .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+            put("/bff/v1/reportings/delete")
+                .content(objectMapper.writeValueAsString(listOf(1, 2, 3)))
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             // Then
             .andExpect(status().isOk)
 
@@ -108,29 +112,38 @@ class ReportingControllerITests {
     @Test
     fun `Should create a reporting`() {
         // Given
-        given(addReporting.execute(any())).willReturn(Reporting(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            creationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
-            type = ReportingType.INFRACTION_SUSPICION,
-            isDeleted = false,
-            isArchived = false))
-
-        // When
-        mockMvc.perform(post("/bff/v1/reportings")
-            .content(objectMapper.writeValueAsString(CreateReportingDataInput(
+        given(addReporting.execute(any())).willReturn(
+            Reporting(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
-                type = ReportingType.INFRACTION_SUSPICION
-            )))
-            .contentType(MediaType.APPLICATION_JSON))
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false
+            )
+        )
+
+        // When
+        mockMvc.perform(
+            post("/bff/v1/reportings")
+                .content(
+                    objectMapper.writeValueAsString(
+                        CreateReportingDataInput(
+                            internalReferenceNumber = "FRFGRGR",
+                            externalReferenceNumber = "RGD",
+                            ircs = "6554fEE",
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                            creationDate = ZonedDateTime.now(),
+                            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                            type = ReportingType.INFRACTION_SUSPICION
+                        )
+                    )
+                )
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             // Then
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
@@ -142,19 +155,22 @@ class ReportingControllerITests {
     @Test
     fun `Should get all current reportings`() {
         // Given
-        given(getAllCurrentReportings.execute()).willReturn(listOf(
-            Reporting(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                creationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
-                type = ReportingType.INFRACTION_SUSPICION,
-                isDeleted = false,
-                isArchived = false,
-                underCharter = true)
-        ))
+        given(getAllCurrentReportings.execute()).willReturn(
+            listOf(
+                Reporting(
+                    internalReferenceNumber = "FRFGRGR",
+                    externalReferenceNumber = "RGD",
+                    ircs = "6554fEE",
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    creationDate = ZonedDateTime.now(),
+                    value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                    type = ReportingType.INFRACTION_SUSPICION,
+                    isDeleted = false,
+                    isArchived = false,
+                    underCharter = true
+                )
+            )
+        )
 
         // When
         mockMvc.perform(get("/bff/v1/reportings"))
@@ -181,17 +197,24 @@ class ReportingControllerITests {
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
-                underCharter = true)
+                underCharter = true
+            )
         )
 
         // When
-        mockMvc.perform(put("/bff/v1/reportings/123/update")
-            .content(objectMapper.writeValueAsString(UpdateReportingDataInput(
-                reportingActor = ReportingActor.OPS,
-                natinfCode = "123456",
-                title = "A title"
-            )))
-            .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+            put("/bff/v1/reportings/123/update")
+                .content(
+                    objectMapper.writeValueAsString(
+                        UpdateReportingDataInput(
+                            reportingActor = ReportingActor.OPS,
+                            natinfCode = "123456",
+                            title = "A title"
+                        )
+                    )
+                )
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             // Then
             .andExpect(status().isOk)
 
@@ -201,27 +224,36 @@ class ReportingControllerITests {
     @Test
     fun `Should create a reporting When no vesselIdentifier given`() {
         // Given
-        given(addReporting.execute(any())).willReturn(Reporting(
-            internalReferenceNumber = "FRFGRGR",
-            externalReferenceNumber = "RGD",
-            ircs = "6554fEE",
-            creationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
-            type = ReportingType.INFRACTION_SUSPICION,
-            isDeleted = false,
-            isArchived = false))
-
-        // When
-        mockMvc.perform(post("/bff/v1/reportings")
-            .content(objectMapper.writeValueAsString(CreateReportingDataInput(
+        given(addReporting.execute(any())).willReturn(
+            Reporting(
                 internalReferenceNumber = "FRFGRGR",
                 externalReferenceNumber = "RGD",
                 ircs = "6554fEE",
                 creationDate = ZonedDateTime.now(),
                 value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
-                type = ReportingType.INFRACTION_SUSPICION
-            )))
-            .contentType(MediaType.APPLICATION_JSON))
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false
+            )
+        )
+
+        // When
+        mockMvc.perform(
+            post("/bff/v1/reportings")
+                .content(
+                    objectMapper.writeValueAsString(
+                        CreateReportingDataInput(
+                            internalReferenceNumber = "FRFGRGR",
+                            externalReferenceNumber = "RGD",
+                            ircs = "6554fEE",
+                            creationDate = ZonedDateTime.now(),
+                            value = InfractionSuspicion(ReportingActor.OPS, natinfCode = "123456", title = "A title"),
+                            type = ReportingType.INFRACTION_SUSPICION
+                        )
+                    )
+                )
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             // Then
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
@@ -229,5 +261,4 @@ class ReportingControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo("123456")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
-
 }

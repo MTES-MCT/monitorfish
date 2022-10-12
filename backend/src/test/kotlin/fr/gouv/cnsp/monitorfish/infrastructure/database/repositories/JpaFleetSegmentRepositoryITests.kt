@@ -31,7 +31,9 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         assertThat(fleetSegments).hasSize(43)
         assertThat(fleetSegments.first().segment).isEqualTo("SWW01/02/03")
         assertThat(fleetSegments.first().dirm).isEqualTo(listOf("NAMO", "SA"))
-        assertThat(fleetSegments.first().gears).isEqualTo(listOf("OTB", "OTT", "PTB", "OT", "PT", "TBN", "TBS", "TX", "TB"))
+        assertThat(fleetSegments.first().gears).isEqualTo(
+            listOf("OTB", "OTT", "PTB", "OT", "PT", "TBN", "TBS", "TX", "TB")
+        )
     }
 
     @Test
@@ -44,7 +46,10 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         assertThat(fleetSegments.first().segment).isEqualTo("SWW01/02/03")
 
         // When
-        val updatedFleetSegment = jpaFleetSegmentRepository.update("SWW01/02/03", CreateOrUpdateFleetSegmentFields("NEXT_SWW01/02/03"))
+        val updatedFleetSegment = jpaFleetSegmentRepository.update(
+            "SWW01/02/03",
+            CreateOrUpdateFleetSegmentFields("NEXT_SWW01/02/03")
+        )
 
         // Then
         assertThat(updatedFleetSegment.segment).isEqualTo("NEXT_SWW01/02/03")
@@ -60,7 +65,10 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         assertThat(fleetSegments.first().segmentName).isEqualTo("Bottom trawls")
 
         // When
-        val updatedFleetSegment = jpaFleetSegmentRepository.update("SWW01/02/03", CreateOrUpdateFleetSegmentFields(segmentName = "Bottom trawls 666"))
+        val updatedFleetSegment = jpaFleetSegmentRepository.update(
+            "SWW01/02/03",
+            CreateOrUpdateFleetSegmentFields(segmentName = "Bottom trawls 666")
+        )
 
         // Then
         assertThat(updatedFleetSegment.segmentName).isEqualTo("Bottom trawls 666")
@@ -74,10 +82,15 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
 
         assertThat(fleetSegments).hasSize(43)
         assertThat(fleetSegments.first().segment).isEqualTo("SWW01/02/03")
-        assertThat(fleetSegments.first().gears).isEqualTo(listOf("OTB", "OTT", "PTB", "OT", "PT", "TBN", "TBS", "TX", "TB"))
+        assertThat(fleetSegments.first().gears).isEqualTo(
+            listOf("OTB", "OTT", "PTB", "OT", "PT", "TBN", "TBS", "TX", "TB")
+        )
 
         // When
-        val updatedFleetSegment = jpaFleetSegmentRepository.update("SWW01/02/03", CreateOrUpdateFleetSegmentFields(gears = listOf("OTB", "DOF")))
+        val updatedFleetSegment = jpaFleetSegmentRepository.update(
+            "SWW01/02/03",
+            CreateOrUpdateFleetSegmentFields(gears = listOf("OTB", "DOF"))
+        )
 
         // Then
         assertThat(updatedFleetSegment.segment).isEqualTo("SWW01/02/03")
@@ -95,7 +108,10 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         assertThat(fleetSegments.first().faoAreas).isEqualTo(listOf("27.8.c", "27.8", "27.9"))
 
         // When
-        val updatedFleetSegment = jpaFleetSegmentRepository.update("SWW01/02/03", CreateOrUpdateFleetSegmentFields(faoAreas = listOf("66.6.6", "66.6.7")))
+        val updatedFleetSegment = jpaFleetSegmentRepository.update(
+            "SWW01/02/03",
+            CreateOrUpdateFleetSegmentFields(faoAreas = listOf("66.6.6", "66.6.7"))
+        )
 
         // Then
         assertThat(updatedFleetSegment.segment).isEqualTo("SWW01/02/03")
@@ -113,15 +129,18 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
         assertThat(fleetSegments.first().faoAreas).isEqualTo(listOf("27.8.c", "27.8", "27.9"))
 
         // When
-        jpaFleetSegmentRepository.create(FleetSegment(
-            segment = "SEGMENT1",
-            segmentName = "A NAME",
-            dirm = listOf(),
-            gears = listOf(),
-            faoAreas = listOf(),
-            targetSpecies = listOf(),
-            bycatchSpecies = listOf(),
-            impactRiskFactor = 2.3))
+        jpaFleetSegmentRepository.create(
+            FleetSegment(
+                segment = "SEGMENT1",
+                segmentName = "A NAME",
+                dirm = listOf(),
+                gears = listOf(),
+                faoAreas = listOf(),
+                targetSpecies = listOf(),
+                bycatchSpecies = listOf(),
+                impactRiskFactor = 2.3
+            )
+        )
 
         // Then
         val createdFleetSegment = jpaFleetSegmentRepository.findAll().find { it.segment == "SEGMENT1" }

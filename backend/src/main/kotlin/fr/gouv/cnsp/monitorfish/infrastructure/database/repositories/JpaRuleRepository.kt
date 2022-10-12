@@ -7,13 +7,14 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaRuleRepository(private val dbRuleRepository: DBRuleRepository,
-                        private val mapper: ObjectMapper) : RuleRepository {
+class JpaRuleRepository(
+    private val dbRuleRepository: DBRuleRepository,
+    private val mapper: ObjectMapper
+) : RuleRepository {
 
     override fun findAll(): List<Rule> {
         return dbRuleRepository.findAll().map {
             it.toRule(mapper)
         }
     }
-
 }

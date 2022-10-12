@@ -14,7 +14,8 @@ class SilencedAlertDataOutput(
     val vesselIdentifier: VesselIdentifier,
     val silencedBeforeDate: ZonedDateTime,
     val silencedAfterDate: ZonedDateTime? = null,
-    val value: AlertType) {
+    val value: AlertType
+) {
     companion object {
         fun fromSilencedAlert(silencedAlert: SilencedAlert) = SilencedAlertDataOutput(
             id = silencedAlert.id,
@@ -25,6 +26,7 @@ class SilencedAlertDataOutput(
             vesselIdentifier = silencedAlert.vesselIdentifier,
             silencedBeforeDate = silencedAlert.silencedBeforeDate,
             silencedAfterDate = silencedAlert.silencedAfterDate,
-            value = silencedAlert.value)
+            value = silencedAlert.value
+        )
     }
 }

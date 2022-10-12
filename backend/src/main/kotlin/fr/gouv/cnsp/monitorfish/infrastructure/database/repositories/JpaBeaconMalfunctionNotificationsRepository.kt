@@ -6,7 +6,9 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaBeaconMalfunctionNotificationsRepository(private val dbBeaconMalfunctionNotificationsRepository: DBBeaconMalfunctionNotificationsRepository) : BeaconMalfunctionNotificationsRepository {
+class JpaBeaconMalfunctionNotificationsRepository(
+    private val dbBeaconMalfunctionNotificationsRepository: DBBeaconMalfunctionNotificationsRepository
+) : BeaconMalfunctionNotificationsRepository {
     override fun findAllByBeaconMalfunctionId(beaconMalfunctionId: Int): List<BeaconMalfunctionNotification> {
         return dbBeaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(beaconMalfunctionId)
             .map {

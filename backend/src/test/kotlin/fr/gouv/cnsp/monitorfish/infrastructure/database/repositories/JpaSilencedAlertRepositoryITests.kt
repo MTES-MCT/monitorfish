@@ -27,7 +27,8 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert())
+            value = ThreeMilesTrawlingAlert()
+        )
 
         // When
         val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null, false)
@@ -56,7 +57,8 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert())
+            value = ThreeMilesTrawlingAlert()
+        )
 
         // When
         val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null, false)
@@ -85,7 +87,8 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert())
+            value = ThreeMilesTrawlingAlert()
+        )
         jpaSilencedAlertRepository.save(alertOne, now, null, false)
 
         // When

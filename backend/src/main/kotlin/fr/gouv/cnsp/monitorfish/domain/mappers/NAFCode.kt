@@ -26,26 +26,26 @@ enum class NAFCode(val code: String) {
     LATITUDE("LA"),
     LONGITUDE("LO");
 
-    private val pattern: Pattern;
+    private val pattern: Pattern
 
     init {
-        this.pattern = Pattern.compile(getPattern());
+        this.pattern = Pattern.compile(getPattern())
     }
 
     private fun getPattern(): String {
         // '//CODE/([^/]+)//'
-        return "${DELIMITER}$code${SUBDELIMITER}([^${SUBDELIMITER}]+)${DELIMITER}";
+        return "${DELIMITER}$code$SUBDELIMITER([^$SUBDELIMITER]+)$DELIMITER"
     }
 
     fun matches(nafMessage: String): Boolean {
-        val matcher = pattern.matcher(nafMessage);
-        return matcher.find();
+        val matcher = pattern.matcher(nafMessage)
+        return matcher.find()
     }
 
     fun getValue(nafMessage: String): String? {
-        val matcher = pattern.matcher(nafMessage);
-        matcher.find();
-        return matcher.group(1);
+        val matcher = pattern.matcher(nafMessage)
+        matcher.find()
+        return matcher.group(1)
     }
 
     companion object {

@@ -74,5 +74,4 @@ class JpaFleetSegmentRepository(private val dbFleetSegmentRepository: DBFleetSeg
     }
 
     fun List<String>.toArrayString(): String = this.joinToString(",", "{", "}")
-
 }

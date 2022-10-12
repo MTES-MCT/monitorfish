@@ -14,11 +14,15 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
 
     fun findAllByDateTimeGreaterThanEqual(dateTime: ZonedDateTime): List<LastPositionEntity>
 
-    @Query("select last_position_datetime_utc from last_positions where last_position_datetime_utc < now() order by last_position_datetime_utc desc limit 1", nativeQuery = true)
+    @Query(
+        "select last_position_datetime_utc from last_positions where last_position_datetime_utc < now() order by last_position_datetime_utc desc limit 1",
+        nativeQuery = true
+    )
     fun findLastPositionDateTime(): Instant
 
     @Modifying(clearAutomatically = true)
-    @Query(value = """
+    @Query(
+        value = """
         UPDATE last_positions
         SET
             alerts = f_array_remove_elem(alerts, array_position(alerts, :alertType)),
@@ -32,10 +36,18 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
                 WHEN :vesselIdentifier = 'IRCS' THEN ircs
                 WHEN :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER' THEN external_immatriculation
             END = :value
-        """, nativeQuery = true)
-    fun removeAlertByVesselIdentifierEquals(vesselIdentifier: String, value: String, alertType: String, isValidated: Boolean)
+        """,
+        nativeQuery = true
+    )
+    fun removeAlertByVesselIdentifierEquals(
+        vesselIdentifier: String,
+        value: String,
+        alertType: String,
+        isValidated: Boolean
+    )
 
-    @Query(value = """
+    @Query(
+        value = """
         SELECT under_charter
         FROM last_positions
         WHERE
@@ -44,6 +56,8 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
                 WHEN :vesselIdentifier = 'IRCS' THEN ircs
                 WHEN :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER' THEN external_immatriculation
             END = :value
-        """, nativeQuery = true)
+        """,
+        nativeQuery = true
+    )
     fun findUnderCharterByVesselIdentifierEquals(vesselIdentifier: String, value: String): Boolean
 }

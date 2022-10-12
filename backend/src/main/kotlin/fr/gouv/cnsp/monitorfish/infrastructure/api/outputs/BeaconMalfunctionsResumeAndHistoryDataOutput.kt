@@ -5,14 +5,25 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeacon
 data class BeaconMalfunctionsResumeAndHistoryDataOutput(
     val resume: VesselBeaconMalfunctionResumeDataOutput,
     val current: BeaconMalfunctionWithDetailsDataOutput?,
-    val history: List<BeaconMalfunctionWithDetailsDataOutput>) {
+    val history: List<BeaconMalfunctionWithDetailsDataOutput>
+) {
     companion object {
-        fun fromBeaconMalfunctionsResumeAndHistory(vesselBeaconMalfunctionsResumeAndHistory: VesselBeaconMalfunctionsResumeAndHistory) = BeaconMalfunctionsResumeAndHistoryDataOutput(
-            resume = VesselBeaconMalfunctionResumeDataOutput.fromVesselBeaconMalfunctionResume(vesselBeaconMalfunctionsResumeAndHistory.resume),
+        fun fromBeaconMalfunctionsResumeAndHistory(
+            vesselBeaconMalfunctionsResumeAndHistory: VesselBeaconMalfunctionsResumeAndHistory
+        ) = BeaconMalfunctionsResumeAndHistoryDataOutput(
+            resume = VesselBeaconMalfunctionResumeDataOutput.fromVesselBeaconMalfunctionResume(
+                vesselBeaconMalfunctionsResumeAndHistory.resume
+            ),
             current = vesselBeaconMalfunctionsResumeAndHistory.current?.let {
-                BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(vesselBeaconMalfunctionsResumeAndHistory.current)
+                BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(
+                    vesselBeaconMalfunctionsResumeAndHistory.current
+                )
             },
-            history = vesselBeaconMalfunctionsResumeAndHistory.history.map { BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(it) }
+            history = vesselBeaconMalfunctionsResumeAndHistory.history.map {
+                BeaconMalfunctionWithDetailsDataOutput.fromBeaconMalfunctionWithDetails(
+                    it
+                )
+            }
         )
     }
 }

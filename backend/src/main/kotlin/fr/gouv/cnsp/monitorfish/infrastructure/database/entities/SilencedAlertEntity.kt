@@ -13,8 +13,11 @@ import java.time.ZonedDateTime
 import javax.persistence.*
 
 @Entity
-@TypeDefs(TypeDef(name = "pgsql_enum",
-    typeClass = PostgreSQLEnumType::class)
+@TypeDefs(
+    TypeDef(
+        name = "pgsql_enum",
+        typeClass = PostgreSQLEnumType::class
+    )
 )
 @Table(name = "silenced_alerts")
 data class SilencedAlertEntity(
@@ -43,7 +46,8 @@ data class SilencedAlertEntity(
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
     val value: String,
     @Column(name = "was_validated")
-    val wasValidated: Boolean? = null) {
+    val wasValidated: Boolean? = null
+) {
 
     fun toSilencedAlert(mapper: ObjectMapper): SilencedAlert {
         return SilencedAlert(
@@ -56,15 +60,18 @@ data class SilencedAlertEntity(
             silencedBeforeDate = silencedBeforeDate,
             silencedAfterDate = silencedAfterDate,
             value = mapper.readValue(value, AlertType::class.java),
-            wasValidated = wasValidated)
+            wasValidated = wasValidated
+        )
     }
 
     companion object {
-        fun fromPendingAlert(mapper: ObjectMapper,
-                             alert: PendingAlert,
-                             silencedBeforeDate: ZonedDateTime,
-                             silencedAfterDate: ZonedDateTime?,
-                             isValidated: Boolean) = SilencedAlertEntity(
+        fun fromPendingAlert(
+            mapper: ObjectMapper,
+            alert: PendingAlert,
+            silencedBeforeDate: ZonedDateTime,
+            silencedAfterDate: ZonedDateTime?,
+            isValidated: Boolean
+        ) = SilencedAlertEntity(
             vesselName = alert.vesselName,
             internalReferenceNumber = alert.internalReferenceNumber,
             externalReferenceNumber = alert.externalReferenceNumber,
@@ -73,6 +80,7 @@ data class SilencedAlertEntity(
             silencedBeforeDate = silencedBeforeDate,
             silencedAfterDate = silencedAfterDate,
             value = mapper.writeValueAsString(alert.value),
-            wasValidated = isValidated)
+            wasValidated = isValidated
+        )
     }
 }

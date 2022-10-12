@@ -38,33 +38,75 @@ class GetBeaconMalfunctionUTests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         given(beaconMalfunctionsRepository.find(1))
-            .willReturn(BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
-                null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
-                true, ZonedDateTime.now(), null, ZonedDateTime.now()))
-        given(beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER), eq("FR224226850"), any()))
-            .willReturn(listOf(
-                BeaconMalfunction(1, "FR224226850", "1236514", "IRCS",
+            .willReturn(
+                BeaconMalfunction(
+                    1, "FR224226850", "1236514", "IRCS",
                     null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
-                    true, ZonedDateTime.now(), null, ZonedDateTime.now()),
-                BeaconMalfunction(2, "FR224226850", "1236514", "IRCS",
-                    null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                    true, ZonedDateTime.now(), null, ZonedDateTime.now())))
-        given(beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(1)).willReturn(listOf(BeaconMalfunctionComment(
-            beaconMalfunctionId = 1, comment = "A comment", userType = BeaconMalfunctionCommentUserType.SIP, dateTime = now)))
-        given(beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).willReturn(listOf(BeaconMalfunctionAction(
-            beaconMalfunctionId = 1, propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS, nextValue = VesselStatus.ACTIVITY_DETECTED.toString(), previousValue = VesselStatus.AT_PORT.toString(), dateTime = now)))
+                    true, ZonedDateTime.now(), null, ZonedDateTime.now()
+                )
+            )
+        given(
+            beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(
+                eq(VesselIdentifier.INTERNAL_REFERENCE_NUMBER),
+                eq("FR224226850"),
+                any()
+            )
+        )
+            .willReturn(
+                listOf(
+                    BeaconMalfunction(
+                        1, "FR224226850", "1236514", "IRCS",
+                        null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                        true, ZonedDateTime.now(), null, ZonedDateTime.now()
+                    ),
+                    BeaconMalfunction(
+                        2, "FR224226850", "1236514", "IRCS",
+                        null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
+                        true, ZonedDateTime.now(), null, ZonedDateTime.now()
+                    )
+                )
+            )
+        given(beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
+            listOf(
+                BeaconMalfunctionComment(
+                    beaconMalfunctionId = 1,
+                    comment = "A comment",
+                    userType = BeaconMalfunctionCommentUserType.SIP,
+                    dateTime = now
+                )
+            )
+        )
+        given(beaconMalfunctionActionsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
+            listOf(
+                BeaconMalfunctionAction(
+                    beaconMalfunctionId = 1,
+                    propertyName = BeaconMalfunctionActionPropertyName.VESSEL_STATUS,
+                    nextValue = VesselStatus.ACTIVITY_DETECTED.toString(),
+                    previousValue = VesselStatus.AT_PORT.toString(),
+                    dateTime = now
+                )
+            )
+        )
         given(beaconMalfunctionNotificationsRepository.findAllByBeaconMalfunctionId(1)).willReturn(
-            listOf(BeaconMalfunctionNotification(
-                id = 1, beaconMalfunctionId = 1, dateTimeUtc = now,
-                notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
-                communicationMeans = CommunicationMeans.SMS,
-                recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000", success = true)
+            listOf(
+                BeaconMalfunctionNotification(
+                    id = 1, beaconMalfunctionId = 1, dateTimeUtc = now,
+                    notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
+                    communicationMeans = CommunicationMeans.SMS,
+                    recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                    recipientName = "Jack Sparrow", recipientAddressOrNumber = "0000000000", success = true
+                )
             )
         )
 
         // When
-        val beaconMalfunctions = GetBeaconMalfunction(beaconMalfunctionsRepository, beaconMalfunctionCommentsRepository, beaconMalfunctionActionsRepository, lastPositionRepository, beaconMalfunctionNotificationsRepository)
+        val beaconMalfunctions = GetBeaconMalfunction(
+            beaconMalfunctionsRepository,
+            beaconMalfunctionCommentsRepository,
+            beaconMalfunctionActionsRepository,
+            lastPositionRepository,
+            beaconMalfunctionNotificationsRepository
+        )
             .execute(1)
 
         // Then
@@ -75,7 +117,9 @@ class GetBeaconMalfunctionUTests {
         assertThat(beaconMalfunctions.comments).hasSize(1)
         assertThat(beaconMalfunctions.notifications).hasSize(1)
         assertThat(beaconMalfunctions.notifications[0].beaconMalfunctionId).isEqualTo(1)
-        assertThat(beaconMalfunctions.notifications[0].notificationType).isEqualTo(BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION)
+        assertThat(beaconMalfunctions.notifications[0].notificationType).isEqualTo(
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION
+        )
         assertThat(beaconMalfunctions.notifications[0].dateTimeUtc).isEqualTo(now)
         assertThat(beaconMalfunctions.notifications[0].notifications[0].recipientName).isEqualTo("Jack Sparrow")
         assertThat(beaconMalfunctions.beaconMalfunction.internalReferenceNumber).isEqualTo("FR224226850")

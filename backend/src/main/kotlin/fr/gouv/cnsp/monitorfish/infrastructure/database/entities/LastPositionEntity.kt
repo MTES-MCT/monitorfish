@@ -20,12 +20,16 @@ import javax.persistence.*
 
 @Entity
 @TypeDefs(
-    TypeDef(name = "duration",
+    TypeDef(
+        name = "duration",
         typeClass = PostgreSQLIntervalType::class,
-        defaultForType = Duration::class),
+        defaultForType = Duration::class
+    ),
     TypeDef(name = "jsonb", typeClass = JsonBinaryType::class),
-    TypeDef(name = "string-array",
-        typeClass = ListArrayType::class)
+    TypeDef(
+        name = "string-array",
+        typeClass = ListArrayType::class
+    )
 )
 @Table(name = "last_positions")
 data class LastPositionEntity(
@@ -118,7 +122,8 @@ data class LastPositionEntity(
     val beaconMalfunctionId: Int?,
     @Type(type = "string-array")
     @Column(name = "reportings", columnDefinition = "varchar(200)[]")
-    val reportings: List<String>? = listOf()) : Serializable {
+    val reportings: List<String>? = listOf()
+) : Serializable {
 
     fun toLastPosition(mapper: ObjectMapper) = LastPosition(
         internalReferenceNumber = internalReferenceNumber,
@@ -144,11 +149,17 @@ data class LastPositionEntity(
         registryPortName = registryPort,
         district = district,
         districtCode = districtCode,
-        gearOnboard = mapper.readValue(gearOnboard, mapper.typeFactory
-            .constructCollectionType(MutableList::class.java, Gear::class.java)),
+        gearOnboard = mapper.readValue(
+            gearOnboard,
+            mapper.typeFactory
+                .constructCollectionType(MutableList::class.java, Gear::class.java)
+        ),
         segments = segments,
-        speciesOnboard = mapper.readValue(speciesOnboard, mapper.typeFactory
-            .constructCollectionType(MutableList::class.java, Species::class.java)),
+        speciesOnboard = mapper.readValue(
+            speciesOnboard,
+            mapper.typeFactory
+                .constructCollectionType(MutableList::class.java, Species::class.java)
+        ),
         totalWeightOnboard = totalWeightOnboard,
         lastControlDateTime = lastControlDateTime,
         lastControlInfraction = lastControlInfraction,
@@ -162,5 +173,6 @@ data class LastPositionEntity(
         isAtPort = isAtPort,
         alerts = alerts,
         beaconMalfunctionId = beaconMalfunctionId,
-        reportings = reportings ?: listOf())
+        reportings = reportings ?: listOf()
+    )
 }

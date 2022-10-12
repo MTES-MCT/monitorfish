@@ -29,11 +29,13 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
     }
 
     @Transactional
-    override fun update(id: Int,
-                        vesselStatus: VesselStatus?,
-                        stage: Stage?,
-                        endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
-                        updateDateTime: ZonedDateTime) {
+    override fun update(
+        id: Int,
+        vesselStatus: VesselStatus?,
+        stage: Stage?,
+        endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
+        updateDateTime: ZonedDateTime
+    ) {
         try {
             vesselStatus?.let {
                 dbBeaconMalfunctionsRepository.updateVesselStatus(id, it.toString(), updateDateTime)
@@ -46,40 +48,57 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
             endOfBeaconMalfunctionReason?.let {
                 dbBeaconMalfunctionsRepository.updateEndOfMalfunctionReason(id, it.toString(), updateDateTime)
             }
-
         } catch (e: Throwable) {
             throw CouldNotUpdateBeaconMalfunctionException("Could not update beacon malfunction: ${e.message}")
         }
     }
 
-    override fun findAllByVesselIdentifierEquals(vesselIdentifier: VesselIdentifier, value: String, afterDateTime: ZonedDateTime): List<BeaconMalfunction> {
+    override fun findAllByVesselIdentifierEquals(
+        vesselIdentifier: VesselIdentifier,
+        value: String,
+        afterDateTime: ZonedDateTime
+    ): List<BeaconMalfunction> {
         return dbBeaconMalfunctionsRepository
             .findAllByVesselIdentifierEqualsAfterDateTime(vesselIdentifier.toString(), value, afterDateTime.toInstant()).map {
                 it.toBeaconMalfunction()
             }
     }
 
-    override fun findAllByVesselWithoutVesselIdentifier(internalReferenceNumber: String,
-                                                        externalReferenceNumber: String,
-                                                        ircs: String,
-                                                        afterDateTime: ZonedDateTime): List<BeaconMalfunction> {
+    override fun findAllByVesselWithoutVesselIdentifier(
+        internalReferenceNumber: String,
+        externalReferenceNumber: String,
+        ircs: String,
+        afterDateTime: ZonedDateTime
+    ): List<BeaconMalfunction> {
         if (internalReferenceNumber.isNotEmpty()) {
             return dbBeaconMalfunctionsRepository
-                .findAllByVesselIdentifierEqualsAfterDateTime(VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(), internalReferenceNumber, afterDateTime.toInstant()).map {
+                .findAllByVesselIdentifierEqualsAfterDateTime(
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(),
+                    internalReferenceNumber,
+                    afterDateTime.toInstant()
+                ).map {
                     it.toBeaconMalfunction()
                 }
         }
 
         if (ircs.isNotEmpty()) {
             return dbBeaconMalfunctionsRepository
-                .findAllByVesselIdentifierEqualsAfterDateTime(VesselIdentifier.IRCS.toString(), ircs, afterDateTime.toInstant()).map {
+                .findAllByVesselIdentifierEqualsAfterDateTime(
+                    VesselIdentifier.IRCS.toString(),
+                    ircs,
+                    afterDateTime.toInstant()
+                ).map {
                     it.toBeaconMalfunction()
                 }
         }
 
         if (externalReferenceNumber.isNotEmpty()) {
             return dbBeaconMalfunctionsRepository
-                .findAllByVesselIdentifierEqualsAfterDateTime(VesselIdentifier.EXTERNAL_REFERENCE_NUMBER.toString(), externalReferenceNumber, afterDateTime.toInstant()).map {
+                .findAllByVesselIdentifierEqualsAfterDateTime(
+                    VesselIdentifier.EXTERNAL_REFERENCE_NUMBER.toString(),
+                    externalReferenceNumber,
+                    afterDateTime.toInstant()
+                ).map {
                     it.toBeaconMalfunction()
                 }
         }

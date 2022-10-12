@@ -24,7 +24,7 @@ class RuleMapperUTests {
         val pnoAndLANWeightTolerance = PNOAndLANWeightTolerance(10.0)
 
         // When
-        val jsonString = mapper.writeValueAsString(pnoAndLANWeightTolerance);
+        val jsonString = mapper.writeValueAsString(pnoAndLANWeightTolerance)
         val parsedPNOAndLANWeightTolerance = RuleMapper.getRuleTypeFromJSON(mapper, jsonString)
 
         // Then
@@ -35,5 +35,4 @@ class RuleMapperUTests {
         assertThat(parsedPNOAndLANWeightTolerance.name).isEqualTo(RuleTypeMapping.PNO_LAN_WEIGHT_TOLERANCE)
         assertThat(parsedPNOAndLANWeightTolerance.inputSource).isEqualTo(InputSource.Logbook)
     }
-
 }

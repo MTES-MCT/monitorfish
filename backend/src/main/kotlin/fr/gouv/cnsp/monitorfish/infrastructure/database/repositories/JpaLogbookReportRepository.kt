@@ -20,8 +20,10 @@ import java.time.ZonedDateTime
 import javax.transaction.Transactional
 
 @Repository
-class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRepository,
-                                 private val mapper: ObjectMapper) : LogbookReportRepository {
+class JpaLogbookReportRepository(
+    private val dbERSRepository: DBLogbookReportRepository,
+    private val mapper: ObjectMapper
+) : LogbookReportRepository {
 
     private val postgresChunkSize = 5000
 
@@ -29,9 +31,16 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val lastTrip = dbERSRepository.findTripsBeforeDatetime(
-                    internalReferenceNumber, beforeDateTime.toInstant(), PageRequest.of(0, 1)).first()
+                    internalReferenceNumber,
+                    beforeDateTime.toInstant(),
+                    PageRequest.of(0, 1)
+                ).first()
 
-                return VoyageDatesAndTripNumber(lastTrip.tripNumber, lastTrip.startDate.atZone(UTC), lastTrip.endDate.atZone(UTC))
+                return VoyageDatesAndTripNumber(
+                    lastTrip.tripNumber,
+                    lastTrip.startDate.atZone(UTC),
+                    lastTrip.endDate.atZone(UTC)
+                )
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
@@ -47,13 +56,20 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val previousTripNumber = dbERSRepository.findPreviousTripNumber(
-                    internalReferenceNumber, tripNumber, PageRequest.of(0, 1)).first().tripNumber
-                val previousTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, previousTripNumber)
+                    internalReferenceNumber,
+                    tripNumber,
+                    PageRequest.of(0, 1)
+                ).first().tripNumber
+                val previousTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(
+                    internalReferenceNumber,
+                    previousTripNumber
+                )
 
                 return VoyageDatesAndTripNumber(
                     previousTripNumber,
                     previousTrip.startDate.atZone(UTC),
-                    previousTrip.endDate.atZone(UTC))
+                    previousTrip.endDate.atZone(UTC)
+                )
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
@@ -71,13 +87,20 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val nextTripNumber = dbERSRepository.findNextTripNumber(
-                    internalReferenceNumber, tripNumber, PageRequest.of(0, 1)).first().tripNumber
-                val nextTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber, nextTripNumber)
+                    internalReferenceNumber,
+                    tripNumber,
+                    PageRequest.of(0, 1)
+                ).first().tripNumber
+                val nextTrip = dbERSRepository.findFirstAndLastOperationsDatesOfTrip(
+                    internalReferenceNumber,
+                    nextTripNumber
+                )
 
                 return VoyageDatesAndTripNumber(
                     nextTripNumber,
                     nextTrip.startDate.atZone(UTC),
-                    nextTrip.endDate.atZone(UTC))
+                    nextTrip.endDate.atZone(UTC)
+                )
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")
@@ -98,7 +121,8 @@ class JpaLogbookReportRepository(private val dbERSRepository: DBLogbookReportRep
         internalReferenceNumber: String,
         afterDate: ZonedDateTime,
         beforeDate: ZonedDateTime,
-        tripNumber: String): List<LogbookMessage> {
+        tripNumber: String
+    ): List<LogbookMessage> {
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 return dbERSRepository.findAllMessagesByTripNumberBetweenDates(

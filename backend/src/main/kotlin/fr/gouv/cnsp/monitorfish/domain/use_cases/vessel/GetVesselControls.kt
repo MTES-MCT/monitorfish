@@ -13,10 +13,12 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVesselControls(private val controlRepository: ControlRepository,
-                        private val infractionRepository: InfractionRepository,
-                        private val portRepository: PortRepository,
-                        private val gearRepository: GearRepository) {
+class GetVesselControls(
+    private val controlRepository: ControlRepository,
+    private val infractionRepository: InfractionRepository,
+    private val portRepository: PortRepository,
+    private val gearRepository: GearRepository
+) {
     private val logger = LoggerFactory.getLogger(GetVesselControls::class.java)
 
     fun execute(vesselId: Int, afterDateTime: ZonedDateTime): ControlResumeAndControls {
@@ -90,6 +92,7 @@ class GetVesselControls(private val controlRepository: ControlRepository,
             numberOfSeizures = numberOfSeizures,
             numberOfFishingInfractions = numberOfFishingInfractions,
             numberOfSecurityInfractions = numberOfSecurityInfractions,
-            controls = controlWithInfractions)
+            controls = controlWithInfractions
+        )
     }
 }

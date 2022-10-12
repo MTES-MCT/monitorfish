@@ -46,7 +46,8 @@ data class BeaconMalfunctionEntity(
     val vesselId: Int?,
     @Column(name = "notification_requested")
     @Enumerated(EnumType.STRING)
-    val notificationRequested: BeaconMalfunctionNotificationType?) {
+    val notificationRequested: BeaconMalfunctionNotificationType?
+) {
 
     fun toBeaconMalfunction() = BeaconMalfunction(
         id = id,

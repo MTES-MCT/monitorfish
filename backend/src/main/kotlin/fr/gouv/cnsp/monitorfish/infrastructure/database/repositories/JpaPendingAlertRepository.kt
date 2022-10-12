@@ -9,8 +9,10 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.
 import org.springframework.stereotype.Repository
 
 @Repository
-class JpaPendingAlertRepository(private val dbPendingAlertRepository: DBPendingAlertRepository,
-                                private val mapper: ObjectMapper) : PendingAlertRepository {
+class JpaPendingAlertRepository(
+    private val dbPendingAlertRepository: DBPendingAlertRepository,
+    private val mapper: ObjectMapper
+) : PendingAlertRepository {
 
     override fun save(alert: PendingAlert) {
         dbPendingAlertRepository.save(PendingAlertEntity.fromPendingAlert(alert, mapper))

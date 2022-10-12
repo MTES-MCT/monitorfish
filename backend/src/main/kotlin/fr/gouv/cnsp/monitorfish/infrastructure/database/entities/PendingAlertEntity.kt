@@ -15,8 +15,10 @@ import javax.persistence.*
 @Entity
 @TypeDefs(
     TypeDef(name = "jsonb", typeClass = JsonBinaryType::class),
-    TypeDef(name = "pgsql_enum",
-        typeClass = PostgreSQLEnumType::class)
+    TypeDef(
+        name = "pgsql_enum",
+        typeClass = PostgreSQLEnumType::class
+    )
 )
 @Table(name = "pending_alerts")
 data class PendingAlertEntity(
@@ -43,7 +45,8 @@ data class PendingAlertEntity(
     val tripNumber: String? = null,
     @Type(type = "jsonb")
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
-    val value: String) {
+    val value: String
+) {
 
     fun toPendingAlert(mapper: ObjectMapper): PendingAlert {
         return PendingAlert(
@@ -68,6 +71,7 @@ data class PendingAlertEntity(
             vesselIdentifier = alert.vesselIdentifier,
             creationDate = alert.creationDate,
             tripNumber = alert.tripNumber,
-            value = mapper.writeValueAsString(alert.value))
+            value = mapper.writeValueAsString(alert.value)
+        )
     }
 }

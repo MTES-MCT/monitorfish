@@ -41,7 +41,7 @@ class NAFMessageMapper(private val naf: String) {
 
     init {
         if (!isValidMessage(naf)) {
-            throw NAFMessageParsingException("Invalid NAF format", naf);
+            throw NAFMessageParsingException("Invalid NAF format", naf)
         }
 
         NAFCode.values()

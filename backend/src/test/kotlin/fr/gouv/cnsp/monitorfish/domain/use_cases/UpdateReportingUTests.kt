@@ -20,7 +20,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
-
 @ExtendWith(SpringExtension::class)
 class UpdateReportingUTests {
 
@@ -30,24 +29,30 @@ class UpdateReportingUTests {
     @Test
     fun `execute Should throw an exception When the reporting is an alert`() {
         // Given
-        given(reportingRepository.findById(any())).willReturn(Reporting(
-            id = 1,
-            type = ReportingType.ALERT,
-            vesselName = "BIDUBULE",
-            internalReferenceNumber = "FR224226850",
-            externalReferenceNumber = "1236514",
-            ircs = "IRCS",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            creationDate = ZonedDateTime.now(),
-            validationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert() as ReportingValue,
-            isArchived = false,
-            isDeleted = false))
+        given(reportingRepository.findById(any())).willReturn(
+            Reporting(
+                id = 1,
+                type = ReportingType.ALERT,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = ThreeMilesTrawlingAlert() as ReportingValue,
+                isArchived = false,
+                isDeleted = false
+            )
+        )
 
         // When
         val throwable = catchThrowable {
             UpdateReporting(reportingRepository)
-                .execute(1, UpdatedInfractionSuspicionOrObservation(reportingActor = ReportingActor.UNIT, title = "A reporting"))
+                .execute(
+                    1,
+                    UpdatedInfractionSuspicionOrObservation(reportingActor = ReportingActor.UNIT, title = "A reporting")
+                )
         }
 
         // Then
@@ -56,26 +61,39 @@ class UpdateReportingUTests {
 
     @ParameterizedTest
     @EnumSource(ReportingActor::class)
-    fun `execute Should throw an exception When fields of reporting actor are not rights`(reportingActor: ReportingActor) {
+    fun `execute Should throw an exception When fields of reporting actor are not rights`(
+        reportingActor: ReportingActor
+    ) {
         // Given
-        given(reportingRepository.findById(any())).willReturn(Reporting(
-            id = 1,
-            type = ReportingType.INFRACTION_SUSPICION,
-            vesselName = "BIDUBULE",
-            internalReferenceNumber = "FR224226850",
-            externalReferenceNumber = "1236514",
-            ircs = "IRCS",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            creationDate = ZonedDateTime.now(),
-            validationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
-            isArchived = false,
-            isDeleted = false))
+        given(reportingRepository.findById(any())).willReturn(
+            Reporting(
+                id = 1,
+                type = ReportingType.INFRACTION_SUSPICION,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
+                isArchived = false,
+                isDeleted = false
+            )
+        )
 
         // When
         val throwable = catchThrowable {
             UpdateReporting(reportingRepository)
-                .execute(1, UpdatedInfractionSuspicionOrObservation(reportingActor = reportingActor, title = "A reporting", dml = "DML 56", natinfCode = "123456"))
+                .execute(
+                    1,
+                    UpdatedInfractionSuspicionOrObservation(
+                        reportingActor = reportingActor,
+                        title = "A reporting",
+                        dml = "DML 56",
+                        natinfCode = "123456"
+                    )
+                )
         }
 
         // Then
@@ -92,26 +110,33 @@ class UpdateReportingUTests {
     @Test
     fun `execute Should throw an exception When NATINF code is not set`() {
         // Given
-        given(reportingRepository.findById(any())).willReturn(Reporting(
-            id = 1,
-            type = ReportingType.INFRACTION_SUSPICION,
-            vesselName = "BIDUBULE",
-            internalReferenceNumber = "FR224226850",
-            externalReferenceNumber = "1236514",
-            ircs = "IRCS",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            creationDate = ZonedDateTime.now(),
-            validationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
-            isArchived = false,
-            isDeleted = false))
+        given(reportingRepository.findById(any())).willReturn(
+            Reporting(
+                id = 1,
+                type = ReportingType.INFRACTION_SUSPICION,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
+                isArchived = false,
+                isDeleted = false
+            )
+        )
 
         // When
         val throwable = catchThrowable {
-            UpdateReporting(reportingRepository).execute(1, UpdatedInfractionSuspicionOrObservation(
-                reportingActor = ReportingActor.UNIT,
-                title = "A reporting",
-                dml = "DML 62/80"))
+            UpdateReporting(reportingRepository).execute(
+                1,
+                UpdatedInfractionSuspicionOrObservation(
+                    reportingActor = ReportingActor.UNIT,
+                    title = "A reporting",
+                    dml = "DML 62/80"
+                )
+            )
         }
 
         // Then
@@ -120,63 +145,82 @@ class UpdateReportingUTests {
 
     @Test
     fun `execute Should add the seaFront When the DML is set`() {
-      // Given
-        given(reportingRepository.findById(any())).willReturn(Reporting(
-            id = 1,
-            type = ReportingType.INFRACTION_SUSPICION,
-            vesselName = "BIDUBULE",
-            internalReferenceNumber = "FR224226850",
-            externalReferenceNumber = "1236514",
-            ircs = "IRCS",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            creationDate = ZonedDateTime.now(),
-            validationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
-            isArchived = false,
-            isDeleted = false))
+        // Given
+        given(reportingRepository.findById(any())).willReturn(
+            Reporting(
+                id = 1,
+                type = ReportingType.INFRACTION_SUSPICION,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
+                isArchived = false,
+                isDeleted = false
+            )
+        )
 
-      // When
-      UpdateReporting(reportingRepository).execute(1, UpdatedInfractionSuspicionOrObservation(
-          reportingActor = ReportingActor.UNIT,
-          unit = "AN UNIT",
-          title = "A reporting",
-          description = "Test 2",
-          dml = "DML 62/80",
-          natinfCode = "1234"))
+        // When
+        UpdateReporting(reportingRepository).execute(
+            1,
+            UpdatedInfractionSuspicionOrObservation(
+                reportingActor = ReportingActor.UNIT,
+                unit = "AN UNIT",
+                title = "A reporting",
+                description = "Test 2",
+                dml = "DML 62/80",
+                natinfCode = "1234"
+            )
+        )
 
-      // Then
-      argumentCaptor<InfractionSuspicion>().apply {
-        verify(reportingRepository).update(any(), capture())
+        // Then
+        argumentCaptor<InfractionSuspicion>().apply {
+            verify(reportingRepository).update(any(), capture())
 
-        assertThat(allValues.first().seaFront).isEqualTo("MEMN")
-        assertThat(allValues.first().description).isEqualTo("Test 2")
-      }
+            assertThat(allValues.first().seaFront).isEqualTo("MEMN")
+            assertThat(allValues.first().description).isEqualTo("Test 2")
+        }
     }
 
     @Test
     fun `execute Should add the flagState of the previous reporting When the reporting is an INFRACTION_SUSPICION`() {
         // Given
-        given(reportingRepository.findById(any())).willReturn(Reporting(
-            id = 1,
-            type = ReportingType.INFRACTION_SUSPICION,
-            vesselName = "BIDUBULE",
-            internalReferenceNumber = "FR224226850",
-            externalReferenceNumber = "1236514",
-            ircs = "IRCS",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            creationDate = ZonedDateTime.now(),
-            validationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234", flagState = "FR") as ReportingValue,
-            isArchived = false,
-            isDeleted = false))
+        given(reportingRepository.findById(any())).willReturn(
+            Reporting(
+                id = 1,
+                type = ReportingType.INFRACTION_SUSPICION,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = InfractionSuspicion(
+                    reportingActor = ReportingActor.UNIT,
+                    title = "Test",
+                    natinfCode = "1234",
+                    flagState = "FR"
+                ) as ReportingValue,
+                isArchived = false,
+                isDeleted = false
+            )
+        )
 
         // When
-        UpdateReporting(reportingRepository).execute(1, UpdatedInfractionSuspicionOrObservation(
-            reportingActor = ReportingActor.UNIT,
-            unit = "AN UNIT",
-            title = "A reporting",
-            dml = "DML 62/80",
-            natinfCode = "1234"))
+        UpdateReporting(reportingRepository).execute(
+            1,
+            UpdatedInfractionSuspicionOrObservation(
+                reportingActor = ReportingActor.UNIT,
+                unit = "AN UNIT",
+                title = "A reporting",
+                dml = "DML 62/80",
+                natinfCode = "1234"
+            )
+        )
 
         // Then
         argumentCaptor<InfractionSuspicion>().apply {
@@ -189,27 +233,34 @@ class UpdateReportingUTests {
     @Test
     fun `execute Should add the flagState of the previous reporting When the reporting is an OBSERVATION`() {
         // Given
-        given(reportingRepository.findById(any())).willReturn(Reporting(
-            id = 1,
-            type = ReportingType.OBSERVATION,
-            vesselName = "BIDUBULE",
-            internalReferenceNumber = "FR224226850",
-            externalReferenceNumber = "1236514",
-            ircs = "IRCS",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            creationDate = ZonedDateTime.now(),
-            validationDate = ZonedDateTime.now(),
-            value = Observation(reportingActor = ReportingActor.UNIT, title = "Test", flagState = "FR") as ReportingValue,
-            isArchived = false,
-            isDeleted = false))
+        given(reportingRepository.findById(any())).willReturn(
+            Reporting(
+                id = 1,
+                type = ReportingType.OBSERVATION,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = Observation(reportingActor = ReportingActor.UNIT, title = "Test", flagState = "FR") as ReportingValue,
+                isArchived = false,
+                isDeleted = false
+            )
+        )
 
         // When
-        UpdateReporting(reportingRepository).execute(1, UpdatedInfractionSuspicionOrObservation(
-            reportingActor = ReportingActor.UNIT,
-            unit = "AN UNIT",
-            title = "A reporting",
-            dml = "DML 62/80",
-            natinfCode = "1234"))
+        UpdateReporting(reportingRepository).execute(
+            1,
+            UpdatedInfractionSuspicionOrObservation(
+                reportingActor = ReportingActor.UNIT,
+                unit = "AN UNIT",
+                title = "A reporting",
+                dml = "DML 62/80",
+                natinfCode = "1234"
+            )
+        )
 
         // Then
         argumentCaptor<Observation>().apply {
@@ -222,28 +273,40 @@ class UpdateReportingUTests {
     @Test
     fun `execute Should throw an exception When the DML is not set`() {
         // Given
-        given(reportingRepository.findById(any())).willReturn(Reporting(
-            id = 1,
-            type = ReportingType.INFRACTION_SUSPICION,
-            vesselName = "BIDUBULE",
-            internalReferenceNumber = "FR224226850",
-            externalReferenceNumber = "1236514",
-            ircs = "IRCS",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            creationDate = ZonedDateTime.now(),
-            validationDate = ZonedDateTime.now(),
-            value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234", flagState = "FR") as ReportingValue,
-            isArchived = false,
-            isDeleted = false))
+        given(reportingRepository.findById(any())).willReturn(
+            Reporting(
+                id = 1,
+                type = ReportingType.INFRACTION_SUSPICION,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = InfractionSuspicion(
+                    reportingActor = ReportingActor.UNIT,
+                    title = "Test",
+                    natinfCode = "1234",
+                    flagState = "FR"
+                ) as ReportingValue,
+                isArchived = false,
+                isDeleted = false
+            )
+        )
 
         // When
         val throwable = catchThrowable {
-            UpdateReporting(reportingRepository).execute(1, UpdatedInfractionSuspicionOrObservation(
-                reportingActor = ReportingActor.UNIT,
-                unit = "AN UNIT",
-                title = "A reporting",
-                dml = "",
-                natinfCode = "1234"))
+            UpdateReporting(reportingRepository).execute(
+                1,
+                UpdatedInfractionSuspicionOrObservation(
+                    reportingActor = ReportingActor.UNIT,
+                    unit = "AN UNIT",
+                    title = "A reporting",
+                    dml = "",
+                    natinfCode = "1234"
+                )
+            )
         }
 
         // Then

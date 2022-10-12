@@ -10,13 +10,17 @@ import org.springframework.stereotype.Repository
 import java.time.ZonedDateTime
 
 @Repository
-class JpaSilencedAlertRepository(private val dbSilencedAlertRepository: DBSilencedAlertRepository,
-                                 private val mapper: ObjectMapper) : SilencedAlertRepository {
+class JpaSilencedAlertRepository(
+    private val dbSilencedAlertRepository: DBSilencedAlertRepository,
+    private val mapper: ObjectMapper
+) : SilencedAlertRepository {
 
-    override fun save(alert: PendingAlert,
-                      silencedBeforeDate: ZonedDateTime,
-                      silencedAfterDate: ZonedDateTime?,
-                      isValidated: Boolean): SilencedAlert {
+    override fun save(
+        alert: PendingAlert,
+        silencedBeforeDate: ZonedDateTime,
+        silencedAfterDate: ZonedDateTime?,
+        isValidated: Boolean
+    ): SilencedAlert {
         return dbSilencedAlertRepository.save(
             SilencedAlertEntity.fromPendingAlert(mapper, alert, silencedBeforeDate, silencedAfterDate, isValidated)
         ).toSilencedAlert(mapper)

@@ -25,5 +25,4 @@ class JpaRuleRepositoryITests : AbstractDBTests() {
         val ruleType = rules.first().value as PNOAndLANWeightTolerance
         assertThat(ruleType.percentOfTolerance).isEqualTo(10.0)
     }
-
 }

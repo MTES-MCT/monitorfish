@@ -35,7 +35,8 @@ data class FleetSegmentEntity(
     @Column(name = "bycatch_species", columnDefinition = "varchar(3)[]")
     val bycatchSpecies: List<String>,
     @Column(name = "impact_risk_factor")
-    val impactRiskFactor: Double) {
+    val impactRiskFactor: Double
+) {
 
     fun toFleetSegment() = FleetSegment(
         segment = this.segment,
@@ -45,7 +46,8 @@ data class FleetSegmentEntity(
         faoAreas = this.faoAreas,
         targetSpecies = this.targetSpecies,
         bycatchSpecies = this.bycatchSpecies,
-        impactRiskFactor = this.impactRiskFactor)
+        impactRiskFactor = this.impactRiskFactor
+    )
 
     companion object {
         fun fromFleetSegment(fleetSegment: FleetSegment) = FleetSegmentEntity(
@@ -56,6 +58,7 @@ data class FleetSegmentEntity(
             faoAreas = fleetSegment.faoAreas,
             targetSpecies = fleetSegment.targetSpecies,
             bycatchSpecies = fleetSegment.bycatchSpecies,
-            impactRiskFactor = fleetSegment.impactRiskFactor)
+            impactRiskFactor = fleetSegment.impactRiskFactor
+        )
     }
 }

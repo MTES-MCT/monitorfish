@@ -22,12 +22,13 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
             .map(PositionEntity::toPosition)
     }
 
-    override fun findVesselLastPositionsWithoutSpecifiedIdentifier(internalReferenceNumber: String,
-                                                                   externalReferenceNumber: String,
-                                                                   ircs: String,
-                                                                   from: ZonedDateTime,
-                                                                   to: ZonedDateTime): List<Position> {
-
+    override fun findVesselLastPositionsWithoutSpecifiedIdentifier(
+        internalReferenceNumber: String,
+        externalReferenceNumber: String,
+        ircs: String,
+        from: ZonedDateTime,
+        to: ZonedDateTime
+    ): List<Position> {
         if (internalReferenceNumber.isNotEmpty()) {
             return findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber, from, to)
         }
@@ -44,25 +45,31 @@ class JpaPositionRepository(private val dbPositionRepository: DBPositionReposito
     }
 
     @Cacheable(value = ["vessel_track"])
-    override fun findVesselLastPositionsByInternalReferenceNumber(internalReferenceNumber: String,
-                                                                  from: ZonedDateTime,
-                                                                  to: ZonedDateTime): List<Position> {
+    override fun findVesselLastPositionsByInternalReferenceNumber(
+        internalReferenceNumber: String,
+        from: ZonedDateTime,
+        to: ZonedDateTime
+    ): List<Position> {
         return dbPositionRepository.findLastByInternalReferenceNumber(internalReferenceNumber, from, to)
             .map(PositionEntity::toPosition)
     }
 
     @Cacheable(value = ["vessel_track"])
-    override fun findVesselLastPositionsByIrcs(ircs: String,
-                                               from: ZonedDateTime,
-                                               to: ZonedDateTime): List<Position> {
+    override fun findVesselLastPositionsByIrcs(
+        ircs: String,
+        from: ZonedDateTime,
+        to: ZonedDateTime
+    ): List<Position> {
         return dbPositionRepository.findLastByIrcs(ircs, from, to)
             .map(PositionEntity::toPosition)
     }
 
     @Cacheable(value = ["vessel_track"])
-    override fun findVesselLastPositionsByExternalReferenceNumber(externalReferenceNumber: String,
-                                                                  from: ZonedDateTime,
-                                                                  to: ZonedDateTime): List<Position> {
+    override fun findVesselLastPositionsByExternalReferenceNumber(
+        externalReferenceNumber: String,
+        from: ZonedDateTime,
+        to: ZonedDateTime
+    ): List<Position> {
         return dbPositionRepository.findLastByExternalReferenceNumber(externalReferenceNumber, from, to)
             .map(PositionEntity::toPosition)
     }

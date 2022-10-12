@@ -34,7 +34,8 @@ data class BeaconMalfunctionNotificationEntity(
     @Column(name = "success")
     val success: Boolean? = null,
     @Column(name = "error_message")
-    val errorMessage: String? = null) {
+    val errorMessage: String? = null
+) {
 
     fun toBeaconMalfunctionNotification() = BeaconMalfunctionNotification(
         id = id,
@@ -48,5 +49,4 @@ data class BeaconMalfunctionNotificationEntity(
         success = success,
         errorMessage = errorMessage
     )
-
 }

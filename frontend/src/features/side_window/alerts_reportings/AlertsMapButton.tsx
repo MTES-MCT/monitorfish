@@ -9,7 +9,7 @@ import { SIDE_WINDOW_MENU } from '../constants'
 
 export function AlertsMapButton() {
   const dispatch = useAppDispatch()
-  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode, sideWindowIsOpen } = useAppSelector(
+  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode } = useAppSelector(
     state => state.global
   )
 
@@ -20,13 +20,13 @@ export function AlertsMapButton() {
       isHidden={Boolean(previewFilteredVesselsMode)}
       isVisible={openedSideWindowTab === SIDE_WINDOW_MENU.ALERTS.code}
       onClick={() => {
-        if (!sideWindowIsOpen || (sideWindowIsOpen && openedSideWindowTab !== SIDE_WINDOW_MENU.ALERTS.code)) {
+        if (openedSideWindowTab !== SIDE_WINDOW_MENU.ALERTS.code) {
           dispatch(openSideWindowTab(SIDE_WINDOW_MENU.ALERTS.code))
 
           return
         }
 
-        if (sideWindowIsOpen && openedSideWindowTab === SIDE_WINDOW_MENU.ALERTS.code) {
+        if (openedSideWindowTab === SIDE_WINDOW_MENU.ALERTS.code) {
           dispatch(closeSideWindow())
         }
       }}

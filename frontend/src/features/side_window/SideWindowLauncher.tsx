@@ -14,7 +14,8 @@ export function SideWindowLauncher() {
   const dispatch = useAppDispatch()
   const { openedSideWindowTab } = useAppSelector(state => state.global)
 
-  // TODO Understand that.
+  // We use a function ref that call `setNewWindowNode` to re-render this component
+  // with the `target` props of <StyleSheetManager/> equals the forwarded node of <SideWindow/>
   const newWindowRef = useCallback((node: HTMLDivElement) => setNewWindowNode(node), [])
 
   // TODO Handle that behavior in parent components.

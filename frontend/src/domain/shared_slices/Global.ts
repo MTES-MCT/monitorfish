@@ -29,7 +29,6 @@ export type GlobalState = {
   // TODO Investigate that. Should be a defined boolean.
   previewFilteredVesselsMode: boolean | undefined
   rightMenuIsOpen: boolean
-  sideWindowIsOpen: boolean
   userType: string
   vesselListModalIsOpen: boolean
 }
@@ -46,7 +45,6 @@ const INITIAL_STATE: GlobalState = {
   openedSideWindowTab: undefined,
   previewFilteredVesselsMode: undefined,
   rightMenuIsOpen: false,
-  sideWindowIsOpen: false,
   userType: getLocalStorageState(UserType.SIP, userTypeLocalStorageKey),
   vesselListModalIsOpen: false
 }
@@ -86,12 +84,10 @@ export const globalSlice = createSlice({
     /**
      * Close side window
      * @function closeSideWindow
-     * @memberOf GlobalReducer
      * @param {Object=} state
      */
     closeSideWindow(state) {
       state.openedSideWindowTab = undefined
-      state.sideWindowIsOpen = false
     },
 
     closeVesselListModal(state) {
@@ -192,16 +188,6 @@ export const globalSlice = createSlice({
     },
 
     /**
-     * Set the side window as open
-     * @function setSideWindowAsOpen
-     * @memberOf GlobalReducer
-     * @param {Object=} state
-     */
-    setSideWindowAsOpen(state) {
-      state.sideWindowIsOpen = true
-    },
-
-    /**
      * Set the user type as OPS or SIP
      * @function setUserType
      * @memberOf GlobalReducer
@@ -234,7 +220,6 @@ export const {
   setLeftBoxOpened,
   setMapToolOpened,
   setPreviewFilteredVesselsMode,
-  setSideWindowAsOpen,
   setUserType
 } = globalSlice.actions
 

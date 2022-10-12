@@ -1,5 +1,5 @@
 import { propEq } from 'ramda'
-import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
@@ -15,6 +15,7 @@ import getFishingInfractions from '../../domain/use_cases/infraction/getFishingI
 import getAllCurrentReportings from '../../domain/use_cases/reporting/getAllCurrentReportings'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
+import { useCombinedRefs } from '../../hooks/useCombineRefs'
 import { usePrevious } from '../../hooks/usePrevious'
 import { AlertsAndReportings } from './alerts_reportings/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
@@ -51,6 +52,11 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
     dispatch(closeBeaconMalfunctionInKanban())
     dispatch(setEditedReportingInSideWindow())
   }, [dispatch])
+
+  // We need to reuse the forwardedRef, se we combine a MutableRef and the passed function ref
+  // See https://itnext.io/reusing-the-ref-from-forwardref-with-react-hooks-4ce9df693dd
+  const innerRef = useRef<HTMLDivElement>(null)
+  const baseRef = useCombinedRefs<HTMLDivElement>(ref, innerRef)
 
   useEffect(() => {
     setTimeout(() => {
@@ -135,7 +141,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   )
 
   return (
-    <Wrapper ref={ref}>
+    <Wrapper ref={baseRef}>
       <SideWindowMenu selectedMenu={openedSideWindowTab} />
       <SideWindowSubMenu
         isFixed={isSubmenuFixed}
@@ -156,7 +162,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
         <Content height={window.innerHeight + 50}>
           {openedSideWindowTab === SIDE_WINDOW_MENU.ALERTS.code && (
             <AlertsAndReportings
-              baseRef={ref}
+              baseRef={baseRef}
               selectedSubMenu={
                 Object.values<string>(SeaFront).includes(selectedSubMenu.code)
                   ? (selectedSubMenu as MenuItem<SeaFront>)

@@ -33,7 +33,7 @@ def test_make_add_vessels_columns_query(reset_test_data):
         "public.vessels.sailing_type, "
         "public.districts.dml \n"
         "FROM public.vessels "
-        "JOIN public.districts "
+        "LEFT OUTER JOIN public.districts "
         "ON public.vessels.district_code = public.districts.district_code \n"
         "WHERE public.vessels.id IN (1, 3, 4)"
     )

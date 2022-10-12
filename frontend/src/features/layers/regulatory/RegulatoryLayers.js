@@ -22,6 +22,8 @@ const RegulatoryLayers = props => {
   const {
     selectedRegulatoryLayers
   } = useSelector(state => state.regulatory)
+  const advancedSearchIsOpen = useSelector(state => state.regulatoryLayerSearch.advancedSearchIsOpen)
+
   const { layersSidebarOpenedLayerType } = useSelector(state => state.layer)
 
   const [showRegulatoryLayers, setShowRegulatoryLayers] = useState(false)
@@ -89,6 +91,7 @@ const RegulatoryLayers = props => {
       </RegulatoryLayersTitle>
       {selectedRegulatoryLayers
         ? <RegulatoryLayersList
+          advancedSearchIsOpen={advancedSearchIsOpen}
           className={'smooth-scroll'}
           topicLength={Object.keys(selectedRegulatoryLayers).length}
           zoneLength={numberOfZonesOpened}
@@ -171,7 +174,7 @@ const RegulatoryLayersList = styled.ul`
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   padding: 0;
-  max-height: 70vh;
+  max-height: ${p => p.advancedSearchIsOpen ? 'calc(70vh - 235px)' : '70vh'};
   overflow-x: hidden;
   color: ${COLORS.gunMetal};
   height: ${props => props.showRegulatoryLayers

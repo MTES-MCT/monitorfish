@@ -277,7 +277,13 @@ class BeaconMalfunctionControllerITests {
                     beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
                 ),
                 comments = listOf(
-                    BeaconMalfunctionComment(1, 1, "A comment", BeaconMalfunctionCommentUserType.SIP, ZonedDateTime.now())
+                    BeaconMalfunctionComment(
+                        1,
+                        1,
+                        "A comment",
+                        BeaconMalfunctionCommentUserType.SIP,
+                        ZonedDateTime.now()
+                    )
                 ),
                 actions = listOf(
                     BeaconMalfunctionAction(

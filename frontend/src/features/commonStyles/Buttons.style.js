@@ -56,7 +56,7 @@ const baseAddButton = css`
   border-radius: 2px;
   color: ${COLORS.lightGray};
   &:after {
-    content: "";  
+    content: "";
     display: block;
     position: absolute;
     top: 50%;
@@ -66,7 +66,7 @@ const baseAddButton = css`
     width: 15px;
   }
   &:before {
-    content: "";  
+    content: "";
     display: block;
     position: absolute;
     top: 50%;
@@ -113,7 +113,7 @@ color: ${COLORS.lightGray};
 margin-right: 5px;
 opacity: ${props => props.disabled ? '0.4' : '1'};
 &:after {
-  content: "";  
+  content: "";
   display: block;
   background-color: ${COLORS.lightGray};
   position: absolute;
@@ -123,7 +123,7 @@ opacity: ${props => props.disabled ? '0.4' : '1'};
 }
 
 &:before {
-  content: "";  
+  content: "";
   display: block;
   background-color: ${COLORS.lightGray};
   position: absolute;

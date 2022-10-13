@@ -11,7 +11,6 @@ from src.pipeline.flows.missing_far_alerts import (
     flow,
     get_dates,
     get_vessels_with_missing_fars,
-    make_alerts,
     make_vessels_at_sea_query,
 )
 from src.read_query import read_query
@@ -249,67 +248,6 @@ def test_get_vessels_with_missing_fars():
     )
 
 
-def test_make_alerts():
-    vessels_with_missing_fars = pd.DataFrame(
-        {
-            "cfr": ["A", "B"],
-            "external_immatriculation": ["AA", "BB"],
-            "ircs": ["AAA", "BBB"],
-            "vessel_name": ["Vessel_A", "Vessel_B"],
-            "flag_state": ["FR", "BE"],
-            "facade": ["NAMO", "MEMN"],
-            "vessel_identifier": [
-                "INTERNAL_REFERENCE_NUMBER",
-                "INTERNAL_REFERENCE_NUMBER",
-            ],
-            "risk_factor": [1.23, 3.56],
-        }
-    )
-
-    alerts = make_alerts.run(
-        vessels_with_missing_fars=vessels_with_missing_fars,
-        alert_type="MISSING_FAR_ALERT",
-        alert_config_name="MISSING_FAR_ALERT",
-        creation_date=datetime(2020, 5, 3, 8, 0, 0),
-    )
-
-    expected_alerts = pd.DataFrame(
-        {
-            "vessel_name": ["Vessel_A", "Vessel_B"],
-            "internal_reference_number": ["A", "B"],
-            "external_reference_number": ["AA", "BB"],
-            "ircs": ["AAA", "BBB"],
-            "vessel_identifier": [
-                "INTERNAL_REFERENCE_NUMBER",
-                "INTERNAL_REFERENCE_NUMBER",
-            ],
-            "creation_date": [
-                datetime(2020, 5, 3, 8, 0, 0),
-                datetime(2020, 5, 3, 8, 0, 0),
-            ],
-            "type": ["MISSING_FAR_ALERT", "MISSING_FAR_ALERT"],
-            "facade": ["NAMO", "MEMN"],
-            "value": [
-                {
-                    "seaFront": "NAMO",
-                    "flagState": "FR",
-                    "type": "MISSING_FAR_ALERT",
-                    "riskFactor": 1.23,
-                },
-                {
-                    "seaFront": "MEMN",
-                    "flagState": "BE",
-                    "type": "MISSING_FAR_ALERT",
-                    "riskFactor": 3.56,
-                },
-            ],
-            "alert_config_name": ["MISSING_FAR_ALERT", "MISSING_FAR_ALERT"],
-        }
-    )
-
-    pd.testing.assert_frame_equal(alerts, expected_alerts)
-
-
 def test_flow_when_an_alert_is_silenced(reset_test_data):
 
     initial_pending_alerts = read_query(
@@ -335,7 +273,32 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
     # Only one alert alert (out of the two) is kept, as one alert is filtered by the
     # filter_silenced_alerts task
     assert len(state.result[flow.get_tasks("make_alerts")[0]].result) == 2
-    assert len(state.result[flow.get_tasks("filter_silenced_alerts")[0]].result) == 1
+    filtered_alerts = state.result[flow.get_tasks("filter_silenced_alerts")[0]].result
+    expected_filtered_alerts = pd.DataFrame(
+        {
+            "vessel_name": ["PLACE SPECTACLE SUBIR"],
+            "internal_reference_number": ["ABC000055481"],
+            "external_reference_number": ["AS761555"],
+            "ircs": ["IL2468"],
+            "vessel_id": [3],
+            "vessel_identifier": ["INTERNAL_REFERENCE_NUMBER"],
+            "value": [
+                {
+                    "seaFront": None,
+                    "flagState": "NL",
+                    "type": "MISSING_FAR_ALERT",
+                    "riskFactor": 1.7411011266,
+                    "dml": "DML 29",
+                }
+            ],
+            "alert_config_name": ["MISSING_FAR_ALERT"],
+        }
+    )
+
+    pd.testing.assert_frame_equal(
+        filtered_alerts.drop(columns=["creation_date"]),
+        expected_filtered_alerts,
+        check_dtype=False,
+    )
+
     assert len(final_pending_alerts) == 2
-    assert "ABC000055481" in final_pending_alerts.internal_reference_number.values
-    assert "MISSING_FAR_ALERT" in final_pending_alerts.alert_config_name.values

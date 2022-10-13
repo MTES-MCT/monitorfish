@@ -1,43 +1,38 @@
-import React from 'react'
+import { Modal } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
-import { Modal } from 'rsuite'
 import StyledModalHeader from '../../../commonComponents/StyledModalHeader'
+import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
 
-const ConfirmDeletionModal = ({ isOpened, validateCallback, closeModal }) => {
+export function ConfirmDeletionModal({ closeModal, isOpened, validateCallback }) {
   return (
-    <ModalWithCustomHeight
-      size={'xs'}
-      backdrop
-      open={isOpened}
-      style={{ marginTop: 100 }}
-      onClose={closeModal}
-    >
+    <ModalWithCustomHeight backdrop onClose={closeModal} open={isOpened} size="xs" style={{ marginTop: 100 }}>
       <StyledModalHeader>
         <Modal.Title>
-          <Title>
-            Voulez-vous supprimer le signalement ?
-          </Title>
+          <Title>Voulez-vous supprimer le signalement ?</Title>
         </Modal.Title>
       </StyledModalHeader>
       <Body>
         <FooterButton>
           <ValidateButton
+            data-cy="confirm-reporting-deletion-button"
             onClick={() => {
               validateCallback()
               closeModal()
             }}
-            width={'120px'}
-            data-cy='confirm-reporting-deletion-button'
+            // TODO Migrate to MonitorFish <Button /> library component
+            // @ts-ignore
+            width="120px"
           >
             Oui
           </ValidateButton>
           <CancelButton
+            data-cy="close-reporting-deletion-modal"
             onClick={closeModal}
-            width={'120px'}
-            data-cy='close-reporting-deletion-modal'
+            // TODO Migrate to MonitorFish <Button /> library component
+            // @ts-ignore
+            width="120px"
           >
             Non
           </CancelButton>
@@ -71,5 +66,3 @@ const FooterButton = styled.div`
   width: 100%;
   padding: 15px 0;
 `
-
-export default ConfirmDeletionModal

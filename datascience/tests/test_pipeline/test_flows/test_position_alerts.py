@@ -15,8 +15,7 @@ from src.pipeline.flows.position_alerts import (
     filter_on_gears,
     flow,
     get_alert_type_zones_table,
-    get_fishing_gears_table,
-    make_alerts,
+    get_vessels_in_alert,
     make_fishing_gears_query,
     make_positions_in_alert_query,
 )
@@ -83,11 +82,6 @@ def test_get_alert_type_zones_table(reset_test_data):
 
     zones_tables = get_alert_type_zones_table.run("THREE_MILES_TRAWLING_ALERT")
     assert isinstance(zones_tables, ZonesTable)
-
-
-def test_get_fishing_gears_table(reset_test_data):
-    fishing_gears_table = get_fishing_gears_table.run()
-    assert isinstance(fishing_gears_table, Table)
 
 
 @patch(
@@ -359,7 +353,7 @@ def test_filter_on_gears():
     )
 
 
-def test_make_alerts():
+def test_get_vessels_in_alert():
 
     now = datetime(2020, 1, 1, 0, 0, 0)
     td = timedelta(hours=1)
@@ -386,44 +380,25 @@ def test_make_alerts():
         }
     )
 
-    alert_type = "USER_DEFINED_ALERT_TYPE"
-    alert_config_name = "ALERTE_CHALUTAGE_CONFIG_1"
+    vessels_in_alert = get_vessels_in_alert.run(positions_in_alert)
 
-    alerts = make_alerts.run(
-        positions_in_alert, alert_type=alert_type, alert_config_name=alert_config_name
-    )
-
-    expected_alerts = pd.DataFrame(
+    expected_vessels_in_alert = pd.DataFrame(
         {
-            "vessel_name": ["v_A", "v_B"],
-            "internal_reference_number": ["A", "B"],
-            "external_reference_number": ["AA", "BB"],
+            "cfr": ["A", "B"],
+            "external_immatriculation": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
+            "vessel_name": ["v_A", "v_B"],
+            "flag_state": ["FR", "FR"],
+            "facade": ["NAMO", "MEMN"],
+            "risk_factor": [1.23, None],
             "vessel_identifier": [
                 "INTERNAL_REFERENCE_NUMBER",
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "creation_date": [now, now - 0.5 * td],
-            "type": [alert_type, alert_type],
-            "facade": ["NAMO", "MEMN"],
-            "value": [
-                {
-                    "seaFront": "NAMO",
-                    "flagState": "FR",
-                    "type": alert_type,
-                    "riskFactor": 1.23,
-                },
-                {
-                    "seaFront": "MEMN",
-                    "flagState": "FR",
-                    "type": alert_type,
-                    "riskFactor": None,
-                },
-            ],
-            "alert_config_name": [alert_config_name, alert_config_name],
         }
     )
-    pd.testing.assert_frame_equal(alerts, expected_alerts)
+    pd.testing.assert_frame_equal(vessels_in_alert, expected_vessels_in_alert)
 
 
 def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test_data):
@@ -561,30 +536,35 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
             "trip_number": [None, None, None, None, None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
                     "riskFactor": 1.74110112659225003,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
                     "riskFactor": None,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
                     "riskFactor": 1.41421356237310003,
                 },
                 {
+                    "dml": None,
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
                     "riskFactor": None,
                 },
                 {
+                    "dml": "DML 13",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
@@ -599,6 +579,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
                 "IRCS",
             ],
             "alert_config_name": [alert_config_name] * 5,
+            "vessel_id": [3, 1, 2, None, 6],
         }
     )
 
@@ -687,24 +668,28 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
             "trip_number": [None, None, None, None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
                     "riskFactor": 1.74110112659225003,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
                     "riskFactor": None,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
                     "riskFactor": 1.41421356237310003,
                 },
                 {
+                    "dml": "DML 13",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
@@ -718,6 +703,7 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
                 "IRCS",
             ],
             "alert_config_name": [alert_config_name] * 4,
+            "vessel_id": [3, 1, 2, 6],
         }
     )
 
@@ -797,12 +783,14 @@ def test_flow_filters_on_gears(reset_test_data):
             "trip_number": [None, None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
                     "riskFactor": 1.74110112659225003,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
@@ -814,6 +802,7 @@ def test_flow_filters_on_gears(reset_test_data):
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "alert_config_name": [alert_config_name] * 2,
+            "vessel_id": [3, 2],
         }
     )
 
@@ -898,18 +887,21 @@ def test_flow_filters_on_time(reset_test_data):
             "trip_number": [None, None, None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade B",
                     "flagState": "FR",
                     "riskFactor": None,
                 },
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
                     "riskFactor": 1.41421356237310003,
                 },
                 {
+                    "dml": "DML 13",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
@@ -922,6 +914,7 @@ def test_flow_filters_on_time(reset_test_data):
                 "IRCS",
             ],
             "alert_config_name": [alert_config_name] * 3,
+            "vessel_id": [1, 2, 6],
         }
     )
 
@@ -996,6 +989,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
             "trip_number": [None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "THREE_MILES_TRAWLING_ALERT",
                     "seaFront": None,
                     "flagState": "NL",
@@ -1006,6 +1000,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "alert_config_name": [alert_config_name],
+            "vessel_id": [3],
         }
     )
 
@@ -1080,12 +1075,14 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
             "trip_number": [None, None],
             "value": [
                 {
+                    "dml": "DML 29",
                     "type": "FRENCH_EEZ_FISHING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
                     "riskFactor": 1.4142135624,
                 },
                 {
+                    "dml": "DML 13",
                     "type": "FRENCH_EEZ_FISHING_ALERT",
                     "seaFront": "Facade A",
                     "flagState": "FR",
@@ -1097,6 +1094,7 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
                 "IRCS",
             ],
             "alert_config_name": [alert_config_name] * 2,
+            "vessel_id": [2, 6],
         }
     )
 

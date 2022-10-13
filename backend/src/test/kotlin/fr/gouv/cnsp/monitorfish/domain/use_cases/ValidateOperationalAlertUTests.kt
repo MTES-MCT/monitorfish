@@ -42,6 +42,7 @@ class ValidateOperationalAlertUTests {
             internalReferenceNumber = "FRFGRGR",
             externalReferenceNumber = "RGD",
             ircs = "6554fEE",
+            vesselId = 123,
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),

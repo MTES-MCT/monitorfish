@@ -90,7 +90,6 @@ class UpdateReportingUTests {
                     UpdatedInfractionSuspicionOrObservation(
                         reportingActor = reportingActor,
                         title = "A reporting",
-                        dml = "DML 56",
                         natinfCode = "123456"
                     )
                 )
@@ -133,8 +132,7 @@ class UpdateReportingUTests {
                 1,
                 UpdatedInfractionSuspicionOrObservation(
                     reportingActor = ReportingActor.UNIT,
-                    title = "A reporting",
-                    dml = "DML 62/80"
+                    title = "A reporting"
                 )
             )
         }
@@ -144,7 +142,7 @@ class UpdateReportingUTests {
     }
 
     @Test
-    fun `execute Should add the seaFront When the DML is set`() {
+    fun `execute Should update the reporting`() {
         // Given
         given(reportingRepository.findById(any())).willReturn(
             Reporting(
@@ -171,7 +169,6 @@ class UpdateReportingUTests {
                 unit = "AN UNIT",
                 title = "A reporting",
                 description = "Test 2",
-                dml = "DML 62/80",
                 natinfCode = "1234"
             )
         )
@@ -180,13 +177,12 @@ class UpdateReportingUTests {
         argumentCaptor<InfractionSuspicion>().apply {
             verify(reportingRepository).update(any(), capture())
 
-            assertThat(allValues.first().seaFront).isEqualTo("MEMN")
             assertThat(allValues.first().description).isEqualTo("Test 2")
         }
     }
 
     @Test
-    fun `execute Should add the flagState of the previous reporting When the reporting is an INFRACTION_SUSPICION`() {
+    fun `execute Should add the flagState, the DMl and the sea front of the previous reporting When the reporting is an INFRACTION_SUSPICION`() {
         // Given
         given(reportingRepository.findById(any())).willReturn(
             Reporting(
@@ -203,7 +199,9 @@ class UpdateReportingUTests {
                     reportingActor = ReportingActor.UNIT,
                     title = "Test",
                     natinfCode = "1234",
-                    flagState = "FR"
+                    flagState = "FR",
+                    dml = "DML 56",
+                    seaFront = "NAMO"
                 ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false
@@ -217,7 +215,6 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 unit = "AN UNIT",
                 title = "A reporting",
-                dml = "DML 62/80",
                 natinfCode = "1234"
             )
         )
@@ -227,6 +224,8 @@ class UpdateReportingUTests {
             verify(reportingRepository).update(any(), capture())
 
             assertThat(allValues.first().flagState).isEqualTo("FR")
+            assertThat(allValues.first().dml).isEqualTo("DML 56")
+            assertThat(allValues.first().seaFront).isEqualTo("NAMO")
         }
     }
 
@@ -257,7 +256,6 @@ class UpdateReportingUTests {
                 reportingActor = ReportingActor.UNIT,
                 unit = "AN UNIT",
                 title = "A reporting",
-                dml = "DML 62/80",
                 natinfCode = "1234"
             )
         )
@@ -268,48 +266,5 @@ class UpdateReportingUTests {
 
             assertThat(allValues.first().flagState).isEqualTo("FR")
         }
-    }
-
-    @Test
-    fun `execute Should throw an exception When the DML is not set`() {
-        // Given
-        given(reportingRepository.findById(any())).willReturn(
-            Reporting(
-                id = 1,
-                type = ReportingType.INFRACTION_SUSPICION,
-                vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
-                ircs = "IRCS",
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                creationDate = ZonedDateTime.now(),
-                validationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(
-                    reportingActor = ReportingActor.UNIT,
-                    title = "Test",
-                    natinfCode = "1234",
-                    flagState = "FR"
-                ) as ReportingValue,
-                isArchived = false,
-                isDeleted = false
-            )
-        )
-
-        // When
-        val throwable = catchThrowable {
-            UpdateReporting(reportingRepository).execute(
-                1,
-                UpdatedInfractionSuspicionOrObservation(
-                    reportingActor = ReportingActor.UNIT,
-                    unit = "AN UNIT",
-                    title = "A reporting",
-                    dml = "",
-                    natinfCode = "1234"
-                )
-            )
-        }
-
-        // Then
-        assertThat(throwable.message).contains("DML should not be null or empty")
     }
 }

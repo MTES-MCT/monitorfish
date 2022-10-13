@@ -117,7 +117,7 @@ function deleteReportingsFromAPI(ids) {
 /**
  * Add a reporting
  * @memberOf API
- * @param {number} newReporting - The reporting to add
+ * @param {Reporting} newReporting - The reporting to add
  * @return {Reporting} reporting - The added reporting
 
  * @throws {Error}

@@ -5,12 +5,19 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionOrObservationType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
+import fr.gouv.cnsp.monitorfish.domain.repositories.DistrictRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 @UseCase
-class AddReporting(private val reportingRepository: ReportingRepository) {
+class AddReporting(
+    private val reportingRepository: ReportingRepository,
+    private val vesselRepository: VesselRepository,
+    private val districtRepository: DistrictRepository
+) {
     private val logger: Logger = LoggerFactory.getLogger(AddReporting::class.java)
 
     fun execute(newReporting: Reporting): Reporting {
@@ -25,15 +32,38 @@ class AddReporting(private val reportingRepository: ReportingRepository) {
         newReporting.value as InfractionSuspicionOrObservationType
         newReporting.value.checkReportingActorAndFieldsRequirements()
 
+        val nextReporting = getReportingWithDMLAndSeaFront(newReporting)
+
+        return reportingRepository.save(nextReporting)
+    }
+
+    private fun getReportingWithDMLAndSeaFront(newReporting: Reporting): Reporting {
         if (newReporting.type == ReportingType.INFRACTION_SUSPICION) {
             newReporting.value as InfractionSuspicion
-            require(!newReporting.value.dml.isNullOrEmpty()) {
-                "A DML must be set"
-            }
 
-            newReporting.value.seaFront = Reporting.getSeaFrontFromDML(newReporting.value.dml)
+            newReporting.vesselId?.let { vesselId ->
+                val districtCode = try {
+                    vesselRepository.findVessel(vesselId).districtCode
+                } catch (e: NoSuchElementException) {
+                    logger.warn("Vessel id $vesselId of reporting not found.", e)
+
+                    null
+                }
+
+                districtCode?.let {
+                    try {
+                        val district = districtRepository.find(it)
+
+                        return newReporting.copy(
+                            value = newReporting.value.copy(dml = district.dml, seaFront = district.facade)
+                        )
+                    } catch (e: CodeNotFoundException) {
+                        logger.warn("Could not add DML and sea front.", e)
+                    }
+                }
+            }
         }
 
-        return reportingRepository.save(newReporting)
+        return newReporting
     }
 }

@@ -12,20 +12,19 @@ from sqlalchemy import Table, and_, or_, select
 from sqlalchemy.sql import Select
 
 from src.db_config import create_engine
-from src.pipeline.generic_tasks import extract
-from src.pipeline.processing import coalesce, df_to_dict_series, join_on_multiple_keys
+from src.pipeline import utils
+from src.pipeline.generic_tasks import extract, read_query_task
+from src.pipeline.processing import coalesce, join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
     extract_silenced_alerts,
     filter_silenced_alerts,
     load_alerts,
+    make_alerts,
 )
-from src.pipeline.shared_tasks.facades import get_facades_table
-from src.pipeline.shared_tasks.positions import (
-    add_vessel_identifier,
-    get_positions_table,
-)
+from src.pipeline.shared_tasks.infrastructure import get_table
+from src.pipeline.shared_tasks.positions import add_vessel_identifier
 from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
-from src.pipeline.utils import get_table
+from src.pipeline.shared_tasks.vessels import add_vessel_id, add_vessels_columns
 from src.read_query import read_query
 
 
@@ -144,7 +143,7 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
             )
         )
 
-    zones_table = get_table(
+    zones_table = utils.get_table(
         table_info["table"],
         schema="public",
         conn=create_engine("monitorfish_remote"),
@@ -158,23 +157,6 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
     )
 
     return zones_table
-
-
-@task(checkpoint=False)
-def get_fishing_gears_table() -> Table:
-    """
-    Return a `Table` representing the table in which fishing gears are stored.
-
-    Returns:
-        - Table: table of fishing gears
-    """
-
-    return get_table(
-        table_name="fishing_gear_codes",
-        schema="public",
-        conn=create_engine("monitorfish_remote"),
-        logger=prefect.context.get("logger"),
-    )
 
 
 @task(checkpoint=False)
@@ -203,8 +185,8 @@ def make_positions_in_alert_query(
           `positions` table will be scanned. Defaults to 8.
         flag_states (List, optional): If given, filters positions to keep only those of
           vessels that belong to these flag_states. Defaults to None.
-        except_flag_states (List, optional): If given, filters positions to keep only those of
-          vessels that do NOT belong to these flag_states. Defaults to None.
+        except_flag_states (List, optional): If given, filters positions to keep only
+          those of vessels that do NOT belong to these flag_states. Defaults to None.
 
     Returns:
         Select: `SQLAlchemy.Select` statement corresponding to the given parameters.
@@ -345,17 +327,6 @@ def extract_gear_codes(query: Select) -> set:
 
 
 @task(checkpoint=False)
-def extract_positions_in_alert(query: Select) -> pd.DataFrame:
-    """
-    Executes the input `sqlalchemy.Select` statement, returns query results.
-    """
-    return read_query(
-        "monitorfish_remote",
-        query,
-    )
-
-
-@task(checkpoint=False)
 def filter_on_gears(
     positions_in_alert: pd.DataFrame,
     current_gears: pd.DataFrame,
@@ -421,16 +392,14 @@ def merge_risk_factor(
 
 
 @task(checkpoint=False)
-def make_alerts(
-    positions_in_alert: pd.DataFrame,
-    alert_type: str,
-    alert_config_name: str,
-) -> pd.DataFrame:
+def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
     """
-    Generates alerts from the input `positions_in_alert`, essentially by grouping all
-    positions of the same vessel as one alert.
+    Returns a `DataFrame` of unique vessels in alert from the input `DataFrame` of
+    positions in alert.
+    For each vessel, the date of the most recent position is used as
+    `creation_datetime` for the alert.
     """
-    alerts = (
+    vessels_in_alerts = (
         positions_in_alert.groupby(
             [
                 "cfr",
@@ -448,40 +417,11 @@ def make_alerts(
         .agg({"date_time": "max"})
         .rename(
             columns={
-                "cfr": "internal_reference_number",
-                "external_immatriculation": "external_reference_number",
                 "date_time": "creation_date",
             }
         )
     )
-
-    alerts["type"] = alert_type
-    alerts["value"] = df_to_dict_series(
-        alerts.rename(
-            columns={
-                "facade": "seaFront",
-                "flag_state": "flagState",
-                "risk_factor": "riskFactor",
-            }
-        )[["seaFront", "flagState", "type", "riskFactor"]]
-    )
-
-    alerts["alert_config_name"] = alert_config_name
-
-    return alerts[
-        [
-            "vessel_name",
-            "internal_reference_number",
-            "external_reference_number",
-            "ircs",
-            "vessel_identifier",
-            "creation_date",
-            "type",
-            "facade",
-            "value",
-            "alert_config_name",
-        ]
-    ]
+    return vessels_in_alerts
 
 
 with Flow("Position alert") as flow:
@@ -503,9 +443,11 @@ with Flow("Position alert") as flow:
         fishing_gears, fishing_gear_categories
     )
 
-    positions_table = get_positions_table()
+    positions_table = get_table("positions")
+    vessels_table = get_table("vessels")
+    districts_table = get_table("districts")
     zones_table = get_alert_type_zones_table(alert_type)
-    facades_table = get_facades_table()
+    facades_table = get_table("facade_areas_subdivided")
 
     positions_query = make_positions_in_alert_query(
         positions_table=positions_table,
@@ -518,10 +460,10 @@ with Flow("Position alert") as flow:
         except_flag_states=except_flag_states,
     )
 
-    positions_in_alert = extract_positions_in_alert(positions_query)
+    positions_in_alert = read_query_task("monitorfish_remote", positions_query)
 
     with case(must_filter_on_gears, True):
-        fishing_gears_table = get_fishing_gears_table()
+        fishing_gears_table = get_table("fishing_gear_codes")
         fishing_gears_query = make_fishing_gears_query(
             fishing_gears_table=fishing_gears_table,
             fishing_gears=fishing_gears,
@@ -547,7 +489,15 @@ with Flow("Position alert") as flow:
     positions_in_alert = add_vessel_identifier(positions_in_alert)
     current_risk_factors = extract_current_risk_factors()
     positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
-    alerts = make_alerts(positions_in_alert, alert_type, alert_config_name)
+    vessels_in_alert = get_vessels_in_alert(positions_in_alert)
+    vessels_in_alert = add_vessel_id(vessels_in_alert, vessels_table)
+    vessels_in_alert = add_vessels_columns(
+        vessels_in_alert,
+        vessels_table,
+        districts_table=districts_table,
+        districts_columns_to_add=["dml"],
+    )
+    alerts = make_alerts(vessels_in_alert, alert_type, alert_config_name)
     silenced_alerts = extract_silenced_alerts()
     alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
     load_alerts(alert_without_silenced, alert_config_name)

@@ -20,10 +20,10 @@ class GetAllBeaconMalfunctions(
 
         val beaconMalfunctionsExceptResumedTransmission = beaconMalfunctionsRepository.findAllExceptEndOfFollowUp()
         val lastSixtyResumedTransmissions = beaconMalfunctionsRepository.findLastSixtyEndOfFollowUp()
-        val activatedVesselIds = beaconRepository.findActivatedVesselIds()
+        val activatedBeaconNumbers = beaconRepository.findActivatedBeaconNumbers()
 
         return (beaconMalfunctionsExceptResumedTransmission + lastSixtyResumedTransmissions)
-            .filter { activatedVesselIds.contains(it.id) }
+            .filter { activatedBeaconNumbers.contains(it.beaconNumber) }
             .map { beaconMalfunction ->
                 val riskFactor = lastPositions.find(getVesselFromBeaconMalfunction(beaconMalfunction))?.riskFactor
                 beaconMalfunction.riskFactor = riskFactor

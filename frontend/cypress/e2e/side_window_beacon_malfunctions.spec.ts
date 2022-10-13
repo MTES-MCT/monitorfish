@@ -117,8 +117,8 @@ context('Side window beacon malfunctions', () => {
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
-      .contains('Navire en mer')
-    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/8').as('moveBeaconMalfunctionCardVesselStatus')
+      .contains('Navire à quai')
+    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/10').as('moveBeaconMalfunctionCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
@@ -249,7 +249,7 @@ context('Side window beacon malfunctions', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
       .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
       .contains('Sans nouvelles')
-    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/8').as('moveBeaconMalfunctionCardVesselStatus')
+    cy.intercept('PUT', 'bff/v1/beacon_malfunctions/10').as('moveBeaconMalfunctionCardVesselStatus')
 
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
@@ -282,7 +282,7 @@ context('Side window beacon malfunctions', () => {
 
     // When
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-textarea"]').type('I just added a new comment')
-    cy.intercept('POST', 'bff/v1/beacon_malfunctions/8/comments').as('addBeaconMalfunctionComment')
+    cy.intercept('POST', 'bff/v1/beacon_malfunctions/10/comments').as('addBeaconMalfunctionComment')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-add"]').click({ force: true })
 
     // Then

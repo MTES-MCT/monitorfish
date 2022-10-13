@@ -128,7 +128,8 @@ data class VesselEntity(
         proprietorEmails = proprietorEmails,
         vesselPhones = vesselPhones,
         vesselEmails = vesselEmails,
-        underCharter = underCharter)
+        underCharter = underCharter
+    )
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(VesselEntity::class.java)

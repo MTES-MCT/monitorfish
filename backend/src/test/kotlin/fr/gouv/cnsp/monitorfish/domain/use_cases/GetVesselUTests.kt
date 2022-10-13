@@ -41,19 +41,48 @@ class GetVesselUTests {
     fun `execute Should return the vessel and an ordered list of last positions for a given vessel`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
-        val firstPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(4))
-        val secondPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(3))
-        val thirdPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(2))
-        val fourthPosition = Position(null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0, now.minusHours(1))
-        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(listOf(firstPosition, fourthPosition, secondPosition, thirdPosition))
+        val firstPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                4
+            )
+        )
+        val secondPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                3
+            )
+        )
+        val thirdPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                2
+            )
+        )
+        val fourthPosition = Position(
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            now.minusHours(
+                1
+            )
+        )
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
+            listOf(firstPosition, fourthPosition, secondPosition, thirdPosition)
+        )
         given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel(id = 123))
         given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor(2.3, 2.0, 1.9, 3.2))
         given(beaconRepository.findBeaconNumberByVesselId(eq(123))).willReturn("A_BEACON_NUMBER")
 
         // When
         val pair = runBlocking {
-            GetVessel(vesselRepository, positionRepository, logbookReportRepository, riskFactorsRepository, beaconRepository)
-                .execute("FR224226850",
+            GetVessel(
+                vesselRepository,
+                positionRepository,
+                logbookReportRepository,
+                riskFactorsRepository,
+                beaconRepository
+            )
+                .execute(
+                    "FR224226850",
                     "",
                     "",
                     VesselTrackDepth.TWELVE_HOURS,
@@ -76,20 +105,30 @@ class GetVesselUTests {
     @Test
     fun `execute Should not throw an exception When no Vessel found`() {
         // Given
-        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(listOf())
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
+            listOf()
+        )
         given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
         given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor())
 
         // When
         val pair = runBlocking {
-            GetVessel(vesselRepository, positionRepository, logbookReportRepository, riskFactorsRepository, beaconRepository)
-                .execute("FR224226850",
+            GetVessel(
+                vesselRepository,
+                positionRepository,
+                logbookReportRepository,
+                riskFactorsRepository,
+                beaconRepository
+            )
+                .execute(
+                    "FR224226850",
                     "",
                     "",
                     VesselTrackDepth.TWELVE_HOURS,
                     VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     null,
-                    null)
+                    null
+                )
         }
 
         // Then

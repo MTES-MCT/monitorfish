@@ -21,7 +21,7 @@ import { VesselLabelsMapButton } from './features/map/tools/vessel_labels/Vessel
 import { VesselVisibilityMapButton } from './features/map/tools/vessel_visibility/VesselVisibilityMapButton'
 import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewFilteredVessels'
 import { AlertsMapButton } from './features/side_window/alerts_reportings/AlertsMapButton'
-import BeaconMalfunctionsMapButton from './features/side_window/beacon_malfunctions/BeaconMalfunctionsMapButton'
+import { BeaconMalfunctionsMapButton } from './features/side_window/beacon_malfunctions/BeaconMalfunctionsMapButton'
 import { SideWindow } from './features/side_window/SideWindow'
 import { SideWindowLauncher } from './features/side_window/SideWindowLauncher'
 import VesselList from './features/vessel_list/VesselList'

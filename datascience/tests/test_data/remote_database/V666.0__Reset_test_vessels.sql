@@ -6,8 +6,8 @@ INSERT INTO public.vessels (
     district, district_code, gauge, registry_port, power, vessel_type, sailing_category, sailing_type, 
     declared_fishing_gears, nav_licence_expiration_date, 
     vessel_emails, vessel_phones, proprietor_name, proprietor_phones, proprietor_emails, operator_name, operator_phones,     
-    beacon_number, under_charter, beacon_status,
-    operator_mobile_phone, vessel_mobile_phone, vessel_telex, vessel_fax, operator_fax, operator_email, satellite_operator_id
+    under_charter,
+    operator_mobile_phone, vessel_mobile_phone, vessel_telex, vessel_fax, operator_fax, operator_email
 ) VALUES 
 (  
     1,
@@ -15,8 +15,8 @@ INSERT INTO public.vessels (
     'Concarneau', 'CC', 4.1, 'Concarneau', 1016, 'Navire polyvalent', '3ème restreinte', 'Petite pêche', 
     '{GNS,GTR,LLS}', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP + INTERVAL '2 months',
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur de poissons', '{1234567890,"06 06 06 06 06"}', 
-    NULL, false, NULL,
-    null, null, null, null, null, 'write_to_me@gmail.com', NULL
+    false,
+    null, null, null, null, null, 'write_to_me@gmail.com'
 ),
 (
     2,
@@ -24,8 +24,8 @@ INSERT INTO public.vessels (
     'Concarneau', 'CC', 3.7, 'Concarneau', 312, 'Navire polyvalent', '3ème restreinte', 'Petite pêche', 
     '{DRB,PS1}', (NOW() AT TIME ZONE 'UTC')::TIMESTAMP + INTERVAL '3 months',
     '{figure@conscience.fr, figure2@conscience.fr}', '{}', NULL, '{}', '{}', 'Le pêcheur de crevettes', '{9876543210}', 
-    123456, true, 'ACTIVATED',
-    '0600000000', null, null, '0100000000', '0200000000', 'address@email.bzh', 1
+    true,
+    '0600000000', null, null, '0100000000', '0200000000', 'address@email.bzh'
 ),
 (
     3,
@@ -33,8 +33,8 @@ INSERT INTO public.vessels (
     'Concarneau', 'CC', 3.7, 'Concarneau', 553, 'Chalutier', '4ème', 'Grande pêche', 
     '{OTM,OTB,OTT}', NULL,
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur de fonds', '{0000000000}', 
-    NULL, false, NULL,
-    null, null, null, null, null, 'address@email.nl', 1
+    false,
+    null, null, null, null, null, 'address@email.nl'
 ),
 (
     4,
@@ -42,8 +42,8 @@ INSERT INTO public.vessels (
     'Brest', 'BR', 2.7, 'Brest', 453, 'Chalutier', '4ème', 'Grande pêche', 
     '{OTM,OTB,OTT}', NULL,
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur', '{11111111111}', 
-    'A56CZ2', false, 'ACTIVATED',
-    null, '0111111111', null, null, null, 'pecheur@poissecaille.fr', 2
+    false,
+    null, '0111111111', null, null, null, 'pecheur@poissecaille.fr'
 ),
 (
     5,
@@ -51,8 +51,8 @@ INSERT INTO public.vessels (
     'Marseille', 'MA', 2.7, 'Marseille', 451, 'Chalutier', '4ème', 'Grande pêche', 
     '{OTT}', NULL,
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur qui se cache', '{2222222222}', 
-    'BEACON_NOT_EMITTING', false, 'ACTIVATED',
-    null, null, null, null, null, 'discrete@cache-cache.fish', 2
+    false,
+    null, null, null, null, null, 'discrete@cache-cache.fish'
 ),
 (
     6,
@@ -60,7 +60,7 @@ INSERT INTO public.vessels (
     'Marseille', 'MA', 2.7, 'Marseille', 250, 'Chalutier', '4ème', 'Grande pêche',
     '{OTT}', NULL,
     '{}', '{}', NULL, '{}', '{}', 'Le pêcheur qui se fait ses 4h reports', '{3333333333}', 
-    'BEA951357', false, 'ACTIVATED',
-    null, null, null, null, null, 'reglo@bateau.fr', 2
+    false,
+    null, null, null, null, null, 'reglo@bateau.fr'
 )
 ;

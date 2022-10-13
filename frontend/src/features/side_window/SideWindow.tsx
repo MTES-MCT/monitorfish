@@ -18,7 +18,7 @@ import { useAppSelector } from '../../hooks/useAppSelector'
 import { usePrevious } from '../../hooks/usePrevious'
 import { AlertsAndReportings } from './alerts_reportings/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
-import BeaconMalfunctionsBoard from './beacon_malfunctions/BeaconMalfunctionsBoard'
+import { BeaconMalfunctionsBoard } from './beacon_malfunctions/BeaconMalfunctionsBoard'
 import { AlertAndReportingTab, SIDE_WINDOW_MENU } from './constants'
 import { SideWindowMenu } from './SideWindowMenu'
 import { SideWindowSubMenu } from './SideWindowSubMenu'
@@ -167,9 +167,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
               setSelectedTab={setSelectedTab}
             />
           )}
-          {openedSideWindowTab === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code && (
-            <BeaconMalfunctionsBoard baseRef={ref} />
-          )}
+          {openedSideWindowTab === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code && <BeaconMalfunctionsBoard />}
         </Content>
       )}
     </Wrapper>

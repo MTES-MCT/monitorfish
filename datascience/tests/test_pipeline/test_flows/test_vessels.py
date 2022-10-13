@@ -5,20 +5,14 @@ import pandas as pd
 import sqlalchemy
 
 from src.pipeline.flows.vessels import (
-    beaconStatus,
     clean_vessels,
-    extract_beacons,
     extract_cee_vessels,
     extract_control_charters,
     extract_floats,
     extract_fr_vessels,
     extract_nav_licences,
     extract_non_cee_vessels,
-    extract_satellite_operators,
-    load_satellite_operators,
     load_vessels,
-    transform_beacons,
-    transform_satellite_operators,
 )
 from tests.mocks import mock_extract_side_effect
 
@@ -59,10 +53,7 @@ cleaned_vessels_data = {
     "vessel_emails": [[], ["vessel@email.me", "vessel_bis@email.me"]],
     "vessel_fax": ["+123456789", "faxne_999"],
     "vessel_telex": ["4-000-000", "444444444"],
-    "beacon_number": [None, "beacbeac"],
-    "beacon_status": [None, "ACTIVATED"],
     "under_charter": [True, False],
-    "satellite_operator_id": [1, None],
 }
 
 
@@ -111,82 +102,6 @@ def test_extract_control_charters(reset_test_data):
     )
 
     pd.testing.assert_frame_equal(vessels_under_charter, expected_vessels_under_charter)
-
-
-@patch("src.pipeline.flows.vessels.extract")
-def test_extract_beacons(mock_extract):
-    mock_extract.side_effect = mock_extract_side_effect
-    query = extract_beacons.run()
-    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
-
-
-@patch("src.pipeline.flows.vessels.extract")
-def test_extract_satellite_operators(mock_extract):
-    mock_extract.side_effect = mock_extract_side_effect
-    query = extract_satellite_operators.run()
-    assert isinstance(query, sqlalchemy.sql.elements.TextClause)
-
-
-def test_transform_beacons():
-    beacons = pd.DataFrame(
-        {
-            "id_nav_flotteur_bn": [1, 2, 3, 4, 5, 6],
-            "beacon_number": ["A", "B", "C", "D", "E", "F"],
-            "beacon_status": [
-                "Activée",
-                "Désactivée",
-                "En test",
-                "Non agréée",
-                "Non surveillée",
-                None,
-            ],
-            "satellite_operator_id": [1, 1, 2, 2, 3, None],
-        }
-    )
-
-    transformed_beacons = transform_beacons.run(beacons)
-    expected_transformed_beacons = pd.DataFrame(
-        {
-            "id_nav_flotteur_bn": [1, 2, 3, 4, 5, 6],
-            "beacon_number": ["A", "B", "C", "D", "E", "F"],
-            "beacon_status": [
-                "ACTIVATED",
-                "DEACTIVATED",
-                "IN_TEST",
-                "NON_APPROVED",
-                "UNSUPERVISED",
-                None,
-            ],
-            "satellite_operator_id": [1, 1, 2, 2, 3, None],
-        }
-    )
-
-    pd.testing.assert_frame_equal(transformed_beacons, expected_transformed_beacons)
-
-
-def test_transform_satellite_operators():
-
-    satellite_operators = pd.DataFrame(
-        {
-            "id": [1, 2, 3],
-            "name": ["SAT", "SAT2", "SAT3"],
-            "emails": ["simple@email.com", "contact1@sat2.com, conact2@sat2.com", None],
-        }
-    )
-
-    res = transform_satellite_operators.run(satellite_operators)
-    expected_res = pd.DataFrame(
-        {
-            "id": [1, 2, 3],
-            "name": ["SAT", "SAT2", "SAT3"],
-            "emails": [
-                ["simple@email.com"],
-                ["contact1@sat2.com", "conact2@sat2.com"],
-                None,
-            ],
-        }
-    )
-    pd.testing.assert_frame_equal(res, expected_res)
 
 
 def test_clean_vessels():
@@ -263,9 +178,6 @@ def test_clean_vessels():
                 None,
             ],
             "sailing_category": ["2ème", None],
-            "beacon_number": [None, "beacbeac"],
-            "beacon_status": [None, beaconStatus.ACTIVATED.value],
-            "satellite_operator_id": [1, None],
             "under_charter": [True, False],
             "operator_name_pos": ["name_pos_123", None],
             "operator_email_pos": ["email_pos_123", None],
@@ -284,23 +196,6 @@ def test_clean_vessels():
     pd.testing.assert_frame_equal(
         cleaned_vessels, expected_cleaned_vessels, check_dtype=False
     )
-
-
-def test_load_satellite_operators(reset_test_data):
-
-    satellite_operators = pd.DataFrame(
-        {
-            "id": [1, 2, 3],
-            "name": ["SAT", "SAT2", "SAT3"],
-            "emails": [
-                ["simple@email.com"],
-                ["contact1@sat2.com", "conact2@sat2.com"],
-                None,
-            ],
-        }
-    )
-
-    load_satellite_operators.run(satellite_operators)
 
 
 def test_load_vessels(reset_test_data):
@@ -339,8 +234,6 @@ def test_load_vessels(reset_test_data):
         "vessel_emails": object,
         "vessel_fax": object,
         "vessel_telex": object,
-        "beacon_number": object,
-        "beacon_status": object,
         "under_charter": bool,
     }
 

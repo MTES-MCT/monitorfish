@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit
 class CaffeineConfiguration {
     val vessels = "vessel"
     val searchVessels = "search_vessels"
+    val searchBeacons = "search_beacons"
     val gearCodeGroups = "gear_code_groups"
     val gearCodeGroup = "gear_code_group"
     val gears = "gears"
@@ -39,6 +40,7 @@ class CaffeineConfiguration {
     val controlAnteriority = "control_anteriority"
     val riskFactors = "risk_factors"
     val faoAreas = "fao_areas"
+    val findBeacon = "find_beacon"
     val district = "district"
 
     @Bean
@@ -49,7 +51,7 @@ class CaffeineConfiguration {
         val nextLogbookCache = buildMinutesCache(nextLogbook, ticker, 10)
         val previousLogbookCache = buildMinutesCache(previousLogbook, ticker, 10)
         val logbookRawMessageCache = buildMinutesCache(logbookRawMessage, ticker, oneWeek)
-        val vesselCache = buildMinutesCache(vessels, ticker, 180)
+        val vesselCache = buildMinutesCache(vessels, ticker, 60)
 
         val gearCodeGroupsCache = buildMinutesCache(gearCodeGroups, ticker, oneWeek)
         val gearCodeGroupCache = buildMinutesCache(gearCodeGroup, ticker, oneWeek)
@@ -83,7 +85,9 @@ class CaffeineConfiguration {
             ticker,
             1
         )
-        val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 180)
+        val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 60)
+        val searchBeaconsCache = buildMinutesCache(searchBeacons, ticker, 1)
+        val findBeaconCache = buildMinutesCache(findBeacon, ticker, 60)
 
         val manager = SimpleCacheManager()
         manager.setCaches(
@@ -102,6 +106,7 @@ class CaffeineConfiguration {
                 allSpeciesCache,
                 speciesCache,
                 searchVesselsCache,
+                searchBeaconsCache,
                 logbookCache,
                 nextLogbookCache,
                 previousLogbookCache,
@@ -114,7 +119,8 @@ class CaffeineConfiguration {
                 riskFactorsCache,
                 allSpeciesGroupsCache,
                 faoAreasCache,
-                districtCache
+                districtCache,
+                findBeaconCache
             )
         )
 

@@ -21,5 +21,5 @@ data class BeaconMalfunctionNotification(
         val notificationType: BeaconMalfunctionNotificationType
     )
 
-    fun toGroupByKeys() = NotificationGroupByKeys(beaconMalfunctionId, dateTimeUtc, notificationType)
+    fun toGroupByKeys() = NotificationGroupByKeys(beaconMalfunctionId, dateTimeUtc.withNano(0), notificationType)
 }

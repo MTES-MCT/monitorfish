@@ -11,12 +11,14 @@ interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
             "OR mmsi LIKE %:searched% " +
             "OR vessel_name LIKE %:searched% " +
             "OR external_immatriculation LIKE %:searched% " +
-            "OR ircs LIKE %:searched% " +
-            "OR beacon_number LIKE %:searched% limit 50",
+            "OR ircs LIKE %:searched% limit 50",
         nativeQuery = true
     )
     fun searchBy(@Param("searched") searched: String): List<VesselEntity>
     fun findByInternalReferenceNumber(internalReferenceNumber: String): VesselEntity
     fun findByExternalReferenceNumberIgnoreCaseContaining(externalReferenceNumber: String): VesselEntity
     fun findByIrcs(ircs: String): VesselEntity
+
+    @Query("SELECT * FROM vessels WHERE id in (:ids)", nativeQuery = true)
+    fun findAllByIds(ids: List<Int>): List<VesselEntity>
 }

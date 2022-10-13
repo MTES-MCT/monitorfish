@@ -58,7 +58,7 @@ context('VesselSearch', () => {
 
   it('Vessel Should be searched from the search bar with few positions When a beacon number is entered', () => {
     // When
-    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('BEACON')
+    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('FGED')
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')

@@ -19,6 +19,7 @@ from config import (
 from src.pipeline.flows import (
     admin_areas,
     anchorages,
+    beacons,
     control_anteriority,
     control_objectives,
     controllers,
@@ -53,6 +54,7 @@ from src.pipeline.helpers.country_codes import (
 )
 
 ################################ Define flow schedules ################################
+beacons.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 control_anteriority.flow.schedule = CronSchedule("5 * * * *")
 controllers.flow.schedule = CronSchedule("0 8 * * *")
 controls.flow.schedule = Schedule(
@@ -119,7 +121,7 @@ missing_trip_numbers.flow.schedule = CronSchedule("4,14,24,34,44,54 * * * *")
 notify_beacon_malfunctions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
-            "0 * * * *",
+            "* * * * *",
             parameter_defaults={
                 "test_mode": True,
             },
@@ -217,6 +219,7 @@ vessels.flow.schedule = CronSchedule("5 2,5,8,11,14,17,20,23 * * *")
 flows_to_register = [
     admin_areas.flow,
     anchorages.flow,
+    beacons.flow,
     control_anteriority.flow,
     control_objectives.flow,
     controllers.flow,

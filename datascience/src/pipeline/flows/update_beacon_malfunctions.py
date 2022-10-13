@@ -12,20 +12,17 @@ from config import (
     BEACON_MALFUNCTIONS_ENDPOINT,
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
-    LIBRARY_LOCATION,
 )
 from src.pipeline.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionStage,
     BeaconMalfunctionVesselStatus,
+    BeaconStatus,
     EndOfMalfunctionReason,
 )
 from src.pipeline.generic_tasks import extract, load
-from src.pipeline.processing import (
-    join_on_multiple_keys,
-    left_isin_right_by_decreasing_priority,
-)
-from src.pipeline.shared_tasks.beacons import beaconStatus
+from src.pipeline.processing import join_on_multiple_keys
+from src.pipeline.shared_tasks.control_flow import filter_results
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 from src.pipeline.shared_tasks.healthcheck import (
     assert_last_positions_health,
@@ -34,14 +31,14 @@ from src.pipeline.shared_tasks.healthcheck import (
 
 
 @task(checkpoint=False)
-def extract_beacons_last_emission() -> pd.DataFrame:
+def extract_last_positions() -> pd.DataFrame:
     """
     Extract the last emission date of each vessel in the `last_positions` table for
     certain flag states.
     """
     return extract(
         "monitorfish_remote",
-        "monitorfish/beacons_last_emission.sql",
+        "monitorfish/last_positions_for_beacon_malfunctions.sql",
     )
 
 
@@ -54,133 +51,66 @@ def extract_known_malfunctions() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def extract_vessels_with_beacon() -> pd.DataFrame:
+def extract_vessels_that_should_emit() -> pd.DataFrame:
     """
-    Extract vessels from the `vessels` table that have a beacon assciated to them and
-    with a flag_state that must be monitored.
+    Extract vessels from the `vessels` table that have a beacon associated to them
+    with a status of `ACTIVATED` or `UNSUPERVISED` and with a flag_state that must be
+    monitored.
     """
-    return extract("monitorfish_remote", "monitorfish/vessels_with_beacon.sql")
+    return extract("monitorfish_remote", "monitorfish/vessels_that_should_emit.sql")
 
 
 @task(checkpoint=False)
-def extract_vessels_less_than_twelve_meters_to_monitor() -> set:
-    """
-    Returns the vessels <12m whose emissions must be monitored.
-
-    Returns:
-        set: set of `cfr`s of vessels <12m to monitor
-    """
-    vessels = pd.read_csv(
-        LIBRARY_LOCATION
-        / "pipeline/data/vessels_less_than_twelve_meters_to_monitor.csv"
-    )
-    return set(vessels.cfr)
-
-
-@task(checkpoint=False)
-def get_vessels_that_should_emit(
-    vessels_with_beacon: pd.DataFrame, less_than_twelve_to_monitor: set
+def get_last_emissions(
+    vessels_that_should_emit: pd.DataFrame, last_positions: pd.DataFrame
 ) -> pd.DataFrame:
-    """Filter the input DataFrame of vessels_with_beacon to keep only those that have :
+    last_emissions = join_on_multiple_keys(
+        vessels_that_should_emit,
+        last_positions,
+        or_join_keys=["cfr", "ircs", "external_immatriculation"],
+        how="left",
+        coalesce_common_columns=False,
+    )
 
-      - an `ACTIVATED` beacon AND
-      - a length >= 12m OR a `cfr` that is in `less_than_twelve_to_monitor`
-
-    Args:
-        vessels_with_beacon (pd.DataFrame): DataFrame of vessels
-        less_than_twelve_to_monitor (set): set of `cfr`s of vessels <12m to monitor
-
-    Returns:
-        pd.DataFrame: filtered version of input
-    """
-    vessels_that_should_emit = (
-        vessels_with_beacon.loc[
-            (vessels_with_beacon.beacon_status == beaconStatus.ACTIVATED.value)
-            & (
-                (vessels_with_beacon.length >= 12)
-                | (vessels_with_beacon.cfr.isin(less_than_twelve_to_monitor))
-            )
-        ]
-        .drop(columns=["beacon_status"])
+    last_emissions = (
+        last_emissions.sort_values("last_position_datetime_utc", ascending=False)
+        .groupby("beacon_number")
+        .head(1)
         .reset_index(drop=True)
     )
-    return vessels_that_should_emit
+
+    return last_emissions
 
 
 @task(checkpoint=False)
-def get_temporarily_unsupervised_vessels(
-    vessels_with_beacon: pd.DataFrame,
-) -> pd.DataFrame:
-    """Filter the input DataFrame of vessels_with_beacon to keep only those with
-    an `UNSUPERVISED` beacon.
-
-    Args:
-        vessels_with_beacon (pd.DataFrame): DataFrame of vessels
-
-    Returns:
-        pd.DataFrame: filtered version of input
-    """
-    temporarily_unsupervised_vessels = (
-        vessels_with_beacon.loc[
-            vessels_with_beacon.beacon_status == beaconStatus.UNSUPERVISED.value
-        ]
-        .drop(columns=["beacon_status"])
-        .reset_index(drop=True)
-    )
-    return temporarily_unsupervised_vessels
-
-
-@task(checkpoint=False)
-def get_current_malfunctions(
-    vessels_that_should_emit: pd.DataFrame,
-    beacons_last_emission: pd.DataFrame,
+def get_new_malfunctions(
+    last_emissions: pd.DataFrame,
+    known_malfunctions: pd.DataFrame,
     malfunction_datetime_utc_threshold_at_sea: datetime,
     malfunction_datetime_utc_threshold_at_port: datetime,
 ) -> pd.DataFrame:
-    """Filters the input `DataFrame` of vessels that should emit and keeps only those
-    which are either absent from `beacons_last_emission` or for which the
-    `last_position_datetime_utc` is older than
-    `malfunction_datetime_utc_threshold_at_sea` or
-    `malfunction_datetime_utc_threshold_at_port`, depending on whether the last
-    emission `is_at_port`.
 
-    Args:
-        beacons_last_emission (pd.DataFrame): `DataFrame` of last emissoions,
-          containing at least a `last_emission_datetime_utc` datetime column and a
-          `is_at_port` boolean column.
-        malfunction_datetime_utc_threshold_at_sea (datetime): Oldest date after which
-          vessels at sea must have emitted
-        malfunction_datetime_utc_threshold_at_port (datetime): Oldest date after which
-          vessels at port must have emitted
+    last_emissions_not_in_known_malfunction = last_emissions.loc[
+        ~last_emissions.beacon_number.isin(known_malfunctions.beacon_number)
+    ]
 
-    Returns:
-        pd.DataFrame: `DataFrame` of malfunctions.
-    """
-
-    last_emission_of_vessels_that_should_emit = join_on_multiple_keys(
-        beacons_last_emission,
-        vessels_that_should_emit,
-        or_join_keys=["cfr", "ircs", "external_immatriculation"],
-        how="right",
-    )
-
-    current_malfunctions = (
-        last_emission_of_vessels_that_should_emit.loc[
-            (last_emission_of_vessels_that_should_emit.is_manual == True)
+    new_malfunctions = (
+        last_emissions_not_in_known_malfunction.loc[
+            (last_emissions_not_in_known_malfunction.is_manual == True)
             | (
-                last_emission_of_vessels_that_should_emit.last_position_datetime_utc.isna()
+                last_emissions_not_in_known_malfunction.last_position_datetime_utc.isna()
             )
             | (
-                (last_emission_of_vessels_that_should_emit.is_at_port == True)
+                (last_emissions_not_in_known_malfunction.is_at_port == True)
                 & (
-                    last_emission_of_vessels_that_should_emit.last_position_datetime_utc
+                    last_emissions_not_in_known_malfunction.last_position_datetime_utc
                     < malfunction_datetime_utc_threshold_at_port
                 )
             )
             | (
-                (last_emission_of_vessels_that_should_emit.is_at_port == False)
+                (last_emissions_not_in_known_malfunction.is_at_port == False)
                 & (
-                    last_emission_of_vessels_that_should_emit.last_position_datetime_utc
+                    last_emissions_not_in_known_malfunction.last_position_datetime_utc
                     < malfunction_datetime_utc_threshold_at_sea
                 )
             )
@@ -189,183 +119,83 @@ def get_current_malfunctions(
         .reset_index(drop=True)
     )
 
-    current_malfunctions = current_malfunctions.drop(columns=["is_manual"])
-    return current_malfunctions
+    new_malfunctions = new_malfunctions.drop(columns=["is_manual"])
+
+    return new_malfunctions
 
 
 @task(checkpoint=False)
-def get_vessels_emitting(
-    beacons_last_emission: pd.DataFrame,
-    malfunction_datetime_utc_threshold_at_sea: datetime,
-    malfunction_datetime_utc_threshold_at_port: datetime,
-) -> pd.DataFrame:
-    """Filters the input `DataFrame` of last emissions and keeps only those for which
-    the `last_position_datetime_utc` is more recent than
-    `malfunction_datetime_utc_threshold_at_sea` or
-    `malfunction_datetime_utc_threshold_at_port`, depending on whether the last
-    emission `is_at_port`.
-
-    Args:
-        beacons_last_emission (pd.DataFrame): `DataFrame` of last emissoions,
-          containing at least a `last_emission_datetime_utc` datetime column and a
-          `is_at_port` boolean column.
-        malfunction_datetime_utc_threshold_at_sea (datetime): Oldest date after which
-          vessels at sea must have emitted
-        malfunction_datetime_utc_threshold_at_port (datetime): Oldest date after which
-          vessels at port must have emitted
-
-    Returns:
-        pd.DataFrame: `DataFrame` of vessels that emitted after the relevant threshold.
-    """
-    vessels_emitting = beacons_last_emission.loc[
-        (beacons_last_emission.is_manual == False)
-        & (
-            (
-                beacons_last_emission.is_at_port
-                & (
-                    beacons_last_emission.last_position_datetime_utc
-                    >= malfunction_datetime_utc_threshold_at_port
-                )
-            )
-            | (
-                (~beacons_last_emission.is_at_port)
-                & (
-                    beacons_last_emission.last_position_datetime_utc
-                    >= malfunction_datetime_utc_threshold_at_sea
-                )
-            )
-        )
-    ].reset_index(drop=True)[["cfr", "external_immatriculation", "ircs"]]
-
-    return vessels_emitting
-
-
-@task(checkpoint=False)
-def get_new_malfunctions(
-    current_malfunctions: pd.DataFrame, known_malfunctions: pd.DataFrame
-) -> pd.DataFrame:
-    """Filters `current_malfunctions` to keep only malfunctions that are not in
-    `known_malfunctions`. Both input DataFrames must have columns :
-
-      - cfr
-      - external_immatriculation
-      - ircs
-
-    Args:
-        current_malfunctions (pd.DataFrame): `DataFrame` of current
-          malfunctions.
-        known_malfunctions (pd.DataFrame): `DataFrame` of already known
-          malfunctions.
-
-    Returns:
-        pd.DataFrame: filtered version of `current_malfunctions`
-    """
-    vessel_id_cols = ["cfr", "ircs", "external_immatriculation"]
-
-    return current_malfunctions.loc[
-        ~left_isin_right_by_decreasing_priority(
-            current_malfunctions.loc[:, vessel_id_cols],
-            known_malfunctions.loc[:, vessel_id_cols],
-        )
-    ]
-
-
-@task(checkpoint=False)
-def get_ended_beacon_malfunction_ids(
+def get_ended_malfunction_ids(
+    last_emissions: pd.DataFrame,
     known_malfunctions: pd.DataFrame,
-    vessels_emitting: pd.DataFrame,
-    temporarily_unsupervised_vessels: pd.DataFrame,
-    vessels_that_should_emit: pd.DataFrame,
-) -> Tuple[list, list, list]:
-    """Returns the ids of the `known_malfunctions` that are now ended.
+    malfunction_datetime_utc_threshold_at_sea: datetime,
+) -> Tuple[list, list, list, list]:
 
-    All 4 input DataFrames must have columns :
-
-      - cfr
-      - external_immatriculation
-      - ircs
-
-    `known_malfunctions` must in addition have an `id` column.
-
-    Args:
-        known_malfunctions (pd.DataFrame): `DataFrame` of malfunctions.
-        vessels_emitting (pd.DataFrame): `DataFrame` of vessels now emitting.
-        temporarily_unsupervised_vessels (pd.DataFrame): `DataFrame` of vessels with
-          `UNSUPERVISED` beacon
-        vessels_that_should_emit (pd.DataFrame): `DataFrame` of vessels with an
-          `ACTIVATED` beacon
-
-    Returns:
-        Tuple[list, list, list]: 3-tuple of lists :
-
-          - ids of `beacon_malfunctions` corresponding to vessels that are still
-            required to emit and that restarted emitting. These are the ids of
-            malfunctions that should be ended with reason RESUMED_TRANSMISSION
-          - ids of `beacon_malfunctions` corresponding to vessels that now have an
-            `UNSUPERVISED` beacon, which should be ended with reason
-            TEMPORARY_INTERRUPTION_OF_SUPERVISION
-          - ids of `beacon_malfunctions` corresponding to vessels that no longer have a
-            beacon, or whose beacon is neither `ACTIVATED` nor `UNSUPERVISED`. These
-            malfunctions are to be ended with reason
-            PERMANENT_INTERRUPTION_OF_SUPERVISION
-    """
-    vessel_id_cols = ["cfr", "ircs", "external_immatriculation"]
-
-    beacon_malfunctions_with_resumed_transmission = set(
+    ids_not_required_to_emit = set(
         known_malfunctions.loc[
-            left_isin_right_by_decreasing_priority(
-                known_malfunctions.loc[:, vessel_id_cols],
-                vessels_emitting.loc[:, vessel_id_cols],
+            ~known_malfunctions.beacon_number.isin(last_emissions.beacon_number), "id"
+        ]
+    )
+
+    known_malfunctions_last_emissions = pd.merge(
+        known_malfunctions, last_emissions, on="beacon_number", how="inner"
+    )
+
+    malfunctions_with_restarted_emissions = known_malfunctions_last_emissions.loc[
+        (known_malfunctions_last_emissions.is_manual == False)
+        & (known_malfunctions_last_emissions.is_at_port == False)
+        & (
+            known_malfunctions_last_emissions.last_position_datetime_utc
+            >= malfunction_datetime_utc_threshold_at_sea
+        )
+    ].reset_index(drop=True)
+
+    ids_unsupervised_restarted_emitting = set(
+        malfunctions_with_restarted_emissions.loc[
+            malfunctions_with_restarted_emissions.beacon_status
+            != BeaconStatus.ACTIVATED.value,
+            "id",
+        ]
+    )
+
+    ids_at_port_restarted_emitting = set(
+        malfunctions_with_restarted_emissions.loc[
+            (
+                malfunctions_with_restarted_emissions.beacon_status
+                == BeaconStatus.ACTIVATED.value
+            )
+            & (
+                malfunctions_with_restarted_emissions.vessel_status
+                == BeaconMalfunctionVesselStatus.AT_PORT.value
             ),
             "id",
         ]
     )
 
-    beacon_malfunctions_no_longer_required_to_emit = set(
-        known_malfunctions.loc[
-            ~left_isin_right_by_decreasing_priority(
-                known_malfunctions.loc[:, vessel_id_cols],
-                vessels_that_should_emit.loc[:, vessel_id_cols],
+    ids_not_at_port_restarted_emitting = set(
+        malfunctions_with_restarted_emissions.loc[
+            (
+                malfunctions_with_restarted_emissions.beacon_status
+                == BeaconStatus.ACTIVATED.value
+            )
+            & (
+                malfunctions_with_restarted_emissions.vessel_status
+                != BeaconMalfunctionVesselStatus.AT_PORT.value
             ),
             "id",
         ]
-    )
-
-    beacon_malfunctions_temporarily_unsupervised = set(
-        known_malfunctions.loc[
-            left_isin_right_by_decreasing_priority(
-                known_malfunctions.loc[:, vessel_id_cols],
-                temporarily_unsupervised_vessels.loc[:, vessel_id_cols],
-            ),
-            "id",
-        ]
-    )
-
-    beacon_malfunctions_permanently_unsupervised = (
-        beacon_malfunctions_no_longer_required_to_emit
-        - beacon_malfunctions_temporarily_unsupervised
-    )
-
-    beacon_malfunctions_with_resumed_transmission = (
-        beacon_malfunctions_with_resumed_transmission
-        - beacon_malfunctions_no_longer_required_to_emit
     )
 
     return (
-        list(beacon_malfunctions_with_resumed_transmission),
-        list(beacon_malfunctions_temporarily_unsupervised),
-        list(beacon_malfunctions_permanently_unsupervised),
+        list(ids_not_at_port_restarted_emitting),
+        list(ids_at_port_restarted_emitting),
+        list(ids_not_required_to_emit),
+        list(ids_unsupervised_restarted_emitting),
     )
 
 
 @task(checkpoint=False)
 def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFrame:
-    new_malfunctions = new_malfunctions.rename(
-        columns={
-            "cfr": "internal_reference_number",
-            "external_immatriculation": "external_reference_number",
-        }
-    )
     new_malfunctions["vessel_status"] = np.choose(
         (
             new_malfunctions.is_at_port.where(
@@ -397,6 +227,20 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         lambda x: notification_to_send[x]
     )
 
+    new_malfunctions[
+        "notification_requested"
+    ] = new_malfunctions.notification_requested.where(
+        new_malfunctions.beacon_status == BeaconStatus.ACTIVATED.value, None
+    )
+
+    new_malfunctions = new_malfunctions.rename(
+        columns={
+            "cfr": "internal_reference_number",
+            "external_immatriculation": "external_reference_number",
+            "beacon_status": "beacon_status_at_malfunction_creation",
+        }
+    )
+
     ordered_columns = [
         "internal_reference_number",
         "external_reference_number",
@@ -406,7 +250,6 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         "vessel_identifier",
         "vessel_status",
         "stage",
-        "priority",
         "malfunction_start_date_utc",
         "malfunction_end_date_utc",
         "vessel_status_last_modification_date_utc",
@@ -414,6 +257,8 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         "notification_requested",
         "latitude",
         "longitude",
+        "beacon_number",
+        "beacon_status_at_malfunction_creation",
     ]
     return new_malfunctions.loc[:, ordered_columns]
 
@@ -441,8 +286,10 @@ def update_beacon_malfunction(
     """Update a `beacon_malfunction`s stage or vessel status.
 
     - Exactly one of `new_state` or `new_vessel_status` must be provided
-    - `end_of_malfunction_reason` must be provided if, and only if, `new_stage` is
-      provided and is equal to `END_OF_MALFUNCTION`
+    - `end_of_malfunction_reason` must be provided if `new_stage` is provided and is
+      equal to `END_OF_MALFUNCTION`
+    - `end_of_malfunction_reason` cannot be be provided when `new_vessel_status` is
+      provided
 
     Args:
         beacon_malfunction_id (int): id of the beacon_malfunction to update
@@ -456,11 +303,11 @@ def update_beacon_malfunction(
     Raises:
         ValueError: in the following cases :
 
+          - both `new_stage` and `new_vessel_status` are provided
+          - both `new_stage` and `new_vessel_status` are null
           - `new_stage` is `END_OF_MALFUNCTION` and no `end_of_malfunction_reason` is
             provided
-          - an `end_of_malfunction_reason` is provided, but `new_stage` is either not
-            provided or is different from `END_OF_MALFUNCTION`
-          - both `new_stage` and `new_vessel_status` are provided
+          - an `end_of_malfunction_reason` is provided along with a `new_vessel_status`
     """
 
     try:
@@ -491,16 +338,6 @@ def update_beacon_malfunction(
                     )
                 )
             json["endOfBeaconMalfunctionReason"] = end_of_malfunction_reason.value
-        else:
-            try:
-                assert end_of_malfunction_reason is None
-            except AssertionError:
-                raise ValueError(
-                    (
-                        "Cannot provide an end_of_malfunction_reason "
-                        "if new_stage is not END_OF_MALFUNCTION"
-                    )
-                )
 
     if new_vessel_status:
         try:
@@ -521,6 +358,31 @@ def update_beacon_malfunction(
         }
         r = requests.put(url=url, json=json, headers=headers)
         r.raise_for_status()
+
+    return beacon_malfunction_id
+
+
+@task(checkpoint=False)
+def request_notification(
+    beacon_malfunction_id: int,
+    requested_notification: BeaconMalfunctionNotificationType,
+):
+    try:
+        assert isinstance(requested_notification, BeaconMalfunctionNotificationType)
+    except AssertionError:
+        raise ValueError(
+            (
+                "Expected BeaconMalfunctionNotificationType, "
+                f"got {requested_notification} instead."
+            )
+        )
+
+    url = (
+        BEACON_MALFUNCTIONS_ENDPOINT
+        + f"{str(beacon_malfunction_id)}/{requested_notification.value}"
+    )
+    r = requests.put(url)
+    r.raise_for_status()
 
 
 with Flow("Beacons malfunctions") as flow:
@@ -543,16 +405,13 @@ with Flow("Beacons malfunctions") as flow:
     )
 
     # Extract
-    beacons_last_emission = extract_beacons_last_emission(
-        upstream_tasks=[last_positions_healthcheck]
-    )
-    vessels_with_beacon = extract_vessels_with_beacon(
+    last_positions = extract_last_positions(upstream_tasks=[last_positions_healthcheck])
+    vessels_that_should_emit = extract_vessels_that_should_emit(
         upstream_tasks=[last_positions_healthcheck]
     )
     known_malfunctions = extract_known_malfunctions(
         upstream_tasks=[last_positions_healthcheck]
     )
-    less_than_twelve_to_monitor = extract_vessels_less_than_twelve_meters_to_monitor()
 
     # Transform
     non_emission_at_sea_max_duration = make_timedelta(
@@ -565,64 +424,69 @@ with Flow("Beacons malfunctions") as flow:
     malfunction_datetime_utc_threshold_at_sea = now - non_emission_at_sea_max_duration
     malfunction_datetime_utc_threshold_at_port = now - non_emission_at_port_max_duration
 
-    vessels_that_should_emit = get_vessels_that_should_emit(
-        vessels_with_beacon, less_than_twelve_to_monitor
-    )
-    temporarily_unsupervised_vessels = get_temporarily_unsupervised_vessels(
-        vessels_with_beacon
-    )
+    last_emissions = get_last_emissions(vessels_that_should_emit, last_positions)
 
-    current_malfunctions = get_current_malfunctions(
-        vessels_that_should_emit,
-        beacons_last_emission,
-        malfunction_datetime_utc_threshold_at_sea,
-        malfunction_datetime_utc_threshold_at_port,
-    )
-
-    vessels_emitting = get_vessels_emitting(
-        beacons_last_emission,
-        malfunction_datetime_utc_threshold_at_sea,
-        malfunction_datetime_utc_threshold_at_port,
-    )
-
-    (
-        beacon_malfunctions_with_resumed_transmission,
-        beacon_malfunctions_temporarily_unsupervised,
-        beacon_malfunctions_permanently_unsupervised,
-    ) = get_ended_beacon_malfunction_ids(
+    new_malfunctions = get_new_malfunctions(
+        last_emissions,
         known_malfunctions,
-        vessels_emitting,
-        temporarily_unsupervised_vessels,
-        vessels_that_should_emit,
+        malfunction_datetime_utc_threshold_at_sea,
+        malfunction_datetime_utc_threshold_at_port,
     )
-
-    new_malfunctions = get_new_malfunctions(current_malfunctions, known_malfunctions)
-
     new_malfunctions = prepare_new_beacon_malfunctions(new_malfunctions)
 
     # Load
+    load_new_beacon_malfunctions(new_malfunctions)
+
+    (
+        ids_not_at_port_restarted_emitting,
+        ids_at_port_restarted_emitting,
+        ids_not_required_to_emit,
+        ids_unsupervised_restarted_emitting,
+    ) = get_ended_malfunction_ids(
+        last_emissions, known_malfunctions, malfunction_datetime_utc_threshold_at_sea
+    )
+
+    # Malfunctions not "at port" (or supposed not to be, according to the latest
+    # vessel_status of the malfunction) - that is, in a status of AT_SEA,
+    # ACTIVITY_DETECTED... anything by AT_PORT - are moved to END_OF_MALFUNCTION.
+    # Notification is left to be done manually after a human check.
     update_beacon_malfunction.map(
-        beacon_malfunctions_with_resumed_transmission,
+        ids_not_at_port_restarted_emitting,
         new_stage=unmapped(BeaconMalfunctionStage.END_OF_MALFUNCTION),
         end_of_malfunction_reason=unmapped(EndOfMalfunctionReason.RESUMED_TRANSMISSION),
     )
 
+    # Malfunctions "at port" (or supposed to be, according to the latest vessel_status
+    # of the malfunction) are moved to ARCHIVED and automatically notified.
+    ids_at_port_restarted_emitting_updated = update_beacon_malfunction.map(
+        ids_at_port_restarted_emitting,
+        new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
+        end_of_malfunction_reason=unmapped(EndOfMalfunctionReason.RESUMED_TRANSMISSION),
+    )
+
+    ids_at_port_restarted_emitting_updated = filter_results(
+        ids_at_port_restarted_emitting_updated
+    )
+
+    request_notification.map(
+        ids_at_port_restarted_emitting_updated,
+        unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
+    )
+
+    # Malfunctions for which the beacon is unsupervised, has been deactivated or
+    # completely unequipped are just archived.
     update_beacon_malfunction.map(
-        beacon_malfunctions_temporarily_unsupervised,
-        new_stage=unmapped(BeaconMalfunctionStage.END_OF_MALFUNCTION),
+        ids_not_required_to_emit,
+        new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
         end_of_malfunction_reason=unmapped(
-            EndOfMalfunctionReason.TEMPORARY_INTERRUPTION_OF_SUPERVISION
+            EndOfMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED
         ),
     )
 
     update_beacon_malfunction.map(
-        beacon_malfunctions_permanently_unsupervised,
-        new_stage=unmapped(BeaconMalfunctionStage.END_OF_MALFUNCTION),
-        end_of_malfunction_reason=unmapped(
-            EndOfMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION
-        ),
+        ids_unsupervised_restarted_emitting,
+        new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
+        end_of_malfunction_reason=unmapped(EndOfMalfunctionReason.RESUMED_TRANSMISSION),
     )
-
-    load_new_beacon_malfunctions(new_malfunctions)
 
 flow.file_name = Path(__file__).name

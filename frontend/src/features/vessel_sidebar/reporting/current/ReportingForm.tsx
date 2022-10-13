@@ -330,10 +330,16 @@ export function ReportingForm({
         onChange={value => setReportingType(value as string)}
         value={reportingType}
       >
-        <Radio key={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code} value={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}>
+        <Radio
+          key={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+          value={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+        >
           {ReportingTypeCharacteristics.INFRACTION_SUSPICION.inputName}
         </Radio>
-        <Radio key={ReportingTypeCharacteristics.OBSERVATION.code} value={ReportingTypeCharacteristics.OBSERVATION.code}>
+        <Radio
+          key={ReportingTypeCharacteristics.OBSERVATION.code}
+          value={ReportingTypeCharacteristics.OBSERVATION.code}
+        >
           {ReportingTypeCharacteristics.OBSERVATION.inputName}
         </Radio>
       </RadioGroup>

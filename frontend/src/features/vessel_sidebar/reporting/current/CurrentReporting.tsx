@@ -7,7 +7,7 @@ import { ReportingType } from '../../../../domain/types/reporting'
 import { deleteReporting } from '../../../../domain/use_cases/reporting/deleteReporting'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import {Reporting} from '../Reporting'
+import { Reporting } from '../Reporting'
 import { ConfirmDeletionModal } from './ConfirmDeletionModal'
 import { CreateOrEditReporting } from './CreateOrEditReporting'
 
@@ -27,9 +27,7 @@ export function CurrentReporting() {
       {operationalAlertTypes.map(alertType => {
         const alertReportings =
           currentAndArchivedReportingsOfSelectedVessel?.current
-            ?.filter(
-              reporting => reporting.type === ReportingType.ALERT && reporting.value.type === alertType.code
-            )
+            ?.filter(reporting => reporting.type === ReportingType.ALERT && reporting.value.type === alertType.code)
             ?.sort((a, b) => sortByValidationDate(a, b)) || []
 
         if (alertReportings?.length) {

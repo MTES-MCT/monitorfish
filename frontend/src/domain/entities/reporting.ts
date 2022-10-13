@@ -105,7 +105,7 @@ export const getYearsToReportingList = (
 }
 
 export const getReportingOrigin = (reporting, isHovering) => {
-  if (reporting.type === ReportingType.ALERT.code) {
+  if (reporting.type === ReportingType.ALERT) {
     return 'Alerte auto.'
   }
 

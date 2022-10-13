@@ -25,7 +25,10 @@ data class InfractionSuspicion(
     type = ReportingTypeMapping.INFRACTION_SUSPICION
 ) {
     companion object {
-        fun fromUpdatedReporting(updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation, reportingValue: InfractionSuspicion): InfractionSuspicion {
+        fun fromUpdatedReporting(
+            updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
+            reportingValue: InfractionSuspicion
+        ): InfractionSuspicion {
             require(!updatedInfractionSuspicionOrObservation.natinfCode.isNullOrEmpty()) {
                 "NATINF code should not be null or empty"
             }
@@ -40,7 +43,8 @@ data class InfractionSuspicion(
                 natinfCode = updatedInfractionSuspicionOrObservation.natinfCode,
                 flagState = reportingValue.flagState,
                 seaFront = reportingValue.seaFront,
-                dml = reportingValue.dml)
+                dml = reportingValue.dml
+            )
         }
     }
 }

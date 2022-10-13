@@ -16,7 +16,8 @@ import org.slf4j.LoggerFactory
 class AddReporting(
     private val reportingRepository: ReportingRepository,
     private val vesselRepository: VesselRepository,
-    private val districtRepository: DistrictRepository) {
+    private val districtRepository: DistrictRepository
+) {
     private val logger: Logger = LoggerFactory.getLogger(AddReporting::class.java)
 
     fun execute(newReporting: Reporting): Reporting {
@@ -53,7 +54,9 @@ class AddReporting(
                     try {
                         val district = districtRepository.find(it)
 
-                        return newReporting.copy(value = newReporting.value.copy(dml = district.dml, seaFront = district.facade))
+                        return newReporting.copy(
+                            value = newReporting.value.copy(dml = district.dml, seaFront = district.facade)
+                        )
                     } catch (e: CodeNotFoundException) {
                         logger.warn("Could not add DML and sea front.", e)
                     }

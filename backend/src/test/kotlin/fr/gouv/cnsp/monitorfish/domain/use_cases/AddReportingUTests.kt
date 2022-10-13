@@ -108,7 +108,8 @@ class AddReportingUTests {
             dml = "DML 17",
             natinfCode = "1235",
             authorTrigram = "LTH",
-            title = "Chalut en boeuf illégal")
+            title = "Chalut en boeuf illégal"
+        )
         val reportingToAdd = Reporting(
             id = 1,
             vesselId = 123,
@@ -122,7 +123,8 @@ class AddReportingUTests {
             validationDate = ZonedDateTime.now(),
             value = expectedInfractionSuspicion,
             isArchived = false,
-            isDeleted = false)
+            isDeleted = false
+        )
 
         given(vesselRepository.findVessel(eq(123))).willReturn(Vessel(districtCode = "LO"))
         given(districtRepository.find(eq("LO")))
@@ -159,9 +161,11 @@ class AddReportingUTests {
                 dml = "",
                 natinfCode = "1235",
                 authorTrigram = "LTH",
-                title = "Chalut en boeuf illégal"),
+                title = "Chalut en boeuf illégal"
+            ),
             isArchived = false,
-            isDeleted = false)
+            isDeleted = false
+        )
 
         // When
         val throwable = catchThrowable {
@@ -191,9 +195,11 @@ class AddReportingUTests {
                 dml = "",
                 natinfCode = "1235",
                 authorTrigram = "LTH",
-                title = "Chalut en boeuf illégal"),
+                title = "Chalut en boeuf illégal"
+            ),
             isArchived = false,
-            isDeleted = false)
+            isDeleted = false
+        )
 
         given(vesselRepository.findVessel(eq(123))).willThrow(NoSuchElementException("No value present"))
 
@@ -225,9 +231,11 @@ class AddReportingUTests {
                 dml = "",
                 natinfCode = "1235",
                 authorTrigram = "LTH",
-                title = "Chalut en boeuf illégal"),
+                title = "Chalut en boeuf illégal"
+            ),
             isArchived = false,
-            isDeleted = false)
+            isDeleted = false
+        )
 
         given(vesselRepository.findVessel(eq(123))).willReturn(Vessel(districtCode = "LO"))
         given(districtRepository.find(eq("LO")))

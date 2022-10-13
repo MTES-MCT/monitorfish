@@ -11,9 +11,6 @@ interface DBBeaconRepository : CrudRepository<BeaconEntity, String> {
 
     fun findByVesselId(vesselId: Int): BeaconEntity
 
-    @Query(
-        value = "SELECT vessel_id FROM beacons WHERE beacon_status = CAST('ACTIVATED' AS beacon_status)",
-        nativeQuery = true
-    )
-    fun findActivatedVesselIds(): List<Int>
+    @Query(value = "SELECT beacon_number FROM beacons WHERE beacon_status = CAST('ACTIVATED' AS beacon_status)", nativeQuery = true)
+    fun findActivatedBeaconNumbers(): List<String>
 }

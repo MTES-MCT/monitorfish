@@ -31,6 +31,7 @@ context('Reportings', () => {
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
     cy.wait(200)
+    cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('3')
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 3)
     cy.get('*[data-cy="side-window-current-reportings"]').first().contains('MARIAGE ÎLE HASARD')
     cy.get('*[data-cy="side-window-current-reportings"]').last().contains('RENCONTRER VEILLER APPARTEMENT"')

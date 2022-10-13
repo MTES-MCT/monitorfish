@@ -29,9 +29,9 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllExceptEndOfFollowUp Should return all beacon malfunctions except end of follow up`() {
+    fun `findAllExceptArchived Should return all beacon malfunctions except end of follow up`() {
         // When
-        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllExceptEndOfFollowUp()
+        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllExceptArchived()
 
         assertThat(baconMalfunctions).hasSize(9)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FAK000999999")
@@ -41,9 +41,9 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLastThirtyEndOfFollowUp Should return last thirty end of follow up beacon malfunctions`() {
+    fun `findLastSixtyArchived Should return last thirty end of follow up beacon malfunctions`() {
         // When
-        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findLastSixtyEndOfFollowUp()
+        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findLastSixtyArchived()
 
         assertThat(baconMalfunctions).hasSize(1)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")

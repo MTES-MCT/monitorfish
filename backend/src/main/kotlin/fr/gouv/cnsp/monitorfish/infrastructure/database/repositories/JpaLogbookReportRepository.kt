@@ -65,10 +65,14 @@ class JpaLogbookReportRepository(
                     previousTripNumber
                 )
 
+                require(previousTrip.startDate != null && previousTrip.endDate != null) {
+                    "No start and/or end dates found."
+                }
+
                 return VoyageDatesAndTripNumber(
                     previousTripNumber,
-                    previousTrip.startDate.atZone(UTC),
-                    previousTrip.endDate.atZone(UTC)
+                    previousTrip.startDate!!.atZone(UTC),
+                    previousTrip.endDate!!.atZone(UTC)
                 )
             }
 
@@ -96,10 +100,14 @@ class JpaLogbookReportRepository(
                     nextTripNumber
                 )
 
+                require(nextTrip.startDate != null && nextTrip.endDate != null) {
+                    "No start and/or end dates found."
+                }
+
                 return VoyageDatesAndTripNumber(
                     nextTripNumber,
-                    nextTrip.startDate.atZone(UTC),
-                    nextTrip.endDate.atZone(UTC)
+                    nextTrip.startDate!!.atZone(UTC),
+                    nextTrip.endDate!!.atZone(UTC)
                 )
             }
 

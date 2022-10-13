@@ -39,17 +39,33 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     /**
      *                               Trips overlap in test data (see V666.5__Insert_logbook.sql)
      *
-     *        <- 2019-01-18T11:45Z
-     *        +----------------------------------+
-     *        | Trip number 13                   |
-     *        +----------------------------------+
-     *                        2019-02-23T13:08Z ->
+     *             <- 2019-01-18T11:45Z
+     *             +-------------------------------------+
+     *             | Trip number 13                      |
+     *             +-------------------------------------+
+     *                             2019-05-01T13:08:00Z ->
+     *
+     *
+     *                                                <-->
+     *                                           Overlap range
      *
      *                                <- 2019-02-17T01:05Z
      *                                +--------------------------------------+
-     *                                | Trip number 14                       |
+     *                                |       +----------------------------+ |
+     *                                |       |       ^                    | |
+     *                                |       | The first acknowledged     | |
+     *                                |       |message is 2019-04-30T12:41Z| |
+     *                                |       |                            | |
+     *                                |       |The last acknowledged       | |
+     *                                |       |message is 2019-07-22T11:53Z| |
+     *                                |       |                         ^  | |
+     *                                |       | Trip number 14 (ACK OK)    | |
+     *                                |       +----------------------------+ |
+     *                                |                                      |
+     *                                | Trip number 14 (ACK NOK)             |
      *                                +--------------------------------------+
      *                                                    2019-10-15T12:01Z ->
+     *
      *
      *                                                                            <- 2019-10-11T02:06Z
      *                                                                            +------------------------+
@@ -98,6 +114,23 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findTripBeforeTripNumber Should thrown an exception When there is a previous trip found but no DAT or COR message acknowledged`() {
+        // When
+        val throwable = catchThrowable {
+            jpaLogbookReportRepository.findTripBeforeTripNumber(
+                "FAK000999999",
+                "9463713"
+            )
+        }
+
+        // Then
+        assertThat(throwable).isInstanceOf(NoLogbookFishingTripFound::class.java)
+        assertThat(throwable.message).contains("No trip found found for the vessel.")
+        assertThat(throwable.cause?.message).contains("No start and/or end dates found.")
+    }
+
+    @Test
+    @Transactional
     fun `findTripBeforeTripNumber Should return the previous trip number When there is an overlap between the current and previous trip`() {
         // When
         val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
@@ -108,7 +141,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463713")
         assertThat(secondTrip.startDate.toString()).isEqualTo("2019-01-18T11:45Z")
-        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-02-23T13:08Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-05-01T13:08Z")
     }
 
     @Test
@@ -138,8 +171,23 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463714")
-        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-17T01:05Z")
-        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-15T12:01Z")
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-04-30T12:41Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-07-22T11:53Z")
+    }
+
+    @Test
+    @Transactional
+    fun `findTripBeforeTripNumber Should return the previous trip number with the right start date When the first message is not acknowledged`() {
+        // When
+        val secondTrip = jpaLogbookReportRepository.findTripBeforeTripNumber(
+            "FAK000999999",
+            "9463714"
+        )
+
+        // Then
+        assertThat(secondTrip.tripNumber).isEqualTo("9463713")
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-01-18T11:45Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-05-01T13:08Z")
     }
 
     @Test
@@ -153,8 +201,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463714")
-        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-02-17T01:05Z")
-        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-15T12:01Z")
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-04-30T12:41Z")
+        assertThat(secondTrip.endDate.toString()).isEqualTo("2019-07-22T11:53Z")
     }
 
     @Test
@@ -168,7 +216,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(secondTrip.tripNumber).isEqualTo("9463715")
-        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-10-11T02:06Z")
+        assertThat(secondTrip.startDate.toString()).isEqualTo("2019-10-17T11:32Z")
         assertThat(secondTrip.endDate.toString()).isEqualTo("2019-10-22T11:06Z")
     }
 
@@ -368,7 +416,7 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val messages = jpaLogbookReportRepository.findLANAndPNOMessagesNotAnalyzedBy("FAKE_RULE_NAME")
 
         // Then, the origin LAN message is not present (3 messages in place of 4)
-        assertThat(messages).hasSize(3)
+        assertThat(messages).hasSize(2)
 
         assertThat(
             messages.any {

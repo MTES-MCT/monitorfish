@@ -6,4 +6,7 @@ class VoyageTripNumberAndDate(var tripNumber: String, var startOrEndDate: Instan
 
 class VoyageTripNumberAndDates(var tripNumber: String, var startDate: Instant, var endDate: Instant)
 
-class VoyageDates(var startDate: Instant, var endDate: Instant)
+interface IVoyageDates {
+    var startDate: Instant?
+    var endDate: Instant?
+}

@@ -36,12 +36,24 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
     fun findNextTripNumber(internalReferenceNumber: String, tripNumber: String, pageable: Pageable): List<VoyageTripNumberAndDate>
 
     @Query(
-        """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageDates(MIN(e.operationDateTime), MAX(e.operationDateTime))
-        FROM LogbookReportEntity e
-        WHERE e.internalReferenceNumber = ?1
-        AND e.tripNumber = ?2"""
+        """WITH dat_cor AS (
+            SELECT *
+            FROM logbook_reports e
+            WHERE e.cfr = ?1
+            AND e.trip_number = ?2
+        ),
+        ret AS (
+            SELECT *
+            FROM logbook_reports
+            WHERE referenced_report_id IN (select report_id FROM dat_cor)
+            AND operation_type = 'RET'
+        )
+        SELECT MIN(dc.operation_datetime_utc) AS startDate, MAX(dc.operation_datetime_utc) AS endDate
+        FROM dat_cor dc
+        INNER JOIN ret r ON r.referenced_report_id = dc.report_id AND r.value->>'returnStatus' = '000'""",
+        nativeQuery = true
     )
-    fun findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber: String, tripNumber: String): VoyageDates
+    fun findFirstAndLastOperationsDatesOfTrip(internalReferenceNumber: String, tripNumber: String): IVoyageDates
 
     @Query(
         """SELECT new fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.VoyageTripNumberAndDates(e.tripNumber, MIN(e.operationDateTime), MAX(e.operationDateTime))

@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react'
+import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
 import { Toggle } from 'rsuite'
 import styled from 'styled-components'
 
@@ -53,52 +53,70 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
     return date
   }
 
-  const commentsByDate =
-    comments?.reduce((commentsByDayAccumulated, _comment) => {
-      const nextCommentsByDayAccumulated = { ...commentsByDayAccumulated }
-      const nextComment = { ..._comment, type: BeaconMalfunctionDetailsType.COMMENT }
+  const commentsByDate = useMemo(
+    () =>
+      comments?.reduce((commentsByDayAccumulated, _comment) => {
+        const nextCommentsByDayAccumulated = { ...commentsByDayAccumulated }
+        const nextComment = { ..._comment, type: BeaconMalfunctionDetailsType.COMMENT }
 
-      const dateWithoutTime = _comment.dateTime.split('T')[0]
-      if (nextCommentsByDayAccumulated[dateWithoutTime]) {
-        nextCommentsByDayAccumulated[dateWithoutTime].push(nextComment)
-      } else {
-        nextCommentsByDayAccumulated[dateWithoutTime] = [nextComment]
-      }
+        const dateWithoutTime = _comment.dateTime.split('T')[0]
+        if (nextCommentsByDayAccumulated[dateWithoutTime]) {
+          nextCommentsByDayAccumulated[dateWithoutTime].push(nextComment)
+        } else {
+          nextCommentsByDayAccumulated[dateWithoutTime] = [nextComment]
+        }
 
-      return nextCommentsByDayAccumulated
-    }, {}) || {}
+        return nextCommentsByDayAccumulated
+      }, {}) || {},
+    [comments]
+  )
 
-  const actionsByDate =
-    actions?.reduce((actionsByDayAccumulated, _action) => {
-      const nextActionsByDayAccumulated = { ...actionsByDayAccumulated }
-      const nextAction = { ..._action, type: BeaconMalfunctionDetailsType.ACTION }
+  // TODO Replace the .reduce() with an easier method ?
+  const actionsByDate = useMemo(
+    () =>
+      actions?.reduce((actionsByDayAccumulated, _action) => {
+        const nextActionsByDayAccumulated = { ...actionsByDayAccumulated }
+        const nextAction = { ..._action, type: BeaconMalfunctionDetailsType.ACTION }
 
-      const dateWithoutTime = nextAction.dateTime.split('T')[0]
-      if (nextActionsByDayAccumulated[dateWithoutTime]) {
-        nextActionsByDayAccumulated[dateWithoutTime].push(nextAction)
-      } else {
-        nextActionsByDayAccumulated[dateWithoutTime] = [nextAction]
-      }
+        const dateWithoutTime = nextAction.dateTime.split('T')[0]
+        if (nextActionsByDayAccumulated[dateWithoutTime]) {
+          nextActionsByDayAccumulated[dateWithoutTime].push(nextAction)
+        } else {
+          nextActionsByDayAccumulated[dateWithoutTime] = [nextAction]
+        }
 
-      return nextActionsByDayAccumulated
-    }, {}) || {}
+        return nextActionsByDayAccumulated
+      }, {}) || {},
+    [actions]
+  )
 
-  const notificationsByDate =
-    notifications?.reduce((notificationsByDayAccumulated, _notification) => {
-      const nextNotificationsByDayAccumulated = { ...notificationsByDayAccumulated }
-      const nextNotification = { ..._notification, type: BeaconMalfunctionDetailsType.NOTIFICATION }
+  const notificationsByDate = useMemo(
+    () =>
+      notifications?.reduce((notificationsByDayAccumulated, _notification) => {
+        const nextNotificationsByDayAccumulated = { ...notificationsByDayAccumulated }
+        const nextNotification = { ..._notification, type: BeaconMalfunctionDetailsType.NOTIFICATION }
 
-      const dateWithoutTime = nextNotification.dateTime.split('T')[0]
-      if (nextNotificationsByDayAccumulated[dateWithoutTime]) {
-        nextNotificationsByDayAccumulated[dateWithoutTime].push(nextNotification)
-      } else {
-        nextNotificationsByDayAccumulated[dateWithoutTime] = [nextNotification]
-      }
+        const dateWithoutTime = nextNotification.dateTime.split('T')[0]
+        if (nextNotificationsByDayAccumulated[dateWithoutTime]) {
+          nextNotificationsByDayAccumulated[dateWithoutTime].push(nextNotification)
+        } else {
+          nextNotificationsByDayAccumulated[dateWithoutTime] = [nextNotification]
+        }
 
-      return nextNotificationsByDayAccumulated
-    }, {}) || {}
+        return nextNotificationsByDayAccumulated
+      }, {}) || {},
+    [notifications]
+  )
 
-  const itemsByDate = mergeObjects(commentsByDate, mergeObjects(actionsByDate, notificationsByDate))
+  const itemsByDate = useMemo(
+    () => mergeObjects(commentsByDate, mergeObjects(actionsByDate, notificationsByDate)),
+    [commentsByDate, actionsByDate, notificationsByDate]
+  )
+
+  const sortedDates = useMemo(
+    () => Object.keys(itemsByDate).sort((a, b) => new Date(a).getTime() - new Date(b).getTime()),
+    [itemsByDate]
+  )
 
   useEffect(() => {
     if (comment?.length && textareaRef.current) {
@@ -170,38 +188,31 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
             />
           </BeaconMalfunctionDetailsFollowUpRow>
         ) : null}
-        {Object.keys(itemsByDate)
-          .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
-          .map((date, dateIndex) => {
-            const isLastDate = Object.keys(itemsByDate).length === dateIndex + 1
-            const dateText = getCommentOrActionDate(getDate(date))
+        {sortedDates.map((date, dateIndex) => {
+          const isLastDate = Object.keys(itemsByDate).length === dateIndex + 1
+          const dateText = getCommentOrActionDate(getDate(date))
 
-            return (
-              <BeaconMalfunctionDetailsFollowUpRow
-                key={date}
-                dateText={dateText}
-                index={dateIndex}
-                smallSize={smallSize}
-              >
-                {itemsByDate[date]
-                  .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
-                  .map((item, dateItemIndex) => {
-                    const isLast = itemsByDate[date].length === dateItemIndex + 1
+          return (
+            <BeaconMalfunctionDetailsFollowUpRow key={date} dateText={dateText} index={dateIndex} smallSize={smallSize}>
+              {itemsByDate[date]
+                .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
+                .map((item, dateItemIndex) => {
+                  const isLast = itemsByDate[date].length === dateItemIndex + 1
 
-                    return (
-                      <BeaconMalfunctionDetailsFollowUpItem
-                        key={item.type + item.dateTime}
-                        contentText={getContent(item, beaconMalfunction)}
-                        isLast={isLast}
-                        isLastDate={isLastDate}
-                        item={item}
-                        scrollToRef={scrollToRef}
-                      />
-                    )
-                  })}
-              </BeaconMalfunctionDetailsFollowUpRow>
-            )
-          })}
+                  return (
+                    <BeaconMalfunctionDetailsFollowUpItem
+                      key={item.type + item.dateTime}
+                      contentText={getContent(item, beaconMalfunction)}
+                      isLast={isLast}
+                      isLastDate={isLastDate}
+                      item={item}
+                      scrollToRef={scrollToRef}
+                    />
+                  )
+                })}
+            </BeaconMalfunctionDetailsFollowUpRow>
+          )
+        })}
       </CommentsAndActions>
       {!smallSize ? (
         <AddCommentRow style={addCommentRow}>

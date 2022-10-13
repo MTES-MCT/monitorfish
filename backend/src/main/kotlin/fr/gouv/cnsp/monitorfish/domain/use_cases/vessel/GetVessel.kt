@@ -13,11 +13,13 @@ import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVessel(private val vesselRepository: VesselRepository,
-                private val positionRepository: PositionRepository,
-                private val logbookReportRepository: LogbookReportRepository,
-                private val riskFactorsRepository: RiskFactorsRepository,
-                private val beaconRepository: BeaconRepository) {
+class GetVessel(
+    private val vesselRepository: VesselRepository,
+    private val positionRepository: PositionRepository,
+    private val logbookReportRepository: LogbookReportRepository,
+    private val riskFactorsRepository: RiskFactorsRepository,
+    private val beaconRepository: BeaconRepository
+) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
     suspend fun execute(

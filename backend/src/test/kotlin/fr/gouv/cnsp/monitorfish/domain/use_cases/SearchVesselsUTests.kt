@@ -51,5 +51,4 @@ class SearchVesselsUTests {
         assertThat(vessels.first().id).isEqualTo(1)
         assertThat(vessels.last().id).isEqualTo(2)
     }
-
 }

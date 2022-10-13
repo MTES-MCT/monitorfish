@@ -80,7 +80,11 @@ class CaffeineConfiguration {
         val vesselTrackCache = buildMinutesCache(vesselTrack, ticker, 1)
         val vesselsPositionsCache = buildSecondsCache(vesselsPositions, ticker, 30)
         val vesselsAllPositionsCache = buildSecondsCache(vesselsAllPositions, ticker, 30)
-        val vesselsPositionsWithBeaconMalfunctionsCache = buildMinutesCache(vesselsPositionsWithBeaconMalfunctions, ticker, 1)
+        val vesselsPositionsWithBeaconMalfunctionsCache = buildMinutesCache(
+            vesselsPositionsWithBeaconMalfunctions,
+            ticker,
+            1
+        )
         val searchVesselsCache = buildMinutesCache(searchVessels, ticker, 60)
         val searchBeaconsCache = buildMinutesCache(searchBeacons, ticker, 1)
         val findBeaconCache = buildMinutesCache(findBeacon, ticker, 60)

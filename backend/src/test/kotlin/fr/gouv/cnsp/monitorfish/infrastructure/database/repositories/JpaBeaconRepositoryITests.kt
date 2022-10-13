@@ -39,5 +39,4 @@ class JpaBeaconRepositoryITests : AbstractDBTests() {
         assertThat(vesselIds).hasSize(6)
         assertThat(vesselIds).isEqualTo(listOf(1, 2, 3, 4, 8, 9))
     }
-
 }

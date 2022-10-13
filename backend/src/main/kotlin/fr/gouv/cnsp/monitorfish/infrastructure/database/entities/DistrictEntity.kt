@@ -21,7 +21,8 @@ data class DistrictEntity(
     @Column(name = "dml")
     val dml: String? = null,
     @Column(name = "facade")
-    val facade: String? = null) {
+    val facade: String? = null
+) {
 
     fun toDistrict() = District(
         districtCode = districtCode,
@@ -29,5 +30,6 @@ data class DistrictEntity(
         departmentCode = departmentCode,
         department = department,
         dml = dml,
-        facade = facade)
+        facade = facade
+    )
 }

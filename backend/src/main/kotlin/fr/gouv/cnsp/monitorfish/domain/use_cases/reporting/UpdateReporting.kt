@@ -21,7 +21,10 @@ class UpdateReporting(private val reportingRepository: ReportingRepository) {
             ReportingType.OBSERVATION -> {
                 currentReporting.value as InfractionSuspicionOrObservationType
 
-                val nextObservation = Observation.fromUpdatedReporting(updatedInfractionSuspicionOrObservation, currentReporting.value)
+                val nextObservation = Observation.fromUpdatedReporting(
+                    updatedInfractionSuspicionOrObservation,
+                    currentReporting.value
+                )
                 nextObservation.checkReportingActorAndFieldsRequirements()
 
                 reportingRepository.update(reportingId, nextObservation)
@@ -30,7 +33,8 @@ class UpdateReporting(private val reportingRepository: ReportingRepository) {
                 currentReporting.value as InfractionSuspicion
 
                 val nextInfractionSuspicion = InfractionSuspicion.fromUpdatedReporting(
-                    updatedInfractionSuspicionOrObservation, currentReporting.value
+                    updatedInfractionSuspicionOrObservation,
+                    currentReporting.value
                 )
                 nextInfractionSuspicion.checkReportingActorAndFieldsRequirements()
 

@@ -54,15 +54,19 @@ class OperationalAlertControllerITests {
     fun `Should get all operational alerts`() {
         // Given
         BDDMockito.given(this.getOperationalAlerts.execute()).willReturn(
-            listOf(PendingAlert(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
-                ircs = "6554fEE",
-                vesselId = 123,
-                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                tripNumber = "123456",
-                creationDate = ZonedDateTime.now(),
-                value = ThreeMilesTrawlingAlert())))
+            listOf(
+                PendingAlert(
+                    internalReferenceNumber = "FRFGRGR",
+                    externalReferenceNumber = "RGD",
+                    ircs = "6554fEE",
+                    vesselId = 123,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    tripNumber = "123456",
+                    creationDate = ZonedDateTime.now(),
+                    value = ThreeMilesTrawlingAlert()
+                )
+            )
+        )
 
         // When
         mockMvc.perform(MockMvcRequestBuilders.get("/bff/v1/operational_alerts"))

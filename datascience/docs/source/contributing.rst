@@ -106,14 +106,23 @@ To manually add a VMS position (in NAF format) for the vessel `CABO ARTA`:
     curl --data '//SR//AD/FRA//FR/NLD//RD/20210431//NA/CABO ARTA//RT/2133//FS/NLD//RC/PCVC//XR/FG78//IR/XXX2545115//DA/20210431//TI/2130//LT/55.099//LG/3.869//SP/0//CO/173//TM/POS//ER//'  -X POST http://localhost:8880/api/v1/positions -H "Content-Type:application/text"
 
 
+Lint
+----
+
+To lint backend code, execute from the ``backend`` folder:
+
+.. code-block:: shell
+
+  ./mvnw antrun:run@ktlint-format
+
 Documentation
 -------------
 
 - API documentation can be found at http://localhost:8880/swagger-ui.html
-- Frontend documentation can be generated with 
-  
+- Frontend documentation can be generated with
+
   .. code-block:: shell
-  
+
     jsdoc frontend/src/domain/ frontend/src/types/ frontend/src/api/ -r -P frontend/ -d docs
 
 Problems & solutions
@@ -123,7 +132,7 @@ Problems & solutions
 Windows & Docker
 """"""""""""""""
 
-* *During the build, there is an error while seting up docker which is used for the test database* 
+* *During the build, there is an error while seting up docker which is used for the test database*
 
     * **Explanation** : Testing uses docker. To be able to connect to docker, Intellij requires that TLS is disabled in docker.
 
@@ -137,7 +146,7 @@ Windows & Docker
 
     1. go to Build,Execution,Deployment> Build Tools > Maven > Runner
     2. click the checkbox : "Delegate IDE Build/run actions to maven"
-    
+
 ----
 
 Data pipeline development and data science
@@ -157,7 +166,7 @@ Install
 
 * The project runs on **python 3.8.7**. To manage python versions, we suggest you use `pyenv <https://github.com/pyenv/pyenv>`_. See the official documentation for installation instructions.
 * After installing python 3.8.7, install development dependencies :
-  
+
   * If you do not have ``poetry``, install it to manage python dependencies:
 
     .. code-block:: shell
@@ -171,7 +180,7 @@ Install
         poetry install
 
 * To install pre-commit hooks (isort, black and flake8 are configured in the pyproject.toml), run
-  
+
   .. code-block:: shell
 
       poetry run pre-commit install
@@ -194,10 +203,10 @@ Documentation is written as ``.rst`` source files, from which the documentation 
 
 .. _writing-documentation:
 
-Writing documentation 
+Writing documentation
 ---------------------
 
-* To update the documentation, simply edit the ``.rst`` source file in ``datascience/docs/source``. 
+* To update the documentation, simply edit the ``.rst`` source file in ``datascience/docs/source``.
 * To build the documentation locally and see the result of your updates :
 
   * you need to install the python development dependencies as described in :ref:`data-install` if you have not yet done so
@@ -224,7 +233,7 @@ In order to translate documentation using Transifex, you must set it up :
 * ask us for an invitation to join our organization on Transifex
 * in your Transifex account, create an API token in ``User Setttings`` > ``API token``
 * in ``datascience/docs``, run :
-  
+
     tx init --token $TOKEN --no-interactive
   (with your API token instead of ``$TOKEN``)
 
@@ -263,6 +272,6 @@ You can then :ref:`build the documentation locally <writing-documentation>` to c
 Updating the documentation online
 ---------------------------------
 
-The documentation is built by ReadTheDocs and hosted on ReadTheDocs. One the ``.rst`` source files and the translations are updated and pulled from Transifex, 
+The documentation is built by ReadTheDocs and hosted on ReadTheDocs. One the ``.rst`` source files and the translations are updated and pulled from Transifex,
 simply pushed the changes to ``master`` (better, create a branch and PR) and ReadTheDocs will build and update the documentation online automatically.
 

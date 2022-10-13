@@ -18,7 +18,10 @@ class Observation(
     flagState = flagState
 ) {
     companion object {
-        fun fromUpdatedReporting(updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation, reportingValue: InfractionSuspicionOrObservationType): Observation = Observation(
+        fun fromUpdatedReporting(
+            updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation,
+            reportingValue: InfractionSuspicionOrObservationType
+        ): Observation = Observation(
             reportingActor = updatedInfractionSuspicionOrObservation.reportingActor,
             unit = updatedInfractionSuspicionOrObservation.unit,
             authorTrigram = updatedInfractionSuspicionOrObservation.authorTrigram,

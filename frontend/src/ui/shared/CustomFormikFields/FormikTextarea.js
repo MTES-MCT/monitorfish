@@ -1,16 +1,11 @@
+import { useField } from 'formik'
 import React from 'react'
-import {  useField } from 'formik';
 import { Input } from 'rsuite'
 
+export function FormikTextarea({ name, ...props }) {
+  const [field, , helpers] = useField(name)
+  const { value } = field
+  const { setValue } = helpers
 
-export const FormikTextarea = ({ name, ...props }) => {
-  const [field, , helpers] = useField(name);
-  const { value } = field;
-  const { setValue } = helpers;
-  
-
-  return (
-    <Input as="textarea" rows={3} value={value} onChange={setValue} {...props} />
-  );
+  return <Input as="textarea" onChange={setValue} rows={3} value={value} {...props} />
 }
-

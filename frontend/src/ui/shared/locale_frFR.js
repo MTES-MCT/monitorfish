@@ -1,3 +1,5 @@
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+
 import { fr } from 'date-fns/locale'
 
 export const Calendar = {
@@ -17,29 +19,20 @@ export const Calendar = {
   formattedMonthPattern: 'MMM, yyyy',
   formattedDayPattern: 'MMM dd, yyyy',
   dateLocale: fr
-};
+}
 
 export default {
-  common: {
-    loading: 'Chargement...',
-    emptyMessage: 'Aucune donnée'
-  },
-  Plaintext: {
-    unfilled: 'Vide',
-    notSelected: 'Non sélectionné',
-    notUploaded: 'Non téléchargé'
-  },
-  Pagination: {
-    more: 'Plus',
-    prev: 'Précédent',
-    next: 'Suivant',
-    first: 'Premier',
-    last: 'Dernier',
-    limit: '{0} / page',
-    total: 'Total : {0}',
-    skip: 'Aller à {0}'
+  Breadcrumb: {
+    expandText: 'Montrer le chemin'
   },
   Calendar,
+  CloseButton: {
+    closeLabel: 'Fermer'
+  },
+  common: {
+    emptyMessage: 'Aucune donnée',
+    loading: 'Chargement...'
+  },
   DatePicker: {
     ...Calendar
   },
@@ -47,32 +40,41 @@ export default {
     ...Calendar,
     last7Days: '7 derniers jours'
   },
+  InputPicker: {
+    createOption: 'Créer option "{0}"',
+    newItem: 'Nouvel item'
+  },
+  Pagination: {
+    first: 'Premier',
+    last: 'Dernier',
+    limit: '{0} / page',
+    more: 'Plus',
+    next: 'Suivant',
+    prev: 'Précédent',
+    skip: 'Aller à {0}',
+    total: 'Total : {0}'
+  },
   Picker: {
+    checkAll: 'Tout',
     noResultsText: 'Aucun résultat trouvé',
     placeholder: 'Sélectionner',
-    searchPlaceholder: 'Rechercher',
-    checkAll: 'Tout'
+    searchPlaceholder: 'Rechercher'
   },
-  InputPicker: {
-    newItem: 'Nouvel item',
-    createOption: 'Créer option "{0}"'
-  },
-  Uploader: {
-    inited: 'Initial',
-    progress: 'En cours',
-    error: 'Erreur',
-    complete: 'Terminé',
-    emptyFile: 'Vide',
-    upload: 'Charger'
-  },
-  CloseButton: {
-    closeLabel: 'Fermer'
-  },
-  Breadcrumb: {
-    expandText: 'Montrer le chemin'
+  Plaintext: {
+    notSelected: 'Non sélectionné',
+    notUploaded: 'Non téléchargé',
+    unfilled: 'Vide'
   },
   Toggle: {
-    on: 'Ouvrir',
-    off: 'Fermer'
+    off: 'Fermer',
+    on: 'Ouvrir'
+  },
+  Uploader: {
+    complete: 'Terminé',
+    emptyFile: 'Vide',
+    error: 'Erreur',
+    inited: 'Initial',
+    progress: 'En cours',
+    upload: 'Charger'
   }
-};
+}

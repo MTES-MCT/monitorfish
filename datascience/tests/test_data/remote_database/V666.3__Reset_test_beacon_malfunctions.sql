@@ -9,7 +9,6 @@ INSERT INTO beacon_malfunctions (
     vessel_identifier,
     vessel_status,
     stage,
-    priority,
     malfunction_start_date_utc,
     malfunction_end_date_utc,
     vessel_status_last_modification_date_utc,
@@ -18,7 +17,9 @@ INSERT INTO beacon_malfunctions (
     vessel_id,
     notification_requested,
     latitude,
-    longitude
+    longitude,
+    beacon_number,
+    beacon_status_at_malfunction_creation
 ) VALUES
 (
     1,
@@ -29,7 +30,6 @@ INSERT INTO beacon_malfunctions (
     'INTERNAL_REFERENCE_NUMBER',
     'AT_SEA',
     'END_OF_MALFUNCTION',
-    True,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month 3 days',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month',
@@ -38,7 +38,9 @@ INSERT INTO beacon_malfunctions (
     2,
     'END_OF_MALFUNCTION',
     45.236,
-    -3.569
+    -3.569,
+    '123456',
+    'ACTIVATED'
 ),
 (
     2,
@@ -49,7 +51,6 @@ INSERT INTO beacon_malfunctions (
     'IRCS',
     'NO_NEWS',
     'TARGETING_VESSEL',
-    False,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '10 hours',
     NULL,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '4 hours',
@@ -58,7 +59,9 @@ INSERT INTO beacon_malfunctions (
     4,
     'MALFUNCTION_AT_SEA_REMINDER',
     42.843,
-    -8.568
+    -8.568,
+    'A56CZ2',
+    'UNSUPERVISED'
 ),
 (
     3,
@@ -69,7 +72,6 @@ INSERT INTO beacon_malfunctions (
     'IRCS',
     'NO_NEWS',
     'FOUR_HOUR_REPORT',
-    true,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '12 hours 10 minutes',
     NULL,
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '10 hours 10 minutes',
@@ -78,7 +80,9 @@ INSERT INTO beacon_malfunctions (
     6,
     'MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION',
     -8.569,
-    -23.1569
+    -23.1569,
+    'BEA951357',
+    'ACTIVATED'
 );
 
 ALTER SEQUENCE beacon_malfunctions_id_seq RESTART WITH 4;

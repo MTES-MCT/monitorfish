@@ -11,6 +11,25 @@ from config import (
 )
 
 
+class BeaconStatus(Enum):
+    ACTIVATED = "ACTIVATED"
+    DEACTIVATED = "DEACTIVATED"
+    IN_TEST = "IN_TEST"
+    NON_APPROVED = "NON_APPROVED"
+    UNSUPERVISED = "UNSUPERVISED"
+
+    @staticmethod
+    def from_poseidon_status(poseidon_status: str):
+        mapping = {
+            "Activée": BeaconStatus.ACTIVATED,
+            "Désactivée": BeaconStatus.DEACTIVATED,
+            "En test": BeaconStatus.IN_TEST,
+            "Non agréée": BeaconStatus.NON_APPROVED,
+            "Non surveillée": BeaconStatus.UNSUPERVISED,
+        }
+        return mapping[poseidon_status]
+
+
 class BeaconMalfunctionStage(Enum):
     INITIAL_ENCOUNTER = "INITIAL_ENCOUNTER"
     FOUR_HOUR_REPORT = "FOUR_HOUR_REPORT"
@@ -31,8 +50,7 @@ class BeaconMalfunctionVesselStatus(Enum):
 
 class EndOfMalfunctionReason(Enum):
     RESUMED_TRANSMISSION = "RESUMED_TRANSMISSION"
-    TEMPORARY_INTERRUPTION_OF_SUPERVISION = "TEMPORARY_INTERRUPTION_OF_SUPERVISION"
-    PERMANENT_INTERRUPTION_OF_SUPERVISION = "PERMANENT_INTERRUPTION_OF_SUPERVISION"
+    BEACON_DEACTIVATED_OR_UNEQUIPPED = "BEACON_DEACTIVATED_OR_UNEQUIPPED"
 
 
 class BeaconMalfunctionNotificationType(Enum):

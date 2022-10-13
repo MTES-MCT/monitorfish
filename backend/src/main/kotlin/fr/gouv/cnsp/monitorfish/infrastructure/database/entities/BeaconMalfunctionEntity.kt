@@ -31,8 +31,6 @@ data class BeaconMalfunctionEntity(
     @Column(name = "stage")
     @Enumerated(EnumType.STRING)
     val stage: Stage,
-    @Column(name = "priority")
-    val priority: Boolean,
     @Column(name = "malfunction_start_date_utc")
     val malfunctionStartDateTime: Instant,
     @Column(name = "malfunction_end_date_utc")
@@ -46,9 +44,13 @@ data class BeaconMalfunctionEntity(
     val vesselId: Int?,
     @Column(name = "notification_requested")
     @Enumerated(EnumType.STRING)
-    val notificationRequested: BeaconMalfunctionNotificationType?
+    val notificationRequested: BeaconMalfunctionNotificationType?,
+    @Column(name = "beacon_number")
+    val beaconNumber: String,
+    @Column(name = "beacon_status_at_malfunction_creation")
+    @Enumerated(EnumType.STRING)
+    val beaconStatusAtMalfunctionCreation: BeaconStatus
 ) {
-
     fun toBeaconMalfunction() = BeaconMalfunction(
         id = id,
         internalReferenceNumber = internalReferenceNumber,
@@ -59,12 +61,13 @@ data class BeaconMalfunctionEntity(
         vesselIdentifier = vesselIdentifier,
         vesselStatus = vesselStatus,
         stage = stage,
-        priority = priority,
         malfunctionStartDateTime = malfunctionStartDateTime.atZone(ZoneOffset.UTC),
         malfunctionEndDateTime = malfunctionEndDateTime?.atZone(ZoneOffset.UTC),
         vesselStatusLastModificationDateTime = vesselStatusLastModificationDateTime.atZone(ZoneOffset.UTC),
         endOfBeaconMalfunctionReason = endOfBeaconMalfunctionReason,
         vesselId = vesselId,
-        notificationRequested = notificationRequested
+        notificationRequested = notificationRequested,
+        beaconNumber = beaconNumber,
+        beaconStatusAtMalfunctionCreation = beaconStatusAtMalfunctionCreation
     )
 }

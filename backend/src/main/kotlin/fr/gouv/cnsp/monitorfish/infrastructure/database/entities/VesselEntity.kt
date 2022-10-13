@@ -89,8 +89,6 @@ data class VesselEntity(
     @Column(name = "vessel_emails", columnDefinition = "varchar(100)[]")
     @Type(type = "list-array")
     val vesselEmails: List<String>? = null,
-    @Column(name = "beacon_number")
-    val beaconNumber: String? = null,
     @Column(name = "under_charter")
     val underCharter: Boolean? = null
 ) {
@@ -130,7 +128,6 @@ data class VesselEntity(
         proprietorEmails = proprietorEmails,
         vesselPhones = vesselPhones,
         vesselEmails = vesselEmails,
-        beaconNumber = beaconNumber,
         underCharter = underCharter
     )
 

@@ -1,5 +1,12 @@
--- Insert anonymized production data	
-COPY public.last_positions (cfr, external_immatriculation, mmsi, ircs, vessel_name, flag_state, trip_number, latitude, longitude, speed, course, last_position_datetime_utc, emission_period, last_logbook_message_datetime_utc, departure_datetime_utc, width, length, registry_port, district, district_code, gear_onboard, segments, species_onboard, total_weight_onboard, id, last_control_datetime_utc, last_control_infraction, post_control_comments, vessel_identifier, estimated_current_latitude, estimated_current_longitude, impact_risk_factor, probability_risk_factor, detectability_risk_factor, risk_factor, under_charter, is_at_port, alerts, beacon_malfunction_id, reportings) FROM stdin;
+-- Insert anonymized production data
+COPY public.last_positions (cfr, external_immatriculation, mmsi, ircs, vessel_name, flag_state, trip_number, latitude,
+                            longitude, speed, course, last_position_datetime_utc, emission_period,
+                            last_logbook_message_datetime_utc, departure_datetime_utc, width, length, registry_port,
+                            district, district_code, gear_onboard, segments, species_onboard, total_weight_onboard, id,
+                            last_control_datetime_utc, last_control_infraction, post_control_comments,
+                            vessel_identifier, estimated_current_latitude, estimated_current_longitude,
+                            impact_risk_factor, probability_risk_factor, detectability_risk_factor, risk_factor,
+                            under_charter, is_at_port, alerts, beacon_malfunction_id, reportings) FROM stdin;
 ABC000339263	CN775734	023858744	YHIZ	PAYSAGE ROMAN LIER	FR	20210004	48.0970000000000013	-4.3230000000000004	0.5	351	2020-12-31 23:19:00	01:01:00	2020-07-08 02:53:00	2020-07-08 01:54:00	6.5	17	Evrard	Saint EmmanuelVille	SI	[{"gear": "PS1", "mesh": 10.0, "dimensions": 380.0}]	{}	[{"gear": "PS1", "weight": 1400.0, "faoZone": "27.7.e", "species": "PIL"}]	0	144	2019-12-22 15:42:00	f	\N	INTERNAL_REFERENCE_NUMBER	48.1029308080762021	-4.32440242826396037	3.57112043211236596	3.39079180965200067	3.44572579581290483	3.45375553585179773	f	t	{THREE_MILES_TRAWLING_ALERT}	\N	\N
 ABC000126173	XN916551	312649432	EIL2780	ROND PRISON GARDER	FR	\N	47.2989999999999995	-2.51500000000000012	0	351	2020-12-31 23:36:00	01:00:00	\N	\N	6.32000000000000028	18	Grondin	Herve-la-Forêt	FQ	null	{}	null	0	7	2020-07-31 08:56:00	f	REJET COE 10KG\r\nREJET WHB 50KG\r\nREJET HOM 200KG\r\nREJET SCL 150KG\r\nREJET BIB 50KG	INTERNAL_REFERENCE_NUMBER	47.2989999999999995	-2.51500000000000012	1.29840274900197983	2.57117246789857745	1.52456657541915774	1.72700838038104321	f	f	{}	\N	\N
 ABC000262563	NL342908	632033196	MN0259	ENTRETENIR NOIRE VENTRE	FR	20210106	44.4309999999999974	-1.39599999999999991	0.800000000000000044	357	2020-12-31 23:51:00	01:00:00	2020-07-12 19:35:00	2020-07-07 23:20:00	6.62000000000000011	20.7899999999999991	Cordier	ClercVille	EC	[{"gear": "OTB", "mesh": 70.0, "dimensions": 100.0}]	{SWW01/02/03,PEL03}	[{"gear": "OTB", "weight": 482.0, "faoZone": "27.8.b", "species": "MAC"}, {"gear": "OTB", "weight": 20.1, "faoZone": "27.8.b", "species": "TRA"}, {"gear": "OTB", "weight": 209.93, "faoZone": "27.8.b", "species": "BIB"}, {"gear": "OTB", "weight": 77.1, "faoZone": "27.8.b", "species": "GUR"}, {"gear": "OTB", "weight": 45.4, "faoZone": "27.8.b", "species": "MUR"}, {"gear": "OTB", "weight": 187.88, "faoZone": "27.8.b", "species": "MNZ"}, {"gear": "OTB", "weight": 69.29, "faoZone": "27.8.b", "species": "SMD"}, {"gear": "OTB", "weight": 366.3, "faoZone": "27.8.b", "species": "HKE"}, {"gear": "OTB", "weight": 28.8, "faoZone": "27.8.b", "species": "GUG"}, {"gear": "OTB", "weight": 1.2, "faoZone": "27.8.b", "species": "TRI"}, {"gear": "OTB", "weight": 37.41, "faoZone": "27.8.b", "species": "RJM"}, {"gear": "OTB", "weight": 65.6, "faoZone": "27.8.b", "species": "SQR"}, {"gear": "OTB", "weight": 10.0, "faoZone": "27.8.b", "species": "COB"}, {"gear": "OTB", "weight": 0.8, "faoZone": "27.8.b", "species": "MGR"}, {"gear": "OTB", "weight": 32.14, "faoZone": "27.8.b", "species": "SOL"}, {"gear": "OTB", "weight": 8.5, "faoZone": "27.8.b", "species": "BRB"}, {"gear": "OTB", "weight": 254.1, "faoZone": "27.8.b", "species": "CTC"}, {"gear": "OTB", "weight": 1.1, "faoZone": "27.8.b", "species": "SCO"}, {"gear": "OTB", "weight": 66.99, "faoZone": "27.8.b", "species": "LEZ"}, {"gear": "OTB", "weight": 1.6, "faoZone": "27.8.b", "species": "SBA"}, {"gear": "OTB", "weight": 210.7, "faoZone": "27.8.b", "species": "JOD"}, {"gear": "OTB", "weight": 0.65, "faoZone": "27.8.b", "species": "BLL"}, {"gear": "OTB", "weight": 272.6, "faoZone": "27.8.b", "species": "BSS"}]	947.42999999999995	8	2020-08-03 20:05:00	f	CTL DOC OK	INTERNAL_REFERENCE_NUMBER	44.4334992837590974	-1.3961828035342001	2.54482043627649546	3.05314559629186988	3.03943056892603636	2.937323614598911	f	f	{}	\N	\N
@@ -1003,37 +1010,87 @@ ABC000919578	OC319278	252109447	HG9977	RÉVEILLER MINUTE EXISTER	FR	20210084	48.
 \.
 
 
--- Shift dates to present	
-update last_positions set last_position_datetime_utc = last_position_datetime_utc + (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);	
-update last_positions set last_logbook_message_datetime_utc = last_logbook_message_datetime_utc + (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);
-update last_positions set departure_datetime_utc = departure_datetime_utc + (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);	
-update last_positions set last_control_datetime_utc = last_control_datetime_utc + (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);	
-	
--- Add fake data used in automated testing	
-COPY public.last_positions (id, cfr, external_immatriculation, mmsi, ircs, vessel_name, flag_state, trip_number, latitude, longitude, speed, course, last_position_datetime_utc, emission_period, last_logbook_message_datetime_utc, length, width, segments, gear_onboard, species_onboard, district, district_code, last_control_datetime_utc, last_control_infraction, post_control_comments, vessel_identifier, estimated_current_latitude, estimated_current_longitude, impact_risk_factor, probability_risk_factor, detectability_risk_factor, risk_factor, under_charter, is_at_port, alerts, beacon_malfunction_id, reportings) FROM stdin;
+-- Shift dates to present
+update last_positions
+set last_position_datetime_utc = last_position_datetime_utc + (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);
+update last_positions
+set last_logbook_message_datetime_utc = last_logbook_message_datetime_utc +
+                                        (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);
+update last_positions
+set departure_datetime_utc = departure_datetime_utc + (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);
+update last_positions
+set last_control_datetime_utc = last_control_datetime_utc + (now() - '2021-01-01 00:00:00Z'::TIMESTAMPTZ);
+
+-- Add fake data used in automated testing
+COPY public.last_positions (id, cfr, external_immatriculation, mmsi, ircs, vessel_name, flag_state, trip_number,
+                            latitude, longitude, speed, course, last_position_datetime_utc, emission_period,
+                            last_logbook_message_datetime_utc, length, width, segments, gear_onboard, species_onboard,
+                            district, district_code, last_control_datetime_utc, last_control_infraction,
+                            post_control_comments, vessel_identifier, estimated_current_latitude,
+                            estimated_current_longitude, impact_risk_factor, probability_risk_factor,
+                            detectability_risk_factor, risk_factor, under_charter, is_at_port, alerts,
+                            beacon_malfunction_id, reportings) FROM stdin;
 10000	FAK000999999	DONTSINK	\N	CALLME	PHENOMENE	GB	\N	47.921999999999997	-8.0129999999999999	8.40000000000000036	14	2021-01-15 07:32:00	00:40:00	2020-12-21 15:01:00	14.3	5.2	{"NWW10", "PEL 03"}	[{"gear": "OTB", "mesh": 70.0, "dimensions": 45.0}]	[{ "gear": "OTB","faoZone": "27.8.b","species": "BLI","weight": 13.46 },{ "gear": "OTB","faoZone": "27.8.c","species": "HKE","weight": 235.6 }]	CAEN	CN	2020-12-22 08:59:00	true	Pas de com	INTERNAL_REFERENCE_NUMBER	47.7123	-8.8123	2.1	2	3	2.473	t	f	{THREE_MILES_TRAWLING_ALERT}	1	\N
 10001	SOCR4T3	LePhiloFilou	\N	SCRT	SOCRATE	FR	\N	48.921999999999997	-8.0129999999999999	8.40000000000000036	14	2021-01-15 07:32:00	00:40:00	2020-12-21 15:01:00	14.3	5.2	{"NWW10", "PEL 03"}	[{"gear": "OTB", "mesh": 70.0, "dimensions": 45.0}]	[{ "gear": "OTB","faoZone": "27.8.b","species": "BLI","weight": 13.46 },{ "gear": "OTB","faoZone": "27.8.c","species": "HKE","weight": 235.6 }]	ATHENES	AT	2020-12-22 08:59:00	true	No comment	INTERNAL_REFERENCE_NUMBER	49.003	-7.9523	2.1	2	3	2.473	f	f	\N	\N	\N
 \.
-	
-update last_positions set last_position_datetime_utc = (NOW() AT TIME ZONE 'UTC')::TIMESTAMP where cfr = 'FAK000999999';	
-update last_positions set last_position_datetime_utc = (NOW() AT TIME ZONE 'UTC')::TIMESTAMP where cfr = 'SOCR4T3';
-update last_positions set last_control_datetime_utc = now() where cfr = 'FAK000999999';	
-update last_positions set post_control_comments = 'Tout va bien' where cfr = 'FAK000999999';	
-update last_positions set last_position_datetime_utc = now() where cfr = 'FAK123456789';	
-update last_positions set last_control_datetime_utc = null where cfr = 'FAK123456789';	
-update last_positions set last_control_datetime_utc = '2106-01-15 08:13:00' where cfr = 'FRA000651332';	
 
-update last_positions set last_position_datetime_utc = NOW() - ('3 WEEK')::interval where cfr = 'ABC000939217';	
-	
-update last_positions set is_at_port = true where cfr = 'ABC000197677';	
-update last_positions set is_at_port = true where cfr = 'ABC000467431';	
-update last_positions set is_at_port = true where cfr = 'ABC000701025';	
-update last_positions set is_at_port = true where cfr = 'ABC000895886';	
-update last_positions set is_at_port = true where cfr = 'ABC000739354';	
-update last_positions set is_at_port = true where cfr = 'ABC000760751';	
-update last_positions set is_at_port = true where cfr = 'ABC000455406';	
-update last_positions set is_at_port = true where cfr = 'ABC000224867';	
-update last_positions set is_at_port = true where cfr = 'ABC000607069';	
-update last_positions set is_at_port = true where cfr = 'ABC000730777';	
-update last_positions set is_at_port = true where cfr = 'ABC000363962';	
-	
+update last_positions
+set last_position_datetime_utc = (NOW() AT TIME ZONE 'UTC')::TIMESTAMP
+where cfr = 'FAK000999999';
+update last_positions
+set last_position_datetime_utc = (NOW() AT TIME ZONE 'UTC')::TIMESTAMP
+where cfr = 'SOCR4T3';
+update last_positions
+set last_control_datetime_utc = now()
+where cfr = 'FAK000999999';
+update last_positions
+set post_control_comments = 'Tout va bien'
+where cfr = 'FAK000999999';
+update last_positions
+set last_position_datetime_utc = now()
+where cfr = 'FAK123456789';
+update last_positions
+set last_control_datetime_utc = null
+where cfr = 'FAK123456789';
+update last_positions
+set last_control_datetime_utc = '2106-01-15 08:13:00'
+where cfr = 'FRA000651332';
+
+update last_positions
+set last_position_datetime_utc = NOW() - ('3 WEEK')::interval
+where cfr = 'ABC000939217';
+
+update last_positions
+set is_at_port = true
+where cfr = 'ABC000197677';
+update last_positions
+set is_at_port = true
+where cfr = 'ABC000467431';
+update last_positions
+set is_at_port = true
+where cfr = 'ABC000701025';
+update last_positions
+set is_at_port = true
+where cfr = 'ABC000895886';
+update last_positions
+set is_at_port = true
+where cfr = 'ABC000739354';
+update last_positions
+set is_at_port = true
+where cfr = 'ABC000760751';
+update last_positions
+set is_at_port = true
+where cfr = 'ABC000455406';
+update last_positions
+set is_at_port = true
+where cfr = 'ABC000224867';
+update last_positions
+set is_at_port = true
+where cfr = 'ABC000607069';
+update last_positions
+set is_at_port = true
+where cfr = 'ABC000730777';
+update last_positions
+set is_at_port = true
+where cfr = 'ABC000363962';
+

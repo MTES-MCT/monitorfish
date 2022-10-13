@@ -12,8 +12,8 @@ interface BeaconMalfunctionsRepository {
         afterDateTime: ZonedDateTime
     ): List<BeaconMalfunction>
 
-    fun findAllExceptEndOfFollowUp(): List<BeaconMalfunction>
-    fun findLastThirtyEndOfFollowUp(): List<BeaconMalfunction>
+    fun findAllExceptArchived(): List<BeaconMalfunction>
+    fun findLastSixtyArchived(): List<BeaconMalfunction>
     fun find(beaconMalfunctionId: Int): BeaconMalfunction
     fun update(
         id: Int,

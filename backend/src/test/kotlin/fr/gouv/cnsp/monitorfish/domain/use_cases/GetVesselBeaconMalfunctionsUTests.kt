@@ -42,12 +42,14 @@ class GetVesselBeaconMalfunctionsUTests {
                     BeaconMalfunction(
                         1, "FR224226850", "1236514", "IRCS",
                         null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
-                        true, ZonedDateTime.now(), null, ZonedDateTime.now()
+                        ZonedDateTime.now(), null, ZonedDateTime.now(),
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
                     ),
                     BeaconMalfunction(
                         2, "FR224226850", "1236514", "IRCS",
                         null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
-                        true, ZonedDateTime.now(), null, ZonedDateTime.now()
+                        ZonedDateTime.now(), null, ZonedDateTime.now(),
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
                     )
                 )
             )

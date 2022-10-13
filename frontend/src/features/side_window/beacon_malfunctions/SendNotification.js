@@ -1,24 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { COLORS } from '../../../constants/constants'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import { beaconMalfunctionNotificationType } from '../../../domain/entities/beaconMalfunction'
 import { SelectPicker } from 'rsuite'
-import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 import sendNotification from '../../../domain/use_cases/beaconMalfunction/sendNotification'
 
-const SendNotification = ({ beaconMalfunction, baseRef }) => {
+const SendNotification = ({ beaconMalfunction }) => {
   const dispatch = useDispatch()
   const selectMenuRef = useRef()
   const [isSendingNotification, setIsSendingNotification] = useState('')
-  const [sendNotificationSelectIsOpened, setSendNotificationSelectIsOpened] = useState(false)
-  const clickedOutsideSendNotificationMenu = useClickOutsideWhenOpenedWithinRef(selectMenuRef, sendNotificationSelectIsOpened, baseRef)
-
-  useEffect(() => {
-    if (clickedOutsideSendNotificationMenu) {
-      setSendNotificationSelectIsOpened(false)
-    }
-  }, [clickedOutsideSendNotificationMenu])
 
   useEffect(() => {
     setIsSendingNotification(beaconMalfunction?.notificationRequested)
@@ -29,23 +20,23 @@ const SendNotification = ({ beaconMalfunction, baseRef }) => {
     selectMenuRef.current?.previousSibling.style.setProperty('background', COLORS.charcoal, 'important')
     selectMenuRef.current?.previousSibling.style.setProperty('margin', '2px 10px 10px 0px', 'important')
     // Target the `rs-picker-toggle-value` span DOM component
-    selectMenuRef.current?.previousSibling.firstChild.firstChild.style.setProperty('color', COLORS.gainsboro, 'important')
-    selectMenuRef.current?.previousSibling.firstChild.firstChild.style.setProperty('font-size', '13px', 'important')
+    const toggleElement = selectMenuRef.current?.previousSibling?.querySelector('.rs-picker-toggle-placeholder')
+    if (toggleElement?.style) {
+      toggleElement.style.setProperty('color', COLORS.gainsboro, 'important')
+      toggleElement.style.setProperty('font-size', 13, 'important')
+    }
   }, [])
 
   return (<>
     <SelectPicker
       container={() => selectMenuRef.current}
-      menuStyle={{ position: 'absolute', marginTop: 310, marginLeft: 40 }}
+      menuStyle={{ position: 'absolute', marginTop: 275, marginLeft: 40}}
       style={sendNotificationSelectStyle}
       searchable={false}
       cleanable={false}
-      open={sendNotificationSelectIsOpened}
       value={null}
-      onClick={() => setSendNotificationSelectIsOpened(true)}
       placeholder={'Envoyer un message'}
       onChange={status => dispatch(sendNotification(beaconMalfunction.id, status))
-        .then(() => setSendNotificationSelectIsOpened(false))
         .then(() => setIsSendingNotification(status))}
       data={Object.keys(beaconMalfunctionNotificationType)
         .map(type => ({ label: beaconMalfunctionNotificationType[type].followUpMessage, value: type }))}

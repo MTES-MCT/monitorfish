@@ -345,7 +345,7 @@ def extract_risk_factors():
 def extract_beacon_malfunctions():
     return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/known_beacon_malfunctions.sql",
+        query_filepath="monitorfish/beacon_malfunctions_for_last_positions.sql",
     )
 
 

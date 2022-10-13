@@ -9,10 +9,10 @@ import java.time.ZonedDateTime
 
 interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntity, Int> {
     @Query(
-        value = "SELECT * FROM beacon_malfunctions where stage = 'ARCHIVED' ORDER BY vessel_status_last_modification_date_utc DESC LIMIT 30",
+        value = "SELECT * FROM beacon_malfunctions where stage = 'ARCHIVED' ORDER BY vessel_status_last_modification_date_utc DESC LIMIT 60",
         nativeQuery = true
     )
-    fun findLastThirtyArchived(): List<BeaconMalfunctionEntity>
+    fun findLastSixtyArchived(): List<BeaconMalfunctionEntity>
 
     @Query(value = "SELECT * FROM beacon_malfunctions where stage <> 'ARCHIVED'", nativeQuery = true)
     fun findAllExceptArchived(): List<BeaconMalfunctionEntity>

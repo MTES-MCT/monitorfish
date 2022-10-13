@@ -29,9 +29,9 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllExceptEndOfFollowUp Should return all beacon malfunctions except end of follow up`() {
+    fun `findAllExceptArchived Should return all beacon malfunctions except end of follow up`() {
         // When
-        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllExceptEndOfFollowUp()
+        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllExceptArchived()
 
         assertThat(baconMalfunctions).hasSize(9)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FAK000999999")
@@ -41,9 +41,9 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLastThirtyEndOfFollowUp Should return last thirty end of follow up beacon malfunctions`() {
+    fun `findLastSixtyArchived Should return last thirty end of follow up beacon malfunctions`() {
         // When
-        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findLastThirtyEndOfFollowUp()
+        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findLastSixtyArchived()
 
         assertThat(baconMalfunctions).hasSize(1)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")
@@ -87,7 +87,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
             id = 1,
             null,
             Stage.END_OF_MALFUNCTION,
-            EndOfBeaconMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION,
+            EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
             updateDateTime
         )
 
@@ -96,7 +96,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         assertThat(updatedBeaconMalfunction?.stage).isEqualTo(Stage.END_OF_MALFUNCTION)
         assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isEqualTo(updateDateTime)
         assertThat(updatedBeaconMalfunction?.endOfBeaconMalfunctionReason).isEqualTo(
-            EndOfBeaconMalfunctionReason.PERMANENT_INTERRUPTION_OF_SUPERVISION
+            EndOfBeaconMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED
         )
         assertThat(updatedBeaconMalfunction?.malfunctionEndDateTime).isEqualTo(updateDateTime)
     }

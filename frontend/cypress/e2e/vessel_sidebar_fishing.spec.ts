@@ -166,11 +166,11 @@ context('Vessel sidebar fishing tab', () => {
         'have.string',
         '/bff/v1/vessels/positions?internalReferenceNumber=FAK000999999' +
           '&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=CUSTOM' +
-          '&afterDateTime=2019-02-16T21:05:00.000Z&beforeDateTime=2019-10-15T13:01:00.000Z'
+          '&afterDateTime=2019-04-30T08:41:00.000Z&beforeDateTime=2019-07-22T12:53:00.000Z'
       )
 
     cy.get('*[data-cy^="fishing-activity-name"]').should('exist').should('have.length', 4)
-    cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 16/02/19 au 15/10/19')
+    cy.get('*[data-cy="custom-dates-showed-text"]').contains('Piste affichée du 30/04/19 au 22/07/19')
 
     // Hide fishing activities
     cy.get('*[data-cy^="show-all-fishing-activities-on-map"]').click({ timeout: 10000 })

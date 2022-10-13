@@ -7,6 +7,7 @@ import java.time.ZonedDateTime
 
 class PendingAlert(
     val id: Int? = null,
+    val vesselId: Int? = null,
     val vesselName: String? = null,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,

@@ -74,6 +74,7 @@ module.exports = {
         prefix: [...BOOLEAN_CAMEL_PREFIXES, ...BOOLEAN_UPPER_PREFIXES]
       }
     ],
+    "no-console": "off",
     '@typescript/no-use-before-define': 'off',
     '@typescript-eslint/no-restricted-imports': [
       'error',

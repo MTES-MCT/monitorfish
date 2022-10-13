@@ -8,17 +8,18 @@ from prefect import Flow, Parameter, task
 from sqlalchemy import Table, and_, not_, or_, select
 from sqlalchemy.sql import Select
 
-from src.pipeline.generic_tasks import extract
-from src.pipeline.processing import df_to_dict_series, join_on_multiple_keys
+from src.pipeline.generic_tasks import extract, read_query_task
+from src.pipeline.processing import join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
     extract_silenced_alerts,
     filter_silenced_alerts,
     load_alerts,
+    make_alerts,
 )
 from src.pipeline.shared_tasks.infrastructure import get_table
 from src.pipeline.shared_tasks.positions import add_vessel_identifier
 from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
-from src.read_query import read_query
+from src.pipeline.shared_tasks.vessels import add_vessel_id, add_vessels_columns
 
 
 @task(checkpoint=False)
@@ -171,25 +172,6 @@ def make_vessels_at_sea_query(
 
 
 @task(checkpoint=False)
-def extract_vessels_at_sea(query: Select) -> pd.DataFrame:
-    """
-    Runs the input `Select` statement on the `monitorfish_remote` database and returns
-    the results as a `pandas.DataFrame`.
-
-    Args:
-        query (Select): `Select` statement to execute.
-
-    Returns:
-        pd.DataFrame: Result of the execution of the input `Select` statement.
-    """
-
-    return read_query(
-        "monitorfish_remote",
-        query,
-    )
-
-
-@task(checkpoint=False)
 def extract_vessels_that_emitted_fars(
     declaration_min_datetime_utc: datetime,
     declaration_max_datetime_utc: datetime,
@@ -305,65 +287,6 @@ def merge_risk_factor(
     )
 
 
-@task(checkpoint=False)
-def make_alerts(
-    vessels_with_missing_fars: pd.DataFrame,
-    alert_type: str,
-    alert_config_name: str,
-    creation_date: datetime,
-) -> pd.DataFrame:
-    """
-    Generates alerts from the input `vessels_with_missing_fars`.
-
-    Args:
-        vessels_with_missing_fars (pd.DataFrame): `DateFrame` of vessels for which to
-          create an alert.
-        alert_type (str): `type` to specify in the built alerts.
-        alert_config_name (str): `alert_config_name` to specify in the built alerts.
-        creation_date (datetime): `creation_date` to specify in the built alerts.
-
-    Returns:
-        pd.DataFrame: `DataFrame` of alerts.
-    """
-    alerts = vessels_with_missing_fars.copy(deep=True)
-    alerts = alerts.rename(
-        columns={
-            "cfr": "internal_reference_number",
-            "external_immatriculation": "external_reference_number",
-        }
-    )
-
-    alerts["creation_date"] = creation_date
-
-    alerts["type"] = alert_type
-    alerts["value"] = df_to_dict_series(
-        alerts.rename(
-            columns={
-                "facade": "seaFront",
-                "flag_state": "flagState",
-                "risk_factor": "riskFactor",
-            }
-        )[["seaFront", "flagState", "type", "riskFactor"]]
-    )
-
-    alerts["alert_config_name"] = alert_config_name
-
-    return alerts[
-        [
-            "vessel_name",
-            "internal_reference_number",
-            "external_reference_number",
-            "ircs",
-            "vessel_identifier",
-            "creation_date",
-            "type",
-            "facade",
-            "value",
-            "alert_config_name",
-        ]
-    ]
-
-
 with Flow("Missing FAR alerts") as flow:
 
     # Parameters
@@ -377,6 +300,7 @@ with Flow("Missing FAR alerts") as flow:
     only_raise_if_route_shows_fishing = Parameter("only_raise_if_route_shows_fishing")
 
     # Infras
+    districts_table = get_table("districts")
     positions_table = get_table("positions")
     facade_areas_table = get_table("facade_areas_subdivided")
     eez_areas_table = get_table("eez_areas")
@@ -414,11 +338,11 @@ with Flow("Missing FAR alerts") as flow:
         only_fishing_positions=only_raise_if_route_shows_fishing,
     )
 
-    vessels_at_sea_yesterday_in_french_eez = extract_vessels_at_sea(
-        vessels_at_sea_yesterday_in_french_eez_query
+    vessels_at_sea_yesterday_in_french_eez = read_query_task(
+        "monitorfish_remote", vessels_at_sea_yesterday_in_french_eez_query
     )
-    vessels_at_sea_yesterday_everywhere = extract_vessels_at_sea(
-        vessels_at_sea_yesterday_everywhere_query
+    vessels_at_sea_yesterday_everywhere = read_query_task(
+        "monitorfish_remote", vessels_at_sea_yesterday_everywhere_query
     )
 
     vessels_that_emitted_fars = extract_vessels_that_emitted_fars(
@@ -444,13 +368,14 @@ with Flow("Missing FAR alerts") as flow:
     vessels_with_missing_fars = merge_risk_factor(
         vessels_with_missing_fars, current_risk_factors
     )
-
-    alerts = make_alerts(
-        vessels_with_missing_fars=vessels_with_missing_fars,
-        alert_type=alert_type,
-        alert_config_name=alert_config_name,
-        creation_date=utcnow,
+    vessels_with_missing_fars = add_vessel_id(vessels_with_missing_fars, vessels_table)
+    vessels_with_missing_fars = add_vessels_columns(
+        vessels_with_missing_fars,
+        vessels_table,
+        districts_table=districts_table,
+        districts_columns_to_add=["dml"],
     )
+    alerts = make_alerts(vessels_with_missing_fars, alert_type, alert_config_name)
     silenced_alerts = extract_silenced_alerts()
     alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
 

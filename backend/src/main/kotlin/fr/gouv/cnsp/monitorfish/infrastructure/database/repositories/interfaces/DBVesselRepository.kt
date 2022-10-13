@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
 
-interface DBVesselRepository : CrudRepository<VesselEntity, Long> {
+interface DBVesselRepository : CrudRepository<VesselEntity, Int> {
     @Query(
         value = "SELECT * FROM vessels WHERE cfr LIKE %:searched% " +
             "OR mmsi LIKE %:searched% " +

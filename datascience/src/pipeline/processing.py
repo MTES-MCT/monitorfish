@@ -508,8 +508,9 @@ def join_on_multiple_keys(
     left and right DataFrames are joined if at least one of the keys match.
 
     Joins are performed on the keys listed in `or_join_keys` by "decreasing order of
-    priority" in the sense that rows of left and right that have been matched on one
-    key are removed from ulterior joins performed on the next keys.
+    priority" in the sense that, in order to be matched, rows of left and
+    right MUST match on their highest priority non null key (which come first in the
+    list) but MIGHT not match on lower priority keys (which come later in the list).
 
     During each of the joins on the individual keys, non-joining key pairs and, if any,
     columns common to both left and right DataFrames, are coalesced (from left to
@@ -521,7 +522,7 @@ def join_on_multiple_keys(
     If `or_join_keys` is `['A', 'B']` and `and_join_keys` is `['C', 'D']`, the SQL
     equivalent of the join condition is :
 
-        WHERE
+        ON
             (
                 left.A = right.A AND
                 left.C = right.C AND
@@ -552,9 +553,22 @@ def join_on_multiple_keys(
     """
 
     joins = []
+    left = left.copy(deep=True)
+    right = right.copy(deep=True)
     common_columns = set.intersection(set(left.columns), set(right.columns))
     keys_already_joined = set()
     and_join_keys = [] if and_join_keys is None else and_join_keys
+    left_cols = list(left)
+    right_cols = list(right)
+
+    # Number rows for future use
+    if how in ("left", "outer"):
+        left_id = get_unused_col_name("left_row_number", left)
+        left[left_id] = range(len(left))
+
+    if how in ("right", "outer"):
+        right_id = get_unused_col_name("right_row_number", right)
+        right[right_id] = range(len(right))
 
     # Attempt to perform the join successively on each key
     for or_join_key in or_join_keys:
@@ -588,25 +602,23 @@ def join_on_multiple_keys(
 
             join = join.drop(columns=[l, r])
 
-        left = left[~left[or_join_key].isin(join[or_join_key])]
-        right = right[~right[or_join_key].isin(join[or_join_key])]
-
         keys_already_joined.add(or_join_key)
 
         joins.append(join)
 
-    # Add unmatched rows if performing left, right or outer joins
-    if how in ("left", "outer"):
-        joins.append(left)
-
-    if how in ("right", "outer"):
-        joins.append(right)
-
     # Concatenate all join results
     res = pd.concat(joins, axis=0)
+
+    # Add unmatched rows if performing left, right or outer joins
+    if how in ("left", "outer"):
+        res = pd.concat([res, left.loc[~left[left_id].isin(res[left_id])]], axis=0)
+
+    if how in ("right", "outer"):
+        res = pd.concat([res, right.loc[~right[right_id].isin(res[right_id])]], axis=0)
+
     res.index = np.arange(0, len(res))
 
-    columns_order = list(left) + [col for col in right if col not in left]
+    columns_order = left_cols + [col for col in right_cols if col not in left_cols]
     res = res[columns_order]
 
     return res

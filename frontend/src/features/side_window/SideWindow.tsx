@@ -11,6 +11,7 @@ import { setEditedReportingInSideWindow } from '../../domain/shared_slices/Repor
 import { getOperationalAlerts } from '../../domain/use_cases/alert/getOperationalAlerts'
 import { getSilencedAlerts } from '../../domain/use_cases/alert/getSilencedAlerts'
 import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
+import getFishingInfractions from '../../domain/use_cases/infraction/getFishingInfractions'
 import getAllCurrentReportings from '../../domain/use_cases/reporting/getAllCurrentReportings'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
@@ -73,6 +74,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       dispatch(getAllBeaconMalfunctions() as any)
       dispatch(getSilencedAlerts() as any)
       dispatch(getAllCurrentReportings() as any)
+      dispatch(getFishingInfractions() as any)
 
       dispatch(openSideWindowTab(SIDE_WINDOW_MENU.ALERTS.code))
     }

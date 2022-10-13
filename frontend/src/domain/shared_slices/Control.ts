@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { ControlResume } from '../types/control'
+import type { Controller, ControlResume } from '../types/control'
 
 export type ControlState = {
   // TODO Understand & check that.
   controlResumeAndControls: Partial<ControlResume>
-  controllers: []
+  controllers: Controller[]
   controlsFromDate: Date
   loadingControls: boolean
   nextControlResumeAndControls: ControlResume | null

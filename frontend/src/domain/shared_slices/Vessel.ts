@@ -54,6 +54,7 @@ export type VesselState = {
     hasAlert?: boolean
     hasInfractionSuspicion: boolean
     reportings: ReportingType[]
+    vesselId?: string | undefined
   } | null
   selectedVesselIdentity: VesselIdentity | null
   selectedVesselPositions: VesselPosition[] | null

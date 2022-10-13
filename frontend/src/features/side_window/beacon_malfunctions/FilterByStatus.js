@@ -1,0 +1,44 @@
+import { useRef } from 'react'
+import { useDispatch } from 'react-redux'
+import { SelectPicker } from 'rsuite'
+import { beaconMalfunctionNotificationType } from '../../../domain/entities/beaconMalfunction'
+import { COLORS } from '../../../constants/constants'
+
+const DEFAULT_SELECT_PICKER_STYLE = {
+  width: 150,
+  margin: '2px 0 0 20px',
+  borderColor: COLORS.lightGray,
+  boxSizing: 'border-box',
+  textOverflow: 'ellipsis'
+}
+
+const DEFAULT_SELECT_PICKER_MENU_STYLE = {
+  width: 200,
+  overflowY: 'hidden',
+  textOverflow: 'ellipsis',
+  position: 'absolute',
+  marginTop: 10,
+  marginLeft: 592
+}
+
+const FilterByStatus = () => {
+  const dispatch = useDispatch()
+  const selectMenuRef = useRef()
+
+  return (<>
+    <SelectPicker
+      container={() => selectMenuRef.current}
+      style={DEFAULT_SELECT_PICKER_STYLE}
+      menuStyle={DEFAULT_SELECT_PICKER_MENU_STYLE}
+      searchable={false}
+      cleanable={false}
+      value={null}
+      placeholder={'Filtrer par statut'}
+      data={Object.keys(beaconMalfunctionNotificationType)
+        .map(type => ({ label: beaconMalfunctionNotificationType[type].followUpMessage, value: type }))}
+    />
+    <div ref={selectMenuRef} />
+  </>)
+}
+
+export default FilterByStatus

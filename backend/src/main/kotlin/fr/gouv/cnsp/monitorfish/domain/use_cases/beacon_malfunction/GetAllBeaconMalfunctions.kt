@@ -18,11 +18,11 @@ class GetAllBeaconMalfunctions(
     fun execute(): List<BeaconMalfunction> {
         val lastPositions = lastPositionRepository.findAll()
 
-        val beaconMalfunctionsExceptResumedTransmission = beaconMalfunctionsRepository.findAllExceptEndOfFollowUp()
-        val lastSixtyResumedTransmissions = beaconMalfunctionsRepository.findLastSixtyEndOfFollowUp()
+        val beaconMalfunctionsExceptArchived = beaconMalfunctionsRepository.findAllExceptArchived()
+        val lastSixtyArchived = beaconMalfunctionsRepository.findLastSixtyArchived()
         val activatedBeaconNumbers = beaconRepository.findActivatedBeaconNumbers()
 
-        return (beaconMalfunctionsExceptResumedTransmission + lastSixtyResumedTransmissions)
+        return (beaconMalfunctionsExceptArchived + lastSixtyArchived)
             .filter { activatedBeaconNumbers.contains(it.beaconNumber) }
             .map { beaconMalfunction ->
                 val riskFactor = lastPositions.find(getVesselFromBeaconMalfunction(beaconMalfunction))?.riskFactor

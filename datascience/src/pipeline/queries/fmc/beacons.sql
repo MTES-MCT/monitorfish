@@ -1,5 +1,5 @@
 SELECT
-    n.id_nav_flotteur as id_nav_flotteur_bn,
+    n.id_nav_flotteur as vessel_id,
     b.numero as beacon_number,
     cst.libelle AS beacon_status,
     b.id_fmc_operateur_satellite AS satellite_operator_id

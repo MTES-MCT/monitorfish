@@ -88,6 +88,7 @@ export function App() {
 
 function HomePage() {
   const isVesselSidebarOpen = useAppSelector(state => state.vessel.vesselSidebarIsOpen)
+  const openedSideWindowTab = useAppSelector(state => state.global.openedSideWindowTab)
   const ref = useRef() as MutableRefObject<HTMLDivElement>
 
   return (
@@ -118,7 +119,7 @@ function HomePage() {
             <VesselLabelsMapButton />
             <APIWorker />
             <ErrorToastNotification />
-            <SideWindowLauncher />
+            {openedSideWindowTab && <SideWindowLauncher />}
           </Wrapper>
         </Route>
       </Switch>

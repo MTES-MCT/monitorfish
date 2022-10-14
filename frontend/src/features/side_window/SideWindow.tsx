@@ -1,5 +1,14 @@
 import { propEq } from 'ramda'
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  forwardRef,
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
@@ -15,7 +24,6 @@ import getFishingInfractions from '../../domain/use_cases/infraction/getFishingI
 import getAllCurrentReportings from '../../domain/use_cases/reporting/getAllCurrentReportings'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
-import { useCombinedRefs } from '../../hooks/useCombineRefs'
 import { usePrevious } from '../../hooks/usePrevious'
 import { AlertsAndReportings } from './alerts_reportings/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
@@ -53,10 +61,8 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
     dispatch(setEditedReportingInSideWindow())
   }, [dispatch])
 
-  // We need to reuse the forwardedRef, se we combine a MutableRef and the passed function ref
-  // See https://itnext.io/reusing-the-ref-from-forwardref-with-react-hooks-4ce9df693dd
-  const innerRef = useRef<HTMLDivElement>(null)
-  const baseRef = useCombinedRefs<HTMLDivElement>(ref, innerRef)
+  const baseRef = useRef() as MutableRefObject<HTMLDivElement>
+  useImperativeHandle(ref, () => baseRef.current)
 
   useEffect(() => {
     setTimeout(() => {

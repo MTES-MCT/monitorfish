@@ -64,7 +64,7 @@ export function DateRangePicker({
   const selectedStartTimeTupleRef = useRef<TimeTuple | undefined>(getTimeTupleFromDate(selectedStartDateRef.current))
   const selectedEndTimeTupleRef = useRef<TimeTuple | undefined>(getTimeTupleFromDate(selectedEndDateRef.current))
 
-  const forceUpdate = useForceUpdate()
+  const { forceUpdate } = useForceUpdate()
 
   const rangeCalendarPickerDefaultValue = useMemo(
     () =>

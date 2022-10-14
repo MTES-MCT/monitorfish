@@ -14,12 +14,13 @@ module.exports = {
         jsc: {
           transform: {
             react: {
-              runtime: 'automatic',
-            },
-          },
-        },
-      },
+              runtime: 'automatic'
+            }
+          }
+        }
+      }
     ],
+    '\\.svg$': '<rootDir>/config/fileTransformer.js'
   },
-  transformIgnorePatterns: ['node_modules/(?!@codemirror)/'],
+  transformIgnorePatterns: ['node_modules/(?!@codemirror)/']
 }

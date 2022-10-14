@@ -1,7 +1,10 @@
 import { addReportingFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../entities/vessel'
 import { removeError, setError } from '../../shared_slices/Global'
-import { setCurrentAndArchivedReportingsOfSelectedVessel } from '../../shared_slices/Reporting'
+import {
+  setCurrentAndArchivedReportingsOfSelectedVessel,
+  addReportingToCurrentReportings
+} from '../../shared_slices/Reporting'
 import { addVesselReporting } from '../../shared_slices/Vessel'
 
 import type { AppDispatch, AppGetState } from '../../../store'
@@ -13,6 +16,7 @@ export const addReporting = (newReporting: Reporting) => (dispatch: AppDispatch,
 
   return addReportingFromAPI(newReporting)
     .then(reporting => {
+      dispatch(addReportingToCurrentReportings(reporting))
       const nextCurrentAndArchivedReporting = addReportingToCurrent(
         currentAndArchivedReportingsOfSelectedVessel,
         reporting

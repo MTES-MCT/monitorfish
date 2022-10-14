@@ -3,7 +3,12 @@ import { transform } from 'ol/proj'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 import { reportingIsAnInfractionSuspicion, ReportingTypeCharacteristics } from '../entities/reporting'
-import { atLeastOneVesselSelected, Vessel, VesselSidebarTab } from '../entities/vessel'
+import {
+  atLeastOneVesselSelected,
+  getOnlyVesselIdentityPropertiesFromSelectedVessel,
+  Vessel,
+  VesselSidebarTab
+} from '../entities/vessel'
 import { ReportingType } from '../types/reporting'
 
 import type { FishingActivityShowedOnMap, TrackRequest, VesselIdentity, VesselPosition } from '../types/vessel'
@@ -484,6 +489,7 @@ const vesselSlice = createSlice({
       state.loadingVessel = null
       state.loadingPositions = null
       state.selectedVessel = action.payload.vessel
+      state.selectedVesselIdentity = getOnlyVesselIdentityPropertiesFromSelectedVessel(action.payload.vessel)
       state.selectedVesselPositions = action.payload.positions
     },
 

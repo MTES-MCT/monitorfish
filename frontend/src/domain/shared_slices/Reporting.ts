@@ -35,6 +35,16 @@ const reportingSlice = createSlice({
   name: 'reporting',
   reducers: {
     /**
+     * Add a new reporting
+     * @function setCurrentReportings
+     * @param {Object=} state
+     * @param {{payload: Reporting}} action
+     */
+    addReportingToCurrentReportings(state, action) {
+      state.currentReportings = state.currentReportings.concat(action.payload)
+    },
+
+    /**
      * Set the loading of reporting to true, and shows a loader in the reporting tab
      * @function loadReporting
      * @memberOf ReportingReducer
@@ -136,6 +146,7 @@ const reportingSlice = createSlice({
 })
 
 export const {
+  addReportingToCurrentReportings,
   loadReporting,
   removeReportingsIdsFromCurrentReportings,
   resetCurrentAndArchivedReportingsOfSelectedVessel,

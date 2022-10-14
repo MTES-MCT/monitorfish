@@ -18,6 +18,7 @@ export type BaseReporting = {
   type: ReportingType
   underCharter: boolean
   validationDate: string
+  vesselId: number | undefined
   vesselIdentifier: string
   vesselName: string
 

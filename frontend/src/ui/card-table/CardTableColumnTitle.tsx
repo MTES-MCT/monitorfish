@@ -22,7 +22,9 @@ export function CardTableColumnTitle({
   return (
     <StyledCardTableColumnTitle data-cy={dataCy} isSortable={isSortable} onClick={onClick}>
       {children}
-      {isSortable && isSortColumn && <Sort title={isAscending ? 'Croissant' : 'Décroissant'} />}
+      {isSortable && isSortColumn && (
+        <Sort isAscending={isAscending} title={isAscending ? 'Croissant' : 'Décroissant'} />
+      )}
     </StyledCardTableColumnTitle>
   )
 }

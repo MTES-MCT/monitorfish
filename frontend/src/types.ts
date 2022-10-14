@@ -5,6 +5,11 @@ import type { ConditionalKeys, Exact } from 'type-fest'
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, HomeRootState, unknown, AnyAction>
 
+export type CollectionItem = {
+  [key: string]: any
+  id: string
+}
+
 export type DateRange = [Date, Date]
 
 export type Native = boolean | null | number | string | undefined

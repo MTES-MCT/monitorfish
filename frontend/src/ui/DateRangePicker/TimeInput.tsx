@@ -56,7 +56,7 @@ function TimeInputWithRef(
 
   const [rangedTimePickerFilter, setRangedTimePickerFilter] = useState<RegExp>(/.*/)
 
-  const forceUpdate = useForceUpdate()
+  const { forceUpdate } = useForceUpdate()
 
   const closeRangedTimePicker = useCallback(() => {
     isRangedTimePickerOpenRef.current = false

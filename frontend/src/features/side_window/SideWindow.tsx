@@ -1,5 +1,14 @@
 import { propEq } from 'ramda'
-import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  forwardRef,
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
@@ -51,6 +60,9 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
     dispatch(closeBeaconMalfunctionInKanban())
     dispatch(setEditedReportingInSideWindow())
   }, [dispatch])
+
+  const baseRef = useRef() as MutableRefObject<HTMLDivElement>
+  useImperativeHandle(ref, () => baseRef.current)
 
   useEffect(() => {
     setTimeout(() => {
@@ -135,7 +147,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   )
 
   return (
-    <Wrapper ref={ref}>
+    <Wrapper ref={baseRef}>
       <SideWindowMenu selectedMenu={openedSideWindowTab} />
       <SideWindowSubMenu
         isFixed={isSubmenuFixed}
@@ -156,7 +168,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
         <Content height={window.innerHeight + 50}>
           {openedSideWindowTab === SIDE_WINDOW_MENU.ALERTS.code && (
             <AlertsAndReportings
-              baseRef={ref}
+              baseRef={baseRef}
               selectedSubMenu={
                 Object.values<string>(SeaFront).includes(selectedSubMenu.code)
                   ? (selectedSubMenu as MenuItem<SeaFront>)

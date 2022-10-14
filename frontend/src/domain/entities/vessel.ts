@@ -3,7 +3,7 @@ import countries from 'i18n-iso-countries'
 import Layers, { baseLayers } from './layers'
 import { vesselLabel as vesselLabelEnum } from './vesselLabelLine'
 
-import type { ShowedVesselTrack, VesselIdentity } from '../types/vessel'
+import type { SelectedVessel, ShowedVesselTrack, VesselIdentity } from '../types/vessel'
 
 export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_INFRACTION_SUSPICION_STYLE = 1
@@ -141,6 +141,18 @@ export const getOnlyVesselIdentityProperties = (vessel: any): VesselIdentity => 
   internalReferenceNumber: vessel.internalReferenceNumber,
   ircs: vessel.ircs,
   mmsi: vessel.mmsi,
+  vesselIdentifier: vessel.vesselIdentifier,
+  vesselName: vessel.vesselName
+})
+
+export const getOnlyVesselIdentityPropertiesFromSelectedVessel = (vessel: SelectedVessel): VesselIdentity => ({
+  beaconNumber: vessel.beaconNumber,
+  externalReferenceNumber: vessel.externalReferenceNumber,
+  flagState: vessel.flagState,
+  internalReferenceNumber: vessel.internalReferenceNumber,
+  ircs: vessel.ircs,
+  mmsi: vessel.mmsi,
+  vesselId: vessel.id,
   vesselIdentifier: vessel.vesselIdentifier,
   vesselName: vessel.vesselName
 })

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
@@ -9,22 +9,11 @@ import { PrimaryButton } from '../../../commonStyles/Buttons.style'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
 import { ReportingForm } from './ReportingForm'
 
-import type { VesselIdentity } from '../../../../domain/types/vessel'
-
 export function CreateOrEditReporting() {
   const dispatch = useAppDispatch()
-  const { selectedVessel, selectedVesselIdentity } = useAppSelector(state => state.vessel)
+  const { selectedVesselIdentity } = useAppSelector(state => state.vessel)
   const editedReporting = useAppSelector(state => state.reporting.editedReporting)
   const [newReportingFormIsOpen, setNewReportingFormIsOpen] = useState(false)
-
-  const selectedVesselIdentityWithVesselId = useMemo(
-    () =>
-      ({
-        ...selectedVesselIdentity,
-        vesselId: selectedVessel?.vesselId
-      } as VesselIdentity),
-    [selectedVesselIdentity, selectedVessel]
-  )
 
   const close = useCallback(() => {
     setNewReportingFormIsOpen(false)
@@ -37,13 +26,15 @@ export function CreateOrEditReporting() {
         <HeaderText>{editedReporting ? 'Editer' : 'Ouvrir'} un signalement</HeaderText>
         <CloseIcon onClick={close} />
       </Header>
-      <ReportingForm
-        closeForm={close}
-        editedReporting={editedReporting}
-        fromSideWindow={false}
-        hasWhiteBackground={false}
-        selectedVesselIdentity={selectedVesselIdentityWithVesselId}
-      />
+      {selectedVesselIdentity && (
+        <ReportingForm
+          closeForm={close}
+          editedReporting={editedReporting}
+          fromSideWindow={false}
+          hasWhiteBackground={false}
+          selectedVesselIdentity={selectedVesselIdentity}
+        />
+      )}
     </FormWrapper>
   ) : (
     <NewReportingButton data-cy="vessel-sidebar-open-reporting" onClick={() => setNewReportingFormIsOpen(true)}>

@@ -77,7 +77,7 @@ context('Vessel sidebar reporting tab', () => {
 
   it('An infraction suspicion reporting Should be added from the reporting form', () => {
     // Given
-    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('MARIAGE île')
+    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('FRAIS avis')
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
@@ -85,12 +85,11 @@ context('Vessel sidebar reporting tab', () => {
     // When
     cy.intercept(
       'GET',
-      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000180832&externalReferenceNumber=VP374069&IRCS=CG1312&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
+      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000939217&externalReferenceNumber=RU460262&IRCS=SC6082&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
     ).as('reporting')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
     cy.wait('@reporting')
-    cy.get('*[data-cy="vessel-menu-reporting"]').contains(2)
     cy.wait(100)
 
     cy.get('*[data-cy="vessel-sidebar-open-reporting"]').click()
@@ -107,12 +106,21 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="new-reporting-create-button"]').scrollIntoView().click()
 
     // Then
-    cy.get('*[data-cy="vessel-menu-reporting"]').contains(3)
+    cy.get('*[data-cy="vessel-menu-reporting"]').contains(1)
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('ULAM 56 / Sortie non autorisée')
     cy.get('*[data-cy="reporting-card"]')
       .eq(0)
       .contains("Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis")
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('Émetteur: Jean Bon (0612365896)')
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('NATINF 2608')
+
+    // The reporting should be found in the reporting tab of the side window
+    cy.visit('/side_window')
+    cy.get('*[data-cy="side-window-reporting-tab"]').click()
+    cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
+    cy.wait(200)
+    cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('3')
+    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 3)
+    cy.get('*[data-cy="side-window-current-reportings"]').last().contains('FRAIS AVIS MODE')
   })
 })

@@ -26,6 +26,7 @@ export type Gear = {
 }
 
 export type SelectedVessel = {
+  beaconNumber: number
   course: number
   dateTime: string | null
   declaredFishingGears: string[]
@@ -75,6 +76,7 @@ export type SelectedVessel = {
   tripNumber: number | null
   underCharter: boolean
   vesselEmails: string[]
+  vesselIdentifier: string
   vesselName: string
   vesselPhones: string[]
   vesselType: string

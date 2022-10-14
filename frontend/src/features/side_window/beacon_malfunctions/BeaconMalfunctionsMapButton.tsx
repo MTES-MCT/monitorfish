@@ -10,7 +10,7 @@ import { SIDE_WINDOW_MENU } from '../constants'
 
 export function BeaconMalfunctionsMapButton() {
   const dispatch = useAppDispatch()
-  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode, sideWindowIsOpen } = useAppSelector(
+  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode } = useAppSelector(
     state => state.global
   )
 

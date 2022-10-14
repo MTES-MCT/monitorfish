@@ -1,5 +1,5 @@
 import { propEq } from 'ramda'
-import { useEffect, useMemo } from 'react'
+import { RefObject, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
@@ -15,11 +15,10 @@ import { ReportingList } from './ReportingList'
 import { SilencedAlertsList } from './SilencedAlertsList'
 
 import type { MenuItem } from '../../../types'
-import type { ForwardedRef } from 'react'
 import type { Promisable } from 'type-fest'
 
 type AlertsAndReportingsProps = {
-  baseRef: ForwardedRef<HTMLDivElement>
+  baseRef: RefObject<HTMLDivElement>
   selectedSubMenu: MenuItem<SeaFront>
   selectedTab: any
   // TODO Change this param to only use the `SeaFront` enum.

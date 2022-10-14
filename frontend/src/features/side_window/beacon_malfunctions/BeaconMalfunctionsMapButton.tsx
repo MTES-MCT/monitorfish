@@ -10,7 +10,7 @@ import { SIDE_WINDOW_MENU } from '../constants'
 
 export function BeaconMalfunctionsMapButton() {
   const dispatch = useAppDispatch()
-  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode, sideWindowIsOpen } = useAppSelector(
+  const { healthcheckTextWarning, openedSideWindowTab, previewFilteredVesselsMode } = useAppSelector(
     state => state.global
   )
 
@@ -21,16 +21,13 @@ export function BeaconMalfunctionsMapButton() {
       isHidden={!!previewFilteredVesselsMode}
       isVisible={openedSideWindowTab === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code}
       onClick={() => {
-        if (
-          !sideWindowIsOpen ||
-          (sideWindowIsOpen && openedSideWindowTab !== SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code)
-        ) {
+        if (openedSideWindowTab !== SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code) {
           dispatch(openSideWindowTab(SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code))
 
           return
         }
 
-        if (sideWindowIsOpen && openedSideWindowTab === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code) {
+        if (openedSideWindowTab === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code) {
           dispatch(closeSideWindow())
         }
       }}

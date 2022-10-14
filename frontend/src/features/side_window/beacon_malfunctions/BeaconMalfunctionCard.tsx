@@ -40,6 +40,7 @@ export function BeaconMalfunctionCard({
   const vesselStatus = vesselStatuses.find(_vesselStatus => _vesselStatus.value === beaconMalfunction?.vesselStatus)
   const bodyRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
+  const hasScroll = verticalScrollRef?.current?.scrollHeight > verticalScrollRef?.current?.clientHeight
 
   const endOfBeaconMalfunctionReason = useMemo(
     () => endOfBeaconMalfunctionReasons[beaconMalfunction?.endOfBeaconMalfunctionReason],
@@ -77,7 +78,7 @@ export function BeaconMalfunctionCard({
       ref={wrapperRef}
       data-cy="side-window-beacon-malfunctions-card"
       style={wrapperStyle(
-        verticalScrollRef?.current?.scrollHeight > verticalScrollRef?.current?.clientHeight,
+        hasScroll,
         isDragging,
         isDroppedId,
         beaconMalfunction?.id,
@@ -86,7 +87,7 @@ export function BeaconMalfunctionCard({
       )}
     >
       <Header style={headerStyle}>
-        <Row style={rowStyle(true, 8)}>
+        <Row style={rowStyle(true, 8, hasScroll)}>
           <Id data-cy="side-window-vessel-id" style={idStyle}>
             #{beaconMalfunction?.id} - {getBeaconCreationOrModificationDate(beaconMalfunction)}
           </Id>
@@ -99,7 +100,7 @@ export function BeaconMalfunctionCard({
             style={showIconStyle}
           />
         </Row>
-        <Row style={rowStyle(false, 4)}>
+        <Row style={rowStyle(false, 4, hasScroll)}>
           {beaconMalfunction?.flagState ? (
             <Flag src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`} style={flagStyle} />
           ) : null}
@@ -133,7 +134,7 @@ export function BeaconMalfunctionCard({
             {endOfBeaconMalfunctionReason?.label || 'Sans raison'}
           </EndOfMalfunction>
         )}
-        <Row style={rowStyle(false, 8)}>
+        <Row style={rowStyle(false, 8, hasScroll)}>
           <MalfunctionStartOrEndDateText style={malfunctionStartOrEndDateTextStyle}>
             {getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}
           </MalfunctionStartOrEndDateText>
@@ -163,11 +164,11 @@ const showIconStyle: CSSProperties = {
 }
 
 const Row = styled.div``
-const rowStyle = (isFirstRow, marginTop): CSSProperties => ({
+const rowStyle = (isFirstRow, marginTop, hasScroll): CSSProperties => ({
   display: 'flex',
   height: `${isFirstRow ? '16px' : 'unset'}`,
   margin: `${marginTop || 4}px 0 0 12px`,
-  maxWidth: 223,
+  maxWidth: hasScroll ? 205 : 220,
   textAlign: 'left'
 })
 

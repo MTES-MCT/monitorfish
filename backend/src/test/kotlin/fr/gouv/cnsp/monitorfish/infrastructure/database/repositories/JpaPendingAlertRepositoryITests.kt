@@ -41,4 +41,18 @@ class JpaPendingAlertRepositoryITests : AbstractDBTests() {
         assertThat(alerts.first().value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
         assertThat(alerts.last().vesselId).isEqualTo(123)
     }
+
+    @Test
+    @Transactional
+    fun `find Should return an alert with the dml found in the value object`() {
+        // When
+        val alert = jpaPendingAlertRepository.find(1)
+
+        // Then
+        assertThat(alert.externalReferenceNumber).isEqualTo("DONTSINK")
+        assertThat(alert.internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(alert.value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
+        assertThat(alert.value.dml).isEqualTo("DML 13")
+        assertThat(alert.value.seaFront).isEqualTo("NAMO")
+    }
 }

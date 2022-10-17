@@ -4,12 +4,14 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
                                                                                                            '"seaFront": "NAMO",' ||
                                                                                                            '"flagState": "FR",' ||
                                                                                                            '"riskFactor": 3.5647,' ||
+                                                                                                           '"dml": "DML 13",' ||
                                                                                                            '"type": "THREE_MILES_TRAWLING_ALERT"' ||
                                                                                                            '}')::jsonb),
        ('MALOTRU', 'U_W0NTFINDME', 'TALK2ME', 'QGDF', NOW(), '9463723', 'INTERNAL_REFERENCE_NUMBER', ('{' ||
                                                                                                       '"seaFront": "NAMO",' ||
                                                                                                       '"flagState": "FR",' ||
                                                                                                       '"riskFactor": 1.5647,' ||
+                                                                                                      '"dml": "DML 06",' ||
                                                                                                       '"type": "THREE_MILES_TRAWLING_ALERT"' ||
                                                                                                       '}')::jsonb),
        ('PAYSAGE ROMAN LIER', 'ABC000339263', 'CN775734', 'YHIZ',
@@ -18,6 +20,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "SA",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('LE b@TO', 'FR263418260', '08FR65324', 'IR12A',
@@ -26,6 +29,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "NAMO",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('PHENOMENE', 'ABC000259234', 'XS666810', 'VU2483',
@@ -34,6 +38,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "NAMO",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('PHENOMENE', 'ABC000777801', 'DA215454', 'RZUW',
@@ -42,6 +47,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "MED",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('PHENOMENE', 'ABC000180818', 'GJ232455', 'VSJM',
@@ -50,6 +56,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "MED",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('PHENOMENE', 'ABC000011166', 'WN121110', 'KK5645',
@@ -58,6 +65,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "MED",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('PHENOMENE', 'ABC000543897', 'NW232931', 'MPBS',
@@ -66,6 +74,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "NAMO",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('PHENOMENE', 'ABC000073956', 'GD896743', 'KAML',
@@ -74,6 +83,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "NAMO",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('PHENOMENE', 'ABC000960650', 'BI807222', 'LC0403',
@@ -82,6 +92,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "SA",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('PHENOMENE', 'ABC000349363', 'KX186589', 'OA0800',
@@ -90,6 +101,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "SA",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('PHENOMENE', 'ABC000089374', 'LP645300', 'RXQO',
@@ -98,6 +110,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "Guyane",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('PHENOMENE', 'ABC000221063', 'OI435694', 'JHKB',
@@ -106,6 +119,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "Guadeloupe",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5647,' ||
+         '"dml": "DML 56",' ||
          '"type": "THREE_MILES_TRAWLING_ALERT"' ||
          '}')::jsonb),
        ('TEMPÊTE COULEUR PUIS', 'ABC000118343', 'TO598604', 'MRCP',
@@ -114,6 +128,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "NAMO",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.5,' ||
+         '"dml": "DML 56",' ||
          '"type": "FRENCH_EEZ_FISHING_ALERT"' ||
          '}')::jsonb),
        ('ASSURER TON COMME', 'ABC000207106', 'DC896841', 'MNMN',
@@ -122,6 +137,7 @@ VALUES ('PHENOMENE', 'FAK000999999', 'DONTSINK', 'CALLME', NOW(), '9463715', 'IN
          '"seaFront": "NAMO",' ||
          '"flagState": "FR",' ||
          '"riskFactor": 2.2,' ||
+         '"dml": "DML 56", '||
          '"type": "TWELVE_MILES_FISHING_ALERT"' ||
          '}')::jsonb),
        ('MARQUER NOTE MANIER', 'ABC000498845', 'YH219470', 'EXG7039',

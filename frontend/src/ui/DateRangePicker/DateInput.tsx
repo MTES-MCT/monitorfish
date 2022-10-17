@@ -12,13 +12,14 @@ import type { Promisable } from 'type-fest'
 
 export type DateInputProps = Pick<NumberInputProps, 'onBack' | 'onPrevious' | 'onNext'> & {
   defaultValue?: DateTuple
+  isForcedFocused: boolean
   isStartDate?: boolean
   /** Called each time the date input is changed to a new valid value. */
   onChange: (nextDateTuple: DateTuple) => Promisable<void>
   onClick: () => Promisable<void>
 }
 function DateInputWithRef(
-  { defaultValue, isStartDate = false, onBack, onChange, onClick, onNext, onPrevious }: DateInputProps,
+  { defaultValue, isForcedFocused, isStartDate = false, onBack, onChange, onClick, onNext, onPrevious }: DateInputProps,
   ref: ForwardedRef<DateOrTimeInputRef>
 ) {
   const boxSpanRef = useRef() as MutableRefObject<HTMLSpanElement>
@@ -28,11 +29,12 @@ function DateInputWithRef(
 
   const [hasFormatError, setHasFormatError] = useState(false)
   const [hasValidationError, setHasValidationError] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
 
   useImperativeHandle<DateOrTimeInputRef, DateOrTimeInputRef>(ref, () => ({
     boxSpan: boxSpanRef.current,
-    focus: (inLastInputOfTheGroup = false) => {
-      if (inLastInputOfTheGroup) {
+    focus: (isInLastInputOfTheGroup = false) => {
+      if (isInLastInputOfTheGroup) {
         yearInputRef.current.focus()
       } else {
         dayInputRef.current.focus()
@@ -41,6 +43,14 @@ function DateInputWithRef(
   }))
 
   const currentUtcYear = useMemo(() => getUtcizedDayjs().year(), [])
+
+  const handleBlur = useCallback(() => {
+    setIsFocused(false)
+  }, [])
+
+  const handleFocus = useCallback(() => {
+    setIsFocused(true)
+  }, [])
 
   const handleFormatError = useCallback((hasNextFormatError: boolean) => {
     setHasFormatError(hasNextFormatError)
@@ -88,7 +98,7 @@ function DateInputWithRef(
   }, [onChange])
 
   return (
-    <Box ref={boxSpanRef} hasError={hasFormatError || hasValidationError}>
+    <Box ref={boxSpanRef} hasError={hasFormatError || hasValidationError} isFocused={isForcedFocused || isFocused}>
       {isStartDate ? 'Du ' : 'Au '}
       <NumberInput
         ref={dayInputRef}
@@ -97,8 +107,10 @@ function DateInputWithRef(
         max={31}
         min={1}
         onBack={onBack}
+        onBlur={handleBlur}
         onClick={onClick}
         onFilled={submit}
+        onFocus={handleFocus}
         onFormatError={handleFormatError}
         onNext={() => monthInputRef.current.focus()}
         onPrevious={onPrevious}
@@ -112,8 +124,10 @@ function DateInputWithRef(
         max={12}
         min={1}
         onBack={() => dayInputRef.current.focus()}
+        onBlur={handleBlur}
         onClick={onClick}
         onFilled={submit}
+        onFocus={handleFocus}
         onFormatError={handleFormatError}
         onNext={() => yearInputRef.current.focus()}
         onPrevious={() => dayInputRef.current.focus()}
@@ -127,8 +141,10 @@ function DateInputWithRef(
         max={currentUtcYear}
         min={2020}
         onBack={() => monthInputRef.current.focus()}
+        onBlur={handleBlur}
         onClick={onClick}
         onFilled={submit}
+        onFocus={handleFocus}
         onFormatError={handleFormatError}
         onNext={onNext}
         onPrevious={() => monthInputRef.current.focus()}
@@ -142,10 +158,20 @@ export const DateInput = forwardRef(DateInputWithRef)
 
 const Box = styled.span<{
   hasError: boolean
+  isFocused: boolean
 }>`
   background-color: ${p => p.theme.color.gainsboro};
-  border: solid 1px ${p => (p.hasError ? 'red' : p.theme.color.lightGray)} !important;
+  box-shadow: ${p =>
+    p.hasError || p.isFocused
+      ? `inset 0px 0px 0px 1px ${p.hasError ? p.theme.color.maximumRed : p.theme.color.blueGray[100]}`
+      : 'none'};
+  color: ${p => p.theme.color.slateGray};
   display: inline-block;
   font-size: inherit;
   padding: 0.3125rem 0.5rem 0.4375rem;
+  user-select: none;
+
+  :hover {
+    box-shadow: ${p => `inset 0px 0px 0px 1px ${p.theme.color.blueYonder[100]}`};
+  }
 `

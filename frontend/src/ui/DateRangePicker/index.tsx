@@ -279,6 +279,7 @@ export function DateRangePicker({
           <DateInput
             ref={startDateInputRef}
             defaultValue={selectedStartDateTupleRef.current}
+            isForcedFocused={isRangeCalendarPickerOpenRef.current}
             isStartDate
             onChange={nextDateTuple => handleDateInputFilled(DateRangePosition.START, nextDateTuple)}
             onClick={openRangeCalendarPicker}
@@ -306,6 +307,7 @@ export function DateRangePicker({
           <DateInput
             ref={endDateInputRef}
             defaultValue={selectedEndDateTupleRef.current}
+            isForcedFocused={isRangeCalendarPickerOpenRef.current}
             onBack={handleEndDateInputPrevious}
             onChange={nextDateTuple => handleDateInputFilled(DateRangePosition.END, nextDateTuple)}
             onClick={openRangeCalendarPicker}
@@ -360,6 +362,7 @@ const Box = styled.div`
 const Legend = styled.legend<{
   isHidden: boolean
 }>`
+  color: ${p => p.theme.color.slateGray};
   display: ${p => (p.isHidden ? 'none' : 'table')};
   font-weight: inherit;
   margin-bottom: 0.5rem;

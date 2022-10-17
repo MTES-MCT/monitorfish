@@ -96,7 +96,6 @@ export function RangedTimePicker({ filter, minutesRange, onChange }: RangedTimeP
 
 const Box = styled.div`
   background-color: ${p => p.theme.color.gainsboro};
-  border: solid 1px ${p => p.theme.color.lightGray};
   display: flex;
   flex-direction: column;
   left: -1px;

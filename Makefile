@@ -10,6 +10,12 @@ run-front:
 run-back:
 	docker compose up -d
 	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local"
+run-stubbed-reg:
+	cd ./frontend/cypress
+	docker stop monitorfish-geoserver-1 || true
+	docker compose -f ./docker-compose.yml up -d --quiet-pull geoserver
+stop-stubbed-reg:
+	docker stop cypress-geoserver-1
 erase-db:
 	docker compose down
 	docker volume rm monitorfish_db-data

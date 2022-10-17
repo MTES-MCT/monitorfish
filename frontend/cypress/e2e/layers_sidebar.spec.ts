@@ -39,8 +39,26 @@ context('LayersSidebar', () => {
     cy.get('canvas', { timeout: 10000 }).eq(0).click(490, 580, { force: true, timeout: 10000 })
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
 
+    // When F5 is pressed, the zones are still showed
+    cy.intercept(
+      'GET',
+      'http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature' +
+        '&typename=monitorfish:regulations&outputFormat=application/json' +
+        '&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27'
+    ).as('getRegulation')
+    cy.reload()
+    cy.wait('@getRegulation').then(({ response }) => {
+      expect(response && response.statusCode).equal(200)
+    })
+    cy.wait(500)
+    cy.get('canvas', { timeout: 10000 }).eq(0).click(490, 580, { force: true, timeout: 10000 })
+    cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
+
     // Close the metadata modal and hide the zone
     cy.get('*[data-cy="regulatory-layers-metadata-close"]').click()
+    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="regulatory-layers-my-zones"]').click()
+    cy.get('*[data-cy="regulatory-layers-my-zones-topic"]').click()
     cy.get('*[data-cy="regulatory-layers-my-zones-zone-hide"]').eq(0).click({ timeout: 10000 })
 
     // The layer is hidden, the metadata modal should not be opened

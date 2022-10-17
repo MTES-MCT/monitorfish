@@ -87,6 +87,7 @@ export function RangeCalendarPicker({ defaultValue, isHistorical, onChange }: Ra
 }
 
 const Box = styled.div`
+  height: 0;
   position: relative;
 
   .rs-picker-toggle {

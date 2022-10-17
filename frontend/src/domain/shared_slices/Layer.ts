@@ -195,13 +195,13 @@ const reducers = {
     }
 
     state.showedLayers = nextShowedLayers
-    window.localStorage.setItem(`homepage${layersShowedOnMapLocalStorageKey}`, JSON.stringify(state.showedLayers))
+    window.localStorage.setItem(`homepage${layersShowedOnMapLocalStorageKey}`, JSON.stringify(nextShowedLayers))
   }
 }
 
 // TODO Remove default export once cleaned.
 // eslint-disable-next-line import/no-default-export
 export default {
-  backoffice: createGenericSlice(HOMEPAGE_INITIAL_STATE, reducers, 'BackofficeLayerSlice') as Slice<LayerState>,
-  homepage: createGenericSlice(BACKOFFICE_INITIAL_STATE, reducers, 'HomePageLayerSlice') as Slice<LayerState>
+  backoffice: createGenericSlice(BACKOFFICE_INITIAL_STATE, reducers, 'BackofficeLayerSlice') as Slice<LayerState>,
+  homepage: createGenericSlice(HOMEPAGE_INITIAL_STATE, reducers, 'HomePageLayerSlice') as Slice<LayerState>
 }

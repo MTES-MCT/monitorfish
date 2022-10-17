@@ -553,10 +553,6 @@ export const baseLayers = {
     code: 'SATELLITE',
     text: 'Satellite'
   },
-  SCAN_LITTORAL: {
-    code: 'SCAN_LITTORAL',
-    text: 'Terre/Mer Littoral (IGN/SHOM)'
-  },
   DARK: {
     code: 'DARK',
     text: 'Fond de carte sombre'

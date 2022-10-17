@@ -40,9 +40,9 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="regulatory-layers-metadata-lawtype"]').contains('Reg. MEMN')
 
     // When F5 is pressed, the zones are still showed
+    // This intercept only works in the CI, as localhost in used in local
     cy.intercept(
-      'GET',
-      'http://localhost:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature' +
+      'http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature' +
         '&typename=monitorfish:regulations&outputFormat=application/json' +
         '&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27'
     ).as('getRegulation')

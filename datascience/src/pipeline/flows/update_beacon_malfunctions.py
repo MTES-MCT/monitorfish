@@ -327,6 +327,7 @@ def update_beacon_malfunction(
 
     if new_stage:
         json["stage"] = new_stage.value
+
         if new_stage is BeaconMalfunctionStage.END_OF_MALFUNCTION:
             try:
                 assert isinstance(end_of_malfunction_reason, EndOfMalfunctionReason)
@@ -337,6 +338,20 @@ def update_beacon_malfunction(
                         "giving an end_of_malfunction_reason"
                     )
                 )
+
+        if end_of_malfunction_reason:
+            assert isinstance(end_of_malfunction_reason, EndOfMalfunctionReason)
+            try:
+                assert new_stage in (
+                    BeaconMalfunctionStage.END_OF_MALFUNCTION,
+                    BeaconMalfunctionStage.ARCHIVED
+                )
+            except AssertionError:
+                raise ValueError((
+                    "Cannot give a `EndOfBeaconMalfunctionReason` for a new_stage "
+                    "other than `END_OF_MALFUNCTION`  or `ARCHIVED`."
+                ))
+
             json["endOfBeaconMalfunctionReason"] = end_of_malfunction_reason.value
 
     if new_vessel_status:

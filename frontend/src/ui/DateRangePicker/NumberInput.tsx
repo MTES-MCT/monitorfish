@@ -1,4 +1,4 @@
-import { forwardRef, KeyboardEvent, useCallback, useImperativeHandle, useRef } from 'react'
+import { forwardRef, KeyboardEvent, useCallback, useImperativeHandle, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import type { FocusEvent, ForwardedRef, InputHTMLAttributes, MouseEvent, MutableRefObject } from 'react'
@@ -41,6 +41,8 @@ function NumberInputWithRef(
   ref: ForwardedRef<HTMLInputElement>
 ) {
   const inputRef = useRef<HTMLInputElement>() as MutableRefObject<HTMLInputElement>
+
+  const placeholder = useMemo(() => '-'.repeat(size), [size])
 
   useImperativeHandle(ref, () => inputRef.current as HTMLInputElement)
 
@@ -139,6 +141,7 @@ function NumberInputWithRef(
       onInput={handleInput}
       onKeyDown={handleKeyDown}
       pattern="\d*"
+      placeholder={placeholder}
       size={size}
       type="text"
       {...nativeProps}
@@ -159,4 +162,8 @@ const StyledNumberInput = styled.input<{
   text-align: center;
   /* 1 digit = 0.5rem */
   width: ${p => p.size * 0.5}rem;
+
+  ::placeholder {
+    color: ${p => p.theme.color.slateGray};
+  }
 `

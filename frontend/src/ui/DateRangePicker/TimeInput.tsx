@@ -40,11 +40,12 @@ function TimeInputWithRef(
   const [controlledDefaultValue, setControlledDefaultValue] = useState(defaultValue)
   const [hasFormatError, setHasFormatError] = useState(false)
   const [hasValidationError, setHasValidationError] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
 
   useImperativeHandle<DateOrTimeInputRef, DateOrTimeInputRef>(ref, () => ({
     boxSpan: boxSpanRef.current,
-    focus: (inLastInputOfTheGroup = false) => {
-      if (inLastInputOfTheGroup) {
+    focus: (isInLastInputOfTheGroup = false) => {
+      if (isInLastInputOfTheGroup) {
         minuteInputRef.current.focus()
       } else {
         hourInputRef.current.focus()
@@ -74,6 +75,10 @@ function TimeInputWithRef(
     onBack()
   }, [closeRangedTimePicker, onBack])
 
+  const handleBlur = useCallback(() => {
+    setIsFocused(false)
+  }, [])
+
   const handleClickOutside = useCallback(
     (event: globalThis.MouseEvent) => {
       const target = event.target as Node | null
@@ -86,6 +91,14 @@ function TimeInputWithRef(
     },
     [closeRangedTimePicker]
   )
+
+  const handleFocus = useCallback(() => {
+    setIsFocused(true)
+
+    if (onFocus) {
+      onFocus()
+    }
+  }, [onFocus])
 
   const handleFormatError = useCallback((hasNextFormatError: boolean) => {
     setHasFormatError(hasNextFormatError)
@@ -145,7 +158,7 @@ function TimeInputWithRef(
   }, [closeRangedTimePicker, onChange])
 
   return (
-    <Box ref={boxSpanRef} hasError={hasFormatError || hasValidationError}>
+    <Box ref={boxSpanRef} hasError={hasFormatError || hasValidationError} isFocused={isFocused}>
       <>
         <NumberInput
           ref={hourInputRef}
@@ -154,9 +167,10 @@ function TimeInputWithRef(
           max={23}
           min={0}
           onBack={handleBack}
+          onBlur={handleBlur}
           onClick={openRangedTimePicker}
           onFilled={submit}
-          onFocus={onFocus}
+          onFocus={handleFocus}
           onFormatError={handleFormatError}
           onInput={handleHourInput}
           onNext={() => minuteInputRef.current.focus()}
@@ -171,9 +185,10 @@ function TimeInputWithRef(
           max={59}
           min={0}
           onBack={() => hourInputRef.current.focus()}
+          onBlur={handleBlur}
           onClick={openRangedTimePicker}
           onFilled={submit}
-          onFocus={onFocus}
+          onFocus={handleFocus}
           onFormatError={handleFormatError}
           onNext={onNext}
           onPrevious={() => hourInputRef.current.focus()}
@@ -196,11 +211,21 @@ export const TimeInput = forwardRef(TimeInputWithRef)
 
 const Box = styled.span<{
   hasError: boolean
+  isFocused: boolean
 }>`
   background-color: ${p => p.theme.color.gainsboro};
-  border: solid 1px ${p => (p.hasError ? 'red' : p.theme.color.lightGray)} !important;
+  box-shadow: ${p =>
+    p.hasError || p.isFocused
+      ? `inset 0px 0px 0px 1px ${p.hasError ? p.theme.color.maximumRed : p.theme.color.blueGray[100]}`
+      : 'none'};
+  color: ${p => p.theme.color.slateGray};
   display: inline-block;
   font-size: inherit;
   padding: 0.3125rem 0.5rem 0.4375rem;
   position: relative;
+  user-select: none;
+
+  :hover {
+    box-shadow: ${p => `inset 0px 0px 0px 1px ${p.theme.color.blueYonder[100]}`};
+  }
 `

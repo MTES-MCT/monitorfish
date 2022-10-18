@@ -547,23 +547,46 @@ def test_update_beacon_malfunction_updates_stage(mock_requests):
     )
 
 
+@pytest.mark.parametrize(
+    "stage,reason",
+    [
+        (
+            BeaconMalfunctionStage.END_OF_MALFUNCTION,
+            EndOfMalfunctionReason.RESUMED_TRANSMISSION,
+        ),
+        (
+            BeaconMalfunctionStage.END_OF_MALFUNCTION,
+            EndOfMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
+        ),
+        (
+            BeaconMalfunctionStage.ARCHIVED,
+            EndOfMalfunctionReason.RESUMED_TRANSMISSION,
+        ),
+        (
+            BeaconMalfunctionStage.ARCHIVED,
+            EndOfMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
+        ),
+    ]
+)
 @patch("src.pipeline.flows.update_beacon_malfunctions.requests")
 @patch(
     "src.pipeline.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
 )
-def test_update_beacon_malfunction_updates_stage_and_reason(mock_requests):
+def test_update_beacon_malfunction_updates_stage_and_reason(
+    mock_requests, stage, reason
+):
     malfunction_id_to_update = 25
     update_beacon_malfunction.run(
         malfunction_id_to_update,
-        new_stage=BeaconMalfunctionStage.END_OF_MALFUNCTION,
-        end_of_malfunction_reason=EndOfMalfunctionReason.RESUMED_TRANSMISSION,
+        new_stage=stage,
+        end_of_malfunction_reason=reason,
     )
     mock_requests.put.assert_called_once_with(
         url=f"dummy/end/point/{malfunction_id_to_update}",
         json={
-            "stage": "END_OF_MALFUNCTION",
-            "endOfBeaconMalfunctionReason": "RESUMED_TRANSMISSION",
+            "stage": stage.value,
+            "endOfBeaconMalfunctionReason": reason.value,
         },
         headers={
             "Accept": "application/json, text/plain",

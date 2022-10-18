@@ -39,4 +39,13 @@ class JpaBeaconRepositoryITests : AbstractDBTests() {
         assertThat(beaconNumbers).hasSize(6)
         assertThat(beaconNumbers).isEqualTo(listOf("FGEDX85", "123456", "ETETE4", "A56CZ2", "NB56FR8", "PO8U9U4"))
     }
+
+    @Test
+    @Transactional
+    fun `findBeaconNumberByVesselId Should return null When no beacon is found`() {
+        // When
+        val beaconNumber = jpaBeaconRepository.findBeaconNumberByVesselId(666)
+
+        assertThat(beaconNumber).isNull()
+    }
 }

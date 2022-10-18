@@ -135,4 +135,39 @@ class GetVesselUTests {
         assertThat(pair.first).isFalse
         assertThat(pair.second.vessel.id).isNull()
     }
+
+    @Test
+    fun `execute Should not throw an exception When no beacon found`() {
+        // Given
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
+            listOf()
+        )
+        given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
+        given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor())
+        given(beaconRepository.findBeaconNumberByVesselId(eq(123))).willReturn(null)
+
+        // When
+        val pair = runBlocking {
+            GetVessel(
+                vesselRepository,
+                positionRepository,
+                logbookReportRepository,
+                riskFactorsRepository,
+                beaconRepository
+            )
+                .execute(
+                    "FR224226850",
+                    "",
+                    "",
+                    VesselTrackDepth.TWELVE_HOURS,
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    null,
+                    null
+                )
+        }
+
+        // Then
+        assertThat(pair.first).isFalse
+        assertThat(pair.second.vessel.beaconNumber).isNull()
+    }
 }

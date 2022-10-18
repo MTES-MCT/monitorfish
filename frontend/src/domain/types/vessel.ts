@@ -26,7 +26,7 @@ export type Gear = {
 }
 
 export type SelectedVessel = {
-  beaconNumber: number
+  beaconNumber: number | undefined
   course: number
   dateTime: string | null
   declaredFishingGears: string[]

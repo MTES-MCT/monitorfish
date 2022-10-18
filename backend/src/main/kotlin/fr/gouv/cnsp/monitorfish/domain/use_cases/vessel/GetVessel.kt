@@ -56,10 +56,12 @@ class GetVessel(
             val vesselRiskFactorsFuture = async { riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber) }
 
             val vessel = vesselFuture.await()
-            val vesselWithBeaconNumber = vessel.id?.let {
-                val beaconNumber = beaconRepository.findBeaconNumberByVesselId(it)
+            val vesselWithBeaconNumber = vessel.id?.let { vesselId ->
+                val beaconNumber = beaconRepository.findBeaconNumberByVesselId(vesselId)
 
-                vessel.copy(beaconNumber = beaconNumber)
+                beaconNumber?.let {
+                    vessel.copy(beaconNumber = it)
+                }
             } ?: vessel
 
             Pair(

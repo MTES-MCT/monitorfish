@@ -89,6 +89,7 @@ export function RangeCalendarPicker({ defaultValue, isHistorical, onChange }: Ra
 const Box = styled.div`
   height: 0;
   position: relative;
+  user-select: none;
 
   .rs-picker-toggle {
     display: none;
@@ -123,12 +124,21 @@ const Box = styled.div`
 
         .rs-calendar-header-month-toolbar {
           align-items: center;
+          color: ${p => p.theme.color.slateGray};
           display: flex;
           justify-content: space-between;
 
           .rs-calendar-header-title {
             font-size: inherit;
             text-transform: uppercase;
+
+            &.rs-calendar-header-error {
+              color: ${p => p.theme.color.slateGray};
+
+              :hover {
+                color: ${p => p.theme.color.slateGray};
+              }
+            }
           }
         }
       }
@@ -137,7 +147,7 @@ const Box = styled.div`
         padding: 0.75rem 0.5rem 0;
 
         .rs-calendar-table-cell {
-          padding: 0;
+          padding: 0 0 0.25rem 0;
           width: 33px;
 
           &.rs-calendar-table-cell-in-range:before {
@@ -154,6 +164,19 @@ const Box = styled.div`
             justify-content: center;
             padding-bottom: 3px;
             width: 33px;
+          }
+          :hover .rs-calendar-table-cell-content {
+            background-color: ${p => p.theme.color.blueYonder[25]};
+            color: ${p => p.theme.color.blueYonder[100]};
+          }
+          &[role='columnheader'] .rs-calendar-table-cell-content,
+          &[role='columnheader']:hover .rs-calendar-table-cell-content {
+            background-color: transparent;
+            color: ${p => p.theme.color.slateGray};
+          }
+          &.rs-calendar-table-cell-disabled .rs-calendar-table-cell-content {
+            background-color: transparent;
+            color: ${p => p.theme.color.lightGray};
           }
           &.rs-calendar-table-cell-selected > .rs-calendar-table-cell-content {
             background-color: ${p => p.theme.color.blueGray[100]};

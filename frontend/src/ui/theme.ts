@@ -9,7 +9,8 @@ export const theme = {
       100: '#5697D2',
       25: '#D4E5F4'
     },
-    blueWonder: {
+    blueYonder: {
+      100: '#567A9E',
       25: '#D4DDE7'
     },
     charcoal: '#3B4559',

@@ -10,49 +10,117 @@ from src.pipeline.processing import coalesce, concatenate_columns
 
 
 @task(checkpoint=False)
-def extract_french_vessels():
+def extract_french_vessels() -> pd.DataFrame:
+    """
+    Extracts french vessels from Navpro.
+
+    Returns:
+        pd.DataFrame: french vessels
+    """
     return extract("ocan", "ocan/french_vessels.sql")
 
 
 @task(checkpoint=False)
-def extract_eu_vessels():
+def extract_eu_vessels() -> pd.DataFrame:
+    """
+    Extracts EU vessels from Navpro.
+
+    Returns:
+        pd.DataFrame: EU vessels
+    """
     return extract("ocan", "ocan/eu_vessels.sql")
 
 
 @task(checkpoint=False)
-def extract_non_eu_vessels():
+def extract_non_eu_vessels() -> pd.DataFrame:
+    """
+    Extracts non-EU vessels from Navpro.
+
+    Returns:
+        pd.DataFrame: non-EU vessels
+    """
     return extract("ocan", "ocan/non_eu_vessels.sql")
 
 
 @task(checkpoint=False)
-def extract_vessels_operators():
+def extract_vessels_operators() -> pd.DataFrame:
+    """
+    Extracts vessel operators (in the sense of "the people or organisation that operate
+    or manage the operations of the vessel") data from Poséidon (name, contact info).
+
+    Returns:
+        pd.DataFrame: Vessels operators
+    """
     return extract("fmc", "fmc/vessels_operators.sql")
 
 
 @task(checkpoint=False)
-def extract_french_vessels_navigation_licences():
+def extract_french_vessels_navigation_licences() -> pd.DataFrame:
+    """
+    Extracts the navigation licence sailing category and expiration date of french
+    vessels from Gina.
+
+    Returns:
+        pd.DataFrame: French vessels navigation licence information
+    """
     return extract("ocan", "ocan/french_vessels_navigation_licences.sql")
 
 
 @task(checkpoint=False)
 def extract_control_charters() -> pd.DataFrame:
     """
-    Extract vessels under control charter.
+    Extracts vessels with the information of whether they are under control charter or
+    not from Monitorfish, based on historical control data.
+
+    Returns:
+        pd.DataFrame: Vessels with a boolean column `under_charter`
     """
     return extract("monitorfish_remote", "monitorfish/control_charter.sql")
 
 
 @task(checkpoint=False)
 def concat_merge_vessels(
-    french_vessels,
-    eu_vessels,
-    non_eu_vessels,
-    vessels_operators,
-    licences,
-    control_charters,
-):
+    french_vessels: pd.DataFrame,
+    eu_vessels: pd.DataFrame,
+    non_eu_vessels: pd.DataFrame,
+    vessels_operators: pd.DataFrame,
+    licences: pd.DataFrame,
+    control_charters: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Concatenates `french_vessels`, `eu_vessels` and `non_eu_vessels`, then performs a
+    left join of the resulting DataFrame with `vessels_operators`, `licences` and
+    `control_charters` successively.
+
+    Vessels, identified by their `id` should be unique :
+
+      - accross `french_vessels`, `eu_vessels` and `non_eu_vessels` : a given `id`
+        cannot be in more than one of the three DataFrames, and it must be present just
+        once (a single row)
+      - in  `vessels_operators`, `licences` and `control_charters`: a given `id` can be
+        in 1, 2 or all 3 DataFrames, but it cannot have more than one row in each
+        DataFrame.
+
+    Args:
+        french_vessels (pd.DataFrame): French vessels
+        eu_vessels (pd.DataFrame): EU vessels
+        non_eu_vessels (pd.DataFrame): non-EU vessels
+        vessels_operators (pd.DataFrame): vessels' operators data
+        licences (pd.DataFrame): french vessels navigation licences data
+        control_charters (pd.DataFrame): vessels under_charter status
+
+    Raises:
+        ValueError: if a vessel `id` is duplicated
+
+    Returns:
+        pd.DataFrame: merged vessels data
+    """
     all_vessels = pd.concat([french_vessels, eu_vessels, non_eu_vessels])
-    assert not all_vessels.duplicated(subset="id").any()
+
+    try:
+        assert not all_vessels.duplicated(subset="id").any()
+    except AssertionError:
+        raise ValueError("Several vessels have the same id. Cannot continue.")
 
     all_vessels = pd.merge(all_vessels, vessels_operators, on="id", how="left")
 
@@ -111,7 +179,17 @@ def concat_merge_vessels(
 
 
 @task(checkpoint=False)
-def clean_vessels(all_vessels):
+def clean_vessels(all_vessels: pd.DataFrame) -> pd.DataFrame:
+    """
+    Combines and concatenates data of some columns as coalesced values or lists (phone
+    numbers, emails...)
+
+    Args:
+        all_vessels (pd.DataFrame): Output of concat_merge_vessels
+
+    Returns:
+        pd.DataFrame: vessels data ready to be loaded.
+    """
 
     logger = prefect.context.get("logger")
 
@@ -238,7 +316,14 @@ def clean_vessels(all_vessels):
 
 
 @task(checkpoint=False)
-def load_vessels(all_vessels):
+def load_vessels(all_vessels: pd.DataFrame):
+    """
+    Replaces the content of the `vessels` table with the content of the `all_vessels`
+    DataFrame.
+
+    Args:
+        all_vessels (pd.DataFrame): vessels data to load
+    """
 
     all_vessels["width"] = np.asarray(all_vessels["width"])
 

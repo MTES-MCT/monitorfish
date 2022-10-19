@@ -3,7 +3,7 @@ import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import CircleStyle from 'ol/style/Circle'
 import { EstimatedPosition } from '../../domain/entities/estimatedPosition'
-import { getColorWithAlpha } from '../../utils'
+import { getColorWithAlpha } from './utils'
 
 const estimatedPositionStyleCache = new Map()
 

@@ -152,11 +152,6 @@ export const getLocalStorageState = (defaultValue, key) => {
     : defaultValue
 }
 
-export const getColorWithAlpha = (color, alpha) => {
-  const [r, g, b] = Array.from(asArray(color))
-  return asString([r, g, b, alpha])
-}
-
 const SECONDS = 60
 const MINUTES = 60
 const HOURS = 24

@@ -4,7 +4,7 @@ import Layers, { getLayerNameNormalized } from '../domain/entities/layers'
 import { showSimplifiedGeometries, showWholeGeometries } from '../domain/shared_slices/Regulatory'
 import { getVectorOLLayer } from '../domain/use_cases/layer/regulation/showRegulatoryZone'
 
-export const metadataIsShowedPropertyName = 'metadataIsShowed'
+export const METADATA_IS_SHOWED = 'metadataIsShowed'
 const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5
 
 const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
@@ -169,18 +169,18 @@ function layersOfTypeRegulatoryLayerInCurrentMap (olLayer) {
 function addMetadataIsShowedProperty (lastShowedFeatures, layerToAddProperty) {
   const features = layerToAddProperty.getSource().getFeatures()
   if (features?.length) {
-    features.forEach(feature => feature.set(metadataIsShowedPropertyName, true))
+    features.forEach(feature => feature.set(METADATA_IS_SHOWED, true))
   } else if (lastShowedFeatures?.length) {
     lastShowedFeatures
-      .forEach(feature => feature.set(metadataIsShowedPropertyName, true))
+      .forEach(feature => feature.set(METADATA_IS_SHOWED, true))
   }
 }
 
 function removeMetadataIsShowedProperty (regulatoryLayers) {
   regulatoryLayers.forEach(layer => {
     layer.getSource().getFeatures()
-      .filter(feature => feature.get(metadataIsShowedPropertyName))
-      .forEach(feature => feature.set(metadataIsShowedPropertyName, false))
+      .filter(feature => feature.get(METADATA_IS_SHOWED))
+      .forEach(feature => feature.set(METADATA_IS_SHOWED, false))
   })
 }
 

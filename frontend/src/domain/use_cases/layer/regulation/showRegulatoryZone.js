@@ -12,7 +12,6 @@ import layer from '../../../shared_slices/Layer'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../entities/map'
 import { getRegulatoryZoneFromAPI } from '../../../../api/geoserver'
-import { getHashDigitsFromRegulation } from '../../../../layers/utils'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
@@ -44,13 +43,12 @@ const showRegulatoryZone = zoneToShow => dispatch => {
 
 export const getVectorOLLayer = (dispatch, getState) => layerToShow => {
   const name = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
-  const randomDigits = getHashDigitsFromRegulation(layerToShow)
   const source = getRegulatoryVectorSource(dispatch, getState)(layerToShow)
 
   const _layer = new VectorImageLayer({
     source,
     className: 'regulatory',
-    style: feature => [getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(feature, randomDigits)]
+    style: feature => [getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(feature, layerToShow)]
   })
   _layer.name = name
 

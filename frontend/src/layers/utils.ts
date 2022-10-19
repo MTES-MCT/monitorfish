@@ -15,7 +15,7 @@ export function getHashDigitsFromRegulation(regulation: BaseRegulatoryZone | nul
   const biggerString = stringToHash.repeat(3)
   const { length } = biggerString
 
-  // DJB2 hash function to derive a number from tbluche string
+  // DJB2 hash function to derive a number from the string
   let h = 5381
   /* eslint-disable-next-line no-plusplus */
   for (let i = 0; i < length; i++) {

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import BaseMap from './BaseMap'
-import LayerDetailsBox from './controls/LayerDetailsBox'
+import { LayerDetailsBox } from './controls/LayerDetailsBox'
 import VesselsTracksLayer from '../../layers/VesselsTracksLayer'
 import VesselsLayer from '../../layers/VesselsLayer'
 import FilterLayer from '../../layers/FilterLayer'
@@ -30,7 +30,6 @@ import VesselAlertAndBeaconMalfunctionLayer from '../../layers/VesselAlertAndBea
 import VesselInfractionSuspicionLayer from '../../layers/VesselInfractionSuspicionLayer'
 
 const Map = () => {
-  const gears = useSelector(state => state.gear.gears)
   const isAdmin = useSelector(state => state.global.isAdmin)
 
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
@@ -90,7 +89,7 @@ const Map = () => {
       <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
       <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
       <VesselTrackCardOverlay feature={currentFeature}/>
-      <LayerDetailsBox gears={gears} feature={currentFeature}/>
+      {currentFeature && <LayerDetailsBox feature={currentFeature}/>}
       <InterestPointLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <RegulatoryPreviewLayer />
     </BaseMap>

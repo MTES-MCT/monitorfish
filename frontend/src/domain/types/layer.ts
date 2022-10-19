@@ -1,4 +1,4 @@
-export type AdministrativeOrRegulatoryLayer = {
+export type ShowAdministrativeOrRegulatoryLayer = {
   namespace: string
   topic: string | null
   type: string

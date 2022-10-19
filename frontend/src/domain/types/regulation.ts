@@ -1,7 +1,12 @@
 import type { GeoJSONGeometry } from './geojson'
 
+export type BaseRegulatoryZone = {
+  topic: string
+  zone: string
+}
+
 // TODO Why do we have that both in layer.ts and regulation.ts?
-export type RegulatoryZone = {
+export type RegulatoryZone = BaseRegulatoryZone & {
   color: string
   gearRegulation: GearRegulation
   geometry: GeoJSONGeometry
@@ -12,9 +17,7 @@ export type RegulatoryZone = {
   regulatoryReference: RegulatoryText[]
   showed: boolean
   speciesRegulation: SpeciesRegulation
-  topic: string
   uuid: string
-  zone: string
 }
 
 export type RegulatoryText = {

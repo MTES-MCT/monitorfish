@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 
-import Layers, { getGearCategory } from '../../../../domain/entities/layers'
+import Layers from '../../../../domain/entities/layers'
 import showRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
@@ -13,7 +13,7 @@ import { showOrHideMetadataIcon } from '../RegulatoryZone'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
 import { COLORS } from '../../../../constants/constants'
-import { getHash } from '../../../../utils'
+import { getHashDigitsFromRegulation } from '../../../../layers/utils'
 
 const RegulatoryLayerSearchResultZone = props => {
   const {
@@ -23,9 +23,6 @@ const RegulatoryLayerSearchResultZone = props => {
   const dispatch = useDispatch()
 
   const {
-    gears
-  } = useSelector(state => state.gear)
-  const {
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
   const zoneIsChecked = useSelector(state => !!state.regulatoryLayerSearch
@@ -33,7 +30,8 @@ const RegulatoryLayerSearchResultZone = props => {
   const zoneIsAlreadySelected = useSelector(state => state.regulatory
     .selectedRegulatoryLayers[regulatoryZone.topic]?.find(zone => zone.id === regulatoryZone.id))
 
-  const [zoneStyle, setZoneStyle] = useState(null)
+  const randomDigits = getHashDigitsFromRegulation(regulatoryZone)
+  const zoneStyle = getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(undefined, randomDigits)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
   const showOrHideRegulatoryZoneMetadata = _regulatoryZone => {
@@ -49,19 +47,6 @@ const RegulatoryLayerSearchResultZone = props => {
   useEffect(() => {
     showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown)
   }, [regulatoryZoneMetadata, regulatoryZone])
-
-  useEffect(() => {
-    if (!isOpen) {
-      return
-    }
-
-    if (regulatoryZone.zone && regulatoryZone.topic && gears) {
-      const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
-      const gearCategory = getGearCategory(regulatoryZone.gears, gears)
-
-      setZoneStyle(getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
-    }
-  }, [regulatoryZone, isOpen, gears])
 
   return (
     <Zone>
@@ -141,17 +126,17 @@ const Zone = styled.span`
   color: ${COLORS.gunMetal};
   padding-top: 1px;
   padding-bottom: 5px;
-  
+
   .rs-checkbox-checker {
     padding-top: 24px;
     margin-left: 0;
   }
-  
+
   .rs-checkbox-inline {
     width: 36px;
     margin-left: 0px;
   }
-  
+
   :hover {
     background: ${COLORS.shadowBlueLittleOpacity};
   }

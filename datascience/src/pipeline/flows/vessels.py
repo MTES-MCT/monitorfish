@@ -116,11 +116,6 @@ def concat_merge_vessels(
     """
     all_vessels = pd.concat([french_vessels, eu_vessels, non_eu_vessels])
 
-    try:
-        assert not all_vessels.duplicated(subset="id").any()
-    except AssertionError:
-        raise ValueError("Several vessels have the same id. Cannot continue.")
-
     all_vessels = pd.merge(all_vessels, vessels_operators, on="id", how="left")
 
     all_vessels = pd.merge(all_vessels, licences, on="id", how="left")
@@ -128,6 +123,11 @@ def concat_merge_vessels(
     all_vessels = pd.merge(all_vessels, control_charters, on="id", how="left")
 
     all_vessels = all_vessels.fillna({"under_charter": False})
+
+    try:
+        assert not all_vessels.duplicated(subset="id").any()
+    except AssertionError:
+        raise ValueError("Several vessels have the same id. Cannot continue.")
 
     dtypes = {
         "imo": "category",

@@ -13,7 +13,6 @@ import { showOrHideMetadataIcon } from '../RegulatoryZone'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
 import { COLORS } from '../../../../constants/constants'
-import { getHashDigitsFromRegulation } from '../../../../layers/utils'
 
 const RegulatoryLayerSearchResultZone = props => {
   const {
@@ -30,8 +29,7 @@ const RegulatoryLayerSearchResultZone = props => {
   const zoneIsAlreadySelected = useSelector(state => state.regulatory
     .selectedRegulatoryLayers[regulatoryZone.topic]?.find(zone => zone.id === regulatoryZone.id))
 
-  const randomDigits = getHashDigitsFromRegulation(regulatoryZone)
-  const zoneStyle = getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(undefined, randomDigits)
+  const zoneStyle = getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(undefined, regulatoryZone)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
   const showOrHideRegulatoryZoneMetadata = _regulatoryZone => {

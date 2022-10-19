@@ -56,8 +56,8 @@ export type FishingPeriod = {
   annualRecurrence: boolean
   authorized: boolean
   dateRanges: [DateInterval]
-  // TODO Check that.
-  dates: [Date]
+  // ISO-8601 date
+  dates: [string]
   daytime: boolean
   holidays: boolean
   otherInfo: string

@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, task
@@ -324,8 +323,6 @@ def load_vessels(all_vessels: pd.DataFrame):
     Args:
         all_vessels (pd.DataFrame): vessels data to load
     """
-
-    all_vessels["width"] = np.asarray(all_vessels["width"])
 
     load(
         all_vessels,

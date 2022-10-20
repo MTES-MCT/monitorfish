@@ -35,7 +35,7 @@ licences_by_num_immat AS (
     
 licences_by_floater AS (
     SELECT
-        n.id_nav_flotteur AS id_nav_flotteur_gin,
+        n.id_nav_flotteur AS id,
         licences_by_num_immat.num_immat,
         licences_by_num_immat.date_expiration AS nav_licence_expiration_date,
         licences_by_num_immat.sailing_category,
@@ -47,7 +47,7 @@ licences_by_floater AS (
 )
 
 SELECT 
-    id_nav_flotteur_gin,
+    id,
     nav_licence_expiration_date,
     sailing_category
 FROM licences_by_floater

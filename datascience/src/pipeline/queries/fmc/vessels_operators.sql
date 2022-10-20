@@ -1,5 +1,5 @@
 SELECT
-    n.id_nav_flotteur AS id_nav_flotteur_pos,
+    n.id_nav_flotteur AS id,
     a.nom AS operator_name_pos,
     a.email AS operator_email_pos,
     a.tel_fixe_1 AS operator_phone_1_pos,

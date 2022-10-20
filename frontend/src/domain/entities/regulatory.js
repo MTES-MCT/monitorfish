@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { formatDataForSelectPicker, getTextForSearch } from '../../utils'
 import Layers from './layers'
 
@@ -369,6 +368,7 @@ export const FISHING_PERIOD_KEYS = {
   ALWAYS: 'always'
 }
 
+/* eslint-disable sort-keys-fix/sort-keys-fix */
 // We must keep this order as dayjs use this order with digits of range [0, 6]
 export const WEEKDAYS = {
   dimanche: 'D',
@@ -379,6 +379,7 @@ export const WEEKDAYS = {
   vendredi: 'V',
   samedi: 'S'
 }
+/* eslint-enable sort-keys-fix/sort-keys-fix */
 
 export const DEFAULT_MENU_CLASSNAME = 'new-regulation-select-picker'
 

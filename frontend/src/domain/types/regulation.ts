@@ -5,19 +5,17 @@ export type BaseRegulatoryZone = {
   zone: string
 }
 
-// TODO Why do we have that both in layer.ts and regulation.ts?
+// TODO Clean all regulations types
 export type RegulatoryZone = BaseRegulatoryZone & {
   color: string
   gearRegulation: GearRegulation
   geometry: GeoJSONGeometry
-  // TODO Check this added prop.
   id: string
   lawType: string
   region: string
   regulatoryReference: RegulatoryText[]
   showed: boolean
   speciesRegulation: SpeciesRegulation
-  uuid: string
 }
 
 export type RegulatoryText = {

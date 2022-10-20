@@ -1,4 +1,5 @@
-export type ShowAdministrativeOrRegulatoryLayer = {
+export type AdministrativeOrRegulatoryLayerIdentity = {
+  id: string
   namespace: string
   topic: string | null
   type: string

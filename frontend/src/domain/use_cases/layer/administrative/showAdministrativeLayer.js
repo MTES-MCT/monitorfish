@@ -21,19 +21,19 @@ const setIrretrievableFeaturesEvent = error => {
 }
 /**
  *
- * @param {Object} layerToShow
- * @param {string} layerToShow.type
- * @param {string} layerToShow.zone
+ * @param {Object} nextVisibleLayer
+ * @param {string} nextVisibleLayer.type
+ * @param {string} nextVisibleLayer.zone
  * @returns
  */
-const showAdministrativeLayer = layerToShow => dispatch => {
-  currentNamespace = layerToShow.namespace
+const showAdministrativeLayer = nextVisibleLayer => dispatch => {
+  currentNamespace = nextVisibleLayer.namespace
   const {
     addShowedLayer
   } = layer[currentNamespace].actions
 
   batch(() => {
-    dispatch(addShowedLayer(layerToShow))
+    dispatch(addShowedLayer(nextVisibleLayer))
   })
 }
 

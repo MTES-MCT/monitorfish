@@ -7,7 +7,7 @@ import { COLORS } from '../../constants/constants'
 import Layers from '../../domain/entities/layers'
 import { theme } from '../../ui/theme'
 import { getHashDigitsFromRegulation } from '../utils'
-import { getIsUnauthorizedPeriod } from './unAuthorizedPeriod'
+import { isForbiddenPeriod } from './isForbiddenPeriod'
 import { getColorWithAlpha, getStyle } from './utils'
 
 import type { BaseRegulatoryZone } from '../../domain/types/regulation'
@@ -211,10 +211,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
     case Layers.REGULATORY.code:
       return (feature: Feature | undefined, regulation: BaseRegulatoryZone | null) => {
         const randomDigits = getHashDigitsFromRegulation(regulation)
-        const isUnAuthorized = getIsUnauthorizedPeriod(feature)
+        const isForbidden = isForbiddenPeriod(feature)
         const metadataIsShowed = feature?.get('metadataIsShowed')
 
-        if (isUnAuthorized) {
+        if (isForbidden) {
           return getStyle(getColorWithAlpha(theme.color.lightCoral, 0.75), metadataIsShowed)
         }
 

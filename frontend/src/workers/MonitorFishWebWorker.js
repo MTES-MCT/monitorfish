@@ -43,7 +43,7 @@ class MonitorFishWebWorker {
     return feature.properties?.id || feature.id.split('.')[1]
   }
 
-  getGeometryWithoutRegulationRef (features) {
+  getIdToGeometryObject (features) {
     const geometryListAsObject = {}
     features.features.forEach(feature => {
       geometryListAsObject[this.#getGeometryIdFromFeatureId(feature)] = feature.geometry
@@ -110,6 +110,7 @@ class MonitorFishWebWorker {
       featuresWithoutGeometry,
       uniqueFeaturesWithoutGeometryByTopics: layerTopicArray
     } = this.#getLayerTopicList(features, speciesByCode)
+
     const layersTopicsByRegulatoryTerritory = layerTopicArray.reduce((accumulatedObject, zone) => {
       const {
         lawType,

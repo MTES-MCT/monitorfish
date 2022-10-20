@@ -1,7 +1,3 @@
-import Fuse from 'fuse.js'
-import _ from 'lodash'
-
-import { getAlertNameFromType } from '../../features/side_window/alerts_reportings/utils'
 import { Reporting, ReportingType } from '../types/reporting'
 
 type ReportingTypeCharacteristic = {
@@ -102,65 +98,4 @@ export const getYearsToReportingList = (
   })
 
   return nextYearsToReporting
-}
-
-export const getReportingOrigin = (reporting, isHovering) => {
-  if (reporting.type === ReportingType.ALERT) {
-    return 'Alerte auto.'
-  }
-
-  // eslint-disable-next-line default-case
-  switch (reporting.value.reportingActor) {
-    case ReportingOriginActor.UNIT.code:
-      return `${reporting.value.unit}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    case ReportingOriginActor.OPS.code:
-      return `Pôle OPS (${reporting.value.authorTrigram})`
-    case ReportingOriginActor.SIP.code:
-      return `Pôle SIP (${reporting.value.authorTrigram})`
-  }
-
-  if (reporting.type === ReportingType.OBSERVATION) {
-    return ''
-  }
-
-  switch (reporting.value.reportingActor) {
-    case ReportingOriginActor.UNIT.code:
-      return `${reporting.value.unit}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    case ReportingOriginActor.OPS.code:
-      return `Pôle OPS (${reporting.value.authorTrigram})`
-    case ReportingOriginActor.SIP.code:
-      return `Pôle SIP (${reporting.value.authorTrigram})`
-    case ReportingOriginActor.DIRM.code:
-      return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    case ReportingOriginActor.DML.code:
-      return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    case ReportingOriginActor.OTHER.code:
-      return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    default:
-      return ''
-  }
-}
-
-export function getReportingTitle(reporting: Reporting, isHovering: boolean = false): string {
-  if (reporting.type === ReportingType.ALERT) {
-    return getAlertNameFromType(reporting.value.type)
-  }
-
-  return isHovering ? `${reporting.value.title}: ${reporting.value.description}` : reporting.value.title
-}
-
-export const REPORTINGS_SEARCH_OPTIONS: Fuse.IFuseOptions<Reporting> = {
-  distance: 50,
-  getFn: (reporting, path) => {
-    const value = Fuse.config.getFn(reporting, path)
-
-    if (_.isEqual(path, ['reportingTitle'])) {
-      return getReportingTitle(reporting)
-    }
-
-    return value
-  },
-  includeScore: true,
-  keys: ['vesselName', 'internalReferenceNumber', 'externalReferenceNumber', 'ircs', 'dml', 'reportingTitle'],
-  threshold: 0.4
 }

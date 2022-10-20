@@ -5,7 +5,7 @@ import { createGlobalStyle } from 'styled-components'
 
 import { DateRangePicker } from '../ui/DateRangePicker'
 
-import type { DateRange } from 'rsuite/esm/DateRangePicker'
+import type { DateRange } from '../types'
 
 const GlobalStyle = createGlobalStyle`
   * {

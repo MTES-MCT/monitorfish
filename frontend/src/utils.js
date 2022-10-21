@@ -152,22 +152,6 @@ export const getLocalStorageState = (defaultValue, key) => {
     : defaultValue
 }
 
-export const getHash = string => {
-  const len = string.length
-  let h = 5381
-
-  for (let i = 0; i < len; i++) {
-    h = h * 33 ^ string.charCodeAt(i)
-  }
-
-  return h >>> 0
-}
-
-export const getColorWithAlpha = (color, alpha) => {
-  const [r, g, b] = Array.from(asArray(color))
-  return asString([r, g, b, alpha])
-}
-
 const SECONDS = 60
 const MINUTES = 60
 const HOURS = 24

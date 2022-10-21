@@ -6,12 +6,11 @@ import { all } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
 import simplify from 'simplify-geojson'
 
-import Layers, { getGearCategory } from '../../../entities/layers'
+import Layers from '../../../entities/layers'
 import { animateToRegulatoryLayer } from '../../../shared_slices/Map'
 import layer from '../../../shared_slices/Layer'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../entities/map'
-import { getHash } from '../../../../utils'
 import { getRegulatoryZoneFromAPI } from '../../../../api/geoserver'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
@@ -27,7 +26,7 @@ const setIrretrievableFeaturesEvent = error => {
 
 /**
  * Show a Regulatory zone
- * @param zoneToShow {AdministrativeOrRegulatoryLayer} - The zone to show
+ * @param zoneToShow {import('../../../types/layer').AdministrativeOrRegulatoryLayerIdentity} - The zone to show
  */
 const showRegulatoryZone = zoneToShow => dispatch => {
   currentNamespace = zoneToShow.namespace
@@ -42,19 +41,14 @@ const showRegulatoryZone = zoneToShow => dispatch => {
   dispatch(addShowedLayer(zoneToShow))
 }
 
-export const getVectorOLLayer = (dispatch, getState) => layerToShow => {
-  const { gears } = getState().gear
-  const hash = getHash(`${layerToShow.topic}:${layerToShow.zone}`)
-  const name = `${Layers.REGULATORY.code}:${layerToShow.topic}:${layerToShow.zone}`
-
-  const source = getRegulatoryVectorSource(dispatch, getState)(layerToShow)
-
-  const gearCategory = getGearCategory(layerToShow.gears, gears)
+export const getVectorOLLayer = (dispatch, getState) => nextVisibleLayer => {
+  const name = `${Layers.REGULATORY.code}:${nextVisibleLayer.topic}:${nextVisibleLayer.zone}`
+  const source = getRegulatoryVectorSource(dispatch, getState)(nextVisibleLayer)
 
   const _layer = new VectorImageLayer({
     source,
     className: 'regulatory',
-    style: feature => [getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(feature, hash, gearCategory)]
+    style: feature => [getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(feature, nextVisibleLayer)]
   })
   _layer.name = name
 

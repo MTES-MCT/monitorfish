@@ -12,7 +12,7 @@ import { SideWindow } from './SideWindow'
 export function SideWindowLauncher() {
   const dispatch = useAppDispatch()
   const newWindowRef = useRef() as MutableRefObject<HTMLDivElement>
-  const forceUpdate = useForceUpdate()
+  const { forceUpdate } = useForceUpdate()
   useEffect(() => forceUpdate(), [forceUpdate])
 
   return (

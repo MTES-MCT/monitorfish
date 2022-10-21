@@ -206,11 +206,14 @@ const BaseMap = props => {
       {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates}/>}
       {showAttributions && <MapAttributionsBox/>}
       {map && Children.map(children, child => {
+        if (!child) {
+          return null
+        }
+
         const props = { map }
         if (child.props.hasClickEvent) {
           props.mapClickEvent = mapClickEvent
         }
-
         return cloneElement(child, props)
       })}
     </MapWrapper>

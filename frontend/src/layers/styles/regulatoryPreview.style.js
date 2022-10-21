@@ -1,8 +1,8 @@
 import { Style } from 'ol/style'
 import Stroke from 'ol/style/Stroke'
 import Fill from 'ol/style/Fill'
-import { getColorWithAlpha } from '../../utils'
 import { COLORS } from '../../constants/constants'
+import { getColorWithAlpha } from './utils'
 
 export const regulatoryPreviewStyle = new Style({
   stroke: new Stroke({

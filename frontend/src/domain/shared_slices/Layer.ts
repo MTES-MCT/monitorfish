@@ -3,7 +3,8 @@
 import { createGenericSlice, getLocalStorageState } from '../../utils'
 import Layers, { getLayerNameNormalized } from '../entities/layers'
 
-import type { Slice } from '@reduxjs/toolkit'
+import type { AdministrativeOrRegulatoryLayerIdentity } from '../types/layer'
+import type { PayloadAction, Slice } from '@reduxjs/toolkit'
 
 const layersShowedOnMapLocalStorageKey = 'layersShowedOnMap'
 
@@ -51,11 +52,9 @@ const reducers = {
   },
   /**
    * Show a Regulatory or Administrative layer
-   * @param {Object=} state
-   * @param {{payload: AdministrativeOrRegulatoryLayer | null}} action - The layer to show
    */
-  addShowedLayer(state, action) {
-    const { gearRegulation, id, namespace, topic, type, zone } = action.payload
+  addShowedLayer(state, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
+    const { id, namespace, topic, type, zone } = action.payload
 
     if (type !== Layers.VESSELS.code) {
       const searchedLayerName = getLayerNameNormalized({ topic, type, zone })
@@ -63,13 +62,13 @@ const reducers = {
 
       if (!found) {
         state.showedLayers = state.showedLayers.concat({
-          gears: gearRegulation,
           id,
           namespace,
           topic,
           type,
           zone
         })
+
         if (namespace !== 'backoffice') {
           window.localStorage.setItem(
             `${namespace}${layersShowedOnMapLocalStorageKey}`,
@@ -101,10 +100,8 @@ const reducers = {
 
   /**
    * Remove a Regulatory or Administrative layer
-   * @param {Object=} state
-   * @param {{payload: AdministrativeOrRegulatoryLayer | null}} action - The layer to remove
    */
-  removeShowedLayer(state, action) {
+  removeShowedLayer(state, action: PayloadAction<AdministrativeOrRegulatoryLayerIdentity>) {
     const { namespace, topic, type, zone } = action.payload
 
     if (type === Layers.VESSELS.code) {

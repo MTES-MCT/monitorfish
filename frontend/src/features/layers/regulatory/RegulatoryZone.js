@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { COLORS } from '../../../constants/constants'
-import Layers, { getGearCategory } from '../../../domain/entities/layers'
+import Layers from '../../../domain/entities/layers'
 
 import showRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
@@ -23,7 +23,6 @@ import {
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened
 } from '../../../domain/shared_slices/Regulatory'
-import { getHash } from '../../../utils'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../layers/styles/administrativeAndRegulatoryLayers.style'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
@@ -58,13 +57,12 @@ const RegulatoryZone = props => {
     isReadyToShowRegulatoryLayers,
     regulatoryZoneMetadata
   } = useSelector(state => state.regulatory)
-  const gears = useSelector(state => state.gear.gears)
   const zoneIsShown = useSelector(state =>
     state.layer.showedLayers.some(layer => layer.id === regulatoryZone?.id))
 
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)
-  const [vectorLayerStyle, setVectorLayerStyle] = useState(false)
+  const vectorLayerStyle = getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(undefined, regulatoryZone)
 
   const callShowRegulatoryZoneMetadata = zone => {
     if (!metadataIsShown) {
@@ -75,14 +73,6 @@ const RegulatoryZone = props => {
       setMetadataIsShown(false)
     }
   }
-
-  useEffect(() => {
-    if (regulatoryZone.zone && regulatoryZone.topic && gears) {
-      const hash = getHash(`${regulatoryZone.topic}:${regulatoryZone.zone}`)
-      const gearCategory = getGearCategory(regulatoryZone.gearsRegulation, gears)
-      setVectorLayerStyle(getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(null, hash, gearCategory))
-    }
-  }, [regulatoryZone, gears])
 
   useEffect(() => {
     showOrHideMetadataIcon(regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown)

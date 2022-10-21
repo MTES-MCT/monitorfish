@@ -1,20 +1,21 @@
 import type { GeoJSONGeometry } from './geojson'
 
-// TODO Why do we have that both in layer.ts and regulation.ts?
-export type RegulatoryZone = {
+export type BaseRegulatoryZone = {
+  topic: string
+  zone: string
+}
+
+// TODO Clean all regulations types
+export type RegulatoryZone = BaseRegulatoryZone & {
   color: string
   gearRegulation: GearRegulation
   geometry: GeoJSONGeometry
-  // TODO Check this added prop.
   id: string
   lawType: string
   region: string
   regulatoryReference: RegulatoryText[]
   showed: boolean
   speciesRegulation: SpeciesRegulation
-  topic: string
-  uuid: string
-  zone: string
 }
 
 export type RegulatoryText = {
@@ -53,8 +54,8 @@ export type FishingPeriod = {
   annualRecurrence: boolean
   authorized: boolean
   dateRanges: [DateInterval]
-  // TODO Check that.
-  dates: [Date]
+  // ISO-8601 date
+  dates: [string]
   daytime: boolean
   holidays: boolean
   otherInfo: string

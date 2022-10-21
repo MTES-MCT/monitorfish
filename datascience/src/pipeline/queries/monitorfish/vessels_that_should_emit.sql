@@ -6,7 +6,8 @@ SELECT
     v.vessel_name,
     v.flag_state,
     b.beacon_status,
-    b.beacon_number
+    b.beacon_number,
+    b.satellite_operator_id
 FROM beacons b
 JOIN vessels v
 ON v.id = b.vessel_id

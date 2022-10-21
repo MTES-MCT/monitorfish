@@ -91,3 +91,18 @@ def get_monitorfish_healthcheck_mock_factory(
         )
 
     return get_monitorfish_healthcheck
+
+
+def extract_satellite_operators_statuses_mock_factory(
+    operator_1_status: bool = None, operator_2_status: bool = None
+):
+    @task(checkpoint=False)
+    def extract_satellite_operators_statuses() -> pd.DataFrame:
+        return pd.DataFrame(
+            {
+                "satellite_operator_id": [1, 2],
+                "operator_is_up": [operator_1_status, operator_2_status],
+            }
+        )
+
+    return extract_satellite_operators_statuses

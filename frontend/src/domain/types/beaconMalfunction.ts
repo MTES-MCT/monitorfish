@@ -86,3 +86,10 @@ export type VesselBeaconMalfunctionsResume = {
   numberOfBeaconsAtPort: number
   numberOfBeaconsAtSea: number
 }
+
+export type BeaconMalfunctionStageColumnValue = {
+  code: string
+  description?: string
+  isColumn: boolean
+  title: string
+}

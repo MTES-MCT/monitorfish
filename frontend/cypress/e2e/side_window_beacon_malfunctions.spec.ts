@@ -10,7 +10,6 @@ context('Side window beacon malfunctions', () => {
   it('A beacon malfunction card Should be moved in the Board', () => {
     // Given
     cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
-    cy.request('PUT', 'bff/v1/beacon_malfunctions/1', { stage: 'INITIAL_ENCOUNTER' })
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(0)
@@ -173,35 +172,36 @@ context('Side window beacon malfunctions', () => {
     // Check the comments order
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comments-number"]').contains('2 commentaires')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').should('have.length', 4)
-    const twoWeeksBefore = new Date()
-    twoWeeksBefore.setDate(twoWeeksBefore.getDate() - 14)
-    const twoWeeksBeforeAsString = getDate(twoWeeksBefore.toUTCString())
-    if (!twoWeeksBeforeAsString) {
-      throw new Error('`twoWeeksBeforeAsString` is undefined.')
-    }
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(0).contains(twoWeeksBeforeAsString)
     const oneWeeksBefore = new Date()
     oneWeeksBefore.setDate(oneWeeksBefore.getDate() - 7)
     const oneWeekBeforeAsString = getDate(oneWeeksBefore.toUTCString())
     if (!oneWeekBeforeAsString) {
       throw new Error('`oneWeekBeforeAsString` is undefined.')
     }
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(1).contains(oneWeekBeforeAsString)
+    const fourDaysBefore = new Date()
+    fourDaysBefore.setDate(fourDaysBefore.getDate() - 4)
+    const fourDaysBeforeAsString = getDate(fourDaysBefore.toUTCString())
+    if (!fourDaysBeforeAsString) {
+      throw new Error('`fourDaysBeforeAsString` is undefined.')
+    }
+    cy.wait(200)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(0).contains(oneWeekBeforeAsString)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(1).contains(fourDaysBeforeAsString)
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(2).contains('Hier')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(3).contains("Aujourd'hui")
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-action-content"]').should('have.length', 3)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-content"]').should('have.length', 2)
+
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-action-content"]')
       .eq(0)
-      .contains('Le statut du ticket a été modifié, de Navire à quai à Activité détectée.')
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-action-content"]')
-      .eq(2)
-      .contains('Le ticket a été déplacé de Premier contact à Relance pour reprise.')
-
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-content"]').should('have.length', 2)
+      .contains('Avarie à quai ouverte dans MonitorFish')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-content"]')
       .eq(0)
       .contains("Ceci est le premier commentaire de la journée ! L'oiseau est dans le nid.")
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-action-content"]')
+      .eq(1)
+      .contains('Le statut du ticket a été modifié, de Navire à quai à Activité détectée.')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-content"]')
       .eq(1)
       .contains(
@@ -209,6 +209,9 @@ context('Side window beacon malfunctions', () => {
           'Après avoir surexploité les stocks de poissons en surface, les flottes de pêche industrielles se sont tournées vers les ' +
           'grands fonds pour trouver la ressource qui leur faisait défaut.'
       )
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-action-content"]')
+      .eq(2)
+      .contains('Le ticket a été déplacé de Premier contact à Relance pour reprise.')
 
     // Show vessel on map
     const oneWeeksBeforeDate = getUtcizedDayjs().subtract(8, 'days')
@@ -391,5 +394,32 @@ context('Side window beacon malfunctions', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-sending-notification"]').contains(
       "En attente d’envoi d'une Relance pour avarie en mer"
     )
+  })
+
+  it('Archive all Should archive all cards the END OF MALFUNCTION column', () => {
+    // Given
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
+      .children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .should('have.length', 1)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
+      .children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .should('have.length', 0)
+
+    // When
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]').scrollIntoView()
+    cy.get('[data-cy="side-window-beacon-malfunctions-archive-all"]').click()
+
+    // Then
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-END_OF_MALFUNCTION"]')
+      .children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .should('have.length', 0)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
+      .children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .should('have.length', 1)
   })
 })

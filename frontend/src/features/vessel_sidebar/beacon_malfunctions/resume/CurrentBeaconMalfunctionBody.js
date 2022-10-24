@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { getMalfunctionStartDateText, vesselStatuses } from '../../../../domain/entities/beaconMalfunction'
+import { vesselStatuses } from '../../../../domain/entities/beaconMalfunction/constants'
 import { VesselStatusSelectValue } from '../../../side_window/beacon_malfunctions/VesselStatusSelectValue'
 import { SelectPicker } from 'rsuite'
 import updateBeaconMalfunctionFromKanban from '../../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useDispatch } from 'react-redux'
 import { ReactComponent as TimeAgoSVG } from '../../../icons/Label_horaire_VMS.svg'
+import { getMalfunctionStartDateText } from '../../../../domain/entities/beaconMalfunction'
 
 const CurrentBeaconMalfunctionBody = props => {
   const {

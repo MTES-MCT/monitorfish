@@ -1,14 +1,14 @@
 import { useDraggable } from '@dnd-kit/core'
 
 import { COLORS } from '../../../constants/constants'
-import { beaconMalfunctionsStages } from '../../../domain/entities/beaconMalfunction'
+import { beaconMalfunctionsStageColumnRecord } from '../../../domain/entities/beaconMalfunction/constants'
 
 export function Draggable({ children, id, stageId }) {
   const { attributes, listeners, setNodeRef } = useDraggable({
     data: {
       stageId
     },
-    disabled: stageId === beaconMalfunctionsStages.ARCHIVED.code,
+    disabled: stageId === beaconMalfunctionsStageColumnRecord.ARCHIVED.code,
     id
   })
 

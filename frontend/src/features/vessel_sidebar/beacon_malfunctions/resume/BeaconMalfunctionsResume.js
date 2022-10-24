@@ -1,9 +1,8 @@
-import React from 'react'
 import { getDateTime } from '../../../../utils'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { NoValue, Title, Zone } from '../../common_styles/common.style'
-import { vesselStatuses } from '../../../../domain/entities/beaconMalfunction'
+import { vesselStatuses } from '../../../../domain/entities/beaconMalfunction/constants'
 
 const BeaconMalfunctionsResume = props => {
   const {
@@ -69,7 +68,7 @@ const Table = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 10px 5px 0 15px; 
+  padding: 10px 5px 0 15px;
   width: inherit;
   display: table;
   margin: 0;

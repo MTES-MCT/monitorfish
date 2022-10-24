@@ -2,7 +2,7 @@ import { setSelectedVesselCustomTrackRequest, showVesselSidebarTab } from '../..
 import showVessel from './showVessel'
 import getVesselVoyage from './getVesselVoyage'
 import { VesselSidebarTab } from '../../entities/vessel'
-import { endOfBeaconMalfunctionReasons } from '../../entities/beaconMalfunction'
+import { endOfBeaconMalfunctionReasons } from '../../entities/beaconMalfunction/constants'
 import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
 
 /**

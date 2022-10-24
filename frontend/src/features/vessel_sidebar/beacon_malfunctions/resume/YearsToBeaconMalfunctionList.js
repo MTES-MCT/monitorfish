@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import YearBeaconMalfunctions from './YearBeaconMalfunctions'
 import { COLORS } from '../../../../constants/constants'

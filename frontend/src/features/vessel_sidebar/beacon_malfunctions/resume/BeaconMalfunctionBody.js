@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
@@ -6,9 +5,9 @@ import { getDateTime } from '../../../../utils'
 import {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionVesselStatus, endOfBeaconMalfunctionReasons,
-  getFirstVesselStatus,
   vesselStatuses
-} from '../../../../domain/entities/beaconMalfunction'
+} from '../../../../domain/entities/beaconMalfunction/constants'
+import { getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24
 

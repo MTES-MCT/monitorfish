@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { UserType } from '../../../domain/entities/beaconMalfunction'
+import { UserType } from '../../../domain/entities/beaconMalfunction/constants'
 import { getTime } from '../../../utils'
 import { BeaconMalfunctionDetailsType } from './beaconMalfunctions'
 

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
-import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconMalfunction'
+import { BeaconMalfunctionsTab } from '../../../domain/entities/beaconMalfunction/constants'
 import { COLORS } from '../../../constants/constants'
 import BeaconMalfunctionsResumeAndHistory from './resume/BeaconMalfunctionsResumeAndHistory'
 import BeaconMalfunctionDetails from './details/BeaconMalfunctionDetails'
@@ -83,7 +83,7 @@ const Wrapper = styled.div`
   .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-caret, .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-clean {
     top: 5px;
   }
-  
+
   .rs-btn-toggle {
     background: #C8DCE6 0% 0% no-repeat padding-box;
     border: 1px solid #707785;

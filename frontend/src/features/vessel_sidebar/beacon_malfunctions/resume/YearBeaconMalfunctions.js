@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
-import { getNumberOfSeaAndLandBeaconMalfunctions } from '../../../../domain/entities/beaconMalfunction'
 import BeaconMalfunction from './BeaconMalfunction'
+import { getNumberOfSeaAndLandBeaconMalfunctions } from '../../../../domain/entities/beaconMalfunction'
 
 const YearBeaconMalfunctions = props => {
   const {
@@ -115,7 +115,7 @@ const YearTitle = styled.span`
   width: 100%;
   display: flex;
   user-select: none;
-  ${props => props.isEmpty ? null : 'cursor: pointer;'} 
+  ${props => props.isEmpty ? null : 'cursor: pointer;'}
   ${props => !props.isOpen ? null : `border-bottom: 1px solid ${COLORS.gray};`}
   ${props => !props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null}
 `
@@ -141,7 +141,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-right: 10px;
   margin-top: 9px;
   float: right;
-  
+
   animation: ${props => props.$isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
 
   @keyframes chevron-layer-opening {
@@ -177,7 +177,7 @@ const Text = styled.div`
   font-size: 13px;
   font-weight: 500;
   width: 95%;
-  ${props => props.isEmpty ? null : 'cursor: pointer;'} 
+  ${props => props.isEmpty ? null : 'cursor: pointer;'}
 `
 
 export default YearBeaconMalfunctions

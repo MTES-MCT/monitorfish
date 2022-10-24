@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { Title, Zone } from '../../common_styles/common.style'

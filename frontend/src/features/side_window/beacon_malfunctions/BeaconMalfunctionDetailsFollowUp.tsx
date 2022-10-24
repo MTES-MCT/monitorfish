@@ -3,7 +3,11 @@ import { Toggle } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { BeaconMalfunctionVesselStatus, UserType, vesselStatuses } from '../../../domain/entities/beaconMalfunction'
+import {
+  BeaconMalfunctionVesselStatus,
+  UserType,
+  vesselStatuses
+} from '../../../domain/entities/beaconMalfunction/constants'
 import { setUserType } from '../../../domain/shared_slices/Global'
 import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
@@ -19,7 +23,7 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
   const { actions, beaconMalfunction, comments, notifications } = beaconMalfunctionWithDetails
   const dispatch = useAppDispatch()
   const { userType } = useAppSelector(state => state.global)
-  const vesselStatus = vesselStatuses.find(status => status.value === beaconMalfunction?.vesselStatus)
+  const vesselStatus = vesselStatuses.find(status => status.value === firstStatus)
   const [today, setToday] = useState('')
   const [yesterday, setYesterday] = useState('')
   const scrollToRef = useRef<HTMLDivElement>(null)
@@ -170,30 +174,24 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
         </NumberCommentsText>
       </NumberComments>
       <CommentsAndActions className="smooth-scroll" style={commentsAndActionsStyle(smallSize, textareaHeight || 0)}>
-        {firstStatus ? (
-          <BeaconMalfunctionDetailsFollowUpRow
-            dateText={getCommentOrActionDate(getDate(beaconMalfunction?.malfunctionStartDateTime))}
-            index={0}
-            smallSize={smallSize}
-          >
-            <BeaconMalfunctionDetailsFollowUpItem
-              contentText={getFirstStatusAction(vesselStatus, beaconMalfunction?.malfunctionStartDateTime)}
-              isLast
-              isLastDate={!itemsByDate?.length}
-              item={{
-                dateTime: beaconMalfunction?.malfunctionStartDateTime,
-                type: BeaconMalfunctionDetailsType.ACTION
-              }}
-              scrollToRef={scrollToRef}
-            />
-          </BeaconMalfunctionDetailsFollowUpRow>
-        ) : null}
         {sortedDates.map((date, dateIndex) => {
           const isLastDate = Object.keys(itemsByDate).length === dateIndex + 1
           const dateText = getCommentOrActionDate(getDate(date))
 
           return (
             <BeaconMalfunctionDetailsFollowUpRow key={date} dateText={dateText} index={dateIndex} smallSize={smallSize}>
+              {dateIndex === 0 && vesselStatus && (
+                <BeaconMalfunctionDetailsFollowUpItem
+                  contentText={getFirstStatusAction(vesselStatus, beaconMalfunction?.malfunctionStartDateTime)}
+                  isLast
+                  isLastDate={!itemsByDate?.length}
+                  item={{
+                    dateTime: beaconMalfunction?.malfunctionStartDateTime,
+                    type: BeaconMalfunctionDetailsType.ACTION
+                  }}
+                  scrollToRef={scrollToRef}
+                />
+              )}
               {itemsByDate[date]
                 .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
                 .map((item, dateItemIndex) => {

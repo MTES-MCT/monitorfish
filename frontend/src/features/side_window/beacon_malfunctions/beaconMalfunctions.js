@@ -1,11 +1,10 @@
-import React from 'react'
 import * as timeago from 'timeago.js'
 import {
   BeaconMalfunctionPropertyName,
-  beaconMalfunctionsStages,
+  beaconMalfunctionsStageColumnRecord,
   endOfBeaconMalfunctionReasons,
   vesselStatuses
-} from '../../../domain/entities/beaconMalfunction'
+} from '../../../domain/entities/beaconMalfunction/constants'
 
 export const BeaconMalfunctionsSubMenu = {
   PAIRING: {
@@ -44,7 +43,7 @@ export const getBeaconCreationDate = (dateLastEmission, status) => {
 }
 
 export function getBeaconCreationOrModificationDate (beaconMalfunction) {
-  if (beaconMalfunction?.stage === beaconMalfunctionsStages.INITIAL_ENCOUNTER.code) {
+  if (beaconMalfunction?.stage === beaconMalfunctionsStageColumnRecord.INITIAL_ENCOUNTER.code) {
     return `ouverte ${getReducedTimeAgo(getBeaconCreationDate(beaconMalfunction?.malfunctionStartDateTime, beaconMalfunction?.vesselStatus))}`
   }
 
@@ -58,8 +57,8 @@ export const getActionText = (action, endOfBeaconMalfunctionReason) => {
 
     return <>Le statut du ticket a été modifié, de <b>{previousValue}</b> à <b>{nextValue}</b>.</>
   } else if (action.propertyName === BeaconMalfunctionPropertyName.STAGE) {
-    const previousValue = beaconMalfunctionsStages[action.previousValue].title
-    const nextValue = beaconMalfunctionsStages[action.nextValue].title
+    const previousValue = beaconMalfunctionsStageColumnRecord[action.previousValue].title
+    const nextValue = beaconMalfunctionsStageColumnRecord[action.nextValue].title
 
     let additionalText = ''
     if (endOfBeaconMalfunctionReason) {
@@ -98,8 +97,8 @@ const getByStage = (stage, beaconMalfunctions) =>
     .sort((a, b) => b.vesselStatusLastModificationDateTime?.localeCompare(a.vesselStatusLastModificationDateTime))
 
 export const getBeaconMalfunctionsByStage = beaconsMalfunctions =>
-  Object.keys(beaconMalfunctionsStages)
-    .filter(stage => beaconMalfunctionsStages[stage].isColumn)
+  Object.keys(beaconMalfunctionsStageColumnRecord)
+    .filter(stage => beaconMalfunctionsStageColumnRecord[stage].isColumn)
     .reduce(
       (previous, stage) => ({
         ...previous,

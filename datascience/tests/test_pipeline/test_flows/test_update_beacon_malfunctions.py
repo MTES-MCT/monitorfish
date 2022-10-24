@@ -241,7 +241,7 @@ def test_get_new_malfunctions():
 
     expected_new_malfunctions = (
         last_emissions.loc[
-            [0, 8],
+            [0],
             [
                 "beacon_number",
                 "last_position_datetime_utc",

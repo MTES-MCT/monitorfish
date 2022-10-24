@@ -29,17 +29,12 @@ from src.read_query import read_query
 from tests.mocks import (
     get_monitorfish_healthcheck_mock_factory,
     mock_check_flow_not_running,
-    mock_extract_monitorfish_recent_positions_histogram,
 )
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 flow.replace(
     flow.get_tasks("get_monitorfish_healthcheck")[0],
     get_monitorfish_healthcheck_mock_factory(),
-)
-flow.replace(
-    flow.get_tasks("extract_monitorfish_recent_positions_histogram")[0],
-    mock_extract_monitorfish_recent_positions_histogram,
 )
 
 

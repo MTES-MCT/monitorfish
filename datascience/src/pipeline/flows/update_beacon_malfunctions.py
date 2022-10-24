@@ -75,6 +75,23 @@ def extract_satellite_operators_statuses() -> pd.DataFrame:
 def get_last_emissions(
     vessels_that_should_emit: pd.DataFrame, last_positions: pd.DataFrame
 ) -> pd.DataFrame:
+    """
+    Join `vessels_that_should_emit` and `last_positions` using `cfr`, `ircs` and
+    `external_immatriculation` as join keys, using the `join_on_multiple_keys` logic.
+
+    `last_positions` of a given vessel that were emitted before the vessel's beacon
+    `logging_datetime_utc` are not taken into account : the result therefore only
+    includes each vessel's last emission **with its current beacon**. Ths is done to
+    avoid generating beacon malfunctions on a given vessel from emission data of its
+    previous beacon.
+
+    Args:
+        vessels_that_should_emit (pd.DataFrame): DataFrame of vessels that should emit
+        last_positions (pd.DataFrame): DataFrame of last positions
+
+    Returns:
+        pd.DataFrame: last emissions of the input vessels with their current beacon
+    """
     last_emissions = join_on_multiple_keys(
         vessels_that_should_emit,
         last_positions,
@@ -88,6 +105,12 @@ def get_last_emissions(
         .groupby("beacon_number")
         .head(1)
         .reset_index(drop=True)
+    )
+
+    last_emissions[
+        "last_position_datetime_utc"
+    ] = last_emissions.last_position_datetime_utc.where(
+        last_emissions.last_position_datetime_utc > last_emissions.logging_datetime_utc
     )
 
     return last_emissions

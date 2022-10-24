@@ -117,31 +117,46 @@ def test_get_last_emissions():
 
     vessels_that_should_emit = pd.DataFrame(
         {
-            "cfr": [None, "C"],
-            "ircs": ["AA", "CC"],
-            "external_immatriculation": ["AAA", None],
-            "beacon_number": ["K1", "K2"],
-            "other_vessels_data": ["what", "ever"],
+            "cfr": [None, "C", "E", "F"],
+            "ircs": ["AA", "CC", "EE", "FF"],
+            "external_immatriculation": ["AAA", None, "EEE", "FFF"],
+            "beacon_number": ["K1", "K2", "K3", "K4"],
+            "other_vessels_data": ["what", "ever", "you", "want"],
+            "logging_datetime_utc": [d, d, d, d],
         }
     )
     last_positions = pd.DataFrame(
         {
-            "cfr": ["A", None, "C", "C"],
-            "ircs": ["AA", "AA", "CC", "incorrect CC"],
-            "external_immatriculation": ["AAA", "AAA", "CCC", "incorrect CCC"],
-            "last_position_datetime_utc": [d, d + 48 * td, d + 6 * td, d + 54 * td],
-            "other_last_positions_data": ["i", "am", "the", "captain"],
+            "cfr": ["A", None, "C", "C", "D", "E"],
+            "ircs": ["AA", "AA", "CC", "incorrect CC", None, "EE"],
+            "external_immatriculation": [
+                "AAA",
+                "AAA",
+                "CCC",
+                "incorrect CCC",
+                "DDD",
+                "EEE",
+            ],
+            "last_position_datetime_utc": [
+                d,
+                d + 48 * td,
+                d + 6 * td,
+                d + 54 * td,
+                d,
+                d - 12 * td,
+            ],
+            "other_last_positions_data": ["i", "am", "the", "captain", "of", "my soul"],
         }
     )
 
     last_emissions = get_last_emissions.run(vessels_that_should_emit, last_positions)
 
     expected_last_emissions = (
-        vessels_that_should_emit.loc[[1, 0]]
+        vessels_that_should_emit.loc[[1, 0, 2, 3]]
         .reset_index(drop=True)
         .assign(
-            last_position_datetime_utc=[d + 54 * td, d + 48 * td],
-            other_last_positions_data=["captain", "am"],
+            last_position_datetime_utc=[d + 54 * td, d + 48 * td, None, None],
+            other_last_positions_data=["captain", "am", "my soul", None],
         )
     )
 

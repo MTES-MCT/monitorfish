@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { SelectPicker } from 'rsuite'
 
-import { vesselStatuses } from '../../../domain/entities/beaconMalfunction'
+import { vesselStatuses } from '../../../domain/entities/beaconMalfunction/constants'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 
 import type { BeaconMalfunction } from '../../../domain/types/beaconMalfunction'
@@ -11,7 +11,7 @@ type VesselStatusSelectProps = {
   domRef: any
   isAbsolute: boolean
   updateVesselStatus: (beaconMalfunction: BeaconMalfunction, status: string | null) => void
-  // TODO Type vesselStatus in beaconMalfunction.ts
+  // TODO Type vesselStatus in constants.tsx
   vesselStatus: { color: string; icon: JSX.Element; label: string; textColor: string; value: string }
 }
 

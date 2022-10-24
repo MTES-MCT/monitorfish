@@ -6,7 +6,7 @@ import {
   beaconMalfunctionNotificationRecipientFunction,
   beaconMalfunctionNotificationType,
   communicationMeans
-} from '../../../domain/entities/beaconMalfunction'
+} from '../../../domain/entities/beaconMalfunction/constants'
 import { ReactComponent as NotOkSVG } from '../../icons/Icon_not_OK.svg'
 import { ReactComponent as OkSVG } from '../../icons/Icon_OK.svg'
 

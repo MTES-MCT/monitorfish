@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
-import { UserType } from '../entities/beaconMalfunction'
+import { UserType } from '../entities/beaconMalfunction/constants'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel'
 
 import type { SideWindowMenuKey } from '../../features/side_window/constants'

@@ -2,7 +2,7 @@ import ky from 'ky'
 
 import { ApiError } from '../libs/ApiError'
 
-import type { beaconMalfunctionNotificationType, UserType } from '../domain/entities/beaconMalfunction'
+import type { beaconMalfunctionNotificationType, UserType } from '../domain/entities/beaconMalfunction/constants'
 import type {
   BeaconMalfunction,
   BeaconMalfunctionResumeAndDetails,
@@ -11,12 +11,13 @@ import type {
 } from '../domain/types/beaconMalfunction'
 import type { VesselIdentity } from '../domain/types/vessel'
 
-export const BEACON_MALFUNCTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les avaries VMS"
-export const BEACON_MALFUNCTION_ERROR_MESSAGE = "Nous n'avons pas pu récupérer l'avarie VMS"
+export const ARCHIVE_BEACON_MALFUNCTION = "Nous n'avons pas pu archiver les avaries VMS"
+export const GET_BEACON_MALFUNCTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les avaries VMS"
+export const GET_BEACON_MALFUNCTION_ERROR_MESSAGE = "Nous n'avons pas pu récupérer l'avarie VMS"
 export const UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour le statut de l'avarie VMS"
 export const SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE =
   "Nous n'avons pas pu ajouter le commentaire sur l'avarie VMS"
-export const VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE = "Nous n'avons pas pu chercher les avaries de ce navire"
+export const GET_VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE = "Nous n'avons pas pu chercher les avaries de ce navire"
 export const SEND_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu envoyer la notification"
 
 /**
@@ -28,7 +29,7 @@ async function getAllBeaconMalfunctionsFromAPI(): Promise<BeaconMalfunction[]> {
   try {
     return await ky.get('/bff/v1/beacon_malfunctions').json<BeaconMalfunction[]>()
   } catch (err) {
-    throw new ApiError(BEACON_MALFUNCTIONS_ERROR_MESSAGE, err)
+    throw new ApiError(GET_BEACON_MALFUNCTIONS_ERROR_MESSAGE, err)
   }
 }
 
@@ -65,7 +66,7 @@ async function getBeaconMalfunctionFromAPI(id: number): Promise<BeaconMalfunctio
   try {
     return await ky.get(`/bff/v1/beacon_malfunctions/${id}`).json<BeaconMalfunctionResumeAndDetails>()
   } catch (err) {
-    throw new ApiError(BEACON_MALFUNCTION_ERROR_MESSAGE, err)
+    throw new ApiError(GET_BEACON_MALFUNCTION_ERROR_MESSAGE, err)
   }
 }
 
@@ -114,7 +115,7 @@ async function getVesselBeaconsMalfunctionsFromAPI(
       )
       .json<VesselBeaconMalfunctionsResumeAndHistory>()
   } catch (err) {
-    throw new ApiError(VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE, err)
+    throw new ApiError(GET_VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE, err)
   }
 }
 
@@ -134,11 +135,33 @@ async function sendNotificationFromAPI(
   }
 }
 
+/**
+ * Archive multiple beacon malfunctions
+ *
+ * @throws {@link ApiError}
+ */
+async function archiveBeaconMalfunctionsFromAPI(ids: number[]): Promise<BeaconMalfunctionResumeAndDetails[]> {
+  try {
+    return await ky
+      .put(`/bff/v1/beacon_malfunctions/archive`, {
+        headers: {
+          Accept: 'application/json, text/plain',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        json: ids
+      })
+      .json<BeaconMalfunctionResumeAndDetails[]>()
+  } catch (err) {
+    throw new ApiError(ARCHIVE_BEACON_MALFUNCTION, err)
+  }
+}
+
 export {
   getVesselBeaconsMalfunctionsFromAPI,
   saveBeaconMalfunctionCommentFromAPI,
   getBeaconMalfunctionFromAPI,
   updateBeaconMalfunctionFromAPI,
   getAllBeaconMalfunctionsFromAPI,
-  sendNotificationFromAPI
+  sendNotificationFromAPI,
+  archiveBeaconMalfunctionsFromAPI
 }

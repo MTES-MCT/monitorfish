@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, ALERTS_SUBMENU, SeaFront } from '../../domain/entities/alerts/constants'
-import { beaconMalfunctionsStages } from '../../domain/entities/beaconMalfunction'
+import { beaconMalfunctionsStageColumnRecord } from '../../domain/entities/beaconMalfunction/constants'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
@@ -44,8 +44,8 @@ export function SideWindowSubMenu({
     () =>
       beaconMalfunctions.filter(
         beaconMalfunction =>
-          beaconMalfunction.stage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
-          beaconMalfunction.stage !== beaconMalfunctionsStages.ARCHIVED.code
+          beaconMalfunction.stage !== beaconMalfunctionsStageColumnRecord.END_OF_MALFUNCTION.code &&
+          beaconMalfunction.stage !== beaconMalfunctionsStageColumnRecord.ARCHIVED.code
       ).length,
     [beaconMalfunctions]
   )

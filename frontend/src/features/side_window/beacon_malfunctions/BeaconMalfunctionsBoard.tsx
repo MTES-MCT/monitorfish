@@ -13,7 +13,7 @@ import { CSSProperties, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { beaconMalfunctionsStages } from '../../../domain/entities/beaconMalfunction'
+import { beaconMalfunctionsStageColumnRecord } from '../../../domain/entities/beaconMalfunction/constants'
 import { setError } from '../../../domain/shared_slices/Global'
 import getAllBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import updateBeaconMalfunctionFromKanban from '../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
@@ -109,11 +109,13 @@ export function BeaconMalfunctionsBoard() {
   }, [beaconMalfunctions, searchedVessel])
 
   const findStage = stageName => {
-    if (stageName in beaconMalfunctionsStages) {
+    if (stageName in beaconMalfunctionsStageColumnRecord) {
       return stageName
     }
 
-    return Object.keys(beaconMalfunctionsStages).find(key => beaconMalfunctionsStages[key]?.code?.includes(stageName))
+    return Object.keys(beaconMalfunctionsStageColumnRecord).find(key =>
+      beaconMalfunctionsStageColumnRecord[key]?.code?.includes(stageName)
+    )
   }
 
   const updateVesselStatus = useCallback(
@@ -144,8 +146,8 @@ export function BeaconMalfunctionsBoard() {
       const nextStage = findStage(over?.id)
 
       if (
-        previousStage === beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
-        nextStage !== beaconMalfunctionsStages.ARCHIVED.code
+        previousStage === beaconMalfunctionsStageColumnRecord.END_OF_MALFUNCTION.code &&
+        nextStage !== beaconMalfunctionsStageColumnRecord.ARCHIVED.code
       ) {
         dispatch(setError(new Error('Une avarie archivée ne peut revenir en arrière')))
         setActiveBeaconMalfunction(null)
@@ -154,8 +156,8 @@ export function BeaconMalfunctionsBoard() {
       }
 
       if (
-        previousStage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
-        nextStage === beaconMalfunctionsStages.ARCHIVED.code
+        previousStage !== beaconMalfunctionsStageColumnRecord.END_OF_MALFUNCTION.code &&
+        nextStage === beaconMalfunctionsStageColumnRecord.ARCHIVED.code
       ) {
         dispatch(setError(new Error('Seulement une avarie terminée peut être archivée')))
         setActiveBeaconMalfunction(null)
@@ -223,25 +225,31 @@ export function BeaconMalfunctionsBoard() {
         sensors={sensors}
       >
         <Columns data-cy="side-window-beacon-malfunctions-columns" style={columnsStyle}>
-          {Object.keys(beaconMalfunctionsStages)
-            .filter(stage => beaconMalfunctionsStages[stage].isColumn)
-            .map((stageId, index) => (
-              <Droppable
-                key={stageId}
-                disabled={stageId === beaconMalfunctionsStages.END_OF_MALFUNCTION.code}
-                id={stageId}
-                index={index}
-              >
-                <StageColumn
-                  activeBeaconMalfunction={activeBeaconMalfunction}
-                  baseUrl={baseUrl}
-                  beaconMalfunctions={filteredBeaconMalfunctions[stageId] || []}
-                  isDroppedId={!!isDroppedId}
-                  stage={beaconMalfunctionsStages[stageId]}
-                  updateVesselStatus={updateVesselStatus}
-                />
-              </Droppable>
-            ))}
+          {Object.keys(beaconMalfunctionsStageColumnRecord)
+            .filter(stage => beaconMalfunctionsStageColumnRecord[stage].isColumn)
+            .map((stageId, index) => {
+              const stage = beaconMalfunctionsStageColumnRecord[stageId]
+
+              return (
+                stage && (
+                  <Droppable
+                    key={stageId}
+                    disabled={stageId === beaconMalfunctionsStageColumnRecord.END_OF_MALFUNCTION.code}
+                    id={stageId}
+                    index={index}
+                  >
+                    <StageColumn
+                      activeBeaconMalfunction={activeBeaconMalfunction}
+                      baseUrl={baseUrl}
+                      beaconMalfunctions={filteredBeaconMalfunctions[stageId] || []}
+                      isDroppedId={!!isDroppedId}
+                      stage={stage}
+                      updateVesselStatus={updateVesselStatus}
+                    />
+                  </Droppable>
+                )
+              )
+            })}
         </Columns>
         <DragOverlay
           dropAnimation={{

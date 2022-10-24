@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { BeaconMalfunctionsTab } from '../entities/beaconMalfunction'
+import { BeaconMalfunctionsTab } from '../entities/beaconMalfunction/constants'
 
 import type {
   BeaconMalfunction,
@@ -35,8 +35,7 @@ const beaconMalfunctionSlice = createSlice({
   reducers: {
     /**
      * Close a single beacon malfunction in the side window kanban
-     * @function closeBeaconMalfunctionInKanban
-     * @memberOf BeaconMalfunctionReducer
+     *
      * @param {Object=} state
      */
     closeBeaconMalfunctionInKanban(state) {
@@ -45,8 +44,7 @@ const beaconMalfunctionSlice = createSlice({
 
     /**
      * Set the loading of beacon malfunctions to true, and shows a loader in the ERS/VMS tab
-     * @function loadVesselBeaconMalfunctions
-     * @memberOf BeaconMalfunctionReducer
+     *
      * @param {Object=} state
      */
     loadVesselBeaconMalfunctions(state) {
@@ -58,8 +56,7 @@ const beaconMalfunctionSlice = createSlice({
 
     /**
      * Reset selected vessel beacon malfunctions resume and history
-     * @function resetVesselBeaconMalfunctionsResumeAndHistory
-     * @memberOf BeaconMalfunctionReducer
+     *
      * @param {Object=} state
      */
     resetVesselBeaconMalfunctionsResumeAndHistory(state) {
@@ -70,8 +67,7 @@ const beaconMalfunctionSlice = createSlice({
 
     /**
      * Set window malfunctions showed in the side window kanban
-     * @function setBeaconMalfunctions
-     * @memberOf BeaconMalfunctionReducer
+     *
      * @param {Object=} state
      * @param {{payload: BeaconMalfunction[]}} action - the beacon malfunctions
      */
@@ -81,8 +77,7 @@ const beaconMalfunctionSlice = createSlice({
 
     /**
      * Show the specified beacon malfunction tab (Resume or Detail)
-     * @function setBeaconMalfunctionTab
-     * @memberOf BeaconMalfunctionReducer
+     *
      * @param {Object=} state
      * @param {{payload: number}} action - The tab
      */
@@ -92,8 +87,7 @@ const beaconMalfunctionSlice = createSlice({
 
     /**
      * Open a beacon malfunction
-     * @function setOpenedBeaconMalfunction
-     * @memberOf BeaconMalfunctionReducer
+     *
      * @param {Object=} state
      * @param {{payload: {
      *   beaconMalfunction: BeaconMalfunctionResumeAndDetails,
@@ -110,8 +104,7 @@ const beaconMalfunctionSlice = createSlice({
 
     /**
      * Open a beacon malfunction in the side window kanban
-     * @function setOpenedBeaconMalfunctionsInKanban
-     * @memberOf BeaconMalfunctionReducer
+     *
      * @param {Object=} state
      * @param {{payload: BeaconMalfunctionResumeAndDetails}} action - the beacon malfunction to open
      */
@@ -121,8 +114,7 @@ const beaconMalfunctionSlice = createSlice({
 
     /**
      * Set the date since beacon malfunctions are fetched
-     * @function setVesselBeaconMalfunctionsFromDate
-     * @memberOf BeaconMalfunctionReducer
+     *
      * @param {Object=} state
      * @param {{payload: Date}} action - The "from" date
      */
@@ -132,8 +124,7 @@ const beaconMalfunctionSlice = createSlice({
 
     /**
      * Set selected vessel beacon malfunctions resume and history
-     * @function setVesselBeaconMalfunctionsResumeAndHistory
-     * @memberOf BeaconMalfunctionReducer
+     *
      * @param {Object=} state
      * @param {{payload: VesselBeaconMalfunctionsResumeAndHistory}} action
      */
@@ -144,12 +135,11 @@ const beaconMalfunctionSlice = createSlice({
 
     /**
      * Update a single beacon malfunction in the kanban
-     * @function updateLocalBeaconMalfunctions
-     * @memberOf BeaconMalfunctionReducer
+     *
      * @param {Object=} state
      * @param {{payload: BeaconMalfunction}} action - the beacon malfunction to update
      */
-    updateLocalBeaconMalfunctions(state, action) {
+    updateLocalBeaconMalfunction(state, action) {
       const id = action.payload?.id
       const nextBeaconMalfunctions = state.beaconMalfunctions.filter(beaconMalfunction => beaconMalfunction.id !== id)
 
@@ -157,9 +147,30 @@ const beaconMalfunctionSlice = createSlice({
     },
 
     /**
+     * Update a beacon malfunctions in the kanban
+     *
+     * @param {Object=} state
+     * @param {{payload: }} action - the beacon malfunctions to update
+     */
+    updateLocalBeaconMalfunctions(
+      state,
+      action: PayloadAction<{
+        beaconMalfunctions: BeaconMalfunction[]
+        ids: number[]
+      }>
+    ) {
+      const { beaconMalfunctions, ids } = action.payload
+
+      const nextBeaconMalfunctions = state.beaconMalfunctions.filter(
+        beaconMalfunction => !ids.includes(beaconMalfunction.id)
+      )
+
+      state.beaconMalfunctions = nextBeaconMalfunctions.concat(beaconMalfunctions)
+    },
+
+    /**
      * Update the selected vessel beacon malfunctions resume and history
-     * @function setVesselBeaconMalfunctionsResumeAndHistory
-     * @memberOf BeaconMalfunctionReducer
+     *
      * @param {Object=} state
      * @param {{payload: BeaconMalfunctionResumeAndDetails}} action
      */
@@ -186,6 +197,7 @@ export const {
   setOpenedBeaconMalfunctionsInKanban,
   setVesselBeaconMalfunctionsFromDate,
   setVesselBeaconMalfunctionsResumeAndHistory,
+  updateLocalBeaconMalfunction,
   updateLocalBeaconMalfunctions,
   updateVesselBeaconMalfunctionsResumeAndHistory
 } = beaconMalfunctionSlice.actions

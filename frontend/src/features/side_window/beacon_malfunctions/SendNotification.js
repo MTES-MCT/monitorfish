@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { COLORS } from '../../../constants/constants'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-import { beaconMalfunctionNotificationType } from '../../../domain/entities/beaconMalfunction'
+import { beaconMalfunctionNotificationType } from '../../../domain/entities/beaconMalfunction/constants'
 import { SelectPicker } from 'rsuite'
 import sendNotification from '../../../domain/use_cases/beaconMalfunction/sendNotification'
 

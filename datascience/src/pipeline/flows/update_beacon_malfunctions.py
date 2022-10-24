@@ -61,6 +61,17 @@ def extract_vessels_that_should_emit() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def extract_satellite_operators_statuses() -> pd.DataFrame:
+    """
+    Extract satellite operators statuses from the `satellite_operators_statuses` view.
+    This is intended to be used to filter which beacon malfunction to create and / or :
+    when a satellite operator is down, we do not want to generate malfunctions for all
+    the beacons of this operator, we want to wait until data flows are up again.
+    """
+    return extract("monitorfish_remote", "monitorfish/satellite_operators_statuses.sql")
+
+
+@task(checkpoint=False)
 def get_last_emissions(
     vessels_that_should_emit: pd.DataFrame, last_positions: pd.DataFrame
 ) -> pd.DataFrame:
@@ -86,31 +97,42 @@ def get_last_emissions(
 def get_new_malfunctions(
     last_emissions: pd.DataFrame,
     known_malfunctions: pd.DataFrame,
+    satellite_operators_statuses: pd.DataFrame,
     malfunction_datetime_utc_threshold_at_sea: datetime,
     malfunction_datetime_utc_threshold_at_port: datetime,
 ) -> pd.DataFrame:
 
-    last_emissions_not_in_known_malfunction = last_emissions.loc[
+    operators_up = set(
+        satellite_operators_statuses.loc[
+            satellite_operators_statuses.operator_is_up == True, "satellite_operator_id"
+        ].values
+    )
+
+    # Remove emissions of beacons already in malfunction
+    last_emissions = last_emissions.loc[
         ~last_emissions.beacon_number.isin(known_malfunctions.beacon_number)
-    ]
+    ].copy(deep=True)
+
+    # Remove emissions of beacons whose satellite operator is down
+    last_emissions = last_emissions.loc[
+        last_emissions.satellite_operator_id.isin(operators_up)
+    ].copy(deep=True)
 
     new_malfunctions = (
-        last_emissions_not_in_known_malfunction.loc[
-            (last_emissions_not_in_known_malfunction.is_manual == True)
+        last_emissions.loc[
+            (last_emissions.is_manual == True)
+            | (last_emissions.last_position_datetime_utc.isna())
             | (
-                last_emissions_not_in_known_malfunction.last_position_datetime_utc.isna()
-            )
-            | (
-                (last_emissions_not_in_known_malfunction.is_at_port == True)
+                (last_emissions.is_at_port == True)
                 & (
-                    last_emissions_not_in_known_malfunction.last_position_datetime_utc
+                    last_emissions.last_position_datetime_utc
                     < malfunction_datetime_utc_threshold_at_port
                 )
             )
             | (
-                (last_emissions_not_in_known_malfunction.is_at_port == False)
+                (last_emissions.is_at_port == False)
                 & (
-                    last_emissions_not_in_known_malfunction.last_position_datetime_utc
+                    last_emissions.last_position_datetime_utc
                     < malfunction_datetime_utc_threshold_at_sea
                 )
             )
@@ -119,7 +141,9 @@ def get_new_malfunctions(
         .reset_index(drop=True)
     )
 
-    new_malfunctions = new_malfunctions.drop(columns=["is_manual"])
+    new_malfunctions = new_malfunctions.drop(
+        columns=["is_manual", "satellite_operator_id"]
+    )
 
     return new_malfunctions
 
@@ -344,13 +368,15 @@ def update_beacon_malfunction(
             try:
                 assert new_stage in (
                     BeaconMalfunctionStage.END_OF_MALFUNCTION,
-                    BeaconMalfunctionStage.ARCHIVED
+                    BeaconMalfunctionStage.ARCHIVED,
                 )
             except AssertionError:
-                raise ValueError((
-                    "Cannot give a `EndOfBeaconMalfunctionReason` for a new_stage "
-                    "other than `END_OF_MALFUNCTION`  or `ARCHIVED`."
-                ))
+                raise ValueError(
+                    (
+                        "Cannot give a `EndOfBeaconMalfunctionReason` for a new_stage "
+                        "other than `END_OF_MALFUNCTION`  or `ARCHIVED`."
+                    )
+                )
 
             json["endOfBeaconMalfunctionReason"] = end_of_malfunction_reason.value
 
@@ -428,6 +454,8 @@ with Flow("Beacons malfunctions") as flow:
         upstream_tasks=[last_positions_healthcheck]
     )
 
+    satellite_operators_statuses = extract_satellite_operators_statuses()
+
     # Transform
     non_emission_at_sea_max_duration = make_timedelta(
         hours=max_hours_without_emission_at_sea
@@ -444,6 +472,7 @@ with Flow("Beacons malfunctions") as flow:
     new_malfunctions = get_new_malfunctions(
         last_emissions,
         known_malfunctions,
+        satellite_operators_statuses,
         malfunction_datetime_utc_threshold_at_sea,
         malfunction_datetime_utc_threshold_at_port,
     )

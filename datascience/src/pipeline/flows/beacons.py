@@ -13,7 +13,7 @@ def extract_beacons() -> pd.DataFrame:
     """
     Extract beacon numbers of all vessels from Poseidon.
     """
-    return extract("fmc", "fmc/beacons.sql")
+    return extract("fmc", "fmc/beacons.sql", parse_dates=["logging_datetime_utc"])
 
 
 @task(checkpoint=False)

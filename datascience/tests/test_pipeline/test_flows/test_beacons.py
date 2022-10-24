@@ -1,3 +1,4 @@
+from datetime import datetime
 from unittest.mock import patch
 
 import pandas as pd
@@ -29,6 +30,8 @@ def test_extract_satellite_operators(mock_extract):
 
 
 def test_transform_beacons():
+    d = datetime(2021, 5, 2, 12, 25, 23)
+
     beacons = pd.DataFrame(
         {
             "beacon_number": ["A", "B", "C", "D", "E", "F"],
@@ -42,6 +45,7 @@ def test_transform_beacons():
                 None,
             ],
             "satellite_operator_id": [1, 1, 2, 2, 3, None],
+            "logging_datetime_utc": [d, d, d, d, d, d],
         }
     )
 
@@ -59,6 +63,7 @@ def test_transform_beacons():
                 None,
             ],
             "satellite_operator_id": [1, 1, 2, 2, 3, None],
+            "logging_datetime_utc": [d, d, d, d, d, d],
         }
     )
 
@@ -91,6 +96,7 @@ def test_transform_satellite_operators():
 
 
 def test_load_beacons(reset_test_data):
+    d = datetime(2021, 5, 2, 12, 25, 23)
 
     beacons = pd.DataFrame(
         {
@@ -105,6 +111,7 @@ def test_load_beacons(reset_test_data):
                 None,
             ],
             "satellite_operator_id": [1, 1, 2, 2, 3, None],
+            "logging_datetime_utc": [d, d, d, d, d, d],
         }
     )
 

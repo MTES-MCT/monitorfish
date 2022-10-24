@@ -17,6 +17,7 @@ from src.pipeline.flows.update_beacon_malfunctions import (
     EndOfMalfunctionReason,
     extract_known_malfunctions,
     extract_last_positions,
+    extract_satellite_operators_statuses,
     extract_vessels_that_should_emit,
     flow,
     get_ended_malfunction_ids,
@@ -27,11 +28,20 @@ from src.pipeline.flows.update_beacon_malfunctions import (
     update_beacon_malfunction,
 )
 from src.read_query import read_query
-from tests.mocks import get_monitorfish_healthcheck_mock_factory, mock_datetime_utcnow
+from tests.mocks import (
+    extract_satellite_operators_statuses_mock_factory,
+    get_monitorfish_healthcheck_mock_factory,
+    mock_datetime_utcnow,
+)
 
 flow.replace(
     flow.get_tasks("get_monitorfish_healthcheck")[0],
     get_monitorfish_healthcheck_mock_factory(),
+)
+
+flow.replace(
+    flow.get_tasks("extract_satellite_operators_statuses")[0],
+    extract_satellite_operators_statuses_mock_factory(True, True),
 )
 
 
@@ -56,6 +66,7 @@ def test_extract_known_malfunctions(reset_test_data):
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
             ],
+            "satellite_operator_id": [2, 2],
         }
     )
     pd.testing.assert_frame_equal(
@@ -75,16 +86,28 @@ def test_extract_vessels_that_should_emit(reset_test_data):
                 BeaconStatus.UNSUPERVISED.value,
                 BeaconStatus.ACTIVATED.value,
             ],
+            "satellite_operator_id": [1, 2, 2, 2],
         }
     )
     pd.testing.assert_frame_equal(
         (
-            vessels_that_should_emit[["vessel_id", "beacon_number", "beacon_status"]]
+            vessels_that_should_emit[
+                ["vessel_id", "beacon_number", "beacon_status", "satellite_operator_id"]
+            ]
             .sort_values("vessel_id")
             .reset_index(drop=True)
         ),
         expected_beacon_numbers_and_statuses,
     )
+
+
+def test_extract_satellite_operators_statuses(reset_test_data):
+    statuses = extract_satellite_operators_statuses.run()
+    expected_statuses = pd.DataFrame(
+        {"satellite_operator_id": [1, 2], "operator_is_up": [False, False]}
+    )
+
+    pd.testing.assert_frame_equal(statuses, expected_statuses)
 
 
 def test_get_last_emissions():
@@ -150,13 +173,22 @@ def test_get_new_malfunctions():
             ],
             "is_at_port": [False, True, True, False, False, False, False, False, None],
             "is_manual": [True, False, False, False, False, False, False, False, None],
+            "satellite_operator_id": [1, 2, 3, 1, 2, 3, 4, 5, 6],
             "other_emissions_data": [10, "twenty", "thirty", 40, 50, 60, 70, 80, None],
+        }
+    )
+
+    satellite_operators_statuses = pd.DataFrame(
+        {
+            "satellite_operator_id": [1, 2, 3, 4, 5, 6, 7],
+            "operator_is_up": [True, True, True, True, True, True, True],
         }
     )
 
     new_malfunctions = get_new_malfunctions.run(
         last_emissions,
         known_malfunctions,
+        satellite_operators_statuses,
         malfunction_datetime_utc_threshold_at_sea=d - 6 * td,
         malfunction_datetime_utc_threshold_at_port=d - 24 * td,
     )
@@ -164,6 +196,37 @@ def test_get_new_malfunctions():
     expected_new_malfunctions = (
         last_emissions.loc[
             [0, 2, 4, 5, 8],
+            [
+                "beacon_number",
+                "last_position_datetime_utc",
+                "is_at_port",
+                "other_emissions_data",
+            ],
+        ]
+        .rename(columns={"last_position_datetime_utc": "malfunction_start_date_utc"})
+        .reset_index(drop=True)
+    )
+
+    pd.testing.assert_frame_equal(new_malfunctions, expected_new_malfunctions)
+
+    satellite_operators_statuses = pd.DataFrame(
+        {
+            "satellite_operator_id": [1, 2, 3, 4, 5, 6, 7],
+            "operator_is_up": [True, None, False, True, True, True, True],
+        }
+    )
+
+    new_malfunctions = get_new_malfunctions.run(
+        last_emissions,
+        known_malfunctions,
+        satellite_operators_statuses,
+        malfunction_datetime_utc_threshold_at_sea=d - 6 * td,
+        malfunction_datetime_utc_threshold_at_port=d - 24 * td,
+    )
+
+    expected_new_malfunctions = (
+        last_emissions.loc[
+            [0, 8],
             [
                 "beacon_number",
                 "last_position_datetime_utc",
@@ -566,7 +629,7 @@ def test_update_beacon_malfunction_updates_stage(mock_requests):
             BeaconMalfunctionStage.ARCHIVED,
             EndOfMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
         ),
-    ]
+    ],
 )
 @patch("src.pipeline.flows.update_beacon_malfunctions.requests")
 @patch(
@@ -613,6 +676,7 @@ def test_update_beacon_malfunction_raises_if_no_stage_and_no_status(mock_request
 def test_update_beacon_malfunctions_flow_doesnt_insert_already_known_malfunctions(
     reset_test_data,
 ):
+
     initial_beacons_malfunctions = read_query(
         "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
     )
@@ -766,6 +830,34 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
         ),
         expected_new_malfunctions_beacons_and_notifications,
     )
+
+
+def test_flow_does_not_create_malfunctions_for_operators_that_are_not_up(
+    reset_test_data,
+):
+    flow.replace(
+        flow.get_tasks("extract_satellite_operators_statuses")[0],
+        extract_satellite_operators_statuses_mock_factory(False, None),
+    )
+
+    initial_beacons_malfunctions = read_query(
+        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+    )
+    flow.schedule = None
+    state = flow.run(
+        max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=24
+    )
+
+    assert state.is_successful()
+
+    beacons_malfunctions = read_query(
+        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+    )
+
+    new_malfunctions = state.result[flow.get_tasks("get_new_malfunctions")[0]].result
+
+    assert len(new_malfunctions) == 0
+    pd.testing.assert_frame_equal(initial_beacons_malfunctions, beacons_malfunctions)
 
 
 def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):

@@ -144,7 +144,6 @@ def get_new_malfunctions(
     new_malfunctions = (
         last_emissions.loc[
             (last_emissions.is_manual == True)
-            | (last_emissions.last_position_datetime_utc.isna())
             | (
                 (last_emissions.is_at_port == True)
                 & (
@@ -244,30 +243,27 @@ def get_ended_malfunction_ids(
 @task(checkpoint=False)
 def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFrame:
     new_malfunctions["vessel_status"] = np.choose(
-        (
-            new_malfunctions.is_at_port.where(
-                new_malfunctions.is_at_port.notnull(), 2
-            ).astype(int)
-        ),
+        new_malfunctions.is_at_port.astype(int),
         [
             BeaconMalfunctionVesselStatus.AT_SEA.value,
             BeaconMalfunctionVesselStatus.AT_PORT.value,
-            BeaconMalfunctionVesselStatus.NEVER_EMITTED.value,
         ],
     )
 
     new_malfunctions["stage"] = BeaconMalfunctionStage.INITIAL_ENCOUNTER.value
 
     new_malfunctions["malfunction_end_date_utc"] = pd.NaT
-    new_malfunctions["malfunction_start_date_utc"] = new_malfunctions[
-        "malfunction_start_date_utc"
-    ].fillna(datetime.utcnow())
     new_malfunctions["vessel_status_last_modification_date_utc"] = datetime.utcnow()
 
     notification_to_send = {
-        BeaconMalfunctionVesselStatus.AT_SEA.value: BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value,
-        BeaconMalfunctionVesselStatus.AT_PORT.value: BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
-        BeaconMalfunctionVesselStatus.NEVER_EMITTED.value: BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
+        BeaconMalfunctionVesselStatus.AT_SEA.value: (
+            BeaconMalfunctionNotificationType
+            .MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value
+        ),
+        BeaconMalfunctionVesselStatus.AT_PORT.value: (
+            BeaconMalfunctionNotificationType
+            .MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value
+        ),
     }
 
     new_malfunctions["notification_requested"] = new_malfunctions.vessel_status.map(

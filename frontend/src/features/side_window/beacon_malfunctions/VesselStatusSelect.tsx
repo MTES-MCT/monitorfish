@@ -11,7 +11,7 @@ type VesselStatusSelectProps = {
   domRef: any
   isAbsolute: boolean
   updateVesselStatus: (beaconMalfunction: BeaconMalfunction, status: string | null) => void
-  // TODO Type vesselStatus in beaconMalfunction.js
+  // TODO Type vesselStatus in beaconMalfunction.ts
   vesselStatus: { color: string; icon: JSX.Element; label: string; textColor: string; value: string }
 }
 

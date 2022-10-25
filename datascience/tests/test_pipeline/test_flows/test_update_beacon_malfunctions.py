@@ -104,7 +104,7 @@ def test_extract_vessels_that_should_emit(reset_test_data):
 def test_extract_satellite_operators_statuses(reset_test_data):
     statuses = extract_satellite_operators_statuses.run()
     expected_statuses = pd.DataFrame(
-        {"satellite_operator_id": [1, 2], "operator_is_up": [False, False]}
+        {"satellite_operator_id": [1, 2], "operator_is_up": [False, None]}
     )
 
     pd.testing.assert_frame_equal(statuses, expected_statuses)

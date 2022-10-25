@@ -177,6 +177,7 @@ export const FRANCE = 'Réglementation France'
 export const UE = 'Réglementation UE'
 export const UK = 'Réglementation UK'
 export const REG_LOCALE = 'Reg locale'
+export const ORGP = 'Réglementation ORGP'
 
 const REG_RTC = 'Reg. RTC'
 const REG_UK = 'Reg. UK'
@@ -185,11 +186,19 @@ const REG_SA = 'Reg. SA'
 const REG_NAMO = 'Reg. NAMO'
 const REG_MEMN = 'Reg. MEMN'
 const REG_OUTRE_MER = 'Reg. Outre-mer'
+
 const RUE_2019 = 'R(UE) 2019/1241'
 const RUE_1380 = 'R(UE) 1380/2013'
 const RUE_2022 = 'R(UE) 2022/1614'
 const RUE_494 = 'R(CE) 494/2002'
 const RUE_2017 = 'R(CE) 2017/118'
+
+const REG_CCAMLR = 'Reg. CCAMLR'
+const REG_CTOI_IOTC = 'Reg. CTOI / IOTC'
+const REG_ICCAT_CICTA = 'Reg. ICCAT / CICTA'
+const REG_NEAFC_CPANE = 'Reg. NEAFC / CPANE'
+const REG_OPANO_NAFO = 'Reg. OPANO / NAFO'
+const REG_SIOFA_APSOI = 'Reg. SIOFA / APSOI'
 
 export const LAWTYPES_TO_TERRITORY = {
   [REG_MED]: FRANCE,
@@ -203,13 +212,20 @@ export const LAWTYPES_TO_TERRITORY = {
   [RUE_2017]: UE,
   [RUE_2022]: UE,
   [REG_RTC]: UE,
-  [REG_UK]: UK
+  [REG_UK]: UK,
+  [REG_CCAMLR]: ORGP,
+  [REG_CTOI_IOTC]: ORGP,
+  [REG_ICCAT_CICTA]: ORGP,
+  [REG_NEAFC_CPANE]: ORGP,
+  [REG_OPANO_NAFO]: ORGP,
+  [REG_SIOFA_APSOI]: ORGP
 }
 
 export const REGULATORY_TERRITORY = {
   [FRANCE]: 'Réglementation France',
   [UE]: 'Réglementation UE',
-  [UK]: 'Réglementation UK'
+  [UK]: 'Réglementation UK',
+  [ORGP]: 'Réglementation ORGP'
 }
 
 export const REGULATORY_SEARCH_PROPERTIES = {

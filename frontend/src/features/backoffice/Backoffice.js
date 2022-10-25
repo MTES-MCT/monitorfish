@@ -114,10 +114,16 @@ const Backoffice = () => {
             {displayRegulatoryZoneByRegTerritory(UE)}
           </Territory>
         </Columns>
-        <Territory key={UK} isLast>
-          <TerritoryName>{UK}</TerritoryName>
-          {displayRegulatoryZoneByRegTerritory(UK)}
-        </Territory>
+        <Columns>
+          <Territory key={UK}>
+            <TerritoryName>{UK}</TerritoryName>
+            {displayRegulatoryZoneByRegTerritory(UK)}
+          </Territory>
+          <Territory key={ORGP}>
+            <TerritoryName>{ORGP}</TerritoryName>
+            {displayRegulatoryZoneByRegTerritory(ORGP)}
+          </Territory>
+        </Columns>
       </SearchResultList>)
   }, [foundRegulatoryZonesByRegTerritory])
 

@@ -251,7 +251,7 @@ def test_get_vessels_with_missing_fars():
     )
 
 
-def test_get_vessels_with_missing_fars_raises_of_share_is_exceeded():
+def test_get_vessels_with_missing_fars_raises_if_share_is_exceeded():
     vessels_at_sea = pd.DataFrame(
         {
             "cfr": ["Vessel_1", "Vessel_3", "Vessel 4", "Vessel 5"],

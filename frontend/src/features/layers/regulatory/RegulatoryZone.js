@@ -4,10 +4,10 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { COLORS } from '../../../constants/constants'
-import Layers from '../../../domain/entities/layers'
+import { Layers } from '../../../domain/entities/layers/constants'
 
 import showRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
-import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import zoomInLayer from '../../../domain/use_cases/layer/zoomInLayer'
 import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'

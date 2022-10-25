@@ -1,6 +1,6 @@
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
-import Layers from './layers'
+import { Layers } from './layers/constants'
 
 export const vesselLabel = {
   VESSEL_NATIONALITY: 'VESSEL_NATIONALITY',

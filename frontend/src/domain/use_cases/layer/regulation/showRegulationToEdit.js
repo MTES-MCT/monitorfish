@@ -5,7 +5,7 @@ import {
   setSelectedRegulatoryZoneId,
   setStatus
 } from '../../../../features/backoffice/Regulation.slice'
-import Layers from '../../../entities/layers'
+import { Layers } from '../../../entities/layers/constants'
 import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../../../api/geoserver'
 import { STATUS } from '../../../../features/backoffice/constants'
 

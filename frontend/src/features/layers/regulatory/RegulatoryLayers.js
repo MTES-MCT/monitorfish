@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import RegulatoryLayerTopic from './RegulatoryTopic'
 import { COLORS } from '../../../constants/constants'
 import removeRegulatoryZoneFromMySelection from '../../../domain/use_cases/layer/regulation/removeRegulatoryZoneFromMySelection'
-import LayersEnum, { layersType } from '../../../domain/entities/layers'
+import { Layers, layersType } from '../../../domain/entities/layers/constants'
 import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 import { useDispatch, useSelector } from 'react-redux'
 import layer from '../../../domain/shared_slices/Layer'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
-import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 const RegulatoryLayers = props => {
   const dispatch = useDispatch()
@@ -51,7 +51,7 @@ const RegulatoryLayers = props => {
   const callRemoveRegulatoryLayerFromMySelection = useCallback((regulatoryZone, numberOfZones, namespace) => {
     decreaseNumberOfZonesOpened(numberOfZones)
     dispatch(hideLayer({
-      type: LayersEnum.REGULATORY.code,
+      type: Layers.REGULATORY.code,
       ...regulatoryZone,
       namespace
     }))

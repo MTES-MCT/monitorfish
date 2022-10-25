@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector, useStore } from 'react-redux'
-import Layers, { getLayerNameNormalized } from '../domain/entities/layers'
+import { Layers } from '../domain/entities/layers/constants'
+import { getLayerNameNormalized } from '../domain/entities/layers'
 import { showSimplifiedGeometries, showWholeGeometries } from '../domain/shared_slices/Regulatory'
 import { getVectorOLLayer } from '../domain/use_cases/layer/regulation/showRegulatoryZone'
 

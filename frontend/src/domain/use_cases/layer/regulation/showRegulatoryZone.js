@@ -6,7 +6,7 @@ import { all } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
 import simplify from 'simplify-geojson'
 
-import Layers from '../../../entities/layers'
+import { Layers } from '../../../entities/layers/constants'
 import { animateToRegulatoryLayer } from '../../../shared_slices/Map'
 import layer from '../../../shared_slices/Layer'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
-import { layersType, layersType as LayersType } from '../domain/entities/layers'
+import { layersType, layersType as LayersType } from '../domain/entities/layers/constants'
 import { InteractionType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import Draw, { createBox } from 'ol/interaction/Draw'
 import { resetInteraction } from '../domain/shared_slices/Map'

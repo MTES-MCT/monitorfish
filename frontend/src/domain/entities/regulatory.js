@@ -1,5 +1,5 @@
 import { formatDataForSelectPicker, getTextForSearch } from '../../utils'
-import Layers from './layers'
+import { Layers } from './layers/constants'
 
 export const mapToRegulatoryZone = ({ properties, geometry, id }, speciesByCode) => {
   return {

@@ -1,4 +1,4 @@
-import Layers from '../domain/entities/layers'
+import { Layers } from '../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import WFS from 'ol/format/WFS'
 import GML from 'ol/format/GML'

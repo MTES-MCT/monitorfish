@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { MapboxVector } from 'ol/layer'
-import Layers, { baseLayers } from '../domain/entities/layers'
+import { Layers, BaseLayers } from '../domain/entities/layers/constants'
 import TileLayer from 'ol/layer/Tile'
 import { OSM } from 'ol/source'
 import XYZ from 'ol/source/XYZ'
@@ -68,7 +68,7 @@ const BaseLayer = ({ map }) => {
     function addLayerToMap () {
       if (map) {
         if (!selectedBaseLayer) {
-          selectedBaseLayer = baseLayers.OSM.code
+          selectedBaseLayer = BaseLayer.OSM.code
         }
         if (baseLayersObjects[selectedBaseLayer]) {
           map.getLayers().push(baseLayersObjects[selectedBaseLayer]())

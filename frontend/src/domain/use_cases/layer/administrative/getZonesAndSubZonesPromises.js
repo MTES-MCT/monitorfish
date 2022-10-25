@@ -1,4 +1,4 @@
-import Layers, { layersType } from '../../../entities/layers'
+import { Layers, layersType } from '../../../entities/layers/constants'
 import { getAdministrativeSubZonesFromAPI } from '../../../../api/geoserver'
 
 export const getZonesAndSubZonesPromises = () => (dispatch, getState) => {

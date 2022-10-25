@@ -24,7 +24,7 @@ import saveMeasurement from '../domain/use_cases/measurement/saveMeasurement'
 import { measurementStyle, measurementStyleWithCenter } from './styles/measurement.style'
 import { transform } from 'ol/proj'
 import { getCenter } from 'ol/extent'
-import Layers from '../domain/entities/layers'
+import { Layers } from '../domain/entities/layers/constants'
 
 const DRAW_START_EVENT = 'drawstart'
 const DRAW_ABORT_EVENT = 'drawabort'

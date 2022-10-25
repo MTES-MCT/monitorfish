@@ -4,7 +4,7 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
-import Layers from '../domain/entities/layers'
+import { Layers } from '../domain/entities/layers/constants'
 
 import { getVesselAlertStyle } from './styles/vessel.style'
 import { getVesselId, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel'

@@ -1,5 +1,5 @@
 import { animateToRegulatoryLayer } from '../../shared_slices/Map'
-import Layers from '../../entities/layers'
+import { Layers } from '../../entities/layers/constants'
 import { getCenter } from 'ol/extent'
 
 const zoomInLayer = ({ topicAndZone, feature }) => (dispatch, getState) => {

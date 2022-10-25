@@ -101,3 +101,10 @@ export type BeaconMalfunctionStatusValue = {
   textColor: string
   value: string
 }
+
+export type EnfOfBeaconMalfunctionStatusValue = {
+  color: string
+  label: string
+  textColor: string
+  value: string
+}

@@ -2,7 +2,7 @@ import { setSelectedVesselCustomTrackRequest, showVesselSidebarTab } from '../..
 import showVessel from './showVessel'
 import getVesselVoyage from './getVesselVoyage'
 import { VesselSidebarTab } from '../../entities/vessel'
-import { endOfBeaconMalfunctionReasons } from '../../entities/beaconMalfunction/constants'
+import { endOfBeaconMalfunctionReasonRecord } from '../../entities/beaconMalfunction/constants'
 import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
 
 /**
@@ -14,7 +14,7 @@ import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
  * @param {boolean} openVMRERSTab
  */
 export const showVesselFromBeaconMalfunctionsKanban = (beaconMalfunction, openVMRERSTab) => async dispatch => {
-  if (beaconMalfunction?.endOfBeaconMalfunctionReason !== endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value) {
+  if (beaconMalfunction?.endOfBeaconMalfunctionReason !== endOfBeaconMalfunctionReasonRecord.RESUMED_TRANSMISSION.value) {
     const { afterDateTime, beforeDateTime } = getDatesAroundMalfunctionDateTime(beaconMalfunction)
 
     const trackRequest = {

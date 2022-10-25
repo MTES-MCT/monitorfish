@@ -4,7 +4,7 @@ import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
 import {
   BeaconMalfunctionPropertyName,
-  BeaconMalfunctionVesselStatus, endOfBeaconMalfunctionReasons,
+  BeaconMalfunctionVesselStatus, endOfBeaconMalfunctionReasonRecord,
   vesselStatuses
 } from '../../../../domain/entities/beaconMalfunction/constants'
 import { getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
@@ -43,7 +43,7 @@ const BeaconMalfunctionBody = props => {
           ? <>
             <Key width={120}>Raison fin d&apos;avarie</Key>
             <SubValue>
-              {endOfBeaconMalfunctionReasons[beaconMalfunctionWithDetails.beaconMalfunction?.endOfBeaconMalfunctionReason]?.label}
+              {endOfBeaconMalfunctionReasonRecord[beaconMalfunctionWithDetails.beaconMalfunction?.endOfBeaconMalfunctionReason]?.label}
             </SubValue><br/>
           </>
           : null

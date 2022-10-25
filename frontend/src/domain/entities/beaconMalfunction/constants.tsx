@@ -7,7 +7,11 @@ import { ReactComponent as VesselStatusAtSeaSVG } from '../../../features/icons/
 import { ReactComponent as VesselStatusNoNewsSVG } from '../../../features/icons/Avarie_statut_sans_nouvelles.svg'
 import { ReactComponent as VesselStatusNeverEmittedSVG } from '../../../features/icons/never_emitted.svg'
 
-import type { BeaconMalfunctionStageColumnValue, BeaconMalfunctionStatusValue } from '../../types/beaconMalfunction'
+import type {
+  BeaconMalfunctionStageColumnValue,
+  BeaconMalfunctionStatusValue,
+  EnfOfBeaconMalfunctionStatusValue
+} from '../../types/beaconMalfunction'
 
 const BeaconMalfunctionsTab = {
   DETAIL: 2,
@@ -81,7 +85,13 @@ const vesselStatuses: BeaconMalfunctionStatusValue[] = [
   }
 ]
 
-const endOfBeaconMalfunctionReasons = {
+export enum EndOfBeaconMalfunctionReason {
+  PERMANENT_INTERRUPTION_OF_SUPERVISION = 'PERMANENT_INTERRUPTION_OF_SUPERVISION',
+  RESUMED_TRANSMISSION = 'RESUMED_TRANSMISSION',
+  TEMPORARY_INTERRUPTION_OF_SUPERVISION = 'TEMPORARY_INTERRUPTION_OF_SUPERVISION'
+}
+
+const endOfBeaconMalfunctionReasonRecord: Record<EndOfBeaconMalfunctionReason, EnfOfBeaconMalfunctionStatusValue> = {
   PERMANENT_INTERRUPTION_OF_SUPERVISION: {
     color: COLORS.opal,
     label: 'Arrêt définitif du suivi',
@@ -102,7 +112,7 @@ const endOfBeaconMalfunctionReasons = {
   }
 }
 
-enum beaconMalfunctionsStage {
+export enum BeaconMalfunctionsStage {
   ARCHIVED = 'ARCHIVED',
   CROSS_CHECK = 'CROSS_CHECK',
   END_OF_MALFUNCTION = 'END_OF_MALFUNCTION',
@@ -117,7 +127,7 @@ enum beaconMalfunctionsStage {
 /**
  * Sort keys are disabled as keys order dictates Kanban columns ordering
  */
-const beaconMalfunctionsStageColumnRecord: Record<beaconMalfunctionsStage, BeaconMalfunctionStageColumnValue> = {
+const beaconMalfunctionsStageColumnRecord: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumnValue> = {
   INITIAL_ENCOUNTER: {
     code: 'INITIAL_ENCOUNTER',
     description: "Obtenir une réponse des navires qui ont cessé d'émettre.",
@@ -239,7 +249,7 @@ export {
   BeaconMalfunctionVesselStatus,
   vesselStatuses,
   BeaconMalfunctionsTab,
-  endOfBeaconMalfunctionReasons,
+  endOfBeaconMalfunctionReasonRecord,
   beaconMalfunctionsStageColumnRecord,
   beaconMalfunctionNotificationType,
   communicationMeans,

@@ -139,6 +139,10 @@ export function BeaconMalfunctionsBoard() {
 
   const onDragEnd = useCallback(
     event => {
+      if (!beaconMalfunctions) {
+        return
+      }
+
       const { active, over } = event
 
       const previousStage = findStage(active.data.current.stageId)
@@ -198,6 +202,10 @@ export function BeaconMalfunctionsBoard() {
   )
 
   const onDragStart = event => {
+    if (!beaconMalfunctions) {
+      return
+    }
+
     const { active } = event
     const beaconId = active?.id
     const previousStage = findStage(active.data.current.stageId)

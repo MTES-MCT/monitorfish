@@ -7,7 +7,7 @@ import { ReactComponent as VesselStatusAtSeaSVG } from '../../../features/icons/
 import { ReactComponent as VesselStatusNoNewsSVG } from '../../../features/icons/Avarie_statut_sans_nouvelles.svg'
 import { ReactComponent as VesselStatusNeverEmittedSVG } from '../../../features/icons/never_emitted.svg'
 
-import type { BeaconMalfunctionStageColumnValue } from '../../types/beaconMalfunction'
+import type { BeaconMalfunctionStageColumnValue, BeaconMalfunctionStatusValue } from '../../types/beaconMalfunction'
 
 const BeaconMalfunctionsTab = {
   DETAIL: 2,
@@ -43,7 +43,7 @@ const iconStyle = {
   verticalAlign: 'sub'
 }
 
-const vesselStatuses = [
+const vesselStatuses: BeaconMalfunctionStatusValue[] = [
   {
     color: '#F4DEAF',
     icon: <VesselStatusAtPort style={iconStyle} />,
@@ -113,12 +113,36 @@ enum beaconMalfunctionsStage {
   TARGETING_VESSEL = 'TARGETING_VESSEL'
 }
 
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+/**
+ * Sort keys are disabled as keys order dictates Kanban columns ordering
+ */
 const beaconMalfunctionsStageColumnRecord: Record<beaconMalfunctionsStage, BeaconMalfunctionStageColumnValue> = {
-  ARCHIVED: {
-    code: 'ARCHIVED',
-    description: 'Avaries clôturées.\n NB : Seules les 30 dernières avaries restent dans le kanban.',
+  INITIAL_ENCOUNTER: {
+    code: 'INITIAL_ENCOUNTER',
+    description: "Obtenir une réponse des navires qui ont cessé d'émettre.",
     isColumn: true,
-    title: 'Archivage'
+    title: 'Premier contact'
+  },
+  FOUR_HOUR_REPORT: {
+    code: 'FOUR_HOUR_REPORT',
+    description: "Suivre les navires qui font leurs 4h report ou les relancer s'ils l'ont cessé.",
+    isColumn: true,
+    title: '4h report'
+  },
+  RELAUNCH_REQUEST: {
+    code: 'RELAUNCH_REQUEST',
+    description:
+      "Relancer les navires qui sont à quai (ou supposés à quai) et qui n'ont pas encore repris leurs émissions.",
+    isColumn: true,
+    title: 'Relance pour reprise'
+  },
+  TARGETING_VESSEL: {
+    code: 'TARGETING_VESSEL',
+    description:
+      "Mobiliser les unités sur les navires dont on n'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.",
+    isColumn: true,
+    title: 'Ciblage du navire'
   },
   CROSS_CHECK: {
     code: 'CROSS_CHECK',
@@ -134,40 +158,20 @@ const beaconMalfunctionsStageColumnRecord: Record<beaconMalfunctionsStage, Beaco
     isColumn: true,
     title: "Fin de l'avarie"
   },
-  FOUR_HOUR_REPORT: {
-    code: 'FOUR_HOUR_REPORT',
-    description: "Suivre les navires qui font leurs 4h report ou les relancer s'ils l'ont cessé.",
+  ARCHIVED: {
+    code: 'ARCHIVED',
+    description: 'Avaries clôturées.\n NB : Seules les 30 dernières avaries restent dans le kanban.',
     isColumn: true,
-    title: '4h report'
-  },
-  INITIAL_ENCOUNTER: {
-    code: 'INITIAL_ENCOUNTER',
-    description: "Obtenir une réponse des navires qui ont cessé d'émettre.",
-    isColumn: true,
-    title: 'Premier contact'
-  },
-  RELAUNCH_REQUEST: {
-    code: 'RELAUNCH_REQUEST',
-    description:
-      "Relancer les navires qui sont à quai (ou supposés à quai) et qui n'ont pas encore repris leurs émissions.",
-    isColumn: true,
-    title: 'Relance pour reprise'
+    title: 'Archivage'
   },
   /** Old stages - for backward compatibility * */
   RESUMED_TRANSMISSION: {
     code: 'RESUMED_TRANSMISSION',
     isColumn: false,
     title: 'Reprise des émissions'
-  },
-
-  TARGETING_VESSEL: {
-    code: 'TARGETING_VESSEL',
-    description:
-      "Mobiliser les unités sur les navires dont on n'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.",
-    isColumn: true,
-    title: 'Ciblage du navire'
   }
 }
+/* eslint-enable sort-keys-fix/sort-keys-fix */
 
 const beaconMalfunctionNotificationType = {
   END_OF_MALFUNCTION: {

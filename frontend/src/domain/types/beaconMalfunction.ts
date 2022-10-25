@@ -93,3 +93,11 @@ export type BeaconMalfunctionStageColumnValue = {
   isColumn: boolean
   title: string
 }
+
+export type BeaconMalfunctionStatusValue = {
+  color: string
+  icon: JSX.Element
+  label: string
+  textColor: string
+  value: string
+}

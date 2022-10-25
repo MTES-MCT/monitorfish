@@ -6,7 +6,7 @@ import {
   BeaconMalfunctionPropertyName,
   beaconMalfunctionsStageColumnRecord,
   BeaconMalfunctionVesselStatus,
-  endOfBeaconMalfunctionReasons
+  endOfBeaconMalfunctionReasonRecord
 } from './constants'
 
 import type {
@@ -117,11 +117,11 @@ const getMalfunctionStartDateText = (
     beaconMalfunction?.stage === beaconMalfunctionsStageColumnRecord.ARCHIVED.code
   ) {
     switch (beaconMalfunction?.endOfBeaconMalfunctionReason) {
-      case endOfBeaconMalfunctionReasons.RESUMED_TRANSMISSION.value:
+      case endOfBeaconMalfunctionReasonRecord.RESUMED_TRANSMISSION.value:
         return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
-      case endOfBeaconMalfunctionReasons.PERMANENT_INTERRUPTION_OF_SUPERVISION.value:
+      case endOfBeaconMalfunctionReasonRecord.PERMANENT_INTERRUPTION_OF_SUPERVISION.value:
         return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
-      case endOfBeaconMalfunctionReasons.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value:
+      case endOfBeaconMalfunctionReasonRecord.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value:
         return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
       default:
         throw Error('Should not happen')

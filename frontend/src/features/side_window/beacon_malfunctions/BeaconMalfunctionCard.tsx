@@ -3,7 +3,10 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { getMalfunctionStartDateText } from '../../../domain/entities/beaconMalfunction'
-import { endOfBeaconMalfunctionReasons, vesselStatuses } from '../../../domain/entities/beaconMalfunction/constants'
+import {
+  endOfBeaconMalfunctionReasonRecord,
+  vesselStatuses
+} from '../../../domain/entities/beaconMalfunction/constants'
 import { openBeaconMalfunctionInKanban } from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
@@ -40,7 +43,7 @@ export function BeaconMalfunctionCard({
   const hasScroll = verticalScrollRef?.current?.scrollHeight > verticalScrollRef?.current?.clientHeight
 
   const endOfBeaconMalfunctionReason = useMemo(
-    () => endOfBeaconMalfunctionReasons[beaconMalfunction?.endOfBeaconMalfunctionReason],
+    () => endOfBeaconMalfunctionReasonRecord[beaconMalfunction?.endOfBeaconMalfunctionReason],
     [beaconMalfunction]
   )
 

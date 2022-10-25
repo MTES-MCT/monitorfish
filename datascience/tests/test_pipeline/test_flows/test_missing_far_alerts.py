@@ -2,9 +2,12 @@ from datetime import datetime, timedelta
 from unittest.mock import patch
 
 import pandas as pd
+import pytest
 from geoalchemy2 import Geometry
+from prefect.engine.signals import TRIGGERFAIL
 from sqlalchemy import BOOLEAN, FLOAT, TIMESTAMP, VARCHAR, Column, MetaData, Table
 
+from src.pipeline.exceptions.monitorfish_health_error import MonitorfishHealthError
 from src.pipeline.flows.missing_far_alerts import (
     concat,
     extract_vessels_that_emitted_fars,
@@ -224,12 +227,12 @@ def test_concat():
 def test_get_vessels_with_missing_fars():
     vessels_at_sea = pd.DataFrame(
         {
-            "cfr": ["Vessel_1", "Vessel_3"],
-            "facade": ["NAMO", "MEMN"],
-            "other_data": ["what", "ever"],
+            "cfr": ["Vessel_1", "Vessel_3", "Vessel 4", "Vessel 5"],
+            "facade": ["NAMO", "MEMN", "SA", "MED"],
+            "other_data": ["what", "ever", "you", "say"],
         }
     )
-    vessels_that_emitted_fars = {"Vessel_1", "Vessel_2"}
+    vessels_that_emitted_fars = {"Vessel_1", "Vessel_2", "Vessel 4", "Vessel 5"}
     vessels_with_missing_fars = get_vessels_with_missing_fars.run(
         vessels_at_sea=vessels_at_sea,
         vessels_that_emitted_fars=vessels_that_emitted_fars,
@@ -248,6 +251,24 @@ def test_get_vessels_with_missing_fars():
     )
 
 
+def test_get_vessels_with_missing_fars_raises_of_share_is_exceeded():
+    vessels_at_sea = pd.DataFrame(
+        {
+            "cfr": ["Vessel_1", "Vessel_3", "Vessel 4", "Vessel 5"],
+            "facade": ["NAMO", "MEMN", "SA", "MED"],
+            "other_data": ["what", "ever", "you", "say"],
+        }
+    )
+    vessels_that_emitted_fars = {"Vessel_1", "Vessel_2", "Vessel 4", "Vessel 5"}
+
+    with pytest.raises(MonitorfishHealthError):
+        get_vessels_with_missing_fars.run(
+            vessels_at_sea=vessels_at_sea,
+            vessels_that_emitted_fars=vessels_that_emitted_fars,
+            max_share_of_vessels_with_missing_fars=0.2,
+        )
+
+
 def test_flow_when_an_alert_is_silenced(reset_test_data):
 
     initial_pending_alerts = read_query(
@@ -259,6 +280,7 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
         alert_config_name="MISSING_FAR_ALERT",
         states_iso2_to_monitor_everywhere=["FR", "NL"],
         states_iso2_to_monitor_in_french_eez=["ES", "DE"],
+        max_share_of_vessels_with_missing_fars=1.0,
         minimum_length=12.0,
         only_raise_if_route_shows_fishing=True,
     )
@@ -302,3 +324,32 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
     )
 
     assert len(final_pending_alerts) == 2
+
+
+def test_flow_fails_if_share_of_vessels_with_missing_far_is_too_large(reset_test_data):
+
+    max_share_of_vessels_with_missing_fars = 0.23
+
+    state = flow.run(
+        alert_type="MISSING_FAR_ALERT",
+        alert_config_name="MISSING_FAR_ALERT",
+        states_iso2_to_monitor_everywhere=["FR", "NL"],
+        states_iso2_to_monitor_in_french_eez=["ES", "DE"],
+        max_share_of_vessels_with_missing_fars=max_share_of_vessels_with_missing_fars,
+        minimum_length=12.0,
+        only_raise_if_route_shows_fishing=True,
+    )
+
+    assert not state.is_successful()
+    vessels_with_missing_fars = state.result[
+        flow.get_tasks("get_vessels_with_missing_fars")[0]
+    ].result
+    assert isinstance(vessels_with_missing_fars, MonitorfishHealthError)
+    assert str(vessels_with_missing_fars) == (
+        "More than 23% of the `vessels_at_sea` are absent from "
+        "`vessels_that_emitted_fars`. It is likely that there is a logbook data "
+        "breakdown."
+    )
+
+    load_alerts_result = state.result[flow.get_tasks("load_alerts")[0]].result
+    assert isinstance(load_alerts_result, TRIGGERFAIL)

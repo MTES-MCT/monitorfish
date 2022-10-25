@@ -8,6 +8,7 @@ from prefect import Flow, Parameter, task
 from sqlalchemy import Table, and_, not_, or_, select
 from sqlalchemy.sql import Select
 
+from src.pipeline.exceptions.monitorfish_health_error import MonitorfishHealthError
 from src.pipeline.generic_tasks import extract, read_query_task
 from src.pipeline.processing import join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
@@ -245,7 +246,9 @@ def concat(
 
 @task(checkpoint=False)
 def get_vessels_with_missing_fars(
-    vessels_at_sea: pd.DataFrame, vessels_that_emitted_fars: set
+    vessels_at_sea: pd.DataFrame,
+    vessels_that_emitted_fars: set,
+    max_share_of_vessels_with_missing_fars: float = 0.5,
 ) -> pd.DataFrame:
     """
     Filters `vessels_at_sea` to keep only rows whose `cfr` is NOT in
@@ -255,14 +258,39 @@ def get_vessels_with_missing_fars(
         vessels_at_sea (pd.DataFrame): `DataFrame` of vessels at sea
         vessels_that_emitted_fars (set): `set` cfrs of vessels that emitted
           `FAR` reports
+        max_share_of_vessels_with_missing_fars (float, optional): If the share of
+          `vessels_at_sea` that are not in `vessels_that_emitted_fars` is greater than
+          this value, it is assumed that there is a breakdown in the date pipeline and
+          a `MonitorfishHealthError` is raised. Defaults to 0.5.
+
+    Raises:
+        MonitorfishHealthError: raised if the share of vessels with missing fars is
+          greater than `max_share_of_vessels_with_missing_fars`
 
     Returns:
         pd.DataFrame: Filtered version of `vessels_at_sea` with only those that are
           not in `vessels_that_emitted_fars`
     """
-    return vessels_at_sea.loc[
+
+    vessels_with_missing_fars = vessels_at_sea.loc[
         ~vessels_at_sea.cfr.isin(vessels_that_emitted_fars)
     ].reset_index(drop=True)
+
+    try:
+        assert (
+            len(vessels_with_missing_fars)
+            <= len(vessels_at_sea) * max_share_of_vessels_with_missing_fars
+        )
+    except AssertionError:
+        raise MonitorfishHealthError(
+            (
+                f"More than {max_share_of_vessels_with_missing_fars:.0%} of the "
+                "`vessels_at_sea` are absent from `vessels_that_emitted_fars`. It is "
+                "likely that there is a logbook data breakdown."
+            )
+        )
+
+    return vessels_with_missing_fars
 
 
 @task(checkpoint=False)
@@ -295,6 +323,9 @@ with Flow("Missing FAR alerts") as flow:
     states_iso2_to_monitor_everywhere = Parameter("states_iso2_to_monitor_everywhere")
     states_iso2_to_monitor_in_french_eez = Parameter(
         "states_iso2_to_monitor_in_french_eez"
+    )
+    max_share_of_vessels_with_missing_fars = Parameter(
+        "max_share_of_vessels_with_missing_fars"
     )
     minimum_length = Parameter("minimum_length")
     only_raise_if_route_shows_fishing = Parameter("only_raise_if_route_shows_fishing")
@@ -360,7 +391,9 @@ with Flow("Missing FAR alerts") as flow:
     )
 
     vessels_with_missing_fars = get_vessels_with_missing_fars(
-        vessels_at_sea, vessels_that_emitted_fars
+        vessels_at_sea,
+        vessels_that_emitted_fars,
+        max_share_of_vessels_with_missing_fars,
     )
 
     vessels_with_missing_fars = add_vessel_identifier(vessels_with_missing_fars)

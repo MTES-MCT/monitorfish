@@ -1,4 +1,4 @@
-import LayersEnum, { layersType } from '../../../entities/layers'
+import { Layers as LayersEnum, layersType } from '../../../entities/layers/constants'
 import { getAdministrativeSubZonesFromAPI } from '../../../../api/geoserver'
 
 const getAdministrativeZonesAndSubZones = administrativeZones => async (dispatch, getState) => {

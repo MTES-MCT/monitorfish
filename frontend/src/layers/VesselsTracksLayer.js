@@ -4,7 +4,7 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 
 import { usePrevious } from '../hooks/usePrevious'
-import Layers from '../domain/entities/layers'
+import { Layers } from '../domain/entities/layers/constants'
 import {
   fishingActivityIsWithinTrackLineDates,
   getVesselTrackExtent,

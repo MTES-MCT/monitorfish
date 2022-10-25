@@ -6,7 +6,7 @@ import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 
 import { getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
-import Layers from '../domain/entities/layers'
+import { Layers } from '../domain/entities/layers/constants'
 
 import { applyFilterToVessels } from '../domain/use_cases/vessel/applyFilterAndSetVessels'
 import { COLORS } from '../constants/constants'

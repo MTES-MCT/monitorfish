@@ -1,6 +1,6 @@
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
-import Layers from './layers'
+import { Layers } from './layers/constants'
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map'
 import { arraysEqual, calculatePointsDistance, calculateSplitPointCoords } from '../../utils'

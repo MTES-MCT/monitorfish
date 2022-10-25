@@ -1,7 +1,7 @@
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map'
 import Feature from 'ol/Feature'
-import Layers from './layers'
+import { Layers } from './layers/constants'
 import LineString from 'ol/geom/LineString'
 import Point from 'ol/geom/Point'
 import { Vessel } from './vessel'

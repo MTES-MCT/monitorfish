@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { getVectorOLLayer } from '../domain/use_cases/layer/administrative/showAdministrativeLayer'
-import Layers, { layersType } from '../domain/entities/layers'
+import { Layers, layersType } from '../domain/entities/layers/constants'
 import {
   layerOfTypeAdministrativeLayer,
   layerOfTypeAdministrativeLayerInCurrentMap,

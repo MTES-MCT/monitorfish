@@ -18,7 +18,7 @@ import { ReactComponent as BoxFilterSelectedSVG } from '../../../icons/Filtre_zo
 import { ReactComponent as PolygonFilterSelectedSVG } from '../../../icons/Filtre_zone_polygone_selected.svg'
 import { setInteraction } from '../../../../domain/shared_slices/Map'
 import { InteractionType } from '../../../../domain/entities/map'
-import { layersType } from '../../../../domain/entities/layers'
+import { layersType } from '../../../../domain/entities/layers/constants'
 import FilterTag from '../../../map/tools/vessel_filters/FilterTag'
 
 const MINIMUM_SEARCH_CHARACTERS_NUMBER = 2

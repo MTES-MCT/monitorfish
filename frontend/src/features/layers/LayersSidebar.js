@@ -7,9 +7,9 @@ import RegulatoryLayerSearch from './regulatory/search/RegulatoryLayerSearch'
 import AdministrativeLayers from './administrative/AdministrativeLayers'
 import RegulatoryLayers from './regulatory/RegulatoryLayers'
 import { COLORS } from '../../constants/constants'
-import closeRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import { closeRegulatoryZoneMetadata } from '../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import RegulatoryZoneMetadata from './regulatory/RegulatoryZoneMetadata'
-import BaseLayers from './base/BaseLayers'
+import { BaseLayerList } from './base/BaseLayerList'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import NamespaceContext from '../../domain/context/NamespaceContext'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
@@ -77,7 +77,7 @@ const LayersSidebar = () => {
                   hideLayersListWhenSearching={hideLayersListWhenSearching}
                   namespace={namespace}
                 />
-                <BaseLayers namespace={namespace}/>
+                <BaseLayerList namespace={namespace}/>
               </Layers>
               <RegulatoryZoneMetadataShifter
                 leftBoxOpened={leftBoxOpened}

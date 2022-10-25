@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryZone'
-import Layers from '../../../domain/entities/layers'
+import { Layers } from '../../../domain/entities/layers/constants'
 import { COLORS } from '../../../constants/constants'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'

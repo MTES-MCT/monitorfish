@@ -1,7 +1,8 @@
 // TODO Review that "double" logic for Layer slice.
 
 import { createGenericSlice, getLocalStorageState } from '../../utils'
-import Layers, { getLayerNameNormalized } from '../entities/layers'
+import { getLayerNameNormalized } from '../entities/layers'
+import { Layers } from '../entities/layers/constants'
 
 import type { AdministrativeOrRegulatoryLayerIdentity } from '../types/layer'
 import type { PayloadAction, Slice } from '@reduxjs/toolkit'

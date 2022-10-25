@@ -6,7 +6,7 @@ import { Vector } from 'ol/layer'
 import { Stroke, Style } from 'ol/style'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
-import Layers from '../domain/entities/layers'
+import { Layers } from '../domain/entities/layers/constants'
 import { COLORS } from '../constants/constants'
 
 const FilterLayer = ({ map }) => {

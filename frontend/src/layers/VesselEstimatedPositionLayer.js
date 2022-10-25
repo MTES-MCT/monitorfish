@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
-import Layers from '../domain/entities/layers'
+import { Layers } from '../domain/entities/layers/constants'
 import { EstimatedPosition } from '../domain/entities/estimatedPosition'
 import { getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel'
 import { Vector } from 'ol/layer'

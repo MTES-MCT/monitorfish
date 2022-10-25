@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 
-import Layers from '../../../../domain/entities/layers'
+import { Layers } from '../../../../domain/entities/layers/constants'
 import showRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
-import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 import { showOrHideMetadataIcon } from '../RegulatoryZone'

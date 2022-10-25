@@ -7,7 +7,7 @@ import { Vector } from 'ol/layer'
 import { transform } from 'ol/proj'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
-import Layers from '../domain/entities/layers'
+import { Layers } from '../domain/entities/layers/constants'
 import { Vessel } from '../domain/entities/vessel'
 
 import { getSelectedVesselStyle } from './styles/vessel.style'

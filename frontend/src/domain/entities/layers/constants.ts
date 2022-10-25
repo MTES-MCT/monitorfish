@@ -1,23 +1,15 @@
-/**
- *
- * @param {Object} layer
- * @param { String } layer.type
- * @param { String | null } layer.topic
- * @param { String | null } layer.zone
- * @returns String
- */
-export const getLayerNameNormalized = (layer) => {
-  return [layer.type, layer.topic, layer.zone].filter(Boolean).join(':')
-}
-
 export const layersGroups = {
-  TWELVE_FORTY_ONE: {
-    code: 'twelve_forty_one',
-    name: 'Zones du 1241'
-  },
   NAVIGATION_CATEGORY: {
     code: 'navigation_category',
     name: 'Catégories de navigation'
+  },
+  ORGP: {
+    code: 'orgp',
+    name: 'Zones ORGP'
+  },
+  TWELVE_FORTY_ONE: {
+    code: 'twelve_forty_one',
+    name: 'Zones du 1241'
   },
   VMS_SITUATION: {
     code: 'vms_situation',
@@ -26,27 +18,24 @@ export const layersGroups = {
   VMS_SITUATION_BREXIT: {
     code: 'vms_situation_brexit',
     name: 'Zones pour situation VMS Brexit'
-  },
-  ORGP: {
-    code: 'orgp',
-    name: 'Zones ORGP'
   }
 }
 
 export const layersType = {
-  VESSEL: 'VESSEL',
-  VESSEL_ALERT: 'VESSEL_ALERT',
-  INFRACTION_SUSPICION: 'INFRACTION_SUSPICION',
-  VESSEL_BEACON_MALFUNCTION: 'VESSEL_BEACON_MALFUNCTION',
-  VESSEL_ALERT_AND_BEACON_MALFUNCTION: 'VESSEL_ALERT_AND_BEACON_MALFUNCTION',
   ADMINISTRATIVE: 'ADMINISTRATIVE',
-  REGULATORY: 'REGULATORY',
   BASE_LAYER: 'BASE_LAYER',
   FREE_DRAW: 'FREE_DRAW',
-  MEASUREMENT: 'MEASUREMENT'
+  INFRACTION_SUSPICION: 'INFRACTION_SUSPICION',
+  MEASUREMENT: 'MEASUREMENT',
+  REGULATORY: 'REGULATORY',
+  VESSEL: 'VESSEL',
+  VESSEL_ALERT: 'VESSEL_ALERT',
+  VESSEL_ALERT_AND_BEACON_MALFUNCTION: 'VESSEL_ALERT_AND_BEACON_MALFUNCTION',
+  VESSEL_BEACON_MALFUNCTION: 'VESSEL_BEACON_MALFUNCTION'
 }
 
-const Layers = {
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+export const Layers = {
   BASE_LAYER: {
     code: 'ol-layer',
     name: '',
@@ -215,9 +204,11 @@ const Layers = {
     getZoneName: feature => {
       if (feature.get(Layers.FAO.subSubZoneFieldKey)) {
         return feature.get(Layers.FAO.subSubZoneFieldKey)
-      } else if (feature.get(Layers.FAO.subZoneFieldKey)) {
+      }
+      if (feature.get(Layers.FAO.subZoneFieldKey)) {
         return feature.get(Layers.FAO.subZoneFieldKey)
-      } else if (feature.get(Layers.FAO.zoneFieldKey)) {
+      }
+      if (feature.get(Layers.FAO.zoneFieldKey)) {
         return feature.get(Layers.FAO.zoneFieldKey)
       }
 
@@ -276,7 +267,7 @@ const Layers = {
   },
   eaux_union_dans_oi_et_atl_ouest: {
     code: '1241_eaux_union_dans_oi_et_atl_ouest_areas',
-    name: 'Eaux de l\'Union dans l\'OI et l\'Atl. ouest',
+    name: "Eaux de l'Union dans l'OI et l'Atl. ouest",
     group: layersGroups.TWELVE_FORTY_ONE,
     type: layersType.ADMINISTRATIVE,
     containsMultipleZones: false,
@@ -436,7 +427,7 @@ const Layers = {
   },
   effort_zones_areas: {
     code: 'effort_zones_areas',
-    name: 'Zones d\'effort',
+    name: "Zones d'effort",
     group: null,
     type: layersType.ADMINISTRATIVE,
     containsMultipleZones: true,
@@ -535,8 +526,13 @@ const Layers = {
     isIntersectable: false
   }
 }
+/* eslint-enable sort-keys-fix/sort-keys-fix */
 
-export const baseLayers = {
+export const BaseLayers = {
+  DARK: {
+    code: 'DARK',
+    text: 'Fond de carte sombre'
+  },
   LIGHT: {
     code: 'LIGHT',
     text: 'Fond de carte clair'
@@ -545,76 +541,15 @@ export const baseLayers = {
     code: 'OSM',
     text: 'Open Street Map'
   },
-  SHOM: {
-    code: 'SHOM',
-    text: 'Carte marine (SHOM)'
-  },
   SATELLITE: {
     code: 'SATELLITE',
     text: 'Satellite'
   },
-  DARK: {
-    code: 'DARK',
-    text: 'Fond de carte sombre'
+  SHOM: {
+    code: 'SHOM',
+    text: 'Carte marine (SHOM)'
   }
-}
-
-function removeMiscellaneousGears (layerGearsArray) {
-  return layerGearsArray
-    .filter(gearCode => gearCode !== 'MIS')
-    .map(gearCode => gearCode)
-}
-
-function removeVariousLonglineGears (layerGearsArray) {
-  return layerGearsArray
-    .filter(gearCode => gearCode !== 'LL')
-    .map(gearCode => gearCode)
-}
-
-export function getGearCategory (layerGears, gears) {
-  if (layerGears?.authorized) {
-    if (layerGears?.authorized.regulatedGearCategories && Object.keys(layerGears?.authorized.regulatedGearCategories).length) {
-      return Object.keys(layerGears?.authorized.regulatedGearCategories)[0]
-    } else if (layerGears?.authorized.regulatedGears?.length) {
-      let layerGearsArray = layerGears?.authorized.regulatedGears
-      if (layerGearsArray.length > 1) {
-        layerGearsArray = removeMiscellaneousGears(layerGearsArray)
-      }
-      if (layerGearsArray.length > 1) {
-        layerGearsArray = removeVariousLonglineGears(layerGearsArray)
-      }
-
-      const gear = gears
-        .find(_gear => {
-          return layerGearsArray
-            .some(gearCode => {
-              return gearCode === _gear.code
-            })
-        })
-      return gear ? gear.category : null
-    }
-  }
-  return null
 }
 
 export const SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY = 'selectedRegulatoryZoneIds'
 export const SELECTED_REG_ZONES_LOCAL_STORAGE_KEY = 'selectedRegulatoryZones'
-
-export const reOrderOldObjectHierarchyIfFound = layers => {
-  layers.forEach(layer => {
-    layers[layer] = layers[layer].map(zone => {
-      if (zone && zone.layerName) {
-        return {
-          topic: zone.layerName,
-          ...zone
-        }
-      }
-
-      return zone
-    })
-  })
-
-  return layers
-}
-
-export default Layers

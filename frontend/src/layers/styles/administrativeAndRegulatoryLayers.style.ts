@@ -4,7 +4,7 @@ import Stroke from 'ol/style/Stroke'
 import Text from 'ol/style/Text'
 
 import { COLORS } from '../../constants/constants'
-import Layers from '../../domain/entities/layers'
+import { Layers } from '../../domain/entities/layers/constants'
 import { theme } from '../../ui/theme'
 import { getHashDigitsFromRegulation } from '../utils'
 import { isForbiddenPeriod } from './isForbiddenPeriod'

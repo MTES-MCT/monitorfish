@@ -6,7 +6,7 @@ WITH vessels_last_emissions AS (
         MAX(last_position_datetime_utc) AS most_recent_emission_datetime_utc
     FROM last_positions l
     JOIN vessels v
-    ON v.cfr = l.cfr or v.ircs = l.ircs
+    ON v.cfr = l.cfr
     GROUP BY v.id
 ),
 

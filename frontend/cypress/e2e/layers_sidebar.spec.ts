@@ -195,8 +195,7 @@ context('LayersSidebar', () => {
     // Then show the metadata
     cy.get('*[data-cy="regulatory-layers-show-metadata"]').click()
     cy.get('*[data-cy="regulatory-layers-metadata-region"]').should('exist')
-    cy.log('Fishing period should not be seen if it has an empty message')
-    cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').should('not.exist')
+    cy.get('*[data-cy="regulatory-layers-metadata-fishing-period"]').contains('Vraiment, regarde Légipêche!')
 
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears"]').contains('Tous les engins trainants')
     cy.get('*[data-cy="authorized-regulatory-layers-metadata-gears-towed-gears"]')

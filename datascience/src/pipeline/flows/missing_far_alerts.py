@@ -245,7 +245,7 @@ def concat(
 
 @task(checkpoint=False)
 def get_vessels_with_missing_fars(
-    vessels_at_sea: pd.DataFrame, vessels_that_emitted_fars: pd.DataFrame
+    vessels_at_sea: pd.DataFrame, vessels_that_emitted_fars: set
 ) -> pd.DataFrame:
     """
     Filters `vessels_at_sea` to keep only rows whose `cfr` is NOT in
@@ -253,7 +253,7 @@ def get_vessels_with_missing_fars(
 
     Args:
         vessels_at_sea (pd.DataFrame): `DataFrame` of vessels at sea
-        vessels_that_emitted_fars (pd.DataFrame): `DataFrame` of vessels that emitted
+        vessels_that_emitted_fars (set): `set` cfrs of vessels that emitted
           `FAR` reports
 
     Returns:

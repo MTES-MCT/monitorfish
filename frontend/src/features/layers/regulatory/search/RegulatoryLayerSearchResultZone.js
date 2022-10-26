@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
 import { Checkbox, CheckboxGroup } from 'rsuite'
 
-import Layers from '../../../../domain/entities/layers'
+import { Layer } from '../../../../domain/entities/layers/constants'
 import showRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
-import closeRegulatoryZoneMetadata from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 import { showOrHideMetadataIcon } from '../RegulatoryZone'
@@ -13,6 +13,7 @@ import { showOrHideMetadataIcon } from '../RegulatoryZone'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import { PaperDarkIcon, PaperIcon } from '../../../commonStyles/icons/REGPaperIcon.style'
 import { COLORS } from '../../../../constants/constants'
+import { theme } from '../../../../ui/theme'
 
 const RegulatoryLayerSearchResultZone = props => {
   const {
@@ -29,7 +30,7 @@ const RegulatoryLayerSearchResultZone = props => {
   const zoneIsAlreadySelected = useSelector(state => state.regulatory
     .selectedRegulatoryLayers[regulatoryZone.topic]?.find(zone => zone.id === regulatoryZone.id))
 
-  const zoneStyle = getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(undefined, regulatoryZone)
+  const zoneStyle = getAdministrativeAndRegulatoryLayersStyle(Layer.REGULATORY.code)(undefined, regulatoryZone)
   const [metadataIsShown, setMetadataIsShown] = useState(false)
 
   const showOrHideRegulatoryZoneMetadata = _regulatoryZone => {
@@ -136,7 +137,7 @@ const Zone = styled.span`
   }
 
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${theme.color.blueGray["25"]};
   }
 `
 

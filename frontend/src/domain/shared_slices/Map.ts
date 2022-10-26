@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
-import { baseLayers } from '../entities/layers'
+import { BaseLayers } from '../entities/layers/constants'
 import { CoordinatesFormat } from '../entities/map'
 import { vesselLabel } from '../entities/vesselLabelLine'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
@@ -54,7 +54,7 @@ const INITIAL_STATE: MapState = {
   hideVesselsAtPort: getLocalStorageState(true, hideVesselsAtPortLocalStorageKey),
   interaction: null,
   riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
-  selectedBaseLayer: getLocalStorageState(baseLayers.LIGHT.code, baseLayerLocalStorageKey),
+  selectedBaseLayer: getLocalStorageState(BaseLayers.LIGHT.code, baseLayerLocalStorageKey),
   showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
   vesselLabel: getLocalStorageState(vesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
   vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),

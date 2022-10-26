@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector, useStore } from 'react-redux'
-import Layers, { getLayerNameNormalized } from '../domain/entities/layers'
+import { Layer } from '../domain/entities/layers/constants'
+import { getLayerNameNormalized } from '../domain/entities/layers'
 import { showSimplifiedGeometries, showWholeGeometries } from '../domain/shared_slices/Regulatory'
 import { getVectorOLLayer } from '../domain/use_cases/layer/regulation/showRegulatoryZone'
 
@@ -47,10 +48,10 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   useEffect(() => {
     function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers () {
       if (map) {
-        const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(Layers.REGULATORY.code))
+        const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(Layer.REGULATORY.code))
         if (regulatoryZoneMetadata) {
           const layerToAddProperty = regulatoryLayers.find(layer => {
-            return layer?.name === `${Layers.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
+            return layer?.name === `${Layer.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
           })
 
           if (layerToAddProperty) {
@@ -81,7 +82,7 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
           return
         }
 
-        const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(Layers.REGULATORY.code))
+        const regulatoryLayers = map.getLayers().getArray().filter(layer => layer?.name?.includes(Layer.REGULATORY.code))
         regulatoryLayers.forEach(layer => {
           const vectorSource = layer.getSource()
 
@@ -131,11 +132,11 @@ function sortRegulatoryLayersFromAreas (layersToFeatures, olLayers) {
 
 function layersNotInCurrentOLMap (olLayers, layer) {
   return !olLayers.some(olLayer => olLayer.name ===
-    getLayerNameNormalized({ type: Layers.REGULATORY.code, ...layer }))
+    getLayerNameNormalized({ type: Layer.REGULATORY.code, ...layer }))
 }
 
 function layersOfTypeRegulatoryLayer (layer) {
-  return layer.type === Layers.REGULATORY.code
+  return layer.type === Layer.REGULATORY.code
 }
 
 function getShowSimplifiedFeatures (currentZoom) {
@@ -163,7 +164,7 @@ function layersNotPresentInShowedLayers (_showedLayers, olLayer) {
 }
 
 function layersOfTypeRegulatoryLayerInCurrentMap (olLayer) {
-  return olLayer?.name?.includes(Layers.REGULATORY.code)
+  return olLayer?.name?.includes(Layer.REGULATORY.code)
 }
 
 function addMetadataIsShowedProperty (lastShowedFeatures, layerToAddProperty) {

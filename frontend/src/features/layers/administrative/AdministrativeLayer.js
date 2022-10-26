@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { ShowIcon } from '../../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../../commonStyles/icons/HideIcon.style'
 import { COLORS } from '../../../constants/constants'
+import { theme } from '../../../ui/theme'
 
 const AdministrativeLayer = props => {
   const {
@@ -83,9 +84,9 @@ const Row = styled.span`
   width: -moz-available;
   width: -webkit-fill-available;
   width: stretch;
-  
+
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${theme.color.blueGray["25"]};
   }
 `
 

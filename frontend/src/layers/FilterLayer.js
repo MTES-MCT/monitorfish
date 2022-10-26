@@ -6,7 +6,7 @@ import { Vector } from 'ol/layer'
 import { Stroke, Style } from 'ol/style'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
-import Layers from '../domain/entities/layers'
+import { Layer } from '../domain/entities/layers/constants'
 import { COLORS } from '../constants/constants'
 
 const FilterLayer = ({ map }) => {
@@ -42,7 +42,7 @@ const FilterLayer = ({ map }) => {
       layerRef.current = new Vector({
         renderBuffer: 4,
         source: getVectorSource(),
-        zIndex: Layers.FILTERED_VESSELS.zIndex,
+        zIndex: Layer.FILTERED_VESSELS.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
         style: new Style({
@@ -53,7 +53,7 @@ const FilterLayer = ({ map }) => {
           })
         })
       })
-      layerRef.current.name = Layers.FILTERED_VESSELS.code
+      layerRef.current.name = Layer.FILTERED_VESSELS.code
     }
     return layerRef.current
   }

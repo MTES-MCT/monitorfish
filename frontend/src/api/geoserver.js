@@ -1,4 +1,4 @@
-import Layers from '../domain/entities/layers'
+import { Layer } from '../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import WFS from 'ol/format/WFS'
 import GML from 'ol/format/GML'
@@ -30,7 +30,7 @@ function getAllRegulatoryLayersFromAPI (fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   return fetch(`${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-    `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`)
+    `${Layer.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id`)
     .then(response => {
       if (response.status === OK) {
         return response.json()
@@ -65,7 +65,7 @@ function getAllGeometryWithoutProperty (fromBackoffice) {
 
   const filter = 'regulatory_references IS NULL AND zone IS NULL AND region IS NULL AND law_type IS NULL AND topic IS NULL'
   const REQUEST = `${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-    `${Layers.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
+    `${Layer.REGULATORY.code}&outputFormat=application/json&propertyName=geometry,id&CQL_FILTER=` + filter.replace(/'/g, '%27').replace(/ /g, '%20')
   return fetch(REQUEST)
     .then(response => {
       if (response.status === OK) {
@@ -198,7 +198,7 @@ export function getRegulatoryZonesInExtentFromAPI (extent, fromBackoffice) {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
     return fetch(`${geoserverURL}/geoserver/wfs?service=WFS` +
-      `&version=1.1.0&request=GetFeature&typename=monitorfish:${Layers.REGULATORY.code}` +
+      `&version=1.1.0&request=GetFeature&typename=monitorfish:${Layer.REGULATORY.code}` +
       `&outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
       `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}` +
       '&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,facade,region'
@@ -246,7 +246,7 @@ function getRegulatoryFeatureMetadataFromAPI (regulatorySubZone, fromBackoffice)
   try {
     const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
-    url = getRegulatoryZoneURL(Layers.REGULATORY.code, regulatorySubZone, geoserverURL)
+    url = getRegulatoryZoneURL(Layer.REGULATORY.code, regulatorySubZone, geoserverURL)
   } catch (e) {
     return Promise.reject(e)
   }
@@ -273,7 +273,7 @@ function getAdministrativeSubZonesFromAPI (type, fromBackoffice) {
   const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
 
   let query
-  if (type === Layers.FAO.code) {
+  if (type === Layer.FAO.code) {
     const filter = 'f_level=\'DIVISION\''
 
     query = `${geoserverURL}/geoserver/wfs?service=WFS&` +

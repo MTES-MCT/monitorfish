@@ -1,6 +1,6 @@
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
-import Layers from './layers'
+import { Layer } from './layers/constants'
 
 export const vesselLabel = {
   VESSEL_NATIONALITY: 'VESSEL_NATIONALITY',
@@ -30,7 +30,7 @@ export class VesselLabelLine {
   }
 
   static getFeatureId (identity) {
-    return `${Layers.VESSELS_LABEL.code}:${identity.internalReferenceNumber}/${identity.ircs}/${identity.externalReferenceNumber}`
+    return `${Layer.VESSELS_LABEL.code}:${identity.internalReferenceNumber}/${identity.ircs}/${identity.externalReferenceNumber}`
   }
 }
 

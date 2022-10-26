@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
 import VesselTrackCard from '../cards/VesselTrackCard'
 import { COLORS } from '../../../constants/constants'
-import LayersEnum from '../../../domain/entities/layers'
+import { Layer } from '../../../domain/entities/layers/constants'
 import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from './position'
 
 const overlayBoxSize = 240
@@ -44,7 +44,8 @@ const VesselTrackCardOverlay = ({ map, feature }) => {
 
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
-      if (feature?.getId()?.toString()?.includes(LayersEnum.VESSEL_TRACK.code) && feature?.getId()?.toString()?.includes('position')) {
+      // TODO Refactor: clean nullish checks & useEffect usage
+      if (feature?.getId()?.toString()?.includes(Layer.VESSEL_TRACK.code) && feature?.getId()?.toString()?.includes('position')) {
         setVesselFeatureToShowOnCard(feature)
         overlayRef.current.style.display = 'block'
         overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())

@@ -4,7 +4,7 @@ import Stroke from 'ol/style/Stroke'
 import Text from 'ol/style/Text'
 
 import { COLORS } from '../../constants/constants'
-import Layers from '../../domain/entities/layers'
+import { Layer } from '../../domain/entities/layers/constants'
 import { theme } from '../../ui/theme'
 import { getHashDigitsFromRegulation } from '../utils'
 import { isForbiddenPeriod } from './isForbiddenPeriod'
@@ -15,7 +15,7 @@ import type Feature from 'ol/Feature'
 
 export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
   switch (type) {
-    case Layers.EEZ.code:
+    case Layer.EEZ.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -26,10 +26,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             fill: new Fill({ color: COLORS.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.9)', width: 2 }),
-            text: `${feature?.get(Layers.EEZ.subZoneFieldKey) || ''}`
+            text: `${feature?.get(Layer.EEZ.subZoneFieldKey) || ''}`
           })
         })
-    case Layers.FAO.code:
+    case Layer.FAO.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -41,10 +41,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             font: '12px Marianne',
             overflow: true,
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: Layers.FAO.getZoneName(feature)
+            text: Layer.FAO.getZoneName(feature)
           })
         })
-    case Layers.AEM.code:
+    case Layer.AEM.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -55,10 +55,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             fill: new Fill({ color: COLORS.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layers.AEM.subZoneFieldKey) || ''}`
+            text: `${feature?.get(Layer.AEM.subZoneFieldKey) || ''}`
           })
         })
-    case Layers.effort_zones_areas.code:
+    case Layer.effort_zones_areas.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -69,10 +69,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             fill: new Fill({ color: COLORS.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layers.effort_zones_areas.subZoneFieldKey) || ''}`
+            text: `${feature?.get(Layer.effort_zones_areas.subZoneFieldKey) || ''}`
           })
         })
-    case Layers.cormoran.code:
+    case Layer.cormoran.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -83,10 +83,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             fill: new Fill({ color: COLORS.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layers.cormoran.subZoneFieldKey) || ''}`
+            text: `${feature?.get(Layer.cormoran.subZoneFieldKey) || ''}`
           })
         })
-    case Layers.situations.code:
+    case Layer.situations.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -97,10 +97,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             fill: new Fill({ color: COLORS.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layers.situations.subZoneFieldKey) || ''}`
+            text: `${feature?.get(Layer.situations.subZoneFieldKey) || ''}`
           })
         })
-    case Layers.brexit.code:
+    case Layer.brexit.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -111,10 +111,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             fill: new Fill({ color: COLORS.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layers.brexit.subZoneFieldKey) || ''}`
+            text: `${feature?.get(Layer.brexit.subZoneFieldKey) || ''}`
           })
         })
-    case Layers.rectangles_stat.code:
+    case Layer.rectangles_stat.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -125,10 +125,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             fill: new Fill({ color: COLORS.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layers.rectangles_stat.subZoneFieldKey) || ''}`
+            text: `${feature?.get(Layer.rectangles_stat.subZoneFieldKey) || ''}`
           })
         })
-    case Layers.THREE_MILES.code:
+    case Layer.THREE_MILES.code:
       return () =>
         new Style({
           stroke: new Stroke({
@@ -136,7 +136,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 2
           })
         })
-    case Layers.SIX_MILES.code:
+    case Layer.SIX_MILES.code:
       return () =>
         new Style({
           stroke: new Stroke({
@@ -144,7 +144,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 2
           })
         })
-    case Layers.TWELVE_MILES.code:
+    case Layer.TWELVE_MILES.code:
       return () =>
         new Style({
           stroke: new Stroke({
@@ -152,7 +152,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 2
           })
         })
-    case Layers.cgpm_areas.code:
+    case Layer.cgpm_areas.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -163,10 +163,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             fill: new Fill({ color: COLORS.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layers.cgpm_areas.subZoneFieldKey) || ''}`
+            text: `${feature?.get(Layer.cgpm_areas.subZoneFieldKey) || ''}`
           })
         })
-    case Layers.cgpm_statistical_rectangles_areas.code:
+    case Layer.cgpm_statistical_rectangles_areas.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -177,10 +177,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             fill: new Fill({ color: COLORS.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layers.cgpm_statistical_rectangles_areas.subZoneFieldKey) || ''}`
+            text: `${feature?.get(Layer.cgpm_statistical_rectangles_areas.subZoneFieldKey) || ''}`
           })
         })
-    case Layers.saltwater_limit.code:
+    case Layer.saltwater_limit.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -191,10 +191,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             fill: new Fill({ color: COLORS.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layers.saltwater_limit.subZoneFieldKey) || ''}`
+            text: `${feature?.get(Layer.saltwater_limit.subZoneFieldKey) || ''}`
           })
         })
-    case Layers.transversal_sea_limit.code:
+    case Layer.transversal_sea_limit.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -205,10 +205,10 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             fill: new Fill({ color: COLORS.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${feature?.get(Layers.transversal_sea_limit.subZoneFieldKey) || ''}`
+            text: `${feature?.get(Layer.transversal_sea_limit.subZoneFieldKey) || ''}`
           })
         })
-    case Layers.REGULATORY.code:
+    case Layer.REGULATORY.code:
       return (feature: Feature | undefined, regulation: BaseRegulatoryZone | null) => {
         const randomDigits = getHashDigitsFromRegulation(regulation)
         const isForbidden = isForbiddenPeriod(feature)

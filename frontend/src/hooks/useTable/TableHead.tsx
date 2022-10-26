@@ -55,6 +55,7 @@ export function TableHead({
             }}
           >
             <CardTableColumnTitle
+              dataCy={`table-order-by-${key}`}
               isAscending={!isSortingDesc}
               isSortable={isSortable}
               isSortColumn={key === sortingKey}

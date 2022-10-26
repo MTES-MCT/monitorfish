@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { getVectorOLLayer } from '../domain/use_cases/layer/administrative/showAdministrativeLayer'
-import { Layers, layersType } from '../domain/entities/layers/constants'
+import { Layer, LayerType } from '../domain/entities/layers/constants'
 import {
   layerOfTypeAdministrativeLayer,
   layerOfTypeAdministrativeLayerInCurrentMap,
@@ -12,9 +12,9 @@ const AdministrativeLayers = ({ map }) => {
   const { showedLayers } = useSelector(state => state.layer)
   const isBackoffice = useSelector(state => state.global.isBackoffice)
 
-  const administrativeLayers = Object.keys(Layers)
-    .map(topic => Layers[topic])
-    .filter(layer => layer.type === layersType.ADMINISTRATIVE)
+  const administrativeLayers = Object.keys(Layer)
+    .map(topic => Layer[topic])
+    .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
 
   useEffect(() => {
     if (map && showedLayers) {

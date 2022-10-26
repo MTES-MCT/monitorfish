@@ -4,7 +4,7 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
-import { Layers } from '../domain/entities/layers/constants'
+import { Layer } from '../domain/entities/layers/constants'
 
 import { getVesselAlertStyle } from './styles/vessel.style'
 import { getVesselId, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel'
@@ -48,7 +48,7 @@ const VesselAlertLayer = ({ map }) => {
     if (layerRef.current === null) {
       layerRef.current = new Vector({
         source: getVectorSource(),
-        zIndex: Layers.VESSEL_ALERT.zIndex,
+        zIndex: Layer.VESSEL_ALERT.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
         style: (feature, resolution) => getVesselAlertStyle(feature, resolution)
@@ -59,7 +59,7 @@ const VesselAlertLayer = ({ map }) => {
 
   useEffect(() => {
     if (isAdmin && map) {
-      getLayer().name = Layers.VESSEL_ALERT.code
+      getLayer().name = Layer.VESSEL_ALERT.code
       map.getLayers().push(getLayer())
     }
 
@@ -86,7 +86,7 @@ const VesselAlertLayer = ({ map }) => {
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layers.VESSEL_ALERT.code}:${getVesselId(vessel.vesselProperties)}`)
+        feature.setId(`${Layer.VESSEL_ALERT.code}:${getVesselId(vessel.vesselProperties)}`)
         features.push(feature)
 
         return features

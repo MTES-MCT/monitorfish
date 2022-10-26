@@ -1,17 +1,17 @@
 import { animateToRegulatoryLayer } from '../../shared_slices/Map'
-import { Layers } from '../../entities/layers/constants'
+import { Layer } from '../../entities/layers/constants'
 import { getCenter } from 'ol/extent'
 
 const zoomInLayer = ({ topicAndZone, feature }) => (dispatch, getState) => {
   if (topicAndZone) {
-    const name = `${Layers.REGULATORY.code}:${topicAndZone.topic}:${topicAndZone.zone}`
+    const name = `${Layer.REGULATORY.code}:${topicAndZone.topic}:${topicAndZone.zone}`
     const layerToZoomIn = getState().layer.layersToFeatures.find(layer => layer.name === name)
     if (layerToZoomIn) {
       dispatchAnimateToRegulatoryLayer(layerToZoomIn.center, dispatch, name)
     }
   } else if (feature) {
     const center = getCenter(feature.getGeometry().getExtent())
-    dispatchAnimateToRegulatoryLayer(center, dispatch, Layers.REGULATORY_PREVIEW)
+    dispatchAnimateToRegulatoryLayer(center, dispatch, Layer.REGULATORY_PREVIEW)
   }
 }
 

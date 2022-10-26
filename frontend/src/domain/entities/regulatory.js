@@ -1,5 +1,5 @@
 import { formatDataForSelectPicker, getTextForSearch } from '../../utils'
-import { Layers } from './layers/constants'
+import { Layer } from './layers/constants'
 
 export const mapToRegulatoryZone = ({ properties, geometry, id }, speciesByCode) => {
   return {
@@ -161,7 +161,7 @@ export const mapToRegulatoryFeatureObject = properties => {
 }
 
 export const getRegulatoryFeatureId = (id) => {
-  return `${Layers.REGULATORY.code}_write.${id}`
+  return `${Layer.REGULATORY.code}_write.${id}`
 }
 
 export const emptyRegulatoryFeatureObject = {

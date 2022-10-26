@@ -4,6 +4,7 @@ import { COLORS } from '../../../constants/constants'
 import AdministrativeLayer from './AdministrativeLayer'
 import { useSelector } from 'react-redux'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
+import { theme } from '../../../ui/theme'
 
 const AdministrativeLayerGroup = props => {
   const showedLayers = useSelector(state => state.layer.showedLayers)
@@ -82,9 +83,9 @@ const Zone = styled.span`
   user-select: none;
   padding-bottom: 2px;
   ${props => !props.isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
-  
+
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${theme.color.blueGray["25"]};
   }
 `
 

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Overlay from 'ol/Overlay'
 import TrackTypeCard from '../cards/TrackTypeCard'
 import { COLORS } from '../../../constants/constants'
-import { Layers } from '../../../domain/entities/layers/constants'
+import { Layer } from '../../../domain/entities/layers/constants'
 
 const TrackTypeCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
   const [trackTypeToShowOnCard, setTrackTypeToShowOnCard] = useState(null)
@@ -34,7 +34,7 @@ const TrackTypeCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {
 
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
-      if (feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) && feature?.getId()?.toString()?.includes('line')) {
+      if (feature?.getId()?.toString()?.includes(Layer.VESSEL_TRACK.code) && feature?.getId()?.toString()?.includes('line')) {
         setTrackTypeToShowOnCard(feature.trackType)
         overlayRef.current.style.display = 'block'
         if (pointerMoveEventPixel) {

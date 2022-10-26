@@ -3,7 +3,7 @@ import { RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { BaseLayers, layersType } from '../../../domain/entities/layers/constants'
+import { BaseLayers, LayerType } from '../../../domain/entities/layers/constants'
 import LayerSlice from '../../../domain/shared_slices/Layer'
 import { selectBaseLayer } from '../../../domain/shared_slices/Map'
 import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
@@ -18,17 +18,17 @@ export function BaseLayerList({ namespace }) {
   const layersSidebarOpenedLayerType = useAppSelector(state => state.layer.layersSidebarOpenedLayerType)
   const { setLayersSideBarOpenedLayerType } = LayerSlice[namespace].actions
 
-  const baseLayers = Object.keys(BaseLayers).filter(key => key !== BaseLayers.DARK.code)
+  const baseLayers = useMemo(() => Object.keys(BaseLayers).filter(key => key !== BaseLayers.DARK.code), [])
   const isBaseLayersShowed = useMemo(
-    () => layersSidebarOpenedLayerType === layersType.BASE_LAYER,
+    () => layersSidebarOpenedLayerType === LayerType.BASE_LAYER,
     [layersSidebarOpenedLayerType]
   )
 
   const openOrCloseBaseLayers = useCallback(() => {
     if (isBaseLayersShowed) {
-      dispatch(setLayersSideBarOpenedLayerType(''))
+      dispatch(setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(setLayersSideBarOpenedLayerType(layersType.BASE_LAYER))
+      dispatch(setLayersSideBarOpenedLayerType(LayerType.BASE_LAYER))
       // @ts-ignore
       dispatch(closeRegulatoryZoneMetadata())
     }

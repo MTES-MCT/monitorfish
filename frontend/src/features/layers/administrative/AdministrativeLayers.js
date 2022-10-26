@@ -9,7 +9,7 @@ import getAdministrativeZonesAndSubZones from '../../../domain/use_cases/layer/a
 import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
 import layer from '../../../domain/shared_slices/Layer'
-import { Layers, layersType } from '../../../domain/entities/layers/constants'
+import { Layer, LayerType } from '../../../domain/entities/layers/constants'
 import { ChevronIcon } from '../../commonStyles/icons/ChevronIcon.style'
 import showAdministrativeLayer from '../../../domain/use_cases/layer/administrative/showAdministrativeLayer'
 import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
@@ -32,9 +32,9 @@ const AdministrativeLayers = props => {
   const [zones, setZones] = useState([])
 
   useEffect(() => {
-    const administrativeLayers = Object.keys(Layers)
-      .map(layer => Layers[layer])
-      .filter(layer => layer.type === layersType.ADMINISTRATIVE)
+    const administrativeLayers = Object.keys(Layer)
+      .map(layer => Layer[layer])
+      .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
 
     if (administrativeLayers && administrativeLayers.length) {
       dispatch(getAdministrativeZonesAndSubZones(administrativeLayers))
@@ -45,7 +45,7 @@ const AdministrativeLayers = props => {
   }, [])
 
   useEffect(() => {
-    setShowZones(layersSidebarOpenedLayerType === layersType.ADMINISTRATIVE)
+    setShowZones(layersSidebarOpenedLayerType === LayerType.ADMINISTRATIVE)
   }, [layersSidebarOpenedLayerType, setShowZones])
 
   useEffect(() => {
@@ -72,9 +72,9 @@ const AdministrativeLayers = props => {
 
   const onSectionTitleClicked = () => {
     if (showZones) {
-      dispatch(setLayersSideBarOpenedLayerType(''))
+      dispatch(setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(setLayersSideBarOpenedLayerType(layersType.ADMINISTRATIVE))
+      dispatch(setLayersSideBarOpenedLayerType(LayerType.ADMINISTRATIVE))
       dispatch(closeRegulatoryZoneMetadata())
     }
   }

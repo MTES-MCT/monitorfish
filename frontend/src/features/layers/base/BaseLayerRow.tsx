@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { BaseLayers } from '../../../domain/entities/layers/constants'
+import { theme } from '../../../ui/theme'
 
 type BaseLayerRowProps = {
   layer: string
@@ -33,6 +34,6 @@ const Row = styled.li`
   user-select: none;
 
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${theme.color.blueGray['25']};
   }
 `

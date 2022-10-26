@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
-import { layersType, layersType as LayersType } from '../domain/entities/layers/constants'
+import { LayerType, LayerType as LayersType } from '../domain/entities/layers/constants'
 import { InteractionType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
 import Draw, { createBox } from 'ol/interaction/Draw'
 import { resetInteraction } from '../domain/shared_slices/Map'
@@ -104,9 +104,9 @@ const DrawLayer = ({ map }) => {
             feature: geoJSONString
           }
           switch (interaction.listener) {
-            case layersType.VESSEL: dispatch(addZoneSelected(newSelectedZone))
+            case LayerType.VESSEL: dispatch(addZoneSelected(newSelectedZone))
               break
-            case layersType.REGULATORY: dispatch(setZoneSelected(newSelectedZone))
+            case LayerType.REGULATORY: dispatch(setZoneSelected(newSelectedZone))
               break
           }
 

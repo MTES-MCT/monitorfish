@@ -12,14 +12,14 @@ const RegulatoryLayerSearchResultList = ({ namespace }) => {
     advancedSearchIsOpen
   } = useSelector(state => state.regulatoryLayerSearch)
   const layersSidebarOpenedLayerType = useSelector(state => state.layer.layersSidebarOpenedLayerType)
-  const hasOneLayerTypeOpen = useMemo(() => layersSidebarOpenedLayerType !== '', [layersSidebarOpenedLayerType])
+  const hasOneLayerTypeOpen = useMemo(() => layersSidebarOpenedLayerType !== undefined, [layersSidebarOpenedLayerType])
   const hasSearchResults = useMemo(() => regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0, [regulatoryLayersSearchResult])
 
   return (<>
     {
       hasOneLayerTypeOpen && hasSearchResults && <ShowResultList
         data-cy={'regulatory-search-show-results'}
-        onClick={() => dispatch(setLayersSideBarOpenedLayerType(''))}
+        onClick={() => dispatch(setLayersSideBarOpenedLayerType(undefined))}
       >
         Afficher les résultats
       </ShowResultList>

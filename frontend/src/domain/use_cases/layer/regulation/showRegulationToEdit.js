@@ -5,7 +5,7 @@ import {
   setSelectedRegulatoryZoneId,
   setStatus
 } from '../../../../features/backoffice/Regulation.slice'
-import { Layers } from '../../../entities/layers/constants'
+import { Layer } from '../../../entities/layers/constants'
 import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../../../api/geoserver'
 import { STATUS } from '../../../../features/backoffice/constants'
 
@@ -13,7 +13,7 @@ const showRegulationToEdit = regulatoryZone => async (dispatch, getState) => {
   const { speciesByCode } = getState().species
   dispatch(setStatus(STATUS.LOADING))
 
-  return getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZone, getState().global.isBackoffice)
+  return getRegulatoryZoneFromAPI(Layer.REGULATORY.code, regulatoryZone, getState().global.isBackoffice)
     .then(feature => {
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature, speciesByCode)
 

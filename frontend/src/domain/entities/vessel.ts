@@ -1,6 +1,6 @@
 import countries from 'i18n-iso-countries'
 
-import { Layers, BaseLayers } from './layers/constants'
+import { Layer, BaseLayers } from './layers/constants'
 import { vesselLabel as vesselLabelEnum } from './vesselLabelLine'
 
 import type { SelectedVessel, ShowedVesselTrack, VesselIdentity } from '../types/vessel'
@@ -17,7 +17,7 @@ export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
   static getVesselFeatureId(vessel) {
-    return `${Layers.VESSELS.code}:${getVesselId(vessel)}`
+    return `${Layer.VESSELS.code}:${getVesselId(vessel)}`
   }
 
   static getVesselOpacity(dateTime, vesselIsHidden, vesselIsOpacityReduced) {

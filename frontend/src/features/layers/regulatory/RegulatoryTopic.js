@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import { batch, useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import RegulatoryLayerZone from './RegulatoryZone'
-import { Layers } from '../../../domain/entities/layers/constants'
+import { Layer } from '../../../domain/entities/layers/constants'
 import { COLORS } from '../../../constants/constants'
 import NamespaceContext from '../../../domain/context/NamespaceContext'
 import { CloseIcon } from '../../commonStyles/icons/CloseIcon.style'
@@ -17,6 +17,7 @@ import {
 } from '../../../domain/shared_slices/Regulatory'
 import showRegulatoryTopic from '../../../domain/use_cases/layer/regulation/showRegulatoryTopic'
 import hideLayer from '../../../domain/use_cases/layer/hideLayer'
+import { theme } from '../../../ui/theme'
 
 const RegulatoryTopic = props => {
   const {
@@ -72,7 +73,7 @@ const RegulatoryTopic = props => {
 
   const showTopic = namespace => {
     dispatch(showRegulatoryTopic({
-      type: Layers.REGULATORY.code,
+      type: Layer.REGULATORY.code,
       regulatoryZones,
       namespace
     }))
@@ -80,7 +81,7 @@ const RegulatoryTopic = props => {
 
   const hideTopic = namespace => {
     dispatch(hideLayer({
-      type: Layers.REGULATORY.code,
+      type: Layer.REGULATORY.code,
       topic: regulatoryTopic,
       namespace
     }))
@@ -249,7 +250,7 @@ const Zone = styled.span`
   ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
 
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${theme.color.blueGray["25"]};
   }
 `
 

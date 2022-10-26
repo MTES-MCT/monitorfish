@@ -14,7 +14,7 @@ import {
 import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
 import { getFishingActivityCircleStyle } from '../../layers/styles/vesselTrack.style'
-import { Layers } from './layers/constants'
+import { Layer } from './layers/constants'
 
 export const LogbookMessageType = {
   DEP: {
@@ -555,7 +555,7 @@ export const getFishingActivityFeatureOnTrackLine = (fishingActivity, lineOfFish
   })
   feature.name = fishingActivity.name
   feature.setStyle(getFishingActivityCircleStyle())
-  feature.setId(`${Layers.VESSEL_TRACK.code}:logbook:${fishingActivityDateTimestamp}`)
+  feature.setId(`${Layer.VESSEL_TRACK.code}:logbook:${fishingActivityDateTimestamp}`)
 
   return {
     feature,

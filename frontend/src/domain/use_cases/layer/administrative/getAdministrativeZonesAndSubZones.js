@@ -1,4 +1,4 @@
-import { Layers as LayersEnum, layersType } from '../../../entities/layers/constants'
+import { Layer as LayersEnum, LayerType } from '../../../entities/layers/constants'
 import { getAdministrativeSubZonesFromAPI } from '../../../../api/geoserver'
 
 const getAdministrativeZonesAndSubZones = administrativeZones => async (dispatch, getState) => {
@@ -21,7 +21,7 @@ const getAdministrativeZonesAndSubZones = administrativeZones => async (dispatch
 
   const nextSubZonesPromises = Object.keys(LayersEnum)
     .map(layer => LayersEnum[layer])
-    .filter(zone => zone.type === layersType.ADMINISTRATIVE)
+    .filter(zone => zone.type === LayerType.ADMINISTRATIVE)
     .filter(zone => zone.showMultipleZonesInAdministrativeZones)
     .map(zone => {
       if (zone.containsMultipleZones) {

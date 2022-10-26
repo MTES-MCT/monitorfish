@@ -6,7 +6,7 @@ import { all } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
 import simplify from 'simplify-geojson'
 
-import { Layers } from '../../../entities/layers/constants'
+import { Layer } from '../../../entities/layers/constants'
 import { animateToRegulatoryLayer } from '../../../shared_slices/Map'
 import layer from '../../../shared_slices/Layer'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
@@ -42,13 +42,13 @@ const showRegulatoryZone = zoneToShow => dispatch => {
 }
 
 export const getVectorOLLayer = (dispatch, getState) => nextVisibleLayer => {
-  const name = `${Layers.REGULATORY.code}:${nextVisibleLayer.topic}:${nextVisibleLayer.zone}`
+  const name = `${Layer.REGULATORY.code}:${nextVisibleLayer.topic}:${nextVisibleLayer.zone}`
   const source = getRegulatoryVectorSource(dispatch, getState)(nextVisibleLayer)
 
   const _layer = new VectorImageLayer({
     source,
     className: 'regulatory',
-    style: feature => [getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(feature, nextVisibleLayer)]
+    style: feature => [getAdministrativeAndRegulatoryLayersStyle(Layer.REGULATORY.code)(feature, nextVisibleLayer)]
   })
   _layer.name = name
 
@@ -56,7 +56,7 @@ export const getVectorOLLayer = (dispatch, getState) => nextVisibleLayer => {
 }
 
 const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperties => {
-  const zoneName = `${Layers.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
+  const zoneName = `${Layer.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
 
   const {
     setLastShowedFeatures,
@@ -69,7 +69,7 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
       featureProjection: OPENLAYERS_PROJECTION
     }),
     loader: extent => {
-      getRegulatoryZoneFromAPI(Layers.REGULATORY.code, regulatoryZoneProperties, getState().global.isBackoffice)
+      getRegulatoryZoneFromAPI(Layer.REGULATORY.code, regulatoryZoneProperties, getState().global.isBackoffice)
         .then(regulatoryZone => {
           if (!regulatoryZone.geometry) {
             vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(new Error('Aucune géometrie dans la zone')))

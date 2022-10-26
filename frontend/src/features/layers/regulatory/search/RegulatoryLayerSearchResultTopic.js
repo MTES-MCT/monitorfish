@@ -6,6 +6,7 @@ import RegulatoryLayerSearchResultZones from './RegulatoryLayerSearchResultZones
 import { checkRegulatoryZones, uncheckRegulatoryZones } from './RegulatoryLayerSearch.slice'
 import { COLORS } from '../../../../constants/constants'
 import { closeRegulatoryZoneMetadata } from '../../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import { theme } from '../../../../ui/theme'
 
 const RegulatoryLayerSearchResultTopic = ({ regulatoryLayerLawType, regulatoryLayerTopic, topicDetails }) => {
   const dispatch = useDispatch()
@@ -147,7 +148,7 @@ const LayerTopic = styled.div`
   border-bottom: 1px solid ${COLORS.lightGray};
 
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${theme.color.blueGray["25"]};
   }
 
   .rs-checkbox-checker {

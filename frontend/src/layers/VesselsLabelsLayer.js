@@ -6,7 +6,7 @@ import LineString from 'ol/geom/LineString'
 
 import { usePrevious } from '../hooks/usePrevious'
 
-import { Layers } from '../domain/entities/layers/constants'
+import { Layer } from '../domain/entities/layers/constants'
 import { getVesselId, getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
 import { drawMovedLabelIfFoundAndReturnOffset, VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
@@ -73,7 +73,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       layerRef.current = new Vector({
         renderBuffer: 7,
         source: getVectorSource(),
-        zIndex: Layers.VESSELS_LABEL.zIndex,
+        zIndex: Layer.VESSELS_LABEL.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true,
         style: getLabelLineStyle
@@ -84,11 +84,11 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
 
   useEffect(() => {
     if (map) {
-      getLayer().name = Layers.VESSELS_LABEL.code
+      getLayer().name = Layer.VESSELS_LABEL.code
       map.getLayers().push(getLayer())
 
       const vesselsLayer = map.getLayers().getArray()?.find((olLayer) => {
-        return olLayer.name === Layers.VESSELS.code
+        return olLayer.name === Layer.VESSELS.code
       })
       vesselsLayerSourceRef.current = vesselsLayer?.getSource()
     }

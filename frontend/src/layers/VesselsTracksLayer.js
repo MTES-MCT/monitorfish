@@ -4,7 +4,7 @@ import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 
 import { usePrevious } from '../hooks/usePrevious'
-import { Layers } from '../domain/entities/layers/constants'
+import { Layer } from '../domain/entities/layers/constants'
 import {
   fishingActivityIsWithinTrackLineDates,
   getVesselTrackExtent,
@@ -68,7 +68,7 @@ const VesselsTracksLayer = ({ map }) => {
       layerRef.current = new Vector({
         renderBuffer: 4,
         source: getVectorSource(),
-        zIndex: Layers.VESSEL_TRACK.zIndex,
+        zIndex: Layer.VESSEL_TRACK.zIndex,
         updateWhileAnimating: true,
         updateWhileInteracting: true
       })
@@ -78,7 +78,7 @@ const VesselsTracksLayer = ({ map }) => {
 
   useEffect(() => {
     if (map) {
-      getLayer().name = Layers.VESSEL_TRACK.code
+      getLayer().name = Layer.VESSEL_TRACK.code
       map.getLayers().push(getLayer())
     }
 

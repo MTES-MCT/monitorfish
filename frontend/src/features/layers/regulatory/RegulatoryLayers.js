@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import RegulatoryLayerTopic from './RegulatoryTopic'
 import { COLORS } from '../../../constants/constants'
 import removeRegulatoryZoneFromMySelection from '../../../domain/use_cases/layer/regulation/removeRegulatoryZoneFromMySelection'
-import { Layers, layersType } from '../../../domain/entities/layers/constants'
+import { Layer, LayerType } from '../../../domain/entities/layers/constants'
 import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 import { useDispatch, useSelector } from 'react-redux'
 import layer from '../../../domain/shared_slices/Layer'
@@ -31,7 +31,7 @@ const RegulatoryLayers = props => {
   const firstUpdate = useRef(true)
 
   useEffect(() => {
-    setShowRegulatoryLayers(layersSidebarOpenedLayerType === layersType.REGULATORY)
+    setShowRegulatoryLayers(layersSidebarOpenedLayerType === LayerType.REGULATORY)
   }, [layersSidebarOpenedLayerType, setShowRegulatoryLayers])
 
   const increaseNumberOfZonesOpened = useCallback(number => {
@@ -51,7 +51,7 @@ const RegulatoryLayers = props => {
   const callRemoveRegulatoryLayerFromMySelection = useCallback((regulatoryZone, numberOfZones, namespace) => {
     decreaseNumberOfZonesOpened(numberOfZones)
     dispatch(hideLayer({
-      type: Layers.REGULATORY.code,
+      type: Layer.REGULATORY.code,
       ...regulatoryZone,
       namespace
     }))
@@ -72,9 +72,9 @@ const RegulatoryLayers = props => {
 
   const onTitleClicked = () => {
     if (showRegulatoryLayers) {
-      dispatch(setLayersSideBarOpenedLayerType(''))
+      dispatch(setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(setLayersSideBarOpenedLayerType(layersType.REGULATORY))
+      dispatch(setLayersSideBarOpenedLayerType(LayerType.REGULATORY))
       dispatch(closeRegulatoryZoneMetadata())
     }
   }

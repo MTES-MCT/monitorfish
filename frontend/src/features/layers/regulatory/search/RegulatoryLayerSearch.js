@@ -37,7 +37,7 @@ const RegulatoryLayerSearch = props => {
   const wrapperRef = useRef(null)
 
   useEffect(() => {
-    if (layersSidebarOpenedLayerType !== '') {
+    if (layersSidebarOpenedLayerType !== undefined) {
       batch(() => {
         dispatch(resetRegulatoryGeometriesToPreview())
         dispatch(resetRegulatoryZonesChecked())
@@ -65,7 +65,7 @@ const RegulatoryLayerSearch = props => {
 
   useEffect(() => {
     if (regulatoryLayersSearchResult && Object.keys(regulatoryLayersSearchResult).length > 0) {
-      dispatch(setLayersSideBarOpenedLayerType(''))
+      dispatch(setLayersSideBarOpenedLayerType(undefined))
     }
   }, [regulatoryLayersSearchResult])
 

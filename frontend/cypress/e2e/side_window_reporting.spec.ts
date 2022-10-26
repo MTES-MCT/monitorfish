@@ -37,7 +37,7 @@ context('Reportings', () => {
     cy.get('*[data-cy="side-window-current-reportings"]').last().contains('RENCONTRER VEILLER APPARTEMENT"')
 
     // When we re-order by date
-    cy.get('[data-cy="side-window-order-by-date"]').click()
+    cy.get('[data-cy="table-order-by-validationDate"]').click()
 
     // Then it is re-ordered
     cy.get('*[data-cy="side-window-current-reportings"]').first().contains('RENCONTRER VEILLER APPARTEMENT"')
@@ -97,6 +97,7 @@ context('Reportings', () => {
       expect(request.body.title).contains('Suspicion de chalutage dans les 3  km')
       expect(response && response.statusCode).equal(200)
     })
+    cy.wait(50)
 
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 1)
     cy.get('*[data-cy="side-window-current-reportings"]').first().contains('DML 29')

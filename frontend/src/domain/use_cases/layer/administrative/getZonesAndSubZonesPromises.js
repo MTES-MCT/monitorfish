@@ -1,10 +1,10 @@
-import Layers, { layersType } from '../../../entities/layers'
+import { Layer, LayerType } from '../../../entities/layers/constants'
 import { getAdministrativeSubZonesFromAPI } from '../../../../api/geoserver'
 
 export const getZonesAndSubZonesPromises = () => (dispatch, getState) => {
-  return Object.keys(Layers)
-    .map(layer => Layers[layer])
-    .filter(layer => layer.type === layersType.ADMINISTRATIVE)
+  return Object.keys(Layer)
+    .map(layer => Layer[layer])
+    .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
     .filter(layer => layer.isIntersectable)
     .map(zone => {
       if (zone.containsMultipleZones) {

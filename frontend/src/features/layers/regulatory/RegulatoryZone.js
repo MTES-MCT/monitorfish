@@ -4,10 +4,10 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { COLORS } from '../../../constants/constants'
-import Layers from '../../../domain/entities/layers'
+import { Layer } from '../../../domain/entities/layers/constants'
 
 import showRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
-import closeRegulatoryZoneMetadata from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import { closeRegulatoryZoneMetadata } from '../../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import zoomInLayer from '../../../domain/use_cases/layer/zoomInLayer'
 import hideLayer from '../../../domain/use_cases/layer/hideLayer'
 import showRegulatoryZone from '../../../domain/use_cases/layer/regulation/showRegulatoryZone'
@@ -24,6 +24,7 @@ import {
   removeRegulatoryTopicOpened
 } from '../../../domain/shared_slices/Regulatory'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../layers/styles/administrativeAndRegulatoryLayers.style'
+import { theme } from '../../../ui/theme'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {
   if (regulatoryZoneMetadata && regulatoryZone &&
@@ -62,7 +63,7 @@ const RegulatoryZone = props => {
 
   const [metadataIsShown, setMetadataIsShown] = useState(false)
   const [isOver, setIsOver] = useState(false)
-  const vectorLayerStyle = getAdministrativeAndRegulatoryLayersStyle(Layers.REGULATORY.code)(undefined, regulatoryZone)
+  const vectorLayerStyle = getAdministrativeAndRegulatoryLayersStyle(Layer.REGULATORY.code)(undefined, regulatoryZone)
 
   const callShowRegulatoryZoneMetadata = zone => {
     if (!metadataIsShown) {
@@ -81,13 +82,13 @@ const RegulatoryZone = props => {
   const triggerShowRegulatoryZone = () => {
     if (!zoneIsShown && isReadyToShowRegulatoryLayers) {
       dispatch(showRegulatoryZone({
-        type: Layers.REGULATORY.code,
+        type: Layer.REGULATORY.code,
         ...regulatoryZone,
         namespace
       }))
     } else {
       dispatch(hideLayer({
-        type: Layers.REGULATORY.code,
+        type: Layer.REGULATORY.code,
         ...regulatoryZone,
         namespace
       }))
@@ -206,7 +207,7 @@ const Zone = styled.span`
   : 'height: 28px;'}
 
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${theme.color.blueGray["25"]};
   }
 `
 

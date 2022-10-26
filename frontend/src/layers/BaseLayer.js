@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { MapboxVector } from 'ol/layer'
-import Layers, { baseLayers } from '../domain/entities/layers'
+import { Layer, BaseLayers } from '../domain/entities/layers/constants'
 import TileLayer from 'ol/layer/Tile'
 import { OSM } from 'ol/source'
 import XYZ from 'ol/source/XYZ'
@@ -14,14 +14,14 @@ const BaseLayer = ({ map }) => {
     LIGHT: () => new MapboxVector({
       styleUrl: 'mapbox://styles/monitorfish/ckrbusml50wgv17nrzy3q374b',
       accessToken: process.env.REACT_APP_MAPBOX_KEY,
-      className: Layers.BASE_LAYER.code,
+      className: Layer.BASE_LAYER.code,
       zIndex: 0
     }),
     OSM: () => new TileLayer({
       source: new OSM({
         attributions: '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
       }),
-      className: Layers.BASE_LAYER.code,
+      className: Layer.BASE_LAYER.code,
       zIndex: 0
     }),
     SATELLITE: () => new TileLayer({
@@ -29,7 +29,7 @@ const BaseLayer = ({ map }) => {
         url: 'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=' + process.env.REACT_APP_MAPBOX_KEY,
         maxZoom: 19
       }),
-      className: Layers.BASE_LAYER.code,
+      className: Layer.BASE_LAYER.code,
       zIndex: 0
     }),
     /*
@@ -48,7 +48,7 @@ const BaseLayer = ({ map }) => {
         // Countries have transparency, so do not fade tiles:
         transition: 0
       }),
-      className: Layers.BASE_LAYER.code,
+      className: Layer.BASE_LAYER.code,
       zIndex: 0
     }),
     SCAN_LITTORAL: () => new TileLayer({
@@ -59,7 +59,7 @@ const BaseLayer = ({ map }) => {
         // Countries have transparency, so do not fade tiles:
         transition: 0
       }),
-      className: Layers.BASE_LAYER.code,
+      className: Layer.BASE_LAYER.code,
       zIndex: 0
     })
   })
@@ -68,7 +68,7 @@ const BaseLayer = ({ map }) => {
     function addLayerToMap () {
       if (map) {
         if (!selectedBaseLayer) {
-          selectedBaseLayer = baseLayers.OSM.code
+          selectedBaseLayer = BaseLayer.OSM.code
         }
         if (baseLayersObjects[selectedBaseLayer]) {
           map.getLayers().push(baseLayersObjects[selectedBaseLayer]())
@@ -84,7 +84,7 @@ const BaseLayer = ({ map }) => {
       if (map && selectedBaseLayer && baseLayersObjects[selectedBaseLayer]) {
         const olLayers = map.getLayers()
         const layerToRemove = olLayers.getArray()
-          .find(layer => layer.className_ === Layers.BASE_LAYER.code)
+          .find(layer => layer.className_ === Layer.BASE_LAYER.code)
 
         if (!layerToRemove) {
           return

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import LayersEnum from '../../domain/entities/layers'
+import { Layer } from '../../domain/entities/layers/constants'
 import showRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 
 const ShowRegulatoryMetadata = ({ mapClickEvent }) => {
@@ -9,7 +9,7 @@ const ShowRegulatoryMetadata = ({ mapClickEvent }) => {
   useEffect(() => {
     if (mapClickEvent?.feature) {
       function showRegulatoryZoneMetadataOnClick (feature) {
-        if (feature?.getId()?.toString()?.includes(LayersEnum.REGULATORY.code)) {
+        if (feature?.getId()?.toString()?.includes(Layer.REGULATORY.code)) {
           const zone = {
             topic: feature.getProperties().topic,
             zone: feature.getProperties().zone

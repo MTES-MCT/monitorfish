@@ -12,9 +12,10 @@ export const updateReporting =
     const { selectedVesselIdentity } = getState().vessel
     const { currentAndArchivedReportingsOfSelectedVessel, vesselIdentity } = getState().reporting
 
-    updateReportingFromAPI(id, nextReporting)
+    return updateReportingFromAPI(id, nextReporting)
       .then(updatedReporting => {
         dispatch(updateCurrentReporting(updatedReporting))
+
         if (vesselIdentity && currentAndArchivedReportingsOfSelectedVessel?.current?.length) {
           const nextCurrentAndArchivedReporting = getUpdatedCurrentAndArchivedReportingOfSelectedVessel(
             currentAndArchivedReportingsOfSelectedVessel,
@@ -27,7 +28,8 @@ export const updateReporting =
             })
           )
         }
-        dispatch(removeError())
+
+        return dispatch(removeError())
       })
       .catch(error => {
         console.error(error)

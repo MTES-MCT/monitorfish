@@ -14,7 +14,7 @@ import ShowRegulatoryMetadata from '../map/ShowRegulatoryMetadata'
 
 import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
 import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
-import closeRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
+import { closeRegulatoryZoneMetadata } from '../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
 import { FRANCE, UE, UK } from '../../domain/entities/regulatory'
 import { COLORS } from '../../constants/constants'
 import { EmptyResult } from '../commonStyles/Text.style'

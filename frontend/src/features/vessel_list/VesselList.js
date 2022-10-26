@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import { Modal } from 'rsuite'
 
-import { layersType } from '../../domain/entities/layers'
+import { LayerType } from '../../domain/entities/layers/constants'
 import { InteractionType } from '../../domain/entities/map'
 import { VesselLocation } from '../../domain/entities/vessel'
 import { animateToExtent, setInteraction } from '../../domain/shared_slices/Map'
@@ -207,7 +207,7 @@ const VesselList = ({ namespace }) => {
       dispatch(closeVesselListModal())
       dispatch(setInteraction({
         type: InteractionType.SQUARE,
-        listener: layersType.VESSEL
+        listener: LayerType.VESSEL
       }))
       dispatch(setBlockVesselsUpdate(true))
     })
@@ -218,7 +218,7 @@ const VesselList = ({ namespace }) => {
       dispatch(closeVesselListModal())
       dispatch(setInteraction({
         type: InteractionType.POLYGON,
-        listener: layersType.VESSEL
+        listener: LayerType.VESSEL
       }))
       dispatch(setBlockVesselsUpdate(true))
     })
@@ -263,7 +263,7 @@ const VesselList = ({ namespace }) => {
       dispatch(openVesselListModal())
     }
   }, [previewFilteredVesselsMode])
-  
+
   useEffect(() => {
     if (zonesSelected?.length) {
       dispatch(openVesselListModal())
@@ -301,7 +301,7 @@ const VesselList = ({ namespace }) => {
       administrativeZonesFiltered &&
       zonesSelected.length > administrativeZonesFiltered.length) {
       const nextZonesSelected = zonesSelected.filter(zoneSelected => {
-        if (zoneSelected.code === layersType.FREE_DRAW) {
+        if (zoneSelected.code === LayerType.FREE_DRAW) {
           return true
         }
 

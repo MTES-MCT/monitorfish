@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../domain/shared_slices/Map'
 import showVessel from '../../domain/use_cases/vessel/showVessel'
-import LayersEnum from '../../domain/entities/layers'
+import { Layer } from '../../domain/entities/layers/constants'
 import showVesselTrack from '../../domain/use_cases/vessel/showVesselTrack'
 import getVesselVoyage from '../../domain/use_cases/vessel/getVesselVoyage'
 import { updateVesselTrackAsZoomed } from '../../domain/shared_slices/Vessel'
@@ -100,7 +100,7 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
 
   useEffect(() => {
     const clickedFeatureId = mapClickEvent?.feature?.getId()
-    if (!previewFilteredVesselsMode && clickedFeatureId?.toString()?.includes(LayersEnum.VESSELS.code)) {
+    if (!previewFilteredVesselsMode && clickedFeatureId?.toString()?.includes(Layer.VESSELS.code)) {
       const clickedVessel = vessels.find(vessel => {
         return clickedFeatureId?.toString()?.includes(vessel.vesselId)
       })

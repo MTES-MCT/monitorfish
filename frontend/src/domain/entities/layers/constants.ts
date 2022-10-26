@@ -1,23 +1,15 @@
-/**
- *
- * @param {Object} layer
- * @param { String } layer.type
- * @param { String | null } layer.topic
- * @param { String | null } layer.zone
- * @returns String
- */
-export const getLayerNameNormalized = (layer) => {
-  return [layer.type, layer.topic, layer.zone].filter(Boolean).join(':')
-}
-
 export const layersGroups = {
-  TWELVE_FORTY_ONE: {
-    code: 'twelve_forty_one',
-    name: 'Zones du 1241'
-  },
   NAVIGATION_CATEGORY: {
     code: 'navigation_category',
     name: 'Catégories de navigation'
+  },
+  ORGP: {
+    code: 'orgp',
+    name: 'Zones ORGP'
+  },
+  TWELVE_FORTY_ONE: {
+    code: 'twelve_forty_one',
+    name: 'Zones du 1241'
   },
   VMS_SITUATION: {
     code: 'vms_situation',
@@ -26,32 +18,29 @@ export const layersGroups = {
   VMS_SITUATION_BREXIT: {
     code: 'vms_situation_brexit',
     name: 'Zones pour situation VMS Brexit'
-  },
-  ORGP: {
-    code: 'orgp',
-    name: 'Zones ORGP'
   }
 }
 
-export const layersType = {
-  VESSEL: 'VESSEL',
-  VESSEL_ALERT: 'VESSEL_ALERT',
-  INFRACTION_SUSPICION: 'INFRACTION_SUSPICION',
-  VESSEL_BEACON_MALFUNCTION: 'VESSEL_BEACON_MALFUNCTION',
-  VESSEL_ALERT_AND_BEACON_MALFUNCTION: 'VESSEL_ALERT_AND_BEACON_MALFUNCTION',
-  ADMINISTRATIVE: 'ADMINISTRATIVE',
-  REGULATORY: 'REGULATORY',
-  BASE_LAYER: 'BASE_LAYER',
-  FREE_DRAW: 'FREE_DRAW',
-  MEASUREMENT: 'MEASUREMENT'
+export enum LayerType {
+  ADMINISTRATIVE = 'ADMINISTRATIVE',
+  BASE_LAYER = 'BASE_LAYER',
+  FREE_DRAW = 'FREE_DRAW',
+  INFRACTION_SUSPICION = 'INFRACTION_SUSPICION',
+  MEASUREMENT = 'MEASUREMENT',
+  REGULATORY = 'REGULATORY',
+  VESSEL = 'VESSEL',
+  VESSEL_ALERT = 'VESSEL_ALERT',
+  VESSEL_ALERT_AND_BEACON_MALFUNCTION = 'VESSEL_ALERT_AND_BEACON_MALFUNCTION',
+  VESSEL_BEACON_MALFUNCTION = 'VESSEL_BEACON_MALFUNCTION'
 }
 
-const Layers = {
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+export const Layer = {
   BASE_LAYER: {
     code: 'ol-layer',
     name: '',
     group: null,
-    type: layersType.BASE_LAYER,
+    type: LayerType.BASE_LAYER,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -61,7 +50,7 @@ const Layers = {
     code: 'vessels',
     name: '',
     group: null,
-    type: layersType.VESSEL,
+    type: LayerType.VESSEL,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -72,7 +61,7 @@ const Layers = {
     code: 'selected_vessel',
     name: '',
     group: null,
-    type: layersType.VESSEL,
+    type: LayerType.VESSEL,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -83,7 +72,7 @@ const Layers = {
     code: 'filtered_vessel',
     name: '',
     group: null,
-    type: layersType.VESSEL,
+    type: LayerType.VESSEL,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -94,7 +83,7 @@ const Layers = {
     code: 'vessel_alert',
     name: '',
     group: null,
-    type: layersType.VESSEL_ALERT,
+    type: LayerType.VESSEL_ALERT,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -105,7 +94,7 @@ const Layers = {
     code: 'vessel_infraction_suspicion',
     name: '',
     group: null,
-    type: layersType.VESSEL_ALERT,
+    type: LayerType.VESSEL_ALERT,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -116,7 +105,7 @@ const Layers = {
     code: 'vessel_beacon_malfunction',
     name: '',
     group: null,
-    type: layersType.VESSEL_BEACON_MALFUNCTION,
+    type: LayerType.VESSEL_BEACON_MALFUNCTION,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -127,7 +116,7 @@ const Layers = {
     code: 'vessel_alert_and_beacon_malfunction',
     name: '',
     group: null,
-    type: layersType.VESSEL_BEACON_MALFUNCTION,
+    type: LayerType.VESSEL_BEACON_MALFUNCTION,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -138,7 +127,7 @@ const Layers = {
     code: 'label',
     name: '',
     group: null,
-    type: layersType.VESSEL,
+    type: LayerType.VESSEL,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -149,7 +138,7 @@ const Layers = {
     code: 'vessel_track',
     name: '',
     group: null,
-    type: layersType.VESSEL,
+    type: LayerType.VESSEL,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -160,7 +149,7 @@ const Layers = {
     code: 'estimated_position',
     name: '',
     group: null,
-    type: layersType.VESSEL,
+    type: LayerType.VESSEL,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -171,7 +160,7 @@ const Layers = {
     code: 'measurement',
     name: '',
     group: null,
-    type: layersType.MEASUREMENT,
+    type: LayerType.MEASUREMENT,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -185,7 +174,7 @@ const Layers = {
     code: 'regulations',
     name: '',
     group: null,
-    type: layersType.REGULATORY,
+    type: LayerType.REGULATORY,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -195,7 +184,7 @@ const Layers = {
     code: 'eez_areas',
     name: 'Zones ZEE',
     group: null,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'union',
@@ -205,7 +194,7 @@ const Layers = {
     code: 'fao_areas',
     name: 'Zones FAO / CIEM',
     group: null,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     zoneFieldKey: 'f_subarea',
@@ -213,12 +202,14 @@ const Layers = {
     subSubZoneFieldKey: 'f_subdivis',
     isIntersectable: true,
     getZoneName: feature => {
-      if (feature.get(Layers.FAO.subSubZoneFieldKey)) {
-        return feature.get(Layers.FAO.subSubZoneFieldKey)
-      } else if (feature.get(Layers.FAO.subZoneFieldKey)) {
-        return feature.get(Layers.FAO.subZoneFieldKey)
-      } else if (feature.get(Layers.FAO.zoneFieldKey)) {
-        return feature.get(Layers.FAO.zoneFieldKey)
+      if (feature.get(Layer.FAO.subSubZoneFieldKey)) {
+        return feature.get(Layer.FAO.subSubZoneFieldKey)
+      }
+      if (feature.get(Layer.FAO.subZoneFieldKey)) {
+        return feature.get(Layer.FAO.subZoneFieldKey)
+      }
+      if (feature.get(Layer.FAO.zoneFieldKey)) {
+        return feature.get(Layer.FAO.zoneFieldKey)
       }
 
       return ''
@@ -228,7 +219,7 @@ const Layers = {
     code: '3_miles_areas',
     name: '3 Milles',
     group: null,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -238,7 +229,7 @@ const Layers = {
     code: '6_miles_areas',
     name: '6 Milles',
     group: null,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -248,7 +239,7 @@ const Layers = {
     code: '12_miles_areas',
     name: '12 Milles',
     group: null,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -258,7 +249,7 @@ const Layers = {
     code: '1241_eaux_occidentales_australes_areas',
     name: 'Eaux occidentales australes',
     group: layersGroups.TWELVE_FORTY_ONE,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -268,7 +259,7 @@ const Layers = {
     code: '1241_eaux_occidentales_septentrionales_areas',
     name: 'Eaux occidentales septentrionales',
     group: layersGroups.TWELVE_FORTY_ONE,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -276,9 +267,9 @@ const Layers = {
   },
   eaux_union_dans_oi_et_atl_ouest: {
     code: '1241_eaux_union_dans_oi_et_atl_ouest_areas',
-    name: 'Eaux de l\'Union dans l\'OI et l\'Atl. ouest',
+    name: "Eaux de l'Union dans l'OI et l'Atl. ouest",
     group: layersGroups.TWELVE_FORTY_ONE,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -288,7 +279,7 @@ const Layers = {
     code: '1241_mer_baltique_areas',
     name: 'Mer Baltique',
     group: layersGroups.TWELVE_FORTY_ONE,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -298,7 +289,7 @@ const Layers = {
     code: '1241_mer_du_nord_areas',
     name: 'Mer du Nord',
     group: layersGroups.TWELVE_FORTY_ONE,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -308,7 +299,7 @@ const Layers = {
     code: '1241_mer_mediterranee_areas',
     name: 'Mer Méditerranée',
     group: layersGroups.TWELVE_FORTY_ONE,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -318,7 +309,7 @@ const Layers = {
     code: '1241_mer_noire_areas',
     name: 'Mer Noire',
     group: layersGroups.TWELVE_FORTY_ONE,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -328,7 +319,7 @@ const Layers = {
     code: 'cormoran_areas',
     name: 'Zones Cormoran (NAMO-SA)',
     group: null,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'zonex',
@@ -338,7 +329,7 @@ const Layers = {
     code: 'aem_areas',
     name: 'Zones AEM (MED)',
     group: null,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'name',
@@ -348,7 +339,7 @@ const Layers = {
     code: 'fao_ccamlr_areas',
     name: 'CCAMLR',
     group: layersGroups.ORGP,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -358,7 +349,7 @@ const Layers = {
     code: 'fao_iccat_areas',
     name: 'ICCAT',
     group: layersGroups.ORGP,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -368,7 +359,7 @@ const Layers = {
     code: 'fao_iotc_areas',
     name: 'IOTC',
     group: layersGroups.ORGP,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -378,7 +369,7 @@ const Layers = {
     code: 'neafc_regulatory_area',
     name: 'NEAFC',
     group: layersGroups.ORGP,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -388,7 +379,7 @@ const Layers = {
     code: 'nafo_regulatory_area',
     name: 'NAFO',
     group: layersGroups.ORGP,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -398,7 +389,7 @@ const Layers = {
     code: 'fao_siofa_areas',
     name: 'SIOFA',
     group: layersGroups.ORGP,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -408,7 +399,7 @@ const Layers = {
     code: 'rectangles_stat_areas',
     name: 'Rectangles statistiques',
     group: null,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'icesname',
@@ -418,7 +409,7 @@ const Layers = {
     code: 'cgpm_areas',
     name: 'CGPM',
     group: layersGroups.ORGP,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'SMU_CODE',
@@ -428,7 +419,7 @@ const Layers = {
     code: 'cgpm_statistical_rectangles_areas',
     name: 'CGPM (Rectangles statistiques)',
     group: layersGroups.ORGP,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'sect_cod',
@@ -436,9 +427,9 @@ const Layers = {
   },
   effort_zones_areas: {
     code: 'effort_zones_areas',
-    name: 'Zones d\'effort',
+    name: "Zones d'effort",
     group: null,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'zone',
@@ -448,7 +439,7 @@ const Layers = {
     code: 'situs_areas',
     name: 'Zones pour situation VMS',
     group: layersGroups.VMS_SITUATION,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: true,
     subZoneFieldKey: 'libelle',
@@ -458,7 +449,7 @@ const Layers = {
     code: 'brexit_areas',
     name: 'Zones pour situation Brexit',
     group: layersGroups.VMS_SITUATION_BREXIT,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: true,
     showMultipleZonesInAdministrativeZones: true,
     subZoneFieldKey: 'nom',
@@ -478,7 +469,7 @@ const Layers = {
     code: 'navigation_category_two_areas',
     name: '2ème',
     group: layersGroups.NAVIGATION_CATEGORY,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -488,7 +479,7 @@ const Layers = {
     code: 'navigation_category_three_areas',
     name: '3ème',
     group: layersGroups.NAVIGATION_CATEGORY,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -498,7 +489,7 @@ const Layers = {
     code: 'navigation_category_four_areas',
     name: '4ème',
     group: layersGroups.NAVIGATION_CATEGORY,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -508,7 +499,7 @@ const Layers = {
     code: 'navigation_category_five_areas',
     name: '5ème',
     group: layersGroups.NAVIGATION_CATEGORY,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: null,
@@ -518,7 +509,7 @@ const Layers = {
     code: 'saltwater_limit_areas',
     name: 'Limites de salure des eaux',
     group: null,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'objnam',
@@ -528,15 +519,20 @@ const Layers = {
     code: 'transversal_sea_limit_areas',
     name: 'Limites transversales de mer',
     group: null,
-    type: layersType.ADMINISTRATIVE,
+    type: LayerType.ADMINISTRATIVE,
     containsMultipleZones: false,
     showMultipleZonesInAdministrativeZones: false,
     subZoneFieldKey: 'objnam',
     isIntersectable: false
   }
 }
+/* eslint-enable sort-keys-fix/sort-keys-fix */
 
-export const baseLayers = {
+export const BaseLayers = {
+  DARK: {
+    code: 'DARK',
+    text: 'Fond de carte sombre'
+  },
   LIGHT: {
     code: 'LIGHT',
     text: 'Fond de carte clair'
@@ -545,76 +541,15 @@ export const baseLayers = {
     code: 'OSM',
     text: 'Open Street Map'
   },
-  SHOM: {
-    code: 'SHOM',
-    text: 'Carte marine (SHOM)'
-  },
   SATELLITE: {
     code: 'SATELLITE',
     text: 'Satellite'
   },
-  DARK: {
-    code: 'DARK',
-    text: 'Fond de carte sombre'
+  SHOM: {
+    code: 'SHOM',
+    text: 'Carte marine (SHOM)'
   }
-}
-
-function removeMiscellaneousGears (layerGearsArray) {
-  return layerGearsArray
-    .filter(gearCode => gearCode !== 'MIS')
-    .map(gearCode => gearCode)
-}
-
-function removeVariousLonglineGears (layerGearsArray) {
-  return layerGearsArray
-    .filter(gearCode => gearCode !== 'LL')
-    .map(gearCode => gearCode)
-}
-
-export function getGearCategory (layerGears, gears) {
-  if (layerGears?.authorized) {
-    if (layerGears?.authorized.regulatedGearCategories && Object.keys(layerGears?.authorized.regulatedGearCategories).length) {
-      return Object.keys(layerGears?.authorized.regulatedGearCategories)[0]
-    } else if (layerGears?.authorized.regulatedGears?.length) {
-      let layerGearsArray = layerGears?.authorized.regulatedGears
-      if (layerGearsArray.length > 1) {
-        layerGearsArray = removeMiscellaneousGears(layerGearsArray)
-      }
-      if (layerGearsArray.length > 1) {
-        layerGearsArray = removeVariousLonglineGears(layerGearsArray)
-      }
-
-      const gear = gears
-        .find(_gear => {
-          return layerGearsArray
-            .some(gearCode => {
-              return gearCode === _gear.code
-            })
-        })
-      return gear ? gear.category : null
-    }
-  }
-  return null
 }
 
 export const SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY = 'selectedRegulatoryZoneIds'
 export const SELECTED_REG_ZONES_LOCAL_STORAGE_KEY = 'selectedRegulatoryZones'
-
-export const reOrderOldObjectHierarchyIfFound = layers => {
-  layers.forEach(layer => {
-    layers[layer] = layers[layer].map(zone => {
-      if (zone && zone.layerName) {
-        return {
-          topic: zone.layerName,
-          ...zone
-        }
-      }
-
-      return zone
-    })
-  })
-
-  return layers
-}
-
-export default Layers

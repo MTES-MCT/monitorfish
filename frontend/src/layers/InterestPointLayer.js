@@ -28,7 +28,7 @@ import LineString from 'ol/geom/LineString'
 import { InterestPointLine } from '../domain/entities/interestPointLine'
 import { usePrevious } from '../hooks/usePrevious'
 import { getLength } from 'ol/sphere'
-import Layers from '../domain/entities/layers'
+import { Layer } from '../domain/entities/layers/constants'
 import { setMapToolOpened } from '../domain/shared_slices/Global'
 
 const DRAW_START_EVENT = 'drawstart'
@@ -72,7 +72,7 @@ const InterestPointLayer = ({ map, mapMovingAndZoomEvent }) => {
         updateWhileAnimating: true,
         updateWhileInteracting: true,
         style: (feature, resolution) => getInterestPointStyle(feature, resolution),
-        zIndex: Layers.INTEREST_POINT.zIndex
+        zIndex: Layer.INTEREST_POINT.zIndex
       })
     }
     return layerRef.current

@@ -1,6 +1,6 @@
 import countries from 'i18n-iso-countries'
 
-import Layers, { baseLayers } from './layers'
+import { Layer, BaseLayers } from './layers/constants'
 import { vesselLabel as vesselLabelEnum } from './vesselLabelLine'
 
 import type { SelectedVessel, ShowedVesselTrack, VesselIdentity } from '../types/vessel'
@@ -17,7 +17,7 @@ export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
   static getVesselFeatureId(vessel) {
-    return `${Layers.VESSELS.code}:${getVesselId(vessel)}`
+    return `${Layer.VESSELS.code}:${getVesselId(vessel)}`
   }
 
   static getVesselOpacity(dateTime, vesselIsHidden, vesselIsOpacityReduced) {
@@ -130,7 +130,7 @@ export class Vessel {
    * @return {boolean} isLight - returns true if vessel icon is light
    */
   static iconIsLight = selectedBaseLayer =>
-    selectedBaseLayer === baseLayers.DARK.code || selectedBaseLayer === baseLayers.SATELLITE.code
+    selectedBaseLayer === BaseLayers.DARK.code || selectedBaseLayer === BaseLayers.SATELLITE.code
 }
 
 // TODO <vessel> is not a Vessel. What is it?

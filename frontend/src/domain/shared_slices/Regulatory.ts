@@ -3,7 +3,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
-import { SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY, SELECTED_REG_ZONES_LOCAL_STORAGE_KEY } from '../entities/layers'
+import {
+  SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY,
+  SELECTED_REG_ZONES_LOCAL_STORAGE_KEY
+} from '../entities/layers/constants'
 import { getRegulatoryLayersWithoutTerritory } from '../entities/regulatory'
 
 import type { RegulatoryLawTypes, RegulatoryZone } from '../types/regulation'

@@ -1,6 +1,6 @@
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
-import Layers from './layers'
+import { Layer } from './layers/constants'
 import { transform } from 'ol/proj'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map'
 import { arraysEqual, calculatePointsDistance, calculateSplitPointCoords } from '../../utils'
@@ -77,13 +77,13 @@ export class VesselTrack {
     const circleFeature = new Feature({
       geometry: new Point(coordinates)
     })
-    circleFeature.name = Layers.VESSEL_TRACK.code + ':position:' + index
+    circleFeature.name = Layer.VESSEL_TRACK.code + ':position:' + index
     circleFeature.course = position.course
     circleFeature.positionType = position.positionType
     circleFeature.speed = position.speed
     circleFeature.dateTime = position.dateTime
 
-    circleFeature.setId(`${Layers.VESSEL_TRACK.code}:${identity}:position:${index}`)
+    circleFeature.setId(`${Layer.VESSEL_TRACK.code}:${identity}:position:${index}`)
     const trackColor = getTrackTypeFromSpeedAndEllipsis(speed, isTimeEllipsis).color
     circleFeature.setStyle(getCircleStyle(trackColor))
 
@@ -107,11 +107,11 @@ export class VesselTrack {
 
       const arrowFeature = new Feature({
         geometry: new Point(newPoint),
-        name: Layers.VESSEL_TRACK.code + ':arrow:' + index
+        name: Layer.VESSEL_TRACK.code + ':arrow:' + index
       })
       arrowFeature.course = feature.course
 
-      arrowFeature.setId(`${Layers.VESSEL_TRACK.code}:${identity}:arrow:${index}`)
+      arrowFeature.setId(`${Layer.VESSEL_TRACK.code}:${identity}:arrow:${index}`)
       const trackArrow = getTrackTypeFromSpeedAndEllipsis(feature.speed, feature.isTimeEllipsis).arrow
       const arrowStyle = getArrowStyle(trackArrow, arrowFeature.course)
 
@@ -157,7 +157,7 @@ export class VesselTrack {
         feature.course = -rotation
         feature.speed = position.speed
 
-        feature.setId(`${Layers.VESSEL_TRACK.code}:${vesselId}:line:${index}`)
+        feature.setId(`${Layer.VESSEL_TRACK.code}:${vesselId}:line:${index}`)
         feature.setStyle(getLineStyle(feature.isTimeEllipsis, feature.trackType))
 
         return feature
@@ -199,14 +199,14 @@ export function getTrackTypeFromSpeedAndEllipsis (speed, isTimeEllipsis) {
 export function getVesselTrackLines (features) {
   return features
     .filter(feature =>
-      feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
+      feature?.getId()?.toString()?.includes(Layer.VESSEL_TRACK.code) &&
       feature?.getId()?.toString()?.includes('line'))
 }
 
 export function removeFishingActivitiesFeatures (features, vectorSource) {
   features
     .filter(feature =>
-      feature?.getId()?.toString()?.includes(Layers.VESSEL_TRACK.code) &&
+      feature?.getId()?.toString()?.includes(Layer.VESSEL_TRACK.code) &&
       feature?.getId()?.toString()?.includes('logbook'))
     .forEach(feature => vectorSource.removeFeature(feature))
 }

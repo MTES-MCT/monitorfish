@@ -161,7 +161,9 @@ def filter_silenced_alerts(
 
     alert_ids_to_remove = set(alerts_to_remove[id_col_name])
 
-    alerts = alerts.loc[~alerts[id_col_name].isin(alert_ids_to_remove)]
+    alerts = alerts.loc[~alerts[id_col_name].isin(alert_ids_to_remove)].reset_index(
+        drop=True
+    )
 
     return alerts[
         [

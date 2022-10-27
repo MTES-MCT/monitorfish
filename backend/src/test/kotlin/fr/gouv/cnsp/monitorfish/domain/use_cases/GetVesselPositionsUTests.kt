@@ -61,7 +61,7 @@ class GetVesselPositionsUTests {
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(firstPosition, fourthPosition, secondPosition, thirdPosition)
         )
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willThrow(
+        given(logbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(any(), any())).willThrow(
             NoLogbookFishingTripFound("ERROR")
         )
 
@@ -117,7 +117,7 @@ class GetVesselPositionsUTests {
     @Test
     fun `execute Should not throw an exception When a vessel's last DEP is not found`() {
         // Given
-        given(logbookReportRepository.findLastTripBeforeDateTime(any(), any())).willThrow(
+        given(logbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(any(), any())).willThrow(
             NoLogbookFishingTripFound("ERROR")
         )
 

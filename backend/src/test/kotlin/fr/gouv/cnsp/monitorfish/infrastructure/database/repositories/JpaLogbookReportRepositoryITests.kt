@@ -422,4 +422,14 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(dateTime).isEqualTo(ZonedDateTime.parse("2021-01-31T12:29:02Z"))
     }
+
+    @Test
+    @Transactional
+    fun `findFirstAcknowledgedDateOfTripBeforeDateTime Should return the last acknowledged message date When the CFR is given`() {
+        // When
+        val lastTrip = jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime("FAK000999999", ZonedDateTime.now())
+
+        // Then
+        assertThat(lastTrip.toString()).isEqualTo("2019-10-17T11:32Z")
+    }
 }

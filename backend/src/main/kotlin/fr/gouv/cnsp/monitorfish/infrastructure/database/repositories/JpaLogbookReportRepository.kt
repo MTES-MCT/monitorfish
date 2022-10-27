@@ -186,6 +186,26 @@ class JpaLogbookReportRepository(
         return dbERSRepository.findLastOperationDateTime().atZone(UTC)
     }
 
+    override fun findFirstAcknowledgedDateOfTripBeforeDateTime(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): ZonedDateTime {
+        try {
+            if (internalReferenceNumber.isNotEmpty()) {
+                val lastTrip = dbERSRepository.findTripsBeforeDatetime(
+                    internalReferenceNumber,
+                    beforeDateTime.toInstant(),
+                    PageRequest.of(0, 1)
+                ).first()
+
+                return dbERSRepository.findFirstAcknowledgedDateOfTrip(internalReferenceNumber, lastTrip.tripNumber).atZone(UTC)
+            }
+
+            throw IllegalArgumentException("No CFR given to find the vessel.")
+        } catch (e: NoSuchElementException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        } catch (e: IllegalArgumentException) {
+            throw NoLogbookFishingTripFound(getTripNotFoundExceptionMessage(internalReferenceNumber), e)
+        }
+    }
+
     private fun getCorrectedMessageIfAvailable(pnoMessage: LogbookReportEntity, messages: List<LogbookReportEntity>): Boolean {
         return if (pnoMessage.operationType == LogbookOperationType.DAT) {
             !messages.any { it.operationType == LogbookOperationType.COR && it.referencedReportId == pnoMessage.reportId }

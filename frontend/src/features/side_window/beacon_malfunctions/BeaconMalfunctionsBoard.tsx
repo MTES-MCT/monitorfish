@@ -9,7 +9,7 @@ import {
   useSensors
 } from '@dnd-kit/core'
 import { createSelector } from '@reduxjs/toolkit'
-import { CSSProperties, useCallback, useEffect, useState } from 'react'
+import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
@@ -27,7 +27,7 @@ import { getBeaconMalfunctionsByStage } from './beaconMalfunctions'
 import { Droppable } from './Droppable'
 import { StageColumn } from './StageColumn'
 
-import type { BeaconMalfunction } from '../../../domain/types/beaconMalfunction'
+import type { BeaconMalfunction, BeaconMalfunctionStageColumnValue } from '../../../domain/types/beaconMalfunction'
 
 const getMemoizedBeaconMalfunctionsByStage = createSelector(
   state => state.beaconMalfunction.beaconMalfunctions,
@@ -117,6 +117,14 @@ export function BeaconMalfunctionsBoard() {
       beaconMalfunctionsStageColumnRecord[key]?.code?.includes(stageName)
     )
   }
+
+  const stages: BeaconMalfunctionStageColumnValue[] = useMemo(
+    () =>
+      Object.keys(beaconMalfunctionsStageColumnRecord)
+        .filter(stage => beaconMalfunctionsStageColumnRecord[stage].isColumn)
+        .map(stageId => beaconMalfunctionsStageColumnRecord[stageId]),
+    []
+  )
 
   const updateVesselStatus = useCallback(
     (beaconMalfunction: BeaconMalfunction, status) => {
@@ -233,31 +241,23 @@ export function BeaconMalfunctionsBoard() {
         sensors={sensors}
       >
         <Columns data-cy="side-window-beacon-malfunctions-columns" style={columnsStyle}>
-          {Object.keys(beaconMalfunctionsStageColumnRecord)
-            .filter(stage => beaconMalfunctionsStageColumnRecord[stage].isColumn)
-            .map((stageId, index) => {
-              const stage = beaconMalfunctionsStageColumnRecord[stageId]
-
-              return (
-                stage && (
-                  <Droppable
-                    key={stageId}
-                    disabled={stageId === beaconMalfunctionsStageColumnRecord.END_OF_MALFUNCTION.code}
-                    id={stageId}
-                    index={index}
-                  >
-                    <StageColumn
-                      activeBeaconMalfunction={activeBeaconMalfunction}
-                      baseUrl={baseUrl}
-                      beaconMalfunctions={filteredBeaconMalfunctions[stageId] || []}
-                      isDroppedId={!!isDroppedId}
-                      stage={stage}
-                      updateVesselStatus={updateVesselStatus}
-                    />
-                  </Droppable>
-                )
-              )
-            })}
+          {stages.map(stage => (
+            <Droppable
+              key={stage.code}
+              disabled={stage.code === beaconMalfunctionsStageColumnRecord.END_OF_MALFUNCTION.code}
+              id={stage.code}
+              index={stage.index}
+            >
+              <StageColumn
+                activeBeaconMalfunction={activeBeaconMalfunction}
+                baseUrl={baseUrl}
+                beaconMalfunctions={filteredBeaconMalfunctions[stage.code] || []}
+                isDroppedId={!!isDroppedId}
+                stage={stage}
+                updateVesselStatus={updateVesselStatus}
+              />
+            </Droppable>
+          ))}
         </Columns>
         <DragOverlay
           dropAnimation={{

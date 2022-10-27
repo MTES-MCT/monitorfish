@@ -129,18 +129,21 @@ export enum BeaconMalfunctionsStage {
  */
 const beaconMalfunctionsStageColumnRecord: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumnValue> = {
   INITIAL_ENCOUNTER: {
+    index: 0,
     code: 'INITIAL_ENCOUNTER',
     description: "Obtenir une réponse des navires qui ont cessé d'émettre.",
     isColumn: true,
     title: 'Premier contact'
   },
   FOUR_HOUR_REPORT: {
+    index: 1,
     code: 'FOUR_HOUR_REPORT',
     description: "Suivre les navires qui font leurs 4h report ou les relancer s'ils l'ont cessé.",
     isColumn: true,
     title: '4h report'
   },
   RELAUNCH_REQUEST: {
+    index: 2,
     code: 'RELAUNCH_REQUEST',
     description:
       "Relancer les navires qui sont à quai (ou supposés à quai) et qui n'ont pas encore repris leurs émissions.",
@@ -148,6 +151,7 @@ const beaconMalfunctionsStageColumnRecord: Record<BeaconMalfunctionsStage, Beaco
     title: 'Relance pour reprise'
   },
   TARGETING_VESSEL: {
+    index: 3,
     code: 'TARGETING_VESSEL',
     description:
       "Mobiliser les unités sur les navires dont on n'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.",
@@ -155,6 +159,7 @@ const beaconMalfunctionsStageColumnRecord: Record<BeaconMalfunctionsStage, Beaco
     title: 'Ciblage du navire'
   },
   CROSS_CHECK: {
+    index: 4,
     code: 'CROSS_CHECK',
     description:
       "Mobiliser les unités sur les navires dont on n'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.",
@@ -162,6 +167,7 @@ const beaconMalfunctionsStageColumnRecord: Record<BeaconMalfunctionsStage, Beaco
     title: 'Contrôle croisé'
   },
   END_OF_MALFUNCTION: {
+    index: 5,
     code: 'END_OF_MALFUNCTION',
     description:
       "Envoyer un message de reprise aux unités dont les émissions ont repris et archiver les avaries qu'on ne suit plus.",
@@ -169,6 +175,7 @@ const beaconMalfunctionsStageColumnRecord: Record<BeaconMalfunctionsStage, Beaco
     title: "Fin de l'avarie"
   },
   ARCHIVED: {
+    index: 6,
     code: 'ARCHIVED',
     description: 'Avaries clôturées.\n NB : Seules les 30 dernières avaries restent dans le kanban.',
     isColumn: true,
@@ -176,6 +183,7 @@ const beaconMalfunctionsStageColumnRecord: Record<BeaconMalfunctionsStage, Beaco
   },
   /** Old stages - for backward compatibility * */
   RESUMED_TRANSMISSION: {
+    index: undefined,
     code: 'RESUMED_TRANSMISSION',
     isColumn: false,
     title: 'Reprise des émissions'

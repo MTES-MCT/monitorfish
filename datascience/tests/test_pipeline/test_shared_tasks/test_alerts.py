@@ -3,7 +3,12 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from src.pipeline.shared_tasks.alerts import filter_silenced_alerts, make_alerts
+from src.pipeline.shared_tasks.alerts import (
+    filter_silenced_alerts,
+    load_alerts,
+    make_alerts,
+)
+from src.read_query import read_query
 from tests.mocks import mock_datetime_utcnow
 
 
@@ -20,7 +25,6 @@ def test_make_alerts():
             "cfr": ["A", "B"],
             "external_immatriculation": ["AA", "BB"],
             "ircs": ["AAA", "BBB"],
-            "vessel_id": [1, 12],
             "vessel_name": ["Vessel_A", "Vessel_B"],
             "flag_state": ["FR", "BE"],
             "facade": ["NAMO", "MEMN"],
@@ -30,6 +34,9 @@ def test_make_alerts():
             ],
             "risk_factor": [1.23, 3.56],
             "creation_date": [date_1, date_2],
+            "latitude": [9.8, -1.963],
+            "longitude": [65.59, -81.71],
+            "vessel_id": [1, 12],
             "dml": ["dml 007", "dml 22"],
         }
     )
@@ -52,6 +59,8 @@ def test_make_alerts():
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "creation_date": [date_1, date_2],
+            "latitude": [9.8, -1.963],
+            "longitude": [65.59, -81.71],
             "type": ["MISSING_FAR_ALERT", "MISSING_FAR_ALERT"],
             "facade": ["NAMO", "MEMN"],
             "value": [
@@ -79,13 +88,17 @@ def test_make_alerts():
 
     pd.testing.assert_frame_equal(alerts, expected_alerts)
 
-    # Without creation_date in input
-    vessels_in_alert = vessels_in_alert.drop(columns=["creation_date"])
+    # Without optional in input
+    vessels_in_alert = vessels_in_alert.drop(
+        columns=["creation_date", "latitude", "longitude"]
+    )
     alerts = make_alerts.run(
         vessels_in_alert,
         alert_type="MISSING_FAR_ALERT",
         alert_config_name="MISSING_FAR_ALERT_CONFIG_1",
     )
+    expected_alerts["latitude"] = None
+    expected_alerts["longitude"] = None
     expected_alerts["creation_date"] = [
         datetime(2020, 5, 3, 8, 0, 0),
         datetime(2020, 5, 3, 8, 0, 0),
@@ -112,6 +125,8 @@ def test_filter_silenced_alerts():
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "creation_date": [now, now - 0.5 * td],
+            "latitude": [9.8, -1.963],
+            "longitude": [65.59, -81.71],
             "type": ["USER_DEFINED_ALERT_TYPE", "USER_DEFINED_ALERT_TYPE"],
             "facade": ["NAMO", "MEMN"],
             "value": [
@@ -157,6 +172,8 @@ def test_filter_silenced_alerts():
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "creation_date": [now - 0.5 * td],
+            "latitude": [-1.963],
+            "longitude": [-81.71],
             "value": [
                 {
                     "seaFront": "MEMN",
@@ -193,6 +210,8 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "creation_date": [now, now - 0.5 * td],
+            "latitude": [9.8, -1.963],
+            "longitude": [65.59, -81.71],
             "type": ["USER_DEFINED_ALERT_TYPE", "USER_DEFINED_ALERT_TYPE"],
             "facade": ["NAMO", "MEMN"],
             "value": [
@@ -242,6 +261,8 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "creation_date": [now - 0.5 * td],
+            "latitude": [-1.963],
+            "longitude": [-81.71],
             "value": [
                 {
                     "seaFront": "MEMN",
@@ -258,3 +279,41 @@ def test_filter_silenced_alerts_when_multiple_silenced_alerts_facade():
     pd.testing.assert_frame_equal(
         active_alerts.reset_index(drop=True), expected_active_alerts
     )
+
+
+def test_load_alerts(reset_test_data):
+    initial_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+
+    now = datetime(2020, 1, 1, 0, 0, 0)
+    td = timedelta(hours=1)
+    alert_type = "FRENCH_EEZ_FISHING_ALERT"
+    alert_config_name = "ALERTE_CHALUTAGE_CONFIG_1"
+    alerts_to_load = pd.DataFrame(
+        {
+            "vessel_name": ["v_B"],
+            "internal_reference_number": ["B"],
+            "external_reference_number": ["BB"],
+            "ircs": ["BBB"],
+            "vessel_id": [12],
+            "vessel_identifier": [
+                "INTERNAL_REFERENCE_NUMBER",
+            ],
+            "creation_date": [now - 0.5 * td],
+            "latitude": [-1.963],
+            "longitude": [-81.71],
+            "value": [
+                {
+                    "seaFront": "MEMN",
+                    "flagState": "FR",
+                    "type": alert_type,
+                    "riskFactor": None,
+                    "dml": "dml B",
+                },
+            ],
+            "alert_config_name": [alert_config_name],
+        }
+    )
+
+    load_alerts.run(alerts_to_load, alert_config_name=alert_config_name)
+    final_alerts = read_query("monitorfish_remote", "SELECT * FROM pending_alerts")
+    assert len(final_alerts) == len(initial_alerts) + 1

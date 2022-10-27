@@ -5,7 +5,16 @@ import pandas as pd
 import pytest
 import pytz
 from geoalchemy2 import Geometry
-from sqlalchemy import BOOLEAN, TIMESTAMP, VARCHAR, Column, Integer, MetaData, Table
+from sqlalchemy import (
+    BOOLEAN,
+    FLOAT,
+    TIMESTAMP,
+    VARCHAR,
+    Column,
+    Integer,
+    MetaData,
+    Table,
+)
 
 from src.db_config import create_engine
 from src.pipeline.flows.position_alerts import (
@@ -101,6 +110,8 @@ def test_make_positions_in_alert_query():
         Column("vessel_name", VARCHAR),
         Column("flag_state", VARCHAR),
         Column("date_time", TIMESTAMP),
+        Column("latitude", FLOAT),
+        Column("longitude", FLOAT),
         Column("is_fishing", BOOLEAN),
         Column("geometry", Geometry),
     )
@@ -150,6 +161,8 @@ def test_make_positions_in_alert_query():
         "positions.vessel_name, "
         "positions.flag_state, "
         "positions.date_time, "
+        "positions.latitude, "
+        "positions.longitude, "
         "facades.facade "
         "\nFROM positions "
         "JOIN zones "
@@ -193,6 +206,8 @@ def test_make_positions_in_alert_query():
         "positions.vessel_name, "
         "positions.flag_state, "
         "positions.date_time, "
+        "positions.latitude, "
+        "positions.longitude, "
         "facades.facade "
         "\nFROM positions "
         "JOIN zones "

@@ -304,6 +304,8 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
             "ircs": ["IL2468"],
             "vessel_id": [3],
             "vessel_identifier": ["INTERNAL_REFERENCE_NUMBER"],
+            "latitude": None,
+            "longitude": None,
             "value": [
                 {
                     "seaFront": None,

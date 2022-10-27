@@ -392,6 +392,8 @@ def test_get_vessels_in_alert():
                 now - 0.5 * td,
                 now,
             ],
+            "latitude": [-5.23, -4.23, -3.23, -50.23, -2.23, -51.23, -1.23],
+            "longitude": [43.25, 42.25, 41.25, -43.25, 40.25, -42.25, 39.25],
         }
     )
 
@@ -411,6 +413,8 @@ def test_get_vessels_in_alert():
                 "INTERNAL_REFERENCE_NUMBER",
             ],
             "creation_date": [now, now - 0.5 * td],
+            "latitude": [-1.23, -51.23],
+            "longitude": [39.25, -42.25],
         }
     )
     pd.testing.assert_frame_equal(vessels_in_alert, expected_vessels_in_alert)
@@ -595,12 +599,18 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
             ],
             "alert_config_name": [alert_config_name] * 5,
             "vessel_id": [3, 1, 2, None, 6],
+            "latitude": [53.435, 49.610, 43.324, 49.606, 43.324],
+            "longitude": [5.553, -0.740, 5.359, -0.736, 5.359],
         }
     )
 
     pd.testing.assert_frame_equal(
-        pending_alerts.drop(columns=["creation_date", "id"]),
-        expected_pending_alerts.drop(columns=["creation_date"]),
+        pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date", "id"]),
+        expected_pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date"]),
     )
 
     # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
@@ -608,9 +618,14 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
     # 'almost equal' check.
     assert (
         (
-            (pending_alerts.creation_date - expected_pending_alerts.creation_date).map(
-                lambda td: td.total_seconds()
-            )
+            (
+                pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+                - expected_pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+            ).map(lambda td: td.total_seconds())
         )
         < 10
     ).all()
@@ -719,12 +734,18 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
             ],
             "alert_config_name": [alert_config_name] * 4,
             "vessel_id": [3, 1, 2, 6],
+            "latitude": [53.435, 49.610, 43.324, 43.324],
+            "longitude": [5.553, -0.740, 5.359, 5.359],
         }
     )
 
     pd.testing.assert_frame_equal(
-        pending_alerts.drop(columns=["creation_date", "id"]),
-        expected_pending_alerts.drop(columns=["creation_date"]),
+        pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date", "id"]),
+        expected_pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date"]),
     )
 
     # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
@@ -732,9 +753,14 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
     # 'almost equal' check.
     assert (
         (
-            (pending_alerts.creation_date - expected_pending_alerts.creation_date).map(
-                lambda td: td.total_seconds()
-            )
+            (
+                pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+                - expected_pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+            ).map(lambda td: td.total_seconds())
         )
         < 10
     ).all()
@@ -818,12 +844,18 @@ def test_flow_filters_on_gears(reset_test_data):
             ],
             "alert_config_name": [alert_config_name] * 2,
             "vessel_id": [3, 2],
+            "latitude": [53.435, 43.324],
+            "longitude": [5.553, 5.359],
         }
     )
 
     pd.testing.assert_frame_equal(
-        pending_alerts.drop(columns=["creation_date", "id"]),
-        expected_pending_alerts.drop(columns=["creation_date"]),
+        pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date", "id"]),
+        expected_pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date"]),
     )
 
     # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
@@ -831,9 +863,14 @@ def test_flow_filters_on_gears(reset_test_data):
     # 'almost equal' check.
     assert (
         (
-            (pending_alerts.creation_date - expected_pending_alerts.creation_date).map(
-                lambda td: td.total_seconds()
-            )
+            (
+                pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+                - expected_pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+            ).map(lambda td: td.total_seconds())
         )
         < 10
     ).all()
@@ -930,12 +967,18 @@ def test_flow_filters_on_time(reset_test_data):
             ],
             "alert_config_name": [alert_config_name] * 3,
             "vessel_id": [1, 2, 6],
+            "latitude": [49.610, 43.324, 43.324],
+            "longitude": [-0.740, 5.359, 5.359],
         }
     )
 
     pd.testing.assert_frame_equal(
-        pending_alerts.drop(columns=["creation_date", "id"]),
-        expected_pending_alerts.drop(columns=["creation_date"]),
+        pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date", "id"]),
+        expected_pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date"]),
     )
 
     # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
@@ -943,9 +986,14 @@ def test_flow_filters_on_time(reset_test_data):
     # 'almost equal' check.
     assert (
         (
-            (pending_alerts.creation_date - expected_pending_alerts.creation_date).map(
-                lambda td: td.total_seconds()
-            )
+            (
+                pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+                - expected_pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+            ).map(lambda td: td.total_seconds())
         )
         < 10
     ).all()
@@ -1016,12 +1064,18 @@ def test_flow_filters_on_flag_states(reset_test_data):
             ],
             "alert_config_name": [alert_config_name],
             "vessel_id": [3],
+            "latitude": [53.435],
+            "longitude": [5.553],
         }
     )
 
     pd.testing.assert_frame_equal(
-        pending_alerts.drop(columns=["creation_date", "id"]),
-        expected_pending_alerts.drop(columns=["creation_date"]),
+        pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date", "id"]),
+        expected_pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date"]),
     )
 
     # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
@@ -1029,9 +1083,14 @@ def test_flow_filters_on_flag_states(reset_test_data):
     # 'almost equal' check.
     assert (
         (
-            (pending_alerts.creation_date - expected_pending_alerts.creation_date).map(
-                lambda td: td.total_seconds()
-            )
+            (
+                pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+                - expected_pending_alerts.sort_values("vessel_id")
+                .reset_index(drop=True)
+                .creation_date
+            ).map(lambda td: td.total_seconds())
         )
         < 10
     ).all()
@@ -1110,10 +1169,14 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
             ],
             "alert_config_name": [alert_config_name] * 2,
             "vessel_id": [2, 6],
+            "latitude": [43.324, 43.324],
+            "longitude": [5.359, 5.359],
         }
     )
 
     pd.testing.assert_frame_equal(
-        pending_alerts.drop(columns=["creation_date", "id"]),
-        expected_pending_alerts,
+        pending_alerts.sort_values("vessel_id")
+        .reset_index(drop=True)
+        .drop(columns=["creation_date", "id"]),
+        expected_pending_alerts.sort_values("vessel_id").reset_index(drop=True),
     )

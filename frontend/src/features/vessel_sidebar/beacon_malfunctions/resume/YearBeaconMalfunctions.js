@@ -115,7 +115,7 @@ const YearTitle = styled.span`
   width: 100%;
   display: flex;
   user-select: none;
-  ${props => props.isEmpty ? null : 'cursor: pointer;'}
+  pointer: ${p => p.isEmpty ? 'default' : 'pointer'};
   ${props => !props.isOpen ? null : `border-bottom: 1px solid ${COLORS.gray};`}
   ${props => !props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null}
 `
@@ -177,7 +177,7 @@ const Text = styled.div`
   font-size: 13px;
   font-weight: 500;
   width: 95%;
-  ${props => props.isEmpty ? null : 'cursor: pointer;'}
+  pointer: ${p => p.isEmpty ? 'default' : 'pointer'};
 `
 
 export default YearBeaconMalfunctions

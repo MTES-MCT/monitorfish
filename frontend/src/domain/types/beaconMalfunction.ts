@@ -90,6 +90,7 @@ export type VesselBeaconMalfunctionsResume = {
 export type BeaconMalfunctionStageColumnValue = {
   code: string
   description?: string
+  index: number | undefined
   isColumn: boolean
   title: string
 }

@@ -19,7 +19,6 @@ from src.pipeline.processing import (
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.healthcheck import (
     assert_positions_health,
-    extract_monitorfish_recent_positions_histogram,
     get_monitorfish_healthcheck,
 )
 from src.pipeline.shared_tasks.positions import (
@@ -402,8 +401,8 @@ def merge_last_positions_risk_factors_alerts_reportings(
     reportings: pd.DataFrame,
 ) -> pd.DataFrame:
     """
-    Performs a left join on last_positions, risk_factors, pending_alerts and reportings using cfr,
-    ircs and external_immatriculation as join keys.
+    Performs a left join on last_positions, risk_factors, pending_alerts and reportings
+    using cfr, ircs and external_immatriculation as join keys.
     """
     last_positions = join_on_multiple_keys(
         last_positions,
@@ -477,11 +476,7 @@ with Flow("Last positions") as flow:
     with case(flow_not_running, True):
 
         healthcheck = get_monitorfish_healthcheck()
-        recent_positions_histogram = extract_monitorfish_recent_positions_histogram()
-        positions_healthcheck = assert_positions_health(
-            healthcheck=healthcheck,
-            recent_positions_histogram=recent_positions_histogram,
-        )
+        positions_healthcheck = assert_positions_health(healthcheck=healthcheck)
 
         # Parameters
         current_position_estimation_max_hours = Parameter(

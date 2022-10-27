@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Tuple
 
 import pandas as pd
+import prefect
 from geoalchemy2.functions import ST_Intersects
 from prefect import Flow, Parameter, task
 from sqlalchemy import Table, and_, not_, or_, select
@@ -272,14 +273,25 @@ def get_vessels_with_missing_fars(
           not in `vessels_that_emitted_fars`
     """
 
+    logger = prefect.context.get("logger")
     vessels_with_missing_fars = vessels_at_sea.loc[
         ~vessels_at_sea.cfr.isin(vessels_that_emitted_fars)
     ].reset_index(drop=True)
 
+    share_of_vessels_with_missing_fars = len(vessels_with_missing_fars) / max(
+        len(vessels_at_sea), 1
+    )
+    logger.info(
+        (
+            f"Out of {len(vessels_at_sea)} vessels at sea, "
+            f"{len(vessels_with_missing_fars)} sent no FAR "
+            f"({share_of_vessels_with_missing_fars:.0%})."
+        )
+    )
+
     try:
         assert (
-            len(vessels_with_missing_fars)
-            <= len(vessels_at_sea) * max_share_of_vessels_with_missing_fars
+            share_of_vessels_with_missing_fars <= max_share_of_vessels_with_missing_fars
         )
     except AssertionError:
         raise MonitorfishHealthError(

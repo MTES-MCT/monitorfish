@@ -207,6 +207,8 @@ def make_positions_in_alert_query(
                 positions_table.c.vessel_name,
                 positions_table.c.flag_state,
                 positions_table.c.date_time,
+                positions_table.c.latitude,
+                positions_table.c.longitude,
                 facades_table.c.facade,
             ]
         )

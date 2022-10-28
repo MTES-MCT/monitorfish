@@ -1,4 +1,4 @@
-import type { VesselIdentity } from './vessel'
+import type { VesselIdentity } from '../entities/vessel/types'
 import type { Integer } from 'type-fest'
 
 export type BeaconMalfunction = {

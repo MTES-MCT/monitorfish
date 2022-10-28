@@ -8,10 +8,10 @@ import {
   getOnlyVesselIdentityPropertiesFromSelectedVessel,
   Vessel,
   VesselSidebarTab
-} from '../entities/vessel'
+} from '../entities/vessel/vessel'
 import { ReportingType } from '../types/reporting'
 
-import type { FishingActivityShowedOnMap, TrackRequest, VesselIdentity, VesselPosition } from '../types/vessel'
+import type { FishingActivityShowedOnMap, TrackRequest, VesselIdentity, VesselPosition } from '../entities/vessel/types'
 
 const NOT_FOUND = -1
 

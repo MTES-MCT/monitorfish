@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
-import { VesselSidebarTab } from '../../domain/entities/vessel'
+import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import VesselBeaconMalfunctions from './beacon_malfunctions/VesselBeaconMalfunctions'
 import VesselControls from './controls/VesselControls'

@@ -7,7 +7,7 @@ import { Vector } from 'ol/layer'
 import { Layer } from '../domain/entities/layers/constants'
 
 import { getVesselInfractionSuspicionStyle } from './styles/vessel.style'
-import { getVesselId, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel'
+import { getVesselId, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel/vessel'
 
 const VesselInfractionSuspicionLayer = ({ map }) => {
   const {

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { useSelector } from 'react-redux'
 import VesselSearchResultItem from './VesselSearchResultItem'
-import { getVesselId } from '../../domain/entities/vessel'
+import { getVesselId } from '../../domain/entities/vessel/vessel'
 
 const VesselSearchResult = ({
   searchText,

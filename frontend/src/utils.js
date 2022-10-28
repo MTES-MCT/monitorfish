@@ -35,7 +35,7 @@ export const calculatePointsDistance = (coord1, coord2) => {
   return Math.sqrt(dx * dx + dy * dy)
 }
 
-export const calculateSplitPointCoords = (startNode, nextNode, distanceBetweenNodes, distanceToSplitPoint) => {
+export const calculateSplitPointCoordinates = (startNode, nextNode, distanceBetweenNodes, distanceToSplitPoint) => {
   const d = distanceToSplitPoint / distanceBetweenNodes
   const x = nextNode[0] + (startNode[0] - nextNode[0]) * d
   const y = nextNode[1] + (startNode[1] - nextNode[1]) * d
@@ -118,22 +118,6 @@ export function getDateMonthsBefore (date, nofMonths) {
   }
 
   return date
-}
-
-export const arraysEqual = (a, b) => {
-  if (a === b) return true
-  if (a == null || b == null) return false
-  if (a.length !== b.length) return false
-
-  // If you don't care about the order of the elements inside
-  // the array, you should sort both arrays here.
-  // Please note that calling sort on an array will modify that array.
-  // you might want to clone your array first.
-
-  for (let i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) return false
-  }
-  return true
 }
 
 export const getTextWidth = text => {

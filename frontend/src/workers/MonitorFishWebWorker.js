@@ -8,7 +8,7 @@ import {
   FRANCE
 } from '../domain/entities/regulatory'
 import { getDateMonthsBefore } from '../utils'
-import { VesselLocation, vesselSize } from '../domain/entities/vessel'
+import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
 
 class MonitorFishWebWorker {
   #getLayerTopicList = (features, speciesByCode) => {

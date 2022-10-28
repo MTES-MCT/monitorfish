@@ -13,7 +13,7 @@ import {
 } from '../../shared_slices/Vessel'
 
 import type { AppDispatch, AppGetState } from '../../../store'
-import type { TrackRequest, VesselIdentity } from '../../types/vessel'
+import type { TrackRequest, VesselIdentity } from '../../entities/vessel/types'
 
 /**
  * Modify the vessel track depth on map

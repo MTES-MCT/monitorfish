@@ -5,7 +5,7 @@ import {
   resetCurrentAndArchivedReportingsOfSelectedVessel,
   setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../../shared_slices/Reporting'
-import { vesselsAreEquals } from '../../entities/vessel'
+import { vesselsAreEquals } from '../../entities/vessel/vessel'
 
 const getVesselReportings = () => (dispatch, getState) => {
   const {

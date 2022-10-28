@@ -12,7 +12,7 @@ import { DateRangeRadio } from './DateRangeRadio'
 import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
 
-import type { TrackRequestCustom, TrackRequestPredefined } from '../../../../domain/types/vessel'
+import type { TrackRequestCustom, TrackRequestPredefined } from '../../../../domain/entities/vessel/types'
 import type { DateRange } from '../../../../types'
 
 type TrackRequestProps = {

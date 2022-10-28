@@ -4,7 +4,7 @@ import Feature from 'ol/Feature'
 import { Layer } from './layers/constants'
 import LineString from 'ol/geom/LineString'
 import Point from 'ol/geom/Point'
-import { Vessel } from './vessel'
+import { Vessel } from './vessel/vessel'
 import { COLORS } from '../../constants/constants'
 import { theme } from '../../ui/theme'
 

@@ -220,12 +220,14 @@ export type VesselPosition = {
   from: string
   internalReferenceNumber: string
   ircs: string
+  isFishing: boolean | null
+  isManual: boolean | null
   latitude: number
   longitude: number
-  mmsi: string
+  mmsi: string | null
   positionType: string
   speed: number
-  tripNumber: number
+  tripNumber: number | null
   vesselName: string
 }
 

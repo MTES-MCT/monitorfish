@@ -53,7 +53,7 @@ export type VesselState = {
   loadingPositions: boolean | null
   loadingVessel: boolean | null
   // TODO Fix this type which doesn't match many actions props.
-  // selectedVessel: VesselNS.SelectedVessel | null
+  // selectedVessel: SelectedVessel | null
   selectedVessel: {
     alerts?: string[]
     hasAlert?: boolean
@@ -154,11 +154,11 @@ const vesselSlice = createSlice({
      * - The `toShow` property trigger the layer to show the track
      * - The `toHide` property trigger the layer to hide the track
      * @function addVesselTrackShowed
-     * @memberOf VesselReducer
+     *
      * @param {Object} state
      * @param {{payload: {
      *   vesselId: string,
-     *   showedVesselTrack: VesselNS.ShowedVesselTrack
+     *   showedVesselTrack: ShowedVesselTrack
      *  }}} action - the vessel positions to show on map
      */
     addVesselTrackShowed(state, action) {
@@ -181,9 +181,9 @@ const vesselSlice = createSlice({
     /**
      * Highlight a vessel position on map from the vessel track positions table
      * @function highlightVesselTrackPosition
-     * @memberOf VesselReducer
+     *
      * @param {Object} state
-     * @param {{payload: VesselNS.VesselPosition | null}} action - The position
+     * @param {{payload: VesselPosition | null}} action - The position
      */
     highlightVesselTrackPosition(state, action) {
       state.highlightedVesselTrackPosition = action.payload
@@ -376,7 +376,7 @@ const vesselSlice = createSlice({
     /**
      * Reset the highlighted vessel position
      * @function resetHighlightedVesselTrackPosition
-     * @memberOf VesselReducer
+     *
      * @param {Object} state
      */
     resetHighlightedVesselTrackPosition(state) {
@@ -397,7 +397,7 @@ const vesselSlice = createSlice({
     /**
      * Reset the vessel track features extent
      * @function setVesselTrackExtent
-     * @memberOf VesselReducer
+     *
      * @param {Object} state
      */
     resetVesselTrackExtent(state) {
@@ -445,7 +445,7 @@ const vesselSlice = createSlice({
     /**
      * Show or hide other vessels (than the selected vessel)
      * @function setHideNonSelectedVessels
-     * @memberOf VesselReducer
+     *
      * @param {Object} state
      * @param {{payload: boolean}} action - hide (true) or show (false)
      */
@@ -482,7 +482,7 @@ const vesselSlice = createSlice({
      * @param {Object} state
      * @param {{payload: {
      *   vessel: Vessel,
-     *   positions: VesselNS.VesselPosition[]
+     *   positions: VesselPosition[]
      * }}} action - The positions
      */
     setSelectedVessel(state, action) {
@@ -503,7 +503,7 @@ const vesselSlice = createSlice({
      *
      * @function setSelectedVesselCustomTrackRequest
      * @param {Object} state
-     * @param {{payload: VesselNS.TrackRequest}} action - The track request
+     * @param {{payload: TrackRequest}} action - The track request
      */
     setSelectedVesselCustomTrackRequest(state, action) {
       state.selectedVesselTrackRequest = action.payload
@@ -551,7 +551,7 @@ const vesselSlice = createSlice({
     /**
      * Set the vessel track features extent - used to fit the extent into the OpenLayers view
      * @function setVesselTrackExtent
-     * @memberOf VesselReducer
+     *
      * @param {Object} state
      * @param {{payload: number[]}} action - the extent
      */
@@ -572,9 +572,9 @@ const vesselSlice = createSlice({
     /**
      * Update the positions of the vessel
      * @function updateSelectedVesselPositions
-     * @memberOf VesselReducer
+     *
      * @param {Object} state
-     * @param {{payload: VesselNS.VesselPosition[]}} action - The positions
+     * @param {{payload: VesselPosition[]}} action - The positions
      */
     updateSelectedVesselPositions(state, action) {
       state.loadingPositions = null
@@ -584,7 +584,7 @@ const vesselSlice = createSlice({
     /**
      * Remove the vessel track to the list
      * @function updateVesselTrackAsHidden
-     * @memberOf VesselReducer
+     *
      * @param {Object} state
      * @param {{payload: string}} action - the vessel id
      */
@@ -628,7 +628,7 @@ const vesselSlice = createSlice({
     /**
      * Update a given vessel track as zoomed
      * @function updateVesselTrackAsZoomed
-     * @memberOf VesselReducer
+     *
      * @param {Object} state
      * @param {{payload: string}} action - the vessel id
      */

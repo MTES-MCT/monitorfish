@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import showAllVessels from '../domain/use_cases/vessel/showVesselsLastPosition'
+import { showVesselsLastPosition } from '../domain/use_cases/vessel/showVesselsLastPosition'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import getAllGearCodes from '../domain/use_cases/gearCode/getAllGearCodes'
 import updateVesselTracks from '../domain/use_cases/vessel/updateVesselTracks'
@@ -58,7 +58,7 @@ const APIWorker = () => {
         dispatch(getAllBeaconMalfunctions())
         dispatch(getAllControllers())
       }
-      dispatch(showAllVessels())
+      dispatch(showVesselsLastPosition())
       dispatch(getAllRegulatoryLayers())
       dispatch(getFishingInfractions())
     })
@@ -67,7 +67,7 @@ const APIWorker = () => {
       batch(() => {
         dispatch(setIsUpdatingVessels())
         dispatch(getHealthcheck())
-        dispatch(showAllVessels())
+        dispatch(showVesselsLastPosition())
         dispatch(updateVesselTracks())
       })
 

@@ -1,3 +1,7 @@
+import type { Feature } from 'ol'
+import type { Coordinate } from 'ol/coordinate'
+import type Point from 'ol/geom/Point'
+
 export type VesselVoyage = {
   endDate: string | null
   isFirstVoyage: boolean
@@ -63,4 +67,14 @@ export type PNOAndLANWeightToleranceAlertValue = {
 export type PNOAndLANWeightToleranceAlertValueCatches = {
   lan: Object
   pno: Object
+}
+
+export interface FishingActivityFeature extends Feature<Point> {
+  name?: string
+}
+
+export type FishingActivityFeatureIdAndCoordinates = {
+  coordinates: Coordinate
+  feature: FishingActivityFeature
+  id: string
 }

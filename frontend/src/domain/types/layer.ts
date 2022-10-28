@@ -1,3 +1,6 @@
+import type VectorLayer from 'ol/layer/Vector'
+import type VectorSource from 'ol/source/Vector'
+
 export type AdministrativeOrRegulatoryLayerIdentity = {
   id: string
   namespace: string
@@ -45,4 +48,8 @@ export type RegulatoryZone = {
   topic: string
   type: string
   zone: string
+}
+
+export type VectorLayerWithName = VectorLayer<VectorSource> & {
+  name?: string
 }

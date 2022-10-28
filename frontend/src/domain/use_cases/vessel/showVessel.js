@@ -1,5 +1,5 @@
 import { batch } from 'react-redux'
-import { getOnlyVesselIdentityProperties, Vessel, VesselSidebarTab } from '../../entities/vessel'
+import { getOnlyVesselIdentityProperties, Vessel, VesselSidebarTab } from '../../entities/vessel/vessel'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel, showVesselSidebarTab } from '../../shared_slices/Vessel'
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'

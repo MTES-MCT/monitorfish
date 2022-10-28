@@ -5,7 +5,7 @@ import {
   setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../../shared_slices/Reporting'
 import { archiveReportingFromAPI } from '../../../api/reporting'
-import { Vessel } from '../../entities/vessel'
+import { Vessel } from '../../entities/vessel/vessel'
 import { removeVesselReporting } from '../../shared_slices/Vessel'
 
 const archiveReporting = id => (dispatch, getState) => {

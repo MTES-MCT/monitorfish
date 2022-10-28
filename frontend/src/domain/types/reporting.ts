@@ -1,6 +1,6 @@
 import type { SeaFront } from '../entities/alerts/constants'
+import type { VesselIdentity } from '../entities/vessel/types'
 import type { PendingAlertValue } from './alert'
-import type { VesselIdentity } from './vessel'
 
 export enum ReportingType {
   // TODO Should be renamed 'PENDING_ALERT'.

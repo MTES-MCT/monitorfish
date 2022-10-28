@@ -9,7 +9,7 @@ import { ReactComponent as VMSSVG } from '../icons/Icone_VMS_fiche_navire.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../constants/constants'
 import { showVesselSidebarTab } from '../../domain/shared_slices/Vessel'
-import { VesselSidebarTab } from '../../domain/entities/vessel'
+import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
 
 const VesselSidebarTabs = () => {
   const dispatch = useDispatch()
@@ -112,7 +112,7 @@ const Tab = styled.button`
   ${props => !props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}
   background: ${props => props.isActive ? props.theme.color.blueGray[100] : props.theme.color.charcoal};
   color: ${props => props.isActive ? props.theme.color.white : props.theme.color.lightGray};
-  
+
   :hover, :focus, :active {
     background: ${p => p.theme.color.blueGray[100]};
     ${props => !props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}

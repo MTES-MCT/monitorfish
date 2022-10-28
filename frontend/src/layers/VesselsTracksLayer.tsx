@@ -4,7 +4,6 @@ import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from
 
 import { Layer } from '../domain/entities/layers/constants'
 import { getFishingActivityFeatureOnTrackLine } from '../domain/entities/logbook'
-import { getVesselId } from '../domain/entities/vessel'
 import {
   fishingActivityIsWithinTrackLineDates,
   getFeaturesFromPositions,
@@ -13,7 +12,8 @@ import {
   removeFishingActivitiesFeatures,
   removeVesselTrackFeatures,
   updateTrackCircleStyle
-} from '../domain/entities/vesselTrack'
+} from '../domain/entities/vessel/track'
+import { getVesselId } from '../domain/entities/vessel/vessel'
 import {
   endRedrawFishingActivitiesOnMap,
   updateFishingActivitiesOnMapCoordinates
@@ -30,9 +30,9 @@ import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { usePrevious } from '../hooks/usePrevious'
 
+import type { FishingActivityShowedOnMap } from '../domain/entities/vessel/types'
 import type { FishingActivityFeatureIdAndCoordinates } from '../domain/types/fishingActivities'
 import type { VectorLayerWithName } from '../domain/types/layer'
-import type { FishingActivityShowedOnMap } from '../domain/types/vessel'
 import type { Coordinate } from 'ol/coordinate'
 
 function VesselsTracksLayer({ map }) {

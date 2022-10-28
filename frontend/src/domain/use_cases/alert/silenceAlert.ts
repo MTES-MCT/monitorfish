@@ -1,6 +1,6 @@
 import { silenceAlertFromAPI } from '../../../api/alert'
 import { deleteListItems } from '../../../utils/deleteListItems'
-import { Vessel } from '../../entities/vessel'
+import { Vessel } from '../../entities/vessel/vessel'
 import {
   addToPendingAlertsBeingSilenced,
   removeFromSilencedAlertsQueue,

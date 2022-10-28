@@ -13,7 +13,7 @@ import {
 import { batch, useDispatch } from 'react-redux'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
-import { getVesselId } from '../../../domain/entities/vessel'
+import { getVesselId } from '../../../domain/entities/vessel/vessel'
 
 const X = 0
 const Y = 1

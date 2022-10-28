@@ -7,7 +7,7 @@ import { Vector } from 'ol/layer'
 import { Layer } from '../domain/entities/layers/constants'
 
 import { getVesselAlertAndBeaconMalfunctionStyle } from './styles/vessel.style'
-import { getVesselId, vesselIsShowed } from '../domain/entities/vessel'
+import { getVesselId, vesselIsShowed } from '../domain/entities/vessel/vessel'
 
 const VesselAlertAndBeaconMalfunctionLayer = ({ map }) => {
   const {

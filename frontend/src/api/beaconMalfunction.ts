@@ -3,13 +3,13 @@ import ky from 'ky'
 import { ApiError } from '../libs/ApiError'
 
 import type { NOTIFICATION_TYPE, UserType } from '../domain/entities/beaconMalfunction/constants'
+import type { VesselIdentity } from '../domain/entities/vessel/types'
 import type {
   BeaconMalfunction,
   BeaconMalfunctionResumeAndDetails,
   UpdateBeaconMalfunction,
   VesselBeaconMalfunctionsResumeAndHistory
 } from '../domain/types/beaconMalfunction'
-import type { VesselIdentity } from '../domain/types/vessel'
 
 export const ARCHIVE_BEACON_MALFUNCTION = "Nous n'avons pas pu archiver les avaries VMS"
 export const GET_BEACON_MALFUNCTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les avaries VMS"

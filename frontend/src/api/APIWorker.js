@@ -8,7 +8,7 @@ import getAllFleetSegments from '../domain/use_cases/fleetSegment/getAllFleetSeg
 import getHealthcheck from '../domain/use_cases/healthcheck/getHealthcheck'
 import getVesselVoyage from '../domain/use_cases/vessel/getVesselVoyage'
 import getVesselControls from '../domain/use_cases/vessel/getVesselControls'
-import { VesselSidebarTab } from '../domain/entities/vessel'
+import { VesselSidebarTab } from '../domain/entities/vessel/vessel'
 import getAllRegulatoryLayers from '../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
 import { getOperationalAlerts } from '../domain/use_cases/alert/getOperationalAlerts'
 import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'

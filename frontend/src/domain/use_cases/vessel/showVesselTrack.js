@@ -1,6 +1,6 @@
 import { addVesselTrackShowed, resetLoadingVessel } from '../../shared_slices/Vessel'
 import { removeError, setError } from '../../shared_slices/Global'
-import { getVesselId } from '../../entities/vessel'
+import { getVesselId } from '../../entities/vessel/vessel'
 import { doNotAnimate } from '../../shared_slices/Map'
 import { getCustomOrDefaultTrackRequest, getTrackResponseError } from '../../entities/vesselTrackDepth'
 import { getVesselPositionsFromAPI } from '../../../api/vessel'

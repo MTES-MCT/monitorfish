@@ -3,9 +3,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
-import { getOnlyVesselIdentityProperties, getVesselId, vesselsAreEquals } from '../entities/vessel'
+import { getOnlyVesselIdentityProperties, getVesselId, vesselsAreEquals } from '../entities/vessel/vessel'
 
-import type { VesselIdentity } from '../types/vessel'
+import type { VesselIdentity } from '../entities/vessel/types'
 
 const FAVORITE_VESSELS_LOCAL_STORAGE_KEY = 'favoriteVessels'
 

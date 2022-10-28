@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
 import { UserType } from '../entities/beaconMalfunction/constants'
-import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel'
+import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel/vessel'
 
 import type { SideWindowMenuKey } from '../../features/side_window/constants'
 import type { MapToolType } from '../entities/map'

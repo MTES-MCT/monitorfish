@@ -117,31 +117,46 @@ def test_get_last_emissions():
 
     vessels_that_should_emit = pd.DataFrame(
         {
-            "cfr": [None, "C"],
-            "ircs": ["AA", "CC"],
-            "external_immatriculation": ["AAA", None],
-            "beacon_number": ["K1", "K2"],
-            "other_vessels_data": ["what", "ever"],
+            "cfr": [None, "C", "E", "F"],
+            "ircs": ["AA", "CC", "EE", "FF"],
+            "external_immatriculation": ["AAA", None, "EEE", "FFF"],
+            "beacon_number": ["K1", "K2", "K3", "K4"],
+            "other_vessels_data": ["what", "ever", "you", "want"],
+            "logging_datetime_utc": [d, d, d, d],
         }
     )
     last_positions = pd.DataFrame(
         {
-            "cfr": ["A", None, "C", "C"],
-            "ircs": ["AA", "AA", "CC", "incorrect CC"],
-            "external_immatriculation": ["AAA", "AAA", "CCC", "incorrect CCC"],
-            "last_position_datetime_utc": [d, d + 48 * td, d + 6 * td, d + 54 * td],
-            "other_last_positions_data": ["i", "am", "the", "captain"],
+            "cfr": ["A", None, "C", "C", "D", "E"],
+            "ircs": ["AA", "AA", "CC", "incorrect CC", None, "EE"],
+            "external_immatriculation": [
+                "AAA",
+                "AAA",
+                "CCC",
+                "incorrect CCC",
+                "DDD",
+                "EEE",
+            ],
+            "last_position_datetime_utc": [
+                d,
+                d + 48 * td,
+                d + 6 * td,
+                d + 54 * td,
+                d,
+                d - 12 * td,
+            ],
+            "other_last_positions_data": ["i", "am", "the", "captain", "of", "my soul"],
         }
     )
 
     last_emissions = get_last_emissions.run(vessels_that_should_emit, last_positions)
 
     expected_last_emissions = (
-        vessels_that_should_emit.loc[[1, 0]]
+        vessels_that_should_emit.loc[[1, 0, 2, 3]]
         .reset_index(drop=True)
         .assign(
-            last_position_datetime_utc=[d + 54 * td, d + 48 * td],
-            other_last_positions_data=["captain", "am"],
+            last_position_datetime_utc=[d + 54 * td, d + 48 * td, None, None],
+            other_last_positions_data=["captain", "am", "my soul", None],
         )
     )
 
@@ -195,7 +210,7 @@ def test_get_new_malfunctions():
 
     expected_new_malfunctions = (
         last_emissions.loc[
-            [0, 2, 4, 5, 8],
+            [0, 2, 4, 5],
             [
                 "beacon_number",
                 "last_position_datetime_utc",
@@ -226,7 +241,7 @@ def test_get_new_malfunctions():
 
     expected_new_malfunctions = (
         last_emissions.loc[
-            [0, 8],
+            [0],
             [
                 "beacon_number",
                 "last_position_datetime_utc",
@@ -389,15 +404,15 @@ def test_prepare_new_beacon_malfunctions():
                 "EXTERNAL_REFERENCE_NUMBER",
                 "EXTERNAL_REFERENCE_NUMBER",
             ],
-            "is_at_port": [True, False, None, False],
+            "is_at_port": [True, False, False, False],
             "malfunction_start_date_utc": [
                 datetime(2020, 3, 30, 12, 0, 0),
                 datetime(2022, 4, 1, 18, 20, 12),
-                None,
+                datetime(2022, 4, 11, 8, 20, 11),
                 datetime(2022, 4, 1, 18, 18, 12),
             ],
-            "latitude": [45.23, -12.256, None, 12.8],
-            "longitude": [12.8, -2.961, None, -5.6],
+            "latitude": [45.23, -12.256, -12.56, 12.8],
+            "longitude": [12.8, -2.961, 8.52, -5.6],
             "beacon_number": ["beacon_1", "beacon_2", "beacon_3", "beacon_4"],
             "beacon_status": [
                 BeaconStatus.ACTIVATED.value,
@@ -426,7 +441,7 @@ def test_prepare_new_beacon_malfunctions():
             "vessel_status": [
                 BeaconMalfunctionVesselStatus.AT_PORT.value,
                 BeaconMalfunctionVesselStatus.AT_SEA.value,
-                BeaconMalfunctionVesselStatus.NEVER_EMITTED.value,
+                BeaconMalfunctionVesselStatus.AT_SEA.value,
                 BeaconMalfunctionVesselStatus.AT_SEA.value,
             ],
             "stage": [
@@ -438,7 +453,7 @@ def test_prepare_new_beacon_malfunctions():
             "malfunction_start_date_utc": [
                 datetime(2020, 3, 30, 12, 0, 0),
                 datetime(2022, 4, 1, 18, 20, 12),
-                datetime(2021, 1, 1, 1, 1, 1),
+                datetime(2022, 4, 11, 8, 20, 11),
                 datetime(2022, 4, 1, 18, 18, 12),
             ],
             "malfunction_end_date_utc": [pd.NaT, pd.NaT, pd.NaT, pd.NaT],
@@ -457,12 +472,12 @@ def test_prepare_new_beacon_malfunctions():
                     BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value
                 ),
                 (
-                    BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value
+                    BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value
                 ),
                 None,
             ],
-            "latitude": [45.23, -12.256, None, 12.8],
-            "longitude": [12.8, -2.961, None, -5.6],
+            "latitude": [45.23, -12.256, -12.56, 12.8],
+            "longitude": [12.8, -2.961, 8.52, -5.6],
             "beacon_number": ["beacon_1", "beacon_2", "beacon_3", "beacon_4"],
             "beacon_status_at_malfunction_creation": [
                 BeaconStatus.ACTIVATED.value,
@@ -673,7 +688,7 @@ def test_update_beacon_malfunction_raises_if_no_stage_and_no_status(mock_request
         )
 
 
-def test_update_beacon_malfunctions_flow_doesnt_insert_already_known_malfunctions(
+def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emitted(
     reset_test_data,
 ):
 
@@ -704,22 +719,8 @@ def test_update_beacon_malfunctions_flow_doesnt_insert_already_known_malfunction
     assert set(last_emissions.ircs) == set(vessels_that_should_emit.ircs)
     assert set(last_emissions.ircs) != set(last_positions.ircs)
 
-    assert len(new_malfunctions) == 1
-    assert len(beacons_malfunctions) == len(initial_beacons_malfunctions) + 1
-
-    # Running the flow a second time should not change beacon_malfunctions any more
-    state = flow.run(
-        max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=24
-    )
-
-    beacons_malfunctions_after_rerun = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
-    )
-
-    assert state.is_successful()
-    new_malfunctions = state.result[flow.get_tasks("get_new_malfunctions")[0]].result
     assert len(new_malfunctions) == 0
-    assert len(beacons_malfunctions) == len(beacons_malfunctions_after_rerun)
+    assert len(beacons_malfunctions) == len(initial_beacons_malfunctions)
 
 
 def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunction(
@@ -743,7 +744,7 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
     assert (
         len(state.result[flow.get_tasks("extract_known_malfunctions")[0]].result) == 2
     )
-    assert len(state.result[flow.get_tasks("get_new_malfunctions")[0]].result) == 1
+    assert len(state.result[flow.get_tasks("get_new_malfunctions")[0]].result) == 0
 
     (
         ids_not_at_port_restarted_emitting,
@@ -799,25 +800,21 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
     )
 
     new_malfunctions = state.result[flow.get_tasks("get_new_malfunctions")[0]].result
-    assert len(new_malfunctions) == 2
+    assert len(new_malfunctions) == 1
     assert len(initial_beacon_malfunctions) == 2
-    assert len(loaded_beacon_malfunctions) == 4
+    assert len(loaded_beacon_malfunctions) == 3
     assert "FQ7058" not in initial_beacon_malfunctions.ircs.values
     assert "FQ7058" in loaded_beacon_malfunctions.ircs.values
-    assert "AB654321" not in initial_beacon_malfunctions.ircs.values
-    assert "AB654321" in loaded_beacon_malfunctions.ircs.values
 
     expected_new_malfunctions_beacons_and_notifications = pd.DataFrame(
         {
-            "vessel_id": [2, 5],
-            "beacon_number": ["123456", "BEACON_NOT_EMITTING"],
+            "vessel_id": [2],
+            "beacon_number": ["123456"],
             "beacon_status": [
                 BeaconStatus.ACTIVATED.value,
-                BeaconStatus.UNSUPERVISED.value,
             ],
             "notification_requested": [
                 BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
-                None,
             ],
         }
     )
@@ -829,6 +826,23 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
             .reset_index(drop=True)
         ),
         expected_new_malfunctions_beacons_and_notifications,
+    )
+
+    # Running the flow again should not add any more malfunctions
+    initial_beacon_malfunctions = read_query(
+        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+    )
+
+    state = flow.run(
+        max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=1
+    )
+
+    loaded_beacon_malfunctions = read_query(
+        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+    )
+
+    pd.testing.assert_frame_equal(
+        initial_beacon_malfunctions, loaded_beacon_malfunctions
     )
 
 

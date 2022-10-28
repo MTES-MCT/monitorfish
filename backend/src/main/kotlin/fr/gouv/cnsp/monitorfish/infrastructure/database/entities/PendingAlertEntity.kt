@@ -47,7 +47,11 @@ data class PendingAlertEntity(
     val tripNumber: String? = null,
     @Type(type = "jsonb")
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
-    val value: String
+    val value: String,
+    @Column(name = "latitude")
+    val latitude: Double? = null,
+    @Column(name = "longitude")
+    val longitude: Double? = null
 ) {
 
     fun toPendingAlert(mapper: ObjectMapper): PendingAlert {
@@ -61,7 +65,9 @@ data class PendingAlertEntity(
             vesselIdentifier = vesselIdentifier,
             creationDate = creationDate,
             tripNumber = tripNumber,
-            value = mapper.readValue(value, AlertType::class.java)
+            value = mapper.readValue(value, AlertType::class.java),
+            latitude = latitude,
+            longitude = longitude
         )
     }
 

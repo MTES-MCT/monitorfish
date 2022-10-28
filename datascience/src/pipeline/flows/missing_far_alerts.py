@@ -46,7 +46,7 @@ def get_dates() -> Tuple[datetime, datetime, datetime, datetime]:
 
 
 @task(checkpoint=False)
-def make_vessels_at_sea_query(
+def make_positions_at_sea_query(
     positions_table: Table,
     facade_areas_table: Table,
     from_date: datetime,
@@ -59,7 +59,7 @@ def make_vessels_at_sea_query(
     only_fishing_positions: bool = False,
 ) -> Select:
     """
-    Generates the `sqlalchemy.Select` statement to run in order to get the list of
+    Generates the `sqlalchemy.Select` statement to run in order to get the positions of
     vessels that were at sea (i.e. those that emitted at least one VMS position outside
     of a port) between the designated dates and matching the designated flag states.
 
@@ -138,10 +138,12 @@ def make_vessels_at_sea_query(
                 positions_table.c.ircs,
                 positions_table.c.vessel_name,
                 positions_table.c.flag_state,
+                positions_table.c.date_time,
+                positions_table.c.latitude,
+                positions_table.c.longitude,
                 facade_areas_table.c.facade,
             ]
         )
-        .distinct()
         .select_from(from_table)
         .where(
             and_(
@@ -223,26 +225,68 @@ def extract_vessels_that_emitted_fars(
 
 @task(checkpoint=False)
 def concat(
-    vessels_at_sea_yesterday_everywhere: pd.DataFrame,
-    vessels_at_sea_yesterday_in_french_eez: pd.DataFrame,
+    positions_at_sea_yesterday_everywhere: pd.DataFrame,
+    positions_at_sea_yesterday_in_french_eez: pd.DataFrame,
 ) -> pd.DataFrame:
     """
     Concatenates the two input `DataFrame`.
 
     Args:
-        vessels_at_sea_yesterday_everywhere (pd.DataFrame)
-        vessels_at_sea_yesterday_in_french_eez (pd.DataFrame)
+        positions_at_sea_yesterday_everywhere (pd.DataFrame)
+        positions_at_sea_yesterday_in_french_eez (pd.DataFrame)
 
     Returns:
         pd.DataFrame
     """
     return pd.concat(
         [
-            vessels_at_sea_yesterday_everywhere,
-            vessels_at_sea_yesterday_in_french_eez,
+            positions_at_sea_yesterday_everywhere,
+            positions_at_sea_yesterday_in_french_eez,
         ],
         ignore_index=True,
     )
+
+
+@task(checkpoint=False)
+def get_vessels_at_sea(positions_at_sea: pd.DataFrame) -> pd.DataFrame:
+    """
+    Returns a DataFrame with the unique vessels present in the input `positions_at_sea`
+    DataFrame. Must have columns :
+
+      - `cfr`
+      - `external_immatriculation`
+      - `ircs`
+      - `vessel_name`
+      - `facade`
+      - `flag_state`
+      - `latitude`
+      - `longitude`
+
+
+    Args:
+        positions_at_sea (pd.DataFrame): DataFrame of positions of vessels at sea
+
+    Returns:
+        pd.DataFrame: unique vessels of the input
+    """
+    vessels_at_sea = (
+        positions_at_sea.sort_values("date_time", ascending=False)
+        .groupby(["cfr", "ircs", "external_immatriculation"])
+        .head(1)[
+            [
+                "cfr",
+                "external_immatriculation",
+                "ircs",
+                "vessel_name",
+                "flag_state",
+                "facade",
+                "latitude",
+                "longitude",
+            ]
+        ]
+        .reset_index(drop=True)
+    )
+    return vessels_at_sea
 
 
 @task(checkpoint=False)
@@ -357,7 +401,7 @@ with Flow("Missing FAR alerts") as flow:
         utcnow,
     ) = get_dates()
 
-    vessels_at_sea_yesterday_everywhere_query = make_vessels_at_sea_query(
+    positions_at_sea_yesterday_everywhere_query = make_positions_at_sea_query(
         positions_table=positions_table,
         facade_areas_table=facade_areas_table,
         from_date=yesterday_at_zero_hours,
@@ -368,7 +412,7 @@ with Flow("Missing FAR alerts") as flow:
         only_fishing_positions=only_raise_if_route_shows_fishing,
     )
 
-    vessels_at_sea_yesterday_in_french_eez_query = make_vessels_at_sea_query(
+    positions_at_sea_yesterday_in_french_eez_query = make_positions_at_sea_query(
         positions_table=positions_table,
         facade_areas_table=facade_areas_table,
         from_date=yesterday_at_zero_hours,
@@ -381,11 +425,11 @@ with Flow("Missing FAR alerts") as flow:
         only_fishing_positions=only_raise_if_route_shows_fishing,
     )
 
-    vessels_at_sea_yesterday_in_french_eez = read_query_task(
-        "monitorfish_remote", vessels_at_sea_yesterday_in_french_eez_query
+    positions_at_sea_yesterday_in_french_eez = read_query_task(
+        "monitorfish_remote", positions_at_sea_yesterday_in_french_eez_query
     )
-    vessels_at_sea_yesterday_everywhere = read_query_task(
-        "monitorfish_remote", vessels_at_sea_yesterday_everywhere_query
+    positions_at_sea_yesterday_everywhere = read_query_task(
+        "monitorfish_remote", positions_at_sea_yesterday_everywhere_query
     )
 
     vessels_that_emitted_fars = extract_vessels_that_emitted_fars(
@@ -398,9 +442,11 @@ with Flow("Missing FAR alerts") as flow:
     current_risk_factors = extract_current_risk_factors()
 
     # Transform
-    vessels_at_sea = concat(
-        vessels_at_sea_yesterday_everywhere, vessels_at_sea_yesterday_in_french_eez
+    positions_at_sea = concat(
+        positions_at_sea_yesterday_everywhere, positions_at_sea_yesterday_in_french_eez
     )
+
+    vessels_at_sea = get_vessels_at_sea(positions_at_sea)
 
     vessels_with_missing_fars = get_vessels_with_missing_fars(
         vessels_at_sea,

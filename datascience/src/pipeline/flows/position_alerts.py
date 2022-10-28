@@ -207,6 +207,8 @@ def make_positions_in_alert_query(
                 positions_table.c.vessel_name,
                 positions_table.c.flag_state,
                 positions_table.c.date_time,
+                positions_table.c.latitude,
+                positions_table.c.longitude,
                 facades_table.c.facade,
             ]
         )
@@ -400,7 +402,9 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
     `creation_datetime` for the alert.
     """
     vessels_in_alerts = (
-        positions_in_alert.groupby(
+        positions_in_alert.sort_values("date_time", ascending=False)
+        .groupby(["cfr", "ircs", "external_immatriculation"])
+        .head(1)[
             [
                 "cfr",
                 "external_immatriculation",
@@ -410,16 +414,17 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
                 "facade",
                 "risk_factor",
                 "vessel_identifier",
-            ],
-            as_index=False,
-            dropna=False,
-        )
-        .agg({"date_time": "max"})
+                "date_time",
+                "latitude",
+                "longitude",
+            ]
+        ]
         .rename(
             columns={
                 "date_time": "creation_date",
             }
         )
+        .reset_index(drop=True)
     )
     return vessels_in_alerts
 

@@ -14,7 +14,7 @@ from src.pipeline.flows.missing_far_alerts import (
     flow,
     get_dates,
     get_vessels_with_missing_fars,
-    make_vessels_at_sea_query,
+    make_positions_at_sea_query,
 )
 from src.read_query import read_query
 from tests.mocks import mock_datetime_utcnow
@@ -37,7 +37,7 @@ def test_get_dates():
     assert utcnow == datetime(2021, 1, 1, 16, 10, 0)
 
 
-def test_make_vessels_at_sea_query():
+def test_make_positions_at_sea_query():
 
     # Setup
 
@@ -59,6 +59,8 @@ def test_make_vessels_at_sea_query():
         Column("vessel_name", VARCHAR),
         Column("flag_state", VARCHAR),
         Column("date_time", TIMESTAMP),
+        Column("latitude", FLOAT),
+        Column("longitude", FLOAT),
         Column("is_at_port", BOOLEAN),
         Column("is_fishing", BOOLEAN),
         Column("geometry", Geometry),
@@ -74,7 +76,7 @@ def test_make_vessels_at_sea_query():
 
     # Test with all arguments
 
-    query = make_vessels_at_sea_query.run(
+    query = make_positions_at_sea_query.run(
         positions_table=positions_table,
         facade_areas_table=facade_areas_table,
         from_date=from_date,
@@ -89,12 +91,15 @@ def test_make_vessels_at_sea_query():
 
     query_string = str(query.compile(compile_kwargs={"literal_binds": True}))
     expected_query_string = (
-        "SELECT DISTINCT "
+        "SELECT "
         "positions.internal_reference_number AS cfr, "
         "positions.external_reference_number AS external_immatriculation, "
         "positions.ircs, "
         "positions.vessel_name, "
         "positions.flag_state, "
+        "positions.date_time, "
+        "positions.latitude, "
+        "positions.longitude, "
         "facades.facade "
         "\nFROM positions "
         "LEFT OUTER JOIN facades "
@@ -118,7 +123,7 @@ def test_make_vessels_at_sea_query():
 
     # Test without optional arguments
 
-    query = make_vessels_at_sea_query.run(
+    query = make_positions_at_sea_query.run(
         positions_table=positions_table,
         facade_areas_table=facade_areas_table,
         from_date=from_date,
@@ -127,12 +132,15 @@ def test_make_vessels_at_sea_query():
 
     query_string = str(query.compile(compile_kwargs={"literal_binds": True}))
     expected_query_string = (
-        "SELECT DISTINCT "
+        "SELECT "
         "positions.internal_reference_number AS cfr, "
         "positions.external_reference_number AS external_immatriculation, "
         "positions.ircs, "
         "positions.vessel_name, "
         "positions.flag_state, "
+        "positions.date_time, "
+        "positions.latitude, "
+        "positions.longitude, "
         "facades.facade "
         "\nFROM positions "
         "LEFT OUTER JOIN facades "
@@ -188,12 +196,13 @@ def test_extract_vessels_that_emitted_fars(reset_test_data):
 def test_concat():
     df1 = pd.DataFrame(
         {
-            "cfr": ["A"],
-            "external_immatriculation": ["AA"],
-            "ircs": ["AAA"],
-            "vessel_name": ["Vessel_A"],
-            "flag_state": ["FR"],
-            "facade": ["NAMO"],
+            "cfr": ["A", "A", "A"],
+            "external_immatriculation": ["AA", "AA", "AA"],
+            "ircs": ["AAA", "AAA", "AAA"],
+            "vessel_name": ["Vessel_A", "Vessel_A", "Vessel_A"],
+            "flag_state": ["FR", "FR", "FR"],
+            "facade": ["NAMO", "NAMO", "NAMO"],
+            "positions_data": [1, 2, 4],
         }
     )
 
@@ -205,17 +214,19 @@ def test_concat():
             "vessel_name": ["Vessel_B"],
             "flag_state": ["BE"],
             "facade": ["MEMN"],
+            "positions_data": [15],
         }
     )
 
     expected_res = pd.DataFrame(
         {
-            "cfr": ["A", "B"],
-            "external_immatriculation": ["AA", "BB"],
-            "ircs": ["AAA", "BBB"],
-            "vessel_name": ["Vessel_A", "Vessel_B"],
-            "flag_state": ["FR", "BE"],
-            "facade": ["NAMO", "MEMN"],
+            "cfr": ["A", "A", "A", "B"],
+            "external_immatriculation": ["AA", "AA", "AA", "BB"],
+            "ircs": ["AAA", "AAA", "AAA", "BBB"],
+            "vessel_name": ["Vessel_A", "Vessel_A", "Vessel_A", "Vessel_B"],
+            "flag_state": ["FR", "FR", "FR", "BE"],
+            "facade": ["NAMO", "NAMO", "NAMO", "MEMN"],
+            "positions_data": [1, 2, 4, 15],
         }
     )
 
@@ -304,6 +315,8 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
             "ircs": ["IL2468"],
             "vessel_id": [3],
             "vessel_identifier": ["INTERNAL_REFERENCE_NUMBER"],
+            "latitude": 53.424,
+            "longitude": 5.549,
             "value": [
                 {
                     "seaFront": None,

@@ -46,10 +46,13 @@ def make_alerts(
       - `dml`
       - `flag_state`
       - `risk_factor`
-      - and optionally, `creation_date`
+      - and optionally, `creation_date`, `latitude` and `longitude`
 
     If `creation_date` is not one of the columns, it will be added and filled with
     `datetime.utcnow`.
+
+    If `latitude` and `longitude` are not columns of the input, they are added and
+    filled with null values in the result.
 
     Args:
         vessels_in_alert (pd.DataFrame): `DateFrame` of vessels for which to
@@ -71,6 +74,12 @@ def make_alerts(
 
     if "creation_date" not in alerts:
         alerts["creation_date"] = datetime.utcnow()
+
+    if "latitude" not in alerts:
+        alerts["latitude"] = None
+
+    if "longitude" not in alerts:
+        alerts["longitude"] = None
 
     alerts["type"] = alert_type
     alerts["value"] = df_to_dict_series(
@@ -94,6 +103,8 @@ def make_alerts(
             "vessel_id",
             "vessel_identifier",
             "creation_date",
+            "latitude",
+            "longitude",
             "type",
             "facade",
             "value",
@@ -122,6 +133,8 @@ def filter_silenced_alerts(
       - vessel_name
       - vessel_identifier
       - creation_date
+      - latitude
+      - longitude
       - value
       - alert_config_name
 
@@ -148,7 +161,9 @@ def filter_silenced_alerts(
 
     alert_ids_to_remove = set(alerts_to_remove[id_col_name])
 
-    alerts = alerts.loc[~alerts[id_col_name].isin(alert_ids_to_remove)]
+    alerts = alerts.loc[~alerts[id_col_name].isin(alert_ids_to_remove)].reset_index(
+        drop=True
+    )
 
     return alerts[
         [
@@ -159,6 +174,8 @@ def filter_silenced_alerts(
             "vessel_id",
             "vessel_identifier",
             "creation_date",
+            "latitude",
+            "longitude",
             "value",
             "alert_config_name",
         ]

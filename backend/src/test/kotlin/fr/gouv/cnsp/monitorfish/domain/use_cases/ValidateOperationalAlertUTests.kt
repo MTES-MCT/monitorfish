@@ -46,7 +46,9 @@ class ValidateOperationalAlertUTests {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = ZonedDateTime.now(),
-            value = ThreeMilesTrawlingAlert()
+            value = ThreeMilesTrawlingAlert(),
+            latitude = 12.123,
+            longitude = -5.5698
         )
         given(pendingAlertRepository.find(any())).willReturn(pendingAlert)
 

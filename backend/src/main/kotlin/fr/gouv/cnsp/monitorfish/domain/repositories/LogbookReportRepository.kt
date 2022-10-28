@@ -13,6 +13,12 @@ interface LogbookReportRepository {
     ): VoyageDatesAndTripNumber
 
     @Throws(NoLogbookFishingTripFound::class)
+    fun findFirstAcknowledgedDateOfTripBeforeDateTime(
+        internalReferenceNumber: String,
+        beforeDateTime: ZonedDateTime
+    ): ZonedDateTime
+
+    @Throws(NoLogbookFishingTripFound::class)
     fun findTripBeforeTripNumber(
         internalReferenceNumber: String,
         tripNumber: String

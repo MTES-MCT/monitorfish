@@ -57,6 +57,28 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
 
     @Query(
         """WITH dat_cor AS (
+            SELECT *
+            FROM logbook_reports e
+            WHERE e.cfr = ?1
+            AND e.trip_number = ?2
+        ),
+        ret AS (
+            SELECT *
+            FROM logbook_reports
+            WHERE referenced_report_id IN (select report_id FROM dat_cor)
+            AND operation_type = 'RET'
+        )
+        SELECT MIN(dc.operation_datetime_utc)
+        FROM dat_cor dc
+        LEFT OUTER JOIN ret r
+            ON r.referenced_report_id = dc.report_id
+            WHERE
+                r.value->>'returnStatus' = '000' OR
+                dc.transmission_format = 'FLUX'""", nativeQuery = true)
+    fun findFirstAcknowledgedDateOfTrip(internalReferenceNumber: String, tripNumber: String): Instant
+
+    @Query(
+        """WITH dat_cor AS (
            SELECT *
            FROM logbook_reports
            WHERE

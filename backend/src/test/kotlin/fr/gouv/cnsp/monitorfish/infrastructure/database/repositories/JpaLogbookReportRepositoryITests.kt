@@ -422,4 +422,24 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(dateTime).isEqualTo(ZonedDateTime.parse("2021-01-31T12:29:02Z"))
     }
+
+    @Test
+    @Transactional
+    fun `findFirstAcknowledgedDateOfTripBeforeDateTime Should return the last acknowledged message date When transmission format is ERS`() {
+        // When
+        val lastTrip = jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime("FAK000999999", ZonedDateTime.now())
+
+        // Then
+        assertThat(lastTrip.toString()).isEqualTo("2019-10-17T11:32Z")
+    }
+
+    @Test
+    @Transactional
+    fun `findFirstAcknowledgedDateOfTripBeforeDateTime Should return the last acknowledged message date When transmission format is FLUX`() {
+        // When
+        val lastTrip = jpaLogbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime("SOCR4T3", ZonedDateTime.now())
+
+        // Then
+        assertThat(lastTrip.toString()).isEqualTo("2020-05-06T18:39:33Z")
+    }
 }

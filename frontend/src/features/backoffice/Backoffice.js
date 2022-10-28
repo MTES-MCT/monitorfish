@@ -15,7 +15,7 @@ import ShowRegulatoryMetadata from '../map/ShowRegulatoryMetadata'
 import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
 import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
 import { closeRegulatoryZoneMetadata } from '../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
-import { FRANCE, UE, UK } from '../../domain/entities/regulatory'
+import { FRANCE, ORGP, UE, UK } from '../../domain/entities/regulatory'
 import { COLORS } from '../../constants/constants'
 import { EmptyResult } from '../commonStyles/Text.style'
 import { setProcessingRegulationSaved } from './Regulation.slice'
@@ -114,10 +114,16 @@ const Backoffice = () => {
             {displayRegulatoryZoneByRegTerritory(UE)}
           </Territory>
         </Columns>
-        <Territory key={UK} isLast>
-          <TerritoryName>{UK}</TerritoryName>
-          {displayRegulatoryZoneByRegTerritory(UK)}
-        </Territory>
+        <Columns>
+          <Territory key={UK}>
+            <TerritoryName>{UK}</TerritoryName>
+            {displayRegulatoryZoneByRegTerritory(UK)}
+          </Territory>
+          <Territory key={ORGP}>
+            <TerritoryName>{ORGP}</TerritoryName>
+            {displayRegulatoryZoneByRegTerritory(ORGP)}
+          </Territory>
+        </Columns>
       </SearchResultList>)
   }, [foundRegulatoryZonesByRegTerritory])
 

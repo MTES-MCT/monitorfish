@@ -3,10 +3,10 @@ import * as timeago from 'timeago.js'
 import {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionsStage,
-  beaconMalfunctionsStageColumnRecord,
+  STAGE_RECORD,
   EndOfBeaconMalfunctionReason,
-  endOfBeaconMalfunctionReasonRecord,
-  vesselStatuses
+  END_OF_MALFUNCTION_REASON_RECORD,
+  VESSEL_STATUS
 } from '../../../domain/entities/beaconMalfunction/constants'
 
 import type { BeaconMalfunction, BeaconMalfunctionAction } from '../../../domain/types/beaconMalfunction'
@@ -49,7 +49,7 @@ export const getBeaconCreationDate = (dateLastEmission, status) => {
 }
 
 export function getBeaconCreationOrModificationDate(beaconMalfunction: BeaconMalfunction) {
-  if (beaconMalfunction.stage === beaconMalfunctionsStageColumnRecord.INITIAL_ENCOUNTER.code) {
+  if (beaconMalfunction.stage === STAGE_RECORD.INITIAL_ENCOUNTER.code) {
     return `ouverte ${getReducedTimeAgo(
       getBeaconCreationDate(beaconMalfunction.malfunctionStartDateTime, beaconMalfunction.vesselStatus)
     )}`
@@ -64,8 +64,8 @@ export function getActionText(
 ) {
   switch (action.propertyName) {
     case BeaconMalfunctionPropertyName.VESSEL_STATUS: {
-      const previousValue = vesselStatuses.find(status => status.value === action.previousValue)?.label
-      const nextValue = vesselStatuses.find(status => status.value === action.nextValue)?.label
+      const previousValue = VESSEL_STATUS.find(status => status.value === action.previousValue)?.label
+      const nextValue = VESSEL_STATUS.find(status => status.value === action.nextValue)?.label
 
       return (
         <>
@@ -74,10 +74,10 @@ export function getActionText(
       )
     }
     case BeaconMalfunctionPropertyName.STAGE: {
-      const previousValue = beaconMalfunctionsStageColumnRecord[action.previousValue].title
-      const nextValue = beaconMalfunctionsStageColumnRecord[action.nextValue].title
+      const previousValue = STAGE_RECORD[action.previousValue].title
+      const nextValue = STAGE_RECORD[action.nextValue].title
       const additionalText = endOfBeaconMalfunctionReason
-        ? endOfBeaconMalfunctionReasonRecord[endOfBeaconMalfunctionReason].label
+        ? END_OF_MALFUNCTION_REASON_RECORD[endOfBeaconMalfunctionReason].label
         : ''
 
       return (
@@ -112,9 +112,7 @@ function getByStage(stage: BeaconMalfunctionsStage, beaconMalfunctions: BeaconMa
 export function getBeaconMalfunctionsByStage(
   beaconsMalfunctions: BeaconMalfunction[]
 ): Record<BeaconMalfunctionsStage, BeaconMalfunction[]> | undefined {
-  const columns = Object.keys(beaconMalfunctionsStageColumnRecord).filter(
-    stage => beaconMalfunctionsStageColumnRecord[stage as BeaconMalfunctionsStage].isColumn
-  )
+  const columns = Object.keys(STAGE_RECORD).filter(stage => STAGE_RECORD[stage as BeaconMalfunctionsStage].isColumn)
 
   if (!columns.length) {
     return undefined

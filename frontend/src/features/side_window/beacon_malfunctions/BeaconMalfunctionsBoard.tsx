@@ -13,7 +13,7 @@ import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { beaconMalfunctionsStageColumnRecord } from '../../../domain/entities/beaconMalfunction/constants'
+import { STAGE_RECORD } from '../../../domain/entities/beaconMalfunction/constants'
 import { setError } from '../../../domain/shared_slices/Global'
 import getAllBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import updateBeaconMalfunctionFromKanban from '../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
@@ -109,20 +109,18 @@ export function BeaconMalfunctionsBoard() {
   }, [beaconMalfunctions, searchedVessel])
 
   const findStage = stageName => {
-    if (stageName in beaconMalfunctionsStageColumnRecord) {
+    if (stageName in STAGE_RECORD) {
       return stageName
     }
 
-    return Object.keys(beaconMalfunctionsStageColumnRecord).find(key =>
-      beaconMalfunctionsStageColumnRecord[key]?.code?.includes(stageName)
-    )
+    return Object.keys(STAGE_RECORD).find(key => STAGE_RECORD[key]?.code?.includes(stageName))
   }
 
   const stages: BeaconMalfunctionStageColumnValue[] = useMemo(
     () =>
-      Object.keys(beaconMalfunctionsStageColumnRecord)
-        .filter(stage => beaconMalfunctionsStageColumnRecord[stage].isColumn)
-        .map(stageId => beaconMalfunctionsStageColumnRecord[stageId]),
+      Object.keys(STAGE_RECORD)
+        .filter(stage => STAGE_RECORD[stage].isColumn)
+        .map(stageId => STAGE_RECORD[stageId]),
     []
   )
 
@@ -157,20 +155,14 @@ export function BeaconMalfunctionsBoard() {
       const beaconId = active?.id
       const nextStage = findStage(over?.id)
 
-      if (
-        previousStage === beaconMalfunctionsStageColumnRecord.END_OF_MALFUNCTION.code &&
-        nextStage !== beaconMalfunctionsStageColumnRecord.ARCHIVED.code
-      ) {
+      if (previousStage === STAGE_RECORD.END_OF_MALFUNCTION.code && nextStage !== STAGE_RECORD.ARCHIVED.code) {
         dispatch(setError(new Error('Une avarie archivée ne peut revenir en arrière')))
         setActiveBeaconMalfunction(null)
 
         return
       }
 
-      if (
-        previousStage !== beaconMalfunctionsStageColumnRecord.END_OF_MALFUNCTION.code &&
-        nextStage === beaconMalfunctionsStageColumnRecord.ARCHIVED.code
-      ) {
+      if (previousStage !== STAGE_RECORD.END_OF_MALFUNCTION.code && nextStage === STAGE_RECORD.ARCHIVED.code) {
         dispatch(setError(new Error('Seulement une avarie terminée peut être archivée')))
         setActiveBeaconMalfunction(null)
 
@@ -244,7 +236,7 @@ export function BeaconMalfunctionsBoard() {
           {stages.map(stage => (
             <Droppable
               key={stage.code}
-              disabled={stage.code === beaconMalfunctionsStageColumnRecord.END_OF_MALFUNCTION.code}
+              disabled={stage.code === STAGE_RECORD.END_OF_MALFUNCTION.code}
               id={stage.code}
               index={stage.index}
             >

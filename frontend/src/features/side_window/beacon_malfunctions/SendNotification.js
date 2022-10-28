@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { COLORS } from '../../../constants/constants'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-import { beaconMalfunctionNotificationType } from '../../../domain/entities/beaconMalfunction/constants'
+import { NOTIFICATION_TYPE } from '../../../domain/entities/beaconMalfunction/constants'
 import { SelectPicker } from 'rsuite'
 import sendNotification from '../../../domain/use_cases/beaconMalfunction/sendNotification'
 
@@ -38,8 +38,8 @@ const SendNotification = ({ beaconMalfunction }) => {
       placeholder={'Envoyer un message'}
       onChange={status => dispatch(sendNotification(beaconMalfunction.id, status))
         .then(() => setIsSendingNotification(status))}
-      data={Object.keys(beaconMalfunctionNotificationType)
-        .map(type => ({ label: beaconMalfunctionNotificationType[type].followUpMessage, value: type }))}
+      data={Object.keys(NOTIFICATION_TYPE)
+        .map(type => ({ label: NOTIFICATION_TYPE[type].followUpMessage, value: type }))}
     />
     <div ref={selectMenuRef} />
     {
@@ -49,8 +49,8 @@ const SendNotification = ({ beaconMalfunction }) => {
           style={sendingNotificationStyle}
         >
           <span className={'loader'}/>
-          En attente d’envoi  {beaconMalfunctionNotificationType[isSendingNotification].preposition}{' '}
-          {beaconMalfunctionNotificationType[isSendingNotification].followUpMessage}
+          En attente d’envoi  {NOTIFICATION_TYPE[isSendingNotification].preposition}{' '}
+          {NOTIFICATION_TYPE[isSendingNotification].followUpMessage}
         </SendingNotification>
         : null
     }

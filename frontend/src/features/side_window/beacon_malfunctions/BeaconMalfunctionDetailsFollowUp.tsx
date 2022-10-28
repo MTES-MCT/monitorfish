@@ -6,7 +6,7 @@ import { COLORS } from '../../../constants/constants'
 import {
   BeaconMalfunctionVesselStatus,
   UserType,
-  vesselStatuses
+  VESSEL_STATUS
 } from '../../../domain/entities/beaconMalfunction/constants'
 import { setUserType } from '../../../domain/shared_slices/Global'
 import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
@@ -23,7 +23,7 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
   const { actions, beaconMalfunction, comments, notifications } = beaconMalfunctionWithDetails
   const dispatch = useAppDispatch()
   const { userType } = useAppSelector(state => state.global)
-  const vesselStatus = vesselStatuses.find(status => status.value === firstStatus)
+  const vesselStatus = VESSEL_STATUS.find(status => status.value === firstStatus)
   const [today, setToday] = useState('')
   const [yesterday, setYesterday] = useState('')
   const scrollToRef = useRef<HTMLDivElement>(null)

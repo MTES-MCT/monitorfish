@@ -3,23 +3,22 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import {
-  beaconMalfunctionNotificationRecipientFunction,
-  beaconMalfunctionNotificationType,
-  communicationMeans
+  NOTIFICATION_RECIPIENT_FUNCTION,
+  NOTIFICATION_TYPE,
+  COMMUNICATION_MEAN
 } from '../../../domain/entities/beaconMalfunction/constants'
 import { ReactComponent as NotOkSVG } from '../../icons/Icon_not_OK.svg'
 import { ReactComponent as OkSVG } from '../../icons/Icon_OK.svg'
 
 export function BeaconMalfunctionsDetailsFollowUpNotification({ notification }) {
   const [showDetails, setShowDetails] = useState(false)
-  const followUpMessage =
-    beaconMalfunctionNotificationType[notification.notificationType]?.followUpMessage || 'Un message a été envoyé'
+  const followUpMessage = NOTIFICATION_TYPE[notification.notificationType]?.followUpMessage || 'Un message a été envoyé'
 
   const notReceivedMeans = notification.notifications
     .filter(notificationMeans => notificationMeans.success === false)
     .map(notificationMeans => {
-      const means = communicationMeans[notificationMeans.communicationMeans]?.denomination || ''
-      const addresseePreposition = communicationMeans[notificationMeans.communicationMeans]?.addresseePreposition || ''
+      const means = COMMUNICATION_MEAN[notificationMeans.communicationMeans]?.denomination || ''
+      const addresseePreposition = COMMUNICATION_MEAN[notificationMeans.communicationMeans]?.addresseePreposition || ''
 
       return (
         <>
@@ -51,14 +50,12 @@ export function BeaconMalfunctionsDetailsFollowUpNotification({ notification }) 
         <Fields style={fieldsStyle}>
           {Object.keys(recipientFunctions).map(recipientFunction => (
             <Field key={recipientFunction} style={fieldStyle}>
-              <Key style={keyStyle}>
-                {beaconMalfunctionNotificationRecipientFunction[recipientFunction]?.addressee || ''}
-              </Key>
+              <Key style={keyStyle}>{NOTIFICATION_RECIPIENT_FUNCTION[recipientFunction]?.addressee || ''}</Key>
               <Value style={valueStyle}>
                 {recipientFunctions[recipientFunction].map(_notification => {
                   const means =
-                    communicationMeans[_notification.communicationMeans] !== communicationMeans.EMAIL
-                      ? communicationMeans[_notification.communicationMeans]?.denomination
+                    COMMUNICATION_MEAN[_notification.communicationMeans] !== COMMUNICATION_MEAN.EMAIL
+                      ? COMMUNICATION_MEAN[_notification.communicationMeans]?.denomination
                       : ''
                   const meansResponse = getMeansResponseIcon(_notification)
 
@@ -91,7 +88,7 @@ export function BeaconMalfunctionsDetailsFollowUpNotification({ notification }) 
 function getMeansResponseIcon(notification) {
   let meansResponse: JSX.Element | undefined
 
-  if (communicationMeans[notification.communicationMeans] === communicationMeans.EMAIL) {
+  if (COMMUNICATION_MEAN[notification.communicationMeans] === COMMUNICATION_MEAN.EMAIL) {
     switch (notification.success) {
       case true:
         meansResponse = <Ok style={okStyle} />

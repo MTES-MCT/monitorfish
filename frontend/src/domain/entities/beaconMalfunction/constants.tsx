@@ -13,27 +13,27 @@ import type {
   EnfOfBeaconMalfunctionStatusValue
 } from '../../types/beaconMalfunction'
 
-const BeaconMalfunctionsTab = {
-  DETAIL: 2,
-  RESUME: 1
+enum BeaconMalfunctionsTab {
+  DETAIL = 2,
+  RESUME = 1
 }
 
-const UserType = {
-  OPS: 'OPS',
-  SIP: 'SIP'
+enum UserType {
+  OPS = 'OPS',
+  SIP = 'SIP'
 }
 
-const BeaconMalfunctionPropertyName = {
-  STAGE: 'STAGE',
-  VESSEL_STATUS: 'VESSEL_STATUS'
+enum BeaconMalfunctionPropertyName {
+  STAGE = 'STAGE',
+  VESSEL_STATUS = 'VESSEL_STATUS'
 }
 
-const BeaconMalfunctionVesselStatus = {
-  ACTIVITY_DETECTED: 'ACTIVITY_DETECTED',
-  AT_PORT: 'AT_PORT',
-  AT_SEA: 'AT_SEA',
-  NEVER_EMITTED: 'NEVER_EMITTED',
-  NO_NEWS: 'NO_NEWS'
+enum BeaconMalfunctionVesselStatus {
+  ACTIVITY_DETECTED = 'ACTIVITY_DETECTED',
+  AT_PORT = 'AT_PORT',
+  AT_SEA = 'AT_SEA',
+  NEVER_EMITTED = 'NEVER_EMITTED',
+  NO_NEWS = 'NO_NEWS'
 }
 
 const VesselStatusAtPort = styled(VesselStatusAtPortSVG)``
@@ -47,7 +47,7 @@ const iconStyle = {
   verticalAlign: 'sub'
 }
 
-const vesselStatuses: BeaconMalfunctionStatusValue[] = [
+const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
   {
     color: '#F4DEAF',
     icon: <VesselStatusAtPort style={iconStyle} />,
@@ -91,7 +91,7 @@ export enum EndOfBeaconMalfunctionReason {
   TEMPORARY_INTERRUPTION_OF_SUPERVISION = 'TEMPORARY_INTERRUPTION_OF_SUPERVISION'
 }
 
-const endOfBeaconMalfunctionReasonRecord: Record<EndOfBeaconMalfunctionReason, EnfOfBeaconMalfunctionStatusValue> = {
+const END_OF_MALFUNCTION_REASON_RECORD: Record<EndOfBeaconMalfunctionReason, EnfOfBeaconMalfunctionStatusValue> = {
   PERMANENT_INTERRUPTION_OF_SUPERVISION: {
     color: COLORS.opal,
     label: 'Arrêt définitif du suivi',
@@ -127,7 +127,7 @@ export enum BeaconMalfunctionsStage {
 /**
  * Sort keys are disabled as keys order dictates Kanban columns ordering
  */
-const beaconMalfunctionsStageColumnRecord: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumnValue> = {
+const STAGE_RECORD: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumnValue> = {
   INITIAL_ENCOUNTER: {
     index: 0,
     code: 'INITIAL_ENCOUNTER',
@@ -191,7 +191,7 @@ const beaconMalfunctionsStageColumnRecord: Record<BeaconMalfunctionsStage, Beaco
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix */
 
-const beaconMalfunctionNotificationType = {
+const NOTIFICATION_TYPE = {
   END_OF_MALFUNCTION: {
     followUpMessage: "Notification de fin d'avarie",
     preposition: 'de la'
@@ -214,7 +214,7 @@ const beaconMalfunctionNotificationType = {
   }
 }
 
-const communicationMeans = {
+const COMMUNICATION_MEAN = {
   EMAIL: {
     addresseePreposition: 'à',
     denomination: 'email',
@@ -232,7 +232,7 @@ const communicationMeans = {
   }
 }
 
-const beaconMalfunctionNotificationRecipientFunction = {
+const NOTIFICATION_RECIPIENT_FUNCTION = {
   FMC: {
     addressee: 'CNSP',
     value: 'FMC'
@@ -255,11 +255,11 @@ export {
   UserType,
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionVesselStatus,
-  vesselStatuses,
+  VESSEL_STATUS,
   BeaconMalfunctionsTab,
-  endOfBeaconMalfunctionReasonRecord,
-  beaconMalfunctionsStageColumnRecord,
-  beaconMalfunctionNotificationType,
-  communicationMeans,
-  beaconMalfunctionNotificationRecipientFunction
+  END_OF_MALFUNCTION_REASON_RECORD,
+  STAGE_RECORD,
+  NOTIFICATION_TYPE,
+  COMMUNICATION_MEAN,
+  NOTIFICATION_RECIPIENT_FUNCTION
 }

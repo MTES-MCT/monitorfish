@@ -29,7 +29,9 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
             vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
             tripNumber = "123456",
             creationDate = creationDate,
-            value = ThreeMilesTrawlingAlert("NAMO")
+            value = ThreeMilesTrawlingAlert("NAMO"),
+            latitude = 5.5588,
+            longitude = -45.3698
         )
 
         // When
@@ -44,6 +46,8 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(alert.seaFront).isEqualTo("NAMO")
         assertThat(reporting.last().creationDate).isEqualTo(creationDate)
         assertThat(reporting.last().validationDate).isEqualTo(now)
+        assertThat(reporting.last().latitude).isEqualTo(5.5588)
+        assertThat(reporting.last().longitude).isEqualTo(-45.3698)
         assertThat(reporting.last().vesselId).isEqualTo(125)
     }
 

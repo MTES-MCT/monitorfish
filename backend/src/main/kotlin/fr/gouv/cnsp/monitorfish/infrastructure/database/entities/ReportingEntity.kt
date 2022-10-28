@@ -57,7 +57,11 @@ data class ReportingEntity(
     @Column(name = "archived", nullable = false)
     val isArchived: Boolean,
     @Column(name = "deleted", nullable = false)
-    val isDeleted: Boolean
+    val isDeleted: Boolean,
+    @Column(name = "latitude")
+    val latitude: Double? = null,
+    @Column(name = "longitude")
+    val longitude: Double? = null
 ) {
 
     fun toReporting(mapper: ObjectMapper): Reporting {
@@ -74,7 +78,9 @@ data class ReportingEntity(
             validationDate = validationDate,
             value = ReportingMapper.getReportingValueFromJSON(mapper, value, type),
             isArchived = isArchived,
-            isDeleted = isDeleted
+            isDeleted = isDeleted,
+            latitude = latitude,
+            longitude = longitude
         )
     }
 
@@ -91,7 +97,9 @@ data class ReportingEntity(
             validationDate = validationDate,
             value = mapper.writeValueAsString(alert.value),
             isArchived = false,
-            isDeleted = false
+            isDeleted = false,
+            latitude = alert.latitude,
+            longitude = alert.longitude
         )
 
         fun fromReporting(reporting: Reporting, mapper: ObjectMapper) = ReportingEntity(

@@ -19,7 +19,9 @@ data class Reporting(
     val isArchived: Boolean,
     val isDeleted: Boolean,
     var infraction: Infraction? = null,
-    var underCharter: Boolean? = null
+    var underCharter: Boolean? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null
 ) {
     companion object {
         fun checkReportingActorAndFieldsRequirements(value: InfractionSuspicionOrObservationType) = when (value.reportingActor) {

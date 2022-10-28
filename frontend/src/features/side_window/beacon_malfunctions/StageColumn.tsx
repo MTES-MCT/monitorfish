@@ -7,6 +7,16 @@ import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 import { Draggable } from './Draggable'
 import { StageColumnHeader } from './StageColumnHeader'
 
+import type { BeaconMalfunction, BeaconMalfunctionStageColumnValue } from '../../../domain/types/beaconMalfunction'
+
+type StageColumnType = {
+  activeBeaconMalfunction: BeaconMalfunction | null
+  baseUrl: string
+  beaconMalfunctions: BeaconMalfunction[]
+  isDroppedId: boolean
+  stage: BeaconMalfunctionStageColumnValue
+  updateVesselStatus
+}
 export function StageColumn({
   activeBeaconMalfunction,
   baseUrl,
@@ -14,16 +24,17 @@ export function StageColumn({
   isDroppedId,
   stage,
   updateVesselStatus
-}) {
+}: StageColumnType) {
   const verticalScrollRef = useRef<HTMLDivElement>(null)
   const { openedBeaconMalfunctionInKanban } = useAppSelector(state => state.beaconMalfunction)
 
   return (
     <Wrapper data-cy={`side-window-beacon-malfunctions-columns-${stage.code}`} style={wrapperStyle}>
       <StageColumnHeader
-        description={stage?.description}
+        description={stage.description}
+        ids={beaconMalfunctions.map(beaconMalfunction => beaconMalfunction.id)}
         numberOfItems={beaconMalfunctions?.length}
-        stage={stage?.title}
+        stage={stage.title}
       />
       <ScrollableContainer ref={verticalScrollRef} className="smooth-scroll" style={ScrollableContainerStyle}>
         {beaconMalfunctions.map(beaconMalfunction => (

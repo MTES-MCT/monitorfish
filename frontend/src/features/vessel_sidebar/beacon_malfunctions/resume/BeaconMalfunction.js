@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
@@ -6,10 +5,11 @@ import { ReactComponent as AtSeaSVG } from '../../../icons/Icone_avarie_mer.svg'
 import { ReactComponent as AtPortSVG } from '../../../icons/Icone_avarie_quai.svg'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
 import { getDateTime } from '../../../../utils'
-import { BeaconMalfunctionVesselStatus, getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
+import { BeaconMalfunctionVesselStatus } from '../../../../domain/entities/beaconMalfunction/constants'
 import { setOpenedBeaconMalfunction } from '../../../../domain/shared_slices/BeaconMalfunction'
 import { useDispatch } from 'react-redux'
 import BeaconMalfunctionBody from './BeaconMalfunctionBody'
+import { getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
 
 const BeaconMalfunction = props => {
   const {

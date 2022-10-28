@@ -86,3 +86,26 @@ export type VesselBeaconMalfunctionsResume = {
   numberOfBeaconsAtPort: number
   numberOfBeaconsAtSea: number
 }
+
+export type BeaconMalfunctionStageColumnValue = {
+  code: string
+  description?: string
+  index: number | undefined
+  isColumn: boolean
+  title: string
+}
+
+export type BeaconMalfunctionStatusValue = {
+  color: string
+  icon: JSX.Element
+  label: string
+  textColor: string
+  value: string
+}
+
+export type EnfOfBeaconMalfunctionStatusValue = {
+  color: string
+  label: string
+  textColor: string
+  value: string
+}

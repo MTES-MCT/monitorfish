@@ -1,14 +1,13 @@
-import React from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
 import {
   BeaconMalfunctionPropertyName,
-  BeaconMalfunctionVesselStatus, endOfBeaconMalfunctionReasons,
-  getFirstVesselStatus,
-  vesselStatuses
-} from '../../../../domain/entities/beaconMalfunction'
+  BeaconMalfunctionVesselStatus, END_OF_MALFUNCTION_REASON_RECORD,
+  VESSEL_STATUS
+} from '../../../../domain/entities/beaconMalfunction/constants'
+import { getFirstVesselStatus } from '../../../../domain/entities/beaconMalfunction'
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24
 
@@ -22,7 +21,7 @@ const BeaconMalfunctionBody = props => {
     ? <Wrapper>
       <Key width={120}>Dernière pos.</Key>
       <SubValue>
-        {vesselStatuses.find(status => status.value === getFirstVesselStatus(beaconMalfunctionWithDetails))?.label}
+        {VESSEL_STATUS.find(status => status.value === getFirstVesselStatus(beaconMalfunctionWithDetails))?.label}
       </SubValue><br/>
       <Key width={120}>Durée avarie</Key>
       <SubValue>
@@ -44,7 +43,7 @@ const BeaconMalfunctionBody = props => {
           ? <>
             <Key width={120}>Raison fin d&apos;avarie</Key>
             <SubValue>
-              {endOfBeaconMalfunctionReasons[beaconMalfunctionWithDetails.beaconMalfunction?.endOfBeaconMalfunctionReason]?.label}
+              {END_OF_MALFUNCTION_REASON_RECORD[beaconMalfunctionWithDetails.beaconMalfunction?.endOfBeaconMalfunctionReason]?.label}
             </SubValue><br/>
           </>
           : null

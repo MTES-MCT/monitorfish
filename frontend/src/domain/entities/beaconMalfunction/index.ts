@@ -1,0 +1,141 @@
+import _ from 'lodash'
+
+import { getReducedTimeAgo } from '../../../features/side_window/beacon_malfunctions/beaconMalfunctions'
+import { getDate } from '../../../utils'
+import {
+  BeaconMalfunctionPropertyName,
+  STAGE_RECORD,
+  BeaconMalfunctionVesselStatus,
+  END_OF_MALFUNCTION_REASON_RECORD
+} from './constants'
+
+import type {
+  BeaconMalfunction,
+  BeaconMalfunctionResumeAndDetails,
+  BeaconMalfunctionStatusValue
+} from '../../types/beaconMalfunction'
+
+/**
+ * Get beacon malfunctions for each years : Years are keys and beacon malfunctions are values
+ *
+ * @returns {Object.<string, BeaconMalfunctionResumeAndDetails[]>} The beacon malfunctions for all years
+ */
+function getYearsToBeaconMalfunctions(
+  beaconMalfunctionsFromDate: Date,
+  beaconMalfunctions: BeaconMalfunctionResumeAndDetails[]
+): Record<string, BeaconMalfunctionResumeAndDetails[]> {
+  const nextYearsToBeaconMalfunctions = initYearToCurrentYearRecord(beaconMalfunctionsFromDate)
+
+  beaconMalfunctions.forEach(beaconMalfunction => {
+    if (beaconMalfunction.beaconMalfunction?.malfunctionStartDateTime) {
+      const year = new Date(beaconMalfunction.beaconMalfunction?.malfunctionStartDateTime).getUTCFullYear()
+
+      nextYearsToBeaconMalfunctions[year] = nextYearsToBeaconMalfunctions[year]?.concat(beaconMalfunction) || [
+        beaconMalfunction
+      ]
+    }
+  })
+
+  return nextYearsToBeaconMalfunctions
+}
+
+function initYearToCurrentYearRecord(
+  beaconMalfunctionsFromDate: Date
+): Record<number, BeaconMalfunctionResumeAndDetails[]> {
+  if (!beaconMalfunctionsFromDate) {
+    return []
+  }
+
+  const nextYearsToBeaconMalfunctions = {}
+  let fromYear = beaconMalfunctionsFromDate.getUTCFullYear() + 1
+  while (fromYear < new Date().getUTCFullYear()) {
+    nextYearsToBeaconMalfunctions[fromYear] = []
+    fromYear += 1
+  }
+
+  return nextYearsToBeaconMalfunctions
+}
+
+/**
+ * Get the number of sea and port beacon malfunctions for a given list of beacon malfunctions
+ */
+function getNumberOfSeaAndLandBeaconMalfunctions(beaconMalfunctions: BeaconMalfunctionResumeAndDetails[]): {
+  numberOfBeaconMalfunctionsAtPort: number
+  numberOfBeaconMalfunctionsAtSea: number
+} {
+  const numberOfBeaconMalfunctionsAtSea = getNumberOfBeaconMalfunctionsAt(
+    BeaconMalfunctionVesselStatus.AT_SEA,
+    beaconMalfunctions
+  )
+  const numberOfBeaconMalfunctionsAtPort = getNumberOfBeaconMalfunctionsAt(
+    BeaconMalfunctionVesselStatus.AT_PORT,
+    beaconMalfunctions
+  )
+
+  return {
+    numberOfBeaconMalfunctionsAtPort,
+    numberOfBeaconMalfunctionsAtSea
+  }
+}
+
+/**
+ * Get the number of beacon malfunctions at Port or at Sea
+ */
+function getNumberOfBeaconMalfunctionsAt(
+  vesselStatus: string,
+  beaconMalfunctionsWithDetails: BeaconMalfunctionResumeAndDetails[]
+): number {
+  return beaconMalfunctionsWithDetails.filter(
+    beaconMalfunctionWithDetails => getFirstVesselStatus(beaconMalfunctionWithDetails) === vesselStatus
+  ).length
+}
+
+/**
+ * Get the first vessel status of a beacon malfunction
+ */
+const getFirstVesselStatus = (beaconMalfunctionWithDetails: BeaconMalfunctionResumeAndDetails): string => {
+  const beaconMalfunctionsVesselStatusActions = beaconMalfunctionWithDetails.actions.filter(
+    action => action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS
+  )
+
+  switch (beaconMalfunctionsVesselStatusActions?.length === 0) {
+    case true:
+      return beaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus
+    case false:
+      return _.minBy(beaconMalfunctionsVesselStatusActions, action => action.dateTime)!.previousValue
+    default:
+      throw Error('Should not happen')
+  }
+}
+
+const getMalfunctionStartDateText = (
+  vesselStatus: BeaconMalfunctionStatusValue | undefined,
+  beaconMalfunction: BeaconMalfunction
+) => {
+  if (
+    beaconMalfunction?.stage === STAGE_RECORD.END_OF_MALFUNCTION.code ||
+    beaconMalfunction?.stage === STAGE_RECORD.ARCHIVED.code
+  ) {
+    switch (beaconMalfunction?.endOfBeaconMalfunctionReason) {
+      case END_OF_MALFUNCTION_REASON_RECORD.RESUMED_TRANSMISSION.value:
+        return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+      case END_OF_MALFUNCTION_REASON_RECORD.PERMANENT_INTERRUPTION_OF_SUPERVISION.value:
+        return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+      case END_OF_MALFUNCTION_REASON_RECORD.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value:
+        return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+      default:
+        throw Error('Should not happen')
+    }
+  }
+
+  return vesselStatus?.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED
+    ? `Balise activée le ${getDate(beaconMalfunction?.malfunctionStartDateTime)}`
+    : `Dernière émission ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+}
+
+export {
+  getYearsToBeaconMalfunctions,
+  getNumberOfSeaAndLandBeaconMalfunctions,
+  getFirstVesselStatus,
+  getMalfunctionStartDateText
+}

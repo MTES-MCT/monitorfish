@@ -2,12 +2,9 @@ import { CSSProperties, Ref, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import {
-  endOfBeaconMalfunctionReasons,
-  getMalfunctionStartDateText,
-  vesselStatuses
-} from '../../../domain/entities/beaconMalfunction'
-import openBeaconMalfunctionInKanban from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
+import { getMalfunctionStartDateText } from '../../../domain/entities/beaconMalfunction'
+import { END_OF_MALFUNCTION_REASON_RECORD, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
+import { openBeaconMalfunctionInKanban } from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
@@ -37,13 +34,13 @@ export function BeaconMalfunctionCard({
   verticalScrollRef
 }) {
   const dispatch = useAppDispatch()
-  const vesselStatus = vesselStatuses.find(_vesselStatus => _vesselStatus.value === beaconMalfunction?.vesselStatus)
+  const vesselStatus = VESSEL_STATUS.find(_vesselStatus => _vesselStatus.value === beaconMalfunction?.vesselStatus)
   const bodyRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const hasScroll = verticalScrollRef?.current?.scrollHeight > verticalScrollRef?.current?.clientHeight
 
   const endOfBeaconMalfunctionReason = useMemo(
-    () => endOfBeaconMalfunctionReasons[beaconMalfunction?.endOfBeaconMalfunctionReason],
+    () => END_OF_MALFUNCTION_REASON_RECORD[beaconMalfunction?.endOfBeaconMalfunctionReason],
     [beaconMalfunction]
   )
 
@@ -109,7 +106,7 @@ export function BeaconMalfunctionCard({
             data-cy="side-window-beacon-malfunctions-card-vessel-name"
             // TODO Fix the TS error when an action returns a Promise
             // @ts-ignore
-            onClick={() => dispatch(openBeaconMalfunctionInKanban({ beaconMalfunction }))}
+            onClick={() => dispatch(openBeaconMalfunctionInKanban(beaconMalfunction.id))}
             style={vesselNameStyle}
           >
             {beaconMalfunction.vesselName || 'Aucun nom'}

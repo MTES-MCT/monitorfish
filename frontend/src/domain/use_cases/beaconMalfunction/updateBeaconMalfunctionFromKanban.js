@@ -1,7 +1,7 @@
 import { setError } from '../../shared_slices/Global'
 import {
   setBeaconMalfunctions,
-  updateLocalBeaconMalfunctions,
+  updateLocalBeaconMalfunction,
   setOpenedBeaconMalfunctionsInKanban, setOpenedBeaconMalfunction, updateVesselBeaconMalfunctionsResumeAndHistory
 } from '../../shared_slices/BeaconMalfunction'
 import { updateBeaconMalfunctionFromAPI } from '../../../api/beaconMalfunction'
@@ -14,7 +14,7 @@ import { updateBeaconMalfunctionFromAPI } from '../../../api/beaconMalfunction'
  */
 const updateBeaconMalfunctionFromKanban = (id, nextBeaconMalfunction, updatedFields) => (dispatch, getState) => {
   const previousBeaconMalfunctions = getState().beaconMalfunction.beaconMalfunctions
-  dispatch(updateLocalBeaconMalfunctions(nextBeaconMalfunction))
+  dispatch(updateLocalBeaconMalfunction(nextBeaconMalfunction))
   const beaconMalfunctionToUpdateIsOpenedAsCurrentVesselMalfunction = getState().beaconMalfunction
     .vesselBeaconMalfunctionsResumeAndHistory?.current?.beaconMalfunction?.id === id
   const beaconMalfunctionToUpdateIsOpened = getState().beaconMalfunction

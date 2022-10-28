@@ -3,11 +3,8 @@ import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../constants/constants'
-import {
-  getFirstVesselStatus,
-  getMalfunctionStartDateText,
-  vesselStatuses
-} from '../../../domain/entities/beaconMalfunction'
+import { getFirstVesselStatus, getMalfunctionStartDateText } from '../../../domain/entities/beaconMalfunction'
+import { VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 import { closeBeaconMalfunctionInKanban } from '../../../domain/shared_slices/BeaconMalfunction'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../domain/use_cases/vessel/showVesselFromBeaconMalfunctionsKanban'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
@@ -26,7 +23,6 @@ export type BeaconMalfunctionDetailsProps = {
   beaconMalfunctionWithDetails: BeaconMalfunctionResumeAndDetails
   updateVesselStatus: (beaconMalfunction: BeaconMalfunction, status: any) => void
 }
-
 export function BeaconMalfunctionDetails({
   beaconMalfunctionWithDetails,
   updateVesselStatus
@@ -34,7 +30,7 @@ export function BeaconMalfunctionDetails({
   const { beaconMalfunction, resume } = beaconMalfunctionWithDetails
 
   const dispatch = useAppDispatch()
-  const vesselStatus = vesselStatuses.find(_vesselStatus => _vesselStatus.value === beaconMalfunction?.vesselStatus)
+  const vesselStatus = VESSEL_STATUS.find(_vesselStatus => _vesselStatus.value === beaconMalfunction?.vesselStatus)
   const baseUrl = window.location.origin
   const vesselStatusRef = useRef<HTMLDivElement>(null)
 

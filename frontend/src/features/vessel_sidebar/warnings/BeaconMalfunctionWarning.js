@@ -4,7 +4,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import { ReactComponent as BeaconMalfunctionSVG } from '../../icons/Icone_VMS_dark.svg'
-import openBeaconMalfunctionInKanban from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
+import { openBeaconMalfunctionInKanban } from '../../../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import { SIDE_WINDOW_MENU } from '../../side_window/constants'
 
 const BeaconMalfunctionWarning = ({ selectedVessel }) => {
@@ -29,11 +29,7 @@ const BeaconMalfunctionWarning = ({ selectedVessel }) => {
 const showBeaconMalfunctionInSideWindow = (dispatch, selectedVessel) => {
   dispatch(openSideWindowTab(SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code))
   dispatch(
-    openBeaconMalfunctionInKanban({
-      beaconMalfunction: {
-        id: selectedVessel?.beaconMalfunctionId
-      }
-    })
+    openBeaconMalfunctionInKanban(selectedVessel?.beaconMalfunctionId)
   )
 }
 

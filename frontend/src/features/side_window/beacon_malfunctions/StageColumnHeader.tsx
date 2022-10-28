@@ -1,27 +1,58 @@
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { beaconMalfunctionsStages } from '../../../domain/entities/beaconMalfunction'
+import { STAGE_RECORD } from '../../../domain/entities/beaconMalfunction/constants'
+import { archiveBeaconMalfunctions } from '../../../domain/use_cases/beaconMalfunction/archiveBeaconMalfunctions'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { theme } from '../../../ui/theme'
 
 import type { CSSProperties } from 'react'
 
 const MAX_ARCHIVED_ITEMS = 60
 
-export function StageColumnHeader({ description, numberOfItems, stage }) {
+type StageColumnHeaderType = {
+  description?: string
+  ids: number[]
+  numberOfItems: number
+  stage: string
+}
+export function StageColumnHeader({ description, ids, numberOfItems, stage }: StageColumnHeaderType) {
+  const dispatch = useAppDispatch()
+  const showArchiveAll = useMemo(() => stage === STAGE_RECORD.END_OF_MALFUNCTION.title && ids.length > 0, [stage, ids])
+
+  const archiveAll = useCallback(() => {
+    // @ts-ignore
+    dispatch(archiveBeaconMalfunctions(ids))
+  }, [dispatch, ids])
+
   return (
     <Wrapper style={wrapperStyle}>
       <Row data-cy="side-window-beacon-malfunctions-header" style={rowStyle}>
         <Title style={titleStyle}>{stage}</Title>
-        <NumberOfItems style={numberOfItemsStyle}>
-          {stage === beaconMalfunctionsStages.ARCHIVED.code && numberOfItems === MAX_ARCHIVED_ITEMS
+        {showArchiveAll && (
+          <ArchiveAll data-cy="side-window-beacon-malfunctions-archive-all" onClick={archiveAll}>
+            Tout archiver
+          </ArchiveAll>
+        )}
+        <NumberOfItems style={numberOfItemsStyle(showArchiveAll)}>
+          {stage === STAGE_RECORD.ARCHIVED.title && numberOfItems === MAX_ARCHIVED_ITEMS
             ? `${MAX_ARCHIVED_ITEMS}+`
             : numberOfItems}
         </NumberOfItems>
       </Row>
-      <Description style={descriptionStyle}>{description}</Description>
+      <Description style={descriptionStyle}>{description || ''}</Description>
     </Wrapper>
   )
 }
+
+const ArchiveAll = styled.a`
+  margin-left: auto;
+  margin-right: 6px;
+  color: ${theme.color.slateGray};
+  cursor: pointer;
+  text-decoration: underline;
+`
 
 const Wrapper = styled.div``
 const wrapperStyle: CSSProperties = {
@@ -51,11 +82,11 @@ const descriptionStyle = {
 }
 
 const NumberOfItems = styled.div``
-const numberOfItemsStyle: CSSProperties = {
+const numberOfItemsStyle: (isEndOfMalfunctionStage: boolean) => CSSProperties = (isEndOfMalfunctionStage: boolean) => ({
   background: COLORS.lightGray,
   borderRadius: 2,
   direction: 'rtl',
   fontWeight: 700,
-  marginLeft: 'auto',
+  marginLeft: isEndOfMalfunctionStage ? 'unset' : 'auto',
   padding: '0px 5px'
-}
+})

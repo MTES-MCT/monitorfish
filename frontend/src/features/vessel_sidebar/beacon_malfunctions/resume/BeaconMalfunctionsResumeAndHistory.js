@@ -1,14 +1,14 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import { setVesselBeaconMalfunctionsFromDate } from '../../../../domain/shared_slices/BeaconMalfunction'
-import { getYearsToBeaconMalfunctions } from '../../../../domain/entities/beaconMalfunction'
 import YearsToBeaconMalfunctionList from './YearsToBeaconMalfunctionList'
 import BeaconMalfunctionsResume from './BeaconMalfunctionsResume'
 import CurrentBeaconMalfunction from './CurrentBeaconMalfunction'
+import { getYearsToBeaconMalfunctions } from '../../../../domain/entities/beaconMalfunction'
 
 const BeaconMalfunctionsResumeAndHistory = props => {
   const dispatch = useDispatch()

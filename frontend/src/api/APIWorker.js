@@ -12,7 +12,7 @@ import { VesselSidebarTab } from '../domain/entities/vessel'
 import getAllRegulatoryLayers from '../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
 import { getOperationalAlerts } from '../domain/use_cases/alert/getOperationalAlerts'
 import getAllBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
-import openBeaconMalfunctionInKanban from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
+import { openBeaconMalfunctionInKanban } from '../domain/use_cases/beaconMalfunction/openBeaconMalfunctionInKanban'
 import getVesselBeaconMalfunctions from '../domain/use_cases/beaconMalfunction/getVesselBeaconMalfunctions'
 import getAllSpecies from '../domain/use_cases/species/getAllSpecies'
 import getVesselReportings from '../domain/use_cases/vessel/getVesselReportings'
@@ -105,7 +105,7 @@ const APIWorker = () => {
       }
 
       beaconMalfunctionInKanbanInterval.current = setInterval(() => {
-        dispatch(openBeaconMalfunctionInKanban(openedBeaconMalfunctionInKanban))
+        dispatch(openBeaconMalfunctionInKanban(openedBeaconMalfunctionInKanban.id))
       }, THIRTY_SECONDS)
     }
 

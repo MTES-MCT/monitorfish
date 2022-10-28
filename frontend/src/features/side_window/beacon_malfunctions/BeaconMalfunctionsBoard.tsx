@@ -9,11 +9,11 @@ import {
   useSensors
 } from '@dnd-kit/core'
 import { createSelector } from '@reduxjs/toolkit'
-import { CSSProperties, useCallback, useEffect, useState } from 'react'
+import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { beaconMalfunctionsStages } from '../../../domain/entities/beaconMalfunction'
+import { STAGE_RECORD } from '../../../domain/entities/beaconMalfunction/constants'
 import { setError } from '../../../domain/shared_slices/Global'
 import getAllBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import updateBeaconMalfunctionFromKanban from '../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
@@ -27,7 +27,7 @@ import { getBeaconMalfunctionsByStage } from './beaconMalfunctions'
 import { Droppable } from './Droppable'
 import { StageColumn } from './StageColumn'
 
-import type { BeaconMalfunction } from '../../../domain/types/beaconMalfunction'
+import type { BeaconMalfunction, BeaconMalfunctionStageColumnValue } from '../../../domain/types/beaconMalfunction'
 
 const getMemoizedBeaconMalfunctionsByStage = createSelector(
   state => state.beaconMalfunction.beaconMalfunctions,
@@ -109,12 +109,20 @@ export function BeaconMalfunctionsBoard() {
   }, [beaconMalfunctions, searchedVessel])
 
   const findStage = stageName => {
-    if (stageName in beaconMalfunctionsStages) {
+    if (stageName in STAGE_RECORD) {
       return stageName
     }
 
-    return Object.keys(beaconMalfunctionsStages).find(key => beaconMalfunctionsStages[key]?.code?.includes(stageName))
+    return Object.keys(STAGE_RECORD).find(key => STAGE_RECORD[key]?.code?.includes(stageName))
   }
+
+  const stages: BeaconMalfunctionStageColumnValue[] = useMemo(
+    () =>
+      Object.keys(STAGE_RECORD)
+        .filter(stage => STAGE_RECORD[stage].isColumn)
+        .map(stageId => STAGE_RECORD[stageId]),
+    []
+  )
 
   const updateVesselStatus = useCallback(
     (beaconMalfunction: BeaconMalfunction, status) => {
@@ -137,26 +145,24 @@ export function BeaconMalfunctionsBoard() {
 
   const onDragEnd = useCallback(
     event => {
+      if (!beaconMalfunctions) {
+        return
+      }
+
       const { active, over } = event
 
       const previousStage = findStage(active.data.current.stageId)
       const beaconId = active?.id
       const nextStage = findStage(over?.id)
 
-      if (
-        previousStage === beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
-        nextStage !== beaconMalfunctionsStages.ARCHIVED.code
-      ) {
+      if (previousStage === STAGE_RECORD.END_OF_MALFUNCTION.code && nextStage !== STAGE_RECORD.ARCHIVED.code) {
         dispatch(setError(new Error('Une avarie archivée ne peut revenir en arrière')))
         setActiveBeaconMalfunction(null)
 
         return
       }
 
-      if (
-        previousStage !== beaconMalfunctionsStages.END_OF_MALFUNCTION.code &&
-        nextStage === beaconMalfunctionsStages.ARCHIVED.code
-      ) {
+      if (previousStage !== STAGE_RECORD.END_OF_MALFUNCTION.code && nextStage === STAGE_RECORD.ARCHIVED.code) {
         dispatch(setError(new Error('Seulement une avarie terminée peut être archivée')))
         setActiveBeaconMalfunction(null)
 
@@ -196,6 +202,10 @@ export function BeaconMalfunctionsBoard() {
   )
 
   const onDragStart = event => {
+    if (!beaconMalfunctions) {
+      return
+    }
+
     const { active } = event
     const beaconId = active?.id
     const previousStage = findStage(active.data.current.stageId)
@@ -223,25 +233,23 @@ export function BeaconMalfunctionsBoard() {
         sensors={sensors}
       >
         <Columns data-cy="side-window-beacon-malfunctions-columns" style={columnsStyle}>
-          {Object.keys(beaconMalfunctionsStages)
-            .filter(stage => beaconMalfunctionsStages[stage].isColumn)
-            .map((stageId, index) => (
-              <Droppable
-                key={stageId}
-                disabled={stageId === beaconMalfunctionsStages.END_OF_MALFUNCTION.code}
-                id={stageId}
-                index={index}
-              >
-                <StageColumn
-                  activeBeaconMalfunction={activeBeaconMalfunction}
-                  baseUrl={baseUrl}
-                  beaconMalfunctions={filteredBeaconMalfunctions[stageId] || []}
-                  isDroppedId={!!isDroppedId}
-                  stage={beaconMalfunctionsStages[stageId]}
-                  updateVesselStatus={updateVesselStatus}
-                />
-              </Droppable>
-            ))}
+          {stages.map(stage => (
+            <Droppable
+              key={stage.code}
+              disabled={stage.code === STAGE_RECORD.END_OF_MALFUNCTION.code}
+              id={stage.code}
+              index={stage.index}
+            >
+              <StageColumn
+                activeBeaconMalfunction={activeBeaconMalfunction}
+                baseUrl={baseUrl}
+                beaconMalfunctions={filteredBeaconMalfunctions[stage.code] || []}
+                isDroppedId={!!isDroppedId}
+                stage={stage}
+                updateVesselStatus={updateVesselStatus}
+              />
+            </Droppable>
+          ))}
         </Columns>
         <DragOverlay
           dropAnimation={{

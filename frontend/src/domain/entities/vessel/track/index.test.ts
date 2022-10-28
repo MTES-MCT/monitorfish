@@ -4,7 +4,7 @@ import { getFeaturesFromPositions, getTrackType } from './index'
 
 import type { VesselLineFeature, VesselPointFeature, VesselPosition } from '../types'
 
-describe('utils', () => {
+describe('vessel/track', () => {
   it('getFeaturesFromPositions Should return one feature point When one position is given', async () => {
     // Given
     const positions = [

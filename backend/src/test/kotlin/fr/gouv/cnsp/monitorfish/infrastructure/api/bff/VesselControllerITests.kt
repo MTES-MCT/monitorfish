@@ -127,19 +127,19 @@ class VesselControllerITests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 4
             )
         )
         val secondPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 3
             )
         )
         val thirdPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 2
             )
@@ -198,19 +198,19 @@ class VesselControllerITests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 4
             )
         )
         val secondPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 3
             )
         )
         val thirdPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 2
             )
@@ -265,19 +265,19 @@ class VesselControllerITests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 4
             )
         )
         val secondPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 3
             )
         )
         val thirdPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 2
             )
@@ -333,19 +333,19 @@ class VesselControllerITests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         val firstPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 4
             )
         )
         val secondPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 3
             )
         )
         val thirdPosition = Position(
-            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, 16.445, 48.2525, 1.8, 180.0,
+            null, "FR224226850", "224226850", null, null, null, null, PositionType.AIS, false, false, 16.445, 48.2525, 1.8, 180.0,
             now.minusHours(
                 2
             )

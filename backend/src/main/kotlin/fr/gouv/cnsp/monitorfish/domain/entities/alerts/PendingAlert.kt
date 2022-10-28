@@ -16,5 +16,7 @@ class PendingAlert(
     val creationDate: ZonedDateTime,
     val tripNumber: String? = null,
     val value: AlertType,
-    var infraction: Infraction? = null
+    var infraction: Infraction? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null
 )

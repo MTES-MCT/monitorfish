@@ -70,7 +70,11 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
         )
         SELECT MIN(dc.operation_datetime_utc)
         FROM dat_cor dc
-        INNER JOIN ret r ON r.referenced_report_id = dc.report_id AND r.value->>'returnStatus' = '000'""", nativeQuery = true)
+        LEFT OUTER JOIN ret r
+            ON r.referenced_report_id = dc.report_id
+            WHERE
+                r.value->>'returnStatus' = '000' OR
+                dc.transmission_format = 'FLUX'""", nativeQuery = true)
     fun findFirstAcknowledgedDateOfTrip(internalReferenceNumber: String, tripNumber: String): Instant
 
     @Query(

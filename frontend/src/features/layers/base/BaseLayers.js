@@ -82,7 +82,7 @@ const BaseLayersList = styled.ul`
   height: 0;
   overflow-y: hidden;
   overflow-x: hidden;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
 
   animation: ${props => props.showBaseLayers ? 'zones-opening' : 'zones-closing'} 0.5s ease forwards;
 
@@ -110,13 +110,13 @@ const ListItem = styled.li`
   text-overflow: ellipsis;
   overflow: hidden !important;
   cursor: pointer;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   color: ${COLORS.gunMetal};
   border-bottom: 1px solid ${COLORS.lightGray};
   line-height: 1.9em;
 
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${p => p.theme.color.blueYonder[25]};
   }
 `
 

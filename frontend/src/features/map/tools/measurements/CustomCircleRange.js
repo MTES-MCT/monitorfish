@@ -1,30 +1,28 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { CoordinatesFormat, MeasurementType, OPENLAYERS_PROJECTION } from '../../../../domain/entities/map'
-import { useSelector } from 'react-redux'
 import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
+import { CoordinatesFormat, MeasurementType, OPENLAYERS_PROJECTION } from '../../../../domain/entities/map'
 import SetCoordinates from '../../../coordinates/SetCoordinates'
 import { MapToolBox } from '../MapToolBox'
 
-const CustomCircleRange = ({ onCancelAddCircleRange, onAddCustomCircleRange }) => {
-  const {
-    measurementTypeToAdd,
-    circleMeasurementInDrawing
-  } = useSelector(state => state.measurement)
-  const {
-    healthcheckTextWarning
-  } = useSelector(state => state.global)
+function CustomCircleRange({ onAddCustomCircleRange, onCancelAddCircleRange }) {
+  const { circleMeasurementInDrawing, measurementTypeToAdd } = useSelector(state => state.measurement)
+  const { healthcheckTextWarning } = useSelector(state => state.global)
   const [circleCoordinatesToAdd, setCircleCoordinatesToAdd] = useState([])
   const [circleRadiusToAdd, setCircleRadiusToAdd] = useState('')
 
   useEffect(() => {
     if (measurementTypeToAdd === MeasurementType.CIRCLE_RANGE) {
       if (circleMeasurementInDrawing?.coordinates?.length) {
-        const ddCoordinates = getCoordinates(circleMeasurementInDrawing?.coordinates, OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES, false).map(coordinate => {
-          return parseFloat(coordinate.replace(/°/g, ''))
-        })
+        const ddCoordinates = getCoordinates(
+          circleMeasurementInDrawing?.coordinates,
+          OPENLAYERS_PROJECTION,
+          CoordinatesFormat.DECIMAL_DEGREES,
+          false
+        ).map(coordinate => parseFloat(coordinate.replace(/°/g, '')))
         setCircleCoordinatesToAdd(ddCoordinates)
       }
 
@@ -61,35 +59,29 @@ const CustomCircleRange = ({ onCancelAddCircleRange, onAddCustomCircleRange }) =
   return (
     <Wrapper
       healthcheckTextWarning={healthcheckTextWarning}
-      isOpen={measurementTypeToAdd === MeasurementType.CIRCLE_RANGE}>
-      <Header>
-        Définir une valeur
-      </Header>
+      isOpen={measurementTypeToAdd === MeasurementType.CIRCLE_RANGE}
+    >
+      <Header>Définir une valeur</Header>
       <Body>
         <p>Coordonnées</p>
-        <SetCoordinates
-          coordinates={circleCoordinatesToAdd}
-          updateCoordinates={updateCoordinates}
-        />
+        <SetCoordinates coordinates={circleCoordinatesToAdd} updateCoordinates={updateCoordinates} />
         <p>Distance (rayon)</p>
         <input
-          style={{ width: 62 }}
-          data-cy={'measurement-circle-radius-input'}
-          type='text'
+          data-cy="measurement-circle-radius-input"
           onChange={e => setCircleRadiusToAdd(e.target.value)}
+          style={{ width: 62 }}
+          type="text"
           value={circleRadiusToAdd}
         />
-        <span>(Nm)</span><br/>
+        <span>(Nm)</span>
+        <br />
         <OkButton
-          data-cy={'measurement-circle-add'}
+          data-cy="measurement-circle-add"
           onClick={() => addCustomCircleRange(circleCoordinatesToAdd, circleRadiusToAdd)}
         >
           OK
         </OkButton>
-        <CancelButton
-          onClick={() => onCancelAddCircleRange()}>
-          Annuler
-        </CancelButton>
+        <CancelButton onClick={() => onCancelAddCircleRange()}>Annuler</CancelButton>
       </Body>
     </Wrapper>
   )
@@ -117,7 +109,8 @@ const OkButton = styled.button`
   font-size: 13px;
   color: ${COLORS.gainsboro};
 
-  :hover, :focus {
+  :hover,
+  :focus {
     background: ${COLORS.charcoal};
   }
 `
@@ -143,9 +136,9 @@ const Body = styled.div`
   }
 
   input {
-    color: ${COLORS.charcoal};
+    color: ${p => p.theme.color.gunMetal};
     margin-top: 7px;
-    background: ${COLORS.grayLighter};
+    background: ${p => p.theme.color.gainsboro};
     border: none;
     height: 27px;
     padding-left: 8px;

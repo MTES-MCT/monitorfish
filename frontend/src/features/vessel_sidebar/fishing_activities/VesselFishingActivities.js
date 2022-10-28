@@ -137,7 +137,7 @@ const Wrapper = styled.div`
 `
 
 const UpdateFishingActivities = styled.div`
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   position: absolute;
   opacity: 0.7;
   position: absolute;

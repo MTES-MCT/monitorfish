@@ -199,7 +199,7 @@ const VesselCardAlert = styled.div`
   background: #e1000f;
   font-weight: 500;
   font-size: 13px;
-  color: ${COLORS.background};
+  color: ${COLORS.white};
   text-transform: uppercase;
   width: 100%;
   text-align: center;
@@ -207,7 +207,7 @@ const VesselCardAlert = styled.div`
 `
 
 const VesselCardBeaconMalfunction = styled.div`
-  background: ${COLORS.yellowMunsell};
+  background: ${p => p.theme.color.goldenPoppy};
   font-weight: 500;
   font-size: 13px;
   color: ${COLORS.gunMetal};
@@ -418,7 +418,7 @@ const ColumnTwo = styled.div`
 
 const VesselCardBottom = styled.div`
   display: flex;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 0 5px 5px 5px;
 `
 
@@ -441,7 +441,7 @@ const FieldValue = styled.div`
 const LatLon = styled.div`
   width: 122px;
   order: 1;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 5px 0 5px 5px;
   padding-bottom: 10px;
 `
@@ -449,7 +449,7 @@ const LatLon = styled.div`
 const Course = styled.div`
   width: 70px;
   order: 2;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 5px 0 5px 5px;
   padding-bottom: 10px;
 `
@@ -457,7 +457,7 @@ const Course = styled.div`
 const Position = styled.div`
   width: 175px;
   order: 3;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 5px 5px 5px 5px;
   padding-bottom: 10px;
   padding-left: 5px;

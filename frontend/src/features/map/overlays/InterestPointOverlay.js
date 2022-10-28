@@ -214,7 +214,7 @@ const WrapperToBeKeptForDOMManagement = styled.div`
 `
 
 const InterestPointOverlayElement = styled.div`
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   cursor: grabbing;
   width: 183px;
   color: ${COLORS.gunMetal};

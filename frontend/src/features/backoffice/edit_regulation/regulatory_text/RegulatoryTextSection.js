@@ -95,7 +95,7 @@ const RegulatoryTextSection = props => {
 const ButtonLine = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: ${COLORS.background};
+  background-color: ${COLORS.white};
 `
 
 export default RegulatoryTextSection

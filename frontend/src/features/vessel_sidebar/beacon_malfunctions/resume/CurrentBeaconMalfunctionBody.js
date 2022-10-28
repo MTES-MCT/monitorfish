@@ -64,7 +64,7 @@ const Body = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
 `
 
 const TimeAgo = styled(TimeAgoSVG)``

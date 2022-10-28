@@ -65,11 +65,11 @@ const Table = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
 `
 
 const Fields = styled.table`
-  padding: 10px 5px 0 15px; 
+  padding: 10px 5px 0 15px;
   width: inherit;
   display: table;
   margin: 0;

@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
 import { closeSideWindow, openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
@@ -46,8 +45,7 @@ const BeaconMalfunctionsButton = styled(MapButtonStyle)<{
 }>`
   position: absolute;
   display: inline-block;
-  color: ${COLORS.blue};
-  background: ${p => (p.isVisible ? COLORS.shadowBlue : COLORS.charcoal)};
+  background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
   padding: 2px 2px 2px 2px;
   top: 162px;
   left: 12px;
@@ -57,7 +55,7 @@ const BeaconMalfunctionsButton = styled(MapButtonStyle)<{
 
   :hover,
   :focus {
-    background: ${p => (p.isVisible ? COLORS.shadowBlue : COLORS.charcoal)};
+    background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
   }
 `
 

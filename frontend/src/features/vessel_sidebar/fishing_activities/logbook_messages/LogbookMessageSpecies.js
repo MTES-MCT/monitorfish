@@ -186,8 +186,8 @@ const TitleText = styled.span`
   font-size: 13px;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  white-space: nowrap;    
-  max-width: 180px; 
+  white-space: nowrap;
+  max-width: 180px;
 `
 
 const Weight = styled.span`
@@ -200,7 +200,7 @@ const Weight = styled.span`
 
 const Species = styled.li`
   margin: 0;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   border-radius: 0;
   padding: 0;
   overflow-y: auto;
@@ -214,8 +214,8 @@ const Title = styled.div`
   padding: 0 0 0 20px;
   user-select: none;
   cursor: pointer;
-  ${props => props.isLast && !props.isOpen ? '' : `border-bottom: 1px solid ${COLORS.gray};`}
- 
+  ${props => props.isLast && !props.isOpen ? '' : `border-bottom: 1px solid ${props.theme.color.lightGray};`}
+
   display: flex;
   flex-wrap: wrap;
   overflow: hidden;
@@ -226,7 +226,7 @@ const Content = styled.div`
   height: 0;
   overflow: hidden;
   padding: 0;
-  border-bottom: 1px solid ${COLORS.gray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   height: ${props => props.isOpen
     ? props.length > 0
       ? props.length * 115 + (props.length > 1 ? 30 : 0)
@@ -241,7 +241,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   float: right;
   margin-right: 10px;
   margin-top: 2px;
-  
+
   animation: ${props => props.$isOpen ? `chevron-${props.name}-zones-opening` : `chevron-${props.name}-zones-closing`} 0.2s ease forwards;
 
   ${props => `
@@ -249,7 +249,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
         0%   { transform: rotate(180deg); }
         100% { transform: rotate(0deg); }
       }
-    
+
       @keyframes chevron-${props.name}-closing {
         0%   { transform: rotate(0deg); }
         100% { transform: rotate(180deg);   }
@@ -261,7 +261,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
 const TableBody = styled.tbody``
 
 const Fields = styled.table`
-  padding: 10px 5px 5px 20px; 
+  padding: 10px 5px 5px 20px;
   width: inherit;
   display: table;
   margin: 0;
@@ -302,8 +302,8 @@ const TrimmedValue = styled.td`
   line-height: normal;
   text-overflow: ellipsis;
   overflow: hidden !important;
-  white-space: nowrap;    
-  max-width: 90px; 
+  white-space: nowrap;
+  max-width: 90px;
 `
 
 const Value = styled.td`

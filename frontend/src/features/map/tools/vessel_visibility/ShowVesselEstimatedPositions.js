@@ -28,7 +28,7 @@ const Wrapper = styled.div`
   padding: 0 0 9px 7px;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
-  border-top: 1px solid ${COLORS.squareBorder};
+  border-top: 1px solid ${p => p.theme.color.lightGray};
 `
 
 const ShowLabelText = styled.span`

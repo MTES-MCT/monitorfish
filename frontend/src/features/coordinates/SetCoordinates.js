@@ -81,7 +81,7 @@ const Body = styled.div`
   input {
     margin-top: 7px;
     color: ${COLORS.gunMetal};
-    background: ${COLORS.grayLighter};
+    background: ${p => p.theme.color.gainsboro};
     border: none;
     height: 27px;
     padding-left: 8px;

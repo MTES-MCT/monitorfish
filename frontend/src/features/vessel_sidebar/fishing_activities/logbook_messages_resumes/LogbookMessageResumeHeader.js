@@ -115,7 +115,7 @@ const LogbookMessageName = styled.span`
 
 const Wrapper = styled.div`
   margin: 0;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   border-radius: 0;
   padding: 0;
   overflow-y: auto;
@@ -129,7 +129,7 @@ const LogbookMessageTitle = styled.div`
   padding: 0 0 0 20px;
   user-select: none;
   ${props => !props.hasNoMessage ? 'cursor: pointer;' : null}}
-  ${props => !props.isLastItem || props.isOpen ? `border-bottom: 1px solid ${COLORS.gray};` : null}
+  ${props => !props.isLastItem || props.isOpen ? `border-bottom: 1px solid ${props.theme.color.lightGray};` : null}
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`
@@ -138,7 +138,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   float: left;
   margin-right: 10px;
   margin-top: 12px;
-  
+
   animation: ${props => props.$isOpen ? `chevron-${props.name}-resume-opening` : `chevron-${props.name}-resume-closing`} 0.2s ease forwards;
 
   ${props => `
@@ -146,7 +146,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
         0%   { transform: rotate(180deg); }
         100% { transform: rotate(0deg); }
       }
-    
+
       @keyframes chevron-${props.name}-resume-closing {
         0%   { transform: rotate(0deg); }
         100% { transform: rotate(180deg);   }

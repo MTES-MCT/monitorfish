@@ -122,10 +122,10 @@ const Rectangle = styled.div`
   height: 14px;
   background: ${props => props.vectorLayerStyle && props.vectorLayerStyle.getFill()
   ? props.vectorLayerStyle.getFill().getColor()
-  : COLORS.gray};
+  : props.theme.color.lightGray};
   border: 1px solid ${props => props.vectorLayerStyle && props.vectorLayerStyle.getStroke()
   ? props.vectorLayerStyle.getStroke().getColor()
-  : COLORS.grayDarkerTwo};
+  : props.theme.color.slateGray};
   display: inline-block;
   margin-right: 10px;
   margin-top: 9px;
@@ -137,23 +137,23 @@ const Zone = styled.span`
   display: flex;
   font-size: 13px;
   padding-left: 20px;
-  background: ${props => props.selected ? COLORS.gray : COLORS.background};
+  background: ${props => props.selected ? COLORS.gray : COLORS.white};
   color: ${COLORS.gunMetal};
   padding-top: 1px;
   padding-bottom: 5px;
-  
+
   .rs-checkbox-checker {
     padding-top: 24px;
     margin-left: 0;
   }
-  
+
   .rs-checkbox-inline {
     width: 36px;
     margin-left: 0px;
   }
-  
+
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${p => p.theme.color.blueYonder[25]};
   }
 `
 

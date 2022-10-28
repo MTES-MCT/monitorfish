@@ -249,7 +249,7 @@ const Zone = styled.span`
   ${props => (!props.isOpen && props.isLastItem) ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
 
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${p => p.theme.color.blueYonder[25]};
   }
 `
 

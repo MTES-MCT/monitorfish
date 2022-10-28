@@ -66,7 +66,7 @@ const BeaconMalfunctionsResumeAndHistory = props => {
 }
 
 const SeeMoreBackground = styled.div`
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 0px 5px 10px 5px;
   padding: 5px 0 5px 0;
 `
@@ -81,7 +81,7 @@ const SeeMore = styled.div`
   margin-left: auto;
   margin-right: auto;
   user-select: none;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
 `
 
 const Body = styled.div`

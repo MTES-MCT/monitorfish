@@ -268,7 +268,7 @@ const ResumeBoxNumber = styled.span`
 `
 
 const ResumeBox = styled.span`
-  background: ${COLORS.grayLighter};
+  background: ${p => p.theme.color.gainsboro};
   border-radius: 11px;
   font-size: 13px;
   height: 22px;
@@ -301,7 +301,7 @@ const Wrapper = styled.div`
   width: -moz-available;
   width: -webkit-fill-available;
   padding: 10px 10px 10px 20px;
-  ${props => !props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null}
+  ${props => !props.isLastItem ? `border-bottom: 1px solid ${props.theme.color.lightGray};` : null}
 `
 
 const SubKey = styled.span`

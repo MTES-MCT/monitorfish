@@ -9,6 +9,7 @@ import { resetFocusOnPendingAlert } from '../../../domain/shared_slices/Alert'
 import { silenceAlert } from '../../../domain/use_cases/alert/silenceAlert'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
+import { theme } from '../../../ui/theme'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { PENDING_ALERTS_SEARCH_OPTIONS } from './constants'
@@ -134,7 +135,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
           index={0}
           style={{
             ...listItemStyle,
-            background: COLORS.background,
+            background: COLORS.white,
             border: `1px solid ${COLORS.lightGray}`,
             color: COLORS.slateGray
           }}
@@ -178,7 +179,7 @@ export function PendingAlertsList({ baseRef, numberOfSilencedAlerts, selectedSea
 
 const Warning = styled.span``
 const warningStyle = {
-  background: COLORS.yellowMunsell,
+  background: theme.color.goldenPoppy,
   borderRadius: 15,
   color: COLORS.charcoal,
   display: 'inline-block',

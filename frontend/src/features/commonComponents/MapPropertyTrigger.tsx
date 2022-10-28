@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
+import { theme } from '../../ui/theme'
 
 import type { FunctionComponent, SVGProps } from 'react'
 
@@ -39,7 +40,7 @@ export function MapPropertyTrigger({
     <Wrapper disabled={disabled} onClick={update}>
       <Icon
         style={{
-          background: booleanProperty ? COLORS.shadowBlue : COLORS.charcoal,
+          background: booleanProperty ? theme.color.blueGray[100] : COLORS.charcoal,
           cursor: disabled ? 'not-allowed' : 'pointer',
           height: 36,
           transition: 'all 0.2s',

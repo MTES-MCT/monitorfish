@@ -9,6 +9,7 @@ import { COLORS } from '../../../../../constants/constants'
 import InfoPoint from '../../../../backoffice/edit_regulation/InfoPoint'
 import { getGroupCategories, REGULATED_GEARS_KEYS } from '../../../../../domain/entities/backoffice'
 import { INFO_TEXT } from '../../../../backoffice/constants'
+import { theme } from '../../../../../ui/theme'
 
 const RegulatedGears = ({ authorized, regulatedGearsObject, hasPreviousRegulatedGearsBloc }) => {
   const {
@@ -100,7 +101,7 @@ const RegulatedGears = ({ authorized, regulatedGearsObject, hasPreviousRegulated
         <Derogation>
           <InfoPoint
             margin={'3px 0 0 0'}
-            backgroundColor={COLORS.yellowMunsell}
+            backgroundColor={theme.color.goldenPoppy}
             color={COLORS.charcoal}
           />
           <DerogationMessage>
@@ -119,7 +120,7 @@ const RegulatedGears = ({ authorized, regulatedGearsObject, hasPreviousRegulated
 
 const Derogation = styled.span`
   display: flex;
-  border: 1px solid ${COLORS.yellowMunsell};
+  border: 1px solid ${theme.color.goldenPoppy};
   padding: 4px 15px 6px 8px;
 `
 

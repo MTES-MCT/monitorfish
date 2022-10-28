@@ -61,8 +61,8 @@ const LayerDetailsBox = props => {
 const Rectangle = styled.div`
   width: 14px;
   height: 14px;
-  background: ${props => props.vectorLayerStyle?.getFill() ? props.vectorLayerStyle.getFill().getColor() : COLORS.gray};
-  border: 1px solid ${props => props.vectorLayerStyle?.getStroke() ? props.vectorLayerStyle.getStroke().getColor() : COLORS.grayDarkerTwo};
+  background: ${props => props.vectorLayerStyle?.getFill() ? props.vectorLayerStyle.getFill().getColor() : props.theme.color.lightGray};
+  border: 1px solid ${props => props.vectorLayerStyle?.getStroke() ? props.vectorLayerStyle.getStroke().getColor() : props.theme.color.slateGray};
   margin-right: 7px;
   margin-top: 5px;
 `
@@ -87,12 +87,12 @@ const Details = styled.span`
   background: ${COLORS.gainsboro};
   font-size: 13px;
   font-weight: 500;
-  color: ${COLORS.charcoal}
+  color: ${COLORS.charcoal};
 `
 
 const ZoneName = styled.span`
   font-weight: 400;
-  color: ${COLORS.grayDarkerTwo}
+  color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   margin-left: 10px;
 `

@@ -82,9 +82,9 @@ const Zone = styled.span`
   user-select: none;
   padding-bottom: 2px;
   ${props => !props.isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`}
-  
+
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${p => p.theme.color.blueYonder[25]};
   }
 `
 

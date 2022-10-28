@@ -147,7 +147,7 @@ const LayerTopic = styled.div`
   border-bottom: 1px solid ${COLORS.lightGray};
 
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${p => p.theme.color.blueYonder[25]};
   }
 
   .rs-checkbox-checker {

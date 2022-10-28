@@ -145,11 +145,11 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
 `
 
 const Fields = styled.table`
-  padding: 10px 5px 5px 20px; 
+  padding: 10px 5px 5px 20px;
   width: inherit;
   display: table;
   margin: 0;

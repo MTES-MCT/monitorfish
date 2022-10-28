@@ -170,7 +170,7 @@ const Columns = styled.div`
 
 const SearchResultList = styled.div`
   margin-top: 5px;
-  color: ${COLORS.textWhite};
+  color: ${p => p.theme.color.gainsboro};
   text-decoration: none;
   border-radius: 2px;
   max-height: calc(100vh - 138.5px - 25px);

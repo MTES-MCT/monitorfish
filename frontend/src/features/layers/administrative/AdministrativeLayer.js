@@ -83,9 +83,9 @@ const Row = styled.span`
   width: -moz-available;
   width: -webkit-fill-available;
   width: stretch;
-  
+
   :hover {
-    background: ${COLORS.shadowBlueLittleOpacity};
+    background: ${p => p.theme.color.blueYonder[25]};
   }
 `
 

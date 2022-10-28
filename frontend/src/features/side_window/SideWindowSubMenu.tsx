@@ -151,7 +151,7 @@ export function SideWindowSubMenu({
 
 const Chevron = styled.div``
 const chevronStyle = (isOpen: boolean): CSSProperties => ({
-  background: COLORS.background,
+  background: COLORS.white,
   border: `1px solid ${COLORS.lightGray}`,
   borderRadius: '50%',
   cursor: 'pointer',

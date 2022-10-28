@@ -22,6 +22,6 @@ const StyledCardTableHeader = styled(List.Item)`
   height: 15px;
   transition: background 3s;
   overflow: hidden;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   color: ${COLORS.slateGray};
 `

@@ -2,7 +2,7 @@ import ky from 'ky'
 
 import { ApiError } from '../libs/ApiError'
 
-import type { beaconMalfunctionNotificationType, UserType } from '../domain/entities/beaconMalfunction/constants'
+import type { NOTIFICATION_TYPE, UserType } from '../domain/entities/beaconMalfunction/constants'
 import type {
   BeaconMalfunction,
   BeaconMalfunctionResumeAndDetails,
@@ -124,10 +124,7 @@ async function getVesselBeaconsMalfunctionsFromAPI(
  *
  * @throws {@link ApiError}
  */
-async function sendNotificationFromAPI(
-  id: number,
-  notificationType: keyof typeof beaconMalfunctionNotificationType
-): Promise<void> {
+async function sendNotificationFromAPI(id: number, notificationType: keyof typeof NOTIFICATION_TYPE): Promise<void> {
   try {
     await ky.put(`/bff/v1/beacon_malfunctions/${id}/${notificationType}`)
   } catch (err) {

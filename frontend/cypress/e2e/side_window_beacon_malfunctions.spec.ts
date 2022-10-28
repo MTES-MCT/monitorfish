@@ -172,15 +172,13 @@ context('Side window beacon malfunctions', () => {
     // Check the comments order
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comments-number"]').contains('2 commentaires')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').should('have.length', 4)
-    const oneWeeksBefore = new Date()
-    oneWeeksBefore.setDate(oneWeeksBefore.getDate() - 7)
-    const oneWeekBeforeAsString = getDate(oneWeeksBefore.toUTCString())
+    const oneWeekBefore = getUtcizedDayjs().subtract(7, 'days').toISOString()
+    const oneWeekBeforeAsString = getDate(oneWeekBefore)
     if (!oneWeekBeforeAsString) {
       throw new Error('`oneWeekBeforeAsString` is undefined.')
     }
-    const fourDaysBefore = new Date()
-    fourDaysBefore.setDate(fourDaysBefore.getDate() - 4)
-    const fourDaysBeforeAsString = getDate(fourDaysBefore.toUTCString())
+    const fourDaysBefore = getUtcizedDayjs().subtract(4, 'days').toISOString()
+    const fourDaysBeforeAsString = getDate(fourDaysBefore)
     if (!fourDaysBeforeAsString) {
       throw new Error('`fourDaysBeforeAsString` is undefined.')
     }

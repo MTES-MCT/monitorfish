@@ -21,8 +21,7 @@ export const archiveBeaconMalfunctions = (ids: number[]) => (dispatch, getState)
     .then(updatedBeaconMalfunctionsWithDetails => {
       dispatch(
         updateLocalBeaconMalfunctions({
-          beaconMalfunctions: updatedBeaconMalfunctionsWithDetails.map(beacon => beacon.beaconMalfunction),
-          ids
+          beaconMalfunctions: updatedBeaconMalfunctionsWithDetails.map(beacon => beacon.beaconMalfunction)
         })
       )
 

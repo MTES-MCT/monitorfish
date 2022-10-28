@@ -156,10 +156,10 @@ const beaconMalfunctionSlice = createSlice({
       state,
       action: PayloadAction<{
         beaconMalfunctions: BeaconMalfunction[]
-        ids: number[]
       }>
     ) {
-      const { beaconMalfunctions, ids } = action.payload
+      const { beaconMalfunctions } = action.payload
+      const ids = beaconMalfunctions.map(beaconMalfunction => beaconMalfunction.id)
 
       const nextBeaconMalfunctions = state.beaconMalfunctions.filter(
         beaconMalfunction => !ids.includes(beaconMalfunction.id)

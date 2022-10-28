@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { beaconMalfunctionsStageColumnRecord } from '../../../domain/entities/beaconMalfunction/constants'
+import { STAGE_RECORD } from '../../../domain/entities/beaconMalfunction/constants'
 import { archiveBeaconMalfunctions } from '../../../domain/use_cases/beaconMalfunction/archiveBeaconMalfunctions'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { theme } from '../../../ui/theme'
@@ -19,10 +19,7 @@ type StageColumnHeaderType = {
 }
 export function StageColumnHeader({ description, ids, numberOfItems, stage }: StageColumnHeaderType) {
   const dispatch = useAppDispatch()
-  const showArchiveAll = useMemo(
-    () => stage === beaconMalfunctionsStageColumnRecord.END_OF_MALFUNCTION.title && ids.length > 0,
-    [stage, ids]
-  )
+  const showArchiveAll = useMemo(() => stage === STAGE_RECORD.END_OF_MALFUNCTION.title && ids.length > 0, [stage, ids])
 
   const archiveAll = useCallback(() => {
     // @ts-ignore
@@ -39,7 +36,7 @@ export function StageColumnHeader({ description, ids, numberOfItems, stage }: St
           </ArchiveAll>
         )}
         <NumberOfItems style={numberOfItemsStyle(showArchiveAll)}>
-          {stage === beaconMalfunctionsStageColumnRecord.ARCHIVED.title && numberOfItems === MAX_ARCHIVED_ITEMS
+          {stage === STAGE_RECORD.ARCHIVED.title && numberOfItems === MAX_ARCHIVED_ITEMS
             ? `${MAX_ARCHIVED_ITEMS}+`
             : numberOfItems}
         </NumberOfItems>

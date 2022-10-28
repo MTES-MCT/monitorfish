@@ -2,7 +2,7 @@ import { getDateTime } from '../../../../utils'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { NoValue, Title, Zone } from '../../common_styles/common.style'
-import { vesselStatuses } from '../../../../domain/entities/beaconMalfunction/constants'
+import { VESSEL_STATUS } from '../../../../domain/entities/beaconMalfunction/constants'
 
 const BeaconMalfunctionsResume = props => {
   const {
@@ -32,7 +32,7 @@ const BeaconMalfunctionsResume = props => {
                   vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime
                     ? <>Le {getDateTime(vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionDateTime, true)}
                       {' '}
-                    ({vesselStatuses.find(status => status.value === vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionVesselStatus)?.label})</>
+                    ({VESSEL_STATUS.find(status => status.value === vesselBeaconMalfunctionsResume?.lastBeaconMalfunctionVesselStatus)?.label})</>
                     : <NoValue>-</NoValue>
                 }
               </Value>

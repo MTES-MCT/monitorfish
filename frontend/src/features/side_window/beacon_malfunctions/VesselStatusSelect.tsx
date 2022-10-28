@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { SelectPicker } from 'rsuite'
 
-import { vesselStatuses } from '../../../domain/entities/beaconMalfunction/constants'
+import { VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 
 import type { BeaconMalfunction } from '../../../domain/types/beaconMalfunction'
@@ -29,7 +29,7 @@ export function VesselStatusSelect({
       <SelectPicker
         cleanable={false}
         container={() => domRef.current}
-        data={vesselStatuses}
+        data={VESSEL_STATUS}
         menuStyle={
           isAbsolute
             ? { marginLeft: 40, marginTop: 120, position: 'absolute' }

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { vesselStatuses } from '../../../../domain/entities/beaconMalfunction/constants'
+import { VESSEL_STATUS } from '../../../../domain/entities/beaconMalfunction/constants'
 import { VesselStatusSelectValue } from '../../../side_window/beacon_malfunctions/VesselStatusSelectValue'
 import { SelectPicker } from 'rsuite'
 import updateBeaconMalfunctionFromKanban from '../../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
@@ -16,7 +16,7 @@ const CurrentBeaconMalfunctionBody = props => {
   } = props
   const dispatch = useDispatch()
   const vesselStatusRef = useRef()
-  const vesselStatus = vesselStatuses.find(vesselStatus => vesselStatus.value === currentBeaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus)
+  const vesselStatus = VESSEL_STATUS.find(vesselStatus => vesselStatus.value === currentBeaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus)
 
   useEffect(() => {
     if (vesselStatus?.color && currentBeaconMalfunctionWithDetails?.beaconMalfunction?.id) {
@@ -45,7 +45,7 @@ const CurrentBeaconMalfunctionBody = props => {
         searchable={false}
         value={vesselStatus?.value}
         onChange={status => updateVesselStatus(currentBeaconMalfunctionWithDetails?.beaconMalfunction, status)}
-        data={vesselStatuses}
+        data={VESSEL_STATUS}
         renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
         cleanable={false}
       />

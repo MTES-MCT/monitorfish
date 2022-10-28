@@ -4,9 +4,9 @@ import { getReducedTimeAgo } from '../../../features/side_window/beacon_malfunct
 import { getDate } from '../../../utils'
 import {
   BeaconMalfunctionPropertyName,
-  beaconMalfunctionsStageColumnRecord,
+  STAGE_RECORD,
   BeaconMalfunctionVesselStatus,
-  endOfBeaconMalfunctionReasonRecord
+  END_OF_MALFUNCTION_REASON_RECORD
 } from './constants'
 
 import type {
@@ -113,15 +113,15 @@ const getMalfunctionStartDateText = (
   beaconMalfunction: BeaconMalfunction
 ) => {
   if (
-    beaconMalfunction?.stage === beaconMalfunctionsStageColumnRecord.END_OF_MALFUNCTION.code ||
-    beaconMalfunction?.stage === beaconMalfunctionsStageColumnRecord.ARCHIVED.code
+    beaconMalfunction?.stage === STAGE_RECORD.END_OF_MALFUNCTION.code ||
+    beaconMalfunction?.stage === STAGE_RECORD.ARCHIVED.code
   ) {
     switch (beaconMalfunction?.endOfBeaconMalfunctionReason) {
-      case endOfBeaconMalfunctionReasonRecord.RESUMED_TRANSMISSION.value:
+      case END_OF_MALFUNCTION_REASON_RECORD.RESUMED_TRANSMISSION.value:
         return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
-      case endOfBeaconMalfunctionReasonRecord.PERMANENT_INTERRUPTION_OF_SUPERVISION.value:
+      case END_OF_MALFUNCTION_REASON_RECORD.PERMANENT_INTERRUPTION_OF_SUPERVISION.value:
         return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
-      case endOfBeaconMalfunctionReasonRecord.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value:
+      case END_OF_MALFUNCTION_REASON_RECORD.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value:
         return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
       default:
         throw Error('Should not happen')

@@ -3,7 +3,7 @@ import logging
 import os
 from email.message import EmailMessage
 from pathlib import Path
-from typing import List, Tuple
+from typing import Iterable, List, Tuple
 
 import jinja2
 import pandas as pd
@@ -25,10 +25,25 @@ from src.pipeline.processing import try_get_factory
 ####################################### Helpers #######################################
 
 
-def make_html_hyperlinks(urls, link_texts) -> List[str]:
+def make_html_hyperlinks(
+    urls: Iterable, link_texts: Iterable, logger: logging.Logger = None
+) -> List[str]:
+    """
+    Returns a list of html strings of links like <a href=url>link_text</a> for the
+    input `urls` and `link_texts`.
+
+    Args:
+        urls (Iterable): Iterable of urls
+        link_texts (Iterable): Iterable of link texts
+
+    Returns:
+        List[str]: `list` of html links
+    """
 
     if not len(urls) == len(link_texts):
-        logging.warn(
+        if not logger:
+            logger = logging.Logger("logger")
+        logger.warning(
             (
                 "urls and text_links do not match in length. The output list will "
                 "be truncated to the shortest of the two sequences"
@@ -49,7 +64,23 @@ def make_html_hyperlinks(urls, link_texts) -> List[str]:
 
 
 @task(checkpoint=False)
-def extract_monitorfish_regulations():
+def extract_monitorfish_regulations() -> pd.DataFrame:
+    """
+    Extracts regulation references from the monitorfish `regulations` table.
+
+    The ouptut DataFrame contains one line per regulatory reference, which means there
+    can be multiple lines for one regulated zone, if the zone has several regulatory
+    references.
+
+    Output columns are `law_type`, `topic`, `zone`, `url` and `reference`.
+
+    Regulatory zones without any regulatory reference are present in the output as a
+    line with `None`s as `url` and `reference` values.
+
+    Returns:
+        pd.DataFrame: DataFrame of regulatory references
+    """
+
     monitorfish_regulations = extract(
         "monitorfish_remote",
         query_filepath="monitorfish/regulations_references.sql",
@@ -77,7 +108,20 @@ def extract_monitorfish_regulations():
 
 
 @task(checkpoint=False)
-def extract_legipeche_regulations():
+def extract_legipeche_regulations() -> pd.DataFrame:
+    """
+    Extracts legipeche regulations from the monitorfish `legipeche` table (which is
+    scraped from legipeche by the `Scrape Legipeche` flow).
+
+    The ouput has one line per document - there can be multiple documents for the same
+    Legipeche page.
+
+    Output columns are `extraction_datetime_utc`, `extraction_occurence`, `page_title`,
+    `page_url`, `document_title`, and `document_url`.
+
+    Returns:
+        pd.DataFrame: DataFrame of Legipeche regulations.
+    """
     return extract(
         "monitorfish_remote",
         query_filepath="monitorfish/legipeche.sql",
@@ -86,6 +130,19 @@ def extract_legipeche_regulations():
 
 @task(checkpoint=False)
 def get_extraction_datetimes(legipeche_regulations: pd.DataFrame) -> Tuple[str, str]:
+    """
+    Returns the extraction datetimes of `previous` and `latest` legipeche extraction
+    occurences from the `legipeche_regulations` DataFrame.
+
+    The input must have `extraction_occurence` and `extraction_datetime_utc` columns.
+
+    Args:
+        legipeche_regulations (pd.DataFrame): DataFrame of legipeche extractions.
+
+    Returns:
+        Tuple[str, str]: extraction datetimes of `previous` and `latest` legipeche
+          extractions
+    """
 
     previous_extraction_datetime_utc = legipeche_regulations.loc[
         legipeche_regulations.extraction_occurence == "previous",
@@ -97,7 +154,20 @@ def get_extraction_datetimes(legipeche_regulations: pd.DataFrame) -> Tuple[str, 
         "extraction_datetime_utc",
     ].iloc[0]
 
-    def naive_datetime_utc_to_paris_datetime_string(naive_dt_utc: datetime.datetime):
+    def naive_datetime_utc_to_paris_datetime_string(
+        naive_dt_utc: datetime.datetime,
+    ) -> str:
+        """
+        Takes a naive `datetime`, supposed to represent a UTC datetime object, converts
+        it to Europe/Paris aware `datetime` and returns it as a formatted string like
+        "%d/%m/%Y %H:%M".
+
+        Args:
+            naive_dt_utc (datetime.datetime): naive `datetime`
+
+        Returns:
+            str: `str` formatted Europe/paris represenation of the input datetime
+        """
         dt_utc = pytz.UTC.localize(naive_dt_utc)
 
         res = dt_utc.astimezone(pytz.timezone("Europe/Paris")).strftime(
@@ -115,6 +185,21 @@ def get_extraction_datetimes(legipeche_regulations: pd.DataFrame) -> Tuple[str, 
 def get_modified_regulations(
     legipeche_regulations: pd.DataFrame, monitorfish_regulations: pd.DataFrame
 ) -> pd.DataFrame:
+    """
+    Filters the input `legipeche_regulations` and returns legipeche regulations
+    (documents) that :
+
+      - have been either added to or removed from an existing Legipeche page between
+        the `previous` and `latest` Legipeche scraping occurences
+      - belong to a Legipeche page referenced by at least one `monitorfish_regulation`
+
+    Args:
+        legipeche_regulations (pd.DataFrame):
+        monitorfish_regulations (pd.DataFrame):
+
+    Returns:
+        pd.DataFrame: filtered DataFrame of Legipeche regulations
+    """
 
     legipeche_latest_page_urls = set(
         legipeche_regulations.loc[
@@ -150,7 +235,7 @@ def get_modified_regulations(
         (legipeche_regulations.document_url.isin(legipeche_modified_documents))
         & (legipeche_regulations.page_url.isin(legipeche_stable_page_urls))
         & (legipeche_regulations.page_url.isin(monitorfish_regulations_urls))
-    ]
+    ].reset_index(drop=True)
 
     return modified_legipeche_regulations
 
@@ -159,23 +244,30 @@ def get_modified_regulations(
 def transform_modified_regulations(
     modified_regulations: pd.DataFrame, monitorfish_regulations: pd.DataFrame
 ) -> pd.DataFrame:
+    """
+    Formats `modified_regulations` into a DataFrame suitable for printing in an email.
 
-    #     # Add modified data for testing
-    #     page_url = modified_regulations.page_url.sample(1).values[0]
-    #     page_title = modified_regulations.loc[modified_regulations.page_url == page_url, "page_title"].iloc[0]
-    #     monitorfish_regulations = pd.concat([
-    #         monitorfish_regulations,
-    #         pd.DataFrame(
-    #             columns=list(monitorfish_regulations),
-    #             data=[[
-    #                 "Reg locale",
-    #                 "Test modification document",
-    #                 "Zone de test",
-    #                 page_url,
-    #                 page_title
-    #             ]]
-    #         )
-    #     ])
+    Args:
+        modified_regulations (pd.DataFrame): DataFrame with columns :
+
+          - `extraction_occurence`, having values 'previous' and 'latest
+          - `page_url`
+          - `document_title`
+          - `document_url`
+
+        monitorfish_regulations (pd.DataFrame): DataFrame with columns :
+
+          - `url` (url of the regulatory reference in Monitorfish)
+          - `reference` (name of the regulatory reference in Monitorfish)
+          - `law_type`
+          - `topic`
+          - `zone`
+
+    Returns:
+        pd.DataFrame: formatted DataFrame of regulation modifications
+    """
+
+    logger = prefect.context.get("logger")
 
     modified_regulations = pd.merge(
         monitorfish_regulations,
@@ -191,11 +283,13 @@ def transform_modified_regulations(
     )
 
     modified_regulations["Référence réglementaire"] = make_html_hyperlinks(
-        modified_regulations.url, modified_regulations.reference
+        modified_regulations.url, modified_regulations.reference, logger=logger
     )
 
     modified_regulations["Document"] = make_html_hyperlinks(
-        modified_regulations.document_url, modified_regulations.document_title
+        modified_regulations.document_url,
+        modified_regulations.document_title,
+        logger=logger,
     )
 
     modified_regulations = (
@@ -226,13 +320,28 @@ def transform_modified_regulations(
                 "zone": "Zone",
             }
         )
-    )
+    ).reset_index(drop=True)
 
     return modified_regulations
 
 
 @task(checkpoint=False)
 def get_missing_references(monitorfish_regulations: pd.DataFrame) -> pd.DataFrame:
+    """
+    Returns `monitorfish_regulations` with null values as `reference`.
+
+    Args:
+        monitorfish_regulations (pd.DataFrame): monitorfish_regulations. Must have
+        columns :
+
+          - `reference`
+          - `law_type`
+          - `topic`
+          - `zone`
+
+    Returns:
+        pd.DataFrame: Filtered and formatted version of input.
+    """
     return (
         monitorfish_regulations.loc[
             monitorfish_regulations.reference.isna(),
@@ -247,6 +356,7 @@ def get_missing_references(monitorfish_regulations: pd.DataFrame) -> pd.DataFram
                 "zone": "Zone",
             }
         )
+        .reset_index(drop=True)
     )
 
 
@@ -254,12 +364,28 @@ def get_missing_references(monitorfish_regulations: pd.DataFrame) -> pd.DataFram
 def get_unknown_links(
     monitorfish_regulations: pd.DataFrame,
     legipeche_regulations: pd.DataFrame,
-) -> pd.DataFrame:
+) -> set:
+    """
+    Returns the urls of `monitorfish_regulations` that are not in
+    `legipeche_regulations.page_url`.
+
+    Args:
+        monitorfish_regulations (pd.DataFrame):
+        legipeche_regulations (pd.DataFrame):
+
+    Returns:
+        set: urls of `monitorfish_regulations.url` not in
+          `legipeche_regulations.page_url`
+    """
 
     logger = prefect.context.get("logger")
 
-    monitorfish_urls = set(monitorfish_regulations.url)
-    legipeche_urls = set(legipeche_regulations.page_url)
+    monitorfish_urls = set(monitorfish_regulations.url.dropna())
+    legipeche_urls = set(
+        legipeche_regulations.loc[
+            legipeche_regulations.extraction_occurence == "latest", "page_url"
+        ]
+    )
 
     unknown_links = monitorfish_urls - legipeche_urls
 
@@ -279,6 +405,19 @@ def get_dead_links(
     monitorfish_regulations: pd.DataFrame,
     unknown_links: set,
 ) -> pd.DataFrame:
+    """
+    Perfoms get requests to check whether `unknown_links` are dead links, then returns
+    `monitorfish_regulations` that reference a dead link as regulatory reference.
+
+    Args:
+        monitorfish_regulations (pd.DataFrame):
+        unknown_links (set): `set` of urls not knonwn (i.e. urls not found when
+          scraping Legipeche)
+
+    Returns:
+        pd.DataFrame: filtered `monitorfish_regulations` with only those that reference
+          a dead link
+    """
 
     logger = prefect.context.get("logger")
 
@@ -316,6 +455,11 @@ def get_dead_links(
 
 @task(checkpoint=False)
 def format_dead_links(dead_links: pd.DataFrame) -> pd.DataFrame:
+    """
+    Format input for printing.
+    """
+
+    logger = prefect.context.get("logger")
 
     dead_links = dead_links.rename(
         columns={
@@ -326,7 +470,7 @@ def format_dead_links(dead_links: pd.DataFrame) -> pd.DataFrame:
     ).copy(deep=True)
 
     dead_links["Référence réglementaire"] = make_html_hyperlinks(
-        dead_links.url, dead_links.reference
+        dead_links.url, dead_links.reference, logger=logger
     )
     dead_links = dead_links[
         ["Type de réglementation", "Thématique", "Zone", "Référence réglementaire"]

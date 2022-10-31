@@ -42,8 +42,7 @@ const AlertsButton = styled(MapButtonStyle)<{
 }>`
   position: absolute;
   display: inline-block;
-  color: ${p => p.theme.color.blue};
-  background: ${p => (p.isVisible ? p.theme.color.shadowBlue : p.theme.color.charcoal)};
+  background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
   padding: 2px 2px 2px 2px;
   top: 120px;
   left: 12px;
@@ -53,7 +52,7 @@ const AlertsButton = styled(MapButtonStyle)<{
 
   :hover,
   :focus {
-    background: ${p => (p.isVisible ? p.theme.color.shadowBlue : p.theme.color.charcoal)};
+    background: ${p => (p.isVisible ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
   }
 `
 

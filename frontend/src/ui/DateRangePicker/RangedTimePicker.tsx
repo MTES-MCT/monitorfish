@@ -103,7 +103,7 @@ const Box = styled.div`
   overflow: auto;
   position: absolute;
   /* Non-WebKit Firefox Compatibility */
-  scrollbar-color: ${p => p.theme.color.grayDarkerTwo};
+  scrollbar-color: ${p => p.theme.color.lightGray};
   scrollbar-width: thin;
   top: 2.25rem;
   z-index: 9999;
@@ -116,23 +116,23 @@ const Box = styled.div`
   }
   ::-webkit-scrollbar-thumb {
     border: 0;
-    background-color: ${p => p.theme.color.grayDarkerTwo};
+    background-color: ${p => p.theme.color.lightGray};
   }
   ::-webkit-scrollbar-track {
-    background-color: ${p => p.theme.color.grayLighter};
+    background-color: ${p => p.theme.color.gainsboro};
   }
 `
 
 const Option = styled.div<{
   isSelected: boolean
 }>`
-  background-color: ${p => (p.isSelected ? p.theme.color.grayDarkerTwo : 'transparent')};
+  background-color: ${p => (p.isSelected ? p.theme.color.blueGray[100] : 'transparent')};
   cursor: pointer;
   line-height: 1;
   padding: 5px 9px 7px 8px;
   text-align: center;
 
   :hover {
-    background-color: ${p => (p.isSelected ? p.theme.color.grayDarkerTwo : p.theme.color.grayBackground)};
+    background-color: ${p => (p.isSelected ? p.theme.color.blueGray[100] : p.theme.color.blueYonder[25])};
   }
 `

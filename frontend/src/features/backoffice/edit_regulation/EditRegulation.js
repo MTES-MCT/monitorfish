@@ -392,7 +392,7 @@ const CreateRegulationWrapper = styled.div`
   flex: 2;
   flex-direction: column;
   padding: 11px 27px 11px 27px;
-  background-color: ${COLORS.background};
+  background-color: ${COLORS.white};
   height: 100vh;
 `
 

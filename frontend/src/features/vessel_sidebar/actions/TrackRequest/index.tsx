@@ -148,7 +148,7 @@ const TrackRequestButton = styled(MapComponentStyle)<{
   isRightMenuOpen: boolean
   isSidebarOpen: boolean
 }>`
-  background: ${p => (p.isOpen ? p.theme.color.shadowBlue : p.theme.color.charcoal)};
+  background: ${p => (p.isOpen ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
   border-radius: 1px;
   cursor: pointer;
   height: 30px;
@@ -169,7 +169,7 @@ const TrackRequestBody = styled(MapComponentStyle)<{
   isRightMenuOpen: boolean
   isSidebarOpen: boolean
 }>`
-  background: ${p => p.theme.color.background};
+  background: ${p => p.theme.color.white};
   border-radius: 2px;
   color: ${p => p.theme.color.slateGray};
   display: flex;

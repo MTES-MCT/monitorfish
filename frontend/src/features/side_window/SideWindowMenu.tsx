@@ -51,7 +51,7 @@ const MenuButton = styled.div<{
   selected?: boolean
 }>`
   text-align: center;
-  background: ${p => (p.selected ? p.theme.color.shadowBlue : 'none')};
+  background: ${p => (p.selected ? p.theme.color.blueGray[100] : 'none')};
   padding: 7px 5px;
   height: 50px;
   cursor: pointer;

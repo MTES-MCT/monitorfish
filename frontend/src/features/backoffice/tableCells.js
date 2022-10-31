@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { InputPicker, Table, Tag, TagPicker } from 'rsuite'
 import { useClickOutsideWhenOpenedAndNotInSelector } from '../../hooks/useClickOutsideWhenOpenedAndNotInSelector'
+import { theme } from '../../ui/theme'
 
 const { Cell } = Table
 const rowKey = 'id'
@@ -100,7 +101,7 @@ export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) =>
 export const SegmentCellWithTitle = ({ rowData, dataKey, ...props }) => (
   <Cell
     title={`Segment ${rowData[dataKey] || 'inconnu'}`}
-    style={{ background: rowData.segmentName ? 'unset' : COLORS.tumbleweed }}
+    style={{ background: rowData.segmentName ? 'unset' : theme.color.goldenPoppy }}
     {...props}
   >
     {rowData[dataKey]}
@@ -231,7 +232,7 @@ export const renderRowExpanded = rowData => {
     <div
       style={{
         float: 'left',
-        background: COLORS.background,
+        background: COLORS.white,
         padding: '0 20px 20px 40px'
       }}
     >

@@ -208,7 +208,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
 const FirstColumnMenu = styled.div`
   display: flex;
   width: 250px;
-  box-shadow: 0px 2px 5px ${COLORS.overlayShadow};
+  box-shadow: 0px 2px 5px ${p => p.theme.color.charcoalShadow};
   height: min-content;
   cursor: pointer;
 `
@@ -216,12 +216,12 @@ const FirstColumnMenu = styled.div`
 const SecondColumnMenu = styled.div`
   margin-left: 2px;
   width: 200px;
-  box-shadow: 0px 2px 5px ${COLORS.overlayShadow};
+  box-shadow: 0px 2px 5px ${p => p.theme.color.charcoalShadow};
   cursor: pointer;
 `
 
 const Menu = styled.span`
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   padding: 5px ${props => props.second ? 15 : 0}px 0px 15px;
   height: 25px;
   display: inline-block;

@@ -155,7 +155,7 @@ const FieldValue = styled.div`
 
 const PhotoZone = styled.div`
   margin: 5px 5px 10px 5px;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
 `
 
 const Body = styled.div`
@@ -187,7 +187,7 @@ const ZoneWithoutBackground = styled.div`
 
 const LatLon = styled.div`
   order: 1;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 0;
   padding: 1px 10px 10px 10px;
   text-align: center;
@@ -196,7 +196,7 @@ const LatLon = styled.div`
 
 const Course = styled.div`
   order: 2;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 0 0 0 10px;
   padding: 1px 10px 10px 10px;
   text-align: center;
@@ -205,7 +205,7 @@ const Course = styled.div`
 
 const Position = styled.div`
   order: 3;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 0 0 0 10px;
   padding: 1px 10px 10px 10px;
   text-align: center;

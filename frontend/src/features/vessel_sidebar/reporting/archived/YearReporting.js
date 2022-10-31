@@ -119,9 +119,9 @@ const YearTitle = styled.span`
   width: 100%;
   display: flex;
   user-select: none;
-  ${props => props.isEmpty ? null : 'cursor: pointer;'} 
-  ${props => !props.isOpen ? null : `border-bottom: 1px solid ${COLORS.gray};`}
-  ${props => !props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null}
+  ${props => props.isEmpty ? null : 'cursor: pointer;'}
+  ${props => !props.isOpen ? null : `border-bottom: 1px solid ${props.theme.color.lightGray};`}
+  ${props => !props.isLastItem ? `border-bottom: 1px solid ${props.theme.color.lightGray};` : null}
 `
 
 const Row = styled.div`
@@ -133,9 +133,9 @@ const Row = styled.div`
   text-overflow: ellipsis;
   overflow: hidden !important;
   margin: 0;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   color: ${COLORS.gunMetal};
-  border-bottom: 1px solid ${COLORS.gray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   line-height: 1.9em;
 `
 
@@ -145,7 +145,7 @@ const ChevronIcon = styled(ChevronIconSVG)`
   margin-right: 10px;
   margin-top: 9px;
   float: right;
-  
+
   animation: ${props => props.$isOpen ? 'chevron-layer-opening' : 'chevron-layer-closing'} 0.5s ease forwards;
 
   @keyframes chevron-layer-opening {
@@ -172,7 +172,7 @@ const Text = styled.div`
   font-size: 13px;
   font-weight: 500;
   width: 95%;
-  ${props => props.isEmpty ? null : 'cursor: pointer;'} 
+  ${props => props.isEmpty ? null : 'cursor: pointer;'}
 `
 
 export default YearReporting

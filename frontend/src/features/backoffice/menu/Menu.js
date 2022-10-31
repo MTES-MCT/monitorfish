@@ -5,6 +5,7 @@ import { Link, useRouteMatch } from 'react-router-dom'
 import { ReactComponent as LayersSVG } from '../../icons/Couches.svg'
 import { ReactComponent as FleetSVG } from '../../icons/Label_segment_de_flotte_white.svg'
 import { ReactComponent as ControlObjectivesSVG } from '../../icons/objectifs_controle.svg'
+import { theme } from '../../../ui/theme'
 
 const Menu = () => {
   const onRegulationPage = useRouteMatch('/backoffice/regulation')
@@ -18,7 +19,7 @@ const Menu = () => {
       </Title>
       <MenuLink
         style={{
-          background: onRegulationPage ? COLORS.shadowBlue : 'none'
+          background: onRegulationPage ? theme.color.blueGray[100] : 'none'
         }}
         to={'/backoffice/regulation'}
         title={'Zones réglementaires'}
@@ -30,7 +31,7 @@ const Menu = () => {
       </MenuLink>
       <MenuLink
         style={{
-          background: onControlObjectivePage ? COLORS.shadowBlue : 'none'
+          background: onControlObjectivePage ? theme.color.blueGray[100] : 'none'
         }}
         to={'/backoffice/control_objectives'}
         title={'Objectifs de contrôle'}
@@ -42,7 +43,7 @@ const Menu = () => {
       </MenuLink>
       <MenuLink
         style={{
-          background: onFleetSegmentsPage ? COLORS.shadowBlue : 'none'
+          background: onFleetSegmentsPage ? theme.color.blueGray[100] : 'none'
         }}
         to={'/backoffice/fleet_segments'}
         title={'Segments de flotte'}

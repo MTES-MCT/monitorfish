@@ -74,7 +74,7 @@ const Body = styled.div`
 `
 
 const Footer = styled.div`
-  background-color: ${COLORS.background};
+  background-color: ${COLORS.white};
   border-top: 1px solid ${COLORS.lightGray};
 `
 
@@ -102,7 +102,7 @@ const ModalContent = styled.div`
   top: 33%;
   width: 400px;
   box-sizing: border-box;
-  background-color: ${COLORS.background};
+  background-color: ${COLORS.white};
   overflow: hidden;
 `
 

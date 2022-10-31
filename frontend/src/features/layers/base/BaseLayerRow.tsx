@@ -26,7 +26,7 @@ const Row = styled.li`
   text-overflow: ellipsis;
   overflow: hidden !important;
   cursor: pointer;
-  background: ${COLORS.background};
+  background: ${p => p.theme.color.white};
   color: ${COLORS.gunMetal};
   border-bottom: 1px solid ${COLORS.lightGray};
   display: block;

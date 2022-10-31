@@ -38,7 +38,7 @@ const HideNonSelectedVesselsButton = styled(MapButtonStyle)`
   top: 223px;
   height: 30px;
   width: 30px;
-  background: ${props => props.hideNonSelectedVessels ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${props => props.hideNonSelectedVessels ? props.theme.color.blueGray[100] : props.theme.color.charcoal};
   position: absolute;
   margin-right: ${props => props.sidebarIsOpen ? 505 : -45}px;
   opacity: ${props => props.sidebarIsOpen ? 1 : 0};
@@ -49,7 +49,7 @@ const HideNonSelectedVesselsButton = styled(MapButtonStyle)`
   transition: all 0.5s, right 0.3s;
 
   :hover, :focus {
-      background: ${props => props.hideNonSelectedVessels ? COLORS.shadowBlue : COLORS.charcoal};
+      background: ${props => props.hideNonSelectedVessels ? props.theme.color.blueGray[100] : props.theme.color.charcoal};
   }
 `
 

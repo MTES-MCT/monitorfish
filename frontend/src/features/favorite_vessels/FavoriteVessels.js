@@ -112,7 +112,7 @@ const FavoriteVesselsNumber = styled(MapComponentStyle)`
   top: 56px;
   line-height: 15px;
   left: 40px;
-  background-color: ${props => props.isOpen ? COLORS.charcoal : COLORS.shadowBlueLight};
+  background-color: ${props => props.isOpen ? props.theme.color.charcoal : props.theme.color.gainsboro};
   transition: all 0.5s;
   color:${props => props.isOpen ? COLORS.white : COLORS.gunMetal};
   z-index: 100;
@@ -121,7 +121,7 @@ const FavoriteVesselsNumber = styled(MapComponentStyle)`
 
 const List = styled.ul`
   margin: 0;
-  background-color: ${COLORS.background};
+  background-color: ${p => p.theme.color.white};
   border-radius: 0;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
@@ -154,7 +154,7 @@ const Header = styled.div`
 
 const FavoriteVesselsBox = styled(MapComponentStyle)`
   width: 305px;
-  background: ${COLORS.background};
+  background: ${p => p.theme.color.white};
   margin-left: ${props => props.isOpen ? '45px' : '-420px'};
   opacity: ${props => props.isOpen ? '1' : '0'};
   top: 65px;

@@ -32,10 +32,16 @@ const Reference = styled.li`
 `
 
 export const Link = styled.a`
-  color: ${COLORS.blue};
-  font-size: 13px;
-  cursor: pointer;
-  font-weight: 500;
+  // LVHA-order
+  :link,
+  :visited,
+  :hover,
+  :active {
+    color: ${p => p.theme.color.blueGray[100]};
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 500;
+  }
 `
 
 export default RegulatoryReferencesDisplayed

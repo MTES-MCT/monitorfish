@@ -12,6 +12,7 @@ import { COLORS } from '../../constants/constants'
 import { booleanToInt } from '../../utils'
 import Circle from 'ol/style/Circle'
 import Stroke from 'ol/style/Stroke'
+import { theme } from '../../ui/theme'
 
 const featureHas = (key) => ['==', ['get', key], 1]
 const featureHasNot = (key) => ['==', ['get', key], 0]
@@ -62,7 +63,7 @@ export const getWebGLVesselStyle = ({
   filterColorBlue
 }) => {
   const filterColor = ['color', ['var', 'filterColorRed'], ['var', 'filterColorGreen'], ['var', 'filterColorBlue']]
-  const defaultVesselColor = ['case', stateIs('isLight'), COLORS.vesselLightColor, COLORS.vesselColor]
+  const defaultVesselColor = ['case', stateIs('isLight'), theme.color.lightGray, COLORS.charcoal]
   const booleanFilter = ['case',
     // in preview mode, show only vessels in preview mode
     stateIs('previewFilteredVesselsMode'), featureHas('filterPreview'),
@@ -113,7 +114,7 @@ export const getSelectedVesselStyle = ({ isLight }) => feature => {
     image: new Icon({
       src: 'selecteur_navire.png',
       scale: 0.5,
-      color: isLight ? COLORS.vesselLightColor : COLORS.vesselColor,
+      color: isLight ? theme.color.lightGray : COLORS.charcoal,
       opacity: 1
     }),
     zIndex: VESSEL_SELECTOR_STYLE
@@ -124,7 +125,7 @@ export const getSelectedVesselStyle = ({ isLight }) => feature => {
       src: 'boat.png',
       rotation: degreesToRadian(course),
       scale: 0.85,
-      color: isLight ? COLORS.vesselLightColor : COLORS.vesselColor,
+      color: isLight ? theme.color.lightGray : COLORS.charcoal,
       opacity: 1
     }),
     zIndex: VESSEL_SELECTOR_STYLE

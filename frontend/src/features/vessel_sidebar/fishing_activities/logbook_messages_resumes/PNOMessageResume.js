@@ -252,11 +252,11 @@ const Wrapper = styled.li`
 `
 
 const LogbookMessageContent = styled.div`
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   width: inherit;
   overflow: hidden;
   padding: 0 0 0 20px;
-  border-bottom: 1px solid ${COLORS.gray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   opacity: ${props => props.isOpen ? 1 : 0};
   height: ${props => props.isOpen
     ? props.chartHeight + 160 + (props.speciesNotLandedArray?.length ? 55 : 0)

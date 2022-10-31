@@ -96,7 +96,7 @@ const VesselControls = () => {
 }
 
 const SeeMoreBackground = styled.div`
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 0px 5px 10px 5px;
   padding: 5px 0 5px 0;
 `
@@ -111,11 +111,11 @@ const SeeMore = styled.div`
   margin-left: auto;
   margin-right: auto;
   user-select: none;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
 `
 
 const UpdateControls = styled.div`
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   position: absolute;
   opacity: 0.7;
   position: absolute;
@@ -138,7 +138,7 @@ const UpdateControlsButton = styled.div`
   cursor: pointer;
   animation: pulse 2s infinite;
   z-index: 10;
-  
+
   @-webkit-keyframes pulse {
   0% {
     -webkit-box-shadow: 0 0 0 0 rgba(81,81,81, 0.4);

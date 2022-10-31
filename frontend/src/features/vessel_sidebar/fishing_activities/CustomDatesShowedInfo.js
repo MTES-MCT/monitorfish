@@ -38,11 +38,11 @@ function CustomDatesShowedInfo({ width }) {
 const ShowLastPositions = styled.a`
   float: right;
   cursor: pointer;
-  color: ${COLORS.textWhite};
+  color: ${p => p.theme.color.gainsboro};
   text-decoration: underline;
 
   :hover {
-    color: ${COLORS.textWhite};
+    color: ${p => p.theme.color.gainsboro};
   }
 `
 
@@ -54,7 +54,7 @@ const Wrapper = styled.div`
   width: ${props => (props.width ? props.width : 480)}px;
   margin: 0;
   padding: 10px 10px 10px 10px;
-  color: ${COLORS.textWhite};
+  color: ${p => p.theme.color.gainsboro};
   background: ${COLORS.slateGray};
 `
 

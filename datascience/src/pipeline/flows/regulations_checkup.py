@@ -448,7 +448,7 @@ def get_dead_links(
     dead_links = monitorfish_regulations[
         (monitorfish_regulations.url.isin(dead_links_urls))
         & (monitorfish_regulations.reference.notnull())
-    ]
+    ].reset_index(drop=True)
 
     return dead_links
 
@@ -511,7 +511,10 @@ def render_body(
     modified_regulations: pd.DataFrame,
     dead_links: pd.DataFrame,
     backoffice_url: str,
-):
+) -> str:
+    """
+    Renders email body as html string.
+    """
 
     email_content = {
         "previous_extraction_datetime_utc": previous_extraction_datetime_utc,
@@ -573,7 +576,7 @@ def create_message(html: str, recipients: List[str]) -> EmailMessage:
 
 
 @task(checkpoint=False)
-def send_message(msg: str):
+def send_message(msg: EmailMessage):
     send_email(msg)
 
 

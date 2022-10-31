@@ -74,7 +74,7 @@ const RiskFactorExponent = styled.span`
   padding: 1px 5px;
   color: ${COLORS.slateGray};
   font-size: 11px;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin-top: -20px;
   margin-right: -23px;
 `

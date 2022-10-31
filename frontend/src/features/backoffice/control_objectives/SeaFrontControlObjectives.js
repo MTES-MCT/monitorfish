@@ -243,35 +243,35 @@ const Wrapper = styled.div`
   margin-left: 40px;
   margin-top: 10px;
   margin-bottom: 10px;
-  
+
   .rs-picker-input {
     border: none;
     margin-left: 7px;
     margin-top: -3px;
   }
-  
+
   .rs-picker-default .rs-picker-toggle.rs-btn-xs {
     padding-left: 5px;
   }
-  
+
   .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
     color: ${COLORS.charcoal};
   }
-  
+
   .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn-xs {
     padding-right: 17px;
   }
-  
+
   .rs-input:focus {
     background: ${COLORS.charcoal};
-    color: ${COLORS.background};
+    color: ${COLORS.white};
   }
 `
 
 const Title = styled.h2`
   font-size: 16px;
   color: #282F3E;
-  border-bottom: 2px solid ${COLORS.squareBorder};
+  border-bottom: 2px solid ${p => p.theme.color.lightGray};
   font-weight: 700;
   text-align: left;
   text-transform: uppercase;

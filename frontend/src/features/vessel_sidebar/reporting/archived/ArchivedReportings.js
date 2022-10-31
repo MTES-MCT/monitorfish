@@ -76,7 +76,7 @@ const NoReporting = styled.div`
 `
 
 const SeeMoreBackground = styled.div`
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 0px 5px 5px 5px;
   padding: 10px 0 5px 0;
   text-align: center;
@@ -93,7 +93,7 @@ const SeeMore = styled.div`
   margin-left: auto;
   margin-right: auto;
   user-select: none;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
 `
 
 export default ArchivedReportings

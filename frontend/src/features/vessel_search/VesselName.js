@@ -93,7 +93,7 @@ const Wrapper = styled.div`
   transition: width 0.7s ease forwards;
 
   :hover, :focus {
-    border-bottom: 1px ${COLORS.gray} solid;
+    border-bottom: 1px ${p => p.theme.color.lightGray} solid;
   }
 `
 
@@ -118,7 +118,7 @@ const Flag = styled.img`
 
 const Name = styled.span`
   display: inline-block;
-  color: ${COLORS.grayLighter};
+  color: ${p => p.theme.color.gainsboro};
   margin-left: 7px;
   line-height: 39px;
   font-weight: 500;

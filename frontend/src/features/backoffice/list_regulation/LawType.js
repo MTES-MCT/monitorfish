@@ -99,7 +99,7 @@ const LawTypeName = styled.div`
   display: flex;
   font-size: 16px;
   color: ${COLORS.gunMetal};
-  border-bottom: 2px solid ${COLORS.squareBorder};
+  border-bottom: 2px solid ${p => p.theme.color.lightGray};
   font-weight: 700;
   text-align: left;
   text-transform: uppercase;
@@ -119,7 +119,7 @@ const RegulatoryZoneLayerList = styled.ul`
   overflow-y: auto;
   overflow-x: unset;
   flex: 1;
-  background-color: ${COLORS.background};
+  background-color: ${COLORS.white};
   border-radius: 0;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;

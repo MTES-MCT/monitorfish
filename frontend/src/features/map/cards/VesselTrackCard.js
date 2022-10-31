@@ -86,7 +86,7 @@ const Gray = styled.span`
 const TrianglePointer = styled.div`
   margin-left: auto;
   margin-right: auto;
-  height: auto; 
+  height: auto;
   width: auto;
 `
 
@@ -166,7 +166,7 @@ const FieldValue = styled.div`
 const LatLon = styled.div`
   flex-grow: 1;
   order: 1;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 5px 0 5px 5px;
   padding-bottom: 10px;
 `
@@ -174,7 +174,7 @@ const LatLon = styled.div`
 const Course = styled.div`
   flex-grow: 1;
   order: 2;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 5px 0 5px 5px;
   padding-bottom: 10px;
 `
@@ -182,7 +182,7 @@ const Course = styled.div`
 const Position = styled.div`
   flex-grow: 1;
   order: 3;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin: 5px 5px 5px 5px;
   padding-bottom: 10px;
 `

@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux'
 import { formatToCSVColumnsForExport, getDate } from '../../../../utils'
 import { ExportToCsv } from 'export-to-csv'
 import CustomDatesShowedInfo from '../CustomDatesShowedInfo'
+import { theme } from '../../../../ui/theme'
 
 const animatedComponents = makeAnimated()
 
@@ -142,11 +143,11 @@ const LogbookMessages = ({ showFishingActivitiesSummary, messageTypeFilter, navi
     multiValueRemove: base => ({
       ...base,
       background: COLORS.gainsboro,
-      color: COLORS.lightGray,
+      color: theme.color.slateGray,
       borderRadius: 12,
       '&:hover': {
-        backgroundColor: COLORS.lightGray,
-        color: COLORS.grayDarkerTwo
+        backgroundColor: theme.color.blueYonder[25],
+        color: theme.color.blueYonder[100]
       }
     }),
     placeholder: base => ({ ...base, fontSize: 13 }),
@@ -321,7 +322,7 @@ const NoMessage = styled.div`
 
 const Wrapper = styled.div`
   text-align: left;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   padding: 5px 10px 10px 10px;
 `
 

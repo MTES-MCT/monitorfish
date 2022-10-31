@@ -81,7 +81,7 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
           index={0}
           style={{
             ...listItemStyle,
-            background: COLORS.background,
+            background: COLORS.white,
             border: `1px solid ${COLORS.lightGray}`,
             color: COLORS.slateGray
           }}

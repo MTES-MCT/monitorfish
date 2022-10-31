@@ -66,7 +66,7 @@ const NewFilterAdded = styled.div<{
 }>`
   position: absolute;
   display: inline-block;
-  background-color: ${COLORS.grayLighter};
+  background-color: ${p => p.theme.color.gainsboro};
   top: 110px;
   right: -150px;
   opacity: 0;

@@ -106,10 +106,10 @@ const Rectangle = styled.div`
   height: 14px;
   background: ${props => props.vectorLayerStyle && props.vectorLayerStyle.getFill()
   ? props.vectorLayerStyle.getFill().getColor()
-  : COLORS.gray};
+  : props.theme.color.lightGray};
   border: 1px solid ${props => props.vectorLayerStyle && props.vectorLayerStyle.getStroke()
   ? props.vectorLayerStyle.getStroke().getColor()
-  : COLORS.grayDarkerTwo};
+  : props.theme.color.lightGray};
   display: inline-block;
   margin-right: 10px;
   margin-top: 9px;
@@ -121,7 +121,7 @@ const Zone = styled.span`
   display: flex;
   font-size: 13px;
   padding-left: 20px;
-  background: ${props => props.selected ? COLORS.gray : COLORS.background};
+  background: ${props => props.selected ? props.theme.color.lightGray : props.theme.color.white};
   color: ${COLORS.gunMetal};
   padding-top: 1px;
   padding-bottom: 5px;

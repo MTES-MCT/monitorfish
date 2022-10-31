@@ -25,6 +25,7 @@ import getAllCurrentReportings from '../../domain/use_cases/reporting/getAllCurr
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { usePrevious } from '../../hooks/usePrevious'
+import { theme } from '../../ui/theme'
 import { AlertsAndReportings } from './alerts_reportings/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import { BeaconMalfunctionsBoard } from './beacon_malfunctions/BeaconMalfunctionsBoard'
@@ -160,7 +161,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       <BeaconMalfunctionsBoardGrayOverlay onClick={closeRightSidebar} style={beaconMalfunctionBoardGrayOverlayStyle} />
       {isPreloading && (
         <Loading>
-          <FulfillingBouncingCircleSpinner className="update-vessels" color={COLORS.grayShadow} size={100} />
+          <FulfillingBouncingCircleSpinner className="update-vessels" color={theme.color.lightGray} size={100} />
           <Text data-cy="first-loader">Chargement...</Text>
         </Loading>
       )}
@@ -206,7 +207,7 @@ const Loading = styled.div`
 const Text = styled.span`
   margin-top: 10px;
   font-size: 13px;
-  color: ${COLORS.grayShadow};
+  color: ${p => p.theme.color.slateGray};
   bottom: -17px;
   position: relative;
 `
@@ -217,13 +218,13 @@ const Wrapper = styled.div`
 
   @keyframes blink {
     0% {
-      background: ${COLORS.background};
+      background: ${p => p.theme.color.white};
     }
     50% {
       background: ${COLORS.lightGray};
     }
     0% {
-      background: ${COLORS.background};
+      background: ${p => p.theme.color.white};
     }
   }
 

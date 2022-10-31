@@ -3,6 +3,7 @@ import CircleStyle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import { COLORS } from '../../constants/constants'
+import { theme } from '../../ui/theme'
 
 const trackLineStyleCache = new Map()
 
@@ -16,7 +17,7 @@ export const getLineStyle = (isTimeEllipsis, trackType) => {
         weight: 4
       }),
       stroke: new Stroke({
-        color: isTimeEllipsis ? COLORS.slateGrayLittleOpacity : trackType.color,
+        color: isTimeEllipsis ? theme.color.charcoalShadow : trackType.color,
         width: 3,
         lineDash: isTimeEllipsis ? [0.1, 5] : []
       })

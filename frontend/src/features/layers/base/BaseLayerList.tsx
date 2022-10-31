@@ -86,7 +86,7 @@ const List = styled.ul<{
   height: ${p => (p.isShowed && p.layersLength ? 37 * p.layersLength : 0)}px;
   overflow-y: hidden;
   overflow-x: hidden;
-  background: ${COLORS.background};
+  background: ${p => p.theme.color.white};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   transition: all 0.2s;

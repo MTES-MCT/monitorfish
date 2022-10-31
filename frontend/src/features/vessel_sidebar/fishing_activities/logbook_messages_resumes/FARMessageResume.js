@@ -138,13 +138,13 @@ const Wrapper = styled.li`
 `
 
 const LogbookMessageContent = styled.div`
-  background: ${COLORS.background};
+  background: ${p => p.theme.color.white};
   width: inherit;
   height: ${props => props.isOpen && props.chartHeight ? props.chartHeight + 50 : 0}px;
   opacity: ${props => props.isOpen ? 1 : 0};
   overflow: hidden;
   padding-left: 20px;
-  border-bottom: 1px solid ${COLORS.gray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   transition: all 0.2s;
   margin-bottom: ${props => props.isOpen ? 5 : -1}px;
 `

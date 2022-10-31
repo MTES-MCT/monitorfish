@@ -22,7 +22,7 @@ export function RiskFactorBox({
   const riskFactorBoxStyle: CSSProperties = {
     background: color,
     borderRadius: 1,
-    color: COLORS.background,
+    color: COLORS.white,
     display: 'inline-block',
     fontSize: isBig ? 14 : 13,
     fontWeight: 500,

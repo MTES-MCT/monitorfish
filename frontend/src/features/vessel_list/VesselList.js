@@ -35,6 +35,7 @@ import { getExtentFromGeoJSON } from '../../utils'
 import { COLORS } from '../../constants/constants'
 import StyledModalHeader from '../commonComponents/StyledModalHeader'
 import { MapToolButton } from '../map/tools/MapToolButton'
+import { theme } from '../../ui/theme'
 
 const NOT_FOUND = -1
 
@@ -326,7 +327,7 @@ const VesselList = ({ namespace }) => {
           onClick={() => dispatch(openVesselListModal())}
         >
           <VesselIcon
-            $background={vesselListModalIsOpen ? COLORS.shadowBlue : COLORS.charcoal}
+            $background={vesselListModalIsOpen ? theme.color.blueGray[100] : COLORS.charcoal}
             $isRightMenuShrinked={isRightMenuShrinked}
           />
         </VesselListButton>

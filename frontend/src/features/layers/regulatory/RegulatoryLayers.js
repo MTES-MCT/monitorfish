@@ -121,7 +121,7 @@ const RegulatoryLayers = props => {
 }
 
 const NoLayerSelected = styled.div`
-  color: ${COLORS.grayDarkerTwo};
+  color: ${p => p.theme.color.slateGray};
   margin: 10px;
   font-size: 13px;
 `
@@ -169,7 +169,7 @@ const RegulatoryLayersTitle = styled.div`
 
 const RegulatoryLayersList = styled.ul`
   margin: 0;
-  background-color: ${COLORS.background};
+  background-color: ${COLORS.white};
   border-radius: 0;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;

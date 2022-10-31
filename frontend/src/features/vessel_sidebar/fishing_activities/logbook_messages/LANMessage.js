@@ -83,11 +83,11 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
 `
 
 const Fields = styled.table`
-  padding: 0px 5px 0 5px; 
+  padding: 0px 5px 0 5px;
   width: inherit;
   display: table;
   margin: 0;

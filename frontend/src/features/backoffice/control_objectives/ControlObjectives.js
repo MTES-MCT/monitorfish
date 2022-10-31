@@ -125,23 +125,23 @@ const AddYear = styled.a`
 `
 
 const Year = styled.div`
-  border-bottom: 2px solid ${COLORS.squareBorder};
+  border-bottom: 2px solid ${p => p.theme.color.lightGray};
   padding-bottom: 5px;
   height: fit-content;
   width: 135px;
   margin: 20px 0 20px 60px;
-  
+
   .rs-picker-input {
     border: none;
     margin-left: -140px;
     margin-top: -3px;
   }
-  
+
   .rs-picker-default .rs-picker-toggle.rs-btn-xs {
     padding-left: 5px;
     width: 120px;
   }
-  
+
   .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
     font-size: 18px;
     color: ${COLORS.gunMetal};
@@ -149,28 +149,28 @@ const Year = styled.div`
     text-transform: uppercase;
     width: fit-content;
   }
-  
+
   .rs-picker-default .rs-picker-toggle.rs-btn-xs .rs-picker-toggle-caret, .rs-picker-default .rs-picker-toggle.rs-btn-xs .rs-picker-toggle-clean {
     top: 6px;
   }
-  
+
   .rs-picker-input .rs-picker-default .rs-picker-toggle-wrapper .rs-picker-placement-bottom-start .rs-picker-has-value .rs-picker-focused {
     top: 46px;
   }
-  
+
   .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn-xs {
     padding-right: 17px;
   }
-  
+
   .rs-input:focus {
     background: ${COLORS.charcoal};
-    color: ${COLORS.background};
+    color: ${p => p.theme.color.white};
   }
-  
+
   .rs-picker-search {
     visibility: hidden;
   }
-  
+
   .rs-picker-select-menu-items {
     width: 100px !important;
   }

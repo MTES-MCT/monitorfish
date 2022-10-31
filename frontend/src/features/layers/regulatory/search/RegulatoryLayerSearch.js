@@ -110,7 +110,7 @@ const AddRegulatoryLayer = styled.div`
   border-radius: 0;
   font-size: 13px;
   background: ${COLORS.charcoal};
-  color: ${COLORS.gray};
+  color: ${p => p.theme.color.gainsboro};
   padding: 0;
   line-height: 2.5em;
   margin: 0;

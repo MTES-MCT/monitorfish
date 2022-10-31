@@ -83,7 +83,7 @@ const FilterLayer = ({ map }) => {
   useEffect(() => {
     layerRef?.current.setStyle(new Style({
       stroke: new Stroke({
-        color: currentDrawnFilterZone ? COLORS.vesselColor : filterColor,
+        color: currentDrawnFilterZone ? COLORS.charcoal : filterColor,
         width: 2,
         lineDash: [4, 8]
       })

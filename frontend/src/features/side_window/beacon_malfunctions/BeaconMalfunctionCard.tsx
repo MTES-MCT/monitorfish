@@ -172,7 +172,7 @@ const rowStyle = (isFirstRow, marginTop, hasScroll): CSSProperties => ({
 const Wrapper = styled.div``
 const wrapperStyle = (hasScroll, isDragging, isDroppedId, id, activeBeaconId, isMalfunctionEnded) => ({
   animation: isDroppedId === id ? 'blink 1s' : 'unset',
-  background: activeBeaconId === id ? COLORS.lightGray : COLORS.background,
+  background: activeBeaconId === id ? COLORS.lightGray : COLORS.white,
   border: `1px solid ${COLORS.lightGray}`,
   borderRadius: 2,
   boxShadow: isDragging ? `0px 0px 10px -3px ${COLORS.gunMetal}` : 'unset',

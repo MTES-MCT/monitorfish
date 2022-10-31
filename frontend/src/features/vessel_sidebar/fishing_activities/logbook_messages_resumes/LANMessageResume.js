@@ -216,7 +216,7 @@ const OverWeightTolerance = styled.span`
   border-radius: 11px;
   background: #e1000f;
   font-size: 11px;
-  color: ${COLORS.background};
+  color: ${p => p.theme.color.white};
   margin: 7px 7px 7px 5px;
   height: 17px;
   padding: 3px 5px 0px 2px;
@@ -338,12 +338,12 @@ const Wrapper = styled.li`
 `
 
 const LogbookMessageContent = styled.div`
-  background: ${COLORS.background};
+  background: ${p => p.theme.color.white};
   width: inherit;
   opacity: ${props => (props.isOpen ? 1 : 0)};
   overflow: hidden;
   padding: 0 0 0 20px;
-  border-bottom: 1px solid ${COLORS.gray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   height: ${props => (props.isOpen ? props.chartHeight + 105 : 0)}px;
   transition: 0.2s all;
 `

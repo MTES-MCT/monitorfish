@@ -125,7 +125,7 @@ const SidebarLayersIcon = styled(MapButtonStyle)`
   position: absolute;
   display: inline-block;
   color: ${COLORS.blue};
-  background: ${props => props.isVisible ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${props => (props.isVisible ? props.theme.color.blueGray[100] : props.theme.color.charcoal)};
   padding: 2px 2px 2px 2px;
   top: 10px;
   left: 12px;
@@ -134,7 +134,7 @@ const SidebarLayersIcon = styled(MapButtonStyle)`
   width: 40px;
 
   :hover, :focus {
-      background: ${props => props.isVisible ? COLORS.shadowBlue : COLORS.charcoal};
+      background: ${props => (props.isVisible ? props.theme.color.blueGray[100] : props.theme.color.charcoal)};
   }
 `
 

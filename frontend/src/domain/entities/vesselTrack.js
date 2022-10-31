@@ -6,8 +6,8 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map'
 import { arraysEqual, calculatePointsDistance, calculateSplitPointCoords } from '../../utils'
 import { getLineStyle, getArrowStyle, getCircleStyle } from '../../layers/styles/vesselTrack.style'
 import LineString from 'ol/geom/LineString'
-import { COLORS } from '../../constants/constants'
 import { extend } from 'ol/extent'
+import { theme } from '../../ui/theme'
 
 const NUMBER_HOURS_TIME_ELLIPSIS = 4
 
@@ -168,19 +168,19 @@ export class VesselTrack {
 export const trackTypes = {
   TRANSIT: {
     code: 'TRANSIT',
-    color: COLORS.trackTransit,
+    color: theme.color.jungleGreen,
     arrow: 'arrow_green.png',
     description: 'En transit (vitesse > 4.5 Nds)'
   },
   FISHING: {
     code: 'FISHING',
-    color: COLORS.trackFishing,
+    color: theme.color.darkCornflowerBlue,
     arrow: 'arrow_blue.png',
     description: 'En pêche (vitesse <= 4.5 Nds)'
   },
   ELLIPSIS: {
     code: 'ELLIPSIS',
-    color: COLORS.slateGrayLittleOpacity,
+    color: theme.color.charcoalShadow,
     arrow: 'arrow_gray.png',
     description: '🕐 entre deux positions > 4h'
   }

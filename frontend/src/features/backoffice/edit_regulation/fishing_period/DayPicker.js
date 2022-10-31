@@ -45,7 +45,7 @@ const DayPicker = ({ disabled }) => {
   </>
 }
 
-const Circle = styled.a` 
+const Circle = styled.a`
   display: inline-block;
   height: 30px;
   width: 30px;
@@ -55,11 +55,11 @@ const Circle = styled.a`
   margin-right: 5px;
   text-align: center;
   line-height: 2em;
-  color: ${props => props.$isGray ? COLORS.slateGray : COLORS.grayShadow};
-  ${props => props.$isGray ? `background-color: ${COLORS.gainsboro}` : ''};
+  color: ${p => p.$isGray ? p.theme.color.gunMetal : p.theme.color.lightGray};
+  ${p => p.$isGray ? `background-color: ${COLORS.gainsboro}` : ''};
   text-decoration: none;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  opacity: ${props => props.disabled ? '0.4' : '1'};
+  cursor: ${p => p.disabled ? 'not-allowed' : 'pointer'};
+  opacity: ${p => p.disabled ? '0.4' : '1'};
   &:hover {
     text-decoration: none;
     color: ${COLORS.slateGray};

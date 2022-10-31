@@ -47,7 +47,7 @@ const RegulatoryLayerSearchResultList = ({ namespace }) => {
 const ShowResultList = styled.div`
   cursor: pointer;
   background: ${p => p.theme.color.charcoal};
-  color: ${p => p.theme.color.gray};
+  color: ${p => p.theme.color.gainsboro};
   padding: 0;
   line-height: 2.5em;
   margin: 0;
@@ -61,7 +61,7 @@ const ShowResultList = styled.div`
 
 const List = styled.ul`
   margin: 0;
-  background: ${p => p.theme.color.background};
+  background: ${p => p.theme.color.white};
   border-radius: 0;
   padding: 0;
   max-height: ${props => props.$advancedSearchIsOpen ? '52vh' : '74vh'};

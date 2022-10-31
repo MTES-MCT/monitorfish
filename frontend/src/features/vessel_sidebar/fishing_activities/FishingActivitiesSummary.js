@@ -450,7 +450,7 @@ const Zone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${props => (props.white ? COLORS.background : 'unset')};
+  background: ${props => (props.white ? COLORS.white : 'unset')};
 `
 
 const Fields = styled.table`

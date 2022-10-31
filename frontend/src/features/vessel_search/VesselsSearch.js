@@ -161,7 +161,7 @@ const VesselNameOrInput = styled(MapComponentStyle)`
   top: 10px;
   right: ${props => props.rightMenuIsShrinked ? 10 : 55}px;
   z-index: 1000;
-  color: ${COLORS.textWhite};
+  color: ${p => p.theme.color.gainsboro};
   text-decoration: none;
   border: none;
   background-color: none;
@@ -212,11 +212,11 @@ const SearchButton = styled(MapButtonStyle)`
   width: ${props => props.isShrinked ? 5 : 40}px;
   border-radius: ${props => props.isShrinked ? 1 : 2}px;
   right: ${props => props.isShrinked ? 0 : 10}px;
-  background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${props => props.isOpen ? props.theme.color.blueGray[100] : props.theme.color.charcoal};
   transition: all 0.3s;
 
   :hover, :focus {
-      background: ${props => props.isOpen ? COLORS.shadowBlue : COLORS.charcoal};
+      background: ${props => props.isOpen ? props.theme.color.blueGray[100] : props.theme.color.charcoal};
   }
 `
 

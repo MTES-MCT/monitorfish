@@ -13,7 +13,7 @@ export function Draggable({ children, id, stageId }) {
   })
 
   const style = {
-    background: COLORS.background,
+    background: COLORS.white,
     color: COLORS.gunMetal,
     cursor: 'move',
     margin: '0 10px 8px 10px'

@@ -13,6 +13,7 @@ import { COLORS } from '../constants/constants'
 import { booleanToInt, customHexToRGB } from '../utils'
 
 import { getWebGLVesselStyle } from './styles/vessel.style'
+import { theme } from '../ui/theme'
 
 export const MIN_ZOOM_VESSEL_LABELS = 8
 
@@ -68,7 +69,7 @@ const VesselsLayer = ({ map }) => {
       // styles derived from state
       const isLight = Vessel.iconIsLight(selectedBaseLayer)
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-      const filterColorRGBArray = customHexToRGB(filterColor || isLight ? COLORS.vesselLightColor : COLORS.vesselColor)
+      const filterColorRGBArray = customHexToRGB(filterColor || isLight ? theme.color.lightGray : COLORS.charcoal)
       const initStyles = {
         hideVesselsAtPort: false,
         hideNonSelectedVessels: false,

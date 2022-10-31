@@ -339,9 +339,7 @@ a:hover, a:focus {
 }
 
 .rs-table-hover .rs-table-row:not(.rs-table-row-header):hover, .rs-table-hover .rs-table-row:hover .rs-table-cell-group, .rs-table-hover .rs-table-row:hover .rs-table-cell {
-  /* background: rgba(107, 131, 158, 0.15) !important; */ /* shadowBlueLittleOpacity */
-  background: #d6dce3 !important; /* shadowBlueLight */
-
+  background: #D4DDE7 !important; /* blueYonder 25 */
 }
 
 .rs-table-cell, .rs-table-cell-group, .rs-table-row {

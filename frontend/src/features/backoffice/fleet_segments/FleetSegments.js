@@ -11,6 +11,7 @@ import getFAOAreas from '../../../domain/use_cases/faoAreas/getFAOAreas'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import * as fleetSegmentUseCase from '../../../domain/use_cases/fleetSegment'
 import { NewFleetSegmentModal } from './NewFleetSegmentModal'
+import { theme } from '../../../ui/theme'
 
 const { Column, HeaderCell } = Table
 
@@ -195,7 +196,7 @@ const FleetSegments = () => {
           </Table>
           : <Loading>
             <FulfillingBouncingCircleSpinner
-              color={COLORS.grayShadow}
+              color={theme.color.lightGray}
               className={'update-vessels'}
               size={100}/>
           </Loading>
@@ -257,7 +258,7 @@ const Wrapper = styled.div`
 
   .rs-input:focus{
     background: ${COLORS.charcoal};
-    color: ${COLORS.background};
+    color: ${COLORS.white};
   }
 
   .rs-picker-tag-wrapper {
@@ -288,7 +289,7 @@ const Wrapper = styled.div`
 const Title = styled.h2`
   font-size: 16px;
   color: #282F3E;
-  border-bottom: 2px solid ${COLORS.squareBorder};
+  border-bottom: 2px solid ${p => p.theme.color.lightGray};
   font-weight: 700;
   text-align: left;
   text-transform: uppercase;

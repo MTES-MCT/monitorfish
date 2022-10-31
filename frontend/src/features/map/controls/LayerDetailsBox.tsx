@@ -49,10 +49,10 @@ const Rectangle = styled.div<{
   width: 14px;
   height: 14px;
   background: ${p =>
-    p.vectorLayerStyle?.getFill() ? p.vectorLayerStyle.getFill().getColor()?.toString() : COLORS.gray};
+    p.vectorLayerStyle?.getFill() ? p.vectorLayerStyle.getFill().getColor()?.toString() : p.theme.color.lightGray};
   border: 1px solid
     ${p =>
-      p.vectorLayerStyle?.getStroke() ? p.vectorLayerStyle.getStroke().getColor().toString() : COLORS.grayDarkerTwo};
+      p.vectorLayerStyle?.getStroke() ? p.vectorLayerStyle.getStroke().getColor().toString() : p.theme.color.slateGray};
   margin-right: 7px;
   margin-top: 5px;
 `
@@ -82,7 +82,7 @@ const RegulationDetails = styled.span`
 
 const ZoneName = styled.span`
   font-weight: 400;
-  color: ${COLORS.grayDarkerTwo}
+  color: ${p => p.theme.color.gunMetal}
   font-size: 13px;
   margin-left: 10px;
 `

@@ -262,7 +262,7 @@ const UnderCharter = styled.span`
 `
 
 const Text = styled.div`
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   border-radius: 1px;
 `
 
@@ -293,8 +293,8 @@ const WrapperToBeKeptForDOMManagement = styled.div`
 `
 
 const RiskFactorDetails = styled.div`
-  box-shadow: 0px 2px 3px ${COLORS.grayShadow};
-  background: ${COLORS.background};
+  box-shadow: 0px 2px 3px ${p => p.theme.color.charcoalShadow};
+  background: ${COLORS.white};
   line-height: 18px;
   height: ${props => props.underCharter ? 94 : 72}px;
   margin-left: 2px;
@@ -319,7 +319,7 @@ const RiskFactorBox = styled.div`
   font-weight: 500;
   display: inline-block;
   user-select: none;
-  color: ${COLORS.background};
+  color: ${COLORS.white};
   background: ${props => props.color};
   line-height: 16px;
   text-align: center;
@@ -328,7 +328,7 @@ const RiskFactorBox = styled.div`
 `
 
 const VesselLabelOverlayElement = styled.div`
-  box-shadow: 0px 2px 3px ${COLORS.grayShadow};
+  box-shadow: 0px 2px 3px ${p => p.theme.color.charcoalShadow};
   line-height: 18px;
   cursor: grabbing;
   height: 20px;
@@ -367,7 +367,7 @@ const RiskFactor = styled.span`
   font-weight: 500;
   display: inline-block;
   user-select: none;
-  color: ${COLORS.background};
+  color: ${COLORS.white};
   background: ${props => props.color};
   line-height: 17px;
   cursor: pointer;

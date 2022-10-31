@@ -8,7 +8,7 @@ export const MapToolBox = styled(MapComponentStyle)<{
   isHidden?: boolean
   isOpen: boolean
 }>`
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin-right: ${p => (p.isOpen ? '45px' : '-420px')};
   opacity: ${p => (p.isOpen ? '1' : '0')};
   right: 10px;

@@ -87,7 +87,7 @@ const Filters = () => {
 
 const FiltersSelectedList = styled.ul`
   margin: 0;
-  background-color: ${COLORS.background};
+  background-color: ${COLORS.white};
   border-radius: 0;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;

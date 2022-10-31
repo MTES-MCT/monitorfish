@@ -69,7 +69,7 @@ def monitorfish_regulations() -> pd.DataFrame:
                 "http://some.url",
                 "http://some.other.url",
                 None,
-                "http://regulation.url",
+                "http://regulation.intranets.developpement-durable.ader.gouv.fr",
                 "http://dead_link.regulation.url",
             ],
             "reference": [
@@ -124,7 +124,7 @@ def legipeche_regulations() -> pd.DataFrame:
             ],
             "page_url": [
                 "http://dead_link.regulation.url",
-                "http://regulation.url",
+                "http://regulation.i2",
                 "http://some.url",
                 "http://some.other.url",
                 "http://some.other.url",
@@ -132,7 +132,7 @@ def legipeche_regulations() -> pd.DataFrame:
                 "http://some.other.url",
                 "http://some.url",
                 "http://unused.url",
-                "http://regulation.url",
+                "http://regulation.i2",
                 "http://unused.url",
                 "http://unused_2.url",
             ],

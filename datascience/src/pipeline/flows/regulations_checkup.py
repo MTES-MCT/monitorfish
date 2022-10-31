@@ -389,6 +389,16 @@ def get_unknown_links(
 
     unknown_links = monitorfish_urls - legipeche_urls
 
+    unknown_links = set(
+        filter(
+            lambda url: url.replace(
+                "intranets.developpement-durable.ader.gouv.fr", "i2"
+            )
+            not in legipeche_urls,
+            unknown_links,
+        )
+    )
+
     logger.info(
         (
             f"Out of {len(monitorfish_urls)} distincts urls in "

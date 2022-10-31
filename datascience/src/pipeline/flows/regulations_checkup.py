@@ -448,6 +448,7 @@ def get_dead_links(
                 "intranets.developpement-durable.ader.gouv.fr",
                 "i2",
             )
+            logger.info(f"Testing {unknown_link_alias}")
             r = requests.get(unknown_link_alias, timeout=10)
             r.raise_for_status()
         except:

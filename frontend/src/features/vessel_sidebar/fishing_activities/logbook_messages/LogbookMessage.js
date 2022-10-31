@@ -169,7 +169,7 @@ const MessageSentByFailoverSoftwareIcon = styled.span`
   height: 10px;
   margin-right: 6px;
   width: 10px;
-  background-color: ${COLORS.yellowMunsell};
+  background-color: ${p => p.theme.color.goldenPoppy};
   border-radius: 50%;
   display: inline-block;
 `
@@ -220,7 +220,7 @@ const Key = styled.span`
 
 const Acknowledge = styled.div`
   text-align: center;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   padding: 5px 9px 9px 9px;
   margin-left: 10px;
   font-size: 13px;
@@ -230,7 +230,7 @@ const Acknowledge = styled.div`
 
 const VoyageNumber = styled.div`
   text-align: center;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   padding: 5px 9px 9px 9px;
   margin-left: 10px;
   font-size: 13px;
@@ -244,7 +244,7 @@ const VoyageNumber = styled.div`
 
 const ReceptionDateTime = styled.div`
   text-align: center;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   padding: 5px 8px 9px 8px;
   margin-left: 10px;
   font-size: 13px;
@@ -254,7 +254,7 @@ const ReceptionDateTime = styled.div`
 
 const EmissionDateTime = styled.div`
   text-align: center;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   padding: 5px 8px 9px 8px;
   font-size: 13px;
   color: ${COLORS.gunMetal};
@@ -273,7 +273,7 @@ const Body = styled.div`
 const Wrapper = styled.div`
   margin-top: ${props => props.isFirst ? '5' : '10'}px;
   font-size: 13px;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   text-align: left;
 `
 
@@ -286,7 +286,7 @@ const Header = styled.div`
 `
 
 const LogbookMessageHeaderText = styled.span`
-  color: ${COLORS.background};
+  color: ${COLORS.white};
   font-weight: 500;
   margin: 5px 5px 5px 5px;
   padding: 3px 4px 2px 0;

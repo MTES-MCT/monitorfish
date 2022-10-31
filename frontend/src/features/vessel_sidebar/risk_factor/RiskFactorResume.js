@@ -161,7 +161,7 @@ const NoRiskFactor = styled.div`
   margin: 5px 5px 10px 5px;
   padding: 10px 10px 10px 25px;
   text-align: left;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   font-size: 15px;
   color: ${COLORS.slateGray};
 `
@@ -216,7 +216,7 @@ const RiskFactorZone = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
 `
 
 const RiskFactorImpact = styled(RiskFactorImpactSVG)`

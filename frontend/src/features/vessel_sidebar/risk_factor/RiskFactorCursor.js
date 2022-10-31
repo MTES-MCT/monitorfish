@@ -105,7 +105,7 @@ const Wrapper = styled.div`
 const Bar = styled.div`
   height: ${props => props.height ? props.height : 8}px;
   width: 208px;
-  background: ${COLORS.grayBackground};
+  background: ${p => p.theme.color.lightGray};
   margin-top: ${props => props.isBig ? 0 : 5}px;
 `
 
@@ -120,7 +120,7 @@ const Progress = styled.div`
 const VerticalBar = styled.div`
   height: 100%;
   width: 2px;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   margin-left: 50.5px;
   padding-top: ${props => props.isBig ? 0 : props.height === 8 ? 7 : 10}px;
   display: inline-block;

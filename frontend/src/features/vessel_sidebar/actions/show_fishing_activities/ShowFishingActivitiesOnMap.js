@@ -49,7 +49,7 @@ const ShowFishingActivitiesOnMapButton = styled(MapButtonStyle)`
   top: 258px;
   height: 30px;
   width: 30px;
-  background: ${props => (props.fishingActivitiesShowedOnMap ? COLORS.shadowBlue : COLORS.charcoal)};
+  background: ${props => (props.fishingActivitiesShowedOnMap ? props.theme.color.blueGray[100] : props.theme.color.charcoal)};
   position: absolute;
   margin-right: ${props => (props.sidebarIsOpen ? 505 : -45)}px;
   right: ${props => (props.rightMenuIsOpen && props.sidebarIsOpen ? 55 : 10)}px;
@@ -61,7 +61,7 @@ const ShowFishingActivitiesOnMapButton = styled(MapButtonStyle)`
 
   :hover,
   :focus {
-    background: ${props => (props.fishingActivitiesShowedOnMap ? COLORS.shadowBlue : COLORS.charcoal)};
+    background: ${props => (props.fishingActivitiesShowedOnMap ? props.theme.color.blueGray[100] : props.theme.color.charcoal)};
   }
 `
 

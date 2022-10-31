@@ -57,7 +57,7 @@ const RegulatoryZoneMetadata = () => {
             </Content>
           </>
           // eslint-disable-next-line react/forbid-component-props
-          : <FingerprintSpinner color={COLORS.background} className={'radar'} size={100}/>
+          : <FingerprintSpinner color={COLORS.white} className={'radar'} size={100}/>
       }
     </Wrapper>
   )
@@ -100,7 +100,7 @@ const Header = styled.div`
 const Content = styled.div`
   border-radius: 2px;
   color: ${COLORS.lightGray};
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   overflow-y: auto;
   max-height: 72vh;
 `

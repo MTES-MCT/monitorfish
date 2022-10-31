@@ -120,7 +120,7 @@ const Zone = styled.div`
 `
 
 const Fields = styled.table`
-  padding: 10px 5px 5px 5px; 
+  padding: 10px 5px 5px 5px;
   width: inherit;
   display: table;
   margin: 0;
@@ -181,11 +181,11 @@ const Wrapper = styled.li`
 `
 
 const LogbookMessageContent = styled.div`
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   width: inherit;
   overflow: hidden;
   padding: 0 0 0 20px;
-  border-bottom: 1px solid ${COLORS.gray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray}};
   opacity: ${props => props.isOpen ? 1 : 0};
   height: ${props => props.isOpen
     ? props.speciesOnboard * 22 + props.gearOnboard * 50 + 20

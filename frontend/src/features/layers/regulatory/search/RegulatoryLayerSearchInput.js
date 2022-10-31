@@ -329,7 +329,7 @@ const SearchIcon = styled(SearchIconSVG)`
   padding-left: 10px;
   height: 29px;
   padding-top: 10px;
-  background: ${COLORS.background};
+  background: ${p => p.theme.color.white};
   vertical-align: top;
   border-bottom: 1px ${COLORS.lightGray} solid;
 `
@@ -338,7 +338,7 @@ const CloseIcon = styled(CloseIconSVG)`
   width: 20px;
   padding: 13px 11px 9px 9px;
   height: 17px;
-  background: ${COLORS.background};
+  background: ${p => p.theme.color.white};
   vertical-align: top;
   border-bottom: 1px ${COLORS.lightGray} solid;
   cursor: pointer;
@@ -347,7 +347,7 @@ const CloseIcon = styled(CloseIconSVG)`
 const AdvancedSearchInput = styled.input`
   border: none !important;
   border-bottom: 1px ${COLORS.lightGray} solid !important;
-  background: ${COLORS.background} !important;
+  background: ${p => p.theme.color.white} !important;
   overflow: none !important;
   width: 265px;
   margin: 5px 0 ${props => props.withoutMarginBottom ? 0 : 15}px 0 !important;
@@ -363,7 +363,7 @@ const AdvancedSearch = styled.div`
   width: 40px;
   height: 40px;
   float: right;
-  background: ${props => props.advancedSearchIsOpen ? COLORS.shadowBlue : COLORS.charcoal};
+  background: ${props => props.advancedSearchIsOpen ? props.theme.color.blueGray[100] : props.theme.color.charcoal};
   cursor: pointer;
   font-size: 32px;
   line-height: 29px;

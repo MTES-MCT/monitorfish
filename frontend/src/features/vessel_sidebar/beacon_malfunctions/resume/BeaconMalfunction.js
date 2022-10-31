@@ -78,7 +78,7 @@ const Title = styled.div`
 const Wrapper = styled.div`
   width: -moz-available;
   width: -webkit-fill-available;
-  ${props => !props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null}
+  ${props => !props.isLastItem ? `border-bottom: 1px solid ${props.theme.color.lightGray};` : null}
 `
 
 const AtSea = styled(AtSeaSVG)`

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
 import { MapToolType, MeasurementType } from '../../../../domain/entities/map'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import {
@@ -125,8 +124,7 @@ export function MeasurementMapButton() {
 
 const MeasurementItem = styled.div`
   display: inline-block;
-  color: ${COLORS.blue};
-  background: ${COLORS.shadowBlue};
+  background: ${p => p.theme.color.blueGray[100]};
   padding: 0;
   z-index: 99;
   right: 0;

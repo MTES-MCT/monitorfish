@@ -64,7 +64,7 @@ const Table = styled.div`
   text-align: left;
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
 `
 
 const Fields = styled.table`

@@ -10,7 +10,9 @@ export const theme = {
 
     // Neutral Colors
     gunMetal: '#282F3E',
+    // TODO Make that charcoal object 100 & 50
     charcoal: '#3B4559',
+    charcoalShadow: 'rgba(59, 69, 89, 0.5)',
     slateGray: '#707785',
     lightGray: '#CCCFD6',
     gainsboro: '#E5E5EB',
@@ -41,6 +43,10 @@ export const theme = {
     copperRed: '#CF6A4E',
     chineseRed: '#A13112',
 
+    // Vessel Track
+    darkCornflowerBlue: '#2A4670',
+    jungleGreen: '#1C9B7B',
+
     // Beacon Malfunction
     powderBlue: '#9ED7D9',
     wheat: '#EDD6A4',
@@ -52,7 +58,7 @@ export const theme = {
 
     // Regulation Areas
     yaleBlue: '#295375',
-    gaucous: '#6284A6',
+    glaucous: '#6284A6',
     blueNcs: '#3690C0',
     iceberg: '#67A9CF',
     lightSteelBlue: '#9AB4D6',
@@ -68,32 +74,24 @@ export const theme = {
     indigoDye: '#033E54',
     lightCoral: '#FA8282',
 
+    // TODO Remove this color.
+    blue: '#0A18DF' // => `???`
+
     // TODO Remove all these colors which are not listed in the UI Design Library.
-    blue: '#0A18DF',
-    background: '#FFFFFF', // => `white`
-    gray: '#EEEEEE',
-    grayBackground: '#D3D5DC',
-    grayDarkerTwo: '#9A9A9A',
-    grayLighter: '#F0F0F0',
-    grayShadow: '#969696BF',
-    grayVesselHidden: '#B2B2B2',
-    orange: '#F6D012',
-    overlayShadow: '#7077851A',
-    overlayShadowDarker: '#7077859A',
-    shadowBlue: '#6B839E',
-    shadowBlueLight: '#D6DCE3',
-    shadowBlueLittleOpacity: 'rgba(107, 131, 158, 0.15)',
-    slateGrayLittleOpacity: 'rgba(112, 119, 133, 0.7)',
-    squareBorder: '#E0E0E0',
-    textBueGray: '#848DAE',
-    textWhite: '#EDEDF5',
-    titleBottomBorder: '#E0E0E0',
-    trackFishing: '#2A4670',
-    trackTransit: '#1C9B7B',
-    tumbleweed: '#F7BA9E',
-    vegasGold: '#E8CA46',
-    vesselColor: '#3B4559', // => `charcoal`
-    vesselLightColor: '#CACCE0',
-    yellowMunsell: '#F6D012'
+    // These colors are still here because we they still exists as hard-coded hex in the code.
+    // background: '#FFFFFF', // => `white`
+    // gray: '#EEEEEE', // => `lightGray`
+    // grayLighter: '#F0F0F0', // => `gainsboro`
+    // orange: '#F6D012', // => `goldenPoppy`
+    // Red button in alert list menu to silence an alert
+    // overlayShadowDarker: '#7077859A', // => `charcoalShadow`
+    // Dotted line when there is a big "hole" between 2 last VMS positions
+    // + Estimated position line
+    // squareBorder: '#E0E0E0', // => `lighGray`
+    // Table cell fleet segment when it's unknown ("inconnu" text color) / Control Objective
+    // vesselColor: '#3B4559', // => `charcoal`
+    // Vessel color when on a dark map
+    // Warning message backgrounds
+    // yellowMunsell: '#F6D012' // => `goldenPoppy`
   }
 }

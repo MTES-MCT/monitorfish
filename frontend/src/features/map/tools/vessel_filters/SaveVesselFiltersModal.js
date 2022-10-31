@@ -112,7 +112,7 @@ const Square = styled.div`
   margin: 5px 7px;
   margin: 4px 7px 6px 0px;
   background: ${props => props.color ? props.color : 'white'};
-  border: 2px solid ${COLORS.squareBorder};
+  border: 2px solid ${p => p.theme.color.lightGray};
     width: 14px;
     height: 14px;
     display: inline-block;

@@ -143,9 +143,9 @@ const Body = styled.div`
   }
 
   input {
-    color: ${COLORS.charcoal};
+    color: ${p => p.theme.color.gunMetal};
     margin-top: 7px;
-    background: ${COLORS.grayLighter};
+    background: ${p => p.theme.color.gainsboro};
     border: none;
     height: 27px;
     padding-left: 8px;

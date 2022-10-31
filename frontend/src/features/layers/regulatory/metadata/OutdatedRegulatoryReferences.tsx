@@ -36,7 +36,7 @@ export function OutdatedRegulatoryReferences() {
 const Warning = styled.div`
   font-size: 13px;
   color: ${COLORS.gunMetal};
-  background: ${COLORS.orange};
+  background: ${p => p.theme.color.goldenPoppy};
   display: flex;
   text-align: left;
   font: normal normal bold 13px/18px Marianne;

@@ -149,7 +149,7 @@ const ZonesList = styled.ul`
   overflow-x: hidden;
   max-height: 48vh;
   height: ${props => props.showZones && props.zonesLength ? 36 * props.zonesLength : 0}px;
-  background: ${COLORS.background};
+  background: ${COLORS.white};
   transition: 0.5s all;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;

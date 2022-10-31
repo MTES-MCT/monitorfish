@@ -90,7 +90,7 @@ const VesselSidebarTabs = () => {
 const ReportingNumber = styled.span`
   background: ${props => props.hasInfractionSuspicion ? COLORS.maximumRed : COLORS.gunMetal};
   border-radius: 10px;
-  color: ${COLORS.background};
+  color: ${p => p.theme.color.white};
   position: absolute;
   top: 6px;
   right: 189px;
@@ -110,11 +110,11 @@ const Tab = styled.button`
   height: 65px;
   font: normal normal 300 10px/14px Marianne;
   ${props => !props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}
-  background: ${props => props.isActive ? COLORS.shadowBlue : COLORS.charcoal};
-  color: ${props => props.isActive ? COLORS.background : COLORS.lightGray};
+  background: ${props => props.isActive ? props.theme.color.blueGray[100] : props.theme.color.charcoal};
+  color: ${props => props.isActive ? props.theme.color.white : props.theme.color.lightGray};
   
   :hover, :focus, :active {
-    background: ${COLORS.shadowBlue};
+    background: ${p => p.theme.color.blueGray[100]};
     ${props => !props.isLast ? `border-right: 1px solid ${COLORS.lightGray};` : null}
   }
 `

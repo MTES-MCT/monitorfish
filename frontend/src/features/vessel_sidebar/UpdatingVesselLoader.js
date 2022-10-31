@@ -30,7 +30,7 @@ const UpdatingVesselLoader = () => {
       {loadingApp
         ? <FirstLoadWrapper healthcheckTextWarning={healthcheckTextWarning}>
           <FulfillingBouncingCircleSpinner
-            color={COLORS.background}
+            color={COLORS.white}
             className={'update-vessels'}
             size={100}/>
           <BigVessel/>
@@ -45,7 +45,7 @@ const UpdatingVesselLoader = () => {
           (isUpdatingVessels || loadingPositions) && !loadingApp
             ? <>
               <FulfillingBouncingCircleSpinner
-                color={COLORS.background}
+                color={COLORS.white}
                 className={'update-vessels'}
                 size={30}/>
               <Vessel/>
@@ -60,7 +60,7 @@ const UpdatingVesselLoader = () => {
 const Text = styled.span`
   margin-top: 10px;
   font-size: 13px;
-  color: ${COLORS.background};
+  color: ${COLORS.white};
   bottom: -17px;
   position: relative;
 `

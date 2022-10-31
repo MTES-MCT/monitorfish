@@ -116,8 +116,8 @@ const YearTitle = styled.span`
   display: flex;
   user-select: none;
   pointer: ${p => p.isEmpty ? 'default' : 'pointer'};
-  ${props => !props.isOpen ? null : `border-bottom: 1px solid ${COLORS.gray};`}
-  ${props => !props.isLastItem ? `border-bottom: 1px solid ${COLORS.gray};` : null}
+  ${props => !props.isOpen ? null : `border-bottom: 1px solid ${props.theme.color.lightGray};`}
+  ${props => !props.isLastItem ? `border-bottom: 1px solid ${props.theme.color.lightGray};` : null}
 `
 
 const Row = styled.div`
@@ -129,9 +129,9 @@ const Row = styled.div`
   text-overflow: ellipsis;
   overflow: hidden !important;
   margin: 0;
-  background: ${COLORS.background};
+  background: ${p => p.theme.color.white};
   color: ${COLORS.gunMetal};
-  border-bottom: 1px solid ${COLORS.gray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   line-height: 1.9em;
 `
 

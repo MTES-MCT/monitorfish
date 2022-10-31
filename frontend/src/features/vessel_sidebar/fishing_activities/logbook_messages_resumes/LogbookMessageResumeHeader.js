@@ -115,7 +115,7 @@ const LogbookMessageName = styled.span`
 
 const Wrapper = styled.div`
   margin: 0;
-  background: ${COLORS.background};
+  background: ${p => p.theme.color.white};
   border-radius: 0;
   padding: 0;
   overflow-y: auto;
@@ -129,7 +129,7 @@ const LogbookMessageTitle = styled.div`
   padding: 0 0 0 20px;
   user-select: none;
   ${props => !props.hasNoMessage ? 'cursor: pointer;' : null}}
-  ${props => !props.isLastItem || props.isOpen ? `border-bottom: 1px solid ${COLORS.gray};` : null}
+  ${props => !props.isLastItem || props.isOpen ? `border-bottom: 1px solid ${props.theme.color.lightGray};` : null}
 `
 
 const ChevronIcon = styled(ChevronIconSVG)`

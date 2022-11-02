@@ -9,6 +9,7 @@ context('Vessels Track', () => {
 
   it('Last position card with Alert Should be seen on the map on pointer move', () => {
     // When we move the pointer cursor (from one point to another to emit an event)
+    // We do not need to subtract 50 to Y because we use clientY property, which set the coordinates from the whole window
     cy.get('.vessels').trigger('pointermove', { clientX: 460, clientY: 480, force: true, pointerId: 1 })
     cy.get('.vessels').trigger('pointermove', { clientX: 904, clientY: 305, force: true, pointerId: 1 })
     cy.get('.vessels').trigger('pointermove', { clientX: 905, clientY: 307, force: true, pointerId: 1 })
@@ -35,6 +36,7 @@ context('Vessels Track', () => {
 
   it('Last position card with Beacon malfunction Should be seen on the map on pointer move', () => {
     // When we move the pointer cursor (from one point to another to emit an event)
+    // We do not need to subtract 50 to Y because we use clientY property, which set the coordinates from the whole window
     cy.get('.vessels').trigger('pointermove', { clientX: 460, clientY: 480, force: true, pointerId: 1 })
     cy.get('.vessels').trigger('pointermove', { clientX: 980, clientY: 785, force: true, pointerId: 1 })
     cy.get('.vessels').trigger('pointermove', { clientX: 981, clientY: 787, force: true, pointerId: 1 })
@@ -55,34 +57,36 @@ context('Vessels Track', () => {
   it('Position card Should be seen on the map on vessel track pointer move', () => {
     // When we click on the vessel
     cy.wait(200)
+    // We must subtract 50 to Y (the real vessel coordinates is 480 + 50 = 530) as the application <Warning/> component offset the .vessels div
     cy.get('.vessels').click(460, 480, { force: true, timeout: 10000 })
 
     // When we move the pointer cursor to a track point (from one point to another to emit an event)
+    // We do not need to subtract 50 to Y because we use clientY property, which set the coordinates from the whole window
     cy.get('.vessels').trigger('pointermove', { clientX: 910, clientY: 300, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 687, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 627, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 686, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 626, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 687, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 627, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 688, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 628, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 689, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 629, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 685, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 625, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 687, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 627, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 688, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 628, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 689, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 629, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 685, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 625, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 687, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 627, force: true, pointerId: 1 })
     cy.wait(20)
-    cy.get('.vessels').trigger('pointermove', { clientX: 411, clientY: 688, force: true, pointerId: 1 })
+    cy.get('.vessels').trigger('pointermove', { clientX: 425, clientY: 628, force: true, pointerId: 1 })
 
     cy.wait(50)
     cy.get('*[data-cy^="vessel-track-card-latitude"]').contains('47° 38′ 24″ N')
@@ -94,6 +98,7 @@ context('Vessels Track', () => {
   it('A track Should be showed When clicking on a vessel with CTRL key pressed', () => {
     // When
     cy.wait(200)
+    // We must subtract 50 to Y (the real vessel coordinates is 480 + 50 = 530) as the application <Warning/> component offset the .vessels div
     cy.get('.vessels').click(460, 480, { ctrlKey: true, force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('.vessels').click(504, 289, { ctrlKey: true, force: true, timeout: 10000 })
@@ -137,6 +142,7 @@ context('Vessels Track', () => {
   it('A track Should be showed When clicking on a vessel with the custom map menu', () => {
     cy.log('Show a first vessel with a three day track depth')
     cy.wait(200)
+    // We must subtract 50 to Y (the real vessel coordinates is 480 + 50 = 530) as the application <Warning/> component offset the .vessels div
     cy.get('.vessels').rightclick(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy^="show-vessel-tracks-menu-options"]').click({ force: true })
     cy.get('*[data-cy^="show-vessel-tracks-three-days"]').click({ force: true })

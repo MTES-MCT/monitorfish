@@ -1,8 +1,9 @@
 import { describe, expect, it } from '@jest/globals'
 
-import { getFeaturesFromPositions, getTrackType } from './index'
+import { getFeaturesFromPositions, getTrackType } from '../index'
+import { DUMMY_VESSEL_TRACK } from './__mocks__'
 
-import type { VesselLineFeature, VesselPointFeature, VesselPosition } from '../types'
+import type { VesselLineFeature, VesselPointFeature, VesselPosition } from '../../types'
 
 describe('vessel/track', () => {
   it('getFeaturesFromPositions Should return one feature point When one position is given', async () => {
@@ -37,10 +38,12 @@ describe('vessel/track', () => {
     expect(features).toHaveLength(1)
 
     const feature = features[0] as VesselPointFeature
-    expect(feature!.course).toEqual(356)
-    expect(feature!.name).toEqual('vessel_track:position:0')
-    expect(feature!.speed).toEqual(2.8)
-    expect(feature!.dateTime).toEqual('2022-10-27T16:10:20.4564+02:00')
+    expect(feature).toMatchObject({
+      course: 356,
+      dateTime: '2022-10-27T16:10:20.4564+02:00',
+      name: 'vessel_track:position:0',
+      speed: 2.8
+    })
     expect(feature!.getId()).toEqual('vessel_track:VESSEL_ID:position:0')
     expect(feature!.getGeometry()?.getFlatCoordinates()[0]).toEqual(-370471.26536001445)
     expect(feature!.getGeometry()?.getFlatCoordinates()[1]).toEqual(5842423.238503429)
@@ -157,120 +160,3 @@ describe('vessel/track', () => {
     expect(trackType.code).toEqual('FISHING')
   })
 })
-
-const DUMMY_VESSEL_TRACK = [
-  {
-    course: 356,
-    dateTime: '2022-10-27T16:10:20.4564+02:00',
-    destination: 'DE',
-    externalReferenceNumber: 'SE457432',
-    flagState: 'FR',
-    from: 'FR',
-    internalReferenceNumber: 'ABC000898396',
-    ircs: 'ZBRI',
-    isFishing: true,
-    isManual: null,
-    latitude: 46.386,
-    longitude: -3.328,
-    mmsi: null,
-    positionType: 'VMS',
-    speed: 2.8,
-    tripNumber: null,
-    vesselName: 'CE DEVANT ÉLEVER'
-  },
-  {
-    course: 328,
-    dateTime: '2022-10-27T17:10:20.4564+02:00',
-    destination: 'DE',
-    externalReferenceNumber: 'SE457432',
-    flagState: 'FR',
-    from: 'FR',
-    internalReferenceNumber: 'ABC000898396',
-    ircs: 'ZBRI',
-    isFishing: true,
-    isManual: null,
-    latitude: 46.43,
-    longitude: -3.347,
-    mmsi: null,
-    positionType: 'VMS',
-    speed: 2.9,
-    tripNumber: null,
-    vesselName: 'CE DEVANT ÉLEVER'
-  },
-  {
-    course: 310,
-    dateTime: '2022-10-27T18:10:20.4564+02:00',
-    destination: 'DE',
-    externalReferenceNumber: 'SE457432',
-    flagState: 'FR',
-    from: 'FR',
-    internalReferenceNumber: 'ABC000898396',
-    ircs: 'ZBRI',
-    isFishing: null,
-    isManual: null,
-    latitude: 46.458,
-    longitude: -3.411,
-    mmsi: null,
-    positionType: 'VMS',
-    speed: 2.2,
-    tripNumber: null,
-    vesselName: 'CE DEVANT ÉLEVER'
-  },
-  {
-    course: 282,
-    dateTime: '2022-10-27T19:10:20.4564+02:00',
-    destination: 'DE',
-    externalReferenceNumber: 'SE457432',
-    flagState: 'FR',
-    from: 'FR',
-    internalReferenceNumber: 'ABC000898396',
-    ircs: 'ZBRI',
-    isFishing: null,
-    isManual: null,
-    latitude: 46.486,
-    longitude: -3.481,
-    mmsi: null,
-    positionType: 'VMS',
-    speed: 3.1,
-    tripNumber: null,
-    vesselName: 'CE DEVANT ÉLEVER'
-  },
-  {
-    course: 227,
-    dateTime: '2022-10-27T20:10:20.4564+02:00',
-    destination: 'DE',
-    externalReferenceNumber: 'SE457432',
-    flagState: 'FR',
-    from: 'FR',
-    internalReferenceNumber: 'ABC000898396',
-    ircs: 'ZBRI',
-    isFishing: null,
-    isManual: null,
-    latitude: 46.471,
-    longitude: -3.552,
-    mmsi: null,
-    positionType: 'VMS',
-    speed: 2.8,
-    tripNumber: null,
-    vesselName: 'CE DEVANT ÉLEVER'
-  },
-  {
-    course: 263,
-    dateTime: '2022-10-27T21:10:20.4564+02:00',
-    destination: 'DE',
-    externalReferenceNumber: 'SE457432',
-    flagState: 'FR',
-    from: 'FR',
-    internalReferenceNumber: 'ABC000898396',
-    ircs: 'ZBRI',
-    isFishing: null,
-    isManual: null,
-    latitude: 46.45,
-    longitude: -3.614,
-    mmsi: null,
-    positionType: 'VMS',
-    speed: 2.9,
-    tripNumber: null,
-    vesselName: 'CE DEVANT ÉLEVER'
-  }
-]

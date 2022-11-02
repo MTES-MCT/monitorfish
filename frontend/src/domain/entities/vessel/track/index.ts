@@ -75,6 +75,7 @@ function buildPointFeature(
   const pointFeature = new Feature({
     geometry: new Point(coordinates)
   }) as VesselPointFeature
+  // TODO Properties are removed when included directly in the `geometryOrProperties` of the Feature instantiation
   pointFeature.name = `${Layer.VESSEL_TRACK.code}:position:${index}`
   pointFeature.course = position.course
   pointFeature.positionType = position.positionType
@@ -105,6 +106,7 @@ function buildArrowPointFeatures(vesselTrackLines, identity): VesselArrowFeature
       const arrowFeature = new Feature({
         geometry: new Point(arrowPointCoordinates)
       }) as VesselArrowFeature
+      // TODO Properties are removed when included directly in the `geometryOrProperties` of the Feature instantiation
       arrowFeature.name = `${Layer.VESSEL_TRACK.code}:arrow:${index}`
       arrowFeature.course = feature.course
 
@@ -154,6 +156,7 @@ function buildLineStringFeatures(positions: VesselPosition[], vesselId: VesselId
       const feature = new Feature({
         geometry: new LineString([firstPoint, secondPoint])
       }) as VesselLineFeature
+      // TODO Properties are removed when included directly in the `geometryOrProperties` of the Feature instantiation
       feature.firstPositionDate = firstPositionDate
       feature.secondPositionDate = secondPositionDate
       feature.isTimeEllipsis = isTimeEllipsis

@@ -10,6 +10,7 @@ from prefect import task
 
 from config import TEST_DATA_LOCATION
 from src.pipeline.flows.regulations_checkup import (
+    add_article_id,
     extract_legipeche_regulations,
     extract_monitorfish_regulations,
     flow,
@@ -27,13 +28,38 @@ from src.pipeline.flows.regulations_checkup import (
     transform_modified_regulations,
 )
 
+# Task mocks
+
+
+@task(checkpoint=False)
+def mock_get_dead_links(
+    monitorfish_regulations: pd.DataFrame,
+    unknown_links: set,
+) -> pd.DataFrame:
+    @patch("src.pipeline.flows.regulations_checkup.requests")
+    def get_dead_links_(regulations, links, mock_requests):
+        def failed_get(url):
+            r = requests.Response()
+            r.status_code = 404
+            r.url = url
+            return r
+
+        mock_requests.get.side_effect = failed_get
+        return get_dead_links.run(regulations, links)
+
+    return get_dead_links_(monitorfish_regulations, unknown_links)
+
 
 @task(checkpoint=False)
 def mock_send_message(msg: EmailMessage):
     assert isinstance(msg, EmailMessage)
 
 
+# Flow mocks
+
+
 flow.replace(flow.get_tasks("send_message")[0], mock_send_message)
+flow.replace(flow.get_tasks("get_dead_links")[0], mock_get_dead_links)
 
 
 @pytest.fixture
@@ -65,15 +91,21 @@ def monitorfish_regulations() -> pd.DataFrame:
                 "Zone C",
             ],
             "url": [
+                "http://external.site.regulation",
+                (
+                    "http://legipeche.metier.intranets.developpement-durable"
+                    ".ader.gouv.fr/some-regulation-a666.html?var=12"
+                ),
+                "http://legipeche.metier.intranets.developpement-durable.ader.gouv.fr/modified-regulation-a668.html",
                 None,
-                "http://some.url",
-                "http://some.other.url",
-                None,
-                "http://regulation.intranets.developpement-durable.ader.gouv.fr",
-                "http://dead_link.regulation.url",
+                "http://legipeche.metier.i2/regulation-a689.html",
+                (
+                    "http://legipeche.metier.intranets.developpement-durable"
+                    ".ader.gouv.fr/deleted-regulation-a671.html"
+                ),
             ],
             "reference": [
-                None,
+                "External regulation",
                 "some regulation",
                 "some other regulation",
                 None,
@@ -112,10 +144,10 @@ def legipeche_regulations() -> pd.DataFrame:
                 "Some old page",
                 "Med. sea regulation",
                 "Bretagne regulation",
-                "Bretagne other reg",
-                "Bretagne other reg",
-                "Bretagne other reg",
-                "Bretagne other reg",
+                "Bretagne modified reg",
+                "Bretagne modified reg",
+                "Bretagne modified reg",
+                "Bretagne modified reg",
                 "Bretagne regulation",
                 "Unused regulation",
                 "Med. sea regulation",
@@ -123,27 +155,27 @@ def legipeche_regulations() -> pd.DataFrame:
                 "Unused regulation 2",
             ],
             "page_url": [
-                "http://dead_link.regulation.url",
-                "http://regulation.i2",
-                "http://some.url",
-                "http://some.other.url",
-                "http://some.other.url",
-                "http://some.other.url",
-                "http://some.other.url",
-                "http://some.url",
-                "http://unused.url",
-                "http://regulation.i2",
-                "http://unused.url",
-                "http://unused_2.url",
+                "http://legipeche.metier.i2/deleted-regulation-a671.html",
+                "http://legipeche.metier.i2/regulation-with-unstable-url-a689.html",
+                "http://legipeche.metier.i2/some-regulation-a666.html",
+                "http://legipeche.metier.i2/modified-regulation-a668.html",
+                "http://legipeche.metier.i2/modified-regulation-a668.html",
+                "http://legipeche.metier.i2/modified-regulation-a668.html",
+                "http://legipeche.metier.i2/modified-regulation-a668.html",
+                "http://legipeche.metier.i2/some-regulation-a666.html",
+                "http://legipeche.metier.i2/unused-regulation-a670.html",
+                "http://legipeche.metier.i2/regulation-with-unstable-url-a689.html",
+                "http://legipeche.metier.i2/unused-regulation-a670.html",
+                "http://legipeche.metier.i2/other-unused-regulation-a675.html",
             ],
             "document_title": [
                 "Some old reg text",
                 "Med reg text",
                 "Bretagne reg text",
-                "Bretagne other reg 1",
-                "Bretagne other reg 2",
-                "Bretagne other reg 1",
-                "Bretagne other reg 3",
+                "Bretagne modified reg 1",
+                "Bretagne modified reg 2",
+                "Bretagne modified reg 1",
+                "Bretagne modified reg 3",
                 "Bretagne reg text",
                 "Unused reg text",
                 "Med reg text",
@@ -171,8 +203,37 @@ def legipeche_regulations() -> pd.DataFrame:
 
 
 @pytest.fixture
-def modified_regulations(legipeche_regulations) -> pd.DataFrame:
-    return legipeche_regulations.iloc[[4, 6]].reset_index(drop=True)
+def monitorfish_regulations_with_id(monitorfish_regulations) -> pd.DataFrame:
+    regulations = monitorfish_regulations.assign(
+        article_id=[None, "666", "668", None, "689", "671"]
+    )
+    return regulations
+
+
+@pytest.fixture
+def legipeche_regulations_with_id(legipeche_regulations) -> pd.DataFrame:
+    regulations = legipeche_regulations.assign(
+        article_id=[
+            "671",
+            "689",
+            "666",
+            "668",
+            "668",
+            "668",
+            "668",
+            "666",
+            "670",
+            "689",
+            "670",
+            "675",
+        ]
+    )
+    return regulations
+
+
+@pytest.fixture
+def modified_regulations(legipeche_regulations_with_id) -> pd.DataFrame:
+    return legipeche_regulations_with_id.iloc[[4, 6]].reset_index(drop=True)
 
 
 @pytest.fixture
@@ -183,13 +244,13 @@ def transformed_regulations() -> pd.DataFrame:
             "Thématique": ["Morbihan - bivalves", "Morbihan - bivalves"],
             "Zone": ["Secteur 2", "Secteur 2"],
             "Référence réglementaire": [
-                '<a href="http://some.other.url">some other regulation</a>',
-                '<a href="http://some.other.url">some other regulation</a>',
+                '<a href="http://legipeche.metier.intranets.developpement-durable.ader.gouv.fr/modified-regulation-a668.html">some other regulation</a>',
+                '<a href="http://legipeche.metier.intranets.developpement-durable.ader.gouv.fr/modified-regulation-a668.html">some other regulation</a>',
             ],
             "Modification": ["Ajout de document", "Suppression de document"],
             "Document": [
-                '<a href="http://bzh.other_3">Bretagne other reg 3</a>',
-                '<a href="http://bzh.other_2">Bretagne other reg 2</a>',
+                '<a href="http://bzh.other_3">Bretagne modified reg 3</a>',
+                '<a href="http://bzh.other_2">Bretagne modified reg 2</a>',
             ],
         }
     )
@@ -201,9 +262,9 @@ def transformed_regulations() -> pd.DataFrame:
 def missing_references() -> pd.DataFrame:
     references = pd.DataFrame(
         {
-            "Type de réglementation": ["Reg. Facade 1", "Reg. Facade 2"],
-            "Thématique": ["Morbihan - bivalves", "Mediterranée - filets"],
-            "Zone": ["Secteur 1", "Zone A"],
+            "Type de réglementation": ["Reg. Facade 2"],
+            "Thématique": ["Mediterranée - filets"],
+            "Zone": ["Zone A"],
         }
     )
     return references
@@ -211,23 +272,34 @@ def missing_references() -> pd.DataFrame:
 
 @pytest.fixture
 def unknown_links() -> set:
-    return {"http://dead_link.regulation.url"}
+    return {
+        "http://external.site.regulation",
+        (
+            "http://legipeche.metier.intranets.developpement-durable.ader.gouv.fr/"
+            "deleted-regulation-a671.html"
+        ),
+    }
 
 
 @pytest.fixture
-def dead_links(monitorfish_regulations) -> pd.DataFrame:
-    return monitorfish_regulations.iloc[[-1]].reset_index(drop=True)
+def dead_links(monitorfish_regulations_with_id) -> pd.DataFrame:
+    return monitorfish_regulations_with_id.iloc[[0, -1]].reset_index(drop=True)
 
 
 @pytest.fixture
 def formatted_dead_links():
     links = pd.DataFrame(
         {
-            "Type de réglementation": ["Reg. Facade 2"],
-            "Thématique": ["Mediterranée - filets"],
-            "Zone": ["Zone C"],
+            "Type de réglementation": ["Reg. Facade 1", "Reg. Facade 2"],
+            "Thématique": ["Morbihan - bivalves", "Mediterranée - filets"],
+            "Zone": ["Secteur 1", "Zone C"],
             "Référence réglementaire": [
-                '<a href="http://dead_link.regulation.url">Dead link regulation</a>'
+                '<a href="http://external.site.regulation">External regulation</a>',
+                (
+                    '<a href="http://legipeche.metier.intranets.developpement-durable'
+                    '.ader.gouv.fr/deleted-regulation-a671.html">'
+                    "Dead link regulation</a>"
+                ),
             ],
         }
     )
@@ -261,47 +333,59 @@ def test_extract_legipeche_regulations(reset_test_data, legipeche_regulations):
     pd.testing.assert_frame_equal(regulations, legipeche_regulations)
 
 
-def test_get_extraction_datetimes(legipeche_regulations):
-    d1_string, d2_string = get_extraction_datetimes.run(legipeche_regulations)
+def test_add_article_id(monitorfish_regulations, monitorfish_regulations_with_id):
+    regulations = add_article_id.run(monitorfish_regulations, url_column="url")
+    pd.testing.assert_frame_equal(regulations, monitorfish_regulations_with_id)
+
+
+def test_add_article_id_2(legipeche_regulations, legipeche_regulations_with_id):
+    regulations = add_article_id.run(legipeche_regulations, url_column="page_url")
+    pd.testing.assert_frame_equal(regulations, legipeche_regulations_with_id)
+
+
+def test_get_extraction_datetimes(legipeche_regulations_with_id):
+    d1_string, d2_string = get_extraction_datetimes.run(legipeche_regulations_with_id)
     assert d1_string == "02/03/2021 15:25"
     assert d2_string == "03/03/2021 15:25"
 
 
 def test_get_modified_regulations(
-    legipeche_regulations, monitorfish_regulations, modified_regulations
+    legipeche_regulations_with_id, monitorfish_regulations_with_id, modified_regulations
 ):
     regulations = get_modified_regulations.run(
-        legipeche_regulations, monitorfish_regulations
+        legipeche_regulations_with_id, monitorfish_regulations_with_id
     )
 
     pd.testing.assert_frame_equal(regulations, modified_regulations)
 
 
 def test_transform_modified_regulations(
-    monitorfish_regulations, modified_regulations, transformed_regulations
+    monitorfish_regulations_with_id, modified_regulations, transformed_regulations
 ):
     regulations = transform_modified_regulations.run(
-        modified_regulations, monitorfish_regulations
+        modified_regulations, monitorfish_regulations_with_id
     )
     pd.testing.assert_frame_equal(regulations, transformed_regulations)
 
 
-def test_get_missing_references(monitorfish_regulations, missing_references):
-    references = get_missing_references.run(monitorfish_regulations)
+def test_get_missing_references(monitorfish_regulations_with_id, missing_references):
+    references = get_missing_references.run(monitorfish_regulations_with_id)
 
     pd.testing.assert_frame_equal(references, missing_references)
 
 
 def test_get_unknown_links(
-    monitorfish_regulations, legipeche_regulations, unknown_links
+    monitorfish_regulations_with_id, legipeche_regulations_with_id, unknown_links
 ):
-    links = get_unknown_links.run(monitorfish_regulations, legipeche_regulations)
+    links = get_unknown_links.run(
+        monitorfish_regulations_with_id, legipeche_regulations_with_id
+    )
     assert links == unknown_links
 
 
 @patch("src.pipeline.flows.regulations_checkup.requests")
 def test_get_dead_links(
-    mock_requests, monitorfish_regulations, unknown_links, dead_links
+    mock_requests, monitorfish_regulations_with_id, unknown_links, dead_links
 ):
     def failed_get(url):
         r = requests.Response()
@@ -311,8 +395,15 @@ def test_get_dead_links(
 
     mock_requests.get.side_effect = failed_get
 
-    links = get_dead_links.run(monitorfish_regulations, unknown_links)
-    mock_requests.get.assert_called_once_with("http://dead_link.regulation.url")
+    links = get_dead_links.run(monitorfish_regulations_with_id, unknown_links)
+
+    assert mock_requests.get.call_count == 2
+    for unknown_link in unknown_links:
+        unknown_link = unknown_link.replace(
+            "intranets.developpement-durable.ader.gouv.fr", "i2"
+        )
+        mock_requests.get.assert_any_call(unknown_link, timeout=10)
+
     pd.testing.assert_frame_equal(links, dead_links)
 
 
@@ -341,7 +432,7 @@ def test_get_recipients():
     assert recipients == ["cnsp.france@test.email"]
 
 
-def test_flow(reset_test_data):
+def test_flow_shawarma(reset_test_data):
     flow.schedule = None
     state = flow.run()
 

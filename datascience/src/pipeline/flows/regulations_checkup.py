@@ -1,6 +1,7 @@
 import datetime
 import logging
 import os
+import re
 from email.message import EmailMessage
 from pathlib import Path
 from typing import Iterable, List, Tuple
@@ -20,7 +21,7 @@ from config import (
 )
 from src.pipeline.generic_tasks import extract
 from src.pipeline.helpers.emails import create_html_email, send_email
-from src.pipeline.processing import try_get_factory
+from src.pipeline.processing import get_matched_groups, try_get_factory
 
 ####################################### Helpers #######################################
 
@@ -129,6 +130,44 @@ def extract_legipeche_regulations() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def add_article_id(regulations: pd.DataFrame, url_column: str) -> pd.DataFrame:
+    """
+    Adds an `article_id` column to the `regulations` DataFrame, extracting the
+    article_id from the `url_column` according the the Legipeche URL schema.
+
+    Rows for which the URL does not match the Legipeche URL schema will have an
+    article_id of `None`.
+
+    Args:
+        regulations (pd.DataFrame): DataFrame of regulations
+        url_column (str): Name of the column containing URLs of regulation pages
+
+    Returns:
+        pd.DataFrame: copy of input `regulations` with an added `article_id` column
+    """
+    legipeche_regex = re.compile(
+        (
+            r"^http://legipeche\.metier\."
+            r"(?:i2|intranets\.developpement-durable\.ader\.gouv\.fr)/"
+            r"(?:[a-zA-Z0-9-]*)"
+            r"-a(?P<article_id>\d+)"
+            r"\.html"
+            r".*$"
+        )
+    )
+
+    regulations = pd.concat(
+        [
+            regulations,
+            regulations[url_column].apply(get_matched_groups, regex=legipeche_regex),
+        ],
+        axis=1,
+    )
+
+    return regulations
+
+
+@task(checkpoint=False)
 def get_extraction_datetimes(legipeche_regulations: pd.DataFrame) -> Tuple[str, str]:
     """
     Returns the extraction datetimes of `previous` and `latest` legipeche extraction
@@ -201,18 +240,18 @@ def get_modified_regulations(
         pd.DataFrame: filtered DataFrame of Legipeche regulations
     """
 
-    legipeche_latest_page_urls = set(
+    legipeche_latest_article_ids = set(
         legipeche_regulations.loc[
-            legipeche_regulations.extraction_occurence == "latest", "page_url"
+            legipeche_regulations.extraction_occurence == "latest", "article_id"
         ]
     )
-    legipeche_previous_page_urls = set(
+    legipeche_previous_article_ids = set(
         legipeche_regulations.loc[
-            legipeche_regulations.extraction_occurence == "previous", "page_url"
+            legipeche_regulations.extraction_occurence == "previous", "article_id"
         ]
     )
-    legipeche_stable_page_urls = legipeche_latest_page_urls.intersection(
-        legipeche_previous_page_urls
+    legipeche_stable_article_ids = legipeche_latest_article_ids.intersection(
+        legipeche_previous_article_ids
     )
 
     legipeche_latest_document_urls = set(
@@ -229,12 +268,14 @@ def get_modified_regulations(
         legipeche_previous_document_urls
     )
 
-    monitorfish_regulations_urls = set(monitorfish_regulations.url)
+    monitorfish_regulations_article_ids = set(
+        monitorfish_regulations.article_id.dropna()
+    )
 
     modified_legipeche_regulations = legipeche_regulations[
         (legipeche_regulations.document_url.isin(legipeche_modified_documents))
-        & (legipeche_regulations.page_url.isin(legipeche_stable_page_urls))
-        & (legipeche_regulations.page_url.isin(monitorfish_regulations_urls))
+        & (legipeche_regulations.article_id.isin(legipeche_stable_article_ids))
+        & (legipeche_regulations.article_id.isin(monitorfish_regulations_article_ids))
     ].reset_index(drop=True)
 
     return modified_legipeche_regulations
@@ -270,10 +311,7 @@ def transform_modified_regulations(
     logger = prefect.context.get("logger")
 
     modified_regulations = pd.merge(
-        monitorfish_regulations,
-        modified_regulations,
-        left_on="url",
-        right_on="page_url",
+        monitorfish_regulations, modified_regulations, on="article_id"
     )
 
     modified_regulations[
@@ -366,44 +404,38 @@ def get_unknown_links(
     legipeche_regulations: pd.DataFrame,
 ) -> set:
     """
-    Returns the urls of `monitorfish_regulations` that are not in
-    `legipeche_regulations.page_url`.
+    Returns the urls of `monitorfish_regulations` that do contain an `article_id`
+    known in `legipeche_regulations`.
 
     Args:
         monitorfish_regulations (pd.DataFrame):
         legipeche_regulations (pd.DataFrame):
 
     Returns:
-        set: urls of `monitorfish_regulations.url` not in
-          `legipeche_regulations.page_url`
+        set: subset of `monitorfish_regulations.url`
     """
 
     logger = prefect.context.get("logger")
 
-    monitorfish_urls = set(monitorfish_regulations.url.dropna())
-    legipeche_urls = set(
+    legipeche_article_ids = set(
         legipeche_regulations.loc[
-            legipeche_regulations.extraction_occurence == "latest", "page_url"
-        ]
+            legipeche_regulations.extraction_occurence == "latest", "article_id"
+        ].dropna()
     )
 
-    unknown_links = monitorfish_urls - legipeche_urls
-
     unknown_links = set(
-        filter(
-            lambda url: url.replace(
-                "intranets.developpement-durable.ader.gouv.fr", "i2"
-            )
-            not in legipeche_urls,
-            unknown_links,
-        )
+        monitorfish_regulations.loc[
+            (monitorfish_regulations.url.notnull())
+            & (~monitorfish_regulations.article_id.isin(legipeche_article_ids)),
+            "url",
+        ]
     )
 
     logger.info(
         (
-            f"Out of {len(monitorfish_urls)} distincts urls in "
-            f"monitorfish_regulation, {len(unknown_links)} were not found in the "
-            "legipeche table."
+            f"Out of {monitorfish_regulations.url.dropna().nunique()} distincts urls "
+            f"in monitorfish_regulation, {len(unknown_links)} were not found in the"
+            " legipeche table."
         )
     )
 
@@ -603,6 +635,8 @@ with Flow("Regulations checkup") as flow:
     style = get_style()
 
     # Transform data
+    monitorfish_regulations = add_article_id(monitorfish_regulations, url_column="url")
+    legipeche_regulations = add_article_id(legipeche_regulations, url_column="page_url")
     missing_references = get_missing_references(monitorfish_regulations)
     modified_regulations = get_modified_regulations(
         legipeche_regulations, monitorfish_regulations

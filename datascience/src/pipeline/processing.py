@@ -1,5 +1,6 @@
 import datetime
 import logging
+import re
 from functools import partial
 from typing import Any, Hashable, List, Union
 
@@ -944,3 +945,37 @@ def rows_belong_to_sequence(
     res = np.where(np.isnan(rows_known) & rows_maybe.astype(bool), np.nan, rows_maybe)
 
     return res
+
+
+def get_matched_groups(string: str, regex: re.Pattern) -> pd.Series:
+    """
+    Matches the input `str` with the input `Pattern` and returns a pandas `Series`
+    with the matched data.
+
+    The index labels of the result `Series` are the group names `(?<group_name>...)`
+    of the pattern.
+
+    The values of the result `Series` are:
+
+      - the match's group values, if the string matches the pattern
+      - `None`, if the string does not matches the pattern
+
+    Args:
+        string (str): string to match
+        regex (re.Pattern): pattern against which to match the string
+
+    Returns:
+        pd.Series: the match's group data
+    """
+
+    assert isinstance(regex, re.Pattern)
+    if isinstance(string, str):
+        m = regex.match(string)
+    else:
+        m = None
+
+    if m:
+        result = pd.Series(m.groupdict())
+    else:
+        result = pd.Series({i: None for i in regex.groupindex})
+    return result

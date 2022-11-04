@@ -145,6 +145,11 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     return sort(bySortingKey, filteredAugmentedData)
   }, [filteredAugmentedData, isSortingDesc, sortingKey])
 
+  const getCheckedData = useCallback(
+    () => filteredAndSortedAugmentedData.filter(({ id }) => checkedIds.includes(id)),
+    [checkedIds, filteredAndSortedAugmentedData]
+  )
+
   const toggleCheckAll = useCallback(() => {
     setCheckedIds(isAllChecked ? [] : filteredAndSortedAugmentedData.map(prop('id')))
     setIsAllChecked(!isAllChecked)
@@ -189,6 +194,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   )
 
   return {
+    getTableCheckedData: getCheckedData,
     renderTableHead,
     tableCheckedIds: checkedIds,
     tableData: filteredAndSortedAugmentedData,

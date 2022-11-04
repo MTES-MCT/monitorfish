@@ -11,7 +11,6 @@ export const openBeaconMalfunctionInKanban = id => dispatch => {
       dispatch(setOpenedBeaconMalfunctionsInKanban(beaconMalfunctionWithDetails))
     })
     .catch(error => {
-      console.error(error)
       dispatch(setError(error))
     })
 }

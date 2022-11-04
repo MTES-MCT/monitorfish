@@ -278,6 +278,7 @@ const item = (e) => {
  * @function convert a list of elements to a list of object :
  * [{label: element, value: element, role: groupName}]
  * @param {string[]} list
+ * @param {string=} groupName
  * @returns {SelectPickerObject[]} - a new array
  */
 export const formatDataForSelectPicker = (list, groupName) => {

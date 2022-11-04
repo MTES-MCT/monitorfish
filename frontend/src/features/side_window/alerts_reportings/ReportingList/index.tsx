@@ -23,6 +23,7 @@ import { CardTableRow } from '../../../../ui/card-table/CardTableRow'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { FilterTableInput } from '../../../../ui/card-table/FilterTableInput'
 import { RowVerticalSeparator } from '../../../../ui/card-table/RowVerticalSeparator'
+import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
 import { ReactComponent as ArchiveIconSVG } from '../../../icons/Bouton_archiver.svg'
 import { ReactComponent as DeleteIconSVG } from '../../../icons/Bouton_supprimer.svg'
 import { Flag } from '../../../vessel_list/tableCells'
@@ -54,7 +55,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     [currentReportings, selectedSeaFront]
   )
 
-  const { renderTableHead, tableCheckedIds, tableData, toggleTableCheckForId } = useTable<
+  const { getTableCheckedData, renderTableHead, tableCheckedIds, tableData, toggleTableCheckForId } = useTable<
     InfractionSuspicionReporting | PendingAlertReporting
   >(currentSeaFrontReportings, REPORTING_LIST_TABLE_OPTIONS, searchInputRef.current?.value)
 
@@ -65,6 +66,12 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
 
     await dispatch(archiveReportings(tableCheckedIds.map(Number)) as any)
   }, [dispatch, tableCheckedIds])
+
+  const download = useCallback(() => {
+    const checkedCurrentSeaFrontReportings = getTableCheckedData()
+
+    downloadAsCsv(checkedCurrentSeaFrontReportings)
+  }, [getTableCheckedData])
 
   // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.
   const edit = useCallback(
@@ -117,6 +124,11 @@ MMSI: ${reporting.mmsi || ''}`
           type="text"
         />
         <RightAligned>
+          <ArchiveButton
+            isShowed={tableCheckedIds.length > 0}
+            onClick={download}
+            title={`Télécharger ${tableCheckedIds.length} signalement${tableCheckedIds.length > 1 ? 's' : ''}`}
+          />
           <ArchiveButton
             data-cy="archive-reporting-cards"
             isShowed={tableCheckedIds.length > 0}

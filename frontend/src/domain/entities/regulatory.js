@@ -221,13 +221,6 @@ export const LAWTYPES_TO_TERRITORY = {
   [REG_SIOFA_APSOI]: ORGP
 }
 
-export const REGULATORY_TERRITORY = {
-  [FRANCE]: 'Réglementation France',
-  [UE]: 'Réglementation UE',
-  [UK]: 'Réglementation UK',
-  [ORGP]: 'Réglementation ORGP'
-}
-
 export const REGULATORY_SEARCH_PROPERTIES = {
   TOPIC: 'topic',
   ZONE: 'zone',

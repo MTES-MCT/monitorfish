@@ -28,9 +28,7 @@ const Backoffice = () => {
   const gears = useSelector(state => state.gear.gears)
   const dispatch = useDispatch()
   const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState(null)
-  const {
-    resetShowedLayer
-  } = layer.backoffice.actions
+  const { resetShowedLayer } = layer.backoffice.actions
 
   const handleMovingAndZoom = () => {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
@@ -78,28 +76,40 @@ const Backoffice = () => {
     dispatch(closeRegulatoryZoneMetadata())
   }, [])
 
-  const displayRegulatoryZoneListByLawType = useCallback((territory, regZoneByLawType) => {
-    return (regZoneByLawType && Object.keys(regZoneByLawType)
-      .sort()
-      .length > 0
-      ? Object.keys(regZoneByLawType).map(lawType => {
-        return <LawType
-          key={lawType}
-          lawType={lawType}
-          regZoneByLawType={regZoneByLawType}
-          isEditable={true}
-          territory={territory}
-        />
-      })
-      : <EmptyResult>Aucun résultat</EmptyResult>)
-  }, [foundRegulatoryZonesByRegTerritory])
+  const displayRegulatoryZoneListByLawType = useCallback(
+    (territory, regZoneByLawType) => {
+      return regZoneByLawType && Object.keys(regZoneByLawType).sort().length > 0 ? (
+        Object.keys(regZoneByLawType).map(lawType => {
+          return (
+            <LawType
+              key={lawType}
+              lawType={lawType}
+              regZoneByLawType={regZoneByLawType}
+              isEditable={true}
+              territory={territory}
+            />
+          )
+        })
+      ) : (
+        <EmptyResult>Aucun résultat</EmptyResult>
+      )
+    },
+    [foundRegulatoryZonesByRegTerritory]
+  )
 
-  const displayRegulatoryZoneByRegTerritory = useCallback(territory => {
-    const territoryRegList = foundRegulatoryZonesByRegTerritory[territory]
-    return territoryRegList
-      ? <RegulatoryZoneListByLawTypeList>{displayRegulatoryZoneListByLawType(territory, territoryRegList)}</RegulatoryZoneListByLawTypeList>
-      : <EmptyResult>Aucune zone pour ce territoire</EmptyResult>
-  }, [foundRegulatoryZonesByRegTerritory])
+  const displayRegulatoryZoneByRegTerritory = useCallback(
+    territory => {
+      const territoryRegList = foundRegulatoryZonesByRegTerritory[territory]
+      return territoryRegList ? (
+        <RegulatoryZoneListByLawTypeList>
+          {displayRegulatoryZoneListByLawType(territory, territoryRegList)}
+        </RegulatoryZoneListByLawTypeList>
+      ) : (
+        <EmptyResult>Aucune zone pour ce territoire</EmptyResult>
+      )
+    },
+    [foundRegulatoryZonesByRegTerritory]
+  )
 
   const searchResultList = useMemo(() => {
     return (
@@ -124,44 +134,45 @@ const Backoffice = () => {
             {displayRegulatoryZoneByRegTerritory(ORGP)}
           </Territory>
         </Columns>
-      </SearchResultList>)
+      </SearchResultList>
+    )
   }, [foundRegulatoryZonesByRegTerritory])
 
   return (
     <>
       <BackofficeContainer>
-        <RegulatoryZonePanel
-          regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-        >
+        <RegulatoryZonePanel regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
           <SearchRegulations
             setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
             regulatoryZoneListByRegTerritory={layersTopicsByRegTerritory}
           />
-          {layersTopicsByRegTerritory && layersTopicsByRegTerritory !== {}
-            ? searchResultList
-            : <div>En attente de chargement</div>}
+          {layersTopicsByRegTerritory && layersTopicsByRegTerritory !== {} ? (
+            searchResultList
+          ) : (
+            <div>En attente de chargement</div>
+          )}
         </RegulatoryZonePanel>
-        <BaseMap handleMovingAndZoom={handleMovingAndZoom} >
-          <BaseLayer/>
-          <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
-          <AdministrativeLayers/>
-          <ShowRegulatoryMetadata hasClickEvent/>
-          <RegulatoryPreviewLayer/>
+        <BaseMap handleMovingAndZoom={handleMovingAndZoom}>
+          <BaseLayer />
+          <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
+          <AdministrativeLayers />
+          <ShowRegulatoryMetadata hasClickEvent />
+          <RegulatoryPreviewLayer />
         </BaseMap>
       </BackofficeContainer>
-      {regulatoryZoneMetadataPanelIsOpen && <MetadataWrapper
-        regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-      >
-        <RegulatoryZoneMetadata
-          loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
-          regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-          regulatoryZoneMetadata={regulatoryZoneMetadata}
-          callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-          gears={gears}
-          layersSidebarIsOpen={true}
-          fromBackoffice={true}
-        />
-      </MetadataWrapper>}
+      {regulatoryZoneMetadataPanelIsOpen && (
+        <MetadataWrapper regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
+          <RegulatoryZoneMetadata
+            loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
+            regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
+            regulatoryZoneMetadata={regulatoryZoneMetadata}
+            callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
+            gears={gears}
+            layersSidebarIsOpen={true}
+            fromBackoffice={true}
+          />
+        </MetadataWrapper>
+      )}
     </>
   )
 }
@@ -192,7 +203,7 @@ const Territory = styled.div`
   box-sizing: border-box;
   max-width: 50%;
   min-width: 250px;
-  margin-right: ${props => props.isLast ? '0px' : '20px'}
+  margin-right: ${props => (props.isLast ? '0px' : '20px')};
 `
 
 const TerritoryName = styled.div`
@@ -229,7 +240,7 @@ const RegulatoryZonePanel = styled.div`
 `
 
 const MetadataWrapper = styled.div`
-  display: ${props => props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none'};
+  display: ${props => (props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none')};
   position: absolute;
   top: 0;
   left: calc(50% + 72px);
@@ -239,8 +250,8 @@ const MetadataWrapper = styled.div`
   flex-direction: column;
   max-height: 95vh;
   transition: all 0.5s;
-  opacity: ${props => props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0'};
-  background: linear-gradient(${COLORS.gainsboro} 70%, rgb(0,0,0,0));
+  opacity: ${props => (props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0')};
+  background: linear-gradient(${COLORS.gainsboro} 70%, rgb(0, 0, 0, 0));
 `
 
 export default Backoffice

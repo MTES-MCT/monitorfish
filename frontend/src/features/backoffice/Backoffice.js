@@ -175,7 +175,7 @@ const Columns = styled.div`
 `
 
 const SearchResultList = styled.div`
-  margin-top: 5px;
+  margin-top: 25px;
   color: ${p => p.theme.color.gainsboro};
   text-decoration: none;
   border-radius: 2px;

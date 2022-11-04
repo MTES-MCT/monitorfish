@@ -11,13 +11,14 @@ import pandas as pd
 import prefect
 import pytz
 import requests
-from prefect import Flow, task
+from prefect import Flow, Parameter, task
 
 from config import (
     BACKOFFICE_URL,
     CNSP_FRANCE_EMAIL_ADDRESS,
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
+    PROXIES,
 )
 from src.pipeline.generic_tasks import extract
 from src.pipeline.helpers.emails import create_html_email, send_email
@@ -444,8 +445,7 @@ def get_unknown_links(
 
 @task(checkpoint=False)
 def get_dead_links(
-    monitorfish_regulations: pd.DataFrame,
-    unknown_links: set,
+    monitorfish_regulations: pd.DataFrame, unknown_links: set, proxies: dict
 ) -> pd.DataFrame:
     """
     Perfoms get requests to check whether `unknown_links` are dead links, then returns
@@ -455,6 +455,7 @@ def get_dead_links(
         monitorfish_regulations (pd.DataFrame):
         unknown_links (set): `set` of urls not knonwn (i.e. urls not found when
           scraping Legipeche)
+        proxies (dict): proxies to use when requests time out without proxies
 
     Returns:
         pd.DataFrame: filtered `monitorfish_regulations` with only those that reference
@@ -483,7 +484,16 @@ def get_dead_links(
             logger.info(f"Testing {unknown_link_alias}")
             r = requests.get(unknown_link_alias, timeout=10)
             r.raise_for_status()
-        except:
+        except requests.Timeout:
+            try:
+                logger.info(f"{unknown_link_alias} timed out. Retrying with proxies...")
+                r = requests.get(unknown_link_alias, timeout=10, proxies=proxies)
+                r.raise_for_status()
+            except requests.HTTPError:
+                logger.info(f"{unknown_link} is a dead link.")
+                dead_links_urls.append(unknown_link)
+
+        except requests.HTTPError:
             logger.info(f"{unknown_link} is a dead link.")
             dead_links_urls.append(unknown_link)
 
@@ -625,6 +635,10 @@ def send_message(msg: EmailMessage):
 
 with Flow("Regulations checkup") as flow:
 
+    # Parameters
+    proxies = Parameter("proxies", default=PROXIES)
+    backoffice_url = Parameter("backoffice_url", default=BACKOFFICE_URL)
+
     # Extract data
     monitorfish_regulations = extract_monitorfish_regulations()
     legipeche_regulations = extract_legipeche_regulations()
@@ -655,11 +669,7 @@ with Flow("Regulations checkup") as flow:
         legipeche_regulations=legipeche_regulations,
     )
 
-    dead_links = get_dead_links(
-        monitorfish_regulations,
-        unknown_links,
-    )
-
+    dead_links = get_dead_links(monitorfish_regulations, unknown_links, proxies)
     dead_links = format_dead_links(dead_links)
 
     # Render email
@@ -670,7 +680,7 @@ with Flow("Regulations checkup") as flow:
         missing_references=missing_references,
         modified_regulations=modified_regulations,
         dead_links=dead_links,
-        backoffice_url=BACKOFFICE_URL,
+        backoffice_url=backoffice_url,
     )
 
     html = render_main(

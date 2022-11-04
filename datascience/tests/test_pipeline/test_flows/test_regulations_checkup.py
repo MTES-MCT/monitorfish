@@ -1,6 +1,6 @@
-from datetime import datetime
+import datetime
 from email.message import EmailMessage
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import jinja2
 import pandas as pd
@@ -8,7 +8,7 @@ import pytest
 import requests
 from prefect import task
 
-from config import TEST_DATA_LOCATION
+from config import PROXIES, TEST_DATA_LOCATION
 from src.pipeline.flows.regulations_checkup import (
     add_article_id,
     extract_legipeche_regulations,
@@ -25,6 +25,7 @@ from src.pipeline.flows.regulations_checkup import (
     get_style,
     get_unknown_links,
     make_html_hyperlinks,
+    render_body,
     transform_modified_regulations,
 )
 
@@ -33,21 +34,16 @@ from src.pipeline.flows.regulations_checkup import (
 
 @task(checkpoint=False)
 def mock_get_dead_links(
-    monitorfish_regulations: pd.DataFrame,
-    unknown_links: set,
+    monitorfish_regulations: pd.DataFrame, unknown_links: set, proxies: dict
 ) -> pd.DataFrame:
-    @patch("src.pipeline.flows.regulations_checkup.requests")
-    def get_dead_links_(regulations, links, mock_requests):
-        def failed_get(url):
-            r = requests.Response()
-            r.status_code = 404
-            r.url = url
-            return r
+    def return_404(url, **kwargs):
+        r = requests.Response()
+        r.status_code = 404
+        r.url = url
+        return r
 
-        mock_requests.get.side_effect = failed_get
-        return get_dead_links.run(regulations, links)
-
-    return get_dead_links_(monitorfish_regulations, unknown_links)
+    with patch("src.pipeline.flows.regulations_checkup.requests.get", return_404):
+        return get_dead_links.run(monitorfish_regulations, unknown_links, proxies)
 
 
 @task(checkpoint=False)
@@ -55,11 +51,35 @@ def mock_send_message(msg: EmailMessage):
     assert isinstance(msg, EmailMessage)
 
 
+@task(checkpoint=False)
+def mock_render_body(
+    body_template,
+    previous_extraction_datetime_utc,
+    latest_extraction_datetime_utc,
+    missing_references,
+    modified_regulations,
+    dead_links,
+    backoffice_url,
+):
+    mock_date = MagicMock()
+    mock_date.today.return_value = datetime.date(2021, 5, 3)
+
+    with patch("src.pipeline.flows.regulations_checkup.datetime.date", mock_date):
+        return render_body.run(
+            body_template,
+            previous_extraction_datetime_utc,
+            latest_extraction_datetime_utc,
+            missing_references,
+            modified_regulations,
+            dead_links,
+            backoffice_url,
+        )
+
+
 # Flow mocks
-
-
 flow.replace(flow.get_tasks("send_message")[0], mock_send_message)
 flow.replace(flow.get_tasks("get_dead_links")[0], mock_get_dead_links)
+flow.replace(flow.get_tasks("render_body")[0], mock_render_body)
 
 
 @pytest.fixture
@@ -96,7 +116,10 @@ def monitorfish_regulations() -> pd.DataFrame:
                     "http://legipeche.metier.intranets.developpement-durable"
                     ".ader.gouv.fr/some-regulation-a666.html?var=12"
                 ),
-                "http://legipeche.metier.intranets.developpement-durable.ader.gouv.fr/modified-regulation-a668.html",
+                (
+                    "http://legipeche.metier.intranets.developpement-durable"
+                    ".ader.gouv.fr/modified-regulation-a668.html"
+                ),
                 None,
                 "http://legipeche.metier.i2/regulation-a689.html",
                 (
@@ -120,8 +143,8 @@ def monitorfish_regulations() -> pd.DataFrame:
 @pytest.fixture
 def legipeche_regulations() -> pd.DataFrame:
 
-    d1 = datetime(2021, 3, 2, 14, 25, 0)
-    d2 = datetime(2021, 3, 3, 14, 25, 0)
+    d1 = datetime.datetime(2021, 3, 2, 14, 25, 0)
+    d2 = datetime.datetime(2021, 3, 3, 14, 25, 0)
 
     regulations = pd.DataFrame(
         {
@@ -244,8 +267,16 @@ def transformed_regulations() -> pd.DataFrame:
             "Thématique": ["Morbihan - bivalves", "Morbihan - bivalves"],
             "Zone": ["Secteur 2", "Secteur 2"],
             "Référence réglementaire": [
-                '<a href="http://legipeche.metier.intranets.developpement-durable.ader.gouv.fr/modified-regulation-a668.html">some other regulation</a>',
-                '<a href="http://legipeche.metier.intranets.developpement-durable.ader.gouv.fr/modified-regulation-a668.html">some other regulation</a>',
+                (
+                    '<a href="http://legipeche.metier.intranets.developpement-durable'
+                    '.ader.gouv.fr/modified-regulation-a668.html">some other regulation'
+                    "</a>"
+                ),
+                (
+                    '<a href="http://legipeche.metier.intranets.developpement-durable'
+                    '.ader.gouv.fr/modified-regulation-a668.html">some other regulation'
+                    "</a>"
+                ),
             ],
             "Modification": ["Ajout de document", "Suppression de document"],
             "Document": [
@@ -383,26 +414,84 @@ def test_get_unknown_links(
     assert links == unknown_links
 
 
-@patch("src.pipeline.flows.regulations_checkup.requests")
-def test_get_dead_links(
-    mock_requests, monitorfish_regulations_with_id, unknown_links, dead_links
+@patch("src.pipeline.flows.regulations_checkup.requests.get")
+def test_get_dead_links_when_response_is_200(
+    mock_get, monitorfish_regulations_with_id, unknown_links, dead_links
 ):
-    def failed_get(url):
+    def return_200(url, **kwargs):
+        r = requests.Response()
+        r.status_code = 200
+        r.url = url
+        return r
+
+    mock_get.side_effect = return_200
+
+    links = get_dead_links.run(
+        monitorfish_regulations_with_id, unknown_links, proxies=PROXIES
+    )
+
+    assert mock_get.call_count == 2
+    for unknown_link in unknown_links:
+        unknown_link = unknown_link.replace(
+            "intranets.developpement-durable.ader.gouv.fr", "i2"
+        )
+        mock_get.assert_any_call(unknown_link, timeout=10)
+
+    pd.testing.assert_frame_equal(links, dead_links.head(0))
+
+
+@patch("src.pipeline.flows.regulations_checkup.requests.get")
+def test_get_dead_links_when_response_is_404(
+    mock_get, monitorfish_regulations_with_id, unknown_links, dead_links
+):
+    def return_404(url, **kwargs):
         r = requests.Response()
         r.status_code = 404
         r.url = url
         return r
 
-    mock_requests.get.side_effect = failed_get
+    mock_get.side_effect = return_404
 
-    links = get_dead_links.run(monitorfish_regulations_with_id, unknown_links)
+    links = get_dead_links.run(
+        monitorfish_regulations_with_id, unknown_links, proxies=PROXIES
+    )
 
-    assert mock_requests.get.call_count == 2
+    assert mock_get.call_count == 2
     for unknown_link in unknown_links:
         unknown_link = unknown_link.replace(
             "intranets.developpement-durable.ader.gouv.fr", "i2"
         )
-        mock_requests.get.assert_any_call(unknown_link, timeout=10)
+        mock_get.assert_any_call(unknown_link, timeout=10)
+
+    pd.testing.assert_frame_equal(links, dead_links)
+
+
+@patch("src.pipeline.flows.regulations_checkup.requests.get")
+def test_get_dead_links_when_request_times_out(
+    mock_get, monitorfish_regulations_with_id, unknown_links, dead_links
+):
+    def raise_timeout_if_no_proxies(url, **kwargs):
+        if "proxies" in kwargs:
+            r = requests.Response()
+            r.status_code = 404
+            r.url = url
+            return r
+        else:
+            raise requests.ConnectTimeout(f"Connection to {url} timed out.")
+
+    mock_get.side_effect = raise_timeout_if_no_proxies
+
+    links = get_dead_links.run(
+        monitorfish_regulations_with_id, unknown_links, proxies=PROXIES
+    )
+
+    assert mock_get.call_count == 4
+    for unknown_link in unknown_links:
+        unknown_link = unknown_link.replace(
+            "intranets.developpement-durable.ader.gouv.fr", "i2"
+        )
+        mock_get.assert_any_call(unknown_link, timeout=10)
+        mock_get.assert_any_call(unknown_link, timeout=10, proxies=PROXIES)
 
     pd.testing.assert_frame_equal(links, dead_links)
 
@@ -432,7 +521,7 @@ def test_get_recipients():
     assert recipients == ["cnsp.france@test.email"]
 
 
-def test_flow_shawarma(reset_test_data):
+def test_flow(reset_test_data):
     flow.schedule = None
     state = flow.run()
 

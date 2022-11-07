@@ -40,8 +40,19 @@
     <p>Aucune lien mort dans Monitorfish ☜(⌒▽⌒)☞ </p>
 {% endif %}
 
+<br>
+<br>
+<hr />
+<h3>Réglementations périmées dans Monitorfish</h3>
+
+{% if outdated_references %}
+    <p>Les {{ n_outdated_references }} références réglementaires suivantes ont passé leur date de fin de validité ᕙ(⇀‸↼‶)ᕗ</p>
+    {{ outdated_references }}
+    <p></p>
+{% else %}
+    <p>Aucune réglementation périmée dans Monitorfish ＼(＾O＾)／ </p>
+{% endif %}
 
 <br>
 <br>
 <p>© 2020 - 2021 | Mérule Inc.</p>
-

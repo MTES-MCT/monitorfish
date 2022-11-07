@@ -54,47 +54,6 @@ def validate_action(action: str) -> str:
 
 
 @task(checkpoint=False)
-def extract_seconds_since_most_recent_last_position() -> float:
-    df = extract(
-        "monitorfish_remote", "monitorfish/seconds_since_most_recent_last_position.sql"
-    )
-    return df.loc[0, "seconds_since_most_recent_last_position"]
-
-
-@task(checkpoint=False)
-def add_catchup(minutes: int, seconds_since_most_recent_last_position: float) -> int:
-    """
-    This functions takes a `minutes` parameter which represents the "normal" number of
-    minutes the `last_positions` flow should query from the `positions` table to
-    update the `last_positions` table as well as a second parameter
-    `seconds_since_most_recent_last_position` which represents the duration since the
-    most recent `last_position`.
-
-    If `seconds_since_most_recent_last_position` is less than 1200 (which is normally
-    the case when positions are received in near real time), simply return `minutes`.
-
-    If not, then there must have been an interruption of data transmission and it is
-    necessary to query the `positions` table further back : in this case, returns the
-    number of minutes since the most recent `last_position` plus a 240 minutes (4
-    hours) margin.
-
-    Args:
-        minutes (int): Default number of minutes to query the `positions` from current
-          date
-        seconds_since_most_recent_last_position (float): Number of seconds since the
-          most recent `last_positions`
-
-    Returns:
-        int: Number of minutes back from current date that the `position` table should
-          be queries when updating the `last_positions` table.
-    """
-    if seconds_since_most_recent_last_position < 1200:
-        return minutes
-    else:
-        return int(seconds_since_most_recent_last_position // 60 + 240)
-
-
-@task(checkpoint=False)
 def extract_last_positions(minutes: int) -> pd.DataFrame:
     """
     Extracts the last position of each vessel over the past `minutes` minutes.
@@ -488,19 +447,12 @@ with Flow("Last positions") as flow:
         action = validate_action(action, upstream_tasks=[positions_healthcheck])
 
         # Extract & Transform
-        seconds_since_most_recent_last_position = (
-            extract_seconds_since_most_recent_last_position(
-                upstream_tasks=[positions_healthcheck]
-            )
-        )
         risk_factors = extract_risk_factors(upstream_tasks=[positions_healthcheck])
         pending_alerts = extract_pending_alerts(upstream_tasks=[positions_healthcheck])
         reportings = extract_reportings(upstream_tasks=[positions_healthcheck])
         beacon_malfunctions = extract_beacon_malfunctions(
             upstream_tasks=[positions_healthcheck]
         )
-
-        minutes = add_catchup(minutes, seconds_since_most_recent_last_position)
 
         last_positions = extract_last_positions(minutes=minutes)
         last_positions = drop_duplicates(last_positions)

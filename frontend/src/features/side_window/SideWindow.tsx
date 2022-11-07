@@ -21,7 +21,7 @@ import { getOperationalAlerts } from '../../domain/use_cases/alert/getOperationa
 import { getSilencedAlerts } from '../../domain/use_cases/alert/getSilencedAlerts'
 import getAllBeaconMalfunctions from '../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import getFishingInfractions from '../../domain/use_cases/infraction/getFishingInfractions'
-import getAllCurrentReportings from '../../domain/use_cases/reporting/getAllCurrentReportings'
+import { getAllCurrentReportings } from '../../domain/use_cases/reporting/getAllCurrentReportings'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { usePrevious } from '../../hooks/usePrevious'

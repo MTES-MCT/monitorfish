@@ -79,11 +79,11 @@ export type UpdateReporting = {
   authorContact: string | undefined
   authorTrigram: string | undefined
   description: string | undefined
-  dml: string | undefined
-  natinfCode: string | undefined
+  natinfCode: string | null
   reportingActor: string
+  reportingType: ReportingType
   title: string
-  unit: string | undefined
+  unit: string | null
 }
 
 export function toVesselIdentity(reporting: Reporting | undefined): VesselIdentity {

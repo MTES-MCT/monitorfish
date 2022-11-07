@@ -1,7 +1,7 @@
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
 
-import type { TrackRequest, TrackRequestPredefined } from '../types/vessel'
+import type { TrackRequest, TrackRequestPredefined } from './vessel/types'
 
 export enum VesselTrackDepth {
   CUSTOM = 'CUSTOM',

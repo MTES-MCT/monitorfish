@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+import type { VesselIdentity } from '../entities/vessel/types'
 import type {
   CurrentAndArchivedReportingsOfSelectedVessel,
   InfractionSuspicionReporting,
   PendingAlertReporting
 } from '../types/reporting'
-import type { VesselIdentity } from '../types/vessel'
 
 export type ReportingState = {
   archivedReportingsFromDate: Date

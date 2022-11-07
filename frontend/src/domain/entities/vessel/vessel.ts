@@ -1,9 +1,9 @@
 import countries from 'i18n-iso-countries'
 
-import { Layer, BaseLayers } from './layers/constants'
-import { vesselLabel as vesselLabelEnum } from './vesselLabelLine'
+import { Layer, BaseLayers } from '../layers/constants'
+import { vesselLabel as vesselLabelEnum } from '../vesselLabelLine'
 
-import type { SelectedVessel, ShowedVesselTrack, VesselIdentity } from '../types/vessel'
+import type { SelectedVessel, ShowedVesselTrack, VesselIdentity } from './types'
 
 export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_INFRACTION_SUSPICION_STYLE = 1
@@ -159,15 +159,15 @@ export const getOnlyVesselIdentityPropertiesFromSelectedVessel = (vessel: Select
 
 /**
  * @param vessel
- * @return {VesselNS.VesselId}
+ * @return {VesselId}
  */
 export const getVesselId = vessel =>
   `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.ircs}`
 
 /**
  * Returns true if there is at least one vessel track or vessel selected
- * @param {Object.<string, VesselNS.ShowedVesselTrack>} vesselsTracksShowed
- * @param {VesselNS.VesselIdentity | null} selectedVesselIdentity
+ * @param {Object.<string, ShowedVesselTrack>} vesselsTracksShowed
+ * @param {VesselIdentity | null} selectedVesselIdentity
  * @return {boolean}
  */
 export const atLeastOneVesselSelected = (vesselsTracksShowed, selectedVesselIdentity) =>

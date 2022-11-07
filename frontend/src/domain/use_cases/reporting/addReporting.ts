@@ -1,5 +1,5 @@
 import { addReportingFromAPI } from '../../../api/reporting'
-import { Vessel } from '../../entities/vessel'
+import { Vessel } from '../../entities/vessel/vessel'
 import { removeError, setError } from '../../shared_slices/Global'
 import {
   setCurrentAndArchivedReportingsOfSelectedVessel,

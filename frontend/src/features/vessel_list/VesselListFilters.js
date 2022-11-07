@@ -7,7 +7,7 @@ import { COLORS } from '../../constants/constants'
 import { ReactComponent as BoxFilterSVG } from '../icons/Filtre_zone_rectangle.svg'
 import { ReactComponent as PolygonFilterSVG } from '../icons/Filtre_zone_polygone.svg'
 import Countries from 'i18n-iso-countries'
-import { VesselLocation, vesselSize } from '../../domain/entities/vessel'
+import { VesselLocation, vesselSize } from '../../domain/entities/vessel/vessel'
 import FilterTag from '../map/tools/vessel_filters/FilterTag'
 
 Countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))

@@ -1,7 +1,7 @@
 import { setSelectedVesselCustomTrackRequest, showVesselSidebarTab } from '../../shared_slices/Vessel'
 import showVessel from './showVessel'
 import getVesselVoyage from './getVesselVoyage'
-import { VesselSidebarTab } from '../../entities/vessel'
+import { VesselSidebarTab } from '../../entities/vessel/vessel'
 import { END_OF_MALFUNCTION_REASON_RECORD } from '../../entities/beaconMalfunction/constants'
 import { VesselTrackDepth } from '../../entities/vesselTrackDepth'
 

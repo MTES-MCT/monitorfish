@@ -1,4 +1,4 @@
-import { FishingActivitiesTab, VesselSidebarTab } from '../../entities/vessel'
+import { FishingActivitiesTab, VesselSidebarTab } from '../../entities/vessel/vessel'
 import { setFishingActivitiesTab } from '../../shared_slices/FishingActivities'
 import { showVesselSidebarTab } from '../../shared_slices/Vessel'
 

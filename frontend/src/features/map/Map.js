@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import BaseMap from './BaseMap'
 import { LayerDetailsBox } from './controls/LayerDetailsBox'
-import VesselsTracksLayer from '../../layers/VesselsTracksLayer'
+import { VesselsTracksLayerMemoized } from '../../layers/VesselsTracksLayer'
 import VesselsLayer from '../../layers/VesselsLayer'
 import FilterLayer from '../../layers/FilterLayer'
 import DrawLayer from '../../layers/DrawLayer'
@@ -76,7 +76,7 @@ const Map = () => {
       <MeasurementLayer/>
       <VesselsLayer/>
       <FilterLayer/>
-      <VesselsTracksLayer/>
+      <VesselsTracksLayerMemoized/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <DrawLayer/>
       <VesselEstimatedPositionLayer/>

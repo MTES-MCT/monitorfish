@@ -101,12 +101,8 @@ const reportingSlice = createSlice({
 
     /**
      * Set current reporting
-     * @function setCurrentReportings
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     * @param {{payload: Reporting[]}} action
      */
-    setCurrentReportings(state, action) {
+    setCurrentReportings(state, action: PayloadAction<Array<InfractionSuspicionReporting | PendingAlertReporting>>) {
       state.currentReportings = action.payload
     },
 
@@ -132,12 +128,8 @@ const reportingSlice = createSlice({
     },
     /**
      * Update a given current reporting
-     * @function updateCurrentReporting
-     * @memberOf ReportingReducer
-     * @param {Object=} state
-     * @param {{payload: Reporting}} action - the reporting to update
      */
-    updateCurrentReporting(state, action) {
+    updateCurrentReporting(state, action: PayloadAction<InfractionSuspicionReporting>) {
       state.currentReportings = state.currentReportings
         .filter(reporting => reporting.id !== action.payload.id)
         .concat(action.payload)

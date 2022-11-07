@@ -14,7 +14,7 @@ import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.st
 import { sortArrayByColumn } from '../../../vessel_list/tableSort'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
-import type { Reporting } from '../../../../domain/types/reporting'
+import type { Reporting, UpdateReporting, ReportingType } from '../../../../domain/types/reporting'
 
 type ReportingFormProps = {
   closeForm: () => void
@@ -38,7 +38,9 @@ export function ReportingForm({
   const infractions = useAppSelector(state => state.infraction.infractions)
   const controllers = useAppSelector(state => state.controls.controllers)
 
-  const [reportingType, setReportingType] = useState<string>(ReportingTypeCharacteristics.INFRACTION_SUSPICION.code)
+  const [reportingType, setReportingType] = useState<ReportingType>(
+    ReportingTypeCharacteristics.INFRACTION_SUSPICION.code
+  )
   useSaveReportingInLocalStorage(reportingLocalStorageKey, 'type', reportingType, false)
   const [unit, setUnit] = useState<string | null>('')
   useSaveReportingInLocalStorage(reportingLocalStorageKey, 'unit', unit, true)
@@ -55,6 +57,7 @@ export function ReportingForm({
   const [description, setDescription] = useState('')
   useSaveReportingInLocalStorage(reportingLocalStorageKey, 'description', description, true)
   const [errorFields, setErrorFields] = useState<string[]>([])
+  const previousReportingType = useRef() as MutableRefObject<ReportingType>
 
   function fillForm(editedOrSavedReporting) {
     setErrorFields([])
@@ -76,6 +79,7 @@ export function ReportingForm({
   useEffect(() => {
     if (editedReporting) {
       fillForm(editedReporting)
+      previousReportingType.current = editedReporting.type
 
       return
     }
@@ -154,14 +158,16 @@ export function ReportingForm({
   }
 
   const editReporting = useCallback(
-    (editedReportingId, nextReporting) => {
+    (editedReportingId: number, nextReporting: UpdateReporting) => {
       // TODO Fix the use-case dispatch type
-      dispatch(updateReporting(editedReportingId, nextReporting.value) as any).then(() => {
+      dispatch(
+        updateReporting(selectedVesselIdentity, editedReportingId, nextReporting, previousReportingType.current) as any
+      ).then(() => {
         closeForm()
         deleteLocalStorageReportingEntry()
       })
     },
-    [dispatch, closeForm, deleteLocalStorageReportingEntry]
+    [dispatch, closeForm, deleteLocalStorageReportingEntry, selectedVesselIdentity]
   )
 
   const createReporting = useCallback(
@@ -192,7 +198,7 @@ export function ReportingForm({
   )
 
   const createOrEditReporting = useCallback(
-    (_reportingType, reportingValue) => {
+    (_reportingType: ReportingType, reportingValue: UpdateReporting) => {
       const hasErrors = checkErrors(reportingValue)
       if (hasErrors) {
         return
@@ -204,7 +210,7 @@ export function ReportingForm({
       }
 
       if (editedReporting) {
-        editReporting(editedReporting.id, nextReporting)
+        editReporting(parseInt(editedReporting.id, 10), nextReporting.value)
 
         return
       }
@@ -325,9 +331,8 @@ export function ReportingForm({
       <RadioGroup
         appearance="picker"
         defaultValue={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
-        disabled={!!editedReporting}
         inline
-        onChange={value => setReportingType(value as string)}
+        onChange={value => setReportingType(value as ReportingType)}
         value={reportingType}
       >
         <Radio
@@ -415,6 +420,7 @@ export function ReportingForm({
             description,
             natinfCode,
             reportingActor,
+            reportingType,
             title,
             unit
           })

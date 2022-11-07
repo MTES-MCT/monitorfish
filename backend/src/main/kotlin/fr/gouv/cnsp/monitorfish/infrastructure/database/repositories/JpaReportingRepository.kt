@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Observation
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
@@ -29,14 +30,14 @@ class JpaReportingRepository(
 
     @Transactional
     override fun update(reportingId: Int, updatedInfractionSuspicion: InfractionSuspicion): Reporting {
-        dbReportingRepository.update(reportingId, mapper.writeValueAsString(updatedInfractionSuspicion))
+        dbReportingRepository.update(reportingId, mapper.writeValueAsString(updatedInfractionSuspicion), ReportingType.INFRACTION_SUSPICION.toString())
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
     }
 
     @Transactional
     override fun update(reportingId: Int, updatedObservation: Observation): Reporting {
-        dbReportingRepository.update(reportingId, mapper.writeValueAsString(updatedObservation))
+        dbReportingRepository.update(reportingId, mapper.writeValueAsString(updatedObservation), ReportingType.OBSERVATION.toString())
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
     }

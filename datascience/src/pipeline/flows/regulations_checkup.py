@@ -23,6 +23,7 @@ from config import (
 from src.pipeline.generic_tasks import extract
 from src.pipeline.helpers.emails import create_html_email, send_email
 from src.pipeline.processing import get_matched_groups, try_get_factory
+from src.pipeline.shared_tasks.dates import get_utcnow
 
 ####################################### Helpers #######################################
 
@@ -100,6 +101,25 @@ def extract_monitorfish_regulations() -> pd.DataFrame:
         "reference"
     ] = monitorfish_regulations.regulatory_references.map(
         try_get_factory("reference", error_value=None)
+    )
+
+    # range of possible values with python datetime timestamps
+    timestamp_max = 253402210800  # 9999, December 31st
+    timestamp_min = -62135510961  # 0001, January 2nd
+
+    monitorfish_regulations[
+        "end_date"
+    ] = monitorfish_regulations.regulatory_references.map(
+        try_get_factory("endDate", error_value=None)
+    ).map(
+        lambda x: (
+            datetime.datetime(9999, 12, 31)
+            if x == "infinite" or x / 1000 > timestamp_max
+            else datetime.datetime(1, 1, 2)
+            if x / 1000 < timestamp_min
+            else datetime.datetime.fromtimestamp(x / 1000)
+        ),
+        na_action="ignore",
     )
 
     monitorfish_regulations = monitorfish_regulations.drop(
@@ -535,6 +555,61 @@ def format_dead_links(dead_links: pd.DataFrame) -> pd.DataFrame:
 
 
 @task(checkpoint=False)
+def get_outdated_references(
+    monitorfish_regulations: pd.DataFrame, now: datetime.datetime
+) -> pd.DataFrame:
+    """
+    Returns `monitorfish_regulations` that have an `end_date` which is before `now`.
+
+    Args:
+        monitorfish_regulations (pd.DataFrame): DataFrame of Monitorfish regulations.
+          Must have at least a `end_date` column.
+        now (datetime.datetime): now
+
+    Returns:
+        pd.DataFrame: Subset of `monitorfish_regulations`
+    """
+    return monitorfish_regulations[monitorfish_regulations.end_date < now].reset_index(
+        drop=True
+    )
+
+
+@task(checkpoint=False)
+def format_outdated_references(outdated_references: pd.DataFrame) -> pd.DataFrame:
+    """
+    Format input for printing.
+    """
+
+    logger = prefect.context.get("logger")
+
+    outdated_references = (
+        outdated_references.sort_values(["law_type", "topic", "zone"])
+        .assign(ref=lambda x: make_html_hyperlinks(x.url, x.reference, logger=logger))
+        .rename(
+            columns={
+                "law_type": "Type de réglementation",
+                "topic": "Thématique",
+                "zone": "Zone",
+                "end_date": "Date de fin de validité",
+                "ref": "Référence réglementaire",
+            }
+        )[
+            [
+                "Type de réglementation",
+                "Thématique",
+                "Zone",
+                "Référence réglementaire",
+                "Date de fin de validité",
+            ]
+        ]
+        .reset_index(drop=True)
+        .copy(deep=True)
+    )
+
+    return outdated_references
+
+
+@task(checkpoint=False)
 def get_main_template() -> jinja2.environment.Template:
 
     with open(EMAIL_TEMPLATES_LOCATION / "regulations_checkup/main.html", "r") as f:
@@ -563,7 +638,9 @@ def render_body(
     missing_references: pd.DataFrame,
     modified_regulations: pd.DataFrame,
     dead_links: pd.DataFrame,
+    outdated_references: pd.DataFrame,
     backoffice_url: str,
+    utcnow: datetime.datetime,
 ) -> str:
     """
     Renders email body as html string.
@@ -572,7 +649,7 @@ def render_body(
     email_content = {
         "previous_extraction_datetime_utc": previous_extraction_datetime_utc,
         "latest_extraction_datetime_utc": latest_extraction_datetime_utc,
-        "verification_date": datetime.date.today().strftime("%d/%m/%Y"),
+        "verification_date": utcnow.date().strftime("%d/%m/%Y"),
         "backoffice_url": backoffice_url,
     }
 
@@ -593,6 +670,12 @@ def render_body(
             index=False, justify="center", escape=False
         )
         email_content["n_modified_regulations"] = len(modified_regulations)
+
+    if len(outdated_references) > 0:
+        email_content["outdated_references"] = outdated_references.to_html(
+            index=False, justify="center", escape=False
+        )
+        email_content["n_outdated_references"] = len(outdated_references)
 
     return body_template.render(email_content)
 
@@ -642,6 +725,7 @@ with Flow("Regulations checkup") as flow:
     # Extract data
     monitorfish_regulations = extract_monitorfish_regulations()
     legipeche_regulations = extract_legipeche_regulations()
+    utcnow = get_utcnow()
 
     # Extract output templates
     main_template = get_main_template()
@@ -651,7 +735,9 @@ with Flow("Regulations checkup") as flow:
     # Transform data
     monitorfish_regulations = add_article_id(monitorfish_regulations, url_column="url")
     legipeche_regulations = add_article_id(legipeche_regulations, url_column="page_url")
+
     missing_references = get_missing_references(monitorfish_regulations)
+
     modified_regulations = get_modified_regulations(
         legipeche_regulations, monitorfish_regulations
     )
@@ -668,9 +754,11 @@ with Flow("Regulations checkup") as flow:
         monitorfish_regulations=monitorfish_regulations,
         legipeche_regulations=legipeche_regulations,
     )
-
     dead_links = get_dead_links(monitorfish_regulations, unknown_links, proxies)
     dead_links = format_dead_links(dead_links)
+
+    outdated_references = get_outdated_references(monitorfish_regulations, utcnow)
+    outdated_references = format_outdated_references(outdated_references)
 
     # Render email
     body = render_body(
@@ -680,7 +768,9 @@ with Flow("Regulations checkup") as flow:
         missing_references=missing_references,
         modified_regulations=modified_regulations,
         dead_links=dead_links,
+        outdated_references=outdated_references,
         backoffice_url=backoffice_url,
+        utcnow=utcnow,
     )
 
     html = render_main(

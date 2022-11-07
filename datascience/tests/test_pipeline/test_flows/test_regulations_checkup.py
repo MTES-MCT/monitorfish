@@ -1,6 +1,6 @@
 import datetime
 from email.message import EmailMessage
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import jinja2
 import pandas as pd
@@ -15,19 +15,21 @@ from src.pipeline.flows.regulations_checkup import (
     extract_monitorfish_regulations,
     flow,
     format_dead_links,
+    format_outdated_references,
     get_body_template,
     get_dead_links,
     get_extraction_datetimes,
     get_main_template,
     get_missing_references,
     get_modified_regulations,
+    get_outdated_references,
     get_recipients,
     get_style,
     get_unknown_links,
     make_html_hyperlinks,
-    render_body,
     transform_modified_regulations,
 )
+from tests.mocks import get_utcnow_mock_factory
 
 # Task mocks
 
@@ -51,35 +53,13 @@ def mock_send_message(msg: EmailMessage):
     assert isinstance(msg, EmailMessage)
 
 
-@task(checkpoint=False)
-def mock_render_body(
-    body_template,
-    previous_extraction_datetime_utc,
-    latest_extraction_datetime_utc,
-    missing_references,
-    modified_regulations,
-    dead_links,
-    backoffice_url,
-):
-    mock_date = MagicMock()
-    mock_date.today.return_value = datetime.date(2021, 5, 3)
-
-    with patch("src.pipeline.flows.regulations_checkup.datetime.date", mock_date):
-        return render_body.run(
-            body_template,
-            previous_extraction_datetime_utc,
-            latest_extraction_datetime_utc,
-            missing_references,
-            modified_regulations,
-            dead_links,
-            backoffice_url,
-        )
-
-
 # Flow mocks
 flow.replace(flow.get_tasks("send_message")[0], mock_send_message)
 flow.replace(flow.get_tasks("get_dead_links")[0], mock_get_dead_links)
-flow.replace(flow.get_tasks("render_body")[0], mock_render_body)
+flow.replace(
+    flow.get_tasks("get_utcnow")[0],
+    get_utcnow_mock_factory(datetime.datetime(2031, 5, 19, 11, 14)),
+)
 
 
 @pytest.fixture
@@ -134,6 +114,14 @@ def monitorfish_regulations() -> pd.DataFrame:
                 None,
                 "Med regulation",
                 "Dead link regulation",
+            ],
+            "end_date": [
+                datetime.datetime(2017, 7, 14, 4, 40, 0),
+                None,
+                datetime.datetime(9999, 12, 31),
+                None,
+                datetime.datetime(2030, 3, 17, 18, 46, 40),
+                None,
             ],
         }
     )
@@ -337,6 +325,33 @@ def formatted_dead_links():
     return links
 
 
+@pytest.fixture
+def outdated_references(monitorfish_regulations_with_id):
+    return monitorfish_regulations_with_id.iloc[[0, 4]].reset_index(drop=True)
+
+
+@pytest.fixture
+def formatted_outdated_references():
+    return pd.DataFrame(
+        {
+            "Type de réglementation": ["Reg. Facade 1", "Reg. Facade 2"],
+            "Thématique": ["Morbihan - bivalves", "Mediterranée - filets"],
+            "Zone": ["Secteur 1", "Zone B"],
+            "Référence réglementaire": [
+                '<a href="http://external.site.regulation">External regulation</a>',
+                (
+                    '<a href="http://legipeche.metier.i2/regulation-a689.html">'
+                    "Med regulation</a>"
+                ),
+            ],
+            "Date de fin de validité": [
+                datetime.datetime(2017, 7, 14, 4, 40),
+                datetime.datetime(2030, 3, 17, 18, 46, 40),
+            ],
+        }
+    )
+
+
 def test_make_html_hyperlinks():
     urls = ["abc.fr", "null.com", "blabla.fr"]
     link_texts = ["ABC", "Not so null"]
@@ -499,6 +514,32 @@ def test_get_dead_links_when_request_times_out(
 def test_format_dead_links(dead_links, formatted_dead_links):
     formatted_links = format_dead_links.run(dead_links)
     pd.testing.assert_frame_equal(formatted_links, formatted_dead_links)
+
+
+def test_get_outdated_references(monitorfish_regulations_with_id):
+    now = datetime.datetime(2021, 2, 3, 12, 56)
+    outdated_references = get_outdated_references.run(
+        monitorfish_regulations_with_id, now
+    )
+
+    pd.testing.assert_frame_equal(
+        outdated_references, monitorfish_regulations_with_id.iloc[[0]]
+    )
+
+    now = datetime.datetime(2031, 2, 3, 12, 56)
+    outdated_references = get_outdated_references.run(
+        monitorfish_regulations_with_id, now
+    )
+
+    pd.testing.assert_frame_equal(
+        outdated_references,
+        monitorfish_regulations_with_id.iloc[[0, 4]].reset_index(drop=True),
+    )
+
+
+def test_format_outdated_references(outdated_references, formatted_outdated_references):
+    res = format_outdated_references.run(outdated_references)
+    pd.testing.assert_frame_equal(res, formatted_outdated_references, check_dtype=False)
 
 
 def test_get_main_template():

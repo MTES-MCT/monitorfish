@@ -55,6 +55,14 @@ def mock_datetime_utcnow(utcnow: datetime):
     return mock_datetime
 
 
+def get_utcnow_mock_factory(utcnow: datetime):
+    @task(checkpoint=False)
+    def mock_get_utcnow():
+        return utcnow
+
+    return mock_get_utcnow
+
+
 @task(checkpoint=False)
 def mock_check_flow_not_running():
     return True

@@ -8,6 +8,11 @@ import {
   layersNotInCurrentOLMap, layersNotInShowedLayers
 } from '../domain/entities/administrative'
 
+/**
+ * @param {{
+ *   map?: any
+ * }} props 
+ */
 const AdministrativeLayers = ({ map }) => {
   const { showedLayers } = useSelector(state => state.layer)
   const isBackoffice = useSelector(state => state.global.isBackoffice)
@@ -54,4 +59,6 @@ const AdministrativeLayers = ({ map }) => {
   return null
 }
 
+// TODO This is strange and I don't think it works since hooks are inner-component dependant.
+// Either memoize it within the parent components or maybe memoize only its props values.
 export default React.memo(AdministrativeLayers)

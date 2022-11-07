@@ -3,7 +3,7 @@ import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BackofficeMode } from '../api/BackofficeMode'
-import Backoffice from '../features/backoffice/Backoffice'
+import { Backoffice } from '../features/backoffice/Backoffice'
 import ControlObjectives from '../features/backoffice/control_objectives/ControlObjectives'
 import EditRegulation from '../features/backoffice/edit_regulation/EditRegulation'
 import FleetSegments from '../features/backoffice/fleet_segments/FleetSegments'

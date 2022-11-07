@@ -6,8 +6,6 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 @Repository
 class JpaBeaconRepository(private val dbBeaconRepository: DBBeaconRepository) : BeaconRepository {
@@ -31,6 +29,6 @@ class JpaBeaconRepository(private val dbBeaconRepository: DBBeaconRepository) : 
     }
 
     override fun findActivatedBeaconNumbers(): List<String> {
-       return dbBeaconRepository.findActivatedBeaconNumbers()
+        return dbBeaconRepository.findActivatedBeaconNumbers()
     }
 }

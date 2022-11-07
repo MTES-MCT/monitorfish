@@ -186,7 +186,10 @@ class JpaLogbookReportRepository(
         return dbERSRepository.findLastOperationDateTime().atZone(UTC)
     }
 
-    override fun findFirstAcknowledgedDateOfTripBeforeDateTime(internalReferenceNumber: String, beforeDateTime: ZonedDateTime): ZonedDateTime {
+    override fun findFirstAcknowledgedDateOfTripBeforeDateTime(
+        internalReferenceNumber: String,
+        beforeDateTime: ZonedDateTime
+    ): ZonedDateTime {
         try {
             if (internalReferenceNumber.isNotEmpty()) {
                 val lastTrip = dbERSRepository.findTripsBeforeDatetime(
@@ -195,7 +198,9 @@ class JpaLogbookReportRepository(
                     PageRequest.of(0, 1)
                 ).first()
 
-                return dbERSRepository.findFirstAcknowledgedDateOfTrip(internalReferenceNumber, lastTrip.tripNumber).atZone(UTC)
+                return dbERSRepository.findFirstAcknowledgedDateOfTrip(internalReferenceNumber, lastTrip.tripNumber).atZone(
+                    UTC
+                )
             }
 
             throw IllegalArgumentException("No CFR given to find the vessel.")

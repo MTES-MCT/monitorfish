@@ -20,6 +20,7 @@ data class Position(
     val flagState: CountryCode? = null,
     val positionType: PositionType,
     val isManual: Boolean? = null,
+    val isFishing: Boolean? = null,
 
     val latitude: Double,
     val longitude: Double,

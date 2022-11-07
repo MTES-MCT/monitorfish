@@ -2,7 +2,7 @@ import { batch } from 'react-redux'
 
 import { getVesselVoyageFromAPI } from '../../../api/vessel'
 import NoLogbookMessagesFoundError from '../../../errors/NoLogbookMessagesFoundError'
-import { vesselsAreEquals } from '../../entities/vessel'
+import { vesselsAreEquals } from '../../entities/vessel/vessel'
 import { getTrackRequestFromDates } from '../../entities/vesselTrackDepth'
 import {
   hideFishingActivitiesOnMap,

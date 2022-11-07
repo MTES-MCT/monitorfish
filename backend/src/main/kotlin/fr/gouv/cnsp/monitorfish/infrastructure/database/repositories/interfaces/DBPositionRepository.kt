@@ -27,7 +27,8 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "p.speed, " +
             "p.course, " +
             "p.position_type, " +
-            "p.is_manual " +
+            "p.is_manual, " +
+            "p.is_fishing " +
             "from positions p " +
             "where p.internal_reference_number = :internalReferenceNumber " +
             "and p.date_time >= :from " +
@@ -55,7 +56,8 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "p.speed, " +
             "p.course, " +
             "p.position_type, " +
-            "p.is_manual " +
+            "p.is_manual, " +
+            "p.is_fishing " +
             "from positions p " +
             "where p.external_reference_number = :externalReferenceNumber " +
             "and p.date_time >= :from " +
@@ -83,7 +85,8 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
             "p.speed, " +
             "p.course, " +
             "p.position_type, " +
-            "p.is_manual " +
+            "p.is_manual, " +
+            "p.is_fishing " +
             "from positions p " +
             "where p.ircs = :ircs " +
             "and p.date_time >= :from " +

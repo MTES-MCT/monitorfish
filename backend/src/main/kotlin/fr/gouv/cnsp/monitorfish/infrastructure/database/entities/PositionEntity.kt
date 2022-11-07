@@ -39,6 +39,8 @@ data class PositionEntity(
     val tripNumber: String? = null,
     @Column(name = "is_manual")
     val isManual: Boolean? = false,
+    @Column(name = "is_fishing")
+    val isFishing: Boolean? = false,
 
     // Mandatory fields
     @Enumerated(EnumType.STRING)
@@ -73,7 +75,8 @@ data class PositionEntity(
         from = from,
         tripNumber = tripNumber,
         positionType = positionType,
-        isManual = isManual
+        isManual = isManual,
+        isFishing = isFishing
     )
 
     companion object {
@@ -94,7 +97,8 @@ data class PositionEntity(
                 from = position.from,
                 tripNumber = position.tripNumber,
                 positionType = position.positionType,
-                isManual = position.isManual
+                isManual = position.isManual,
+                isFishing = position.isFishing
             )
         }
     }

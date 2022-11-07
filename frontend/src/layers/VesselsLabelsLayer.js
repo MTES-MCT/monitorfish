@@ -7,7 +7,7 @@ import LineString from 'ol/geom/LineString'
 import { usePrevious } from '../hooks/usePrevious'
 
 import { Layer } from '../domain/entities/layers/constants'
-import { getVesselId, getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
+import { getVesselId, getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel/vessel'
 import { drawMovedLabelIfFoundAndReturnOffset, VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 

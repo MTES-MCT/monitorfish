@@ -6,7 +6,7 @@ import {
   VESSEL_BEACON_MALFUNCTION_STYLE,
   VESSEL_INFRACTION_SUSPICION_STYLE,
   VESSEL_SELECTOR_STYLE
-} from '../../domain/entities/vessel'
+} from '../../domain/entities/vessel/vessel'
 
 import { COLORS } from '../../constants/constants'
 import { booleanToInt } from '../../utils'

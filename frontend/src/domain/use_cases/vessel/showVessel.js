@@ -1,10 +1,5 @@
 import { batch } from 'react-redux'
-import {
-  getOnlyVesselIdentityProperties,
-  getOnlyVesselIdentityPropertiesFromSelectedVessel,
-  Vessel,
-  VesselSidebarTab
-} from '../../entities/vessel'
+import { getOnlyVesselIdentityProperties, Vessel, VesselSidebarTab } from '../../entities/vessel/vessel'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel, showVesselSidebarTab } from '../../shared_slices/Vessel'
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
@@ -15,7 +10,7 @@ import { getVesselFromAPI } from '../../../api/vessel'
 /**
  * Show a specified vessel track on map and on the vessel right sidebar
  * @function showVessel
- * @param {VesselNS.VesselIdentity} vesselIdentity
+ * @param {VesselIdentity} vesselIdentity
  * @param {boolean} calledFromCron
  * @param {boolean} fromSearch
  */

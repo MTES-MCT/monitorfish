@@ -1,8 +1,9 @@
 // TODO This should be moved to `entities/vessel/types.ts`
 
-import type { SilencedAlertPeriod } from '../entities/alerts/constants'
-import type { VesselTrackDepth } from '../entities/vesselTrackDepth'
-import type { ValueOf } from 'type-fest'
+import type { VesselTrackDepth } from '../vesselTrackDepth'
+import type Feature from 'ol/Feature'
+import type LineString from 'ol/geom/LineString'
+import type Point from 'ol/geom/Point'
 
 export type FishingActivityShowedOnMap = {
   /** The coordinates of the fishing activity */
@@ -220,17 +221,44 @@ export type VesselPosition = {
   from: string
   internalReferenceNumber: string
   ircs: string
+  isFishing: boolean | null
+  isManual: boolean | null
   latitude: number
   longitude: number
-  mmsi: string
+  mmsi: string | null
   positionType: string
   speed: number
-  tripNumber: number
+  tripNumber: number | null
   vesselName: string
 }
 
-export type VesselTrackDepthKey = ValueOf<VesselTrackDepth>
+export interface VesselPointFeature extends Feature<Point> {
+  course?: number
+  dateTime?: string
+  name?: string
+  positionType?: string
+  speed?: number
+}
 
-export type VesselAlert = {
-  silenceAlertPeriod: SilencedAlertPeriod
+export interface VesselLineFeature extends Feature<LineString> {
+  course?: number
+  dateTime?: string
+  firstPositionDate?: Date
+  isTimeEllipsis?: boolean
+  positionType?: string
+  secondPositionDate?: Date
+  speed?: number
+  trackType?: TrackTypeRecordItem
+}
+
+export interface VesselArrowFeature extends Feature<Point> {
+  course?: number
+  name?: string
+}
+
+export type TrackTypeRecordItem = {
+  arrow: string
+  code: string
+  color: string
+  description: string
 }

@@ -8,7 +8,7 @@ import ArchivedReportings from './archived/ArchivedReportings'
 import { CurrentReporting } from './current/CurrentReporting'
 import getVesselReportings from '../../../domain/use_cases/vessel/getVesselReportings'
 import { usePrevious } from '../../../hooks/usePrevious'
-import { vesselsAreEquals } from '../../../domain/entities/vessel'
+import { vesselsAreEquals } from '../../../domain/entities/vessel/vessel'
 
 const ReportingTab = {
   CURRENT_REPORTING: 'CURRENT_REPORTING',

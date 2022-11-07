@@ -258,5 +258,5 @@ function getDateInTheFuture() {
 
   const date = now.add(1, 'month')
 
-  return `${date.year()}-${date.month() + 1}-${date.date()}`
+  return `${date.year()}-${date.month() + 1}-${date.date().toString().padStart(2, '0')}`
 }

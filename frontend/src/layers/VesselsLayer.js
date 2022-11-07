@@ -5,7 +5,7 @@ import WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 
-import { getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel'
+import { getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel/vessel'
 import { Layer } from '../domain/entities/layers/constants'
 
 import { applyFilterToVessels } from '../domain/use_cases/vessel/applyFilterAndSetVessels'

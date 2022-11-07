@@ -4,7 +4,7 @@ import {
   setCurrentAndArchivedReportingsOfSelectedVessel
 } from '../../shared_slices/Reporting'
 import { deleteReportingsFromAPI } from '../../../api/reporting'
-import { Vessel } from '../../entities/vessel'
+import { Vessel } from '../../entities/vessel/vessel'
 import { removeVesselReportings } from '../../shared_slices/Vessel'
 
 /**

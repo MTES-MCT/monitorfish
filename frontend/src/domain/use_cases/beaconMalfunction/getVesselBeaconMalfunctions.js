@@ -4,7 +4,7 @@ import {
   loadVesselBeaconMalfunctions,
   setVesselBeaconMalfunctionsResumeAndHistory
 } from '../../shared_slices/BeaconMalfunction'
-import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../../entities/vessel'
+import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../../entities/vessel/vessel'
 import { getVesselBeaconsMalfunctionsFromAPI } from '../../../api/beaconMalfunction'
 import openBeaconMalfunction from './openBeaconMalfunction'
 

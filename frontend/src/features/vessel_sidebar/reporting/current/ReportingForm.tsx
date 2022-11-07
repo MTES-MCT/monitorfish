@@ -13,8 +13,8 @@ import { getLocalStorageState } from '../../../../utils'
 import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.style'
 import { sortArrayByColumn } from '../../../vessel_list/tableSort'
 
+import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
 import type { Reporting } from '../../../../domain/types/reporting'
-import type { VesselIdentity } from '../../../../domain/types/vessel'
 
 type ReportingFormProps = {
   closeForm: () => void

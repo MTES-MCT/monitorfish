@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getEffectiveDateTimeFromMessage, getLogbookMessageType } from '../entities/logbook'
-import { FishingActivitiesTab } from '../entities/vessel'
+import { FishingActivitiesTab } from '../entities/vessel/vessel'
 
+import type { FishingActivityShowedOnMap } from '../entities/vessel/types'
 import type { FishingActivities } from '../types/fishingActivities'
-import type { FishingActivityShowedOnMap } from '../types/vessel'
 
 // TODO Properly type this redux state.
 export type FishingActivitiesState = {

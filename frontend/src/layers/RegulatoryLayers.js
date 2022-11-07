@@ -8,6 +8,12 @@ import { getVectorOLLayer } from '../domain/use_cases/layer/regulation/showRegul
 export const METADATA_IS_SHOWED = 'metadataIsShowed'
 const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5
 
+/**
+ * @param {{
+ *   map?: any
+ *   mapMovingAndZoomEvent?: any
+ * }} props 
+ */
 const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
   const throttleDuration = 500 // ms
   const dispatch = useDispatch()
@@ -112,6 +118,7 @@ const RegulatoryLayers = ({ map, mapMovingAndZoomEvent }) => {
       showSimplifiedOrWholeFeatures()
       isThrottled.current = false
     }, throttleDuration)
+    // TODO Why is there an unused prop just to refresh this effect?
   }, [map, mapMovingAndZoomEvent, layersToFeatures])
 
   return null

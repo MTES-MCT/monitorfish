@@ -3,6 +3,11 @@ import { useDispatch } from 'react-redux'
 import { Layer } from '../../domain/entities/layers/constants'
 import showRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/showRegulatoryZoneMetadata'
 
+/**
+ * @param {{
+ *   mapClickEvent?: any
+ * }} props 
+ */
 const ShowRegulatoryMetadata = ({ mapClickEvent }) => {
   const dispatch = useDispatch()
 

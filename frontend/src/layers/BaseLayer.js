@@ -7,6 +7,11 @@ import { OSM } from 'ol/source'
 import XYZ from 'ol/source/XYZ'
 import TileWMS from 'ol/source/TileWMS'
 
+/**
+ * @param {{
+ *   map?: any
+ * }} props 
+ */
 const BaseLayer = ({ map }) => {
   let selectedBaseLayer = useSelector(state => state.map.selectedBaseLayer)
 

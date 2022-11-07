@@ -8,6 +8,11 @@ import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
 import zoomInLayer from '../domain/use_cases/layer/zoomInLayer'
 import { regulatoryPreviewStyle } from './styles/regulatoryPreview.style'
 
+/**
+ * @param {{
+ *   map?: any
+ * }} props 
+ */
 const RegulatoryPreviewLayer = ({ map }) => {
   const dispatch = useDispatch()
   const { regulatoryGeometriesToPreview } = useSelector(state => state.regulatory)

@@ -1,67 +1,70 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { batch, useDispatch, useSelector } from 'react-redux'
+import { isEmpty } from 'ramda'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { batch } from 'react-redux'
 import styled from 'styled-components'
 
-import BaseMap from '../map/BaseMap'
-import LawType from './list_regulation/LawType'
-import SearchRegulations from './list_regulation/SearchRegulations'
-import RegulatoryZoneMetadata from '../layers/regulatory/RegulatoryZoneMetadata'
+import { FRANCE, ORGP, UE, UK } from '../../domain/entities/regulatory'
+import layer from '../../domain/shared_slices/Layer'
+import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
+import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
+import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
+import getAllSpecies from '../../domain/use_cases/species/getAllSpecies'
+import { useAppDispatch } from '../../hooks/useAppDispatch'
+import { useAppSelector } from '../../hooks/useAppSelector'
+import AdministrativeLayers from '../../layers/AdministrativeLayers'
 import BaseLayer from '../../layers/BaseLayer'
 import RegulatoryLayers from '../../layers/RegulatoryLayers'
-import AdministrativeLayers from '../../layers/AdministrativeLayers'
 import RegulatoryPreviewLayer from '../../layers/RegulatoryPreviewLayer'
-import ShowRegulatoryMetadata from '../map/ShowRegulatoryMetadata'
-
-import getAllRegulatoryLayersByRegTerritory from '../../domain/use_cases/layer/regulation/getAllRegulatoryLayers'
-import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'
-import { closeRegulatoryZoneMetadata } from '../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'
-import { FRANCE, ORGP, UE, UK } from '../../domain/entities/regulatory'
-import { COLORS } from '../../constants/constants'
 import { EmptyResult } from '../commonStyles/Text.style'
+import RegulatoryZoneMetadata from '../layers/regulatory/RegulatoryZoneMetadata'
+import BaseMap from '../map/BaseMap'
+import ShowRegulatoryMetadata from '../map/ShowRegulatoryMetadata'
+import LawType from './list_regulation/LawType'
+import SearchRegulations from './list_regulation/SearchRegulations'
 import { setProcessingRegulationSaved } from './Regulation.slice'
-import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
-import layer from '../../domain/shared_slices/Layer'
-import getAllSpecies from '../../domain/use_cases/species/getAllSpecies'
 
-const Backoffice = () => {
+export function Backoffice() {
   const [foundRegulatoryZonesByRegTerritory, setFoundRegulatoryZonesByRegTerritory] = useState({})
-  const gears = useSelector(state => state.gear.gears)
-  const dispatch = useDispatch()
-  const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState(null)
+  const dispatch = useAppDispatch()
+  const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState<{
+    dummyUpdate: boolean
+  } | null>(null)
   const { resetShowedLayer } = layer.backoffice.actions
 
   const handleMovingAndZoom = () => {
     setMapMovingAndZoomEvent({ dummyUpdate: true })
   }
 
-  const {
-    regulatoryZoneMetadataPanelIsOpen,
-    loadingRegulatoryZoneMetadata,
-    regulatoryZoneMetadata,
-    layersTopicsByRegTerritory
-  } = useSelector(state => state.regulatory)
+  const { layersTopicsByRegTerritory, regulatoryZoneMetadataPanelIsOpen } = useAppSelector(state => state.regulatory)
 
-  const { regulationSaved } = useSelector(state => state.regulation)
+  // TODO Scritly type this once the store is perfectly typed.
+  const { regulationSaved } = useAppSelector(state => (state as any).regulation)
 
-  const initBackoffice = () => {
+  const initBackoffice = useCallback(() => {
     batch(async () => {
-      await dispatch(getAllSpecies())
-      dispatch(getAllRegulatoryLayersByRegTerritory())
-      dispatch(getAllGearCodes())
+      await dispatch(getAllSpecies() as any)
+      dispatch(getAllRegulatoryLayersByRegTerritory() as any)
+      dispatch(getAllGearCodes() as any)
       dispatch(setProcessingRegulationSaved(false))
       dispatch(setRegulatoryZoneMetadata(null))
     })
-  }
+  }, [dispatch])
 
   /**
    * Init component datas on first load
    */
   useEffect(() => {
     initBackoffice()
+
     return () => {
+      // TODO This shouldn't be required, there is something wrong with typings here.
+      if (!resetShowedLayer) {
+        return
+      }
+
       dispatch(resetShowedLayer('backoffice'))
     }
-  }, [])
+  }, [dispatch, initBackoffice, resetShowedLayer])
 
   /**
    * Refresh components data when a regulation is updated
@@ -70,36 +73,30 @@ const Backoffice = () => {
     if (regulationSaved) {
       initBackoffice()
     }
-  }, [regulationSaved])
-
-  const callCloseRegulatoryZoneMetadata = useCallback(() => {
-    dispatch(closeRegulatoryZoneMetadata())
-  }, [])
+  }, [initBackoffice, regulationSaved])
 
   const displayRegulatoryZoneListByLawType = useCallback(
-    (territory, regZoneByLawType) => {
-      return regZoneByLawType && Object.keys(regZoneByLawType).sort().length > 0 ? (
-        Object.keys(regZoneByLawType).map(lawType => {
-          return (
-            <LawType
-              key={lawType}
-              lawType={lawType}
-              regZoneByLawType={regZoneByLawType}
-              isEditable={true}
-              territory={territory}
-            />
-          )
-        })
+    (territory, regZoneByLawType) =>
+      regZoneByLawType && Object.keys(regZoneByLawType).sort().length > 0 ? (
+        Object.keys(regZoneByLawType).map(lawType => (
+          <LawType
+            key={lawType}
+            isEditable
+            lawType={lawType}
+            regZoneByLawType={regZoneByLawType}
+            territory={territory}
+          />
+        ))
       ) : (
         <EmptyResult>Aucun résultat</EmptyResult>
-      )
-    },
-    [foundRegulatoryZonesByRegTerritory]
+      ),
+    []
   )
 
   const displayRegulatoryZoneByRegTerritory = useCallback(
     territory => {
       const territoryRegList = foundRegulatoryZonesByRegTerritory[territory]
+
       return territoryRegList ? (
         <RegulatoryZoneListByLawTypeList>
           {displayRegulatoryZoneListByLawType(territory, territoryRegList)}
@@ -108,11 +105,11 @@ const Backoffice = () => {
         <EmptyResult>Aucune zone pour ce territoire</EmptyResult>
       )
     },
-    [foundRegulatoryZonesByRegTerritory]
+    [displayRegulatoryZoneListByLawType, foundRegulatoryZonesByRegTerritory]
   )
 
-  const searchResultList = useMemo(() => {
-    return (
+  const searchResultList = useMemo(
+    () => (
       <SearchResultList>
         <Columns>
           <Territory key={FRANCE}>
@@ -135,18 +132,19 @@ const Backoffice = () => {
           </Territory>
         </Columns>
       </SearchResultList>
-    )
-  }, [foundRegulatoryZonesByRegTerritory])
+    ),
+    [displayRegulatoryZoneByRegTerritory]
+  )
 
   return (
     <>
       <BackofficeContainer>
-        <RegulatoryZonePanel regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
+        <RegulatoryZonePanel>
           <SearchRegulations
-            setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
             regulatoryZoneListByRegTerritory={layersTopicsByRegTerritory}
+            setFoundRegulatoryZonesByRegTerritory={setFoundRegulatoryZonesByRegTerritory}
           />
-          {layersTopicsByRegTerritory && layersTopicsByRegTerritory !== {} ? (
+          {layersTopicsByRegTerritory && !isEmpty(layersTopicsByRegTerritory) ? (
             searchResultList
           ) : (
             <div>En attente de chargement</div>
@@ -156,21 +154,13 @@ const Backoffice = () => {
           <BaseLayer />
           <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
           <AdministrativeLayers />
-          <ShowRegulatoryMetadata hasClickEvent />
+          <ShowRegulatoryMetadata />
           <RegulatoryPreviewLayer />
         </BaseMap>
       </BackofficeContainer>
       {regulatoryZoneMetadataPanelIsOpen && (
         <MetadataWrapper regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}>
-          <RegulatoryZoneMetadata
-            loadingRegulatoryZoneMetadata={loadingRegulatoryZoneMetadata}
-            regulatoryZoneMetadataPanelIsOpen={regulatoryZoneMetadataPanelIsOpen}
-            regulatoryZoneMetadata={regulatoryZoneMetadata}
-            callCloseRegulatoryZoneMetadata={callCloseRegulatoryZoneMetadata}
-            gears={gears}
-            layersSidebarIsOpen={true}
-            fromBackoffice={true}
-          />
+          <RegulatoryZoneMetadata />
         </MetadataWrapper>
       )}
     </>
@@ -195,7 +185,9 @@ const SearchResultList = styled.div`
   margin-bottom: 60px;
 `
 
-const Territory = styled.div`
+const Territory = styled.div<{
+  isLast?: boolean
+}>`
   display: flex;
   flex-direction: column;
   flex: 1 1 1%;
@@ -203,7 +195,7 @@ const Territory = styled.div`
   box-sizing: border-box;
   max-width: 50%;
   min-width: 250px;
-  margin-right: ${props => (props.isLast ? '0px' : '20px')};
+  margin-right: ${p => (p.isLast ? '0px' : '20px')};
 `
 
 const TerritoryName = styled.div`
@@ -212,7 +204,7 @@ const TerritoryName = styled.div`
   font-weight: 700;
   text-transform: uppercase;
   text-align: left;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
 `
 
 const RegulatoryZoneListByLawTypeList = styled.div`
@@ -225,7 +217,7 @@ const RegulatoryZoneListByLawTypeList = styled.div`
 const BackofficeContainer = styled.div`
   display: flex;
   position: relative;
-  background-color: ${COLORS.white};
+  background-color: ${p => p.theme.color.white};
   width: 100%;
   height: 100vh;
 `
@@ -236,22 +228,22 @@ const RegulatoryZonePanel = styled.div`
   flex-direction: column;
   max-height: 100vh;
   max-width: 50%;
-  background-color: ${COLORS.white};
+  background-color: ${p => p.theme.color.white};
 `
 
-const MetadataWrapper = styled.div`
+const MetadataWrapper = styled.div<{
+  regulatoryZoneMetadataPanelIsOpen: boolean
+}>`
   display: ${props => (props.regulatoryZoneMetadataPanelIsOpen ? 'flex' : 'none')};
   position: absolute;
   top: 0;
   left: calc(50% + 72px);
   z-index: 1;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   margin: 6px 0 0 6px;
   flex-direction: column;
   max-height: 95vh;
   transition: all 0.5s;
   opacity: ${props => (props.regulatoryZoneMetadataPanelIsOpen ? '1' : '0')};
-  background: linear-gradient(${COLORS.gainsboro} 70%, rgb(0, 0, 0, 0));
+  background: linear-gradient(${p => p.theme.color.gainsboro} 70%, rgb(0, 0, 0, 0));
 `
-
-export default Backoffice

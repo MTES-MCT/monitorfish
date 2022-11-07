@@ -1,5 +1,6 @@
 import datetime
 import logging
+import re
 from enum import Enum
 from unittest.mock import Mock, patch
 
@@ -20,6 +21,7 @@ from src.pipeline.processing import (
     df_values_to_psql_arrays,
     drop_duplicates_by_decreasing_priority,
     drop_rows_already_in_table,
+    get_matched_groups,
     get_unused_col_name,
     is_a_value,
     join_on_multiple_keys,
@@ -862,3 +864,49 @@ def test_rows_belong_to_sequence():
     res = rows_belong_to_sequence(arr, row, 7)
     expected_res = np.array([np.nan, np.nan, np.nan, 0.0, 0.0, 0.0])
     np.testing.assert_array_equal(res, expected_res)
+
+
+def test_get_matched_groups():
+    regex = re.compile(
+        (
+            r"^This is a ((?P<optionnal_word_1>[a-z]*) )?"
+            r"(?P<word_2>[a-z]*) (?P<word_3>[a-z]*)\.$"
+        )
+    )
+
+    s_1 = "This is a test string."
+    series_1 = get_matched_groups(s_1, regex)
+    expected_series_1 = pd.Series(
+        {
+            "optionnal_word_1": None,
+            "word_2": "test",
+            "word_3": "string",
+        }
+    )
+    pd.testing.assert_series_equal(series_1, expected_series_1)
+
+    s_2 = "This is a new test string."
+    series_2 = get_matched_groups(s_2, regex)
+    expected_series_2 = pd.Series(
+        {
+            "optionnal_word_1": "new",
+            "word_2": "test",
+            "word_3": "string",
+        }
+    )
+    pd.testing.assert_series_equal(series_2, expected_series_2)
+
+    s_3 = "This is a non-matching test string."
+    series_3 = get_matched_groups(s_3, regex)
+    default_series = pd.Series(
+        {
+            "optionnal_word_1": None,
+            "word_2": None,
+            "word_3": None,
+        }
+    )
+    pd.testing.assert_series_equal(series_3, default_series)
+
+    s_4 = None
+    series_4 = get_matched_groups(s_4, regex)
+    pd.testing.assert_series_equal(series_4, default_series)

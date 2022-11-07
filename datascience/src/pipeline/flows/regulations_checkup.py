@@ -117,7 +117,7 @@ def extract_monitorfish_regulations() -> pd.DataFrame:
             if x == "infinite" or x / 1000 > timestamp_max
             else datetime.datetime(1, 1, 2)
             if x / 1000 < timestamp_min
-            else datetime.datetime.fromtimestamp(x / 1000)
+            else datetime.datetime.utcfromtimestamp(x / 1000)
         ),
         na_action="ignore",
     )

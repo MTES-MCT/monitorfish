@@ -116,11 +116,11 @@ def monitorfish_regulations() -> pd.DataFrame:
                 "Dead link regulation",
             ],
             "end_date": [
-                datetime.datetime(2017, 7, 14, 4, 40, 0),
+                datetime.datetime(2017, 7, 14, 2, 40, 0),
                 None,
                 datetime.datetime(9999, 12, 31),
                 None,
-                datetime.datetime(2030, 3, 17, 18, 46, 40),
+                datetime.datetime(2030, 3, 17, 17, 46, 40),
                 None,
             ],
         }
@@ -345,8 +345,8 @@ def formatted_outdated_references():
                 ),
             ],
             "Date de fin de validité": [
-                datetime.datetime(2017, 7, 14, 4, 40),
-                datetime.datetime(2030, 3, 17, 18, 46, 40),
+                datetime.datetime(2017, 7, 14, 2, 40),
+                datetime.datetime(2030, 3, 17, 17, 46, 40),
             ],
         }
     )

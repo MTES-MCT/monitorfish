@@ -62,7 +62,7 @@ shares_histogram AS (
     SELECT
         date_hour,
         s.id AS satellite_operator_id,
-        100 * (nb_vessels_emitting::DOUBLE PRECISION / nb_activated_beacons::DOUBLE PRECISION) AS share_vessels_emitting
+        nb_vessels_emitting::DOUBLE PRECISION / nb_activated_beacons::DOUBLE PRECISION AS share_vessels_emitting
     FROM nb_activated_beacons_per_operator n
     JOIN positions_histogram h
     ON h.satellite_operator_id = n.satellite_operator_id
@@ -73,7 +73,7 @@ shares_histogram AS (
 nb_hours_share_ok_per_operator AS (
     SELECT
         s.id AS satellite_operator_id,
-        SUM(CASE WHEN share_vessels_emitting > 70 THEN 1 ELSE 0 END) AS nb_hours_with_share_ok
+        SUM(CASE WHEN share_vessels_emitting > 0.7 THEN 1 ELSE 0 END) AS nb_hours_with_share_ok
     FROM satellite_operators s
     LEFT JOIN shares_histogram sh
     ON s.id = sh.satellite_operator_id

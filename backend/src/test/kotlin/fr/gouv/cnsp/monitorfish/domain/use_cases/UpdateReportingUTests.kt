@@ -51,12 +51,45 @@ class UpdateReportingUTests {
             UpdateReporting(reportingRepository)
                 .execute(
                     1,
-                    UpdatedInfractionSuspicionOrObservation(reportingActor = ReportingActor.UNIT, title = "A reporting")
+                    UpdatedInfractionSuspicionOrObservation(reportingActor = ReportingActor.UNIT, reportingType = ReportingType.OBSERVATION, title = "A reporting")
                 )
         }
 
         // Then
         assertThat(throwable.message).contains("The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION")
+    }
+
+    @Test
+    fun `execute Should throw an exception When the new reporting type is not allowed`() {
+        // Given
+        given(reportingRepository.findById(any())).willReturn(
+            Reporting(
+                id = 1,
+                type = ReportingType.INFRACTION_SUSPICION,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
+                isArchived = false,
+                isDeleted = false
+            )
+        )
+
+        // When
+        val throwable = catchThrowable {
+            UpdateReporting(reportingRepository)
+                .execute(
+                    1,
+                    UpdatedInfractionSuspicionOrObservation(reportingActor = ReportingActor.UNIT, reportingType = ReportingType.ALERT, title = "A reporting")
+                )
+        }
+
+        // Then
+        assertThat(throwable.message).contains("The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION")
     }
 
     @ParameterizedTest
@@ -89,6 +122,7 @@ class UpdateReportingUTests {
                     1,
                     UpdatedInfractionSuspicionOrObservation(
                         reportingActor = reportingActor,
+                        reportingType = ReportingType.INFRACTION_SUSPICION,
                         title = "A reporting",
                         natinfCode = "123456"
                     )
@@ -132,6 +166,7 @@ class UpdateReportingUTests {
                 1,
                 UpdatedInfractionSuspicionOrObservation(
                     reportingActor = ReportingActor.UNIT,
+                    reportingType = ReportingType.INFRACTION_SUSPICION,
                     title = "A reporting"
                 )
             )
@@ -166,6 +201,7 @@ class UpdateReportingUTests {
             1,
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
+                reportingType = ReportingType.INFRACTION_SUSPICION,
                 unit = "AN UNIT",
                 title = "A reporting",
                 description = "Test 2",
@@ -178,6 +214,49 @@ class UpdateReportingUTests {
             verify(reportingRepository).update(any(), capture())
 
             assertThat(allValues.first().description).isEqualTo("Test 2")
+        }
+    }
+
+    @Test
+    fun `execute Should update the reporting type`() {
+        // Given
+        given(reportingRepository.findById(any())).willReturn(
+            Reporting(
+                id = 1,
+                type = ReportingType.INFRACTION_SUSPICION,
+                vesselName = "BIDUBULE",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                creationDate = ZonedDateTime.now(),
+                validationDate = ZonedDateTime.now(),
+                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
+                isArchived = false,
+                isDeleted = false
+            )
+        )
+
+        // When
+        UpdateReporting(reportingRepository).execute(
+            1,
+            UpdatedInfractionSuspicionOrObservation(
+                reportingActor = ReportingActor.UNIT,
+                reportingType = ReportingType.OBSERVATION,
+                unit = "AN UNIT",
+                title = "A reporting",
+                description = "Test 2",
+                natinfCode = "1234"
+            )
+        )
+
+        // Then
+        argumentCaptor<Observation>().apply {
+            verify(reportingRepository).update(any(), capture())
+
+            assertThat(allValues.first().description).isEqualTo("Test 2")
+            assertThat(allValues.first().natinfCode).isNull()
+            assertThat(allValues.first().type.toString()).isEqualTo(ReportingType.OBSERVATION.toString())
         }
     }
 
@@ -213,6 +292,7 @@ class UpdateReportingUTests {
             1,
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
+                reportingType = ReportingType.INFRACTION_SUSPICION,
                 unit = "AN UNIT",
                 title = "A reporting",
                 natinfCode = "1234"
@@ -254,6 +334,7 @@ class UpdateReportingUTests {
             1,
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
+                reportingType = ReportingType.OBSERVATION,
                 unit = "AN UNIT",
                 title = "A reporting",
                 natinfCode = "1234"

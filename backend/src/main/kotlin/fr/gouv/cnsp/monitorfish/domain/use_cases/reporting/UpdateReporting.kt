@@ -14,10 +14,11 @@ class UpdateReporting(private val reportingRepository: ReportingRepository) {
         logger.info("Updating reporting id $reportingId")
         val currentReporting = reportingRepository.findById(reportingId)
 
-        return when (currentReporting.type) {
-            ReportingType.ALERT -> throw IllegalArgumentException(
-                "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION"
-            )
+        require(currentReporting.type != ReportingType.ALERT) {
+            "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION"
+        }
+
+        return when (updatedInfractionSuspicionOrObservation.reportingType) {
             ReportingType.OBSERVATION -> {
                 currentReporting.value as InfractionSuspicionOrObservationType
 
@@ -40,6 +41,9 @@ class UpdateReporting(private val reportingRepository: ReportingRepository) {
 
                 reportingRepository.update(reportingId, nextInfractionSuspicion)
             }
+            else -> throw IllegalArgumentException(
+                "The new reporting type must be an INFRACTION_SUSPICION or an OBSERVATION"
+            )
         }
     }
 }

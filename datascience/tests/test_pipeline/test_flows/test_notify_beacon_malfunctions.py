@@ -36,7 +36,9 @@ from src.pipeline.flows.notify_beacon_malfunctions import (
     to_malfunctions_to_notify_list,
 )
 from src.read_query import read_query
-from tests.mocks import mock_datetime_utcnow
+from tests.mocks import mock_check_flow_not_running, mock_datetime_utcnow
+
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 malfunctions_to_notify_shared_data = {
     "beacon_malfunction_id": [1, 2, 3],

@@ -5,9 +5,10 @@ import numpy as np
 import pandas as pd
 import prefect
 from dateutil.relativedelta import relativedelta
-from prefect import Flow, task
+from prefect import Flow, case, task
 
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 ######## Parameters for control rate and infraction rate risk factor components ########
 
@@ -505,20 +506,24 @@ def load_control_anteriority(control_anteriority: pd.DataFrame):
 
 
 with Flow("Control anteriority") as flow:
-    controls = extract_last_5_years_controls()
-    fishing_infraction_ids = extract_fishing_infraction_ids()
-    last_controls = get_last_controls(controls)
-    control_statistics = compute_control_statistics(controls)
-    control_rate_risk_factors = compute_control_rate_risk_factors(controls)
-    infraction_rate_risk_factors = compute_infraction_rate_risk_factors(
-        controls, fishing_infraction_ids
-    )
-    control_anteriority = merge(
-        control_rate_risk_factors,
-        infraction_rate_risk_factors,
-        last_controls,
-        control_statistics,
-    )
-    load_control_anteriority(control_anteriority)
+
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
+
+        controls = extract_last_5_years_controls()
+        fishing_infraction_ids = extract_fishing_infraction_ids()
+        last_controls = get_last_controls(controls)
+        control_statistics = compute_control_statistics(controls)
+        control_rate_risk_factors = compute_control_rate_risk_factors(controls)
+        infraction_rate_risk_factors = compute_infraction_rate_risk_factors(
+            controls, fishing_infraction_ids
+        )
+        control_anteriority = merge(
+            control_rate_risk_factors,
+            infraction_rate_risk_factors,
+            last_controls,
+            control_statistics,
+        )
+        load_control_anteriority(control_anteriority)
 
 flow.file_name = Path(__file__).name

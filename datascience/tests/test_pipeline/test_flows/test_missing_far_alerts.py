@@ -17,7 +17,9 @@ from src.pipeline.flows.missing_far_alerts import (
     make_positions_at_sea_query,
 )
 from src.read_query import read_query
-from tests.mocks import mock_datetime_utcnow
+from tests.mocks import mock_check_flow_not_running, mock_datetime_utcnow
+
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
 @patch(

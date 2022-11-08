@@ -6,6 +6,9 @@ from dateutil.relativedelta import relativedelta
 from src.db_config import create_engine
 from src.pipeline.flows.control_anteriority import flow
 from src.read_query import read_query
+from tests.mocks import mock_check_flow_not_running
+
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
 def test_control_anteriority_flow(reset_test_data):

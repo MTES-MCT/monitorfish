@@ -2,10 +2,11 @@ from pathlib import Path
 
 import pandas as pd
 import prefect
-from prefect import Flow, task
+from prefect import Flow, case, task
 
 from src.pipeline.entities.beacon_malfunctions import BeaconStatus
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 
 @task(checkpoint=False)
@@ -75,16 +76,20 @@ def load_satellite_operators(satellite_operators):
 
 
 with Flow("Beacons") as flow:
-    # Extract
-    beacons = extract_beacons()
-    satellite_operators = extract_satellite_operators()
 
-    # Transform
-    beacons = transform_beacons(beacons)
-    satellite_operators = transform_satellite_operators(satellite_operators)
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    # Load
-    load_satellite_operators(satellite_operators)
-    load_beacons(beacons)
+        # Extract
+        beacons = extract_beacons()
+        satellite_operators = extract_satellite_operators()
+
+        # Transform
+        beacons = transform_beacons(beacons)
+        satellite_operators = transform_satellite_operators(satellite_operators)
+
+        # Load
+        load_satellite_operators(satellite_operators)
+        load_beacons(beacons)
 
 flow.file_name = Path(__file__).name

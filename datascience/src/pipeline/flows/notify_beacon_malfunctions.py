@@ -16,7 +16,7 @@ import prefect
 import sqlalchemy
 import weasyprint
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from prefect import Flow, Parameter, flatten, task, unmapped
+from prefect import Flow, Parameter, case, flatten, task, unmapped
 from sqlalchemy import Table, update
 
 from config import (
@@ -46,7 +46,10 @@ from src.pipeline.helpers.emails import (
     send_sms,
 )
 from src.pipeline.helpers.spatial import Position, position_to_position_representation
-from src.pipeline.shared_tasks.control_flow import filter_results
+from src.pipeline.shared_tasks.control_flow import (
+    check_flow_not_running,
+    filter_results,
+)
 from src.pipeline.shared_tasks.infrastructure import get_table
 
 cnsp_logo_path = EMAIL_IMAGES_LOCATION / "logo_cnsp.jpg"
@@ -485,53 +488,58 @@ def execute_statement(reset_requested_notifications_statement):
 
 with Flow("Notify malfunctions") as flow:
 
-    test_mode = Parameter("test_mode")
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    beacon_malfunctions_table = get_table(table_name="beacon_malfunctions")
-    templates = get_templates()
-    sms_templates = get_sms_templates()
+        test_mode = Parameter("test_mode")
 
-    malfunctions_to_notify = extract_malfunctions_to_notify()
-    malfunctions_to_notify = to_malfunctions_to_notify_list(
-        malfunctions_to_notify, test_mode
-    )
+        beacon_malfunctions_table = get_table(table_name="beacon_malfunctions")
+        templates = get_templates()
+        sms_templates = get_sms_templates()
 
-    sms_text = render_sms.map(malfunctions_to_notify, templates=unmapped(sms_templates))
-
-    html = render.map(
-        malfunctions_to_notify,
-        templates=unmapped(templates),
-        output_format=unmapped("html"),
-    )
-
-    pdf = render.map(
-        malfunctions_to_notify,
-        templates=unmapped(templates),
-        output_format=unmapped("pdf"),
-    )
-
-    email = create_email.map(html=html, pdf=pdf, m=malfunctions_to_notify)
-    email = filter_results(email)
-
-    sms = create_sms.map(text=sms_text, m=malfunctions_to_notify)
-    sms = filter_results(sms)
-
-    fax = create_fax.map(pdf=pdf, m=malfunctions_to_notify)
-    fax = filter_results(fax)
-
-    messages_to_send = flatten([flatten(email), flatten(sms), flatten(fax)])
-
-    notifications = send_beacon_malfunction_message.map(messages_to_send)
-    notifications = filter_results(notifications)
-    load_notifications(flatten(notifications))
-
-    reset_requested_notifications_statement = (
-        make_reset_requested_notifications_statement(
-            beacon_malfunctions_table=beacon_malfunctions_table,
-            notified_malfunctions=malfunctions_to_notify,
+        malfunctions_to_notify = extract_malfunctions_to_notify()
+        malfunctions_to_notify = to_malfunctions_to_notify_list(
+            malfunctions_to_notify, test_mode
         )
-    )
 
-    execute_statement(reset_requested_notifications_statement)
+        sms_text = render_sms.map(
+            malfunctions_to_notify, templates=unmapped(sms_templates)
+        )
+
+        html = render.map(
+            malfunctions_to_notify,
+            templates=unmapped(templates),
+            output_format=unmapped("html"),
+        )
+
+        pdf = render.map(
+            malfunctions_to_notify,
+            templates=unmapped(templates),
+            output_format=unmapped("pdf"),
+        )
+
+        email = create_email.map(html=html, pdf=pdf, m=malfunctions_to_notify)
+        email = filter_results(email)
+
+        sms = create_sms.map(text=sms_text, m=malfunctions_to_notify)
+        sms = filter_results(sms)
+
+        fax = create_fax.map(pdf=pdf, m=malfunctions_to_notify)
+        fax = filter_results(fax)
+
+        messages_to_send = flatten([flatten(email), flatten(sms), flatten(fax)])
+
+        notifications = send_beacon_malfunction_message.map(messages_to_send)
+        notifications = filter_results(notifications)
+        load_notifications(flatten(notifications))
+
+        reset_requested_notifications_statement = (
+            make_reset_requested_notifications_statement(
+                beacon_malfunctions_table=beacon_malfunctions_table,
+                notified_malfunctions=malfunctions_to_notify,
+            )
+        )
+
+        execute_statement(reset_requested_notifications_statement)
 
 flow.file_name = Path(__file__).name

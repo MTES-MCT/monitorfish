@@ -21,6 +21,7 @@ from src.pipeline.shared_tasks.alerts import (
     load_alerts,
     make_alerts,
 )
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.infrastructure import get_table
 from src.pipeline.shared_tasks.positions import add_vessel_identifier
 from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
@@ -431,80 +432,83 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
 
 with Flow("Position alert") as flow:
 
-    alert_type = Parameter("alert_type")
-    alert_config_name = Parameter("alert_config_name")
-    zones = Parameter("zones")
-    hours_from_now = Parameter("hours_from_now", default=8)
-    only_fishing_positions = Parameter("only_fishing_positions", default=True)
-    flag_states = Parameter("flag_states", default=None)
-    except_flag_states = Parameter("except_flag_states", default=None)
-    fishing_gears = Parameter("fishing_gears", default=None)
-    fishing_gear_categories = Parameter("fishing_gear_categories", default=None)
-    include_vessels_unknown_gear = Parameter(
-        "include_vessels_unknown_gear", default=True
-    )
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    must_filter_on_gears = alert_has_gear_parameters(
-        fishing_gears, fishing_gear_categories
-    )
-
-    positions_table = get_table("positions")
-    vessels_table = get_table("vessels")
-    districts_table = get_table("districts")
-    zones_table = get_alert_type_zones_table(alert_type)
-    facades_table = get_table("facade_areas_subdivided")
-
-    positions_query = make_positions_in_alert_query(
-        positions_table=positions_table,
-        facades_table=facades_table,
-        zones_table=zones_table,
-        only_fishing_positions=only_fishing_positions,
-        zones=zones,
-        hours_from_now=hours_from_now,
-        flag_states=flag_states,
-        except_flag_states=except_flag_states,
-    )
-
-    positions_in_alert = read_query_task("monitorfish_remote", positions_query)
-
-    with case(must_filter_on_gears, True):
-        fishing_gears_table = get_table("fishing_gear_codes")
-        fishing_gears_query = make_fishing_gears_query(
-            fishing_gears_table=fishing_gears_table,
-            fishing_gears=fishing_gears,
-            fishing_gear_categories=fishing_gear_categories,
-        )
-        gear_codes = extract_gear_codes(fishing_gears_query)
-        current_gears = extract_current_gears()
-
-        positions_in_alert_1 = filter_on_gears(
-            positions_in_alert=positions_in_alert,
-            current_gears=current_gears,
-            gear_codes=gear_codes,
-            include_vessels_unknown_gear=include_vessels_unknown_gear,
+        alert_type = Parameter("alert_type")
+        alert_config_name = Parameter("alert_config_name")
+        zones = Parameter("zones")
+        hours_from_now = Parameter("hours_from_now", default=8)
+        only_fishing_positions = Parameter("only_fishing_positions", default=True)
+        flag_states = Parameter("flag_states", default=None)
+        except_flag_states = Parameter("except_flag_states", default=None)
+        fishing_gears = Parameter("fishing_gears", default=None)
+        fishing_gear_categories = Parameter("fishing_gear_categories", default=None)
+        include_vessels_unknown_gear = Parameter(
+            "include_vessels_unknown_gear", default=True
         )
 
-    with case(must_filter_on_gears, False):
-        positions_in_alert_2 = positions_in_alert
+        must_filter_on_gears = alert_has_gear_parameters(
+            fishing_gears, fishing_gear_categories
+        )
 
-    positions_in_alert = merge(
-        positions_in_alert_1, positions_in_alert_2, checkpoint=False
-    )
+        positions_table = get_table("positions")
+        vessels_table = get_table("vessels")
+        districts_table = get_table("districts")
+        zones_table = get_alert_type_zones_table(alert_type)
+        facades_table = get_table("facade_areas_subdivided")
 
-    positions_in_alert = add_vessel_identifier(positions_in_alert)
-    current_risk_factors = extract_current_risk_factors()
-    positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
-    vessels_in_alert = get_vessels_in_alert(positions_in_alert)
-    vessels_in_alert = add_vessel_id(vessels_in_alert, vessels_table)
-    vessels_in_alert = add_vessels_columns(
-        vessels_in_alert,
-        vessels_table,
-        districts_table=districts_table,
-        districts_columns_to_add=["dml"],
-    )
-    alerts = make_alerts(vessels_in_alert, alert_type, alert_config_name)
-    silenced_alerts = extract_silenced_alerts()
-    alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
-    load_alerts(alert_without_silenced, alert_config_name)
+        positions_query = make_positions_in_alert_query(
+            positions_table=positions_table,
+            facades_table=facades_table,
+            zones_table=zones_table,
+            only_fishing_positions=only_fishing_positions,
+            zones=zones,
+            hours_from_now=hours_from_now,
+            flag_states=flag_states,
+            except_flag_states=except_flag_states,
+        )
+
+        positions_in_alert = read_query_task("monitorfish_remote", positions_query)
+
+        with case(must_filter_on_gears, True):
+            fishing_gears_table = get_table("fishing_gear_codes")
+            fishing_gears_query = make_fishing_gears_query(
+                fishing_gears_table=fishing_gears_table,
+                fishing_gears=fishing_gears,
+                fishing_gear_categories=fishing_gear_categories,
+            )
+            gear_codes = extract_gear_codes(fishing_gears_query)
+            current_gears = extract_current_gears()
+
+            positions_in_alert_1 = filter_on_gears(
+                positions_in_alert=positions_in_alert,
+                current_gears=current_gears,
+                gear_codes=gear_codes,
+                include_vessels_unknown_gear=include_vessels_unknown_gear,
+            )
+
+        with case(must_filter_on_gears, False):
+            positions_in_alert_2 = positions_in_alert
+
+        positions_in_alert = merge(
+            positions_in_alert_1, positions_in_alert_2, checkpoint=False
+        )
+
+        positions_in_alert = add_vessel_identifier(positions_in_alert)
+        current_risk_factors = extract_current_risk_factors()
+        positions_in_alert = merge_risk_factor(positions_in_alert, current_risk_factors)
+        vessels_in_alert = get_vessels_in_alert(positions_in_alert)
+        vessels_in_alert = add_vessel_id(vessels_in_alert, vessels_table)
+        vessels_in_alert = add_vessels_columns(
+            vessels_in_alert,
+            vessels_table,
+            districts_table=districts_table,
+            districts_columns_to_add=["dml"],
+        )
+        alerts = make_alerts(vessels_in_alert, alert_type, alert_config_name)
+        silenced_alerts = extract_silenced_alerts()
+        alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
+        load_alerts(alert_without_silenced, alert_config_name)
 
 flow.file_name = Path(__file__).name

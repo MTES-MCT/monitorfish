@@ -3,6 +3,9 @@ import pandas as pd
 from src.db_config import create_engine
 from src.pipeline.flows.risk_factor import flow
 from src.read_query import read_query
+from tests.mocks import mock_check_flow_not_running
+
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
 def test_risk_factor_flow(reset_test_data):

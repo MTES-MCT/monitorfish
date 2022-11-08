@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 import prefect
-from prefect import Flow, task
+from prefect import Flow, case, task
 from scrapy.crawler import CrawlerProcess
 
 from config import LIBRARY_LOCATION
@@ -12,6 +12,7 @@ from src.db_config import create_engine
 from src.pipeline.scraping.legipeche.legipeche.spiders.legipeche_spider import (
     LegipecheSpider,
 )
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.utils import psql_insert_copy
 
 SCRAPED_FILE_LOCATION = LIBRARY_LOCATION / "pipeline/data/"
@@ -105,9 +106,13 @@ def load_legipeche(legipeche: pd.DataFrame):
 
 
 with Flow("Scrape legipeche") as flow:
-    deleted_csv = delete_csv()
-    extraction_datetime_utc = scrape_legipeche_to_csv(upstream_tasks=[deleted_csv])
-    legipeche = read_legipeche_csv(extraction_datetime_utc)
-    load_legipeche(legipeche)
+
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
+
+        deleted_csv = delete_csv()
+        extraction_datetime_utc = scrape_legipeche_to_csv(upstream_tasks=[deleted_csv])
+        legipeche = read_legipeche_csv(extraction_datetime_utc)
+        load_legipeche(legipeche)
 
 flow.file_name = Path(__file__).name

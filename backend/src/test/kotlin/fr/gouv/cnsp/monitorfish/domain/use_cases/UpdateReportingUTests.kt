@@ -125,6 +125,9 @@ class UpdateReportingUTests {
                 isDeleted = false
             )
         )
+        given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
+            InfractionSuspicion(reportingActor = reportingActor, title = "Test", natinfCode = "1234")
+        )
 
         // When
         val throwable = catchThrowable {
@@ -193,7 +196,7 @@ class UpdateReportingUTests {
         given(reportingRepository.findById(any())).willReturn(
             Reporting(
                 id = 1,
-                type = ReportingType.INFRACTION_SUSPICION,
+                type = ReportingType.OBSERVATION,
                 vesselName = "BIDUBULE",
                 internalReferenceNumber = "FR224226850",
                 externalReferenceNumber = "1236514",
@@ -201,7 +204,7 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = InfractionSuspicion(reportingActor = ReportingActor.UNIT, title = "Test", natinfCode = "1234") as ReportingValue,
+                value = Observation(reportingActor = ReportingActor.UNIT, unit = "OPS", title = "A title", description = "Before update") as ReportingValue,
                 isArchived = false,
                 isDeleted = false
             )
@@ -212,7 +215,7 @@ class UpdateReportingUTests {
             1,
             UpdatedInfractionSuspicionOrObservation(
                 reportingActor = ReportingActor.UNIT,
-                reportingType = ReportingType.INFRACTION_SUSPICION,
+                reportingType = ReportingType.OBSERVATION,
                 unit = "AN UNIT",
                 title = "A reporting",
                 description = "Test 2",
@@ -221,7 +224,7 @@ class UpdateReportingUTests {
         )
 
         // Then
-        argumentCaptor<InfractionSuspicion>().apply {
+        argumentCaptor<Observation>().apply {
             verify(reportingRepository).update(any(), capture())
 
             assertThat(allValues.first().description).isEqualTo("Test 2")
@@ -272,7 +275,7 @@ class UpdateReportingUTests {
     }
 
     @Test
-    fun `execute Should add the flagState, the DMl and the sea front of the reporting When the reporting is an INFRACTION_SUSPICION`() {
+    fun `execute Should add the flagState, the DML and the sea front of the reporting When the reporting is an INFRACTION_SUSPICION`() {
         // Given
         given(reportingRepository.findById(any())).willReturn(
             Reporting(
@@ -295,9 +298,10 @@ class UpdateReportingUTests {
                 isDeleted = false
             )
         )
-        given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), any())).willReturn(
+        given(getInfractionSuspicionWithDMLAndSeaFront.execute(any(), anyOrNull())).willReturn(
             InfractionSuspicion(
                 reportingActor = ReportingActor.UNIT,
+                unit = "AN UNIT",
                 title = "Test",
                 natinfCode = "1234",
                 flagState = "FR",

@@ -12,6 +12,7 @@ import prefect
 import pytz
 import requests
 from prefect import Flow, Parameter, case, task
+from prefect.executors import LocalDaskExecutor
 
 from config import (
     BACKOFFICE_URL,
@@ -717,7 +718,7 @@ def send_message(msg: EmailMessage):
     send_email(msg)
 
 
-with Flow("Regulations checkup") as flow:
+with Flow("Regulations checkup", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

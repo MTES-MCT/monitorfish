@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import prefect
 from prefect import Flow, task
+from prefect.executors import LocalDaskExecutor
 
 from config import LIBRARY_LOCATION
 from src.pipeline.generic_tasks import load
@@ -29,7 +30,7 @@ def load_districts(districts):
     )
 
 
-with Flow("Districts") as flow:
+with Flow("Districts", executor=LocalDaskExecutor()) as flow:
     districts = extract_districts()
     load_districts(districts)
 

@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import prefect
 from prefect import Flow, task
+from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.generic_tasks import extract, load
 
@@ -34,7 +35,7 @@ def load_facade_areas(facade_areas: pd.DataFrame):
     )
 
 
-with Flow("Facade areas") as flow:
+with Flow("Facade areas", executor=LocalDaskExecutor()) as flow:
     facade_areas = extract_facade_areas()
     load_facade_areas(facade_areas)
 

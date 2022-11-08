@@ -7,6 +7,7 @@ import prefect
 from geoalchemy2 import Geometry
 from geoalchemy2.functions import ST_Intersects
 from prefect import Flow, Parameter, case, task
+from prefect.executors import LocalDaskExecutor
 from prefect.tasks.control_flow import merge
 from sqlalchemy import Table, and_, or_, select
 from sqlalchemy.sql import Select
@@ -430,7 +431,7 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
     return vessels_in_alerts
 
 
-with Flow("Position alert") as flow:
+with Flow("Position alert", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

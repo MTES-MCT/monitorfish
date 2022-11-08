@@ -17,6 +17,7 @@ import sqlalchemy
 import weasyprint
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from prefect import Flow, Parameter, case, flatten, task, unmapped
+from prefect.executors import LocalDaskExecutor
 from sqlalchemy import Table, update
 
 from config import (
@@ -438,7 +439,6 @@ def send_beacon_malfunction_message(
                 error_message=error_message,
             )
         )
-
     return notifications
 
 
@@ -486,7 +486,7 @@ def execute_statement(reset_requested_notifications_statement):
         conn.execute(reset_requested_notifications_statement)
 
 
-with Flow("Notify malfunctions") as flow:
+with Flow("Notify malfunctions", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

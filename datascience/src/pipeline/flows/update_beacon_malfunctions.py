@@ -7,6 +7,7 @@ import pandas as pd
 import prefect
 import requests
 from prefect import Flow, Parameter, case, task, unmapped
+from prefect.executors import LocalDaskExecutor
 
 from config import (
     BEACON_MALFUNCTIONS_ENDPOINT,
@@ -446,7 +447,7 @@ def request_notification(
     r.raise_for_status()
 
 
-with Flow("Beacons malfunctions") as flow:
+with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

@@ -2,6 +2,7 @@ from pathlib import Path
 
 import prefect
 from prefect import Flow, case, task
+from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
@@ -30,7 +31,7 @@ def load_infractions(infractions):
     )
 
 
-with Flow("Infractions") as flow:
+with Flow("Infractions", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

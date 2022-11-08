@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import prefect
 from prefect import Flow, case, task
+from prefect.executors import LocalDaskExecutor
 
 from config import default_risk_factors, risk_factor_coefficients
 from src.pipeline.generic_tasks import extract, load
@@ -110,7 +111,7 @@ def load_risk_factors(risk_factors: pd.DataFrame):
     )
 
 
-with Flow("Risk factor") as flow:
+with Flow("Risk factor", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

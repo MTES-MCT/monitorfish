@@ -5,6 +5,7 @@ import pandas as pd
 import requests
 import tabula
 from prefect import Flow, Parameter, task
+from prefect.executors import LocalDaskExecutor
 
 from config import PROXIES
 
@@ -99,7 +100,9 @@ def export_isscaap_codes(isscaap_codes: pd.DataFrame, csv_filepath: str) -> None
     isscaap_codes.to_csv(csv_filepath, index=True)
 
 
-with Flow("Extract ISSCAAP codes from fao.org to csv file") as flow:
+with Flow(
+    "Extract ISSCAAP codes from fao.org to csv file", executor=LocalDaskExecutor()
+) as flow:
     csv_filepath = Parameter("csv_filepath")
     pdf = extract_isscaap_codes_pdf()
     isscaap_codes = parse_pdf(pdf)

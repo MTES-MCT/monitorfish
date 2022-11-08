@@ -5,6 +5,7 @@ from pathlib import Path
 import pandas as pd
 import prefect
 from prefect import Flow, case, task
+from prefect.executors import LocalDaskExecutor
 from scrapy.crawler import CrawlerProcess
 
 from config import LIBRARY_LOCATION
@@ -105,7 +106,7 @@ def load_legipeche(legipeche: pd.DataFrame):
         )
 
 
-with Flow("Scrape legipeche") as flow:
+with Flow("Scrape legipeche", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

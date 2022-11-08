@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 from prefect import Flow, Parameter, case, task
+from prefect.executors import LocalDaskExecutor
 from prefect.tasks.control_flow import merge
 
 from src.db_config import create_engine
@@ -91,7 +92,7 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
         )
 
 
-with Flow("Missing trip number") as flow:
+with Flow("Missing trip number", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

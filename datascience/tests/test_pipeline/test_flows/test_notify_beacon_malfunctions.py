@@ -822,6 +822,9 @@ def test_flow(reset_test_data):
         mock_send_beacon_malfunction_message,
     )
 
+    # unittest.mock.patching a task results in weird bugs if using a LocalDaskExecutor
+    flow.executor = None
+
     # Test flow run
     state = flow.run(test_mode=False)
 

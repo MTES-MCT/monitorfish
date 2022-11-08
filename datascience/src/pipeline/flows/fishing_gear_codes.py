@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import prefect
 from prefect import Flow, task
+from prefect.executors import LocalDaskExecutor
 
 from config import LIBRARY_LOCATION
 from src.pipeline.generic_tasks import load
@@ -42,7 +43,7 @@ def load_fishing_gear_codes_groups(fishing_gear_codes_groups):
     )
 
 
-with Flow("Fishing gears") as flow:
+with Flow("Fishing gears", executor=LocalDaskExecutor()) as flow:
     fishing_gear_codes = extract_fishing_gear_codes()
     fishing_gear_codes_groups = extract_fishing_gear_codes_groups()
     load_fishing_gear_codes_groups(fishing_gear_codes_groups)

@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import prefect
 from prefect import Flow, case, task
+from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import coalesce, concatenate_columns
@@ -343,7 +344,7 @@ def load_vessels(all_vessels: pd.DataFrame):
     )
 
 
-with Flow("Vessels") as flow:
+with Flow("Vessels", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

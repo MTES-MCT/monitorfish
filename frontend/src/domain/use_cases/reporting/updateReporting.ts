@@ -28,9 +28,9 @@ export const updateReporting =
           dispatch(updateCurrentReporting(updatedReporting as InfractionSuspicionReporting))
         }
 
+        // We update the reportings of the last positions vessels state
         if (previousReportingType !== nextReporting.reportingType) {
           const vesselId = Vessel.getVesselFeatureId(selectedVesselIdentity)
-          console.log(vesselId, 'vesselId')
 
           dispatch(
             removeVesselReporting({
@@ -46,7 +46,7 @@ export const updateReporting =
           )
         }
 
-        // If the update is done from the ReportingCard tab of the vessel sidebar
+        // If the update is done from the Reporting tab of the vessel sidebar
         if (vesselIdentity && currentAndArchivedReportingsOfSelectedVessel?.current?.length) {
           const nextCurrentAndArchivedReporting = getUpdatedCurrentAndArchivedReportingOfSelectedVessel(
             currentAndArchivedReportingsOfSelectedVessel,

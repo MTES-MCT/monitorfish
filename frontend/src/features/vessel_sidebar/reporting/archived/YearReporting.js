@@ -8,7 +8,7 @@ import { ReportingCard } from '../ReportingCard'
 
 const YearReporting = props => {
   const {
-    /** @type {ReportingCard[]} yearReportings */
+    /** @type {Reporting[]} yearReportings */
     yearReportings,
     year,
     isLastItem

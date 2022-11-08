@@ -6,7 +6,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.loadPath('/#@-824534.42,6082993.21,8.70')
   })
 
-  it('ReportingCard Should contain the current reporting, archive or delete a reporting', () => {
+  it('Reporting Should contain the current reporting, archive or delete a reporting', () => {
     // Given
     cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('MARIAGE île')
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
@@ -38,7 +38,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="reporting-card"]').eq(1).contains('ALERTE / 3 milles - Chaluts')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
 
-    // ReportingCard Should be deleted and not found in the archived reporting nor in the map
+    // Reporting Should be deleted and not found in the archived reporting nor in the map
     cy.get('*[data-cy^="vessel-labels"]').click({ timeout: 10000 })
     cy.get('*[data-cy^="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("de risque des navires")')
@@ -124,7 +124,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="side-window-current-reportings"]').last().contains('FRAIS AVIS MODE')
   })
 
-  it('An infraction suspicion reporting Should be added from the reporting form', () => {
+  it('An observation reporting should be modified to an Infraction suspicion', () => {
     // Given
     cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('RENCONTRER VEILLER')
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()

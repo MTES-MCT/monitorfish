@@ -24,7 +24,7 @@ export type ReportingCardProps = {
   isArchive?: boolean
   numberOfAlerts?: number
   openConfirmDeletionModalForId: (reportingId: string) => Promisable<void>
-  // TODO Doesn't respect ReportingCard type from domain. Can it be undefined (wouldn't make sense)?
+  // TODO Doesn't respect Reporting type from domain. Can it be undefined (wouldn't make sense)?
   reporting: Reporting
 }
 export function ReportingCard({

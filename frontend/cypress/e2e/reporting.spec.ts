@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context('ReportingCard', () => {
+context('Reporting', () => {
   beforeEach(() => {
     cy.loadPath('/#@-582151.17,6006980.16,10.94')
   })

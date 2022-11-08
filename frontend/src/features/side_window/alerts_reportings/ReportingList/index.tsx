@@ -66,7 +66,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     await dispatch(archiveReportings(tableCheckedIds.map(Number)) as any)
   }, [dispatch, tableCheckedIds])
 
-  // TODO Rather use a reporting id here than passing a copy of the whole ReportingCard object.
+  // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.
   const edit = useCallback(
     (isDisabled: boolean, reporting: InfractionSuspicionReporting | PendingAlertReporting) => {
       if (!isDisabled) {

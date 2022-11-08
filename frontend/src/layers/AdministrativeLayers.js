@@ -59,6 +59,4 @@ const AdministrativeLayers = ({ map }) => {
   return null
 }
 
-// TODO This is strange and I don't think it works since hooks are inner-component dependant.
-// Either memoize it within the parent components or maybe memoize only its props values.
 export default React.memo(AdministrativeLayers)

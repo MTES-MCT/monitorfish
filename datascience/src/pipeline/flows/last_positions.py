@@ -5,6 +5,7 @@ from typing import Tuple
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task
+from prefect.executors import LocalDaskExecutor
 from prefect.tasks.control_flow import merge
 
 from config import CURRENT_POSITION_ESTIMATION_MAX_HOURS, default_risk_factors
@@ -469,7 +470,7 @@ def load_last_positions(last_positions):
     )
 
 
-with Flow("Last positions") as flow:
+with Flow("Last positions", executor=LocalDaskExecutor()) as flow:
 
     # Only run if the previous run has finished running
     flow_not_running = check_flow_not_running()

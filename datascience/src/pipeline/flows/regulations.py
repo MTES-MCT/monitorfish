@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import prefect
 from prefect import Flow, case, task
+from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.generic_tasks import delete_rows, extract, load
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
@@ -117,7 +118,7 @@ def load_new_regulations(new_regulations: pd.DataFrame):
     )
 
 
-with Flow("Regulations") as flow:
+with Flow("Regulations", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

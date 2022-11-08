@@ -4,6 +4,7 @@ import geopandas as gpd
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task
+from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
@@ -442,7 +443,7 @@ def load_controls(controls: pd.DataFrame, how: str):
     )
 
 
-with Flow("Controls") as flow:
+with Flow("Controls", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

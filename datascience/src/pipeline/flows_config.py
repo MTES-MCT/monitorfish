@@ -1,6 +1,5 @@
 from docker.types import Mount
 from dotenv import dotenv_values
-from prefect.executors.dask import LocalDaskExecutor
 from prefect.run_configs.docker import DockerRun
 from prefect.schedules import CronSchedule, Schedule, clocks
 from prefect.storage.local import Local
@@ -249,9 +248,6 @@ flows_to_register = [
     vessels.flow,
 ]
 
-################################ Define flows' executor ###############################
-for flow in flows_to_register:
-    flow.executor = LocalDaskExecutor()
 
 ################################ Define flows' storage ################################
 # This defines where the executor can find the flow.py file for each flow **inside**

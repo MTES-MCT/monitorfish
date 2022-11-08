@@ -6,6 +6,7 @@ import pandas as pd
 import prefect
 from geoalchemy2.functions import ST_Intersects
 from prefect import Flow, Parameter, case, task
+from prefect.executors import LocalDaskExecutor
 from sqlalchemy import Table, and_, not_, or_, select
 from sqlalchemy.sql import Select
 
@@ -372,7 +373,7 @@ def merge_risk_factor(
     )
 
 
-with Flow("Missing FAR alerts") as flow:
+with Flow("Missing FAR alerts", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

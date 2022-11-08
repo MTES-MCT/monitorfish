@@ -5,6 +5,7 @@ import pandas as pd
 import prefect
 import requests
 from prefect import Flow, task
+from prefect.executors import LocalDaskExecutor
 
 from config import DATA_GOUV_SPECIES_URL, PROXIES
 from src.pipeline.generic_tasks import load
@@ -56,7 +57,7 @@ def load_species(species: pd.DataFrame):
     )
 
 
-with Flow("Species") as flow:
+with Flow("Species", executor=LocalDaskExecutor()) as flow:
     species = extract_species(url=DATA_GOUV_SPECIES_URL, proxies=PROXIES)
     species = transform_species(species)
     load_species(species)

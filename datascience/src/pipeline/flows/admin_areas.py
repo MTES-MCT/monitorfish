@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import prefect
 from prefect import Flow, task
+from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.generic_tasks import extract, load
 
@@ -645,7 +646,7 @@ def load_transversal_sea_limit_areas(transversal_sea_limit_areas: pd.DataFrame):
     )
 
 
-with Flow("Administrative areas") as flow:
+with Flow("Administrative areas", executor=LocalDaskExecutor()) as flow:
 
     cgpm_areas = extract_cgpm_areas()
     load_cgpm_areas(cgpm_areas)

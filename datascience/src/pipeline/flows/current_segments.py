@@ -5,6 +5,7 @@ import geopandas as gpd
 import pandas as pd
 import prefect
 from prefect import Flow, case, task
+from prefect.executors import LocalDaskExecutor
 
 from config import default_risk_factors
 from src.pipeline.generic_tasks import extract, load
@@ -225,7 +226,7 @@ def load_current_segments(vessels_segments):  # pragma: no cover
     )
 
 
-with Flow("Current segments") as flow:
+with Flow("Current segments", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

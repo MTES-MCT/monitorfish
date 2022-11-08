@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import prefect
 from prefect import Flow, case, task
+from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.entities.beacon_malfunctions import BeaconStatus
 from src.pipeline.generic_tasks import extract, load
@@ -75,7 +76,7 @@ def load_satellite_operators(satellite_operators):
     )
 
 
-with Flow("Beacons") as flow:
+with Flow("Beacons", executor=LocalDaskExecutor()) as flow:
 
     flow_not_running = check_flow_not_running()
     with case(flow_not_running, True):

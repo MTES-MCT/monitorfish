@@ -1,3 +1,5 @@
+import type { Infraction } from './control'
+
 export enum PendingAlertValueType {
   FRENCH_EEZ_FISHING_ALERT = 'FRENCH_EEZ_FISHING_ALERT',
   MISSING_FAR_ALERT = 'MISSING_FAR_ALERT',
@@ -9,12 +11,7 @@ export type PendingAlert = {
   creationDate: string
   externalReferenceNumber: string
   id: string
-  infraction: {
-    infraction: string
-    infractionCategory: string
-    natinfCode: string
-    regulation: string
-  }
+  infraction: Infraction | null
   internalReferenceNumber: string
   ircs: string
   tripNumber: string

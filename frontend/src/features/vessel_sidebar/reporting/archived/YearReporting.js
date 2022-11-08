@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { ReactComponent as ChevronIconSVG } from '../../../icons/Chevron_simple_gris.svg'
 import { reportingIsAnInfractionSuspicion } from '../../../../domain/entities/reporting'
-import { Reporting } from '../Reporting'
+import { ReportingCard } from '../ReportingCard'
 
 const YearReporting = props => {
   const {
-    /** @type {Reporting[]} yearReportings */
+    /** @type {ReportingCard[]} yearReportings */
     yearReportings,
     year,
     isLastItem
@@ -71,7 +71,7 @@ const YearReporting = props => {
             ? yearReportings
               .sort((a, b) => new Date(b.validationDate) - new Date(a.validationDate))
               .map(reporting => {
-                return <Reporting
+                return <ReportingCard
                   key={reporting.id}
                   reporting={reporting}
                   isArchive={true}

@@ -7,13 +7,13 @@ import { ReportingType } from '../../types/reporting'
 
 import type { AppDispatch, AppGetState } from '../../../store'
 import type { VesselIdentity } from '../../entities/vessel/types'
-import type { InfractionSuspicionReporting, UpdateReporting } from '../../types/reporting'
+import type { InfractionSuspicionReporting, ReportingUpdate } from '../../types/reporting'
 
 export const updateReporting =
   (
     selectedVesselIdentity: VesselIdentity,
     id: number,
-    nextReporting: UpdateReporting,
+    nextReporting: ReportingUpdate,
     previousReportingType: ReportingType
   ) =>
   async (dispatch: AppDispatch, getState: AppGetState): Promise<void> => {
@@ -21,12 +21,16 @@ export const updateReporting =
 
     return updateReportingFromAPI(id, nextReporting)
       .then(updatedReporting => {
-        if (nextReporting.reportingType === ReportingType.INFRACTION_SUSPICION) {
+        if (
+          nextReporting.reportingType === ReportingType.INFRACTION_SUSPICION ||
+          previousReportingType === ReportingType.INFRACTION_SUSPICION
+        ) {
           dispatch(updateCurrentReporting(updatedReporting as InfractionSuspicionReporting))
         }
 
         if (previousReportingType !== nextReporting.reportingType) {
           const vesselId = Vessel.getVesselFeatureId(selectedVesselIdentity)
+          console.log(vesselId, 'vesselId')
 
           dispatch(
             removeVesselReporting({
@@ -42,7 +46,7 @@ export const updateReporting =
           )
         }
 
-        // If the update is done from the Reporting tab of the vessel sidebar
+        // If the update is done from the ReportingCard tab of the vessel sidebar
         if (vesselIdentity && currentAndArchivedReportingsOfSelectedVessel?.current?.length) {
           const nextCurrentAndArchivedReporting = getUpdatedCurrentAndArchivedReportingOfSelectedVessel(
             currentAndArchivedReportingsOfSelectedVessel,

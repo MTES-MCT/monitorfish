@@ -3,10 +3,10 @@ import ky from 'ky'
 import { ApiError } from '../libs/ApiError'
 
 import type {
-  Reporting,
-  UpdateReporting,
   InfractionSuspicionReporting,
-  PendingAlertReporting
+  PendingAlertReporting,
+  Reporting,
+  ReportingUpdate
 } from '../domain/types/reporting'
 
 export const ARCHIVE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu archiver le signalement"
@@ -42,7 +42,7 @@ async function archiveReportingsFromAPI(ids: number[]) {
         Accept: 'application/json, text/plain',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      json: JSON.stringify(ids)
+      json: ids
     })
   } catch (err) {
     throw new ApiError(ARCHIVE_REPORTINGS_ERROR_MESSAGE, err)
@@ -74,7 +74,7 @@ async function deleteReportingsFromAPI(ids: number[]) {
         Accept: 'application/json, text/plain',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      json: JSON.stringify(ids)
+      json: ids
     })
   } catch (err) {
     throw new ApiError(DELETE_REPORTINGS_ERROR_MESSAGE, err)
@@ -107,7 +107,7 @@ async function addReportingFromAPI(newReporting: Reporting): Promise<Reporting> 
  *
  * @throws {@link ApiError}
  */
-async function updateReportingFromAPI(id: number, nextReporting: UpdateReporting): Promise<Reporting> {
+async function updateReportingFromAPI(id: number, nextReporting: ReportingUpdate): Promise<Reporting> {
   try {
     return await ky
       .put(`/bff/v1/reportings/${id}/update`, {

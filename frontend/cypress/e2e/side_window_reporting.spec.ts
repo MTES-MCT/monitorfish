@@ -7,6 +7,7 @@ context('Reportings', () => {
 
   it('Reportings Should be archived', () => {
     // Given
+    console.log('re')
     cy.intercept('PUT', 'bff/v1/reportings/archive').as('archiveReportings')
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 1)
@@ -102,5 +103,28 @@ context('Reportings', () => {
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 1)
     cy.get('*[data-cy="side-window-current-reportings"]').first().contains('DML 29')
     cy.get('*[data-cy="side-window-current-reportings"]').first().contains('23581')
+  })
+
+  it('A Reporting Should be edited with the reporting type modified ', () => {
+    // Given
+    cy.intercept('PUT', 'bff/v1/reportings/6/update').as('updateReporting')
+    cy.get('*[data-cy="side-window-reporting-tab"]').click()
+    cy.get('[data-cy="side-window-sub-menu-NAMO"]').click()
+    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 1)
+
+    // When
+    cy.get('[data-cy="side-window-edit-reporting"]').click()
+    cy.get('[data-cy="new-reporting-select-observation-reporting-type"]').click()
+    cy.wait(500)
+    cy.get('[data-cy="new-reporting-create-button"]').click()
+
+    // Then
+    cy.wait('@updateReporting').then(({ request, response }) => {
+      expect(request.body.reportingType).contains('OBSERVATION')
+      expect(response && response.statusCode).equal(200)
+    })
+    cy.wait(50)
+
+    cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 0)
   })
 })

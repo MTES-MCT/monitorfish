@@ -30,14 +30,22 @@ class JpaReportingRepository(
 
     @Transactional
     override fun update(reportingId: Int, updatedInfractionSuspicion: InfractionSuspicion): Reporting {
-        dbReportingRepository.update(reportingId, mapper.writeValueAsString(updatedInfractionSuspicion), ReportingType.INFRACTION_SUSPICION.toString())
+        dbReportingRepository.update(
+            reportingId,
+            mapper.writeValueAsString(updatedInfractionSuspicion),
+            ReportingType.INFRACTION_SUSPICION.toString()
+        )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
     }
 
     @Transactional
     override fun update(reportingId: Int, updatedObservation: Observation): Reporting {
-        dbReportingRepository.update(reportingId, mapper.writeValueAsString(updatedObservation), ReportingType.OBSERVATION.toString())
+        dbReportingRepository.update(
+            reportingId,
+            mapper.writeValueAsString(updatedObservation),
+            ReportingType.OBSERVATION.toString()
+        )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
     }

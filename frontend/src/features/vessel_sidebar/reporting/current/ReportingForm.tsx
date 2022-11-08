@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { ReportingOriginActor, ReportingTypeCharacteristics } from '../../../../domain/entities/reporting'
+import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
 import { addReporting } from '../../../../domain/use_cases/reporting/addReporting'
 import { updateReporting } from '../../../../domain/use_cases/reporting/updateReporting'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
@@ -14,7 +15,7 @@ import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.st
 import { sortArrayByColumn } from '../../../vessel_list/tableSort'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
-import type { Reporting, UpdateReporting, ReportingType } from '../../../../domain/types/reporting'
+import type { Reporting, ReportingUpdate, ReportingType } from '../../../../domain/types/reporting'
 
 type ReportingFormProps = {
   closeForm: () => void
@@ -62,13 +63,13 @@ export function ReportingForm({
   function fillForm(editedOrSavedReporting) {
     setErrorFields([])
     setReportingType(editedOrSavedReporting.type || ReportingTypeCharacteristics.INFRACTION_SUSPICION.code)
-    setUnit(editedOrSavedReporting.value?.unit || '')
-    setAuthorTrigram(editedOrSavedReporting.value?.authorTrigram || '')
-    setAuthorContact(editedOrSavedReporting.value?.authorContact || '')
-    setReportingActor(editedOrSavedReporting.value?.reportingActor || ReportingOriginActor.OPS.code)
-    setTitle(editedOrSavedReporting.value?.title || '')
-    setNatinfCode(editedOrSavedReporting.value?.natinfCode || '')
-    setDescription(editedOrSavedReporting.value?.description || '')
+    setUnit(editedOrSavedReporting.value.unit || '')
+    setAuthorTrigram(editedOrSavedReporting.value.authorTrigram || '')
+    setAuthorContact(editedOrSavedReporting.value.authorContact || '')
+    setReportingActor(editedOrSavedReporting.value.reportingActor || ReportingOriginActor.OPS.code)
+    setTitle(editedOrSavedReporting.value.title || '')
+    setNatinfCode(editedOrSavedReporting.value.natinfCode || '')
+    setDescription(editedOrSavedReporting.value.description || '')
   }
 
   const deleteLocalStorageReportingEntry = useCallback(
@@ -158,16 +159,21 @@ export function ReportingForm({
   }
 
   const editReporting = useCallback(
-    (editedReportingId: number, nextReporting: UpdateReporting) => {
+    (editedReportingId: number, nextReportingValue: ReportingUpdate) => {
       // TODO Fix the use-case dispatch type
       dispatch(
-        updateReporting(selectedVesselIdentity, editedReportingId, nextReporting, previousReportingType.current) as any
+        updateReporting(
+          getOnlyVesselIdentityProperties(editedReporting),
+          editedReportingId,
+          nextReportingValue,
+          previousReportingType.current
+        ) as any
       ).then(() => {
         closeForm()
         deleteLocalStorageReportingEntry()
       })
     },
-    [dispatch, closeForm, deleteLocalStorageReportingEntry, selectedVesselIdentity]
+    [dispatch, closeForm, deleteLocalStorageReportingEntry, editedReporting]
   )
 
   const createReporting = useCallback(
@@ -198,7 +204,7 @@ export function ReportingForm({
   )
 
   const createOrEditReporting = useCallback(
-    (_reportingType: ReportingType, reportingValue: UpdateReporting) => {
+    (_reportingType: ReportingType, reportingValue: ReportingUpdate) => {
       const hasErrors = checkErrors(reportingValue)
       if (hasErrors) {
         return
@@ -337,12 +343,14 @@ export function ReportingForm({
       >
         <Radio
           key={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+          data-cy="new-reporting-select-infraction-reporting-type"
           value={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
         >
           {ReportingTypeCharacteristics.INFRACTION_SUSPICION.inputName}
         </Radio>
         <Radio
           key={ReportingTypeCharacteristics.OBSERVATION.code}
+          data-cy="new-reporting-select-observation-reporting-type"
           value={ReportingTypeCharacteristics.OBSERVATION.code}
         >
           {ReportingTypeCharacteristics.OBSERVATION.inputName}

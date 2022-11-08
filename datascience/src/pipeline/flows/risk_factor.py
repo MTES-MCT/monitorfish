@@ -2,10 +2,11 @@ from pathlib import Path
 
 import pandas as pd
 import prefect
-from prefect import Flow, task
+from prefect import Flow, case, task
 
 from config import default_risk_factors, risk_factor_coefficients
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 
 @task(checkpoint=False)
@@ -110,9 +111,13 @@ def load_risk_factors(risk_factors: pd.DataFrame):
 
 
 with Flow("Risk factor") as flow:
-    current_segments = extract_current_segments()
-    control_anteriority = extract_control_anteriority()
-    risk_factors = compute_risk_factors(current_segments, control_anteriority)
-    load_risk_factors(risk_factors)
+
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
+
+        current_segments = extract_current_segments()
+        control_anteriority = extract_control_anteriority()
+        risk_factors = compute_risk_factors(current_segments, control_anteriority)
+        load_risk_factors(risk_factors)
 
 flow.file_name = Path(__file__).name

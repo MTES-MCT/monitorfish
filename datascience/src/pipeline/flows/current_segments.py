@@ -4,7 +4,7 @@ from pathlib import Path
 import geopandas as gpd
 import pandas as pd
 import prefect
-from prefect import Flow, task
+from prefect import Flow, case, task
 
 from config import default_risk_factors
 from src.pipeline.generic_tasks import extract, load
@@ -14,6 +14,7 @@ from src.pipeline.helpers.segments import (
     unnest_segments,
 )
 from src.pipeline.processing import df_to_dict_series
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.facades import extract_facade_areas
 
 
@@ -226,23 +227,28 @@ def load_current_segments(vessels_segments):  # pragma: no cover
 
 with Flow("Current segments") as flow:
 
-    # Extract
-    catches = extract_catches()
-    last_positions = extract_last_positions()
-    segments = extract_segments()
-    facade_areas = extract_facade_areas()
-    control_priorities = extract_control_priorities()
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    # Transform
-    last_positions_facade = compute_last_positions_facade(last_positions, facade_areas)
-    segments = unnest_segments(segments)
-    current_segments = compute_current_segments(catches, segments)
-    control_priorities = compute_control_priorities(
-        current_segments, last_positions_facade, control_priorities
-    )
-    current_segments = join(catches, current_segments, control_priorities)
+        # Extract
+        catches = extract_catches()
+        last_positions = extract_last_positions()
+        segments = extract_segments()
+        facade_areas = extract_facade_areas()
+        control_priorities = extract_control_priorities()
 
-    # Load
-    load_current_segments(current_segments)
+        # Transform
+        last_positions_facade = compute_last_positions_facade(
+            last_positions, facade_areas
+        )
+        segments = unnest_segments(segments)
+        current_segments = compute_current_segments(catches, segments)
+        control_priorities = compute_control_priorities(
+            current_segments, last_positions_facade, control_priorities
+        )
+        current_segments = join(catches, current_segments, control_priorities)
+
+        # Load
+        load_current_segments(current_segments)
 
 flow.file_name = Path(__file__).name

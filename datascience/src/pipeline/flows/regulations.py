@@ -5,6 +5,7 @@ import prefect
 from prefect import Flow, case, task
 
 from src.pipeline.generic_tasks import delete_rows, extract, load
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 
 @task(checkpoint=False)
@@ -118,19 +119,22 @@ def load_new_regulations(new_regulations: pd.DataFrame):
 
 with Flow("Regulations") as flow:
 
-    local_hashes = extract_local_hashes()
-    remote_hashes = extract_remote_hashes()
-    hashes = merge_hashes(local_hashes, remote_hashes)
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    ids_to_delete = select_ids_to_delete(hashes)
-    cond_delete = delete_required(ids_to_delete)
-    with case(cond_delete, True):
-        delete(ids_to_delete)
+        local_hashes = extract_local_hashes()
+        remote_hashes = extract_remote_hashes()
+        hashes = merge_hashes(local_hashes, remote_hashes)
 
-    ids_to_update = select_ids_to_update(hashes)
-    cond_update = update_required(ids_to_update)
-    with case(cond_update, True):
-        new_regulations = extract_new_regulations(ids_to_update)
-        load_new_regulations(new_regulations)
+        ids_to_delete = select_ids_to_delete(hashes)
+        cond_delete = delete_required(ids_to_delete)
+        with case(cond_delete, True):
+            delete(ids_to_delete)
+
+        ids_to_update = select_ids_to_update(hashes)
+        cond_update = update_required(ids_to_update)
+        with case(cond_update, True):
+            new_regulations = extract_new_regulations(ids_to_update)
+            load_new_regulations(new_regulations)
 
 flow.file_name = Path(__file__).name

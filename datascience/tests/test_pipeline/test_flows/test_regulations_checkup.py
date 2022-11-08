@@ -29,7 +29,7 @@ from src.pipeline.flows.regulations_checkup import (
     make_html_hyperlinks,
     transform_modified_regulations,
 )
-from tests.mocks import get_utcnow_mock_factory
+from tests.mocks import get_utcnow_mock_factory, mock_check_flow_not_running
 
 # Task mocks
 
@@ -60,6 +60,7 @@ flow.replace(
     flow.get_tasks("get_utcnow")[0],
     get_utcnow_mock_factory(datetime.datetime(2031, 5, 19, 11, 14)),
 )
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
 @pytest.fixture

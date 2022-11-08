@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import prefect
 import requests
-from prefect import Flow, Parameter, task, unmapped
+from prefect import Flow, Parameter, case, task, unmapped
 
 from config import (
     BEACON_MALFUNCTIONS_ENDPOINT,
@@ -22,7 +22,10 @@ from src.pipeline.entities.beacon_malfunctions import (
 )
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import join_on_multiple_keys
-from src.pipeline.shared_tasks.control_flow import filter_results
+from src.pipeline.shared_tasks.control_flow import (
+    check_flow_not_running,
+    filter_results,
+)
 from src.pipeline.shared_tasks.dates import get_utcnow, make_timedelta
 from src.pipeline.shared_tasks.healthcheck import (
     assert_last_positions_health,
@@ -257,12 +260,10 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
 
     notification_to_send = {
         BeaconMalfunctionVesselStatus.AT_SEA.value: (
-            BeaconMalfunctionNotificationType
-            .MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value
         ),
         BeaconMalfunctionVesselStatus.AT_PORT.value: (
-            BeaconMalfunctionNotificationType
-            .MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value
+            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value
         ),
     }
 
@@ -447,109 +448,126 @@ def request_notification(
 
 with Flow("Beacons malfunctions") as flow:
 
-    # Healthcheck
-    healthcheck = get_monitorfish_healthcheck()
-    now = get_utcnow()
-    last_positions_healthcheck = assert_last_positions_health(
-        healthcheck=healthcheck, utcnow=now
-    )
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    # Parameters
-    max_hours_without_emission_at_sea = Parameter(
-        "max_hours_without_emission_at_sea",
-        default=BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
-    )
-    max_hours_without_emission_at_port = Parameter(
-        "max_hours_without_emission_at_port",
-        default=BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,
-    )
+        # Healthcheck
+        healthcheck = get_monitorfish_healthcheck()
+        now = get_utcnow()
+        last_positions_healthcheck = assert_last_positions_health(
+            healthcheck=healthcheck, utcnow=now
+        )
 
-    # Extract
-    last_positions = extract_last_positions(upstream_tasks=[last_positions_healthcheck])
-    vessels_that_should_emit = extract_vessels_that_should_emit(
-        upstream_tasks=[last_positions_healthcheck]
-    )
-    known_malfunctions = extract_known_malfunctions(
-        upstream_tasks=[last_positions_healthcheck]
-    )
+        # Parameters
+        max_hours_without_emission_at_sea = Parameter(
+            "max_hours_without_emission_at_sea",
+            default=BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
+        )
+        max_hours_without_emission_at_port = Parameter(
+            "max_hours_without_emission_at_port",
+            default=BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,
+        )
 
-    satellite_operators_statuses = extract_satellite_operators_statuses()
+        # Extract
+        last_positions = extract_last_positions(
+            upstream_tasks=[last_positions_healthcheck]
+        )
+        vessels_that_should_emit = extract_vessels_that_should_emit(
+            upstream_tasks=[last_positions_healthcheck]
+        )
+        known_malfunctions = extract_known_malfunctions(
+            upstream_tasks=[last_positions_healthcheck]
+        )
 
-    # Transform
-    non_emission_at_sea_max_duration = make_timedelta(
-        hours=max_hours_without_emission_at_sea
-    )
-    non_emission_at_port_max_duration = make_timedelta(
-        hours=max_hours_without_emission_at_port
-    )
+        satellite_operators_statuses = extract_satellite_operators_statuses()
 
-    malfunction_datetime_utc_threshold_at_sea = now - non_emission_at_sea_max_duration
-    malfunction_datetime_utc_threshold_at_port = now - non_emission_at_port_max_duration
+        # Transform
+        non_emission_at_sea_max_duration = make_timedelta(
+            hours=max_hours_without_emission_at_sea
+        )
+        non_emission_at_port_max_duration = make_timedelta(
+            hours=max_hours_without_emission_at_port
+        )
 
-    last_emissions = get_last_emissions(vessels_that_should_emit, last_positions)
+        malfunction_datetime_utc_threshold_at_sea = (
+            now - non_emission_at_sea_max_duration
+        )
+        malfunction_datetime_utc_threshold_at_port = (
+            now - non_emission_at_port_max_duration
+        )
 
-    new_malfunctions = get_new_malfunctions(
-        last_emissions,
-        known_malfunctions,
-        satellite_operators_statuses,
-        malfunction_datetime_utc_threshold_at_sea,
-        malfunction_datetime_utc_threshold_at_port,
-    )
-    new_malfunctions = prepare_new_beacon_malfunctions(new_malfunctions)
+        last_emissions = get_last_emissions(vessels_that_should_emit, last_positions)
 
-    # Load
-    load_new_beacon_malfunctions(new_malfunctions)
+        new_malfunctions = get_new_malfunctions(
+            last_emissions,
+            known_malfunctions,
+            satellite_operators_statuses,
+            malfunction_datetime_utc_threshold_at_sea,
+            malfunction_datetime_utc_threshold_at_port,
+        )
+        new_malfunctions = prepare_new_beacon_malfunctions(new_malfunctions)
 
-    (
-        ids_not_at_port_restarted_emitting,
-        ids_at_port_restarted_emitting,
-        ids_not_required_to_emit,
-        ids_unsupervised_restarted_emitting,
-    ) = get_ended_malfunction_ids(
-        last_emissions, known_malfunctions, malfunction_datetime_utc_threshold_at_sea
-    )
+        # Load
+        load_new_beacon_malfunctions(new_malfunctions)
 
-    # Malfunctions not "at port" (or supposed not to be, according to the latest
-    # vessel_status of the malfunction) - that is, in a status of AT_SEA,
-    # ACTIVITY_DETECTED... anything by AT_PORT - are moved to END_OF_MALFUNCTION.
-    # Notification is left to be done manually after a human check.
-    update_beacon_malfunction.map(
-        ids_not_at_port_restarted_emitting,
-        new_stage=unmapped(BeaconMalfunctionStage.END_OF_MALFUNCTION),
-        end_of_malfunction_reason=unmapped(EndOfMalfunctionReason.RESUMED_TRANSMISSION),
-    )
+        (
+            ids_not_at_port_restarted_emitting,
+            ids_at_port_restarted_emitting,
+            ids_not_required_to_emit,
+            ids_unsupervised_restarted_emitting,
+        ) = get_ended_malfunction_ids(
+            last_emissions,
+            known_malfunctions,
+            malfunction_datetime_utc_threshold_at_sea,
+        )
 
-    # Malfunctions "at port" (or supposed to be, according to the latest vessel_status
-    # of the malfunction) are moved to ARCHIVED and automatically notified.
-    ids_at_port_restarted_emitting_updated = update_beacon_malfunction.map(
-        ids_at_port_restarted_emitting,
-        new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
-        end_of_malfunction_reason=unmapped(EndOfMalfunctionReason.RESUMED_TRANSMISSION),
-    )
+        # Malfunctions not "at port" (or supposed not to be, according to the latest
+        # vessel_status of the malfunction) - that is, in a status of AT_SEA,
+        # ACTIVITY_DETECTED... anything by AT_PORT - are moved to END_OF_MALFUNCTION.
+        # Notification is left to be done manually after a human check.
+        update_beacon_malfunction.map(
+            ids_not_at_port_restarted_emitting,
+            new_stage=unmapped(BeaconMalfunctionStage.END_OF_MALFUNCTION),
+            end_of_malfunction_reason=unmapped(
+                EndOfMalfunctionReason.RESUMED_TRANSMISSION
+            ),
+        )
 
-    ids_at_port_restarted_emitting_updated = filter_results(
-        ids_at_port_restarted_emitting_updated
-    )
+        # Malfunctions "at port" (or supposed to be, according to the latest vessel_status
+        # of the malfunction) are moved to ARCHIVED and automatically notified.
+        ids_at_port_restarted_emitting_updated = update_beacon_malfunction.map(
+            ids_at_port_restarted_emitting,
+            new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
+            end_of_malfunction_reason=unmapped(
+                EndOfMalfunctionReason.RESUMED_TRANSMISSION
+            ),
+        )
 
-    request_notification.map(
-        ids_at_port_restarted_emitting_updated,
-        unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
-    )
+        ids_at_port_restarted_emitting_updated = filter_results(
+            ids_at_port_restarted_emitting_updated
+        )
 
-    # Malfunctions for which the beacon is unsupervised, has been deactivated or
-    # completely unequipped are just archived.
-    update_beacon_malfunction.map(
-        ids_not_required_to_emit,
-        new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
-        end_of_malfunction_reason=unmapped(
-            EndOfMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED
-        ),
-    )
+        request_notification.map(
+            ids_at_port_restarted_emitting_updated,
+            unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
+        )
 
-    update_beacon_malfunction.map(
-        ids_unsupervised_restarted_emitting,
-        new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
-        end_of_malfunction_reason=unmapped(EndOfMalfunctionReason.RESUMED_TRANSMISSION),
-    )
+        # Malfunctions for which the beacon is unsupervised, has been deactivated or
+        # completely unequipped are just archived.
+        update_beacon_malfunction.map(
+            ids_not_required_to_emit,
+            new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
+            end_of_malfunction_reason=unmapped(
+                EndOfMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED
+            ),
+        )
+
+        update_beacon_malfunction.map(
+            ids_unsupervised_restarted_emitting,
+            new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
+            end_of_malfunction_reason=unmapped(
+                EndOfMalfunctionReason.RESUMED_TRANSMISSION
+            ),
+        )
 
 flow.file_name = Path(__file__).name

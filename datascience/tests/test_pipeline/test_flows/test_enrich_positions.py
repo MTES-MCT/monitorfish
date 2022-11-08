@@ -15,6 +15,9 @@ from src.pipeline.flows.enrich_positions import (
 )
 from src.pipeline.helpers.dates import Period
 from src.read_query import read_query
+from tests.mocks import mock_check_flow_not_running
+
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
 def test_extract_positions(reset_test_data):

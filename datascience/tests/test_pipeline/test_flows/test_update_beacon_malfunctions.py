@@ -31,6 +31,7 @@ from src.read_query import read_query
 from tests.mocks import (
     extract_satellite_operators_statuses_mock_factory,
     get_monitorfish_healthcheck_mock_factory,
+    mock_check_flow_not_running,
     mock_datetime_utcnow,
 )
 
@@ -43,6 +44,8 @@ flow.replace(
     flow.get_tasks("extract_satellite_operators_statuses")[0],
     extract_satellite_operators_statuses_mock_factory(True, True),
 )
+
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
 def test_extract_last_positions_selects_all_vessels(reset_test_data):

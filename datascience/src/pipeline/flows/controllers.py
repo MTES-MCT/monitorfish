@@ -1,9 +1,11 @@
 from pathlib import Path
 
 import prefect
-from prefect import Flow, task
+from prefect import Flow, case, task
+from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 
 @task(checkpoint=False)
@@ -24,8 +26,12 @@ def load_controllers(controllers):
     )
 
 
-with Flow("Controllers") as flow:
-    controllers = extract_controllers()
-    load_controllers(controllers)
+with Flow("Controllers", executor=LocalDaskExecutor()) as flow:
+
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
+
+        controllers = extract_controllers()
+        load_controllers(controllers)
 
 flow.file_name = Path(__file__).name

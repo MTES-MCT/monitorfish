@@ -9,6 +9,7 @@ import pandas as pd
 import prefect
 import requests
 from prefect import Flow, Parameter, task
+from prefect.executors import LocalDaskExecutor
 from vptree import VPTree
 
 from config import (
@@ -521,7 +522,7 @@ def load_anchorages_to_monitorfish(anchorages: pd.DataFrame):
     )
 
 
-with Flow("Anchorages") as flow:
+with Flow("Anchorages", executor=LocalDaskExecutor()) as flow:
     anchorages = extract_datagouv_anchorages(
         anchorages_url=ANCHORAGES_URL, proxies=PROXIES
     )

@@ -7,6 +7,7 @@ from zipfile import ZipFile
 
 import prefect
 from prefect import Flow, Parameter, task
+from prefect.executors import LocalDaskExecutor
 from prefect.tasks.control_flow import case
 
 from config import ERS_FILES_LOCATION
@@ -445,7 +446,7 @@ def load_logbook_data(cleaned_data: List[dict]):
                 )
 
 
-with Flow("Logbook") as flow:
+with Flow("Logbook", executor=LocalDaskExecutor()) as flow:
 
     # Only run if the previous run has finished running
     flow_not_running = check_flow_not_running()

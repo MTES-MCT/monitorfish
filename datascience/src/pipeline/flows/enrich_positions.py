@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task, unmapped
+from prefect.executors import LocalDaskExecutor
 from sqlalchemy import text
 
 from src.db_config import create_engine
@@ -16,6 +17,7 @@ from src.pipeline.processing import (
     prepare_df_for_loading,
     zeros_ones_to_bools,
 )
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import make_periods
 from src.pipeline.shared_tasks.positions import tag_positions_at_port
 from src.pipeline.utils import psql_insert_copy
@@ -322,47 +324,52 @@ def extract_enrich_load(
     load_fishing_activity(positions, period, logger)
 
 
-with Flow("Enrich positions") as flow:
+with Flow("Enrich positions", executor=LocalDaskExecutor()) as flow:
 
-    start_hours_ago = Parameter("start_hours_ago")
-    end_hours_ago = Parameter("end_hours_ago")
-    minutes_per_chunk = Parameter("minutes_per_chunk")
-    chunk_overlap_minutes = Parameter("chunk_overlap_minutes")
-    minimum_consecutive_positions = Parameter("minimum_consecutive_positions")
-    minimum_minutes_of_emission_at_sea = Parameter("minimum_minutes_of_emission_at_sea")
-    min_fishing_speed_threshold = Parameter("min_fishing_speed_threshold")
-    max_fishing_speed_threshold = Parameter("max_fishing_speed_threshold")
-    recompute_all = Parameter("recompute_all")
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    periods = make_periods(
-        start_hours_ago,
-        end_hours_ago,
-        minutes_per_chunk,
-        chunk_overlap_minutes,
-    )
+        start_hours_ago = Parameter("start_hours_ago")
+        end_hours_ago = Parameter("end_hours_ago")
+        minutes_per_chunk = Parameter("minutes_per_chunk")
+        chunk_overlap_minutes = Parameter("chunk_overlap_minutes")
+        minimum_consecutive_positions = Parameter("minimum_consecutive_positions")
+        minimum_minutes_of_emission_at_sea = Parameter(
+            "minimum_minutes_of_emission_at_sea"
+        )
+        min_fishing_speed_threshold = Parameter("min_fishing_speed_threshold")
+        max_fishing_speed_threshold = Parameter("max_fishing_speed_threshold")
+        recompute_all = Parameter("recompute_all")
 
-    with case(recompute_all, True):
-        reset = reset_positions.map(periods)
-        extract_enrich_load.map(
-            periods,
-            minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
-            min_fishing_speed_threshold=unmapped(min_fishing_speed_threshold),
-            max_fishing_speed_threshold=unmapped(max_fishing_speed_threshold),
-            minimum_minutes_of_emission_at_sea=unmapped(
-                minimum_minutes_of_emission_at_sea
-            ),
-            upstream_tasks=[reset],
+        periods = make_periods(
+            start_hours_ago,
+            end_hours_ago,
+            minutes_per_chunk,
+            chunk_overlap_minutes,
         )
 
-    with case(recompute_all, False):
-        extract_enrich_load.map(
-            periods,
-            minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
-            min_fishing_speed_threshold=unmapped(min_fishing_speed_threshold),
-            max_fishing_speed_threshold=unmapped(max_fishing_speed_threshold),
-            minimum_minutes_of_emission_at_sea=unmapped(
-                minimum_minutes_of_emission_at_sea
-            ),
-        )
+        with case(recompute_all, True):
+            reset = reset_positions.map(periods)
+            extract_enrich_load.map(
+                periods,
+                minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
+                min_fishing_speed_threshold=unmapped(min_fishing_speed_threshold),
+                max_fishing_speed_threshold=unmapped(max_fishing_speed_threshold),
+                minimum_minutes_of_emission_at_sea=unmapped(
+                    minimum_minutes_of_emission_at_sea
+                ),
+                upstream_tasks=[reset],
+            )
+
+        with case(recompute_all, False):
+            extract_enrich_load.map(
+                periods,
+                minimum_consecutive_positions=unmapped(minimum_consecutive_positions),
+                min_fishing_speed_threshold=unmapped(min_fishing_speed_threshold),
+                max_fishing_speed_threshold=unmapped(max_fishing_speed_threshold),
+                minimum_minutes_of_emission_at_sea=unmapped(
+                    minimum_minutes_of_emission_at_sea
+                ),
+            )
 
 flow.file_name = Path(__file__).name

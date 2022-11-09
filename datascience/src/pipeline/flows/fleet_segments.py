@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import prefect
 from prefect import Flow, task
+from prefect.executors import LocalDaskExecutor
 
 from config import LIBRARY_LOCATION
 from src.pipeline.generic_tasks import load
@@ -33,7 +34,7 @@ def load_segments(segments):
     )
 
 
-with Flow("Fleet segments") as flow:
+with Flow("Fleet segments", executor=LocalDaskExecutor()) as flow:
     segments = extract_segments()
     load_segments(segments)
 

@@ -16,6 +16,9 @@ from src.pipeline.flows.current_segments import (
     join,
 )
 from src.read_query import read_query
+from tests.mocks import mock_check_flow_not_running
+
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
 def test_extract_catches(reset_test_data):

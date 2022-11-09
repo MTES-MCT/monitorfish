@@ -2,10 +2,12 @@ from pathlib import Path
 
 import pandas as pd
 from prefect import Flow, Parameter, case, task
+from prefect.executors import LocalDaskExecutor
 from prefect.tasks.control_flow import merge
 
 from src.db_config import create_engine
 from src.pipeline.generic_tasks import extract
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.utils import psql_insert_copy
 
 
@@ -90,20 +92,25 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
         )
 
 
-with Flow("Missing trip number") as flow:
+with Flow("Missing trip number", executor=LocalDaskExecutor()) as flow:
 
-    reset_trip_numbers = Parameter("reset_trip_numbers", default=False)
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    with case(reset_trip_numbers, True):
-        reset = reset_computed_trip_numbers()
-        computed_trip_numbers_1 = extract_computed_trip_numbers(upstream_tasks=[reset])
+        reset_trip_numbers = Parameter("reset_trip_numbers", default=False)
 
-    with case(reset_trip_numbers, False):
-        computed_trip_numbers_2 = extract_computed_trip_numbers()
+        with case(reset_trip_numbers, True):
+            reset = reset_computed_trip_numbers()
+            computed_trip_numbers_1 = extract_computed_trip_numbers(
+                upstream_tasks=[reset]
+            )
 
-    computed_trip_numbers = merge(
-        computed_trip_numbers_1, computed_trip_numbers_2, checkpoint=False
-    )
-    load_computed_trip_numbers(computed_trip_numbers)
+        with case(reset_trip_numbers, False):
+            computed_trip_numbers_2 = extract_computed_trip_numbers()
+
+        computed_trip_numbers = merge(
+            computed_trip_numbers_1, computed_trip_numbers_2, checkpoint=False
+        )
+        load_computed_trip_numbers(computed_trip_numbers)
 
 flow.file_name = Path(__file__).name

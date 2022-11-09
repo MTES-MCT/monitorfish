@@ -9,6 +9,7 @@ import pandas as pd
 import prefect
 import requests
 from prefect import Flow, Parameter, task
+from prefect.executors import LocalDaskExecutor
 
 from config import LIBRARY_LOCATION, PORTS_URL, PROXIES
 from src.db_config import create_engine
@@ -628,7 +629,7 @@ def load_ports_to_monitorfish(ports):
     )
 
 
-with Flow("Ports") as flow:
+with Flow("Ports", executor=LocalDaskExecutor()) as flow:
     ports = extract_datagouv_ports(ports_url=PORTS_URL, proxies=PROXIES)
     load_ports_to_monitorfish(ports)
 

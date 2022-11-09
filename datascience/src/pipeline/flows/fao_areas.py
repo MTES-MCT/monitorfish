@@ -5,6 +5,7 @@ import geopandas as gpd
 import prefect
 import requests
 from prefect import Flow, task
+from prefect.executors import LocalDaskExecutor
 
 from config import FAO_AREAS_URL, LIBRARY_LOCATION, PROXIES
 from src.pipeline.generic_tasks import load
@@ -74,7 +75,7 @@ def load_fao_areas(fao_areas: gpd.GeoDataFrame):
     )
 
 
-with Flow("FAO areas") as flow:
+with Flow("FAO areas", executor=LocalDaskExecutor()) as flow:
     fao_areas = extract_fao_areas(url=FAO_AREAS_URL, proxies=PROXIES)
     fao_areas = transform_fao_areas(fao_areas)
     load_fao_areas(fao_areas)

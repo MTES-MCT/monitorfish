@@ -7,7 +7,7 @@ const getGeometryWithoutRegulationReference = () => async (dispatch, getState) =
 
   return getAllGeometryWithoutProperty(getState().global.isBackoffice)
     .then(features => {
-      return monitorFishWorker.getGeometryWithoutRegulationRef(features)
+      return monitorFishWorker.getIdToGeometryObject(features)
     }).catch(error => {
       dispatch(setError(error))
     })

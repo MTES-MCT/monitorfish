@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import prefect
 from prefect import Flow, case, task
@@ -25,18 +26,27 @@ def extract_satellite_operators():
 
 @task(checkpoint=False)
 def transform_beacons(beacons: pd.DataFrame) -> pd.DataFrame:
-    """Maps Posedion beacon status to Monitorfish `BeaconStatus`.
+    """Maps Posedion beacon status to Monitorfish `BeaconStatus` and maps the
+    1 and 0 `int`s and `np.nan` values in `is_coastal` to `True`, `False` and `None`
+    respectively.
 
     Args:
         beacons (pd.DataFrame): DataFrame of beacons extracted from Poseidon
 
     Returns:
-        pd.DataFrame: beacons with status mapped to `BeaconStatus`
+        pd.DataFrame: beacons with status mapped to `BeaconStatus` and `is_coastal`
+          mapped to `True`, `False` and `None`.
     """
     beacons = beacons.copy(deep=True)
+
     beacons["beacon_status"] = beacons.beacon_status.map(
         BeaconStatus.from_poseidon_status, na_action="ignore"
     ).map(lambda beacon_status: beacon_status.value, na_action="ignore")
+
+    beacons["is_coastal"] = beacons.is_coastal.map(
+        {1.0: True, 0.0: False, np.nan: None}
+    )
+
     return beacons
 
 

@@ -245,7 +245,11 @@ const endOfMalfunctionStyle: (endOfBeaconMalfunctionReason) => CSSProperties = e
   fontWeight: 500,
   height: 20,
   margin: '8px 12px 5px 12px',
+  maxWidth: 185,
+  overflow: 'hidden',
   padding: '1px 10px',
   textAlign: 'left',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
   width: 'fit-content'
 })

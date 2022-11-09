@@ -86,29 +86,22 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
 ]
 
 export enum EndOfBeaconMalfunctionReason {
-  PERMANENT_INTERRUPTION_OF_SUPERVISION = 'PERMANENT_INTERRUPTION_OF_SUPERVISION',
-  RESUMED_TRANSMISSION = 'RESUMED_TRANSMISSION',
-  TEMPORARY_INTERRUPTION_OF_SUPERVISION = 'TEMPORARY_INTERRUPTION_OF_SUPERVISION'
+  BEACON_DEACTIVATED_OR_UNEQUIPPED = 'BEACON_DEACTIVATED_OR_UNEQUIPPED',
+  RESUMED_TRANSMISSION = 'RESUMED_TRANSMISSION'
 }
 
 const END_OF_MALFUNCTION_REASON_RECORD: Record<EndOfBeaconMalfunctionReason, EnfOfBeaconMalfunctionStatusValue> = {
-  PERMANENT_INTERRUPTION_OF_SUPERVISION: {
+  BEACON_DEACTIVATED_OR_UNEQUIPPED: {
     color: COLORS.opal,
-    label: 'Arrêt définitif du suivi',
+    label: 'Balise désactivée / navire non-équipé',
     textColor: COLORS.gunMetal,
-    value: 'PERMANENT_INTERRUPTION_OF_SUPERVISION'
+    value: 'BEACON_DEACTIVATED_OR_UNEQUIPPED'
   },
   RESUMED_TRANSMISSION: {
     color: COLORS.mediumSeaGreen,
     label: 'Reprise des émissions',
     textColor: COLORS.white,
     value: 'RESUMED_TRANSMISSION'
-  },
-  TEMPORARY_INTERRUPTION_OF_SUPERVISION: {
-    color: COLORS.opal,
-    label: 'Arrêt temporaire du suivi',
-    textColor: COLORS.gunMetal,
-    value: 'TEMPORARY_INTERRUPTION_OF_SUPERVISION'
   }
 }
 

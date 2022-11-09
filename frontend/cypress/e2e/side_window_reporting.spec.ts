@@ -98,7 +98,7 @@ context('Reportings', () => {
       expect(request.body.title).contains('Suspicion de chalutage dans les 3  km')
       expect(response && response.statusCode).equal(200)
     })
-    cy.wait(50)
+    cy.wait(200)
 
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 1)
     cy.get('*[data-cy="side-window-current-reportings"]').first().contains('DML 29')

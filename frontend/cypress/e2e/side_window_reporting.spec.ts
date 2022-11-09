@@ -101,7 +101,8 @@ context('Reportings', () => {
     cy.wait(200)
 
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 1)
-    cy.get('*[data-cy="side-window-current-reportings"]').first().contains('DML 29')
+    // The DML is modified as this is the DML fetched from the vessels table
+    cy.get('*[data-cy="side-window-current-reportings"]').first().contains('DML 56')
     cy.get('*[data-cy="side-window-current-reportings"]').first().contains('23581')
   })
 

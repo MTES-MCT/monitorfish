@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import prefect
 from prefect import Flow, task
+from prefect.executors import LocalDaskExecutor
 
 from config import LIBRARY_LOCATION
 from src.pipeline.generic_tasks import load
@@ -43,7 +44,7 @@ def load_species_groups(species_groups, species_codes_groups):
     )
 
 
-with Flow("Species groups") as flow:
+with Flow("Species groups", executor=LocalDaskExecutor()) as flow:
     species_groups = extract_species_groups()
     species_codes_groups = extract_species_codes_groups()
     load_species_groups(species_groups, species_codes_groups)

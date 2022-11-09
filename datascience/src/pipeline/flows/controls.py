@@ -3,7 +3,8 @@ from pathlib import Path
 import geopandas as gpd
 import pandas as pd
 import prefect
-from prefect import Flow, Parameter, task
+from prefect import Flow, Parameter, case, task
+from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
@@ -17,6 +18,7 @@ from src.pipeline.processing import (
     try_get_factory,
     zeros_ones_to_bools,
 )
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.facades import extract_facade_areas
 
 
@@ -441,30 +443,34 @@ def load_controls(controls: pd.DataFrame, how: str):
     )
 
 
-with Flow("Controls") as flow:
-    # Parameters
-    loading_mode = Parameter("loading_mode")
-    number_of_months = Parameter("number_of_months")
+with Flow("Controls", executor=LocalDaskExecutor()) as flow:
 
-    # Extract
-    controls = extract_controls(number_of_months=number_of_months)
-    fao_areas = extract_fao_areas()
-    facade_areas = extract_facade_areas()
-    ports = extract_ports()
-    segments = extract_segments()
-    catch_controls = extract_catch_controls()
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    # Transform
-    segments = unnest_segments(segments)
-    controls = transform_controls(controls)
-    catch_controls = transform_catch_controls(catch_controls)
-    controls_fao_areas = compute_controls_fao_areas(controls, fao_areas, ports)
-    controls_facade = compute_controls_facade(controls, facade_areas, ports)
-    controls = compute_controls_segments(
-        controls, catch_controls, controls_fao_areas, controls_facade, segments
-    )
+        # Parameters
+        loading_mode = Parameter("loading_mode")
+        number_of_months = Parameter("number_of_months")
 
-    # Load
-    load_controls(controls, how=loading_mode)
+        # Extract
+        controls = extract_controls(number_of_months=number_of_months)
+        fao_areas = extract_fao_areas()
+        facade_areas = extract_facade_areas()
+        ports = extract_ports()
+        segments = extract_segments()
+        catch_controls = extract_catch_controls()
+
+        # Transform
+        segments = unnest_segments(segments)
+        controls = transform_controls(controls)
+        catch_controls = transform_catch_controls(catch_controls)
+        controls_fao_areas = compute_controls_fao_areas(controls, fao_areas, ports)
+        controls_facade = compute_controls_facade(controls, facade_areas, ports)
+        controls = compute_controls_segments(
+            controls, catch_controls, controls_fao_areas, controls_facade, segments
+        )
+
+        # Load
+        load_controls(controls, how=loading_mode)
 
 flow.file_name = Path(__file__).name

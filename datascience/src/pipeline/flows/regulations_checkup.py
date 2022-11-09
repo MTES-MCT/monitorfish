@@ -11,7 +11,8 @@ import pandas as pd
 import prefect
 import pytz
 import requests
-from prefect import Flow, Parameter, task
+from prefect import Flow, Parameter, case, task
+from prefect.executors import LocalDaskExecutor
 
 from config import (
     BACKOFFICE_URL,
@@ -23,6 +24,7 @@ from config import (
 from src.pipeline.generic_tasks import extract
 from src.pipeline.helpers.emails import create_html_email, send_email
 from src.pipeline.processing import get_matched_groups, try_get_factory
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.dates import get_utcnow
 
 ####################################### Helpers #######################################
@@ -716,73 +718,80 @@ def send_message(msg: EmailMessage):
     send_email(msg)
 
 
-with Flow("Regulations checkup") as flow:
+with Flow("Regulations checkup", executor=LocalDaskExecutor()) as flow:
 
-    # Parameters
-    proxies = Parameter("proxies", default=PROXIES)
-    backoffice_url = Parameter("backoffice_url", default=BACKOFFICE_URL)
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    # Extract data
-    monitorfish_regulations = extract_monitorfish_regulations()
-    legipeche_regulations = extract_legipeche_regulations()
-    utcnow = get_utcnow()
+        # Parameters
+        proxies = Parameter("proxies", default=PROXIES)
+        backoffice_url = Parameter("backoffice_url", default=BACKOFFICE_URL)
 
-    # Extract output templates
-    main_template = get_main_template()
-    body_template = get_body_template()
-    style = get_style()
+        # Extract data
+        monitorfish_regulations = extract_monitorfish_regulations()
+        legipeche_regulations = extract_legipeche_regulations()
+        utcnow = get_utcnow()
 
-    # Transform data
-    monitorfish_regulations = add_article_id(monitorfish_regulations, url_column="url")
-    legipeche_regulations = add_article_id(legipeche_regulations, url_column="page_url")
+        # Extract output templates
+        main_template = get_main_template()
+        body_template = get_body_template()
+        style = get_style()
 
-    missing_references = get_missing_references(monitorfish_regulations)
+        # Transform data
+        monitorfish_regulations = add_article_id(
+            monitorfish_regulations, url_column="url"
+        )
+        legipeche_regulations = add_article_id(
+            legipeche_regulations, url_column="page_url"
+        )
 
-    modified_regulations = get_modified_regulations(
-        legipeche_regulations, monitorfish_regulations
-    )
-    modified_regulations = transform_modified_regulations(
-        modified_regulations, monitorfish_regulations
-    )
+        missing_references = get_missing_references(monitorfish_regulations)
 
-    (
-        previous_extraction_datetime_utc,
-        latest_extraction_datetime_utc,
-    ) = get_extraction_datetimes(legipeche_regulations)
+        modified_regulations = get_modified_regulations(
+            legipeche_regulations, monitorfish_regulations
+        )
+        modified_regulations = transform_modified_regulations(
+            modified_regulations, monitorfish_regulations
+        )
 
-    unknown_links = get_unknown_links(
-        monitorfish_regulations=monitorfish_regulations,
-        legipeche_regulations=legipeche_regulations,
-    )
-    dead_links = get_dead_links(monitorfish_regulations, unknown_links, proxies)
-    dead_links = format_dead_links(dead_links)
+        (
+            previous_extraction_datetime_utc,
+            latest_extraction_datetime_utc,
+        ) = get_extraction_datetimes(legipeche_regulations)
 
-    outdated_references = get_outdated_references(monitorfish_regulations, utcnow)
-    outdated_references = format_outdated_references(outdated_references)
+        unknown_links = get_unknown_links(
+            monitorfish_regulations=monitorfish_regulations,
+            legipeche_regulations=legipeche_regulations,
+        )
+        dead_links = get_dead_links(monitorfish_regulations, unknown_links, proxies)
+        dead_links = format_dead_links(dead_links)
 
-    # Render email
-    body = render_body(
-        body_template=body_template,
-        previous_extraction_datetime_utc=previous_extraction_datetime_utc,
-        latest_extraction_datetime_utc=latest_extraction_datetime_utc,
-        missing_references=missing_references,
-        modified_regulations=modified_regulations,
-        dead_links=dead_links,
-        outdated_references=outdated_references,
-        backoffice_url=backoffice_url,
-        utcnow=utcnow,
-    )
+        outdated_references = get_outdated_references(monitorfish_regulations, utcnow)
+        outdated_references = format_outdated_references(outdated_references)
 
-    html = render_main(
-        main_template=main_template,
-        style=style,
-        body=body,
-    )
+        # Render email
+        body = render_body(
+            body_template=body_template,
+            previous_extraction_datetime_utc=previous_extraction_datetime_utc,
+            latest_extraction_datetime_utc=latest_extraction_datetime_utc,
+            missing_references=missing_references,
+            modified_regulations=modified_regulations,
+            dead_links=dead_links,
+            outdated_references=outdated_references,
+            backoffice_url=backoffice_url,
+            utcnow=utcnow,
+        )
 
-    # Send
+        html = render_main(
+            main_template=main_template,
+            style=style,
+            body=body,
+        )
 
-    recipients = get_recipients()
-    msg = create_message(html, recipients)
-    send_message(msg)
+        # Send
+
+        recipients = get_recipients()
+        msg = create_message(html, recipients)
+        send_message(msg)
 
 flow.file_name = Path(__file__).name

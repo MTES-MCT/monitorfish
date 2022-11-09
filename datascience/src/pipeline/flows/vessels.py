@@ -2,10 +2,12 @@ from pathlib import Path
 
 import pandas as pd
 import prefect
-from prefect import Flow, task
+from prefect import Flow, case, task
+from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.processing import coalesce, concatenate_columns
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 
 @task(checkpoint=False)
@@ -342,27 +344,31 @@ def load_vessels(all_vessels: pd.DataFrame):
     )
 
 
-with Flow("Vessels") as flow:
-    # Extract
-    french_vessels = extract_french_vessels()
-    eu_vessels = extract_eu_vessels()
-    non_eu_vessels = extract_non_eu_vessels()
-    vessels_operators = extract_vessels_operators()
-    licences = extract_french_vessels_navigation_licences()
-    control_charters = extract_control_charters()
+with Flow("Vessels", executor=LocalDaskExecutor()) as flow:
 
-    # Transform
-    all_vessels = concat_merge_vessels(
-        french_vessels,
-        eu_vessels,
-        non_eu_vessels,
-        vessels_operators,
-        licences,
-        control_charters,
-    )
-    all_vessels = clean_vessels(all_vessels)
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    # Load
-    load_vessels(all_vessels)
+        # Extract
+        french_vessels = extract_french_vessels()
+        eu_vessels = extract_eu_vessels()
+        non_eu_vessels = extract_non_eu_vessels()
+        vessels_operators = extract_vessels_operators()
+        licences = extract_french_vessels_navigation_licences()
+        control_charters = extract_control_charters()
+
+        # Transform
+        all_vessels = concat_merge_vessels(
+            french_vessels,
+            eu_vessels,
+            non_eu_vessels,
+            vessels_operators,
+            licences,
+            control_charters,
+        )
+        all_vessels = clean_vessels(all_vessels)
+
+        # Load
+        load_vessels(all_vessels)
 
 flow.file_name = Path(__file__).name

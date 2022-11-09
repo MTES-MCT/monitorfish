@@ -5,7 +5,8 @@ from typing import Tuple
 import pandas as pd
 import prefect
 from geoalchemy2.functions import ST_Intersects
-from prefect import Flow, Parameter, task
+from prefect import Flow, Parameter, case, task
+from prefect.executors import LocalDaskExecutor
 from sqlalchemy import Table, and_, not_, or_, select
 from sqlalchemy.sql import Select
 
@@ -18,6 +19,7 @@ from src.pipeline.shared_tasks.alerts import (
     load_alerts,
     make_alerts,
 )
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.infrastructure import get_table
 from src.pipeline.shared_tasks.positions import add_vessel_identifier
 from src.pipeline.shared_tasks.risk_factors import extract_current_risk_factors
@@ -371,106 +373,116 @@ def merge_risk_factor(
     )
 
 
-with Flow("Missing FAR alerts") as flow:
+with Flow("Missing FAR alerts", executor=LocalDaskExecutor()) as flow:
 
-    # Parameters
-    alert_type = Parameter("alert_type")
-    alert_config_name = Parameter("alert_config_name")
-    states_iso2_to_monitor_everywhere = Parameter("states_iso2_to_monitor_everywhere")
-    states_iso2_to_monitor_in_french_eez = Parameter(
-        "states_iso2_to_monitor_in_french_eez"
-    )
-    max_share_of_vessels_with_missing_fars = Parameter(
-        "max_share_of_vessels_with_missing_fars"
-    )
-    minimum_length = Parameter("minimum_length")
-    only_raise_if_route_shows_fishing = Parameter("only_raise_if_route_shows_fishing")
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    # Infras
-    districts_table = get_table("districts")
-    positions_table = get_table("positions")
-    facade_areas_table = get_table("facade_areas_subdivided")
-    eez_areas_table = get_table("eez_areas")
-    vessels_table = get_table("vessels")
+        # Parameters
+        alert_type = Parameter("alert_type")
+        alert_config_name = Parameter("alert_config_name")
+        states_iso2_to_monitor_everywhere = Parameter(
+            "states_iso2_to_monitor_everywhere"
+        )
+        states_iso2_to_monitor_in_french_eez = Parameter(
+            "states_iso2_to_monitor_in_french_eez"
+        )
+        max_share_of_vessels_with_missing_fars = Parameter(
+            "max_share_of_vessels_with_missing_fars"
+        )
+        minimum_length = Parameter("minimum_length")
+        only_raise_if_route_shows_fishing = Parameter(
+            "only_raise_if_route_shows_fishing"
+        )
 
-    # Extract
-    (
-        yesterday_at_zero_hours,
-        yesterday_at_eight_pm,
-        today_at_zero_hours,
-        utcnow,
-    ) = get_dates()
+        # Infras
+        districts_table = get_table("districts")
+        positions_table = get_table("positions")
+        facade_areas_table = get_table("facade_areas_subdivided")
+        eez_areas_table = get_table("eez_areas")
+        vessels_table = get_table("vessels")
 
-    positions_at_sea_yesterday_everywhere_query = make_positions_at_sea_query(
-        positions_table=positions_table,
-        facade_areas_table=facade_areas_table,
-        from_date=yesterday_at_zero_hours,
-        to_date=yesterday_at_eight_pm,
-        states_to_monitor_iso2=states_iso2_to_monitor_everywhere,
-        vessels_table=vessels_table,
-        minimum_length=minimum_length,
-        only_fishing_positions=only_raise_if_route_shows_fishing,
-    )
+        # Extract
+        (
+            yesterday_at_zero_hours,
+            yesterday_at_eight_pm,
+            today_at_zero_hours,
+            utcnow,
+        ) = get_dates()
 
-    positions_at_sea_yesterday_in_french_eez_query = make_positions_at_sea_query(
-        positions_table=positions_table,
-        facade_areas_table=facade_areas_table,
-        from_date=yesterday_at_zero_hours,
-        to_date=yesterday_at_eight_pm,
-        states_to_monitor_iso2=states_iso2_to_monitor_in_french_eez,
-        vessels_table=vessels_table,
-        minimum_length=minimum_length,
-        eez_areas_table=eez_areas_table,
-        eez_to_monitor_iso3=["FRA"],
-        only_fishing_positions=only_raise_if_route_shows_fishing,
-    )
+        positions_at_sea_yesterday_everywhere_query = make_positions_at_sea_query(
+            positions_table=positions_table,
+            facade_areas_table=facade_areas_table,
+            from_date=yesterday_at_zero_hours,
+            to_date=yesterday_at_eight_pm,
+            states_to_monitor_iso2=states_iso2_to_monitor_everywhere,
+            vessels_table=vessels_table,
+            minimum_length=minimum_length,
+            only_fishing_positions=only_raise_if_route_shows_fishing,
+        )
 
-    positions_at_sea_yesterday_in_french_eez = read_query_task(
-        "monitorfish_remote", positions_at_sea_yesterday_in_french_eez_query
-    )
-    positions_at_sea_yesterday_everywhere = read_query_task(
-        "monitorfish_remote", positions_at_sea_yesterday_everywhere_query
-    )
+        positions_at_sea_yesterday_in_french_eez_query = make_positions_at_sea_query(
+            positions_table=positions_table,
+            facade_areas_table=facade_areas_table,
+            from_date=yesterday_at_zero_hours,
+            to_date=yesterday_at_eight_pm,
+            states_to_monitor_iso2=states_iso2_to_monitor_in_french_eez,
+            vessels_table=vessels_table,
+            minimum_length=minimum_length,
+            eez_areas_table=eez_areas_table,
+            eez_to_monitor_iso3=["FRA"],
+            only_fishing_positions=only_raise_if_route_shows_fishing,
+        )
 
-    vessels_that_emitted_fars = extract_vessels_that_emitted_fars(
-        declaration_min_datetime_utc=yesterday_at_zero_hours,
-        declaration_max_datetime_utc=utcnow,
-        fishing_operation_min_datetime_utc=yesterday_at_zero_hours,
-        fishing_operation_max_datetime_utc=today_at_zero_hours,
-    )
+        positions_at_sea_yesterday_in_french_eez = read_query_task(
+            "monitorfish_remote", positions_at_sea_yesterday_in_french_eez_query
+        )
+        positions_at_sea_yesterday_everywhere = read_query_task(
+            "monitorfish_remote", positions_at_sea_yesterday_everywhere_query
+        )
 
-    current_risk_factors = extract_current_risk_factors()
+        vessels_that_emitted_fars = extract_vessels_that_emitted_fars(
+            declaration_min_datetime_utc=yesterday_at_zero_hours,
+            declaration_max_datetime_utc=utcnow,
+            fishing_operation_min_datetime_utc=yesterday_at_zero_hours,
+            fishing_operation_max_datetime_utc=today_at_zero_hours,
+        )
 
-    # Transform
-    positions_at_sea = concat(
-        positions_at_sea_yesterday_everywhere, positions_at_sea_yesterday_in_french_eez
-    )
+        current_risk_factors = extract_current_risk_factors()
 
-    vessels_at_sea = get_vessels_at_sea(positions_at_sea)
+        # Transform
+        positions_at_sea = concat(
+            positions_at_sea_yesterday_everywhere,
+            positions_at_sea_yesterday_in_french_eez,
+        )
 
-    vessels_with_missing_fars = get_vessels_with_missing_fars(
-        vessels_at_sea,
-        vessels_that_emitted_fars,
-        max_share_of_vessels_with_missing_fars,
-    )
+        vessels_at_sea = get_vessels_at_sea(positions_at_sea)
 
-    vessels_with_missing_fars = add_vessel_identifier(vessels_with_missing_fars)
+        vessels_with_missing_fars = get_vessels_with_missing_fars(
+            vessels_at_sea,
+            vessels_that_emitted_fars,
+            max_share_of_vessels_with_missing_fars,
+        )
 
-    vessels_with_missing_fars = merge_risk_factor(
-        vessels_with_missing_fars, current_risk_factors
-    )
-    vessels_with_missing_fars = add_vessel_id(vessels_with_missing_fars, vessels_table)
-    vessels_with_missing_fars = add_vessels_columns(
-        vessels_with_missing_fars,
-        vessels_table,
-        districts_table=districts_table,
-        districts_columns_to_add=["dml"],
-    )
-    alerts = make_alerts(vessels_with_missing_fars, alert_type, alert_config_name)
-    silenced_alerts = extract_silenced_alerts()
-    alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
+        vessels_with_missing_fars = add_vessel_identifier(vessels_with_missing_fars)
 
-    # Load
-    load_alerts(alert_without_silenced, alert_config_name=alert_config_name)
+        vessels_with_missing_fars = merge_risk_factor(
+            vessels_with_missing_fars, current_risk_factors
+        )
+        vessels_with_missing_fars = add_vessel_id(
+            vessels_with_missing_fars, vessels_table
+        )
+        vessels_with_missing_fars = add_vessels_columns(
+            vessels_with_missing_fars,
+            vessels_table,
+            districts_table=districts_table,
+            districts_columns_to_add=["dml"],
+        )
+        alerts = make_alerts(vessels_with_missing_fars, alert_type, alert_config_name)
+        silenced_alerts = extract_silenced_alerts()
+        alert_without_silenced = filter_silenced_alerts(alerts, silenced_alerts)
+
+        # Load
+        load_alerts(alert_without_silenced, alert_config_name=alert_config_name)
 
 flow.file_name = Path(__file__).name

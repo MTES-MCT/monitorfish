@@ -29,7 +29,9 @@ from src.pipeline.flows.position_alerts import (
     make_positions_in_alert_query,
 )
 from src.read_query import read_query
-from tests.mocks import mock_datetime_utcnow
+from tests.mocks import mock_check_flow_not_running, mock_datetime_utcnow
+
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
 def test_zones_table():

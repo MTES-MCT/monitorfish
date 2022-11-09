@@ -119,9 +119,7 @@ const getMalfunctionStartDateText = (
     switch (beaconMalfunction?.endOfBeaconMalfunctionReason) {
       case END_OF_MALFUNCTION_REASON_RECORD.RESUMED_TRANSMISSION.value:
         return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
-      case END_OF_MALFUNCTION_REASON_RECORD.PERMANENT_INTERRUPTION_OF_SUPERVISION.value:
-        return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
-      case END_OF_MALFUNCTION_REASON_RECORD.TEMPORARY_INTERRUPTION_OF_SUPERVISION.value:
+      case END_OF_MALFUNCTION_REASON_RECORD.BEACON_DEACTIVATED_OR_UNEQUIPPED.value:
         return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
       default:
         throw Error('Should not happen')

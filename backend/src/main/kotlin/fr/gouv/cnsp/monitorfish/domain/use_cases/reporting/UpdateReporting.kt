@@ -14,8 +14,8 @@ class UpdateReporting(
     private val logger: Logger = LoggerFactory.getLogger(UpdateReporting::class.java)
 
     fun execute(reportingId: Int, updatedInfractionSuspicionOrObservation: UpdatedInfractionSuspicionOrObservation): Reporting {
-        logger.info("Updating reporting id $reportingId")
         val currentReporting = reportingRepository.findById(reportingId)
+        logger.info("Updating reporting id $reportingId for vessel id ${currentReporting.vesselId}")
 
         require(currentReporting.type != ReportingType.ALERT) {
             "The edited reporting must be an INFRACTION_SUSPICION or an OBSERVATION"

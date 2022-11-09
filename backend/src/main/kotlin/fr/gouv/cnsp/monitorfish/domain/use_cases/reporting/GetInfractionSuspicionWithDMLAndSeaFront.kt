@@ -36,6 +36,8 @@ class GetInfractionSuspicionWithDMLAndSeaFront(
             }
         }
 
+        logger.warn("No vessel id given, the infraction will be stored without DML/SeaFront.")
+
         return infractionSuspicion
     }
 }

@@ -1,7 +1,11 @@
 import { updateReportingFromAPI } from '../../../api/reporting'
 import { Vessel } from '../../entities/vessel/vessel'
 import { removeError, setError } from '../../shared_slices/Global'
-import { setCurrentAndArchivedReportingsOfSelectedVessel, updateCurrentReporting } from '../../shared_slices/Reporting'
+import {
+  removeCurrentReporting,
+  setCurrentAndArchivedReportingsOfSelectedVessel,
+  updateCurrentReporting
+} from '../../shared_slices/Reporting'
 import { addVesselReporting, removeVesselReporting } from '../../shared_slices/Vessel'
 import { ReportingType } from '../../types/reporting'
 
@@ -21,11 +25,15 @@ export const updateReporting =
 
     return updateReportingFromAPI(id, nextReporting)
       .then(updatedReporting => {
+        if (nextReporting.reportingType === ReportingType.INFRACTION_SUSPICION) {
+          dispatch(updateCurrentReporting(updatedReporting as InfractionSuspicionReporting))
+        }
+
         if (
-          nextReporting.reportingType === ReportingType.INFRACTION_SUSPICION ||
+          nextReporting.reportingType === ReportingType.OBSERVATION &&
           previousReportingType === ReportingType.INFRACTION_SUSPICION
         ) {
-          dispatch(updateCurrentReporting(updatedReporting as InfractionSuspicionReporting))
+          dispatch(removeCurrentReporting(updatedReporting.id))
         }
 
         // We update the reportings of the last positions vessels state

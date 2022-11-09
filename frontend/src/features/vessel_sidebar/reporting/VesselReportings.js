@@ -25,7 +25,7 @@ const VesselReportings = () => {
     /** @type {CurrentAndArchivedReportingsOfSelectedVessel} */
     currentAndArchivedReportingsOfSelectedVessel,
     archivedReportingsFromDate,
-    loadingReporting
+    isLoadingReporting
   } = useSelector(state => state.reporting)
 
   const [reportingTab, setReportingTab] = useState(ReportingTab.CURRENT_REPORTING)
@@ -42,7 +42,7 @@ const VesselReportings = () => {
 
   return <>
     {
-      !loadingReporting
+      !isLoadingReporting
         ? <Body data-cy={'vessel-reporting'}>
           <Menu>
             <CurrentOrHistoryReportingButton

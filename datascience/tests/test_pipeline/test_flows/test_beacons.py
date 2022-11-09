@@ -2,6 +2,7 @@ from datetime import datetime
 from unittest.mock import patch
 
 import pandas as pd
+import pytest
 import sqlalchemy
 
 from src.pipeline.flows.beacons import (
@@ -29,13 +30,18 @@ def test_extract_satellite_operators(mock_extract):
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
-def test_transform_beacons():
-    d = datetime(2021, 5, 2, 12, 25, 23)
+@pytest.fixture
+def logging_datetime_utc() -> datetime:
+    return datetime(2021, 5, 2, 12, 25, 23)
 
-    beacons = pd.DataFrame(
+
+@pytest.fixture
+def beacons(logging_datetime_utc) -> pd.DataFrame:
+    d = logging_datetime_utc
+    return pd.DataFrame(
         {
-            "beacon_number": ["A", "B", "C", "D", "E", "F"],
-            "vessel_id": [1, 2, 3, 4, 5, 6],
+            "beacon_number": ["A", "B", "C", "D", "E", "F", "G"],
+            "vessel_id": [1, 2, 3, 4, 5, 6, None],
             "beacon_status": [
                 "Activée",
                 "Désactivée",
@@ -43,17 +49,21 @@ def test_transform_beacons():
                 "Non agréée",
                 "Non surveillée",
                 None,
+                None,
             ],
-            "satellite_operator_id": [1, 1, 2, 2, 3, None],
-            "logging_datetime_utc": [d, d, d, d, d, d],
+            "satellite_operator_id": [1, 1, 2, 2, 3, None, None],
+            "logging_datetime_utc": [d, d, d, d, d, d, d],
         }
     )
 
-    transformed_beacons = transform_beacons.run(beacons)
-    expected_transformed_beacons = pd.DataFrame(
+
+@pytest.fixture
+def transformed_beacons(logging_datetime_utc) -> pd.DataFrame:
+    d = logging_datetime_utc
+    return pd.DataFrame(
         {
-            "beacon_number": ["A", "B", "C", "D", "E", "F"],
-            "vessel_id": [1, 2, 3, 4, 5, 6],
+            "beacon_number": ["A", "B", "C", "D", "E", "F", "G"],
+            "vessel_id": [1, 2, 3, 4, 5, 6, None],
             "beacon_status": [
                 "ACTIVATED",
                 "DEACTIVATED",
@@ -61,18 +71,17 @@ def test_transform_beacons():
                 "NON_APPROVED",
                 "UNSUPERVISED",
                 None,
+                None,
             ],
-            "satellite_operator_id": [1, 1, 2, 2, 3, None],
-            "logging_datetime_utc": [d, d, d, d, d, d],
+            "satellite_operator_id": [1, 1, 2, 2, 3, None, None],
+            "logging_datetime_utc": [d, d, d, d, d, d, d],
         }
     )
 
-    pd.testing.assert_frame_equal(transformed_beacons, expected_transformed_beacons)
 
-
-def test_transform_satellite_operators():
-
-    satellite_operators = pd.DataFrame(
+@pytest.fixture
+def satellite_operators() -> pd.DataFrame:
+    return pd.DataFrame(
         {
             "id": [1, 2, 3],
             "name": ["SAT", "SAT2", "SAT3"],
@@ -80,56 +89,37 @@ def test_transform_satellite_operators():
         }
     )
 
+
+@pytest.fixture
+def tranformed_satellite_operators() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "id": [1, 2, 3],
+            "name": ["SAT", "SAT2", "SAT3"],
+            "emails": [
+                ["simple@email.com"],
+                ["contact1@sat2.com", "conact2@sat2.com"],
+                None,
+            ],
+        }
+    )
+
+
+def test_transform_beacons(beacons, transformed_beacons):
+    res = transform_beacons.run(beacons)
+    pd.testing.assert_frame_equal(res, transformed_beacons)
+
+
+def test_transform_satellite_operators(
+    satellite_operators, tranformed_satellite_operators
+):
     res = transform_satellite_operators.run(satellite_operators)
-    expected_res = pd.DataFrame(
-        {
-            "id": [1, 2, 3],
-            "name": ["SAT", "SAT2", "SAT3"],
-            "emails": [
-                ["simple@email.com"],
-                ["contact1@sat2.com", "conact2@sat2.com"],
-                None,
-            ],
-        }
-    )
-    pd.testing.assert_frame_equal(res, expected_res)
+    pd.testing.assert_frame_equal(res, tranformed_satellite_operators)
 
 
-def test_load_beacons(reset_test_data):
-    d = datetime(2021, 5, 2, 12, 25, 23)
-
-    beacons = pd.DataFrame(
-        {
-            "beacon_number": ["A", "B", "C", "D", "E", "F"],
-            "vessel_id": [1, 2, 3, 4, 5, 6],
-            "beacon_status": [
-                "ACTIVATED",
-                "DEACTIVATED",
-                "IN_TEST",
-                "NON_APPROVED",
-                "UNSUPERVISED",
-                None,
-            ],
-            "satellite_operator_id": [1, 1, 2, 2, 3, None],
-            "logging_datetime_utc": [d, d, d, d, d, d],
-        }
-    )
-
-    load_beacons.run(beacons)
+def test_load_beacons(reset_test_data, transformed_beacons):
+    load_beacons.run(transformed_beacons)
 
 
-def test_load_satellite_operators(reset_test_data):
-
-    satellite_operators = pd.DataFrame(
-        {
-            "id": [1, 2, 3],
-            "name": ["SAT", "SAT2", "SAT3"],
-            "emails": [
-                ["simple@email.com"],
-                ["contact1@sat2.com", "conact2@sat2.com"],
-                None,
-            ],
-        }
-    )
-
-    load_satellite_operators.run(satellite_operators)
+def test_load_satellite_operators(reset_test_data, tranformed_satellite_operators):
+    load_satellite_operators.run(tranformed_satellite_operators)

@@ -59,7 +59,7 @@ def load_beacons(beacons):
         db_name="monitorfish_remote",
         logger=prefect.context.get("logger"),
         how="replace",
-        nullable_integer_columns=["satellite_operator_id"],
+        nullable_integer_columns=["satellite_operator_id", "vessel_id"],
     )
 
 

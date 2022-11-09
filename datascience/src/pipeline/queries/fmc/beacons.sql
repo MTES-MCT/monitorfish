@@ -14,4 +14,3 @@ ON st.id_fmc_balise_statut = bn.id_fmc_balise_statut
 LEFT JOIN FMC2.FMC_CODE_STATUT_BALISE cst
 ON cst.idc_fmc_statut_balise = st.idc_fmc_statut_balise
 WHERE bn.est_courant = 1
-AND n.id_nav_flotteur IS NOT NULL

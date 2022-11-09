@@ -13,8 +13,7 @@ export type ReportingState = {
   currentReportings: Array<InfractionSuspicionReporting | PendingAlertReporting>
   editedReporting: InfractionSuspicionReporting | PendingAlertReporting | undefined
   editedReportingInSideWindow: InfractionSuspicionReporting | PendingAlertReporting | undefined
-  // TODO Rename this prop.
-  loadingReporting: boolean
+  isLoadingReporting: boolean
   vesselIdentity: VesselIdentity | undefined
 }
 const INITIAL_STATE: ReportingState = {
@@ -26,7 +25,7 @@ const INITIAL_STATE: ReportingState = {
   currentReportings: [],
   editedReporting: undefined,
   editedReportingInSideWindow: undefined,
-  loadingReporting: false,
+  isLoadingReporting: false,
   vesselIdentity: undefined
 }
 
@@ -51,7 +50,16 @@ const reportingSlice = createSlice({
      * @param {Object=} state
      */
     loadReporting(state) {
-      state.loadingReporting = true
+      state.isLoadingReporting = true
+    },
+
+    /**
+     * Remove a given current reporting
+     * @param state
+     * @param {PayloadAction<number>} action - Reporting id
+     */
+    removeCurrentReporting(state, action: PayloadAction<string>) {
+      state.currentReportings = state.currentReportings.filter(reporting => reporting.id !== action.payload)
     },
 
     /**
@@ -96,7 +104,7 @@ const reportingSlice = createSlice({
     setCurrentAndArchivedReportingsOfSelectedVessel(state, action) {
       state.currentAndArchivedReportingsOfSelectedVessel = action.payload.currentAndArchivedReportingsOfSelectedVessel
       state.vesselIdentity = action.payload.vesselIdentity
-      state.loadingReporting = false
+      state.isLoadingReporting = false
     },
 
     /**
@@ -126,6 +134,7 @@ const reportingSlice = createSlice({
     ) {
       state.editedReportingInSideWindow = action.payload
     },
+
     /**
      * Update a given current reporting
      */
@@ -140,6 +149,7 @@ const reportingSlice = createSlice({
 export const {
   addReportingToCurrentReportings,
   loadReporting,
+  removeCurrentReporting,
   removeReportingsIdsFromCurrentReportings,
   resetCurrentAndArchivedReportingsOfSelectedVessel,
   setArchivedReportingsFromDate,

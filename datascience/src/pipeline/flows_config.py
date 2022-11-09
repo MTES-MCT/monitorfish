@@ -93,13 +93,9 @@ infractions.flow.schedule = CronSchedule("1 8 * * *")
 last_positions.flow.schedule = Schedule(
     clocks=[
         clocks.CronClock(
-            "0 * * * *",
-            parameter_defaults={"minutes": 240, "action": "update"},
-        ),
-        clocks.CronClock(
-            "1-59 * * * *",
-            parameter_defaults={"minutes": 30, "action": "update"},
-        ),
+            "* * * * *",
+            parameter_defaults={"minutes": 1440, "action": "update"},
+        )
     ]
 )
 missing_far_alerts.flow.schedule = Schedule(

@@ -11,7 +11,7 @@ data class BeaconEntity(
     @Column(name = "beacon_number")
     val beaconNumber: String,
     @Column(name = "vessel_id")
-    val vesselId: Int,
+    val vesselId: Int? = null,
     @Column(name = "beacon_status")
     @Enumerated(EnumType.STRING)
     val beaconStatus: BeaconStatus? = null,

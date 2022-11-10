@@ -153,7 +153,7 @@ class GetLogbookMessages(
 
     private fun setNamesFromCodes(message: COE) {
         message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
-            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find { it.name === targetSpeciesOnEntry }?.value
+            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find { it.name == targetSpeciesOnEntry }?.value
 
             if (message.targetSpeciesNameOnEntry == null) {
                 try {
@@ -167,7 +167,7 @@ class GetLogbookMessages(
 
     private fun setNamesFromCodes(message: COX) {
         message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
-            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find { it.name === targetSpeciesOnExit }?.value
+            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find { it.name == targetSpeciesOnExit }?.value
 
             if (message.targetSpeciesNameOnExit == null) {
                 try {
@@ -181,7 +181,7 @@ class GetLogbookMessages(
 
     private fun setNamesFromCodes(message: CRO) {
         message.targetSpeciesOnExit?.let { targetSpeciesOnExit ->
-            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find { it.name === targetSpeciesOnExit }?.value
+            message.targetSpeciesNameOnExit = EffortTargetSpeciesGroup.values().find { it.name == targetSpeciesOnExit }?.value
 
             if (message.targetSpeciesNameOnExit == null) {
                 try {
@@ -193,7 +193,7 @@ class GetLogbookMessages(
         }
 
         message.targetSpeciesOnEntry?.let { targetSpeciesOnEntry ->
-            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find { it.name === targetSpeciesOnEntry }?.value
+            message.targetSpeciesNameOnEntry = EffortTargetSpeciesGroup.values().find { it.name == targetSpeciesOnEntry }?.value
 
             if (message.targetSpeciesNameOnEntry == null) {
                 try {

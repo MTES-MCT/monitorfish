@@ -73,7 +73,7 @@ class GetLogbookMessagesUTests {
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
-        assertThat(ersMessages).hasSize(4)
+        assertThat(ersMessages).hasSize(5)
 
         assertThat(ersMessages[0].message).isInstanceOf(DEP::class.java)
         assertThat(ersMessages[0].rawMessage).isEqualTo("<xml>DUMMY XML MESSAGE</xml>")
@@ -102,9 +102,14 @@ class GetLogbookMessagesUTests {
         assertThat(coe.targetSpeciesOnEntry).isEqualTo("DEM")
         assertThat(coe.targetSpeciesNameOnEntry).isEqualTo("Démersal")
 
-        assertThat(ersMessages[3].message).isInstanceOf(PNO::class.java)
-        assertThat(ersMessages[3].rawMessage).isEqualTo("<xml>DUMMY XML MESSAGE</xml>")
-        val pno = ersMessages[3].message as PNO
+        assertThat(ersMessages[3].message).isInstanceOf(COX::class.java)
+        val cox = ersMessages[3].message as COX
+        assertThat(cox.targetSpeciesOnExit).isEqualTo("DEM")
+        assertThat(cox.targetSpeciesNameOnExit).isEqualTo("Démersal")
+
+        assertThat(ersMessages[4].message).isInstanceOf(PNO::class.java)
+        assertThat(ersMessages[4].rawMessage).isEqualTo("<xml>DUMMY XML MESSAGE</xml>")
+        val pno = ersMessages[4].message as PNO
         assertThat(pno.catchOnboard[0].species).isEqualTo("TTV")
         assertThat(pno.catchOnboard[0].speciesName).isEqualTo("TORPILLE OCELLÉE")
         assertThat(pno.catchOnboard[1].species).isEqualTo("SMV")
@@ -365,11 +370,12 @@ class GetLogbookMessagesUTests {
             .execute("FR224226850", ZonedDateTime.now().minusMinutes(5), ZonedDateTime.now(), "345")
 
         // Then
-        assertThat(ersMessages).hasSize(4)
+        assertThat(ersMessages).hasSize(5)
 
         assertThat(ersMessages[0].isSentByFailoverSoftware).isTrue
         assertThat(ersMessages[1].isSentByFailoverSoftware).isFalse
         assertThat(ersMessages[2].isSentByFailoverSoftware).isTrue
         assertThat(ersMessages[3].isSentByFailoverSoftware).isTrue
+        assertThat(ersMessages[4].isSentByFailoverSoftware).isTrue
     }
 }

@@ -1,0 +1,151 @@
+from io import BytesIO
+
+import geopandas as gpd
+import pandas as pd
+from prefect import Flow, task
+from prefect.executors import LocalDaskExecutor
+
+from config import (
+    REGULATIONS_CSV_RESOURCE_ID,
+    REGULATIONS_DATASET_ID,
+    REGULATIONS_GEOPACKAGE_RESOURCE_ID,
+)
+from src.pipeline.generic_tasks import extract
+from src.pipeline.shared_tasks.datagouv import update_resource
+
+
+@task(checkpoint=False)
+def extract_regulations_open_data() -> pd.DataFrame:
+    return extract(
+        "monitorfish_remote",
+        "monitorfish/regulations_open_data.sql",
+        backend="geopandas",
+        geom_col="geometry",
+    )
+
+
+@task(checkpoint=False)
+def get_regulations_for_csv(regulations: gpd.GeoDataFrame) -> pd.DataFrame:
+
+    columns = [
+        "thematique",
+        "zone",
+        "reglementations",
+        "wkt",
+    ]
+
+    return pd.DataFrame(regulations[columns])
+
+
+@task(checkpoint=False)
+def get_regulations_for_geopackage(regulations: gpd.GeoDataFrame) -> pd.DataFrame:
+
+    columns = [
+        "thematique",
+        "zone",
+        "reglementations",
+        "geometry",
+    ]
+
+    return regulations[columns].copy(deep=True)
+
+
+@task(checkpoint=False)
+def get_csv_file_object(df: pd.DataFrame) -> BytesIO:
+    """
+    Returns a `BytesIO` csv file object from the input `DataFrame`.
+    Useful to upload a `DataFrame` to data.gouv.fr
+
+    The index is not included in the output csv file.
+
+    Args:
+        df (pd.DataFrame): DataFrame to convert
+
+    Returns:
+        BytesIO: file object
+
+    Examples:
+        import pandas as pd
+        >>> df = pd.DataFrame({"a": [10, 20, 30], "b": [40, 50, 60]})
+        >>> df
+                a   b
+            0  10  40
+            1  20  50
+            2  30  60
+        >>> buf = df_to_csv_file_object.run(df)
+        >>> pd.read_csv(buf)
+                a   b
+            0  10  40
+            1  20  50
+            2  30  60
+    """
+    buf = BytesIO()
+    df.to_csv(buf, mode="wb", index=False)
+    buf.seek(0)
+    return buf
+
+
+@task(checkpoint=False)
+def get_geopackage_file_object(gdf: gpd.GeoDataFrame) -> BytesIO:
+    """
+    Returns a `BytesIO` geopackage file object. from the input `DataFrame`.
+
+    The index is not included in the output csv file.
+
+    Args:
+        gdf (pd.DataFrame): DataFrame to convert
+
+    Returns:
+        BytesIO: file object
+
+    Examples:
+        import geopandas as gpd
+        from shapely.geometry import Point
+        >>> gdf = gpd.GeoDataFrame({
+            "a": [10, 20, 30],
+            "geometry": [Point(1, 2), Point(3, 4), Point(5, 6)]
+        })
+        >>> gdf
+                a                 geometry
+            0  10  POINT (1.00000 2.00000)
+            1  20  POINT (3.00000 4.00000)
+            2  30  POINT (5.00000 6.00000)
+        >>> buf = get_geopackage_file_object.run(gdf)
+        >>> gpd.read_file(buf, driver="GPKG")
+                a                 geometry
+            0  10  POINT (1.00000 2.00000)
+            1  20  POINT (3.00000 4.00000)
+            2  30  POINT (5.00000 6.00000)
+    """
+    buf = BytesIO()
+    gdf.to_file(buf, driver="GPKG")
+    buf.seek(0)
+    return buf
+
+
+with Flow("Regulations open data", executor=LocalDaskExecutor()) as flow:
+
+    # flow_not_running = check_flow_not_running()
+    # with case(flow_not_running, True):
+
+    regulations = extract_regulations_open_data()
+
+    regulations_for_csv = get_regulations_for_csv(regulations)
+    regulations_for_geopackage = get_regulations_for_geopackage(regulations)
+
+    csv_file = get_csv_file_object(regulations_for_csv)
+    geopackage_file = get_geopackage_file_object(regulations_for_geopackage)
+
+    update_resource(
+        dataset_id=REGULATIONS_DATASET_ID,
+        resource_id=REGULATIONS_CSV_RESOURCE_ID,
+        resource_title="reglementation-des-peches-cartographiee.csv",
+        resource=csv_file,
+    )
+
+    update_resource(
+        dataset_id=REGULATIONS_DATASET_ID,
+        resource_id=REGULATIONS_GEOPACKAGE_RESOURCE_ID,
+        resource_title="reglementation-des-peches-cartographiee.gpkg",
+        resource=geopackage_file,
+    )

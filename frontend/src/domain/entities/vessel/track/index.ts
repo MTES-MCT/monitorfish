@@ -1,3 +1,4 @@
+import { uniqWith, isEqual } from 'lodash'
 import { extend } from 'ol/extent'
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
@@ -28,14 +29,24 @@ export function getFeaturesFromPositions(
 ): (VesselPointFeature | VesselArrowFeature | VesselLineFeature)[] {
   const hasOnlyOnePosition = positions?.length === 1
   if (hasOnlyOnePosition) {
-    return getFirstPositionFeature(positions, vesselId)
+    return getPositionFeatureOfIndex(positions, vesselId, FIRST_POSITION)
+  }
+
+  const uniquePositions = uniqWith(
+    positions,
+    (a, b) => isEqual(a.latitude, b.latitude) && isEqual(a.longitude, b.longitude)
+  )
+  const hasOnlyOneUniquePosition = uniquePositions?.length === 1
+  if (hasOnlyOneUniquePosition) {
+    // Get last position
+    return getPositionFeatureOfIndex(positions, vesselId, positions.length - 1)
   }
 
   let features: (VesselPointFeature | VesselArrowFeature | VesselLineFeature)[] = []
-  const positionsPointFeatures = buildPointFeatures(positions, vesselId)
+  const positionsPointFeatures = buildPointFeatures(uniquePositions, vesselId)
   features = features.concat(positionsPointFeatures)
 
-  const vesselTrackLineFeatures = buildLineStringFeatures(positions, vesselId)
+  const vesselTrackLineFeatures = buildLineStringFeatures(uniquePositions, vesselId)
   features = features.concat(vesselTrackLineFeatures)
 
   const arrowPointFeatures = buildArrowPointFeatures(vesselTrackLineFeatures, vesselId)
@@ -44,8 +55,8 @@ export function getFeaturesFromPositions(
   return features
 }
 
-function getFirstPositionFeature(positions: VesselPosition[], vesselId: VesselId) {
-  const position = positions[FIRST_POSITION]
+function getPositionFeatureOfIndex(positions: VesselPosition[], vesselId: VesselId, index: number) {
+  const position = positions[index]
   if (!position) {
     throw new Error('No position given')
   }

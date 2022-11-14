@@ -13,7 +13,7 @@ import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useEscapeFromKeyboardAndExecute } from '../../../../hooks/useEscapeFromKeyboardAndExecute'
 import { ReactComponent as InterestPointSVG } from '../../../icons/standardized/Landmark.svg'
 import { MapToolButton } from '../MapToolButton'
-import EditInterestPoint from './EditInterestPoint'
+import { EditInterestPoint } from './EditInterestPoint'
 
 export function InterestPointMapButton() {
   const dispatch = useAppDispatch()

@@ -439,7 +439,7 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.isFirstVoyage", equalTo(false)))
             .andExpect(jsonPath("$.startDate", equalTo("2021-01-21T10:21:26.617301+01:00")))
             .andExpect(jsonPath("$.endDate", equalTo(null)))
-            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages.length()", equalTo(4)))
+            .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages.length()", equalTo(5)))
             .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].messageType", equalTo("DEP")))
             .andExpect(jsonPath("$.logbookMessagesAndAlerts.logbookMessages[1].tripNumber", equalTo("345")))
             .andExpect(

@@ -58,20 +58,17 @@ export const theme = {
 
     // Regulation Areas
     yaleBlue: '#295375',
+    queenBlue: '#367096',
     glaucous: '#6284A6',
     blueNcs: '#3690C0',
     iceberg: '#67A9CF',
     lightSteelBlue: '#9AB4D6',
     lightPeriwinkle: '#CDCFEA',
     aliceBlue: '#EBF0F4',
-    lightCyan: '#C7EAE5',
-    middleBlueGreen: '#91CFC9',
-    verdigris: '#56B3AB',
-    viridianGreen: '#01A29D',
-    paoloVeroneseGreen: '#21977F',
-    skobeloff: '#01686B',
-    blueSapphire: '#01536A',
-    indigoDye: '#033E54',
+    lightBlue: '#B9DDE5',
+    skyBlue: '#77C1DE',
+    frenchBlue: '#2E75AB',
+    prussianBlue: '#003454',
     lightCoral: '#FA8282',
 
     // TODO Remove this color.

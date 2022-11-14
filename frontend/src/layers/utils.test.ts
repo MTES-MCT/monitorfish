@@ -19,9 +19,9 @@ describe('utils', () => {
     }
 
     // Then
-    expect(getHashDigitsFromRegulation(regulation)).toEqual(5)
+    expect(getHashDigitsFromRegulation(regulation)).toEqual(11)
     // Retry to ensure the returned digit is constant
-    expect(getHashDigitsFromRegulation(regulation)).toEqual(5)
+    expect(getHashDigitsFromRegulation(regulation)).toEqual(11)
   })
 
   it('getHashDigitsFromRegulation Should return a constant number for another regulatory zone', async () => {
@@ -32,6 +32,6 @@ describe('utils', () => {
     }
 
     // When
-    expect(getHashDigitsFromRegulation(regulation)).toEqual(4)
+    expect(getHashDigitsFromRegulation(regulation)).toEqual(9)
   })
 })

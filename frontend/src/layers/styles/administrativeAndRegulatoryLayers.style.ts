@@ -234,33 +234,26 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
   }
 }
 
+const DIGIT_TO_LAYER_COLOR_MAP = new Map<number, string>([
+  [0, theme.color.yaleBlue],
+  [1, theme.color.queenBlue],
+  [2, theme.color.glaucous],
+  [3, theme.color.blueNcs],
+  [4, theme.color.iceberg],
+  [5, theme.color.lightSteelBlue],
+  [6, theme.color.lightPeriwinkle],
+  [7, theme.color.aliceBlue],
+  [8, theme.color.lightBlue],
+  [9, theme.color.skyBlue],
+  [10, theme.color.frenchBlue],
+  [11, theme.color.prussianBlue]
+])
+
 const getLayerColor = (randomDigits, metadataIsShowed) => {
-  switch (randomDigits) {
-    case 0:
-      return getStyle(getColorWithAlpha(theme.color.yaleBlue, 0.75), metadataIsShowed)
-    case 1:
-      return getStyle(getColorWithAlpha(theme.color.queenBlue, 0.75), metadataIsShowed)
-    case 2:
-      return getStyle(getColorWithAlpha(theme.color.glaucous, 0.75), metadataIsShowed)
-    case 3:
-      return getStyle(getColorWithAlpha(theme.color.blueNcs, 0.75), metadataIsShowed)
-    case 4:
-      return getStyle(getColorWithAlpha(theme.color.iceberg, 0.75), metadataIsShowed)
-    case 5:
-      return getStyle(getColorWithAlpha(theme.color.lightSteelBlue, 0.75), metadataIsShowed)
-    case 6:
-      return getStyle(getColorWithAlpha(theme.color.lightPeriwinkle, 0.75), metadataIsShowed)
-    case 7:
-      return getStyle(getColorWithAlpha(theme.color.aliceBlue, 0.75), metadataIsShowed)
-    case 8:
-      return getStyle(getColorWithAlpha(theme.color.lightBlue, 0.75), metadataIsShowed)
-    case 9:
-      return getStyle(getColorWithAlpha(theme.color.skyBlue, 0.75), metadataIsShowed)
-    case 10:
-      return getStyle(getColorWithAlpha(theme.color.frenchBlue, 0.75), metadataIsShowed)
-    case 11:
-      return getStyle(getColorWithAlpha(theme.color.prussianBlue, 0.75), metadataIsShowed)
-    default:
-      return getStyle(getColorWithAlpha(theme.color.yaleBlue, 0.75), metadataIsShowed)
+  const color = DIGIT_TO_LAYER_COLOR_MAP.get(randomDigits)
+  if (!color) {
+    return getStyle(getColorWithAlpha(theme.color.yaleBlue, 0.75), metadataIsShowed)
   }
+
+  return getStyle(getColorWithAlpha(color, 0.75), metadataIsShowed)
 }

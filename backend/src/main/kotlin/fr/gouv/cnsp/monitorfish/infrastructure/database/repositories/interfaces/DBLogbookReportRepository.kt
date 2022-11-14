@@ -74,7 +74,9 @@ interface DBLogbookReportRepository : CrudRepository<LogbookReportEntity, Long>,
             ON r.referenced_report_id = dc.report_id
             WHERE
                 r.value->>'returnStatus' = '000' OR
-                dc.transmission_format = 'FLUX'""", nativeQuery = true)
+                dc.transmission_format = 'FLUX'""",
+        nativeQuery = true
+    )
     fun findFirstAcknowledgedDateOfTrip(internalReferenceNumber: String, tripNumber: String): Instant
 
     @Query(

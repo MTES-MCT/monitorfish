@@ -62,10 +62,12 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     @Query(
         value = """
         UPDATE reportings
-        SET value = CAST(:value AS JSONB)
+        SET
+            value = CAST(:value AS JSONB),
+            type = CAST(:type AS reporting_type)
         WHERE id = :id
     """,
         nativeQuery = true
     )
-    fun update(id: Int, value: String)
+    fun update(id: Int, value: String, type: String)
 }

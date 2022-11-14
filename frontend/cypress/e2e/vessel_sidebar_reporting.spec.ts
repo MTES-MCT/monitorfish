@@ -123,4 +123,39 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 3)
     cy.get('*[data-cy="side-window-current-reportings"]').last().contains('FRAIS AVIS MODE')
   })
+
+  it('An observation reporting should be modified to an Infraction suspicion', () => {
+    // Given
+    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('RENCONTRER VEILLER')
+    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.wait(50)
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+
+    // When
+    cy.intercept(
+      'GET',
+      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000597493&externalReferenceNumber=JL026591&IRCS=CMQ7994&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
+    ).as('reporting')
+    cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
+    cy.wait('@reporting')
+    cy.wait(100)
+
+    cy.intercept('PUT', '/bff/v1/reportings/8/update').as('updateReporting')
+    cy.get('*[data-cy="edit-reporting-card-8"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="new-reporting-select-infraction-reporting-type"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="new-reporting-select-natinf"]').click()
+    cy.get('[data-key="7059"] > .rs-picker-select-menu-item').click()
+    cy.get('*[data-cy="new-reporting-create-button"]').scrollIntoView().click()
+    cy.wait('@updateReporting')
+    cy.wait(50)
+
+    // Then
+    cy.get('*[data-cy="reporting-card"]').then(elements => {
+      // In some case, this spec may be run after another spec modifying the reportings of this vessel
+      // so we make sure to assert only the last one reporting
+      const index = elements.length > 1 ? 1 : 0
+      cy.get('*[data-cy="reporting-card"]').eq(index).contains('NATINF 7059')
+    })
+  })
 })

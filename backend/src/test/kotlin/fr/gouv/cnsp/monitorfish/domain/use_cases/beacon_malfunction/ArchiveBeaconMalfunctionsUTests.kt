@@ -21,7 +21,7 @@ class ArchiveBeaconMalfunctionsUTests {
     @Test
     fun `execute Should return the updated beacon malfunction When a field to update is given`() {
         // Given
-        given(updateBeaconMalfunction.execute(eq(1), eq( null), eq(Stage.ARCHIVED), eq( null)))
+        given(updateBeaconMalfunction.execute(eq(1), eq(null), eq(Stage.ARCHIVED), eq(null)))
             .willReturn(
                 BeaconMalfunctionResumeAndDetails(
                     beaconMalfunction = BeaconMalfunction(
@@ -68,7 +68,7 @@ class ArchiveBeaconMalfunctionsUTests {
                     )
                 )
             )
-        given(updateBeaconMalfunction.execute(eq(2), eq( null), eq(Stage.ARCHIVED), eq( null)))
+        given(updateBeaconMalfunction.execute(eq(2), eq(null), eq(Stage.ARCHIVED), eq(null)))
             .willReturn(
                 BeaconMalfunctionResumeAndDetails(
                     beaconMalfunction = BeaconMalfunction(

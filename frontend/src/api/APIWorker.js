@@ -19,7 +19,7 @@ import getVesselReportings from '../domain/use_cases/vessel/getVesselReportings'
 import { getSilencedAlerts } from '../domain/use_cases/alert/getSilencedAlerts'
 import getFishingInfractions from '../domain/use_cases/infraction/getFishingInfractions'
 import getAllControllers from '../domain/use_cases/controller/getAllControllers'
-import getAllCurrentReportings from '../domain/use_cases/reporting/getAllCurrentReportings'
+import { getAllCurrentReportings } from '../domain/use_cases/reporting/getAllCurrentReportings'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
 export const THIRTY_SECONDS = 30 * 1000

@@ -208,6 +208,7 @@ class ReportingControllerITests {
                     objectMapper.writeValueAsString(
                         UpdateReportingDataInput(
                             reportingActor = ReportingActor.OPS,
+                            reportingType = ReportingType.INFRACTION_SUSPICION,
                             natinfCode = "123456",
                             title = "A title"
                         )

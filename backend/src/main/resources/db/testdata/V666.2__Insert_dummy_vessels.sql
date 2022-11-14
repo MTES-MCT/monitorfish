@@ -39,4 +39,12 @@ VALUES (1, 'FAK000999999', '224103750', 'CALLME', '', 'PHENOMENE', 'FR', 5.0, 12
        (9, 'ABC000640738', '', 'IJU5217', 'EJ600773', 'PROFITER ESPRIT DEPUIS', 'FR', 15.5, 7.6, 'Auray', 'AY', 123,
         'LORIENT', 108, 'Pêche côtière', '3', 'Pêche', ARRAY ['PTM', 'OTM'], CURRENT_DATE, 'DUPOND',
         ARRAY ['+33 6 84 56 32 14'], 'dupond@gmail.com', 'DURAND', ARRAY ['+33 6 45 25 14'], ARRAY ['durand@gmail.com'],
+        ARRAY ['escogriffe@dgse.spy', 'henri.duflot@dgse.spy'], ARRAY ['0918273645', '+33 6 00 00 00 00'], true),
+       (10, 'ABC000042310', '', 'IW783219', 'QD0506', 'COURANT MAIN PROFESSEUR', 'FR', 12.5, 7.6, 'Lorient', 'LO', 105,
+        'LORIENT', 108, 'Pêche côtière', '3', 'Pêche', ARRAY ['PTM', 'OTM'], CURRENT_DATE + INTERVAL '2 days', 'DUPOND',
+        ARRAY ['+33 6 84 56 32 14'], 'dupond@gmail.com', 'DURAND', ARRAY ['+33 6 45 25 14'], ARRAY ['durand@gmail.com'],
+        ARRAY ['escogriffe@dgse.spy', 'henri.duflot@dgse.spy'], ARRAY ['0918273645', '+33 6 00 00 00 00'], true),
+       (11, 'ABC000597493', '', 'JL026591', 'CMQ7994', 'RENCONTRER VEILLER APPARTEMENT', 'FR', 15.5, 7.6, 'Auray', 'AY', 123,
+        'LORIENT', 108, 'Pêche côtière', '3', 'Pêche', ARRAY ['PTM', 'OTM'], CURRENT_DATE + INTERVAL '5 days', 'DUPOND',
+        ARRAY ['+33 6 84 56 32 14'], 'dupond@gmail.com', 'DURAND', ARRAY ['+33 6 45 25 14'], ARRAY ['durand@gmail.com'],
         ARRAY ['escogriffe@dgse.spy', 'henri.duflot@dgse.spy'], ARRAY ['0918273645', '+33 6 00 00 00 00'], true);

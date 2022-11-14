@@ -30,12 +30,14 @@ export const deleteReporting = id => (dispatch: AppDispatch, getState: AppGetSta
   deleteReportingFromAPI(id)
     .then(() => {
       dispatch(removeReportingsIdsFromCurrentReportings([id]))
-      dispatch(
-        removeVesselReporting({
-          reportingType: deletedReporting?.type,
-          vesselId: Vessel.getVesselFeatureId(selectedVesselIdentity)
-        })
-      )
+      if (deletedReporting) {
+        dispatch(
+          removeVesselReporting({
+            reportingType: deletedReporting.type,
+            vesselId: Vessel.getVesselFeatureId(selectedVesselIdentity)
+          })
+        )
+      }
       dispatch(removeError())
     })
     .catch(error => {

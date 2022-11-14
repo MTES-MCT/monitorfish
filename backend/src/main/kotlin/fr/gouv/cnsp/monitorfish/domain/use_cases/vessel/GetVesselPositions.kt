@@ -48,7 +48,10 @@ class GetVesselPositions(
                 try {
                     // We subtract 4h to this date to ensure the track starts at the port
                     // (the departure message may be sent after the departure)
-                    logbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(internalReferenceNumber, ZonedDateTime.now())
+                    logbookReportRepository.findFirstAcknowledgedDateOfTripBeforeDateTime(
+                        internalReferenceNumber,
+                        ZonedDateTime.now()
+                    )
                         .minusHours(4)
                 } catch (e: NoLogbookFishingTripFound) {
                     logger.warn(e.message)

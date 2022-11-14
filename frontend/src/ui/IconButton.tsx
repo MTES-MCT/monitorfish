@@ -22,7 +22,7 @@ export function IconButton({ iconName, type = 'button', ...nativeProps }: IconBu
 
 const Button = styled.button`
   border: 1px solid ${p => p.theme.color.lightGray};
-  padding: 3px 4px 0;
+  padding: 4px 4px 0;
   vertical-align: bottom;
 
   :disabled {

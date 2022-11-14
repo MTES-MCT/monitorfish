@@ -15,12 +15,14 @@ export type LayerState = {
   lastShowedFeatures: Record<string, any>[]
   layersSidebarOpenedLayerType: string | undefined
   layersToFeatures: Record<string, any>[]
+  showedLayers: Record<string, any>[]
 }
 const INITIAL_STATE: LayerState = {
   administrativeZonesGeometryCache: [],
   lastShowedFeatures: [],
   layersSidebarOpenedLayerType: undefined,
-  layersToFeatures: []
+  layersToFeatures: [],
+  showedLayers: []
 }
 
 const reOrderOldObjectHierarchyIfFound = zones =>

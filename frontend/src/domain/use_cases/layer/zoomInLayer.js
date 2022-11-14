@@ -2,6 +2,15 @@ import { animateToRegulatoryLayer } from '../../shared_slices/Map'
 import { Layer } from '../../entities/layers/constants'
 import { getCenter } from 'ol/extent'
 
+/**
+ *
+ * @param {{
+ *  feature?: any
+ *  topicAndZone?: any
+ * }} layer
+ *
+ * @returns {any}
+ */
 const zoomInLayer = ({ topicAndZone, feature }) => (dispatch, getState) => {
   if (topicAndZone) {
     const name = `${Layer.REGULATORY.code}:${topicAndZone.topic}:${topicAndZone.zone}`

@@ -1,62 +1,65 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { getVectorOLLayer } from '../domain/use_cases/layer/administrative/showAdministrativeLayer'
-import { Layer, LayerType } from '../domain/entities/layers/constants'
+
 import {
   layerOfTypeAdministrativeLayer,
   layerOfTypeAdministrativeLayerInCurrentMap,
-  layersNotInCurrentOLMap, layersNotInShowedLayers
+  layersNotInCurrentOLMap,
+  layersNotInShowedLayers
 } from '../domain/entities/administrative'
+import { Layer, LayerType } from '../domain/entities/layers/constants'
+import { getVectorOLLayer } from '../domain/use_cases/layer/administrative/showAdministrativeLayer'
+import { useAppSelector } from '../hooks/useAppSelector'
 
-/**
- * @param {{
- *   map?: any
- * }} props 
- */
-const AdministrativeLayers = ({ map }) => {
-  const { showedLayers } = useSelector(state => state.layer)
-  const isBackoffice = useSelector(state => state.global.isBackoffice)
+export type AdministrativeLayersProps = {
+  map?: any
+}
+function UnmemoizedAdministrativeLayers({ map }: AdministrativeLayersProps) {
+  const { showedLayers } = useAppSelector(state => state.layer)
+  const isBackoffice = useAppSelector(state => state.global.isBackoffice)
 
   const administrativeLayers = Object.keys(Layer)
     .map(topic => Layer[topic])
     .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
 
   useEffect(() => {
-    if (map && showedLayers) {
-      function addAdministrativeLayersToMap () {
-        const olLayers = map.getLayers()
-        const layersToInsert = showedLayers
-          .filter(layer => layerOfTypeAdministrativeLayer(administrativeLayers, layer))
-          .filter(layer => layersNotInCurrentOLMap(olLayers, layer))
-
-        layersToInsert.forEach(layerToInsert => {
-          if (!layerToInsert) {
-            return
-          }
-          const VectorLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, isBackoffice)
-          olLayers.push(VectorLayer)
-        })
-      }
-
-      function removeAdministrativeLayersToMap () {
-        const _showedLayers = showedLayers?.length ? showedLayers : []
-
-        const layers = map.getLayers()
-        const layersToRemove = layers.getArray()
-          .filter(olLayer => layerOfTypeAdministrativeLayerInCurrentMap(administrativeLayers, olLayer))
-          .filter(olLayer => layersNotInShowedLayers(_showedLayers, olLayer))
-
-        layersToRemove.forEach(layerToRemove => {
-          layers.remove(layerToRemove)
-        })
-      }
-
-      addAdministrativeLayersToMap()
-      removeAdministrativeLayersToMap()
+    if (!map && !showedLayers) {
+      return
     }
-  }, [showedLayers])
 
-  return null
+    function addAdministrativeLayersToMap() {
+      const olLayers = map.getLayers()
+      const layersToInsert = showedLayers
+        .filter(layer => layerOfTypeAdministrativeLayer(administrativeLayers, layer))
+        .filter(layer => layersNotInCurrentOLMap(olLayers, layer))
+
+      layersToInsert.forEach(layerToInsert => {
+        if (!layerToInsert) {
+          return
+        }
+        const VectorLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, isBackoffice)
+        olLayers.push(VectorLayer)
+      })
+    }
+
+    function removeAdministrativeLayersToMap() {
+      const layers = map.getLayers()
+      const layersToRemove = layers
+        .getArray()
+        .filter(olLayer => layerOfTypeAdministrativeLayerInCurrentMap(administrativeLayers, olLayer))
+        .filter(olLayer => layersNotInShowedLayers(showedLayers, olLayer))
+
+      layersToRemove.forEach(layerToRemove => {
+        layers.remove(layerToRemove)
+      })
+    }
+
+    addAdministrativeLayersToMap()
+    removeAdministrativeLayersToMap()
+  }, [administrativeLayers, isBackoffice, map, showedLayers])
+
+  return <></>
 }
 
-export default React.memo(AdministrativeLayers)
+export const AdministrativeLayers = React.memo(UnmemoizedAdministrativeLayers)
+
+AdministrativeLayers.displayName = 'AdministrativeLayers'

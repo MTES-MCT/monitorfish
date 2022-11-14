@@ -21,9 +21,14 @@ export function getStyle(color: string | undefined, isSelected: boolean) {
 export function getColorWithAlpha(colorHex: string, alpha: number) {
   const [r, g, b] = asArray(colorHex)
 
-  if (!r || !g || !b) {
+  if (!Number.isInteger(r) || !Number.isInteger(g) || !Number.isInteger(b)) {
     return undefined
   }
 
-  return asString([r, g, b, alpha])
+  return asString([
+    Number.parseInt(String(r), 10),
+    Number.parseInt(String(g), 10),
+    Number.parseInt(String(b), 10),
+    alpha
+  ])
 }

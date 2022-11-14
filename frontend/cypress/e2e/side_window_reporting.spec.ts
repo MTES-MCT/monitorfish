@@ -7,7 +7,6 @@ context('Reportings', () => {
 
   it('Reportings Should be archived', () => {
     // Given
-    console.log('re')
     cy.intercept('PUT', 'bff/v1/reportings/archive').as('archiveReportings')
     cy.get('*[data-cy="side-window-reporting-tab"]').click()
     cy.get('*[data-cy="side-window-current-reportings"]').should('have.length', 1)

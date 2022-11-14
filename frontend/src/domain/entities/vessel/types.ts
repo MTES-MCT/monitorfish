@@ -215,7 +215,7 @@ export type VesselLastPosition = {
 export type VesselPosition = {
   course: number
   dateTime: string
-  destination: string
+  destination: string | null
   externalReferenceNumber: string
   flagState: string
   from: string

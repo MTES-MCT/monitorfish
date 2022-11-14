@@ -1,7 +1,8 @@
 import { describe, expect, it } from '@jest/globals'
+import { includes } from 'lodash'
 
 import { getFeaturesFromPositions, getTrackType } from '../index'
-import { DUMMY_VESSEL_TRACK } from './__mocks__'
+import { DUMMY_VESSEL_TRACK, VESSEL_TRACK_ALL_SAME_COORDINATES, VESSEL_TRACK_FEW_SAME_COORDINATES } from './__mocks__'
 
 import type { VesselLineFeature, VesselPointFeature, VesselPosition } from '../../types'
 
@@ -104,6 +105,53 @@ describe('vessel/track', () => {
     expect(positionFeature!.getId()).toEqual('vessel_track:VESSEL_ID:position:5')
     // A Point geometry is of type Coordinate[]
     expect(positionFeature!.getGeometry()?.getCoordinates()).toEqual([-402308.6397268907, 5852757.632510743])
+  })
+
+  it('getFeaturesFromPositions Should return one features When a track with same coordinates is given', async () => {
+    // Given
+    const vesselId = 'VESSEL_ID'
+
+    // When
+    const features = getFeaturesFromPositions(VESSEL_TRACK_ALL_SAME_COORDINATES, vesselId)
+
+    // Then
+    const positionFeatures = features.filter(feature => feature.getId()?.toString().includes('position'))
+    const lineFeatures = features.filter(feature => feature.getId()?.toString().includes('line'))
+    const arrowFeatures = features.filter(feature => feature.getId()?.toString().includes('arrow'))
+
+    // Then, there is only 1 position, as all positions have the same coordinates
+    expect(features).toHaveLength(1)
+    expect(lineFeatures).toHaveLength(0)
+    expect(positionFeatures).toHaveLength(1)
+    expect(arrowFeatures).toHaveLength(0)
+
+    const position = positionFeatures[0] as VesselPointFeature
+    expect(position.getId()).toEqual('vessel_track:VESSEL_ID:position:0')
+    expect(position.dateTime).toEqual('2022-11-14T07:23:00Z')
+  })
+
+  it('getFeaturesFromPositions Should return multiple features When another track containing same coordinates is given', async () => {
+    // Given
+    const vesselId = 'VESSEL_ID'
+
+    // When
+    const features = getFeaturesFromPositions(VESSEL_TRACK_FEW_SAME_COORDINATES, vesselId)
+
+    // Then
+    const positionFeatures = features.filter(feature => feature.getId()?.toString().includes('position'))
+    const lineFeatures = features.filter(feature => feature.getId()?.toString().includes('line'))
+    const arrowFeatures = features.filter(feature => feature.getId()?.toString().includes('arrow'))
+
+    // Then, there is only 1 position, as all positions have the same coordinates
+    expect(features).toHaveLength(7)
+    expect(lineFeatures).toHaveLength(2)
+    expect(positionFeatures).toHaveLength(3)
+    expect(arrowFeatures).toHaveLength(2)
+
+    features.forEach(feature => {
+      const coordinates = feature.getGeometry()?.getFlatCoordinates()
+      expect(includes(coordinates, NaN)).toBeFalsy()
+    })
   })
 
   it('getTrackType Should return FISHING When two positions have the isFishing property set as true', async () => {

@@ -7,7 +7,7 @@ import {
   ReportingTypeCharacteristics
 } from '../../../domain/entities/reporting'
 import { setEditedReporting } from '../../../domain/shared_slices/Reporting'
-import { ReportingType } from '../../../domain/types/reporting'
+import { ReportingType, Reporting } from '../../../domain/types/reporting'
 import archiveReporting from '../../../domain/use_cases/reporting/archiveReporting'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { getDateTime } from '../../../utils'
@@ -20,23 +20,23 @@ import { getAlertNameFromType } from '../../side_window/alerts_reportings/utils'
 
 import type { Promisable } from 'type-fest'
 
-export type ReportingProps = {
+export type ReportingCardProps = {
   isArchive?: boolean
   numberOfAlerts?: number
   openConfirmDeletionModalForId: (reportingId: string) => Promisable<void>
   // TODO Doesn't respect Reporting type from domain. Can it be undefined (wouldn't make sense)?
-  reporting?: Record<string, any>
+  reporting: Reporting
 }
-export function Reporting({
+export function ReportingCard({
   isArchive = false,
   numberOfAlerts,
   openConfirmDeletionModalForId,
   reporting
-}: ReportingProps) {
+}: ReportingCardProps) {
   const dispatch = useAppDispatch()
-  const isAnInfractionSuspicion = reporting && reportingIsAnInfractionSuspicion(reporting.type)
+  const isAnInfractionSuspicion = reportingIsAnInfractionSuspicion(reporting.type)
   const reportingName = Object.values(ReportingTypeCharacteristics).find(
-    reportingType => reportingType.code === reporting?.type
+    reportingType => reportingType.code === reporting.type
   )?.name
 
   return (
@@ -44,55 +44,56 @@ export function Reporting({
       <Icon>{isAnInfractionSuspicion ? <InfractionSuspicionIcon /> : <ObservationIcon />}</Icon>
       <Body isInfractionSuspicion={isAnInfractionSuspicion}>
         <Title>
-          {reporting?.type === ReportingType.ALERT
+          {reporting.type === ReportingType.ALERT
             ? reportingName
-            : getReportingActor(reporting?.value?.reportingActor, reporting?.value?.unit)}{' '}
+            : getReportingActor(reporting.value.reportingActor, reporting.value.unit)}{' '}
           /{' '}
-          {reporting?.type === ReportingType.ALERT
-            ? getAlertNameFromType(reporting?.value?.type)
-            : reporting?.value?.title}
+          {reporting.type === ReportingType.ALERT ? getAlertNameFromType(reporting.value.type) : reporting.value.title}
         </Title>
         <Date>
           {numberOfAlerts ? 'Dernière alerte le' : 'Le'}{' '}
           {getDateTime(
-            reporting?.type === ReportingType.ALERT ? reporting?.validationDate : reporting?.creationDate,
+            reporting.type === ReportingType.ALERT ? reporting.validationDate : reporting.creationDate,
             true
           )}
         </Date>
-        {reporting?.type !== ReportingType.ALERT ? <Description>{reporting?.value?.description}</Description> : null}
-        {reporting?.type !== ReportingType.ALERT && reporting?.value?.authorContact ? (
-          <Author>Émetteur: {reporting?.value?.authorContact}</Author>
-        ) : null}
-        {reporting?.value?.natinfCode ? (
+        {reporting.type !== ReportingType.ALERT && <Description>{reporting.value.description}</Description>}
+        {reporting.type !== ReportingType.ALERT && reporting.value.authorContact && (
+          <Author>Émetteur: {reporting.value.authorContact}</Author>
+        )}
+        {reporting.type !== ReportingType.OBSERVATION && reporting.value.natinfCode && (
           <Natinf
             title={
-              reporting?.infraction
-                ? `${reporting?.infraction?.natinfCode || ''}: ${
-                    reporting?.infraction?.infraction || ''
-                  } (réglementation "${reporting?.infraction?.regulation || ''}")`
+              reporting.infraction
+                ? `${reporting.infraction?.natinfCode || ''}: ${
+                    reporting.infraction?.infraction || ''
+                  } (réglementation "${reporting.infraction?.regulation || ''}")`
                 : ''
             }
           >
-            NATINF {reporting?.value?.natinfCode}
+            NATINF {reporting.value.natinfCode}
           </Natinf>
-        ) : null}
+        )}
       </Body>
       {!isArchive && (
         <Actions isAlert={!!numberOfAlerts} isInfractionSuspicion={isAnInfractionSuspicion}>
           {numberOfAlerts && <NumberOfAlerts>{numberOfAlerts}</NumberOfAlerts>}
-          {reporting?.type === ReportingType.OBSERVATION ||
-            (reporting?.type === ReportingType.INFRACTION_SUSPICION && (
-              <EditButton onClick={() => dispatch(setEditedReporting(reporting))} title="Editer" />
-            ))}
+          {(reporting.type === ReportingType.OBSERVATION || reporting.type === ReportingType.INFRACTION_SUSPICION) && (
+            <EditButton
+              data-cy={`edit-reporting-card-${reporting.id}`}
+              onClick={() => dispatch(setEditedReporting(reporting))}
+              title="Editer"
+            />
+          )}
           <ArchiveButton
             data-cy="archive-reporting-card"
             isAlert={!!numberOfAlerts}
-            onClick={() => reporting && dispatch(archiveReporting(reporting.id) as any)}
+            onClick={() => dispatch(archiveReporting(reporting.id) as any)}
             title="Archiver"
           />
           <DeleteButton
             data-cy="delete-reporting-card"
-            onClick={() => reporting && openConfirmDeletionModalForId(reporting.id)}
+            onClick={() => openConfirmDeletionModalForId(reporting.id)}
             title="Supprimer"
           />
         </Actions>

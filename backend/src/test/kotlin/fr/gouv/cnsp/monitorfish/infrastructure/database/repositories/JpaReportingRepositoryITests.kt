@@ -286,4 +286,33 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting.value as Observation).description).isEqualTo(updatedReporting.description)
         assertThat((reporting.value as Observation).flagState).isEqualTo(updatedReporting.flagState)
     }
+
+    @Test
+    @Transactional
+    fun `update Should convert an InfractionSuspicion to an Observation`() {
+        // Given
+        val updatedReporting = Observation(
+            ReportingActor.UNIT,
+            "An unit",
+            "",
+            "Jean Bon",
+            "Une observation",
+            "Une description",
+            "1236"
+        )
+
+        // When
+        val reporting = jpaReportingRepository.update(6, updatedReporting)
+
+        // Then
+        assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
+        assertThat(reporting.type).isEqualTo(ReportingType.OBSERVATION)
+        assertThat((reporting.value as Observation).reportingActor).isEqualTo(updatedReporting.reportingActor)
+        assertThat((reporting.value as Observation).unit).isEqualTo(updatedReporting.unit)
+        assertThat((reporting.value as Observation).authorTrigram).isEqualTo(updatedReporting.authorTrigram)
+        assertThat((reporting.value as Observation).authorContact).isEqualTo(updatedReporting.authorContact)
+        assertThat((reporting.value as Observation).title).isEqualTo(updatedReporting.title)
+        assertThat((reporting.value as Observation).description).isEqualTo(updatedReporting.description)
+        assertThat((reporting.value as Observation).flagState).isEqualTo(updatedReporting.flagState)
+    }
 }

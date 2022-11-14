@@ -265,18 +265,15 @@ const vesselSlice = createSlice({
     },
 
     /**
-     * Remove the reporting from vessels array
-     * before the /vessels API is fetched from the cron
-     * @function removeVesselReporting
-     * @param {Object} state
-     * @param {{
-     *   payload: {
-     *     vesselId: string
-     *     reportingType: string
-     *   }
-     * }} action
+     * Remove the reporting from vessels array before the /vessels API is fetched from the cron
      */
-    removeVesselReporting(state, action) {
+    removeVesselReporting(
+      state,
+      action: PayloadAction<{
+        reportingType: string
+        vesselId: string
+      }>
+    ) {
       state.vessels = state.vessels.map(vessel => {
         if (vessel.vesselId !== action.payload.vesselId) {
           return vessel

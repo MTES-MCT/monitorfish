@@ -1,6 +1,7 @@
 import type { SeaFront } from '../entities/alerts/constants'
 import type { VesselIdentity } from '../entities/vessel/types'
 import type { PendingAlertValue } from './alert'
+import type { Infraction } from './control'
 
 export enum ReportingType {
   // TODO Should be renamed 'PENDING_ALERT'.
@@ -13,6 +14,7 @@ export type BaseReporting = {
   creationDate: string
   externalReferenceNumber: string
   id: string
+  infraction: Infraction | null
   internalReferenceNumber: string
   ircs: string
   type: ReportingType
@@ -75,15 +77,15 @@ export type Observation = {
   unit: string | null
 }
 
-export type UpdateReporting = {
+export type ReportingUpdate = {
   authorContact: string | undefined
   authorTrigram: string | undefined
   description: string | undefined
-  dml: string | undefined
-  natinfCode: string | undefined
+  natinfCode: string | null
   reportingActor: string
+  reportingType: ReportingType
   title: string
-  unit: string | undefined
+  unit: string | null
 }
 
 export function toVesselIdentity(reporting: Reporting | undefined): VesselIdentity {

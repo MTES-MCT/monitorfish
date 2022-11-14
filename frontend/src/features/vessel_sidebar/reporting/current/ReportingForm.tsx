@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { ReportingOriginActor, ReportingTypeCharacteristics } from '../../../../domain/entities/reporting'
+import { getOnlyVesselIdentityProperties } from '../../../../domain/entities/vessel/vessel'
 import { addReporting } from '../../../../domain/use_cases/reporting/addReporting'
 import { updateReporting } from '../../../../domain/use_cases/reporting/updateReporting'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
@@ -14,7 +15,7 @@ import { PrimaryButton, SecondaryButton } from '../../../commonStyles/Buttons.st
 import { sortArrayByColumn } from '../../../vessel_list/tableSort'
 
 import type { VesselIdentity } from '../../../../domain/entities/vessel/types'
-import type { Reporting } from '../../../../domain/types/reporting'
+import type { Reporting, ReportingUpdate, ReportingType } from '../../../../domain/types/reporting'
 
 type ReportingFormProps = {
   closeForm: () => void
@@ -38,7 +39,9 @@ export function ReportingForm({
   const infractions = useAppSelector(state => state.infraction.infractions)
   const controllers = useAppSelector(state => state.controls.controllers)
 
-  const [reportingType, setReportingType] = useState<string>(ReportingTypeCharacteristics.INFRACTION_SUSPICION.code)
+  const [reportingType, setReportingType] = useState<ReportingType>(
+    ReportingTypeCharacteristics.INFRACTION_SUSPICION.code
+  )
   useSaveReportingInLocalStorage(reportingLocalStorageKey, 'type', reportingType, false)
   const [unit, setUnit] = useState<string | null>('')
   useSaveReportingInLocalStorage(reportingLocalStorageKey, 'unit', unit, true)
@@ -55,17 +58,18 @@ export function ReportingForm({
   const [description, setDescription] = useState('')
   useSaveReportingInLocalStorage(reportingLocalStorageKey, 'description', description, true)
   const [errorFields, setErrorFields] = useState<string[]>([])
+  const previousReportingType = useRef() as MutableRefObject<ReportingType>
 
   function fillForm(editedOrSavedReporting) {
     setErrorFields([])
     setReportingType(editedOrSavedReporting.type || ReportingTypeCharacteristics.INFRACTION_SUSPICION.code)
-    setUnit(editedOrSavedReporting.value?.unit || '')
-    setAuthorTrigram(editedOrSavedReporting.value?.authorTrigram || '')
-    setAuthorContact(editedOrSavedReporting.value?.authorContact || '')
-    setReportingActor(editedOrSavedReporting.value?.reportingActor || ReportingOriginActor.OPS.code)
-    setTitle(editedOrSavedReporting.value?.title || '')
-    setNatinfCode(editedOrSavedReporting.value?.natinfCode || '')
-    setDescription(editedOrSavedReporting.value?.description || '')
+    setUnit(editedOrSavedReporting.value.unit || '')
+    setAuthorTrigram(editedOrSavedReporting.value.authorTrigram || '')
+    setAuthorContact(editedOrSavedReporting.value.authorContact || '')
+    setReportingActor(editedOrSavedReporting.value.reportingActor || ReportingOriginActor.OPS.code)
+    setTitle(editedOrSavedReporting.value.title || '')
+    setNatinfCode(editedOrSavedReporting.value.natinfCode || '')
+    setDescription(editedOrSavedReporting.value.description || '')
   }
 
   const deleteLocalStorageReportingEntry = useCallback(
@@ -76,6 +80,7 @@ export function ReportingForm({
   useEffect(() => {
     if (editedReporting) {
       fillForm(editedReporting)
+      previousReportingType.current = editedReporting.type
 
       return
     }
@@ -154,14 +159,21 @@ export function ReportingForm({
   }
 
   const editReporting = useCallback(
-    (editedReportingId, nextReporting) => {
+    (editedReportingId: number, nextReportingValue: ReportingUpdate) => {
       // TODO Fix the use-case dispatch type
-      dispatch(updateReporting(editedReportingId, nextReporting.value) as any).then(() => {
+      dispatch(
+        updateReporting(
+          getOnlyVesselIdentityProperties(editedReporting),
+          editedReportingId,
+          nextReportingValue,
+          previousReportingType.current
+        ) as any
+      ).then(() => {
         closeForm()
         deleteLocalStorageReportingEntry()
       })
     },
-    [dispatch, closeForm, deleteLocalStorageReportingEntry]
+    [dispatch, closeForm, deleteLocalStorageReportingEntry, editedReporting]
   )
 
   const createReporting = useCallback(
@@ -192,7 +204,7 @@ export function ReportingForm({
   )
 
   const createOrEditReporting = useCallback(
-    (_reportingType, reportingValue) => {
+    (_reportingType: ReportingType, reportingValue: ReportingUpdate) => {
       const hasErrors = checkErrors(reportingValue)
       if (hasErrors) {
         return
@@ -204,7 +216,7 @@ export function ReportingForm({
       }
 
       if (editedReporting) {
-        editReporting(editedReporting.id, nextReporting)
+        editReporting(parseInt(editedReporting.id, 10), nextReporting.value)
 
         return
       }
@@ -325,19 +337,20 @@ export function ReportingForm({
       <RadioGroup
         appearance="picker"
         defaultValue={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
-        disabled={!!editedReporting}
         inline
-        onChange={value => setReportingType(value as string)}
+        onChange={value => setReportingType(value as ReportingType)}
         value={reportingType}
       >
         <Radio
           key={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
+          data-cy="new-reporting-select-infraction-reporting-type"
           value={ReportingTypeCharacteristics.INFRACTION_SUSPICION.code}
         >
           {ReportingTypeCharacteristics.INFRACTION_SUSPICION.inputName}
         </Radio>
         <Radio
           key={ReportingTypeCharacteristics.OBSERVATION.code}
+          data-cy="new-reporting-select-observation-reporting-type"
           value={ReportingTypeCharacteristics.OBSERVATION.code}
         >
           {ReportingTypeCharacteristics.OBSERVATION.inputName}
@@ -415,6 +428,7 @@ export function ReportingForm({
             description,
             natinfCode,
             reportingActor,
+            reportingType,
             title,
             unit
           })

@@ -1,21 +1,60 @@
-import { batch } from 'react-redux'
-
 import { updateReportingFromAPI } from '../../../api/reporting'
+import { Vessel } from '../../entities/vessel/vessel'
 import { removeError, setError } from '../../shared_slices/Global'
-import { setCurrentAndArchivedReportingsOfSelectedVessel, updateCurrentReporting } from '../../shared_slices/Reporting'
+import {
+  removeCurrentReporting,
+  setCurrentAndArchivedReportingsOfSelectedVessel,
+  updateCurrentReporting
+} from '../../shared_slices/Reporting'
+import { addVesselReporting, removeVesselReporting } from '../../shared_slices/Vessel'
+import { ReportingType } from '../../types/reporting'
 
 import type { AppDispatch, AppGetState } from '../../../store'
+import type { VesselIdentity } from '../../entities/vessel/types'
+import type { InfractionSuspicionReporting, ReportingUpdate } from '../../types/reporting'
 
 export const updateReporting =
-  (id, nextReporting) =>
+  (
+    selectedVesselIdentity: VesselIdentity,
+    id: number,
+    nextReporting: ReportingUpdate,
+    previousReportingType: ReportingType
+  ) =>
   async (dispatch: AppDispatch, getState: AppGetState): Promise<void> => {
-    const { selectedVesselIdentity } = getState().vessel
     const { currentAndArchivedReportingsOfSelectedVessel, vesselIdentity } = getState().reporting
 
     return updateReportingFromAPI(id, nextReporting)
       .then(updatedReporting => {
-        dispatch(updateCurrentReporting(updatedReporting))
+        if (nextReporting.reportingType === ReportingType.INFRACTION_SUSPICION) {
+          dispatch(updateCurrentReporting(updatedReporting as InfractionSuspicionReporting))
+        }
 
+        if (
+          nextReporting.reportingType === ReportingType.OBSERVATION &&
+          previousReportingType === ReportingType.INFRACTION_SUSPICION
+        ) {
+          dispatch(removeCurrentReporting(updatedReporting.id))
+        }
+
+        // We update the reportings of the last positions vessels state
+        if (previousReportingType !== nextReporting.reportingType) {
+          const vesselId = Vessel.getVesselFeatureId(selectedVesselIdentity)
+
+          dispatch(
+            removeVesselReporting({
+              reportingType: previousReportingType,
+              vesselId
+            })
+          )
+          dispatch(
+            addVesselReporting({
+              reportingType: nextReporting.reportingType,
+              vesselId
+            })
+          )
+        }
+
+        // If the update is done from the Reporting tab of the vessel sidebar
         if (vesselIdentity && currentAndArchivedReportingsOfSelectedVessel?.current?.length) {
           const nextCurrentAndArchivedReporting = getUpdatedCurrentAndArchivedReportingOfSelectedVessel(
             currentAndArchivedReportingsOfSelectedVessel,
@@ -29,19 +68,10 @@ export const updateReporting =
           )
         }
 
-        return dispatch(removeError())
+        dispatch(removeError())
       })
       .catch(error => {
-        console.error(error)
-        batch(() => {
-          dispatch(
-            setCurrentAndArchivedReportingsOfSelectedVessel({
-              currentAndArchivedReportingsOfSelectedVessel,
-              vesselIdentity: selectedVesselIdentity
-            })
-          )
-          dispatch(setError(error))
-        })
+        dispatch(setError(error))
       })
   }
 

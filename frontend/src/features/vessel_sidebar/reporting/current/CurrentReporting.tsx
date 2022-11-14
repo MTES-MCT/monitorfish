@@ -7,7 +7,7 @@ import { ReportingType } from '../../../../domain/types/reporting'
 import { deleteReporting } from '../../../../domain/use_cases/reporting/deleteReporting'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { Reporting } from '../Reporting'
+import { ReportingCard } from '../ReportingCard'
 import { ConfirmDeletionModal } from './ConfirmDeletionModal'
 import { CreateOrEditReporting } from './CreateOrEditReporting'
 
@@ -32,14 +32,14 @@ export function CurrentReporting() {
 
         if (alertReportings?.length) {
           return (
-            <Reporting
+            <ReportingCard
               // TODO We need to change that with a proper cursor.
               // eslint-disable-next-line no-unsafe-optional-chaining
               key={(alertReportings as any)[alertReportings?.length - 1].id}
               numberOfAlerts={alertReportings?.length}
               openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
               // eslint-disable-next-line no-unsafe-optional-chaining
-              reporting={alertReportings[alertReportings?.length - 1]}
+              reporting={alertReportings[alertReportings?.length - 1]!!}
             />
           )
         }
@@ -50,7 +50,7 @@ export function CurrentReporting() {
         ?.filter(reporting => reporting.type !== ReportingType.ALERT)
         ?.filter(reporting => reporting.id !== editedReporting?.id)
         .map(reporting => (
-          <Reporting
+          <ReportingCard
             key={reporting.id}
             openConfirmDeletionModalForId={setDeletionModalIsOpenForId}
             reporting={reporting}

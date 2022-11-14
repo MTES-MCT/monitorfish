@@ -33,7 +33,7 @@ class ReportingMapperUTests {
     @Test
     fun `getReportingValueFromJSON Should deserialize an THREE_MILES_TRAWLING_ALERT When it is first serialized`() {
         // Given
-        val alert = ThreeMilesTrawlingAlert("NAMO", "DML 56",  "FR", 2.356)
+        val alert = ThreeMilesTrawlingAlert("NAMO", "DML 56", "FR", 2.356)
 
         // When
         val jsonString = mapper.writeValueAsString(alert)

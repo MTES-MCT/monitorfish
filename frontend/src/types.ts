@@ -7,7 +7,7 @@ export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, HomeRootState,
 
 export type CollectionItem = {
   [key: string]: any
-  id: string
+  id: number | string
 }
 
 export type DateRange = [Date, Date]

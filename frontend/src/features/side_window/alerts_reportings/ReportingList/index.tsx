@@ -72,7 +72,29 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
   const download = useCallback(() => {
     const checkedCurrentSeaFrontReportings = getTableCheckedData()
 
-    downloadAsCsv(checkedCurrentSeaFrontReportings)
+    downloadAsCsv('test', checkedCurrentSeaFrontReportings, {
+      creationDate: 'Ouvert le',
+      dml: 'DML concernées',
+      externalReferenceNumber: 'Référence externe',
+      internalReferenceNumber: 'CFR',
+      ircs: 'C/S',
+      reportingTitle: 'reportingTitle',
+      type: {
+        label: 'Origine',
+        transform: getReportingOrigin
+      },
+      underCharter: {
+        label: 'Navire sous charte ?',
+        transform: reporting => (reporting.underCharter ? 'OUI' : 'NON')
+      },
+      'value.natinfCode': 'NATINF',
+      'value.seaFront': 'Front de mer',
+      'value.type': {
+        label: 'Titre',
+        transform: getReportingTitle
+      },
+      vesselName: 'Navire'
+    })
   }, [getTableCheckedData])
 
   // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.

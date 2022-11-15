@@ -45,7 +45,7 @@ export type TableOptions<T extends CollectionItem> = {
 }
 
 export type AugmentedDataItem<T extends CollectionItem> = {
-  id: string
+  id: number | string
   isChecked: boolean
   item: T
   labelled: Partial<T>

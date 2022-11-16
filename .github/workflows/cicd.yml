@@ -45,7 +45,7 @@ jobs:
 
       - id: env_profile
         name: Set ENV profile output
-        run: ENV_PROFILE=${{ env.ENV_PROFILE }} && echo "::set-output name=ENV_PROFILE::$ENV_PROFILE"
+        run: ENV_PROFILE=${{ env.ENV_PROFILE }} && echo "ENV_PROFILE=$ENV_PROFILE" >> $GITHUB_OUTPUT
 
       - id: version
         name: Set VERSION env
@@ -55,7 +55,7 @@ jobs:
           else\
               export VERSION=${{ steps.lastrelease.outputs.release }}
           fi
-          echo "::set-output name=VERSION::$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
   build:
     name: Run unit tests, build and package

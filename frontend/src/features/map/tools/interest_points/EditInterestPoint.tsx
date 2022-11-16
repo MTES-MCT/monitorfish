@@ -11,8 +11,7 @@ import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../../..
 import saveInterestPointFeature from '../../../../domain/use_cases/interestPoint/saveInterestPointFeature'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { isNumeric } from '../../../../utils/isNumeric'
-import SetCoordinates from '../../../coordinates/SetCoordinates'
+import { SetCoordinates } from '../../../coordinates/SetCoordinates'
 import { ReactComponent as ControlSVG } from '../../../icons/Label_controle.svg'
 import { ReactComponent as GearSVG } from '../../../icons/Label_engin_de_peche.svg'
 import { ReactComponent as VesselSVG } from '../../../icons/Label_segment_de_flotte.svg'
@@ -44,7 +43,7 @@ export function EditInterestPoint({ close, healthcheckTextWarning, isOpen }: Edi
       CoordinatesFormat.DECIMAL_DEGREES,
       false
     )
-    if (!isNumeric(latitude) || !isNumeric(longitude)) {
+    if (!latitude || !longitude) {
       return []
     }
 
@@ -134,7 +133,7 @@ export function EditInterestPoint({ close, healthcheckTextWarning, isOpen }: Edi
       <Header>Créer un point d&apos;intérêt</Header>
       <Body>
         <p>Coordonnées</p>
-        <SetCoordinates coordinates={coordinates} updateCoordinates={updateCoordinates} />
+        {isOpen && <SetCoordinates coordinates={coordinates} updateCoordinates={updateCoordinates} />}
         <p>Type de point</p>
         <RadioWrapper>
           <RadioGroup

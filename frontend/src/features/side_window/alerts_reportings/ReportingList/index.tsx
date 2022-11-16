@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo, useRef } from 'react'
 import { Checkbox, FlexboxGrid } from 'rsuite'
@@ -71,11 +72,12 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
 
   const download = useCallback(() => {
     const checkedCurrentSeaFrontReportings = getTableCheckedData()
+    const fileName = `${checkedCurrentSeaFrontReportings.length}-signalements-${dayjs().format('DD-MM-YYYY')}`
 
-    downloadAsCsv('test', checkedCurrentSeaFrontReportings, {
+    downloadAsCsv(fileName, checkedCurrentSeaFrontReportings, {
       creationDate: 'Ouvert le',
       dml: 'DML concernées',
-      externalReferenceNumber: 'Référence externe',
+      externalReferenceNumber: 'Marquage ext.',
       internalReferenceNumber: 'CFR',
       ircs: 'C/S',
       reportingTitle: 'reportingTitle',
@@ -87,8 +89,9 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
         label: 'Navire sous charte ?',
         transform: reporting => (reporting.underCharter ? 'OUI' : 'NON')
       },
+      'value.flagState': 'Pavillon',
       'value.natinfCode': 'NATINF',
-      'value.seaFront': 'Front de mer',
+      'value.seaFront': 'Façade',
       'value.type': {
         label: 'Titre',
         transform: getReportingTitle

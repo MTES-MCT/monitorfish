@@ -328,7 +328,7 @@ def update_beacon_malfunction(
     new_vessel_status: BeaconMalfunctionVesselStatus = None,
     end_of_malfunction_reason: EndOfMalfunctionReason = None,
 ):
-    """Update a `beacon_malfunction`s stage or vessel status.
+    """Update a `beacon_malfunction` stage or vessel status.
 
     - Exactly one of `new_state` or `new_vessel_status` must be provided
     - `end_of_malfunction_reason` must be provided if `new_stage` is provided and is

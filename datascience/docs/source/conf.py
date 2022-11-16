@@ -39,9 +39,8 @@ templates_path = ["_templates"]
 exclude_patterns = []
 
 # -- API generation with sphinx-autoapi --------------------------------------
-autoapi_dirs = ["../.."]
-autoapi_ignore = ["**/datascience/tests/**", "**datascience*docs/**"]
-autoapi_root = "./autoapi"
+autoapi_dirs = ["../../src"]
+autoapi_ignore = ["*flows_config*", "*legipeche*"]
 autoapi_add_toctree_entry = False
 
 # -- Options for HTML output -------------------------------------------------

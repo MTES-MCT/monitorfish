@@ -7,7 +7,7 @@ from geoalchemy2 import Geometry
 from prefect.engine.signals import TRIGGERFAIL
 from sqlalchemy import BOOLEAN, FLOAT, TIMESTAMP, VARCHAR, Column, MetaData, Table
 
-from src.pipeline.exceptions.monitorfish_health_error import MonitorfishHealthError
+from src.pipeline.exceptions import MonitorfishHealthError
 from src.pipeline.flows.missing_far_alerts import (
     concat,
     extract_vessels_that_emitted_fars,

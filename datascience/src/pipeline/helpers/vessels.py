@@ -21,7 +21,7 @@ def make_add_vessels_columns_query(
     indicated `vessel_ids`.
 
     Args:
-        vessel_ids (list): List of vessels `id`s to fetch data for.
+        vessel_ids (list): List of vessels `id` to fetch data for.
         vessels_table (Table): vessels table.
         vessels_columns_to_add (list, optional): List of columns to get from the
           `vessels` table. Defaults to None.

@@ -10,7 +10,7 @@ from prefect.executors import LocalDaskExecutor
 from sqlalchemy import Table, and_, not_, or_, select
 from sqlalchemy.sql import Select
 
-from src.pipeline.exceptions.monitorfish_health_error import MonitorfishHealthError
+from src.pipeline.exceptions import MonitorfishHealthError
 from src.pipeline.generic_tasks import extract, read_query_task
 from src.pipeline.processing import join_on_multiple_keys
 from src.pipeline.shared_tasks.alerts import (
@@ -189,6 +189,7 @@ def extract_vessels_that_emitted_fars(
     designated dates and returns the result as a `set` of their CFR numbers.
 
     Date conditions on dates must be made on 3 dates :
+
     - `operation_datetime_utc`: for performance reasons (the table is chunked on this
       column)
     - `report_datetime_utc`: to get only reports that were filled between the given
@@ -316,7 +317,7 @@ def get_vessels_with_missing_fars(
 
     Returns:
         pd.DataFrame: Filtered version of `vessels_at_sea` with only those that are
-          not in `vessels_that_emitted_fars`
+        not in `vessels_that_emitted_fars`
     """
 
     logger = prefect.context.get("logger")

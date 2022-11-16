@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { dmsToDecimal } from 'react-coordinate-input'
+import { isNumeric } from '../../utils/isNumeric'
 
 const DMDCoordinatesInput = props => {
   const {
@@ -58,7 +59,7 @@ const DMDCoordinatesInput = props => {
     const dLatitude = dmsToDecimal(latitudeDegrees, latitudeMinutes + Math.pow(10, -3) * latitudeSeconds, 0, NS, 6)
     const dLongitude = dmsToDecimal(longitudeDegrees, longitudeMinutes + Math.pow(10, -3) * longitudeSeconds, 0, EW, 6)
 
-    if (!Number.isNaN(dLatitude) && !Number.isNaN(dLongitude)) {
+    if (!isNumeric(dLatitude) && !isNumeric(dLongitude)) {
       updateCoordinates([dLatitude, dLongitude], coordinates)
     } else {
       setError('Format lat/long invalide')

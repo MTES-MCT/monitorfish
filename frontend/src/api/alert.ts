@@ -5,10 +5,10 @@ import ky from 'ky'
 import { ApiError } from '../libs/ApiError'
 
 import type {
-  PendingAlert,
-  SilencedAlert,
   LEGACY_PendingAlert,
   LEGACY_SilencedAlert,
+  PendingAlert,
+  SilencedAlert,
   SilencedAlertPeriodRequest
 } from '../domain/types/alert'
 
@@ -66,11 +66,10 @@ async function silenceAlertFromAPI(
 ): Promise<LEGACY_SilencedAlert> {
   // TODO Normalize this data before calling the api service rather than here.
   const silencedAlertPeriod = silencedAlertPeriodRequest.silencedAlertPeriod || ''
-  const afterDateTime = silencedAlertPeriodRequest.afterDateTime?.toISOString() || ''
   const beforeDateTime = silencedAlertPeriodRequest.beforeDateTime?.toISOString() || ''
 
   try {
-    const data = await ky
+    return await ky
       .put(`/bff/v1/operational_alerts/${id}/silence`, {
         // TODO Is this necessary?
         headers: {
@@ -78,14 +77,11 @@ async function silenceAlertFromAPI(
           'Content-Type': 'application/json;charset=UTF-8'
         },
         json: {
-          afterDateTime,
           beforeDateTime,
           silencedAlertPeriod
         }
       })
       .json<SilencedAlert>()
-
-    return data
   } catch (err) {
     throw new ApiError(SILENCE_ALERT_ERROR_MESSAGE, err)
   }
@@ -98,9 +94,7 @@ async function silenceAlertFromAPI(
  */
 async function getSilencedAlertsFromAPI(): Promise<LEGACY_SilencedAlert[]> {
   try {
-    const data = await ky.get('/bff/v1/operational_alerts/silenced').json<SilencedAlert[]>()
-
-    return data
+    return await ky.get('/bff/v1/operational_alerts/silenced').json<SilencedAlert[]>()
   } catch (err) {
     throw new ApiError(ALERTS_ERROR_MESSAGE, err)
   }

@@ -88,7 +88,7 @@ class OperationalAlertControllerITests {
     @Test
     fun `Should silence an operational alert`() {
         // Given
-        given(this.silenceOperationalAlert.execute(any(), any(), any(), any())).willReturn(
+        given(this.silenceOperationalAlert.execute(any(), any(), any())).willReturn(
             SilencedAlert(
                 id = 666,
                 internalReferenceNumber = "FRFGRGR",
@@ -96,12 +96,10 @@ class OperationalAlertControllerITests {
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 silencedBeforeDate = ZonedDateTime.now(),
-                silencedAfterDate = ZonedDateTime.now().plusDays(2),
                 value = ThreeMilesTrawlingAlert()
             )
         )
         val before = ZonedDateTime.now()
-        val after = ZonedDateTime.now().minusMinutes(56)
 
         // When
         mockMvc.perform(
@@ -110,8 +108,7 @@ class OperationalAlertControllerITests {
                     objectMapper.writeValueAsString(
                         SilenceOperationalAlertDataInput(
                             silencedAlertPeriod = SilenceAlertPeriod.CUSTOM,
-                            beforeDateTime = before,
-                            afterDateTime = after
+                            beforeDateTime = before
                         )
                     )
                 )
@@ -124,13 +121,9 @@ class OperationalAlertControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.type", Matchers.equalTo("THREE_MILES_TRAWLING_ALERT")))
 
         argumentCaptor<ZonedDateTime>().apply {
-            verify(silenceOperationalAlert).execute(eq(666), eq(SilenceAlertPeriod.CUSTOM), capture(), capture())
+            verify(silenceOperationalAlert).execute(eq(666), eq(SilenceAlertPeriod.CUSTOM), capture())
 
-            assertThat(allValues).hasSize(2)
             assertThat(allValues.first().withZoneSameInstant(UTC).toString()).isEqualTo(
-                after.withZoneSameInstant(UTC).toString()
-            )
-            assertThat(allValues.last().withZoneSameInstant(UTC).toString()).isEqualTo(
                 before.withZoneSameInstant(UTC).toString()
             )
         }
@@ -147,7 +140,6 @@ class OperationalAlertControllerITests {
                     ircs = "6554fEE",
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     silencedBeforeDate = ZonedDateTime.now(),
-                    silencedAfterDate = ZonedDateTime.now().plusDays(2),
                     value = ThreeMilesTrawlingAlert()
                 )
             )

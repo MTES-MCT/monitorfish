@@ -8,7 +8,6 @@ interface SilencedAlertRepository {
     fun save(
         alert: PendingAlert,
         silencedBeforeDate: ZonedDateTime,
-        silencedAfterDate: ZonedDateTime?,
         isValidated: Boolean
     ): SilencedAlert
 

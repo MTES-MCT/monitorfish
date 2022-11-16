@@ -33,9 +33,7 @@ export const getSilencedAlertPeriodText = (silencedAlertPeriodRequest: SilencedA
       return 'pendant 1 année'
 
     case SilencedAlertPeriod.CUSTOM:
-      return `du ${getDate(silencedAlertPeriodRequest.afterDateTime)} au ${getDate(
-        silencedAlertPeriodRequest.beforeDateTime
-      )}`
+      return `jusqu'au ${getDate(silencedAlertPeriodRequest.beforeDateTime)}`
 
     default:
       throw new Error('This should never happen.')

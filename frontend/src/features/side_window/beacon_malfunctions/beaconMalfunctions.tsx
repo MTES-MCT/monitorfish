@@ -8,8 +8,13 @@ import {
   END_OF_MALFUNCTION_REASON_RECORD,
   VESSEL_STATUS
 } from '../../../domain/entities/beaconMalfunction/constants'
+import { getTextForSearch } from '../../../utils'
 
-import type { BeaconMalfunction, BeaconMalfunctionAction } from '../../../domain/types/beaconMalfunction'
+import type {
+  BeaconMalfunction,
+  BeaconMalfunctionAction,
+  BeaconMalfunctionStatusValue
+} from '../../../domain/types/beaconMalfunction'
 
 export const BeaconMalfunctionsSubMenu = {
   HISTORIC: {
@@ -131,4 +136,42 @@ export const BeaconMalfunctionDetailsType = {
   ACTION: 'ACTION',
   COMMENT: 'COMMENT',
   NOTIFICATION: 'NOTIFICATION'
+}
+
+export function searchInBeaconMalfunctions(
+  beaconMalfunctions: Record<BeaconMalfunctionsStage, BeaconMalfunction[]>,
+  searchedVessel: string,
+  filteredVesselStatus: BeaconMalfunctionStatusValue | undefined
+) {
+  let nextFilteredItems = beaconMalfunctions
+
+  if (searchedVessel?.length > 1) {
+    nextFilteredItems = Object.keys(beaconMalfunctions).reduce(
+      (previous, stage) => ({
+        ...previous,
+        [stage]: beaconMalfunctions[stage].filter(
+          beaconMalfunction =>
+            getTextForSearch(beaconMalfunction.vesselName).includes(getTextForSearch(searchedVessel)) ||
+            getTextForSearch(beaconMalfunction.internalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
+            getTextForSearch(beaconMalfunction.externalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
+            getTextForSearch(beaconMalfunction.ircs).includes(getTextForSearch(searchedVessel))
+        )
+      }),
+      {} as any
+    )
+  }
+
+  if (filteredVesselStatus) {
+    nextFilteredItems = Object.keys(nextFilteredItems).reduce(
+      (previous, stage) => ({
+        ...previous,
+        [stage]: nextFilteredItems[stage].filter(
+          beaconMalfunction => beaconMalfunction.vesselStatus === filteredVesselStatus.value
+        )
+      }),
+      {} as any
+    )
+  }
+
+  return nextFilteredItems
 }

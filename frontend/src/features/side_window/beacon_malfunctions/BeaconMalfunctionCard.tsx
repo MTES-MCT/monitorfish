@@ -1,4 +1,4 @@
-import { CSSProperties, Ref, useEffect, useMemo, useRef } from 'react'
+import { CSSProperties, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
@@ -13,14 +13,14 @@ import { VesselStatusSelect } from './VesselStatusSelect'
 import type { BeaconMalfunction } from '../../../domain/types/beaconMalfunction'
 
 export type BeaconMalfunctionCardProps = {
-  activeBeaconId: number
+  activeBeaconId: number | undefined
   baseUrl: string
   beaconMalfunction: BeaconMalfunction
   isDragging: boolean
-  isDroppedId: boolean
+  isDroppedId: boolean | undefined
   isShowed: boolean
-  updateVesselStatus: () => {}
-  verticalScrollRef: Ref<HTMLDivElement>
+  updateVesselStatus: (beaconMalfunction: BeaconMalfunction | undefined, status: string | null) => void
+  verticalScrollRef: MutableRefObject<HTMLDivElement> | undefined
 }
 
 export function BeaconMalfunctionCard({
@@ -32,34 +32,19 @@ export function BeaconMalfunctionCard({
   isShowed,
   updateVesselStatus,
   verticalScrollRef
-}) {
+}: BeaconMalfunctionCardProps) {
   const dispatch = useAppDispatch()
   const vesselStatus = VESSEL_STATUS.find(_vesselStatus => _vesselStatus.value === beaconMalfunction?.vesselStatus)
   const bodyRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const hasScroll = verticalScrollRef?.current?.scrollHeight > verticalScrollRef?.current?.clientHeight
+  const hasScroll = verticalScrollRef?.current
+    ? verticalScrollRef?.current?.scrollHeight > verticalScrollRef?.current?.clientHeight
+    : false
 
   const endOfBeaconMalfunctionReason = useMemo(
     () => END_OF_MALFUNCTION_REASON_RECORD[beaconMalfunction?.endOfBeaconMalfunctionReason],
     [beaconMalfunction]
   )
-
-  useEffect(() => {
-    if (bodyRef.current && vesselStatus && vesselStatus.color && beaconMalfunction?.id) {
-      // TODO Use styled-component and avoid useEffect to update these elements style.
-      const selectElement = bodyRef.current.querySelector('.rs-picker-select') as HTMLElement
-      if (selectElement?.style) {
-        selectElement.style.background = vesselStatus.color
-      }
-
-      const toggleElement = bodyRef.current.querySelector(
-        '*[data-cy="side-window-beacon-malfunctions-vessel-status"]'
-      ) as HTMLElement
-      if (toggleElement?.style) {
-        toggleElement.style.color = vesselStatus.textColor
-      }
-    }
-  }, [vesselStatus, beaconMalfunction])
 
   useEffect(() => {
     if (isShowed && beaconMalfunction && wrapperRef.current) {
@@ -119,6 +104,7 @@ export function BeaconMalfunctionCard({
             beaconMalfunction={beaconMalfunction}
             domRef={bodyRef}
             isAbsolute={false}
+            isCleanable={false}
             updateVesselStatus={updateVesselStatus}
             vesselStatus={vesselStatus}
           />

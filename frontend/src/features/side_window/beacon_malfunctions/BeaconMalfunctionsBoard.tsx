@@ -9,25 +9,29 @@ import {
   useSensors
 } from '@dnd-kit/core'
 import { createSelector } from '@reduxjs/toolkit'
-import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
+import { CSSProperties, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import { STAGE_RECORD } from '../../../domain/entities/beaconMalfunction/constants'
+import { STAGE_RECORD, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 import { setError } from '../../../domain/shared_slices/Global'
 import getAllBeaconMalfunctions from '../../../domain/use_cases/beaconMalfunction/getAllBeaconMalfunctions'
 import updateBeaconMalfunctionFromKanban from '../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { getTextForSearch } from '../../../utils'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 import { BeaconMalfunctionDetails } from './BeaconMalfunctionDetails'
-import { getBeaconMalfunctionsByStage } from './beaconMalfunctions'
+import { getBeaconMalfunctionsByStage, searchInBeaconMalfunctions } from './beaconMalfunctions'
 import { Droppable } from './Droppable'
 import { StageColumn } from './StageColumn'
+import { VesselStatusSelect } from './VesselStatusSelect'
 
-import type { BeaconMalfunction, BeaconMalfunctionStageColumnValue } from '../../../domain/types/beaconMalfunction'
+import type {
+  BeaconMalfunction,
+  BeaconMalfunctionStageColumnValue,
+  BeaconMalfunctionStatusValue
+} from '../../../domain/types/beaconMalfunction'
 
 const getMemoizedBeaconMalfunctionsByStage = createSelector(
   state => state.beaconMalfunction.beaconMalfunctions,
@@ -44,6 +48,8 @@ export function BeaconMalfunctionsBoard() {
   const [isDroppedId, setIsDroppedId] = useState<number | undefined>(undefined)
   const [searchedVessel, setSearchedVessel] = useState<string>('')
   const [activeBeaconMalfunction, setActiveBeaconMalfunction] = useState(null)
+  const [filteredVesselStatus, setFilteredVesselStatus] = useState<BeaconMalfunctionStatusValue | undefined>()
+  const vesselStatusSelectRef = useRef() as MutableRefObject<HTMLDivElement>
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -84,29 +90,20 @@ export function BeaconMalfunctionsBoard() {
       return
     }
 
-    if (!searchedVessel?.length || searchedVessel?.length <= 1) {
+    if ((!searchedVessel?.length || searchedVessel?.length <= 1) && !filteredVesselStatus) {
       setFilteredBeaconMalfunctions(beaconMalfunctions)
 
       return
     }
 
-    if (searchedVessel?.length > 1) {
-      const nextFilteredItems = Object.keys(beaconMalfunctions).reduce(
-        (previous, stage) => ({
-          ...previous,
-          [stage]: beaconMalfunctions[stage].filter(
-            beaconMalfunction =>
-              getTextForSearch(beaconMalfunction.vesselName).includes(getTextForSearch(searchedVessel)) ||
-              getTextForSearch(beaconMalfunction.internalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
-              getTextForSearch(beaconMalfunction.externalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
-              getTextForSearch(beaconMalfunction.ircs).includes(getTextForSearch(searchedVessel))
-          )
-        }),
-        {}
-      )
-      setFilteredBeaconMalfunctions(nextFilteredItems)
-    }
-  }, [beaconMalfunctions, searchedVessel])
+    const nextFilteredBeaconMalfunctions = searchInBeaconMalfunctions(
+      beaconMalfunctions,
+      searchedVessel,
+      filteredVesselStatus
+    )
+
+    setFilteredBeaconMalfunctions(nextFilteredBeaconMalfunctions)
+  }, [beaconMalfunctions, searchedVessel, filteredVesselStatus])
 
   const findStage = stageName => {
     if (stageName in STAGE_RECORD) {
@@ -125,7 +122,11 @@ export function BeaconMalfunctionsBoard() {
   )
 
   const updateVesselStatus = useCallback(
-    (beaconMalfunction: BeaconMalfunction, status) => {
+    (beaconMalfunction: BeaconMalfunction | undefined, status: string | null) => {
+      if (!beaconMalfunction) {
+        return
+      }
+
       const nextBeaconMalfunction = {
         ...beaconMalfunction,
         vesselStatus: status,
@@ -217,14 +218,29 @@ export function BeaconMalfunctionsBoard() {
 
   return (
     <Wrapper style={wrapperStyle}>
-      <SearchVesselInput
-        data-cy="search-vessel-in-beacon-malfunctions"
-        onChange={e => setSearchedVessel(e.target.value)}
-        placeholder="Rechercher un navire en avarie"
-        style={searchVesselInputStyle}
-        type="text"
-        value={searchedVessel}
-      />
+      <Header>
+        <SearchVesselInput
+          data-cy="search-vessel-in-beacon-malfunctions"
+          onChange={e => setSearchedVessel(e.target.value)}
+          placeholder="Rechercher un navire en avarie"
+          style={searchVesselInputStyle}
+          type="text"
+          value={searchedVessel}
+        />
+        <VesselStatusSelectWrapper ref={vesselStatusSelectRef}>
+          <VesselStatusSelect
+            beaconMalfunction={undefined}
+            domRef={vesselStatusSelectRef}
+            isAbsolute={false}
+            isCleanable
+            marginTop={-35}
+            updateVesselStatus={(_, status) =>
+              setFilteredVesselStatus(VESSEL_STATUS.find(statusObject => statusObject.value === status))
+            }
+            vesselStatus={filteredVesselStatus}
+          />
+        </VesselStatusSelectWrapper>
+      </Header>
       <DndContext
         autoScroll
         collisionDetection={closestCenter}
@@ -294,7 +310,6 @@ const searchVesselInputStyle = {
   border: `1px ${COLORS.lightGray} solid`,
   borderRadius: 0,
   color: COLORS.gunMetal,
-  flex: 3,
   fontSize: 13,
   height: 40,
   margin: '0 0 5px 5px',
@@ -316,7 +331,7 @@ const Wrapper = styled.div`
     overflow-y: unset;
   }
   .rs-picker-select {
-    width: 155px !important;
+    width: 185px !important;
     margin: 8px 10px 0 10px !important;
     height: 30px;
   }
@@ -329,12 +344,16 @@ const Wrapper = styled.div`
   .rs-picker-toggle-wrapper {
     display: block;
   }
+  .rs-picker-toggle-placeholder {
+    font-size: 13px;
+  }
   .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn {
     padding-right: 27px;
     padding-left: 10px;
     height: 15px;
     padding-top: 5px;
     padding-bottom: 8px;
+    width: 152px;
   }
   .rs-picker-toggle.rs-btn {
     padding-left: 5px !important;
@@ -368,6 +387,13 @@ const wrapperStyle: CSSProperties = {
   padding: '20px 0 0 10px',
   width: 'calc(100vw - 110px)'
 }
+
+const VesselStatusSelectWrapper = styled.div``
+
+const Header = styled.div`
+  display: flex;
+  height: 45px;
+`
 
 const Columns = styled.div``
 const columnsStyle = {

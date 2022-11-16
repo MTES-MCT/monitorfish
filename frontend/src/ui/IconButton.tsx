@@ -22,10 +22,13 @@ export function IconButton({ iconName, type = 'button', ...nativeProps }: IconBu
 
 const Button = styled.button`
   border: 1px solid ${p => p.theme.color.lightGray};
-  padding: 4px 4px 0;
-  vertical-align: bottom;
+  padding: 0.25rem;
 
   :disabled {
     cursor: not-allowed;
+  }
+
+  > svg {
+    display: block;
   }
 `

@@ -5,7 +5,7 @@ import { COLORS } from '../../../../constants/constants'
 import { CoordinatesFormat, MeasurementType, OPENLAYERS_PROJECTION } from '../../../../domain/entities/map'
 import { useSelector } from 'react-redux'
 import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
-import SetCoordinates from '../../../coordinates/SetCoordinates'
+import { SetCoordinates } from '../../../coordinates/SetCoordinates'
 import { MapToolBox } from '../MapToolBox'
 
 const CustomCircleRange = ({ onCancelAddCircleRange, onAddCustomCircleRange }) => {

@@ -1,11 +1,14 @@
+// TODO Import `export-to-csv` dependency code (since it's short) to handle null and undefined with empty CSV values.
+// https://www.npmjs.com/package/export-to-csv is not maintained anymore.
+
 import { ExportToCsv } from 'export-to-csv'
 import { fromPairs, isEmpty, map, pipe, toPairs, unnest } from 'ramda'
 
 import type { CollectionItem } from '../types'
 
-type Nsnu = number | string | null | undefined
-type NsnuPair = [string, Nsnu]
-type NsnuRecord = Record<string, Nsnu>
+type CsvType = boolean | number | string | null | undefined
+type CsvTypePair = [string, CsvType]
+type CsvTypeRecord = Record<string, CsvType>
 type StringAnyPair = [string, any]
 
 export type DownloadAsCsvMap<T extends CollectionItem> = Record<
@@ -13,17 +16,17 @@ export type DownloadAsCsvMap<T extends CollectionItem> = Record<
   | string
   | {
       label: string
-      transform?: (item: T) => Nsnu
+      transform?: (item: T) => CsvType
     }
 >
 
-const flattenAndNormalizeRecord = <T extends CollectionItem>(record: T, csvMap: DownloadAsCsvMap<T>): NsnuRecord =>
+const flattenAndNormalizeRecord = <T extends CollectionItem>(record: T, csvMap: DownloadAsCsvMap<T>): CsvTypeRecord =>
   pipe(
     toPairs,
     map(flattenRecordPair),
     unnest,
     fromPairs as (flattenRecordPairs: any) => CollectionItem,
-    (flattenRecord: CollectionItem): NsnuRecord => normalizeRecord<T>(flattenRecord, record, csvMap)
+    (flattenRecord: CollectionItem): CsvTypeRecord => normalizeRecord<T>(flattenRecord, record, csvMap)
   )(record)
 
 // The record pair is nested in an array and `unnest()`-ed later on in `normalizeRecord()`
@@ -33,7 +36,7 @@ const flattenRecordPair = ([key, value]: StringAnyPair): StringAnyPair[] => {
   if (typeof value === 'object' && value?.constructor?.name === 'Object') {
     return toPairs(prefixRecordKeysWith(value, key))
       .map(flattenRecordPair)
-      .map(([recordPairs]) => recordPairs as NsnuPair)
+      .map(([recordPairs]) => recordPairs as CsvTypePair)
   }
 
   return [[key, value]]
@@ -44,38 +47,38 @@ const isCsvMapPairWithTransform = <T extends CollectionItem>(
     | string
     | {
         label: string
-        transform?: ((item: T) => Nsnu) | undefined
+        transform?: ((item: T) => CsvType) | undefined
       }
 ): maybeCsvMapEntry is {
   label: string
-  transform: (item: T) => Nsnu
+  transform: (item: T) => CsvType
 } => typeof maybeCsvMapEntry !== 'string' && Boolean(maybeCsvMapEntry.transform)
 
 const normalizeRecord = <T extends CollectionItem>(
   flattenRecord: CollectionItem,
   rawRecord: T,
   csvMap: DownloadAsCsvMap<T>
-): NsnuRecord => {
-  const flattenRecordPairs = toPairs(flattenRecord)
-  const normalizedRecordPairs = flattenRecordPairs.reduce<StringAnyPair[]>((flattenRecordPairsStack, [key, value]) => {
-    const maybeCsvMapEntry = csvMap[key]
-    if (!maybeCsvMapEntry) {
-      return flattenRecordPairsStack
+): CsvTypeRecord => {
+  const csvMapPairs = toPairs(csvMap)
+  const normalizedRecordPairs = csvMapPairs.map(([mapKey, mapEntry]): CsvTypePair => {
+    const normalizedKey = typeof mapEntry === 'string' ? mapEntry : mapEntry.label
+    const value = flattenRecord[mapKey]
+
+    if (isCsvMapPairWithTransform<T>(mapEntry)) {
+      return [normalizedKey, mapEntry.transform(rawRecord)]
     }
 
-    const normalizedKey = typeof maybeCsvMapEntry === 'string' ? maybeCsvMapEntry : maybeCsvMapEntry.label
-
-    if (isCsvMapPairWithTransform<T>(maybeCsvMapEntry)) {
-      return [...flattenRecordPairsStack, [normalizedKey, maybeCsvMapEntry.transform(rawRecord)]]
+    if (typeof value === 'boolean' || typeof value === 'number' || typeof value === 'string') {
+      return [normalizedKey, value]
     }
 
     // eslint-disable-next-line no-null/no-null
-    if (typeof value === 'number' || typeof value === 'string' || value === null || value === undefined) {
-      return [...flattenRecordPairsStack, [normalizedKey, value]]
+    if (value === null || value === undefined) {
+      return [normalizedKey, '']
     }
 
-    return [...flattenRecordPairsStack, [normalizedKey, String(value)]]
-  }, [])
+    return [normalizedKey, String(value)]
+  })
 
   return fromPairs(normalizedRecordPairs)
 }

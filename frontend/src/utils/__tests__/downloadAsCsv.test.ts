@@ -56,6 +56,7 @@ describe('utils/downloadAsCsv()', () => {
       aMap: 'aMap',
       'anObject.anotherObject.anotherNumber': 'anObject.anotherObject.anotherNumber',
       'anObject.anotherString': 'anObject.anotherString',
+      aNonexistentKey: 'aNonexistentKey',
       aNull: 'aNull',
       aNumber: 'aNumber',
       aNumberToRelabel: {
@@ -76,12 +77,12 @@ describe('utils/downloadAsCsv()', () => {
         aMap: '[object Map]',
         Année: 2022,
         'anObject.anotherObject.anotherNumber': 2,
-
         'anObject.anotherString': 'Another string',
+        aNonexistentKey: '',
         // eslint-disable-next-line no-null/no-null
-        aNull: null,
+        aNull: '',
         aNumber: 4.2,
-        anUndefined: undefined,
+        anUndefined: '',
         aString: 'A string',
         id: 1
       }

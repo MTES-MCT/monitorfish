@@ -12,11 +12,14 @@ Features
 * Visualization of fishing vessels' historical **controls** and **violations**
 * Visualization of :doc:`regulated fishing areas <regulation>` of the french and european regulations
 * Computation of fishing vessels' real time belonging to :doc:`fleet segments <fleet-segments>` as defined by the `European Fishing Control Agency (EFCA) <https://www.efca.europa.eu/en>`_ in its `risk assessment methodology <https://www.efca.europa.eu/en/content/guidelines-risk-assessment-methodology-fisheries-compliance>`_
+* Real time fraud detection :doc:`alerts <alerts>`
 * Computation of fishing vessels' real time :doc:`risk factor <risk-factor>`, a metric developed in the context of the Monitorfish project that aims to help FMC agents **prioritize vessels to control** based on all the above elements 
 * Administration panel that allows admins to
 
   * Update regulation data : update authorized fishing areas / periods / gears...
-  * :doc:`Stear control priorities <control-priority-steering>` by dynamically adjuting the control priority level of each fleet segment
+  * Update the definitions of :doc:`fleet segments <fleet-segments>`
+  * :doc:`Stear control priorities <control-priority-steering>` by dynamically adjuting the control priority level of each fleet segmen
+
 
 
 Demo

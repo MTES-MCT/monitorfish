@@ -22,13 +22,9 @@ class SilenceOperationalAlert(
     fun execute(
         alertId: Int,
         silenceAlertPeriod: SilenceAlertPeriod,
-        afterDateTime: ZonedDateTime? = null,
         beforeDateTime: ZonedDateTime? = null
     ): SilencedAlert {
         if (silenceAlertPeriod == SilenceAlertPeriod.CUSTOM) {
-            requireNotNull(afterDateTime) {
-                "begin date must be not null when ignoring an operational alert with a custom period"
-            }
             requireNotNull(beforeDateTime) {
                 "end date must be not null when ignoring an operational alert with a custom period"
             }
@@ -47,16 +43,10 @@ class SilenceOperationalAlert(
             SilenceAlertPeriod.CUSTOM -> beforeDateTime!!
         }
 
-        val after = when (silenceAlertPeriod) {
-            SilenceAlertPeriod.CUSTOM -> afterDateTime
-            else -> null
-        }
-
         val silencedAlert = pendingAlertRepository.find(alertId)
 
         val savedSilencedAlert = silencedAlertRepository.save(
             alert = silencedAlert,
-            silencedAfterDate = after,
             silencedBeforeDate = before,
             isValidated = false
         )

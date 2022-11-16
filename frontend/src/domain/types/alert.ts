@@ -40,7 +40,6 @@ export type SilencedAlert = {
   internalReferenceNumber: string
   ircs: string
   isReactivated: boolean | null
-  silencedAfterDate: Date
   silencedBeforeDate: Date
   value: PendingAlertValue
   vesselIdentifier: string
@@ -52,7 +51,6 @@ export type LEGACY_SilencedAlert = SilencedAlert & {
 }
 
 export type SilencedAlertPeriodRequest = {
-  afterDateTime: Date | null
   beforeDateTime: Date | null
   silencedAlertPeriod: string | null
 }

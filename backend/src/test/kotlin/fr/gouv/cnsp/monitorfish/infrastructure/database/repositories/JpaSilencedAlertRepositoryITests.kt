@@ -32,13 +32,12 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null, false)
+        val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), false)
 
         // Then
         assertThat(silencedAlert.internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(silencedAlert.externalReferenceNumber).isEqualTo("RGD")
         assertThat(silencedAlert.value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
-        assertThat(silencedAlert.silencedAfterDate).isNull()
         assertThat(silencedAlert.silencedBeforeDate).isEqualTo(now.plusHours(1))
         assertThat(silencedAlert.wasValidated).isEqualTo(false)
 
@@ -63,13 +62,12 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
         )
 
         // When
-        val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), null, false)
+        val silencedAlert = jpaSilencedAlertRepository.save(alertOne, now.plusHours(1), false)
 
         // Then
         assertThat(silencedAlert.internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(silencedAlert.externalReferenceNumber).isEqualTo("RGD")
         assertThat(silencedAlert.value.type).isEqualTo(AlertTypeMapping.THREE_MILES_TRAWLING_ALERT)
-        assertThat(silencedAlert.silencedAfterDate).isNull()
         assertThat(silencedAlert.silencedBeforeDate).isEqualTo(now.plusHours(1))
 
         val alerts = jpaSilencedAlertRepository.findAllCurrentSilencedAlerts()
@@ -92,7 +90,7 @@ class JpaSilencedAlertRepositoryITests : AbstractDBTests() {
             creationDate = ZonedDateTime.now(),
             value = ThreeMilesTrawlingAlert()
         )
-        jpaSilencedAlertRepository.save(alertOne, now, null, false)
+        jpaSilencedAlertRepository.save(alertOne, now, false)
 
         // When
         val alerts = jpaSilencedAlertRepository.findAllCurrentSilencedAlerts()

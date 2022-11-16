@@ -13,7 +13,6 @@ class SilencedAlertDataOutput(
     val ircs: String? = null,
     val vesselIdentifier: VesselIdentifier,
     val silencedBeforeDate: ZonedDateTime,
-    val silencedAfterDate: ZonedDateTime? = null,
     val value: AlertType
 ) {
     companion object {
@@ -25,7 +24,6 @@ class SilencedAlertDataOutput(
             ircs = silencedAlert.ircs,
             vesselIdentifier = silencedAlert.vesselIdentifier,
             silencedBeforeDate = silencedAlert.silencedBeforeDate,
-            silencedAfterDate = silencedAlert.silencedAfterDate,
             value = silencedAlert.value
         )
     }

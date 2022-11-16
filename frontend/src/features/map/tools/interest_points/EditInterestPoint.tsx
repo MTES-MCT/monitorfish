@@ -11,6 +11,7 @@ import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../../..
 import saveInterestPointFeature from '../../../../domain/use_cases/interestPoint/saveInterestPointFeature'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { isNumeric } from '../../../../utils/isNumeric'
 import SetCoordinates from '../../../coordinates/SetCoordinates'
 import { ReactComponent as ControlSVG } from '../../../icons/Label_controle.svg'
 import { ReactComponent as GearSVG } from '../../../icons/Label_engin_de_peche.svg'
@@ -43,7 +44,7 @@ export function EditInterestPoint({ close, healthcheckTextWarning, isOpen }: Edi
       CoordinatesFormat.DECIMAL_DEGREES,
       false
     )
-    if (!latitude || !longitude) {
+    if (!isNumeric(latitude) || !isNumeric(longitude)) {
       return []
     }
 

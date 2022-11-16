@@ -10,6 +10,7 @@ import { highlightVesselTrackPosition } from '../../../../domain/shared_slices/V
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useClickOutsideWhenOpened } from '../../../../hooks/useClickOutsideWhenOpened'
+import { isNumeric } from '../../../../utils/isNumeric'
 import { ReactComponent as ManualPositionSVG } from '../../../icons/Pastille_position_manuelle.svg'
 import { CSVOptions } from '../../../vessel_list/dataFormatting'
 import { sortArrayByColumn, SortType } from '../../../vessel_list/tableSort'
@@ -103,7 +104,7 @@ export function SpeedCell({ coordinatesFormat, dataKey, rowData, ...nativeProps 
       style={{ cursor: 'pointer' }}
       title={rowData && coordinates ? `${coordinates[0]} ${coordinates[1]}` : ''}
     >
-      {Number.isNaN(parseFloat(rowData[dataKey])) ? '' : `${rowData[dataKey]} nds`}
+      {!isNumeric(rowData[dataKey]) ? '' : `${rowData[dataKey]} nds`}
     </Cell>
   )
 }

@@ -12,6 +12,7 @@ import layer from '../../../shared_slices/Layer'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../entities/map'
 import { getRegulatoryZoneFromAPI } from '../../../../api/geoserver'
+import { isNumeric } from '../../../../utils/isNumeric'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
@@ -87,7 +88,7 @@ const getRegulatoryVectorSource = (dispatch, getState) => regulatoryZoneProperti
           const feature = getState().regulatory.simplifiedGeometries ? simplifiedRegulatoryZone || regulatoryZone : regulatoryZone
           vectorSource.addFeatures(vectorSource.getFormat().readFeatures(feature))
           const center = getCenter(vectorSource.getExtent())
-          const centerHasValidCoordinates = center?.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])
+          const centerHasValidCoordinates = center?.length && isNumeric(center[0]) && isNumeric(center[1])
 
           batch(() => {
             dispatch(pushLayerToFeatures({

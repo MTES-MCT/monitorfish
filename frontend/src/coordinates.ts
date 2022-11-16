@@ -1,6 +1,7 @@
 import { transform } from 'ol/proj'
 
 import { CoordinatesFormat, WSG84_PROJECTION } from './domain/entities/map'
+import { isNumeric } from './utils/isNumeric'
 
 enum CoordinateLatLon {
   LATITUDE = 'LATITUDE',
@@ -53,10 +54,10 @@ function getDDCoordinates(transformedCoordinates: number[], forPrint: boolean): 
   const [longitudeInteger, longitudeDecimals] = transformedCoordinates[0].toString().split('.')
   const precision = forPrint ? 4 : 6
 
-  if (!longitudeInteger) {
+  if (!isNumeric(longitudeInteger)) {
     return []
   }
-  let longitude = longitudeInteger.trim().replace(/-/g, '')
+  let longitude = longitudeInteger.toString().trim().replace(/-/g, '')
   const decimals = longitudeDecimals?.substring(0, precision) || '000000'
   longitude = `${negative ? '-' : ''}${getPaddedDegrees(longitude, CoordinateLatLon.LONGITUDE)}.${decimals}`
 
@@ -70,7 +71,7 @@ function getDDCoordinates(transformedCoordinates: number[], forPrint: boolean): 
  */
 function getDMDCoordinates(transformedCoordinates: number[]): string[] {
   const [longitude, latitude] = transformedCoordinates
-  if (!longitude || !latitude) {
+  if (!isNumeric(latitude) || !isNumeric(longitude)) {
     return []
   }
 
@@ -87,7 +88,7 @@ function getDMDCoordinates(transformedCoordinates: number[]): string[] {
  */
 function getDMSCoordinates(transformedCoordinates: number[]): string[] {
   const [longitude, latitude] = transformedCoordinates
-  if (!longitude || !latitude) {
+  if (!isNumeric(latitude) || !isNumeric(longitude)) {
     return []
   }
 
@@ -174,15 +175,11 @@ export const coordinatesAreDistinct = (nextCoordinates: number[], coordinates: n
   const [nextLongitude, nextLatitude] = nextCoordinates
   const [longitude, latitude] = coordinates
 
-  if (!nextLongitude || !nextLatitude || !longitude || !latitude) {
+  if (!isNumeric(nextLongitude) || !isNumeric(nextLatitude) || !isNumeric(longitude) || !isNumeric(latitude)) {
     return false
   }
 
   return (
-    !Number.isNaN(longitude) &&
-    !Number.isNaN(latitude) &&
-    !Number.isNaN(nextLongitude) &&
-    !Number.isNaN(nextLatitude) &&
     (longitude !== nextLongitude || latitude !== nextLatitude) &&
     (Math.abs(nextLongitude - longitude) > roundingDifference || Math.abs(nextLatitude - latitude) > roundingDifference)
   )

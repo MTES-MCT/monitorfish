@@ -36,6 +36,7 @@ import { COLORS } from '../../constants/constants'
 import StyledModalHeader from '../commonComponents/StyledModalHeader'
 import { MapToolButton } from '../map/tools/MapToolButton'
 import { theme } from '../../ui/theme'
+import { isNumeric } from '../../utils/isNumeric'
 
 const NOT_FOUND = -1
 
@@ -246,7 +247,7 @@ const VesselList = ({ namespace }) => {
 
       if (zonesSelected?.length) {
         const extent = getExtentFromGeoJSON(zonesSelected[0]?.feature)
-        if (extent?.length && !Number.isNaN(extent[0]) && !Number.isNaN(extent[1])) {
+        if (extent?.length && !isNumeric(extent[0]) && !isNumeric(extent[1])) {
           batch(() => {
             dispatch(setProcessingRegulationSearchedZoneExtent(extent))
             dispatch(animateToExtent())

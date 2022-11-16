@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: ../source/flows/controls.rst:5
 #: 66981795e5c04f478142bbd27b73ac24
-msgid "The ``controls`` flow extracts all controls data from the FMC2 database and inserts the data into the ``controls`` table of the Monitorfish database."
+msgid "The ``controls`` flow extracts all controls data from the FMC database and inserts the data into the ``controls`` table of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows/controls.rst:8

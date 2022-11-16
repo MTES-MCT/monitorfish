@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: 2022-11-16 16:48+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/flows/regulations-checkup.rst:3 31b51ccf1bda4919bd7b6fbf762eb0e3
+msgid "Regulations check-up"
+msgstr ""
+
+#: ../source/flows/regulations-checkup.rst:5 4d5997b45a4e4817bf194fddc229de77
+msgid ""
+"The ``Regulations check-up`` flow performs a daily check on the data of the "
+"``legipeche`` and ``regulations`` tables. Checks made are :"
+msgstr ""
+
+#: ../source/flows/regulations-checkup.rst:7 b732a94a96d24ddea7381766eb83df93
+msgid ""
+"summary of the changes made in ``legipeche`` in articles referenced in "
+"``regulations``"
+msgstr ""
+
+#: ../source/flows/regulations-checkup.rst:8 44e751361eca419cbbd0bcdddfbe6006
+msgid ""
+"presence of regulated zones without a regulatory reference in "
+"``regulations``"
+msgstr ""
+
+#: ../source/flows/regulations-checkup.rst:9 59932b2516d4491e8d22ab7a2ece4d88
+msgid "presence of dead links in a regulatory reference in ``regulations``"
+msgstr ""
+
+#: ../source/flows/regulations-checkup.rst:10 0a5099c9e95d4be8bee3ec463fa8576e
+msgid "presence of outdated regulations in ``regulations``"
+msgstr ""
+
+#: ../source/flows/regulations-checkup.rst:12 c577c0ef8a654608815c7a75c165ca4e
+msgid "A summary of the check-up is sent by email to the regulations team."
+msgstr ""
+
+#: ../source/flows/regulations-checkup.rst:14 fedb3610367144b99277e96e63974af8
+msgid "It is scheduled to run every day."
+msgstr ""

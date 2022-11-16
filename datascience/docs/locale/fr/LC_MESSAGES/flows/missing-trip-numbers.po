@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: 2022-11-16 16:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/flows/missing-trip-numbers.rst:3 cfa670cdbb57462781424c889aaa7ae2
+msgid "Missing trip numbers"
+msgstr ""
+
+#: ../source/flows/missing-trip-numbers.rst:5 851382b7666b44b4879509dd3766a033
+msgid ""
+"The ``Missing trip numbers`` flow adds computed trip numbers to reports of "
+"the ``logbook_reports`` table that miss a trip number. Computed trip number "
+"are computed as follows :"
+msgstr ""
+
+#: ../source/flows/missing-trip-numbers.rst:8 6e55318401b446ee8e56392e3cea2927
+msgid ""
+"for each year ``YYYY`` and each vessel, trip numbers start with ``YYYY0001``"
+msgstr ""
+
+#: ../source/flows/missing-trip-numbers.rst:9 11f62d03eb11465ba684ae329ad1ca95
+msgid ""
+"subsequent reports are assigned a trip number which : * is incremented by 1 "
+"if the report is a ``DEP`` or if it follows a ``LAN`` (which indicates that "
+"it is the start of a new trip) * is identical to the previous report "
+"otherwise"
+msgstr ""
+
+#: ../source/flows/missing-trip-numbers.rst:13
+#: 1c64d29081284227a898c9ed41074d28
+msgid "It is scheduled to run every 10 minutes."
+msgstr ""

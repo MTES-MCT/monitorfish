@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,6 +27,11 @@ msgid "The ``current_segments`` flow extracts all catches of each vessel since i
 msgstr ""
 
 #: ../source/flows/current-segments.rst:10
+#: 01d039428830443b9cf418fbc48facac
+msgid "The computed data is loaded in the ``current_segments`` table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/current-segments.rst:12
 #: d639bb482008464f97aa8a1569e7cd3f
 msgid "It is scheduled to run every 10 minutes.prefect"
 msgstr ""

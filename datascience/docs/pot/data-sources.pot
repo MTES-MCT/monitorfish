@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,12 +33,12 @@ msgstr ""
 
 #: ../source/data-sources.rst:10
 #: 2a4d1189daa84c218601b345ce31ce37
-msgid "ERS xml files"
+msgid "Logbook xml files"
 msgstr ""
 
 #: ../source/data-sources.rst:12
 #: cd443d34553443ec8440bbea352457ee
-msgid "ERS raw xml files are ingested by the :doc:`ers` flow from the `configured location <https://github.com/MTES-MCT/monitorfish/blob/master/datascience/config.py>`__ where ERS xml files must be deposited."
+msgid "Logbook raw xml files are ingested by the :doc:`flows/logbook` flow from the `configured location <https://github.com/MTES-MCT/monitorfish/blob/master/datascience/config.py>`__ where logbook xml files must be deposited."
 msgstr ""
 
 #: ../source/data-sources.rst:17

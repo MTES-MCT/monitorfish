@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,10 +23,10 @@ msgstr ""
 
 #: ../source/flows/risk-factor.rst:5
 #: f9d819c45a9444aeba85af5347e55b29
-msgid "The ``risk factor`` flow computes the :doc:`risk factor <../risk-factor>` of each fishing vessel."
+msgid "The ``risk factor`` flow computes the :doc:`risk factor <../risk-factor>` of each fishing vessel and inserts the computed data into the ``risk_factors`` table."
 msgstr ""
 
-#: ../source/flows/risk-factor.rst:7
-#: 50ee734007eb48479c0eab01b68cf36e
-msgid "It runs every 10 minutes."
+#: ../source/flows/risk-factor.rst:8
+#: 0be63af08f5143498c8b7db32cadab7f
+msgid "It is scheduled to run every 10 minutes."
 msgstr ""

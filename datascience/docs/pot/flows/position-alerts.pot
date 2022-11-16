@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/position-alerts.rst:3
+#: 59cb8fa2902148f9b44fe0b971193e3d
+msgid "Position alerts"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:5
+#: 1c89c74e1b9943b8947fd321fe6f8c65
+msgid "The ``Position alerts`` flow detects whether any vessel emitted VMS data that matches the specified detection parameters on :"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:7
+#: f8357151c4d347f19625e886aaa010cd
+msgid "flag state"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:8
+#: 928e779082994651a383aeab484949ab
+msgid "area of detection"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:9
+#: 0337b606d3504fc1a178d695fc9fa0f6
+msgid "whether to detect all positions or only positions with fishing activity (as detected by the :doc:`enrich positions flow <enrich-positions>`)"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:10
+#: 9deb74c25c4b4972933ce9738d7dbc1d
+msgid "fishing gear (from logbook data)"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:11
+#: c403c956f1ef49af96660a591d430145
+msgid "time window (specified by a number of hours preceding the present time)"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:13
+#: 3ed54288c3e94ad5a82304e9e7613732
+msgid "The detected vessels are loaded to the ``pending_alerts`` table."
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:15
+#: 97f1f96ad8444736b2f0d69c1a69456b
+msgid "It is scheduled to run 10 minutes, with different parameters related to :"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:17
+#: b8adb2fe4934487180b92858b05e2e6c
+msgid "trawling in the 3 nautical miles french coastal strip"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:18
+#: 07afe3055a6d4c9eb3cc6ccfbbc70d91
+msgid "fishing in the 12 nautical miles french coastal strip by a non-french vessel (excluding historic fishing rights)"
+msgstr ""

@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/alerts.rst:3
+#: 2be54d4938df4538aa7ebdeb6c6ff004
+msgid "Alerts"
+msgstr ""
+
+#: ../source/alerts.rst:5
+#: a00ac361ee074c9d892c8fc82a9ea8b6
+msgid "Monitorifsh performs **real time fraud detection** using VMS, logbook and regulations data. The types of fraud currenlty detected are :"
+msgstr ""
+
+#: ../source/alerts.rst:7
+#: 8ae85e419d234a8ab32e7c2953fb7cbb
+msgid "trawling in the french 3 nautical miles coastal strip"
+msgstr ""
+
+#: ../source/alerts.rst:8
+#: 760a4c8301894fb28417e091599e8671
+msgid "fishing in the french 12 nautical miles coastal strip by a non-french vessel (excluding historic fishing rights for certains states)"
+msgstr ""
+
+#: ../source/alerts.rst:9
+#: 386393fb5d3040dc8b4d715c1adec7f7
+msgid "fishing without logging any Fishing Activity Report (FAR) in the fishing logbook before midnight"
+msgstr ""
+
+#: ../source/alerts.rst:11
+#: f495746f408b476c96fc885a0d404659
+msgid "When signs of fraud are detected on a vessel, it appears on the map with a red halo :"
+msgstr ""
+
+#: ../source/alerts.rst:None
+#: 6dce656ed46f4d939678d21abc78d12b
+msgid "Map showing a vessel's VMS track which presents signs of illegal trawling in the 3 nautical miles coastal strip"
+msgstr ""
+
+#: ../source/alerts.rst:17
+#: 15027adb885d4f9aaec559b7fe1343cc
+msgid "*Map showing a vessel's VMS track which presents signs of illegal trawling in the 3 nautical miles coastal strip*"
+msgstr ""
+
+#: ../source/alerts.rst:19
+#: 5f3dfbfba4564a2c858902e72634fe47
+msgid "Alerts are then humanly checked and validated / invalidated. Validated alerts become *reportings* which are stored in the Monitorfish database and add the vessel's history."
+msgstr ""
+
+#: ../source/alerts.rst:21
+#: 0ec65f29d69246f59de3219b7168d288
+msgid "Alerts make use of the fishing detection algorithm of the :doc:`enrich position flow <flows/enrich-positions>`."
+msgstr ""

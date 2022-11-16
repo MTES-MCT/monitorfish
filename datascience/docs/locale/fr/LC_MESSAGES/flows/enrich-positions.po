@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: 2022-11-16 16:48+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/flows/enrich-positions.rst:3 afccb454a387409ab2cddf9115fb06f6
+msgid "Enrich positions"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:5 ba1feee5fd2c47178d03c1a2f3983cd8
+msgid ""
+"The ``Enrich positions`` flow analyzes the VMS route of vessels and computes"
+" a number of features which are then inserted in additionnal computed "
+"columns of the ``positions`` table :"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:8 31afab380e1e4747bf597bcfeccf57b6
+msgid ""
+"``is_at_port`` : a boolean which is ``true`` if the position is in one of "
+"the ``anchorage`` H3 cells and ``false`` otherwise"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:9 654a41b4208e490197b283f789e411cd
+msgid "distance, time and average speed from the previous emitted position"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:10 1f06fecf80104174b63849e2eb78f317
+msgid "total time of continuous emission since the last exit of a harbour"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:11 4e41c89fcd614702a5d5c51fcd634207
+msgid ""
+"``is_fishing`` : a boolean which is ``true`` if the fishing activity is "
+"detected and ``false`` otherwise (see below)"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:13 c20d0ba8370446fbbf10c5a7b6f180f5
+msgid "It is scheduled to run every minute."
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:16 be53ae0e066a48faa3083d17ec68e227
+msgid "Fishing detection"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:18 0fce13fb8bb041869f12222ff9a07c60
+msgid ""
+"Based on several years of VMS and logbook data, it has been observed that "
+"fishing activity can be detected on a VMS track with great accuracy, for any"
+" type of fishing gear, using the following criteria :"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:21 17ea511183e34e2f918f944e627056f9
+msgid "the vessel is at sea (i.e. outside of a port) for > 1 hour"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:22 337744a919dd4f45bd626b662f28546b
+msgid ""
+"the vessel's *average speed* (i.e. the distance between two VMS positions "
+"divided by the time between the two positions) remains between 0.0025 and "
+"5.5 knots twice in a row"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rstNone 92abd7325bdb4716a16e62b5695004a2
+msgid ""
+"Map with VMS tracks colored in green where fishing activity is detected"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:28 da0c62441a9f4c00b2b7f5e23e8f9ae3
+msgid "*VMS tracks colored in green where fishing activity is detected*"
+msgstr ""
+
+#: ../source/flows/enrich-positions.rst:30 5b95d893742048459e4932d6254c0512
+msgid ""
+"Note : the 0.0025 knots lower bound is useful to filter out vessels at "
+"anchor"
+msgstr ""

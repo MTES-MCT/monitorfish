@@ -1,0 +1,35 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: 2022-11-16 16:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/flows/administrative-areas.rst:3 77b399002ed44c69a75af41fa9cfe0ad
+msgid "Administrative areas"
+msgstr ""
+
+#: ../source/flows/administrative-areas.rst:5 6d192d7a86dc46a18bcb2887fe43dd3c
+msgid ""
+"The ``Administrative areas`` flow extracts administrative areas (FAO areas, "
+"exclusive economic areas...) from the CROSSA database and inserts the data "
+"into the various tables of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/administrative-areas.rst:8 d71cefdccc2f4a9581ef7e66c0d7c686
+msgid ""
+"It is run manually when necessary, in order to sync the Monitorfish database"
+" with the CROSSA database after an update."
+msgstr ""

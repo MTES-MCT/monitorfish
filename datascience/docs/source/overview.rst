@@ -18,7 +18,7 @@ Features
 
   * Update regulation data : update authorized fishing areas / periods / gears...
   * Update the definitions of :doc:`fleet segments <fleet-segments>`
-  * :doc:`Stear control priorities <control-priority-steering>` by dynamically adjuting the control priority level of each fleet segmen
+  * :doc:`Stear control priorities <control-priority-steering>` by dynamically adjuting the control priority level of each fleet segment
 
 
 

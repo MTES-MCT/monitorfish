@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/control-anteriority.rst:3
+#: 49671c223b914582a74bdec48738b6fc
+msgid "Control anteriority"
+msgstr ""
+
+#: ../source/flows/control-anteriority.rst:5
+#: 04854fa5d64249f7a00ae81d5cbbd841
+msgid "The ``Control anteriority`` flow extracts controls data from the ``controls``, produces aggregated control statistics for each vessel and loads the results into the ``control_anteriority`` table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/control-anteriority.rst:9
+#: 766940350f994331b170107c5f459df5
+msgid "It is scheduled to run every hour."
+msgstr ""

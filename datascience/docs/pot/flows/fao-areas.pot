@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/fao-areas.rst:3
+#: ea59320023ac4df79895068532dc5dc2
+msgid "FAO areas"
+msgstr ""
+
+#: ../source/flows/fao-areas.rst:5
+#: 0b4cf77f68c948fd94492588038ea3d3
+msgid "The ``FAO areas`` flow extracts FAO areas from the `FAO website <http://www.fao.org/fishery/static/ASFIS>`__ and loads it to the ``fao_areas`` table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/fao-areas.rst:8
+#: cdf619be8fef42db975a18ba6751a750
+msgid "It is run manually when necessary, in order to sync the Monitorfish database with the FAO website after an update."
+msgstr ""

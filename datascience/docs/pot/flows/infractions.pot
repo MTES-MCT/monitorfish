@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: ../source/flows/infractions.rst:5
 #: fab89f139cab4c5495613d4218666e64
-msgid "The ``infractions`` flow extracts the list of infractions with their NATINF code and description from the FMC2 database and loads the data into the ``infractions`` table of the Monitorfish database."
+msgid "The ``infractions`` flow extracts the list of infractions with their NATINF code and description from the FMC database and loads the data into the ``infractions`` table of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows/infractions.rst:9

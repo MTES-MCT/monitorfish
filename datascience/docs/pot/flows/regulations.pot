@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/regulations.rst:3
+#: 8518d190ae4c4358983f9ffb3a0924b9
+msgid "Regulations"
+msgstr ""
+
+#: ../source/flows/regulations.rst:5
+#: 591bbb0ed85c4588b627881ddd616883
+msgid "The ``Regulations`` flow updates the the ``regulations`` table of the Monitorfish database by extracting changes (if present) made in the ``regulations`` table of the CROSSA database."
+msgstr ""
+
+#: ../source/flows/regulations.rst:8
+#: ca62f22bd21b40f68f22f3c10569aa26
+msgid "It is scheduled to run every minute."
+msgstr ""

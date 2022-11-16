@@ -29,10 +29,8 @@ def get_unused_col_name(col_name: str, df: pd.DataFrame) -> str:
     Examples:
         >>> get_unused_col_name("id", pd.DataFrame({"idx": [1, 2, 3]}))
         "id"
-
         >>> get_unused_col_name("id", pd.DataFrame({"id": [1, 2, 3]}))
         "id_0"
-
         >>> get_unused_col_name("id", pd.DataFrame({"id": [1, 2, 3], "id_0": [4, 5, 6]}))
         "id_1"
     """
@@ -51,16 +49,16 @@ def get_unused_col_name(col_name: str, df: pd.DataFrame) -> str:
 def is_a_value(x) -> bool:
     """Returns False if pd.isna(x), True otherwise.
 
-    NB : The same result could be obtained simply by checking pd.isna(x),
-    but checking if x is None before checking pd.isna(x)
-    improves performance on DataFrames containing many None values,
-    since checking pd.isna(x) is slower than checking if x is None.
+    NB : The same result could be obtained simply by checking pd.isna(x), but checking
+    if x is None before checking pd.isna(x) improves performance on DataFrames
+    containing many None values, since checking pd.isna(x) is slower than checking if x
+    is None.
 
     Args:
         x : Anything
 
     Returns:
-        bool: False if pd.isna(x), True otherwise
+        bool: `False` if pd.isna(x), `True` otherwise
     """
     if x is not None and not pd.isna(x):
         return True
@@ -69,11 +67,12 @@ def is_a_value(x) -> bool:
 
 
 def concatenate_values(row: pd.Series) -> List:
-    """Filters the input pandas Series to keep only distinct non null values
-    and returns the result as a python list.
+    """
+    Filters the input pandas Series to keep only distinct non null values and returns
+    the result as a python ``list``.
 
     Args:
-        row (pd.Series): pandas Series
+        row (pd.Series): pandas ``Series``
 
     Returns:
         List: list of distinct non null values in row
@@ -88,7 +87,8 @@ def concatenate_values(row: pd.Series) -> List:
 
 
 def concatenate_columns(df: pd.DataFrame, input_col_names: List) -> pd.Series:
-    """For each row in the input DataFrame, the distinct and non null values contained in
+    """
+    For each row in the input DataFrame, the distinct and non null values contained in
     the columns input_col_names are stored in a list. A pandas Series of the same length
     as the input DataFrame is then constructed with these lists as values.
 
@@ -107,7 +107,8 @@ def concatenate_columns(df: pd.DataFrame, input_col_names: List) -> pd.Series:
 
 
 def coalesce(df: pd.DataFrame) -> pd.Series:
-    """Combines the input DataFrame's columns into one by taking the non null value in
+    """
+    Combines the input DataFrame's columns into one by taking the non null value in
     each row, in the order of the DataFrame's columns from left to right.
 
     Returns a pandas Series with the combined results.
@@ -117,7 +118,7 @@ def coalesce(df: pd.DataFrame) -> pd.Series:
 
     Returns:
         pd.Series: Series containing the first non null value in each row of the
-          DataFrame, taken in order of the DataFrame's columns from left to right.
+        DataFrame, taken in order of the DataFrame's columns from left to right.
     """
     non_null_rows = df.dropna(how="all")
     first_non_null_values_idx = np.argmax(non_null_rows.notnull().values, axis=1)
@@ -132,7 +133,8 @@ def coalesce(df: pd.DataFrame) -> pd.Series:
 def get_first_non_null_column_name(
     df: pd.DataFrame, result_labels: Union[None, dict] = None
 ) -> pd.Series:
-    """Returns a Series with the same index as the input DataFrame, whose values are
+    """
+    Returns a Series with the same index as the input DataFrame, whose values are
     the name of the first column (or the corresponding label, if provided) with a
     non-null value in each row, from left to right.
 
@@ -141,7 +143,7 @@ def get_first_non_null_column_name(
     Args:
         df (pd.DataFrame): input pandas DataFrame
         result_labels (dict): if provided, must be a mapping of column names to the
-        corresponding labels in the result.
+          corresponding labels in the result.
 
     Returns:
         pd.Series: Series containing the name of the first column with a non-null value
@@ -170,7 +172,7 @@ def remove_nones_from_dict(d: dict) -> dict:
         d (dict): a dictionary
 
     Returns:
-        dict: the input dictionary, with all ``None``s removed.
+        dict: the input dictionary, with all `None` removed.
 
     Examples:
         >>> d = {
@@ -188,16 +190,23 @@ def remove_nones_from_dict(d: dict) -> dict:
 def df_to_dict_series(
     df: pd.DataFrame, result_colname: str = "json_col", remove_nulls: bool = False
 ):
-    """Converts a pandas DataFrame into a Series with the same index as the input
+    """
+    Converts a pandas DataFrame into a Series with the same index as the input
     DataFrame and whose values are dictionaries like :
 
-        {'column_1' : value, 'column_2': value}
+    .. code-block:: python
+
+      {
+          "column_1" : value,
+          "column_2": value,
+      }
+
 
     Args:
         df (pd.DataFrame): input DataFrame
         result_colname (Union[str, None]): optionnal, name of result Series
         remove_nulls (bool): if set to ``True``, ``null`` values are recursively
-        removed from the dictionaries
+          removed from the dictionaries
 
     Returns:
         pd.Series: pandas Series
@@ -217,7 +226,8 @@ def df_to_dict_series(
 def zeros_ones_to_bools(
     x: Union[pd.Series, pd.DataFrame]
 ) -> Union[pd.Series, pd.DataFrame]:
-    """Converts a pandas DataFrame or Series containing `str`, `int` or `float` values,
+    """
+    Converts a pandas DataFrame or Series containing `str`, `int` or `float` values,
     possibly including null (`None` and `np.nan`) values to a DataFrame with False,
     True and `np.nan` values respectively.
 
@@ -240,7 +250,8 @@ def to_pgarr(
     handle_errors: bool = False,
     value_on_error: Union[str, None] = None,
 ) -> Union[str, None]:
-    """Converts a python `list`, `set` or `numpy.ndarray` to a string with Postgresql
+    """
+    Converts a python `list`, `set` or `numpy.ndarray` to a string with Postgresql
     array syntax.
 
     Elements of the list-like input argument are converted to `string` type, then
@@ -254,9 +265,9 @@ def to_pgarr(
     Args:
         x (list, set or numpy.ndarray) : iterable to serialize as Postgres array
         handle_errors (bool): if ``True``, returns ``value_on_error`` instead of raising
-            ``ValueError`` when the input is of an unexpected type
+          ``ValueError`` when the input is of an unexpected type
         value_on_error (str or None): value to return on errors, if ``handle_errors``
-            is ``True``
+          is ``True``
 
     Returns:
         str: string with Postgresql Array compatible syntax
@@ -269,10 +280,8 @@ def to_pgarr(
         "{1,2,'a','b'}"
         >>> to_pgarr(None)
         ValueError
-
         >>> to_pgarr(None, handle_errors=True, value_on_error="{}")
         "{}"
-
         >>> to_pgarr(np.nan, handle_errors=True, value_on_error=None)
     """
     try:
@@ -294,7 +303,8 @@ def df_values_to_psql_arrays(
     handle_errors: bool = False,
     value_on_error: Union[str, None] = None,
 ) -> pd.DataFrame:
-    """Returns a `pandas.DataFrame` with all values serialized as strings
+    """
+    Returns a `pandas.DataFrame` with all values serialized as strings
     with Postgresql array syntax. All values must be of type list, set or numpy array.
     Other values raise errors, which may be handled if handle_errors is set to True.
 
@@ -309,10 +319,9 @@ def df_values_to_psql_arrays(
 
     Returns:
         pd.DataFrame: pandas DataFrame with the same shape and index, all values
-            serialized as strings with Postgresql array syntax.
+        serialized as strings with Postgresql array syntax.
 
     Examples :
-
         >>> df_to_psql_arrays(pd.DataFrame({'a': [[1, 2], ['a', 'b']]}))
             a
         0   {1,2,3}
@@ -353,7 +362,8 @@ def to_json(x: Any) -> str:
 
 
 def df_values_to_json(df: pd.DataFrame) -> pd.DataFrame:
-    """Returns a `pandas.DataFrame` with all values serialized to json string.
+    """
+    Returns a `pandas.DataFrame` with all values serialized to json string.
 
     This is required before bulk loading into a Postgresql table with
     the psql_insert_copy method.
@@ -365,7 +375,7 @@ def df_values_to_json(df: pd.DataFrame) -> pd.DataFrame:
 
     Returns:
         pd.DataFrame: pandas DataFrame with the same shape and index, all values
-            serialized as json strings.
+        serialized as json strings.
     """
     return df.applymap(to_json, na_action="ignore").fillna("null")
 
@@ -523,21 +533,23 @@ def join_on_multiple_keys(
     If `or_join_keys` is `['A', 'B']` and `and_join_keys` is `['C', 'D']`, the SQL
     equivalent of the join condition is :
 
-        ON
-            (
-                left.A = right.A AND
-                left.C = right.C AND
-                left.D = right.D
-            ) OR
-            (
-                (
-                    left.A IS NULL OR
-                    right.A IS NULL
-                ) AND
-                left.B = right.B AND
-                left.C = right.C AND
-                left.D = right.D
-            )
+    .. code-block:: SQL
+
+      ON
+          (
+              left.A = right.A AND
+              left.C = right.C AND
+              left.D = right.D
+          ) OR
+          (
+              (
+                  left.A IS NULL OR
+                  right.A IS NULL
+              ) AND
+              left.B = right.B AND
+              left.C = right.C AND
+              left.D = right.D
+          )
 
     Args:
         left (pd.DataFrame): pandas DataFrame
@@ -545,7 +557,7 @@ def join_on_multiple_keys(
         or_join_keys (list): list of column names to use as join keys
         how (str, optional): 'inner', 'left', 'right' or 'outer'. Defaults to 'inner'.
         and_join_keys (list, optional): list of column names to use as additional join
-            keys
+          keys
         coalesce_common_columns (bool, optional): whether to coalesce values in the
           columns that are present in both DataFrames. Defaults to `True`.
 
@@ -633,20 +645,20 @@ def left_isin_right_by_decreasing_priority(
     the differences that :
 
     - the columns are tested one by one (instead of being tested simultaneously as in
-    the case of `pandas.DataFrame.isin`), the first column of `left` being tested
-    against the first column of `right`, the second column of `left` being tested
-    against the second column of `right`...
+      the case of `pandas.DataFrame.isin`), the first column of `left` being tested
+      against the first column of `right`, the second column of `left` being tested
+      against the second column of `right`...
     - columns are considered to be sorted by decreasing priority, meaning that a match
-    on 2 rows of `left` and `right` on a given column will be taken into account only
-    if the columns of higher priority on those 2 rows have values that are either equal
-    or null.
+      on 2 rows of `left` and `right` on a given column will be taken into account only
+      if the columns of higher priority on those 2 rows have values that are either equal
+      or null.
 
     Takes two DataFrames `left` and `right` with the same columns, returns a Series
     with the same index as the `left` DataFrame and whose values are :
 
-    - `True` if the corresponding row in `left` has a match in `right' in at least one
-    column
-    - `False` if the corresponding row in `left` has no match in `right'
+    - `True` if the corresponding row in `left` has a match in `right` in at least one
+      column
+    - `False` if the corresponding row in `left` has no match in `right`
 
     This is typically useful to filter vessels' data based on some other vessels' data,
     both datasets being index with multiple identifiers (cfr, ircs, external immat...).
@@ -775,7 +787,8 @@ def try_get_factory(key: Hashable, error_value: Any = None):
 def array_equals_row_on_window(
     arr: np.array, row: np.array, window_length: int
 ) -> np.array:
-    """Tests whether each row of an input 2D array is the last of a sequence of
+    """
+    Tests whether each row of an input 2D array is the last of a sequence of
     `window_length` consecutive rows equal to a given `row` 1D array, and returns the
     result as a float array with the same length as the input array.
 
@@ -791,7 +804,7 @@ def array_equals_row_on_window(
         row (np.array): 1D numpy array with the same length as the number of columns in
           `arr`
         window_length (int): number of consecutive rows that must be equal to `row` for
-            the result to be `True`
+          the result to be `True`
 
     Returns:
         np.array: 1D boolean array of the same length as the input arrays
@@ -844,7 +857,7 @@ def back_propagate_ones(arr: np.array, steps: int) -> np.array:
 
     returns:
         np.array: 1D array with the same dimensions as input, with ones back-propagated
-          `steps` times.
+        `steps` times.
 
     Examples:
         >>> arr = np.array([np.nan,  0.,  0.,  1.,  0.,  0.,  1.,  1.,  0.,  1.])
@@ -866,7 +879,8 @@ def back_propagate_ones(arr: np.array, steps: int) -> np.array:
 def rows_belong_to_sequence(
     arr: np.array, row: np.array, window_length: int
 ) -> np.array:
-    """Tests whether each row of an input 2D array belongs to a sequence of
+    """
+    Tests whether each row of an input 2D array belongs to a sequence of
     `window_length` consecutive rows equal to a given `row` 1D array, and returns the
     result as a float array with the same length as the input array.
 
@@ -887,7 +901,6 @@ def rows_belong_to_sequence(
 
     Returns:
         np.array: 1D boolean array of the same length as the input arrays
-
 
     Examples:
         >>> arr = np.array([
@@ -922,7 +935,7 @@ def rows_belong_to_sequence(
     rows_known = back_propagate_ones(ends_of_sequences, steps=window_length - 1)
 
     # To test if rows at the beginning and at the end of the array could possibly
-    # belong to a sequence `row`s exceeding the boundaries of the array, we add rows to
+    # belong to a sequence `row` exceeding the boundaries of the array, we add rows to
     # the array and test again
     extended_arr = np.concatenate(
         (

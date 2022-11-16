@@ -18,10 +18,10 @@ def make_periods(
     overlap: Union[None, timedelta] = None,
 ) -> List[Period]:
     """
-    Returns a list of `Period`s of duration `period_duration` covering the time range
+    Returns a list of `Period` of duration `period_duration` covering the time range
     from `start_datetime_utc` to `end_datetime_utc`.
 
-    If `overlap` is specified, the `Period`s returned will overlap by the amount
+    If `overlap` is specified, the `Period` returned will overlap by the amount
     specified, otherwise the end of one period will coincide with the start of the
     next one.
 
@@ -79,17 +79,20 @@ def make_periods(
 def get_datetime_intervals(
     s: pd.Series, unit: str = None, how: str = "backward"
 ) -> pd.Series:
-    """Takes a pandas Series with datetime dtype.
-    Return a pandas Series with the same index and with time intervals between the
-    successives values of the input Series as values.
+    """
+    Takes a pandas Series with datetime dtype. Return a pandas Series with the same
+    index and with time intervals between the successives values of the input Series as
+    values.
 
     Args:
         s (Series): pandas Series with datetime dtype
         unit (Union[str, None]):
-          - if None, returns values as pandas Timedelta
+
+          - if `None`, returns values as pandas `Timedelta`
           - if provided, must be one of 's', 'min' or 'h', in which case values
-          are returned as a float.
-          Defaults to None.
+            are returned as a float.
+
+          Defaults to `None`.
         how (str): if, 'forward', computes the interval between each position and the
           next one. If 'backward', computes the interval between each position and
           the previous one.

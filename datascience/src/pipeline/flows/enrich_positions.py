@@ -159,7 +159,7 @@ def load_fishing_activity(positions: pd.DataFrame, period: Period, logger: Logge
         positions (pd.DataFrame): Enriched positions data
         period (Period): the `Period` covered by the input `DataFrame`. This is used
           to add a `where` clause on the `positions` hypertable limiting the time range
-          queried when looking for `id`s corresponding to the rows to update.
+          queried when looking for `id` corresponding to the rows to update.
         logger (Logger): `Logger`
     """
 

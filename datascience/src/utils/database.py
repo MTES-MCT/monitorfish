@@ -9,10 +9,12 @@ from src.read_query import read_query
 
 
 def get_tables_sizes(db: str, table_names: List[str]) -> pd.DataFrame:
-    """Returns a pandas DataFrame with the size of each table in tables_names, in Mb.
+    """
+    Returns a pandas DataFrame with the size of each table in tables_names, in Mb.
 
-    db : 'ocan', 'fmc'
-    view_name : the name of the view to inspect.
+    Aegs:
+        db : 'ocan', 'fmc'
+        view_name : the name of the view to inspect.
     """
 
     query = f"""SELECT segment_name AS table_name, (bytes/1024/1024) AS size_Mb
@@ -25,11 +27,13 @@ def get_tables_sizes(db: str, table_names: List[str]) -> pd.DataFrame:
 
 
 def print_view_query_string(db: str, view_name: str):
-    """View the SQL query string that was used to create an existing view in an Oracle
+    """
+    View the SQL query string that was used to create an existing view in an Oracle
     database.
 
-        db : 'ocan', 'fmc'
-        view_name : the name of the view to inspect.
+    Args:
+      db : 'ocan', 'fmc'
+      view_name : the name of the view to inspect.
     """
     query = f"""SELECT TEXT
     FROM SYS.ALL_VIEWS
@@ -41,14 +45,13 @@ def print_view_query_string(db: str, view_name: str):
 
 
 def find_table_schema(db: str, table_name: str):
-    """Looks for a table named table_name in all schemas of
-    the designated database and return the name of the schema
-    in which the table is found.
+    """
+    Looks for a table named table_name in all schemas of the designated database and
+    returns the name of the schema in which the table is found.
 
     If the table is not found, returns None.
 
-    Possible values for db : 'ocan', 'monitorfish_remote',
-                             'fmc', 'monitorfish_local'
+    Possible values for db : 'ocan', 'monitorfish_remote', 'fmc', 'monitorfish_local'
     """
     e = create_engine(db)
     insp = inspect(e)
@@ -62,11 +65,11 @@ def find_table_schema(db: str, table_name: str):
 
 
 def print_schemas_tables(db: str, schemas=None):
-    """Prints all schemas and associated tables in a database.
+    """
+    Prints all schemas and associated tables in a database.
     Optionnal argument 'schemas' takes a list of schemas to restrict the scan.
 
-    Possible values for db :
-        'ocan', 'monitorfish_remote', 'fmc', 'monitorfish_local'
+    Possible values for db : 'ocan', 'monitorfish_remote', 'fmc', 'monitorfish_local'
     """
     e = create_engine(db)
     insp = inspect(e)
@@ -87,9 +90,9 @@ def pg_dump_table(
     scripts.
 
       * If ``db`` is ``monitorfish_local``, the ``pg_dump`` command will be run by the
-      machine on which the command is run, so postres must be installed.
+        machine on which the command is run, so postres must be installed.
       * If ``db`` is ``monitorfish_remote``, the command in run through in the docker
-      container with ``docker exec monitorfish_database``.
+        container with ``docker exec monitorfish_database``.
 
     Args:
         db (str): 'monitorfish_remote' or 'monitorfish_local'

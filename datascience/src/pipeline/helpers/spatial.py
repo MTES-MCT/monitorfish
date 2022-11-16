@@ -44,7 +44,6 @@ def coordinate_to_dms(coord: float) -> Tuple[int, float, int, int]:
     Examples:
         >>> coordinate_to_dms(45.123)
         (45, 7.379999999999853, 7, 23)
-
         >>> coordinate_to_dms(-45.123)
         (45, 7.379999999999853, 7, 23)
     """
@@ -80,6 +79,7 @@ def position_to_position_representation(
           - `lat` is greater than 90.0 and less than -90.0
           - `lon` is greater than 180.0 and less than -180.0
           - `representation_type` is not 'DMD' or 'DMS'.
+
     """
     lat = p.latitude
     lon = p.longitude
@@ -147,7 +147,8 @@ def estimate_current_position(
     max_hours_since_last_position: float = 2.0,
     on_error: str = "ignore",
 ) -> Tuple[float, float]:
-    """Estimate the current position of a vessel based on its last position, course and
+    """
+    Estimate the current position of a vessel based on its last position, course and
     speed. If the last position is older than max_hours_since_last_position, or is in
     the future (i.e. hours_since_last_position is negative), returns None.
 
@@ -156,11 +157,12 @@ def estimate_current_position(
         last_longitude (float): last known longitude of vessel
         course (float): last known route of vessel in degrees
         speed (float): last known speed of vessel in nots
-        hours_since_last_position (float): time since last known position of vessel, in hours
-        max_hours_since_last_position (float): maximum time in hours since last position,
-            after which the estimation is not performed (returns None instead).
-            Defaults to 2.0.
-        on_error (str): 'ignore' or 'raise'.
+        hours_since_last_position (float): time since last known position of vessel, in
+          hours
+        max_hours_since_last_position (float): maximum time in hours since last
+          position, after which the estimation is not performed (returns None instead)
+          Defaults to 2.0
+        on_error (str): 'ignore' or 'raise'
 
     Returns:
         float: estimated current latitude
@@ -230,7 +232,7 @@ def get_k_ring_of_h3_cells(h3_sequence: Iterable[str], k: int) -> Set[str]:
 
     Returns:
         sequence[str]: sequence of h3 cells belonging to the k-ring of at least one of
-            the h3 cells in the input sequence
+        the h3 cells in the input sequence
     """
     h3_cells = [h3.k_ring(h, k) for h in h3_sequence]
     return set.union(*h3_cells)
@@ -238,8 +240,7 @@ def get_k_ring_of_h3_cells(h3_sequence: Iterable[str], k: int) -> Set[str]:
 
 def point_dist(position1: Position, position2: Position) -> float:
     """
-    Computes the spherical distance between two Position objects in
-    meters.
+    Computes the spherical distance between two Position objects in meters.
 
     Args:
         position1 (Position)
@@ -275,10 +276,9 @@ def get_step_distances(
         lat (str): column name containing latitudes
         lon (str): column name containing longitudes
         how (str): if, 'forward', computes the interval between each position and the
-            next one. if 'backward', computes the interval between each position and
-            the previous one.
-        unit (str): the distance unit (passed to h3.point_dist).
-            Defaults to 'm'.
+          next one. if 'backward', computes the interval between each position and
+          the previous one.
+        unit (str): the distance unit (passed to h3.point_dist). Defaults to 'm'.
 
     Returns:
         np.array: array of distances between the successive positions.
@@ -326,12 +326,14 @@ def compute_movement_metrics(
     is_at_port_column: str = "is_at_port",
     time_emitting_at_sea_column: str = "time_emitting_at_sea",
 ) -> pd.DataFrame:
-    """Takes a pandas DataFrame with
+    """Takes a pandas DataFrame with:
+
         - latitude and longitude columns (float dtypes)
         - a column indicating the date and time of the position (datetime dtype)
         - a column indicating whether the vessel is at port (boolean dtype)
         - a column indicating how long the vessel has been continuously
           emitting at sea (timedelta dtype)
+
     whose rows represent successive positions of a vessel, assumed to be sorted
     chronologically by ascending order.
 
@@ -453,9 +455,10 @@ def detect_fishing_activity(
     Rows of the input DataFrame represent successive positions of the analyzed vessel,
     assumed to be sorted chronologically by ascending order.
 
-    The DataFrame must have a columns indicating
-        1) whether the position is at port
-        2) the average speed between each position and the previous one, in knots
+    The DataFrame must have a columns indicating :
+
+      1) whether the position is at port
+      2) the average speed between each position and the previous one, in knots
 
     A vessel will be considered to be fishing if its average speed remains above the
     `min_fishing_speed_threshold` and below the `max_fishing_speed_threshold` for a
@@ -490,7 +493,7 @@ def detect_fishing_activity(
 
     Returns:
         pd.DataFrame: copy of the input DataFrame with the added boolean column
-          "is_fishing"
+        "is_fishing"
     """
 
     positions = positions.copy(deep=True)
@@ -620,14 +623,17 @@ def enrich_positions(
 
 
 def geocode(query_string=None, country_code_iso2=None, **kwargs):
-    """Return latitude, longitude for input location.
-    Provided either a query string, or one or more of the following keyword arguments:
-        street
-        city
-        county
-        state
-        country
-        postalcode
+    """
+    Return latitude, longitude for input location from a query string or from one or
+    more of the following keyword arguments:
+
+      - street
+      - city
+      - county
+      - state
+      - country
+      - postalcode
+
     """
     assert LOCATIONIQ_TOKEN
     base_url = "https://eu1.locationiq.com/v1/search.php"

@@ -16,3 +16,4 @@ SELECT
 FROM regulations
 LEFT JOIN regulatory_references
 ON regulatory_references.id = regulations.id
+ORDER BY regulations.id

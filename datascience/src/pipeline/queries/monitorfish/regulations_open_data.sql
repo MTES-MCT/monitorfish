@@ -8,6 +8,7 @@ WITH regulatory_references AS (
 )
 
 SELECT
+    regulations.law_type AS type_de_reglementation,
     regulations.topic AS thematique,
     regulations.zone,
     regulatory_references.reglementations,

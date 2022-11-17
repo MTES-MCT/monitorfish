@@ -1,6 +1,7 @@
 from io import BytesIO
 from unittest.mock import patch
 
+import fiona
 import geopandas as gpd
 import pandas as pd
 import pytest
@@ -67,6 +68,13 @@ def make_square_multipolygon(
 def regulations_open_data() -> gpd.GeoDataFrame:
     return gpd.GeoDataFrame(
         {
+            "type_de_reglementation": [
+                "Reg. Facade 1",
+                "Reg. Facade 1",
+                "Reg. Facade 2",
+                "Reg. Facade 2",
+                "Reg. Facade 2",
+            ],
             "thematique": [
                 "Morbihan - bivalves",
                 "Morbihan - bivalves",
@@ -110,6 +118,13 @@ def regulations_open_data() -> gpd.GeoDataFrame:
 def regulations_for_csv() -> pd.DataFrame:
     return pd.DataFrame(
         {
+            "type_de_reglementation": [
+                "Reg. Facade 1",
+                "Reg. Facade 1",
+                "Reg. Facade 2",
+                "Reg. Facade 2",
+                "Reg. Facade 2",
+            ],
             "thematique": [
                 "Morbihan - bivalves",
                 "Morbihan - bivalves",
@@ -146,6 +161,13 @@ def regulations_for_csv() -> pd.DataFrame:
 def regulations_for_geopackage() -> gpd.GeoDataFrame:
     return gpd.GeoDataFrame(
         {
+            "type_de_reglementation": [
+                "Reg. Facade 1",
+                "Reg. Facade 1",
+                "Reg. Facade 2",
+                "Reg. Facade 2",
+                "Reg. Facade 2",
+            ],
             "thematique": [
                 "Morbihan - bivalves",
                 "Morbihan - bivalves",
@@ -205,12 +227,34 @@ def test_get_csv_file_object(regulations_for_csv):
 
 
 def test_get_geopackage_file_object(regulations_for_geopackage):
-    file_object = get_geopackage_file_object.run(regulations_for_geopackage)
+    file_object = get_geopackage_file_object.run(
+        regulations_for_geopackage, layers="type_de_reglementation"
+    )
 
     assert isinstance(file_object, BytesIO)
 
-    gdf_from_file_object = gpd.read_file(file_object, driver="GPKG")
-    pd.testing.assert_frame_equal(gdf_from_file_object, regulations_for_geopackage)
+    layer_1, layer_2 = ["Reg. Facade 1", "Reg. Facade 2"]
+    assert fiona.listlayers(file_object) == [layer_1, layer_2]
+
+    file_object.seek(0)
+    gdf_from_file_object = gpd.read_file(file_object, driver="GPKG", layer=layer_1)
+    pd.testing.assert_frame_equal(
+        gdf_from_file_object,
+        regulations_for_geopackage[
+            regulations_for_geopackage["type_de_reglementation"] == layer_1
+        ],
+    )
+
+    file_object.seek(0)
+    gdf_from_file_object = gpd.read_file(file_object, driver="GPKG", layer=layer_2)
+    pd.testing.assert_frame_equal(
+        gdf_from_file_object,
+        (
+            regulations_for_geopackage[
+                regulations_for_geopackage["type_de_reglementation"] == layer_2
+            ].reset_index(drop=True)
+        ),
+    )
 
 
 def test_flow(reset_test_data):

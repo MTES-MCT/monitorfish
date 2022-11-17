@@ -11,10 +11,12 @@ from config import (
     REGULATIONS_DATASET_ID,
     REGULATIONS_GEOPACKAGE_RESOURCE_ID,
     REGULATIONS_GEOPACKAGE_RESOURCE_TITLE,
+    ROOT_DIRECTORY,
 )
 from src.pipeline.generic_tasks import extract
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.datagouv import update_resource
+from src.pipeline.utils import remove_file
 
 
 @task(checkpoint=False)
@@ -31,6 +33,7 @@ def extract_regulations_open_data() -> gpd.GeoDataFrame:
 def get_regulations_for_csv(regulations: gpd.GeoDataFrame) -> pd.DataFrame:
 
     columns = [
+        "type_de_reglementation",
         "thematique",
         "zone",
         "reglementations",
@@ -44,6 +47,7 @@ def get_regulations_for_csv(regulations: gpd.GeoDataFrame) -> pd.DataFrame:
 def get_regulations_for_geopackage(regulations: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
 
     columns = [
+        "type_de_reglementation",
         "thematique",
         "zone",
         "reglementations",
@@ -89,12 +93,18 @@ def get_csv_file_object(df: pd.DataFrame) -> BytesIO:
 
 
 @task(checkpoint=False)
-def get_geopackage_file_object(gdf: gpd.GeoDataFrame) -> BytesIO:
+def get_geopackage_file_object(gdf: gpd.GeoDataFrame, layers: str = None) -> BytesIO:
     """
-    Returns a `BytesIO` geopackage file object. from the input `DataFrame`.
+    Returns a `BytesIO` geopackage file object. from the input `GeoDataFrame`.
+
+    If `layers` is given, the geopackage will be organized in layers according to the
+    data labels of the `layers` column. If there are null values in the `layers` column,
+    the corresponding rows will not be included in the geopackage.
 
     Args:
-        gdf (pd.DataFrame): DataFrame to convert
+        gdf (gpd.DataFrame): GeoDataFrame to convert
+        layers (str, optional): name of the column to use as layer labels in the
+          geopackage. Defaults to None.
 
     Returns:
         BytesIO: file object
@@ -118,8 +128,29 @@ def get_geopackage_file_object(gdf: gpd.GeoDataFrame) -> BytesIO:
             1  20  POINT (3.00000 4.00000)
             2  30  POINT (5.00000 6.00000)
     """
+
     buf = BytesIO()
-    gdf.to_file(buf, driver="GPKG")
+
+    if layers:
+        temp_file_path = ROOT_DIRECTORY / "src/pipeline/data/tmp_geopackage.gpkg"
+        remove_file(temp_file_path, ignore_errors=True)
+
+        try:
+            for layer in gdf[layers].dropna().unique():
+
+                gdf[gdf[layers] == layer].to_file(
+                    temp_file_path, driver="GPKG", layer=layer
+                )
+
+            with open(temp_file_path, "rb") as f:
+                buf.write(f.read())
+
+        finally:
+            remove_file(temp_file_path, ignore_errors=True)
+
+    else:
+        gdf.to_file(buf, driver="GPKG")
+
     buf.seek(0)
     return buf
 
@@ -149,7 +180,9 @@ with Flow("Regulations open data", executor=LocalDaskExecutor()) as flow:
         regulations_for_geopackage = get_regulations_for_geopackage(regulations)
 
         csv_file = get_csv_file_object(regulations_for_csv)
-        geopackage_file = get_geopackage_file_object(regulations_for_geopackage)
+        geopackage_file = get_geopackage_file_object(
+            regulations_for_geopackage, layers="type_de_reglementation"
+        )
 
         update_resource(
             dataset_id=dataset_id,

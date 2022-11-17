@@ -1,10 +1,10 @@
+import dayjs from 'dayjs'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo, useRef } from 'react'
 import { Checkbox, FlexboxGrid } from 'rsuite'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
-import { COLORS } from '../../../../constants/constants'
 import { ALERTS_MENU_SEA_FRONT_TO_SEA_FRONTS, SeaFront } from '../../../../domain/entities/alerts/constants'
 import { setEditedReportingInSideWindow } from '../../../../domain/shared_slices/Reporting'
 import { InfractionSuspicionReporting, PendingAlertReporting, ReportingType } from '../../../../domain/types/reporting'
@@ -23,8 +23,12 @@ import { CardTableRow } from '../../../../ui/card-table/CardTableRow'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { FilterTableInput } from '../../../../ui/card-table/FilterTableInput'
 import { RowVerticalSeparator } from '../../../../ui/card-table/RowVerticalSeparator'
-import { ReactComponent as ArchiveIconSVG } from '../../../icons/Bouton_archiver.svg'
-import { ReactComponent as DeleteIconSVG } from '../../../icons/Bouton_supprimer.svg'
+import { IconButton } from '../../../../ui/IconButton'
+import { IconName } from '../../../../ui/icons/constants'
+import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
+import { ReactComponent as ArchiveIcon } from '../../../icons/Bouton_archiver.svg'
+import { ReactComponent as DeleteIcon } from '../../../icons/Bouton_supprimer.svg'
+// import { ReactComponent as DownloadIcon } from '../../../icons/standardized/Download.svg'
 import { Flag } from '../../../vessel_list/tableCells'
 import { EditReporting } from '../EditReporting'
 import { REPORTING_LIST_TABLE_OPTIONS } from './constants'
@@ -54,7 +58,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     [currentReportings, selectedSeaFront]
   )
 
-  const { renderTableHead, tableCheckedIds, tableData, toggleTableCheckForId } = useTable<
+  const { getTableCheckedData, renderTableHead, tableCheckedIds, tableData, toggleTableCheckForId } = useTable<
     InfractionSuspicionReporting | PendingAlertReporting
   >(currentSeaFrontReportings, REPORTING_LIST_TABLE_OPTIONS, searchInputRef.current?.value)
 
@@ -65,6 +69,36 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
 
     await dispatch(archiveReportings(tableCheckedIds.map(Number)) as any)
   }, [dispatch, tableCheckedIds])
+
+  const download = useCallback(() => {
+    const checkedCurrentSeaFrontReportings = getTableCheckedData()
+    const fileName = `${checkedCurrentSeaFrontReportings.length}-signalements-${dayjs().format('DD-MM-YYYY')}`
+
+    downloadAsCsv(fileName, checkedCurrentSeaFrontReportings, {
+      creationDate: 'Ouvert le',
+      dml: 'DML concernées',
+      externalReferenceNumber: 'Marquage ext.',
+      internalReferenceNumber: 'CFR',
+      ircs: 'C/S',
+      reportingTitle: 'reportingTitle',
+      type: {
+        label: 'Origine',
+        transform: getReportingOrigin
+      },
+      underCharter: {
+        label: 'Navire sous charte ?',
+        transform: reporting => (reporting.underCharter ? 'OUI' : 'NON')
+      },
+      'value.flagState': 'Pavillon',
+      'value.natinfCode': 'NATINF',
+      'value.seaFront': 'Façade',
+      'value.type': {
+        label: 'Titre',
+        transform: getReportingTitle
+      },
+      vesselName: 'Navire'
+    })
+  }, [getTableCheckedData])
 
   // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.
   const edit = useCallback(
@@ -117,15 +151,21 @@ MMSI: ${reporting.mmsi || ''}`
           type="text"
         />
         <RightAligned>
+          <IconButton
+            disabled={!tableCheckedIds.length}
+            iconName={IconName.Download}
+            onClick={download}
+            title={`Télécharger ${tableCheckedIds.length} signalement${tableCheckedIds.length > 1 ? 's' : ''}`}
+          />
           <ArchiveButton
+            $isShowed={tableCheckedIds.length > 0}
             data-cy="archive-reporting-cards"
-            isShowed={tableCheckedIds.length > 0}
             onClick={archive}
             title={`Archiver ${tableCheckedIds.length} signalement${tableCheckedIds.length > 1 ? 's' : ''}`}
           />
           <DeleteButton
+            $isShowed={tableCheckedIds.length > 0}
             data-cy="delete-reporting-cards"
-            isShowed={tableCheckedIds.length > 0}
             onClick={remove}
             title={`Supprimer ${tableCheckedIds.length} signalement${tableCheckedIds.length > 1 ? 's' : ''}`}
           />
@@ -210,32 +250,38 @@ MMSI: ${reporting.mmsi || ''}`
 }
 
 const UnderCharter = styled.div`
-  background: ${COLORS.mediumSeaGreen} 0% 0% no-repeat padding-box;
+  background: ${p => p.theme.color.mediumSeaGreen} 0% 0% no-repeat padding-box;
   padding: 2px 8px;
   border-radius: 1px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
 `
 const RightAligned = styled.div`
   margin-left: auto;
   align-self: flex-end;
+
+  > button:not(:last-child) {
+    margin-right: 10px;
+  }
 `
 
-const ArchiveButton = styled(ArchiveIconSVG)<{
-  isShowed?: boolean
+// TODO Move that into the UI using `<IconButton />`.
+const ArchiveButton = styled(ArchiveIcon)<{
+  $isShowed?: boolean
 }>`
-  border: 1px solid ${COLORS.lightGray};
+  border: 1px solid ${p => p.theme.color.lightGray};
   padding: 6.5px 6px;
-  cursor: ${p => (p.isShowed ? 'pointer' : 'not-allowed')};
+  cursor: ${p => (p.$isShowed ? 'pointer' : 'not-allowed')};
   vertical-align: bottom;
   margin-right: 10px;
 `
 
-const DeleteButton = styled(DeleteIconSVG)<{
-  isShowed?: boolean
+// TODO Move that into the UI using `<IconButton />`.
+const DeleteButton = styled(DeleteIcon)<{
+  $isShowed?: boolean
 }>`
-  border: 1px solid ${COLORS.lightGray};
+  border: 1px solid ${p => p.theme.color.lightGray};
   padding: 7px;
-  cursor: ${p => (p.isShowed ? 'pointer' : 'not-allowed')};
+  cursor: ${p => (p.$isShowed ? 'pointer' : 'not-allowed')};
   vertical-align: bottom;
 `
 

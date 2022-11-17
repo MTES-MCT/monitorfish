@@ -306,8 +306,8 @@ export function ReportingForm({
         <>
           <Label>Identité de l&apos;émetteur (trigramme)</Label>
           <StyledInput
+            $hasWhiteBackground={hasWhiteBackground}
             data-cy=""
-            hasWhiteBackground={hasWhiteBackground}
             onChange={value => setAuthorTrigram(value)}
             placeholder="Ex: LTH"
             type="text"
@@ -323,8 +323,8 @@ export function ReportingForm({
         <>
           <Label>Nom et contact (numéro, mail…) de l&apos;émetteur</Label>
           <StyledInput
+            $hasWhiteBackground={hasWhiteBackground}
             data-cy="new-reporting-author-contact"
-            hasWhiteBackground={hasWhiteBackground}
             onChange={value => setAuthorContact(value)}
             placeholder="Ex: Yannick Attal (06 24 25 01 91)"
             type="text"
@@ -359,8 +359,8 @@ export function ReportingForm({
       <Label>Titre</Label>
       <StyledInput
         $hasError={errorFields.includes('title')}
+        $hasWhiteBackground={hasWhiteBackground}
         data-cy="new-reporting-title"
-        hasWhiteBackground={hasWhiteBackground}
         onChange={value => setTitle(value)}
         placeholder={
           reportingType === ReportingTypeCharacteristics.OBSERVATION.code
@@ -494,11 +494,13 @@ const Label = styled.div`
   margin-top: 10px;
 `
 
-const StyledInput = styled(Input)`
+const StyledInput = styled(Input)<{
+  $hasWhiteBackground: boolean
+}>`
   margin: 5px 0px 10px 0px;
   width: ${props => props.width}px;
   border: 1px solid ${props => (props.$hasError ? COLORS.maximumRed : 'unset')};
-  background: ${p => (p.hasWhiteBackground ? COLORS.gainsboro : COLORS.white)};
+  background: ${p => (p.$hasWhiteBackground ? COLORS.gainsboro : COLORS.white)};
 `
 
 const Form = styled.div<{

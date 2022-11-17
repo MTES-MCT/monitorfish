@@ -41,7 +41,6 @@ export const deleteReporting = id => (dispatch: AppDispatch, getState: AppGetSta
       dispatch(removeError())
     })
     .catch(error => {
-      console.error(error)
       batch(() => {
         dispatch(
           setCurrentAndArchivedReportingsOfSelectedVessel({

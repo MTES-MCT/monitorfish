@@ -319,9 +319,7 @@ def send_beacon_malfunction_message(
 
     Returns:
         dict: Dict of errors returned by the server for each recipient that was
-          refused, with the following form :
-
-          { "three@three.org" : ( 550 ,"User unknown" ) }
+        refused, with the following form {"three@three.org" : ( 550 ,"User unknown" )}
     """
 
     addressees = msg_to_send.get_addressees()

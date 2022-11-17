@@ -4,7 +4,7 @@ import pytest
 from pytest import fixture
 
 from src.pipeline.entities.monitorfish_healthcheck import MonitorfishHealthcheck
-from src.pipeline.exceptions.monitorfish_health_error import MonitorfishHealthError
+from src.pipeline.exceptions import MonitorfishHealthError
 from src.pipeline.shared_tasks.healthcheck import (
     assert_last_positions_health,
     assert_positions_health,

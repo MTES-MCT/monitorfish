@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: ../source/flows.rst:11
 #: 794d0cd906ed4fd2b69308b60028cf1f
-msgid "*Flows* are batch jobs that move and transform data. Collectively, they constitute the :ref:`data pipeline` part of the Monitorfish architecture."
+msgid "*Flows* are batch jobs that move and transform data. Collectively, they constitute the :ref:`data-pipeline` part of the Monitorfish architecture."
 msgstr ""
 
 #: ../source/flows.rst:14
@@ -41,17 +41,62 @@ msgstr ""
 msgid "Flows are composed of `tasks <https://docs.prefect.io/core/concepts/tasks.html#overview>`__ typically written as python pure functions. `The UI <http://prefect.csam.e2.rie.gouv.fr/>`__ (restricted access) enables administrators to view each flow as a diagram of its constituent tasks, to monitor their execution, see the logs and debug in case any flow run fails..."
 msgstr ""
 
-#: ../source/flows.rst:23
+#: ../source/flows.rst:24
 #: 1746550ec6d0467f9ae1c5d4bd07a5e5
-msgid "Overall view of data flows in Monitorfish :"
+msgid "Overview of flows in Monitorfish"
+msgstr ""
+
+#: ../source/flows.rst:26
+#: 84d950781731416f905baf395846ead1
+msgid "Flow that imports administrative areas :"
 msgstr ""
 
 #: ../source/flows.rst:None
 #: b72a3d3af8b340d582985db7b67bd35a
-msgid "Schematic of data flows in Monitorfish"
+msgid "Schematic of administrative areas data flow"
 msgstr ""
 
-#: ../source/flows.rst:33
+#: ../source/flows.rst:32
+#: 10b980a32bdb4d678ac0112644e77e33
+msgid "Flows that import repositories (species, gears, infractions...) :"
+msgstr ""
+
+#: ../source/flows.rst:None
+#: b72a3d3af8b340d582985db7b67bd35a
+msgid "Schematic of repositories flows"
+msgstr ""
+
+#: ../source/flows.rst:39
+#: 2c3228301cce40c58532bee3bb3a8ca8
+msgid "Flows that import and perform a check-up on regulations data :"
+msgstr ""
+
+#: ../source/flows.rst:None
+#: b72a3d3af8b340d582985db7b67bd35a
+msgid "Schematic of regulation flows"
+msgstr ""
+
+#: ../source/flows.rst:46
+#: 81e6225dfaa04354b3c10d72c954c73c
+msgid "Flows that perform computations that are internal to Monitorfish (alerts, fishing detection...):"
+msgstr ""
+
+#: ../source/flows.rst:None
+#: b72a3d3af8b340d582985db7b67bd35a
+msgid "Schematic of internal computations flows"
+msgstr ""
+
+#: ../source/flows.rst:53
+#: 46ccd7c49738436397daca598bee6488
+msgid "Flows that contribute to maintaining an up-to-date `last_positions` table :"
+msgstr ""
+
+#: ../source/flows.rst:None
+#: b72a3d3af8b340d582985db7b67bd35a
+msgid "Schematic of last positions flows"
+msgstr ""
+
+#: ../source/flows.rst:64
 #: ec91d154d38946d690335e716ff04176
 msgid "List of flows"
 msgstr ""

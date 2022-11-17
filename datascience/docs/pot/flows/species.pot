@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,10 +23,10 @@ msgstr ""
 
 #: ../source/flows/species.rst:5
 #: 3fc398f5c46c407cb22b47c09bd892af
-msgid "The ``species`` flow extracts the list of species from `data.gouv.fr <https://www.data.gouv.fr/fr/datasets/liste-des-especes-a-but-detudes-statistiques-sur-la-peche/>`__. and loads it to the ``species`` table of the Monitorfish database."
+msgid "The ``species`` flow extracts the list of species from the open dataset `data.gouv.fr <https://www.data.gouv.fr/fr/datasets/liste-des-especes-a-but-detudes-statistiques-sur-la-peche/>`__, which is managed by the development team, and loads it to the ``species`` table of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows/species.rst:9
-#: 310e3307c6134fe7baa0c63c434c40f0
-msgid "It is not scheduled to run and it only required to run when the list of species has been manually updated on data.gouv.fr by the development team."
+#: 3ef18008ed9548c3862c7bdad77b641c
+msgid "It is run manually when needed in order to sync the Monitorfish database with the open dataset."
 msgstr ""

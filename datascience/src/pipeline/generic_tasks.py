@@ -38,14 +38,15 @@ def extract(
             one or more of the DataFrame’s columns to column-specific types.
             Defaults to None.
         parse_dates (Union[list, dict, None], optional):
-            - List of column names to parse as dates.
-            - Dict of ``{column_name: format string}`` where format string is
+
+          - List of column names to parse as dates.
+          - Dict of ``{column_name: format string}`` where format string is
             strftime compatible in case of parsing string times or is one of
             (D, s, ns, ms, us) in case of parsing integer timestamps.
-            - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
+          - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
             to the keyword arguments of :func:`pandas.to_datetime`
 
-            Defaults to None.
+          Defaults to None.
         params (Union[dict, None], optional): Parameters to pass to execute method.
             Defaults to None.
         backend (str, optional) : 'pandas' to run a SQL query and return a
@@ -108,10 +109,12 @@ def load(
         schema (str): database schema of the table
         logger (logging.Logger): logger instance
         how (str): one of
+
           - 'replace' to delete all rows in the table before loading
           - 'append' to append the data to rows already in the table
           - 'upsert' to append the rows to the table, replacing the rows whose id is
             already
+
         db_name (str, optional): Required if a `connection` is not provided.
           'monitorfish_remote' or 'monitorfish_local'. Defaults to None.
         pg_array_columns (list, optional): columns containing sequences that must be

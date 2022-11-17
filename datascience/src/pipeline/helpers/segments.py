@@ -10,13 +10,17 @@ from src.pipeline.generic_tasks import extract
 def catch_area_isin_fao_area(
     catch_area: Union[None, str], fao_area: Union[None, str]
 ) -> bool:
-    """Return
-    - True if a catch area (e.g. '27.7.b') is in a given fao_area (e.g. '27.7.b' or
-    '27')
-    - False if a catch area (e.g. '27.7.b') is NOT in a given fao_area (e.g. '28.6' or
-    '27.7.b.4')
-    - True if the fao_area if None (whatever the value of the catch_area)
-    - False if the fao_area is not None and the catch_area is None
+    """
+    Returns:
+        bool :
+
+          - `True` if a catch area (e.g. '27.7.b') is in a given fao_area (e.g. '27.7.b' or
+            '27')
+          - False if a catch area (e.g. '27.7.b') is NOT in a given fao_area (e.g. '28.6' or
+            '27.7.b.4')
+          - `True` if the fao_area if None (whatever the value of the catch_area)
+          - `False` if the fao_area is not None and the catch_area is None
+
     """
     if fao_area is None:
         return True
@@ -33,7 +37,8 @@ def attribute_segments_to_catches(
     append_unassigned_catches: bool = False,
     unassigned_catches_segment_label: str = "Aucun"
 ) -> pd.DataFrame:
-    """Takes a pandas DataFrame of catches and a pandas DataFrame defining fleet
+    """
+    Takes a pandas DataFrame of catches and a pandas DataFrame defining fleet
     segments, returns a pandas DataFrame which is an inner join of the two
     input DataFrames with species, gear and fao_area as join keys.
 
@@ -42,9 +47,11 @@ def attribute_segments_to_catches(
     that defines segments cannot have rows with 3 null values for the 3 criteria).
 
     Note that, as a result of the fact that the join is performed as an inner join:
+
         - catches that do not belong to any segments are absent of the result,
-        unless `append_unattributed_catches` is set to True.
+          unless `append_unattributed_catches` is set to True.
         - catches that belong to several segments appear several times in the result
+
     """
 
     try:

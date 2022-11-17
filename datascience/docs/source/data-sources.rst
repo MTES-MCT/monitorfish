@@ -6,12 +6,12 @@ VMS positions
 
 VMS positions are received on an API endpoint provided by the Kotlin Springboot backend service.
 
-ERS xml files
-^^^^^^^^^^^^^
+Logbook xml files
+^^^^^^^^^^^^^^^^^
 
-ERS raw xml files are ingested by the :doc:`ers` flow from the 
+Logbook raw xml files are ingested by the :doc:`flows/logbook` flow from the 
 `configured location <https://github.com/MTES-MCT/monitorfish/blob/master/datascience/config.py>`__ 
-where ERS xml files must be deposited.
+where logbook xml files must be deposited.
 
 Databases
 ^^^^^^^^^

@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/scrape-legipeche.rst:3
+#: d86b32421cac43d59a6f71268101f653
+msgid "Scrape Legipeche"
+msgstr ""
+
+#: ../source/flows/scrape-legipeche.rst:5
+#: 32466b3fcc3a46058a70df7aecedb3c3
+msgid "The ``Scrape Legipeche`` flow scrapes all regulations (articles and linked documents) from the Legipeche website and loads the scraped data into the ``legipeche`` table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/scrape-legipeche.rst:8
+#: 196d307f66bf4b97b0de46728f9d3f3f
+msgid "It is scheduled to run every day."
+msgstr ""

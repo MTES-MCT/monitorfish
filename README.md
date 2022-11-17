@@ -16,12 +16,18 @@
 
 ## Main features
 * Visualization of fishing vessels' real time **positions** (VMS)
-* Visualization of fishing vessels' declarative **fishing activity** data (ERS and FLUX)
+* Visualization of fishing vessels' declarative **fishing activity** data (ERS)
 * Visualization of fishing vessels' historical **controls** and **violations**
-* Visualization of french and european **regulated fishing areas**
-* Computation of fishing vessels' real time **belonging to fleet segments** as defined by the [European Fishing Control Agency (EFCA)](https://www.efca.europa.eu/en) in its [risk assessment methodology](https://www.efca.europa.eu/sites/default/files/Risk%20Assessment%20Methodology.pdf)
-* Computation of fishing vessels' **risk factor**, a metric developed in the context of the Monitorfish project that aims to help FMC agents **prioritize vessels to control** based on all the above elements
-* Administration panel to steer control priorities, update regulation data...
+* Visualization of `regulated fishing areas <https://monitorfish.readthedocs.io/en/latest/regulation.html>` of the french and european regulations
+* Computation of fishing vessels' real time belonging to `fleet segments <https://monitorfish.readthedocs.io/en/latest/fleet-segments.html>` as defined by the `European Fishing Control Agency (EFCA) <https://www.efca.europa.eu/en>`_ in its `risk assessment methodology <https://www.efca.europa.eu/en/content/guidelines-risk-assessment-methodology-fisheries-compliance>`_
+* Real time fraud detection `alerts <https://monitorfish.readthedocs.io/en/latest/alerts.html>`
+* Computation of fishing vessels' real time `risk factor <https://monitorfish.readthedocs.io/en/latest/risk-factor.html>`, a metric developed in the context of the Monitorfish project that aims to help FMC agents **prioritize vessels to control** based on all the above elements 
+* Administration panel that allows admins to
+
+  * Update regulation data : update authorized fishing areas / periods / gears...
+  * Update the definitions of `fleet segments <https://monitorfish.readthedocs.io/en/latest/fleet-segments.html>`
+  * `Stear control priorities <https://monitorfish.readthedocs.io/en/latest/control-priority-steering.html>` by dynamically adjuting the control priority level of each fleet segment
+
 
 ## Demo
 [![Monitorfish demo](/images/video-demo.png)](https://player.vimeo.com/video/563710999)

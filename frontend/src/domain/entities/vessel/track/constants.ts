@@ -6,7 +6,7 @@ export const TRACK_TYPE_RECORD: Record<TrackType, TrackTypeRecordItem> = {
   ELLIPSIS: {
     arrow: 'arrow_gray.png',
     code: 'ELLIPSIS',
-    color: theme.color.jungleGreen,
+    color: theme.color.charcoalShadow,
     description: '🕐 entre deux positions > 4h'
   },
   FISHING: {
@@ -18,7 +18,7 @@ export const TRACK_TYPE_RECORD: Record<TrackType, TrackTypeRecordItem> = {
   TRANSIT: {
     arrow: 'arrow_green.png',
     code: 'TRANSIT',
-    color: theme.color.charcoalShadow,
+    color: theme.color.jungleGreen,
     description: 'En transit (vitesse > 4.5 Nds)'
   }
 }

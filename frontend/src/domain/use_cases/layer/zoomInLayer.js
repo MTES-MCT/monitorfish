@@ -1,6 +1,7 @@
 import { animateToRegulatoryLayer } from '../../shared_slices/Map'
 import { Layer } from '../../entities/layers/constants'
 import { getCenter } from 'ol/extent'
+import { isNumeric } from '../../../utils/isNumeric'
 
 const zoomInLayer = ({ topicAndZone, feature }) => (dispatch, getState) => {
   if (topicAndZone) {
@@ -16,7 +17,7 @@ const zoomInLayer = ({ topicAndZone, feature }) => (dispatch, getState) => {
 }
 
 const dispatchAnimateToRegulatoryLayer = (center, dispatch, name) => {
-  if (center?.length && !Number.isNaN(center[0]) && !Number.isNaN(center[1])) {
+  if (center?.length && isNumeric(center[0]) && isNumeric(center[1])) {
     dispatch(animateToRegulatoryLayer({
       name: name,
       center: center

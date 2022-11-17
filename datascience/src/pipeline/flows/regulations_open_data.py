@@ -2,7 +2,7 @@ from io import BytesIO
 
 import geopandas as gpd
 import pandas as pd
-from prefect import Flow, task
+from prefect import Flow, case, task
 from prefect.executors import LocalDaskExecutor
 
 from config import (
@@ -11,6 +11,7 @@ from config import (
     REGULATIONS_GEOPACKAGE_RESOURCE_ID,
 )
 from src.pipeline.generic_tasks import extract
+from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.datagouv import update_resource
 
 
@@ -125,27 +126,27 @@ def get_geopackage_file_object(gdf: gpd.GeoDataFrame) -> BytesIO:
 
 with Flow("Regulations open data", executor=LocalDaskExecutor()) as flow:
 
-    # flow_not_running = check_flow_not_running()
-    # with case(flow_not_running, True):
+    flow_not_running = check_flow_not_running()
+    with case(flow_not_running, True):
 
-    regulations = extract_regulations_open_data()
+        regulations = extract_regulations_open_data()
 
-    regulations_for_csv = get_regulations_for_csv(regulations)
-    regulations_for_geopackage = get_regulations_for_geopackage(regulations)
+        regulations_for_csv = get_regulations_for_csv(regulations)
+        regulations_for_geopackage = get_regulations_for_geopackage(regulations)
 
-    csv_file = get_csv_file_object(regulations_for_csv)
-    geopackage_file = get_geopackage_file_object(regulations_for_geopackage)
+        csv_file = get_csv_file_object(regulations_for_csv)
+        geopackage_file = get_geopackage_file_object(regulations_for_geopackage)
 
-    update_resource(
-        dataset_id=REGULATIONS_DATASET_ID,
-        resource_id=REGULATIONS_CSV_RESOURCE_ID,
-        resource_title="reglementation-des-peches-cartographiee.csv",
-        resource=csv_file,
-    )
+        update_resource(
+            dataset_id=REGULATIONS_DATASET_ID,
+            resource_id=REGULATIONS_CSV_RESOURCE_ID,
+            resource_title="reglementation-des-peches-cartographiee.csv",
+            resource=csv_file,
+        )
 
-    update_resource(
-        dataset_id=REGULATIONS_DATASET_ID,
-        resource_id=REGULATIONS_GEOPACKAGE_RESOURCE_ID,
-        resource_title="reglementation-des-peches-cartographiee.gpkg",
-        resource=geopackage_file,
-    )
+        update_resource(
+            dataset_id=REGULATIONS_DATASET_ID,
+            resource_id=REGULATIONS_GEOPACKAGE_RESOURCE_ID,
+            resource_title="reglementation-des-peches-cartographiee.gpkg",
+            resource=geopackage_file,
+        )

@@ -35,7 +35,10 @@ import type { FishingActivityFeatureIdAndCoordinates } from '../domain/types/fis
 import type { VectorLayerWithName } from '../domain/types/layer'
 import type { Coordinate } from 'ol/coordinate'
 
-function VesselsTracksLayer({ map }) {
+type VesselsTracksLayerProps = {
+  map?: any
+}
+function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
   const dispatch = useAppDispatch()
   const { highlightedVesselTrackPosition, selectedVessel, selectedVesselPositions, vesselsTracksShowed } =
     useAppSelector(state => state.vessel)

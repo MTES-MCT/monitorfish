@@ -6,8 +6,10 @@ import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/v
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { DateRangePicker } from '../../../../ui/DateRangePicker'
+import { theme } from '../../../../ui/theme'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import { ReactComponent as VesselSVG } from '../../../icons/Icone_navire.svg'
+import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 import { DateRangeRadio } from './DateRangeRadio'
 import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
@@ -75,17 +77,19 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
 
   return (
     <>
-      <TrackRequestButton
+      <VesselSidebarActionButton
+        backgroundColor={isOpen ? theme.color.blueGray[100] : theme.color.charcoal}
         data-cy="vessel-track-depth-selection"
         healthcheckTextWarning={!!healthcheckTextWarning}
-        isOpen={isOpen}
+        isHidden={false}
         isRightMenuOpen={rightMenuIsOpen}
         isSidebarOpen={isSidebarOpen}
         onClick={() => setIsOpenedFromClick(!isOpenedFromClick)}
         title={"Paramétrer l'affichage de la piste VMS"}
+        top={118}
       >
         <VesselIcon />
-      </TrackRequestButton>
+      </VesselSidebarActionButton>
       <TrackRequestBody
         healthcheckTextWarning={!!healthcheckTextWarning}
         isOpen={isOpen}
@@ -139,27 +143,6 @@ const Header = styled.div`
 
 const Field = styled.div`
   margin-bottom: 1rem;
-`
-
-const TrackRequestButton = styled(MapComponentStyle)<{
-  healthcheckTextWarning: boolean
-  isHidden?: boolean
-  isOpen: boolean
-  isRightMenuOpen: boolean
-  isSidebarOpen: boolean
-}>`
-  background: ${p => (p.isOpen ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
-  border-radius: 1px;
-  cursor: pointer;
-  height: 30px;
-  margin-right: ${p => (p.isSidebarOpen ? 505 : -45)}px;
-  right: ${p => (p.isRightMenuOpen && p.isSidebarOpen ? 55 : 10)}px;
-  opacity: ${p => (p.isSidebarOpen ? 1 : 0)};
-  position: absolute;
-  top: 153px;
-  transition: all 0.5s, right 0.3s;
-  width: 30px;
-  z-index: 999;
 `
 
 const TrackRequestBody = styled(MapComponentStyle)<{

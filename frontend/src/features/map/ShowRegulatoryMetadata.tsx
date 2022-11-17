@@ -5,6 +5,9 @@ import showRegulatoryZoneMetadata from '../../domain/use_cases/layer/regulation/
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 
 export type ShowRegulatoryMetadataProps = {
+  // hasClickEvent is only used for `BaseMap` to inject `mapClickEvent` props
+  // eslint-disable-next-line react/no-unused-prop-types
+  hasClickEvent?: boolean
   mapClickEvent?: any
 }
 export function ShowRegulatoryMetadata({ mapClickEvent }: ShowRegulatoryMetadataProps) {

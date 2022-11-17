@@ -16,6 +16,9 @@ import { platformModifierKeyOnly } from 'ol/events/condition'
 
 let lastEventForPointerMove, timeoutForPointerMove, timeoutForMove
 
+/**
+ * BaseMap forwards map & mapClickEvent (when hasClickEvent is true) as props to children
+ */
 const BaseMap = props => {
   const {
     handleMovingAndZoom,

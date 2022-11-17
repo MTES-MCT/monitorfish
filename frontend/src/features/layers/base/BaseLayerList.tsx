@@ -18,7 +18,7 @@ export function BaseLayerList({ namespace }) {
   const layersSidebarOpenedLayerType = useAppSelector(state => state.layer.layersSidebarOpenedLayerType)
   const { setLayersSideBarOpenedLayerType } = LayerSlice[namespace].actions
 
-  const baseLayers = useMemo(() => Object.keys(BaseLayers).filter(key => key !== BaseLayers.DARK.code), [])
+  const baseLayers = useMemo(() => Object.keys(BaseLayers), [])
   const isBaseLayersShowed = useMemo(
     () => layersSidebarOpenedLayerType === LayerType.BASE_LAYER,
     [layersSidebarOpenedLayerType]

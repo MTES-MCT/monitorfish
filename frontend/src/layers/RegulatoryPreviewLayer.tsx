@@ -1,7 +1,7 @@
 import GeoJSON from 'ol/format/GeoJSON'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 
 import { Layer } from '../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
@@ -10,6 +10,7 @@ import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { regulatoryPreviewStyle } from './styles/regulatoryPreview.style'
 
+import type { VectorLayerWithName } from '../domain/types/layer'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 
@@ -19,8 +20,8 @@ export type RegulatoryPreviewLayerProps = {
 function UnmemoizedRegulatoryPreviewLayer({ map }: RegulatoryPreviewLayerProps) {
   const dispatch = useAppDispatch()
   const { regulatoryGeometriesToPreview } = useAppSelector(state => state.regulatory)
-  const vectorSourceRef = useRef<VectorSource | null>(null)
-  const layerRef = useRef<Vector<VectorSource<Geometry>> | null>(null)
+  const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
+  const layerRef = useRef() as MutableRefObject<VectorLayerWithName>
 
   function getVectorSource() {
     if (!vectorSourceRef.current) {
@@ -47,41 +48,42 @@ function UnmemoizedRegulatoryPreviewLayer({ map }: RegulatoryPreviewLayerProps) 
   }, [])
 
   useEffect(() => {
-    if (map) {
-      getVectorSource().clear()
+    if (!map) {
+      return
+    }
 
-      if (regulatoryGeometriesToPreview && regulatoryGeometriesToPreview.length) {
-        const features = regulatoryGeometriesToPreview
-          .map(geometry => {
-            if (geometry) {
-              return new GeoJSON({
-                featureProjection: OPENLAYERS_PROJECTION
-              }).readFeature(geometry)
-            }
+    getVectorSource().clear()
 
-            return null
-          })
-          .filter((feature): feature is Feature<Geometry> => Boolean(feature))
+    if (regulatoryGeometriesToPreview && regulatoryGeometriesToPreview.length) {
+      const features = regulatoryGeometriesToPreview
+        .map(geometry => {
+          if (geometry) {
+            return new GeoJSON({
+              featureProjection: OPENLAYERS_PROJECTION
+            }).readFeature(geometry)
+          }
 
-        if (features?.length) {
-          getVectorSource().addFeatures(features)
-          dispatch(zoomInLayer({ feature: features[0] }) as any)
-        }
+          return null
+        })
+        .filter((feature): feature is Feature<Geometry> => Boolean(feature))
+
+      if (features?.length) {
+        getVectorSource().addFeatures(features)
+        dispatch(zoomInLayer({ feature: features[0] }) as any)
       }
     }
   }, [dispatch, map, regulatoryGeometriesToPreview])
 
   useEffect(() => {
-    if (map) {
-      // TODO Check that: `Property 'name' does not exist on type 'VectorLayer<VectorSource<Geometry>>'`?
-      ;(getLayer() as any).name = Layer.REGULATORY_PREVIEW.code
-      map.getLayers().push(getLayer())
+    if (!map) {
+      return undefined
     }
 
+    getLayer().name = Layer.REGULATORY_PREVIEW.code
+    map.getLayers().push(getLayer())
+
     return () => {
-      if (map) {
-        map.removeLayer(getLayer())
-      }
+      map.removeLayer(getLayer())
     }
   }, [getLayer, map])
 

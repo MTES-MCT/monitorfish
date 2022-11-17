@@ -16,7 +16,7 @@ from src.pipeline.shared_tasks.datagouv import update_resource
 
 
 @task(checkpoint=False)
-def extract_regulations_open_data() -> pd.DataFrame:
+def extract_regulations_open_data() -> gpd.GeoDataFrame:
     return extract(
         "monitorfish_remote",
         "monitorfish/regulations_open_data.sql",
@@ -39,7 +39,7 @@ def get_regulations_for_csv(regulations: gpd.GeoDataFrame) -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def get_regulations_for_geopackage(regulations: gpd.GeoDataFrame) -> pd.DataFrame:
+def get_regulations_for_geopackage(regulations: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
 
     columns = [
         "thematique",
@@ -90,8 +90,6 @@ def get_csv_file_object(df: pd.DataFrame) -> BytesIO:
 def get_geopackage_file_object(gdf: gpd.GeoDataFrame) -> BytesIO:
     """
     Returns a `BytesIO` geopackage file object. from the input `DataFrame`.
-
-    The index is not included in the output csv file.
 
     Args:
         gdf (pd.DataFrame): DataFrame to convert

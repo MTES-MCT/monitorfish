@@ -23,7 +23,7 @@ context('Measurement', () => {
     cy.get('*[data-cy="measurement"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('#root').click(490, 580, { timeout: 10000 })
-    cy.get('*[data-cy="dms-coordinates-input"]').eq(0).should('have.value', '47° 48′ 56″ N 007° 54′ 51″ W')
+    cy.get('*[data-cy="dms-coordinates-input"]').should('have.value', '47° 48′ 56″ N 007° 54′ 51″ W')
     cy.get('*[data-cy="measurement-circle-radius-input"]').type('35', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-add"]').click({ timeout: 10000 })
     cy.wait(100)
@@ -38,7 +38,7 @@ context('Measurement', () => {
     // When
     cy.get('*[data-cy="measurement"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="dms-coordinates-input"]').eq(0).type('470123N0070123W', { timeout: 10000 })
+    cy.get('*[data-cy="dms-coordinates-input"]').type('470123N0070123W', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-radius-input"]').type('47', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-add"]').click({ timeout: 10000 })
     cy.wait(100)
@@ -73,9 +73,10 @@ context('Measurement', () => {
 
     cy.get('*[data-cy="measurement"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
-      .eq(1)
-      .should('have.value', '__° __′ __″ _ ___° __′ __″ _')
+    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 }).should(
+      'have.value',
+      '__° __′ __″ _ ___° __′ __″ _'
+    )
     cy.get('#root').click(690, 680, { timeout: 10000 })
     cy.get('#root').click(750, 785, { timeout: 10000 })
     cy.get('*[data-cy="measurement-value"]').should('have.length', 2)

@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals'
+
 import { getCoordinates } from './coordinates'
 import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map'
 
@@ -34,7 +36,11 @@ describe('coordinates', () => {
 
   it('getCoordinates Should get DD coordinates for an East longitude', async () => {
     // When
-    const coordinates = getCoordinates([881004.7140361258, 6076231.889001969], OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES)
+    const coordinates = getCoordinates(
+      [881004.7140361258, 6076231.889001969],
+      OPENLAYERS_PROJECTION,
+      CoordinatesFormat.DECIMAL_DEGREES
+    )
 
     // Then
     expect(coordinates).not.toBeUndefined()
@@ -44,7 +50,11 @@ describe('coordinates', () => {
 
   it('getCoordinates Should get DD coordinates for a West longitude', async () => {
     // When
-    const coordinates = getCoordinates([-881004.7140361258, 6076231.889001969], OPENLAYERS_PROJECTION, CoordinatesFormat.DECIMAL_DEGREES)
+    const coordinates = getCoordinates(
+      [-881004.7140361258, 6076231.889001969],
+      OPENLAYERS_PROJECTION,
+      CoordinatesFormat.DECIMAL_DEGREES
+    )
 
     // Then
     expect(coordinates).not.toBeUndefined()
@@ -64,7 +74,11 @@ describe('coordinates', () => {
 
   it('getCoordinates Should get DMD with coordinates for a dummy lon/lat with seconds under 100', async () => {
     // When
-    const coordinates = getCoordinates([48.883917, -5.563333], WSG84_PROJECTION, CoordinatesFormat.DEGREES_MINUTES_DECIMALS)
+    const coordinates = getCoordinates(
+      [48.883917, -5.563333],
+      WSG84_PROJECTION,
+      CoordinatesFormat.DEGREES_MINUTES_DECIMALS
+    )
 
     // Then
     expect(coordinates).not.toBeUndefined()

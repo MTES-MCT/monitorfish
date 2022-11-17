@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { getLocalStorageState } from '../../utils'
+import { isNumeric } from '../../utils/isNumeric'
 
 const savedMapExtentLocalStorageKey = 'mapExtent'
 const savedMapViewLocalStorageKey = 'mapView'
@@ -36,7 +37,7 @@ const MapHistory = ({ map, setShouldUpdateView, shouldUpdateView, historyMoveTri
         if (window.location.hash !== '') {
           const hash = window.location.hash.replace('@', '').replace('#', '')
           const viewParts = hash.split(',')
-          if (viewParts.length === 3 && !Number.isNaN(viewParts[0]) && !Number.isNaN(viewParts[1]) && !Number.isNaN(viewParts[2])) {
+          if (viewParts.length === 3 && isNumeric(viewParts[0]) && isNumeric(viewParts[1]) && isNumeric(viewParts[2])) {
             map.getView().setCenter([parseFloat(viewParts[0]), parseFloat(viewParts[1])])
             map.getView().setZoom(parseFloat(viewParts[2]))
           }

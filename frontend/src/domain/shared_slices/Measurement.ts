@@ -8,7 +8,10 @@ const measurementsLocalStorageKey = 'measurements'
 
 export type MeasurementState = {
   // TODO Type this prop.
-  circleMeasurementInDrawing: null
+  circleMeasurementInDrawing: {
+    coordinates: number[]
+    measurement: any
+  } | null
   // TODO Type this prop.
   circleMeasurementToAdd: null
   measurementTypeToAdd: MeasurementType | null

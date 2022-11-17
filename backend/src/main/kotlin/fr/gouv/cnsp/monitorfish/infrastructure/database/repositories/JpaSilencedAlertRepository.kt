@@ -18,11 +18,10 @@ class JpaSilencedAlertRepository(
     override fun save(
         alert: PendingAlert,
         silencedBeforeDate: ZonedDateTime,
-        silencedAfterDate: ZonedDateTime?,
         isValidated: Boolean
     ): SilencedAlert {
         return dbSilencedAlertRepository.save(
-            SilencedAlertEntity.fromPendingAlert(mapper, alert, silencedBeforeDate, silencedAfterDate, isValidated)
+            SilencedAlertEntity.fromPendingAlert(mapper, alert, silencedBeforeDate, isValidated)
         ).toSilencedAlert(mapper)
     }
 

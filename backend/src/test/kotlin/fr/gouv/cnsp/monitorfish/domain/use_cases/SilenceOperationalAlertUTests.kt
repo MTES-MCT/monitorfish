@@ -62,7 +62,7 @@ class SilenceOperationalAlertUTests {
             false
         )
         argumentCaptor<ZonedDateTime>().apply {
-            verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), anyOrNull(), any())
+            verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), any())
 
             assertThat(allValues.first().toString().split("T")[0])
                 .isEqualTo(ZonedDateTime.now().plusDays(1).toString().split("T")[0])
@@ -92,19 +92,16 @@ class SilenceOperationalAlertUTests {
         ).execute(
             666,
             SilenceAlertPeriod.CUSTOM,
-            ZonedDateTime.now().plusDays(2),
             ZonedDateTime.now().plusDays(26)
         )
 
         // Then
         Mockito.verify(pendingAlertRepository).delete(eq(666))
         argumentCaptor<ZonedDateTime>().apply {
-            verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), capture(), any())
+            verify(silencedAlertRepository, times(1)).save(eq(pendingAlert), capture(), any())
 
             assertThat(allValues.first().toString().split("T")[0])
                 .isEqualTo(ZonedDateTime.now().plusDays(26).toString().split("T")[0])
-            assertThat(allValues.last().toString().split("T")[0])
-                .isEqualTo(ZonedDateTime.now().plusDays(2).toString().split("T")[0])
         }
     }
 
@@ -132,7 +129,6 @@ class SilenceOperationalAlertUTests {
             ).execute(
                 666,
                 SilenceAlertPeriod.CUSTOM,
-                ZonedDateTime.now().plusDays(2),
                 null
             )
         }

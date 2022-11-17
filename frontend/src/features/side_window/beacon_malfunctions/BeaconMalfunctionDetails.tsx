@@ -21,7 +21,7 @@ import type { BeaconMalfunction, BeaconMalfunctionResumeAndDetails } from '../..
 
 export type BeaconMalfunctionDetailsProps = {
   beaconMalfunctionWithDetails: BeaconMalfunctionResumeAndDetails
-  updateVesselStatus: (beaconMalfunction: BeaconMalfunction, status: any) => void
+  updateVesselStatus: (beaconMalfunction: BeaconMalfunction | undefined, status: any) => void
 }
 export function BeaconMalfunctionDetails({
   beaconMalfunctionWithDetails,
@@ -111,6 +111,7 @@ export function BeaconMalfunctionDetails({
                 beaconMalfunction={beaconMalfunction}
                 domRef={vesselStatusRef}
                 isAbsolute
+                isCleanable={false}
                 updateVesselStatus={updateVesselStatus}
                 vesselStatus={vesselStatus}
               />

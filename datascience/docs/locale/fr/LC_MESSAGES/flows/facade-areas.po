@@ -1,0 +1,35 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: 2022-11-16 16:49+0000\n"
+"Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../source/flows/facade-areas.rst:3 5408c35f64db4d2bbd1b26c801a8e556
+msgid "Facade areas"
+msgstr ""
+
+#: ../source/flows/facade-areas.rst:5 00a70e8cb6f64dd1b05beb3c31e630f2
+msgid ""
+"The ``Facade areas`` flow extracts facade areas (NAMO, MEMN...) from the "
+"CROSSA database and loads it to the ``facade_areas_subdivided`` table of the"
+" Monitorfish database."
+msgstr ""
+
+#: ../source/flows/facade-areas.rst:8 da9294a538864509a4b781f85133ee5b
+msgid ""
+"It is run manually when necessary, in order to sync the Monitorfish database"
+" with the CROSSA database after an update."
+msgstr ""

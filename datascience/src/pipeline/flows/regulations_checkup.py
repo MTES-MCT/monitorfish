@@ -80,7 +80,7 @@ def extract_monitorfish_regulations() -> pd.DataFrame:
     Output columns are `law_type`, `topic`, `zone`, `url` and `reference`.
 
     Regulatory zones without any regulatory reference are present in the output as a
-    line with `None`s as `url` and `reference` values.
+    line with `None` as `url` and `reference` values.
 
     Returns:
         pd.DataFrame: DataFrame of regulatory references

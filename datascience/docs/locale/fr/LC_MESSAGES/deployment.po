@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-26 11:42+0200\n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
 "Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
@@ -19,56 +19,57 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: ../source/deployment.rst:3 a469ee8bd44b430d964d687568903d48
-msgid "Deployment"
-msgstr "Déploiement"
+#: ../source/deployment.rst:3 1799159a19ca44de97cf4a3d9f8f9ccd
+msgid "Deployment & Administration"
+msgstr ""
 
-#: ../source/deployment.rst:6 41c832a7029b4eb8a1fcc3c0cc969807
+#: ../source/deployment.rst:8 41c832a7029b4eb8a1fcc3c0cc969807
 msgid "Prerequisites"
 msgstr "Prérequis"
 
-#: ../source/deployment.rst:9 5b2cb8bd00334d3c84adad01d9a84912
+#: ../source/deployment.rst:11 5b2cb8bd00334d3c84adad01d9a84912
 msgid "Dependencies"
 msgstr "Dépendances"
 
-#: ../source/deployment.rst:11 bd3c0f6601f246428a203541ec87613d
+#: ../source/deployment.rst:13 bd3c0f6601f246428a203541ec87613d
 msgid ""
 "The following dependencies must be installed on the production machine :"
 msgstr ""
 "Les dépendances suivantes doivent être installées sur la machine de "
 "production "
 
-#: ../source/deployment.rst:13 8f2e4d7928f345d6a846c34eb0674d32
+#: ../source/deployment.rst:15 8f2e4d7928f345d6a846c34eb0674d32
 msgid "`git <https://git-scm.com/>`__"
 msgstr "`git <https://git-scm.com/>`__"
 
-#: ../source/deployment.rst:14 a6dec34cfe8e494986fb622085c3e84b
+#: ../source/deployment.rst:16 a6dec34cfe8e494986fb622085c3e84b
 msgid "`docker <https://docs.docker.com/get-docker/>`__"
 msgstr "`docker <https://docs.docker.com/get-docker/>`__"
 
-#: ../source/deployment.rst:15 364ecde2fc934fb5876bf90074338a0a
+#: ../source/deployment.rst:17 364ecde2fc934fb5876bf90074338a0a
 msgid "`make <https://www.gnu.org/software/make/>`__"
 msgstr "`make <https://www.gnu.org/software/make/>`__"
 
-#: ../source/deployment.rst:18 bced2dbb027e4568bbfce515a0e81ea8
+#: ../source/deployment.rst:20 ../source/deployment.rst:101
+#: bced2dbb027e4568bbfce515a0e81ea8 f9bd48862f874803b10b109da49e0bfd
 msgid "Configuration"
 msgstr "Configuration"
 
-#: ../source/deployment.rst:21 7f33e7db223b46c89fa67fa7a39c7955
+#: ../source/deployment.rst:23 7f33e7db223b46c89fa67fa7a39c7955
 msgid "Cloning the repository"
 msgstr "Cloner le dépôt"
 
-#: ../source/deployment.rst:23 0b370f92fbad4ea9b0f859a828efeae0
+#: ../source/deployment.rst:25 0b370f92fbad4ea9b0f859a828efeae0
 msgid "Clone the repo with :"
 msgstr "Clonez le dépôt avec :"
 
-#: ../source/deployment.rst:32 a861d84c16f44946b0a774cf863ef6c3
+#: ../source/deployment.rst:34 a861d84c16f44946b0a774cf863ef6c3
 msgid "Environment variables"
 msgstr "Variables d'environnement"
 
-#: ../source/deployment.rst:34 5430e26a5386428d83a83d6c8f38aaba
+#: ../source/deployment.rst:36 5430e26a5386428d83a83d6c8f38aaba
 msgid ""
 "A ``.env`` file must be created in the ``datascience`` folder, with all the "
 "variables listed in ``.env.template`` filled in."
@@ -76,7 +77,7 @@ msgstr ""
 "Un fichier ``.env`` doit être créé dans le dossier ``datascience``, avec "
 "toutes les variables listées dans ``.env.template`` remplies."
 
-#: ../source/deployment.rst:35 0029cdb020184b84995479bc4fb75ec1
+#: ../source/deployment.rst:37 0029cdb020184b84995479bc4fb75ec1
 msgid ""
 "Set the ``MONITORFISH_VERSION`` environment variable. This will determine "
 "which docker images to pull when running ```make`` commands."
@@ -85,11 +86,11 @@ msgstr ""
 "déterminera les images docker à extraire lors de l'exécution des commandes "
 "``make``"
 
-#: ../source/deployment.rst:38 95aa81e03b7d48cea6c8a329d764b287
+#: ../source/deployment.rst:40 95aa81e03b7d48cea6c8a329d764b287
 msgid "ERS files"
 msgstr "Fichiers ERS"
 
-#: ../source/deployment.rst:40 f8448faf88f4443f8cde74701a514b8c
+#: ../source/deployment.rst:42 f8448faf88f4443f8cde74701a514b8c
 msgid ""
 "ERS raw xml files are ingested by the ERS flow from the configured "
 "``ERS_FILES_LOCATION`` in ``datascience/config.py``. In order to make ERS "
@@ -101,11 +102,11 @@ msgstr ""
 "Afin de rendre les données ERS disponibles pour Monitorfish, les fichiers "
 "ERS doivent donc être déposés dans ce répertoire."
 
-#: ../source/deployment.rst:44 48ca5b6874074d668273b897c98f00d9
+#: ../source/deployment.rst:46 48ca5b6874074d668273b897c98f00d9
 msgid "Running the database service"
 msgstr "Exécution de la base de données"
 
-#: ../source/deployment.rst:46 16399d29543f49e485a12ffbe2202c99
+#: ../source/deployment.rst:48 16399d29543f49e485a12ffbe2202c99
 msgid ""
 "The Monitorfish database must be running for data processing operations to "
 "be carried out. For this, run the backend service first."
@@ -114,23 +115,23 @@ msgstr ""
 "opérations de traitement des données puissent être effectuées. Pour cela, "
 "lancez d'abord le service backend."
 
-#: ../source/deployment.rst:49 9efa4a35fa004fcaaadc5ebea28381d3
+#: ../source/deployment.rst:54 9efa4a35fa004fcaaadc5ebea28381d3
 msgid "Running the orchestration service"
 msgstr "Exécution de l'orchestrateur"
 
-#: ../source/deployment.rst:52 8175acad2ca24104a4f91b48ac8e0cda
+#: ../source/deployment.rst:57 8175acad2ca24104a4f91b48ac8e0cda
 msgid "Starting the Prefect server orchestrator"
 msgstr "Démarrer l'orchestrateur Prefect server"
 
-#: ../source/deployment.rst:54 d869a54a95f942e8babd551d9a82167f
+#: ../source/deployment.rst:59 d869a54a95f942e8babd551d9a82167f
 msgid "The orchestration service can be started with :"
 msgstr "L'orchestrateur est lancé par la commande suivante :"
 
-#: ../source/deployment.rst:62 da2b91c4c70e4a0da59ca78e96e2f8e3
+#: ../source/deployment.rst:67 da2b91c4c70e4a0da59ca78e96e2f8e3
 msgid "Automating log cleaning"
 msgstr "Automatiser le nettoyage des logs"
 
-#: ../source/deployment.rst:64 9913e1374caf4d55a94d65f94afd7fd7
+#: ../source/deployment.rst:69 9913e1374caf4d55a94d65f94afd7fd7
 msgid ""
 "Logs of past flow runs are stored in a Postgres database that is part of the"
 " prefect server architecture. In order to keep the size of this database "
@@ -142,7 +143,7 @@ msgstr ""
 "nécessaire de mettre en place une tâche cron pour supprimer les anciens "
 "logs."
 
-#: ../source/deployment.rst:67 4bc17c3b5ede41e2b145ad0922244c80
+#: ../source/deployment.rst:72 4bc17c3b5ede41e2b145ad0922244c80
 msgid ""
 "The Prefect server database runs in a Docker container. The script "
 "``infra/remote/data-pipeline/truncate-old-prefect-logs.sh`` goes into that "
@@ -154,7 +155,7 @@ msgstr ""
 " dans ce conteneur avec ``docker exec`` et exécute une requête ``DELETE`` "
 "pour supprimer les anciens flow_runs."
 
-#: ../source/deployment.rst:69 0d50aaed78db4a8bbf534be32c1bab43
+#: ../source/deployment.rst:74 0d50aaed78db4a8bbf534be32c1bab43
 msgid ""
 "This query can be run daily by setting up a cron job, for instance by adding"
 " a line to the crontab file :"
@@ -162,7 +163,7 @@ msgstr ""
 "Cette requête peut être exécutée quotidiennement en configurant une tâche "
 "cron, par exemple en ajoutant une ligne au fichier crontab :"
 
-#: ../source/deployment.rst:75 df899e07c8694ecc903cd2393d79b184
+#: ../source/deployment.rst:80 df899e07c8694ecc903cd2393d79b184
 msgid ""
 "then add the line in ``infra/remote/data-pipeline/crontab.txt`` (after "
 "updating the scripts and logs locations as needed) in the crontab file."
@@ -171,11 +172,125 @@ msgstr ""
 " avoir mis à jour les emplacements des scripts et des logs si nécessaire) "
 "dans le fichier crontab."
 
-#: ../source/deployment.rst:78 eebc600719524e148610174ead696bea
+#: ../source/deployment.rst:85 eebc600719524e148610174ead696bea
 msgid "Running the execution service"
 msgstr "Exécution du service de traitement de données"
 
-#: ../source/deployment.rst:80 7c58a51c30f24c1bb222694dc6addc86
+#: ../source/deployment.rst:87 7c58a51c30f24c1bb222694dc6addc86
 msgid "The execution service can be started with :"
 msgstr ""
 "Le service de traitement de données est lancé par la commande suivante :"
+
+#: ../source/deployment.rst:96 901505e1368f47bab235ecffb9382071
+msgid "Database backup & restore"
+msgstr ""
+
+#: ../source/deployment.rst:98 2a18b79c6b2345fa91c0aa4ba85f3dc8
+msgid ""
+"This section explains how to perform and automate full database backups."
+msgstr ""
+
+#: ../source/deployment.rst:103 e7bbb6ccd19b4183a75b02d0ee66b890
+msgid "Create a backups folder on the host machine."
+msgstr ""
+
+#: ../source/deployment.rst:104 44a1c6e11f254bae8c38d79162c00eb0
+msgid ""
+"Create ``MONITORFISH_BACKUPS_FOLDER`` entry with the full path to the "
+"backups folder in ~/.monitorfish - e.g.g. ``export "
+"MONITORFISH_BACKUPS_FOLDER=\"/backups/\"``."
+msgstr ""
+
+#: ../source/deployment.rst:105 2392dbbe74144cc79d5a4cfadcf6fea9
+msgid ""
+"Create ``MONITORFISH_LOGS_AND_BACKUPS_GID`` entry in ~/.monitorfish with the"
+" group that owns the backups folder (the database container with be run with"
+" this group so it can write to the backups folder on the host) - e.g.g. "
+"``export MONITORFISH_LOGS_AND_BACKUPS_GID=\"125\"``."
+msgstr ""
+
+#: ../source/deployment.rst:106 127af2c7661f42f99c57df931333045d
+msgid ""
+"Make a copy of ``infra/remote/backup/pg_backup.config.template`` and rename "
+"it ``pg_backup.config``."
+msgstr ""
+
+#: ../source/deployment.rst:107 fe237e7608f8419bbf6b9397740bb392
+msgid "Optionnally, change the backup parameters in ``pg_backup.config``."
+msgstr ""
+
+#: ../source/deployment.rst:110 31918af2de644337929880d623221fe1
+msgid "Backup"
+msgstr ""
+
+#: ../source/deployment.rst:113 3ad354ac666f4e2ea0f7f0a3138a9e89
+msgid "Running the backup script"
+msgstr ""
+
+#: ../source/deployment.rst:115 bd6bc840dca844afb1b6604a71e6ca8b
+msgid ""
+"Once the configuration step is done, a backup can be made by running the "
+"script at ``infra/remote/backup/pg_backup_rotated.sh``."
+msgstr ""
+
+#: ../source/deployment.rst:117 f2bcba08c8ee4162b7d87abd0735c879
+msgid "This script :"
+msgstr ""
+
+#: ../source/deployment.rst:119 87b1828509fb4a55b6018a7e2133232c
+msgid ""
+"``docker execs`` into the database container and makes a full database "
+"backup using ``pg_dump``"
+msgstr ""
+
+#: ../source/deployment.rst:120 52ee75eae84345339f435bc4d16ed50b
+msgid "outputs :"
+msgstr ""
+
+#: ../source/deployment.rst:122 f9dd66d15daa4cc78015c442d046f393
+msgid ""
+"a single ``globals.sql.gz`` file that contains database globals (roles, "
+"tablespaces)"
+msgstr ""
+
+#: ../source/deployment.rst:123 6f1a88287b0145e2a4bab31b1152171c
+msgid ""
+"a ``*.custom`` file (full database dump in compressed `custom` postgres "
+"format) for each database on the postgres cluster"
+msgstr ""
+
+#: ../source/deployment.rst:124 b5ead73c9f7c4911921f2b5e35257048
+msgid ""
+"stores these files on the host machine, in a subfolder of the backups "
+"folder, named with the date of the backup"
+msgstr ""
+
+#: ../source/deployment.rst:125 5abf630c307345b0805d7b60111cbba6
+msgid ""
+"deletes old backups in rotation, keeping daily and weekly backups for as "
+"long as specified in the ``pg_backup.config`` file"
+msgstr ""
+
+#: ../source/deployment.rst:128 8f1952d3418f4caba6f87cab6bcbdb27
+msgid "Automating backups"
+msgstr ""
+
+#: ../source/deployment.rst:130 494555a19dbe4ef69f10653be1cdd210
+msgid ""
+"To automate backups, add the line ``infra/remote/backup/crontab.txt`` to the"
+" crontab file :"
+msgstr ""
+
+#: ../source/deployment.rst:136 710a8417e03e4ee989e086f89bdfc227
+msgid "We recommend running the backup script daily."
+msgstr ""
+
+#: ../source/deployment.rst:139 ba0d91a650b44cfb9321f64899894ceb
+msgid "Restore"
+msgstr ""
+
+#: ../source/deployment.rst:141 22b0f83eb6344b1a85edc492c2391dc8
+msgid ""
+"To restore from a backup, see `TimescaleDB documentation <https://legacy-"
+"docs.timescale.com/v1.7/using-timescaledb/backup#pg_dump-pg_restore>`_."
+msgstr ""

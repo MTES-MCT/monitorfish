@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,10 +23,10 @@ msgstr ""
 
 #: ../source/flows/ports.rst:5
 #: a619af8f5b194251bf66017a9aa710b2
-msgid "The ``ports`` flow extracts the list of ports from `data.gouv.fr <https://www.data.gouv.fr/fr/datasets/liste-des-ports-du-systeme-ers-avec-donnees-de-position/>`__. and loads it to the ``ports`` table of the Monitorfish database."
+msgid "The ``ports`` flow extracts the list of ports from the open dataset on `data.gouv.fr <https://www.data.gouv.fr/fr/datasets/liste-des-ports-du-systeme-ers-avec-donnees-de-position/>`__, which is managed by the development team, and loads it to the ``ports`` table of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows/ports.rst:9
-#: 02b81b40dd574e27bb72c36162d31495
-msgid "It is not scheduled to run and it only required to run when the list of ports has been manually updated on data.gouv.fr by the development team."
+#: 2e1050057b7442d99640ffc406597019
+msgid "It is run manually when needed in order to sync the Monitorfish database with the open dataset."
 msgstr ""

@@ -27,7 +27,7 @@ def extract_satellite_operators():
 @task(checkpoint=False)
 def transform_beacons(beacons: pd.DataFrame) -> pd.DataFrame:
     """Maps Posedion beacon status to Monitorfish `BeaconStatus` and maps the
-    1 and 0 `int`s and `np.nan` values in `is_coastal` to `True`, `False` and `None`
+    1, 0 and `np.nan` values in `is_coastal` to `True`, `False` and `None`
     respectively.
 
     Args:

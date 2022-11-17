@@ -464,7 +464,7 @@ def merge(
     last_controls: pd.DataFrame,
     control_statistics: pd.DataFrame,
 ) -> pd.DataFrame:
-    """Merge of ``pd.DataFrame``s to produce output of the flow. The join is performed
+    """Merge of ``pd.DataFrame`` to produce output of the flow. The join is performed
     on ``vessel_id``.
 
     Args:
@@ -475,7 +475,7 @@ def merge(
         last_controls (pd.DataFrame): output of ``get_last_controls`` task
 
     Returns:
-        pd.DataFrame: join of the 3 input ``pd.DataFrame``s
+        pd.DataFrame: join of the 3 input ``pd.DataFrame``
     """
 
     res = pd.merge(

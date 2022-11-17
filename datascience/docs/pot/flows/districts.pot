@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/districts.rst:3
+#: 066c8699c54742179e361bf2b37c0673
+msgid "Districts"
+msgstr ""
+
+#: ../source/flows/districts.rst:5
+#: 3547034c7452442593e917a3a558e528
+msgid "The ``Districts`` flow extracts the districts repository data from a hard coded csv file stored in ``datascience/src/pipeline/data/`` and loads it to the ``districts`` table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/districts.rst:9
+#: 4e9450c1f5444c38ba6195184c8fe37d
+msgid "It is run manually when needed (when the csv file is updated)."
+msgstr ""

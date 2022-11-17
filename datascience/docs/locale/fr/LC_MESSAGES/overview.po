@@ -4,49 +4,49 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Vincent Chéry <vincent.chery@m4x.org>, 2021
+# Vincent Chéry <vincent.chery@m4x.org>, 2022
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:06+0200\n"
+"POT-Creation-Date: 2022-11-16 17:53+0100\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
-"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2022\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: ../source/overview.rst:3 ed0bcc4763c64932beee1d0e79695a31
+#: ../source/overview.rst:3 7612e6af1f68435f90ff892b5c9b1408
 msgid "Overview"
 msgstr "En bref"
 
-#: ../source/overview.rst:5 452dca6618264ba3b45c6706c09df7bc
+#: ../source/overview.rst:5 fca9bdd1bd2746c4ab88d61280d99655
 msgid ""
 "**Monitorfish** is a **fishing vessels monitoring software** developped by "
 "the French adminitration for the french **Fishing Monitoring Center (FMC)** "
-"- the `Centre National de Surveillance des Pêches <https://www.mer.gouv.fr"
-"/la-police-des-peches>`_ - and its partners."
+"- the `Centre National de Surveillance des Pêches "
+"<https://www.mer.gouv.fr/la-police-des-peches>`_ - and its partners."
 msgstr ""
 "**Monitorfish** est un **logiciel de surveillance des navires de pêche** "
 "développé par l'administration française pour le **Fishing Monitoring Center"
 " (FMC)** français - le `Centre National de Surveillance des Pêches "
 "<https://www.mer.gouv.fr/la-police-des-peches>`_ - et ses partenaires."
 
-#: ../source/overview.rst:8 b7b982691506469da0a650b6527e8660
+#: ../source/overview.rst:8 86627f9ccd33486fb9ac972d11b205f5
 msgid "Features"
 msgstr "Fonctionnalités"
 
-#: ../source/overview.rst:10 4fa402e3b11c4a7eaf1a68cd5124780c
+#: ../source/overview.rst:10 864a990a552e4473921cdc04eb4581e3
 msgid "Visualization of fishing vessels' real time **positions** (VMS)"
 msgstr ""
 "Visualisation des **positions** des navires de pêche en temps réel (VMS)"
 
-#: ../source/overview.rst:11 8f60cb8374ee49c58d7d392d694271d9
+#: ../source/overview.rst:11 c9bd804ca5d54cbb9189d36283743c09
 msgid ""
 "Visualization of fishing vessels' declarative **fishing activity** data "
 "(ERS)"
@@ -54,14 +54,14 @@ msgstr ""
 "Visualisation des données déclaratives de **l'activité de pêche** des "
 "navires de pêche (ERS)"
 
-#: ../source/overview.rst:12 d2616e30901641d68d37b1086e2cf974
+#: ../source/overview.rst:12 6c40db0b976d44ad96b453d409c33c8f
 msgid ""
 "Visualization of fishing vessels' historical **controls** and **violations**"
 msgstr ""
 "Visualisation de l'historique des **contrôles** et des **infractions** des "
 "navires de pêche"
 
-#: ../source/overview.rst:13 8096170bb0d74ab2b0b23b97c91955e6
+#: ../source/overview.rst:13 59134d4acd7844deb3eb6a50be765722
 msgid ""
 "Visualization of :doc:`regulated fishing areas <regulation>` of the french "
 "and european regulations"
@@ -69,7 +69,7 @@ msgstr ""
 "Visualisation des :doc:`zones de pêche réglementées <regulation>` de la "
 "réglementation française et européenn"
 
-#: ../source/overview.rst:14 d9d7395f4d41462f829b2bf85c24d1bf
+#: ../source/overview.rst:14 960a263768504b9082c1cc599b7b8d74
 msgid ""
 "Computation of fishing vessels' real time belonging to :doc:`fleet segments "
 "<fleet-segments>` as defined by the `European Fishing Control Agency (EFCA) "
@@ -84,7 +84,11 @@ msgstr ""
 "<https://www.efca.europa.eu/en/content/guidelines-risk-assessment-"
 "methodology-fisheries-compliance>`_."
 
-#: ../source/overview.rst:15 0d752fc7b10c4f83880576ebae8cbcb1
+#: ../source/overview.rst:15 88e31bb1327e426e90b444fc46c80ecb
+msgid "Real time fraud detection :doc:`alerts <alerts>`"
+msgstr ":doc:`Alertes <alerts>` de détection de fraude en temps réel"
+
+#: ../source/overview.rst:16 fb5d3b0cbbc04d308db4b77a1a175719
 msgid ""
 "Computation of fishing vessels' real time :doc:`risk factor <risk-factor>`, "
 "a metric developed in the context of the Monitorfish project that aims to "
@@ -96,11 +100,11 @@ msgstr ""
 "vise à aider les agents du FMC à **prioriser les navires à contrôler** sur "
 "la base des éléments ci-dessus."
 
-#: ../source/overview.rst:16 095c8180e84a4ebbb99873fd03cd4141
+#: ../source/overview.rst:17 a90ab40b3df245d0b26f5cf24ff063aa
 msgid "Administration panel that allows admins to"
 msgstr "Interface d'administration qui permet aux administrateurs de"
 
-#: ../source/overview.rst:18 9d0d451bd85949d38a4e22bcb79c0bb5
+#: ../source/overview.rst:19 031f5c87b5ea45528fc4a63660890282
 msgid ""
 "Update regulation data : update authorized fishing areas / periods / "
 "gears..."
@@ -108,7 +112,12 @@ msgstr ""
 "Mettre à jour les données réglementaires : mise à jour des zones / périodes "
 "/ engins de pêche autorisés..."
 
-#: ../source/overview.rst:19 c3be377eb828405bb29ed151ce860d58
+#: ../source/overview.rst:20 62ce6af5b6f64f55a79ee9f375109c69
+msgid "Update the definitions of :doc:`fleet segments <fleet-segments>`"
+msgstr ""
+"Mettre à jour les définitions de :doc:`segments de flotte <fleet-segments>`"
+
+#: ../source/overview.rst:21 fcdcc0b8e0de4663ba09b981c0c2ea99
 msgid ""
 ":doc:`Stear control priorities <control-priority-steering>` by dynamically "
 "adjuting the control priority level of each fleet segment"
@@ -117,6 +126,6 @@ msgstr ""
 "ajustant dynamiquement le niveau de priorité de contrôle de chaque segment "
 "de flotte"
 
-#: ../source/overview.rst:23 c3cad58ec2f540a8bd2d7655eea42fd3
+#: ../source/overview.rst:26 52de09b54dc94f72af0358495dc3f356
 msgid "Demo"
 msgstr "Démo"

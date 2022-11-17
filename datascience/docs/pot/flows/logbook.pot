@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/logbook.rst:3
+#: 686d627bd41b49a68fa7aa7373ad8cdc
+msgid "Logbook"
+msgstr ""
+
+#: ../source/flows/logbook.rst:5
+#: f145b9030cd545dd8d835453d5b730bf
+msgid "The ``Logbook`` flow processes logbook xml raw messages and inserts the parsed data into the ``logbook_reports`` and ``logbook_raw_messages`` tables of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/logbook.rst:8
+#: f7c4dafbd1454f3ab71fb9edf5cb2905
+msgid "ERS and FLUX formats are supported."
+msgstr ""
+
+#: ../source/flows/logbook.rst:10
+#: acc3a6d6c89c4f80b9125cc49a351a0a
+msgid "It is scheduled to run every minute."
+msgstr ""

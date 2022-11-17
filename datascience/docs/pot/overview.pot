@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 17:14+0200\n"
+"POT-Creation-Date: 2022-11-16 17:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,26 +57,36 @@ msgid "Computation of fishing vessels' real time belonging to :doc:`fleet segmen
 msgstr ""
 
 #: ../source/overview.rst:15
+#: 88e31bb1327e426e90b444fc46c80ecb
+msgid "Real time fraud detection :doc:`alerts <alerts>`"
+msgstr ""
+
+#: ../source/overview.rst:16
 #: fb5d3b0cbbc04d308db4b77a1a175719
 msgid "Computation of fishing vessels' real time :doc:`risk factor <risk-factor>`, a metric developed in the context of the Monitorfish project that aims to help FMC agents **prioritize vessels to control** based on all the above elements"
 msgstr ""
 
-#: ../source/overview.rst:16
+#: ../source/overview.rst:17
 #: a90ab40b3df245d0b26f5cf24ff063aa
 msgid "Administration panel that allows admins to"
 msgstr ""
 
-#: ../source/overview.rst:18
+#: ../source/overview.rst:19
 #: 031f5c87b5ea45528fc4a63660890282
 msgid "Update regulation data : update authorized fishing areas / periods / gears..."
 msgstr ""
 
-#: ../source/overview.rst:19
+#: ../source/overview.rst:20
+#: 62ce6af5b6f64f55a79ee9f375109c69
+msgid "Update the definitions of :doc:`fleet segments <fleet-segments>`"
+msgstr ""
+
+#: ../source/overview.rst:21
 #: fcdcc0b8e0de4663ba09b981c0c2ea99
 msgid ":doc:`Stear control priorities <control-priority-steering>` by dynamically adjuting the control priority level of each fleet segment"
 msgstr ""
 
-#: ../source/overview.rst:23
+#: ../source/overview.rst:26
 #: 52de09b54dc94f72af0358495dc3f356
 msgid "Demo"
 msgstr ""

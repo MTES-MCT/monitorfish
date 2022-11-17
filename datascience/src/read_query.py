@@ -21,38 +21,44 @@ def read_saved_query(
     **kwargs,
 ) -> pd.DataFrame:
     """Run saved SQLquery on a database. Supported databases :
-    - 'ocan' : OCAN database
-    - 'fmc': FMC database
-    - 'monitorfish_remote': Monitorfish database
-    - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
-    - 'cacem_local' : CACEM PostGIS database hosted in CNSP
+
+      - 'ocan' : OCAN database
+      - 'fmc': FMC database
+      - 'monitorfish_remote': Monitorfish database
+      - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+      - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
     Database credentials must be present in the environement.
 
     Args:
-        db (str): Database name. Possible values :
-            'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'
+        db (str): Database name. Possible values : 'ocan', 'fmc', 'monitorfish_remote',
+          'monitorfish_local'
         sql_filepath (str): path to .sql file, starting from the saved queries folder.
-            example : "ocan/nav_fr_peche.sql"
+          example : 'ocan/nav_fr_peche.sql'
         parse_dates (Union[list, dict, None], optional):
-            - List of column names to parse as dates.
-            - Dict of ``{column_name: format string}`` where format string is
+
+          - List of column names to parse as dates.
+          - Dict of ``{column_name: format string}`` where format string is
             strftime compatible in case of parsing string times or is one of
             (D, s, ns, ms, us) in case of parsing integer timestamps.
-            - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
+          - Dict of ``{column_name: arg dict}``, where the arg dict corresponds
             to the keyword arguments of :func:`pandas.to_datetime`
+
         params (Union[dict, None], optional): Parameters to pass to execute method.
-            Defaults to None.
-        backend (str, optional) : 'pandas' to run a SQL query and return a
-            `pandas.DataFrame` or 'geopandas' to run a PostGIS query and return a
-            `geopandas.GeoDataFrame`. Defaults to 'pandas'.
+          Defaults to None.
+        backend (str, optional) :
+
+          - 'pandas' to run a SQL query and return a `pandas.DataFrame`
+          - 'geopandas' to run a PostGIS query and return a `geopandas.GeoDataFrame`.
+
+          Defaults to 'pandas'.
         geom_col (str, optional): column name to convert to shapely geometries when
-            `backend` is 'geopandas'. Ignored when `backend` is 'pandas'. Defaults to
-            'geom'.
+          `backend` is 'geopandas'. Ignored when `backend` is 'pandas'. Defaults to
+          'geom'.
         crs (Union[None, str], optional) : CRS to use for the returned GeoDataFrame;
-            if not set, tries to determine CRS from the SRID associated with the first
-            geometry in the database, and assigns that to all geometries. Ignored when
-            `backend` is 'pandas'. Defaults to None.
+          if not set, tries to determine CRS from the SRID associated with the first
+          geometry in the database, and assigns that to all geometries. Ignored when
+          `backend` is 'pandas'. Defaults to None.
         kwargs : passed to pd.read_sql or gpd.read_postgis
 
     Returns:
@@ -88,32 +94,34 @@ def read_query(
     **kwargs,
 ) -> Union[pd.DataFrame, gpd.GeoDataFrame]:
     """Run SQLquery on a database. Supported databases :
-    - 'ocan' : OCAN database
-    - 'fmc': FMC database
-    - 'monitorfish_remote': Monitorfish database
-    - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
-    - 'cacem_local' : CACEM PostGIS database hosted in CNSP
+
+      - 'ocan' : OCAN database
+      - 'fmc': FMC database
+      - 'monitorfish_remote': Monitorfish database
+      - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+      - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
     Database credentials must be present in the environement.
 
     Args:
         db (str): Database name. Possible values :
-            'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'
+          'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'
         query (str): Query string or SQLAlchemy Selectable
         chunksize (Union[None, str], optional): If specified, return an iterator where
-            `chunksize` is the number of rows to include in each chunk. Defaults to None.
+          `chunksize` is the number of rows to include in each chunk. Defaults to
+          None.
         params (Union[dict, None], optional): Parameters to pass to execute method.
-            Defaults to None.
+          Defaults to None.
         backend (str, optional) : 'pandas' to run a SQL query and return a
-            `pandas.DataFrame` or 'geopandas' to run a PostGIS query and return a
-            `geopandas.GeoDataFrame`. Defaults to 'pandas'.
+          `pandas.DataFrame` or 'geopandas' to run a PostGIS query and return a
+          `geopandas.GeoDataFrame`. Defaults to 'pandas'.
         geom_col (str, optional): column name to convert to shapely geometries when
-            `backend` is 'geopandas'. Ignored when `backend` is 'pandas'. Defaults to
-            'geom'.
+          `backend` is 'geopandas'. Ignored when `backend` is 'pandas'. Defaults to
+          'geom'.
         crs (Union[None, str], optional) : CRS to use for the returned GeoDataFrame;
-            if not set, tries to determine CRS from the SRID associated with the first
-            geometry in the database, and assigns that to all geometries. Ignored when `backend`
-            is 'pandas'. Defaults to None.
+          if not set, tries to determine CRS from the SRID associated with the first
+          geometry in the database, and assigns that to all geometries. Ignored when
+          `backend` is 'pandas'. Defaults to None.
         kwargs : passed to pd.read_sql or gpd.read_postgis
 
     Returns:
@@ -140,15 +148,16 @@ def read_query(
 
 def read_table(db: str, schema: str, table_name: str):
     """Loads database table into pandas Dataframe. Supported databases :
-    - 'ocan' : OCAN database
-    - 'fmc': FMC database
-    - 'monitorfish_remote': Monitorfish database
-    - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
-    - 'cacem_local' : CACEM PostGIS database hosted in CNSP
+
+      - 'ocan' : OCAN database
+      - 'fmc': FMC database
+      - 'monitorfish_remote': Monitorfish database
+      - 'monitorfish_local': Monitorfish PostGIS database hosted in CNSP
+      - 'cacem_local' : CACEM PostGIS database hosted in CNSP
 
     Args:
-        db (str): Database name. Possible values :
-            'ocan', 'fmc', 'monitorfish_remote', 'monitorfish_local'
+        db (str): Database name. Possible values : 'ocan', 'fmc', 'monitorfish_remote',
+          'monitorfish_local'
         schema (str): Schema name
         table_name (str): Table name
 

@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/missing-far-alerts.rst:3
+#: 8be1bc7e8c2f4f399c831b033f6c6cc4
+msgid "Missing FAR alerts"
+msgstr ""
+
+#: ../source/flows/missing-far-alerts.rst:5
+#: f286f434ed014ed582bbb2fc6bedc9fe
+msgid "The ``Missing FAR alerts`` flow detects whether any vessel of more than 12m spent time fishing - that is, whether it emitted VMS data which was classified as fishing activity by the :ref:`enrich positions flow <enrich-positions>` - on the previous day in french waters without sending any FAR logbook report."
+msgstr ""
+
+#: ../source/flows/missing-far-alerts.rst:9
+#: 13cd8e5487664f3da6dcf9c3274230f0
+msgid "The detected vessels are loaded to the ``pending_alerts`` table."
+msgstr ""
+
+#: ../source/flows/missing-far-alerts.rst:11
+#: 3084197719f1433bad91cb2c00368afe
+msgid "It is scheduled to run every day."
+msgstr ""

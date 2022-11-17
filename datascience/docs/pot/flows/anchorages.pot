@@ -1,0 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Vincent Chéry
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-16 17:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/anchorages.rst:3
+#: 15071f48923a41c5bbb64d2e875b6261
+msgid "Anchorages"
+msgstr ""
+
+#: ../source/flows/anchorages.rst:5
+#: a0976e05a607483180339a56b1591fc2
+msgid "The ``Anchorages`` flow extracts anchorage data from the open dataset on `data.gouv.fr <https://www.data.gouv.fr/fr/datasets/traces-geometriques-des-ports-du-systeme-ers/>`__, which is managed by the development team, and loads it to the ``anchorages`` table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/anchorages.rst:9
+#: 568d3a906b244fa8ae8f73bed233ca25
+msgid "It is run manually when needed in order to sync the Monitorfish database with the open dataset."
+msgstr ""

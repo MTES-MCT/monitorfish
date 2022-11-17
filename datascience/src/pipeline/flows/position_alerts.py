@@ -38,12 +38,12 @@ class ZonesTable:
             table (Table): A SQLAchemy `Table`
             geometry_column (str): name of the geometry column
             filter_column (str): name of the column on which to filter (typically the
-              id or unique name of zones)
+            id or unique name of zones)
 
         Raises:
             AssertionError: if `filter_column` is not a column of `table` or
-              `geometry_column` is not a column of `Table` of type
-              `geoalchemy2.Geometry`
+            `geometry_column` is not a column of `Table` of type
+            `geoalchemy2.Geometry`
     """
 
     def __init__(self, table: Table, geometry_column: str, filter_column: str):
@@ -77,7 +77,7 @@ def alert_has_gear_parameters(
 
     Returns:
         bool: `True` if one of the input arguments are non empty lists, `False`
-          otherwise.
+        otherwise.
 
     Raises:
         TypeError: if the input arguments are not lists or `None`.
@@ -108,7 +108,7 @@ def get_alert_type_zones_table(alert_type: str) -> ZonesTable:
         alert_type (str): the type of alert.
 
     Returns:
-        - ZonesTable: table in which to look for the zones for the given alert type.
+        ZonesTable: table in which to look for the zones for the given alert type.
 
     Raises:
         ValueError: if the input `alert_type` does not correspond to one of the

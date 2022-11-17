@@ -27,8 +27,10 @@ export function DDCoordinatesInput({ coordinates, updateCoordinates }: DDCoordin
   useEffect(() => {
     const [nextLatitude, nextLongitude] = coordinates
 
-    setLatitude(nextLatitude)
-    setLongitude(nextLongitude)
+    if (isNumeric(nextLatitude) && isNumeric(nextLongitude)) {
+      setLatitude(nextLatitude)
+      setLongitude(nextLongitude)
+    }
   }, [coordinates])
 
   useEffect(() => {

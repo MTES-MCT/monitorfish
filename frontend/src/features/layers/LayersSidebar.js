@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { ReactComponent as LayersSVG } from '../icons/Couches.svg'
 import RegulatoryLayerSearch from './regulatory/search/RegulatoryLayerSearch'
-import { AdministrativeLayers } from './administrative/AdministrativeLayers'
+import AdministrativeLayers from './administrative/AdministrativeLayers'
 import RegulatoryLayers from './regulatory/RegulatoryLayers'
 import { COLORS } from '../../constants/constants'
 import { closeRegulatoryZoneMetadata } from '../../domain/use_cases/layer/regulation/closeRegulatoryZoneMetadata'

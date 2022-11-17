@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import BaseMap from './BaseMap'
 import { LayerDetailsBox } from './controls/LayerDetailsBox'
@@ -30,8 +29,6 @@ import VesselAlertAndBeaconMalfunctionLayer from '../../layers/VesselAlertAndBea
 import VesselInfractionSuspicionLayer from '../../layers/VesselInfractionSuspicionLayer'
 
 const Map = () => {
-  const isAdmin = useSelector(state => state.global.isAdmin)
-
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [currentFeature, setCurrentFeature] = useState(null)
@@ -81,10 +78,10 @@ const Map = () => {
       <DrawLayer/>
       <VesselEstimatedPositionLayer/>
       <VesselSelectedLayer/>
-      <VesselAlertLayer isAdmin={isAdmin}/>
-      <VesselBeaconMalfunctionLayer isAdmin={isAdmin}/>
-      <VesselAlertAndBeaconMalfunctionLayer isAdmin={isAdmin}/>
-      <VesselInfractionSuspicionLayer isAdmin={isAdmin}/>
+      <VesselAlertLayer/>
+      <VesselBeaconMalfunctionLayer/>
+      <VesselAlertAndBeaconMalfunctionLayer/>
+      <VesselInfractionSuspicionLayer/>
       <VesselCardOverlay feature={currentFeature}/>
       <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
       <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>

@@ -19,9 +19,9 @@ const MapAttributionsBox = () => {
 }
 
 const Wrapper = styled.div`
-  bottom: 8px;
+  bottom: 10px;
   left: .5em;
-  max-width: calc(100% - 1.3em);  
+  max-width: calc(100% - 1.3em);
   background: none;
 `
 
@@ -29,7 +29,7 @@ const Button = styled.button`
   float: left;
   width: 25px !important;
   height: 25px !important;
-  
+
   :hover {
     background: none;
   }
@@ -41,7 +41,7 @@ const ButtonText = styled.span`
 
 const List = styled.ul`
   font-size: 0.9em;
-  background-color: ${COLORS.gainsboro};
+  background-color: ${COLORS.charcoal};
   height: 1.5em;
   border: none;
   border-radius: 0;
@@ -56,7 +56,7 @@ const ListItem = styled.li`
 `
 
 const Link = styled.a`
-  color: ${COLORS.slateGray};
+  color: ${COLORS.lightGray};
 `
 
 export default MapAttributionsBox

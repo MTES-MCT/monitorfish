@@ -5,14 +5,14 @@ import TileWMS from 'ol/source/TileWMS'
 import XYZ from 'ol/source/XYZ'
 import React, { useEffect, useState } from 'react'
 
-import { Layer } from '../domain/entities/layers/constants'
+import { BaseLayers, Layer } from '../domain/entities/layers/constants'
 import { useAppSelector } from '../hooks/useAppSelector'
 
 export type BaseLayerProps = {
   map?: any
 }
 function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
-  let selectedBaseLayer = useAppSelector(state => state.map.selectedBaseLayer)
+  const selectedBaseLayer = useAppSelector(state => state.map.selectedBaseLayer)
 
   const [baseLayersObjects] = useState({
     LIGHT: () =>
@@ -40,28 +40,6 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
         }),
         zIndex: 0
       }),
-
-    SCAN_LITTORAL: () =>
-      new TileLayer({
-        className: Layer.BASE_LAYER.code,
-        source: new TileWMS({
-          params: { LAYERS: 'FDC_GEBCO_PYR-PNG_3857_WMTS', TILED: true },
-          serverType: 'geoserver',
-          // Countries have transparency, so do not fade tiles:
-          transition: 0,
-
-          url: `https://services.data.shom.fr/${process.env.REACT_APP_SHOM_KEY}/wms/r`
-        }),
-        zIndex: 0
-      }),
-    /*
-    DARK: () => new MapboxVector({
-      styleUrl: 'mapbox://styles/monitorfish/cklv7vc0f1ej817o5ivmkjmrs',
-      accessToken: process.env.REACT_APP_MAPBOX_KEY,
-      className: Layers.BASE_LAYER.code,
-      zIndex: 0
-    }),
-    */
     SHOM: () =>
       new TileLayer({
         className: Layer.BASE_LAYER.code,
@@ -78,38 +56,39 @@ function UnmemoizedBaseLayer({ map }: BaseLayerProps) {
   })
 
   useEffect(() => {
+    if (!map) {
+      return
+    }
+
     function addLayerToMap() {
-      if (map) {
-        if (!selectedBaseLayer) {
-          // TODO Does this work? This looks like a really bad pattern. Use a ref?
-          selectedBaseLayer = BaseLayer.OSM.code
-        }
-        if (baseLayersObjects[selectedBaseLayer]) {
-          map.getLayers().push(baseLayersObjects[selectedBaseLayer]())
-        }
+      const nextSelectedBaseLayer = selectedBaseLayer || BaseLayers.OSM.code
+
+      if (baseLayersObjects[nextSelectedBaseLayer]) {
+        map.getLayers().push(baseLayersObjects[nextSelectedBaseLayer]())
       }
     }
 
     addLayerToMap()
-  }, [map])
+  }, [map, baseLayersObjects, selectedBaseLayer])
 
   useEffect(() => {
+    if (!map || !selectedBaseLayer || !baseLayersObjects[selectedBaseLayer]) {
+      return
+    }
+
     function showAnotherBaseLayer() {
-      if (map && selectedBaseLayer && baseLayersObjects[selectedBaseLayer]) {
-        const olLayers = map.getLayers()
-        // TODO Is the dangling `_` in `layer.className_` a mistake?
-        // eslint-disable-next-line no-underscore-dangle
-        const layerToRemove = olLayers.getArray().find(layer => layer.className_ === Layer.BASE_LAYER.code)
+      const olLayers = map.getLayers()
+      // eslint-disable-next-line no-underscore-dangle
+      const layerToRemove = olLayers.getArray().find(layer => layer.className_ === Layer.BASE_LAYER.code)
 
-        if (!layerToRemove) {
-          return
-        }
-
-        olLayers.insertAt(0, baseLayersObjects[selectedBaseLayer]())
-        setTimeout(() => {
-          olLayers.remove(layerToRemove)
-        }, 300)
+      if (!layerToRemove) {
+        return
       }
+
+      olLayers.insertAt(0, baseLayersObjects[selectedBaseLayer]())
+      setTimeout(() => {
+        olLayers.remove(layerToRemove)
+      }, 300)
     }
 
     showAnotherBaseLayer()

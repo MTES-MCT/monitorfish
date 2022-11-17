@@ -4,7 +4,7 @@ import { useStore } from 'react-redux'
 import { getLayerNameNormalized } from '../domain/entities/layers'
 import { Layer } from '../domain/entities/layers/constants'
 import { showSimplifiedGeometries, showWholeGeometries } from '../domain/shared_slices/Regulatory'
-import { getVectorOLLayer } from '../domain/use_cases/layer/regulation/showRegulatoryZone'
+import { getRegulatoryLayersToAdd } from '../domain/use_cases/layer/regulation/getRegulatoryLayersToAdd'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 
@@ -24,45 +24,54 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
 
   const { regulatoryZoneMetadata, simplifiedGeometries } = useAppSelector(state => state.regulatory)
 
-  const { gears } = useAppSelector(state => state.gear)
-
   const previousMapZoom = useRef('')
   const isThrottled = useRef(false)
 
   useEffect(() => {
-    if (map) {
-      sortRegulatoryLayersFromAreas(layersToFeatures, map.getLayers().getArray())
+    if (!map) {
+      return
     }
+
+    sortRegulatoryLayersFromAreas(layersToFeatures, map.getLayers().getArray())
   }, [layersToFeatures, map])
 
   useEffect(() => {
-    if (map && showedLayers && gears?.length) {
-      const olLayers = map.getLayers()
-      // TODO Passing a `dispatch` and a `getState` to another function that's not a hook?
-      addRegulatoryLayersToMap(dispatch, getState, olLayers, showedLayers)
-      removeRegulatoryLayersToMap(showedLayers, olLayers)
+    if (!map || !showedLayers) {
+      return
     }
-  }, [dispatch, gears, getState, map, showedLayers])
+
+    const olLayers = map.getLayers()
+    const vectorLayersToAdd = dispatch(getRegulatoryLayersToAdd(olLayers.getArray(), showedLayers) as any)
+    vectorLayersToAdd.forEach(vectorLayer => {
+      olLayers.push(vectorLayer)
+    })
+    removeRegulatoryLayersToMap(showedLayers, olLayers)
+  }, [dispatch, getState, map, showedLayers])
 
   useEffect(() => {
-    function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers() {
-      if (map) {
-        const regulatoryLayers = map
-          .getLayers()
-          .getArray()
-          .filter(layer => layer?.name?.includes(Layer.REGULATORY.code))
-        if (regulatoryZoneMetadata) {
-          const layerToAddProperty = regulatoryLayers.find(
-            layer =>
-              layer?.name === `${Layer.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
-          )
+    if (!map) {
+      return
+    }
 
-          if (layerToAddProperty) {
-            addMetadataIsShowedProperty(lastShowedFeatures, layerToAddProperty)
-          }
-        } else {
-          removeMetadataIsShowedProperty(regulatoryLayers)
-        }
+    function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers() {
+      const regulatoryLayers = map
+        .getLayers()
+        .getArray()
+        .filter(layer => layer?.name?.includes(Layer.REGULATORY.code))
+
+      if (!regulatoryZoneMetadata) {
+        removeMetadataIsShowedProperty(regulatoryLayers)
+
+        return
+      }
+
+      const layerToAddProperty = regulatoryLayers.find(
+        layer =>
+          layer?.name === `${Layer.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
+      )
+
+      if (layerToAddProperty) {
+        addMetadataIsShowedProperty(lastShowedFeatures, layerToAddProperty)
       }
     }
 
@@ -118,7 +127,7 @@ export function RegulatoryLayers({ map, mapMovingAndZoomEvent }: RegulatoryLayer
       showSimplifiedOrWholeFeatures()
       isThrottled.current = false
     }, throttleDuration)
-    // TODO Why is there an unused prop just to refresh this effect?
+    // The `mapMovingAndZoomEvent` prop is used to refresh this effect
   }, [dispatch, layersToFeatures, map, mapMovingAndZoomEvent, simplifiedGeometries])
 
   return <></>
@@ -134,14 +143,6 @@ function sortRegulatoryLayersFromAreas(layersToFeatures, olLayers) {
       foundLayer.setZIndex(index + 1)
     }
   })
-}
-
-function layersNotInCurrentOLMap(olLayers, layer) {
-  return !olLayers.some(olLayer => olLayer.name === getLayerNameNormalized({ type: Layer.REGULATORY.code, ...layer }))
-}
-
-function layersOfTypeRegulatoryLayer(layer) {
-  return layer.type === Layer.REGULATORY.code
 }
 
 function getShowSimplifiedFeatures(currentZoom) {
@@ -188,21 +189,4 @@ function removeMetadataIsShowedProperty(regulatoryLayers) {
       .filter(feature => feature.get(METADATA_IS_SHOWED))
       .forEach(feature => feature.set(METADATA_IS_SHOWED, false))
   })
-}
-
-function addRegulatoryLayersToMap(dispatch, getState, olLayers, showedLayers) {
-  if (showedLayers.length) {
-    const layersToInsert = showedLayers
-      .filter(layer => layersNotInCurrentOLMap(olLayers.getArray(), layer))
-      .filter(layer => layersOfTypeRegulatoryLayer(layer))
-
-    layersToInsert.forEach(layerToInsert => {
-      if (!layerToInsert) {
-        return
-      }
-      const getVectorLayerClosure = getVectorOLLayer(dispatch, getState)
-      const vectorLayer = getVectorLayerClosure(layerToInsert)
-      olLayers.push(vectorLayer)
-    })
-  }
 }

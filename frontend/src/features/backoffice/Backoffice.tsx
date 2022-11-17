@@ -154,7 +154,7 @@ export function Backoffice() {
           <BaseLayer />
           <RegulatoryLayers mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
           <AdministrativeLayers />
-          <ShowRegulatoryMetadata />
+          <ShowRegulatoryMetadata hasClickEvent />
           <RegulatoryPreviewLayer />
         </BaseMap>
       </BackofficeContainer>

@@ -3,11 +3,7 @@ import styled from 'styled-components'
 
 import { MapToolType, MeasurementType } from '../../../../domain/entities/map'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
-import {
-  resetCircleMeasurementInDrawing,
-  setCircleMeasurementToAdd,
-  setMeasurementTypeToAdd
-} from '../../../../domain/shared_slices/Measurement'
+import { setMeasurementTypeToAdd } from '../../../../domain/shared_slices/Measurement'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useClickOutsideWhenOpenedAndExecute } from '../../../../hooks/useClickOutsideWhenOpenedAndExecute'
@@ -17,7 +13,7 @@ import { ReactComponent as MultiLineSVG } from '../../../icons/standardized/Meas
 import { ReactComponent as CircleRangeSVG } from '../../../icons/standardized/Measure_circle.svg'
 import { ReactComponent as MeasurementSVG } from '../../../icons/standardized/Measure_line.svg'
 import { MapToolButton } from '../MapToolButton'
-import CustomCircleRange from './CustomCircleRange'
+import { CustomCircleRange } from './CustomCircleRange'
 
 export function MeasurementMapButton() {
   const dispatch = useAppDispatch()
@@ -68,26 +64,6 @@ export function MeasurementMapButton() {
     }
   }, [dispatch, measurementTypeToAdd])
 
-  const addCustomCircleRange = useCallback(
-    (circleCoordinatesToAdd, circleRadiusToAdd) => {
-      dispatch(
-        setCircleMeasurementToAdd({
-          circleCoordinatesToAdd,
-          circleRadiusToAdd
-        })
-      )
-      dispatch(setMeasurementTypeToAdd(null))
-      dispatch(setMapToolOpened(undefined))
-    },
-    [dispatch]
-  )
-
-  const cancelAddCircleRange = useCallback(() => {
-    dispatch(setMeasurementTypeToAdd(null))
-    dispatch(resetCircleMeasurementInDrawing())
-    dispatch(setMapToolOpened(undefined))
-  }, [dispatch])
-
   return (
     <Wrapper ref={wrapperRef}>
       <MeasurementButton
@@ -117,7 +93,7 @@ export function MeasurementMapButton() {
           <CircleRangeIcon />
         </MeasurementItem>
       </MeasurementOptions>
-      <CustomCircleRange onAddCustomCircleRange={addCustomCircleRange} onCancelAddCircleRange={cancelAddCircleRange} />
+      <CustomCircleRange />
     </Wrapper>
   )
 }

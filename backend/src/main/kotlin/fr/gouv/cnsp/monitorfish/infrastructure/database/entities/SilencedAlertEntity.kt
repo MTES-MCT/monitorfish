@@ -40,8 +40,6 @@ data class SilencedAlertEntity(
     val vesselIdentifier: VesselIdentifier,
     @Column(name = "silenced_before_date", nullable = false)
     val silencedBeforeDate: ZonedDateTime,
-    @Column(name = "silenced_after_date")
-    val silencedAfterDate: ZonedDateTime? = null,
     @Type(type = "jsonb")
     @Column(name = "value", nullable = false, columnDefinition = "jsonb")
     val value: String,
@@ -58,7 +56,6 @@ data class SilencedAlertEntity(
             ircs = ircs,
             vesselIdentifier = vesselIdentifier,
             silencedBeforeDate = silencedBeforeDate,
-            silencedAfterDate = silencedAfterDate,
             value = mapper.readValue(value, AlertType::class.java),
             wasValidated = wasValidated
         )
@@ -69,7 +66,6 @@ data class SilencedAlertEntity(
             mapper: ObjectMapper,
             alert: PendingAlert,
             silencedBeforeDate: ZonedDateTime,
-            silencedAfterDate: ZonedDateTime?,
             isValidated: Boolean
         ) = SilencedAlertEntity(
             vesselName = alert.vesselName,
@@ -78,7 +74,6 @@ data class SilencedAlertEntity(
             ircs = alert.ircs,
             vesselIdentifier = alert.vesselIdentifier,
             silencedBeforeDate = silencedBeforeDate,
-            silencedAfterDate = silencedAfterDate,
             value = mapper.writeValueAsString(alert.value),
             wasValidated = isValidated
         )

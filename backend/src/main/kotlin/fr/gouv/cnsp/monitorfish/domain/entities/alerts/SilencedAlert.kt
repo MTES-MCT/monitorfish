@@ -12,7 +12,6 @@ class SilencedAlert(
     val ircs: String? = null,
     val vesselIdentifier: VesselIdentifier,
     val silencedBeforeDate: ZonedDateTime,
-    val silencedAfterDate: ZonedDateTime? = null,
     val value: AlertType,
     val wasValidated: Boolean? = null
 )

@@ -25,7 +25,6 @@ class ValidateOperationalAlert(
 
         silencedAlertRepository.save(
             alert = validatedAlert,
-            silencedAfterDate = null,
             silencedBeforeDate = now.plusHours(4),
             isValidated = true
         )

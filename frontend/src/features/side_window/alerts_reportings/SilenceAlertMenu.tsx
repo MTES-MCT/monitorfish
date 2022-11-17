@@ -1,14 +1,16 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
+import DatePicker from 'rsuite/DatePicker'
+import { beforeToday } from 'rsuite/esm/DateRangePicker/disabledDateUtils'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { SilencedAlertPeriod } from '../../../domain/entities/alerts/constants'
 import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
+import { useForceUpdate } from '../../../hooks/useForceUpdate'
 import { theme } from '../../../ui/theme'
-import DateRange from '../../vessel_sidebar/actions/TrackRequest/DateRange'
+import { DATE_RANGE_PICKER_LOCALE } from '../../vessel_sidebar/actions/TrackRequest/DateRange'
 
 import type { SilencedAlertPeriodRequest } from '../../../domain/types/alert'
-import type { DateRange as DateRangeType } from '../../../types'
 import type { CSSProperties, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 
@@ -33,7 +35,11 @@ export function SilenceAlertMenu({
 }: SilenceAlertMenuProps) {
   const silencedAlertRef = useRef() as MutableRefObject<HTMLDivElement>
   const clickedOutside = useClickOutsideWhenOpenedWithinRef(silencedAlertRef, showSilencedAlertForIndex, baseRef)
-  const [selectedDates, setSelectedDates] = useState<DateRangeType>()
+  const { forceUpdate } = useForceUpdate()
+
+  useEffect(() => {
+    forceUpdate()
+  }, [forceUpdate])
 
   useEffect(() => {
     if (clickedOutside) {
@@ -41,21 +47,23 @@ export function SilenceAlertMenu({
     }
   }, [clickedOutside, setShowSilencedAlertForIndex])
 
-  useEffect(() => {
-    if (!selectedDates) {
-      return
-    }
+  const selectDate = useCallback(
+    (selectedDate: Date) => {
+      if (!selectedDate) {
+        return
+      }
 
-    setShowSilencedAlertForIndex()
+      setShowSilencedAlertForIndex()
 
-    const silenceAlertPeriodRequest: SilencedAlertPeriodRequest = {
-      afterDateTime: selectedDates[0],
-      beforeDateTime: selectedDates[1],
-      silencedAlertPeriod: SilencedAlertPeriod.CUSTOM
-    }
+      const silenceAlertPeriodRequest: SilencedAlertPeriodRequest = {
+        beforeDateTime: selectedDate,
+        silencedAlertPeriod: SilencedAlertPeriod.CUSTOM
+      }
 
-    silenceAlert(silenceAlertPeriodRequest, id)
-  }, [id, selectedDates, setShowSilencedAlertForIndex, silenceAlert])
+      silenceAlert(silenceAlertPeriodRequest, id)
+    },
+    [id, setShowSilencedAlertForIndex, silenceAlert]
+  )
 
   return (
     <Wrapper
@@ -143,13 +151,17 @@ export function SilenceAlertMenu({
           style={menuLinkStyle(false, true, true)}
         >
           {silencedAlertRef.current && (
-            <DateRange
-              containerRef={silencedAlertRef?.current}
-              defaultValue={selectedDates}
-              noMargin
-              onChange={setSelectedDates}
-              placeholder="Période précise"
-              width={145}
+            <DatePicker
+              cleanable
+              container={silencedAlertRef.current}
+              // @ts-ignore
+              disabledDate={beforeToday()}
+              format="dd-MM-yyyy"
+              locale={DATE_RANGE_PICKER_LOCALE}
+              onOk={selectDate}
+              placeholder="Date précise"
+              placement="auto"
+              size="sm"
             />
           )}
         </MenuLink>
@@ -191,5 +203,5 @@ const menuLinkStyle = (withBottomLine: boolean, hasLink: boolean, isCalendar: bo
   cursor: hasLink ? 'pointer' : 'unset',
   display: 'flex',
   height: 25,
-  padding: isCalendar ? '3px 15px 15px' : '5px 15px 0px 15px'
+  padding: isCalendar ? '7px 15px 7px 15px' : '5px 15px 0px 15px'
 })

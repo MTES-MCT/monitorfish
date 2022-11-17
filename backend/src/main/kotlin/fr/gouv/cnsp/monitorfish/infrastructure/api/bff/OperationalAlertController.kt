@@ -50,7 +50,6 @@ class OperationalAlertController(
         val silencedAlert = silenceOperationalAlert.execute(
             id,
             silenceOperationalAlertData.silencedAlertPeriod,
-            silenceOperationalAlertData.afterDateTime,
             silenceOperationalAlertData.beforeDateTime
         )
 

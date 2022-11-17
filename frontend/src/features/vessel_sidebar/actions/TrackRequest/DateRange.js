@@ -9,7 +9,7 @@ import { getLocalizedDayjs } from '../../../../utils/getLocalizedDayjs'
 import { getUtcizedDayjs } from '../../../../utils/getUtcizedDayjs'
 
 /** @type {import('rsuite').DateRangePickerLocale} */
-const DATE_RANGE_PICKER_LOCALE = {
+export const DATE_RANGE_PICKER_LOCALE = {
   friday: 'Ve',
   last7Days: '7 derniers jours',
   monday: 'Lu',

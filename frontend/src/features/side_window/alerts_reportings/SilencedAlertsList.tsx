@@ -11,7 +11,7 @@ import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { getDateDiffInDays, getDateTime } from '../../../utils'
+import { getDateTime } from '../../../utils'
 import SearchIconSVG from '../../icons/Loupe_dark.svg'
 import { Flag } from '../../vessel_list/tableCells'
 import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
@@ -120,19 +120,7 @@ export function SilencedAlertsList({ silencedAlerts }: SilencedAlertsListProps) 
                   <FlexboxGrid.Item style={alertTypeStyle}>{getAlertNameFromType(alert.value.type)}</FlexboxGrid.Item>
                   <FlexboxGrid.Item style={alertNatinfStyle}>{alert.value.natinfCode}</FlexboxGrid.Item>
                   <FlexboxGrid.Item style={ignoredForStyle}>
-                    {/* TODO Move that into a `SilenceAlertRow` component. */}
-                    {alert.silencedAfterDate && (
-                      <>
-                        {new Date(alert.silencedAfterDate) > new Date() &&
-                          `${getDateDiffInDays(
-                            new Date(alert.silencedAfterDate),
-                            new Date(alert.silencedBeforeDate)
-                          )} jours`}
-                        {new Date(alert.silencedAfterDate) <= new Date() &&
-                          timeago.format(alert.silencedBeforeDate, 'fr')}
-                      </>
-                    )}
-                    {!alert.silencedAfterDate && timeago.format(alert.silencedBeforeDate, 'fr')}
+                    {timeago.format(alert.silencedBeforeDate, 'fr')}
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={ignoredForStyle}>
                     {getDateTime(alert.silencedBeforeDate, true)}

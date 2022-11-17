@@ -253,10 +253,10 @@ function getDateInTheFuture() {
   if (currentMonth === MAX_MONTH_IN_YEAR) {
     const date = now.add(1, 'year')
 
-    return `${date.year()}-${date.month()}-${date.date()}`
+    return date.format('YYYY-MM-DD')
   }
 
   const date = now.add(1, 'month')
 
-  return `${date.year()}-${date.month() + 1}-${date.date().toString().padStart(2, '0')}`
+  return date.format('YYYY-MM-DD')
 }

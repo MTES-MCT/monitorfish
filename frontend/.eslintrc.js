@@ -1,8 +1,5 @@
 const path = require('path')
 
-const BOOLEAN_CAMEL_PREFIXES = ['can', 'did', 'is', 'had', 'has', 'must', 'should', 'was', 'will', 'with']
-const BOOLEAN_UPPER_PREFIXES = ['CAN_', 'DID_', 'IS_', 'HAD_', 'HAS_', 'MUST_', 'SHOULD_', 'WAS_', 'WILL_', 'WITH_']
-
 module.exports = {
   extends: '@ivangabriele/eslint-config-typescript-react',
   parser: '@typescript-eslint/parser',
@@ -40,41 +37,34 @@ module.exports = {
       {
         selector: 'accessor',
         types: ['boolean'],
-        format: ['camelCase', 'PascalCase'],
-        prefix: BOOLEAN_CAMEL_PREFIXES
+        format: ['camelCase', 'PascalCase']
       },
       {
         selector: 'classProperty',
         types: ['boolean'],
-        format: ['camelCase', 'PascalCase'],
-        prefix: BOOLEAN_CAMEL_PREFIXES
+        format: ['camelCase', 'PascalCase']
       },
       {
         selector: 'objectLiteralProperty',
         types: ['boolean'],
-        format: ['camelCase', 'PascalCase'],
-        prefix: BOOLEAN_CAMEL_PREFIXES
+        format: ['camelCase', 'PascalCase']
       },
       {
         selector: 'parameter',
         types: ['boolean'],
-        format: ['camelCase', 'PascalCase'],
-        prefix: BOOLEAN_CAMEL_PREFIXES
+        format: ['camelCase', 'PascalCase']
       },
       {
         selector: 'parameterProperty',
         types: ['boolean'],
-        format: ['camelCase', 'PascalCase'],
-        prefix: BOOLEAN_CAMEL_PREFIXES
+        format: ['camelCase', 'PascalCase']
       },
       {
         selector: 'variable',
         types: ['boolean'],
-        format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
-        prefix: [...BOOLEAN_CAMEL_PREFIXES, ...BOOLEAN_UPPER_PREFIXES]
+        format: ['camelCase', 'PascalCase', 'UPPER_CASE']
       }
     ],
-    "no-console": "off",
     '@typescript/no-use-before-define': 'off',
     '@typescript-eslint/no-restricted-imports': [
       'error',

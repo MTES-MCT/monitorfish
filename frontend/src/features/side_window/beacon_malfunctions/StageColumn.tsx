@@ -1,4 +1,4 @@
-import { CSSProperties, useRef } from 'react'
+import { CSSProperties, MutableRefObject, useRef } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
@@ -25,7 +25,7 @@ export function StageColumn({
   stage,
   updateVesselStatus
 }: StageColumnType) {
-  const verticalScrollRef = useRef<HTMLDivElement>(null)
+  const verticalScrollRef = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>
   const { openedBeaconMalfunctionInKanban } = useAppSelector(state => state.beaconMalfunction)
 
   return (

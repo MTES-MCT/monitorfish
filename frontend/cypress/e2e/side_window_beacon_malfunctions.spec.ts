@@ -382,10 +382,10 @@ context('Side window beacon malfunctions', () => {
       .scrollIntoView()
       .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
       .click()
-    // Click on send notification select menu
-    cy.get('.rs-picker-toggle-placeholder').click()
 
     // When
+    // Click on send notification select menu
+    cy.get('[aria-placeholder="Envoyer un message"]').click()
     cy.get('[data-key="MALFUNCTION_AT_SEA_REMINDER"] > .rs-picker-select-menu-item').click()
 
     // Then
@@ -416,6 +416,45 @@ context('Side window beacon malfunctions', () => {
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .should('have.length', 0)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
+      .children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .should('have.length', 1)
+  })
+
+  it('Beacon malfunctions Should be filtered by status', () => {
+    // Given
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
+      .children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .should('have.length', 3)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-FOUR_HOUR_REPORT"]')
+      .children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .should('have.length', 1)
+
+    // When
+    cy.get('[aria-placeholder="Statut"]').click()
+    cy.get('[data-key="AT_SEA"]').click()
+
+    // Then
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
+      .children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .should('have.length', 1)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-FOUR_HOUR_REPORT"]')
+      .children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .should('have.length', 0)
+
+    // Clean filter
+    cy.get('[aria-label="Clear"]').click()
+    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
+      .children()
+      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
+      .should('have.length', 3)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-FOUR_HOUR_REPORT"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .should('have.length', 1)

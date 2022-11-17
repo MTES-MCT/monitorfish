@@ -87,8 +87,9 @@ context('Reportings', () => {
       '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace} km'
     )
     cy.get('[data-cy="new-reporting-select-natinf"]').click()
+    cy.wait(200)
     cy.get('.rs-picker-search-bar-input').type('maille{enter}')
-    cy.wait(500)
+    cy.wait(200)
     cy.get('[data-cy="new-reporting-create-button"]').click()
 
     // Then

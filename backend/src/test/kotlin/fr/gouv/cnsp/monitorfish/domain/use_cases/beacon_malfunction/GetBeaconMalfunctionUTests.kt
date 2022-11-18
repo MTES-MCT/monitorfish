@@ -151,4 +151,37 @@ class GetBeaconMalfunctionUTests {
 
         assertThat(beaconMalfunctions.beaconMalfunction.internalReferenceNumber).isEqualTo("FR224226850")
     }
+
+    @Test
+    fun `execute Should not throw an exception When vessel identifier is null for fetching historical malfunctions`() {
+        // Given
+        given(beaconMalfunctionsRepository.find(1))
+            .willReturn(
+                BeaconMalfunction(
+                    1, null, "1236514", "IRCS",
+                    null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
+                    ZonedDateTime.now(), null, ZonedDateTime.now(),
+                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                )
+            )
+
+        // When
+        val beaconMalfunctions = GetBeaconMalfunction(
+            beaconMalfunctionsRepository,
+            beaconMalfunctionCommentsRepository,
+            beaconMalfunctionActionsRepository,
+            lastPositionRepository,
+            beaconMalfunctionNotificationsRepository
+        )
+            .execute(1)
+
+        // Then
+        assertThat(beaconMalfunctions.resume?.numberOfBeaconsAtSea).isEqualTo(0)
+        assertThat(beaconMalfunctions.resume?.numberOfBeaconsAtPort).isEqualTo(0)
+        assertThat(beaconMalfunctions.resume?.lastBeaconMalfunctionVesselStatus).isNull()
+        assertThat(beaconMalfunctions.actions).hasSize(0)
+        assertThat(beaconMalfunctions.comments).hasSize(0)
+
+        assertThat(beaconMalfunctions.beaconMalfunction.internalReferenceNumber).isNull()
+    }
 }

@@ -10,6 +10,65 @@
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "*"
     },
-    "body": "{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"id\":\"regulations.598\",\"properties\":{\"fishing_period\":\"{\\\"dates\\\": [], \\\"holidays\\\": true, \\\"weekdays\\\": [\\\"vendredi\\\", \\\"samedi\\\", \\\"dimanche\\\"], \\\"otherInfo\\\": \\\"\\\", \\\"authorized\\\": false, \\\"dateRanges\\\": [], \\\"timeIntervals\\\": [], \\\"annualRecurrence\\\": true}\",\"species\":\"{\\\"species\\\": [{\\\"code\\\": \\\"URC\\\", \\\"quantity\\\": \\\"500 kg\\\"}, {\\\"code\\\": \\\"URX\\\", \\\"quantity\\\": \\\"500 kg\\\"}], \\\"authorized\\\": true, \\\"speciesGroups\\\": []}\",\"gears\":\"{\\\"allGears\\\": false, \\\"otherInfo\\\": \\\"Drague sans dent et de largeur maximale 1,30 mètre\\\", \\\"authorized\\\": true, \\\"allTowedGears\\\": false, \\\"regulatedGears\\\": {}, \\\"allPassiveGears\\\": false, \\\"regulatedGearCategories\\\": {\\\"Dragues\\\": {\\\"name\\\": \\\"Dragues\\\"}}, \\\"selectedCategoriesAndGears\\\": [\\\"Dragues\\\"]}\",\"topic\":\"Ouest Cotentin Bivalves\",\"regulatory_references\":\"[{\\\"url\\\": \\\"http://legipeche.metier.i2/arrete-prefectoral-109-2019-delib-2019-c-pr-oc-08-a8855.html?id_rub=634\\\", \\\"reference\\\": \\\"ArrÃªtÃ© PrÃ©fectoral 109/2019 - dÃ©lib 2019/C-PR-OC-08 / MEMN\\\"}, {\\\"url\\\": \\\"http://legipeche.metier.i2/arrete-ministeriel-du-11-08-2008-a460.html?id_rub=634\\\", \\\"reference\\\": \\\"ArrÃªtÃ© MinistÃ©riel du 11/08/2008\\\"}, {\\\"url\\\": \\\"http://legipeche.metier.i2/arrete-prefectoral-009-2021-memn-a10903.html?id_rub=634\\\", \\\"reference\\\": \\\"ArrÃªtÃ© PrÃ©fectoral 009/2021 / MEMN\\\"}, {\\\"url\\\": \\\"http://legipeche.metier.i2/arrete-prefectoral-243-2020-memn-a10718.html?id_rub=634\\\", \\\"reference\\\": \\\"ArrÃªtÃ© PrÃ©fectoral 243/2020 / MEMN\\\"}, {\\\"url\\\": \\\"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634\\\", \\\"reference\\\": \\\"ArrÃªtÃ© PrÃ©fectoral 168/2020 ModifiÃ© - dÃ©lib 2020/PR-B-16 / MEMN\\\"}]\",\"zone\":\"Praires Ouest cotentin\",\"region\":\"Normandie, Bretagne\",\"law_type\":\"Reg. MEMN\"},\"bbox\":[48.5983,-2.6721,49.7226,-1.3524]},{\"type\":\"Feature\",\"id\":\"regulations.1\",\"geometry\":null,\"properties\":{\"engins\":\"DRB\",\"engins_interdits\":null,\"especes\":\"SCE\",\"especes_interdites\":null,\"topic\":\"Armor CSJ Dragues\",\"references_reglementaires\":\"[{\\\"url\\\": \\\"http://legipeche.metier.i2/arrete-prefectoral-r53-2020-04-24-002-delib-2020-a9873.html?id_rub=1637\\\", \\\"reference\\\": \\\"ArrÃªtÃ© PrÃ©fectoral R53-2020-04-24-002 - dÃ©lib 2020-004 / NAMO\\\"}, {\\\"url\\\": \\\"\\\", \\\"reference\\\": \\\"126-2020\\\"}]\",\"zone\":\"Secteur 3\",\"region\":\"Bretagne\",\"law_type\":\"Reg. NAMO\"},\"bbox\":[48.5536,-2.7833,49.0387,-2.1888]},{\"type\":\"Feature\",\"id\":\"regulations.3145\",\"geometry\":null,\"properties\":{\"engins\":null,\"engins_interdits\":null,\"especes\":\"OCC\",\"especes_interdites\":null,\"topic\":\"Mayotte Poulpes\",\"regulatory_references\":[{\"url\": \"http://legipeche.metier.i2/r-ue-2019-1241-a8962.html?id_rub=1719\", \"reference\": \"R(UE) 2019/1241\"}],\"next_id\":null,\"zone\":\"Poulpes Mayotte\",\"region\":\"Mayotte\",\"law_type\":\"Reg. Outre-mer\"},\"bbox\":[-12.9624,45.0773,-12.9249,45.1043]}]}"
+    "jsonBody": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": "regulations.598",
+          "properties": {
+            "fishing_period": "{\"dates\": [], \"holidays\": true, \"weekdays\": [\"vendredi\", \"samedi\", \"dimanche\"], \"otherInfo\": \"\", \"authorized\": false, \"dateRanges\": [], \"timeIntervals\": [], \"annualRecurrence\": true}",
+            "species": "{\"species\": [{\"code\": \"URC\", \"quantity\": \"500 kg\"}, {\"code\": \"URX\", \"quantity\": \"500 kg\"}], \"authorized\": true, \"speciesGroups\": []}",
+            "gears": "{\"allGears\": false, \"otherInfo\": \"Drague sans dent et de largeur maximale 1,30 mètre\", \"authorized\": true, \"allTowedGears\": false, \"regulatedGears\": {}, \"allPassiveGears\": false, \"regulatedGearCategories\": {\"Dragues\": {\"name\": \"Dragues\"}}, \"selectedCategoriesAndGears\": [\"Dragues\"]}",
+            "topic": "Ouest Cotentin Bivalves",
+            "regulatory_references": "[{\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-109-2019-delib-2019-c-pr-oc-08-a8855.html?id_rub=634\", \"reference\": \"ArrÃªtÃ© PrÃ©fectoral 109/2019 - dÃ©lib 2019/C-PR-OC-08 / MEMN\"}, {\"url\": \"http://legipeche.metier.i2/arrete-ministeriel-du-11-08-2008-a460.html?id_rub=634\", \"reference\": \"ArrÃªtÃ© MinistÃ©riel du 11/08/2008\"}, {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-009-2021-memn-a10903.html?id_rub=634\", \"reference\": \"ArrÃªtÃ© PrÃ©fectoral 009/2021 / MEMN\"}, {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-243-2020-memn-a10718.html?id_rub=634\", \"reference\": \"ArrÃªtÃ© PrÃ©fectoral 243/2020 / MEMN\"}, {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634\", \"reference\": \"ArrÃªtÃ© PrÃ©fectoral 168/2020 ModifiÃ© - dÃ©lib 2020/PR-B-16 / MEMN\"}]",
+            "zone": "Praires Ouest cotentin",
+            "region": "Normandie, Bretagne",
+            "law_type": "Reg. MEMN"
+          },
+          "bbox": [48.5983, -2.6721, 49.7226, -1.3524]
+        },
+        {
+          "type": "Feature",
+          "id": "regulations.1",
+          "geometry": null,
+          "properties": {
+            "engins": "DRB",
+            "engins_interdits": null,
+            "especes": "SCE",
+            "especes_interdites": null,
+            "topic": "Armor CSJ Dragues",
+            "references_reglementaires": "[{\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-r53-2020-04-24-002-delib-2020-a9873.html?id_rub=1637\", \"reference\": \"ArrÃªtÃ© PrÃ©fectoral R53-2020-04-24-002 - dÃ©lib 2020-004 / NAMO\"}, {\"url\": \"\", \"reference\": \"126-2020\"}]",
+            "zone": "Secteur 3",
+            "region": "Bretagne",
+            "law_type": "Reg. NAMO"
+          },
+          "bbox": [48.5536, -2.7833, 49.0387, -2.1888]
+        },
+        {
+          "type": "Feature",
+          "id": "regulations.3145",
+          "geometry": null,
+          "properties": {
+            "engins": null,
+            "engins_interdits": null,
+            "especes": "OCC",
+            "especes_interdites": null,
+            "topic": "Mayotte Poulpes",
+            "regulatory_references": [
+              {
+                "url": "http://legipeche.metier.i2/r-ue-2019-1241-a8962.html?id_rub=1719",
+                "reference": "R(UE) 2019/1241"
+              }
+            ],
+            "next_id": null,
+            "zone": "Poulpes Mayotte",
+            "region": "Mayotte",
+            "law_type": "Reg. Outre-mer"
+          },
+          "bbox": [-12.9624, 45.0773, -12.9249, 45.1043]
+        }
+      ]
+    }
   }
 }

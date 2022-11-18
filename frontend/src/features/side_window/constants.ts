@@ -1,18 +1,23 @@
 import type { MenuItem } from '../../types'
 
 export enum SideWindowMenuKey {
-  ALERTS = 'ALERTS',
-  BEACON_MALFUNCTIONS = 'BEACON_MALFUNCTIONS'
+  ALERTS = 'Alertes',
+  BEACON_MALFUNCTIONS = 'Suivi VMS',
+  MISSIONS = 'Missions et contrôles'
 }
 
-export const SIDE_WINDOW_MENU: Record<SideWindowMenuKey, MenuItem<SideWindowMenuKey>> = {
+export const SIDE_WINDOW_MENU: Record<keyof typeof SideWindowMenuKey, MenuItem<SideWindowMenuKey>> = {
   ALERTS: {
     code: SideWindowMenuKey.ALERTS,
-    name: 'Alertes'
+    name: SideWindowMenuKey.ALERTS
   },
   BEACON_MALFUNCTIONS: {
     code: SideWindowMenuKey.BEACON_MALFUNCTIONS,
-    name: 'Suivi VMS'
+    name: SideWindowMenuKey.BEACON_MALFUNCTIONS
+  },
+  MISSIONS: {
+    code: SideWindowMenuKey.MISSIONS,
+    name: SideWindowMenuKey.MISSIONS
   }
 }
 

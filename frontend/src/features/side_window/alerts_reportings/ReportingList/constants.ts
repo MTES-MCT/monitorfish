@@ -42,6 +42,14 @@ export const REPORTING_LIST_TABLE_OPTIONS: TableOptions<InfractionSuspicionRepor
       isSortable: true,
       key: 'value.dml',
       label: 'DML concernées'
+    },
+    {
+      fixedWidth: 2,
+      key: '_focusOnMap'
+    },
+    {
+      fixedWidth: 2,
+      key: '_edit'
     }
   ],
   isCheckable: true,

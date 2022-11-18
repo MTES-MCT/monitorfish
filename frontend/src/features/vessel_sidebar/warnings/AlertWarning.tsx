@@ -5,6 +5,7 @@ import { focusOnAlert } from '../../../domain/shared_slices/Alert'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
+import { SideWindowMenuKey } from '../../side_window/constants'
 import { getAlertNameFromType } from '../../side_window/alerts_reportings/utils'
 import { SIDE_WINDOW_MENU } from '../../side_window/constants'
 
@@ -30,7 +31,7 @@ export function AlertWarning({ selectedVessel }) {
 
 const showAlertInSideWindow = (dispatch, selectedVessel) => {
   batch(() => {
-    dispatch(openSideWindowTab(SIDE_WINDOW_MENU.ALERTS.code))
+    dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))
     dispatch(
       focusOnAlert({
         externalReferenceNumber: selectedVessel.externalReferenceNumber,

@@ -40,6 +40,7 @@ export const COMMON_ALERT_TYPE_OPTION: Record<
   }
 }
 
+// TODO Move that into a more global file since it's at least used by both reportings and missions.
 export enum SeaFront {
   MED = 'MED',
   MEMN = 'MEMN',

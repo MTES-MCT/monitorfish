@@ -5,7 +5,7 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { ReactComponent as AlertsSVG } from '../../icons/Icone_alertes.svg'
-import { SIDE_WINDOW_MENU } from '../constants'
+import { SideWindowMenuKey } from '../constants'
 
 export function AlertsMapButton() {
   const dispatch = useAppDispatch()
@@ -18,15 +18,15 @@ export function AlertsMapButton() {
       data-cy="alerts-button"
       healthcheckTextWarning={!!healthcheckTextWarning}
       isHidden={Boolean(previewFilteredVesselsMode)}
-      isVisible={openedSideWindowTab === SIDE_WINDOW_MENU.ALERTS.code}
+      isVisible={openedSideWindowTab === SideWindowMenuKey.ALERTS}
       onClick={() => {
-        if (openedSideWindowTab !== SIDE_WINDOW_MENU.ALERTS.code) {
-          dispatch(openSideWindowTab(SIDE_WINDOW_MENU.ALERTS.code))
+        if (openedSideWindowTab !== SideWindowMenuKey.ALERTS) {
+          dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))
 
           return
         }
 
-        if (openedSideWindowTab === SIDE_WINDOW_MENU.ALERTS.code) {
+        if (openedSideWindowTab === SideWindowMenuKey.ALERTS) {
           dispatch(closeSideWindow())
         }
       }}

@@ -7,7 +7,7 @@ import { STAGE_RECORD } from '../../domain/entities/beaconMalfunction/constants'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { ReactComponent as ChevronIconSVG } from '../icons/Chevron_simple_gris.svg'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
-import { AlertAndReportingTab, SIDE_WINDOW_MENU } from './constants'
+import { AlertAndReportingTab, SideWindowMenuKey } from './constants'
 import { SideWindowSubMenuLink } from './SideWindowSubMenuLink'
 
 import type { MenuItem } from '../../types'
@@ -66,10 +66,10 @@ export function SideWindowSubMenu({
   )
 
   useEffect(() => {
-    if (selectedMenu === SIDE_WINDOW_MENU.ALERTS.code) {
+    if (selectedMenu === SideWindowMenuKey.ALERTS) {
       setIsFixed(true)
       setIsOpen(true)
-    } else if (selectedMenu === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code) {
+    } else if (selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTIONS) {
       setIsFixed(false)
     }
   }, [selectedMenu, setIsFixed])
@@ -84,7 +84,7 @@ export function SideWindowSubMenu({
         <ChevronIcon style={chevronIconStyle(isOpen)} />
       </Chevron>
       <Title style={titleStyle(isOpen)}>Vue d’ensemble</Title>
-      {selectedMenu === SIDE_WINDOW_MENU.ALERTS.code && (
+      {selectedMenu === SideWindowMenuKey.ALERTS && (
         <>
           <SideWindowSubMenuLink
             isOneLine
@@ -136,7 +136,7 @@ export function SideWindowSubMenu({
           />
         </>
       )}
-      {selectedMenu === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code && (
+      {selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTIONS && (
         <SideWindowSubMenuLink
           isOpen={isOpen}
           isSelected={selectedSubMenu.code === BeaconMalfunctionsSubMenu.MALFUNCTIONING.code}

@@ -353,13 +353,13 @@ const columnStyles: CSSProperties[] = [
     ...styleCenter,
     marginLeft: 10,
     paddingRight: 10,
-    width: 20
+    width: '2rem'
   },
   {
     ...styleCenter,
     marginLeft: 10,
     paddingRight: 10,
-    width: 20
+    width: '2rem'
   }
 ]
 

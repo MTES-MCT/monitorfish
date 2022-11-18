@@ -4,12 +4,27 @@ from unittest.mock import patch
 import pandas as pd
 
 from src.pipeline.shared_tasks.alerts import (
+    extract_silenced_alerts,
     filter_silenced_alerts,
     load_alerts,
     make_alerts,
 )
 from src.read_query import read_query
 from tests.mocks import mock_datetime_utcnow
+
+
+def test_extract_silenced_alerts():
+    silenced_alerts = extract_silenced_alerts.run()
+    expected_silenced_alerts = pd.DataFrame(
+        {
+            "internal_reference_number": ["ABC000658985", "ABC000542519"],
+            "external_reference_number": ["OHMYGOSH", "RO237719"],
+            "ircs": ["OGMJ", "FQ7058"],
+            "facade": ["Facade B", "Facade A"],
+            "type": ["THREE_MILES_TRAWLING_ALERT", "MISSING_FAR_ALERT"],
+        }
+    )
+    pd.testing.assert_frame_equal(silenced_alerts, expected_silenced_alerts)
 
 
 @patch(

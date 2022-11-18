@@ -11,7 +11,7 @@ services:
     ports:
       - $DB_PUBLIC_PORT:5432
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 1s
       timeout: 1s
       retries: 30
@@ -33,6 +33,7 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - HOST_IP=127.0.0.1
       - REACT_APP_GEOSERVER_LOCAL_URL=http://0.0.0.0:8081
+      - REACT_APP_MONITORENV_URL=http://0.0.0.0:8081
       - REACT_APP_GEOSERVER_REMOTE_URL=http://0.0.0.0:8081
       - REACT_APP_CYPRESS_TEST=true
     ports:
@@ -47,18 +48,24 @@ services:
         condition: service_healthy
     restart: always
     logging:
-      driver: "json-file"
+      driver: 'json-file'
       options:
-        max-size: "1024m"
+        max-size: '1024m'
 
-  geoserver:
-    image:  rodolpheche/wiremock
+  geoserver-monitorenv-stubs:
+    image: rodolpheche/wiremock
     ports:
       - 8081:8080
     volumes:
       - ./mappings:/home/wiremock/mappings
     healthcheck:
-      test: ["CMD-SHELL", "curl --fail http://localhost:8080/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27 || exit 1 "]
+      test:
+        [
+          'CMD-SHELL',
+          'curl --fail
+          http://localhost:8080/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:regulations&outputFormat=application/json&CQL_FILTER=topic=%27Ouest%20Cotentin%20Bivalves%27%20AND%20zone=%27Praires%20Ouest%20cotentin%27
+          || exit 1 '
+        ]
       interval: 1s
       timeout: 1s
       retries: 30

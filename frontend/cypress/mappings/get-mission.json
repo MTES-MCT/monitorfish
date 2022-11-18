@@ -1,0 +1,47 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/v1/missions/38"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "id": 38,
+      "missionType": "LAND",
+      "missionNature": ["ENV", "FISH"],
+      "resourceUnits": [
+        {
+          "administration": "Douanes",
+          "unit": "BN Pornic",
+          "resources": ["Semi Rigide 3", "Semi Rigide 3"]
+        },
+        {
+          "administration": "Gendarmerie maritime",
+          "unit": "PM 441",
+          "resources": ["ALTAIR", "CALISTO"]
+        },
+        {
+          "administration": "Douanes",
+          "unit": "PM 474 Bastia",
+          "resources": ["THEMIS", "PHEROUSA"]
+        }
+      ],
+      "missionStatus": "PENDING",
+      "openBy": "Randy Woodward",
+      "closedBy": "Timothy Patrick",
+      "observationsCacem": "Black bit sell. House relate policy once. White member worker east even anyone detail professor.",
+      "observationsCnsp": null,
+      "facade": "MED",
+      "geom": null,
+      "inputStartDatetimeUtc": "2022-11-16T19:20:23.01111Z",
+      "inputEndDatetimeUtc": "2022-11-20T14:32:32.01111Z",
+      "envActions": [],
+      "missionSource": "CACEM"
+    }
+  }
+}

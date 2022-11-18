@@ -50,6 +50,7 @@ const iconStyle = {
 const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
   {
     color: '#F4DEAF',
+    hoursOffsetToRetrieveMalfunctionCreation: 60,
     icon: <VesselStatusAtPort style={iconStyle} />,
     label: 'Navire à quai',
     textColor: COLORS.charcoal,
@@ -57,6 +58,7 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
   },
   {
     color: '#9ED7D9',
+    hoursOffsetToRetrieveMalfunctionCreation: 6,
     icon: <VesselStatusAtSea style={iconStyle} />,
     label: 'Navire en mer',
     textColor: COLORS.charcoal,
@@ -64,6 +66,7 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
   },
   {
     color: '#E6BC51',
+    hoursOffsetToRetrieveMalfunctionCreation: undefined,
     icon: <VesselStatusNoNews style={iconStyle} />,
     label: 'Sans nouvelles',
     textColor: COLORS.charcoal,
@@ -71,6 +74,7 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
   },
   {
     color: COLORS.charcoal,
+    hoursOffsetToRetrieveMalfunctionCreation: undefined,
     icon: <VesselStatusNeverEmitted style={iconStyle} />,
     label: "N'a jamais émis",
     textColor: COLORS.white,
@@ -78,6 +82,7 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
   },
   {
     color: '#C41812',
+    hoursOffsetToRetrieveMalfunctionCreation: undefined,
     icon: <VesselStatusActivityDetected style={iconStyle} />,
     label: 'Activité détectée',
     textColor: COLORS.white,

@@ -17,8 +17,7 @@ from src.pipeline.utils import delete_rows, get_table
 @task(checkpoint=False)
 def extract_silenced_alerts() -> pd.DataFrame:
     """
-    Return active silenced alerts: the FLow is computed before silenced_before_date
-    and after silenced_after_date if not null
+    Return active silenced alerts
     """
     return extract(
         db_name="monitorfish_remote",

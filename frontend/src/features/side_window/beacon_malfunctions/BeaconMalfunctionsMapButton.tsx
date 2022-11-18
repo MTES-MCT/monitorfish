@@ -5,7 +5,7 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 import { ReactComponent as BeaconMalfunctionsSVG } from '../../icons/Icone_VMS.svg'
-import { SIDE_WINDOW_MENU } from '../constants'
+import { SideWindowMenuKey } from '../constants'
 
 export function BeaconMalfunctionsMapButton() {
   const dispatch = useAppDispatch()
@@ -18,15 +18,15 @@ export function BeaconMalfunctionsMapButton() {
       data-cy="beacon-malfunction-button"
       healthcheckTextWarning={!!healthcheckTextWarning}
       isHidden={!!previewFilteredVesselsMode}
-      isVisible={openedSideWindowTab === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code}
+      isVisible={openedSideWindowTab === SideWindowMenuKey.BEACON_MALFUNCTIONS}
       onClick={() => {
-        if (openedSideWindowTab !== SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code) {
-          dispatch(openSideWindowTab(SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code))
+        if (openedSideWindowTab !== SideWindowMenuKey.BEACON_MALFUNCTIONS) {
+          dispatch(openSideWindowTab(SideWindowMenuKey.BEACON_MALFUNCTIONS))
 
           return
         }
 
-        if (openedSideWindowTab === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code) {
+        if (openedSideWindowTab === SideWindowMenuKey.BEACON_MALFUNCTIONS) {
           dispatch(closeSideWindow())
         }
       }}

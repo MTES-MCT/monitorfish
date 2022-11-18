@@ -4,7 +4,7 @@ import { openSideWindowTab } from '../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
 import { ReactComponent as BeaconMalfunctionsSVG } from '../icons/Icone_VMS.svg'
-import { SIDE_WINDOW_MENU } from './constants'
+import { SideWindowMenuKey } from './constants'
 
 export type SideWindowMenuProps = {
   selectedMenu?: string
@@ -17,19 +17,28 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
       <MenuButton />
       <MenuButton
         data-cy="side-window-menu-alerts"
-        onClick={() => dispatch(openSideWindowTab(SIDE_WINDOW_MENU.ALERTS.code))}
+        onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))}
         role="menuitem"
-        selected={selectedMenu === SIDE_WINDOW_MENU.ALERTS.code}
-        title={SIDE_WINDOW_MENU.ALERTS.name}
+        selected={selectedMenu === SideWindowMenuKey.ALERTS}
+        title={SideWindowMenuKey.ALERTS}
       >
         <AlertsIcon />
       </MenuButton>
       <MenuButton
-        data-cy="side-window-menu-beacon-malfunctions"
-        onClick={() => dispatch(openSideWindowTab(SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code))}
+        aria-label={SideWindowMenuKey.MISSIONS}
+        onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.MISSIONS))}
         role="menuitem"
-        selected={selectedMenu === SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.code}
-        title={SIDE_WINDOW_MENU.BEACON_MALFUNCTIONS.name}
+        selected={selectedMenu === SideWindowMenuKey.MISSIONS}
+        title={SideWindowMenuKey.MISSIONS}
+      >
+        <BeaconMalfunctionsIcon />
+      </MenuButton>
+      <MenuButton
+        data-cy="side-window-menu-beacon-malfunctions"
+        onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.BEACON_MALFUNCTIONS))}
+        role="menuitem"
+        selected={selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTIONS}
+        title={SideWindowMenuKey.BEACON_MALFUNCTIONS}
       >
         <BeaconMalfunctionsIcon />
       </MenuButton>

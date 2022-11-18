@@ -20,7 +20,7 @@ export function CardTableColumnTitle({
   onClick
 }: CardTableColumnTitleProps) {
   return (
-    <StyledCardTableColumnTitle data-cy={dataCy} isSortable={isSortable} onClick={onClick}>
+    <StyledCardTableColumnTitle data-cy={dataCy} isSortable={isSortable} onClick={onClick} title={String(children)}>
       {children}
       {isSortable && isSortColumn && (
         <Sort isAscending={isAscending} title={isAscending ? 'Croissant' : 'Décroissant'} />
@@ -33,6 +33,9 @@ const StyledCardTableColumnTitle = styled.div<{
   isSortable?: boolean
 }>`
   cursor: ${p => (p.isSortable ? 'pointer' : '')};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const Sort = styled(SortSVG)<{

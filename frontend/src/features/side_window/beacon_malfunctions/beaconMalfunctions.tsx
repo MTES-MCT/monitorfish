@@ -99,7 +99,7 @@ const getFirstStatusAction = (vesselStatus: BeaconMalfunctionStatusValue, malfun
     )} ouverte dans MonitorFish, dernière émission le ${getDate(malfunctionStartDateTime)} à ${getTime(
       malfunctionStartDateTime,
       true
-    )}`
+    )} (UTC)`
   }
 
   if (vesselStatus.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED) {

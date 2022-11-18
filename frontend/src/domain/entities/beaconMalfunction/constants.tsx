@@ -112,7 +112,6 @@ const END_OF_MALFUNCTION_REASON_RECORD: Record<EndOfBeaconMalfunctionReason, Enf
 
 export enum BeaconMalfunctionsStage {
   ARCHIVED = 'ARCHIVED',
-  CROSS_CHECK = 'CROSS_CHECK',
   END_OF_MALFUNCTION = 'END_OF_MALFUNCTION',
   FOUR_HOUR_REPORT = 'FOUR_HOUR_REPORT',
   INITIAL_ENCOUNTER = 'INITIAL_ENCOUNTER',
@@ -146,7 +145,7 @@ const STAGE_RECORD: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumn
     description:
       "Relancer les navires qui sont à quai (ou supposés à quai) et qui n'ont pas encore repris leurs émissions.",
     isColumn: true,
-    title: 'Relance pour reprise'
+    title: 'Navires supposés à quai'
   },
   TARGETING_VESSEL: {
     index: 3,
@@ -154,15 +153,7 @@ const STAGE_RECORD: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumn
     description:
       "Mobiliser les unités sur les navires dont on n'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.",
     isColumn: true,
-    title: 'Ciblage du navire'
-  },
-  CROSS_CHECK: {
-    index: 4,
-    code: 'CROSS_CHECK',
-    description:
-      "Mobiliser les unités sur les navires dont on n'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.",
-    isColumn: true,
-    title: 'Contrôle croisé'
+    title: 'Suivi en cours'
   },
   END_OF_MALFUNCTION: {
     index: 5,

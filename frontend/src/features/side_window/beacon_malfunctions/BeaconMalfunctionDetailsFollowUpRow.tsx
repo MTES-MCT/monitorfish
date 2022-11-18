@@ -2,15 +2,17 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 
-export function BeaconMalfunctionDetailsFollowUpRow({ children, dateText, index, smallSize }) {
+export function BeaconMalfunctionDetailsFollowUpRow({ children, date, hoveredDate, index, smallSize }) {
   return (
-    <span key={dateText}>
+    <span key={date}>
       <DateSeparator
         data-cy="side-window-beacon-malfunctions-detail-comment-date"
         style={dateSeparatorStyle(index === 0)}
       >
         <Line style={lineStyle(smallSize)} />
-        <RowDate style={rowDateStyle(dateText === "Aujourd'hui", dateText === 'Hier', smallSize)}>{dateText}</RowDate>
+        <RowDate style={rowDateStyle(date === "Aujourd'hui", date === 'Hier', smallSize)} title={hoveredDate}>
+          {date}
+        </RowDate>
       </DateSeparator>
       {children}
     </span>

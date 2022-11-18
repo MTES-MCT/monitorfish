@@ -3,27 +3,29 @@ import { Toggle } from 'rsuite'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
-import {
-  BeaconMalfunctionVesselStatus,
-  UserType,
-  VESSEL_STATUS
-} from '../../../domain/entities/beaconMalfunction/constants'
+import { UserType, VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
 import { setUserType } from '../../../domain/shared_slices/Global'
 import saveBeaconMalfunctionCommentFromKanban from '../../../domain/use_cases/beaconMalfunction/saveBeaconMalfunctionCommentFromKanban'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { getDate, getTime, mergeObjects } from '../../../utils'
+import { getDate, mergeObjects } from '../../../utils'
+import { dayjs } from '../../../utils/dayjs'
+import { pushToObjectAtIndex } from '../../../utils/pushToObjectAtIndex'
 import { ReactComponent as CommentsSVG } from '../../icons/Commentaires.svg'
 import { BeaconMalfunctionDetailsFollowUpItem } from './BeaconMalfunctionDetailsFollowUpItem'
 import { BeaconMalfunctionDetailsFollowUpRow } from './BeaconMalfunctionDetailsFollowUpRow'
-import { BeaconMalfunctionDetailsType, getActionText } from './beaconMalfunctions'
-import { BeaconMalfunctionsDetailsFollowUpNotification } from './BeaconMalfunctionsDetailsFollowUpNotification'
+import { BeaconMalfunctionDetailsType, getContent } from './beaconMalfunctions'
+
+import type {
+  BeaconMalfunctionFollowUpItem,
+  BeaconMalfunctionStatusValue
+} from '../../../domain/types/beaconMalfunction'
 
 export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails, firstStatus, smallSize }) {
   const { actions, beaconMalfunction, comments, notifications } = beaconMalfunctionWithDetails
   const dispatch = useAppDispatch()
   const { userType } = useAppSelector(state => state.global)
-  const vesselStatus = VESSEL_STATUS.find(status => status.value === firstStatus)
+  const firstVesselStatus = VESSEL_STATUS.find(status => status.value === firstStatus) as BeaconMalfunctionStatusValue
   const [today, setToday] = useState('')
   const [yesterday, setYesterday] = useState('')
   const scrollToRef = useRef<HTMLDivElement>(null)
@@ -57,62 +59,65 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
     return date
   }
 
-  const commentsByDate = useMemo(
+  const commentsByDate: Record<string, BeaconMalfunctionFollowUpItem> = useMemo(
     () =>
       comments?.reduce((commentsByDayAccumulated, _comment) => {
         const nextCommentsByDayAccumulated = { ...commentsByDayAccumulated }
         const nextComment = { ..._comment, type: BeaconMalfunctionDetailsType.COMMENT }
 
         const dateWithoutTime = _comment.dateTime.split('T')[0]
-        if (nextCommentsByDayAccumulated[dateWithoutTime]) {
-          nextCommentsByDayAccumulated[dateWithoutTime].push(nextComment)
-        } else {
-          nextCommentsByDayAccumulated[dateWithoutTime] = [nextComment]
-        }
 
-        return nextCommentsByDayAccumulated
+        return pushToObjectAtIndex(nextCommentsByDayAccumulated, dateWithoutTime, nextComment)
       }, {}) || {},
     [comments]
   )
 
   // TODO Replace the .reduce() with an easier method ?
-  const actionsByDate = useMemo(
-    () =>
+  const actionsByDate: Record<string, BeaconMalfunctionFollowUpItem[]> = useMemo(() => {
+    const nextActionsByDate =
       actions?.reduce((actionsByDayAccumulated, _action) => {
         const nextActionsByDayAccumulated = { ...actionsByDayAccumulated }
         const nextAction = { ..._action, type: BeaconMalfunctionDetailsType.ACTION }
 
-        const dateWithoutTime = nextAction.dateTime.split('T')[0]
-        if (nextActionsByDayAccumulated[dateWithoutTime]) {
-          nextActionsByDayAccumulated[dateWithoutTime].push(nextAction)
-        } else {
-          nextActionsByDayAccumulated[dateWithoutTime] = [nextAction]
-        }
+        const dateWithoutTime = nextAction.dateTime.split('T')[0] || ''
 
-        return nextActionsByDayAccumulated
-      }, {}) || {},
-    [actions]
-  )
+        return pushToObjectAtIndex(nextActionsByDayAccumulated, dateWithoutTime, nextAction)
+      }, {}) || {}
 
-  const notificationsByDate = useMemo(
+    if (firstVesselStatus) {
+      let malfunctionCreationDateTime = beaconMalfunction.malfunctionStartDateTime
+      if (firstVesselStatus.hoursOffsetToRetrieveMalfunctionCreation) {
+        malfunctionCreationDateTime = dayjs(beaconMalfunction.malfunctionStartDateTime)
+          .add(firstVesselStatus.hoursOffsetToRetrieveMalfunctionCreation, 'hours')
+          .toISOString()
+      }
+      const dateWithoutTime = malfunctionCreationDateTime.split('T')[0] || ''
+      const firstAction = {
+        dateTime: malfunctionCreationDateTime,
+        isBeaconCreationMessage: true,
+        type: BeaconMalfunctionDetailsType.ACTION
+      }
+
+      return pushToObjectAtIndex(nextActionsByDate, dateWithoutTime, firstAction)
+    }
+
+    return nextActionsByDate
+  }, [actions, firstVesselStatus, beaconMalfunction])
+
+  const notificationsByDate: Record<string, BeaconMalfunctionFollowUpItem[]> = useMemo(
     () =>
       notifications?.reduce((notificationsByDayAccumulated, _notification) => {
         const nextNotificationsByDayAccumulated = { ...notificationsByDayAccumulated }
         const nextNotification = { ..._notification, type: BeaconMalfunctionDetailsType.NOTIFICATION }
 
-        const dateWithoutTime = nextNotification.dateTime.split('T')[0]
-        if (nextNotificationsByDayAccumulated[dateWithoutTime]) {
-          nextNotificationsByDayAccumulated[dateWithoutTime].push(nextNotification)
-        } else {
-          nextNotificationsByDayAccumulated[dateWithoutTime] = [nextNotification]
-        }
+        const dateWithoutTime = nextNotification.dateTime.split('T')[0] || ''
 
-        return nextNotificationsByDayAccumulated
+        return pushToObjectAtIndex(nextNotificationsByDayAccumulated, dateWithoutTime, nextNotification)
       }, {}) || {},
     [notifications]
   )
 
-  const itemsByDate = useMemo(
+  const itemsByDate: Record<string, BeaconMalfunctionFollowUpItem[]> = useMemo(
     () => mergeObjects(commentsByDate, mergeObjects(actionsByDate, notificationsByDate)),
     [commentsByDate, actionsByDate, notificationsByDate]
   )
@@ -144,24 +149,6 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
     })
   }
 
-  const getFirstStatusAction = (_vesselStatus, malfunctionStartDateTime) => {
-    if (
-      _vesselStatus?.value === BeaconMalfunctionVesselStatus.AT_PORT ||
-      _vesselStatus?.value === BeaconMalfunctionVesselStatus.AT_SEA
-    ) {
-      return `Avarie ${_vesselStatus?.label?.replace(
-        'Navire ',
-        ''
-      )} ouverte dans MonitorFish, dernière émission à ${getTime(malfunctionStartDateTime, true)}`
-    }
-
-    if (_vesselStatus?.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED) {
-      return 'Avarie ouverte dans MonitorFish, aucune émission du navire à ce jour.'
-    }
-
-    return ''
-  }
-
   return (
     <Body style={bodyStyle(smallSize)}>
       <NumberComments style={numberCommentsStyle}>
@@ -180,27 +167,15 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
 
           return (
             <BeaconMalfunctionDetailsFollowUpRow key={date} dateText={dateText} index={dateIndex} smallSize={smallSize}>
-              {dateIndex === 0 && vesselStatus && (
-                <BeaconMalfunctionDetailsFollowUpItem
-                  contentText={getFirstStatusAction(vesselStatus, beaconMalfunction?.malfunctionStartDateTime)}
-                  isLast
-                  isLastDate={!itemsByDate?.length}
-                  item={{
-                    dateTime: beaconMalfunction?.malfunctionStartDateTime,
-                    type: BeaconMalfunctionDetailsType.ACTION
-                  }}
-                  scrollToRef={scrollToRef}
-                />
-              )}
               {itemsByDate[date]
-                .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
+                ?.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
                 .map((item, dateItemIndex) => {
-                  const isLast = itemsByDate[date].length === dateItemIndex + 1
+                  const isLast = itemsByDate[date]?.length === dateItemIndex + 1
 
                   return (
                     <BeaconMalfunctionDetailsFollowUpItem
                       key={item.type + item.dateTime}
-                      contentText={getContent(item, beaconMalfunction)}
+                      contentText={getContent(item, beaconMalfunction, firstVesselStatus)}
                       isLast={isLast}
                       isLastDate={isLastDate}
                       item={item}
@@ -242,19 +217,6 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
       ) : null}
     </Body>
   )
-}
-
-function getContent(item, beaconMalfunction) {
-  switch (item?.type) {
-    case BeaconMalfunctionDetailsType.COMMENT:
-      return item.comment
-    case BeaconMalfunctionDetailsType.ACTION:
-      return getActionText(item, beaconMalfunction?.endOfBeaconMalfunctionReason)
-    case BeaconMalfunctionDetailsType.NOTIFICATION:
-      return <BeaconMalfunctionsDetailsFollowUpNotification notification={item} />
-    default:
-      throw new Error('This should never happen.')
-  }
 }
 
 const AddCommentRow = styled.div``

@@ -108,6 +108,8 @@ def get_geopackage_file_object(gdf: gpd.GeoDataFrame, layers: str = None) -> Byt
     buf = BytesIO()
 
     if layers:
+        # Tried using tempfile.TemporaryFile without success.
+        # Try again at your own risk :)
         temp_file_path = ROOT_DIRECTORY / "src/pipeline/data/tmp_geopackage.gpkg"
         remove_file(temp_file_path, ignore_errors=True)
 

@@ -40,7 +40,7 @@ class JpaBeaconMalfunctionActionsRepositoryITests : AbstractDBTests() {
             null,
             1,
             BeaconMalfunctionActionPropertyName.STAGE,
-            Stage.CROSS_CHECK.toString(),
+            Stage.FOUR_HOUR_REPORT.toString(),
             Stage.FOUR_HOUR_REPORT.toString(),
             ZonedDateTime.now()
         )

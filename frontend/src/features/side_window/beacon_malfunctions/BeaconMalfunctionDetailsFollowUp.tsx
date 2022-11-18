@@ -163,10 +163,17 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
       <CommentsAndActions className="smooth-scroll" style={commentsAndActionsStyle(smallSize, textareaHeight || 0)}>
         {sortedDates.map((date, dateIndex) => {
           const isLastDate = Object.keys(itemsByDate).length === dateIndex + 1
-          const dateText = getCommentOrActionDate(getDate(date))
+          const hoveredDate = getDate(date)
+          const showedDate = getCommentOrActionDate(hoveredDate)
 
           return (
-            <BeaconMalfunctionDetailsFollowUpRow key={date} dateText={dateText} index={dateIndex} smallSize={smallSize}>
+            <BeaconMalfunctionDetailsFollowUpRow
+              key={date}
+              date={showedDate}
+              hoveredDate={hoveredDate}
+              index={dateIndex}
+              smallSize={smallSize}
+            >
               {itemsByDate[date]
                 ?.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
                 .map((item, dateItemIndex) => {

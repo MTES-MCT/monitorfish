@@ -1,24 +1,21 @@
 from io import BytesIO
 from unittest.mock import patch
 
-import fiona
 import geopandas as gpd
 import pandas as pd
 import pytest
 import requests
 from prefect import task
-from shapely.geometry import MultiPolygon
 
 from src.pipeline.flows.regulations_open_data import (
     extract_regulations_open_data,
     flow,
-    get_csv_file_object,
-    get_geopackage_file_object,
     get_regulations_for_csv,
     get_regulations_for_geopackage,
 )
 from src.pipeline.shared_tasks.datagouv import update_resource
 from tests.mocks import mock_check_flow_not_running
+from tests.test_pipeline.test_shared_tasks.test_datagouv import make_square_multipolygon
 
 
 @task(checkpoint=False)
@@ -41,27 +38,6 @@ def mock_update_resource(
 
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
-
-
-def make_square_multipolygon(
-    init_lon,
-    init_lat,
-    width,
-    height,
-):
-    return MultiPolygon(
-        [
-            (
-                (
-                    (init_lon, init_lat),
-                    (init_lon + width, init_lat),
-                    (init_lon + width, init_lat + height),
-                    (init_lon, init_lat + height),
-                ),
-                [],
-            )
-        ]
-    )
 
 
 @pytest.fixture
@@ -217,50 +193,34 @@ def test_get_regulations_for_geopackage(
     pd.testing.assert_frame_equal(regulations, regulations_for_geopackage)
 
 
-def test_get_csv_file_object(regulations_for_csv):
-    file_object = get_csv_file_object.run(regulations_for_csv)
-
-    assert isinstance(file_object, BytesIO)
-
-    df_from_file_object = pd.read_csv(file_object)
-    pd.testing.assert_frame_equal(df_from_file_object, regulations_for_csv)
-
-
-def test_get_geopackage_file_object(regulations_for_geopackage):
-    file_object = get_geopackage_file_object.run(
-        regulations_for_geopackage, layers="type_de_reglementation"
-    )
-
-    assert isinstance(file_object, BytesIO)
-
-    layer_1, layer_2 = ["Reg. Facade 1", "Reg. Facade 2"]
-    assert fiona.listlayers(file_object) == [layer_1, layer_2]
-
-    file_object.seek(0)
-    gdf_from_file_object = gpd.read_file(file_object, driver="GPKG", layer=layer_1)
-    pd.testing.assert_frame_equal(
-        gdf_from_file_object,
-        regulations_for_geopackage[
-            regulations_for_geopackage["type_de_reglementation"] == layer_1
-        ],
-    )
-
-    file_object.seek(0)
-    gdf_from_file_object = gpd.read_file(file_object, driver="GPKG", layer=layer_2)
-    pd.testing.assert_frame_equal(
-        gdf_from_file_object,
-        (
-            regulations_for_geopackage[
-                regulations_for_geopackage["type_de_reglementation"] == layer_2
-            ].reset_index(drop=True)
-        ),
-    )
-
-
-def test_flow(reset_test_data):
+def test_flow(reset_test_data, regulations_for_csv, regulations_for_geopackage):
 
     while flow.get_tasks("update_resource"):
         flow.replace(flow.get_tasks("update_resource")[0], mock_update_resource)
 
     state = flow.run()
     assert state.is_successful()
+
+    # Check csv file object
+    csv_file_object = state.result[flow.get_tasks("get_csv_file_object")[0]].result
+    assert isinstance(csv_file_object, BytesIO)
+    df_from_csv_file_object = pd.read_csv(csv_file_object)
+    pd.testing.assert_frame_equal(df_from_csv_file_object, regulations_for_csv)
+
+    # Check geopackage file object
+    geopackage_file_object = state.result[
+        flow.get_tasks("get_geopackage_file_object")[0]
+    ].result
+    assert isinstance(geopackage_file_object, BytesIO)
+
+    layers = ["Reg. Facade 1", "Reg. Facade 2"]
+    gdfs = []
+    for layer in layers:
+        geopackage_file_object.seek(0)
+        gdfs.append(gpd.read_file(geopackage_file_object, driver="GPKG", layer=layer))
+
+    gdf_from_geopackage_file_object = pd.concat(gdfs).reset_index(drop=True)
+
+    pd.testing.assert_frame_equal(
+        gdf_from_geopackage_file_object, regulations_for_geopackage
+    )

@@ -25,7 +25,7 @@ test: check-clean-archi
 	cd frontend && CI=true npm run test:unit -- --coverage
 dev: dev-back
 	sh -c 'make run-front'
-dev-back: run-stubbed-apis
+dev-back:
 	docker compose -f ./infra/dev/docker-compose.yml down -v
 	docker network inspect monitorfish_network >/dev/null 2>&1 || docker network create monitorfish_network
 	docker compose -f ./infra/dev/docker-compose.yml up -d db

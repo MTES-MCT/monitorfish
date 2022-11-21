@@ -113,22 +113,22 @@ const getMalfunctionStartDateText = (
   beaconMalfunction: BeaconMalfunction
 ) => {
   if (
-    beaconMalfunction?.stage === STAGE_RECORD.END_OF_MALFUNCTION.code ||
-    beaconMalfunction?.stage === STAGE_RECORD.ARCHIVED.code
+    beaconMalfunction.stage === STAGE_RECORD.END_OF_MALFUNCTION.code ||
+    beaconMalfunction.stage === STAGE_RECORD.ARCHIVED.code
   ) {
-    switch (beaconMalfunction?.endOfBeaconMalfunctionReason) {
+    switch (beaconMalfunction.endOfBeaconMalfunctionReason) {
       case END_OF_MALFUNCTION_REASON_RECORD.RESUMED_TRANSMISSION.value:
-        return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+        return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction.malfunctionStartDateTime)}`
       case END_OF_MALFUNCTION_REASON_RECORD.BEACON_DEACTIVATED_OR_UNEQUIPPED.value:
-        return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+        return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction.malfunctionStartDateTime)}`
       default:
         throw Error('Should not happen')
     }
   }
 
   return vesselStatus?.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED
-    ? `Balise activée le ${getDate(beaconMalfunction?.malfunctionStartDateTime)}`
-    : `Dernière émission ${getReducedTimeAgo(beaconMalfunction?.malfunctionStartDateTime)}`
+    ? `Balise activée le ${getDate(beaconMalfunction.malfunctionStartDateTime)}`
+    : `Dernière émission le ${getDate(beaconMalfunction.malfunctionStartDateTime)}`
 }
 
 export {

@@ -1,3 +1,5 @@
+import { dayjs } from 'src/utils/dayjs'
+
 import { getDate } from '../../src/utils'
 import { getUtcizedDayjs } from '../../src/utils/getUtcizedDayjs'
 
@@ -14,7 +16,7 @@ context('Side window beacon malfunctions', () => {
       .children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 4)
+      .should('have.length', 5)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(2)
@@ -37,7 +39,7 @@ context('Side window beacon malfunctions', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 3)
+      .should('have.length', 4)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-RELAUNCH_REQUEST"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -47,15 +49,15 @@ context('Side window beacon malfunctions', () => {
   it('Board Should be initialized with the beacon malfunctions', () => {
     // Then
     cy.get('*[data-cy="side-window-sub-menu-trigger"]').click({ force: true })
-    cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('5')
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children().should('have.length', 7)
+    cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('6')
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children().should('have.length', 6)
 
     // Count the number of cards in the columns' header
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-header"]')
-      .contains('3')
+      .contains('4')
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(1)
@@ -72,7 +74,7 @@ context('Side window beacon malfunctions', () => {
       .children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 3)
+      .should('have.length', 4)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(1)
@@ -171,11 +173,16 @@ context('Side window beacon malfunctions', () => {
 
     // Check the comments order
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comments-number"]').contains('2 commentaires')
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').should('have.length', 4)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').should('have.length', 5)
     const oneWeekBefore = getUtcizedDayjs().subtract(7, 'days').toISOString()
     const oneWeekBeforeAsString = getDate(oneWeekBefore)
     if (!oneWeekBeforeAsString) {
       throw new Error('`oneWeekBeforeAsString` is undefined.')
+    }
+    const oneWeekBeforePlusSixtyHours = dayjs(oneWeekBefore).add(60, 'hours').toISOString()
+    const oneWeekBeforePlusSixtyHoursAsString = getDate(oneWeekBeforePlusSixtyHours)
+    if (!oneWeekBeforePlusSixtyHoursAsString) {
+      throw new Error('`oneWeekBeforePlusSixtyHoursAsString` is undefined.')
     }
     const fourDaysBefore = getUtcizedDayjs().subtract(4, 'days').toISOString()
     const fourDaysBeforeAsString = getDate(fourDaysBefore)
@@ -184,9 +191,12 @@ context('Side window beacon malfunctions', () => {
     }
     cy.wait(200)
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(0).contains(oneWeekBeforeAsString)
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(1).contains(fourDaysBeforeAsString)
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(2).contains('Hier')
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(3).contains("Aujourd'hui")
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]')
+      .eq(1)
+      .contains(oneWeekBeforePlusSixtyHoursAsString)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(2).contains(fourDaysBeforeAsString)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(3).contains('Hier')
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(4).contains("Aujourd'hui")
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-action-content"]').should('have.length', 3)
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-content"]').should('have.length', 2)
@@ -209,7 +219,7 @@ context('Side window beacon malfunctions', () => {
       )
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-action-content"]')
       .eq(2)
-      .contains('Le ticket a été déplacé de Premier contact à Relance pour reprise.')
+      .contains('Le ticket a été déplacé de Premier contact à Navires supposés à quai.')
 
     // Show vessel on map
     const oneWeeksBeforeDate = getUtcizedDayjs().subtract(8, 'days')
@@ -293,7 +303,7 @@ context('Side window beacon malfunctions', () => {
       expect(response && response.statusCode).equal(201)
     })
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comments-number"]').contains('1 commentaire')
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(0).contains("Aujourd'hui")
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(1).contains("Aujourd'hui")
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-content"]')
       .eq(0)
       .contains('I just added a new comment')
@@ -427,7 +437,7 @@ context('Side window beacon malfunctions', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 3)
+      .should('have.length', 4)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-FOUR_HOUR_REPORT"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -453,7 +463,7 @@ context('Side window beacon malfunctions', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 3)
+      .should('have.length', 4)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-FOUR_HOUR_REPORT"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')

@@ -105,7 +105,7 @@ const APIWorker = () => {
       }
 
       beaconMalfunctionInKanbanInterval.current = setInterval(() => {
-        dispatch(openBeaconMalfunctionInKanban(openedBeaconMalfunctionInKanban.id))
+        dispatch(openBeaconMalfunctionInKanban(openedBeaconMalfunctionInKanban.beaconMalfunction.id))
       }, THIRTY_SECONDS)
     }
 

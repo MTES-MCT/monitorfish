@@ -3,16 +3,20 @@ import * as timeago from 'timeago.js'
 import {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionsStage,
-  STAGE_RECORD,
-  EndOfBeaconMalfunctionReason,
+  BeaconMalfunctionVesselStatus,
   END_OF_MALFUNCTION_REASON_RECORD,
+  EndOfBeaconMalfunctionReason,
+  STAGE_RECORD,
   VESSEL_STATUS
 } from '../../../domain/entities/beaconMalfunction/constants'
-import { getTextForSearch } from '../../../utils'
+import { getDate, getTextForSearch, getTime } from '../../../utils'
+import { BeaconMalfunctionsDetailsFollowUpNotification } from './BeaconMalfunctionsDetailsFollowUpNotification'
 
 import type {
   BeaconMalfunction,
   BeaconMalfunctionAction,
+  BeaconMalfunctionComment,
+  BeaconMalfunctionFollowUpItem,
   BeaconMalfunctionStatusValue
 } from '../../../domain/types/beaconMalfunction'
 
@@ -61,6 +65,48 @@ export function getBeaconCreationOrModificationDate(beaconMalfunction: BeaconMal
   }
 
   return `modifiée ${getReducedTimeAgo(beaconMalfunction.vesselStatusLastModificationDateTime)}`
+}
+
+export function getContent(
+  item: BeaconMalfunctionFollowUpItem,
+  beaconMalfunction: BeaconMalfunction,
+  firstVesselStatus: BeaconMalfunctionStatusValue
+) {
+  if (item.isBeaconCreationMessage) {
+    return getFirstStatusAction(firstVesselStatus, beaconMalfunction?.malfunctionStartDateTime)
+  }
+
+  switch (item.type) {
+    case BeaconMalfunctionDetailsType.COMMENT:
+      return (item as BeaconMalfunctionComment).comment
+    case BeaconMalfunctionDetailsType.ACTION:
+      return getActionText(item as BeaconMalfunctionAction, beaconMalfunction.endOfBeaconMalfunctionReason)
+    case BeaconMalfunctionDetailsType.NOTIFICATION:
+      return <BeaconMalfunctionsDetailsFollowUpNotification notification={item} />
+    default:
+      throw new Error('This should never happen.')
+  }
+}
+
+const getFirstStatusAction = (vesselStatus: BeaconMalfunctionStatusValue, malfunctionStartDateTime: string) => {
+  if (
+    vesselStatus.value === BeaconMalfunctionVesselStatus.AT_PORT ||
+    vesselStatus.value === BeaconMalfunctionVesselStatus.AT_SEA
+  ) {
+    return `Avarie ${vesselStatus.label.replace(
+      'Navire ',
+      ''
+    )} ouverte dans MonitorFish, dernière émission le ${getDate(malfunctionStartDateTime)} à ${getTime(
+      malfunctionStartDateTime,
+      true
+    )} (UTC)`
+  }
+
+  if (vesselStatus.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED) {
+    return 'Avarie ouverte dans MonitorFish, aucune émission du navire à ce jour.'
+  }
+
+  return ''
 }
 
 export function getActionText(
@@ -132,10 +178,10 @@ export function getBeaconMalfunctionsByStage(
   )
 }
 
-export const BeaconMalfunctionDetailsType = {
-  ACTION: 'ACTION',
-  COMMENT: 'COMMENT',
-  NOTIFICATION: 'NOTIFICATION'
+export enum BeaconMalfunctionDetailsType {
+  ACTION = 'ACTION',
+  COMMENT = 'COMMENT',
+  NOTIFICATION = 'NOTIFICATION'
 }
 
 export function searchInBeaconMalfunctions(

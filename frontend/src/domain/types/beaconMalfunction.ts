@@ -1,8 +1,15 @@
+import type { BeaconMalfunctionDetailsType } from '../../features/side_window/beacon_malfunctions/beaconMalfunctions'
+import type {
+  BeaconMalfunctionPropertyName,
+  BeaconMalfunctionsStage,
+  BeaconMalfunctionVesselStatus,
+  EndOfBeaconMalfunctionReason
+} from '../entities/beaconMalfunction/constants'
 import type { VesselIdentity } from '../entities/vessel/types'
 import type { Integer } from 'type-fest'
 
 export type BeaconMalfunction = {
-  endOfBeaconMalfunctionReason: string
+  endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason
   externalReferenceNumber: string
   flagState: string
   id: number
@@ -15,13 +22,13 @@ export type BeaconMalfunction = {
   stage: string
   vesselIdentifier: string
   vesselName: string
-  vesselStatus: string
+  vesselStatus: BeaconMalfunctionVesselStatus
   vesselStatusLastModificationDateTime: string
 }
 
 export type UpdateBeaconMalfunction = {
-  stage: string | null
-  vesselStatus: string | null
+  stage: BeaconMalfunctionsStage | null
+  vesselStatus: BeaconMalfunctionVesselStatus | null
 }
 
 export type BeaconMalfunctionComment = {
@@ -35,9 +42,18 @@ export type BeaconMalfunctionAction = {
   beaconMalfunctionId: Integer<number>
   dateTime: string
   id: number
-  nextValue: string
-  previousValue: string
-  propertyName: string
+  nextValue: BeaconMalfunctionsStage | BeaconMalfunctionVesselStatus
+  previousValue: BeaconMalfunctionsStage | BeaconMalfunctionVesselStatus
+  propertyName: BeaconMalfunctionPropertyName
+}
+
+export type BeaconMalfunctionFollowUpItem = (
+  | BeaconMalfunctionAction
+  | BeaconMalfunctionComment
+  | BeaconMalfunctionNotification
+) & {
+  isBeaconCreationMessage?: boolean
+  type: BeaconMalfunctionDetailsType
 }
 
 export type BeaconMalfunctionNotification = {
@@ -97,6 +113,7 @@ export type BeaconMalfunctionStageColumnValue = {
 
 export type BeaconMalfunctionStatusValue = {
   color: string
+  hoursOffsetToRetrieveMalfunctionCreation: number | undefined
   icon: JSX.Element
   label: string
   textColor: string

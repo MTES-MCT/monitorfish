@@ -27,4 +27,7 @@ VALUES (1, 'FAK000999999', 'CALLME', 'DONTSINK', 'GB', 'INTERNAL_REFERENCE_NUMBE
         NOW() - ('1 WEEK 6 DAYS')::interval, null, 8, null, 'NB56FR8', 'ACTIVATED'),
        (10, 'ABC000640738', 'IJU5217', 'EJ600773', 'FR', 'INTERNAL_REFERENCE_NUMBER', 'PROFITER ESPRIT DEPUIS',
         'AT_PORT', 'INITIAL_ENCOUNTER', NOW() - ('1 WEEK 3 DAYS')::interval, null, NOW() - ('1 WEEK 3 DAYS')::interval,
+        null, 9, null, 'PO8U9U4', 'UNSUPERVISED'),
+       (11, null, 'IJU5217', 'EJ600773', 'FR', 'INTERNAL_REFERENCE_NUMBER', 'VESSEL WITHOUT CFR',
+        'AT_PORT', 'INITIAL_ENCOUNTER', NOW() - ('2 WEEKS 2 DAYS')::interval, null, NOW() - ('2 WEEK 2 DAYS')::interval,
         null, 9, null, 'PO8U9U4', 'UNSUPERVISED');

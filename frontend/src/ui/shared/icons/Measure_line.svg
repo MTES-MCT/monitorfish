@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Measure_line" transform="translate(280 -82)">
+    <path
+      d="M-260,87h-20V97h20Zm-1.818,8.333h-16.363V88.667h1.818V92h1.818V88.667h1.818V92h1.818V88.667h1.819V92h1.818V88.667h1.818V92h1.819V88.667h1.818Z"
+      fill="currentColor" />
+    <rect width="20" height="20" transform="translate(-280 82)" fill="none" />
+  </g>
+</svg>

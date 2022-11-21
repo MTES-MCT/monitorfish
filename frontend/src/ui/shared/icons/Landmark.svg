@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Landmark" transform="translate(120 -82)">
+    <rect width="2" height="15" transform="translate(-114 99) rotate(180)" fill="currentColor" />
+    <path d="M-113,84V94l12-5Z" fill="currentColor" />
+    <rect width="20" height="20" transform="translate(-120 82)" fill="none" />
+  </g>
+</svg>

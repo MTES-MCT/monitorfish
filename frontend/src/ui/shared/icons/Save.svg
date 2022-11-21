@@ -1,0 +1,6 @@
+<svg id="Save" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <path
+    d="M14.444,2H2V18H18V5.556ZM10,16.222a2.667,2.667,0,1,1,2.667-2.667h0a2.663,2.663,0,0,1-2.659,2.667Zm2.667-8.889H3.778V3.778h8.889Z"
+    fill="currentColor" />
+  <rect width="20" height="20" fill="none" />
+</svg>

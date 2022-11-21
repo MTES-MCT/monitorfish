@@ -1,7 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16.5" height="16.5" viewBox="0 0 16.5 16.5">
   <g id="Groupe_527" data-name="Groupe 527" transform="translate(-257.25 -753.25)">
-    <rect id="Rectangle_2486" data-name="Rectangle 2486" width="2.5" height="2.5" transform="translate(264.25 757)" fill="#707785"/>
-    <rect id="Rectangle_2487" data-name="Rectangle 2487" width="2.5" height="5.5" transform="translate(264.25 760.5)" fill="#707785"/>
-    <circle id="Ellipse_175" data-name="Ellipse 175" cx="7.5" cy="7.5" r="7.5" transform="translate(258 754)" fill="none" stroke="#707785" stroke-width="1.5"/>
+    <rect id="Rectangle_2486" data-name="Rectangle 2486" width="2.5" height="2.5" transform="translate(264.25 757)"
+      fill="currentColor" />
+    <rect id="Rectangle_2487" data-name="Rectangle 2487" width="2.5" height="5.5" transform="translate(264.25 760.5)"
+      fill="currentColor" />
+    <circle id="Ellipse_175" data-name="Ellipse 175" cx="7.5" cy="7.5" r="7.5" transform="translate(258 754)"
+      fill="none" stroke="currentColor" stroke-width="1.5" />
   </g>
 </svg>

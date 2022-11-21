@@ -529,10 +529,6 @@ export const Layer = {
 /* eslint-enable sort-keys-fix/sort-keys-fix */
 
 export const BaseLayers = {
-  DARK: {
-    code: 'DARK',
-    text: 'Fond de carte sombre'
-  },
   LIGHT: {
     code: 'LIGHT',
     text: 'Fond de carte clair'

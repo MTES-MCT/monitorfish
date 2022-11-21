@@ -68,7 +68,7 @@ export type RegulatoryState = {
   // TODO Type this prop.
   regulationSearchedZoneExtent: Record<string, any>[]
   regulatoryGeometriesToPreview: Geometry[] | null
-  regulatoryLayerLawTypes: RegulatoryLawTypes[]
+  regulatoryLayerLawTypes: RegulatoryLawTypes | undefined
   // TODO Type this prop.
   regulatoryTopics: Record<string, any>[]
   // TODO Type this prop.
@@ -87,7 +87,7 @@ const INITIAL_STATE: RegulatoryState = {
   loadingRegulatoryZoneMetadata: false,
   regulationSearchedZoneExtent: [],
   regulatoryGeometriesToPreview: null,
-  regulatoryLayerLawTypes: [],
+  regulatoryLayerLawTypes: undefined,
   regulatoryTopics: [],
   regulatoryTopicsOpened: [],
   regulatoryZoneMetadata: null,

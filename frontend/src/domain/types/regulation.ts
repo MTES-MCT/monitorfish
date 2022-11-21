@@ -37,7 +37,8 @@ export type RegulatoryTopics = Map<string, RegulatoryZone[]>
 // TODO Check that.
 /** key is the law type name */
 // TODO Is it a matrix? The name doesn't reflect that.
-export type RegulatoryLawTypes = Map<string, RegulatoryTopics[]>
+// export type RegulatoryLawTypes = Map<string, RegulatoryTopics[]>
+export type RegulatoryLawTypes = Record<string, RegulatoryTopics[]>
 
 export type DateInterval = {
   endDate: Date

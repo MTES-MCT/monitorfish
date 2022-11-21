@@ -1,10 +1,10 @@
-import { REGULATORY_SEARCH_PROPERTIES } from './regulatory'
+import { RegulatorySearchProperty } from './regulatory'
 
 export const BACKOFFICE_SEARCH_PROPERTIES = [
-  REGULATORY_SEARCH_PROPERTIES.TOPIC,
-  REGULATORY_SEARCH_PROPERTIES.ZONE,
-  REGULATORY_SEARCH_PROPERTIES.REGION,
-  REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES
+  RegulatorySearchProperty.TOPIC,
+  RegulatorySearchProperty.ZONE,
+  RegulatorySearchProperty.REGION,
+  RegulatorySearchProperty.REGULATORY_REFERENCES
 ]
 
 export const GEAR_MESH_SIZE = {

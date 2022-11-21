@@ -9,7 +9,7 @@ context('Update Regulation', () => {
 
     // Open a regulation to edit
     cy.get('[data-cy="law-type"]').should('have.length', 3)
-    cy.get('[data-cy="law-type"]').eq(1).click()
+    cy.get('[data-cy="law-type"]').eq(0).click()
     cy.get('[data-cy="regulatory-layer-topic-row"]').should('have.length', 1)
     cy.get('[data-cy="regulatory-layer-topic-row"]').eq(0).click({ force: true })
     cy.get('[data-cy="regulatory-layer-zone"]').should('have.length', 1)

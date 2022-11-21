@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import BaseMap from './BaseMap'
 import { LayerDetailsBox } from './controls/LayerDetailsBox'
@@ -7,11 +6,11 @@ import { VesselsTracksLayerMemoized } from '../../layers/VesselsTracksLayer'
 import VesselsLayer from '../../layers/VesselsLayer'
 import FilterLayer from '../../layers/FilterLayer'
 import DrawLayer from '../../layers/DrawLayer'
-import BaseLayer from '../../layers/BaseLayer'
-import RegulatoryLayers from '../../layers/RegulatoryLayers'
-import AdministrativeLayers from '../../layers/AdministrativeLayers'
-import ShowRegulatoryMetadata from './ShowRegulatoryMetadata'
-import RegulatoryPreviewLayer from '../../layers/RegulatoryPreviewLayer'
+import { BaseLayer } from '../../layers/BaseLayer'
+import { RegulatoryLayers } from '../../layers/RegulatoryLayers'
+import { AdministrativeLayers } from '../../layers/AdministrativeLayers'
+import { ShowRegulatoryMetadata } from './ShowRegulatoryMetadata'
+import { RegulatoryPreviewLayer } from '../../layers/RegulatoryPreviewLayer'
 import MeasurementLayer from '../../layers/MeasurementLayer'
 import MapHistory from './MapHistory'
 import VesselCardOverlay from './overlays/VesselCardOverlay'
@@ -30,8 +29,6 @@ import VesselAlertAndBeaconMalfunctionLayer from '../../layers/VesselAlertAndBea
 import VesselInfractionSuspicionLayer from '../../layers/VesselInfractionSuspicionLayer'
 
 const Map = () => {
-  const isAdmin = useSelector(state => state.global.isAdmin)
-
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [currentFeature, setCurrentFeature] = useState(null)
@@ -81,10 +78,10 @@ const Map = () => {
       <DrawLayer/>
       <VesselEstimatedPositionLayer/>
       <VesselSelectedLayer/>
-      <VesselAlertLayer isAdmin={isAdmin}/>
-      <VesselBeaconMalfunctionLayer isAdmin={isAdmin}/>
-      <VesselAlertAndBeaconMalfunctionLayer isAdmin={isAdmin}/>
-      <VesselInfractionSuspicionLayer isAdmin={isAdmin}/>
+      <VesselAlertLayer/>
+      <VesselBeaconMalfunctionLayer/>
+      <VesselAlertAndBeaconMalfunctionLayer/>
+      <VesselInfractionSuspicionLayer/>
       <VesselCardOverlay feature={currentFeature}/>
       <TrackTypeCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>
       <VesselEstimatedPositionCardOverlay pointerMoveEventPixel={handlePointerMoveEventPixel} feature={currentFeature}/>

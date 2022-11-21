@@ -1,38 +1,39 @@
 import { formatDataForSelectPicker, getTextForSearch } from '../../utils'
 import { Layer } from './layers/constants'
 
-export const mapToRegulatoryZone = ({ properties, geometry, id }, speciesByCode) => {
-  return {
-    id: properties.id || id?.split('.')[1],
-    geometry: geometry,
-    lawType: properties.law_type,
-    topic: properties.topic,
-    zone: decodeURI(properties.zone),
-    gearRegulation: parseGearRegulation(properties.gears),
-    speciesRegulation: parseSpeciesRegulation(properties.species, speciesByCode),
-    regulatoryReferences: parseRegulatoryReferences(properties.regulatory_references),
-    fishingPeriod: parseFishingPeriod(properties.fishing_period),
-    region: properties.region,
-    otherInfo: properties.other_info,
-    nextId: properties.next_id
-  }
-}
+import type { Gear, RegulatoryLawTypes } from '../types/regulation'
+import type { Specy } from '../types/specy'
+
+export const mapToRegulatoryZone = ({ geometry, id, properties }, speciesByCode) => ({
+  fishingPeriod: parseFishingPeriod(properties.fishing_period),
+  gearRegulation: parseGearRegulation(properties.gears),
+  geometry,
+  id: properties.id || id?.split('.')[1],
+  lawType: properties.law_type,
+  nextId: properties.next_id,
+  otherInfo: properties.other_info,
+  region: properties.region,
+  regulatoryReferences: parseRegulatoryReferences(properties.regulatory_references),
+  speciesRegulation: parseSpeciesRegulation(properties.species, speciesByCode),
+  topic: properties.topic,
+  zone: decodeURI(properties.zone)
+})
 
 export const mapToProcessingRegulation = persistProcessingRegulation => {
   if (persistProcessingRegulation) {
-    const _parsedFishingPeriod = mapToFishingPeriod(persistProcessingRegulation.fishingPeriod)
+    const fishingPeriod = mapToFishingPeriod(persistProcessingRegulation.fishingPeriod)
+
     return {
       ...persistProcessingRegulation,
-      fishingPeriod: _parsedFishingPeriod
+      fishingPeriod
     }
   }
+
   return DEFAULT_REGULATION
 }
 
-function parseGearRegulation (gears) {
-  return gears
-    ? parseJSON(gears)
-    : DEFAULT_GEAR_REGULATION
+function parseGearRegulation(gears) {
+  return gears ? parseJSON(gears) : DEFAULT_GEAR_REGULATION
 }
 
 /**
@@ -41,30 +42,31 @@ function parseGearRegulation (gears) {
  * @param {Object<string, {name: string, code: string}>} speciesByCode
  * @return {{otherInfo?: string, species: *, allSpecies?: boolean, speciesGroups?: string[]}}
  */
-function parseSpeciesRegulation (speciesRegulation, speciesByCode) {
-  const nextSpeciesRegulation = speciesRegulation
-    ? parseJSON(speciesRegulation)
-    : DEFAULT_SPECIES_REGULATION
+function parseSpeciesRegulation(speciesRegulation, speciesByCode) {
+  const nextSpeciesRegulation = speciesRegulation ? parseJSON(speciesRegulation) : DEFAULT_SPECIES_REGULATION
 
   if (nextSpeciesRegulation?.authorized?.species?.length) {
-    nextSpeciesRegulation.authorized.species = addMissingSpeciesName(nextSpeciesRegulation?.authorized?.species, speciesByCode)
+    nextSpeciesRegulation.authorized.species = addMissingSpeciesName(
+      nextSpeciesRegulation?.authorized?.species,
+      speciesByCode
+    )
   }
 
   if (nextSpeciesRegulation?.unauthorized?.species?.length) {
-    nextSpeciesRegulation.unauthorized.species = addMissingSpeciesName(nextSpeciesRegulation?.unauthorized?.species, speciesByCode)
+    nextSpeciesRegulation.unauthorized.species = addMissingSpeciesName(
+      nextSpeciesRegulation?.unauthorized?.species,
+      speciesByCode
+    )
   }
 
   return nextSpeciesRegulation
 }
 
-function addMissingSpeciesName (species, speciesByCode) {
-  return species.map(uniqueSpecies => {
-    if (!uniqueSpecies?.name) {
-      uniqueSpecies.name = speciesByCode[uniqueSpecies.code]?.name
-    }
-
-    return uniqueSpecies
-  })
+function addMissingSpeciesName(species: Specy[], speciesByCode: Record<string, Specy>) {
+  return species.map(specy => ({
+    ...specy,
+    name: !specy?.name ? speciesByCode[specy.code]?.name : specy.name
+  }))
 }
 
 const parseRegulatoryReferences = regulatoryTextsString => {
@@ -74,53 +76,40 @@ const parseRegulatoryReferences = regulatoryTextsString => {
 
   const regulatoryTexts = parseJSON(regulatoryTextsString)
   if (regulatoryTexts?.length > 0 && Array.isArray(regulatoryTexts)) {
-    return regulatoryTexts.map(regulatoryText => {
-      if (!regulatoryText.startDate || regulatoryText.startDate === '') {
-        regulatoryText.startDate = new Date().getTime()
-      }
-
-      return regulatoryText
-    })
+    return regulatoryTexts.map(regulatoryText => ({
+      ...regulatoryText,
+      startDate:
+        !regulatoryText.startDate || regulatoryText.startDate === '' ? new Date().getTime() : regulatoryText.startDate
+    }))
   }
 
   return undefined
 }
 
-const parseJSON = text => typeof text === 'string'
-  ? JSON.parse(text)
-  : text
+const parseJSON = text => (typeof text === 'string' ? JSON.parse(text) : text)
 
 export const parseFishingPeriod = fishingPeriod => {
   if (fishingPeriod) {
     return mapToFishingPeriod(JSON.parse(fishingPeriod))
   }
+
   return DEFAULT_FISHING_PERIOD_VALUES
 }
 
 const mapToFishingPeriod = fishingPeriod => {
   if (fishingPeriod) {
-    const {
-      dateRanges,
-      dates,
-      timeIntervals
-    } = fishingPeriod
-    const newDateRanges = dateRanges?.map(({ startDate, endDate }) => {
-      return {
-        startDate: startDate ? new Date(startDate) : undefined,
-        endDate: endDate ? new Date(endDate) : undefined
-      }
-    })
+    const { dateRanges, dates, timeIntervals } = fishingPeriod
+    const newDateRanges = dateRanges?.map(({ endDate, startDate }) => ({
+      endDate: endDate ? new Date(endDate) : undefined,
+      startDate: startDate ? new Date(startDate) : undefined
+    }))
 
-    const newDates = dates?.map(date => {
-      return date ? new Date(date) : undefined
-    })
+    const newDates = dates?.map(date => (date ? new Date(date) : undefined))
 
-    const newTimeIntervals = timeIntervals?.map(({ from, to }) => {
-      return {
-        from: from ? new Date(from) : undefined,
-        to: to ? new Date(to) : undefined
-      }
-    })
+    const newTimeIntervals = timeIntervals?.map(({ from, to }) => ({
+      from: from ? new Date(from) : undefined,
+      to: to ? new Date(to) : undefined
+    }))
 
     return {
       ...fishingPeriod,
@@ -129,48 +118,47 @@ const mapToFishingPeriod = fishingPeriod => {
       timeIntervals: newTimeIntervals
     }
   }
+
   return DEFAULT_FISHING_PERIOD_VALUES
 }
 
 export const mapToRegulatoryFeatureObject = properties => {
   const {
-    topic,
+    fishingPeriod,
+    gearRegulation,
     lawType,
-    zone,
+    nextId,
+    otherInfo,
     region,
     regulatoryReferences,
-    fishingPeriod,
     speciesRegulation,
-    gearRegulation,
-    otherInfo,
-    nextId
+    topic,
+    zone
   } = properties
 
   return {
-    topic: topic,
-    law_type: lawType,
-    zone: zone,
-    region: region,
-    regulatory_references: JSON.stringify(regulatoryReferences),
     fishing_period: JSON.stringify(fishingPeriod),
-    species: JSON.stringify(speciesRegulation),
     gears: JSON.stringify(gearRegulation),
+    law_type: lawType,
+    next_id: nextId,
     other_info: otherInfo,
-    next_id: nextId
+    region,
+    regulatory_references: JSON.stringify(regulatoryReferences),
+    species: JSON.stringify(speciesRegulation),
+    topic,
+    zone
   }
 }
 
-export const getRegulatoryFeatureId = (id) => {
-  return `${Layer.REGULATORY.code}_write.${id}`
-}
+export const getRegulatoryFeatureId = id => `${Layer.REGULATORY.code}_write.${id}`
 
 export const emptyRegulatoryFeatureObject = {
-  topic: null,
   law_type: null,
-  zone: null,
+  next_id: null,
   region: null,
   regulatory_references: null,
-  next_id: null
+  topic: null,
+  zone: null
 }
 
 export const FRANCE = 'Réglementation France'
@@ -201,94 +189,88 @@ const REG_OPANO_NAFO = 'Reg. OPANO / NAFO'
 const REG_SIOFA_APSOI = 'Reg. SIOFA / APSOI'
 
 export const LAWTYPES_TO_TERRITORY = {
-  [REG_MED]: FRANCE,
-  [REG_SA]: FRANCE,
-  [REG_NAMO]: FRANCE,
-  [REG_MEMN]: FRANCE,
-  [REG_OUTRE_MER]: FRANCE,
-  [RUE_2019]: UE,
-  [RUE_1380]: UE,
-  [RUE_494]: UE,
-  [RUE_2017]: UE,
-  [RUE_2022]: UE,
-  [REG_RTC]: UE,
-  [REG_UK]: UK,
   [REG_CCAMLR]: ORGP,
   [REG_CTOI_IOTC]: ORGP,
   [REG_ICCAT_CICTA]: ORGP,
+  [REG_MED]: FRANCE,
+  [REG_MEMN]: FRANCE,
+  [REG_NAMO]: FRANCE,
   [REG_NEAFC_CPANE]: ORGP,
   [REG_OPANO_NAFO]: ORGP,
-  [REG_SIOFA_APSOI]: ORGP
+  [REG_OUTRE_MER]: FRANCE,
+  [REG_RTC]: UE,
+  [REG_SA]: FRANCE,
+  [REG_SIOFA_APSOI]: ORGP,
+  [REG_UK]: UK,
+  [RUE_1380]: UE,
+  [RUE_2017]: UE,
+  [RUE_2019]: UE,
+  [RUE_2022]: UE,
+  [RUE_494]: UE
 }
 
-export const REGULATORY_TERRITORY = {
-  [FRANCE]: 'Réglementation France',
-  [UE]: 'Réglementation UE',
-  [UK]: 'Réglementation UK',
-  [ORGP]: 'Réglementation ORGP'
-}
-
-export const REGULATORY_SEARCH_PROPERTIES = {
-  TOPIC: 'topic',
-  ZONE: 'zone',
-  REGION: 'region',
-  LAW_TYPE: 'law_type',
-  GEARS: 'gears',
-  SPECIES: 'species',
-  REGULATORY_REFERENCES: 'regulatoryReferences'
+export enum RegulatorySearchProperty {
+  GEARS = 'gears',
+  LAW_TYPE = 'law_type',
+  REGION = 'region',
+  REGULATORY_REFERENCES = 'regulatoryReferences',
+  SPECIES = 'species',
+  TOPIC = 'topic',
+  ZONE = 'zone'
 }
 
 /**
-  * @readonly
-  * @enum {string}
-*/
+ * @readonly
+ * @enum {string}
+ */
 export const REGULATION_ACTION_TYPE = {
-  UPDATE: 'update',
+  DELETE: 'delete',
   INSERT: 'insert',
-  DELETE: 'delete'
+  UPDATE: 'update'
 }
 
 /**
-* @enum {RegulatoryTextType}
-*/
-export const REGULATORY_TEXT_TYPE = {
-  CREATION: 'creation',
-  REGULATION: 'regulation'
+ * @enum {RegulatoryTextType}
+ */
+export enum RegulatoryTextType {
+  CREATION = 'creation',
+  REGULATION = 'regulation'
 }
 
-const regulatoryZoneTextType = type =>
-  type === REGULATORY_TEXT_TYPE.CREATION ? 'création' : REGULATORY_TEXT_TYPE.REGULATION ? 'réglementation' : undefined
+const regulatoryZoneTextType = (type: RegulatoryTextType) =>
+  type === RegulatoryTextType.CREATION ? 'création' : 'réglementation'
 
-export const getRegulatoryZoneTextTypeAsText = (textTypeList) => {
-  return `${textTypeList.length === 2
-  ? `${regulatoryZoneTextType(textTypeList[0])} et ${regulatoryZoneTextType(textTypeList[1])}`
-  : `${regulatoryZoneTextType(textTypeList[0])}`} de zone`
-}
+export const getRegulatoryZoneTextTypeAsText = textTypeList =>
+  `${
+    textTypeList.length === 2
+      ? `${regulatoryZoneTextType(textTypeList[0])} et ${regulatoryZoneTextType(textTypeList[1])}`
+      : `${regulatoryZoneTextType(textTypeList[0])}`
+  } de zone`
 
 export const DEFAULT_REGULATORY_TEXT = {
-  url: '',
+  endDate: undefined,
   reference: '',
   startDate: new Date().getTime(),
-  endDate: undefined,
-  textType: []
+  textType: [],
+  url: ''
 }
 
 export const DEFAULT_DATE_RANGE = {
-  startDate: undefined,
-  endDate: undefined
+  endDate: undefined,
+  startDate: undefined
 }
 
 /** @type {FishingPeriod} */
 const DEFAULT_FISHING_PERIOD_VALUES = {
-  authorized: undefined,
+  always: undefined,
   annualRecurrence: undefined,
+  authorized: undefined,
   dateRanges: [],
   dates: [],
-  weekdays: [],
-  holidays: undefined,
   daytime: undefined,
+  holidays: undefined,
   timeIntervals: [],
-  always: undefined
+  weekdays: []
 }
 
 /** @type {RegulatedSpecies} */
@@ -309,49 +291,49 @@ export const DEFAULT_UNAUTHORIZED_REGULATED_SPECIES = {
 /** @type {SpeciesRegulation} */
 export const DEFAULT_SPECIES_REGULATION = {
   authorized: DEFAULT_AUTHORIZED_REGULATED_SPECIES,
-  unauthorized: DEFAULT_UNAUTHORIZED_REGULATED_SPECIES,
-  otherInfo: undefined
+  otherInfo: undefined,
+  unauthorized: DEFAULT_UNAUTHORIZED_REGULATED_SPECIES
 }
 
 /** @type {RegulatedGears} */
 export const DEFAULT_AUTHORIZED_REGULATED_GEARS = {
-  allTowedGears: null,
   allPassiveGears: null,
+  allTowedGears: null,
+  derogation: null,
   regulatedGearCategories: {},
   regulatedGears: {},
-  selectedCategoriesAndGears: [],
-  derogation: null
+  selectedCategoriesAndGears: []
 }
 
 /** @type {RegulatedGears} */
 export const DEFAULT_UNAUTHORIZED_REGULATED_GEARS = {
   allGears: null,
-  allTowedGears: null,
   allPassiveGears: null,
+  allTowedGears: null,
+  derogation: null,
   regulatedGearCategories: {},
   regulatedGears: {},
-  selectedCategoriesAndGears: [],
-  derogation: null
+  selectedCategoriesAndGears: []
 }
 
 /** @type {GearRegulation} */
 export const DEFAULT_GEAR_REGULATION = {
   authorized: DEFAULT_AUTHORIZED_REGULATED_GEARS,
-  unauthorized: DEFAULT_UNAUTHORIZED_REGULATED_GEARS,
-  otherInfo: undefined
+  otherInfo: undefined,
+  unauthorized: DEFAULT_UNAUTHORIZED_REGULATED_GEARS
 }
 
 export const REGULATORY_REFERENCE_KEYS = {
-  ID: 'id',
-  REGION: 'region',
-  LAW_TYPE: 'lawType',
-  TOPIC: 'topic',
-  ZONE: 'zone',
-  REGULATORY_REFERENCES: 'regulatoryReferences',
   FISHING_PERIOD: 'fishingPeriod',
-  SPECIES_REGULATION: 'speciesRegulation',
   GEAR_REGULATION: 'gearRegulation',
-  OTHER_INFO: 'otherInfo'
+  ID: 'id',
+  LAW_TYPE: 'lawType',
+  OTHER_INFO: 'otherInfo',
+  REGION: 'region',
+  REGULATORY_REFERENCES: 'regulatoryReferences',
+  SPECIES_REGULATION: 'speciesRegulation',
+  TOPIC: 'topic',
+  ZONE: 'zone'
 }
 
 export const DEFAULT_REGULATION = {
@@ -373,15 +355,15 @@ export const GEARS_CATEGORIES_WITH_MESH = [
 export const INITIAL_UPCOMING_REG_REFERENCE = { regulatoryTextList: [DEFAULT_REGULATORY_TEXT] }
 
 export const FISHING_PERIOD_KEYS = {
+  ALWAYS: 'always',
+  ANNUAL_RECURRENCE: 'annualRecurrence',
+  AUTHORIZED: 'authorized',
   DATE_RANGES: 'dateRanges',
   DATES: 'dates',
-  TIME_INTERVALS: 'timeIntervals',
-  AUTHORIZED: 'authorized',
-  ANNUAL_RECURRENCE: 'annualRecurrence',
-  WEEKDAYS: 'weekdays',
-  HOLIDAYS: 'holidays',
   DAYTIME: 'daytime',
-  ALWAYS: 'always'
+  HOLIDAYS: 'holidays',
+  TIME_INTERVALS: 'timeIntervals',
+  WEEKDAYS: 'weekdays'
 }
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
@@ -399,23 +381,23 @@ export const WEEKDAYS = {
 
 export const DEFAULT_MENU_CLASSNAME = 'new-regulation-select-picker'
 
-export function findIfSearchStringIncludedInProperty (zone, propertiesToSearch, searchText) {
+export function findIfSearchStringIncludedInProperty(zone, propertiesToSearch, searchText) {
   return zone[propertiesToSearch] && searchText
     ? getTextForSearch(zone[propertiesToSearch]).includes(getTextForSearch(searchText))
     : false
 }
 
-export function findIfSearchStringIncludedInRegulatoryReferences (zone, searchText) {
-  return zone[REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES]?.length && searchText
-    ? zone[REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES].find(text => text?.reference.toString().includes(searchText))
+export function findIfSearchStringIncludedInRegulatoryReferences(zone, searchText) {
+  return zone[RegulatorySearchProperty.REGULATORY_REFERENCES]?.length && searchText
+    ? zone[RegulatorySearchProperty.REGULATORY_REFERENCES].find(text => text?.reference.toString().includes(searchText))
     : false
 }
 
-export function searchByLawType (lawTypes, properties, searchText, gears, species) {
+export function searchByLawType(lawTypes, properties, searchText, gears, species) {
   const searchResultByLawType = {}
 
   Object.keys(lawTypes).forEach(lawType => {
-    const regulatoryZone = Object.assign({}, lawTypes[lawType])
+    const regulatoryZone = { ...lawTypes[lawType] }
     const foundRegulatoryZones = search(searchText, properties, regulatoryZone, gears, species)
 
     if (foundRegulatoryZones && Object.keys(foundRegulatoryZones).length !== 0) {
@@ -426,75 +408,82 @@ export function searchByLawType (lawTypes, properties, searchText, gears, specie
   return searchResultByLawType
 }
 
-export function searchResultIncludeZone (searchResult, { lawType, topic, zone }) {
+export function searchResultIncludeZone(searchResult, { lawType, topic, zone }) {
   const territorySearchResult = searchResult[LAWTYPES_TO_TERRITORY[lawType]]
   if (territorySearchResult) {
-    return Object.keys(territorySearchResult).includes(lawType) &&
+    return (
+      Object.keys(territorySearchResult).includes(lawType) &&
       Object.keys(territorySearchResult[lawType]).includes(topic) &&
       territorySearchResult[lawType][topic].filter(regulatoryZone => regulatoryZone.zone === zone).length > 0
+    )
   }
+
   return false
 }
 
-export function findIfStringIsIncludedInZoneGears (zone, searchText, uniqueGearCodes) {
-  const gearCodes = zone.regulatedGears?.regulatedGears
-    ? Object.keys(zone.regulatedGears?.regulatedGears)
-    : []
+export function findIfStringIsIncludedInZoneGears(zone, uniqueGearCodes: string[]) {
+  const gearCodes = zone.regulatedGears?.regulatedGears ? Object.keys(zone.regulatedGears?.regulatedGears) : []
 
   if (gearCodes?.length) {
     return gearCodeIsFoundInRegulatoryZone(gearCodes, uniqueGearCodes)
-  } else {
-    return false
   }
+
+  return false
 }
 
-export function findIfStringIsIncludedInZoneSpecies (zone, searchText, uniqueGearCodes) {
-  const speciesCodes = zone.speciesRegulation?.authorized?.species?.map(speciesCodes => speciesCodes.code)
+export function findIfStringIsIncludedInZoneSpecies(zone, uniqueGearCodes: string[]) {
+  const speciesCodes = zone.speciesRegulation?.authorized?.species?.map(specy => specy.code)
 
   if (speciesCodes?.length) {
     return gearCodeIsFoundInRegulatoryZone(speciesCodes, uniqueGearCodes)
-  } else {
-    return false
   }
+
+  return false
 }
 
-export function search (searchText, propertiesToSearch, regulatoryZones, gears, species) {
+// TODO Type thees untyped params.
+export function search(
+  searchText: string,
+  propertiesToSearch: RegulatorySearchProperty[],
+  regulatoryZones,
+  gears: Gear[],
+  species: Specy[]
+) {
   if (regulatoryZones) {
-    const foundRegulatoryZones = { ...regulatoryZones }
+    // TODO Type that with real definitions.
+    const foundRegulatoryZones: Record<string, Record<string, any>[]> = { ...regulatoryZones }
 
-    let uniqueGearCodes = null
-    if (propertiesToSearch.includes(REGULATORY_SEARCH_PROPERTIES.GEARS)) {
-      uniqueGearCodes = getUniqueGearCodesFromSearch(searchText, gears)
-    }
-    let uniqueSpeciesCodes = null
-    if (propertiesToSearch.includes(REGULATORY_SEARCH_PROPERTIES.SPECIES)) {
-      uniqueSpeciesCodes = getUniqueSpeciesCodesFromSearch(searchText, species)
-    }
+    const uniqueGearCodes: string[] = propertiesToSearch.includes(RegulatorySearchProperty.GEARS)
+      ? getUniqueGearCodesFromSearch(searchText, gears)
+      : []
+    const uniqueSpeciesCodes: string[] = propertiesToSearch.includes(RegulatorySearchProperty.SPECIES)
+      ? getUniqueSpeciesCodesFromSearch(searchText, species)
+      : []
 
-    Object.keys(foundRegulatoryZones)
-      .forEach(key => {
-        foundRegulatoryZones[key] = foundRegulatoryZones[key]
-          .filter(zone => {
-            let searchStringIncludedInProperty = false
-            propertiesToSearch.forEach(property => {
-              if (property === REGULATORY_SEARCH_PROPERTIES.GEARS) {
-                searchStringIncludedInProperty = findIfStringIsIncludedInZoneGears(zone, searchText, uniqueGearCodes)
-              } else if (property === REGULATORY_SEARCH_PROPERTIES.SPECIES) {
-                searchStringIncludedInProperty = findIfStringIsIncludedInZoneSpecies(zone, searchText, uniqueSpeciesCodes)
-              } else if (property === REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES) {
-                searchStringIncludedInProperty =
-                  searchStringIncludedInProperty || findIfSearchStringIncludedInRegulatoryReferences(zone, searchText)
-              } else {
-                searchStringIncludedInProperty =
-                  searchStringIncludedInProperty || findIfSearchStringIncludedInProperty(zone, property, searchText)
-              }
-            })
-            return searchStringIncludedInProperty
-          })
-        if (!foundRegulatoryZones[key] || !foundRegulatoryZones[key].length > 0) {
-          delete foundRegulatoryZones[key]
-        }
+    // TODO Avoid using `Object.keys()` which makes typing cumbersome.
+    Object.keys(foundRegulatoryZones).forEach(key => {
+      foundRegulatoryZones[key] = (foundRegulatoryZones[key] as Record<string, any>[]).filter(zone => {
+        let isSearchStringIncludedInProperty = false
+        propertiesToSearch.forEach(property => {
+          if (property === RegulatorySearchProperty.GEARS) {
+            isSearchStringIncludedInProperty = findIfStringIsIncludedInZoneGears(zone, uniqueGearCodes)
+          } else if (property === RegulatorySearchProperty.SPECIES) {
+            isSearchStringIncludedInProperty = findIfStringIsIncludedInZoneSpecies(zone, uniqueSpeciesCodes)
+          } else if (property === RegulatorySearchProperty.REGULATORY_REFERENCES) {
+            isSearchStringIncludedInProperty =
+              isSearchStringIncludedInProperty || findIfSearchStringIncludedInRegulatoryReferences(zone, searchText)
+          } else {
+            isSearchStringIncludedInProperty =
+              isSearchStringIncludedInProperty || findIfSearchStringIncludedInProperty(zone, property, searchText)
+          }
+        })
+
+        return isSearchStringIncludedInProperty
       })
+      if (!foundRegulatoryZones[key] || !(foundRegulatoryZones[key] as Record<string, any>).length) {
+        delete foundRegulatoryZones[key]
+      }
+    })
 
     return foundRegulatoryZones
   }
@@ -502,30 +491,41 @@ export function search (searchText, propertiesToSearch, regulatoryZones, gears, 
   return {}
 }
 
-export function getUniqueGearCodesFromSearch (searchText, gears) {
+export function getUniqueGearCodesFromSearch(searchText: string, gears: Gear[]): string[] {
   const foundGearCodes = gears
-    .filter(gear => gear.name.toLowerCase().includes(searchText.toLowerCase()) || gear.code.toLowerCase().includes(searchText.toLowerCase()))
+    .filter(
+      gear =>
+        gear.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        gear.code.toLowerCase().includes(searchText.toLowerCase())
+    )
     .map(gear => gear.code)
+
   return [...new Set(foundGearCodes)]
 }
 
-export function getUniqueSpeciesCodesFromSearch (searchText, species) {
+export function getUniqueSpeciesCodesFromSearch(searchText: string, species: Specy[]): string[] {
   const foundSpeciesCodes = species
-    .filter(species => species.name.toLowerCase().includes(searchText.toLowerCase()) || species.code.toLowerCase().includes(searchText.toLowerCase()))
+    .filter(
+      specy =>
+        specy.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        specy.code.toLowerCase().includes(searchText.toLowerCase())
+    )
     .map(gear => gear.code)
+
   return [...new Set(foundSpeciesCodes)]
 }
 
-export function gearCodeIsFoundInRegulatoryZone (gears, uniqueGearCodes) {
-  return gears.some(gearCodeFromREG => {
-    return !!uniqueGearCodes.some(foundGearCode => foundGearCode === gearCodeFromREG)
-  })
+// TODO `gears` seems to be a strings array here and not a `Gear` array, this should be renamed.
+export function gearCodeIsFoundInRegulatoryZone(gears: string[], uniqueGearCodes: string[]) {
+  return gears.some(gearCodeFromREG => !!uniqueGearCodes.some(foundGearCode => foundGearCode === gearCodeFromREG))
 }
 
-export function orderByAlphabeticalLayer (foundRegulatoryLayers) {
+// TODO Refactor that with a clean `toPairs` / `fromPairs` without param reassigning.
+export function orderByAlphabeticalLayer(foundRegulatoryLayers) {
   if (foundRegulatoryLayers) {
     Object.keys(foundRegulatoryLayers).forEach(lawType => {
       Object.keys(foundRegulatoryLayers[lawType]).forEach(topic => {
+        // eslint-disable-next-line no-param-reassign
         foundRegulatoryLayers[lawType][topic] = foundRegulatoryLayers[lawType][topic].sort((a, b) => {
           if (a.zone && b.zone) {
             return a.zone.localeCompare(b.zone)
@@ -538,23 +538,25 @@ export function orderByAlphabeticalLayer (foundRegulatoryLayers) {
   }
 }
 
-export function getMergedRegulatoryLayers (previousFoundRegulatoryLayers, nextFoundRegulatoryLayers) {
+export function getMergedRegulatoryLayers(previousFoundRegulatoryLayers, nextFoundRegulatoryLayers) {
   const mergedRegulatoryLayers = {}
 
   Object.keys(previousFoundRegulatoryLayers).forEach(lawType => {
     if (previousFoundRegulatoryLayers[lawType]) {
       Object.keys(previousFoundRegulatoryLayers[lawType]).forEach(regulatoryTopic => {
         previousFoundRegulatoryLayers[lawType][regulatoryTopic].forEach(zone => {
-          if (nextFoundRegulatoryLayers &&
+          if (
+            nextFoundRegulatoryLayers &&
             nextFoundRegulatoryLayers[lawType] &&
             nextFoundRegulatoryLayers[lawType][regulatoryTopic] &&
             nextFoundRegulatoryLayers[lawType][regulatoryTopic].length &&
-            nextFoundRegulatoryLayers[lawType][regulatoryTopic].some(searchZone =>
-              searchZone.topic === zone.topic &&
-              searchZone.zone === zone.zone
-            )) {
+            nextFoundRegulatoryLayers[lawType][regulatoryTopic].some(
+              searchZone => searchZone.topic === zone.topic && searchZone.zone === zone.zone
+            )
+          ) {
             if (mergedRegulatoryLayers[lawType] && mergedRegulatoryLayers[lawType][regulatoryTopic]) {
-              mergedRegulatoryLayers[lawType][regulatoryTopic] = mergedRegulatoryLayers[lawType][regulatoryTopic].concat(zone)
+              mergedRegulatoryLayers[lawType][regulatoryTopic] =
+                mergedRegulatoryLayers[lawType][regulatoryTopic].concat(zone)
             } else {
               if (!mergedRegulatoryLayers[lawType]) {
                 mergedRegulatoryLayers[lawType] = {}
@@ -572,10 +574,11 @@ export function getMergedRegulatoryLayers (previousFoundRegulatoryLayers, nextFo
 
 /**
  * Remove the Territory part of the regulatory layer object (see `setRegulatoryLayers` method within the `Regulatory` reducer)
- * @param {Object} layersTopicsByRegTerritory - The regulatory object
- * @return {Object} The regulatory object without Territory
  */
-export const getRegulatoryLayersWithoutTerritory = layersTopicsByRegTerritory => {
+// TODO Type these params with strict definitions and check `RegulatoryLawTypes` validity.
+export const getRegulatoryLayersWithoutTerritory = (
+  layersTopicsByRegTerritory: Record<string, any>
+): RegulatoryLawTypes => {
   let nextRegulatoryLayersWithoutTerritory = {}
 
   Object.keys(layersTopicsByRegTerritory).forEach(territory => {
@@ -596,16 +599,18 @@ export const getRegulatoryLayersWithoutTerritory = layersTopicsByRegTerritory =>
  * @param {string[]} array
  * @returns {string}
  */
-const toArrayString = (array) => {
+const toArrayString = array => {
   if (array?.length) {
     if (array.length === 1) {
       return array[0]
-    } else if (array.length === 2) {
-      return array.join(' et ')
-    } else {
-      return array.slice(0, -1).join(', ').concat(' et ').concat(array.slice(-1))
     }
+    if (array.length === 2) {
+      return array.join(' et ')
+    }
+
+    return array.slice(0, -1).join(', ').concat(' et ').concat(array.slice(-1))
   }
+
   return null
 }
 
@@ -617,22 +622,25 @@ const toArrayString = (array) => {
  * @param {boolean} annualRecurrence
  * @returns
  */
-const dateToString = (date, annualRecurrence) => {
-  const options = { day: 'numeric', month: 'long' }
-  if (!annualRecurrence) {
+const dateToString = (date: Date, isYearly: boolean = false) => {
+  const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long' }
+  if (!isYearly) {
     options.year = 'numeric'
   }
+
   return date.toLocaleDateString('fr-FR', options)
 }
 
 const getHoursValues = () => {
   const hours = [...Array(24).keys()]
-  const times = hours.reduce((acc, hour) => {
-    const hourStr = hour < 10 ? '0' + hour : hour
+  const times = hours.reduce<string[]>((acc, hour) => {
+    const hourStr = hour < 10 ? `0${hour}` : hour
     acc.push(`${hourStr}h00`)
     acc.push(`${hourStr}h30`)
+
     return acc
   }, [])
+
   return formatDataForSelectPicker(times)
 }
 
@@ -645,12 +653,14 @@ export const TIMES_SELECT_PICKER_VALUES = getHoursValues()
  * @param {Date} date
  * @returns {string} date as string
  */
-export const convertTimeToString = (date) => {
+export const convertTimeToString = date => {
   if (date) {
     const minutes = date.getMinutes()
     const hours = date.getHours()
-    return `${hours < 10 ? '0' + hours : hours}h${minutes === 0 ? minutes + '0' : minutes}`
+
+    return `${hours < 10 ? `0${hours}` : hours}h${minutes === 0 ? `${minutes}0` : minutes}`
   }
+
   return null
 }
 
@@ -665,32 +675,26 @@ export const fishingPeriodToString = fishingPeriod => {
     return ''
   }
 
-  const {
-    dateRanges,
-    annualRecurrence,
-    dates,
-    weekdays,
-    holidays,
-    timeIntervals,
-    daytime,
-    authorized,
-    always
-  } = fishingPeriod
+  const { always, annualRecurrence, authorized, dateRanges, dates, daytime, holidays, timeIntervals, weekdays } =
+    fishingPeriod
 
-  const textArray = []
+  const textArray: string[] = []
   if (always) {
     textArray.push('en tous temps')
   }
 
   if (dateRanges?.length) {
     let array = toArrayString(
-      dateRanges.map(({ startDate, endDate }) => {
-        if (startDate && endDate) {
-          return `du ${dateToString(startDate, annualRecurrence)} au ${dateToString(endDate, annualRecurrence)}`
-        }
+      dateRanges
+        .map(({ endDate, startDate }) => {
+          if (startDate && endDate) {
+            return `du ${dateToString(startDate, annualRecurrence)} au ${dateToString(endDate, annualRecurrence)}`
+          }
 
-        return undefined
-      }).filter(e => e))
+          return undefined
+        })
+        .filter(e => e)
+    )
 
     if (array?.length) {
       if (annualRecurrence) {
@@ -701,13 +705,17 @@ export const fishingPeriodToString = fishingPeriod => {
   }
 
   if (dates?.length) {
-    const array = toArrayString(dates.map((date) => {
-      if (date) {
-        return `le ${dateToString(date)}`
-      }
+    const array = toArrayString(
+      dates
+        .map(date => {
+          if (date) {
+            return `le ${dateToString(date)}`
+          }
 
-      return undefined
-    }).filter(e => e))
+          return undefined
+        })
+        .filter(e => e)
+    )
 
     if (array?.length) {
       textArray.push(array)
@@ -723,12 +731,17 @@ export const fishingPeriodToString = fishingPeriod => {
   }
 
   if (timeIntervals?.length) {
-    const array = toArrayString(timeIntervals.map(({ from, to }) => {
-      if (from && to) {
-        return `de ${convertTimeToString(from)} à ${convertTimeToString(to)}`
-      }
-      return undefined
-    }).filter(e => e))
+    const array = toArrayString(
+      timeIntervals
+        .map(({ from, to }) => {
+          if (from && to) {
+            return `de ${convertTimeToString(from)} à ${convertTimeToString(to)}`
+          }
+
+          return undefined
+        })
+        .filter(e => e)
+    )
 
     if (array?.length) {
       textArray.push(array)
@@ -751,34 +764,33 @@ export const fishingPeriodToString = fishingPeriod => {
  * @param {Map<string, RegulatoryTopics} layersTopicsByRegTerritory
  * @returns {Map<string, RegulatoryTopics}
  */
-export const sortLayersTopicsByRegTerritory = (layersTopicsByRegTerritory) => {
+export const sortLayersTopicsByRegTerritory = layersTopicsByRegTerritory => {
   const UEObject = { ...layersTopicsByRegTerritory[UE] }
 
   const FRObject = { ...layersTopicsByRegTerritory[FRANCE] }
   const newFRObject = {
+    [REG_MED]: FRObject[REG_MED],
     [REG_MEMN]: FRObject[REG_MEMN],
     [REG_NAMO]: FRObject[REG_NAMO],
-    [REG_SA]: FRObject[REG_SA],
-    [REG_MED]: FRObject[REG_MED],
-    [REG_OUTRE_MER]: FRObject[REG_OUTRE_MER]
+    [REG_OUTRE_MER]: FRObject[REG_OUTRE_MER],
+    [REG_SA]: FRObject[REG_SA]
   }
 
   return {
-    [UE]: UEObject.sort(),
-    [FRANCE]: newFRObject
+    [FRANCE]: newFRObject,
+    [UE]: UEObject.sort()
   }
 }
 
-export const getTitle = regulatory => regulatory
-  ? regulatory.zone
-  : ''
+export const getTitle = regulatory => (regulatory ? regulatory.zone : '')
 
 /**
  * @function checkUrl
  * @param {String} url
  * @returns true if the url parameter is a correct url, else false
  */
-export const checkURL = (url) => {
+export const checkURL = url => {
   const regex = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/
+
   return regex.test(url)
 }

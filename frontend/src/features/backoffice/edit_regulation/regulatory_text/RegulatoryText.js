@@ -12,7 +12,7 @@ import {
   addObjectToRegulatoryTextCheckedMap
 } from '../../Regulation.slice'
 import Tag from '../Tag'
-import { checkURL, REGULATORY_TEXT_TYPE } from '../../../../domain/entities/regulatory'
+import { checkURL, RegulatoryTextType } from '../../../../domain/entities/regulatory'
 
 /**
  * @typedef {object} Props
@@ -208,12 +208,12 @@ const RegulatoryText = props => {
       >
         <CustomCheckbox
           $isRequired={textTypeIsRequired}
-          value={REGULATORY_TEXT_TYPE.CREATION}
+          value={RegulatoryTextType.CREATION}
           data-cy='create-zone-checkbox'
         >création de la zone</CustomCheckbox>
         <CustomCheckbox
           $isRequired={textTypeIsRequired}
-          value={REGULATORY_TEXT_TYPE.REGULATION}
+          value={RegulatoryTextType.REGULATION}
           data-cy='zone-regulation-checkbox'
         >réglementation de la zone</CustomCheckbox>
       </CustomCheckboxGroup>

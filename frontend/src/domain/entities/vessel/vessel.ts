@@ -129,8 +129,7 @@ export class Vessel {
    * Check if vessel icon is in light or dark mode, based on the base layer
    * @return {boolean} isLight - returns true if vessel icon is light
    */
-  static iconIsLight = selectedBaseLayer =>
-    selectedBaseLayer === BaseLayers.DARK.code || selectedBaseLayer === BaseLayers.SATELLITE.code
+  static iconIsLight = selectedBaseLayer => selectedBaseLayer === BaseLayers.SATELLITE.code
 }
 
 // TODO <vessel> is not a Vessel. What is it?

@@ -3,6 +3,15 @@ import { Layer } from '../../entities/layers/constants'
 import { getCenter } from 'ol/extent'
 import { isNumeric } from '../../../utils/isNumeric'
 
+/**
+ *
+ * @param {{
+ *  feature?: any
+ *  topicAndZone?: any
+ * }} layer
+ *
+ * @returns {any}
+ */
 const zoomInLayer = ({ topicAndZone, feature }) => (dispatch, getState) => {
   if (topicAndZone) {
     const name = `${Layer.REGULATORY.code}:${topicAndZone.topic}:${topicAndZone.zone}`

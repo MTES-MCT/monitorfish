@@ -46,8 +46,6 @@ const fishingActivitiesSlice = createSlice({
   reducers: {
     /**
      * End redraw fishing activities on map
-     * @function endRedrawFishingActivitiesOnMap
-     * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      */
     endRedrawFishingActivitiesOnMap(state) {
@@ -56,8 +54,6 @@ const fishingActivitiesSlice = createSlice({
 
     /**
      * Hide fishing activities of the vessel track
-     * @function showFishingActivitiesOnMap
-     * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      */
     hideFishingActivitiesOnMap(state) {
@@ -67,8 +63,6 @@ const fishingActivitiesSlice = createSlice({
 
     /**
      * Set the loading of fishing activities to true, and shows a loader in the fishing activities tab
-     * @function loadFishingActivities
-     * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      */
     loadFishingActivities(state) {
@@ -77,8 +71,6 @@ const fishingActivitiesSlice = createSlice({
 
     /**
      * Remove fishing activities from the map
-     * @function showFishingActivitiesOnMap
-     * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      */
     removeFishingActivitiesFromMap(state) {
@@ -87,8 +79,6 @@ const fishingActivitiesSlice = createSlice({
 
     /**
      * Hide a single fishing activity showed on the vessel track
-     * @function hideFishingActivityOnMap
-     * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      * @param {{payload: string}} action - The fishing activity id to hide
      */
@@ -104,8 +94,6 @@ const fishingActivitiesSlice = createSlice({
 
     /**
      * Show the specified fishing activities tab (Resume or All messages)
-     * @function setFishingActivitiesTab
-     * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      * @param {{payload: number}} action - The tab
      */
@@ -116,8 +104,6 @@ const fishingActivitiesSlice = createSlice({
     /**
      * Set selected vessel last voyage - This voyage is saved to be able to compare it
      * with new last voyages we will receive from the CRON
-     * @function setLastVoyage
-     * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      * @param {{payload: VesselVoyage}} action - the vessel last voyage
      */
@@ -131,8 +117,6 @@ const fishingActivitiesSlice = createSlice({
 
     /**
      * Set selected next vessel fishing activities to propose an update of the current displayed fishing activities
-     * @function setNextFishingActivities
-     * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      * @param {{payload: FishingActivities}} action - the fishing activities with new messages
      */
@@ -142,8 +126,6 @@ const fishingActivitiesSlice = createSlice({
 
     /**
      * Set selected vessel voyage
-     * @function setVoyage
-     * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      * @param {{payload: VesselVoyage}} action - the vessel voyage
      */
@@ -161,7 +143,7 @@ const fishingActivitiesSlice = createSlice({
      * Show fishing activities on the vessel track, on the map
      * Without the corrected messages
      */
-    showFishingActivitiesOnMap(state, action) {
+    showFishingActivitiesOnMap(state) {
       state.areFishingActivitiesShowedOnMap = true
       // TODO There is a typing issue that may reveal a code issue here.
       state.fishingActivitiesShowedOnMap = state.fishingActivities.logbookMessages
@@ -174,9 +156,7 @@ const fishingActivitiesSlice = createSlice({
           name: getLogbookMessageType(fishingActivity)
         })) as any
 
-      if (action.payload) {
-        state.redrawFishingActivitiesOnMap = true
-      }
+      state.redrawFishingActivitiesOnMap = true
     },
 
     /**
@@ -202,8 +182,6 @@ const fishingActivitiesSlice = createSlice({
 
     /**
      * Update coordinates of showed fishing activities
-     * @function updateFishingActivitiesOnMapCoordinates
-     * @memberOf FishingActivitiesReducer
      * @param {Object=} state
      * @param {{payload: {
      *   id: string,

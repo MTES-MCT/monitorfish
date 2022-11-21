@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
-import AnimateToTrack from './actions/animate_to_track/AnimateToTrack'
-import HideNonSelectedVessels from './actions/hide_non_selected_vessels/HideNonSelectedVessels'
-import ShowFishingActivitiesOnMap from './actions/show_fishing_activities/ShowFishingActivitiesOnMap'
+import { AnimateToTrack } from './actions/animate_to_track'
+import { HideNonSelectedVessels } from './actions/hide_non_selected_vessels'
+import { ShowFishingActivitiesOnMap } from './actions/show_fishing_activities'
 import { TrackRequest } from './actions/TrackRequest'
 import { VesselSidebarBody } from './VesselSidebarBody'
 import VesselSidebarTabs from './VesselSidebarTabs'
@@ -16,6 +16,7 @@ export function VesselSidebar() {
 
   const [isFirstLoad, setIsFirstLoad] = useState(false)
 
+  // Used to propagate prop `isSidebarOpen` to children, for animation purpose
   useEffect(() => {
     const timeoutHandler = setTimeout(() => {
       setIsFirstLoad(true)
@@ -30,9 +31,9 @@ export function VesselSidebar() {
   return (
     <>
       <TrackRequest isSidebarOpen={isFirstLoad} />
-      <AnimateToTrack sidebarIsOpen={isFirstLoad} />
-      <HideNonSelectedVessels sidebarIsOpen={isFirstLoad} />
-      <ShowFishingActivitiesOnMap sidebarIsOpen={isFirstLoad} />
+      <AnimateToTrack isSidebarOpen={isFirstLoad} />
+      <HideNonSelectedVessels isSidebarOpen={isFirstLoad} />
+      <ShowFishingActivitiesOnMap isSidebarOpen={isFirstLoad} />
       <Wrapper
         data-cy="vessel-sidebar"
         healthcheckTextWarning={!!healthcheckTextWarning}

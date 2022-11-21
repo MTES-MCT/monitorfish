@@ -12,6 +12,7 @@ import { updateVesselTrackAsZoomed } from '../../domain/shared_slices/Vessel'
  * the BaseMap component, event if it's not seen in the props passed to MapVesselAnimation
  * @param {Object} map
  * @param {MapClickEvent} mapClickEvent
+ * @param {boolean} hasClickEvent
  */
 const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
   const dispatch = useDispatch()

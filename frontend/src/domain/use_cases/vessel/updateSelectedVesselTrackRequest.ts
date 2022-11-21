@@ -39,7 +39,7 @@ export const updateSelectedVesselTrackRequest =
         dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
         dispatch(updateSelectedVesselPositions(positions))
         if (areFishingActivitiesShowedOnMap && !withoutFishingMessagesRerendering) {
-          dispatch(showFishingActivitiesOnMap(true))
+          dispatch(showFishingActivitiesOnMap())
         }
         dispatch(animateToExtent())
       })

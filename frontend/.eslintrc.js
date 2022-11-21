@@ -65,6 +65,9 @@ module.exports = {
         format: ['camelCase', 'PascalCase', 'UPPER_CASE']
       }
     ],
+
+    'no-console': 'off',
+
     '@typescript/no-use-before-define': 'off',
     '@typescript-eslint/no-restricted-imports': [
       'error',
@@ -76,6 +79,7 @@ module.exports = {
     ],
     '@typescript-eslint/no-use-before-define': 'off',
 
+    'react/jsx-no-useless-fragment': 'off',
     // See https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props/#you-may-not-need-defaultprops
     'react/require-default-props': 'off',
     'react/react-in-jsx-scope': 'off'

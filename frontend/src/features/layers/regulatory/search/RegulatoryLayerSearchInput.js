@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { REGULATORY_SEARCH_PROPERTIES } from '../../../../domain/entities/regulatory'
+import { RegulatorySearchProperty } from '../../../../domain/entities/regulatory'
 import searchRegulatoryLayers from '../../../../domain/use_cases/layer/regulation/searchRegulatoryLayers'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import {
@@ -87,23 +87,23 @@ const RegulatoryLayerSearchInput = props => {
     const searchFields = {
       nameSearchText: {
         searchText: nameSearchText,
-        properties: [REGULATORY_SEARCH_PROPERTIES.TOPIC, REGULATORY_SEARCH_PROPERTIES.ZONE]
+        properties: [RegulatorySearchProperty.TOPIC, RegulatorySearchProperty.ZONE]
       },
       placeSearchText: {
         searchText: placeSearchText,
-        properties: [REGULATORY_SEARCH_PROPERTIES.REGION]
+        properties: [RegulatorySearchProperty.REGION]
       },
       gearSearchText: {
         searchText: gearSearchText,
-        properties: [REGULATORY_SEARCH_PROPERTIES.GEARS]
+        properties: [RegulatorySearchProperty.GEARS]
       },
       speciesSearchText: {
         searchText: speciesSearchText,
-        properties: [REGULATORY_SEARCH_PROPERTIES.SPECIES]
+        properties: [RegulatorySearchProperty.SPECIES]
       },
       regulatoryReferencesSearchText: {
         searchText: regulatoryReferencesSearchText,
-        properties: [REGULATORY_SEARCH_PROPERTIES.REGULATORY_REFERENCES]
+        properties: [RegulatorySearchProperty.REGULATORY_REFERENCES]
       }
     }
 

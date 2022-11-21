@@ -48,7 +48,13 @@ export { homeStore, backofficeStore, backofficePersistor }
 // https://react-redux.js.org/using-react-redux/usage-with-typescript#define-root-state-and-dispatch-types
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type HomeRootState = ReturnType<typeof homeStore.getState>
-export type BakcofficeRootState = ReturnType<typeof backofficeStore.getState>
 // Inferred type: { global: GlobalState, vessel: VesselState, ... }
 export type AppDispatch = typeof homeStore.dispatch
 export type AppGetState = typeof homeStore.getState
+
+// TODO This is a terrible hack, we need to type the original store correctly.
+const typedBackofficeStore = configureStore({
+  middleware: [thunk],
+  reducer: backofficeReducers
+})
+export type BackofficeRootState = ReturnType<typeof typedBackofficeStore.getState>

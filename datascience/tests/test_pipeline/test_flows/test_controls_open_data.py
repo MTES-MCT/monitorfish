@@ -45,7 +45,7 @@ def transformed_fleet_segments_open_data() -> pd.DataFrame:
 
 
 @pytest.fixture
-def controls_open_data_columns() -> pd.DataFrame:
+def controls_open_data_columns() -> list:
     return [
         "control_year",
         "control_type",

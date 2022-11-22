@@ -17,7 +17,7 @@ VALUES (1, 'FAK000999999', 'CALLME', 'DONTSINK', 'GB', 'INTERNAL_REFERENCE_NUMBE
         'ARCHIVED', NOW() - ('3 WEEK')::interval, null, NOW() - ('2 WEEK')::interval,
         'BEACON_DEACTIVATED_OR_UNEQUIPPED', null, null, 'NOT_FOUND', 'ACTIVATED'),
        (6, 'FR263454484', 'FE4864', '8FR6541', 'FR', 'EXTERNAL_REFERENCE_NUMBER', 'NO NAME', 'AT_SEA',
-        'RELAUNCH_REQUEST', NOW() - ('3 WEEK')::interval, null, NOW() - ('2 WEEK')::interval, null, null, null, 'NOT_FOUND', 'ACTIVATED'),
+        'AT_QUAY', NOW() - ('3 WEEK')::interval, null, NOW() - ('2 WEEK')::interval, null, null, null, 'NOT_FOUND', 'ACTIVATED'),
        (7, 'ABC000939217', 'SC6082', 'RU460262', 'FR', 'INTERNAL_REFERENCE_NUMBER', 'FRAIS AVIS MODE', 'AT_SEA',
         'INITIAL_ENCOUNTER', NOW() - ('3 WEEK')::interval, null, NOW() - ('2 WEEK')::interval, null, 6, null, '556GEG5', 'ACTIVATED'),
        (8, 'ABC000717263', 'QP6933', 'IG860866', 'FR', null, 'ÉCRASER TON IMPOSSIBLE', 'AT_SEA', 'INITIAL_ENCOUNTER',

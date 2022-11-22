@@ -243,6 +243,24 @@ describe('isForbiddenPeriod', () => {
     // When
     expect(isForbiddenPeriod(feature)).toEqual(false)
   })
+
+  it('isForbiddenPeriod Should return true When the regulation is always forbidden', async () => {
+    // Given
+    const feature = new Feature({
+      // The JSON is a string in geoserver
+      fishing_period: JSON.stringify({
+        always: true,
+        authorized: false,
+        dateRanges: [],
+        dates: [],
+        timeIntervals: [],
+        weekdays: []
+      })
+    })
+
+    // When
+    expect(isForbiddenPeriod(feature)).toEqual(true)
+  })
 })
 
 function getDateInTheFuture() {

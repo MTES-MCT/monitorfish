@@ -38,6 +38,8 @@ export function isForbiddenPeriod(feature: Feature | undefined) {
      * It is forbidden when the date is within at least one fishing period.
      */
     case false: {
+      const isAlwaysForbidden = fishingPeriod.always
+
       const hasForbiddenRange = fishingPeriod.dateRanges?.find(
         dateRange => currentDate.isAfter(dateRange.startDate) && currentDate.isBefore(dateRange.endDate)
       )
@@ -51,7 +53,7 @@ export function isForbiddenPeriod(feature: Feature | undefined) {
         day => Object.keys(WEEKDAYS).indexOf(day) === currentWeekDayDigit
       )
 
-      return !!(hasForbiddenRange || hasForbiddenDate || hasForbiddenWeekDay)
+      return !!(isAlwaysForbidden || hasForbiddenRange || hasForbiddenDate || hasForbiddenWeekDay)
     }
     default: {
       return false

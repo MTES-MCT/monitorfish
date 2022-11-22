@@ -6,6 +6,7 @@ import Text from 'ol/style/Text'
 import { COLORS } from '../../constants/constants'
 import { Layer } from '../../domain/entities/layers/constants'
 import { theme } from '../../ui/theme'
+import { getUtcDayjs } from '../../utils/getUtcDayjs'
 import { getHashDigitsFromRegulation } from '../utils'
 import { isForbiddenPeriod } from './isForbiddenPeriod'
 import { getColorWithAlpha, getStyle } from './utils'
@@ -211,7 +212,8 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
     case Layer.REGULATORY.code:
       return (feature: Feature | undefined, regulation: BaseRegulatoryZone | null) => {
         const randomDigits = getHashDigitsFromRegulation(regulation)
-        const isForbidden = isForbiddenPeriod(feature)
+        const currentDate = getUtcDayjs()
+        const isForbidden = isForbiddenPeriod(feature, currentDate)
         const metadataIsShowed = feature?.get('metadataIsShowed')
 
         if (isForbidden) {

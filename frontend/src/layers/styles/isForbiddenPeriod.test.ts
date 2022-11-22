@@ -11,7 +11,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: false,
         dateRanges: [{ endDate: '2022-06-15T12:52:33.708Z', startDate: '2022-04-01T12:51:24.623Z' }],
         dates: [],
@@ -22,7 +22,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(false)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
   it('isForbiddenPeriod Should return true When the regulation date range is within a not authorized range', async () => {
@@ -31,7 +32,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: false,
         dateRanges: [{ endDate: `${dateInTheFuture}T12:52:33.708Z`, startDate: '2022-04-01T12:51:24.623Z' }],
         dates: [],
@@ -42,7 +43,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(true)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
   it('isForbiddenPeriod Should return false When the regulation date range is within an authorized range', async () => {
@@ -51,7 +53,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: true,
         dateRanges: [{ endDate: `${dateInTheFuture}T12:52:33.708Z`, startDate: '2022-04-01T12:51:24.623Z' }],
         dates: [],
@@ -62,7 +64,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(false)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
   it('isForbiddenPeriod Should return true When the regulation date range is out of an authorized range', async () => {
@@ -70,7 +73,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: true,
         dateRanges: [{ endDate: `2022-04-05T12:52:33.708Z`, startDate: '2022-04-01T12:51:24.623Z' }],
         dates: [],
@@ -81,7 +84,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(true)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
   it('isForbiddenPeriod Should return true When the regulation unauthorized dates equals the current date', async () => {
@@ -90,7 +94,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: false,
         dateRanges: [],
         dates: [now],
@@ -101,7 +105,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(true)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
   it('isForbiddenPeriod Should return false When the regulation unauthorized dates do not equals the current date', async () => {
@@ -110,7 +115,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: false,
         dateRanges: [],
         dates: [nowPlusOneDay],
@@ -121,7 +126,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(false)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
   it('isForbiddenPeriod Should return false When the regulation unauthorized dates equals the current date', async () => {
@@ -130,7 +136,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: true,
         dateRanges: [],
         dates: [now],
@@ -141,7 +147,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(false)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
   it('isForbiddenPeriod Should return true When the regulation unauthorized dates do not equals the current date', async () => {
@@ -150,7 +157,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: true,
         dateRanges: [],
         dates: [nowPlusOneDay],
@@ -161,7 +168,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(true)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
   it('isForbiddenPeriod Should return true When the regulation unauthorized week days equals the current week day', async () => {
@@ -171,7 +179,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: false,
         dateRanges: [],
         dates: [],
@@ -182,7 +190,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(true)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
   it('isForbiddenPeriod Should return false When the regulation unauthorized week days do not equals the current week day', async () => {
@@ -190,7 +199,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: false,
         dateRanges: [],
         dates: [],
@@ -201,7 +210,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(false)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
   it('isForbiddenPeriod Should return false When the regulation authorized week days equals the current week day', async () => {
@@ -211,7 +221,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: true,
         dateRanges: [],
         dates: [],
@@ -222,7 +232,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(false)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
   it('isForbiddenPeriod Should return true When the regulation authorized week days do not equals the current week day', async () => {
@@ -230,7 +241,7 @@ describe('isForbiddenPeriod', () => {
     const feature = new Feature({
       // The JSON is a string in geoserver
       fishing_period: JSON.stringify({
-        annualRecurrence: true,
+        annualRecurrence: false,
         authorized: true,
         dateRanges: [],
         dates: [],
@@ -241,7 +252,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(false)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
   it('isForbiddenPeriod Should return true When the regulation is always forbidden', async () => {
@@ -259,7 +271,152 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    expect(isForbiddenPeriod(feature)).toEqual(true)
+    const currentDate = getUtcDayjs()
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
+  })
+
+  it('isForbiddenPeriod Should return false When it is authorized inside the date range with annual recurrence', async () => {
+    // Given
+    const feature = new Feature({
+      // The JSON is a string in geoserver
+      fishing_period: JSON.stringify({
+        annualRecurrence: true,
+        authorized: true,
+        dateRanges: [
+          {
+            endDate: '2022-04-19T09:24:56.025Z',
+            startDate: '2021-09-15T09:24:35.588Z'
+          }
+        ],
+        dates: [],
+        timeIntervals: [],
+        weekdays: []
+      })
+    })
+
+    // When
+    const currentDate = getUtcDayjs().set('month', 11) // 11 is inside [09 -> 04]
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
+  })
+
+  it('isForbiddenPeriod Should return true When it is authorized outside the date range with annual recurrence', async () => {
+    // Given
+    const feature = new Feature({
+      // The JSON is a string in geoserver
+      fishing_period: JSON.stringify({
+        annualRecurrence: true,
+        authorized: true,
+        dateRanges: [
+          {
+            endDate: '2022-04-19T09:24:56.025Z',
+            startDate: '2021-09-15T09:24:35.588Z'
+          }
+        ],
+        dates: [],
+        timeIntervals: [],
+        weekdays: []
+      })
+    })
+
+    // When
+    const currentDate = getUtcDayjs().set('month', 5) // 3 is outside [09 -> 04]
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
+  })
+
+  it('isForbiddenPeriod Should return true When it is not authorized inside the date range with annual recurrence', async () => {
+    // Given
+    const feature = new Feature({
+      // The JSON is a string in geoserver
+      fishing_period: JSON.stringify({
+        annualRecurrence: true,
+        authorized: false,
+        dateRanges: [
+          {
+            endDate: '2020-04-19T09:24:56.025Z',
+            startDate: '2019-09-15T09:24:35.588Z'
+          }
+        ],
+        dates: [],
+        timeIntervals: [],
+        weekdays: []
+      })
+    })
+
+    // When
+    const currentDate = getUtcDayjs().set('month', 10) // 10 is inside [09 -> 04]
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
+  })
+
+  it('isForbiddenPeriod Should return true When it is not authorized inside the date range with another annual recurrence', async () => {
+    // Given
+    const feature = new Feature({
+      // The JSON is a string in geoserver
+      fishing_period: JSON.stringify({
+        annualRecurrence: true,
+        authorized: false,
+        dateRanges: [
+          {
+            endDate: '2022-04-19T09:24:56.025Z',
+            startDate: '2021-09-15T09:24:35.588Z'
+          }
+        ],
+        dates: [],
+        timeIntervals: [],
+        weekdays: []
+      })
+    })
+
+    // When
+    const currentDate = getUtcDayjs().set('month', 2) // 3 is inside [09 -> 04]
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
+  })
+
+  it('isForbiddenPeriod Should return false When it is not authorized outside another date range with annual recurrence', async () => {
+    // Given
+    const feature = new Feature({
+      // The JSON is a string in geoserver
+      fishing_period: JSON.stringify({
+        annualRecurrence: true,
+        authorized: false,
+        dateRanges: [
+          {
+            endDate: '2022-04-19T09:24:56.025Z',
+            startDate: '2021-09-15T09:24:35.588Z'
+          }
+        ],
+        dates: [],
+        timeIntervals: [],
+        weekdays: []
+      })
+    })
+
+    // When
+    const currentDate = getUtcDayjs().set('month', 6) // 6 is outside [09 -> 04]
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
+  })
+
+  it('isForbiddenPeriod Should return true When it is not authorized outside another date range in the past with annual recurrence', async () => {
+    // Given
+    const feature = new Feature({
+      // The JSON is a string in geoserver
+      fishing_period: JSON.stringify({
+        annualRecurrence: true,
+        authorized: false,
+        dateRanges: [
+          {
+            endDate: '2005-04-19T09:24:56.025Z',
+            startDate: '2004-09-15T09:24:35.588Z'
+          }
+        ],
+        dates: [],
+        timeIntervals: [],
+        weekdays: []
+      })
+    })
+
+    // When
+    const currentDate = getUtcDayjs().set('month', 9) // 9 is outside [09 -> 04]
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 })
 

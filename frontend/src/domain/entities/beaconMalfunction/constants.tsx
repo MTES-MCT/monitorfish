@@ -112,10 +112,11 @@ const END_OF_MALFUNCTION_REASON_RECORD: Record<EndOfBeaconMalfunctionReason, Enf
 
 export enum BeaconMalfunctionsStage {
   ARCHIVED = 'ARCHIVED',
+  AT_QUAY = 'AT_QUAY',
   END_OF_MALFUNCTION = 'END_OF_MALFUNCTION',
+  FOLLOWING = 'FOLLOWING',
   FOUR_HOUR_REPORT = 'FOUR_HOUR_REPORT',
   INITIAL_ENCOUNTER = 'INITIAL_ENCOUNTER',
-  RELAUNCH_REQUEST = 'RELAUNCH_REQUEST',
   RESUMED_TRANSMISSION = 'RESUMED_TRANSMISSION',
   TARGETING_VESSEL = 'TARGETING_VESSEL'
 }
@@ -139,21 +140,28 @@ const STAGE_RECORD: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumn
     isColumn: true,
     title: '4h report'
   },
-  RELAUNCH_REQUEST: {
+  AT_QUAY: {
     index: 2,
-    code: 'RELAUNCH_REQUEST',
+    code: 'AT_QUAY',
     description:
       "Relancer les navires qui sont à quai (ou supposés à quai) et qui n'ont pas encore repris leurs émissions.",
     isColumn: true,
     title: 'Navires supposés à quai'
   },
-  TARGETING_VESSEL: {
+  FOLLOWING: {
     index: 3,
+    code: 'FOLLOWING',
+    description: '',
+    isColumn: true,
+    title: 'Suivi en cours'
+  },
+  TARGETING_VESSEL: {
+    index: 4,
     code: 'TARGETING_VESSEL',
     description:
       "Mobiliser les unités sur les navires dont on n'a pas de nouvelles et/ou qui sont actifs en mer sans VMS.",
     isColumn: true,
-    title: 'Suivi en cours'
+    title: 'Ciblage du navire'
   },
   END_OF_MALFUNCTION: {
     index: 5,

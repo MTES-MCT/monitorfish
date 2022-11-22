@@ -49,6 +49,7 @@ def test_update_resource(mock_requests):
         resource_id="666",
         resource_title="File title",
         resource=resource,
+        mock_update=False,
     )
 
     assert len(mock_requests.method_calls) == 1
@@ -62,6 +63,22 @@ def test_update_resource(mock_requests):
             "https": "http://some.ip.address:port",
         },
     )
+
+
+@patch("src.pipeline.shared_tasks.datagouv.requests")
+def test_update_resource_hen_mock_update_is_true(mock_requests):
+
+    resource = BytesIO(b"some file object")
+
+    update_resource.run(
+        dataset_id="123",
+        resource_id="666",
+        resource_title="File title",
+        resource=resource,
+        mock_update=True,
+    )
+
+    mock_requests.post.assert_not_called()
 
 
 def test_get_csv_file_object():

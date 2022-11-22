@@ -24,6 +24,15 @@ RUN_LOCAL = os.getenv("RUN_LOCAL", "False").lower() in ("true", "t", "yes", "y")
 if RUN_LOCAL:
     load_dotenv(ROOT_DIRECTORY / ".env")
 
+# Must be set to true to avoid external side effects (emails, data.gouv uploads...) in
+# integration
+IS_INTEGRATION = os.getenv("IS_INTEGRATION", "False").lower() in (
+    "true",
+    "t",
+    "yes",
+    "y",
+)
+
 # Flow execution configuration
 DOCKER_IMAGE = "docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline"
 MONITORFISH_VERSION = os.getenv("MONITORFISH_VERSION")

@@ -4,6 +4,7 @@ from prefect import Flow, Parameter, case, task
 from prefect.executors import LocalDaskExecutor
 
 from config import (
+    IS_INTEGRATION,
     REGULATIONS_CSV_RESOURCE_ID,
     REGULATIONS_CSV_RESOURCE_TITLE,
     REGULATIONS_DATASET_ID,
@@ -75,6 +76,7 @@ with Flow("Regulations open data", executor=LocalDaskExecutor()) as flow:
         gpkg_resource_title = Parameter(
             "gpkg_resource_title", default=REGULATIONS_GEOPACKAGE_RESOURCE_TITLE
         )
+        is_integration = Parameter("is_integration", default=IS_INTEGRATION)
 
         regulations = extract_regulations_open_data()
 
@@ -91,6 +93,7 @@ with Flow("Regulations open data", executor=LocalDaskExecutor()) as flow:
             resource_id=csv_resource_id,
             resource_title=csv_resource_title,
             resource=csv_file,
+            mock_update=is_integration,
         )
 
         update_resource(
@@ -98,4 +101,5 @@ with Flow("Regulations open data", executor=LocalDaskExecutor()) as flow:
             resource_id=gpkg_resource_id,
             resource_title=gpkg_resource_title,
             resource=geopackage_file,
+            mock_update=is_integration,
         )

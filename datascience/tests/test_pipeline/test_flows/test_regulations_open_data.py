@@ -20,7 +20,11 @@ from tests.test_pipeline.test_shared_tasks.test_datagouv import make_square_mult
 
 @task(checkpoint=False)
 def mock_update_resource(
-    dataset_id: str, resource_id: str, resource_title: str, resource: BytesIO
+    dataset_id: str,
+    resource_id: str,
+    resource_title: str,
+    resource: BytesIO,
+    mock_update: bool,
 ) -> pd.DataFrame:
     def return_200(url, **kwargs):
         r = requests.Response()
@@ -34,6 +38,7 @@ def mock_update_resource(
             resource_id=resource_id,
             resource_title=resource_title,
             resource=resource,
+            mock_update=mock_update,
         )
 
 

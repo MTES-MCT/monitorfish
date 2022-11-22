@@ -2,6 +2,7 @@ from io import BytesIO
 
 import geopandas as gpd
 import pandas as pd
+import prefect
 import requests
 from prefect import task
 
@@ -19,16 +20,44 @@ def api_url(path: str):
 
 @task(checkpoint=False)
 def update_resource(
-    dataset_id: str, resource_id: str, resource_title: str, resource: BytesIO
+    dataset_id: str,
+    resource_id: str,
+    resource_title: str,
+    resource: BytesIO,
+    mock_update: bool,
 ):
+    """
+    Update the designated resource on data.gouv.fr
+
+    Args:
+        dataset_id (str): dataset id to update on data.gouv.fr
+        resource_id (str): resource id to update on data.gouv.fr
+        resource_title (str): title of the resource file after upload
+        resource (BytesIO): resource to upload
+        mock_update (bool): if ``True``, the post request is not actually sent
+
+    Returns:
+        requests.Response: Response object
+    """
+    logger = prefect.context.get("logger")
+
     url = api_url(f"/datasets/{dataset_id}/resources/{resource_id}/upload/")
-    response = requests.post(
-        url,
-        files={"file": (resource_title, resource)},
-        headers=HEADERS,
-        proxies=PROXIES,
-    )
-    response.raise_for_status()
+
+    if not mock_update:
+        logger.info(f"Updating resource on {url}")
+        response = requests.post(
+            url,
+            files={"file": (resource_title, resource)},
+            headers=HEADERS,
+            proxies=PROXIES,
+        )
+        response.raise_for_status()
+
+    else:
+        logger.info(f"Mocking update on resource on {url}")
+        response = requests.Response()
+        response.url = url
+        response.status_code = 200
     return response
 
 

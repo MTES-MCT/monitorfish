@@ -1,11 +1,8 @@
 from io import BytesIO
-from unittest.mock import patch
 
 import geopandas as gpd
 import pandas as pd
 import pytest
-import requests
-from prefect import task
 
 from src.pipeline.flows.regulations_open_data import (
     extract_regulations_open_data,
@@ -13,34 +10,8 @@ from src.pipeline.flows.regulations_open_data import (
     get_regulations_for_csv,
     get_regulations_for_geopackage,
 )
-from src.pipeline.shared_tasks.datagouv import update_resource
-from tests.mocks import mock_check_flow_not_running
+from tests.mocks import mock_check_flow_not_running, mock_update_resource
 from tests.test_pipeline.test_shared_tasks.test_datagouv import make_square_multipolygon
-
-
-@task(checkpoint=False)
-def mock_update_resource(
-    dataset_id: str,
-    resource_id: str,
-    resource_title: str,
-    resource: BytesIO,
-    mock_update: bool,
-) -> pd.DataFrame:
-    def return_200(url, **kwargs):
-        r = requests.Response()
-        r.status_code = 200
-        r.url = url
-        return r
-
-    with patch("src.pipeline.shared_tasks.datagouv.requests.post", return_200):
-        return update_resource.run(
-            dataset_id=dataset_id,
-            resource_id=resource_id,
-            resource_title=resource_title,
-            resource=resource,
-            mock_update=mock_update,
-        )
-
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 

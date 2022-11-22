@@ -295,7 +295,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 11) // 11 is inside [09 -> 04]
+    const currentDate = getUtcDayjs().set('month', 11) // 11 (12 from 1) is inside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -343,7 +343,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 10) // 10 is inside [09 -> 04]
+    const currentDate = getUtcDayjs().set('month', 10) // 10 (11 from 1) is inside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -367,7 +367,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 2) // 3 is inside [09 -> 04]
+    const currentDate = getUtcDayjs().set('month', 2) // 3 (4 from 1) is inside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -391,8 +391,32 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 6) // 6 is outside [09 -> 04]
+    const currentDate = getUtcDayjs().set('month', 6) // 6 (7 from 1) is outside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
+  })
+
+  it('isForbiddenPeriod Should return true When it is not authorized inside another date range in the past with annual recurrence', async () => {
+    // Given
+    const feature = new Feature({
+      // The JSON is a string in geoserver
+      fishing_period: JSON.stringify({
+        annualRecurrence: true,
+        authorized: false,
+        dateRanges: [
+          {
+            endDate: '2005-04-19T09:24:56.025Z',
+            startDate: '2004-09-15T09:24:35.588Z'
+          }
+        ],
+        dates: [],
+        timeIntervals: [],
+        weekdays: []
+      })
+    })
+
+    // When
+    const currentDate = getUtcDayjs().set('month', 9) // 9 (10 from 1) is inside [09 -> 04]
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
   it('isForbiddenPeriod Should return true When it is not authorized outside another date range in the past with annual recurrence', async () => {
@@ -415,8 +439,8 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 9) // 9 is outside [09 -> 04]
-    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
+    const currentDate = getUtcDayjs().set('month', 7) // 7 (8 from 1) is outside [09 -> 04]
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 })
 

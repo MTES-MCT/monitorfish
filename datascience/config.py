@@ -24,6 +24,15 @@ RUN_LOCAL = os.getenv("RUN_LOCAL", "False").lower() in ("true", "t", "yes", "y")
 if RUN_LOCAL:
     load_dotenv(ROOT_DIRECTORY / ".env")
 
+# Must be set to true to avoid external side effects (emails, data.gouv uploads...) in
+# integration
+IS_INTEGRATION = os.getenv("IS_INTEGRATION", "False").lower() in (
+    "true",
+    "t",
+    "yes",
+    "y",
+)
+
 # Flow execution configuration
 DOCKER_IMAGE = "docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline"
 MONITORFISH_VERSION = os.getenv("MONITORFISH_VERSION")
@@ -139,3 +148,20 @@ CNSP_FRANCE_EMAIL_ADDRESS = os.environ.get("CNSP_FRANCE_EMAIL_ADDRESS")
 
 # Tokens
 LOCATIONIQ_TOKEN = os.getenv("LOCATIONIQ_TOKEN")
+
+# data.gouv.fr configuration
+DATAGOUV_API_ENDPOINT = "https://www.data.gouv.fr/api/1"
+DATAGOUV_API_KEY = os.getenv("DATAGOUV_API_KEY")
+
+# data.gouv.fr resource ids
+REGULATIONS_DATASET_ID = "60c0ad5b8d17ba18c7b17bd0"
+REGULATIONS_CSV_RESOURCE_ID = "67578d0c-92d4-44b4-8405-34ade40742aa"
+REGULATIONS_GEOPACKAGE_RESOURCE_ID = "12d32a68-e245-4e19-9215-7d07c699b6c0"
+REGULATIONS_CSV_RESOURCE_TITLE = "reglementation-des-peches-cartographiee.csv"
+REGULATIONS_GEOPACKAGE_RESOURCE_TITLE = "reglementation-des-peches-cartographiee.gpkg"
+
+CONTROLS_STATISTICS_DATASET_ID = "637c9225bad9521cdab12ba2"
+CONTROLS_STATISTICS_CSV_RESOURCE_ID = "e370fae2-9397-4fbd-bdc9-4f574b49d503"
+CONTROLS_STATISTICS_CSV_RESOURCE_TITLE = "statistiques-de-controle-des-peches.csv"
+FLEET_SEGMENTS_CSV_RESOURCE_ID = "d6d6376b-2412-4910-95a5-0f615c1c23aa"
+FLEET_SEGMENTS_CSV_RESOURCE_TITLE = "segments-de-flotte.csv"

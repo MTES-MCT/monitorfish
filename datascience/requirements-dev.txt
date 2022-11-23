@@ -90,7 +90,7 @@ json5==0.9.8; python_version >= "3.7"
 jsonschema==3.2.0; python_version >= "3.7"
 jupyter-client==7.3.4; python_full_version >= "3.7.0" and python_version >= "3.7"
 jupyter-console==6.4.3; python_version >= "3.6"
-jupyter-core==4.10.0; python_version >= "3.7"
+jupyter-core==4.11.2; python_version >= "3.7"
 jupyter-server==1.17.1; python_version >= "3.7"
 jupyter==1.0.0
 jupyterlab-pygments==0.2.2; python_version >= "3.7"

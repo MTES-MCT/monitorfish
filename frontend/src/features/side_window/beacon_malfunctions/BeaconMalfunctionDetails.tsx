@@ -119,7 +119,7 @@ export function BeaconMalfunctionDetails({
           </Malfunctioning>
           <LastPosition style={lastPositionStyle} title={getDateTime(beaconMalfunction?.malfunctionStartDateTime)}>
             <TimeAgo style={timeAgoStyle} />
-            {getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}
+            {getMalfunctionStartDateText(beaconMalfunction)}
           </LastPosition>
           <SendNotification beaconMalfunction={beaconMalfunction} />
         </FirstColumn>

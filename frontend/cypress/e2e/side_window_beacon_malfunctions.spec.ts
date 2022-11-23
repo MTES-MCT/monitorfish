@@ -333,33 +333,6 @@ context('Side window beacon malfunctions', () => {
       .contains('Reprise des émissions')
   })
 
-  it('Beacon activated should be showed When the vessel status is NEVER_EMITTED', () => {
-    // In the board
-    cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
-      .children()
-      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .eq(1)
-      .contains("N'a jamais émis")
-
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
-      .children()
-      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .eq(1)
-      .contains('Balise activée le')
-
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
-      .children()
-      .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .eq(1)
-      .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
-      .click()
-
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail"]')
-      .find('*[data-cy="side-window-beacon-malfunctions-vessel-status"]')
-      .contains("N'a jamais émis")
-  })
-
   it('Notification messages feedback should be showed in beacon follow up', () => {
     // In the board
     cy.get('*[data-cy="side-window-sub-menu-trigger"]').click()

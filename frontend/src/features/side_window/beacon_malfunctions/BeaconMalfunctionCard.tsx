@@ -119,7 +119,7 @@ export function BeaconMalfunctionCard({
         )}
         <Row style={rowStyle(false, 8, hasScroll)}>
           <MalfunctionStartOrEndDateText style={malfunctionStartOrEndDateTextStyle}>
-            {getMalfunctionStartDateText(vesselStatus, beaconMalfunction)}
+            {getMalfunctionStartDateText(beaconMalfunction)}
           </MalfunctionStartOrEndDateText>
         </Row>
       </Body>

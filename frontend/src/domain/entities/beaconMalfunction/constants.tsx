@@ -5,7 +5,6 @@ import { ReactComponent as VesselStatusTechnicalStopSVG } from '../../../feature
 import { ReactComponent as VesselStatusAtPortSVG } from '../../../features/icons/Avarie_statut_navire_a_quai.svg'
 import { ReactComponent as VesselStatusAtSeaSVG } from '../../../features/icons/Avarie_statut_navire_en_mer.svg'
 import { ReactComponent as VesselStatusNoNewsSVG } from '../../../features/icons/Avarie_statut_sans_nouvelles.svg'
-import { ReactComponent as VesselStatusNeverEmittedSVG } from '../../../features/icons/never_emitted.svg'
 import { theme } from '../../../ui/theme'
 
 import type {
@@ -33,14 +32,16 @@ enum BeaconMalfunctionVesselStatus {
   ACTIVITY_DETECTED = 'ACTIVITY_DETECTED',
   AT_PORT = 'AT_PORT',
   AT_SEA = 'AT_SEA',
-  NEVER_EMITTED = 'NEVER_EMITTED',
-  NO_NEWS = 'NO_NEWS'
+  IN_FOREIGN_EEZ = 'IN_FOREIGN_EEZ',
+  NO_NEWS = 'NO_NEWS',
+  ON_SALE = 'ON_SALE',
+  SUSPENDED_BECAUSE_UNPAID = 'SUSPENDED_BECAUSE_UNPAID',
+  TECHNICAL_STOP = 'TECHNICAL_STOP'
 }
 
 const VesselStatusAtPort = styled(VesselStatusAtPortSVG)``
 const VesselStatusAtSea = styled(VesselStatusAtSeaSVG)``
 const VesselStatusNoNews = styled(VesselStatusNoNewsSVG)``
-const VesselStatusNeverEmitted = styled(VesselStatusNeverEmittedSVG)``
 const VesselStatusActivityDetected = styled(VesselStatusActivityDetectedSVG)``
 
 const iconStyle = {
@@ -72,14 +73,6 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
     label: 'Sans nouvelles',
     textColor: theme.color.charcoal,
     value: 'NO_NEWS'
-  },
-  {
-    color: theme.color.charcoal,
-    hoursOffsetToRetrieveMalfunctionCreation: undefined,
-    icon: <VesselStatusNeverEmitted style={iconStyle} />,
-    label: "N'a jamais émis",
-    textColor: theme.color.white,
-    value: 'NEVER_EMITTED'
   },
   {
     color: theme.color.maximumRed,

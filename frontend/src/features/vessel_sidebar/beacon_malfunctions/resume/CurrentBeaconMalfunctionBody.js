@@ -54,7 +54,7 @@ const CurrentBeaconMalfunctionBody = props => {
         style={lastPositionStyle}
       >
         <TimeAgo style={timeAgoStyle}/>
-        {getMalfunctionStartDateText(vesselStatus, currentBeaconMalfunctionWithDetails?.beaconMalfunction)}
+        {getMalfunctionStartDateText(currentBeaconMalfunctionWithDetails?.beaconMalfunction)}
       </LastPosition>
     </Body>
     : null

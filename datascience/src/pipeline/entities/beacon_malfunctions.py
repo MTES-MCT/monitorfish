@@ -43,7 +43,6 @@ class BeaconMalfunctionStage(Enum):
 class BeaconMalfunctionVesselStatus(Enum):
     AT_SEA = "AT_SEA"
     AT_PORT = "AT_PORT"
-    NEVER_EMITTED = "NEVER_EMITTED"
     NO_NEWS = "NO_NEWS"
     ACTIVITY_DETECTED = "ACTIVITY_DETECTED"
     TECHNICAL_STOP = "TECHNICAL_STOP"

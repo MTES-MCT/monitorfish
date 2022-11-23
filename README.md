@@ -12,7 +12,7 @@
 > Improve monitoring and controlling of the activities of fishing vessels
 
 ## What is it ?
-**Monitorfish** is a **fishing vessels monitoring software** developped by the French adminitration for the french **Fishing Monitoring Center (FMC)** - the [Centre National de Surveillance des Pêches](https://www.mer.gouv.fr/la-police-des-peches) - and its partners.
+**Monitorfish** is a **fishing vessels monitoring software** developped by the French adminitration for the french **Fisheries Monitoring Center (FMC)** - the [Centre National de Surveillance des Pêches](https://www.mer.gouv.fr/la-police-des-peches) - and its partners.
 
 ## Main features
 
@@ -51,11 +51,9 @@ The project roadmap can be found [here](https://github.com/MTES-MCT/monitorfish/
 
 ## Open data
 In line with the philosophy of the EIG program, all data that can be opened is made publicly available. Opened datasets :
+* [Statistiques de contrôle des pêches](https://www.data.gouv.fr/fr/datasets/637c9225bad9521cdab12ba2/)
 * [Ports of the ERS system with their localization](https://www.data.gouv.fr/fr/datasets/liste-des-ports-du-systeme-ers-avec-donnees-de-position/)
 * [Regulated fishing areas of the french and european regulation](https://www.data.gouv.fr/fr/datasets/reglementation-des-peches-cartographiee/)
 
 ## Contributing
 External contributions are welcome. If you wish to volunteer, please [get in touch](mailto:vincent.chery@m4x.org).
-
-
-

@@ -4,16 +4,12 @@ import { getReducedTimeAgo } from '../../../features/side_window/beacon_malfunct
 import { getDate } from '../../../utils'
 import {
   BeaconMalfunctionPropertyName,
-  STAGE_RECORD,
   BeaconMalfunctionVesselStatus,
-  END_OF_MALFUNCTION_REASON_RECORD
+  END_OF_MALFUNCTION_REASON_RECORD,
+  STAGE_RECORD
 } from './constants'
 
-import type {
-  BeaconMalfunction,
-  BeaconMalfunctionResumeAndDetails,
-  BeaconMalfunctionStatusValue
-} from '../../types/beaconMalfunction'
+import type { BeaconMalfunction, BeaconMalfunctionResumeAndDetails } from '../../types/beaconMalfunction'
 
 /**
  * Get beacon malfunctions for each years : Years are keys and beacon malfunctions are values
@@ -108,10 +104,7 @@ const getFirstVesselStatus = (beaconMalfunctionWithDetails: BeaconMalfunctionRes
   }
 }
 
-const getMalfunctionStartDateText = (
-  vesselStatus: BeaconMalfunctionStatusValue | undefined,
-  beaconMalfunction: BeaconMalfunction
-) => {
+const getMalfunctionStartDateText = (beaconMalfunction: BeaconMalfunction) => {
   if (
     beaconMalfunction.stage === STAGE_RECORD.END_OF_MALFUNCTION.code ||
     beaconMalfunction.stage === STAGE_RECORD.ARCHIVED.code
@@ -126,9 +119,7 @@ const getMalfunctionStartDateText = (
     }
   }
 
-  return vesselStatus?.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED
-    ? `Balise activée le ${getDate(beaconMalfunction.malfunctionStartDateTime)}`
-    : `Dernière émission le ${getDate(beaconMalfunction.malfunctionStartDateTime)}`
+  return `Dernière émission le ${getDate(beaconMalfunction.malfunctionStartDateTime)}`
 }
 
 export {

@@ -48,7 +48,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         assertThat(baconMalfunctions).hasSize(1)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")
         assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.ARCHIVED)
-        assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.NEVER_EMITTED)
+        assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.ON_SALE)
     }
 
     @Test
@@ -115,7 +115,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         assertThat(baconMalfunctions).hasSize(1)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")
         assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.ARCHIVED)
-        assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.NEVER_EMITTED)
+        assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.ON_SALE)
     }
 
     @Test

@@ -143,15 +143,14 @@ const STAGE_RECORD: Record<BeaconMalfunctionsStage, BeaconMalfunctionStageColumn
   AT_QUAY: {
     index: 2,
     code: 'AT_QUAY',
-    description:
-      "Relancer les navires qui sont à quai (ou supposés à quai) et qui n'ont pas encore repris leurs émissions.",
+    description: "Relancer les navires supposés à quai et avec lesquels aucun contact n'a été établi.",
     isColumn: true,
     title: 'Navires supposés à quai'
   },
   FOLLOWING: {
     index: 3,
     code: 'FOLLOWING',
-    description: '',
+    description: "Suivre les navires avec lesquels un contact a été établi (réparation en cours, pause d'activité...)",
     isColumn: true,
     title: 'Suivi en cours'
   },

@@ -1,13 +1,16 @@
 from datetime import datetime, timedelta
+from io import BytesIO
 from pathlib import Path
 from typing import Union
 from unittest.mock import MagicMock, patch
 
 import pandas as pd
+import requests
 from prefect import task
 
 from src.pipeline.entities.monitorfish_healthcheck import MonitorfishHealthcheck
 from src.pipeline.generic_tasks import extract
+from src.pipeline.shared_tasks.datagouv import update_resource
 
 
 def mock_extract_side_effect(
@@ -101,3 +104,27 @@ def extract_satellite_operators_statuses_mock_factory(
         )
 
     return extract_satellite_operators_statuses
+
+
+@task(checkpoint=False)
+def mock_update_resource(
+    dataset_id: str,
+    resource_id: str,
+    resource_title: str,
+    resource: BytesIO,
+    mock_update: bool,
+) -> pd.DataFrame:
+    def return_200(url, **kwargs):
+        r = requests.Response()
+        r.status_code = 200
+        r.url = url
+        return r
+
+    with patch("src.pipeline.shared_tasks.datagouv.requests.post", return_200):
+        return update_resource.run(
+            dataset_id=dataset_id,
+            resource_id=resource_id,
+            resource_title=resource_title,
+            resource=resource,
+            mock_update=mock_update,
+        )

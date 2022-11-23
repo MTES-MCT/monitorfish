@@ -102,10 +102,6 @@ const getFirstStatusAction = (vesselStatus: BeaconMalfunctionStatusValue, malfun
     )} (UTC)`
   }
 
-  if (vesselStatus.value === BeaconMalfunctionVesselStatus.NEVER_EMITTED) {
-    return 'Avarie ouverte dans MonitorFish, aucune émission du navire à ce jour.'
-  }
-
   return ''
 }
 

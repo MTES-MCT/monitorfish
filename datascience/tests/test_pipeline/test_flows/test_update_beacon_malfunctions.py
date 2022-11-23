@@ -360,7 +360,7 @@ def test_get_ended_malfunction_ids():
                 BeaconMalfunctionVesselStatus.ACTIVITY_DETECTED.value,
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
                 BeaconMalfunctionVesselStatus.AT_SEA.value,
-                BeaconMalfunctionVesselStatus.NEVER_EMITTED.value,
+                BeaconMalfunctionVesselStatus.NO_NEWS.value,
                 BeaconMalfunctionVesselStatus.AT_SEA.value,
                 BeaconMalfunctionVesselStatus.AT_PORT.value,
                 BeaconMalfunctionVesselStatus.AT_PORT.value,

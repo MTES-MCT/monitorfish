@@ -43,9 +43,12 @@ class BeaconMalfunctionStage(Enum):
 class BeaconMalfunctionVesselStatus(Enum):
     AT_SEA = "AT_SEA"
     AT_PORT = "AT_PORT"
-    NEVER_EMITTED = "NEVER_EMITTED"
     NO_NEWS = "NO_NEWS"
     ACTIVITY_DETECTED = "ACTIVITY_DETECTED"
+    TECHNICAL_STOP = "TECHNICAL_STOP"
+    ON_SALE = "ON_SALE"
+    SUSPENDED_BECAUSE_UNPAID = "SUSPENDED_BECAUSE_UNPAID"
+    IN_FOREIGN_EEZ = "IN_FOREIGN_EEZ"
 
 
 class EndOfMalfunctionReason(Enum):

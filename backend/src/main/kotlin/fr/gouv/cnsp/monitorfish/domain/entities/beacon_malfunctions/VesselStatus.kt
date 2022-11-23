@@ -4,7 +4,6 @@ enum class VesselStatus {
     AT_SEA,
     AT_PORT,
     NO_NEWS,
-    NEVER_EMITTED,
     ACTIVITY_DETECTED,
     TECHNICAL_STOP,
     ON_SALE,

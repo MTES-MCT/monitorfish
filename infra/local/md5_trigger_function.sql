@@ -10,7 +10,6 @@ CREATE FUNCTION prod.compute_regulations_md5() RETURNS trigger AS $$
 BEGIN
     NEW.row_hash := md5(
         COALESCE(NEW.law_type::text, '') ||
-        COALESCE(NEW.facade::text, '') ||
         COALESCE(NEW.topic::text, '') ||
         COALESCE(NEW.zone::text, '') ||
         COALESCE(NEW.region::text, '') ||

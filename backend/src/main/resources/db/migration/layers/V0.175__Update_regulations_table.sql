@@ -1,6 +1,3 @@
-ALTER TABLE public.regulations
-    DROP COLUMN facade;
-
 DROP VIEW regulations_view;
 
 CREATE OR REPLACE VIEW regulations_view AS
@@ -14,10 +11,10 @@ SELECT id,
        species,
        gears,
        regulatory_references,
-       geometry_simplified,
+       geometry_simplified AS geometry,
        row_hash,
        next_id
 FROM regulations;
 
-ALTER TABLE regulations_view
-    RENAME COLUMN geometry_simplified to geometry;
+ALTER TABLE public.regulations
+    DROP COLUMN facade;

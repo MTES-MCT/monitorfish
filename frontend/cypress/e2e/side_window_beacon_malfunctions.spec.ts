@@ -29,18 +29,18 @@ context('Side window beacon malfunctions', () => {
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
-      .dragTo('*[data-cy="side-window-beacon-malfunctions-columns-RELAUNCH_REQUEST"]')
+      .dragTo('*[data-cy="side-window-beacon-malfunctions-columns-AT_QUAY"]')
 
     // Then
     cy.wait('@moveBeaconMalfunctionCardInColumn').then(({ request, response }) => {
-      expect(request.body.stage).contains('RELAUNCH_REQUEST')
+      expect(request.body.stage).contains('AT_QUAY')
       expect(response && response.statusCode).equal(200)
     })
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .should('have.length', 4)
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-RELAUNCH_REQUEST"]')
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-AT_QUAY"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .should('have.length', 1)
@@ -50,7 +50,7 @@ context('Side window beacon malfunctions', () => {
     // Then
     cy.get('*[data-cy="side-window-sub-menu-trigger"]').click({ force: true })
     cy.get('*[data-cy="side-window-sub-menu-Avaries VMS en cours-number"]').contains('6')
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children().should('have.length', 6)
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]').children().should('have.length', 7)
 
     // Count the number of cards in the columns' header
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
@@ -156,7 +156,7 @@ context('Side window beacon malfunctions', () => {
     cy.intercept('GET', 'bff/v1/beacon_malfunctions/1').as('showBeaconMalfunction')
 
     // When
-    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-RELAUNCH_REQUEST"]')
+    cy.get('*[data-cy="side-window-beacon-malfunctions-columns-AT_QUAY"]')
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
       .first()
       .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
@@ -173,7 +173,6 @@ context('Side window beacon malfunctions', () => {
 
     // Check the comments order
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comments-number"]').contains('2 commentaires')
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').should('have.length', 5)
     const oneWeekBefore = getUtcizedDayjs().subtract(7, 'days').toISOString()
     const oneWeekBeforeAsString = getDate(oneWeekBefore)
     if (!oneWeekBeforeAsString) {
@@ -190,13 +189,27 @@ context('Side window beacon malfunctions', () => {
       throw new Error('`fourDaysBeforeAsString` is undefined.')
     }
     cy.wait(200)
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(0).contains(oneWeekBeforeAsString)
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]')
-      .eq(1)
-      .contains(oneWeekBeforePlusSixtyHoursAsString)
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(2).contains(fourDaysBeforeAsString)
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(3).contains('Hier')
-    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(4).contains("Aujourd'hui")
+    const areFourDaysBeforeAndMalfunctionDateWithOffsetEquals =
+      oneWeekBeforePlusSixtyHoursAsString === fourDaysBeforeAsString
+    cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').should(
+      'have.length',
+      areFourDaysBeforeAndMalfunctionDateWithOffsetEquals ? 4 : 5
+    )
+
+    if (areFourDaysBeforeAndMalfunctionDateWithOffsetEquals) {
+      cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(0).contains(oneWeekBeforeAsString)
+      cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(1).contains(fourDaysBeforeAsString)
+      cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(2).contains('Hier')
+      cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(3).contains("Aujourd'hui")
+    } else {
+      cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(0).contains(oneWeekBeforeAsString)
+      cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]')
+        .eq(1)
+        .contains(oneWeekBeforePlusSixtyHoursAsString)
+      cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(2).contains(fourDaysBeforeAsString)
+      cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(3).contains('Hier')
+      cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-date"]').eq(4).contains("Aujourd'hui")
+    }
 
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-action-content"]').should('have.length', 3)
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-comment-content"]').should('have.length', 2)

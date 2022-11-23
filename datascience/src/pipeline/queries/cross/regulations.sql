@@ -1,7 +1,6 @@
 SELECT
     id,
     law_type,
-    facade,
     topic,
     zone,
     region,

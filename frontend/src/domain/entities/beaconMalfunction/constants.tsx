@@ -1,11 +1,12 @@
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
 import { ReactComponent as VesselStatusActivityDetectedSVG } from '../../../features/icons/Avarie_statut_activite_detectee.svg'
+import { ReactComponent as VesselStatusTechnicalStopSVG } from '../../../features/icons/Avarie_statut_arret_tech.svg'
 import { ReactComponent as VesselStatusAtPortSVG } from '../../../features/icons/Avarie_statut_navire_a_quai.svg'
 import { ReactComponent as VesselStatusAtSeaSVG } from '../../../features/icons/Avarie_statut_navire_en_mer.svg'
 import { ReactComponent as VesselStatusNoNewsSVG } from '../../../features/icons/Avarie_statut_sans_nouvelles.svg'
 import { ReactComponent as VesselStatusNeverEmittedSVG } from '../../../features/icons/never_emitted.svg'
+import { theme } from '../../../ui/theme'
 
 import type {
   BeaconMalfunctionStageColumnValue,
@@ -49,19 +50,19 @@ const iconStyle = {
 
 const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
   {
-    color: '#F4DEAF',
+    color: theme.color.wheat,
     hoursOffsetToRetrieveMalfunctionCreation: 60,
     icon: <VesselStatusAtPort style={iconStyle} />,
     label: 'Navire à quai',
-    textColor: COLORS.charcoal,
+    textColor: theme.color.charcoal,
     value: 'AT_PORT'
   },
   {
-    color: '#9ED7D9',
+    color: theme.color.powderBlue,
     hoursOffsetToRetrieveMalfunctionCreation: 6,
     icon: <VesselStatusAtSea style={iconStyle} />,
     label: 'Navire en mer',
-    textColor: COLORS.charcoal,
+    textColor: theme.color.charcoal,
     value: 'AT_SEA'
   },
   {
@@ -69,24 +70,56 @@ const VESSEL_STATUS: BeaconMalfunctionStatusValue[] = [
     hoursOffsetToRetrieveMalfunctionCreation: undefined,
     icon: <VesselStatusNoNews style={iconStyle} />,
     label: 'Sans nouvelles',
-    textColor: COLORS.charcoal,
+    textColor: theme.color.charcoal,
     value: 'NO_NEWS'
   },
   {
-    color: COLORS.charcoal,
+    color: theme.color.charcoal,
     hoursOffsetToRetrieveMalfunctionCreation: undefined,
     icon: <VesselStatusNeverEmitted style={iconStyle} />,
     label: "N'a jamais émis",
-    textColor: COLORS.white,
+    textColor: theme.color.white,
     value: 'NEVER_EMITTED'
   },
   {
-    color: '#C41812',
+    color: theme.color.maximumRed,
     hoursOffsetToRetrieveMalfunctionCreation: undefined,
     icon: <VesselStatusActivityDetected style={iconStyle} />,
     label: 'Activité détectée',
-    textColor: COLORS.white,
+    textColor: theme.color.white,
     value: 'ACTIVITY_DETECTED'
+  },
+  {
+    color: theme.color.wheat,
+    hoursOffsetToRetrieveMalfunctionCreation: undefined,
+    icon: <VesselStatusTechnicalStopSVG style={iconStyle} />,
+    label: 'En arrêt technique',
+    textColor: theme.color.charcoal,
+    value: 'TECHNICAL_STOP'
+  },
+  {
+    color: theme.color.wheat,
+    hoursOffsetToRetrieveMalfunctionCreation: undefined,
+    icon: <VesselStatusAtPort style={iconStyle} />,
+    label: 'En vente',
+    textColor: theme.color.charcoal,
+    value: 'ON_SALE'
+  },
+  {
+    color: theme.color.maximumRed,
+    hoursOffsetToRetrieveMalfunctionCreation: undefined,
+    icon: <VesselStatusActivityDetected style={iconStyle} />,
+    label: 'Suspendu cause impayé',
+    textColor: theme.color.white,
+    value: 'SUSPENDED_BECAUSE_UNPAID'
+  },
+  {
+    color: theme.color.powderBlue,
+    hoursOffsetToRetrieveMalfunctionCreation: undefined,
+    icon: <VesselStatusAtSea style={iconStyle} />,
+    label: 'Navire en ZEE étrangère',
+    textColor: theme.color.charcoal,
+    value: 'IN_FOREIGN_EEZ'
   }
 ]
 
@@ -97,15 +130,15 @@ export enum EndOfBeaconMalfunctionReason {
 
 const END_OF_MALFUNCTION_REASON_RECORD: Record<EndOfBeaconMalfunctionReason, EnfOfBeaconMalfunctionStatusValue> = {
   BEACON_DEACTIVATED_OR_UNEQUIPPED: {
-    color: COLORS.opal,
+    color: theme.color.opal,
     label: 'Balise désactivée / navire non-équipé',
-    textColor: COLORS.gunMetal,
+    textColor: theme.color.gunMetal,
     value: 'BEACON_DEACTIVATED_OR_UNEQUIPPED'
   },
   RESUMED_TRANSMISSION: {
-    color: COLORS.mediumSeaGreen,
+    color: theme.color.mediumSeaGreen,
     label: 'Reprise des émissions',
-    textColor: COLORS.white,
+    textColor: theme.color.white,
     value: 'RESUMED_TRANSMISSION'
   }
 }

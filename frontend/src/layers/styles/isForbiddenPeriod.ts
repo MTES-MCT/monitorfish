@@ -1,5 +1,5 @@
 import { WEEKDAYS } from '../../domain/entities/regulatory'
-import { dayjs } from '../../utils/dayjs'
+import { getStartAndEndDatesSetWithCurrentYear } from './utils'
 
 import type { DateInterval, FishingPeriod } from '../../domain/types/regulation'
 import type { Dayjs } from 'dayjs'
@@ -20,14 +20,8 @@ export function isForbiddenPeriod(feature: Feature | undefined, currentDate: Day
      */
     case true: {
       const hasForbiddenRange = !!fishingPeriod.dateRanges?.find(dateRange => {
-        // The annual recurrence is only permitted for an end date before the current date
-        if (fishingPeriod.annualRecurrence && currentDate.isAfter(dateRange.endDate)) {
-          const { endDateWithOffsetApplied, startDateWithOffsetApplied } = getStartAndEndDatesWithAppliedOffset(
-            dateRange,
-            currentDate
-          )
-
-          return currentDate.isBefore(startDateWithOffsetApplied) || currentDate.isAfter(endDateWithOffsetApplied)
+        if (fishingPeriod.annualRecurrence) {
+          return isForbiddenWhenAnnualRecurrenceInAuthorizedPeriod(dateRange, currentDate)
         }
 
         return currentDate.isBefore(dateRange.startDate) || currentDate.isAfter(dateRange.endDate)
@@ -51,14 +45,8 @@ export function isForbiddenPeriod(feature: Feature | undefined, currentDate: Day
       const isAlwaysForbidden = fishingPeriod.always
 
       const hasForbiddenRange = fishingPeriod.dateRanges?.find(dateRange => {
-        // The annual recurrence is only permitted for an end date before the current date
-        if (fishingPeriod.annualRecurrence && currentDate.isAfter(dateRange.endDate)) {
-          const { endDateWithOffsetApplied, startDateWithOffsetApplied } = getStartAndEndDatesWithAppliedOffset(
-            dateRange,
-            currentDate
-          )
-
-          return currentDate.isAfter(startDateWithOffsetApplied) && currentDate.isBefore(endDateWithOffsetApplied)
+        if (fishingPeriod.annualRecurrence) {
+          return isForbiddenWhenAnnualRecurrenceInForbiddenPeriod(dateRange, currentDate)
         }
 
         return currentDate.isAfter(dateRange.startDate) && currentDate.isBefore(dateRange.endDate)
@@ -81,23 +69,48 @@ export function isForbiddenPeriod(feature: Feature | undefined, currentDate: Day
   }
 }
 
-function getStartAndEndDatesWithAppliedOffset(dateRange: DateInterval, currentDate: Dayjs): Record<string, Dayjs> {
-  const endDateWithCurrentYear = dayjs(dateRange.endDate)
-  const startDateWithCurrentYear = dayjs(dateRange.startDate)
-  const yearOffset = currentDate.year() - endDateWithCurrentYear.year()
+function isForbiddenWhenAnnualRecurrenceInAuthorizedPeriod(dateRange: DateInterval, currentDate: Dayjs): boolean {
+  const { endDateWithOffsetApplied, startDateWithOffsetApplied } = getStartAndEndDatesSetWithCurrentYear(
+    dateRange,
+    currentDate
+  )
 
-  const endDateWithOffsetApplied = endDateWithCurrentYear.add(yearOffset, 'year')
-  const startDateWithOffsetApplied = startDateWithCurrentYear.add(yearOffset, 'year')
-
-  if (endDateWithOffsetApplied?.isBefore(currentDate) || startDateWithOffsetApplied?.isAfter(currentDate)) {
-    return {
-      endDateWithOffsetApplied: endDateWithOffsetApplied?.add(1, 'year'),
-      startDateWithOffsetApplied: startDateWithOffsetApplied?.add(1, 'year')
-    }
+  /*
+    The date range looks like this :
+    Months:   1    2    3    4    5    6    7    8    9    10    11    12
+                    [startDate___________________________endDate]
+   */
+  if (endDateWithOffsetApplied?.isAfter(startDateWithOffsetApplied)) {
+    return !(currentDate.isAfter(startDateWithOffsetApplied) && currentDate.isBefore(endDateWithOffsetApplied))
   }
 
-  return {
-    endDateWithOffsetApplied,
-    startDateWithOffsetApplied
+  /*
+    The date range looks like this :
+    Months:   1    2    3    4    5    6    7    8    9    10    11    12
+            ________endDate]                          [startDate__________
+   */
+  return !(currentDate.isAfter(startDateWithOffsetApplied) || currentDate.isBefore(endDateWithOffsetApplied))
+}
+
+function isForbiddenWhenAnnualRecurrenceInForbiddenPeriod(dateRange: DateInterval, currentDate: Dayjs): boolean {
+  const { endDateWithOffsetApplied, startDateWithOffsetApplied } = getStartAndEndDatesSetWithCurrentYear(
+    dateRange,
+    currentDate
+  )
+
+  /*
+    The date range looks like this :
+    Months:   1    2    3    4    5    6    7    8    9    10    11    12
+                    [startDate___________________________endDate]
+   */
+  if (endDateWithOffsetApplied?.isAfter(startDateWithOffsetApplied)) {
+    return currentDate.isAfter(startDateWithOffsetApplied) && currentDate.isBefore(endDateWithOffsetApplied)
   }
+
+  /*
+    The date range looks like this :
+    Months:   1    2    3    4    5    6    7    8    9    10    11    12
+            ________endDate]                          [startDate__________
+   */
+  return currentDate.isAfter(startDateWithOffsetApplied) || currentDate.isBefore(endDateWithOffsetApplied)
 }

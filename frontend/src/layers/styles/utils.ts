@@ -3,6 +3,11 @@ import { Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 
+import { dayjs } from '../../utils/dayjs'
+
+import type { DateInterval } from '../../domain/types/regulation'
+import type { Dayjs } from 'dayjs'
+
 export function getStyle(color: string | undefined, isSelected: boolean) {
   return new Style({
     fill: new Fill({
@@ -31,4 +36,18 @@ export function getColorWithAlpha(colorHex: string, alpha: number) {
     Number.parseInt(String(b), 10),
     alpha
   ])
+}
+
+export function getStartAndEndDatesSetWithCurrentYear(
+  dateRange: DateInterval,
+  currentDate: Dayjs
+): Record<string, Dayjs> {
+  const currentYear = currentDate.get('year')
+  const endDateWithCurrentYear = dayjs(dateRange.endDate).set('year', currentYear)
+  const startDateWithCurrentYear = dayjs(dateRange.startDate).set('year', currentYear)
+
+  return {
+    endDateWithOffsetApplied: endDateWithCurrentYear,
+    startDateWithOffsetApplied: startDateWithCurrentYear
+  }
 }

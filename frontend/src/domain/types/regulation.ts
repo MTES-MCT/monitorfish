@@ -41,8 +41,8 @@ export type RegulatoryTopics = Map<string, RegulatoryZone[]>
 export type RegulatoryLawTypes = Record<string, RegulatoryTopics[]>
 
 export type DateInterval = {
-  endDate: Date
-  startDate: Date
+  endDate: string | Date
+  startDate: string | Date
 }
 
 export type TimeInterval = {

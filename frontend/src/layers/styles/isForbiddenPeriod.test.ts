@@ -295,7 +295,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 11) // 11 (12 from 1) is inside [09 -> 04]
+    const currentDate = getUtcDayjs().set('year', 2021).set('month', 11) // 11 (12 from 1) is inside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -319,7 +319,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 5) // 3 is outside [09 -> 04]
+    const currentDate = getUtcDayjs().set('year', 2022).set('month', 5) // 5 (6 from 1) is outside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -343,7 +343,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 10) // 10 (11 from 1) is inside [09 -> 04]
+    const currentDate = getUtcDayjs().set('year', 2022).set('month', 10) // 10 (11 from 1) is inside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -367,7 +367,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 2) // 3 (4 from 1) is inside [09 -> 04]
+    const currentDate = getUtcDayjs().set('year', 2022).set('month', 2) // 3 (4 from 1) is inside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
@@ -391,7 +391,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 6) // 6 (7 from 1) is outside [09 -> 04]
+    const currentDate = getUtcDayjs().set('year', 2022).set('month', 6) // 6 (7 from 1) is outside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 
@@ -415,11 +415,11 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 9) // 9 (10 from 1) is inside [09 -> 04]
+    const currentDate = getUtcDayjs().set('year', 2022).set('month', 9) // 9 (10 from 1) is inside [09 -> 04]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 
-  it('isForbiddenPeriod Should return true When it is not authorized outside another date range in the past with annual recurrence', async () => {
+  it('isForbiddenPeriod Should return false When it is not authorized outside another date range in the past with annual recurrence', async () => {
     // Given
     const feature = new Feature({
       // The JSON is a string in geoserver
@@ -439,7 +439,55 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 7) // 7 (8 from 1) is outside [09 -> 04]
+    const currentDate = getUtcDayjs().set('year', 2022).set('month', 7) // 7 (8 from 1) is outside [09 -> 04]
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
+  })
+
+  it('isForbiddenPeriod Should return true When it is authorized outside another date range in the past with annual recurrence', async () => {
+    // Given
+    const feature = new Feature({
+      // The JSON is a string in geoserver
+      fishing_period: JSON.stringify({
+        annualRecurrence: true,
+        authorized: true,
+        dateRanges: [
+          {
+            endDate: '2022-11-15T10:26:37.477Z',
+            startDate: '2021-09-15T09:25:52.233Z'
+          }
+        ],
+        dates: [],
+        timeIntervals: [],
+        weekdays: []
+      })
+    })
+
+    // When
+    const currentDate = getUtcDayjs().set('year', 2022).set('month', 10).set('day', 22) // 11 (12 from 1) is outside [09 -> 11]
+    expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
+  })
+
+  it('isForbiddenPeriod Should return false When it is authorized inside another date range in the past with annual recurrence', async () => {
+    // Given
+    const feature = new Feature({
+      // The JSON is a string in geoserver
+      fishing_period: JSON.stringify({
+        annualRecurrence: true,
+        authorized: true,
+        dateRanges: [
+          {
+            endDate: '2022-03-15T10:26:37.477Z',
+            startDate: '2022-09-15T09:25:52.233Z'
+          }
+        ],
+        dates: [],
+        timeIntervals: [],
+        weekdays: []
+      })
+    })
+
+    // When
+    const currentDate = getUtcDayjs().set('year', 2022).set('month', 1).set('day', 22) // 11 (12 from 1) is outside [09 -> 11]
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(false)
   })
 })

@@ -2,7 +2,7 @@
 Overview
 ======== 
 
-**Monitorfish** is a **fishing vessels monitoring software** developped by the French adminitration for the french **Fishing Monitoring Center (FMC)** - the `Centre National de Surveillance des Pêches <https://www.mer.gouv.fr/la-police-des-peches>`_ - and its partners.
+**Monitorfish** is a **fishing vessels monitoring software** developped by the French administration for the french **Fisheries Monitoring Center (FMC)** - the `Centre National de Surveillance des Pêches <https://www.mer.gouv.fr/la-police-des-peches>`_ - and its partners.
 
 Features
 --------

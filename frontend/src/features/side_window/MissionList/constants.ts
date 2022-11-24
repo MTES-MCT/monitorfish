@@ -1,10 +1,12 @@
 import { SeaFront } from '../../../domain/entities/alerts/constants'
-import { Mission, MissionStatus, MissionType } from '../../../domain/types/mission'
+import { Mission, MissionAlertType, MissionStatus, MissionType } from '../../../domain/types/mission'
+import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
 import type { TableOptions } from '../../../hooks/useTable/types'
+import type { Option } from '../../../types'
 
 export const DUMMY_MISSIONS: Mission[] = new Array(20).fill(undefined).map((_, index) => ({
-  alert: '-',
+  alertType: MissionAlertType.WAITING_FOR_CLOSURE,
   endDate: new Date(),
   id: String(index + 1),
   inspectionsCount: 0,
@@ -15,6 +17,41 @@ export const DUMMY_MISSIONS: Mission[] = new Array(20).fill(undefined).map((_, i
   type: MissionType.SEA,
   unit: 'Unité'
 }))
+
+/* eslint-disable typescript-sort-keys/string-enum */
+export enum MissionDateRangeFilter {
+  CURRENT_DAY = 'Aujourd’hui',
+  CURRENT_WEEK = 'Semaine en cours',
+  CURRENT_MONTH = 'Mois en cours',
+  CURRENT_QUARTER = 'Trimestre en cours',
+  CUSTOM = 'Période spécifique'
+}
+/* eslint-enable typescript-sort-keys/string-enum */
+
+export enum MissionFilterType {
+  ALERT_TYPE = 'alertType',
+  CUSTOM_DATE_RANGE = 'customDateRange',
+  DATE_RANGE = 'dateRange',
+  INSPECTION_TYPE = 'inspectionType',
+  MISSION_TYPE = 'missionType',
+  STATUS = 'status',
+  UNIT = 'unit'
+}
+
+export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {
+  [MissionFilterType.ALERT_TYPE]: getOptionsFromLabelledEnum(MissionAlertType),
+  [MissionFilterType.CUSTOM_DATE_RANGE]: [],
+  [MissionFilterType.DATE_RANGE]: getOptionsFromLabelledEnum(MissionDateRangeFilter),
+  [MissionFilterType.INSPECTION_TYPE]: [
+    {
+      label: 'Inconnu',
+      value: 'UNKNOWN'
+    }
+  ],
+  [MissionFilterType.MISSION_TYPE]: getOptionsFromLabelledEnum(MissionType),
+  [MissionFilterType.STATUS]: getOptionsFromLabelledEnum(MissionStatus),
+  [MissionFilterType.UNIT]: []
+}
 
 export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission> = {
   columns: [
@@ -66,9 +103,9 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission> = {
       label: 'Statut'
     },
     {
-      fixedWidth: 5,
+      fixedWidth: 10,
       isSortable: true,
-      key: 'alert',
+      key: 'alertType',
       label: 'Alerte'
     },
     {

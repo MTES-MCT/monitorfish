@@ -16,7 +16,7 @@ describe('hooks/useTable()', () => {
 
     const { result } = renderHook(() => useTable(rawData, tableOptions))
 
-    expect(result.current.tableData).toMatchObject([])
+    expect(result.current.tableAugmentedData).toMatchObject([])
   })
 
   it('should return the expected augmented data from simple queries with untransformed columns', () => {
@@ -38,7 +38,7 @@ describe('hooks/useTable()', () => {
 
     const { result: firstResult } = renderHook(() => useTable(rawData, tableOptions, '12'))
 
-    expect(firstResult.current.tableData).toMatchObject([
+    expect(firstResult.current.tableAugmentedData).toMatchObject([
       {
         id: '12',
         isChecked: false,
@@ -73,7 +73,7 @@ describe('hooks/useTable()', () => {
 
     const { result: secondResult } = renderHook(() => useTable(rawData, tableOptions, '23'))
 
-    expect(secondResult.current.tableData).toMatchObject([
+    expect(secondResult.current.tableAugmentedData).toMatchObject([
       {
         id: '123',
         isChecked: false,
@@ -93,7 +93,7 @@ describe('hooks/useTable()', () => {
 
     const { result: thirdResult } = renderHook(() => useTable(rawData, tableOptions, '1 2'))
 
-    expect(thirdResult.current.tableData).toMatchObject([
+    expect(thirdResult.current.tableAugmentedData).toMatchObject([
       {
         id: '12',
         isChecked: false,

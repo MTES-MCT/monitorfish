@@ -145,9 +145,14 @@ export function useTable<T extends CollectionItem = CollectionItem>(
     return sort(bySortingKey, filteredAugmentedData)
   }, [filteredAugmentedData, isSortingDesc, sortingKey])
 
+  const filteredAndSortedData = useMemo(
+    () => filteredAndSortedAugmentedData.map(({ item }) => item),
+    [filteredAndSortedAugmentedData]
+  )
+
   const getCheckedData = useCallback(
-    () => filteredAndSortedAugmentedData.filter(({ id }) => checkedIds.includes(id)).map(({ item }) => item),
-    [checkedIds, filteredAndSortedAugmentedData]
+    () => filteredAndSortedData.filter(({ id }) => checkedIds.includes(id)),
+    [checkedIds, filteredAndSortedData]
   )
 
   const toggleCheckAll = useCallback(() => {
@@ -196,8 +201,9 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   return {
     getTableCheckedData: getCheckedData,
     renderTableHead,
+    tableAugmentedData: filteredAndSortedAugmentedData,
     tableCheckedIds: checkedIds,
-    tableData: filteredAndSortedAugmentedData,
+    tableData: filteredAndSortedData,
     toggleTableAllCheck: toggleCheckAll,
     toggleTableCheckForId
   }

@@ -66,8 +66,6 @@ module.exports = {
       }
     ],
 
-    'no-console': 'off',
-
     '@typescript/no-use-before-define': 'off',
     '@typescript-eslint/no-restricted-imports': [
       'error',

@@ -136,8 +136,6 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
     setSelectedSubMenu
   ])
 
-  console.log(openedSideWindowTab)
-
   const beaconMalfunctionBoardGrayOverlayStyle: CSSProperties = useMemo(
     () => ({
       background: COLORS.charcoal,

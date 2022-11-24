@@ -29,13 +29,13 @@ export function TableHead({
     <CardTableHeader noPadding>
       <FlexboxGrid>
         {isCheckable && (
-          <CellWrapper fixedWidth={2.25} style={{ padding: 0 }}>
+          <CellWrapper $fixedWidth={2.25} style={{ padding: 0 }}>
             <StyledCheckbox checked={isAllChecked} onChange={onAllCheckChange} />
           </CellWrapper>
         )}
 
         {columns.map(({ fixedWidth, isSortable, key, label = '' }) => (
-          <CellWrapper key={key} fixedWidth={fixedWidth}>
+          <CellWrapper key={key} $fixedWidth={fixedWidth}>
             <CardTableColumnTitle
               dataCy={`table-order-by-${key}`}
               isAscending={!isSortingDesc}
@@ -53,14 +53,14 @@ export function TableHead({
 }
 
 const CellWrapper = styled(FlexboxGrid.Item)<{
-  fixedWidth: number
+  $fixedWidth: number
 }>`
   align-items: center;
   display: flex;
   height: 36px;
   padding: 0 10px;
   user-select: 'none';
-  width: ${p => p.fixedWidth}rem;
+  width: ${p => p.$fixedWidth}rem;
 `
 
 export const StyledCheckbox = styled(Checkbox)`

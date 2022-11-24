@@ -58,7 +58,7 @@ export function ReportingList({ selectedSeaFront }: ReportingListProps) {
     [currentReportings, selectedSeaFront]
   )
 
-  const { getTableCheckedData, renderTableHead, tableCheckedIds, tableData, toggleTableCheckForId } = useTable<
+  const { getTableCheckedData, renderTableHead, tableAugmentedData, tableCheckedIds, toggleTableCheckForId } = useTable<
     InfractionSuspicionReporting | PendingAlertReporting
   >(currentSeaFrontReportings, REPORTING_LIST_TABLE_OPTIONS, searchInputRef.current?.value)
 
@@ -173,7 +173,7 @@ MMSI: ${reporting.mmsi || ''}`
       </CardTableFilters>
 
       <CardTable
-        $hasScroll={tableData.length > 9}
+        $hasScroll={tableAugmentedData.length > 9}
         $width={1513}
         data-cy="side-window-reporting-list"
         style={{ marginTop: 10 }}
@@ -181,7 +181,7 @@ MMSI: ${reporting.mmsi || ''}`
         {renderTableHead()}
 
         <CardTableBody>
-          {tableData.map((reporting, index) => {
+          {tableAugmentedData.map((reporting, index) => {
             const editingIsDisabled = reporting.item.type === ReportingType.ALERT
 
             return (
@@ -242,7 +242,7 @@ MMSI: ${reporting.mmsi || ''}`
             )
           })}
         </CardTableBody>
-        {!tableData.length && <EmptyCardTable>Aucun signalement</EmptyCardTable>}
+        {!tableAugmentedData.length && <EmptyCardTable>Aucun signalement</EmptyCardTable>}
       </CardTable>
       <EditReporting />
     </Content>

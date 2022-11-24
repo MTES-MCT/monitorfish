@@ -1,29 +1,29 @@
-import { useMemo, useRef } from 'react'
+import { pipe } from 'ramda'
+import { useMemo, useRef, useState } from 'react'
 import { FlexboxGrid } from 'rsuite'
 import styled from 'styled-components'
 
 // import { useAppDispatch } from '../../../hooks/useAppDispatch'
 // import { useAppSelector } from '../../../hooks/useAppSelector'
-import { useForceUpdate } from '../../../hooks/useForceUpdate'
 import { useTable } from '../../../hooks/useTable'
 import { CardTable } from '../../../ui/card-table/CardTable'
 import { CardTableBody } from '../../../ui/card-table/CardTableBody'
-import { CardTableFilters } from '../../../ui/card-table/CardTableFilters'
 import { CardTableRow } from '../../../ui/card-table/CardTableRow'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
-import { FilterTableInput } from '../../../ui/card-table/FilterTableInput'
 import { dayjs } from '../../../utils/dayjs'
 import { DUMMY_MISSIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
+import { FilterBar } from './FilterBar'
 
 import type { Mission } from '../../../domain/types/mission'
+import type { MissionFilter } from './types'
 import type { MutableRefObject } from 'react'
 
 export function MissionList() {
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
+  const [filters, setFilters] = useState<MissionFilter[]>([])
   // const dispatch = useAppDispatch()
   // const { currentMissions } = useAppSelector(state => state.missions)
   const currentMissions = DUMMY_MISSIONS
-  const { forceDebouncedUpdate } = useForceUpdate()
 
   const baseUrl = useMemo(() => window.location.origin, [])
 
@@ -33,40 +33,39 @@ export function MissionList() {
     searchInputRef.current?.value
   )
 
+  const filteredMissions = useMemo(
+    () => (filters.length ? (pipe as (...args: MissionFilter[]) => MissionFilter)(...filters)(tableData) : tableData),
+    [filters, tableData]
+  )
+
   return (
     <Wrapper>
-      <CardTableFilters>
-        <FilterTableInput
-          ref={searchInputRef}
-          baseUrl={baseUrl}
-          data-cy="side-window-reporting-search"
-          onChange={forceDebouncedUpdate}
-          placeholder="Rechercher une mission"
-          type="text"
-        />
-      </CardTableFilters>
+      <FilterBar missions={tableData} onChange={setFilters} />
 
+      <div>{`${filteredMissions.length ? filteredMissions.length : 'Aucune'} mission${
+        filteredMissions.length > 1 ? 's' : ''
+      }`}</div>
       <CardTable
-        $hasScroll={tableData.length > 9}
+        $hasScroll={filteredMissions.length > 9}
         data-cy="side-window-reporting-list"
         style={{ flexGrow: 1, marginTop: 10 }}
       >
         {renderTableHead()}
 
         <CardTableBody>
-          {tableData.map((mission, index) => (
+          {filteredMissions.map((mission, index) => (
             <CardTableRow key={mission.id} data-cy="side-window-current-reportings" index={index + 1}>
               <FlexboxGrid>
-                <Cell fixedWidth={7}>{dayjs(mission.item.startDate).format('D MMM YY, HH:MM')}</Cell>
-                <Cell fixedWidth={7}>{dayjs(mission.item.endDate).format('D MMM YY, HH:MM')}</Cell>
-                <Cell fixedWidth={10}>{mission.item.unit}</Cell>
-                <Cell fixedWidth={5}>{mission.item.type}</Cell>
-                <Cell fixedWidth={5}>{mission.item.seaFront}</Cell>
-                <Cell fixedWidth={10}>{mission.item.themes.join(', ')}</Cell>
-                <Cell fixedWidth={2}>{mission.item.inspectionsCount}</Cell>
-                <Cell fixedWidth={5}>{mission.item.status}</Cell>
-                <Cell fixedWidth={5}>{mission.item.alert}</Cell>
-                <Cell fixedWidth={2}>
+                <Cell $fixedWidth={7}>{dayjs(mission.startDate).format('D MMM YY, HH:MM')}</Cell>
+                <Cell $fixedWidth={7}>{dayjs(mission.endDate).format('D MMM YY, HH:MM')}</Cell>
+                <Cell $fixedWidth={10}>{mission.unit}</Cell>
+                <Cell $fixedWidth={5}>{mission.type}</Cell>
+                <Cell $fixedWidth={5}>{mission.seaFront}</Cell>
+                <Cell $fixedWidth={10}>{mission.themes.join(', ')}</Cell>
+                <Cell $fixedWidth={2}>{mission.inspectionsCount}</Cell>
+                <Cell $fixedWidth={5}>{mission.status}</Cell>
+                <Cell $fixedWidth={10}>{mission.alertType}</Cell>
+                <Cell $fixedWidth={2}>
                   <button onClick={() => undefined} type="button">
                     <img
                       alt="Voir sur la carte"
@@ -75,7 +74,7 @@ export function MissionList() {
                     />
                   </button>
                 </Cell>
-                <Cell fixedWidth={2}>
+                <Cell $fixedWidth={2}>
                   <button onClick={() => undefined} type="button">
                     <img alt="Editer la mission" src={`${baseUrl}/Bouton_edition.png`} title="Editer la mission" />
                   </button>
@@ -101,8 +100,8 @@ const Wrapper = styled.div`
 `
 
 const Cell = styled(FlexboxGrid.Item)<{
-  fixedWidth: number
+  $fixedWidth: number
 }>`
   padding: 0 10px;
-  width: ${p => p.fixedWidth}rem;
+  width: ${p => p.$fixedWidth}rem;
 `

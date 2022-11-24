@@ -106,7 +106,7 @@ update-python-dependencies:
 # DOC commands
 push-docs-to-transifex:
 	cd datascience/docs && \
-	poetry run sphinx-build -b gettext source pot && \
+	poetry run sphinx-build -b gettext -D extensions="sphinx.ext.viewcode","sphinx.ext.napoleon" source pot && \
 	poetry run tx config mapping-bulk --project monitorfish --file-extension '.pot' --source-file-dir pot --source-lang en --type PO --expression 'locale/<lang>/LC_MESSAGES/{filepath}/{filename}.po' --execute && \
 	poetry run tx push --source
 pull-translated-docs-from-transifex:

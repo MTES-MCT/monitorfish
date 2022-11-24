@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-16 17:53+0100\n"
+"POT-Creation-Date: 2022-11-24 08:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: ../source/overview.rst:5
 #: e3439acbacf04b0f92af90e6ebcdf6a2
-msgid "**Monitorfish** is a **fishing vessels monitoring software** developped by the French adminitration for the french **Fishing Monitoring Center (FMC)** - the `Centre National de Surveillance des Pêches <https://www.mer.gouv.fr/la-police-des-peches>`_ - and its partners."
+msgid "**Monitorfish** is a **fishing vessels monitoring software** developped by the French administration for the french **Fisheries Monitoring Center (FMC)** - the `Centre National de Surveillance des Pêches <https://www.mer.gouv.fr/la-police-des-peches>`_ - and its partners."
 msgstr ""
 
 #: ../source/overview.rst:8

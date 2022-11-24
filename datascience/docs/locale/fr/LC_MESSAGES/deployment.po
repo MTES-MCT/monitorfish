@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Vincent Chéry <vincent.chery@m4x.org>, 2021
+# Vincent Chéry <vincent.chery@m4x.org>, 2022
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-16 17:20+0100\n"
 "PO-Revision-Date: 2021-08-23 14:48+0000\n"
-"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2021\n"
+"Last-Translator: Vincent Chéry <vincent.chery@m4x.org>, 2022\n"
 "Language-Team: French (https://www.transifex.com/ministere-de-la-transition-ecologique-et-solidaire-1/teams/124045/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: ../source/deployment.rst:3 1799159a19ca44de97cf4a3d9f8f9ccd
 msgid "Deployment & Administration"
-msgstr ""
+msgstr "Déploiement & administration"
 
 #: ../source/deployment.rst:8 41c832a7029b4eb8a1fcc3c0cc969807
 msgid "Prerequisites"
@@ -183,16 +183,18 @@ msgstr ""
 
 #: ../source/deployment.rst:96 901505e1368f47bab235ecffb9382071
 msgid "Database backup & restore"
-msgstr ""
+msgstr "Sauvegarde et restauration de base de données"
 
 #: ../source/deployment.rst:98 2a18b79c6b2345fa91c0aa4ba85f3dc8
 msgid ""
 "This section explains how to perform and automate full database backups."
 msgstr ""
+"Cette section explique comment effectuer et automatiser des sauvegardes "
+"complètes de bases de données."
 
 #: ../source/deployment.rst:103 e7bbb6ccd19b4183a75b02d0ee66b890
 msgid "Create a backups folder on the host machine."
-msgstr ""
+msgstr "Créez un dossier de sauvegardes sur la machine hôte."
 
 #: ../source/deployment.rst:104 44a1c6e11f254bae8c38d79162c00eb0
 msgid ""
@@ -200,6 +202,9 @@ msgid ""
 "backups folder in ~/.monitorfish - e.g.g. ``export "
 "MONITORFISH_BACKUPS_FOLDER=\"/backups/\"``."
 msgstr ""
+"Créez l'entrée ``MONITORFISH_BACKUPS_FOLDER`` avec le chemin complet vers le"
+" dossier des sauvegardes dans ~/.monitorfish - par exemple, ``export "
+"MONITORFISH_BACKUPS_FOLDER=\"/backups/\"``."
 
 #: ../source/deployment.rst:105 2392dbbe74144cc79d5a4cfadcf6fea9
 msgid ""
@@ -208,89 +213,116 @@ msgid ""
 " this group so it can write to the backups folder on the host) - e.g.g. "
 "``export MONITORFISH_LOGS_AND_BACKUPS_GID=\"125\"``."
 msgstr ""
+"Créez l'entrée ``MONITORFISH_LOGS_AND_BACKUPS_GID`` dans ~/.monitorfish avec"
+" le groupe qui possède le dossier des sauvegardes (le conteneur de base de "
+"données sera exécuté avec ce groupe afin qu'il puisse écrire dans le dossier"
+" des sauvegardes sur l'hôte) - par exemple, ``export "
+"MONITORFISH_LOGS_AND_BACKUPS_GID=\"125\"``."
 
 #: ../source/deployment.rst:106 127af2c7661f42f99c57df931333045d
 msgid ""
 "Make a copy of ``infra/remote/backup/pg_backup.config.template`` and rename "
 "it ``pg_backup.config``."
 msgstr ""
+"Faites une copie de ``infra/remote/backup/pg_backup.config.template`` et "
+"renommez-la ``pg_backup.config``."
 
 #: ../source/deployment.rst:107 fe237e7608f8419bbf6b9397740bb392
 msgid "Optionnally, change the backup parameters in ``pg_backup.config``."
 msgstr ""
+"En option, changez les paramètres de sauvegarde dans ``pg_backup.config``."
 
 #: ../source/deployment.rst:110 31918af2de644337929880d623221fe1
 msgid "Backup"
-msgstr ""
+msgstr "Sauvegarde"
 
 #: ../source/deployment.rst:113 3ad354ac666f4e2ea0f7f0a3138a9e89
 msgid "Running the backup script"
-msgstr ""
+msgstr "Exécuter le script de sauvegarde"
 
 #: ../source/deployment.rst:115 bd6bc840dca844afb1b6604a71e6ca8b
 msgid ""
 "Once the configuration step is done, a backup can be made by running the "
 "script at ``infra/remote/backup/pg_backup_rotated.sh``."
 msgstr ""
+"Une fois l'étape de configuration effectuée, une sauvegarde peut être faite "
+"en exécutant le script à ``infra/remote/backup/pg_backup_rotated.sh``."
 
 #: ../source/deployment.rst:117 f2bcba08c8ee4162b7d87abd0735c879
 msgid "This script :"
-msgstr ""
+msgstr "Ce script :"
 
 #: ../source/deployment.rst:119 87b1828509fb4a55b6018a7e2133232c
 msgid ""
 "``docker execs`` into the database container and makes a full database "
 "backup using ``pg_dump``"
 msgstr ""
+"``docker execs`` dans le conteneur de la base de données et fait une "
+"sauvegarde complète de la base de données en utilisant ``pg_dump``."
 
 #: ../source/deployment.rst:120 52ee75eae84345339f435bc4d16ed50b
 msgid "outputs :"
-msgstr ""
+msgstr "renvoie :"
 
 #: ../source/deployment.rst:122 f9dd66d15daa4cc78015c442d046f393
 msgid ""
 "a single ``globals.sql.gz`` file that contains database globals (roles, "
 "tablespaces)"
 msgstr ""
+"un unique fichier ``globals.sql.gz`` qui contient les globaux de la base de "
+"données (rôles, tablespaces)"
 
 #: ../source/deployment.rst:123 6f1a88287b0145e2a4bab31b1152171c
 msgid ""
 "a ``*.custom`` file (full database dump in compressed `custom` postgres "
 "format) for each database on the postgres cluster"
 msgstr ""
+"un fichier ``*.custom`` ( dump complet de la base de données au format "
+"compressé `custom` postgres) pour chaque base de données du cluster "
+"postgres."
 
 #: ../source/deployment.rst:124 b5ead73c9f7c4911921f2b5e35257048
 msgid ""
 "stores these files on the host machine, in a subfolder of the backups "
 "folder, named with the date of the backup"
 msgstr ""
+"stocke ces fichiers sur la machine hôte, dans un sous-dossier du dossier des"
+" sauvegardes, nommé avec la date de la sauvegarde."
 
 #: ../source/deployment.rst:125 5abf630c307345b0805d7b60111cbba6
 msgid ""
 "deletes old backups in rotation, keeping daily and weekly backups for as "
 "long as specified in the ``pg_backup.config`` file"
 msgstr ""
+"supprime les anciennes sauvegardes par rotation, en gardant les sauvegardes "
+"quotidiennes et hebdomadaires aussi longtemps que spécifié dans le fichier "
+"``pg_backup.config``."
 
 #: ../source/deployment.rst:128 8f1952d3418f4caba6f87cab6bcbdb27
 msgid "Automating backups"
-msgstr ""
+msgstr "Automatisation des sauvegardes"
 
 #: ../source/deployment.rst:130 494555a19dbe4ef69f10653be1cdd210
 msgid ""
 "To automate backups, add the line ``infra/remote/backup/crontab.txt`` to the"
 " crontab file :"
 msgstr ""
+"Pour automatiser les sauvegardes, ajoutez la ligne "
+"``infra/remote/backup/crontab.txt`` au fichier crontab :"
 
 #: ../source/deployment.rst:136 710a8417e03e4ee989e086f89bdfc227
 msgid "We recommend running the backup script daily."
-msgstr ""
+msgstr "Nous recommandons d'exécuter le script de sauvegarde quotidiennement."
 
 #: ../source/deployment.rst:139 ba0d91a650b44cfb9321f64899894ceb
 msgid "Restore"
-msgstr ""
+msgstr "Restauration à partir d'une sauvegarde"
 
 #: ../source/deployment.rst:141 22b0f83eb6344b1a85edc492c2391dc8
 msgid ""
 "To restore from a backup, see `TimescaleDB documentation <https://legacy-"
 "docs.timescale.com/v1.7/using-timescaledb/backup#pg_dump-pg_restore>`_."
 msgstr ""
+"Pour restaurer à partir d'une sauvegarde, voir `la documentation de "
+"TimescaleDB <https://legacy-docs.timescale.com/v1.7/using-"
+"timescaledb/backup#pg_dump-pg_restore>`_."

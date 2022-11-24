@@ -55,10 +55,16 @@ function initYearToCurrentYearRecord(
 /**
  * Get the number of sea and port beacon malfunctions for a given list of beacon malfunctions
  */
-function getNumberOfSeaAndLandBeaconMalfunctions(beaconMalfunctions: BeaconMalfunctionResumeAndDetails[]): {
-  numberOfBeaconMalfunctionsAtPort: number
-  numberOfBeaconMalfunctionsAtSea: number
-} {
+function getNumberOfSeaAndLandBeaconMalfunctions(beaconMalfunctions: BeaconMalfunctionResumeAndDetails[]):
+  | {
+      atPort: number
+      atSea: number
+    }
+  | undefined {
+  if (!beaconMalfunctions.length) {
+    return undefined
+  }
+
   const numberOfBeaconMalfunctionsAtSea = getNumberOfBeaconMalfunctionsAt(
     BeaconMalfunctionVesselStatus.AT_SEA,
     beaconMalfunctions
@@ -69,8 +75,8 @@ function getNumberOfSeaAndLandBeaconMalfunctions(beaconMalfunctions: BeaconMalfu
   )
 
   return {
-    numberOfBeaconMalfunctionsAtPort,
-    numberOfBeaconMalfunctionsAtSea
+    atPort: numberOfBeaconMalfunctionsAtPort,
+    atSea: numberOfBeaconMalfunctionsAtSea
   }
 }
 

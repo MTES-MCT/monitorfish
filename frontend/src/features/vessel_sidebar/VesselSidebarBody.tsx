@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 import { VesselSidebarTab } from '../../domain/entities/vessel/vessel'
 import { useAppSelector } from '../../hooks/useAppSelector'
-import VesselBeaconMalfunctions from './beacon_malfunctions/VesselBeaconMalfunctions'
+import { VesselBeaconMalfunctions } from './beacon_malfunctions/VesselBeaconMalfunctions'
 import VesselControls from './controls/VesselControls'
 import VesselFishingActivities from './fishing_activities/VesselFishingActivities'
 import VesselIdentity from './identity/VesselIdentity'
@@ -19,14 +19,14 @@ export function VesselSidebarBody() {
 
   return (
     <Body healthcheckTextWarning={healthcheckTextWarning}>
-      {isAdmin ? <AlertWarning selectedVessel={selectedVessel} /> : null}
-      {isAdmin ? <BeaconMalfunctionWarning selectedVessel={selectedVessel} /> : null}
-      {vesselSidebarTab === VesselSidebarTab.SUMMARY ? <VesselSummary /> : null}
-      {vesselSidebarTab === VesselSidebarTab.IDENTITY ? <VesselIdentity /> : null}
-      {vesselSidebarTab === VesselSidebarTab.VOYAGES ? <VesselFishingActivities /> : null}
-      {vesselSidebarTab === VesselSidebarTab.CONTROLS ? <VesselControls /> : null}
-      {vesselSidebarTab === VesselSidebarTab.REPORTING ? <VesselReportings /> : null}
-      {vesselSidebarTab === VesselSidebarTab.ERSVMS ? <VesselBeaconMalfunctions /> : null}
+      {isAdmin && <AlertWarning selectedVessel={selectedVessel} />}
+      {isAdmin && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
+      {vesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
+      {vesselSidebarTab === VesselSidebarTab.IDENTITY && <VesselIdentity />}
+      {vesselSidebarTab === VesselSidebarTab.VOYAGES && <VesselFishingActivities />}
+      {vesselSidebarTab === VesselSidebarTab.CONTROLS && <VesselControls />}
+      {vesselSidebarTab === VesselSidebarTab.REPORTING && <VesselReportings />}
+      {vesselSidebarTab === VesselSidebarTab.ERSVMS && <VesselBeaconMalfunctions />}
     </Body>
   )
 }

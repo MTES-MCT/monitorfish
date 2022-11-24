@@ -26,11 +26,11 @@ const BeaconMalfunctionsResumeAndHistory = props => {
 
   /** @type {Object.<string, BeaconMalfunctionResumeAndDetails[]>} yearsToBeaconMalfunctions */
   const yearsToBeaconMalfunctions = useMemo(() => {
-    let nextYearsToBeaconMalfunctions
-    if (vesselBeaconMalfunctionsResumeAndHistory?.history) {
-      nextYearsToBeaconMalfunctions = getYearsToBeaconMalfunctions(vesselBeaconMalfunctionsFromDate, vesselBeaconMalfunctionsResumeAndHistory.history)
+    if (!vesselBeaconMalfunctionsResumeAndHistory?.history) {
+      return {}
     }
-    return nextYearsToBeaconMalfunctions
+
+    return getYearsToBeaconMalfunctions(vesselBeaconMalfunctionsFromDate, vesselBeaconMalfunctionsResumeAndHistory.history)
   }, [vesselBeaconMalfunctionsResumeAndHistory?.history, vesselBeaconMalfunctionsFromDate])
 
   function seeMore () {

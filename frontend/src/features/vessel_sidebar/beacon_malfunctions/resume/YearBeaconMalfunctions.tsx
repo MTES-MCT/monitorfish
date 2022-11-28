@@ -9,12 +9,12 @@ import {
   YearListTitle,
   YearListTitleText
 } from '../../common_styles/YearList.style'
-import BeaconMalfunction from './BeaconMalfunction'
+import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 
 import type { BeaconMalfunctionResumeAndDetails } from '../../../../domain/types/beaconMalfunction'
 
 type YearBeaconMalfunctionsProps = {
-  setIsCurrentBeaconMalfunctionDetails: () => void
+  setIsCurrentBeaconMalfunctionDetails: (boolean) => void
   year: number
   yearBeaconMalfunctions: BeaconMalfunctionResumeAndDetails[]
 }
@@ -62,10 +62,9 @@ export function YearBeaconMalfunctions({
         </YearListTitle>
         <YearListContent isOpen={isOpen} name={year.toString()}>
           {sortedMalfunctions.map((beaconMalfunctionWithDetails, index) => (
-            <BeaconMalfunction
+            <BeaconMalfunctionCard
               key={beaconMalfunctionWithDetails.beaconMalfunction.id}
               beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}
-              index={index}
               isLastItem={yearBeaconMalfunctions.length === index + 1}
               setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
             />

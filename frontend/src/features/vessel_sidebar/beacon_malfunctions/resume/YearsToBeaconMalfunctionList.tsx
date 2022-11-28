@@ -7,7 +7,7 @@ import { YearBeaconMalfunctions } from './YearBeaconMalfunctions'
 import type { BeaconMalfunctionResumeAndDetails } from '../../../../domain/types/beaconMalfunction'
 
 type YearsToBeaconMalfunctionListProps = {
-  setIsCurrentBeaconMalfunctionDetails: () => void
+  setIsCurrentBeaconMalfunctionDetails: (boolean) => void
   vesselBeaconMalfunctionsFromDate: Date
   yearsToBeaconMalfunctions: Record<number, BeaconMalfunctionResumeAndDetails[]>
 }

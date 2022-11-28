@@ -37,7 +37,7 @@ context('Vessel sidebar ers/vms tab', () => {
       .contains('Aucune avarie')
 
     // See the details of a beacon malfunction
-    cy.get('*[data-cy="vessel-beacon-malfunction-history-see-more"]', { timeout: 10000 }).click({ force: true })
+    cy.get('*[data-cy="vessel-beacon-malfunction-single-history"]', { timeout: 10000 }).click({ force: true })
     cy.get('*[data-cy="vessel-malfunctions-details"]', { timeout: 10000 }).should('be.visible')
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 10000 }).contains('0 commentaire')
     cy.get('*[data-cy="beacon-malfunction-details-follow-up"]', { timeout: 10000 }).contains(
@@ -56,7 +56,7 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.get('.vessels').click(460, 480, { force: true, timeout: 10000 })
     cy.get('*[data-cy="vessel-menu-ers-vms"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-beacon-malfunctions-history"]', { timeout: 10000 }).children().eq(0).click()
-    cy.get('*[data-cy="vessel-beacon-malfunction-history-see-more"]', { timeout: 10000 }).click({ force: true })
+    cy.get('*[data-cy="vessel-beacon-malfunction-single-history"]', { timeout: 10000 }).click({ force: true })
     cy.get('*[data-cy="beacon-malfunction-back-to-resume"]', { timeout: 10000 }).click()
     cy.get('*[data-cy="vessel-malfunctions-resume"]', { timeout: 10000 }).should('be.visible')
 

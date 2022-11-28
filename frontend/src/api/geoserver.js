@@ -201,7 +201,7 @@ export function getRegulatoryZonesInExtentFromAPI (extent, fromBackoffice) {
       `&version=1.1.0&request=GetFeature&typename=monitorfish:${Layer.REGULATORY.code}` +
       `&outputFormat=application/json&srsname=${WSG84_PROJECTION}` +
       `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}` +
-      '&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,facade,region'
+      '&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region'
         .replace(/'/g, '%27')
         .replace(/\(/g, '%28')
         .replace(/\)/g, '%29')

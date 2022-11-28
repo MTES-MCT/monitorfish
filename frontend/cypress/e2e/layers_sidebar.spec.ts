@@ -240,6 +240,13 @@ context('LayersSidebar', () => {
 
   it('A regulation Should be searched with a rectangle', () => {
     // When
+    cy.intercept(
+      'GET',
+      'http://0.0.0.0:8081/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature' +
+        '&typename=monitorfish:regulations&outputFormat=application/json&srsname=EPSG:4326' +
+        '&bbox=-378334.88336741074,6258255.970396698,-280465.66220758925,6277076.974465896,EPSG:3857' +
+        '&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region'
+    ).as('getFeature')
     cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
 
     cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
@@ -247,6 +254,10 @@ context('LayersSidebar', () => {
 
     cy.get('canvas').eq(0).click(490, 580, { force: true, timeout: 10000 })
     cy.get('canvas').eq(0).click(230, 630, { force: true, timeout: 10000 })
+    cy.wait('@getFeature').then(({ request, response }) => {
+      expect(request.url).contains('propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region')
+      expect(response && response.statusCode).equal(200)
+    })
 
     cy.get('*[data-cy="regulation-search-box-filter"]').should('not.exist')
     cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('exist')

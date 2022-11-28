@@ -4,7 +4,7 @@
     "urlPath": "/geoserver/wfs",
     "queryParameters": {
       "bbox": {
-        "matches": ".*378.*&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region"
+        "matches": ".*378.*"
       }
     }
   },

@@ -111,9 +111,9 @@ const getMalfunctionStartDateText = (beaconMalfunction: BeaconMalfunction) => {
   ) {
     switch (beaconMalfunction.endOfBeaconMalfunctionReason) {
       case END_OF_MALFUNCTION_REASON_RECORD.RESUMED_TRANSMISSION.value:
-        return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction.malfunctionStartDateTime)}`
+        return `Reprise des émissions ${getReducedTimeAgo(beaconMalfunction.malfunctionEndDateTime)}`
       case END_OF_MALFUNCTION_REASON_RECORD.BEACON_DEACTIVATED_OR_UNEQUIPPED.value:
-        return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction.malfunctionStartDateTime)}`
+        return `Balise désactivée ${getReducedTimeAgo(beaconMalfunction.malfunctionEndDateTime)}`
       default:
         throw Error('Should not happen')
     }

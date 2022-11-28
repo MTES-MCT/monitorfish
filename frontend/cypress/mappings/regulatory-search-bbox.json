@@ -2,9 +2,9 @@
   "request": {
     "method": "GET",
     "urlPath": "/geoserver/wfs",
-    "queryParameters" : {
-      "bbox" : {
-        "matches" : ".*378.*"
+    "queryParameters": {
+      "bbox": {
+        "matches": ".*378.*"
       }
     }
   },
@@ -12,8 +12,8 @@
     "status": 200,
     "headers": {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin" : "*",
-      "Access-Control-Allow-Methods" : "*"
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
     },
     "body": "{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"id\":\"regulations.598\",\"geometry\":null,\"properties\":{\"engins\":\"DRB\",\"engins_interdits\":null,\"especes\":\"VEV\",\"especes_interdites\":null,\"topic\":\"Ouest Cotentin Bivalves\",\"regulatory_references\":[{\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-109-2019-delib-2019-c-pr-oc-08-a8855.html?id_rub=634\", \"reference\": \"ArrÃªtÃ© PrÃ©fectoral 109/2019 - dÃ©lib 2019/C-PR-OC-08 / MEMN\"}, {\"url\": \"http://legipeche.metier.i2/arrete-ministeriel-du-11-08-2008-a460.html?id_rub=634\", \"reference\": \"ArrÃªtÃ© MinistÃ©riel du 11/08/2008\"}, {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-009-2021-memn-a10903.html?id_rub=634\", \"reference\": \"ArrÃªtÃ© PrÃ©fectoral 009/2021 / MEMN\"}, {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-243-2020-memn-a10718.html?id_rub=634\", \"reference\": \"ArrÃªtÃ© PrÃ©fectoral 243/2020 / MEMN\"}, {\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-168-2020-modifie-delib-2020-pr-a10301.html?id_rub=634\", \"reference\": \"ArrÃªtÃ© PrÃ©fectoral 168/2020 ModifiÃ© - dÃ©lib 2020/PR-B-16 / MEMN\"}],\"zone\":\"Praires Ouest cotentin\",\"facade\":\"MEMN\",\"region\":\"Normandie, Bretagne\",\"next_id\":null,\"law_type\":\"Reg. MEMN\"},\"bbox\":[48.5983,-2.6721,49.7226,-1.3524]},{\"type\":\"Feature\",\"id\":\"regulations.1\",\"geometry\":null,\"properties\":{\"engins\":\"DRB\",\"engins_interdits\":null,\"especes\":\"SCE\",\"especes_interdites\":null,\"topic\":\"Armor CSJ Dragues\",\"references_reglementaires\":[{\"url\": \"http://legipeche.metier.i2/arrete-prefectoral-r53-2020-04-24-002-delib-2020-a9873.html?id_rub=1637\", \"reference\": \"ArrÃªtÃ© PrÃ©fectoral R53-2020-04-24-002 - dÃ©lib 2020-004 / NAMO\"}, {\"url\": \"\", \"reference\": \"126-2020\"}],\"zone\":\"Secteur 3\",\"facade\":\"NAMO\",\"region\":\"Bretagne\",\"law_type\":\"Reg. MEMN\"},\"bbox\":[48.5536,-2.7833,49.0387,-2.1888]}]}"
   }

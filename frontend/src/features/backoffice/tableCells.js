@@ -2,7 +2,7 @@ import { COLORS } from '../../constants/constants'
 import { RiskFactorBox } from '../vessel_sidebar/risk_factor/RiskFactorBox'
 import { getRiskFactorColor } from '../../domain/entities/riskFactor'
 import { ReactComponent as DeleteIconSVG } from '../icons/Icone_suppression.svg'
-import React, { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { InputPicker, Table, Tag, TagPicker } from 'rsuite'
 import { useClickOutsideWhenOpenedAndNotInSelector } from '../../hooks/useClickOutsideWhenOpenedAndNotInSelector'
@@ -16,64 +16,88 @@ export const INPUT_TYPE = {
   DOUBLE: 'DOUBLE'
 }
 
-export const ModifiableCell = ({ rowData, dataKey, id, inputType, maxLength, onChange, ...props }) => {
+export const ModifiableCell = ({ dataKey, id, inputType, maxLength, onChange, afterChange, ...props }) => {
+  const { rowData } = props
+  const dataCy = `row-${rowData[id]}-${dataKey}-${rowData[dataKey]}`
+
   return (
-    <Cell
-      title={rowData[dataKey]}
-      key={rowData[id]}
-      className={'table-content-editing'}
-      {...props}
-    >
-      <FleetSegmentInput
-        withinCell
-        maxLength={maxLength}
-        value={rowData[dataKey]}
-        inputType={inputType}
-        id={rowData[id]}
-        dataCy={`row-${rowData[id]}-${dataKey}-${rowData[dataKey]}`}
-        dataKey={dataKey}
-        onChange={onChange}
-      />
-    </Cell>
+    <ModifiableCellWrapper>
+      <Cell
+        title={rowData[dataKey]}
+        key={rowData[id]}
+        className={'table-content-editing'}
+        {...props}
+      >
+        <FleetSegmentInput
+          afterChange={afterChange}
+          withinCell
+          maxLength={maxLength}
+          value={rowData[dataKey]}
+          inputType={inputType}
+          id={rowData[id]}
+          dataCy={dataCy}
+          dataKey={dataKey}
+          onChange={onChange}
+        />
+      </Cell>
+    </ModifiableCellWrapper>
   )
 }
 
-export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, withinCell, onChange, dataCy }) => <input
-  data-cy={dataCy}
-  id={id}
-  style={{
-    fontSize: 13,
-    marginTop: withinCell ? -8 : 5,
-    marginBottom: withinCell ? 0 : 20,
-    marginLeft: withinCell ? -7 : 0,
-    marginRight: 0,
-    paddingLeft: 5,
-    paddingRight: 10,
-    fontWeight: 500
-  }}
-  type="text"
-  maxLength={maxLength}
-  className="rs-input"
-  value={value}
-  onChange={event => {
-    let value = null
-    switch (inputType) {
-      case INPUT_TYPE.INT: {
-        value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : 0
-        break
+const ModifiableCellWrapper = styled.div`
+  .rs-input:focus{
+    background: ${COLORS.charcoal};
+    color: ${COLORS.white};
+  }
+`
+
+export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, withinCell, onChange, dataCy, afterChange }) => {
+
+  const onChangeCallback = useCallback(event => {
+      let value = null
+      switch (inputType) {
+        case INPUT_TYPE.INT: {
+          value = (event.target.value && !isNaN(parseInt(event.target.value))) ? parseInt(event.target.value) : 0
+          break
+        }
+        case INPUT_TYPE.DOUBLE: {
+          value = event.target.value ? event.target.value : 0.0
+          break
+        }
+        case INPUT_TYPE.STRING: {
+          value = event.target.value
+          break
+        }
       }
-      case INPUT_TYPE.DOUBLE: {
-        value = event.target.value ? event.target.value : 0.0
-        break
+
+      onChange && onChange(id, dataKey, value)
+      if (dataKey === 'segment') {
+        afterChange && afterChange(dataCy.replaceAll(id, value))
+      } else {
+        afterChange && afterChange(dataCy)
       }
-      case INPUT_TYPE.STRING: {
-        value = event.target.value
-        break
-      }
-    }
-    onChange && onChange(id, dataKey, value)
-  }}
-/>
+  }, [onChange, dataKey, id, afterChange, dataCy])
+
+  return <input
+    data-cy={dataCy}
+    id={id}
+    style={{
+      fontSize: 13,
+      marginTop: withinCell ? -8 : 5,
+      marginBottom: withinCell ? 0 : 20,
+      marginLeft: withinCell ? -7 : 0,
+      marginRight: 0,
+      paddingLeft: 5,
+      paddingRight: 10,
+      fontWeight: 500
+    }}
+    type="text"
+    maxLength={maxLength}
+    className="rs-input"
+    value={value}
+    onChange={event => onChangeCallback(event)}
+  />
+}
 
 export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) => {
   return (
@@ -141,16 +165,9 @@ export const ImpactRiskFactorCell = ({ rowData, expandedRowKeys, onChange, ...pr
 
 /**
  * This component show a list of tag by default and only open the tagPicker if the user click, for performance reason
- * @param rowData
- * @param dataKey
- * @param data
- * @param hasClicked
- * @param onChange
- * @param props
- * @return {JSX.Element}
- * @constructor
  */
-export const TagPickerCell = ({ rowData, dataKey, data, id, onChange, ...props }) => {
+export const TagPickerCell = ({ dataKey, data, id, onChange, ...props }) => {
+  const { rowData } = props
   const wrapperRef = useRef(null)
   const [isOpened, setIsOpened] = useState(false)
   const clickedOutsideComponent = useClickOutsideWhenOpenedAndNotInSelector(wrapperRef, isOpened, '.rs-picker-menu')
@@ -159,7 +176,7 @@ export const TagPickerCell = ({ rowData, dataKey, data, id, onChange, ...props }
     setIsOpened(false)
   }, [clickedOutsideComponent])
 
-  return <div ref={wrapperRef}>
+  return <TagPickerWrapper ref={wrapperRef}>
     <Cell
       {...props}
       style={{
@@ -195,8 +212,50 @@ export const TagPickerCell = ({ rowData, dataKey, data, id, onChange, ...props }
           </TagOnly>
       }
     </Cell>
-  </div>
+  </TagPickerWrapper>
 }
+
+const TagPickerWrapper = styled.div`
+  .rs-picker-default .rs-picker-toggle.rs-btn-xs {
+    padding-left: 5px;
+  }
+
+  .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+    color: ${COLORS.charcoal};
+  }
+
+  .rs-picker-toggle-wrapper .rs-picker-toggle.rs-btn-xs {
+    padding-right: 17px;
+  }
+
+  .rs-picker-tag-wrapper {
+    width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: -10px;
+  }
+
+  .rs-picker-tag {
+    width: 280px;
+    background: none;
+  }
+
+  .rs-picker-toggle-clean {
+    visibility: hidden !important;
+  }
+
+  .rs-picker-toggle-caret {
+    visibility: hidden !important;
+  }
+
+  .rs-picker-toggle-placeholder {
+    visibility: hidden !important;
+  }
+
+  *:focus {
+    outline: none;
+}
+`
 
 export function renderTagPickerMenuItem (onChange, item) {
   return (
@@ -260,7 +319,9 @@ export const renderRowExpanded = rowData => {
   )
 }
 
-export const DeleteCell = ({ rowData, dataKey, id, onClick, ...props }) => {
+export const DeleteCell = ({ dataKey, id, onClick, ...props }) => {
+  const { rowData } = props
+
   return (
     <Cell key={rowData[id]} {...props}>
       <Delete

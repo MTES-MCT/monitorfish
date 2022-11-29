@@ -19,41 +19,47 @@ class JpaFleetSegmentRepository(private val dbFleetSegmentRepository: DBFleetSeg
         }
     }
 
+    override fun findAllByYear(year: Int): List<FleetSegment> {
+        return dbFleetSegmentRepository.findAllByYearEquals(year).map {
+            it.toFleetSegment()
+        }
+    }
+
     @Transactional
-    override fun update(segment: String, fields: CreateOrUpdateFleetSegmentFields): FleetSegment {
+    override fun update(segment: String, fields: CreateOrUpdateFleetSegmentFields, year: Int): FleetSegment {
         try {
             fields.segment?.let {
-                dbFleetSegmentRepository.updateSegment(segment, it)
+                dbFleetSegmentRepository.updateSegment(segment, it, year)
             }
 
             fields.segmentName?.let {
-                dbFleetSegmentRepository.updateSegmentName(segment, it)
+                dbFleetSegmentRepository.updateSegmentName(segment, it, year)
             }
 
             fields.gears?.let {
-                dbFleetSegmentRepository.updateGears(segment, it.toArrayString())
+                dbFleetSegmentRepository.updateGears(segment, it.toArrayString(), year)
             }
 
             fields.faoAreas?.let {
-                dbFleetSegmentRepository.updateFAOAreas(segment, it.toArrayString())
+                dbFleetSegmentRepository.updateFAOAreas(segment, it.toArrayString(), year)
             }
 
             fields.targetSpecies?.let {
-                dbFleetSegmentRepository.updateTargetSpecies(segment, it.toArrayString())
+                dbFleetSegmentRepository.updateTargetSpecies(segment, it.toArrayString(), year)
             }
 
             fields.bycatchSpecies?.let {
-                dbFleetSegmentRepository.updateBycatchSpecies(segment, it.toArrayString())
+                dbFleetSegmentRepository.updateBycatchSpecies(segment, it.toArrayString(), year)
             }
 
             fields.impactRiskFactor?.let {
-                dbFleetSegmentRepository.updateImpactRiskFactor(segment, it)
+                dbFleetSegmentRepository.updateImpactRiskFactor(segment, it, year)
             }
 
             return fields.segment?.let {
-                dbFleetSegmentRepository.findBySegmentEquals(it).toFleetSegment()
+                dbFleetSegmentRepository.findBySegmentAndYearEquals(it, year).toFleetSegment()
             } ?: run {
-                dbFleetSegmentRepository.findBySegmentEquals(segment).toFleetSegment()
+                dbFleetSegmentRepository.findBySegmentAndYearEquals(segment, year).toFleetSegment()
             }
         } catch (e: Throwable) {
             throw CouldNotUpdateFleetSegmentException("Could not update fleet segment: ${e.message}")
@@ -61,16 +67,26 @@ class JpaFleetSegmentRepository(private val dbFleetSegmentRepository: DBFleetSeg
     }
 
     @Transactional
-    override fun delete(segment: String) {
+    override fun delete(segment: String, year: Int) {
         try {
-            dbFleetSegmentRepository.deleteBySegment(segment)
+            dbFleetSegmentRepository.deleteBySegmentAndYear(segment, year)
         } catch (e: Throwable) {
             throw CouldNotDeleteException("Could not delete fleet segment: ${e.message}")
         }
     }
 
+    @Transactional
     override fun create(segment: FleetSegment) {
         dbFleetSegmentRepository.save(FleetSegmentEntity.fromFleetSegment(segment))
+    }
+
+    override fun findYearEntries(): List<Int> {
+        return dbFleetSegmentRepository.findDistinctYears()
+    }
+
+    @Transactional
+    override fun addYear(currentYear: Int, nextYear: Int) {
+        dbFleetSegmentRepository.duplicateCurrentYearAsNextYear(currentYear, nextYear)
     }
 
     fun List<String>.toArrayString(): String = this.joinToString(",", "{", "}")

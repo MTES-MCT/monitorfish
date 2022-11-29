@@ -60,7 +60,11 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 4, analyzedByRules = listOf(), operationNumber = "", tripNumber = "345", reportId = "", operationType = LogbookOperationType.DAT, messageType = "COX", software = "e-Sacapt Secours ERSV3 V 1.0.7",
-                message = cox, reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(20), transmissionFormat = LogbookTransmissionFormat.ERS
+                message = cox,
+                reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(0).minusMinutes(
+                    20
+                ),
+                transmissionFormat = LogbookTransmissionFormat.ERS
             )
         )
     }

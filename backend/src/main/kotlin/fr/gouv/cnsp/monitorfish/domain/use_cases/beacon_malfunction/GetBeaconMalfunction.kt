@@ -80,8 +80,11 @@ class GetBeaconMalfunction(
                 )
             }
         } catch (e: Throwable) {
-            logger.error("Could not fetch historical beacon malfunctions of vessel " +
-                "${beaconMalfunction.internalReferenceNumber}/${beaconMalfunction.externalReferenceNumber}/${beaconMalfunction.ircs}", e)
+            logger.error(
+                "Could not fetch historical beacon malfunctions of vessel " +
+                    "${beaconMalfunction.internalReferenceNumber}/${beaconMalfunction.externalReferenceNumber}/${beaconMalfunction.ircs}",
+                e
+            )
 
             listOf()
         }

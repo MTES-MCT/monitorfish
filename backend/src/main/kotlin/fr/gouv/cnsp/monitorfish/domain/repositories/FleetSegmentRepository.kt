@@ -4,8 +4,13 @@ import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegmentFields
 
 interface FleetSegmentRepository {
+    // For test purpose
     fun findAll(): List<FleetSegment>
-    fun update(segment: String, fields: CreateOrUpdateFleetSegmentFields): FleetSegment
-    fun delete(segment: String)
+    fun findAllByYear(year: Int): List<FleetSegment>
+
+    fun update(segment: String, fields: CreateOrUpdateFleetSegmentFields, year: Int): FleetSegment
+    fun delete(segment: String, year: Int)
     fun create(segment: FleetSegment)
+    fun findYearEntries(): List<Int>
+    fun addYear(currentYear: Int, nextYear: Int)
 }

@@ -9,7 +9,7 @@ import { cleanInputString } from '../../../utils/cleanInputString'
 import StyledModalHeader from '../../commonComponents/StyledModalHeader'
 
 // TODO Use Formik + Yup to handle and validate form
-export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit }) {
+export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit, year }) {
   const gearsFAOList = useSelector(state => state.gear.gears)
   const speciesFAOList = useSelector(state => state.species.species)
 
@@ -36,7 +36,8 @@ export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit }) {
       gears,
       faoAreas,
       targetSpecies: targetSpecies ?? [],
-      bycatchSpecies: bycatchSpecies ?? []
+      bycatchSpecies: bycatchSpecies ?? [],
+      year
     }
 
     onSubmit(newFleetSegmentData)

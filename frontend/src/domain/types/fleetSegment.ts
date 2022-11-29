@@ -5,9 +5,10 @@ export type FleetSegment = {
   faoAreas: string[] | null
   gears: string[] | null
   impactRiskFactor: Float<number> | null
-  segment: string | null
+  segment: string
   segmentName: string | null
   targetSpecies: string[] | null
+  year: number
 }
 
 export type UpdateFleetSegment = {
@@ -18,4 +19,5 @@ export type UpdateFleetSegment = {
   segment: string | null
   segmentName: string | null
   targetSpecies: string[] | null
+  year: number | null
 }

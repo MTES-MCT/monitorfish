@@ -15,7 +15,7 @@ import javax.persistence.Table
 @TypeDefs(TypeDef(name = "list-array", typeClass = ListArrayType::class))
 data class FleetSegmentEntity(
     @Id
-    @Column(name = "segment")
+    @Column(name = "segment", nullable = false)
     val segment: String,
     @Column(name = "segment_name")
     val segmentName: String,
@@ -35,7 +35,9 @@ data class FleetSegmentEntity(
     @Column(name = "bycatch_species", columnDefinition = "varchar(3)[]")
     val bycatchSpecies: List<String>,
     @Column(name = "impact_risk_factor")
-    val impactRiskFactor: Double
+    val impactRiskFactor: Double,
+    @Column(name = "year", nullable = false)
+    val year: Int
 ) {
 
     fun toFleetSegment() = FleetSegment(
@@ -46,7 +48,8 @@ data class FleetSegmentEntity(
         faoAreas = this.faoAreas,
         targetSpecies = this.targetSpecies,
         bycatchSpecies = this.bycatchSpecies,
-        impactRiskFactor = this.impactRiskFactor
+        impactRiskFactor = this.impactRiskFactor,
+        year = this.year
     )
 
     companion object {
@@ -58,7 +61,8 @@ data class FleetSegmentEntity(
             faoAreas = fleetSegment.faoAreas,
             targetSpecies = fleetSegment.targetSpecies,
             bycatchSpecies = fleetSegment.bycatchSpecies,
-            impactRiskFactor = fleetSegment.impactRiskFactor
+            impactRiskFactor = fleetSegment.impactRiskFactor,
+            year = fleetSegment.year
         )
     }
 }

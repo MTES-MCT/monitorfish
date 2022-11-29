@@ -43,5 +43,5 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
     """,
         nativeQuery = true
     )
-    fun insertNextYearFromCurrentYear(currentYear: Int, nextYear: Int)
+    fun duplicateCurrentYearAsNextYear(currentYear: Int, nextYear: Int)
 }

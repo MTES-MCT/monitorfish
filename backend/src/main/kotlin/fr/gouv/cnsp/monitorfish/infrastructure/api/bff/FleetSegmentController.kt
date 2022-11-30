@@ -46,12 +46,14 @@ class FleetSegmentController(
         segment: String,
         @RequestBody
         createOrUpdateFleetSegmentData: CreateOrUpdateFleetSegmentDataInput
-    ): FleetSegment {
-        return updateFleetSegment.execute(
+    ): FleetSegmentDataOutput {
+        val updatedFleetSegment = updateFleetSegment.execute(
             segment = segment,
             fields = createOrUpdateFleetSegmentData.toCreateOrUpdateFleetSegmentFields(),
             year = year
         )
+
+        return FleetSegmentDataOutput.fromFleetSegment(updatedFleetSegment)
     }
 
     @DeleteMapping(value = [""])
@@ -63,8 +65,10 @@ class FleetSegmentController(
         @ApiParam("Segment")
         @RequestParam(name = "segment")
         segment: String
-    ) {
-        deleteFleetSegment.execute(segment, year)
+    ): List<FleetSegmentDataOutput> {
+        return deleteFleetSegment.execute(segment, year).map {
+            FleetSegmentDataOutput.fromFleetSegment(it)
+        }
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -73,8 +77,10 @@ class FleetSegmentController(
     fun createFleetSegment(
         @RequestBody
         newFleetSegmentData: CreateOrUpdateFleetSegmentDataInput
-    ) {
-        createFleetSegment.execute(newFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
+    ): FleetSegmentDataOutput {
+        val createdFleetSegment = createFleetSegment.execute(newFleetSegmentData.toCreateOrUpdateFleetSegmentFields())
+
+        return FleetSegmentDataOutput.fromFleetSegment(createdFleetSegment)
     }
 
     @GetMapping("/years")

@@ -1,48 +1,50 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import _ from 'lodash'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
-import { Table } from 'rsuite'
 import SelectPicker from 'rsuite/SelectPicker'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import getFAOAreas from '../../../domain/use_cases/faoAreas/getFAOAreas'
+import { addFleetSegmentYear } from '../../../domain/use_cases/fleetSegment/addFleetSegmentYear'
 import { createFleetSegment } from '../../../domain/use_cases/fleetSegment/createFleetSegment'
-import { deleteFleetSegment } from '../../../domain/use_cases/fleetSegment/deleteFleetSegment'
 import { getAllFleetSegmentsForBackoffice } from '../../../domain/use_cases/fleetSegment/getAllFleetSegmentsForBackoffice'
 import { getFleetSegmentsYearEntries } from '../../../domain/use_cases/fleetSegment/getFleetSegmentsYearEntries'
-import { updateFleetSegment } from '../../../domain/use_cases/fleetSegment/updateFleetSegment'
-import getAllGearCodes from '../../../domain/use_cases/gearCode/getAllGearCodes'
-import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
-import { useWindowResize } from '../../../hooks/useWindowResize'
 import { theme } from '../../../ui/theme'
 import { dayjs } from '../../../utils/dayjs'
-import { DeleteCell, INPUT_TYPE, ModifiableCell, TagPickerCell } from '../tableCells'
+import { FleetSegmentsTable } from './FleetSegmentsTable'
 import { NewFleetSegmentModal } from './NewFleetSegmentModal'
 
 import type { FleetSegment } from '../../../domain/types/fleetSegment'
 
-const { Column, HeaderCell } = Table
-
 const currentYear = dayjs().year()
+
+function getLabeledYear(_year) {
+  return { label: `Année ${_year}`, value: _year }
+}
 
 export function FleetSegments() {
   const dispatch = useAppDispatch()
   const [fleetSegments, setFleetSegments] = useState<FleetSegment[]>([])
-  const gears = useAppSelector(state => state.gear.gears)
-  const species = useAppSelector(state => state.species.species)
-  const [year, setYear] = useState<number | undefined>(currentYear)
-  const [yearEntries, setYearEntries] = useState([{ label: `Année ${currentYear}`, value: currentYear }])
-  const doNotUpdateScrollRef = useRef(false)
   const [faoAreas, setFAOAreas] = useState([])
+  const [year, setYear] = useState<number | undefined>(currentYear)
+  const [yearEntries, setYearEntries] = useState([getLabeledYear(currentYear)])
   const [isNewFleetSegmentModalOpen, setIsNewFleetSegmentModalOpen] = useState(false)
-  const [updatedInput, setUpdatedInput] = useState(undefined)
-  const doNotUpdateRef = useRef(false)
 
-  const { height, width } = useWindowResize()
+  useEffect(() => {
+    dispatch(getFAOAreas() as any).then(_faoAreas => setFAOAreas(_faoAreas))
+  }, [dispatch])
 
-  const getFleetSegments = useCallback(
+  const yearsToAdd = useMemo(
+    () =>
+      _.range(currentYear - 10, currentYear + 10, 1)
+        .filter(_year => !yearEntries.map(entry => entry.value).includes(_year))
+        .map(_year => ({ label: _year, value: _year })),
+    [yearEntries]
+  )
+
+  const fetchFleetSegments = useCallback(
     _year => {
       dispatch(getAllFleetSegmentsForBackoffice(_year) as any).then(nextFleetSegments => {
         setYear(_year || currentYear)
@@ -52,36 +54,26 @@ export function FleetSegments() {
     [dispatch]
   )
 
-  useEffect(() => {
-    dispatch(getFAOAreas() as any).then(_faoAreas => setFAOAreas(_faoAreas))
+  const addYearEntry = useCallback(
+    addedYear => {
+      dispatch(addFleetSegmentYear(addedYear) as any).then(years => {
+        const yearsWithLabel = years.map(_year => getLabeledYear(_year))
+        setYearEntries(yearsWithLabel)
 
+        fetchFleetSegments(addedYear)
+      })
+    },
+    [dispatch, fetchFleetSegments]
+  )
+
+  useEffect(() => {
     dispatch(getFleetSegmentsYearEntries() as any).then(years => {
-      const yearsWithLabel = years.map(_year => ({ label: `Année ${_year}`, value: _year }))
+      const yearsWithLabel = years.map(_year => getLabeledYear(_year))
       setYearEntries(yearsWithLabel)
     })
 
-    getFleetSegments(currentYear)
-  }, [dispatch, getFleetSegments])
-
-  useEffect(() => {
-    setTimeout(() => {
-      // @ts-ignore
-      document.querySelector(`[data-cy="${updatedInput}"]`)?.focus()
-      doNotUpdateRef.current = false
-    }, 100)
-  }, [fleetSegments, updatedInput])
-
-  useEffect(() => {
-    if (!gears?.length) {
-      dispatch(getAllGearCodes() as any)
-    }
-  }, [dispatch, gears])
-
-  useEffect(() => {
-    if (!species?.length) {
-      dispatch(getAllSpecies() as any)
-    }
-  }, [dispatch, species])
+    fetchFleetSegments(currentYear)
+  }, [dispatch, fetchFleetSegments])
 
   const closeNewFleetSegmentModal = useCallback(() => {
     setIsNewFleetSegmentModalOpen(false)
@@ -93,173 +85,44 @@ export function FleetSegments() {
     closeNewFleetSegmentModal()
   }
 
-  const triggerDeleteFleetSegment = (segment, _year) => {
-    doNotUpdateScrollRef.current = true
-
-    dispatch(deleteFleetSegment(segment, _year) as any)
-  }
-
-  const handleChangeModifiableKeyWithThrottle = (segment, _year, key, value) => {
-    if (doNotUpdateRef.current) {
-      return
-    }
-
-    doNotUpdateRef.current = true
-    handleChangeModifiableKey(segment, _year, key, value)
-  }
-
-  const handleChangeModifiableKey = (segment, _year, key, value) => {
-    if (!segment || !key) {
-      return
-    }
-
-    const updateJSON = {
-      bycatchSpecies: null,
-      faoAreas: null,
-      gears: null,
-      impactRiskFactor: null,
-      segment: null,
-      segmentName: null,
-      targetSpecies: null,
-      year: null
-    }
-    updateJSON[key] = value
-
-    dispatch(updateFleetSegment(segment, _year, updateJSON) as any).then(updatedFleetSegment => {
-      const nextFleetSegments = fleetSegments
-        .filter(_segment => _segment.segment !== segment)
-        .concat(updatedFleetSegment)
-        .sort((a, b) => a.segment.localeCompare(b.segment))
-      setFleetSegments(nextFleetSegments)
-    })
-  }
-
   const openNewFleetSegmentModal = useCallback(() => {
     setIsNewFleetSegmentModalOpen(true)
   }, [])
+
+  console.log(fleetSegments)
 
   return (
     <Wrapper>
       <Header>
         <Title>Segments de flotte</Title>
         <br />
-        <StyledSelectPicker
+        <YearSelectPicker
           cleanable={false}
           data={yearEntries}
-          onChange={_year => getFleetSegments(_year as number)}
+          onChange={_year => fetchFleetSegments(_year as number)}
           searchable={false}
           size="xs"
           value={year}
         />
-        <AddYear data-cy="open-create-fleet-segment-modal" onClick={openNewFleetSegmentModal}>
-          Ajouter l&apos;année
-        </AddYear>
+        <AddYear>Ajouter</AddYear>
+        <AddYearSelectPicker
+          cleanable={false}
+          data={yearsToAdd}
+          onChange={_year => addYearEntry(_year as number)}
+          placeholder={"l'année"}
+          searchable={false}
+          size="xs"
+          value={year}
+        />
       </Header>
-      {fleetSegments?.length && gears?.length && species?.length && faoAreas?.length ? (
+      {fleetSegments.length ? (
         <>
-          <Table
-            affixHorizontalScrollbar
-            data={fleetSegments}
-            height={height < 900 ? height - 120 : 830}
-            locale={{
-              emptyMessage: 'Aucun résultat',
-              loading: 'Chargement...'
-            }}
-            onDataUpdated={() => {
-              doNotUpdateScrollRef.current = true
-            }}
-            rowHeight={36}
-            rowKey="segment"
-            shouldUpdateScroll={!doNotUpdateScrollRef.current}
-            width={width < 1800 ? width - 200 : 1600}
-          >
-            <Column width={70}>
-              <HeaderCell>N. impact</HeaderCell>
-              <ModifiableCell
-                afterChange={tag => setUpdatedInput(tag)}
-                dataKey="impactRiskFactor"
-                id="segment"
-                inputType={INPUT_TYPE.DOUBLE}
-                maxLength={3}
-                onChange={(segment, key, value) => handleChangeModifiableKeyWithThrottle(segment, year, key, value)}
-              />
-            </Column>
-
-            <Column width={110}>
-              <HeaderCell>Segment</HeaderCell>
-              <ModifiableCell
-                afterChange={tag => setUpdatedInput(tag)}
-                dataKey="segment"
-                id="segment"
-                inputType={INPUT_TYPE.STRING}
-                maxLength={null}
-                onChange={(segment, key, value) =>
-                  handleChangeModifiableKeyWithThrottle(segment, year, key, value?.replace(/[ ]/g, ''))
-                }
-              />
-            </Column>
-
-            <Column width={200}>
-              <HeaderCell>Nom du segment</HeaderCell>
-              <ModifiableCell
-                afterChange={undefined}
-                dataKey="segmentName"
-                id="segment"
-                inputType={INPUT_TYPE.STRING}
-                maxLength={null}
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
-              />
-            </Column>
-
-            <Column width={290}>
-              <HeaderCell>Engins</HeaderCell>
-              <TagPickerCell
-                data={gears.map(gear => ({ label: gear.code, value: gear.code }))}
-                dataKey="gears"
-                id="segment"
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
-              />
-            </Column>
-
-            <Column width={290}>
-              <HeaderCell>Espèces ciblées</HeaderCell>
-              <TagPickerCell
-                data={species.map(gear => ({ label: gear.code, value: gear.code }))}
-                dataKey="targetSpecies"
-                id="segment"
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
-              />
-            </Column>
-
-            <Column width={290}>
-              <HeaderCell>Prises accessoires</HeaderCell>
-              <TagPickerCell
-                data={species.map(_species => ({ label: _species.code, value: _species.code }))}
-                dataKey="bycatchSpecies"
-                id="segment"
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
-              />
-            </Column>
-
-            <Column width={300}>
-              <HeaderCell>FAO</HeaderCell>
-              <TagPickerCell
-                data={faoAreas.map(faoArea => ({ label: faoArea, value: faoArea }))}
-                dataKey="faoAreas"
-                id="segment"
-                onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
-              />
-            </Column>
-
-            <Column width={30}>
-              <HeaderCell> </HeaderCell>
-              <DeleteCell
-                dataKey="year"
-                id="segment"
-                onClick={(segment, _year) => triggerDeleteFleetSegment(segment, _year)}
-              />
-            </Column>
-          </Table>
+          <FleetSegmentsTable
+            faoAreas={faoAreas}
+            fleetSegments={fleetSegments}
+            setFleetSegments={setFleetSegments}
+            year={year}
+          />
           <AddSegment data-cy="open-create-fleet-segment-modal" onClick={openNewFleetSegmentModal}>
             Ajouter un segment
           </AddSegment>
@@ -286,15 +149,11 @@ const Header = styled.div`
   margin-bottom: 10px;
 `
 
-const AddYear = styled.a`
-  height: fit-content;
-  width: fit-content;
-  margin-top: 10px;
-  margin-right: 20px;
-  margin-left: 40px;
-  text-decoration: underline;
+const AddYear = styled.span`
+  margin-top: 12px;
+  margin-right: 10px;
+  margin-left: auto;
   color: ${COLORS.gunMetal};
-  cursor: pointer;
 `
 
 const AddSegment = styled.a`
@@ -307,12 +166,32 @@ const AddSegment = styled.a`
   display: block;
 `
 
-const StyledSelectPicker = styled(SelectPicker)`
+const YearSelectPicker = styled(SelectPicker)`
+  height: fit-content;
+  width: fit-content;
+  margin-top: 14px;
+  margin-right: 20px;
+  margin-left: 5px;
+
+  .rs-picker-toggle {
+    width: 80px;
+  }
+`
+
+const AddYearSelectPicker = styled(SelectPicker)`
   height: fit-content;
   width: fit-content;
   margin-top: 10px;
   margin-right: 20px;
-  margin-left: auto;
+
+  .rs-picker-toggle-placeholder {
+    font-size: 13px;
+    color: ${COLORS.gunMetal} !important;
+  }
+
+  .rs-picker-toggle {
+    width: 50px;
+  }
 `
 
 const Loading = styled.div`

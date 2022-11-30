@@ -59,8 +59,8 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
     fun findBySegmentAndYearEquals(segment: String, year: Int): FleetSegmentEntity
 
     @Modifying(clearAutomatically = true)
-    @Query
-    fun deleteBySegmentAndYear(segment: String, year: Int)
+    @Query("DELETE FROM fleet_segments where segment = :segment and year = :year", nativeQuery = true)
+    fun deleteBySegmentAndYearEquals(segment: String, year: Int)
 
     @Query
     fun findAllByYearEquals(year: Int): List<FleetSegmentEntity>

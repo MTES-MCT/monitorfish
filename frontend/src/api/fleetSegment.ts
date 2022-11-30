@@ -59,9 +59,9 @@ async function updateFleetSegmentFromAPI(
  *
  * @throws {@link ApiError}
  */
-async function deleteFleetSegmentFromAPI(segment: string, year: number) {
+async function deleteFleetSegmentFromAPI(segment: string, year: number): Promise<FleetSegment[]> {
   try {
-    return await ky.delete(`/bff/v1/fleet_segments?year=${year}&segment=${segment}`)
+    return await ky.delete(`/bff/v1/fleet_segments?year=${year}&segment=${segment}`).json<FleetSegment[]>()
   } catch (err) {
     throw new ApiError(DELETE_FLEET_SEGMENT_ERROR_MESSAGE, err)
   }

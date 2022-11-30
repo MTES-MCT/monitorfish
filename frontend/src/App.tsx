@@ -30,7 +30,6 @@ import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader
 import { VesselSidebar } from './features/vessel_sidebar/VesselSidebar'
 import { useAppSelector } from './hooks/useAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
-import { UiPage } from './pages/UiPage'
 import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
 import { backofficeStore, homeStore, backofficePersistor } from './store'
 import { theme } from './ui/theme'
@@ -65,12 +64,6 @@ export function App() {
                 <TritonFish />
               </NamespaceContext.Provider>
             </Provider>
-          </Route>
-
-          <Route exact path="/ui">
-            <NamespaceContext.Provider value="ui">
-              <UiPage />
-            </NamespaceContext.Provider>
           </Route>
 
           <Route path="/">

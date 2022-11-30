@@ -2,15 +2,23 @@ import type { SeaFront } from '../entities/alerts/constants'
 
 export type Mission = {
   alertType: MissionAlertType
+  cacemNote: string
+  closedBy: string
+  cnspNote: string
   endDate: Date
+  goals: MissionGoal[]
+  hasOrder: boolean
   id: string
   inspectionsCount: number
+  isUnderJdp: boolean
+  openedBy: string
   seaFront: SeaFront
   startDate: Date
   status: MissionStatus
   themes: string[]
   type: MissionType
-  unit: string
+  units: MissionUnit[]
+  zones: Record<string, any>[]
 }
 
 export enum MissionAlertType {
@@ -23,8 +31,23 @@ export enum MissionStatus {
   CLOSED = 'Clôturée',
   DONE = 'Terminée'
 }
-/* eslint-enable typescript-sort-keys/string-enum */
+
+export enum MissionGoal {
+  ENVIRONMENT = 'Env',
+  FISHING = 'Pêche',
+  OTHER = 'Autre'
+}
 
 export enum MissionType {
-  SEA = 'Mer'
+  SEA = 'Mer',
+  GROUND = 'Terre',
+  AIR = 'Air'
+}
+/* eslint-enable typescript-sort-keys/string-enum */
+
+export type MissionUnit = {
+  administrationId: string
+  contactId: string
+  meanId: string
+  unitId: string
 }

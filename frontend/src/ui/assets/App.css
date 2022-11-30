@@ -27,7 +27,7 @@ html {
 
 .zoom {
   bottom: 38px;
-  left: .5em;
+  left: 0.5em;
   width: 25px;
   height: 53px;
 }
@@ -52,7 +52,7 @@ html {
 }
 
 .ol-control button {
-  background-color: #3B4559;
+  background-color: #3b4559;
 }
 
 .ol-control {
@@ -63,15 +63,17 @@ html {
   background: inherit;
 }
 
-.ol-control button, .ol-control button:hover, .ol-control button:focus {
-  background-color: #3B4559;
+.ol-control button,
+.ol-control button:hover,
+.ol-control button:focus {
+  background-color: #3b4559;
   border-radius: 2px;
   font-size: 15px;
   padding-bottom: 5px;
 }
 
-
-button:hover, button:focus {
+button:hover,
+button:focus {
   background: inherit;
 }
 
@@ -92,17 +94,19 @@ button:hover, button:focus {
   color: #707785;
 }
 
-table:not(.horizontal) th, table:not(.horizontal) td {
+table:not(.horizontal) th,
+table:not(.horizontal) td {
   overflow: unset;
   flex: unset;
 }
 
-table th, table td {
+table th,
+table td {
   padding: unset;
 }
 
 table tr {
-  display: table-row
+  display: table-row;
 }
 
 .primary {
@@ -128,12 +132,12 @@ tbody {
 
 .update-vessels .fingerprint-spinner {
   border: 1px solid transparent !important;
-  border-top-color: #3B4559 !important;
+  border-top-color: #3b4559 !important;
 }
 
 .update-vessels > .spinner-ring {
   border: 1px solid transparent !important;
-  border-top-color: #3B4559 !important;
+  border-top-color: #3b4559 !important;
 }
 
 a:focus {
@@ -151,11 +155,22 @@ input:focus {
 .highlight {
   margin: 0;
   padding: 0;
-  background-color: #CCCFD6;
+  background-color: #cccfd6;
   color: rgb(81, 81, 81);
 }
 
-input:not([type]), [type="text"], [type="email"], [type="number"], [type="search"], [type="password"], [type="url"], [type="tel"], [type="checkbox"], [type="radio"], textarea, select {
+input:not([type]),
+[type='text'],
+[type='email'],
+[type='number'],
+[type='search'],
+[type='password'],
+[type='url'],
+[type='tel'],
+[type='checkbox'],
+[type='radio'],
+textarea,
+select {
   margin: 0;
   padding: 0;
 }
@@ -172,7 +187,7 @@ input:not([type]), [type="text"], [type="email"], [type="number"], [type="search
   text-decoration: none;
   text-align: center;
   height: 18px;
-  background-color: #3B4559;
+  background-color: #3b4559;
   border: none;
   border-radius: 2px;
 }
@@ -183,8 +198,9 @@ input:not([type]), [type="text"], [type="email"], [type="number"], [type="search
   padding-bottom: 4px;
 }
 
-a:hover, a:focus {
-  color: #282F3E;
+a:hover,
+a:focus {
+  color: #282f3e;
 }
 
 .base-layers-selection > .rs-radio > .rs-radio-checker > label > .rs-radio-wrapper {
@@ -206,7 +222,7 @@ a:hover, a:focus {
   font-weight: 500;
 }
 
-.rs-modal-full .rs-modal-dialog {
+/* .rs-modal-full .rs-modal-dialog {
   width: 100%;
   margin-left: 0;
 }
@@ -339,13 +355,13 @@ a:hover, a:focus {
 }
 
 .rs-table-hover .rs-table-row:not(.rs-table-row-header):hover, .rs-table-hover .rs-table-row:hover .rs-table-cell-group, .rs-table-hover .rs-table-row:hover .rs-table-cell {
-  background: #D4DDE7 !important; /* blueYonder 25 */
+  background: #D4DDE7 !important;
 }
 
 .rs-table-cell, .rs-table-cell-group, .rs-table-row {
   -webkit-transition: background-color .1s linear !important;
   transition: background-color .1s linear !important;
-}
+} */
 
 .new-regulation-select-picker a {
   padding: 8px 0px;

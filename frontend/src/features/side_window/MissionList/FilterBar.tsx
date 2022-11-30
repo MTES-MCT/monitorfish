@@ -1,12 +1,10 @@
+import { FormikDateRangePicker, FormikEffect, FormikMultiSelect, FormikSelect } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop, toPairs } from 'lodash'
-import { concat, map, pipe, uniq } from 'ramda'
+import { concat, flatten, map, pipe, uniq } from 'ramda'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { FormikDateRangePicker } from '../../../ui/shared/CustomFormikFields/FormikDateRangePicker'
-import { FormikEffect } from '../../../ui/shared/CustomFormikFields/FormikEffect'
-import { FormikSelect } from '../../../ui/shared/CustomFormikFields/FormikSelect'
 import { getOptionsFromStrings } from '../../../utils/getOptionsFromStrings'
 import { MissionDateRangeFilter, MissionFilterType, MISSION_FILTER_OPTIONS } from './constants'
 import { mapFilterFormRecordsToFilters } from './utils'
@@ -26,7 +24,8 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
   const unitsAsOptions = useMemo(
     () =>
       pipe(
-        map<Mission, string>(({ unit }) => unit),
+        map<Mission, string[]>(({ units }) => units.map(unit => unit.unitId)),
+        flatten,
         uniq,
         getOptionsFromStrings
       )(missions),
@@ -58,39 +57,57 @@ export function FilterBar({ missions, onChange }: FilterBarProps) {
 
         <FiltersBox>
           <FormikSelect
+            isLabelHidden
             label="Période"
             name={MissionFilterType.DATE_RANGE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.DATE_RANGE]}
+            placeholder="Période"
           />
-          <FormikSelect
-            isMulti
+          <FormikMultiSelect
+            fixedWidth={10}
+            isLabelHidden
             label="Status"
             name={MissionFilterType.STATUS}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.STATUS]}
+            placeholder="Status"
           />
-          <FormikSelect isMulti label="Unité" name={MissionFilterType.UNIT} options={unitsAsOptions} />
-          <FormikSelect
-            isMulti
+          <FormikMultiSelect
+            fixedWidth={10}
+            isLabelHidden
+            label="Unité"
+            name={MissionFilterType.UNIT}
+            options={unitsAsOptions}
+            placeholder="Unité"
+          />
+          <FormikMultiSelect
+            fixedWidth={10}
+            isLabelHidden
             label="Type de mission"
             name={MissionFilterType.MISSION_TYPE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.MISSION_TYPE]}
+            placeholder="Type de mission"
           />
-          <FormikSelect
-            isMulti
+          <FormikMultiSelect
+            fixedWidth={10}
+            isLabelHidden
             label="Type de contrôle"
             name={MissionFilterType.INSPECTION_TYPE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.INSPECTION_TYPE]}
+            placeholder="Type de contrôle"
           />
-          <FormikSelect
-            isMulti
+          <FormikMultiSelect
+            fixedWidth={10}
+            isLabelHidden
             label="Alerte"
             name={MissionFilterType.ALERT_TYPE}
             options={MISSION_FILTER_OPTIONS[MissionFilterType.ALERT_TYPE]}
+            placeholder="Alerte"
           />
         </FiltersBox>
 
         {isCustomDateRangeOpen && (
           <FiltersBox>
+            isLabelHidden
             <FormikDateRangePicker label="Période spécifique" name={MissionFilterType.CUSTOM_DATE_RANGE} />
           </FiltersBox>
         )}
@@ -107,14 +124,14 @@ const Box = styled.div`
 
 const Title = styled.h4`
   color: ${p => p.theme.color.slateGray};
-  font-size: 100%;
+  font-size: 16px;
   font-weight: 500;
   margin: 0;
 `
 
 const FiltersBox = styled.div`
   display: flex;
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
 
   > div:not(:first-child) {
     margin-left: 1rem;

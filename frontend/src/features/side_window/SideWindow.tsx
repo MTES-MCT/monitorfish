@@ -12,7 +12,6 @@ import {
 import { FulfillingBouncingCircleSpinner } from 'react-epic-spinners'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
 import { ALERTS_SUBMENU, SeaFront } from '../../domain/entities/alerts/constants'
 import { closeBeaconMalfunctionInKanban } from '../../domain/shared_slices/BeaconMalfunction'
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
@@ -30,6 +29,7 @@ import { AlertsAndReportings } from './alerts_reportings/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import { BeaconMalfunctionsBoard } from './beacon_malfunctions/BeaconMalfunctionsBoard'
 import { AlertAndReportingTab, SideWindowMenuKey } from './constants'
+import { MissionForm } from './MissionForm'
 import { MissionList } from './MissionList'
 import { SideWindowMenu } from './SideWindowMenu'
 import { SideWindowSubMenu } from './SideWindowSubMenu'
@@ -57,6 +57,13 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   const [selectedTab, setSelectedTab] = useState(AlertAndReportingTab.ALERT)
   const [isOverlayed, setIsOverlayed] = useState(false)
   const [isSubmenuFixed, setIsSubmenuFixed] = useState(false)
+
+  const hasSubmenu = useMemo(
+    () =>
+      openedSideWindowTab !== undefined &&
+      [SideWindowMenuKey.ALERTS, SideWindowMenuKey.BEACON_MALFUNCTIONS].includes(openedSideWindowTab),
+    [openedSideWindowTab]
+  )
 
   const closeRightSidebar = useCallback(() => {
     dispatch(closeBeaconMalfunctionInKanban())
@@ -90,12 +97,12 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       dispatch(getAllCurrentReportings() as any)
       dispatch(getFishingInfractions() as any)
 
-      dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))
+      dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))
     }
   }, [dispatch, isFromURL])
 
   useEffect(() => {
-    if (openedSideWindowTab === previousOpenedSideWindowTab || openedSideWindowTab === SideWindowMenuKey.MISSIONS) {
+    if (openedSideWindowTab === previousOpenedSideWindowTab || openedSideWindowTab === SideWindowMenuKey.MISSION_LIST) {
       return
     }
 
@@ -124,7 +131,9 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
           }
           break
         default:
-          throw new Error('This should never happen.')
+          // throw new Error('This should never happen.')
+          // eslint-disable-next-line no-useless-return
+          return
       }
     }
   }, [
@@ -138,7 +147,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
 
   const beaconMalfunctionBoardGrayOverlayStyle: CSSProperties = useMemo(
     () => ({
-      background: COLORS.charcoal,
+      background: theme.color.charcoal,
       height: '100%',
       opacity: isOverlayed ? 0.5 : 0,
       position: 'absolute',
@@ -151,7 +160,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
   return (
     <Wrapper ref={baseRef}>
       <SideWindowMenu selectedMenu={openedSideWindowTab} />
-      {openedSideWindowTab !== SideWindowMenuKey.MISSIONS && (
+      {hasSubmenu && (
         <SideWindowSubMenu
           isFixed={isSubmenuFixed}
           selectedMenu={openedSideWindowTab}
@@ -169,7 +178,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
         </Loading>
       )}
       {!isPreloading && (
-        <Content height={window.innerHeight + 50}>
+        <Content height={window.innerHeight + 50} noMargin={openedSideWindowTab === SideWindowMenuKey.MISSION_FORM}>
           {openedSideWindowTab === SideWindowMenuKey.ALERTS && (
             <AlertsAndReportings
               baseRef={baseRef}
@@ -184,7 +193,8 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
             />
           )}
           {openedSideWindowTab === SideWindowMenuKey.BEACON_MALFUNCTIONS && <BeaconMalfunctionsBoard />}
-          {openedSideWindowTab === SideWindowMenuKey.MISSIONS && <MissionList />}
+          {openedSideWindowTab === SideWindowMenuKey.MISSION_LIST && <MissionList />}
+          {openedSideWindowTab === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
         </Content>
       )}
     </Wrapper>
@@ -193,12 +203,13 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
 
 const Content = styled.div<{
   height: number
+  noMargin?: boolean
 }>`
-  margin-left: 30px;
-  width: 100%;
   height: ${p => p.height}px;
+  margin-left: ${p => (p.noMargin ? 0 : '30px')};
   min-height: 1000px;
   overflow: auto;
+  width: 100%;
 `
 
 const BeaconMalfunctionsBoardGrayOverlay = styled.div``
@@ -218,14 +229,14 @@ const Text = styled.span`
 
 const Wrapper = styled.div`
   display: flex;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
 
   @keyframes blink {
     0% {
       background: ${p => p.theme.color.white};
     }
     50% {
-      background: ${COLORS.lightGray};
+      background: ${p => p.theme.color.lightGray};
     }
     0% {
       background: ${p => p.theme.color.white};

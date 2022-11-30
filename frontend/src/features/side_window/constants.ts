@@ -3,7 +3,8 @@ import type { MenuItem } from '../../types'
 export enum SideWindowMenuKey {
   ALERTS = 'Alertes',
   BEACON_MALFUNCTIONS = 'Suivi VMS',
-  MISSIONS = 'Missions et contrôles'
+  MISSION_FORM = 'Ajouter ou éditer une mission',
+  MISSION_LIST = 'Liste des missions et contrôles'
 }
 
 export const SIDE_WINDOW_MENU: Record<keyof typeof SideWindowMenuKey, MenuItem<SideWindowMenuKey>> = {
@@ -15,9 +16,13 @@ export const SIDE_WINDOW_MENU: Record<keyof typeof SideWindowMenuKey, MenuItem<S
     code: SideWindowMenuKey.BEACON_MALFUNCTIONS,
     name: SideWindowMenuKey.BEACON_MALFUNCTIONS
   },
-  MISSIONS: {
-    code: SideWindowMenuKey.MISSIONS,
-    name: SideWindowMenuKey.MISSIONS
+  MISSION_FORM: {
+    code: SideWindowMenuKey.MISSION_FORM,
+    name: SideWindowMenuKey.MISSION_FORM
+  },
+  MISSION_LIST: {
+    code: SideWindowMenuKey.MISSION_LIST,
+    name: SideWindowMenuKey.MISSION_LIST
   }
 }
 

@@ -1,5 +1,5 @@
 import { SeaFront } from '../../../domain/entities/alerts/constants'
-import { Mission, MissionAlertType, MissionStatus, MissionType } from '../../../domain/types/mission'
+import { Mission, MissionAlertType, MissionGoal, MissionStatus, MissionType } from '../../../domain/types/mission'
 import { getOptionsFromLabelledEnum } from '../../../utils/getOptionsFromLabelledEnum'
 
 import type { TableOptions } from '../../../hooks/useTable/types'
@@ -7,15 +7,23 @@ import type { Option } from '../../../types'
 
 export const DUMMY_MISSIONS: Mission[] = new Array(20).fill(undefined).map((_, index) => ({
   alertType: MissionAlertType.WAITING_FOR_CLOSURE,
+  cacemNote: 'Une note du CACEM.',
+  closedBy: 'Bob A',
+  cnspNote: 'Une note du CNSP.',
   endDate: new Date(),
+  goals: [MissionGoal.FISHING],
+  hasOrder: false,
   id: String(index + 1),
   inspectionsCount: 0,
+  isUnderJdp: false,
+  openedBy: 'Bob B',
   seaFront: SeaFront.MED,
   startDate: new Date(),
   status: MissionStatus.CLOSED,
   themes: [],
   type: MissionType.SEA,
-  unit: 'Unité'
+  units: [],
+  zones: []
 }))
 
 /* eslint-disable typescript-sort-keys/string-enum */

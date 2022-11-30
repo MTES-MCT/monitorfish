@@ -3,14 +3,17 @@ import { useMemo, useRef, useState } from 'react'
 import { FlexboxGrid } from 'rsuite'
 import styled from 'styled-components'
 
-// import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { openSideWindowTab } from '../../../domain/shared_slices/Global'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
 // import { useAppSelector } from '../../../hooks/useAppSelector'
 import { useTable } from '../../../hooks/useTable'
+import { Button } from '../../../ui/Button'
 import { CardTable } from '../../../ui/card-table/CardTable'
 import { CardTableBody } from '../../../ui/card-table/CardTableBody'
 import { CardTableRow } from '../../../ui/card-table/CardTableRow'
 import { EmptyCardTable } from '../../../ui/card-table/EmptyCardTable'
 import { dayjs } from '../../../utils/dayjs'
+import { SideWindowMenuKey } from '../constants'
 import { DUMMY_MISSIONS, MISSION_LIST_TABLE_OPTIONS } from './constants'
 import { FilterBar } from './FilterBar'
 
@@ -21,7 +24,7 @@ import type { MutableRefObject } from 'react'
 export function MissionList() {
   const searchInputRef = useRef() as MutableRefObject<HTMLInputElement>
   const [filters, setFilters] = useState<MissionFilter[]>([])
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
   // const { currentMissions } = useAppSelector(state => state.missions)
   const currentMissions = DUMMY_MISSIONS
 
@@ -40,6 +43,10 @@ export function MissionList() {
 
   return (
     <Wrapper>
+      <div>
+        <Button onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_FORM))}>Nouvelle mission</Button>
+      </div>
+
       <FilterBar missions={tableData} onChange={setFilters} />
 
       <div>{`${filteredMissions.length ? filteredMissions.length : 'Aucune'} mission${
@@ -58,7 +65,7 @@ export function MissionList() {
               <FlexboxGrid>
                 <Cell $fixedWidth={7}>{dayjs(mission.startDate).format('D MMM YY, HH:MM')}</Cell>
                 <Cell $fixedWidth={7}>{dayjs(mission.endDate).format('D MMM YY, HH:MM')}</Cell>
-                <Cell $fixedWidth={10}>{mission.unit}</Cell>
+                <Cell $fixedWidth={10}>{mission.units}</Cell>
                 <Cell $fixedWidth={5}>{mission.type}</Cell>
                 <Cell $fixedWidth={5}>{mission.seaFront}</Cell>
                 <Cell $fixedWidth={10}>{mission.themes.join(', ')}</Cell>
@@ -90,6 +97,7 @@ export function MissionList() {
   )
 }
 
+// TODO Check why there is a `box-sizing: revert` in index.css.
 const Wrapper = styled.div`
   box-sizing: border-box;
   display: flex;
@@ -97,6 +105,10 @@ const Wrapper = styled.div`
   margin-bottom: 20px;
   padding: 20px 30px 40px 0;
   width: 100%;
+
+  * {
+    box-sizing: border-box;
+  }
 `
 
 const Cell = styled(FlexboxGrid.Item)<{

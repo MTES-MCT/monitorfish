@@ -25,11 +25,11 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
         <AlertsIcon />
       </MenuButton>
       <MenuButton
-        aria-label={SideWindowMenuKey.MISSIONS}
-        onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.MISSIONS))}
+        aria-label={SideWindowMenuKey.MISSION_LIST}
+        onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))}
         role="menuitem"
-        selected={selectedMenu === SideWindowMenuKey.MISSIONS}
-        title={SideWindowMenuKey.MISSIONS}
+        selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
+        title={SideWindowMenuKey.MISSION_LIST}
       >
         <BeaconMalfunctionsIcon />
       </MenuButton>

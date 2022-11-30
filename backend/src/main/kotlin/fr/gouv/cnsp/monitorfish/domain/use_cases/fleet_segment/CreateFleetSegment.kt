@@ -7,7 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.CreateOrUpdateFleetSegment
 
 @UseCase
 class CreateFleetSegment(private val fleetSegmentRepository: FleetSegmentRepository) {
-    fun execute(fields: CreateOrUpdateFleetSegmentFields) {
+    fun execute(fields: CreateOrUpdateFleetSegmentFields): FleetSegment {
         require(fields.segment != null) {
             "Segment must be provided"
         }
@@ -30,6 +30,6 @@ class CreateFleetSegment(private val fleetSegmentRepository: FleetSegmentReposit
             )
         }
 
-        fleetSegmentRepository.create(newSegment)
+        return fleetSegmentRepository.create(newSegment)
     }
 }

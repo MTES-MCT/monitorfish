@@ -7,6 +7,8 @@ import styled from 'styled-components'
 import { InputPicker, Table, Tag, TagPicker } from 'rsuite'
 import { useClickOutsideWhenOpenedAndNotInSelector } from '../../hooks/useClickOutsideWhenOpenedAndNotInSelector'
 import { theme } from '../../ui/theme'
+import _ from 'lodash'
+import SelectPicker from 'rsuite/SelectPicker'
 
 const { Cell } = Table
 const rowKey = 'id'
@@ -51,8 +53,47 @@ const ModifiableCellWrapper = styled.div`
   }
 `
 
-export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, withinCell, onChange, dataCy, afterChange }) => {
+const impactRange = _.range(1, 4, 0.1).map(num => {
+  const rounded = Number(num.toFixed(1))
+  return { label: rounded, value: rounded }
+})
 
+export const ImpactCell = ({ dataKey, id, onChange, ...props }) => {
+  const { rowData } = props
+  const dataCy = `row-${rowData[id]}-${dataKey}-${rowData[dataKey]}`
+
+  return (
+    <Cell
+      title={rowData[dataKey]}
+      key={rowData[id]}
+      className={'table-content-editing'}
+      {...props}
+    >
+      <ImpactSelectPicker
+        data-cy={dataCy}
+        cleanable={false}
+        data={impactRange}
+        onChange={value => onChange && onChange(rowData[id], dataKey, value)}
+        searchable={false}
+        size="xs"
+        value={rowData[dataKey]}
+        placement={'auto'}
+      />
+    </Cell>
+  )
+}
+
+const ImpactSelectPicker = styled(SelectPicker)`
+  .rs-picker-toggle {
+    width: 20px;
+  }
+
+  .rs-picker-toggle-wrapper {
+    margin-top: -5px;
+  }
+`
+
+export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, withinCell, onChange, dataCy, afterChange }) => {
   const onChangeCallback = useCallback(event => {
       let value = null
       switch (inputType) {
@@ -193,7 +234,6 @@ export const TagPickerCell = ({ dataKey, data, id, onChange, ...props }) => {
             virtualized
             searchable
             value={rowData[dataKey]}
-            style={tagPickerStyle}
             data={data}
             placeholder={''}
             placement={'auto'}
@@ -216,8 +256,20 @@ export const TagPickerCell = ({ dataKey, data, id, onChange, ...props }) => {
 }
 
 const TagPickerWrapper = styled.div`
+  .rs-table-cell-content {
+    padding-left: 5px;
+    padding-top: 0px;
+  }
+
+  .rs-picker-input {
+    border: none;
+    margin-left: -5px !important;
+    margin-top: 0px  !important;
+  }
+
   .rs-picker-default .rs-picker-toggle.rs-btn-xs {
     padding-left: 5px;
+    width: 290px;
   }
 
   .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
@@ -229,14 +281,13 @@ const TagPickerWrapper = styled.div`
   }
 
   .rs-picker-tag-wrapper {
-    width: 280px;
+    width: 290px;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-top: -10px;
   }
 
   .rs-picker-tag {
-    width: 280px;
+    width: 290px;
     background: none;
   }
 
@@ -254,7 +305,11 @@ const TagPickerWrapper = styled.div`
 
   *:focus {
     outline: none;
-}
+  }
+
+  .rs-picker-default {
+    background: ${COLORS.charcoal};
+  }
 `
 
 export function renderTagPickerMenuItem (onChange, item) {
@@ -276,15 +331,18 @@ export function renderTagPickerValue (items) {
 }
 
 const TagOnly = styled.div`
-  margin: -3px 10px 10px 6px !important;
-  vertical-align: top;
+  margin: 7px 7px 10px 6px;
+
+  .rs-tag {
+    padding-left: 2px;
+    padding-right: 2px;
+    line-height: 18px;
+  }
 `
 
 const Label = styled.span`
   font-size: 13px;
 `
-
-const tagPickerStyle = { width: 250, margin: '2px 10px 10px 0', verticalAlign: 'top' }
 
 export const renderRowExpanded = rowData => {
   return (
@@ -327,7 +385,7 @@ export const DeleteCell = ({ dataKey, id, onClick, ...props }) => {
       <Delete
         title={'Supprimer la ligne'}
         data-cy={`delete-row-${rowData[id]}`}
-        onClick={() => onClick && onClick(rowData[id], dataKey)}
+        onClick={() => onClick && onClick(rowData[id], rowData[dataKey])}
       >
         <DeleteIcon/>
       </Delete>

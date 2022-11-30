@@ -67,17 +67,20 @@ class JpaFleetSegmentRepository(private val dbFleetSegmentRepository: DBFleetSeg
     }
 
     @Transactional
-    override fun delete(segment: String, year: Int) {
+    override fun delete(segment: String, year: Int): List<FleetSegment> {
         try {
-            dbFleetSegmentRepository.deleteBySegmentAndYear(segment, year)
+            dbFleetSegmentRepository.deleteBySegmentAndYearEquals(segment, year)
+
+            return dbFleetSegmentRepository.findAllByYearEquals(year)
+                .map { it.toFleetSegment() }
         } catch (e: Throwable) {
             throw CouldNotDeleteException("Could not delete fleet segment: ${e.message}")
         }
     }
 
     @Transactional
-    override fun create(segment: FleetSegment) {
-        dbFleetSegmentRepository.save(FleetSegmentEntity.fromFleetSegment(segment))
+    override fun create(segment: FleetSegment): FleetSegment {
+        return dbFleetSegmentRepository.save(FleetSegmentEntity.fromFleetSegment(segment)).toFleetSegment()
     }
 
     override fun findYearEntries(): List<Int> {

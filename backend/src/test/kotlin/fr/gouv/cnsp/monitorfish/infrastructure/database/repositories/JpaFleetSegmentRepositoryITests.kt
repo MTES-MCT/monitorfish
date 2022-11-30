@@ -164,6 +164,22 @@ class JpaFleetSegmentRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `delete Should delete a fleet segment`() {
+        // Given
+        val fleetSegments = jpaFleetSegmentRepository.findAllByYear(2021)
+        val segmentToDelete = fleetSegments.first()
+
+        // When
+        jpaFleetSegmentRepository.delete(segmentToDelete.segment, 2021)
+
+        // Then
+        val expectedFleetSegment = jpaFleetSegmentRepository.findAllByYear(2021)
+        assertThat(expectedFleetSegment).hasSize(22)
+        assertThat(expectedFleetSegment).doesNotContain(segmentToDelete)
+    }
+
+    @Test
+    @Transactional
     fun `findAllByYear Should return no fleet segments When there is no objectives for a given year`() {
         // When
         val fleetSegments = jpaFleetSegmentRepository.findAllByYear(2020)

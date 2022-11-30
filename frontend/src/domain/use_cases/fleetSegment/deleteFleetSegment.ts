@@ -6,21 +6,18 @@ import { setError } from '../../shared_slices/Global'
 /**
  * Delete a fleet segment
  */
-export const deleteFleetSegment = (segment: string, year: number) => (dispatch, getState) => {
-  const previousFleetSegments = Object.assign([], getState().fleetSegment.fleetSegments).sort((a, b) =>
-    a.segment.localeCompare(b.segment)
-  )
+export const deleteFleetSegment = (segment: string, year: number) => dispatch => {
   const currentYear = dayjs().year()
 
   return deleteFleetSegmentFromAPI(segment, year)
-    .then(() => {
+    .then(updatedFleetSegments => {
       if (year === currentYear) {
-        const nextFleetSegments = previousFleetSegments.filter(_segment => _segment.segment !== segment)
-        dispatch(setFleetSegments(nextFleetSegments))
+        dispatch(setFleetSegments(updatedFleetSegments))
       }
+
+      return updatedFleetSegments
     })
     .catch(error => {
-      dispatch(setFleetSegments(previousFleetSegments))
       dispatch(setError(error))
     })
 }

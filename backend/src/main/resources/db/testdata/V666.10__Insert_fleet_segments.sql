@@ -67,3 +67,6 @@ ATL01	All Trawls 3	{MED,SA,NAMO,MEMN}	{OTM,PTM}	{27.7,27.8,27.9,27.10}	{BFT}	{}	
 MED03	Purse seine 1	{MED}	{PS}	{37.1,37.2,37.3}	{HER,HOM,JAX,MAC,WHB}	{}	{}	3.7	2021
 MED04	Purse seine 2	{MED}	{PS}	{37.1,37.2,37.3}	{BFT,SWO,ALB}	{}	{}	1.7	2021
 \.
+
+UPDATE fleet_segments SET year = date_part('year', CURRENT_DATE) WHERE year = 2022;
+UPDATE fleet_segments SET year = date_part('year', CURRENT_DATE - interval '1 year') WHERE year = 2021;

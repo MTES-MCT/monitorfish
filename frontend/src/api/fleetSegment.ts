@@ -41,7 +41,7 @@ async function updateFleetSegmentFromAPI(
 ): Promise<FleetSegment> {
   try {
     return await ky
-      .put(`/bff/v1/fleet_segments/?year=${year}&segment=${segment}`, {
+      .put(`/bff/v1/fleet_segments?year=${year}&segment=${segment}`, {
         headers: {
           Accept: 'application/json, text/plain',
           'Content-Type': 'application/json;charset=UTF-8'

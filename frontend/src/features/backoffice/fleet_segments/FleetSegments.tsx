@@ -75,30 +75,35 @@ export function FleetSegments() {
     fetchFleetSegments(currentYear)
   }, [dispatch, fetchFleetSegments])
 
-  const closeNewFleetSegmentModal = useCallback(() => {
-    setIsNewFleetSegmentModalOpen(false)
-  }, [])
-
-  const triggerCreateFleetSegment = newFleetSegmentData => {
-    dispatch(createFleetSegment(newFleetSegmentData) as any)
-
-    closeNewFleetSegmentModal()
-  }
-
   const openNewFleetSegmentModal = useCallback(() => {
     setIsNewFleetSegmentModalOpen(true)
   }, [])
 
-  console.log(fleetSegments)
+  const closeNewFleetSegmentModal = useCallback(() => {
+    setIsNewFleetSegmentModalOpen(false)
+  }, [])
+
+  const triggerCreateFleetSegment = useCallback(
+    newFleetSegmentData => {
+      dispatch(createFleetSegment(newFleetSegmentData, fleetSegments) as any).then(nextFleetSegments => {
+        if (nextFleetSegments) {
+          setFleetSegments(nextFleetSegments)
+        }
+      })
+
+      closeNewFleetSegmentModal()
+    },
+    [dispatch, fleetSegments, closeNewFleetSegmentModal]
+  )
 
   return (
     <Wrapper>
       <Header>
         <Title>Segments de flotte</Title>
-        <br />
         <YearSelectPicker
           cleanable={false}
           data={yearEntries}
+          data-cy="fleet-segments-select-year"
           onChange={_year => fetchFleetSegments(_year as number)}
           searchable={false}
           size="xs"
@@ -108,6 +113,7 @@ export function FleetSegments() {
         <AddYearSelectPicker
           cleanable={false}
           data={yearsToAdd}
+          data-cy="fleet-segments-add-year"
           onChange={_year => addYearEntry(_year as number)}
           placeholder={"l'année"}
           searchable={false}

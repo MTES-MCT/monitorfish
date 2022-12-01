@@ -275,4 +275,5 @@ for flow in flows_to_register:
         image=f"{DOCKER_IMAGE}:{MONITORFISH_VERSION}",
         host_config=host_config,
         env=dotenv_values(ROOT_DIRECTORY / ".env"),
+        labels=["monitorfish"],
     )

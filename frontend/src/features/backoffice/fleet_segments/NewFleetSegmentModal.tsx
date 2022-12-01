@@ -59,6 +59,7 @@ export function NewFleetSegmentModal({ faoAreasList, onCancel, onSubmit, year })
               dataKey={undefined}
               id="newFleetSegmentName"
               inputType={INPUT_TYPE.STRING}
+              isDisabled={false}
               maxLength={null}
               onChange={(_id, _key, value) => setSegment(value)}
               value={segment}
@@ -73,6 +74,7 @@ export function NewFleetSegmentModal({ faoAreasList, onCancel, onSubmit, year })
               dataKey={undefined}
               id="newFleetSegmentImpactRiskFactor"
               inputType={INPUT_TYPE.DOUBLE}
+              isDisabled={false}
               maxLength={50}
               onChange={(_id, _key, value) => setImpactRiskFactor(value)}
               value={impactRiskFactor}
@@ -87,6 +89,7 @@ export function NewFleetSegmentModal({ faoAreasList, onCancel, onSubmit, year })
           dataKey={undefined}
           id="newFleetSegmentDescription"
           inputType={INPUT_TYPE.STRING}
+          isDisabled={false}
           maxLength={null}
           onChange={(_id, _key, value) => setSegmentName(value)}
           value={segmentName}

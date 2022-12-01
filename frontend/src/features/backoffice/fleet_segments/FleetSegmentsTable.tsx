@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import { Table } from 'rsuite'
 
 import { deleteFleetSegment } from '../../../domain/use_cases/fleetSegment/deleteFleetSegment'
@@ -7,6 +7,7 @@ import getAllGearCodes from '../../../domain/use_cases/gearCode/getAllGearCodes'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useBlockUpdateAndFocusWhenDataRefresh } from '../../../hooks/useBlockUpdateAndFocusWhenDataRefresh'
 import { useWindowResize } from '../../../hooks/useWindowResize'
 import { DeleteCell, ImpactCell, INPUT_TYPE, ModifiableCell, TagPickerCell } from '../tableCells'
 
@@ -16,18 +17,8 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
   const dispatch = useAppDispatch()
   const gears = useAppSelector(state => state.gear.gears)
   const species = useAppSelector(state => state.species.species)
-  const doNotUpdateScrollRef = useRef(false)
-  const [updatedInput, setUpdatedInput] = useState(undefined)
-  const doNotUpdateRef = useRef(false)
   const { height, width } = useWindowResize()
-
-  useEffect(() => {
-    setTimeout(() => {
-      // @ts-ignore
-      document.querySelector(`[data-cy="${updatedInput}"]`)?.focus()
-      doNotUpdateRef.current = false
-    }, 100)
-  }, [fleetSegments, updatedInput])
+  const { blockUpdate, isUpdateBlocked, setInputDataCySelector } = useBlockUpdateAndFocusWhenDataRefresh(fleetSegments)
 
   useEffect(() => {
     if (!gears?.length) {
@@ -40,17 +31,15 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
   }, [dispatch, gears, species])
 
   const triggerDeleteFleetSegment = (segment, _year) => {
-    doNotUpdateScrollRef.current = true
-
     dispatch(deleteFleetSegment(segment, _year) as any).then(nextFleetSegments => setFleetSegments(nextFleetSegments))
   }
 
   const handleChangeModifiableKeyWithThrottle = (segment, _year, key, value) => {
-    if (doNotUpdateRef.current) {
+    if (isUpdateBlocked) {
       return
     }
 
-    doNotUpdateRef.current = true
+    blockUpdate()
     handleChangeModifiableKey(segment, _year, key, value)
   }
 
@@ -59,7 +48,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
       return
     }
 
-    const updateJSON = {
+    const updatedFields = {
       bycatchSpecies: null,
       faoAreas: null,
       gears: null,
@@ -69,15 +58,11 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
       targetSpecies: null,
       year: null
     }
-    updateJSON[key] = value
+    updatedFields[key] = value
 
-    dispatch(updateFleetSegment(segment, _year, updateJSON) as any).then(updatedFleetSegment => {
-      const nextFleetSegments = fleetSegments
-        .filter(_segment => _segment.segment !== segment)
-        .concat(updatedFleetSegment)
-        .sort((a, b) => a.segment.localeCompare(b.segment))
+    dispatch(updateFleetSegment(segment, _year, updatedFields, fleetSegments) as any).then(nextFleetSegments =>
       setFleetSegments(nextFleetSegments)
-    })
+    )
   }
 
   return gears?.length && species?.length && faoAreas?.length ? (
@@ -89,12 +74,9 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
         emptyMessage: 'Aucun résultat',
         loading: 'Chargement...'
       }}
-      onDataUpdated={() => {
-        doNotUpdateScrollRef.current = true
-      }}
       rowHeight={36}
       rowKey="segment"
-      shouldUpdateScroll={!doNotUpdateScrollRef.current}
+      shouldUpdateScroll={false}
       width={width < 1800 ? width - 200 : 1600}
     >
       <Column width={70}>
@@ -109,10 +91,11 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
       <Column width={110}>
         <HeaderCell>Segment</HeaderCell>
         <ModifiableCell
-          afterChange={tag => setUpdatedInput(tag)}
+          afterChange={tag => setInputDataCySelector(tag)}
           dataKey="segment"
           id="segment"
           inputType={INPUT_TYPE.STRING}
+          isDisabled={isUpdateBlocked}
           maxLength={null}
           onChange={(segment, key, value) =>
             handleChangeModifiableKeyWithThrottle(segment, year, key, value?.replace(/[ ]/g, ''))
@@ -127,6 +110,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
           dataKey="segmentName"
           id="segment"
           inputType={INPUT_TYPE.STRING}
+          isDisabled={false}
           maxLength={null}
           onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
         />

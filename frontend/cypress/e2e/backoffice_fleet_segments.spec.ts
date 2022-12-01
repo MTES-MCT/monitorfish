@@ -1,9 +1,12 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
 
+import { dayjs } from '../../src/utils/dayjs'
+
+const currentYear = dayjs().year()
 context('Fleet segments', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
+    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
   })
@@ -11,9 +14,9 @@ context('Fleet segments', () => {
   it('Should render the fleet segments', () => {
     // Then
     cy.get('.rs-table-row').should('have.length', 44)
-    cy.get('.rs-table-cell-content').eq(8).children().should('have.value', '1.7')
-    cy.get('.rs-table-cell-content').eq(9).children().should('have.value', 'ATL01')
-    cy.get('.rs-table-cell-content').eq(10).children().should('have.value', 'All Trawls 3')
+    cy.get('[data-cy="row-ATL01-impactRiskFactor-1.7"]').should('exist')
+    cy.get('[data-cy="row-ATL01-segment-ATL01"]').should('exist')
+    cy.get('[data-cy="row-ATL01-segmentName-All Trawls 3"]').should('exist')
     cy.get('.rs-table-cell-content').eq(11).contains('OTM')
     cy.get('.rs-table-cell-content').eq(11).contains('PTM')
     cy.get('.rs-table-cell-content').eq(12).contains('BFT')
@@ -25,65 +28,66 @@ context('Fleet segments', () => {
 
   it('Should update the impact factor field', () => {
     // When
-    cy.intercept('PUT', '/bff/v1/fleet_segments/ATL01').as('updateFleetSegment')
-    cy.get('.rs-table-cell-content').eq(8).children().type('{backspace}{backspace}')
-    cy.get('.rs-table-cell-content').eq(8).children().type('.9')
+    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
+    cy.get('[data-cy="row-ATL01-impactRiskFactor-1.7"]').click()
+    cy.get('[data-key="1.2"] > .rs-picker-select-menu-item').click()
     cy.wait('@updateFleetSegment')
 
     // Then
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(8).children().should('have.value', '1.9')
+    cy.get('[data-cy="row-ATL01-impactRiskFactor-1.2"]').should('exist')
 
     // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
+    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(8).children().should('have.value', '1.9')
+    cy.get('[data-cy="row-ATL01-impactRiskFactor-1.2"]').should('exist')
   })
 
   it('Should update the segment field', () => {
     // When
-    cy.intercept('PUT', '/bff/v1/fleet_segments/ATL03').as('updateFleetSegment')
-    cy.get('.rs-table-cell-content').eq(9).children().type('{backspace}')
-    cy.get('.rs-table-cell-content').eq(9).children().type('3')
-    cy.get('.rs-table-cell-content').eq(9).children().type('6')
+    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL01`).as('updateFleetSegment')
+    cy.get('[data-cy="row-ATL01-segment-ATL01"]').type('{backspace}')
+    cy.get('[data-cy="row-ATL0-segment-ATL0"]').type('3')
+    cy.get('[data-cy="row-ATL03-segment-ATL03"]').type('6')
     cy.wait('@updateFleetSegment')
 
     // Then
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(9).children().should('have.value', 'ATL036')
+    cy.get('[data-cy="row-ATL036-segment-ATL036"]').should('exist')
 
     // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
+    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(9).children().should('have.value', 'ATL036')
+    cy.get('[data-cy="row-ATL036-segment-ATL036"]').should('exist')
   })
 
   it('Should update the segment name field', () => {
     // When
-    cy.intercept('PUT', '/bff/v1/fleet_segments/ATL036').as('updateFleetSegment')
-    cy.get('.rs-table-cell-content').eq(10).children().type('{backspace}')
-    cy.get('.rs-table-cell-content').eq(10).children().type('45')
+    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL036`).as('updateFleetSegment')
+    cy.get('[data-cy="row-ATL036-segmentName-All Trawls 3"]').type('{backspace}')
+    cy.get('[data-cy="row-ATL036-segmentName-All Trawls "]').type('4')
+    cy.get('[data-cy="row-ATL036-segmentName-All Trawls 4"]').type('5')
     cy.wait('@updateFleetSegment')
 
     // Then
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(10).children().should('have.value', 'All Trawls 45')
+    cy.get('[data-cy="row-ATL036-segmentName-All Trawls 45"]').should('exist')
 
     // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
+    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(10).children().should('have.value', 'All Trawls 45')
+    cy.get('[data-cy="row-ATL036-segmentName-All Trawls 45"]').should('exist')
   })
 
   it('Should update the gears field', () => {
     // When
-    cy.intercept('PUT', '/bff/v1/fleet_segments/ATL036').as('updateFleetSegment')
+    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL036`).as('updateFleetSegment')
     cy.get('.rs-table-cell-content').eq(11).click()
     cy.get('[data-key="MSP"]').scrollIntoView()
     cy.get('[data-key="MSP"]').click()
@@ -100,7 +104,7 @@ context('Fleet segments', () => {
     cy.get('.rs-table-cell-content').eq(11).contains('NO')
 
     // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
+    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
@@ -113,7 +117,7 @@ context('Fleet segments', () => {
   it('Should delete a fleet segment', () => {
     // Given
     cy.get('.rs-table-row').should('have.length', 44)
-    cy.intercept('DELETE', '/bff/v1/fleet_segments/ATL036').as('deleteFleetSegment')
+    cy.intercept('DELETE', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL036`).as('deleteFleetSegment')
 
     // When
     cy.get('*[data-cy="delete-row-ATL036"]').click({ force: true })
@@ -124,7 +128,7 @@ context('Fleet segments', () => {
     cy.get('.rs-table-row').should('have.length', 43)
 
     // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
+    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
@@ -180,7 +184,7 @@ context('Fleet segments', () => {
     cy.get('[title="Malotru’s segment"] > .rs-table-cell-content > .rs-input').should('exist')
 
     // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/fleet_segments').as('fleetSegments')
+    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
@@ -188,5 +192,36 @@ context('Fleet segments', () => {
     cy.get('[title="SEGMENT007"] > .rs-table-cell-content > .rs-input').should('exist')
     cy.get('[title="Malotru’s segment"] > .rs-table-cell-content > .rs-input').should('exist')
     cy.get('*[data-cy="delete-row-SEGMENT007"]').should('exist')
+  })
+
+  it('Should show previous year fleet segments', () => {
+    cy.get('[data-cy="fleet-segments-select-year"]').contains(currentYear)
+    cy.get('[role="row"]').should('have.length', 43)
+    cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear - 1}`).as('fleetSegments')
+
+    // When
+    cy.get('[data-cy="fleet-segments-select-year"]').click()
+    cy.get('[aria-selected="false"] > .rs-picker-select-menu-item').click()
+
+    // Then
+    cy.get('[data-cy="fleet-segments-select-year"]').contains(currentYear - 1)
+    cy.get('[role="row"]').should('have.length', 24)
+  })
+
+  it('Should add a new year based on current year', () => {
+    // Given
+    const yearToAdd = 2013
+    cy.get('[data-cy="fleet-segments-select-year"]').contains(currentYear)
+    cy.get('[role="row"]').should('have.length', 43)
+
+    // When
+    cy.get('[data-cy="fleet-segments-add-year"]').click()
+    cy.get(`[data-key="${yearToAdd}"]`).click()
+
+    // Then
+    cy.get('[data-cy="fleet-segments-add-year"]').click()
+    cy.get(`[data-key="${yearToAdd}"]`).should('not.exist')
+    cy.get('[role="row"]').should('have.length', 43)
+    cy.get('[data-cy="fleet-segments-select-year"]').contains(yearToAdd)
   })
 })

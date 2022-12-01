@@ -18,7 +18,7 @@ export const INPUT_TYPE = {
   DOUBLE: 'DOUBLE'
 }
 
-export const ModifiableCell = ({ dataKey, id, inputType, maxLength, onChange, afterChange, ...props }) => {
+export const ModifiableCell = ({ dataKey, id, inputType, maxLength, onChange, afterChange, isDisabled, ...props }) => {
   const { rowData } = props
   const dataCy = `row-${rowData[id]}-${dataKey}-${rowData[dataKey]}`
 
@@ -31,6 +31,7 @@ export const ModifiableCell = ({ dataKey, id, inputType, maxLength, onChange, af
         {...props}
       >
         <FleetSegmentInput
+          isDisabled={isDisabled}
           afterChange={afterChange}
           withinCell
           maxLength={maxLength}
@@ -93,7 +94,7 @@ const ImpactSelectPicker = styled(SelectPicker)`
   }
 `
 
-export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, withinCell, onChange, dataCy, afterChange }) => {
+export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, withinCell, onChange, dataCy, isDisabled, afterChange }) => {
   const onChangeCallback = useCallback(event => {
       let value = null
       switch (inputType) {
@@ -122,6 +123,7 @@ export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, wi
   return <input
     data-cy={dataCy}
     id={id}
+    disabled={isDisabled}
     style={{
       fontSize: 13,
       marginTop: withinCell ? -8 : 5,

@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.lang.IllegalArgumentException
 
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(value = [(FleetSegmentController::class)])
@@ -123,6 +124,10 @@ class FleetSegmentControllerITests {
 
     @Test
     fun `Should create a fleet segment`() {
+        // Given
+        given(createFleetSegment.execute(any()))
+            .willReturn(FleetSegment("SW1", "", listOf("NAMO", "SA"), listOf(), listOf(), listOf(), listOf(), 1.2, 2022))
+
         // When
         mockMvc.perform(
             post("/bff/v1/fleet_segments")
@@ -147,6 +152,10 @@ class FleetSegmentControllerITests {
 
     @Test
     fun `Should throw an exception When no year given to create a fleet segment`() {
+        // Given
+        given(createFleetSegment.execute(any()))
+            .willThrow(IllegalArgumentException("Year must be provided"))
+
         // When
         mockMvc.perform(
             post("/bff/v1/fleet_segments")
@@ -158,7 +167,7 @@ class FleetSegmentControllerITests {
                 .contentType(MediaType.APPLICATION_JSON)
         )
             // Then
-            .andExpect(status().isCreated)
+            .andExpect(status().isBadRequest)
 
         Mockito.verify(createFleetSegment).execute(
             CreateOrUpdateFleetSegmentFields(segment = "SEGMENT", gears = listOf("OTB", "OTC"))

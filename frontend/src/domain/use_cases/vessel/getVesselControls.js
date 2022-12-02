@@ -50,9 +50,9 @@ const getVesselControls = userRequest => (dispatch, getState) => {
   }
 }
 
-const getIsSameVesselAsCurrentlyShowed = (vesselId, controlResumeAndControls) => {
-  if (controlResumeAndControls?.vesselId) {
-    return vesselId === controlResumeAndControls.vesselId
+const getIsSameVesselAsCurrentlyShowed = (vesselInternalId, controlResumeAndControls) => {
+  if (controlResumeAndControls?.vesselInternalId) {
+    return vesselInternalId === controlResumeAndControls.vesselInternalId
   }
 
   return false

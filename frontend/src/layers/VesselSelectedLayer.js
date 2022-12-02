@@ -67,7 +67,7 @@ const VesselSelectedLayer = ({ map }) => {
           course: vesselTrack.course,
           geometry: new Point(vesselTrack.coordinates)
         })
-        feature.setId(vesselTrack.vesselId)
+        feature.setId(vesselTrack.vesselCompositeIdentifier)
         return feature
       })
       vectorSourceRef.current?.addFeatures(features)

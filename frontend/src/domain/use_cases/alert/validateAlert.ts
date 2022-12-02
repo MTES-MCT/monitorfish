@@ -35,7 +35,7 @@ export const validateAlert = (id: string) => (dispatch, getState: AppGetState) =
         removeVesselAlertAndUpdateReporting({
           alertType: validatedAlert.value?.type,
           isValidated: true,
-          vesselId: Vessel.getVesselFeatureId(validatedAlert)
+          vesselFeatureId: Vessel.getVesselFeatureId(validatedAlert)
         })
       )
     })

@@ -12,8 +12,8 @@ import {
 } from '../../../domain/entities/riskFactor'
 import { batch, useDispatch } from 'react-redux'
 import showVessel from '../../../domain/use_cases/vessel/showVessel'
-import getVesselVoyage from '../../../domain/use_cases/vessel/getVesselVoyage'
-import { getVesselId } from '../../../domain/entities/vessel/vessel'
+import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
+import { getVesselCompositeIdentifier } from '../../../domain/entities/vessel/vessel'
 
 const X = 0
 const Y = 1
@@ -121,7 +121,7 @@ const VesselLabelOverlay = ({
     <WrapperToBeKeptForDOMManagement>
       <Wrapper
         ref={ref}
-        data-cy={`vessel-label-draggable-${getVesselId(identity)}`}
+        data-cy={`vessel-label-draggable-${getVesselCompositeIdentifier(identity)}`}
         onClick={() => {
           if (overlayIsPanning.current) {
             overlayIsPanning.current = false

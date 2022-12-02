@@ -1,5 +1,6 @@
 // TODO This should be moved to `entities/vessel/types.ts`
 
+import type { ReportingType } from '../../types/reporting'
 import type { VesselTrackDepth } from '../vesselTrackDepth'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
@@ -41,7 +42,6 @@ export type SelectedVessel = {
   from: string | null
   gauge: number
   gearOnboard: Gear[] | null
-  id: number
   imo: string
   internalReferenceNumber: string
   ircs: string
@@ -77,7 +77,8 @@ export type SelectedVessel = {
   tripNumber: number | null
   underCharter: boolean
   vesselEmails: string[]
-  vesselIdentifier: string
+  vesselIdentifier: VesselIdentifier
+  vesselInternalId: number
   vesselName: string
   vesselPhones: string[]
   vesselType: string
@@ -93,7 +94,7 @@ export type ShowedVesselTrack = {
   toHide: boolean
   toShow: boolean
   toZoom: boolean
-  vesselId: string
+  vesselCompositeIdentifier: number
   vesselIdentity: VesselIdentity
 }
 
@@ -118,13 +119,13 @@ export type TrackRequestPredefined = {
 }
 
 export type Vessel = {
+  beaconNumber: number | null
   declaredFishingGears: string[]
   district: string
   districtCode: string
   externalReferenceNumber: string
   flagState: string
   gauge: number
-  id: number
   imo: string
   internalReferenceNumber: string
   ircs: string
@@ -145,34 +146,57 @@ export type Vessel = {
   sailingType: string
   underCharter: boolean
   vesselEmails: string[]
+  vesselInternalId: number
   vesselName: string
   vesselPhones: string[]
   vesselType: string
   width: number
 }
 
+export type VesselAndPositions = {
+  positions: VesselPosition[]
+  vessel: Vessel
+}
+
 /**
- * The vessel id : `internalReferenceNumber/externalReferenceNumber/ircs`
+ * The vessel composite key/identifier used to identify all vessels
+ * by concatenating :
+ * - internalReferenceNumber
+ * - ircs
+ * - externalReferenceNumber
  *
- * i.e: "FAK000999999/DONTSINK/CALLME"
+ * The result is :`internalReferenceNumber/ircs/externalReferenceNumber`
+ *
+ * i.e: "FAK000999999/CALLME/DONTSINK"
  */
-export type VesselId = string
+export type VesselCompositeIdentifier = string
+
+/**
+ * The vessel id number used to identify vessels entered in the NAVPRO French database
+ * It is used for :
+ * - Controls
+ * - Beacons
+ *
+ * i.e: 20569
+ */
+export type VesselInternalId = number
 
 export type VesselIdentity = {
   // TODO Check that.
-  beaconNumber?: number | undefined
-  externalReferenceNumber: string | undefined
-  flagState: string | undefined
-  internalReferenceNumber: string | undefined
-  ircs: string | undefined
-  mmsi: string | undefined
-  vesselId?: number | undefined
-  vesselIdentifier: string | undefined
-  vesselName: string | undefined
+  beaconNumber?: number | null
+  externalReferenceNumber: string | null
+  flagState: string | null
+  internalReferenceNumber: string | null
+  ircs: string | null
+  mmsi?: string | null
+  vesselIdentifier: VesselIdentifier | null
+  vesselInternalId?: VesselInternalId | null
+  vesselName: string | null
 }
 
 export type VesselLastPosition = {
-  alerts: String[] | null
+  alerts: string[] | null
+  beaconNumber?: number | null
   course: number
   dateTime: string
   departureDateTime: string
@@ -200,14 +224,14 @@ export type VesselLastPosition = {
   postControlComment: number
   registryPortLocode: string
   registryPortName: string
-  reporting: String[]
+  reporting: string[]
   segments: string[]
   speciesOnboard: Species[]
   speed: number
   totalWeightOnboard: number
   tripNumber: number
   underCharter: boolean
-  vesselIdentifier: string
+  vesselIdentifier: VesselIdentifier
   vesselName: string
   width: number
 }
@@ -261,4 +285,35 @@ export type TrackTypeRecordItem = {
   code: string
   color: string
   description: string
+}
+
+export type VesselEnhancedLastPositionWebGLObject = {
+  coordinates: number[]
+  course: number
+  filterPreview: number // 0 is False, 1 is True - for WebGL
+  hasBeaconMalfunction: boolean
+  isAtPort: boolean
+  isFiltered: number // 0 is False, 1 is True - for WebGL
+  lastPositionSentAt: number
+  speed: number
+  vesselFeatureId: string
+  vesselProperties: VesselEnhancedObject
+}
+
+export enum VesselIdentifier {
+  EXTERNAL_REFERENCE_NUMBER = 'EXTERNAL_REFERENCE_NUMBER',
+  INTERNAL_REFERENCE_NUMBER = 'INTERNAL_REFERENCE_NUMBER',
+  IRCS = 'IRCS'
+}
+
+export type VesselEnhancedObject = VesselLastPosition & {
+  alerts: string[]
+  flagState: string
+  fleetSegmentsArray: string[]
+  gearsArray: string[]
+  hasAlert: boolean
+  hasInfractionSuspicion: boolean
+  lastControlDateTimeTimestamp: number | string
+  reportings: ReportingType[]
+  speciesArray: string[]
 }

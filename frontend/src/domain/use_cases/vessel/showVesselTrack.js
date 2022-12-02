@@ -1,6 +1,6 @@
 import { addVesselTrackShowed, resetLoadingVessel } from '../../shared_slices/Vessel'
 import { removeError, setError } from '../../shared_slices/Global'
-import { getVesselId } from '../../entities/vessel/vessel'
+import { getVesselCompositeIdentifier } from '../../entities/vessel/vessel'
 import { doNotAnimate } from '../../shared_slices/Map'
 import { getCustomOrDefaultTrackRequest, getTrackResponseError } from '../../entities/vesselTrackDepth'
 import { getVesselPositionsFromAPI } from '../../../api/vessel'
@@ -39,15 +39,15 @@ const showVesselTrack = (vesselIdentity, calledFromCron, trackRequest, zoom) => 
       }
 
       if (positions?.length) {
-        const vesselId = getVesselId(vesselIdentity)
+        const vesselMergedIdentifiers = getVesselCompositeIdentifier(vesselIdentity)
         const firstPosition = positions[positions.length - 1]
         const coordinates = transform([firstPosition.longitude, firstPosition.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
         const course = firstPosition.course
 
         dispatch(addVesselTrackShowed({
-          vesselId: vesselId,
+          vesselMergedIdentifiers: vesselMergedIdentifiers,
           showedVesselTrack: {
-            vesselId: vesselId,
+            vesselMergedIdentifiers: vesselMergedIdentifiers,
             vesselIdentity: vesselIdentity,
             positions: positions,
             coordinates: coordinates,

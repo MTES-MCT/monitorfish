@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getLocalStorageState } from '../../utils'
 import { BaseLayers } from '../entities/layers/constants'
 import { CoordinatesFormat } from '../entities/map'
-import { vesselLabel } from '../entities/vesselLabelLine'
+import { vesselLabel } from '../entities/vessel/label/types'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 
 import type { LastPositionVisibility } from '../types/map'

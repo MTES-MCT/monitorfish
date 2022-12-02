@@ -21,7 +21,7 @@ export const applyFilterToVessels = () => (dispatch, getState) => {
       if (!filteredVessels?.length) {
         dispatch(setError(new NoVesselsInFilterError('Il n\'y a pas de navire dans ce filtre')))
       }
-      const filteredVesselsUids = filteredVessels.map(vessel => vessel.vesselId)
+      const filteredVesselsUids = filteredVessels.map(vessel => vessel.vesselFeatureId)
       dispatch(setFilteredVesselsFeatures(filteredVesselsUids))
     })
 }

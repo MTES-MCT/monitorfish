@@ -13,7 +13,7 @@ import {
   removeVesselTrackFeatures,
   updateTrackCircleStyle
 } from '../domain/entities/vessel/track'
-import { getVesselId } from '../domain/entities/vessel/vessel'
+import { getVesselCompositeIdentifier } from '../domain/entities/vessel/vessel'
 import {
   endRedrawFishingActivitiesOnMap,
   updateFishingActivitiesOnMapCoordinates
@@ -60,7 +60,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
   const vesselsTracksShowedAndDefined = useMemo(
     () =>
       Object.keys(vesselsTracksShowed)
-        .map(vesselId => vesselsTracksShowed[vesselId])
+        .map(vesselCompositeIdentifier => vesselsTracksShowed[vesselCompositeIdentifier])
         // TODO Move these toShow and toHide properties in another state
         .filter(vesselTrack => !vesselTrack.toShow && !vesselTrack.toHide),
     [vesselsTracksShowed]
@@ -110,10 +110,10 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
     function showSelectedVesselTrack() {
       if (map && selectedVessel && selectedVesselPositions?.length) {
         const features = getVectorSource().getFeatures()
-        const vesselId = getVesselId(selectedVessel)
-        removeVesselTrackFeatures(features, getVectorSource(), vesselId)
+        const vesselCompositeIdentifier = getVesselCompositeIdentifier(selectedVessel)
+        removeVesselTrackFeatures(features, getVectorSource(), vesselCompositeIdentifier)
 
-        const vesselTrackFeatures = getFeaturesFromPositions(selectedVesselPositions, vesselId)
+        const vesselTrackFeatures = getFeaturesFromPositions(selectedVesselPositions, vesselCompositeIdentifier)
 
         let lastPositionCoordinates: Coordinate | Coordinate[] | undefined
         if (vesselTrackFeatures[vesselTrackFeatures.length - 1]) {
@@ -122,7 +122,7 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
 
         if (vesselTrackFeatures?.length) {
           getVectorSource().addFeatures(vesselTrackFeatures)
-          const vesselTrackExtent = getVesselTrackExtent(vesselTrackFeatures, vesselId)
+          const vesselTrackExtent = getVesselTrackExtent(vesselTrackFeatures, vesselCompositeIdentifier)
 
           dispatch(setVesselTrackExtent(vesselTrackExtent))
         }
@@ -140,10 +140,10 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
     function hidePreviouslySelectedVessel() {
       if (previousSelectedVessel && !selectedVessel) {
         const features = getVectorSource().getFeatures()
-        const vesselIdentity = getVesselId(previousSelectedVessel)
-        removeVesselTrackFeatures(features, getVectorSource(), vesselIdentity)
+        const vesselCompositeIdentifier = getVesselCompositeIdentifier(previousSelectedVessel)
+        removeVesselTrackFeatures(features, getVectorSource(), vesselCompositeIdentifier)
 
-        dispatch(updateVesselTrackAsHidden(vesselIdentity))
+        dispatch(updateVesselTrackAsHidden(vesselCompositeIdentifier))
       }
     }
 
@@ -159,17 +159,20 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
       vesselTracks
         .filter(vesselTrack => vesselTrack.toShow)
         .forEach(vesselTrack => {
-          removeVesselTrackFeatures(showedFeatures, getVectorSource(), vesselTrack.vesselId)
+          removeVesselTrackFeatures(showedFeatures, getVectorSource(), vesselTrack.vesselCompositeIdentifier)
 
-          const vesselTrackFeatures = getFeaturesFromPositions(vesselTrack.positions, vesselTrack.vesselId)
+          const vesselTrackFeatures = getFeaturesFromPositions(
+            vesselTrack.positions,
+            vesselTrack.vesselCompositeIdentifier
+          )
           if (vesselTrackFeatures.length) {
             getVectorSource().addFeatures(vesselTrackFeatures)
-            const vesselTrackExtent = getVesselTrackExtent(vesselTrackFeatures, vesselTrack.vesselId)
+            const vesselTrackExtent = getVesselTrackExtent(vesselTrackFeatures, vesselTrack.vesselCompositeIdentifier)
 
             dispatch(
               updateVesselTrackAsShowedWithExtend({
                 extent: vesselTrackExtent,
-                vesselId: vesselTrack.vesselId
+                vesselCompositeIdentifier: vesselTrack.vesselCompositeIdentifier
               })
             )
           }
@@ -180,13 +183,15 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
       vesselTracks
         .filter(vesselTrack => vesselTrack.toHide)
         .forEach(vesselTrack => {
-          removeVesselTrackFeatures(showedFeatures, getVectorSource(), vesselTrack.vesselId)
+          removeVesselTrackFeatures(showedFeatures, getVectorSource(), vesselTrack.vesselCompositeIdentifier)
 
-          dispatch(updateVesselTrackAsHidden(vesselTrack.vesselId))
+          dispatch(updateVesselTrackAsHidden(vesselTrack.vesselCompositeIdentifier))
         })
     }
 
-    const vesselTracks = Object.keys(vesselsTracksShowed).map(vesselId => vesselsTracksShowed[vesselId])
+    const vesselTracks = Object.keys(vesselsTracksShowed).map(
+      vesselCompositeIdentifier => vesselsTracksShowed[vesselCompositeIdentifier]
+    )
 
     const features = getVectorSource().getFeatures()
     showVesselsTracks(features, vesselTracks)
@@ -269,10 +274,10 @@ function VesselsTracksLayer({ map }: VesselsTracksLayerProps) {
     <>
       {vesselsTracksShowedAndDefined.map(vesselTrack => (
         <CloseVesselTrackOverlay
-          key={vesselTrack.vesselId}
+          key={vesselTrack.vesselCompositeIdentifier}
           coordinates={vesselTrack.coordinates}
           map={map}
-          vesselId={vesselTrack.vesselId}
+          vesselCompositeIdentifier={vesselTrack.vesselCompositeIdentifier}
         />
       ))}
       {fishingActivitiesShowedOnMapWithCoordinates.map(fishingActivity => (

@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 
 class CreateReportingDataInput(
     val type: ReportingType,
-    val vesselId: Int? = null,
+    val vesselInternalId: Int? = null,
     val vesselName: String? = null,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
@@ -20,7 +20,7 @@ class CreateReportingDataInput(
 ) {
     fun toReporting() = Reporting(
         type = this.type,
-        vesselId = this.vesselId,
+        vesselId = this.vesselInternalId,
         vesselName = this.vesselName,
         internalReferenceNumber = this.internalReferenceNumber,
         externalReferenceNumber = this.externalReferenceNumber,

@@ -10,7 +10,7 @@ import { setEditedReportingInSideWindow } from '../../../../domain/shared_slices
 import { InfractionSuspicionReporting, PendingAlertReporting, ReportingType } from '../../../../domain/types/reporting'
 import archiveReportings from '../../../../domain/use_cases/reporting/archiveReportings'
 import deleteReportings from '../../../../domain/use_cases/reporting/deleteReportings'
-import getVesselVoyage from '../../../../domain/use_cases/vessel/getVesselVoyage'
+import { getVesselVoyage } from '../../../../domain/use_cases/vessel/getVesselVoyage'
 import showVessel from '../../../../domain/use_cases/vessel/showVessel'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'

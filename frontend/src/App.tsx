@@ -25,7 +25,7 @@ import { BeaconMalfunctionsMapButton } from './features/side_window/beacon_malfu
 import { SideWindow } from './features/side_window/SideWindow'
 import { SideWindowLauncher } from './features/side_window/SideWindowLauncher'
 import VesselList from './features/vessel_list/VesselList'
-import VesselsSearch from './features/vessel_search/VesselsSearch'
+import { VesselsSearch } from './features/vessel_search/VesselsSearch'
 import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader'
 import { VesselSidebar } from './features/vessel_sidebar/VesselSidebar'
 import { useAppSelector } from './hooks/useAppSelector'

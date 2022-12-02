@@ -483,7 +483,7 @@ class VesselControllerITests {
     fun `Should get all controls for a vessel`() {
         // Given
         given(this.getVesselControls.execute(any(), any())).willReturn(
-            ControlResumeAndControls(
+            ControlSummary(
                 1,
                 1,
                 3,

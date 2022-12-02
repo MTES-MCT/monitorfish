@@ -30,10 +30,10 @@ describe('vessel/track', () => {
         vesselName: 'CE DEVANT ÉLEVER'
       }
     ]
-    const vesselId = 'VESSEL_ID'
+    const vesselCompositeIdentifier = 'VESSEL_ID'
 
     // When
-    const features = getFeaturesFromPositions(positions, vesselId)
+    const features = getFeaturesFromPositions(positions, vesselCompositeIdentifier)
 
     // Then
     expect(features).toHaveLength(1)
@@ -54,10 +54,10 @@ describe('vessel/track', () => {
     // Given
     const positions = DUMMY_VESSEL_TRACK
     const expectedPositionsCourses = DUMMY_VESSEL_TRACK.map(position => position.course)
-    const vesselId = 'VESSEL_ID'
+    const vesselCompositeIdentifier = 'VESSEL_ID'
 
     // When
-    const features = getFeaturesFromPositions(positions, vesselId)
+    const features = getFeaturesFromPositions(positions, vesselCompositeIdentifier)
     const positionFeatures = features.filter(feature => feature.getId()?.toString().includes('position'))
     const lineFeatures = features.filter(feature => feature.getId()?.toString().includes('line'))
     const arrowFeatures = features.filter(feature => feature.getId()?.toString().includes('arrow'))
@@ -109,10 +109,10 @@ describe('vessel/track', () => {
 
   it('getFeaturesFromPositions Should return one features When a track with same coordinates is given', async () => {
     // Given
-    const vesselId = 'VESSEL_ID'
+    const vesselCompositeIdentifier = 'VESSEL_ID'
 
     // When
-    const features = getFeaturesFromPositions(VESSEL_TRACK_ALL_SAME_COORDINATES, vesselId)
+    const features = getFeaturesFromPositions(VESSEL_TRACK_ALL_SAME_COORDINATES, vesselCompositeIdentifier)
 
     // Then
     const positionFeatures = features.filter(feature => feature.getId()?.toString().includes('position'))
@@ -132,10 +132,10 @@ describe('vessel/track', () => {
 
   it('getFeaturesFromPositions Should return multiple features When another track containing same coordinates is given', async () => {
     // Given
-    const vesselId = 'VESSEL_ID'
+    const vesselCompositeIdentifier = 'VESSEL_ID'
 
     // When
-    const features = getFeaturesFromPositions(VESSEL_TRACK_FEW_SAME_COORDINATES, vesselId)
+    const features = getFeaturesFromPositions(VESSEL_TRACK_FEW_SAME_COORDINATES, vesselCompositeIdentifier)
 
     // Then
     const positionFeatures = features.filter(feature => feature.getId()?.toString().includes('position'))

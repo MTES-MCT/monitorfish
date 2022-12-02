@@ -9,7 +9,7 @@ import {
   STAGE_RECORD
 } from './constants'
 
-import type { BeaconMalfunction, BeaconMalfunctionResumeAndDetails } from '../../types/beaconMalfunction'
+import type { BeaconMalfunction, BeaconMalfunctionResumeAndDetails } from './types'
 
 /**
  * Get beacon malfunctions for each years : Years are keys and beacon malfunctions are values

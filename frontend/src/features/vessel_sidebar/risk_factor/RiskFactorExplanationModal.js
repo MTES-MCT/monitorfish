@@ -12,7 +12,7 @@ import {
   getImpactRiskFactorText,
   getProbabilityRiskFactorText,
   getRiskFactorColor
-} from '../../../domain/entities/riskFactor'
+} from '../../../domain/entities/vessel/riskFactor'
 import { basePrimaryButton, SecondaryButton } from '../../commonStyles/Buttons.style'
 import StyledModalHeader from '../../commonComponents/StyledModalHeader'
 

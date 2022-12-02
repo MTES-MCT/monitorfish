@@ -2,161 +2,10 @@
 
 import type { ReportingType } from '../../types/reporting'
 import type { VesselTrackDepth } from '../vesselTrackDepth'
+import type { RiskFactor } from './riskFactor/types'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
 import type Point from 'ol/geom/Point'
-
-export type FishingActivityShowedOnMap = {
-  /** The coordinates of the fishing activity */
-  coordinates?: string[]
-  /** The effective date of message */
-  date: string
-  /** The operation number for logbook */
-  id: string
-  /** true if the message was deleted */
-  isDeleted: boolean
-  /** true id the message was not acknowledged */
-  isNotAcknowledged: boolean
-  /** The message name */
-  name: string
-}
-
-export type Gear = {
-  dimension: number
-  gear: string
-  mesh: number
-}
-
-export type SelectedVessel = {
-  beaconNumber: number | undefined
-  course: number
-  dateTime: string | null
-  declaredFishingGears: string[]
-  departureDateTime: string | null
-  destination: string | null
-  district: string
-  districtCode: string
-  emissionPeriod: number | null
-  externalReferenceNumber: string
-  flagState: string
-  from: string | null
-  gauge: number
-  gearOnboard: Gear[] | null
-  imo: string
-  internalReferenceNumber: string
-  ircs: string
-  lastControlDateTime: string | null
-  lastControlInfraction: boolean | null
-  lastLogbookMessageDateTime: string | null
-  latitude: number | null
-  length: number
-  longitude: number | null
-  mmsi: string
-  name: string
-  navigationLicenceExpirationDate: string
-  operatorEmails: string[]
-  operatorName: string
-  operatorPhones: string[]
-  pinger: boolean
-  positionType: string | null
-  positions: VesselPosition[]
-  postControlComment: number | null
-  power: number
-  proprietorEmails: string[]
-  proprietorName: string
-  proprietorPhones: string[]
-  registryPort: string
-  registryPortLocode: string | null
-  registryPortName: string | null
-  sailingCategory: string
-  sailingType: string
-  segments: string[] | null
-  speciesOnboard: Species[] | null
-  speed: number | null
-  totalWeightOnboard: number | null
-  tripNumber: number | null
-  underCharter: boolean
-  vesselEmails: string[]
-  vesselIdentifier: VesselIdentifier
-  vesselInternalId: number
-  vesselName: string
-  vesselPhones: string[]
-  vesselType: string
-  width: number
-}
-
-export type ShowedVesselTrack = {
-  coordinates: string[]
-  course: number
-  extent: number[]
-  isDefaultTrackDepth: boolean
-  positions: VesselPosition[]
-  toHide: boolean
-  toShow: boolean
-  toZoom: boolean
-  vesselCompositeIdentifier: number
-  vesselIdentity: VesselIdentity
-}
-
-// TODO Exist both in Vessel and Species.
-export type Species = {
-  faoZone: string
-  gear: string
-  species: string
-  weight: number
-}
-
-export type TrackRequest = TrackRequestCustom | TrackRequestPredefined
-export type TrackRequestCustom = {
-  afterDateTime: Date
-  beforeDateTime: Date
-  trackDepth: VesselTrackDepth.CUSTOM
-}
-export type TrackRequestPredefined = {
-  afterDateTime: null
-  beforeDateTime: null
-  trackDepth: Exclude<VesselTrackDepth, 'CUSTOM'>
-}
-
-export type Vessel = {
-  beaconNumber: number | null
-  declaredFishingGears: string[]
-  district: string
-  districtCode: string
-  externalReferenceNumber: string
-  flagState: string
-  gauge: number
-  imo: string
-  internalReferenceNumber: string
-  ircs: string
-  length: number
-  mmsi: string
-  navigationLicenceExpirationDate: string
-  operatorEmails: string[]
-  operatorName: string
-  operatorPhones: string[]
-  pinger: boolean
-  positions: VesselPosition[]
-  power: number
-  proprietorEmails: string[]
-  proprietorName: string
-  proprietorPhones: string[]
-  registryPort: string
-  sailingCategory: string
-  sailingType: string
-  underCharter: boolean
-  vesselEmails: string[]
-  vesselInternalId: number
-  vesselName: string
-  vesselPhones: string[]
-  vesselType: string
-  width: number
-}
-
-export type VesselAndPositions = {
-  positions: VesselPosition[]
-  vessel: Vessel
-}
 
 /**
  * The vessel composite key/identifier used to identify all vessels
@@ -181,21 +30,75 @@ export type VesselCompositeIdentifier = string
  */
 export type VesselInternalId = number
 
+export enum VesselIdentifier {
+  EXTERNAL_REFERENCE_NUMBER = 'EXTERNAL_REFERENCE_NUMBER',
+  INTERNAL_REFERENCE_NUMBER = 'INTERNAL_REFERENCE_NUMBER',
+  IRCS = 'IRCS'
+}
+
 export type VesselIdentity = {
   // TODO Check that.
   beaconNumber?: number | null
   externalReferenceNumber: string | null
-  flagState: string | null
+  flagState?: string | null
   internalReferenceNumber: string | null
   ircs: string | null
   mmsi?: string | null
-  vesselIdentifier: VesselIdentifier | null
+  vesselIdentifier?: VesselIdentifier | null
   vesselInternalId?: VesselInternalId | null
-  vesselName: string | null
+  vesselName?: string | null
+}
+
+export type Vessel = {
+  beaconNumber: number | null
+  declaredFishingGears: string[]
+  district: string
+  districtCode: string
+  externalReferenceNumber: string
+  flagState: string
+  gauge: number
+  imo: string
+  internalReferenceNumber: string
+  ircs: string
+  length: number
+  mmsi: string
+  navigationLicenceExpirationDate: string
+  operatorEmails: string[]
+  operatorName: string
+  operatorPhones: string[]
+  pinger: boolean
+  power: number
+  proprietorEmails: string[]
+  proprietorName: string
+  proprietorPhones: string[]
+  registryPort: string
+  riskFactor: RiskFactor
+  sailingCategory: string
+  sailingType: string
+  underCharter: boolean
+  vesselEmails: string[]
+  vesselInternalId: number
+  vesselName: string
+  vesselPhones: string[]
+  vesselType: string
+  width: number
+}
+
+export type SelectedVessel = VesselEnhancedObject & Vessel
+
+export type AugmentedSelectedVessel = SelectedVessel & {
+  hasAlert: boolean
+  hasInfractionSuspicion: boolean
+}
+
+export type VesselAndPositions = {
+  positions: VesselPosition[]
+  vessel: Vessel
 }
 
 export type VesselLastPosition = {
   alerts: string[] | null
+  beaconMalfunctionId: number | null
   beaconNumber?: number | null
   course: number
   dateTime: string
@@ -224,7 +127,7 @@ export type VesselLastPosition = {
   postControlComment: number
   registryPortLocode: string
   registryPortName: string
-  reporting: string[]
+  reportings: ReportingType[]
   segments: string[]
   speciesOnboard: Species[]
   speed: number
@@ -254,6 +157,60 @@ export type VesselPosition = {
   speed: number
   tripNumber: number | null
   vesselName: string
+}
+
+export type FishingActivityShowedOnMap = {
+  /** The coordinates of the fishing activity */
+  coordinates?: string[]
+  /** The effective date of message */
+  date: string
+  /** The operation number for logbook */
+  id: string
+  /** true if the message was deleted */
+  isDeleted: boolean
+  /** true id the message was not acknowledged */
+  isNotAcknowledged: boolean
+  /** The message name */
+  name: string
+}
+
+export type Gear = {
+  dimension: number
+  gear: string
+  mesh: number
+}
+
+export type ShowedVesselTrack = {
+  coordinates: string[]
+  course: number
+  extent: number[]
+  isDefaultTrackDepth: boolean
+  positions: VesselPosition[]
+  toHide: boolean
+  toShow: boolean
+  toZoom: boolean
+  vesselCompositeIdentifier: string
+  vesselIdentity: VesselIdentity
+}
+
+// TODO Exist both in Vessel and Species.
+export type Species = {
+  faoZone: string
+  gear: string
+  species: string
+  weight: number
+}
+
+export type TrackRequest = TrackRequestCustom | TrackRequestPredefined
+export type TrackRequestCustom = {
+  afterDateTime: Date
+  beforeDateTime: Date
+  trackDepth: VesselTrackDepth.CUSTOM
+}
+export type TrackRequestPredefined = {
+  afterDateTime: null
+  beforeDateTime: null
+  trackDepth: Exclude<VesselTrackDepth, 'CUSTOM'>
 }
 
 export interface VesselPointFeature extends Feature<Point> {
@@ -298,12 +255,6 @@ export type VesselEnhancedLastPositionWebGLObject = {
   speed: number
   vesselFeatureId: string
   vesselProperties: VesselEnhancedObject
-}
-
-export enum VesselIdentifier {
-  EXTERNAL_REFERENCE_NUMBER = 'EXTERNAL_REFERENCE_NUMBER',
-  INTERNAL_REFERENCE_NUMBER = 'INTERNAL_REFERENCE_NUMBER',
-  IRCS = 'IRCS'
 }
 
 export type VesselEnhancedObject = VesselLastPosition & {

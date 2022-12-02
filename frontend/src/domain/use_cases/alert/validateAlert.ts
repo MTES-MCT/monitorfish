@@ -8,7 +8,7 @@ import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
 import getVesselReportings from '../vessel/getVesselReportings'
 
 import type { AppGetState } from '../../../store'
-import type { LEGACY_PendingAlert } from '../../types/alert'
+import type { LEGACY_PendingAlert } from '../../entities/alerts/types'
 
 export const validateAlert = (id: string) => (dispatch, getState: AppGetState) => {
   const previousAlerts = getState().alert.pendingAlerts

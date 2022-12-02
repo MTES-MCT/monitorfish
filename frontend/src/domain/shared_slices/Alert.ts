@@ -2,8 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { deleteListItems } from '../../utils/deleteListItems'
 
-import type { SelectedVessel } from '../entities/vessel/types'
-import type { LEGACY_PendingAlert, SilenceAlertQueueItem, LEGACY_SilencedAlert } from '../types/alert'
+import type {
+  AlertNameAndVesselIdentity,
+  LEGACY_PendingAlert,
+  LEGACY_SilencedAlert,
+  SilenceAlertQueueItem
+} from '../entities/alerts/types'
 
 export type AlertState = {
   focusedPendingAlertId: string | undefined
@@ -29,7 +33,7 @@ const alertSlice = createSlice({
     /**
      * Focus a pending alert in the alert list
      */
-    focusOnAlert(state, action: PayloadAction<SelectedVessel>) {
+    focusOnAlert(state, action: PayloadAction<AlertNameAndVesselIdentity>) {
       const { externalReferenceNumber, internalReferenceNumber, ircs, name } = action.payload
       const foundPendingAlert = state.pendingAlerts.find(
         alert =>

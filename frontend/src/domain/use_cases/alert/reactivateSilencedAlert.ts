@@ -5,7 +5,7 @@ import { setSilencedAlerts } from '../../shared_slices/Alert'
 import { setError } from '../../shared_slices/Global'
 
 import type { AppGetState } from '../../../store'
-import type { LEGACY_SilencedAlert } from '../../types/alert'
+import type { LEGACY_SilencedAlert } from '../../entities/alerts/types'
 
 export const reactivateSilencedAlert = id => (dispatch, getState: AppGetState) => {
   const previousSilencedAlerts = getState().alert.silencedAlerts

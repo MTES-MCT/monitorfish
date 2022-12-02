@@ -5,7 +5,7 @@ import {
   getControlPriorityLevel,
   getControlRateRiskFactorText,
   getRiskFactorColor
-} from '../../../../domain/entities/riskFactor'
+} from '../../../../domain/entities/vessel/riskFactor'
 import RiskFactorCursor from '../RiskFactorCursor'
 import { useSelector } from 'react-redux'
 import { getDate } from '../../../../utils'

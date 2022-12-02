@@ -19,7 +19,7 @@ export function removeDuplicatedFoundVessels(
   return foundVesselsFromAPI.concat(filteredVesselsFromMap)
 }
 
-export function addVesselIdentifierFromIdentity(identity: VesselIdentity): VesselIdentity {
+export function addVesselIdentifierToVesselIdentity(identity: VesselIdentity): VesselIdentity {
   if (identity.vesselIdentifier) {
     return identity
   }

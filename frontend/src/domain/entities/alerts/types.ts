@@ -1,5 +1,5 @@
-import type { VesselIdentifier } from '../entities/vessel/types'
-import type { Infraction } from './control'
+import type { Infraction } from '../../types/control'
+import type { VesselIdentifier, VesselIdentity } from '../vessel/types'
 
 export enum PendingAlertValueType {
   FRENCH_EEZ_FISHING_ALERT = 'FRENCH_EEZ_FISHING_ALERT',
@@ -59,4 +59,8 @@ export type SilencedAlertPeriodRequest = {
 export type SilenceAlertQueueItem = {
   pendingAlertId: string
   silencedAlertPeriodRequest: SilencedAlertPeriodRequest
+}
+
+export type AlertNameAndVesselIdentity = VesselIdentity & {
+  name: string | null
 }

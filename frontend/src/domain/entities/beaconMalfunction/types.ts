@@ -1,11 +1,11 @@
-import type { BeaconMalfunctionDetailsType } from '../../features/side_window/beacon_malfunctions/beaconMalfunctions'
+import type { BeaconMalfunctionDetailsType } from '../../../features/side_window/beacon_malfunctions/beaconMalfunctions'
+import type { VesselIdentity } from '../vessel/types'
 import type {
   BeaconMalfunctionPropertyName,
   BeaconMalfunctionsStage,
   BeaconMalfunctionVesselStatus,
   EndOfBeaconMalfunctionReason
-} from '../entities/beaconMalfunction/constants'
-import type { VesselIdentity } from '../entities/vessel/types'
+} from './constants'
 import type { Integer } from 'type-fest'
 
 export type BeaconMalfunction = {

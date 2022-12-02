@@ -3,7 +3,7 @@ import { isEqual } from 'lodash'
 
 import { getAlertNameFromType } from './utils'
 
-import type { LEGACY_PendingAlert, LEGACY_SilencedAlert } from '../../../domain/types/alert'
+import type { LEGACY_PendingAlert, LEGACY_SilencedAlert } from '../../../domain/entities/alerts/types'
 
 const PENDING_ALERT_TYPE_KEY_PATH = ['value', 'type']
 

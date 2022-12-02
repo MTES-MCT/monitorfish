@@ -7,7 +7,10 @@ import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 import { Draggable } from './Draggable'
 import { StageColumnHeader } from './StageColumnHeader'
 
-import type { BeaconMalfunction, BeaconMalfunctionStageColumnValue } from '../../../domain/types/beaconMalfunction'
+import type {
+  BeaconMalfunction,
+  BeaconMalfunctionStageColumnValue
+} from '../../../domain/entities/beaconMalfunction/types'
 
 type StageColumnType = {
   activeBeaconMalfunction: BeaconMalfunction | null

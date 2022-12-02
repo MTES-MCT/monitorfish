@@ -3,6 +3,8 @@ WITH deleted_or_corrected_messages AS (
     FROM public.logbook_reports
     WHERE operation_type IN ('DEL', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
+    -- exclude VisioCapture (which is not real time but has several months of delay) from current_catches
+    AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
 ),
 
 ordered_deps AS (
@@ -16,6 +18,7 @@ ordered_deps AS (
     WHERE log_type = 'DEP'
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
     AND report_id NOT IN (SELECT referenced_report_id FROM deleted_or_corrected_messages)
+    AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
 ),
 
 last_deps AS (
@@ -35,6 +38,7 @@ last_logbook_reports AS (
     FROM public.logbook_reports
     WHERE operation_type IN ('DAT', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
+    AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
     GROUP BY cfr
 ),
 
@@ -54,6 +58,7 @@ catches AS (
     AND operation_type IN ('DAT', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
     AND operation_number NOT IN (SELECT referenced_report_id FROM deleted_or_corrected_messages)
+    AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
 ),
 
 summed_catches AS (

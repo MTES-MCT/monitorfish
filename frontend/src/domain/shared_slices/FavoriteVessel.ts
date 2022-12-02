@@ -3,7 +3,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
-import { getOnlyVesselIdentityProperties, getVesselId, vesselsAreEquals } from '../entities/vessel/vessel'
+import {
+  getOnlyVesselIdentityProperties,
+  getVesselCompositeIdentifier,
+  vesselsAreEquals
+} from '../entities/vessel/vessel'
 
 import type { VesselIdentity } from '../entities/vessel/types'
 
@@ -45,7 +49,9 @@ const favoriteVesselSlice = createSlice({
      * @param {{payload: string}} action - The vessel id
      */
     removeVesselFromFavorites(state, action) {
-      state.favorites = state.favorites.filter(favoriteVessel => getVesselId(favoriteVessel) !== action.payload)
+      state.favorites = state.favorites.filter(
+        favoriteVessel => getVesselCompositeIdentifier(favoriteVessel) !== action.payload
+      )
       window.localStorage.setItem(FAVORITE_VESSELS_LOCAL_STORAGE_KEY, JSON.stringify(state.favorites))
     }
   }

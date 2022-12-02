@@ -26,7 +26,7 @@ const MapMenu = ({ map }) => {
 
         if (clickedFeatureId?.toString()?.includes(Layer.VESSELS.code)) {
           const clickedVessel = vessels.find(vessel => {
-            return clickedFeatureId?.toString()?.includes(vessel.vesselId)
+            return clickedFeatureId?.toString()?.includes(vessel.vesselCompositeIdentifier)
           })
 
           if (clickedVessel) {

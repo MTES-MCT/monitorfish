@@ -1,6 +1,6 @@
 import { Radio, RadioGroup } from 'rsuite'
 import styled from 'styled-components'
-import { vesselLabel as label } from '../../../../domain/entities/vesselLabelLine'
+import { label } from '../../../../domain/entities/vessel/label/types'
 
 const VesselLabelSelection = ({ vesselLabel, updateVesselLabel, isAdmin }) => {
   return (

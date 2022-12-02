@@ -188,20 +188,20 @@ class VesselController(
         const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"
     }
 
-    @GetMapping("/{vesselId}/controls")
+    @GetMapping("/{vesselInternalId}/controls")
     @ApiOperation("Get vessel's controls")
     fun getVesselControls(
-        @PathParam("Vessel id")
-        @PathVariable(name = "vesselId")
-        vesselId: String,
+        @PathParam("Vessel internal id")
+        @PathVariable(name = "vesselInternalId")
+        vesselInternalId: String,
         @ApiParam("Control after date time")
         @RequestParam(name = "afterDateTime")
         @DateTimeFormat(pattern = zoneDateTimePattern)
         afterDateTime: ZonedDateTime
-    ): ControlResumeAndControlsDataOutput {
-        val controlResumeAndControls = getVesselControls.execute(vesselId.toInt(), afterDateTime)
+    ): ControlSummaryDataOutput {
+        val controlResumeAndControls = getVesselControls.execute(vesselInternalId.toInt(), afterDateTime)
 
-        return ControlResumeAndControlsDataOutput.fromControlResumeAndControls(controlResumeAndControls)
+        return ControlSummaryDataOutput.fromControlSummary(controlResumeAndControls)
     }
 
     @GetMapping("/reporting")

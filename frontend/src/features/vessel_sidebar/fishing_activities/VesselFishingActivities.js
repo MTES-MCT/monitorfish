@@ -10,7 +10,7 @@ import {
   setVoyage
 } from '../../../domain/shared_slices/FishingActivities'
 import { batch, useDispatch, useSelector } from 'react-redux'
-import getVesselVoyage, { NAVIGATE_TO } from '../../../domain/use_cases/vessel/getVesselVoyage'
+import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
 import { FingerprintSpinner } from 'react-epic-spinners'
 import { usePrevious } from '../../../hooks/usePrevious'
 import { FishingActivitiesTab, vesselsAreEquals } from '../../../domain/entities/vessel/vessel'

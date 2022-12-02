@@ -41,7 +41,7 @@ export const silenceAlert =
           removeVesselAlertAndUpdateReporting({
             alertType: silencedAlert.value.type,
             isValidated: false,
-            vesselId: Vessel.getVesselFeatureId(silencedAlert)
+            vesselFeatureId: Vessel.getVesselFeatureId(silencedAlert)
           })
         )
 

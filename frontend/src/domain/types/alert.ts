@@ -1,3 +1,4 @@
+import type { VesselIdentifier } from '../entities/vessel/types'
 import type { Infraction } from './control'
 
 export enum PendingAlertValueType {
@@ -16,7 +17,7 @@ export type PendingAlert = {
   ircs: string
   tripNumber: string
   value: PendingAlertValue
-  vesselIdentifier: string
+  vesselIdentifier: VesselIdentifier
   vesselName: string
 }
 
@@ -42,7 +43,7 @@ export type SilencedAlert = {
   isReactivated: boolean | null
   silencedBeforeDate: Date
   value: PendingAlertValue
-  vesselIdentifier: string
+  vesselIdentifier: VesselIdentifier
   vesselName: string
 }
 

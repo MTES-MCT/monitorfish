@@ -172,10 +172,10 @@ const VesselList = ({ namespace }) => {
     setVessels(nextVessels)
   }, [allVesselsChecked])
 
-  const toggleSelectRow = useCallback((vesselId, value) => {
+  const toggleSelectRow = useCallback((vesselCompositeIdentifier, value) => {
     const nextVessels = Object.assign([], _vessels)
 
-    const toggledVesselIndex = nextVessels.findIndex(vessel => vessel.vesselId === vesselId)
+    const toggledVesselIndex = nextVessels.findIndex(vessel => vessel.vesselCompositeIdentifier === vesselCompositeIdentifier)
     if (!(toggledVesselIndex === NOT_FOUND)) {
       nextVessels.splice(toggledVesselIndex, 1, { ...nextVessels[toggledVesselIndex], checked: value })
       setVessels(nextVessels)
@@ -239,10 +239,10 @@ const VesselList = ({ namespace }) => {
   }, [])
 
   const previewFilteredVessels = useCallback(() => {
-    const vesselsUids = filteredVessels.map(vessel => vessel.vesselId)
+    const vesselCompositeIdentifiers = filteredVessels.map(vessel => vessel.vesselCompositeIdentifier)
 
-    if (vesselsUids?.length) {
-      dispatch(setPreviewFilteredVesselsFeatures(vesselsUids))
+    if (vesselCompositeIdentifiers?.length) {
+      dispatch(setPreviewFilteredVesselsFeatures(vesselCompositeIdentifiers))
       dispatch(setPreviewFilteredVesselsMode(true))
 
       if (zonesSelected?.length) {

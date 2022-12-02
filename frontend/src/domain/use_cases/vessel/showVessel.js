@@ -1,5 +1,9 @@
 import { batch } from 'react-redux'
-import { getOnlyVesselIdentityProperties, Vessel, VesselSidebarTab } from '../../entities/vessel/vessel'
+import {
+  getOnlyVesselIdentityProperties,
+  getVesselCompositeIdentifier,
+  VesselSidebarTab
+} from '../../entities/vessel/vessel'
 import { loadingVessel, resetLoadingVessel, setSelectedVessel, showVesselSidebarTab } from '../../shared_slices/Vessel'
 import { addSearchedVessel, removeError, setError } from '../../shared_slices/Global'
 import { doNotAnimate } from '../../shared_slices/Map'
@@ -23,7 +27,7 @@ const showVessel = (vesselIdentity, fromSearch, calledFromCron) => async (dispat
   const { areFishingActivitiesShowedOnMap } = fishingActivities
   const { isAdmin } = global
 
-  const lastPositionVessel = vessels.find(_vessel => _vessel.vesselId === Vessel.getVesselFeatureId(vesselIdentity))
+  const lastPositionVessel = vessels.find(_vessel => _vessel.vesselCompositeIdentifier === getVesselCompositeIdentifier(vesselIdentity))
 
   dispatchLoadingVessel(dispatch, calledFromCron, vesselIdentity)
 

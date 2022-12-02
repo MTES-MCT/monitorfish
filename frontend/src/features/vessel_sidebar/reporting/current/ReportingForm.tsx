@@ -160,18 +160,20 @@ export function ReportingForm({
 
   const editReporting = useCallback(
     (editedReportingId: number, nextReportingValue: ReportingUpdate) => {
-      // TODO Fix the use-case dispatch type
-      dispatch(
-        updateReporting(
-          getOnlyVesselIdentityProperties(editedReporting),
-          editedReportingId,
-          nextReportingValue,
-          previousReportingType.current
-        ) as any
-      ).then(() => {
-        closeForm()
-        deleteLocalStorageReportingEntry()
-      })
+      if (editedReporting) {
+        // TODO Fix the use-case dispatch type
+        dispatch(
+          updateReporting(
+            getOnlyVesselIdentityProperties(editedReporting),
+            editedReportingId,
+            nextReportingValue,
+            previousReportingType.current
+          ) as any
+        ).then(() => {
+          closeForm()
+          deleteLocalStorageReportingEntry()
+        })
+      }
     },
     [dispatch, closeForm, deleteLocalStorageReportingEntry, editedReporting]
   )
@@ -190,8 +192,8 @@ export function ReportingForm({
           flagState: selectedVesselIdentity?.flagState?.toUpperCase(),
           type: nextReporting.type
         },
-        vesselId: selectedVesselIdentity?.vesselId,
         vesselIdentifier: selectedVesselIdentity?.vesselIdentifier,
+        vesselInternalId: selectedVesselIdentity?.vesselInternalId,
         vesselName: selectedVesselIdentity?.vesselName
       }
 

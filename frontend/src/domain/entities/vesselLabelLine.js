@@ -1,13 +1,7 @@
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
 import { Layer } from './layers/constants'
-
-export const vesselLabel = {
-  VESSEL_NATIONALITY: 'VESSEL_NATIONALITY',
-  VESSEL_NAME: 'VESSEL_NAME',
-  VESSEL_INTERNAL_REFERENCE_NUMBER: 'VESSEL_INTERNAL_REFERENCE_NUMBER',
-  VESSEL_FLEET_SEGMENT: 'VESSEL_FLEET_SEGMENT'
-}
+import { getVesselCompositeIdentifier } from './vessel/vessel'
 
 export class VesselLabelLine {
   static opacityProperty = 'opacity'
@@ -30,7 +24,7 @@ export class VesselLabelLine {
   }
 
   static getFeatureId (identity) {
-    return `${Layer.VESSELS_LABEL.code}:${identity.internalReferenceNumber}/${identity.ircs}/${identity.externalReferenceNumber}`
+    return `${Layer.VESSELS_LABEL.code}:${getVesselCompositeIdentifier(identity)}`
   }
 }
 

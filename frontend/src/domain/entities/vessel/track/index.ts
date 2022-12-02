@@ -12,7 +12,13 @@ import { Layer } from '../../layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../map'
 import { TRACK_TYPE_RECORD } from './constants'
 
-import type { VesselArrowFeature, VesselLineFeature, VesselPointFeature, VesselId, VesselPosition } from '../types'
+import type {
+  VesselArrowFeature,
+  VesselLineFeature,
+  VesselPointFeature,
+  VesselCompositeIdentifier,
+  VesselPosition
+} from '../types'
 import type { Coordinate } from 'ol/coordinate'
 
 const NUMBER_HOURS_TIME_ELLIPSIS = 4
@@ -25,11 +31,11 @@ const FIRST_POSITION = 0
  */
 export function getFeaturesFromPositions(
   positions: VesselPosition[],
-  vesselId: VesselId
+  vesselCompositeIdentifier: VesselCompositeIdentifier
 ): (VesselPointFeature | VesselArrowFeature | VesselLineFeature)[] {
   const hasOnlyOnePosition = positions?.length === 1
   if (hasOnlyOnePosition) {
-    return getPositionFeatureOfIndex(positions, vesselId, FIRST_POSITION)
+    return getPositionFeatureOfIndex(positions, vesselCompositeIdentifier, FIRST_POSITION)
   }
 
   const uniquePositions = uniqWith(
@@ -39,40 +45,47 @@ export function getFeaturesFromPositions(
   const hasOnlyOneUniquePosition = uniquePositions?.length === 1
   if (hasOnlyOneUniquePosition) {
     // Get last position
-    return getPositionFeatureOfIndex(positions, vesselId, positions.length - 1)
+    return getPositionFeatureOfIndex(positions, vesselCompositeIdentifier, positions.length - 1)
   }
 
   let features: (VesselPointFeature | VesselArrowFeature | VesselLineFeature)[] = []
-  const positionsPointFeatures = buildPointFeatures(uniquePositions, vesselId)
+  const positionsPointFeatures = buildPointFeatures(uniquePositions, vesselCompositeIdentifier)
   features = features.concat(positionsPointFeatures)
 
-  const vesselTrackLineFeatures = buildLineStringFeatures(uniquePositions, vesselId)
+  const vesselTrackLineFeatures = buildLineStringFeatures(uniquePositions, vesselCompositeIdentifier)
   features = features.concat(vesselTrackLineFeatures)
 
-  const arrowPointFeatures = buildArrowPointFeatures(vesselTrackLineFeatures, vesselId)
+  const arrowPointFeatures = buildArrowPointFeatures(vesselTrackLineFeatures, vesselCompositeIdentifier)
   features = features.concat(arrowPointFeatures)
 
   return features
 }
 
-function getPositionFeatureOfIndex(positions: VesselPosition[], vesselId: VesselId, index: number) {
+function getPositionFeatureOfIndex(
+  positions: VesselPosition[],
+  vesselCompositeIdentifier: VesselCompositeIdentifier,
+  index: number
+) {
   const position = positions[index]
   if (!position) {
     throw new Error('No position given')
   }
 
   const coordinates = transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-  const feature = buildPointFeature(coordinates, FIRST_POSITION, position, vesselId)
+  const feature = buildPointFeature(coordinates, FIRST_POSITION, position, vesselCompositeIdentifier)
 
   return [feature]
 }
 
-function buildPointFeatures(positions: VesselPosition[], identity: VesselId): VesselPointFeature[] {
+function buildPointFeatures(
+  positions: VesselPosition[],
+  vesselCompositeIdentifier: VesselCompositeIdentifier
+): VesselPointFeature[] {
   return positions
     .map((position, currentIndex) => {
       const coordinates = transform([position.longitude, position.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
-      return buildPointFeature(coordinates, currentIndex, position, identity)
+      return buildPointFeature(coordinates, currentIndex, position, vesselCompositeIdentifier)
     })
     .filter((circlePoint): circlePoint is VesselPointFeature => circlePoint !== null)
 }
@@ -81,7 +94,7 @@ function buildPointFeature(
   coordinates: Coordinate,
   index: number,
   position: VesselPosition,
-  identity: VesselId
+  vesselCompositeIdentifier: VesselCompositeIdentifier
 ): VesselPointFeature {
   const pointFeature = new Feature({
     geometry: new Point(coordinates)
@@ -93,14 +106,17 @@ function buildPointFeature(
   pointFeature.speed = position.speed
   pointFeature.dateTime = position.dateTime
 
-  pointFeature.setId(`${Layer.VESSEL_TRACK.code}:${identity}:position:${index}`)
+  pointFeature.setId(`${Layer.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:position:${index}`)
   const trackColor = getTrackType([position], false).color
   pointFeature.setStyle(getCircleStyle(trackColor))
 
   return pointFeature
 }
 
-function buildArrowPointFeatures(vesselTrackLines, identity): VesselArrowFeature[] {
+function buildArrowPointFeatures(
+  vesselTrackLines,
+  vesselCompositeIdentifier: VesselCompositeIdentifier
+): VesselArrowFeature[] {
   return vesselTrackLines
     .map((feature, index) => {
       const pointsDistance = calculatePointsDistance(
@@ -121,7 +137,7 @@ function buildArrowPointFeatures(vesselTrackLines, identity): VesselArrowFeature
       arrowFeature.name = `${Layer.VESSEL_TRACK.code}:arrow:${index}`
       arrowFeature.course = feature.course
 
-      arrowFeature.setId(`${Layer.VESSEL_TRACK.code}:${identity}:arrow:${index}`)
+      arrowFeature.setId(`${Layer.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:arrow:${index}`)
       const trackArrow = TRACK_TYPE_RECORD[feature.trackType.code].arrow
       const arrowStyle = getArrowStyle(trackArrow, arrowFeature.course)
 
@@ -136,7 +152,10 @@ function buildArrowPointFeatures(vesselTrackLines, identity): VesselArrowFeature
     .filter(arrowPoint => arrowPoint)
 }
 
-function buildLineStringFeatures(positions: VesselPosition[], vesselId: VesselId): VesselLineFeature[] {
+function buildLineStringFeatures(
+  positions: VesselPosition[],
+  vesselCompositeIdentifier: VesselCompositeIdentifier
+): VesselLineFeature[] {
   return positions
     .filter(position => position)
     .map((firstPosition, index) => {
@@ -175,7 +194,7 @@ function buildLineStringFeatures(positions: VesselPosition[], vesselId: VesselId
       feature.course = rotation ? -rotation : undefined
       feature.speed = firstPosition.speed
 
-      feature.setId(`${Layer.VESSEL_TRACK.code}:${vesselId}:line:${index}`)
+      feature.setId(`${Layer.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:line:${index}`)
       feature.setStyle(getLineStyle(feature.isTimeEllipsis, feature.trackType))
 
       return feature
@@ -249,9 +268,9 @@ export function removeFishingActivitiesFeatures(features, vectorSource) {
     .forEach(feature => vectorSource.removeFeature(feature))
 }
 
-export function removeVesselTrackFeatures(features, vectorSource, vesselId) {
+export function removeVesselTrackFeatures(features, vectorSource, vesselCompositeIdentifier) {
   features
-    .filter(feature => feature?.getId()?.toString()?.includes(vesselId))
+    .filter(feature => feature?.getId()?.toString()?.includes(vesselCompositeIdentifier))
     .map(feature => vectorSource.removeFeature(feature))
 }
 
@@ -262,11 +281,11 @@ export function fishingActivityIsWithinTrackLineDates(fishingActivityDateTimesta
   )
 }
 
-export function getVesselTrackExtent(vesselTrackFeatures, vesselId) {
+export function getVesselTrackExtent(vesselTrackFeatures, vesselCompositeIdentifier) {
   let vesselTrackExtent = vesselTrackFeatures[0].getGeometry().getExtent().slice(0)
 
   vesselTrackFeatures
-    .filter(feature => feature.getId().includes(vesselId))
+    .filter(feature => feature.getId().includes(vesselCompositeIdentifier))
     .forEach(feature => {
       vesselTrackExtent = extend(vesselTrackExtent, feature.getGeometry().getExtent())
     })

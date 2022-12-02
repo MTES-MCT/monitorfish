@@ -1,9 +1,17 @@
 import countries from 'i18n-iso-countries'
 
-import { Layer, BaseLayers } from '../layers/constants'
-import { vesselLabel as vesselLabelEnum } from '../vesselLabelLine'
+import { BaseLayers, Layer } from '../layers/constants'
+import { vesselLabel as vesselLabelEnum } from './label/types'
 
-import type { SelectedVessel, ShowedVesselTrack, VesselIdentity } from './types'
+import type { Reporting } from '../../types/reporting'
+import type {
+  SelectedVessel,
+  ShowedVesselTrack,
+  Vessel as VesselType,
+  VesselEnhancedObject,
+  VesselIdentity,
+  VesselCompositeIdentifier
+} from './types'
 
 export const VESSEL_ALERT_STYLE = 1
 export const VESSEL_INFRACTION_SUSPICION_STYLE = 1
@@ -17,7 +25,7 @@ export class Vessel {
   static vesselIsMovingSpeed = 0.1
 
   static getVesselFeatureId(vessel) {
-    return `${Layer.VESSELS.code}:${getVesselId(vessel)}`
+    return `${Layer.VESSELS.code}:${getVesselCompositeIdentifier(vessel)}`
   }
 
   static getVesselOpacity(dateTime, vesselIsHidden, vesselIsOpacityReduced) {
@@ -132,36 +140,22 @@ export class Vessel {
   static iconIsLight = selectedBaseLayer => selectedBaseLayer === BaseLayers.SATELLITE.code
 }
 
-// TODO <vessel> is not a Vessel. What is it?
-export const getOnlyVesselIdentityProperties = (vessel: any): VesselIdentity => ({
-  beaconNumber: vessel.beaconNumber,
+export const getOnlyVesselIdentityProperties = (
+  vessel: VesselEnhancedObject | SelectedVessel | VesselType | Reporting
+): VesselIdentity => ({
+  beaconNumber: 'beaconNumber' in vessel ? vessel.beaconNumber : null,
   externalReferenceNumber: vessel.externalReferenceNumber,
-  flagState: vessel.flagState,
+  flagState: 'flagState' in vessel ? vessel.flagState : null,
   internalReferenceNumber: vessel.internalReferenceNumber,
   ircs: vessel.ircs,
-  mmsi: vessel.mmsi,
-  vesselIdentifier: vessel.vesselIdentifier,
+  mmsi: 'mmsi' in vessel ? vessel.mmsi : null,
+  vesselIdentifier: 'vesselIdentifier' in vessel ? vessel.vesselIdentifier : null,
+  vesselInternalId: 'vesselInternalId' in vessel ? vessel.vesselInternalId : null,
   vesselName: vessel.vesselName
 })
 
-export const getOnlyVesselIdentityPropertiesFromSelectedVessel = (vessel: SelectedVessel): VesselIdentity => ({
-  beaconNumber: vessel.beaconNumber,
-  externalReferenceNumber: vessel.externalReferenceNumber,
-  flagState: vessel.flagState,
-  internalReferenceNumber: vessel.internalReferenceNumber,
-  ircs: vessel.ircs,
-  mmsi: vessel.mmsi,
-  vesselId: vessel.id,
-  vesselIdentifier: vessel.vesselIdentifier,
-  vesselName: vessel.vesselName
-})
-
-/**
- * @param vessel
- * @return {VesselId}
- */
-export const getVesselId = vessel =>
-  `${vessel.internalReferenceNumber}/${vessel.externalReferenceNumber}/${vessel.ircs}`
+export const getVesselCompositeIdentifier: (vessel) => VesselCompositeIdentifier = vessel =>
+  `${vessel.internalReferenceNumber}/${vessel.ircs}/${vessel.externalReferenceNumber}`
 
 /**
  * Returns true if there is at least one vessel track or vessel selected
@@ -193,18 +187,6 @@ export const getVesselLastPositionVisibilityDates = vesselsLastPositionVisibilit
   vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced)
 
   return { vesselIsHidden, vesselIsOpacityReduced }
-}
-
-export function vesselAndVesselFeatureAreEquals(vessel, feature) {
-  return (
-    (feature.vessel.internalReferenceNumber
-      ? feature.vessel.internalReferenceNumber === vessel.internalReferenceNumber
-      : false) ||
-    (feature.vessel.ircs ? feature.vessel.ircs === vessel.ircs : false) ||
-    (feature.vessel.externalReferenceNumber
-      ? feature.vessel.externalReferenceNumber === vessel.externalReferenceNumber
-      : false)
-  )
 }
 
 const VesselIdentifier = {

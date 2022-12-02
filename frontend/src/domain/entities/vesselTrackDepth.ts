@@ -53,11 +53,11 @@ export const getTrackRequestFromTrackDepth = trackDepth => ({
  * TODO Is it still useful?
  */
 export const getUTCFullDayTrackRequest = (trackRequest: TrackRequest): TrackRequest => {
-  if (!trackRequest?.afterDateTime && !trackRequest?.beforeDateTime) {
+  if (!trackRequest.afterDateTime && !trackRequest.beforeDateTime) {
     return getTrackRequestFromTrackDepth(trackRequest?.trackDepth)
   }
 
-  return getTrackRequestFromDates(trackRequest?.afterDateTime, trackRequest?.beforeDateTime)
+  return getTrackRequestFromDates(trackRequest.afterDateTime, trackRequest.beforeDateTime)
 }
 /**
  * Get the `TrackRequest` object from the custom track depth with dates range

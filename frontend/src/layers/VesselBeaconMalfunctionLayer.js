@@ -7,7 +7,7 @@ import { Vector } from 'ol/layer'
 import { Layer } from '../domain/entities/layers/constants'
 
 import { getVesselBeaconMalfunctionStyle } from './styles/vessel.style'
-import { getVesselId, vesselIsShowed } from '../domain/entities/vessel/vessel'
+import { getVesselCompositeIdentifier, vesselIsShowed } from '../domain/entities/vessel/vessel'
 
 const VesselBeaconMalfunctionLayer = ({ map }) => {
   const {
@@ -81,7 +81,7 @@ const VesselBeaconMalfunctionLayer = ({ map }) => {
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layer.VESSEL_BEACON_MALFUNCTION.code}:${getVesselId(vessel.vesselProperties)}`)
+        feature.setId(`${Layer.VESSEL_BEACON_MALFUNCTION.code}:${getVesselCompositeIdentifier(vessel.vesselProperties)}`)
         _features.push(feature)
 
         return _features

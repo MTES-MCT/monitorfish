@@ -5,13 +5,19 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
 import { reportingIsAnInfractionSuspicion, ReportingTypeCharacteristics } from '../entities/reporting'
 import {
   atLeastOneVesselSelected,
-  getOnlyVesselIdentityPropertiesFromSelectedVessel,
+  getOnlyVesselIdentityProperties,
   Vessel,
   VesselSidebarTab
 } from '../entities/vessel/vessel'
 import { ReportingType } from '../types/reporting'
 
-import type { FishingActivityShowedOnMap, TrackRequest, VesselIdentity, VesselPosition } from '../entities/vessel/types'
+import type {
+  FishingActivityShowedOnMap,
+  TrackRequest,
+  VesselEnhancedLastPositionWebGLObject,
+  VesselIdentity,
+  VesselPosition
+} from '../entities/vessel/types'
 
 const NOT_FOUND = -1
 
@@ -59,7 +65,7 @@ export type VesselState = {
     hasAlert?: boolean
     hasInfractionSuspicion: boolean
     reportings: ReportingType[]
-    vesselId?: string | undefined
+    vesselInternalId?: number | undefined
   } | null
   selectedVesselIdentity: VesselIdentity | null
   selectedVesselPositions: VesselPosition[] | null
@@ -70,7 +76,7 @@ export type VesselState = {
   vesselSidebarIsOpen: boolean
   vesselSidebarTab: VesselSidebarTab
   vesselTrackExtent: any | null
-  vessels: any[]
+  vessels: VesselEnhancedLastPositionWebGLObject[]
   vesselsEstimatedPositions: any[]
   vesselsTracksShowed: any
 }
@@ -109,11 +115,11 @@ const vesselSlice = createSlice({
       state,
       action: PayloadAction<{
         reportingType: ReportingType
-        vesselId: string
+        vesselFeatureId: string
       }>
     ) {
       state.vessels = state.vessels.map(vessel => {
-        if (vessel.vesselId !== action.payload.vesselId) {
+        if (vessel.vesselFeatureId !== action.payload.vesselFeatureId) {
           return vessel
         }
 
@@ -131,7 +137,7 @@ const vesselSlice = createSlice({
         }
       })
 
-      if (Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselId) {
+      if (Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselFeatureId) {
         let reportings: ReportingType[] = []
 
         if (state.selectedVessel?.reportings.length) {
@@ -157,12 +163,12 @@ const vesselSlice = createSlice({
      *
      * @param {Object} state
      * @param {{payload: {
-     *   vesselId: string,
+     *   vesselMergedIdentifiers: string,
      *   showedVesselTrack: ShowedVesselTrack
      *  }}} action - the vessel positions to show on map
      */
     addVesselTrackShowed(state, action) {
-      state.vesselsTracksShowed[action.payload.vesselId] = action.payload.showedVesselTrack
+      state.vesselsTracksShowed[action.payload.vesselMergedIdentifiers] = action.payload.showedVesselTrack
     },
 
     closeVesselSidebar(state) {
@@ -208,11 +214,11 @@ const vesselSlice = createSlice({
       action: PayloadAction<{
         alertType: string
         isValidated: boolean
-        vesselId: string
+        vesselFeatureId: string
       }>
     ) {
       state.vessels = state.vessels.map(vessel => {
-        if (vessel.vesselId !== action.payload.vesselId) {
+        if (vessel.vesselFeatureId !== action.payload.vesselFeatureId) {
           return vessel
         }
         const filteredAlerts = vessel.vesselProperties.alerts?.filter(alert => alert !== action.payload.alertType)
@@ -271,11 +277,11 @@ const vesselSlice = createSlice({
       state,
       action: PayloadAction<{
         reportingType: string
-        vesselId: string
+        vesselFeatureId: string
       }>
     ) {
       state.vessels = state.vessels.map(vessel => {
-        if (vessel.vesselId !== action.payload.vesselId) {
+        if (vessel.vesselFeatureId !== action.payload.vesselFeatureId) {
           return vessel
         }
 
@@ -296,7 +302,10 @@ const vesselSlice = createSlice({
         }
       })
 
-      if (state.selectedVessel && Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselId) {
+      if (
+        state.selectedVessel &&
+        Vessel.getVesselFeatureId(state.selectedVesselIdentity) === action.payload.vesselFeatureId
+      ) {
         const vesselReportingWithoutFirstFoundReportingType = state.selectedVessel.reportings?.reduce(
           filterFirstFoundReportingType(action.payload.reportingType),
           []
@@ -320,18 +329,20 @@ const vesselSlice = createSlice({
      *   payload: {
      *     id: number
      *     type: string
-     *     vesselId: string
+     *     vesselFeatureId: string
      *   }[]
      * }} action - the reportings to remove
      */
     removeVesselReportings(state, action) {
-      const vesselsIds = action.payload.map(reporting => reporting.vesselId)
+      const vesselsFeatureIds = action.payload.map(reporting => reporting.vesselFeatureId)
       state.vessels = state.vessels.map(vessel => {
-        if (!vesselsIds.find(vesselId => vessel.vesselId === vesselId)) {
+        if (!vesselsFeatureIds.find(vesselFeatureId => vessel.vesselFeatureId === vesselFeatureId)) {
           return vessel
         }
 
-        const vesselReportingsToRemove = action.payload.filter(reporting => vessel.vesselId === reporting.vesselId)
+        const vesselReportingsToRemove = action.payload.filter(
+          reporting => vessel.vesselFeatureId === reporting.vesselFeatureId
+        )
         const vesselReportingWithoutFirstFoundReportingTypes = filterFirstFoundReportingTypes(
           vessel.vesselProperties.reportings,
           vesselReportingsToRemove
@@ -353,9 +364,14 @@ const vesselSlice = createSlice({
         return
       }
 
-      const selectedVesselId = Vessel.getVesselFeatureId(state.selectedVesselIdentity)
-      if (state.selectedVessel && vesselsIds.find(vesselId => selectedVesselId === vesselId)) {
-        const vesselReportingsToRemove = action.payload.filter(reporting => selectedVesselId === reporting.vesselId)
+      const selectedVesselFeatureId = Vessel.getVesselFeatureId(state.selectedVesselIdentity)
+      if (
+        state.selectedVessel &&
+        vesselsFeatureIds.find(vesselFeatureId => selectedVesselFeatureId === vesselFeatureId)
+      ) {
+        const vesselReportingsToRemove = action.payload.filter(
+          reporting => selectedVesselFeatureId === reporting.vesselFeatureId
+        )
         const vesselReportingWithoutFirstFoundReportingTypes = filterFirstFoundReportingTypes(
           state.selectedVessel.reportings || [],
           vesselReportingsToRemove
@@ -421,7 +437,7 @@ const vesselSlice = createSlice({
     setFilteredVesselsFeatures(state, action) {
       const filteredVesselsFeaturesUids = action.payload
       state.vessels = state.vessels.map(vessel => {
-        if (filteredVesselsFeaturesUids.indexOf(vessel.vesselId) !== NOT_FOUND) {
+        if (filteredVesselsFeaturesUids.indexOf(vessel.vesselFeatureId) !== NOT_FOUND) {
           return {
             ...vessel,
             isFiltered: 1
@@ -435,10 +451,6 @@ const vesselSlice = createSlice({
       })
     },
 
-    setFocusOnVesselSearch(state, action) {
-      state.isFocusedOnVesselSearch = action.payload
-    },
-
     /**
      * Show or hide other vessels (than the selected vessel)
      * @function setHideNonSelectedVessels
@@ -450,6 +462,10 @@ const vesselSlice = createSlice({
       state.hideNonSelectedVessels = action.payload
     },
 
+    setIsFocusedOnVesselSearch(state, action) {
+      state.isFocusedOnVesselSearch = action.payload
+    },
+
     /**
      * Set  previewed vessel features
      * @function setPreviewFilteredVesselsFeatures
@@ -459,7 +475,7 @@ const vesselSlice = createSlice({
     setPreviewFilteredVesselsFeatures(state, action) {
       const previewFilteredVesselsFeaturesUids = action.payload
       state.vessels = state.vessels.map(vessel => {
-        if (previewFilteredVesselsFeaturesUids.indexOf(vessel.vesselId) !== NOT_FOUND) {
+        if (previewFilteredVesselsFeaturesUids.indexOf(vessel.vesselFeatureId) !== NOT_FOUND) {
           return {
             ...vessel,
             filterPreview: 1
@@ -486,7 +502,7 @@ const vesselSlice = createSlice({
       state.loadingVessel = null
       state.loadingPositions = null
       state.selectedVessel = action.payload.vessel
-      state.selectedVesselIdentity = getOnlyVesselIdentityPropertiesFromSelectedVessel(action.payload.vessel)
+      state.selectedVesselIdentity = getOnlyVesselIdentityProperties(action.payload.vessel)
       state.selectedVesselPositions = action.payload.positions
     },
 
@@ -522,7 +538,7 @@ const vesselSlice = createSlice({
         isFiltered: 0,
         lastPositionSentAt: new Date(vessel.dateTime).getTime(),
         speed: vessel.speed,
-        vesselId: Vessel.getVesselFeatureId(vessel),
+        vesselFeatureId: Vessel.getVesselFeatureId(vessel),
         vesselProperties: {
           ...vessel,
           flagState: vessel.flagState?.toLowerCase(),
@@ -598,15 +614,15 @@ const vesselSlice = createSlice({
      * @function updateVesselTrackAsShowed
      * @param {Object} state
      * @param {{payload: {
-     *   vesselId: string,
+     *   vesselCompositeIdentifier: string,
      *   extent: number[]
      * }}} action - the vessel id and extent
      */
     updateVesselTrackAsShowedWithExtend(state, action) {
-      const { extent, vesselId } = action.payload
-      if (state.vesselsTracksShowed[vesselId]) {
-        state.vesselsTracksShowed[vesselId].toShow = false
-        state.vesselsTracksShowed[vesselId].extent = extent
+      const { extent, vesselCompositeIdentifier } = action.payload
+      if (state.vesselsTracksShowed[vesselCompositeIdentifier]) {
+        state.vesselsTracksShowed[vesselCompositeIdentifier].toShow = false
+        state.vesselsTracksShowed[vesselCompositeIdentifier].extent = extent
       }
     },
 
@@ -627,7 +643,7 @@ const vesselSlice = createSlice({
      * @function updateVesselTrackAsZoomed
      *
      * @param {Object} state
-     * @param {{payload: string}} action - the vessel id
+     * @param {{payload: string}} action - the vessel Composite Identifier
      */
     updateVesselTrackAsZoomed(state, action) {
       if (state.vesselsTracksShowed[action.payload]) {
@@ -656,8 +672,8 @@ export const {
   resetVesselTrackExtent,
   setAllVesselsAsUnfiltered,
   setFilteredVesselsFeatures,
-  setFocusOnVesselSearch,
   setHideNonSelectedVessels,
+  setIsFocusedOnVesselSearch,
   setPreviewFilteredVesselsFeatures,
   setSelectedVessel,
   setSelectedVesselCustomTrackRequest,

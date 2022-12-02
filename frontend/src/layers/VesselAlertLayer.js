@@ -7,7 +7,7 @@ import { Vector } from 'ol/layer'
 import { Layer } from '../domain/entities/layers/constants'
 
 import { getVesselAlertStyle } from './styles/vessel.style'
-import { getVesselId, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel/vessel'
+import { getVesselCompositeIdentifier, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel/vessel'
 
 const VesselAlertLayer = ({ map }) => {
   const {
@@ -86,7 +86,7 @@ const VesselAlertLayer = ({ map }) => {
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layer.VESSEL_ALERT.code}:${getVesselId(vessel.vesselProperties)}`)
+        feature.setId(`${Layer.VESSEL_ALERT.code}:${getVesselCompositeIdentifier(vessel.vesselProperties)}`)
         features.push(feature)
 
         return features

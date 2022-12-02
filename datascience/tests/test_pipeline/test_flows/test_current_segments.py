@@ -3,6 +3,7 @@ import datetime
 import geopandas as gpd
 import numpy as np
 import pandas as pd
+import pytest
 from shapely.geometry import Polygon
 
 from src.pipeline.flows.current_segments import (
@@ -21,10 +22,69 @@ from tests.mocks import mock_check_flow_not_running
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 
+@pytest.fixture
+def current_segments() -> pd.DataFrame:
+
+    now = datetime.datetime.utcnow()
+    return pd.DataFrame(
+        {
+            "cfr": ["ABC000306959", "ABC000542519"],
+            "last_logbook_message_datetime_utc": [
+                now - datetime.timedelta(days=1, hours=6),
+                now - datetime.timedelta(weeks=1, days=3),
+            ],
+            "departure_datetime_utc": [
+                datetime.datetime(2018, 2, 27, 1, 5),
+                now - datetime.timedelta(weeks=1, days=5),
+            ],
+            "trip_number": ["20210001", "20210002"],
+            "gear_onboard": [
+                [{"gear": "OTM", "mesh": 80.0}],
+                [{"gear": "OTB", "mesh": 80.0}],
+            ],
+            "species_onboard": [
+                [
+                    {
+                        "gear": "OTM",
+                        "weight": 713.0,
+                        "faoZone": "27.8.a",
+                        "species": "HKE",
+                    }
+                ],
+                [
+                    {
+                        "gear": "OTB",
+                        "weight": 157.0,
+                        "faoZone": "27.8.c",
+                        "species": "SOL",
+                    },
+                    {
+                        "gear": "OTB",
+                        "weight": 2426.0,
+                        "faoZone": "27.8.c",
+                        "species": "HKE",
+                    },
+                ],
+            ],
+            "segments": [["SWW04"], ["SWW01/02/03"]],
+            "total_weight_onboard": [713.0, 2583.0],
+            "probable_segments": [None, None],
+            "impact_risk_factor": [2.1, 3.0],
+            "control_priority_level": [1.0, 1.0],
+            "segment_highest_impact": ["SWW04", "SWW01/02/03"],
+            "segment_highest_priority": [None, None],
+            "vessel_id": [1, 2],
+            "external_immatriculation": ["RV348407", "RO237719"],
+            "ircs": ["LLUK", "FQ7058"],
+        }
+    )
+
+
 def test_extract_catches(reset_test_data):
     catches = extract_catches.run()
     assert len(catches) == 3
     assert set(catches.cfr) == {"ABC000542519", "ABC000306959"}
+    assert set(catches.ircs) == {"LLUK", "FQ7058"}
     assert set(catches.loc[catches.cfr == "ABC000542519", "trip_number"]) == {
         "20210002"
     }
@@ -247,6 +307,8 @@ def test_join():
         columns=pd.Index(
             [
                 "cfr",
+                "ircs",
+                "external_immatriculation",
                 "last_logbook_message_datetime_utc",
                 "departure_datetime_utc",
                 "trip_number",
@@ -260,6 +322,8 @@ def test_join():
         data=[
             [
                 "Vessel_A",
+                "AA",
+                "AAA",
                 datetime.datetime(2021, 2, 3, 13, 58, 21),
                 datetime.datetime(2021, 2, 3, 13, 56, 21),
                 20210003.0,
@@ -271,6 +335,8 @@ def test_join():
             ],
             [
                 "Vessel_A",
+                "AA",
+                "AAA",
                 datetime.datetime(2021, 2, 3, 13, 58, 21),
                 datetime.datetime(2021, 2, 3, 13, 56, 21),
                 20210003.0,
@@ -282,6 +348,8 @@ def test_join():
             ],
             [
                 "Vessel_B",
+                None,
+                "BBB",
                 datetime.datetime(2020, 12, 3, 15, 58, 21),
                 datetime.datetime(2020, 12, 3, 15, 56, 21),
                 20200053.0,
@@ -326,6 +394,8 @@ def test_join():
     expected_res = pd.DataFrame(
         {
             "cfr": ["Vessel_A", "Vessel_B"],
+            "ircs": ["AA", None],
+            "external_immatriculation": ["AAA", "BBB"],
             "last_logbook_message_datetime_utc": [
                 datetime.datetime(2021, 2, 3, 13, 58, 21),
                 datetime.datetime(2020, 12, 3, 15, 58, 21),
@@ -367,11 +437,30 @@ def test_join():
     pd.testing.assert_frame_equal(res, expected_res)
 
 
-def test_test_current_segments_flow(reset_test_data):
+def test_test_current_segments_flow(reset_test_data, current_segments):
     state = flow.run()
     assert state.is_successful()
 
-    current_segments = read_query(
-        "monitorfish_remote", "SELECT * FROM current_segments"
+    computed_current_segments = read_query(
+        "monitorfish_remote", "SELECT * FROM current_segments ORDER BY cfr"
     )
-    assert len(current_segments) == 2
+    datetime_columns = [
+        "last_logbook_message_datetime_utc",
+        "departure_datetime_utc",
+    ]
+    pd.testing.assert_frame_equal(
+        current_segments.drop(columns=datetime_columns),
+        computed_current_segments.drop(columns=datetime_columns),
+    )
+
+    assert (
+        (
+            (
+                current_segments[datetime_columns]
+                - computed_current_segments[datetime_columns]
+            )
+            < datetime.timedelta(seconds=10)
+        )
+        .all()
+        .all()
+    )

@@ -10,6 +10,8 @@ WITH deleted_or_corrected_messages AS (
 ordered_deps AS (
     SELECT
         cfr,
+        ircs,
+        external_identification,
         trip_number,
         value->'gearOnboard' AS gear_onboard,
         (value->>'departureDatetimeUtc')::timestamptz AS departure_datetime_utc,
@@ -24,6 +26,8 @@ ordered_deps AS (
 last_deps AS (
     SELECT 
         cfr,
+        ircs,
+        external_identification,
         departure_datetime_utc,
         trip_number,
         gear_onboard
@@ -74,6 +78,8 @@ summed_catches AS (
 
 SELECT
     COALESCE(last_logbook_reports.cfr, last_deps.cfr) AS cfr,
+    last_deps.ircs,
+    last_deps.external_identification AS external_immatriculation,
     last_logbook_reports.last_logbook_message_datetime_utc,
     departure_datetime_utc,
     trip_number,

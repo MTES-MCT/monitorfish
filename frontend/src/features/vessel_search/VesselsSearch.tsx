@@ -8,7 +8,7 @@ import { expandRightMenu } from '../../domain/shared_slices/Global'
 import { setIsFocusedOnVesselSearch } from '../../domain/shared_slices/Vessel'
 import { getVesselVoyage } from '../../domain/use_cases/vessel/getVesselVoyage'
 import { searchVessels } from '../../domain/use_cases/vessel/searchVessels'
-import showVessel from '../../domain/use_cases/vessel/showVessel'
+import { showVessel } from '../../domain/use_cases/vessel/showVessel'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
@@ -17,7 +17,7 @@ import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { ReactComponent as SearchIconSVG } from '../icons/Loupe.svg'
 import { VESSEL_SEARCH_OPTIONS } from './constants'
-import { addVesselIdentifierFromIdentity, removeDuplicatedFoundVessels } from './utils'
+import { addVesselIdentifierToVesselIdentity, removeDuplicatedFoundVessels } from './utils'
 import { VesselName } from './VesselName'
 import { VesselSearchResult } from './VesselSearchResult'
 
@@ -89,7 +89,7 @@ export function VesselsSearch() {
       .then((nextFoundVesselsFromAPI: VesselIdentity[]) =>
         removeDuplicatedFoundVessels(nextFoundVesselsFromAPI, vesselsFromMap)
       )
-      .map(identity => addVesselIdentifierFromIdentity(identity))
+      .map(identity => addVesselIdentifierToVesselIdentity(identity))
   }, [dispatch, searchQuery, fuse])
 
   return (

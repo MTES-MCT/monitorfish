@@ -1,7 +1,7 @@
 import { getDate } from '../../../utils'
 import { SilencedAlertPeriod } from './constants'
 
-import type { SilencedAlertPeriodRequest } from '../../types/alert'
+import type { SilencedAlertPeriodRequest } from './types'
 
 export const getSilencedAlertPeriodText = (silencedAlertPeriodRequest: SilencedAlertPeriodRequest): string => {
   switch (silencedAlertPeriodRequest.silencedAlertPeriod) {

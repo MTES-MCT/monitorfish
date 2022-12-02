@@ -10,7 +10,7 @@ import { ShowIcon } from '../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../commonStyles/icons/HideIcon.style'
 import { CloseIcon } from '../commonStyles/icons/CloseIcon.style'
 import { PaperDarkIcon, PaperIcon } from '../commonStyles/icons/REGPaperIcon.style'
-import showVessel from '../../domain/use_cases/vessel/showVessel'
+import { showVessel } from '../../domain/use_cases/vessel/showVessel'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
 import { getVesselVoyage } from '../../domain/use_cases/vessel/getVesselVoyage'
 

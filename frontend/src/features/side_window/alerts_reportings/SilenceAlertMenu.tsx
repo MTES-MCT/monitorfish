@@ -10,7 +10,7 @@ import { useForceUpdate } from '../../../hooks/useForceUpdate'
 import { theme } from '../../../ui/theme'
 import { DATE_RANGE_PICKER_LOCALE } from '../../vessel_sidebar/actions/TrackRequest/DateRange'
 
-import type { SilencedAlertPeriodRequest } from '../../../domain/types/alert'
+import type { SilencedAlertPeriodRequest } from '../../../domain/entities/alerts/types'
 import type { CSSProperties, MutableRefObject } from 'react'
 import type { Promisable } from 'type-fest'
 

@@ -9,9 +9,9 @@ import {
   getImpactRiskFactorText,
   getProbabilityRiskFactorText,
   getRiskFactorColor
-} from '../../../domain/entities/riskFactor'
+} from '../../../domain/entities/vessel/riskFactor'
 import { batch, useDispatch } from 'react-redux'
-import showVessel from '../../../domain/use_cases/vessel/showVessel'
+import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
 import { getVesselCompositeIdentifier } from '../../../domain/entities/vessel/vessel'
 

@@ -1,5 +1,5 @@
 import showVesselTrack from './showVesselTrack'
-import showVessel from './showVessel'
+import { showVessel } from './showVessel'
 
 const updateVesselTracks = () => (dispatch, getState) => {
   const {

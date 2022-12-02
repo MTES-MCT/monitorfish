@@ -1,22 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { Controller, ControlResume } from '../types/control'
+import type { Controller, ControlSummary } from '../types/control'
 
 export type ControlState = {
-  // TODO Understand & check that.
-  controlResumeAndControls: Partial<ControlResume>
   controllers: Controller[]
   controlsFromDate: Date
+  // TODO Understand & check that.
+  currentControlSummary: Partial<ControlSummary>
   loadingControls: boolean
-  nextControlResumeAndControls: ControlResume | null
+  nextControlSummary: ControlSummary | null
 }
 const INITIAL_STATE: ControlState = {
   controllers: [],
-  // TODO Understand & check that.
-  controlResumeAndControls: {},
+
   controlsFromDate: new Date(new Date().getUTCFullYear() - 5, 0, 1),
+  // TODO Understand & check that.
+  currentControlSummary: {},
   loadingControls: false,
-  nextControlResumeAndControls: null
+  nextControlSummary: null
 }
 
 const controlSlice = createSlice({
@@ -33,8 +34,8 @@ const controlSlice = createSlice({
       state.loadingControls = true
     },
 
-    resetNextControlResumeAndControls(state) {
-      state.nextControlResumeAndControls = null
+    resetNextControlSummary(state) {
+      state.nextControlSummary = null
     },
 
     /**
@@ -61,29 +62,29 @@ const controlSlice = createSlice({
 
     /**
      * Set selected vessel control resume and control
-     * @function setControlResumeAndControls
+     * @function setControlSummary
      * @memberOf ControlReducer
      * @param {Object=} state
-     * @param {{payload: ControlResume}} action - the control resume
+     * @param {{payload: ControlSummary}} action - the control resume
      */
-    setControlResumeAndControls(state, action) {
-      state.controlResumeAndControls = action.payload
+    setControlSummary(state, action) {
+      state.currentControlSummary = action.payload
       state.loadingControls = false
     },
 
-    setNextControlResumeAndControls(state, action) {
-      state.nextControlResumeAndControls = action.payload
+    setNextControlSummary(state, action) {
+      state.nextControlSummary = action.payload
     }
   }
 })
 
 export const {
   loadControls,
-  resetNextControlResumeAndControls,
+  resetNextControlSummary,
   setControlFromDate,
   setControllers,
-  setControlResumeAndControls,
-  setNextControlResumeAndControls
+  setControlSummary,
+  setNextControlSummary
 } = controlSlice.actions
 
 export const controlReducer = controlSlice.reducer

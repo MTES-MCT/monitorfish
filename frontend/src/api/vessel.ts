@@ -10,7 +10,7 @@ import type {
   VesselLastPosition,
   VesselPosition
 } from '../domain/entities/vessel/types'
-import type { ControlResume } from '../domain/types/control'
+import type { ControlSummary } from '../domain/types/control'
 import type { VesselVoyage } from '../domain/types/fishingActivities'
 import type { CurrentAndArchivedReportingsOfSelectedVessel } from '../domain/types/reporting'
 import type { NavigateTo } from '../domain/use_cases/vessel/getVesselVoyage'
@@ -152,7 +152,7 @@ async function getVesselControlsFromAPI(vesselInternalId: number, fromDate: Date
   try {
     return await ky
       .get(`/bff/v1/vessels/${vesselInternalId}/controls?afterDateTime=${fromDate.toISOString()}`)
-      .json<ControlResume>()
+      .json<ControlSummary>()
   } catch (err) {
     throw new ApiError(CONTROLS_ERROR_MESSAGE, err)
   }

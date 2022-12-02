@@ -18,7 +18,7 @@ import type {
   BeaconMalfunctionComment,
   BeaconMalfunctionFollowUpItem,
   BeaconMalfunctionStatusValue
-} from '../../../domain/types/beaconMalfunction'
+} from '../../../domain/entities/beaconMalfunction/types'
 
 export const BeaconMalfunctionsSubMenu = {
   HISTORIC: {

@@ -10,7 +10,7 @@ import type {
   PendingAlert,
   SilencedAlert,
   SilencedAlertPeriodRequest
-} from '../domain/types/alert'
+} from '../domain/entities/alerts/types'
 
 export const ALERTS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les alertes opérationelles"
 export const VALIDATE_ALERT_ERROR_MESSAGE = "Nous n'avons pas pu valider l'alerte opérationelle"

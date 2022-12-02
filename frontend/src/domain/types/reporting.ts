@@ -1,6 +1,6 @@
 import type { SeaFront } from '../entities/alerts/constants'
+import type { PendingAlertValue } from '../entities/alerts/types'
 import type { VesselIdentifier } from '../entities/vessel/types'
-import type { PendingAlertValue } from './alert'
 import type { Infraction } from './control'
 
 export enum ReportingType {

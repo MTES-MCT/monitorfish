@@ -10,7 +10,7 @@ import {
   setVesselLabel,
   setVesselLabelsShowedOnMap
 } from '../../../../domain/shared_slices/Map'
-import VesselLabelSelection from './VesselLabelSelection'
+import { VesselLabelSelection } from './VesselLabelSelection'
 import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
 import { MapToolType } from '../../../../domain/entities/map'
 import { MapToolBox } from '../MapToolBox'

@@ -6,7 +6,7 @@ import type {
   BeaconMalfunction,
   BeaconMalfunctionResumeAndDetails,
   VesselBeaconMalfunctionsResumeAndHistory
-} from '../types/beaconMalfunction'
+} from '../entities/beaconMalfunction/types'
 import type { ValueOf } from 'type-fest'
 
 export type BeaconMalfunctionState = {

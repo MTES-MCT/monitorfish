@@ -8,7 +8,7 @@ import * as timeago from 'timeago.js'
 import { COLORS } from '../../../constants/constants'
 import { reactivateSilencedAlert } from '../../../domain/use_cases/alert/reactivateSilencedAlert'
 import { getVesselVoyage } from '../../../domain/use_cases/vessel/getVesselVoyage'
-import showVessel from '../../../domain/use_cases/vessel/showVessel'
+import { showVessel } from '../../../domain/use_cases/vessel/showVessel'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { getDateTime } from '../../../utils'
@@ -18,7 +18,7 @@ import { sortArrayByColumn, SortType } from '../../vessel_list/tableSort'
 import { PENDING_ALERTS_SEARCH_OPTIONS } from './constants'
 import { getAlertNameFromType } from './utils'
 
-import type { LEGACY_SilencedAlert } from '../../../domain/types/alert'
+import type { LEGACY_SilencedAlert } from '../../../domain/entities/alerts/types'
 import type { CSSProperties } from 'react'
 
 export type SilencedAlertsListProps = {

@@ -12,6 +12,7 @@ import {
 import { ReportingType } from '../types/reporting'
 
 import type {
+  AugmentedSelectedVessel,
   FishingActivityShowedOnMap,
   TrackRequest,
   VesselEnhancedLastPositionWebGLObject,
@@ -58,15 +59,7 @@ export type VesselState = {
   isFocusedOnVesselSearch: boolean
   loadingPositions: boolean | null
   loadingVessel: boolean | null
-  // TODO Fix this type which doesn't match many actions props.
-  // selectedVessel: SelectedVessel | null
-  selectedVessel: {
-    alerts?: string[]
-    hasAlert?: boolean
-    hasInfractionSuspicion: boolean
-    reportings: ReportingType[]
-    vesselInternalId?: number | undefined
-  } | null
+  selectedVessel: AugmentedSelectedVessel | null
   selectedVesselIdentity: VesselIdentity | null
   selectedVesselPositions: VesselPosition[] | null
   selectedVesselTrackRequest: TrackRequest | null
@@ -147,7 +140,7 @@ const vesselSlice = createSlice({
         const nextVesselReportings = reportings.concat(action.payload.reportingType)
 
         state.selectedVessel = {
-          ...state.selectedVessel,
+          ...(state.selectedVessel as AugmentedSelectedVessel),
           hasInfractionSuspicion: nextVesselReportings.some(reportingIsAnInfractionSuspicion),
           reportings: nextVesselReportings
         }
@@ -251,7 +244,7 @@ const vesselSlice = createSlice({
       })
 
       if (state.selectedVessel) {
-        const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType)
+        const filteredAlerts = state.selectedVessel.alerts?.filter(alert => alert !== action.payload.alertType) || []
 
         let reportingsWithAlert: ReportingType[] = []
         if (state.selectedVessel.reportings?.length) {
@@ -259,7 +252,7 @@ const vesselSlice = createSlice({
         }
         reportingsWithAlert = reportingsWithAlert.concat([ReportingType.ALERT])
         state.selectedVessel = {
-          ...state.selectedVessel,
+          ...(state.selectedVessel as AugmentedSelectedVessel),
           alerts: filteredAlerts,
           hasAlert: filteredAlerts && !!filteredAlerts.length,
           hasInfractionSuspicion: reportingsWithAlert.some(reportingType =>
@@ -378,7 +371,7 @@ const vesselSlice = createSlice({
         )
 
         state.selectedVessel = {
-          ...state.selectedVessel,
+          ...(state.selectedVessel as AugmentedSelectedVessel),
           hasInfractionSuspicion: vesselReportingWithoutFirstFoundReportingTypes.some(reportingType =>
             reportingIsAnInfractionSuspicion(reportingType)
           ),

@@ -10,7 +10,7 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import { VesselStatusSelect } from './VesselStatusSelect'
 
-import type { BeaconMalfunction } from '../../../domain/types/beaconMalfunction'
+import type { BeaconMalfunction } from '../../../domain/entities/beaconMalfunction/types'
 
 export type BeaconMalfunctionCardProps = {
   activeBeaconId: number | undefined

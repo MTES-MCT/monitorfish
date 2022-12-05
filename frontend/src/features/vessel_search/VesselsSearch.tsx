@@ -7,7 +7,7 @@ import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../../domain/
 import { expandRightMenu } from '../../domain/shared_slices/Global'
 import { setIsFocusedOnVesselSearch } from '../../domain/shared_slices/Vessel'
 import { getVesselVoyage } from '../../domain/use_cases/vessel/getVesselVoyage'
-import { searchVessels } from '../../domain/use_cases/vessel/searchVessels'
+import { searchVessels as searchVesselsAction } from '../../domain/use_cases/vessel/searchVessels'
 import { showVessel } from '../../domain/use_cases/vessel/showVessel'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
@@ -33,6 +33,7 @@ export function VesselsSearch() {
 
   const wrapperRef = useRef(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [foundVessels, setFoundVessels] = useState<VesselIdentity[]>([])
   const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
   const escapeFromKeyboard = useEscapeFromKeyboard()
   const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isFocusedOnVesselSearch)
@@ -44,16 +45,17 @@ export function VesselsSearch() {
       dispatch(setIsFocusedOnVesselSearch(isFocused))
 
       if (!isFocused) {
+        console.log(isFocused, 'yup')
         setShowLastSearchedVessels(false)
 
         return
       }
 
-      if (isFocused && !searchQuery?.length) {
+      if (isFocused) {
         setShowLastSearchedVessels(true)
       }
     },
-    [dispatch, searchQuery]
+    [dispatch]
   )
 
   useEffect(() => {
@@ -63,33 +65,42 @@ export function VesselsSearch() {
   }, [clickedOutsideComponent, escapeFromKeyboard, focusOnInputAndShowLastSearchedVessels])
 
   const selectVessel = useCallback(
-    vessel => {
-      if (!vesselsAreEquals(vessel, selectedVesselIdentity)) {
-        dispatch(showVessel(vessel, true, false) as any)
-        dispatch(getVesselVoyage(vessel, undefined, false) as any)
+    vesselIdentity => {
+      if (!vesselsAreEquals(vesselIdentity, selectedVesselIdentity)) {
+        dispatch(showVessel(vesselIdentity, true, false) as any)
+        dispatch(getVesselVoyage(vesselIdentity, undefined, false) as any)
       }
 
       focusOnInputAndShowLastSearchedVessels(false)
+      setFoundVessels([])
     },
     [dispatch, focusOnInputAndShowLastSearchedVessels, selectedVesselIdentity]
   )
 
   const fuse = useMemo(() => new Fuse(vessels, VESSEL_SEARCH_OPTIONS), [vessels])
 
-  const foundVessels = useMemo(() => {
+  useEffect(() => {
     if (!searchQuery || searchQuery.length <= 1) {
-      return []
+      setFoundVessels([])
     }
 
-    const vesselsFromMap = fuse
-      .search(searchQuery)
-      .map(result => getOnlyVesselIdentityProperties(result.item.vesselProperties))
+    async function searchVessels(_searchQuery) {
+      const vesselsFromMap = fuse
+        .search(_searchQuery)
+        .map(result => getOnlyVesselIdentityProperties(result.item.vesselProperties))
 
-    return dispatch(searchVessels(searchQuery.toUpperCase()) as any)
-      .then((nextFoundVesselsFromAPI: VesselIdentity[]) =>
-        removeDuplicatedFoundVessels(nextFoundVesselsFromAPI, vesselsFromMap)
+      const nextFoundVesselsFromAPI: VesselIdentity[] = await dispatch(
+        searchVesselsAction(_searchQuery.toUpperCase()) as any
       )
-      .map(identity => addVesselIdentifierToVesselIdentity(identity))
+
+      const nextFoundVessels = removeDuplicatedFoundVessels(nextFoundVesselsFromAPI, vesselsFromMap).map(identity =>
+        addVesselIdentifierToVesselIdentity(identity)
+      )
+
+      setFoundVessels(nextFoundVessels)
+    }
+
+    searchVessels(searchQuery)
   }, [dispatch, searchQuery, fuse])
 
   return (

@@ -40,7 +40,11 @@ data class VesselDataOutput(
     val underCharter: Boolean? = null
 ) {
     companion object {
-        fun fromVesselAndRiskFactor(vessel: Vessel, vesselRiskFactor: VesselRiskFactor): VesselDataOutput {
+        fun fromVesselAndRiskFactor(vessel: Vessel?, vesselRiskFactor: VesselRiskFactor): VesselDataOutput? {
+            if (vessel == null) {
+                return null
+            }
+
             return VesselDataOutput(
                 vesselInternalId = vessel.id,
                 internalReferenceNumber = vessel.internalReferenceNumber,

@@ -3,7 +3,7 @@ import { batch, useDispatch, useSelector } from 'react-redux'
 import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../domain/shared_slices/Map'
 import { showVessel } from '../../domain/use_cases/vessel/showVessel'
 import { Layer } from '../../domain/entities/layers/constants'
-import showVesselTrack from '../../domain/use_cases/vessel/showVesselTrack'
+import { showVesselTrack } from '../../domain/use_cases/vessel/showVesselTrack'
 import { getVesselVoyage } from '../../domain/use_cases/vessel/getVesselVoyage'
 import { updateVesselTrackAsZoomed } from '../../domain/shared_slices/Vessel'
 

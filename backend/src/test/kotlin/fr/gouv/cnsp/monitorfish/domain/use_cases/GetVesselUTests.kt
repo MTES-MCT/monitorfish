@@ -94,8 +94,8 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.vessel.id).isEqualTo(123)
-        assertThat(pair.second.vessel.beaconNumber).isEqualTo("A_BEACON_NUMBER")
+        assertThat(pair.second.vessel?.id).isEqualTo(123)
+        assertThat(pair.second.vessel?.beaconNumber).isEqualTo("A_BEACON_NUMBER")
         assertThat(pair.second.positions.first().dateTime).isEqualTo(now.minusHours(4))
         assertThat(pair.second.positions.last().dateTime).isEqualTo(now.minusHours(1))
         assertThat(pair.second.vesselRiskFactor.impactRiskFactor).isEqualTo(2.3)
@@ -103,12 +103,12 @@ class GetVesselUTests {
     }
 
     @Test
-    fun `execute Should not throw an exception When no Vessel found`() {
+    fun `execute Should not throw an exception When no Vessel found ANd return null`() {
         // Given
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf()
         )
-        given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
+        given(vesselRepository.findVessel(any(), any(), any())).willReturn(null)
         given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor())
 
         // When
@@ -133,7 +133,7 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.vessel.id).isNull()
+        assertThat(pair.second.vessel).isNull()
     }
 
     @Test
@@ -168,6 +168,6 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.vessel.beaconNumber).isNull()
+        assertThat(pair.second.vessel?.beaconNumber).isNull()
     }
 }

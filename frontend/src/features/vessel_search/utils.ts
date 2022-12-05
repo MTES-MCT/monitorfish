@@ -5,7 +5,7 @@ import type { VesselIdentity } from '../../domain/entities/vessel/types'
 export function removeDuplicatedFoundVessels(
   foundVesselsFromAPI: VesselIdentity[],
   foundVesselsOnMap: VesselIdentity[]
-) {
+): VesselIdentity[] {
   const filteredVesselsFromMap = foundVesselsOnMap.filter(vesselFromMap => {
     if (!vesselFromMap.internalReferenceNumber) {
       return false

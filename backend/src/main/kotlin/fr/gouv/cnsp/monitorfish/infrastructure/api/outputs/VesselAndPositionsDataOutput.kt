@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselWithData
 
 data class VesselAndPositionsDataOutput(
     val positions: List<PositionDataOutput>,
-    val vessel: VesselDataOutput
+    val vessel: VesselDataOutput?
 ) {
     companion object {
         fun fromVesselWithData(vesselWithData: VesselWithData): VesselAndPositionsDataOutput {

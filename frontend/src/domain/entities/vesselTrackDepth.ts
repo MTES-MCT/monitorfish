@@ -1,7 +1,7 @@
 import NoDEPFoundError from '../../errors/NoDEPFoundError'
 import NoPositionsFoundError from '../../errors/NoPositionsFoundError'
 
-import type { TrackRequest, TrackRequestPredefined } from './vessel/types'
+import type { TrackRequest, TrackRequestPredefined, VesselPosition } from './vessel/types'
 
 export enum VesselTrackDepth {
   CUSTOM = 'CUSTOM',
@@ -70,31 +70,33 @@ export const getTrackRequestFromDates = (afterDateTime: Date, beforeDateTime: Da
   trackDepth: VesselTrackDepth.CUSTOM
 })
 
-export function getTrackResponseError(positions, trackDepthHasBeenModified, calledFromCron, nextTrackRequest) {
-  if (trackDepthHasBeenModifiedFromAPI(positions, trackDepthHasBeenModified, calledFromCron)) {
-    return new NoDEPFoundError(
+export function throwCustomErrorFromAPIFeedback(
+  positions: VesselPosition[],
+  isTrackDepthModified: boolean,
+  isCalledFromCron: boolean
+) {
+  if (trackDepthHasBeenModifiedFromAPI(positions, isTrackDepthModified, isCalledFromCron)) {
+    throw new NoDEPFoundError(
       "Nous n'avons pas trouvé de dernier DEP pour ce navire, nous affichons " +
         'les positions des dernières 24 heures.'
     )
   }
-  if (noPositionsFoundForVessel(positions, calledFromCron)) {
-    return new NoPositionsFoundError("Nous n'avons trouvé aucune position.")
+  if (noPositionsFoundForVessel(positions, isCalledFromCron)) {
+    throw new NoPositionsFoundError("Nous n'avons trouvé aucune position.")
   }
-  if (noPositionsFoundForEnteredDateTime(positions, nextTrackRequest)) {
-    return new NoPositionsFoundError("Nous n'avons trouvé aucune position pour ces dates.")
+  if (noPositionsFoundForEnteredDateTime(positions)) {
+    throw new NoPositionsFoundError("Nous n'avons trouvé aucune position pour ces dates.")
   }
-
-  return null
 }
 
 function noPositionsFoundForVessel(positions, updateShowedVessel) {
   return !positions?.length && !updateShowedVessel
 }
 
-function noPositionsFoundForEnteredDateTime(positions, trackRequest) {
-  return !positions?.length && trackRequest
+function noPositionsFoundForEnteredDateTime(positions) {
+  return !positions?.length
 }
 
-function trackDepthHasBeenModifiedFromAPI(positions, trackDepthHasBeenModified, updateShowedVessel) {
-  return positions?.length && trackDepthHasBeenModified && !updateShowedVessel
+function trackDepthHasBeenModifiedFromAPI(positions, isTrackDepthModified, updateShowedVessel) {
+  return positions?.length && isTrackDepthModified && !updateShowedVessel
 }

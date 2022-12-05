@@ -14,6 +14,7 @@ import { ReportingType } from '../types/reporting'
 import type {
   AugmentedSelectedVessel,
   FishingActivityShowedOnMap,
+  SelectedVessel,
   TrackRequest,
   VesselEnhancedLastPositionWebGLObject,
   VesselIdentity,
@@ -156,12 +157,12 @@ const vesselSlice = createSlice({
      *
      * @param {Object} state
      * @param {{payload: {
-     *   vesselMergedIdentifiers: string,
+     *   vesselCompositeIdentifier: string,
      *   showedVesselTrack: ShowedVesselTrack
      *  }}} action - the vessel positions to show on map
      */
     addVesselTrackShowed(state, action) {
-      state.vesselsTracksShowed[action.payload.vesselMergedIdentifiers] = action.payload.showedVesselTrack
+      state.vesselsTracksShowed[action.payload.vesselCompositeIdentifier] = action.payload.showedVesselTrack
     },
 
     closeVesselSidebar(state) {
@@ -484,14 +485,14 @@ const vesselSlice = createSlice({
 
     /**
      * Set the selected vessel and positions
-     * @function setSelectedVessel
-     * @param {Object} state
-     * @param {{payload: {
-     *   vessel: Vessel,
-     *   positions: VesselPosition[]
-     * }}} action - The positions
      */
-    setSelectedVessel(state, action) {
+    setSelectedVessel(
+      state,
+      action: PayloadAction<{
+        positions: VesselPosition[]
+        vessel: SelectedVessel
+      }>
+    ) {
       state.loadingVessel = null
       state.loadingPositions = null
       state.selectedVessel = action.payload.vessel

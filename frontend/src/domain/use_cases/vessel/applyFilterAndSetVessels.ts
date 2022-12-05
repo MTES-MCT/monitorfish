@@ -1,9 +1,11 @@
 import NoVesselsInFilterError from '../../../errors/NoVesselsInFilterError'
 import { setError } from '../../shared_slices/Global'
 import { setAllVesselsAsUnfiltered, setFilteredVesselsFeatures, setVesselsFromAPI } from '../../shared_slices/Vessel'
-import getFilteredVessels from './getFilteredVessels'
+import { getFilteredVessels } from './getFilteredVessels'
 
-export const loadVesselsFromAPIAndApplyFilter = lastPositions => dispatch => {
+import type { VesselLastPosition } from '../../entities/vessel/types'
+
+export const loadVesselsFromAPIAndApplyFilter = (lastPositions: VesselLastPosition[]) => dispatch => {
   dispatch(setVesselsFromAPI(lastPositions))
   dispatch(applyFilterToVessels())
 }

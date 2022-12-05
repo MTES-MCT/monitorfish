@@ -71,8 +71,6 @@ async function silenceAlertFromAPI(
   try {
     return await ky
       .put(`/bff/v1/operational_alerts/${id}/silence`, {
-        // TODO Is this necessary?
-
         json: {
           beforeDateTime,
           silencedAlertPeriod

@@ -29,70 +29,69 @@ export enum NavigateTo {
  * Get the vessel fishing voyage and update the vessel positions track when navigating in the trips
  */
 export const getVesselVoyage =
-  (vesselIdentity: VesselIdentity, navigateTo: NavigateTo | undefined, fromCron: boolean) => (dispatch, getState) => {
-    if (vesselIdentity) {
-      const currentSelectedVesselIdentity = getState().vessel.selectedVesselIdentity
-      const { areFishingActivitiesShowedOnMap, isLastVoyage, lastFishingActivities, tripNumber } =
-        getState().fishingActivities
+  (vesselIdentity: VesselIdentity, navigateTo: NavigateTo | undefined, fromCron: boolean) =>
+  async (dispatch, getState) => {
+    if (!vesselIdentity) {
+      return
+    }
 
-      const updateVesselTrack = navigateTo && !fromCron
-      const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
-      const nextNavigateTo = navigateTo || NavigateTo.LAST
+    const currentSelectedVesselIdentity = getState().vessel.selectedVesselIdentity
+    const { areFishingActivitiesShowedOnMap, isLastVoyage, lastFishingActivities, tripNumber } =
+      getState().fishingActivities
 
-      if (nextNavigateTo === NavigateTo.NEXT && isLastVoyage) {
-        console.error('This voyage is the last one.')
+    const updateVesselTrack = navigateTo && !fromCron
+    const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
+    const nextNavigateTo = navigateTo || NavigateTo.LAST
+
+    if (nextNavigateTo === NavigateTo.NEXT && isLastVoyage) {
+      console.error('This voyage is the last one.')
+
+      return
+    }
+
+    if (!fromCron) {
+      dispatch(loadFishingActivities())
+    }
+
+    try {
+      const voyage = await getVesselVoyageFromAPI(vesselIdentity, nextNavigateTo, tripNumber)
+      if (!voyage) {
+        batch(() => {
+          dispatch(setVoyage(emptyVoyage))
+          dispatch(hideFishingActivitiesOnMap())
+          dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
+        })
 
         return
       }
 
-      if (!fromCron) {
-        dispatch(loadFishingActivities())
+      if (isSameVesselAsCurrentlyShowed && fromCron) {
+        if (gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage)) {
+          dispatch(setNextFishingActivities(voyage.logbookMessagesAndAlerts))
+          dispatch(removeError())
+        }
+
+        return
       }
 
-      getVesselVoyageFromAPI(vesselIdentity, nextNavigateTo, tripNumber)
-        .then(voyage => {
-          if (!voyage) {
-            batch(() => {
-              dispatch(setVoyage(emptyVoyage))
-              dispatch(hideFishingActivitiesOnMap())
-              dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
-            })
+      if (updateVesselTrack) {
+        modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishingActivitiesShowedOnMap)
 
-            return
-          }
+        return
+      }
 
-          if (isSameVesselAsCurrentlyShowed && fromCron) {
-            if (gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage)) {
-              dispatch(setNextFishingActivities(voyage.logbookMessagesAndAlerts))
-              dispatch(removeError())
-            }
+      dispatch(setLastVoyage(voyage))
+      dispatch(setVoyage(voyage))
+      if (areFishingActivitiesShowedOnMap) {
+        dispatch(showFishingActivitiesOnMap())
+      } else {
+        dispatch(hideFishingActivitiesOnMap())
+      }
 
-            return
-          }
-
-          if (updateVesselTrack) {
-            modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishingActivitiesShowedOnMap)
-
-            return
-          }
-
-          dispatch(setLastVoyage(voyage))
-          dispatch(setVoyage(voyage))
-          if (areFishingActivitiesShowedOnMap) {
-            dispatch(showFishingActivitiesOnMap())
-          } else {
-            dispatch(hideFishingActivitiesOnMap())
-          }
-
-          dispatch(removeError())
-        })
-        .catch(error => {
-          console.error(error)
-          batch(() => {
-            dispatch(setVoyage(emptyVoyage))
-            dispatch(setError(error))
-          })
-        })
+      dispatch(removeError())
+    } catch (error) {
+      dispatch(setVoyage(emptyVoyage))
+      dispatch(setError(error))
     }
   }
 

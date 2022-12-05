@@ -31,7 +31,7 @@ class GetVesselPositions(
         fromDateTime: ZonedDateTime? = null,
         toDateTime: ZonedDateTime? = null
     ): Pair<Boolean, Deferred<List<Position>>> {
-        var vesselTrackDepthHasBeenModified = false
+        var isTrackDepthModified = false
 
         if (trackDepth == VesselTrackDepth.CUSTOM) {
             requireNotNull(fromDateTime) {
@@ -55,7 +55,7 @@ class GetVesselPositions(
                         .minusHours(4)
                 } catch (e: NoLogbookFishingTripFound) {
                     logger.warn(e.message)
-                    vesselTrackDepthHasBeenModified = true
+                    isTrackDepthModified = true
                     ZonedDateTime.now().minusDays(1)
                 }
             }
@@ -85,7 +85,7 @@ class GetVesselPositions(
             )
 
             Pair(
-                vesselTrackDepthHasBeenModified,
+                isTrackDepthModified,
                 positionsFuture
             )
         }

@@ -29,7 +29,7 @@ const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les signalements
  */
 async function getVesselsLastPositionsFromAPI() {
   try {
-    return await ky.get('/bff/v1/vessels').json<VesselLastPosition>()
+    return await ky.get('/bff/v1/vessels').json<VesselLastPosition[]>()
   } catch (err) {
     throw new ApiError(LAST_POSITIONS_ERROR_MESSAGE, err)
   }
@@ -63,7 +63,7 @@ async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackReq
       )
       .then(response =>
         response.json<VesselAndPositions>().then(vesselAndPositions => ({
-          trackDepthHasBeenModified: response.status === ACCEPTED,
+          isTrackDepthModified: response.status === ACCEPTED,
           vesselAndPositions
         }))
       )
@@ -91,8 +91,8 @@ async function getVesselPositionsFromAPI(identity: VesselIdentity, trackRequest:
       )
       .then(response =>
         response.json<VesselPosition[]>().then(positions => ({
-          positions,
-          trackDepthHasBeenModified: response.status === ACCEPTED
+          isTrackDepthModified: response.status === ACCEPTED,
+          positions
         }))
       )
   } catch (err) {

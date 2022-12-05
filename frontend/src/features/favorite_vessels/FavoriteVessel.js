@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
-import showVesselTrack from '../../domain/use_cases/vessel/showVesselTrack'
+import { showVesselTrack } from '../../domain/use_cases/vessel/showVesselTrack'
 import { hideVesselTrack } from '../../domain/use_cases/vessel/hideVesselTrack'
 import { removeVesselFromFavorites } from '../../domain/shared_slices/FavoriteVessel'
 import { useDispatch } from 'react-redux'

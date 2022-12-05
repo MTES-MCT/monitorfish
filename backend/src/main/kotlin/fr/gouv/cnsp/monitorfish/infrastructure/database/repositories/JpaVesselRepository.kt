@@ -14,7 +14,7 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
     private val logger: Logger = LoggerFactory.getLogger(JpaVesselRepository::class.java)
 
     @Cacheable(value = ["vessel"])
-    override fun findVessel(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): Vessel {
+    override fun findVessel(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): Vessel? {
         if (internalReferenceNumber.isNotEmpty()) {
             try {
                 return dbVesselRepository.findByInternalReferenceNumber(internalReferenceNumber).toVessel()
@@ -39,7 +39,7 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
             }
         }
 
-        return Vessel()
+        return null
     }
 
     override fun findVesselsByIds(ids: List<Int>): List<Vessel> {

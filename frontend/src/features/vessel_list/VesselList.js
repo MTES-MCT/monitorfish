@@ -18,7 +18,7 @@ import { addFilter } from '../../domain/shared_slices/Filter'
 import { setPreviewFilteredVesselsFeatures } from '../../domain/shared_slices/Vessel'
 import getAdministrativeZoneGeometry from '../../domain/use_cases/layer/administrative/getAdministrativeZoneGeometry'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
-import getFilteredVessels from '../../domain/use_cases/vessel/getFilteredVessels'
+import { getFilteredVessels } from '../../domain/use_cases/vessel/getFilteredVessels'
 import { getZonesAndSubZonesPromises } from '../../domain/use_cases/layer/administrative/getZonesAndSubZonesPromises'
 
 import SaveVesselFiltersModal from '../map/tools/vessel_filters/SaveVesselFiltersModal'

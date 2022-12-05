@@ -38,10 +38,6 @@ async function archiveReportingFromAPI(id: number) {
 async function archiveReportingsFromAPI(ids: number[]) {
   try {
     await ky.put(`/bff/v1/reportings/archive`, {
-      headers: {
-        Accept: 'application/json, text/plain',
-        'Content-Type': 'application/json;charset=UTF-8'
-      },
       json: ids
     })
   } catch (err) {
@@ -70,10 +66,6 @@ async function deleteReportingFromAPI(id: number) {
 async function deleteReportingsFromAPI(ids: number[]) {
   try {
     await ky.put(`/bff/v1/reportings/delete`, {
-      headers: {
-        Accept: 'application/json, text/plain',
-        'Content-Type': 'application/json;charset=UTF-8'
-      },
       json: ids
     })
   } catch (err) {
@@ -90,10 +82,6 @@ async function addReportingFromAPI(newReporting: Reporting): Promise<Reporting> 
   try {
     return await ky
       .post(`/bff/v1/reportings`, {
-        headers: {
-          Accept: 'application/json, text/plain',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
         json: newReporting
       })
       .json<Reporting>()
@@ -111,10 +99,6 @@ async function updateReportingFromAPI(id: number, nextReporting: ReportingUpdate
   try {
     return await ky
       .put(`/bff/v1/reportings/${id}/update`, {
-        headers: {
-          Accept: 'application/json, text/plain',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
         json: nextReporting
       })
       .json<Reporting>()

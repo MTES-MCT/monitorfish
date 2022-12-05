@@ -42,10 +42,6 @@ async function updateFleetSegmentFromAPI(
   try {
     return await ky
       .put(`/bff/v1/fleet_segments?year=${year}&segment=${segment}`, {
-        headers: {
-          Accept: 'application/json, text/plain',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
         json: updatedFields
       })
       .json<FleetSegment>()
@@ -76,10 +72,6 @@ async function createFleetSegmentFromAPI(segmentFields: UpdateFleetSegment): Pro
   try {
     return await ky
       .post('/bff/v1/fleet_segments', {
-        headers: {
-          Accept: 'application/json, text/plain',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
         json: segmentFields
       })
       .json<FleetSegment>()

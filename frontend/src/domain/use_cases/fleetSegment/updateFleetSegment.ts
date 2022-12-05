@@ -9,34 +9,40 @@ import type { FleetSegment, UpdateFleetSegment } from '../../types/fleetSegment'
  * Update a fleet segment
  */
 export const updateFleetSegment =
-  (segment: string, year: number, updatedFields: UpdateFleetSegment, previousFleetSegments: FleetSegment[]) =>
-  (dispatch, getState) => {
-    if (!segment || !year) {
-      dispatch(setError(new Error('Erreur lors de la modification du segment de flotte')))
+  (
+    segment: string,
+    year: number,
+    updatedFields: UpdateFleetSegment,
+    previousFleetSegments: FleetSegment[]
+  ): ((dispatch, getState) => Promise<FleetSegment[] | undefined>) =>
+  async (dispatch, getState) => {
+    try {
+      if (!segment || !year) {
+        throw new Error('Erreur lors de la modification du segment de flotte')
+      }
+
+      const currentYear = dayjs().year()
+      const previousFleetSegmentsOfCurrentYear = Object.assign([], getState().fleetSegment.fleetSegments)
+
+      const updatedFleetSegment = await updateFleetSegmentFromAPI(segment, year, updatedFields)
+      if (year === currentYear) {
+        const nextFleetSegments = updateFleetSegments(previousFleetSegmentsOfCurrentYear, segment, updatedFleetSegment)
+        dispatch(setFleetSegments(nextFleetSegments))
+      }
+
+      return updateFleetSegments(previousFleetSegments, segment, updatedFleetSegment)
+    } catch (error) {
+      dispatch(setError(error))
+
+      return undefined
     }
-
-    const currentYear = dayjs().year()
-    const previousFleetSegmentsOfCurrentYear = Object.assign([], getState().fleetSegment.fleetSegments)
-
-    return updateFleetSegmentFromAPI(segment, year, updatedFields)
-      .then(updatedFleetSegment => {
-        if (year === currentYear) {
-          const nextFleetSegments = updateFleetSegments(
-            previousFleetSegmentsOfCurrentYear,
-            segment,
-            updatedFleetSegment
-          )
-          dispatch(setFleetSegments(nextFleetSegments))
-        }
-
-        return updateFleetSegments(previousFleetSegments, segment, updatedFleetSegment)
-      })
-      .catch(error => {
-        dispatch(setError(error))
-      })
   }
 
-function updateFleetSegments(previousFleetSegments, segment, updatedFleetSegment) {
+function updateFleetSegments(
+  previousFleetSegments: FleetSegment[],
+  segment: string,
+  updatedFleetSegment: FleetSegment
+): FleetSegment[] {
   return previousFleetSegments
     .filter(_segment => _segment.segment !== segment)
     .concat(updatedFleetSegment)

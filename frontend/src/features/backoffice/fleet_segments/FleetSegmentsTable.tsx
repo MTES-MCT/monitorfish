@@ -1,13 +1,12 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Table } from 'rsuite'
 
-import { deleteFleetSegment } from '../../../domain/use_cases/fleetSegment/deleteFleetSegment'
-import { updateFleetSegment } from '../../../domain/use_cases/fleetSegment/updateFleetSegment'
+import { deleteFleetSegment as deleteFleetSegmentAction } from '../../../domain/use_cases/fleetSegment/deleteFleetSegment'
+import { updateFleetSegment as updateFleetSegmentAction } from '../../../domain/use_cases/fleetSegment/updateFleetSegment'
 import getAllGearCodes from '../../../domain/use_cases/gearCode/getAllGearCodes'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
-import { useBlockUpdateAndFocusWhenDataRefresh } from '../../../hooks/useBlockUpdateAndFocusWhenDataRefresh'
 import { useWindowResize } from '../../../hooks/useWindowResize'
 import { DeleteCell, ImpactCell, INPUT_TYPE, ModifiableCell, TagPickerCell } from '../tableCells'
 
@@ -18,52 +17,58 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
   const gears = useAppSelector(state => state.gear.gears)
   const species = useAppSelector(state => state.species.species)
   const { height, width } = useWindowResize()
-  const { blockUpdate, isUpdateBlocked, setInputDataCySelector } = useBlockUpdateAndFocusWhenDataRefresh(fleetSegments)
+  const { blockUpdate, isUpdateBlocked, setInputDataCySelector } = useBlockUpdateAndFocusOnDataRefresh(fleetSegments)
 
   useEffect(() => {
-    if (!gears?.length) {
-      dispatch(getAllGearCodes() as any)
-    }
+    dispatch(getAllGearCodes() as any)
+    dispatch(getAllSpecies() as any)
+  }, [dispatch])
 
-    if (!species?.length) {
-      dispatch(getAllSpecies() as any)
-    }
-  }, [dispatch, gears, species])
+  const deleteFleetSegment = useCallback(
+    (segment, _year) => {
+      dispatch(deleteFleetSegmentAction(segment, _year) as any).then(nextFleetSegments =>
+        setFleetSegments(nextFleetSegments)
+      )
+    },
+    [dispatch, setFleetSegments]
+  )
 
-  const triggerDeleteFleetSegment = (segment, _year) => {
-    dispatch(deleteFleetSegment(segment, _year) as any).then(nextFleetSegments => setFleetSegments(nextFleetSegments))
-  }
+  const updateFleetSegment = useCallback(
+    (segment, _year, key, value, _fleetSegments) => {
+      if (!segment || !key) {
+        return
+      }
 
-  const handleChangeModifiableKeyWithThrottle = (segment, _year, key, value) => {
-    if (isUpdateBlocked) {
-      return
-    }
+      const updatedFields = {
+        bycatchSpecies: null,
+        faoAreas: null,
+        gears: null,
+        impactRiskFactor: null,
+        segment: null,
+        segmentName: null,
+        targetSpecies: null,
+        year: null
+      }
+      updatedFields[key] = value
 
-    blockUpdate()
-    handleChangeModifiableKey(segment, _year, key, value)
-  }
+      dispatch(updateFleetSegmentAction(segment, _year, updatedFields, _fleetSegments) as any).then(nextFleetSegments =>
+        setFleetSegments(nextFleetSegments)
+      )
+    },
+    [dispatch, setFleetSegments]
+  )
 
-  const handleChangeModifiableKey = (segment, _year, key, value) => {
-    if (!segment || !key) {
-      return
-    }
+  const handleChangeModifiableKeyWithThrottle = useCallback(
+    (segment, _year, key, value, _fleetSegments) => {
+      if (isUpdateBlocked) {
+        return
+      }
 
-    const updatedFields = {
-      bycatchSpecies: null,
-      faoAreas: null,
-      gears: null,
-      impactRiskFactor: null,
-      segment: null,
-      segmentName: null,
-      targetSpecies: null,
-      year: null
-    }
-    updatedFields[key] = value
-
-    dispatch(updateFleetSegment(segment, _year, updatedFields, fleetSegments) as any).then(nextFleetSegments =>
-      setFleetSegments(nextFleetSegments)
-    )
-  }
+      blockUpdate()
+      updateFleetSegment(segment, _year, key, value, _fleetSegments)
+    },
+    [isUpdateBlocked, updateFleetSegment, blockUpdate]
+  )
 
   return gears?.length && species?.length && faoAreas?.length ? (
     <Table
@@ -84,7 +89,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
         <ImpactCell
           dataKey="impactRiskFactor"
           id="segment"
-          onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
+          onChange={(segment, key, value) => updateFleetSegment(segment, year, key, value, fleetSegments)}
         />
       </Column>
 
@@ -98,7 +103,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
           isDisabled={isUpdateBlocked}
           maxLength={null}
           onChange={(segment, key, value) =>
-            handleChangeModifiableKeyWithThrottle(segment, year, key, value?.replace(/[ ]/g, ''))
+            handleChangeModifiableKeyWithThrottle(segment, year, key, value?.replace(/[ ]/g, ''), fleetSegments)
           }
         />
       </Column>
@@ -112,7 +117,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
           inputType={INPUT_TYPE.STRING}
           isDisabled={false}
           maxLength={null}
-          onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
+          onChange={(segment, key, value) => updateFleetSegment(segment, year, key, value, fleetSegments)}
         />
       </Column>
 
@@ -122,7 +127,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
           data={gears.map(gear => ({ label: gear.code, value: gear.code }))}
           dataKey="gears"
           id="segment"
-          onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
+          onChange={(segment, key, value) => updateFleetSegment(segment, year, key, value, fleetSegments)}
         />
       </Column>
 
@@ -132,7 +137,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
           data={species.map(gear => ({ label: gear.code, value: gear.code }))}
           dataKey="targetSpecies"
           id="segment"
-          onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
+          onChange={(segment, key, value) => updateFleetSegment(segment, year, key, value, fleetSegments)}
         />
       </Column>
 
@@ -142,7 +147,7 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
           data={species.map(_species => ({ label: _species.code, value: _species.code }))}
           dataKey="bycatchSpecies"
           id="segment"
-          onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
+          onChange={(segment, key, value) => updateFleetSegment(segment, year, key, value, fleetSegments)}
         />
       </Column>
 
@@ -152,18 +157,56 @@ export function FleetSegmentsTable({ faoAreas, fleetSegments, setFleetSegments, 
           data={faoAreas.map(faoArea => ({ label: faoArea, value: faoArea }))}
           dataKey="faoAreas"
           id="segment"
-          onChange={(segment, key, value) => handleChangeModifiableKey(segment, year, key, value)}
+          onChange={(segment, key, value) => updateFleetSegment(segment, year, key, value, fleetSegments)}
         />
       </Column>
 
       <Column width={30}>
         <HeaderCell> </HeaderCell>
-        <DeleteCell
-          dataKey="year"
-          id="segment"
-          onClick={(segment, _year) => triggerDeleteFleetSegment(segment, _year)}
-        />
+        <DeleteCell dataKey="year" id="segment" onClick={(segment, _year) => deleteFleetSegment(segment, _year)} />
       </Column>
     </Table>
   ) : null
+}
+
+export function useBlockUpdateAndFocusOnDataRefresh(savedData) {
+  const [isUpdateBlocked, setIsUpdateBlocked] = useState(false)
+  const inputDataCySelectorRef = useRef('')
+  const intervalRef = useRef<NodeJS.Timer>()
+
+  const blockUpdate = () => setIsUpdateBlocked(true)
+  const setInputDataCySelector = dataCySelector => {
+    inputDataCySelectorRef.current = dataCySelector
+  }
+  const focusAndUnblock = useCallback(() => {
+    const domElement = document.querySelector(`[data-cy="${inputDataCySelectorRef.current}"]`)
+    if (!domElement) {
+      return
+    }
+
+    const timeout = setTimeout(() => {
+      // @ts-ignore
+      domElement.focus()
+      clearTimeout(timeout)
+    }, 200)
+
+    setIsUpdateBlocked(false)
+    clearInterval(intervalRef.current)
+  }, [])
+
+  useEffect(() => {
+    if (!isUpdateBlocked) {
+      return undefined
+    }
+
+    intervalRef.current = setInterval(focusAndUnblock, 200)
+
+    return () => clearInterval(intervalRef.current)
+  }, [savedData, isUpdateBlocked, focusAndUnblock])
+
+  return {
+    blockUpdate,
+    isUpdateBlocked,
+    setInputDataCySelector
+  }
 }

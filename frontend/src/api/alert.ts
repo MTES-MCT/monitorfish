@@ -72,10 +72,7 @@ async function silenceAlertFromAPI(
     return await ky
       .put(`/bff/v1/operational_alerts/${id}/silence`, {
         // TODO Is this necessary?
-        headers: {
-          Accept: 'application/json, text/plain',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+
         json: {
           beforeDateTime,
           silencedAlertPeriod

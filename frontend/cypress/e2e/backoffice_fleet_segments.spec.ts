@@ -196,7 +196,7 @@ context('Fleet segments', () => {
 
   it('Should show previous year fleet segments', () => {
     cy.get('[data-cy="fleet-segments-select-year"]').contains(currentYear)
-    cy.get('[role="row"]').should('have.length', 43)
+    cy.get('[role="row"]').should('have.length', 44)
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear - 1}`).as('fleetSegments')
 
     // When
@@ -212,7 +212,7 @@ context('Fleet segments', () => {
     // Given
     const yearToAdd = 2013
     cy.get('[data-cy="fleet-segments-select-year"]').contains(currentYear)
-    cy.get('[role="row"]').should('have.length', 43)
+    cy.get('[role="row"]').should('have.length', 44)
 
     // When
     cy.get('[data-cy="fleet-segments-add-year"]').click()
@@ -221,7 +221,7 @@ context('Fleet segments', () => {
     // Then
     cy.get('[data-cy="fleet-segments-add-year"]').click()
     cy.get(`[data-key="${yearToAdd}"]`).should('not.exist')
-    cy.get('[role="row"]').should('have.length', 43)
+    cy.get('[role="row"]').should('have.length', 44)
     cy.get('[data-cy="fleet-segments-select-year"]').contains(yearToAdd)
   })
 })

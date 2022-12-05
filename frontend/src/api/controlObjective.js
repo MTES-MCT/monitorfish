@@ -64,10 +64,7 @@ function getControlObjectiveYearEntriesFromAPI () {
 function updateControlObjectiveFromAPI (id, updatedFields) {
   return fetch(`/bff/v1/control_objectives/${id}`, {
     method: 'PUT',
-    headers: {
-      Accept: 'application/json, text/plain',
-      'Content-Type': 'application/json;charset=UTF-8'
-    },
+
     body: JSON.stringify(updatedFields)
   }).then(response => {
     if (response.status !== OK) {
@@ -119,10 +116,7 @@ function addControlObjectiveFromAPI (segment, facade, year) {
 
   return fetch('/bff/v1/control_objectives', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain',
-      'Content-Type': 'application/json;charset=UTF-8'
-    },
+
     body: JSON.stringify(createFields)
   }).then(response => {
     if (response.status === OK) {

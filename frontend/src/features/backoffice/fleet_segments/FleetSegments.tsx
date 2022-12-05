@@ -18,13 +18,12 @@ import { NewFleetSegmentModal } from './NewFleetSegmentModal'
 
 import type { FleetSegment } from '../../../domain/types/fleetSegment'
 
-const currentYear = dayjs().year()
-
 function getLabeledYear(_year) {
   return { label: `Année ${_year}`, value: _year }
 }
 
 export function FleetSegments() {
+  const currentYear = dayjs().year()
   const dispatch = useAppDispatch()
   const [fleetSegments, setFleetSegments] = useState<FleetSegment[]>([])
   const [faoAreas, setFAOAreas] = useState([])
@@ -41,7 +40,7 @@ export function FleetSegments() {
       _.range(currentYear - 10, currentYear + 10, 1)
         .filter(_year => !yearEntries.map(entry => entry.value).includes(_year))
         .map(_year => ({ label: _year, value: _year })),
-    [yearEntries]
+    [yearEntries, currentYear]
   )
 
   const fetchFleetSegments = useCallback(
@@ -51,7 +50,7 @@ export function FleetSegments() {
         setFleetSegments(nextFleetSegments)
       })
     },
-    [dispatch]
+    [dispatch, currentYear]
   )
 
   const addYearEntry = useCallback(
@@ -73,7 +72,7 @@ export function FleetSegments() {
     })
 
     fetchFleetSegments(currentYear)
-  }, [dispatch, fetchFleetSegments])
+  }, [dispatch, fetchFleetSegments, currentYear])
 
   const openNewFleetSegmentModal = useCallback(() => {
     setIsNewFleetSegmentModalOpen(true)

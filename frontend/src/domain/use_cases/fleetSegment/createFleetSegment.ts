@@ -11,21 +11,17 @@ import type { FleetSegment, UpdateFleetSegment } from '../../types/fleetSegment'
 export const createFleetSegment =
   (segmentFields: UpdateFleetSegment, previousFleetSegments: FleetSegment[]) =>
   async (dispatch, getState): Promise<undefined | FleetSegment[]> => {
-    if (!segmentFields?.segment) {
-      const returnedError = new Error("Le segment de flotte n'a pas de nom")
-      dispatch(setError(returnedError))
-      throw returnedError
-    }
-    if (!segmentFields?.year) {
-      const returnedError = new Error("Le segment de flotte n'a pas d'année")
-      dispatch(setError(returnedError))
-      throw returnedError
-    }
-
-    const currentYear = dayjs().year()
-    const previousFleetSegmentsOfCurrentYear = Object.assign([], getState().fleetSegment.fleetSegments)
-
     try {
+      if (!segmentFields?.segment) {
+        throw new Error("Le segment de flotte n'a pas de nom")
+      }
+      if (!segmentFields?.year) {
+        throw new Error("Le segment de flotte n'a pas d'année")
+      }
+
+      const currentYear = dayjs().year()
+      const previousFleetSegmentsOfCurrentYear = Object.assign([], getState().fleetSegment.fleetSegments)
+
       const newSegment = await createFleetSegmentFromAPI(segmentFields)
       if (segmentFields.year === currentYear) {
         const nextFleetSegments = addFleetSegments(previousFleetSegmentsOfCurrentYear, newSegment)

@@ -1,3 +1,4 @@
+import { Icon, IconButton } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
 import countries from 'i18n-iso-countries'
 import { useCallback, useMemo, useRef } from 'react'
@@ -23,8 +24,6 @@ import { CardTableRow } from '../../../../ui/card-table/CardTableRow'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { FilterTableInput } from '../../../../ui/card-table/FilterTableInput'
 import { RowVerticalSeparator } from '../../../../ui/card-table/RowVerticalSeparator'
-import { IconButton } from '../../../../ui/IconButton'
-import { IconName } from '../../../../ui/icons/constants'
 import { downloadAsCsv } from '../../../../utils/downloadAsCsv'
 import { ReactComponent as ArchiveIcon } from '../../../icons/Bouton_archiver.svg'
 import { ReactComponent as DeleteIcon } from '../../../icons/Bouton_supprimer.svg'
@@ -153,7 +152,7 @@ MMSI: ${reporting.mmsi || ''}`
         <RightAligned>
           <IconButton
             disabled={!tableCheckedIds.length}
-            iconName={IconName.Download}
+            Icon={Icon.Download}
             onClick={download}
             title={`Télécharger ${tableCheckedIds.length} signalement${tableCheckedIds.length > 1 ? 's' : ''}`}
           />
@@ -218,7 +217,7 @@ MMSI: ${reporting.mmsi || ''}`
                   </FlexboxGrid.Item>
                   <RowVerticalSeparator />
                   <FlexboxGrid.Item style={columnStyles[8]}>
-                    <Icon
+                    <LEGACY_Icon
                       alt="Voir sur la carte"
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => focusOnMap(reporting.item)}
@@ -228,7 +227,7 @@ MMSI: ${reporting.mmsi || ''}`
                     />
                   </FlexboxGrid.Item>
                   <FlexboxGrid.Item style={columnStyles[9]}>
-                    <Icon
+                    <LEGACY_Icon
                       alt="Editer le signalement"
                       data-cy="side-window-edit-reporting"
                       onClick={() => edit(editingIsDisabled, reporting.item)}
@@ -387,7 +386,8 @@ const showIconStyle: CSSProperties = {
 
 // We need to use an IMG tag as with a SVG a DND drag event is emitted when the pointer
 // goes back to the main window
-const Icon = styled.img``
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const LEGACY_Icon = styled.img``
 const editIconStyle: (disabled: boolean) => CSSProperties = (disabled: boolean) => ({
   cursor: disabled ? 'not-allowed' : 'pointer',
   flexShrink: 0,

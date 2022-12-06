@@ -29,7 +29,7 @@ export enum NavigateTo {
  * Get the vessel fishing voyage and update the vessel positions track when navigating in the trips
  */
 export const getVesselVoyage =
-  (vesselIdentity: VesselIdentity, navigateTo: NavigateTo | undefined, fromCron: boolean) =>
+  (vesselIdentity: VesselIdentity | null, navigateTo: NavigateTo | undefined, fromCron: boolean) =>
   async (dispatch, getState) => {
     if (!vesselIdentity) {
       return

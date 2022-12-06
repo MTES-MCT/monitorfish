@@ -45,7 +45,6 @@ export function VesselsSearch() {
       dispatch(setIsFocusedOnVesselSearch(isFocused))
 
       if (!isFocused) {
-        console.log(isFocused, 'yup')
         setShowLastSearchedVessels(false)
 
         return

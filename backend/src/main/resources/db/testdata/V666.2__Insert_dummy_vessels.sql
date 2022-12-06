@@ -5,7 +5,7 @@ INSERT INTO vessels (id, cfr, mmsi, ircs, external_immatriculation, vessel_name,
                      nav_licence_expiration_date, operator_name,
                      operator_phones, operator_email, proprietor_name, proprietor_phones, proprietor_emails,
                      vessel_emails, vessel_phones, under_charter)
-VALUES (1, 'FAK000999999', '224103750', 'CALLME', '', 'PHENOMENE', 'FR', 5.0, 12.89, 'Auray', 'AY', 123, 'LORIENT', 127,
+VALUES (1, 'FAK000999999', '224103750', 'CALLME', 'DONTSINK', 'PHENOMENE', 'FR', 5.0, 12.89, 'Auray', 'AY', 123, 'LORIENT', 127,
         'Pêche côtière', '3', 'Pêche', ARRAY ['SDN', 'OTM'], CURRENT_DATE, 'LE PELETIER', ARRAY ['+33 6 84 56 32 14'],
         'lepeletier@gmail.com', 'EL MALIK', ARRAY ['+33 6 45 25 14'], ARRAY ['elmalik@gmail.com'], NULL, NULL, false),
        (2, 'U_W0NTFINDME', 'ABC123456', 'QGDF', 'TALK2ME', 'MALOTRU', 'X', 5.0, 12.89, 'Auray', 'AY', 123, 'LORIENT',

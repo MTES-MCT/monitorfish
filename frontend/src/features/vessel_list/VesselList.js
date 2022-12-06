@@ -239,10 +239,10 @@ const VesselList = ({ namespace }) => {
   }, [])
 
   const previewFilteredVessels = useCallback(() => {
-    const vesselCompositeIdentifiers = filteredVessels.map(vessel => vessel.vesselCompositeIdentifier)
+    const vesselFeatureIds = filteredVessels.map(vessel => vessel.vesselFeatureId)
 
-    if (vesselCompositeIdentifiers?.length) {
-      dispatch(setPreviewFilteredVesselsFeatures(vesselCompositeIdentifiers))
+    if (vesselFeatureIds?.length) {
+      dispatch(setPreviewFilteredVesselsFeatures(vesselFeatureIds))
       dispatch(setPreviewFilteredVesselsMode(true))
 
       if (zonesSelected?.length) {

@@ -11,7 +11,7 @@ context('Vessel sidebar fishing tab', () => {
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).click()
     cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('U_W0')
     cy.wait(50)
-    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(1).click()
+    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 

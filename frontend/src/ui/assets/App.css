@@ -1,3 +1,6 @@
+/* TODO Remove Rsuite classes once everything imported from @mtes-mct/monitor-ui. */
+/* Ultimately, this file must disappear alltogether. */
+
 .boat {
   object-position: 0 -234px;
 }
@@ -5,6 +8,7 @@
 html {
   overflow-y: hidden;
   overflow-x: hidden;
+  /* font-size: 13px; */
   scroll-behavior: smooth;
 }
 
@@ -219,6 +223,167 @@ a:focus {
   width: 304px;
   display: inline-block;
   font-weight: 500;
+}
+
+.rs-modal-full .rs-modal-dialog {
+  width: 100%;
+  margin-left: 0;
+}
+
+.rs-modal-content {
+  padding: 0;
+  border-radius: 2px;
+}
+
+.rs-modal-body {
+  padding: 20px 25px 20px 25px;
+  margin-top: 0;
+  max-height: 800px !important;
+  min-height: 210px !important;
+}
+
+.rs-table-cell-header,
+.rs-table-cell[role='columnheader'],
+.rs-table-cell-header:focus,
+.rs-table-cell[role='columnheader']:focus,
+.rs-table-cell-header:hover,
+.rs-table-cell[role='columnheader']:hover {
+  background: #e5e5eb;
+  color: white;
+}
+
+.rs-table-hover .rs-table-row-header:hover .rs-table-cell-group,
+.rs-table-hover .rs-table-row-header:hover .rs-table-cell {
+  background: #e5e5eb;
+}
+
+.rs-table-cell[role='columnheader'] > .rs-table-cell-content {
+  color: #707785;
+}
+
+.rs-table-cell {
+  border: 1px solid #e0e0e0;
+}
+
+.rs-table-cell-content {
+  font-size: 13px;
+  font-weight: 500;
+  color: #282f3e;
+  padding: 9px 7px;
+  text-align: left;
+}
+
+.rs-table-cell-content > input {
+  border: none;
+  width: inherit;
+  background: none;
+  padding-left: 15px;
+  font-size: 13px;
+  font-weight: normal;
+  color: #282f3e;
+}
+
+.rs-table-scrollbar-handle,
+.rs-table-scrollbar-handle:hover,
+.rs-table-scrollbar-handle:focus {
+  position: absolute;
+  background-color: #575757;
+  border-radius: 4px;
+}
+
+.rs-picker-default .rs-btn,
+.rs-picker-input .rs-btn,
+.rs-picker-default .rs-picker-toggle,
+.rs-picker-input .rs-picker-toggle {
+  background: unset !important;
+}
+
+.rs-picker-tag-wrapper {
+  padding-bottom: 0;
+  min-height: 30px;
+}
+
+.rs-picker-input {
+  vertical-align: top;
+  border-radius: 2px;
+}
+
+.rs-picker-toggle {
+  border-radius: 2px;
+}
+
+.rs-picker-toggle-placeholder {
+  font-size: 11px;
+  color: #707785 !important;
+}
+
+.rs-picker-has-value .rs-btn .rs-picker-toggle-value,
+.rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+  color: #707785;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+.rs-picker-tag > .rs-picker-toggle {
+  width: 105px;
+}
+
+.rs-picker-select-menu-item.rs-picker-select-menu-item-active,
+.rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover,
+.rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover,
+.rs-picker-select-menu-item.rs-picker-select-menu-item-focus,
+.rs-picker-select-menu-item {
+  color: #707785;
+  font-size: 13px;
+  font-weight: normal;
+  max-width: 600px;
+}
+
+.grouped .rs-picker-select-menu-item {
+  padding-left: 0px;
+}
+
+.rs-picker-select-menu-items.rs-picker-select-menu-group.rs-picker-select-menu-group-title {
+  font-size: 13px;
+  color: #707785;
+}
+
+.rs-picker-toggle-clean,
+.rs-picker-toggle-caret {
+  color: #707785;
+}
+
+.rs-picker-check-menu {
+  width: 280px;
+}
+
+.rs-picker-tag .rs-tag {
+  max-width: calc(100% - 25px) !important;
+}
+
+.rs-picker-check-menu-group[role='listitem'] {
+  height: 48px !important;
+}
+
+.rs-picker-check-menu-items .rs-picker-check-menu-group:not(:first-child) {
+  padding-top: 0px !important;
+}
+
+.rs-table-cell-header .rs-table-cell-content {
+  padding: 10px 7px;
+}
+
+.rs-table-hover .rs-table-row:not(.rs-table-row-header):hover,
+.rs-table-hover .rs-table-row:hover .rs-table-cell-group,
+.rs-table-hover .rs-table-row:hover .rs-table-cell {
+  background: #d4dde7 !important; /* blueYonder 25 */
+}
+
+.rs-table-cell,
+.rs-table-cell-group,
+.rs-table-row {
+  -webkit-transition: background-color 0.1s linear !important;
+  transition: background-color 0.1s linear !important;
 }
 
 .new-regulation-select-picker a {

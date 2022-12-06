@@ -3,6 +3,7 @@ name: CI/CD Back & Front
 on:
   push:
     paths:
+      - "**.css"
       - "**.kt"
       - "**.png"
       - "**.js"

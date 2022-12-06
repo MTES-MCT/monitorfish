@@ -8,6 +8,10 @@ import { getCoordinates } from '../../coordinates'
 import { CoordinatesFormat, WSG84_PROJECTION } from '../../domain/entities/map'
 import { isNumeric } from '../../utils/isNumeric'
 
+// TODO Remove that once the fix is added and released.
+// Open issue: https://github.com/uNmAnNeR/imaskjs/issues/761
+const UntypedIMaskInput: any = IMaskInput
+
 type DMDCoordinatesInputProps = {
   coordinates: number[]
   coordinatesFormat: CoordinatesFormat
@@ -82,7 +86,7 @@ export function DMDCoordinatesInput({ coordinates, coordinatesFormat, updateCoor
 
   return (
     <Body>
-      <IMaskInput
+      <UntypedIMaskInput
         data-cy="dmd-coordinates-input"
         lazy={false}
         mask="00° 00.000′ a 000° 00.000′ a"

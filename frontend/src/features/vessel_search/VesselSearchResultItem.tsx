@@ -5,11 +5,11 @@ import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
 
 export function VesselSearchResultItem({ searchQuery, selectVessel, vessel }) {
-  const flagState = vessel.flagState || vessel.vesselProperties?.flagState
-  const vesselName = vessel.vesselName || vessel.vesselProperties?.vesselName
+  const { flagState } = vessel
+  const { vesselName } = vessel
 
   return (
-    <ListItem data-cy="vessel-search-item" onClick={selectVessel}>
+    <ListItem data-cy="vessel-search-item" onClick={() => selectVessel(vessel)}>
       <div>
         {!!flagState && (
           <Flag rel="preload" src={`flags/${flagState.toLowerCase()}.svg`} title={countries.getName(flagState, 'fr')} />

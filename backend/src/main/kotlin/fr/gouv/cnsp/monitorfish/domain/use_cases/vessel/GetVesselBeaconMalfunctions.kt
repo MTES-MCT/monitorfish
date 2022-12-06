@@ -19,6 +19,7 @@ class GetVesselBeaconMalfunctions(
     private val beaconMalfunctionActionsRepository: BeaconMalfunctionActionsRepository
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselBeaconMalfunctions::class.java)
+    // TODO Request by vesselId
     fun execute(
         internalReferenceNumber: String,
         externalReferenceNumber: String,

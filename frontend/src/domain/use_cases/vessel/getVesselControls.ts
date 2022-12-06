@@ -9,6 +9,10 @@ export const getVesselControls = userRequest => (dispatch, getState) => {
   const { selectedVessel } = getState().vessel
   const { controlsFromDate, currentControlSummary } = getState().controls
 
+  if (!selectedVessel) {
+    return
+  }
+
   if (!selectedVessel.vesselInternalId) {
     batch(() => {
       dispatch(setError(new NoControlsFoundError('Aucun contrôle connu')))

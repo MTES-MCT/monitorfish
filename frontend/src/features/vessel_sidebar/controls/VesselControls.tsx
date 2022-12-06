@@ -42,9 +42,11 @@ export function VesselControls() {
   }, [yearsToControls, currentControlSummary?.controls])
 
   useEffect(() => {
-    if (controlsFromDate) {
-      dispatch(getVesselControls(true) as any)
+    if (!controlsFromDate) {
+      return
     }
+
+    dispatch(getVesselControls(true) as any)
   }, [dispatch, selectedVessel, controlsFromDate])
 
   const updateControlSummary = nextControlSummary_ => {

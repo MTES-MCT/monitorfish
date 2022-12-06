@@ -1,3 +1,5 @@
+// TODO Remove legacy colors.
+
 import { describe, expect, it } from '@jest/globals'
 import dayjs from 'dayjs'
 

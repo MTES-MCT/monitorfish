@@ -1,9 +1,10 @@
+import { GlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useRef } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
-import styled, { ThemeProvider } from 'styled-components'
+import styled from 'styled-components'
 
 import APIWorker from './api/APIWorker'
 import { BackofficeMode } from './api/BackofficeMode'
@@ -32,7 +33,6 @@ import { useAppSelector } from './hooks/useAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
 import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
 import { backofficeStore, homeStore, backofficePersistor } from './store'
-import { theme } from './ui/theme'
 import { isBrowserSupported } from './utils/isBrowserSupported'
 
 import type { MutableRefObject } from 'react'
@@ -45,7 +45,9 @@ export function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={THEME}>
+      <GlobalStyle />
+
       <Router>
         <Switch>
           <Route path="/backoffice">

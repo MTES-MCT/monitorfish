@@ -1,3 +1,4 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import { propEq } from 'ramda'
 import {
   forwardRef,
@@ -24,7 +25,6 @@ import { getAllCurrentReportings } from '../../domain/use_cases/reporting/getAll
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { usePrevious } from '../../hooks/usePrevious'
-import { theme } from '../../ui/theme'
 import { AlertsAndReportings } from './alerts_reportings/AlertsAndReportings'
 import { BeaconMalfunctionsSubMenu } from './beacon_malfunctions/beaconMalfunctions'
 import { BeaconMalfunctionsBoard } from './beacon_malfunctions/BeaconMalfunctionsBoard'
@@ -147,7 +147,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
 
   const beaconMalfunctionBoardGrayOverlayStyle: CSSProperties = useMemo(
     () => ({
-      background: theme.color.charcoal,
+      background: THEME.color.charcoal,
       height: '100%',
       opacity: isOverlayed ? 0.5 : 0,
       position: 'absolute',
@@ -173,7 +173,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
       <BeaconMalfunctionsBoardGrayOverlay onClick={closeRightSidebar} style={beaconMalfunctionBoardGrayOverlayStyle} />
       {isPreloading && (
         <Loading>
-          <FulfillingBouncingCircleSpinner className="update-vessels" color={theme.color.lightGray} size={100} />
+          <FulfillingBouncingCircleSpinner className="update-vessels" color={THEME.color.lightGray} size={100} />
           <Text data-cy="first-loader">Chargement...</Text>
         </Loading>
       )}

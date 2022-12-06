@@ -28,7 +28,14 @@
     "target": "ES2022",
     "useUnknownInCatchVariables": true
   },
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "src/ui/styled.d.ts"],
+  "include": [
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/ui/styled.d.ts",
+    "src/features/side_window/MissionForm/MainForm"
+  ],
   "exclude": ["node_modules/*"],
   "ts-node": {
     "swc": true,

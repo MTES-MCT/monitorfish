@@ -1,9 +1,11 @@
+// TODO Remove legacy colors.
+
+import { THEME } from '@mtes-mct/monitor-ui'
 import { Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import Text from 'ol/style/Text'
 
-import { COLORS } from '../../constants/constants'
 import { Layer } from '../../domain/entities/layers/constants'
 import { theme } from '../../ui/theme'
 import { getUtcDayjs } from '../../utils/getUtcDayjs'
@@ -24,7 +26,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 1
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.9)', width: 2 }),
             text: `${feature?.get(Layer.EEZ.subZoneFieldKey) || ''}`
@@ -38,7 +40,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 1
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             overflow: true,
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
@@ -53,7 +55,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 1
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${feature?.get(Layer.AEM.subZoneFieldKey) || ''}`
@@ -67,7 +69,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 1
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${feature?.get(Layer.effort_zones_areas.subZoneFieldKey) || ''}`
@@ -81,7 +83,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 1
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${feature?.get(Layer.cormoran.subZoneFieldKey) || ''}`
@@ -95,7 +97,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 2
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${feature?.get(Layer.situations.subZoneFieldKey) || ''}`
@@ -109,7 +111,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 2
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${feature?.get(Layer.brexit.subZoneFieldKey) || ''}`
@@ -123,7 +125,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 1
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${feature?.get(Layer.rectangles_stat.subZoneFieldKey) || ''}`
@@ -161,7 +163,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 1
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${feature?.get(Layer.cgpm_areas.subZoneFieldKey) || ''}`
@@ -175,7 +177,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 1
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${feature?.get(Layer.cgpm_statistical_rectangles_areas.subZoneFieldKey) || ''}`
@@ -189,7 +191,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 3
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${feature?.get(Layer.saltwater_limit.subZoneFieldKey) || ''}`
@@ -203,7 +205,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
             width: 3
           }),
           text: new Text({
-            fill: new Fill({ color: COLORS.gunMetal }),
+            fill: new Fill({ color: THEME.color.gunMetal }),
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${feature?.get(Layer.transversal_sea_limit.subZoneFieldKey) || ''}`
@@ -217,7 +219,7 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
         const metadataIsShowed = feature?.get('metadataIsShowed')
 
         if (isForbidden) {
-          return getStyle(getColorWithAlpha(theme.color.lightCoral, 0.75), metadataIsShowed)
+          return getStyle(getColorWithAlpha(THEME.color.lightCoral, 0.75), metadataIsShowed)
         }
 
         return getLayerColor(randomDigits, metadataIsShowed)
@@ -237,13 +239,13 @@ export function getAdministrativeAndRegulatoryLayersStyle(type: string) {
 }
 
 const DIGIT_TO_LAYER_COLOR_MAP = new Map<number, string>([
-  [0, theme.color.yaleBlue],
+  [0, THEME.color.yaleBlue],
   [1, theme.color.queenBlue],
-  [2, theme.color.glaucous],
-  [3, theme.color.blueNcs],
-  [4, theme.color.iceberg],
-  [5, theme.color.lightSteelBlue],
-  [6, theme.color.lightPeriwinkle],
+  [2, THEME.color.glaucous],
+  [3, THEME.color.blueNcs],
+  [4, THEME.color.iceberg],
+  [5, THEME.color.lightSteelBlue],
+  [6, THEME.color.lightPeriwinkle],
   [7, theme.color.aliceBlue],
   [8, theme.color.lightBlue],
   [9, theme.color.skyBlue],
@@ -254,7 +256,7 @@ const DIGIT_TO_LAYER_COLOR_MAP = new Map<number, string>([
 const getLayerColor = (randomDigits, metadataIsShowed) => {
   const color = DIGIT_TO_LAYER_COLOR_MAP.get(randomDigits)
   if (!color) {
-    return getStyle(getColorWithAlpha(theme.color.yaleBlue, 0.75), metadataIsShowed)
+    return getStyle(getColorWithAlpha(THEME.color.yaleBlue, 0.75), metadataIsShowed)
   }
 
   return getStyle(getColorWithAlpha(color, 0.75), metadataIsShowed)

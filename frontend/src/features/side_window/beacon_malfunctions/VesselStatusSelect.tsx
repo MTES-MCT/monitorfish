@@ -1,8 +1,8 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useEffect } from 'react'
 import { SelectPicker } from 'rsuite'
 
 import { VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/constants'
-import { theme } from '../../../ui/theme'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 
 import type { BeaconMalfunction } from '../../../domain/entities/beaconMalfunction/types'
@@ -31,21 +31,21 @@ export function VesselStatusSelect({
       // TODO Use styled-component and avoid useEffect to update these elements style.
       const selectElement = domRef.current.querySelector('.rs-picker-select') as HTMLElement
       if (selectElement?.style) {
-        selectElement.style.background = vesselStatus?.color || theme.color.white
+        selectElement.style.background = vesselStatus?.color || THEME.color.white
       }
 
       const toggleElement = domRef.current.querySelector(
         '*[data-cy="side-window-beacon-malfunctions-vessel-status"]'
       ) as HTMLElement
       if (toggleElement?.style) {
-        toggleElement.style.color = vesselStatus?.textColor || theme.color.charcoal
+        toggleElement.style.color = vesselStatus?.textColor || THEME.color.charcoal
       }
 
       const icons = domRef.current.querySelectorAll('.rs-icon') as HTMLElement[]
       icons.forEach(icon => {
         if (icon?.style) {
           // eslint-disable-next-line no-param-reassign
-          icon.style.color = vesselStatus?.textColor || theme.color.charcoal
+          icon.style.color = vesselStatus?.textColor || THEME.color.charcoal
         }
       })
     }

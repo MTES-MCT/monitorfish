@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 
-import { theme } from '../../../ui/theme'
 import { MapButtonStyle } from '../../commonStyles/MapButton.style'
 
 export const VesselSidebarActionButton = styled(MapButtonStyle)<{
@@ -12,7 +11,7 @@ export const VesselSidebarActionButton = styled(MapButtonStyle)<{
   top: ${p => p.top}px;
   height: 30px;
   width: 30px;
-  background: ${p => p.backgroundColor || theme.color.charcoal};
+  background: ${p => p.backgroundColor || p.theme.color.charcoal};
   position: absolute;
   margin-right: ${p => (p.isSidebarOpen ? 505 : -45)}px;
   opacity: ${p => (p.isSidebarOpen ? 1 : 0)};
@@ -24,6 +23,6 @@ export const VesselSidebarActionButton = styled(MapButtonStyle)<{
 
   :hover,
   :focus {
-    background: ${p => p.backgroundColor || theme.color.charcoal};
+    background: ${p => p.backgroundColor || p.theme.color.charcoal};
   }
 `

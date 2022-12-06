@@ -106,15 +106,15 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
         return clickedFeatureId?.toString()?.includes(vessel.vesselFeatureId)
       })
 
-      if (clickedVessel) {
-        if (mapClickEvent.ctrlKeyPressed) {
-          dispatch(showVesselTrack(clickedVessel.vesselProperties, false))
-        } else {
-          batch(() => {
-            dispatch(showVessel(clickedVessel.vesselProperties, false, false))
-            dispatch(getVesselVoyage(clickedVessel.vesselProperties, null, false))
-          })
-        }
+      if (!clickedVessel) {
+        return
+      }
+
+      if (mapClickEvent.ctrlKeyPressed) {
+        dispatch(showVesselTrack(clickedVessel.vesselProperties, false))
+      } else {
+        dispatch(showVessel(clickedVessel.vesselProperties, false, false))
+        dispatch(getVesselVoyage(clickedVessel.vesselProperties, null, false))
       }
     }
   }, [mapClickEvent])

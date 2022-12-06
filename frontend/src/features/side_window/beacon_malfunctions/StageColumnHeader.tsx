@@ -1,11 +1,10 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
 import { STAGE_RECORD } from '../../../domain/entities/beaconMalfunction/constants'
 import { archiveBeaconMalfunctions } from '../../../domain/use_cases/beaconMalfunction/archiveBeaconMalfunctions'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { theme } from '../../../ui/theme'
 
 import type { CSSProperties } from 'react'
 
@@ -49,16 +48,16 @@ export function StageColumnHeader({ description, ids, numberOfItems, stage }: St
 const ArchiveAll = styled.a`
   margin-left: auto;
   margin-right: 6px;
-  color: ${theme.color.slateGray};
+  color: ${p => p.theme.color.slateGray};
   cursor: pointer;
   text-decoration: underline;
 `
 
 const Wrapper = styled.div``
 const wrapperStyle: CSSProperties = {
-  background: COLORS.gainsboro,
-  borderBottom: `1px solid ${COLORS.lightGray}`,
-  color: COLORS.slateGray,
+  background: THEME.color.gainsboro,
+  borderBottom: `1px solid ${THEME.color.lightGray}`,
+  color: THEME.color.slateGray,
   height: 95,
   marginBottom: 3,
   padding: 15,
@@ -83,7 +82,7 @@ const descriptionStyle = {
 
 const NumberOfItems = styled.div``
 const numberOfItemsStyle: (isEndOfMalfunctionStage: boolean) => CSSProperties = (isEndOfMalfunctionStage: boolean) => ({
-  background: COLORS.lightGray,
+  background: THEME.color.lightGray,
   borderRadius: 2,
   direction: 'rtl',
   fontWeight: 700,

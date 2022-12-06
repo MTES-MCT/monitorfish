@@ -1,7 +1,21 @@
-import type { Mission, MissionUnit } from '../../../domain/types/mission'
-import type { DateRange } from '@mtes-mct/monitor-ui/types'
+import type { MissionType } from '../../../domain/types/mission'
 
-export type FormValues = Partial<Omit<Mission, 'endDate' | 'startDate' | 'units'>> & {
-  dateRange?: DateRange
-  units: Partial<MissionUnit>[]
+export type Action = AirControl | SeaControl
+export type PartialAction = PartialAirControl | PartialSeaControl
+
+type AirControl = {
+  endDate: Date
+  startDate: Date
+  type: MissionType.AIR
+}
+export type PartialAirControl = Partial<AirControl> & {
+  type: MissionType.AIR
+}
+
+type SeaControl = {
+  date: Date
+  type: MissionType.SEA
+}
+export type PartialSeaControl = Partial<SeaControl> & {
+  type: MissionType.SEA
 }

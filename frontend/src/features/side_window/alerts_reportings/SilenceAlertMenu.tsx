@@ -1,3 +1,4 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useRef } from 'react'
 import DatePicker from 'rsuite/DatePicker'
 import { beforeToday } from 'rsuite/esm/DateRangePicker/disabledDateUtils'
@@ -7,7 +8,6 @@ import { COLORS } from '../../../constants/constants'
 import { SilencedAlertPeriod } from '../../../domain/entities/alerts/constants'
 import { useClickOutsideWhenOpenedWithinRef } from '../../../hooks/useClickOutsideWhenOpenedWithinRef'
 import { useForceUpdate } from '../../../hooks/useForceUpdate'
-import { theme } from '../../../ui/theme'
 import { DATE_RANGE_PICKER_LOCALE } from '../../vessel_sidebar/actions/TrackRequest/DateRange'
 
 import type { SilencedAlertPeriodRequest } from '../../../domain/entities/alerts/types'
@@ -186,7 +186,7 @@ function setBackgroundAsNotHovered(e) {
 
 const Wrapper = styled.div``
 const silenceMenuStyle = (index: number, scrollY: number): CSSProperties => ({
-  boxShadow: `1px 2px 5px ${theme.color.charcoalShadow}`,
+  boxShadow: `1px 2px 5px ${THEME.color.charcoalShadow}`,
   marginLeft: 940,
   marginTop: 35 + index * 49 - scrollY,
   position: 'absolute',

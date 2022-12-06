@@ -1,4 +1,4 @@
-import ky from 'ky'
+import ky, { HTTPError } from 'ky'
 
 import { ApiError } from '../libs/ApiError'
 import { ACCEPTED, NOT_FOUND } from './api'
@@ -131,14 +131,12 @@ async function getVesselVoyageFromAPI(
       .get(
         `/bff/v1/vessels/logbook/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&voyageRequest=${nextVoyageRequest}&tripNumber=${nextTripNumber}`
       )
-      .then(response => {
-        if (response.status === NOT_FOUND) {
-          return undefined
-        }
-
-        return response.json<VesselVoyage>()
-      })
+      .json<VesselVoyage>()
   } catch (err) {
+    if (err instanceof HTTPError && err.response.status === NOT_FOUND) {
+      return undefined
+    }
+
     throw new ApiError(LOGBOOK_ERROR_MESSAGE, err)
   }
 }

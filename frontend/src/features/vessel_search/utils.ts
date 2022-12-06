@@ -8,7 +8,7 @@ export function removeDuplicatedFoundVessels(
 ): VesselIdentity[] {
   const filteredVesselsFromMap = foundVesselsOnMap.filter(vesselFromMap => {
     if (!vesselFromMap.internalReferenceNumber) {
-      return false
+      return true
     }
 
     return !foundVesselsFromAPI.some(
@@ -16,7 +16,7 @@ export function removeDuplicatedFoundVessels(
     )
   })
 
-  return foundVesselsFromAPI.concat(filteredVesselsFromMap)
+  return foundVesselsFromAPI.concat(filteredVesselsFromMap).slice(0, 50)
 }
 
 export function addVesselIdentifierToVesselIdentity(identity: VesselIdentity): VesselIdentity {

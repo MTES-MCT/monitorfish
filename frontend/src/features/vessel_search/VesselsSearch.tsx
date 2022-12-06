@@ -43,15 +43,10 @@ export function VesselsSearch() {
   const focusOnInputAndShowLastSearchedVessels = useCallback(
     isFocused => {
       dispatch(setIsFocusedOnVesselSearch(isFocused))
+      setShowLastSearchedVessels(isFocused)
 
       if (!isFocused) {
-        setShowLastSearchedVessels(false)
-
-        return
-      }
-
-      if (isFocused) {
-        setShowLastSearchedVessels(true)
+        setSearchQuery('')
       }
     },
     [dispatch]

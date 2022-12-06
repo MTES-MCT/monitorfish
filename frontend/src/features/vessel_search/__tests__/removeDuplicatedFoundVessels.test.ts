@@ -8,12 +8,13 @@ describe('vessel_search/utils.removeDuplicatedFoundVessels()', () => {
     // Given
     const vesselsFromApi = dummyVessels
     const vesselsFromMap = anotherDummyVessels
-    const expectedResult = vesselsFromApi.concat(vesselsFromMap)
+    const expectedResult = vesselsFromApi.concat(vesselsFromMap).slice(0, 50)
 
     // When
     const result = removeDuplicatedFoundVessels(vesselsFromApi, vesselsFromMap)
 
     // Then
+    expect(result).toHaveLength(50)
     expect(result).toEqual(expectedResult)
   })
 
@@ -22,13 +23,13 @@ describe('vessel_search/utils.removeDuplicatedFoundVessels()', () => {
     const vesselsInCommon = dummyVessels
       .slice(0, 5)
       .map(vessel => ({ ...vessel, externalReferenceNumber: 'ANOTHER EXT. REF.' }))
-    const vesselsFromMapWithFiveVesselsInCommon = anotherDummyVessels.concat(vesselsInCommon)
+    const vesselsFromMapWithFiveVesselsInCommon = anotherDummyVessels.concat(vesselsInCommon).slice(0, 50)
 
     // When
     const result = removeDuplicatedFoundVessels(dummyVessels, vesselsFromMapWithFiveVesselsInCommon)
 
     // Then
-    expect(result).toHaveLength(dummyVessels.length + anotherDummyVessels.length)
+    expect(result).toHaveLength(dummyVessels.length + anotherDummyVessels.length - 10)
     expect(result).not.toContain(vesselsInCommon)
   })
 })

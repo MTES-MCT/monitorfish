@@ -1,17 +1,18 @@
 import { useMemo, useState } from 'react'
-import styled from 'styled-components'
 import { Footer, Modal, TagPicker } from 'rsuite'
+import styled from 'styled-components'
+
 import { COLORS } from '../../../constants/constants'
-import { FleetSegmentInput, INPUT_TYPE, renderTagPickerValue } from '../tableCells'
-import { useSelector } from 'react-redux'
-import { PrimaryButton } from '../../commonStyles/Buttons.style'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 import { cleanInputString } from '../../../utils/cleanInputString'
 import StyledModalHeader from '../../commonComponents/StyledModalHeader'
+import { PrimaryButton } from '../../commonStyles/Buttons.style'
+import { FleetSegmentInput, INPUT_TYPE, renderTagPickerValue } from '../tableCells'
 
 // TODO Use Formik + Yup to handle and validate form
-export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit }) {
-  const gearsFAOList = useSelector(state => state.gear.gears)
-  const speciesFAOList = useSelector(state => state.species.species)
+export function NewFleetSegmentModal({ faoAreasList, onCancel, onSubmit, year }) {
+  const gearsFAOList = useAppSelector(state => state.gear.gears)
+  const speciesFAOList = useAppSelector(state => state.species.species)
 
   const [segment, setSegment] = useState('')
   const [segmentName, setSegmentName] = useState('')
@@ -22,39 +23,30 @@ export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit }) {
   const [bycatchSpecies, setBycatchSpecies] = useState()
 
   const faoSpeciesAsOptions = useMemo(
-    () => {
-      return speciesFAOList.map(species => ({ label: species.code, value: species.code }))
-    },
+    () => speciesFAOList.map(species => ({ label: species.code, value: species.code })),
     [speciesFAOList]
   )
 
   const handleSubmit = () => {
     const newFleetSegmentData = {
+      bycatchSpecies: bycatchSpecies ?? [],
+      faoAreas,
+      gears,
+      impactRiskFactor,
       segment: cleanInputString(segment),
       segmentName,
-      impactRiskFactor,
-      gears,
-      faoAreas,
       targetSpecies: targetSpecies ?? [],
-      bycatchSpecies: bycatchSpecies ?? []
+      year
     }
 
     onSubmit(newFleetSegmentData)
   }
 
   return (
-    <ModalWithCustomHeight
-      backdrop
-      onClose={onCancel}
-      open
-      size={'xs'}
-      style={{ marginTop: 50 }}
-    >
+    <ModalWithCustomHeight backdrop onClose={onCancel} open size="xs" style={{ marginTop: 50 }}>
       <StyledModalHeader>
         <Modal.Title>
-          <Title>
-            Ajouter un segment de flotte
-          </Title>
+          <Title>Ajouter un segment de flotte</Title>
         </Modal.Title>
       </StyledModalHeader>
       <Body>
@@ -62,40 +54,54 @@ export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit }) {
           <Column>
             <Label htmlFor="newFleetSegmentName">Nom</Label>
             <FleetSegmentInput
+              afterChange={undefined}
+              dataCy={undefined}
+              dataKey={undefined}
               id="newFleetSegmentName"
               inputType={INPUT_TYPE.STRING}
+              isDisabled={false}
               maxLength={null}
-              onChange={(id, key, value) => setSegment(value)}
+              onChange={(_id, _key, value) => setSegment(value)}
               value={segment}
+              withinCell={false}
             />
           </Column>
           <Column>
             <Label htmlFor="newFleetSegmentImpactRiskFactor">Note d’impact</Label>
             <FleetSegmentInput
+              afterChange={undefined}
+              dataCy={undefined}
+              dataKey={undefined}
               id="newFleetSegmentImpactRiskFactor"
               inputType={INPUT_TYPE.DOUBLE}
+              isDisabled={false}
               maxLength={50}
-              onChange={(id, key, value) => setImpactRiskFactor(value)}
+              onChange={(_id, _key, value) => setImpactRiskFactor(value)}
               value={impactRiskFactor}
+              withinCell={false}
             />
           </Column>
         </Columns>
         <Label htmlFor="newFleetSegmentDescription">Description</Label>
         <FleetSegmentInput
-          dataCy={'create-fleet-segment-description'}
+          afterChange={undefined}
+          dataCy="create-fleet-segment-description"
+          dataKey={undefined}
           id="newFleetSegmentDescription"
           inputType={INPUT_TYPE.STRING}
+          isDisabled={false}
           maxLength={null}
-          onChange={(id, key, value) => setSegmentName(value)}
+          onChange={(_id, _key, value) => setSegmentName(value)}
           value={segmentName}
+          withinCell={false}
         />
         <Label>Engins</Label>
         <TagPicker
-          data-cy={'create-fleet-segment-gears'}
           data={gearsFAOList.map(gear => ({ label: gear.code, value: gear.code }))}
+          data-cy="create-fleet-segment-gears"
           onChange={setGears}
-          placeholder={'Engins'}
-          placement={'auto'}
+          placeholder="Engins"
+          placement="auto"
           renderValue={(_, items) => renderTagPickerValue(items)}
           searchable
           style={tagPickerStyle}
@@ -105,22 +111,23 @@ export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit }) {
         <Label>Espèces ciblées</Label>
         <TagPicker
           data={faoSpeciesAsOptions}
-          data-cy={'create-fleet-segment-targeted-species'}
+          data-cy="create-fleet-segment-targeted-species"
           onChange={setTargetSpecies}
-          placeholder={'Espèces ciblées'}
-          placement={'auto'}
+          placeholder="Espèces ciblées"
+          placement="auto"
           renderValue={(_, items) => renderTagPickerValue(items)}
           searchable
           style={tagPickerStyle}
           value={targetSpecies}
-          virtualized />
+          virtualized
+        />
         <Label>Prises accessoires</Label>
         <TagPicker
           data={faoSpeciesAsOptions}
-          data-cy={'create-fleet-segment-incidental-species'}
+          data-cy="create-fleet-segment-incidental-species"
           onChange={setBycatchSpecies}
-          placeholder={'Prises accessoires'}
-          placement={'auto'}
+          placeholder="Prises accessoires"
+          placement="auto"
           renderValue={(_, items) => renderTagPickerValue(items)}
           searchable
           style={tagPickerStyle}
@@ -129,11 +136,11 @@ export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit }) {
         />
         <Label>Zones FAO</Label>
         <TagPicker
-          data-cy={'create-fleet-segment-fao-zones'}
-          data={faoAreasList?.map(faoAreas => ({ label: faoAreas, value: faoAreas }))}
+          data={faoAreasList?.map(_faoAreas => ({ label: _faoAreas, value: _faoAreas }))}
+          data-cy="create-fleet-segment-fao-zones"
           onChange={setFaoAreas}
-          placeholder={'Zones FAO'}
-          placement={'auto'}
+          placeholder="Zones FAO"
+          placement="auto"
           renderValue={(_, items) => renderTagPickerValue(items)}
           searchable
           style={tagPickerStyle}
@@ -141,10 +148,7 @@ export function NewFleetSegmentModal ({ faoAreasList, onCancel, onSubmit }) {
         />
       </Body>
       <Footer>
-        <ValidateButton
-          data-cy={'create-fleet-segment'}
-          onClick={handleSubmit}
-        >
+        <ValidateButton data-cy="create-fleet-segment" onClick={handleSubmit}>
           Créer
         </ValidateButton>
       </Footer>
@@ -157,14 +161,14 @@ const Columns = styled.div`
 `
 
 const Column = styled.div`
-  margin-right: 5px
+  margin-right: 5px;
 `
 
 const ValidateButton = styled(PrimaryButton)`
   margin: 10px 10px 15px 25px;
 `
 
-const tagPickerStyle = { width: 350, margin: '5px 10px 20px 0', verticalAlign: 'top' }
+const tagPickerStyle = { margin: '5px 10px 20px 0', verticalAlign: 'top', width: 350 }
 
 const Label = styled.label`
   display: inline-block;
@@ -189,7 +193,8 @@ const Body = styled(Modal.Body)`
     padding-left: 5px;
   }
 
-  .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+  .rs-picker-has-value .rs-btn .rs-picker-toggle-value,
+  .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
     color: ${COLORS.charcoal};
   }
 

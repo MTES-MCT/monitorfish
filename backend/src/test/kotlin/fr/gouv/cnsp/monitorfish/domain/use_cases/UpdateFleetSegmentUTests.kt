@@ -21,7 +21,7 @@ class UpdateFleetSegmentUTests {
     fun `execute Should throw an exception When there is no fields given`() {
         // When
         val throwable = catchThrowable {
-            UpdateFleetSegment(fleetSegmentRepository).execute("SEGMENT", CreateOrUpdateFleetSegmentFields())
+            UpdateFleetSegment(fleetSegmentRepository).execute("SEGMENT", CreateOrUpdateFleetSegmentFields(), 2021)
         }
 
         // Then
@@ -35,9 +35,9 @@ class UpdateFleetSegmentUTests {
         val fields = CreateOrUpdateFleetSegmentFields(bycatchSpecies = listOf("AMZ", "HKE"))
 
         // When
-        UpdateFleetSegment(fleetSegmentRepository).execute("SEGMENT", fields)
+        UpdateFleetSegment(fleetSegmentRepository).execute("SEGMENT", fields, 2021)
 
         // Then
-        Mockito.verify(fleetSegmentRepository).update("SEGMENT", fields)
+        Mockito.verify(fleetSegmentRepository).update("SEGMENT", fields, 2021)
     }
 }

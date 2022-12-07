@@ -204,7 +204,12 @@ class UpdateReportingUTests {
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 creationDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                value = Observation(reportingActor = ReportingActor.UNIT, unit = "OPS", title = "A title", description = "Before update") as ReportingValue,
+                value = Observation(
+                    reportingActor = ReportingActor.UNIT,
+                    unit = "OPS",
+                    title = "A title",
+                    description = "Before update"
+                ) as ReportingValue,
                 isArchived = false,
                 isDeleted = false
             )

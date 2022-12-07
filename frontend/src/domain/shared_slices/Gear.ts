@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { Gear } from '../entities/vessel/types'
+import type { Gear } from '../types/Gear'
 
 export type GearState = {
   categoriesToGears: Map<string, Gear[]> | undefined

@@ -23,7 +23,11 @@ const getGroupName = groupId => {
   }
 }
 
-const getAllGearCodes = () => dispatch => {
+const getAllGearCodes = () => (dispatch, getState) => {
+  if (getState().gear.gears?.length) {
+    return
+  }
+
   getAllGearCodesFromAPI().then(gears => {
     /** @type {Map<string, Gear[]>} */
     const categoriesToGears = {}

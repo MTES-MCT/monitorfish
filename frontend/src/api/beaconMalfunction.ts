@@ -45,10 +45,6 @@ async function updateBeaconMalfunctionFromAPI(
   try {
     return await ky
       .put(`/bff/v1/beacon_malfunctions/${id}`, {
-        headers: {
-          Accept: 'application/json, text/plain',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
         json: updatedFields
       })
       .json<BeaconMalfunctionResumeAndDetails>()
@@ -82,10 +78,6 @@ async function saveBeaconMalfunctionCommentFromAPI(
   try {
     return await ky
       .post(`/bff/v1/beacon_malfunctions/${id}/comments`, {
-        headers: {
-          Accept: 'application/json, text/plain',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
         json: comment
       })
       .json<BeaconMalfunctionResumeAndDetails>()
@@ -141,10 +133,6 @@ async function archiveBeaconMalfunctionsFromAPI(ids: number[]): Promise<BeaconMa
   try {
     return await ky
       .put(`/bff/v1/beacon_malfunctions/archive`, {
-        headers: {
-          Accept: 'application/json, text/plain',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
         json: ids
       })
       .json<BeaconMalfunctionResumeAndDetails[]>()

@@ -46,6 +46,7 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
         }
     }
 
+    @Transactional
     override fun delete(id: Int) {
         try {
             dbControlObjectivesRepository.deleteById(id)
@@ -54,12 +55,13 @@ class JpaControlObjectivesRepository(private val dbControlObjectivesRepository: 
         }
     }
 
+    @Transactional
     override fun add(controlObjective: ControlObjective): Int {
         return dbControlObjectivesRepository.save(ControlObjectivesEntity.fromControlObjective(controlObjective)).id!!
     }
 
     @Transactional
     override fun addYear(currentYear: Int, nextYear: Int) {
-        dbControlObjectivesRepository.insertNextYearFromCurrentYear(currentYear, nextYear)
+        dbControlObjectivesRepository.duplicateCurrentYearAsNextYear(currentYear, nextYear)
     }
 }

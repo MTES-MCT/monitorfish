@@ -13,7 +13,7 @@ import { getDateTime } from '../../../../utils'
 import { ReactComponent as AtSeaSVG } from '../../../icons/Icone_avarie_mer.svg'
 import { ReactComponent as AtPortSVG } from '../../../icons/Icone_avarie_quai.svg'
 
-import type { BeaconMalfunctionResumeAndDetails } from '../../../../domain/types/beaconMalfunction'
+import type { BeaconMalfunctionResumeAndDetails } from '../../../../domain/entities/beaconMalfunction/types'
 import type { HTMLProps } from 'react'
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24

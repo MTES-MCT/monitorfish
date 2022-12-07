@@ -36,12 +36,13 @@ async function getVesselsLastPositionsFromAPI() {
 }
 
 function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity) {
+  const vesselId = identity.vesselId || ''
   const internalReferenceNumber = identity.internalReferenceNumber || ''
   const externalReferenceNumber = identity.externalReferenceNumber || ''
   const ircs = identity.ircs || ''
   const vesselIdentifier = identity.vesselIdentifier || ''
 
-  return { externalReferenceNumber, internalReferenceNumber, ircs, vesselIdentifier }
+  return { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier }
 }
 
 /**
@@ -50,7 +51,7 @@ function getVesselIdentityAsEmptyStringWhenNull(identity: VesselIdentity) {
  * @throws {@link ApiError}
  */
 async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackRequest) {
-  const { externalReferenceNumber, internalReferenceNumber, ircs, vesselIdentifier } =
+  const { externalReferenceNumber, internalReferenceNumber, ircs, vesselId, vesselIdentifier } =
     getVesselIdentityAsEmptyStringWhenNull(identity)
   const trackDepth = trackRequest.trackDepth || ''
   const afterDateTime = trackRequest.afterDateTime?.toISOString() || ''
@@ -59,7 +60,7 @@ async function getVesselFromAPI(identity: VesselIdentity, trackRequest: TrackReq
   try {
     return await ky
       .get(
-        `/bff/v1/vessels/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`
+        `/bff/v1/vessels/find?vesselId=${vesselId}&internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&trackDepth=${trackDepth}&afterDateTime=${afterDateTime}&beforeDateTime=${beforeDateTime}`
       )
       .then(response =>
         response.json<VesselAndPositions>().then(vesselAndPositions => ({
@@ -121,15 +122,13 @@ async function getVesselVoyageFromAPI(
   tripNumber: number | undefined
 ) {
   const internalReferenceNumber = vesselIdentity.internalReferenceNumber || ''
-  const externalReferenceNumber = vesselIdentity.externalReferenceNumber || ''
-  const ircs = vesselIdentity.ircs || ''
   const nextTripNumber = tripNumber || ''
   const nextVoyageRequest = voyageRequest || ''
 
   try {
     return await ky
       .get(
-        `/bff/v1/vessels/logbook/find?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&voyageRequest=${nextVoyageRequest}&tripNumber=${nextTripNumber}`
+        `/bff/v1/vessels/logbook/find?internalReferenceNumber=${internalReferenceNumber}&voyageRequest=${nextVoyageRequest}&tripNumber=${nextTripNumber}`
       )
       .json<VesselVoyage>()
   } catch (err) {
@@ -146,10 +145,10 @@ async function getVesselVoyageFromAPI(
  *
  * @throws {@link ApiError}
  */
-async function getVesselControlsFromAPI(vesselInternalId: number, fromDate: Date) {
+async function getVesselControlsFromAPI(vesselId: number, fromDate: Date) {
   try {
     return await ky
-      .get(`/bff/v1/vessels/${vesselInternalId}/controls?afterDateTime=${fromDate.toISOString()}`)
+      .get(`/bff/v1/vessels/${vesselId}/controls?afterDateTime=${fromDate.toISOString()}`)
       .json<ControlSummary>()
   } catch (err) {
     throw new ApiError(CONTROLS_ERROR_MESSAGE, err)

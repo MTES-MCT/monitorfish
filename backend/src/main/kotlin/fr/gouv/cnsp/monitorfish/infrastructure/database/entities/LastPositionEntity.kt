@@ -36,6 +36,8 @@ data class LastPositionEntity(
     @Id
     @Column(name = "id")
     val id: Int,
+    @Column(name = "vessel_id")
+    val vesselId: Int? = null,
     @Column(name = "cfr")
     val internalReferenceNumber: String? = null,
     @Column(name = "mmsi")
@@ -126,6 +128,7 @@ data class LastPositionEntity(
 ) : Serializable {
 
     fun toLastPosition(mapper: ObjectMapper) = LastPosition(
+        vesselId = vesselId,
         internalReferenceNumber = internalReferenceNumber,
         ircs = ircs,
         mmsi = mmsi,

@@ -16,6 +16,9 @@ const getVesselBeaconMalfunctions = fromCron => (dispatch, getState) => {
     return
   }
   const vesselIdentity = getOnlyVesselIdentityProperties(selectedVessel)
+  if (!vesselIdentity.vesselId) {
+    return
+  }
 
   const {
     vesselBeaconMalfunctionsFromDate,
@@ -31,7 +34,7 @@ const getVesselBeaconMalfunctions = fromCron => (dispatch, getState) => {
     dispatch(loadVesselBeaconMalfunctions())
   }
 
-  getVesselBeaconsMalfunctionsFromAPI(vesselIdentity, vesselBeaconMalfunctionsFromDate).then(vesselBeaconsMalfunctions => {
+  getVesselBeaconsMalfunctionsFromAPI(vesselIdentity.vesselId, vesselBeaconMalfunctionsFromDate).then(vesselBeaconsMalfunctions => {
     dispatch(setVesselBeaconMalfunctionsResumeAndHistory({
       ...vesselBeaconsMalfunctions,
       vesselIdentity

@@ -13,7 +13,7 @@ export const getVesselControls = userRequest => (dispatch, getState) => {
     return
   }
 
-  if (!selectedVessel.vesselInternalId) {
+  if (!selectedVessel.vesselId) {
     batch(() => {
       dispatch(setError(new NoControlsFoundError('Aucun contrôle connu')))
       dispatch(
@@ -26,15 +26,12 @@ export const getVesselControls = userRequest => (dispatch, getState) => {
     return
   }
 
-  const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(
-    selectedVessel.vesselInternalId,
-    currentControlSummary
-  )
+  const isSameVesselAsCurrentlyShowed = getIsSameVesselAsCurrentlyShowed(selectedVessel.vesselId, currentControlSummary)
   if (!isSameVesselAsCurrentlyShowed) {
     dispatch(loadControls())
   }
 
-  getVesselControlsFromAPI(selectedVessel.vesselInternalId, controlsFromDate)
+  getVesselControlsFromAPI(selectedVessel.vesselId, controlsFromDate)
     .then(controlSummary => {
       if (isSameVesselAsCurrentlyShowed && !userRequest) {
         if (controlSummary.controls?.length > currentControlSummary.controls?.length) {
@@ -53,9 +50,9 @@ export const getVesselControls = userRequest => (dispatch, getState) => {
     })
 }
 
-const getIsSameVesselAsCurrentlyShowed = (vesselInternalId, currentControlSummary) => {
-  if (currentControlSummary?.vesselInternalId) {
-    return vesselInternalId === currentControlSummary.vesselInternalId
+const getIsSameVesselAsCurrentlyShowed = (vesselId, currentControlSummary) => {
+  if (currentControlSummary?.vesselId) {
+    return vesselId === currentControlSummary.vesselId
   }
 
   return false

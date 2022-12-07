@@ -55,7 +55,7 @@ export type ControlSummary = {
   numberOfSeaControls: number
   numberOfSecurityInfractions: number
   numberOfSeizures: number
-  vesselInternalId: number
+  vesselId: number
 }
 
 // TODO Check that these comments are not some sort of enum value.

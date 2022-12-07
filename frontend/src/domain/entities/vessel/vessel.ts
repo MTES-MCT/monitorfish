@@ -149,8 +149,8 @@ export const getOnlyVesselIdentityProperties = (
   internalReferenceNumber: vessel.internalReferenceNumber,
   ircs: vessel.ircs,
   mmsi: 'mmsi' in vessel ? vessel.mmsi : null,
+  vesselId: 'vesselId' in vessel ? vessel.vesselId : null,
   vesselIdentifier: 'vesselIdentifier' in vessel ? vessel.vesselIdentifier : null,
-  vesselInternalId: 'vesselInternalId' in vessel ? vessel.vesselInternalId : null,
   vesselName: vessel.vesselName
 })
 

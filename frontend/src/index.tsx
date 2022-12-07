@@ -5,7 +5,6 @@ import { createRoot } from 'react-dom/client'
 import { App } from './App'
 
 import 'rsuite/dist/rsuite.css'
-import 'mini.css'
 import 'nouislider/distribute/nouislider.css'
 import './ui/assets/index.css'
 import 'ol/ol.css'

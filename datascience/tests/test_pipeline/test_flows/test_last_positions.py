@@ -17,9 +17,8 @@ from src.pipeline.flows.last_positions import (
     extract_reportings,
     extract_risk_factors,
     flow,
+    join,
     load_last_positions,
-    merge_last_positions_beacon_malfunctions,
-    merge_last_positions_risk_factors_alerts_reportings,
     split,
     validate_action,
 )
@@ -40,6 +39,7 @@ def test_extract_risk_factors(reset_test_data):
     risk_factors = extract_risk_factors.run()
     assert len(risk_factors) == 2
     assert list(risk_factors) == [
+        "vessel_id",
         "cfr",
         "ircs",
         "external_immatriculation",
@@ -83,9 +83,10 @@ def test_extract_reportings(reset_test_data):
     reportings = extract_reportings.run()
     expected_reportings = pd.DataFrame(
         {
-            "cfr": ["ABC000180832"],
-            "external_immatriculation": ["VP374069"],
-            "ircs": ["CG1312"],
+            "vessel_id": [6],
+            "cfr": [None],
+            "ircs": ["ZZ000000"],
+            "external_immatriculation": ["ZZTOPACDC"],
             "reportings": [["ALERT"]],
         }
     )
@@ -96,6 +97,7 @@ def test_load_last_positions(reset_test_data):
     last_positions_to_load = pd.DataFrame(
         {
             "id": [13639642, 13640935],
+            "vessel_id": [1, None],
             "cfr": ["ABC000306959", "ABC000542519"],
             "external_immatriculation": ["RV348407", "RO237719"],
             "mmsi": [None, None],
@@ -168,17 +170,51 @@ def test_validate_action():
 
 
 def test_drop_duplicates():
+    d = datetime(2020, 2, 1, 12, 0, 0)
+    td = timedelta(hours=1)
     positions = pd.DataFrame(
         {
-            "cfr": ["A", "A", "B", "C"],
-            "external_immatriculation": ["AA", "A-A", "BB", "CC"],
-            "ircs": ["AAA", "AAA", "BBB", "CCC"],
-            "other_columns": ["some", "some", "more", "data"],
+            "vessel_id": [1, 1, 2, None, None, 4, 4, None, None],
+            "last_position_datetime_utc": [
+                d,
+                d + 0.5 * td,
+                d + 3 * td,
+                d + 4.2 * td,
+                d + 2.8 * td,
+                d + 2.9 * td,
+                d + 1.9 * td,
+                d + 1.1 * td,
+                d + 5.5 * td,
+            ],
+            "cfr": ["A", "A", "B", "C", "C", None, "D", None, None],
+            "external_immatriculation": [
+                "AA",
+                "A-A",
+                "BB",
+                "CC",
+                "C-C",
+                "DD",
+                "DD",
+                "EE",
+                None,
+            ],
+            "ircs": ["AAA", "AAA", "BBB", "CCC", "CCC", "DDD", "DDD", None, "BBB"],
+            "other_columns": [
+                "some",
+                "more",
+                "data",
+                "to",
+                "fill",
+                "my",
+                "test",
+                "data",
+                "frame",
+            ],
         }
     )
 
     res = drop_duplicates.run(positions)
-    expected_res = positions.iloc[[0, 2, 3]]
+    expected_res = positions.iloc[[2, 5, 1, 3, 7]]
     pd.testing.assert_frame_equal(res, expected_res)
 
 
@@ -224,6 +260,7 @@ def test_drop_unchanged_new_last_positions():
 def test_split():
     previous_last_positions = pd.DataFrame(
         {
+            "vessel_id": [1, None, 3, None, None, 7],
             "cfr": ["A", "B", "C", None, None, "G"],
             "external_immatriculation": [
                 "AA",
@@ -247,6 +284,7 @@ def test_split():
 
     new_last_positions = pd.DataFrame(
         {
+            "vessel_id": [1, None, None, None],
             "cfr": ["A", None, "F", "G"],
             "external_immatriculation": ["AA", None, "FF", "GG_updated"],
             "ircs": ["AAA", "EEE", None, None],
@@ -274,6 +312,7 @@ def test_split():
 
     expected_last_positions_to_update = pd.DataFrame(
         {
+            "vessel_id": [1, None, None],
             "cfr": ["A", "G", None],
             "external_immatriculation": ["AA", "GG_updated", None],
             "ircs": ["AAA", None, "EEE"],
@@ -437,10 +476,11 @@ def test_estimate_current_positions(mock_datetime):
     )
 
 
-def test_merge_last_positions_risk_factors_alerts_reportings():
+def test_join():
 
     last_positions = pd.DataFrame(
         {
+            "vessel_id": [1, 2, 3, None],
             "cfr": ["A", "B", None, None],
             "ircs": ["aa", "bb", "cc", None],
             "external_immatriculation": ["aaa", None, None, "ddd"],
@@ -451,7 +491,8 @@ def test_merge_last_positions_risk_factors_alerts_reportings():
 
     risk_factors = pd.DataFrame(
         {
-            "cfr": ["A", None, None, "E"],
+            "vessel_id": [1, 3, 4, 5],
+            "cfr": [None, None, "d", "E"],
             "ircs": ["aa", "cc", None, "ee"],
             "external_immatriculation": ["aaa", None, "ddd", "eee"],
             "impact_risk_factor": [1.2, 3.8, 1.2, 3.7],
@@ -464,6 +505,7 @@ def test_merge_last_positions_risk_factors_alerts_reportings():
 
     pending_alerts = pd.DataFrame(
         {
+            "vessel_id": [1, 6],
             "cfr": ["A", "F"],
             "ircs": [None, "ff"],
             "external_immatriculation": ["aaa", None],
@@ -476,6 +518,7 @@ def test_merge_last_positions_risk_factors_alerts_reportings():
 
     reportings = pd.DataFrame(
         {
+            "vessel_id": [1, 6],
             "cfr": ["A", "F"],
             "ircs": [None, "ff"],
             "external_immatriculation": ["aaa", None],
@@ -486,21 +529,28 @@ def test_merge_last_positions_risk_factors_alerts_reportings():
         }
     )
 
-    res = merge_last_positions_risk_factors_alerts_reportings.run(
-        last_positions, risk_factors, pending_alerts, reportings
+    known_malfunctions = pd.DataFrame(
+        {
+            "vessel_id": [2, 1, 5],
+            "id": [1, 2, 3],
+            "cfr": ["B", "A", "E"],
+            "external_immatriculation": ["BB", "AAA", "EE"],
+            "ircs": ["BBB", "AAA", "EEE"],
+        }
     )
 
-    res = (
-        res.sort_values(["cfr", "ircs", "external_immatriculation"])
-        .reset_index()
-        .drop(columns=["index"])
+    res = join.run(
+        last_positions, risk_factors, pending_alerts, reportings, known_malfunctions
     )
+
+    res = res.sort_values("vessel_id").reset_index(drop=True)
 
     expected_res = pd.DataFrame(
         {
-            "cfr": ["A", "B", None, None],
+            "vessel_id": [1.0, 2.0, 3.0, 4.0],
+            "cfr": ["A", "B", None, "d"],
             "ircs": ["aa", "bb", "cc", None],
-            "external_immatriculation": ["aaa", None, None, "ddd"],
+            "external_immatriculation": ["aaa", "BB", None, "ddd"],
             "latitude": [45, 45.12, 56.214, 21.325],
             "longitude": [-5.1236, -12.85, 1.01, -1.236],
             "impact_risk_factor": [1.2, None, 3.8, 1.2],
@@ -520,53 +570,9 @@ def test_merge_last_positions_risk_factors_alerts_reportings():
                 None,
                 None,
             ],
-        }
-    ).fillna({**default_risk_factors})
-
-    pd.testing.assert_frame_equal(expected_res, res)
-
-
-def test_merge_last_positions_beacon_malfunctions():
-
-    last_positions = pd.DataFrame(
-        {
-            "cfr": ["A", "B", None, None],
-            "ircs": ["aa", "bb", "cc", None],
-            "external_immatriculation": ["aaa", None, None, "ddd"],
-            "latitude": [45, 45.12, 56.214, 21.325],
-            "longitude": [-5.1236, -12.85, 1.01, -1.236],
-        }
-    )
-
-    known_malfunctions = pd.DataFrame(
-        {
-            "id": [1, 2, 3],
-            "cfr": ["B", "A", "E"],
-            "external_immatriculation": ["BB", "AAA", "EE"],
-            "ircs": ["BBB", "AAA", "EEE"],
-        }
-    )
-
-    res = merge_last_positions_beacon_malfunctions.run(
-        last_positions, known_malfunctions
-    )
-
-    res = (
-        res.sort_values(["cfr", "ircs", "external_immatriculation"])
-        .reset_index()
-        .drop(columns=["index"])
-    )
-
-    expected_res = pd.DataFrame(
-        {
-            "cfr": ["A", "B", None, None],
-            "ircs": ["aa", "bb", "cc", None],
-            "external_immatriculation": ["aaa", "BB", None, "ddd"],
-            "latitude": [45, 45.12, 56.214, 21.325],
-            "longitude": [-5.1236, -12.85, 1.01, -1.236],
             "beacon_malfunction_id": [2, 1, None, None],
         }
-    )
+    ).fillna({**default_risk_factors})
 
     pd.testing.assert_frame_equal(expected_res, res)
 

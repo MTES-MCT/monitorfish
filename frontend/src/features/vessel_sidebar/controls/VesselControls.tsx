@@ -10,7 +10,7 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import ControlsResumeZone from './ControlsResumeZone'
 import LastControlZone from './LastControlZone'
-import YearsToControlList from './YearsToControlList'
+import { YearsToControlList } from './YearsToControlList'
 
 export function VesselControls() {
   const dispatch = useAppDispatch()

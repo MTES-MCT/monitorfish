@@ -11,7 +11,7 @@ import {
 } from '../../common_styles/YearList.style'
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
 
-import type { BeaconMalfunctionResumeAndDetails } from '../../../../domain/types/beaconMalfunction'
+import type { BeaconMalfunctionResumeAndDetails } from '../../../../domain/entities/beaconMalfunction/types'
 
 type YearBeaconMalfunctionsProps = {
   setIsCurrentBeaconMalfunctionDetails: (boolean) => void

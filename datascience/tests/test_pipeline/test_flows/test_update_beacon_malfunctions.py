@@ -567,7 +567,7 @@ def test_load_new_beacon_malfunctions(reset_test_data):
     load_new_beacon_malfunctions.run(new_beacon_malfunctions)
 
     loaded_beacon_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+        "monitorfish_remote", "SELECT * FROM beacon_malfunctions ORDER BY id"
     )
 
     assert len(loaded_beacon_malfunctions) == len(initial_beacon_malfunctions) + 2

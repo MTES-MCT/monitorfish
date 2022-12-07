@@ -22,10 +22,12 @@ from src.pipeline.shared_tasks.healthcheck import (
     assert_positions_health,
     get_monitorfish_healthcheck,
 )
+from src.pipeline.shared_tasks.infrastructure import get_table
 from src.pipeline.shared_tasks.positions import (
     add_vessel_identifier,
     tag_positions_at_port,
 )
+from src.pipeline.shared_tasks.vessels import add_vessel_id
 
 
 @task(checkpoint=False)
@@ -92,22 +94,28 @@ def extract_reportings() -> pd.DataFrame:
 @task(checkpoint=False)
 def drop_duplicates(positions: pd.DataFrame) -> pd.DataFrame:
     """
-    Drop duplicate vessels in a `pandas.DataFrame` of positions.
+    Drop duplicate vessels in a `pandas.DataFrame` of positions, keeping only the most
+    recent position of each vessel.
 
     This is required although the query that computes last positions already contains a
     DISTINCT ON clause because for some vessels, we receive each position twice with
     partially different identifiers - for instance, the same CFR but different ircs or
     external immatriculation.
 
+    De-deplucation is done using, by decreasing priority, vessel_id, CFR, ircs and
+    external_immatriculation.
+
     Args:
-        positions (pd.DataFrame): positions of vessels. Must contain columns "cfr",
-          "external_immatriculation" and "ircs".
+        positions (pd.DataFrame): positions of vessels. Must contain columns
+          "vessel_id", "cfr", "external_immatriculation", "ircs" and
+          "last_position_datetime_utc".
 
     Returns:
         pd.DataFrame: DataFrame of vessels' last position with duplicates removed.
     """
     return drop_duplicates_by_decreasing_priority(
-        positions, subset=["cfr", "external_immatriculation", "ircs"]
+        positions.sort_values(by="last_position_datetime_utc", ascending=False),
+        subset=["vessel_id", "cfr", "ircs", "external_immatriculation"],
     )
 
 
@@ -180,7 +188,7 @@ def split(
     previous_last_positions = previous_last_positions.copy(deep=True)
     new_last_positions = new_last_positions.copy(deep=True)
 
-    vessel_id_cols = ["cfr", "external_immatriculation", "ircs"]
+    vessel_id_cols = ["vessel_id", "cfr", "ircs", "external_immatriculation"]
 
     unchanged_previous_last_positions = previous_last_positions[
         ~left_isin_right_by_decreasing_priority(
@@ -354,57 +362,50 @@ def estimate_current_positions(
 
 
 @task(checkpoint=False)
-def merge_last_positions_risk_factors_alerts_reportings(
+def join(
     last_positions: pd.DataFrame,
     risk_factors: pd.DataFrame,
     pending_alerts: pd.DataFrame,
     reportings: pd.DataFrame,
+    beacon_malfunctions: pd.DataFrame,
 ) -> pd.DataFrame:
     """
-    Performs a left join on last_positions, risk_factors, pending_alerts and reportings
-    using cfr, ircs and external_immatriculation as join keys.
+    Performs a left join on last_positions, risk_factors, pending_alerts, reportings and
+    beacon_malfunctions using vessel_id cfr, ircs and external_immatriculation as join
+    keys.
     """
+    join_keys = ["vessel_id", "cfr", "ircs", "external_immatriculation"]
+
     last_positions = join_on_multiple_keys(
         last_positions,
         risk_factors,
-        or_join_keys=["cfr", "ircs", "external_immatriculation"],
+        or_join_keys=join_keys,
         how="left",
     )
 
     last_positions = join_on_multiple_keys(
         last_positions,
         pending_alerts,
-        or_join_keys=["cfr", "ircs", "external_immatriculation"],
+        or_join_keys=join_keys,
         how="left",
     )
 
     last_positions = join_on_multiple_keys(
         last_positions,
         reportings,
-        or_join_keys=["cfr", "ircs", "external_immatriculation"],
+        or_join_keys=join_keys,
+        how="left",
+    )
+
+    last_positions = join_on_multiple_keys(
+        last_positions,
+        beacon_malfunctions.rename(columns={"id": "beacon_malfunction_id"}),
+        or_join_keys=join_keys,
         how="left",
     )
 
     last_positions = last_positions.fillna(
         {**default_risk_factors, "total_weight_onboard": 0.0}
-    )
-    return last_positions
-
-
-@task(checkpoint=False)
-def merge_last_positions_beacon_malfunctions(
-    last_positions: pd.DataFrame,
-    beacon_malfunctions: pd.DataFrame,
-) -> pd.DataFrame:
-    """
-    Performs a left join on last_positions and beacon_malfunctions using cfr,
-    ircs and external_immatriculation as join keys.
-    """
-    last_positions = join_on_multiple_keys(
-        last_positions,
-        beacon_malfunctions.rename(columns={"id": "beacon_malfunction_id"}),
-        or_join_keys=["cfr", "ircs", "external_immatriculation"],
-        how="left",
     )
 
     return last_positions
@@ -424,7 +425,7 @@ def load_last_positions(last_positions):
         handle_array_conversion_errors=True,
         value_on_array_conversion_error="{}",
         jsonb_columns=["gear_onboard", "species_onboard"],
-        nullable_integer_columns=["beacon_malfunction_id"],
+        nullable_integer_columns=["beacon_malfunction_id", "vessel_id"],
         timedelta_columns=["emission_period"],
     )
 
@@ -448,6 +449,9 @@ with Flow("Last positions", executor=LocalDaskExecutor()) as flow:
         action = validate_action(action, upstream_tasks=[positions_healthcheck])
 
         # Extract & Transform
+
+        vessels_table = get_table("vessels")
+
         risk_factors = extract_risk_factors(upstream_tasks=[positions_healthcheck])
         pending_alerts = extract_pending_alerts(upstream_tasks=[positions_healthcheck])
         reportings = extract_reportings(upstream_tasks=[positions_healthcheck])
@@ -456,12 +460,16 @@ with Flow("Last positions", executor=LocalDaskExecutor()) as flow:
         )
 
         last_positions = extract_last_positions(minutes=minutes)
+        last_positions = add_vessel_id(last_positions, vessels_table)
         last_positions = drop_duplicates(last_positions)
         last_positions = add_vessel_identifier(last_positions)
         last_positions = tag_positions_at_port(last_positions)
 
         with case(action, "update"):
             previous_last_positions = extract_previous_last_positions()
+            previous_last_positions = add_vessel_id(
+                previous_last_positions, vessels_table
+            )
             previous_last_positions = drop_duplicates(previous_last_positions)
             new_last_positions = drop_unchanged_new_last_positions(
                 last_positions, previous_last_positions
@@ -489,11 +497,12 @@ with Flow("Last positions", executor=LocalDaskExecutor()) as flow:
             last_positions=last_positions,
             max_hours_since_last_position=current_position_estimation_max_hours,
         )
-        last_positions = merge_last_positions_risk_factors_alerts_reportings(
-            last_positions, risk_factors, pending_alerts, reportings
-        )
-        last_positions = merge_last_positions_beacon_malfunctions(
-            last_positions, beacon_malfunctions
+        last_positions = join(
+            last_positions,
+            risk_factors,
+            pending_alerts,
+            reportings,
+            beacon_malfunctions,
         )
 
         # Load

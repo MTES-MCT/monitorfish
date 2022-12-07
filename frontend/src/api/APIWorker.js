@@ -139,7 +139,7 @@ const APIWorker = () => {
       } else if (vesselSidebarTab === VesselSidebarTab.REPORTING) {
         dispatch(getVesselReportings())
       } else if (isAdmin && vesselSidebarTab === VesselSidebarTab.ERSVMS) {
-        dispatch(getVesselBeaconMalfunctions())
+        dispatch(getVesselBeaconMalfunctions(true))
       }
 
       setUpdateVesselSidebarTab(false)

@@ -79,7 +79,7 @@ const VesselSidebarTabs = () => {
             onClick={() => dispatch(showVesselSidebarTab(VesselSidebarTab.ERSVMS))}
             data-cy={'vessel-menu-ers-vms'}
           >
-            <VMSIcon/> <br/> VMS/ERS
+            <VMSIcon/> <br/> VMS
           </Tab>
           : null
       }

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/constants'
 import LastControlZone from './LastControlZone'
 import ControlsResumeZone from './ControlsResumeZone'
-import YearsToControlList from './YearsToControlList'
+import { YearsToControlList } from './YearsToControlList'
 import { getYearsToControl, lastControlByType } from '../../../domain/entities/controls'
 import getVesselControls from '../../../domain/use_cases/vessel/getVesselControls'
 import {
@@ -33,11 +33,11 @@ const VesselControls = () => {
 
   /** @type {Object.<string, VesselControl[]>} yearsToControls */
   const yearsToControls = useMemo(() => {
-    let nextYearsToControls
-    if (controlResumeAndControls?.controls) {
-      nextYearsToControls = getYearsToControl(controlsFromDate, controlResumeAndControls.controls)
+    if (!controlResumeAndControls?.controls) {
+      return {}
     }
-    return nextYearsToControls
+
+    return getYearsToControl(controlsFromDate, controlResumeAndControls.controls)
   }, [controlResumeAndControls, controlsFromDate])
 
   /** @type {LastControls} lastControlList */

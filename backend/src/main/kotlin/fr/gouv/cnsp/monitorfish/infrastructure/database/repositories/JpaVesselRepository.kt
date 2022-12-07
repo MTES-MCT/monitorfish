@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
+import java.util.NoSuchElementException
 
 @Repository
 class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : VesselRepository {
@@ -46,8 +47,12 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
         return dbVesselRepository.findAllByIds(ids).map { it.toVessel() }
     }
 
-    override fun findVessel(vesselId: Int): Vessel {
-        return dbVesselRepository.findById(vesselId).get().toVessel()
+    override fun findVessel(vesselId: Int): Vessel? {
+        return try {
+            dbVesselRepository.findById(vesselId).get().toVessel()
+        } catch (e: NoSuchElementException) {
+            null
+        }
     }
 
     @Cacheable(value = ["search_vessels"])

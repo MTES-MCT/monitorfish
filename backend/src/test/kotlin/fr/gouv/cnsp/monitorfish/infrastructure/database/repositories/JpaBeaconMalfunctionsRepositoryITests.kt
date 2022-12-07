@@ -103,23 +103,6 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllByVesselWithoutVesselIdentifier Should return beacon attached to a vessel When there is no vessel identifier`() {
-        // When
-        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllByVesselWithoutVesselIdentifier(
-            "FR263465414",
-            "",
-            "",
-            ZonedDateTime.now().minusYears(1)
-        )
-
-        assertThat(baconMalfunctions).hasSize(1)
-        assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")
-        assertThat(baconMalfunctions.first().stage).isEqualTo(Stage.ARCHIVED)
-        assertThat(baconMalfunctions.first().vesselStatus).isEqualTo(VesselStatus.ON_SALE)
-    }
-
-    @Test
-    @Transactional
     fun `requestNotification Should update the requestNotification field`() {
         // Given
         val initialBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }

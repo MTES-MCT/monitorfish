@@ -75,7 +75,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessels = jpaVesselRepository.search("LE b")
 
-        assertThat(vessels).hasSize(1)
+        assertThat(vessels).hasSize(2)
         assertThat(vessels.first().internalReferenceNumber).isEqualTo("FR263418260")
     }
 

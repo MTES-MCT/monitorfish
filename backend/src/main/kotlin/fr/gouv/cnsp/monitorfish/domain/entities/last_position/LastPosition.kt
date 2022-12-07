@@ -10,6 +10,7 @@ data class LastPosition(
     val id: Int? = null,
 
     /* Vessel identification properties */
+    val vesselId: Int? = null,
     // Unique code composed by the contracting party/cooperating non-contracting party expressed as 3-alpha
     // country code followed by the vessel registration number as recorded in the national fleet register
     val internalReferenceNumber: String? = null,

@@ -75,7 +75,7 @@ class GetInfractionSuspicionWithDMLAndSeaFrontUTests {
     @Test
     fun `execute Should not throw an exception When the vessel is not found`() {
         // Given
-        given(vesselRepository.findVessel(eq(123))).willThrow(NoSuchElementException("No value present"))
+        given(vesselRepository.findVessel(eq(123))).willReturn(null)
 
         // When
         val throwable = catchThrowable {

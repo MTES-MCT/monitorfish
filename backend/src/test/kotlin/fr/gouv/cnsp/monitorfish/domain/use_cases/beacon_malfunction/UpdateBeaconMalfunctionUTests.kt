@@ -73,7 +73,7 @@ class UpdateBeaconMalfunctionUTests {
                 1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                 "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                 ZonedDateTime.now(), null, ZonedDateTime.now(),
-                beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
             )
         )
         given(beaconMalfunctionActionRepository.findAllByBeaconMalfunctionId(any())).willReturn(
@@ -95,7 +95,7 @@ class UpdateBeaconMalfunctionUTests {
                         1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
                     ),
                     comments = listOf(
                         BeaconMalfunctionComment(

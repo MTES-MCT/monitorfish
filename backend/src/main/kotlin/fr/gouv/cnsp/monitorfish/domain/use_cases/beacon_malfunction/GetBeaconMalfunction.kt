@@ -40,51 +40,7 @@ class GetBeaconMalfunction(
         }
 
         val oneYearBefore = ZonedDateTime.now().minusYears(1)
-        val vesselBeaconMalfunctions = try {
-            when (beaconMalfunction.vesselIdentifier) {
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> {
-                    require(beaconMalfunction.internalReferenceNumber != null) {
-                        "The fields 'internalReferenceNumber' must be not null when the vessel identifier is INTERNAL_REFERENCE_NUMBER."
-                    }
-                    beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(
-                        beaconMalfunction.vesselIdentifier,
-                        beaconMalfunction.internalReferenceNumber,
-                        oneYearBefore
-                    )
-                }
-                VesselIdentifier.IRCS -> {
-                    require(beaconMalfunction.ircs != null) {
-                        "The fields 'ircs' must be not null when the vessel identifier is IRCS."
-                    }
-                    beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(
-                        beaconMalfunction.vesselIdentifier,
-                        beaconMalfunction.ircs,
-                        oneYearBefore
-                    )
-                }
-                VesselIdentifier.EXTERNAL_REFERENCE_NUMBER -> {
-                    require(beaconMalfunction.externalReferenceNumber != null) {
-                        "The fields 'externalReferenceNumber' must be not null when the vessel identifier is EXTERNAL_REFERENCE_NUMBER."
-                    }
-                    beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(
-                        beaconMalfunction.vesselIdentifier,
-                        beaconMalfunction.externalReferenceNumber,
-                        oneYearBefore
-                    )
-                }
-                else -> beaconMalfunctionsRepository.findAllByVesselWithoutVesselIdentifier(
-                    beaconMalfunction.internalReferenceNumber ?: "",
-                    beaconMalfunction.externalReferenceNumber ?: "",
-                    beaconMalfunction.ircs ?: "",
-                    oneYearBefore
-                )
-            }
-        } catch (e: Throwable) {
-            logger.error("Could not fetch historical beacon malfunctions of vessel " +
-                "${beaconMalfunction.internalReferenceNumber}/${beaconMalfunction.ircs}/${beaconMalfunction.externalReferenceNumber}", e)
-
-            listOf()
-        }
+        val vesselBeaconMalfunctions = beaconMalfunctionsRepository.findAllByVesselId(beaconMalfunction.vesselId, oneYearBefore)
 
         val beaconMalfunctionsWithDetails = vesselBeaconMalfunctions.map { vesselBeaconMalfunction ->
             val comments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(vesselBeaconMalfunction.id)

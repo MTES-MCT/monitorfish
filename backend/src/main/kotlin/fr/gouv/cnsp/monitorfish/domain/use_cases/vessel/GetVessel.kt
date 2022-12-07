@@ -3,8 +3,8 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselInformation
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

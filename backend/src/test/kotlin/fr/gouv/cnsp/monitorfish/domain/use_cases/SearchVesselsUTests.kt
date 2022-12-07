@@ -39,7 +39,9 @@ class SearchVesselsUTests {
     fun `execute Should return vessels When there is a match with a beacon`() {
         // Given
         given(vesselRepository.search(any())).willReturn(listOf(Vessel()))
-        given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(listOf(Vessel(1, internalReferenceNumber = "1234"), Vessel(2, internalReferenceNumber = "5789")))
+        given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(
+            listOf(Vessel(1, internalReferenceNumber = "1234"), Vessel(2, internalReferenceNumber = "5789"))
+        )
         given(beaconRepository.search(any()))
             .willReturn(
                 listOf(
@@ -63,12 +65,16 @@ class SearchVesselsUTests {
         // Given
         given(vesselRepository.search(any())).willReturn(listOf(Vessel(id = 1, internalReferenceNumber = "1234")))
         given(beaconRepository.search(any()))
-            .willReturn(listOf(
-                Beacon("123", 1),
-                Beacon("12456", 2),
-                Beacon("123456789", null),
-            ))
-        given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(listOf(Vessel(1, internalReferenceNumber = "1234"), Vessel(2, internalReferenceNumber = "5789")))
+            .willReturn(
+                listOf(
+                    Beacon("123", 1),
+                    Beacon("12456", 2),
+                    Beacon("123456789", null)
+                )
+            )
+        given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(
+            listOf(Vessel(1, internalReferenceNumber = "1234"), Vessel(2, internalReferenceNumber = "5789"))
+        )
 
         // When
         val vessels = SearchVessels(vesselRepository, beaconRepository).execute("12")
@@ -82,14 +88,20 @@ class SearchVesselsUTests {
     @Test
     fun `execute Should return vessels When there is a match with a beacon, the same vessel found in the vessel table and another vessel concatenated`() {
         // Given
-        given(vesselRepository.search(any())).willReturn(listOf(Vessel(id = 123456, internalReferenceNumber = "12345688415")))
+        given(vesselRepository.search(any())).willReturn(
+            listOf(Vessel(id = 123456, internalReferenceNumber = "12345688415"))
+        )
         given(beaconRepository.search(any()))
-            .willReturn(listOf(
-                Beacon("123", 1),
-                Beacon("12456", 2),
-                Beacon("123456789", null),
-            ))
-        given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(listOf(Vessel(1, internalReferenceNumber = "1234"), Vessel(2, internalReferenceNumber = "5789")))
+            .willReturn(
+                listOf(
+                    Beacon("123", 1),
+                    Beacon("12456", 2),
+                    Beacon("123456789", null)
+                )
+            )
+        given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(
+            listOf(Vessel(1, internalReferenceNumber = "1234"), Vessel(2, internalReferenceNumber = "5789"))
+        )
 
         // When
         val vessels = SearchVessels(vesselRepository, beaconRepository).execute("12")

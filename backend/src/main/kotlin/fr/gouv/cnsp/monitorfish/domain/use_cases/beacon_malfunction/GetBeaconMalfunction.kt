@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -40,7 +39,10 @@ class GetBeaconMalfunction(
         }
 
         val oneYearBefore = ZonedDateTime.now().minusYears(1)
-        val vesselBeaconMalfunctions = beaconMalfunctionsRepository.findAllByVesselId(beaconMalfunction.vesselId, oneYearBefore)
+        val vesselBeaconMalfunctions = beaconMalfunctionsRepository.findAllByVesselId(
+            beaconMalfunction.vesselId,
+            oneYearBefore
+        )
 
         val beaconMalfunctionsWithDetails = vesselBeaconMalfunctions.map { vesselBeaconMalfunction ->
             val comments = beaconMalfunctionCommentsRepository.findAllByBeaconMalfunctionId(vesselBeaconMalfunction.id)

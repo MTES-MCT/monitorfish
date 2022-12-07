@@ -17,6 +17,7 @@ import type {
   SelectedVessel,
   TrackRequest,
   VesselEnhancedLastPositionWebGLObject,
+  VesselFeatureId,
   VesselIdentity,
   VesselPosition
 } from '../entities/vessel/types'
@@ -109,7 +110,7 @@ const vesselSlice = createSlice({
       state,
       action: PayloadAction<{
         reportingType: ReportingType
-        vesselFeatureId: string
+        vesselFeatureId: VesselFeatureId
       }>
     ) {
       state.vessels = state.vessels.map(vessel => {
@@ -208,7 +209,7 @@ const vesselSlice = createSlice({
       action: PayloadAction<{
         alertType: string
         isValidated: boolean
-        vesselFeatureId: string
+        vesselFeatureId: VesselFeatureId
       }>
     ) {
       state.vessels = state.vessels.map(vessel => {
@@ -271,7 +272,7 @@ const vesselSlice = createSlice({
       state,
       action: PayloadAction<{
         reportingType: string
-        vesselFeatureId: string
+        vesselFeatureId: VesselFeatureId
       }>
     ) {
       state.vessels = state.vessels.map(vessel => {

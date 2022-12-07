@@ -8,6 +8,17 @@ import type LineString from 'ol/geom/LineString'
 import type Point from 'ol/geom/Point'
 
 /**
+ * The vessel id number used to identify vessels entered in the NAVPRO French database
+ * It is used for :
+ * - Controls
+ * - Beacons
+ * - Vessel information
+ *
+ * i.e: 20569
+ */
+export type VesselId = number
+
+/**
  * The vessel composite key/identifier used to identify all vessels
  * by concatenating :
  * - internalReferenceNumber
@@ -21,14 +32,13 @@ import type Point from 'ol/geom/Point'
 export type VesselCompositeIdentifier = string
 
 /**
- * The vessel id number used to identify vessels entered in the NAVPRO French database
- * It is used for :
- * - Controls
- * - Beacons
+ * The vessel feature id is the vessel composite key concatenated to the `vessel:` string.
+ * It is mainly used to distinct OpenLayers objects (called Features)
  *
- * i.e: 20569
+ * i.e: "vessel:FAK000999999/CALLME/DONTSINK"
+ * @see VesselCompositeIdentifier
  */
-export type VesselInternalId = number
+export type VesselFeatureId = string
 
 export enum VesselIdentifier {
   EXTERNAL_REFERENCE_NUMBER = 'EXTERNAL_REFERENCE_NUMBER',
@@ -44,8 +54,8 @@ export type VesselIdentity = {
   internalReferenceNumber: string | null
   ircs: string | null
   mmsi?: string | null
+  vesselId?: VesselId | null
   vesselIdentifier?: VesselIdentifier | null
-  vesselInternalId?: VesselInternalId | null
   vesselName?: string | null
 }
 
@@ -77,7 +87,7 @@ export type Vessel = {
   sailingType: string
   underCharter: boolean
   vesselEmails: string[]
-  vesselInternalId: number
+  vesselId: number
   vesselName: string
   vesselPhones: string[]
   vesselType: string
@@ -134,6 +144,7 @@ export type VesselLastPosition = {
   totalWeightOnboard: number
   tripNumber: number
   underCharter: boolean
+  vesselId: number | null
   vesselIdentifier: VesselIdentifier
   vesselName: string
   width: number
@@ -253,7 +264,7 @@ export type VesselEnhancedLastPositionWebGLObject = {
   isFiltered: number // 0 is False, 1 is True - for WebGL
   lastPositionSentAt: number
   speed: number
-  vesselFeatureId: string
+  vesselFeatureId: VesselFeatureId
   vesselProperties: VesselEnhancedObject
 }
 

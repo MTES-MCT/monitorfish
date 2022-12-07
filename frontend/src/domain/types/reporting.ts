@@ -20,8 +20,8 @@ export type BaseReporting = {
   type: ReportingType
   underCharter: boolean
   validationDate: string
+  vesselId: number | null
   vesselIdentifier: VesselIdentifier
-  vesselInternalId: number | null
   vesselName: string
 
   // TODO These 2 props shouldn't be there at all and should be treated in a separated redux state.

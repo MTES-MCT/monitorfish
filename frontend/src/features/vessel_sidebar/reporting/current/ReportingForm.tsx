@@ -192,8 +192,8 @@ export function ReportingForm({
           flagState: selectedVesselIdentity?.flagState?.toUpperCase(),
           type: nextReporting.type
         },
+        vesselId: selectedVesselIdentity?.vesselId,
         vesselIdentifier: selectedVesselIdentity?.vesselIdentifier,
-        vesselInternalId: selectedVesselIdentity?.vesselInternalId,
         vesselName: selectedVesselIdentity?.vesselName
       }
 

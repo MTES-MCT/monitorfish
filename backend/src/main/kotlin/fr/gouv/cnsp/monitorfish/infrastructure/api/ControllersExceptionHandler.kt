@@ -53,7 +53,7 @@ class ControllersExceptionHandler {
     @ExceptionHandler(CouldNotUpdateFleetSegmentException::class)
     fun handleCouldNotUpdateFleetSegmentException(e: Exception): ApiError {
         logger.error(e.message, e.cause)
-        return ApiError(CouldNotUpdateFleetSegmentException(e.message.toString(), e))
+        return ApiError(e)
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -5,8 +5,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
 
 @UseCase
-class GetAllFleetSegments(private val fleetSegmentRepository: FleetSegmentRepository) {
-    fun execute(): List<FleetSegment> {
-        return fleetSegmentRepository.findAll()
+class GetAllFleetSegmentsByYear(private val fleetSegmentRepository: FleetSegmentRepository) {
+    fun execute(year: Int): List<FleetSegment> {
+        return fleetSegmentRepository.findAllByYear(year)
     }
 }

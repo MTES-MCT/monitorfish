@@ -41,11 +41,13 @@ class SearchVesselsUTests {
         given(vesselRepository.search(any())).willReturn(listOf(Vessel()))
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(listOf(Vessel(1), Vessel(2)))
         given(beaconRepository.search(any()))
-            .willReturn(listOf(
-                Beacon("123", 1),
-                Beacon("12456", 2),
-                Beacon("123456789", null),
-            ))
+            .willReturn(
+                listOf(
+                    Beacon("123", 1),
+                    Beacon("12456", 2),
+                    Beacon("123456789", null)
+                )
+            )
 
         // When
         val vessels = SearchVessels(vesselRepository, beaconRepository).execute("12")

@@ -9,15 +9,15 @@ from prefect.executors import LocalDaskExecutor
 
 from config import default_risk_factors
 from src.pipeline.generic_tasks import extract, load
-from src.pipeline.helpers.segments import (
-    attribute_segments_to_catches,
-    extract_segments,
-    unnest_segments,
-)
+from src.pipeline.helpers.segments import attribute_segments_to_catches
 from src.pipeline.processing import df_to_dict_series
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.facades import extract_facade_areas
 from src.pipeline.shared_tasks.infrastructure import get_table
+from src.pipeline.shared_tasks.segments import (
+    extract_segments_of_current_year,
+    unnest_segments,
+)
 from src.pipeline.shared_tasks.vessels import add_vessel_id
 
 
@@ -240,7 +240,7 @@ with Flow("Current segments", executor=LocalDaskExecutor()) as flow:
         # Extract
         catches = extract_catches()
         last_positions = extract_last_positions()
-        segments = extract_segments()
+        segments = extract_segments_of_current_year()
         facade_areas = extract_facade_areas()
         control_priorities = extract_control_priorities()
 

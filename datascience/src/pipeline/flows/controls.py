@@ -8,11 +8,7 @@ from prefect.executors import LocalDaskExecutor
 
 from src.pipeline.generic_tasks import extract, load
 from src.pipeline.helpers.fao_areas import remove_redundant_fao_area_codes
-from src.pipeline.helpers.segments import (
-    attribute_segments_to_catches,
-    extract_segments,
-    unnest_segments,
-)
+from src.pipeline.helpers.segments import attribute_segments_to_catches
 from src.pipeline.processing import (
     df_to_dict_series,
     try_get_factory,
@@ -20,6 +16,10 @@ from src.pipeline.processing import (
 )
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.facades import extract_facade_areas
+from src.pipeline.shared_tasks.segments import (
+    extract_segments_of_current_year,
+    unnest_segments,
+)
 
 
 # ********************************** Tasks and flow ***********************************
@@ -457,7 +457,7 @@ with Flow("Controls", executor=LocalDaskExecutor()) as flow:
         fao_areas = extract_fao_areas()
         facade_areas = extract_facade_areas()
         ports = extract_ports()
-        segments = extract_segments()
+        segments = extract_segments_of_current_year()
         catch_controls = extract_catch_controls()
 
         # Transform

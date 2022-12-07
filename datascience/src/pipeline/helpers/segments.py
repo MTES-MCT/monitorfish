@@ -2,9 +2,6 @@ import warnings
 from typing import Union
 
 import pandas as pd
-from prefect import task
-
-from src.pipeline.generic_tasks import extract
 
 
 def catch_area_isin_fao_area(
@@ -149,30 +146,3 @@ def attribute_segments_to_catches(
         )
 
     return segmented_catches
-
-
-@task(checkpoint=False)
-def extract_segments():  # pragma: no cover
-    segments = extract(
-        db_name="monitorfish_remote", query_filepath="monitorfish/fleet_segments.sql"
-    )
-
-    # Remove duplicate species that arise from the concatenation of target species and
-    # bycatch species
-    segments["species"] = segments.species.map(lambda l: list(set(l)))
-
-    return segments
-
-
-@task(checkpoint=False)
-def unnest_segments(segments):
-    segments = (
-        segments.explode("gears")
-        .explode("fao_areas")
-        .explode("species")
-        .rename(columns={"fao_areas": "fao_area", "gears": "gear"})
-    )
-
-    #     segments.index = np.arange(len(segments))
-
-    return segments

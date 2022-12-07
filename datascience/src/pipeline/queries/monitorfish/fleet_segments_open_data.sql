@@ -1,4 +1,5 @@
 SELECT
+    year,
     segment,
     segment_name,
     gears,

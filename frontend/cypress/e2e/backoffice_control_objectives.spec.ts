@@ -81,20 +81,20 @@ context('Control objectives', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(14).click()
+    cy.get('[data-cy="row-78-controlPriorityLevel-1"]').click()
     cy.get('.rs-picker-select-menu-item').eq(2).click()
     cy.wait('@updateObjective')
 
     // Then
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(14).children().children().children().contains('3')
+    cy.get('[data-cy="row-78-controlPriorityLevel-3"]').should('exist')
 
     // The value is saved in database when I refresh the page
     cy.intercept('GET', '/bff/v1/control_objectives').as('controlObjectives')
     cy.visit('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(14).children().children().children().contains('3')
+    cy.get('[data-cy="row-78-controlPriorityLevel-3"]').should('exist')
   })
 
   it('Should delete an objective', () => {

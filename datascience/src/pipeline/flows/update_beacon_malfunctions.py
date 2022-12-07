@@ -76,7 +76,7 @@ def extract_satellite_operators_statuses() -> pd.DataFrame:
 
 
 @task(checkpoint=False)
-def get_last_emissions(
+def get_last_emissions_of_vessels_that_should_emit(
     vessels_that_should_emit: pd.DataFrame, last_positions: pd.DataFrame
 ) -> pd.DataFrame:
     """
@@ -96,7 +96,7 @@ def get_last_emissions(
     Returns:
         pd.DataFrame: last emissions of the input vessels with their current beacon
     """
-    last_emissions = join_on_multiple_keys(
+    last_emissions_of_vessels_that_should_emit = join_on_multiple_keys(
         vessels_that_should_emit,
         last_positions,
         or_join_keys=["cfr", "ircs", "external_immatriculation"],
@@ -104,20 +104,23 @@ def get_last_emissions(
         coalesce_common_columns=False,
     )
 
-    last_emissions = (
-        last_emissions.sort_values("last_position_datetime_utc", ascending=False)
+    last_emissions_of_vessels_that_should_emit = (
+        last_emissions_of_vessels_that_should_emit.sort_values(
+            "last_position_datetime_utc", ascending=False
+        )
         .groupby("beacon_number")
         .head(1)
         .reset_index(drop=True)
     )
 
-    last_emissions[
+    last_emissions_of_vessels_that_should_emit[
         "last_position_datetime_utc"
-    ] = last_emissions.last_position_datetime_utc.where(
-        last_emissions.last_position_datetime_utc > last_emissions.logging_datetime_utc
+    ] = last_emissions_of_vessels_that_should_emit.last_position_datetime_utc.where(
+        last_emissions_of_vessels_that_should_emit.last_position_datetime_utc
+        > last_emissions_of_vessels_that_should_emit.logging_datetime_utc
     )
 
-    return last_emissions
+    return last_emissions_of_vessels_that_should_emit
 
 
 @task(checkpoint=False)
@@ -176,19 +179,25 @@ def get_new_malfunctions(
 
 @task(checkpoint=False)
 def get_ended_malfunction_ids(
-    last_emissions: pd.DataFrame,
+    last_emissions_of_vessels_that_should_emit: pd.DataFrame,
     known_malfunctions: pd.DataFrame,
     malfunction_datetime_utc_threshold_at_sea: datetime,
 ) -> Tuple[list, list, list, list]:
 
     ids_not_required_to_emit = set(
         known_malfunctions.loc[
-            ~known_malfunctions.beacon_number.isin(last_emissions.beacon_number), "id"
+            ~known_malfunctions.beacon_number.isin(
+                last_emissions_of_vessels_that_should_emit.beacon_number
+            ),
+            "id",
         ]
     )
 
     known_malfunctions_last_emissions = pd.merge(
-        known_malfunctions, last_emissions, on="beacon_number", how="inner"
+        known_malfunctions,
+        last_emissions_of_vessels_that_should_emit,
+        on="beacon_number",
+        how="inner",
     )
 
     malfunctions_with_restarted_emissions = known_malfunctions_last_emissions.loc[
@@ -497,10 +506,14 @@ with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
             now - non_emission_at_port_max_duration
         )
 
-        last_emissions = get_last_emissions(vessels_that_should_emit, last_positions)
+        last_emissions_of_vessels_that_should_emit = (
+            get_last_emissions_of_vessels_that_should_emit(
+                vessels_that_should_emit, last_positions
+            )
+        )
 
         new_malfunctions = get_new_malfunctions(
-            last_emissions,
+            last_emissions_of_vessels_that_should_emit,
             known_malfunctions,
             satellite_operators_statuses,
             malfunction_datetime_utc_threshold_at_sea,
@@ -517,7 +530,7 @@ with Flow("Beacons malfunctions", executor=LocalDaskExecutor()) as flow:
             ids_not_required_to_emit,
             ids_unsupervised_restarted_emitting,
         ) = get_ended_malfunction_ids(
-            last_emissions,
+            last_emissions_of_vessels_that_should_emit,
             known_malfunctions,
             malfunction_datetime_utc_threshold_at_sea,
         )

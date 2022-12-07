@@ -143,6 +143,8 @@ export const FleetSegmentInput = ({ maxLength, value, inputType, id, dataKey, wi
 }
 
 export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) => {
+  const dataCy = `row-${rowData.id}-${dataKey}-${rowData[dataKey]}`
+
   return (
     <Cell
       key={rowData.id}
@@ -150,6 +152,7 @@ export const ControlPriorityCell = ({ rowData, dataKey, onChange, ...props }) =>
       className={'table-content-editing'}
     >
       <InputPicker
+        data-cy={dataCy}
         value={rowData[dataKey]}
         onChange={value => {
           const controlPriority = (value && !isNaN(parseInt(value))) ? parseInt(value) : ''

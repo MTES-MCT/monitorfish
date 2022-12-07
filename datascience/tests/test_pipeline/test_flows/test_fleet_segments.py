@@ -1,8 +1,6 @@
 import unittest
 from unittest.mock import patch
 
-import pandas as pd
-
 from src.pipeline.flows.fleet_segments import flow
 
 

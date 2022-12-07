@@ -3,9 +3,8 @@ import shutil
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import Mock, patch
 
-from src.pipeline.utils import delete, get_table, move
+from src.pipeline.utils import move
 
 
 class TestProcessingMethods(unittest.TestCase):

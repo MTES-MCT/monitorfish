@@ -1,5 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit'
 
+import { missionApi } from '../../api/mission'
 import regulation from '../../features/backoffice/Regulation.slice'
 import regulatoryLayerSearch from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
 import vesselList from '../../features/vessel_list/VesselList.slice'
@@ -44,6 +45,7 @@ const homeReducers = combineReducers({
   interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
   measurement: measurementReducer,
+  missionApi: missionApi.reducer,
   regulatoryLayerSearch,
   reporting: reportingReducer,
   vessel: vesselSliceReducer,

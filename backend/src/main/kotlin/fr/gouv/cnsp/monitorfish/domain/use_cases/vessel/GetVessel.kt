@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselWithData
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselInformation
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -23,6 +23,7 @@ class GetVessel(
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
     suspend fun execute(
+        vesselId: Int?,
         internalReferenceNumber: String,
         externalReferenceNumber: String,
         ircs: String,
@@ -30,7 +31,7 @@ class GetVessel(
         vesselIdentifier: VesselIdentifier?,
         fromDateTime: ZonedDateTime? = null,
         toDateTime: ZonedDateTime? = null
-    ): Pair<Boolean, VesselWithData> {
+    ): Pair<Boolean, VesselInformation> {
         return coroutineScope {
             val (vesselTrackHasBeenModified, positions) = GetVesselPositions(
                 positionRepository,
@@ -46,11 +47,7 @@ class GetVessel(
             )
 
             val vesselFuture = async {
-                vesselRepository.findVessel(
-                    internalReferenceNumber,
-                    externalReferenceNumber,
-                    ircs
-                )
+                vesselId?.let { vesselRepository.findVessel(vesselId) }
             }
 
             val vesselRiskFactorsFuture = async { riskFactorsRepository.findVesselRiskFactors(internalReferenceNumber) }
@@ -66,7 +63,7 @@ class GetVessel(
 
             Pair(
                 vesselTrackHasBeenModified,
-                VesselWithData(
+                VesselInformation(
                     vesselWithBeaconNumber,
                     positions.await(),
                     vesselRiskFactorsFuture.await() ?: VesselRiskFactor()

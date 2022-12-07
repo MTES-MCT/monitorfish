@@ -49,17 +49,10 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
     )
 
     @Query(
-        value = """
-        SELECT * FROM beacon_malfunctions WHERE
-            CASE
-                WHEN :vesselIdentifier = 'INTERNAL_REFERENCE_NUMBER' THEN internal_reference_number
-                WHEN :vesselIdentifier = 'IRCS' THEN ircs
-                WHEN :vesselIdentifier = 'EXTERNAL_REFERENCE_NUMBER' THEN external_reference_number
-            END = :value AND malfunction_start_date_utc >= :afterDateTime
-        """,
+        value = "SELECT * FROM beacon_malfunctions WHERE vessel_id = :vesselId AND malfunction_start_date_utc >= :afterDateTime",
         nativeQuery = true
     )
-    fun findAllByVesselIdentifierEqualsAfterDateTime(vesselIdentifier: String, value: String, afterDateTime: Instant): List<BeaconMalfunctionEntity>
+    fun findAllByVesselIdEqualsAfterDateTime(vesselId: Int, afterDateTime: Instant): List<BeaconMalfunctionEntity>
 
     @Modifying(clearAutomatically = true)
     @Query(

@@ -6,12 +6,7 @@ import java.time.ZonedDateTime
 
 interface BeaconMalfunctionsRepository {
     fun findAll(): List<BeaconMalfunction>
-    fun findAllByVesselIdentifierEquals(
-        vesselIdentifier: VesselIdentifier,
-        value: String,
-        afterDateTime: ZonedDateTime
-    ): List<BeaconMalfunction>
-
+    fun findAllByVesselId(vesselId: Int, afterDateTime: ZonedDateTime): List<BeaconMalfunction>
     fun findAllExceptArchived(): List<BeaconMalfunction>
     fun findLastSixtyArchived(): List<BeaconMalfunction>
     fun find(beaconMalfunctionId: Int): BeaconMalfunction
@@ -22,12 +17,5 @@ interface BeaconMalfunctionsRepository {
         endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
         updateDateTime: ZonedDateTime
     )
-
     fun requestNotification(id: Int, notificationType: BeaconMalfunctionNotificationType)
-    fun findAllByVesselWithoutVesselIdentifier(
-        internalReferenceNumber: String,
-        externalReferenceNumber: String,
-        ircs: String,
-        afterDateTime: ZonedDateTime
-    ): List<BeaconMalfunction>
 }

@@ -284,14 +284,12 @@ def test_extract_controls_applies_dtypes(controls):
     )
 
 
+flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
+flow.replace(flow.get_tasks("extract_controls")[0], mock_extract_controls)
+flow.replace(flow.get_tasks("extract_catch_controls")[0], mock_extract_catch_controls)
+
+
 def test_flow_replaces_data(reset_test_data, controls, loaded_controls):
-    flow.replace(
-        flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running
-    )
-    flow.replace(flow.get_tasks("extract_controls")[0], mock_extract_controls)
-    flow.replace(
-        flow.get_tasks("extract_catch_controls")[0], mock_extract_catch_controls
-    )
 
     controls_query = "SELECT * FROM controls ORDER BY id"
 
@@ -305,3 +303,27 @@ def test_flow_replaces_data(reset_test_data, controls, loaded_controls):
     assert final_controls.shape == (5, 33)
 
     pd.testing.assert_frame_equal(loaded_controls, final_controls, check_like=True)
+
+
+def test_flow_upserts_data(reset_test_data, controls, loaded_controls):
+
+    controls_query = "SELECT * FROM controls ORDER BY id"
+
+    initial_controls = read_query("monitorfish_remote", controls_query)
+
+    state = flow.run(loading_mode="upsert", number_of_months=12)
+    assert state.is_successful()
+
+    final_controls = read_query("monitorfish_remote", controls_query)
+
+    new_controls = state.result[flow.get_tasks("compute_controls_segments")[0]].result
+
+    assert initial_controls.shape == (22, 33)
+    assert new_controls.shape == (5, 33)
+    # Control ids already in the controls table and in newly extracted controls :
+    assert set.intersection(set(new_controls.id), set(initial_controls.id)) == {1, 8}
+    assert final_controls.shape == (25, 33)
+
+    assert initial_controls.loc[initial_controls.id == 1, "vessel_id"][0] == 1
+    assert new_controls.loc[new_controls.id == 1, "vessel_id"][0] == 100
+    assert final_controls.loc[final_controls.id == 1, "vessel_id"][0] == 100

@@ -216,66 +216,70 @@ const Content = styled.div<{
 const BeaconMalfunctionsBoardGrayOverlay = styled.div``
 
 const Loading = styled.div`
-  margin-top: 350px;
   margin-left: 550px;
+  margin-top: 350px;
 `
 
 const Text = styled.span`
-  margin-top: 10px;
-  font-size: 13px;
-  color: ${p => p.theme.color.slateGray};
   bottom: -17px;
+  color: ${p => p.theme.color.slateGray};
+  font-size: 13px;
+  margin-top: 10px;
   position: relative;
 `
 
 const Wrapper = styled.div`
-  display: flex;
   background: ${p => p.theme.color.white};
+  display: flex;
 
   @keyframes blink {
     0% {
       background: ${p => p.theme.color.white};
     }
+
     50% {
       background: ${p => p.theme.color.lightGray};
     }
-    0% {
+
+    100% {
       background: ${p => p.theme.color.white};
     }
   }
 
   @keyframes close-alert-transition-item {
     60% {
-      height: 15px;
-      margin: 6px 0px 6px 0px;
-      padding: 13px 0px 13px 0px;
       border-width: 1px;
+      height: 15px;
+      margin: 6px 0;
+      padding: 13px 0;
     }
+
     100% {
-      height: 0px;
-      margin: 0px 0px 0px 0px;
-      padding: 0px 0px 0px 0px;
-      border-width: 0px;
+      border-width: 0;
+      height: 0;
+      margin: 0;
+      padding: 0;
     }
   }
 
   .loader {
-    width: 15px;
-    height: 15px;
+    animation: rotation 1s linear infinite;
     border: 2px solid #707785;
     border-bottom-color: transparent;
     border-radius: 50%;
-    display: inline-block;
     box-sizing: border-box;
-    animation: rotation 1s linear infinite;
+    display: inline-block;
+    height: 15px;
     margin-right: 5px;
     margin-top: 2px;
+    width: 15px;
   }
 
   @keyframes rotation {
     0% {
       transform: rotate(0deg);
     }
+
     100% {
       transform: rotate(360deg);
     }

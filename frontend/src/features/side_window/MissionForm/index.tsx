@@ -1,10 +1,11 @@
 import { Accent, Button, Icon } from '@mtes-mct/monitor-ui'
+import { noop } from 'lodash'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { MissionType } from '../../../domain/types/mission'
+import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
-import { ControlForm } from './ControlForm'
 import { MainForm } from './MainForm'
 
 import type { PartialAction } from './types'
@@ -18,7 +19,11 @@ export function MissionForm() {
   /** Header height in pixels */
   const [selectedType, setSelectedType] = useState<MissionType>(MissionType.SEA)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
-  const [editedAction, setEditedAction] = useState<PartialAction | undefined>()
+  const [newAction, setNewAction] = useState<PartialAction | undefined>(undefined)
+
+  const unsetNewAction = useCallback(() => {
+    setNewAction(undefined)
+  }, [])
 
   const handleResize = useCallback(() => {
     setHeaderHeight(headerRef.current.offsetHeight)
@@ -51,8 +56,15 @@ export function MissionForm() {
 
       <Body>
         <MainForm onTypeChange={setSelectedType} />
-        <ActionList actions={[]} onAddAction={setEditedAction} selectedType={selectedType} />
-        <ControlForm action={editedAction} />
+        <ActionList
+          actions={[]}
+          newAction={newAction}
+          onAddAction={setNewAction}
+          onDeleteAction={noop}
+          onDeleteNewAction={unsetNewAction}
+          selectedType={selectedType}
+        />
+        <ActionForm action={newAction} />
       </Body>
     </Wrapper>
   )

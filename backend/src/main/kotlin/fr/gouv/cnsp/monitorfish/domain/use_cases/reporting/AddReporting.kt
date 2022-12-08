@@ -18,7 +18,7 @@ class AddReporting(
 
     fun execute(newReporting: Reporting): Reporting {
         logger.info(
-            "Adding reporting for vessel ${newReporting.internalReferenceNumber}/${newReporting.externalReferenceNumber}/${newReporting.ircs}"
+            "Adding reporting for vessel ${newReporting.internalReferenceNumber}/${newReporting.ircs}/${newReporting.externalReferenceNumber}"
         )
 
         require(newReporting.type != ReportingType.ALERT) {

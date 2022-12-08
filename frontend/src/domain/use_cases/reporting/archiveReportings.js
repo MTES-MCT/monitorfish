@@ -51,7 +51,7 @@ function getArchivedReportingsFromIds (ids, currentReportings) {
     return {
       id: reporting.id,
       type: reporting.type,
-      vesselId: Vessel.getVesselFeatureId(reporting),
+      vesselFeatureId: Vessel.getVesselFeatureId(reporting),
     }
   }).filter(reporting => reporting)
 }

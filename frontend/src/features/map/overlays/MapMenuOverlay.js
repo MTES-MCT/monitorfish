@@ -9,7 +9,7 @@ import {
 } from '../../../domain/entities/vesselTrackDepth'
 import { TrackRangeModal } from './map_menu/TrackRangeModal'
 import { useDispatch } from 'react-redux'
-import showVesselTrack from '../../../domain/use_cases/vessel/showVesselTrack'
+import { showVesselTrack } from '../../../domain/use_cases/vessel/showVesselTrack'
 import { addVesselToFavorites } from '../../../domain/shared_slices/FavoriteVessel'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
 

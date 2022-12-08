@@ -17,7 +17,10 @@ import { getBeaconCreationOrModificationDate } from './beaconMalfunctions'
 import SendNotification from './SendNotification'
 import { VesselStatusSelect } from './VesselStatusSelect'
 
-import type { BeaconMalfunction, BeaconMalfunctionResumeAndDetails } from '../../../domain/types/beaconMalfunction'
+import type {
+  BeaconMalfunction,
+  BeaconMalfunctionResumeAndDetails
+} from '../../../domain/entities/beaconMalfunction/types'
 
 export type BeaconMalfunctionDetailsProps = {
   beaconMalfunctionWithDetails: BeaconMalfunctionResumeAndDetails

@@ -111,7 +111,7 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="trigger-hide-other-vessels-from-sidebar"]').click({ force: true, timeout: 10000 })
     cy.wait(200)
 
-    cy.focused().type('-', { force: true }) // Because of the throttle, we de-zoom to show labels
+    cy.get('body').type('-', { force: true }) // Because of the throttle, we de-zoom to show labels
     cy.wait(200)
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 3)
     cy.wait(200)
@@ -122,7 +122,7 @@ context('Vessels Track', () => {
 
     cy.log('Close one track')
     cy.get('*[data-cy^="close-vessel-track"]').eq(1).click({ force: true })
-    cy.wait(1000) // Because of the throttle
+    cy.get('body').type('+', { force: true }) // Because of the throttle, we zoom to refresh labels
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
 
     cy.log('Hide other vessels')
@@ -131,7 +131,8 @@ context('Vessels Track', () => {
       .filter(':contains("les navires non sélectionnés")')
       .eq(1)
       .click({ force: true, timeout: 10000 })
-    cy.wait(1000)
+    cy.wait(200)
+    cy.get('body').type('-', { force: true }) // Because of the throttle, we de-zoom to refresh labels
     cy.get('*[data-cy^="vessel-label-risk-factor"]').should('have.length', 1)
 
     cy.log('Close the last track')

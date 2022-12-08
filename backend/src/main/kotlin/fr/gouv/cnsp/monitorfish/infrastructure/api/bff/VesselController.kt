@@ -53,8 +53,11 @@ class VesselController(
     }
 
     @GetMapping("/find")
-    @ApiOperation("Get vessel's positions and data")
+    @ApiOperation("Get vessel information and positions")
     fun getVessel(
+        @ApiParam("Vessel internal id")
+        @RequestParam(name = "vesselId")
+        vesselId: Int?,
         @ApiParam("Vessel internal reference number (CFR)")
         @RequestParam(name = "internalReferenceNumber")
         internalReferenceNumber: String,
@@ -83,6 +86,7 @@ class VesselController(
             val start = System.currentTimeMillis()
 
             val (vesselTrackHasBeenModified, vesselWithData) = getVessel.execute(
+                vesselId,
                 internalReferenceNumber,
                 externalReferenceNumber,
                 IRCS,
@@ -103,28 +107,16 @@ class VesselController(
     @GetMapping("/beacon_malfunctions")
     @ApiOperation("Get vessel's beacon malfunctions history")
     fun getVesselBeaconMalfunctions(
-        @ApiParam("Vessel internal reference number (CFR)")
-        @RequestParam(name = "internalReferenceNumber")
-        internalReferenceNumber: String,
-        @ApiParam("Vessel external reference number")
-        @RequestParam(name = "externalReferenceNumber")
-        externalReferenceNumber: String,
-        @ApiParam("Vessel IRCS")
-        @RequestParam(name = "IRCS")
-        IRCS: String,
-        @ApiParam("Vessel identifier")
-        @RequestParam(name = "vesselIdentifier")
-        vesselIdentifier: VesselIdentifier?,
+        @ApiParam("Vessel id")
+        @RequestParam(name = "vesselId")
+        vesselId: Int,
         @ApiParam("beacon malfunctions after date time")
         @RequestParam(name = "afterDateTime")
         @DateTimeFormat(pattern = zoneDateTimePattern)
         afterDateTime: ZonedDateTime
     ): BeaconMalfunctionsResumeAndHistoryDataOutput {
         val beaconMalfunctionsWithDetails = getVesselBeaconMalfunctions.execute(
-            internalReferenceNumber,
-            externalReferenceNumber,
-            IRCS,
-            vesselIdentifier,
+            vesselId,
             afterDateTime
         )
 
@@ -198,10 +190,10 @@ class VesselController(
         @RequestParam(name = "afterDateTime")
         @DateTimeFormat(pattern = zoneDateTimePattern)
         afterDateTime: ZonedDateTime
-    ): ControlResumeAndControlsDataOutput {
+    ): ControlSummaryDataOutput {
         val controlResumeAndControls = getVesselControls.execute(vesselId.toInt(), afterDateTime)
 
-        return ControlResumeAndControlsDataOutput.fromControlResumeAndControls(controlResumeAndControls)
+        return ControlSummaryDataOutput.fromControlSummary(controlResumeAndControls)
     }
 
     @GetMapping("/reporting")
@@ -239,7 +231,7 @@ class VesselController(
     @ApiOperation("Search vessels")
     fun searchVessel(
         @ApiParam(
-            "Vessel internal reference number (CFR), external marker, IRCS, MMSI or name",
+            "Vessel internal reference number (CFR), external marker, IRCS, MMSI, name or beacon number",
             required = true
         )
         @RequestParam(name = "searched")

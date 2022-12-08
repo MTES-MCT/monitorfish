@@ -1,19 +1,20 @@
-import { batch, useDispatch } from 'react-redux'
-import { openSideWindowTab } from '../../../domain/shared_slices/Global'
-import { focusOnAlert } from '../../../domain/shared_slices/Alert'
-import React from 'react'
+import { batch } from 'react-redux'
 import styled from 'styled-components'
-import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
-import { SIDE_WINDOW_MENU } from '../../side_window/constants'
-import { getAlertNameFromType } from '../../side_window/alerts_reportings/utils'
 
-const AlertWarning = ({ selectedVessel }) => {
-  const dispatch = useDispatch()
+import { focusOnAlert } from '../../../domain/shared_slices/Alert'
+import { openSideWindowTab } from '../../../domain/shared_slices/Global'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
+import { getAlertNameFromType } from '../../side_window/alerts_reportings/utils'
+import { SIDE_WINDOW_MENU } from '../../side_window/constants'
+
+export function AlertWarning({ selectedVessel }) {
+  const dispatch = useAppDispatch()
 
   return (
     <>
       {selectedVessel?.alerts?.length ? (
-        <Alerts onClick={() => showAlertInSideWindow(dispatch, selectedVessel)} data-cy={'vessel-sidebar-alert'}>
+        <Alerts data-cy="vessel-sidebar-alert" onClick={() => showAlertInSideWindow(dispatch, selectedVessel)}>
           <AlertIcon />
           {selectedVessel?.alerts.length === 1
             ? getAlertNameFromType(selectedVessel?.alerts[0])
@@ -32,10 +33,10 @@ const showAlertInSideWindow = (dispatch, selectedVessel) => {
     dispatch(openSideWindowTab(SIDE_WINDOW_MENU.ALERTS.code))
     dispatch(
       focusOnAlert({
-        name: selectedVessel?.alerts[0],
-        internalReferenceNumber: selectedVessel.internalReferenceNumber,
         externalReferenceNumber: selectedVessel.externalReferenceNumber,
-        ircs: selectedVessel.ircs
+        internalReferenceNumber: selectedVessel.internalReferenceNumber,
+        ircs: selectedVessel.ircs,
+        name: selectedVessel?.alerts[0]
       })
     )
   })
@@ -149,5 +150,3 @@ const Alerts = styled.div`
   padding: 5px 0;
   margin-top: 1px;
 `
-
-export default AlertWarning

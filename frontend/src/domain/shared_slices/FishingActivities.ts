@@ -11,7 +11,7 @@ export type FishingActivitiesState = {
   areFishingActivitiesShowedOnMap: boolean
   fishingActivities: FishingActivities
   fishingActivitiesShowedOnMap: FishingActivityShowedOnMap[]
-  fishingActivitiesTab: FishingActivitiesTab.SUMMARY
+  fishingActivitiesTab: FishingActivitiesTab
   isFirstVoyage: any | null
   isLastVoyage: any | null
   lastFishingActivities: FishingActivities

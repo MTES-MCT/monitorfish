@@ -68,7 +68,7 @@ class GetVesselUTests {
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf(firstPosition, fourthPosition, secondPosition, thirdPosition)
         )
-        given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel(id = 123))
+        given(vesselRepository.findVessel(any())).willReturn(Vessel(id = 123))
         given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor(2.3, 2.0, 1.9, 3.2))
         given(beaconRepository.findBeaconNumberByVesselId(eq(123))).willReturn("A_BEACON_NUMBER")
 
@@ -82,6 +82,7 @@ class GetVesselUTests {
                 beaconRepository
             )
                 .execute(
+                    123,
                     "FR224226850",
                     "",
                     "",
@@ -94,8 +95,8 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.vessel.id).isEqualTo(123)
-        assertThat(pair.second.vessel.beaconNumber).isEqualTo("A_BEACON_NUMBER")
+        assertThat(pair.second.vessel?.id).isEqualTo(123)
+        assertThat(pair.second.vessel?.beaconNumber).isEqualTo("A_BEACON_NUMBER")
         assertThat(pair.second.positions.first().dateTime).isEqualTo(now.minusHours(4))
         assertThat(pair.second.positions.last().dateTime).isEqualTo(now.minusHours(1))
         assertThat(pair.second.vesselRiskFactor.impactRiskFactor).isEqualTo(2.3)
@@ -103,12 +104,12 @@ class GetVesselUTests {
     }
 
     @Test
-    fun `execute Should not throw an exception When no Vessel found`() {
+    fun `execute Should not throw an exception When no Vessel found And return null`() {
         // Given
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf()
         )
-        given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
+        given(vesselRepository.findVessel(any())).willReturn(null)
         given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor())
 
         // When
@@ -121,6 +122,7 @@ class GetVesselUTests {
                 beaconRepository
             )
                 .execute(
+                    123,
                     "FR224226850",
                     "",
                     "",
@@ -133,7 +135,7 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.vessel.id).isNull()
+        assertThat(pair.second.vessel).isNull()
     }
 
     @Test
@@ -142,7 +144,7 @@ class GetVesselUTests {
         given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
             listOf()
         )
-        given(vesselRepository.findVessel(any(), any(), any())).willReturn(Vessel())
+        given(vesselRepository.findVessel(any())).willReturn(null)
         given(riskFactorsRepository.findVesselRiskFactors(any())).willReturn(VesselRiskFactor())
         given(beaconRepository.findBeaconNumberByVesselId(eq(123))).willReturn(null)
 
@@ -156,6 +158,7 @@ class GetVesselUTests {
                 beaconRepository
             )
                 .execute(
+                    123,
                     "FR224226850",
                     "",
                     "",
@@ -168,6 +171,6 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.first).isFalse
-        assertThat(pair.second.vessel.beaconNumber).isNull()
+        assertThat(pair.second.vessel?.beaconNumber).isNull()
     }
 }

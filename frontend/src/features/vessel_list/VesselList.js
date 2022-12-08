@@ -18,7 +18,7 @@ import { addFilter } from '../../domain/shared_slices/Filter'
 import { setPreviewFilteredVesselsFeatures } from '../../domain/shared_slices/Vessel'
 import getAdministrativeZoneGeometry from '../../domain/use_cases/layer/administrative/getAdministrativeZoneGeometry'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
-import getFilteredVessels from '../../domain/use_cases/vessel/getFilteredVessels'
+import { getFilteredVessels } from '../../domain/use_cases/vessel/getFilteredVessels'
 import { getZonesAndSubZonesPromises } from '../../domain/use_cases/layer/administrative/getZonesAndSubZonesPromises'
 
 import SaveVesselFiltersModal from '../map/tools/vessel_filters/SaveVesselFiltersModal'
@@ -172,10 +172,10 @@ const VesselList = ({ namespace }) => {
     setVessels(nextVessels)
   }, [allVesselsChecked])
 
-  const toggleSelectRow = useCallback((vesselId, value) => {
+  const toggleSelectRow = useCallback((vesselCompositeIdentifier, value) => {
     const nextVessels = Object.assign([], _vessels)
 
-    const toggledVesselIndex = nextVessels.findIndex(vessel => vessel.vesselId === vesselId)
+    const toggledVesselIndex = nextVessels.findIndex(vessel => vessel.vesselCompositeIdentifier === vesselCompositeIdentifier)
     if (!(toggledVesselIndex === NOT_FOUND)) {
       nextVessels.splice(toggledVesselIndex, 1, { ...nextVessels[toggledVesselIndex], checked: value })
       setVessels(nextVessels)
@@ -239,10 +239,10 @@ const VesselList = ({ namespace }) => {
   }, [])
 
   const previewFilteredVessels = useCallback(() => {
-    const vesselsUids = filteredVessels.map(vessel => vessel.vesselId)
+    const vesselFeatureIds = filteredVessels.map(vessel => vessel.vesselFeatureId)
 
-    if (vesselsUids?.length) {
-      dispatch(setPreviewFilteredVesselsFeatures(vesselsUids))
+    if (vesselFeatureIds?.length) {
+      dispatch(setPreviewFilteredVesselsFeatures(vesselFeatureIds))
       dispatch(setPreviewFilteredVesselsMode(true))
 
       if (zonesSelected?.length) {

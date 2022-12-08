@@ -30,7 +30,7 @@ export const addReporting = (newReporting: Reporting) => (dispatch: AppDispatch,
       dispatch(
         addVesselReporting({
           reportingType: newReporting?.type,
-          vesselId: Vessel.getVesselFeatureId(selectedVesselIdentity)
+          vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
         })
       )
       dispatch(removeError())

@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateOrUpdateFleetSegmentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FleetSegmentDataOutput

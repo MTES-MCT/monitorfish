@@ -24,22 +24,19 @@ const MapMenu = ({ map }) => {
         const feature = map.forEachFeatureAtPixel(pixel, feature => feature, { hitTolerance: HIT_PIXEL_TO_TOLERANCE })
         const clickedFeatureId = feature?.getId()
 
-        if (clickedFeatureId?.toString()?.includes(Layer.VESSELS.code)) {
-          const clickedVessel = vessels.find(vessel => {
-            return clickedFeatureId?.toString()?.includes(vessel.vesselId)
-          })
-
-          if (clickedVessel) {
-            vessel.current = clickedVessel
-            setCoordinates(feature.getGeometry().getCoordinates())
-            return
-          }
-
+        if (!clickedFeatureId?.toString()?.includes(Layer.VESSELS.code)) {
+          vessel.current = null
+          setCoordinates([])
           return
         }
 
-        vessel.current = null
-        setCoordinates([])
+        const clickedVessel = vessels.find(vessel => clickedFeatureId === vessel.vesselFeatureId)
+        if (!clickedVessel) {
+          return
+        }
+
+        vessel.current = clickedVessel
+        setCoordinates(feature.getGeometry().getCoordinates())
       }
 
       map.getViewport().addEventListener('contextmenu', showMenu)

@@ -19,7 +19,7 @@ data class BeaconMalfunction(
     val vesselStatusLastModificationDateTime: ZonedDateTime,
     var riskFactor: Double? = null,
     val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason? = null,
-    val vesselId: Int? = null,
+    val vesselId: Int,
     val notificationRequested: BeaconMalfunctionNotificationType? = null,
     val beaconNumber: String,
     val beaconStatusAtMalfunctionCreation: BeaconStatus

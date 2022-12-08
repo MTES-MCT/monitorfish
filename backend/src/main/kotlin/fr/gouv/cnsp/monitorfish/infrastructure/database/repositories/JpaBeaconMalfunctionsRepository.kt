@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateBeaconMalfunctionException
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBBeaconMalfunctionsRepository
@@ -53,57 +52,14 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
         }
     }
 
-    override fun findAllByVesselIdentifierEquals(
-        vesselIdentifier: VesselIdentifier,
-        value: String,
+    override fun findAllByVesselId(
+        vesselId: Int,
         afterDateTime: ZonedDateTime
     ): List<BeaconMalfunction> {
         return dbBeaconMalfunctionsRepository
-            .findAllByVesselIdentifierEqualsAfterDateTime(vesselIdentifier.toString(), value, afterDateTime.toInstant()).map {
+            .findAllByVesselIdEqualsAfterDateTime(vesselId, afterDateTime.toInstant()).map {
                 it.toBeaconMalfunction()
             }
-    }
-
-    override fun findAllByVesselWithoutVesselIdentifier(
-        internalReferenceNumber: String,
-        externalReferenceNumber: String,
-        ircs: String,
-        afterDateTime: ZonedDateTime
-    ): List<BeaconMalfunction> {
-        if (internalReferenceNumber.isNotEmpty()) {
-            return dbBeaconMalfunctionsRepository
-                .findAllByVesselIdentifierEqualsAfterDateTime(
-                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER.toString(),
-                    internalReferenceNumber,
-                    afterDateTime.toInstant()
-                ).map {
-                    it.toBeaconMalfunction()
-                }
-        }
-
-        if (ircs.isNotEmpty()) {
-            return dbBeaconMalfunctionsRepository
-                .findAllByVesselIdentifierEqualsAfterDateTime(
-                    VesselIdentifier.IRCS.toString(),
-                    ircs,
-                    afterDateTime.toInstant()
-                ).map {
-                    it.toBeaconMalfunction()
-                }
-        }
-
-        if (externalReferenceNumber.isNotEmpty()) {
-            return dbBeaconMalfunctionsRepository
-                .findAllByVesselIdentifierEqualsAfterDateTime(
-                    VesselIdentifier.EXTERNAL_REFERENCE_NUMBER.toString(),
-                    externalReferenceNumber,
-                    afterDateTime.toInstant()
-                ).map {
-                    it.toBeaconMalfunction()
-                }
-        }
-
-        return listOf()
     }
 
     @Transactional

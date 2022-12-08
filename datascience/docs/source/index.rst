@@ -6,7 +6,7 @@
 ===========
 Monitorfish
 ===========
-   
+
 .. include:: overview.rst
 
 
@@ -23,6 +23,7 @@ Table of contents
    data-sources
    flows
    containerization
+   vessel_identification
    deployment
    contributing
    reference

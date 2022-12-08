@@ -9,6 +9,7 @@ import java.time.ZonedDateTime
 class ReportingDataOutput(
     val id: Int? = null,
     val type: ReportingType,
+    val vesselId: Int? = null,
     val vesselName: String? = null,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
@@ -27,6 +28,7 @@ class ReportingDataOutput(
             id = reporting.id,
             type = reporting.type,
             vesselName = reporting.vesselName,
+            vesselId = reporting.vesselId,
             internalReferenceNumber = reporting.internalReferenceNumber,
             externalReferenceNumber = reporting.externalReferenceNumber,
             ircs = reporting.ircs,

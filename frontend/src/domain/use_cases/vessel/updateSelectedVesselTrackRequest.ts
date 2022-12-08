@@ -1,7 +1,5 @@
-import { batch } from 'react-redux'
-
 import { getVesselPositionsFromAPI } from '../../../api/vessel'
-import { getTrackResponseError } from '../../entities/vesselTrackDepth'
+import { throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
 import { showFishingActivitiesOnMap } from '../../shared_slices/FishingActivities'
 import { removeError, setError } from '../../shared_slices/Global'
 import { animateToExtent, doNotAnimate } from '../../shared_slices/Map'
@@ -26,37 +24,24 @@ export const updateSelectedVesselTrackRequest =
 
       dispatchUpdatingVessel(dispatch, true)
 
-      const { positions, trackDepthHasBeenModified } = await getVesselPositionsFromAPI(vesselIdentity, trackRequest)
-      const error = getTrackResponseError(positions, trackDepthHasBeenModified, false, trackRequest)
-      if (error && setError) {
-        dispatch(setError(error))
+      const { isTrackDepthModified, positions } = await getVesselPositionsFromAPI(vesselIdentity, trackRequest)
+      throwCustomErrorFromAPIFeedback(positions, isTrackDepthModified, false)
 
-        return
-      }
       dispatch(removeError())
-
-      batch(() => {
-        dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
-        dispatch(updateSelectedVesselPositions(positions))
-        if (areFishingActivitiesShowedOnMap && !withoutFishingMessagesRerendering) {
-          dispatch(showFishingActivitiesOnMap())
-        }
-        dispatch(animateToExtent())
-      })
+      dispatch(setSelectedVesselCustomTrackRequest(trackRequest))
+      dispatch(updateSelectedVesselPositions(positions))
+      if (areFishingActivitiesShowedOnMap && !withoutFishingMessagesRerendering) {
+        dispatch(showFishingActivitiesOnMap())
+      }
+      dispatch(animateToExtent())
     } catch (error) {
-      batch(() => {
-        if (setError) {
-          dispatch(setError(error))
-        }
-        dispatch(resetLoadingVessel())
-      })
+      dispatch(setError(error))
+      dispatch(resetLoadingVessel())
     }
   }
 
 function dispatchUpdatingVessel(dispatch: AppDispatch, doNotAnimateBoolean: boolean) {
-  batch(() => {
-    dispatch(doNotAnimate(doNotAnimateBoolean))
-    dispatch(removeError())
-    dispatch(updatingVesselTrackDepth())
-  })
+  dispatch(doNotAnimate(doNotAnimateBoolean))
+  dispatch(removeError())
+  dispatch(updatingVesselTrackDepth())
 }

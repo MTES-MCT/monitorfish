@@ -4,9 +4,9 @@ import Feature from 'ol/Feature'
 import { Layer } from './layers/constants'
 import LineString from 'ol/geom/LineString'
 import Point from 'ol/geom/Point'
-import { Vessel } from './vessel/vessel'
 import { COLORS } from '../../constants/constants'
 import { theme } from '../../ui/theme'
+import { Vessel } from './vessel/vessel'
 
 class EstimatedPosition {
   static colorProperty = 'color'
@@ -16,7 +16,7 @@ class EstimatedPosition {
 
   /**
    * For building OpenLayers estimated position feature
-   * @param {Vessel} vessel - The vessel
+   * @param {import('./vessel/types').VesselEnhancedLastPositionWebGLObject} vessel - The vessel
    * @param {{
       isLight: boolean,
       vesselIsHidden: Date
@@ -38,7 +38,7 @@ class EstimatedPosition {
 
     const currentCoordinates = transform([longitude, latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
     const estimatedCoordinates = transform([estimatedCurrentLongitude, estimatedCurrentLatitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-    const vesselId = vessel.vesselId.replace(`${Layer.VESSELS.code}:`, '')
+    const vesselCompositeIdentifier = vessel.vesselFeatureId.replace(`${Layer.VESSELS.code}:`, '')
 
     const estimatedPositionObject = {
       latitude: estimatedCurrentLatitude,
@@ -66,7 +66,7 @@ class EstimatedPosition {
       isHidden: options.hideNonSelectedVessels
     })
     lineFeature.estimatedPosition = estimatedPositionObject
-    lineFeature.setId(`${Layer.VESSEL_ESTIMATED_POSITION.code}:${vesselId}`)
+    lineFeature.setId(`${Layer.VESSEL_ESTIMATED_POSITION.code}:${vesselCompositeIdentifier}`)
 
     const circleFeature = new Feature({
       geometry: new Point(estimatedCoordinates),
@@ -76,7 +76,7 @@ class EstimatedPosition {
       isHidden: options.hideNonSelectedVessels
     })
     circleFeature.estimatedPosition = estimatedPositionObject
-    circleFeature.setId(`${Layer.VESSEL_ESTIMATED_POSITION.code}:circle:${vesselId}`)
+    circleFeature.setId(`${Layer.VESSEL_ESTIMATED_POSITION.code}:circle:${vesselCompositeIdentifier}`)
 
     features.push(lineFeature, circleFeature)
 

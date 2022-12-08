@@ -8,6 +8,7 @@ import java.time.Duration
 import java.time.ZonedDateTime
 
 data class LastPositionDataOutput(
+    val vesselId: Int? = null,
     val internalReferenceNumber: String? = null,
     val mmsi: String? = null,
     val ircs: String? = null,
@@ -54,6 +55,7 @@ data class LastPositionDataOutput(
     companion object {
         fun fromLastPosition(position: LastPosition): LastPositionDataOutput {
             return LastPositionDataOutput(
+                vesselId = position.vesselId,
                 internalReferenceNumber = position.internalReferenceNumber,
                 ircs = position.ircs,
                 mmsi = position.mmsi,

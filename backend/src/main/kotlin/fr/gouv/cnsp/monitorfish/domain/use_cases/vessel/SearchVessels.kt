@@ -24,6 +24,7 @@ class SearchVessels(
         val vesselIdsFromBeacons = beaconRepository.search(searched).mapNotNull { it.vesselId }
         val vesselsFromBeacons = vesselRepository.findVesselsByIds(vesselIdsFromBeacons)
 
-        return vessels + vesselsFromBeacons
+        return (vessels + vesselsFromBeacons)
+            .distinctBy { it.id }
     }
 }

@@ -126,7 +126,9 @@ class FleetSegmentControllerITests {
     fun `Should create a fleet segment`() {
         // Given
         given(createFleetSegment.execute(any()))
-            .willReturn(FleetSegment("SW1", "", listOf("NAMO", "SA"), listOf(), listOf(), listOf(), listOf(), 1.2, 2022))
+            .willReturn(
+                FleetSegment("SW1", "", listOf("NAMO", "SA"), listOf(), listOf(), listOf(), listOf(), 1.2, 2022)
+            )
 
         // When
         mockMvc.perform(

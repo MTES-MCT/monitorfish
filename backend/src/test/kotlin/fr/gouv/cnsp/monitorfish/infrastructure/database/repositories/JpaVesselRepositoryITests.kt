@@ -23,14 +23,11 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findVessel Should return an empty Vessel object When no vessel is found`() {
+    fun `findVessel Should return null When no vessel is found`() {
         // When
         val vessel = jpaVesselRepository.findVessel("DUMMY", "", "")
 
-        assertThat(vessel.internalReferenceNumber).isNull()
-        assertThat(vessel.externalReferenceNumber).isNull()
-        assertThat(vessel.mmsi).isNull()
-        assertThat(vessel.ircs).isNull()
+        assertThat(vessel).isNull()
     }
 
     @Test
@@ -39,7 +36,8 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessel = jpaVesselRepository.findVessel("FAK000999999", "", "")
 
-        assertThat(vessel.internalReferenceNumber).isEqualTo("FAK000999999")
+        assertThat(vessel).isNotNull
+        assertThat(vessel!!.internalReferenceNumber).isEqualTo("FAK000999999")
     }
 
     @Test
@@ -48,7 +46,8 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessel = jpaVesselRepository.findVessel("BAD_IDEA", "TALK2ME", "")
 
-        assertThat(vessel.internalReferenceNumber).isEqualTo("U_W0NTFINDME")
+        assertThat(vessel).isNotNull
+        assertThat(vessel!!.internalReferenceNumber).isEqualTo("U_W0NTFINDME")
     }
 
     @Test
@@ -76,7 +75,7 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
         // When
         val vessels = jpaVesselRepository.search("LE b")
 
-        assertThat(vessels).hasSize(1)
+        assertThat(vessels).hasSize(2)
         assertThat(vessels.first().internalReferenceNumber).isEqualTo("FR263418260")
     }
 

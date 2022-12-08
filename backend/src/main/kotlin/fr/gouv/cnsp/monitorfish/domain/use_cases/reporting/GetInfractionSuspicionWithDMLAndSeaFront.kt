@@ -17,13 +17,7 @@ class GetInfractionSuspicionWithDMLAndSeaFront(
 
     fun execute(infractionSuspicion: InfractionSuspicion, vesselId: Int?): InfractionSuspicion {
         vesselId?.let { _vesselId ->
-            val districtCode = try {
-                vesselRepository.findVessel(_vesselId).districtCode
-            } catch (e: NoSuchElementException) {
-                logger.warn("Vessel id $_vesselId of reporting not found.", e)
-
-                null
-            }
+            val districtCode = vesselRepository.findVessel(_vesselId)?.districtCode
 
             districtCode?.let {
                 try {

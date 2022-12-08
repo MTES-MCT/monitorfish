@@ -1,6 +1,6 @@
 import { COLORS } from '../../constants/constants'
 import { RiskFactorBox } from '../vessel_sidebar/risk_factor/RiskFactorBox'
-import { getRiskFactorColor } from '../../domain/entities/riskFactor'
+import { getRiskFactorColor } from '../../domain/entities/vessel/riskFactor'
 import { ReactComponent as DeleteIconSVG } from '../icons/Icone_suppression.svg'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'

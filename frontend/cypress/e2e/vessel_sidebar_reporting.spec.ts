@@ -126,7 +126,7 @@ context('Vessel sidebar reporting tab', () => {
 
   it('An observation reporting should be modified to an Infraction suspicion', () => {
     // Given
-    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('RENCONTRER VEILLER')
+    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('ABC000597493')
     cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
@@ -134,7 +134,7 @@ context('Vessel sidebar reporting tab', () => {
     // When
     cy.intercept(
       'GET',
-      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000597493&externalReferenceNumber=JL026591&IRCS=CMQ7994&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
+      '/bff/v1/vessels/reporting?internalReferenceNumber=ABC000597493&externalReferenceNumber=CMQ7994&IRCS=JL026591&vesselIdentifier=INTERNAL_REFERENCE_NUMBER*'
     ).as('reporting')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')

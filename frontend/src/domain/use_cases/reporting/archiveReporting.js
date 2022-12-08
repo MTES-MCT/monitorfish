@@ -26,7 +26,7 @@ const archiveReporting = id => (dispatch, getState) => {
   archiveReportingFromAPI(id).then(() => {
     dispatch(removeReportingsIdsFromCurrentReportings([id]))
     dispatch(removeVesselReporting({
-      vesselId: Vessel.getVesselFeatureId(selectedVesselIdentity),
+      vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity),
       reportingType: archivedReporting?.type
     }))
     dispatch(removeError())

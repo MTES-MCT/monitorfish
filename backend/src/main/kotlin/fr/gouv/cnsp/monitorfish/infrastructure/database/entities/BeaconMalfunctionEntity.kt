@@ -40,8 +40,8 @@ data class BeaconMalfunctionEntity(
     @Column(name = "end_of_malfunction_reason")
     @Enumerated(EnumType.STRING)
     val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason,
-    @Column(name = "vessel_id")
-    val vesselId: Int?,
+    @Column(name = "vessel_id", nullable = false)
+    val vesselId: Int,
     @Column(name = "notification_requested")
     @Enumerated(EnumType.STRING)
     val notificationRequested: BeaconMalfunctionNotificationType?,

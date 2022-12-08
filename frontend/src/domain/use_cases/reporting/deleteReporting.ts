@@ -34,7 +34,7 @@ export const deleteReporting = id => (dispatch: AppDispatch, getState: AppGetSta
         dispatch(
           removeVesselReporting({
             reportingType: deletedReporting.type,
-            vesselId: Vessel.getVesselFeatureId(selectedVesselIdentity)
+            vesselFeatureId: Vessel.getVesselFeatureId(selectedVesselIdentity)
           })
         )
       }

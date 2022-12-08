@@ -49,6 +49,7 @@
     "immer": "9.0.16",
     "ky": "0.31.3",
     "lodash": "4.17.21",
+    "mini.css": "3.0.1",
     "nouislider": "14.7.0",
     "nouislider-react": "3.4.1",
     "ol": "7.1.0",

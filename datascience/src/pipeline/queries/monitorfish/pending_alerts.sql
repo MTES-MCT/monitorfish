@@ -1,10 +1,12 @@
 SELECT
+    vessel_id,
     internal_reference_number AS cfr,
-    external_reference_number AS external_immatriculation,
     ircs,
+    external_reference_number AS external_immatriculation,
     ARRAY_AGG(value->>'type') AS alerts
 FROM pending_alerts
 GROUP BY
+    vessel_id,
     internal_reference_number,
-    external_reference_number,
-    ircs
+    ircs,
+    external_reference_number

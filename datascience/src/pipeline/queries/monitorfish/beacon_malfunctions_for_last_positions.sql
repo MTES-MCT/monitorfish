@@ -1,8 +1,9 @@
 SELECT
     bm.id,
+    b.vessel_id,
     bm.internal_reference_number AS cfr,
-    bm.external_reference_number AS external_immatriculation,
-    bm.ircs
+    bm.ircs,
+    bm.external_reference_number AS external_immatriculation
 FROM beacon_malfunctions bm
 JOIN beacons b
 ON b.beacon_number = bm.beacon_number

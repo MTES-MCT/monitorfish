@@ -7,6 +7,7 @@ from prefect.executors import LocalDaskExecutor
 
 from config import default_risk_factors, risk_factor_coefficients
 from src.pipeline.generic_tasks import extract, load
+from src.pipeline.processing import join_on_multiple_keys
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 
 
@@ -30,8 +31,12 @@ def extract_control_anteriority():
 def compute_risk_factors(
     current_segments: pd.DataFrame, control_anteriority: pd.DataFrame
 ):
-    risk_factors = pd.merge(
-        current_segments, control_anteriority, on="cfr", how="outer"
+    risk_factors = join_on_multiple_keys(
+        control_anteriority,
+        current_segments,
+        or_join_keys=["vessel_id"],
+        how="outer",
+        coalesce_common_columns=True,
     )
 
     risk_factors = risk_factors.fillna(

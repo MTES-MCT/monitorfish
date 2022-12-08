@@ -9,14 +9,16 @@ from prefect.executors import LocalDaskExecutor
 
 from config import default_risk_factors
 from src.pipeline.generic_tasks import extract, load
-from src.pipeline.helpers.segments import (
-    attribute_segments_to_catches,
-    extract_segments,
-    unnest_segments,
-)
+from src.pipeline.helpers.segments import attribute_segments_to_catches
 from src.pipeline.processing import df_to_dict_series
 from src.pipeline.shared_tasks.control_flow import check_flow_not_running
 from src.pipeline.shared_tasks.facades import extract_facade_areas
+from src.pipeline.shared_tasks.infrastructure import get_table
+from src.pipeline.shared_tasks.segments import (
+    extract_segments_of_current_year,
+    unnest_segments,
+)
+from src.pipeline.shared_tasks.vessels import add_vessel_id
 
 
 @task(checkpoint=False)
@@ -183,22 +185,25 @@ def join(
     species_onboard = species_onboard.dropna(subset=["species_onboard"])
     species_onboard = species_onboard.groupby("cfr")["species_onboard"].apply(list)
 
-    # Keep one line by vessel for data related to the last ers messages of each vessel
-    last_logbook_columns = [
+    # Keep one line per vessel for data related to the last logbook report of each
+    # vessel
+    last_logbook_report_columns = [
         "cfr",
+        "ircs",
+        "external_immatriculation",
         "last_logbook_message_datetime_utc",
         "departure_datetime_utc",
         "trip_number",
         "gear_onboard",
     ]
 
-    last_ers = catches[last_logbook_columns].groupby("cfr").head(1)
-    last_ers = last_ers.set_index("cfr")
+    last_logbook_report = catches[last_logbook_report_columns].groupby("cfr").head(1)
+    last_logbook_report = last_logbook_report.set_index("cfr")
 
     # Join departure, catches and segments information into a single table with 1 line
     # by vessel
     res = (
-        last_ers.join(species_onboard)
+        last_logbook_report.join(species_onboard)
         .join(current_segments)
         .join(control_priorities)
         .reset_index()
@@ -223,6 +228,7 @@ def load_current_segments(vessels_segments):  # pragma: no cover
         handle_array_conversion_errors=True,
         value_on_array_conversion_error="{}",
         jsonb_columns=["gear_onboard", "species_onboard"],
+        nullable_integer_columns=["vessel_id"],
     )
 
 
@@ -234,9 +240,11 @@ with Flow("Current segments", executor=LocalDaskExecutor()) as flow:
         # Extract
         catches = extract_catches()
         last_positions = extract_last_positions()
-        segments = extract_segments()
+        segments = extract_segments_of_current_year()
         facade_areas = extract_facade_areas()
         control_priorities = extract_control_priorities()
+
+        vessels_table = get_table("vessels")
 
         # Transform
         last_positions_facade = compute_last_positions_facade(
@@ -248,6 +256,7 @@ with Flow("Current segments", executor=LocalDaskExecutor()) as flow:
             current_segments, last_positions_facade, control_priorities
         )
         current_segments = join(catches, current_segments, control_priorities)
+        current_segments = add_vessel_id(current_segments, vessels_table)
 
         # Load
         load_current_segments(current_segments)

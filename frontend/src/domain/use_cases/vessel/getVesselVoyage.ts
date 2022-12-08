@@ -44,8 +44,6 @@ export const getVesselVoyage =
     const nextNavigateTo = navigateTo || NavigateTo.LAST
 
     if (nextNavigateTo === NavigateTo.NEXT && isLastVoyage) {
-      console.error('This voyage is the last one.')
-
       return
     }
 

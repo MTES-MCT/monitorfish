@@ -3,7 +3,7 @@
   "arrowParens": "avoid",
   "bracketSameLine": false,
   "bracketSpacing": true,
-  "endOfLine": "lf",
+  "endOfLine": "auto",
   "insertPragma": false,
   "jsxSingleQuote": false,
   "printWidth": 120,

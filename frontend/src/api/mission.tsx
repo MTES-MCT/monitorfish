@@ -8,7 +8,7 @@ export const missionApi = createApi({
   }),
   endpoints: builder => ({
     getAll: builder.query<Mission[], undefined>({
-      query: () => `missions`
+      query: () => `missions?startedAfterDateTime=&startedBeforeDateTime=`
     })
   }),
   reducerPath: 'missionApi'

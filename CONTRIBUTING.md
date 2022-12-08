@@ -153,30 +153,30 @@ expecting a callback. React native uplifter props follow this convention themsel
 
 ```json
 {
-  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  "eslint.packageManager": "npm",
-  "eslint.workingDirectories": ["./frontend"]
-}
-```
-
-And globally or locally it's highly recommended to 
-
-```json
-{
-  "editor.codeActionsOnSave": {
+   "editor.codeActionsOnSave": {
     "source.fixAll": true
   },
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "editor.formatOnSave": true,
   "eslint.codeActionsOnSave.mode": "all",
   "eslint.format.enable": true,
+  "eslint.packageManager": "npm",
+  "eslint.workingDirectories": ["./frontend"],
+  "stylelint.configBasedir": "./frontend",
+  "stylelint.validate": [
+    "css",
+    "html",
+    "less",
+    "postcss",
+    "sass",
+    "scss",
+    "typescriptreact"
+  ],
   "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma"
   }
 }
 ```

@@ -56,6 +56,7 @@ def transform_fleet_segments_open_data(fleet_segments) -> pd.DataFrame:
     fleet_segments = prepare_df_for_loading(
         fleet_segments,
         logger=logger,
+        nullable_integer_columns=["year"],
         pg_array_columns=["gears", "fao_areas", "species"],
     )
     return fleet_segments

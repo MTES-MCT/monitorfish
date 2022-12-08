@@ -21,7 +21,7 @@ from src.pipeline.flows.update_beacon_malfunctions import (
     extract_vessels_that_should_emit,
     flow,
     get_ended_malfunction_ids,
-    get_last_emissions,
+    get_last_emissions_of_vessels_that_should_emit,
     get_new_malfunctions,
     load_new_beacon_malfunctions,
     prepare_new_beacon_malfunctions,
@@ -152,7 +152,9 @@ def test_get_last_emissions():
         }
     )
 
-    last_emissions = get_last_emissions.run(vessels_that_should_emit, last_positions)
+    last_emissions = get_last_emissions_of_vessels_that_should_emit.run(
+        vessels_that_should_emit, last_positions
+    )
 
     expected_last_emissions = (
         vessels_that_should_emit.loc[[1, 0, 2, 3]]
@@ -166,7 +168,16 @@ def test_get_last_emissions():
     pd.testing.assert_frame_equal(last_emissions, expected_last_emissions)
 
 
-def test_get_new_malfunctions():
+# The `LEFT JOIN` in known_beacon_malfunctions.sql can return rows with
+# `satellite_operator_id` = NULL, which results in a change of dtype of the
+# `satellite_operator_id` column of the known_malfunctions DataFrame from `int` to
+# `float`. As a safe measure, a test is made with both cases, with or without nulls in
+# the `satellite_operator_id` column.
+@pytest.mark.parametrize(
+    "satellite_operator_ids_contain_nulls",
+    [False, True],
+)
+def test_get_new_malfunctions(satellite_operator_ids_contain_nulls):
     d = datetime(2021, 10, 8, 2, 56, 0)
     td = timedelta(hours=1)
     known_malfunctions = pd.DataFrame(
@@ -191,7 +202,17 @@ def test_get_new_malfunctions():
             ],
             "is_at_port": [False, True, True, False, False, False, False, False, None],
             "is_manual": [True, False, False, False, False, False, False, False, None],
-            "satellite_operator_id": [1, 2, 3, 1, 2, 3, 4, 5, 6],
+            "satellite_operator_id": [
+                1,
+                2,
+                3,
+                1,
+                2,
+                3 if not satellite_operator_ids_contain_nulls else None,
+                4,
+                5,
+                6,
+            ],
             "other_emissions_data": [10, "twenty", "thirty", 40, 50, 60, 70, 80, None],
         }
     )
@@ -211,9 +232,13 @@ def test_get_new_malfunctions():
         malfunction_datetime_utc_threshold_at_port=d - 24 * td,
     )
 
+    expected_new_malfunctions_ids = [0, 2, 4]
+    if not satellite_operator_ids_contain_nulls:
+        expected_new_malfunctions_ids.append(5)
+
     expected_new_malfunctions = (
         last_emissions.loc[
-            [0, 2, 4, 5],
+            expected_new_malfunctions_ids,
             [
                 "beacon_number",
                 "last_position_datetime_utc",
@@ -542,7 +567,7 @@ def test_load_new_beacon_malfunctions(reset_test_data):
     load_new_beacon_malfunctions.run(new_beacon_malfunctions)
 
     loaded_beacon_malfunctions = read_query(
-        "monitorfish_remote", "SELECT * FROM beacon_malfunctions"
+        "monitorfish_remote", "SELECT * FROM beacon_malfunctions ORDER BY id"
     )
 
     assert len(loaded_beacon_malfunctions) == len(initial_beacon_malfunctions) + 2
@@ -710,7 +735,9 @@ def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emi
     )
 
     last_positions = state.result[flow.get_tasks("extract_last_positions")[0]].result
-    last_emissions = state.result[flow.get_tasks("get_last_emissions")[0]].result
+    last_emissions = state.result[
+        flow.get_tasks("get_last_emissions_of_vessels_that_should_emit")[0]
+    ].result
     vessels_that_should_emit = state.result[
         flow.get_tasks("extract_vessels_that_should_emit")[0]
     ].result

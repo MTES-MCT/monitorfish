@@ -9,6 +9,12 @@ WITH infractions AS (
 SELECT 
     c.id_fmc_bc_controle as id,
     c.id_nav_flotteur as vessel_id,
+    f.num_cfr AS cfr,
+    f.indicatif_radio AS ircs,
+    c.marquage_exterieur AS external_immatriculation,
+    c.nom_navire AS vessel_name,
+    cp.code_pays_iso2 AS flag_state,
+    cq.code AS district_code,
     ctrl.idc_fmc_moyen_controle as controller_id,
     ctype.libelle as control_type,
     c.date_controle as control_datetime_utc,
@@ -42,6 +48,12 @@ SELECT
     rc.maillage_controle2 as controlled_mesh_2,
     rc.maillage_controle3 as controlled_mesh_3
 FROM FMC2.FMC_BC_CONTROLE c
+LEFT JOIN NAVPROFMC.NAV_FLOTTEUR f
+ON c.id_nav_flotteur = f.id_nav_flotteur
+LEFT JOIN COMMUNFMC.C_CODE_PAYS cp
+ON c.idc_pays = cp.idc_pays
+LEFT JOIN COMMUNFMC.C_CODE_QUARTIER cq
+ON c.idc_quartier = cq.idc_quartier
 LEFT JOIN FMC2.FMC_CODE_TYPE_CONTROLE ctype
 ON c.idc_fmc_type_controle = ctype.idc_fmc_type_controle
 LEFT JOIN FMC2.FMC_BC_RESULTAT_CONTROLE rc

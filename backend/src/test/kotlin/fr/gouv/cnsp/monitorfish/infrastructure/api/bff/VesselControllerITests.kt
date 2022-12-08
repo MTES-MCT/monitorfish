@@ -150,6 +150,7 @@ class VesselControllerITests {
                 false,
                 VesselInformation(
                     Vessel(
+                        id = 123,
                         internalReferenceNumber = "FR224226850",
                         vesselName = "MY AWESOME VESSEL",
                         flagState = CountryCode.FR,
@@ -202,7 +203,7 @@ class VesselControllerITests {
             Pair(
                 true,
                 VesselInformation(
-                    Vessel(),
+                    null,
                     listOf(),
                     VesselRiskFactor(2.3, 2.0, 1.9, 3.2)
                 )
@@ -312,6 +313,7 @@ class VesselControllerITests {
         given(this.searchVessels.execute(any())).willReturn(
             listOf(
                 Vessel(
+                    id = 1,
                     internalReferenceNumber = "FR224226850",
                     vesselName = "MY AWESOME VESSEL",
                     flagState = CountryCode.FR,
@@ -319,6 +321,7 @@ class VesselControllerITests {
                     vesselType = "Fishing"
                 ),
                 Vessel(
+                    id = 2,
                     internalReferenceNumber = "GBR21555445",
                     vesselName = "ANOTHER VESSEL",
                     flagState = CountryCode.GB,

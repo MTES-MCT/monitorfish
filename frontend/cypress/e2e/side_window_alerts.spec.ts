@@ -39,7 +39,7 @@ context('Alerts', () => {
     // Show vessel on map
     cy.intercept(
       'GET',
-      'bff/v1/vessels/find?vesselId=1&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
+      'bff/v1/vessels/find?vesselId=&internalReferenceNumber=FAK000999999&externalReferenceNumber=DONTSINK' +
         '&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER&trackDepth=TWELVE_HOURS&afterDateTime=&beforeDateTime='
     ).as('showVesselPositionsOnMap')
     cy.intercept(

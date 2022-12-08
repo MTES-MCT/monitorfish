@@ -1032,6 +1032,7 @@ COPY public.last_positions (id, cfr, external_immatriculation, mmsi, ircs, vesse
                             beacon_malfunction_id, reportings) FROM stdin;
 10000	FAK000999999	DONTSINK	\N	CALLME	PHENOMENE	GB	\N	47.921999999999997	-8.0129999999999999	8.40000000000000036	14	2021-01-15 07:32:00	00:40:00	2020-12-21 15:01:00	14.3	5.2	{"NWW10", "PEL 03"}	[{"gear": "OTB", "mesh": 70.0, "dimensions": 45.0}]	[{ "gear": "OTB","faoZone": "27.8.b","species": "BLI","weight": 13.46 },{ "gear": "OTB","faoZone": "27.8.c","species": "HKE","weight": 235.6 }]	CAEN	CN	2020-12-22 08:59:00	true	Pas de com	INTERNAL_REFERENCE_NUMBER	47.7123	-8.8123	2.1	2	3	2.473	t	f	{THREE_MILES_TRAWLING_ALERT}	1	\N
 10001	SOCR4T3	LePhiloFilou	\N	SCRT	SOCRATE	FR	\N	48.921999999999997	-8.0129999999999999	8.40000000000000036	14	2021-01-15 07:32:00	00:40:00	2020-12-21 15:01:00	14.3	5.2	{"NWW10", "PEL 03"}	[{"gear": "OTB", "mesh": 70.0, "dimensions": 45.0}]	[{ "gear": "OTB","faoZone": "27.8.b","species": "BLI","weight": 13.46 },{ "gear": "OTB","faoZone": "27.8.c","species": "HKE","weight": 235.6 }]	ATHENES	AT	2020-12-22 08:59:00	true	No comment	INTERNAL_REFERENCE_NUMBER	49.003	-7.9523	2.1	2	3	2.473	f	f	\N	\N	\N
+10002	U_W0NTFINDME	ABC123456	\N	TALK2ME	MALOTRU	FR	\N	48.221999999999997	-8.5129999999999999	8.40000000000000036	14	2021-01-15 07:32:00	00:40:00	2020-12-21 15:01:00	14.3	5.2	{"NWW10", "PEL 03"}	[{"gear": "OTB", "mesh": 70.0, "dimensions": 45.0}]	[{ "gear": "OTB","faoZone": "27.8.b","species": "BLI","weight": 13.46 },{ "gear": "OTB","faoZone": "27.8.c","species": "HKE","weight": 235.6 }]	ATHENES	AT	2020-12-22 08:59:00	true	No comment	INTERNAL_REFERENCE_NUMBER	49.003	-7.9523	2.1	2	3	2.473	f	f	\N	\N	\N
 \.
 
 update last_positions
@@ -1055,7 +1056,9 @@ where cfr = 'FAK123456789';
 update last_positions
 set last_control_datetime_utc = '2106-01-15 08:13:00'
 where cfr = 'FRA000651332';
-
+update last_positions
+set last_position_datetime_utc = now() - ('20 days 3 hours')::interval
+where cfr = 'U_W0NTFINDME';
 update last_positions
 set last_position_datetime_utc = NOW() - ('3 WEEK')::interval
 where cfr = 'ABC000939217';

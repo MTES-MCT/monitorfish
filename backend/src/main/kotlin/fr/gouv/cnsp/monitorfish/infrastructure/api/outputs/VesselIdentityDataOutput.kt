@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 
 data class VesselIdentityDataOutput(
     val internalReferenceNumber: String? = null,
+    val vesselId: Int,
     val imo: String? = null,
     val mmsi: String? = null,
     val ircs: String? = null,
@@ -17,6 +18,7 @@ data class VesselIdentityDataOutput(
         fun fromVessel(vessel: Vessel): VesselIdentityDataOutput {
             return VesselIdentityDataOutput(
                 internalReferenceNumber = vessel.internalReferenceNumber,
+                vesselId = vessel.id,
                 imo = vessel.imo,
                 ircs = vessel.ircs,
                 mmsi = vessel.mmsi,

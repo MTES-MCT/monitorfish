@@ -4,40 +4,64 @@ import styled from 'styled-components'
 
 import { MissionType } from '../../../../domain/types/mission'
 import { NEW_ACTION_BY_TYPE } from '../constants'
-import { FormTitle } from '../FormTitle'
+import { FormBody } from '../FormBody'
+import { FormHead } from '../FormHead'
+import { Item } from './Item'
 
 import type { Action, PartialAction } from '../types'
 import type { Promisable } from 'type-fest'
 
 export type ActionListProps = {
   actions?: Action[]
+  newAction?: PartialAction
   onAddAction: (newAction: PartialAction) => Promisable<void>
+  onDeleteAction: (index: number) => Promisable<void>
+  onDeleteNewAction: () => Promisable<void>
   selectedType: MissionType
 }
-export function ActionList({ actions = [], selectedType, onAddAction }: ActionListProps) {
-  const addAction = useCallback(() => {
-    onAddAction(NEW_ACTION_BY_TYPE[selectedType])
-  }, [onAddAction, selectedType])
+export function ActionList({
+  actions = [],
+  newAction,
+  onDeleteAction,
+  onDeleteNewAction,
+  selectedType,
+  onAddAction
+}: ActionListProps) {
+  const addAction = useCallback(
+    (type: Action['type']) => {
+      const nextNewAction = NEW_ACTION_BY_TYPE[type || 'default']()
+
+      onAddAction(nextNewAction)
+    },
+    [onAddAction]
+  )
 
   return (
     <Wrapper>
-      <Header>
-        <FormTitle>Informations générales</FormTitle>
+      <FormHead>
+        <h2>Actions réalisées en mission</h2>
 
         <Dropdown Icon={Icon.Plus} title="Ajouter">
-          <Dropdown.Item Icon={Icon.FleetSegment} onClick={addAction}>
+          <Dropdown.Item Icon={Icon.FleetSegment} onClick={() => addAction(selectedType)}>
             {selectedType === MissionType.AIR && 'Ajouter un contrôle aérien'}
             {selectedType === MissionType.GROUND && 'Ajouter un contrôle à la débarque'}
             {selectedType === MissionType.SEA && 'Ajouter un contrôle en mer'}
           </Dropdown.Item>
-          <Dropdown.Item Icon={Icon.Observation}>Ajouter une note libre</Dropdown.Item>
+          <Dropdown.Item Icon={Icon.Observation} onClick={() => addAction(undefined)}>
+            Ajouter une note libre
+          </Dropdown.Item>
         </Dropdown>
-      </Header>
+      </FormHead>
 
-      {actions.map((_, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <p key={index}>{index}</p>
-      ))}
+      <FormBody>
+        {!actions.length && !newAction && <Placeholder>Aucune action n’est ajoutée pour le moment.</Placeholder>}
+        {newAction && <Item action={newAction} isNew onDelete={onDeleteNewAction} />}
+        {Boolean(actions.length) &&
+          actions.map((action, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Item key={index} action={action} onDelete={() => onDeleteAction(index)} />
+          ))}
+      </FormBody>
     </Wrapper>
   )
 }
@@ -46,20 +70,14 @@ const Wrapper = styled.div`
   background-color: ${p => p.theme.color.cultured};
   display: flex;
   flex-direction: column;
-  padding: 2rem;
-  overflow-y: auto;
   width: 33.33%;
 `
 
-const Header = styled.div`
+const Placeholder = styled.div`
   align-items: center;
   display: flex;
-
-  > h2 {
-    margin: 0;
-  }
-
-  > div {
-    margin-left: 1.5rem;
-  }
+  flex-grow: 1;
+  font-size: 13px;
+  font-style: italic;
+  justify-content: center;
 `

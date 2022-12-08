@@ -17,7 +17,8 @@ import styled from 'styled-components'
 
 import { MissionGoal, MissionType } from '../../../../domain/types/mission'
 import { getOptionsFromLabelledEnum } from '../../../../utils/getOptionsFromLabelledEnum'
-import { FormTitle } from '../FormTitle'
+import { FormBody } from '../FormBody'
+import { FormHead } from '../FormHead'
 import { MultiZonePicker } from '../MultiZonePicker'
 import { FLIGHT_GOALS_AS_OPTIONS, INITIAL_VALUES, TARGETTED_SEGMENTS_AS_OPTIONS } from './constants'
 import { MultiUnitPicker } from './MultiUnitPicker'
@@ -70,9 +71,11 @@ export function MainForm({ onTypeChange }: MainFormProps) {
       <Wrapper>
         <FormikEffect onChange={updateCurrentValues as any} />
 
-        <FormTitle>Informations générales</FormTitle>
+        <FormHead>
+          <h2>Informations générales</h2>
+        </FormHead>
 
-        <FieldGroupWrapper>
+        <CustomFormBody>
           <FormikDateRangePicker label="Début et fin de mission" name="dateRange" />
           <FormikMultiRadio
             isInline
@@ -134,7 +137,7 @@ export function MainForm({ onTypeChange }: MainFormProps) {
             <FormikTextInput label="Ouvert par" name="openBy" />
             <FormikTextInput label="Clôturé par" name="closedBy" />
           </InlineFieldGroupWrapper>
-        </FieldGroupWrapper>
+        </CustomFormBody>
       </Wrapper>
     </Formik>
   )
@@ -146,8 +149,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding: 2rem;
-  overflow-y: auto;
   width: 33.33%;
 
   /* TODO Handle that in @mtes-mct/monitor-ui. */
@@ -156,7 +157,7 @@ const Wrapper = styled.div`
   }
 `
 
-const FieldGroupWrapper = styled.div`
+const CustomFormBody = styled(FormBody)`
   > div:not(:first-child),
   > fieldset:not(:first-child) {
     margin-top: 2rem;
@@ -180,6 +181,7 @@ const InlineFieldGroupWrapper = styled.div`
     margin-right: 0.5rem;
     width: 50%;
   }
+
   > div:last-child {
     margin-left: 0.5rem;
     width: 50%;

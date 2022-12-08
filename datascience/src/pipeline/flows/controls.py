@@ -429,6 +429,9 @@ def compute_controls_segments(
 
 @task(checkpoint=False)
 def load_controls(controls: pd.DataFrame, how: str):
+
+    assert how in ("replace", "upsert")
+
     load(
         controls,
         table_name="controls",

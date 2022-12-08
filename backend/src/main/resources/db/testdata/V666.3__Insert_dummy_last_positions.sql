@@ -1112,11 +1112,11 @@ SET vessel_id = 8 WHERE cfr = 'ABC000480070';
 UPDATE last_positions
 SET vessel_id = 9 WHERE cfr = 'ABC000640738';
 UPDATE last_positions
-SET vessel_id = 1 WHERE cfr = 'ABC000042310';
+SET vessel_id = 10 WHERE cfr = 'ABC000042310';
 UPDATE last_positions
-SET vessel_id = 1 WHERE cfr = 'ABC000597493';
+SET vessel_id = 11 WHERE cfr = 'ABC000597493';
 UPDATE last_positions
-SET vessel_id = 1 WHERE cfr = 'FR263465414';
+SET vessel_id = 12 WHERE cfr = 'FR263465414';
 UPDATE last_positions
-SET vessel_id = 1 WHERE cfr = 'FR263454484';
+SET vessel_id = 13 WHERE cfr = 'FR263454484';
 

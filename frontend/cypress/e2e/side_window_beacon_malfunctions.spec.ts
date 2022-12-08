@@ -242,7 +242,7 @@ context('Side window beacon malfunctions', () => {
     cy.intercept(
       'GET',
       new RegExp(
-        `bff\\/v1\\/vessels\\/find\\?internalReferenceNumber=FAK000999999` +
+        `bff\\/v1\\/vessels\\/find\\?vesselId=1&internalReferenceNumber=FAK000999999` +
           `&externalReferenceNumber=DONTSINK&IRCS=CALLME&vesselIdentifier=INTERNAL_REFERENCE_NUMBER` +
           `&trackDepth=CUSTOM` +
           `&afterDateTime=${oneWeeksBeforeDate.format('YYYY-MM-DD')}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z` +
@@ -251,8 +251,7 @@ context('Side window beacon malfunctions', () => {
     ).as('showVesselPositionsOnMap')
     cy.intercept(
       'GET',
-      'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999' +
-        '&externalReferenceNumber=DONTSINK&IRCS=CALLME&voyageRequest=LAST&tripNumber='
+      'bff/v1/vessels/logbook/find?internalReferenceNumber=FAK000999999&voyageRequest=LAST&tripNumber='
     ).as('showVesselVoyageOnMap')
     cy.get('*[data-cy="side-window-beacon-malfunctions-detail-show-vessel"]').click()
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))

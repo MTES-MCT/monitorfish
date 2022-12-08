@@ -13,7 +13,7 @@ context('Vessel sidebar resume tab', () => {
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
     // Then
-    cy.get('*[data-cy^="vessel-name"]').contains('PHENOMENE (GB)', { timeout: 10000 })
+    cy.get('*[data-cy^="vessel-name"]').contains('PHENOMENE (FR)', { timeout: 10000 })
     cy.get('*[data-cy^="global-risk-factor"]').contains('2.5', { timeout: 10000 })
     cy.get('*[data-cy^="impact-risk-factor"]').contains('2.1', { timeout: 10000 })
     cy.get('*[data-cy^="probability-risk-factor"]').contains('2.0', { timeout: 10000 })

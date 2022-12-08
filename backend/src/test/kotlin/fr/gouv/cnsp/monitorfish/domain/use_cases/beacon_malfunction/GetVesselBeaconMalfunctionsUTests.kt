@@ -31,9 +31,8 @@ class GetVesselBeaconMalfunctionsUTests {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
         given(
-            beaconMalfunctionsRepository.findAllByVesselIdentifierEquals(
-                VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                "FR224226850",
+            beaconMalfunctionsRepository.findAllByVesselId(
+                1,
                 now.minusYears(1)
             )
         )
@@ -43,13 +42,13 @@ class GetVesselBeaconMalfunctionsUTests {
                         1, "FR224226850", "1236514", "IRCS",
                         null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.END_OF_MALFUNCTION,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1
                     ),
                     BeaconMalfunction(
                         2, "FR224226850", "1236514", "IRCS",
                         null, VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 1
                     )
                 )
             )
@@ -81,7 +80,7 @@ class GetVesselBeaconMalfunctionsUTests {
             beaconMalfunctionCommentsRepository,
             beaconMalfunctionActionsRepository
         )
-            .execute("FR224226850", "", "", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, now.minusYears(1))
+            .execute(1, now.minusYears(1))
 
         // Then
         assertThat(enrichedBeaconMalfunctions.history).hasSize(1)

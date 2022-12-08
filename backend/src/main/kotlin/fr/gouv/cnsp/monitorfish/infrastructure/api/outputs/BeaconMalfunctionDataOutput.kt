@@ -18,6 +18,7 @@ data class BeaconMalfunctionDataOutput(
     val malfunctionEndDateTime: ZonedDateTime?,
     val vesselStatusLastModificationDateTime: ZonedDateTime,
     val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason? = null,
+    val vesselId: Int,
     var riskFactor: Double?,
     val notificationRequested: BeaconMalfunctionNotificationType? = null,
     val beaconNumber: String? = null
@@ -40,7 +41,8 @@ data class BeaconMalfunctionDataOutput(
                 endOfBeaconMalfunctionReason = beaconMalfunction.endOfBeaconMalfunctionReason,
                 riskFactor = beaconMalfunction.riskFactor,
                 notificationRequested = beaconMalfunction.notificationRequested,
-                beaconNumber = beaconMalfunction.beaconNumber
+                beaconNumber = beaconMalfunction.beaconNumber,
+                vesselId = beaconMalfunction.vesselId
             )
         }
     }

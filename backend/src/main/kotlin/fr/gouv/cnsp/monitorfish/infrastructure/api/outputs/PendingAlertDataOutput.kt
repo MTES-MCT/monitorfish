@@ -7,6 +7,7 @@ import java.time.ZonedDateTime
 
 data class PendingAlertDataOutput(
     val id: Int? = null,
+    val vesselId: Int? = null,
     val vesselName: String? = null,
     val internalReferenceNumber: String? = null,
     val externalReferenceNumber: String? = null,
@@ -20,6 +21,7 @@ data class PendingAlertDataOutput(
     companion object {
         fun fromPendingAlert(pendingAlert: PendingAlert) = PendingAlertDataOutput(
             id = pendingAlert.id,
+            vesselId = pendingAlert.vesselId,
             vesselName = pendingAlert.vesselName,
             internalReferenceNumber = pendingAlert.internalReferenceNumber,
             externalReferenceNumber = pendingAlert.externalReferenceNumber,

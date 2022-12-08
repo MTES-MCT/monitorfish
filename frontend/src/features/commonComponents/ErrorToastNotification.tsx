@@ -10,30 +10,25 @@ import 'react-toastify/dist/ReactToastify.css'
 
 export function ErrorToastNotification() {
   // TODO Type global.error
-  // This typing is a wild guess of what it could be: errors should be strict-typed in priority
-  const error: {
-    message: string
-    type: ErrorType
-  } | null = useAppSelector(state => state.global.error)
+  const error:
+    | (Error & {
+        type: ErrorType
+      })
+    | null = useAppSelector(state => state.global.error)
 
   useEffect(() => {
+    if (!error || (error.type && error.type === ErrorType.INFO_AND_HIDDEN)) {
+      return
+    }
+
     const toastOptions: ToastOptions = {
       autoClose: 3000,
       position: 'bottom-right'
     }
 
-    if (error instanceof Error) {
+    if (!error.type) {
       toast.error(error.message, toastOptions)
 
-      return
-    }
-
-    if (
-      !error ||
-      typeof error !== 'object' ||
-      !error.message ||
-      (error.type && error.type === ErrorType.INFO_AND_HIDDEN)
-    ) {
       return
     }
 

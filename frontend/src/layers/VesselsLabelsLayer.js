@@ -7,7 +7,7 @@ import LineString from 'ol/geom/LineString'
 import { usePrevious } from '../hooks/usePrevious'
 
 import { Layer } from '../domain/entities/layers/constants'
-import { getVesselId, getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel/vessel'
+import { getVesselCompositeIdentifier, getVesselLastPositionVisibilityDates, Vessel } from '../domain/entities/vessel/vessel'
 import { drawMovedLabelIfFoundAndReturnOffset, VesselLabelLine } from '../domain/entities/vesselLabelLine'
 import { getLabelLineStyle } from './styles/vesselLabelLine.style'
 
@@ -203,7 +203,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
       const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
       const showedTracksVesselsIdentities = Object.keys(vesselsTracksShowed)
       if (selectedVessel) {
-        showedTracksVesselsIdentities.push(getVesselId(selectedVessel))
+        showedTracksVesselsIdentities.push(getVesselCompositeIdentifier(selectedVessel))
       }
 
       const nextFeaturesAndLabels = features
@@ -220,7 +220,7 @@ const VesselsLabelsLayer = ({ map, mapMovingAndZoomEvent }) => {
           const labelLineFeatureId = VesselLabelLine.getFeatureId(vesselProperties)
           const opacity = Vessel.getVesselOpacity(vesselProperties.dateTime, vesselIsHidden, vesselIsOpacityReduced) || vesselProperties?.beaconMalfunctionId ? 1 : 0
           const offset = drawMovedLabelIfFoundAndReturnOffset(getVectorSource(), vesselToCoordinates, labelLineFeatureId, feature, opacity)
-          const trackIsShown = showedTracksVesselsIdentities.includes(getVesselId(vesselProperties))
+          const trackIsShown = showedTracksVesselsIdentities.includes(getVesselCompositeIdentifier(vesselProperties))
 
           return {
             identity: {

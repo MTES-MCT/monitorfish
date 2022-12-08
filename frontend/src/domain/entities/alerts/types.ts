@@ -1,4 +1,5 @@
-import type { Infraction } from './control'
+import type { Infraction } from '../../types/control'
+import type { VesselIdentifier, VesselIdentity } from '../vessel/types'
 
 export enum PendingAlertValueType {
   FRENCH_EEZ_FISHING_ALERT = 'FRENCH_EEZ_FISHING_ALERT',
@@ -16,7 +17,7 @@ export type PendingAlert = {
   ircs: string
   tripNumber: string
   value: PendingAlertValue
-  vesselIdentifier: string
+  vesselIdentifier: VesselIdentifier
   vesselName: string
 }
 
@@ -42,7 +43,7 @@ export type SilencedAlert = {
   isReactivated: boolean | null
   silencedBeforeDate: Date
   value: PendingAlertValue
-  vesselIdentifier: string
+  vesselIdentifier: VesselIdentifier
   vesselName: string
 }
 
@@ -58,4 +59,8 @@ export type SilencedAlertPeriodRequest = {
 export type SilenceAlertQueueItem = {
   pendingAlertId: string
   silencedAlertPeriodRequest: SilencedAlertPeriodRequest
+}
+
+export type AlertNameAndVesselIdentity = VesselIdentity & {
+  name: string | null
 }

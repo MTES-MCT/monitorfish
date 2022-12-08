@@ -2,6 +2,7 @@ import { batch } from 'react-redux'
 
 import { getVesselVoyageFromAPI } from '../../../api/vessel'
 import NoLogbookMessagesFoundError from '../../../errors/NoLogbookMessagesFoundError'
+import { dayjs } from '../../../utils/dayjs'
 import { vesselsAreEquals } from '../../entities/vessel/vessel'
 import { getTrackRequestFromDates } from '../../entities/vesselTrackDepth'
 import {
@@ -16,30 +17,33 @@ import {
 import { removeError, setError } from '../../shared_slices/Global'
 import { updateSelectedVesselTrackRequest } from './updateSelectedVesselTrackRequest'
 
-export const NAVIGATE_TO = {
-  LAST: 'LAST',
-  NEXT: 'NEXT',
-  PREVIOUS: 'PREVIOUS'
+import type { VesselIdentity } from '../../entities/vessel/types'
+
+export enum NavigateTo {
+  LAST = 'LAST',
+  NEXT = 'NEXT',
+  PREVIOUS = 'PREVIOUS'
 }
 
 /**
  * Get the vessel fishing voyage and update the vessel positions track when navigating in the trips
- * @function getVesselVoyage
- * @param {VesselNS.VesselIdentity} vesselIdentity
- * @param {keyof typeof NAVIGATE_TO | undefined} navigateTo
- * @param {boolean} fromCron
  */
-const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, getState) => {
-  if (vesselIdentity) {
+export const getVesselVoyage =
+  (vesselIdentity: VesselIdentity | null, navigateTo: NavigateTo | undefined, fromCron: boolean) =>
+  async (dispatch, getState) => {
+    if (!vesselIdentity) {
+      return
+    }
+
     const currentSelectedVesselIdentity = getState().vessel.selectedVesselIdentity
     const { areFishingActivitiesShowedOnMap, isLastVoyage, lastFishingActivities, tripNumber } =
       getState().fishingActivities
 
     const updateVesselTrack = navigateTo && !fromCron
     const isSameVesselAsCurrentlyShowed = vesselsAreEquals(vesselIdentity, currentSelectedVesselIdentity)
-    navigateTo = navigateTo || NAVIGATE_TO.LAST
+    const nextNavigateTo = navigateTo || NavigateTo.LAST
 
-    if (navigateTo === NAVIGATE_TO.NEXT && isLastVoyage) {
+    if (nextNavigateTo === NavigateTo.NEXT && isLastVoyage) {
       console.error('This voyage is the last one.')
 
       return
@@ -49,54 +53,53 @@ const getVesselVoyage = (vesselIdentity, navigateTo, fromCron) => (dispatch, get
       dispatch(loadFishingActivities())
     }
 
-    getVesselVoyageFromAPI(vesselIdentity, navigateTo, tripNumber)
-      .then(voyage => {
-        if (!voyage) {
-          batch(() => {
-            dispatch(setVoyage(emptyVoyage))
-            dispatch(hideFishingActivitiesOnMap())
-            dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
-          })
-
-          return
-        }
-
-        if (isSameVesselAsCurrentlyShowed && fromCron) {
-          if (gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage)) {
-            dispatch(setNextFishingActivities(voyage.logbookMessagesAndAlerts))
-            dispatch(removeError())
-          }
-
-          return
-        }
-
-        if (updateVesselTrack) {
-          modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishingActivitiesShowedOnMap)
-
-          return
-        }
-
-        dispatch(setLastVoyage(voyage))
-        dispatch(setVoyage(voyage))
-        if (areFishingActivitiesShowedOnMap) {
-          dispatch(showFishingActivitiesOnMap())
-        } else {
-          dispatch(hideFishingActivitiesOnMap())
-        }
-
-        dispatch(removeError())
-      })
-      .catch(error => {
-        console.error(error)
+    try {
+      const voyage = await getVesselVoyageFromAPI(vesselIdentity, nextNavigateTo, tripNumber)
+      if (!voyage) {
         batch(() => {
           dispatch(setVoyage(emptyVoyage))
-          dispatch(setError(error))
+          dispatch(hideFishingActivitiesOnMap())
+          dispatch(setError(new NoLogbookMessagesFoundError("Ce navire n'a pas envoyé de message JPE.")))
         })
-      })
+
+        return
+      }
+
+      if (isSameVesselAsCurrentlyShowed && fromCron) {
+        if (gotNewFishingActivitiesWithMoreMessagesOrAlerts(lastFishingActivities, voyage)) {
+          dispatch(setNextFishingActivities(voyage.logbookMessagesAndAlerts))
+          dispatch(removeError())
+        }
+
+        return
+      }
+
+      if (updateVesselTrack) {
+        modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishingActivitiesShowedOnMap)
+
+        return
+      }
+
+      dispatch(setLastVoyage(voyage))
+      dispatch(setVoyage(voyage))
+      if (areFishingActivitiesShowedOnMap) {
+        dispatch(showFishingActivitiesOnMap())
+      } else {
+        dispatch(hideFishingActivitiesOnMap())
+      }
+
+      dispatch(removeError())
+    } catch (error) {
+      dispatch(setVoyage(emptyVoyage))
+      dispatch(setError(error))
+    }
   }
-}
 
 function modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishingActivitiesShowedOnMap) {
+  if (!voyage.startDate && !voyage.endDate) {
+    return
+  }
+
   const { afterDateTime, beforeDateTime } = getDateRangeMinusFourHoursPlusOneHour(voyage.startDate, voyage.endDate)
 
   const trackRequest = getTrackRequestFromDates(afterDateTime, beforeDateTime)
@@ -111,24 +114,12 @@ function modifyVesselTrackAndVoyage(voyage, dispatch, vesselIdentity, areFishing
 }
 
 function getDateRangeMinusFourHoursPlusOneHour(afterDateTime, beforeDateTime) {
-  if (!afterDateTime && !beforeDateTime) {
-    return {
-      afterDateTime: null,
-      beforeDateTime: null
-    }
-  }
-
-  afterDateTime = new Date(afterDateTime)
-  const fourHours = 4
-  afterDateTime.setTime(afterDateTime.getTime() - fourHours * 60 * 60 * 1000)
-
-  beforeDateTime = new Date(beforeDateTime)
-  const oneHour = 1
-  beforeDateTime.setTime(beforeDateTime.getTime() + oneHour * 60 * 60 * 1000)
+  const nextAfterDateTime = dayjs(afterDateTime).subtract(4, 'hours')
+  const nextBeforeDateTime = dayjs(beforeDateTime).add(1, 'hour')
 
   return {
-    afterDateTime,
-    beforeDateTime
+    afterDateTime: nextAfterDateTime.toDate(),
+    beforeDateTime: nextBeforeDateTime.toDate()
   }
 }
 
@@ -150,5 +141,3 @@ const emptyVoyage = {
     logbookMessages: []
   }
 }
-
-export default getVesselVoyage

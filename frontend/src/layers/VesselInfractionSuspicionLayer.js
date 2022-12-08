@@ -7,7 +7,7 @@ import { Vector } from 'ol/layer'
 import { Layer } from '../domain/entities/layers/constants'
 
 import { getVesselInfractionSuspicionStyle } from './styles/vessel.style'
-import { getVesselId, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel/vessel'
+import { getVesselCompositeIdentifier, getVesselLastPositionVisibilityDates, Vessel, vesselIsShowed } from '../domain/entities/vessel/vessel'
 
 const VesselInfractionSuspicionLayer = ({ map }) => {
   const {
@@ -85,7 +85,7 @@ const VesselInfractionSuspicionLayer = ({ map }) => {
         const feature = new Feature({
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(`${Layer.VESSEL_INFRACTION_SUSPICION.code}:${getVesselId(vessel.vesselProperties)}`)
+        feature.setId(`${Layer.VESSEL_INFRACTION_SUSPICION.code}:${getVesselCompositeIdentifier(vessel.vesselProperties)}`)
         features.push(feature)
 
         return features

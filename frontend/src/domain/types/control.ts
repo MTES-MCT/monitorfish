@@ -45,7 +45,7 @@ export type VesselControl = {
   vesselTargeted: boolean
 }
 
-export type ControlResume = {
+export type ControlSummary = {
   controls: VesselControl[]
   numberOfAerialControls: number
   numberOfDiversions: number

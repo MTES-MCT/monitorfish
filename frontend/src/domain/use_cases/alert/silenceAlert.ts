@@ -11,7 +11,7 @@ import { setError } from '../../shared_slices/Global'
 import { removeVesselAlertAndUpdateReporting } from '../../shared_slices/Vessel'
 
 import type { AppGetState } from '../../../store'
-import type { SilencedAlertPeriodRequest } from '../../types/alert'
+import type { SilencedAlertPeriodRequest } from '../../entities/alerts/types'
 
 /**
  * Silence an alert
@@ -41,7 +41,7 @@ export const silenceAlert =
           removeVesselAlertAndUpdateReporting({
             alertType: silencedAlert.value.type,
             isValidated: false,
-            vesselId: Vessel.getVesselFeatureId(silencedAlert)
+            vesselFeatureId: Vessel.getVesselFeatureId(silencedAlert)
           })
         )
 

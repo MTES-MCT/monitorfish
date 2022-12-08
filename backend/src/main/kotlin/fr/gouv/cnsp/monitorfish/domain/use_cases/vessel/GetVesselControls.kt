@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.controls.ControlResumeAndControls
+import fr.gouv.cnsp.monitorfish.domain.entities.controls.ControlSummary
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.ControlType
 import fr.gouv.cnsp.monitorfish.domain.entities.controls.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
@@ -21,7 +21,7 @@ class GetVesselControls(
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselControls::class.java)
 
-    fun execute(vesselId: Int, afterDateTime: ZonedDateTime): ControlResumeAndControls {
+    fun execute(vesselId: Int, afterDateTime: ZonedDateTime): ControlSummary {
         logger.debug("Searching controls for vessel $vesselId after $afterDateTime")
         val controlAndInfractionIds = controlRepository.findVesselControlsAfterDateTime(vesselId, afterDateTime)
         logger.debug("Found ${controlAndInfractionIds.size} controls for vessel $vesselId")
@@ -82,7 +82,7 @@ class GetVesselControls(
             .filter { it.infractionCategory == InfractionCategory.SECURITY.value }
             .size
 
-        return ControlResumeAndControls(
+        return ControlSummary(
             vesselId = vesselId,
             numberOfSeaControls = numberOfSeaControls,
             numberOfLandControls = numberOfLandControls,

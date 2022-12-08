@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../domain/shared_slices/Map'
-import showVessel from '../../domain/use_cases/vessel/showVessel'
+import { showVessel } from '../../domain/use_cases/vessel/showVessel'
 import { Layer } from '../../domain/entities/layers/constants'
-import showVesselTrack from '../../domain/use_cases/vessel/showVesselTrack'
-import getVesselVoyage from '../../domain/use_cases/vessel/getVesselVoyage'
+import { showVesselTrack } from '../../domain/use_cases/vessel/showVesselTrack'
+import { getVesselVoyage } from '../../domain/use_cases/vessel/getVesselVoyage'
 import { updateVesselTrackAsZoomed } from '../../domain/shared_slices/Vessel'
 
 /**
@@ -81,19 +81,19 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
     }
 
     Object.keys(vesselsTracksShowed)
-      .filter(vesselId => {
-        const track = vesselsTracksShowed[vesselId]
+      .filter(vesselCompositeIdentifier => {
+        const track = vesselsTracksShowed[vesselCompositeIdentifier]
 
         return track.toZoom && track.extent && !track.toShow
-      }).forEach(vesselIdentity => {
-        const extent = vesselsTracksShowed[vesselIdentity].extent
+      }).forEach(vesselCompositeIdentifier => {
+        const extent = vesselsTracksShowed[vesselCompositeIdentifier].extent
 
         map.getView().fit(extent, {
           duration: 500,
           padding: [100, 550, 100, 50],
           maxZoom: 10,
           callback: () => {
-            dispatch(updateVesselTrackAsZoomed(vesselIdentity))
+            dispatch(updateVesselTrackAsZoomed(vesselCompositeIdentifier))
           }
         })
       })
@@ -103,18 +103,18 @@ const MapVesselClickAndAnimationHandler = ({ map, mapClickEvent }) => {
     const clickedFeatureId = mapClickEvent?.feature?.getId()
     if (!previewFilteredVesselsMode && clickedFeatureId?.toString()?.includes(Layer.VESSELS.code)) {
       const clickedVessel = vessels.find(vessel => {
-        return clickedFeatureId?.toString()?.includes(vessel.vesselId)
+        return clickedFeatureId?.toString()?.includes(vessel.vesselFeatureId)
       })
 
-      if (clickedVessel) {
-        if (mapClickEvent.ctrlKeyPressed) {
-          dispatch(showVesselTrack(clickedVessel.vesselProperties, false))
-        } else {
-          batch(() => {
-            dispatch(showVessel(clickedVessel.vesselProperties, false, false))
-            dispatch(getVesselVoyage(clickedVessel.vesselProperties, null, false))
-          })
-        }
+      if (!clickedVessel) {
+        return
+      }
+
+      if (mapClickEvent.ctrlKeyPressed) {
+        dispatch(showVesselTrack(clickedVessel.vesselProperties, false))
+      } else {
+        dispatch(showVessel(clickedVessel.vesselProperties, false, false))
+        dispatch(getVesselVoyage(clickedVessel.vesselProperties, null, false))
       }
     }
   }, [mapClickEvent])

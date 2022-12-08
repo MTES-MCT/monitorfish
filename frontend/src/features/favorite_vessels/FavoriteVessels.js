@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as FavoriteSVG } from '../icons/favorite.svg'
 import { COLORS } from '../../constants/constants'
 import FavoriteVessel from './FavoriteVessel'
-import { getVesselId } from '../../domain/entities/vessel/vessel'
+import { getVesselCompositeIdentifier } from '../../domain/entities/vessel/vessel'
 import { MapComponentStyle } from '../commonStyles/MapComponent.style'
 import { MapButtonStyle } from '../commonStyles/MapButton.style'
 import { MapPropertyTrigger } from '../commonComponents/MapPropertyTrigger'
@@ -70,16 +70,16 @@ const FavoriteVessels = () => {
                 {
                   favorites
                     .map((favoriteVessel, index) => {
-                      const vesselId = getVesselId(favoriteVessel)
+                      const vesselCompositeIdentifier = getVesselCompositeIdentifier(favoriteVessel)
 
                       return <FavoriteVessel
-                        key={vesselId}
+                        key={vesselCompositeIdentifier}
                         favorite={favoriteVessel}
-                        vesselId={vesselId}
+                        vesselCompositeIdentifier={vesselCompositeIdentifier}
                         vesselIsShowed={selectedVesselIdentity
-                          ? vesselId === getVesselId(selectedVesselIdentity)
+                          ? vesselCompositeIdentifier === getVesselCompositeIdentifier(selectedVesselIdentity)
                           : false}
-                        trackIsShowed={Object.values(vesselsTracksShowed)?.find(vessel => vessel.vesselId === vesselId)}
+                        trackIsShowed={Object.values(vesselsTracksShowed)?.find(vessel => vessel.vesselCompositeIdentifier === vesselCompositeIdentifier)}
                         isLastItem={favorites.length === index + 1}
                       />
                     })

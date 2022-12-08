@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../constants/constants'
-import showVesselTrack from '../../domain/use_cases/vessel/showVesselTrack'
-import hideVesselTrack from '../../domain/use_cases/vessel/hideVesselTrack'
+import { showVesselTrack } from '../../domain/use_cases/vessel/showVesselTrack'
+import { hideVesselTrack } from '../../domain/use_cases/vessel/hideVesselTrack'
 import { removeVesselFromFavorites } from '../../domain/shared_slices/FavoriteVessel'
 import { useDispatch } from 'react-redux'
 import { Flag } from '../vessel_list/tableCells'
@@ -10,16 +10,16 @@ import { ShowIcon } from '../commonStyles/icons/ShowIcon.style'
 import { HideIcon } from '../commonStyles/icons/HideIcon.style'
 import { CloseIcon } from '../commonStyles/icons/CloseIcon.style'
 import { PaperDarkIcon, PaperIcon } from '../commonStyles/icons/REGPaperIcon.style'
-import showVessel from '../../domain/use_cases/vessel/showVessel'
+import { showVessel } from '../../domain/use_cases/vessel/showVessel'
 import unselectVessel from '../../domain/use_cases/vessel/unselectVessel'
-import getVesselVoyage from '../../domain/use_cases/vessel/getVesselVoyage'
+import { getVesselVoyage } from '../../domain/use_cases/vessel/getVesselVoyage'
 
 const FavoriteVessel = props => {
   const {
     /** {VesselIdentity} */
     favorite,
-    /** {VesselId} vesselId */
-    vesselId,
+    /** {VesselCompositeIdentifier} vesselCompositeIdentifier */
+    vesselCompositeIdentifier,
     trackIsShowed,
     vesselIsShowed,
     isLastItem
@@ -47,7 +47,7 @@ const FavoriteVessel = props => {
               title="Afficher la fiche navire"
               onClick={() => {
                 if (trackIsShowed) {
-                  dispatch(hideVesselTrack(vesselId))
+                  dispatch(hideVesselTrack(vesselCompositeIdentifier))
                 }
                 dispatch(showVessel(favorite))
                 dispatch(getVesselVoyage(favorite, null, false))
@@ -62,7 +62,7 @@ const FavoriteVessel = props => {
               title="Cacher la piste"
               onClick={() => {
                 if (trackIsShowed) {
-                  dispatch(hideVesselTrack(vesselId))
+                  dispatch(hideVesselTrack(vesselCompositeIdentifier))
                 } else if (vesselIsShowed) {
                   dispatch(unselectVessel())
                 }
@@ -79,7 +79,7 @@ const FavoriteVessel = props => {
           data-cy={'favorite-vessel-delete-vessel'}
           style={{ marginTop: 4 }}
           title="Supprimer le navire de mes navires suivis"
-          onClick={() => dispatch(removeVesselFromFavorites(vesselId))}
+          onClick={() => dispatch(removeVesselFromFavorites(vesselCompositeIdentifier))}
         />
       </Item>
     </Wrapper>

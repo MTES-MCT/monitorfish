@@ -1,17 +1,11 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
 interface BeaconMalfunctionsRepository {
     fun findAll(): List<BeaconMalfunction>
-    fun findAllByVesselIdentifierEquals(
-        vesselIdentifier: VesselIdentifier,
-        value: String,
-        afterDateTime: ZonedDateTime
-    ): List<BeaconMalfunction>
-
+    fun findAllByVesselId(vesselId: Int, afterDateTime: ZonedDateTime): List<BeaconMalfunction>
     fun findAllExceptArchived(): List<BeaconMalfunction>
     fun findLastSixtyArchived(): List<BeaconMalfunction>
     fun find(beaconMalfunctionId: Int): BeaconMalfunction
@@ -22,12 +16,5 @@ interface BeaconMalfunctionsRepository {
         endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason?,
         updateDateTime: ZonedDateTime
     )
-
     fun requestNotification(id: Int, notificationType: BeaconMalfunctionNotificationType)
-    fun findAllByVesselWithoutVesselIdentifier(
-        internalReferenceNumber: String,
-        externalReferenceNumber: String,
-        ircs: String,
-        afterDateTime: ZonedDateTime
-    ): List<BeaconMalfunction>
 }

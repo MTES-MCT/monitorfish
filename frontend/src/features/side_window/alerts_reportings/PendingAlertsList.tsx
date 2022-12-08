@@ -16,7 +16,7 @@ import { PENDING_ALERTS_SEARCH_OPTIONS } from './constants'
 import { PendingAlertRow } from './PendingAlertRow'
 import { SilenceAlertMenu } from './SilenceAlertMenu'
 
-import type { SilencedAlertPeriodRequest } from '../../../domain/types/alert'
+import type { SilencedAlertPeriodRequest } from '../../../domain/entities/alerts/types'
 import type { MenuItem } from '../../../types'
 
 export type PendingAlertsListProps = {

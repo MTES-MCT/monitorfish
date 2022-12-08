@@ -68,7 +68,7 @@ class BeaconMalfunctionControllerITests {
                     1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                     "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                     ZonedDateTime.now(), null, ZonedDateTime.now(),
-                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
                 )
             )
         )
@@ -79,6 +79,7 @@ class BeaconMalfunctionControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
             .andExpect(jsonPath("$[0].internalReferenceNumber", equalTo("CFR")))
+            .andExpect(jsonPath("$[0].vesselId", equalTo(123)))
             .andExpect(jsonPath("$[0].vesselStatus", equalTo("AT_SEA")))
             .andExpect(jsonPath("$[0].stage", equalTo("INITIAL_ENCOUNTER")))
     }
@@ -92,7 +93,7 @@ class BeaconMalfunctionControllerITests {
                         1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
                     ),
                     comments = listOf(
                         BeaconMalfunctionComment(
@@ -159,7 +160,7 @@ class BeaconMalfunctionControllerITests {
                         1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
                     ),
                     resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
                     comments = listOf(
@@ -233,7 +234,7 @@ class BeaconMalfunctionControllerITests {
                         1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                         "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                         ZonedDateTime.now(), null, ZonedDateTime.now(),
-                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                        beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
                     ),
                     comments = listOf(
                         BeaconMalfunctionComment(
@@ -277,7 +278,7 @@ class BeaconMalfunctionControllerITests {
                     1, "CFR", "EXTERNAL_IMMAT", "IRCS",
                     "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDUBULE", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                     ZonedDateTime.now(), null, ZonedDateTime.now(),
-                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                    beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
                 ),
                 comments = listOf(
                     BeaconMalfunctionComment(
@@ -341,7 +342,7 @@ class BeaconMalfunctionControllerITests {
                             123, "CFR", "EXTERNAL_IMMAT", "IRCS",
                             "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDIBULE 1", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                             ZonedDateTime.now(), null, ZonedDateTime.now(),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
                         ),
                         comments = listOf(
                             BeaconMalfunctionComment(
@@ -368,7 +369,7 @@ class BeaconMalfunctionControllerITests {
                             465, "CFR", "EXTERNAL_IMMAT", "IRCS",
                             "fr", VesselIdentifier.INTERNAL_REFERENCE_NUMBER, "BIDIBULE 2", VesselStatus.AT_SEA, Stage.INITIAL_ENCOUNTER,
                             ZonedDateTime.now(), null, ZonedDateTime.now(),
-                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED
+                            beaconNumber = "123465", beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED, vesselId = 123
                         ),
                         comments = listOf(
                             BeaconMalfunctionComment(

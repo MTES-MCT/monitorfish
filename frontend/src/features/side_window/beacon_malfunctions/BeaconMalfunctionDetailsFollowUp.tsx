@@ -19,7 +19,7 @@ import { BeaconMalfunctionDetailsType, getContent } from './beaconMalfunctions'
 import type {
   BeaconMalfunctionFollowUpItem,
   BeaconMalfunctionStatusValue
-} from '../../../domain/types/beaconMalfunction'
+} from '../../../domain/entities/beaconMalfunction/types'
 
 export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails, firstStatus, smallSize }) {
   const { actions, beaconMalfunction, comments, notifications } = beaconMalfunctionWithDetails

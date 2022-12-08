@@ -1,6 +1,6 @@
 import type { SeaFront } from '../entities/alerts/constants'
-import type { VesselIdentity } from '../entities/vessel/types'
-import type { PendingAlertValue } from './alert'
+import type { PendingAlertValue } from '../entities/alerts/types'
+import type { VesselIdentifier } from '../entities/vessel/types'
 import type { Infraction } from './control'
 
 export enum ReportingType {
@@ -20,8 +20,8 @@ export type BaseReporting = {
   type: ReportingType
   underCharter: boolean
   validationDate: string
-  vesselId: number | undefined
-  vesselIdentifier: string
+  vesselId: number | null
+  vesselIdentifier: VesselIdentifier
   vesselName: string
 
   // TODO These 2 props shouldn't be there at all and should be treated in a separated redux state.
@@ -86,18 +86,4 @@ export type ReportingUpdate = {
   reportingType: ReportingType
   title: string
   unit: string | null
-}
-
-export function toVesselIdentity(reporting: Reporting | undefined): VesselIdentity {
-  return {
-    beaconNumber: undefined,
-    externalReferenceNumber: reporting?.externalReferenceNumber,
-    flagState: undefined,
-    internalReferenceNumber: reporting?.internalReferenceNumber,
-    ircs: reporting?.ircs,
-    mmsi: undefined,
-    vesselId: undefined,
-    vesselIdentifier: reporting?.vesselIdentifier,
-    vesselName: reporting?.vesselName
-  }
 }

@@ -31,7 +31,7 @@ import type {
   BeaconMalfunction,
   BeaconMalfunctionStageColumnValue,
   BeaconMalfunctionStatusValue
-} from '../../../domain/types/beaconMalfunction'
+} from '../../../domain/entities/beaconMalfunction/types'
 
 const getMemoizedBeaconMalfunctionsByStage = createSelector(
   state => state.beaconMalfunction.beaconMalfunctions,

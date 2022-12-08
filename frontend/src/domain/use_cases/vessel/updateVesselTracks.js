@@ -1,7 +1,7 @@
-import showVesselTrack from './showVesselTrack'
-import showVessel from './showVessel'
+import { showVesselTrack } from './showVesselTrack'
+import { showVessel } from './showVessel'
 
-const updateVesselTracks = () => (dispatch, getState) => {
+export const updateVesselTracks = () => (dispatch, getState) => {
   const {
     selectedVesselIdentity,
     vesselsTracksShowed
@@ -12,9 +12,7 @@ const updateVesselTracks = () => (dispatch, getState) => {
   }
 
   Object.keys(vesselsTracksShowed)
-    .forEach(vesselIdentity => {
-      updateVesselTracksWithDefaultTrackDepth(dispatch)(vesselsTracksShowed[vesselIdentity])
-    })
+    .forEach(vesselIdentity => updateVesselTracksWithDefaultTrackDepth(dispatch)(vesselsTracksShowed[vesselIdentity]))
 }
 
 const updateVesselTracksWithDefaultTrackDepth = dispatch => vesselTrack => {
@@ -27,5 +25,3 @@ const updateVesselTracksWithDefaultTrackDepth = dispatch => vesselTrack => {
     true,
     null))
 }
-
-export default updateVesselTracks

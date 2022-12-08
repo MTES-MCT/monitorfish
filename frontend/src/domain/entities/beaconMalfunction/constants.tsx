@@ -11,7 +11,7 @@ import type {
   BeaconMalfunctionStageColumnValue,
   BeaconMalfunctionStatusValue,
   EnfOfBeaconMalfunctionStatusValue
-} from '../../types/beaconMalfunction'
+} from './types'
 
 enum BeaconMalfunctionsTab {
   DETAIL = 2,

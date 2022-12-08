@@ -4,29 +4,25 @@ import { setVesselsSpeciesAndDistricts } from '../../shared_slices/Vessel'
 import getUniqueSpeciesAndDistricts from '../species/getUniqueSpeciesAndDistricts'
 import { loadVesselsFromAPIAndApplyFilter } from './applyFilterAndSetVessels'
 
-export const showVesselsLastPosition = () => (dispatch, getState) => {
+export const showVesselsLastPosition = () => async (dispatch, getState) => {
   if (getState().global.blockVesselsUpdate) {
     dispatch(resetIsUpdatingVessels())
 
     return
   }
 
-  getVesselsLastPositionsFromAPI()
-    .then(vessels => {
-      dispatch(loadVesselsFromAPIAndApplyFilter(vessels))
-      dispatch(getUniqueSpeciesAndDistricts(vessels)).then(speciesAndDistricts => {
-        dispatch(
-          setVesselsSpeciesAndDistricts({
-            districts: speciesAndDistricts.districts,
-            species: speciesAndDistricts.species
-          })
-        )
+  try {
+    const vessels = await getVesselsLastPositionsFromAPI()
+    dispatch(loadVesselsFromAPIAndApplyFilter(vessels))
+    const speciesAndDistricts = await dispatch(getUniqueSpeciesAndDistricts(vessels))
+    dispatch(
+      setVesselsSpeciesAndDistricts({
+        districts: speciesAndDistricts.districts,
+        species: speciesAndDistricts.species
       })
-    })
-    .catch(error => {
-      dispatch(setError(error))
-    })
-    .then(() => {
-      dispatch(resetIsUpdatingVessels())
-    })
+    )
+    dispatch(resetIsUpdatingVessels())
+  } catch (error) {
+    dispatch(setError(error))
+  }
 }

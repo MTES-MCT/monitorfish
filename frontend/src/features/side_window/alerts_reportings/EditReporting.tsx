@@ -2,8 +2,9 @@ import { CSSProperties, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
+import { getOnlyVesselIdentityProperties } from '../../../domain/entities/vessel/vessel'
 import { setEditedReportingInSideWindow } from '../../../domain/shared_slices/Reporting'
-import { ReportingType, toVesselIdentity } from '../../../domain/types/reporting'
+import { ReportingType } from '../../../domain/types/reporting'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { ReactComponent as CloseIconSVG } from '../../icons/Croix_grise.svg'
@@ -69,13 +70,15 @@ export function EditReporting() {
       </Header>
       <Line style={lineStyle} />
       <ReportingFormWrapper>
-        <ReportingForm
-          closeForm={closeForm}
-          editedReporting={editedReportingInSideWindow}
-          fromSideWindow
-          hasWhiteBackground
-          selectedVesselIdentity={toVesselIdentity(editedReportingInSideWindow)}
-        />
+        {editedReportingInSideWindow && (
+          <ReportingForm
+            closeForm={closeForm}
+            editedReporting={editedReportingInSideWindow}
+            fromSideWindow
+            hasWhiteBackground
+            selectedVesselIdentity={getOnlyVesselIdentityProperties(editedReportingInSideWindow)}
+          />
+        )}
       </ReportingFormWrapper>
     </EditReportingWrapper>
   )

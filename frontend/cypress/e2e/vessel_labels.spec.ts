@@ -31,10 +31,10 @@ context('Vessel labels', () => {
     cy.get('*[data-cy="vessel-labels"]').click({ timeout: 10000 })
     cy.get('*[data-cy="map-property-trigger"]').filter(':contains("étiquettes des navires")').click({ timeout: 10000 })
     // cy.get('body').type('{upArrow}')
-    cy.get('*[data-cy="vessel-label-draggable-FAK000999999/DONTSINK/CALLME"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="vessel-label-draggable-FAK000999999/CALLME/DONTSINK"]').click({ timeout: 10000 })
 
     // Then
-    cy.get('*[data-cy="vessel-label-draggable-FAK000999999/DONTSINK/CALLME"]')
+    cy.get('*[data-cy="vessel-label-draggable-FAK000999999/CALLME/DONTSINK"]')
       .trigger('pointerdown', {
         animationDistanceThreshold: 100,
         eventConstructor: 'MouseEvent',

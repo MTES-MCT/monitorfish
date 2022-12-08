@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import java.util.*
 
 data class VesselDataOutput(
-    val id: Int? = null,
+    val vesselId: Int? = null,
     val internalReferenceNumber: String? = null,
     val IMO: String? = null,
     val mmsi: String? = null,
@@ -40,9 +40,13 @@ data class VesselDataOutput(
     val underCharter: Boolean? = null
 ) {
     companion object {
-        fun fromVesselAndRiskFactor(vessel: Vessel, vesselRiskFactor: VesselRiskFactor): VesselDataOutput {
+        fun fromVesselAndRiskFactor(vessel: Vessel?, vesselRiskFactor: VesselRiskFactor): VesselDataOutput? {
+            if (vessel == null) {
+                return null
+            }
+
             return VesselDataOutput(
-                id = vessel.id,
+                vesselId = vessel.id,
                 internalReferenceNumber = vessel.internalReferenceNumber,
                 IMO = vessel.imo,
                 ircs = vessel.ircs,

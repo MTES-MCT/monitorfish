@@ -116,11 +116,11 @@ const VesselsLayer = ({ map }) => {
         }
 
         const feature = new Feature({
-          vesselId: vessel.vesselId,
+          vesselFeatureId: vessel.vesselFeatureId,
           ...propertiesUsedForStyling,
           geometry: new Point(vessel.coordinates)
         })
-        feature.setId(vessel.vesselId)
+        feature.setId(vessel.vesselFeatureId)
         feature.vesselProperties = vessel.vesselProperties
 
         return feature

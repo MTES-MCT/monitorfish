@@ -17,7 +17,7 @@ export function CellUsingVesselProperty({ vesselProperty, ...props }: CellUsingV
 }
 
 type CheckedCellProps = CellProps & {
-  onChange: (vesselId: string, isChecked: boolean) => void
+  onChange: (vesselCompositeIdentifier: string, isChecked: boolean) => void
 }
 export function CheckedCell({ dataKey, onChange, rowData, ...props }: CheckedCellProps) {
   const defaultValue = useMemo(() => dataKey && rowData[dataKey], [rowData, dataKey])
@@ -30,7 +30,7 @@ export function CheckedCell({ dataKey, onChange, rowData, ...props }: CheckedCel
         defaultValue={defaultValue}
         onChange={value => {
           if (onChange) {
-            onChange(rowData.vesselId, !value)
+            onChange(rowData.vesselCompositeIdentifier, !value)
           }
         }}
       />

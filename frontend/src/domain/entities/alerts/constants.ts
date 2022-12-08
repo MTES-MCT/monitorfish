@@ -1,6 +1,6 @@
 // TODO This is a bit shady to mix up pending/silenced alerts with PNO ones here.
 
-import { PendingAlertValueType } from '../../types/alert'
+import { PendingAlertValueType } from './types'
 
 import type { MenuItem } from '../../../types'
 

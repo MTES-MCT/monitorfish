@@ -8,13 +8,14 @@ import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Repository
+import java.util.NoSuchElementException
 
 @Repository
 class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : VesselRepository {
     private val logger: Logger = LoggerFactory.getLogger(JpaVesselRepository::class.java)
 
     @Cacheable(value = ["vessel"])
-    override fun findVessel(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): Vessel {
+    override fun findVessel(internalReferenceNumber: String, externalReferenceNumber: String, ircs: String): Vessel? {
         if (internalReferenceNumber.isNotEmpty()) {
             try {
                 return dbVesselRepository.findByInternalReferenceNumber(internalReferenceNumber).toVessel()
@@ -39,15 +40,19 @@ class JpaVesselRepository(private val dbVesselRepository: DBVesselRepository) : 
             }
         }
 
-        return Vessel()
+        return null
     }
 
     override fun findVesselsByIds(ids: List<Int>): List<Vessel> {
         return dbVesselRepository.findAllByIds(ids).map { it.toVessel() }
     }
 
-    override fun findVessel(vesselId: Int): Vessel {
-        return dbVesselRepository.findById(vesselId).get().toVessel()
+    override fun findVessel(vesselId: Int): Vessel? {
+        return try {
+            dbVesselRepository.findById(vesselId).get().toVessel()
+        } catch (e: NoSuchElementException) {
+            null
+        }
     }
 
     @Cacheable(value = ["search_vessels"])

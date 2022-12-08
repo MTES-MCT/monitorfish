@@ -5,7 +5,7 @@ import { VESSEL_STATUS } from '../../../domain/entities/beaconMalfunction/consta
 import { theme } from '../../../ui/theme'
 import { VesselStatusSelectValue } from './VesselStatusSelectValue'
 
-import type { BeaconMalfunction } from '../../../domain/types/beaconMalfunction'
+import type { BeaconMalfunction } from '../../../domain/entities/beaconMalfunction/types'
 
 type VesselStatusSelectProps = {
   beaconMalfunction: BeaconMalfunction | undefined

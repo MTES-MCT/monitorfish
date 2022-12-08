@@ -3,13 +3,13 @@ import ky from 'ky'
 import { ApiError } from '../libs/ApiError'
 
 import type { NOTIFICATION_TYPE, UserType } from '../domain/entities/beaconMalfunction/constants'
-import type { VesselIdentity } from '../domain/entities/vessel/types'
 import type {
   BeaconMalfunction,
   BeaconMalfunctionResumeAndDetails,
   UpdateBeaconMalfunction,
   VesselBeaconMalfunctionsResumeAndHistory
-} from '../domain/types/beaconMalfunction'
+} from '../domain/entities/beaconMalfunction/types'
+import type { VesselId } from '../domain/entities/vessel/types'
 
 export const ARCHIVE_BEACON_MALFUNCTION = "Nous n'avons pas pu archiver les avaries VMS"
 export const GET_BEACON_MALFUNCTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les avaries VMS"
@@ -92,19 +92,12 @@ async function saveBeaconMalfunctionCommentFromAPI(
  * @throws {@link ApiError}
  */
 async function getVesselBeaconsMalfunctionsFromAPI(
-  vesselIdentity: VesselIdentity,
+  vesselId: VesselId,
   fromDate: Date
 ): Promise<VesselBeaconMalfunctionsResumeAndHistory> {
-  const internalReferenceNumber = vesselIdentity.internalReferenceNumber || ''
-  const externalReferenceNumber = vesselIdentity.externalReferenceNumber || ''
-  const ircs = vesselIdentity.ircs || ''
-  const vesselIdentifier = vesselIdentity.vesselIdentifier || ''
-
   try {
     return await ky
-      .get(
-        `/bff/v1/vessels/beacon_malfunctions?internalReferenceNumber=${internalReferenceNumber}&externalReferenceNumber=${externalReferenceNumber}&IRCS=${ircs}&vesselIdentifier=${vesselIdentifier}&afterDateTime=${fromDate.toISOString()}`
-      )
+      .get(`/bff/v1/vessels/beacon_malfunctions?vesselId=${vesselId}&afterDateTime=${fromDate.toISOString()}`)
       .json<VesselBeaconMalfunctionsResumeAndHistory>()
   } catch (err) {
     throw new ApiError(GET_VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE, err)

@@ -38,18 +38,18 @@ export const updateReporting =
 
         // We update the reportings of the last positions vessels state
         if (previousReportingType !== nextReporting.reportingType) {
-          const vesselId = Vessel.getVesselFeatureId(selectedVesselIdentity)
+          const vesselFeatureId = Vessel.getVesselFeatureId(selectedVesselIdentity)
 
           dispatch(
             removeVesselReporting({
               reportingType: previousReportingType,
-              vesselId
+              vesselFeatureId
             })
           )
           dispatch(
             addVesselReporting({
               reportingType: nextReporting.reportingType,
-              vesselId
+              vesselFeatureId
             })
           )
         }

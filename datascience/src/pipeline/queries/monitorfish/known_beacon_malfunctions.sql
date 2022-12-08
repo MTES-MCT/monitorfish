@@ -4,6 +4,6 @@ SELECT
     m.vessel_status,
     b.satellite_operator_id
 FROM beacon_malfunctions m
-JOIN beacons b
+LEFT JOIN beacons b
 ON m.beacon_number = b.beacon_number
 WHERE stage NOT IN ('END_OF_MALFUNCTION', 'ARCHIVED')

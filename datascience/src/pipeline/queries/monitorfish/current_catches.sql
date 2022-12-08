@@ -3,11 +3,15 @@ WITH deleted_or_corrected_messages AS (
     FROM public.logbook_reports
     WHERE operation_type IN ('DEL', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
+    -- exclude VisioCapture (which is not real time but has several months of delay) from current_catches
+    AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
 ),
 
 ordered_deps AS (
     SELECT
         cfr,
+        ircs,
+        external_identification,
         trip_number,
         value->'gearOnboard' AS gear_onboard,
         (value->>'departureDatetimeUtc')::timestamptz AS departure_datetime_utc,
@@ -16,11 +20,14 @@ ordered_deps AS (
     WHERE log_type = 'DEP'
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
     AND report_id NOT IN (SELECT referenced_report_id FROM deleted_or_corrected_messages)
+    AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
 ),
 
 last_deps AS (
     SELECT 
         cfr,
+        ircs,
+        external_identification,
         departure_datetime_utc,
         trip_number,
         gear_onboard
@@ -35,6 +42,7 @@ last_logbook_reports AS (
     FROM public.logbook_reports
     WHERE operation_type IN ('DAT', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
+    AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
     GROUP BY cfr
 ),
 
@@ -54,6 +62,7 @@ catches AS (
     AND operation_type IN ('DAT', 'COR')
     AND operation_datetime_utc > CURRENT_TIMESTAMP - INTERVAL '6 months'
     AND operation_number NOT IN (SELECT referenced_report_id FROM deleted_or_corrected_messages)
+    AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
 ),
 
 summed_catches AS (
@@ -69,6 +78,8 @@ summed_catches AS (
 
 SELECT
     COALESCE(last_logbook_reports.cfr, last_deps.cfr) AS cfr,
+    last_deps.ircs,
+    last_deps.external_identification AS external_immatriculation,
     last_logbook_reports.last_logbook_message_datetime_utc,
     departure_datetime_utc,
     trip_number,

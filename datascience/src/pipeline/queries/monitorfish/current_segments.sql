@@ -1,5 +1,8 @@
 SELECT
+    vessel_id,
     cfr,
+    ircs,
+    external_immatriculation,
     last_logbook_message_datetime_utc,
     departure_datetime_utc,
     trip_number,

@@ -1,4 +1,5 @@
 SELECT 
+    vessel_id,
     cfr,
     ircs,
     external_immatriculation,

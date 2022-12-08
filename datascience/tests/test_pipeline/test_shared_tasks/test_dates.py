@@ -1,5 +1,5 @@
 import unittest
-from datetime import datetime, timedelta
+from datetime import datetime
 from unittest.mock import patch
 
 from src.pipeline.helpers.dates import Period

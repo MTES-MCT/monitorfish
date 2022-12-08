@@ -71,7 +71,7 @@ export function MissionList() {
                     <Cell $fixedWidth={10}>{mission.units}</Cell>
                     <Cell $fixedWidth={5}>{mission.type}</Cell>
                     <Cell $fixedWidth={5}>{mission.seaFront}</Cell>
-                    <Cell $fixedWidth={10}>{mission.themes.join(', ')}</Cell>
+                    <Cell $fixedWidth={10}>{mission.themes?.join(', ')}</Cell>
                     <Cell $fixedWidth={2}>{mission.inspectionsCount}</Cell>
                     <Cell $fixedWidth={5}>{mission.status}</Cell>
                     <Cell $fixedWidth={10}>{mission.alertType}</Cell>

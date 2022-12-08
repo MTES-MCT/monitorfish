@@ -76,6 +76,8 @@ export function VesselsSearch() {
   useEffect(() => {
     if (!searchQuery || searchQuery.length <= 1) {
       setFoundVessels([])
+
+      return
     }
 
     async function searchVessels(_searchQuery) {

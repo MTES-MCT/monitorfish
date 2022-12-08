@@ -4,7 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import java.util.*
 
 data class Vessel(
-    val id: Int? = null,
+    val id: Int,
     val internalReferenceNumber: String? = null,
     val imo: String? = null,
     val mmsi: String? = null,

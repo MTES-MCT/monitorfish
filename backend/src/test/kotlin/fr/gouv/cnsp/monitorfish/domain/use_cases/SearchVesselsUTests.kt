@@ -26,7 +26,7 @@ class SearchVesselsUTests {
     @Test
     fun `execute Should return no vessel When there is no identification number`() {
         // Given
-        given(vesselRepository.search(any())).willReturn(listOf(Vessel()))
+        given(vesselRepository.search(any())).willReturn(listOf(Vessel(id = 1)))
 
         // When
         val vessels = SearchVessels(vesselRepository, beaconRepository).execute("DUMMY VESSEL")
@@ -38,7 +38,7 @@ class SearchVesselsUTests {
     @Test
     fun `execute Should return vessels When there is a match with a beacon`() {
         // Given
-        given(vesselRepository.search(any())).willReturn(listOf(Vessel()))
+        given(vesselRepository.search(any())).willReturn(listOf(Vessel(id = 1)))
         given(vesselRepository.findVesselsByIds(eq(listOf(1, 2)))).willReturn(
             listOf(Vessel(1, internalReferenceNumber = "1234"), Vessel(2, internalReferenceNumber = "5789"))
         )

@@ -1,0 +1,18 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-prettier"],
+  "plugins": ["stylelint-order"],
+  "rules": {
+    "comment-empty-line-before": null,
+    "function-no-unknown": [true, { "ignoreFunctions": ["/\\${/"] }],
+    "no-empty-source": null,
+    "value-keyword-case": null,
+
+    "order/properties-alphabetical-order": true
+  },
+  "overrides": [
+    {
+      "files": ["**/*.tsx"],
+      "customSyntax": "@stylelint/postcss-css-in-js"
+    }
+  ]
+}

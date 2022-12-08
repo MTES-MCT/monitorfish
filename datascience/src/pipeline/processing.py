@@ -650,8 +650,8 @@ def left_isin_right_by_decreasing_priority(
       against the second column of `right`...
     - columns are considered to be sorted by decreasing priority, meaning that a match
       on 2 rows of `left` and `right` on a given column will be taken into account only
-      if the columns of higher priority on those 2 rows have values that are either equal
-      or null.
+      if the columns of higher priority on those 2 rows have values that are either
+      equal or null.
 
     Takes two DataFrames `left` and `right` with the same columns, returns a Series
     with the same index as the `left` DataFrame and whose values are :
@@ -661,7 +661,8 @@ def left_isin_right_by_decreasing_priority(
     - `False` if the corresponding row in `left` has no match in `right`
 
     This is typically useful to filter vessels' data based on some other vessels' data,
-    both datasets being index with multiple identifiers (cfr, ircs, external immat...).
+    both datasets being indexed with multiple identifiers (vessel_id, cfr, ircs,
+    external immat...).
 
     Args:
         left (pd.DataFrame): DataFrame

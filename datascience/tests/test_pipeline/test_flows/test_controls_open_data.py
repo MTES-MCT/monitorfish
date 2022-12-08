@@ -1,3 +1,4 @@
+from datetime import datetime
 from io import BytesIO
 
 import pandas as pd
@@ -17,6 +18,7 @@ flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_ru
 def fleet_segments_open_data() -> pd.DataFrame:
     return pd.DataFrame(
         {
+            "year": [datetime.utcnow().year, datetime.utcnow().year],
             "segment": ["SWW01/02/03", "SWW04"],
             "segment_name": ["Bottom trawls", "Midwater trawls"],
             "gears": [
@@ -34,6 +36,7 @@ def fleet_segments_open_data() -> pd.DataFrame:
 def transformed_fleet_segments_open_data() -> pd.DataFrame:
     return pd.DataFrame(
         {
+            "year": [datetime.utcnow().year, datetime.utcnow().year],
             "segment": ["SWW01/02/03", "SWW04"],
             "segment_name": ["Bottom trawls", "Midwater trawls"],
             "gears": ["{OTB,OTT,PTB,OT,PT,TBN,TBS,TX,TB}", "{OTM,PTM}"],

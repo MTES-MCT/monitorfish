@@ -20,16 +20,15 @@ from src.pipeline.flows import (
     anchorages,
     beacons,
     control_anteriority,
-    control_objectives,
     controllers,
     controls,
+    controls_open_data,
     current_segments,
     districts,
     enrich_positions,
     facade_areas,
     fao_areas,
     fishing_gear_codes,
-    fleet_segments,
     infractions,
     init_species_groups,
     last_positions,
@@ -41,6 +40,7 @@ from src.pipeline.flows import (
     position_alerts,
     regulations,
     regulations_checkup,
+    regulations_open_data,
     risk_factor,
     scrape_legipeche,
     species,
@@ -68,6 +68,7 @@ controls.flow.schedule = Schedule(
         ),
     ]
 )
+controls_open_data.flow.schedule = CronSchedule("15 3 * * 5")
 current_segments.flow.schedule = CronSchedule("2,12,22,32,42,52 * * * *")
 logbook.flow.schedule = CronSchedule("* * * * *")
 enrich_positions.flow.schedule = Schedule(
@@ -205,6 +206,7 @@ position_alerts.flow.schedule = Schedule(
 
 regulations.flow.schedule = CronSchedule("6,16,26,36,46,56 * * * *")
 regulations_checkup.flow.schedule = CronSchedule("58 5 * * 1,2,3,4,5")
+regulations_open_data.flow.schedule = CronSchedule("18 1 * * 5")
 risk_factor.flow.schedule = CronSchedule("3,13,23,33,43,53 * * * *")
 scrape_legipeche.flow.schedule = CronSchedule("15 5 * * 1,2,3,4,5")
 vessels.flow.schedule = CronSchedule("5 2,5,8,11,14,17,20,23 * * *")
@@ -216,9 +218,9 @@ flows_to_register = [
     anchorages.flow,
     beacons.flow,
     control_anteriority.flow,
-    control_objectives.flow,
     controllers.flow,
     controls.flow,
+    controls_open_data.flow,
     current_segments.flow,
     districts.flow,
     enrich_positions.flow,
@@ -226,7 +228,6 @@ flows_to_register = [
     facade_areas.flow,
     fao_areas.flow,
     fishing_gear_codes.flow,
-    fleet_segments.flow,
     infractions.flow,
     init_species_groups.flow,
     last_positions.flow,
@@ -238,6 +239,7 @@ flows_to_register = [
     position_alerts.flow,
     regulations.flow,
     regulations_checkup.flow,
+    regulations_open_data.flow,
     risk_factor.flow,
     scrape_legipeche.flow,
     species.flow,

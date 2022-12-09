@@ -71,8 +71,8 @@ build-backend = "poetry.core.masonry.api"
 profile = "black"
 
 [tool.coverage.run]
-source = ['src']
-omit = ['src/utils/*']
+source = ['.']
+omit = ['src/utils/*', 'tests/*']
 
 [tool.pytest.ini_options]
 env_files = [

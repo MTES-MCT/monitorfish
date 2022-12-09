@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "Update backend deps"
+      prefix-development: "Update backend dev-deps"
+
+  - package-ecosystem: "pip"
+    directory: "/datascience"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "Update datascience deps"
+      prefix-development: "Update datascience dev-deps"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "Update frontend deps"
+      prefix-development: "Update frontend dev-deps"

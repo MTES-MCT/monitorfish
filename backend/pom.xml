@@ -18,7 +18,7 @@
         <java.version>11</java.version>
         <spring.version>2.3.3.RELEASE</spring.version>
         <kotlin.version>1.4.10</kotlin.version>
-        <testcontainers.version>1.15.1</testcontainers.version>
+        <testcontainers.version>1.17.6</testcontainers.version>
         <commit.hash>COMMIT_TO_CHANGE</commit.hash>
         <main.class>fr.gouv.cnsp.monitorfish.MonitorFishApplicationKt</main.class>
     </properties>

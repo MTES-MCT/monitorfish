@@ -614,14 +614,14 @@ def format_outdated_references(outdated_references: pd.DataFrame) -> pd.DataFram
 @task(checkpoint=False)
 def get_main_template() -> jinja2.environment.Template:
 
-    with open(EMAIL_TEMPLATES_LOCATION / "regulations_checkup/main.html", "r") as f:
+    with open(EMAIL_TEMPLATES_LOCATION / "regulations_checkup/main.jinja", "r") as f:
         return jinja2.Template(f.read())
 
 
 @task(checkpoint=False)
 def get_body_template() -> jinja2.environment.Template:
 
-    with open(EMAIL_TEMPLATES_LOCATION / "regulations_checkup/body.html", "r") as f:
+    with open(EMAIL_TEMPLATES_LOCATION / "regulations_checkup/body.jinja", "r") as f:
         return jinja2.Template(f.read())
 
 

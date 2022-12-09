@@ -1,4 +1,4 @@
-{% extends "base_template.txt" %}
+{% extends "base_template.jinja" %}
 {% block message %}Le CNSP ne reçoit pas les positions VMS de votre navire.
 {% if last_position_latitude and last_position_longitude and last_position_datetime_utc %}
 La dernière position reçue date du {{ last_position_datetime_utc }}, latitude {{ last_position_latitude }}, longitude {{ last_position_longitude }}.

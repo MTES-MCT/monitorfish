@@ -85,19 +85,19 @@ def get_templates() -> dict:
 
     templates = {
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: env.get_template(
-            "malfunction_at_sea_initial_notification.html"
+            "malfunction_at_sea_initial_notification.jinja"
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: env.get_template(
-            "malfunction_at_port_initial_notification.html"
+            "malfunction_at_port_initial_notification.jinja"
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: env.get_template(
-            "malfunction_at_sea_reminder.html"
+            "malfunction_at_sea_reminder.jinja"
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_REMINDER: env.get_template(
-            "malfunction_at_port_reminder.html"
+            "malfunction_at_port_reminder.jinja"
         ),
         BeaconMalfunctionNotificationType.END_OF_MALFUNCTION: env.get_template(
-            "end_of_malfunction.html"
+            "end_of_malfunction.jinja"
         ),
     }
 
@@ -113,19 +113,19 @@ def get_sms_templates() -> dict:
 
     templates = {
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: env.get_template(
-            "malfunction_at_sea_initial_notification.txt"
+            "malfunction_at_sea_initial_notification.jinja"
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: env.get_template(
-            "malfunction_at_port_initial_notification.txt"
+            "malfunction_at_port_initial_notification.jinja"
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: env.get_template(
-            "malfunction_at_sea_reminder.txt"
+            "malfunction_at_sea_reminder.jinja"
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_REMINDER: env.get_template(
-            "malfunction_at_port_reminder.txt"
+            "malfunction_at_port_reminder.jinja"
         ),
         BeaconMalfunctionNotificationType.END_OF_MALFUNCTION: env.get_template(
-            "end_of_malfunction.txt"
+            "end_of_malfunction.jinja"
         ),
     }
 

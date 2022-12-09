@@ -129,14 +129,14 @@ export function InterestPointOverlay({
     overlay.setElement(ref.current)
 
     map.addOverlay(overlay)
-    if (featureIsShowed) {
+    if (featureIsShowed && !showed) {
       setShowed(true)
     }
 
     return () => {
       map.removeOverlay(overlay)
     }
-  }, [coordinates, featureIsShowed, map, overlay])
+  }, [coordinates, featureIsShowed, map, overlay, showed])
 
   useEffect(() => {
     if (zoomHasChanged < MIN_ZOOM) {

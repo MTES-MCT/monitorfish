@@ -44,6 +44,8 @@ services:
     depends_on:
       flyway:
         condition: service_completed_successfully
+      geoserver:
+        condition: service_healthy
     restart: always
     logging:
       driver: 'json-file'

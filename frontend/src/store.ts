@@ -5,15 +5,36 @@
  * @see https://redux-toolkit.js.org/tutorials/rtk-query#add-the-service-to-your-store
  */
 
-import { configureStore } from '@reduxjs/toolkit'
+// TODO Make a single store with all reducers and apply the `persistReducer()` per reducer in the combined reducer list.
+
+import { combineReducers, configureStore, isPlain } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
-import { createTransform, persistReducer, persistStore } from 'redux-persist'
+import {
+  createTransform,
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  persistStore,
+  persistReducer,
+  PURGE,
+  REGISTER,
+  REHYDRATE
+} from 'redux-persist'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/lib/storage' // localStorage
 
 import { missionApi } from './api/mission'
 import { mapToProcessingRegulation } from './domain/entities/regulatory'
 import { backofficeReducers, homeReducers } from './domain/shared_slices'
+
+import type { FleetSegmentState } from './domain/shared_slices/FleetSegment'
+import type { GearState } from './domain/shared_slices/Gear'
+import type { GlobalState } from './domain/shared_slices/Global'
+import type { LayerState } from './domain/shared_slices/Layer'
+import type { MapState } from './domain/shared_slices/Map'
+import type { RegulatoryState } from './domain/shared_slices/Regulatory'
+import type { SpecyState } from './domain/shared_slices/Species'
+import type { CombinedState } from '@reduxjs/toolkit'
 
 // TODO Properly type this generic. No any.
 const SetTransform = createTransform(
@@ -29,6 +50,7 @@ const SetTransform = createTransform(
 )
 
 const backofficePersistConfig = {
+  blacklist: [missionApi.reducerPath],
   key: 'backofficePersistor',
   stateReconciler: autoMergeLevel2,
   storage,
@@ -36,19 +58,44 @@ const backofficePersistConfig = {
   whitelist: ['regulation']
 }
 
-// TODO Why 2 stores?
 const homeStore = configureStore({
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(missionApi.middleware),
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      // TODO Create a Redux middleware to properly serialize/deserialize `Date`, `Error` objects into plain objects.
+      // https://redux-toolkit.js.org/api/serializabilityMiddleware
+      serializableCheck: {
+        isSerializable: (value: any) => isPlain(value) || value instanceof Date || value instanceof Error
+      }
+    }).concat(missionApi.middleware),
   reducer: homeReducers
 })
 setupListeners(homeStore.dispatch)
 
+// https://redux-toolkit.js.org/usage/usage-guide#use-with-redux-persist
+const combinedBackofficeReducers = combineReducers(backofficeReducers)
+const persistedReducer = persistReducer<
+  CombinedState<{
+    fleetSegment: FleetSegmentState
+    gear: GearState
+    global: GlobalState
+    layer: LayerState
+    map: MapState
+    regulation: any
+    regulatory: RegulatoryState
+    species: SpecyState
+  }>
+>(backofficePersistConfig, combinedBackofficeReducers)
 const backofficeStore = configureStore({
-  // TODO Properly type all reducer states.
-  reducer: persistReducer(backofficePersistConfig, backofficeReducers as any)
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        isSerializable: (value: any) => isPlain(value) || value instanceof Date || value instanceof Error
+      }
+    }),
+  reducer: persistedReducer
 })
 
-// TODO Either use a single persisted store or use another mechanism (like a middleware in a single store).
 const backofficePersistor = persistStore(backofficeStore)
 
 export { homeStore, backofficeStore, backofficePersistor }

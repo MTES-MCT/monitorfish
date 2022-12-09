@@ -7,7 +7,7 @@ import Draw from 'ol/interaction/Draw'
 import VectorLayer from 'ol/layer/Vector'
 import { getInterestPointStyle, POIStyle } from './styles/interestPoint.style'
 import { v4 as uuidv4 } from 'uuid'
-import InterestPointOverlay from '../features/map/overlays/InterestPointOverlay'
+import { InterestPointOverlay } from '../features/map/overlays/InterestPointOverlay'
 import {
   deleteInterestPointBeingDrawed,
   editInterestPoint,

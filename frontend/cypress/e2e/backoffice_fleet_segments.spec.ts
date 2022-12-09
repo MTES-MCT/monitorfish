@@ -86,20 +86,53 @@ context('Fleet segments', () => {
   })
 
   it('Should update the gears field', () => {
-    // When
-    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL036`).as('updateFleetSegment')
+    // Given
+    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=FR_DRB`).as('updateFleetSegment')
     cy.get('.rs-table-cell-content').eq(11).click()
-    cy.get('[data-key="MSP"]').scrollIntoView()
-    cy.get('[data-key="MSP"]').click()
-    cy.get('[data-key="NO"]').click()
+    cy.wait(200)
+    cy.get('.rs-table-cell-content')
+      .eq(11)
+      .then(content => {
+        if (content.text().includes('OTM')) {
+          cy.get('.rs-picker-search-input > input').type('OTM{enter}')
+          cy.wait('@updateFleetSegment')
+        }
+      })
+    cy.get('.rs-table-cell-content')
+      .eq(11)
+      .then(content => {
+        if (content.text().includes('PTM')) {
+          cy.get('.rs-picker-search-input > input').type('PTM{enter}')
+          cy.wait('@updateFleetSegment')
+        }
+      })
+    cy.get('.rs-table-cell-content')
+      .eq(11)
+      .then(content => {
+        if (content.text().includes('MSP')) {
+          cy.get('.rs-picker-search-input > input').type('MSP{enter}')
+          cy.wait('@updateFleetSegment')
+        }
+      })
+    cy.get('.rs-table-cell-content')
+      .eq(11)
+      .then(content => {
+        if (content.text().includes('NO')) {
+          cy.get('.rs-picker-search-input > input').type('NO{enter}')
+          cy.wait('@updateFleetSegment')
+        }
+      })
+    cy.wait(200)
 
-    cy.wait('@updateFleetSegment')
+    // When
+    cy.get('.rs-picker-search-input > input').type('MSP{enter}')
+    cy.wait(200)
+    cy.get('.rs-picker-search-input > input').type('NO{enter}')
+
     cy.wait('@updateFleetSegment')
 
     // Then
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(11).contains('OTM')
-    cy.get('.rs-table-cell-content').eq(11).contains('PTM')
     cy.get('.rs-table-cell-content').eq(11).contains('MSP')
     cy.get('.rs-table-cell-content').eq(11).contains('NO')
 
@@ -108,8 +141,6 @@ context('Fleet segments', () => {
     cy.visit('/backoffice/fleet_segments')
     cy.wait('@fleetSegments')
     cy.wait(50)
-    cy.get('.rs-table-cell-content').eq(11).contains('OTM')
-    cy.get('.rs-table-cell-content').eq(11).contains('PTM')
     cy.get('.rs-table-cell-content').eq(11).contains('MSP')
     cy.get('.rs-table-cell-content').eq(11).contains('NO')
   })

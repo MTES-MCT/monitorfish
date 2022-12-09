@@ -1,6 +1,7 @@
 {
   "extends": ["stylelint-config-standard", "stylelint-config-prettier"],
   "plugins": ["stylelint-order"],
+  "defaultSeverity": "warning",
   "rules": {
     "comment-empty-line-before": null,
     "function-no-unknown": [true, { "ignoreFunctions": ["/\\${/"] }],

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import prefect
 from prefect import Flow, Parameter, case, task
@@ -107,3 +109,5 @@ with Flow("Controls open data", executor=LocalDaskExecutor()) as flow:
             resource=fleet_segments_csv_file,
             mock_update=is_integration,
         )
+
+flow.file_name = Path(__file__).name

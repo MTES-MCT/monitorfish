@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import geopandas as gpd
 import pandas as pd
 from prefect import Flow, Parameter, case, task
@@ -103,3 +105,5 @@ with Flow("Regulations open data", executor=LocalDaskExecutor()) as flow:
             resource=geopackage_file,
             mock_update=is_integration,
         )
+
+flow.file_name = Path(__file__).name

@@ -136,7 +136,8 @@ export const globalSlice = createSlice({
       // eslint-disable-next-line no-console
       console.error(action.payload)
 
-      state.error = action.payload
+      // eslint-disable-next-line no-null/no-null
+      state.error = action.payload !== undefined && action.payload !== null ? String(action.payload) : action.payload
     },
 
     /**

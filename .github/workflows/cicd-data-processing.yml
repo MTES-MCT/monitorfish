@@ -75,7 +75,7 @@ jobs:
         run: make docker-test-pipeline
 
       - name: Push docker image to registry
-        if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/v')
+        if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v1') || startsWith(github.ref, 'refs/heads/v1') || startsWith(github.ref, 'refs/tags/v2') || startsWith(github.ref, 'refs/heads/v2')
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
           make docker-tag-pipeline

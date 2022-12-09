@@ -1,41 +1,54 @@
-import React, { createRef, useCallback, useEffect, useRef, useState } from 'react'
+import { noop } from 'lodash'
+import LineString from 'ol/geom/LineString'
 import Overlay from 'ol/Overlay'
+import { getLength } from 'ol/sphere'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../../../constants/constants'
 
-import { ReactComponent as DeleteSVG } from '../../icons/Suppression.svg'
-import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
 import { getCoordinates } from '../../../coordinates'
 import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map'
+import { useAppSelector } from '../../../hooks/useAppSelector'
 import { useMoveOverlayWhenDragging } from '../../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZooming'
-import { useSelector } from 'react-redux'
 import { usePrevious } from '../../../hooks/usePrevious'
-import LineString from 'ol/geom/LineString'
-import { getLength } from 'ol/sphere'
+import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
+import { ReactComponent as DeleteSVG } from '../../icons/Suppression.svg'
+
+import type { MutableRefObject } from 'react'
 
 const X = 0
 const Y = 1
 export const initialOffsetValue = [-90, 10]
 const MIN_ZOOM = 7
 
-const InterestPointOverlay = props => {
-  const {
-    map,
-    coordinates,
-    uuid,
-    observations,
-    name,
-    featureIsShowed,
-    moveLine,
-    zoomHasChanged,
-    deleteInterestPoint,
-    modifyInterestPoint
-  } = props
+// TODO Type that.
+export type InterestPointOverlayProps = {
+  coordinates: any
+  deleteInterestPoint: any
+  featureIsShowed: any
+  map: any
+  modifyInterestPoint: any
+  moveLine: any
+  name: any
+  observations: any
+  uuid: any
+  zoomHasChanged: any
+}
+export function InterestPointOverlay({
+  coordinates,
+  deleteInterestPoint,
+  featureIsShowed,
+  map,
+  modifyInterestPoint,
+  moveLine,
+  name,
+  observations,
+  uuid,
+  zoomHasChanged
+}: InterestPointOverlayProps) {
+  const { coordinatesFormat } = useAppSelector(state => state.map)
 
-  const { coordinatesFormat } = useSelector(state => state.map)
-
-  const ref = createRef()
+  const ref = useRef() as MutableRefObject<HTMLDivElement>
   const currentOffset = useRef(initialOffsetValue)
   const currentCoordinates = useRef([])
   const interestPointCoordinates = useRef(coordinates)
@@ -44,11 +57,11 @@ const InterestPointOverlay = props => {
   const [hiddenByZoom, setHiddenByZoom] = useState(false)
   const [overlay] = useState(
     new Overlay({
-      element: ref.current,
-      position: coordinates,
-      offset: currentOffset.current,
       autoPan: false,
-      positioning: 'left-center'
+      element: ref.current,
+      offset: currentOffset.current,
+      position: coordinates,
+      positioning: 'center-left'
     })
   )
 
@@ -76,20 +89,20 @@ const InterestPointOverlay = props => {
         }
       }, delay)
     },
-    [interestPointCoordinates.current]
+    [map, moveLine, uuid]
   )
 
   useMoveOverlayWhenDragging(overlay, map, currentOffset, moveInterestPointWithThrottle, showed, () => {})
   useMoveOverlayWhenZooming(overlay, initialOffsetValue, zoomHasChanged, currentOffset, moveInterestPointWithThrottle)
   const previousCoordinates = usePrevious(coordinates)
 
-  function coordinatesAreModified(coordinates, previousCoordinates) {
+  function coordinatesAreModified(_coordinates, _previousCoordinates) {
     return (
-      !isNaN(coordinates[0]) &&
-      !isNaN(coordinates[1]) &&
-      !isNaN(previousCoordinates[0]) &&
-      !isNaN(previousCoordinates[1]) &&
-      (coordinates[0] !== previousCoordinates[0] || coordinates[1] !== previousCoordinates[1])
+      !Number.isNaN(_coordinates[0]) &&
+      !Number.isNaN(_coordinates[1]) &&
+      !Number.isNaN(_previousCoordinates[0]) &&
+      !Number.isNaN(_previousCoordinates[1]) &&
+      (_coordinates[0] !== _previousCoordinates[0] || _coordinates[1] !== _previousCoordinates[1])
     )
   }
 
@@ -105,23 +118,25 @@ const InterestPointOverlay = props => {
         overlay.setOffset(initialOffsetValue)
       }
     }
-  }, [coordinates])
+  }, [coordinates, overlay, previousCoordinates])
 
   useEffect(() => {
-    if (map) {
-      overlay.setPosition(coordinates)
-      overlay.setElement(ref.current)
-
-      map.addOverlay(overlay)
-      if (featureIsShowed) {
-        setShowed(true)
-      }
-
-      return () => {
-        map.removeOverlay(overlay)
-      }
+    if (!map || !ref.current) {
+      return noop
     }
-  }, [overlay, coordinates, map])
+
+    overlay.setPosition(coordinates)
+    overlay.setElement(ref.current)
+
+    map.addOverlay(overlay)
+    if (featureIsShowed) {
+      setShowed(true)
+    }
+
+    return () => {
+      map.removeOverlay(overlay)
+    }
+  }, [coordinates, featureIsShowed, map, overlay])
 
   useEffect(() => {
     if (zoomHasChanged < MIN_ZOOM) {
@@ -134,23 +149,23 @@ const InterestPointOverlay = props => {
   return (
     <WrapperToBeKeptForDOMManagement>
       <div ref={ref}>
-        {showed && !hiddenByZoom ? (
+        {showed && !hiddenByZoom && (
           <InterestPointOverlayElement>
             <Header>
-              <Name data-cy={'interest-point-name'} title={name || 'Aucun Libellé'}>
+              <Name data-cy="interest-point-name" title={name || 'Aucun Libellé'}>
                 {name || 'Aucun Libellé'}
               </Name>
-              <Edit data-cy={'interest-point-edit'} onClick={() => modifyInterestPoint(uuid)} />
-              <Delete data-cy={'interest-point-delete'} onClick={() => deleteInterestPoint(uuid)} />
+              <Edit data-cy="interest-point-edit" onClick={() => modifyInterestPoint(uuid)} />
+              <Delete data-cy="interest-point-delete" onClick={() => deleteInterestPoint(uuid)} />
             </Header>
-            <Body data-cy={'interest-point-observations'}>{observations || 'Aucune observation'}</Body>
-            <Footer data-cy={'interest-point-coordinates'}>
-              {coordinates && coordinates.length
-                ? getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat).join(' ')
-                : null}
+            <Body data-cy="interest-point-observations">{observations || 'Aucune observation'}</Body>
+            <Footer data-cy="interest-point-coordinates">
+              {coordinates &&
+                Boolean(coordinates.length) &&
+                getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat).join(' ')}
             </Footer>
           </InterestPointOverlayElement>
-        ) : null}
+        )}
       </div>
     </WrapperToBeKeptForDOMManagement>
   )
@@ -161,20 +176,20 @@ const Body = styled.div`
   font-size: 13px;
   font-weight: 500;
   text-align: left;
-  border-bottom: 1px solid ${COLORS.lightGray};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
 `
 
 const Footer = styled.div`
   padding: 3px;
   font-size: 12px;
   text-align: center;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
 `
 
 const Header = styled.div`
   display: flex;
   height: 30px;
-  background ${COLORS.gainsboro};
+  background ${p => p.theme.color.gainsboro};
   text-align: left;
   border: none;
   border-top-left-radius: 2px;
@@ -184,7 +199,7 @@ const Header = styled.div`
 const Delete = styled(DeleteSVG)`
   height: 30px;
   width: 15px;
-  border-left: 1px solid ${COLORS.lightGray};
+  border-left: 1px solid ${p => p.theme.color.lightGray};
   padding-left: 7px;
   margin-left: auto;
   margin-right: 8px;
@@ -194,7 +209,7 @@ const Delete = styled(DeleteSVG)`
 const Edit = styled(EditSVG)`
   height: 30px;
   width: 15px;
-  border-left: 1px solid ${COLORS.lightGray};
+  border-left: 1px solid ${p => p.theme.color.lightGray};
   padding-left: 7px;
   margin-left: auto;
   margin-right: 8px;
@@ -206,10 +221,10 @@ const WrapperToBeKeptForDOMManagement = styled.div`
 `
 
 const InterestPointOverlayElement = styled.div`
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   cursor: grabbing;
   width: 183px;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   border: none;
   border-radius: 2px;
 `
@@ -225,5 +240,3 @@ const Name = styled.span`
   white-space: nowrap;
   flex: 1 1 0;
 `
-
-export default InterestPointOverlay

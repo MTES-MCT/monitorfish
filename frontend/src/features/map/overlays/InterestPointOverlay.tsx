@@ -2,7 +2,7 @@ import { noop } from 'lodash'
 import LineString from 'ol/geom/LineString'
 import Overlay from 'ol/Overlay'
 import { getLength } from 'ol/sphere'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { getCoordinates } from '../../../coordinates'
@@ -13,8 +13,6 @@ import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZoom
 import { usePrevious } from '../../../hooks/usePrevious'
 import { ReactComponent as EditSVG } from '../../icons/Bouton_edition.svg'
 import { ReactComponent as DeleteSVG } from '../../icons/Suppression.svg'
-
-import type { MutableRefObject } from 'react'
 
 const X = 0
 const Y = 1
@@ -46,24 +44,29 @@ export function InterestPointOverlay({
   uuid,
   zoomHasChanged
 }: InterestPointOverlayProps) {
-  const { coordinatesFormat } = useAppSelector(state => state.map)
+  const ref: any = createRef()
 
-  const ref = useRef() as MutableRefObject<HTMLDivElement>
   const currentOffset = useRef(initialOffsetValue)
   const currentCoordinates = useRef([])
   const interestPointCoordinates = useRef(coordinates)
   const isThrottled = useRef(false)
   const [showed, setShowed] = useState(false)
   const [hiddenByZoom, setHiddenByZoom] = useState(false)
-  const [overlay] = useState(
-    new Overlay({
-      autoPan: false,
-      element: ref.current,
-      offset: currentOffset.current,
-      position: coordinates,
-      positioning: 'center-left'
-    })
+  const overlay = useMemo(
+    () =>
+      new Overlay({
+        autoPan: false,
+        element: ref.current,
+        offset: currentOffset.current,
+        position: coordinates,
+        positioning: 'center-left'
+      }),
+
+    // We exclude `ref` on purpose here to avoid infinite re-renders
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [coordinates]
   )
+  const { coordinatesFormat } = useAppSelector(state => state.map)
 
   const moveInterestPointWithThrottle = useCallback(
     (target, delay) => {
@@ -120,23 +123,29 @@ export function InterestPointOverlay({
     }
   }, [coordinates, overlay, previousCoordinates])
 
-  useEffect(() => {
-    if (!map || !ref.current) {
-      return noop
-    }
+  useEffect(
+    () => {
+      if (!map || !ref.current) {
+        return noop
+      }
 
-    overlay.setPosition(coordinates)
-    overlay.setElement(ref.current)
+      overlay.setPosition(coordinates)
+      overlay.setElement(ref.current)
 
-    map.addOverlay(overlay)
-    if (featureIsShowed && !showed) {
-      setShowed(true)
-    }
+      map.addOverlay(overlay)
+      if (featureIsShowed && !showed) {
+        setShowed(true)
+      }
 
-    return () => {
-      map.removeOverlay(overlay)
-    }
-  }, [coordinates, featureIsShowed, map, overlay, showed])
+      return () => {
+        map.removeOverlay(overlay)
+      }
+    },
+
+    // We exclude `ref` on purpose here to avoid infinite re-renders
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [coordinates, featureIsShowed, map, overlay, showed]
+  )
 
   useEffect(() => {
     if (zoomHasChanged < MIN_ZOOM) {

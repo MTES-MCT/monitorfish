@@ -102,6 +102,7 @@ def test_flow(
     while flow.get_tasks("update_resource"):
         flow.replace(flow.get_tasks("update_resource")[0], mock_update_resource)
 
+    flow.schedule = None
     state = flow.run()
     assert state.is_successful()
 

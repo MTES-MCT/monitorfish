@@ -438,6 +438,7 @@ def test_join():
 
 
 def test_test_current_segments_flow(reset_test_data, current_segments):
+    flow.schedule = None
     state = flow.run()
     assert state.is_successful()
 

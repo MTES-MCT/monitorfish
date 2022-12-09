@@ -826,6 +826,7 @@ def test_flow(reset_test_data):
     flow.executor = None
 
     # Test flow run
+    flow.schedule = None
     state = flow.run(test_mode=False)
 
     final_notifications = read_query(
@@ -938,6 +939,7 @@ def test_flow(reset_test_data):
 
     # Now all notifications have been sent, test flow again to check it runs
     # successfully when there are no notifications to send
+    flow.schedule = None
     state = flow.run(test_mode=False)
     assert state.is_successful()
     assert (

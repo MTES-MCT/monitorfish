@@ -325,6 +325,8 @@ def test_flow(mock_move, reset_test_data):
     received_directory = ZIPFILES_TEST_DATA_LOCATION / "test_flow/received"
     treated_directory = ZIPFILES_TEST_DATA_LOCATION / "test_flow/treated"
     error_directory = ZIPFILES_TEST_DATA_LOCATION / "test_flow/error"
+
+    flow.schedule = None
     state = flow.run(
         received_directory=received_directory,
         treated_directory=treated_directory,

@@ -174,6 +174,7 @@ def test_flow(reset_test_data, regulations_for_csv, regulations_for_geopackage):
     while flow.get_tasks("update_resource"):
         flow.replace(flow.get_tasks("update_resource")[0], mock_update_resource)
 
+    flow.schedule = None
     state = flow.run()
     assert state.is_successful()
 

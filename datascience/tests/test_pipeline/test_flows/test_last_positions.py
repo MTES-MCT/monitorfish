@@ -584,6 +584,7 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
         "monitorfish_remote", "SELECT * FROM last_positions;"
     )
 
+    flow.schedule = None
     state = flow.run(action="replace", minutes=1200)
     assert state.is_successful()
 
@@ -614,6 +615,7 @@ def test_last_positions_flow_updates_last_positions_when_action_is_update(
         "monitorfish_remote", "SELECT * FROM last_positions;"
     )
 
+    flow.schedule = None
     state = flow.run(action="update", minutes=35)
     assert state.is_successful()
 

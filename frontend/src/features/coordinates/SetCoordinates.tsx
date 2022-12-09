@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
 import { CoordinatesFormat } from '../../domain/entities/map'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { DDCoordinatesInput } from './DDCoordinatesInput'
@@ -34,7 +33,7 @@ export function SetCoordinates({ coordinates, updateCoordinates }: SetCoordinate
           />
         )
       case CoordinatesFormat.DECIMAL_DEGREES:
-        return <DDCoordinatesInput coordinates={coordinates} updateCoordinates={updateCoordinates} />
+        return <DDCoordinatesInput coordinates={coordinates as any} updateCoordinates={updateCoordinates} />
       default:
         return null
     }
@@ -44,16 +43,16 @@ export function SetCoordinates({ coordinates, updateCoordinates }: SetCoordinate
 }
 
 const Body = styled.div`
-  text-align: left;
+  color: ${p => p.theme.color.lightGray};
   font-size: 13px;
-  color: ${COLORS.lightGray};
+  text-align: left;
 
   input {
-    margin-top: 7px;
-    color: ${COLORS.gunMetal};
     background: ${p => p.theme.color.gainsboro};
     border: none;
+    color: ${p => p.theme.color.gunMetal};
     height: 27px;
+    margin-top: 7px;
     padding-left: 8px;
   }
 `

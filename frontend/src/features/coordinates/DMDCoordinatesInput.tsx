@@ -3,7 +3,6 @@ import { dmsToDecimal } from 'react-coordinate-input'
 import IMaskInput from 'react-imask/esm/input'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
 import { getCoordinates } from '../../coordinates'
 import { CoordinatesFormat, WSG84_PROJECTION } from '../../domain/entities/map'
 import { isNumeric } from '../../utils/isNumeric'
@@ -109,19 +108,19 @@ const CoordinatesType = styled.span`
 `
 
 const Error = styled.span`
+  color: ${p => p.theme.color.maximumRed};
   display: inline-block;
-  color: red;
 `
 
 const Body = styled.div`
-  text-align: left;
   font-size: 13px;
+  text-align: left;
 
   input {
-    margin-top: 7px;
-    background: ${COLORS.gainsboro};
+    background: ${p => p.theme.color.gainsboro};
     border: none;
     height: 27px;
+    margin-top: 7px;
     padding-left: 8px;
     width: 200px;
   }

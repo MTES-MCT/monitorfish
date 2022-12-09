@@ -28,30 +28,33 @@ def test_extract_positions(reset_test_data):
     positions = extract_positions(period)
 
     assert len(positions) == 19
-    assert (
-        positions.loc[:, "id"].values
-        == [
-            13641745,
-            13786527,
-            13786528,
-            13786529,
-            13732807,
-            13786530,
-            13786523,
-            13735518,
-            13786532,
-            13738407,
-            13786531,
-            13632807,
-            13634205,
-            13635518,
-            13637054,
-            13638407,
-            13640935,
-            13639642,
-            13740935,
-        ]
-    ).all()
+
+    # Some positions have the same datetime_utc so the order is not guaranteed. To
+    # avoid flaky tests we test the set of unordered values and test that they are
+    # order in ascending order.
+    assert set(positions.id) == {
+        13641745,
+        13786527,
+        13786528,
+        13786529,
+        13732807,
+        13786530,
+        13786523,
+        13735518,
+        13786532,
+        13738407,
+        13786531,
+        13632807,
+        13634205,
+        13635518,
+        13637054,
+        13638407,
+        13640935,
+        13639642,
+        13740935,
+    }
+    assert (positions.datetime_utc >= positions.datetime_utc.shift()).iloc[1:].all()
+
     assert list(positions) == [
         "id",
         "cfr",

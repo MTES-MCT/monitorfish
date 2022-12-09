@@ -87,7 +87,7 @@ context('Fleet segments', () => {
 
   it('Should update the gears field', () => {
     // Given
-    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=FR_DRB`).as('updateFleetSegment')
+    cy.intercept('PUT', `/bff/v1/fleet_segments?year=${currentYear}&segment=ATL036`).as('updateFleetSegment')
     cy.get('.rs-table-cell-content').eq(11).click()
     cy.wait(200)
     cy.get('.rs-table-cell-content')

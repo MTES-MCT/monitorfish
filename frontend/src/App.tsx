@@ -52,6 +52,7 @@ export function App() {
         <Switch>
           <Route path="/backoffice">
             <Provider store={backofficeStore}>
+              {/* eslint-disable-next-line no-null/no-null */}
               <PersistGate loading={null} persistor={backofficePersistor}>
                 <NamespaceContext.Provider value="backoffice">
                   <BackofficePage />

@@ -1,5 +1,3 @@
-import { combineReducers } from '@reduxjs/toolkit'
-
 import { missionApi } from '../../api/mission'
 import regulation from '../../features/backoffice/Regulation.slice'
 import regulatoryLayerSearch from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
@@ -31,7 +29,7 @@ const commonReducerList = {
   species: speciesReducer
 }
 
-const homeReducers = combineReducers({
+const homeReducers = {
   ...commonReducerList,
   alert: alertReducer,
   beaconMalfunction: beaconMalfunctionReducer,
@@ -50,13 +48,13 @@ const homeReducers = combineReducers({
   reporting: reportingReducer,
   vessel: vesselSliceReducer,
   vesselList
-})
+}
 
-const backofficeReducers = combineReducers({
+const backofficeReducers = {
   ...commonReducerList,
   fleetSegment: fleetSegmentReducer,
   layer: layer.backoffice.reducer,
   regulation
-})
+}
 
 export { homeReducers, backofficeReducers }

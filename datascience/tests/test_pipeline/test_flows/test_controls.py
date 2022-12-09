@@ -229,13 +229,16 @@ def mock_extract_controls(number_of_months: int) -> pd.DataFrame:
         return extract_controls.run(number_of_months=number_of_months)
 
 
+# Using `patch` is a task results in flaky errors when using a LocalDaskExecutor so we
+# need to make a mock task without `patch` to test the flow.
 @task(checkpoint=False)
-def mock_extract_catch_controls() -> pd.DataFrame:
-    def mock_read_saved_query(*args, **kwargs):
-        return catch_controls_df
+def mock_extract_controls_in_flow(number_of_months: int) -> pd.DataFrame:
+    return controls_df
 
-    with patch("src.pipeline.generic_tasks.read_saved_query", mock_read_saved_query):
-        return extract_catch_controls.run()
+
+@task(checkpoint=False)
+def mock_extract_catch_controls_in_flow() -> pd.DataFrame:
+    return catch_controls_df
 
 
 @patch("src.pipeline.flows.controls.extract")
@@ -285,8 +288,10 @@ def test_extract_controls_applies_dtypes(controls):
 
 
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
-flow.replace(flow.get_tasks("extract_controls")[0], mock_extract_controls)
-flow.replace(flow.get_tasks("extract_catch_controls")[0], mock_extract_catch_controls)
+flow.replace(flow.get_tasks("extract_controls")[0], mock_extract_controls_in_flow)
+flow.replace(
+    flow.get_tasks("extract_catch_controls")[0], mock_extract_catch_controls_in_flow
+)
 
 
 def test_flow_replaces_data(reset_test_data, controls, loaded_controls):

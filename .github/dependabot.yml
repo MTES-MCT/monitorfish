@@ -2,15 +2,22 @@ version: 2
 updates:
   - package-ecosystem: "maven"
     directory: "/backend"
+    assignees:
+      - "louptheron"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "pip"
     directory: "/datascience"
+    assignees:
+      - "VincentAntoine"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "npm"
     directory: "/frontend"
+    assignees:
+      - "ivangabriele"
+      - "louptheron"
     schedule:
       interval: "daily"

@@ -424,8 +424,6 @@ def test_get_vessels_in_alert():
 
 def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test_data):
 
-    flow.schedule = None
-
     # With these parameters, no alert should be raised.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
     alert_config_name_in_table = "ALERTE_1"
@@ -438,6 +436,7 @@ def test_flow_deletes_existing_pending_alerts_of_matching_config_name(reset_test
     fishing_gear_categories = None
     include_vessels_unknown_gear = False
 
+    flow.schedule = None
     state = flow.run(
         alert_type=alert_type,
         zones=zones,
@@ -488,8 +487,6 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
 
     now = pytz.utc.localize(datetime.utcnow())
 
-    flow.schedule = None
-
     # With these parameters, all 4 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
     alert_config_name = "ALERTE_1"
@@ -501,6 +498,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = True
 
+    flow.schedule = None
     state = flow.run(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
@@ -636,8 +634,6 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
 def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data):
     now = pytz.utc.localize(datetime.utcnow())
 
-    flow.schedule = None
-
     # With these parameters, all 4 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
     alert_config_name = "ALERTE_1"
@@ -649,6 +645,7 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
     fishing_gear_categories = None
     include_vessels_unknown_gear = True
 
+    flow.schedule = None
     state = flow.run(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
@@ -772,8 +769,6 @@ def test_flow_filters_on_gears(reset_test_data):
 
     now = pytz.utc.localize(datetime.utcnow())
 
-    flow.schedule = None
-
     # With these parameters, all 3 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
     alert_config_name = "ALERTE_1"
@@ -785,6 +780,7 @@ def test_flow_filters_on_gears(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = False
 
+    flow.schedule = None
     state = flow.run(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
@@ -882,8 +878,6 @@ def test_flow_filters_on_time(reset_test_data):
 
     now = pytz.utc.localize(datetime.utcnow())
 
-    flow.schedule = None
-
     # With these parameters, all 3 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
     alert_config_name = "ALERTE_1"
@@ -895,6 +889,7 @@ def test_flow_filters_on_time(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = True
 
+    flow.schedule = None
     state = flow.run(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
@@ -1005,8 +1000,6 @@ def test_flow_filters_on_flag_states(reset_test_data):
 
     now = pytz.utc.localize(datetime.utcnow())
 
-    flow.schedule = None
-
     # With these parameters, all 3 vessels should be in alert.
     alert_type = "THREE_MILES_TRAWLING_ALERT"
     alert_config_name = "ALERTE_1"
@@ -1018,6 +1011,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
     fishing_gear_categories = None
     include_vessels_unknown_gear = True
 
+    flow.schedule = None
     state = flow.run(
         alert_type=alert_type,
         alert_config_name=alert_config_name,
@@ -1100,8 +1094,6 @@ def test_flow_filters_on_flag_states(reset_test_data):
 
 def test_flow_french_eez_fishing_alert(reset_test_data):
 
-    flow.schedule = None
-
     # With these parameters, 2 french vessels should be in alert.
     alert_type = "FRENCH_EEZ_FISHING_ALERT"
     alert_config_name = "ALERTE_1"
@@ -1114,6 +1106,7 @@ def test_flow_french_eez_fishing_alert(reset_test_data):
     include_vessels_unknown_gear = True
     except_flag_states = ["NL"]
 
+    flow.schedule = None
     state = flow.run(
         alert_type=alert_type,
         alert_config_name=alert_config_name,

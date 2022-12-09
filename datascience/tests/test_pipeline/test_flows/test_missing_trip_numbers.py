@@ -43,6 +43,7 @@ def test_missing_trip_numbers_flow(reset_test_data):
     )
 
     # Run the flow to compute missing trip numbers
+    flow.schedule = None
     state = flow.run()
     assert state.is_successful()
 
@@ -161,6 +162,7 @@ def test_missing_trip_numbers_flow_overwrites_only_computed_trip_numbers(
     )
 
     # Run the flow to compute missing trip numbers
+    flow.schedule = None
     state = flow.run()
     assert state.is_successful()
 

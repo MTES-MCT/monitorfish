@@ -22,6 +22,7 @@ def test_control_anteriority_flow(reset_test_data):
     assert len(read_query("monitorfish_remote", query)) == 0
 
     # Run control anteriority flow
+    flow.schedule = None
     state = flow.run()
     assert state.is_successful()
 

@@ -27,6 +27,7 @@ def test_risk_factor_flow(reset_test_data):
     assert len(read_query("monitorfish_remote", query)) == 0
 
     ############################## Run risk factors flow ##############################
+    flow.schedule = None
     state = flow.run()
     assert state.is_successful()
 

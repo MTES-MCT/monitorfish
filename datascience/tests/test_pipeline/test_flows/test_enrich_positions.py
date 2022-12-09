@@ -585,7 +585,6 @@ def test_extract_enrich_load(reset_test_data):
 
 
 def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
-    flow.schedule = None
 
     # Vessel 'ABC000055481' has all its positions already enriched in the test_data
     positions_before = read_query(
@@ -602,6 +601,7 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
         ORDER BY date_time""",
     )
 
+    flow.schedule = None
     state = flow.run(
         start_hours_ago=48,
         end_hours_ago=0,
@@ -634,7 +634,6 @@ def test_flow_does_not_recompute_all_when_not_asked_to(reset_test_data):
 
 
 def test_flow_recomputes_all_when_asked_to(reset_test_data):
-    flow.schedule = None
 
     # Vessel 'ABC000055481' has all its positions already enriched in the test_data
     positions_before = read_query(
@@ -652,6 +651,7 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
         ORDER BY date_time""",
     )
 
+    flow.schedule = None
     state = flow.run(
         start_hours_ago=48,
         end_hours_ago=0,
@@ -708,7 +708,6 @@ def test_flow_recomputes_all_when_asked_to(reset_test_data):
 
 
 def test_flow_can_compute_in_chunks(reset_test_data):
-    flow.schedule = None
 
     query = """
         SELECT
@@ -725,6 +724,7 @@ def test_flow_can_compute_in_chunks(reset_test_data):
 
     positions_before = read_query("monitorfish_remote", query)
 
+    flow.schedule = None
     state = flow.run(
         start_hours_ago=48,
         end_hours_ago=0,
@@ -741,6 +741,7 @@ def test_flow_can_compute_in_chunks(reset_test_data):
 
     positions_enriched_in_2_chunks = read_query("monitorfish_remote", query)
 
+    flow.schedule = None
     state = flow.run(
         start_hours_ago=48,
         end_hours_ago=0,

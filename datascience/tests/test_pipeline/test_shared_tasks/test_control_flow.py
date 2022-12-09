@@ -42,6 +42,7 @@ with Flow("filter") as flow:
 
 
 def test_filter_failed_tasks():
+    flow.schedule = None
     state = flow.run()
     assert len(state.result[flow.get_tasks("unstable_task")[0]].result) == 5
     assert state.result[flow.get_tasks("FilterTask")[0]].result == [0, 4]

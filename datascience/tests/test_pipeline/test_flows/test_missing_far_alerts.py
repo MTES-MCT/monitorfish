@@ -288,6 +288,7 @@ def test_flow_when_an_alert_is_silenced(reset_test_data):
         "monitorfish_remote", "SELECT * FROM pending_alerts"
     )
 
+    flow.schedule = None
     state = flow.run(
         alert_type="MISSING_FAR_ALERT",
         alert_config_name="MISSING_FAR_ALERT",
@@ -345,6 +346,7 @@ def test_flow_fails_if_share_of_vessels_with_missing_far_is_too_large(reset_test
 
     max_share_of_vessels_with_missing_fars = 0.23
 
+    flow.schedule = None
     state = flow.run(
         alert_type="MISSING_FAR_ALERT",
         alert_config_name="MISSING_FAR_ALERT",

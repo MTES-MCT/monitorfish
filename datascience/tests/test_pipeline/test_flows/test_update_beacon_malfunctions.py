@@ -805,7 +805,6 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
 
 
 def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_data):
-    flow.schedule = None
     initial_beacon_malfunctions = read_query(
         "monitorfish_remote",
         (
@@ -813,6 +812,7 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
             "WHERE stage NOT IN ('END_OF_MALFUNCTION', 'ARCHIVED')"
         ),
     )
+    flow.schedule = None
     state = flow.run(
         max_hours_without_emission_at_sea=6, max_hours_without_emission_at_port=1
     )
@@ -911,6 +911,7 @@ def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):
         get_monitorfish_healthcheck_mock_factory(position_received_minutes_ago=15),
     )
 
+    flow.schedule = None
     state = flow.run()
 
     assert not state.is_successful()

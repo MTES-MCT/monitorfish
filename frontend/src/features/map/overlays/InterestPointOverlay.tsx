@@ -42,53 +42,55 @@ const InterestPointOverlay = props => {
   const isThrottled = useRef(false)
   const [showed, setShowed] = useState(false)
   const [hiddenByZoom, setHiddenByZoom] = useState(false)
-  const [overlay] = useState(new Overlay({
-    element: ref.current,
-    position: coordinates,
-    offset: currentOffset.current,
-    autoPan: false,
-    positioning: 'left-center'
-  }))
+  const [overlay] = useState(
+    new Overlay({
+      element: ref.current,
+      position: coordinates,
+      offset: currentOffset.current,
+      autoPan: false,
+      positioning: 'left-center'
+    })
+  )
 
-  const moveInterestPointWithThrottle = useCallback((target, delay) => {
-    if (isThrottled.current) {
-      return
-    }
-
-    isThrottled.current = true
-    setTimeout(() => {
-      if (interestPointCoordinates.current) {
-        const offset = target.getOffset()
-        const pixel = map.getPixelFromCoordinate(interestPointCoordinates.current)
-
-        const { width } = target.getElement().getBoundingClientRect()
-        const nextXPixelCenter = pixel[X] + offset[X] + width / 2
-        const nextYPixelCenter = pixel[Y] + offset[Y]
-
-        const nextCoordinates = map.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
-        currentCoordinates.current = nextCoordinates
-        moveLine(uuid, interestPointCoordinates.current, nextCoordinates, offset)
-
-        isThrottled.current = false
+  const moveInterestPointWithThrottle = useCallback(
+    (target, delay) => {
+      if (isThrottled.current) {
+        return
       }
-    }, delay)
-  }, [interestPointCoordinates.current])
+
+      isThrottled.current = true
+      setTimeout(() => {
+        if (interestPointCoordinates.current) {
+          const offset = target.getOffset()
+          const pixel = map.getPixelFromCoordinate(interestPointCoordinates.current)
+
+          const { width } = target.getElement().getBoundingClientRect()
+          const nextXPixelCenter = pixel[X] + offset[X] + width / 2
+          const nextYPixelCenter = pixel[Y] + offset[Y]
+
+          const nextCoordinates = map.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
+          currentCoordinates.current = nextCoordinates
+          moveLine(uuid, interestPointCoordinates.current, nextCoordinates, offset)
+
+          isThrottled.current = false
+        }
+      }, delay)
+    },
+    [interestPointCoordinates.current]
+  )
 
   useMoveOverlayWhenDragging(overlay, map, currentOffset, moveInterestPointWithThrottle, showed, () => {})
   useMoveOverlayWhenZooming(overlay, initialOffsetValue, zoomHasChanged, currentOffset, moveInterestPointWithThrottle)
   const previousCoordinates = usePrevious(coordinates)
 
-  function coordinatesAreModified (coordinates, previousCoordinates) {
+  function coordinatesAreModified(coordinates, previousCoordinates) {
     return (
       !isNaN(coordinates[0]) &&
       !isNaN(coordinates[1]) &&
       !isNaN(previousCoordinates[0]) &&
-      !isNaN(previousCoordinates[1])
-    ) &&
-      (
-        coordinates[0] !== previousCoordinates[0] ||
-        coordinates[1] !== previousCoordinates[1]
-      )
+      !isNaN(previousCoordinates[1]) &&
+      (coordinates[0] !== previousCoordinates[0] || coordinates[1] !== previousCoordinates[1])
+    )
   }
 
   useEffect(() => {
@@ -132,33 +134,23 @@ const InterestPointOverlay = props => {
   return (
     <WrapperToBeKeptForDOMManagement>
       <div ref={ref}>
-        {
-          showed && !hiddenByZoom
-            ? <InterestPointOverlayElement>
-              <Header>
-                <Name data-cy={'interest-point-name'} title={name || 'Aucun Libellé'}>
-                  {
-                    name || 'Aucun Libellé'
-                  }
-                </Name>
-                <Edit data-cy={'interest-point-edit'} onClick={() => modifyInterestPoint(uuid)}/>
-                <Delete data-cy={'interest-point-delete'} onClick={() => deleteInterestPoint(uuid)}/>
-              </Header>
-              <Body data-cy={'interest-point-observations'}>
-                {
-                  observations || 'Aucune observation'
-                }
-              </Body>
-              <Footer data-cy={'interest-point-coordinates'}>
-                {
-                  coordinates && coordinates.length
-                    ? getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat).join(' ')
-                    : null
-                }
-              </Footer>
-            </InterestPointOverlayElement>
-            : null
-        }
+        {showed && !hiddenByZoom ? (
+          <InterestPointOverlayElement>
+            <Header>
+              <Name data-cy={'interest-point-name'} title={name || 'Aucun Libellé'}>
+                {name || 'Aucun Libellé'}
+              </Name>
+              <Edit data-cy={'interest-point-edit'} onClick={() => modifyInterestPoint(uuid)} />
+              <Delete data-cy={'interest-point-delete'} onClick={() => deleteInterestPoint(uuid)} />
+            </Header>
+            <Body data-cy={'interest-point-observations'}>{observations || 'Aucune observation'}</Body>
+            <Footer data-cy={'interest-point-coordinates'}>
+              {coordinates && coordinates.length
+                ? getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat).join(' ')
+                : null}
+            </Footer>
+          </InterestPointOverlayElement>
+        ) : null}
       </div>
     </WrapperToBeKeptForDOMManagement>
   )
@@ -176,7 +168,7 @@ const Footer = styled.div`
   padding: 3px;
   font-size: 12px;
   text-align: center;
-  color: ${COLORS.slateGray}
+  color: ${COLORS.slateGray};
 `
 
 const Header = styled.div`

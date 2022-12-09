@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/api/v1/missions/38"
+    "url": "/api/v1/missions/130"
   },
   "response": {
     "status": 200,
@@ -11,37 +11,53 @@
       "Access-Control-Allow-Methods": "*"
     },
     "jsonBody": {
-      "id": 38,
-      "missionType": "LAND",
-      "missionNature": ["ENV", "FISH"],
+      "id": 130,
+      "missionType": "SEA",
+      "missionNature": ["ENV"],
       "resourceUnits": [
         {
-          "administration": "Douanes",
-          "unit": "BN Pornic",
-          "resources": ["Semi Rigide 3", "Semi Rigide 3"]
+          "administration": "DDTM",
+          "unit": "ULAM 33",
+          "resources": [],
+          "contact": null
         },
         {
-          "administration": "Gendarmerie maritime",
-          "unit": "PM 441",
-          "resources": ["ALTAIR", "CALISTO"]
+          "administration": "Gendarmerie Maritime",
+          "unit": "BSL Lège-Cap-Ferret",
+          "resources": [],
+          "contact": null
         },
         {
-          "administration": "Douanes",
-          "unit": "PM 474 Bastia",
-          "resources": ["THEMIS", "PHEROUSA"]
+          "administration": "Office Français de la Biodiversité",
+          "unit": "OFB SD 33",
+          "resources": [],
+          "contact": null
         }
       ],
-      "missionStatus": "PENDING",
-      "openBy": "Randy Woodward",
-      "closedBy": "Timothy Patrick",
-      "observationsCacem": "Black bit sell. House relate policy once. White member worker east even anyone detail professor.",
-      "observationsCnsp": null,
-      "facade": "MED",
-      "geom": null,
-      "inputStartDatetimeUtc": "2022-11-16T19:20:23.01111Z",
-      "inputEndDatetimeUtc": "2022-11-20T14:32:32.01111Z",
+      "openBy": "",
+      "closedBy": "",
+      "observationsCacem": "",
+      "observationsCnsp": "",
+      "facade": null,
+      "geom": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [-0.93623462, 45.43992532],
+              [-0.73471066, 45.19917001],
+              [-0.62710077, 45.22949261],
+              [-0.81688548, 45.48383851],
+              [-0.93623462, 45.43992532]
+            ]
+          ]
+        ]
+      },
+      "inputStartDateTimeUtc": "2022-12-07T01:00:56.198Z",
+      "inputEndDateTimeUtc": null,
       "envActions": [],
-      "missionSource": "CACEM"
+      "missionSource": "CACEM",
+      "isClosed": false
     }
   }
 }

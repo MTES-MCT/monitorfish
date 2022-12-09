@@ -6,10 +6,10 @@ import type { FormValues } from './types'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 export const EMPTY_UNIT: Partial<MissionUnit> = {
-  administrationId: undefined,
-  contactId: undefined,
-  meanId: undefined,
-  unitId: undefined
+  administration: undefined,
+  contact: undefined,
+  resources: [],
+  unit: undefined
 }
 
 export const INITIAL_VALUES: FormValues = {

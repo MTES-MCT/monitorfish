@@ -49,15 +49,6 @@ const SetTransform = createTransform(
   { whitelist: ['regulation'] }
 )
 
-const backofficePersistConfig = {
-  blacklist: [missionApi.reducerPath],
-  key: 'backofficePersistor',
-  stateReconciler: autoMergeLevel2,
-  storage,
-  transforms: [SetTransform],
-  whitelist: ['regulation']
-}
-
 const homeStore = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -73,6 +64,13 @@ setupListeners(homeStore.dispatch)
 
 // https://redux-toolkit.js.org/usage/usage-guide#use-with-redux-persist
 const combinedBackofficeReducers = combineReducers(backofficeReducers)
+const backofficePersistConfig = {
+  key: 'backofficePersistor',
+  stateReconciler: autoMergeLevel2,
+  storage,
+  transforms: [SetTransform],
+  whitelist: ['regulation']
+}
 const persistedReducer = persistReducer<
   CombinedState<{
     fleetSegment: FleetSegmentState

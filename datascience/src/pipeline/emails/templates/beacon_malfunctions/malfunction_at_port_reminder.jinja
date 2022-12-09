@@ -1,4 +1,4 @@
-{% extends "malfunction_at_port_initial_notification.html" %}
+{% extends "malfunction_at_port_initial_notification.jinja" %}
 {% block beginning %}
 <p>Aucune amélioration n’a été apportée depuis notre dernier message
 {% if previous_notification_datetime_utc %} datant du {{ previous_notification_datetime_utc }}{% endif %}. 

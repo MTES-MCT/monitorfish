@@ -44,7 +44,7 @@ services:
     depends_on:
       flyway:
         condition: service_completed_successfully
-      geoserver:
+      geoserver-monitorenv-stubs:
         condition: service_healthy
     restart: always
     logging:

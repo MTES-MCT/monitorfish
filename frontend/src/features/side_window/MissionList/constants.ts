@@ -17,12 +17,12 @@ export const DUMMY_MISSIONS: Mission[] = new Array(20).fill(undefined).map((_, i
   inspectionsCount: 0,
   isUnderJdp: false,
   openedBy: 'Bob B',
+  resourceUnits: [],
   seaFront: SeaFront.MED,
   startDate: new Date(),
   status: MissionStatus.CLOSED,
   themes: [],
   type: MissionType.SEA,
-  units: [],
   zones: []
 }))
 

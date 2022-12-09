@@ -2,6 +2,7 @@ import { Accent, Button, Icon, IconButton, Select } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { assoc, remove, update } from 'ramda'
 import { useCallback, useMemo } from 'react'
+import { TagPicker } from 'rsuite'
 import styled from 'styled-components'
 
 import { EMPTY_UNIT } from './constants'
@@ -50,34 +51,33 @@ export function MultiUnitPicker({ name }: MultiUnitPickerProps) {
           <Row key={`unit${index}`}>
             <UnitWrapper>
               <Select
-                defaultValue={currentUnit.administrationId}
+                defaultValue={currentUnit.administration}
                 label={`Administration ${index + 1}`}
-                name={`administrationId_${index}`}
-                onChange={nextValue => handleChange(index, 'administrationId', nextValue)}
+                name={`administration_${index}`}
+                onChange={nextValue => handleChange(index, 'administration', nextValue)}
                 options={[]}
               />
               <Select
-                defaultValue={currentUnit.unitId}
-                disabled={!currentUnit.administrationId}
+                defaultValue={currentUnit.unit}
+                disabled={!currentUnit.administration}
                 label={`Unité ${index + 1}`}
-                name={`unitId_${index}`}
-                onChange={nextValue => handleChange(index, 'unitId', nextValue)}
+                name={`unit_${index}`}
+                onChange={nextValue => handleChange(index, 'unit', nextValue)}
                 options={[]}
               />
-              <Select
-                defaultValue={currentUnit.meanId}
-                disabled={!currentUnit.unitId}
-                label={`Moyen ${index + 1}`}
+              <TagPicker
+                data={[]}
+                defaultValue={currentUnit.resources}
+                disabled={!currentUnit.unit}
                 name={`meanId_${index}`}
-                onChange={nextValue => handleChange(index, 'meanId', nextValue)}
-                options={[]}
+                onChange={nextValue => handleChange(index, 'resources', nextValue)}
               />
               <Select
-                defaultValue={currentUnit.contactId}
-                disabled={!currentUnit.meanId}
+                defaultValue={currentUnit.contact}
+                disabled={!currentUnit.unit}
                 label={`Contact de l’unité ${index + 1}`}
-                name={`contactId_${index}`}
-                onChange={nextValue => handleChange(index, 'contactId', nextValue)}
+                name={`contact_${index}`}
+                onChange={nextValue => handleChange(index, 'contact', nextValue)}
                 options={[]}
               />
             </UnitWrapper>

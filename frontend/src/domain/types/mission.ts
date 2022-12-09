@@ -12,12 +12,12 @@ export type Mission = {
   inspectionsCount: number
   isUnderJdp: boolean
   openedBy: string
+  resourceUnits: MissionUnit[]
   seaFront: SeaFront
   startDate: Date
   status: MissionStatus
   themes: string[]
   type: MissionType
-  units: MissionUnit[]
   zones: Record<string, any>[]
 }
 
@@ -46,8 +46,8 @@ export enum MissionType {
 /* eslint-enable typescript-sort-keys/string-enum */
 
 export type MissionUnit = {
-  administrationId: string
-  contactId: string
-  meanId: string
-  unitId: string
+  administration: string
+  contact: string
+  resources: Array<string>
+  unit: string
 }

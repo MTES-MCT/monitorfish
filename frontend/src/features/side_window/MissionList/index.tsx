@@ -68,7 +68,11 @@ export function MissionList() {
                   <FlexboxGrid>
                     <Cell $fixedWidth={7}>{dayjs(mission.startDate).format('D MMM YY, HH:MM')}</Cell>
                     <Cell $fixedWidth={7}>{dayjs(mission.endDate).format('D MMM YY, HH:MM')}</Cell>
-                    <Cell $fixedWidth={10}>{mission.units}</Cell>
+                    <Cell $fixedWidth={10}>
+                      {mission.resourceUnits?.map(
+                        resourceUnit => `${resourceUnit.unit} (${resourceUnit.administration || '-'})`
+                      )}
+                    </Cell>
                     <Cell $fixedWidth={5}>{mission.type}</Cell>
                     <Cell $fixedWidth={5}>{mission.seaFront}</Cell>
                     <Cell $fixedWidth={10}>{mission.themes?.join(', ')}</Cell>

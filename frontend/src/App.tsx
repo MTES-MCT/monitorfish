@@ -31,6 +31,7 @@ import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader
 import { VesselSidebar } from './features/vessel_sidebar/VesselSidebar'
 import { useAppSelector } from './hooks/useAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
+import { TestPage } from './pages/TestPage'
 import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
 import { backofficeStore, homeStore, backofficePersistor } from './store'
 import { isBrowserSupported } from './utils/isBrowserSupported'
@@ -68,6 +69,8 @@ export function App() {
               </NamespaceContext.Provider>
             </Provider>
           </Route>
+
+          <Route component={TestPage} exact path="/test" />
 
           <Route path="/">
             <Provider store={homeStore}>
@@ -154,7 +157,7 @@ function TritonFish() {
 
 const Wrapper = styled.div`
   font-size: 13px;
+  overflow: hidden;
   text-align: center;
   width: 100vw;
-  overflow: hidden;
 `

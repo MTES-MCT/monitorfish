@@ -9,15 +9,16 @@
     "npm": "8"
   },
   "scripts": {
-    "start": "sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
     "build": "sh -ac '. ../infra/configurations/frontend/.env.${REACT_APP_ENV}; react-scripts build'",
     "build:dev": "REACT_APP_ENV=dev npm run build",
     "build:prod": "REACT_APP_ENV=prod npm run build",
     "build:local": "REACT_APP_ENV=local npm run build",
     "cypress:open": "cypress open --browser firefox --e2e",
     "cypress:open:electron": "cypress open --browser electron --e2e",
+    "dev": "BROWSER=none sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
     "eject": "react-scripts eject",
     "prepare": "cd .. && husky install ./frontend/config/husky",
+    "start": "sh -ac '. ../infra/configurations/frontend/.env.local; react-scripts start'",
     "test:css": "stylelint --ignore-path .gitignore '**/*.(css|tsx)'",
     "test:e2e": "cypress run --browser firefox --e2e",
     "test:lint": "eslint ./src",

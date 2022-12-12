@@ -99,15 +99,15 @@ export function AlertsAndReportings({
 const Title = styled.h2<{
   isSelected: boolean
 }>`
-  margin: 30px 10px 30px 10px;
-  font-size: 22px;
-  color: ${COLORS.gunMetal};
   border-bottom: 5px solid ${p => (p.isSelected ? COLORS.charcoal : COLORS.white)};
-  font-weight: 700;
-  text-align: left;
-  padding-bottom: 5px;
-  width: fit-content;
-  display: inline-block;
+  color: ${COLORS.gunMetal};
   cursor: pointer;
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 30px 10px;
+  padding-bottom: 5px;
+  text-align: left;
   transition: all 0.2s;
+  width: fit-content;
 `

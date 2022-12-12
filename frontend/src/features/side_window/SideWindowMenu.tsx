@@ -1,4 +1,5 @@
-import styled from 'styled-components'
+import { IconButton } from '@mtes-mct/monitor-ui'
+import styled, { css } from 'styled-components'
 
 import { getEnvironmentVariable } from '../../api/api'
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
@@ -17,43 +18,41 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
 
   return (
     <Menu role="menu">
-      <MenuButton />
       <MenuButton
         data-cy="side-window-menu-alerts"
+        Icon={AlertsIcon}
         onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))}
         role="menuitem"
         selected={selectedMenu === SideWindowMenuKey.ALERTS}
         title={SideWindowMenuKey.ALERTS}
-      >
-        <AlertsIcon />
-      </MenuButton>
+      />
       {IS_DEV_ENV && (
         <MenuButton
           aria-label={SideWindowMenuKey.MISSION_LIST}
+          data-cy="side-window-menu-mission-list"
+          Icon={BeaconMalfunctionsIcon}
           onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))}
           role="menuitem"
           selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
           title={SideWindowMenuKey.MISSION_LIST}
-        >
-          <BeaconMalfunctionsIcon />
-        </MenuButton>
+        />
       )}
       <MenuButton
         data-cy="side-window-menu-beacon-malfunctions"
+        Icon={BeaconMalfunctionsIcon}
         onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.BEACON_MALFUNCTIONS))}
         role="menuitem"
         selected={selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTIONS}
         title={SideWindowMenuKey.BEACON_MALFUNCTIONS}
-      >
-        <BeaconMalfunctionsIcon />
-      </MenuButton>
+      />
     </Menu>
   )
 }
 
 const Menu = styled.div`
-  background: ${p => p.theme.color.charcoal};
-  color: ${p => p.theme.color.gainsboro};
+  background-color: ${p => p.theme.color.charcoal} !important;
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
   font-size: 11px;
   height: 100vh;
@@ -61,15 +60,20 @@ const Menu = styled.div`
   width: 66px;
 `
 
-const MenuButton = styled.div<{
+const MenuButton = styled(IconButton)<{
   selected?: boolean
 }>`
   background: ${p => (p.selected ? p.theme.color.blueGray[100] : 'none')};
-  border-bottom: 0.5px solid ${p => p.theme.color.slateGray};
-  cursor: pointer;
-  height: 50px;
-  padding: 7px 5px;
-  text-align: center;
+  padding-bottom: 18px;
+  padding-top: 7px;
+
+  ${p =>
+    p.selected &&
+    css`
+      :hover {
+        background: ${p.theme.color.blueGray[100]} !important;
+      }
+    `}
 `
 
 const AlertsIcon = styled(AlertsSVG)`

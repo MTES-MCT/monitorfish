@@ -84,6 +84,7 @@ export function MultiUnitPicker({ name }: MultiUnitPickerProps) {
 
             <IconButton
               accent={Accent.SECONDARY}
+              aria-label="Supprimer cette unité"
               Icon={Icon.Delete}
               onClick={() => deleteUnit(index)}
               style={

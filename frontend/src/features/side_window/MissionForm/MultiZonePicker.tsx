@@ -63,7 +63,12 @@ export function MultiZonePicker({ addButtonLabel, defaultZoneLabel, name }: Mult
             </ZoneWrapper>
 
             <IconButton accent={Accent.SECONDARY} Icon={Icon.Edit} />
-            <IconButton accent={Accent.SECONDARY} Icon={Icon.Delete} onClick={() => deleteZone(index)} />
+            <IconButton
+              accent={Accent.SECONDARY}
+              aria-label="Supprimer cette zone"
+              Icon={Icon.Delete}
+              onClick={() => deleteZone(index)}
+            />
           </Row>
         ))}
       </>
@@ -74,7 +79,7 @@ export function MultiZonePicker({ addButtonLabel, defaultZoneLabel, name }: Mult
 const Row = styled.div`
   align-items: center;
   display: flex;
-  margin: 0.5rem 0 0 0;
+  margin: 0.5rem 0 0;
 
   > button {
     margin: 0 0 0 0.5rem;

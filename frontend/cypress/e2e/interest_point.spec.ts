@@ -75,7 +75,7 @@ context('InterestPoint', () => {
 
     cy.get('*[data-cy^="interest-point-name"]').first().contains('Aucun Libellé', { timeout: 10000 })
     cy.get('*[data-cy^="interest-point-observations"]').first().contains('Aucune observation', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47.5525° -007.5499°', { timeout: 10000 })
+    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47.5525° -007.5563°', { timeout: 10000 })
 
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
   })

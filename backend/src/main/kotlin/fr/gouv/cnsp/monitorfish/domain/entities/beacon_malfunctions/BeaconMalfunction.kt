@@ -21,6 +21,7 @@ data class BeaconMalfunction(
     val endOfBeaconMalfunctionReason: EndOfBeaconMalfunctionReason? = null,
     val vesselId: Int,
     val notificationRequested: BeaconMalfunctionNotificationType? = null,
+    val requestedNotificationForeignFmcCode: String? = null,
     val beaconNumber: String,
     val beaconStatusAtMalfunctionCreation: BeaconStatus,
 ) {

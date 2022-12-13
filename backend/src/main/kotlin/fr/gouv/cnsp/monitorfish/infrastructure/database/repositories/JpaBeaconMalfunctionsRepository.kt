@@ -63,7 +63,7 @@ class JpaBeaconMalfunctionsRepository(private val dbBeaconMalfunctionsRepository
     }
 
     @Transactional
-    override fun requestNotification(id: Int, notificationType: BeaconMalfunctionNotificationType) {
-        dbBeaconMalfunctionsRepository.updateRequestNotification(id, notificationType.toString())
+    override fun requestNotification(id: Int, notificationType: BeaconMalfunctionNotificationType, requestedNotificationForeignFmcCode: String?) {
+        dbBeaconMalfunctionsRepository.updateRequestNotification(id, notificationType.toString(), requestedNotificationForeignFmcCode)
     }
 }

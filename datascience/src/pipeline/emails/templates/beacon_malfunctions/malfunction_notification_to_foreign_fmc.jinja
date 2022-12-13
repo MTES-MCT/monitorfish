@@ -1,0 +1,10 @@
+{% extends "base_template_en.jinja" %}
+{% block message %}
+<p>We inform you that <strong>the french FMC currently receives no VMS positions from the aforementioned fishing vessel.</strong>
+{% if last_position_latitude and last_position_longitude and last_position_datetime_utc %}
+ The latest position received was on {{ last_position_datetime_utc }}, 
+latitude {{ last_position_latitude }}, longitude {{ last_position_longitude }}.
+{%endif%}
+</p>
+<p>The fishing vessel has been informed of the trouble on her VMS device.</p>
+{% endblock %}

@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionData
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionResumeAndDetailsDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import io.swagger.v3.oas.annotations.Parameter
 import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -101,10 +102,14 @@ class BeaconMalfunctionController(
         @PathParam("Notification type requested")
         @PathVariable(name = "notificationRequested")
         notificationRequested: BeaconMalfunctionNotificationType,
+        @Parameter(name = "ISO3 country code of the FMC to notify")
+        @RequestParam(name = "requestedNotificationForeignFmcCode")
+        requestedNotificationForeignFmcCode: String? = null
     ) {
         return requestNotification.execute(
             id = beaconMalfunctionId,
             notificationRequested = notificationRequested,
+            requestedNotificationForeignFmcCode = requestedNotificationForeignFmcCode
         )
     }
 }

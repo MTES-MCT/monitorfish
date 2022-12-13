@@ -329,9 +329,23 @@ class BeaconMalfunctionControllerITests {
         verify(requestNotification).execute(
             eq(123),
             eq(BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION),
+            eq(null)
         )
     }
 
+    @Test
+    fun `Should request a notification to a foreign fmc`() {
+        // When
+        mockMvc.perform(put("/bff/v1/beacon_malfunctions/123/MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC?requestedNotificationForeignFmcCode=ABC"))
+            // Then
+            .andExpect(status().isOk)
+
+        verify(requestNotification).execute(
+            eq(123),
+            eq(BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC),
+            eq("ABC")
+        )
+    }
     @Test
     fun `Should return Ok When archiving multiple beacon malfunctions`() {
         given(this.archiveBeaconMalfunctions.execute(listOf(123, 456)))

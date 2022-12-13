@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import { getReducedTimeAgo } from '../../../features/side_window/beacon_malfunctions/beaconMalfunctions'
+import { getReducedTimeAgo } from '../../../features/SideWindow/beacon_malfunctions/beaconMalfunctions'
 import { getDate } from '../../../utils'
 import {
   BeaconMalfunctionPropertyName,

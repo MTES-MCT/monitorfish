@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux'
 import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
 import { ReactComponent as BeaconMalfunctionSVG } from '../../icons/Icone_VMS_dark.svg'
 import { marginsWithOneWarning, marginsWithoutAlert, marginsWithTwoWarning } from '../overlays/VesselCardOverlay'
-import { getAlertNameFromType } from '../../side_window/alerts_reportings/utils'
+import { getAlertNameFromType } from '../../SideWindow/alerts_reportings/utils'
 
 timeago.register('fr', timeagoFrenchLocale)
 

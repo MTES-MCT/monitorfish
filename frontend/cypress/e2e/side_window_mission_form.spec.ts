@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { SideWindowMenuKey } from 'src/features/side_window/constants'
+import { SideWindowMenuKey } from 'src/features/SideWindow/constants'
 
 context('Mission Form', () => {
   beforeEach(() => {
@@ -12,7 +12,7 @@ context('Mission Form', () => {
     if (document.querySelector('[data-cy="first-loader"]')) {
       cy.getDataCy('first-loader').should('not.be.visible')
     }
-    cy.clickButton('Nouvelle mission')
+    cy.clickButton('Ajouter une nouvelle mission')
   })
 
   it('Should enable or disable under JDP checkbox depending on other field values', () => {

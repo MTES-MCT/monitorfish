@@ -5,8 +5,8 @@ import { focusOnAlert } from '../../../domain/shared_slices/Alert'
 import { openSideWindowTab } from '../../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
 import { ReactComponent as AlertSVG } from '../../icons/Icone_alertes.svg'
-import { getAlertNameFromType } from '../../side_window/alerts_reportings/utils'
-import { SideWindowMenuKey } from '../../side_window/constants'
+import { getAlertNameFromType } from '../../SideWindow/alerts_reportings/utils'
+import { SideWindowMenuKey } from '../../SideWindow/constants'
 
 export function AlertWarning({ selectedVessel }) {
   const dispatch = useAppDispatch()

@@ -300,6 +300,7 @@ def test_flow_replaces_data(reset_test_data, controls, loaded_controls):
 
     initial_controls = read_query("monitorfish_remote", controls_query)
 
+    flow.schedule = None
     state = flow.run(loading_mode="replace", number_of_months=12)
     assert state.is_successful()
     final_controls = read_query("monitorfish_remote", controls_query)
@@ -316,6 +317,7 @@ def test_flow_upserts_data(reset_test_data, controls, loaded_controls):
 
     initial_controls = read_query("monitorfish_remote", controls_query)
 
+    flow.schedule = None
     state = flow.run(loading_mode="upsert", number_of_months=12)
     assert state.is_successful()
 

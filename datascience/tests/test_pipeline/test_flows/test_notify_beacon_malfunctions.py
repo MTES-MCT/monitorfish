@@ -42,42 +42,66 @@ from tests.mocks import mock_check_flow_not_running, mock_datetime_utcnow
 flow.replace(flow.get_tasks("check_flow_not_running")[0], mock_check_flow_not_running)
 
 malfunctions_to_notify_shared_data = {
-    "beacon_malfunction_id": [1, 2, 3],
-    "vessel_cfr_or_immat_or_ircs": ["ABC000542519", "SB125334", "ZZTOPACDC"],
-    "beacon_number": ["123456", "A56CZ2", "BEA951357"],
+    "beacon_malfunction_id": [1, 2, 3, 4, 5],
+    "vessel_cfr_or_immat_or_ircs": [
+        "ABC000542519",
+        "SB125334",
+        "ZZTOPACDC",
+        "AB123456",
+        "ABC000306959",
+    ],
+    "beacon_number": ["123456", "A56CZ2", "BEA951357", "BEACON_NOT_EMITTING", "987654"],
     "vessel_name": [
         "DEVINER FIGURE CONSCIENCE",
         "JOUR INTÉRESSER VOILÀ",
         "I DO 4H REPORT",
+        "I NEVER EMITTED BUT SHOULD HAVE",
+        "ÉTABLIR IMPRESSION LORSQUE",
     ],
-    "last_position_latitude": [45.236, 42.843, -8.5690],
-    "last_position_longitude": [-3.569, -8.568, -23.1569],
+    "last_position_latitude": [45.236, 42.843, -8.5690, -6.862, -6.162],
+    "last_position_longitude": [-3.569, -8.568, -23.1569, 51.1686, 50.185],
     "notification_type": [
         "END_OF_MALFUNCTION",
         "MALFUNCTION_AT_SEA_REMINDER",
         "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION",
+        "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC",
+        "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC",
     ],
-    "vessel_emails": [["figure@conscience.fr", "figure2@conscience.fr"], [], []],
-    "vessel_mobile_phone": [None, "0111111111", None],
-    "vessel_fax": ["0100000000", None, None],
+    "vessel_emails": [
+        ["figure@conscience.fr", "figure2@conscience.fr"],
+        [],
+        [],
+        [],
+        [],
+    ],
+    "vessel_mobile_phone": [None, "0111111111", None, None, None],
+    "vessel_fax": ["0100000000", None, None, None, None],
     "operator_name": [
         "Le pêcheur de crevettes",
         "Le pêcheur",
         "Le pêcheur qui se fait ses 4h reports",
+        "Le pêcheur qui se cache",
+        "Le pêcheur de poissons",
     ],
     "operator_email": [
         "address@email.bzh",
         "pecheur@poissecaille.fr",
         "reglo@bateau.fr",
+        "discrete@cache-cache.fish",
+        "write_to_me@gmail.com",
     ],
-    "operator_mobile_phone": ["0600000000", None, None],
-    "operator_fax": ["0200000000", None, None],
-    "satellite_operator": ["SAT", "SRV", "SRV"],
+    "operator_mobile_phone": ["0600000000", None, None, None, None],
+    "operator_fax": ["0200000000", None, None, None, None],
+    "satellite_operator": ["SAT", "SRV", "SRV", "SRV", "SAT"],
     "satellite_operator_emails": [
         ["email1@sat.op", "email2@sat.op"],
         ["contact@srv.gps"],
         ["contact@srv.gps"],
+        ["contact@srv.gps"],
+        ["email1@sat.op", "email2@sat.op"],
     ],
+    "foreign_fmc_name": [None, None, None, "Alabama", "Boulgiboulgastan"],
+    "foreign_fmc_emails": [None, None, None, ["fmc@aaa.com", "fmc2@aaa.com"], []],
 }
 
 
@@ -94,11 +118,15 @@ def test_extract_malfunctions_to_notify(reset_test_data):
                 now - relativedelta(months=1, days=2, hours=17, minutes=57),
                 now - relativedelta(hours=3, minutes=57),
                 None,
+                None,
+                None,
             ],
             "malfunction_start_date_utc": [
                 now - relativedelta(months=1, days=3),
                 now - relativedelta(hours=10),
                 now - relativedelta(hours=12, minutes=10),
+                now - relativedelta(hours=6, minutes=10),
+                now - relativedelta(hours=8, minutes=10),
             ],
         }
     )
@@ -139,11 +167,15 @@ def test_to_malfunctions_to_notify_list():
                 datetime(2022, 1, 1, 12, 53, 23),
                 datetime(2022, 1, 2, 12, 53, 23),
                 None,
+                None,
+                None,
             ],
             "malfunction_start_date_utc": [
                 datetime(2022, 1, 3, 12, 53, 23),
                 datetime(2022, 1, 4, 12, 53, 23),
                 datetime(2022, 1, 5, 12, 53, 23),
+                datetime(2022, 1, 6, 12, 53, 23),
+                datetime(2022, 1, 7, 12, 53, 23),
             ],
         }
     )
@@ -171,6 +203,8 @@ def test_to_malfunctions_to_notify_list():
             operator_fax="0200000000",
             satellite_operator="SAT",
             satellite_operator_emails=["email1@sat.op", "email2@sat.op"],
+            foreign_fmc_name=None,
+            foreign_fmc_emails=None,
             previous_notification_datetime_utc=datetime(2022, 1, 1, 12, 53, 23),
             test_mode=False,
         ),
@@ -192,6 +226,8 @@ def test_to_malfunctions_to_notify_list():
             operator_fax=None,
             satellite_operator="SRV",
             satellite_operator_emails=["contact@srv.gps"],
+            foreign_fmc_name=None,
+            foreign_fmc_emails=None,
             previous_notification_datetime_utc=datetime(2022, 1, 2, 12, 53, 23),
             test_mode=False,
         ),
@@ -213,6 +249,54 @@ def test_to_malfunctions_to_notify_list():
             operator_fax=None,
             satellite_operator="SRV",
             satellite_operator_emails=["contact@srv.gps"],
+            foreign_fmc_name=None,
+            foreign_fmc_emails=None,
+            previous_notification_datetime_utc=pd.NaT,
+            test_mode=False,
+        ),
+        BeaconMalfunctionToNotify(
+            beacon_malfunction_id=4,
+            vessel_cfr_or_immat_or_ircs="AB123456",
+            beacon_number="BEACON_NOT_EMITTING",
+            vessel_name="I NEVER EMITTED BUT SHOULD HAVE",
+            malfunction_start_date_utc=datetime(2022, 1, 6, 12, 53, 23),
+            last_position_latitude=-6.862,
+            last_position_longitude=51.1686,
+            notification_type="MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC",
+            vessel_emails=[],
+            vessel_mobile_phone=None,
+            vessel_fax=None,
+            operator_name="Le pêcheur qui se cache",
+            operator_email="discrete@cache-cache.fish",
+            operator_mobile_phone=None,
+            operator_fax=None,
+            satellite_operator="SRV",
+            satellite_operator_emails=["contact@srv.gps"],
+            foreign_fmc_name="Alabama",
+            foreign_fmc_emails=["fmc@aaa.com", "fmc2@aaa.com"],
+            previous_notification_datetime_utc=pd.NaT,
+            test_mode=False,
+        ),
+        BeaconMalfunctionToNotify(
+            beacon_malfunction_id=5,
+            vessel_cfr_or_immat_or_ircs="ABC000306959",
+            beacon_number="987654",
+            vessel_name="ÉTABLIR IMPRESSION LORSQUE",
+            malfunction_start_date_utc=datetime(2022, 1, 7, 12, 53, 23),
+            last_position_latitude=-6.162,
+            last_position_longitude=50.185,
+            notification_type="MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC",
+            vessel_emails=[],
+            vessel_mobile_phone=None,
+            vessel_fax=None,
+            operator_name="Le pêcheur de poissons",
+            operator_email="write_to_me@gmail.com",
+            operator_mobile_phone=None,
+            operator_fax=None,
+            satellite_operator="SAT",
+            satellite_operator_emails=["email1@sat.op", "email2@sat.op"],
+            foreign_fmc_name="Boulgiboulgastan",
+            foreign_fmc_emails=[],
             previous_notification_datetime_utc=pd.NaT,
             test_mode=False,
         ),
@@ -233,8 +317,13 @@ def test_get_sms_templates():
     templates = get_sms_templates.run()
     assert isinstance(templates, dict)
     for notification_type in BeaconMalfunctionNotificationType:
-        assert notification_type in templates
-        assert isinstance(templates[notification_type], Template)
+        try:
+            assert notification_type in templates
+            assert isinstance(templates[notification_type], Template)
+        except AssertionError:
+            assert notification_type is (
+                BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
+            )
 
 
 @fixture
@@ -273,6 +362,8 @@ def malfunction_to_notify_data() -> dict:
         operator_fax="0200000000",
         satellite_operator="SAT",
         satellite_operator_emails=["email1@sat.op", "email2@sat.op"],
+        foreign_fmc_name="Saturne",
+        foreign_fmc_emails=["fmc@email.country", "fmc2@email.country"],
         previous_notification_datetime_utc=datetime(2022, 1, 1, 12, 53, 23),
     )
 
@@ -296,6 +387,8 @@ def malfunction_to_notify_data_with_nulls() -> dict:
         operator_fax=None,
         satellite_operator=None,
         satellite_operator_emails=[],
+        foreign_fmc_emails=[],
+        foreign_fmc_name=None,
         previous_notification_datetime_utc=None,
     )
 
@@ -433,6 +526,8 @@ def expected_notifications(request) -> list:
         ("MALFUNCTION_AT_PORT_REMINDER", "pdf"),
         ("END_OF_MALFUNCTION", "html"),
         ("END_OF_MALFUNCTION", "pdf"),
+        ("MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC", "html"),
+        ("MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC", "pdf"),
     ],
 )
 @patch(
@@ -547,6 +642,7 @@ def test_render_with_null_values(malfunction_to_notify_data_with_nulls, template
         "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION",
         "MALFUNCTION_AT_PORT_REMINDER",
         "END_OF_MALFUNCTION",
+        "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC",
     ],
 )
 def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
@@ -568,12 +664,18 @@ def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
     assert communication_means is CommunicationMeans.EMAIL
     assert malfunction_to_notify is m
 
+    expected_to = (
+        "fmc@email.country, fmc2@email.country"
+        if (notification_type == "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC")
+        else (
+            "figure@conscience.fr, figure2@conscience.fr, "
+            "address@email.bzh, email1@sat.op, email2@sat.op"
+        )
+    )
+
     assert email["Subject"] == subject
     assert email["From"] == "monitorfish@test.email"
-    assert email["To"] == (
-        "figure@conscience.fr, figure2@conscience.fr, "
-        "address@email.bzh, email1@sat.op, email2@sat.op"
-    )
+    assert email["To"] == expected_to
     assert email["Cc"] == "cnsp.sip@email.fr"
     assert email["Reply-To"] == "cnsp.sip@email.fr"
     assert email.get_content_type() == "multipart/mixed"
@@ -867,13 +969,13 @@ def test_flow(reset_test_data):
     # Check extract_malfunctions_to_notify results
     assert (
         len(state.result[flow.get_tasks("extract_malfunctions_to_notify")[0]].result)
-        == 3
+        == 5
     )
 
     # Check to_malfunctions_to_notify_list results
     assert (
         len(state.result[flow.get_tasks("to_malfunctions_to_notify_list")[0]].result)
-        == 3
+        == 5
     )
     assert isinstance(
         state.result[flow.get_tasks("to_malfunctions_to_notify_list")[0]].result[0],
@@ -888,10 +990,12 @@ def test_flow(reset_test_data):
 
     # Check create_email results
     created_emails = state.result[flow.get_tasks("create_email")[0]].result
-    assert len(created_emails) == 3
+    assert len(created_emails) == 5
     assert isinstance(created_emails[0], BeaconMalfunctionMessageToSend)
     assert isinstance(created_emails[1], BeaconMalfunctionMessageToSend)
     assert isinstance(created_emails[2], BeaconMalfunctionMessageToSend)
+    assert isinstance(created_emails[3], BeaconMalfunctionMessageToSend)
+    assert created_emails[4] is None
     assert created_emails[0].communication_means is CommunicationMeans.EMAIL
 
     # Check create_sms results
@@ -904,11 +1008,13 @@ def test_flow(reset_test_data):
 
     # Check create_fax results
     created_faxs = state.result[flow.get_tasks("create_fax")[0]].result
-    assert len(created_faxs) == 3
+    assert len(created_faxs) == 5
     assert isinstance(created_faxs[0], BeaconMalfunctionMessageToSend)
     assert created_faxs[0].communication_means is CommunicationMeans.FAX
     assert created_faxs[1] is None
     assert created_faxs[2] is None
+    assert created_faxs[3] is None
+    assert created_faxs[4] is None
 
     # Check mock_send_beacon_malfunction_message results
     assert (
@@ -917,7 +1023,7 @@ def test_flow(reset_test_data):
                 flow.get_tasks("mock_send_beacon_malfunction_message")[0]
             ].result
         )
-        == 6
+        == 7
     )
     assert isinstance(
         state.result[flow.get_tasks("mock_send_beacon_malfunction_message")[0]].result[
@@ -933,7 +1039,7 @@ def test_flow(reset_test_data):
 
     # Check the data loaded into the database
     assert len(initial_notifications) == 2
-    assert len(final_notifications) == 12
+    assert len(final_notifications) == 14
     inserted_notifications = final_notifications[
         ~final_notifications.id.isin(initial_notifications.id)
     ].reset_index(drop=True)
@@ -958,9 +1064,10 @@ def test_flow(reset_test_data):
     ).all()
 
     # Check that malfunctions' `notification_requested` field is reset to nulls.
-    assert len(initial_malfunctions) == 3
+    assert len(initial_malfunctions) == 5
     assert initial_malfunctions.notification_requested.notnull().all()
     assert final_malfunctions.notification_requested.isna().all()
+    assert final_malfunctions.requested_notification_foreign_fmc_code.isna().all()
 
     # Now all notifications have been sent, test flow again to check it runs
     # successfully when there are no notifications to send

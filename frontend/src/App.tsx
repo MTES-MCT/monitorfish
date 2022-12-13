@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
-import styled from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 
 import APIWorker from './api/APIWorker'
 import { BackofficeMode } from './api/BackofficeMode'
@@ -48,6 +48,7 @@ export function App() {
   return (
     <ThemeProvider theme={THEME}>
       <GlobalStyle />
+      <CustomGlobalStyle />
 
       <Router>
         <Switch>
@@ -154,6 +155,12 @@ function TritonFish() {
     </>
   )
 }
+
+const CustomGlobalStyle = createGlobalStyle`
+  html, body {
+    font-size: 13px;
+  }
+`
 
 const Wrapper = styled.div`
   font-size: 13px;

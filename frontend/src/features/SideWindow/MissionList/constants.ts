@@ -64,19 +64,19 @@ export const MISSION_FILTER_OPTIONS: Record<MissionFilterType, Option[]> = {
 export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission> = {
   columns: [
     {
-      fixedWidth: 7,
+      fixedWidth: 8,
       isSortable: true,
       key: 'startDate',
       label: 'Date de début'
     },
     {
-      fixedWidth: 7,
+      fixedWidth: 8,
       isSortable: true,
       key: 'endDate',
       label: 'Date de fin'
     },
     {
-      fixedWidth: 10,
+      fixedWidth: 14,
       isSortable: true,
       key: 'unit',
       label: 'Unité (Administration)'
@@ -105,7 +105,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission> = {
       label: 'Nombre de contrôles'
     },
     {
-      fixedWidth: 5,
+      fixedWidth: 8,
       isSortable: true,
       key: 'status',
       label: 'Statut'
@@ -117,12 +117,12 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission> = {
       label: 'Alerte'
     },
     {
-      fixedWidth: 2,
+      fixedWidth: 3,
       key: 'mapAction',
       label: ''
     },
     {
-      fixedWidth: 2,
+      fixedWidth: 3,
       key: 'editionAction',
       label: ''
     }

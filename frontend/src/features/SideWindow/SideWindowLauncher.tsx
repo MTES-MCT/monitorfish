@@ -2,12 +2,12 @@ import { MutableRefObject, useEffect, useRef } from 'react'
 import { batch } from 'react-redux'
 import { StyleSheetManager } from 'styled-components'
 
+import { SideWindow } from '.'
 import { resetFocusOnPendingAlert } from '../../domain/shared_slices/Alert'
 import { closeSideWindow } from '../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useForceUpdate } from '../../hooks/useForceUpdate'
 import { NewWindow } from './NewWindow'
-import { SideWindow } from './SideWindow'
 
 export function SideWindowLauncher() {
   const dispatch = useAppDispatch()

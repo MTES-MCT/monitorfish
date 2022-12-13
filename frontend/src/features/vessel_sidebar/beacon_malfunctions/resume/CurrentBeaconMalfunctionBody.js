@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { VESSEL_STATUS } from '../../../../domain/entities/beaconMalfunction/constants'
-import { VesselStatusSelectValue } from '../../../side_window/beacon_malfunctions/VesselStatusSelectValue'
+import { VesselStatusSelectValue } from '../../../SideWindow/beacon_malfunctions/VesselStatusSelectValue'
 import { SelectPicker } from 'rsuite'
 import updateBeaconMalfunctionFromKanban from '../../../../domain/use_cases/beaconMalfunction/updateBeaconMalfunctionFromKanban'
 import { useDispatch } from 'react-redux'
@@ -16,7 +16,9 @@ const CurrentBeaconMalfunctionBody = props => {
   } = props
   const dispatch = useDispatch()
   const vesselStatusRef = useRef()
-  const vesselStatus = VESSEL_STATUS.find(vesselStatus => vesselStatus.value === currentBeaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus)
+  const vesselStatus = VESSEL_STATUS.find(
+    vesselStatus => vesselStatus.value === currentBeaconMalfunctionWithDetails?.beaconMalfunction?.vesselStatus
+  )
 
   useEffect(() => {
     if (vesselStatus?.color && currentBeaconMalfunctionWithDetails?.beaconMalfunction?.id) {
@@ -34,30 +36,32 @@ const CurrentBeaconMalfunctionBody = props => {
       vesselStatusLastModificationDateTime: new Date().toISOString()
     }
 
-    dispatch(updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconMalfunction, {
-      vesselStatus: nextBeaconMalfunction.vesselStatus
-    }))
+    dispatch(
+      updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconMalfunction, {
+        vesselStatus: nextBeaconMalfunction.vesselStatus
+      })
+    )
   }
 
-  return currentBeaconMalfunctionWithDetails
-    ? <Body ref={vesselStatusRef}>
+  return currentBeaconMalfunctionWithDetails ? (
+    <Body ref={vesselStatusRef}>
       <SelectPicker
         searchable={false}
         value={vesselStatus?.value}
         onChange={status => updateVesselStatus(currentBeaconMalfunctionWithDetails?.beaconMalfunction, status)}
         data={VESSEL_STATUS}
-        renderValue={(_, item) => <VesselStatusSelectValue item={item}/>}
+        renderValue={(_, item) => <VesselStatusSelectValue item={item} />}
         cleanable={false}
       />
       <LastPosition
         title={currentBeaconMalfunctionWithDetails?.beaconMalfunction?.malfunctionStartDateTime}
         style={lastPositionStyle}
       >
-        <TimeAgo style={timeAgoStyle}/>
+        <TimeAgo style={timeAgoStyle} />
         {getMalfunctionStartDateText(currentBeaconMalfunctionWithDetails?.beaconMalfunction)}
       </LastPosition>
     </Body>
-    : null
+  ) : null
 }
 
 const Body = styled.div`

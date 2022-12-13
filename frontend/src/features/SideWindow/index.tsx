@@ -179,7 +179,13 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
         </Loading>
       )}
       {!isPreloading && (
-        <Content height={window.innerHeight + 50} noMargin={openedSideWindowTab === SideWindowMenuKey.MISSION_FORM}>
+        <Content
+          height={window.innerHeight + 50}
+          noMargin={
+            openedSideWindowTab &&
+            [SideWindowMenuKey.MISSION_FORM, SideWindowMenuKey.MISSION_LIST].includes(openedSideWindowTab)
+          }
+        >
           {openedSideWindowTab === SideWindowMenuKey.ALERTS && (
             <AlertsAndReportings
               baseRef={baseRef}

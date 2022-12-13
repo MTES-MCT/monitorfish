@@ -11,9 +11,10 @@ import './ui/assets/index.css'
 import 'ol/ol.css'
 import './ui/assets/App.css'
 import './ui/shared/ol-override.css'
+import './ui/shared/rsuite-override.css'
 // TODO Declare this path in @mtes-mct/monitor-ui.
 // eslint-disable-next-line import/no-relative-packages
-import '../node_modules/@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
+// import '../node_modules/@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 // import '@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 
 if (!(process.env.NODE_ENV === 'development')) {

@@ -15,6 +15,7 @@ from config import (
     MINIMUM_MINUTES_OF_EMISSION_AT_SEA,
     MONITORFISH_VERSION,
     ROOT_DIRECTORY,
+    TEST_MODE,
 )
 from src.pipeline.flows import (
     admin_areas,
@@ -121,7 +122,7 @@ notify_beacon_malfunctions.flow.schedule = Schedule(
         clocks.CronClock(
             "* * * * *",
             parameter_defaults={
-                "test_mode": True,
+                "test_mode": TEST_MODE,
                 "is_integration": IS_INTEGRATION,
             },
         ),

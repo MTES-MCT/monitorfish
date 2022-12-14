@@ -33,6 +33,15 @@ IS_INTEGRATION = os.getenv("IS_INTEGRATION", "False").lower() in (
     "y",
 )
 
+# Must be set to true to send beacon malfunction notifications to the FMC IT dept, and
+# not to real addressees (fishermen, shipowners and satellite operators)
+TEST_MODE = os.getenv("TEST_MODE", "False").lower() in (
+    "true",
+    "t",
+    "yes",
+    "y",
+)
+
 # Flow execution configuration
 DOCKER_IMAGE = "docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline"
 MONITORFISH_VERSION = os.getenv("MONITORFISH_VERSION")

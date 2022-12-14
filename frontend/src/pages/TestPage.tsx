@@ -71,7 +71,7 @@ export function TestPage() {
 
           <hr />
           <FormikMultiSelect
-            fixedWidth={10}
+            fixedWidth={160}
             label="Multi select"
             name="multiSelect"
             options={[
@@ -83,7 +83,7 @@ export function TestPage() {
           <hr />
           {/* TODO A MultiSelect should be searchable. Fix that in @mtes-mct/monitor-ui. */}
           {/* <FormikMultiSelect
-            fixedWidth={10}
+            fixedWidth={160}
             label="Multi select with search input"
             name="multiSelectWithSearchInput"
             options={new Array(50).fill(undefined).map((_, index) => ({
@@ -94,7 +94,7 @@ export function TestPage() {
           /> */}
           <hr />
           <FormikMultiSelect
-            fixedWidth={10}
+            fixedWidth={160}
             isLabelHidden
             label="Multi select with hidden label"
             name="multiSelectWithHiddenLabel"

@@ -1,4 +1,5 @@
 import io
+from copy import deepcopy
 from datetime import datetime, timedelta
 from email.message import EmailMessage
 from pathlib import Path
@@ -684,11 +685,14 @@ def test_create_fax(malfunction_to_notify_data, cnsp_logo, notification_type):
 
 
 @pytest.mark.parametrize(
-    "expected_notifications,communication_means",
+    "expected_notifications,communication_means,is_integration",
     [
-        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.EMAIL),
-        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.SMS),
-        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.FAX),
+        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.EMAIL, False),
+        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.SMS, False),
+        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.FAX, False),
+        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.EMAIL, True),
+        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.SMS, True),
+        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.FAX, True),
     ],
     indirect=["expected_notifications"],
 )
@@ -703,6 +707,7 @@ def test_send_beacon_malfunction_message(
     email_message,
     expected_notifications,
     communication_means,
+    is_integration,
 ):
 
     m = BeaconMalfunctionToNotify(
@@ -711,6 +716,10 @@ def test_send_beacon_malfunction_message(
         test_mode=False,
     )
     msg = email_message
+
+    # send_fax and send_sms are not mocked, they are expected to fail as a result of
+    # using incorrect server url and port in test data - hence the `success=False` in
+    # expected_notifications.
     mock_send_email.return_value = {
         "email1@sat.op": (550, "User unknown"),
         "email2@sat.op": (None, None),
@@ -722,13 +731,27 @@ def test_send_beacon_malfunction_message(
         communication_means=communication_means,
     )
 
-    notifications = send_beacon_malfunction_message.run(msg_to_send)
+    notifications = send_beacon_malfunction_message.run(
+        msg_to_send, is_integration=is_integration
+    )
+
     expected_notifications_of_communication_means = list(
         filter(
             lambda n: n.communication_means is communication_means,
             expected_notifications,
         )
     )
+
+    def mark_as_success(notification: BeaconMalfunctionNotification):
+        notification = deepcopy(notification)
+        notification.success = True
+        notification.error_message = None
+        return notification
+
+    if is_integration:
+        expected_notifications_of_communication_means = list(
+            map(mark_as_success, expected_notifications_of_communication_means)
+        )
 
     assert notifications == expected_notifications_of_communication_means
 
@@ -799,6 +822,7 @@ def test_flow(reset_test_data):
         mock_send_sms,
         mock_send_fax,
         msg_to_send: BeaconMalfunctionMessageToSend,
+        is_integration: bool,
     ):
         if msg_to_send.beacon_malfunction_to_notify.beacon_malfunction_id == 2:
             raise ValueError(
@@ -815,7 +839,7 @@ def test_flow(reset_test_data):
         mock_send_sms.return_value = {}
         mock_send_fax.return_value = {}
 
-        return send_beacon_malfunction_message.run(msg_to_send)
+        return send_beacon_malfunction_message.run(msg_to_send, is_integration)
 
     flow.replace(
         flow.get_tasks("send_beacon_malfunction_message")[0],
@@ -827,7 +851,7 @@ def test_flow(reset_test_data):
 
     # Test flow run
     flow.schedule = None
-    state = flow.run(test_mode=False)
+    state = flow.run(test_mode=False, is_integration=False)
 
     final_notifications = read_query(
         "monitorfish_remote",
@@ -940,7 +964,7 @@ def test_flow(reset_test_data):
     # Now all notifications have been sent, test flow again to check it runs
     # successfully when there are no notifications to send
     flow.schedule = None
-    state = flow.run(test_mode=False)
+    state = flow.run(test_mode=False, is_integration=False)
     assert state.is_successful()
     assert (
         len(state.result[flow.get_tasks("extract_malfunctions_to_notify")[0]].result)

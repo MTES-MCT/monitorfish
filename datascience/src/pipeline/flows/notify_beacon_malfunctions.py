@@ -308,7 +308,7 @@ def create_fax(
 
 @task(checkpoint=False)
 def send_beacon_malfunction_message(
-    msg_to_send: BeaconMalfunctionMessageToSend,
+    msg_to_send: BeaconMalfunctionMessageToSend, is_integration: bool
 ) -> List[BeaconMalfunctionNotification]:
     """
     Sends input email using the contents of `From` header as sender and `To`, `Cc`
@@ -316,6 +316,7 @@ def send_beacon_malfunction_message(
 
     Args:
         msg (EmailMessage): email message to send
+        is_integration (bool): if ``False``, the message is not actually sent
 
     Returns:
         dict: Dict of errors returned by the server for each recipient that was
@@ -338,10 +339,22 @@ def send_beacon_malfunction_message(
 
     try:
         try:
-            logger.info(
-                f"Sending {m.notification_type} by {communication_means.value.lower()}."
-            )
-            send_errors = send(msg)
+            if is_integration:
+                logger.info(
+                    (
+                        f"(Mock) Sending {m.notification_type} by "
+                        f"{communication_means.value.lower()}."
+                    )
+                )
+                send_errors = {}
+            else:
+                logger.info(
+                    (
+                        f"Sending {m.notification_type} by "
+                        f"{communication_means.value.lower()}."
+                    )
+                )
+                send_errors = send(msg)
         except (SMTPHeloError, SMTPDataError):
             # Retry
             logger.warning("Message not sent, retrying...")
@@ -405,7 +418,7 @@ def send_beacon_malfunction_message(
             for addr in addressees
         }
         logger.error(str(send_errors))
-    except:
+    except Exception:
         send_errors = {
             addr.address_or_number: (None, "Unknown error.") for addr in addressees
         }
@@ -490,6 +503,7 @@ with Flow("Notify malfunctions", executor=LocalDaskExecutor()) as flow:
     with case(flow_not_running, True):
 
         test_mode = Parameter("test_mode")
+        is_integration = Parameter("is_integration")
 
         beacon_malfunctions_table = get_table(table_name="beacon_malfunctions")
         templates = get_templates()
@@ -527,7 +541,9 @@ with Flow("Notify malfunctions", executor=LocalDaskExecutor()) as flow:
 
         messages_to_send = flatten([flatten(email), flatten(sms), flatten(fax)])
 
-        notifications = send_beacon_malfunction_message.map(messages_to_send)
+        notifications = send_beacon_malfunction_message.map(
+            messages_to_send, is_integration=unmapped(is_integration)
+        )
         notifications = filter_results(notifications)
         load_notifications(flatten(notifications))
 

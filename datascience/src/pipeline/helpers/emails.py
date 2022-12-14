@@ -29,6 +29,7 @@ def create_html_email(
     bcc: Union[str, List[str]] = None,
     images: List[Path] = None,
     attachments: dict = None,
+    reply_to: str = None,
 ) -> EmailMessage:
     """
     Creates a `email.EmailMessage` with the defined parameters.
@@ -60,6 +61,8 @@ def create_html_email(
         attachments (dict, optional): `dict` of attachments to add to the email.
           Consists of {filename : bytes} value pairs. Defaults
           to None.
+        reply_to (str, optional): if given, added as `Reply-To` header. Defaults to
+          None.
 
     Returns:
         EmailMessage
@@ -82,6 +85,9 @@ def create_html_email(
         if isinstance(bcc, list):
             bcc = ", ".join(bcc)
         msg["Bcc"] = bcc
+
+    if reply_to:
+        msg["Reply-To"] = reply_to
 
     msg.set_content(html, subtype="html")
 

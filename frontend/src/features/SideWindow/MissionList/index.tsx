@@ -63,21 +63,23 @@ export function MissionList() {
               <TableBody>
                 {filteredMissions.map(mission => (
                   <TableBodyRow key={mission.id} data-cy="side-window-current-reportings">
-                    <TableBodyCell $fixedWidth={8}>{dayjs(mission.startDate).format('D MMM YY, HH:MM')}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={8}>{dayjs(mission.endDate).format('D MMM YY, HH:MM')}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={14}>
+                    <TableBodyCell $fixedWidth={112}>
+                      {dayjs(mission.startDate).format('D MMM YY, HH:MM')}
+                    </TableBodyCell>
+                    <TableBodyCell $fixedWidth={112}>{dayjs(mission.endDate).format('D MMM YY, HH:MM')}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={160}>
                       {mission.resourceUnits?.map(
                         resourceUnit => `${resourceUnit.unit} (${resourceUnit.administration || '-'})`
                       )}
                     </TableBodyCell>
-                    <TableBodyCell $fixedWidth={5}>{mission.type}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={5}>{mission.seaFront}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={10}>{mission.themes?.join(', ')}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={2}>{mission.inspectionsCount}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={8}>{mission.status}</TableBodyCell>
-                    <TableBodyCell $fixedWidth={10}>{mission.alertType}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{mission.type}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{mission.seaFront}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={160}>{mission.themes?.join(', ')}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={32}>{mission.inspectionsCount}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={80}>{mission.status}</TableBodyCell>
+                    <TableBodyCell $fixedWidth={32}>{mission.alertType}</TableBodyCell>
                     <TableBodyCell
-                      $fixedWidth={3}
+                      $fixedWidth={32}
                       style={{
                         padding: '8px 12px',
                         textAlign: 'center'
@@ -92,7 +94,7 @@ export function MissionList() {
                       </button>
                     </TableBodyCell>
                     <TableBodyCell
-                      $fixedWidth={3}
+                      $fixedWidth={32}
                       style={{
                         padding: '8px 12px',
                         textAlign: 'center'

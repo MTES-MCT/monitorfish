@@ -52,7 +52,7 @@ export function Item({ action, isNew = false, onDelete }: ItemProps) {
       </DateLabel>
       <InnerWrapper>
         <ActionLabel>
-          <Icon.FleetSegment color={THEME.color.charcoal} size={1} /> {actionLabel}
+          <Icon.FleetSegment color={THEME.color.charcoal} /> {actionLabel}
         </ActionLabel>
         <IconButton accent={Accent.TERTIARY} color={THEME.color.slateGray} Icon={Icon.Duplicate} size={Size.NORMAL} />
         <IconButton

@@ -6,7 +6,7 @@ import { createRef, useCallback, useEffect, useMemo, useRef, useState } from 're
 import styled from 'styled-components'
 
 import { getCoordinates } from '../../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map'
+import { OPENLAYERS_PROJECTION } from '../../../domain/entities/map/constants'
 import { useAppSelector } from '../../../hooks/useAppSelector'
 import { useMoveOverlayWhenDragging } from '../../../hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '../../../hooks/useMoveOverlayWhenZooming'

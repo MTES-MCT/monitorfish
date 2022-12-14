@@ -155,7 +155,7 @@
   "lint-staged": {
     "*.{json,md,yaml,yml}": "prettier --write",
     "*.{ts,tsx}": [
-      "eslint",
+      "eslint --fix",
       "bash -c 'npm run test:type:partial'"
     ]
   },

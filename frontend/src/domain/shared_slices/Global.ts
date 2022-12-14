@@ -5,7 +5,7 @@ import { UserType } from '../entities/beaconMalfunction/constants'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel/vessel'
 
 import type { SideWindowMenuKey } from '../../features/SideWindow/constants'
-import type { MapToolType } from '../entities/map'
+import type { MapToolType } from '../entities/map/constants'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 const userTypeLocalStorageKey = 'userType'
@@ -23,7 +23,6 @@ export type GlobalState = {
   lastSearchedVessels: any[]
   leftBoxOpened: any
   mapToolOpened: MapToolType | undefined
-  // TODO Make that an enum.
   openedSideWindowTab: SideWindowMenuKey | undefined
   // TODO Rename this prop.
   // TODO Investigate that. Should be a defined boolean.

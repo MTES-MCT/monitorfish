@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { MapToolType } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
@@ -64,40 +64,43 @@ export function VesselFiltersMapButton() {
 const NewFilterAdded = styled.div<{
   hasOneFilterAdded: boolean
 }>`
-  position: absolute;
-  display: inline-block;
-  background-color: ${p => p.theme.color.gainsboro};
-  top: 110px;
-  right: -150px;
-  opacity: 0;
-  border-radius: 2px;
-  width: 86px;
-  height: 18px;
-  padding: 11px 12px;
-  color: ${COLORS.gunMetal};
-  font-size: 13px;
-  z-index: 9999;
-
   animation: ${p => (p.hasOneFilterAdded ? 'new-filter-added' : '')} 4.5s ease;
+  background-color: ${p => p.theme.color.gainsboro};
+  border-radius: 2px;
+  color: ${COLORS.gunMetal};
+  display: inline-block;
+  font-size: 13px;
+  height: 18px;
+  opacity: 0;
+  padding: 11px 12px;
+  position: absolute;
+  right: -150px;
+  top: 110px;
+  width: 86px;
+  z-index: 9999;
 
   @keyframes new-filter-added {
     0% {
-      right: -150px;
       opacity: 0;
+      right: -150px;
     }
+
     25% {
       opacity: 0;
     }
+
     50% {
-      right: 52px;
       opacity: 1;
+      right: 52px;
     }
+
     75% {
       opacity: 0;
     }
+
     100% {
-      right: -150px;
       opacity: 0;
+      right: -150px;
     }
   }
 `
@@ -112,10 +115,11 @@ const VesselFiltersButton = styled(MapToolButton)``
 const FilterIcon = styled(FilterSVG)<{
   $isRightMenuShrinked: boolean
 }>`
-  width: 25px;
   height: 25px;
   opacity: ${p => (p.$isRightMenuShrinked ? '0' : '1')};
   transition: all 0.2s;
+  width: 25px;
+
   path {
     fill: ${p => p.theme.color.gainsboro};
   }

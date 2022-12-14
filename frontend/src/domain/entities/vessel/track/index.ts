@@ -9,7 +9,7 @@ import { getArrowStyle, getCircleStyle, getLineStyle } from '../../../../layers/
 import { calculatePointsDistance, calculateSplitPointCoordinates } from '../../../../utils'
 import { dayjs } from '../../../../utils/dayjs'
 import { Layer } from '../../layers/constants'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../map/constants'
 import { TRACK_TYPE_RECORD } from './constants'
 
 import type {

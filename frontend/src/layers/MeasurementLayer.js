@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
-import { MeasurementType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
+import { MeasurementType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map/constants'
 import Draw from 'ol/interaction/Draw'
 import { unByKey } from 'ol/Observable'
 import LineString from 'ol/geom/LineString'

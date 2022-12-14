@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
-import { MapToolType } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map/constants'
 import {
   setHideVesselsAtPort,
   setVesselsLastPositionVisibility,
@@ -84,60 +84,60 @@ const EstimatedPosition = styled(EstimatedPositionSVG)`
 `
 
 const LastPositionLegend = styled.div`
-  margin: 5px 5px 15px 25px;
-  font-size: 13px;
   color: ${COLORS.slateGray};
+  font-size: 13px;
+  margin: 5px 5px 15px 25px;
   text-align: left;
 `
 
 const VesselHidden = styled.span`
   background: #cccfd6;
   border: unset;
+  display: inline-block;
+  height: 3px;
+  margin-bottom: 1px;
   margin-right: 5px;
   width: 8px;
-  height: 3px;
-  display: inline-block;
-  margin-bottom: 1px;
 `
 
 const VesselAlmostHidden = styled.span`
   background: #9095a2;
   border: unset;
-  margin-right: 5px;
-  margin-left: 25px;
-  width: 8px;
-  height: 3px;
   display: inline-block;
+  height: 3px;
   margin-bottom: 1px;
+  margin-left: 25px;
+  margin-right: 5px;
+  width: 8px;
 `
 
 const VesselShowed = styled.span`
   background: ${COLORS.charcoal};
   border: unset;
-  margin-right: 5px;
-  margin-left: 25px;
-  width: 8px;
-  height: 3px;
   display: inline-block;
+  height: 3px;
   margin-bottom: 1px;
+  margin-left: 25px;
+  margin-right: 5px;
+  width: 8px;
 `
 
 const LastPositionInfo = styled.div`
+  color: ${COLORS.gunMetal};
   font-size: 10px;
   margin: 15px;
-  color: ${COLORS.gunMetal};
 `
 
 const Header = styled.div<{
   isFirst: boolean
 }>`
   background: ${COLORS.charcoal};
-  color: ${COLORS.gainsboro};
-  padding: 9px 0 7px 15px;
-  font-size: 16px;
-  text-align: left;
   border-top-left-radius: ${p => (p.isFirst ? '2px' : '0')};
   border-top-right-radius: ${p => (p.isFirst ? '2px' : '0')};
+  color: ${COLORS.gainsboro};
+  font-size: 16px;
+  padding: 9px 0 7px 15px;
+  text-align: left;
 `
 
 const Wrapper = styled(MapToolBox)<{
@@ -145,6 +145,6 @@ const Wrapper = styled(MapToolBox)<{
   isHidden?: boolean
   isOpen: boolean
 }>`
-  width: 406px;
   top: 152px;
+  width: 406px;
 `

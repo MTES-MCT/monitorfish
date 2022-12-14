@@ -1,44 +1,70 @@
 import { Accent, Button, Field, Icon, IconButton, Label } from '@mtes-mct/monitor-ui'
-import { useField } from 'formik'
+import { boundingExtent } from 'ol/extent'
+import { transformExtent } from 'ol/proj'
 import { remove } from 'ramda'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
+
+import {
+  InteractionListener,
+  OLGeometryType,
+  OPENLAYERS_PROJECTION,
+  WSG84_PROJECTION
+} from '../../../domain/entities/map/constants'
+import { fitToExtent } from '../../../domain/shared_slices/Map'
+import { addMissionZone } from '../../../domain/use_cases/missions/addMissionZone'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
+
+import type { GeoJSON } from '../../../domain/types/GeoJSON'
+import type { Coordinate } from 'ol/coordinate'
 
 export type MultiZonePickerProps = {
   addButtonLabel: string
-  defaultZoneLabel: string
-  name: string
 }
-export function MultiZonePicker({ addButtonLabel, defaultZoneLabel, name }: MultiZonePickerProps) {
-  const [input, , helpers] = useField<
-    | Array<{
-        label: string
-      }>
-    | undefined
-  >(name)
+export function MultiZonePicker({ addButtonLabel }: MultiZonePickerProps) {
+  const dispatch = useAppDispatch()
+  const { geometry, listener } = useAppSelector(state => state.draw)
+  const [value, setValue] = useState<GeoJSON.MultiPolygon | undefined>()
 
-  const currentZones = useMemo(() => input.value || [], [input.value])
+  const polygons = useMemo(() => {
+    if (!value) {
+      return []
+    }
 
-  const { setValue } = helpers
+    return value.coordinates || []
+  }, [value])
+
+  useEffect(() => {
+    if (geometry?.type === OLGeometryType.MULTIPOLYGON && listener === InteractionListener.MISSION_ZONE) {
+      setValue(geometry)
+    }
+  }, [geometry, listener, setValue])
+
+  const handleCenterOnMap = (coordinates: Coordinate[][]) => {
+    const firstRing = coordinates[0]
+    if (!firstRing) {
+      return
+    }
+
+    const extent = transformExtent(boundingExtent(firstRing), WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+    dispatch(fitToExtent(extent))
+  }
 
   const addZone = useCallback(() => {
-    const nextZones = [
-      ...currentZones,
-      {
-        label: defaultZoneLabel
-      }
-    ]
-
-    setValue(nextZones)
-  }, [currentZones, defaultZoneLabel, setValue])
+    dispatch(addMissionZone(value))
+  }, [dispatch, value])
 
   const deleteZone = useCallback(
     (index: number) => {
-      const nextZones = remove(index, 1, currentZones)
+      if (!value) {
+        return
+      }
 
-      setValue(nextZones)
+      const nextCoordinates = remove(index, 1, value.coordinates)
+      setValue({ ...value, coordinates: nextCoordinates })
     },
-    [currentZones, setValue]
+    [value, setValue]
   )
 
   return (
@@ -49,20 +75,21 @@ export function MultiZonePicker({ addButtonLabel, defaultZoneLabel, name }: Mult
       </Button>
 
       <>
-        {currentZones.map((currentZone, index) => (
+        {polygons.map((polygonCoordinates, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <Row key={`zone-${index}`}>
             <ZoneWrapper>
-              {currentZone.label}
-
+              Polygone dessiné {index + 1}
               {/* TODO Add `Accent.LINK` accent in @mtes-mct/monitor-ui and use it here. */}
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a href="#">
+              {/* eslint-disable jsx-a11y/anchor-is-valid */}
+              {/* eslint-disable jsx-a11y/click-events-have-key-events */}
+              {/* eslint-disable jsx-a11y/no-static-element-interactions */}
+              <Center onClick={() => handleCenterOnMap(polygonCoordinates as Coordinate[][])}>
                 <Icon.SelectRectangle /> Centrer sur la carte
-              </a>
+              </Center>
             </ZoneWrapper>
 
-            <IconButton accent={Accent.SECONDARY} Icon={Icon.Edit} />
+            <IconButton accent={Accent.SECONDARY} Icon={Icon.Edit} onClick={addZone} />
             <IconButton
               accent={Accent.SECONDARY}
               aria-label="Supprimer cette zone"
@@ -75,6 +102,10 @@ export function MultiZonePicker({ addButtonLabel, defaultZoneLabel, name }: Mult
     </Field>
   )
 }
+
+const Center = styled.a`
+  cursor: pointer;
+`
 
 const Row = styled.div`
   align-items: center;

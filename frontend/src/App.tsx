@@ -13,6 +13,7 @@ import { ErrorToastNotification } from './features/commonComponents/ErrorToastNo
 import FavoriteVessels from './features/favorite_vessels/FavoriteVessels'
 import Healthcheck from './features/healthcheck/Healthcheck'
 import LayersSidebar from './features/layers/LayersSidebar'
+import { DrawLayerModal } from './features/map/draw/DrawModal'
 import Map from './features/map/Map'
 import { InterestPointMapButton } from './features/map/tools/interest_points/InterestPointMapButton'
 import { MeasurementMapButton } from './features/map/tools/measurements/MeasurementMapButton'
@@ -87,6 +88,16 @@ export function App() {
 }
 
 function HomePage() {
+  const {
+    isDrawLayerModalDisplayed,
+    isInterestPointMapButtonDisplayed,
+    isMeasurementMapButtonDisplayed,
+    isVesselFiltersMapButtonDisplayed,
+    isVesselLabelsMapButtonDisplayed,
+    isVesselListDisplayed,
+    isVesselSearchDisplayed,
+    isVesselVisibilityMapButtonDisplayed
+  } = useAppSelector(state => state.displayedComponent)
   const isVesselSidebarOpen = useAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const openedSideWindowTab = useAppSelector(state => state.global.openedSideWindowTab)
   const ref = useRef() as MutableRefObject<HTMLDivElement>
@@ -104,22 +115,23 @@ function HomePage() {
           <Wrapper>
             <Map />
             <LayersSidebar />
-            <VesselsSearch />
+            {isVesselSearchDisplayed && <VesselsSearch />}
             <AlertsMapButton />
             <BeaconMalfunctionsMapButton />
             <RightMenuOnHoverArea />
-            <VesselList namespace="homepage" />
-            <VesselFiltersMapButton />
-            <VesselVisibilityMapButton />
+            {isVesselListDisplayed && <VesselList namespace="homepage" />}
+            {isVesselFiltersMapButtonDisplayed && <VesselFiltersMapButton />}
+            {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
             <FavoriteVessels />
             {isVesselSidebarOpen && <VesselSidebar />}
             <UpdatingVesselLoader />
-            <MeasurementMapButton />
-            <InterestPointMapButton />
-            <VesselLabelsMapButton />
+            {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
+            {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
+            {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
             <APIWorker />
             <ErrorToastNotification />
             {openedSideWindowTab && <SideWindowLauncher />}
+            {isDrawLayerModalDisplayed && <DrawLayerModal />}
           </Wrapper>
         </Route>
       </Switch>

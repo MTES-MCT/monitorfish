@@ -1,5 +1,5 @@
 import GeoJSON from 'ol/format/GeoJSON'
-import { OPENLAYERS_PROJECTION } from '../../entities/map'
+import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
 import { updateInterestPointKeyBeingDrawed } from '../../shared_slices/InterestPoint'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'

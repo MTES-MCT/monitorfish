@@ -4,7 +4,7 @@ import { batch, useDispatch, useSelector } from 'react-redux'
 import { Modal } from 'rsuite'
 
 import { LayerType } from '../../domain/entities/layers/constants'
-import { InteractionType } from '../../domain/entities/map'
+import { InteractionListener, InteractionType } from '../../domain/entities/map/constants'
 import { VesselLocation } from '../../domain/entities/vessel/vessel'
 import { animateToExtent, setInteraction } from '../../domain/shared_slices/Map'
 import { removeZoneSelected, resetZonesSelected, setZonesSelected } from './VesselList.slice'
@@ -209,7 +209,7 @@ const VesselList = ({ namespace }) => {
       dispatch(closeVesselListModal())
       dispatch(setInteraction({
         type: InteractionType.SQUARE,
-        listener: LayerType.VESSEL
+        listener: InteractionListener.VESSELS_LIST
       }))
       dispatch(setBlockVesselsUpdate(true))
     })
@@ -220,7 +220,7 @@ const VesselList = ({ namespace }) => {
       dispatch(closeVesselListModal())
       dispatch(setInteraction({
         type: InteractionType.POLYGON,
-        listener: LayerType.VESSEL
+        listener: InteractionListener.VESSELS_LIST
       }))
       dispatch(setBlockVesselsUpdate(true))
     })

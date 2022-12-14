@@ -4,7 +4,7 @@ import { ReactComponent as NoVesselSVG } from '../icons/Picto_photo_navire_manqu
 
 import { getCoordinates } from '../../coordinates'
 import { getDateTime, timeagoFrenchLocale } from '../../utils'
-import { WSG84_PROJECTION } from '../../domain/entities/map'
+import { WSG84_PROJECTION } from '../../domain/entities/map/constants'
 import { COLORS } from '../../constants/constants'
 import * as timeago from 'timeago.js'
 import { ReactComponent as InfoSVG } from '../icons/Information.svg'

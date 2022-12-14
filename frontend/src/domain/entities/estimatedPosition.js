@@ -1,5 +1,5 @@
 import { transform } from 'ol/proj'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './map/constants'
 import Feature from 'ol/Feature'
 import { Layer } from './layers/constants'
 import LineString from 'ol/geom/LineString'

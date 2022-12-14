@@ -3,7 +3,7 @@ export type CRS = {
   type: string
 }
 
-export type GeoJSON = {
+export type WFSGetFeature = {
   bbox: number[]
   crs: CRS
   features: Object[]
@@ -12,8 +12,4 @@ export type GeoJSON = {
   timeStamp: string
   totalFeatures: number
   type: string
-}
-
-export type GeoJSONGeometry = {
-  geometry: { coordinates: Object; type: string }
 }

@@ -11,7 +11,7 @@ import {
   showFilter
 } from '../../../../domain/shared_slices/Filter'
 import FilterParameters from './FilterParameters'
-import { MapToolType } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map/constants'
 import { MapToolBox } from '../MapToolBox'
 
 const Filters = () => {

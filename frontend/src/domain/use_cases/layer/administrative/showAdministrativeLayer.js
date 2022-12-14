@@ -6,7 +6,7 @@ import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
 
 import layer from '../../../shared_slices/Layer'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../entities/map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../entities/map/constants'
 import { getAdministrativeZoneFromAPI } from '../../../../api/geoserver'
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'

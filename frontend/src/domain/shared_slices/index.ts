@@ -5,6 +5,8 @@ import vesselList from '../../features/vessel_list/VesselList.slice'
 import { alertReducer } from './Alert'
 import { beaconMalfunctionReducer } from './BeaconMalfunction'
 import { controlReducer } from './Control'
+import { displayedComponentReducer } from './DisplayedComponent'
+import { drawReducer } from './Draw'
 import { favoriteVesselReducer } from './FavoriteVessel'
 import { filterReducer } from './Filter'
 import { fishingActivitiesReducer } from './FishingActivities'
@@ -35,6 +37,8 @@ const homeReducers = {
   beaconMalfunction: beaconMalfunctionReducer,
   //  TODO Pass that to singular.
   controls: controlReducer,
+  displayedComponent: displayedComponentReducer,
+  draw: drawReducer,
   favoriteVessel: favoriteVesselReducer,
   filter: filterReducer,
   fishingActivities: fishingActivitiesReducer,

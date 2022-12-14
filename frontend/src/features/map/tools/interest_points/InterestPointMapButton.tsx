@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { MapToolType } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import {
   deleteInterestPointBeingDrawed,
@@ -70,13 +70,15 @@ const InterestPointButton = styled(MapToolButton)``
 const InterestPointIcon = styled(InterestPointSVG)<{
   $isRightMenuShrinked: boolean
 }>`
-  width: 25px;
   height: 25px;
   opacity: ${p => (p.$isRightMenuShrinked ? '0' : '1')};
   transition: all 0.2s;
+  width: 25px;
+
   rect:first-of-type {
     fill: ${p => p.theme.color.gainsboro};
   }
+
   path:first-of-type {
     fill: ${p => p.theme.color.gainsboro};
   }

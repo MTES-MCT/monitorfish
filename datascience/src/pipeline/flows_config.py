@@ -7,6 +7,7 @@ from prefect.storage.local import Local
 from config import (
     DOCKER_IMAGE,
     FLOWS_LOCATION,
+    IS_INTEGRATION,
     LOGBOOK_FILES_GID,
     MAX_FISHING_SPEED_THRESHOLD,
     MIN_FISHING_SPEED_THRESHOLD,
@@ -121,6 +122,7 @@ notify_beacon_malfunctions.flow.schedule = Schedule(
             "* * * * *",
             parameter_defaults={
                 "test_mode": True,
+                "is_integration": IS_INTEGRATION,
             },
         ),
     ]

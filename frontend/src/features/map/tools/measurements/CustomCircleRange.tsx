@@ -9,7 +9,7 @@ import {
   MeasurementType,
   OPENLAYERS_PROJECTION,
   WSG84_PROJECTION
-} from '../../../../domain/entities/map'
+} from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import {
   resetCircleMeasurementInDrawing,
@@ -133,11 +133,11 @@ export function CustomCircleRange() {
 
 const CancelButton = styled.button`
   border: 1px solid ${COLORS.charcoal};
-  width: 130px;
-  padding: 5px 12px;
-  margin: 15px 0 0 15px;
-  font-size: 13px;
   color: ${COLORS.gunMetal};
+  font-size: 13px;
+  margin: 15px 0 0 15px;
+  padding: 5px 12px;
+  width: 130px;
 
   :disabled {
     border: 1px solid ${COLORS.lightGray};
@@ -147,11 +147,11 @@ const CancelButton = styled.button`
 
 const OkButton = styled.button`
   background: ${COLORS.charcoal};
-  width: 130px;
-  padding: 5px 12px;
-  margin: 15px 0 0;
-  font-size: 13px;
   color: ${COLORS.gainsboro};
+  font-size: 13px;
+  margin: 15px 0 0;
+  padding: 5px 12px;
+  width: 130px;
 
   :hover,
   :focus {
@@ -160,19 +160,19 @@ const OkButton = styled.button`
 `
 
 const Body = styled.div`
+  color: ${COLORS.slateGray};
+  font-size: 13px;
   margin: 10px 15px;
   text-align: left;
-  font-size: 13px;
-  color: ${COLORS.slateGray};
 
   p {
-    margin: 0;
     font-size: 13px;
+    margin: 0;
   }
 
   p:nth-of-type(2) {
-    margin-top: 15px;
     font-size: 13px;
+    margin-top: 15px;
   }
 
   span {
@@ -180,26 +180,26 @@ const Body = styled.div`
   }
 
   input {
-    color: ${p => p.theme.color.gunMetal};
-    margin-top: 7px;
     background: ${p => p.theme.color.gainsboro};
     border: none;
+    color: ${p => p.theme.color.gunMetal};
     height: 27px;
+    margin-top: 7px;
     padding-left: 8px;
   }
 `
 
 const Header = styled.div`
   background: ${COLORS.charcoal};
-  color: ${COLORS.gainsboro};
-  padding: 9px 0 7px 15px;
-  font-size: 16px;
-  text-align: left;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
+  color: ${COLORS.gainsboro};
+  font-size: 16px;
+  padding: 9px 0 7px 15px;
+  text-align: left;
 `
 
 const Wrapper = styled(MapToolBox)`
-  width: 306px;
   top: 249px;
+  width: 306px;
 `

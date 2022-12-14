@@ -1,12 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
 import { BaseLayers } from '../entities/layers/constants'
-import { CoordinatesFormat } from '../entities/map'
+import { CoordinatesFormat } from '../entities/map/constants'
 import { vesselLabel } from '../entities/vessel/label/types'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 
 import type { LastPositionVisibility } from '../types/map'
+import type { Extent } from 'ol/extent'
 
 const vesselLabelsShowedOnMapLocalStorageKey = 'vesselLabelsShowedOnMap'
 const vesselsLastPositionVisibilityLocalStorageKey = 'vesselsLastPositionVisibility'
@@ -29,6 +30,7 @@ export type MapState = {
   defaultVesselTrackDepth: VesselTrackDepth
   doNotAnimate: boolean
   extent: null
+  fitToExtent: Extent | undefined
   hideVesselsAtPort: boolean
   interaction: null
   riskFactorShowedOnMap: boolean
@@ -51,6 +53,7 @@ const INITIAL_STATE: MapState = {
   defaultVesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
   doNotAnimate: false,
   extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
+  fitToExtent: undefined,
   hideVesselsAtPort: getLocalStorageState(true, hideVesselsAtPortLocalStorageKey),
   interaction: null,
   riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
@@ -104,6 +107,9 @@ const mapSlice = createSlice({
     doNotAnimate(state, action) {
       state.doNotAnimate = action.payload
     },
+    fitToExtent(state, action: PayloadAction<Extent>) {
+      state.fitToExtent = action.payload
+    },
     resetAnimateToCoordinates(state) {
       state.animateToCoordinates = null
     },
@@ -112,6 +118,9 @@ const mapSlice = createSlice({
     },
     resetAnimateToRegulatoryLayer(state) {
       state.animateToRegulatoryLayer = null
+    },
+    resetFitToExtent(state) {
+      state.fitToExtent = undefined
     },
     /**
      * Reset the interaction with the OpenLayers map
@@ -205,9 +214,11 @@ export const {
   animateToExtent,
   animateToRegulatoryLayer,
   doNotAnimate,
+  fitToExtent,
   resetAnimateToCoordinates,
   resetAnimateToExtent,
   resetAnimateToRegulatoryLayer,
+  resetFitToExtent,
   resetInteraction,
   selectBaseLayer,
   setCoordinatesFormat,

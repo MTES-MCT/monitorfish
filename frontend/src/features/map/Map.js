@@ -6,6 +6,7 @@ import { VesselsTracksLayerMemoized } from '../../layers/VesselsTracksLayer'
 import VesselsLayer from '../../layers/VesselsLayer'
 import FilterLayer from '../../layers/FilterLayer'
 import DrawLayer from '../../layers/DrawLayer'
+import { DrawMissionsLayer } from '../../layers/DrawMissionsLayer'
 import { BaseLayer } from '../../layers/BaseLayer'
 import { RegulatoryLayers } from '../../layers/RegulatoryLayers'
 import { AdministrativeLayers } from '../../layers/AdministrativeLayers'
@@ -16,7 +17,7 @@ import MapHistory from './MapHistory'
 import VesselCardOverlay from './overlays/VesselCardOverlay'
 import VesselTrackCardOverlay from './overlays/VesselTrackCardOverlay'
 import TrackTypeCardOverlay from './overlays/TrackTypeCardOverlay'
-import MapVesselClickAndAnimationHandler from './MapVesselClickAndAnimationHandler'
+import { MapVesselClickAndAnimationHandler } from './MapVesselClickAndAnimationHandler'
 import VesselEstimatedPositionLayer from '../../layers/VesselEstimatedPositionLayer'
 import VesselSelectedLayer from '../../layers/VesselSelectedLayer'
 import VesselEstimatedPositionCardOverlay from './overlays/VesselEstimatedPositionCardOverlay'
@@ -27,8 +28,10 @@ import VesselAlertLayer from '../../layers/VesselAlertLayer'
 import VesselBeaconMalfunctionLayer from '../../layers/VesselBeaconMalfunctionLayer'
 import VesselAlertAndBeaconMalfunctionLayer from '../../layers/VesselAlertAndBeaconMalfunctionLayer'
 import VesselInfractionSuspicionLayer from '../../layers/VesselInfractionSuspicionLayer'
+import { useSelector } from 'react-redux'
 
 const Map = () => {
+  const isDrawLayerModalDisplayed = useSelector(state => state.displayedComponent.isDrawLayerModalDisplayed)
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [currentFeature, setCurrentFeature] = useState(null)
@@ -76,6 +79,7 @@ const Map = () => {
       <VesselsTracksLayerMemoized/>
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent}/>
       <DrawLayer/>
+      {isDrawLayerModalDisplayed && <DrawMissionsLayer/>}
       <VesselEstimatedPositionLayer/>
       <VesselSelectedLayer/>
       <VesselAlertLayer/>

@@ -95,11 +95,7 @@ export function MainForm({ onTypeChange }: MainFormProps) {
 
           <MultiUnitPicker name="units" />
 
-          <MultiZonePicker
-            addButtonLabel="Ajouter une zone de mission"
-            defaultZoneLabel="Polygone dessiné"
-            name="zones"
-          />
+          <MultiZonePicker addButtonLabel="Ajouter une zone de mission" />
 
           <FormikMultiRadio
             isInline

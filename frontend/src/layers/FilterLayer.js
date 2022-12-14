@@ -5,7 +5,7 @@ import GeoJSON from 'ol/format/GeoJSON'
 import { Vector } from 'ol/layer'
 import { Stroke, Style } from 'ol/style'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map/constants'
 import { Layer } from '../domain/entities/layers/constants'
 import { COLORS } from '../constants/constants'
 

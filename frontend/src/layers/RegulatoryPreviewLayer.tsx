@@ -4,7 +4,7 @@ import VectorSource from 'ol/source/Vector'
 import React, { MutableRefObject, useCallback, useEffect, useRef } from 'react'
 
 import { Layer } from '../domain/entities/layers/constants'
-import { OPENLAYERS_PROJECTION } from '../domain/entities/map'
+import { OPENLAYERS_PROJECTION } from '../domain/entities/map/constants'
 import zoomInLayer from '../domain/use_cases/layer/zoomInLayer'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'

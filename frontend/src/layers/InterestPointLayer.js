@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import VectorSource from 'ol/source/Vector'
-import { MapToolType, OPENLAYERS_PROJECTION } from '../domain/entities/map'
+import { MapToolType, OPENLAYERS_PROJECTION } from '../domain/entities/map/constants'
 import Draw from 'ol/interaction/Draw'
 import VectorLayer from 'ol/layer/Vector'
 import { getInterestPointStyle, POIStyle } from './styles/interestPoint.style'

@@ -125,6 +125,7 @@ const VesselsLayer = ({ map }) => {
 
         return feature
       })
+      console.log(features)
 
       getVesselsVectorSource()?.clear(true)
       getVesselsVectorSource()?.addFeatures(features)

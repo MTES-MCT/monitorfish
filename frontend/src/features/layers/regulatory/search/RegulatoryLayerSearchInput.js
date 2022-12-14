@@ -17,7 +17,7 @@ import { ReactComponent as PolygonFilterSVG } from '../../../icons/Filtre_zone_p
 import { ReactComponent as BoxFilterSelectedSVG } from '../../../icons/Filtre_zone_rectangle_selected.svg'
 import { ReactComponent as PolygonFilterSelectedSVG } from '../../../icons/Filtre_zone_polygone_selected.svg'
 import { setInteraction } from '../../../../domain/shared_slices/Map'
-import { InteractionType } from '../../../../domain/entities/map'
+import { InteractionListener, InteractionType } from '../../../../domain/entities/map/constants'
 import { LayerType } from '../../../../domain/entities/layers/constants'
 import FilterTag from '../../../map/tools/vessel_filters/FilterTag'
 
@@ -128,7 +128,7 @@ const RegulatoryLayerSearchInput = props => {
     if (!selectedOrSelectingZoneIsPolygon) {
       dispatch(setInteraction({
         type: InteractionType.SQUARE,
-        listener: LayerType.REGULATORY
+        listener: InteractionListener.REGULATION
       }))
     }
   }
@@ -137,7 +137,7 @@ const RegulatoryLayerSearchInput = props => {
     if (!selectedOrSelectingZoneIsSquare) {
       dispatch(setInteraction({
         type: InteractionType.POLYGON,
-        listener: LayerType.REGULATORY
+        listener: InteractionListener.REGULATION
       }))
     }
   }

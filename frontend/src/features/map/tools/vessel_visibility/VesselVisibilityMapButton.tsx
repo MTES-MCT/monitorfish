@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { MapToolType } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
@@ -54,10 +54,11 @@ const Wrapper = styled.div`
 const VesselIcon = styled(VesselSVG)<{
   $isRightMenuShrinked: boolean
 }>`
-  width: 25px;
   height: 25px;
   opacity: ${p => (p.$isRightMenuShrinked ? '0' : '1')};
   transition: all 0.2s;
+  width: 25px;
+
   path {
     fill: ${p => p.theme.color.gainsboro};
   }

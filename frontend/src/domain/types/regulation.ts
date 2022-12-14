@@ -1,4 +1,4 @@
-import type { GeoJSONGeometry } from './geojson'
+import type { GeoJSON } from './GeoJSON'
 
 export type BaseRegulatoryZone = {
   topic: string
@@ -9,7 +9,7 @@ export type BaseRegulatoryZone = {
 export type RegulatoryZone = BaseRegulatoryZone & {
   color: string
   gearRegulation: GearRegulation
-  geometry: GeoJSONGeometry
+  geometry: GeoJSON.Geometry
   id: string
   lawType: string
   region: string

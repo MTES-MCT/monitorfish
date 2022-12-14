@@ -10,7 +10,7 @@ import { Layer } from '../../../entities/layers/constants'
 import { animateToRegulatoryLayer } from '../../../shared_slices/Map'
 import layer from '../../../shared_slices/Layer'
 import { getAdministrativeAndRegulatoryLayersStyle } from '../../../../layers/styles/administrativeAndRegulatoryLayers.style'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../entities/map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../entities/map/constants'
 import { getRegulatoryZoneFromAPI } from '../../../../api/geoserver'
 import { isNumeric } from '../../../../utils/isNumeric'
 

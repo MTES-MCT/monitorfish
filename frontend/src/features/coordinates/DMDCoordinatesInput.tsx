@@ -4,7 +4,7 @@ import IMaskInput from 'react-imask/esm/input'
 import styled from 'styled-components'
 
 import { getCoordinates } from '../../coordinates'
-import { CoordinatesFormat, WSG84_PROJECTION } from '../../domain/entities/map'
+import { CoordinatesFormat, WSG84_PROJECTION } from '../../domain/entities/map/constants'
 import { isNumeric } from '../../utils/isNumeric'
 
 // TODO Remove that once the fix is added and released.

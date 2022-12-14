@@ -16,7 +16,7 @@ import { sortVesselsByProperty } from './tableSort'
 import { COLORS } from '../../constants/constants'
 
 import { getCoordinates } from '../../coordinates'
-import { OPENLAYERS_PROJECTION } from '../../domain/entities/map'
+import { OPENLAYERS_PROJECTION } from '../../domain/entities/map/constants'
 
 const { Column, HeaderCell, Cell } = Table
 

@@ -9,11 +9,6 @@ export type AdministrativeOrRegulatoryLayerIdentity = {
   zone: string | null
 }
 
-export type LayerAndArea = {
-  area: number
-  name: string
-}
-
 export type LayerToFeatures = {
   area: number
   center: number[]

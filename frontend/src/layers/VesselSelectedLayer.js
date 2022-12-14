@@ -6,7 +6,7 @@ import Point from 'ol/geom/Point'
 import { Vector } from 'ol/layer'
 import { transform } from 'ol/proj'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map/constants'
 import { Layer } from '../domain/entities/layers/constants'
 import { Vessel } from '../domain/entities/vessel/vessel'
 

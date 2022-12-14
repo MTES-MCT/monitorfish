@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
 
-import type { MeasurementType } from '../entities/map'
+import type { MeasurementType } from '../entities/map/constants'
 
 const measurementsLocalStorageKey = 'measurements'
 

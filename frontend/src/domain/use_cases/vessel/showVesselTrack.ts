@@ -1,7 +1,7 @@
 import { transform } from 'ol/proj'
 
 import { getVesselPositionsFromAPI } from '../../../api/vessel'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map/constants'
 import { getVesselCompositeIdentifier } from '../../entities/vessel/vessel'
 import { getCustomOrDefaultTrackRequest, throwCustomErrorFromAPIFeedback } from '../../entities/vesselTrackDepth'
 import { removeError, setError } from '../../shared_slices/Global'

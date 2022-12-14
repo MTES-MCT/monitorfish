@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { CoordinatesFormat } from '../../domain/entities/map'
+import { CoordinatesFormat } from '../../domain/entities/map/constants'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { DDCoordinatesInput } from './DDCoordinatesInput'
 import { DMDCoordinatesInput } from './DMDCoordinatesInput'

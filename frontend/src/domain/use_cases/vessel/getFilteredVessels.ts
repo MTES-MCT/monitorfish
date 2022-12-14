@@ -2,7 +2,7 @@ import GeoJSON from 'ol/format/GeoJSON'
 import VectorSource from 'ol/source/Vector'
 
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map/constants'
 
 const vectorSource = new VectorSource({
   format: new GeoJSON({

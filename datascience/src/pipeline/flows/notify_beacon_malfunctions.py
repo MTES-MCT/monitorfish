@@ -261,6 +261,7 @@ def create_email(
             html=html,
             images=[cnsp_logo_path],
             attachments={"Notification.pdf": pdf},
+            reply_to=CNSP_SIP_DEPARTMENT_EMAIL,
         )
 
         return BeaconMalfunctionMessageToSend(

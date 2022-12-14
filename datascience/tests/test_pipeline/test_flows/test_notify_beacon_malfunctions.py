@@ -575,6 +575,7 @@ def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
         "address@email.bzh, email1@sat.op, email2@sat.op"
     )
     assert email["Cc"] == "cnsp.sip@email.fr"
+    assert email["Reply-To"] == "cnsp.sip@email.fr"
     assert email.get_content_type() == "multipart/mixed"
 
     attachments = list(email.iter_attachments())

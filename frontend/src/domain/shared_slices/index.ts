@@ -1,7 +1,7 @@
 import { missionApi } from '../../api/mission'
 import regulation from '../../features/backoffice/Regulation.slice'
-import regulatoryLayerSearch from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
-import vesselList from '../../features/vessel_list/VesselList.slice'
+import { regulatoryLayerSearchReducer } from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
+import { vesselListReducer } from '../../features/vessel_list/VesselList.slice'
 import { alertReducer } from './Alert'
 import { beaconMalfunctionReducer } from './BeaconMalfunction'
 import { controlReducer } from './Control'
@@ -48,10 +48,10 @@ const homeReducers = {
   layer: layer.homepage.reducer,
   measurement: measurementReducer,
   missionApi: missionApi.reducer,
-  regulatoryLayerSearch,
+  regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: reportingReducer,
   vessel: vesselSliceReducer,
-  vesselList
+  vesselList: vesselListReducer
 }
 
 const backofficeReducers = {

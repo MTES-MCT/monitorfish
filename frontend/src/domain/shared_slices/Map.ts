@@ -32,7 +32,6 @@ export type MapState = {
   extent: null
   fitToExtent: Extent | undefined
   hideVesselsAtPort: boolean
-  interaction: null
   riskFactorShowedOnMap: boolean
   selectedBaseLayer: string
   showingVesselsEstimatedPositions: boolean
@@ -55,7 +54,6 @@ const INITIAL_STATE: MapState = {
   extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
   fitToExtent: undefined,
   hideVesselsAtPort: getLocalStorageState(true, hideVesselsAtPortLocalStorageKey),
-  interaction: null,
   riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
   selectedBaseLayer: getLocalStorageState(BaseLayers.LIGHT.code, baseLayerLocalStorageKey),
   showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
@@ -122,13 +120,6 @@ const mapSlice = createSlice({
     resetFitToExtent(state) {
       state.fitToExtent = undefined
     },
-    /**
-     * Reset the interaction with the OpenLayers map
-     * @param {Object=} state
-     */
-    resetInteraction(state) {
-      state.interaction = null
-    },
 
     selectBaseLayer(state, action) {
       window.localStorage.setItem(baseLayerLocalStorageKey, JSON.stringify(action.payload))
@@ -160,20 +151,6 @@ const mapSlice = createSlice({
     setHideVesselsAtPort(state, action) {
       window.localStorage.setItem(hideVesselsAtPortLocalStorageKey, JSON.stringify(action.payload))
       state.hideVesselsAtPort = action.payload
-    },
-
-    /**
-     * Start an interaction with the OpenLayers map, hence use the mouse to draw geometries
-     * @param {Object} state
-     * @param {{
-     *   payload: {
-     *     type: string
-     *     listener: (layersType.REGULATORY|layersType.VESSEL)
-     *   }
-     * }} action - The interaction type (see InteractionTypes enum) and listener (see layersType enum)
-     */
-    setInteraction(state, action) {
-      state.interaction = action.payload
     },
 
     setRiskFactorShowedOnMap(state, action) {
@@ -219,12 +196,10 @@ export const {
   resetAnimateToExtent,
   resetAnimateToRegulatoryLayer,
   resetFitToExtent,
-  resetInteraction,
   selectBaseLayer,
   setCoordinatesFormat,
   setDefaultVesselTrackDepth,
   setHideVesselsAtPort,
-  setInteraction,
   setRiskFactorShowedOnMap,
   setVesselLabel,
   setVesselLabelsShowedOnMap,

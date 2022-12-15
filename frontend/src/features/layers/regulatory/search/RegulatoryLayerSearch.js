@@ -13,7 +13,7 @@ import {
 import { useEscapeFromKeyboard } from '../../../../hooks/useEscapeFromKeyboard'
 
 import RegulatoryLayerSearchResultList from './RegulatoryLayerSearchResultList'
-import RegulatoryLayerSearchInput from './RegulatoryLayerSearchInput'
+import { RegulatoryLayerSearchInput } from './RegulatoryLayerSearchInput'
 import { COLORS } from '../../../../constants/constants'
 
 const RegulatoryLayerSearch = props => {

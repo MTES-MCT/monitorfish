@@ -22,9 +22,9 @@ import {
 } from './'
 import ConfirmRegulationModal from './ConfirmRegulationModal'
 import BaseMap from '../../map/BaseMap'
-import { BaseLayer } from '../../../layers/BaseLayer'
+import { BaseLayer } from '../../map/layers/BaseLayer'
 
-import { RegulatoryPreviewLayer } from '../../../layers/RegulatoryPreviewLayer'
+import { RegulatoryPreviewLayer } from '../../map/layers/RegulatoryPreviewLayer'
 import {
   closeRegulatoryZoneMetadataPanel,
   resetRegulatoryGeometriesToPreview,

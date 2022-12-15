@@ -2,18 +2,22 @@ import React from 'react'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 
-import { openVesselListModal } from '../../../../domain/shared_slices/Global'
 import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
 
 import { ReactComponent as HidingOtherVesselsSVG } from '../../../icons/Bouton_masquer_pistes_actif.svg'
 import { ReactComponent as ShowingOtherVesselsSVG } from '../../../icons/Bouton_masquer_pistes_inactif.svg'
 import { COLORS } from '../../../../constants/constants'
+import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
 
 const FilterParameters = ({ nonFilteredVesselsAreHidden, setNonFilteredVesselsAreHidden }) => {
   const dispatch = useDispatch()
 
   const handleCreateFilter = () => {
-    dispatch(openVesselListModal())
+    dispatch(
+      setDisplayedComponents({
+        isVesselListModalDisplayed: true,
+      })
+    )
   }
 
   return (

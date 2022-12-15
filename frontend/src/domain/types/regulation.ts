@@ -5,13 +5,15 @@ export type BaseRegulatoryZone = {
   zone: string
 }
 
-// TODO Clean all regulations types
 export type RegulatoryZone = BaseRegulatoryZone & {
   color: string
+  fishingPeriod: FishingPeriod
   gearRegulation: GearRegulation
   geometry: GeoJSON.Geometry
   id: string
   lawType: string
+  nextId: string
+  otherInfo: string
   region: string
   regulatoryReference: RegulatoryText[]
   showed: boolean
@@ -62,12 +64,6 @@ export type FishingPeriod = {
   otherInfo: string
   timeIntervals: TimeInterval
   weekdays: [string]
-}
-
-export type RegulatorySpeciesDetail = {
-  /** FAO code */
-  code: string
-  remarks: string
 }
 
 export type RegulatedSpecies = {

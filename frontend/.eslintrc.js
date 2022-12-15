@@ -89,6 +89,12 @@ module.exports = {
       }
     },
     {
+      files: ['src/**/*.slice.ts'],
+      rules: {
+        'no-param-reassign': 'off'
+      }
+    },
+    {
       files: ['src/ui/**/*.tsx'],
       rules: {
         'react/jsx-props-no-spreading': 'off'

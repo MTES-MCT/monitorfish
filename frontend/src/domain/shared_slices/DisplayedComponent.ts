@@ -7,6 +7,7 @@ export type OptionalDisplayedComponentAction = {
   isVesselFiltersMapButtonDisplayed?: boolean
   isVesselLabelsMapButtonDisplayed?: boolean
   isVesselListDisplayed?: boolean
+  isVesselListModalDisplayed?: boolean
   isVesselSearchDisplayed?: boolean
   isVesselVisibilityMapButtonDisplayed?: boolean
 }
@@ -18,6 +19,7 @@ export type DisplayedComponentState = {
   isVesselFiltersMapButtonDisplayed: boolean
   isVesselLabelsMapButtonDisplayed: boolean
   isVesselListDisplayed: boolean
+  isVesselListModalDisplayed: boolean
   isVesselSearchDisplayed: boolean
   isVesselVisibilityMapButtonDisplayed: boolean
 }
@@ -28,6 +30,7 @@ const INITIAL_STATE: DisplayedComponentState = {
   isVesselFiltersMapButtonDisplayed: true,
   isVesselLabelsMapButtonDisplayed: true,
   isVesselListDisplayed: true,
+  isVesselListModalDisplayed: false,
   isVesselSearchDisplayed: true,
   isVesselVisibilityMapButtonDisplayed: true
 }
@@ -66,6 +69,10 @@ const displayedComponentSlice = createSlice({
         state.isInterestPointMapButtonDisplayed
       )
       state.isVesselListDisplayed = getValueOrDefault(action.payload.isVesselListDisplayed, state.isVesselListDisplayed)
+      state.isVesselListModalDisplayed = getValueOrDefault(
+        action.payload.isVesselListModalDisplayed,
+        state.isVesselListModalDisplayed
+      )
     }
   }
 })

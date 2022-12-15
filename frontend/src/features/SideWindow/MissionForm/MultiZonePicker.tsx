@@ -14,7 +14,7 @@ import {
 import { fitToExtent } from '../../../domain/shared_slices/Map'
 import { addMissionZone } from '../../../domain/use_cases/missions/addMissionZone'
 import { useAppDispatch } from '../../../hooks/useAppDispatch'
-import { useAppSelector } from '../../../hooks/useAppSelector'
+import { useListenForDrawedGeometry } from '../../../hooks/useListenForDrawing'
 
 import type { GeoJSON } from '../../../domain/types/GeoJSON'
 import type { Coordinate } from 'ol/coordinate'
@@ -24,7 +24,7 @@ export type MultiZonePickerProps = {
 }
 export function MultiZonePicker({ addButtonLabel }: MultiZonePickerProps) {
   const dispatch = useAppDispatch()
-  const { geometry, listener } = useAppSelector(state => state.draw)
+  const { geometry } = useListenForDrawedGeometry(InteractionListener.MISSION_ZONE)
   const [value, setValue] = useState<GeoJSON.MultiPolygon | undefined>()
 
   const polygons = useMemo(() => {
@@ -36,10 +36,10 @@ export function MultiZonePicker({ addButtonLabel }: MultiZonePickerProps) {
   }, [value])
 
   useEffect(() => {
-    if (geometry?.type === OLGeometryType.MULTIPOLYGON && listener === InteractionListener.MISSION_ZONE) {
+    if (geometry?.type === OLGeometryType.MULTIPOLYGON) {
       setValue(geometry)
     }
-  }, [geometry, listener, setValue])
+  }, [geometry, setValue])
 
   const handleCenterOnMap = (coordinates: Coordinate[][]) => {
     const firstRing = coordinates[0]

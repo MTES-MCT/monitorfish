@@ -13,7 +13,7 @@ import {
 } from '../../features/vessel_sidebar/fishing_activities/logbook_messages/index.js'
 import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
-import { getFishingActivityCircleStyle } from '../../layers/styles/vesselTrack.style'
+import { getFishingActivityCircleStyle } from '../../features/map/layers/styles/vesselTrack.style'
 import { Layer } from './layers/constants'
 
 export const LogbookMessageType = {

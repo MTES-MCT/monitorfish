@@ -17,7 +17,7 @@ export function CellUsingVesselProperty({ vesselProperty, ...props }: CellUsingV
 }
 
 type CheckedCellProps = CellProps & {
-  onChange: (vesselCompositeIdentifier: string, isChecked: boolean) => void
+  onChange: (vesselFeatureId: string, isChecked: boolean) => void
 }
 export function CheckedCell({ dataKey, onChange, rowData, ...props }: CheckedCellProps) {
   const defaultValue = useMemo(() => dataKey && rowData[dataKey], [rowData, dataKey])
@@ -30,7 +30,7 @@ export function CheckedCell({ dataKey, onChange, rowData, ...props }: CheckedCel
         defaultValue={defaultValue}
         onChange={value => {
           if (onChange) {
-            onChange(rowData.vesselCompositeIdentifier, !value)
+            onChange(rowData.vesselFeatureId, !value)
           }
         }}
       />
@@ -45,7 +45,7 @@ export const StyledCheckbox = styled(Checkbox)`
 `
 
 type FlagCellProps = InnerCellProps & {
-  baseUrl: string
+  baseUrl?: string
   vesselProperty: string
 }
 export function FlagCell({ baseUrl, rowData, vesselProperty, ...props }: FlagCellProps) {
@@ -60,20 +60,7 @@ export function FlagCell({ baseUrl, rowData, vesselProperty, ...props }: FlagCel
   )
 }
 
-type TimeAgoCellProps = InnerCellProps & {
-  vesselProperty: string
-}
-export function TimeAgoCell({ dataKey, rowData, vesselProperty, ...props }: TimeAgoCellProps) {
-  if (vesselProperty) {
-    return (
-      <Cell {...props}>
-        {rowData?.vesselProperties[vesselProperty]
-          ? timeago.format(rowData?.vesselProperties[vesselProperty], 'fr')
-          : ''}
-      </Cell>
-    )
-  }
-
+export function TimeAgoCell({ dataKey, rowData, ...props }: InnerCellProps) {
   return <Cell {...props}>{dataKey && rowData[dataKey] ? timeago.format(rowData[dataKey], 'fr') : ''}</Cell>
 }
 

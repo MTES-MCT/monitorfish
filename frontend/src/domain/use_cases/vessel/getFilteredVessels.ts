@@ -4,6 +4,8 @@ import VectorSource from 'ol/source/Vector'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../entities/map/constants'
 
+import type { VesselEnhancedLastPositionWebGLObject } from '../../entities/vessel/types'
+
 const vectorSource = new VectorSource({
   format: new GeoJSON({
     dataProjection: WSG84_PROJECTION,
@@ -11,7 +13,7 @@ const vectorSource = new VectorSource({
   })
 })
 
-export const getFilteredVessels = (vessels, filters) => async () => {
+export const getFilteredVessels = (vessels: VesselEnhancedLastPositionWebGLObject[], filters) => async () => {
   // @ts-ignore
   const monitorFishWorker = await new MonitorFishWorker()
   const workerFilters = getFiltersWithoutZonesSelected(filters)

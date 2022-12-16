@@ -24,7 +24,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/lib/storage' // localStorage
 
 import { missionApi } from './api/mission'
-import { mapToProcessingRegulation } from './domain/entities/regulatory'
+import { mapToProcessingRegulation } from './domain/entities/regulation'
 import { backofficeReducers, homeReducers } from './domain/shared_slices'
 
 import type { FleetSegmentState } from './domain/shared_slices/FleetSegment'

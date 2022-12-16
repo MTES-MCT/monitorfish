@@ -1,5 +1,5 @@
 import { setError } from '../../../shared_slices/Global'
-import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, REGULATION_ACTION_TYPE } from '../../../entities/regulatory'
+import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, REGULATION_ACTION_TYPE } from '../../../entities/regulation'
 import { Feature } from 'ol'
 
 import { setLayersTopicsByRegTerritory, setRegulatoryLayerLawTypes } from '../../../shared_slices/Regulatory'
@@ -12,7 +12,7 @@ const updateTopicForAllZones = (territory, lawType, oldLayerName, newLayerName) 
   if (!layersTopicsByRegTerritory || !layersTopicsByRegTerritory[territory] ||
     !layersTopicsByRegTerritory[territory][lawType]) {
     console.error(`${UPDATE_TOPIC_NAME_ERROR}
-      One value is undefined: 
+      One value is undefined:
       layersTopicsByRegTerritory is ${layersTopicsByRegTerritory}
       territory is ${territory}
       lawType is ${lawType}`)

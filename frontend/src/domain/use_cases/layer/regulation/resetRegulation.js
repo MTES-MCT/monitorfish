@@ -3,7 +3,7 @@ import {
   REGULATION_ACTION_TYPE,
   getRegulatoryFeatureId,
   emptyRegulatoryFeatureObject
-} from '../../../entities/regulatory'
+} from '../../../entities/regulation'
 import updateRegulation from './updateRegulation'
 
 const resetRegulation = (id, nextId) => (dispatch) => {

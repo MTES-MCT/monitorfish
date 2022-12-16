@@ -2,7 +2,7 @@ import { Layer } from '../domain/entities/layers/constants'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../domain/entities/map/constants'
 import WFS from 'ol/format/WFS'
 import GML from 'ol/format/GML'
-import { REGULATION_ACTION_TYPE } from '../domain/entities/regulatory'
+import { REGULATION_ACTION_TYPE } from '../domain/entities/regulation'
 import { OK } from './api'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = 'Nous n\'avons pas pu récupérer la couche réglementaire'
@@ -188,7 +188,7 @@ function getRegulatoryZoneURL (type, regulatoryZone, geoserverURL) {
 /**
  * Get the regulatory zones GeoJSON feature filtered with the OpenLayers extent (the BBOX)
  * @memberOf API
- * @param {string[]|null} extent
+ * @param {number[]|null} extent
  * @param {boolean} fromBackoffice
  * @returns {Promise<GeoJSON>} The feature GeoJSON
  * @throws {Error}

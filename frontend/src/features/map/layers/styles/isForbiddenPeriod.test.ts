@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals'
 import Feature from 'ol/Feature'
 
-import { WEEKDAYS } from '../../../../domain/entities/regulatory'
+import { WEEKDAYS } from '../../../../domain/entities/regulation'
 import { getUtcDayjs } from '../../../../utils/getUtcDayjs'
 import { isForbiddenPeriod } from './isForbiddenPeriod'
 

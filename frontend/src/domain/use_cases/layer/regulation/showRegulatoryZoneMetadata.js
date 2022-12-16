@@ -4,7 +4,7 @@ import {
   setLoadingRegulatoryZoneMetadata, setRegulatoryGeometriesToPreview,
   setRegulatoryZoneMetadata
 } from '../../../shared_slices/Regulatory'
-import { mapToRegulatoryZone } from '../../../entities/regulatory'
+import { mapToRegulatoryZone } from '../../../entities/regulation'
 import { setError } from '../../../shared_slices/Global'
 import { batch } from 'react-redux'
 import { getRegulatoryFeatureMetadataFromAPI } from '../../../../api/geoserver'

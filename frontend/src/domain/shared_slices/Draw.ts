@@ -4,8 +4,6 @@ import type { InteractionListener, InteractionType } from '../entities/map/const
 import type { GeoJSON, GeoJSON as GeoJSONType } from '../types/GeoJSON'
 import type { InteractionTypeAndListener } from '../types/map'
 
-// TODO All drawing in the app must use this slice
-// TODO see interaction in Map slice
 export type DrawState = {
   geometry: GeoJSON.Geometry | undefined
   interactionType: InteractionType | undefined

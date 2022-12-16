@@ -32,7 +32,6 @@ const RegulatoryLayerSearch = props => {
     regulatoryZonesChecked
   } = useSelector(state => state.regulatoryLayerSearch)
 
-  const [initSearchFields, setInitSearchFields] = useState(false)
   const escape = useEscapeFromKeyboard()
   const wrapperRef = useRef(null)
 
@@ -45,12 +44,6 @@ const RegulatoryLayerSearch = props => {
       })
     }
   }, [layersSidebarOpenedLayerType])
-
-  useEffect(() => {
-    if (initSearchFields) {
-      dispatch(closeRegulatoryZoneMetadataPanel())
-    }
-  }, [initSearchFields])
 
   useEffect(() => {
     if (escape) {
@@ -80,11 +73,7 @@ const RegulatoryLayerSearch = props => {
 
   return (
     <Search ref={wrapperRef}>
-      <RegulatoryLayerSearchInput
-        initSearchFields={initSearchFields}
-        setInitSearchFields={setInitSearchFields}
-        layersSidebarIsOpen={layersSidebarIsOpen}
-      />
+      <RegulatoryLayerSearchInput/>
       <RegulatoryLayerSearchResultList namespace={namespace}/>
       <AddRegulatoryLayer
         data-cy={'regulatory-search-add-zones-button'}

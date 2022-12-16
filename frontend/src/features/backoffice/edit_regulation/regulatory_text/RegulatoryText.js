@@ -12,7 +12,7 @@ import {
   addObjectToRegulatoryTextCheckedMap
 } from '../../Regulation.slice'
 import Tag from '../Tag'
-import { checkURL, RegulatoryTextType } from '../../../../domain/entities/regulatory'
+import { checkURL, RegulatoryTextType } from '../../../../domain/entities/regulation'
 
 /**
  * @typedef {object} Props
@@ -261,7 +261,7 @@ const RegulatoryText = props => {
 }
 
 const CancelContentLine = styled(ContentLine)`
-  margin: 16px 0px 15px 0px; 
+  margin: 16px 0px 15px 0px;
 `
 
 const CustomCheckboxGroup = styled(CheckboxGroup)`

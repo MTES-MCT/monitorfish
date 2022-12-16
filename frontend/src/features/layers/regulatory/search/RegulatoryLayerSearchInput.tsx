@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react'
-import { batch } from 'react-redux'
+import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { COLORS } from '../../../../constants/constants'
 import { LayerType as LayersType } from '../../../../domain/entities/layers/constants'
 import { InteractionListener, InteractionType } from '../../../../domain/entities/map/constants'
-import { RegulatorySearchProperty } from '../../../../domain/entities/regulatory'
 import { resetInteraction, setInteractionTypeAndListener } from '../../../../domain/shared_slices/Draw'
-import searchRegulatoryLayers from '../../../../domain/use_cases/layer/regulation/searchRegulatoryLayers'
+import { closeRegulatoryZoneMetadataPanel } from '../../../../domain/shared_slices/Regulatory'
+import {
+  MINIMUM_SEARCH_CHARACTERS_NUMBER,
+  searchRegulatoryLayers
+} from '../../../../domain/use_cases/layer/regulation/searchRegulatoryLayers'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
@@ -26,98 +28,39 @@ import {
   setZoneSelected
 } from './RegulatoryLayerSearch.slice'
 
-const MINIMUM_SEARCH_CHARACTERS_NUMBER = 2
-
-export function RegulatoryLayerSearchInput({ initSearchFields, setInitSearchFields }) {
+export function RegulatoryLayerSearchInput() {
   const dispatch = useAppDispatch()
   const { advancedSearchIsOpen, zoneSelected } = useAppSelector(state => state.regulatoryLayerSearch)
 
   const { geometry, interactionType } = useListenForDrawedGeometry(InteractionListener.REGULATION)
-  const [nameSearchText, setNameSearchText] = useState('')
-  const [placeSearchText, setPlaceSearchText] = useState('')
-  const [gearSearchText, setGearSearchText] = useState('')
-  const [speciesSearchText, setSpeciesSearchText] = useState('')
-  const [regulatoryReferencesSearchText, setRegulatoryReferenceSearchText] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
   const selectedOrSelectingZoneIsSquare = zoneSelected?.name === InteractionType.SQUARE
   const selectedOrSelectingZoneIsPolygon = zoneSelected?.name === InteractionType.POLYGON
 
-  const inputsAreEmpty =
-    nameSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
-    placeSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
-    gearSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
-    regulatoryReferencesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER &&
-    speciesSearchText.length < MINIMUM_SEARCH_CHARACTERS_NUMBER
-
-  useEffect(() => {
-    if (initSearchFields) {
-      setNameSearchText('')
-      setPlaceSearchText('')
-      setGearSearchText('')
-      setSpeciesSearchText('')
-      setRegulatoryReferenceSearchText('')
-      setInitSearchFields(false)
-    }
-  }, [initSearchFields, setInitSearchFields])
+  const closeSearch = useCallback(() => {
+    setSearchQuery('')
+    dispatch(closeRegulatoryZoneMetadataPanel())
+  }, [dispatch])
 
   useEffect(() => {
     if (!advancedSearchIsOpen) {
-      setPlaceSearchText('')
-      setGearSearchText('')
-      setSpeciesSearchText('')
-      setRegulatoryReferenceSearchText('')
       dispatch(resetZoneSelected())
     }
   }, [dispatch, advancedSearchIsOpen])
 
   useEffect(() => {
-    if (inputsAreEmpty && !zoneSelected) {
-      batch(() => {
-        dispatch(setRegulatoryLayersSearchResult({}))
-        dispatch(resetRegulatoryZonesChecked())
-      })
+    if (searchQuery?.length < MINIMUM_SEARCH_CHARACTERS_NUMBER && !zoneSelected) {
+      dispatch(setRegulatoryLayersSearchResult({}))
+      dispatch(resetRegulatoryZonesChecked())
 
       return
     }
 
-    const searchFields = {
-      gearSearchText: {
-        properties: [RegulatorySearchProperty.GEARS],
-        searchText: gearSearchText
-      },
-      nameSearchText: {
-        properties: [RegulatorySearchProperty.TOPIC, RegulatorySearchProperty.ZONE],
-        searchText: nameSearchText
-      },
-      placeSearchText: {
-        properties: [RegulatorySearchProperty.REGION],
-        searchText: placeSearchText
-      },
-      regulatoryReferencesSearchText: {
-        properties: [RegulatorySearchProperty.REGULATORY_REFERENCES],
-        searchText: regulatoryReferencesSearchText
-      },
-      speciesSearchText: {
-        properties: [RegulatorySearchProperty.SPECIES],
-        searchText: speciesSearchText
-      }
-    }
-
-    batch(() => {
-      dispatch(resetRegulatoryZonesChecked())
-      dispatch(searchRegulatoryLayers(searchFields, inputsAreEmpty)).then(foundRegulatoryLayers => {
-        dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
-      })
+    dispatch(resetRegulatoryZonesChecked())
+    dispatch(searchRegulatoryLayers(searchQuery)).then(foundRegulatoryLayers => {
+      dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
     })
-  }, [
-    dispatch,
-    inputsAreEmpty,
-    nameSearchText,
-    placeSearchText,
-    speciesSearchText,
-    gearSearchText,
-    regulatoryReferencesSearchText,
-    zoneSelected
-  ])
+  }, [dispatch, searchQuery, zoneSelected])
 
   useEffect(() => {
     if (!geometry) {
@@ -161,15 +104,15 @@ export function RegulatoryLayerSearchInput({ initSearchFields, setInitSearchFiel
       <PrincipalSearchInput>
         <SearchBoxInput
           data-cy="regulatory-search-input"
-          onChange={e => setNameSearchText(e.target.value)}
+          onChange={e => setSearchQuery(e.target.value)}
           placeholder="Rechercher une zone reg. par son nom"
           type="text"
-          value={nameSearchText}
+          value={searchQuery}
         />
-        {inputsAreEmpty ? (
-          <SearchIcon />
+        {searchQuery?.length > MINIMUM_SEARCH_CHARACTERS_NUMBER ? (
+          <CloseIcon data-cy="regulatory-search-clean-input" onClick={closeSearch} />
         ) : (
-          <CloseIcon data-cy="regulatory-search-clean-input" onClick={() => setInitSearchFields(true)} />
+          <SearchIcon />
         )}
         <AdvancedSearch
           advancedSearchIsOpen={advancedSearchIsOpen}
@@ -180,16 +123,8 @@ export function RegulatoryLayerSearchInput({ initSearchFields, setInitSearchFiel
         </AdvancedSearch>
       </PrincipalSearchInput>
       <AdvancedSearchBox advancedSearchIsOpen={advancedSearchIsOpen}>
-        <AdvancedSearchInput
-          data-cy="regulatory-layers-advanced-search-zone"
-          onChange={e => setPlaceSearchText(e.target.value)}
-          placeholder="Zone (ex. Med, Bretagne, mer Celtique…)"
-          type="text"
-          value={placeSearchText}
-          withoutMarginBottom
-        />
         <SearchByGeometry>
-          ou définir une zone sur la carte <br />
+          Définir une zone sur la carte <br />
           {selectedOrSelectingZoneIsSquare ? (
             <BoxFilterSelected data-cy="regulation-search-box-filter-selected" onClick={drawSquare} />
           ) : (
@@ -214,27 +149,6 @@ export function RegulatoryLayerSearchInput({ initSearchFields, setInitSearchFiel
             </InlineTagWrapper>
           )}
         </SearchByGeometry>
-        <AdvancedSearchInput
-          data-cy="regulatory-layers-advanced-search-gears"
-          onChange={e => setGearSearchText(e.target.value)}
-          placeholder="Engins (ex. chaluts, casiers, FPO, GNS…)"
-          type="text"
-          value={gearSearchText}
-        />
-        <AdvancedSearchInput
-          data-cy="regulatory-layers-advanced-search-species"
-          onChange={e => setSpeciesSearchText(e.target.value)}
-          placeholder="Espèces (ex. merlu, coque, SCE, PIL...)"
-          type="text"
-          value={speciesSearchText}
-        />
-        <AdvancedSearchInput
-          data-cy="regulatory-layers-advanced-search-reg"
-          onChange={e => setRegulatoryReferenceSearchText(e.target.value)}
-          placeholder="Référence reg. (ex. 58/2007, 171/2020, 1241...)"
-          type="text"
-          value={regulatoryReferencesSearchText}
-        />
       </AdvancedSearchBox>
     </>
   )
@@ -291,7 +205,7 @@ const AdvancedSearchBox = styled.div<{
   advancedSearchIsOpen: boolean
 }>`
   background-color: white;
-  height: ${p => (p.advancedSearchIsOpen ? 210 : 0)}px;
+  height: ${p => (p.advancedSearchIsOpen ? 50 : 0)}px;
   width: 320px;
   transition: 0.5s all;
   padding: ${p => (p.advancedSearchIsOpen ? 10 : 0)}px 15px;
@@ -341,24 +255,6 @@ const CloseIcon = styled(CloseIconSVG)`
   vertical-align: top;
   border-bottom: 1px ${COLORS.lightGray} solid;
   cursor: pointer;
-`
-
-const AdvancedSearchInput = styled.input<{
-  withoutMarginBottom?: boolean
-}>`
-  border: none !important;
-  border-bottom: 1px ${COLORS.lightGray} solid !important;
-  background: ${p => p.theme.color.white} !important;
-  overflow: none !important;
-  width: 265px;
-  margin: 5px 0 ${p => (p.withoutMarginBottom ? 0 : 15)}px 0 !important;
-  font-size: 13px;
-  color: ${COLORS.gunMetal};
-
-  :hover,
-  :focus {
-    border-bottom: 1px ${COLORS.lightGray} solid;
-  }
 `
 
 const AdvancedSearch = styled.div<{

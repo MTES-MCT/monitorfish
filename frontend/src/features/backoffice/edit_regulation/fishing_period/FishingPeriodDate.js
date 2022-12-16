@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import useUpdateArrayInFishingPeriod from '../../../../hooks/fishingPeriod/useUpdateArrayInFishingPeriod'
-import { FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulatory'
+import { FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulation'
 import CustomDatePicker from '../custom_form/CustomDatePicker'
 
 const FishingPeriodDate = ({ date, id, disabled }) => {

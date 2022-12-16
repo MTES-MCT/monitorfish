@@ -1,16 +1,18 @@
 import * as Comlink from 'comlink'
 import {
-  getMergedRegulatoryLayers,
+  FRANCE,
+  getMergedRegulatoryLayers, getRegulatoryLawTypesFromZones,
   LAWTYPES_TO_TERRITORY,
   mapToRegulatoryZone,
   orderByAlphabeticalLayer,
-  searchByLawType,
-  FRANCE
-} from '../domain/entities/regulatory'
+  searchByLawType
+} from '../domain/entities/regulation'
 import { getDateMonthsBefore } from '../utils'
 import { VesselLocation, vesselSize } from '../domain/entities/vessel/vessel'
 
 class MonitorFishWebWorker {
+  getStructuredRegulationLawTypes = regulatoryZones => getRegulatoryLawTypesFromZones(regulatoryZones)
+
   #getLayerTopicList = (features, speciesByCode) => {
     const featuresWithoutGeometry = features.features.map(feature => {
       return mapToRegulatoryZone(feature, speciesByCode)
@@ -38,6 +40,9 @@ class MonitorFishWebWorker {
       uniqueFeaturesWithoutGeometryByTopics
     }
   }
+
+  mapGeoserverToRegulatoryZones = (geoJSON, speciesByCode) =>
+    geoJSON.features.map(feature => mapToRegulatoryZone(feature, speciesByCode))
 
   #getGeometryIdFromFeatureId = feature => {
     return feature.properties?.id || feature.id.split('.')[1]

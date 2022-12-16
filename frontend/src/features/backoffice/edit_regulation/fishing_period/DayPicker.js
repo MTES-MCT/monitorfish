@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
-import { FISHING_PERIOD_KEYS, WEEKDAYS } from '../../../../domain/entities/regulatory'
+import { FISHING_PERIOD_KEYS, WEEKDAYS } from '../../../../domain/entities/regulation'
 import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
 
 const DayPicker = ({ disabled }) => {

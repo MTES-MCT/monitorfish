@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { SectionTitle, Section, List, Label, Elem } from '../RegulatoryMetadata.style'
-import { getRegulatoryZoneTextTypeAsText } from '../../../../../domain/entities/regulatory'
+import { getRegulatoryZoneTextTypeAsText } from '../../../../../domain/entities/regulation'
 import { COLORS } from '../../../../../constants/constants'
 
 const RegulatoryReferencesDisplayed = () => {

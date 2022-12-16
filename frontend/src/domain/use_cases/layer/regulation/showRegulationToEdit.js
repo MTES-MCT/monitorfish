@@ -1,4 +1,4 @@
-import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../../../entities/regulatory'
+import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../../../entities/regulation'
 import { setError } from '../../../shared_slices/Global'
 import {
   setProcessingRegulation,

@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom'
 import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
 import { COLORS } from '../../../constants/constants'
 import { AddRegulationButton } from '../../commonStyles/Buttons.style'
-import { searchByLawType, searchResultIncludeZone } from '../../../domain/entities/regulatory'
+import { searchByLawType, searchResultIncludeZone } from '../../../domain/entities/regulation'
 import { closeRegulatoryZoneMetadataPanel } from '../../../domain/shared_slices/Regulatory'
 import { BACKOFFICE_SEARCH_PROPERTIES } from '../../../domain/entities/backoffice'
 

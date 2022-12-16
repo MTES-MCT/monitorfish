@@ -7,7 +7,7 @@ import { formatDataForSelectPicker } from '../../../../utils'
 import { FRENCH_REGION_LIST } from '../../constants'
 import Tag from '../Tag'
 import MenuItem from '../custom_form/MenuItem'
-import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
+import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulation'
 import { updateProcessingRegulationByKey } from '../../Regulation.slice'
 
 const RegulationRegionLine = props => {

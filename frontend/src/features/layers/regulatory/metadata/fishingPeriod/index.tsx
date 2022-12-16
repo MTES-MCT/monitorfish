@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 
-import { fishingPeriodToString } from '../../../../../domain/entities/regulatory'
+import { fishingPeriodToString } from '../../../../../domain/entities/regulation'
 import { useAppSelector } from '../../../../../hooks/useAppSelector'
 import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { Section, SectionTitle } from '../RegulatoryMetadata.style'

@@ -23,12 +23,12 @@ export type RegulatoryZone = BaseRegulatoryZone & {
 export type RegulatoryText = {
   // TODO Use `Infinity`
   endDate: Date | 'infinite'
+  reference: string
   startDate: Date
-  textName: string
   // TODO Doesn't exist.
   textType: any
   // textType: RegulatoryTextType
-  textURL: string
+  url: string
 }
 
 // TODO Check that.

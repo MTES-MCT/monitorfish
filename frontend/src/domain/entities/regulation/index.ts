@@ -1,8 +1,8 @@
-import { formatDataForSelectPicker, getTextForSearch } from '../../utils'
-import { Layer } from './layers/constants'
+import { formatDataForSelectPicker, getTextForSearch } from '../../../utils'
+import { Layer } from '../layers/constants'
 
-import type { Gear, RegulatoryLawTypes } from '../types/regulation'
-import type { Specy } from '../types/specy'
+import type { Gear, RegulatoryLawTypes, RegulatoryZone } from '../../types/regulation'
+import type { Specy } from '../../types/specy'
 
 export const mapToRegulatoryZone = ({ geometry, id, properties }, speciesByCode) => ({
   fishingPeriod: parseFishingPeriod(properties.fishing_period),
@@ -30,6 +30,37 @@ export const mapToProcessingRegulation = persistProcessingRegulation => {
   }
 
   return DEFAULT_REGULATION
+}
+
+export const getRegulatoryLawTypesFromZones = (regulatoryZones: RegulatoryZone[]): RegulatoryLawTypes => {
+  const lawTypes: string[] = regulatoryZones.map(regulatoryZone => regulatoryZone.lawType)
+  const uniqueLawTypes = [...new Set(lawTypes)]
+
+  return uniqueLawTypes.reduce((lawTypeAccumulator, lawType) => {
+    const uniqueLawTypeTopics = getLawTypeTopics(regulatoryZones, lawType)
+
+    // eslint-disable-next-line no-param-reassign
+    lawTypeAccumulator[lawType] = getTopicsToZones(uniqueLawTypeTopics, regulatoryZones)
+
+    return lawTypeAccumulator
+  }, {})
+}
+
+function getLawTypeTopics(regulatoryZones: RegulatoryZone[], lawType: string) {
+  const lawTypeTopics: string[] = regulatoryZones
+    .filter(regulatoryZone => regulatoryZone.lawType === lawType)
+    .map(regulatoryZone => regulatoryZone.topic)
+
+  return [...new Set(lawTypeTopics)]
+}
+
+function getTopicsToZones(uniqueLawTypeTopics: string[], regulatoryZones: RegulatoryZone[]) {
+  return uniqueLawTypeTopics.reduce((topicAccumulator, topic) => {
+    // eslint-disable-next-line no-param-reassign
+    topicAccumulator[topic] = regulatoryZones.filter(regulatoryZone => regulatoryZone.topic === topic)
+
+    return topicAccumulator
+  }, {})
 }
 
 function parseGearRegulation(gears) {
@@ -211,7 +242,6 @@ export const LAWTYPES_TO_TERRITORY = {
 
 export enum RegulatorySearchProperty {
   GEARS = 'gears',
-  LAW_TYPE = 'law_type',
   REGION = 'region',
   REGULATORY_REFERENCES = 'regulatoryReferences',
   SPECIES = 'species',

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { batch } from 'react-redux'
 import styled from 'styled-components'
 
-import { FRANCE, ORGP, UE, UK } from '../../domain/entities/regulatory'
+import { FRANCE, ORGP, UE, UK } from '../../domain/entities/regulation'
 import layer from '../../domain/shared_slices/Layer'
 import { setRegulatoryZoneMetadata } from '../../domain/shared_slices/Regulatory'
 import getAllGearCodes from '../../domain/use_cases/gearCode/getAllGearCodes'

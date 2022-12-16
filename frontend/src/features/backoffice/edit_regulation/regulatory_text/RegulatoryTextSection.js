@@ -4,7 +4,7 @@ import { COLORS } from '../../../../constants/constants'
 import { Section, Title } from '../../../commonStyles/Backoffice.style'
 import { ValidateButton } from '../../../commonStyles/Buttons.style'
 import RegulatoryText from './RegulatoryText'
-import { DEFAULT_REGULATORY_TEXT, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulatory'
+import { DEFAULT_REGULATORY_TEXT, REGULATORY_REFERENCE_KEYS } from '../../../../domain/entities/regulation'
 import { updateProcessingRegulationByKey } from '../../Regulation.slice'
 import { useDispatch } from 'react-redux'
 

@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import {
   DEFAULT_AUTHORIZED_REGULATED_SPECIES,
   DEFAULT_UNAUTHORIZED_REGULATED_SPECIES
-} from '../../../../../domain/entities/regulatory'
+} from '../../../../../domain/entities/regulation'
 import styled from 'styled-components'
 import RegulatedSpecies from './RegulatedSpecies'
 

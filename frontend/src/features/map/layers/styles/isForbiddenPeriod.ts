@@ -1,4 +1,4 @@
-import { WEEKDAYS } from '../../../../domain/entities/regulatory'
+import { WEEKDAYS } from '../../../../domain/entities/regulation'
 import { getStartAndEndDatesSetWithCurrentYear } from './utils'
 
 import type { DateInterval, FishingPeriod } from '../../../../domain/types/regulation'

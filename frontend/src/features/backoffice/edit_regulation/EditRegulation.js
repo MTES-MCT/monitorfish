@@ -56,7 +56,7 @@ import {
   FRANCE,
   LAWTYPES_TO_TERRITORY,
   REGULATORY_REFERENCE_KEYS
-} from '../../../domain/entities/regulatory'
+} from '../../../domain/entities/regulation'
 import SpeciesRegulation from './species_regulation/SpeciesRegulation'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 import { STATUS } from '../constants'

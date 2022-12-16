@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { TimeRow } from '../../../commonStyles/FishingPeriod.style'
 import { CustomCheckbox } from '../../../commonStyles/Backoffice.style'
 import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
-import { FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulatory'
+import { FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulation'
 
 const DayTimeCheckbox = ({ timeIsDisabled, disabled }) => {
   const { daytime } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)

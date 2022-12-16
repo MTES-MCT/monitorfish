@@ -10,7 +10,7 @@ import {
   DEFAULT_AUTHORIZED_REGULATED_GEARS,
   DEFAULT_UNAUTHORIZED_REGULATED_GEARS,
   REGULATORY_REFERENCE_KEYS
-} from '../../../../domain/entities/regulatory'
+} from '../../../../domain/entities/regulation'
 import { GEAR_REGULATION_KEYS, prepareCategoriesAndGearsToDisplay } from '../../../../domain/entities/backoffice'
 import getAllGearCodes from '../../../../domain/use_cases/gearCode/getAllGearCodes'
 

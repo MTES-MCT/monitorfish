@@ -64,7 +64,7 @@ export function MissionForm() {
           onDeleteNewAction={unsetNewAction}
           selectedType={selectedType}
         />
-        <ActionForm action={newAction} />
+        <ActionForm action={newAction} onChange={setNewAction} />
       </Body>
     </Wrapper>
   )

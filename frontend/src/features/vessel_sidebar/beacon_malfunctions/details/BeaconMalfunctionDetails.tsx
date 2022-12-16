@@ -8,7 +8,7 @@ import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { getDateTime } from '../../../../utils'
 import { ReactComponent as ArrowSVG } from '../../../icons/Picto_fleche-pleine-droite.svg'
-import { BeaconMalfunctionDetailsFollowUp } from '../../../side_window/beacon_malfunctions/BeaconMalfunctionDetailsFollowUp'
+import { BeaconMalfunctionDetailsFollowUp } from '../../../SideWindow/beacon_malfunctions/BeaconMalfunctionDetailsFollowUp'
 import BeaconMalfunctionDetailBody from '../resume/BeaconMalfunctionBody'
 import CurrentBeaconMalfunctionBody from '../resume/CurrentBeaconMalfunctionBody'
 
@@ -56,41 +56,41 @@ export function BeaconMalfunctionDetails({ isCurrentBeaconMalfunctionDetails }: 
 }
 
 const Wrapper = styled.div`
-  text-align: left;
   padding: 5px;
+  text-align: left;
 `
 
 const Arrow = styled(ArrowSVG)`
-  vertical-align: sub;
-  transform: rotate(180deg);
-  margin-right: 5px;
   margin-left: 5px;
+  margin-right: 5px;
+  transform: rotate(180deg);
+  vertical-align: sub;
 `
 
 const Previous = styled.a`
-  text-align: left;
-  text-decoration: underline;
-  font-size: 13px;
   color: ${COLORS.slateGray};
   cursor: pointer;
   display: inline-block;
+  font-size: 13px;
+  text-align: left;
+  text-decoration: underline;
 `
 
 const Zone = styled.div`
-  margin: 10px 5px 5px 5px;
+  background: ${COLORS.white};
+  margin: 10px 5px 5px;
   padding-bottom: 10px;
   text-align: left;
-  background: ${COLORS.white};
   width: 480px;
 `
 
 const Title = styled.div`
-  color: ${COLORS.white};
   background: ${COLORS.charcoal};
-  padding: 8.5px 10px 8px 20px;
+  color: ${COLORS.white};
   font-size: 0.8rem;
-  width: 450px;
   font-size: 13px;
   font-weight: 500;
   margin-bottom: 10px;
+  padding: 8.5px 10px 8px 20px;
+  width: 450px;
 `

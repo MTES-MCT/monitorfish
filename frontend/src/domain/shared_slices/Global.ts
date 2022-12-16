@@ -4,8 +4,8 @@ import { getLocalStorageState } from '../../utils'
 import { UserType } from '../entities/beaconMalfunction/constants'
 import { getOnlyVesselIdentityProperties, vesselsAreEquals } from '../entities/vessel/vessel'
 
-import type { SideWindowMenuKey } from '../../features/side_window/constants'
-import type { MapToolType } from '../entities/map'
+import type { SideWindowMenuKey } from '../../features/SideWindow/constants'
+import type { MapToolType } from '../entities/map/constants'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 const userTypeLocalStorageKey = 'userType'
@@ -23,7 +23,6 @@ export type GlobalState = {
   lastSearchedVessels: any[]
   leftBoxOpened: any
   mapToolOpened: MapToolType | undefined
-  // TODO Make that an enum.
   openedSideWindowTab: SideWindowMenuKey | undefined
   // TODO Rename this prop.
   // TODO Investigate that. Should be a defined boolean.
@@ -136,7 +135,8 @@ export const globalSlice = createSlice({
       // eslint-disable-next-line no-console
       console.error(action.payload)
 
-      state.error = action.payload
+      // eslint-disable-next-line no-null/no-null
+      state.error = action.payload !== undefined && action.payload !== null ? String(action.payload) : action.payload
     },
 
     /**

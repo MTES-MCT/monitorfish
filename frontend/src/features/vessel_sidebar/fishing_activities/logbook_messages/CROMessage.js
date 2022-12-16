@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime } from '../../../../utils'
 import { getCoordinates } from '../../../../coordinates'
-import { WSG84_PROJECTION } from '../../../../domain/entities/map'
+import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useSelector } from 'react-redux'
 
 const CROMessage = props => {

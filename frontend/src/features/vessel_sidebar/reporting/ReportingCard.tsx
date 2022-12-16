@@ -16,7 +16,7 @@ import { ReactComponent as EditIconSVG } from '../../icons/Bouton_editer.svg'
 import { ReactComponent as DeleteIconSVG } from '../../icons/Bouton_supprimer.svg'
 import { ReactComponent as InfractionSuspicionIconSVG } from '../../icons/Icone_alerte_signalement_rouge_16.svg'
 import { ReactComponent as ObservationIconSVG } from '../../icons/Icone_observations.svg'
-import { getAlertNameFromType } from '../../side_window/alerts_reportings/utils'
+import { getAlertNameFromType } from '../../SideWindow/alerts_reportings/utils'
 
 import type { Promisable } from 'type-fest'
 
@@ -114,10 +114,10 @@ const getReportingActor = (reportingActor, unit) => {
 const Wrapper = styled.div<{
   isInfractionSuspicion?: boolean
 }>`
-  margin-bottom: 10px;
-  display: flex;
   background: ${p => (p.isInfractionSuspicion ? '#E1000F1A' : COLORS.cultured)} 0% 0% no-repeat padding-box;
   border: 1px solid ${p => (p.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray)};
+  display: flex;
+  margin-bottom: 10px;
 `
 
 const Icon = styled.div`
@@ -127,31 +127,31 @@ const Icon = styled.div`
 const Body = styled.div<{
   isInfractionSuspicion?: boolean
 }>`
-  width: 365px;
-  margin-top: 12px;
-  margin-bottom: 12px;
   color: ${p => (p.isInfractionSuspicion ? COLORS.maximumRed : COLORS.gunMetal)};
+  margin-bottom: 12px;
+  margin-top: 12px;
+  width: 365px;
 `
 
 const Actions = styled.div<{
   isAlert: boolean
   isInfractionSuspicion?: boolean
 }>`
-  padding-top: ${p => (p.isAlert ? 8 : 3)}px;
-  width: 30px;
-  text-align: center;
   border-left: 1px solid ${p => (p.isInfractionSuspicion ? '#E1000F59' : COLORS.lightGray)};
+  padding-top: ${p => (p.isAlert ? 8 : 3)}px;
+  text-align: center;
+  width: 30px;
 `
 
 const NumberOfAlerts = styled.span`
-  padding: 0px 5.5px;
   background: ${COLORS.maximumRed} 0% 0% no-repeat padding-box;
   border-radius: 2px;
   color: ${COLORS.white};
+  display: inline-block;
   font-weight: 500;
   height: 17px;
-  display: inline-block;
   line-height: 16px;
+  padding: 0 5.5px;
 `
 
 const Title = styled.div`
@@ -163,36 +163,36 @@ const Date = styled.span`
 `
 
 const Natinf = styled.div`
-  padding: 2px 8px 2px 8px;
   background: ${COLORS.white};
-  font: normal normal medium 13px/18px Marianne;
-  width: fit-content;
-  margin-top: 10px;
   color: ${COLORS.gunMetal};
+  font: normal normal medium 13px/18px Marianne;
+  margin-top: 10px;
+  padding: 2px 8px;
+  width: fit-content;
 `
 
 const Description = styled.div`
-  margin-top: 10px;
-  font: normal normal bold 13px/18px Marianne;
   color: ${COLORS.gunMetal};
+  font: normal normal bold 13px/18px Marianne;
+  margin-top: 10px;
   white-space: normal;
 `
 
 const Author = styled.div`
-  font: normal normal normal 13px/18px Marianne;
   color: ${COLORS.gunMetal};
+  font: normal normal normal 13px/18px Marianne;
 `
 
 const ObservationIcon = styled(ObservationIconSVG)`
-  width: 25px;
-  margin-top: 13px;
   margin-left: 10px;
+  margin-top: 13px;
+  width: 25px;
 `
 
 const InfractionSuspicionIcon = styled(InfractionSuspicionIconSVG)`
-  width: 20px;
-  margin-top: 12px;
   margin-left: 12px;
+  margin-top: 12px;
+  width: 20px;
 `
 
 const ArchiveButton = styled(ArchiveIconSVG)<{
@@ -209,8 +209,8 @@ const EditButton = styled(EditIconSVG)`
 
 const DeleteButton = styled(DeleteIconSVG)`
   cursor: pointer;
-  margin-top: 7px;
-  margin-bottom: 10px;
-  width: 15px;
   height: 15px;
+  margin-bottom: 10px;
+  margin-top: 7px;
+  width: 15px;
 `

@@ -12,6 +12,13 @@ module.exports = {
     browser: true
   },
   rules: {
+    'react/jsx-pascal-case': [
+      'error',
+      {
+        ignore: ['LEGACY_*']
+      }
+    ],
+
     // We must add PascalCase in formats because ESLint trim the prefix before evaluating the case
     // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/naming-convention.md#format-options
     // > Note: As documented above, the prefix is trimmed before format is validated,
@@ -19,20 +26,12 @@ module.exports = {
     '@typescript-eslint/naming-convention': [
       'warn',
       {
-        selector: 'variable',
-        format: ['camelCase', 'PascalCase', 'UPPER_CASE']
-      },
-      {
         selector: 'function',
         format: ['camelCase', 'PascalCase']
       },
       {
         selector: 'typeLike',
-        format: ['PascalCase'],
-        filter: {
-          regex: '^LEGACY_',
-          match: false
-        }
+        format: ['PascalCase']
       },
       {
         selector: 'accessor',
@@ -66,8 +65,6 @@ module.exports = {
       }
     ],
 
-    'no-console': 'off',
-
     '@typescript/no-use-before-define': 'off',
     '@typescript-eslint/no-restricted-imports': [
       'error',
@@ -87,6 +84,12 @@ module.exports = {
   overrides: [
     {
       files: ['src/domain/shared_slices/**/*.ts'],
+      rules: {
+        'no-param-reassign': 'off'
+      }
+    },
+    {
+      files: ['src/**/*.slice.ts'],
       rules: {
         'no-param-reassign': 'off'
       }

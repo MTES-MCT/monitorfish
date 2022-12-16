@@ -1,9 +1,10 @@
+import { GlobalStyle, THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useRef } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
-import styled, { ThemeProvider } from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 
 import APIWorker from './api/APIWorker'
 import { BackofficeMode } from './api/BackofficeMode'
@@ -12,6 +13,7 @@ import { ErrorToastNotification } from './features/commonComponents/ErrorToastNo
 import FavoriteVessels from './features/favorite_vessels/FavoriteVessels'
 import Healthcheck from './features/healthcheck/Healthcheck'
 import LayersSidebar from './features/layers/LayersSidebar'
+import { DrawLayerModal } from './features/map/draw/DrawModal'
 import Map from './features/map/Map'
 import { InterestPointMapButton } from './features/map/tools/interest_points/InterestPointMapButton'
 import { MeasurementMapButton } from './features/map/tools/measurements/MeasurementMapButton'
@@ -20,20 +22,19 @@ import { VesselFiltersMapButton } from './features/map/tools/vessel_filters/Vess
 import { VesselLabelsMapButton } from './features/map/tools/vessel_labels/VesselLabelsMapButton'
 import { VesselVisibilityMapButton } from './features/map/tools/vessel_visibility/VesselVisibilityMapButton'
 import PreviewFilteredVessels from './features/preview_filtered_vessels/PreviewFilteredVessels'
-import { AlertsMapButton } from './features/side_window/alerts_reportings/AlertsMapButton'
-import { BeaconMalfunctionsMapButton } from './features/side_window/beacon_malfunctions/BeaconMalfunctionsMapButton'
-import { SideWindow } from './features/side_window/SideWindow'
-import { SideWindowLauncher } from './features/side_window/SideWindowLauncher'
-import VesselList from './features/vessel_list/VesselList'
+import { SideWindow } from './features/SideWindow'
+import { AlertsMapButton } from './features/SideWindow/alerts_reportings/AlertsMapButton'
+import { BeaconMalfunctionsMapButton } from './features/SideWindow/beacon_malfunctions/BeaconMalfunctionsMapButton'
+import { SideWindowLauncher } from './features/SideWindow/SideWindowLauncher'
+import { VesselList } from './features/vessel_list/VesselList'
 import { VesselsSearch } from './features/vessel_search/VesselsSearch'
 import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader'
 import { VesselSidebar } from './features/vessel_sidebar/VesselSidebar'
 import { useAppSelector } from './hooks/useAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
-import { UiPage } from './pages/UiPage'
+import { TestPage } from './pages/TestPage'
 import { UnsupportedBrowserPage } from './pages/UnsupportedBrowserPage'
 import { backofficeStore, homeStore, backofficePersistor } from './store'
-import { theme } from './ui/theme'
 import { isBrowserSupported } from './utils/isBrowserSupported'
 
 import type { MutableRefObject } from 'react'
@@ -46,11 +47,15 @@ export function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={THEME}>
+      <GlobalStyle />
+      <CustomGlobalStyle />
+
       <Router>
         <Switch>
           <Route path="/backoffice">
             <Provider store={backofficeStore}>
+              {/* eslint-disable-next-line no-null/no-null */}
               <PersistGate loading={null} persistor={backofficePersistor}>
                 <NamespaceContext.Provider value="backoffice">
                   <BackofficePage />
@@ -67,11 +72,7 @@ export function App() {
             </Provider>
           </Route>
 
-          <Route exact path="/ui">
-            <NamespaceContext.Provider value="ui">
-              <UiPage />
-            </NamespaceContext.Provider>
-          </Route>
+          <Route component={TestPage} exact path="/test" />
 
           <Route path="/">
             <Provider store={homeStore}>
@@ -87,6 +88,16 @@ export function App() {
 }
 
 function HomePage() {
+  const {
+    isDrawLayerModalDisplayed,
+    isInterestPointMapButtonDisplayed,
+    isMeasurementMapButtonDisplayed,
+    isVesselFiltersMapButtonDisplayed,
+    isVesselLabelsMapButtonDisplayed,
+    isVesselListDisplayed,
+    isVesselSearchDisplayed,
+    isVesselVisibilityMapButtonDisplayed
+  } = useAppSelector(state => state.displayedComponent)
   const isVesselSidebarOpen = useAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const openedSideWindowTab = useAppSelector(state => state.global.openedSideWindowTab)
   const ref = useRef() as MutableRefObject<HTMLDivElement>
@@ -104,22 +115,23 @@ function HomePage() {
           <Wrapper>
             <Map />
             <LayersSidebar />
-            <VesselsSearch />
+            {isVesselSearchDisplayed && <VesselsSearch />}
             <AlertsMapButton />
             <BeaconMalfunctionsMapButton />
             <RightMenuOnHoverArea />
-            <VesselList namespace="homepage" />
-            <VesselFiltersMapButton />
-            <VesselVisibilityMapButton />
+            {isVesselListDisplayed && <VesselList namespace="homepage" />}
+            {isVesselFiltersMapButtonDisplayed && <VesselFiltersMapButton />}
+            {isVesselVisibilityMapButtonDisplayed && <VesselVisibilityMapButton />}
             <FavoriteVessels />
             {isVesselSidebarOpen && <VesselSidebar />}
             <UpdatingVesselLoader />
-            <MeasurementMapButton />
-            <InterestPointMapButton />
-            <VesselLabelsMapButton />
+            {isMeasurementMapButtonDisplayed && <MeasurementMapButton />}
+            {isInterestPointMapButtonDisplayed && <InterestPointMapButton />}
+            {isVesselLabelsMapButtonDisplayed && <VesselLabelsMapButton />}
             <APIWorker />
             <ErrorToastNotification />
             {openedSideWindowTab && <SideWindowLauncher />}
+            {isDrawLayerModalDisplayed && <DrawLayerModal />}
           </Wrapper>
         </Route>
       </Switch>
@@ -156,9 +168,15 @@ function TritonFish() {
   )
 }
 
+const CustomGlobalStyle = createGlobalStyle`
+  html, body {
+    font-size: 13px;
+  }
+`
+
 const Wrapper = styled.div`
   font-size: 13px;
+  overflow: hidden;
   text-align: center;
   width: 100vw;
-  overflow: hidden;
 `

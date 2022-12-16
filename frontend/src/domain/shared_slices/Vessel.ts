@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { transform } from 'ol/proj'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../entities/map/constants'
 import { reportingIsAnInfractionSuspicion, ReportingTypeCharacteristics } from '../entities/reporting'
 import {
   atLeastOneVesselSelected,

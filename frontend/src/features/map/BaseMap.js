@@ -7,7 +7,7 @@ import { transform } from 'ol/proj'
 import ScaleLine from 'ol/control/ScaleLine'
 import Zoom from 'ol/control/Zoom'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../domain/entities/map/constants'
 import { resetAnimateToRegulatoryLayer } from '../../domain/shared_slices/Map'
 import MapCoordinatesBox from './controls/MapCoordinatesBox'
 import MapAttributionsBox from './controls/MapAttributionsBox'

@@ -1,9 +1,9 @@
-import type { GeoJSON } from './geojson'
+import type { WFSGetFeature } from './geoserver'
 
 export type InterestPoint = {
   /** [longitude, latitude] coordinates */
   coordinates: [number, number]
-  feature: GeoJSON
+  feature: WFSGetFeature
   name: string | null
   observations: string | null
   type: string

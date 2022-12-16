@@ -4,7 +4,7 @@ import { Table } from 'rsuite'
 import styled from 'styled-components'
 
 import { getCoordinates } from '../../../../coordinates'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../domain/entities/map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { animateToCoordinates } from '../../../../domain/shared_slices/Map'
 import { highlightVesselTrackPosition } from '../../../../domain/shared_slices/Vessel'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
@@ -182,6 +182,6 @@ export function DateTimeCell({ coordinatesFormat, dataKey, rowData, ...nativePro
 }
 
 const ManualPosition = styled(ManualPositionSVG)`
-  vertical-align: sub;
   margin-left: 3px;
+  vertical-align: sub;
 `

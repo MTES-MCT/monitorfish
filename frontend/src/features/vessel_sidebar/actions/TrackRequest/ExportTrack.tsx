@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { getCoordinates } from '../../../../coordinates'
-import { WSG84_PROJECTION } from '../../../../domain/entities/map'
+import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { formatToCSVColumnsForExport, getDate } from '../../../../utils'
 import { PrimaryButton } from '../../../commonStyles/Buttons.style'

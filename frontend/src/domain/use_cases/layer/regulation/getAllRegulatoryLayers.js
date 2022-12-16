@@ -1,9 +1,10 @@
 import { batch } from 'react-redux'
 import { setError } from '../../../shared_slices/Global'
 import {
-  setSelectedRegulatoryZone,
   setLayersTopicsByRegTerritory,
-  setRegulatoryLayerLawTypes
+  setRegulatoryLayerLawTypes,
+  setRegulatoryZones,
+  setSelectedRegulatoryZone
 } from '../../../shared_slices/Regulatory'
 import layer from '../../../shared_slices/Layer'
 import { getAllRegulatoryLayersFromAPI } from '../../../../api/geoserver'
@@ -16,6 +17,10 @@ const getAllRegulatoryLayers = () => async (dispatch, getState) => {
 
   return getAllRegulatoryLayersFromAPI(getState().global.isBackoffice)
     .then(features => {
+      monitorFishWorker.mapGeoserverToRegulatoryZones(features, speciesByCode).then(regulatoryZones => {
+        dispatch(setRegulatoryZones(regulatoryZones))
+      })
+
       return monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode)
     })
     .then(response => {

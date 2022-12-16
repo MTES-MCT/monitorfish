@@ -1,9 +1,7 @@
 import { Radio } from 'rsuite'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../constants/constants'
 import { BaseLayers } from '../../../domain/entities/layers/constants'
-import { theme } from '../../../ui/theme'
 
 type BaseLayerRowProps = {
   layer: string
@@ -27,13 +25,13 @@ const Row = styled.li`
   overflow: hidden !important;
   cursor: pointer;
   background: ${p => p.theme.color.white};
-  color: ${COLORS.gunMetal};
-  border-bottom: 1px solid ${COLORS.lightGray};
+  color: ${p => p.theme.color.gunMetal};
+  border-bottom: 1px solid ${p => p.theme.color.lightGray};
   display: block;
   line-height: 18px;
   user-select: none;
 
   :hover {
-    background: ${theme.color.blueGray['25']};
+    background: ${p => p.theme.color.blueGray['25']};
   }
 `

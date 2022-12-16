@@ -1,4 +1,4 @@
-import type { BeaconMalfunctionDetailsType } from '../../../features/side_window/beacon_malfunctions/beaconMalfunctions'
+import type { BeaconMalfunctionDetailsType } from '../../../features/SideWindow/beacon_malfunctions/beaconMalfunctions'
 import type { VesselIdentity } from '../vessel/types'
 import type {
   BeaconMalfunctionPropertyName,

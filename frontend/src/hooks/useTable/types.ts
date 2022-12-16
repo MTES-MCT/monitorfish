@@ -6,7 +6,7 @@ export type TableColumn<T extends Record<string, any> = Record<string, any>> = {
   fixedWidth?: number
   isSortable?: boolean
   key: string
-  label: string
+  label?: string
   /**
    * Transform the column value into a custom value used as the rendered label.
    *

@@ -5,7 +5,7 @@ import { COLORS } from '../../../constants/constants'
 import { Layer } from '../../../domain/entities/layers/constants'
 import VesselEstimatedPositionCard from '../cards/VesselEstimatedPositionCard'
 import { getCoordinates } from '../../../coordinates'
-import { WSG84_PROJECTION } from '../../../domain/entities/map'
+import { WSG84_PROJECTION } from '../../../domain/entities/map/constants'
 import { useSelector } from 'react-redux'
 
 const VesselEstimatedPositionCardOverlay = ({ map, pointerMoveEventPixel, feature }) => {

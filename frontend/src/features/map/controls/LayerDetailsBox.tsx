@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../../constants/constants'
 import { Layer } from '../../../domain/entities/layers/constants'
-import { getAdministrativeAndRegulatoryLayersStyle } from '../../../layers/styles/administrativeAndRegulatoryLayers.style'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../layers/styles/administrativeAndRegulatoryLayers.style'
 
 import type { BaseRegulatoryZone } from '../../../domain/types/regulation'
 import type Feature from 'ol/Feature'

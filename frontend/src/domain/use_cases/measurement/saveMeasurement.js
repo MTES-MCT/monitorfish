@@ -1,5 +1,5 @@
 import GeoJSON from 'ol/format/GeoJSON'
-import { OPENLAYERS_PROJECTION } from '../../entities/map'
+import { OPENLAYERS_PROJECTION } from '../../entities/map/constants'
 import Circle from 'ol/geom/Circle'
 import { fromCircle } from 'ol/geom/Polygon'
 import { addMeasurementDrawed, resetCircleMeasurementInDrawing } from '../../shared_slices/Measurement'

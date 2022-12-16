@@ -2,7 +2,7 @@ import Feature from 'ol/Feature'
 import {
   REGULATION_ACTION_TYPE,
   getRegulatoryFeatureId, mapToRegulatoryFeatureObject
-} from '../../../entities/regulatory'
+} from '../../../entities/regulation'
 import updateRegulation from './updateRegulation'
 import resetPreviousRegulation from './resetRegulation'
 

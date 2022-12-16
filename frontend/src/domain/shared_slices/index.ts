@@ -1,11 +1,12 @@
-import { combineReducers } from '@reduxjs/toolkit'
-
+import { missionApi } from '../../api/mission'
 import regulation from '../../features/backoffice/Regulation.slice'
-import regulatoryLayerSearch from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
-import vesselList from '../../features/vessel_list/VesselList.slice'
+import { regulatoryLayerSearchReducer } from '../../features/layers/regulatory/search/RegulatoryLayerSearch.slice'
+import { vesselListReducer } from '../../features/vessel_list/VesselList.slice'
 import { alertReducer } from './Alert'
 import { beaconMalfunctionReducer } from './BeaconMalfunction'
 import { controlReducer } from './Control'
+import { displayedComponentReducer } from './DisplayedComponent'
+import { drawReducer } from './Draw'
 import { favoriteVesselReducer } from './FavoriteVessel'
 import { filterReducer } from './Filter'
 import { fishingActivitiesReducer } from './FishingActivities'
@@ -30,12 +31,14 @@ const commonReducerList = {
   species: speciesReducer
 }
 
-const homeReducers = combineReducers({
+const homeReducers = {
   ...commonReducerList,
   alert: alertReducer,
   beaconMalfunction: beaconMalfunctionReducer,
   //  TODO Pass that to singular.
   controls: controlReducer,
+  displayedComponent: displayedComponentReducer,
+  draw: drawReducer,
   favoriteVessel: favoriteVesselReducer,
   filter: filterReducer,
   fishingActivities: fishingActivitiesReducer,
@@ -44,17 +47,18 @@ const homeReducers = combineReducers({
   interestPoint: interestPointReducer,
   layer: layer.homepage.reducer,
   measurement: measurementReducer,
-  regulatoryLayerSearch,
+  missionApi: missionApi.reducer,
+  regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: reportingReducer,
   vessel: vesselSliceReducer,
-  vesselList
-})
+  vesselList: vesselListReducer
+}
 
-const backofficeReducers = combineReducers({
+const backofficeReducers = {
   ...commonReducerList,
   fleetSegment: fleetSegmentReducer,
   layer: layer.backoffice.reducer,
   regulation
-})
+}
 
 export { homeReducers, backofficeReducers }

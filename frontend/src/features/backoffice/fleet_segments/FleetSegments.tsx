@@ -47,7 +47,7 @@ export function FleetSegments() {
     _year => {
       dispatch(getAllFleetSegmentsForBackoffice(_year) as any).then(nextFleetSegments => {
         setYear(_year || currentYear)
-        setFleetSegments(nextFleetSegments)
+        setFleetSegments(nextFleetSegments || [])
       })
     },
     [dispatch, currentYear]
@@ -86,7 +86,7 @@ export function FleetSegments() {
     newFleetSegmentData => {
       dispatch(createFleetSegment(newFleetSegmentData, fleetSegments) as any).then(nextFleetSegments => {
         if (nextFleetSegments) {
-          setFleetSegments(nextFleetSegments)
+          setFleetSegments(nextFleetSegments || [])
         }
       })
 
@@ -155,28 +155,28 @@ const Header = styled.div`
 `
 
 const AddYear = styled.span`
-  margin-top: 12px;
-  margin-right: 10px;
-  margin-left: auto;
   color: ${COLORS.gunMetal};
+  margin-left: auto;
+  margin-right: 10px;
+  margin-top: 12px;
 `
 
 const AddSegment = styled.a`
-  height: fit-content;
-  width: fit-content;
-  margin-top: 10px;
-  text-decoration: underline;
   color: ${COLORS.gunMetal};
   cursor: pointer;
   display: block;
+  height: fit-content;
+  margin-top: 10px;
+  text-decoration: underline;
+  width: fit-content;
 `
 
 const YearSelectPicker = styled(SelectPicker)`
   height: fit-content;
-  width: fit-content;
-  margin-top: 14px;
-  margin-right: 20px;
   margin-left: 5px;
+  margin-right: 20px;
+  margin-top: 14px;
+  width: fit-content;
 
   .rs-picker-toggle {
     width: 80px;
@@ -185,13 +185,13 @@ const YearSelectPicker = styled(SelectPicker)`
 
 const AddYearSelectPicker = styled(SelectPicker)`
   height: fit-content;
-  width: fit-content;
-  margin-top: 10px;
   margin-right: 20px;
+  margin-top: 10px;
+  width: fit-content;
 
   .rs-picker-toggle-placeholder {
-    font-size: 13px;
     color: ${COLORS.gunMetal} !important;
+    font-size: 13px;
   }
 
   .rs-picker-toggle {
@@ -200,14 +200,14 @@ const AddYearSelectPicker = styled(SelectPicker)`
 `
 
 const Loading = styled.div`
-  margin-top: 200px;
   margin-left: calc(50vw - 200px);
+  margin-top: 200px;
 `
 
 const Wrapper = styled.div`
+  height: calc(100vh - 50px);
   margin-left: 40px;
   margin-top: 20px;
-  height: calc(100vh - 50px);
   width: calc(100vw - 200px);
 
   .rs-picker-input {
@@ -218,12 +218,12 @@ const Wrapper = styled.div`
 `
 
 const Title = styled.h2`
-  font-size: 16px;
-  color: #282f3e;
   border-bottom: 2px solid ${p => p.theme.color.lightGray};
+  color: #282f3e;
+  font-size: 16px;
   font-weight: 700;
+  padding-bottom: 5px;
   text-align: left;
   text-transform: uppercase;
-  padding-bottom: 5px;
   width: fit-content;
 `

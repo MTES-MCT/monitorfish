@@ -11,19 +11,19 @@ services:
     ports:
       - 5432:5432
 
-  geoserver:
-    image: kartoza/geoserver:2.18.0
-    restart: unless-stopped
-    ports:
-      - 8081:8080
-    links:
-      - "db:db"
-    volumes:
-      - geoserver-data:/opt/geoserver/data_dir
-    depends_on:
-      - db
-
-#  prometheus:
+#  geoserver:
+#    image: kartoza/geoserver:2.18.0
+#    restart: unless-stopped
+#    ports:
+#      - 8081:8080
+#    links:
+#      - "db:db"
+#    volumes:
+#      - geoserver-data:/opt/geoserver/data_dir
+#    depends_on:
+#      - db
+#
+##  prometheus:
 #    ports:
 #      - 9090:9090
 #    image: prom/prometheus

@@ -1,12 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { getLocalStorageState } from '../../utils'
 import { BaseLayers } from '../entities/layers/constants'
-import { CoordinatesFormat } from '../entities/map'
+import { CoordinatesFormat } from '../entities/map/constants'
 import { vesselLabel } from '../entities/vessel/label/types'
 import { VesselTrackDepth } from '../entities/vesselTrackDepth'
 
 import type { LastPositionVisibility } from '../types/map'
+import type { Extent } from 'ol/extent'
 
 const vesselLabelsShowedOnMapLocalStorageKey = 'vesselLabelsShowedOnMap'
 const vesselsLastPositionVisibilityLocalStorageKey = 'vesselsLastPositionVisibility'
@@ -29,8 +30,8 @@ export type MapState = {
   defaultVesselTrackDepth: VesselTrackDepth
   doNotAnimate: boolean
   extent: null
+  fitToExtent: Extent | undefined
   hideVesselsAtPort: boolean
-  interaction: null
   riskFactorShowedOnMap: boolean
   selectedBaseLayer: string
   showingVesselsEstimatedPositions: boolean
@@ -51,8 +52,8 @@ const INITIAL_STATE: MapState = {
   defaultVesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
   doNotAnimate: false,
   extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
+  fitToExtent: undefined,
   hideVesselsAtPort: getLocalStorageState(true, hideVesselsAtPortLocalStorageKey),
-  interaction: null,
   riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
   selectedBaseLayer: getLocalStorageState(BaseLayers.LIGHT.code, baseLayerLocalStorageKey),
   showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
@@ -104,6 +105,9 @@ const mapSlice = createSlice({
     doNotAnimate(state, action) {
       state.doNotAnimate = action.payload
     },
+    fitToExtent(state, action: PayloadAction<Extent>) {
+      state.fitToExtent = action.payload
+    },
     resetAnimateToCoordinates(state) {
       state.animateToCoordinates = null
     },
@@ -113,12 +117,8 @@ const mapSlice = createSlice({
     resetAnimateToRegulatoryLayer(state) {
       state.animateToRegulatoryLayer = null
     },
-    /**
-     * Reset the interaction with the OpenLayers map
-     * @param {Object=} state
-     */
-    resetInteraction(state) {
-      state.interaction = null
+    resetFitToExtent(state) {
+      state.fitToExtent = undefined
     },
 
     selectBaseLayer(state, action) {
@@ -151,20 +151,6 @@ const mapSlice = createSlice({
     setHideVesselsAtPort(state, action) {
       window.localStorage.setItem(hideVesselsAtPortLocalStorageKey, JSON.stringify(action.payload))
       state.hideVesselsAtPort = action.payload
-    },
-
-    /**
-     * Start an interaction with the OpenLayers map, hence use the mouse to draw geometries
-     * @param {Object} state
-     * @param {{
-     *   payload: {
-     *     type: string
-     *     listener: (layersType.REGULATORY|layersType.VESSEL)
-     *   }
-     * }} action - The interaction type (see InteractionTypes enum) and listener (see layersType enum)
-     */
-    setInteraction(state, action) {
-      state.interaction = action.payload
     },
 
     setRiskFactorShowedOnMap(state, action) {
@@ -205,15 +191,15 @@ export const {
   animateToExtent,
   animateToRegulatoryLayer,
   doNotAnimate,
+  fitToExtent,
   resetAnimateToCoordinates,
   resetAnimateToExtent,
   resetAnimateToRegulatoryLayer,
-  resetInteraction,
+  resetFitToExtent,
   selectBaseLayer,
   setCoordinatesFormat,
   setDefaultVesselTrackDepth,
   setHideVesselsAtPort,
-  setInteraction,
   setRiskFactorShowedOnMap,
   setVesselLabel,
   setVesselLabelsShowedOnMap,

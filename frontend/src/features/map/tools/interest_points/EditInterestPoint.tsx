@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
 import { interestPointType } from '../../../../domain/entities/interestPoints'
-import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../domain/entities/map'
+import { CoordinatesFormat, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import { addInterestPoint, updateInterestPointKeyBeingDrawed } from '../../../../domain/shared_slices/InterestPoint'
 import saveInterestPointFeature from '../../../../domain/use_cases/interestPoint/saveInterestPointFeature'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
@@ -193,11 +193,11 @@ const RadioWrapper = styled.div`
 
 const CancelButton = styled.button`
   border: 1px solid ${COLORS.lightGray};
-  width: 130px;
-  padding: 5px 12px;
-  margin: 15px 0 0 15px;
-  font-size: 13px;
   color: ${COLORS.gunMetal};
+  font-size: 13px;
+  margin: 15px 0 0 15px;
+  padding: 5px 12px;
+  width: 130px;
 
   :disabled {
     border: 1px solid ${COLORS.lightGray};
@@ -207,11 +207,11 @@ const CancelButton = styled.button`
 
 const OkButton = styled.button`
   background: ${COLORS.charcoal};
-  width: 130px;
-  padding: 5px 12px;
-  margin: 15px 0 0;
-  font-size: 13px;
   color: ${COLORS.gainsboro};
+  font-size: 13px;
+  margin: 15px 0 0;
+  padding: 5px 12px;
+  width: 130px;
 
   :hover,
   :focus {
@@ -220,61 +220,61 @@ const OkButton = styled.button`
 `
 
 const Body = styled.div`
-  text-align: left;
-  font-size: 13px;
   color: ${COLORS.slateGray};
+  font-size: 13px;
   margin: 10px 15px;
+  text-align: left;
 
   p {
-    margin: 0;
     font-size: 13px;
+    margin: 0;
   }
 
   p:nth-of-type(2) {
-    margin-top: 15px;
     font-size: 13px;
+    margin-top: 15px;
   }
 
   p:nth-of-type(3) {
-    margin-top: 15px;
     font-size: 13px;
+    margin-top: 15px;
   }
 
   p:nth-of-type(4) {
-    margin-top: 15px;
     font-size: 13px;
+    margin-top: 15px;
   }
 
   input {
-    margin-top: 7px;
-    color: ${COLORS.gunMetal};
     background: ${COLORS.gainsboro};
     border: none;
+    color: ${COLORS.gunMetal};
     height: 27px;
+    margin-top: 7px;
     padding-left: 8px;
   }
 
   textarea {
-    color: ${COLORS.gunMetal};
-    margin-top: 7px;
     background: ${COLORS.gainsboro};
     border: none;
+    color: ${COLORS.gunMetal};
+    margin-top: 7px;
     min-height: 50px;
     padding-left: 8px;
     padding-top: 3px;
-    width: 100% !important;
     resize: vertical;
+    width: 100% !important;
   }
 `
 
 const Header = styled.div`
   background: ${COLORS.charcoal};
-  color: ${COLORS.gainsboro};
-  padding: 9px 0 7px 15px;
-  font-size: 16px;
-  text-align: left;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
+  color: ${COLORS.gainsboro};
+  font-size: 16px;
+  padding: 9px 0 7px 15px;
+  text-align: left;
 `
 
 const Wrapper = styled(MapToolBox)`
@@ -283,10 +283,10 @@ const Wrapper = styled(MapToolBox)`
 `
 
 const iconStyle = css`
-  vertical-align: sub;
-  width: 14px;
   margin-left: 3px;
   margin-right: 7px;
+  vertical-align: sub;
+  width: 14px;
 `
 
 const Gear = styled(GearSVG)`

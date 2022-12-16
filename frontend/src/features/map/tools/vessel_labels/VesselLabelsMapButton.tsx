@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { MapToolType } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
@@ -56,13 +56,15 @@ const VesselLabelsButton = styled(MapToolButton)``
 const LabelIcon = styled(LabelSVG)<{
   $isRightMenuShrinked: boolean
 }>`
-  width: 27px;
   height: 27px;
   opacity: ${props => (props.$isRightMenuShrinked ? '0' : '1')};
   transition: all 0.2s;
+  width: 27px;
+
   path {
     fill: ${p => p.theme.color.gainsboro};
   }
+
   g > g {
     stroke: ${p => p.theme.color.gainsboro};
   }

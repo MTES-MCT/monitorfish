@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 
 export function fillDateRangePicker(label: string, startDate: Date, endDate: Date): void {
   // eslint-disable-next-line cypress/no-assigning-return-values
-  const cypressLegendElement = cy.get('.DateRangePicker > legend').contains(label)
+  const cypressLegendElement = cy.get('.DateRangePicker > div > legend').contains(label)
   if (!cypressLegendElement) {
     throw new Error(`Could not find label (legend) element with text "${label}".`)
   }

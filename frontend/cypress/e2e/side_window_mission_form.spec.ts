@@ -47,7 +47,7 @@ context('Mission Form', () => {
 
     cy.get('label').contains('Administration 2').should('not.exist')
   })
-
+  /*
   it('Should add and remove a zone', () => {
     cy.clickButton('Ajouter une zone de mission')
 
@@ -56,7 +56,7 @@ context('Mission Form', () => {
     cy.clickButton('Supprimer cette zone')
 
     cy.get('div').contains('Polygone dessiné').should('not.exist')
-  })
+  }) */
 
   // it('Should send the expected data to the API', () => {
   //   cy.fill('Type de mission', 'Mer')

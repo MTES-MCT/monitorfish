@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { batch } from 'react-redux'
 import { Modal } from 'rsuite'
 import styled from 'styled-components'
@@ -83,23 +83,28 @@ export function VesselList({ namespace }) {
   const [filteredVessels, setFilteredVessels] = useState<CheckedVesselEnhancedLastPositionWebGLObject[]>([])
   const [vesselsCountTotal, setVesselsCountTotal] = useState(0)
   const [vesselsCountShowed, setVesselsCountShowed] = useState(0)
-  const [allVesselsChecked, setAllVesselsChecked] = useState({ globalCheckbox: true })
+  const [allVesselsChecked, setAllVesselsChecked] = useState(true)
   const [zoneGroups, setZoneGroups] = useState<string[]>([])
 
   // Filters
   const zonesSelected = useAppSelector(state => state.vesselList.zonesSelected)
+  const administrativeZonesFiltered = useMemo(
+    () =>
+      zonesSelected
+        .filter(zoneSelected => zoneSelected.code !== LayerType.FREE_DRAW)
+        .map(zoneSelected => zoneSelected.code),
+    [zonesSelected]
+  )
 
   const [zonesFilter, setZonesFilter] = useState<ZoneGroupAndChildren[]>([])
   const [lastPositionTimeAgoFilter, setLastPositionTimeAgoFilter] = useState(3)
   const [lastControlMonthsAgo, setLastControlMonthsAgo] = useState(null)
   const [countriesFiltered, setCountriesFiltered] = useState([])
-  const [administrativeZonesFiltered, setAdministrativeZonesFiltered] = useState<string[]>([])
   const [fleetSegmentsFiltered, setFleetSegmentsFiltered] = useState([])
   const [gearsFiltered, setGearsFiltered] = useState([])
   const [speciesFiltered, setSpeciesFiltered] = useState([])
   const [districtsFiltered, setDistrictsFiltered] = useState([])
   const [vesselsSizeValuesChecked, setVesselsSizeValuesChecked] = useState([])
-  const [isFiltering, setIsFiltering] = useState(false)
   const [vesselsLocationFilter, setVesselsLocationFilter] = useState([VesselLocation.SEA, VesselLocation.PORT])
 
   const hasNoFilter = () =>
@@ -163,8 +168,17 @@ export function VesselList({ namespace }) {
     }
   }, [dispatch, vessels, isVesselListModalDisplayed])
 
+  const checkedVessels = useMemo(
+    () =>
+      _vessels.map(vessel => ({
+        ...vessel,
+        checked: allVesselsChecked
+      })),
+    [_vessels, allVesselsChecked]
+  )
+
   useEffect(() => {
-    if (_vessels?.length) {
+    if (checkedVessels?.length) {
       const filters = {
         countriesFiltered,
         districtsFiltered,
@@ -178,7 +192,7 @@ export function VesselList({ namespace }) {
         zonesSelected
       }
       setTimeout(() => {
-        dispatch(getFilteredVessels(_vessels, filters)).then(_filteredVessels => {
+        dispatch(getFilteredVessels(checkedVessels, filters)).then(_filteredVessels => {
           setFilteredVessels(_filteredVessels)
           setVesselsCountShowed(_filteredVessels.length)
         })
@@ -186,7 +200,7 @@ export function VesselList({ namespace }) {
     }
   }, [
     dispatch,
-    _vessels,
+    checkedVessels,
     countriesFiltered,
     lastPositionTimeAgoFilter,
     zonesSelected,
@@ -198,15 +212,6 @@ export function VesselList({ namespace }) {
     lastControlMonthsAgo,
     vesselsLocationFilter
   ])
-
-  useEffect(() => {
-    const nextVessels = _vessels.map(vessel => ({
-      ...vessel,
-      checked: allVesselsChecked.globalCheckbox
-    }))
-
-    setVessels(nextVessels)
-  }, [_vessels, allVesselsChecked])
 
   const toggleSelectRow = useCallback(
     (vesselFeatureId, value) => {
@@ -229,7 +234,6 @@ export function VesselList({ namespace }) {
 
   const closeAndResetVesselList = useCallback(() => {
     setCountriesFiltered([])
-    setAdministrativeZonesFiltered([])
     setLastPositionTimeAgoFilter(3)
     setFleetSegmentsFiltered([])
     setGearsFiltered([])
@@ -321,19 +325,24 @@ export function VesselList({ namespace }) {
     }
   }, [dispatch, previewFilteredVesselsMode])
 
-  useEffect(() => {
-    if (administrativeZonesFiltered?.length > zonesSelected?.length) {
-      setIsFiltering(true)
+  const setAdministrativeZonesFiltered = useCallback(
+    (nextAdministrativeZonesFiltered: string[]) => {
+      const withoutAdministrativeZones = zonesSelected.filter(zoneSelected => {
+        if (zoneSelected.code === LayerType.FREE_DRAW) {
+          return true
+        }
 
-      const zonesGeometryToFetch = administrativeZonesFiltered
-        .filter(zonesFiltered => !zonesSelected.some(alreadyFetchedZone => alreadyFetchedZone.code === zonesFiltered))
-        .map(zoneName =>
-          zonesFilter
-            .map(group => group.children)
-            .flat()
-            .filter(zone => zone)
-            .find(zone => zone.code === zoneName)
-        )
+        return nextAdministrativeZonesFiltered.find(zoneFiltered => zoneFiltered === zoneSelected.code)
+      })
+      dispatch(setZonesSelected(withoutAdministrativeZones))
+
+      const zonesGeometryToFetch = nextAdministrativeZonesFiltered.map(zoneName =>
+        zonesFilter
+          .map(group => group.children)
+          .flat()
+          .filter(zone => zone)
+          .find(zone => zone.code === zoneName)
+      )
 
       zonesGeometryToFetch.forEach(zoneToFetch => {
         if (!zoneToFetch) {
@@ -346,35 +355,15 @@ export function VesselList({ namespace }) {
           dispatch(getAdministrativeZoneGeometry(zoneToFetch.code, null, zoneToFetch.name, namespace))
         }
       })
-
-      setIsFiltering(false)
-    }
-  }, [dispatch, administrativeZonesFiltered, zonesFilter, namespace, zonesSelected])
-
-  useEffect(() => {
-    if (
-      zonesSelected &&
-      zonesSelected.length &&
-      administrativeZonesFiltered &&
-      zonesSelected.length > administrativeZonesFiltered.length
-    ) {
-      const nextZonesSelected = zonesSelected.filter(zoneSelected => {
-        if (zoneSelected.code === LayerType.FREE_DRAW) {
-          return true
-        }
-
-        return administrativeZonesFiltered.find(zoneFiltered => zoneFiltered === zoneSelected.code)
-      })
-
-      dispatch(setZonesSelected(nextZonesSelected))
-    }
-  }, [dispatch, zonesSelected, administrativeZonesFiltered])
+    },
+    [dispatch, namespace, zonesFilter, zonesSelected]
+  )
 
   const isRightMenuShrinked = !rightMenuIsOpen
 
   return (
     <>
-      <Wrapper healthcheckTextWarning={false} isFiltering={isFiltering}>
+      <Wrapper healthcheckTextWarning={false}>
         <VesselListButton
           dataCy="vessel-list"
           isOpen={isVesselListModalDisplayed}
@@ -476,7 +465,6 @@ export function VesselList({ namespace }) {
               seeMoreIsOpen={seeMoreIsOpen}
               setAllVesselsChecked={setAllVesselsChecked}
               toggleSelectRow={toggleSelectRow}
-              vessels={_vessels}
               vesselsCountShowed={vesselsCountShowed}
               vesselsCountTotal={vesselsCountTotal}
             />
@@ -534,11 +522,8 @@ export function VesselList({ namespace }) {
   )
 }
 
-const Wrapper = styled(MapComponentStyle)<{
-  isFiltering: boolean
-}>`
+const Wrapper = styled(MapComponentStyle)`
   transition: all 0.2s;
-  cursor: ${p => (p.isFiltering ? 'progress' : 'auto')};
 `
 
 const PreviewButton = styled(SecondaryButton)`

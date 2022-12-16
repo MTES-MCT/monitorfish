@@ -27,7 +27,6 @@ function UnmemoizedVesselListTable({
   seeMoreIsOpen,
   setAllVesselsChecked,
   toggleSelectRow,
-  vessels,
   vesselsCountShowed,
   vesselsCountTotal
 }) {
@@ -50,14 +49,8 @@ function UnmemoizedVesselListTable({
   }, [sortColumn, sortType, filteredVessels])
 
   const updateAllVesselsChecked = useCallback(() => {
-    const isChecked =
-      allVesselsChecked.globalCheckbox && vessels.filter(vessel => vessel.checked === true).length === vessels.length
-    if (isChecked === false) {
-      setAllVesselsChecked({ globalCheckbox: true })
-    } else {
-      setAllVesselsChecked({ globalCheckbox: !allVesselsChecked.globalCheckbox })
-    }
-  }, [allVesselsChecked, vessels, setAllVesselsChecked])
+    setAllVesselsChecked(!allVesselsChecked)
+  }, [allVesselsChecked, setAllVesselsChecked])
 
   return (
     <TableContent>
@@ -80,13 +73,7 @@ function UnmemoizedVesselListTable({
       >
         <Column fixed resizable width={35}>
           <HeaderCell>
-            <StyledCheckbox
-              checked={
-                allVesselsChecked.globalCheckbox &&
-                vessels.filter(vessel => vessel.checked === true).length === vessels.length
-              }
-              onChange={() => updateAllVesselsChecked()}
-            />
+            <StyledCheckbox checked={allVesselsChecked} onChange={() => updateAllVesselsChecked()} />
           </HeaderCell>
           <CheckedCell dataKey="checked" onChange={toggleSelectRow} />
         </Column>

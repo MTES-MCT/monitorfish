@@ -19,7 +19,14 @@ export const NEW_GROUND_CONTROL_ACTION = (): PartialGroundControl => ({
 })
 
 export const NEW_SEA_CONTROL_ACTION = (): PartialSeaControl => ({
+  compliance: {
+    customInfractions: []
+  },
+  deviceInfractions: [],
+  specyInfractions: [],
   startDate: new Date(),
+  tideFishingZones: [],
+  tideFleetSegments: [],
   type: MissionType.SEA
 })
 

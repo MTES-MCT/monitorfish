@@ -32,7 +32,7 @@
   "dependencies": {
     "@dnd-kit/core": "^4.0.3",
     "@dnd-kit/modifiers": "^4.0.0",
-    "@mtes-mct/monitor-ui": "2.0.0",
+    "@mtes-mct/monitor-ui": "2.3.0",
     "@reduxjs/toolkit": "1.9.1",
     "@sentry/react": "6.19.7",
     "@sentry/tracing": "6.19.7",
@@ -65,7 +65,7 @@
     "react-epic-spinners": "^0.5.0",
     "react-highlight-words": "0.18.0",
     "react-imask": "^6.1.0",
-    "react-markdown": "^6.0.1",
+    "react-markdown": "6.0.3",
     "react-redux": "8.0.5",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.1",
@@ -79,7 +79,8 @@
     "simplify-geojson": "^1.0.4",
     "styled-components": "5.3.5",
     "timeago.js": "^4.0.2",
-    "worker-loader": "^3.0.6"
+    "worker-loader": "^3.0.6",
+    "yup": "0.32.11"
   },
   "devDependencies": {
     "@ivangabriele/eslint-config-typescript-react": "5.0.0",

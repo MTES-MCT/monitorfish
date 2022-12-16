@@ -6,7 +6,7 @@ export const FormHead = styled.div`
   padding: 2rem;
 
   > div {
-    margin-left: 1.5rem;
+    margin-left: 24px;
   }
 
   > h2 {
@@ -17,7 +17,8 @@ export const FormHead = styled.div`
     margin: 0;
 
     > div {
-      margin-right: 0.25rem;
+      margin-right: 8px;
+      vertical-align: -2px;
     }
   }
 `

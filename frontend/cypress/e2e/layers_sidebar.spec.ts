@@ -224,20 +224,6 @@ context('LayersSidebar', () => {
     cy.get('*[data-cy="unauthorized-regulatory-layers-metadata-species"]').contains('Toutes les espèces')
   })
 
-  it('An advanced search Should filter the search result', () => {
-    // When
-    cy.get('*[data-cy="layers-sidebar"]').click({ timeout: 10000 })
-
-    cy.get('*[data-cy="regulatory-search-input"]').type('Cotentin')
-    cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
-
-    cy.get('*[data-cy="regulatory-layers-advanced-search-zone"]').type('MEMN')
-    cy.get('*[data-cy="regulatory-layers-advanced-search-gears"]').type('DRB')
-    cy.get('*[data-cy="regulatory-layers-advanced-search-species"]').type('VEV')
-    cy.get('*[data-cy="regulatory-layers-advanced-search-reg"]').type('168/2020')
-    cy.get('*[data-cy="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
-  })
-
   it('A regulation Should be searched with a rectangle', () => {
     // When
     cy.intercept(

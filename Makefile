@@ -7,13 +7,13 @@ install:
 	cd ./frontend && npm i
 run-front:
 	cd ./frontend && npm start
-run-back:
-	docker compose up -d
+run-back: run-stubbed-apis
+	docker compose up -d --quiet-pull db
 	cd backend && ./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.additional-location=$(INFRA_FOLDER)" -Dspring-boot.run.profiles="local"
-run-stubbed-reg:
-	docker stop monitorfish-geoserver-1 || true
-	cd ./frontend/cypress && docker compose -f ./docker-compose.yml up -d --quiet-pull geoserver
-stop-stubbed-reg:
+run-stubbed-apis:
+	docker stop cypress-geoserver-monitorenv-stubs-1 || true
+	docker compose -f ./frontend/cypress/docker-compose.yml up -d --quiet-pull geoserver-monitorenv-stubs
+stop-stubbed-apis:
 	docker stop cypress-geoserver-1
 erase-db:
 	docker compose down

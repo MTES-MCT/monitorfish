@@ -75,7 +75,7 @@ context('InterestPoint', () => {
 
     cy.get('*[data-cy^="interest-point-name"]').first().contains('Aucun Libellé', { timeout: 10000 })
     cy.get('*[data-cy^="interest-point-observations"]').first().contains('Aucune observation', { timeout: 10000 })
-    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47.5525° -007.5499°', { timeout: 10000 })
+    cy.get('*[data-cy^="interest-point-coordinates"]').first().contains('47.5525° -007.5563°', { timeout: 10000 })
 
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
   })
@@ -107,7 +107,7 @@ context('InterestPoint', () => {
     cy.get('#root').click(490, 580, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-type-radio-input"]').click({ timeout: 10000 })
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
-    cy.get('#root').click(536, 600, { timeout: 10000 })
+    cy.get('[data-cy="interest-point-edit"]').click({ timeout: 10000 })
     // The interest point is moved to the East side
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 }).eq(1).type('{backspace}E')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })

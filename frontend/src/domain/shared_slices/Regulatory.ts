@@ -7,7 +7,7 @@ import {
   SELECTED_REG_ZONES_IDS_LOCAL_STORAGE_KEY,
   SELECTED_REG_ZONES_LOCAL_STORAGE_KEY
 } from '../entities/layers/constants'
-import { getRegulatoryLayersWithoutTerritory } from '../entities/regulatory'
+import { getRegulatoryLayersWithoutTerritory } from '../entities/regulation'
 
 import type { RegulatoryLawTypes, RegulatoryZone } from '../types/regulation'
 import type { Geometry } from 'ol/geom'
@@ -76,6 +76,7 @@ export type RegulatoryState = {
   // TODO Type this prop.
   regulatoryZoneMetadata: Record<string, any> | null
   regulatoryZoneMetadataPanelIsOpen: boolean
+  regulatoryZones: RegulatoryZone[]
   // TODO Type this prop.
   selectedRegulatoryLayers: Record<string, RegulatoryZone[]> | null
   simplifiedGeometries: boolean
@@ -92,6 +93,7 @@ const INITIAL_STATE: RegulatoryState = {
   regulatoryTopicsOpened: [],
   regulatoryZoneMetadata: null,
   regulatoryZoneMetadataPanelIsOpen: false,
+  regulatoryZones: [],
   selectedRegulatoryLayers: null,
   simplifiedGeometries: true
 }
@@ -291,6 +293,10 @@ const regulatorySlice = createSlice({
       state.regulatoryZoneMetadata = action.payload
     },
 
+    setRegulatoryZones(state, action: PayloadAction<RegulatoryZone[]>) {
+      state.regulatoryZones = action.payload
+    },
+
     setSelectedRegulatoryZone(state, action) {
       if (action.payload?.length) {
         const regulatoryLayers = action.payload
@@ -359,6 +365,7 @@ export const {
   setRegulatoryTopics,
   setRegulatoryTopicsOpened,
   setRegulatoryZoneMetadata,
+  setRegulatoryZones,
   setSelectedRegulatoryZone,
   showSimplifiedGeometries,
   showWholeGeometries

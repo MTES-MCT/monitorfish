@@ -1,3 +1,4 @@
+import { DateRangePicker, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -5,8 +6,6 @@ import { VesselTrackDepth } from '../../../../domain/entities/vesselTrackDepth'
 import { updateSelectedVesselTrackRequest } from '../../../../domain/use_cases/vessel/updateSelectedVesselTrackRequest'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { DateRangePicker } from '../../../../ui/DateRangePicker'
-import { theme } from '../../../../ui/theme'
 import { MapComponentStyle } from '../../../commonStyles/MapComponent.style'
 import { ReactComponent as VesselSVG } from '../../../icons/Icone_navire.svg'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
@@ -78,7 +77,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   return (
     <>
       <VesselSidebarActionButton
-        backgroundColor={isOpen ? theme.color.blueGray[100] : theme.color.charcoal}
+        backgroundColor={isOpen ? THEME.color.blueGray[100] : THEME.color.charcoal}
         data-cy="vessel-track-depth-selection"
         healthcheckTextWarning={!!healthcheckTextWarning}
         isHidden={false}

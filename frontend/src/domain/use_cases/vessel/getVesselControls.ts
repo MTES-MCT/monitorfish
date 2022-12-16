@@ -43,7 +43,6 @@ export const getVesselControls = userRequest => (dispatch, getState) => {
       dispatch(removeError())
     })
     .catch(error => {
-      console.error(error)
       batch(() => {
         dispatch(setError(error))
       })

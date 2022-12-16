@@ -1,5 +1,6 @@
-import { isEmpty } from 'ramda'
-
+import { clickButton } from './commands/clickButton'
+import { clickOutside } from './commands/clickOutside'
+import { fill } from './commands/fill'
 import { fillDateRangePicker } from './commands/fillDateRangePicker'
 import { forceClick } from './commands/forceClick'
 import { getDataCy } from './commands/getDataCy'
@@ -33,10 +34,8 @@ Cypress.Commands.add('cleanScreenshots', (fromNumber: number): void => {
   cy.exec(`cd cypress/e2e/__image_snapshots__/ && find . | grep -P "[${fromNumber}-7]\\.png" | xargs -i rm {}\n`)
 })
 
-Cypress.Commands.add(
-  'clickButton',
-  (buttonText: string): Cypress.Chainable<JQuery<HTMLButtonElement>> => cy.get('button').contains(buttonText).click()
-)
+Cypress.Commands.add('clickButton', clickButton)
+
 Cypress.Commands.add(
   'clickLink',
   (linkText: string): Cypress.Chainable<JQuery<HTMLAnchorElement>> => cy.get('a').contains(linkText).click()
@@ -46,7 +45,7 @@ Cypress.Commands.add(
  * @description
  * Useful to close modals.
  */
-Cypress.Commands.add('clickOutside', () => cy.get('body').click(0, 0))
+Cypress.Commands.add('clickOutside', clickOutside)
 
 /**
  * @example
@@ -54,48 +53,11 @@ Cypress.Commands.add('clickOutside', () => cy.get('body').click(0, 0))
  *   cy.fill('Password', 'P422W0Rd')
  * ```
  */
-Cypress.Commands.add('fill', (label: string, value: string): void => {
-  // eslint-disable-next-line cypress/no-assigning-return-values
-  const cypressLabelElement = cy.get('label').contains(label)
-  if (!cypressLabelElement) {
-    throw new Error(`Could not find label element with text "${label}".`)
-  }
-
-  cypressLabelElement.then(([labelElement]) => {
-    if (!labelElement) {
-      throw new Error(`Could not find label element with text "${label}".`)
-    }
-
-    // If the label has a for attribute, we can use it to find the input
-    if (!isEmpty(labelElement.htmlFor)) {
-      // eslint-disable-next-line cypress/no-assigning-return-values
-      const cypressInputElement = cy.get(`#${labelElement.htmlFor}`)
-      cypressInputElement.type(value)
-
-      return cypressInputElement
-    }
-
-    // If the label has no for attribute, we can check if an input is within the label
-    const cypressInputElement = cypressLabelElement.get('input')
-    if (cypressInputElement) {
-      cypressInputElement.type(value)
-
-      return cypressInputElement
-    }
-
-    // If the label has no for attribute, we can check if a textarea is within the label
-    const cypressTextareaElement = cypressLabelElement.get('textarea')
-    if (cypressTextareaElement) {
-      cypressTextareaElement.type(value)
-
-      return cypressTextareaElement
-    }
-
-    throw new Error(`Could not find input or textarea with label "${label}".`)
-  })
-})
+Cypress.Commands.add('fill', fill)
 
 Cypress.Commands.add('fillDateRangePicker', fillDateRangePicker)
+
 // Maybe because of https://github.com/cypress-io/cypress/issues/19564
 Cypress.Commands.add('forceClick', { prevSubject: true }, forceClick)
+
 Cypress.Commands.add('getDataCy', getDataCy)

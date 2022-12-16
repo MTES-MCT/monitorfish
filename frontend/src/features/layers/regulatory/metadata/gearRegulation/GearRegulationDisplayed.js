@@ -6,7 +6,7 @@ import RegulatedGears from './RegulatedGears'
 import {
   DEFAULT_AUTHORIZED_REGULATED_GEARS,
   DEFAULT_UNAUTHORIZED_REGULATED_GEARS
-} from '../../../../../domain/entities/regulatory'
+} from '../../../../../domain/entities/regulation'
 import { Section } from '../RegulatoryMetadata.style'
 
 const GearRegulationDisplayed = () => {

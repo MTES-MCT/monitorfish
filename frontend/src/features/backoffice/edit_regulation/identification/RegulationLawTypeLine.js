@@ -10,7 +10,7 @@ import {
   LAWTYPES_TO_TERRITORY,
   UE,
   REGULATORY_REFERENCE_KEYS
-} from '../../../../domain/entities/regulatory'
+} from '../../../../domain/entities/regulation'
 import { updateProcessingRegulationByKey } from '../../Regulation.slice'
 
 const RegulationLawTypeLine = ({ selectData, lawTypeIsMissing }) => {

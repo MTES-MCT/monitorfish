@@ -1,3 +1,4 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -7,7 +8,6 @@ import {
 } from '../../../../domain/shared_slices/FishingActivities'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { theme } from '../../../../ui/theme'
 import { ReactComponent as ShowFishingActivitiesSVG } from '../../../icons/Bouton_afficher_messages_JPE_sur_piste.svg'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
@@ -37,7 +37,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
 
   return (
     <VesselSidebarActionButton
-      backgroundColor={areFishingActivitiesShowedOnMap ? theme.color.blueGray[100] : theme.color.charcoal}
+      backgroundColor={areFishingActivitiesShowedOnMap ? THEME.color.blueGray[100] : THEME.color.charcoal}
       data-cy="show-all-fishing-activities-on-map"
       healthcheckTextWarning={!!healthcheckTextWarning}
       isHidden={false}

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { MapToolType, MeasurementType } from '../../../../domain/entities/map'
+import { MapToolType, MeasurementType } from '../../../../domain/entities/map/constants'
 import { setMapToolOpened } from '../../../../domain/shared_slices/Global'
 import { setMeasurementTypeToAdd } from '../../../../domain/shared_slices/Measurement'
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
@@ -99,24 +99,24 @@ export function MeasurementMapButton() {
 }
 
 const MeasurementItem = styled.div`
-  display: inline-block;
   background: ${p => p.theme.color.blueGray[100]};
-  padding: 0;
-  z-index: 99;
-  right: 0;
-  height: 32px;
-  width: 40px;
   border-radius: 2px;
-  padding-top: 8px;
   cursor: pointer;
-  position: relative;
-  margin-left: 5px;
+  display: inline-block;
   float: right;
+  height: 32px;
+  margin-left: 5px;
+  padding: 0;
+  padding-top: 8px;
+  position: relative;
+  right: 0;
+  width: 40px;
+  z-index: 99;
 `
 
 const MultiLineIcon = styled(MultiLineSVG)`
-  width: 25px;
   height: 25px;
+  width: 25px;
 
   path {
     fill: ${p => p.theme.color.gainsboro};
@@ -124,8 +124,8 @@ const MultiLineIcon = styled(MultiLineSVG)`
 `
 
 const CircleRangeIcon = styled(CircleRangeSVG)`
-  width: 25px;
   height: 25px;
+  width: 25px;
 
   path {
     fill: ${p => p.theme.color.gainsboro};
@@ -142,15 +142,15 @@ const MeasurementOptions = styled(MapComponentStyle)<{
   isHidden?: boolean
   isOpen: boolean
 }>`
-  width: 175px;
+  border-radius: 2px;
+  display: inline-block;
   margin-right: ${p => (p.isOpen ? '45px' : '-200px')};
   opacity: ${p => (p.isOpen ? '1' : '0')};
-  top: 249px;
-  right: 10px;
-  border-radius: 2px;
   position: absolute;
-  display: inline-block;
+  right: 10px;
+  top: 249px;
   transition: all 0.5s;
+  width: 175px;
   z-index: 999;
 `
 
@@ -159,10 +159,11 @@ const MeasurementButton = styled(MapToolButton)``
 const MeasurementIcon = styled(MeasurementSVG)<{
   $isRightMenuShrinked: boolean
 }>`
-  width: 25px;
   height: 25px;
   opacity: ${p => (p.$isRightMenuShrinked ? '0' : '1')};
   transition: all 0.2s;
+  width: 25px;
+
   path:first-of-type {
     fill: ${p => p.theme.color.gainsboro};
   }

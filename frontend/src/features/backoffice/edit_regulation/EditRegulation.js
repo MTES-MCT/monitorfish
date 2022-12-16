@@ -22,9 +22,9 @@ import {
 } from './'
 import ConfirmRegulationModal from './ConfirmRegulationModal'
 import BaseMap from '../../map/BaseMap'
-import { BaseLayer } from '../../../layers/BaseLayer'
+import { BaseLayer } from '../../map/layers/BaseLayer'
 
-import { RegulatoryPreviewLayer } from '../../../layers/RegulatoryPreviewLayer'
+import { RegulatoryPreviewLayer } from '../../map/layers/RegulatoryPreviewLayer'
 import {
   closeRegulatoryZoneMetadataPanel,
   resetRegulatoryGeometriesToPreview,
@@ -56,7 +56,7 @@ import {
   FRANCE,
   LAWTYPES_TO_TERRITORY,
   REGULATORY_REFERENCE_KEYS
-} from '../../../domain/entities/regulatory'
+} from '../../../domain/entities/regulation'
 import SpeciesRegulation from './species_regulation/SpeciesRegulation'
 import getAllSpecies from '../../../domain/use_cases/species/getAllSpecies'
 import { STATUS } from '../constants'

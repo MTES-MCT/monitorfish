@@ -5,7 +5,7 @@ import { Radio, RadioGroup } from 'rsuite'
 import { Label } from '../../../commonStyles/Input.style'
 import { COLORS } from '../../../../constants/constants'
 import useSetFishingPeriod from '../../../../hooks/fishingPeriod/useSetFishingPeriod'
-import { FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulatory'
+import { FISHING_PERIOD_KEYS } from '../../../../domain/entities/regulation'
 
 const FishingPeriodAnnualRecurrence = ({ disabled }) => {
   const { annualRecurrence } = useSelector(state => state.regulation.processingRegulation.fishingPeriod)

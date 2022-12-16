@@ -10,9 +10,15 @@ declare global {
     interface Chainable {
       before(property: string): string
       cleanScreenshots(fromNumber: number): void
-      clickButton(buttonText: string): Chainable<JQuery<HTMLButtonElement>>
+      clickButton(
+        label: string,
+        options?: Partial<{
+          index: number
+          withinSelector: string
+        }>
+      ): Chainable<JQuery<HTMLButtonElement>>
       clickLink(linkText: string): Chainable<JQuery<HTMLAnchorElement>>
-      clickOutside(): Chainable<JQuery<HTMLBodyElement>>
+      clickOutside(yPosition?: number): Chainable<JQuery<HTMLBodyElement>>
       dragTo(
         selector: string,
         options?: Partial<{
@@ -20,7 +26,7 @@ declare global {
           isSmooth: boolean
         }>
       ): void
-      fill(label: string, value: string): Chainable<Element>
+      fill(label: string, value: boolean | string | string[] | undefined): Chainable<Element>
       fillDateRangePicker(label: string, startDate: Date, endDate: Date): Chainable<Element>
       forceClick(): Chainable<JQuery<HTMLElement>>
       getDataCy(dataCy: string): Chainable<JQuery<HTMLElement>>

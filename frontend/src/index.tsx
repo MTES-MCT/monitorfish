@@ -3,7 +3,6 @@ import { Integrations } from '@sentry/tracing'
 import { createRoot } from 'react-dom/client'
 
 import { App } from './App'
-import { FontStyle } from './ui/assets/fonts/fonts'
 
 import 'rsuite/dist/rsuite.css'
 import 'mini.css'
@@ -13,6 +12,10 @@ import 'ol/ol.css'
 import './ui/assets/App.css'
 import './ui/shared/ol-override.css'
 import './ui/shared/rsuite-override.css'
+// TODO Declare this path in @mtes-mct/monitor-ui.
+// eslint-disable-next-line import/no-relative-packages
+// import '../node_modules/@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
+// import '@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 
 if (!(process.env.NODE_ENV === 'development')) {
   Sentry.init({
@@ -32,9 +35,4 @@ if (!container) {
 }
 const root = createRoot(container)
 
-root.render(
-  <>
-    <FontStyle />
-    <App />
-  </>
-)
+root.render(<App />)

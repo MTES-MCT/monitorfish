@@ -26,34 +26,16 @@ export function TableHead({
   sortingKey
 }: TableHeadProps) {
   return (
-    <CardTableHeader>
+    <CardTableHeader noPadding>
       <FlexboxGrid>
         {isCheckable && (
-          <FlexboxGrid.Item
-            style={{
-              alignItems: 'center',
-              display: 'flex',
-              height: 15,
-              paddingRight: 10,
-              userSelect: 'none',
-              width: '2.25rem'
-            }}
-          >
+          <CellWrapper $fixedWidth={2.25} style={{ padding: 0 }}>
             <StyledCheckbox checked={isAllChecked} onChange={onAllCheckChange} />
-          </FlexboxGrid.Item>
+          </CellWrapper>
         )}
-        {columns.map(({ fixedWidth, isSortable, key, label }) => (
-          <FlexboxGrid.Item
-            key={key}
-            style={{
-              alignItems: 'center',
-              display: 'flex',
-              height: 15,
-              paddingRight: 10,
-              userSelect: 'none',
-              width: `${fixedWidth}rem`
-            }}
-          >
+
+        {columns.map(({ fixedWidth, isSortable, key, label = '' }) => (
+          <CellWrapper key={key} $fixedWidth={fixedWidth}>
             <CardTableColumnTitle
               dataCy={`table-order-by-${key}`}
               isAscending={!isSortingDesc}
@@ -63,12 +45,23 @@ export function TableHead({
             >
               {label}
             </CardTableColumnTitle>
-          </FlexboxGrid.Item>
+          </CellWrapper>
         ))}
       </FlexboxGrid>
     </CardTableHeader>
   )
 }
+
+const CellWrapper = styled(FlexboxGrid.Item)<{
+  $fixedWidth: number
+}>`
+  align-items: center;
+  display: flex;
+  height: 36px;
+  padding: 0 10px;
+  user-select: 'none';
+  width: ${p => p.$fixedWidth}rem;
+`
 
 export const StyledCheckbox = styled(Checkbox)`
   height: 36px;

@@ -1,3 +1,6 @@
+/* TODO Remove Rsuite classes once everything imported from @mtes-mct/monitor-ui. */
+/* Ultimately, this file must disappear alltogether. */
+
 .boat {
   object-position: 0 -234px;
 }

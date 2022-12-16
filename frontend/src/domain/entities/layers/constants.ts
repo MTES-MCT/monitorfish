@@ -24,6 +24,7 @@ export const layersGroups = {
 export enum LayerType {
   ADMINISTRATIVE = 'ADMINISTRATIVE',
   BASE_LAYER = 'BASE_LAYER',
+  DRAW = 'DRAW',
   FREE_DRAW = 'FREE_DRAW',
   INFRACTION_SUSPICION = 'INFRACTION_SUSPICION',
   MEASUREMENT = 'MEASUREMENT',
@@ -67,6 +68,17 @@ export const Layer = {
     subZoneFieldKey: null,
     isIntersectable: false,
     zIndex: 995
+  },
+  DRAW: {
+    code: 'draw',
+    name: '',
+    group: null,
+    type: LayerType.DRAW,
+    containsMultipleZones: false,
+    showMultipleZonesInAdministrativeZones: false,
+    subZoneFieldKey: null,
+    isIntersectable: false,
+    zIndex: 999
   },
   FILTERED_VESSELS: {
     code: 'filtered_vessel',

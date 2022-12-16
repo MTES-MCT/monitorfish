@@ -5,11 +5,11 @@ import LineString from 'ol/geom/LineString'
 import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 
-import { getArrowStyle, getCircleStyle, getLineStyle } from '../../../../layers/styles/vesselTrack.style'
+import { getArrowStyle, getCircleStyle, getLineStyle } from '../../../../features/map/layers/styles/vesselTrack.style'
 import { calculatePointsDistance, calculateSplitPointCoordinates } from '../../../../utils'
 import { dayjs } from '../../../../utils/dayjs'
 import { Layer } from '../../layers/constants'
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../map/constants'
 import { TRACK_TYPE_RECORD } from './constants'
 
 import type {

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../../constants/constants'
 import { getCoordinates } from '../../../../coordinates'
 import { getDateTime } from '../../../../utils'
-import { WSG84_PROJECTION } from '../../../../domain/entities/map'
+import { WSG84_PROJECTION } from '../../../../domain/entities/map/constants'
 import countries from 'i18n-iso-countries'
 import { useSelector } from 'react-redux'
 

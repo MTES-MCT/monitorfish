@@ -1,17 +1,19 @@
-import type { GeoJSONGeometry } from './geojson'
+import type { GeoJSON } from './GeoJSON'
 
 export type BaseRegulatoryZone = {
   topic: string
   zone: string
 }
 
-// TODO Clean all regulations types
 export type RegulatoryZone = BaseRegulatoryZone & {
   color: string
+  fishingPeriod: FishingPeriod
   gearRegulation: GearRegulation
-  geometry: GeoJSONGeometry
+  geometry: GeoJSON.Geometry
   id: string
   lawType: string
+  nextId: string
+  otherInfo: string
   region: string
   regulatoryReference: RegulatoryText[]
   showed: boolean
@@ -21,12 +23,12 @@ export type RegulatoryZone = BaseRegulatoryZone & {
 export type RegulatoryText = {
   // TODO Use `Infinity`
   endDate: Date | 'infinite'
+  reference: string
   startDate: Date
-  textName: string
   // TODO Doesn't exist.
   textType: any
   // textType: RegulatoryTextType
-  textURL: string
+  url: string
 }
 
 // TODO Check that.
@@ -62,12 +64,6 @@ export type FishingPeriod = {
   otherInfo: string
   timeIntervals: TimeInterval
   weekdays: [string]
-}
-
-export type RegulatorySpeciesDetail = {
-  /** FAO code */
-  code: string
-  remarks: string
 }
 
 export type RegulatedSpecies = {

@@ -3,7 +3,7 @@ import VectorSource from 'ol/source/Vector'
 import GeoJSON from 'ol/format/GeoJSON'
 import { all } from 'ol/loadingstrategy'
 
-import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map'
+import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './domain/entities/map/constants'
 
 /**
  *

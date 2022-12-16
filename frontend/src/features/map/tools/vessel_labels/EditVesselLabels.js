@@ -12,7 +12,7 @@ import {
 } from '../../../../domain/shared_slices/Map'
 import { VesselLabelSelection } from './VesselLabelSelection'
 import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
-import { MapToolType } from '../../../../domain/entities/map'
+import { MapToolType } from '../../../../domain/entities/map/constants'
 import { MapToolBox } from '../MapToolBox'
 
 const EditVesselLabels = () => {

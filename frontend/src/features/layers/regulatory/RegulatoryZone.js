@@ -23,7 +23,7 @@ import {
   closeRegulatoryZoneMetadataPanel,
   removeRegulatoryTopicOpened
 } from '../../../domain/shared_slices/Regulatory'
-import { getAdministrativeAndRegulatoryLayersStyle } from '../../../layers/styles/administrativeAndRegulatoryLayers.style'
+import { getAdministrativeAndRegulatoryLayersStyle } from '../../map/layers/styles/administrativeAndRegulatoryLayers.style'
 import { theme } from '../../../ui/theme'
 
 export function showOrHideMetadataIcon (regulatoryZoneMetadata, regulatoryZone, setMetadataIsShown) {

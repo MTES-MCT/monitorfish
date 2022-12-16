@@ -1,3 +1,4 @@
+import { Icon, IconButton, Size } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -13,6 +14,7 @@ import {
 import { useAppDispatch } from '../../../../hooks/useAppDispatch'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { useListenForDrawedGeometry } from '../../../../hooks/useListenForDrawing'
+import { theme } from '../../../../ui/theme'
 import { ReactComponent as CloseIconSVG } from '../../../icons/Croix_grise.svg'
 import { ReactComponent as PolygonFilterSVG } from '../../../icons/Filtre_zone_polygone.svg'
 import { ReactComponent as PolygonFilterSelectedSVG } from '../../../icons/Filtre_zone_polygone_selected.svg'
@@ -27,6 +29,8 @@ import {
   setRegulatoryLayersSearchResult,
   setZoneSelected
 } from './RegulatoryLayerSearch.slice'
+
+import type { IconButtonProps } from '@mtes-mct/monitor-ui/elements/IconButton'
 
 export function RegulatoryLayerSearchInput() {
   const dispatch = useAppDispatch()
@@ -105,7 +109,7 @@ export function RegulatoryLayerSearchInput() {
         <SearchBoxInput
           data-cy="regulatory-search-input"
           onChange={e => setSearchQuery(e.target.value)}
-          placeholder="Rechercher une zone reg. par son nom"
+          placeholder="Rechercher une zone réglementaire"
           type="text"
           value={searchQuery}
         />
@@ -116,11 +120,13 @@ export function RegulatoryLayerSearchInput() {
         )}
         <AdvancedSearch
           advancedSearchIsOpen={advancedSearchIsOpen}
+          color={theme.color.gainsboro}
           data-cy="regulatory-layers-advanced-search"
+          Icon={Icon.FilterBis}
           onClick={() => dispatch(setAdvancedSearchIsOpen(!advancedSearchIsOpen))}
-        >
-          {advancedSearchIsOpen ? '-' : '+'}
-        </AdvancedSearch>
+          size={Size.LARGE}
+          title="Ouvrir la recherche avancée"
+        />
       </PrincipalSearchInput>
       <AdvancedSearchBox advancedSearchIsOpen={advancedSearchIsOpen}>
         <SearchByGeometry>
@@ -229,6 +235,7 @@ const SearchBoxInput = styled.input`
   height: 40px;
   width: 270px;
   padding: 0 5px 0 10px;
+  vertical-align: bottom;
   border-bottom: 1px ${COLORS.lightGray} solid;
 
   :hover,
@@ -257,17 +264,24 @@ const CloseIcon = styled(CloseIconSVG)`
   cursor: pointer;
 `
 
-const AdvancedSearch = styled.div<{
-  advancedSearchIsOpen: boolean
-}>`
-  width: 40px;
+const AdvancedSearch = styled(IconButton)<
+  IconButtonProps & {
+    advancedSearchIsOpen?: boolean
+  }
+>`
+  display: inline-block;
   height: 40px;
-  float: right;
-  background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueGray[100] : p.theme.color.charcoal)};
-  cursor: pointer;
-  font-size: 32px;
-  line-height: 29px;
-  color: ${COLORS.gainsboro};
-  font-weight: 300;
-  transition: 0.5s all;
+  width: 40px;
+  background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder['100'] : p.theme.color.charcoal)};
+  border: unset;
+  div {
+    margin-top: -1px;
+    margin-left: -1px;
+  }
+
+  :hover,
+  :focus,
+  :active {
+    background: ${p => (p.advancedSearchIsOpen ? p.theme.color.blueYonder['100'] : p.theme.color.charcoal)};
+  }
 `

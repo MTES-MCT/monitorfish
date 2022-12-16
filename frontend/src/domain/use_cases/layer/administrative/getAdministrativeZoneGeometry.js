@@ -18,7 +18,7 @@ const getAdministrativeZoneGeometry = (administrativeZoneCode, subZoneCode, zone
         value: administrativeZoneFeature
       }))
     } else {
-      console.error(`Vector ${administrativeZoneFeature}:${subZoneCode} has 
+      console.error(`Vector ${administrativeZoneFeature}:${subZoneCode} has
         ${administrativeZoneFeature.numberReturned} features. It should have only 1 feature.`)
     }
   }).catch(e => {

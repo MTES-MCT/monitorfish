@@ -4,7 +4,7 @@ import { Modify } from 'ol/interaction'
 import Draw, { createBox, createRegularPolygon, GeometryFunction } from 'ol/interaction/Draw'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
-import { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { Layer } from '../../../domain/entities/layers/constants'
 import {
@@ -23,7 +23,7 @@ import { drawStyle, editStyle } from './styles/draw.style'
 import type { VectorLayerWithName } from '../../../domain/types/layer'
 import type Geometry from 'ol/geom/Geometry'
 
-export function DrawLayer({ map }) {
+function UnmemoizedDrawLayer({ map }) {
   const dispatch = useAppDispatch()
   const { geometry, interactionType, listener } = useAppSelector(state => state.draw)
 
@@ -209,3 +209,5 @@ function resetDrawInteractions(map) {
     }
   })
 }
+
+export const DrawLayer = React.memo(UnmemoizedDrawLayer)

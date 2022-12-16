@@ -20,24 +20,24 @@ export const searchRegulatoryLayers = searchQuery => async (_, getState) => {
   const { zoneSelected } = state.regulatoryLayerSearch
   const { speciesByCode } = state.species
 
-  let extent: number[] = []
   if (zoneSelected) {
-    extent = getExtentFromGeoJSON(zoneSelected.feature)
-  }
-  if (extent?.length === 4) {
-    return getRegulatoryZonesInExtentFromAPI(extent, state.global.isBackoffice)
-      .then(features => monitorFishWorker.mapGeoserverToRegulatoryZones(features, speciesByCode))
-      .then(filteredRegulatoryZones => {
-        if (searchQuery?.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) {
-          return monitorFishWorker.getStructuredRegulationLawTypes(filteredRegulatoryZones)
-        }
+    const extent = getExtentFromGeoJSON(zoneSelected.feature)
 
-        const fuse = new Fuse(filteredRegulatoryZones, REGULATION_SEARCH_OPTIONS)
+    if (extent?.length === 4) {
+      return getRegulatoryZonesInExtentFromAPI(extent, state.global.isBackoffice)
+        .then(features => monitorFishWorker.mapGeoserverToRegulatoryZones(features, speciesByCode))
+        .then(filteredRegulatoryZones => {
+          if (searchQuery?.length < MINIMUM_SEARCH_CHARACTERS_NUMBER) {
+            return monitorFishWorker.getStructuredRegulationLawTypes(filteredRegulatoryZones)
+          }
 
-        const items = fuse.search<RegulatoryZone>(searchQuery).map(result => result.item)
+          const fuse = new Fuse(filteredRegulatoryZones, REGULATION_SEARCH_OPTIONS)
 
-        return monitorFishWorker.getStructuredRegulationLawTypes(items)
-      })
+          const items = fuse.search<RegulatoryZone>(searchQuery).map(result => result.item)
+
+          return monitorFishWorker.getStructuredRegulationLawTypes(items)
+        })
+    }
   }
 
   const fuse = new Fuse(regulatoryZones, REGULATION_SEARCH_OPTIONS)

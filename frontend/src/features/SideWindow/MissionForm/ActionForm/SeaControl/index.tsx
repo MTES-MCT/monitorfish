@@ -5,9 +5,9 @@ import {
   FormikMultiRadio,
   FormikTextarea,
   FormikTextInput,
-  FormikDateRangePicker,
   Icon,
-  MultiZoneEditor
+  MultiZoneEditor,
+  FormikDatePicker
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
@@ -57,7 +57,7 @@ export function SeaControl({ action, onChange }: SeaControlProps) {
             <FormikCheckbox label="Navire inconnu" name="isVesselUnknown" />
           </FieldGroup>
 
-          <FormikDateRangePicker isLight label="Date et heure du contrôle" name="date" withTime />
+          <FormikDatePicker isLight label="Date et heure du contrôle" name="date" withTime />
 
           <MultiZoneEditor
             addButtonLabel="Ajouter un point de contrôle"

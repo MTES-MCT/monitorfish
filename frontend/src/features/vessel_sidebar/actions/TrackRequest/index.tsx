@@ -14,7 +14,7 @@ import { ExportTrack } from './ExportTrack'
 import { PositionsTable } from './PositionsTable'
 
 import type { TrackRequestCustom, TrackRequestPredefined } from '../../../../domain/entities/vessel/types'
-import type { DateRange } from '../../../../types'
+import type { DateRange } from '@mtes-mct/monitor-ui'
 
 type TrackRequestProps = {
   isSidebarOpen: boolean
@@ -157,11 +157,11 @@ const TrackRequestBody = styled(MapComponentStyle)<{
   display: flex;
   flex-direction: column;
   font-size: 13px;
-  text-align: left;
   margin-right: ${p => (p.isOpen ? '540px' : '217px')};
   opacity: ${p => (p.isOpen ? '1' : '0')};
   position: absolute;
   right: ${p => (p.isRightMenuOpen && p.isSidebarOpen ? 55 : 10)}px;
+  text-align: left;
   top: 118px;
   transition: all 0.3s;
   visibility: ${p => (p.isOpen ? 'visible' : 'hidden')};

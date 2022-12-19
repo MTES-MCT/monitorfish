@@ -1,5 +1,5 @@
 import type { MissionType } from '../../../domain/types/mission'
-import type { DeepPartial } from '@mtes-mct/monitor-ui/types'
+import type { DeepPartial } from '../../../types'
 
 export type Action = AirControl | GroundControl | SeaControl | FreeNote
 export type PartialAction = PartialAirControl | PartialGroundControl | PartialSeaControl | PartialFreeNote

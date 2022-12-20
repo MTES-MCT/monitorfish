@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
@@ -5,13 +6,14 @@ import { getVesselCompositeIdentifier } from '../../domain/entities/vessel/vesse
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { VesselSearchResultItem } from './VesselSearchResultItem'
 
-export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels }) {
+export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, showLastSearchedVessels, width }) {
   const { lastSearchedVessels } = useAppSelector(state => state.global)
+  const baseUrl = useMemo(() => window.location.origin, [])
 
   return (
     <>
       {!!foundVessels?.length && (
-        <Results>
+        <Results width={width}>
           <List>
             {foundVessels.map(featureOrIdentity => {
               const vesselCompositeIdentifier =
@@ -20,6 +22,7 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
               return (
                 <VesselSearchResultItem
                   key={vesselCompositeIdentifier}
+                  baseUrl={baseUrl}
                   searchQuery={searchQuery}
                   selectVessel={selectVessel}
                   vessel={featureOrIdentity}
@@ -30,7 +33,7 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
         </Results>
       )}
       {!foundVessels?.length && showLastSearchedVessels && (
-        <Results>
+        <Results width={width}>
           <List>
             {lastSearchedVessels.map(vessel => {
               const vesselCompositeIdentifier = getVesselCompositeIdentifier(vessel)
@@ -38,6 +41,7 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
               return (
                 <VesselSearchResultItem
                   key={vesselCompositeIdentifier}
+                  baseUrl={baseUrl}
                   searchQuery={searchQuery}
                   selectVessel={() => selectVessel(vessel)}
                   vessel={vessel}
@@ -51,11 +55,16 @@ export function VesselSearchResult({ foundVessels, searchQuery, selectVessel, sh
   )
 }
 
-const Results = styled.div`
+const Results = styled.div<{
+  width: number
+}>`
   background: white;
   color: ${COLORS.gunMetal};
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
+  position: absolute;
+  z-index: 9;
+  width: ${p => p.width}px;
 `
 
 const List = styled.ul`

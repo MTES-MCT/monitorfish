@@ -1,13 +1,13 @@
 import {
   FormikAutoComplete,
   FormikCheckbox,
+  FormikDatePicker,
   FormikEffect,
   FormikMultiRadio,
   FormikTextarea,
   FormikTextInput,
   Icon,
-  MultiZoneEditor,
-  FormikDatePicker
+  MultiZoneEditor
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'

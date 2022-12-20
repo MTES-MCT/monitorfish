@@ -34,7 +34,7 @@
     "@dnd-kit/modifiers": "^4.0.0",
     "@mtes-mct/monitor-ui": "2.3.0",
     "@reduxjs/toolkit": "1.9.1",
-    "@sentry/react": "6.19.7",
+    "@sentry/react": "7.28.0",
     "@sentry/tracing": "6.19.7",
     "@svgr/webpack": "^5.5.0",
     "comlink": "^4.3.0",

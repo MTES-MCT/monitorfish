@@ -53,7 +53,9 @@ type SeaControl = {
   tideFishingZones: string[]
   tideFleetSegments: string[]
   type: MissionType.SEA
+  vesselId: number
 }
+
 export type PartialSeaControl = Omit<
   DeepPartial<SeaControl>,
   'compliance' | 'deviceInfractions' | 'specyInfractions' | 'tideFishingZones' | 'tideFleetSegments'

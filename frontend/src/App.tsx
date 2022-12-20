@@ -27,9 +27,9 @@ import { AlertsMapButton } from './features/SideWindow/alerts_reportings/AlertsM
 import { BeaconMalfunctionsMapButton } from './features/SideWindow/beacon_malfunctions/BeaconMalfunctionsMapButton'
 import { SideWindowLauncher } from './features/SideWindow/SideWindowLauncher'
 import { VesselList } from './features/vessel_list/VesselList'
-import { VesselsSearch } from './features/vessel_search/VesselsSearch'
 import UpdatingVesselLoader from './features/vessel_sidebar/UpdatingVesselLoader'
 import { VesselSidebar } from './features/vessel_sidebar/VesselSidebar'
+import { VesselSidebarHeader } from './features/vessel_sidebar/VesselSidebarHeader'
 import { useAppSelector } from './hooks/useAppSelector'
 import { BackofficePage } from './pages/BackofficePage'
 import { TestPage } from './pages/TestPage'
@@ -115,7 +115,7 @@ function HomePage() {
           <Wrapper>
             <Map />
             <LayersSidebar />
-            {isVesselSearchDisplayed && <VesselsSearch />}
+            {isVesselSearchDisplayed && <VesselSidebarHeader />}
             <AlertsMapButton />
             <BeaconMalfunctionsMapButton />
             <RightMenuOnHoverArea />
@@ -150,7 +150,7 @@ function TritonFish() {
       <Wrapper>
         <Map />
         <LayersSidebar />
-        <VesselsSearch />
+        <VesselSidebarHeader />
         <RightMenuOnHoverArea />
         <VesselList namespace="homepage" />
         <VesselFiltersMapButton />

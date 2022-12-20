@@ -201,7 +201,7 @@ function SideWindowWithRef({ isFromURL }: SideWindowProps, ref: ForwardedRef<HTM
           )}
           {openedSideWindowTab === SideWindowMenuKey.BEACON_MALFUNCTIONS && <BeaconMalfunctionsBoard />}
           {openedSideWindowTab === SideWindowMenuKey.MISSION_LIST && <MissionList />}
-          {openedSideWindowTab === SideWindowMenuKey.MISSION_FORM && <MissionForm />}
+          {openedSideWindowTab === SideWindowMenuKey.MISSION_FORM && <MissionForm baseRef={baseRef} />}
         </Content>
       )}
     </Wrapper>

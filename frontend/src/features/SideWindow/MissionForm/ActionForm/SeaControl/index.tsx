@@ -1,5 +1,4 @@
 import {
-  FormikAutoComplete,
   FormikCheckbox,
   FormikDatePicker,
   FormikEffect,
@@ -11,7 +10,7 @@ import {
 } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash'
-import { useMemo } from 'react'
+import { RefObject, useMemo } from 'react'
 
 import { getLocalizedDayjs } from '../../../../../utils/getLocalizedDayjs'
 import { FieldGroup } from '../../FieldGroup'
@@ -21,6 +20,7 @@ import { FormHead } from '../../FormHead'
 import { ComplianceField } from './ComplianceField'
 import { DevicesField } from './DevicesField'
 import { FleetSegmentsField } from './FleetSegmentsField'
+import { FormikVesselSearch } from './FormikVesselSearch'
 import { SpeciesField } from './SpeciesField'
 
 import type { PartialSeaControl } from '../../types'
@@ -28,9 +28,10 @@ import type { Promisable } from 'type-fest'
 
 export type SeaControlProps = {
   action: PartialSeaControl
+  baseRef: RefObject<HTMLDivElement>
   onChange: (nextNewAction: PartialSeaControl) => Promisable<void>
 }
-export function SeaControl({ action, onChange }: SeaControlProps) {
+export function SeaControl({ action, baseRef, onChange }: SeaControlProps) {
   const startDateAsDayjs = useMemo(() => getLocalizedDayjs(action.startDate), [action])
 
   return (
@@ -47,13 +48,7 @@ export function SeaControl({ action, onChange }: SeaControlProps) {
 
         <FormBody>
           <FieldGroup isInline>
-            <FormikAutoComplete
-              isLabelHidden
-              isLight
-              label="Navire"
-              name="vesselId"
-              placeholder="Rechercher un navire"
-            />
+            <FormikVesselSearch baseRef={baseRef} name="vesselId" />
             <FormikCheckbox label="Navire inconnu" name="isVesselUnknown" />
           </FieldGroup>
 

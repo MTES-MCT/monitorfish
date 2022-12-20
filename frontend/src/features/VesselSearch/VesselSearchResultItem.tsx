@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
 
-export function VesselSearchResultItem({ searchQuery, selectVessel, vessel }) {
+export function VesselSearchResultItem({ baseUrl, searchQuery, selectVessel, vessel }) {
   const { flagState } = vessel
   const { vesselName } = vessel
 
@@ -12,7 +12,11 @@ export function VesselSearchResultItem({ searchQuery, selectVessel, vessel }) {
     <ListItem data-cy="vessel-search-item" onClick={() => selectVessel(vessel)}>
       <div>
         {!!flagState && (
-          <Flag rel="preload" src={`flags/${flagState.toLowerCase()}.svg`} title={countries.getName(flagState, 'fr')} />
+          <Flag
+            rel="preload"
+            src={`${baseUrl}/flags/${flagState.toLowerCase()}.svg`}
+            title={countries.getName(flagState, 'fr')}
+          />
         )}
         <Name>
           <Highlighter

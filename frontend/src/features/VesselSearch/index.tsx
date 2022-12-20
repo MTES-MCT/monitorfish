@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/constants'
@@ -7,7 +7,7 @@ import { getOnlyVesselIdentityProperties } from '../../domain/entities/vessel/ve
 import { searchVessels as searchVesselsAction } from '../../domain/use_cases/vessel/searchVessels'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { useAppSelector } from '../../hooks/useAppSelector'
-import { useClickOutsideWhenOpened } from '../../hooks/useClickOutsideWhenOpened'
+import { useClickOutsideWhenOpenedWithinRef } from '../../hooks/useClickOutsideWhenOpenedWithinRef'
 import { useEscapeFromKeyboard } from '../../hooks/useEscapeFromKeyboard'
 import { VESSEL_SEARCH_OPTIONS } from './constants'
 import { addVesselIdentifierToVesselIdentity, removeDuplicatedFoundVessels } from './utils'
@@ -15,7 +15,24 @@ import { VesselSearchResult } from './VesselSearchResult'
 
 import type { VesselIdentity } from '../../domain/entities/vessel/types'
 
-export function VesselSearch({ isFocused, onClickOutsideOrEscape, onInputClick, onSelectVessel }) {
+type VesselSearchProps = {
+  baseRef?: RefObject<HTMLDivElement>
+  defaultValue?: string
+  extendedWidth: number
+  isFocused: boolean
+  onClickOutsideOrEscape: () => void
+  onInputClick: () => void
+  onSelectVessel: (selectedVessel: VesselIdentity) => void
+}
+export function VesselSearch({
+  baseRef,
+  defaultValue,
+  extendedWidth,
+  isFocused,
+  onClickOutsideOrEscape,
+  onInputClick,
+  onSelectVessel
+}: VesselSearchProps) {
   const dispatch = useAppDispatch()
 
   const { selectedVesselIdentity, vessels } = useAppSelector(state => state.vessel)
@@ -25,7 +42,7 @@ export function VesselSearch({ isFocused, onClickOutsideOrEscape, onInputClick, 
   const [foundVessels, setFoundVessels] = useState<VesselIdentity[]>([])
   const [showLastSearchedVessels, setShowLastSearchedVessels] = useState(false)
   const escapeFromKeyboard = useEscapeFromKeyboard()
-  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isFocused)
+  const clickedOutsideComponent = useClickOutsideWhenOpenedWithinRef(wrapperRef, isFocused, baseRef)
 
   useEffect(() => {
     if (clickedOutsideComponent || escapeFromKeyboard) {
@@ -43,6 +60,11 @@ export function VesselSearch({ isFocused, onClickOutsideOrEscape, onInputClick, 
     },
     [onSelectVessel]
   )
+
+  const onVesselInputClick = useCallback(() => {
+    onInputClick()
+    setShowLastSearchedVessels(true)
+  }, [onInputClick])
 
   useEffect(() => {
     setShowLastSearchedVessels(isFocused)
@@ -82,18 +104,20 @@ export function VesselSearch({ isFocused, onClickOutsideOrEscape, onInputClick, 
       <Input
         ref={input => (selectedVesselIdentity ? input && input.focus() : null)}
         data-cy="vessel-search-input"
+        extendedWidth={extendedWidth}
         isExtended={isFocused}
         onChange={e => setSearchQuery(e.target.value)}
-        onClick={() => onInputClick() && setShowLastSearchedVessels(true)}
+        onClick={onVesselInputClick}
         placeholder="Rechercher un navire..."
         type="text"
-        value={searchQuery}
+        value={searchQuery || defaultValue}
       />
       <VesselSearchResult
         foundVessels={foundVessels}
         searchQuery={searchQuery}
         selectVessel={selectVessel}
         showLastSearchedVessels={showLastSearchedVessels}
+        width={extendedWidth}
       />
     </RefWrapper>
   )
@@ -102,6 +126,7 @@ export function VesselSearch({ isFocused, onClickOutsideOrEscape, onInputClick, 
 const RefWrapper = styled.div``
 
 const Input = styled.input<{
+  extendedWidth: number
   isExtended: boolean
 }>`
   margin: 0;
@@ -112,7 +137,7 @@ const Input = styled.input<{
   color: ${COLORS.gunMetal};
   font-size: 13px;
   height: 40px;
-  width: ${p => (p.isExtended ? 500 : 320)}px;
+  width: ${p => (p.isExtended ? p.extendedWidth : 320)}px;
   padding: 0 5px 0 10px;
   flex: 3;
   transition: all 0.7s;

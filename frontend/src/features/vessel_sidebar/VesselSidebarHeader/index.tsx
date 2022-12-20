@@ -50,6 +50,7 @@ export function VesselSidebarHeader() {
         )}
         {!isVesselNameShown && (
           <VesselSearch
+            extendedWidth={500}
             isFocused={isFocusedOnVesselSearch || vesselSidebarIsOpen}
             onClickOutsideOrEscape={() => dispatch(setIsFocusedOnVesselSearch(false))}
             onInputClick={() => dispatch(setIsFocusedOnVesselSearch(true))}

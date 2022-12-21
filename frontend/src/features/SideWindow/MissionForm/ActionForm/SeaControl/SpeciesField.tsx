@@ -20,7 +20,7 @@ export function SpeciesField() {
       }
 
       const nextValue = append({
-        deviceName: _nextValue
+        specyName: _nextValue
       } as any)(input.value)
 
       helper.setValue(nextValue)

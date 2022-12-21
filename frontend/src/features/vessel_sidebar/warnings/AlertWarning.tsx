@@ -13,7 +13,7 @@ export function AlertWarning({ selectedVessel }) {
 
   return (
     <>
-      {selectedVessel?.alerts?.length && (
+      {!!selectedVessel?.alerts?.length && (
         <Alerts data-cy="vessel-sidebar-alert" onClick={() => showAlertInSideWindow(dispatch, selectedVessel)}>
           <AlertIcon />
           {selectedVessel?.alerts.length === 1

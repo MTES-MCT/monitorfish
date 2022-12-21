@@ -9,7 +9,7 @@ import type { PartialSeaControl } from '../../types'
 
 export function FleetSegmentsField() {
   const [tideFishingZonesInput, , tideFishingZonesHelper] =
-    useField<PartialSeaControl['tideFleetSegments']>('tideFishingZones')
+    useField<PartialSeaControl['tideFishingZones']>('tideFishingZones')
   const [tideFleetSegmentsInput, , tideFleetSegmentsHelper] =
     useField<PartialSeaControl['tideFleetSegments']>('tideFleetSegments')
 

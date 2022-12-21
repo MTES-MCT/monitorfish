@@ -48,7 +48,7 @@ export function SeaControl({ action, baseRef, onChange }: SeaControlProps) {
 
         <FormBody>
           <FieldGroup isInline>
-            <FormikVesselSearch baseRef={baseRef} name="vesselId" />
+            <FormikVesselSearch baseRef={baseRef} />
             <FormikCheckbox label="Navire inconnu" name="isVesselUnknown" />
           </FieldGroup>
 

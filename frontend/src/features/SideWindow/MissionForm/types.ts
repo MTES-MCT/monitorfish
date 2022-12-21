@@ -53,12 +53,20 @@ type SeaControl = {
   tideFishingZones: string[]
   tideFleetSegments: string[]
   type: MissionType.SEA
-  vesselId: number
+  vessel: {
+    externalReferenceNumber?: string | null
+    flagState: string | null
+    internalReferenceNumber?: string | null
+    ircs?: string | null
+    mmsi?: string | null
+    vesselId: number
+    vesselName: string
+  }
 }
 
 export type PartialSeaControl = Omit<
   DeepPartial<SeaControl>,
-  'compliance' | 'deviceInfractions' | 'specyInfractions' | 'tideFishingZones' | 'tideFleetSegments'
+  'compliance' | 'deviceInfractions' | 'specyInfractions' | 'tideFishingZones' | 'tideFleetSegments' | 'vessel'
 > & {
   compliance: Partial<SeaControl['compliance']> & {
     customInfractions: Array<Partial<SeaControl['compliance']['customInfractions'][0]>>
@@ -75,6 +83,7 @@ export type PartialSeaControl = Omit<
   tideFishingZones: string[]
   tideFleetSegments: string[]
   type: MissionType.SEA
+  vessel: Partial<SeaControl['vessel']>
 }
 
 type FreeNote = {

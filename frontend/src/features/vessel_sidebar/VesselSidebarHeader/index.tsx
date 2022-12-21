@@ -51,10 +51,13 @@ export function VesselSidebarHeader() {
         {!isVesselNameShown && (
           <VesselSearch
             extendedWidth={500}
-            isFocused={isFocusedOnVesselSearch || vesselSidebarIsOpen}
+            hasVesselIdInResults={false}
+            isExtended={isFocusedOnVesselSearch || vesselSidebarIsOpen}
+            isLastSearchedVesselsShowed={isFocusedOnVesselSearch || vesselSidebarIsOpen}
             onClickOutsideOrEscape={() => dispatch(setIsFocusedOnVesselSearch(false))}
             onInputClick={() => dispatch(setIsFocusedOnVesselSearch(true))}
             onSelectVessel={onSelectVessel}
+            onUnselectVessel={() => {}}
           />
         )}
       </VesselNameOrInput>

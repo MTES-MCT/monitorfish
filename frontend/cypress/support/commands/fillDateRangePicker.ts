@@ -13,15 +13,15 @@ export function fillDateRangePicker(label: string, startDate: Date, endDate: Dat
   }
 
   cypressFieldsetElement.find('input').then(inputs => {
-    if (inputs.length !== 6 && inputs.length !== 10) {
+    if (inputs.length !== 7 && inputs.length !== 11) {
       throw new Error(
-        `Should have found 6 or 10 inputs within label (legend) element with text "${label}" but found ${inputs.length}.`
+        `Should have found 7 or 11 inputs within label (legend) element with text "${label}" but found ${inputs.length}.`
       )
     }
 
     const startDateAsDayJs = dayjs(startDate)
     const endDateAsDayJs = dayjs(endDate)
-    const hasTimeInput = inputs.length !== 6
+    const hasTimeInput = inputs.length !== 7
 
     cypressFieldsetElement.get('[aria-label="Jour de début"]').type(startDateAsDayJs.format('DD'))
     cypressFieldsetElement.get('[aria-label="Mois de début"]').type(startDateAsDayJs.format('MM'))

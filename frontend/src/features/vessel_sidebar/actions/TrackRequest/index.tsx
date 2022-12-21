@@ -108,6 +108,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
             <DateRangePicker
               key={selectedVesselTrackRequest?.trackDepth}
               defaultValue={dateRangePickerDefaultValue}
+              isCompact
               isHistorical
               isLabelHidden
               label="Plage de temps sur mesure"

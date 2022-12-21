@@ -1,11 +1,9 @@
-import { IconButton } from '@mtes-mct/monitor-ui'
-import styled, { css } from 'styled-components'
+import { Icon, IconButton } from '@mtes-mct/monitor-ui'
+import styled from 'styled-components'
 
 import { getEnvironmentVariable } from '../../api/api'
 import { openSideWindowTab } from '../../domain/shared_slices/Global'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { ReactComponent as AlertsSVG } from '../icons/Icone_alertes.svg'
-import { ReactComponent as BeaconMalfunctionsSVG } from '../icons/Icone_VMS.svg'
 import { SideWindowMenuKey } from './constants'
 
 const IS_DEV_ENV = getEnvironmentVariable('REACT_APP_IS_DEV_ENV')
@@ -20,7 +18,8 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
     <Menu role="menu">
       <MenuButton
         data-cy="side-window-menu-alerts"
-        Icon={AlertsIcon}
+        Icon={Icon.Alert}
+        iconSize={26}
         onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.ALERTS))}
         role="menuitem"
         selected={selectedMenu === SideWindowMenuKey.ALERTS}
@@ -30,7 +29,8 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
         <MenuButton
           aria-label={SideWindowMenuKey.MISSION_LIST}
           data-cy="side-window-menu-mission-list"
-          Icon={BeaconMalfunctionsIcon}
+          Icon={Icon.Target}
+          iconSize={26}
           onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.MISSION_LIST))}
           role="menuitem"
           selected={selectedMenu === SideWindowMenuKey.MISSION_LIST}
@@ -39,7 +39,8 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
       )}
       <MenuButton
         data-cy="side-window-menu-beacon-malfunctions"
-        Icon={BeaconMalfunctionsIcon}
+        Icon={Icon.Vms}
+        iconSize={26}
         onClick={() => dispatch(openSideWindowTab(SideWindowMenuKey.BEACON_MALFUNCTIONS))}
         role="menuitem"
         selected={selectedMenu === SideWindowMenuKey.BEACON_MALFUNCTIONS}
@@ -50,36 +51,36 @@ export function SideWindowMenu({ selectedMenu }: SideWindowMenuProps) {
 }
 
 const Menu = styled.div`
-  background-color: ${p => p.theme.color.charcoal} !important;
+  background-color: ${p => p.theme.color.charcoal};
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
-  font-size: 11px;
   height: 100vh;
-  padding: 0;
-  width: 66px;
+  padding: 70px 0 0;
 `
 
 const MenuButton = styled(IconButton)<{
   selected?: boolean
 }>`
+  animation: none;
   background: ${p => (p.selected ? p.theme.color.blueGray[100] : 'none')};
-  padding-bottom: 18px;
-  padding-top: 7px;
+  border: 0;
+  border-bottom: solid 1px ${p => p.theme.color.slateGray};
+  color: ${p => (p.selected ? p.theme.color.white : p.theme.color.gainsboro)};
+  padding: 22px;
 
-  ${p =>
-    p.selected &&
-    css`
-      :hover {
-        background: ${p.theme.color.blueGray[100]} !important;
-      }
-    `}
-`
+  :hover,
+  :focus {
+    background: ${p => (p.selected ? p.theme.color.blueGray[100] : 'rgba(255, 255, 255, 0.125)')};
+    border: 0;
+    border-bottom: solid 1px ${p => p.theme.color.slateGray};
+    color: ${p => p.theme.color.white};
+  }
 
-const AlertsIcon = styled(AlertsSVG)`
-  margin-top: 12px;
-`
+  :first-child {
+    border-top: solid 1px ${p => p.theme.color.slateGray};
 
-const BeaconMalfunctionsIcon = styled(BeaconMalfunctionsSVG)`
-  margin-top: 12px;
+    :hover {
+      border-top: solid 1px ${p => p.theme.color.slateGray};
+    }
+  }
 `

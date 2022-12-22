@@ -166,6 +166,7 @@ const Input = styled.input<{
   border-radius: 2px;
   color: ${COLORS.gunMetal};
   font-size: 13px;
+  font-weight: 500;
   height: 40px;
   width: ${p => (p.isExtended ? p.extendedWidth : 320)}px;
   padding: 0 5px 0 10px;
@@ -175,8 +176,8 @@ const Input = styled.input<{
     p.flagState ? `url(${p.baseUrl}/flags/${p.flagState.toLowerCase()}.svg) no-repeat scroll, white` : 'white'};
   background-size: 20px;
   background-position-y: center;
-  background-position-x: 5px;
-  padding-left: ${p => (p.flagState ? 30 : 10)}px;
+  background-position-x: 16px;
+  padding-left: ${p => (p.flagState ? 45 : 16)}px;
 
   :hover,
   :focus {

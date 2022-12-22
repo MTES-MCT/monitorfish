@@ -657,10 +657,6 @@ class VesselControllerITests {
         // When
         mockMvc.perform(get("/bff/v1/vessels/risk_factor?internalReferenceNumber=FR224226850"))
             // Then
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.impactRiskFactor", equalTo(1.0)))
-            .andExpect(jsonPath("$.segments", equalTo(listOf("SWW10"))))
-
-        Mockito.verify(getVesselRiskFactor).execute("FR224226850")
+            .andExpect(status().isBadRequest)
     }
 }

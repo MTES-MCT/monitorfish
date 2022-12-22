@@ -81,7 +81,7 @@ context('Control objectives', () => {
     // When
     cy.intercept('PUT', '/bff/v1/control_objectives/78').as('updateObjective')
     cy.wait(50)
-    cy.get('[data-cy="row-78-controlPriorityLevel-1"]').click()
+    cy.get('[data-cy="row-78-controlPriorityLevel-1"]').parent().click()
     cy.get('.rs-picker-select-menu-item').eq(2).click()
     cy.wait('@updateObjective')
 

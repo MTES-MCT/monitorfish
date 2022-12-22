@@ -3,6 +3,7 @@ import ky, { HTTPError } from 'ky'
 import { ApiError } from '../libs/ApiError'
 import { ACCEPTED, NOT_FOUND } from './api'
 
+import type { RiskFactor } from '../domain/entities/vessel/riskFactor/types'
 import type {
   TrackRequest,
   VesselAndPositions,
@@ -21,6 +22,7 @@ const VESSEL_SEARCH_ERROR_MESSAGE = "Nous n'avons pas pu chercher les navires da
 const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu chercher les messages JPE de ce navire"
 const CONTROLS_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les contrôles de ce navire"
 const REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récuperer les signalements de ce navire"
+const RISK_FACTOR_ERROR_MESSAGE = "Nous n'avons pas pu récuperer le facteur de risque du navire"
 
 /**
  * Get all vessels last positions
@@ -175,6 +177,21 @@ async function getVesselReportingsFromAPI(identity: VesselIdentity, fromDate: Da
   }
 }
 
+/**
+ * Get vessel risk factor
+ *
+ * @throws {@link ApiError}
+ */
+async function getVesselRiskFactorFromAPI(internalReferenceNumber: string) {
+  try {
+    return await ky
+      .get(`/bff/v1/vessels/risk_factor?internalReferenceNumber=${internalReferenceNumber}`)
+      .json<RiskFactor>()
+  } catch (err) {
+    throw new ApiError(RISK_FACTOR_ERROR_MESSAGE, err)
+  }
+}
+
 export {
   searchVesselsFromAPI,
   getVesselPositionsFromAPI,
@@ -182,5 +199,6 @@ export {
   getVesselsLastPositionsFromAPI,
   getVesselControlsFromAPI,
   getVesselVoyageFromAPI,
-  getVesselReportingsFromAPI
+  getVesselReportingsFromAPI,
+  getVesselRiskFactorFromAPI
 }

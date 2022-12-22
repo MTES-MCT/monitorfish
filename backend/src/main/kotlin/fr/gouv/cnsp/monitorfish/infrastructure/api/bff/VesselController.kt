@@ -31,6 +31,7 @@ class VesselController(
     private val getVesselControls: GetVesselControls,
     private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
     private val getVesselReportings: GetVesselReportings,
+    private val getVesselRiskFactor: GetVesselRiskFactor,
     meterRegistry: MeterRegistry
 ) {
 
@@ -264,5 +265,17 @@ class VesselController(
 
         logbookTimer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS)
         return VoyageDataOutput.fromVoyage(voyage)
+    }
+
+    @GetMapping("/risk_factor")
+    @ApiOperation("Get vessel risk factor")
+    fun getVesselRiskFactor(
+        @ApiParam("Vessel internal reference number (CFR)")
+        @RequestParam(name = "internalReferenceNumber")
+        internalReferenceNumber: String
+    ): RiskFactorDataOutput {
+        val riskFactor = getVesselRiskFactor.execute(internalReferenceNumber)
+
+        return RiskFactorDataOutput.fromVesselRiskFactor(riskFactor)
     }
 }

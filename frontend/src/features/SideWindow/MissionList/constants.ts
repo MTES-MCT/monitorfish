@@ -13,7 +13,7 @@ export const DUMMY_MISSIONS: Mission[] = new Array(20).fill(undefined).map((_, i
   endDate: new Date(),
   goals: [MissionGoal.FISHING],
   hasOrder: false,
-  id: String(index + 1),
+  id: index + 1,
   inspectionsCount: 0,
   isUnderJdp: false,
   openedBy: 'Bob B',

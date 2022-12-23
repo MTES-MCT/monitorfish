@@ -8,7 +8,7 @@ export type Mission = {
   endDate: Date
   goals: MissionGoal[]
   hasOrder: boolean
-  id: string
+  id: number
   inspectionsCount: number
   isUnderJdp: boolean
   openedBy: string

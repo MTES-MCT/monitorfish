@@ -9,8 +9,7 @@ import {
   FormikTextarea,
   FormikTextInput
 } from '@mtes-mct/monitor-ui'
-import { Formik } from 'formik'
-import { noop } from 'lodash'
+import { Form, Formik } from 'formik'
 import { dissoc, equals, pipe } from 'ramda'
 import { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -27,9 +26,10 @@ import type { FormValues } from './types'
 import type { Promisable } from 'type-fest'
 
 export type MainFormProps = {
+  createMission: (mission: FormValues) => void
   onTypeChange: (nextType: MissionType) => Promisable<void>
 }
-export function MainForm({ onTypeChange }: MainFormProps) {
+export function MainForm({ createMission, onTypeChange }: MainFormProps) {
   const currentValues = useRef<FormValues>(INITIAL_VALUES)
   const [hasMissionUnderJdpType, setHasMissionUnderJdpType] = useState(false)
 
@@ -67,77 +67,86 @@ export function MainForm({ onTypeChange }: MainFormProps) {
   )
 
   return (
-    <Formik initialValues={currentValues.current} onSubmit={noop}>
+    <Formik initialValues={currentValues.current} onSubmit={() => createMission(currentValues.current)}>
       <Wrapper>
-        <FormikEffect onChange={updateCurrentValues as any} />
+        <StyledForm id="mission-form">
+          <FormikEffect onChange={updateCurrentValues as any} />
 
-        <FormHead>
-          <h2>Informations générales</h2>
-        </FormHead>
+          <FormHead>
+            <h2>Informations générales</h2>
+          </FormHead>
 
-        <CustomFormBody>
-          <FormikDateRangePicker label="Début et fin de mission" name="dateRange" />
-          <FormikMultiRadio
-            isInline
-            label="Type de mission"
-            name="type"
-            options={getOptionsFromLabelledEnum(MissionType)}
-          />
-          <FormikMultiCheckbox
-            isInline
-            label="Intentions principales de mission"
-            name="goals"
-            options={getOptionsFromLabelledEnum(MissionGoal)}
-          />
-          <UnderJdpBox>
-            <FormikCheckbox disabled={!hasMissionUnderJdpType} label="Mission sous JDP" name="isUnderJdp" />
-          </UnderJdpBox>
+          <CustomFormBody>
+            <FormikDateRangePicker label="Début et fin de mission" name="dateRange" />
+            <FormikMultiRadio
+              isInline
+              label="Type de mission"
+              name="type"
+              options={getOptionsFromLabelledEnum(MissionType)}
+            />
+            <FormikMultiCheckbox
+              isInline
+              label="Intentions principales de mission"
+              name="goals"
+              options={getOptionsFromLabelledEnum(MissionGoal)}
+            />
+            <UnderJdpBox>
+              <FormikCheckbox disabled={!hasMissionUnderJdpType} label="Mission sous JDP" name="isUnderJdp" />
+            </UnderJdpBox>
 
-          <MultiUnitPicker name="units" />
+            <MultiUnitPicker name="units" />
 
-          <MultiZonePicker addButtonLabel="Ajouter une zone de mission" />
+            <MultiZonePicker addButtonLabel="Ajouter une zone de mission" />
 
-          <FormikMultiRadio
-            isInline
-            label="Ordre de mission"
-            name="hasOrder"
-            // TODO Allow more Monitor UI `Option` types.
-            options={[
-              { label: 'Oui', value: true as any },
-              { label: 'Non', value: false as any }
-            ]}
-          />
+            <FormikMultiRadio
+              isInline
+              label="Ordre de mission"
+              name="hasOrder"
+              // TODO Allow more Monitor UI `Option` types.
+              options={[
+                { label: 'Oui', value: true as any },
+                { label: 'Non', value: false as any }
+              ]}
+            />
 
-          {currentValues.current.type === MissionType.AIR && (
+            {currentValues.current.type === MissionType.AIR && (
+              <InlineFieldGroupWrapper>
+                <FormikMultiSelect
+                  fixedWidth={218}
+                  label="Objectifs du vol"
+                  name="flightGoal"
+                  options={FLIGHT_GOALS_AS_OPTIONS}
+                />
+                <FormikSelect
+                  label="Segment ciblé (si pertinent)"
+                  name="targettedSegment"
+                  options={TARGETTED_SEGMENTS_AS_OPTIONS}
+                />
+              </InlineFieldGroupWrapper>
+            )}
+
+            <RelatedFieldGroupWrapper>
+              <FormikTextarea label="CACEM : orientations, observations" name="cacemNote" />
+              <FormikTextarea label="CNSP : orientations, observations" name="cnspNote" />
+            </RelatedFieldGroupWrapper>
+
             <InlineFieldGroupWrapper>
-              <FormikMultiSelect
-                fixedWidth={218}
-                label="Objectifs du vol"
-                name="flightGoal"
-                options={FLIGHT_GOALS_AS_OPTIONS}
-              />
-              <FormikSelect
-                label="Segment ciblé (si pertinent)"
-                name="targettedSegment"
-                options={TARGETTED_SEGMENTS_AS_OPTIONS}
-              />
+              <FormikTextInput label="Ouvert par" name="openBy" />
+              <FormikTextInput label="Clôturé par" name="closedBy" />
             </InlineFieldGroupWrapper>
-          )}
-
-          <RelatedFieldGroupWrapper>
-            <FormikTextarea label="CACEM : orientations, observations" name="cacemNote" />
-            <FormikTextarea label="CNSP : orientations, observations" name="cnspNote" />
-          </RelatedFieldGroupWrapper>
-
-          <InlineFieldGroupWrapper>
-            <FormikTextInput label="Ouvert par" name="openBy" />
-            <FormikTextInput label="Clôturé par" name="closedBy" />
-          </InlineFieldGroupWrapper>
-        </CustomFormBody>
+          </CustomFormBody>
+        </StyledForm>
       </Wrapper>
     </Formik>
   )
 }
+
+const StyledForm = styled(Form)`
+  background-color: ${p => p.theme.color.white};
+  margin: unset;
+  border: unset;
+  overflow: auto;
+`
 
 // TODO Why is there a `font-weight: 700` for legends in mini.css?
 const Wrapper = styled.div`

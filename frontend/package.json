@@ -77,7 +77,7 @@
     "rsuite": "5.18.0",
     "rsuite-table": "5.8.1",
     "simplify-geojson": "^1.0.4",
-    "styled-components": "5.3.5",
+    "styled-components": "5.3.6",
     "timeago.js": "^4.0.2",
     "worker-loader": "^3.0.6"
   },

@@ -5,17 +5,25 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
-
     @Autowired
     private lateinit var jpaControlObjectivesRepository: JpaControlObjectivesRepository
+
+    private val currentYear: Int
+
+    init {
+        val formatter = DateTimeFormatter.ofPattern("yyyy")
+        currentYear = LocalDate.now().format(formatter).toInt()
+    }
 
     @Test
     @Transactional
     fun `findAllByYear Should find all control objectives of the given year`() {
         // When
-        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(2021)
+        val controlObjectives = jpaControlObjectivesRepository.findAllByYear(currentYear - 1)
 
         // Then
         assertThat(controlObjectives).hasSize(53)
@@ -132,17 +140,17 @@ class JpaControlObjectivesRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `addYear Should add a new year copied from the specified year`() {
         // Given
-        assertThat(jpaControlObjectivesRepository.findAllByYear(2021)).hasSize(53)
-        assertThat(jpaControlObjectivesRepository.findAllByYear(2023)).hasSize(0)
+        assertThat(jpaControlObjectivesRepository.findAllByYear(currentYear - 1)).hasSize(53)
+        assertThat(jpaControlObjectivesRepository.findAllByYear(currentYear + 1)).hasSize(0)
 
         // When
-        jpaControlObjectivesRepository.addYear(2021, 2023)
+        jpaControlObjectivesRepository.addYear(currentYear - 1, currentYear + 1)
 
         // Then
-        assertThat(jpaControlObjectivesRepository.findAllByYear(2021)).hasSize(53)
-        val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(2023)
+        assertThat(jpaControlObjectivesRepository.findAllByYear(currentYear - 1)).hasSize(53)
+        val updatedControlObjectives = jpaControlObjectivesRepository.findAllByYear(currentYear + 1)
         assertThat(updatedControlObjectives).hasSize(53)
         assertThat(updatedControlObjectives.first().id).isEqualTo(107)
-        assertThat(updatedControlObjectives.first().year).isEqualTo(2023)
+        assertThat(updatedControlObjectives.first().year).isEqualTo(currentYear + 1)
     }
 }

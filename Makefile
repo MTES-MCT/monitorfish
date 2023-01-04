@@ -20,9 +20,10 @@ erase-db:
 	docker volume rm monitorfish_db-data
 check-clean-archi:
 	cd backend/tools && ./check-clean-architecture.sh
-test: check-clean-archi
-	cd backend && ./mvnw clean && ./mvnw test
+test: test-back
 	cd frontend && CI=true npm run test:unit -- --coverage
+test-back: check-clean-archi
+	cd backend && ./mvnw clean && ./mvnw test
 dev: dev-back
 	sh -c 'make run-front'
 dev-back:

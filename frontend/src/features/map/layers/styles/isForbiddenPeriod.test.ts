@@ -548,7 +548,7 @@ describe('isForbiddenPeriod', () => {
     })
 
     // When
-    const currentDate = getUtcDayjs().set('month', 1).set('date', 0) // Monday
+    const currentDate = getUtcDayjs().day(1) // Monday
     expect(isForbiddenPeriod(feature, currentDate)).toEqual(true)
   })
 })

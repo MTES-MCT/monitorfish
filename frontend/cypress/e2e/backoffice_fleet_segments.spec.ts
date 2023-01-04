@@ -182,6 +182,7 @@ context('Fleet segments', () => {
 
     cy.get('[data-cy="create-fleet-segment-gears"]').click({ force: true })
     cy.get('[data-key="DHS"]').click()
+    cy.wait(500)
     cy.get('[data-key="FCN"]').scrollIntoView().click()
 
     cy.get('[data-cy="create-fleet-segment-targeted-species"]').click({ force: true })
@@ -232,7 +233,7 @@ context('Fleet segments', () => {
 
     // When
     cy.get('[data-cy="fleet-segments-select-year"]').click()
-    cy.get('[aria-selected="false"] > .rs-picker-select-menu-item').click()
+    cy.get('[aria-selected="false"] > .rs-picker-select-menu-item').first().click()
 
     // Then
     cy.get('[data-cy="fleet-segments-select-year"]').contains(currentYear - 1)
@@ -241,7 +242,7 @@ context('Fleet segments', () => {
 
   it('Should add a new year based on current year', () => {
     // Given
-    const yearToAdd = 2013
+    const yearToAdd = currentYear - 9
     cy.get('[data-cy="fleet-segments-select-year"]').contains(currentYear)
     cy.get('[role="row"]').should('have.length', 44)
 

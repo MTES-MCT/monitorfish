@@ -58,8 +58,8 @@ jobs:
           fi
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
-  build:
-    name: Run unit tests, build and package
+  unit_test_backend:
+    name: Run backend unit tests
     needs: version
     runs-on: ubuntu-22.04
     env:
@@ -75,6 +75,17 @@ jobs:
         with:
           java-version: 11
 
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Unit test
+        run: make test-back
+
+  unit_test_frontend:
+    name: Run frontend unit tests
+    needs: version
+    runs-on: ubuntu-22.04
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -97,12 +108,24 @@ jobs:
         run: npm run test:type:partial
         working-directory: ./frontend
 
-      - name: Unit test
-        run: make test
-
       - name: Upload coverage
         run: npx codecov
         working-directory: ./frontend
+
+  build:
+    name: Build and package
+    needs: version
+    runs-on: ubuntu-22.04
+    env:
+      ENV_PROFILE: ${{needs.version.outputs.ENV_PROFILE}}
+      VERSION: ${{needs.version.outputs.VERSION}}
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    steps:
+      - name: Show version
+        run: echo "VERSION:${{ env.VERSION }} ENV_PROFILE:${{ env.ENV_PROFILE }}"
+
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         id: buildx
@@ -148,7 +171,7 @@ jobs:
 
   e2e_test:
     name: Run E2E tests
-    needs: [version, build]
+    needs: [version, unit_test_backend, unit_test_frontend, build]
     runs-on: ubuntu-22.04
     strategy:
       # when one test fails, DO NOT cancel the other
@@ -232,8 +255,7 @@ jobs:
           image: monitorfish-app:${{ env.VERSION }}
 
       - name: Push docker image to registry
-        if:
-          github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v1') || startsWith(github.ref, 'refs/heads/v1') || startsWith(github.ref, 'refs/tags/v2') || startsWith(github.ref, 'refs/heads/v2')
+        if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v1') || startsWith(github.ref, 'refs/heads/v1') || startsWith(github.ref, 'refs/tags/v2') || startsWith(github.ref, 'refs/heads/v2')
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
           make docker-tag

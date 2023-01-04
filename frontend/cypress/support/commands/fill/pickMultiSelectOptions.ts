@@ -5,6 +5,8 @@ export function pickMultiSelectOptions(
   cypressMultiSelectInputElement
     .parent()
     .parent()
+    .parent()
+    .parent()
     .then(([rsuiteMultiSelectElement]) => {
       if (!rsuiteMultiSelectElement) {
         throw new Error('This should never happen.')

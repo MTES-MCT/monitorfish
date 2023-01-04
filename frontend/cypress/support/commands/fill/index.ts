@@ -75,9 +75,12 @@ export function fill(label: string, value: boolean | string | string[] | undefin
       const cypressHtmlforElement = cy.get(`#${labelElement.htmlFor}`)
       cypressHtmlforElement.then((() => {
         if (htmlforElement.classList.contains('rs-picker-toggle-textbox')) {
-          const rsuitePickerElement = htmlforElement.parentElement
-            ? htmlforElement.parentElement.parentElement
-            : undefined
+          const rsuitePickerElement =
+            htmlforElement.parentElement &&
+            htmlforElement.parentElement.parentElement &&
+            htmlforElement.parentElement.parentElement.parentElement
+              ? htmlforElement.parentElement.parentElement.parentElement.parentElement
+              : undefined
           if (!rsuitePickerElement) {
             throw new Error('This should never happen.')
           }

@@ -4,8 +4,8 @@ import { dayjs } from '../../../utils/dayjs'
 import { MissionDateRangeFilter, MissionFilterType } from './constants'
 
 import type { Mission } from '../../../domain/types/mission'
-import type { DateRange } from '../../../types'
 import type { MissionFilter } from './types'
+import type { DateRange } from '@mtes-mct/monitor-ui'
 
 // TODO Add unit tests.
 export const mapFilterFormRecordsToFilters = ([key, valueOrValues]: [MissionFilterType, any]): MissionFilter => {

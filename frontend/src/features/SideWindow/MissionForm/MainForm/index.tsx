@@ -111,7 +111,7 @@ export function MainForm({ onTypeChange }: MainFormProps) {
           {currentValues.current.type === MissionType.AIR && (
             <InlineFieldGroupWrapper>
               <FormikMultiSelect
-                fixedWidth={13.625}
+                fixedWidth={218}
                 label="Objectifs du vol"
                 name="flightGoal"
                 options={FLIGHT_GOALS_AS_OPTIONS}

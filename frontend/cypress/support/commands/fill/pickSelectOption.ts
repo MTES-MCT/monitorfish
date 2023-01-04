@@ -5,6 +5,8 @@ export function pickSelectOption(
   cypressSelectInputElement
     .parent()
     .parent()
+    .parent()
+    .parent()
     .scrollIntoView()
     .then(([rsuiteSelectElement]) => {
       if (!rsuiteSelectElement) {

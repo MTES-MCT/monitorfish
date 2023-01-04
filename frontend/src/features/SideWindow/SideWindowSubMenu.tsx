@@ -181,7 +181,7 @@ const menuStyle = (isOpen: boolean, isFixed: boolean): CSSProperties => ({
   fontSize: 16,
   fontWeight: 500,
   height: 'calc(100vh - 28px)',
-  marginLeft: isFixed ? 0 : 66,
+  marginLeft: isFixed ? 0 : 70,
   padding: '14px 0',
   position: isFixed ? 'unset' : 'absolute',
   transition: 'width 0.5s',

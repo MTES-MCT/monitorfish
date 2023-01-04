@@ -67,7 +67,7 @@
     "react-imask": "^6.1.0",
     "react-markdown": "6.0.3",
     "react-redux": "8.0.5",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
     "react-select": "5.4.0",
     "react-toastify": "9.0.7",

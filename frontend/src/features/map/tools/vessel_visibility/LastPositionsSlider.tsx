@@ -1,4 +1,4 @@
-import Nouislider from 'nouislider-react'
+// import Nouislider from 'nouislider-react'
 import { useEffect, useState } from 'react'
 import { RangeSlider } from 'rsuite'
 import styled from 'styled-components'
@@ -41,7 +41,7 @@ export function LastPositionsSlider({
   return (
     value && (
       <SliderWrapper>
-        <Nouislider
+        {/* <Nouislider
           behaviour="tap"
           connect={[true, true, true]}
           onSlide={(_a, _b, nextValue) => updateValue(nextValue)}
@@ -50,7 +50,7 @@ export function LastPositionsSlider({
             min: [0, 1]
           }}
           start={value}
-        />
+        /> */}
         <RangeSlider
           defaultValue={value}
           graduated

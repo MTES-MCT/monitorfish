@@ -1,42 +1,47 @@
-import styled from 'styled-components'
-import { COLORS } from '../../constants/constants'
 import { Input } from 'rsuite'
+import styled from 'styled-components'
 
-export const Label = styled.span`
+export const Label = styled.span<{
+  isLast?: boolean
+}>`
   text-align: left;
-  color: ${COLORS.slateGray};
+  color: ${p => p.theme.color.slateGray};
   min-width: 150px;
   display: inline-block;
   font-size: 13px;
-  ${props => props.isLast ? '' : 'margin-right: 20px'};
+  ${p => (p.isLast ? '' : 'margin-right: 20px')};
 `
 
-export const CustomInput = styled(Input)`
+export const CustomInput = styled(Input)<{
+  $isGray: boolean
+  $isRed?: boolean
+  width?: string
+}>`
   font-size: 13px;
-  ${props => props.width ? '' : 'min-width: 100px;'}
-  ${props => props.width ? `width: ${props.width};` : ''}
-  border: 1px solid ${props => props.$isRed ? `${COLORS.maximumRed}` : `${COLORS.lightGray}`};
+  ${p => (p.width ? '' : 'min-width: 100px;')}
+  ${p => (p.width ? `width: ${p.width};` : '')}
+  border: 1px solid ${p => (p.$isRed ? `${p.theme.color.maximumRed}` : `${p.theme.color.lightGray}`)};
   border-radius: 2px;
-  color: ${COLORS.gunMetal}!important;
+  color: ${p => p.theme.color.gunMetal}!important;
   font-weight: 500;
-  background-color: ${props => props.$isGray ? COLORS.gainsboro : COLORS.white};
+  background-color: ${p => (p.$isGray ? p.theme.color.gainsboro : p.theme.color.white)};
   margin: 0px 10px 0px 0px;
   padding: 8px;
 
   &:focus {
-    color: ${COLORS.gunMetal}!important;
-    border-color: ${COLORS.lightGray}!important;
+    color: ${p => p.theme.color.gunMetal}!important;
+    border-color: ${p => p.theme.color.lightGray}!important;
     cursor: text;
   }
 
   &:hover {
-    color: ${COLORS.gunMetal}!important;
-    border-color: ${COLORS.lightGray}!important;
+    color: ${p => p.theme.color.gunMetal}!important;
+    border-color: ${p => p.theme.color.lightGray}!important;
     cursor: text;
   }
 
   ::placeholder {
     font-size: 11px;
-    color: ${COLORS.slateGray};
+    color: ${p => p.theme.color.slateGray};
   }
 `

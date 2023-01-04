@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
-
 const circle = css<{
   margin: string
 }>`
@@ -15,12 +13,12 @@ const circle = css<{
 
 export const GreenCircle = styled.span`
   ${circle}
-  background-color: ${COLORS.mediumSeaGreen};
+  background-color: ${p => p.theme.color.mediumSeaGreen};
 `
 
 export const RedCircle = styled.span`
   ${circle}
-  background-color: ${COLORS.maximumRed};
+  background-color: ${p => p.theme.color.maximumRed};
 `
 
 export const BlackCircle = styled.span`
@@ -30,5 +28,5 @@ export const BlackCircle = styled.span`
   border-radius: 50%;
   vertical-align: middle;
   margin-right: 6px;
-  background-color: ${COLORS.gunMetal};
+  background-color: ${p => p.theme.color.gunMetal};
 `

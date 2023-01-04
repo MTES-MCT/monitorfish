@@ -1,22 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
-import { COLORS } from '../../../constants/constants'
-import { AddRegulationButton } from '../../commonStyles/Buttons.style'
+
+import { BACKOFFICE_SEARCH_PROPERTIES } from '../../../domain/entities/backoffice'
 import { searchByLawType, searchResultIncludeZone } from '../../../domain/entities/regulation'
 import { closeRegulatoryZoneMetadataPanel } from '../../../domain/shared_slices/Regulatory'
-import { BACKOFFICE_SEARCH_PROPERTIES } from '../../../domain/entities/backoffice'
+import { useAppDispatch } from '../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../hooks/useAppSelector'
+import { AddRegulationButton } from '../../commonStyles/Buttons.style'
+import { ReactComponent as SearchIconSVG } from '../../icons/Loupe.svg'
 
-const SearchRegulations = props => {
-  const dispatch = useDispatch()
-  const { setFoundRegulatoryZonesByRegTerritory, regulatoryZoneListByRegTerritory } = props
+export function SearchRegulations(props) {
+  const dispatch = useAppDispatch()
+  const { regulatoryZoneListByRegTerritory, setFoundRegulatoryZonesByRegTerritory } = props
 
-  const searchInput = useRef(null)
+  const searchInput = useRef<HTMLInputElement>(null)
   const [searchText, setSearchText] = useState('')
 
-  const { regulatoryZoneMetadata } = useSelector(state => state.regulatory)
+  const { regulatoryZoneMetadata } = useAppSelector(state => state.regulatory)
 
   useEffect(() => {
     searchRegulatoryZone()
@@ -37,7 +38,8 @@ const SearchRegulations = props => {
           }
         })
         if (regulatoryZoneMetadata !== null) {
-          if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata)) {
+          // TODO Properly type this `any`.
+          if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata as any)) {
             dispatch(closeRegulatoryZoneMetadataPanel())
           }
         }
@@ -53,15 +55,15 @@ const SearchRegulations = props => {
   ])
 
   useEffect(() => {
-    if (searchInput) {
+    if (searchInput.current) {
       searchInput.current.focus()
     }
   }, [])
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const onAddRegulationClick = () => {
-    history.push('/backoffice/regulation/new')
+    navigate('/backoffice/regulation/new')
   }
 
   return (
@@ -69,19 +71,14 @@ const SearchRegulations = props => {
       <SearchBox>
         <SearchBoxInput
           ref={searchInput}
+          onChange={e => setSearchText(e.target.value)}
+          placeholder="Rechercher une zone par son nom ou sa référence réglementaire"
           type="text"
           value={searchText}
-          placeholder={'Rechercher une zone par son nom ou sa référence réglementaire'}
-          onChange={e => setSearchText(e.target.value)}
         />
         <SearchIcon />
       </SearchBox>
-      <AddRegulationButton
-        onClick={onAddRegulationClick}
-        disabled={false}
-        isLast={false}
-        title={'Saisir une nouvelle réglementation'}
-      />
+      <AddRegulationButton onClick={onAddRegulationClick} title="Saisir une nouvelle réglementation" />
     </SearchContainer>
   )
 }
@@ -98,7 +95,7 @@ const SearchBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: 1px ${COLORS.lightGray} solid;
+  border: 1px ${p => p.theme.color.lightGray} solid;
   border-radius: 0;
   background-color: white;
   margin-right: 10px;
@@ -107,7 +104,7 @@ const SearchBox = styled.div`
 
 const SearchBoxInput = styled.input`
   margin: 0;
-  color: ${COLORS.gunMetal};
+  color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   height: 40px;
   width: 100%;
@@ -122,7 +119,5 @@ const SearchIcon = styled(SearchIconSVG)`
   margin-top: 2px;
   margin-right: 8px;
   float: right;
-  color: ${COLORS.lightGray};
+  color: ${p => p.theme.color.lightGray};
 `
-
-export default SearchRegulations

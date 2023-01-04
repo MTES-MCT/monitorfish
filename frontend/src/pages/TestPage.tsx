@@ -81,8 +81,8 @@ export function TestPage() {
             ]}
           />
           <hr />
-          {/* TODO A MultiSelect should be searchable. Fix that in @mtes-mct/monitor-ui. */}
-          {/* <FormikMultiSelect
+          {/* TODO Add a Cypress helper with a related test for this component. */}
+          <FormikMultiSelect
             fixedWidth={160}
             label="Multi select with search input"
             name="multiSelectWithSearchInput"
@@ -91,7 +91,7 @@ export function TestPage() {
               value: `MULTI_SELECT_WITH_SEARCH_INPUT_OPTION_${String(index + 1).padStart(2, '0')}`
             }))}
             searchable
-          /> */}
+          />
           <hr />
           <FormikMultiSelect
             fixedWidth={160}

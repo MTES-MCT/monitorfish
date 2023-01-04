@@ -423,7 +423,7 @@ export function findIfSearchStringIncludedInRegulatoryReferences(zone, searchTex
     : false
 }
 
-export function searchByLawType(lawTypes, properties, searchText, gears, species) {
+export function searchByLawType(lawTypes, properties, searchText: string, gears: Gear[] = [], species: Specy[] = []) {
   const searchResultByLawType = {}
 
   Object.keys(lawTypes).forEach(lawType => {

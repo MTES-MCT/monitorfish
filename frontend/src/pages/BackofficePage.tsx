@@ -1,46 +1,32 @@
-import countries from 'i18n-iso-countries'
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom'
+import { Provider as ReduxProvider } from 'react-redux'
+import { Outlet } from 'react-router-dom'
+import { PersistGate } from 'redux-persist/es/integration/react'
 import styled from 'styled-components'
 
 import { BackofficeMode } from '../api/BackofficeMode'
-import { Backoffice } from '../features/backoffice/Backoffice'
-import ControlObjectives from '../features/backoffice/control_objectives/ControlObjectives'
-import EditRegulation from '../features/backoffice/edit_regulation/EditRegulation'
-import { FleetSegments } from '../features/backoffice/fleet_segments/FleetSegments'
-import Menu from '../features/backoffice/menu/Menu'
+import NamespaceContext from '../domain/context/NamespaceContext'
+import { Menu } from '../features/backoffice/menu/Menu'
 import { ErrorToastNotification } from '../features/commonComponents/ErrorToastNotification'
-
-countries.registerLocale(require('i18n-iso-countries/langs/fr.json'))
+import { persistedStore, persistedStorePersistor } from '../store'
 
 export function BackofficePage() {
-  const match = useRouteMatch()
-
   return (
-    <>
-      <BackofficeMode isBackoffice />
-      <BackofficeWrapper>
-        <Menu />
-        <Switch>
-          <Route exact path="/backoffice" render={() => <Redirect to="/backoffice/regulation" />} />
-          <Route exact path={`${match.path}/regulation`}>
-            <Backoffice />
-          </Route>
-          <Route exact path={`${match.path}/regulation/new`}>
-            <EditRegulation isEdition={false} title="Saisir une nouvelle réglementation" />
-          </Route>
-          <Route exact path={`${match.path}/regulation/edit`}>
-            <EditRegulation isEdition title="Modifier la réglementation de la zone" />
-          </Route>
-          <Route exact path={`${match.path}/control_objectives`}>
-            <ControlObjectives />
-          </Route>
-          <Route exact path={`${match.path}/fleet_segments`}>
-            <FleetSegments />
-          </Route>
-        </Switch>
-      </BackofficeWrapper>
-      <ErrorToastNotification />
-    </>
+    <ReduxProvider store={persistedStore}>
+      {/* eslint-disable-next-line no-null/no-null */}
+      <PersistGate loading={null} persistor={persistedStorePersistor}>
+        <NamespaceContext.Provider value="backoffice">
+          <BackofficeMode isBackoffice />
+
+          <BackofficeWrapper>
+            <Menu />
+
+            <Outlet />
+          </BackofficeWrapper>
+
+          <ErrorToastNotification />
+        </NamespaceContext.Provider>
+      </PersistGate>
+    </ReduxProvider>
   )
 }
 

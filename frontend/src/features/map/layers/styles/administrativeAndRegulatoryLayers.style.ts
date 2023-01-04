@@ -1,4 +1,4 @@
-// TODO Remove legacy colors.
+// TODO Remove legacy colors and `theme` (in lowercase).
 
 import { THEME } from '@mtes-mct/monitor-ui'
 import { Style } from 'ol/style'

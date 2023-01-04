@@ -13,9 +13,10 @@ export function UnsupportedBrowserPage() {
           <Title>
             Cette version de votre navigateur est trop ancienne, MonitorFish ne peut pas fonctionner correctement.
           </Title>
-          <br />
-          Merci d&apos;utiliser une version de Firefox supérieure à la version 62, ou une version de Chrome supérieure à
-          la version 69.
+          <p>
+            Merci d’utiliser une version de Firefox supérieure à la version 62, ou une version de Chrome supérieure à la
+            version 69.
+          </p>
         </Text>
       </Alert>
 
